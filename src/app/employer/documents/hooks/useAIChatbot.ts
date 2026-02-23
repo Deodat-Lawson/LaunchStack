@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { SourceReference } from '~/app/api/agents/documentQ&A/services';
+import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
 
 interface Chat {
   id: string;
@@ -19,6 +20,7 @@ export interface MessageContent {
   pages?: number[];
   references?: SourceReference[];
   webSources?: Array<{ title: string; url: string; snippet: string }>;
+  aiModel?: AIModelType;
 }
 
 export interface Message {
@@ -29,6 +31,7 @@ export interface Message {
   messageType: 'text' | 'tool_call' | 'tool_result' | 'thinking';
   parentMessageId?: string;
   createdAt: string;
+  aiModel?: AIModelType;
 }
 
 interface CreateChatParams {

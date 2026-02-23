@@ -7,6 +7,7 @@ import { Textarea } from "./ui/textarea";
 import { AIChatbotSelector, type AIModel } from "./AIChatbotSelector";
 import { useAIQuery } from "~/app/employer/documents/hooks/useAIQuery";
 import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
+import { ModelBadge } from "~/app/employer/documents/components/ModelBadge";
 
 interface AIMessage {
   id: string;
@@ -196,20 +197,25 @@ export function AIQueryChat({ isBuddy = false, isDark = false, selectedDocumentI
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  <p
-                    className={`text-xs mt-1 ${
-                      message.role === "user"
-                        ? "text-white/70"
-                        : isDark
-                        ? "text-gray-500"
-                        : "text-gray-500"
-                    }`}
-                  >
-                    {message.timestamp.toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
+                  <div className="flex items-center justify-between gap-2 mt-1">
+                    <p
+                      className={`text-xs ${
+                        message.role === "user"
+                          ? "text-white/70"
+                          : isDark
+                          ? "text-gray-500"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {message.timestamp.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    {message.role === "ai" && (
+                      <ModelBadge model={message.model} />
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

@@ -17,6 +17,9 @@ import { Button } from "~/app/employer/documents/components/ui/button";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 
 import { RESPONSE_STYLES, type ResponseStyleId } from "~/lib/ai/styles";
+import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
+
+type AIModelAvailability = Record<AIModelType, boolean>;
 
 const ChatPanel = dynamic(
   () => import("./ChatPanel").then((module) => module.ChatPanel),
@@ -81,6 +84,8 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const { createChat, getChat } = useAIChatbot();
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [aiPersona, setAiPersona] = useState<string>('general');
+  const [aiModel, setAiModel] = useState<AIModelType>("gpt-5.2");
+  const [modelAvailability, setModelAvailability] = useState<Partial<AIModelAvailability>>({});
 
   // Handle chat selection and auto-document binding
   useEffect(() => {
@@ -220,6 +225,25 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     void fetchDocuments();
   }, [userId, isRoleLoading, fetchDocuments]);
 
+  useEffect(() => {
+    const fetchModelAvailability = async () => {
+      try {
+        const response = await fetch("/api/config/ai-models");
+        if (!response.ok) return;
+        const data = (await response.json()) as {
+          models?: Partial<Record<AIModelType, boolean>>;
+        };
+        if (data.models) {
+          setModelAvailability(data.models);
+        }
+      } catch (error) {
+        console.error("Error fetching AI model availability:", error);
+      }
+    };
+
+    void fetchModelAvailability();
+  }, []);
+
   // Actions
   const toggleCategory = (categoryName: string) => {
     setOpenCategories(prev => {
@@ -323,6 +347,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         question: currentQuestion,
         searchScope,
         style: aiStyle as ResponseStyleId,
+        aiModel,
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
         companyId: searchScope === "company" ? resolvedCompanyId ?? undefined : undefined,
       });
@@ -480,6 +505,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                       setSearchScope={handleSearchScopeChange}
                       aiStyle={aiStyle}
                       setAiStyle={setAiStyle}
+                      aiModel={aiModel}
+                      setAiModel={setAiModel}
+                      modelAvailability={modelAvailability}
                       styleOptions={STYLE_OPTIONS}
                       referencePages={referencePages}
                       setPdfPageNumber={setPdfPageNumber}
@@ -499,6 +527,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                               setAiStyle={setAiStyle}
                               aiPersona={aiPersona}
                               setAiPersona={setAiPersona}
+                              aiModel={aiModel}
+                              setAiModel={setAiModel}
+                              modelAvailability={modelAvailability}
                               searchScope={searchScope}
                               setSearchScope={handleSearchScopeChange}
                               companyId={companyId}

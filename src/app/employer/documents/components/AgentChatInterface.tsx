@@ -18,6 +18,7 @@ import {
 import { useAIChatbot, type Message } from '../hooks/useAIChatbot';
 import { useAIChat, type SourceReference } from '../hooks/useAIChat';
 import { cn } from '~/lib/utils';
+import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
 
 const MarkdownMessage = dynamic(
   () => import("~/app/_components/MarkdownMessage"),
@@ -38,6 +39,7 @@ interface AgentChatInterfaceProps {
   companyId?: number | null;
   aiStyle?: string;
   aiPersona?: string;
+  aiModel?: AIModelType;
   onPageClick?: (page: number) => void;
   onReferencesResolved?: (references: SourceReference[]) => void;
   onCreateChat?: () => Promise<string | null>;
@@ -53,6 +55,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   companyId,
   aiStyle = 'concise',
   aiPersona = 'general',
+  aiModel = 'gpt-5.2',
   onPageClick,
   onReferencesResolved,
   onCreateChat,
@@ -215,6 +218,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           conversationHistory: conversationContext || undefined,
           enableWebSearch: Boolean(enableWebSearch),
           aiPersona: aiPersona as 'general' | 'learning-coach' | 'financial-expert' | 'legal-expert' | 'math-reasoning' | undefined,
+          aiModel,
           documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
           companyId: searchScope === "company" && companyId ? companyId : undefined,
         });

@@ -153,6 +153,40 @@ async function maybeExtractEntities(
   });
 }
 
+async function maybeSyncToNeo4j(
+  documentId: number,
+  companyId: string,
+  runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
+): Promise<void> {
+  const neo4jUri = process.env.NEO4J_URI;
+  if (!neo4jUri) return;
+
+  await runStep("step-g-neo4j-sync", async () => {
+    const { isNeo4jConfigured, checkNeo4jHealth } = await import(
+      "~/lib/graph/neo4j-client"
+    );
+
+    if (!isNeo4jConfigured()) return null;
+
+    const healthy = await checkNeo4jHealth();
+    if (!healthy) {
+      console.warn("[DocIngestionTool] Step G skipped: Neo4j unhealthy");
+      return null;
+    }
+
+    const { syncDocumentToNeo4j } = await import("~/lib/graph/neo4j-sync");
+
+    const result = await syncDocumentToNeo4j(documentId, BigInt(companyId));
+
+    console.log(
+      `[DocIngestionTool] Neo4j sync: ${result.entities} entities, ` +
+        `${result.mentions} mentions, ${result.relationships} relationships (${result.durationMs}ms)`,
+    );
+
+    return result;
+  });
+}
+
 function buildFailureResult(
   jobId: string,
   documentId: number,
@@ -283,6 +317,8 @@ export async function runDocIngestionTool(
       companyId,
       runStep,
     );
+
+    await maybeSyncToNeo4j(documentId, companyId, runStep);
 
     const stats = getTotalChunkSize(chunks);
     const totalProcessingTime = Date.now() - pipelineStartTime;

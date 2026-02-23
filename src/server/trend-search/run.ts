@@ -1,4 +1,7 @@
 import type { TrendSearchInput, TrendSearchOutput } from "~/server/trend-search/types";
+import { planQueries } from "~/server/trend-search/query-planner";
+import { executeSearch } from "~/server/trend-search/web-search";
+import { synthesizeResults } from "~/server/trend-search/synthesizer";
 
 export type TrendSearchPipelineStage = "searching" | "synthesizing";
 
@@ -7,22 +10,35 @@ export interface RunTrendSearchOptions {
 }
 
 /**
- * Trend-search pipeline contract.
+ * Trend-search pipeline: planQueries → executeSearch → synthesizeResults.
  *
- * The pipeline owns planning/search/synthesis. It reports progress via callbacks,
- * while callers (e.g. Inngest) own persistence and status tracking.
- *
- * TODO: Replace this placeholder with the real trend-search pipeline implementation.
+ * Pure pipeline execution — no DB writes, no side effects.
+ * Callers (e.g. Inngest) own persistence and status tracking.
  */
 export async function runTrendSearch(
     input: TrendSearchInput,
-    options: RunTrendSearchOptions = {}
+    options: RunTrendSearchOptions = {},
 ): Promise<TrendSearchOutput> {
-    await options.onStageChange?.("searching");
-    await options.onStageChange?.("synthesizing");
+    // Step 1: Plan queries
+    const categories = input.categories;
+    const plannedQueries = await planQueries(input.query, input.companyContext, categories);
 
-    throw new Error(
-        `runTrendSearch() is not implemented yet (query=${JSON.stringify(input.query).slice(0, 120)}). ` +
-            "Add the planner/search/synthesis pipeline to src/server/trend-search/run.ts."
-    );
+    // Step 2: Execute web searches
+    await options.onStageChange?.("searching");
+    const rawResults = await executeSearch(plannedQueries);
+
+    // Step 3: Synthesize results
+    await options.onStageChange?.("synthesizing");
+    const resolvedCategories = categories ?? [...new Set(plannedQueries.map((q) => q.category))];
+    const results = await synthesizeResults(rawResults, input.query, input.companyContext, resolvedCategories);
+
+    return {
+        results,
+        metadata: {
+            query: input.query,
+            companyContext: input.companyContext,
+            categories: resolvedCategories,
+            createdAt: new Date().toISOString(),
+        },
+    };
 }

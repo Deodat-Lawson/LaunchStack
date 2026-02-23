@@ -9,9 +9,9 @@ export type { AIModelType };
 
 /**
  * Get a chat model instance based on the model type
- * 
+ *
  * Supports all model types defined in types.ts:
- * - OpenAI: gpt-4o, gpt-5.2, gpt-5.1
+ * - OpenAI: gpt-4o, gpt-5.2, gpt-5.1, gpt-5-nano, gpt-5-mini
  * - Anthropic: claude-sonnet-4, claude-opus-4.5
  * - Google: gemini-2.5-flash, gemini-3-flash, gemini-3-pro
  */
@@ -39,6 +39,20 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
                 openAIApiKey: process.env.OPENAI_API_KEY,
                 modelName: "gpt-5.1",
                 temperature: 0.7,
+                timeout: 600000,
+            });
+
+        case "gpt-5-nano":
+            return new ChatOpenAI({
+                openAIApiKey: process.env.OPENAI_API_KEY,
+                modelName: "gpt-5-nano-2025-08-07",
+                timeout: 300000,
+            });
+
+        case "gpt-5-mini":
+            return new ChatOpenAI({
+                openAIApiKey: process.env.OPENAI_API_KEY,
+                modelName: "gpt-5-mini-2025-08-07",
                 timeout: 600000,
             });
 

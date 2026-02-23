@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 export interface AIQueryRequest {
   documentId: number;
   question: string;
-  aiModel?: 'gpt-4o' | 'gpt-5.2' | 'gpt-5.1' | 'claude-sonnet-4' | 'claude-opus-4.5' | 'gemini-2.5-flash' | 'gemini-3-flash' | 'gemini-3-pro';
+  aiModel?: 'gpt-4o' | 'gpt-5.2' | 'gpt-5.1' | 'gpt-5-nano' | 'gpt-5-mini' | 'claude-sonnet-4' | 'claude-opus-4.5' | 'gemini-2.5-flash' | 'gemini-3-flash' | 'gemini-3-pro';
   style?: 'concise' | 'detailed' | 'academic' | 'bullet-points';
   enableWebSearch?: boolean;
   conversationHistory?: string;

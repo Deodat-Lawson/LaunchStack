@@ -68,6 +68,8 @@ const personaConfig = [
 
 const modelConfig: Array<{ key: AIModelType; label: string }> = [
   { key: "gpt-5.2", label: "GPT-5.2" },
+  { key: "gpt-5-mini", label: "GPT-5 Mini" },
+  { key: "gpt-5-nano", label: "GPT-5 Nano" },
   { key: "claude-opus-4.5", label: "Claude Opus 4.5" },
   { key: "gemini-3-flash", label: "Gemini 3 Flash" },
   { key: "gemini-3-pro", label: "Gemini 3 Pro" },

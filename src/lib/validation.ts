@@ -66,7 +66,7 @@ export const PredictiveAnalysisSchema = z.object({
 }));
 
 const aiPersonaOptions = ["general", "learning-coach", "financial-expert", "legal-expert", "math-reasoning"] as const;
-const aiModelOptions = ["gpt-4o", "claude-sonnet-4", "claude-opus-4.5", "gpt-5.2", "gpt-5.1", "gemini-2.5-flash", "gemini-3-flash", "gemini-3-pro"] as const;
+const aiModelOptions = ["gpt-4o", "gpt-5.2", "gpt-5.1", "gpt-5-nano", "gpt-5-mini", "claude-sonnet-4", "claude-opus-4.5", "gemini-2.5-flash", "gemini-3-flash", "gemini-3-pro"] as const;
 
 export const QuestionSchema = z.object({
   documentId: z.number().int().positive().optional(),

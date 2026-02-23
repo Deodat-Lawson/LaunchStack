@@ -10,3 +10,4 @@ export * from "./schema/study-agent";
 export { studyAgentMessages } from "./schema/study-agent";
 export * from "./schema/rlm-knowledge-base";
 export * from "./schema/knowledge-graph";
+export * from "./schema/trend-search";

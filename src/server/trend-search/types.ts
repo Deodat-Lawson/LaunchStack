@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // ─── Category ────────────────────────────────────────────────────────────────
-//kien
+
 export const SearchCategoryEnum = z.enum([
     "fashion",
     "finance",

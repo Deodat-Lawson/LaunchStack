@@ -2,7 +2,7 @@
  * Job Dispatcher Abstraction
  *
  * Defines the interface for background job dispatchers.
- * Implementations: Inngest (default), Trigger.dev (optional).
+ * Implementation: Inngest.
  */
 
 import type { ProcessDocumentEventData } from "~/lib/ocr/types";
@@ -20,7 +20,7 @@ export interface DispatchResult {
 /**
  * Supported job runner backends
  */
-export type JobRunner = "inngest" | "trigger-dev";
+export type JobRunner = "inngest";
 
 /**
  * Interface that all job dispatchers must implement.

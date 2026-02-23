@@ -170,8 +170,12 @@ export async function normalizeDocument(
       case "DATALAB":
         normalizedDoc = await processWithDatalab(documentUrl);
         break;
+      case "NATIVE_PDF":
+        normalizedDoc = await processNativePDF(documentUrl);
+        break;
       default:
-        normalizedDoc = await processWithAzure(documentUrl);
+        console.warn(`[Normalize] Unknown provider "${routerDecision.selectedProvider}", falling back to native PDF extraction`);
+        normalizedDoc = await processNativePDF(documentUrl);
     }
   }
 

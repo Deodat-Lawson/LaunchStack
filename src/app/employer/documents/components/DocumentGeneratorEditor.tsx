@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from "react";
 import { 
   ArrowLeft, 
   Save, 
@@ -37,6 +37,20 @@ import {
   type Citation,
   type OutlineItem,
 } from "./generator";
+import { WysiwygEditor, type WysiwygEditorHandle, type SelectionInfo } from "./WysiwygEditor";
+
+/** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
+function stripRewriteQuotes(text: string): string {
+  let s = text.trim();
+  const quotePairs: [string, string][] = [['"', '"'], ['"', '"'], ["'", "'"], ["'", "'"]];
+  for (const [open, close] of quotePairs) {
+    if (s.length >= open.length + close.length && s.startsWith(open) && s.endsWith(close)) {
+      s = s.slice(open.length, s.length - close.length).trim();
+      break;
+    }
+  }
+  return s;
+}
 
 /** Extract sentence or paragraph at cursor when there is no selection (cursor rewrite). */
 function extractTextAtCursor(text: string, cursorPos: number): { text: string; start: number; end: number } {
@@ -83,7 +97,7 @@ export function DocumentGeneratorEditor({
   initialTitle, 
   initialContent,
   initialCitations = [],
-  documentId: _documentId,
+  documentId,
   onBack, 
   onSave,
   mode = 'full',
@@ -110,30 +124,140 @@ export function DocumentGeneratorEditor({
   const [selectionEnd, setSelectionEnd] = useState(0);
   const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant', content: string }>>([]);
 
-  /** Rewrite preview: show diff, user must Accept or Reject. */
+  /** Rewrite preview: show diff, user must Accept or Reject. Uses from/to (ProseMirror) for WYSIWYG. */
   const [rewritePreview, setRewritePreview] = useState<{
     originalText: string;
     proposedText: string;
-    selectionStart: number;
-    selectionEnd: number;
+    from: number;
+    to: number;
+    textBefore: string;
+    textAfter: string;
     prompt: string;
   } | null>(null);
 
   /** Undo stack for content (used so Accept is one undo step). */
   const contentHistoryRef = useRef<string[]>([]);
 
-  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const contentRef = useRef<HTMLTextAreaElement | null>(null);
+  const wysiwygEditorRef = useRef<WysiwygEditorHandle | null>(null);
+  /** Selection captured while user has text selected - used for rewrite to avoid collapsed selection at click time */
+  const lastSelectionRef = useRef<SelectionInfo | null>(null);
 
   // Auto-save (supports async onSave e.g. for Rewrite tab saving to API)
   const handleSave = useCallback(async () => {
     setIsSaving(true);
     try {
-      await Promise.resolve(onSave(title, content, citations));
+      // Save HTML to preserve formatting (italics, underline, text-align, lists) - Markdown drops these
+      const contentToSave = wysiwygEditorRef.current?.getHtml() ?? content;
+      await Promise.resolve(onSave(title, contentToSave, citations));
       setLastSaved(new Date());
     } finally {
       setIsSaving(false);
     }
   }, [onSave, title, content, citations]);
+
+  /** Check if selection has format and return unwrapped text, or null if not formatted. */
+  const getUnwrapped = useCallback(
+    (selected: string, type: "bold" | "italic" | "underline"): string | null => {
+      if (!selected) return null;
+      if (type === "bold" && selected.startsWith("**") && selected.endsWith("**") && selected.length > 4) {
+        return selected.slice(2, -2);
+      }
+      if (type === "italic" && selected.length > 2 && selected.startsWith("*") && !selected.startsWith("**") && selected.endsWith("*") && !selected.endsWith("**")) {
+        return selected.slice(1, -1);
+      }
+      if (type === "underline" && selected.startsWith("<u>") && selected.endsWith("</u>")) {
+        return selected.slice(3, -4);
+      }
+      return null;
+    },
+    []
+  );
+
+  // Formatting: wrap selection or unwrap if already formatted (use onMouseDown to preserve selection)
+  const applyFormat = useCallback(
+    (type: "bold" | "italic" | "underline" | "bulletList" | "numberedList") => {
+      const el = contentRef.current;
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const before = content.substring(0, start);
+      const selected = content.substring(start, end);
+      const after = content.substring(end);
+
+      let newContent: string;
+      let newCursor: number;
+
+      if (type === "bold" || type === "italic" || type === "underline") {
+        const unwrapped = getUnwrapped(selected, type);
+        if (unwrapped !== null) {
+          newContent = before + unwrapped + after;
+          newCursor = start + unwrapped.length;
+        } else if (type === "bold") {
+          const wrapped = selected ? `**${selected}**` : "****";
+          newContent = before + wrapped + after;
+          newCursor = start + wrapped.length;
+        } else if (type === "italic") {
+          const wrapped = selected ? `*${selected}*` : "**";
+          newContent = before + wrapped + after;
+          newCursor = start + wrapped.length;
+        } else {
+          const wrapped = selected ? `<u>${selected}</u>` : "<u></u>";
+          newContent = before + wrapped + after;
+          newCursor = start + wrapped.length;
+        }
+      } else if (type === "bulletList" || type === "numberedList") {
+        let transformed: string;
+        if (selected) {
+          const lines = selected.split("\n");
+          const bulletRe = /^[-*+]\s/;
+          const numRe = /^\d+\.\s/;
+          const alreadyBullet = lines.every((l) => bulletRe.test(l));
+          const alreadyNumbered = lines.every((l) => numRe.test(l));
+          if (type === "bulletList" && alreadyBullet) {
+            transformed = lines.map((l) => l.replace(bulletRe, "")).join("\n");
+          } else if (type === "numberedList" && alreadyNumbered) {
+            transformed = lines.map((l) => l.replace(numRe, "")).join("\n");
+          } else {
+            transformed = lines
+              .map((line, i) =>
+                type === "numberedList" ? `${i + 1}. ${line}` : `- ${line}`
+              )
+              .join("\n");
+          }
+        } else {
+          const lineStart = before.lastIndexOf("\n") + 1;
+          const nextNewline = content.indexOf("\n", start);
+          const lineEnd = nextNewline >= 0 ? nextNewline : content.length;
+          const lineContent = content.substring(lineStart, lineEnd);
+          transformed = type === "numberedList" ? `1. ${lineContent}` : `- ${lineContent}`;
+          newContent = content.substring(0, lineStart) + transformed + content.substring(lineEnd);
+          newCursor = lineStart + transformed.length;
+          contentHistoryRef.current.push(content);
+          setContent(newContent);
+          setRewritePreview(null);
+          requestAnimationFrame(() => {
+            el.focus();
+            el.setSelectionRange(newCursor, newCursor);
+          });
+          return;
+        }
+        newContent = before + transformed + after;
+        newCursor = start + transformed.length;
+      } else {
+        return;
+      }
+
+      contentHistoryRef.current.push(content);
+      setContent(newContent);
+      setRewritePreview(null);
+      requestAnimationFrame(() => {
+        el.focus();
+        el.setSelectionRange(newCursor, newCursor);
+      });
+    },
+    [content]
+  );
 
   useEffect(() => {
     if (isRewriteMode) return; 
@@ -143,10 +267,14 @@ export function DocumentGeneratorEditor({
     return () => clearInterval(interval);
   }, [handleSave, isRewriteMode]);
 
-  // Keyboard shortcuts (including undo)
+  // Keyboard shortcuts (including undo, format)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "z" && !e.shiftKey) {
+        const editorFocused = document.activeElement?.closest(".ProseMirror");
+        if (editorFocused) {
+          return;
+        }
         const history = contentHistoryRef.current;
         if (history.length > 0 && contentRef.current === document.activeElement) {
           e.preventDefault();
@@ -162,10 +290,26 @@ export function DocumentGeneratorEditor({
         e.preventDefault();
         setActiveTool("ai-generate");
       }
+      if ((e.metaKey || e.ctrlKey) && e.key === "b") {
+        const editorFocused = document.activeElement?.closest(".ProseMirror");
+        if (contentRef.current === document.activeElement || editorFocused) {
+          e.preventDefault();
+          if (wysiwygEditorRef.current) wysiwygEditorRef.current.toggleBold();
+          else applyFormat("bold");
+        }
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === "i") {
+        const editorFocused = document.activeElement?.closest(".ProseMirror");
+        if (contentRef.current === document.activeElement || editorFocused) {
+          e.preventDefault();
+          if (wysiwygEditorRef.current) wysiwygEditorRef.current.toggleItalic();
+          else applyFormat("italic");
+        }
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleSave]);
+  }, [handleSave, applyFormat]);
 
   // Handle AI content generation
   const handleAIAction = async (action: AIAction, customPrompt?: string) => {
@@ -173,19 +317,59 @@ export function DocumentGeneratorEditor({
     const prompt = customPrompt ?? aiPrompt;
 
     let textToRewrite: string;
-    let rewriteStart: number;
-    let rewriteEnd: number;
+    let rewriteFrom: number;
+    let rewriteTo: number;
+    let textBefore: string;
+    let textAfter: string;
 
-    if (selectedText) {
-      textToRewrite = selectedText;
-      rewriteStart = selectionStart;
-      rewriteEnd = selectionEnd;
+    const editor = wysiwygEditorRef.current;
+    if (editor) {
+      // Prefer stored selection - it was captured before focus moved; getSelection() may return collapsed
+      const stored = lastSelectionRef.current;
+      const sel = editor.getSelection();
+      const useStored = action === "rewrite" && stored?.text && stored.text.length > 0;
+      if (useStored && stored) {
+        textToRewrite = stored.text;
+        rewriteFrom = stored.from;
+        rewriteTo = stored.to;
+        textBefore = stored.textBefore;
+        textAfter = stored.textAfter;
+      } else if (sel && sel.text) {
+        textToRewrite = sel.text;
+        rewriteFrom = sel.from;
+        rewriteTo = sel.to;
+        textBefore = sel.textBefore ?? editor.getText().slice(0, 3000);
+        textAfter = sel.textAfter ?? "";
+      } else {
+        const extracted = editor.getExtractedAtCursor();
+        if (!extracted) {
+          textToRewrite = editor.getText().slice(-500);
+          rewriteFrom = 0;
+          rewriteTo = 0;
+          textBefore = editor.getText();
+          textAfter = "";
+        } else {
+          textToRewrite = extracted.text;
+          rewriteFrom = extracted.from;
+          rewriteTo = extracted.to;
+          textBefore = extracted.textBefore;
+          textAfter = extracted.textAfter;
+        }
+      }
     } else {
-      const cursorPos = contentRef.current?.selectionStart ?? content.length;
-      const extracted = extractTextAtCursor(content, cursorPos);
-      textToRewrite = extracted.text;
-      rewriteStart = extracted.start;
-      rewriteEnd = extracted.end;
+      if (selectedText) {
+        textToRewrite = selectedText;
+        rewriteFrom = selectionStart;
+        rewriteTo = selectionEnd;
+      } else {
+        const cursorPos = contentRef.current?.selectionStart ?? content.length;
+        const extracted = extractTextAtCursor(content, cursorPos);
+        textToRewrite = extracted.text;
+        rewriteFrom = extracted.start;
+        rewriteTo = extracted.end;
+      }
+      textBefore = content.substring(0, rewriteFrom);
+      textAfter = content.substring(rewriteTo);
     }
 
     if (prompt) {
@@ -193,18 +377,20 @@ export function DocumentGeneratorEditor({
       setAiPrompt("");
     }
 
+    const fullContent = editor ? editor.getText() : content;
+
     try {
       const response = await fetch("/api/document-generator/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action,
-          content: textToRewrite || content.slice(-500),
+          content: textToRewrite || fullContent.slice(-500),
           prompt,
           context: {
             documentTitle: title,
-            fullContent: content.slice(0, 3000),
-            cursorPosition: selectionEnd,
+            fullContent: fullContent.slice(0, 3000),
+            cursorPosition: rewriteTo,
           },
           options: { tone: "professional", length: "medium" },
         }),
@@ -216,11 +402,14 @@ export function DocumentGeneratorEditor({
         const generatedContent = data.generatedContent;
 
         if (action === "rewrite" && textToRewrite.trim()) {
+          const cleaned = stripRewriteQuotes(generatedContent);
           setRewritePreview({
             originalText: textToRewrite,
-            proposedText: generatedContent,
-            selectionStart: rewriteStart,
-            selectionEnd: rewriteEnd,
+            proposedText: cleaned,
+            from: rewriteFrom,
+            to: rewriteTo,
+            textBefore,
+            textAfter,
             prompt: prompt ?? "",
           });
           setChatMessages((prev) => [
@@ -230,12 +419,20 @@ export function DocumentGeneratorEditor({
           return;
         }
 
-        if (selectedText && (action === "expand" || action === "summarize" || action === "change_tone")) {
-          const newContent =
-            content.substring(0, selectionStart) + generatedContent + content.substring(selectionEnd);
-          setContent(newContent);
+        if (textToRewrite && (action === "expand" || action === "summarize" || action === "change_tone")) {
+          if (editor) {
+            editor.replaceRange(rewriteFrom, rewriteTo, generatedContent);
+          } else {
+            const newContent =
+              content.substring(0, rewriteFrom) + generatedContent + content.substring(rewriteTo);
+            setContent(newContent);
+          }
         } else {
-          setContent((prev) => prev + "\n\n" + generatedContent);
+          if (editor) {
+            editor.insertContent("<p>" + generatedContent + "</p>");
+          } else {
+            setContent((prev) => prev + "\n\n" + generatedContent);
+          }
         }
 
         setChatMessages((prev) => [
@@ -246,8 +443,7 @@ export function DocumentGeneratorEditor({
           },
         ]);
       }
-    } catch (error) {
-      console.error("AI generation error:", error);
+    } catch {
       setChatMessages((prev) => [
         ...prev,
         { role: "assistant", content: "Sorry, there was an error generating content. Please try again." },
@@ -273,14 +469,23 @@ export function DocumentGeneratorEditor({
 
   const handleRewriteAccept = useCallback(() => {
     if (!rewritePreview) return;
-    contentHistoryRef.current.push(content);
-    const newContent =
-      content.slice(0, rewritePreview.selectionStart) +
-      rewritePreview.proposedText +
-      content.slice(rewritePreview.selectionEnd);
-    setContent(newContent);
+    const editor = wysiwygEditorRef.current;
+    if (editor) {
+      contentHistoryRef.current.push(editor.getHtml());
+      // Use text context to compute range - selection may have collapsed when focus moved to AI panel
+      const ok = editor.replaceRangeByTextContext(rewritePreview.textBefore, rewritePreview.originalText, rewritePreview.proposedText);
+      if (ok) setContent(editor.getHtml());
+    } else {
+      contentHistoryRef.current.push(content);
+      const newContent =
+        rewritePreview.textBefore +
+        rewritePreview.proposedText +
+        rewritePreview.textAfter;
+      setContent(newContent);
+    }
     setRewritePreview(null);
     setSelectedText("");
+    lastSelectionRef.current = null;
     setChatMessages((prev) => [
       ...prev,
       { role: "assistant", content: "Rewrite applied. Use Cmd+Z to undo." },
@@ -289,12 +494,14 @@ export function DocumentGeneratorEditor({
 
   const handleRewriteReject = useCallback(() => {
     setRewritePreview(null);
+    lastSelectionRef.current = null;
   }, []);
 
   const [isRetryingRewrite, setIsRetryingRewrite] = useState(false);
   const handleRewriteTryAgain = useCallback(async () => {
     if (!rewritePreview) return;
     setIsRetryingRewrite(true);
+    const fullContent = wysiwygEditorRef.current?.getText() ?? content;
     try {
       const response = await fetch("/api/document-generator/generate", {
         method: "POST",
@@ -303,13 +510,13 @@ export function DocumentGeneratorEditor({
           action: "rewrite",
           content: rewritePreview.originalText,
           prompt: rewritePreview.prompt,
-          context: { documentTitle: title, fullContent: content.slice(0, 3000) },
+          context: { documentTitle: title, fullContent: fullContent.slice(0, 3000) },
           options: { tone: "professional", length: "medium" },
         }),
       });
       const data = (await response.json()) as { success: boolean; generatedContent?: string };
       if (data.success && data.generatedContent) {
-        setRewritePreview((p) => (p ? { ...p, proposedText: data.generatedContent! } : null));
+        setRewritePreview((p) => (p ? { ...p, proposedText: stripRewriteQuotes(data.generatedContent!) } : null));
       }
     } finally {
       setIsRetryingRewrite(false);
@@ -334,9 +541,14 @@ export function DocumentGeneratorEditor({
 
   // Handle inserting content from research
   const handleInsertContent = (insertContent: string, citation?: { title: string; url?: string }) => {
-    const cursorPos = contentRef.current?.selectionStart ?? content.length;
-    const newContent = content.substring(0, cursorPos) + '\n\n' + insertContent + '\n\n' + content.substring(cursorPos);
-    setContent(newContent);
+    const editor = wysiwygEditorRef.current;
+    if (editor) {
+      editor.insertContent("<p></p><p>" + insertContent.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</p><p></p>");
+    } else {
+      const cursorPos = contentRef.current?.selectionStart ?? content.length;
+      const newContent = content.substring(0, cursorPos) + '\n\n' + insertContent + '\n\n' + content.substring(cursorPos);
+      setContent(newContent);
+    }
     
     // Add citation if provided
     if (citation) {
@@ -353,23 +565,40 @@ export function DocumentGeneratorEditor({
 
   // Handle inserting citation
   const handleInsertCitation = (inTextCitation: string) => {
-    const cursorPos = contentRef.current?.selectionStart ?? content.length;
-    const newContent = content.substring(0, cursorPos) + inTextCitation + content.substring(cursorPos);
-    setContent(newContent);
+    const editor = wysiwygEditorRef.current;
+    if (editor) {
+      editor.insertContent(inTextCitation);
+    } else {
+      const cursorPos = contentRef.current?.selectionStart ?? content.length;
+      const newContent = content.substring(0, cursorPos) + inTextCitation + content.substring(cursorPos);
+      setContent(newContent);
+    }
   };
 
   // Handle grammar suggestion
   const handleApplySuggestion = (original: string, suggestion: string) => {
-    const newContent = content.replace(original, suggestion);
-    setContent(newContent);
+    const editor = wysiwygEditorRef.current;
+    if (editor) {
+      const html = editor.getHtml().replace(original, suggestion);
+      editor.setContent(html);
+    } else {
+      const newContent = content.replace(original, suggestion);
+      setContent(newContent);
+    }
   };
 
   // Handle outline section insertion
   const handleInsertSection = (sectionTitle: string, level: number) => {
-    const markdown = '#'.repeat(level) + ' ' + sectionTitle + '\n\n';
-    const cursorPos = contentRef.current?.selectionStart ?? content.length;
-    const newContent = content.substring(0, cursorPos) + '\n\n' + markdown + content.substring(cursorPos);
-    setContent(newContent);
+    const html = `<h${level}>${sectionTitle}</h${level}><p></p>`;
+    const editor = wysiwygEditorRef.current;
+    if (editor) {
+      editor.insertContent(html);
+    } else {
+      const markdown = '#'.repeat(level) + ' ' + sectionTitle + '\n\n';
+      const cursorPos = contentRef.current?.selectionStart ?? content.length;
+      const newContent = content.substring(0, cursorPos) + '\n\n' + markdown + content.substring(cursorPos);
+      setContent(newContent);
+    }
   };
 
   // Handle tool selection
@@ -522,30 +751,122 @@ export function DocumentGeneratorEditor({
 
               {/* Formatting Bar */}
               <div className="flex items-center gap-1 px-4 py-2 bg-background/50 backdrop-blur-sm">
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground" title="Bold">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground"
+                  title="Bold (Ctrl+B)"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    if (wysiwygEditorRef.current) {
+                      wysiwygEditorRef.current.toggleBold();
+                    } else {
+                      applyFormat("bold");
+                    }
+                  }}
+                >
                   <Bold className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground" title="Italic">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground"
+                  title="Italic (Ctrl+I)"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    if (wysiwygEditorRef.current) {
+                      wysiwygEditorRef.current.toggleItalic();
+                    } else {
+                      applyFormat("italic");
+                    }
+                  }}
+                >
                   <Italic className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground" title="Underline">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground"
+                  title="Underline"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    if (wysiwygEditorRef.current) {
+                      wysiwygEditorRef.current.toggleUnderline();
+                    } else {
+                      applyFormat("underline");
+                    }
+                  }}
+                >
                   <Underline className="w-4 h-4" />
                 </Button>
                 <div className="w-px h-6 bg-border mx-2" />
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground" title="Bullet List">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground"
+                  title="Bullet List"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    if (wysiwygEditorRef.current) {
+                      wysiwygEditorRef.current.toggleBulletList();
+                    } else {
+                      applyFormat("bulletList");
+                    }
+                  }}
+                >
                   <List className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground" title="Numbered List">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground"
+                  title="Numbered List"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    if (wysiwygEditorRef.current) {
+                      wysiwygEditorRef.current.toggleOrderedList();
+                    } else {
+                      applyFormat("numberedList");
+                    }
+                  }}
+                >
                   <ListOrdered className="w-4 h-4" />
                 </Button>
                 <div className="w-px h-6 bg-border mx-2" />
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground" title="Align Left">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground"
+                  title="Align Left"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    wysiwygEditorRef.current?.setTextAlign("left");
+                  }}
+                >
                   <AlignLeft className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground" title="Align Center">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground"
+                  title="Align Center"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    wysiwygEditorRef.current?.setTextAlign("center");
+                  }}
+                >
                   <AlignCenter className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground" title="Align Right">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-8 h-8 p-0 text-muted-foreground hover:text-foreground"
+                  title="Align Right"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    wysiwygEditorRef.current?.setTextAlign("right");
+                  }}
+                >
                   <AlignRight className="w-4 h-4" />
                 </Button>
                 
@@ -556,16 +877,33 @@ export function DocumentGeneratorEditor({
               </div>
             </div>
 
-            {/* Editor Content - when rewrite preview active, show before|diff|after inline in document */}
-            <div className="flex-1 bg-muted/30 overflow-y-auto custom-scrollbar">
+            {/* Editor Content - Edit or Preview (single pane) */}
+            <div className="flex-1 bg-muted/30 overflow-y-auto custom-scrollbar relative">
               <div className="py-8 px-4">
                 <div
                   className="max-w-[816px] mx-auto bg-card shadow-xl min-h-[1056px] px-24 py-20 border border-border/50 text-base leading-relaxed text-foreground"
                   style={{ fontFamily: "Georgia, serif" }}
                 >
+                  {/* Editor stays mounted when rewrite preview shows so Accept can replace content */}
+                  <div className={rewritePreview ? "sr-only" : undefined}>
+                    <WysiwygEditor
+                      key={documentId ?? "new"}
+                      ref={wysiwygEditorRef}
+                      initialContent={content}
+                      onChange={(md) => { setRewritePreview(null); setContent(md); }}
+                      onSelectionChange={(info) => {
+                        setSelectedText(info.text);
+                        setSelectionStart(info.from);
+                        setSelectionEnd(info.to);
+                        lastSelectionRef.current = info.text ? info : null;
+                      }}
+                      placeholder={isRewriteMode ? "Paste or type text here, then select and use the AI panel to rewrite..." : "Start writing or use the AI tools..."}
+                      className="w-full min-h-[900px] [&_.ProseMirror]:min-h-[900px]"
+                    />
+                  </div>
                   {rewritePreview ? (
                     <div className="whitespace-pre-wrap">
-                      {content.slice(0, rewritePreview.selectionStart)}
+                      {rewritePreview.textBefore}
                       <InlineRewriteDiff
                         originalText={rewritePreview.originalText}
                         proposedText={rewritePreview.proposedText}
@@ -574,19 +912,9 @@ export function DocumentGeneratorEditor({
                         onTryAgain={handleRewriteTryAgain}
                         isRetrying={isRetryingRewrite}
                       />
-                      {content.slice(rewritePreview.selectionEnd)}
+                      {rewritePreview.textAfter}
                     </div>
-                  ) : (
-                    <Textarea
-                      ref={contentRef}
-                      value={content}
-                      onChange={handleContentChange}
-                      onSelect={handleTextSelection}
-                      className="w-full min-h-[900px] border-0 focus-visible:ring-0 resize-none text-base leading-relaxed bg-transparent text-foreground"
-                      placeholder={isRewriteMode ? "Paste or type text here, then select and use the AI panel to rewrite..." : "Start writing or use the AI tools to help you..."}
-                      style={{ fontFamily: "Georgia, serif" }}
-                    />
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

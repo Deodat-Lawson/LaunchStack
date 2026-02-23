@@ -72,8 +72,8 @@ export function RewriteDiffView() {
         }));
         setRewriteDocuments(docs);
       }
-    } catch (err) {
-      console.error("Error fetching rewrite documents:", err);
+    } catch {
+      // Error fetching rewrite documents
     } finally {
       setIsLoading(false);
     }

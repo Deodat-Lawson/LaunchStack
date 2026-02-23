@@ -40,6 +40,9 @@ const serverSchema = z.object({
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
+  NEO4J_URI: optionalString(),
+  NEO4J_USERNAME: optionalString(),
+  NEO4J_PASSWORD: optionalString(),
 });
 
 const clientSchema = z.object({
@@ -88,6 +91,9 @@ function parseServerEnv() {
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
+    NEO4J_URI: process.env.NEO4J_URI,
+    NEO4J_USERNAME: process.env.NEO4J_USERNAME,
+    NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
   });
   if (
     (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)

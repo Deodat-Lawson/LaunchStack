@@ -10,19 +10,20 @@ import {
 } from "~/lib/ingestion/types";
 
 const EMAIL_SOURCE = "email";
+const UNKNOWN_SOURCE = "unknown";
 
 /** MIME types that have a dedicated ingestion adapter (excludes email). */
 export const ACCEPTED_MIME_TYPES: string[] = (
   Object.entries(MIME_TO_SOURCE_TYPE) as [string, string][]
 )
-  .filter(([, sourceType]) => sourceType !== EMAIL_SOURCE)
+  .filter(([, sourceType]) => sourceType !== EMAIL_SOURCE && sourceType !== UNKNOWN_SOURCE)
   .map(([mime]) => mime);
 
 /** File extensions that have a dedicated ingestion adapter (excludes email). */
 export const ACCEPTED_EXTENSIONS: string[] = (
   Object.entries(EXTENSION_TO_SOURCE_TYPE) as [string, string][]
 )
-  .filter(([, sourceType]) => sourceType !== EMAIL_SOURCE)
+  .filter(([, sourceType]) => sourceType !== EMAIL_SOURCE && sourceType !== UNKNOWN_SOURCE)
   .map(([ext]) => ext);
 
 /** Value for HTML <input accept=""> attribute. */

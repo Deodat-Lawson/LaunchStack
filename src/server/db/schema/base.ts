@@ -446,6 +446,119 @@ export const ocrCostTracking = pgTable(
 );
 
 // ============================================================================
+// Upload Batches
+// ============================================================================
+
+export const uploadBatches = pgTable(
+    "upload_batches",
+    {
+        id: varchar("id", { length: 64 }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        createdByUserId: varchar("created_by_user_id", { length: 256 }).notNull(),
+        status: varchar("status", {
+            length: 32,
+            enum: ["created", "uploading", "committed", "processing", "complete", "failed"],
+        })
+            .notNull()
+            .default("created"),
+        metadata: jsonb("metadata"),
+        totalFiles: integer("total_files").default(0).notNull(),
+        uploadedFiles: integer("uploaded_files").default(0).notNull(),
+        processedFiles: integer("processed_files").default(0).notNull(),
+        failedFiles: integer("failed_files").default(0).notNull(),
+        committedAt: timestamp("committed_at", { withTimezone: true }),
+        processingStartedAt: timestamp("processing_started_at", { withTimezone: true }),
+        completedAt: timestamp("completed_at", { withTimezone: true }),
+        failedAt: timestamp("failed_at", { withTimezone: true }),
+        errorMessage: text("error_message"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+            () => new Date()
+        ),
+    },
+    (table) => ({
+        companyIdx: index("upload_batches_company_idx").on(table.companyId),
+        creatorIdx: index("upload_batches_creator_idx").on(table.createdByUserId),
+        statusIdx: index("upload_batches_status_idx").on(table.status),
+    })
+);
+
+export const uploadBatchFiles = pgTable(
+    "upload_batch_files",
+    {
+        id: serial("id").primaryKey(),
+        batchId: varchar("batch_id", { length: 64 })
+            .notNull()
+            .references(() => uploadBatches.id, { onDelete: "cascade" }),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        userId: varchar("user_id", { length: 256 }).notNull(),
+        filename: varchar("filename", { length: 512 }).notNull(),
+        relativePath: varchar("relative_path", { length: 1024 }),
+        mimeType: varchar("mime_type", { length: 128 }),
+        fileSizeBytes: bigint("file_size_bytes", { mode: "bigint" }),
+        storageUrl: varchar("storage_url", { length: 1024 }),
+        storageType: varchar("storage_type", { length: 32 }),
+        status: varchar("status", {
+            length: 32,
+            enum: ["queued", "uploaded", "processing", "complete", "failed"],
+        })
+            .notNull()
+            .default("queued"),
+        metadata: jsonb("metadata"),
+        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, {
+            onDelete: "set null",
+        }),
+        jobId: varchar("job_id", { length: 256 }).references(() => ocrJobs.id, {
+            onDelete: "set null",
+        }),
+        errorMessage: text("error_message"),
+        uploadedAt: timestamp("uploaded_at", { withTimezone: true }),
+        processedAt: timestamp("processed_at", { withTimezone: true }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+            () => new Date()
+        ),
+    },
+    (table) => ({
+        batchIdx: index("upload_batch_files_batch_idx").on(table.batchId),
+        statusIdx: index("upload_batch_files_status_idx").on(table.status),
+        jobIdx: index("upload_batch_files_job_idx").on(table.jobId),
+        documentIdx: index("upload_batch_files_document_idx").on(table.documentId),
+    })
+);
+
+export const uploadBatchesRelations = relations(uploadBatches, ({ many, one }) => ({
+    files: many(uploadBatchFiles),
+    company: one(company, {
+        fields: [uploadBatches.companyId],
+        references: [company.id],
+    }),
+}));
+
+export const uploadBatchFilesRelations = relations(uploadBatchFiles, ({ one }) => ({
+    batch: one(uploadBatches, {
+        fields: [uploadBatchFiles.batchId],
+        references: [uploadBatches.id],
+    }),
+    document: one(document, {
+        fields: [uploadBatchFiles.documentId],
+        references: [document.id],
+    }),
+    job: one(ocrJobs, {
+        fields: [uploadBatchFiles.jobId],
+        references: [ocrJobs.id],
+    }),
+}));
+
+// ============================================================================
 // Document Views (for tracking document click/view events)
 // ============================================================================
 

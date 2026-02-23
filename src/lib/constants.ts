@@ -37,6 +37,21 @@ export const DOCUMENT_LIMITS = {
   ] as const
 } as const;
 
+// Batch Document Upload
+export const BATCH_UPLOAD_CONFIG = {
+  /** Maximum number of files accepted in a single batch request. */
+  MAX_FILES: 20,
+  /** Combined size cap for all files in a batch (MB). */
+  MAX_TOTAL_SIZE_MB: 500,
+  /** Number of files processed concurrently through the OCR/embedding pipeline. */
+  MAX_CONCURRENT_UPLOADS: 3,
+  /** Front-end polling interval when waiting for batch job completion (ms). */
+  QUEUE_POLL_INTERVAL_MS: 2000,
+} as const;
+
+/** Convenience alias used by upload route validation. */
+export const BATCH_UPLOAD_MAX_FILES = BATCH_UPLOAD_CONFIG.MAX_FILES;
+
 // Predictive Analysis batching
 export const ANALYSIS_BATCH_CONFIG = {
   MAX_CHUNKS_PER_CALL: 10,

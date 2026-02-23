@@ -14,7 +14,7 @@ function toHtml(md: string): string {
   if (!md.trim()) return "<p></p>";
   if (md.trim().startsWith("<") && md.includes(">")) return md;
   try {
-    return marked.parse(md, { async: false }) as string;
+    return String(marked.parse(md, { async: false }));
   } catch {
     return md;
   }
@@ -25,8 +25,8 @@ function markdownToInlineHtml(md: string): string {
   if (!md.trim()) return "";
   if (md.trim().startsWith("<") && md.includes(">")) return md;
   try {
-    const html = marked.parse(md, { async: false }) as string;
-    const m = html.match(/^<p>(.*)<\/p>$/s);
+    const html = String(marked.parse(md, { async: false }));
+    const m = /^<p>(.*)<\/p>$/s.exec(html);
     return m ? m[1]! : html;
   } catch {
     return md;
@@ -115,7 +115,7 @@ interface WysiwygEditorProps {
 }
 
 export const WysiwygEditor = forwardRef<WysiwygEditorHandle, WysiwygEditorProps>(
-  function WysiwygEditor({ initialContent, onChange, onSelectionChange, placeholder, className }, ref) {
+  function WysiwygEditor({ initialContent, onChange, onSelectionChange, placeholder: _placeholder, className }, ref) {
     const initialHtmlRef = useRef(toHtml(initialContent));
     initialHtmlRef.current = toHtml(initialContent);
     const onChangeRef = useRef(onChange);
@@ -215,7 +215,8 @@ export const WysiwygEditor = forwardRef<WysiwygEditorHandle, WysiwygEditorProps>
           const { doc } = editor.state;
           const startChar = textBefore.length;
           const endChar = textBefore.length + originalText.length;
-          let { from, to } = findPositions(doc, startChar, endChar);
+          const { from: fromPos, to } = findPositions(doc, startChar, endChar);
+          let from = fromPos;
           if (from > 1) from -= 1;
           const content = markdownToInlineHtml(proposedText);
           editor.chain().focus().insertContentAt({ from, to }, content || proposedText).run();

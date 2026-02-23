@@ -256,7 +256,7 @@ export function DocumentGeneratorEditor({
         el.setSelectionRange(newCursor, newCursor);
       });
     },
-    [content]
+    [content, getUnwrapped]
   );
 
   useEffect(() => {
@@ -327,14 +327,14 @@ export function DocumentGeneratorEditor({
       // Prefer stored selection - it was captured before focus moved; getSelection() may return collapsed
       const stored = lastSelectionRef.current;
       const sel = editor.getSelection();
-      const useStored = action === "rewrite" && stored?.text && stored.text.length > 0;
+      const useStored = action === "rewrite" && (stored?.text?.length ?? 0) > 0;
       if (useStored && stored) {
         textToRewrite = stored.text;
         rewriteFrom = stored.from;
         rewriteTo = stored.to;
         textBefore = stored.textBefore;
         textAfter = stored.textAfter;
-      } else if (sel && sel.text) {
+      } else if (sel?.text) {
         textToRewrite = sel.text;
         rewriteFrom = sel.from;
         rewriteTo = sel.to;
@@ -462,11 +462,6 @@ export function DocumentGeneratorEditor({
     await handleAIAction(action, aiPrompt);
   };
 
-  const handleContentChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setRewritePreview(null); 
-    setContent(e.target.value);
-  }, []);
-
   const handleRewriteAccept = useCallback(() => {
     if (!rewritePreview) return;
     const editor = wysiwygEditorRef.current;
@@ -522,22 +517,6 @@ export function DocumentGeneratorEditor({
       setIsRetryingRewrite(false);
     }
   }, [rewritePreview, title, content]);
-
-  // Handle text selection
-  const handleTextSelection = () => {
-    if (!contentRef.current) return;
-    
-    const start = contentRef.current.selectionStart;
-    const end = contentRef.current.selectionEnd;
-    
-    if (start !== end) {
-      setSelectedText(content.substring(start, end));
-      setSelectionStart(start);
-      setSelectionEnd(end);
-    } else {
-      setSelectedText('');
-    }
-  };
 
   // Handle inserting content from research
   const handleInsertContent = (insertContent: string, citation?: { title: string; url?: string }) => {

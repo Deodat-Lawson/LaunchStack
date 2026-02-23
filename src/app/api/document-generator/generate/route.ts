@@ -237,7 +237,7 @@ Now refine it further:
                 ]);
 
                 // Use the refined second pass for rewrite (skip the generic call below)
-                let rewriteContent = stripRewriteQuotes(normalizeModelContent(secondPass.content));
+                const rewriteContent = stripRewriteQuotes(normalizeModelContent(secondPass.content));
                 const rewriteProcessingTimeMs = Date.now() - startTime;
                 return NextResponse.json({
                     success: true,

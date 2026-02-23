@@ -15,15 +15,14 @@ import { auth } from "@clerk/nextjs/server";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 import TurndownService from "turndown";
 
+const turndown = new TurndownService({ headingStyle: "atx" });
+turndown.keep(["u"]);
+
 // Helper function to create RGB color for pdf-lib
 function rgb(r: number, g: number, b: number) {
     return { type: 1 as const, red: r, green: g, blue: b };
 }
 import { z } from "zod";
-
-const turndown = new TurndownService({ headingStyle: "atx" });
-// Preserve underline (Markdown has no native equivalent)
-turndown.keep(["u"]);
 
 /** Detect if content is HTML (from WYSIWYG editor). */
 function isHtml(content: string): boolean {

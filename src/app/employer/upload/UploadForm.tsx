@@ -49,6 +49,36 @@ import {
 const { uploadFiles } = genUploader<OurFileRouter>();
 
 const MAX_FILE_SIZE = 16 * 1024 * 1024;
+const ZIP_ACCEPT_STRING = ".zip,application/zip";
+const ZIP_MIME_TYPES = new Set([
+    "application/zip",
+    "application/x-zip-compressed",
+    "multipart/x-zip",
+    "application/octet-stream",
+]);
+const MIME_BY_EXTENSION: Record<string, string> = {
+    pdf: "application/pdf",
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    tif: "image/tiff",
+    tiff: "image/tiff",
+    webp: "image/webp",
+    gif: "image/gif",
+    bmp: "image/bmp",
+    docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    doc: "application/msword",
+    xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    xls: "application/vnd.ms-excel",
+    csv: "text/csv",
+    pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ppt: "application/vnd.ms-powerpoint",
+    txt: "text/plain",
+    md: "text/markdown",
+    markdown: "text/markdown",
+    html: "text/html",
+    htm: "text/html",
+};
 
 interface DocumentFile {
     id: string;
@@ -69,6 +99,16 @@ interface BatchSettings {
     uploadDate: string;
     storageMethod: string;
 }
+
+interface ZipExtractionResult {
+    files: File[];
+    nestedZipCount: number;
+    metadataFileCount: number;
+}
+
+type DataTransferItemWithWebkitEntry = DataTransferItem & {
+    webkitGetAsEntry?: () => FileSystemEntry | null;
+};
 
 export interface AvailableProviders {
     azure: boolean;
@@ -98,6 +138,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const { userId } = useAuth();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const folderInputRef = useRef<HTMLInputElement>(null);
 
     const [step, setStep] = useState<1 | 2>(1);
     const [documents, setDocuments] = useState<DocumentFile[]>([]);
@@ -149,29 +190,141 @@ const UploadForm: React.FC<UploadFormProps> = ({
         [batchSettings],
     );
 
-    const validateAndAddFiles = useCallback(
-        (files: File[]) => {
-            const validFiles: DocumentFile[] = [];
-            let errorCount = 0;
+    const isZipFile = useCallback((file: File) => {
+        const extension = file.name.toLowerCase().split(".").pop();
+        const mimeType = file.type.toLowerCase();
+        return extension === "zip" || ZIP_MIME_TYPES.has(mimeType);
+    }, []);
 
-            files.forEach((file) => {
+    const inferMimeTypeFromFilename = useCallback((filename: string) => {
+        const extension = filename.toLowerCase().split(".").pop() ?? "";
+        return MIME_BY_EXTENSION[extension];
+    }, []);
+
+    const extractFilesFromZip = useCallback(async (zipFile: File): Promise<ZipExtractionResult> => {
+        const JSZip = (await import("jszip")).default;
+        const zip = await JSZip.loadAsync(await zipFile.arrayBuffer());
+
+        const extractedFiles: File[] = [];
+        let nestedZipCount = 0;
+        let metadataFileCount = 0;
+
+        for (const [entryPath, entry] of Object.entries(zip.files)) {
+            if (entry.dir) continue;
+
+            // Skip macOS ZIP metadata/resource fork entries.
+            const normalizedEntryPath = entryPath.replaceAll("\\", "/");
+            const pathParts = normalizedEntryPath.split("/").filter(Boolean);
+            if (pathParts.length === 0) continue;
+            const safeName = pathParts[pathParts.length - 1]!;
+            if (
+                pathParts.includes("__MACOSX") ||
+                safeName.startsWith("._") ||
+                safeName === ".DS_Store"
+            ) {
+                metadataFileCount++;
+                continue;
+            }
+
+            if (safeName.toLowerCase().endsWith(".zip")) {
+                nestedZipCount++;
+                continue;
+            }
+
+            const blob = await entry.async("blob");
+            const inferredMime = inferMimeTypeFromFilename(safeName);
+            extractedFiles.push(
+                new File([blob], safeName, {
+                    type: inferredMime ?? blob.type ?? "",
+                    lastModified: zipFile.lastModified,
+                }),
+            );
+        }
+
+        return { files: extractedFiles, nestedZipCount, metadataFileCount };
+    }, [inferMimeTypeFromFilename]);
+
+    const validateAndAddFiles = useCallback(
+        async (files: File[]) => {
+            const validFiles: DocumentFile[] = [];
+            const filesToValidate: { file: File; fromZip: boolean }[] = [];
+
+            let nonZipErrorCount = 0;
+            let zipArchiveCount = 0;
+            let zipExtractionFailureCount = 0;
+            let zipNestedSkippedCount = 0;
+            let zipMetadataSkippedCount = 0;
+            let zipUnsupportedCount = 0;
+            let zipOversizedCount = 0;
+            let zipQueuedCount = 0;
+
+            for (const file of files) {
+                if (!isZipFile(file)) {
+                    filesToValidate.push({ file, fromZip: false });
+                    continue;
+                }
+
+                zipArchiveCount++;
+                try {
+                    const extracted = await extractFilesFromZip(file);
+                    zipNestedSkippedCount += extracted.nestedZipCount;
+                    zipMetadataSkippedCount += extracted.metadataFileCount;
+                    extracted.files.forEach((extractedFile) => {
+                        filesToValidate.push({ file: extractedFile, fromZip: true });
+                    });
+                } catch (error) {
+                    zipExtractionFailureCount++;
+                    console.error("Failed to extract ZIP file", error);
+                    toast.error(`Failed to extract ${file.name}`);
+                }
+            }
+
+            filesToValidate.forEach(({ file, fromZip }) => {
                 if (!isUploadAccepted({ name: file.name, type: file.type })) {
-                    errorCount++;
+                    if (fromZip) {
+                        zipUnsupportedCount++;
+                    } else {
+                        nonZipErrorCount++;
+                    }
                     return;
                 }
                 if (file.size > MAX_FILE_SIZE) {
-                    toast.error(`${file.name} exceeds 16MB limit`);
-                    errorCount++;
+                    if (fromZip) {
+                        zipOversizedCount++;
+                    } else {
+                        toast.error(`${file.name} exceeds 16MB limit`);
+                        nonZipErrorCount++;
+                    }
                     return;
                 }
+
                 validFiles.push(defaultDoc(file));
+                if (fromZip) zipQueuedCount++;
             });
 
-            if (errorCount > 0) {
-                toast.error(`${errorCount} file(s) were rejected`, {
+            if (nonZipErrorCount > 0) {
+                toast.error(`${nonZipErrorCount} file(s) were rejected`, {
                     description: "Please upload PDF, DOCX, images (PNG, JPG, etc.) under 16MB",
                 });
             }
+
+            if (zipArchiveCount > 0) {
+                const details: string[] = [`${zipQueuedCount} file(s) added from ZIP`];
+                if (zipUnsupportedCount > 0) details.push(`${zipUnsupportedCount} unsupported`);
+                if (zipOversizedCount > 0) details.push(`${zipOversizedCount} over 16MB`);
+                if (zipNestedSkippedCount > 0) details.push(`${zipNestedSkippedCount} nested ZIP skipped`);
+                if (zipMetadataSkippedCount > 0) details.push(`${zipMetadataSkippedCount} system file(s) ignored`);
+                if (zipExtractionFailureCount > 0) details.push(`${zipExtractionFailureCount} ZIP failed`);
+
+                if (zipQueuedCount > 0) {
+                    toast.success("ZIP extraction complete", { description: details.join(" • ") });
+                } else {
+                    toast.error("No extractable files were found in ZIP", {
+                        description: details.join(" • "),
+                    });
+                }
+            }
+
             if (validFiles.length > 0) {
                 setDocuments((prev) => [...prev, ...validFiles]);
                 toast.success(`${validFiles.length} file(s) added to upload queue`);
@@ -182,26 +335,107 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 });
             }
         },
-        [defaultDoc],
+        [defaultDoc, extractFilesFromZip, isZipFile],
     );
 
     const handleFileSelect = useCallback(
         (files: FileList | null) => {
             if (!files || files.length === 0) return;
-            validateAndAddFiles(Array.from(files));
+            void validateAndAddFiles(Array.from(files));
             if (fileInputRef.current) fileInputRef.current.value = "";
         },
         [validateAndAddFiles],
     );
 
-    const handleDrop = useCallback(
-        (e: React.DragEvent) => {
-            e.preventDefault();
-            setIsDragging(false);
-            const files = Array.from(e.dataTransfer.files);
-            if (files.length > 0) validateAndAddFiles(files);
+    const handleFolderSelect = useCallback(
+        (files: FileList | null) => {
+            if (!files || files.length === 0) return;
+            void validateAndAddFiles(Array.from(files));
+            if (folderInputRef.current) folderInputRef.current.value = "";
         },
         [validateAndAddFiles],
+    );
+
+    const isFileEntry = (entry: FileSystemEntry): entry is FileSystemFileEntry => entry.isFile;
+    const isDirectoryEntry = (entry: FileSystemEntry): entry is FileSystemDirectoryEntry =>
+        entry.isDirectory;
+
+    const readFileFromEntry = useCallback((entry: FileSystemFileEntry) => {
+        return new Promise<File | null>((resolve) => {
+            entry.file(
+                (file) => resolve(file),
+                () => resolve(null),
+            );
+        });
+    }, []);
+
+    const readAllDirectoryEntries = useCallback(async (entry: FileSystemDirectoryEntry) => {
+        const reader = entry.createReader();
+        const collected: FileSystemEntry[] = [];
+
+        while (true) {
+            const entries = await new Promise<FileSystemEntry[]>((resolve) => {
+                reader.readEntries(
+                    (batch) => resolve(batch),
+                    () => resolve([]),
+                );
+            });
+            if (entries.length === 0) break;
+            collected.push(...entries);
+        }
+
+        return collected;
+    }, []);
+
+    const collectFilesFromEntry = useCallback(
+        async (entry: FileSystemEntry): Promise<File[]> => {
+            if (isFileEntry(entry)) {
+                const file = await readFileFromEntry(entry);
+                return file ? [file] : [];
+            }
+
+            if (isDirectoryEntry(entry)) {
+                const children = await readAllDirectoryEntries(entry);
+                const nestedFiles = await Promise.all(children.map((child) => collectFilesFromEntry(child)));
+                return nestedFiles.flat();
+            }
+
+            return [];
+        },
+        [readAllDirectoryEntries, readFileFromEntry],
+    );
+
+    const collectDroppedFiles = useCallback(
+        async (dataTransfer: DataTransfer): Promise<{ files: File[]; usedEntryApi: boolean }> => {
+            const items = Array.from(dataTransfer.items ?? []) as DataTransferItemWithWebkitEntry[];
+            const rootEntries = items
+                .map((item) => item.webkitGetAsEntry?.() ?? null)
+                .filter((entry): entry is FileSystemEntry => entry !== null);
+
+            if (rootEntries.length === 0) {
+                return { files: Array.from(dataTransfer.files), usedEntryApi: false };
+            }
+
+            const nestedFiles = await Promise.all(rootEntries.map((entry) => collectFilesFromEntry(entry)));
+            return { files: nestedFiles.flat(), usedEntryApi: true };
+        },
+        [collectFilesFromEntry],
+    );
+
+    const handleDrop = useCallback(
+        async (e: React.DragEvent) => {
+            e.preventDefault();
+            setIsDragging(false);
+            const { files, usedEntryApi } = await collectDroppedFiles(e.dataTransfer);
+            if (files.length === 0) {
+                if (usedEntryApi) {
+                    toast.error("No files found in dropped folder");
+                }
+                return;
+            }
+            void validateAndAddFiles(files);
+        },
+        [collectDroppedFiles, validateAndAddFiles],
     );
 
     const handleDragOver = (e: React.DragEvent) => {
@@ -313,6 +547,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
         if (step === 1) hasSyncedBatch.current = false;
     }, [step, documents]);
 
+    useEffect(() => {
+        const folderInput = folderInputRef.current;
+        if (!folderInput) return;
+        folderInput.setAttribute("webkitdirectory", "");
+        folderInput.setAttribute("directory", "");
+    }, []);
+
     const formatFileSize = (bytes: number) => {
         if (bytes === 0) return "0 Bytes";
         const k = 1024;
@@ -371,7 +612,12 @@ const UploadForm: React.FC<UploadFormProps> = ({
             }),
         });
 
-        if (!response.ok) throw new Error(`Document registration failed for ${doc.title}`);
+        if (!response.ok) {
+            const text = await response.text().catch(() => "");
+            throw new Error(
+                `Document registration failed for ${doc.title} (HTTP ${response.status}) ${text}`
+            );
+        }
         updateDocument(doc.id, { status: "success", progress: 100 });
     };
 
@@ -518,14 +764,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                 onDrop={handleDrop}
                                 onDragOver={handleDragOver}
                                 onDragLeave={handleDragLeave}
-                                className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors cursor-pointer ${
+                                className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
                                     isDragging
                                         ? "border-purple-600 bg-purple-50 dark:border-purple-400 dark:bg-purple-900/30"
                                         : errors.files
                                           ? "border-red-300 bg-red-50"
                                           : "border-gray-300 hover:border-purple-400 hover:bg-gray-50 dark:border-purple-400/40 dark:hover:border-purple-400 dark:hover:bg-slate-800/60"
                                 }`}
-                                onClick={() => fileInputRef.current?.click()}
                             >
                                 <Upload
                                     className={`mx-auto h-12 w-12 mb-4 ${
@@ -535,20 +780,50 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     }`}
                                 />
                                 <p className="text-base font-medium text-gray-900 dark:text-white mb-1">
-                                    Drop your files here, or click to browse
+                                    Drag and drop files or folders here
                                 </p>
                                 <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">
-                                    PDF, DOC, DOCX, PNG, JPG — Max 16MB per file
+                                    PDF, DOC, DOCX, PNG, JPG, ZIP — Max 16MB per file
                                 </p>
                                 <p className="text-xs text-gray-400">
-                                    You can select multiple files at once
+                                    Or choose exactly what to upload
                                 </p>
+                                <div className="mt-4 flex items-center justify-center gap-3">
+                                    <Button
+                                        type="button"
+                                        onClick={() => {
+                                            fileInputRef.current?.click();
+                                        }}
+                                    >
+                                        Select Files
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => {
+                                            folderInputRef.current?.click();
+                                        }}
+                                    >
+                                        Select Folder
+                                    </Button>
+                                </div>
                                 <input
                                     ref={fileInputRef}
                                     id="file-input"
                                     type="file"
-                                    accept={UPLOAD_ACCEPT_STRING}
+                                    accept={`${UPLOAD_ACCEPT_STRING},${ZIP_ACCEPT_STRING}`}
                                     onChange={(e) => handleFileSelect(e.target.files)}
+                                    className="hidden"
+                                    multiple
+                                    aria-describedby={errors.files ? "files-error" : undefined}
+                                    aria-invalid={!!errors.files}
+                                />
+                                <input
+                                    ref={folderInputRef}
+                                    id="folder-input"
+                                    type="file"
+                                    accept={`${UPLOAD_ACCEPT_STRING},${ZIP_ACCEPT_STRING}`}
+                                    onChange={(e) => handleFolderSelect(e.target.files)}
                                     className="hidden"
                                     multiple
                                     aria-describedby={errors.files ? "files-error" : undefined}

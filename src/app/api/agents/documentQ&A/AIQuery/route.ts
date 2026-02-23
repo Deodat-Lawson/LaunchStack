@@ -23,6 +23,7 @@ import {
     getChatModel,
     getEmbeddings,
     extractRecommendedPages,
+    filterPagesByAICitation,
 } from "../services";
 import type { AIModelType } from "../services";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
@@ -269,10 +270,13 @@ export async function POST(request: Request) {
 
             recordResult("success");
 
+            const allCandidatePages = extractRecommendedPages(documents);
+            const recommendedPages = filterPagesByAICitation(summarizedAnswer, allCandidatePages);
+
             return NextResponse.json({
                 success: true,
                 summarizedAnswer,
-                recommendedPages: extractRecommendedPages(documents),
+                recommendedPages,
                 retrievalMethod,
                 processingTimeMs: totalTime,
                 chunksAnalyzed: documents.length,

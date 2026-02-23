@@ -87,6 +87,7 @@ export const ourFileRouter = {
     // Document upload restricted to processable types (PDF, Office, text, HTML, images)
     documentUploaderRestricted: f({
         "application/pdf": { maxFileSize: "128MB", maxFileCount: 1 },
+        "application/zip": { maxFileSize: "128MB", maxFileCount: 1 },
         "image/png": { maxFileSize: "128MB", maxFileCount: 1 },
         "image/jpeg": { maxFileSize: "128MB", maxFileCount: 1 },
         "image/tiff": { maxFileSize: "128MB", maxFileCount: 1 },

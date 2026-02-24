@@ -1,5 +1,5 @@
 import { env } from "~/env";
-import type { PlannedQuery, RawSearchResult } from "~/server/trend-search/types";
+import type { PlannedQuery, RawSearchResult } from "~/lib/tools/trend-search/types";
 
 const TAVILY_SEARCH_URL = "https://api.tavily.com/search";
 const MAX_RESULTS_PER_QUERY = 10;

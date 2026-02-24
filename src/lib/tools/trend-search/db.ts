@@ -8,7 +8,7 @@ import type {
     TrendSearchJobRecord,
     TrendSearchJobStatus,
     TrendSearchOutput,
-} from "~/server/trend-search/types";
+} from "~/lib/tools/trend-search/types";
 
 type TrendSearchJobRow = InferSelectModel<typeof trendSearchJobs>;
 type TrendSearchJobInsert = InferInsertModel<typeof trendSearchJobs>;

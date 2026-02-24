@@ -7,8 +7,8 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { inngest } from "~/server/inngest/client";
-import { TrendSearchInputSchema } from "~/server/trend-search/types";
-import { createJob, getJobsByCompanyId } from "~/server/trend-search/db";
+import { TrendSearchInputSchema } from "~/lib/tools/trend-search/types";
+import { createJob, getJobsByCompanyId } from "~/lib/tools/trend-search/db";
 
 // ─── POST /api/trend-search ─────────────────────────────────────────────────
 export async function POST(request: NextRequest) {

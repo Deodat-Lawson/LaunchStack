@@ -80,7 +80,7 @@ import "dotenv/config";
 // Skip the full env validation so we don't need DB/Clerk/Inngest keys
 process.env.SKIP_ENV_VALIDATION = "true";
 
-import { runTrendSearch } from "~/server/trend-search/index";
+import { runTrendSearch } from "~/lib/tools/trend-search/index";
 
 async function main() {
     const input = {

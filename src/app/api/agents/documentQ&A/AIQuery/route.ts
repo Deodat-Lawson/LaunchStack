@@ -144,9 +144,9 @@ export async function POST(request: Request) {
 
             try {
                 const documentOptions: DocumentSearchOptions = {
-                    weights: [0.4, 0.6],
-                    topK: 5, // Fast query - limit results
-                    documentId
+                    topK: 5,
+                    documentId,
+                    companyId: Number(requestingUser.companyId),
                 };
                 
                 documents = await documentEnsembleSearch(

@@ -193,9 +193,8 @@ export async function POST(request: Request) {
             try {
                 if (searchScope === "company") {
                     const companyOptions: CompanySearchOptions = {
-                        weights: [0.4, 0.6],
-                        topK: 10, // More results for comprehensive search
-                        companyId: numericCompanyId
+                        topK: 10,
+                        companyId: numericCompanyId,
                     };
                     
                     documents = await companyEnsembleSearch(
@@ -205,9 +204,9 @@ export async function POST(request: Request) {
                     );
                 } else if (searchScope === "document" && documentId) {
                     const documentOptions: DocumentSearchOptions = {
-                        weights: [0.4, 0.6],
                         topK: 5,
-                        documentId
+                        documentId,
+                        companyId: numericCompanyId,
                     };
                     
                     documents = await documentEnsembleSearch(

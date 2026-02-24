@@ -19,6 +19,7 @@ import { useAIChatbot, type Message } from '../hooks/useAIChatbot';
 import { useAIChat, type SourceReference } from '../hooks/useAIChat';
 import { cn } from '~/lib/utils';
 import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import { ModelBadge } from './ModelBadge';
 
 const MarkdownMessage = dynamic(
   () => import("~/app/_components/MarkdownMessage"),
@@ -247,11 +248,12 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
         const aiResponse = await sendMessage({
           chatId: activeChatId,
           role: 'assistant',
-          content: { 
+          content: {
             text: aiAnswer,
             references: references.length > 0 ? references : undefined,
             pages: pages,
-            webSources: webSources.length > 0 ? webSources : undefined
+            webSources: webSources.length > 0 ? webSources : undefined,
+            aiModel: aiData.aiModel as AIModelType | undefined ?? aiModel
           },
           messageType: 'text',
         });
@@ -451,33 +453,39 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                         </div>
                       )}
 
-                      {/* Actions */}
-                      <div className="flex items-center gap-1 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-                        <button
-                          onClick={() => handleCopy(displayText, msg.id)}
-                          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
-                          title="Copy response"
-                        >
-                          {copiedId === msg.id ? (
-                            <Check className="w-3.5 h-3.5 text-emerald-500" />
-                          ) : (
-                            <Copy className="w-3.5 h-3.5" />
-                          )}
-                        </button>
-                        <button
-                          onClick={() => handleVote(msg.id, true)}
-                          className="p-1.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
-                          title="Helpful"
-                        >
-                          <ThumbsUp className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleVote(msg.id, false)}
-                          className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-all"
-                          title="Not helpful"
-                        >
-                          <ThumbsDown className="w-3.5 h-3.5" />
-                        </button>
+                      {/* Model Badge & Actions */}
+                      <div className="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
+                        {/* Model Badge */}
+                        <ModelBadge model={msg.aiModel ?? (typeof msg.content === 'object' && msg.content !== null && 'aiModel' in msg.content ? msg.content.aiModel : undefined)} />
+
+                        {/* Actions */}
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleCopy(displayText, msg.id)}
+                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
+                            title="Copy response"
+                          >
+                            {copiedId === msg.id ? (
+                              <Check className="w-3.5 h-3.5 text-emerald-500" />
+                            ) : (
+                              <Copy className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                          <button
+                            onClick={() => handleVote(msg.id, true)}
+                            className="p-1.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
+                            title="Helpful"
+                          >
+                            <ThumbsUp className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleVote(msg.id, false)}
+                            className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-all"
+                            title="Not helpful"
+                          >
+                            <ThumbsDown className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
                     </>
                   )}

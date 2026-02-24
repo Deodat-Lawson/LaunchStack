@@ -28,6 +28,7 @@ import {
 import { cn } from "~/lib/utils";
 import type { DocumentType } from '../types';
 import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import { ModelBadge } from './ModelBadge';
 
 const MarkdownMessage = dynamic(
   () => import("~/app/_components/MarkdownMessage"),
@@ -55,6 +56,7 @@ interface SimpleQueryPanelProps {
   setAiStyle: (s: string) => void;
   aiModel: AIModelType;
   setAiModel: (m: AIModelType) => void;
+  aiAnswerModel?: AIModelType;
   modelAvailability?: Partial<Record<AIModelType, boolean>>;
   styleOptions: Record<string, string>;
   referencePages: number[];
@@ -100,6 +102,7 @@ export function SimpleQueryPanel({
   setAiStyle,
   aiModel,
   setAiModel,
+  aiAnswerModel,
   modelAvailability = {},
   styleOptions,
   referencePages: _referencePages,
@@ -318,11 +321,12 @@ export function SimpleQueryPanel({
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Response</span>
+                    <ModelBadge model={aiAnswerModel} className="ml-1" />
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-7 px-2.5 text-[10px] font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2.5 text-[10px] font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg"
                     onClick={() => {
                       setAiAnswer('');
                       setAiQuestion('');
@@ -331,7 +335,7 @@ export function SimpleQueryPanel({
                     Clear
                   </Button>
                 </div>
-                
+
                 <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm min-w-0 overflow-hidden">
                   <MarkdownMessage
                     content={aiAnswer}

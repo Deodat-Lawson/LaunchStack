@@ -78,6 +78,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [referencePages, setReferencePages] = useState<number[]>([]);
   const [aiStyle, setAiStyle] = useState<string>("concise");
   const [searchScope, setSearchScope] = useState<"document" | "company">("document");
+  const [aiAnswerModel, setAiAnswerModel] = useState<AIModelType | undefined>(undefined);
   const { sendQuery: sendAIChatQuery, loading: isAiLoading } = useAIChat();
   
   // AI States (Chat)
@@ -258,6 +259,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setSelectedDoc(doc);
     setPdfPageNumber(1);
     setAiAnswer("");
+    setAiAnswerModel(undefined);
     setReferencePages([]);
     setPredictiveAnalysis(null);
   };
@@ -337,9 +339,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
 
     setAiError("");
     setAiAnswer("");
+    setAiAnswerModel(undefined);
     setReferencePages([]);
 
     const currentQuestion = aiQuestion;
+    const modelUsedForQuery = aiModel; // Capture the model at query time
     setAiQuestion("");
 
     try {
@@ -347,7 +351,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         question: currentQuestion,
         searchScope,
         style: aiStyle as ResponseStyleId,
-        aiModel,
+        aiModel: modelUsedForQuery,
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
         companyId: searchScope === "company" ? resolvedCompanyId ?? undefined : undefined,
       });
@@ -355,6 +359,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       if (!data) throw new Error("Failed to get AI response");
 
       setAiAnswer(data.summarizedAnswer ?? "");
+      setAiAnswerModel((data.aiModel as AIModelType | undefined) ?? modelUsedForQuery);
       if (Array.isArray(data.recommendedPages)) {
         setReferencePages(Array.from(new Set(data.recommendedPages)));
       }
@@ -507,6 +512,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                       setAiStyle={setAiStyle}
                       aiModel={aiModel}
                       setAiModel={setAiModel}
+                      aiAnswerModel={aiAnswerModel}
                       modelAvailability={modelAvailability}
                       styleOptions={STYLE_OPTIONS}
                       referencePages={referencePages}

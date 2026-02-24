@@ -11,8 +11,7 @@ import {
   Settings,
   FileText,
   RotateCw,
-  Check,
-  X
+  Check
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
@@ -102,9 +101,10 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
         setRewrittenText(data.generatedContent);
         setCurrentStep('preview');
       } else {
-        setError(data.message || 'Failed to rewrite text');
+        setError(data.message ?? 'Failed to rewrite text');
       }
     } catch (err) {
+      console.error('Rewrite request failed', err);
       setError('Network error occurred');
     } finally {
       setIsProcessing(false);
@@ -240,7 +240,12 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div>
               <label className="block text-sm font-medium mb-2">Tone</label>
-              <Select value={options.tone} onValueChange={(value: any) => setOptions(prev => ({ ...prev, tone: value }))}>
+              <Select
+                value={options.tone}
+                onValueChange={(value: RewriteOptions['tone']) =>
+                  setOptions(prev => ({ ...prev, tone: value }))
+                }
+              >
                 <SelectTrigger className="text-left min-h-12 h-12 py-3">
                   <SelectValue />
                 </SelectTrigger>
@@ -259,7 +264,12 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
 
             <div>
               <label className="block text-sm font-medium mb-2">Length</label>
-              <Select value={options.length} onValueChange={(value: any) => setOptions(prev => ({ ...prev, length: value }))}>
+              <Select
+                value={options.length}
+                onValueChange={(value: RewriteOptions['length']) =>
+                  setOptions(prev => ({ ...prev, length: value }))
+                }
+              >
                 <SelectTrigger className="text-left min-h-12 h-12 py-3">
                   <SelectValue />
                 </SelectTrigger>
@@ -278,7 +288,12 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
 
             <div>
               <label className="block text-sm font-medium mb-2">Audience</label>
-              <Select value={options.audience} onValueChange={(value: any) => setOptions(prev => ({ ...prev, audience: value }))}>
+              <Select
+                value={options.audience}
+                onValueChange={(value: RewriteOptions['audience']) =>
+                  setOptions(prev => ({ ...prev, audience: value }))
+                }
+              >
                 <SelectTrigger className="text-left min-h-12 h-12 py-3">
                   <SelectValue />
                 </SelectTrigger>
@@ -300,7 +315,7 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
             <label className="block text-sm font-medium mb-2">Additional Instructions (Optional)</label>
             <Textarea
               placeholder="Any specific requirements or style preferences..."
-              value={options.customPrompt || ""}
+              value={options.customPrompt ?? ""}
               onChange={(e) => setOptions(prev => ({ ...prev, customPrompt: e.target.value }))}
               rows={5}
               className="min-h-32"

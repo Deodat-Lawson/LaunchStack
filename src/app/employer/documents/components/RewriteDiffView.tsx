@@ -115,7 +115,8 @@ export function RewriteDiffView() {
   const handleSave = useCallback(
     async (title: string, content: string, citations?: Citation[]) => {
       setSaveError(null);
-      const docTitle = title.trim() || DEFAULT_TITLE;
+      const trimmedTitle = title.trim();
+      const docTitle = trimmedTitle.length > 0 ? trimmedTitle : DEFAULT_TITLE;
       try {
         if (currentDocument) {
           const response = await fetch("/api/document-generator/documents", {
@@ -228,7 +229,7 @@ export function RewriteDiffView() {
   }, [handleFileRead, tempIdCounter, componentId]);
 
   const handleStartWorkflow = useCallback((text?: string) => {
-    setWorkflowText(text || "");
+    setWorkflowText(text ?? "");
     setShowWorkflow(true);
   }, []);
 
@@ -262,34 +263,12 @@ export function RewriteDiffView() {
     setIsDragActive(false);
   }, []);
 
-  const handleFileSelect = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
-
   const handleFileInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       void handleFileImport(files);
     }
   }, [handleFileImport]);
-
-  const handlePasteText = useCallback(() => {
-    navigator.clipboard.readText().then(text => {
-      if (text.trim()) {
-        const newId = tempIdCounter + 1;
-        setTempIdCounter(newId);
-        setCurrentDocument({
-          id: `temp-${componentId}-${newId}`,
-          title: "Pasted Text",
-          content: text,
-          lastEdited: "Just now",
-        });
-        setViewMode("editor");
-      }
-    }).catch(() => {
-      setImportError('Failed to read from clipboard');
-    });
-  }, [tempIdCounter, componentId]);
 
   const handleWorkflowComplete = useCallback((rewrittenText: string) => {
     // Create a new document with the rewritten content

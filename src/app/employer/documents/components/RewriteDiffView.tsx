@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-import { Search, Plus, FileText, Clock, PenLine, Loader2 } from "lucide-react";
+import React, { useCallback, useEffect, useState, useRef, useId } from "react";
+import { Search, Plus, FileText, Clock, PenLine, Loader2, Upload, FileUp, Type, Paperclip, Sparkles } from "lucide-react";
 import { Input } from "~/app/employer/documents/components/ui/input";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Card } from "~/app/employer/documents/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "~/app/employer/documents/components/ui/tabs";
 import { DocumentGeneratorEditor } from "./DocumentGeneratorEditor";
+import { RewriteWorkflow } from "./generator/RewriteWorkflow";
 import type { Citation } from "./generator";
 
 const DEFAULT_TITLE = "Untitled (Rewrite)";
@@ -52,6 +53,14 @@ export function RewriteDiffView() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentDocument, setCurrentDocument] = useState<RewriteDocument | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [isDragActive, setIsDragActive] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [showWorkflow, setShowWorkflow] = useState(false);
+  const [workflowText, setWorkflowText] = useState("");
+  const [tempIdCounter, setTempIdCounter] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const componentId = useId();
 
   const fetchRewriteDocuments = useCallback(async () => {
     try {
@@ -168,6 +177,147 @@ export function RewriteDiffView() {
     [currentDocument]
   );
 
+  // File import handlers
+  const handleFileRead = useCallback(async (file: File): Promise<string> => {
+    const fileType = file.name.split('.').pop()?.toLowerCase();
+    
+    switch (fileType) {
+      case 'txt':
+      case 'md':
+        return file.text();
+      case 'pdf':
+        // For PDF, we'll need to use an external service or library
+        // For now, we'll show an error and suggest copying text manually
+        throw new Error('PDF import not yet supported. Please copy and paste the text manually.');
+      case 'docx':
+        throw new Error('DOCX import not yet supported. Please copy and paste the text manually.');
+      default:
+        // Try to read as text for other formats
+        return file.text();
+    }
+  }, []);
+
+  const handleFileImport = useCallback(async (files: FileList) => {
+    if (files.length === 0) return;
+    
+    const file = files[0];
+    if (!file) return;
+
+    setIsImporting(true);
+    setImportError(null);
+
+    try {
+      const content = await handleFileRead(file);
+      const fileName = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
+      
+      // Create a new document with the imported content
+      const newId = tempIdCounter + 1;
+      setTempIdCounter(newId);
+      setCurrentDocument({
+        id: `temp-${componentId}-${newId}`,
+        title: fileName,
+        content,
+        lastEdited: "Just now",
+      });
+      setViewMode("editor");
+    } catch (error) {
+      setImportError(error instanceof Error ? error.message : 'Failed to import file');
+    } finally {
+      setIsImporting(false);
+    }
+  }, [handleFileRead, tempIdCounter, componentId]);
+
+  const handleStartWorkflow = useCallback((text?: string) => {
+    setWorkflowText(text || "");
+    setShowWorkflow(true);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragActive(false);
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      if (file) {
+        setIsImporting(true);
+        setImportError(null);
+        handleFileRead(file).then(content => {
+          setIsImporting(false);
+          handleStartWorkflow(content);
+        }).catch(error => {
+          setIsImporting(false);
+          setImportError(error instanceof Error ? error.message : 'Failed to import file');
+        });
+      }
+    }
+  }, [handleFileRead, handleStartWorkflow]);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragActive(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragActive(false);
+  }, []);
+
+  const handleFileSelect = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const handleFileInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      void handleFileImport(files);
+    }
+  }, [handleFileImport]);
+
+  const handlePasteText = useCallback(() => {
+    navigator.clipboard.readText().then(text => {
+      if (text.trim()) {
+        const newId = tempIdCounter + 1;
+        setTempIdCounter(newId);
+        setCurrentDocument({
+          id: `temp-${componentId}-${newId}`,
+          title: "Pasted Text",
+          content: text,
+          lastEdited: "Just now",
+        });
+        setViewMode("editor");
+      }
+    }).catch(() => {
+      setImportError('Failed to read from clipboard');
+    });
+  }, [tempIdCounter, componentId]);
+
+  const handleWorkflowComplete = useCallback((rewrittenText: string) => {
+    // Create a new document with the rewritten content
+    const newId = tempIdCounter + 1;
+    setTempIdCounter(newId);
+    setCurrentDocument({
+      id: `temp-${componentId}-${newId}`,
+      title: "Rewritten Text",
+      content: rewrittenText,
+      lastEdited: "Just now",
+    });
+    setShowWorkflow(false);
+    setViewMode("editor");
+  }, [tempIdCounter, componentId]);
+
+  const handleWorkflowCancel = useCallback(() => {
+    setShowWorkflow(false);
+    setWorkflowText("");
+  }, []);
+
+  if (showWorkflow) {
+    return <RewriteWorkflow 
+      initialText={workflowText} 
+      onComplete={handleWorkflowComplete} 
+      onCancel={handleWorkflowCancel} 
+    />;
+  }
+
   if (viewMode === "editor") {
     return (
       <div className="flex flex-col h-full w-full">
@@ -239,16 +389,164 @@ export function RewriteDiffView() {
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto p-6">
           {activeTab === "new" ? (
-            <div className="flex flex-col items-center justify-center py-16">
-              <div className="max-w-md text-center mb-6">
-                <h3 className="text-xl font-semibold mb-2 text-foreground">Start writing</h3>
-                <p className="text-muted-foreground mb-6">
-                  Create a new document and use AI to rewrite, refine, or improve your text.
-                </p>
-                <Button onClick={handleNewDocument} className="bg-amber-600 hover:bg-amber-700 text-white">
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Document
-                </Button>
+            <div className="space-y-6">
+              {importError && (
+                <div className="p-4 bg-destructive/10 text-destructive text-sm rounded-lg border border-destructive/20">
+                  {importError}
+                </div>
+              )}
+              
+              {/* Import Options */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Drag & Drop Zone */}
+                <div
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  className={`
+                    border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer
+                    ${isDragActive 
+                      ? 'border-amber-600 bg-amber-50 dark:bg-amber-900/20' 
+                      : 'border-border hover:border-amber-600 hover:bg-muted/50'
+                    }
+                    ${isImporting ? 'pointer-events-none opacity-50' : ''}
+                  `}
+                  onClick={() => {
+                    if (!isImporting && fileInputRef.current) {
+                      fileInputRef.current.addEventListener('change', (e) => {
+                        const files = (e.target as HTMLInputElement).files;
+                        if (files && files.length > 0) {
+                          const file = files[0];
+                          if (file) {
+                            handleFileRead(file).then(content => {
+                              handleStartWorkflow(content);
+                            }).catch(() => {
+                              setImportError('Failed to read file');
+                            });
+                          }
+                        }
+                      }, { once: true });
+                      fileInputRef.current.click();
+                    }
+                  }}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".txt,.md,.pdf,.docx,.doc"
+                    onChange={handleFileInputChange}
+                    className="hidden"
+                  />
+                  
+                  <div className="space-y-4">
+                    <div className="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-full w-fit mx-auto">
+                      {isImporting ? (
+                        <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
+                      ) : (
+                        <Upload className="w-8 h-8 text-amber-600" />
+                      )}
+                    </div>
+                    
+                    <div>
+                      <h3 className="font-semibold mb-2 text-foreground">
+                        {isImporting ? 'Importing...' : 'Import Document'}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Drag & drop a file or click to browse
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Supports: .txt, .md files
+                      </p>
+                      <p className="text-xs text-muted-foreground italic mt-1">
+                        PDF & DOCX: Copy text manually for now
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="space-y-4">
+                  <div className="border border-border rounded-xl p-6 text-center hover:shadow-md transition-all">
+                    <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full w-fit mx-auto mb-4">
+                      <Sparkles className="w-8 h-8 text-purple-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2 text-foreground">Step-by-Step Workflow</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Guided process with options and preview
+                    </p>
+                    <Button
+                      onClick={() => handleStartWorkflow()}
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white mb-2"
+                    >
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Start Workflow
+                    </Button>
+                    <p className="text-xs text-muted-foreground">
+                      Choose tone, audience & preview changes
+                    </p>
+                  </div>
+
+                  <div className="border border-border rounded-xl p-6 text-center hover:shadow-md transition-all">
+                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full w-fit mx-auto mb-4">
+                      <Type className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2 text-foreground">Paste Text</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Paste text and start workflow
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        navigator.clipboard.readText().then(text => {
+                          if (text.trim()) {
+                            handleStartWorkflow(text);
+                          }
+                        }).catch(() => {
+                          setImportError('Failed to read from clipboard');
+                        });
+                      }}
+                      className="w-full hover:bg-blue-600 hover:text-white border-border mb-2"
+                    >
+                      <Paperclip className="w-4 h-4 mr-2" />
+                      Paste & Start Workflow
+                    </Button>
+                    <p className="text-xs text-muted-foreground">
+                      Quick start with clipboard content
+                    </p>
+                  </div>
+
+                  <div className="border border-border rounded-xl p-6 text-center hover:shadow-md transition-all">
+                    <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full w-fit mx-auto mb-4">
+                      <FileUp className="w-8 h-8 text-green-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2 text-foreground">Start Fresh</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Create a blank document
+                    </p>
+                    <Button
+                      onClick={handleNewDocument}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      New Document
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Tips */}
+              <div className="bg-muted/50 rounded-xl p-6 border border-border">
+                <h4 className="font-semibold mb-3 text-foreground">✨ New Step-by-Step Workflow</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
+                  <div className="space-y-2">
+                    <p><strong>🎯 Guided Process:</strong> Input → Select Options → Preview → Apply</p>
+                    <p><strong>🎨 Smart Options:</strong> Tone, length, audience, custom prompts</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p><strong>👀 Before/After:</strong> See exact changes with diff highlighting</p>
+                    <p><strong>📁 File Support:</strong> Drag & drop .txt, .md files</p>
+                  </div>
+                </div>
               </div>
             </div>
           ) : isLoading ? (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { 
   ArrowLeft, 
   Save, 
@@ -103,6 +103,8 @@ export function DocumentGeneratorEditor({
   mode = 'full',
 }: DocumentGeneratorEditorProps) {
   const isRewriteMode = mode === 'rewrite';
+  const componentId = useId();
+  const [citationCounter, setCitationCounter] = useState(0);
   // Core state
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
@@ -531,8 +533,10 @@ export function DocumentGeneratorEditor({
     
     // Add citation if provided
     if (citation) {
+      const newId = citationCounter + 1;
+      setCitationCounter(newId);
       const newCitation: Citation = {
-        id: Date.now().toString(),
+        id: `${componentId}-${newId}`,
         sourceType: citation.url ? 'website' : 'document',
         title: citation.title,
         url: citation.url,

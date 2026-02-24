@@ -96,10 +96,10 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
         })
       });
 
-      const data = await response.json();
+      const data = await response.json() as { success: boolean; message?: string; generatedContent?: string };
       
-      if (data.success) {
-        setRewrittenText(data.result);
+      if (data.success && typeof data.generatedContent === "string" && data.generatedContent.trim().length > 0) {
+        setRewrittenText(data.generatedContent);
         setCurrentStep('preview');
       } else {
         setError(data.message || 'Failed to rewrite text');

@@ -26,13 +26,15 @@ export function RewritePreviewPanel({
   isRetrying = false,
 }: RewritePreviewProps) {
   const [viewMode, setViewMode] = useState<"diff" | "sidebyside" | "clean">("sidebyside");
-  const changes = diffWords(originalText, proposedText);
+  const safeOriginal = typeof originalText === "string" ? originalText : "";
+  const safeProposed = typeof proposedText === "string" ? proposedText : "";
+  const changes = diffWords(safeOriginal, safeProposed);
   
   const stats = {
-    wordsOriginal: originalText.split(/\s+/).length,
-    wordsRewritten: proposedText.split(/\s+/).length,
-    charactersOriginal: originalText.length,
-    charactersRewritten: proposedText.length,
+    wordsOriginal: safeOriginal.trim() ? safeOriginal.split(/\s+/).length : 0,
+    wordsRewritten: safeProposed.trim() ? safeProposed.split(/\s+/).length : 0,
+    charactersOriginal: safeOriginal.length,
+    charactersRewritten: safeProposed.length,
     changes: changes.filter(part => part.added || part.removed).length
   };
 
@@ -64,7 +66,7 @@ export function RewritePreviewPanel({
           </span>
         </div>
         <div className="p-3 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50 dark:border-red-900/50 text-sm leading-relaxed max-h-80 overflow-y-auto">
-          {originalText}
+          {safeOriginal}
         </div>
       </Card>
       
@@ -77,7 +79,7 @@ export function RewritePreviewPanel({
           </span>
         </div>
         <div className="p-3 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50 dark:border-green-900/50 text-sm leading-relaxed max-h-80 overflow-y-auto">
-          {proposedText}
+          {safeProposed}
         </div>
       </Card>
     </div>
@@ -85,7 +87,7 @@ export function RewritePreviewPanel({
 
   const renderCleanView = () => (
     <div className="p-4 rounded-lg bg-background border border-border text-sm leading-relaxed max-h-96 overflow-y-auto">
-      {proposedText}
+      {safeProposed}
     </div>
   );
 

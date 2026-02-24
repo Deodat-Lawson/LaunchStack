@@ -1,6 +1,6 @@
 import { EventSchemas, Inngest } from "inngest";
 import type { ProcessDocumentEventData } from "~/lib/ocr/types";
-import type { TrendSearchEventData } from "~/server/trend-search/types";
+import type { TrendSearchEventData } from "~/lib/tools/trend-search/types";
 
 export type ProcessDocumentEvent = {
   name: "document/process.requested";

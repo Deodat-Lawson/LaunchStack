@@ -5,11 +5,11 @@
  * The pipeline is stateless — no DB writes, no side effects.
  * Persistence is the responsibility of the caller (e.g. Inngest function).
  */
-export { runTrendSearch } from "~/server/trend-search/run";
-export type { RunTrendSearchOptions, TrendSearchPipelineStage } from "~/server/trend-search/run";
+export { runTrendSearch } from "~/lib/tools/trend-search/run";
+export type { RunTrendSearchOptions, TrendSearchPipelineStage } from "~/lib/tools/trend-search/run";
 export type {
     TrendSearchInput,
     TrendSearchOutput,
     SearchResult,
     SearchCategory,
-} from "~/server/trend-search/types";
+} from "~/lib/tools/trend-search/types";

@@ -40,6 +40,10 @@ const DocumentGenerator = dynamic(
   () => import("./DocumentGenerator").then((module) => module.DocumentGenerator),
   { loading: () => <LoadingPage /> }
 );
+const RewriteDiffView = dynamic(
+  () => import("./RewriteDiffView").then((module) => module.RewriteDiffView),
+  { loading: () => <LoadingPage /> }
+);
 
 const STYLE_OPTIONS = Object.entries(RESPONSE_STYLES).reduce((acc, [key, config]) => {
   acc[key as ResponseStyleId] = config.label;
@@ -610,6 +614,8 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       case "generator":
         if (userRole !== 'employer') return null;
         return <DocumentGenerator />;
+      case "rewrite":
+        return <RewriteDiffView />;
       default:
         return null;
     }

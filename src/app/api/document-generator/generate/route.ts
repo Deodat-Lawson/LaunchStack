@@ -15,6 +15,19 @@ import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
+
+/** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
+function stripRewriteQuotes(text: string): string {
+    let s = text.trim();
+    const quotePairs: [string, string][] = [['"', '"'], ['"', '"'], ["'", "'"], ["'", "'"]];
+    for (const [open, close] of quotePairs) {
+        if (open && close && s.length >= open.length + close.length && s.startsWith(open) && s.endsWith(close)) {
+            s = s.slice(open.length, -close.length).trim();
+            break;
+        }
+    }
+    return s;
+}
 import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
 
 export const runtime = "nodejs";
@@ -76,7 +89,9 @@ Guidelines:
 - Improve sentence structure and word choice
 - Enhance readability and engagement
 - Apply the requested tone if specified
-- Keep similar length to the original unless otherwise specified`,
+- Keep similar length to the original unless otherwise specified
+- Output ONLY the rewritten text: no quotation marks, no "Here is the rewrite:", no wrapper text
+- Use HTML tags for formatting: <strong> for bold, <em> for italic, <u> for underline. Do NOT use Markdown (** or *).`,
 
     summarize: `You are an expert editor specializing in summarization. Your task is to create a concise summary of the given text.
 
@@ -195,7 +210,42 @@ export async function POST(request: Request) {
                 if (prompt) {
                     userPrompt += `\n\nAdditional instructions: ${prompt}`;
                 }
-                break;
+
+                // Writing first pass
+                const firstPass = await chat.call([
+                    new SystemMessage(systemPrompt),
+                    new HumanMessage(userPrompt),
+                ]);
+                
+                // Normalizing
+                const firstDraft = normalizeModelContent(firstPass.content);
+
+                // Refining through second pass
+                const secondPass = await chat.call([
+                    new SystemMessage(systemPrompt),
+                    new HumanMessage(`Here is a rewritten version of the original text:
+
+"${firstDraft}"
+
+Now refine it further:
+- Improve sentence flow and rhythm
+- Remove any redundancy or filler phrases
+- Ensure it reads naturally, not like it was AI-generated
+- Preserve all factual information, names, numbers, and technical terms
+- Do not change the meaning or add new information
+- Output ONLY the refined text: no quotation marks, no wrapper phrases`),
+                ]);
+
+                // Use the refined second pass for rewrite (skip the generic call below)
+                const rewriteContent = stripRewriteQuotes(normalizeModelContent(secondPass.content));
+                const rewriteProcessingTimeMs = Date.now() - startTime;
+                return NextResponse.json({
+                    success: true,
+                    action: "rewrite",
+                    generatedContent: rewriteContent,
+                    processingTimeMs: rewriteProcessingTimeMs,
+                    model: modelId,
+                });
 
             case "summarize":
                 userPrompt = `Summarize the following text:\n\n"${content}"`;
@@ -228,8 +278,6 @@ export async function POST(request: Request) {
         const generatedContent = normalizeModelContent(response.content);
         const processingTimeMs = Date.now() - startTime;
 
-        console.log(`✅ [Document Generator] ${action} completed in ${processingTimeMs}ms`);
-
         return NextResponse.json({
             success: true,
             action,
@@ -239,7 +287,6 @@ export async function POST(request: Request) {
         });
 
     } catch (error) {
-        console.error("❌ [Document Generator] Error generating content:", error);
         return NextResponse.json(
             { 
                 success: false, 

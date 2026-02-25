@@ -5,19 +5,20 @@ import type { DocumentType } from "./document";
 import type { PredictiveAnalysisResponse } from "./predictive-analysis";
 import type { QAHistoryEntry } from "./qa-history";
 
-export type ViewMode = 
-  | "document-only" 
-  | "with-ai-qa" 
-  | "with-ai-qa-history" 
+export type ViewMode =
+  | "document-only"
+  | "with-ai-qa"
+  | "with-ai-qa-history"
   | "predictive-analysis"
-  | "generator";
+  | "generator"
+  | "rewrite";
 
-export type AiPersona = 
-  | 'general' 
-  | 'learning-coach' 
-  | 'financial-expert' 
-  | 'legal-expert' 
-  | 'math-reasoning';
+export type AiPersona =
+  | "general"
+  | "learning-coach"
+  | "financial-expert"
+  | "legal-expert"
+  | "math-reasoning";
 
 export interface errorType {
   error?: string;

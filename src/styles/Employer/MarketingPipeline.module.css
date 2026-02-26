@@ -1,0 +1,560 @@
+.pageRoot {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--foreground);
+}
+
+.pageHeader {
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+}
+
+.pageHeaderInner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.pageTitleRow {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.pageTitleIcon {
+    padding: 0.4rem;
+    border-radius: 0.9rem;
+    background: linear-gradient(135deg, #7e22ce, #22c55e);
+    box-shadow: 0 10px 25px rgba(88, 28, 135, 0.45);
+}
+
+.pageTitleIconInner {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: white;
+}
+
+.pageTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.1rem 0;
+}
+
+.pageSubtitle {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--muted-foreground);
+}
+
+.pageHeaderSecondary {
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    padding: 0.35rem 0.8rem;
+    cursor: pointer;
+}
+
+.mainShell {
+    flex: 1;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 3rem;
+}
+
+.card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.stepTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.helperText {
+    margin: 0 0 0.85rem 0;
+    color: var(--muted-foreground);
+}
+
+.platformGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: stretch;
+    justify-items: center;
+}
+
+.platformCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 0.9rem;
+    width: 100%;
+    max-width: 220px;
+    min-height: 150px;
+    background: radial-gradient(circle at top, rgba(148, 163, 184, 0.2), transparent 55%),
+        var(--background);
+    color: var(--foreground);
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease;
+}
+
+.platformCard:hover {
+    transform: translateY(-4px);
+    border-color: #9333ea;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+    background: radial-gradient(circle at top, rgba(147, 51, 234, 0.2), transparent 55%),
+        var(--background);
+}
+
+.platformLogo {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+}
+
+.platformLogoReddit {
+    background: #ff4500;
+}
+
+.platformLogoX {
+    background: #000000;
+}
+
+.platformLogoLinkedin {
+    background: #0a66c2;
+}
+
+.platformName {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.platformSubtitle {
+    font-size: 0.85rem;
+    color: var(--muted-foreground);
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+.workspaceShell {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+.workspaceLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.workspaceLeftHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+
+.selectedPlatformChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.35rem 0.65rem;
+    font-weight: 600;
+}
+
+.selectedPlatformLogo {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #fff;
+}
+
+.secondaryButton {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--foreground);
+    border-radius: 8px;
+    padding: 0.45rem 0.7rem;
+    cursor: pointer;
+}
+
+.textarea {
+    width: 100%;
+    min-height: 130px;
+    resize: vertical;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--background);
+    color: var(--foreground);
+    padding: 0.7rem;
+    line-height: 1.45;
+}
+
+.generateButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    border: 0;
+    border-radius: 9px;
+    background: #7e22ce;
+    color: white;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.generateButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error {
+    margin-top: 0.75rem;
+    color: #dc2626;
+}
+
+.errorInline {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #dc2626;
+}
+
+.workspaceRight {
+    position: sticky;
+    top: 1.25rem;
+}
+
+.assistantCard {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    padding: 1rem;
+}
+
+.assistantHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.assistantTitle {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.assistantHint {
+    color: var(--muted-foreground);
+    font-size: 0.94rem;
+}
+
+.hintList {
+    margin: 0.65rem 0 0;
+    padding-left: 1rem;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.assistantLoading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--muted-foreground);
+}
+
+.outputHeader {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.outputBlock {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    background: var(--background);
+    white-space: pre-wrap;
+}
+
+.researchLabel {
+    margin-top: 0.85rem;
+    margin-bottom: 0.55rem;
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+
+.researchList {
+    display: grid;
+    gap: 0.7rem;
+}
+
+.researchItem {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.65rem;
+}
+
+.researchTitle {
+    font-weight: 600;
+}
+
+.researchLink {
+    font-size: 0.86rem;
+    color: #3b82f6;
+    word-break: break-all;
+}
+
+.researchSnippet {
+    margin-top: 0.35rem;
+    color: var(--muted-foreground);
+}
+
+.spinIcon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 960px) {
+    .workspaceShell {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .workspaceRight {
+        position: static;
+    }
+}
+
+@media (max-width: 720px) {
+    .platformGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* New prompt + assistant refinements */
+
+.promptCard {
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 1rem 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.promptHeaderRow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.promptTitle {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.promptHint {
+    font-size: 0.85rem;
+    color: var(--muted-foreground);
+}
+
+.promptTextarea {
+    width: 100%;
+    min-height: 140px;
+    resize: vertical;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--background);
+    color: var(--foreground);
+    padding: 0.7rem;
+    line-height: 1.45;
+}
+
+.inlineAlert {
+    margin-top: 0.25rem;
+    margin-bottom: 0.1rem;
+    padding: 0.45rem 0.55rem;
+    border-radius: 0.6rem;
+    background: rgba(220, 38, 38, 0.08);
+    color: #b91c1c;
+    font-size: 0.85rem;
+}
+
+.generateButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    border: 0;
+    border-radius: 999px;
+    background: #7e22ce;
+    color: white;
+    padding: 0.55rem 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.generateButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.assistantIconWrap {
+    padding: 0.3rem;
+    border-radius: 0.6rem;
+    background: rgba(147, 51, 234, 0.12);
+}
+
+.assistantIcon {
+    color: #7e22ce;
+}
+
+.assistantSubtitle {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted-foreground);
+}
+
+.assistantEmptyState {
+    font-size: 0.9rem;
+    color: var(--muted-foreground);
+}
+
+.assistantEmptyTitle {
+    margin-bottom: 0.45rem;
+    font-weight: 500;
+    color: var(--foreground);
+}
+
+.assistantEmptyList {
+    list-style: disc;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.3rem;
+}
+
+.assistantSectionHeader {
+    margin-top: 0.6rem;
+    margin-bottom: 0.45rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.assistantResult {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.workspaceLeftHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+
+.selectedPlatformPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.6rem;
+    font-size: 0.9rem;
+}
+
+.selectedPlatformLabel {
+    font-weight: 500;
+}
+
+.changePlatformButton {
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+}
+
+.platformShell {
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 1.5rem 1.25rem 1.75rem;
+}
+
+.platformShellHeader {
+    margin-bottom: 1.1rem;
+}
+
+.platformShellTitle {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.platformShellSubtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted-foreground);
+}

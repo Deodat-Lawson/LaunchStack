@@ -23,8 +23,10 @@ interface PipelineResponse {
     };
 }
 
-const PLATFORM_OPTIONS: Array<{ id: Platform; label: string; subtitle: string; logoText: string }> = [
-    { id: "reddit", label: "Reddit", subtitle: "Community-first threads", logoText: "reddit" },
+const REDDIT_SNOO_URL = "/images/reddit-snoo.png";
+
+const PLATFORM_OPTIONS: Array<{ id: Platform; label: string; subtitle: string; logoText: string; logoImg?: string }> = [
+    { id: "reddit", label: "Reddit", subtitle: "Community-first threads", logoText: "reddit", logoImg: REDDIT_SNOO_URL },
     { id: "x", label: "Twitter / X", subtitle: "Fast-moving trends", logoText: "𝕏" },
     { id: "linkedin", label: "LinkedIn", subtitle: "B2B + thought leadership", logoText: "in" },
 ];
@@ -144,9 +146,13 @@ export default function MarketingPipelinePage() {
                                     <span
                                         className={`${styles.platformLogo} ${
                                             logoClassNames[option.id]
-                                        }`}
+                                        } ${option.logoImg ? styles.platformLogoImgContainer : ""}`}
                                     >
-                                        {option.logoText}
+                                        {option.logoImg ? (
+                                            <img src={option.logoImg} alt="" className={styles.platformLogoImg} />
+                                        ) : (
+                                            option.logoText
+                                        )}
                                     </span>
                                     <span className={styles.platformName}>{option.label}</span>
                                     <span className={styles.platformSubtitle}>{option.subtitle}</span>
@@ -165,9 +171,13 @@ export default function MarketingPipelinePage() {
                                     <span
                                         className={`${styles.selectedPlatformLogo} ${
                                             selectedPlatform ? logoClassNames[selectedPlatform.id] : ""
-                                        }`}
+                                        } ${selectedPlatform?.logoImg ? styles.platformLogoImgContainer : ""}`}
                                     >
-                                        {selectedPlatform?.logoText}
+                                        {selectedPlatform?.logoImg ? (
+                                            <img src={selectedPlatform.logoImg} alt="" className={styles.platformLogoImg} />
+                                        ) : (
+                                            selectedPlatform?.logoText
+                                        )}
                                     </span>
                                     <span className={styles.selectedPlatformLabel}>{selectedPlatform?.label}</span>
                                 </div>

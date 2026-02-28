@@ -147,6 +147,30 @@
     background: #ff4500;
 }
 
+.platformLogoImgContainer.platformLogoReddit {
+    background: transparent;
+}
+
+.platformLogoImgContainer {
+    overflow: visible;
+}
+
+.platformCard .platformLogoImgContainer {
+    width: 4rem;
+    height: 4rem;
+}
+
+.platformCard .platformLogoImgContainer .platformLogoImg {
+    transform: scale(1.35);
+}
+
+.platformLogoImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0.9rem;
+}
+
 .platformLogoX {
     background: #000000;
 }

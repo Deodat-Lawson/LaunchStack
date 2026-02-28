@@ -1,15 +1,15 @@
 /**
  * Drizzle schema for the Client Prospector feature.
  *
- * This file defines the `client_prospector_jobs` database table which stores
+ * This file defines the client_prospector_jobs database table which stores
  * every prospecting search job. When a user submits a prospecting request
  * (e.g. "find law firms near Austin that need IT consulting"), a row is
  * created here with status "queued". As the Inngest background job progresses
  * through the pipeline (planning → searching → scoring), the status column
- * is updated. Once done, the scored results are written into the `results`
+ * is updated. Once done, the scored results are written into the results
  * JSONB column and the status flips to "completed".
  *
- * This mirrors the pattern used in `src/server/db/schema/trend-search.ts`.
+ * This mirrors the pattern used in src/server/db/schema/trend-search.ts.
  */
 
 import { sql } from "drizzle-orm";
@@ -29,10 +29,10 @@ import {
 // relevanceScore 0-100, rationale, etc.). We store an array of them as JSONB.
 import type { ProspectResult } from "~/lib/tools/client-prospector/types";
 
-// `company` is the parent table — every job belongs to a company.
+// company is the parent table — every job belongs to a company.
 import { company } from "./base";
 
-// `pgTable` is a helper that prefixes all table names with "pdr_ai_v2_"
+// pgTable is a helper that prefixes all table names with "pdr_ai_v2_"
 // so the actual SQL table name becomes "pdr_ai_v2_client_prospector_jobs".
 import { pgTable } from "./helpers";
 
@@ -65,7 +65,7 @@ export const clientProspectorJobs = pgTable(
         // ── Multi-tenancy ────────────────────────────────────────────────
         // Foreign key to the company table. This is how we enforce data
         // isolation — every query filters by company_id so company A
-        // can never see company B's jobs. `onDelete: "cascade"` means
+        // can never see company B's jobs. onDelete: "cascade" means
         // if a company is deleted, all their prospector jobs are too.
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()

@@ -1,73 +1,78 @@
-.pageRoot {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: var(--background);
+/* Back button in nav */
+.backNavButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.backNavButton:hover {
     color: var(--foreground);
+    background: rgba(148, 163, 184, 0.15);
 }
 
-.pageHeader {
-    flex-shrink: 0;
-    border-bottom: 1px solid var(--border);
-    background: var(--background);
-}
-
-.pageHeaderInner {
-    max-width: 1040px;
+/* Compact page header */
+.main {
+    max-width: 56rem;
     margin: 0 auto;
-    padding: 1.5rem 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    padding: 1.5rem 1.25rem 2rem;
 }
 
-.pageTitleRow {
+.pageHeaderRow {
     display: flex;
-    align-items: center;
-    gap: 0.9rem;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .pageTitleIcon {
-    padding: 0.4rem;
-    border-radius: 0.9rem;
-    background: linear-gradient(135deg, #7e22ce, #22c55e);
-    box-shadow: 0 10px 25px rgba(88, 28, 135, 0.45);
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #7e22ce, #7c3aed);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+    flex-shrink: 0;
 }
 
 .pageTitleIconInner {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     color: white;
 }
 
 .pageTitle {
     font-size: 1.5rem;
     font-weight: 700;
-    margin: 0 0 0.1rem 0;
+    margin: 0 0 0.35rem 0;
+    background: linear-gradient(135deg, #1f2937 0%, #4f46e5 50%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .pageSubtitle {
+    font-size: 0.9375rem;
+    color: var(--muted-foreground);
     margin: 0;
-    font-size: 0.95rem;
-    color: var(--muted-foreground);
+    line-height: 1.5;
 }
 
-.pageHeaderSecondary {
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted-foreground);
-    font-size: 0.85rem;
-    padding: 0.35rem 0.8rem;
-    cursor: pointer;
+[data-theme="dark"] .pageTitle {
+    background: linear-gradient(135deg, #e5e7eb 0%, #a78bfa 50%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.mainShell {
-    flex: 1;
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 1.5rem 1.25rem 3rem;
+.mainContent {
+    width: 100%;
 }
 
 .card {
@@ -102,32 +107,29 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.1rem 0.9rem;
+    border-radius: 0.75rem;
+    padding: 1rem 0.85rem;
     width: 100%;
-    max-width: 220px;
-    min-height: 150px;
-    background: radial-gradient(circle at top, rgba(148, 163, 184, 0.2), transparent 55%),
-        var(--background);
+    max-width: 180px;
+    min-height: 130px;
+    background: var(--card);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
     color: var(--foreground);
     cursor: pointer;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
     transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease,
-        border-color 0.18s ease,
-        background 0.18s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
 }
 
 .platformCard:hover {
-    transform: translateY(-4px);
-    border-color: #9333ea;
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
-    background: radial-gradient(circle at top, rgba(147, 51, 234, 0.2), transparent 55%),
-        var(--background);
+    transform: translateY(-2px);
+    border-color: #7c3aed;
+    box-shadow: 0 12px 24px -4px rgba(124, 58, 237, 0.2);
 }
 
 .platformLogo {
@@ -237,6 +239,16 @@
     color: #fff;
 }
 
+/* Larger Reddit Snoo in selected platform pill */
+.selectedPlatformPill .platformLogoImgContainer {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.selectedPlatformPill .platformLogoImgContainer .platformLogoImg {
+    transform: scale(1.35);
+}
+
 .secondaryButton {
     border: 1px solid var(--border);
     background: transparent;
@@ -295,8 +307,10 @@
 
 .assistantCard {
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 0.75rem;
     background: var(--card);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     padding: 1rem;
 }
 
@@ -304,13 +318,17 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
+}
+
+.assistantIcon {
+    color: #7e22ce;
 }
 
 .assistantTitle {
     margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 0.9375rem;
+    font-weight: 600;
 }
 
 .assistantHint {
@@ -414,10 +432,12 @@
 /* New prompt + assistant refinements */
 
 .promptCard {
-    border-radius: 12px;
+    border-radius: 1rem;
     border: 1px solid var(--border);
     background: var(--card);
-    padding: 1rem 1rem 1.1rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    padding: 1.25rem 1.25rem 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
@@ -432,18 +452,18 @@
 
 .promptTitle {
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 600;
 }
 
 .promptHint {
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
     color: var(--muted-foreground);
 }
 
 .promptTextarea {
     width: 100%;
-    min-height: 140px;
+    min-height: 100px;
     resize: vertical;
     border-radius: 10px;
     border: 1px solid var(--border);
@@ -467,14 +487,21 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    margin-top: 0.6rem;
+    margin-top: 0.75rem;
     border: 0;
-    border-radius: 999px;
-    background: #7e22ce;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #7c3aed, #7e22ce);
     color: white;
-    padding: 0.55rem 1.1rem;
+    padding: 0.6rem 1.25rem;
     font-weight: 600;
     cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.generateButton:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px -2px rgba(124, 58, 237, 0.4);
 }
 
 .generateButton:disabled {
@@ -482,38 +509,11 @@
     cursor: not-allowed;
 }
 
-.assistantIconWrap {
-    padding: 0.3rem;
-    border-radius: 0.6rem;
-    background: rgba(147, 51, 234, 0.12);
-}
-
-.assistantIcon {
-    color: #7e22ce;
-}
-
-.assistantSubtitle {
-    margin: 0;
-    font-size: 0.85rem;
-    color: var(--muted-foreground);
-}
 
 .assistantEmptyState {
-    font-size: 0.9rem;
+    font-size: 0.8125rem;
     color: var(--muted-foreground);
-}
-
-.assistantEmptyTitle {
-    margin-bottom: 0.45rem;
-    font-weight: 500;
-    color: var(--foreground);
-}
-
-.assistantEmptyList {
-    list-style: disc;
-    padding-left: 1.1rem;
-    display: grid;
-    gap: 0.3rem;
+    margin: 0;
 }
 
 .assistantSectionHeader {
@@ -561,24 +561,17 @@
 }
 
 .platformShell {
-    border-radius: 12px;
+    border-radius: 0.75rem;
     border: 1px solid var(--border);
     background: var(--card);
-    padding: 1.5rem 1.25rem 1.75rem;
-}
-
-.platformShellHeader {
-    margin-bottom: 1.1rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 1rem 1.25rem;
 }
 
 .platformShellTitle {
-    margin: 0 0 0.3rem 0;
-    font-size: 1.05rem;
+    margin: 0 0 0.85rem 0;
+    font-size: 0.9375rem;
     font-weight: 600;
-}
-
-.platformShellSubtitle {
-    margin: 0;
-    font-size: 0.9rem;
-    color: var(--muted-foreground);
+    color: var(--foreground);
 }

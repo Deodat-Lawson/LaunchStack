@@ -2,7 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, MessageSquareText, Rocket, Sparkles } from "lucide-react";
+import { ArrowLeft, Brain, Loader2, MessageSquareText, Megaphone, Sparkles } from "lucide-react";
+import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
+import { ThemeToggle } from "~/app/_components/ThemeToggle";
+import homeStyles from "~/styles/Employer/Home.module.css";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 
 type Platform = "x" | "linkedin" | "reddit";
@@ -97,40 +100,49 @@ export default function MarketingPipelinePage() {
     };
 
     return (
-        <div className={styles.pageRoot}>
-            <div className={styles.pageHeader}>
-                <div className={styles.pageHeaderInner}>
-                    <div className={styles.pageTitleRow}>
-                        <div className={styles.pageTitleIcon}>
-                            <Rocket className={styles.pageTitleIconInner} />
-                        </div>
-                        <div>
-                            <h1 className={styles.pageTitle}>Marketing Pipeline</h1>
-                            <p className={styles.pageSubtitle}>
-                                Turn your company knowledge base into platform-ready marketing messages.
-                            </p>
-                        </div>
-                    </div>
-                    <button
-                        type="button"
-                        className={styles.pageHeaderSecondary}
+        <div className={homeStyles.container}>
+            <nav className={homeStyles.navbar}>
+                <div className={homeStyles.navContent}>
+                    <div
+                        className={homeStyles.logoContainer}
                         onClick={() => router.push("/employer/home")}
+                        onKeyDown={(e) => e.key === "Enter" && router.push("/employer/home")}
+                        role="button"
+                        tabIndex={0}
                     >
-                        Back to employer home
-                    </button>
+                        <Brain className={homeStyles.logoIcon} />
+                        <span className={homeStyles.logoText}>PDR AI</span>
+                    </div>
+                    <div className={homeStyles.navActions}>
+                        <button
+                            type="button"
+                            className={styles.backNavButton}
+                            onClick={() => router.push("/employer/home")}
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            Home
+                        </button>
+                        <ThemeToggle />
+                        <ProfileDropdown />
+                    </div>
                 </div>
-            </div>
+            </nav>
+
+            <main className={styles.main}>
+                <div className={styles.pageHeaderRow}>
+                    <div className={styles.pageTitleIcon}>
+                        <Megaphone className={styles.pageTitleIconInner} />
+                    </div>
+                    <div>
+                        <h1 className={styles.pageTitle}>Marketing Pipeline</h1>
+                        <p className={styles.pageSubtitle}>Create campaign-ready posts for Reddit, X & LinkedIn from your company knowledge base</p>
+                    </div>
+                </div>
 
             {!platform ? (
-                <main className={styles.mainShell}>
+                <section className={styles.mainContent}>
                     <section className={styles.platformShell}>
-                        <div className={styles.platformShellHeader}>
-                            <h2 className={styles.platformShellTitle}>Choose a channel to start</h2>
-                            <p className={styles.platformShellSubtitle}>
-                                Pick where this campaign will live. You can always come back and run again for a
-                                different platform.
-                            </p>
-                        </div>
+                        <h2 className={styles.platformShellTitle}>Choose platform</h2>
                         <div className={styles.platformGrid}>
                             {PLATFORM_OPTIONS.map((option) => (
                                 <button
@@ -161,9 +173,9 @@ export default function MarketingPipelinePage() {
                         </div>
                         {error && <p className={styles.errorInline}>{error}</p>}
                     </section>
-                </main>
+                </section>
             ) : (
-                <main className={styles.mainShell}>
+                <section className={styles.mainContent}>
                     <section className={styles.workspaceShell}>
                         <div className={styles.workspaceLeft}>
                             <header className={styles.workspaceLeftHeader}>
@@ -235,28 +247,14 @@ export default function MarketingPipelinePage() {
                         <aside className={styles.workspaceRight}>
                             <div className={styles.assistantCard}>
                                 <header className={styles.assistantHeader}>
-                                    <div className={styles.assistantIconWrap}>
-                                        <MessageSquareText size={18} className={styles.assistantIcon} />
-                                    </div>
-                                    <div>
-                                        <h2 className={styles.assistantTitle}>AI Assistant</h2>
-                                        <p className={styles.assistantSubtitle}>
-                                            Uses your company KB + live trends to shape the copy.
-                                        </p>
-                                    </div>
+                                    <MessageSquareText size={18} className={styles.assistantIcon} />
+                                    <h2 className={styles.assistantTitle}>AI Assistant</h2>
                                 </header>
 
                                 {!result && !loading && (
-                                    <div className={styles.assistantEmptyState}>
-                                        <p className={styles.assistantEmptyTitle}>
-                                            Fill in the prompt and click &quot;Generate campaign draft&quot;.
-                                        </p>
-                                        <ul className={styles.assistantEmptyList}>
-                                            <li>Aligns wording with your company documents and categories.</li>
-                                            <li>Pulls recent trending angles for the selected platform.</li>
-                                            <li>Returns a normalized block you can paste into your scheduler.</li>
-                                        </ul>
-                                    </div>
+                                    <p className={styles.assistantEmptyState}>
+                                        Enter a prompt and click Generate.
+                                    </p>
                                 )}
 
                                 {loading && (
@@ -304,8 +302,9 @@ image/video: ${result["image/video"]}`}
                             </div>
                         </aside>
                     </section>
-                </main>
+                </section>
             )}
+            </main>
         </div>
     );
 }

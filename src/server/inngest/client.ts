@@ -1,6 +1,7 @@
 import { EventSchemas, Inngest } from "inngest";
 import type { ProcessDocumentEventData } from "~/lib/ocr/types";
 import type { TrendSearchEventData } from "~/lib/tools/trend-search/types";
+import type { ProspectorEventData } from "~/lib/tools/client-prospector/types";
 
 export type ProcessDocumentEvent = {
   name: "document/process.requested";
@@ -12,7 +13,12 @@ export type TrendSearchEvent = {
   data: TrendSearchEventData;
 };
 
-export type Events = ProcessDocumentEvent | TrendSearchEvent;
+export type ClientProspectorEvent = {
+  name: "client-prospector/run.requested";
+  data: ProspectorEventData;
+};
+
+export type Events = ProcessDocumentEvent | TrendSearchEvent | ClientProspectorEvent;
 
 /**
  * Create the Inngest client.

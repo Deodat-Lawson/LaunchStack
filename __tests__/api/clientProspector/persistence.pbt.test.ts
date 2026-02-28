@@ -171,7 +171,7 @@ const prospectResultArb: fc.Arbitrary<ProspectResult> = fc.record({
 
 const prospectResultsArb = fc.array(prospectResultArb, { minLength: 0, maxLength: 10 });
 
-const isoDateArb = fc.date({ min: new Date(0), max: new Date("2100-01-01") }).map((d) => d.toISOString());
+const isoDateArb = fc.integer({ min: 0, max: 4102444800000 }).map((ms) => new Date(ms).toISOString());
 
 const prospectorOutputArb = fc.tuple(
     prospectResultsArb,

@@ -16,6 +16,11 @@ const serverSchema = z.object({
   UPLOADTHING_TOKEN: optionalString(),
   DATALAB_API_KEY: optionalString(),
   TAVILY_API_KEY: optionalString(),
+  SERPER_API_KEY: optionalString(),
+  SEARCH_PROVIDER: z
+    .enum(["tavily", "serper", "fallback", "parallel"])
+    .default("tavily")
+    .optional(),
   // Azure Document Intelligence (for OCR pipeline)
   AZURE_DOC_INTELLIGENCE_ENDPOINT: optionalString(),
   AZURE_DOC_INTELLIGENCE_KEY: optionalString(),
@@ -73,6 +78,8 @@ function parseServerEnv() {
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+    SERPER_API_KEY: process.env.SERPER_API_KEY,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as "tavily" | "serper" | "fallback" | "parallel" | undefined,
     AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
     AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY,
     LANDING_AI_API_KEY: process.env.LANDING_AI_API_KEY,

@@ -44,6 +44,7 @@ interface AgentChatInterfaceProps {
   onPageClick?: (page: number) => void;
   onReferencesResolved?: (references: SourceReference[]) => void;
   onCreateChat?: () => Promise<string | null>;
+  isDocumentProcessing?: boolean;
 }
 
 export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
@@ -60,6 +61,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   onPageClick,
   onReferencesResolved,
   onCreateChat,
+  isDocumentProcessing = false,
 }) => {
   const { getMessages, sendMessage, voteMessage, error } = useAIChatbot();
   const { sendQuery: sendAIChatQuery, error: aiChatError } = useAIChat();
@@ -633,7 +635,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                   placeholder={`Ask about ${searchScope === 'document' ? (selectedDocTitle ?? 'your document') : 'all company documents'}...`}
                   className="w-full bg-transparent text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-2 py-2.5 text-sm focus:outline-none resize-none min-h-[52px] max-h-[180px] leading-relaxed"
                   rows={1}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isDocumentProcessing}
                 />
                 <div className="flex items-center justify-between px-2 pb-1">
                   <span className="text-[11px] text-slate-400 dark:text-slate-500">
@@ -648,7 +650,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
               {/* Send Button */}
               <button
                 type="submit"
-                disabled={!input.trim() || isSubmitting}
+                disabled={!input.trim() || isSubmitting || isDocumentProcessing}
                 className={cn(
                   "h-10 sm:h-11 min-w-10 sm:min-w-11 px-3 sm:px-4 rounded-xl flex items-center justify-center gap-1.5 font-semibold text-sm transition-all",
                   !input.trim() || isSubmitting

@@ -24,6 +24,9 @@ export const uploadDocument = inngest.createFunction(
     id: "process-document",
     name: "Document Ingestion Pipeline (V2)",
     retries: 5,
+    concurrency: [{ limit: 3 }],
+    throttle: { limit: 30, period: "1m" },
+    timeouts: { finish: "120m" },
     onFailure: async ({ error, event }) => {
       console.error(`[ProcessDocument] Pipeline failed for job ${JSON.stringify(event.data)}:`, error);
     },

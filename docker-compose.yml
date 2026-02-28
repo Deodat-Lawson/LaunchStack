@@ -1,7 +1,7 @@
 # Pass env file as argument: docker compose --env-file .env up
 #
 # Profiles:
-#   default (no flag)        — db + migrate + app + sidecar
+#   default (no flag)        — db + migrate + app
 #   --profile dev            — adds Inngest dev server (local dashboard at :8288)
 #   --profile minimal        — db only (for local Next.js dev with `pnpm dev`)
 #
@@ -9,6 +9,10 @@
 #   docker compose --env-file .env up                           # production-like
 #   docker compose --env-file .env --profile dev up             # with Inngest dev server
 #   docker compose --env-file .env --profile minimal up db      # just the database
+
+x-app-build-args: &app-build-args
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+  OPENAI_API_KEY: ${OPENAI_API_KEY}
 
 services:
   db:
@@ -23,21 +27,20 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     ports:
-      - "5433:5432"   # host:container — use 5433 to avoid conflict with local Postgres on 5432
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d pdr_ai_v2"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  # Applies schema with db:push (no migration files). Use this for fresh DBs.
   migrate:
     build:
       context: .
       dockerfile: Dockerfile
       target: migrate
       args:
-        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        <<: *app-build-args
     depends_on:
       db:
         condition: service_healthy
@@ -52,7 +55,7 @@ services:
       dockerfile: Dockerfile
       target: runner
       args:
-        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        <<: *app-build-args
     container_name: pdr_ai_v2-app
     restart: unless-stopped
     depends_on:
@@ -60,50 +63,19 @@ services:
         condition: service_completed_successfully
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
-      # Pass through from .env (user must set these)
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
       UPLOADTHING_TOKEN: ${UPLOADTHING_TOKEN:-}
       NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
-      # Inngest — required in production for background job processing
-      INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY}
+      INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:-placeholder}
       TAVILY_API_KEY: ${TAVILY_API_KEY:-}
       DATALAB_API_KEY: ${DATALAB_API_KEY:-}
       AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
       AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
       LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
-      # Sidecar — Graph RAG auto-enables when this is set
-      SIDECAR_URL: ${SIDECAR_URL:-http://sidecar:8000}
     ports:
       - "3000:3000"
-
-  # FastAPI sidecar — local ML compute (embeddings, reranking, NER / Graph RAG)
-  sidecar:
-    build:
-      context: ./sidecar
-      dockerfile: Dockerfile
-    container_name: pdr_ai_v2-sidecar
-    restart: unless-stopped
-    environment:
-      DEVICE: ${SIDECAR_DEVICE:-cpu}
-      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-large-en-v1.5}
-      RERANKER_MODEL: ${RERANKER_MODEL:-cross-encoder/ms-marco-MiniLM-L-12-v2}
-      NER_MODEL: ${NER_MODEL:-dslim/bert-base-NER}
-    volumes:
-      - model_cache:/app/model-cache
-    ports:
-      - "8000:8000"
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 120s
 
   # Inngest dev server — local dashboard & event processing for development
   # Start with: docker compose --profile dev up
@@ -122,4 +94,3 @@ services:
 
 volumes:
   postgres_data:
-  model_cache:

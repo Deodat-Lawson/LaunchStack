@@ -333,6 +333,9 @@ export function Sidebar({
                             selectedDoc?.id === doc.id ? "text-purple-600 dark:text-purple-400" : "text-muted-foreground group-hover:text-foreground"
                           )} />
                           <span className="flex-1 text-left truncate">{doc.title}</span>
+                          {doc.ocrProcessed === false && (
+                            <span className="flex-shrink-0 w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Processing" />
+                          )}
                         </button>
                         
                         {showDelete && deleteDocument && (

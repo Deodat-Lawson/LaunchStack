@@ -13,7 +13,8 @@ import {
   Calculator,
   Sparkles,
   PanelRightClose,
-  PanelRightOpen
+  PanelRightOpen,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '~/app/employer/documents/components/ui/button';
 import {
@@ -246,6 +247,15 @@ export function ChatPanel({
         </div>
       </div>
 
+      {selectedDoc && selectedDoc.ocrProcessed === false && searchScope === 'document' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+          <Loader2 className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-spin flex-shrink-0" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400 leading-relaxed">
+            This document is still being processed. AI chat will be available once indexing completes.
+          </p>
+        </div>
+      )}
+
       {/* Messages Area */}
       <div className="flex-1 relative overflow-hidden">
         <AgentChatInterface
@@ -260,6 +270,7 @@ export function ChatPanel({
           aiModel={aiModel}
           onPageClick={setPdfPageNumber}
           onCreateChat={onCreateChat}
+          isDocumentProcessing={selectedDoc?.ocrProcessed === false && searchScope === 'document'}
         />
       </div>
     </div>

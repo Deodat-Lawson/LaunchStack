@@ -13,7 +13,8 @@ import {
   BookOpen,
   GraduationCap,
   List,
-  MessageSquare
+  MessageSquare,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '~/app/employer/documents/components/ui/button';
 import { Textarea } from '~/app/employer/documents/components/ui/textarea';
@@ -128,6 +129,22 @@ export function SimpleQueryPanel({
 
       <ScrollArea className="flex-1 min-h-0">
         <div className="p-5 space-y-5">
+          {selectedDoc && selectedDoc.ocrProcessed === false && searchScope === 'document' && (
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+              <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center flex-shrink-0">
+                <Loader2 className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-spin" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 mb-0.5">
+                  Document still processing
+                </p>
+                <p className="text-[11px] text-amber-600/80 dark:text-amber-500/80 leading-relaxed">
+                  This document is being analyzed and indexed. AI queries will be available once processing completes. Try switching to &quot;All Documents&quot; scope or check back shortly.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Search Scope Toggle - only show company scope for employers */}
           {showCompanyScope && (
             <div className="space-y-2">
@@ -272,7 +289,7 @@ export function SimpleQueryPanel({
                   </span>
                   <Button
                     onClick={(e) => { void handleAiSearch(e); }}
-                    disabled={!aiQuestion.trim() || aiLoading || (searchScope === 'document' && !selectedDoc)}
+                    disabled={!aiQuestion.trim() || aiLoading || (searchScope === 'document' && !selectedDoc) || (searchScope === 'document' && selectedDoc?.ocrProcessed === false)}
                     size="sm"
                     className={cn(
                       "h-8 px-4 rounded-lg text-xs font-semibold transition-all duration-300",

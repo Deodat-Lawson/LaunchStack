@@ -14,8 +14,8 @@ jest.mock("~/env", () => ({
 }));
 
 import * as fc from "fast-check";
-import { executeSearch } from "~/server/trend-search/web-search";
-import type { PlannedQuery, SearchCategory } from "~/server/trend-search/types";
+import { executeSearch } from "~/lib/tools/trend-search/web-search";
+import type { PlannedQuery, SearchCategory } from "~/lib/tools/trend-search/types";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
@@ -159,6 +159,6 @@ describe("Unit: Tavily fails, retries 2 times then marks sub-query failed", () =
         // 1 + 2 retries for first sub-query, then 1 for second
         expect(fetchSpy).toHaveBeenCalledTimes(4);
         expect(result).toHaveLength(1);
-        expect(result[0].url).toBe("https://ok.com");
+        expect(result[0]!.url).toBe("https://ok.com");
     });
 });

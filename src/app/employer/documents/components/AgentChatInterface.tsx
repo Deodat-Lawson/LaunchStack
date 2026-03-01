@@ -18,6 +18,8 @@ import {
 import { useAIChatbot, type Message } from '../hooks/useAIChatbot';
 import { useAIChat, type SourceReference } from '../hooks/useAIChat';
 import { cn } from '~/lib/utils';
+import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import { ModelBadge } from './ModelBadge';
 
 const MarkdownMessage = dynamic(
   () => import("~/app/_components/MarkdownMessage"),
@@ -38,9 +40,11 @@ interface AgentChatInterfaceProps {
   companyId?: number | null;
   aiStyle?: string;
   aiPersona?: string;
+  aiModel?: AIModelType;
   onPageClick?: (page: number) => void;
   onReferencesResolved?: (references: SourceReference[]) => void;
   onCreateChat?: () => Promise<string | null>;
+  isDocumentProcessing?: boolean;
 }
 
 export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
@@ -53,9 +57,11 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   companyId,
   aiStyle = 'concise',
   aiPersona = 'general',
+  aiModel = 'gpt-5.2',
   onPageClick,
   onReferencesResolved,
   onCreateChat,
+  isDocumentProcessing = false,
 }) => {
   const { getMessages, sendMessage, voteMessage, error } = useAIChatbot();
   const { sendQuery: sendAIChatQuery, error: aiChatError } = useAIChat();
@@ -215,6 +221,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           conversationHistory: conversationContext || undefined,
           enableWebSearch: Boolean(enableWebSearch),
           aiPersona: aiPersona as 'general' | 'learning-coach' | 'financial-expert' | 'legal-expert' | 'math-reasoning' | undefined,
+          aiModel,
           documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
           companyId: searchScope === "company" && companyId ? companyId : undefined,
         });
@@ -243,11 +250,12 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
         const aiResponse = await sendMessage({
           chatId: activeChatId,
           role: 'assistant',
-          content: { 
+          content: {
             text: aiAnswer,
             references: references.length > 0 ? references : undefined,
             pages: pages,
-            webSources: webSources.length > 0 ? webSources : undefined
+            webSources: webSources.length > 0 ? webSources : undefined,
+            aiModel: aiData.aiModel as AIModelType | undefined ?? aiModel
           },
           messageType: 'text',
         });
@@ -447,33 +455,39 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                         </div>
                       )}
 
-                      {/* Actions */}
-                      <div className="flex items-center gap-1 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-                        <button
-                          onClick={() => handleCopy(displayText, msg.id)}
-                          className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
-                          title="Copy response"
-                        >
-                          {copiedId === msg.id ? (
-                            <Check className="w-3.5 h-3.5 text-emerald-500" />
-                          ) : (
-                            <Copy className="w-3.5 h-3.5" />
-                          )}
-                        </button>
-                        <button
-                          onClick={() => handleVote(msg.id, true)}
-                          className="p-1.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
-                          title="Helpful"
-                        >
-                          <ThumbsUp className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleVote(msg.id, false)}
-                          className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-all"
-                          title="Not helpful"
-                        >
-                          <ThumbsDown className="w-3.5 h-3.5" />
-                        </button>
+                      {/* Model Badge & Actions */}
+                      <div className="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
+                        {/* Model Badge */}
+                        <ModelBadge model={msg.aiModel ?? (typeof msg.content === 'object' && msg.content !== null && 'aiModel' in msg.content ? msg.content.aiModel : undefined)} />
+
+                        {/* Actions */}
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleCopy(displayText, msg.id)}
+                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
+                            title="Copy response"
+                          >
+                            {copiedId === msg.id ? (
+                              <Check className="w-3.5 h-3.5 text-emerald-500" />
+                            ) : (
+                              <Copy className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                          <button
+                            onClick={() => handleVote(msg.id, true)}
+                            className="p-1.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
+                            title="Helpful"
+                          >
+                            <ThumbsUp className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleVote(msg.id, false)}
+                            className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-all"
+                            title="Not helpful"
+                          >
+                            <ThumbsDown className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
                     </>
                   )}
@@ -621,7 +635,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                   placeholder={`Ask about ${searchScope === 'document' ? (selectedDocTitle ?? 'your document') : 'all company documents'}...`}
                   className="w-full bg-transparent text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-2 py-2.5 text-sm focus:outline-none resize-none min-h-[52px] max-h-[180px] leading-relaxed"
                   rows={1}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isDocumentProcessing}
                 />
                 <div className="flex items-center justify-between px-2 pb-1">
                   <span className="text-[11px] text-slate-400 dark:text-slate-500">
@@ -636,7 +650,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
               {/* Send Button */}
               <button
                 type="submit"
-                disabled={!input.trim() || isSubmitting}
+                disabled={!input.trim() || isSubmitting || isDocumentProcessing}
                 className={cn(
                   "h-10 sm:h-11 min-w-10 sm:min-w-11 px-3 sm:px-4 rounded-xl flex items-center justify-center gap-1.5 font-semibold text-sm transition-all",
                   !input.trim() || isSubmitting

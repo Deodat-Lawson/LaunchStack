@@ -1,6 +1,6 @@
-import { db, toRows } from "~/server/db/index";
-import { eq, sql } from "drizzle-orm";
-import { documentSections } from "~/server/db/schema";
+import { db } from "~/server/db/index";
+import { and, eq, inArray, sql } from "drizzle-orm";
+import { documentSections, pdfChunks } from "~/server/db/schema";
 
 interface ANNConfig {
     strategy: 'hnsw' | 'ivf' | 'hybrid' | 'prefiltered';
@@ -75,43 +75,53 @@ export class ANNOptimizer {
         
         const approximateLimit = Math.min(limit * 5, 100);
         
-        const results = await db.execute(sql`
-            SELECT
-                id,
-                content,
-                page_number as page,
-                document_id as "documentId",
-                embedding <=> ${embeddingStr}::vector as distance
-            FROM pdr_ai_v2_document_sections
-            WHERE document_id IN (${sql.join(documentIds, sql`, `)})
-            ORDER BY embedding <=> ${embeddingStr}::vector
-            LIMIT ${approximateLimit}
-        `);
+        const results = await db.select({
+            id: documentSections.id,
+            content: documentSections.content,
+            page: documentSections.pageNumber,
+            documentId: documentSections.documentId,
+            distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
+        })
+        .from(documentSections)
+        .where(inArray(documentSections.documentId, documentIds.map(id => BigInt(id))))
+        .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
+        .limit(approximateLimit);
 
-        let rows = toRows<ANNRow>(results);
+        let rows: ANNRow[] = results.map(r => ({
+            id: r.id,
+            content: r.content,
+            page: r.page ?? 0,
+            documentId: Number(r.documentId),
+            distance: Number(r.distance ?? 1),
+        }));
 
         // Fallback to legacy table
         if (rows.length === 0 && documentIds.length === 1) {
-            const legacyResults = await db.execute(sql`
-                SELECT
-                    id,
-                    content,
-                    page,
-                    document_id as "documentId",
-                    embedding <=> ${embeddingStr}::vector as distance
-                FROM pdr_ai_v2_pdf_chunks
-                WHERE document_id = ${documentIds[0]}
-                ORDER BY embedding <=> ${embeddingStr}::vector
-                LIMIT ${approximateLimit}
-            `);
-            rows = toRows<ANNRow>(legacyResults);
+            const legacyResults = await db.select({
+                id: pdfChunks.id,
+                content: pdfChunks.content,
+                page: pdfChunks.page,
+                documentId: pdfChunks.documentId,
+                distance: sql<number>`${pdfChunks.embedding} <=> ${embeddingStr}::vector`,
+            })
+            .from(pdfChunks)
+            .where(eq(pdfChunks.documentId, BigInt(documentIds[0]!)))
+            .orderBy(sql`${pdfChunks.embedding} <=> ${embeddingStr}::vector`)
+            .limit(approximateLimit);
+
+            rows = legacyResults.map(r => ({
+                id: r.id,
+                content: r.content,
+                page: r.page,
+                documentId: Number(r.documentId),
+                distance: Number(r.distance ?? 1),
+            }));
         }
 
         const refinedResults = rows
             .map(row => ({
                 ...row,
-                distance: Number(row.distance ?? 1),
-                confidence: Math.max(0, 1 - Number(row.distance ?? 1))
+                confidence: Math.max(0, 1 - row.distance)
             }))
             .filter(r => r.distance <= threshold)
             .sort((a, b) => a.distance - b.distance)
@@ -144,25 +154,29 @@ export class ANNOptimizer {
         
         const embeddingStr = `[${queryEmbedding.join(',')}]`;
         
-        const results = await db.execute(sql`
-            SELECT
-                id,
-                content,
-                page_number as page,
-                document_id as "documentId",
-                embedding <=> ${embeddingStr}::vector as distance
-            FROM pdr_ai_v2_document_sections
-            WHERE id IN (${sql.join(clusterChunkIds, sql`, `)})
-            AND embedding <=> ${embeddingStr}::vector <= ${threshold}
-            ORDER BY embedding <=> ${embeddingStr}::vector
-            LIMIT ${limit}
-        `);
+        const results = await db.select({
+            id: documentSections.id,
+            content: documentSections.content,
+            page: documentSections.pageNumber,
+            documentId: documentSections.documentId,
+            distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
+        })
+        .from(documentSections)
+        .where(and(
+            inArray(documentSections.id, clusterChunkIds),
+            sql`${documentSections.embedding} <=> ${embeddingStr}::vector <= ${threshold}`,
+        ))
+        .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
+        .limit(limit);
 
-        return toRows<ANNRow>(results).map(row => ({
-            ...row,
+        return results.map(row => ({
+            id: row.id,
+            content: row.content,
+            page: row.page ?? 0,
+            documentId: Number(row.documentId),
             distance: Number(row.distance ?? 1),
-            confidence: Math.max(0, 1 - Number(row.distance ?? 1))
-        })) as ANNResult[];
+            confidence: Math.max(0, 1 - Number(row.distance ?? 1)),
+        }));
     }
 
 
@@ -191,24 +205,29 @@ export class ANNOptimizer {
             if (results.length >= limit) break;
 
             const remaining = limit - results.length;
-            const docResults = await db.execute(sql`
-                SELECT
-                    id,
-                    content,
-                    page_number as page,
-                    document_id as "documentId",
-                    embedding <=> ${embeddingStr}::vector as distance
-                FROM pdr_ai_v2_document_sections
-                WHERE document_id = ${docId}
-                AND embedding <=> ${embeddingStr}::vector <= ${threshold}
-                ORDER BY embedding <=> ${embeddingStr}::vector
-                LIMIT ${remaining * 2}
-            `);
+            const docResults = await db.select({
+                id: documentSections.id,
+                content: documentSections.content,
+                page: documentSections.pageNumber,
+                documentId: documentSections.documentId,
+                distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
+            })
+            .from(documentSections)
+            .where(and(
+                eq(documentSections.documentId, BigInt(docId)),
+                sql`${documentSections.embedding} <=> ${embeddingStr}::vector <= ${threshold}`,
+            ))
+            .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
+            .limit(remaining * 2);
 
-            const mappedResults = toRows<ANNRow>(docResults).map(row => ({
-                ...row,                distance: Number(row.distance ?? 1),
-                confidence: Math.max(0, 1 - Number(row.distance ?? 1))
-            })) as ANNResult[];
+            const mappedResults: ANNResult[] = docResults.map(row => ({
+                id: row.id,
+                content: row.content,
+                page: row.page ?? 0,
+                documentId: Number(row.documentId),
+                distance: Number(row.distance ?? 1),
+                confidence: Math.max(0, 1 - Number(row.distance ?? 1)),
+            }));
 
             results.push(...mappedResults.slice(0, remaining));
         }

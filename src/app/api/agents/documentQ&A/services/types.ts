@@ -17,13 +17,23 @@
 /**
  * Supported AI model types for chat generation
  */
-export type AIModelType = "gpt-4o" | "claude-sonnet-4" | "claude-opus-4.5" | "gpt-5.2" | "gpt-5.1" | "gemini-2.5-flash" | "gemini-3-flash" | "gemini-3-pro";
+export type AIModelType =
+  | "gpt-4o"
+  | "gpt-5.2"
+  | "gpt-5.1"
+  | "gpt-5-nano"
+  | "gpt-5-mini"
+  | "claude-sonnet-4"
+  | "claude-opus-4.5"
+  | "gemini-2.5-flash"
+  | "gemini-3-flash"
+  | "gemini-3-pro";
 
 /**
  * Union type of all supported AI model names
  * Useful for type checking and validation
  */
-export const AIModelTypes = ["gpt-4o", "claude-sonnet-4", "claude-opus-4.5", "gpt-5.2", "gpt-5.1", "gemini-2.5-flash", "gemini-3-flash", "gemini-3-pro"] as const;
+export const AIModelTypes = ["gpt-4o", "gpt-5.2", "gpt-5.1", "gpt-5-nano", "gpt-5-mini", "claude-sonnet-4", "claude-opus-4.5", "gemini-2.5-flash", "gemini-3-flash", "gemini-3-pro"] as const;
 
 /**
  * Type guard to check if a string is a valid AI model type

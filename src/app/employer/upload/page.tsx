@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { Brain, Home } from "lucide-react";
+import Link from "next/link";
+import { Brain, Home, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import EmployerAuthCheck from "./EmployerAuthCheck";
 import UploadForm, { type AvailableProviders } from "./UploadForm";
+import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
+import { Toaster } from "~/app/employer/documents/components/ui/sonner";
 import styles from "~/styles/Employer/Upload.module.css";
 
 const CategoryManagement = dynamic(() => import("./CategoryManagement"), {
@@ -133,21 +137,20 @@ const Page: React.FC = () => {
                         const newCategories = [...prev, { id: createdCategory.id.toString(), name: createdCategory.name }];
                         return newCategories;
                     });
+                    toast.success(`Category "${rawData.name}" created`);
                 } else {
                     console.error("Invalid category data received:", rawData);
-                    alert("Error: Invalid category data format");
+                    toast.error("Invalid category data format");
                 }
             } catch (error) {
                 console.error(error);
-                alert("Error creating category. Check console for details.");
+                toast.error("Error creating category. Check console for details.");
             }
         },
         [],
     );
 
-    const handleRemoveCategory = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to delete this category?")) return;
-
+    const handleRemoveCategory = useCallback(async (id: string, categoryName: string) => {
         try {
             const res = await fetch("/api/Categories/DeleteCategories", {
                 method: "DELETE",
@@ -158,9 +161,10 @@ const Page: React.FC = () => {
                 throw new Error("Failed to remove category");
             }
             setCategories((prev) => prev.filter((cat) => cat.id !== id));
+            toast.success(`Category "${categoryName}" removed`);
         } catch (error) {
             console.error(error);
-            alert("Error removing category. Check console for details.");
+            toast.error("Error removing category. Check console for details.");
         }
     }, []);
 
@@ -182,14 +186,71 @@ const Page: React.FC = () => {
                             >
                                 <Home className={styles.iconButtonIcon} />
                             </button>
+                            <div className={styles.navProfile}>
+                                <ProfileDropdown />
+                            </div>
                         </div>
                     </div>
                 </nav>
 
                 <div className={styles.container}>
+                {/* Breadcrumb */}
+                <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+                    <ol className={styles.breadcrumbList}>
+                        <li className={styles.breadcrumbItem}>
+                            <Link href="/employer/home" className={styles.breadcrumbLink}>
+                                Home
+                            </Link>
+                        </li>
+                        <li className={styles.breadcrumbItem}>
+                            <ChevronRight className={styles.breadcrumbSeparator} aria-hidden />
+                            <span className={styles.breadcrumbCurrent} aria-current="page">
+                                Upload
+                            </span>
+                        </li>
+                    </ol>
+                </nav>
+
                 <div className={styles.header}>
-                    <h1 className={styles.title}>Upload New Document</h1>
-                    <p className={styles.subtitle}>Add a new document to your repository</p>
+                    <h1 className={styles.title}>Upload Documents</h1>
+                    <p className={styles.subtitle}>
+                        Add new documents to your collection. Upload multiple files at once, provide details, and organize them with categories.
+                    </p>
+                    <div className={styles.featureHighlights}>
+                        <div className={styles.featureItem}>
+                            <div className={styles.featureIcon}>
+                                <svg className={styles.featureCheck} fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p className={styles.featureTitle}>Multiple Files</p>
+                                <p className={styles.featureDesc}>Upload many documents at once</p>
+                            </div>
+                        </div>
+                        <div className={styles.featureItem}>
+                            <div className={styles.featureIcon}>
+                                <svg className={styles.featureCheck} fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p className={styles.featureTitle}>Batch Settings</p>
+                                <p className={styles.featureDesc}>Apply category to all files</p>
+                            </div>
+                        </div>
+                        <div className={styles.featureItem}>
+                            <div className={styles.featureIcon}>
+                                <svg className={styles.featureCheck} fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p className={styles.featureTitle}>Individual Control</p>
+                                <p className={styles.featureDesc}>Customize each document</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <UploadForm 
@@ -199,6 +260,7 @@ const Page: React.FC = () => {
                     onToggleUploadMethod={handleToggleUploadMethod}
                     isUpdatingPreference={isUpdatingPreference}
                     availableProviders={availableProviders}
+                    onAddCategory={handleAddCategory}
                 />
 
                 <CategoryManagement
@@ -207,6 +269,7 @@ const Page: React.FC = () => {
                     onRemoveCategory={handleRemoveCategory}
                 />
                 </div>
+                <Toaster />
             </div>
         </EmployerAuthCheck>
     );

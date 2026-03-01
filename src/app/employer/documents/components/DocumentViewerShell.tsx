@@ -14,9 +14,24 @@ import { getDocumentDisplayType, type DocumentDisplayType } from "../types/docum
 import { useAIChat } from "../hooks/useAIChat";
 import { useAIChatbot } from "../hooks/useAIChatbot";
 import { Button } from "~/app/employer/documents/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/app/employer/documents/components/ui/alert-dialog";
+import { Toaster } from "~/app/employer/documents/components/ui/sonner";
+import { toast } from "sonner";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 
 import { RESPONSE_STYLES, type ResponseStyleId } from "~/lib/ai/styles";
+import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
+
+type AIModelAvailability = Record<AIModelType, boolean>;
 
 const ChatPanel = dynamic(
   () => import("./ChatPanel").then((module) => module.ChatPanel),
@@ -35,6 +50,14 @@ const DocumentSanityChecker = dynamic(
 );
 const DocumentGenerator = dynamic(
   () => import("./DocumentGenerator").then((module) => module.DocumentGenerator),
+  { loading: () => <LoadingPage /> }
+);
+const RewriteDiffView = dynamic(
+  () => import("./RewriteDiffView").then((module) => module.RewriteDiffView),
+  { loading: () => <LoadingPage /> }
+);
+const UploadView = dynamic(
+  () => import("./UploadView").then((module) => module.UploadView),
   { loading: () => <LoadingPage /> }
 );
 
@@ -75,12 +98,15 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [referencePages, setReferencePages] = useState<number[]>([]);
   const [aiStyle, setAiStyle] = useState<string>("concise");
   const [searchScope, setSearchScope] = useState<"document" | "company">("document");
+  const [aiAnswerModel, setAiAnswerModel] = useState<AIModelType | undefined>(undefined);
   const { sendQuery: sendAIChatQuery, loading: isAiLoading } = useAIChat();
   
   // AI States (Chat)
   const { createChat, getChat } = useAIChatbot();
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [aiPersona, setAiPersona] = useState<string>('general');
+  const [aiModel, setAiModel] = useState<AIModelType>("gpt-5.2");
+  const [modelAvailability, setModelAvailability] = useState<Partial<AIModelAvailability>>({});
 
   // Handle chat selection and auto-document binding
   useEffect(() => {
@@ -108,6 +134,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   
   const [pdfPageNumber, setPdfPageNumber] = useState<number>(1);
   
+  // Delete confirmation state
+  const [deleteConfirmDocId, setDeleteConfirmDocId] = useState<number | null>(null);
+
   const previewPanelRef = useRef<ImperativePanelHandle>(null);
   const sidebarPanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -220,6 +249,41 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     void fetchDocuments();
   }, [userId, isRoleLoading, fetchDocuments]);
 
+  // Poll for document updates when the selected doc is still processing
+  useEffect(() => {
+    if (!selectedDoc || selectedDoc.ocrProcessed !== false) return;
+    const interval = setInterval(() => void fetchDocuments(), 15_000);
+    return () => clearInterval(interval);
+  }, [selectedDoc, fetchDocuments]);
+
+  // Sync selectedDoc when the documents list refreshes (e.g. after OCR completes)
+  useEffect(() => {
+    if (!selectedDoc || selectedDoc.ocrProcessed !== false) return;
+    const updated = documents.find((d) => d.id === selectedDoc.id);
+    if (updated && updated.ocrProcessed === true) {
+      setSelectedDoc(updated);
+    }
+  }, [documents, selectedDoc]);
+
+  useEffect(() => {
+    const fetchModelAvailability = async () => {
+      try {
+        const response = await fetch("/api/config/ai-models");
+        if (!response.ok) return;
+        const data = (await response.json()) as {
+          models?: Partial<Record<AIModelType, boolean>>;
+        };
+        if (data.models) {
+          setModelAvailability(data.models);
+        }
+      } catch (error) {
+        console.error("Error fetching AI model availability:", error);
+      }
+    };
+
+    void fetchModelAvailability();
+  }, []);
+
   // Actions
   const toggleCategory = (categoryName: string) => {
     setOpenCategories(prev => {
@@ -234,14 +298,19 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setSelectedDoc(doc);
     setPdfPageNumber(1);
     setAiAnswer("");
+    setAiAnswerModel(undefined);
     setReferencePages([]);
     setPredictiveAnalysis(null);
   };
 
-  const deleteDocument = async (docId: number) => {
-    if (!window.confirm('Are you sure you want to delete this document? This will permanently remove it and all related data. This action cannot be undone.')) {
-      return;
-    }
+  const requestDeleteDocument = (docId: number) => {
+    setDeleteConfirmDocId(docId);
+  };
+
+  const confirmDeleteDocument = async () => {
+    const docId = deleteConfirmDocId;
+    setDeleteConfirmDocId(null);
+    if (!docId) return;
 
     try {
       const response = await fetch('/api/deleteDocument', {
@@ -256,10 +325,10 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
 
       setDocuments(prev => prev.filter(doc => doc.id !== docId));
       if (selectedDoc?.id === docId) handleSelectDoc(null);
-      alert(result.message ?? 'Document deleted successfully');
+      toast.success(result.message ?? 'Document deleted successfully');
     } catch (error) {
       console.error('Error deleting document:', error);
-      alert(`Failed to delete document: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error(`Failed to delete document: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -297,6 +366,15 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     void fetchPredictiveAnalysis(selectedDoc.id, false);
   }, [viewMode, selectedDoc, fetchPredictiveAnalysis]);
 
+  // Refresh document list when leaving the upload tab
+  const prevViewModeRef = useRef<typeof viewMode | null>(null);
+  useEffect(() => {
+    if (prevViewModeRef.current === "upload" && viewMode !== "upload") {
+      void fetchDocuments();
+    }
+    prevViewModeRef.current = viewMode;
+  }, [viewMode, fetchDocuments]);
+
   const handleAiSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!aiQuestion.trim()) return;
@@ -313,9 +391,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
 
     setAiError("");
     setAiAnswer("");
+    setAiAnswerModel(undefined);
     setReferencePages([]);
 
     const currentQuestion = aiQuestion;
+    const modelUsedForQuery = aiModel; // Capture the model at query time
     setAiQuestion("");
 
     try {
@@ -323,6 +403,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         question: currentQuestion,
         searchScope,
         style: aiStyle as ResponseStyleId,
+        aiModel: modelUsedForQuery,
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
         companyId: searchScope === "company" ? resolvedCompanyId ?? undefined : undefined,
       });
@@ -330,6 +411,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       if (!data) throw new Error("Failed to get AI response");
 
       setAiAnswer(data.summarizedAnswer ?? "");
+      setAiAnswerModel((data.aiModel as AIModelType | undefined) ?? modelUsedForQuery);
       if (Array.isArray(data.recommendedPages)) {
         setReferencePages(Array.from(new Set(data.recommendedPages)));
       }
@@ -480,6 +562,10 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                       setSearchScope={handleSearchScopeChange}
                       aiStyle={aiStyle}
                       setAiStyle={setAiStyle}
+                      aiModel={aiModel}
+                      setAiModel={setAiModel}
+                      aiAnswerModel={aiAnswerModel}
+                      modelAvailability={modelAvailability}
                       styleOptions={STYLE_OPTIONS}
                       referencePages={referencePages}
                       setPdfPageNumber={setPdfPageNumber}
@@ -499,6 +585,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                               setAiStyle={setAiStyle}
                               aiPersona={aiPersona}
                               setAiPersona={setAiPersona}
+                              aiModel={aiModel}
+                              setAiModel={setAiModel}
+                              modelAvailability={modelAvailability}
                               searchScope={searchScope}
                               setSearchScope={handleSearchScopeChange}
                               companyId={companyId}
@@ -573,6 +662,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       case "generator":
         if (userRole !== 'employer') return null;
         return <DocumentGenerator />;
+      case "rewrite":
+        return <RewriteDiffView />;
+      case "upload":
+        if (userRole !== 'employer') return null;
+        return <UploadView onDocumentUploaded={() => void fetchDocuments()} />;
       default:
         return null;
     }
@@ -605,7 +699,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
             viewMode={viewMode}
             setViewMode={setViewMode}
             toggleCategory={toggleCategory}
-            deleteDocument={userRole === 'employer' ? (id) => { void deleteDocument(id); } : undefined}
+            deleteDocument={userRole === 'employer' ? requestDeleteDocument : undefined}
             isCollapsed={isSidebarCollapsed}
             onCollapseToggle={(collapsed) => {
               if (collapsed) sidebarPanelRef.current?.collapse();
@@ -634,6 +728,31 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
+
+      <AlertDialog
+        open={deleteConfirmDocId !== null}
+        onOpenChange={(open) => { if (!open) setDeleteConfirmDocId(null); }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete document?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently remove the document and all related data. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={() => void confirmDeleteDocument()}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <Toaster />
     </div>
   );
 }

@@ -123,6 +123,13 @@ export async function renderPagesToImages(buffer: ArrayBuffer, pageIndices: numb
   }
 }
 
+function getDefaultOCRProvider(): OCRProvider {
+  if (process.env.AZURE_DOC_INTELLIGENCE_KEY && process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT) return "AZURE";
+  if (process.env.LANDING_AI_API_KEY) return "LANDING_AI";
+  if (process.env.DATALAB_API_KEY) return "DATALAB";
+  return "NATIVE_PDF";
+}
+
 export async function determineDocumentRouting(documentUrl: string): Promise<RoutingDecision> {
   const response = await fetch(documentUrl);
   const buffer = await response.arrayBuffer();
@@ -173,9 +180,10 @@ try {
     const images = await renderPagesToImages(buffer, pagesToSample);
 
     if (images.length === 0) {
+       const fallback = getDefaultOCRProvider();
        return {
-         provider: "AZURE",
-         reason: "No text layer detected, using OCR",
+         provider: fallback,
+         reason: `No text layer detected, using ${fallback}`,
          confidence: 0.5,
          pageCount
         };
@@ -193,9 +201,10 @@ try {
       };
     }
 
+    const cleanFallback = getDefaultOCRProvider();
     return {
-      provider: "AZURE",
-      reason: `Vision detected clean layout '${visionResult.label}'`,
+      provider: cleanFallback,
+      reason: `Vision detected clean layout '${visionResult.label}', using ${cleanFallback}`,
       confidence: visionResult.score,
       visionResult,
       pageCount
@@ -203,12 +212,13 @@ try {
 
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorFallback = getDefaultOCRProvider();
     if (!errorMessage.includes('ENOENT')) {
-      console.warn("Vision routing failed, defaulting to Azure OCR:", errorMessage);
+      console.warn(`Vision routing failed, defaulting to ${errorFallback}:`, errorMessage);
     }
     return {
-      provider: "AZURE",
-      reason: "Defaulting to OCR",
+      provider: errorFallback,
+      reason: `Defaulting to ${errorFallback}`,
       confidence: 0.5,
       pageCount
     };

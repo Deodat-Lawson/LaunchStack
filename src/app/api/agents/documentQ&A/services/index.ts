@@ -12,7 +12,7 @@
 // Functions
 export { normalizeModelContent } from "./normalizeModelContent";
 export { performWebSearch } from "./webSearch";
-export { buildReferences, extractRecommendedPages } from "./references";
+export { buildReferences, extractRecommendedPages, filterPagesByAICitation } from "./references";
 export { performTavilySearch } from "./tavilySearch";
 export { executeWebSearchAgent } from "./webSearchAgent";
 export { SYSTEM_PROMPTS, getSystemPrompt, getWebSearchInstruction } from "./prompts";

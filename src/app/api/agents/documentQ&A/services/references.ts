@@ -86,6 +86,51 @@ export function extractRecommendedPages(documents: SearchResult[]): number[] {
     return Array.from(new Set(pages)).sort((a, b) => a - b);
 }
 
+/**
+ * Filters a list of candidate page numbers to only those explicitly cited in
+ * the AI's response text.
+ *
+ * The AI receives context chunks labelled "Page N", so it naturally produces
+ * phrases like "according to page 3" or "(pages 4–6)". This function extracts
+ * those references and returns only the pages the model actually used,
+ * addressing the behaviour reported in issue #90 where all retrieved pages
+ * were surfaced regardless of whether the AI mentioned them.
+ *
+ * Falls back to returning all `candidatePages` unchanged when:
+ * - No page references are found in the response (model answered without
+ *   explicit citations — preserve backward-compatible behaviour).
+ * - Every cited page falls outside the candidate set (e.g. the model
+ *   hallucinated a page number — avoid returning an empty list).
+ */
+export function filterPagesByAICitation(
+    aiResponse: string,
+    candidatePages: number[]
+): number[] {
+    if (candidatePages.length === 0) return [];
+
+    const cited = new Set<number>();
+
+    // Matches "page 5", "pages 5-7", "pages 5–7", "p. 5", "(page 5)", etc.
+    // The optional range group captures constructs like "pages 4-6".
+    const pagePattern = /\bpages?\s*\.?\s*(\d+)(?:\s*[-–]\s*(\d+))?/gi;
+    let match: RegExpExecArray | null;
+
+    while ((match = pagePattern.exec(aiResponse)) !== null) {
+        const start = Number.parseInt(match[1]!, 10);
+        const end = match[2] !== undefined ? Number.parseInt(match[2], 10) : start;
+        for (let p = start; p <= Math.min(end, start + 50); p++) {
+            cited.add(p);
+        }
+    }
+
+    if (cited.size === 0) {
+        return candidatePages;
+    }
+
+    const filtered = candidatePages.filter((p) => cited.has(p));
+    return filtered.length > 0 ? filtered : candidatePages;
+}
+
 export function buildReferences(
     question: string,
     documents: SearchResult[],

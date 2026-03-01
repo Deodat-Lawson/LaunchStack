@@ -13,8 +13,10 @@ import {
   MoreVertical, 
   MessageCircle,
   PenTool,
+  PenLine,
   Clock,
   Brain,
+  Upload,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Input } from '~/app/employer/documents/components/ui/input';
@@ -141,6 +143,36 @@ export function Sidebar({
               <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-500 rounded-full" />
             </Button>
           )}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setViewMode('rewrite')}
+            className={cn(
+              "w-full h-10 rounded-xl transition-all duration-200",
+              viewMode === 'rewrite' 
+                ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400" 
+                : "text-muted-foreground hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+            )}
+            title="Rewrite"
+          >
+            <PenLine className="w-4 h-4" />
+          </Button>
+          {showGenerator && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setViewMode('upload')}
+              className={cn(
+                "w-full h-10 rounded-xl transition-all duration-200",
+                viewMode === 'upload'
+                  ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
+                  : "text-muted-foreground hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+              )}
+              title="Upload Documents"
+            >
+              <Upload className="w-4 h-4" />
+            </Button>
+          )}
         </div>
 
         {/* Bottom Actions */}
@@ -256,6 +288,34 @@ export function Sidebar({
               </div>
             </Button>
           )}
+          <Button
+            variant={viewMode === 'rewrite' ? 'default' : 'ghost'}
+            className={cn(
+              "justify-start gap-3 h-11 rounded-lg px-3 transition-all duration-200",
+              viewMode === 'rewrite' 
+                ? "bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-500/20" 
+                : "hover:bg-purple-50 dark:hover:bg-purple-900/10 hover:text-purple-600 dark:hover:text-purple-400 text-muted-foreground"
+            )}
+            onClick={() => setViewMode('rewrite')}
+          >
+            <PenLine className="w-4 h-4" />
+            <span className="font-medium text-sm">Rewrite</span>
+          </Button>
+          {showGenerator && (
+            <Button
+              variant={viewMode === 'upload' ? 'default' : 'ghost'}
+              className={cn(
+                "justify-start gap-3 h-11 rounded-lg px-3 transition-all duration-200",
+                viewMode === 'upload'
+                  ? "bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-500/20"
+                  : "hover:bg-purple-50 dark:hover:bg-purple-900/10 hover:text-purple-600 dark:hover:text-purple-400 text-muted-foreground"
+              )}
+              onClick={() => setViewMode('upload')}
+            >
+              <Upload className="w-4 h-4" />
+              <span className="font-medium text-sm">Upload Documents</span>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -333,6 +393,9 @@ export function Sidebar({
                             selectedDoc?.id === doc.id ? "text-purple-600 dark:text-purple-400" : "text-muted-foreground group-hover:text-foreground"
                           )} />
                           <span className="flex-1 text-left truncate">{doc.title}</span>
+                          {doc.ocrProcessed === false && (
+                            <span className="flex-shrink-0 w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Processing" />
+                          )}
                         </button>
                         
                         {showDelete && deleteDocument && (

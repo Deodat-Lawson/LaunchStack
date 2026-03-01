@@ -5,3 +5,6 @@ export { CitationPanel, type Citation, type CitationFormat, type SourceType } fr
 export { OutlinePanel, type OutlineItem } from "./OutlinePanel";
 export { GrammarPanel } from "./GrammarPanel";
 export { ExportDialog } from "./ExportDialog";
+export { RewritePreviewPanel } from "./RewritePreviewPanel";
+export { InlineRewriteDiff } from "./InlineRewriteDiff";
+export { RewriteWorkflow } from "./RewriteWorkflow";

@@ -122,7 +122,7 @@ export default clerkMiddleware(async (auth, req) => {
                 if (!existingUser) {
                     // User exists in Clerk but not in DB – send to signup to finish registration
                     if (pathname !== '/signup') {
-                        return NextResponse.redirect(new URL('/signup', req.url));
+                        return NextResponse.redirect(new URL('/signup?from=signin', req.url));
                     }
                 } else if (hasCodeParam) {
                     // Let the signup page handle the "already registered" error
@@ -175,7 +175,7 @@ export const config = {
     matcher: [
         // Skip Next.js internals and all static files, unless found in search params
         '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-        // Always run for API routes
-        '/(api|trpc)(.*)',
+        // Always run for API routes, but exclude file upload routes (body stream conflicts in standalone mode)
+        '/(api(?!/upload-local|/files)|trpc)(.*)',
     ],
 };

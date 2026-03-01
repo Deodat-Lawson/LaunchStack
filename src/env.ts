@@ -7,7 +7,7 @@ const requiredString = () =>
   z.preprocess(normalize, z.string().min(1, "Value is required"));
 
 const optionalString = () =>
-  z.preprocess(normalize, z.string().min(1)).optional();
+  z.preprocess(normalize, z.string().min(1).optional());
 
 const serverSchema = z.object({
   DATABASE_URL: z.preprocess(normalize, z.string().url()),
@@ -28,8 +28,8 @@ const serverSchema = z.object({
   ),
   LANGCHAIN_API_KEY: optionalString(),
   LANGCHAIN_PROJECT: optionalString(), // Optional project name for LangSmith
-  // Job runner backend: "inngest" (default) or "trigger-dev"
-  JOB_RUNNER: z.enum(["inngest", "trigger-dev"]).default("inngest"),
+  // Job runner backend
+  JOB_RUNNER: z.enum(["inngest"]).default("inngest"),
   // Inngest event key — required in production; optional in development
   INNGEST_EVENT_KEY: optionalString(),
   // Sidecar configuration (optional, for local ML compute)
@@ -79,11 +79,12 @@ function parseServerEnv() {
     LANGCHAIN_TRACING_V2: process.env.LANGCHAIN_TRACING_V2,
     LANGCHAIN_API_KEY: process.env.LANGCHAIN_API_KEY,
     LANGCHAIN_PROJECT: process.env.LANGCHAIN_PROJECT,
-    JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | "trigger-dev" | undefined,
+    JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
   });
   if (
+    !skipValidation &&
     (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)
   ) {
     throw new Error("INNGEST_EVENT_KEY is required in production");

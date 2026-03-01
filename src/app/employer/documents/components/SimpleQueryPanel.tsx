@@ -13,13 +13,23 @@ import {
   BookOpen,
   GraduationCap,
   List,
-  MessageSquare
+  MessageSquare,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '~/app/employer/documents/components/ui/button';
 import { Textarea } from '~/app/employer/documents/components/ui/textarea';
 import { ScrollArea } from '~/app/employer/documents/components/ui/scroll-area';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/app/employer/documents/components/ui/select';
 import { cn } from "~/lib/utils";
 import type { DocumentType } from '../types';
+import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import { ModelBadge } from './ModelBadge';
 
 const MarkdownMessage = dynamic(
   () => import("~/app/_components/MarkdownMessage"),
@@ -45,6 +55,10 @@ interface SimpleQueryPanelProps {
   setSearchScope: (s: 'document' | 'company') => void;
   aiStyle: string;
   setAiStyle: (s: string) => void;
+  aiModel: AIModelType;
+  setAiModel: (m: AIModelType) => void;
+  aiAnswerModel?: AIModelType;
+  modelAvailability?: Partial<Record<AIModelType, boolean>>;
   styleOptions: Record<string, string>;
   referencePages: number[];
   setPdfPageNumber: (p: number) => void;
@@ -58,6 +72,19 @@ const styleIcons: Record<string, React.ReactNode> = {
   organized: <List className="w-3.5 h-3.5" />,
   "bullet-points": <List className="w-3.5 h-3.5" />, // Backwards compat just in case
 };
+
+const modelConfig: Array<{ key: AIModelType; label: string }> = [
+  { key: "gpt-5.2", label: "GPT-5.2" },
+  { key: "gpt-5-mini", label: "GPT-5 Mini" },
+  { key: "gpt-5-nano", label: "GPT-5 Nano" },
+  { key: "claude-opus-4.5", label: "Claude Opus 4.5" },
+  { key: "gemini-3-flash", label: "Gemini 3 Flash" },
+  { key: "gemini-3-pro", label: "Gemini 3 Pro" },
+  { key: "gpt-5.1", label: "GPT-5.1" },
+  { key: "gpt-4o", label: "GPT-4o" },
+  { key: "claude-sonnet-4", label: "Claude Sonnet 4" },
+  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+];
 
 export function SimpleQueryPanel({
   selectedDoc,
@@ -74,6 +101,10 @@ export function SimpleQueryPanel({
   setSearchScope,
   aiStyle,
   setAiStyle,
+  aiModel,
+  setAiModel,
+  aiAnswerModel,
+  modelAvailability = {},
   styleOptions,
   referencePages: _referencePages,
   setPdfPageNumber: _setPdfPageNumber,
@@ -101,6 +132,22 @@ export function SimpleQueryPanel({
 
       <ScrollArea className="flex-1 min-h-0">
         <div className="p-5 space-y-5">
+          {selectedDoc && selectedDoc.ocrProcessed === false && searchScope === 'document' && (
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+              <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center flex-shrink-0">
+                <Loader2 className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-spin" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 mb-0.5">
+                  Document still processing
+                </p>
+                <p className="text-[11px] text-amber-600/80 dark:text-amber-500/80 leading-relaxed">
+                  This document is being analyzed and indexed. AI queries will be available once processing completes. Try switching to &quot;All Documents&quot; scope or check back shortly.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Search Scope Toggle - only show company scope for employers */}
           {showCompanyScope && (
             <div className="space-y-2">
@@ -163,6 +210,36 @@ export function SimpleQueryPanel({
             </div>
           </div>
 
+          {/* Model Selector */}
+          <div className="space-y-2">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-violet-500" />
+              AI Model
+            </span>
+            <Select
+              value={aiModel}
+              onValueChange={(value) => setAiModel(value as AIModelType)}
+            >
+              <SelectTrigger
+                size="sm"
+                className="h-9 bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-xs font-semibold"
+              >
+                <SelectValue placeholder="Select model" />
+              </SelectTrigger>
+              <SelectContent>
+                {modelConfig.map((model) => (
+                  <SelectItem
+                    key={model.key}
+                    value={model.key}
+                    disabled={modelAvailability[model.key] === false}
+                  >
+                    {model.label}{modelAvailability[model.key] === false ? " (Unavailable)" : ""}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Question Input */}
           <div className="space-y-2">
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-1.5">
@@ -215,7 +292,7 @@ export function SimpleQueryPanel({
                   </span>
                   <Button
                     onClick={(e) => { void handleAiSearch(e); }}
-                    disabled={!aiQuestion.trim() || aiLoading || (searchScope === 'document' && !selectedDoc)}
+                    disabled={!aiQuestion.trim() || aiLoading || (searchScope === 'document' && !selectedDoc) || (searchScope === 'document' && selectedDoc?.ocrProcessed === false)}
                     size="sm"
                     className={cn(
                       "h-8 px-4 rounded-lg text-xs font-semibold transition-all duration-300",
@@ -261,11 +338,12 @@ export function SimpleQueryPanel({
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Response</span>
+                    <ModelBadge model={aiAnswerModel} className="ml-1" />
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-7 px-2.5 text-[10px] font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2.5 text-[10px] font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg"
                     onClick={() => {
                       setAiAnswer('');
                       setAiQuestion('');
@@ -274,7 +352,7 @@ export function SimpleQueryPanel({
                     Clear
                   </Button>
                 </div>
-                
+
                 <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm min-w-0 overflow-hidden">
                   <MarkdownMessage
                     content={aiAnswer}

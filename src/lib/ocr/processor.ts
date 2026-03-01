@@ -34,6 +34,53 @@ import type {
 
 export type { ProcessDocumentEventData, PipelineResult, VectorizedChunk };
 
+// ============================================================================
+// DB Retry Utility
+// ============================================================================
+
+function isTransientDbError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const cause = (error as unknown as { cause?: { code?: string } }).cause;
+  if (cause && typeof cause.code === "string") {
+    return cause.code === "ECONNRESET" || cause.code === "ECONNREFUSED" || cause.code === "ETIMEDOUT" || cause.code === "EPIPE";
+  }
+  return false;
+}
+
+/**
+ * Strip verbose `query` and `params` properties from DB driver errors
+ * so full chunk content / embedding vectors don't flood the console.
+ */
+function sanitizeDbError(error: unknown): void {
+  if (!(error instanceof Error)) return;
+  const e = error as unknown as Record<string, unknown>;
+  delete e.params;
+  if (typeof e.query === "string") {
+    e.query = e.query.substring(0, 120) + "…";
+  }
+}
+
+export async function withDbRetry<T>(
+  fn: () => Promise<T>,
+  maxAttempts = 3,
+  baseDelayMs = 2000,
+): Promise<T> {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      sanitizeDbError(error);
+      if (!isTransientDbError(error) || attempt === maxAttempts) throw error;
+      const delay = baseDelayMs * attempt;
+      console.warn(
+        `[DB] Transient error (attempt ${attempt}/${maxAttempts}), retrying in ${delay}ms...`,
+      );
+      await new Promise((r) => setTimeout(r, delay));
+    }
+  }
+  throw new Error("withDbRetry: unreachable");
+}
+
 /**
  * Router decision result from Step A
  */
@@ -85,33 +132,24 @@ export async function routeDocument(
   documentUrl: string,
   options?: { forceOCR?: boolean; preferredProvider?: OCRProvider }
 ): Promise<RouterDecisionResult> {
+  const preferred = options?.preferredProvider;
+
+  if (preferred && (preferred === "NATIVE_PDF" || isValidOCRProvider(preferred))) {
+    const pageCount = await getPageCount(documentUrl);
+
+    return {
+      isNativePDF: preferred === "NATIVE_PDF",
+      pageCount,
+      selectedProvider: preferred,
+      confidence: 1.0,
+      reason: preferred === "NATIVE_PDF"
+        ? "User selected native PDF extraction"
+        : `User selected ${preferred} for OCR`,
+    };
+  }
+
   const { determineDocumentRouting } = await import("~/lib/ocr/complexity");
   const decision: RoutingDecision = await determineDocumentRouting(documentUrl);
-
-  // Honor frontend provider selection when set
-  const preferred = options?.preferredProvider;
-  if (preferred) {
-    if (preferred === "NATIVE_PDF") {
-      return {
-        isNativePDF: true,
-        pageCount: decision.pageCount,
-        selectedProvider: "NATIVE_PDF",
-        confidence: decision.confidence,
-        reason: `User selected native PDF extraction`,
-        visionLabel: decision.visionResult?.label,
-      };
-    }
-    if (isValidOCRProvider(preferred)) {
-      return {
-        isNativePDF: false,
-        pageCount: decision.pageCount,
-        selectedProvider: preferred,
-        confidence: decision.confidence,
-        reason: `User selected ${preferred} for OCR`,
-        visionLabel: decision.visionResult?.label,
-      };
-    }
-  }
 
   const isNativePDF = decision.provider === "NATIVE_PDF";
 
@@ -142,6 +180,19 @@ export async function routeDocument(
   };
 }
 
+async function getPageCount(documentUrl: string): Promise<number> {
+  try {
+    const { PDFDocument } = await import("pdf-lib");
+    const response = await fetch(documentUrl);
+    const buffer = await response.arrayBuffer();
+    const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+    return doc.getPageCount();
+  } catch {
+    console.warn("[Router] Could not extract page count, defaulting to 1");
+    return 1;
+  }
+}
+
 // ============================================================================
 // Step B: Normalize - Run OCR or native extraction
 // ============================================================================
@@ -170,8 +221,12 @@ export async function normalizeDocument(
       case "DATALAB":
         normalizedDoc = await processWithDatalab(documentUrl);
         break;
+      case "NATIVE_PDF":
+        normalizedDoc = await processNativePDF(documentUrl);
+        break;
       default:
-        normalizedDoc = await processWithAzure(documentUrl);
+        console.warn(`[Normalize] Unknown provider "${routerDecision.selectedProvider}", falling back to native PDF extraction`);
+        normalizedDoc = await processNativePDF(documentUrl);
     }
   }
 
@@ -286,7 +341,6 @@ export async function vectorizeChunks(chunks: DocumentChunk[]): Promise<Vectoriz
 
   const embedStart = Date.now();
   const embeddingResult = await generateEmbeddings(contentStrings, {
-    batchSize: 20,
     model: "text-embedding-3-large",
     dimensions: 1536,
   });
@@ -311,9 +365,221 @@ export interface StoredSection {
 }
 
 /**
+ * Verify that the target document exists before inserting chunks.
+ * Retries once after 2s to handle replication lag.
+ */
+export async function ensureDocumentExists(documentId: number): Promise<void> {
+  let [existingDoc] = await db
+    .select({ id: documentTable.id })
+    .from(documentTable)
+    .where(eq(documentTable.id, documentId));
+  if (!existingDoc) {
+    await new Promise((r) => setTimeout(r, 2000));
+    [existingDoc] = await db
+      .select({ id: documentTable.id })
+      .from(documentTable)
+      .where(eq(documentTable.id, documentId));
+  }
+  if (!existingDoc) {
+    throw new Error(
+      `Document ${documentId} does not exist. Cannot store chunks. ` +
+      `The document may have been deleted before the job completed.`
+    );
+  }
+}
+
+/**
+ * Create the root document structure node. Must be called once before storeBatch.
+ */
+export async function createRootStructure(
+  documentId: number,
+  totalPages: number,
+  estimatedTokens: number,
+): Promise<number> {
+  await ensureDocumentExists(documentId);
+
+  return withDbRetry(async () => {
+    const rootStructure = await db.insert(documentStructure).values({
+      documentId: BigInt(documentId),
+      parentId: null,
+      contentType: "section",
+      path: "/",
+      title: "Document Root",
+      level: 0,
+      ordering: 0,
+      startPage: 1,
+      endPage: totalPages,
+      tokenCount: estimatedTokens,
+      childCount: 0,
+    }).returning({ id: documentStructure.id });
+
+    const rootId = rootStructure[0]?.id;
+    if (!rootId) {
+      throw new Error("Failed to create root document structure");
+    }
+    return rootId;
+  });
+}
+
+/**
+ * Write a batch of vectorized chunks to the database (context + retrieval chunks).
+ * Designed to be called per-batch inside an Inngest step so vectors never
+ * need to pass through step output serialization.
+ */
+export async function storeBatch(
+  documentId: number,
+  rootStructureId: number,
+  vectorizedChunks: VectorizedChunk[],
+): Promise<StoredSection[]> {
+  if (vectorizedChunks.length === 0) return [];
+
+  return withDbRetry(async () => {
+    return db.transaction(async (tx) => {
+      const parentValues = vectorizedChunks.map((chunk) => ({
+        documentId: BigInt(documentId),
+        structureId: BigInt(rootStructureId),
+        content: chunk.content,
+        tokenCount: Math.ceil(chunk.content.length / 4),
+        charCount: chunk.content.length,
+        embedding:
+          chunk.vector && chunk.vector.length > 0
+            ? sql`${JSON.stringify(chunk.vector)}::vector(1536)`
+            : null,
+        pageNumber: chunk.metadata.pageNumber,
+        semanticType: chunk.metadata.isTable ? ("tabular" as const) : ("narrative" as const),
+        contentHash: crypto
+          .createHash("sha256")
+          .update(chunk.content)
+          .digest("hex"),
+      }));
+
+      const parentRows = await tx
+        .insert(documentContextChunks)
+        .values(parentValues)
+        .returning({ id: documentContextChunks.id, content: documentContextChunks.content });
+
+      const storedSections: StoredSection[] = parentRows.map((r) => ({
+        sectionId: r.id,
+        content: r.content,
+      }));
+
+      const childValues: Array<{
+        contextChunkId: bigint;
+        documentId: bigint;
+        content: string;
+        tokenCount: number;
+        embedding: ReturnType<typeof sql>;
+        embeddingShort: ReturnType<typeof sql> | null;
+      }> = [];
+
+      for (let i = 0; i < vectorizedChunks.length; i++) {
+        const chunk = vectorizedChunks[i]!;
+        const parentId = parentRows[i]?.id;
+        if (!parentId || !chunk.children?.length) continue;
+
+        for (const child of chunk.children) {
+          childValues.push({
+            contextChunkId: BigInt(parentId),
+            documentId: BigInt(documentId),
+            content: child.content,
+            tokenCount: Math.ceil(child.content.length / 4),
+            embedding: sql`${JSON.stringify(child.vector)}::vector(1536)`,
+            embeddingShort: child.vectorShort
+              ? sql`${JSON.stringify(child.vectorShort)}::vector(512)`
+              : null,
+          });
+        }
+      }
+
+      const CHILD_BATCH_SIZE = 50;
+      for (let i = 0; i < childValues.length; i += CHILD_BATCH_SIZE) {
+        await tx
+          .insert(documentRetrievalChunks)
+          .values(childValues.slice(i, i + CHILD_BATCH_SIZE));
+      }
+
+      return storedSections;
+    });
+  });
+}
+
+/**
+ * Finalize storage after all batches: create document metadata, update document
+ * record, and mark the OCR job as completed.  Needs only counts and metadata,
+ * not vectors or chunk content.
+ */
+export async function finalizeStorage(
+  documentId: number,
+  jobId: string,
+  totalChunks: number,
+  summaryText: string,
+  meta: {
+    totalPages: number;
+    provider: string;
+    processingTimeMs: number;
+    confidenceScore?: number;
+  },
+  pipelineStartTime: number,
+): Promise<void> {
+  return withDbRetry(async () => {
+    const summaryPreview = summaryText.substring(0, 500) + (summaryText.length > 500 ? "..." : "");
+
+    await db.insert(documentMetadata).values({
+      documentId: BigInt(documentId),
+      summary: summaryPreview,
+      outline: Array.from({ length: meta.totalPages }, (_, i) => ({
+        id: i + 1,
+        title: `Page ${i + 1}`,
+        level: 1,
+        path: `/${i + 1}`,
+        pageRange: { start: i + 1, end: i + 1 },
+      })),
+      totalTokens: Math.ceil(summaryText.length / 4),
+      totalPages: meta.totalPages,
+      totalSections: totalChunks,
+      topicTags: [],
+      entities: {},
+    });
+
+    await db
+      .update(documentTable)
+      .set({
+        ocrProcessed: true,
+        ocrJobId: jobId,
+        ocrProvider: meta.provider,
+        ocrConfidenceScore: meta.confidenceScore,
+        ocrMetadata: {
+          totalPages: meta.totalPages,
+          totalChunks,
+          processingTimeMs: meta.processingTimeMs,
+          processedAt: new Date().toISOString(),
+        },
+      })
+      .where(eq(documentTable.id, documentId));
+
+    await db
+      .update(ocrJobs)
+      .set({
+        status: "completed",
+        completedAt: new Date(),
+        processingDurationMs: Date.now() - pipelineStartTime,
+        pageCount: meta.totalPages,
+        actualProvider: meta.provider,
+        confidenceScore: meta.confidenceScore,
+      })
+      .where(eq(ocrJobs.id, jobId));
+
+    console.log(
+      `[Storage] Finalized docId=${documentId}, ${totalChunks} chunks, job=${jobId}`
+    );
+  });
+}
+
+/**
  * Store vectorized chunks in the database.
  * Returns an array of { sectionId, content } for each inserted section (Context Chunk),
  * which downstream steps (e.g. entity extraction) can use.
+ * @deprecated Use createRootStructure + storeBatch + finalizeStorage for Inngest pipelines
  */
 export async function storeDocument(
   documentId: number,

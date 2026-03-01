@@ -13,12 +13,21 @@ import {
   Calculator,
   Sparkles,
   PanelRightClose,
-  PanelRightOpen
+  PanelRightOpen,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '~/app/employer/documents/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/app/employer/documents/components/ui/select';
 import { cn } from "~/lib/utils";
 import { AgentChatInterface } from './AgentChatInterface';
 import type { DocumentType } from '../types';
+import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
 
 interface ChatPanelProps {
   userId: string;
@@ -29,6 +38,9 @@ interface ChatPanelProps {
   setAiStyle: (s: string) => void;
   aiPersona: string;
   setAiPersona: (p: string) => void;
+  aiModel: AIModelType;
+  setAiModel: (m: AIModelType) => void;
+  modelAvailability?: Partial<Record<AIModelType, boolean>>;
   searchScope: 'document' | 'company';
   setSearchScope: (s: 'document' | 'company') => void;
   companyId: number | null;
@@ -55,6 +67,19 @@ const personaConfig = [
   { key: 'math-reasoning', icon: Calculator, label: 'Math' },
 ];
 
+const modelConfig: Array<{ key: AIModelType; label: string }> = [
+  { key: "gpt-5.2", label: "GPT-5.2" },
+  { key: "gpt-5-mini", label: "GPT-5 Mini" },
+  { key: "gpt-5-nano", label: "GPT-5 Nano" },
+  { key: "claude-opus-4.5", label: "Claude Opus 4.5" },
+  { key: "gemini-3-flash", label: "Gemini 3 Flash" },
+  { key: "gemini-3-pro", label: "Gemini 3 Pro" },
+  { key: "gpt-5.1", label: "GPT-5.1" },
+  { key: "gpt-4o", label: "GPT-4o" },
+  { key: "claude-sonnet-4", label: "Claude Sonnet 4" },
+  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+];
+
 export function ChatPanel({
   userId,
   selectedDoc,
@@ -64,6 +89,9 @@ export function ChatPanel({
   setAiStyle,
   aiPersona,
   setAiPersona,
+  aiModel,
+  setAiModel,
+  modelAvailability = {},
   searchScope,
   setSearchScope,
   companyId,
@@ -123,6 +151,33 @@ export function ChatPanel({
                 <span className="text-[10px] font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">Document</span>
               </div>
             )}
+
+            {/* Model Selector */}
+            <div className="shrink-0">
+              <Select
+                value={aiModel}
+                onValueChange={(value) => setAiModel(value as AIModelType)}
+              >
+                <SelectTrigger
+                  size="sm"
+                  className="h-7 w-[150px] bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-[10px] font-semibold"
+                >
+                  <SelectValue placeholder="Model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {modelConfig.map((model) => (
+                    <SelectItem
+                      key={model.key}
+                      value={model.key}
+                      disabled={modelAvailability[model.key] === false}
+                      className="text-xs"
+                    >
+                      {model.label}{modelAvailability[model.key] === false ? " (Unavailable)" : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Center: Style & Persona Pills */}
@@ -167,6 +222,7 @@ export function ChatPanel({
                 </button>
               ))}
             </div>
+
           </div>
 
           {/* Right: Preview Toggle */}
@@ -191,6 +247,15 @@ export function ChatPanel({
         </div>
       </div>
 
+      {selectedDoc && selectedDoc.ocrProcessed === false && searchScope === 'document' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+          <Loader2 className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-spin flex-shrink-0" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400 leading-relaxed">
+            This document is still being processed. AI chat will be available once indexing completes.
+          </p>
+        </div>
+      )}
+
       {/* Messages Area */}
       <div className="flex-1 relative overflow-hidden">
         <AgentChatInterface
@@ -202,8 +267,10 @@ export function ChatPanel({
           companyId={companyId}
           aiStyle={aiStyle}
           aiPersona={aiPersona}
+          aiModel={aiModel}
           onPageClick={setPdfPageNumber}
           onCreateChat={onCreateChat}
+          isDocumentProcessing={selectedDoc?.ocrProcessed === false && searchScope === 'document'}
         />
       </div>
     </div>

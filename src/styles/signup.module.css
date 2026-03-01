@@ -23,6 +23,17 @@
     shadow-xl border border-gray-100 overflow-hidden;
 }
 
+/* ── Info Banner (redirected from sign-in) ─────────────────────────────── */
+
+.infoBanner {
+    @apply flex items-start gap-3 bg-blue-50 border-b border-blue-200
+    px-6 py-4 text-sm text-blue-800 leading-relaxed;
+}
+
+.infoBannerIcon {
+    @apply w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0;
+}
+
 /* ── Tab Bar ────────────────────────────────────────────────────────────── */
 
 .tabBar {
@@ -317,6 +328,14 @@
 
 :global([data-theme="dark"]) .formCard {
     @apply bg-slate-900/70 border-purple-500/20 backdrop-blur-sm;
+}
+
+:global([data-theme="dark"]) .infoBanner {
+    @apply bg-blue-950/40 border-blue-500/20 text-blue-300;
+}
+
+:global([data-theme="dark"]) .infoBannerIcon {
+    @apply text-blue-400;
 }
 
 :global([data-theme="dark"]) .tabBar {

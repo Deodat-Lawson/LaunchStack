@@ -25,7 +25,8 @@ export async function runTrendSearch(
 
     // Step 2: Execute web searches
     await options.onStageChange?.("searching");
-    const rawResults = await executeSearch(plannedQueries);
+    const { results: rawResults, providerUsed } = await executeSearch(plannedQueries);
+    console.log(`[trend-search] Search provider used: ${providerUsed}`);
 
     // Step 3: Synthesize results
     await options.onStageChange?.("synthesizing");

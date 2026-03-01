@@ -56,7 +56,7 @@ function sanitizeDbError(error: unknown): void {
   const e = error as unknown as Record<string, unknown>;
   delete e.params;
   if (typeof e.query === "string") {
-    e.query = (e.query as string).substring(0, 120) + "…";
+    e.query = e.query.substring(0, 120) + "…";
   }
 }
 
@@ -446,9 +446,7 @@ export async function storeBatch(
             ? sql`${JSON.stringify(chunk.vector)}::vector(1536)`
             : null,
         pageNumber: chunk.metadata.pageNumber,
-        semanticType: (chunk.metadata.isTable ? "tabular" : "narrative") as
-          | "tabular"
-          | "narrative",
+        semanticType: chunk.metadata.isTable ? ("tabular" as const) : ("narrative" as const),
         contentHash: crypto
           .createHash("sha256")
           .update(chunk.content)

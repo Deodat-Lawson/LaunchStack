@@ -7,7 +7,7 @@ const requiredString = () =>
   z.preprocess(normalize, z.string().min(1, "Value is required"));
 
 const optionalString = () =>
-  z.preprocess(normalize, z.string().min(1)).optional();
+  z.preprocess(normalize, z.string().min(1).optional());
 
 const serverSchema = z.object({
   DATABASE_URL: z.preprocess(normalize, z.string().url()),
@@ -84,6 +84,7 @@ function parseServerEnv() {
     SIDECAR_URL: process.env.SIDECAR_URL,
   });
   if (
+    !skipValidation &&
     (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)
   ) {
     throw new Error("INNGEST_EVENT_KEY is required in production");

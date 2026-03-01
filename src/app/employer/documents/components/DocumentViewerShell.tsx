@@ -56,6 +56,10 @@ const RewriteDiffView = dynamic(
   () => import("./RewriteDiffView").then((module) => module.RewriteDiffView),
   { loading: () => <LoadingPage /> }
 );
+const UploadView = dynamic(
+  () => import("./UploadView").then((module) => module.UploadView),
+  { loading: () => <LoadingPage /> }
+);
 
 const STYLE_OPTIONS = Object.entries(RESPONSE_STYLES).reduce((acc, [key, config]) => {
   acc[key as ResponseStyleId] = config.label;
@@ -362,6 +366,15 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     void fetchPredictiveAnalysis(selectedDoc.id, false);
   }, [viewMode, selectedDoc, fetchPredictiveAnalysis]);
 
+  // Refresh document list when leaving the upload tab
+  const prevViewModeRef = useRef<typeof viewMode | null>(null);
+  useEffect(() => {
+    if (prevViewModeRef.current === "upload" && viewMode !== "upload") {
+      void fetchDocuments();
+    }
+    prevViewModeRef.current = viewMode;
+  }, [viewMode, fetchDocuments]);
+
   const handleAiSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!aiQuestion.trim()) return;
@@ -651,6 +664,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         return <DocumentGenerator />;
       case "rewrite":
         return <RewriteDiffView />;
+      case "upload":
+        if (userRole !== 'employer') return null;
+        return <UploadView onDocumentUploaded={() => void fetchDocuments()} />;
       default:
         return null;
     }

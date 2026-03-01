@@ -53,8 +53,9 @@ export async function extractReferences(
         name: "reference_extraction"
     });
 
+    let timeoutHandle: ReturnType<typeof setTimeout> | null = null;
     const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => {
+        timeoutHandle = setTimeout(() => {
             reject(new Error(`Reference extraction timed out after ${timeoutMs}ms`));
         }, timeoutMs);
     });
@@ -67,15 +68,19 @@ export async function extractReferences(
     try {
         const response = await Promise.race([aiCallPromise, timeoutPromise]);
         const references = response.references;
-        
-        const filteredReferences = references.filter(ref => 
+
+        const filteredReferences = references.filter(ref =>
             hasSpecificIdentifier(ref.documentName)
         );
-        
+
         return filteredReferences;
     } catch (error) {
         console.error("Reference extraction error:", error);
         return [];
+    } finally {
+        if (timeoutHandle) {
+            clearTimeout(timeoutHandle);
+        }
     }
 }
 

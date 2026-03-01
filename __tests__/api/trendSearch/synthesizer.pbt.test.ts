@@ -19,8 +19,8 @@ jest.mock("@langchain/openai", () => {
 });
 
 import * as fc from "fast-check";
-import { synthesizeResults } from "~/server/trend-search/synthesizer";
-import type { RawSearchResult, SearchCategory } from "~/server/trend-search/types";
+import { synthesizeResults } from "~/lib/tools/trend-search/synthesizer";
+import type { RawSearchResult, SearchCategory } from "~/lib/tools/trend-search/types";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
@@ -30,11 +30,11 @@ const categoryArb = fc.constantFrom(...validCategories);
 
 const validQueryArb = fc
     .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+    .filter((s: string) => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter((s: string) => s.trim().length > 0);
 
 /** Single raw result (URL must be unique for traceability). */
 const rawResultArb = fc.record({
@@ -72,7 +72,12 @@ describe("Property 7: Synthesizer output structure", () => {
                 validQueryArb,
                 validCompanyContextArb,
                 fc.array(categoryArb, { minLength: 0, maxLength: 4 }),
-                async (rawResults, query, companyContext, categories) => {
+                async (
+                    rawResults: RawSearchResult[],
+                    query: string,
+                    companyContext: string,
+                    categories: SearchCategory[]
+                ) => {
                     const mockResults = buildMockResults(rawResults, 5);
                     mockInvoke.mockResolvedValue({ results: mockResults });
 
@@ -115,7 +120,12 @@ describe("Property 8: Source URL traceability", () => {
                 validQueryArb,
                 validCompanyContextArb,
                 fc.array(categoryArb, { minLength: 0, maxLength: 4 }),
-                async (rawResults, query, companyContext, categories) => {
+                async (
+                    rawResults: RawSearchResult[],
+                    query: string,
+                    companyContext: string,
+                    categories: SearchCategory[]
+                ) => {
                     const urlSet = new Set(rawResults.map((r) => r.url));
                     const mockResults = buildMockResults(rawResults, 5);
                     mockInvoke.mockResolvedValue({ results: mockResults });

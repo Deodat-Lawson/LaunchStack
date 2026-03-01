@@ -16,6 +16,7 @@ import {
   PenLine,
   Clock,
   Brain,
+  Upload,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Input } from '~/app/employer/documents/components/ui/input';
@@ -156,6 +157,22 @@ export function Sidebar({
           >
             <PenLine className="w-4 h-4" />
           </Button>
+          {showGenerator && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setViewMode('upload')}
+              className={cn(
+                "w-full h-10 rounded-xl transition-all duration-200",
+                viewMode === 'upload'
+                  ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
+                  : "text-muted-foreground hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+              )}
+              title="Upload Documents"
+            >
+              <Upload className="w-4 h-4" />
+            </Button>
+          )}
         </div>
 
         {/* Bottom Actions */}
@@ -284,6 +301,21 @@ export function Sidebar({
             <PenLine className="w-4 h-4" />
             <span className="font-medium text-sm">Rewrite</span>
           </Button>
+          {showGenerator && (
+            <Button
+              variant={viewMode === 'upload' ? 'default' : 'ghost'}
+              className={cn(
+                "justify-start gap-3 h-11 rounded-lg px-3 transition-all duration-200",
+                viewMode === 'upload'
+                  ? "bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-500/20"
+                  : "hover:bg-purple-50 dark:hover:bg-purple-900/10 hover:text-purple-600 dark:hover:text-purple-400 text-muted-foreground"
+              )}
+              onClick={() => setViewMode('upload')}
+            >
+              <Upload className="w-4 h-4" />
+              <span className="font-medium text-sm">Upload Documents</span>
+            </Button>
+          )}
         </div>
       </div>
 

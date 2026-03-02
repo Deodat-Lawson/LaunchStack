@@ -16,6 +16,8 @@ const serverSchema = z.object({
   UPLOADTHING_TOKEN: optionalString(),
   DATALAB_API_KEY: optionalString(),
   TAVILY_API_KEY: optionalString(),
+  // Foursquare Places API (for Client Prospector)
+  FOURSQUARE_SERVICE_KEY: optionalString(),
   // Azure Document Intelligence (for OCR pipeline)
   AZURE_DOC_INTELLIGENCE_ENDPOINT: optionalString(),
   AZURE_DOC_INTELLIGENCE_KEY: optionalString(),
@@ -73,6 +75,7 @@ function parseServerEnv() {
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+    FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
     AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
     AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY,
     LANDING_AI_API_KEY: process.env.LANDING_AI_API_KEY,

@@ -1,8 +1,21 @@
+// Client Prospector pipeline entry point.
+//
+// This is the core pipeline function that chains:
+//   resolveLocation → planSearches → executePlaceSearch → scoreLeads
+//
+// It is a pure pipeline — no DB writes, no side effects.
+// The Inngest function calls this and handles persistence separately.
+// This can also be invoked directly by AI agents for synchronous use.
+
+import type { ProspectorOutput } from "~/lib/tools/client-prospector/types";
+import { DEFAULT_SEARCH_RADIUS } from "~/lib/tools/client-prospector/types";
+import { resolveLocation } from "~/lib/tools/client-prospector/location-resolver";
+import { planSearches } from "~/lib/tools/client-prospector/query-planner";
+import { executePlaceSearch } from "~/lib/tools/client-prospector/place-search";
+import { scoreLeads } from "~/lib/tools/client-prospector/scorer";
+
 // Pipeline stages that the Inngest function tracks.
 // These correspond to the status enum values in the DB schema.
-// "planning" = LLM generating Foursquare search params
-// "searching" = calling Foursquare API
-// "scoring" = LLM ranking the results
 export type ClientProspectorPipelineStage = "planning" | "searching" | "scoring";
 
 export interface RunClientProspectorOptions {
@@ -12,42 +25,61 @@ export interface RunClientProspectorOptions {
 export interface RunClientProspectorInput {
     query: string;
     companyContext: string;
-    location: { lat: number; lng: number };
-    radius: number;
+    location: { lat: number; lng: number } | string;
+    radius?: number;
     categories?: string[];
 }
 
-import type { ProspectorOutput } from "~/lib/tools/client-prospector/types";
-
-// Pipeline: planSearches (LLM) -> placeSearch (Foursquare) -> scoreLeads (LLM)
-//
-// This function owns the pipeline execution only.
-// It does NOT touch the database. The Inngest function handles
-// persistence and status tracking via the onStageChange callback.
-//
-// TODO: implement the actual pipeline steps (Tasks 4.1-4.6)
+/**
+ * Runs the full Client Prospector pipeline:
+ *   1. Resolve location to lat/lng (pass-through if already coordinates)
+ *   2. Plan Foursquare searches via LLM
+ *   3. Execute searches against Foursquare Places API
+ *   4. Score and rank results via LLM
+ *
+ * Pure pipeline — no DB writes. Callers own persistence.
+ */
 export async function runClientProspector(
     input: RunClientProspectorInput,
     options: RunClientProspectorOptions = {},
 ): Promise<ProspectorOutput> {
-    // Step 1: Plan searches — LLM decides what Foursquare queries to run
+    const radius = input.radius ?? DEFAULT_SEARCH_RADIUS;
+
+    // Step 1: Resolve location
+    const resolvedLocation = await resolveLocation(input.location);
+
+    // Step 2: Plan searches — LLM decides what Foursquare queries to run
     await options.onStageChange?.("planning");
+    const plannedSearches = await planSearches(
+        input.query,
+        input.companyContext,
+        input.categories,
+    );
 
-    // Step 2: Search — call Foursquare Places API for each planned search
+    // Step 3: Search — call Foursquare Places API for each planned search
     await options.onStageChange?.("searching");
+    const rawPlaces = await executePlaceSearch(plannedSearches, resolvedLocation, radius);
 
-    // Step 3: Score — LLM ranks and scores the results by relevance
+    // Step 4: Score — LLM ranks and scores the results by relevance
     await options.onStageChange?.("scoring");
+    const resolvedCategories = input.categories ?? [
+        ...new Set(plannedSearches.flatMap((s) => s.categoryIds)),
+    ];
+    const results = await scoreLeads(
+        rawPlaces,
+        input.query,
+        input.companyContext,
+        resolvedCategories,
+    );
 
-    // Placeholder until pipeline steps are implemented
     return {
-        results: [],
+        results,
         metadata: {
             query: input.query,
             companyContext: input.companyContext,
-            location: input.location,
-            radius: input.radius,
-            categories: input.categories ?? [],
+            location: resolvedLocation,
+            radius,
+            categories: resolvedCategories,
             createdAt: new Date().toISOString(),
         },
     };

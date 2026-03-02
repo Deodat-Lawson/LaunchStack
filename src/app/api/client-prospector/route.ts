@@ -26,30 +26,7 @@ import {
 } from "~/lib/tools/client-prospector/types";
 import type { LatLng } from "~/lib/tools/client-prospector/types";
 import { createJob, getJobsByCompanyId } from "~/lib/tools/client-prospector/db";
-
-// Resolve the location to lat/lng coordinates.
-// If the user already sent { lat, lng }, return it as-is.
-// If they sent a string like "Austin, TX", we need to geocode it.
-//
-// TODO (Task 4.1): Replace this with a real geocoding implementation
-// using Google Maps, Mapbox, or a similar geocoding service.
-async function resolveLocation(location: LatLng | string): Promise<LatLng> {
-    // If it's already lat/lng coordinates, just validate and return.
-    const parsed = LatLngSchema.safeParse(location);
-    if (parsed.success) {
-        return parsed.data;
-    }
-
-    // String location needs geocoding — not yet implemented.
-    // For now, reject string locations until the geocoder is built.
-    if (typeof location === "string") {
-        throw new Error(
-            `Location geocoding is not yet implemented. Please provide coordinates as { lat, lng } instead of "${location}".`
-        );
-    }
-
-    throw new Error("Invalid location format");
-}
+import { resolveLocation } from "~/lib/tools/client-prospector/location-resolver";
 
 // ─── POST /api/client-prospector ─────────────────────────────────────────────
 export async function POST(request: NextRequest) {

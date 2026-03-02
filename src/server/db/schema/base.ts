@@ -288,8 +288,12 @@ export const fileUploads = pgTable(
         userId: varchar("user_id", { length: 256 }).notNull(),
         filename: varchar("filename", { length: 256 }).notNull(),
         mimeType: varchar("mime_type", { length: 128 }).notNull(),
-        fileData: text("file_data").notNull(), // Base64 encoded file data
+        fileData: text("file_data"),
         fileSize: integer("file_size").notNull(),
+        storageProvider: varchar("storage_provider", { length: 64 }).default("database").notNull(),
+        storageUrl: varchar("storage_url", { length: 1024 }),
+        storagePathname: varchar("storage_pathname", { length: 1024 }),
+        blobChecksum: varchar("blob_checksum", { length: 128 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),

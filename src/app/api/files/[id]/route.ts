@@ -71,6 +71,19 @@ export async function GET(
       );
     }
 
+    if (file.storageProvider === "vercel_blob" && file.storageUrl) {
+      return NextResponse.redirect(file.storageUrl, {
+        status: 307,
+      });
+    }
+
+    if (!file.fileData) {
+      return NextResponse.json(
+        { error: "File is not available in database storage" },
+        { status: 404 }
+      );
+    }
+
     // Decode base64 data back to binary
     const binaryData = Buffer.from(file.fileData, "base64");
     const mimeType = file.mimeType?.trim() || inferMimeTypeFromFilename(file.filename);

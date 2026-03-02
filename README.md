@@ -124,6 +124,7 @@ Create `.env` from `.env.example` and fill required values:
 - `DATABASE_URL`
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `CLERK_SECRET_KEY`
+- `BLOB_READ_WRITE_TOKEN` (Vercel Blob read/write token)
 - `OPENAI_API_KEY`
 - `INNGEST_EVENT_KEY`, as placeholder
 
@@ -136,6 +137,13 @@ Optional integrations:
 - `LANDING_AI_API_KEY`, `DATALAB_API_KEY`
 - `LANGCHAIN_TRACING_V2`, `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`
 - `DEBUG_PERF` (`1` or `true`) to enable dev perf logs for middleware and key auth/dashboard APIs
+
+### 2.1) Configure Vercel Blob (Vercel deploys)
+
+1. In the Vercel dashboard, create a **Blob Store** (Storage → Blob → Create Store).
+2. Generate a **Read/Write token** for that store and add it as `BLOB_READ_WRITE_TOKEN` in your Vercel Project Settings.
+3. Redeploy so the token is available at build and runtime.
+4. After deploy, sign in to the Employer Upload page, upload a small PDF, and confirm the network response from `/api/upload-local` returns a `vercel-storage.com` URL. Opening that URL should download the same file.
 
 ### 3) Start database and apply schema
 

@@ -28,6 +28,7 @@ export interface RunClientProspectorInput {
     location: { lat: number; lng: number } | string;
     radius?: number;
     categories?: string[];
+    excludeChains?: boolean; // exclude chain businesses (default: true)
 }
 
 /**
@@ -56,9 +57,16 @@ export async function runClientProspector(
         input.categories,
     );
 
+    console.log(
+        `[prospector] Planned ${plannedSearches.length} searches:`,
+        plannedSearches.map((s) => ({ query: s.searchQuery, categories: s.categoryIds })),
+    );
+
     // Step 3: Search — call Foursquare Places API for each planned search
     await options.onStageChange?.("searching");
-    const rawPlaces = await executePlaceSearch(plannedSearches, resolvedLocation, radius);
+    const rawPlaces = await executePlaceSearch(plannedSearches, resolvedLocation, radius, {
+        excludeChains: input.excludeChains ?? true,
+    });
 
     // Step 4: Score — LLM ranks and scores the results by relevance
     await options.onStageChange?.("scoring");

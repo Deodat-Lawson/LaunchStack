@@ -25,6 +25,7 @@ export const ProspectorInputSchema = z.object({
     location: SearchLocationSchema,
     radius: z.number().int().min(100).max(50000).optional(),
     categories: z.array(z.string()).optional(), // Foursquare category IDs or names
+    excludeChains: z.boolean().optional(), // exclude chain businesses (default: true)
 });
 export type ProspectorInput = z.infer<typeof ProspectorInputSchema>;
 

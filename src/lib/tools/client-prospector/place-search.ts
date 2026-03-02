@@ -47,6 +47,8 @@ interface FoursquarePlace {
     website?: string;
     description?: string;
     distance?: number;
+    closed_bucket?: string; // e.g. "VeryLikelyClosed", "LikelyClosed", "Unsure"
+    date_closed?: string; // ISO date when the place was closed
     social_media?: {
         facebook_id?: string;
         instagram?: string;
@@ -68,8 +70,21 @@ function getApiKey(): string {
     return key;
 }
 
+// Closed-bucket values that indicate a business is no longer operating
+const CLOSED_BUCKETS = new Set(["VeryLikelyClosed", "LikelyClosed"]);
+
 function mapFoursquarePlace(place: FoursquarePlace): RawPlaceResult | null {
     if (!place.fsq_place_id || !place.name) return null;
+
+    // Filter out closed businesses
+    if (place.date_closed) {
+        console.log(`[place-search] Skipping closed place: "${place.name}" (closed ${place.date_closed})`);
+        return null;
+    }
+    if (place.closed_bucket && CLOSED_BUCKETS.has(place.closed_bucket)) {
+        console.log(`[place-search] Skipping likely-closed place: "${place.name}" (${place.closed_bucket})`);
+        return null;
+    }
 
     const lat = place.latitude;
     const lng = place.longitude;
@@ -106,16 +121,22 @@ async function callFoursquare(
     location: LatLng,
     radius: number,
     apiKey: string,
+    options: { excludeChains: boolean },
 ): Promise<RawPlaceResult[]> {
     const params = new URLSearchParams({
         query: search.searchQuery,
         ll: `${location.lat},${location.lng}`,
         radius: String(radius),
         limit: String(MAX_RESULTS_PER_SEARCH),
+        sort: "RELEVANCE",
     });
 
     if (search.categoryIds.length > 0) {
         params.set("categories", search.categoryIds.join(","));
+    }
+
+    if (options.excludeChains) {
+        params.set("exclude_all_chains", "true");
     }
 
     const url = `${FOURSQUARE_SEARCH_URL}?${params.toString()}`;
@@ -158,10 +179,12 @@ export async function executePlaceSearch(
     searches: PlannedSearch[],
     location: LatLng,
     radius: number,
+    options: { excludeChains?: boolean } = {},
 ): Promise<RawPlaceResult[]> {
     const apiKey = getApiKey();
     const seenIds = new Set<string>();
     const combined: RawPlaceResult[] = [];
+    const excludeChains = options.excludeChains ?? true; // default: exclude chains
 
     for (const search of searches) {
         let lastError: Error | null = null;
@@ -169,7 +192,7 @@ export async function executePlaceSearch(
 
         for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
             try {
-                results = await callFoursquare(search, location, radius, apiKey);
+                results = await callFoursquare(search, location, radius, apiKey, { excludeChains });
                 lastError = null;
                 break;
             } catch (err) {

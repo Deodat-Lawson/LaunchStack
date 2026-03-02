@@ -30,12 +30,20 @@ const ScorerOutputSchema = z.object({
 
 const SYSTEM_PROMPT = `You are a lead scoring assistant for a client prospecting tool.
 
+CONTEXT: The user's company is looking for POTENTIAL CLIENTS — businesses they can sell their services to. These businesses are the BUYERS, and the user's company is the SELLER.
+
 Given a list of businesses found near a location, the user's prospecting query, and their company context, your job is to:
 
 1. Select up to 10 businesses that are the BEST potential clients for the user's company.
-2. Assign each a relevanceScore from 0 to 100 based on how well it matches the prospecting query and company context.
+2. Assign each a relevanceScore from 0 to 100 based on how likely the business is to NEED the user's services.
 3. Rank them by relevanceScore descending (highest first).
-4. Write a brief rationale for each explaining why it's a good prospect.
+4. Write a brief rationale for each explaining why it would be a good client.
+
+SCORING GUIDANCE:
+- HIGH scores (70-100): Businesses that clearly match the target client profile and would likely benefit from the user's services.
+- MEDIUM scores (40-69): Businesses that could plausibly be clients but are a weaker fit.
+- LOW scores (0-39): Businesses that are unlikely to need the user's services, or are COMPETITORS of the user's company (same industry/service type). Competitors should score very low.
+- Example: If the user is a "digital marketing agency", other marketing agencies are COMPETITORS, not prospects. Restaurants, cafes, and retail shops are the PROSPECTS.
 
 RULES:
 - Only select businesses from the provided list.
@@ -44,9 +52,7 @@ RULES:
 - fsqIds are long hex strings like "50981188e4b0f94e062c8664". Do NOT truncate, abbreviate, or modify them.
 - The rationale MUST describe the actual business whose fsqId and name you copied — do NOT mix up descriptions between businesses.
 - If fewer than 10 businesses are provided, score all of them (do not pad with fake entries).
-- Consider business category, name, description, and location when scoring.
-- Higher scores mean stronger fit as a potential client.
-- A score of 0 means completely irrelevant; 100 means perfect match.`;
+- Consider business category, name, description, and location when scoring.`;
 
 function buildHumanPrompt(
     rawPlaces: RawPlaceResult[],

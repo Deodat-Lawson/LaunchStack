@@ -21,6 +21,7 @@ import { eq, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users, document as documentTable, documentContextChunks } from "~/server/db/schema";
+import { companyMetadata } from "~/server/db/schema/company-metadata";
 import { extractCompanyFacts } from "~/lib/tools/company-metadata/extractor";
 import { mergeCompanyMetadata } from "~/lib/tools/company-metadata/merger";
 import { createEmptyMetadata } from "~/lib/tools/company-metadata/types";
@@ -128,6 +129,20 @@ export async function POST(request: Request) {
                 documentsProcessed: docs.length,
             });
         }
+
+        // Save to database
+        await db
+            .insert(companyMetadata)
+            .values({
+                companyId: userInfo.companyId,
+                metadata: metadata,
+            })
+            .onConflictDoUpdate({
+                target: companyMetadata.companyId,
+                set: {
+                    metadata: metadata,
+                },
+            });
 
         return NextResponse.json({
             metadata,

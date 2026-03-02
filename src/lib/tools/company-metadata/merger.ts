@@ -21,7 +21,6 @@ import type {
     ExtractedCompanyFacts,
     MergeResult,
     MetadataDiff,
-    DiffEntry,
     MetadataFact,
     CompanyInfo,
     PersonEntry,
@@ -241,7 +240,7 @@ function mergeNamedArray<T extends NamedEntry>(
         existingMap.set(normaliseName(entry.name), { entry, index: i });
     }
 
-    const result = existing.map((e) => ({ ...e })) as T[];
+    const result = existing.map((e) => ({ ...e }));
 
     for (const incomingEntry of incoming) {
         const key = normaliseName(incomingEntry.name);
@@ -250,7 +249,7 @@ function mergeNamedArray<T extends NamedEntry>(
         if (!match) {
             // New entry — append
             const newIndex = result.length;
-            result.push({ ...incomingEntry } as T);
+            result.push({ ...incomingEntry });
             diff.added.push({
                 path: `${section}[${newIndex}]`,
                 new: incomingEntry.name,
@@ -289,8 +288,9 @@ function mergeNamedArray<T extends NamedEntry>(
 
             // Merge subprojects if present on projects
             if ("subprojects" in incomingEntry && incomingEntry.subprojects) {
-                const existingSubs = (match.entry as ProjectEntry).subprojects ?? [];
-                (mergedEntry as Record<string, unknown>).subprojects = mergeNamedArray(
+                const existingProject = match.entry as unknown as ProjectEntry;
+                const existingSubs = existingProject.subprojects ?? [];
+                mergedEntry.subprojects = mergeNamedArray(
                     existingSubs,
                     incomingEntry.subprojects as NamedEntry[],
                     `${section}[${idx}].subprojects`,

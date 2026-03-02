@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Upload, FileText, BarChart, Brain, Settings, Users, HelpCircle, Clock, MousePointerClick } from "lucide-react";
+import { Upload, FileText, BarChart, Brain, Settings, Users, HelpCircle, Clock, MousePointerClick, Building2 } from "lucide-react";
 import styles from "~/styles/Employer/Home.module.css";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
@@ -110,6 +110,13 @@ const HomeScreen = () => {
             title: "Document Statistics",
             description: "View analytics and insights about document usage",
             path: "/employer/statistics",
+            isBeta: false,
+        },
+        {
+            icon: <Building2 className={styles.menuIcon} />,
+            title: "Company Metadata",
+            description: "View AI-extracted company info from your documents",
+            path: "/employer/metadata",
             isBeta: false,
         },
         {

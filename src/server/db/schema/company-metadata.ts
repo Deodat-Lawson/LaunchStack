@@ -14,7 +14,6 @@ import {
     index,
     jsonb,
     serial,
-    text,
     timestamp,
     varchar,
     bigint,

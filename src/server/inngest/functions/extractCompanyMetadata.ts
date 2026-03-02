@@ -4,13 +4,12 @@
  * Background job that runs after document ingestion completes.
  * Extracts structured company metadata from a document's chunks
  * and merges it into the company's canonical metadata JSON.
- *
- * Currently operates in memory-only mode (no DB persistence).
- * Once the `companyMetadata` table is created (db:push), the
- * TODO sections below should be filled in to load/save state.
  */
 
+import { eq } from "drizzle-orm";
 import { inngest } from "../client";
+import { db } from "~/server/db";
+import { companyMetadata, companyMetadataHistory } from "~/server/db/schema/company-metadata";
 import { runCompanyMetadataTool } from "~/lib/tools/company-metadata";
 
 // ============================================================================
@@ -35,19 +34,18 @@ export const extractCompanyMetadataJob = inngest.createFunction(
 
         // Step 1: Extract facts and merge into canonical metadata
         const result = await step.run("extract-and-merge", async () => {
-            // TODO: Once DB tables are created, load existing metadata here:
-            //
-            // const row = await db
-            //     .select({ metadata: companyMetadata.metadata })
-            //     .from(companyMetadata)
-            //     .where(eq(companyMetadata.companyId, BigInt(companyId)))
-            //     .limit(1);
-            // const existingMetadata = row[0]?.metadata ?? undefined;
+            // Load existing metadata if it exists
+            const [row] = await db
+                .select({ metadata: companyMetadata.metadata })
+                .from(companyMetadata)
+                .where(eq(companyMetadata.companyId, BigInt(companyId)))
+                .limit(1);
+            const existingMetadata = row?.metadata ?? undefined;
 
             return runCompanyMetadataTool({
                 documentId,
                 companyId,
-                // existingMetadata,  // uncomment when DB is ready
+                existingMetadata,
             });
         });
 
@@ -64,32 +62,29 @@ export const extractCompanyMetadataJob = inngest.createFunction(
             return { success: true, factsFound: false };
         }
 
-        // Step 2: Persist results (TODO — pending DB table creation)
-        //
-        // await step.run("persist-metadata", async () => {
-        //     await db
-        //         .insert(companyMetadata)
-        //         .values({
-        //             companyId: BigInt(companyId),
-        //             metadata: result.result.updatedMetadata,
-        //             updatedAt: new Date(),
-        //         })
-        //         .onConflictDoUpdate({
-        //             target: companyMetadata.companyId,
-        //             set: {
-        //                 metadata: result.result.updatedMetadata,
-        //                 updatedAt: new Date(),
-        //             },
-        //         });
-        //
-        //     await db.insert(companyMetadataHistory).values({
-        //         companyId: BigInt(companyId),
-        //         documentId,
-        //         diff: result.result.diff,
-        //         changeType: "extraction",
-        //         changedBy: "system",
-        //     });
-        // });
+        // Step 2: Persist results to database
+        await step.run("persist-metadata", async () => {
+            await db
+                .insert(companyMetadata)
+                .values({
+                    companyId: BigInt(companyId),
+                    metadata: result.result!.updatedMetadata,
+                })
+                .onConflictDoUpdate({
+                    target: companyMetadata.companyId,
+                    set: {
+                        metadata: result.result!.updatedMetadata,
+                    },
+                });
+
+            await db.insert(companyMetadataHistory).values({
+                companyId: BigInt(companyId),
+                documentId: BigInt(documentId),
+                diff: result.result!.diff,
+                changeType: "extraction",
+                changedBy: "system",
+            });
+        });
 
         const { diff } = result.result;
 

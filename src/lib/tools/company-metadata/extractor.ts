@@ -248,7 +248,7 @@ async function runWithConcurrency<T>(
     tasks: Array<() => Promise<T>>,
     limit: number,
 ): Promise<T[]> {
-    const results: T[] = new Array(tasks.length);
+    const results = Array.from<T>({ length: tasks.length });
     let nextIndex = 0;
 
     async function worker() {
@@ -396,7 +396,7 @@ function aggregateResults(
             const existing = policies[entry.key];
             const hydrated = hydrate(entry.fact, entry.fact.confidence, extractedAt, source);
             if (!existing || entry.fact.confidence > existing.confidence) {
-                policies[entry.key] = hydrated as MetadataFact;
+                policies[entry.key] = hydrated;
             }
         }
     }

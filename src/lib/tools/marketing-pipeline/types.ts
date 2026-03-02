@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit"]);
+export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
 export type MarketingPlatform = z.infer<typeof MarketingPlatformEnum>;
 
 export const MarketingPipelineInputSchema = z.object({

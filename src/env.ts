@@ -16,6 +16,14 @@ const serverSchema = z.object({
   UPLOADTHING_TOKEN: optionalString(),
   DATALAB_API_KEY: optionalString(),
   TAVILY_API_KEY: optionalString(),
+  // Platform API Keys for Marketing Pipeline
+  REDDIT_CLIENT_ID: optionalString(),
+  REDDIT_CLIENT_SECRET: optionalString(),
+  REDDIT_USER_AGENT: optionalString(),
+  TWITTER_BEARER_TOKEN: optionalString(),
+  LINKEDIN_ACCESS_TOKEN: optionalString(),
+  BLUESKY_HANDLE: optionalString(),
+  BLUESKY_APP_PASSWORD: optionalString(),
   // Azure Document Intelligence (for OCR pipeline)
   AZURE_DOC_INTELLIGENCE_ENDPOINT: optionalString(),
   AZURE_DOC_INTELLIGENCE_KEY: optionalString(),

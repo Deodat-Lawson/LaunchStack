@@ -8,7 +8,7 @@ import { ThemeToggle } from "~/app/_components/ThemeToggle";
 import homeStyles from "~/styles/Employer/Home.module.css";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 
-type Platform = "x" | "linkedin" | "reddit";
+type Platform = "x" | "linkedin" | "reddit" | "bluesky";
 
 interface PipelineResponse {
     success: boolean;
@@ -32,6 +32,7 @@ const PLATFORM_OPTIONS: Array<{ id: Platform; label: string; subtitle: string; l
     { id: "reddit", label: "Reddit", subtitle: "Community-first threads", logoText: "reddit", logoImg: REDDIT_SNOO_URL },
     { id: "x", label: "Twitter / X", subtitle: "Fast-moving trends", logoText: "𝕏" },
     { id: "linkedin", label: "LinkedIn", subtitle: "B2B + thought leadership", logoText: "in" },
+    { id: "bluesky", label: "Bluesky", subtitle: "Decentralized trends", logoText: "🦋" },
 ];
 
 function usePlatformLogoClassNames() {
@@ -40,6 +41,7 @@ function usePlatformLogoClassNames() {
             reddit: styles.platformLogoReddit,
             x: styles.platformLogoX,
             linkedin: styles.platformLogoLinkedin,
+            bluesky: styles.platformLogoBluesky,
         }),
         [],
     );
@@ -135,7 +137,7 @@ export default function MarketingPipelinePage() {
                     </div>
                     <div>
                         <h1 className={styles.pageTitle}>Marketing Pipeline</h1>
-                        <p className={styles.pageSubtitle}>Create campaign-ready posts for Reddit, X & LinkedIn from your company knowledge base</p>
+                        <p className={styles.pageSubtitle}>Create campaign-ready posts for Reddit, X, LinkedIn & Bluesky from your company knowledge base</p>
                     </div>
                 </div>
 
@@ -213,7 +215,7 @@ export default function MarketingPipelinePage() {
                                     <span className={styles.promptHint}>1–3 sentences is perfect.</span>
                                 </div>
                                 <textarea
-                                    className={styles.promptTextarea}
+                                    className={styles.textarea}
                                     value={prompt}
                                     onChange={(event) => setPrompt(event.target.value)}
                                     placeholder="Example: Promote our AI-powered document workflow for startup operations teams this month."

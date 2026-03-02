@@ -12,7 +12,11 @@ export type ViewMode =
   | "predictive-analysis"
   | "generator"
   | "rewrite"
-  | "upload";
+  | "upload"
+  | "dashboard"
+  | "analytics"
+  | "employees"
+  | "settings";
 
 export type AiPersona =
   | "general"

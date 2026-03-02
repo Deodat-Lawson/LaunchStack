@@ -60,6 +60,22 @@ const UploadView = dynamic(
   () => import("./UploadView").then((module) => module.UploadView),
   { loading: () => <LoadingPage /> }
 );
+const EmployerDashboard = dynamic(
+  () => import("./EmployerDashboard").then((module) => module.EmployerDashboard),
+  { loading: () => <LoadingPage /> }
+);
+const CompanyAnalyticsPanel = dynamic(
+  () => import("./CompanyAnalyticsPanel").then((module) => module.CompanyAnalyticsPanel),
+  { loading: () => <LoadingPage /> }
+);
+const EmployeeManagementPanel = dynamic(
+  () => import("./EmployeeManagementPanel").then((module) => module.EmployeeManagementPanel),
+  { loading: () => <LoadingPage /> }
+);
+const EmployerSettingsPanel = dynamic(
+  () => import("./EmployerSettingsPanel").then((module) => module.EmployerSettingsPanel),
+  { loading: () => <LoadingPage /> }
+);
 
 const STYLE_OPTIONS = Object.entries(RESPONSE_STYLES).reduce((acc, [key, config]) => {
   acc[key as ResponseStyleId] = config.label;
@@ -86,7 +102,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [fileTypeFilter, setFileTypeFilter] = useState<DocumentDisplayType | "all">("all");
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
-  const [viewMode, setViewMode] = useState<ViewMode>("with-ai-qa");
+  const [viewMode, setViewMode] = useState<ViewMode>(userRole === 'employer' ? "dashboard" : "with-ai-qa");
   const [qaSubMode, setQaSubMode] = useState<"simple" | "chat">("simple");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isPreviewCollapsed, setIsPreviewCollapsed] = useState(false);
@@ -482,42 +498,59 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   // Render main content based on view mode
   const renderContent = () => {
     switch (viewMode) {
+      case "dashboard":
+        if (userRole !== 'employer') return null;
+        return (
+          <EmployerDashboard
+            documents={documents}
+            categories={categories}
+            setViewMode={setViewMode}
+            setSelectedDoc={handleSelectDoc}
+          />
+        );
       case "with-ai-qa":
         return (
           <div className="flex flex-col h-full">
             {/* Query Mode Toggle */}
-            <div className="flex-shrink-0 bg-background border-b border-border px-8 pt-4 pb-0">
-              <div className="flex gap-8">
+            <div className="flex-shrink-0 bg-background border-b border-border px-5 py-0">
+              <div className="flex items-center gap-1">
                 <button
                   onClick={() => {
                     setQaSubMode("simple");
                     setCurrentChatId(null);
                   }}
                   className={cn(
-                    "pb-3 text-xs font-bold uppercase tracking-widest transition-all relative",
-                    qaSubMode === "simple" ? "text-purple-600" : "text-muted-foreground hover:text-foreground"
+                    "py-3 px-3 text-[10px] font-black uppercase tracking-[0.15em] transition-all relative",
+                    qaSubMode === "simple"
+                      ? "text-purple-600 dark:text-purple-400"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   Simple Query
-                  {qaSubMode === "simple" && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 animate-in fade-in duration-300" />}
+                  {qaSubMode === "simple" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 rounded-t-full animate-in fade-in duration-200" />
+                  )}
                 </button>
                 <button
                   onClick={() => setQaSubMode("chat")}
                   className={cn(
-                    "pb-3 text-xs font-bold uppercase tracking-widest transition-all relative",
-                    qaSubMode === "chat" ? "text-purple-600" : "text-muted-foreground hover:text-foreground"
+                    "py-3 px-3 text-[10px] font-black uppercase tracking-[0.15em] transition-all relative",
+                    qaSubMode === "chat"
+                      ? "text-purple-600 dark:text-purple-400"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   AI Chat
-                  {qaSubMode === "chat" && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 animate-in fade-in duration-300" />}
+                  {qaSubMode === "chat" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 rounded-t-full animate-in fade-in duration-200" />
+                  )}
                 </button>
-                
-                <div className="ml-auto pb-3 flex items-center gap-4">
-                  <div className="h-4 w-px bg-border" />
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-7 px-3 text-[10px] font-black uppercase tracking-widest text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all active:scale-95"
+                <div className="ml-auto flex items-center gap-2 py-2">
+                  <div className="h-3.5 w-px bg-border" />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2.5 text-[9px] font-black uppercase tracking-[0.15em] text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all active:scale-95 rounded-md"
                     onClick={() => {
                       if (qaSubMode === "chat") {
                         setQaSubMode("simple");
@@ -667,6 +700,15 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       case "upload":
         if (userRole !== 'employer') return null;
         return <UploadView onDocumentUploaded={() => void fetchDocuments()} />;
+      case "analytics":
+        if (userRole !== 'employer') return null;
+        return <CompanyAnalyticsPanel />;
+      case "employees":
+        if (userRole !== 'employer') return null;
+        return <EmployeeManagementPanel />;
+      case "settings":
+        if (userRole !== 'employer') return null;
+        return <EmployerSettingsPanel />;
       default:
         return null;
     }
@@ -681,10 +723,10 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         <ResizablePanel 
           ref={sidebarPanelRef}
           defaultSize={20} 
-          minSize={15} 
+          minSize={14} 
           maxSize={30}
           collapsible={true}
-          collapsedSize={5}
+          collapsedSize={4}
           onCollapse={() => setIsSidebarCollapsed(true)}
           onExpand={() => setIsSidebarCollapsed(false)}
         >
@@ -716,10 +758,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
               setQaSubMode("chat");
             }}
             userRole={userRole}
+            totalDocuments={documents.length}
           />
         </ResizablePanel>
 
-        <ResizableHandle className="w-px bg-gray-200 dark:bg-gray-800" />
+        <ResizableHandle className="w-px bg-border" />
 
         {/* Main Content Area */}
         <ResizablePanel defaultSize={80} minSize={50}>

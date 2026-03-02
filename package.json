@@ -72,6 +72,7 @@
     "@tiptap/starter-kit": "^3.20.0",
     "@uploadthing/react": "^7.3.3",
     "@vercel/analytics": "^1.6.1",
+    "@vercel/blob": "^2.3.0",
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "*",

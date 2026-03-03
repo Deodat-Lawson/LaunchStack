@@ -1,9 +1,5 @@
 import { env } from "~/env";
 import type { MarketingPlatform, MarketingResearchResult } from "~/lib/tools/marketing-pipeline/types";
-import { redditClient } from "~/lib/tools/marketing-pipeline/clients/reddit";
-import { twitterClient } from "~/lib/tools/marketing-pipeline/clients/twitter";
-import { linkedinClient } from "~/lib/tools/marketing-pipeline/clients/linkedin";
-import { blueskyClient } from "~/lib/tools/marketing-pipeline/clients/bluesky";
 
 const TAVILY_SEARCH_URL = "https://api.tavily.com/search";
 
@@ -52,8 +48,8 @@ async function callTavily(query: string, maxResults: number): Promise<TavilyResu
     });
 
     if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Tavily API error: ${response.status} ${response.statusText} - ${text}`);
+        console.warn(`[marketing-pipeline] Tavily API error: ${response.status} ${response.statusText}`);
+        return [];
     }
 
     const data = (await response.json()) as TavilySearchResponse;
@@ -68,55 +64,8 @@ export async function researchPlatformTrends(args: {
 }): Promise<MarketingResearchResult[]> {
     const { platform, prompt, companyName, maxResults } = args;
 
-    try {
-        // Try platform-specific API first
-        let results: MarketingResearchResult[] = [];
-
-        switch (platform) {
-            case "reddit":
-                results = await redditClient.searchTrendingPosts(
-                    `${prompt} ${companyName}`, 
-                    maxResults
-                );
-                break;
-            
-            case "x":
-                results = await twitterClient.searchTrendingTweets(
-                    `${prompt} ${companyName}`, 
-                    maxResults
-                );
-                break;
-            
-            case "linkedin":
-                results = await linkedinClient.searchTrendingPosts(
-                    `${prompt} ${companyName}`, 
-                    maxResults
-                );
-                break;
-
-            case "bluesky":
-                results = await blueskyClient.searchTrendingPosts(
-                    `${prompt} ${companyName}`, 
-                    maxResults
-                );
-                break;
-        }
-
-        // If we got good results from the platform API, return them
-        if (results.length > 0) {
-            return results;
-        }
-
-        // Fallback to web search if platform API failed or returned no results
-        console.warn(`Platform API for ${platform} returned no results, falling back to web search`);
-        return await fallbackWebSearch(platform, prompt, companyName, maxResults);
-
-    } catch (error) {
-        console.error(`Platform API error for ${platform}:`, error);
-        
-        // Fallback to web search on any error
-        return await fallbackWebSearch(platform, prompt, companyName, maxResults);
-    }
+    // Use Tavily web search only for now (platform APIs can be added later)
+    return fallbackWebSearch(platform, prompt, companyName, maxResults);
 }
 
 // Fallback function using the original Tavily web search

@@ -223,7 +223,7 @@
 }
 
 .platformCard .platformLogoImgContainer .platformLogoImg {
-    transform: scale(1.35);
+    object-fit: contain;
 }
 
 .platformLogoImg {
@@ -328,14 +328,16 @@
     color: #fff;
 }
 
-/* Larger Reddit Snoo in selected platform pill */
+/* Reddit Snoo in selected platform pill - fit inside container */
 .selectedPlatformPill .platformLogoImgContainer {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
+    min-height: 2rem;
 }
 
 .selectedPlatformPill .platformLogoImgContainer .platformLogoImg {
-    transform: scale(1.35);
+    object-fit: contain;
 }
 
 .changePlatformButton {

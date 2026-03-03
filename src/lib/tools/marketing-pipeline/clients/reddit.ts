@@ -62,8 +62,14 @@ class RedditClient {
     }
 
     async searchTrendingPosts(query: string, maxResults: number): Promise<MarketingResearchResult[]> {
+        const clientId = env.server.REDDIT_CLIENT_ID;
+        const clientSecret = env.server.REDDIT_CLIENT_SECRET;
+        const userAgent = env.server.REDDIT_USER_AGENT;
+        if (!clientId || !clientSecret || !userAgent) {
+            return [];
+        }
+
         const token = await this.getAccessToken();
-        const userAgent = env.server.REDDIT_USER_AGENT!;
 
         // Search both hot and top posts for trending content
         const searches = [

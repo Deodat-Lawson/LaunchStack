@@ -46,7 +46,7 @@ import type {
 // ============================================================================
 
 /** Number of chunks per LLM batch. */
-const CHUNKS_PER_BATCH = 4;
+const CHUNKS_PER_BATCH = 15;
 
 /** Max parallel LLM calls. */
 const MAX_CONCURRENCY = 5;

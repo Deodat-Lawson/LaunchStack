@@ -23,4 +23,12 @@ export type ProcessDocumentEvent = {
   data: ProcessDocumentEventData;
 };
 
-export type Events = ProcessDocumentEvent;
+export type ExtractCompanyMetadataEvent = {
+  name: "company-metadata/extract.requested";
+  data: {
+    documentId: number;
+    companyId: string;
+  };
+};
+
+export type Events = ProcessDocumentEvent | ExtractCompanyMetadataEvent;

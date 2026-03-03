@@ -10,11 +10,12 @@
 import { serve } from "inngest/next";
 import { inngest } from "~/server/inngest/client";
 import { uploadDocument } from "~/server/inngest/functions/processDocument";
+import { extractCompanyMetadataJob } from "~/server/inngest/functions/extractCompanyMetadata";
 
 // Register all Inngest functions
 const handler = serve({
   client: inngest,
-  functions: [uploadDocument],
+  functions: [uploadDocument, extractCompanyMetadataJob],
 });
 
 export const GET = handler.GET;

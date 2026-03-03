@@ -2,14 +2,24 @@
  * Inngest Function — Company Metadata Extraction
  *
  * Background job that runs after document ingestion completes.
- * Extracts structured company metadata from a document's chunks
- * and merges it into the company's canonical metadata JSON.
+ * Extracts structured company metadata from a document's chunks,
+ * merges it into the company's canonical metadata JSON, and
+ * persists both the updated canonical row and an audit history entry.
+ *
+ * Flow:
+ *   1. Load any existing canonical metadata for the company.
+ *   2. Run extract-then-merge pipeline (extractor → merger).
+ *   3. Upsert the canonical row in `company_metadata`.
+ *   4. Append a row to `company_metadata_history`.
  */
 
 import { eq } from "drizzle-orm";
 import { inngest } from "../client";
 import { db } from "~/server/db";
-import { companyMetadata, companyMetadataHistory } from "~/server/db/schema/company-metadata";
+import {
+    companyMetadata,
+    companyMetadataHistory,
+} from "~/server/db/schema/company-metadata";
 import { runCompanyMetadataTool } from "~/lib/tools/company-metadata";
 
 // ============================================================================
@@ -32,20 +42,30 @@ export const extractCompanyMetadataJob = inngest.createFunction(
     async ({ event, step }) => {
         const { documentId, companyId } = event.data;
 
-        // Step 1: Extract facts and merge into canonical metadata
-        const result = await step.run("extract-and-merge", async () => {
-            // Load existing metadata if it exists
-            const [row] = await db
-                .select({ metadata: companyMetadata.metadata })
-                .from(companyMetadata)
-                .where(eq(companyMetadata.companyId, BigInt(companyId)))
-                .limit(1);
-            const existingMetadata = row?.metadata ?? undefined;
+        // ------------------------------------------------------------------
+        // Step 1: Load existing canonical metadata (if any)
+        // ------------------------------------------------------------------
+        const existingMetadata = await step.run(
+            "load-existing-metadata",
+            async () => {
+                const rows = await db
+                    .select({ metadata: companyMetadata.metadata })
+                    .from(companyMetadata)
+                    .where(eq(companyMetadata.companyId, BigInt(companyId)))
+                    .limit(1);
 
+                return rows[0]?.metadata ?? null;
+            },
+        );
+
+        // ------------------------------------------------------------------
+        // Step 2: Extract facts from document chunks and merge
+        // ------------------------------------------------------------------
+        const result = await step.run("extract-and-merge", async () => {
             return runCompanyMetadataTool({
                 documentId,
                 companyId,
-                existingMetadata,
+                existingMetadata: existingMetadata ?? undefined,
             });
         });
 
@@ -62,31 +82,43 @@ export const extractCompanyMetadataJob = inngest.createFunction(
             return { success: true, factsFound: false };
         }
 
-        // Step 2: Persist results to database
+        const { updatedMetadata, diff } = result.result;
+
+        // ------------------------------------------------------------------
+        // Step 3: Upsert canonical metadata row
+        // ------------------------------------------------------------------
         await step.run("persist-metadata", async () => {
             await db
                 .insert(companyMetadata)
                 .values({
                     companyId: BigInt(companyId),
-                    metadata: result.result!.updatedMetadata,
+                    schemaVersion: updatedMetadata.schema_version,
+                    metadata: updatedMetadata,
+                    lastExtractionDocumentId: BigInt(documentId),
                 })
                 .onConflictDoUpdate({
                     target: companyMetadata.companyId,
                     set: {
-                        metadata: result.result!.updatedMetadata,
+                        schemaVersion: updatedMetadata.schema_version,
+                        metadata: updatedMetadata,
+                        lastExtractionDocumentId: BigInt(documentId),
+                        updatedAt: new Date(),
                     },
                 });
+        });
 
+        // ------------------------------------------------------------------
+        // Step 4: Append audit history entry
+        // ------------------------------------------------------------------
+        await step.run("persist-history", async () => {
             await db.insert(companyMetadataHistory).values({
                 companyId: BigInt(companyId),
                 documentId: BigInt(documentId),
-                diff: result.result!.diff,
                 changeType: "extraction",
+                diff,
                 changedBy: "system",
             });
         });
-
-        const { diff } = result.result;
 
         console.log(
             `[CompanyMetadata] Document ${documentId}: ` +

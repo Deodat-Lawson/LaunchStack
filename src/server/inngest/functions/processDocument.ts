@@ -30,7 +30,7 @@ export const uploadDocument = inngest.createFunction(
   },
   { event: "document/process.requested" },
   async ({ event, step }) => {
-    const eventData = event.data;
+    const eventData = event.data as ProcessDocumentEventData;
     const result = await runDocIngestionTool({
       ...eventData,
       runtime: {
@@ -47,7 +47,7 @@ export const uploadDocument = inngest.createFunction(
         name: "company-metadata/extract.requested" as const,
         data: {
           documentId: eventData.documentId,
-          companyId: eventData.companyId,
+          companyId: String(eventData.companyId),
         },
       });
     }

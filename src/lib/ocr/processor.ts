@@ -56,7 +56,7 @@ function sanitizeDbError(error: unknown): void {
   const e = error as unknown as Record<string, unknown>;
   delete e.params;
   if (typeof e.query === "string") {
-    e.query = (e.query as string).substring(0, 120) + "…";
+    e.query = e.query.substring(0, 120) + "…";
   }
 }
 
@@ -435,25 +435,28 @@ export async function storeBatch(
 
   return withDbRetry(async () => {
     return db.transaction(async (tx) => {
-      const parentValues = vectorizedChunks.map((chunk) => ({
-        documentId: BigInt(documentId),
-        structureId: BigInt(rootStructureId),
-        content: chunk.content,
-        tokenCount: Math.ceil(chunk.content.length / 4),
-        charCount: chunk.content.length,
-        embedding:
-          chunk.vector && chunk.vector.length > 0
-            ? sql`${JSON.stringify(chunk.vector)}::vector(1536)`
-            : null,
-        pageNumber: chunk.metadata.pageNumber,
-        semanticType: (chunk.metadata.isTable ? "tabular" : "narrative") as
-          | "tabular"
-          | "narrative",
-        contentHash: crypto
-          .createHash("sha256")
-          .update(chunk.content)
-          .digest("hex"),
-      }));
+      const parentValues = vectorizedChunks.map((chunk) => {
+        const semanticType: "tabular" | "narrative" = chunk.metadata.isTable
+          ? "tabular"
+          : "narrative";
+        return {
+          documentId: BigInt(documentId),
+          structureId: BigInt(rootStructureId),
+          content: chunk.content,
+          tokenCount: Math.ceil(chunk.content.length / 4),
+          charCount: chunk.content.length,
+          embedding:
+            chunk.vector && chunk.vector.length > 0
+              ? sql`${JSON.stringify(chunk.vector)}::vector(1536)`
+              : null,
+          pageNumber: chunk.metadata.pageNumber,
+          semanticType,
+          contentHash: crypto
+            .createHash("sha256")
+            .update(chunk.content)
+            .digest("hex"),
+        };
+      });
 
       const parentRows = await tx
         .insert(documentContextChunks)

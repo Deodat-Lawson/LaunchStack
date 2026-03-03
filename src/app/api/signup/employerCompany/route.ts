@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         const {userId, name, email, companyName, numberOfEmployees} = (await request.json()) as PostBody;
 
         // Validate required fields
-        if (!name || !name.trim()) {
+        if (!name?.trim()) {
             return createValidationError(
                 "User name is required. Please ensure you are logged in with a complete profile."
             );

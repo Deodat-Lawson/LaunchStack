@@ -30,7 +30,7 @@ export const uploadDocument = inngest.createFunction(
   },
   { event: "document/process.requested" },
   async ({ event, step }) => {
-    const eventData = event.data as ProcessDocumentEventData;
+    const eventData = event.data;
     const result = await runDocIngestionTool({
       ...eventData,
       runtime: {

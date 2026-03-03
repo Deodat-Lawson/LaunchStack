@@ -396,7 +396,7 @@ function aggregateResults(
             const existing = policies[entry.key];
             const hydrated = hydrate(entry.fact, entry.fact.confidence, extractedAt, source);
             if (!existing || entry.fact.confidence > existing.confidence) {
-                policies[entry.key] = hydrated as MetadataFact;
+                policies[entry.key] = hydrated;
             }
         }
     }

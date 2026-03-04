@@ -131,6 +131,12 @@ export async function companyEnsembleSearch(
 ): Promise<SearchResult[]> {
   const { companyId, topK = 10 } = options;
 
+  const chunks = await getCompanyChunks(companyId);
+  if (chunks.length === 0) {
+    console.log(`[EnsembleSearch] No chunks for company ${companyId}, skipping search`);
+    return [];
+  }
+
   console.log(
     `🔍 [EnsembleSearch] Searching company ${companyId} for: "${query.substring(0, 50)}..."`
   );

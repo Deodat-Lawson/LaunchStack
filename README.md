@@ -124,6 +124,7 @@ Create `.env` from `.env.example` and fill required values:
 - `DATABASE_URL`
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `CLERK_SECRET_KEY`
+- `BLOB_READ_WRITE_TOKEN` (Vercel Blob read/write token)
 - `OPENAI_API_KEY`
 - `INNGEST_EVENT_KEY`, as placeholder
 
@@ -136,6 +137,18 @@ Optional integrations:
 - `LANDING_AI_API_KEY`, `DATALAB_API_KEY`
 - `LANGCHAIN_TRACING_V2`, `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`
 - `DEBUG_PERF` (`1` or `true`) to enable dev perf logs for middleware and key auth/dashboard APIs
+
+### 2.1) Configure Vercel Blob Storage
+
+Vercel Blob is used for storing uploaded documents. Both **public** and **private** stores are supported -- the upload logic auto-detects which mode the store uses and adapts automatically.
+
+1. In the Vercel dashboard, go to **Storage → Blob → Create Store**.
+2. Choose either **Public** or **Private** access. Both work:
+   - **Public** stores produce URLs the browser can load directly (faster for previews).
+   - **Private** stores keep files behind authentication; the app proxies content through `/api/documents/[id]/content` and `/api/files/[id]` so previews still work.
+3. Generate a **Read/Write token** for the store and add it as `BLOB_READ_WRITE_TOKEN` in your environment (`.env` locally, or Vercel Project Settings for deploys).
+4. Redeploy so the token is available at build and runtime.
+5. Verify: sign in to the Employer Upload page, upload a small PDF, and confirm `/api/upload-local` returns a `vercel-storage.com` URL without errors.
 
 ### 3) Start database and apply schema
 

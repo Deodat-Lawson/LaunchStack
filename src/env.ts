@@ -15,7 +15,12 @@ const serverSchema = z.object({
   CLERK_SECRET_KEY: requiredString(),
   UPLOADTHING_TOKEN: optionalString(),
   DATALAB_API_KEY: optionalString(),
+  // Web search providers
   TAVILY_API_KEY: optionalString(),
+  SERPER_API_KEY: optionalString(),
+  SEARCH_PROVIDER: z
+    .enum(["tavily", "serper", "fallback", "parallel"])
+    .optional(),
   // Platform API Keys for Marketing Pipeline
   REDDIT_CLIENT_ID: optionalString(),
   REDDIT_CLIENT_SECRET: optionalString(),
@@ -81,6 +86,20 @@ function parseServerEnv() {
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+    SERPER_API_KEY: process.env.SERPER_API_KEY,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as
+      | "tavily"
+      | "serper"
+      | "fallback"
+      | "parallel"
+      | undefined,
+    REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
+    REDDIT_CLIENT_SECRET: process.env.REDDIT_CLIENT_SECRET,
+    REDDIT_USER_AGENT: process.env.REDDIT_USER_AGENT,
+    TWITTER_BEARER_TOKEN: process.env.TWITTER_BEARER_TOKEN,
+    LINKEDIN_ACCESS_TOKEN: process.env.LINKEDIN_ACCESS_TOKEN,
+    BLUESKY_HANDLE: process.env.BLUESKY_HANDLE,
+    BLUESKY_APP_PASSWORD: process.env.BLUESKY_APP_PASSWORD,
     AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
     AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY,
     LANDING_AI_API_KEY: process.env.LANDING_AI_API_KEY,

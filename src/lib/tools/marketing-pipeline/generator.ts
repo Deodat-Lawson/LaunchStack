@@ -33,7 +33,7 @@ switch (platform) {
             "- 0–2 relevant hashtags max (no spam).",
             "- Keep it concise (aim ~280 chars; stay tight).",
         ].join("\n");
-    case "linkedin":p
+    case "linkedin":
         return [
             "Format requirements for LinkedIn:",
             "- First line: clear insight/outcome (scroll-stopper).",

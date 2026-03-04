@@ -97,6 +97,7 @@ async function testIntegratedPipeline() {
                 platform,
                 prompt: "AI marketing tools",
                 companyName: "TechCorp",
+                companyContext: "Company Name: TechCorp. Knowledge Base Signals: None.",
                 maxResults: 3,
             });
             

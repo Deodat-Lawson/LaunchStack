@@ -33,7 +33,7 @@ interface BlueskySearchResponse {
 
 class BlueskyClient {
     private session: BlueskySession | null = null;
-    private sessionExpiry: number = 0;
+    private sessionExpiry = 0;
 
     private get credentials() {
         const handle = env.server.BLUESKY_HANDLE;
@@ -165,7 +165,7 @@ class BlueskyClient {
     }
 
     private extractTitle(text: string): string {
-        const firstLine = text.split('\n')[0] || text;
+        const firstLine = text.split('\n')[0] ?? text;
         return firstLine.slice(0, 120) + (firstLine.length > 120 ? "..." : "");
     }
 

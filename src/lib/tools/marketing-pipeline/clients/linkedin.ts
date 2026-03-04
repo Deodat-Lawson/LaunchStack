@@ -62,8 +62,6 @@ class LinkedInClient {
         try {
             // Note: LinkedIn's public content search is limited
             // We'll focus on UGC (User Generated Content) posts that are publicly available
-            const searchTerm = encodeURIComponent(query);
-            
             // This is a simplified approach - LinkedIn's search API has strict access requirements
             // You may need to use LinkedIn's Content API or Partner Program for full access
             const url = `https://api.linkedin.com/v2/ugcPosts?q=authors&count=${Math.min(maxResults, 50)}`;
@@ -99,12 +97,12 @@ class LinkedInClient {
     }
 
     private getPostText(post: LinkedInPost): string {
-        return post.specificContent?.["com.linkedin.ugc.ShareContent"]?.shareCommentary?.text || "";
+        return post.specificContent?.["com.linkedin.ugc.ShareContent"]?.shareCommentary?.text ?? "";
     }
 
     private extractTitle(post: LinkedInPost): string {
         const text = this.getPostText(post);
-        const firstLine = text.split('\n')[0] || text;
+        const firstLine = text.split('\n')[0] ?? text;
         return firstLine.slice(0, 120) + (firstLine.length > 120 ? "..." : "");
     }
 
@@ -126,12 +124,10 @@ class LinkedInClient {
     }
 
     // Alternative: Search LinkedIn articles/posts via web scraping approach
-    async searchLinkedInContent(query: string, maxResults: number): Promise<MarketingResearchResult[]> {
+    async searchLinkedInContent(_query: string, _maxResults: number): Promise<MarketingResearchResult[]> {
         try {
             // This is a fallback approach using LinkedIn's public search
             // Note: This requires careful rate limiting and may have restrictions
-            const searchUrl = `https://www.linkedin.com/search/results/content/?keywords=${encodeURIComponent(query)}&origin=GLOBAL_SEARCH_HEADER&sortBy=date`;
-            
             // For now, we'll return an empty array and log that manual implementation is needed
             console.warn("LinkedIn content search requires manual implementation due to API restrictions");
             return [];

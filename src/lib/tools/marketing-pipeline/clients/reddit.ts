@@ -21,7 +21,7 @@ interface RedditResponse {
 
 class RedditClient {
     private accessToken: string | null = null;
-    private tokenExpiry: number = 0;
+    private tokenExpiry = 0;
 
     private async getAccessToken(): Promise<string> {
         const clientId = env.server.REDDIT_CLIENT_ID;

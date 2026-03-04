@@ -21,13 +21,6 @@ interface TwitterSearchResponse {
     };
 }
 
-interface TwitterTrendsResponse {
-    data?: Array<{
-        trend: string;
-        tweet_volume?: number;
-    }>;
-}
-
 class TwitterClient {
     private get bearerToken(): string {
         const token = env.server.TWITTER_BEARER_TOKEN;
@@ -84,7 +77,7 @@ class TwitterClient {
         }
     }
 
-    async getTrendingTopics(location: string = "1"): Promise<Array<{ trend: string; volume?: number }>> {
+    async getTrendingTopics(_location = "1"): Promise<Array<{ trend: string; volume?: number }>> {
         try {
             // Note: Trends endpoint requires Twitter API v1.1 and may need different authentication
             // For now, we'll focus on tweet search which provides good trending content

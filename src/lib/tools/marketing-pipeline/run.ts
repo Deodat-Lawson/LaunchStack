@@ -1,6 +1,10 @@
 import { buildCompanyKnowledgeContext } from "~/lib/tools/marketing-pipeline/context";
 import { generateCampaignOutput } from "~/lib/tools/marketing-pipeline/generator";
-import type { MarketingPipelineInput, MarketingPipelineResult, MarketingResearchResult } from "~/lib/tools/marketing-pipeline/types";
+import type {
+  MarketingPipelineInput,
+  MarketingPipelineResult,
+  MarketingResearchResult,
+} from "~/lib/tools/marketing-pipeline/types";
 
 // additional imports for query building and for fetching trend information
 import { eq } from "drizzle-orm";
@@ -29,65 +33,66 @@ function normalizeResearch(research: MarketingResearchResult[]): MarketingResear
 }
 
 export async function runMarketingPipeline(args: {
-    companyId: number;
-    input: MarketingPipelineInput;
+  companyId: number;
+  input: MarketingPipelineInput;
 }): Promise<MarketingPipelineResult> {
-    const normalizedInput = normalizeInput(args.input);
+  const normalizedInput = normalizeInput(args.input);
 
-    // 1) Fetch company name (used for trend query building)
-    const [companyRow] = await db
-        .select({ name: company.name })
-        .from(company)
-        .where(eq(company.id, args.companyId))
-        .limit(1);
+  // 1) Fetch company name (used for logs / future features)
+  const [companyRow] = await db
+    .select({ name: company.name })
+    .from(company)
+    .where(eq(company.id, args.companyId))
+    .limit(1);
 
-    const companyName = companyRow?.name ?? "Unknown Company";
+  const companyName = companyRow?.name ?? "Unknown Company";
 
-    // 2) Build KB context
-    const companyContextBase = await buildCompanyKnowledgeContext({
-        companyId: args.companyId,
-        prompt: normalizedInput.prompt,
-    });
+  // 2) Build KB context from all company documents
+  const companyContextBase = await buildCompanyKnowledgeContext({
+    companyId: args.companyId,
+    prompt: normalizedInput.prompt,
+  });
 
-    // 3) Add platform best practices
-    const platformGuidelines = buildPlatformGuidelines(normalizedInput.platform);
-    const companyContext = `${companyContextBase}
+  // 3) Add platform best practices
+  const platformGuidelines = buildPlatformGuidelines(normalizedInput.platform);
+  const companyContext = `${companyContextBase}
 
 Platform best practices:
 ${platformGuidelines}`;
 
-    // 4) Fetch trend references (non-fatal)
-    let research: MarketingResearchResult[] = [];
-    try {
-        research = await researchPlatformTrends({
-            platform: normalizedInput.platform,
-            prompt: normalizedInput.prompt,
-            companyName,
-            maxResults: normalizedInput.maxResearchResults ?? 6,
-        });
-        research = normalizeResearch(research);
-    } catch (error) {
-        console.warn("[marketing-pipeline] trend research failed:", error);
-        research = [];
-    }
-
-    // 5) Generate campaign output using KB + trends
-    const generated = await generateCampaignOutput({
-        platform: normalizedInput.platform,
-        prompt: normalizedInput.prompt,
-        companyContext,
-        research,
+  // 4) Fetch trend references (non-fatal)
+  let research: MarketingResearchResult[] = [];
+  try {
+    research = await researchPlatformTrends({
+      platform: normalizedInput.platform,
+      prompt: normalizedInput.prompt,
+      companyName,
+      companyContext,
+      maxResults: normalizedInput.maxResearchResults ?? 6,
     });
+    research = normalizeResearch(research);
+  } catch (error) {
+    console.warn("[marketing-pipeline] trend research failed:", error);
+    research = [];
+  }
 
-    // 6) Return final result
-    return {
-        ...generated,
-        research,
-        normalizedInput: {
-            platform: normalizedInput.platform,
-            prompt: normalizedInput.prompt,
-        },
-    };
+  // 5) Generate campaign output using KB + trends
+  const generated = await generateCampaignOutput({
+    platform: normalizedInput.platform,
+    prompt: normalizedInput.prompt,
+    companyContext,
+    research,
+  });
+
+  // 6) Return final result
+  return {
+    ...generated,
+    research,
+    normalizedInput: {
+      platform: normalizedInput.platform,
+      prompt: normalizedInput.prompt,
+    },
+  };
 }
 
 function buildPlatformGuidelines(platform: MarketingPipelineInput["platform"]): string {

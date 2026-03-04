@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Brain, Loader2, MessageSquareText, Megaphone, Sparkles } from "lucide-react";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
@@ -163,7 +164,7 @@ export default function MarketingPipelinePage() {
                                         } ${option.logoImg ? styles.platformLogoImgContainer : ""}`}
                                     >
                                         {option.logoImg ? (
-                                            <img src={option.logoImg} alt="" className={styles.platformLogoImg} />
+                                            <Image src={option.logoImg} alt="" width={64} height={64} className={styles.platformLogoImg} />
                                         ) : (
                                             option.logoText
                                         )}
@@ -188,7 +189,7 @@ export default function MarketingPipelinePage() {
                                         } ${selectedPlatform?.logoImg ? styles.platformLogoImgContainer : ""}`}
                                     >
                                         {selectedPlatform?.logoImg ? (
-                                            <img src={selectedPlatform.logoImg} alt="" className={styles.platformLogoImg} />
+                                            <Image src={selectedPlatform.logoImg} alt="" width={64} height={64} className={styles.platformLogoImg} />
                                         ) : (
                                             selectedPlatform?.logoText
                                         )}

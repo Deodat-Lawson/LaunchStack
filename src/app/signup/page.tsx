@@ -248,7 +248,7 @@ const SignupPage: React.FC = () => {
                 setIsCreating(false);
                 return;
             }
-            router.push("/employer/home");
+            router.push("/employer/onboarding");
         } catch (error) {
             console.error("Create company error:", error);
             setCreateErrors((prev) => ({

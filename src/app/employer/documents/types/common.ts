@@ -16,7 +16,9 @@ export type ViewMode =
   | "dashboard"
   | "analytics"
   | "employees"
-  | "settings";
+  | "settings"
+  | "metadata"
+  | "marketing-pipeline";
 
 export type AiPersona =
   | "general"

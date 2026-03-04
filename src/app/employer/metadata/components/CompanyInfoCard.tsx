@@ -79,9 +79,9 @@ export function CompanyInfoCard({ company }: CompanyInfoCardProps) {
                         <Building2 className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <CardTitle className="text-lg font-bold">Company Information</CardTitle>
+                        <CardTitle className="text-lg font-bold">AI-Extracted Company Info</CardTitle>
                         <p className="text-sm text-muted-foreground">
-                            Core company details extracted from documents
+                            Facts discovered by AI from your uploaded documents
                         </p>
                     </div>
                 </div>

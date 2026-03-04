@@ -76,6 +76,14 @@ const EmployerSettingsPanel = dynamic(
   () => import("./EmployerSettingsPanel").then((module) => module.EmployerSettingsPanel),
   { loading: () => <LoadingPage /> }
 );
+const CompanyMetadataPanel = dynamic(
+  () => import("./CompanyMetadataPanel").then((module) => module.CompanyMetadataPanel),
+  { loading: () => <LoadingPage /> }
+);
+const MarketingPipelinePanel = dynamic(
+  () => import("./MarketingPipelinePanel").then((module) => module.MarketingPipelinePanel),
+  { loading: () => <LoadingPage /> }
+);
 
 const STYLE_OPTIONS = Object.entries(RESPONSE_STYLES).reduce((acc, [key, config]) => {
   acc[key as ResponseStyleId] = config.label;
@@ -709,6 +717,12 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       case "settings":
         if (userRole !== 'employer') return null;
         return <EmployerSettingsPanel />;
+      case "metadata":
+        if (userRole !== 'employer') return null;
+        return <CompanyMetadataPanel />;
+      case "marketing-pipeline":
+        if (userRole !== 'employer') return null;
+        return <MarketingPipelinePanel />;
       default:
         return null;
     }

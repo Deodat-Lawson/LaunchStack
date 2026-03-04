@@ -23,6 +23,8 @@ import {
   TrendingUp,
   Users,
   Settings,
+  Building2,
+  Megaphone,
 } from 'lucide-react';
 import { UserButton } from '@clerk/nextjs';
 import { Input } from '~/app/employer/documents/components/ui/input';
@@ -101,6 +103,8 @@ const NAV_ITEMS = (showGenerator: boolean) => [
 const COMPANY_NAV_ITEMS = [
   { id: "analytics" as ViewMode, label: "Analytics", icon: TrendingUp },
   { id: "employees" as ViewMode, label: "Employees", icon: Users },
+  { id: "metadata" as ViewMode, label: "Metadata", icon: Building2 },
+  { id: "marketing-pipeline" as ViewMode, label: "Marketing", icon: Megaphone },
   { id: "settings" as ViewMode, label: "Settings", icon: Settings },
 ];
 

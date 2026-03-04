@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import Link from "next/link";
 import {
   FileText,
   Upload,
@@ -18,6 +19,8 @@ import {
   FileSearch,
   PenLine,
   Tag,
+  Sparkles,
+  X,
 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "~/app/employer/documents/components/ui/button";
@@ -61,6 +64,26 @@ export function EmployerDashboard({
   setSelectedDoc,
   companyName,
 }: EmployerDashboardProps) {
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+  const [profileIncomplete, setProfileIncomplete] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/company/onboarding");
+        if (!res.ok) return;
+        const data = (await res.json()) as { description: string | null };
+        if (!cancelled && !data.description) {
+          setProfileIncomplete(true);
+        }
+      } catch {
+        // silently ignore
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
   const stats = useMemo(() => {
     const total = documents.length;
     const processing = documents.filter((d) => d.ocrProcessed === false).length;
@@ -150,6 +173,35 @@ export function EmployerDashboard({
             Upload Documents
           </Button>
         </div>
+
+        {/* Profile Completion Banner */}
+        {profileIncomplete && !bannerDismissed && (
+          <div className="flex items-center gap-3 px-5 py-4 rounded-xl bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200 dark:border-purple-800/50">
+            <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-purple-900 dark:text-purple-200">
+                Complete your company profile
+              </p>
+              <p className="text-xs text-purple-700 dark:text-purple-400 mt-0.5">
+                Help AI better understand your documents by adding a company description.
+              </p>
+            </div>
+            <Link
+              href="/employer/onboarding"
+              className="flex-shrink-0 px-4 py-1.5 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors"
+            >
+              Complete Setup
+            </Link>
+            <button
+              type="button"
+              onClick={() => setBannerDismissed(true)}
+              className="flex-shrink-0 p-1 text-purple-400 hover:text-purple-600 dark:text-purple-500 dark:hover:text-purple-300 transition-colors"
+              aria-label="Dismiss"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

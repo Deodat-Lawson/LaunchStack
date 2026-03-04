@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../server/db/index";
 import { company, users } from "../../../server/db/schema";
-import { eq, and } from "drizzle-orm";
-import * as console from "console";
+import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 
 
@@ -30,12 +29,19 @@ export async function GET() {
 
         const companyId = userInfo.companyId;
 
-        const companies = await db
+        const [companyRecord] = await db
             .select()
             .from(company)
-            .where(and(eq(company.id, Number(companyId))));
+            .where(eq(company.id, Number(companyId)));
 
-        return NextResponse.json(companies, { status: 200 });
+        if (!companyRecord) {
+            return NextResponse.json(
+                { error: "Company not found." },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json(companyRecord, { status: 200 });
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
         return NextResponse.json(

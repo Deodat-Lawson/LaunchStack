@@ -34,7 +34,7 @@ export const uploadDocument = inngest.createFunction(
   { event: "document/process.requested" },
   async ({ event, step }) => {
     const eventData = event.data;
-    return runDocIngestionTool({
+    const result = await runDocIngestionTool({
       ...eventData,
       runtime: {
         updateJobStatus: false,
@@ -43,5 +43,18 @@ export const uploadDocument = inngest.createFunction(
           step.run(stepName, fn) as Promise<T>,
       },
     });
+
+    // Trigger company metadata extraction after successful ingestion
+    if (result.success && eventData.documentId && eventData.companyId) {
+      await step.sendEvent("trigger-metadata-extraction", {
+        name: "company-metadata/extract.requested" as const,
+        data: {
+          documentId: eventData.documentId,
+          companyId: String(eventData.companyId),
+        },
+      });
+    }
+
+    return result;
   },
 );

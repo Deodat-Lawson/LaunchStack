@@ -56,29 +56,6 @@ const ZIP_MIME_TYPES = new Set([
     "multipart/x-zip",
     "application/octet-stream",
 ]);
-const MIME_BY_EXTENSION: Record<string, string> = {
-    pdf: "application/pdf",
-    png: "image/png",
-    jpg: "image/jpeg",
-    jpeg: "image/jpeg",
-    tif: "image/tiff",
-    tiff: "image/tiff",
-    webp: "image/webp",
-    gif: "image/gif",
-    bmp: "image/bmp",
-    docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    doc: "application/msword",
-    xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    xls: "application/vnd.ms-excel",
-    csv: "text/csv",
-    pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    ppt: "application/vnd.ms-powerpoint",
-    txt: "text/plain",
-    md: "text/markdown",
-    markdown: "text/markdown",
-    html: "text/html",
-    htm: "text/html",
-};
 
 interface DocumentFile {
     id: string;
@@ -98,12 +75,6 @@ interface BatchSettings {
     processingMethod: string;
     uploadDate: string;
     storageMethod: string;
-}
-
-interface ZipExtractionResult {
-    files: File[];
-    nestedZipCount: number;
-    metadataFileCount: number;
 }
 
 type DataTransferItemWithWebkitEntry = DataTransferItem & {
@@ -196,111 +167,39 @@ const UploadForm: React.FC<UploadFormProps> = ({
         return extension === "zip" || ZIP_MIME_TYPES.has(mimeType);
     }, []);
 
-    const inferMimeTypeFromFilename = useCallback((filename: string) => {
-        const extension = filename.toLowerCase().split(".").pop() ?? "";
-        return MIME_BY_EXTENSION[extension];
-    }, []);
-
-    const extractFilesFromZip = useCallback(async (zipFile: File): Promise<ZipExtractionResult> => {
-        const JSZip = (await import("jszip")).default;
-        const zip = await JSZip.loadAsync(await zipFile.arrayBuffer());
-
-        const extractedFiles: File[] = [];
-        let nestedZipCount = 0;
-        let metadataFileCount = 0;
-
-        for (const [entryPath, entry] of Object.entries(zip.files)) {
-            if (entry.dir) continue;
-
-            // Skip macOS ZIP metadata/resource fork entries.
-            const normalizedEntryPath = entryPath.replaceAll("\\", "/");
-            const pathParts = normalizedEntryPath.split("/").filter(Boolean);
-            if (pathParts.length === 0) continue;
-            const safeName = pathParts[pathParts.length - 1]!;
-            if (
-                pathParts.includes("__MACOSX") ||
-                safeName.startsWith("._") ||
-                safeName === ".DS_Store"
-            ) {
-                metadataFileCount++;
-                continue;
-            }
-
-            if (safeName.toLowerCase().endsWith(".zip")) {
-                nestedZipCount++;
-                continue;
-            }
-
-            const blob = await entry.async("blob");
-            const inferredMime = inferMimeTypeFromFilename(safeName);
-            extractedFiles.push(
-                new File([blob], safeName, {
-                    type: inferredMime ?? blob.type ?? "",
-                    lastModified: zipFile.lastModified,
-                }),
-            );
-        }
-
-        return { files: extractedFiles, nestedZipCount, metadataFileCount };
-    }, [inferMimeTypeFromFilename]);
-
     const validateAndAddFiles = useCallback(
         async (files: File[]) => {
             const validFiles: DocumentFile[] = [];
-            const filesToValidate: { file: File; fromZip: boolean }[] = [];
-
             let nonZipErrorCount = 0;
             let zipArchiveCount = 0;
-            let zipExtractionFailureCount = 0;
-            let zipNestedSkippedCount = 0;
-            let zipMetadataSkippedCount = 0;
-            let zipUnsupportedCount = 0;
             let zipOversizedCount = 0;
             let zipQueuedCount = 0;
 
             for (const file of files) {
-                if (!isZipFile(file)) {
-                    filesToValidate.push({ file, fromZip: false });
+                if (isZipFile(file)) {
+                    zipArchiveCount++;
+                    if (file.size > MAX_FILE_SIZE) {
+                        zipOversizedCount++;
+                        continue;
+                    }
+                    validFiles.push(defaultDoc(file));
+                    zipQueuedCount++;
                     continue;
                 }
 
-                zipArchiveCount++;
-                try {
-                    const extracted = await extractFilesFromZip(file);
-                    zipNestedSkippedCount += extracted.nestedZipCount;
-                    zipMetadataSkippedCount += extracted.metadataFileCount;
-                    extracted.files.forEach((extractedFile) => {
-                        filesToValidate.push({ file: extractedFile, fromZip: true });
-                    });
-                } catch (error) {
-                    zipExtractionFailureCount++;
-                    console.error("Failed to extract ZIP file", error);
-                    toast.error(`Failed to extract ${file.name}`);
-                }
-            }
-
-            filesToValidate.forEach(({ file, fromZip }) => {
                 if (!isUploadAccepted({ name: file.name, type: file.type })) {
-                    if (fromZip) {
-                        zipUnsupportedCount++;
-                    } else {
-                        nonZipErrorCount++;
-                    }
-                    return;
+                    nonZipErrorCount++;
+                    continue;
                 }
+
                 if (file.size > MAX_FILE_SIZE) {
-                    if (fromZip) {
-                        zipOversizedCount++;
-                    } else {
-                        toast.error(`${file.name} exceeds 16MB limit`);
-                        nonZipErrorCount++;
-                    }
-                    return;
+                    toast.error(`${file.name} exceeds 16MB limit`);
+                    nonZipErrorCount++;
+                    continue;
                 }
 
                 validFiles.push(defaultDoc(file));
-                if (fromZip) zipQueuedCount++;
-            });
+            }
 
             if (nonZipErrorCount > 0) {
                 toast.error(`${nonZipErrorCount} file(s) were rejected`, {
@@ -309,18 +208,14 @@ const UploadForm: React.FC<UploadFormProps> = ({
             }
 
             if (zipArchiveCount > 0) {
-                const details: string[] = [`${zipQueuedCount} file(s) added from ZIP`];
-                if (zipUnsupportedCount > 0) details.push(`${zipUnsupportedCount} unsupported`);
-                if (zipOversizedCount > 0) details.push(`${zipOversizedCount} over 16MB`);
-                if (zipNestedSkippedCount > 0) details.push(`${zipNestedSkippedCount} nested ZIP skipped`);
-                if (zipMetadataSkippedCount > 0) details.push(`${zipMetadataSkippedCount} system file(s) ignored`);
-                if (zipExtractionFailureCount > 0) details.push(`${zipExtractionFailureCount} ZIP failed`);
-
                 if (zipQueuedCount > 0) {
-                    toast.success("ZIP extraction complete", { description: details.join(" • ") });
-                } else {
-                    toast.error("No extractable files were found in ZIP", {
-                        description: details.join(" • "),
+                    toast.success("ZIP archive queued", {
+                        description: "Archive uploads as-is; expansion occurs server-side after upload.",
+                    });
+                }
+                if (zipOversizedCount > 0) {
+                    toast.error("ZIP archive rejected", {
+                        description: `${zipOversizedCount} ZIP file(s) exceeded the 16MB limit.`,
                     });
                 }
             }
@@ -335,7 +230,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 });
             }
         },
-        [defaultDoc, extractFilesFromZip, isZipFile],
+        [defaultDoc, isZipFile],
     );
 
     const handleFileSelect = useCallback(
@@ -565,12 +460,12 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const uploadSingleDocument = async (doc: DocumentFile) => {
         updateDocument(doc.id, { status: "uploading", progress: 10 });
 
-        const storageType =
-            doc.storageMethod === "cloud" && isUploadThingConfigured ? "cloud" : "database";
+        const useUploadThingForDoc = doc.storageMethod === "cloud" && isUploadThingConfigured;
+        let resolvedStorageType: "cloud" | "database" = "cloud";
         let fileUrl: string;
         const mimeType: string | undefined = doc.file.type || undefined;
 
-        if (storageType === "cloud") {
+        if (useUploadThingForDoc) {
             updateDocument(doc.id, { progress: 30 });
             const res = await uploadFiles("documentUploaderRestricted", {
                 files: [doc.file],
@@ -586,8 +481,11 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 const err = (await res.json()) as { error?: string };
                 throw new Error(err.error ?? "Local upload failed");
             }
-            const data = (await res.json()) as { url: string };
+            const data = (await res.json()) as { url: string; provider?: string };
             fileUrl = data.url;
+            if (data.provider !== "vercel_blob") {
+                resolvedStorageType = "database";
+            }
         }
 
         updateDocument(doc.id, { progress: 60 });
@@ -605,7 +503,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 documentName: doc.title,
                 category: doc.category,
                 documentUrl: fileUrl,
-                storageType,
+                storageType: resolvedStorageType,
                 mimeType,
                 preferredProvider:
                     preferredProvider === "LANDING_AI" ? "LANDING_AI" : preferredProvider,

@@ -32,16 +32,34 @@ function getBlobToken(): string {
   return token;
 }
 
+let detectedAccess: "public" | "private" | null = null;
+
 export async function putFile({ filename, data, contentType }: PutFileInput): Promise<StoredBlobMetadata> {
   const token = getBlobToken();
   const safeName = sanitizeFilename(filename);
   const key = `documents/${randomUUID()}-${safeName.length > 0 ? safeName : "upload"}`;
 
-  const blob = await put(key, data, {
-    access: "public",
-    contentType,
-    token,
-  });
+  const body = Buffer.from(data instanceof ArrayBuffer ? new Uint8Array(data) : data);
+
+  const tryPut = (access: "public" | "private") =>
+    put(key, body, { access, contentType, token });
+
+  let blob: PutBlobResult;
+  if (detectedAccess) {
+    blob = await tryPut(detectedAccess);
+  } else {
+    try {
+      blob = await tryPut("public");
+      detectedAccess = "public";
+    } catch (err) {
+      if (err instanceof Error && err.message.includes("private store")) {
+        blob = await tryPut("private");
+        detectedAccess = "private";
+      } else {
+        throw err;
+      }
+    }
+  }
 
   const extended = blob as PutBlobResult & { contentHash?: string | null };
 
@@ -49,9 +67,26 @@ export async function putFile({ filename, data, contentType }: PutFileInput): Pr
     url: blob.url,
     pathname: blob.pathname,
     contentType: blob.contentType,
-    size: blob.size,
     checksum: extended.contentHash ?? null,
   };
+}
+
+export function isPrivateBlobUrl(url: string): boolean {
+  return url.includes(".private.blob.");
+}
+
+export async function fetchBlob(url: string, init?: RequestInit): Promise<Response> {
+  if (isPrivateBlobUrl(url)) {
+    const token = getBlobToken();
+    return fetch(url, {
+      ...init,
+      headers: {
+        ...(init?.headers as Record<string, string> | undefined),
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+  return fetch(url, init);
 }
 
 function sanitizeFilename(filename: string): string {

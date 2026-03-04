@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { fileUploads } from "~/server/db/schema";
+import { isPrivateBlobUrl, fetchBlob } from "~/server/storage/vercel-blob";
 
 const MIME_BY_EXTENSION: Record<string, string> = {
   pdf: "application/pdf",
@@ -72,6 +73,30 @@ export async function GET(
     }
 
     if (file.storageProvider === "vercel_blob" && file.storageUrl) {
+      if (isPrivateBlobUrl(file.storageUrl)) {
+        const blobRes = await fetchBlob(file.storageUrl);
+        if (!blobRes.ok) {
+          return NextResponse.json(
+            { error: "Failed to retrieve file from storage" },
+            { status: 502 }
+          );
+        }
+        const mimeType =
+          blobRes.headers.get("content-type") ??
+          file.mimeType?.trim() ??
+          inferMimeTypeFromFilename(file.filename);
+        return new NextResponse(blobRes.body, {
+          status: 200,
+          headers: {
+            "Content-Type": mimeType,
+            ...(blobRes.headers.get("content-length")
+              ? { "Content-Length": blobRes.headers.get("content-length")! }
+              : {}),
+            "Content-Disposition": `inline; filename="${encodeURIComponent(file.filename)}"; filename*=UTF-8''${encodeURIComponent(file.filename)}`,
+            "Cache-Control": "private, max-age=31536000",
+          },
+        });
+      }
       return NextResponse.redirect(file.storageUrl, {
         status: 307,
       });

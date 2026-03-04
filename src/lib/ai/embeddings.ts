@@ -8,21 +8,24 @@
  * Embedding configuration
  */
 export interface EmbeddingConfig {
-  apiKey?: string; // OpenAI API key
+  apiKey?: string;
   model?: string;
   batchSize?: number;
   maxRetries?: number;
   retryDelayMs?: number;
   dimensions?: number;
+  /** Max concurrent API requests (default 5) */
+  concurrency?: number;
 }
 
 const DEFAULT_CONFIG: Required<EmbeddingConfig> = {
   apiKey: process.env.OPENAI_API_KEY ?? "",
   model: "text-embedding-3-large",
-  batchSize: 20,
-  maxRetries: 3,
-  retryDelayMs: 1000,
+  batchSize: 100,
+  maxRetries: 5,
+  retryDelayMs: 2000,
   dimensions: 1536,
+  concurrency: 5,
 };
 
 /**
@@ -80,29 +83,39 @@ export async function generateEmbeddings(
   const batches = createBatches(chunks, cfg.batchSize);
   const allEmbeddings: number[][] = new Array<number[]>(chunks.length);
   let totalTokens = 0;
+  const concurrency = cfg.concurrency;
 
   console.log(
-    `[Embeddings] Processing ${chunks.length} chunks in ${batches.length} batches`
+    `[Embeddings] Processing ${chunks.length} chunks in ${batches.length} batches (concurrency=${concurrency})`
   );
 
-  for (let i = 0; i < batches.length; i++) {
-    const batch = batches[i]!;
-    const { startIndex, texts } = batch;
+  for (let wave = 0; wave < batches.length; wave += concurrency) {
+    const waveBatches = batches.slice(wave, wave + concurrency);
+    const waveNum = Math.floor(wave / concurrency) + 1;
+    const totalWaves = Math.ceil(batches.length / concurrency);
 
     console.log(
-      `[Embeddings] Processing batch ${i + 1}/${batches.length} (${texts.length} chunks)`
+      `[Embeddings] Wave ${waveNum}/${totalWaves}: batches ${wave + 1}-${wave + waveBatches.length} of ${batches.length}`
     );
 
-    const result = await callEmbeddingAPIWithRetry(texts, cfg);
+    const results = await Promise.all(
+      waveBatches.map(({ startIndex, texts }) =>
+        callEmbeddingAPIWithRetry(texts, cfg).then((result) => ({
+          ...result,
+          startIndex,
+        }))
+      )
+    );
 
-    for (let j = 0; j < result.embeddings.length; j++) {
-      allEmbeddings[startIndex + j] = result.embeddings[j]!;
+    for (const result of results) {
+      for (let j = 0; j < result.embeddings.length; j++) {
+        allEmbeddings[result.startIndex + j] = result.embeddings[j]!;
+      }
+      totalTokens += result.tokensUsed;
     }
 
-    totalTokens += result.tokensUsed;
-
-    if (i < batches.length - 1) {
-      await delay(100);
+    if (wave + concurrency < batches.length) {
+      await delay(200);
     }
   }
 
@@ -188,6 +201,7 @@ async function callEmbeddingAPI(
       input: sanitizedTexts,
       dimensions: config.dimensions,
     }),
+    signal: AbortSignal.timeout(90_000),
   });
 
   if (!response.ok) {

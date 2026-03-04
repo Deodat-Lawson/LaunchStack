@@ -14,8 +14,8 @@ jest.mock("~/env", () => ({
 }));
 
 import * as fc from "fast-check";
-import { executeSearch } from "~/server/trend-search/web-search";
-import type { PlannedQuery, SearchCategory } from "~/server/trend-search/types";
+import { executeSearch } from "~/lib/tools/trend-search/web-search";
+import type { PlannedQuery, SearchCategory } from "~/lib/tools/trend-search/types";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

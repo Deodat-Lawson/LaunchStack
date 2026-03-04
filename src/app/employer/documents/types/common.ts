@@ -11,7 +11,8 @@ export type ViewMode =
   | "with-ai-qa-history"
   | "predictive-analysis"
   | "generator"
-  | "rewrite";
+  | "rewrite"
+  | "upload";
 
 export type AiPersona =
   | "general"

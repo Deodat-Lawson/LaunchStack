@@ -24,7 +24,7 @@ describe("RewritePreviewPanel", () => {
 
     expect(screen.getByText("Accept")).toBeInTheDocument();
     expect(screen.getByText("Reject")).toBeInTheDocument();
-    expect(screen.getByText("Try again")).toBeInTheDocument();
+    expect(screen.getByText("Try Again")).toBeInTheDocument();
   });
 
   it("calls onAccept when Accept is clicked", async () => {
@@ -65,7 +65,7 @@ describe("RewritePreviewPanel", () => {
     expect(onReject).toHaveBeenCalledTimes(1);
   });
 
-  it("calls onTryAgain when Try again is clicked", async () => {
+  it("calls onTryAgain when Try Again is clicked", async () => {
     const onAccept = jest.fn();
     const onReject = jest.fn();
     const onTryAgain = jest.fn();
@@ -80,7 +80,7 @@ describe("RewritePreviewPanel", () => {
       />
     );
 
-    await userEvent.click(screen.getByText("Try again"));
+    await userEvent.click(screen.getByText("Try Again"));
     expect(onTryAgain).toHaveBeenCalledTimes(1);
   });
 });

@@ -6,6 +6,9 @@ import { DeploymentNavbar } from './components/DeploymentNavbar';
 import { DeploymentSidebar } from './components/DeploymentSidebar';
 import {
   MainDeployment,
+  DockerDeploymentPage,
+  VercelDeploymentPage,
+  ClerkSetupPage,
   InngestPage,
   LangChainPage,
   TavilyPage,
@@ -80,6 +83,12 @@ const DeploymentPage = () => {
     switch (activeSection) {
       case 'main':
         return <MainDeployment {...props} />;
+      case 'docker':
+        return <DockerDeploymentPage {...props} />;
+      case 'vercel':
+        return <VercelDeploymentPage {...props} />;
+      case 'clerk':
+        return <ClerkSetupPage {...props} />;
       case 'inngest':
         return <InngestPage {...props} />;
       case 'langchain':
@@ -140,8 +149,8 @@ const DeploymentPage = () => {
         />
 
         {/* Main Content */}
-        <main className="flex-1 ml-72">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <main className="flex-1 ml-64">
+          <div className="max-w-3xl mx-auto px-6 lg:px-8 py-12">
             {renderActiveSection()}
           </div>
         </main>

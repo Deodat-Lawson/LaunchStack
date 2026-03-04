@@ -146,7 +146,6 @@ pnpm db:push
 ### 4) Run app
 
 ```bash
-pnpm inngest:dev
 pnpm run dev
 ```
 

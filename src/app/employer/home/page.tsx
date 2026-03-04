@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Upload, FileText, BarChart, Brain, Settings, Users, HelpCircle, Clock, MousePointerClick, Building2 } from "lucide-react";
+import { Upload, FileText, BarChart, Brain, Settings, Users, HelpCircle, Clock, MousePointerClick, Megaphone, Building2 } from "lucide-react";
 import styles from "~/styles/Employer/Home.module.css";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
@@ -124,6 +124,13 @@ const HomeScreen = () => {
             title: "Manage Employees",
             description: `View and manage ${stats ? stats.totalEmployees : ''} employees in your organization`,
             path: "/employer/employees",
+            isBeta: false,
+        },
+        {
+            icon: <Megaphone className={styles.menuIcon} />,
+            title: "Marketing Pipeline",
+            description: "Research trends and generate campaign-ready platform messages",
+            path: "/employer/tools/marketing-pipeline",
             isBeta: false,
         },
         {

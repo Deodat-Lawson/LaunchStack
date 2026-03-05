@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import React, { type FC } from 'react';
+import React from 'react';
 import {
     Brain, ArrowRight, FileSearch, Upload, Sparkles, CheckCircle,
-    Building2, BarChart3, Github, Heart, Code2, ExternalLink,
+    Github, Heart, Code2, ExternalLink,
 } from 'lucide-react';
 import { Navbar } from './_components/Navbar';
 

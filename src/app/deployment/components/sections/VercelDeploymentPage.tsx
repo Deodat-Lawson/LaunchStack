@@ -7,11 +7,9 @@ import {
   Database,
   Settings,
   Globe,
-  CheckCircle2,
   ShieldAlert,
   ExternalLink,
   Play,
-  Video,
 } from 'lucide-react';
 import type { DeploymentProps } from '../../types';
 import { Section, Step } from '../ui';

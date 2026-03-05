@@ -3,14 +3,11 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import {
-  Container,
   Server,
   Database,
   RefreshCw,
   CheckCircle2,
   ShieldAlert,
-  ExternalLink,
-  ArrowRight,
 } from 'lucide-react';
 import type { DeploymentProps } from '../../types';
 import { Section, Step } from '../ui';

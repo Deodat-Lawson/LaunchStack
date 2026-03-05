@@ -71,10 +71,10 @@ export async function POST(request: Request) {
     };
 
     if (description !== undefined) {
-      updateData.description = description?.trim() || null;
+      updateData.description = description?.trim() ?? null;
     }
     if (industry !== undefined) {
-      updateData.industry = industry?.trim() || null;
+      updateData.industry = industry?.trim() ?? null;
     }
 
     if (employerPasskey !== undefined) {

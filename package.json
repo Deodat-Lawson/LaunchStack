@@ -91,6 +91,7 @@
     "jszip": "^3.10.1",
     "katex": "^0.16.25",
     "langchain": "^0.3.33",
+    "lru-cache": "^11.2.6",
     "lucide-react": "^0.487.0",
     "mammoth": "^1.11.0",
     "marked": "^17.0.3",

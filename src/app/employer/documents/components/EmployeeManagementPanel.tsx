@@ -98,7 +98,7 @@ export function EmployeeManagementPanel() {
         if (!response.ok) { setError("Authentication failed."); return; }
         const data = (await response.json()) as { role?: string };
         if (data?.role === "employer" || data?.role === "owner") {
-          setUserRole(data.role as "owner" | "employer");
+          setUserRole(data.role);
           await Promise.all([loadEmployees(), loadInviteCodes()]);
         } else {
           setError("You don't have permission to manage employees.");

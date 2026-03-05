@@ -8,6 +8,9 @@ export const ANALYSIS_TYPES = [
   'financial',
   'technical',
   'compliance',
+  'educational',
+  'hr',
+  'research',
   'general'
 ] as const;
 

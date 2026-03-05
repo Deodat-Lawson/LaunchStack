@@ -69,7 +69,7 @@ export function EmployerDashboard({
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    void (async () => {
       try {
         const res = await fetch("/api/company/onboarding");
         if (!res.ok) return;

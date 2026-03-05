@@ -691,25 +691,40 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         );
       case "predictive-analysis":
         return (
-          <DocumentSanityChecker 
-            selectedDoc={selectedDoc}
-            predictiveAnalysis={predictiveAnalysis}
-            predictiveLoading={isPredictiveLoading}
-            predictiveError={predictiveError}
-            onRefreshAnalysis={() => {
-              if (selectedDoc) {
-                void fetchPredictiveAnalysis(selectedDoc.id, true);
-              }
-            }}
-            onSelectDocument={(docId, page) => {
-              const doc = documents.find(d => d.id === docId);
-              if (doc) {
-                setSelectedDoc(doc);
-                setPdfPageNumber(page);
-              }
-            }}
-            setPdfPageNumber={setPdfPageNumber}
-          />
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            <ResizablePanel defaultSize={60} minSize={35}>
+              <DocumentViewer 
+                document={selectedDoc} 
+                pdfPageNumber={pdfPageNumber}
+                setPdfPageNumber={setPdfPageNumber}
+              />
+            </ResizablePanel>
+            
+            <ResizableHandle className="w-px bg-border" />
+            
+            <ResizablePanel defaultSize={40} minSize={28} maxSize={55}>
+              <DocumentSanityChecker 
+                selectedDoc={selectedDoc}
+                predictiveAnalysis={predictiveAnalysis}
+                predictiveLoading={isPredictiveLoading}
+                predictiveError={predictiveError}
+                onRefreshAnalysis={() => {
+                  if (selectedDoc) {
+                    void fetchPredictiveAnalysis(selectedDoc.id, true);
+                  }
+                }}
+                onSelectDocument={(docId, page) => {
+                  const doc = documents.find(d => d.id === docId);
+                  if (doc) {
+                    setSelectedDoc(doc);
+                    setPdfPageNumber(page);
+                  }
+                }}
+                setPdfPageNumber={setPdfPageNumber}
+                currentPage={pdfPageNumber}
+              />
+            </ResizablePanel>
+          </ResizablePanelGroup>
         );
       case "document-only":
         return (

@@ -1,16 +1,24 @@
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { LRUCache } from "lru-cache";
+import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 
-const embeddingCache = new Map<string, number[]>();
+const EMBEDDING_MODEL = "text-embedding-3-large";
+const MAX_CACHE_ENTRIES = 500;
+
+const embeddingCache = new LRUCache<string, number[]>({
+    max: MAX_CACHE_ENTRIES,
+});
 
 export async function getEmbeddings(text: string): Promise<number[]> {
-    if (embeddingCache.has(text)) {
-        return embeddingCache.get(text)!;
+    const cached = embeddingCache.get(text);
+    if (cached) {
+        return cached;
     }
     
     try {
         const embeddings = new OpenAIEmbeddings({
             openAIApiKey: process.env.OPENAI_API_KEY,
-            modelName: "text-embedding-ada-002",
+            modelName: EMBEDDING_MODEL,
         });
         
         const [embedding] = await embeddings.embedDocuments([text]);
@@ -19,7 +27,7 @@ export async function getEmbeddings(text: string): Promise<number[]> {
         embeddingCache.set(text, result);
         return result;
     } catch (error) {
-        console.error("Error getting embeddings:", error);
+        console.error("Error getting embeddings:", sanitizeErrorMessage(error));
         return [];
     }
 }
@@ -30,7 +38,7 @@ export async function batchGetEmbeddings(texts: string[]): Promise<number[][]> {
     try {
         const embeddings = new OpenAIEmbeddings({
             openAIApiKey: process.env.OPENAI_API_KEY,
-            modelName: "text-embedding-ada-002",
+            modelName: EMBEDDING_MODEL,
         });
         
         const results = await embeddings.embedDocuments(uniqueTexts);
@@ -42,7 +50,7 @@ export async function batchGetEmbeddings(texts: string[]): Promise<number[][]> {
         
         return texts.map(text => embeddingMap.get(text) ?? []);
     } catch (error) {
-        console.error("Error getting batch embeddings:", error);
+        console.error("Error getting batch embeddings:", sanitizeErrorMessage(error));
         return texts.map(() => []);
     }
 }
@@ -54,6 +62,6 @@ export function clearEmbeddingCache(): void {
 export function getEmbeddingCacheStats() {
     return {
         size: embeddingCache.size,
-        entries: Array.from(embeddingCache.keys()).slice(0, 5) // First 5 keys for debugging
+        maxSize: MAX_CACHE_ENTRIES,
     };
-} 
+}

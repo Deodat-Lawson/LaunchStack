@@ -8,8 +8,6 @@ import {
   Megaphone,
   FileSearch,
   Upload,
-  MessageCircle,
-  Users,
   ArrowRight,
   ChevronRight,
   ChevronLeft,

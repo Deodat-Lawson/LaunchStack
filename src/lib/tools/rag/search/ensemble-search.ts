@@ -62,7 +62,7 @@ export async function createDocumentEnsembleRetriever(
   const bm25Retriever = await createDocumentBM25Retriever(documentId, candidateK);
   const vectorRetriever = createDocumentVectorRetriever(documentId, emb, candidateK, filters);
 
-  const retrievers = [bm25Retriever, vectorRetriever];
+  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
   let weights = options.weights ?? DEFAULT_WEIGHTS_2;
 
   if (isGraphRetrievalEnabled() && companyId != null) {
@@ -90,7 +90,7 @@ export async function createCompanyEnsembleRetriever(
   const bm25Retriever = await createCompanyBM25Retriever(companyId, candidateK);
   const vectorRetriever = createCompanyVectorRetriever(companyId, emb, candidateK, filters);
 
-  const retrievers = [bm25Retriever, vectorRetriever];
+  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
   let weights = options.weights ?? DEFAULT_WEIGHTS_2;
 
   if (isGraphRetrievalEnabled()) {
@@ -117,7 +117,7 @@ export async function createMultiDocEnsembleRetriever(
   const bm25Retriever = await createMultiDocBM25Retriever(documentIds, candidateK);
   const vectorRetriever = createMultiDocVectorRetriever(documentIds, emb, candidateK, filters);
 
-  const retrievers = [bm25Retriever, vectorRetriever];
+  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
   let weights = options.weights ?? DEFAULT_WEIGHTS_2;
 
   if (isGraphRetrievalEnabled() && companyId != null) {

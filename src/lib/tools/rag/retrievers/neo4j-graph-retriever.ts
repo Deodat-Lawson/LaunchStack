@@ -162,9 +162,11 @@ export class Neo4jGraphRetriever extends BaseRetriever {
     );
 
     return result.records.map((r) => {
-      const val = r.get("sectionId");
+      const val = r.get("sectionId") as
+        | number
+        | { toNumber: () => number };
       return typeof val === "object" && "toNumber" in val
-        ? (val as { toNumber: () => number }).toNumber()
+        ? val.toNumber()
         : Number(val);
     });
   }

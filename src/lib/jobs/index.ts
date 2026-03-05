@@ -3,20 +3,11 @@
  *
  * Returns the configured job dispatcher based on the JOB_RUNNER env var.
  * Default: Inngest (the core job runner).
- *
- * Supported values:
- * - "inngest"     (default) — uses Inngest for background processing
- * - "trigger-dev"           — uses Trigger.dev (requires @trigger.dev/sdk)
  */
 
 import type { JobDispatcher, JobRunner } from "./types";
 
 export type { JobDispatcher, DispatchResult, JobRunner } from "./types";
-
-/** Shape of the trigger-dev module (for require() type assertion) */
-interface TriggerDevModuleShape {
-  TriggerDevDispatcher: new () => JobDispatcher;
-}
 
 /** Shape of the inngest module (for require() type assertion) */
 interface InngestModuleShape {
@@ -32,7 +23,7 @@ let _dispatcher: JobDispatcher | null = null;
  */
 function getJobRunner(): JobRunner {
   const value = process.env.JOB_RUNNER?.toLowerCase().trim();
-  if (value === "trigger-dev") return "trigger-dev";
+  if (value === "inngest") return "inngest";
   return "inngest";
 }
 
@@ -47,12 +38,6 @@ export function getDispatcher(): JobDispatcher {
   let dispatcher: JobDispatcher;
 
   switch (runner) {
-    case "trigger-dev": {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { TriggerDevDispatcher } = require("./trigger-dev") as TriggerDevModuleShape;
-      dispatcher = new TriggerDevDispatcher();
-      break;
-    }
     case "inngest":
     default: {
       // eslint-disable-next-line @typescript-eslint/no-require-imports

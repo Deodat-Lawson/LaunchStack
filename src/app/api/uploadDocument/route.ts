@@ -10,16 +10,11 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { users, ocrJobs, document } from "~/server/db/schema";
-import { triggerDocumentProcessing, parseProvider } from "~/lib/ocr/trigger";
+import { users, ocrJobs } from "~/server/db/schema";
+import { processDocumentUpload } from "~/server/services/document-upload";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-
-/**
- * Storage type for uploaded documents
- */
-type StorageType = "cloud" | "database";
 
 /**
  * Request validation schema
@@ -35,39 +30,6 @@ const UploadDocumentSchema = z.object({
   /** MIME type of the uploaded file — used to route non-PDF files to the correct adapter */
   mimeType: z.string().optional(),
 });
-
-/**
- * Determines the storage type from the URL
- */
-function detectStorageType(url: string): StorageType {
-  // If it starts with /api/files/, it's database storage
-  if (url.startsWith("/api/files/")) {
-    return "database";
-  }
-  // If it's a full URL, it's cloud storage
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return "cloud";
-  }
-  // Default to database for other relative paths
-  return "database";
-}
-
-/**
- * Converts a relative URL to an absolute URL using the request origin
- */
-function toAbsoluteUrl(url: string, requestUrl: string): string {
-  // If already absolute, return as-is
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
-  }
-  
-  // Extract origin from request URL
-  const parsedUrl = new URL(requestUrl);
-  const origin = parsedUrl.origin;
-  
-  // Combine origin with relative path
-  return `${origin}${url.startsWith("/") ? "" : "/"}${url}`;
-}
 
 export async function POST(request: Request) {
   return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -92,16 +54,6 @@ export async function POST(request: Request) {
         `mime=${mimeType ?? "not provided"}, user=${userId}, provider=${preferredProvider ?? "auto"}`
       );
 
-      // Determine storage type (explicit or auto-detect)
-      const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
-      console.log(`[UploadDocument] Storage type: ${storageType} (explicit=${!!explicitStorageType})`);
-      
-      // Convert relative URLs to absolute for processing pipeline
-      const documentUrl = storageType === "database" 
-        ? toAbsoluteUrl(rawDocumentUrl, request.url)
-        : rawDocumentUrl;
-      console.log(`[UploadDocument] Resolved URL: ${documentUrl.substring(0, 120)}`);
-
       const [userInfo] = await db
         .select()
         .from(users)
@@ -115,77 +67,33 @@ export async function POST(request: Request) {
         );
       }
 
-      const companyId = userInfo.companyId.toString();
-      const documentCategory = category ?? "Uncategorized";
-
-      // Store the original URL (relative for database, full for cloud)
-      // This preserves the reference for later retrieval
-      console.log(`[UploadDocument] Creating document record: company=${companyId}, category=${documentCategory}`);
-      const [newDocument] = await db.insert(document).values({
-        url: rawDocumentUrl,
-        title: documentName,
-        category: documentCategory,
-        companyId: userInfo.companyId,
-        ocrEnabled: true,
-        ocrProcessed: false,
-      }).returning({
-        id: document.id,
-        url: document.url,
-        title: document.title,
-        category: document.category,
-      });
-
-      if (!newDocument) {
-        console.error("[UploadDocument] Database insert returned no document record");
-        return NextResponse.json(
-          { error: "Failed to create document record" },
-          { status: 500 }
-        );
-      }
-
-      console.log(`[UploadDocument] Document created: id=${newDocument.id}, triggering pipeline...`);
-
-      // Use absolute URL for processing pipeline (it needs to fetch the file)
-      const { jobId, eventIds } = await triggerDocumentProcessing(
-        documentUrl,
+      const uploadResult = await processDocumentUpload({
+        user: {
+          userId,
+          companyId: userInfo.companyId,
+        },
         documentName,
-        companyId,
-        userId,
-        newDocument.id,
-        documentCategory,
-        {
-          preferredProvider: parseProvider(preferredProvider),
-          mimeType,
-        }
-      );
-
-      await db.insert(ocrJobs).values({
-        id: jobId,
-        companyId: userInfo.companyId,
-        userId,
-        status: "queued",
-        documentUrl,
-        documentName,
+        rawDocumentUrl,
+        category,
+        preferredProvider,
+        explicitStorageType,
+        mimeType,
+        requestUrl: request.url,
       });
 
       console.log(
-        `[UploadDocument] Pipeline triggered: jobId=${jobId}, docId=${newDocument.id}, ` +
-        `mime=${mimeType ?? "none"}, eventIds=${eventIds.length}`
+        `[UploadDocument] Pipeline triggered: jobId=${uploadResult.jobId}, docId=${uploadResult.document.id}, ` +
+        `mime=${mimeType ?? "none"}, eventIds=${uploadResult.eventIds.length}`
       );
 
       return NextResponse.json(
         {
           success: true,
-          jobId,
-          eventIds,
+          jobId: uploadResult.jobId,
+          eventIds: uploadResult.eventIds,
           message: "Document processing started",
-          storageType,
-          document: {
-            id: newDocument.id,
-            title: newDocument.title,
-            url: newDocument.url,
-            category: newDocument.category,
-          },
+          storageType: uploadResult.storageType,
+          document: uploadResult.document,
         },
         { status: 202 }
       );

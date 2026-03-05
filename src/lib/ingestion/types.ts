@@ -84,6 +84,7 @@ export interface SourceAdapterOptions {
 
 export const MIME_TO_SOURCE_TYPE: Record<string, SourceType> = {
   "application/pdf": "pdf",
+  "application/zip": "unknown",
   "image/png": "image",
   "image/jpeg": "image",
   "image/jpg": "image",
@@ -108,6 +109,7 @@ export const MIME_TO_SOURCE_TYPE: Record<string, SourceType> = {
 
 export const EXTENSION_TO_SOURCE_TYPE: Record<string, SourceType> = {
   ".pdf": "pdf",
+  ".zip": "unknown",
   ".png": "image",
   ".jpg": "image",
   ".jpeg": "image",

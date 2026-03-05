@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
-import { db, toRows } from "~/server/db/index";
+import { db } from "~/server/db/index";
 import { eq, sql } from "drizzle-orm";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
@@ -12,7 +12,7 @@ import {
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { users, document } from "~/server/db/schema";
+import { users, document, documentSections } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -23,19 +23,13 @@ import {
     getChatModel,
     getEmbeddings,
     extractRecommendedPages,
+    filterPagesByAICitation,
 } from "../services";
 import type { AIModelType } from "../services";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
-
-type SectionRow = Record<string, unknown> & {
-    id: number;
-    content: string;
-    page: number | null;
-    distance: number;
-};
 
 const qaAnnOptimizer = new ANNOptimizer({ 
     strategy: 'hnsw',
@@ -193,20 +187,17 @@ export async function POST(request: Request) {
                     const questionEmbedding = await embeddings.embedQuery(question);
                     const bracketedEmbedding = `[${questionEmbedding.join(",")}]`;
 
-                    const query = sql`
-                      SELECT
-                        id,
-                        content,
-                        page_number as page,
-                        embedding <-> ${bracketedEmbedding}::vector(1536) AS distance
-                      FROM pdr_ai_v2_document_sections
-                      WHERE document_id = ${documentId}
-                      ORDER BY embedding <-> ${bracketedEmbedding}::vector(1536)
-                      LIMIT 3
-                    `;
+                    const rows = await db.select({
+                        id: documentSections.id,
+                        content: documentSections.content,
+                        page: documentSections.pageNumber,
+                        distance: sql<number>`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`,
+                    })
+                    .from(documentSections)
+                    .where(eq(documentSections.documentId, BigInt(documentId)))
+                    .orderBy(sql`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`)
+                    .limit(3);
 
-                    const result = await db.execute<SectionRow>(query);
-                    const rows = toRows<SectionRow>(result);
                     documents = rows.map((row) => ({
                         pageContent: row.content,
                         metadata: {
@@ -279,10 +270,13 @@ export async function POST(request: Request) {
 
             recordResult("success");
 
+            const allCandidatePages = extractRecommendedPages(documents);
+            const recommendedPages = filterPagesByAICitation(summarizedAnswer, allCandidatePages);
+
             return NextResponse.json({
                 success: true,
                 summarizedAnswer,
-                recommendedPages: extractRecommendedPages(documents),
+                recommendedPages,
                 retrievalMethod,
                 processingTimeMs: totalTime,
                 chunksAnalyzed: documents.length,

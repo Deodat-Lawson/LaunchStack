@@ -24,14 +24,17 @@ export const uploadDocument = inngest.createFunction(
     id: "process-document",
     name: "Document Ingestion Pipeline (V2)",
     retries: 5,
+    concurrency: [{ limit: 3 }],
+    throttle: { limit: 30, period: "1m" },
+    timeouts: { finish: "120m" },
     onFailure: async ({ error, event }) => {
       console.error(`[ProcessDocument] Pipeline failed for job ${JSON.stringify(event.data)}:`, error);
     },
   },
   { event: "document/process.requested" },
   async ({ event, step }) => {
-    const eventData = event.data as ProcessDocumentEventData;
-    return runDocIngestionTool({
+    const eventData = event.data;
+    const result = await runDocIngestionTool({
       ...eventData,
       runtime: {
         updateJobStatus: false,
@@ -40,5 +43,18 @@ export const uploadDocument = inngest.createFunction(
           step.run(stepName, fn) as Promise<T>,
       },
     });
+
+    // Trigger company metadata extraction after successful ingestion
+    if (result.success && eventData.documentId && eventData.companyId) {
+      await step.sendEvent("trigger-metadata-extraction", {
+        name: "company-metadata/extract.requested" as const,
+        data: {
+          documentId: eventData.documentId,
+          companyId: String(eventData.companyId),
+        },
+      });
+    }
+
+    return result;
   },
 );

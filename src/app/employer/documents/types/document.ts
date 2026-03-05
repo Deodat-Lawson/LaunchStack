@@ -18,6 +18,8 @@ export interface DocumentType {
   url: string;
   /** MIME type when available (from API); otherwise inferred from URL/title */
   mimeType?: string;
+  /** Whether OCR processing has completed for this document */
+  ocrProcessed?: boolean;
 }
 
 /** Infer display type from document for viewer rendering */

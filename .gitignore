@@ -48,3 +48,6 @@ yarn-error.log*
 .windsurf/rules/markdowncreation.md
 /public/vad
 *.pyc
+
+# kiro
+.kiro

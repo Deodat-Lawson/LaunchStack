@@ -83,8 +83,9 @@ function transformCitations(citations: z.infer<typeof CitationSchema>[] | undefi
 
 /**
  * GET - List all generated documents for the authenticated user
+ * Query: ?templateId=rewrite to filter rewrite documents only
  */
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const { userId } = await auth();
         if (!userId) {
@@ -108,16 +109,21 @@ export async function GET() {
             );
         }
 
-        // Fetch all documents for this user
+        const { searchParams } = new URL(request.url);
+        const templateId = searchParams.get("templateId");
+
+        const conditions = [
+            eq(generatedDocuments.userId, userId),
+            eq(generatedDocuments.companyId, requestingUser.companyId),
+        ];
+        if (templateId) {
+            conditions.push(eq(generatedDocuments.templateId, templateId));
+        }
+
         const documents = await db
             .select()
             .from(generatedDocuments)
-            .where(
-                and(
-                    eq(generatedDocuments.userId, userId),
-                    eq(generatedDocuments.companyId, requestingUser.companyId)
-                )
-            )
+            .where(and(...conditions))
             .orderBy(desc(generatedDocuments.updatedAt));
 
         return NextResponse.json({

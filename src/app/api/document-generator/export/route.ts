@@ -4,19 +4,68 @@
  * Export documents to various formats:
  * - PDF (using pdf-lib)
  * - Markdown (raw markdown)
- * - HTML (rendered from markdown)
+ * - HTML (rendered from markdown or raw HTML)
  * - Plain Text
+ * 
+ * Supports both Markdown and HTML input (WYSIWYG editor saves HTML to preserve formatting).
  */
 
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { PDFDocument, StandardFonts } from "pdf-lib";
+import TurndownService from "turndown";
+
+const turndown = new TurndownService({ headingStyle: "atx" });
+turndown.keep(["u"]);
 
 // Helper function to create RGB color for pdf-lib
 function rgb(r: number, g: number, b: number) {
     return { type: 1 as const, red: r, green: g, blue: b };
 }
 import { z } from "zod";
+
+/** Detect if content is HTML (from WYSIWYG editor). */
+function isHtml(content: string): boolean {
+    const trimmed = content.trim();
+    return trimmed.startsWith("<") && trimmed.includes(">");
+}
+
+/** Convert HTML to plain text by stripping tags. */
+function htmlToText(html: string): string {
+    return html
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/<\/p>/gi, "\n\n")
+        .replace(/<\/li>/gi, "\n")
+        .replace(/<\/tr>/gi, "\n")
+        .replace(/<[^>]+>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+}
+
+/** Normalize content to Markdown (handles both HTML and Markdown input). */
+function toMarkdown(content: string): string {
+    if (isHtml(content)) {
+        try {
+            return turndown.turndown(content);
+        } catch {
+            return htmlToText(content);
+        }
+    }
+    return content;
+}
+
+/** Normalize content to plain text (handles both HTML and Markdown input). */
+function toPlainText(content: string): string {
+    if (isHtml(content)) {
+        return htmlToText(content);
+    }
+    return markdownToText(content);
+}
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -315,7 +364,7 @@ export async function POST(request: Request) {
                 break;
 
             case "markdown":
-                let mdContent = content;
+                let mdContent = toMarkdown(content);
                 if (options?.includeCitations && options.bibliography) {
                     mdContent += `\n\n---\n\n## References\n\n${options.bibliography}`;
                 }
@@ -325,17 +374,42 @@ export async function POST(request: Request) {
                 break;
 
             case "html":
-                let htmlContent = content;
-                if (options?.includeCitations && options.bibliography) {
-                    htmlContent += `\n\n---\n\n## References\n\n${options.bibliography}`;
+                if (isHtml(content)) {
+                    const refs = options?.includeCitations && options.bibliography
+                        ? `\n<hr>\n<h2>References</h2>\n<p>${options.bibliography.replace(/\n/g, "</p><p>")}</p>\n`
+                        : "";
+                    const bodyContent = content.trim() + refs;
+                    exportedContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        body { font-family: Georgia, serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 40px 20px; color: #333; }
+        h1,h2,h3,h4,h5,h6 { font-family: system-ui, sans-serif; margin-top: 1.5em; margin-bottom: 0.5em; }
+        p { margin: 1em 0; }
+        ul,ol { margin: 1em 0; padding-left: 2em; }
+        li { margin: 0.5em 0; }
+        [style*="text-align:center"] { text-align: center; }
+        [style*="text-align:right"] { text-align: right; }
+    </style>
+</head>
+<body>${bodyContent}</body>
+</html>`;
+                } else {
+                    let htmlContent = content;
+                    if (options?.includeCitations && options.bibliography) {
+                        htmlContent += `\n\n---\n\n## References\n\n${options.bibliography}`;
+                    }
+                    exportedContent = markdownToHtml(htmlContent, title);
                 }
-                exportedContent = markdownToHtml(htmlContent, title);
                 contentType = "text/html";
                 filename = `${title.replace(/[^a-zA-Z0-9]/g, "_")}.html`;
                 break;
 
             case "text":
-                let textContent = markdownToText(content);
+                let textContent = toPlainText(content);
                 if (options?.includeCitations && options.bibliography) {
                     textContent += `\n\n---\n\nReferences\n\n${markdownToText(options.bibliography)}`;
                 }

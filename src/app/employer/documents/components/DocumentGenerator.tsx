@@ -61,15 +61,17 @@ export function DocumentGenerator() {
       const data = await response.json() as { success: boolean; message?: string; documents?: APIDocument[] };
       
       if (data.success && data.documents) {
-        const docs: GeneratedDocument[] = data.documents.map((doc: APIDocument) => ({
-          id: doc.id.toString(),
-          title: doc.title,
-          template: doc.templateId ?? 'Custom',
-          lastEdited: formatRelativeTime(doc.updatedAt ?? doc.createdAt),
-          content: doc.content,
-          citations: doc.citations,
-          metadata: doc.metadata,
-        }));
+        const docs: GeneratedDocument[] = data.documents
+          .filter((doc: APIDocument) => doc.templateId !== 'rewrite')
+          .map((doc: APIDocument) => ({
+            id: doc.id.toString(),
+            title: doc.title,
+            template: doc.templateId ?? 'Custom',
+            lastEdited: formatRelativeTime(doc.updatedAt ?? doc.createdAt),
+            content: doc.content,
+            citations: doc.citations,
+            metadata: doc.metadata,
+          }));
         setGeneratedDocuments(docs);
       } else {
         setError(data.message ?? 'Failed to fetch documents');

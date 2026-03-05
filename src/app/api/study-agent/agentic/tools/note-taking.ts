@@ -16,10 +16,10 @@ import { and, eq } from "drizzle-orm";
 // but the handler intentionally rejects it (see switch below).
 const NoteSchema = z.object({
   action: z
-    .enum(["create", "update", "delete"]) // TODO: add "search" or "list" actions
+    .enum(["create", "update", "delete", "list", "get"])
     .describe("The action to perform on notes"),
   userId: z.string().describe("The user ID"),
-  noteId: z.string().optional().describe("Note ID for update/delete actions"), // TODO: add "get" action
+  noteId: z.string().optional().describe("Note ID for update/get actions"),
   data: z
     .object({
       title: z.string().optional(),
@@ -29,21 +29,30 @@ const NoteSchema = z.object({
     })
     .optional()
     .describe("Note data for create/update actions"),
+  filters: z
+    .object({
+      tags: z.array(z.string()).optional(),
+    })
+    .optional()
+    .describe("Optional filters for list action (e.g. filter by tags)"),
   sessionId: z.number().describe("Session ID to associate the note"),
 });
 
 /**
  * Manage study notes
- * Only supports:
+ * Supports:
  * - create
- * - update (used as "manage")
- * - delete
+ * - update
+ * - list  (returns all notes for the session, with optional tag filter)
+ * - get   (returns a single note by ID)
+ * - delete (schema-compatible stub; intentionally rejected)
  */
 export async function manageNotes(
   input: NoteInput & { userId: string; sessionId: number }
 ): Promise<{
   success: boolean;
   note?: StudyNote;
+  notes?: StudyNote[];
   message: string;
 }> {
   const now = new Date();
@@ -160,12 +169,79 @@ export async function manageNotes(
       };
     }
 
+    case "list": {
+      const rows = await db
+        .select()
+        .from(studyAgentNotes)
+        .where(
+          and(
+            eq(studyAgentNotes.userId, input.userId),
+            eq(studyAgentNotes.sessionId, BigInt(session.id))
+          )
+        );
+
+      let notes = rows.map(mapRowToNote);
+
+      // Apply optional tag filter when provided.
+      const filterTags = (input as NoteInput & { filters?: { tags?: string[] } }).filters?.tags;
+      if (filterTags && filterTags.length > 0) {
+        notes = notes.filter((n) =>
+          filterTags.some((tag) => n.tags.includes(tag))
+        );
+      }
+
+      console.log(`📝 [Notes] Listed ${notes.length} note(s) for session ${session.id}`);
+
+      return {
+        success: true,
+        notes,
+        message: notes.length > 0
+          ? `Found ${notes.length} note(s).`
+          : "No notes found for this session.",
+      };
+    }
+
+    case "get": {
+      if (!input.noteId) {
+        return { success: false, message: "Note ID is required for get" };
+      }
+
+      const noteId = Number.parseInt(input.noteId, 10);
+      if (Number.isNaN(noteId)) {
+        return { success: false, message: "Invalid note ID" };
+      }
+
+      const [row] = await db
+        .select()
+        .from(studyAgentNotes)
+        .where(
+          and(
+            eq(studyAgentNotes.id, noteId),
+            eq(studyAgentNotes.userId, input.userId),
+            eq(studyAgentNotes.sessionId, BigInt(session.id))
+          )
+        );
+
+      if (!row) {
+        return { success: false, message: "Note not found" };
+      }
+
+      const note = mapRowToNote(row);
+      console.log(`📝 [Notes] Retrieved note: ${note.title}`);
+
+      return {
+        success: true,
+        note,
+        message: `Retrieved note "${note.title}"`,
+      };
+    }
+
     // We intentionally do NOT support delete anymore.
     // Schema still includes it, so we return a clear error.
     case "delete":
       return {
         success: false,
-        message: 'Action "delete" is not supported. Only "create" and "update" are available.',
+        message: 'Action "delete" is not supported. Use "create", "update", "list", or "get".',
       };
 
     default:
@@ -185,6 +261,7 @@ export const noteTakingTool = tool(
         userId: input.userId,
         noteId: input.noteId,
         data: input.data,
+        filters: input.filters,
         sessionId: input.sessionId,
       });
 
@@ -200,11 +277,17 @@ export const noteTakingTool = tool(
     name: "take_notes",
     description: `Create and manage study notes.
       Supported actions:
-      - create: Create a new note
-      - update: Update an existing note (manage)
-      - delete: Delete an existing note
+      - create: Create a new note (requires data.title or data.content)
+      - update: Update an existing note (requires noteId)
+      - list:   List all notes for the current session (optional: filters.tags to narrow results)
+      - get:    Retrieve a single note by ID (requires noteId)
 
-      Examples: "Take a note about photosynthesis", "Update my chemistry note with this new reaction"`,
-    schema: NoteSchema, // unchanged
+      Examples:
+        "Take a note about photosynthesis"
+        "Update my chemistry note with this new reaction"
+        "Show me all my notes"
+        "Get note 42"
+        "List notes tagged 'biology'"`,
+    schema: NoteSchema,
   }
 );

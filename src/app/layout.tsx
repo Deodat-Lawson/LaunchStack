@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`} suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
       <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="dark" enableSystem>
         {children}
         <Analytics />

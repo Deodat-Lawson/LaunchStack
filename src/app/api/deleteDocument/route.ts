@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from "../../../server/db/index";
-import { document, ChatHistory, documentReferenceResolution, documentSections, documentStructure, documentMetadata, documentPreviews, workspaceResults, users } from "../../../server/db/schema";
+import { document, ChatHistory, documentReferenceResolution, documentSections, documentRetrievalChunks, documentStructure, documentMetadata, documentPreviews, documentViews, predictiveDocumentAnalysisResults, workspaceResults, users, kgEntityMentions } from "../../../server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
@@ -52,10 +52,16 @@ export async function DELETE(request: Request) {
         await db.delete(documentReferenceResolution).where(
             eq(documentReferenceResolution.resolvedInDocumentId, documentId)
         );
+        await db.delete(predictiveDocumentAnalysisResults).where(eq(predictiveDocumentAnalysisResults.documentId, BigInt(documentId)));
+        await db.delete(documentViews).where(eq(documentViews.documentId, BigInt(documentId)));
 
-        // Delete RLM schema tables (documentSections, documentStructure, documentMetadata, etc.)
+        // Delete RLM schema tables — order matters for FK constraints:
+        // kgEntityMentions & workspaceResults & documentPreviews reference documentSections (contextChunks),
+        // documentRetrievalChunks references both documentSections and document.
+        await db.delete(kgEntityMentions).where(eq(kgEntityMentions.documentId, BigInt(documentId)));
         await db.delete(workspaceResults).where(eq(workspaceResults.documentId, BigInt(documentId)));
         await db.delete(documentPreviews).where(eq(documentPreviews.documentId, BigInt(documentId)));
+        await db.delete(documentRetrievalChunks).where(eq(documentRetrievalChunks.documentId, BigInt(documentId)));
         await db.delete(documentSections).where(eq(documentSections.documentId, BigInt(documentId)));
         await db.delete(documentStructure).where(eq(documentStructure.documentId, BigInt(documentId)));
         await db.delete(documentMetadata).where(eq(documentMetadata.documentId, BigInt(documentId)));

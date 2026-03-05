@@ -7,15 +7,29 @@ const requiredString = () =>
   z.preprocess(normalize, z.string().min(1, "Value is required"));
 
 const optionalString = () =>
-  z.preprocess(normalize, z.string().min(1)).optional();
+  z.preprocess(normalize, z.string().min(1).optional());
 
 const serverSchema = z.object({
   DATABASE_URL: z.preprocess(normalize, z.string().url()),
   OPENAI_API_KEY: requiredString(),
   CLERK_SECRET_KEY: requiredString(),
+  BLOB_READ_WRITE_TOKEN: optionalString(),
   UPLOADTHING_TOKEN: optionalString(),
   DATALAB_API_KEY: optionalString(),
+  // Web search providers
   TAVILY_API_KEY: optionalString(),
+  SERPER_API_KEY: optionalString(),
+  SEARCH_PROVIDER: z
+    .enum(["tavily", "serper", "fallback", "parallel"])
+    .optional(),
+  // Platform API Keys for Marketing Pipeline
+  REDDIT_CLIENT_ID: optionalString(),
+  REDDIT_CLIENT_SECRET: optionalString(),
+  REDDIT_USER_AGENT: optionalString(),
+  TWITTER_BEARER_TOKEN: optionalString(),
+  LINKEDIN_ACCESS_TOKEN: optionalString(),
+  BLUESKY_HANDLE: optionalString(),
+  BLUESKY_APP_PASSWORD: optionalString(),
   // Azure Document Intelligence (for OCR pipeline)
   AZURE_DOC_INTELLIGENCE_ENDPOINT: optionalString(),
   AZURE_DOC_INTELLIGENCE_KEY: optionalString(),
@@ -28,8 +42,8 @@ const serverSchema = z.object({
   ),
   LANGCHAIN_API_KEY: optionalString(),
   LANGCHAIN_PROJECT: optionalString(), // Optional project name for LangSmith
-  // Job runner backend: "inngest" (default) or "trigger-dev"
-  JOB_RUNNER: z.enum(["inngest", "trigger-dev"]).default("inngest"),
+  // Job runner backend
+  JOB_RUNNER: z.enum(["inngest"]).default("inngest"),
   // Inngest event key — required in production; optional in development
   INNGEST_EVENT_KEY: optionalString(),
   // Sidecar configuration (optional, for local ML compute)
@@ -78,16 +92,31 @@ function parseServerEnv() {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+    SERPER_API_KEY: process.env.SERPER_API_KEY,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as
+      | "tavily"
+      | "serper"
+      | "fallback"
+      | "parallel"
+      | undefined,
+    REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
+    REDDIT_CLIENT_SECRET: process.env.REDDIT_CLIENT_SECRET,
+    REDDIT_USER_AGENT: process.env.REDDIT_USER_AGENT,
+    TWITTER_BEARER_TOKEN: process.env.TWITTER_BEARER_TOKEN,
+    LINKEDIN_ACCESS_TOKEN: process.env.LINKEDIN_ACCESS_TOKEN,
+    BLUESKY_HANDLE: process.env.BLUESKY_HANDLE,
+    BLUESKY_APP_PASSWORD: process.env.BLUESKY_APP_PASSWORD,
     AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
     AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY,
     LANDING_AI_API_KEY: process.env.LANDING_AI_API_KEY,
     LANGCHAIN_TRACING_V2: process.env.LANGCHAIN_TRACING_V2,
     LANGCHAIN_API_KEY: process.env.LANGCHAIN_API_KEY,
     LANGCHAIN_PROJECT: process.env.LANGCHAIN_PROJECT,
-    JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | "trigger-dev" | undefined,
+    JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
@@ -96,6 +125,7 @@ function parseServerEnv() {
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
   });
   if (
+    !skipValidation &&
     (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)
   ) {
     throw new Error("INNGEST_EVENT_KEY is required in production");

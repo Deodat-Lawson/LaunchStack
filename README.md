@@ -2,7 +2,7 @@
 
 PDR AI is a Next.js platform for role-based document management, AI-assisted Q&A, and predictive document analysis. It combines document upload, optional OCR, embeddings, and retrieval to help teams find gaps and act faster.
 
-## ✨ Core Features
+## Core Features
 
 - Clerk-based Employer/Employee authentication with role-aware middleware.
 - Document upload pipeline with optional OCR for scanned PDFs.
@@ -11,7 +11,7 @@ PDR AI is a Next.js platform for role-based document management, AI-assisted Q&A
 - Optional web-enriched analysis with Tavily.
 - Optional reliability/observability via Inngest and LangSmith.
 
-## 🏗️ Architecture
+## Architecture
 
 PDR AI follows a three-layer modular architecture:
 
@@ -91,7 +91,7 @@ The platform is organized into:
 
 All services operate within domain-partitioned boundaries enforced by Clerk RBAC. RAG queries are scoped by `domain + company_id` to ensure data isolation.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - Next.js 15 + TypeScript
 - PostgreSQL + Drizzle ORM + pgvector
@@ -100,14 +100,14 @@ All services operate within domain-partitioned boundaries enforced by Clerk RBAC
 - UploadThing + optional OCR providers
 - Tailwind CSS
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js 18+
 - pnpm
 - Docker + Docker Compose (recommended for local DB/full stack)
 - Git
 
-## ⚡ Quick Start
+## Quick Start
 
 ### 1) Clone and install
 
@@ -124,6 +124,7 @@ Create `.env` from `.env.example` and fill required values:
 - `DATABASE_URL`
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `CLERK_SECRET_KEY`
+- `BLOB_READ_WRITE_TOKEN` (Vercel Blob read/write token)
 - `OPENAI_API_KEY`
 - `INNGEST_EVENT_KEY`, as placeholder
 
@@ -141,6 +142,18 @@ Optional integrations:
 - `NEO4J_USERNAME`
 - `NEO4J_PASSWORD`
 
+### 2.1) Configure Vercel Blob Storage
+
+Vercel Blob is used for storing uploaded documents. Both **public** and **private** stores are supported -- the upload logic auto-detects which mode the store uses and adapts automatically.
+
+1. In the Vercel dashboard, go to **Storage → Blob → Create Store**.
+2. Choose either **Public** or **Private** access. Both work:
+   - **Public** stores produce URLs the browser can load directly (faster for previews).
+   - **Private** stores keep files behind authentication; the app proxies content through `/api/documents/[id]/content` and `/api/files/[id]` so previews still work.
+3. Generate a **Read/Write token** for the store and add it as `BLOB_READ_WRITE_TOKEN` in your environment (`.env` locally, or Vercel Project Settings for deploys).
+4. Redeploy so the token is available at build and runtime.
+5. Verify: sign in to the Employer Upload page, upload a small PDF, and confirm `/api/upload-local` returns a `vercel-storage.com` URL without errors.
+
 ### 3) Start database and apply schema
 
 ```bash
@@ -150,13 +163,12 @@ pnpm db:push
 ### 4) Run app
 
 ```bash
-pnpm inngest:dev
 pnpm run dev
 ```
 
 Open `http://localhost:3000`.
 
-## 🐳 Docker Deployment Methods
+## Docker Deployment Methods
 
 ### Method 1: Full stack (recommended)
 
@@ -195,14 +207,14 @@ pnpm dev
 
 For host DB tools, use `localhost:5433`.
 
-## 🧩 How Docker Supports Platform Features
+## How Docker Supports Platform Features
 
 - `app` service runs auth, upload, OCR integration, RAG chat, and predictive analysis.
 - `db` service provides pgvector-backed storage/retrieval for embeddings.
 - `migrate` service ensures schema readiness before app startup.
 - Optional providers (Inngest, Tavily, OCR, LangSmith) are enabled by env vars in the same runtime.
 
-## 📚 Documentation
+## Documentation
 
 - Deployment details (Docker, Vercel, VPS): [docs/deployment.md](docs/deployment.md)
 - Feature workflows and architecture: [docs/feature-workflows.md](docs/feature-workflow.md)
@@ -210,19 +222,19 @@ For host DB tools, use `localhost:5433`.
 - Observability and metrics: [docs/observability.md](docs/observability.md)
 - **Manual testing (dev, post-PR):** [docs/manual-testing-guide.md](docs/manual-testing-guide.md)
 
-## 🔌 API Endpoints (high-level)
+## API Endpoints (high-level)
 
 - `POST /api/uploadDocument` - upload and process document (OCR optional)
 - `POST /api/LangChain` - document-grounded Q&A
 - `POST /api/agents/predictive-document-analysis` - detect gaps and recommendations
 - `GET /api/metrics` - Prometheus metrics stream
 
-## 🔐 User Roles
+## User Roles
 
 - **Employee**: view assigned documents, use AI chat/analysis.
 - **Employer**: upload/manage documents, categories, and employee access.
 
-## 🧪 Useful Scripts
+## Useful Scripts
 
 ```bash
 pnpm db:studio
@@ -234,14 +246,14 @@ pnpm build
 pnpm start
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 - Confirm Docker is running before DB startup.
 - If build issues occur: remove `.next` and reinstall dependencies.
 - If OCR UI is missing: verify OCR provider keys are configured.
 - If Docker image pull/build is corrupted: remove image and rebuild with `--no-cache`.
 
-## 🤝 Contributing
+## Contributing
 
 1. Create a feature branch.
 2. Make changes and run `pnpm check`.

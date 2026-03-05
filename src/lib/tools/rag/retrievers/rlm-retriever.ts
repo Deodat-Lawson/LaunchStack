@@ -16,7 +16,7 @@
  * 5. Workspace operations - Store/retrieve intermediate results
  */
 
-import { db, toRows } from "~/server/db/index";
+import { db } from "~/server/db/index";
 import { eq, and, sql, asc, desc, lte, inArray, isNull } from "drizzle-orm";
 import {
     documentStructure,
@@ -749,50 +749,38 @@ export class RLMRetriever {
         const queryEmbedding = await this.embeddings.embedQuery(query);
         const bracketedEmbedding = `[${queryEmbedding.join(",")}]`;
 
-        const sqlQuery = sql`
-            SELECT
-                s.id,
-                s.content,
-                s.token_count,
-                s.page_number,
-                s.semantic_type,
-                st.path as structure_path,
-                s.embedding <-> ${bracketedEmbedding}::vector(1536) AS distance
-            FROM pdr_ai_v2_document_sections s
-            LEFT JOIN pdr_ai_v2_document_structure st ON s.structure_id = st.id
-            WHERE s.document_id = ${documentId}
-            ORDER BY s.embedding <-> ${bracketedEmbedding}::vector(1536)
-            LIMIT ${topK}
-        `;
-
-        type SectionRow = {
-            id: number;
-            content: string;
-            token_count: number;
-            page_number: number | null;
-            semantic_type: string | null;
-            structure_path: string | null;
-            distance: number;
-        };
-        const results = await db.execute<SectionRow>(sqlQuery);
+        const results = await db.select({
+            id: documentSections.id,
+            content: documentSections.content,
+            tokenCount: documentSections.tokenCount,
+            pageNumber: documentSections.pageNumber,
+            semanticType: documentSections.semanticType,
+            structurePath: documentStructure.path,
+            distance: sql<number>`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`,
+        })
+        .from(documentSections)
+        .leftJoin(documentStructure, eq(documentSections.structureId, documentStructure.id))
+        .where(eq(documentSections.documentId, BigInt(documentId)))
+        .orderBy(sql`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`)
+        .limit(topK);
 
         // Apply token budget if specified
         let cumulative = 0;
         const sections: SectionWithCost[] = [];
 
-        for (const row of toRows<SectionRow>(results)) {
-            if (maxTokens && cumulative + row.token_count > maxTokens && sections.length > 0) {
+        for (const row of results) {
+            if (maxTokens && cumulative + row.tokenCount > maxTokens && sections.length > 0) {
                 break;
             }
 
-            cumulative += row.token_count;
+            cumulative += row.tokenCount;
             sections.push({
                 id: row.id,
                 content: row.content,
-                tokenCount: row.token_count,
-                pageNumber: row.page_number,
-                semanticType: row.semantic_type as SemanticType | null,
-                structurePath: row.structure_path,
+                tokenCount: row.tokenCount,
+                pageNumber: row.pageNumber,
+                semanticType: row.semanticType,
+                structurePath: row.structurePath,
                 cumulativeTokens: cumulative,
             });
         }

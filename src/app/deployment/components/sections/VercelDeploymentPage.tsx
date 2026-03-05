@@ -7,11 +7,9 @@ import {
   Database,
   Settings,
   Globe,
-  CheckCircle2,
   ShieldAlert,
   ExternalLink,
   Play,
-  Video,
 } from 'lucide-react';
 import type { DeploymentProps } from '../../types';
 import { Section, Step } from '../ui';
@@ -169,19 +167,39 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
           <Step
             number={3}
             title="Add environment variables"
-            description="Paste these into Vercel's Environment Variables panel before the first deploy."
+            description="Paste these into Vercel's Environment Variables panel before the first deploy. BLOB_READ_WRITE_TOKEN is auto-injected when you connect a Blob store (see below)."
             code={`DATABASE_URL=postgresql://<neon-connection-string>
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx
 CLERK_SECRET_KEY=sk_live_xxx
 OPENAI_API_KEY=sk-proj-xxx
-INNGEST_EVENT_KEY=evt_xxx`}
-            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nOPENAI_API_KEY=sk-proj-xxx\nINNGEST_EVENT_KEY=evt_xxx`, 'v-2')}
+INNGEST_EVENT_KEY=evt_xxx
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
+            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nOPENAI_API_KEY=sk-proj-xxx\nINNGEST_EVENT_KEY=evt_xxx\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`, 'v-2')}
             copied={copiedCode === 'v-2'}
             darkMode={darkMode}
           />
 
           <Step
             number={4}
+            title="Create a Vercel Blob store"
+            description="Go to your Vercel project → Storage → Create Database → Blob. Connect it to your project — this auto-injects BLOB_READ_WRITE_TOKEN. Document uploads will fail without this."
+            onCopy={() => copyToClipboard('https://vercel.com/dashboard', 'v-blob')}
+            copied={copiedCode === 'v-blob'}
+            darkMode={darkMode}
+          >
+            <a
+              href="https://vercel.com/dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-purple-500 hover:text-purple-400 hover:underline font-medium"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              Vercel Dashboard → Storage
+            </a>
+          </Step>
+
+          <Step
+            number={5}
             title="Deploy"
             description="Click Deploy in your Vercel project dashboard. Vercel builds and publishes the app automatically."
             onCopy={() => copyToClipboard('https://vercel.com/dashboard', 'v-3')}
@@ -200,7 +218,7 @@ INNGEST_EVENT_KEY=evt_xxx`}
           </Step>
 
           <Step
-            number={5}
+            number={6}
             title="Validate"
             description="Open your production domain and confirm these routes work:"
             onCopy={() => copyToClipboard('https://your-app.vercel.app\nhttps://your-app.vercel.app/sign-in\nhttps://your-app.vercel.app/dashboard', 'v-4')}
@@ -231,9 +249,10 @@ INNGEST_EVENT_KEY=evt_xxx`}
             <tbody className={`divide-y ${darkMode ? 'divide-gray-700/60' : 'divide-gray-200'}`}>
               {[
                 ['Auth works', 'Sign in and sign out on production domain'],
-                ['Database connected', 'Upload a document — no connection errors in Vercel logs'],
+                ['Database connected', 'Check Vercel logs for successful DB queries, no ETIMEDOUT errors'],
+                ['Blob storage', 'Upload a document — check it stores successfully (no MissingBlobTokenError)'],
                 ['Document Q&A', 'Ask a question against an uploaded document'],
-                ['Background jobs', 'If INNGEST_EVENT_KEY is set, trigger a processing pipeline'],
+                ['Background jobs', 'Upload a document and verify the Inngest pipeline runs in the Inngest dashboard'],
               ].map(([check, how]) => (
                 <tr key={check} className={darkMode ? 'bg-gray-800/40' : 'bg-white'}>
                   <td className={`px-4 py-3 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{check}</td>

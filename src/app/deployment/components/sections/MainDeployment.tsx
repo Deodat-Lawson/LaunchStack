@@ -213,6 +213,12 @@ export const MainDeployment: React.FC<DeploymentProps> = ({
             </a>
             {' '}(recommended) and copy the connection string.
           </StepCard>
+
+          <StepCard icon={<Database className="w-5 h-5" />} title="Create a Vercel Blob store" darkMode={darkMode}>
+            In your Vercel project, go to <strong>Storage → Create Database → Blob</strong> and connect it to your project.
+            This provides the <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>BLOB_READ_WRITE_TOKEN</code> needed
+            for document uploads. See the <strong>Vercel Blob</strong> page in the sidebar for details.
+          </StepCard>
         </div>
       </Section>
 
@@ -250,8 +256,14 @@ export const MainDeployment: React.FC<DeploymentProps> = ({
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_your_key_here
 CLERK_SECRET_KEY=sk_live_your_key_here
 
-OPENAI_API_KEY=sk-proj-your_key_here`}
-            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"\n\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_your_key_here\nCLERK_SECRET_KEY=sk_live_your_key_here\n\nOPENAI_API_KEY=sk-proj-your_key_here`, 'step-3')}
+OPENAI_API_KEY=sk-proj-your_key_here
+
+# Vercel Blob — required for document uploads
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx
+
+# Inngest — use a placeholder for local dev
+INNGEST_EVENT_KEY=dev-placeholder`}
+            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"\n\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_your_key_here\nCLERK_SECRET_KEY=sk_live_your_key_here\n\nOPENAI_API_KEY=sk-proj-your_key_here\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'step-3')}
             copied={copiedCode === 'step-3'}
             darkMode={darkMode}
           />
@@ -302,13 +314,20 @@ OPENAI_API_KEY=sk-proj-your_key_here`}
         </div>
       </Section>
 
-      {/* ── More ways to integrate ── */}
+      {/* ── Required integrations ── */}
       <Section
-        title="More ways to integrate"
-        subtitle="Optional services you can enable via environment variables."
+        title="Required integrations"
+        subtitle="These services must be configured for PDR AI to function."
         darkMode={darkMode}
       >
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 gap-5">
+          <NavCard
+            icon={<Database className="w-5 h-5" />}
+            title="Vercel Blob"
+            description="Cloud file storage for document uploads. Required — there is no database fallback."
+            cta="Set up Vercel Blob"
+            darkMode={darkMode}
+          />
           <NavCard
             icon={<Zap className="w-5 h-5" />}
             title="Inngest"
@@ -316,6 +335,16 @@ OPENAI_API_KEY=sk-proj-your_key_here`}
             cta="Set up Inngest"
             darkMode={darkMode}
           />
+        </div>
+      </Section>
+
+      {/* ── Optional integrations ── */}
+      <Section
+        title="Optional integrations"
+        subtitle="Additional services you can enable via environment variables."
+        darkMode={darkMode}
+      >
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <NavCard
             icon={<Terminal className="w-5 h-5" />}
             title="LangChain Tracing"

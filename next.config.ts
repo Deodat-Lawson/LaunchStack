@@ -82,6 +82,9 @@ const config: NextConfig = {
     "@img/sharp-libvips-linuxmusl-x64",
     "@img/sharp-libvips-linux-x64",
     "pdf-lib",
+    "jszip",
+    "readable-stream",
+    "mammoth",
   ],
 };
 

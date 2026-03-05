@@ -51,7 +51,7 @@ docker compose --env-file .env --profile dev up
 
 1. Import repository into Vercel.
 2. Configure managed PostgreSQL (Vercel Postgres, Neon, Supabase, etc.).
-3. Set `DATABASE_URL` and app environment variables.
+3. Set `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, and the other app environment variables.
 4. Deploy with Vercel defaults.
 5. Apply schema once:
 
@@ -64,6 +64,12 @@ Optional integrations:
 - Inngest for background document processing
 - LangSmith for tracing
 - Sidecar (deploy separately and set `SIDECAR_URL`)
+
+### Verifying Blob uploads on Vercel
+
+1. After deploy, sign in to the Employer portal and open `/employer/upload`.
+2. Upload any small PDF or DOCX. The `/api/upload-local` response should return a `vercel-storage.com` URL.
+3. Paste that URL into a new tab. The file should download directly, confirming Blob access end to end.
 
 ## Option 3: VPS self-hosted (Node + reverse proxy)
 
@@ -89,7 +95,8 @@ Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
 | `CLERK_SECRET_KEY` | Yes | Clerk secret key |
 | `OPENAI_API_KEY` | Yes | OpenAI API key |
 | `INNGEST_EVENT_KEY` | Yes (prod) | Inngest event key for background jobs |
-| `UPLOADTHING_TOKEN` | Optional | UploadThing for cloud storage |
+| `BLOB_READ_WRITE_TOKEN` | Yes (Vercel) | Required for Vercel Blob uploads |
+| `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
 | `SIDECAR_URL` | Optional | Sidecar URL for reranking and Graph RAG |
 | `TAVILY_API_KEY` | Optional | Web search for analysis |
 | `AZURE_DOC_INTELLIGENCE_*` | Optional | OCR for scanned PDFs |

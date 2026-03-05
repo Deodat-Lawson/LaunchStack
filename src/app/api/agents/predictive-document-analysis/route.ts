@@ -3,7 +3,8 @@ import { db } from "~/server/db/index";
 import { eq, sql, and, gt, desc, ne } from "drizzle-orm";
 import { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-analysis/agent";
 import type { PredictiveAnalysisResult } from "~/app/api/agents/predictive-document-analysis/agent";
-import { predictiveDocumentAnalysisResults, document, pdfChunks } from "~/server/db/schema";
+import { predictiveDocumentAnalysisResults, document, pdfChunks, documentContextChunks, documentStructure } from "~/server/db/schema";
+import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 import {
     ANALYSIS_BATCH_CONFIG,
     ANALYSIS_TYPES,
@@ -46,6 +47,7 @@ type PredictiveAnalysisOutput = {
         totalMissingDocuments: number;
         highPriorityItems: number;
         totalRecommendations: number;
+        totalInsights: number;
         totalSuggestedRelated: number;
         analysisTimestamp: string;
     };
@@ -180,17 +182,46 @@ export async function POST(request: Request) {
             }, { status: HTTP_STATUS.NOT_FOUND });
         }
 
-        const chunksResults = await db
+        // Read from RLM table first (with structure headings), fall back to legacy pdfChunks
+        const rlmChunks = await db
             .select({
-                id: pdfChunks.id,
-                content: pdfChunks.content,
-                page: pdfChunks.page
+                id: documentContextChunks.id,
+                content: documentContextChunks.content,
+                page: documentContextChunks.pageNumber,
+                sectionHeading: documentStructure.title,
             })
-            .from(pdfChunks)
-            .where(eq(pdfChunks.documentId, BigInt(documentId)))
-            .orderBy(pdfChunks.id);
+            .from(documentContextChunks)
+            .leftJoin(
+                documentStructure,
+                eq(documentContextChunks.structureId, documentStructure.id)
+            )
+            .where(eq(documentContextChunks.documentId, BigInt(documentId)))
+            .orderBy(documentContextChunks.id);
 
-        if (chunksResults.length === 0) {
+        let chunks: PdfChunk[];
+
+        if (rlmChunks.length > 0) {
+            chunks = rlmChunks.map(c => ({
+                id: c.id,
+                content: c.content,
+                page: c.page ?? 1,
+                sectionHeading: c.sectionHeading,
+            }));
+        } else {
+            const legacyChunks = await db
+                .select({
+                    id: pdfChunks.id,
+                    content: pdfChunks.content,
+                    page: pdfChunks.page
+                })
+                .from(pdfChunks)
+                .where(eq(pdfChunks.documentId, BigInt(documentId)))
+                .orderBy(pdfChunks.id);
+
+            chunks = legacyChunks;
+        }
+
+        if (chunks.length === 0) {
             recordResult("error");
             return NextResponse.json({
                 success: false,
@@ -198,8 +229,6 @@ export async function POST(request: Request) {
                 errorType: ERROR_TYPES.VALIDATION
             }, { status: HTTP_STATUS.NOT_FOUND });
         }
-
-        const chunks: PdfChunk[] = chunksResults;
 
         let existingDocuments: string[] = [];
         if (includeRelatedDocs) {
@@ -252,6 +281,7 @@ export async function POST(request: Request) {
                 totalMissingDocuments: analysisResult.missingDocuments.length,
                 highPriorityItems: analysisResult.missingDocuments.filter(doc => doc.priority === 'high').length,
                 totalRecommendations: analysisResult.recommendations.length,
+                totalInsights: analysisResult.insights?.length ?? 0,
                 totalSuggestedRelated: analysisResult.suggestedRelatedDocuments?.length ?? 0,
                 analysisTimestamp: new Date().toISOString()
             },
@@ -273,7 +303,7 @@ export async function POST(request: Request) {
             fromCache: false
         }, { status: HTTP_STATUS.OK });
     } catch (error: unknown) {
-        console.error("Predictive Document Analysis Error:", error);
+        console.error("Predictive Document Analysis Error:", sanitizeErrorMessage(error));
 
         let status: number = HTTP_STATUS.INTERNAL_SERVER_ERROR;
         let message = "Failed to perform predictive document analysis";

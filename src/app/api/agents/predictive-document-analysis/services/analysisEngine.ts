@@ -162,7 +162,7 @@ function createAnalysisPrompt(
 
         If there are no notable insights, return an empty insights array.
 
-        ${guidanceByType[specification.type] || guidanceByType.general}
+        ${guidanceByType[specification.type] ?? guidanceByType.general}
 
         ${analysisInstructions}
 
@@ -429,12 +429,12 @@ export async function analyzeDocumentChunks(
         ]);
 
         const llmInsights: DocumentInsight[] = chunkResults.flatMap(
-            result => (result.insights ?? []) as DocumentInsight[],
+            result => result.insights ?? [],
         );
 
         const combinedResult: PredictiveAnalysisResult = {
-            missingDocuments: chunkResults.flatMap(result => result.missingDocuments || []),
-            recommendations: chunkResults.flatMap(result => result.recommendations || []),
+            missingDocuments: chunkResults.flatMap(result => result.missingDocuments ?? []),
+            recommendations: chunkResults.flatMap(result => result.recommendations ?? []),
         };
 
         combinedResult.missingDocuments = filterNonFindingDocuments(combinedResult.missingDocuments);
@@ -772,13 +772,13 @@ function promoteStrongRecommendations(
         const matchesPhrase = PROMOTION_PHRASES.some(p => lower.includes(p));
         if (!matchesPhrase) continue;
 
-        const nameMatch = rec.match(NAMED_DOC_PATTERN);
+        const nameMatch = NAMED_DOC_PATTERN.exec(rec);
         const docName = (nameMatch?.[1] ?? nameMatch?.[2] ?? '').trim();
         if (!docName || docName.length < 3) continue;
 
         if (existingNames.has(docName.toLowerCase())) continue;
 
-        const pageMatch = rec.match(PAGE_PATTERN);
+        const pageMatch = PAGE_PATTERN.exec(rec);
         const page = pageMatch ? parseInt(pageMatch[1]!, 10) : 1;
 
         promoted.push({

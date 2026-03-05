@@ -203,6 +203,7 @@ function LinkCard({ doc }: { doc: MissingDocument }) {
       )}
     >
       {faviconDomain ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={`https://www.google.com/s2/favicons?sz=32&domain=${faviconDomain}`}
           alt=""
@@ -331,6 +332,7 @@ function InsightCard({
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-150"
             >
               {faviconHost ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={`https://www.google.com/s2/favicons?sz=32&domain=${faviconHost}`}
                   alt=""
@@ -383,7 +385,10 @@ export function DocumentSanityChecker({
     return pages.size > 1;
   }, [issues]);
 
-  const insights = predictiveAnalysis?.analysis.insights ?? [];
+  const insights = useMemo(
+    () => predictiveAnalysis?.analysis.insights ?? [],
+    [predictiveAnalysis?.analysis.insights],
+  );
   const recommendations = predictiveAnalysis?.analysis.recommendations ?? [];
   const resolved = predictiveAnalysis?.analysis.resolvedDocuments ?? [];
   const webRefs = predictiveAnalysis?.analysis.suggestedRelatedDocuments ?? [];

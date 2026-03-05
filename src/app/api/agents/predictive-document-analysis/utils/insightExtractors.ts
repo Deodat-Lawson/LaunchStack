@@ -41,7 +41,7 @@ function extractSurroundingSentence(text: string, matchIndex: number, matchLengt
 
     let end = matchIndex + matchLength;
     const searchForward = text.slice(end, end + 300);
-    const fwdMatch = searchForward.match(sentenceBreak);
+    const fwdMatch = sentenceBreak.exec(searchForward);
     if (fwdMatch?.index !== undefined) {
         end = end + fwdMatch.index + fwdMatch[0].length;
     } else {
@@ -305,7 +305,7 @@ function buildResourceTitle(url: string, context: string, hostname: string): str
         return `Watch: Video on ${hostname.replace(/^www\./, '')}`;
     }
 
-    const actionMatch = context.match(RESOURCE_ACTION_RE);
+    const actionMatch = RESOURCE_ACTION_RE.exec(context);
     if (actionMatch) {
         const afterAction = context.slice((actionMatch.index ?? 0) + actionMatch[0].length).trim();
         const clean = afterAction.replace(/https?:\/\/[^\s]+/g, '').trim();

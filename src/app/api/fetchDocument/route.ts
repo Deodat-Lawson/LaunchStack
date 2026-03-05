@@ -105,7 +105,6 @@ export async function POST(request: Request) {
             const mimeType = mimeFromFile
                 ?? inferMimeFromName(doc.title)
                 ?? inferMimeFromName(doc.url);
-
             const url = isPrivateBlobUrl(doc.url)
                 ? `/api/documents/${Number(doc.id)}/content`
                 : doc.url;

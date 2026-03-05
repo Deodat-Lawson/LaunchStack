@@ -52,6 +52,8 @@ export const users = pgTable(
 export const company = pgTable("company", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
+    description: text("description"),
+    industry: varchar("industry", { length: 256 }),
     employerpasskey: varchar("employerPasskey", { length: 256 }).notNull().default(""),
     employeepasskey: varchar("employeePasskey", { length: 256 }).notNull().default(""),
     numberOfEmployees: varchar("numberOfEmployees", { length: 256 }).notNull(),

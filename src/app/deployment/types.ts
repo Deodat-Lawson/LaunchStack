@@ -6,6 +6,7 @@ import {
   FileSearch,
   Mic,
   Upload,
+  Database,
   Layers,
   Container,
   Rocket,
@@ -22,6 +23,7 @@ export type DeploymentSection =
   | 'langchain'
   | 'tavily'
   | 'uploadthing'
+  | 'vercel-blob'
   | 'ocr'
   | 'ocr-azure'
   | 'ocr-landing'
@@ -80,39 +82,46 @@ export const SECTIONS: SectionConfig[] = [
     group: 'Deployment',
   },
   {
+    id: 'vercel-blob',
+    title: 'Vercel Blob',
+    icon: React.createElement(Database, { className: 'w-4 h-4' }),
+    badge: 'Core',
+    group: 'Required',
+  },
+  {
     id: 'inngest',
     title: 'Inngest',
     icon: React.createElement(Layers, { className: 'w-4 h-4' }),
-    badge: 'Optional',
-    group: 'Integrations',
+    badge: 'Core',
+    group: 'Required',
   },
   {
     id: 'langchain',
     title: 'LangChain Tracing',
     icon: React.createElement(Eye, { className: 'w-4 h-4' }),
     badge: 'Optional',
-    group: 'Integrations',
+    group: 'Optional',
   },
   {
     id: 'tavily',
     title: 'Tavily Search',
     icon: React.createElement(SearchIcon, { className: 'w-4 h-4' }),
     badge: 'Optional',
-    group: 'Integrations',
+    group: 'Optional',
   },
   {
     id: 'uploadthing',
     title: 'UploadThing',
     icon: React.createElement(Upload, { className: 'w-4 h-4' }),
     badge: 'Optional',
-    group: 'Integrations',
+    group: 'Optional',
   },
   {
     id: 'ocr',
     title: 'OCR Services',
     icon: React.createElement(FileSearch, { className: 'w-4 h-4' }),
     badge: 'Optional',
-    group: 'Integrations',
+    group: 'Optional',
     hasChildren: true,
     children: [
       { id: 'ocr-azure', title: 'Azure Document Intelligence' },
@@ -125,6 +134,6 @@ export const SECTIONS: SectionConfig[] = [
     title: 'Voice / Audio',
     icon: React.createElement(Mic, { className: 'w-4 h-4' }),
     badge: 'Optional',
-    group: 'Integrations',
+    group: 'Optional',
   },
 ];

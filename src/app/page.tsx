@@ -44,12 +44,12 @@ export default function HomePage() {
                             Try it out <ArrowRight className="w-4 h-4" />
                         </button>
                     </Link>
-                    <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">
-                        <button className="flex items-center gap-2 bg-gray-100 dark:bg-white/8 hover:bg-gray-200 dark:hover:bg-white/12 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/15 font-semibold px-7 py-3 rounded-full transition-colors text-base cursor-pointer">
+                    <Link href="/deployment?section=main">
+                        <button className="flex items-center gap-2 bg-gray-100 dark:bg-purple-950/50 hover:bg-gray-200 dark:hover:bg-purple-900/50 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-purple-700/40 font-semibold px-7 py-3 rounded-full transition-colors text-base cursor-pointer">
                             <Github className="w-4 h-4" />
                             Deploy via GitHub
                         </button>
-                    </a>
+                    </Link>
                     <Link href="/deployment">
                         <button className="text-gray-400 dark:text-gray-500 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm font-medium cursor-pointer">
                             Deployment guide →
@@ -59,8 +59,8 @@ export default function HomePage() {
             </section>
 
             {/* ── Stats ────────────────────────────────────────────── */}
-            <section className="border-y border-gray-100 dark:border-white/8 py-10 mb-28">
-                <div className="max-w-3xl mx-auto grid grid-cols-4 divide-x divide-gray-100 dark:divide-white/8 text-center px-4">
+            <section className="border-y border-gray-100 dark:border-purple-900/40 py-10 mb-28">
+                <div className="max-w-3xl mx-auto grid grid-cols-4 divide-x divide-gray-100 dark:divide-purple-900/40 text-center px-4">
                     {[
                         { num: "12+", label: "Document Types" },
                         { num: "<2s", label: "Response Time" },
@@ -178,9 +178,9 @@ export default function HomePage() {
             </section>
 
             {/* ── How It Works ─────────────────────────────────────── */}
-            <section className="border-y border-gray-100 dark:border-white/8 py-28">
+            <section className="border-y border-gray-100 dark:border-purple-900/40 py-28">
                 <div className="max-w-4xl mx-auto px-4 text-center">
-                    <p className="text-gray-400 dark:text-gray-600 text-xs uppercase tracking-widest mb-4 font-semibold">How it works</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-xs uppercase tracking-widest mb-4 font-semibold">How it works</p>
                     <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
                         Up and running in 3 steps
                     </h2>
@@ -210,7 +210,7 @@ export default function HomePage() {
             <section className="max-w-6xl mx-auto px-4 py-28">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                     <div>
-                        <p className="text-gray-400 dark:text-gray-600 text-xs uppercase tracking-widest mb-4 font-semibold">Open Source</p>
+                        <p className="text-gray-400 dark:text-gray-500 text-xs uppercase tracking-widest mb-4 font-semibold">Open Source</p>
                         <h2 className="text-3xl md:text-4xl font-bold mb-5 leading-tight">
                             Fully open source.<br />Deploy anywhere.
                         </h2>
@@ -225,7 +225,7 @@ export default function HomePage() {
                                 </button>
                             </a>
                             <Link href="/deployment">
-                                <button className="flex items-center gap-2 border border-gray-200 dark:border-white/15 text-gray-600 dark:text-gray-400 font-semibold px-6 py-3 rounded-full hover:border-purple-400 dark:hover:border-purple-600 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm cursor-pointer">
+                                <button className="flex items-center gap-2 border border-gray-200 dark:border-purple-700/50 text-gray-600 dark:text-gray-300 font-semibold px-6 py-3 rounded-full hover:border-purple-400 dark:hover:border-purple-500 hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-sm cursor-pointer">
                                     <Code2 className="w-4 h-4" />
                                     Deployment Guide
                                 </button>
@@ -236,18 +236,18 @@ export default function HomePage() {
                     {/* Deploy options */}
                     <div className="space-y-3">
                         {[
-                            { icon: "▲", name: "Deploy on Vercel", desc: "One-click deploy to Vercel with environment variable setup guide", href: "/deployment" },
-                            { icon: "🐳", name: "Docker", desc: "Containerized deployment for any cloud or on-premise server", href: "/deployment" },
-                            { icon: "⚙️", name: "Self-hosted", desc: "Full control — run on your own servers with custom configuration", href: "/deployment" },
+                            { icon: "▲", name: "Deploy on Vercel", desc: "One-click deploy to Vercel with environment variable setup guide", href: "/deployment?section=vercel" },
+                            { icon: "🐳", name: "Docker", desc: "Containerized deployment for any cloud or on-premise server", href: "/deployment?section=docker" },
+                            { icon: "⚙️", name: "Self-hosted", desc: "Full control — run on your own servers with custom configuration", href: "/deployment?section=main" },
                         ].map((d) => (
                             <Link key={d.name} href={d.href}>
-                                <div className="flex items-center gap-4 p-5 bg-gray-50 dark:bg-white/4 border border-gray-100 dark:border-white/8 rounded-xl hover:border-purple-300 dark:hover:border-purple-800/70 hover:bg-purple-50/60 dark:hover:bg-purple-950/20 transition-all duration-200 group cursor-pointer mb-3">
+                                <div className="flex items-center gap-4 p-5 bg-gray-50 dark:bg-purple-950/40 border border-gray-100 dark:border-purple-800/40 rounded-xl hover:border-purple-300 dark:hover:border-purple-600/60 hover:bg-purple-50/60 dark:hover:bg-purple-900/30 transition-all duration-200 group cursor-pointer mb-3">
                                     <span className="text-xl w-8 flex-shrink-0">{d.icon}</span>
                                     <div className="flex-1 min-w-0">
                                         <div className="font-semibold text-gray-900 dark:text-white text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{d.name}</div>
-                                        <div className="text-gray-500 text-xs mt-0.5 leading-snug">{d.desc}</div>
+                                        <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5 leading-snug">{d.desc}</div>
                                     </div>
-                                    <ExternalLink className="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <ExternalLink className="w-4 h-4 text-gray-300 dark:text-gray-500 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
                             </Link>
                         ))}
@@ -256,7 +256,7 @@ export default function HomePage() {
             </section>
 
             {/* ── JHU Sponsorship ──────────────────────────────────── */}
-            <section className="border-y border-gray-100 dark:border-white/8 py-16">
+            <section className="border-y border-gray-100 dark:border-purple-900/40 py-16">
                 <div className="max-w-xl mx-auto px-4 text-center">
                     <div className="inline-flex items-center gap-2 text-sm text-gray-400 mb-6">
                         <Heart className="w-4 h-4 text-red-400" />
@@ -281,7 +281,7 @@ export default function HomePage() {
             {/* ── Security Badges ───────────────────────────────────── */}
             <section className="py-16">
                 <div className="max-w-3xl mx-auto px-4 text-center">
-                    <p className="text-gray-400 dark:text-gray-600 text-xs uppercase tracking-widest mb-8 font-semibold">Security & Compliance</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-xs uppercase tracking-widest mb-8 font-semibold">Security & Compliance</p>
                     <div className="flex flex-wrap justify-center gap-3">
                         {["SOC 2 Type II", "GDPR", "CCPA", "HIPAA", "Bank-level Encryption"].map((b) => (
                             <span key={b} className="border border-gray-200 dark:border-white/12 rounded-full py-2 px-5 text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -318,7 +318,7 @@ export default function HomePage() {
             </section>
 
             {/* ── Footer ────────────────────────────────────────────── */}
-            <footer className="border-t border-gray-100 dark:border-white/8 py-12">
+            <footer className="border-t border-gray-100 dark:border-purple-900/40 py-12">
                 <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
                         <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -332,7 +332,7 @@ export default function HomePage() {
                             <Github className="w-3.5 h-3.5" /> GitHub
                         </a>
                     </div>
-                    <p className="text-gray-400 dark:text-gray-600 text-sm">© 2026 PDR AI. All rights reserved.</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-sm">© 2026 PDR AI. All rights reserved.</p>
                 </div>
             </footer>
         </div>
@@ -343,12 +343,12 @@ export default function HomePage() {
 
 function DocRAGMockup() {
     return (
-        <div className="bg-white dark:bg-[#0d0018] border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl shadow-purple-100/50 dark:shadow-purple-950/30">
+        <div className="bg-white dark:bg-[#0d0018] border border-gray-200 dark:border-purple-800/40 rounded-2xl overflow-hidden shadow-xl shadow-purple-100/50 dark:shadow-purple-950/30">
             <MockupChrome label="Document Q&A" />
             <div className="flex" style={{ height: 280 }}>
                 {/* Doc list sidebar */}
-                <div className="w-2/5 border-r border-gray-100 dark:border-white/8 p-4 flex flex-col gap-1.5">
-                    <div className="text-xs font-semibold text-gray-400 dark:text-gray-600 mb-2 uppercase tracking-wide">Documents</div>
+                <div className="w-2/5 border-r border-gray-100 dark:border-purple-800/30 p-4 flex flex-col gap-1.5">
+                    <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 mb-2 uppercase tracking-wide">Documents</div>
                     {[
                         { name: "Policy Manual.pdf", pages: "24 pages", active: true },
                         { name: "Safety Protocol.pdf", pages: "12 pages", active: false },
@@ -363,7 +363,7 @@ function DocRAGMockup() {
                             <FileSearch className="w-3 h-3 text-purple-500 flex-shrink-0 mt-0.5" />
                             <div>
                                 <div className="font-medium text-gray-800 dark:text-gray-200 leading-snug">{d.name}</div>
-                                <div className="text-gray-400 dark:text-gray-600">{d.pages}</div>
+                                <div className="text-gray-400 dark:text-gray-500">{d.pages}</div>
                             </div>
                         </div>
                     ))}
@@ -381,13 +381,13 @@ function DocRAGMockup() {
                             <div className="w-5 h-5 rounded-full bg-purple-600 flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <Brain className="w-3 h-3 text-white" />
                             </div>
-                            <div className="bg-gray-50 dark:bg-white/8 border border-gray-100 dark:border-white/10 text-xs rounded-2xl rounded-tl-sm px-3 py-2 max-w-[82%] text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <div className="bg-gray-50 dark:bg-purple-950/50 border border-gray-100 dark:border-purple-800/40 text-xs rounded-2xl rounded-tl-sm px-3 py-2 max-w-[82%] text-gray-700 dark:text-gray-200 leading-relaxed">
                                 Based on <span className="text-purple-600 dark:text-purple-400 font-medium">Policy Manual p.8</span>, requirements are: (1) PPE required in Zone A, (2) mandatory safety briefing before entry, (3) sign-off from department lead...
                             </div>
                         </div>
                     </div>
-                    <div className="p-3 border-t border-gray-100 dark:border-white/8">
-                        <div className="flex items-center gap-2 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl px-3 py-2">
+                    <div className="p-3 border-t border-gray-100 dark:border-purple-800/30">
+                        <div className="flex items-center gap-2 bg-gray-50 dark:bg-purple-950/40 border border-gray-100 dark:border-purple-800/30 rounded-xl px-3 py-2">
                             <span className="text-xs text-gray-400 flex-1">Ask anything about your documents...</span>
                             <ArrowRight className="w-3 h-3 text-purple-400" />
                         </div>
@@ -407,22 +407,22 @@ function EmployeeMockup() {
     ];
 
     return (
-        <div className="bg-white dark:bg-[#0d0018] border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl shadow-purple-100/50 dark:shadow-purple-950/30">
+        <div className="bg-white dark:bg-[#0d0018] border border-gray-200 dark:border-purple-800/40 rounded-2xl overflow-hidden shadow-xl shadow-purple-100/50 dark:shadow-purple-950/30">
             <MockupChrome label="Employee Management" />
             <div className="p-5">
                 <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-600 uppercase tracking-wide">Team Members · {employees.length}</span>
+                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Team Members · {employees.length}</span>
                     <button className="text-xs bg-purple-600 text-white px-3 py-1 rounded-full font-medium">+ Invite</button>
                 </div>
                 <div className="space-y-2">
                     {employees.map((e) => (
-                        <div key={e.name} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl">
+                        <div key={e.name} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-purple-950/40 border border-gray-100 dark:border-purple-800/30 rounded-xl">
                             <div className={`w-8 h-8 rounded-full ${e.color} flex items-center justify-center text-white text-xs font-bold flex-shrink-0`}>
                                 {e.initials}
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="text-xs font-semibold text-gray-800 dark:text-gray-200">{e.name}</div>
-                                <div className="text-xs text-gray-400 dark:text-gray-600">{e.role}</div>
+                                <div className="text-xs text-gray-400 dark:text-gray-500">{e.role}</div>
                             </div>
                             <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${e.status === "Active"
                                 ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
@@ -452,7 +452,7 @@ function AnalyticsMockup() {
     ];
 
     return (
-        <div className="bg-white dark:bg-[#0d0018] border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl shadow-purple-100/50 dark:shadow-purple-950/30">
+        <div className="bg-white dark:bg-[#0d0018] border border-gray-200 dark:border-purple-800/40 rounded-2xl overflow-hidden shadow-xl shadow-purple-100/50 dark:shadow-purple-950/30">
             <MockupChrome label="Analytics Dashboard" />
             <div className="p-5">
                 {/* Stat cards */}
@@ -462,7 +462,7 @@ function AnalyticsMockup() {
                         { label: "Queries", value: "1,834", change: "+28%" },
                         { label: "Accuracy", value: "99.1%", change: "+0.3%" },
                     ].map((s) => (
-                        <div key={s.label} className="bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl p-3">
+                        <div key={s.label} className="bg-gray-50 dark:bg-purple-950/40 border border-gray-100 dark:border-purple-800/30 rounded-xl p-3">
                             <div className="text-base font-bold text-gray-900 dark:text-white tabular-nums">{s.value}</div>
                             <div className="text-xs text-gray-500 dark:text-gray-500">{s.label}</div>
                             <div className="text-xs text-green-500 font-semibold mt-0.5">{s.change}</div>
@@ -471,8 +471,8 @@ function AnalyticsMockup() {
                 </div>
 
                 {/* Bar chart */}
-                <div className="bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl p-4">
-                    <div className="text-xs text-gray-500 dark:text-gray-500 mb-3 font-semibold uppercase tracking-wide">Document Queries — This Week</div>
+                <div className="bg-gray-50 dark:bg-purple-950/40 border border-gray-100 dark:border-purple-800/30 rounded-xl p-4">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-3 font-semibold uppercase tracking-wide">Document Queries — This Week</div>
                     <div className="flex items-end justify-between gap-1.5 h-20">
                         {bars.map((b) => (
                             <div key={b.label} className="flex-1 flex flex-col items-center gap-1">
@@ -480,7 +480,7 @@ function AnalyticsMockup() {
                                     className="w-full bg-purple-500 dark:bg-purple-600 rounded-t-sm opacity-80 hover:opacity-100 transition-opacity"
                                     style={{ height: `${b.pct}%` }}
                                 />
-                                <span className="text-xs text-gray-400 dark:text-gray-600">{b.label}</span>
+                                <span className="text-xs text-gray-400 dark:text-gray-500">{b.label}</span>
                             </div>
                         ))}
                     </div>
@@ -492,11 +492,11 @@ function AnalyticsMockup() {
 
 function MockupChrome({ label }: { label: string }) {
     return (
-        <div className="flex items-center gap-1.5 px-4 py-3 bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/8">
+        <div className="flex items-center gap-1.5 px-4 py-3 bg-gray-50 dark:bg-purple-950/50 border-b border-gray-100 dark:border-purple-800/30">
             <div className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
             <div className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
-            <span className="ml-3 text-xs text-gray-400 dark:text-gray-600 font-mono">{label}</span>
+            <span className="ml-3 text-xs text-gray-400 dark:text-gray-500 font-mono">{label}</span>
         </div>
     );
 }

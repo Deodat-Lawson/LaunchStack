@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     if (!validation.success) {
       return validation.response;
     }
-    const { name, employerPasskey, employeePasskey, numberOfEmployees, useUploadThing } = validation.data;
+    const { name, description, industry, employerPasskey, employeePasskey, numberOfEmployees, useUploadThing } = validation.data;
 
     const [userRecord] = await db
       .select({
@@ -59,6 +59,8 @@ export async function POST(request: Request) {
 
     const updateData: Partial<{
       name: string;
+      description: string | null;
+      industry: string | null;
       employerpasskey: string;
       employeepasskey: string;
       numberOfEmployees: string;
@@ -68,7 +70,13 @@ export async function POST(request: Request) {
       numberOfEmployees,
     };
 
-    // Only include passkeys if they were explicitly provided
+    if (description !== undefined) {
+      updateData.description = description?.trim() || null;
+    }
+    if (industry !== undefined) {
+      updateData.industry = industry?.trim() || null;
+    }
+
     if (employerPasskey !== undefined) {
       updateData.employerpasskey = employerPasskey;
     }
@@ -76,7 +84,6 @@ export async function POST(request: Request) {
       updateData.employeepasskey = employeePasskey;
     }
 
-    // Only include useUploadThing if it was explicitly provided
     if (useUploadThing !== undefined) {
       updateData.useUploadThing = useUploadThing;
     }

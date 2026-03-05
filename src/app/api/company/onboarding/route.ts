@@ -10,6 +10,8 @@ interface OnboardingBody {
   industry?: string;
 }
 
+const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 export async function POST(request: Request) {
   try {
     const { userId } = await auth();
@@ -18,12 +20,16 @@ export async function POST(request: Request) {
     }
 
     const [userInfo] = await db
-      .select({ companyId: users.companyId })
+      .select({ companyId: users.companyId, role: users.role })
       .from(users)
       .where(eq(users.userId, userId));
 
     if (!userInfo) {
       return NextResponse.json({ error: "User not found" }, { status: 400 });
+    }
+
+    if (!AUTHORIZED_ROLES.has(userInfo.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const body = (await request.json()) as OnboardingBody;

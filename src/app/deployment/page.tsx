@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useSearchParams } from 'next/navigation';
 import { DeploymentNavbar } from './components/DeploymentNavbar';
@@ -27,8 +27,18 @@ const VALID_SECTIONS = new Set<string>(
   SECTIONS.flatMap(s => [s.id, ...(s.children?.map(c => c.id) ?? [])])
 );
 
-const DeploymentPage = () => {
+function SectionFromParams({ onSection }: { onSection: (s: DeploymentSection) => void }) {
   const searchParams = useSearchParams();
+  useEffect(() => {
+    const section = searchParams.get('section');
+    if (section && VALID_SECTIONS.has(section)) {
+      onSection(section as DeploymentSection);
+    }
+  }, [searchParams, onSection]);
+  return null;
+}
+
+const DeploymentPage = () => {
   const [mounted, setMounted] = useState(false);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -44,15 +54,12 @@ const DeploymentPage = () => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const section = searchParams.get('section');
-    if (section && VALID_SECTIONS.has(section)) {
-      setActiveSection(section as DeploymentSection);
-      if (section.startsWith('ocr-') && !expandedSections.includes('ocr')) {
-        setExpandedSections(prev => [...prev, 'ocr']);
-      }
+  const handleSectionFromParams = useCallback((section: DeploymentSection) => {
+    setActiveSection(section);
+    if (section.startsWith('ocr-')) {
+      setExpandedSections(prev => prev.includes('ocr') ? prev : [...prev, 'ocr']);
     }
-  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!mounted) {
     return <div className="min-h-screen bg-white dark:bg-gray-900" />;
@@ -132,6 +139,9 @@ const DeploymentPage = () => {
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-slate-50 via-white to-purple-50'}`}>
+      <Suspense>
+        <SectionFromParams onSection={handleSectionFromParams} />
+      </Suspense>
       {/* Top Navigation */}
       <DeploymentNavbar
         darkMode={darkMode}

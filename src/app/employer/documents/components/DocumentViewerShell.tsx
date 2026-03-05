@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
 import { Sidebar } from "./Sidebar";
@@ -95,8 +95,15 @@ export interface DocumentViewerShellProps {
   userRole: 'employer' | 'employee';
 }
 
+const VALID_VIEW_MODES = new Set<string>([
+  "document-only", "with-ai-qa", "with-ai-qa-history", "predictive-analysis",
+  "generator", "rewrite", "upload", "dashboard", "analytics",
+  "employees", "settings", "metadata", "marketing-pipeline",
+]);
+
 export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { isLoaded, isSignedIn, userId } = useAuth();
   
   // Data States
@@ -110,7 +117,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [fileTypeFilter, setFileTypeFilter] = useState<DocumentDisplayType | "all">("all");
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
-  const [viewMode, setViewMode] = useState<ViewMode>(userRole === 'employer' ? "dashboard" : "with-ai-qa");
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    const param = searchParams.get("view");
+    if (param && VALID_VIEW_MODES.has(param)) return param as ViewMode;
+    return userRole === 'employer' ? "dashboard" : "with-ai-qa";
+  });
   const [qaSubMode, setQaSubMode] = useState<"simple" | "chat">("simple");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isPreviewCollapsed, setIsPreviewCollapsed] = useState(false);
@@ -389,6 +400,14 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     if (viewMode !== "predictive-analysis" || !selectedDoc?.id) return;
     void fetchPredictiveAnalysis(selectedDoc.id, false);
   }, [viewMode, selectedDoc, fetchPredictiveAnalysis]);
+
+  // Sync viewMode when ?view= search param changes after mount
+  useEffect(() => {
+    const param = searchParams.get("view");
+    if (param && VALID_VIEW_MODES.has(param) && param !== viewMode) {
+      setViewMode(param as ViewMode);
+    }
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Refresh document list when leaving the upload tab
   const prevViewModeRef = useRef<typeof viewMode | null>(null);

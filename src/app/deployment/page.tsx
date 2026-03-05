@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
+import { useSearchParams } from 'next/navigation';
 import { DeploymentNavbar } from './components/DeploymentNavbar';
 import { DeploymentSidebar } from './components/DeploymentSidebar';
 import {
@@ -13,6 +14,7 @@ import {
   LangChainPage,
   TavilyPage,
   UploadThingPage,
+  VercelBlobPage,
   OCRAzurePage,
   OCRLandingPage,
   OCRDatalabPage,
@@ -21,7 +23,12 @@ import {
 import type { DeploymentSection } from './types';
 import { SECTIONS } from './types';
 
+const VALID_SECTIONS = new Set<string>(
+  SECTIONS.flatMap(s => [s.id, ...(s.children?.map(c => c.id) ?? [])])
+);
+
 const DeploymentPage = () => {
+  const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -36,6 +43,16 @@ const DeploymentPage = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const section = searchParams.get('section');
+    if (section && VALID_SECTIONS.has(section)) {
+      setActiveSection(section as DeploymentSection);
+      if (section.startsWith('ocr-') && !expandedSections.includes('ocr')) {
+        setExpandedSections(prev => [...prev, 'ocr']);
+      }
+    }
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!mounted) {
     return <div className="min-h-screen bg-white dark:bg-gray-900" />;
@@ -97,6 +114,8 @@ const DeploymentPage = () => {
         return <TavilyPage {...props} />;
       case 'uploadthing':
         return <UploadThingPage {...props} />;
+      case 'vercel-blob':
+        return <VercelBlobPage {...props} />;
       case 'ocr':
       case 'ocr-azure':
         return <OCRAzurePage {...props} />;

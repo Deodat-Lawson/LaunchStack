@@ -645,13 +645,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     <AlertCircle className="w-5 h-5 text-amber-500 dark:text-amber-400 flex-shrink-0 mt-0.5" />
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm text-amber-800 dark:text-amber-200 font-medium">
-                                            Cloud storage (UploadThing) is not configured.
+                                            UploadThing is not configured. Uploads will use Vercel Blob.
                                         </span>
                                         <Link
-                                            href="/deployment"
+                                            href="/deployment?section=uploadthing"
                                             className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium inline-flex items-center gap-1 transition-colors"
                                         >
-                                            Set up in Deployment Guide{" "}
+                                            Set up UploadThing{" "}
                                             <ExternalLink className="w-3.5 h-3.5" />
                                         </Link>
                                     </div>
@@ -1201,13 +1201,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="database">
-                                                        Database Storage
+                                                        Vercel Blob
                                                     </SelectItem>
                                                     <SelectItem
                                                         value="cloud"
                                                         disabled={!isUploadThingConfigured}
                                                     >
-                                                        Cloud Storage
+                                                        UploadThing
                                                         {!isUploadThingConfigured &&
                                                             " (not configured)"}
                                                     </SelectItem>
@@ -1219,7 +1219,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                                 </p>
                                             )}
                                             <p className="text-xs text-gray-500 mt-1">
-                                                Choose where to store the files
+                                                Vercel Blob is the default. UploadThing is an optional alternative.
                                             </p>
                                         </div>
                                     </div>

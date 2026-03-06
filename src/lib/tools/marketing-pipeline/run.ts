@@ -69,7 +69,7 @@ export async function runMarketingPipeline(args: {
   // 2) Build KB context (needed for research and generator)
   const companyContextBase = await buildCompanyKnowledgeContext({
     companyId: args.companyId,
-    prompt: normalizedInput.prompt,
+    prompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
   });
 
   const platformGuidelines = buildPlatformGuidelines(normalizedInput.platform);
@@ -81,7 +81,7 @@ ${platformGuidelines}`;
   // 3) Run DNA extraction, competitor analysis, and trend research in parallel
   let research: MarketingResearchResult[] = [];
   const [dna, competitors] = await Promise.all([
-    extractCompanyDNA({ companyId: args.companyId, prompt: normalizedInput.prompt }),
+    extractCompanyDNA({ companyId: args.companyId, prompt: normalizedInput.prompt ?? DEFAULT_PROMPT }),
     analyzeCompetitors({
       companyName,
       categories,
@@ -91,14 +91,15 @@ ${platformGuidelines}`;
       try {
         const raw = await researchPlatformTrends({
           platform: normalizedInput.platform,
-          prompt: normalizedInput.prompt,
+          prompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
           companyName,
           companyContext,
           maxResults: normalizedInput.maxResearchResults ?? 6,
         });
         return normalizeResearch(raw);
-      } catch (error) {
-        console.warn("[marketing-pipeline] trend research failed:", error);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn("[marketing-pipeline] trend research failed:", message);
         return [];
       }
     })(),
@@ -113,13 +114,13 @@ ${platformGuidelines}`;
     dna,
     competitors,
     trendsSummary,
-    userPrompt: normalizedInput.prompt,
+    userPrompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
   });
 
   // 5) Generate campaign output with strategy
   const generated = await generateCampaignOutput({
     platform: normalizedInput.platform,
-    prompt: normalizedInput.prompt,
+    prompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
     companyContext,
     research,
     strategy,
@@ -131,7 +132,7 @@ ${platformGuidelines}`;
     research,
     normalizedInput: {
       platform: normalizedInput.platform,
-      prompt: normalizedInput.prompt,
+      prompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
     },
     competitiveAngle: generated.competitiveAngle,
     strategyUsed: generated.strategyUsed,

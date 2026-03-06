@@ -1,9 +1,13 @@
-import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import type { MarketingPlatform, MarketingResearchResult } from "~/lib/tools/marketing-pipeline/types";
+import { getChatModel, MARKETING_MODELS } from "~/lib/models";
+import type {
+  MarketingPlatform,
+  MarketingResearchResult,
+  MessagingStrategy,
+} from "~/lib/tools/marketing-pipeline/types";
 import { MarketingPipelineOutputSchema } from "~/lib/tools/marketing-pipeline/types";
 
-const SYSTEM_PROMPT = `You are a marketing campaign copywriter for B2B products.
+const SYSTEM_PROMPT_BASE = `You are a marketing campaign copywriter for B2B products.
 
 You create a platform-ready campaign message using:
 - User prompt
@@ -21,6 +25,13 @@ Rules:
 5) Keep it practical: concrete benefit > adjectives.
 6) Pick "image" when a static visual would help (diagram, workflow, checklist).
    Pick "video" when a demo/explainer makes more sense.`;
+
+const STRATEGY_RULES = `
+When a Messaging Strategy is provided:
+- Lead with the recommended angle and human hook when it fits the platform; balance human story with technical depth.
+- Back claims with the key proof points given; do not add proof not in company context.
+- Do NOT use any phrase or theme in the strategy's avoid list.
+- Keep the post aligned with the positioning angle while staying platform-native.`;
 
 function platformTemplate(platform: MarketingPlatform): string {
 switch (platform) {
@@ -75,28 +86,48 @@ return research
 }
 
 
+function formatStrategyBlock(strategy: MessagingStrategy): string {
+  return [
+    `Positioning angle: ${strategy.angle}`,
+    `Key proof: ${strategy.keyProof.join("; ")}`,
+    `Human hook: ${strategy.humanHook}`,
+    `Avoid: ${strategy.avoidList.join("; ")}`,
+  ].join("\n");
+}
+
 function buildPrompt(args: {
     platform: MarketingPlatform;
     prompt: string;
     companyContext: string;
     research: MarketingResearchResult[];
+    strategy?: MessagingStrategy;
 }): string {
-    return `Selected platform: ${args.platform}
-User prompt: ${args.prompt}
-
-Company context (source of truth):
-${args.companyContext}
-
-Trend references (optional angles, do not quote, do not claim facts from them):
-${formatTrendReferences(args.research)}
-
-${platformTemplate(args.platform)}
-
-Task:
-- Pick ONE angle (either from trend references or company context).
-- Write ONE post that fits the platform format above.
-- Do NOT add facts not supported by company context.
-- Return JSON only matching the schema.`;
+  const parts = [
+    `Selected platform: ${args.platform}`,
+    `User prompt: ${args.prompt}`,
+    "",
+    "Company context (source of truth):",
+    args.companyContext,
+    "",
+    "Trend references (optional angles, do not quote, do not claim facts from them):",
+    formatTrendReferences(args.research),
+  ];
+  if (args.strategy) {
+    parts.push("", "Messaging strategy (use this angle and proof; respect avoid list):", formatStrategyBlock(args.strategy));
+  }
+  parts.push(
+    "",
+    platformTemplate(args.platform),
+    "",
+    "Task:",
+    args.strategy
+      ? "- Write ONE post using the messaging strategy angle and proof; respect the avoid list."
+      : "- Pick ONE angle (either from trend references or company context).",
+    "- Write ONE post that fits the platform format above.",
+    "- Do NOT add facts not supported by company context.",
+    "- Return JSON only matching the schema.",
+  );
+  return parts.join("\n");
 }
 
 export async function generateCampaignOutput(args: {
@@ -104,22 +135,40 @@ export async function generateCampaignOutput(args: {
     prompt: string;
     companyContext: string;
     research: MarketingResearchResult[];
-}) {
-    const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
-        modelName: "gpt-4o-mini",
-        temperature: 0.3,
-    });
+    strategy?: MessagingStrategy;
+}): Promise<{
+  platform: MarketingPlatform;
+  message: string;
+  "image/video": "image" | "video";
+  competitiveAngle?: string;
+  strategyUsed?: MessagingStrategy;
+}> {
+  const systemPrompt = args.strategy
+    ? SYSTEM_PROMPT_BASE + STRATEGY_RULES
+    : SYSTEM_PROMPT_BASE;
 
-    const model = chat.withStructuredOutput(MarketingPipelineOutputSchema, {
-        name: "marketing_pipeline_output",
-    });
+  const chat = getChatModel(MARKETING_MODELS.contentGeneration);
+  const model = chat.withStructuredOutput(MarketingPipelineOutputSchema, {
+    name: "marketing_pipeline_output",
+  });
 
-    const response = await model.invoke([
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(buildPrompt(args)),
-    ]);
+  const response = await model.invoke([
+    new SystemMessage(systemPrompt),
+    new HumanMessage(buildPrompt(args)),
+  ]);
 
-    return MarketingPipelineOutputSchema.parse(response);
+  const parsed = MarketingPipelineOutputSchema.parse(response);
+  const out: {
+    platform: MarketingPlatform;
+    message: string;
+    "image/video": "image" | "video";
+    competitiveAngle?: string;
+    strategyUsed?: MessagingStrategy;
+  } = { ...parsed };
+  if (args.strategy) {
+    out.competitiveAngle = args.strategy.angle;
+    out.strategyUsed = args.strategy;
+  }
+  return out;
 }
 

@@ -1,5 +1,7 @@
-import { buildCompanyKnowledgeContext } from "~/lib/tools/marketing-pipeline/context";
+import { buildCompanyKnowledgeContext, extractCompanyDNA } from "~/lib/tools/marketing-pipeline/context";
 import { generateCampaignOutput } from "~/lib/tools/marketing-pipeline/generator";
+import { analyzeCompetitors } from "~/lib/tools/marketing-pipeline/competitor";
+import { buildMessagingStrategy } from "~/lib/tools/marketing-pipeline/positioning";
 import type {
   MarketingPipelineInput,
   MarketingPipelineResult,
@@ -9,13 +11,16 @@ import type {
 // additional imports for query building and for fetching trend information
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { company } from "~/server/db/schema";
+import { company, category } from "~/server/db/schema";
 import { researchPlatformTrends } from "~/lib/tools/marketing-pipeline/research";
 
+const DEFAULT_PROMPT = "Generate a compelling campaign post for this platform.";
+
 function normalizeInput(input: MarketingPipelineInput): MarketingPipelineInput {
+    const prompt = input.prompt?.trim().replace(/\s+/g, " ") ?? DEFAULT_PROMPT;
     return {
         platform: input.platform,
-        prompt: input.prompt.trim().replace(/\s+/g, " "),
+        prompt: prompt || DEFAULT_PROMPT,
         maxResearchResults: input.maxResearchResults ?? 6,
     };
 }
@@ -32,59 +37,95 @@ function normalizeResearch(research: MarketingResearchResult[]): MarketingResear
         }));
 }
 
+function formatTrendsSummary(research: MarketingResearchResult[]): string {
+  if (!research.length) return "";
+  return research
+    .slice(0, 6)
+    .map((r) => `${r.title}: ${r.snippet.slice(0, 180)}`)
+    .join("\n");
+}
+
 export async function runMarketingPipeline(args: {
   companyId: number;
   input: MarketingPipelineInput;
 }): Promise<MarketingPipelineResult> {
   const normalizedInput = normalizeInput(args.input);
 
-  // 1) Fetch company name (used for logs / future features)
+  // 1) Fetch company name and categories
   const [companyRow] = await db
     .select({ name: company.name })
     .from(company)
     .where(eq(company.id, args.companyId))
     .limit(1);
-
   const companyName = companyRow?.name ?? "Unknown Company";
 
-  // 2) Build KB context from all company documents
+  const categoryRows = await db
+    .select({ name: category.name })
+    .from(category)
+    .where(eq(category.companyId, BigInt(args.companyId)))
+    .limit(8);
+  const categories = categoryRows.map((r) => r.name).filter(Boolean);
+
+  // 2) Build KB context (needed for research and generator)
   const companyContextBase = await buildCompanyKnowledgeContext({
     companyId: args.companyId,
     prompt: normalizedInput.prompt,
   });
 
-  // 3) Add platform best practices
   const platformGuidelines = buildPlatformGuidelines(normalizedInput.platform);
   const companyContext = `${companyContextBase}
 
 Platform best practices:
 ${platformGuidelines}`;
 
-  // 4) Fetch trend references (non-fatal)
+  // 3) Run DNA extraction, competitor analysis, and trend research in parallel
   let research: MarketingResearchResult[] = [];
-  try {
-    research = await researchPlatformTrends({
-      platform: normalizedInput.platform,
-      prompt: normalizedInput.prompt,
+  const [dna, competitors] = await Promise.all([
+    extractCompanyDNA({ companyId: args.companyId, prompt: normalizedInput.prompt }),
+    analyzeCompetitors({
       companyName,
-      companyContext,
-      maxResults: normalizedInput.maxResearchResults ?? 6,
-    });
-    research = normalizeResearch(research);
-  } catch (error) {
-    console.warn("[marketing-pipeline] trend research failed:", error);
-    research = [];
-  }
+      categories,
+      companyContext: companyContextBase,
+    }),
+    (async (): Promise<MarketingResearchResult[]> => {
+      try {
+        const raw = await researchPlatformTrends({
+          platform: normalizedInput.platform,
+          prompt: normalizedInput.prompt,
+          companyName,
+          companyContext,
+          maxResults: normalizedInput.maxResearchResults ?? 6,
+        });
+        return normalizeResearch(raw);
+      } catch (error) {
+        console.warn("[marketing-pipeline] trend research failed:", error);
+        return [];
+      }
+    })(),
+  ]).then(([d, c, r]) => {
+    research = r;
+    return [d, c] as const;
+  });
 
-  // 5) Generate campaign output using KB + trends
+  // 4) Build messaging strategy from DNA + competitors + trends
+  const trendsSummary = formatTrendsSummary(research);
+  const strategy = await buildMessagingStrategy({
+    dna,
+    competitors,
+    trendsSummary,
+    userPrompt: normalizedInput.prompt,
+  });
+
+  // 5) Generate campaign output with strategy
   const generated = await generateCampaignOutput({
     platform: normalizedInput.platform,
     prompt: normalizedInput.prompt,
     companyContext,
     research,
+    strategy,
   });
 
-  // 6) Return final result
+  // 6) Return result with competitiveAngle and strategyUsed
   return {
     ...generated,
     research,
@@ -92,6 +133,8 @@ ${platformGuidelines}`;
       platform: normalizedInput.platform,
       prompt: normalizedInput.prompt,
     },
+    competitiveAngle: generated.competitiveAngle,
+    strategyUsed: generated.strategyUsed,
   };
 }
 

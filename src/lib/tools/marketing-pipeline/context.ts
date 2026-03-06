@@ -41,14 +41,14 @@ export async function buildCompanyKnowledgeContext(args: {
         const embeddings = createOpenAIEmbeddings();
         const options: CompanySearchOptions = {
             companyId,
-            topK: 4,
+            topK: 6,
             weights: [0.4, 0.6],
         };
         const kbResults: SearchResult[] = await companyEnsembleSearch(prompt, options, embeddings);
 
         kbSnippets = kbResults
-            .slice(0, 4)
-            .map((row) => row.pageContent.trim().replace(/\s+/g, " ").slice(0, 240))
+            .slice(0, 6)
+            .map((row) => row.pageContent.trim().replace(/\s+/g, " ").slice(0, 400))
             .filter(Boolean);
     } catch (error) {
         console.warn("[marketing-pipeline] company KB context retrieval failed:", error);

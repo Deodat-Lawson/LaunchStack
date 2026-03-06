@@ -69,7 +69,7 @@ export async function runMarketingPipeline(args: {
   // 2) Build KB context (needed for research and generator)
   const companyContextBase = await buildCompanyKnowledgeContext({
     companyId: args.companyId,
-    prompt: normalizedInput.prompt,
+    prompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
   });
 
   const platformGuidelines = buildPlatformGuidelines(normalizedInput.platform);
@@ -81,7 +81,7 @@ ${platformGuidelines}`;
   // 3) Run DNA extraction, competitor analysis, and trend research in parallel
   let research: MarketingResearchResult[] = [];
   const [dna, competitors] = await Promise.all([
-    extractCompanyDNA({ companyId: args.companyId, prompt: normalizedInput.prompt }),
+    extractCompanyDNA({ companyId: args.companyId, prompt: normalizedInput.prompt ?? DEFAULT_PROMPT }),
     analyzeCompetitors({
       companyName,
       categories,
@@ -91,14 +91,15 @@ ${platformGuidelines}`;
       try {
         const raw = await researchPlatformTrends({
           platform: normalizedInput.platform,
-          prompt: normalizedInput.prompt,
+          prompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
           companyName,
           companyContext,
           maxResults: normalizedInput.maxResearchResults ?? 6,
         });
         return normalizeResearch(raw);
-      } catch (error) {
-        console.warn("[marketing-pipeline] trend research failed:", error);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn("[marketing-pipeline] trend research failed:", message);
         return [];
       }
     })(),
@@ -113,13 +114,13 @@ ${platformGuidelines}`;
     dna,
     competitors,
     trendsSummary,
-    userPrompt: normalizedInput.prompt,
+    userPrompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
   });
 
   // 5) Generate campaign output with strategy
   const generated = await generateCampaignOutput({
     platform: normalizedInput.platform,
-    prompt: normalizedInput.prompt,
+    prompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
     companyContext,
     research,
     strategy,
@@ -131,11 +132,40 @@ ${platformGuidelines}`;
     research,
     normalizedInput: {
       platform: normalizedInput.platform,
-      prompt: normalizedInput.prompt,
+      prompt: normalizedInput.prompt ?? DEFAULT_PROMPT,
     },
     competitiveAngle: generated.competitiveAngle,
     strategyUsed: generated.strategyUsed,
   };
 }
 
-
+function buildPlatformGuidelines(platform: MarketingPipelineInput["platform"]): string {
+  switch (platform) {
+    case "reddit":
+      return [
+        "- Speak like a real community member, not a brand account.",
+        "- Lead with a specific pain point or story that matches the subreddit.",
+        "- Avoid pure self-promotion: focus on value, insight, or behind-the-scenes context.",
+        "- Use clear, descriptive titles; body can be longer and conversational.",
+        "- Invite discussion with an authentic question at the end.",
+      ].join("\n");
+    case "x":
+      return [
+        "- Keep posts tight and high-signal; front-load the hook in the first line.",
+        "- Use 1–2 sharp talking points instead of long paragraphs.",
+        "- Sprinkle in 1–2 relevant hashtags, but avoid hashtag spam.",
+        "- When appropriate, reference current trends or conversations in the space.",
+        "- Make the call-to-action explicit and easy to understand.",
+      ].join("\n");
+    case "linkedin":
+      return [
+        "- Use a strong first line that clearly states the outcome or insight.",
+        "- Write in short paragraphs or bullet points for easy scanning.",
+        "- Frame the message around business impact, transformation, or a concrete case.",
+        "- Keep the tone professional but human—less hype, more signal.",
+        "- Close with a takeaway or a soft call-to-action tailored to professionals.",
+      ].join("\n");
+    default:
+      return "- Write a clear, concise, value-focused message tailored to this platform.";
+  }
+}

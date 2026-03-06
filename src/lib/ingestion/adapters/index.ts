@@ -10,6 +10,8 @@ export { SpreadsheetAdapter } from "./spreadsheet-adapter";
 export { HtmlAdapter } from "./html-adapter";
 export { PdfAdapter } from "./pdf-adapter";
 export { ImageAdapter } from "./image-adapter";
+export { JsonExportAdapter, SlackExportAdapter } from "./slack-export-adapter";
+export { ZipAdapter } from "./zip-adapter";
 export { FallbackAdapter } from "./fallback-adapter";
 
 import type { SourceAdapter } from "../types";
@@ -20,6 +22,8 @@ import { SpreadsheetAdapter } from "./spreadsheet-adapter";
 import { HtmlAdapter } from "./html-adapter";
 import { PdfAdapter } from "./pdf-adapter";
 import { ImageAdapter } from "./image-adapter";
+import { JsonExportAdapter } from "./slack-export-adapter";
+import { ZipAdapter } from "./zip-adapter";
 import { FallbackAdapter } from "./fallback-adapter";
 
 const ADAPTERS: SourceAdapter[] = [
@@ -30,14 +34,17 @@ const ADAPTERS: SourceAdapter[] = [
   new HtmlAdapter(),
   new ImageAdapter(),
   new TextAdapter(),
+  new JsonExportAdapter(),
+  new ZipAdapter(),
   new FallbackAdapter(), // last: handles any unknown MIME/extension
 ];
 
 export function findAdapter(
   mimeType: string,
   extension: string,
+  filename?: string,
 ): SourceAdapter | undefined {
-  return ADAPTERS.find((a) => a.canHandle(mimeType, extension));
+  return ADAPTERS.find((a) => a.canHandle(mimeType, extension, filename));
 }
 
 export function getAllAdapters(): readonly SourceAdapter[] {

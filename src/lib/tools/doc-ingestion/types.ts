@@ -5,6 +5,8 @@ export interface DocIngestionToolRuntimeOptions {
   sidecarBatchSize?: number;
   updateJobStatus?: boolean;
   markFailureInDb?: boolean;
+  /** When true, skips OCR routing and uses TextAdapter directly */
+  fastTextPath?: boolean;
   runStep?<T>(stepName: string, fn: () => Promise<T>): Promise<T>;
 }
 

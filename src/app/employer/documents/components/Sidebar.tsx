@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Search, 
   FileText, 
   ChevronRight, 
   ChevronDown, 
   ChevronLeft, 
-  BarChart3, 
+  ShieldCheck, 
   Trash2, 
   MoreVertical, 
   MessageCircle,
   PenTool,
   PenLine,
+  StickyNote,
   Clock,
   Brain,
   Upload,
@@ -25,8 +26,9 @@ import {
   Settings,
   Building2,
   Megaphone,
+  Archive,
 } from 'lucide-react';
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 import { Input } from '~/app/employer/documents/components/ui/input';
 import { Button } from '~/app/employer/documents/components/ui/button';
 import { cn } from "~/lib/utils";
@@ -64,49 +66,61 @@ interface SidebarProps {
   totalDocuments?: number;
 }
 
-const NAV_ITEMS = (showGenerator: boolean) => [
-  ...(showGenerator ? [{
-    id: "dashboard" as ViewMode,
-    label: "Dashboard",
-    icon: LayoutDashboard,
-    employerOnly: true,
+interface NavItem {
+  id: ViewMode;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  employerOnly?: boolean;
+  badge?: string;
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+  employerOnly?: boolean;
+}
+
+const NAV_GROUPS = (isEmployer: boolean): NavGroup[] => [
+  ...(isEmployer ? [{
+    label: "Workspace",
+    items: [
+      { id: "dashboard" as ViewMode, label: "Home", icon: LayoutDashboard, employerOnly: true },
+    ],
   }] : []),
   {
-    id: "with-ai-qa" as ViewMode,
-    label: "AI Q&A",
-    icon: MessageCircle,
-    employerOnly: false,
+    label: "Knowledge",
+    items: [
+      { id: "with-ai-qa" as ViewMode, label: "Ask AI", icon: MessageCircle },
+      { id: "predictive-analysis" as ViewMode, label: "Audit", icon: ShieldCheck },
+      { id: "notes" as ViewMode, label: "Notes", icon: StickyNote },
+    ],
   },
   {
-    id: "predictive-analysis" as ViewMode,
-    label: "Predictive Analysis",
-    icon: BarChart3,
-    employerOnly: false,
+    label: "Create",
+    items: [
+      ...(isEmployer ? [
+        { id: "generator" as ViewMode, label: "Draft", icon: PenTool, employerOnly: true, badge: "Beta" },
+      ] : []),
+      { id: "rewrite" as ViewMode, label: "Rewrite", icon: PenLine },
+      ...(isEmployer ? [
+        { id: "marketing-pipeline" as ViewMode, label: "Marketing", icon: Megaphone, employerOnly: true },
+      ] : []),
+    ],
   },
-  ...(showGenerator ? [
-    {
-      id: "generator" as ViewMode,
-      label: "Doc Generator",
-      icon: PenTool,
-      employerOnly: true,
-      badge: "Beta",
-    },
-  ] : []),
-  {
-    id: "rewrite" as ViewMode,
-    label: "Rewrite",
-    icon: PenLine,
-    employerOnly: false,
-  },
+  ...(isEmployer ? [{
+    label: "Company",
+    employerOnly: true,
+    items: [
+      { id: "employees" as ViewMode, label: "Team", icon: Users },
+      { id: "metadata" as ViewMode, label: "Company Profile", icon: Building2 },
+      { id: "analytics" as ViewMode, label: "Analytics", icon: TrendingUp },
+      { id: "settings" as ViewMode, label: "Settings", icon: Settings },
+    ],
+  }] : []),
 ];
 
-const COMPANY_NAV_ITEMS = [
-  { id: "analytics" as ViewMode, label: "Analytics", icon: TrendingUp },
-  { id: "employees" as ViewMode, label: "Employees", icon: Users },
-  { id: "metadata" as ViewMode, label: "Metadata", icon: Building2 },
-  { id: "marketing-pipeline" as ViewMode, label: "Marketing", icon: Megaphone },
-  { id: "settings" as ViewMode, label: "Settings", icon: Settings },
-];
+const allNavItems = (isEmployer: boolean): NavItem[] =>
+  NAV_GROUPS(isEmployer).flatMap((g) => g.items);
 
 export function Sidebar({
   categories,
@@ -129,10 +143,33 @@ export function Sidebar({
   userRole = 'employer',
   totalDocuments = 0,
 }: SidebarProps) {
-  const showGenerator = userRole === 'employer';
-  const showDelete = userRole === 'employer' && !!deleteDocument;
+  const isEmployer = userRole === 'employer';
+  const showDelete = isEmployer && !!deleteDocument;
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const navItems = NAV_ITEMS(showGenerator);
+  const navGroups = NAV_GROUPS(isEmployer);
+  const flatNavItems = allNavItems(isEmployer);
+
+  const { user } = useUser();
+  const [companyName, setCompanyName] = useState<string>("");
+  const [openArchives, setOpenArchives] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchCompany = async () => {
+      try {
+        const res = await fetch("/api/fetchCompany");
+        if (!res.ok) return;
+        const data = (await res.json()) as { name?: string };
+        if (!cancelled && data.name) setCompanyName(data.name);
+      } catch {
+        // silent — company name is cosmetic
+      }
+    };
+    void fetchCompany();
+    return () => { cancelled = true; };
+  }, []);
+
+  const displayName = user?.fullName ?? user?.primaryEmailAddress?.emailAddress ?? "User";
 
   /* ── COLLAPSED STATE ── */
   if (isCollapsed) {
@@ -151,43 +188,10 @@ export function Sidebar({
 
         {/* Nav Items */}
         <div className="flex flex-col gap-1 w-full px-2 flex-1">
-          {navItems.map((item) => (
-            <Button
-              key={item.id}
-              variant="ghost"
-              size="icon"
-              onClick={() => setViewMode(item.id)}
-              className={cn(
-                "w-full h-10 rounded-xl transition-all duration-200",
-                viewMode === item.id
-                  ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
-                  : "text-muted-foreground hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-              )}
-              title={item.label}
-            >
-              <item.icon className="w-4 h-4" />
-            </Button>
-          ))}
-          {showGenerator && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setViewMode('upload')}
-              className={cn(
-                "w-full h-10 rounded-xl transition-all duration-200",
-                viewMode === 'upload'
-                  ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
-                  : "text-muted-foreground hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-              )}
-              title="Upload Documents"
-            >
-              <Upload className="w-4 h-4" />
-            </Button>
-          )}
-          {showGenerator && (
-            <>
-              <div className="w-8 h-px bg-border mx-auto my-1" />
-              {COMPANY_NAV_ITEMS.map((item) => (
+          {navGroups.map((group, gi) => (
+            <React.Fragment key={group.label}>
+              {gi > 0 && <div className="w-8 h-px bg-border mx-auto my-1" />}
+              {group.items.map((item) => (
                 <Button
                   key={item.id}
                   variant="ghost"
@@ -204,8 +208,8 @@ export function Sidebar({
                   <item.icon className="w-4 h-4" />
                 </Button>
               ))}
-            </>
-          )}
+            </React.Fragment>
+          ))}
         </div>
 
         {/* Bottom Actions */}
@@ -268,49 +272,14 @@ export function Sidebar({
         </div>
       </div>
 
-      {/* ── NAVIGATION ── */}
-      <div className="px-3 py-2.5 border-b border-border">
-        <div className="text-[9px] font-black text-muted-foreground mb-1.5 px-1 tracking-[0.15em] uppercase">
-          Navigation
-        </div>
-        <div className="space-y-0.5">
-          {navItems.map((item) => (
-            <Button
-              key={item.id}
-              variant="ghost"
-              className={cn(
-                "w-full justify-start gap-2.5 h-8 rounded-lg px-2.5 text-xs font-medium transition-all duration-150",
-                viewMode === item.id
-                  ? "bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-              onClick={() => setViewMode(item.id)}
-            >
-              <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="flex-1 text-left">{item.label}</span>
-              {'badge' in item && item.badge && (
-                <span className={cn(
-                  "text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider",
-                  viewMode === item.id
-                    ? "bg-white/20 text-white"
-                    : "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400"
-                )}>
-                  {item.badge}
-                </span>
-              )}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── COMPANY SECTION (employer only) ── */}
-      {showGenerator && (
-        <div className="px-3 py-2.5 border-b border-border">
+      {/* ── GROUPED NAVIGATION ── */}
+      {navGroups.map((group) => (
+        <div key={group.label} className="px-3 py-2.5 border-b border-border">
           <div className="text-[9px] font-black text-muted-foreground mb-1.5 px-1 tracking-[0.15em] uppercase">
-            Company
+            {group.label}
           </div>
           <div className="space-y-0.5">
-            {COMPANY_NAV_ITEMS.map((item) => (
+            {group.items.map((item) => (
               <Button
                 key={item.id}
                 variant="ghost"
@@ -324,11 +293,21 @@ export function Sidebar({
               >
                 <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
                 <span className="flex-1 text-left">{item.label}</span>
+                {item.badge && (
+                  <span className={cn(
+                    "text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider",
+                    viewMode === item.id
+                      ? "bg-white/20 text-white"
+                      : "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400"
+                  )}>
+                    {item.badge}
+                  </span>
+                )}
               </Button>
             ))}
           </div>
         </div>
-      )}
+      ))}
 
       {/* ── DOCUMENTS SECTION ── */}
       <div className="flex-1 overflow-y-auto flex flex-col gap-0 custom-scrollbar">
@@ -344,7 +323,7 @@ export function Sidebar({
                 </span>
               )}
             </div>
-            {showGenerator && (
+            {isEmployer && (
               <button
                 onClick={() => setViewMode('upload')}
                 className={cn(
@@ -399,75 +378,120 @@ export function Sidebar({
                   <span className="ml-auto font-mono text-[9px] opacity-60">{category.documents.length}</span>
                 </button>
 
-                {category.isOpen && (
-                  <div className="ml-3 border-l border-border pl-1 space-y-0.5 animate-in slide-in-from-left-1 duration-150">
-                    {category.documents.map(doc => {
-                      const docDisplayType = getDocumentDisplayType(doc);
-                      const DocIcon = DISPLAY_TYPE_ICONS[docDisplayType];
-                      const isSelected = selectedDoc?.id === doc.id;
-                      return (
-                        <div
-                          key={doc.id}
+                {category.isOpen && (() => {
+                  const standaloneDocs = category.documents.filter(d => !d.sourceArchiveName);
+                  const archiveGroups: Record<string, typeof category.documents> = {};
+                  category.documents.forEach(d => {
+                    if (d.sourceArchiveName) {
+                      (archiveGroups[d.sourceArchiveName] ??= []).push(d);
+                    }
+                  });
+
+                  const renderDocItem = (doc: typeof category.documents[0]) => {
+                    const docDisplayType = getDocumentDisplayType(doc);
+                    const DocIcon = DISPLAY_TYPE_ICONS[docDisplayType];
+                    const isSelected = selectedDoc?.id === doc.id;
+                    return (
+                      <div
+                        key={doc.id}
+                        className={cn(
+                          "group/doc flex items-center rounded-lg transition-all duration-150 relative",
+                          isSelected
+                            ? "bg-purple-50 dark:bg-purple-900/20"
+                            : "hover:bg-muted/50"
+                        )}
+                      >
+                        {isSelected && (
+                          <div className="absolute left-0 top-1 bottom-1 w-0.5 bg-purple-600 rounded-r-full" />
+                        )}
+                        <button
+                          onClick={() => setSelectedDoc(doc)}
                           className={cn(
-                            "group/doc flex items-center rounded-lg transition-all duration-150 relative",
+                            "flex-1 flex items-center gap-2 px-2.5 py-2 text-xs transition-all",
                             isSelected
-                              ? "bg-purple-50 dark:bg-purple-900/20"
-                              : "hover:bg-muted/50"
+                              ? "text-purple-700 dark:text-purple-300 font-semibold"
+                              : "text-muted-foreground hover:text-foreground"
                           )}
                         >
-                          {isSelected && (
-                            <div className="absolute left-0 top-1 bottom-1 w-0.5 bg-purple-600 rounded-r-full" />
+                          <DocIcon className={cn(
+                            "w-3.5 h-3.5 flex-shrink-0 transition-colors",
+                            isSelected ? "text-purple-600 dark:text-purple-400" : "text-muted-foreground"
+                          )} />
+                          <span className="flex-1 text-left truncate">{doc.title}</span>
+                          {doc.ocrProcessed === false && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse flex-shrink-0" title="Processing" />
                           )}
-                          <button
-                            onClick={() => setSelectedDoc(doc)}
-                            className={cn(
-                              "flex-1 flex items-center gap-2 px-2.5 py-2 text-xs transition-all",
-                              isSelected
-                                ? "text-purple-700 dark:text-purple-300 font-semibold"
-                                : "text-muted-foreground hover:text-foreground"
-                            )}
-                          >
-                            <DocIcon className={cn(
-                              "w-3.5 h-3.5 flex-shrink-0 transition-colors",
-                              isSelected ? "text-purple-600 dark:text-purple-400" : "text-muted-foreground"
-                            )} />
-                            <span className="flex-1 text-left truncate">{doc.title}</span>
-                            {doc.ocrProcessed === false && (
-                              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse flex-shrink-0" title="Processing" />
-                            )}
-                          </button>
+                          {doc.ocrProcessed === true && doc.ocrMetadata?.error && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" title={`Failed: ${doc.ocrMetadata.errorMessage ?? doc.ocrMetadata.error}`} />
+                          )}
+                        </button>
 
-                          {showDelete && deleteDocument && (
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-6 w-6 opacity-0 group-hover/doc:opacity-100 transition-opacity mr-1 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 flex-shrink-0"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <MoreVertical className="w-3 h-3" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="w-40">
-                                <DropdownMenuItem
-                                  className="text-red-600 dark:text-red-400 cursor-pointer focus:bg-red-50 dark:focus:bg-red-900/20 focus:text-red-600 text-xs"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    deleteDocument(doc.id);
-                                  }}
-                                >
-                                  <Trash2 className="w-3.5 h-3.5 mr-2" />
-                                  Delete Document
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                        {showDelete && deleteDocument && (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 opacity-0 group-hover/doc:opacity-100 transition-opacity mr-1 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 flex-shrink-0"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <MoreVertical className="w-3 h-3" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-40">
+                              <DropdownMenuItem
+                                className="text-red-600 dark:text-red-400 cursor-pointer focus:bg-red-50 dark:focus:bg-red-900/20 focus:text-red-600 text-xs"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteDocument(doc.id);
+                                }}
+                              >
+                                <Trash2 className="w-3.5 h-3.5 mr-2" />
+                                Delete Document
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        )}
+                      </div>
+                    );
+                  };
+
+                  return (
+                    <div className="ml-3 border-l border-border pl-1 space-y-0.5 animate-in slide-in-from-left-1 duration-150">
+                      {standaloneDocs.map(renderDocItem)}
+
+                      {Object.entries(archiveGroups).map(([archiveName, docs]) => {
+                        const isOpen = openArchives.has(archiveName);
+                        return (
+                          <div key={`archive-${archiveName}`}>
+                            <button
+                              onClick={() => setOpenArchives(prev => {
+                                const next = new Set(prev);
+                                if (next.has(archiveName)) next.delete(archiveName);
+                                else next.add(archiveName);
+                                return next;
+                              })}
+                              className="w-full flex items-center gap-1.5 px-2 py-1.5 hover:bg-muted/70 rounded-md text-[10px] font-semibold text-muted-foreground transition-all"
+                            >
+                              {isOpen
+                                ? <ChevronDown className="w-2.5 h-2.5 text-purple-500 flex-shrink-0" />
+                                : <ChevronRight className="w-2.5 h-2.5 flex-shrink-0" />
+                              }
+                              <Archive className="w-2.5 h-2.5 flex-shrink-0 text-purple-500" />
+                              <span className="truncate flex-1 text-left">{archiveName}</span>
+                              <span className="font-mono text-[9px] opacity-60">{docs.length}</span>
+                            </button>
+                            {isOpen && (
+                              <div className="ml-3 border-l border-purple-200 dark:border-purple-800/40 pl-1 space-y-0.5 animate-in slide-in-from-left-1 duration-150">
+                                {docs.map(renderDocItem)}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
               </div>
             ))}
 
@@ -475,7 +499,7 @@ export function Sidebar({
               <div className="px-2 py-6 text-center">
                 <FileText className="w-8 h-8 text-muted-foreground/40 mx-auto mb-2" />
                 <p className="text-[10px] text-muted-foreground font-medium">No documents yet</p>
-                {showGenerator && (
+                {isEmployer && (
                   <button
                     onClick={() => setViewMode('upload')}
                     className="text-[10px] text-purple-600 dark:text-purple-400 font-semibold mt-1 hover:underline"
@@ -518,8 +542,10 @@ export function Sidebar({
         <div className="flex items-center gap-2.5">
           <UserButton />
           <div className="flex-1 min-w-0">
-            <div className="text-[10px] font-semibold text-foreground truncate">Account</div>
-            <div className="text-[9px] text-muted-foreground">Profile & billing</div>
+            <div className="text-[10px] font-semibold text-foreground truncate">{displayName}</div>
+            {companyName && (
+              <div className="text-[9px] text-muted-foreground truncate">{companyName}</div>
+            )}
           </div>
         </div>
       </div>

@@ -51,8 +51,8 @@ interface SimpleQueryPanelProps {
   setAiError: (e: string) => void;
   aiLoading: boolean;
   handleAiSearch: (e: React.FormEvent) => Promise<void>;
-  searchScope: 'document' | 'company';
-  setSearchScope: (s: 'document' | 'company') => void;
+  searchScope: 'document' | 'company' | 'archive';
+  setSearchScope: (s: 'document' | 'company' | 'archive') => void;
   aiStyle: string;
   setAiStyle: (s: string) => void;
   aiModel: AIModelType;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from "next/dynamic";
 import { 
   Sparkles, 
@@ -13,6 +13,7 @@ import {
   Copy,
   Check,
   MessageSquare,
+  Mic,
   X
 } from 'lucide-react';
 import { useAIChatbot, type Message } from '../hooks/useAIChatbot';
@@ -20,6 +21,7 @@ import { useAIChat, type SourceReference } from '../hooks/useAIChat';
 import { cn } from '~/lib/utils';
 import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
 import { ModelBadge } from './ModelBadge';
+import { VoiceChat, type VoiceMessage } from '~/components/voice/VoiceChat';
 
 const MarkdownMessage = dynamic(
   () => import("~/app/_components/MarkdownMessage"),
@@ -35,9 +37,10 @@ interface AgentChatInterfaceProps {
   userId: string;
   onAIResponse?: (response: string) => void;
   selectedDocTitle?: string | null;
-  searchScope: 'document' | 'company';
+  searchScope: 'document' | 'company' | 'archive';
   selectedDocId?: number | null;
   companyId?: number | null;
+  archiveName?: string | null;
   aiStyle?: string;
   aiPersona?: string;
   aiModel?: AIModelType;
@@ -55,6 +58,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   searchScope,
   selectedDocId,
   companyId,
+  archiveName,
   aiStyle = 'concise',
   aiPersona = 'general',
   aiModel = 'gpt-5.2',
@@ -71,6 +75,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   const [enableWebSearch, setEnableWebSearch] = useState(false);
   const [showToolsMenu, setShowToolsMenu] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [voiceMode, setVoiceMode] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const toolsMenuRef = useRef<HTMLDivElement>(null);
@@ -223,7 +228,8 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           aiPersona: aiPersona as 'general' | 'learning-coach' | 'financial-expert' | 'legal-expert' | 'math-reasoning' | undefined,
           aiModel,
           documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
-          companyId: searchScope === "company" && companyId ? companyId : undefined,
+          companyId: (searchScope === "company" || searchScope === "archive") && companyId ? companyId : undefined,
+          archiveName: searchScope === "archive" && archiveName ? archiveName : undefined,
         });
 
         if (!aiData) {
@@ -290,8 +296,98 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     await voteMessage(chatId, messageId, isUpvoted);
   };
 
+  const voiceMessages: VoiceMessage[] = messages.map((msg) => ({
+    id: msg.id,
+    role: msg.role,
+    content:
+      typeof msg.content === "string"
+        ? msg.content
+        : typeof msg.content === "object" && msg.content !== null && "text" in msg.content
+          ? (msg.content.text ?? JSON.stringify(msg.content))
+          : JSON.stringify(msg.content),
+  }));
+
+  const handleVoiceSend = useCallback((content: string) => {
+    if (!content.trim() || isSubmitting) return;
+    setInput('');
+    void (async () => {
+      setIsSubmitting(true);
+      let activeChatId = chatId;
+      try {
+        if (!activeChatId && onCreateChat) {
+          activeChatId = await onCreateChat();
+        }
+        if (!activeChatId) throw new Error("Failed to create chat session");
+
+        const userMsg = await sendMessage({
+          chatId: activeChatId,
+          role: 'user',
+          content: { text: content, context: { searchScope, selectedDocTitle } },
+          messageType: 'text',
+        });
+        if (userMsg) setMessages(prev => [...prev, userMsg]);
+
+        const conversationContext = messages
+          .filter(msg => msg.role === 'user' || msg.role === 'assistant')
+          .slice(-6)
+          .map(msg => {
+            const role = msg.role === 'user' ? 'User' : 'Assistant';
+            const text = typeof msg.content === 'string'
+              ? msg.content
+              : (typeof msg.content === 'object' && msg.content !== null && 'text' in msg.content)
+                ? (msg.content.text ?? JSON.stringify(msg.content))
+                : JSON.stringify(msg.content);
+            return `${role}: ${text}`;
+          })
+          .join('\n\n');
+
+        const aiData = await sendAIChatQuery({
+          question: content,
+          searchScope,
+          style: aiStyle as 'concise' | 'detailed' | 'academic' | 'bullet-points',
+          conversationHistory: conversationContext || undefined,
+          enableWebSearch: Boolean(enableWebSearch),
+          aiPersona: aiPersona as 'general' | 'learning-coach' | 'financial-expert' | 'legal-expert' | 'math-reasoning' | undefined,
+          aiModel,
+          documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
+          companyId: (searchScope === "company" || searchScope === "archive") && companyId ? companyId : undefined,
+          archiveName: searchScope === "archive" && archiveName ? archiveName : undefined,
+        });
+        if (!aiData) throw new Error("Failed to get AI response");
+
+        const aiAnswer = aiData.summarizedAnswer ?? "I'm sorry, I couldn't generate a response.";
+        const aiResponse = await sendMessage({
+          chatId: activeChatId,
+          role: 'assistant',
+          content: { text: aiAnswer, aiModel: aiData.aiModel as AIModelType | undefined ?? aiModel },
+          messageType: 'text',
+        });
+        if (aiResponse) {
+          setMessages(prev => [...prev, aiResponse]);
+          onAIResponse?.(aiAnswer);
+        }
+      } catch (err) {
+        console.error('Voice send error:', err);
+      } finally {
+        setIsSubmitting(false);
+      }
+    })();
+  }, [isSubmitting, chatId, onCreateChat, sendMessage, searchScope, selectedDocTitle, messages, sendAIChatQuery, aiStyle, enableWebSearch, aiPersona, aiModel, selectedDocId, companyId, archiveName, onAIResponse]);
+
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
+      {/* Voice Chat Overlay */}
+      {voiceMode && (
+        <div className="flex-shrink-0 p-3 border-b border-border">
+          <VoiceChat
+            messages={voiceMessages}
+            onSendMessage={handleVoiceSend}
+            onEndCall={() => setVoiceMode(false)}
+            assistantRoles={["assistant"]}
+          />
+        </div>
+      )}
+
       {/* Messages */}
       <div
         className="flex-1 overflow-y-auto px-5 py-5 space-y-5 custom-scrollbar"
@@ -632,6 +728,22 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                   </span>
                 </div>
               </div>
+
+              {/* Voice Button */}
+              <button
+                type="button"
+                onClick={() => setVoiceMode(!voiceMode)}
+                className={cn(
+                  "h-9 w-9 rounded-lg flex items-center justify-center transition-all flex-shrink-0 border",
+                  voiceMode
+                    ? "bg-purple-600 text-white border-purple-600 shadow-sm shadow-purple-500/20"
+                    : "bg-background text-muted-foreground border-border hover:bg-muted hover:text-foreground"
+                )}
+                title={voiceMode ? "Close voice chat" : "Open voice chat"}
+                aria-label="Toggle voice chat"
+              >
+                <Mic className="w-4 h-4" />
+              </button>
 
               {/* Send Button */}
               <button

@@ -6,8 +6,9 @@ export type { SourceReference };
 export interface AIChatRequest {
   documentId?: number;
   companyId?: number;
+  archiveName?: string;
   question: string;
-  searchScope: 'document' | 'company';
+  searchScope: 'document' | 'company' | 'archive';
   aiModel?: 'gpt-4o' | 'gpt-5.2' | 'gpt-5.1' | 'gpt-5-nano' | 'gpt-5-mini' | 'claude-sonnet-4' | 'claude-opus-4.5' | 'gemini-2.5-flash' | 'gemini-3-flash' | 'gemini-3-pro';
   style?: string;
   enableWebSearch?: boolean;
@@ -36,7 +37,7 @@ export interface AIChatResponse {
   processingTimeMs?: number;
   chunksAnalyzed?: number;
   fusionWeights?: number[];
-  searchScope?: 'document' | 'company';
+  searchScope?: 'document' | 'company' | 'archive';
   aiModel?: string;
   webSources?: WebSource[];
   webSearch?: WebSearchInfo;

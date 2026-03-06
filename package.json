@@ -86,6 +86,7 @@
     "formdata-node": "^6.0.3",
     "framer-motion": "^12.29.2",
     "geist": "^1.5.1",
+    "highlight.js": "^11.11.1",
     "inngest": "^3.49.3",
     "input-otp": "^1.4.2",
     "jszip": "^3.10.1",

@@ -35,6 +35,43 @@ const EXTENSION_TO_MIME: Record<string, string> = {
     ".html": "text/html",
     ".htm": "text/html",
     ".md": "text/markdown",
+    ".py": "text/x-python",
+    ".js": "text/javascript",
+    ".ts": "text/typescript",
+    ".jsx": "text/jsx",
+    ".tsx": "text/tsx",
+    ".css": "text/css",
+    ".scss": "text/x-scss",
+    ".less": "text/x-less",
+    ".json": "application/json",
+    ".xml": "text/xml",
+    ".yaml": "text/x-yaml",
+    ".yml": "text/x-yaml",
+    ".toml": "text/x-toml",
+    ".ini": "text/plain",
+    ".cfg": "text/plain",
+    ".env": "text/plain",
+    ".log": "text/plain",
+    ".rst": "text/x-rst",
+    ".java": "text/x-java",
+    ".c": "text/x-c",
+    ".cpp": "text/x-c++src",
+    ".h": "text/x-c",
+    ".hpp": "text/x-c++hdr",
+    ".go": "text/x-go",
+    ".rs": "text/x-rust",
+    ".rb": "text/x-ruby",
+    ".php": "text/x-php",
+    ".swift": "text/x-swift",
+    ".kt": "text/x-kotlin",
+    ".sh": "text/x-shellscript",
+    ".bash": "text/x-shellscript",
+    ".sql": "text/x-sql",
+    ".r": "text/x-r",
+    ".lua": "text/x-lua",
+    ".pl": "text/x-perl",
+    ".scala": "text/x-scala",
+    ".geojson": "application/json",
 };
 
 const EXTENSION_REGEX = /(\.[a-z0-9]+)(?:\?|#|$)/i;
@@ -101,8 +138,8 @@ export async function POST(request: Request) {
         const serializedDocs = docs.map((doc) => {
             const fileId = FILE_API_ID_REGEX.exec(doc.url)?.[1];
             const mimeFromFile = fileId ? mimeByFileId[parseInt(fileId, 10)] : undefined;
-            // Fallback: infer from title/url extension (covers cloud docs with no DB mime)
-            const mimeType = mimeFromFile
+            const mimeType = doc.mimeType
+                ?? mimeFromFile
                 ?? inferMimeFromName(doc.title)
                 ?? inferMimeFromName(doc.url);
             const url = isPrivateBlobUrl(doc.url)

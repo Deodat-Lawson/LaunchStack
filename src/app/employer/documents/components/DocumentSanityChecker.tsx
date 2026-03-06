@@ -42,6 +42,17 @@ interface DocumentSanityCheckerProps {
 
 /* ── Helpers ───────────────────────────────────────────────── */
 
+const ANALYSIS_TYPE_LABELS: Record<string, string> = {
+  contract: 'Checking exhibits, schedules, addendums',
+  financial: 'Checking reports, statements, audit docs',
+  technical: 'Checking specs, manuals, deliverables',
+  compliance: 'Checking regulatory filings, policies',
+  educational: 'Checking syllabi, readings, resources',
+  hr: 'Checking policies, forms, benefits docs',
+  research: 'Checking cited papers, datasets',
+  general: 'Checking all cross-references',
+};
+
 function getLinkHref(link: SuggestedLink): string {
   return link.url ?? link.link ?? '#';
 }
@@ -434,6 +445,11 @@ export function DocumentSanityChecker({
           <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
             {selectedDoc.title}
           </p>
+          {predictiveAnalysis?.analysisType && (
+            <p className="text-[9px] text-purple-500 dark:text-purple-400 mt-0.5 truncate font-medium">
+              {ANALYSIS_TYPE_LABELS[predictiveAnalysis.analysisType] ?? predictiveAnalysis.analysisType}
+            </p>
+          )}
         </div>
         <Button
           onClick={onRefreshAnalysis}
@@ -686,6 +702,13 @@ export function DocumentSanityChecker({
                   </div>
                 </div>
               )}
+
+              {/* ── Disclaimer ── */}
+              <div className="p-3 bg-muted/40 border border-border/40 rounded-xl">
+                <p className="text-[10px] text-muted-foreground leading-relaxed">
+                  <span className="font-semibold">Disclaimer:</span> This analysis is AI-generated and may not capture all document references. For legal, financial, or compliance documents, always verify critical findings with a qualified professional.
+                </p>
+              </div>
 
               {/* ── All clear ── */}
               {issues.length === 0 && links.length === 0 && insights.length === 0 && recommendations.length === 0 && (

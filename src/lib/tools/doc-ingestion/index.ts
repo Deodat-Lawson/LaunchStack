@@ -124,14 +124,20 @@ async function maybeMarkProcessing(
     .where(eq(ocrJobs.id, jobId));
 }
 
+const AZURE_SUPPORTED_EXTENSIONS = new Set([
+  ".pdf", ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".heif",
+  ".docx", ".doc", ".pptx", ".ppt", ".xlsx", ".xls",
+]);
+
 function shouldUsePdfPipeline(mimeType: string | undefined, documentName: string): boolean {
-  const isOffice = isKnownOfficeDocument(documentName);
-  return (
-    !isOffice &&
-    (!mimeType ||
-      mimeType === "application/pdf" ||
-      documentName.toLowerCase().endsWith(".pdf"))
-  );
+  if (mimeType === "application/pdf") return true;
+  if (documentName.toLowerCase().endsWith(".pdf")) return true;
+  return false;
+}
+
+function isAzureSupportedFile(documentUrl: string, documentName: string): boolean {
+  const nameToCheck = `${documentUrl} ${documentName}`.toLowerCase();
+  return [...AZURE_SUPPORTED_EXTENSIONS].some((ext) => nameToCheck.includes(ext));
 }
 
 async function vectorizeWithSidecar(
@@ -342,10 +348,12 @@ export async function runDocIngestionTool(
     documentName,
     companyId,
     mimeType,
+    originalFilename,
     options,
     runtime,
   } = input;
   const pipelineStartTime = Date.now();
+  const routingFilename = originalFilename ?? documentName;
 
   const runStep = createStepRunner(runtime);
   const isInngest = !!runtime?.runStep;
@@ -354,10 +362,12 @@ export async function runDocIngestionTool(
   const updateJobStatus = runtime?.updateJobStatus ?? false;
   const markFailureInDb = runtime?.markFailureInDb ?? false;
 
+  const fastTextPath = runtime?.fastTextPath ?? false;
+
   try {
     await maybeMarkProcessing(jobId, updateJobStatus);
 
-    const isPdf = shouldUsePdfPipeline(mimeType, documentName);
+    const isPdf = !fastTextPath && shouldUsePdfPipeline(mimeType, routingFilename);
 
     // -----------------------------------------------------------------------
     // Steps A+B: Route & Normalize (OCR)
@@ -367,7 +377,7 @@ export async function runDocIngestionTool(
     // -----------------------------------------------------------------------
     let normSummary: NormalizeSummary;
 
-    if (isPdf) {
+    if (isPdf && isAzureSupportedFile(documentUrl, routingFilename)) {
       const routerDecision = await runStep(
         "step-a-router",
         async (): Promise<RouterDecisionResult> =>
@@ -412,7 +422,7 @@ export async function runDocIngestionTool(
             const { ingestToNormalized } = await import("~/lib/ingestion");
             const normalizedDoc = await ingestToNormalized(documentUrl, {
               mimeType,
-              filename: documentName,
+              filename: routingFilename,
               forceOCR: options?.forceOCR,
             });
             await savePipelineState(jobId, "pages", normalizedDoc.pages);
@@ -432,7 +442,7 @@ export async function runDocIngestionTool(
             const { ingestToNormalized } = await import("~/lib/ingestion");
             const normalizedDoc = await ingestToNormalized(documentUrl, {
               mimeType,
-              filename: documentName,
+              filename: routingFilename,
               forceOCR: options?.forceOCR,
             });
             return {
@@ -465,7 +475,7 @@ export async function runDocIngestionTool(
         "step-c-chunking",
         async (): Promise<ChunkSummary> => {
           const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
-          const chunked = await chunkPages(pages);
+          const chunked = await chunkPages(pages, routingFilename);
           await savePipelineState(jobId, "chunks", chunked);
           const stats = getTotalChunkSize(chunked);
           return {
@@ -488,7 +498,7 @@ export async function runDocIngestionTool(
       const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
       chunks = await runStep(
         "step-c-chunking",
-        async (): Promise<DocumentChunk[]> => chunkPages(pages),
+        async (): Promise<DocumentChunk[]> => chunkPages(pages, routingFilename),
       );
     }
 

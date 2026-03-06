@@ -24,6 +24,7 @@ import {
 import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { notifyOnCriticalFindings } from "~/lib/integrations/slack";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -294,6 +295,13 @@ export async function POST(request: Request) {
         } as PredictiveAnalysisOutput;
 
         await storeAnalysisResult(documentId, typedAnalysisType, typedIncludeRelatedDocs, fullResult);
+
+        // Fire-and-forget Slack notification for critical findings
+        notifyOnCriticalFindings(
+            docDetails.title,
+            typedAnalysisType,
+            analysisResult.missingDocuments,
+        ).catch(() => { /* non-critical */ });
 
         recordResult("success");
 

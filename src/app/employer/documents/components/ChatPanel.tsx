@@ -3,6 +3,7 @@
 import { 
   FileText,
   Building2,
+  Archive,
   Zap,
   BookOpen,
   GraduationCap,
@@ -41,8 +42,8 @@ interface ChatPanelProps {
   aiModel: AIModelType;
   setAiModel: (m: AIModelType) => void;
   modelAvailability?: Partial<Record<AIModelType, boolean>>;
-  searchScope: 'document' | 'company';
-  setSearchScope: (s: 'document' | 'company') => void;
+  searchScope: 'document' | 'company' | 'archive';
+  setSearchScope: (s: 'document' | 'company' | 'archive') => void;
   companyId: number | null;
   setPdfPageNumber: (p: number) => void;
   styleOptions: Record<string, string>;
@@ -103,6 +104,7 @@ export function ChatPanel({
   userRole = 'employer',
 }: ChatPanelProps) {
   const showCompanyScope = userRole === 'employer';
+  const hasArchive = !!selectedDoc?.sourceArchiveName;
 
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden">
@@ -132,6 +134,21 @@ export function ChatPanel({
                   <FileText className="w-2.5 h-2.5" />
                   Doc
                 </button>
+                {hasArchive && (
+                  <button
+                    onClick={() => setSearchScope('archive')}
+                    className={cn(
+                      "flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all",
+                      searchScope === 'archive'
+                        ? "bg-background text-purple-600 dark:text-purple-400 shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                    title={`Search all files from ${selectedDoc?.sourceArchiveName}`}
+                  >
+                    <Archive className="w-2.5 h-2.5" />
+                    Zip
+                  </button>
+                )}
                 <button
                   onClick={() => setSearchScope('company')}
                   className={cn(
@@ -238,6 +255,24 @@ export function ChatPanel({
         </div>
       </div>
 
+      {/* Legal / Financial Persona Disclaimer */}
+      {aiPersona === 'legal-expert' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-start gap-2.5 animate-in fade-in">
+          <Scale className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400">
+            This is AI-generated analysis, not legal advice. Consult a qualified attorney for legal matters.
+          </p>
+        </div>
+      )}
+      {aiPersona === 'financial-expert' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-start gap-2.5 animate-in fade-in">
+          <Briefcase className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400">
+            This is AI-generated analysis, not financial advice. Consult a qualified financial advisor.
+          </p>
+        </div>
+      )}
+
       {/* Processing Warning */}
       {selectedDoc && selectedDoc.ocrProcessed === false && searchScope === 'document' && (
         <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-center gap-2.5 animate-in fade-in">
@@ -257,6 +292,7 @@ export function ChatPanel({
           searchScope={searchScope}
           selectedDocId={selectedDoc?.id}
           companyId={companyId}
+          archiveName={selectedDoc?.sourceArchiveName}
           aiStyle={aiStyle}
           aiPersona={aiPersona}
           aiModel={aiModel}

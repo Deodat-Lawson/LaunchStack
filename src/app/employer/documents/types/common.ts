@@ -18,7 +18,8 @@ export type ViewMode =
   | "employees"
   | "settings"
   | "metadata"
-  | "marketing-pipeline";
+  | "marketing-pipeline"
+  | "notes";
 
 export type AiPersona =
   | "general"

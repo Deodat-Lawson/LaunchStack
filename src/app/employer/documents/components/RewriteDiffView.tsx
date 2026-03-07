@@ -549,9 +549,8 @@ export function RewriteDiffView() {
                       <p className="text-xs text-muted-foreground">Last edited {doc.lastEdited}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground line-clamp-3 mb-3">
-                    {doc.content.slice(0, 150)}
-                    {doc.content.length > 150 ? "..." : ""}
+                  <p className="text-sm text-muted-foreground mb-3 whitespace-pre-wrap break-words max-h-48 overflow-y-auto">
+                    {doc.content}
                   </p>
                   <Button
                     size="sm"

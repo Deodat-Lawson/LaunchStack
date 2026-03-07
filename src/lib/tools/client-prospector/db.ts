@@ -23,7 +23,6 @@ import type {
     ProspectorJobRecord,
     ProspectorJobStatus,
     ProspectorOutput,
-    ProspectResult,
 } from "~/lib/tools/client-prospector/types";
 
 // ─── Row types derived from the Drizzle schema ──────────────────────────────
@@ -131,10 +130,7 @@ export function createDrizzleClientProspectorJobStore(): ClientProspectorJobStor
         async update(jobId, companyId, patch) {
             const [row] = await db
                 .update(clientProspectorJobs)
-                .set({
-                    ...patch,
-                    updatedAt: new Date(),
-                })
+                .set(patch)
                 .where(
                     and(
                         eq(clientProspectorJobs.id, jobId),

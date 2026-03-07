@@ -8,7 +8,7 @@
 // This can also be invoked directly by AI agents for synchronous use.
 
 import type { ProspectorOutput } from "~/lib/tools/client-prospector/types";
-import { DEFAULT_SEARCH_RADIUS } from "~/lib/tools/client-prospector/types";
+import { DEFAULT_SEARCH_RADIUS, FoursquareCategoryIdSchema } from "~/lib/tools/client-prospector/types";
 import { resolveLocation } from "~/lib/tools/client-prospector/location-resolver";
 import { planSearches } from "~/lib/tools/client-prospector/query-planner";
 import { executePlaceSearch } from "~/lib/tools/client-prospector/place-search";
@@ -45,6 +45,9 @@ export async function runClientProspector(
     options: RunClientProspectorOptions = {},
 ): Promise<ProspectorOutput> {
     const radius = input.radius ?? DEFAULT_SEARCH_RADIUS;
+    const providedCategoryIds = (input.categories ?? []).filter((category) =>
+        FoursquareCategoryIdSchema.safeParse(category).success,
+    );
 
     // Step 1: Resolve location
     const resolvedLocation = await resolveLocation(input.location);
@@ -70,7 +73,7 @@ export async function runClientProspector(
 
     // Step 4: Score — LLM ranks and scores the results by relevance
     await options.onStageChange?.("scoring");
-    const resolvedCategories = input.categories ?? [
+    const resolvedCategories = providedCategoryIds.length > 0 ? providedCategoryIds : [
         ...new Set(plannedSearches.flatMap((s) => s.categoryIds)),
     ];
     const results = await scoreLeads(

@@ -8,6 +8,7 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
+import { env } from "~/env";
 import { LatLngSchema } from "~/lib/tools/client-prospector/types";
 import type { LatLng, SearchLocation } from "~/lib/tools/client-prospector/types";
 
@@ -57,7 +58,7 @@ export async function resolveLocation(location: SearchLocation): Promise<LatLng>
     }
 
     const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        openAIApiKey: env.server.OPENAI_API_KEY,
         modelName: "gpt-4o-mini",
         temperature: 0,
     });

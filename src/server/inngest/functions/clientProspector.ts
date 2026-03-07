@@ -89,6 +89,7 @@ function toPipelineInput(eventData: ProspectorEventData) {
         location: eventData.location,
         radius: eventData.radius,
         ...(eventData.categories ? { categories: eventData.categories } : {}),
+        ...(eventData.excludeChains !== undefined ? { excludeChains: eventData.excludeChains } : {}),
     };
 }
 

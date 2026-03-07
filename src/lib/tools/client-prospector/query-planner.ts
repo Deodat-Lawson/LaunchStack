@@ -10,6 +10,8 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
+import { env } from "~/env";
+import { FoursquareCategoryIdSchema } from "~/lib/tools/client-prospector/types";
 import type { PlannedSearch } from "~/lib/tools/client-prospector/types";
 
 // ─── Structured output schema for LLM ───────────────────────────────────────
@@ -74,9 +76,25 @@ function buildHumanPrompt(
     companyContext: string,
     categories?: string[],
 ): string {
+    const validCategoryIds = (categories ?? []).filter((category) =>
+        FoursquareCategoryIdSchema.safeParse(category).success,
+    );
+    const categoryLabels = (categories ?? []).filter(
+        (category) => !FoursquareCategoryIdSchema.safeParse(category).success,
+    );
     const categoryBlock =
         categories && categories.length > 0
-            ? `Use ONLY these Foursquare category IDs: ${categories.join(", ")}. Every planned search must use only IDs from this list.`
+            ? [
+                  validCategoryIds.length > 0
+                      ? `If helpful, constrain searches to these already-known Foursquare category IDs: ${validCategoryIds.join(", ")}.`
+                      : null,
+                  categoryLabels.length > 0
+                      ? `Translate these user-provided category labels into the correct Foursquare category IDs before planning searches: ${categoryLabels.join(", ")}.`
+                      : null,
+                  "Every planned search must return only real Foursquare category IDs in categoryIds.",
+              ]
+                  .filter(Boolean)
+                  .join(" ")
             : "Infer appropriate Foursquare category IDs from the query and company context.";
 
     return `PROSPECTING QUERY:
@@ -102,7 +120,7 @@ export async function planSearches(
     categories?: string[],
 ): Promise<PlannedSearch[]> {
     const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        openAIApiKey: env.server.OPENAI_API_KEY,
         modelName: "gpt-4o-mini",
         temperature: 0.2,
     });

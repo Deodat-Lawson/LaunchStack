@@ -29,6 +29,10 @@ export const ProspectorInputSchema = z.object({
 });
 export type ProspectorInput = z.infer<typeof ProspectorInputSchema>;
 
+export const FoursquareCategoryIdSchema = z
+    .string()
+    .regex(/^[0-9a-fA-F]+$/, "Expected a valid Foursquare category ID");
+
 // ─── Query Planner ───────────────────────────────────────────────────────────
 
 export interface PlannedSearch {
@@ -114,8 +118,9 @@ export const ProspectorEventDataSchema = z.object({
     userId: z.string(),
     query: z.string(),
     companyContext: z.string(),
-    location: LatLngSchema, // always resolved to lat/lng before dispatch
+    location: SearchLocationSchema,
     radius: z.number().int(),
     categories: z.array(z.string()).optional(),
+    excludeChains: z.boolean().optional(),
 });
 export type ProspectorEventData = z.infer<typeof ProspectorEventDataSchema>;

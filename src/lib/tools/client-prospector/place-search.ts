@@ -10,6 +10,7 @@
 // IMPORTANT: Do NOT pass the `fields` parameter — it triggers Premium pricing.
 // The default Pro response includes all the fields we need.
 
+import { env } from "~/env";
 import type { LatLng, PlannedSearch, RawPlaceResult } from "~/lib/tools/client-prospector/types";
 
 // Foursquare new Places API endpoint (post June 17 2025 accounts)
@@ -63,11 +64,41 @@ interface FoursquareSearchResponse {
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getApiKey(): string {
-    const key = process.env.FOURSQUARE_SERVICE_KEY;
+    const key = env.server.FOURSQUARE_SERVICE_KEY;
     if (!key) {
         throw new Error("FOURSQUARE_SERVICE_KEY environment variable is not set.");
     }
     return key;
+}
+
+async function executeSearchWithRetries(
+    search: PlannedSearch,
+    location: LatLng,
+    radius: number,
+    apiKey: string,
+    options: { excludeChains: boolean },
+): Promise<RawPlaceResult[]> {
+    let lastError: Error | null = null;
+
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+        try {
+            return await callFoursquare(search, location, radius, apiKey, options);
+        } catch (err) {
+            lastError = err instanceof Error ? err : new Error(String(err));
+            if (attempt < MAX_RETRIES) {
+                console.warn(
+                    `[place-search] Search failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): "${search.searchQuery.slice(0, 50)}..."`,
+                    lastError.message,
+                );
+            }
+        }
+    }
+
+    console.error(
+        `[place-search] Search failed after ${MAX_RETRIES + 1} attempts: "${search.searchQuery.slice(0, 50)}..."`,
+        lastError,
+    );
+    return [];
 }
 
 // Closed-bucket values that indicate a business is no longer operating
@@ -186,34 +217,27 @@ export async function executePlaceSearch(
     const combined: RawPlaceResult[] = [];
     const excludeChains = options.excludeChains ?? true; // default: exclude chains
 
-    for (const search of searches) {
-        let lastError: Error | null = null;
-        let results: RawPlaceResult[] = [];
+    const settledSearches = await Promise.allSettled(
+        searches.map((search) =>
+            executeSearchWithRetries(search, location, radius, apiKey, { excludeChains }),
+        ),
+    );
 
-        for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-            try {
-                results = await callFoursquare(search, location, radius, apiKey, { excludeChains });
-                lastError = null;
-                break;
-            } catch (err) {
-                lastError = err instanceof Error ? err : new Error(String(err));
-                if (attempt < MAX_RETRIES) {
-                    console.warn(
-                        `[place-search] Search failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): "${search.searchQuery.slice(0, 50)}..."`,
-                        lastError.message,
-                    );
-                } else {
-                    console.error(
-                        `[place-search] Search failed after ${MAX_RETRIES + 1} attempts: "${search.searchQuery.slice(0, 50)}..."`,
-                        lastError,
-                    );
-                }
-            }
-        }
-
-        if (results.length === 0 && lastError) {
+    for (const [index, settled] of settledSearches.entries()) {
+        const search = searches[index];
+        if (!search) {
             continue;
         }
+
+        if (settled.status === "rejected") {
+            console.error(
+                `[place-search] Search promise rejected unexpectedly: "${search.searchQuery.slice(0, 50)}..."`,
+                settled.reason,
+            );
+            continue;
+        }
+
+        const results = settled.value;
 
         if (results.length === 0) {
             console.warn(`[place-search] Zero results for search: "${search.searchQuery.slice(0, 80)}..."`);

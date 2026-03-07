@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from "next/dynamic";
 import { 
   Sparkles, 
@@ -13,6 +13,7 @@ import {
   Copy,
   Check,
   MessageSquare,
+  Mic,
   X
 } from 'lucide-react';
 import { useAIChatbot, type Message } from '../hooks/useAIChatbot';
@@ -20,6 +21,7 @@ import { useAIChat, type SourceReference } from '../hooks/useAIChat';
 import { cn } from '~/lib/utils';
 import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
 import { ModelBadge } from './ModelBadge';
+import { VoiceChat, type VoiceMessage } from '~/components/voice/VoiceChat';
 
 const MarkdownMessage = dynamic(
   () => import("~/app/_components/MarkdownMessage"),
@@ -35,15 +37,17 @@ interface AgentChatInterfaceProps {
   userId: string;
   onAIResponse?: (response: string) => void;
   selectedDocTitle?: string | null;
-  searchScope: 'document' | 'company';
+  searchScope: 'document' | 'company' | 'archive';
   selectedDocId?: number | null;
   companyId?: number | null;
+  archiveName?: string | null;
   aiStyle?: string;
   aiPersona?: string;
   aiModel?: AIModelType;
   onPageClick?: (page: number) => void;
   onReferencesResolved?: (references: SourceReference[]) => void;
   onCreateChat?: () => Promise<string | null>;
+  isDocumentProcessing?: boolean;
 }
 
 export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
@@ -54,12 +58,14 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   searchScope,
   selectedDocId,
   companyId,
+  archiveName,
   aiStyle = 'concise',
   aiPersona = 'general',
   aiModel = 'gpt-5.2',
   onPageClick,
   onReferencesResolved,
   onCreateChat,
+  isDocumentProcessing = false,
 }) => {
   const { getMessages, sendMessage, voteMessage, error } = useAIChatbot();
   const { sendQuery: sendAIChatQuery, error: aiChatError } = useAIChat();
@@ -69,6 +75,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   const [enableWebSearch, setEnableWebSearch] = useState(false);
   const [showToolsMenu, setShowToolsMenu] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [voiceMode, setVoiceMode] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const toolsMenuRef = useRef<HTMLDivElement>(null);
@@ -139,9 +146,9 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = '52px';
+      textareaRef.current.style.height = '48px';
       const scrollHeight = textareaRef.current.scrollHeight;
-      textareaRef.current.style.height = `${Math.min(Math.max(scrollHeight, 52), 180)}px`;
+      textareaRef.current.style.height = `${Math.min(Math.max(scrollHeight, 48), 180)}px`;
     }
   }, [input]);
 
@@ -221,7 +228,8 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           aiPersona: aiPersona as 'general' | 'learning-coach' | 'financial-expert' | 'legal-expert' | 'math-reasoning' | undefined,
           aiModel,
           documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
-          companyId: searchScope === "company" && companyId ? companyId : undefined,
+          companyId: (searchScope === "company" || searchScope === "archive") && companyId ? companyId : undefined,
+          archiveName: searchScope === "archive" && archiveName ? archiveName : undefined,
         });
 
         if (!aiData) {
@@ -288,33 +296,119 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
     await voteMessage(chatId, messageId, isUpvoted);
   };
 
+  const voiceMessages: VoiceMessage[] = messages.map((msg) => ({
+    id: msg.id,
+    role: msg.role,
+    content:
+      typeof msg.content === "string"
+        ? msg.content
+        : typeof msg.content === "object" && msg.content !== null && "text" in msg.content
+          ? (msg.content.text ?? JSON.stringify(msg.content))
+          : JSON.stringify(msg.content),
+  }));
+
+  const handleVoiceSend = useCallback((content: string) => {
+    if (!content.trim() || isSubmitting) return;
+    setInput('');
+    void (async () => {
+      setIsSubmitting(true);
+      let activeChatId = chatId;
+      try {
+        if (!activeChatId && onCreateChat) {
+          activeChatId = await onCreateChat();
+        }
+        if (!activeChatId) throw new Error("Failed to create chat session");
+
+        const userMsg = await sendMessage({
+          chatId: activeChatId,
+          role: 'user',
+          content: { text: content, context: { searchScope, selectedDocTitle } },
+          messageType: 'text',
+        });
+        if (userMsg) setMessages(prev => [...prev, userMsg]);
+
+        const conversationContext = messages
+          .filter(msg => msg.role === 'user' || msg.role === 'assistant')
+          .slice(-6)
+          .map(msg => {
+            const role = msg.role === 'user' ? 'User' : 'Assistant';
+            const text = typeof msg.content === 'string'
+              ? msg.content
+              : (typeof msg.content === 'object' && msg.content !== null && 'text' in msg.content)
+                ? (msg.content.text ?? JSON.stringify(msg.content))
+                : JSON.stringify(msg.content);
+            return `${role}: ${text}`;
+          })
+          .join('\n\n');
+
+        const aiData = await sendAIChatQuery({
+          question: content,
+          searchScope,
+          style: aiStyle as 'concise' | 'detailed' | 'academic' | 'bullet-points',
+          conversationHistory: conversationContext || undefined,
+          enableWebSearch: Boolean(enableWebSearch),
+          aiPersona: aiPersona as 'general' | 'learning-coach' | 'financial-expert' | 'legal-expert' | 'math-reasoning' | undefined,
+          aiModel,
+          documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
+          companyId: (searchScope === "company" || searchScope === "archive") && companyId ? companyId : undefined,
+          archiveName: searchScope === "archive" && archiveName ? archiveName : undefined,
+        });
+        if (!aiData) throw new Error("Failed to get AI response");
+
+        const aiAnswer = aiData.summarizedAnswer ?? "I'm sorry, I couldn't generate a response.";
+        const aiResponse = await sendMessage({
+          chatId: activeChatId,
+          role: 'assistant',
+          content: { text: aiAnswer, aiModel: aiData.aiModel as AIModelType | undefined ?? aiModel },
+          messageType: 'text',
+        });
+        if (aiResponse) {
+          setMessages(prev => [...prev, aiResponse]);
+          onAIResponse?.(aiAnswer);
+        }
+      } catch (err) {
+        console.error('Voice send error:', err);
+      } finally {
+        setIsSubmitting(false);
+      }
+    })();
+  }, [isSubmitting, chatId, onCreateChat, sendMessage, searchScope, selectedDocTitle, messages, sendAIChatQuery, aiStyle, enableWebSearch, aiPersona, aiModel, selectedDocId, companyId, archiveName, onAIResponse]);
+
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden bg-background">
+      {/* Voice Chat Overlay */}
+      {voiceMode && (
+        <div className="flex-shrink-0 p-3 border-b border-border">
+          <VoiceChat
+            messages={voiceMessages}
+            onSendMessage={handleVoiceSend}
+            onEndCall={() => setVoiceMode(false)}
+            assistantRoles={["assistant"]}
+          />
+        </div>
+      )}
+
       {/* Messages */}
       <div
-        className="flex-1 overflow-y-auto px-6 py-6 space-y-6"
+        className="flex-1 overflow-y-auto px-5 py-5 space-y-5 custom-scrollbar"
         role="log"
         aria-live="polite"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
-            <div className="relative mb-6">
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-violet-100 to-indigo-100 dark:from-violet-900/30 dark:to-indigo-900/30 flex items-center justify-center">
-                <MessageSquare className="w-9 h-9 text-violet-500/60 dark:text-violet-400/50" />
+            <div className="relative mb-5">
+              <div className="w-16 h-16 rounded-2xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center">
+                <MessageSquare className="w-7 h-7 text-purple-400/60 dark:text-purple-500/40" />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/25">
-                <Sparkles className="w-4 h-4 text-white" />
+              <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center shadow-sm shadow-purple-500/25">
+                <Sparkles className="w-3.5 h-3.5 text-white" />
               </div>
             </div>
-            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-2">
-              Start a conversation
-            </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed">
+            <h3 className="text-sm font-bold text-foreground mb-1.5">Start a conversation</h3>
+            <p className="text-xs text-muted-foreground max-w-xs leading-relaxed">
               Ask me anything about {searchScope === 'document' ? (selectedDocTitle ?? 'your document') : 'all your company documents'}. I&apos;m here to help!
             </p>
-            
-            {/* Quick prompts */}
-            <div className="flex flex-wrap gap-2 mt-6 justify-center max-w-md">
+            <div className="flex flex-wrap gap-1.5 mt-5 justify-center max-w-sm">
               {[
                 "Summarize the key points",
                 "What are the main takeaways?",
@@ -323,7 +417,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                 <button
                   key={prompt}
                   onClick={() => setInput(prompt)}
-                  className="px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-full hover:bg-violet-100 dark:hover:bg-violet-900/30 hover:text-violet-600 dark:hover:text-violet-400 transition-all"
+                  className="px-3 py-1.5 text-xs font-medium text-muted-foreground bg-muted rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all"
                 >
                   {prompt}
                 </button>
@@ -343,42 +437,38 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
               <div
                 key={msg.id}
                 className={cn(
-                  'flex gap-3',
+                  'flex gap-2.5',
                   msg.role === 'user' ? 'justify-end' : 'justify-start'
                 )}
               >
                 {/* AI Avatar */}
                 {msg.role === 'assistant' && (
-                  <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-md shadow-violet-500/20">
-                    <Sparkles className="w-4 h-4 text-white" />
+                  <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center shadow-sm shadow-purple-500/20">
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
                   </div>
                 )}
 
-                <div
-                  className={cn(
-                    'max-w-[75%] rounded-2xl transition-all',
-                    msg.role === 'user'
-                      ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-3 shadow-lg shadow-violet-500/20'
-                      : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-3 shadow-sm'
-                  )}
-                >
+                <div className={cn(
+                  'max-w-[78%] rounded-xl transition-all',
+                  msg.role === 'user'
+                    ? 'bg-purple-600 text-white px-4 py-2.5 shadow-sm shadow-purple-500/20'
+                    : 'bg-card border border-border px-4 py-3 shadow-sm'
+                )}>
                   {msg.role === 'assistant' ? (
                     <MarkdownMessage
                       content={displayText}
-                      className="text-sm leading-relaxed text-slate-700 dark:text-slate-200 prose prose-sm dark:prose-invert max-w-none prose-p:my-2 prose-headings:mt-4 prose-headings:mb-2"
+                      className="text-sm leading-relaxed text-foreground prose prose-sm dark:prose-invert max-w-none prose-p:my-2 prose-headings:mt-4 prose-headings:mb-2"
                     />
                   ) : (
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">
-                      {displayText}
-                    </p>
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{displayText}</p>
                   )}
-                  
+
                   {msg.role === 'assistant' && typeof msg.content === 'object' && msg.content !== null && (
                     <>
                       {/* Source References */}
                       {'references' in msg.content && Array.isArray(msg.content.references) && msg.content.references.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-                          <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                        <div className="mt-3 pt-3 border-t border-border">
+                          <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.15em] mb-2">
                             Page References
                           </p>
                           <div className="flex flex-wrap gap-1.5">
@@ -391,7 +481,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                                     onPageClick?.(reference.page);
                                   }
                                 }}
-                                className="inline-flex items-center bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-violet-200 dark:hover:bg-violet-800/50 transition-all"
+                                className="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2.5 py-1 rounded-md text-xs font-semibold hover:bg-purple-200 dark:hover:bg-purple-800/50 transition-all"
                               >
                                 {reference.page ? `Page ${reference.page}` : "Highlight Source"}
                               </button>
@@ -403,8 +493,8 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                       {/* Legacy page references fallback */}
                       {(!('references' in msg.content) || !Array.isArray(msg.content.references) || msg.content.references.length === 0) &&
                         'pages' in msg.content && Array.isArray(msg.content.pages) && msg.content.pages.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-                          <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                        <div className="mt-3 pt-3 border-t border-border">
+                          <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.15em] mb-2">
                             Referenced Pages
                           </p>
                           <div className="flex flex-wrap gap-1.5">
@@ -412,7 +502,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                               <button
                                 key={`${msg.id}-page-${page}-${idx}`}
                                 onClick={() => onPageClick?.(page)}
-                                className="inline-flex items-center bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-violet-200 dark:hover:bg-violet-800/50 transition-all"
+                                className="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2.5 py-1 rounded-md text-xs font-semibold hover:bg-purple-200 dark:hover:bg-purple-800/50 transition-all"
                               >
                                 Page {page}
                               </button>
@@ -423,26 +513,26 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
 
                       {/* Web Sources */}
                       {'webSources' in msg.content && Array.isArray(msg.content.webSources) && msg.content.webSources.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-                          <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                        <div className="mt-3 pt-3 border-t border-border">
+                          <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.15em] mb-2">
                             Web Sources
                           </p>
-                          <div className="space-y-2">
+                          <div className="space-y-1.5">
                             {msg.content.webSources.map((source: { title: string; url: string; snippet: string }, idx: number) => (
                               <a
                                 key={`${msg.id}-source-${idx}`}
                                 href={source.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block p-2.5 bg-blue-50 dark:bg-blue-950/30 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors group border border-blue-100 dark:border-blue-900/50"
+                                className="block p-2.5 bg-blue-50 dark:bg-blue-950/30 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors group border border-blue-100 dark:border-blue-900/50"
                               >
                                 <div className="flex items-start gap-2">
-                                  <ExternalLink className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                                  <ExternalLink className="w-3 h-3 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                                   <div className="flex-1 min-w-0">
                                     <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 truncate">
                                       {source.title}
                                     </p>
-                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">
+                                    <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">
                                       {source.snippet}
                                     </p>
                                   </div>
@@ -454,33 +544,29 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                       )}
 
                       {/* Model Badge & Actions */}
-                      <div className="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-                        {/* Model Badge */}
+                      <div className="flex items-center justify-between gap-2 mt-3 pt-3 border-t border-border">
                         <ModelBadge model={msg.aiModel ?? (typeof msg.content === 'object' && msg.content !== null && 'aiModel' in msg.content ? msg.content.aiModel : undefined)} />
-
-                        {/* Actions */}
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-0.5">
                           <button
                             onClick={() => handleCopy(displayText, msg.id)}
-                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
+                            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
                             title="Copy response"
                           >
-                            {copiedId === msg.id ? (
-                              <Check className="w-3.5 h-3.5 text-emerald-500" />
-                            ) : (
-                              <Copy className="w-3.5 h-3.5" />
-                            )}
+                            {copiedId === msg.id
+                              ? <Check className="w-3.5 h-3.5 text-emerald-500" />
+                              : <Copy className="w-3.5 h-3.5" />
+                            }
                           </button>
                           <button
                             onClick={() => handleVote(msg.id, true)}
-                            className="p-1.5 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
+                            className="p-1.5 rounded-md hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
                             title="Helpful"
                           >
                             <ThumbsUp className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleVote(msg.id, false)}
-                            className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-all"
+                            className="p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 text-muted-foreground hover:text-red-600 dark:hover:text-red-400 transition-all"
                             title="Not helpful"
                           >
                             <ThumbsDown className="w-3.5 h-3.5" />
@@ -491,50 +577,50 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                   )}
                 </div>
 
-                {/* User Avatar placeholder for alignment */}
+                {/* User Avatar */}
                 {msg.role === 'user' && (
-                  <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center shadow-md">
-                    <span className="text-xs font-bold text-white">You</span>
+                  <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-muted flex items-center justify-center">
+                    <span className="text-[10px] font-bold text-muted-foreground">You</span>
                   </div>
                 )}
               </div>
             );
           })
         )}
-        
+
         {/* Typing Indicator */}
         {isSubmitting && (
-          <div className="flex gap-3 justify-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-md shadow-violet-500/20">
-              <Sparkles className="w-4 h-4 text-white" />
+          <div className="flex gap-2.5 justify-start">
+            <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center shadow-sm shadow-purple-500/20">
+              <Sparkles className="w-3.5 h-3.5 text-white" />
             </div>
-            <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-4 py-3 shadow-sm">
+            <div className="bg-card border border-border rounded-xl px-4 py-3 shadow-sm">
               <div className="flex items-center gap-2">
                 <div className="flex gap-1">
-                  <div className="w-2 h-2 rounded-full bg-violet-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2 h-2 rounded-full bg-violet-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 rounded-full bg-violet-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Thinking...</span>
+                <span className="text-xs text-muted-foreground font-medium">Thinking...</span>
               </div>
             </div>
           </div>
         )}
-        
+
         <div ref={chatEndRef} />
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-slate-200/60 dark:border-slate-800/60 p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div className="border-t border-border p-3.5 bg-background/90 backdrop-blur-sm">
         {error && (
-          <div className="mb-3 px-3 py-2 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded-lg flex items-center gap-2">
+          <div className="mb-2.5 px-3 py-2 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/60 rounded-lg flex items-center gap-2">
             <span className="text-xs text-red-600 dark:text-red-400">{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="w-full">
-          <div className="rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white dark:bg-slate-900 shadow-sm transition-colors focus-within:border-violet-400/70 dark:focus-within:border-violet-600/70 focus-within:ring-4 focus-within:ring-violet-500/10">
-            <div className="flex items-end gap-2 p-2 sm:p-3">
+          <div className="rounded-xl border border-border bg-muted/30 transition-colors focus-within:border-purple-400/60 dark:focus-within:border-purple-600/60 focus-within:ring-2 focus-within:ring-purple-500/10">
+            <div className="flex items-end gap-2 p-2">
               {/* Tools Button */}
               <div className="relative flex-shrink-0" ref={toolsMenuRef}>
                 <button
@@ -545,25 +631,25 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                     setShowToolsMenu(!showToolsMenu);
                   }}
                   className={cn(
-                    "w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl transition-all border",
+                    "w-9 h-9 flex items-center justify-center rounded-lg transition-all border",
                     showToolsMenu || enableWebSearch
-                      ? "bg-violet-600 text-white border-violet-600 shadow-md shadow-violet-500/25"
-                      : "bg-slate-50 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-300"
+                      ? "bg-purple-600 text-white border-purple-600 shadow-sm shadow-purple-500/20"
+                      : "bg-background text-muted-foreground border-border hover:bg-muted hover:text-foreground"
                   )}
                   title="Tools"
                   aria-label="Open tools menu"
                 >
-                  <Plus className={cn("w-5 h-5 transition-transform", showToolsMenu && "rotate-45")} />
+                  <Plus className={cn("w-4 h-4 transition-transform", showToolsMenu && "rotate-45")} />
                 </button>
-                
+
                 {/* Tools Menu */}
                 {showToolsMenu && (
-                  <div className="absolute bottom-full left-0 mb-3 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 animate-in slide-in-from-bottom-2 fade-in duration-200">
-                    <div className="px-4 py-2.5 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tools</span>
-                      <button 
+                  <div className="absolute bottom-full left-0 mb-2 w-60 bg-card rounded-xl shadow-xl border border-border overflow-hidden z-50 animate-in slide-in-from-bottom-2 fade-in duration-150">
+                    <div className="px-3 py-2 border-b border-border flex items-center justify-between">
+                      <span className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.15em]">Tools</span>
+                      <button
                         onClick={() => setShowToolsMenu(false)}
-                        className="w-5 h-5 rounded flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400"
+                        className="w-5 h-5 rounded flex items-center justify-center hover:bg-muted text-muted-foreground"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -577,31 +663,29 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                         setShowToolsMenu(false);
                       }}
                       className={cn(
-                        "w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors",
-                        enableWebSearch && "bg-violet-50 dark:bg-violet-900/20"
+                        "w-full flex items-center gap-3 px-3 py-2.5 hover:bg-muted/60 transition-colors",
+                        enableWebSearch && "bg-purple-50 dark:bg-purple-900/20"
                       )}
                     >
                       <div className={cn(
-                        "w-8 h-8 rounded-lg flex items-center justify-center",
-                        enableWebSearch 
-                          ? "bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400" 
-                          : "bg-slate-100 dark:bg-slate-700 text-slate-500"
+                        "w-7 h-7 rounded-lg flex items-center justify-center",
+                        enableWebSearch
+                          ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
+                          : "bg-muted text-muted-foreground"
                       )}>
-                        <Search className="w-4 h-4" />
+                        <Search className="w-3.5 h-3.5" />
                       </div>
                       <div className="flex-1 text-left">
                         <p className={cn(
-                          "text-sm font-semibold",
-                          enableWebSearch ? "text-violet-600 dark:text-violet-400" : "text-slate-700 dark:text-slate-300"
+                          "text-xs font-semibold",
+                          enableWebSearch ? "text-purple-600 dark:text-purple-400" : "text-foreground"
                         )}>
                           Web Search
                         </p>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                          Search the web for more info
-                        </p>
+                        <p className="text-[10px] text-muted-foreground">Search the web for more info</p>
                       </div>
                       {enableWebSearch && (
-                        <div className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
+                        <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
                       )}
                     </button>
                   </div>
@@ -611,9 +695,9 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
               {/* Input Field */}
               <div className="flex-1 min-w-0">
                 {enableWebSearch && (
-                  <div className="mb-2 inline-flex items-center gap-1.5 px-2 py-1 bg-violet-100 dark:bg-violet-900/30 rounded-md">
-                    <Search className="w-3 h-3 text-violet-600 dark:text-violet-400" />
-                    <span className="text-[10px] font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider">Web search on</span>
+                  <div className="mb-1.5 inline-flex items-center gap-1 px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 rounded-md">
+                    <Search className="w-2.5 h-2.5 text-purple-600 dark:text-purple-400" />
+                    <span className="text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-[0.15em]">Web search on</span>
                   </div>
                 )}
                 <textarea
@@ -631,39 +715,61 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
                   }}
                   onClick={(e) => e.stopPropagation()}
                   placeholder={`Ask about ${searchScope === 'document' ? (selectedDocTitle ?? 'your document') : 'all company documents'}...`}
-                  className="w-full bg-transparent text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-2 py-2.5 text-sm focus:outline-none resize-none min-h-[52px] max-h-[180px] leading-relaxed"
+                  className="w-full bg-transparent text-foreground placeholder:text-muted-foreground/60 px-1 py-2 text-sm focus:outline-none resize-none min-h-[48px] max-h-[180px] leading-relaxed"
                   rows={1}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isDocumentProcessing}
                 />
-                <div className="flex items-center justify-between px-2 pb-1">
-                  <span className="text-[11px] text-slate-400 dark:text-slate-500">
-                    Enter to send, Shift+Enter for new line
+                <div className="flex items-center justify-between pb-1 px-1">
+                  <span className="text-[10px] text-muted-foreground">
+                    Enter to send · Shift+Enter for new line
                   </span>
-                  <span className="text-[11px] text-slate-400 dark:text-slate-500 hidden sm:inline">
+                  <span className="text-[10px] text-muted-foreground hidden sm:inline">
                     {searchScope === 'document' ? 'Document mode' : 'Company mode'}
                   </span>
                 </div>
               </div>
 
+              {/* Voice Button */}
+              <button
+                type="button"
+                onClick={() => setVoiceMode(!voiceMode)}
+                className={cn(
+                  "h-9 w-9 rounded-lg flex items-center justify-center transition-all flex-shrink-0 border",
+                  voiceMode
+                    ? "bg-purple-600 text-white border-purple-600 shadow-sm shadow-purple-500/20"
+                    : "bg-background text-muted-foreground border-border hover:bg-muted hover:text-foreground"
+                )}
+                title={voiceMode ? "Close voice chat" : "Open voice chat"}
+                aria-label="Toggle voice chat"
+              >
+                <Mic className="w-4 h-4" />
+              </button>
+
               {/* Send Button */}
               <button
                 type="submit"
-                disabled={!input.trim() || isSubmitting}
+                disabled={!input.trim() || isSubmitting || isDocumentProcessing}
                 className={cn(
-                  "h-10 sm:h-11 min-w-10 sm:min-w-11 px-3 sm:px-4 rounded-xl flex items-center justify-center gap-1.5 font-semibold text-sm transition-all",
+                  "h-9 min-w-9 px-3 rounded-lg flex items-center justify-center gap-1.5 font-semibold text-sm transition-all flex-shrink-0",
                   !input.trim() || isSubmitting
-                    ? "bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-200 dark:border-slate-700"
-                    : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 shadow-md shadow-violet-500/25 active:scale-95"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed border border-border"
+                    : "bg-purple-600 text-white hover:bg-purple-700 shadow-sm shadow-purple-500/20 active:scale-95"
                 )}
                 aria-label="Send message"
               >
                 <Send className="w-4 h-4" />
-                <span className="hidden md:inline">Send</span>
+                <span className="hidden md:inline text-xs">Send</span>
               </button>
             </div>
           </div>
         </form>
       </div>
+
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 10px; }
+      `}</style>
     </div>
   );
 };

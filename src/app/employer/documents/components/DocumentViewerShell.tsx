@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
 import { Sidebar } from "./Sidebar";
@@ -14,6 +14,18 @@ import { getDocumentDisplayType, type DocumentDisplayType } from "../types/docum
 import { useAIChat } from "../hooks/useAIChat";
 import { useAIChatbot } from "../hooks/useAIChatbot";
 import { Button } from "~/app/employer/documents/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/app/employer/documents/components/ui/alert-dialog";
+import { Toaster } from "~/app/employer/documents/components/ui/sonner";
+import { toast } from "sonner";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 
 import { RESPONSE_STYLES, type ResponseStyleId } from "~/lib/ai/styles";
@@ -44,6 +56,34 @@ const RewriteDiffView = dynamic(
   () => import("./RewriteDiffView").then((module) => module.RewriteDiffView),
   { loading: () => <LoadingPage /> }
 );
+const UploadView = dynamic(
+  () => import("./UploadView").then((module) => module.UploadView),
+  { loading: () => <LoadingPage /> }
+);
+const EmployerDashboard = dynamic(
+  () => import("./EmployerDashboard").then((module) => module.EmployerDashboard),
+  { loading: () => <LoadingPage /> }
+);
+const CompanyAnalyticsPanel = dynamic(
+  () => import("./CompanyAnalyticsPanel").then((module) => module.CompanyAnalyticsPanel),
+  { loading: () => <LoadingPage /> }
+);
+const EmployeeManagementPanel = dynamic(
+  () => import("./EmployeeManagementPanel").then((module) => module.EmployeeManagementPanel),
+  { loading: () => <LoadingPage /> }
+);
+const EmployerSettingsPanel = dynamic(
+  () => import("./EmployerSettingsPanel").then((module) => module.EmployerSettingsPanel),
+  { loading: () => <LoadingPage /> }
+);
+const CompanyMetadataPanel = dynamic(
+  () => import("./CompanyMetadataPanel").then((module) => module.CompanyMetadataPanel),
+  { loading: () => <LoadingPage /> }
+);
+const MarketingPipelinePanel = dynamic(
+  () => import("./MarketingPipelinePanel").then((module) => module.MarketingPipelinePanel),
+  { loading: () => <LoadingPage /> }
+);
 
 const STYLE_OPTIONS = Object.entries(RESPONSE_STYLES).reduce((acc, [key, config]) => {
   acc[key as ResponseStyleId] = config.label;
@@ -55,8 +95,20 @@ export interface DocumentViewerShellProps {
   userRole: 'employer' | 'employee';
 }
 
+const NotesPanel = dynamic(
+  () => import("~/components/notes/NotesPanel").then((module) => module.NotesPanel),
+  { loading: () => <LoadingPage /> }
+);
+
+const VALID_VIEW_MODES = new Set<string>([
+  "document-only", "with-ai-qa", "with-ai-qa-history", "predictive-analysis",
+  "generator", "rewrite", "upload", "dashboard", "analytics",
+  "employees", "settings", "metadata", "marketing-pipeline", "notes",
+]);
+
 export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { isLoaded, isSignedIn, userId } = useAuth();
   
   // Data States
@@ -70,7 +122,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [fileTypeFilter, setFileTypeFilter] = useState<DocumentDisplayType | "all">("all");
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
-  const [viewMode, setViewMode] = useState<ViewMode>("with-ai-qa");
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    const param = searchParams.get("view");
+    if (param && VALID_VIEW_MODES.has(param)) return param as ViewMode;
+    return userRole === 'employer' ? "dashboard" : "with-ai-qa";
+  });
   const [qaSubMode, setQaSubMode] = useState<"simple" | "chat">("simple");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isPreviewCollapsed, setIsPreviewCollapsed] = useState(false);
@@ -81,7 +137,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [aiError, setAiError] = useState("");
   const [referencePages, setReferencePages] = useState<number[]>([]);
   const [aiStyle, setAiStyle] = useState<string>("concise");
-  const [searchScope, setSearchScope] = useState<"document" | "company">("document");
+  const [searchScope, setSearchScope] = useState<"document" | "company" | "archive">("document");
   const [aiAnswerModel, setAiAnswerModel] = useState<AIModelType | undefined>(undefined);
   const { sendQuery: sendAIChatQuery, loading: isAiLoading } = useAIChat();
   
@@ -118,6 +174,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   
   const [pdfPageNumber, setPdfPageNumber] = useState<number>(1);
   
+  // Delete confirmation state
+  const [deleteConfirmDocId, setDeleteConfirmDocId] = useState<number | null>(null);
+
   const previewPanelRef = useRef<ImperativePanelHandle>(null);
   const sidebarPanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -230,6 +289,22 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     void fetchDocuments();
   }, [userId, isRoleLoading, fetchDocuments]);
 
+  // Poll for document updates when the selected doc is still processing
+  useEffect(() => {
+    if (!selectedDoc || selectedDoc.ocrProcessed !== false) return;
+    const interval = setInterval(() => void fetchDocuments(), 15_000);
+    return () => clearInterval(interval);
+  }, [selectedDoc, fetchDocuments]);
+
+  // Sync selectedDoc when the documents list refreshes (e.g. after OCR completes)
+  useEffect(() => {
+    if (!selectedDoc || selectedDoc.ocrProcessed !== false) return;
+    const updated = documents.find((d) => d.id === selectedDoc.id);
+    if (updated && updated.ocrProcessed === true) {
+      setSelectedDoc(updated);
+    }
+  }, [documents, selectedDoc]);
+
   useEffect(() => {
     const fetchModelAvailability = async () => {
       try {
@@ -268,10 +343,14 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setPredictiveAnalysis(null);
   };
 
-  const deleteDocument = async (docId: number) => {
-    if (!window.confirm('Are you sure you want to delete this document? This will permanently remove it and all related data. This action cannot be undone.')) {
-      return;
-    }
+  const requestDeleteDocument = (docId: number) => {
+    setDeleteConfirmDocId(docId);
+  };
+
+  const confirmDeleteDocument = async () => {
+    const docId = deleteConfirmDocId;
+    setDeleteConfirmDocId(null);
+    if (!docId) return;
 
     try {
       const response = await fetch('/api/deleteDocument', {
@@ -286,10 +365,10 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
 
       setDocuments(prev => prev.filter(doc => doc.id !== docId));
       if (selectedDoc?.id === docId) handleSelectDoc(null);
-      alert(result.message ?? 'Document deleted successfully');
+      toast.success(result.message ?? 'Document deleted successfully');
     } catch (error) {
       console.error('Error deleting document:', error);
-      alert(`Failed to delete document: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error(`Failed to delete document: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -327,13 +406,30 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     void fetchPredictiveAnalysis(selectedDoc.id, false);
   }, [viewMode, selectedDoc, fetchPredictiveAnalysis]);
 
+  // Sync viewMode when ?view= search param changes after mount
+  useEffect(() => {
+    const param = searchParams.get("view");
+    if (param && VALID_VIEW_MODES.has(param) && param !== viewMode) {
+      setViewMode(param as ViewMode);
+    }
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Refresh document list when leaving the upload tab
+  const prevViewModeRef = useRef<typeof viewMode | null>(null);
+  useEffect(() => {
+    if (prevViewModeRef.current === "upload" && viewMode !== "upload") {
+      void fetchDocuments();
+    }
+    prevViewModeRef.current = viewMode;
+  }, [viewMode, fetchDocuments]);
+
   const handleAiSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!aiQuestion.trim()) return;
     
     if (searchScope === "document" && !selectedDoc) return;
     let resolvedCompanyId = companyId;
-    if (searchScope === "company" && !resolvedCompanyId) {
+    if ((searchScope === "company" || searchScope === "archive") && !resolvedCompanyId) {
       resolvedCompanyId = await ensureCompanyContext();
       if (!resolvedCompanyId) {
         setAiError("Company information not available.");
@@ -347,7 +443,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setReferencePages([]);
 
     const currentQuestion = aiQuestion;
-    const modelUsedForQuery = aiModel; // Capture the model at query time
+    const modelUsedForQuery = aiModel;
     setAiQuestion("");
 
     try {
@@ -357,7 +453,8 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         style: aiStyle as ResponseStyleId,
         aiModel: modelUsedForQuery,
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
-        companyId: searchScope === "company" ? resolvedCompanyId ?? undefined : undefined,
+        companyId: (searchScope === "company" || searchScope === "archive") ? resolvedCompanyId ?? undefined : undefined,
+        archiveName: searchScope === "archive" && selectedDoc?.sourceArchiveName ? selectedDoc.sourceArchiveName : undefined,
       });
 
       if (!data) throw new Error("Failed to get AI response");
@@ -373,11 +470,22 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     }
   };
 
-  const handleSearchScopeChange = useCallback((scope: "document" | "company") => {
+  const handleSearchScopeChange = useCallback((scope: "document" | "company" | "archive") => {
     if (scope === "company") {
       void ensureCompanyContext().then((resolvedCompanyId) => {
         if (resolvedCompanyId) {
           setSearchScope("company");
+        } else {
+          setAiError("Company information not available.");
+          setSearchScope("document");
+        }
+      });
+      return;
+    }
+    if (scope === "archive") {
+      void ensureCompanyContext().then((resolvedCompanyId) => {
+        if (resolvedCompanyId) {
+          setSearchScope("archive");
         } else {
           setAiError("Company information not available.");
           setSearchScope("document");
@@ -434,42 +542,59 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   // Render main content based on view mode
   const renderContent = () => {
     switch (viewMode) {
+      case "dashboard":
+        if (userRole !== 'employer') return null;
+        return (
+          <EmployerDashboard
+            documents={documents}
+            categories={categories}
+            setViewMode={setViewMode}
+            setSelectedDoc={handleSelectDoc}
+          />
+        );
       case "with-ai-qa":
         return (
           <div className="flex flex-col h-full">
             {/* Query Mode Toggle */}
-            <div className="flex-shrink-0 bg-background border-b border-border px-8 pt-4 pb-0">
-              <div className="flex gap-8">
+            <div className="flex-shrink-0 bg-background border-b border-border px-5 py-0">
+              <div className="flex items-center gap-1">
                 <button
                   onClick={() => {
                     setQaSubMode("simple");
                     setCurrentChatId(null);
                   }}
                   className={cn(
-                    "pb-3 text-xs font-bold uppercase tracking-widest transition-all relative",
-                    qaSubMode === "simple" ? "text-purple-600" : "text-muted-foreground hover:text-foreground"
+                    "py-3 px-3 text-[10px] font-black uppercase tracking-[0.15em] transition-all relative",
+                    qaSubMode === "simple"
+                      ? "text-purple-600 dark:text-purple-400"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   Simple Query
-                  {qaSubMode === "simple" && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 animate-in fade-in duration-300" />}
+                  {qaSubMode === "simple" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 rounded-t-full animate-in fade-in duration-200" />
+                  )}
                 </button>
                 <button
                   onClick={() => setQaSubMode("chat")}
                   className={cn(
-                    "pb-3 text-xs font-bold uppercase tracking-widest transition-all relative",
-                    qaSubMode === "chat" ? "text-purple-600" : "text-muted-foreground hover:text-foreground"
+                    "py-3 px-3 text-[10px] font-black uppercase tracking-[0.15em] transition-all relative",
+                    qaSubMode === "chat"
+                      ? "text-purple-600 dark:text-purple-400"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   AI Chat
-                  {qaSubMode === "chat" && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 animate-in fade-in duration-300" />}
+                  {qaSubMode === "chat" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 rounded-t-full animate-in fade-in duration-200" />
+                  )}
                 </button>
-                
-                <div className="ml-auto pb-3 flex items-center gap-4">
-                  <div className="h-4 w-px bg-border" />
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-7 px-3 text-[10px] font-black uppercase tracking-widest text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all active:scale-95"
+                <div className="ml-auto flex items-center gap-2 py-2">
+                  <div className="h-3.5 w-px bg-border" />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2.5 text-[9px] font-black uppercase tracking-[0.15em] text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all active:scale-95 rounded-md"
                     onClick={() => {
                       if (qaSubMode === "chat") {
                         setQaSubMode("simple");
@@ -583,25 +708,40 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         );
       case "predictive-analysis":
         return (
-          <DocumentSanityChecker 
-            selectedDoc={selectedDoc}
-            predictiveAnalysis={predictiveAnalysis}
-            predictiveLoading={isPredictiveLoading}
-            predictiveError={predictiveError}
-            onRefreshAnalysis={() => {
-              if (selectedDoc) {
-                void fetchPredictiveAnalysis(selectedDoc.id, true);
-              }
-            }}
-            onSelectDocument={(docId, page) => {
-              const doc = documents.find(d => d.id === docId);
-              if (doc) {
-                setSelectedDoc(doc);
-                setPdfPageNumber(page);
-              }
-            }}
-            setPdfPageNumber={setPdfPageNumber}
-          />
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            <ResizablePanel defaultSize={60} minSize={35}>
+              <DocumentViewer 
+                document={selectedDoc} 
+                pdfPageNumber={pdfPageNumber}
+                setPdfPageNumber={setPdfPageNumber}
+              />
+            </ResizablePanel>
+            
+            <ResizableHandle className="w-px bg-border" />
+            
+            <ResizablePanel defaultSize={40} minSize={28} maxSize={55}>
+              <DocumentSanityChecker 
+                selectedDoc={selectedDoc}
+                predictiveAnalysis={predictiveAnalysis}
+                predictiveLoading={isPredictiveLoading}
+                predictiveError={predictiveError}
+                onRefreshAnalysis={() => {
+                  if (selectedDoc) {
+                    void fetchPredictiveAnalysis(selectedDoc.id, true);
+                  }
+                }}
+                onSelectDocument={(docId, page) => {
+                  const doc = documents.find(d => d.id === docId);
+                  if (doc) {
+                    setSelectedDoc(doc);
+                    setPdfPageNumber(page);
+                  }
+                }}
+                setPdfPageNumber={setPdfPageNumber}
+                currentPage={pdfPageNumber}
+              />
+            </ResizablePanel>
+          </ResizablePanelGroup>
         );
       case "document-only":
         return (
@@ -616,6 +756,42 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         return <DocumentGenerator />;
       case "rewrite":
         return <RewriteDiffView />;
+      case "upload":
+        if (userRole !== 'employer') return null;
+        return <UploadView onDocumentUploaded={() => void fetchDocuments()} />;
+      case "analytics":
+        if (userRole !== 'employer') return null;
+        return <CompanyAnalyticsPanel />;
+      case "employees":
+        if (userRole !== 'employer') return null;
+        return <EmployeeManagementPanel />;
+      case "settings":
+        if (userRole !== 'employer') return null;
+        return <EmployerSettingsPanel />;
+      case "metadata":
+        if (userRole !== 'employer') return null;
+        return <CompanyMetadataPanel />;
+      case "marketing-pipeline":
+        if (userRole !== 'employer') return null;
+        return <MarketingPipelinePanel />;
+      case "notes":
+        return (
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            <ResizablePanel defaultSize={60} minSize={35}>
+              <DocumentViewer 
+                document={selectedDoc} 
+                pdfPageNumber={pdfPageNumber}
+                setPdfPageNumber={setPdfPageNumber}
+              />
+            </ResizablePanel>
+            
+            <ResizableHandle className="w-px bg-border" />
+            
+            <ResizablePanel defaultSize={40} minSize={25} maxSize={50}>
+              <NotesPanel documentId={selectedDoc?.id ? String(selectedDoc.id) : null} />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        );
       default:
         return null;
     }
@@ -630,10 +806,10 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         <ResizablePanel 
           ref={sidebarPanelRef}
           defaultSize={20} 
-          minSize={15} 
+          minSize={14} 
           maxSize={30}
           collapsible={true}
-          collapsedSize={5}
+          collapsedSize={4}
           onCollapse={() => setIsSidebarCollapsed(true)}
           onExpand={() => setIsSidebarCollapsed(false)}
         >
@@ -648,7 +824,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
             viewMode={viewMode}
             setViewMode={setViewMode}
             toggleCategory={toggleCategory}
-            deleteDocument={userRole === 'employer' ? (id) => { void deleteDocument(id); } : undefined}
+            deleteDocument={userRole === 'employer' ? requestDeleteDocument : undefined}
             isCollapsed={isSidebarCollapsed}
             onCollapseToggle={(collapsed) => {
               if (collapsed) sidebarPanelRef.current?.collapse();
@@ -665,10 +841,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
               setQaSubMode("chat");
             }}
             userRole={userRole}
+            totalDocuments={documents.length}
           />
         </ResizablePanel>
 
-        <ResizableHandle className="w-px bg-gray-200 dark:bg-gray-800" />
+        <ResizableHandle className="w-px bg-border" />
 
         {/* Main Content Area */}
         <ResizablePanel defaultSize={80} minSize={50}>
@@ -677,6 +854,31 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
+
+      <AlertDialog
+        open={deleteConfirmDocId !== null}
+        onOpenChange={(open) => { if (!open) setDeleteConfirmDocId(null); }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete document?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently remove the document and all related data. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={() => void confirmDeleteDocument()}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <Toaster />
     </div>
   );
 }

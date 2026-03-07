@@ -15,6 +15,13 @@ export async function POST(request: Request) {
     try {
         const {userId, name, email, companyName, numberOfEmployees} = (await request.json()) as PostBody;
 
+        // Validate required fields
+        if (!name?.trim()) {
+            return createValidationError(
+                "User name is required. Please ensure you are logged in with a complete profile."
+            );
+        }
+
         // Check if company already exists
         const [existingCompany] = await db
             .select()
@@ -36,6 +43,7 @@ export async function POST(request: Request) {
             .returning({ id: company.id });
 
         if(!newCompany) {
+            console.error("Company creation returned no data. Database insert failed.");
             return createValidationError(
                 "Could not create company. Please try again later."
             );
@@ -59,6 +67,10 @@ export async function POST(request: Request) {
     }
     catch (error: unknown) {
         console.error("Error during employer company signup:", error);
+        if (error instanceof Error) {
+            console.error("Error message:", error.message);
+            console.error("Error stack:", error.stack);
+        }
         return handleApiError(error);
     }
 }

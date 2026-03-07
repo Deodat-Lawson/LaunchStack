@@ -8,8 +8,79 @@ PDR AI is a Next.js platform for role-based document management, AI-assisted Q&A
 - Document upload pipeline with optional OCR for scanned PDFs.
 - PostgreSQL + pgvector semantic retrieval for RAG workflows.
 - AI chat and predictive document analysis over uploaded content.
+- Agent guardrails with PII filtering, grounding checks, and confidence gating.
+- Supervisor agent that validates outputs against domain-specific rubrics.
+- Marketing pipeline with content generation for Reddit, X, LinkedIn, and Bluesky.
 - Optional web-enriched analysis with Tavily.
 - Optional reliability/observability via Inngest and LangSmith.
+
+## Predictive Analysis — Supported Document Types
+
+PDR AI runs domain-specific analysis tailored to your document type:
+
+| Type | What It Detects |
+|------|----------------|
+| **Contract** | Missing exhibits, schedules, addendums, and supporting agreements |
+| **Financial** | Missing balance sheets, audit reports, income statements |
+| **Technical** | Missing specifications, manuals, diagrams, deliverables |
+| **Compliance** | Missing regulatory filings, certifications, policy documents |
+| **Educational** | Missing syllabi, handouts, readings, linked resources |
+| **HR** | Missing policies, forms, benefits materials, handbooks |
+| **Research** | Missing cited papers, datasets, supplementary materials |
+| **General** | Any document with cross-references and attachments |
+
+Each analysis type also extracts insights (deadlines, action items, resources, caveats) and runs chain-of-verification on high-priority predictions.
+
+## Importing External Knowledge
+
+PDR AI can ingest content exported from third-party tools. No API keys or OAuth setup required — export your data, upload the files, and the ingestion pipeline handles the rest.
+
+### Supported Export Formats
+
+| Source | Export Method | Resulting Format | PDR AI Adapter |
+|--------|-------------|-----------------|----------------|
+| **Notion** | Settings > Export > Markdown & CSV | `.md`, `.csv` (ZIP) | TextAdapter, SpreadsheetAdapter |
+| **Notion** | Page > Export > HTML | `.html` | HtmlAdapter |
+| **Google Docs** | File > Download > Microsoft Word | `.docx` | DocxAdapter |
+| **Google Sheets** | File > Download > CSV or Excel | `.csv`, `.xlsx` | SpreadsheetAdapter |
+| **Google Drive** | Google Takeout (takeout.google.com) | `.docx` (ZIP) | DocxAdapter |
+| **Slack** | Workspace Settings > Import/Export > Export | `.json` (ZIP) | JsonExportAdapter |
+| **GitHub** | Code > Download ZIP | `.md`, `.txt` (ZIP) | TextAdapter |
+| **GitHub** | `gh issue list --json ...` | `.json` | JsonExportAdapter |
+| **GitHub** | `gh pr list --json ...` | `.json` | JsonExportAdapter |
+
+### How to Export
+
+**Notion**
+1. Open your Notion workspace.
+2. Click the **...** menu on a page, or go to **Settings & members > Export** for a full workspace export.
+3. Select **Markdown & CSV** as the format and check **Include subpages** if needed.
+4. Download the ZIP and upload it directly to PDR AI.
+
+**Google Docs / Sheets**
+1. Open the document in Google Docs or Sheets.
+2. Go to **File > Download** and choose **Microsoft Word (.docx)** or **CSV / Excel (.xlsx)**.
+3. Upload the downloaded file. For bulk exports, use [Google Takeout](https://takeout.google.com) to export your Drive as a ZIP.
+
+**Slack**
+1. Go to **Workspace Settings > Import/Export Data > Export**.
+2. Choose a date range and start the export.
+3. Download the ZIP and upload it to PDR AI. Each channel's messages will be ingested as a separate document.
+
+**GitHub**
+1. **Repo docs**: Click **Code > Download ZIP** on any GitHub repository. Upload the ZIP — all Markdown and text files will be ingested.
+2. **Issues**: Install the [GitHub CLI](https://cli.github.com/) and run:
+   ```bash
+   gh issue list --state all --limit 1000 --json number,title,body,state,labels,author,createdAt,closedAt,comments > issues.json
+   ```
+   Upload the resulting `issues.json` file.
+3. **Pull requests**: Run:
+   ```bash
+   gh pr list --state all --limit 1000 --json number,title,body,state,labels,author,createdAt,mergedAt,comments > prs.json
+   ```
+   Upload the resulting `prs.json` file.
+
+All uploaded content flows through the standard ingestion pipeline (chunking, embedding, RAG indexing) and becomes searchable alongside your other documents.
 
 ## Architecture
 
@@ -124,6 +195,7 @@ Create `.env` from `.env.example` and fill required values:
 - `DATABASE_URL`
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `CLERK_SECRET_KEY`
+- `BLOB_READ_WRITE_TOKEN` (Vercel Blob read/write token)
 - `OPENAI_API_KEY`
 - `INNGEST_EVENT_KEY`, as placeholder
 
@@ -137,6 +209,18 @@ Optional integrations:
 - `LANGCHAIN_TRACING_V2`, `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`
 - `DEBUG_PERF` (`1` or `true`) to enable dev perf logs for middleware and key auth/dashboard APIs
 
+### 2.1) Configure Vercel Blob Storage
+
+Vercel Blob is used for storing uploaded documents. Both **public** and **private** stores are supported -- the upload logic auto-detects which mode the store uses and adapts automatically.
+
+1. In the Vercel dashboard, go to **Storage → Blob → Create Store**.
+2. Choose either **Public** or **Private** access. Both work:
+   - **Public** stores produce URLs the browser can load directly (faster for previews).
+   - **Private** stores keep files behind authentication; the app proxies content through `/api/documents/[id]/content` and `/api/files/[id]` so previews still work.
+3. Generate a **Read/Write token** for the store and add it as `BLOB_READ_WRITE_TOKEN` in your environment (`.env` locally, or Vercel Project Settings for deploys).
+4. Redeploy so the token is available at build and runtime.
+5. Verify: sign in to the Employer Upload page, upload a small PDF, and confirm `/api/upload-local` returns a `vercel-storage.com` URL without errors.
+
 ### 3) Start database and apply schema
 
 ```bash
@@ -146,7 +230,6 @@ pnpm db:push
 ### 4) Run app
 
 ```bash
-pnpm inngest:dev
 pnpm run dev
 ```
 
@@ -229,6 +312,12 @@ pnpm typecheck
 pnpm build
 pnpm start
 ```
+
+## Roadmap — Future Integrations
+
+- **Notion API-key connector**: Paste your Notion Internal Integration token in settings, select pages to sync. No OAuth required. Contributions welcome.
+- **GitHub webhook sync**: Automatically ingest new issues and PRs via repository webhooks.
+- **Google Drive watch**: Automatic re-sync when Google Docs are updated, using Drive push notifications.
 
 ## Troubleshooting
 

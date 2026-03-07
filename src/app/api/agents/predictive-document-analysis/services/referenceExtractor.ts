@@ -2,7 +2,8 @@ import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import type { PdfChunk, DocumentReference } from "~/app/api/agents/predictive-document-analysis/types";
-import { groupContentFromChunks, hasSpecificIdentifier } from "~/app/api/agents/predictive-document-analysis/utils/content";
+import { groupContentFromChunks, isValidReference } from "~/app/api/agents/predictive-document-analysis/utils/content";
+import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 
 const ReferenceExtractionSchema = z.object({
     references: z.array(z.object({
@@ -15,20 +16,25 @@ const ReferenceExtractionSchema = z.object({
 
 function createReferenceExtractionPrompt(content: string): string {
     return `
-    You are an expert in extracting references from documents.
+    You are an expert at extracting document references from any type of document.
 
-    Extract ONLY clear, explicit references to separate documents that should be attached or included (e.g., "See Exhibit A", "Schedule 1 attached", "Refer to Addendum B").
+    Extract clear, explicit references to separate documents, resources, or materials that the reader is expected to consult but that are NOT included in the current content.
+
+    Examples of references to extract:
+    • "See Exhibit A", "Schedule 1 attached", "Refer to Addendum B"
+    • "Please see syllabus", "refer to the handbook", "as described in the user guide"
+    • "See the policy document", "complete Form W-9", "review the template"
+    • "Posted on Canvas", "available on the course website"
     
-    IMPORTANT RULES:
-    - Only extract references that use specific document identifiers (Exhibit A, Schedule 1, Attachment B, etc.)
-    - Ignore general mentions like "other documents", "additional forms", "related materials"
-    - Ignore references to external documents that are clearly not part of this document set
-    - Only include references where the document is expected to be attached or included
-    - Be very conservative - when in doubt, don't extract it
+    RULES:
+    - Extract any named document, form, guide, syllabus, handbook, manual, template, or policy that is referenced
+    - Include references where the reader is directed to consult another document ("see", "refer to", "please review", "posted on")
+    - Ignore vague generic mentions like "other documents", "various materials", "related items"
+    - Do NOT extract URLs themselves (those are handled separately)
     
     For each valid reference, provide:
-    - name: The specific document identifier (e.g., "Exhibit A", "Schedule 1")
-    - type: The document type (exhibit, schedule, attachment, addendum)
+    - name: The document name (e.g., "Exhibit A", "Syllabus", "Employee Handbook", "Form W-9")
+    - type: The document type (exhibit, schedule, attachment, addendum, syllabus, handbook, policy, form, template, guide, manual, other)
     - page: The page number where referenced
     - contextSnippet: 15-30 words around the reference showing why it should be included
     
@@ -69,12 +75,12 @@ export async function extractReferences(
         const references = response.references;
         
         const filteredReferences = references.filter(ref => 
-            hasSpecificIdentifier(ref.documentName)
+            isValidReference(ref.documentName)
         );
         
         return filteredReferences;
     } catch (error) {
-        console.error("Reference extraction error:", error);
+        console.error("Reference extraction error:", sanitizeErrorMessage(error));
         return [];
     }
 }

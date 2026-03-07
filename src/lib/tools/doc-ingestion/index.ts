@@ -2,24 +2,28 @@ import { eq } from "drizzle-orm";
 
 import {
   chunkPages,
+  createRootStructure,
+  finalizeStorage,
   isKnownOfficeDocument,
   markJobFailed,
   normalizeDocument,
   routeDocument,
-  storeDocument,
-  vectorizeChunks,
+  storeBatch,
+  withDbRetry,
   type NormalizationResult,
   type RouterDecisionResult,
   type StoredSection,
 } from "~/lib/ocr/processor";
-import { getTotalChunkSize } from "~/lib/ocr/chunker";
+import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "~/lib/ocr/chunker";
+import { generateEmbeddings } from "~/lib/ai/embeddings";
 import type {
   DocumentChunk,
+  PageContent,
   PipelineResult,
   VectorizedChunk,
 } from "~/lib/ocr/types";
 import { db } from "~/server/db";
-import { ocrJobs } from "~/server/db/schema";
+import { ocrJobs, documentContextChunks } from "~/server/db/schema";
 
 import type {
   DocIngestionToolInput,
@@ -28,6 +32,65 @@ import type {
 } from "./types";
 
 const DEFAULT_SIDECAR_BATCH_SIZE = 50;
+const DEFAULT_OPENAI_BATCH_SIZE = 50;
+
+/**
+ * Lightweight step output for normalize, kept under Inngest's ~4MB step output limit.
+ * The full page data is stored in ocrJobs.ocrResult so subsequent steps can load it.
+ */
+interface NormalizeSummary {
+  jobId: string;
+  pageCount: number;
+  provider: string;
+  processingTimeMs: number;
+  confidenceScore?: number;
+}
+
+/**
+ * Lightweight step output for chunking.
+ * Full chunk data is stored in ocrJobs.ocrResult.
+ */
+interface ChunkSummary {
+  jobId: string;
+  parentChunkCount: number;
+  childChunkCount: number;
+  textChunks: number;
+  tableChunks: number;
+}
+
+async function savePipelineState(
+  jobId: string,
+  key: string,
+  data: unknown,
+): Promise<void> {
+  return withDbRetry(async () => {
+    const [job] = await db
+      .select({ ocrResult: ocrJobs.ocrResult })
+      .from(ocrJobs)
+      .where(eq(ocrJobs.id, jobId));
+
+    const existing = (job?.ocrResult as Record<string, unknown> | null) ?? {};
+    await db
+      .update(ocrJobs)
+      .set({ ocrResult: { ...existing, [key]: data } })
+      .where(eq(ocrJobs.id, jobId));
+  });
+}
+
+async function loadPipelineState<T>(jobId: string, key: string): Promise<T> {
+  return withDbRetry(async () => {
+    const [job] = await db
+      .select({ ocrResult: ocrJobs.ocrResult })
+      .from(ocrJobs)
+      .where(eq(ocrJobs.id, jobId));
+
+    const state = job?.ocrResult as Record<string, unknown> | null;
+    if (!state || !(key in state)) {
+      throw new Error(`Pipeline state "${key}" not found for job ${jobId}`);
+    }
+    return state[key] as T;
+  });
+}
 
 function splitIntoBatches<T>(arr: T[], size: number): T[][] {
   const batches: T[][] = [];
@@ -61,32 +124,40 @@ async function maybeMarkProcessing(
     .where(eq(ocrJobs.id, jobId));
 }
 
+const AZURE_SUPPORTED_EXTENSIONS = new Set([
+  ".pdf", ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".heif",
+  ".docx", ".doc", ".pptx", ".ppt", ".xlsx", ".xls",
+]);
+
 function shouldUsePdfPipeline(mimeType: string | undefined, documentName: string): boolean {
-  const isOffice = isKnownOfficeDocument(documentName);
-  return (
-    !isOffice &&
-    (!mimeType ||
-      mimeType === "application/pdf" ||
-      documentName.toLowerCase().endsWith(".pdf"))
-  );
+  if (mimeType === "application/pdf") return true;
+  if (documentName.toLowerCase().endsWith(".pdf")) return true;
+  return false;
+}
+
+function isAzureSupportedFile(documentUrl: string, documentName: string): boolean {
+  const nameToCheck = `${documentUrl} ${documentName}`.toLowerCase();
+  return [...AZURE_SUPPORTED_EXTENSIONS].some((ext) => nameToCheck.includes(ext));
 }
 
 async function vectorizeWithSidecar(
   chunks: DocumentChunk[],
   sidecarUrl: string,
   sidecarBatchSize: number,
+  documentId: number,
+  rootStructureId: number,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
-): Promise<VectorizedChunk[]> {
+): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   const batches = splitIntoBatches(chunks, sidecarBatchSize);
-  const allEmbeddings: number[][] = [];
+  let totalStored = 0;
 
   for (let i = 0; i < batches.length; i++) {
     const batch = batches[i];
     if (!batch) continue;
 
-    const batchResult = await runStep(
-      `step-d-embed-batch-${i}`,
-      async (): Promise<number[][]> => {
+    const result = await runStep(
+      `step-d-batch-${i}`,
+      async (): Promise<{ batchIndex: number; stored: number }> => {
         const texts = batch.map((chunk) => chunk.content);
         const response = await fetch(`${sidecarUrl}/embed`, {
           method: "POST",
@@ -101,18 +172,102 @@ async function vectorizeWithSidecar(
         }
 
         const data = (await response.json()) as { embeddings: number[][] };
-        return data.embeddings;
+        const vectorized: VectorizedChunk[] = batch.map((chunk, idx) => ({
+          content: chunk.content,
+          metadata: chunk.metadata,
+          vector: data.embeddings[idx] ?? [],
+        }));
+
+        const sections = await storeBatch(documentId, rootStructureId, vectorized);
+        return { batchIndex: i, stored: sections.length };
       },
     );
 
-    allEmbeddings.push(...batchResult);
+    totalStored += result.stored;
   }
 
-  return chunks.map((chunk, idx) => ({
-    content: chunk.content,
-    metadata: chunk.metadata,
-    vector: allEmbeddings[idx] ?? [],
-  }));
+  const rows = await db
+    .select({ id: documentContextChunks.id, content: documentContextChunks.content })
+    .from(documentContextChunks)
+    .where(eq(documentContextChunks.documentId, BigInt(documentId)));
+
+  return {
+    totalStored,
+    storedSections: rows.map((r) => ({ sectionId: r.id, content: r.content })),
+  };
+}
+
+/**
+ * Vectorize chunks via OpenAI using batched Inngest steps.
+ * Each step embeds a batch of parent chunks AND writes them directly to the
+ * database, returning only a tiny count. This avoids Inngest's output_too_large
+ * error since vectors never pass through step serialization.
+ */
+async function vectorizeWithOpenAI(
+  chunks: DocumentChunk[],
+  batchSize: number,
+  documentId: number,
+  rootStructureId: number,
+  runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
+): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
+  if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
+
+  const contentStrings = prepareForEmbedding(chunks);
+  console.log(
+    `[Vectorize] Prepared ${chunks.length} parents -> ${contentStrings.length} strings for embedding`,
+  );
+
+  const childCounts = chunks.map(
+    (c) => (c.children && c.children.length > 0 ? c.children.length : 1),
+  );
+
+  const parentBatches = splitIntoBatches(chunks, batchSize);
+  let totalStored = 0;
+  let stringOffset = 0;
+
+  for (let i = 0; i < parentBatches.length; i++) {
+    const batch = parentBatches[i];
+    if (!batch) continue;
+
+    const batchChildCount = batch.reduce(
+      (sum, _, idx) => sum + (childCounts[i * batchSize + idx] ?? 0),
+      0,
+    );
+    const batchStringsStart = stringOffset;
+    const batchStrings = contentStrings.slice(
+      batchStringsStart,
+      batchStringsStart + batchChildCount,
+    );
+    stringOffset += batchChildCount;
+
+    const result = await runStep(
+      `step-d-batch-${i}`,
+      async (): Promise<{ batchIndex: number; stored: number }> => {
+        console.log(
+          `[Vectorize] Batch ${i + 1}/${parentBatches.length}: ${batch.length} parents, ${batchStrings.length} strings`,
+        );
+        const embedResult = await generateEmbeddings(batchStrings, {
+          model: "text-embedding-3-large",
+          dimensions: 1536,
+        });
+        const vectorized = mergeWithEmbeddings(batch, embedResult.embeddings);
+        const sections = await storeBatch(documentId, rootStructureId, vectorized);
+        return { batchIndex: i, stored: sections.length };
+      },
+    );
+
+    totalStored += result.stored;
+  }
+
+  const rows = await db
+    .select({ id: documentContextChunks.id, content: documentContextChunks.content })
+    .from(documentContextChunks)
+    .where(eq(documentContextChunks.documentId, BigInt(documentId)));
+
+  return {
+    totalStored,
+    storedSections: rows.map((r) => ({ sectionId: r.id, content: r.content })),
+  };
 }
 
 async function maybeExtractEntities(
@@ -193,88 +348,218 @@ export async function runDocIngestionTool(
     documentName,
     companyId,
     mimeType,
+    originalFilename,
     options,
     runtime,
   } = input;
   const pipelineStartTime = Date.now();
+  const routingFilename = originalFilename ?? documentName;
 
   const runStep = createStepRunner(runtime);
+  const isInngest = !!runtime?.runStep;
   const sidecarUrl = runtime?.sidecarUrl ?? process.env.SIDECAR_URL;
   const sidecarBatchSize = runtime?.sidecarBatchSize ?? DEFAULT_SIDECAR_BATCH_SIZE;
   const updateJobStatus = runtime?.updateJobStatus ?? false;
   const markFailureInDb = runtime?.markFailureInDb ?? false;
 
+  const fastTextPath = runtime?.fastTextPath ?? false;
+
   try {
     await maybeMarkProcessing(jobId, updateJobStatus);
 
-    const isPdf = shouldUsePdfPipeline(mimeType, documentName);
-    let normalizationResult: NormalizationResult;
+    const isPdf = !fastTextPath && shouldUsePdfPipeline(mimeType, routingFilename);
 
-    if (isPdf) {
+    // -----------------------------------------------------------------------
+    // Steps A+B: Route & Normalize (OCR)
+    // When running under Inngest, store page data in DB and return only a
+    // lightweight summary so Inngest can memoize it without exceeding the
+    // ~4MB step output limit.  Without this, every Inngest replay re-runs OCR.
+    // -----------------------------------------------------------------------
+    let normSummary: NormalizeSummary;
+
+    if (isPdf && isAzureSupportedFile(documentUrl, routingFilename)) {
       const routerDecision = await runStep(
         "step-a-router",
         async (): Promise<RouterDecisionResult> =>
           routeDocument(documentUrl, options),
       );
 
-      normalizationResult = await runStep(
-        "step-b-normalize",
-        async (): Promise<NormalizationResult> =>
-          normalizeDocument(documentUrl, routerDecision),
-      );
+      if (isInngest) {
+        normSummary = await runStep(
+          "step-b-normalize",
+          async (): Promise<NormalizeSummary> => {
+            const result = await normalizeDocument(documentUrl, routerDecision);
+            await savePipelineState(jobId, "pages", result.pages);
+            return {
+              jobId,
+              pageCount: result.pages.length,
+              provider: result.provider,
+              processingTimeMs: result.processingTimeMs,
+              confidenceScore: result.confidenceScore,
+            };
+          },
+        );
+      } else {
+        const result = await runStep(
+          "step-b-normalize",
+          async (): Promise<NormalizationResult> =>
+            normalizeDocument(documentUrl, routerDecision),
+        );
+        normSummary = {
+          jobId,
+          pageCount: result.pages.length,
+          provider: result.provider,
+          processingTimeMs: result.processingTimeMs,
+          confidenceScore: result.confidenceScore,
+        };
+        await savePipelineState(jobId, "pages", result.pages);
+      }
     } else {
-      normalizationResult = await runStep(
-        "step-ab-ingest",
-        async (): Promise<NormalizationResult> => {
-          const { ingestToNormalized } = await import("~/lib/ingestion");
-          const normalizedDoc = await ingestToNormalized(documentUrl, {
-            mimeType,
-            filename: documentName,
-            forceOCR: options?.forceOCR,
-          });
+      if (isInngest) {
+        normSummary = await runStep(
+          "step-ab-ingest",
+          async (): Promise<NormalizeSummary> => {
+            const { ingestToNormalized } = await import("~/lib/ingestion");
+            const normalizedDoc = await ingestToNormalized(documentUrl, {
+              mimeType,
+              filename: routingFilename,
+              forceOCR: options?.forceOCR,
+            });
+            await savePipelineState(jobId, "pages", normalizedDoc.pages);
+            return {
+              jobId,
+              pageCount: normalizedDoc.pages.length,
+              provider: normalizedDoc.metadata.provider,
+              processingTimeMs: normalizedDoc.metadata.processingTimeMs,
+              confidenceScore: normalizedDoc.metadata.confidenceScore,
+            };
+          },
+        );
+      } else {
+        const result = await runStep(
+          "step-ab-ingest",
+          async (): Promise<NormalizationResult> => {
+            const { ingestToNormalized } = await import("~/lib/ingestion");
+            const normalizedDoc = await ingestToNormalized(documentUrl, {
+              mimeType,
+              filename: routingFilename,
+              forceOCR: options?.forceOCR,
+            });
+            return {
+              pages: normalizedDoc.pages,
+              provider: normalizedDoc.metadata.provider,
+              processingTimeMs: normalizedDoc.metadata.processingTimeMs,
+              confidenceScore: normalizedDoc.metadata.confidenceScore,
+            };
+          },
+        );
+        normSummary = {
+          jobId,
+          pageCount: result.pages.length,
+          provider: result.provider,
+          processingTimeMs: result.processingTimeMs,
+          confidenceScore: result.confidenceScore,
+        };
+        await savePipelineState(jobId, "pages", result.pages);
+      }
+    }
 
+    // -----------------------------------------------------------------------
+    // Step C: Chunking
+    // Load pages from DB, chunk them, store chunks back, return summary.
+    // -----------------------------------------------------------------------
+    let chunks: DocumentChunk[];
+
+    if (isInngest) {
+      const chunkSummary = await runStep(
+        "step-c-chunking",
+        async (): Promise<ChunkSummary> => {
+          const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
+          const chunked = await chunkPages(pages, routingFilename);
+          await savePipelineState(jobId, "chunks", chunked);
+          const stats = getTotalChunkSize(chunked);
           return {
-            pages: normalizedDoc.pages,
-            provider: normalizedDoc.metadata.provider,
-            processingTimeMs: normalizedDoc.metadata.processingTimeMs,
-            confidenceScore: normalizedDoc.metadata.confidenceScore,
+            jobId,
+            parentChunkCount: chunked.length,
+            childChunkCount: chunked.reduce(
+              (sum, c) => sum + (c.children?.length ?? 1),
+              0,
+            ),
+            textChunks: stats.textChunks,
+            tableChunks: stats.tableChunks,
           };
         },
       );
-    }
-
-    const chunks = await runStep(
-      "step-c-chunking",
-      async (): Promise<DocumentChunk[]> => chunkPages(normalizationResult.pages),
-    );
-
-    let vectorizedChunks: VectorizedChunk[];
-    if (sidecarUrl && chunks.length > 0) {
-      vectorizedChunks = await vectorizeWithSidecar(
-        chunks,
-        sidecarUrl,
-        sidecarBatchSize,
-        runStep,
+      chunks = await loadPipelineState<DocumentChunk[]>(jobId, "chunks");
+      console.log(
+        `[Pipeline] Chunks loaded: ${chunkSummary.parentChunkCount} parents, ${chunkSummary.childChunkCount} children`,
       );
     } else {
-      vectorizedChunks = await runStep(
-        "step-d-vectorize",
-        async (): Promise<VectorizedChunk[]> => vectorizeChunks(chunks),
+      const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
+      chunks = await runStep(
+        "step-c-chunking",
+        async (): Promise<DocumentChunk[]> => chunkPages(pages, routingFilename),
       );
     }
 
-    const storedSections = await runStep(
-      "step-e-storage",
-      async (): Promise<StoredSection[]> =>
-        storeDocument(
-          documentId,
-          jobId,
-          vectorizedChunks,
-          normalizationResult,
-          pipelineStartTime,
-        ),
-    );
+    // -----------------------------------------------------------------------
+    // Step D: Setup root structure + Embed & Store per batch
+    // -----------------------------------------------------------------------
+    let storedSections: StoredSection[] = [];
+    let totalStored = 0;
 
+    if (chunks.length > 0) {
+      const rootStructureId = await runStep(
+        "step-d-setup",
+        async (): Promise<number> => {
+          const estimatedTokens = Math.ceil(
+            chunks.reduce((sum, c) => sum + c.content.length / 4, 0),
+          );
+          return createRootStructure(documentId, normSummary.pageCount, estimatedTokens);
+        },
+      );
+
+      if (sidecarUrl) {
+        const result = await vectorizeWithSidecar(
+          chunks,
+          sidecarUrl,
+          sidecarBatchSize,
+          documentId,
+          rootStructureId,
+          runStep,
+        );
+        storedSections = result.storedSections;
+        totalStored = result.totalStored;
+      } else {
+        const result = await vectorizeWithOpenAI(
+          chunks,
+          DEFAULT_OPENAI_BATCH_SIZE,
+          documentId,
+          rootStructureId,
+          runStep,
+        );
+        storedSections = result.storedSections;
+        totalStored = result.totalStored;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Step E: Finalize (metadata + job status)
+    // -----------------------------------------------------------------------
+    await runStep("step-e-finalize", async (): Promise<{ ok: true }> => {
+      const summaryText = chunks.map((c) => c.content).join("\n\n");
+      await finalizeStorage(documentId, jobId, totalStored, summaryText, {
+        totalPages: normSummary.pageCount,
+        provider: normSummary.provider,
+        processingTimeMs: normSummary.processingTimeMs,
+        confidenceScore: normSummary.confidenceScore,
+      }, pipelineStartTime);
+      return { ok: true };
+    });
+
+    // -----------------------------------------------------------------------
+    // Step F: Graph RAG (optional)
+    // -----------------------------------------------------------------------
     await maybeExtractEntities(
       sidecarUrl,
       storedSections,
@@ -290,15 +575,15 @@ export async function runDocIngestionTool(
       success: true,
       jobId,
       documentId,
-      chunks: vectorizedChunks,
+      chunks: [],
       metadata: {
-        totalChunks: vectorizedChunks.length,
+        totalChunks: totalStored,
         textChunks: stats.textChunks,
         tableChunks: stats.tableChunks,
-        totalPages: normalizationResult.pages.length,
-        provider: normalizationResult.provider,
-        processingTimeMs: normalizationResult.processingTimeMs,
-        embeddingTimeMs: totalProcessingTime - normalizationResult.processingTimeMs,
+        totalPages: normSummary.pageCount,
+        provider: normSummary.provider as NormalizationResult["provider"],
+        processingTimeMs: normSummary.processingTimeMs,
+        embeddingTimeMs: totalProcessingTime - normSummary.processingTimeMs,
       },
     };
   } catch (error) {
@@ -308,6 +593,8 @@ export async function runDocIngestionTool(
         error instanceof Error ? error : new Error(String(error)),
       );
     }
+
+    if (isInngest) throw error;
 
     return buildFailureResult(jobId, documentId, pipelineStartTime, error);
   }

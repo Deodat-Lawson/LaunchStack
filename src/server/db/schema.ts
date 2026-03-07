@@ -6,9 +6,9 @@
 export { pgTable } from "./schema/helpers";
 export * from "./schema/base";
 export * from "./schema/agent-ai";
-export * from "./schema/study-agent";
-export { studyAgentMessages } from "./schema/study-agent";
 export * from "./schema/rlm-knowledge-base";
 export * from "./schema/knowledge-graph";
+export * from "./schema/document-notes";
 export * from "./schema/trend-search";
 export * from "./schema/client-prospector";
+export * from "./schema/company-metadata";

@@ -91,7 +91,7 @@ Guidelines:
 - Apply the requested tone if specified
 - Keep similar length to the original unless otherwise specified
 - Output ONLY the rewritten text: no quotation marks, no "Here is the rewrite:", no wrapper text
-- Use HTML tags for formatting: <strong> for bold, <em> for italic, <u> for underline. Do NOT use Markdown (** or *).`,
+- Use Markdown for formatting: **bold**, *italic*, __underline__. Do NOT use raw HTML tags.`,
 
     summarize: `You are an expert editor specializing in summarization. Your task is to create a concise summary of the given text.
 
@@ -221,6 +221,17 @@ export async function POST(request: Request) {
                 const firstDraft = normalizeModelContent(firstPass.content);
 
                 // Refining through second pass
+                const refinementInstructions = [
+                    "Improve sentence flow and rhythm",
+                    "Remove any redundancy or filler phrases",
+                    "Ensure it reads naturally, not like it was AI-generated",
+                    "Preserve all factual information, names, numbers, and technical terms",
+                    prompt
+                        ? "IMPORTANT: The user requested specific additions or changes. Make sure these are fully incorporated and prioritized: " + prompt
+                        : "Do not change the meaning or add new information beyond what was requested",
+                    "Output ONLY the refined text: no quotation marks, no wrapper phrases",
+                ].join("\n- ");
+
                 const secondPass = await chat.call([
                     new SystemMessage(systemPrompt),
                     new HumanMessage(`Here is a rewritten version of the original text:
@@ -228,12 +239,7 @@ export async function POST(request: Request) {
 "${firstDraft}"
 
 Now refine it further:
-- Improve sentence flow and rhythm
-- Remove any redundancy or filler phrases
-- Ensure it reads naturally, not like it was AI-generated
-- Preserve all factual information, names, numbers, and technical terms
-- Do not change the meaning or add new information
-- Output ONLY the refined text: no quotation marks, no wrapper phrases`),
+- ${refinementInstructions}`),
                 ]);
 
                 // Use the refined second pass for rewrite (skip the generic call below)

@@ -15,6 +15,32 @@ import styles from "~/styles/Employer/MarketingPipeline.module.css";
 
 type Platform = "x" | "linkedin" | "reddit" | "bluesky";
 
+/** Strip Markdown to plain text for platforms that don't render it (LinkedIn, X, Bluesky). */
+function markdownToPlainText(text: string): string {
+    return text
+        .replace(/\*\*(.+?)\*\*/g, "$1")
+        .replace(/\*(.+?)\*/g, "$1")
+        .replace(/__(.+?)__/g, "$1")
+        .replace(/_(.+?)_/g, "$1")
+        .replace(/`(.+?)`/g, "$1")
+        .trim();
+}
+
+/** Convert Markdown to HTML for rich-text paste (LinkedIn composer, etc.). */
+function markdownToHtml(text: string): string {
+    const escaped = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    return escaped
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.+?)\*/g, "<em>$1</em>")
+        .replace(/__(.+?)__/g, "<strong>$1</strong>")
+        .replace(/_(.+?)_/g, "<em>$1</em>")
+        .replace(/`(.+?)`/g, "<code>$1</code>")
+        .replace(/\n/g, "<br/>");
+}
+
 interface PipelineResponse {
     success: boolean;
     message?: string;
@@ -82,13 +108,29 @@ export default function MarketingPipelinePage() {
     const handleCopy = useCallback(async () => {
         if (!editableMessage.trim()) return;
         try {
-            await navigator.clipboard.writeText(editableMessage);
+            const targetPlatform = result?.platform;
+            // Reddit renders Markdown in posts → keep **bold** in plain text
+            // LinkedIn/X/Bluesky don't → strip to plain text for paste
+            const plainText =
+                targetPlatform === "reddit" ? editableMessage : markdownToPlainText(editableMessage);
+            const html = markdownToHtml(editableMessage);
+
+            if (typeof navigator.clipboard.write === "function") {
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        "text/plain": new Blob([plainText], { type: "text/plain" }),
+                        "text/html": new Blob([html], { type: "text/html" }),
+                    }),
+                ]);
+            } else {
+                await navigator.clipboard.writeText(plainText);
+            }
             setCopySuccess(true);
             setTimeout(() => setCopySuccess(false), 2000);
         } catch {
             setCopySuccess(false);
         }
-    }, [editableMessage]);
+    }, [editableMessage, result?.platform]);
 
     const runPipeline = async () => {
         setError(null);

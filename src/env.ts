@@ -49,6 +49,34 @@ const serverSchema = z.object({
   // Sidecar configuration (optional, for local ML compute)
   // When set, Graph RAG entity extraction is automatically enabled
   SIDECAR_URL: optionalString(),
+  // Storage provider configuration
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+  NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
+  S3_REGION: optionalString(),
+  S3_ACCESS_KEY: optionalString(),
+  S3_SECRET_KEY: optionalString(),
+  S3_BUCKET_NAME: optionalString(),
+});
+
+const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
+  if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "local") {
+    const required = [
+      "NEXT_PUBLIC_S3_ENDPOINT",
+      "S3_REGION",
+      "S3_ACCESS_KEY",
+      "S3_SECRET_KEY",
+      "S3_BUCKET_NAME",
+    ] as const;
+    for (const key of required) {
+      if (!data[key]) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [key],
+          message: `${key} is required when NEXT_PUBLIC_STORAGE_PROVIDER is "local"`,
+        });
+      }
+    }
+  }
 });
 
 const clientSchema = z.object({
@@ -57,6 +85,8 @@ const clientSchema = z.object({
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+  NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
 });
 
 const skipValidation =
@@ -80,7 +110,7 @@ const parseEnv = <T extends z.AnyZodObject>(
 };
 
 function parseServerEnv() {
-  const server = parseEnv(serverSchema, {
+  const rawValues = {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
@@ -111,7 +141,25 @@ function parseServerEnv() {
     JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
-  });
+    NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
+      | "cloud"
+      | "local"
+      | undefined,
+    NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+    S3_REGION: process.env.S3_REGION,
+    S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+    S3_SECRET_KEY: process.env.S3_SECRET_KEY,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+  };
+
+  let server: z.infer<typeof serverSchemaRefined>;
+  if (skipValidation) {
+    const result = serverSchema.partial().safeParse(rawValues);
+    server = (result.success ? result.data : rawValues) as z.infer<typeof serverSchemaRefined>;
+  } else {
+    server = serverSchemaRefined.parse(rawValues);
+  }
+
   if (
     !skipValidation &&
     (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)
@@ -128,6 +176,11 @@ export const env = {
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     NEXT_PUBLIC_UPLOADTHING_ENABLED:
       process.env.NEXT_PUBLIC_UPLOADTHING_ENABLED,
+    NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
+      | "cloud"
+      | "local"
+      | undefined,
+    NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
   }),
 };
 

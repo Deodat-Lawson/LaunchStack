@@ -22,6 +22,8 @@
     "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1004.0",
+    "@aws-sdk/s3-request-presigner": "^3.1004.0",
     "@clerk/nextjs": "^6.31.9",
     "@clerk/themes": "^2.4.29",
     "@elevenlabs/elevenlabs-js": "^2.27.0",

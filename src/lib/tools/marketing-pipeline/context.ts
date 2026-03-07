@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { db } from "~/server/db";
-import { category, company } from "~/server/db/schema";
+import { category, company, companyMetadata } from "~/server/db/schema";
 import {
     companyEnsembleSearch,
     createOpenAIEmbeddings,
@@ -9,8 +9,9 @@ import {
     type SearchResult,
 } from "~/lib/tools/rag";
 import { getChatModel, MARKETING_MODELS } from "~/lib/models";
-import type { CompanyDNA } from "~/lib/tools/marketing-pipeline/types";
+import type { CompanyDNA, DNADebugInfo } from "~/lib/tools/marketing-pipeline/types";
 import { CompanyDNASchema } from "~/lib/tools/marketing-pipeline/types";
+import type { CompanyMetadataJSON, MetadataFact } from "~/lib/tools/company-metadata/types";
 
 const DIFFERENTIATOR_QUERY_PARTS = [
     "unique strengths",
@@ -69,14 +70,170 @@ export async function buildCompanyKnowledgeContext(args: {
 }
 
 /**
- * Run RAG for general context and for differentiators, then use LLM to distill into CompanyDNA.
+ * Extract CompanyDNA using stored metadata when available, falling back to RAG.
+ *
+ * Priority: company_metadata table → dual RAG queries → minimal fallback.
  */
+export interface ExtractCompanyDNAResult {
+    dna: CompanyDNA;
+    debug: DNADebugInfo;
+}
+
 export async function extractCompanyDNA(args: {
     companyId: number;
     prompt: string;
-}): Promise<CompanyDNA> {
+}): Promise<ExtractCompanyDNAResult> {
     const { companyId, prompt } = args;
 
+    // Try metadata-first approach
+    const metadataContext = await buildMetadataContext(companyId);
+    if (metadataContext) {
+        console.log("[marketing-pipeline] extractCompanyDNA: using METADATA for company %d", companyId);
+        const dna = await synthesizeDNA(metadataContext, prompt);
+        return { dna, debug: { source: "metadata", contextUsed: metadataContext, dna } };
+    }
+
+    // Fallback: dual RAG extraction for companies without metadata
+    console.log("[marketing-pipeline] extractCompanyDNA: using RAG FALLBACK for company %d (no metadata found)", companyId);
+    const ragContext = await buildRAGContext(companyId, prompt);
+    const dna = await synthesizeDNA(ragContext, prompt);
+    return { dna, debug: { source: "rag", contextUsed: ragContext, dna } };
+}
+
+// ============================================================================
+// Metadata-based context (preferred path)
+// ============================================================================
+
+const MIN_CONFIDENCE = 0.5;
+
+/** Read active fact value if confidence meets threshold. */
+function readFact<T>(fact: MetadataFact<T> | undefined): T | undefined {
+    if (!fact) return undefined;
+    if (fact.status !== "active") return undefined;
+    if (fact.confidence < MIN_CONFIDENCE) return undefined;
+    return fact.value;
+}
+
+/**
+ * Build a structured text block from the company_metadata JSONB for LLM synthesis.
+ * Returns null if no metadata row exists.
+ */
+async function buildMetadataContext(companyId: number): Promise<string | null> {
+    const [row] = await db
+        .select({ metadata: companyMetadata.metadata })
+        .from(companyMetadata)
+        .where(eq(companyMetadata.companyId, BigInt(companyId)))
+        .limit(1);
+
+    if (!row?.metadata) return null;
+
+    const md = row.metadata as CompanyMetadataJSON;
+    const parts: string[] = [];
+
+    // Company info
+    const name = readFact(md.company.name);
+    const description = readFact(md.company.description);
+    const industry = readFact(md.company.industry);
+    const size = readFact(md.company.size);
+    const founded = readFact(md.company.founded_year as MetadataFact<number> | undefined);
+    const hq = readFact(md.company.headquarters);
+
+    parts.push("=== Company ===");
+    if (name) parts.push(`Name: ${name}`);
+    if (description) parts.push(`Description: ${description}`);
+    if (industry) parts.push(`Industry: ${industry}`);
+    if (size) parts.push(`Size: ${size}`);
+    if (founded) parts.push(`Founded: ${founded}`);
+    if (hq) parts.push(`Headquarters: ${hq}`);
+
+    // Services → differentiators and technical edge
+    if (md.services.length > 0) {
+        const serviceLines = md.services
+            .map((s): string | null => {
+                const sName = readFact(s.name);
+                const sDesc = readFact(s.description);
+                if (!sName) return null;
+                return sDesc ? `- ${sName}: ${sDesc}` : `- ${sName}`;
+            })
+            .filter((v): v is string => v != null);
+        if (serviceLines.length > 0) {
+            parts.push("", "=== Services & Products ===", ...serviceLines);
+        }
+    }
+
+    // Projects → proven results
+    if (md.projects.length > 0) {
+        const projectLines = md.projects
+            .map((p): string | null => {
+                const pName = readFact(p.name);
+                const pDesc = readFact(p.description);
+                const pStatus = readFact(p.status);
+                if (!pName) return null;
+                const detail = [pDesc, pStatus].filter(Boolean).join(" | ");
+                return detail ? `- ${pName}: ${detail}` : `- ${pName}`;
+            })
+            .filter((v): v is string => v != null);
+        if (projectLines.length > 0) {
+            parts.push("", "=== Projects & Outcomes ===", ...projectLines);
+        }
+    }
+
+    // People → human story
+    if (md.people.length > 0) {
+        const personLines = md.people
+            .slice(0, 8)
+            .map((p): string | null => {
+                const pName = readFact(p.name);
+                const pRole = readFact(p.role);
+                if (!pName) return null;
+                return pRole ? `- ${pName} (${pRole})` : `- ${pName}`;
+            })
+            .filter((v): v is string => v != null);
+        if (personLines.length > 0) {
+            parts.push("", "=== Key People ===", ...personLines);
+        }
+    }
+
+    // Markets → differentiators
+    const marketParts: string[] = [];
+    if (md.markets.primary?.length) {
+        const vals = md.markets.primary.map((f) => readFact(f)).filter((v): v is string => v != null);
+        if (vals.length) marketParts.push(`Primary markets: ${vals.join(", ")}`);
+    }
+    if (md.markets.verticals?.length) {
+        const vals = md.markets.verticals.map((f) => readFact(f)).filter((v): v is string => v != null);
+        if (vals.length) marketParts.push(`Verticals: ${vals.join(", ")}`);
+    }
+    if (md.markets.geographies?.length) {
+        const vals = md.markets.geographies.map((f) => readFact(f)).filter((v): v is string => v != null);
+        if (vals.length) marketParts.push(`Geographies: ${vals.join(", ")}`);
+    }
+    if (marketParts.length > 0) {
+        parts.push("", "=== Markets ===", ...marketParts);
+    }
+
+    // Policies → differentiators (certifications, compliance)
+    const policyEntries = Object.entries(md.policies);
+    if (policyEntries.length > 0) {
+        const policyLines = policyEntries
+            .map(([key, fact]): string | null => {
+                const val = readFact(fact);
+                return val ? `- ${key}: ${val}` : null;
+            })
+            .filter((v): v is string => v != null);
+        if (policyLines.length > 0) {
+            parts.push("", "=== Policies & Certifications ===", ...policyLines);
+        }
+    }
+
+    return parts.join("\n");
+}
+
+// ============================================================================
+// RAG-based context (fallback)
+// ============================================================================
+
+async function buildRAGContext(companyId: number, prompt: string): Promise<string> {
     const [companyRow, categoryRows] = await Promise.all([
         db.select().from(company).where(eq(company.id, companyId)).limit(1),
         db.select().from(category).where(eq(category.companyId, BigInt(companyId))).limit(8),
@@ -115,14 +272,18 @@ export async function extractCompanyDNA(args: {
     }
 
     const combinedSnippets = [...new Set([...generalSnippets, ...differentiatorSnippets])];
-    const rawContext =
-        combinedSnippets.length > 0
-            ? combinedSnippets.map((s, i) => `${i + 1}. ${s}`).join("\n\n")
-            : `Company Name: ${companyInfo?.name ?? "Unknown Company"}. No KB snippets available.`;
+    return combinedSnippets.length > 0
+        ? combinedSnippets.map((s, i) => `${i + 1}. ${s}`).join("\n\n")
+        : `Company Name: ${companyInfo?.name ?? "Unknown Company"}. No KB snippets available.`;
+}
 
-    const systemPrompt = `You are a strategist. Given raw company knowledge-base snippets, distill them into a structured CompanyDNA.
+// ============================================================================
+// Shared LLM synthesis
+// ============================================================================
+
+const DNA_SYSTEM_PROMPT = `You are a strategist. Given company information, distill it into a structured CompanyDNA.
 Rules:
-- Use ONLY information present in the snippets. Do not invent.
+- Use ONLY information present in the input. Do not invent.
 - If something is missing, use a short placeholder like "Not specified" or an empty array.
 - coreMission: one sentence on what the company does and for whom.
 - keyDifferentiators: 2-5 short phrases (e.g. "open source", "no vendor lock-in").
@@ -131,13 +292,13 @@ Rules:
 - technicalEdge: one simple sentence on how it works or why it's better; keep it non-technical.
 Return valid JSON matching the schema.`;
 
+async function synthesizeDNA(context: string, userPrompt: string): Promise<CompanyDNA> {
     const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
     const model = chat.withStructuredOutput(CompanyDNASchema, { name: "company_dna" });
     const response = await model.invoke([
-        new SystemMessage(systemPrompt),
-        new HumanMessage(`Raw KB snippets:\n\n${rawContext}\n\nUser focus: ${prompt}`),
+        new SystemMessage(DNA_SYSTEM_PROMPT),
+        new HumanMessage(`Company information:\n\n${context}\n\nUser focus: ${userPrompt}`),
     ]);
-
     return CompanyDNASchema.parse(response);
 }
 

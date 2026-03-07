@@ -48,6 +48,7 @@ function formatTrendsSummary(research: MarketingResearchResult[]): string {
 export async function runMarketingPipeline(args: {
   companyId: number;
   input: MarketingPipelineInput;
+  debug?: boolean;
 }): Promise<MarketingPipelineResult> {
   const normalizedInput = normalizeInput(args.input);
 
@@ -80,7 +81,7 @@ ${platformGuidelines}`;
 
   // 3) Run DNA extraction, competitor analysis, and trend research in parallel
   let research: MarketingResearchResult[] = [];
-  const [dna, competitors] = await Promise.all([
+  const [dnaResult, competitors] = await Promise.all([
     extractCompanyDNA({ companyId: args.companyId, prompt: normalizedInput.prompt ?? DEFAULT_PROMPT }),
     analyzeCompetitors({
       companyName,
@@ -107,6 +108,8 @@ ${platformGuidelines}`;
     research = r;
     return [d, c] as const;
   });
+
+  const { dna, debug: dnaDebug } = dnaResult;
 
   // 4) Build messaging strategy from DNA + competitors + trends
   const trendsSummary = formatTrendsSummary(research);
@@ -136,6 +139,7 @@ ${platformGuidelines}`;
     },
     competitiveAngle: generated.competitiveAngle,
     strategyUsed: generated.strategyUsed,
+    ...(args.debug ? { dnaDebug } : {}),
   };
 }
 

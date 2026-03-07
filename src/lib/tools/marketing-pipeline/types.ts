@@ -81,6 +81,13 @@ export const MarketingPipelineOutputSchema = z.object({
 });
 export type MarketingPipelineOutput = z.infer<typeof MarketingPipelineOutputSchema>;
 
+/** Debug info about the DNA extraction source, included when ?debug=true. */
+export interface DNADebugInfo {
+    source: "metadata" | "rag";
+    contextUsed: string;
+    dna: CompanyDNA;
+}
+
 export interface MarketingPipelineResult extends MarketingPipelineOutput {
     research: MarketingResearchResult[];
     normalizedInput: {
@@ -91,5 +98,7 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
     competitiveAngle?: string;
     /** Optional summary of strategy (angle + proof + hook) for transparency. */
     strategyUsed?: MessagingStrategy;
+    /** Debug info about DNA extraction, included when debug mode is on. */
+    dnaDebug?: DNADebugInfo;
 }
 

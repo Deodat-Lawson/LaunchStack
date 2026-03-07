@@ -2,14 +2,26 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Brain, Loader2, MessageSquareText, Megaphone, Sparkles } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowLeft, Brain, ChevronDown, ChevronRight, Loader2, MessageSquareText, Megaphone, Sparkles } from "lucide-react";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
 import homeStyles from "~/styles/Employer/Home.module.css";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 
 type Platform = "x" | "linkedin" | "reddit" | "bluesky";
+
+interface DNADebugInfo {
+    source: "metadata" | "rag";
+    contextUsed: string;
+    dna: {
+        coreMission: string;
+        keyDifferentiators: string[];
+        provenResults: string[];
+        humanStory: string;
+        technicalEdge: string;
+    };
+}
 
 interface PipelineResponse {
     success: boolean;
@@ -24,6 +36,7 @@ interface PipelineResponse {
             snippet: string;
             source: Platform;
         }>;
+        dnaDebug?: DNADebugInfo;
     };
 }
 
@@ -50,11 +63,14 @@ function usePlatformLogoClassNames() {
 
 export default function MarketingPipelinePage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const isDebug = searchParams.get("debug") === "true";
     const [platform, setPlatform] = useState<Platform | null>(null);
     const [prompt, setPrompt] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [result, setResult] = useState<PipelineResponse["data"] | null>(null);
+    const [debugOpen, setDebugOpen] = useState(false);
 
     const logoClassNames = usePlatformLogoClassNames();
     const selectedPlatform = PLATFORM_OPTIONS.find((option) => option.id === platform) ?? null;
@@ -76,7 +92,8 @@ export default function MarketingPipelinePage() {
 
         setLoading(true);
         try {
-            const response = await fetch("/api/marketing-pipeline", {
+            const apiUrl = isDebug ? "/api/marketing-pipeline?debug=true" : "/api/marketing-pipeline";
+            const response = await fetch(apiUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -299,6 +316,79 @@ image/video: ${result["image/video"]}`}
                                                     ))}
                                                 </div>
                                             </>
+                                        )}
+
+                                        {isDebug && result.dnaDebug && (
+                                            <div style={{ marginTop: "1rem", borderTop: "1px solid var(--border-color, #e5e7eb)", paddingTop: "0.75rem" }}>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDebugOpen((prev) => !prev)}
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: "0.375rem",
+                                                        background: "none",
+                                                        border: "none",
+                                                        cursor: "pointer",
+                                                        padding: 0,
+                                                        fontSize: "0.75rem",
+                                                        fontWeight: 600,
+                                                        color: "var(--text-muted, #6b7280)",
+                                                    }}
+                                                >
+                                                    {debugOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                                                    Debug: DNA Source
+                                                    <span style={{
+                                                        marginLeft: "0.5rem",
+                                                        padding: "0.125rem 0.5rem",
+                                                        borderRadius: "9999px",
+                                                        fontSize: "0.625rem",
+                                                        fontWeight: 700,
+                                                        textTransform: "uppercase",
+                                                        letterSpacing: "0.05em",
+                                                        background: result.dnaDebug.source === "metadata" ? "#dcfce7" : "#fef3c7",
+                                                        color: result.dnaDebug.source === "metadata" ? "#166534" : "#92400e",
+                                                    }}>
+                                                        {result.dnaDebug.source}
+                                                    </span>
+                                                </button>
+
+                                                {debugOpen && (
+                                                    <div style={{ marginTop: "0.5rem", fontSize: "0.75rem" }}>
+                                                        <div style={{ fontWeight: 600, marginBottom: "0.25rem", color: "var(--text-muted, #6b7280)" }}>
+                                                            CompanyDNA
+                                                        </div>
+                                                        <pre style={{
+                                                            background: "var(--bg-secondary, #f9fafb)",
+                                                            padding: "0.5rem",
+                                                            borderRadius: "0.375rem",
+                                                            overflow: "auto",
+                                                            maxHeight: "12rem",
+                                                            fontSize: "0.6875rem",
+                                                            lineHeight: 1.5,
+                                                        }}>
+                                                            {JSON.stringify(result.dnaDebug.dna, null, 2)}
+                                                        </pre>
+
+                                                        <div style={{ fontWeight: 600, marginTop: "0.5rem", marginBottom: "0.25rem", color: "var(--text-muted, #6b7280)" }}>
+                                                            Raw context sent to LLM
+                                                        </div>
+                                                        <pre style={{
+                                                            background: "var(--bg-secondary, #f9fafb)",
+                                                            padding: "0.5rem",
+                                                            borderRadius: "0.375rem",
+                                                            overflow: "auto",
+                                                            maxHeight: "16rem",
+                                                            fontSize: "0.6875rem",
+                                                            lineHeight: 1.5,
+                                                            whiteSpace: "pre-wrap",
+                                                            wordBreak: "break-word",
+                                                        }}>
+                                                            {result.dnaDebug.contextUsed}
+                                                        </pre>
+                                                    </div>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
                                 )}

@@ -131,25 +131,27 @@ export function CompanyMetadataPanel() {
       if (segments[0] === "company" && segments[1]) {
         const field = segments[1];
         const existing = m.company[field];
-        m.company[field] = buildFact(field === "founded_year" ? Number(value) : value, existing);
+        (m.company as Record<string, unknown>)[field] = buildFact(field === "founded_year" ? Number(value) : value, existing);
       } else if (segments[0] === "people" && segments[1] && segments[2]) {
         const idx = Number(segments[1]);
         const field = segments[2];
-        if (m.people[idx]) {
-          m.people[idx][field] = buildFact(value, m.people[idx][field]);
+        const person = m.people[idx];
+        if (person) {
+          (person as Record<string, unknown>)[field] = buildFact(value, person[field]);
         }
       } else if (segments[0] === "services" && segments[1] && segments[2]) {
         const idx = Number(segments[1]);
         const field = segments[2];
-        if (m.services[idx]) {
-          m.services[idx][field] = buildFact(value, m.services[idx][field]);
+        const service = m.services[idx];
+        if (service) {
+          (service as Record<string, unknown>)[field] = buildFact(value, service[field]);
         }
       } else if (segments[0] === "markets" && segments[1] && segments[2] != null) {
         const sub = segments[1] as "primary" | "verticals" | "geographies";
         const idx = Number(segments[2]);
         const arr = m.markets[sub];
         if (arr?.[idx]) {
-          arr[idx] = buildFact(value, arr[idx]);
+          arr[idx] = buildFact(value, arr[idx]) as typeof arr[number];
         }
       }
       m.updated_at = now;
@@ -183,12 +185,16 @@ export function CompanyMetadataPanel() {
     URL.revokeObjectURL(url);
   }, [data]);
 
-  const runExtraction = useCallback(async () => {
+  const runExtraction = useCallback(async (force = false) => {
     setExtracting(true);
     setError(null);
     try {
-      const response = await fetch("/api/company/metadata/extract", { method: "POST" });
-      const result = (await response.json()) as { error?: string };
+      const response = await fetch("/api/company/metadata/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ force }),
+      });
+      const result = (await response.json()) as { error?: string; message?: string };
       if (result.error) throw new Error(result.error);
       await fetchMetadata();
     } catch (err) {
@@ -273,13 +279,24 @@ export function CompanyMetadataPanel() {
               Export JSON
             </Button>
             <Button
-              onClick={() => void runExtraction()}
+              onClick={() => void runExtraction(false)}
               disabled={extracting}
               variant="outline"
               className="rounded-xl h-9 px-4 gap-2 font-bold"
+              title="Process only new documents since last extraction"
             >
               <Sparkles className={cn("w-4 h-4", extracting && "animate-pulse")} />
-              {extracting ? "Extracting..." : "Re-extract"}
+              {extracting ? "Extracting..." : "Extract New"}
+            </Button>
+            <Button
+              onClick={() => void runExtraction(true)}
+              disabled={extracting}
+              variant="outline"
+              className="rounded-xl h-9 px-4 gap-2 font-bold text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300"
+              title="Re-process all documents from scratch"
+            >
+              <RefreshCw className={cn("w-4 h-4", extracting && "animate-spin")} />
+              Full Re-extract
             </Button>
             <Button
               onClick={() => setIsEditMode((prev) => !prev)}

@@ -111,6 +111,7 @@ function parseServerEnv() {
     SIDECAR_URL: process.env.SIDECAR_URL,
   });
   if (
+    !skipValidation &&
     (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)
   ) {
     throw new Error("INNGEST_EVENT_KEY is required in production");

@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { ArrowLeft, Brain, Loader2, MessageSquareText, Megaphone, Sparkles } from "lucide-react";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
@@ -270,10 +272,24 @@ export default function MarketingPipelinePage() {
                                 {result && !loading && (
                                     <div className={styles.assistantResult}>
                                         <div className={styles.assistantSectionHeader}>Campaign draft</div>
-                                        <div className={styles.outputBlock}>
-                                            {`platform: ${result.platform}
-message: ${result.message}
-image/video: ${result["image/video"]}`}
+                                        <div className={styles.platformPreviewCard}>
+                                            <div className={styles.platformPreviewHeader}>
+                                                <span className={`${styles.platformPreviewBadge} ${result.platform === "reddit" ? styles.platformPreviewBadgeReddit : result.platform === "x" ? styles.platformPreviewBadgeX : result.platform === "linkedin" ? styles.platformPreviewBadgeLinkedin : styles.platformPreviewBadgeBluesky}`}>
+                                                    {result.platform === "reddit" ? (
+                                                        <Image src={REDDIT_SNOO_URL} alt="" width={18} height={18} className={styles.platformPreviewBadgeImg} />
+                                                    ) : (
+                                                        result.platform === "x" ? "𝕏" : result.platform === "linkedin" ? "in" : "🦋"
+                                                    )}
+                                                </span>
+                                                <span className={styles.platformPreviewLabel}>
+                                                    {PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? result.platform} preview
+                                                </span>
+                                            </div>
+                                            <div className={styles.platformPreviewBody}>
+                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                    {result.message}
+                                                </ReactMarkdown>
+                                            </div>
                                         </div>
 
                                         {result.research.length > 0 && (

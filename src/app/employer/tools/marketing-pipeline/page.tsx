@@ -1,13 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ArrowLeft, Brain, Loader2, MessageSquareText, Megaphone, Sparkles } from "lucide-react";
+import { ArrowLeft, Brain, Copy, Loader2, MessageSquareText, Megaphone, Pencil, Sparkles } from "lucide-react";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/app/employer/documents/components/ui/sheet";
+import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import homeStyles from "~/styles/Employer/Home.module.css";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 
@@ -57,9 +59,36 @@ export default function MarketingPipelinePage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [result, setResult] = useState<PipelineResponse["data"] | null>(null);
+    const [editableMessage, setEditableMessage] = useState("");
+    const [showRewriteSheet, setShowRewriteSheet] = useState(false);
+    const [copySuccess, setCopySuccess] = useState(false);
+    const [viewMode, setViewMode] = useState<"preview" | "edit">("preview");
 
     const logoClassNames = usePlatformLogoClassNames();
     const selectedPlatform = PLATFORM_OPTIONS.find((option) => option.id === platform) ?? null;
+
+    useEffect(() => {
+        if (result?.message) {
+            setEditableMessage(result.message);
+            setViewMode("preview");
+        }
+    }, [result]);
+
+    const handleRewriteComplete = useCallback((rewrittenText: string) => {
+        setEditableMessage(rewrittenText);
+        setShowRewriteSheet(false);
+    }, []);
+
+    const handleCopy = useCallback(async () => {
+        if (!editableMessage.trim()) return;
+        try {
+            await navigator.clipboard.writeText(editableMessage);
+            setCopySuccess(true);
+            setTimeout(() => setCopySuccess(false), 2000);
+        } catch {
+            setCopySuccess(false);
+        }
+    }, [editableMessage]);
 
     const runPipeline = async () => {
         setError(null);
@@ -284,13 +313,70 @@ export default function MarketingPipelinePage() {
                                                 <span className={styles.platformPreviewLabel}>
                                                     {PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? result.platform} preview
                                                 </span>
+                                                <button
+                                                    type="button"
+                                                    className={styles.viewModeToggle}
+                                                    onClick={() => setViewMode((m) => (m === "preview" ? "edit" : "preview"))}
+                                                    title={viewMode === "preview" ? "Edit" : "Preview"}
+                                                >
+                                                    <Pencil size={14} />
+                                                </button>
                                             </div>
                                             <div className={styles.platformPreviewBody}>
-                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                                    {result.message}
-                                                </ReactMarkdown>
+                                                {viewMode === "preview" ? (
+                                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{editableMessage}</ReactMarkdown>
+                                                ) : (
+                                                    <textarea
+                                                        className={styles.editableMessageTextarea}
+                                                        value={editableMessage}
+                                                        onChange={(e) => setEditableMessage(e.target.value)}
+                                                        placeholder="Your campaign message..."
+                                                    />
+                                                )}
                                             </div>
                                         </div>
+
+                                        <div className={styles.draftActions}>
+                                            <button
+                                                type="button"
+                                                className={styles.refineInRewriteButton}
+                                                onClick={() => setShowRewriteSheet(true)}
+                                                disabled={!editableMessage.trim()}
+                                            >
+                                                <Sparkles size={14} />
+                                                Refine in Rewrite
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={styles.copyButton}
+                                                onClick={handleCopy}
+                                                disabled={!editableMessage.trim()}
+                                            >
+                                                <Copy size={14} />
+                                                {copySuccess ? "Copied!" : "Copy to platform"}
+                                            </button>
+                                        </div>
+
+                                        <Sheet open={showRewriteSheet} onOpenChange={(open) => !open && setShowRewriteSheet(false)}>
+                                            <SheetContent
+                                                side="right"
+                                                className="w-full sm:max-w-2xl overflow-y-auto p-0 flex flex-col"
+                                            >
+                                                <SheetHeader className="px-6 pt-6 pb-4 border-b shrink-0">
+                                                    <SheetTitle className="text-lg font-semibold">Refine your campaign</SheetTitle>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Use tone, length, and audience options to refine the message. Preview and accept when you&apos;re happy.
+                                                    </p>
+                                                </SheetHeader>
+                                                <div className="flex-1 overflow-y-auto px-6 py-4">
+                                                    <RewriteWorkflow
+                                                        initialText={editableMessage}
+                                                        onComplete={handleRewriteComplete}
+                                                        onCancel={() => setShowRewriteSheet(false)}
+                                                    />
+                                                </div>
+                                            </SheetContent>
+                                        </Sheet>
 
                                         {result.research.length > 0 && (
                                             <>

@@ -237,8 +237,8 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
             </div>
           )}
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div>
+          <div className="flex flex-col gap-6 mb-6">
+            <div className="min-w-0">
               <label className="block text-sm font-medium mb-2">Tone</label>
               <Select
                 value={options.tone}
@@ -246,23 +246,21 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
                   setOptions(prev => ({ ...prev, tone: value }))
                 }
               >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3">
+                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {TONE_OPTIONS.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      <div className="text-left">
-                        <div className="font-medium">{option.label}</div>
-                        <div className="text-xs text-muted-foreground">{option.desc}</div>
-                      </div>
+                      <span className="block truncate font-medium">{option.label}</span>
+                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className="block text-sm font-medium mb-2">Length</label>
               <Select
                 value={options.length}
@@ -270,23 +268,21 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
                   setOptions(prev => ({ ...prev, length: value }))
                 }
               >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3">
+                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {LENGTH_OPTIONS.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      <div className="text-left">
-                        <div className="font-medium">{option.label}</div>
-                        <div className="text-xs text-muted-foreground">{option.desc}</div>
-                      </div>
+                      <span className="block truncate font-medium">{option.label}</span>
+                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className="block text-sm font-medium mb-2">Audience</label>
               <Select
                 value={options.audience}
@@ -294,16 +290,14 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
                   setOptions(prev => ({ ...prev, audience: value }))
                 }
               >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3">
+                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {AUDIENCE_OPTIONS.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      <div className="text-left">
-                        <div className="font-medium">{option.label}</div>
-                        <div className="text-xs text-muted-foreground">{option.desc}</div>
-                      </div>
+                      <span className="block truncate font-medium">{option.label}</span>
+                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>

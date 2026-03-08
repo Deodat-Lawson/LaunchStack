@@ -3,11 +3,17 @@
  * Calls the real OpenAI + Tavily APIs — no DB, no auth, no Inngest.
  *
  * Usage:
+ * 
+ * 1. Tavilly
  *   npx tsx scripts/test-trend-search.ts
+ *
+ * 2. Serper
+ *   SEARCH_PROVIDER="serper" npx tsx scripts/test-trend-search.ts
  *
  * Required env vars (reads from .env automatically via dotenv):
  *   OPENAI_API_KEY
- *   TAVILY_API_KEY
+ *   TAVILY_API_KEY (if using Tavily)
+ *   SERPER_API_KEY (if using Serper)
  * 
  *
  *   ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -15,12 +21,13 @@
  *   │                                                                             │
  *   │  Required env vars:                                                         │
  *   │   - OPENAI_API_KEY                                                          │
- *   │   - TAVILY_API_KEY                                                          │
+ *   │   - TAVILY_API_KEY (if using Tavily)                                        │
+ *   │   - SERPER_API_KEY (if using Serper)                                        │
  *   │                                                                             │
  *   │  Sample output:                                                             │
  *   └─────────────────────────────────────────────────────────────────────────────┘
  *
-─── Input ───
+─── Input ─── (tavily)
 {
   "query": "latest AI trends in retail marketing",
   "companyContext": "We are a mid-size fashion retailer focused on Gen Z customers in the US market.",
@@ -71,6 +78,61 @@ Running pipeline (plan → search → synthesize)…
       "tech"
     ],
     "createdAt": "2026-02-23T08:41:22.609Z"
+  }
+}
+
+─── Input ─── (serper)
+{
+  "query": "latest AI trends in retail marketing",
+  "companyContext": "We are a mid-size fashion retailer focused on Gen Z customers in the US market.",
+  "categories": [
+    "fashion",
+    "tech"
+  ]
+}
+
+Running pipeline (plan → search → synthesize)…
+
+  ⏳ stage: searching
+[trend-search] Search provider used: serper
+  ⏳ stage: synthesizing
+─── Output ───
+{
+  "results": [
+    {
+      "sourceUrl": "https://www.businessoffashion.com/articles/marketing-pr/fashions-new-ai-marketing-toolkit/",
+      "summary": "Fashion brands are leveraging AI tools to enhance marketing campaigns.",
+      "description": "This article discusses how various fashion brands are utilizing AI to create faster, cheaper, and more personalized marketing campaigns. Given your focus on Gen Z customers, understanding these AI marketing strategies can help your mid-size fashion retail company effectively engage with this demographic, which values personalization and innovative marketing approaches."
+    },
+    {
+      "sourceUrl": "https://www.mckinsey.com/industries/retail/our-insights/merchants-unleashed-how-agentic-ai-transforms-retail-merchandising",
+      "summary": "AI is transforming retail merchandising, allowing for more efficient operations.",
+      "description": "This McKinsey article highlights how AI is reshaping retail merchandising, enabling retailers to optimize their operations and better meet consumer demands. As a fashion retailer targeting Gen Z, adopting AI-driven merchandising strategies can enhance your inventory management and customer engagement, aligning with the preferences of this tech-savvy generation."
+    },
+    {
+      "sourceUrl": "https://www.retailtouchpoints.com/executive-viewpoints/how-ai-can-handle-the-3-biggest-gen-z-retail-trends-that-shaped-the-2025-holiday-season/156558/",
+      "summary": "AI can address key retail trends influencing Gen Z shopping behaviors.",
+      "description": "This piece explores how AI can help retailers adapt to the evolving trends that shape Gen Z's shopping habits. It provides insights into the values and preferences of Gen Z consumers, which is crucial for your company as you aim to connect with this audience through effective marketing and product offerings."
+    },
+    {
+      "sourceUrl": "https://www.mckinsey.com/industries/consumer-packaged-goods/our-insights/the-state-of-the-us-consumer",
+      "summary": "AI is influencing US consumer spending trends, particularly among younger demographics.",
+      "description": "This report from McKinsey discusses the impact of AI on consumer spending, particularly highlighting how younger consumers, including Gen Z, are embracing AI-supported shopping experiences. Understanding these trends can help your fashion retail business tailor its marketing strategies to better resonate with Gen Z customers."
+    },
+    {
+      "sourceUrl": "https://www.deloitte.com/us/en/Industries/consumer/articles/future-of-fashion-omnichannel-strategies.html",
+      "summary": "Digital transformation and omnichannel strategies are crucial for future fashion retail.",
+      "description": "This article outlines how digital transformation and omnichannel strategies are shaping the future of fashion retail. For a mid-size fashion retailer focused on Gen Z, leveraging these strategies can enhance customer experiences and improve engagement across various platforms, aligning with the expectations of today's consumers."
+    }
+  ],
+  "metadata": {
+    "query": "latest AI trends in retail marketing",
+    "companyContext": "We are a mid-size fashion retailer focused on Gen Z customers in the US market.",
+    "categories": [
+      "fashion",
+      "tech"
+    ],
+    "createdAt": "2026-03-08T21:31:39.644Z"
   }
 }
  */

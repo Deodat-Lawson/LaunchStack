@@ -70,7 +70,7 @@ export async function callSerper(query: string): Promise<RawSearchResult[]> {
         typeof item.position === "number" && item.position > 0
           ? item.position
           : index + 1;
-      const score = 1 - position / (total + 1);
+      const score = Math.max(0, 1 - position / total);
 
       return {
         url: item.link,

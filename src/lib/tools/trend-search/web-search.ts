@@ -123,7 +123,7 @@ export async function executeSearch(
 
   if (!useSerper && strategy === "serper") {
     console.warn(
-      "[web-search] SERPER_API_KEY not set; falling back to Tavily strategy.",
+      "[web-search] SERPER_API_KEY not set; downgrading strategy to tavily.",
     );
   }
 

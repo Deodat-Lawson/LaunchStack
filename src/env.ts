@@ -21,7 +21,6 @@ const serverSchema = z.object({
   SERPER_API_KEY: optionalString(),
   SEARCH_PROVIDER: z
     .enum(["tavily", "serper", "fallback", "parallel"])
-    .default("tavily")
     .optional(),
   // Platform API Keys for Marketing Pipeline
   REDDIT_CLIENT_ID: optionalString(),

@@ -251,7 +251,7 @@ export function CompanyMetadataPanel() {
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                       Industry / Sector
                     </span>
-                    <p className="text-foreground font-medium mt-1">{profile.industry || "Not set"}</p>
+                    <p className="text-foreground font-medium mt-1">{profile.industry ?? "Not set"}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50">

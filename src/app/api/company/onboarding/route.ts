@@ -37,8 +37,8 @@ export async function POST(request: Request) {
     await db
       .update(company)
       .set({
-        description: body.description?.trim() || null,
-        industry: body.industry?.trim() || null,
+        description: body.description?.trim() ?? null,
+        industry: body.industry?.trim() ?? null,
       })
       .where(eq(company.id, Number(userInfo.companyId)));
 

@@ -200,6 +200,9 @@ importers:
       geist:
         specifier: ^1.5.1
         version: 1.5.1(next@15.5.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      highlight.js:
+        specifier: ^11.11.1
+        version: 11.11.1
       inngest:
         specifier: ^3.49.3
         version: 3.49.3(@opentelemetry/core@2.5.0(@opentelemetry/api@1.9.0))(next@15.5.7(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.9.2)(zod@3.25.76)
@@ -215,6 +218,9 @@ importers:
       langchain:
         specifier: ^0.3.33
         version: 0.3.33(4c63b96815301c04536f0c3ba2bb9f23)
+      lru-cache:
+        specifier: ^11.2.6
+        version: 11.2.6
       lucide-react:
         specifier: ^0.487.0
         version: 0.487.0(react@18.3.1)
@@ -5878,6 +5884,10 @@ packages:
   hastscript@9.0.1:
     resolution: {integrity: sha512-g7df9rMFX/SPi34tyGCyUBREQoKkapwdY/T04Qn9TDWfHhAYt4/I0gMVirzK5wEzeUqIjEB+LXC/ypb7Aqno5w==}
 
+  highlight.js@11.11.1:
+    resolution: {integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==}
+    engines: {node: '>=12.0.0'}
+
   html-encoding-sniffer@4.0.0:
     resolution: {integrity: sha512-Y22oTqIU4uuPgEemfz7NDJz6OeKf12Lsu+QC+s3BVpda64lTiMYCyGwg5ki4vFxkMwQdeZDl2adZoqUgdFuTgQ==}
     engines: {node: '>=18'}
@@ -6609,6 +6619,10 @@ packages:
 
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
+
+  lru-cache@11.2.6:
+    resolution: {integrity: sha512-ESL2CrkS/2wTPfuend7Zhkzo2u0daGJ/A2VucJOgQ/C48S/zB8MMeMHSGKYpXhIjbPxfuezITkaBH1wqv00DDQ==}
+    engines: {node: 20 || >=22}
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -14323,6 +14337,8 @@ snapshots:
       property-information: 7.1.0
       space-separated-tokens: 2.0.2
 
+  highlight.js@11.11.1: {}
+
   html-encoding-sniffer@4.0.0:
     dependencies:
       whatwg-encoding: 3.1.1
@@ -15236,6 +15252,8 @@ snapshots:
       underscore: 1.13.7
 
   lru-cache@10.4.3: {}
+
+  lru-cache@11.2.6: {}
 
   lru-cache@5.1.1:
     dependencies:

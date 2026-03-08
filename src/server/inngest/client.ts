@@ -17,10 +17,22 @@ export type CompanyMetadataExtractEvent = {
   data: { documentId: number; companyId: string };
 };
 
+export type PredictiveAnalysisEvent = {
+  name: "predictive-analysis/run.requested";
+  data: {
+    documentId: number;
+    analysisType: string;
+    includeRelatedDocs: boolean;
+    timeoutMs?: number;
+    jobId: string;
+  };
+};
+
 export type Events =
   | ProcessDocumentEvent
   | TrendSearchEvent
-  | CompanyMetadataExtractEvent;
+  | CompanyMetadataExtractEvent
+  | PredictiveAnalysisEvent;
 
 /**
  * Create the Inngest client.

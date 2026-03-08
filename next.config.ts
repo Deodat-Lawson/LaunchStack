@@ -35,6 +35,10 @@ const config: NextConfig = {
     return webpackConfig;
   },
 
+  experimental: {
+    middlewareClientMaxBodySize: "128mb",
+  },
+
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 

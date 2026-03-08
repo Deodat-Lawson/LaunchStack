@@ -299,9 +299,23 @@ export async function normalizeDocument(
 // ============================================================================
 
 /**
- * Chunk the normalized document pages
+ * Chunk the normalized document pages.
+ * If a filename is provided and it's a known code extension, uses code-aware
+ * chunking that respects function/class boundaries.
  */
-export async function chunkPages(pages: PageContent[]): Promise<DocumentChunk[]> {
+export async function chunkPages(pages: PageContent[], filename?: string): Promise<DocumentChunk[]> {
+  const { isCodeFile, chunkCodeFile } = await import("./code-chunker");
+
+  if (filename && isCodeFile(filename)) {
+    console.log(`[Chunking] Using code-aware chunker for ${filename}`);
+    const codeChunks = chunkCodeFile(pages, filename);
+    console.log(`[Chunking] Created ${codeChunks.length} code parent chunks`);
+    codeChunks.forEach((chunk, idx) => {
+      console.log(`[Chunking] Code Parent ${idx}: ${chunk.content.length} chars, ${chunk.children?.length ?? 0} children, path=${chunk.metadata.structurePath ?? ""}`);
+    });
+    return codeChunks;
+  }
+
   const pageSizes = pages.map((page, idx) => {
     const textLength = page.textBlocks.join("").length;
     return `Page ${idx + 1}: ${textLength} chars, ${page.textBlocks.length} blocks, ${page.tables.length} tables`;

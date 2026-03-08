@@ -10,8 +10,6 @@ import {
   Shield,
   BarChart3,
   CheckCircle2,
-  AlertTriangle,
-  ExternalLink,
 } from 'lucide-react';
 import type { DeploymentProps } from '../../types';
 import { Section, CodeBlock, Step, ApiKeyCard, InfoBox, WarningBox } from '../ui';

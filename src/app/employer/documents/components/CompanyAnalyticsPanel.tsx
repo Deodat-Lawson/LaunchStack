@@ -9,7 +9,6 @@ import {
   RefreshCw,
   Clock,
   AlertCircle,
-  Loader2,
 } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { cn } from "~/lib/utils";

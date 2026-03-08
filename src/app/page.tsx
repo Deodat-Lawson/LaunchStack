@@ -1,17 +1,39 @@
+import type { Metadata } from 'next';
 import Link from "next/link";
 import Image from "next/image";
-import React, { type FC } from 'react';
+import React from 'react';
+
+export const metadata: Metadata = {
+    title: 'PDR AI — AI-Powered Document Analysis Platform',
+    description: 'Document RAG, predictive analysis, contract review, and AI Q&A — all open source. Upload documents, detect gaps, and get cited answers instantly.',
+};
 import {
     Brain, ArrowRight, FileSearch, Upload, Sparkles, CheckCircle,
-    Building2, BarChart3, Github, Heart, Code2, ExternalLink,
+    Github, Heart, Code2, ExternalLink,
 } from 'lucide-react';
 import { Navbar } from './_components/Navbar';
 
 const GITHUB_REPO = "https://github.com/Deodat-Lawson/pdr_ai_v2";
 
+const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'PDR AI',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    description: 'AI-powered document analysis platform with RAG, predictive gap detection, and intelligent Q&A.',
+    url: 'https://pdr-ai.com',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    creator: { '@type': 'Organization', name: 'PDR AI', url: 'https://pdr-ai.com' },
+};
+
 export default function HomePage() {
     return (
         <div className="min-h-screen bg-white dark:bg-[#080010] text-gray-900 dark:text-white overflow-x-hidden transition-colors duration-200">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <Navbar />
 
             {/* ── Hero ─────────────────────────────────────────────── */}
@@ -174,6 +196,39 @@ export default function HomePage() {
                         </Link>
                     </div>
                     <AnalyticsMockup />
+                </div>
+            </section>
+
+            {/* ── Document Analysis Types ─────────────────────────── */}
+            <section className="max-w-6xl mx-auto px-4 mb-32">
+                <div className="text-center mb-14">
+                    <span className="inline-block text-xs font-semibold uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-4">Predictive Analysis</span>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+                        Deep analysis across<br />8 document domains
+                    </h2>
+                    <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                        PDR AI detects missing references, compliance gaps, and actionable insights tailored to your specific document type.
+                    </p>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                        { type: 'Contract', desc: 'Exhibits, schedules, addendums, and supporting agreements' },
+                        { type: 'Financial', desc: 'Balance sheets, audit reports, and supporting statements' },
+                        { type: 'Technical', desc: 'Specifications, manuals, diagrams, and deliverables' },
+                        { type: 'Compliance', desc: 'Regulatory filings, certifications, and policy documents' },
+                        { type: 'Educational', desc: 'Syllabi, handouts, readings, and linked resources' },
+                        { type: 'HR', desc: 'Policies, forms, benefits materials, and handbooks' },
+                        { type: 'Research', desc: 'Cited papers, datasets, and supplementary materials' },
+                        { type: 'General', desc: 'Any document with cross-references and attachments' },
+                    ].map((item) => (
+                        <div
+                            key={item.type}
+                            className="bg-gray-50 dark:bg-purple-950/40 border border-gray-100 dark:border-purple-800/40 rounded-xl p-5 hover:border-purple-300 dark:hover:border-purple-600/60 transition-colors"
+                        >
+                            <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1.5">{item.type}</h3>
+                            <p className="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">{item.desc}</p>
+                        </div>
+                    ))}
                 </div>
             </section>
 

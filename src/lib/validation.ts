@@ -73,7 +73,8 @@ export const QuestionSchema = z.object({
   companyId: z.number().int().positive().optional(),
   question: z.string().min(1, "Question is required"),
   style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
-  searchScope: z.enum(["document", "company"]).optional(),
+  searchScope: z.enum(["document", "company", "archive"]).optional(),
+  archiveName: z.string().optional(),
   enableWebSearch: z.boolean().optional().default(false),
   aiPersona: z.enum(aiPersonaOptions).optional(),
   aiModel: z.enum(aiModelOptions).optional(),
@@ -86,6 +87,7 @@ export const QuestionSchema = z.object({
   searchScope: data.searchScope ?? "document" as const,
   enableWebSearch: data.enableWebSearch ?? false,
   aiPersona: data.aiPersona ?? "general",
+  archiveName: data.archiveName,
   aiModel: data.aiModel ?? "gpt-4o" as const,
   conversationHistory: data.conversationHistory,
 }));

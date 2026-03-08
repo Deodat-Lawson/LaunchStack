@@ -28,7 +28,7 @@ import {
 } from '~/app/employer/documents/components/ui/select';
 import { cn } from "~/lib/utils";
 import type { DocumentType } from '../types';
-import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 import { ModelBadge } from './ModelBadge';
 
 const MarkdownMessage = dynamic(
@@ -55,6 +55,8 @@ interface SimpleQueryPanelProps {
   setSearchScope: (s: 'document' | 'company') => void;
   aiStyle: string;
   setAiStyle: (s: string) => void;
+  provider: LLMProvider;
+  setProvider: (p: LLMProvider) => void;
   aiModel: AIModelType;
   setAiModel: (m: AIModelType) => void;
   aiAnswerModel?: AIModelType;
@@ -73,17 +75,18 @@ const styleIcons: Record<string, React.ReactNode> = {
   "bullet-points": <List className="w-3.5 h-3.5" />, // Backwards compat just in case
 };
 
-const modelConfig: Array<{ key: AIModelType; label: string }> = [
-  { key: "gpt-5.2", label: "GPT-5.2" },
-  { key: "gpt-5-mini", label: "GPT-5 Mini" },
-  { key: "gpt-5-nano", label: "GPT-5 Nano" },
-  { key: "claude-opus-4.5", label: "Claude Opus 4.5" },
-  { key: "gemini-3-flash", label: "Gemini 3 Flash" },
-  { key: "gemini-3-pro", label: "Gemini 3 Pro" },
-  { key: "gpt-5.1", label: "GPT-5.1" },
-  { key: "gpt-4o", label: "GPT-4o" },
-  { key: "claude-sonnet-4", label: "Claude Sonnet 4" },
-  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+const providerOptions: Array<{ key: LLMProvider; label: string }> = [
+  { key: "openai", label: "OpenAI" },
+  { key: "ollama", label: "Ollama" },
+];
+
+const modelConfig: Array<{ key: AIModelType; label: string; provider: LLMProvider }> = [
+  { key: "gpt-5.2", label: "GPT-5.2", provider: "openai" },
+  { key: "gpt-5-mini", label: "GPT-5 Mini", provider: "openai" },
+  { key: "gpt-5-nano", label: "GPT-5 Nano", provider: "openai" },
+  { key: "gpt-5.1", label: "GPT-5.1", provider: "openai" },
+  { key: "gpt-4o", label: "GPT-4o", provider: "openai" },
+  { key: "llama3.1:8b", label: "Llama 3.1 8B", provider: "ollama" },
 ];
 
 export function SimpleQueryPanel({
@@ -101,6 +104,8 @@ export function SimpleQueryPanel({
   setSearchScope,
   aiStyle,
   setAiStyle,
+  provider,
+  setProvider,
   aiModel,
   setAiModel,
   aiAnswerModel,
@@ -112,6 +117,7 @@ export function SimpleQueryPanel({
 }: SimpleQueryPanelProps) {
   const showCompanyScope = userRole === 'employer';
   const [isFocused, setIsFocused] = useState(false);
+  const availableModels = modelConfig.filter((model) => model.provider === provider);
 
   return (
     <div className="bg-gradient-to-b from-slate-50/50 to-white dark:from-slate-900/50 dark:to-slate-950 flex flex-col h-full">
@@ -210,34 +216,60 @@ export function SimpleQueryPanel({
             </div>
           </div>
 
-          {/* Model Selector */}
-          <div className="space-y-2">
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-violet-500" />
-              AI Model
-            </span>
-            <Select
-              value={aiModel}
-              onValueChange={(value) => setAiModel(value as AIModelType)}
-            >
-              <SelectTrigger
-                size="sm"
-                className="h-9 bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-xs font-semibold"
+          {/* Provider & Model Selector */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-violet-500" />
+                Provider
+              </span>
+              <Select
+                value={provider}
+                onValueChange={(value) => setProvider(value as LLMProvider)}
               >
-                <SelectValue placeholder="Select model" />
-              </SelectTrigger>
-              <SelectContent>
-                {modelConfig.map((model) => (
-                  <SelectItem
-                    key={model.key}
-                    value={model.key}
-                    disabled={modelAvailability[model.key] === false}
-                  >
-                    {model.label}{modelAvailability[model.key] === false ? " (Unavailable)" : ""}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                <SelectTrigger
+                  size="sm"
+                  className="h-9 bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-xs font-semibold"
+                >
+                  <SelectValue placeholder="Select provider" />
+                </SelectTrigger>
+                <SelectContent>
+                  {providerOptions.map((option) => (
+                    <SelectItem key={option.key} value={option.key}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-violet-500" />
+                AI Model
+              </span>
+              <Select
+                value={aiModel}
+                onValueChange={(value) => setAiModel(value as AIModelType)}
+              >
+                <SelectTrigger
+                  size="sm"
+                  className="h-9 bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-xs font-semibold"
+                >
+                  <SelectValue placeholder="Select model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableModels.map((model) => (
+                    <SelectItem
+                      key={model.key}
+                      value={model.key}
+                      disabled={modelAvailability[model.key] === false}
+                    >
+                      {model.label}{modelAvailability[model.key] === false ? " (Unavailable)" : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Question Input */}

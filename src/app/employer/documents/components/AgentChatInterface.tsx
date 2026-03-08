@@ -18,7 +18,7 @@ import {
 import { useAIChatbot, type Message } from '../hooks/useAIChatbot';
 import { useAIChat, type SourceReference } from '../hooks/useAIChat';
 import { cn } from '~/lib/utils';
-import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 import { ModelBadge } from './ModelBadge';
 
 const MarkdownMessage = dynamic(
@@ -41,6 +41,7 @@ interface AgentChatInterfaceProps {
   aiStyle?: string;
   aiPersona?: string;
   aiModel?: AIModelType;
+  provider?: LLMProvider;
   onPageClick?: (page: number) => void;
   onReferencesResolved?: (references: SourceReference[]) => void;
   onCreateChat?: () => Promise<string | null>;
@@ -58,6 +59,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   aiStyle = 'concise',
   aiPersona = 'general',
   aiModel = 'gpt-5.2',
+  provider = 'openai',
   onPageClick,
   onReferencesResolved,
   onCreateChat,
@@ -222,6 +224,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           enableWebSearch: Boolean(enableWebSearch),
           aiPersona: aiPersona as 'general' | 'learning-coach' | 'financial-expert' | 'legal-expert' | 'math-reasoning' | undefined,
           aiModel,
+          provider,
           documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
           companyId: searchScope === "company" && companyId ? companyId : undefined,
         });

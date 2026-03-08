@@ -29,7 +29,8 @@ import { toast } from "sonner";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 
 import { RESPONSE_STYLES, type ResponseStyleId } from "~/lib/ai/styles";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
+import type { AIModelType, LLMProvider } from "~/app/api/agents/documentQ&A/services/types";
+import { ProviderModelMap, ProviderDefaultModels } from "~/app/api/agents/documentQ&A/services/types";
 
 type AIModelAvailability = Record<AIModelType, boolean>;
 
@@ -105,8 +106,16 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const { createChat, getChat } = useAIChatbot();
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [aiPersona, setAiPersona] = useState<string>('general');
-  const [aiModel, setAiModel] = useState<AIModelType>("gpt-5.2");
+  const [provider, setProvider] = useState<LLMProvider>("openai");
+  const [aiModel, setAiModel] = useState<AIModelType>(ProviderDefaultModels.openai);
   const [modelAvailability, setModelAvailability] = useState<Partial<AIModelAvailability>>({});
+
+  useEffect(() => {
+    const allowedModels = ProviderModelMap[provider];
+    if (allowedModels && !allowedModels.includes(aiModel)) {
+      setAiModel(ProviderDefaultModels[provider]);
+    }
+  }, [provider, aiModel]);
 
   // Handle chat selection and auto-document binding
   useEffect(() => {
@@ -396,6 +405,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
 
     const currentQuestion = aiQuestion;
     const modelUsedForQuery = aiModel; // Capture the model at query time
+    const providerUsedForQuery = provider;
     setAiQuestion("");
 
     try {
@@ -404,6 +414,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         searchScope,
         style: aiStyle as ResponseStyleId,
         aiModel: modelUsedForQuery,
+        provider: providerUsedForQuery,
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
         companyId: searchScope === "company" ? resolvedCompanyId ?? undefined : undefined,
       });
@@ -562,6 +573,8 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                       setSearchScope={handleSearchScopeChange}
                       aiStyle={aiStyle}
                       setAiStyle={setAiStyle}
+                      provider={provider}
+                      setProvider={setProvider}
                       aiModel={aiModel}
                       setAiModel={setAiModel}
                       aiAnswerModel={aiAnswerModel}
@@ -585,6 +598,8 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                               setAiStyle={setAiStyle}
                               aiPersona={aiPersona}
                               setAiPersona={setAiPersona}
+                              provider={provider}
+                              setProvider={setProvider}
                               aiModel={aiModel}
                               setAiModel={setAiModel}
                               modelAvailability={modelAvailability}

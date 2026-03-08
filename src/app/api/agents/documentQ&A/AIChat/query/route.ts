@@ -21,12 +21,13 @@ import {
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModel,
+    getChatModelForProvider,
+    getProviderDefaultModel,
+    describeOllamaError,
     getEmbeddings,
     buildReferences,
     extractRecommendedPages,
 } from "../../services";
-import type { AIModelType } from "../../services";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 
 export const runtime = 'nodejs';
@@ -92,6 +93,7 @@ export async function POST(request: Request) {
                 enableWebSearch,
                 aiPersona,
                 aiModel,
+                provider,
                 conversationHistory,
             } = validation.data;
 
@@ -335,8 +337,12 @@ export async function POST(request: Request) {
             );
 
             // Get AI model and generate comprehensive response
-            const selectedAiModel = (aiModel ?? 'gpt-4o') as AIModelType;
-            const chat = getChatModel(selectedAiModel);
+            const resolvedProvider = provider ?? "openai";
+            const selectedAiModel = aiModel ?? getProviderDefaultModel(resolvedProvider);
+            const chat = getChatModelForProvider({
+                provider: resolvedProvider,
+                model: selectedAiModel,
+            });
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
             // Build conversation context
@@ -356,10 +362,28 @@ export async function POST(request: Request) {
 
             const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${webSearchInstruction}\n\nProvide a natural, conversational answer based primarily on the provided content. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
             
-            const response = await chat.call([
-                new SystemMessage(systemPrompt),
-                new HumanMessage(userPrompt),
-            ]);
+            let response;
+            try {
+                response = await chat.call([
+                    new SystemMessage(systemPrompt),
+                    new HumanMessage(userPrompt),
+                ]);
+            } catch (modelError) {
+                if (resolvedProvider === "ollama") {
+                    const friendly = describeOllamaError(modelError, selectedAiModel);
+                    if (friendly) {
+                        recordResult("error");
+                        return NextResponse.json(
+                            {
+                                success: false,
+                                message: friendly.message,
+                            },
+                            { status: friendly.status },
+                        );
+                    }
+                }
+                throw modelError;
+            }
 
             const summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;

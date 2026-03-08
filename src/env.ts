@@ -12,6 +12,9 @@ const optionalString = () =>
 const serverSchema = z.object({
   DATABASE_URL: z.preprocess(normalize, z.string().url()),
   OPENAI_API_KEY: requiredString(),
+  OPENAI_MODEL: optionalString(),
+  OLLAMA_BASE_URL: optionalString(),
+  OLLAMA_MODEL: optionalString(),
   CLERK_SECRET_KEY: requiredString(),
   BLOB_READ_WRITE_TOKEN: optionalString(),
   UPLOADTHING_TOKEN: optionalString(),
@@ -83,6 +86,9 @@ function parseServerEnv() {
   const server = parseEnv(serverSchema, {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    OPENAI_MODEL: process.env.OPENAI_MODEL,
+    OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
+    OLLAMA_MODEL: process.env.OLLAMA_MODEL,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,

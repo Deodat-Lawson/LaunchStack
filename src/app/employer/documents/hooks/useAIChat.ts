@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { SourceReference } from '~/app/api/agents/documentQ&A/services';
+import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 
 export type { SourceReference };
 
@@ -8,7 +9,8 @@ export interface AIChatRequest {
   companyId?: number;
   question: string;
   searchScope: 'document' | 'company';
-  aiModel?: 'gpt-4o' | 'gpt-5.2' | 'gpt-5.1' | 'gpt-5-nano' | 'gpt-5-mini' | 'claude-sonnet-4' | 'claude-opus-4.5' | 'gemini-2.5-flash' | 'gemini-3-flash' | 'gemini-3-pro';
+  aiModel?: AIModelType;
+  provider?: LLMProvider;
   style?: string;
   enableWebSearch?: boolean;
   conversationHistory?: string;
@@ -81,6 +83,7 @@ export function useAIChat() {
           question: params.question,
           searchScope: params.searchScope,
           aiModel: mappedModel,
+          provider: params.provider,
           style: params.style,
           enableWebSearch: params.enableWebSearch,
           conversationHistory: params.conversationHistory,

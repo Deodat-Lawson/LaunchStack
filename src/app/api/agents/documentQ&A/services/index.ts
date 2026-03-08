@@ -16,7 +16,8 @@ export { buildReferences, extractRecommendedPages, filterPagesByAICitation } fro
 export { performTavilySearch } from "./tavilySearch";
 export { executeWebSearchAgent } from "./webSearchAgent";
 export { SYSTEM_PROMPTS, getSystemPrompt, getWebSearchInstruction } from "./prompts";
-export { getChatModel, getEmbeddings } from "./models";
+export { getChatModel, getEmbeddings, getChatModelForProvider, getProviderDefaultModel, describeOllamaError } from "./models";
+export { ProviderModelMap, ProviderDefaultModels } from "./types";
 
 // RLM Search (hierarchical, cost-aware retrieval for large documents)
 export {
@@ -33,6 +34,7 @@ export {
 export type {
     // AI Model Types
     AIModelType,
+    LLMProvider,
     // Response Style Types
     ResponseStyle,
     // Source Reference Types

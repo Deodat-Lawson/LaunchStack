@@ -27,19 +27,59 @@ export type AIModelType =
   | "claude-opus-4.5"
   | "gemini-2.5-flash"
   | "gemini-3-flash"
-  | "gemini-3-pro";
+  | "gemini-3-pro"
+  | "llama3.1:8b";
 
 /**
  * Union type of all supported AI model names
  * Useful for type checking and validation
  */
-export const AIModelTypes = ["gpt-4o", "gpt-5.2", "gpt-5.1", "gpt-5-nano", "gpt-5-mini", "claude-sonnet-4", "claude-opus-4.5", "gemini-2.5-flash", "gemini-3-flash", "gemini-3-pro"] as const;
+export const AIModelTypes = [
+    "gpt-4o",
+    "gpt-5.2",
+    "gpt-5.1",
+    "gpt-5-nano",
+    "gpt-5-mini",
+    "claude-sonnet-4",
+    "claude-opus-4.5",
+    "gemini-2.5-flash",
+    "gemini-3-flash",
+    "gemini-3-pro",
+    "llama3.1:8b",
+] as const;
 
 /**
  * Type guard to check if a string is a valid AI model type
  */
 export function isAIModelType(value: string): value is AIModelType {
     return AIModelTypes.includes(value as AIModelType);
+}
+
+// ============================================================================
+// LLM Provider Types
+// ============================================================================
+
+export const LLMProviders = ["openai", "ollama"] as const;
+
+export type LLMProvider = (typeof LLMProviders)[number];
+
+export const ProviderModelMap = {
+    openai: ["gpt-4o", "gpt-5.2", "gpt-5.1", "gpt-5-nano", "gpt-5-mini"] as const,
+    ollama: ["llama3.1:8b"] as const,
+} satisfies Record<LLMProvider, readonly AIModelType[]>;
+
+export const ProviderDefaultModels: Record<LLMProvider, AIModelType> = {
+    openai: "gpt-4o",
+    ollama: "llama3.1:8b",
+};
+
+export function isModelAllowedForProvider(
+    provider: LLMProvider,
+    model: string | undefined,
+): model is AIModelType {
+    if (!model) return false;
+    const allowedModels = ProviderModelMap[provider];
+    return allowedModels.includes(model as AIModelType);
 }
 
 // ============================================================================

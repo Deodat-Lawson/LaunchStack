@@ -31,6 +31,7 @@ import {
     extractRecommendedPages,
 } from "../../services";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
+import { validateQAResponse } from "~/lib/agents/supervisor";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;

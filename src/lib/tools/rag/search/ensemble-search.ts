@@ -1,6 +1,7 @@
 import { EnsembleRetriever } from "langchain/retrievers/ensemble";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { BM25Retriever } from "@langchain/community/retrievers/bm25";
+import type { BaseRetriever } from "@langchain/core/retrievers";
 import {
   createDocumentVectorRetriever,
   createCompanyVectorRetriever,
@@ -15,6 +16,11 @@ import {
   getMultiDocChunks,
   chunksToDocuments,
 } from "../retrievers/bm25-retriever";
+import {
+  createNeo4jGraphRetriever,
+  shouldUseNeo4jRetriever,
+} from "../retrievers/neo4j-graph-retriever";
+import { createGraphRetriever } from "../retrievers/graph-retriever";
 import type {
   SearchResult,
   DocumentSearchOptions,
@@ -24,10 +30,18 @@ import type {
   SearchScope,
 } from "../types";
 
-const DEFAULT_WEIGHTS: [number, number] = [0.4, 0.6];
+const DEFAULT_WEIGHTS_2: number[] = [0.4, 0.6];
+const DEFAULT_WEIGHTS_3: number[] = [0.3, 0.5, 0.2];
 const DEFAULT_TOP_K = 8;
-const RERANK_CANDIDATE_MULTIPLIER = 4; // Fetch 4x candidates for re-ranking
+const RERANK_CANDIDATE_MULTIPLIER = 4;
 const SIDECAR_URL = process.env.SIDECAR_URL;
+
+function isGraphRetrievalEnabled(): boolean {
+  return (
+    process.env.ENABLE_GRAPH_RETRIEVER === "true" ||
+    process.env.ENABLE_GRAPH_RETRIEVER === "1"
+  );
+}
 
 export function createOpenAIEmbeddings(): OpenAIEmbeddings {
   return new OpenAIEmbeddings({
@@ -41,52 +55,104 @@ export async function createDocumentEnsembleRetriever(
   options: DocumentSearchOptions,
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
-  const { documentId, weights = DEFAULT_WEIGHTS, topK = DEFAULT_TOP_K, filters } = options;
+  const { documentId, companyId, topK = DEFAULT_TOP_K, filters } = options;
   const emb = embeddings ?? createOpenAIEmbeddings();
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
-  // We increase the candidate pool for both retrievers to improve recall before re-ranking
   const bm25Retriever = await createDocumentBM25Retriever(documentId, candidateK);
   const vectorRetriever = createDocumentVectorRetriever(documentId, emb, candidateK, filters);
 
-  return new EnsembleRetriever({
-    retrievers: [bm25Retriever, vectorRetriever],
-    weights,
-  });
+  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
+  let weights = options.weights ?? DEFAULT_WEIGHTS_2;
+
+  if (isGraphRetrievalEnabled() && companyId != null) {
+    const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
+      documentIds: [documentId],
+      topK: candidateK,
+    });
+    if (graphRetriever) {
+      retrievers.push(graphRetriever);
+      weights = options.weights ?? DEFAULT_WEIGHTS_3;
+    }
+  }
+
+  return new EnsembleRetriever({ retrievers, weights });
 }
 
 export async function createCompanyEnsembleRetriever(
   options: CompanySearchOptions,
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
-  const { companyId, weights = DEFAULT_WEIGHTS, topK = 10, filters } = options;
+  const { companyId, topK = 10, filters } = options;
   const emb = embeddings ?? createOpenAIEmbeddings();
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
   const bm25Retriever = await createCompanyBM25Retriever(companyId, candidateK);
   const vectorRetriever = createCompanyVectorRetriever(companyId, emb, candidateK, filters);
 
-  return new EnsembleRetriever({
-    retrievers: [bm25Retriever, vectorRetriever],
-    weights,
-  });
+  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
+  let weights = options.weights ?? DEFAULT_WEIGHTS_2;
+
+  if (isGraphRetrievalEnabled()) {
+    const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
+      topK: candidateK,
+    });
+    if (graphRetriever) {
+      retrievers.push(graphRetriever);
+      weights = options.weights ?? DEFAULT_WEIGHTS_3;
+    }
+  }
+
+  return new EnsembleRetriever({ retrievers, weights });
 }
 
 export async function createMultiDocEnsembleRetriever(
   options: MultiDocSearchOptions,
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
-  const { documentIds, weights = DEFAULT_WEIGHTS, topK = DEFAULT_TOP_K, filters } = options;
+  const { documentIds, companyId, topK = DEFAULT_TOP_K, filters } = options;
   const emb = embeddings ?? createOpenAIEmbeddings();
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
   const bm25Retriever = await createMultiDocBM25Retriever(documentIds, candidateK);
   const vectorRetriever = createMultiDocVectorRetriever(documentIds, emb, candidateK, filters);
 
-  return new EnsembleRetriever({
-    retrievers: [bm25Retriever, vectorRetriever],
-    weights,
-  });
+  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
+  let weights = options.weights ?? DEFAULT_WEIGHTS_2;
+
+  if (isGraphRetrievalEnabled() && companyId != null) {
+    const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
+      documentIds,
+      topK: candidateK,
+    });
+    if (graphRetriever) {
+      retrievers.push(graphRetriever);
+      weights = options.weights ?? DEFAULT_WEIGHTS_3;
+    }
+  }
+
+  return new EnsembleRetriever({ retrievers, weights });
+}
+
+/**
+ * Creates the appropriate graph retriever (Neo4j or PostgreSQL fallback).
+ * Returns null if graph retrieval is not available.
+ */
+function createGraphRetrieverForEnsemble(
+  companyId: number,
+  options?: { documentIds?: number[]; topK?: number },
+): BaseRetriever | null {
+  if (shouldUseNeo4jRetriever()) {
+    console.log(
+      `[EnsembleSearch] Graph retriever: using NEO4J (companyId=${companyId}, docs=${options?.documentIds?.length ?? "all"})`,
+    );
+    return createNeo4jGraphRetriever(companyId, options);
+  }
+
+  console.log(
+    `[EnsembleSearch] Graph retriever: using POSTGRESQL fallback (companyId=${companyId})`,
+  );
+  return createGraphRetriever(companyId, options);
 }
 
 export async function documentEnsembleSearch(
@@ -96,15 +162,17 @@ export async function documentEnsembleSearch(
 ): Promise<SearchResult[]> {
   const { documentId, topK = DEFAULT_TOP_K } = options;
 
+  const graphEnabled = isGraphRetrievalEnabled() && options.companyId != null;
   console.log(
-    `🔍 [EnsembleSearch] Searching document ${documentId} for: "${query.substring(0, 50)}..."`
+    `[EnsembleSearch] Searching document ${documentId} for: "${query.substring(0, 50)}..." ` +
+    `(graph=${graphEnabled ? "ON" : "OFF"})`,
   );
 
   try {
     const retriever = await createDocumentEnsembleRetriever(options, embeddings);
     const results = await retriever.getRelevantDocuments(query);
 
-    console.log(`✅ [EnsembleSearch] Found ${results.length} candidates for document ${documentId} (requested topK=${topK})`);
+    console.log(`[EnsembleSearch] Found ${results.length} candidates for document ${documentId} (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`);
 
     const mapped: SearchResult[] = results.map((doc) => ({
       pageContent: doc.pageContent,
@@ -137,15 +205,17 @@ export async function companyEnsembleSearch(
     return [];
   }
 
+  const graphEnabled = isGraphRetrievalEnabled();
   console.log(
-    `🔍 [EnsembleSearch] Searching company ${companyId} for: "${query.substring(0, 50)}..."`
+    `[EnsembleSearch] Searching company ${companyId} for: "${query.substring(0, 50)}..." ` +
+    `(graph=${graphEnabled ? "ON" : "OFF"})`,
   );
 
   try {
     const retriever = await createCompanyEnsembleRetriever(options, embeddings);
     const results = await retriever.getRelevantDocuments(query);
 
-    console.log(`✅ [EnsembleSearch] Found ${results.length} candidates for company ${companyId} (requested topK=${topK})`);
+    console.log(`[EnsembleSearch] Found ${results.length} candidates for company ${companyId} (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`);
 
     const mapped: SearchResult[] = results.map((doc) => ({
       pageContent: doc.pageContent,
@@ -177,8 +247,10 @@ export async function multiDocEnsembleSearch(
     return [];
   }
 
+  const graphEnabled = isGraphRetrievalEnabled() && options.companyId != null;
   console.log(
-    `🔍 [EnsembleSearch] Searching ${documentIds.length} documents for: "${query.substring(0, 50)}..."`
+    `[EnsembleSearch] Searching ${documentIds.length} documents for: "${query.substring(0, 50)}..." ` +
+    `(graph=${graphEnabled ? "ON" : "OFF"})`,
   );
 
   try {
@@ -186,7 +258,7 @@ export async function multiDocEnsembleSearch(
     const results = await retriever.getRelevantDocuments(query);
 
     console.log(
-      `✅ [EnsembleSearch] Found ${results.length} candidates from ${documentIds.length} documents (requested topK=${topK})`
+      `[EnsembleSearch] Found ${results.length} candidates from ${documentIds.length} documents (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`,
     );
 
     const mapped: SearchResult[] = results.map((doc) => ({

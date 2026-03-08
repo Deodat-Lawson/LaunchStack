@@ -120,6 +120,9 @@ export interface ChunkMetadata {
   documentTitle?: string;
   /** Structure path for contextual retrieval */
   structurePath?: string;
+  /** Source line range for code chunks */
+  lineStart?: number;
+  lineEnd?: number;
 }
 
 /**
@@ -200,6 +203,8 @@ export interface ProcessDocumentEventData {
   category: string;
   /** MIME type of the uploaded file (used by the ingestion router) */
   mimeType?: string;
+  /** Original filename with extension — used for adapter routing when documentName has been cleaned */
+  originalFilename?: string;
   options?: {
     forceOCR?: boolean;
     preferredProvider?: OCRProvider;

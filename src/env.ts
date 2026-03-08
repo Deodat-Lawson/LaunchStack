@@ -52,6 +52,14 @@ const serverSchema = z.object({
   // Sidecar configuration (optional, for local ML compute)
   // When set, Graph RAG entity extraction is automatically enabled
   SIDECAR_URL: optionalString(),
+  // Enable Graph RAG retrieval
+  ENABLE_GRAPH_RETRIEVER: z.preprocess(
+    (val) => val === "true" || val === "1",
+    z.boolean().optional()
+  ),
+  NEO4J_URI: optionalString(),
+  NEO4J_USERNAME: optionalString(),
+  NEO4J_PASSWORD: optionalString(),
 });
 
 const clientSchema = z.object({
@@ -117,6 +125,10 @@ function parseServerEnv() {
     JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
+    ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
+    NEO4J_URI: process.env.NEO4J_URI,
+    NEO4J_USERNAME: process.env.NEO4J_USERNAME,
+    NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
   });
   if (
     !skipValidation &&

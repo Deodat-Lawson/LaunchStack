@@ -145,12 +145,12 @@ export default clerkMiddleware(async (auth, req) => {
                         return NextResponse.redirect(new URL('/employee/documents', req.url));
                     }
                     if (isEmployeePath(pathname) && !isEmployeeRole) {
-                        return NextResponse.redirect(new URL('/employer/home', req.url));
+                        return NextResponse.redirect(new URL('/employer/documents', req.url));
                     }
                 } else if (isAuthRedirectRoute(req)) {
                     // Verified user on / or /signup – send to their dashboard
                     if (existingUser.role === "employer" || existingUser.role === "owner") {
-                        return NextResponse.redirect(new URL('/employer/home', req.url));
+                        return NextResponse.redirect(new URL('/employer/documents', req.url));
                     } else if (existingUser.role === "employee") {
                         return NextResponse.redirect(new URL('/employee/documents', req.url));
                     }

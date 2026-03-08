@@ -56,10 +56,11 @@ export interface SearchFilters {
 }
 
 export interface EnsembleSearchOptions {
-  weights?: [number, number];
+  weights?: number[];
   topK?: number;
   minSimilarity?: number;
   filters?: SearchFilters;
+  companyId?: number;
 }
 
 export interface DocumentSearchOptions extends EnsembleSearchOptions {

@@ -9,8 +9,9 @@ import { db } from "~/server/db";
 import { fileUploads } from "~/server/db/schema";
 import { putFile } from "~/server/storage/vercel-blob";
 import { isUploadAccepted } from "~/lib/upload-accepted";
+import { DOCUMENT_LIMITS } from "~/lib/constants";
 
-const MAX_FILE_SIZE = 16 * 1024 * 1024; // 16MB to match UploadThing config
+const MAX_FILE_SIZE = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const UNSUPPORTED_TYPE_MESSAGE =
   "Unsupported file type. Accepted: PDF, Word, Excel, PowerPoint, text, HTML, images (PNG, JPG, TIFF, etc.).";

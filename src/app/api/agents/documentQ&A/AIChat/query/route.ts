@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db, toRows } from "~/server/db/index";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
     companyEnsembleSearch,
     documentEnsembleSearch,
+    multiDocEnsembleSearch,
     type CompanySearchOptions,
     type DocumentSearchOptions,
+    type MultiDocSearchOptions,
     type SearchResult
 } from "~/lib/tools/rag";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
@@ -90,6 +92,7 @@ export async function POST(request: Request) {
                 question,
                 style,
                 searchScope,
+                archiveName,
                 enableWebSearch,
                 aiPersona,
                 aiModel,
@@ -111,6 +114,14 @@ export async function POST(request: Request) {
                 return NextResponse.json({
                     success: false,
                     message: "documentId is required for document search"
+                }, { status: 400 });
+            }
+
+            if (searchScope === "archive" && !archiveName) {
+                recordResult("error");
+                return NextResponse.json({
+                    success: false,
+                    message: "archiveName is required for archive search"
                 }, { status: 400 });
             }
 
@@ -140,8 +151,8 @@ export async function POST(request: Request) {
                 }, { status: 403 });
             }
 
-            // Validate company-wide search permissions
-            if (searchScope === "company") {
+            // Validate company/archive search permissions
+            if (searchScope === "company" || searchScope === "archive") {
                 if (!COMPANY_SCOPE_ROLES.has(requestingUser.role)) {
                     recordResult("error");
                     return NextResponse.json({
@@ -187,16 +198,41 @@ export async function POST(request: Request) {
                 }
             }
 
+            // Resolve archive document IDs if archive scope
+            let archiveDocumentIds: number[] | undefined;
+            if (searchScope === "archive" && archiveName) {
+                const archiveDocs = await db
+                    .select({ id: document.id })
+                    .from(document)
+                    .where(and(
+                        eq(document.sourceArchiveName, archiveName),
+                        eq(document.companyId, String(numericCompanyId))
+                    ));
+
+                archiveDocumentIds = archiveDocs.map(d => d.id);
+                if (archiveDocumentIds.length === 0) {
+                    recordResult("empty");
+                    return NextResponse.json({
+                        success: false,
+                        message: `No documents found in archive "${archiveName}".`
+                    }, { status: 404 });
+                }
+            }
+
             // Perform comprehensive search
             const embeddings = getEmbeddings();
             let documents: SearchResult[] = [];
-            retrievalMethod = searchScope === "company" ? 'company_ensemble_rrf' : 'document_ensemble_rrf';
+            retrievalMethod = searchScope === "company"
+                ? 'company_ensemble_rrf'
+                : searchScope === "archive"
+                    ? 'archive_ensemble_rrf'
+                    : 'document_ensemble_rrf';
 
             try {
                 if (searchScope === "company") {
                     const companyOptions: CompanySearchOptions = {
                         weights: [0.4, 0.6],
-                        topK: 10, // More results for comprehensive search
+                        topK: 10,
                         companyId: numericCompanyId
                     };
                     
@@ -205,11 +241,23 @@ export async function POST(request: Request) {
                         companyOptions,
                         embeddings
                     );
+                } else if (searchScope === "archive" && archiveDocumentIds?.length) {
+                    const archiveOptions: MultiDocSearchOptions = {
+                        weights: [0.4, 0.6],
+                        topK: 10,
+                        documentIds: archiveDocumentIds
+                    };
+
+                    documents = await multiDocEnsembleSearch(
+                        question,
+                        archiveOptions,
+                        embeddings
+                    );
                 } else if (searchScope === "document" && documentId) {
                     const documentOptions: DocumentSearchOptions = {
-                        weights: [0.4, 0.6],
                         topK: 5,
-                        documentId
+                        documentId,
+                        companyId: numericCompanyId,
                     };
                     
                     documents = await documentEnsembleSearch(
@@ -385,8 +433,14 @@ export async function POST(request: Request) {
                 throw modelError;
             }
 
-            const summarizedAnswer = normalizeModelContent(response.content);
+            let summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;
+
+            const sourceTexts = documents.map(d => d.pageContent);
+            const supervision = validateQAResponse(summarizedAnswer, sourceTexts, aiPersona);
+            if (supervision.adjustedOutput) {
+                summarizedAnswer = supervision.adjustedOutput;
+            }
 
             // Log query to ChatHistory for analytics
             try {
@@ -431,7 +485,11 @@ export async function POST(request: Request) {
                     refinedQuery: webSearch.refinedQuery || question,
                     reasoning: webSearch.reasoning,
                     resultsCount: webSearch.results.length
-                } : undefined
+                } : undefined,
+                disclaimer: supervision.disclaimer,
+                guardrails: !supervision.approved ? {
+                    warnings: supervision.issues,
+                } : undefined,
             });
 
         } catch (error) {

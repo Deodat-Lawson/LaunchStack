@@ -7,6 +7,7 @@ export type { SourceReference };
 export interface AIChatRequest {
   documentId?: number;
   companyId?: number;
+  archiveName?: string;
   question: string;
   searchScope: 'document' | 'company';
   aiModel?: AIModelType;
@@ -38,7 +39,7 @@ export interface AIChatResponse {
   processingTimeMs?: number;
   chunksAnalyzed?: number;
   fusionWeights?: number[];
-  searchScope?: 'document' | 'company';
+  searchScope?: 'document' | 'company' | 'archive';
   aiModel?: string;
   webSources?: WebSource[];
   webSearch?: WebSearchInfo;

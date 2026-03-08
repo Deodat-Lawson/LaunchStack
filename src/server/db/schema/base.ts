@@ -52,6 +52,8 @@ export const users = pgTable(
 export const company = pgTable("company", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
+    description: text("description"),
+    industry: varchar("industry", { length: 256 }),
     employerpasskey: varchar("employerPasskey", { length: 256 }).notNull().default(""),
     employeepasskey: varchar("employeePasskey", { length: 256 }).notNull().default(""),
     numberOfEmployees: varchar("numberOfEmployees", { length: 256 }).notNull(),
@@ -111,6 +113,8 @@ export const document = pgTable(
         ocrProvider: varchar("ocr_provider", { length: 50 }),
         ocrConfidenceScore: integer("ocr_confidence_score"),
         ocrCostCents: integer("ocr_cost_cents"),
+        mimeType: varchar("mime_type", { length: 128 }),
+        sourceArchiveName: varchar("source_archive_name", { length: 256 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),

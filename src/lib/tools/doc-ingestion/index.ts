@@ -124,14 +124,20 @@ async function maybeMarkProcessing(
     .where(eq(ocrJobs.id, jobId));
 }
 
+const AZURE_SUPPORTED_EXTENSIONS = new Set([
+  ".pdf", ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".heif",
+  ".docx", ".doc", ".pptx", ".ppt", ".xlsx", ".xls",
+]);
+
 function shouldUsePdfPipeline(mimeType: string | undefined, documentName: string): boolean {
-  const isOffice = isKnownOfficeDocument(documentName);
-  return (
-    !isOffice &&
-    (!mimeType ||
-      mimeType === "application/pdf" ||
-      documentName.toLowerCase().endsWith(".pdf"))
-  );
+  if (mimeType === "application/pdf") return true;
+  if (documentName.toLowerCase().endsWith(".pdf")) return true;
+  return false;
+}
+
+function isAzureSupportedFile(documentUrl: string, documentName: string): boolean {
+  const nameToCheck = `${documentUrl} ${documentName}`.toLowerCase();
+  return [...AZURE_SUPPORTED_EXTENSIONS].some((ext) => nameToCheck.includes(ext));
 }
 
 async function vectorizeWithSidecar(
@@ -302,6 +308,40 @@ async function maybeExtractEntities(
   });
 }
 
+async function maybeSyncToNeo4j(
+  documentId: number,
+  companyId: string,
+  runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
+): Promise<void> {
+  const neo4jUri = process.env.NEO4J_URI;
+  if (!neo4jUri) return;
+
+  await runStep("step-g-neo4j-sync", async () => {
+    const { isNeo4jConfigured, checkNeo4jHealth } = await import(
+      "~/lib/graph/neo4j-client"
+    );
+
+    if (!isNeo4jConfigured()) return null;
+
+    const healthy = await checkNeo4jHealth();
+    if (!healthy) {
+      console.warn("[DocIngestionTool] Step G skipped: Neo4j unhealthy");
+      return null;
+    }
+
+    const { syncDocumentToNeo4j } = await import("~/lib/graph/neo4j-sync");
+
+    const result = await syncDocumentToNeo4j(documentId, BigInt(companyId));
+
+    console.log(
+      `[DocIngestionTool] Neo4j sync: ${result.entities} entities, ` +
+        `${result.mentions} mentions, ${result.relationships} relationships (${result.durationMs}ms)`,
+    );
+
+    return result;
+  });
+}
+
 function buildFailureResult(
   jobId: string,
   documentId: number,
@@ -342,10 +382,12 @@ export async function runDocIngestionTool(
     documentName,
     companyId,
     mimeType,
+    originalFilename,
     options,
     runtime,
   } = input;
   const pipelineStartTime = Date.now();
+  const routingFilename = originalFilename ?? documentName;
 
   const runStep = createStepRunner(runtime);
   const isInngest = !!runtime?.runStep;
@@ -354,10 +396,12 @@ export async function runDocIngestionTool(
   const updateJobStatus = runtime?.updateJobStatus ?? false;
   const markFailureInDb = runtime?.markFailureInDb ?? false;
 
+  const fastTextPath = runtime?.fastTextPath ?? false;
+
   try {
     await maybeMarkProcessing(jobId, updateJobStatus);
 
-    const isPdf = shouldUsePdfPipeline(mimeType, documentName);
+    const isPdf = !fastTextPath && shouldUsePdfPipeline(mimeType, routingFilename);
 
     // -----------------------------------------------------------------------
     // Steps A+B: Route & Normalize (OCR)
@@ -367,7 +411,7 @@ export async function runDocIngestionTool(
     // -----------------------------------------------------------------------
     let normSummary: NormalizeSummary;
 
-    if (isPdf) {
+    if (isPdf && isAzureSupportedFile(documentUrl, routingFilename)) {
       const routerDecision = await runStep(
         "step-a-router",
         async (): Promise<RouterDecisionResult> =>
@@ -412,7 +456,7 @@ export async function runDocIngestionTool(
             const { ingestToNormalized } = await import("~/lib/ingestion");
             const normalizedDoc = await ingestToNormalized(documentUrl, {
               mimeType,
-              filename: documentName,
+              filename: routingFilename,
               forceOCR: options?.forceOCR,
             });
             await savePipelineState(jobId, "pages", normalizedDoc.pages);
@@ -432,7 +476,7 @@ export async function runDocIngestionTool(
             const { ingestToNormalized } = await import("~/lib/ingestion");
             const normalizedDoc = await ingestToNormalized(documentUrl, {
               mimeType,
-              filename: documentName,
+              filename: routingFilename,
               forceOCR: options?.forceOCR,
             });
             return {
@@ -465,7 +509,7 @@ export async function runDocIngestionTool(
         "step-c-chunking",
         async (): Promise<ChunkSummary> => {
           const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
-          const chunked = await chunkPages(pages);
+          const chunked = await chunkPages(pages, routingFilename);
           await savePipelineState(jobId, "chunks", chunked);
           const stats = getTotalChunkSize(chunked);
           return {
@@ -488,7 +532,7 @@ export async function runDocIngestionTool(
       const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
       chunks = await runStep(
         "step-c-chunking",
-        async (): Promise<DocumentChunk[]> => chunkPages(pages),
+        async (): Promise<DocumentChunk[]> => chunkPages(pages, routingFilename),
       );
     }
 
@@ -557,6 +601,8 @@ export async function runDocIngestionTool(
       companyId,
       runStep,
     );
+
+    await maybeSyncToNeo4j(documentId, companyId, runStep);
 
     const stats = getTotalChunkSize(chunks);
     const totalProcessingTime = Date.now() - pipelineStartTime;

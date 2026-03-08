@@ -13,6 +13,7 @@ import {
     AlertCircle,
     Loader2,
     ExternalLink,
+    BookOpen,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
@@ -48,13 +49,14 @@ import {
 
 const { uploadFiles } = genUploader<OurFileRouter>();
 
-const MAX_FILE_SIZE = 16 * 1024 * 1024;
+import { DOCUMENT_LIMITS } from "~/lib/constants";
+
+const MAX_FILE_SIZE = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024;
 const ZIP_ACCEPT_STRING = ".zip,application/zip";
 const ZIP_MIME_TYPES = new Set([
     "application/zip",
     "application/x-zip-compressed",
     "multipart/x-zip",
-    "application/octet-stream",
 ]);
 
 interface DocumentFile {
@@ -123,6 +125,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const [newCategoryName, setNewCategoryName] = useState("");
     const [isSavingCategory, setIsSavingCategory] = useState(false);
     const [showAdvanced, setShowAdvanced] = useState(false);
+    const [showImportGuide, setShowImportGuide] = useState(false);
+    const [importTab, setImportTab] = useState<"notion" | "google" | "slack" | "github">("notion");
     const [expandedDocId, setExpandedDocId] = useState<string | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -193,7 +197,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 }
 
                 if (file.size > MAX_FILE_SIZE) {
-                    toast.error(`${file.name} exceeds 16MB limit`);
+                    toast.error(`${file.name} exceeds ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB limit`);
                     nonZipErrorCount++;
                     continue;
                 }
@@ -203,19 +207,19 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
             if (nonZipErrorCount > 0) {
                 toast.error(`${nonZipErrorCount} file(s) were rejected`, {
-                    description: "Please upload PDF, DOCX, images (PNG, JPG, etc.) under 16MB",
+                    description: `Please upload PDF, DOCX, images (PNG, JPG, etc.) under ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB`,
                 });
             }
 
             if (zipArchiveCount > 0) {
                 if (zipQueuedCount > 0) {
                     toast.success("ZIP archive queued", {
-                        description: "Archive uploads as-is; expansion occurs server-side after upload.",
+                        description: "Files will be auto-extracted and processed individually after upload.",
                     });
                 }
                 if (zipOversizedCount > 0) {
                     toast.error("ZIP archive rejected", {
-                        description: `${zipOversizedCount} ZIP file(s) exceeded the 16MB limit.`,
+                        description: `${zipOversizedCount} ZIP file(s) exceeded the ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB limit.`,
                     });
                 }
             }
@@ -505,6 +509,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 documentUrl: fileUrl,
                 storageType: resolvedStorageType,
                 mimeType,
+                originalFilename: doc.file.name,
                 preferredProvider:
                     preferredProvider === "LANDING_AI" ? "LANDING_AI" : preferredProvider,
             }),
@@ -645,13 +650,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     <AlertCircle className="w-5 h-5 text-amber-500 dark:text-amber-400 flex-shrink-0 mt-0.5" />
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm text-amber-800 dark:text-amber-200 font-medium">
-                                            Cloud storage (UploadThing) is not configured.
+                                            UploadThing is not configured. Uploads will use Vercel Blob.
                                         </span>
                                         <Link
-                                            href="/deployment"
+                                            href="/deployment?section=uploadthing"
                                             className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium inline-flex items-center gap-1 transition-colors"
                                         >
-                                            Set up in Deployment Guide{" "}
+                                            Set up UploadThing{" "}
                                             <ExternalLink className="w-3.5 h-3.5" />
                                         </Link>
                                     </div>
@@ -681,7 +686,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     Drag and drop files or folders here
                                 </p>
                                 <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">
-                                    PDF, DOC, DOCX, PNG, JPG, ZIP — Max 16MB per file
+                                    PDF, DOC, DOCX, PNG, JPG, ZIP — Max {DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB per file
                                 </p>
                                 <p className="text-xs text-gray-400">
                                     Or choose exactly what to upload
@@ -733,6 +738,137 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     {errors.files}
                                 </p>
                             )}
+
+                            {/* Import from External Sources */}
+                            <Collapsible open={showImportGuide} onOpenChange={setShowImportGuide}>
+                                <CollapsibleTrigger asChild>
+                                    <button className="w-full mt-4 px-4 py-3 flex items-center gap-3 rounded-lg border border-dashed border-gray-300 dark:border-purple-500/30 hover:border-purple-400 dark:hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-colors text-left">
+                                        <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0" />
+                                        <div className="flex-1 min-w-0">
+                                            <span className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                                                Import from Notion, Google Docs, Slack, or GitHub
+                                            </span>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                                Export your existing knowledge and upload it here
+                                            </p>
+                                        </div>
+                                        {showImportGuide ? (
+                                            <ChevronUp className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                                        ) : (
+                                            <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                                        )}
+                                    </button>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                    <div className="mt-3 border border-gray-200 dark:border-purple-500/20 rounded-lg overflow-hidden">
+                                        <div className="flex border-b border-gray-200 dark:border-purple-500/20">
+                                            {(["notion", "google", "slack", "github"] as const).map((tab) => (
+                                                <button
+                                                    key={tab}
+                                                    onClick={() => setImportTab(tab)}
+                                                    className={`flex-1 px-3 py-2.5 text-sm font-medium transition-colors ${
+                                                        importTab === tab
+                                                            ? "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-b-2 border-purple-600"
+                                                            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800/60"
+                                                    }`}
+                                                >
+                                                    {tab === "notion" ? "Notion" : tab === "google" ? "Google" : tab === "slack" ? "Slack" : "GitHub"}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <div className="p-4 bg-gray-50 dark:bg-slate-800/40 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                                            {importTab === "notion" && (
+                                                <>
+                                                    <p className="font-medium text-gray-900 dark:text-gray-100">Export from Notion as Markdown</p>
+                                                    <ol className="list-decimal list-inside space-y-1.5 text-gray-600 dark:text-gray-400">
+                                                        <li>Open your Notion workspace</li>
+                                                        <li>Click the <strong>&hellip;</strong> menu on a page, or go to <strong>Settings &amp; members &gt; Export</strong> for a full workspace export</li>
+                                                        <li>Select <strong>Markdown &amp; CSV</strong> as the format</li>
+                                                        <li>Check <strong>Include subpages</strong> if needed</li>
+                                                        <li>Download the ZIP file</li>
+                                                        <li>Upload the ZIP directly here &mdash; each <code>.md</code> and <code>.csv</code> file will be ingested as a separate document</li>
+                                                    </ol>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-3">
+                                                        Supported formats: Markdown (.md), CSV (.csv), HTML (.html)
+                                                    </p>
+                                                </>
+                                            )}
+                                            {importTab === "google" && (
+                                                <>
+                                                    <p className="font-medium text-gray-900 dark:text-gray-100">Export from Google Docs &amp; Sheets</p>
+                                                    <div className="space-y-3">
+                                                        <div>
+                                                            <p className="font-medium text-gray-800 dark:text-gray-200 text-xs uppercase tracking-wide mb-1">Single document</p>
+                                                            <ol className="list-decimal list-inside space-y-1 text-gray-600 dark:text-gray-400">
+                                                                <li>Open your Google Doc or Sheet</li>
+                                                                <li>Go to <strong>File &gt; Download</strong></li>
+                                                                <li>Choose <strong>Microsoft Word (.docx)</strong> for Docs or <strong>CSV / Excel (.xlsx)</strong> for Sheets</li>
+                                                                <li>Upload the downloaded file here</li>
+                                                            </ol>
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-medium text-gray-800 dark:text-gray-200 text-xs uppercase tracking-wide mb-1">Bulk export</p>
+                                                            <ol className="list-decimal list-inside space-y-1 text-gray-600 dark:text-gray-400">
+                                                                <li>Go to <strong>takeout.google.com</strong></li>
+                                                                <li>Select <strong>Drive</strong> and choose the folders you want</li>
+                                                                <li>Export as ZIP with DOCX format</li>
+                                                                <li>Upload the ZIP directly here</li>
+                                                            </ol>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-3">
+                                                        Supported formats: DOCX (.docx), XLSX (.xlsx), CSV (.csv), PDF (.pdf)
+                                                    </p>
+                                                </>
+                                            )}
+                                            {importTab === "slack" && (
+                                                <>
+                                                    <p className="font-medium text-gray-900 dark:text-gray-100">Export from Slack</p>
+                                                    <ol className="list-decimal list-inside space-y-1.5 text-gray-600 dark:text-gray-400">
+                                                        <li>Go to your Slack workspace <strong>Settings &amp; administration &gt; Workspace settings</strong></li>
+                                                        <li>Click <strong>Import/Export Data</strong> then select the <strong>Export</strong> tab</li>
+                                                        <li>Choose a date range and click <strong>Start Export</strong></li>
+                                                        <li>Download the export ZIP when ready</li>
+                                                        <li>Upload the ZIP here &mdash; each channel&apos;s messages will be ingested as a separate document</li>
+                                                    </ol>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-3">
+                                                        Supported formats: Slack export JSON (.json), plus any file attachments (PDF, DOCX, etc.)
+                                                    </p>
+                                                </>
+                                            )}
+                                            {importTab === "github" && (
+                                                <>
+                                                    <p className="font-medium text-gray-900 dark:text-gray-100">Export from GitHub</p>
+                                                    <div className="space-y-3">
+                                                        <div>
+                                                            <p className="font-medium text-gray-800 dark:text-gray-200 text-xs uppercase tracking-wide mb-1">Repo docs and code</p>
+                                                            <ol className="list-decimal list-inside space-y-1 text-gray-600 dark:text-gray-400">
+                                                                <li>Go to your repository on GitHub</li>
+                                                                <li>Click <strong>Code &gt; Download ZIP</strong></li>
+                                                                <li>Upload the ZIP here &mdash; all Markdown, text, and HTML files will be ingested</li>
+                                                            </ol>
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-medium text-gray-800 dark:text-gray-200 text-xs uppercase tracking-wide mb-1">Issues</p>
+                                                            <p className="text-gray-600 dark:text-gray-400 mb-1">Requires the <code>gh</code> CLI. Run in your terminal:</p>
+                                                            <code className="block bg-gray-200 dark:bg-slate-700 text-xs p-2 rounded overflow-x-auto whitespace-pre">gh issue list --state all --limit 1000 --json number,title,body,state,labels,author,createdAt,closedAt,comments &gt; issues.json</code>
+                                                            <p className="text-gray-600 dark:text-gray-400 mt-1">Upload the resulting <code>issues.json</code> file here.</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-medium text-gray-800 dark:text-gray-200 text-xs uppercase tracking-wide mb-1">Pull requests</p>
+                                                            <code className="block bg-gray-200 dark:bg-slate-700 text-xs p-2 rounded overflow-x-auto whitespace-pre">gh pr list --state all --limit 1000 --json number,title,body,state,labels,author,createdAt,mergedAt,comments &gt; prs.json</code>
+                                                            <p className="text-gray-600 dark:text-gray-400 mt-1">Upload the resulting <code>prs.json</code> file here.</p>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-3">
+                                                        Supported formats: GitHub CLI JSON (.json), repo ZIP (.zip with .md files)
+                                                    </p>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                </CollapsibleContent>
+                            </Collapsible>
 
                             {documents.length > 0 && (
                                 <div className="mt-6 space-y-3">
@@ -1201,13 +1337,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="database">
-                                                        Database Storage
+                                                        Vercel Blob
                                                     </SelectItem>
                                                     <SelectItem
                                                         value="cloud"
                                                         disabled={!isUploadThingConfigured}
                                                     >
-                                                        Cloud Storage
+                                                        UploadThing
                                                         {!isUploadThingConfigured &&
                                                             " (not configured)"}
                                                     </SelectItem>
@@ -1219,7 +1355,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                                 </p>
                                             )}
                                             <p className="text-xs text-gray-500 mt-1">
-                                                Choose where to store the files
+                                                Vercel Blob is the default. UploadThing is an optional alternative.
                                             </p>
                                         </div>
                                     </div>

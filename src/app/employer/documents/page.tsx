@@ -1,7 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { DocumentViewerShell } from "./components/DocumentViewerShell";
 
 export default function DocumentViewerPage() {
-  return <DocumentViewerShell userRole="employer" />;
+  return (
+    <Suspense>
+      <DocumentViewerShell userRole="employer" />
+    </Suspense>
+  );
 }

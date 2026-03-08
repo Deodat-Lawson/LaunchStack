@@ -254,9 +254,9 @@ export async function POST(request: Request) {
                     );
                 } else if (searchScope === "document" && documentId) {
                     const documentOptions: DocumentSearchOptions = {
-                        weights: [0.4, 0.6],
                         topK: 5,
-                        documentId
+                        documentId,
+                        companyId: numericCompanyId,
                     };
                     
                     documents = await documentEnsembleSearch(

@@ -208,6 +208,10 @@ Optional integrations:
 - `LANDING_AI_API_KEY`, `DATALAB_API_KEY`
 - `LANGCHAIN_TRACING_V2`, `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`
 - `DEBUG_PERF` (`1` or `true`) to enable dev perf logs for middleware and key auth/dashboard APIs
+- `SIDECAR_URL`
+- `NEO4J_URI`
+- `NEO4J_USERNAME`
+- `NEO4J_PASSWORD`
 
 ### 2.1) Configure Vercel Blob Storage
 

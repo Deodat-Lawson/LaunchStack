@@ -73,7 +73,8 @@ export const QuestionSchema = z.object({
   companyId: z.number().int().positive().optional(),
   question: z.string().min(1, "Question is required"),
   style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
-  searchScope: z.enum(["document", "company"]).optional(),
+  searchScope: z.enum(["document", "company", "archive"]).optional(),
+  archiveName: z.string().optional(),
   enableWebSearch: z.boolean().optional().default(false),
   aiPersona: z.enum(aiPersonaOptions).optional(),
   aiModel: z.enum(aiModelOptions).optional(),
@@ -86,6 +87,7 @@ export const QuestionSchema = z.object({
   searchScope: data.searchScope ?? "document" as const,
   enableWebSearch: data.enableWebSearch ?? false,
   aiPersona: data.aiPersona ?? "general",
+  archiveName: data.archiveName,
   aiModel: data.aiModel ?? "gpt-4o" as const,
   conversationHistory: data.conversationHistory,
 }));
@@ -126,6 +128,8 @@ export const UploadDocumentSchema = z.object({
 
 export const UpdateCompanySchema = z.object({
   name: z.string().min(1, "Company name is required").max(256, "Company name is too long").trim(),
+  description: z.string().max(5000, "Description is too long").trim().optional().nullable(),
+  industry: z.string().max(256, "Industry is too long").trim().optional().nullable(),
   employerPasskey: z.string().max(256, "Employer passkey is too long").trim().optional(),
   employeePasskey: z.string().max(256, "Employee passkey is too long").trim().optional(),
   numberOfEmployees: z
@@ -137,6 +141,8 @@ export const UpdateCompanySchema = z.object({
   useUploadThing: z.boolean().optional(),
 }).transform((data) => ({
   name: data.name,
+  description: data.description,
+  industry: data.industry,
   employerPasskey: data.employerPasskey,
   employeePasskey: data.employeePasskey,
   numberOfEmployees: data.numberOfEmployees && data.numberOfEmployees !== "" ? data.numberOfEmployees : "0",

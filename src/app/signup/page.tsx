@@ -15,6 +15,7 @@ import {
     CheckCircle,
     ArrowLeft,
     AlertCircle,
+    Info,
 } from "lucide-react";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
@@ -54,6 +55,8 @@ const SignupPage: React.FC = () => {
     const searchParams = useSearchParams();
     const { userId, isLoaded: isAuthLoaded } = useAuth();
     const { user } = useUser();
+
+    const fromSignin = searchParams.get("from") === "signin";
 
     const [activeTab, setActiveTab] = useState<ActiveTab>("create");
 
@@ -245,7 +248,7 @@ const SignupPage: React.FC = () => {
                 setIsCreating(false);
                 return;
             }
-            router.push("/employer/home");
+            router.push("/employer/onboarding");
         } catch (error) {
             console.error("Create company error:", error);
             setCreateErrors((prev) => ({
@@ -503,6 +506,17 @@ const SignupPage: React.FC = () => {
                 {/* ── Left: Form Panel ──────────────────────────────── */}
                 <div className={styles.formPanel}>
                     <div className={styles.formCard}>
+                        {fromSignin && (
+                            <div className={styles.infoBanner}>
+                                <Info className={styles.infoBannerIcon} />
+                                <p>
+                                    Welcome! You&apos;ve signed in successfully, but you still need to
+                                    complete your registration by creating a company or joining one
+                                    with an invite code.
+                                </p>
+                            </div>
+                        )}
+
                         {/* Tab Bar */}
                         <div className={styles.tabBar}>
                             {tabs.map((tab) => (

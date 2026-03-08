@@ -46,6 +46,8 @@ yarn-error.log*
 .idea
 /.localFiles
 .windsurf/rules/markdowncreation.md
+/public/vad
+*.pyc
 
 # kiro
 .kiro

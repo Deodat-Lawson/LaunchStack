@@ -25,6 +25,7 @@ import {
     extractRecommendedPages,
     filterPagesByAICitation,
 } from "../services";
+import { validateQAResponse } from "~/lib/agents/supervisor";
 import type { AIModelType } from "../services";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 
@@ -138,9 +139,9 @@ export async function POST(request: Request) {
 
             try {
                 const documentOptions: DocumentSearchOptions = {
-                    weights: [0.4, 0.6],
-                    topK: 5, // Fast query - limit results
-                    documentId
+                    topK: 5,
+                    documentId,
+                    companyId: Number(requestingUser.companyId),
                 };
                 
                 documents = await documentEnsembleSearch(
@@ -265,8 +266,14 @@ export async function POST(request: Request) {
                 new HumanMessage(userPrompt),
             ]);
 
-            const summarizedAnswer = normalizeModelContent(response.content);
+            let summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;
+
+            const sourceTexts = documents.map(d => d.pageContent);
+            const supervision = validateQAResponse(summarizedAnswer, sourceTexts, aiPersona);
+            if (supervision.adjustedOutput) {
+                summarizedAnswer = supervision.adjustedOutput;
+            }
 
             recordResult("success");
 
@@ -288,7 +295,11 @@ export async function POST(request: Request) {
                     refinedQuery: webSearch.refinedQuery || question,
                     reasoning: webSearch.reasoning,
                     resultsCount: webSearch.results.length
-                } : undefined
+                } : undefined,
+                disclaimer: supervision.disclaimer,
+                guardrails: !supervision.approved ? {
+                    warnings: supervision.issues,
+                } : undefined,
             });
 
         } catch (error) {

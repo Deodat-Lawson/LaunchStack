@@ -4,14 +4,10 @@ import type { RawSearchResult } from "~/lib/tools/trend-search/types";
 export type SearchProviderFn = (query: string) => Promise<RawSearchResult[]>;
 
 /** The supported provider strategy names. */
-export type ProviderStrategy =
-    | "tavily"
-    | "serper"
-    | "fallback"
-    | "parallel";
+export type ProviderStrategy = "tavily" | "serper" | "fallback" | "parallel";
 
 /** Extended result from executeSearch, includes which provider was used. */
 export interface SearchExecutionResult {
-    results: RawSearchResult[];
-    providerUsed: string;
+  results: RawSearchResult[];
+  providerUsed: string;
 }

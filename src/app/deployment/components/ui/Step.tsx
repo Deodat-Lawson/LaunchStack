@@ -8,6 +8,7 @@ interface StepProps {
   title: string;
   code?: string;
   description?: string;
+  children?: React.ReactNode;
   onCopy: () => void;
   copied: boolean;
   darkMode: boolean;
@@ -17,7 +18,8 @@ export const Step: React.FC<StepProps> = ({
   number, 
   title, 
   code, 
-  description, 
+  description,
+  children,
   onCopy, 
   copied, 
   darkMode 
@@ -35,6 +37,11 @@ export const Step: React.FC<StepProps> = ({
           <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-3`}>
             {description}
           </p>
+        )}
+        {children && (
+          <div className={`mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            {children}
+          </div>
         )}
         {code && (
           <div className="relative group">
@@ -57,4 +64,3 @@ export const Step: React.FC<StepProps> = ({
     </div>
   </div>
 );
-

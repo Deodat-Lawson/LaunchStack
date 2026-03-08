@@ -137,7 +137,8 @@ Running pipeline (plan → search → synthesize)…
 }
  */
 
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Skip the full env validation so we don't need DB/Clerk/Inngest keys
 process.env.SKIP_ENV_VALIDATION = "true";

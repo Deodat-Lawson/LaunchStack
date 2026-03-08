@@ -21,6 +21,7 @@ import {
 } from "~/server/db/schema";
 import { eq, sql } from "drizzle-orm";
 import crypto from "crypto";
+import { fetchBlob } from "~/server/storage/vercel-blob";
 
 import type {
   ProcessDocumentEventData,
@@ -183,7 +184,7 @@ export async function routeDocument(
 async function getPageCount(documentUrl: string): Promise<number> {
   try {
     const { PDFDocument } = await import("pdf-lib");
-    const response = await fetch(documentUrl);
+    const response = await fetchBlob(documentUrl);
     const buffer = await response.arrayBuffer();
     const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
     return doc.getPageCount();
@@ -238,7 +239,7 @@ export async function normalizeDocument(
   // 3. Explicitly requested via options (future)
   
   const isPdf = documentUrl.toLowerCase().endsWith(".pdf") || 
-                (await fetch(documentUrl, { method: "HEAD" }).then(r => r.headers.get("content-type") === "application/pdf").catch(() => false));
+                (await fetchBlob(documentUrl, { method: "HEAD" }).then(r => r.headers.get("content-type") === "application/pdf").catch(() => false));
 
   if (isPdf && process.env.OPENAI_API_KEY) {
     const isComplex = routerDecision.visionLabel 
@@ -250,7 +251,7 @@ export async function normalizeDocument(
     if (isComplex || isLowConfidence) {
       console.log(`[Enrichment] Triggering VLM enrichment (Complex=${isComplex}, LowConf=${isLowConfidence})`);
       try {
-        const response = await fetch(documentUrl);
+        const response = await fetchBlob(documentUrl);
         const buffer = await response.arrayBuffer();
         
         // Identify pages to enrich (all for now, or sample? Plan says "Complex" or "Low Conf").
@@ -298,9 +299,23 @@ export async function normalizeDocument(
 // ============================================================================
 
 /**
- * Chunk the normalized document pages
+ * Chunk the normalized document pages.
+ * If a filename is provided and it's a known code extension, uses code-aware
+ * chunking that respects function/class boundaries.
  */
-export async function chunkPages(pages: PageContent[]): Promise<DocumentChunk[]> {
+export async function chunkPages(pages: PageContent[], filename?: string): Promise<DocumentChunk[]> {
+  const { isCodeFile, chunkCodeFile } = await import("./code-chunker");
+
+  if (filename && isCodeFile(filename)) {
+    console.log(`[Chunking] Using code-aware chunker for ${filename}`);
+    const codeChunks = chunkCodeFile(pages, filename);
+    console.log(`[Chunking] Created ${codeChunks.length} code parent chunks`);
+    codeChunks.forEach((chunk, idx) => {
+      console.log(`[Chunking] Code Parent ${idx}: ${chunk.content.length} chars, ${chunk.children?.length ?? 0} children, path=${chunk.metadata.structurePath ?? ""}`);
+    });
+    return codeChunks;
+  }
+
   const pageSizes = pages.map((page, idx) => {
     const textLength = page.textBlocks.join("").length;
     return `Page ${idx + 1}: ${textLength} chars, ${page.textBlocks.length} blocks, ${page.tables.length} tables`;
@@ -806,7 +821,7 @@ export async function processNativePDF(documentUrl: string): Promise<NormalizedD
   const { getDocument } = await import("pdfjs-serverless");
 
   // 1. Fetch PDF data
-  const response = await fetch(documentUrl);
+  const response = await fetchBlob(documentUrl);
   if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
   const arrayBuffer = await response.arrayBuffer();
   const uint8Array = new Uint8Array(arrayBuffer);

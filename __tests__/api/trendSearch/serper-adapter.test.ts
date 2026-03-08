@@ -75,7 +75,7 @@ describe("callSerper", () => {
                         "X-API-KEY": "test-serper-key",
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ q: "AI trends", num: 10 }),
+                    body: JSON.stringify({ q: "AI trends", num: 10, gl: "us", hl: "en" }),
                 })
             );
             expect(results).toHaveLength(1);

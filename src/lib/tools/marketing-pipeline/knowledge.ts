@@ -1,3 +1,7 @@
+/**
+ * new backend intelligence layer
+ */
+
 import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
@@ -95,7 +99,10 @@ async function getCompanyMetadata(companyId: number): Promise<{
 
   return { companyName, categoryNames, baseMeta };
 }
-
+/**
+ * runs multiple focused RAG queries over company KB instead of just one generic search
+ * this gives better raw material without changing the rest of the RAG system
+ */
 export async function retrieveCompanyKnowledgeEvidence(args: {
   companyId: number;
   prompt: string;
@@ -144,6 +151,10 @@ export async function retrieveCompanyKnowledgeEvidence(args: {
   return deduped.slice(0, 20);
 }
 
+/**
+ * first pass LLM - takes the raw retreived evidence and converts it into a stable structure
+ * gives normalized format 
+ */
 export async function normalizeCompanyKnowledge(args: {
   companyId: number;
   prompt: string;
@@ -189,6 +200,10 @@ Return valid JSON exactly matching the schema.`;
   return NormalizedCompanyKnowledgeSchema.parse(response);
 }
 
+/**
+ * second pass LLM - checks if output is grounded, complete, internally consistent, what claims look weak or unsupported
+ * grading/validation pass
+ */
 export async function validateCompanyKnowledge(args: {
   knowledge: NormalizedCompanyKnowledge;
   evidence: SearchResult[];
@@ -232,6 +247,11 @@ Return valid JSON exactly matching the schema.`;
   return KnowledgeValidationReportSchema.parse(response);
 }
 
+/**
+ * if validation function says result is weak, this pass rewrites it - removes unsupported clains,
+ * tightens vague working, preserves supported information only
+ * pipeline is now: retreive->normalize->validate->revise
+ */
 export async function reviseCompanyKnowledgeIfNeeded(args: {
   knowledge: NormalizedCompanyKnowledge;
   validation: KnowledgeValidationReport;
@@ -278,7 +298,9 @@ Return valid JSON exactly matching the schema.`;
 
   return NormalizedCompanyKnowledgeSchema.parse(response);
 }
-
+/**
+ * returns final knowledge object, validation report, raw evidence
+ */
 export async function buildValidatedCompanyKnowledge(args: {
   companyId: number;
   prompt: string;
@@ -313,6 +335,10 @@ export async function buildValidatedCompanyKnowledge(args: {
   };
 }
 
+/**
+ * converts deeper structured object we created here into the simpler object
+ * expected by marketing pipeline
+ */
 export function mapValidatedKnowledgeToCompanyDNA(
   knowledge: NormalizedCompanyKnowledge,
 ): CompanyDNA {

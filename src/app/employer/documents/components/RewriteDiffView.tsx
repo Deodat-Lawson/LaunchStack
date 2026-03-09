@@ -11,6 +11,7 @@ import { RewriteWorkflow } from "./generator/RewriteWorkflow";
 import type { Citation } from "./generator";
 
 const DEFAULT_TITLE = "Untitled (Rewrite)";
+const PENDING_REWRITE_STORAGE_KEY = "pdr.pendingRewriteDraft";
 
 interface RewriteDocument {
   id: string;
@@ -28,6 +29,13 @@ interface APIDocument {
   citations?: Citation[];
   createdAt: string;
   updatedAt?: string;
+}
+
+interface PendingRewriteDraft {
+  title?: string;
+  content?: string;
+  createdAt?: number;
+  source?: string;
 }
 
 function formatRelativeTime(dateString: string): string {
@@ -91,6 +99,43 @@ export function RewriteDiffView() {
   useEffect(() => {
     void fetchRewriteDocuments();
   }, [fetchRewriteDocuments]);
+
+  useEffect(() => {
+    let raw: string | null = null;
+    try {
+      raw = sessionStorage.getItem(PENDING_REWRITE_STORAGE_KEY);
+      if (!raw) return;
+      sessionStorage.removeItem(PENDING_REWRITE_STORAGE_KEY);
+
+      const parsed = JSON.parse(raw) as PendingRewriteDraft;
+      const content = typeof parsed.content === "string" ? parsed.content : "";
+      if (!content.trim()) return;
+
+      const title =
+        typeof parsed.title === "string" && parsed.title.trim().length > 0
+          ? parsed.title.trim()
+          : "Rewritten Text";
+
+      const newId = tempIdCounter + 1;
+      setTempIdCounter(newId);
+      setCurrentDocument({
+        id: `temp-${componentId}-${newId}`,
+        title,
+        content,
+        lastEdited: "Just now",
+      });
+      setViewMode("editor");
+      setActiveTab("new");
+    } catch {
+      if (raw) {
+        try {
+          sessionStorage.removeItem(PENDING_REWRITE_STORAGE_KEY);
+        } catch {
+          // Ignore cleanup errors.
+        }
+      }
+    }
+  }, [componentId, tempIdCounter]);
 
   const filteredDocuments = rewriteDocuments.filter((doc) =>
     doc.title.toLowerCase().includes(searchQuery.toLowerCase())

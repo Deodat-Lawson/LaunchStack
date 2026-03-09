@@ -24,7 +24,6 @@ afterEach(() => {
 
 // Must import after mocks so env is mocked
 import { callSerper } from "~/lib/tools/trend-search/providers/serper";
-import type { RawSearchResult } from "~/lib/tools/trend-search/types";
 
 const SERPER_NEWS_URL = "https://google.serper.dev/news";
 
@@ -45,7 +44,7 @@ function makeErrorResponse(status: number, statusText: string, body = "Error") {
         json: async () => {
             throw new Error("not json");
         },
-    } as Response;
+    } as unknown as Response;
 }
 
 describe("callSerper", () => {
@@ -79,7 +78,7 @@ describe("callSerper", () => {
                 })
             );
             expect(results).toHaveLength(1);
-            const r = results[0] as RawSearchResult;
+            const r = results[0]!;
             expect(r.url).toBe("https://example.com/1");
             expect(r.title).toBe("AI Trends 2026");
             expect(r.content).toBe("Summary here");
@@ -98,8 +97,8 @@ describe("callSerper", () => {
             const results = await callSerper("query");
 
             expect(results).toHaveLength(1);
-            expect(results[0].title).toBe("Untitled");
-            expect(results[0].content).toBe("");
+            expect(results[0]!.title).toBe("Untitled");
+            expect(results[0]!.content).toBe("");
         });
     });
 
@@ -170,11 +169,11 @@ describe("callSerper", () => {
 
             expect(results).toHaveLength(3);
             const total = 3;
-            expect(results[0].score).toBeCloseTo(1 - 1 / total); // 0.666...
-            expect(results[1].score).toBeCloseTo(1 - 2 / total); // 0.333...
-            expect(results[2].score).toBeCloseTo(1 - 3 / total); // 0
-            expect(results[0].score).toBeGreaterThan(results[1].score);
-            expect(results[1].score).toBeGreaterThan(results[2].score);
+            expect(results[0]!.score).toBeCloseTo(1 - 1 / total); // 0.666...
+            expect(results[1]!.score).toBeCloseTo(1 - 2 / total); // 0.333...
+            expect(results[2]!.score).toBeCloseTo(1 - 3 / total); // 0
+            expect(results[0]!.score).toBeGreaterThan(results[1]!.score);
+            expect(results[1]!.score).toBeGreaterThan(results[2]!.score);
         });
 
         it("uses index+1 when position is missing", async () => {
@@ -191,8 +190,8 @@ describe("callSerper", () => {
 
             expect(results).toHaveLength(2);
             // position 1 and 2 from index+1, total 2 → scores 0.5 and 0
-            expect(results[0].score).toBeCloseTo(1 - 1 / 2);
-            expect(results[1].score).toBeCloseTo(1 - 2 / 2);
+            expect(results[0]!.score).toBeCloseTo(1 - 1 / 2);
+            expect(results[1]!.score).toBeCloseTo(1 - 2 / 2);
         });
     });
 });

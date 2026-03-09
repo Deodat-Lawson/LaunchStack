@@ -11,6 +11,7 @@ import {
   Container,
   Rocket,
   Shield,
+  BrainCircuit,
 } from 'lucide-react';
 
 // --- Types ---
@@ -24,6 +25,7 @@ export type DeploymentSection =
   | 'tavily'
   | 'uploadthing'
   | 'vercel-blob'
+  | 'ai-providers'
   | 'ocr'
   | 'ocr-azure'
   | 'ocr-landing'
@@ -115,6 +117,13 @@ export const SECTIONS: SectionConfig[] = [
     icon: React.createElement(Upload, { className: 'w-4 h-4' }),
     badge: 'Optional',
     group: 'Optional',
+  },
+  {
+    id: 'ai-providers',
+    title: 'AI Model Providers',
+    icon: React.createElement(BrainCircuit, { className: 'w-4 h-4' }),
+    badge: 'Core',
+    group: 'Required',
   },
   {
     id: 'ocr',

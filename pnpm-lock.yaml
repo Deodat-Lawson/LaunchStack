@@ -34,7 +34,7 @@ importers:
         version: 1.3.3(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))
       '@langchain/community':
         specifier: ^0.3.54
-        version: 0.3.54(ceb034c78bf6c941036d31add547e1d6)
+        version: 0.3.54(750a6d03ce53b10eab8b6a936ee9a7b0)
       '@langchain/core':
         specifier: ^0.3.74
         version: 0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76))
@@ -44,6 +44,9 @@ importers:
       '@langchain/langgraph':
         specifier: ^0.4.9
         version: 0.4.9(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(zod-to-json-schema@3.25.1(zod@3.25.76))
+      '@langchain/ollama':
+        specifier: ^0.1.6
+        version: 0.1.6(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))
       '@langchain/openai':
         specifier: ^0.6.11
         version: 0.6.11(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))(ws@8.19.0)
@@ -217,7 +220,7 @@ importers:
         version: 0.16.25
       langchain:
         specifier: ^0.3.33
-        version: 0.3.33(4c63b96815301c04536f0c3ba2bb9f23)
+        version: 0.3.33(db6e0a2bb4f8eef45b6b578f9c2526eb)
       lru-cache:
         specifier: ^11.2.6
         version: 11.2.6
@@ -2411,6 +2414,12 @@ packages:
     peerDependenciesMeta:
       zod-to-json-schema:
         optional: true
+
+  '@langchain/ollama@0.1.6':
+    resolution: {integrity: sha512-hS+xHiRqKpq37eGyZQ0JoTghfNA7hWXK54XbILQ0KVm3v2MMWLKqBAep4LwMLrAr4NE7SIp+SJnQRdsjabR0jw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@langchain/core': '>=0.2.21 <0.4.0'
 
   '@langchain/openai@0.6.11':
     resolution: {integrity: sha512-BkaudQTLsmdt9mF6tn6CrsK2TEFKk4EhAWYkouGTy/ljJIH/p2Nz9awIOGdrQiQt6AJ5mvKGupyVqy3W/jim2Q==}
@@ -7069,6 +7078,9 @@ packages:
   okapibm25@1.4.1:
     resolution: {integrity: sha512-UHmeH4MAtZXGFVncwbY7pfFvDVNxpsyM3W66aGPU0SHj1+ld59ty+9lJ0ifcrcnPUl1XdYoDgb06ObyCnpTs3g==}
 
+  ollama@0.5.18:
+    resolution: {integrity: sha512-lTFqTf9bo7Cd3hpF6CviBe/DEhewjoZYd9N/uCe7O20qYTvGqrNOFOBDj3lbZgFWHUgDv5EeyusYxsZSLS8nvg==}
+
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
@@ -8498,6 +8510,9 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+
+  whatwg-fetch@3.6.20:
+    resolution: {integrity: sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==}
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -10318,7 +10333,7 @@ snapshots:
       '@langchain/core': 0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76))
       zod: 3.25.76
 
-  '@langchain/community@0.3.54(ceb034c78bf6c941036d31add547e1d6)':
+  '@langchain/community@0.3.54(750a6d03ce53b10eab8b6a936ee9a7b0)':
     dependencies:
       '@browserbasehq/stagehand': 1.9.0(@playwright/test@1.55.0)(deepmerge@4.3.1)(dotenv@17.3.1)(openai@4.104.0(ws@8.19.0)(zod@3.25.76))(zod@3.25.76)
       '@ibm-cloud/watsonx-ai': 1.3.1
@@ -10330,7 +10345,7 @@ snapshots:
       flat: 5.0.2
       ibm-cloud-sdk-core: 5.1.0
       js-yaml: 4.1.0
-      langchain: 0.3.33(4c63b96815301c04536f0c3ba2bb9f23)
+      langchain: 0.3.33(db6e0a2bb4f8eef45b6b578f9c2526eb)
       langsmith: 0.3.67(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76))
       openai: 4.104.0(ws@8.19.0)(zod@3.25.76)
       uuid: 10.0.0
@@ -10427,6 +10442,14 @@ snapshots:
     transitivePeerDependencies:
       - react
       - react-dom
+
+  '@langchain/ollama@0.1.6(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))':
+    dependencies:
+      '@langchain/core': 0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76))
+      ollama: 0.5.18
+      uuid: 10.0.0
+      zod: 3.25.76
+      zod-to-json-schema: 3.25.1(zod@3.25.76)
 
   '@langchain/openai@0.6.11(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))(ws@8.19.0)':
     dependencies:
@@ -15138,7 +15161,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  langchain@0.3.33(4c63b96815301c04536f0c3ba2bb9f23):
+  langchain@0.3.33(db6e0a2bb4f8eef45b6b578f9c2526eb):
     dependencies:
       '@langchain/core': 0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76))
       '@langchain/openai': 0.6.11(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))(ws@8.19.0)
@@ -15155,6 +15178,7 @@ snapshots:
     optionalDependencies:
       '@langchain/anthropic': 1.3.3(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))
       '@langchain/google-genai': 2.1.3(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))
+      '@langchain/ollama': 0.1.6(@langchain/core@0.3.74(@opentelemetry/api@1.9.0)(@opentelemetry/exporter-trace-otlp-proto@0.210.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.0(@opentelemetry/api@1.9.0))(openai@4.104.0(ws@8.19.0)(zod@3.25.76)))
       axios: 1.7.4(debug@4.4.3)
       cheerio: 1.2.0
       handlebars: 4.7.8
@@ -15919,6 +15943,10 @@ snapshots:
       es-object-atoms: 1.1.1
 
   okapibm25@1.4.1: {}
+
+  ollama@0.5.18:
+    dependencies:
+      whatwg-fetch: 3.6.20
 
   once@1.4.0:
     dependencies:
@@ -17573,6 +17601,8 @@ snapshots:
   whatwg-encoding@3.1.1:
     dependencies:
       iconv-lite: 0.6.3
+
+  whatwg-fetch@3.6.20: {}
 
   whatwg-mimetype@4.0.0: {}
 

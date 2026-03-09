@@ -4,11 +4,13 @@
 #   default (no flag)        — db + migrate + app
 #   --profile dev            — adds Inngest dev server (local dashboard at :8288)
 #   --profile minimal        — db only (for local Next.js dev with `pnpm dev`)
+#   --profile local-storage  — adds SeaweedFS S3-compatible storage (gateway at :8333)
 #
 # Examples:
-#   docker compose --env-file .env up                           # production-like
-#   docker compose --env-file .env --profile dev up             # with Inngest dev server
-#   docker compose --env-file .env --profile minimal up db      # just the database
+#   docker compose --env-file .env up                                          # production-like
+#   docker compose --env-file .env --profile dev up                            # with Inngest dev server
+#   docker compose --env-file .env --profile minimal up db                     # just the database
+#   docker compose --env-file .env --profile local-storage up                  # with SeaweedFS local storage
 
 x-app-build-args: &app-build-args
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
@@ -93,5 +95,27 @@ services:
     profiles:
       - dev
 
+  # SeaweedFS — self-hosted S3-compatible object storage
+  # Start with: docker compose --profile local-storage up
+  # S3 gateway: http://localhost:8333
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
+    container_name: pdr_ai_v2-seaweedfs
+    command: server -s3 -s3.config=/etc/seaweedfs/s3-config.json -filer -dir=/data -volume.max=0 -master.volumeSizeLimitMB=1024 -volume.port=8080
+    ports:
+      - "8333:8333"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    volumes:
+      - seaweedfs_data:/data
+      - ./docker/filer.toml:/etc/seaweedfs/filer.toml:ro
+      - ./docker/s3-config.json:/etc/seaweedfs/s3-config.json:ro
+    profiles:
+      - local-storage
+
 volumes:
   postgres_data:
+  seaweedfs_data:

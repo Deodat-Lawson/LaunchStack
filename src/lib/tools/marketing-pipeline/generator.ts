@@ -1,9 +1,13 @@
-import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import type { MarketingPlatform, MarketingResearchResult } from "~/lib/tools/marketing-pipeline/types";
+import { getChatModel, MARKETING_MODELS } from "~/lib/models";
+import type {
+  MarketingPlatform,
+  MarketingResearchResult,
+  MessagingStrategy,
+} from "~/lib/tools/marketing-pipeline/types";
 import { MarketingPipelineOutputSchema } from "~/lib/tools/marketing-pipeline/types";
 
-const SYSTEM_PROMPT = `You are a sharp B2B copywriter who writes like an operator sharing hard-won lessons—not a brand broadcasting announcements.
+const SYSTEM_PROMPT_BASE = `You are a sharp B2B copywriter who writes like an operator sharing hard-won lessons—not a brand broadcasting announcements.
 
 Voice & craft:
 - Write as a knowledgeable peer, not a marketing department. First person ("we", "our team") is fine.
@@ -25,6 +29,13 @@ Media selection:
 
 Output:
 - Return JSON matching the schema exactly. No extra keys.`;
+
+const STRATEGY_RULES = `
+When a Messaging Strategy is provided:
+- Lead with the recommended angle and human hook when it fits the platform; balance human story with technical depth.
+- Back claims with the key proof points given; do not add proof not in company context.
+- Do NOT use any phrase or theme in the strategy's avoid list.
+- Keep the post aligned with the positioning angle while staying platform-native.`;
 
 function platformTemplate(platform: MarketingPlatform): string {
 switch (platform) {
@@ -165,34 +176,50 @@ We rebuilt our pipeline around that idea. Early results are promising.
 """`,
 };
 
+function formatStrategyBlock(strategy: MessagingStrategy): string {
+  return [
+    `Positioning angle: ${strategy.angle}`,
+    `Key proof: ${strategy.keyProof.join("; ")}`,
+    `Human hook: ${strategy.humanHook}`,
+    `Avoid: ${strategy.avoidList.join("; ")}`,
+  ].join("\n");
+}
+
 function buildPrompt(args: {
     platform: MarketingPlatform;
     prompt: string;
     companyContext: string;
     research: MarketingResearchResult[];
+    strategy?: MessagingStrategy;
 }): string {
-    return `Selected platform: ${args.platform}
-User prompt: ${args.prompt}
-
-Company context (source of truth — all product claims must come from here):
-${args.companyContext}
-
-Trend references (use as narrative hooks or framing, never quote or attribute):
-${formatTrendReferences(args.research)}
-
-${platformTemplate(args.platform)}
-
-${PLATFORM_EXAMPLES[args.platform] ?? ""}
-
-Task:
-Write ONE post for the platform above. Follow these principles:
-1. Pick ONE angle — a tension, trend, or insight — and commit to it. Don't try to cover everything.
-2. Open with a hook that creates curiosity or contrast. Never open with an announcement.
-3. Build a short narrative arc: hook → insight/story → takeaway → CTA/question.
-4. Write as a person sharing what they've learned, not a brand listing features.
-5. Every line must add value. If a sentence could be deleted without losing meaning, delete it.
-6. Ground all product claims in the company context. Reframe anything unsupported as an industry observation.
-7. Return JSON matching the schema exactly.`;
+  const parts = [
+    `Selected platform: ${args.platform}`,
+    `User prompt: ${args.prompt}`,
+    "",
+    "Company context (source of truth — all product claims must come from here):",
+    args.companyContext,
+    "",
+    "Trend references (use as narrative hooks or framing, never quote or attribute):",
+    formatTrendReferences(args.research),
+  ];
+  if (args.strategy) {
+    parts.push("", "Messaging strategy (use this angle and proof; respect avoid list):", formatStrategyBlock(args.strategy));
+  }
+  parts.push(
+    "",
+    platformTemplate(args.platform),
+    "",
+    PLATFORM_EXAMPLES[args.platform] ?? "",
+    "",
+    "Task:",
+    args.strategy
+      ? "- Write ONE post using the messaging strategy angle and proof; respect the avoid list."
+      : "- Pick ONE angle (either from trend references or company context).",
+    "- Write ONE post that fits the platform format above.",
+    "- Do NOT add facts not supported by company context.",
+    "- Return JSON only matching the schema.",
+  );
+  return parts.join("\n");
 }
 
 export async function generateCampaignOutput(args: {
@@ -200,21 +227,40 @@ export async function generateCampaignOutput(args: {
     prompt: string;
     companyContext: string;
     research: MarketingResearchResult[];
-}) {
-    const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
-        modelName: "gpt-5-mini",
-    });
+    strategy?: MessagingStrategy;
+}): Promise<{
+  platform: MarketingPlatform;
+  message: string;
+  "image/video": "image" | "video";
+  competitiveAngle?: string;
+  strategyUsed?: MessagingStrategy;
+}> {
+  const systemPrompt = args.strategy
+    ? SYSTEM_PROMPT_BASE + STRATEGY_RULES
+    : SYSTEM_PROMPT_BASE;
 
-    const model = chat.withStructuredOutput(MarketingPipelineOutputSchema, {
-        name: "marketing_pipeline_output",
-    });
+  const chat = getChatModel(MARKETING_MODELS.contentGeneration);
+  const model = chat.withStructuredOutput(MarketingPipelineOutputSchema, {
+    name: "marketing_pipeline_output",
+  });
 
-    const response = await model.invoke([
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(buildPrompt(args)),
-    ]);
+  const response = await model.invoke([
+    new SystemMessage(systemPrompt),
+    new HumanMessage(buildPrompt(args)),
+  ]);
 
-    return MarketingPipelineOutputSchema.parse(response);
+  const parsed = MarketingPipelineOutputSchema.parse(response);
+  const out: {
+    platform: MarketingPlatform;
+    message: string;
+    "image/video": "image" | "video";
+    competitiveAngle?: string;
+    strategyUsed?: MessagingStrategy;
+  } = { ...parsed };
+  if (args.strategy) {
+    out.competitiveAngle = args.strategy.angle;
+    out.strategyUsed = args.strategy;
+  }
+  return out;
 }
 

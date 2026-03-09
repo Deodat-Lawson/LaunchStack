@@ -61,6 +61,54 @@ const EXTRACTION_MODEL = "gpt-4o-mini";
 const MULTI_MENTION_BOOST = 0.05;
 
 // ============================================================================
+// Boilerplate detection heuristics
+// ============================================================================
+
+/** Minimum character count for a chunk to be worth sending to LLM. */
+const MIN_CHUNK_CHARS = 40;
+
+/** Patterns that indicate boilerplate content (case-insensitive). */
+const BOILERPLATE_PATTERNS = [
+    /^table of contents$/i,
+    /^\s*contents\s*$/i,
+    /^page\s+\d+\s*(of\s+\d+)?$/i,
+    /^©\s*\d{4}/,
+    /copyright\s+©?\s*\d{4}/i,
+    /all rights reserved/i,
+    /confidential\s+and\s+proprietary/i,
+    /^\s*disclaimer\s*$/i,
+    /this document is confidential/i,
+    /do not distribute/i,
+    /^\s*\d+\s*$/,                            // just a page number
+    /^(\.{2,}\s*\d+\s*\n?)+$/,               // TOC dotted lines: "Section...12"
+];
+
+/**
+ * Returns true if a chunk is likely boilerplate that won't contain
+ * useful company metadata. Uses content length and pattern matching.
+ */
+function isBoilerplate(content: string): boolean {
+    const trimmed = content.trim();
+
+    // Too short to contain meaningful facts
+    if (trimmed.length < MIN_CHUNK_CHARS) return true;
+
+    // Check against boilerplate patterns
+    for (const pattern of BOILERPLATE_PATTERNS) {
+        if (pattern.test(trimmed)) return true;
+    }
+
+    // TOC heuristic: many lines that end with page numbers (e.g., "Introduction ... 3")
+    const lines = trimmed.split("\n").filter((l) => l.trim().length > 0);
+    if (lines.length >= 3) {
+        const tocLines = lines.filter((l) => /\.{2,}\s*\d+\s*$/.test(l) || /\s{3,}\d+\s*$/.test(l));
+        if (tocLines.length / lines.length > 0.6) return true;
+    }
+
+    return false;
+}
+
+// ============================================================================
 // Zod schema for structured output (same schema, used per-batch)
 // ============================================================================
 
@@ -170,6 +218,7 @@ export async function extractCompanyFacts(
         .select({
             content: documentContextChunks.content,
             pageNumber: documentContextChunks.pageNumber,
+            semanticType: documentContextChunks.semanticType,
         })
         .from(documentContextChunks)
         .where(eq(documentContextChunks.documentId, BigInt(documentId)));
@@ -185,14 +234,34 @@ export async function extractCompanyFacts(
         (a, b) => (a.pageNumber ?? 0) - (b.pageNumber ?? 0),
     );
 
+    // 2b. Filter out low-value chunks to reduce LLM tokens
+    const filteredChunks = sortedChunks.filter((c) => {
+        // Skip chunks tagged as legal or reference (TOCs, disclaimers)
+        if (c.semanticType === "legal" || c.semanticType === "reference") {
+            return false;
+        }
+        // Skip chunks that are mostly boilerplate based on content heuristics
+        if (isBoilerplate(c.content)) {
+            return false;
+        }
+        return true;
+    });
+
+    if (filteredChunks.length === 0) {
+        console.warn(
+            `[CompanyMetadataExtractor] All ${chunks.length} chunks filtered as boilerplate for document ${documentId}`,
+        );
+        return null;
+    }
+
     // 3. Split into batches
     const batches = splitIntoBatches(
-        sortedChunks.map((c) => c.content),
+        filteredChunks.map((c) => c.content),
         CHUNKS_PER_BATCH,
     );
 
     console.log(
-        `[CompanyMetadataExtractor] Document ${documentId}: ${chunks.length} chunks → ${batches.length} batches`,
+        `[CompanyMetadataExtractor] Document ${documentId}: ${chunks.length} chunks → ${filteredChunks.length} after filtering → ${batches.length} batches`,
     );
 
     // 4. Extract from each batch in parallel (capped concurrency)

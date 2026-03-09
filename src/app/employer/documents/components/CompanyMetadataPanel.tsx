@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import {
   Building2,
@@ -11,6 +11,7 @@ import {
   FileText,
   Sparkles,
   Pencil,
+  Download,
 } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "~/app/employer/documents/components/ui/card";
@@ -20,6 +21,7 @@ import { PeopleSection } from "~/app/employer/metadata/components/PeopleSection"
 import { ServicesSection } from "~/app/employer/metadata/components/ServicesSection";
 import { MarketsSection } from "~/app/employer/metadata/components/MarketsSection";
 import { ProvenanceCard } from "~/app/employer/metadata/components/ProvenanceCard";
+import { MetadataHistorySection } from "~/app/employer/metadata/components/MetadataHistorySection";
 import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
 
 interface CompanyProfile {
@@ -78,6 +80,8 @@ export function CompanyMetadataPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [extracting, setExtracting] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const previousDataRef = useRef<MetadataResponse | null>(null);
 
   const fetchMetadata = useCallback(async () => {
     setLoading(true);
@@ -102,12 +106,95 @@ export function CompanyMetadataPanel() {
     }
   }, []);
 
-  const runExtraction = useCallback(async () => {
+  const handleFieldSave = useCallback(async (path: string, value: string) => {
+    previousDataRef.current = data;
+    const now = new Date().toISOString();
+    const manualSource = { doc_id: 0, doc_name: "Manual edit", extracted_at: now };
+
+    // Optimistic update
+    setData((prev) => {
+      if (!prev?.metadata) return prev;
+      const m = structuredClone(prev.metadata);
+      const segments = path.split(".");
+
+      const buildFact = (val: string | number, existing?: { visibility?: string; usage?: string }) => ({
+        value: val,
+        visibility: existing?.visibility ?? "public",
+        usage: existing?.usage ?? "outreach_ok",
+        confidence: 1.0,
+        priority: "manual_override" as const,
+        status: "active" as const,
+        last_updated: now,
+        sources: [manualSource],
+      });
+
+      if (segments[0] === "company" && segments[1]) {
+        const field = segments[1];
+        const existing = m.company[field];
+        (m.company as Record<string, unknown>)[field] = buildFact(field === "founded_year" ? Number(value) : value, existing);
+      } else if (segments[0] === "people" && segments[1] && segments[2]) {
+        const idx = Number(segments[1]);
+        const field = segments[2];
+        const person = m.people[idx];
+        if (person) {
+          (person as Record<string, unknown>)[field] = buildFact(value, person[field]);
+        }
+      } else if (segments[0] === "services" && segments[1] && segments[2]) {
+        const idx = Number(segments[1]);
+        const field = segments[2];
+        const service = m.services[idx];
+        if (service) {
+          (service as Record<string, unknown>)[field] = buildFact(value, service[field]);
+        }
+      } else if (segments[0] === "markets" && segments[1] && segments[2] != null) {
+        const sub = segments[1] as "primary" | "verticals" | "geographies";
+        const idx = Number(segments[2]);
+        const arr = m.markets[sub];
+        if (arr?.[idx]) {
+          arr[idx] = buildFact(value, arr[idx]) as typeof arr[number];
+        }
+      }
+      m.updated_at = now;
+      return { ...prev, metadata: m };
+    });
+    try {
+      const res = await fetch("/api/company/metadata", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path, value }),
+      });
+      if (!res.ok) throw new Error("Save failed");
+      await fetchMetadata();
+    } catch (err) {
+      if (previousDataRef.current !== null) {
+        setData(previousDataRef.current);
+      }
+      throw err;
+    }
+  }, [data, fetchMetadata]);
+
+  const handleExportJson = useCallback(() => {
+    if (!data?.metadata) return;
+    const json = JSON.stringify(data.metadata, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `company-metadata-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [data]);
+
+  const runExtraction = useCallback(async (force = false) => {
     setExtracting(true);
     setError(null);
     try {
-      const response = await fetch("/api/company/metadata/extract", { method: "POST" });
-      const result = (await response.json()) as { error?: string };
+      const response = await fetch("/api/company/metadata/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ force }),
+      });
+      const result = (await response.json()) as { error?: string; message?: string };
       if (result.error) throw new Error(result.error);
       await fetchMetadata();
     } catch (err) {
@@ -183,13 +270,44 @@ export function CompanyMetadataPanel() {
           </div>
           <div className="flex gap-3">
             <Button
-              onClick={() => void runExtraction()}
-              disabled={extracting}
+              onClick={handleExportJson}
+              disabled={!data?.metadata}
               variant="outline"
               className="rounded-xl h-9 px-4 gap-2 font-bold"
             >
+              <Download className="w-4 h-4" />
+              Export JSON
+            </Button>
+            <Button
+              onClick={() => void runExtraction(false)}
+              disabled={extracting}
+              variant="outline"
+              className="rounded-xl h-9 px-4 gap-2 font-bold"
+              title="Process only new documents since last extraction"
+            >
               <Sparkles className={cn("w-4 h-4", extracting && "animate-pulse")} />
-              {extracting ? "Extracting..." : "Re-extract"}
+              {extracting ? "Extracting..." : "Extract New"}
+            </Button>
+            <Button
+              onClick={() => void runExtraction(true)}
+              disabled={extracting}
+              variant="outline"
+              className="rounded-xl h-9 px-4 gap-2 font-bold text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300"
+              title="Re-process all documents from scratch"
+            >
+              <RefreshCw className={cn("w-4 h-4", extracting && "animate-spin")} />
+              Full Re-extract
+            </Button>
+            <Button
+              onClick={() => setIsEditMode((prev) => !prev)}
+              variant={isEditMode ? "default" : "outline"}
+              className={cn(
+                "rounded-xl h-9 px-4 gap-2 font-bold",
+                isEditMode && "bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20",
+              )}
+            >
+              <Pencil className="w-4 h-4" />
+              {isEditMode ? "Done" : "Edit"}
             </Button>
             <Button
               onClick={() => void fetchMetadata()}
@@ -323,18 +441,28 @@ export function CompanyMetadataPanel() {
               />
             </div>
 
-            <CompanyInfoCard company={metadata.company} />
+            <CompanyInfoCard
+              company={metadata.company}
+              isEditMode={isEditMode}
+              onFieldSave={handleFieldSave}
+            />
 
-            {metadata.people.length > 0 && <PeopleSection people={metadata.people} />}
+            {metadata.people.length > 0 && (
+              <PeopleSection people={metadata.people} isEditMode={isEditMode} onFieldSave={handleFieldSave} />
+            )}
 
-            {metadata.services.length > 0 && <ServicesSection services={metadata.services} />}
+            {metadata.services.length > 0 && (
+              <ServicesSection services={metadata.services} isEditMode={isEditMode} onFieldSave={handleFieldSave} />
+            )}
 
             {(metadata.markets.primary?.length ?? 0) > 0 ||
             (metadata.markets.geographies?.length ?? 0) > 0 ? (
-              <MarketsSection markets={metadata.markets} />
+              <MarketsSection markets={metadata.markets} isEditMode={isEditMode} onFieldSave={handleFieldSave} />
             ) : null}
 
             <ProvenanceCard provenance={metadata.provenance} updatedAt={data?.updatedAt} />
+
+            <MetadataHistorySection />
           </>
         )}
       </div>

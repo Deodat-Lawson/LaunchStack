@@ -99,6 +99,7 @@ function uploadToS3WithProgress(
     file: File,
     presignedUrl: string,
     onProgress: (percent: number) => void,
+    endpoint: string,
 ): Promise<void> {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -107,6 +108,7 @@ function uploadToS3WithProgress(
             "Content-Type",
             file.type || "application/octet-stream",
         );
+        xhr.timeout = 10 * 60 * 1000;
 
         xhr.upload.onprogress = (event) => {
             if (event.lengthComputable) {
@@ -115,17 +117,41 @@ function uploadToS3WithProgress(
         };
 
         xhr.onload = () => {
-            if (xhr.status >= 200 && xhr.status < 300) resolve();
-            else
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve();
+            } else if (xhr.status === 403) {
                 reject(
                     new Error(
-                        `Upload to storage failed (HTTP ${xhr.status})`,
+                        "SeaweedFS: Storage access denied — the upload URL may have expired. Please retry.",
                     ),
                 );
+            } else if (xhr.status >= 500) {
+                reject(
+                    new Error(
+                        `SeaweedFS: Storage service error at ${endpoint} — please try again later`,
+                    ),
+                );
+            } else {
+                reject(
+                    new Error(
+                        `SeaweedFS: Upload to storage failed (HTTP ${xhr.status})`,
+                    ),
+                );
+            }
         };
 
+        xhr.ontimeout = () =>
+            reject(
+                new Error(
+                    `SeaweedFS: Upload timed out at ${endpoint} — check your connection and try again`,
+                ),
+            );
         xhr.onerror = () =>
-            reject(new Error("Network error during file upload"));
+            reject(
+                new Error(
+                    `SeaweedFS: Local storage service unavailable at ${endpoint}`,
+                ),
+            );
         xhr.send(file);
     });
 }
@@ -528,9 +554,30 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
             if (!presignRes.ok) {
                 const errBody = await presignRes.text().catch(() => "");
-                throw new Error(
-                    errBody || `Presign request failed (HTTP ${presignRes.status})`,
-                );
+                let parsed = "";
+                try {
+                    const json = JSON.parse(errBody) as { error?: string; message?: string };
+                    parsed = json.error ?? json.message ?? "";
+                } catch { /* not JSON */ }
+                const detail = parsed || errBody;
+
+                if (presignRes.status === 401) {
+                    throw new Error(
+                        "Authentication required — please sign in and try again",
+                    );
+                } else if (presignRes.status === 400) {
+                    throw new Error(
+                        detail || "Invalid upload request — check file name and type",
+                    );
+                } else if (presignRes.status >= 500) {
+                    throw new Error(
+                        detail || "Storage service is unavailable — please try again later",
+                    );
+                } else {
+                    throw new Error(
+                        detail || `Presign request failed (HTTP ${presignRes.status})`,
+                    );
+                }
             }
 
             const { presignedUrl, objectKey, bucket } =
@@ -542,7 +589,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 updateDocument(doc.id, {
                     progress: 20 + Math.round(pct * 0.7),
                 });
-            });
+            }, s3Endpoint);
 
             fileUrl = `${s3Endpoint}/${bucket}/${objectKey}`;
             uploadedObjectKey = objectKey;
@@ -556,7 +603,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 const res = await uploadFiles("documentUploaderRestricted", {
                     files: [doc.file],
                 });
-                if (!res?.[0]?.url) throw new Error("Cloud upload failed");
+                if (!res?.[0]?.url) throw new Error("UploadThing: Cloud upload failed — no URL returned");
                 fileUrl = res[0].url;
             } else {
                 updateDocument(doc.id, { progress: 30 });
@@ -568,7 +615,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 });
                 if (!res.ok) {
                     const err = (await res.json()) as { error?: string };
-                    throw new Error(err.error ?? "Local upload failed");
+                    throw new Error("Vercel Blob: " + (err.error ?? "Upload failed"));
                 }
                 const data = (await res.json()) as {
                     url: string;

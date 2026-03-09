@@ -4,6 +4,7 @@ import type { RawSearchResult } from "~/lib/tools/trend-search/types";
 const TAVILY_SEARCH_URL = "https://api.tavily.com/search";
 const MAX_RESULTS_PER_QUERY = 10;
 
+/** Response shape from Tavily /search API (subset we use). Note: published_date is not in the current Tavily spec; we accept it if present. */
 interface TavilyResultItem {
   title?: string;
   url?: string;
@@ -64,4 +65,3 @@ export async function callTavily(query: string): Promise<RawSearchResult[]> {
       ...(item.published_date != null && { publishedDate: item.published_date }),
     }));
 }
-

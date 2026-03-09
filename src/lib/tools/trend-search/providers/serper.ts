@@ -2,7 +2,9 @@ import { env } from "~/env";
 import type { RawSearchResult } from "~/lib/tools/trend-search/types";
 
 const SERPER_NEWS_URL = "https://google.serper.dev/news";
+const MAX_RESULTS_PER_QUERY = 10;
 
+/** Response shape from Serper Google News API (subset we use). */
 interface SerperNewsItem {
   title?: string;
   link?: string;
@@ -16,6 +18,10 @@ interface SerperNewsResponse {
   news?: SerperNewsItem[];
 }
 
+/**
+ * Calls Serper.dev Google News API for a single query.
+ * @returns RawSearchResult[] or empty array if SERPER_API_KEY not set; throws on non-2xx.
+ */
 export async function callSerper(query: string): Promise<RawSearchResult[]> {
   const apiKey = env.server.SERPER_API_KEY;
   if (!apiKey) {
@@ -31,7 +37,7 @@ export async function callSerper(query: string): Promise<RawSearchResult[]> {
     },
     body: JSON.stringify({
       q: query,
-      num: 10,
+      num: MAX_RESULTS_PER_QUERY,
       gl: "us",
       hl: "en",
     }),
@@ -64,7 +70,7 @@ export async function callSerper(query: string): Promise<RawSearchResult[]> {
         typeof item.position === "number" && item.position > 0
           ? item.position
           : index + 1;
-      const score = 1 - position / (total + 1);
+      const score = Math.max(0, 1 - position / total);
 
       return {
         url: item.link,
@@ -75,4 +81,3 @@ export async function callSerper(query: string): Promise<RawSearchResult[]> {
       };
     });
 }
-

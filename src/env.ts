@@ -97,12 +97,7 @@ function parseServerEnv() {
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
     SERPER_API_KEY: process.env.SERPER_API_KEY,
-    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as
-      | "tavily"
-      | "serper"
-      | "fallback"
-      | "parallel"
-      | undefined,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as "tavily" | "serper" | "fallback" | "parallel" | undefined,
     REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
     REDDIT_CLIENT_SECRET: process.env.REDDIT_CLIENT_SECRET,
     REDDIT_USER_AGENT: process.env.REDDIT_USER_AGENT,

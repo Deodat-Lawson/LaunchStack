@@ -21,6 +21,10 @@ function normalizeUrl(url: string): string {
   }
 }
 
+/**
+ * Runs all sub-queries through a single provider with retry and URL deduplication.
+ * @returns Combined RawSearchResult[] (deduplicated by URL).
+ */
 async function executeWithProvider(
   subQueries: PlannedQuery[],
   provider: SearchProviderFn,
@@ -119,7 +123,7 @@ export async function executeSearch(
 
   if (!useSerper && strategy === "serper") {
     console.warn(
-      "[web-search] SERPER_API_KEY not set; falling back to Tavily strategy.",
+      "[web-search] SERPER_API_KEY not set; downgrading strategy to tavily.",
     );
   }
 
@@ -226,4 +230,3 @@ export async function executeSearch(
   const defaultResults = await executeWithProvider(subQueries, defaultProvider);
   return { results: defaultResults, providerUsed: "auto" };
 }
-

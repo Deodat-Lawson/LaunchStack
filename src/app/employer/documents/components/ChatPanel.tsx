@@ -25,6 +25,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/app/employer/documents/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/app/employer/documents/components/ui/tooltip';
 import { cn } from "~/lib/utils";
 import { AgentChatInterface } from './AgentChatInterface';
 import type { DocumentType } from '../types';
@@ -44,6 +50,7 @@ interface ChatPanelProps {
   aiModel: AIModelType;
   setAiModel: (m: AIModelType) => void;
   modelAvailability?: Partial<Record<AIModelType, boolean>>;
+  providerAvailability?: Partial<Record<LLMProvider, boolean>>;
   searchScope: 'document' | 'company' | 'archive';
   setSearchScope: (s: 'document' | 'company' | 'archive') => void;
   companyId: number | null;
@@ -72,6 +79,8 @@ const personaConfig = [
 
 const providerOptions: Array<{ key: LLMProvider; label: string }> = [
   { key: "openai", label: "OpenAI" },
+  { key: "anthropic", label: "Anthropic" },
+  { key: "google", label: "Google" },
   { key: "ollama", label: "Ollama" },
 ];
 
@@ -80,8 +89,18 @@ const modelConfig: Array<{ key: AIModelType; label: string; provider: LLMProvide
   { key: "gpt-5-mini", label: "GPT-5 Mini", provider: "openai" },
   { key: "gpt-5-nano", label: "GPT-5 Nano", provider: "openai" },
   { key: "gpt-5.1", label: "GPT-5.1", provider: "openai" },
-  { key: "gpt-4o", label: "GPT-4o", provider: "openai" },
+  { key: "claude-sonnet-4", label: "Claude Sonnet 4", provider: "anthropic" },
+  { key: "claude-opus-4.5", label: "Claude Opus 4.5", provider: "anthropic" },
+  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash", provider: "google" },
+  { key: "gemini-3-flash", label: "Gemini 3 Flash", provider: "google" },
+  { key: "gemini-3-pro", label: "Gemini 3 Pro", provider: "google" },
   { key: "llama3.1:8b", label: "Llama 3.1 8B", provider: "ollama" },
+  { key: "llama3.2:3b", label: "Llama 3.2 3B", provider: "ollama" },
+  { key: "mistral:7b", label: "Mistral 7B", provider: "ollama" },
+  { key: "codellama:7b", label: "Code Llama 7B", provider: "ollama" },
+  { key: "gemma2:9b", label: "Gemma 2 9B", provider: "ollama" },
+  { key: "phi3:mini", label: "Phi-3 Mini", provider: "ollama" },
+  { key: "qwen2.5:7b", label: "Qwen 2.5 7B", provider: "ollama" },
 ];
 
 export function ChatPanel({
@@ -98,6 +117,7 @@ export function ChatPanel({
   aiModel,
   setAiModel,
   modelAvailability = {},
+  providerAvailability = {},
   searchScope,
   setSearchScope,
   companyId,
@@ -188,11 +208,13 @@ export function ChatPanel({
                   <SelectValue placeholder="Provider" />
                 </SelectTrigger>
                 <SelectContent>
-                  {providerOptions.map((option) => (
-                    <SelectItem key={option.key} value={option.key} className="text-xs">
-                      {option.label}
-                    </SelectItem>
-                  ))}
+                  {providerOptions
+                    .filter((opt) => providerAvailability[opt.key] !== false)
+                    .map((option) => (
+                      <SelectItem key={option.key} value={option.key} className="text-xs">
+                        {option.label}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <Select
@@ -208,16 +230,36 @@ export function ChatPanel({
                 <SelectContent>
                   {modelConfig
                     .filter((model) => model.provider === provider)
-                    .map((model) => (
-                      <SelectItem
-                        key={model.key}
-                        value={model.key}
-                        disabled={modelAvailability[model.key] === false}
-                        className="text-xs"
-                      >
-                        {model.label}{modelAvailability[model.key] === false ? " (Unavailable)" : ""}
-                      </SelectItem>
-                    ))}
+                    .map((model) => {
+                      const unavailable = modelAvailability[model.key] === false;
+                      return (
+                        <SelectItem
+                          key={model.key}
+                          value={model.key}
+                          disabled={unavailable}
+                          className={cn("text-xs", unavailable && "opacity-50")}
+                        >
+                          <TooltipProvider delayDuration={300}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="flex items-center gap-1.5">
+                                  <span className={cn(
+                                    "w-1.5 h-1.5 rounded-full flex-shrink-0",
+                                    unavailable ? "bg-red-400" : "bg-emerald-500"
+                                  )} />
+                                  {model.label}
+                                </span>
+                              </TooltipTrigger>
+                              {unavailable && (
+                                <TooltipContent side="left" className="text-xs">
+                                  API key not configured for this model
+                                </TooltipContent>
+                              )}
+                            </Tooltip>
+                          </TooltipProvider>
+                        </SelectItem>
+                      );
+                    })}
                 </SelectContent>
               </Select>
             </div>

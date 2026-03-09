@@ -18,7 +18,6 @@
  * Supported AI model types for chat generation
  */
 export type AIModelType =
-  | "gpt-4o"
   | "gpt-5.2"
   | "gpt-5.1"
   | "gpt-5-nano"
@@ -28,14 +27,19 @@ export type AIModelType =
   | "gemini-2.5-flash"
   | "gemini-3-flash"
   | "gemini-3-pro"
-  | "llama3.1:8b";
+  | "llama3.1:8b"
+  | "llama3.2:3b"
+  | "mistral:7b"
+  | "codellama:7b"
+  | "gemma2:9b"
+  | "phi3:mini"
+  | "qwen2.5:7b";
 
 /**
  * Union type of all supported AI model names
  * Useful for type checking and validation
  */
 export const AIModelTypes = [
-    "gpt-4o",
     "gpt-5.2",
     "gpt-5.1",
     "gpt-5-nano",
@@ -46,6 +50,12 @@ export const AIModelTypes = [
     "gemini-3-flash",
     "gemini-3-pro",
     "llama3.1:8b",
+    "llama3.2:3b",
+    "mistral:7b",
+    "codellama:7b",
+    "gemma2:9b",
+    "phi3:mini",
+    "qwen2.5:7b",
 ] as const;
 
 /**
@@ -59,17 +69,21 @@ export function isAIModelType(value: string): value is AIModelType {
 // LLM Provider Types
 // ============================================================================
 
-export const LLMProviders = ["openai", "ollama"] as const;
+export const LLMProviders = ["openai", "anthropic", "google", "ollama"] as const;
 
 export type LLMProvider = (typeof LLMProviders)[number];
 
 export const ProviderModelMap = {
-    openai: ["gpt-4o", "gpt-5.2", "gpt-5.1", "gpt-5-nano", "gpt-5-mini"] as const,
-    ollama: ["llama3.1:8b"] as const,
+    openai: ["gpt-5.2", "gpt-5.1", "gpt-5-nano", "gpt-5-mini"] as const,
+    anthropic: ["claude-sonnet-4", "claude-opus-4.5"] as const,
+    google: ["gemini-2.5-flash", "gemini-3-flash", "gemini-3-pro"] as const,
+    ollama: ["llama3.1:8b", "llama3.2:3b", "mistral:7b", "codellama:7b", "gemma2:9b", "phi3:mini", "qwen2.5:7b"] as const,
 } satisfies Record<LLMProvider, readonly AIModelType[]>;
 
 export const ProviderDefaultModels: Record<LLMProvider, AIModelType> = {
-    openai: "gpt-4o",
+    openai: "gpt-5-mini",
+    anthropic: "claude-sonnet-4",
+    google: "gemini-2.5-flash",
     ollama: "llama3.1:8b",
 };
 
@@ -78,8 +92,7 @@ export function isModelAllowedForProvider(
     model: string | undefined,
 ): model is AIModelType {
     if (!model) return false;
-    const allowedModels = ProviderModelMap[provider];
-    return allowedModels.includes(model as AIModelType);
+    return (ProviderModelMap[provider] as readonly string[]).includes(model);
 }
 
 // ============================================================================

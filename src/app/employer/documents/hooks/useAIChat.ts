@@ -55,7 +55,7 @@ function mapLegacyModelName(model?: string): string | undefined {
   if (!model) return undefined;
   
   const legacyMap: Record<string, string> = {
-    'gpt4': 'gpt-4o',
+    'gpt4': 'gpt-5-mini',
     'claude': 'claude-sonnet-4',
     'gemini': 'gemini-2.5-flash',
   };

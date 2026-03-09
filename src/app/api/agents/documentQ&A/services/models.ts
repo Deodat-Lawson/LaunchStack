@@ -3,7 +3,7 @@ import { ChatAnthropic } from "@langchain/anthropic";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import type { AIModelType } from "./types";
-export { getChatModelForProvider, getProviderDefaultModel, describeOllamaError } from "~/lib/ai/chat-model-factory";
+export { getChatModelForProvider, getProviderDefaultModel, describeOllamaError, describeProviderError } from "~/lib/ai/chat-model-factory";
 
 // Re-export type for convenience
 export type { AIModelType };
@@ -12,21 +12,13 @@ export type { AIModelType };
  * Get a chat model instance based on the model type
  *
  * Supports all model types defined in types.ts:
- * - OpenAI: gpt-4o, gpt-5.2, gpt-5.1, gpt-5-nano, gpt-5-mini
+ * - OpenAI: gpt-5.2, gpt-5.1, gpt-5-nano, gpt-5-mini
  * - Anthropic: claude-sonnet-4, claude-opus-4.5
  * - Google: gemini-2.5-flash, gemini-3-flash, gemini-3-pro
  */
 export function getChatModel(modelType: AIModelType): BaseChatModel {
     switch (modelType) {
         // OpenAI Models
-        case "gpt-4o":
-            return new ChatOpenAI({
-                openAIApiKey: process.env.OPENAI_API_KEY,
-                modelName: "gpt-4o",
-                temperature: 0.7,
-                timeout: 600000,
-            });
-
         case "gpt-5.2":
             return new ChatOpenAI({
                 openAIApiKey: process.env.OPENAI_API_KEY,
@@ -98,7 +90,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
         default:
             return new ChatOpenAI({
                 openAIApiKey: process.env.OPENAI_API_KEY,
-                modelName: "gpt-4o",
+                modelName: "gpt-5-mini",
                 temperature: 0.7,
                 timeout: 600000,
             });

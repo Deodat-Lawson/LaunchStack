@@ -15,6 +15,7 @@ import {
   TavilyPage,
   UploadThingPage,
   VercelBlobPage,
+  AIProvidersPage,
   OCRAzurePage,
   OCRLandingPage,
   OCRDatalabPage,
@@ -123,6 +124,8 @@ const DeploymentPage = () => {
         return <UploadThingPage {...props} />;
       case 'vercel-blob':
         return <VercelBlobPage {...props} />;
+      case 'ai-providers':
+        return <AIProvidersPage {...props} />;
       case 'ocr':
       case 'ocr-azure':
         return <OCRAzurePage {...props} />;

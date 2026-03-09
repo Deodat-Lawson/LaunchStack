@@ -30,7 +30,7 @@ import {
     getWebSearchInstruction,
     getChatModelForProvider,
     getProviderDefaultModel,
-    describeOllamaError,
+    describeProviderError,
 } from "../services";
 import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
 import type { AIModelType, LLMProvider } from "../services";
@@ -85,7 +85,7 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
     const providerInput = typeof req.provider === "string" ? (req.provider.trim() || undefined) : undefined;
     const providerCandidate = (providerInput ?? "openai") as string;
     if (!LLMProviders.includes(providerCandidate as LLMProvider)) {
-        return { success: false, error: "provider must be either 'openai' or 'ollama'" };
+        return { success: false, error: `provider must be one of: ${LLMProviders.join(", ")}` };
     }
     const providerValue = providerCandidate as LLMProvider;
 
@@ -297,17 +297,15 @@ Provide a comprehensive answer based on the provided content. When referencing s
                     new HumanMessage(userPrompt),
                 ]);
             } catch (modelError) {
-                if (resolvedProvider === "ollama") {
-                    const friendly = describeOllamaError(modelError, selectedAiModel);
-                    if (friendly) {
-                        return NextResponse.json(
-                            {
-                                success: false,
-                                message: friendly.message,
-                            },
-                            { status: friendly.status },
-                        );
-                    }
+                const friendly = describeProviderError(resolvedProvider, modelError, selectedAiModel);
+                if (friendly) {
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            message: friendly.message,
+                        },
+                        { status: friendly.status },
+                    );
                 }
                 throw modelError;
             }

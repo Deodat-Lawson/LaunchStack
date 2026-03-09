@@ -33,6 +33,7 @@ import type { AIModelType, LLMProvider } from "~/app/api/agents/documentQ&A/serv
 import { ProviderModelMap, ProviderDefaultModels } from "~/app/api/agents/documentQ&A/services/types";
 
 type AIModelAvailability = Record<AIModelType, boolean>;
+type ProviderAvailability = Record<LLMProvider, boolean>;
 
 const ChatPanel = dynamic(
   () => import("./ChatPanel").then((module) => module.ChatPanel),
@@ -149,6 +150,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [provider, setProvider] = useState<LLMProvider>("openai");
   const [aiModel, setAiModel] = useState<AIModelType>(ProviderDefaultModels.openai);
   const [modelAvailability, setModelAvailability] = useState<Partial<AIModelAvailability>>({});
+  const [providerAvailability, setProviderAvailability] = useState<Partial<ProviderAvailability>>({});
 
   useEffect(() => {
     const allowedModels = ProviderModelMap[provider];
@@ -320,10 +322,14 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         const response = await fetch("/api/config/ai-models");
         if (!response.ok) return;
         const data = (await response.json()) as {
+          providers?: Partial<Record<LLMProvider, boolean>>;
           models?: Partial<Record<AIModelType, boolean>>;
         };
         if (data.models) {
           setModelAvailability(data.models);
+        }
+        if (data.providers) {
+          setProviderAvailability(data.providers);
         }
       } catch (error) {
         console.error("Error fetching AI model availability:", error);
@@ -656,6 +662,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                       setAiModel={setAiModel}
                       aiAnswerModel={aiAnswerModel}
                       modelAvailability={modelAvailability}
+                      providerAvailability={providerAvailability}
                       styleOptions={STYLE_OPTIONS}
                       referencePages={referencePages}
                       setPdfPageNumber={setPdfPageNumber}
@@ -680,6 +687,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                               aiModel={aiModel}
                               setAiModel={setAiModel}
                               modelAvailability={modelAvailability}
+                              providerAvailability={providerAvailability}
                               searchScope={searchScope}
                               setSearchScope={handleSearchScopeChange}
                               companyId={companyId}

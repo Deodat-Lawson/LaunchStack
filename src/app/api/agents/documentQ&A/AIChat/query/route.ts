@@ -25,7 +25,7 @@ import {
     getWebSearchInstruction,
     getChatModelForProvider,
     getProviderDefaultModel,
-    describeOllamaError,
+    describeProviderError,
     getEmbeddings,
     buildReferences,
     extractRecommendedPages,
@@ -418,18 +418,16 @@ export async function POST(request: Request) {
                     new HumanMessage(userPrompt),
                 ]);
             } catch (modelError) {
-                if (resolvedProvider === "ollama") {
-                    const friendly = describeOllamaError(modelError, selectedAiModel);
-                    if (friendly) {
-                        recordResult("error");
-                        return NextResponse.json(
-                            {
-                                success: false,
-                                message: friendly.message,
-                            },
-                            { status: friendly.status },
-                        );
-                    }
+                const friendly = describeProviderError(resolvedProvider, modelError, selectedAiModel);
+                if (friendly) {
+                    recordResult("error");
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            message: friendly.message,
+                        },
+                        { status: friendly.status },
+                    );
                 }
                 throw modelError;
             }

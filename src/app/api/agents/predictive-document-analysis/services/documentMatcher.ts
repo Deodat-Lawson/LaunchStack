@@ -9,7 +9,9 @@ import type {
 } from "~/app/api/agents/predictive-document-analysis/types";
 import { getEmbeddings } from "~/app/api/agents/predictive-document-analysis/utils/embeddings";
 import { cleanText, truncateText } from "~/app/api/agents/predictive-document-analysis/utils/content";
+import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
+import { hybridSearchWithRRF } from "~/app/api/agents/predictive-document-analysis/services/hybridSearch";
 
 type MatchCandidate = {
     documentId: number;
@@ -77,9 +79,23 @@ export async function findSuggestedCompanyDocuments(
 
         const highConfidenceMatches = Array.from(matchCandidates.values()).filter(m => m.confidence > 0.7);
         if (highConfidenceMatches.length < 2) {
-            const contextMatches = await findOptimizedContextualMatches(missingDoc, otherDocIds);
+            // Run ANN vector search and BM25+vector hybrid search in parallel
+            const searchQuery = `${missingDoc.documentType} ${missingDoc.documentName}`;
+            const [contextMatches, hybridMatches] = await Promise.all([
+                findOptimizedContextualMatches(missingDoc, otherDocIds),
+                hybridSearchWithRRF(searchQuery, otherDocIds, 6).catch(() => [] as DocumentMatch[]),
+            ]);
+
+            const allContextMatches = [...contextMatches, ...hybridMatches];
+            const bestByDoc = new Map<number, DocumentMatch>();
+            for (const m of allContextMatches) {
+                const existing = bestByDoc.get(m.documentId);
+                if (!existing || m.similarity > existing.similarity) {
+                    bestByDoc.set(m.documentId, m);
+                }
+            }
             
-            for (const match of contextMatches) {
+            for (const match of bestByDoc.values()) {
                 const existing = matchCandidates.get(match.documentId);
                 if (!existing || (match.similarity > existing.confidence && match.similarity > 0.5)) {
                     const validatedMatch = await validateContextualMatch(missingDoc, match);
@@ -90,7 +106,7 @@ export async function findSuggestedCompanyDocuments(
                             page: match.page,
                             snippet: validatedMatch.snippet,
                             reasons: validatedMatch.reasons,
-                            matchTypes: existing ? [...(existing.matchTypes ?? []), 'contextual-ann'] : ['contextual-ann'],
+                            matchTypes: existing ? [...(existing.matchTypes ?? []), 'contextual-hybrid'] : ['contextual-hybrid'],
                             finalScore: validatedMatch.confidence * 0.9
                         });
                     }
@@ -118,7 +134,7 @@ export async function findSuggestedCompanyDocuments(
 
         return finalSuggestions;
     } catch (error) {
-        console.error("Error finding suggested company documents:", error);
+        console.error("Error finding suggested company documents:", sanitizeErrorMessage(error));
         return [];
     }
 }
@@ -255,7 +271,7 @@ async function findOptimizedContextualMatches(
                 });
             }
         } catch (error) {
-            console.warn(`ANN search failed for query "${query}", falling back to traditional search:`, error);
+            console.warn(`ANN search failed for query "${query}", falling back to traditional search:`, sanitizeErrorMessage(error));
             
             const fallbackMatches = await findTraditionalContextualMatches(query, queryEmbedding, docIds);
             allMatches.push(...fallbackMatches);
@@ -279,30 +295,35 @@ async function findTraditionalContextualMatches(
     queryEmbedding: number[],
     docIds: number[]
 ): Promise<DocumentMatch[]> {
-    const distanceSql = sql`embedding <=> ${`[${queryEmbedding.join(',')}]`}::vector`;
-    const results = await db.select({
-        id: documentSections.id,
-        content: documentSections.content,
-        page: documentSections.pageNumber,
-        documentId: documentSections.documentId,
-        distance: distanceSql
-    }).from(documentSections).where(and(
-        inArray(documentSections.documentId, docIds.map(id => BigInt(id))),
-        sql`${distanceSql} < 0.3`
-    )).orderBy(distanceSql).limit(5);
+    try {
+        const distanceSql = sql`embedding <=> ${`[${queryEmbedding.join(',')}]`}::vector`;
+        const results = await db.select({
+            id: documentSections.id,
+            content: documentSections.content,
+            page: documentSections.pageNumber,
+            documentId: documentSections.documentId,
+            distance: distanceSql
+        }).from(documentSections).where(and(
+            inArray(documentSections.documentId, docIds.map(id => BigInt(id))),
+            sql`${distanceSql} < 0.3`
+        )).orderBy(distanceSql).limit(5);
 
-    return results.map(result => {
-        const distance = Number(result.distance) ?? 1;
-        const similarity = Math.max(0, (1 - distance) * 0.7);
+        return results.map(result => {
+            const distance = Number(result.distance) ?? 1;
+            const similarity = Math.max(0, (1 - distance) * 0.7);
 
-        return {
-            documentId: Number(result.documentId),
-            page: result.page ?? 1,
-            snippet: truncateText(result.content, 150),
-            similarity,
-            content: result.content
-        };
-    });
+            return {
+                documentId: Number(result.documentId),
+                page: result.page ?? 1,
+                snippet: truncateText(result.content, 150),
+                similarity,
+                content: result.content
+            };
+        });
+    } catch (error) {
+        console.warn("Traditional contextual search failed:", sanitizeErrorMessage(error));
+        return [];
+    }
 }
 
 async function validateContextualMatch(

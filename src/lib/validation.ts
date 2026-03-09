@@ -1,5 +1,12 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
+import {
+  AIModelTypes,
+  LLMProviders,
+  isModelAllowedForProvider,
+  type AIModelType,
+  type LLMProvider,
+} from "~/app/api/agents/documentQ&A/services/types";
 
 export const createErrorResponse = (message: string, status = 400) => {
   return NextResponse.json(
@@ -66,29 +73,57 @@ export const PredictiveAnalysisSchema = z.object({
 }));
 
 const aiPersonaOptions = ["general", "learning-coach", "financial-expert", "legal-expert", "math-reasoning"] as const;
-const aiModelOptions = ["gpt-4o", "gpt-5.2", "gpt-5.1", "gpt-5-nano", "gpt-5-mini", "claude-sonnet-4", "claude-opus-4.5", "gemini-2.5-flash", "gemini-3-flash", "gemini-3-pro"] as const;
+const aiModelOptions = AIModelTypes;
+const providerOptions = LLMProviders;
 
-export const QuestionSchema = z.object({
-  documentId: z.number().int().positive().optional(),
-  companyId: z.number().int().positive().optional(),
-  question: z.string().min(1, "Question is required"),
-  style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
-  searchScope: z.enum(["document", "company"]).optional(),
-  enableWebSearch: z.boolean().optional().default(false),
-  aiPersona: z.enum(aiPersonaOptions).optional(),
-  aiModel: z.enum(aiModelOptions).optional(),
-  conversationHistory: z.string().optional(),
-}).transform((data) => ({
-  documentId: data.documentId,
-  companyId: data.companyId,
-  question: data.question,
-  style: data.style ?? "concise" as const,
-  searchScope: data.searchScope ?? "document" as const,
-  enableWebSearch: data.enableWebSearch ?? false,
-  aiPersona: data.aiPersona ?? "general",
-  aiModel: data.aiModel ?? "gpt-4o" as const,
-  conversationHistory: data.conversationHistory,
-}));
+function assertProviderModelCombination(
+  provider: LLMProvider,
+  model: AIModelType | undefined,
+  ctx: z.RefinementCtx,
+) {
+  if (model && !isModelAllowedForProvider(provider, model)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["aiModel"],
+      message: `Model \"${model}\" is not available for provider \"${provider}\"`,
+    });
+  }
+}
+
+export const QuestionSchema = z
+  .object({
+    documentId: z.number().int().positive().optional(),
+    companyId: z.number().int().positive().optional(),
+    question: z.string().min(1, "Question is required"),
+    style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
+    searchScope: z.enum(["document", "company", "archive"]).optional(),
+    archiveName: z.string().optional(),
+    enableWebSearch: z.boolean().optional().default(false),
+    aiPersona: z.enum(aiPersonaOptions).optional(),
+    aiModel: z.enum(aiModelOptions).optional(),
+    provider: z.enum(providerOptions).optional(),
+    conversationHistory: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const provider = (data.provider ?? "openai") as LLMProvider;
+    assertProviderModelCombination(provider, data.aiModel, ctx);
+  })
+  .transform((data) => {
+    const provider = (data.provider ?? "openai") as LLMProvider;
+    return {
+      documentId: data.documentId,
+      companyId: data.companyId,
+      question: data.question,
+      style: (data.style ?? "concise") as const,
+      searchScope: (data.searchScope ?? "document") as const,
+      archiveName: data.archiveName,
+      enableWebSearch: data.enableWebSearch ?? false,
+      aiPersona: data.aiPersona ?? "general",
+      aiModel: data.aiModel,
+      provider,
+      conversationHistory: data.conversationHistory,
+    };
+  });
 
 export const ChatHistoryAddSchema = z.object({
   documentId: z.number().int().positive("Document ID must be a positive integer"),
@@ -126,6 +161,8 @@ export const UploadDocumentSchema = z.object({
 
 export const UpdateCompanySchema = z.object({
   name: z.string().min(1, "Company name is required").max(256, "Company name is too long").trim(),
+  description: z.string().max(5000, "Description is too long").trim().optional().nullable(),
+  industry: z.string().max(256, "Industry is too long").trim().optional().nullable(),
   employerPasskey: z.string().max(256, "Employer passkey is too long").trim().optional(),
   employeePasskey: z.string().max(256, "Employee passkey is too long").trim().optional(),
   numberOfEmployees: z
@@ -137,6 +174,8 @@ export const UpdateCompanySchema = z.object({
   useUploadThing: z.boolean().optional(),
 }).transform((data) => ({
   name: data.name,
+  description: data.description,
+  industry: data.industry,
   employerPasskey: data.employerPasskey,
   employeePasskey: data.employeePasskey,
   numberOfEmployees: data.numberOfEmployees && data.numberOfEmployees !== "" ? data.numberOfEmployees : "0",
@@ -178,39 +217,53 @@ const prioritizeOptions = ["start", "end", "relevance"] as const;
  * Schema for RLM-style hierarchical document queries
  * Extends QuestionSchema with cost-aware retrieval options
  */
-export const RLMQuestionSchema = z.object({
-  documentId: z.number().int().positive("Document ID must be a positive integer"),
-  question: z.string().min(1, "Question is required"),
-  // Standard options
-  style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
-  enableWebSearch: z.boolean().optional().default(false),
-  aiPersona: z.enum(aiPersonaOptions).optional(),
-  aiModel: z.enum(aiModelOptions).optional(),
-  conversationHistory: z.string().optional(),
-  // RLM-specific options
-  maxTokens: z.number().int().min(500).max(100000).optional(),
-  includeOverview: z.boolean().optional(),
-  includePreviews: z.boolean().optional(),
-  semanticTypes: z.array(z.enum(semanticTypeOptions)).optional(),
-  prioritize: z.enum(prioritizeOptions).optional(),
-  pageRange: z.object({
-    start: z.number().int().min(0),
-    end: z.number().int().min(0),
-  }).refine((data) => data.end >= data.start, {
-    message: "pageRange.end must be >= pageRange.start",
-  }).optional(),
-}).transform((data) => ({
-  documentId: data.documentId,
-  question: data.question,
-  style: data.style ?? "concise" as const,
-  enableWebSearch: data.enableWebSearch ?? false,
-  aiPersona: data.aiPersona ?? "general",
-  aiModel: data.aiModel ?? "gpt-4o" as const,
-  conversationHistory: data.conversationHistory,
-  maxTokens: data.maxTokens ?? 4000,
-  includeOverview: data.includeOverview ?? true,
-  includePreviews: data.includePreviews ?? false,
-  semanticTypes: data.semanticTypes,
-  prioritize: data.prioritize ?? "relevance" as const,
-  pageRange: data.pageRange,
-}));
+export const RLMQuestionSchema = z
+  .object({
+    documentId: z.number().int().positive("Document ID must be a positive integer"),
+    question: z.string().min(1, "Question is required"),
+    // Standard options
+    style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
+    enableWebSearch: z.boolean().optional().default(false),
+    aiPersona: z.enum(aiPersonaOptions).optional(),
+    aiModel: z.enum(aiModelOptions).optional(),
+    provider: z.enum(providerOptions).optional(),
+    conversationHistory: z.string().optional(),
+    // RLM-specific options
+    maxTokens: z.number().int().min(500).max(100000).optional(),
+    includeOverview: z.boolean().optional(),
+    includePreviews: z.boolean().optional(),
+    semanticTypes: z.array(z.enum(semanticTypeOptions)).optional(),
+    prioritize: z.enum(prioritizeOptions).optional(),
+    pageRange: z
+      .object({
+        start: z.number().int().min(0),
+        end: z.number().int().min(0),
+      })
+      .refine((data) => data.end >= data.start, {
+        message: "pageRange.end must be >= pageRange.start",
+      })
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    const provider = (data.provider ?? "openai") as LLMProvider;
+    assertProviderModelCombination(provider, data.aiModel, ctx);
+  })
+  .transform((data) => {
+    const provider = (data.provider ?? "openai") as LLMProvider;
+    return {
+      documentId: data.documentId,
+      question: data.question,
+      style: (data.style ?? "concise") as const,
+      enableWebSearch: data.enableWebSearch ?? false,
+      aiPersona: data.aiPersona ?? "general",
+      aiModel: data.aiModel,
+      provider,
+      conversationHistory: data.conversationHistory,
+      maxTokens: data.maxTokens ?? 4000,
+      includeOverview: data.includeOverview ?? true,
+      includePreviews: data.includePreviews ?? false,
+      semanticTypes: data.semanticTypes,
+      prioritize: (data.prioritize ?? "relevance") as const,
+      pageRange: data.pageRange,
+    };
+  });

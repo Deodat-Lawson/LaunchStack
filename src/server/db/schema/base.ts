@@ -52,6 +52,8 @@ export const users = pgTable(
 export const company = pgTable("company", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
+    description: text("description"),
+    industry: varchar("industry", { length: 256 }),
     employerpasskey: varchar("employerPasskey", { length: 256 }).notNull().default(""),
     employeepasskey: varchar("employeePasskey", { length: 256 }).notNull().default(""),
     numberOfEmployees: varchar("numberOfEmployees", { length: 256 }).notNull(),
@@ -111,6 +113,8 @@ export const document = pgTable(
         ocrProvider: varchar("ocr_provider", { length: 50 }),
         ocrConfidenceScore: integer("ocr_confidence_score"),
         ocrCostCents: integer("ocr_cost_cents"),
+        mimeType: varchar("mime_type", { length: 128 }),
+        sourceArchiveName: varchar("source_archive_name", { length: 256 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
@@ -288,8 +292,12 @@ export const fileUploads = pgTable(
         userId: varchar("user_id", { length: 256 }).notNull(),
         filename: varchar("filename", { length: 256 }).notNull(),
         mimeType: varchar("mime_type", { length: 128 }).notNull(),
-        fileData: text("file_data").notNull(), // Base64 encoded file data
+        fileData: text("file_data"),
         fileSize: integer("file_size").notNull(),
+        storageProvider: varchar("storage_provider", { length: 64 }).default("database").notNull(),
+        storageUrl: varchar("storage_url", { length: 1024 }),
+        storagePathname: varchar("storage_pathname", { length: 1024 }),
+        blobChecksum: varchar("blob_checksum", { length: 128 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),

@@ -2,7 +2,8 @@
 
 export interface SuggestedLink {
   title: string;
-  link: string;
+  link?: string;
+  url?: string;
   snippet: string;
 }
 
@@ -40,6 +41,26 @@ export interface ResolvedDocument {
   priority: "high" | "medium" | "low";
 }
 
+export type InsightCategory =
+  | "deadline"
+  | "resource"
+  | "key-reference"
+  | "action-item"
+  | "caveat";
+
+export type InsightSeverity = "note" | "warning";
+
+export interface DocumentInsight {
+  category: InsightCategory;
+  severity: InsightSeverity;
+  title: string;
+  detail: string;
+  page: number;
+  sourceQuote?: string;
+  url?: string;
+  date?: string;
+}
+
 export interface PredictiveAnalysisResponse {
   success: boolean;
   documentId: number;
@@ -48,12 +69,14 @@ export interface PredictiveAnalysisResponse {
     totalMissingDocuments: number;
     highPriorityItems: number;
     totalRecommendations: number;
+    totalInsights: number;
     totalSuggestedRelated: number;
     analysisTimestamp: string;
   };
   analysis: {
     missingDocuments: Array<MissingDocument>;
     recommendations: string[];
+    insights?: Array<DocumentInsight>;
     suggestedRelatedDocuments?: Array<SuggestedLink>;
     resolvedDocuments?: Array<ResolvedDocument>;
   };

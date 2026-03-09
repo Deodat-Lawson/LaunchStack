@@ -3,7 +3,7 @@ export { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-anal
 export { extractReferences } from "~/app/api/agents/predictive-document-analysis/services/referenceExtractor";
 export { findSuggestedCompanyDocuments } from "~/app/api/agents/predictive-document-analysis/services/documentMatcher";
 export { getEmbeddings, batchGetEmbeddings } from "~/app/api/agents/predictive-document-analysis/utils/embeddings";
-export { groupContentFromChunks, cleanText, hasSpecificIdentifier } from "~/app/api/agents/predictive-document-analysis/utils/content";
+export { groupContentFromChunks, cleanText, hasSpecificIdentifier, isValidReference } from "~/app/api/agents/predictive-document-analysis/utils/content";
 
 // Type exports
 export type {

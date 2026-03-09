@@ -1,14 +1,17 @@
 import { useState, useCallback } from 'react';
 import type { SourceReference } from '~/app/api/agents/documentQ&A/services';
+import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 
 export type { SourceReference };
 
 export interface AIChatRequest {
   documentId?: number;
   companyId?: number;
+  archiveName?: string;
   question: string;
   searchScope: 'document' | 'company';
-  aiModel?: 'gpt-4o' | 'gpt-5.2' | 'gpt-5.1' | 'gpt-5-nano' | 'gpt-5-mini' | 'claude-sonnet-4' | 'claude-opus-4.5' | 'gemini-2.5-flash' | 'gemini-3-flash' | 'gemini-3-pro';
+  aiModel?: AIModelType;
+  provider?: LLMProvider;
   style?: string;
   enableWebSearch?: boolean;
   conversationHistory?: string;
@@ -36,7 +39,7 @@ export interface AIChatResponse {
   processingTimeMs?: number;
   chunksAnalyzed?: number;
   fusionWeights?: number[];
-  searchScope?: 'document' | 'company';
+  searchScope?: 'document' | 'company' | 'archive';
   aiModel?: string;
   webSources?: WebSource[];
   webSearch?: WebSearchInfo;
@@ -52,7 +55,7 @@ function mapLegacyModelName(model?: string): string | undefined {
   if (!model) return undefined;
   
   const legacyMap: Record<string, string> = {
-    'gpt4': 'gpt-4o',
+    'gpt4': 'gpt-5-mini',
     'claude': 'claude-sonnet-4',
     'gemini': 'gemini-2.5-flash',
   };
@@ -81,6 +84,7 @@ export function useAIChat() {
           question: params.question,
           searchScope: params.searchScope,
           aiModel: mappedModel,
+          provider: params.provider,
           style: params.style,
           enableWebSearch: params.enableWebSearch,
           conversationHistory: params.conversationHistory,

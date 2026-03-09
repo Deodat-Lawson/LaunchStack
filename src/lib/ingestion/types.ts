@@ -14,6 +14,7 @@ export type SourceType =
   | "text"
   | "markdown"
   | "html"
+  | "zip"
   | "email"
   | "unknown";
 
@@ -64,7 +65,7 @@ export interface LayoutCoordinate {
 
 export interface SourceAdapter {
   readonly name: string;
-  canHandle(mimeType: string, extension: string): boolean;
+  canHandle(mimeType: string, extension: string, filename?: string): boolean;
   process(
     input: string | Buffer,
     options?: SourceAdapterOptions,
@@ -84,7 +85,7 @@ export interface SourceAdapterOptions {
 
 export const MIME_TO_SOURCE_TYPE: Record<string, SourceType> = {
   "application/pdf": "pdf",
-  "application/zip": "unknown",
+  "application/zip": "zip",
   "image/png": "image",
   "image/jpeg": "image",
   "image/jpg": "image",
@@ -109,7 +110,7 @@ export const MIME_TO_SOURCE_TYPE: Record<string, SourceType> = {
 
 export const EXTENSION_TO_SOURCE_TYPE: Record<string, SourceType> = {
   ".pdf": "pdf",
-  ".zip": "unknown",
+  ".zip": "zip",
   ".png": "image",
   ".jpg": "image",
   ".jpeg": "image",

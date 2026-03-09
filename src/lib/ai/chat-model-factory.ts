@@ -11,6 +11,11 @@ import {
   type LLMProvider,
 } from "~/app/api/agents/documentQ&A/services/types";
 
+const REASONING_MODELS: ReadonlySet<string> = new Set([
+  "gpt-5-mini",
+  "gpt-5-nano",
+]);
+
 const PROVIDER_ENV_MODEL_KEY: Record<LLMProvider, string> = {
   openai: "OPENAI_MODEL",
   anthropic: "ANTHROPIC_MODEL",
@@ -92,13 +97,15 @@ export function getChatModelForProvider(opts: {
       });
 
     case "openai":
-    default:
+    default: {
+      const useTemp = !REASONING_MODELS.has(modelName);
       return new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName,
-        temperature: temperature ?? 0.7,
+        ...(useTemp ? { temperature: temperature ?? 0.7 } : {}),
         timeout: timeoutMs ?? 600_000,
       });
+    }
   }
 }
 

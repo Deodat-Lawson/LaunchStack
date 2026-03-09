@@ -29,6 +29,8 @@ const UploadDocumentSchema = z.object({
   storageType: z.enum(["cloud", "database"]).optional(),
   /** MIME type of the uploaded file — used to route non-PDF files to the correct adapter */
   mimeType: z.string().optional(),
+  /** Original filename with extension — used for adapter routing when documentName has been cleaned */
+  originalFilename: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -47,6 +49,7 @@ export async function POST(request: Request) {
         preferredProvider,
         storageType: explicitStorageType,
         mimeType,
+        originalFilename,
       } = validation.data;
 
       console.log(
@@ -78,6 +81,7 @@ export async function POST(request: Request) {
         preferredProvider,
         explicitStorageType,
         mimeType,
+        originalFilename,
         requestUrl: request.url,
       });
 

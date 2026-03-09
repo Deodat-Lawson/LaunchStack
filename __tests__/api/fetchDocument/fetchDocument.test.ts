@@ -1,7 +1,8 @@
-import { POST } from "~/app/api/fetchDocument/route";
-import { auth } from "@clerk/nextjs/server";
-import { validateRequestBody } from "~/lib/validation";
-import { dbCore } from "~/server/db/core";
+jest.mock("~/server/storage/vercel-blob", () => ({
+  isPrivateBlobUrl: jest.fn(() => false),
+  fetchBlob: jest.fn(),
+  putFile: jest.fn(),
+}));
 
 jest.mock("@clerk/nextjs/server", () => ({
   auth: jest.fn(),
@@ -11,12 +12,16 @@ jest.mock("~/lib/validation", () => ({
   validateRequestBody: jest.fn(),
 }));
 
-// Route uses dbCore from core, not db from index
 jest.mock("~/server/db/core", () => ({
   dbCore: {
     select: jest.fn(),
   },
 }));
+
+import { POST } from "~/app/api/fetchDocument/route";
+import { auth } from "@clerk/nextjs/server";
+import { validateRequestBody } from "~/lib/validation";
+import { dbCore } from "~/server/db/core";
 
 describe("POST /api/fetchDocument", () => {
   beforeEach(() => {

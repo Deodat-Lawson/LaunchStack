@@ -56,6 +56,8 @@ export async function buildCompanyKnowledgeContext(args: {
 
     const contextParts = [
         `Company Name: ${companyInfo?.name ?? "Unknown Company"}`,
+        ...(companyInfo?.description ? [`Company Description: ${companyInfo.description}`] : []),
+        ...(companyInfo?.industry ? [`Industry / Sector: ${companyInfo.industry}`] : []),
         `Employee Count Range: ${companyInfo?.numberOfEmployees ?? "Unknown"}`,
         `Company Categories: ${categoryNames.length > 0 ? categoryNames.join(", ") : "None"}`,
         `Knowledge Base Signals: ${

@@ -93,7 +93,7 @@ describe("RewritePreviewPanel", () => {
       />
     );
 
-    await userEvent.click(screen.getByText("Regenerate"));
+  await userEvent.click(screen.getByText("Regenerate"));
     expect(onTryAgain).toHaveBeenCalledTimes(1);
   });
 

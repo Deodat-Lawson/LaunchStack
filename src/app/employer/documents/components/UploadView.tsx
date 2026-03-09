@@ -33,6 +33,8 @@ interface UploadBootstrapResponse {
   company: CompanyData | null;
   isUploadThingConfigured: boolean;
   availableProviders: AvailableProviders;
+  storageProvider: "cloud" | "local";
+  s3Endpoint: string;
 }
 
 interface UploadViewProps {
@@ -50,6 +52,8 @@ export function UploadView({ onDocumentUploaded: _onDocumentUploaded }: UploadVi
     datalab: false,
     landingAI: false,
   });
+  const [storageProvider, setStorageProvider] = useState<"cloud" | "local">("cloud");
+  const [s3Endpoint, setS3Endpoint] = useState("");
 
   const fetchBootstrap = useCallback(async () => {
     try {
@@ -64,6 +68,8 @@ export function UploadView({ onDocumentUploaded: _onDocumentUploaded }: UploadVi
       setCategories(data.categories);
       setIsUploadThingConfigured(data.isUploadThingConfigured);
       setAvailableProviders(data.availableProviders);
+      setStorageProvider(data.storageProvider);
+      setS3Endpoint(data.s3Endpoint);
 
       if (!data.isUploadThingConfigured) {
         setUseUploadThing(false);
@@ -188,6 +194,8 @@ export function UploadView({ onDocumentUploaded: _onDocumentUploaded }: UploadVi
           isUpdatingPreference={isUpdatingPreference}
           availableProviders={availableProviders}
           onAddCategory={handleAddCategory}
+          storageProvider={storageProvider}
+          s3Endpoint={s3Endpoint}
         />
 
         {/* Category Management */}

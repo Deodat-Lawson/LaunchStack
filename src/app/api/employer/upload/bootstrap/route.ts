@@ -24,6 +24,8 @@ type UploadBootstrapResponse = {
     datalab: boolean;
     landingAI: boolean;
   };
+  storageProvider: "cloud" | "local";
+  s3Endpoint: string;
 };
 
 export async function GET() {
@@ -94,6 +96,10 @@ export async function GET() {
         datalab: Boolean(process.env.DATALAB_API_KEY),
         landingAI: Boolean(process.env.LANDING_AI_API_KEY),
       },
+      storageProvider:
+        (process.env.NEXT_PUBLIC_STORAGE_PROVIDER as "cloud" | "local") ??
+        "cloud",
+      s3Endpoint: process.env.NEXT_PUBLIC_S3_ENDPOINT ?? "",
     };
 
     return NextResponse.json(response);

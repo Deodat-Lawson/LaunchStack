@@ -3,6 +3,7 @@
 import { 
   FileText,
   Building2,
+  Archive,
   Zap,
   BookOpen,
   GraduationCap,
@@ -13,7 +14,8 @@ import {
   Calculator,
   Sparkles,
   PanelRightClose,
-  PanelRightOpen
+  PanelRightOpen,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '~/app/employer/documents/components/ui/button';
 import {
@@ -23,10 +25,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/app/employer/documents/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/app/employer/documents/components/ui/tooltip';
 import { cn } from "~/lib/utils";
 import { AgentChatInterface } from './AgentChatInterface';
 import type { DocumentType } from '../types';
-import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 
 interface ChatPanelProps {
   userId: string;
@@ -37,11 +45,14 @@ interface ChatPanelProps {
   setAiStyle: (s: string) => void;
   aiPersona: string;
   setAiPersona: (p: string) => void;
+  provider: LLMProvider;
+  setProvider: (p: LLMProvider) => void;
   aiModel: AIModelType;
   setAiModel: (m: AIModelType) => void;
   modelAvailability?: Partial<Record<AIModelType, boolean>>;
-  searchScope: 'document' | 'company';
-  setSearchScope: (s: 'document' | 'company') => void;
+  providerAvailability?: Partial<Record<LLMProvider, boolean>>;
+  searchScope: 'document' | 'company' | 'archive';
+  setSearchScope: (s: 'document' | 'company' | 'archive') => void;
   companyId: number | null;
   setPdfPageNumber: (p: number) => void;
   styleOptions: Record<string, string>;
@@ -66,17 +77,30 @@ const personaConfig = [
   { key: 'math-reasoning', icon: Calculator, label: 'Math' },
 ];
 
-const modelConfig: Array<{ key: AIModelType; label: string }> = [
-  { key: "gpt-5.2", label: "GPT-5.2" },
-  { key: "gpt-5-mini", label: "GPT-5 Mini" },
-  { key: "gpt-5-nano", label: "GPT-5 Nano" },
-  { key: "claude-opus-4.5", label: "Claude Opus 4.5" },
-  { key: "gemini-3-flash", label: "Gemini 3 Flash" },
-  { key: "gemini-3-pro", label: "Gemini 3 Pro" },
-  { key: "gpt-5.1", label: "GPT-5.1" },
-  { key: "gpt-4o", label: "GPT-4o" },
-  { key: "claude-sonnet-4", label: "Claude Sonnet 4" },
-  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+const providerOptions: Array<{ key: LLMProvider; label: string }> = [
+  { key: "openai", label: "OpenAI" },
+  { key: "anthropic", label: "Anthropic" },
+  { key: "google", label: "Google" },
+  { key: "ollama", label: "Ollama" },
+];
+
+const modelConfig: Array<{ key: AIModelType; label: string; provider: LLMProvider }> = [
+  { key: "gpt-5.2", label: "GPT-5.2", provider: "openai" },
+  { key: "gpt-5-mini", label: "GPT-5 Mini", provider: "openai" },
+  { key: "gpt-5-nano", label: "GPT-5 Nano", provider: "openai" },
+  { key: "gpt-5.1", label: "GPT-5.1", provider: "openai" },
+  { key: "claude-sonnet-4", label: "Claude Sonnet 4", provider: "anthropic" },
+  { key: "claude-opus-4.5", label: "Claude Opus 4.5", provider: "anthropic" },
+  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash", provider: "google" },
+  { key: "gemini-3-flash", label: "Gemini 3 Flash", provider: "google" },
+  { key: "gemini-3-pro", label: "Gemini 3 Pro", provider: "google" },
+  { key: "llama3.1:8b", label: "Llama 3.1 8B", provider: "ollama" },
+  { key: "llama3.2:3b", label: "Llama 3.2 3B", provider: "ollama" },
+  { key: "mistral:7b", label: "Mistral 7B", provider: "ollama" },
+  { key: "codellama:7b", label: "Code Llama 7B", provider: "ollama" },
+  { key: "gemma2:9b", label: "Gemma 2 9B", provider: "ollama" },
+  { key: "phi3:mini", label: "Phi-3 Mini", provider: "ollama" },
+  { key: "qwen2.5:7b", label: "Qwen 2.5 7B", provider: "ollama" },
 ];
 
 export function ChatPanel({
@@ -88,9 +112,12 @@ export function ChatPanel({
   setAiStyle,
   aiPersona,
   setAiPersona,
+  provider,
+  setProvider,
   aiModel,
   setAiModel,
   modelAvailability = {},
+  providerAvailability = {},
   searchScope,
   setSearchScope,
   companyId,
@@ -102,57 +129,94 @@ export function ChatPanel({
   userRole = 'employer',
 }: ChatPanelProps) {
   const showCompanyScope = userRole === 'employer';
+  const hasArchive = !!selectedDoc?.sourceArchiveName;
+
   return (
-    <div className="flex flex-col h-full relative overflow-hidden bg-gradient-to-b from-slate-50/30 to-white dark:from-slate-950/30 dark:to-slate-900 transition-all duration-300">
-      {/* Chat Header */}
-      <div className="flex-shrink-0 border-b border-slate-200/60 dark:border-slate-800/60 px-5 py-3 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
-        <div className="flex items-center justify-between gap-4">
-          {/* Left: Status & Scope */}
-          <div className="flex items-center gap-3">
+    <div className="flex flex-col h-full bg-background overflow-hidden">
+      {/* Toolbar Header */}
+      <div className="flex-shrink-0 border-b border-border px-4 py-2.5 bg-background/90 backdrop-blur-sm z-20">
+        <div className="flex items-center justify-between gap-3">
+          {/* Left: Status + Scope + Model */}
+          <div className="flex items-center gap-2.5 min-w-0">
             {/* Online Status */}
-            <div className="flex items-center gap-2 px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-200/50 dark:border-emerald-800/30">
+            <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 dark:bg-emerald-950/30 rounded-md border border-emerald-200/60 dark:border-emerald-800/40 flex-shrink-0">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Online</span>
+              <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-[0.15em]">Online</span>
             </div>
 
-            {/* Scope Toggle - only show company scope for employers */}
+            {/* Scope Toggle */}
             {showCompanyScope ? (
-              <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-0.5">
+              <div className="flex items-center bg-muted rounded-md p-0.5 flex-shrink-0">
                 <button
                   onClick={() => setSearchScope('document')}
                   className={cn(
-                    "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
+                    "flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all",
                     searchScope === 'document'
-                      ? "bg-white dark:bg-slate-700 text-violet-600 dark:text-violet-400 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                      ? "bg-background text-purple-600 dark:text-purple-400 shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <FileText className="w-3 h-3" />
+                  <FileText className="w-2.5 h-2.5" />
                   Doc
                 </button>
+                {hasArchive && (
+                  <button
+                    onClick={() => setSearchScope('archive')}
+                    className={cn(
+                      "flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all",
+                      searchScope === 'archive'
+                        ? "bg-background text-purple-600 dark:text-purple-400 shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                    title={`Search all files from ${selectedDoc?.sourceArchiveName}`}
+                  >
+                    <Archive className="w-2.5 h-2.5" />
+                    Zip
+                  </button>
+                )}
                 <button
                   onClick={() => setSearchScope('company')}
                   className={cn(
-                    "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
+                    "flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all",
                     searchScope === 'company'
-                      ? "bg-white dark:bg-slate-700 text-violet-600 dark:text-violet-400 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300",
-                    !companyId && "opacity-80"
+                      ? "bg-background text-purple-600 dark:text-purple-400 shadow-sm"
+                      : "text-muted-foreground hover:text-foreground",
+                    !companyId && "opacity-70"
                   )}
                 >
-                  <Building2 className="w-3 h-3" />
+                  <Building2 className="w-2.5 h-2.5" />
                   All
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                <FileText className="w-3 h-3 text-violet-600 dark:text-violet-400" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">Document</span>
+              <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md flex-shrink-0">
+                <FileText className="w-2.5 h-2.5 text-purple-600 dark:text-purple-400" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">Document</span>
               </div>
             )}
 
-            {/* Model Selector */}
-            <div className="shrink-0">
+            {/* Provider & Model Selector */}
+            <div className="flex items-center gap-2 shrink-0">
+              <Select
+                value={provider}
+                onValueChange={(value) => setProvider(value as LLMProvider)}
+              >
+                <SelectTrigger
+                  size="sm"
+                  className="h-7 w-[110px] bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-[10px] font-semibold"
+                >
+                  <SelectValue placeholder="Provider" />
+                </SelectTrigger>
+                <SelectContent>
+                  {providerOptions
+                    .filter((opt) => providerAvailability[opt.key] !== false)
+                    .map((option) => (
+                      <SelectItem key={option.key} value={option.key} className="text-xs">
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
               <Select
                 value={aiModel}
                 onValueChange={(value) => setAiModel(value as AIModelType)}
@@ -164,34 +228,56 @@ export function ChatPanel({
                   <SelectValue placeholder="Model" />
                 </SelectTrigger>
                 <SelectContent>
-                  {modelConfig.map((model) => (
-                    <SelectItem
-                      key={model.key}
-                      value={model.key}
-                      disabled={modelAvailability[model.key] === false}
-                      className="text-xs"
-                    >
-                      {model.label}{modelAvailability[model.key] === false ? " (Unavailable)" : ""}
-                    </SelectItem>
-                  ))}
+                  {modelConfig
+                    .filter((model) => model.provider === provider)
+                    .map((model) => {
+                      const unavailable = modelAvailability[model.key] === false;
+                      return (
+                        <SelectItem
+                          key={model.key}
+                          value={model.key}
+                          disabled={unavailable}
+                          className={cn("text-xs", unavailable && "opacity-50")}
+                        >
+                          <TooltipProvider delayDuration={300}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="flex items-center gap-1.5">
+                                  <span className={cn(
+                                    "w-1.5 h-1.5 rounded-full flex-shrink-0",
+                                    unavailable ? "bg-red-400" : "bg-emerald-500"
+                                  )} />
+                                  {model.label}
+                                </span>
+                              </TooltipTrigger>
+                              {unavailable && (
+                                <TooltipContent side="left" className="text-xs">
+                                  API key not configured for this model
+                                </TooltipContent>
+                              )}
+                            </Tooltip>
+                          </TooltipProvider>
+                        </SelectItem>
+                      );
+                    })}
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          {/* Center: Style & Persona Pills */}
-          <div className="hidden md:flex items-center gap-4">
-            {/* Style Pills */}
-            <div className="flex items-center gap-1">
+          {/* Center: Style & Persona pills */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* Style pills */}
+            <div className="flex items-center gap-0.5">
               {styleConfig.map(({ key, icon: Icon }) => (
                 <button
                   key={key}
                   onClick={() => setAiStyle(key)}
                   className={cn(
-                    "w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200",
+                    "w-7 h-7 rounded-md flex items-center justify-center transition-all duration-150",
                     aiStyle === key
-                      ? "bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
-                      : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   )}
                   title={key.charAt(0).toUpperCase() + key.slice(1).replace('-', ' ')}
                 >
@@ -200,19 +286,19 @@ export function ChatPanel({
               ))}
             </div>
 
-            <div className="w-px h-5 bg-slate-200 dark:bg-slate-700" />
+            <div className="w-px h-4 bg-border" />
 
-            {/* Persona Pills */}
-            <div className="flex items-center gap-1">
+            {/* Persona pills */}
+            <div className="flex items-center gap-0.5">
               {personaConfig.map(({ key, icon: Icon, label }) => (
                 <button
                   key={key}
                   onClick={() => setAiPersona(key)}
                   className={cn(
-                    "h-7 px-2 rounded-lg flex items-center gap-1 text-[10px] font-semibold transition-all duration-200",
+                    "h-7 px-2 rounded-md flex items-center gap-1 text-[10px] font-semibold transition-all duration-150",
                     aiPersona === key
-                      ? "bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
-                      : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   )}
                   title={label}
                 >
@@ -221,7 +307,6 @@ export function ChatPanel({
                 </button>
               ))}
             </div>
-
           </div>
 
           {/* Right: Preview Toggle */}
@@ -230,21 +315,48 @@ export function ChatPanel({
             size="sm"
             onClick={onTogglePreview}
             className={cn(
-              "h-8 px-2.5 rounded-lg transition-all",
+              "h-7 px-2 rounded-md transition-all flex-shrink-0",
               isPreviewCollapsed
-                ? "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/20"
-                : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                ? "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
             )}
             title={isPreviewCollapsed ? "Show Preview" : "Hide Preview"}
           >
-            {isPreviewCollapsed ? (
-              <PanelRightOpen className="w-4 h-4" />
-            ) : (
-              <PanelRightClose className="w-4 h-4" />
-            )}
+            {isPreviewCollapsed
+              ? <PanelRightOpen className="w-4 h-4" />
+              : <PanelRightClose className="w-4 h-4" />
+            }
           </Button>
         </div>
       </div>
+
+      {/* Legal / Financial Persona Disclaimer */}
+      {aiPersona === 'legal-expert' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-start gap-2.5 animate-in fade-in">
+          <Scale className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400">
+            This is AI-generated analysis, not legal advice. Consult a qualified attorney for legal matters.
+          </p>
+        </div>
+      )}
+      {aiPersona === 'financial-expert' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-start gap-2.5 animate-in fade-in">
+          <Briefcase className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400">
+            This is AI-generated analysis, not financial advice. Consult a qualified financial advisor.
+          </p>
+        </div>
+      )}
+
+      {/* Processing Warning */}
+      {selectedDoc && selectedDoc.ocrProcessed === false && searchScope === 'document' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-center gap-2.5 animate-in fade-in">
+          <Loader2 className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-spin flex-shrink-0" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400">
+            This document is still being processed. AI chat will be available once indexing completes.
+          </p>
+        </div>
+      )}
 
       {/* Messages Area */}
       <div className="flex-1 relative overflow-hidden">
@@ -255,11 +367,14 @@ export function ChatPanel({
           searchScope={searchScope}
           selectedDocId={selectedDoc?.id}
           companyId={companyId}
+          archiveName={selectedDoc?.sourceArchiveName}
           aiStyle={aiStyle}
           aiPersona={aiPersona}
+          provider={provider}
           aiModel={aiModel}
           onPageClick={setPdfPageNumber}
           onCreateChat={onCreateChat}
+          isDocumentProcessing={selectedDoc?.ocrProcessed === false && searchScope === 'document'}
         />
       </div>
     </div>

@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "~/app/employer/documen
 import { ConfidenceBadge } from "./ConfidenceBadge";
 import { VisibilityBadge } from "./VisibilityBadge";
 import { PriorityBadge } from "./PriorityBadge";
-import type { ServiceEntry } from "~/lib/tools/company-metadata/types";
+import type { ServiceEntry, MetadataFact } from "~/lib/tools/company-metadata/types";
 
 interface ServicesSectionProps {
     services: ServiceEntry[];
@@ -119,6 +119,19 @@ function ServiceFieldEditor({
     );
 }
 
+/** Check all fields on a service for the best source to display */
+function getServiceSource(service: ServiceEntry): { docName: string; hasManualEdit: boolean } {
+    const allFacts: (MetadataFact<unknown> | undefined)[] = [
+        service.name, service.description, service.status,
+    ];
+    const hasManualEdit = allFacts.some((f) => f?.priority === "manual_override");
+    if (hasManualEdit) {
+        return { docName: "Manual edit", hasManualEdit: true };
+    }
+    const firstSource = service.name.sources[0]?.doc_name ?? "document";
+    return { docName: firstSource, hasManualEdit: false };
+}
+
 function ServiceCard({
     service,
     index,
@@ -207,15 +220,18 @@ function ServiceCard({
 
                     <div className="flex items-center gap-2 mt-3">
                         <ConfidenceBadge confidence={service.name.confidence} />
-                        {service.name.priority === "manual_override" || service.description?.priority === "manual_override" ? (
-                            <span className="text-[10px] text-violet-600 dark:text-violet-400 font-semibold">
-                                Manual edit
-                            </span>
-                        ) : service.name.sources.length > 0 ? (
-                            <span className="text-[10px] text-muted-foreground">
-                                from {service.name.sources[0]?.doc_name ?? "document"}
-                            </span>
-                        ) : null}
+                        {(() => {
+                            const { docName, hasManualEdit } = getServiceSource(service);
+                            return hasManualEdit ? (
+                                <span className="text-[10px] text-violet-600 dark:text-violet-400 font-semibold">
+                                    Manual edit
+                                </span>
+                            ) : (
+                                <span className="text-[10px] text-muted-foreground">
+                                    from {docName}
+                                </span>
+                            );
+                        })()}
                     </div>
                 </div>
             </div>

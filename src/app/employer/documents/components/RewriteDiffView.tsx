@@ -162,8 +162,10 @@ export function RewriteDiffView() {
       setSaveError(null);
       const trimmedTitle = title.trim();
       const docTitle = trimmedTitle.length > 0 ? trimmedTitle : DEFAULT_TITLE;
+      const isTempDoc = currentDocument?.id.startsWith("temp-") ?? false;
+      const usePut = currentDocument && !isTempDoc;
       try {
-        if (currentDocument) {
+        if (usePut) {
           const response = await fetch("/api/document-generator/documents", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -174,7 +176,18 @@ export function RewriteDiffView() {
               citations: citations ?? [],
             }),
           });
-          const data = (await response.json()) as { success: boolean; message?: string };
+          const text = await response.text();
+          let data: { success: boolean; message?: string };
+          try {
+            data = JSON.parse(text) as { success: boolean; message?: string };
+          } catch {
+            setSaveError(
+              response.ok
+                ? "Invalid response from server"
+                : `Failed to save (${response.status}). ${text.slice(0, 100)}`
+            );
+            return;
+          }
           if (!data.success) {
             setSaveError(data.message ?? "Failed to save document");
             return;
@@ -197,11 +210,22 @@ export function RewriteDiffView() {
               metadata: { source: "rewrite" },
             }),
           });
-          const data = (await response.json()) as {
-            success: boolean;
-            message?: string;
-            document?: { id: number };
-          };
+          const text = await response.text();
+          let data: { success: boolean; message?: string; document?: { id: number } };
+          try {
+            data = JSON.parse(text) as {
+              success: boolean;
+              message?: string;
+              document?: { id: number };
+            };
+          } catch {
+            setSaveError(
+              response.ok
+                ? "Invalid response from server"
+                : `Failed to save (${response.status}). ${text.slice(0, 100)}`
+            );
+            return;
+          }
           if (!data.success) {
             setSaveError(data.message ?? "Failed to save document");
             return;

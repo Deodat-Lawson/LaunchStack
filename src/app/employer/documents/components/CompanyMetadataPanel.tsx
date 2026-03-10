@@ -8,7 +8,9 @@ import {
   Briefcase,
   RefreshCw,
   AlertCircle,
+  AlertTriangle,
   FileText,
+  Scale,
   Sparkles,
   Pencil,
   Download,
@@ -22,7 +24,8 @@ import { ServicesSection } from "~/app/employer/metadata/components/ServicesSect
 import { MarketsSection } from "~/app/employer/metadata/components/MarketsSection";
 import { ProvenanceCard } from "~/app/employer/metadata/components/ProvenanceCard";
 import { MetadataHistorySection } from "~/app/employer/metadata/components/MetadataHistorySection";
-import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
+import { LegalSection } from "~/app/employer/metadata/components/LegalSection";
+import type { CompanyMetadataJSON, CompanyInfo, PersonEntry } from "~/lib/tools/company-metadata/types";
 
 interface CompanyProfile {
   name: string;
@@ -44,7 +47,7 @@ interface StatsCardProps {
   title: string;
   value: number | string;
   icon: React.ComponentType<{ className?: string }>;
-  color: "purple" | "blue" | "green" | "amber";
+  color: "purple" | "blue" | "green" | "amber" | "rose";
 }
 
 const colorMap = {
@@ -52,6 +55,7 @@ const colorMap = {
   blue: { border: "border-l-blue-500", text: "text-blue-500" },
   green: { border: "border-l-green-500", text: "text-green-500" },
   amber: { border: "border-l-amber-500", text: "text-amber-500" },
+  rose: { border: "border-l-rose-500", text: "text-rose-500" },
 };
 
 function MetadataStatsCard({ title, value, icon: Icon, color }: StatsCardProps) {
@@ -419,7 +423,7 @@ export function CompanyMetadataPanel() {
           </Card>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <MetadataStatsCard
                 title="Company Fields"
                 value={Object.keys(metadata.company).filter((k) => metadata.company[k]).length}
@@ -434,12 +438,20 @@ export function CompanyMetadataPanel() {
                 color="green"
               />
               <MetadataStatsCard
+                title="Legal"
+                value={(metadata.legal ?? []).length}
+                icon={Scale}
+                color="rose"
+              />
+              <MetadataStatsCard
                 title="Documents Processed"
                 value={metadata.provenance.total_documents_processed}
                 icon={FileText}
                 color="amber"
               />
             </div>
+
+            <MissingMetadataAlert company={metadata.company} people={metadata.people} />
 
             <CompanyInfoCard
               company={metadata.company}
@@ -460,6 +472,10 @@ export function CompanyMetadataPanel() {
               <MarketsSection markets={metadata.markets} isEditMode={isEditMode} onFieldSave={handleFieldSave} />
             ) : null}
 
+            {(metadata.legal ?? []).length > 0 && (
+              <LegalSection legal={metadata.legal ?? []} />
+            )}
+
             <ProvenanceCard provenance={metadata.provenance} updatedAt={data?.updatedAt} />
 
             <MetadataHistorySection />
@@ -467,5 +483,59 @@ export function CompanyMetadataPanel() {
         )}
       </div>
     </div>
+  );
+}
+
+/* Missing Metadata Alert */
+const EXPECTED_FIELDS: Array<{ key: keyof CompanyInfo; label: string }> = [
+  { key: "name", label: "Company Name" },
+  { key: "industry", label: "Industry" },
+  { key: "headquarters", label: "Headquarters" },
+  { key: "founded_year", label: "Founded Year" },
+  { key: "description", label: "Description" },
+  { key: "website", label: "Website" },
+  { key: "size", label: "Company Size" },
+];
+
+function MissingMetadataAlert({ company, people }: { company: CompanyInfo; people: PersonEntry[] }) {
+  const missingFields = EXPECTED_FIELDS.filter((f) => {
+    const field = company[f.key];
+    if (!field) return true;
+    const val = (field as { value?: unknown }).value;
+    return val === undefined || val === null || val === "";
+  });
+  const peopleWithoutRoles = people.filter((p) => !p.role);
+
+  if (missingFields.length === 0 && peopleWithoutRoles.length === 0) return null;
+
+  return (
+    <Card className="p-4 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/30 shadow-sm">
+      <div className="flex items-start gap-3">
+        <div className="p-2 bg-amber-100 dark:bg-amber-900/40 rounded-lg shrink-0">
+          <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h4 className="text-sm font-bold text-amber-800 dark:text-amber-300">
+            Incomplete Metadata
+          </h4>
+          {missingFields.length > 0 && (
+            <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+              Missing company fields:{" "}
+              <span className="font-semibold">
+                {missingFields.map((f) => f.label).join(", ")}
+              </span>
+            </p>
+          )}
+          {peopleWithoutRoles.length > 0 && (
+            <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+              {peopleWithoutRoles.length} {peopleWithoutRoles.length === 1 ? "person" : "people"} missing role information
+            </p>
+          )}
+          <p className="text-xs text-amber-600 dark:text-amber-500 mt-2">
+            Upload more documents or manually edit fields to fill in missing information.
+          </p>
+        </div>
+      </div>
+    </Card>
   );
 }

@@ -19,7 +19,7 @@ import { eq, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users, document as documentTable, documentContextChunks } from "~/server/db/schema";
-import { companyMetadata } from "~/server/db/schema/company-metadata";
+import { companyMetadata, companyMetadataHistory } from "~/server/db/schema/company-metadata";
 import { extractCompanyFacts } from "~/lib/tools/company-metadata/extractor";
 import { mergeCompanyMetadata } from "~/lib/tools/company-metadata/merger";
 import { createEmptyMetadata } from "~/lib/tools/company-metadata/types";
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
         // For incremental: merge into existing. For full: start fresh (force) or merge into existing.
         const baseMetadata = force ? null : existingRow?.metadata ?? null;
 
-        return processDocuments(docs, companyId, userInfo.companyId, baseMetadata, debug, isIncremental);
+        return processDocuments(docs, companyId, userInfo.companyId, baseMetadata, debug, isIncremental, userId);
     } catch (error) {
         console.error("[company-metadata] POST /extract error:", error);
         return NextResponse.json(
@@ -116,6 +116,7 @@ async function processDocuments(
     existingMetadata: CompanyMetadataJSON | null,
     debug: boolean,
     incremental: boolean,
+    userId: string,
 ) {
     // Debug mode: return per-document chunk counts without running extraction
     if (debug) {
@@ -196,6 +197,18 @@ async function processDocuments(
                 ...(lastDocId > 0 && { lastExtractionDocumentId: BigInt(lastDocId) }),
             },
         });
+
+    // Write audit history entry for this extraction
+    const hasChanges = allDiffs.added.length > 0 || allDiffs.updated.length > 0 || allDiffs.deprecated.length > 0;
+    if (hasChanges) {
+        await db.insert(companyMetadataHistory).values({
+            companyId: companyIdBigint,
+            documentId: lastDocId > 0 ? BigInt(lastDocId) : null,
+            changeType: "extraction",
+            diff: allDiffs,
+            changedBy: userId,
+        });
+    }
 
     return NextResponse.json({
         metadata,

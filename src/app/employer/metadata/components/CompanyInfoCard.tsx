@@ -162,7 +162,7 @@ function FieldDisplay({ label, fact, icon: Icon, isLink, fieldKey, isEditMode, o
                             <p className="text-xs text-violet-600 dark:text-violet-400 font-semibold mt-1">
                                 Manual edit
                             </p>
-                        ) : fact.sources.length > 0 ? (
+                        ) : (fact.sources?.length ?? 0) > 0 ? (
                             <p className="text-xs text-muted-foreground mt-1">
                                 Source: {fact.sources[0]?.doc_name ?? "Unknown"}
                                 {fact.sources.length > 1 && ` +${fact.sources.length - 1} more`}

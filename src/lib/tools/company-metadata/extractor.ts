@@ -38,6 +38,7 @@ import type {
     ServiceEntry,
     ProjectEntry,
     SubprojectEntry,
+    LegalEntry,
     MarketsInfo,
 } from "./types";
 
@@ -146,6 +147,16 @@ const ProjectSchema = z.object({
     subprojects: z.array(SubprojectSchema).nullable(),
 });
 
+const LegalSchema = z.object({
+    name: MetadataFactSchema,
+    type: MetadataFactSchema.nullable(),
+    summary: MetadataFactSchema.nullable(),
+    effective_date: MetadataFactSchema.nullable(),
+    expiry_date: MetadataFactSchema.nullable(),
+    parties: MetadataFactSchema.nullable(),
+    status: MetadataFactSchema.nullable(),
+});
+
 const ExtractionOutputSchema = z.object({
     company: z
         .object({
@@ -176,6 +187,9 @@ const ExtractionOutputSchema = z.object({
             }),
         )
         .describe("Company policies, certifications, or compliance facts"),
+    legal: z
+        .array(LegalSchema)
+        .describe("Legal documents, contracts, NDAs, terms of service, privacy policies, or regulatory references"),
 });
 
 type ExtractionOutput = z.infer<typeof ExtractionOutputSchema>;
@@ -236,8 +250,8 @@ export async function extractCompanyFacts(
 
     // 2b. Filter out low-value chunks to reduce LLM tokens
     const filteredChunks = sortedChunks.filter((c) => {
-        // Skip chunks tagged as legal or reference (TOCs, disclaimers)
-        if (c.semanticType === "legal" || c.semanticType === "reference") {
+        // Skip chunks tagged as reference (TOCs, disclaimers)
+        if (c.semanticType === "reference") {
             return false;
         }
         // Skip chunks that are mostly boilerplate based on content heuristics
@@ -470,6 +484,14 @@ function aggregateResults(
         }
     }
 
+    // ---- Legal: merge by normalised name ----
+    const legal = mergeNamedEntries(
+        batchResults.flatMap((r) => r.legal),
+        extractedAt,
+        source,
+        hydrateLegalEntry,
+    );
+
     // ---- Assemble ----
     return {
         document_id: documentId,
@@ -482,6 +504,7 @@ function aggregateResults(
             ...(Object.keys(markets).length > 0 && { markets }),
             ...(projects.length > 0 && { projects }),
             ...(Object.keys(policies).length > 0 && { policies }),
+            ...(legal.length > 0 && { legal }),
         },
     };
 }
@@ -591,6 +614,7 @@ type RawPerson = z.infer<typeof PersonSchema>;
 type RawService = z.infer<typeof ServiceSchema>;
 type RawProject = z.infer<typeof ProjectSchema>;
 type RawSubproject = z.infer<typeof SubprojectSchema>;
+type RawLegal = z.infer<typeof LegalSchema>;
 
 function hydratePersonEntry(
     group: RawPerson[],
@@ -694,6 +718,32 @@ function hydrateSubprojectEntry(
     };
 
     const optionalFields = ["description", "status"] as const;
+    for (const field of optionalFields) {
+        const candidates = group
+            .map((g) => g[field])
+            .filter((f): f is RawFact => f != null);
+        if (candidates.length > 0) {
+            const best = pickHighestConfidence(candidates);
+            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+        }
+    }
+
+    return entry;
+}
+
+function hydrateLegalEntry(
+    group: RawLegal[],
+    extractedAt: string,
+    source: MetadataSource,
+): LegalEntry {
+    const count = group.length;
+    const bestName = pickHighestConfidence(group.map((g) => g.name));
+
+    const entry: LegalEntry = {
+        name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
+    };
+
+    const optionalFields = ["type", "summary", "effective_date", "expiry_date", "parties", "status"] as const;
     for (const field of optionalFields) {
         const candidates = group
             .map((g) => g[field])

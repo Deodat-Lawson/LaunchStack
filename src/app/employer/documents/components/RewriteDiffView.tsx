@@ -11,6 +11,7 @@ import { RewriteWorkflow } from "./generator/RewriteWorkflow";
 import type { Citation } from "./generator";
 
 const DEFAULT_TITLE = "Untitled (Rewrite)";
+const PENDING_REWRITE_STORAGE_KEY = "pdr.pendingRewriteDraft";
 
 interface RewriteDocument {
   id: string;
@@ -28,6 +29,13 @@ interface APIDocument {
   citations?: Citation[];
   createdAt: string;
   updatedAt?: string;
+}
+
+interface PendingRewriteDraft {
+  title?: string;
+  content?: string;
+  createdAt?: number;
+  source?: string;
 }
 
 function formatRelativeTime(dateString: string): string {
@@ -92,6 +100,43 @@ export function RewriteDiffView() {
     void fetchRewriteDocuments();
   }, [fetchRewriteDocuments]);
 
+  useEffect(() => {
+    let raw: string | null = null;
+    try {
+      raw = sessionStorage.getItem(PENDING_REWRITE_STORAGE_KEY);
+      if (!raw) return;
+      sessionStorage.removeItem(PENDING_REWRITE_STORAGE_KEY);
+
+      const parsed = JSON.parse(raw) as PendingRewriteDraft;
+      const content = typeof parsed.content === "string" ? parsed.content : "";
+      if (!content.trim()) return;
+
+      const title =
+        typeof parsed.title === "string" && parsed.title.trim().length > 0
+          ? parsed.title.trim()
+          : "Rewritten Text";
+
+      const newId = tempIdCounter + 1;
+      setTempIdCounter(newId);
+      setCurrentDocument({
+        id: `temp-${componentId}-${newId}`,
+        title,
+        content,
+        lastEdited: "Just now",
+      });
+      setViewMode("editor");
+      setActiveTab("new");
+    } catch {
+      if (raw) {
+        try {
+          sessionStorage.removeItem(PENDING_REWRITE_STORAGE_KEY);
+        } catch {
+          // Ignore cleanup errors.
+        }
+      }
+    }
+  }, [componentId, tempIdCounter]);
+
   const filteredDocuments = rewriteDocuments.filter((doc) =>
     doc.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -117,8 +162,10 @@ export function RewriteDiffView() {
       setSaveError(null);
       const trimmedTitle = title.trim();
       const docTitle = trimmedTitle.length > 0 ? trimmedTitle : DEFAULT_TITLE;
+      const isTempDoc = currentDocument?.id.startsWith("temp-") ?? false;
+      const usePut = currentDocument && !isTempDoc;
       try {
-        if (currentDocument) {
+        if (usePut) {
           const response = await fetch("/api/document-generator/documents", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -129,7 +176,18 @@ export function RewriteDiffView() {
               citations: citations ?? [],
             }),
           });
-          const data = (await response.json()) as { success: boolean; message?: string };
+          const text = await response.text();
+          let data: { success: boolean; message?: string };
+          try {
+            data = JSON.parse(text) as { success: boolean; message?: string };
+          } catch {
+            setSaveError(
+              response.ok
+                ? "Invalid response from server"
+                : `Failed to save (${response.status}). ${text.slice(0, 100)}`
+            );
+            return;
+          }
           if (!data.success) {
             setSaveError(data.message ?? "Failed to save document");
             return;
@@ -152,11 +210,22 @@ export function RewriteDiffView() {
               metadata: { source: "rewrite" },
             }),
           });
-          const data = (await response.json()) as {
-            success: boolean;
-            message?: string;
-            document?: { id: number };
-          };
+          const text = await response.text();
+          let data: { success: boolean; message?: string; document?: { id: number } };
+          try {
+            data = JSON.parse(text) as {
+              success: boolean;
+              message?: string;
+              document?: { id: number };
+            };
+          } catch {
+            setSaveError(
+              response.ok
+                ? "Invalid response from server"
+                : `Failed to save (${response.status}). ${text.slice(0, 100)}`
+            );
+            return;
+          }
           if (!data.success) {
             setSaveError(data.message ?? "Failed to save document");
             return;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { 
   CheckCircle, 
   ArrowRight, 
@@ -18,6 +18,7 @@ import { Card } from "../ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Badge } from "../ui/badge";
+import { Switch } from "../ui/switch";
 import { cn } from "~/lib/utils";
 import { RewritePreviewPanel } from "./RewritePreviewPanel";
 
@@ -25,15 +26,25 @@ interface RewriteWorkflowProps {
   initialText?: string;
   onComplete: (rewrittenText: string) => void;
   onCancel: () => void;
+  persistedState?: Partial<RewriteWorkflowStateSnapshot>;
+  onStateChange?: (state: RewriteWorkflowStateSnapshot) => void;
 }
 
-type WorkflowStep = 'input' | 'options' | 'preview' | 'complete';
+export type WorkflowStep = 'input' | 'options' | 'preview' | 'complete';
 
-interface RewriteOptions {
+export interface RewriteOptions {
   tone: 'professional' | 'casual' | 'formal' | 'technical' | 'creative' | 'persuasive';
   length: 'brief' | 'medium' | 'detailed' | 'comprehensive';
   audience: 'general' | 'technical' | 'executives' | 'students' | 'customers' | 'team';
   customPrompt?: string;
+}
+
+export interface RewriteWorkflowStateSnapshot {
+  currentStep: WorkflowStep;
+  text: string;
+  options: RewriteOptions;
+  rewrittenText: string;
+  isDraftMode: boolean;
 }
 
 const TONE_OPTIONS = [
@@ -61,17 +72,30 @@ const AUDIENCE_OPTIONS = [
   { value: 'team', label: 'Team Members', desc: 'Internal colleagues' }
 ] as const;
 
-export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: RewriteWorkflowProps) {
-  const [currentStep, setCurrentStep] = useState<WorkflowStep>(initialText ? 'options' : 'input');
-  const [text, setText] = useState(initialText);
+export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persistedState, onStateChange }: RewriteWorkflowProps) {
+  const [currentStep, setCurrentStep] = useState<WorkflowStep>(persistedState?.currentStep ?? (initialText ? 'options' : 'input'));
+  const [text, setText] = useState(persistedState?.text ?? initialText);
   const [options, setOptions] = useState<RewriteOptions>({
-    tone: 'professional',
-    length: 'medium',
-    audience: 'general'
+    tone: persistedState?.options?.tone ?? 'professional',
+    length: persistedState?.options?.length ?? 'medium',
+    audience: persistedState?.options?.audience ?? 'general',
+    customPrompt: persistedState?.options?.customPrompt ?? "",
   });
-  const [rewrittenText, setRewrittenText] = useState("");
+  const [rewrittenText, setRewrittenText] = useState(persistedState?.rewrittenText ?? "");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDraftMode, setIsDraftMode] = useState(persistedState?.isDraftMode ?? true);
+
+  useEffect(() => {
+    if (!onStateChange) return;
+    onStateChange({
+      currentStep,
+      text,
+      options,
+      rewrittenText,
+      isDraftMode,
+    });
+  }, [currentStep, isDraftMode, onStateChange, options, rewrittenText, text]);
 
   const handleRewrite = useCallback(async () => {
     if (!text.trim()) return;
@@ -98,8 +122,12 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
       const data = await response.json() as { success: boolean; message?: string; generatedContent?: string };
       
       if (data.success && typeof data.generatedContent === "string" && data.generatedContent.trim().length > 0) {
-        setRewrittenText(data.generatedContent);
-        setCurrentStep('preview');
+        if (isDraftMode) {
+          setRewrittenText(data.generatedContent);
+          setCurrentStep('preview');
+        } else {
+          onComplete(data.generatedContent);
+        }
       } else {
         setError(data.message ?? 'Failed to rewrite text');
       }
@@ -109,7 +137,7 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
     } finally {
       setIsProcessing(false);
     }
-  }, [text, options]);
+  }, [isDraftMode, onComplete, options, text]);
 
   const handleAcceptRewrite = useCallback(() => {
     onComplete(rewrittenText);
@@ -316,6 +344,20 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
             />
           </div>
 
+          <div className="mb-6 flex items-start justify-between gap-4 rounded-lg border border-border bg-muted/30 p-4">
+            <div>
+              <p className="text-sm font-medium">Draft Mode</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                ON: show generated draft below so you can regenerate or push to Rewrite. OFF: open Rewrite editor directly with the generated content.
+              </p>
+            </div>
+            <Switch
+              aria-label="Draft mode"
+              checked={isDraftMode}
+              onCheckedChange={setIsDraftMode}
+            />
+          </div>
+
           <div className="border-t pt-4">
             <div className="mb-4">
               <p className="text-sm font-medium mb-2">Selected Options:</p>
@@ -345,7 +387,7 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 mr-2" />
-                  Generate Rewrite
+                  {isDraftMode ? "Generate Draft" : "Generate a Document"}
                 </>
               )}
             </Button>
@@ -376,14 +418,14 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
             proposedText={rewrittenText}
             onAccept={handleAcceptRewrite}
             onReject={onCancel}
-            onTryAgain={handleRetry}
+            onTryAgain={handleRewrite}
             isRetrying={isProcessing}
           />
 
           <div className="flex gap-3">
             <Button variant="outline" onClick={handleRetry}>
               <RotateCw className="w-4 h-4 mr-2" />
-              Try Different Options
+              Edit Options
             </Button>
             <Button variant="outline" onClick={onCancel}>
               Cancel
@@ -393,7 +435,7 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
               className="bg-green-600 hover:bg-green-700 text-white"
             >
               <Check className="w-4 h-4 mr-2" />
-              Accept Rewrite
+              Push to Rewrite
             </Button>
           </div>
         </div>

@@ -1,3 +1,95 @@
+/* New styles for marketing pipeline session history list and controls */
+.sessionPanel {
+    border-radius: 1rem;
+    border: 1px solid rgba(124, 58, 237, 0.18);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.08);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.sessionPanelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+}
+
+.sessionPanelTitle {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.newSessionButton {
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+    padding: 0.25rem 0.7rem;
+    cursor: pointer;
+}
+
+.newSessionButton:hover {
+    background: rgba(124, 58, 237, 0.08);
+    color: var(--foreground);
+}
+
+.sessionEmpty {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--muted-foreground);
+}
+
+.sessionList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /* Grow with content, then scroll after ~5 session rows */
+    max-height: calc((5 * 72px) + (4 * 0.5rem));
+    overflow: auto;
+    padding-right: 0.2rem;
+}
+
+.sessionItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    width: 100%;
+    border-radius: 0.65rem;
+    border: 1px solid var(--border);
+    background: var(--background);
+    color: var(--foreground);
+    text-align: left;
+    padding: 0.6rem 0.7rem;
+    cursor: pointer;
+}
+
+.sessionItem:hover {
+    border-color: rgba(124, 58, 237, 0.35);
+    background: rgba(124, 58, 237, 0.06);
+}
+
+.sessionItemActive {
+    border-color: rgba(124, 58, 237, 0.45);
+    background: rgba(124, 58, 237, 0.11);
+}
+
+.sessionItemTitle {
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.sessionItemMeta {
+    font-size: 0.74rem;
+    color: var(--muted-foreground);
+}
 /* Back button in nav */
 .backNavButton {
     display: inline-flex;
@@ -21,7 +113,8 @@
 
 /* Main container with gradient background */
 .main {
-    max-width: 56rem;
+    width: 100%;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 1.5rem 1.25rem 2rem;
     min-height: calc(100vh - 4rem);
@@ -1200,14 +1293,80 @@
 }
 
 /* Final layout overrides: use top-down flow instead of left-right */
+.workspaceLayout {
+    grid-template-columns: 250px minmax(0, 1fr) !important;
+    display: grid;
+    gap: 1.25rem !important;
+    align-items: start;
+}
+
 .workspaceShell {
     grid-template-columns: minmax(0, 1fr) !important;
+    display: grid;
     gap: 1.25rem !important;
+}
+
+.sessionSidebar {
+    position: sticky;
+    top: 1.25rem;
+}
+
+.workspaceMain {
+    display: grid;
+    grid-template-columns: minmax(520px, 1.35fr) minmax(360px, 1fr);
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+.workspaceMainSingle {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.workspaceLeft {
+    min-width: 0;
+}
+
+.workspaceMainHeader {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.1rem 0 0.35rem;
+}
+
+.workspaceMainTitle {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.assistantContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 .workspaceRight {
     position: static !important;
     top: auto !important;
+}
+
+@media (max-width: 1200px) {
+    .workspaceMain {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 960px) {
+    .workspaceLayout {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .sessionSidebar {
+        position: static;
+        top: auto;
+    }
 }
 
 /* Keep long assistant output readable */
@@ -1228,6 +1387,7 @@
 
 .researchSnippet {
     display: -webkit-box;
+    line-clamp: 3;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;

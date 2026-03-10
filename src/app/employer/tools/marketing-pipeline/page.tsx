@@ -312,7 +312,14 @@ export default function MarketingPipelinePage() {
                 }),
             });
 
-            const payload = (await response.json()) as PipelineResponse;
+            const text = await response.text();
+            let payload: PipelineResponse;
+            try {
+                payload = JSON.parse(text) as PipelineResponse;
+            } catch {
+                setError(text?.slice(0, 120) ?? "Server returned an invalid response. Please try again.");
+                return;
+            }
             if (!response.ok || !payload.success || !payload.data) {
                 setError(payload.message ?? "We couldn't generate a campaign right now. Please try again.");
                 return;
@@ -647,30 +654,30 @@ export default function MarketingPipelinePage() {
                                             </SheetContent>
                                         </Sheet>
 
-                                        {result.research.length > 0 && (
-                                            <>
-                                                <div className={styles.assistantSectionHeader}>Trend references</div>
-                                                <div className={styles.researchList}>
-                                                    {result.research.map((item, index) => (
-                                                        <article
-                                                            key={`${item.url}-${item.source}-${index}`}
-                                                            className={styles.researchItem}
+                                        <div className={styles.assistantSectionHeader}>Trend references</div>
+                                        <div className={styles.researchList}>
+                                            {(result.research ?? []).length > 0 ? (
+                                                (result.research ?? []).map((item, index) => (
+                                                    <article
+                                                        key={`${item.url}-${item.source}-${index}`}
+                                                        className={styles.researchItem}
+                                                    >
+                                                        <div className={styles.researchTitle}>{item.title}</div>
+                                                        <a
+                                                            className={styles.researchLink}
+                                                            href={item.url}
+                                                            target="_blank"
+                                                            rel="noreferrer"
                                                         >
-                                                            <div className={styles.researchTitle}>{item.title}</div>
-                                                            <a
-                                                                className={styles.researchLink}
-                                                                href={item.url}
-                                                                target="_blank"
-                                                                rel="noreferrer"
-                                                            >
-                                                                {item.url}
-                                                            </a>
-                                                            <p className={styles.researchSnippet}>{item.snippet}</p>
-                                                        </article>
-                                                    ))}
-                                                </div>
-                                            </>
-                                        )}
+                                                            {item.url}
+                                                        </a>
+                                                        <p className={styles.researchSnippet}>{item.snippet}</p>
+                                                    </article>
+                                                ))
+                                            ) : (
+                                                <p className={styles.sessionEmpty}>No trend references available for this campaign.</p>
+                                            )}
+                                        </div>
                                     </div>
                                 )}
                             </div>

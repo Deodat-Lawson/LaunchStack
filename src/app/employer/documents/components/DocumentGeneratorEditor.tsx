@@ -398,7 +398,14 @@ export function DocumentGeneratorEditor({
         }),
       });
 
-      const data = (await response.json()) as { success: boolean; generatedContent?: string };
+      const rawText = await response.text();
+      let data: { success: boolean; generatedContent?: string; message?: string; error?: string };
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        setAiError(rawText?.slice(0, 120) || "Server returned an invalid response. Please try again.");
+        return;
+      }
 
       if (data.success && data.generatedContent) {
         const generatedContent = data.generatedContent;
@@ -511,7 +518,14 @@ export function DocumentGeneratorEditor({
           options: { tone: "professional", length: "medium" },
         }),
       });
-      const data = (await response.json()) as { success: boolean; generatedContent?: string };
+      const rawText = await response.text();
+      let data: { success: boolean; generatedContent?: string };
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        setAiError(rawText?.slice(0, 120) || "Server returned an invalid response. Please try again.");
+        return;
+      }
       if (data.success && data.generatedContent) {
         setRewritePreview((p) => (p ? { ...p, proposedText: stripRewriteQuotes(data.generatedContent!) } : null));
       }

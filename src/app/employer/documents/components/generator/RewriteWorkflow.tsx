@@ -119,7 +119,14 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persis
         })
       });
 
-      const data = await response.json() as { success: boolean; message?: string; generatedContent?: string };
+      const responseText = await response.text();
+      let data: { success: boolean; message?: string; generatedContent?: string; error?: string };
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        setError(responseText?.slice(0, 120) || 'Server returned an invalid response. Please try again.');
+        return;
+      }
       
       if (data.success && typeof data.generatedContent === "string" && data.generatedContent.trim().length > 0) {
         if (isDraftMode) {
@@ -129,7 +136,7 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persis
           onComplete(data.generatedContent);
         }
       } else {
-        setError(data.message ?? 'Failed to rewrite text');
+        setError(data.message ?? data.error ?? 'Failed to rewrite text');
       }
     } catch (err) {
       console.error('Rewrite request failed', err);

@@ -140,7 +140,15 @@ export async function POST(request: Request) {
             );
         }
 
-        const body = await request.json() as unknown;
+        let body: unknown;
+        try {
+            body = (await request.json()) as unknown;
+        } catch {
+            return NextResponse.json(
+                { success: false, message: "Invalid JSON body", error: "Request body must be valid JSON" },
+                { status: 400 },
+            );
+        }
         const validation = GenerateSchema.safeParse(body);
 
         if (!validation.success) {
@@ -153,8 +161,8 @@ export async function POST(request: Request) {
         const { action, content, prompt, context, options } = validation.data;
         const startTime = Date.now();
 
-        // Get the AI model
-        const modelId = (options?.model ?? "gpt-5-mini") as AIModelType;
+        // Get the AI model (gpt-4o is widely available; gpt-5-mini may require newer API access)
+        const modelId = (options?.model ?? "gpt-4o") as AIModelType;
         const chat = getChatModel(modelId);
 
         // Build the system prompt
@@ -293,13 +301,17 @@ Now refine it further:
         });
 
     } catch (error) {
+        const errMessage = error instanceof Error ? error.message : String(error);
+        const stack = error instanceof Error ? error.stack : undefined;
+        console.error("[document-generator/generate] error:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to generate content",
-                error: error instanceof Error ? error.message : "Unknown error"
+                error: errMessage,
+                ...(process.env.NODE_ENV === "development" && stack ? { stack } : {}),
             },
-            { status: 500 }
+            { status: 500, headers: { "Content-Type": "application/json" } },
         );
     }
 }

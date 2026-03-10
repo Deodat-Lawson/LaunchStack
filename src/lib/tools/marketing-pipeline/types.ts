@@ -6,13 +6,14 @@ import { z } from "zod";
  * so model has to be stricter
  */
 
+/** OpenAI structured outputs require .nullable() instead of .optional() - all fields must be present. */
 export const EvidenceCitationSchema = z.object({
-  documentId: z.union([z.string(), z.number()]).optional(),
-  title: z.string().optional(),
-  page: z.number().int().optional(),
-  sectionPath: z.string().optional(),
+  documentId: z.union([z.string(), z.number()]).nullable(),
+  title: z.string().nullable(),
+  page: z.number().int().nullable(),
+  sectionPath: z.string().nullable(),
   snippet: z.string().min(1),
-  sourceType: z.string().optional(),
+  sourceType: z.string().nullable(),
 });
 
 export type EvidenceCitation = z.infer<typeof EvidenceCitationSchema>;

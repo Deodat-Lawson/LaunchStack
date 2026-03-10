@@ -27,11 +27,6 @@ export interface BaseSearchMetadata {
 }
 
 export interface SearchResult<T extends BaseSearchMetadata = BaseSearchMetadata> {
-  retrievalMethod: string | undefined;
-  source: string | undefined;
-  pageNumber: number | undefined;
-  title: string | undefined;
-  documentId: string | number | undefined;
   pageContent: string;
   metadata: T;
 }
@@ -61,11 +56,10 @@ export interface SearchFilters {
 }
 
 export interface EnsembleSearchOptions {
-  weights?: number[];
+  weights?: [number, number];
   topK?: number;
   minSimilarity?: number;
   filters?: SearchFilters;
-  companyId?: number;
 }
 
 export interface DocumentSearchOptions extends EnsembleSearchOptions {

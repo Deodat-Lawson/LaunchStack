@@ -1,13 +1,12 @@
-# Dependencies (reinstalled inside container)
+# Dependencies
 node_modules
 .pnp
 .pnp.js
 
-# Build output (rebuilt inside container)
+# Build output
 .next
 out
 build
-dist
 
 # Generated assets (created by postinstall from node_modules)
 public/vad
@@ -25,41 +24,24 @@ __tests__
 *.spec.tsx
 jest.config.js
 jest.babel.config.cjs
-playwright.config.*
-playwright-report
 
-# Env files
 .env
-.env.*
+.env*.local
 
-# IDE and editor
+# IDE and misc
 .DS_Store
 .idea
-.vscode
-*.swp
-*.swo
-
-# Docs (not needed in image)
 *.md
 !README.md
 
 # Vercel
 .vercel
 
-# Debug logs
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# TypeScript incremental
+# TypeScript
 *.tsbuildinfo
-
-# Sidecar (has its own build context)
-sidecar
-
-# Docker files (don't copy into context recursively)
-docker-compose*.yml
-Dockerfile
-.dockerignore
-start-database.sh

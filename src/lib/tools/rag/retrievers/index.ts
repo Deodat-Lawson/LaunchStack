@@ -33,9 +33,3 @@ export type {
 } from "./rlm-retriever";
 
 export { GraphRetriever, createGraphRetriever } from "./graph-retriever";
-
-export {
-  Neo4jGraphRetriever,
-  createNeo4jGraphRetriever,
-  shouldUseNeo4jRetriever,
-} from "./neo4j-graph-retriever";

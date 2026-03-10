@@ -8,7 +8,7 @@ import {
     TrendSearchInputSchema,
     TrendSearchEventDataSchema,
     SearchCategoryEnum,
-} from "~/lib/tools/trend-search/types";
+} from "~/server/trend-search/types";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

@@ -190,7 +190,7 @@ export async function POST(request: Request) {
         const startTime = Date.now();
 
         // Get the AI model
-        const modelId = (options?.model ?? "gpt-5-mini") as AIModelType;
+        const modelId = (options?.model ?? "gpt-4o") as AIModelType;
         const chat = getChatModel(modelId);
 
         let systemPrompt: string;

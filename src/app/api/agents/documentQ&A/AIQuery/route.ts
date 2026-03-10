@@ -20,15 +20,13 @@ import {
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModelForProvider,
-    getProviderDefaultModel,
-    describeProviderError,
+    getChatModel,
     getEmbeddings,
     extractRecommendedPages,
     filterPagesByAICitation,
 } from "../services";
+import type { AIModelType } from "../services";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
-import { validateQAResponse } from "~/lib/agents/supervisor";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -81,7 +79,6 @@ export async function POST(request: Request) {
                 enableWebSearch,
                 aiPersona,
                 aiModel,
-                provider,
                 conversationHistory,
             } = validation.data;
 
@@ -141,9 +138,9 @@ export async function POST(request: Request) {
 
             try {
                 const documentOptions: DocumentSearchOptions = {
-                    topK: 5,
-                    documentId,
-                    companyId: Number(requestingUser.companyId),
+                    weights: [0.4, 0.6],
+                    topK: 5, // Fast query - limit results
+                    documentId
                 };
                 
                 documents = await documentEnsembleSearch(
@@ -242,12 +239,8 @@ export async function POST(request: Request) {
             );
 
             // Get AI model and generate response
-            const resolvedProvider = provider ?? "openai";
-            const resolvedModel = aiModel ?? getProviderDefaultModel(resolvedProvider);
-            const chat = getChatModelForProvider({
-                provider: resolvedProvider,
-                model: resolvedModel,
-            });
+            const selectedAiModel = (aiModel ?? 'gpt4') as AIModelType;
+            const chat = getChatModel(selectedAiModel);
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
             // Build conversation context
@@ -267,35 +260,13 @@ export async function POST(request: Request) {
 
             const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${webSearchInstruction}\n\nProvide a natural, conversational answer based primarily on the provided content. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
             
-            let response;
-            try {
-                response = await chat.call([
-                    new SystemMessage(systemPrompt),
-                    new HumanMessage(userPrompt),
-                ]);
-            } catch (modelError) {
-                const friendly = describeProviderError(resolvedProvider, modelError, resolvedModel);
-                if (friendly) {
-                    recordResult("error");
-                    return NextResponse.json(
-                        {
-                            success: false,
-                            message: friendly.message,
-                        },
-                        { status: friendly.status },
-                    );
-                }
-                throw modelError;
-            }
+            const response = await chat.call([
+                new SystemMessage(systemPrompt),
+                new HumanMessage(userPrompt),
+            ]);
 
-            let summarizedAnswer = normalizeModelContent(response.content);
+            const summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;
-
-            const sourceTexts = documents.map(d => d.pageContent);
-            const supervision = validateQAResponse(summarizedAnswer, sourceTexts, aiPersona);
-            if (supervision.adjustedOutput) {
-                summarizedAnswer = supervision.adjustedOutput;
-            }
 
             recordResult("success");
 
@@ -311,17 +282,13 @@ export async function POST(request: Request) {
                 chunksAnalyzed: documents.length,
                 fusionWeights: [0.4, 0.6],
                 searchScope: 'document',
-                aiModel: resolvedModel,
+                aiModel: selectedAiModel,
                 webSources: enableWebSearch ? webSearch.results : undefined,
                 webSearch: enableWebSearch ? {
                     refinedQuery: webSearch.refinedQuery || question,
                     reasoning: webSearch.reasoning,
                     resultsCount: webSearch.results.length
-                } : undefined,
-                disclaimer: supervision.disclaimer,
-                guardrails: !supervision.approved ? {
-                    warnings: supervision.issues,
-                } : undefined,
+                } : undefined
             });
 
         } catch (error) {

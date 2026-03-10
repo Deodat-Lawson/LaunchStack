@@ -1,5 +1,4 @@
 export { runMarketingPipeline } from "~/lib/tools/marketing-pipeline/run";
-export { publishContent, type PublishResult } from "~/lib/tools/marketing-pipeline/publish";
 export {
     MarketingPipelineInputSchema,
     MarketingPipelineOutputSchema,

@@ -60,31 +60,31 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
         </ul>
       </Section>
 
-      <Section title="UploadThing vs Vercel Blob" darkMode={darkMode}>
+      <Section title="Cloud vs Database Storage" darkMode={darkMode}>
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-          PDR AI supports two cloud storage backends for uploaded documents. Vercel Blob is the default and required; UploadThing is an optional alternative.
+          PDR AI supports two storage methods for uploaded documents:
         </p>
         <div className="grid md:grid-cols-2 gap-4">
-          <div className={`p-4 rounded-xl ${darkMode ? 'bg-slate-800/50 border border-slate-600/30' : 'bg-slate-50 border border-slate-200'}`}>
-            <h4 className={`font-semibold mb-2 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Vercel Blob (Default)
-            </h4>
-            <ul className={`text-sm space-y-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>• Required — used by default for all uploads</li>
-              <li>• Native Vercel integration</li>
-              <li>• Edge-optimized delivery</li>
-              <li>• Public &amp; private store support</li>
-            </ul>
-          </div>
           <div className={`p-4 rounded-xl ${darkMode ? 'bg-purple-900/30 border border-purple-500/30' : 'bg-purple-50 border border-purple-200'}`}>
             <h4 className={`font-semibold mb-2 ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}>
-              UploadThing (Optional)
+              Cloud Storage (UploadThing)
             </h4>
             <ul className={`text-sm space-y-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>• Optional alternative upload path</li>
+              <li>• Better performance for large files</li>
               <li>• CDN-backed delivery</li>
-              <li>• Type-safe file routing</li>
               <li>• Requires UploadThing account</li>
+              <li>• Recommended for production</li>
+            </ul>
+          </div>
+          <div className={`p-4 rounded-xl ${darkMode ? 'bg-slate-800/50 border border-slate-600/30' : 'bg-slate-50 border border-slate-200'}`}>
+            <h4 className={`font-semibold mb-2 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+              Database Storage
+            </h4>
+            <ul className={`text-sm space-y-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <li>• No external service required</li>
+              <li>• Files stored in PostgreSQL</li>
+              <li>• Good for development/testing</li>
+              <li>• Works offline</li>
             </ul>
           </div>
         </div>
@@ -126,17 +126,17 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
 
           <div>
             <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Step 4: Select UploadThing in the Upload Page
+              Step 4: Enable Cloud Storage
             </h3>
             <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-              Once configured, you can toggle between Vercel Blob and UploadThing in the storage method selector on the upload page. 
+              Once configured, you can toggle between Cloud and Database storage on the upload page. 
               The preference is saved per-company and persists across sessions.
             </p>
           </div>
 
           <WarningBox
             title="Note"
-            description="Without UploadThing configured, PDR AI uses Vercel Blob for all uploads. UploadThing is fully optional — Vercel Blob is the required default storage backend."
+            description="Without UploadThing configured, PDR AI will use database storage which stores files directly in PostgreSQL. This works well for development but cloud storage is recommended for production deployments."
             darkMode={darkMode}
           />
         </div>

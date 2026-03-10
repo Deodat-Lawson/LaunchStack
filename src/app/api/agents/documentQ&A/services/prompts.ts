@@ -30,29 +30,6 @@ export function getSystemPrompt(
     const config = RESPONSE_STYLES[styleId as ResponseStyleId] ?? RESPONSE_STYLES[DEFAULT_STYLE];
     let prompt = config.systemPrompt;
     
-    if (persona === 'legal-expert') {
-        prompt = `${prompt}
-
-LEGAL EXPERT MODE:
-You are assisting with legal document analysis. While you provide detailed and thorough analysis, you must:
-1. Always include a brief disclaimer that your output is AI-generated analysis, NOT legal advice
-2. Recommend consulting a qualified attorney for binding legal decisions
-3. Flag areas of ambiguity or risk clearly
-4. Never claim certainty about legal outcomes or jurisdictional interpretations
-5. When analyzing contracts, highlight potential issues but note they require professional review`;
-    }
-
-    if (persona === 'financial-expert') {
-        prompt = `${prompt}
-
-FINANCIAL EXPERT MODE:
-You are assisting with financial document analysis. While you provide detailed and thorough analysis, you must:
-1. Always include a brief disclaimer that your output is AI-generated analysis, NOT financial advice
-2. Recommend consulting a qualified financial advisor for investment or major financial decisions
-3. Flag areas of uncertainty in financial projections or estimates
-4. Never guarantee financial outcomes or returns`;
-    }
-
     if (persona === 'learning-coach') {
         prompt = `${prompt}
 

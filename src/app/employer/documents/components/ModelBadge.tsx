@@ -10,6 +10,7 @@ interface ModelBadgeProps {
 // Model configuration with colors and icons
 const modelConfig: Record<string, { label: string; color: string; bgColor: string; borderColor: string; icon: typeof Sparkles }> = {
   // OpenAI Models - Blue/Teal
+  'gpt-4o': { label: 'GPT-4o', color: 'text-blue-700 dark:text-blue-300', bgColor: 'bg-blue-50 dark:bg-blue-950/30', borderColor: 'border-blue-200 dark:border-blue-800/50', icon: Zap },
   'gpt-5.2': { label: 'GPT-5.2', color: 'text-blue-700 dark:text-blue-300', bgColor: 'bg-blue-50 dark:bg-blue-950/30', borderColor: 'border-blue-200 dark:border-blue-800/50', icon: Zap },
   'gpt-5.1': { label: 'GPT-5.1', color: 'text-blue-700 dark:text-blue-300', bgColor: 'bg-blue-50 dark:bg-blue-950/30', borderColor: 'border-blue-200 dark:border-blue-800/50', icon: Zap },
   'gpt-5-nano': { label: 'GPT-5 Nano', color: 'text-cyan-700 dark:text-cyan-300', bgColor: 'bg-cyan-50 dark:bg-cyan-950/30', borderColor: 'border-cyan-200 dark:border-cyan-800/50', icon: Zap },
@@ -18,15 +19,6 @@ const modelConfig: Record<string, { label: string; color: string; bgColor: strin
   // Anthropic Models - Purple
   'claude-sonnet-4': { label: 'Claude Sonnet 4', color: 'text-purple-700 dark:text-purple-300', bgColor: 'bg-purple-50 dark:bg-purple-950/30', borderColor: 'border-purple-200 dark:border-purple-800/50', icon: Brain },
   'claude-opus-4.5': { label: 'Claude Opus 4.5', color: 'text-purple-700 dark:text-purple-300', bgColor: 'bg-purple-50 dark:bg-purple-950/30', borderColor: 'border-purple-200 dark:border-purple-800/50', icon: Brain },
-
-  // Ollama Models - Green
-  'llama3.1:8b': { label: 'Llama 3.1 8B', color: 'text-green-700 dark:text-green-300', bgColor: 'bg-green-50 dark:bg-green-950/30', borderColor: 'border-green-200 dark:border-green-800/50', icon: Zap },
-  'llama3.2:3b': { label: 'Llama 3.2 3B', color: 'text-green-700 dark:text-green-300', bgColor: 'bg-green-50 dark:bg-green-950/30', borderColor: 'border-green-200 dark:border-green-800/50', icon: Zap },
-  'mistral:7b': { label: 'Mistral 7B', color: 'text-green-700 dark:text-green-300', bgColor: 'bg-green-50 dark:bg-green-950/30', borderColor: 'border-green-200 dark:border-green-800/50', icon: Zap },
-  'codellama:7b': { label: 'Code Llama 7B', color: 'text-green-700 dark:text-green-300', bgColor: 'bg-green-50 dark:bg-green-950/30', borderColor: 'border-green-200 dark:border-green-800/50', icon: Zap },
-  'gemma2:9b': { label: 'Gemma 2 9B', color: 'text-green-700 dark:text-green-300', bgColor: 'bg-green-50 dark:bg-green-950/30', borderColor: 'border-green-200 dark:border-green-800/50', icon: Zap },
-  'phi3:mini': { label: 'Phi-3 Mini', color: 'text-green-700 dark:text-green-300', bgColor: 'bg-green-50 dark:bg-green-950/30', borderColor: 'border-green-200 dark:border-green-800/50', icon: Zap },
-  'qwen2.5:7b': { label: 'Qwen 2.5 7B', color: 'text-green-700 dark:text-green-300', bgColor: 'bg-green-50 dark:bg-green-950/30', borderColor: 'border-green-200 dark:border-green-800/50', icon: Zap },
 
   // Google Models - Orange/Amber
   'gemini-2.5-flash': { label: 'Gemini 2.5 Flash', color: 'text-orange-700 dark:text-orange-300', bgColor: 'bg-orange-50 dark:bg-orange-950/30', borderColor: 'border-orange-200 dark:border-orange-800/50', icon: Sparkles },

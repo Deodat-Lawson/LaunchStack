@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { FileText, FileImage, FileSpreadsheet, FileCode, Loader2, AlertTriangle, RotateCw, Presentation, Archive } from 'lucide-react';
+import { FileText, FileImage, FileSpreadsheet, FileCode, Loader2, AlertTriangle, RotateCw, Presentation } from 'lucide-react';
 import type { DocumentType } from '../types';
 import { getDocumentDisplayType, type DocumentDisplayType } from '../types/document';
 import { DocxViewer } from './DocxViewer';
 import { XlsxViewer } from './XlsxViewer';
 import { PptxViewer } from './PptxViewer';
 import { ImageViewer } from './ImageViewer';
-import { CodeViewer } from './CodeViewer';
 
 interface DocumentViewerProps {
   document: DocumentType | null;
@@ -26,8 +25,6 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
   xlsx: "Spreadsheet",
   pptx: "Presentation",
   text: "Text / HTML",
-  code: "Source Code",
-  zip: "Archive",
   unknown: "File",
 };
 
@@ -38,8 +35,6 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
   xlsx: FileSpreadsheet,
   pptx: Presentation,
   text: FileCode,
-  code: FileCode,
-  zip: Archive,
   unknown: FileText,
 };
 
@@ -177,9 +172,6 @@ export function DocumentViewer({
         return <XlsxViewer url={document.url} title={document.title} />;
       case "pptx":
         return <PptxViewer url={document.url} title={document.title} />;
-      case "code":
-        return <CodeViewer url={document.url} title={document.title} mimeType={document.mimeType} />;
-      case "zip":
       case "text":
         return (
           <IframeWithState

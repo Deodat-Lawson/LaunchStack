@@ -9,12 +9,12 @@ jest.mock("~/server/db", () => ({
     db: {},
 }));
 
-jest.mock("~/lib/tools/trend-search/run", () => ({
+jest.mock("~/server/trend-search/run", () => ({
     runTrendSearch: jest.fn(),
 }));
 
-jest.mock("~/lib/tools/trend-search/db", () => {
-    const actual = jest.requireActual("~/lib/tools/trend-search/db");
+jest.mock("~/server/trend-search/db", () => {
+    const actual = jest.requireActual("~/server/trend-search/db");
 
     return {
         ...actual,
@@ -23,17 +23,17 @@ jest.mock("~/lib/tools/trend-search/db", () => {
     };
 });
 
-import { createTrendSearchJobHelpers } from "~/lib/tools/trend-search/db";
-import * as trendSearchDb from "~/lib/tools/trend-search/db";
+import { createTrendSearchJobHelpers } from "~/server/trend-search/db";
+import * as trendSearchDb from "~/server/trend-search/db";
 import { trendSearchJob } from "~/server/inngest/functions/trendSearch";
-import { runTrendSearch } from "~/lib/tools/trend-search/run";
+import { runTrendSearch } from "~/server/trend-search/run";
 import type {
     SearchCategory,
     SearchResult,
     TrendSearchJobStatus,
     TrendSearchOutput,
-} from "~/lib/tools/trend-search/types";
-import { SearchCategoryEnum } from "~/lib/tools/trend-search/types";
+} from "~/server/trend-search/types";
+import { SearchCategoryEnum } from "~/server/trend-search/types";
 
 type StoredRow = {
     id: string;

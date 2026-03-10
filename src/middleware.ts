@@ -122,7 +122,7 @@ export default clerkMiddleware(async (auth, req) => {
                 if (!existingUser) {
                     // User exists in Clerk but not in DB – send to signup to finish registration
                     if (pathname !== '/signup') {
-                        return NextResponse.redirect(new URL('/signup?from=signin', req.url));
+                        return NextResponse.redirect(new URL('/signup', req.url));
                     }
                 } else if (hasCodeParam) {
                     // Let the signup page handle the "already registered" error
@@ -145,12 +145,12 @@ export default clerkMiddleware(async (auth, req) => {
                         return NextResponse.redirect(new URL('/employee/documents', req.url));
                     }
                     if (isEmployeePath(pathname) && !isEmployeeRole) {
-                        return NextResponse.redirect(new URL('/employer/documents', req.url));
+                        return NextResponse.redirect(new URL('/employer/home', req.url));
                     }
                 } else if (isAuthRedirectRoute(req)) {
                     // Verified user on / or /signup – send to their dashboard
                     if (existingUser.role === "employer" || existingUser.role === "owner") {
-                        return NextResponse.redirect(new URL('/employer/documents', req.url));
+                        return NextResponse.redirect(new URL('/employer/home', req.url));
                     } else if (existingUser.role === "employee") {
                         return NextResponse.redirect(new URL('/employee/documents', req.url));
                     }
@@ -175,7 +175,7 @@ export const config = {
     matcher: [
         // Skip Next.js internals and all static files, unless found in search params
         '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-        // Always run for API routes, but exclude file upload routes (body stream conflicts in standalone mode)
-        '/(api(?!/upload-local|/files)|trpc)(.*)',
+        // Always run for API routes
+        '/(api|trpc)(.*)',
     ],
 };

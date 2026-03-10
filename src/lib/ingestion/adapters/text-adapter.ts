@@ -10,29 +10,6 @@ export class TextAdapter implements SourceAdapter {
   private static readonly MIME_TYPES = new Set([
     "text/plain",
     "text/markdown",
-    "text/css",
-    "text/xml",
-    "text/javascript",
-    "text/typescript",
-    "text/jsx",
-    "text/tsx",
-    "text/x-python",
-    "text/x-java",
-    "text/x-c",
-    "text/x-c++src",
-    "text/x-go",
-    "text/x-rust",
-    "text/x-ruby",
-    "text/x-php",
-    "text/x-swift",
-    "text/x-kotlin",
-    "text/x-shellscript",
-    "text/x-sql",
-    "text/x-yaml",
-    "text/x-toml",
-    "text/x-scss",
-    "text/x-less",
-    "application/json",
   ]);
 
   private static readonly EXTENSIONS = new Set([
@@ -42,60 +19,13 @@ export class TextAdapter implements SourceAdapter {
     ".log",
     ".rst",
     ".adoc",
-    ".py",
-    ".js",
-    ".ts",
-    ".jsx",
-    ".tsx",
-    ".css",
-    ".scss",
-    ".less",
-    ".java",
-    ".c",
-    ".cpp",
-    ".h",
-    ".hpp",
-    ".go",
-    ".rs",
-    ".rb",
-    ".php",
-    ".swift",
-    ".kt",
-    ".sh",
-    ".bash",
-    ".sql",
-    ".r",
-    ".lua",
-    ".pl",
-    ".scala",
-    ".xml",
-    ".yaml",
-    ".yml",
-    ".toml",
-    ".ini",
-    ".cfg",
-    ".env",
-    ".json",
-    ".geojson",
   ]);
 
-  private static readonly EXTENSIONLESS_FILENAMES = new Set([
-    "makefile", "dockerfile", "license", "licence", "readme",
-    "gemfile", "procfile", "vagrantfile", "rakefile", "brewfile",
-    "cmakelists.txt", "justfile", "taskfile", ".gitignore",
-    ".gitattributes", ".editorconfig", ".prettierrc", ".eslintrc",
-    ".babelrc", ".dockerignore", ".npmignore", ".env.local",
-    ".env.production", ".env.development", ".env.test",
-  ]);
-
-  canHandle(mimeType: string, extension: string, filename?: string): boolean {
-    if (TextAdapter.MIME_TYPES.has(mimeType)) return true;
-    if (extension && TextAdapter.EXTENSIONS.has(extension.toLowerCase())) return true;
-    if (filename) {
-      const base = filename.split("/").pop()?.toLowerCase() ?? "";
-      if (TextAdapter.EXTENSIONLESS_FILENAMES.has(base)) return true;
-    }
-    return false;
+  canHandle(mimeType: string, extension: string): boolean {
+    return (
+      TextAdapter.MIME_TYPES.has(mimeType) ||
+      TextAdapter.EXTENSIONS.has(extension.toLowerCase())
+    );
   }
 
   async process(

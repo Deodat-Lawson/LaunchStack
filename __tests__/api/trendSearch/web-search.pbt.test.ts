@@ -14,8 +14,8 @@ jest.mock("~/env", () => ({
 }));
 
 import * as fc from "fast-check";
-import { executeSearch } from "~/lib/tools/trend-search/web-search";
-import type { PlannedQuery, SearchCategory } from "~/lib/tools/trend-search/types";
+import { executeSearch } from "~/server/trend-search/web-search";
+import type { PlannedQuery, SearchCategory } from "~/server/trend-search/types";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
@@ -115,8 +115,8 @@ describe("Unit: one sub-query returns 0 results, pipeline continues", () => {
         const result = await executeSearch(subQueries);
 
         expect(fetchSpy).toHaveBeenCalledTimes(3);
-        expect(result.results).toHaveLength(2);
-        expect(result.results.map((r) => r.url)).toEqual(["https://b.com", "https://c.com"]);
+        expect(result).toHaveLength(2);
+        expect(result.map((r) => r.url)).toEqual(["https://b.com", "https://c.com"]);
     });
 });
 
@@ -158,7 +158,7 @@ describe("Unit: Tavily fails, retries 2 times then marks sub-query failed", () =
 
         // 1 + 2 retries for first sub-query, then 1 for second
         expect(fetchSpy).toHaveBeenCalledTimes(4);
-        expect(result.results).toHaveLength(1);
-        expect(result.results[0].url).toBe("https://ok.com");
+        expect(result).toHaveLength(1);
+        expect(result[0].url).toBe("https://ok.com");
     });
 });

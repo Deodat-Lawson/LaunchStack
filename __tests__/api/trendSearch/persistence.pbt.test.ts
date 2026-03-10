@@ -9,14 +9,14 @@ jest.mock("~/server/db", () => ({
     db: {},
 }));
 
-import { createTrendSearchJobHelpers } from "~/lib/tools/trend-search/db";
+import { createTrendSearchJobHelpers } from "~/server/trend-search/db";
 import type {
     SearchCategory,
     SearchResult,
     TrendSearchJobStatus,
     TrendSearchOutput,
-} from "~/lib/tools/trend-search/types";
-import { SearchCategoryEnum } from "~/lib/tools/trend-search/types";
+} from "~/server/trend-search/types";
+import { SearchCategoryEnum } from "~/server/trend-search/types";
 
 type StoredRow = {
     id: string;

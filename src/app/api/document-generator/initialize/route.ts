@@ -299,7 +299,7 @@ export async function POST(request: Request) {
         }
 
         // Get the AI model
-        const modelId = "gpt-5-mini" as AIModelType;
+        const modelId = "gpt-4o" as AIModelType;
         const chat = getChatModel(modelId);
 
         // Build system prompt

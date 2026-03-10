@@ -2,7 +2,6 @@ export type PdfChunk = {
     id: number;
     content: string;
     page: number;
-    sectionHeading?: string | null;
 };
 
 export type AnalysisSpecification = {
@@ -53,30 +52,9 @@ export type ResolvedReference = {
     priority: 'high' | 'medium' | 'low';
 };
 
-export type InsightCategory =
-    | 'deadline'
-    | 'resource'
-    | 'key-reference'
-    | 'action-item'
-    | 'caveat';
-
-export type InsightSeverity = 'note' | 'warning';
-
-export type DocumentInsight = {
-    category: InsightCategory;
-    severity: InsightSeverity;
-    title: string;
-    detail: string;
-    page: number;
-    sourceQuote?: string;
-    url?: string;
-    date?: string;
-};
-
 export type PredictiveAnalysisResult = {
     missingDocuments: MissingDocumentPrediction[];
     recommendations: string[];
-    insights?: DocumentInsight[];
     suggestedRelatedDocuments?: SearchResult[];
     resolvedDocuments?: ResolvedReference[];
 };
@@ -112,8 +90,5 @@ export const ANALYSIS_TYPES = {
     financial: `You are an expert in analyzing financial documents to identify missing reports, statements, and supporting documentation.`,
     technical: `You are an expert in analyzing technical documents to identify missing specifications, manuals, and project deliverables.`,
     compliance: `You are an expert in analyzing compliance documents to identify missing regulatory filings and policy documents.`,
-    educational: `You are an expert in analyzing educational materials to identify missing referenced course documents, syllabi, handouts, readings, and linked resources.`,
-    hr: `You are an expert in analyzing HR and employee documents to identify missing referenced policies, forms, benefits materials, and compliance documents.`,
-    research: `You are an expert in analyzing research documents to identify missing cited papers, datasets, supplementary materials, and methodology references.`,
     general: `You are an expert in analyzing documents to identify any missing referenced or implied documents.`
 } as const; 

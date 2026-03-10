@@ -19,8 +19,6 @@ export interface TriggerOptions {
   preferredProvider?: OCRProvider;
   /** MIME type of the uploaded file — forwarded to the ingestion router */
   mimeType?: string;
-  /** Original filename with extension — used for adapter routing */
-  originalFilename?: string;
 }
 
 /**
@@ -56,7 +54,6 @@ export async function triggerDocumentProcessing(
     documentId,
     category,
     mimeType: options?.mimeType,
-    originalFilename: options?.originalFilename,
     options: {
       forceOCR: options?.forceOCR,
       preferredProvider: options?.preferredProvider,

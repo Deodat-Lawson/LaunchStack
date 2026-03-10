@@ -12,27 +12,7 @@ export type TrendSearchEvent = {
   data: TrendSearchEventData;
 };
 
-export type CompanyMetadataExtractEvent = {
-  name: "company-metadata/extract.requested";
-  data: { documentId: number; companyId: string };
-};
-
-export type PredictiveAnalysisEvent = {
-  name: "predictive-analysis/run.requested";
-  data: {
-    documentId: number;
-    analysisType: string;
-    includeRelatedDocs: boolean;
-    timeoutMs?: number;
-    jobId: string;
-  };
-};
-
-export type Events =
-  | ProcessDocumentEvent
-  | TrendSearchEvent
-  | CompanyMetadataExtractEvent
-  | PredictiveAnalysisEvent;
+export type Events = ProcessDocumentEvent | TrendSearchEvent;
 
 /**
  * Create the Inngest client.

@@ -188,7 +188,7 @@ async function generateTableDescription(
   try {
     const tablePreview = table.markdown.substring(0, 1000); // Limit context
     const response = await openai.chat.completions.create({
-      model: "gpt-5-nano",
+      model: "gpt-4o-mini", // Use mini for speed/cost
       messages: [
         {
           role: "system",

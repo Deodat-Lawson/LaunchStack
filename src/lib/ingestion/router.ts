@@ -13,7 +13,6 @@ import {
   type StandardizedDocument,
 } from "./types";
 import type { NormalizedDocument } from "~/lib/ocr/types";
-import { fetchBlob } from "~/server/storage/vercel-blob";
 
 export interface IngestOptions extends SourceAdapterOptions {
   mimeType?: string;
@@ -47,7 +46,7 @@ export async function ingestDocument(
       `mime=${mimeType}, ext=${extension}, detected=${sourceType}, file=${filename}, input=${inputType}`,
   );
 
-  const adapter = findAdapter(mimeType, extension, filename);
+  const adapter = findAdapter(mimeType, extension);
 
   if (!adapter) {
     console.error(
@@ -61,19 +60,8 @@ export async function ingestDocument(
 
   console.log(`[IngestionRouter] Selected adapter: ${adapter.name}`);
 
-  let resolvedInput: string | Buffer = input;
-  if (typeof input === "string" && (input.startsWith("http://") || input.startsWith("https://"))) {
-    console.log(`[IngestionRouter] Pre-fetching URL via fetchBlob`);
-    const res = await fetchBlob(input);
-    if (!res.ok) {
-      throw new Error(`[IngestionRouter] Failed to fetch document: ${res.status} ${res.statusText}`);
-    }
-    resolvedInput = Buffer.from(await res.arrayBuffer());
-    console.log(`[IngestionRouter] Fetched ${resolvedInput.length} bytes`);
-  }
-
   const adapterStart = Date.now();
-  const result = await adapter.process(resolvedInput, {
+  const result = await adapter.process(input, {
     ...options,
     mimeType,
     filename,
@@ -116,5 +104,5 @@ export function isSupported(mimeType?: string, filename?: string): boolean {
   const ext = filename?.includes(".")
     ? filename.slice(filename.lastIndexOf(".")).toLowerCase()
     : "";
-  return !!findAdapter(mime, ext, filename);
+  return !!findAdapter(mime, ext);
 }

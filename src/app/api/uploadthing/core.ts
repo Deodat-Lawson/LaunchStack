@@ -27,7 +27,7 @@ export const ourFileRouter = {
     // Generic document uploader — accepts Office, text, CSV, HTML files
     documentUploader: f({
         blob: {
-            maxFileSize: "128MB",
+            maxFileSize: "64MB",
             maxFileCount: 1,
         },
     })
@@ -47,7 +47,7 @@ export const ourFileRouter = {
     // Image uploader — accepts PNG, JPG, TIFF, WebP, etc.
     imageUploader: f({
         image: {
-            maxFileSize: "128MB",
+            maxFileSize: "32MB",
             maxFileCount: 1,
         },
     })

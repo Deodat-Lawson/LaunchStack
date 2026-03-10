@@ -1,11 +1,5 @@
-import type { Metadata } from 'next';
 import Link from "next/link";
 import React from 'react';
-
-export const metadata: Metadata = {
-    title: 'Pricing',
-    description: 'PDR AI is free and open source. Self-host with your own API keys or use the hosted demo.',
-};
 import { Brain, Check, Users, Heart, Award, GraduationCap } from 'lucide-react';
 import styles from '../../styles/pricing.module.css';
 import Image from "next/image";

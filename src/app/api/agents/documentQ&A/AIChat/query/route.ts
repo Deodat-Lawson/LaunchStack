@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db, toRows } from "~/server/db/index";
-import { and, eq, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
     companyEnsembleSearch,
     documentEnsembleSearch,
-    multiDocEnsembleSearch,
     type CompanySearchOptions,
     type DocumentSearchOptions,
-    type MultiDocSearchOptions,
     type SearchResult
 } from "~/lib/tools/rag";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
@@ -23,15 +21,13 @@ import {
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModelForProvider,
-    getProviderDefaultModel,
-    describeProviderError,
+    getChatModel,
     getEmbeddings,
     buildReferences,
     extractRecommendedPages,
 } from "../../services";
+import type { AIModelType } from "../../services";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
-import { validateQAResponse } from "~/lib/agents/supervisor";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -93,11 +89,9 @@ export async function POST(request: Request) {
                 question,
                 style,
                 searchScope,
-                archiveName,
                 enableWebSearch,
                 aiPersona,
                 aiModel,
-                provider,
                 conversationHistory,
             } = validation.data;
 
@@ -115,14 +109,6 @@ export async function POST(request: Request) {
                 return NextResponse.json({
                     success: false,
                     message: "documentId is required for document search"
-                }, { status: 400 });
-            }
-
-            if (searchScope === "archive" && !archiveName) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "archiveName is required for archive search"
                 }, { status: 400 });
             }
 
@@ -152,8 +138,8 @@ export async function POST(request: Request) {
                 }, { status: 403 });
             }
 
-            // Validate company/archive search permissions
-            if (searchScope === "company" || searchScope === "archive") {
+            // Validate company-wide search permissions
+            if (searchScope === "company") {
                 if (!COMPANY_SCOPE_ROLES.has(requestingUser.role)) {
                     recordResult("error");
                     return NextResponse.json({
@@ -199,41 +185,16 @@ export async function POST(request: Request) {
                 }
             }
 
-            // Resolve archive document IDs if archive scope
-            let archiveDocumentIds: number[] | undefined;
-            if (searchScope === "archive" && archiveName) {
-                const archiveDocs = await db
-                    .select({ id: document.id })
-                    .from(document)
-                    .where(and(
-                        eq(document.sourceArchiveName, archiveName),
-                        eq(document.companyId, String(numericCompanyId))
-                    ));
-
-                archiveDocumentIds = archiveDocs.map(d => d.id);
-                if (archiveDocumentIds.length === 0) {
-                    recordResult("empty");
-                    return NextResponse.json({
-                        success: false,
-                        message: `No documents found in archive "${archiveName}".`
-                    }, { status: 404 });
-                }
-            }
-
             // Perform comprehensive search
             const embeddings = getEmbeddings();
             let documents: SearchResult[] = [];
-            retrievalMethod = searchScope === "company"
-                ? 'company_ensemble_rrf'
-                : searchScope === "archive"
-                    ? 'archive_ensemble_rrf'
-                    : 'document_ensemble_rrf';
+            retrievalMethod = searchScope === "company" ? 'company_ensemble_rrf' : 'document_ensemble_rrf';
 
             try {
                 if (searchScope === "company") {
                     const companyOptions: CompanySearchOptions = {
                         weights: [0.4, 0.6],
-                        topK: 10,
+                        topK: 10, // More results for comprehensive search
                         companyId: numericCompanyId
                     };
                     
@@ -242,23 +203,11 @@ export async function POST(request: Request) {
                         companyOptions,
                         embeddings
                     );
-                } else if (searchScope === "archive" && archiveDocumentIds?.length) {
-                    const archiveOptions: MultiDocSearchOptions = {
-                        weights: [0.4, 0.6],
-                        topK: 10,
-                        documentIds: archiveDocumentIds
-                    };
-
-                    documents = await multiDocEnsembleSearch(
-                        question,
-                        archiveOptions,
-                        embeddings
-                    );
                 } else if (searchScope === "document" && documentId) {
                     const documentOptions: DocumentSearchOptions = {
+                        weights: [0.4, 0.6],
                         topK: 5,
-                        documentId,
-                        companyId: numericCompanyId,
+                        documentId
                     };
                     
                     documents = await documentEnsembleSearch(
@@ -386,12 +335,8 @@ export async function POST(request: Request) {
             );
 
             // Get AI model and generate comprehensive response
-            const resolvedProvider = provider ?? "openai";
-            const selectedAiModel = aiModel ?? getProviderDefaultModel(resolvedProvider);
-            const chat = getChatModelForProvider({
-                provider: resolvedProvider,
-                model: selectedAiModel,
-            });
+            const selectedAiModel = (aiModel ?? 'gpt-4o') as AIModelType;
+            const chat = getChatModel(selectedAiModel);
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
             // Build conversation context
@@ -411,35 +356,13 @@ export async function POST(request: Request) {
 
             const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${webSearchInstruction}\n\nProvide a natural, conversational answer based primarily on the provided content. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
             
-            let response;
-            try {
-                response = await chat.call([
-                    new SystemMessage(systemPrompt),
-                    new HumanMessage(userPrompt),
-                ]);
-            } catch (modelError) {
-                const friendly = describeProviderError(resolvedProvider, modelError, selectedAiModel);
-                if (friendly) {
-                    recordResult("error");
-                    return NextResponse.json(
-                        {
-                            success: false,
-                            message: friendly.message,
-                        },
-                        { status: friendly.status },
-                    );
-                }
-                throw modelError;
-            }
+            const response = await chat.call([
+                new SystemMessage(systemPrompt),
+                new HumanMessage(userPrompt),
+            ]);
 
-            let summarizedAnswer = normalizeModelContent(response.content);
+            const summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;
-
-            const sourceTexts = documents.map(d => d.pageContent);
-            const supervision = validateQAResponse(summarizedAnswer, sourceTexts, aiPersona);
-            if (supervision.adjustedOutput) {
-                summarizedAnswer = supervision.adjustedOutput;
-            }
 
             // Log query to ChatHistory for analytics
             try {
@@ -484,11 +407,7 @@ export async function POST(request: Request) {
                     refinedQuery: webSearch.refinedQuery || question,
                     reasoning: webSearch.reasoning,
                     resultsCount: webSearch.results.length
-                } : undefined,
-                disclaimer: supervision.disclaimer,
-                guardrails: !supervision.approved ? {
-                    warnings: supervision.issues,
-                } : undefined,
+                } : undefined
             });
 
         } catch (error) {

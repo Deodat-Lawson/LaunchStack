@@ -1,22 +1,18 @@
-# syntax=docker/dockerfile:1
 FROM python:3.12-slim
 
 WORKDIR /app
 
+# Install system dependencies (for sentence-transformers / torch)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-
-# Install CPU-only PyTorch first (~200MB vs ~2GB with CUDA), then remaining deps.
-# BuildKit cache mount keeps pip's download cache across rebuilds.
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install torch --index-url https://download.pytorch.org/whl/cpu && \
-    pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/
 
+# Model cache volume — avoids re-downloading on every restart
 ENV TRANSFORMERS_CACHE=/app/model-cache
 ENV HF_HOME=/app/model-cache
 

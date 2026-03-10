@@ -26,18 +26,6 @@ export class HtmlAdapter implements SourceAdapter {
     const startTime = Date.now();
     console.log(`[HtmlAdapter] Processing: file=${options?.filename ?? "unknown"}, mime=${options?.mimeType ?? "none"}`);
 
-    if (typeof globalThis.File === "undefined") {
-      (globalThis as Record<string, unknown>).File = class File extends Blob {
-        name: string;
-        lastModified: number;
-        constructor(parts: BlobPart[], name: string, opts?: FilePropertyBag) {
-          super(parts, opts);
-          this.name = name;
-          this.lastModified = opts?.lastModified ?? Date.now();
-        }
-      };
-    }
-
     const cheerio = await import("cheerio");
 
     const html = await this.resolveHtml(input);

@@ -35,13 +35,6 @@ const config: NextConfig = {
     return webpackConfig;
   },
 
-  experimental: {
-    middlewareClientMaxBodySize: "128mb",
-  },
-
-  eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true },
-
   images: {
     remotePatterns: [
       {
@@ -86,9 +79,6 @@ const config: NextConfig = {
     "@img/sharp-libvips-linuxmusl-x64",
     "@img/sharp-libvips-linux-x64",
     "pdf-lib",
-    "jszip",
-    "readable-stream",
-    "mammoth",
   ],
 };
 

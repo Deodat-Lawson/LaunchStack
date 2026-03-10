@@ -11,7 +11,6 @@ import type {
   ExtractedTable,
   OCRProvider,
 } from "../types";
-import { fetchBlob } from "~/server/storage/vercel-blob";
 
 /**
  * Azure Document Intelligence API response types
@@ -220,7 +219,7 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
     const fullUrl = queryParams.toString() ? `${url}&${queryParams}` : url;
 
     // Fetch document server-side and send as binary. Azure cannot reach localhost/private URLs.
-    const docResponse = await fetchBlob(documentUrl);
+    const docResponse = await fetch(documentUrl);
     if (!docResponse.ok) {
       throw new Error(
         `Failed to fetch document from ${documentUrl}: ${docResponse.status} ${docResponse.statusText}`

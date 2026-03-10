@@ -74,7 +74,7 @@ export async function planQueries(
     // Initialize the OpenAI chat model
     const chat = new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
-        modelName: "gpt-5-nano",
+        modelName: "gpt-4o-mini",
         temperature: 0.2,
     });
 

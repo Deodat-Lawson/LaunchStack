@@ -1,21 +1,15 @@
 'use client';
 
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { useSearchParams } from 'next/navigation';
 import { DeploymentNavbar } from './components/DeploymentNavbar';
 import { DeploymentSidebar } from './components/DeploymentSidebar';
 import {
   MainDeployment,
-  DockerDeploymentPage,
-  VercelDeploymentPage,
-  ClerkSetupPage,
   InngestPage,
   LangChainPage,
   TavilyPage,
   UploadThingPage,
-  VercelBlobPage,
-  AIProvidersPage,
   OCRAzurePage,
   OCRLandingPage,
   OCRDatalabPage,
@@ -23,21 +17,6 @@ import {
 } from './components/sections';
 import type { DeploymentSection } from './types';
 import { SECTIONS } from './types';
-
-const VALID_SECTIONS = new Set<string>(
-  SECTIONS.flatMap(s => [s.id, ...(s.children?.map(c => c.id) ?? [])])
-);
-
-function SectionFromParams({ onSection }: { onSection: (s: DeploymentSection) => void }) {
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    const section = searchParams.get('section');
-    if (section && VALID_SECTIONS.has(section)) {
-      onSection(section as DeploymentSection);
-    }
-  }, [searchParams, onSection]);
-  return null;
-}
 
 const DeploymentPage = () => {
   const [mounted, setMounted] = useState(false);
@@ -53,13 +32,6 @@ const DeploymentPage = () => {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  const handleSectionFromParams = useCallback((section: DeploymentSection) => {
-    setActiveSection(section);
-    if (section.startsWith('ocr-')) {
-      setExpandedSections(prev => prev.includes('ocr') ? prev : [...prev, 'ocr']);
-    }
   }, []);
 
   if (!mounted) {
@@ -108,12 +80,6 @@ const DeploymentPage = () => {
     switch (activeSection) {
       case 'main':
         return <MainDeployment {...props} />;
-      case 'docker':
-        return <DockerDeploymentPage {...props} />;
-      case 'vercel':
-        return <VercelDeploymentPage {...props} />;
-      case 'clerk':
-        return <ClerkSetupPage {...props} />;
       case 'inngest':
         return <InngestPage {...props} />;
       case 'langchain':
@@ -122,10 +88,6 @@ const DeploymentPage = () => {
         return <TavilyPage {...props} />;
       case 'uploadthing':
         return <UploadThingPage {...props} />;
-      case 'vercel-blob':
-        return <VercelBlobPage {...props} />;
-      case 'ai-providers':
-        return <AIProvidersPage {...props} />;
       case 'ocr':
       case 'ocr-azure':
         return <OCRAzurePage {...props} />;
@@ -142,9 +104,6 @@ const DeploymentPage = () => {
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-slate-50 via-white to-purple-50'}`}>
-      <Suspense>
-        <SectionFromParams onSection={handleSectionFromParams} />
-      </Suspense>
       {/* Top Navigation */}
       <DeploymentNavbar
         darkMode={darkMode}
@@ -181,8 +140,8 @@ const DeploymentPage = () => {
         />
 
         {/* Main Content */}
-        <main className="flex-1 ml-64">
-          <div className="max-w-3xl mx-auto px-6 lg:px-8 py-12">
+        <main className="flex-1 ml-72">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             {renderActiveSection()}
           </div>
         </main>

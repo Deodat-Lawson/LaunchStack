@@ -9,8 +9,5 @@ export type {
     PredictiveAnalysisResult,
     MissingDocumentPrediction,
     ResolvedReference,
-    SearchResult,
-    DocumentInsight,
-    InsightCategory,
-    InsightSeverity,
+    SearchResult
 } from "~/app/api/agents/predictive-document-analysis/types";

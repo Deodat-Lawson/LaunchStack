@@ -352,16 +352,17 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persis
           </div>
 
           <div className="mb-6 flex items-start justify-between gap-4 rounded-lg border border-border bg-muted/30 p-4">
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-sm font-medium">Draft Mode</p>
               <p className="text-xs text-muted-foreground mt-1">
-                ON: show generated draft below so you can regenerate or push to Rewrite. OFF: open Rewrite editor directly with the generated content.
+                ON: show generated draft below so you can regenerate or push to Rewrite. OFF: apply directly to document.
               </p>
             </div>
             <Switch
               aria-label="Draft mode"
               checked={isDraftMode}
               onCheckedChange={setIsDraftMode}
+              className="flex-shrink-0"
             />
           </div>
 
@@ -376,25 +377,30 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persis
             </div>
           </div>
           
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setCurrentStep('input')}>
+          <div className="flex flex-wrap gap-3 items-center min-h-[44px]">
+            <Button variant="outline" onClick={() => setCurrentStep('input')} className="flex-shrink-0">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
             <Button 
               onClick={handleRewrite}
               disabled={isProcessing}
-              className="bg-amber-600 hover:bg-amber-700 text-white"
+              className="!bg-amber-600 hover:!bg-amber-500 !text-white border-2 border-amber-700 flex-shrink-0 min-w-[180px] dark:!bg-amber-500 dark:hover:!bg-amber-400 dark:!text-white dark:border-amber-400 shadow-lg"
             >
               {isProcessing ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Rewriting...
                 </>
+              ) : isDraftMode ? (
+                <>
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Generate Draft
+                </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 mr-2" />
-                  {isDraftMode ? "Generate Draft" : "Generate a Document"}
+                  Generate & Apply
                 </>
               )}
             </Button>

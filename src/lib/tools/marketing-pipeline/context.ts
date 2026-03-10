@@ -12,7 +12,7 @@ import { getChatModel, MARKETING_MODELS } from "~/lib/models";
 import type { CompanyDNA } from "~/lib/tools/marketing-pipeline/types";
 import { CompanyDNASchema } from "~/lib/tools/marketing-pipeline/types";
 import {
-    buildValidatedCompanyKnowledge,
+    buildCompanyKnowledgeFast,
     mapValidatedKnowledgeToCompanyDNA,
   } from "~/lib/tools/marketing-pipeline/knowledge";
 
@@ -149,21 +149,10 @@ export async function extractCompanyDNA(args: {
     companyId: number;
     prompt: string;
 }): Promise<CompanyDNA> {
-    const { knowledge, validation } = await buildValidatedCompanyKnowledge({
+    const { knowledge } = await buildCompanyKnowledgeFast({
         companyId: args.companyId,
         prompt: args.prompt,
     });
-
-    if (validation.needsRevision) {
-        console.warn("[marketing-pipeline] company knowledge required revision", {
-            groundednessScore: validation.groundednessScore,
-            completenessScore: validation.completenessScore,
-            consistencyScore: validation.consistencyScore,
-            unsupportedClaims: validation.unsupportedClaims,
-            missingCriticalFields: validation.missingCriticalFields,
-        });
-    }
-
     return mapValidatedKnowledgeToCompanyDNA(knowledge);
 }
 

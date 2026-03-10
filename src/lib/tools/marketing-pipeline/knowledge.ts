@@ -42,13 +42,9 @@ function dedupeStrings(values: string[]): string[] {
 
 function buildKnowledgeQueries(baseMeta: string, userPrompt: string): string[] {
   return [
-    `${baseMeta} company overview what does the company do target customer`,
-    `${baseMeta} products services capabilities features`,
-    `${baseMeta} differentiators competitive advantages why choose this company`,
-    `${baseMeta} proof points metrics case studies outcomes customer results`,
-    `${baseMeta} founder story team mission values brand philosophy`,
-    `${baseMeta} technical edge implementation workflow methodology`,
-    `${baseMeta} customer pain points problems solved objections`,
+    `${baseMeta} company overview products services target customer`,
+    `${baseMeta} differentiators competitive advantages key benefits`,
+    `${baseMeta} proof points metrics outcomes customer results`,
     `${baseMeta} ${userPrompt}`,
   ];
 }
@@ -298,6 +294,25 @@ Return valid JSON exactly matching the schema.`;
 
   return NormalizedCompanyKnowledgeSchema.parse(response);
 }
+/**
+ * Fast path: single normalize pass, no validation/revise. Use for lower latency.
+ */
+export async function buildCompanyKnowledgeFast(args: {
+  companyId: number;
+  prompt: string;
+}): Promise<{
+  knowledge: NormalizedCompanyKnowledge;
+  evidence: SearchResult[];
+}> {
+  const evidence = await retrieveCompanyKnowledgeEvidence(args);
+  const knowledge = await normalizeCompanyKnowledge({
+    companyId: args.companyId,
+    prompt: args.prompt,
+    evidence,
+  });
+  return { knowledge, evidence };
+}
+
 /**
  * returns final knowledge object, validation report, raw evidence
  */

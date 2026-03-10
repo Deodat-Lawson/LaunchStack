@@ -717,6 +717,8 @@ export const generatedDocuments = pgTable(
             audience?: string;
             length?: string;
             description?: string;
+            templateType?: "general" | "legal";
+            legalData?: Record<string, string>;
         }>(),
         citations: jsonb("citations").$type<Array<{
             id: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Brain, ChevronDown, ChevronRight, Loader2, MessageSquareText, Megaphone, Sparkles } from "lucide-react";
@@ -62,6 +62,14 @@ function usePlatformLogoClassNames() {
 }
 
 export default function MarketingPipelinePage() {
+    return (
+        <Suspense>
+            <MarketingPipelineContent />
+        </Suspense>
+    );
+}
+
+function MarketingPipelineContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const isDebug = searchParams.get("debug") === "true";

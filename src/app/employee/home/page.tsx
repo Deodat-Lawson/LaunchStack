@@ -87,7 +87,7 @@ const EmployeeHomeScreen = () => {
         <div className={styles.navContent}>
           <div className={styles.logoContainer}>
             <Brain className={styles.logoIcon} />
-            <span className={styles.logoText}>PDR AI</span>
+            <span className={styles.logoText}>Launchstack</span>
           </div>
           <div className={styles.navActions}>
             <ThemeToggle />
@@ -97,7 +97,7 @@ const EmployeeHomeScreen = () => {
       </nav>
       <main className={styles.main}>
         <div className={styles.welcomeSection}>
-          <h1 className={styles.welcomeTitle}>Welcome to PDR AI</h1>
+          <h1 className={styles.welcomeTitle}>Welcome to Launchstack</h1>
           <p className={styles.welcomeText}>
             Your AI integrated document management assistant and interpreter. Choose an option below
             to get started.

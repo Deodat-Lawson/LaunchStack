@@ -90,7 +90,7 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
           Vercel Deployment
         </h1>
         <p className={`text-xl leading-relaxed max-w-2xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          Deploy PDR AI with managed hosting from Vercel. Connect your GitHub repository, add environment variables, and go live with zero infrastructure to maintain.
+          Deploy Launchstack with managed hosting from Vercel. Connect your GitHub repository, add environment variables, and go live with zero infrastructure to maintain.
         </p>
       </motion.div>
 
@@ -129,7 +129,7 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
           <Step
             number={1}
             title="Fork the repository"
-            description="Go to the PDR AI repo and click Fork to create a copy under your GitHub account."
+            description="Go to the Launchstack repo and click Fork to create a copy under your GitHub account."
             onCopy={() => copyToClipboard('https://github.com/Deodat-Lawson/pdr_ai_v2/fork', 'v-1a')}
             copied={copiedCode === 'v-1a'}
             darkMode={darkMode}

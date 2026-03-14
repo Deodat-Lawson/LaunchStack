@@ -67,7 +67,7 @@ function buildSlackBlocks(payload: SlackNotificationPayload): SlackBlock[] {
         elements: [
             {
                 type: 'mrkdwn',
-                text: `Sent by PDR AI Predictive Analysis | ${new Date().toISOString()}`,
+                text: `Sent by Launchstack Predictive Analysis | ${new Date().toISOString()}`,
             },
         ],
     });
@@ -95,7 +95,7 @@ export async function sendSlackNotification(
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                text: `PDR AI: ${payload.highPriorityCount} high-priority issues found in "${payload.documentTitle}"`,
+                text: `Launchstack: ${payload.highPriorityCount} high-priority issues found in "${payload.documentTitle}"`,
                 blocks,
             }),
         });

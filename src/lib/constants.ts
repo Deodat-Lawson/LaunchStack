@@ -1,5 +1,5 @@
 /**
- * Common constants used across the PDR AI application
+ * Common constants used across the Launchstack application
  */
 
 // Analysis Types

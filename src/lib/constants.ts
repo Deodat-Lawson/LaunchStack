@@ -1,5 +1,5 @@
 /**
- * Common constants used across the PDR AI application
+ * Common constants used across the Launchstack application
  */
 
 // Analysis Types
@@ -31,7 +31,7 @@ export const CACHE_CONFIG = {
 
 // Document Processing (SUPPORTED_FORMATS aligned with ingestion/upload-accepted)
 export const DOCUMENT_LIMITS = {
-  MAX_FILE_SIZE_MB: 50,
+  MAX_FILE_SIZE_MB: 128,
   MAX_PAGES: 1000,
   SUPPORTED_FORMATS: [
     'pdf', 'png', 'jpg', 'jpeg', 'tiff', 'tif', 'webp', 'gif', 'bmp',

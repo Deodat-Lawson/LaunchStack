@@ -106,7 +106,7 @@ async function searchArxiv(
 
         const response = await fetch(arxivUrl, {
             headers: {
-                "User-Agent": "PDR-AI-Research/1.0 (Document Generator)",
+                "User-Agent": "Launchstack-Research/1.0 (Document Generator)",
             },
         });
 

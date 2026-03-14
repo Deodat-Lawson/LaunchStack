@@ -43,7 +43,7 @@ function createInngestClient() {
 
   return new Inngest({
     id: "pdr-ai",
-    name: "PDR AI",
+    name: "Launchstack",
     schemas: new EventSchemas().fromUnion<Events>(),
     ...(eventKey && { eventKey }),
   });

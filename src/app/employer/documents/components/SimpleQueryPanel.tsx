@@ -26,9 +26,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/app/employer/documents/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/app/employer/documents/components/ui/tooltip';
 import { cn } from "~/lib/utils";
 import type { DocumentType } from '../types';
-import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 import { ModelBadge } from './ModelBadge';
 
 const MarkdownMessage = dynamic(
@@ -51,14 +57,17 @@ interface SimpleQueryPanelProps {
   setAiError: (e: string) => void;
   aiLoading: boolean;
   handleAiSearch: (e: React.FormEvent) => Promise<void>;
-  searchScope: 'document' | 'company';
-  setSearchScope: (s: 'document' | 'company') => void;
+  searchScope: 'document' | 'company' | 'archive';
+  setSearchScope: (s: 'document' | 'company' | 'archive') => void;
   aiStyle: string;
   setAiStyle: (s: string) => void;
+  provider: LLMProvider;
+  setProvider: (p: LLMProvider) => void;
   aiModel: AIModelType;
   setAiModel: (m: AIModelType) => void;
   aiAnswerModel?: AIModelType;
   modelAvailability?: Partial<Record<AIModelType, boolean>>;
+  providerAvailability?: Partial<Record<LLMProvider, boolean>>;
   styleOptions: Record<string, string>;
   referencePages: number[];
   setPdfPageNumber: (p: number) => void;
@@ -73,17 +82,30 @@ const styleIcons: Record<string, React.ReactNode> = {
   "bullet-points": <List className="w-3.5 h-3.5" />,
 };
 
-const modelConfig: Array<{ key: AIModelType; label: string }> = [
-  { key: "gpt-5.2", label: "GPT-5.2" },
-  { key: "gpt-5-mini", label: "GPT-5 Mini" },
-  { key: "gpt-5-nano", label: "GPT-5 Nano" },
-  { key: "claude-opus-4.5", label: "Claude Opus 4.5" },
-  { key: "gemini-3-flash", label: "Gemini 3 Flash" },
-  { key: "gemini-3-pro", label: "Gemini 3 Pro" },
-  { key: "gpt-5.1", label: "GPT-5.1" },
-  { key: "gpt-4o", label: "GPT-4o" },
-  { key: "claude-sonnet-4", label: "Claude Sonnet 4" },
-  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+const providerOptions: Array<{ key: LLMProvider; label: string }> = [
+  { key: "openai", label: "OpenAI" },
+  { key: "anthropic", label: "Anthropic" },
+  { key: "google", label: "Google" },
+  { key: "ollama", label: "Ollama" },
+];
+
+const modelConfig: Array<{ key: AIModelType; label: string; provider: LLMProvider }> = [
+  { key: "gpt-5.2", label: "GPT-5.2", provider: "openai" },
+  { key: "gpt-5-mini", label: "GPT-5 Mini", provider: "openai" },
+  { key: "gpt-5-nano", label: "GPT-5 Nano", provider: "openai" },
+  { key: "gpt-5.1", label: "GPT-5.1", provider: "openai" },
+  { key: "claude-sonnet-4", label: "Claude Sonnet 4", provider: "anthropic" },
+  { key: "claude-opus-4.5", label: "Claude Opus 4.5", provider: "anthropic" },
+  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash", provider: "google" },
+  { key: "gemini-3-flash", label: "Gemini 3 Flash", provider: "google" },
+  { key: "gemini-3-pro", label: "Gemini 3 Pro", provider: "google" },
+  { key: "llama3.1:8b", label: "Llama 3.1 8B", provider: "ollama" },
+  { key: "llama3.2:3b", label: "Llama 3.2 3B", provider: "ollama" },
+  { key: "mistral:7b", label: "Mistral 7B", provider: "ollama" },
+  { key: "codellama:7b", label: "Code Llama 7B", provider: "ollama" },
+  { key: "gemma2:9b", label: "Gemma 2 9B", provider: "ollama" },
+  { key: "phi3:mini", label: "Phi-3 Mini", provider: "ollama" },
+  { key: "qwen2.5:7b", label: "Qwen 2.5 7B", provider: "ollama" },
 ];
 
 export function SimpleQueryPanel({
@@ -101,10 +123,13 @@ export function SimpleQueryPanel({
   setSearchScope,
   aiStyle,
   setAiStyle,
+  provider,
+  setProvider,
   aiModel,
   setAiModel,
   aiAnswerModel,
   modelAvailability = {},
+  providerAvailability = {},
   styleOptions,
   referencePages: _referencePages,
   setPdfPageNumber: _setPdfPageNumber,
@@ -112,6 +137,7 @@ export function SimpleQueryPanel({
 }: SimpleQueryPanelProps) {
   const showCompanyScope = userRole === 'employer';
   const [isFocused, setIsFocused] = useState(false);
+  const availableModels = modelConfig.filter((model) => model.provider === provider);
 
   return (
     <div className="bg-background flex flex-col h-full border-l border-border">
@@ -201,27 +227,83 @@ export function SimpleQueryPanel({
             </div>
           </div>
 
-          {/* Model Selector */}
-          <div className="space-y-1.5">
-            <span className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.15em] px-0.5">
-              AI Model
-            </span>
-            <Select value={aiModel} onValueChange={(value) => setAiModel(value as AIModelType)}>
-              <SelectTrigger size="sm" className="h-8 bg-muted border-none text-xs font-semibold focus:ring-1 focus:ring-purple-500">
-                <SelectValue placeholder="Select model" />
-              </SelectTrigger>
-              <SelectContent>
-                {modelConfig.map((model) => (
-                  <SelectItem
-                    key={model.key}
-                    value={model.key}
-                    disabled={modelAvailability[model.key] === false}
-                  >
-                    {model.label}{modelAvailability[model.key] === false ? " (Unavailable)" : ""}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* Provider & Model Selector */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-violet-500" />
+                Provider
+              </span>
+              <Select
+                value={provider}
+                onValueChange={(value) => setProvider(value as LLMProvider)}
+              >
+                <SelectTrigger
+                  size="sm"
+                  className="h-9 bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-xs font-semibold"
+                >
+                  <SelectValue placeholder="Select provider" />
+                </SelectTrigger>
+                <SelectContent>
+                  {providerOptions
+                    .filter((opt) => providerAvailability[opt.key] !== false)
+                    .map((option) => (
+                      <SelectItem key={option.key} value={option.key}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-1 flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-violet-500" />
+                AI Model
+              </span>
+              <Select
+                value={aiModel}
+                onValueChange={(value) => setAiModel(value as AIModelType)}
+              >
+                <SelectTrigger
+                  size="sm"
+                  className="h-9 bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-xs font-semibold"
+                >
+                  <SelectValue placeholder="Select model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableModels.map((model) => {
+                    const unavailable = modelAvailability[model.key] === false;
+                    return (
+                      <SelectItem
+                        key={model.key}
+                        value={model.key}
+                        disabled={unavailable}
+                        className={cn(unavailable && "opacity-50")}
+                      >
+                        <TooltipProvider delayDuration={300}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="flex items-center gap-1.5">
+                                <span className={cn(
+                                  "w-1.5 h-1.5 rounded-full flex-shrink-0",
+                                  unavailable ? "bg-red-400" : "bg-emerald-500"
+                                )} />
+                                {model.label}
+                              </span>
+                            </TooltipTrigger>
+                            {unavailable && (
+                              <TooltipContent side="left" className="text-xs">
+                                API key not configured for this model
+                              </TooltipContent>
+                            )}
+                          </Tooltip>
+                        </TooltipProvider>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Question Input */}

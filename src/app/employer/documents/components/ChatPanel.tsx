@@ -3,6 +3,7 @@
 import { 
   FileText,
   Building2,
+  Archive,
   Zap,
   BookOpen,
   GraduationCap,
@@ -24,10 +25,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/app/employer/documents/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/app/employer/documents/components/ui/tooltip';
 import { cn } from "~/lib/utils";
 import { AgentChatInterface } from './AgentChatInterface';
 import type { DocumentType } from '../types';
-import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
+import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 
 interface ChatPanelProps {
   userId: string;
@@ -38,11 +45,14 @@ interface ChatPanelProps {
   setAiStyle: (s: string) => void;
   aiPersona: string;
   setAiPersona: (p: string) => void;
+  provider: LLMProvider;
+  setProvider: (p: LLMProvider) => void;
   aiModel: AIModelType;
   setAiModel: (m: AIModelType) => void;
   modelAvailability?: Partial<Record<AIModelType, boolean>>;
-  searchScope: 'document' | 'company';
-  setSearchScope: (s: 'document' | 'company') => void;
+  providerAvailability?: Partial<Record<LLMProvider, boolean>>;
+  searchScope: 'document' | 'company' | 'archive';
+  setSearchScope: (s: 'document' | 'company' | 'archive') => void;
   companyId: number | null;
   setPdfPageNumber: (p: number) => void;
   styleOptions: Record<string, string>;
@@ -67,17 +77,30 @@ const personaConfig = [
   { key: 'math-reasoning', icon: Calculator, label: 'Math' },
 ];
 
-const modelConfig: Array<{ key: AIModelType; label: string }> = [
-  { key: "gpt-5.2", label: "GPT-5.2" },
-  { key: "gpt-5-mini", label: "GPT-5 Mini" },
-  { key: "gpt-5-nano", label: "GPT-5 Nano" },
-  { key: "claude-opus-4.5", label: "Claude Opus 4.5" },
-  { key: "gemini-3-flash", label: "Gemini 3 Flash" },
-  { key: "gemini-3-pro", label: "Gemini 3 Pro" },
-  { key: "gpt-5.1", label: "GPT-5.1" },
-  { key: "gpt-4o", label: "GPT-4o" },
-  { key: "claude-sonnet-4", label: "Claude Sonnet 4" },
-  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+const providerOptions: Array<{ key: LLMProvider; label: string }> = [
+  { key: "openai", label: "OpenAI" },
+  { key: "anthropic", label: "Anthropic" },
+  { key: "google", label: "Google" },
+  { key: "ollama", label: "Ollama" },
+];
+
+const modelConfig: Array<{ key: AIModelType; label: string; provider: LLMProvider }> = [
+  { key: "gpt-5.2", label: "GPT-5.2", provider: "openai" },
+  { key: "gpt-5-mini", label: "GPT-5 Mini", provider: "openai" },
+  { key: "gpt-5-nano", label: "GPT-5 Nano", provider: "openai" },
+  { key: "gpt-5.1", label: "GPT-5.1", provider: "openai" },
+  { key: "claude-sonnet-4", label: "Claude Sonnet 4", provider: "anthropic" },
+  { key: "claude-opus-4.5", label: "Claude Opus 4.5", provider: "anthropic" },
+  { key: "gemini-2.5-flash", label: "Gemini 2.5 Flash", provider: "google" },
+  { key: "gemini-3-flash", label: "Gemini 3 Flash", provider: "google" },
+  { key: "gemini-3-pro", label: "Gemini 3 Pro", provider: "google" },
+  { key: "llama3.1:8b", label: "Llama 3.1 8B", provider: "ollama" },
+  { key: "llama3.2:3b", label: "Llama 3.2 3B", provider: "ollama" },
+  { key: "mistral:7b", label: "Mistral 7B", provider: "ollama" },
+  { key: "codellama:7b", label: "Code Llama 7B", provider: "ollama" },
+  { key: "gemma2:9b", label: "Gemma 2 9B", provider: "ollama" },
+  { key: "phi3:mini", label: "Phi-3 Mini", provider: "ollama" },
+  { key: "qwen2.5:7b", label: "Qwen 2.5 7B", provider: "ollama" },
 ];
 
 export function ChatPanel({
@@ -89,9 +112,12 @@ export function ChatPanel({
   setAiStyle,
   aiPersona,
   setAiPersona,
+  provider,
+  setProvider,
   aiModel,
   setAiModel,
   modelAvailability = {},
+  providerAvailability = {},
   searchScope,
   setSearchScope,
   companyId,
@@ -103,6 +129,7 @@ export function ChatPanel({
   userRole = 'employer',
 }: ChatPanelProps) {
   const showCompanyScope = userRole === 'employer';
+  const hasArchive = !!selectedDoc?.sourceArchiveName;
 
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden">
@@ -132,6 +159,21 @@ export function ChatPanel({
                   <FileText className="w-2.5 h-2.5" />
                   Doc
                 </button>
+                {hasArchive && (
+                  <button
+                    onClick={() => setSearchScope('archive')}
+                    className={cn(
+                      "flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all",
+                      searchScope === 'archive'
+                        ? "bg-background text-purple-600 dark:text-purple-400 shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                    title={`Search all files from ${selectedDoc?.sourceArchiveName}`}
+                  >
+                    <Archive className="w-2.5 h-2.5" />
+                    Zip
+                  </button>
+                )}
                 <button
                   onClick={() => setSearchScope('company')}
                   className={cn(
@@ -153,24 +195,74 @@ export function ChatPanel({
               </div>
             )}
 
-            {/* Model Selector */}
-            <Select value={aiModel} onValueChange={(value) => setAiModel(value as AIModelType)}>
-              <SelectTrigger size="sm" className="h-7 w-[140px] bg-muted border-none text-[10px] font-semibold focus:ring-1 focus:ring-purple-500">
-                <SelectValue placeholder="Model" />
-              </SelectTrigger>
-              <SelectContent>
-                {modelConfig.map((model) => (
-                  <SelectItem
-                    key={model.key}
-                    value={model.key}
-                    disabled={modelAvailability[model.key] === false}
-                    className="text-xs"
-                  >
-                    {model.label}{modelAvailability[model.key] === false ? " (Unavailable)" : ""}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* Provider & Model Selector */}
+            <div className="flex items-center gap-2 shrink-0">
+              <Select
+                value={provider}
+                onValueChange={(value) => setProvider(value as LLMProvider)}
+              >
+                <SelectTrigger
+                  size="sm"
+                  className="h-7 w-[110px] bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-[10px] font-semibold"
+                >
+                  <SelectValue placeholder="Provider" />
+                </SelectTrigger>
+                <SelectContent>
+                  {providerOptions
+                    .filter((opt) => providerAvailability[opt.key] !== false)
+                    .map((option) => (
+                      <SelectItem key={option.key} value={option.key} className="text-xs">
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+              <Select
+                value={aiModel}
+                onValueChange={(value) => setAiModel(value as AIModelType)}
+              >
+                <SelectTrigger
+                  size="sm"
+                  className="h-7 w-[150px] bg-slate-100 dark:bg-slate-800 border-slate-200/70 dark:border-slate-700 text-[10px] font-semibold"
+                >
+                  <SelectValue placeholder="Model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {modelConfig
+                    .filter((model) => model.provider === provider)
+                    .map((model) => {
+                      const unavailable = modelAvailability[model.key] === false;
+                      return (
+                        <SelectItem
+                          key={model.key}
+                          value={model.key}
+                          disabled={unavailable}
+                          className={cn("text-xs", unavailable && "opacity-50")}
+                        >
+                          <TooltipProvider delayDuration={300}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="flex items-center gap-1.5">
+                                  <span className={cn(
+                                    "w-1.5 h-1.5 rounded-full flex-shrink-0",
+                                    unavailable ? "bg-red-400" : "bg-emerald-500"
+                                  )} />
+                                  {model.label}
+                                </span>
+                              </TooltipTrigger>
+                              {unavailable && (
+                                <TooltipContent side="left" className="text-xs">
+                                  API key not configured for this model
+                                </TooltipContent>
+                              )}
+                            </Tooltip>
+                          </TooltipProvider>
+                        </SelectItem>
+                      );
+                    })}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Center: Style & Persona pills */}
@@ -238,6 +330,24 @@ export function ChatPanel({
         </div>
       </div>
 
+      {/* Legal / Financial Persona Disclaimer */}
+      {aiPersona === 'legal-expert' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-start gap-2.5 animate-in fade-in">
+          <Scale className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400">
+            This is AI-generated analysis, not legal advice. Consult a qualified attorney for legal matters.
+          </p>
+        </div>
+      )}
+      {aiPersona === 'financial-expert' && (
+        <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-start gap-2.5 animate-in fade-in">
+          <Briefcase className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <p className="text-[11px] font-medium text-amber-700 dark:text-amber-400">
+            This is AI-generated analysis, not financial advice. Consult a qualified financial advisor.
+          </p>
+        </div>
+      )}
+
       {/* Processing Warning */}
       {selectedDoc && selectedDoc.ocrProcessed === false && searchScope === 'document' && (
         <div className="flex-shrink-0 mx-4 mt-3 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl flex items-center gap-2.5 animate-in fade-in">
@@ -257,8 +367,10 @@ export function ChatPanel({
           searchScope={searchScope}
           selectedDocId={selectedDoc?.id}
           companyId={companyId}
+          archiveName={selectedDoc?.sourceArchiveName}
           aiStyle={aiStyle}
           aiPersona={aiPersona}
+          provider={provider}
           aiModel={aiModel}
           onPageClick={setPdfPageNumber}
           onCreateChat={onCreateChat}

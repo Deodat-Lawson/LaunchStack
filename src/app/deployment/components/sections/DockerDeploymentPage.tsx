@@ -100,7 +100,7 @@ docker run --rm -p 3000:3000 \\
           Docker Deployment
         </h1>
         <p className={`text-xl leading-relaxed max-w-2xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          Self-host PDR AI with Docker Compose. The stack includes PostgreSQL with pgvector, automatic schema migrations, and the Next.js runtime.
+          Self-host Launchstack with Docker Compose. The stack includes PostgreSQL with pgvector, automatic schema migrations, and the Next.js runtime.
         </p>
       </motion.div>
 

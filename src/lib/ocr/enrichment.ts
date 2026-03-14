@@ -31,7 +31,7 @@ export async function enrichPageWithVlm(
     return "";
   }
 
-  const model = options?.model ?? "gpt-4o";
+  const model = options?.model ?? "gpt-5-mini";
   const detail = options?.detail ?? "auto";
   const maxTokens = options?.maxTokens ?? 500;
 

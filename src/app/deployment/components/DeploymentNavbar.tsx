@@ -82,7 +82,7 @@ export const DeploymentNavbar: React.FC<DeploymentNavbarProps> = ({
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
-                  PDR AI
+                  Launchstack
                 </span>
                 <span className={`text-[10px] font-medium ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                   Deployment Guide

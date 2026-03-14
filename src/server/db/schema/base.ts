@@ -113,6 +113,8 @@ export const document = pgTable(
         ocrProvider: varchar("ocr_provider", { length: 50 }),
         ocrConfidenceScore: integer("ocr_confidence_score"),
         ocrCostCents: integer("ocr_cost_cents"),
+        mimeType: varchar("mime_type", { length: 128 }),
+        sourceArchiveName: varchar("source_archive_name", { length: 256 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
@@ -715,6 +717,8 @@ export const generatedDocuments = pgTable(
             audience?: string;
             length?: string;
             description?: string;
+            templateType?: "general" | "legal";
+            legalData?: Record<string, string>;
         }>(),
         citations: jsonb("citations").$type<Array<{
             id: string;

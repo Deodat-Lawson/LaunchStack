@@ -17,6 +17,7 @@ import { extractReferences, deduplicateReferences } from "~/app/api/agents/predi
 import { findSuggestedCompanyDocuments } from "~/app/api/agents/predictive-document-analysis/services/documentMatcher";
 import { extractDeterministicInsights } from "~/app/api/agents/predictive-document-analysis/utils/insightExtractors";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
+import { validatePredictiveAnalysis } from "~/lib/agents/supervisor";
 import pLimit from "p-limit";
 import { db } from "~/server/db/index";
 import { document } from "~/server/db/schema";
@@ -399,6 +400,11 @@ export type AnalysisRunStats = {
 export type AnalyzeDocumentChunksResponse = {
     result: PredictiveAnalysisResult;
     stats: AnalysisRunStats;
+    supervision?: {
+        approved: boolean;
+        issues: string[];
+        disclaimer?: string;
+    };
 };
 
 export async function analyzeDocumentChunks(
@@ -479,6 +485,12 @@ export async function analyzeDocumentChunks(
             combinedResult.missingDocuments,
         );
 
+        const sourceTexts = allChunks.map(c => c.content ?? '');
+        const supervision = validatePredictiveAnalysis(combinedResult, sourceTexts);
+        if (!supervision.approved) {
+            console.warn(`[PDA Supervisor] Issues found: ${supervision.issues.join('; ')}`);
+        }
+
         const totalCharacters = allChunks.reduce((sum, chunk) => sum + (chunk.content?.length ?? 0), 0);
         const stats: AnalysisRunStats = {
             aiCalls: batches.length,
@@ -490,7 +502,12 @@ export async function analyzeDocumentChunks(
 
         return {
             result: combinedResult,
-            stats
+            stats,
+            supervision: {
+                approved: supervision.approved,
+                issues: supervision.issues,
+                disclaimer: supervision.disclaimer,
+            },
         };
     } catch (error) {
         console.error("Batch analysis error:", sanitizeErrorMessage(error));

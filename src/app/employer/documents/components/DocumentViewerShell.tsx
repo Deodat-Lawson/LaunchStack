@@ -29,9 +29,11 @@ import { toast } from "sonner";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 
 import { RESPONSE_STYLES, type ResponseStyleId } from "~/lib/ai/styles";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
+import type { AIModelType, LLMProvider } from "~/app/api/agents/documentQ&A/services/types";
+import { ProviderModelMap, ProviderDefaultModels } from "~/app/api/agents/documentQ&A/services/types";
 
 type AIModelAvailability = Record<AIModelType, boolean>;
+type ProviderAvailability = Record<LLMProvider, boolean>;
 
 const ChatPanel = dynamic(
   () => import("./ChatPanel").then((module) => module.ChatPanel),
@@ -95,10 +97,15 @@ export interface DocumentViewerShellProps {
   userRole: 'employer' | 'employee';
 }
 
+const NotesPanel = dynamic(
+  () => import("~/components/notes/NotesPanel").then((module) => module.NotesPanel),
+  { loading: () => <LoadingPage /> }
+);
+
 const VALID_VIEW_MODES = new Set<string>([
   "document-only", "with-ai-qa", "with-ai-qa-history", "predictive-analysis",
   "generator", "rewrite", "upload", "dashboard", "analytics",
-  "employees", "settings", "metadata", "marketing-pipeline",
+  "employees", "settings", "metadata", "marketing-pipeline", "notes",
 ]);
 
 export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
@@ -132,7 +139,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [aiError, setAiError] = useState("");
   const [referencePages, setReferencePages] = useState<number[]>([]);
   const [aiStyle, setAiStyle] = useState<string>("concise");
-  const [searchScope, setSearchScope] = useState<"document" | "company">("document");
+  const [searchScope, setSearchScope] = useState<"document" | "company" | "archive">("document");
   const [aiAnswerModel, setAiAnswerModel] = useState<AIModelType | undefined>(undefined);
   const { sendQuery: sendAIChatQuery, loading: isAiLoading } = useAIChat();
   
@@ -140,8 +147,17 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const { createChat, getChat } = useAIChatbot();
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [aiPersona, setAiPersona] = useState<string>('general');
-  const [aiModel, setAiModel] = useState<AIModelType>("gpt-5.2");
+  const [provider, setProvider] = useState<LLMProvider>("openai");
+  const [aiModel, setAiModel] = useState<AIModelType>(ProviderDefaultModels.openai);
   const [modelAvailability, setModelAvailability] = useState<Partial<AIModelAvailability>>({});
+  const [providerAvailability, setProviderAvailability] = useState<Partial<ProviderAvailability>>({});
+
+  useEffect(() => {
+    const allowedModels = ProviderModelMap[provider];
+    if (allowedModels && !allowedModels.includes(aiModel)) {
+      setAiModel(ProviderDefaultModels[provider]);
+    }
+  }, [provider, aiModel]);
 
   // Handle chat selection and auto-document binding
   useEffect(() => {
@@ -306,10 +322,14 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         const response = await fetch("/api/config/ai-models");
         if (!response.ok) return;
         const data = (await response.json()) as {
+          providers?: Partial<Record<LLMProvider, boolean>>;
           models?: Partial<Record<AIModelType, boolean>>;
         };
         if (data.models) {
           setModelAvailability(data.models);
+        }
+        if (data.providers) {
+          setProviderAvailability(data.providers);
         }
       } catch (error) {
         console.error("Error fetching AI model availability:", error);
@@ -424,7 +444,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     
     if (searchScope === "document" && !selectedDoc) return;
     let resolvedCompanyId = companyId;
-    if (searchScope === "company" && !resolvedCompanyId) {
+    if ((searchScope === "company" || searchScope === "archive") && !resolvedCompanyId) {
       resolvedCompanyId = await ensureCompanyContext();
       if (!resolvedCompanyId) {
         setAiError("Company information not available.");
@@ -439,6 +459,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
 
     const currentQuestion = aiQuestion;
     const modelUsedForQuery = aiModel; // Capture the model at query time
+    const providerUsedForQuery = provider;
     setAiQuestion("");
 
     try {
@@ -447,8 +468,10 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         searchScope,
         style: aiStyle as ResponseStyleId,
         aiModel: modelUsedForQuery,
+        provider: providerUsedForQuery,
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
-        companyId: searchScope === "company" ? resolvedCompanyId ?? undefined : undefined,
+        companyId: (searchScope === "company" || searchScope === "archive") ? resolvedCompanyId ?? undefined : undefined,
+        archiveName: searchScope === "archive" && selectedDoc?.sourceArchiveName ? selectedDoc.sourceArchiveName : undefined,
       });
 
       if (!data) throw new Error("Failed to get AI response");
@@ -464,11 +487,22 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     }
   };
 
-  const handleSearchScopeChange = useCallback((scope: "document" | "company") => {
+  const handleSearchScopeChange = useCallback((scope: "document" | "company" | "archive") => {
     if (scope === "company") {
       void ensureCompanyContext().then((resolvedCompanyId) => {
         if (resolvedCompanyId) {
           setSearchScope("company");
+        } else {
+          setAiError("Company information not available.");
+          setSearchScope("document");
+        }
+      });
+      return;
+    }
+    if (scope === "archive") {
+      void ensureCompanyContext().then((resolvedCompanyId) => {
+        if (resolvedCompanyId) {
+          setSearchScope("archive");
         } else {
           setAiError("Company information not available.");
           setSearchScope("document");
@@ -622,10 +656,13 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                       setSearchScope={handleSearchScopeChange}
                       aiStyle={aiStyle}
                       setAiStyle={setAiStyle}
+                      provider={provider}
+                      setProvider={setProvider}
                       aiModel={aiModel}
                       setAiModel={setAiModel}
                       aiAnswerModel={aiAnswerModel}
                       modelAvailability={modelAvailability}
+                      providerAvailability={providerAvailability}
                       styleOptions={STYLE_OPTIONS}
                       referencePages={referencePages}
                       setPdfPageNumber={setPdfPageNumber}
@@ -645,9 +682,12 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                               setAiStyle={setAiStyle}
                               aiPersona={aiPersona}
                               setAiPersona={setAiPersona}
+                              provider={provider}
+                              setProvider={setProvider}
                               aiModel={aiModel}
                               setAiModel={setAiModel}
                               modelAvailability={modelAvailability}
+                              providerAvailability={providerAvailability}
                               searchScope={searchScope}
                               setSearchScope={handleSearchScopeChange}
                               companyId={companyId}
@@ -757,6 +797,24 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       case "marketing-pipeline":
         if (userRole !== 'employer') return null;
         return <MarketingPipelinePanel />;
+      case "notes":
+        return (
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            <ResizablePanel defaultSize={60} minSize={35}>
+              <DocumentViewer 
+                document={selectedDoc} 
+                pdfPageNumber={pdfPageNumber}
+                setPdfPageNumber={setPdfPageNumber}
+              />
+            </ResizablePanel>
+            
+            <ResizableHandle className="w-px bg-border" />
+            
+            <ResizablePanel defaultSize={40} minSize={25} maxSize={50}>
+              <NotesPanel documentId={selectedDoc?.id ? String(selectedDoc.id) : null} />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        );
       default:
         return null;
     }

@@ -1,5 +1,14 @@
+import type { Metadata } from 'next';
 import Link from "next/link";
 import React from 'react';
+
+export const metadata: Metadata = {
+    title: 'Pricing — Free & Open Source for Every Founder',
+    description: 'Launchstack is completely free and open source. Self-host with your own API keys or try the hosted demo. No hidden costs, no usage limits, no vendor lock-in.',
+    alternates: {
+        canonical: '/pricing',
+    },
+};
 import { Brain, Check, Users, Heart, Award, GraduationCap } from 'lucide-react';
 import styles from '../../styles/pricing.module.css';
 import Image from "next/image";
@@ -21,7 +30,7 @@ export default function PricingPage() {
                             Open Source & Self-Deployable
                         </h1>
                         <p className={styles.heroDescription}>
-                            Deploy PDR AI with your own API keys - this website serves as a free demo
+                            Deploy Launchstack with your own API keys — this website serves as a free demo
                         </p>
                     </div>
                 </div>
@@ -69,7 +78,7 @@ export default function PricingPage() {
                                     <span className={styles.price}>Free</span>
                                 </div>
                                 <p className={styles.planDescription}>
-                                    This is a demo version of PDR AI for testing and exploration.
+                                    This is a demo version of Launchstack for testing and exploration.
                                 </p>
                             </div>
 
@@ -137,7 +146,7 @@ export default function PricingPage() {
                                     <span className={styles.priceSubtext}>with your API keys</span>
                                 </div>
                                 <p className={styles.planDescription}>
-                                    Deploy PDR AI on your own infrastructure with your API keys. This website is a free demo for testing and exploration.
+                                    Deploy Launchstack on your own infrastructure with your API keys. This website is a free demo for testing and exploration.
                                 </p>
                             </div>
 
@@ -210,7 +219,7 @@ export default function PricingPage() {
 
                 <div className={styles.benefitsSection}>
                     <div className={styles.benefitsContainer}>
-                        <h2 className={styles.benefitsTitle}>Why Choose PDR AI</h2>
+                        <h2 className={styles.benefitsTitle}>Why Choose Launchstack</h2>
                         <div className={styles.benefitsGrid}>
                             <div className={styles.benefitCard}>
                                 <GraduationCap className={styles.benefitIcon} />

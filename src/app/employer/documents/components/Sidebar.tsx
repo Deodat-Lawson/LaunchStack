@@ -236,7 +236,7 @@ export function Sidebar({
             </div>
             <div>
               <span className="font-bold text-sm tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400">
-                PDR AI
+                Launchstack
               </span>
               <div className="text-[10px] text-muted-foreground font-medium -mt-0.5">Workspace</div>
             </div>

@@ -122,7 +122,7 @@ OLLAMA_BASE_URL="http://host.docker.internal:11434"`;
           AI Model Providers
         </h1>
         <p className={`text-xl leading-relaxed max-w-2xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          PDR AI supports multiple LLM providers simultaneously. Users can switch providers and models from the UI at query time.
+          Launchstack supports multiple LLM providers simultaneously. Users can switch providers and models from the UI at query time.
         </p>
       </motion.div>
 
@@ -246,7 +246,7 @@ OLLAMA_BASE_URL="http://host.docker.internal:11434"`;
       <Section title="OpenAI" subtitle="Required provider — powers both chat models and the embedding pipeline." darkMode={darkMode}>
         <div className="space-y-4">
           <StepCard icon={<Key className="w-5 h-5" />} title="Why is OpenAI required?" darkMode={darkMode}>
-            PDR AI uses OpenAI&apos;s <Code darkMode={darkMode}>text-embedding-3-large</Code> model for all document embeddings
+            Launchstack uses OpenAI&apos;s <Code darkMode={darkMode}>text-embedding-3-large</Code> model for all document embeddings
             (1536 dimensions). These embeddings power the RAG search pipeline, ensemble retrieval, document matching, and
             predictive document analysis. Without an OpenAI key, documents cannot be ingested or searched.
           </StepCard>

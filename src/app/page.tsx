@@ -4,27 +4,94 @@ import Image from "next/image";
 import React from 'react';
 
 export const metadata: Metadata = {
-    title: 'PDR AI — AI-Powered Document Analysis Platform',
-    description: 'Document RAG, predictive analysis, contract review, and AI Q&A — all open source. Upload documents, detect gaps, and get cited answers instantly.',
+    title: 'Launchstack — The Open-Source Launch Stack for Tech Founders',
+    description: 'Launchstack is a free, open-source AI platform that helps tech founders analyze documents, detect compliance gaps, manage teams, and grow their product. Self-host with your own API keys.',
+    alternates: {
+        canonical: '/',
+    },
 };
 import {
     Brain, ArrowRight, FileSearch, Upload, Sparkles, CheckCircle,
-    Github, Heart, Code2, ExternalLink,
+    Github, Heart, Code2, ExternalLink, HelpCircle,
 } from 'lucide-react';
 import { Navbar } from './_components/Navbar';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://launchstack.app';
 const GITHUB_REPO = "https://github.com/Deodat-Lawson/pdr_ai_v2";
 
 const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'PDR AI',
+    name: 'Launchstack',
     applicationCategory: 'BusinessApplication',
+    applicationSubCategory: 'DeveloperApplication',
     operatingSystem: 'Web',
-    description: 'AI-powered document analysis platform with RAG, predictive gap detection, and intelligent Q&A.',
-    url: 'https://pdr-ai.com',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    creator: { '@type': 'Organization', name: 'PDR AI', url: 'https://pdr-ai.com' },
+    description: 'Launchstack is a free, open-source AI platform that helps tech founders analyze documents, detect compliance gaps, manage teams, and grow their product. It supports 12+ document types and can be self-hosted with your own API keys.',
+    url: SITE_URL,
+    downloadUrl: GITHUB_REPO,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+    creator: { '@type': 'Organization', name: 'Launchstack', url: SITE_URL },
+    featureList: 'Document RAG, Predictive Analysis, Contract Review, AI Q&A, Employee Management, Analytics Dashboard, Marketing Pipeline, Self-Hosting',
+    screenshot: `${SITE_URL}/og-image.png`,
+    softwareVersion: '2.0',
+    license: 'https://opensource.org/licenses/MIT',
+};
+
+const organizationLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Launchstack',
+    url: SITE_URL,
+    logo: `${SITE_URL}/favicon.ico`,
+    description: 'Launchstack builds free, open-source tools that help tech founders grow their products.',
+    sameAs: [GITHUB_REPO],
+};
+
+const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+        {
+            '@type': 'Question',
+            name: 'What is Launchstack?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Launchstack is a free, open-source AI platform built for tech founders. It helps you analyze documents, detect compliance gaps, manage your team, and generate marketing content — all self-hostable with your own API keys.',
+            },
+        },
+        {
+            '@type': 'Question',
+            name: 'Is Launchstack really free?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes. Launchstack is 100% free and open source under the MIT license. You can self-host it on your own infrastructure using your own API keys, with no usage limits and no hidden costs.',
+            },
+        },
+        {
+            '@type': 'Question',
+            name: 'Can I self-host Launchstack?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Absolutely. Launchstack can be deployed on Vercel, Docker, or any self-hosted server. You bring your own API keys and maintain full control over your data and infrastructure.',
+            },
+        },
+        {
+            '@type': 'Question',
+            name: 'What document types does Launchstack support?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Launchstack supports 12+ document types across 8 domains including contracts, financial documents, technical specs, compliance filings, HR policies, educational materials, research papers, and general documents.',
+            },
+        },
+        {
+            '@type': 'Question',
+            name: 'How is Launchstack different from other document AI tools?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Unlike proprietary alternatives, Launchstack is fully open source and free. It combines document RAG with predictive gap detection, team management, and marketing tools in a single platform. You own your data and can customize every aspect of the platform.',
+            },
+        },
+    ],
 };
 
 export default function HomePage() {
@@ -33,6 +100,14 @@ export default function HomePage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
             />
             <Navbar />
 
@@ -53,11 +128,11 @@ export default function HomePage() {
                 </a>
 
                 <h1 className="text-5xl md:text-7xl font-bold leading-tight tracking-tight max-w-4xl mb-6 relative">
-                    The AI Platform for<br />
-                    <span className="text-purple-600 dark:text-purple-400">Professional Documents</span>
+                    The Open-Source Launch Stack<br />
+                    <span className="text-purple-600 dark:text-purple-400">for Tech Founders</span>
                 </h1>
                 <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mb-10 leading-relaxed relative">
-                    Document RAG, employee management, and enterprise analytics — all open source and self-deployable with your own API keys.
+                    Document AI, growth tools, and team management — built by founders, for founders. Completely free, fully open source, and self-hostable with your own API keys.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3 items-center relative">
@@ -106,7 +181,7 @@ export default function HomePage() {
                             AI that answers from<br />your documents, real‑time
                         </h2>
                         <p className="text-gray-500 dark:text-gray-400 text-lg mb-7 leading-relaxed">
-                            PDR-AI uses retrieval-augmented generation to give instant, cited answers from your uploaded documents — with page references and context-aware explanations.
+                            Launchstack uses retrieval-augmented generation to give instant, cited answers from your uploaded documents — with page references and context-aware explanations.
                         </p>
                         <ul className="space-y-3 mb-8">
                             {[
@@ -207,7 +282,7 @@ export default function HomePage() {
                         Deep analysis across<br />8 document domains
                     </h2>
                     <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-                        PDR AI detects missing references, compliance gaps, and actionable insights tailored to your specific document type.
+                        Launchstack detects missing references, compliance gaps, and actionable insights tailored to your specific document type.
                     </p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -240,12 +315,12 @@ export default function HomePage() {
                         Up and running in 3 steps
                     </h2>
                     <p className="text-gray-500 dark:text-gray-400 text-lg mb-16 max-w-lg mx-auto">
-                        Deploy PDR-AI with your own API keys in minutes.
+                        Deploy Launchstack with your own API keys in minutes.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                         {[
                             { n: "1", title: "Upload Documents", desc: "Drag and drop PDFs, contracts, reports, and more to your secure workspace.", icon: <Upload className="w-6 h-6" /> },
-                            { n: "2", title: "AI Processes", desc: "PDR-AI reads, categorizes, and builds a knowledge graph — automatically.", icon: <Sparkles className="w-6 h-6" /> },
+                            { n: "2", title: "AI Processes", desc: "Launchstack reads, categorizes, and builds a knowledge graph — automatically.", icon: <Sparkles className="w-6 h-6" /> },
                             { n: "3", title: "Get Answers", desc: "Ask questions, get cited summaries, and review compliance gaps instantly.", icon: <CheckCircle className="w-6 h-6" /> },
                         ].map((s) => (
                             <div key={s.n} className="text-center">
@@ -270,7 +345,7 @@ export default function HomePage() {
                             Fully open source.<br />Deploy anywhere.
                         </h2>
                         <p className="text-gray-500 dark:text-gray-400 text-lg mb-8 leading-relaxed">
-                            Self-host PDR-AI with your own API keys. This public site is a free demo — fork it, customize it, and run it on your own infrastructure.
+                            Self-host Launchstack with your own API keys. This public site is a free demo — fork it, customize it, and run it on your own infrastructure.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3">
                             <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">
@@ -347,6 +422,75 @@ export default function HomePage() {
                 </div>
             </section>
 
+            {/* ── What is Launchstack (GEO-optimized) ─────────────── */}
+            <section className="max-w-4xl mx-auto px-4 py-20">
+                <div className="text-center mb-10">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+                        What is Launchstack?
+                    </h2>
+                </div>
+                <div className="prose prose-lg dark:prose-invert max-w-none text-gray-600 dark:text-gray-400 leading-relaxed space-y-4">
+                    <p>
+                        Launchstack is a free, open-source AI platform built specifically for tech founders who want to move fast without spending a fortune on SaaS tools. It brings together document analysis, predictive gap detection, team management, and marketing automation into a single platform that you can self-host on your own infrastructure.
+                    </p>
+                    <p>
+                        Most startup tools lock you into expensive subscriptions before you have revenue. Launchstack takes a different approach. You bring your own API keys, deploy on Vercel or Docker, and get the same capabilities that enterprise teams pay thousands per month for. There are no usage limits, no hidden costs, and no vendor lock-in.
+                    </p>
+                    <p>
+                        The platform supports over 12 document types across 8 domains, from contracts and compliance filings to financial statements and research papers. Its retrieval-augmented generation engine gives you cited answers with page references, while the predictive analysis system flags missing documents and compliance gaps before they become problems.
+                    </p>
+                </div>
+            </section>
+
+            {/* ── FAQ Section ─────────────────────────────────────── */}
+            <section className="border-y border-gray-100 dark:border-purple-900/40 py-20">
+                <div className="max-w-3xl mx-auto px-4">
+                    <div className="text-center mb-14">
+                        <p className="text-gray-400 dark:text-gray-500 text-xs uppercase tracking-widest mb-4 font-semibold">Frequently Asked Questions</p>
+                        <h2 className="text-3xl md:text-4xl font-bold leading-tight">
+                            Everything you need to know
+                        </h2>
+                    </div>
+                    <div className="space-y-6">
+                        {[
+                            {
+                                q: "Is Launchstack really free?",
+                                a: "Yes, completely. Launchstack is open source under the MIT license. You can self-host it with your own API keys and pay nothing beyond your own infrastructure costs. There are no premium tiers, no feature gates, and no usage limits."
+                            },
+                            {
+                                q: "How do I deploy Launchstack?",
+                                a: "You can deploy Launchstack on Vercel with one click, run it in Docker containers, or set it up on any server you control. The deployment guide walks you through every step, and most founders have it running in under 30 minutes."
+                            },
+                            {
+                                q: "What makes Launchstack different from other document AI tools?",
+                                a: "Two things. First, it is completely free and open source — you will never get a surprise invoice. Second, it goes beyond basic document Q&A by combining predictive gap detection, team management, analytics, and marketing tools into one platform. Most alternatives only do one of those things and charge you monthly for it."
+                            },
+                            {
+                                q: "Do I need my own API keys?",
+                                a: "Yes. Launchstack uses your own OpenAI, Anthropic, or Google AI keys for the AI features. This means you are not locked into our pricing and you maintain full control over your AI usage and costs."
+                            },
+                            {
+                                q: "Can I use Launchstack for my startup right now?",
+                                a: "Absolutely. Launchstack is production-ready and already used by teams for contract analysis, compliance checking, and document management. You can also try the free demo on this site before deploying your own instance."
+                            },
+                        ].map((item) => (
+                            <div
+                                key={item.q}
+                                className="bg-gray-50 dark:bg-purple-950/30 border border-gray-100 dark:border-purple-800/40 rounded-xl p-6"
+                            >
+                                <div className="flex items-start gap-3">
+                                    <HelpCircle className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <h3 className="font-bold text-gray-900 dark:text-white text-base mb-2">{item.q}</h3>
+                                        <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{item.a}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* ── Final CTA ─────────────────────────────────────────── */}
             <section className="relative py-36 text-center px-4">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,rgba(147,51,234,0.1),transparent)] dark:bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,rgba(147,51,234,0.18),transparent)] pointer-events-none" />
@@ -355,7 +499,7 @@ export default function HomePage() {
                     <span className="text-purple-600 dark:text-purple-400">during analysis, not after.</span>
                 </h2>
                 <p className="text-gray-500 dark:text-gray-400 text-lg mb-10 max-w-md mx-auto relative">
-                    Try PDR-AI free on your next document today.
+                    Try Launchstack free on your next document today.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 items-center justify-center relative">
                     <Link href="/signup">
@@ -377,7 +521,7 @@ export default function HomePage() {
                 <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
                         <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                        <span className="font-bold text-gray-900 dark:text-white">PDR AI</span>
+                        <span className="font-bold text-gray-900 dark:text-white">Launchstack</span>
                     </div>
                     <div className="flex gap-8 text-sm text-gray-500">
                         <Link href="/pricing" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Pricing</Link>
@@ -387,7 +531,7 @@ export default function HomePage() {
                             <Github className="w-3.5 h-3.5" /> GitHub
                         </a>
                     </div>
-                    <p className="text-gray-400 dark:text-gray-500 text-sm">© 2026 PDR AI. All rights reserved.</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-sm">© 2026 Launchstack. All rights reserved.</p>
                 </div>
             </footer>
         </div>

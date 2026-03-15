@@ -108,6 +108,7 @@ export interface CompanyMetadataJSON {
     markets: MarketsInfo;
     projects: ProjectEntry[];
     policies: Record<string, MetadataFact>;
+    legal: LegalEntry[];
 
     provenance: ProvenanceInfo;
     derived_views?: Record<string, string>;
@@ -160,6 +161,17 @@ export interface SubprojectEntry {
     name: MetadataFact;
     description?: MetadataFact;
     status?: MetadataFact;
+}
+
+export interface LegalEntry {
+    name: MetadataFact; // title of the legal document/clause
+    type?: MetadataFact; // e.g. "contract", "NDA", "terms_of_service", "privacy_policy", "regulation"
+    summary?: MetadataFact;
+    effective_date?: MetadataFact;
+    expiry_date?: MetadataFact;
+    parties?: MetadataFact; // comma-separated or descriptive
+    status?: MetadataFact; // e.g. "active", "expired", "pending"
+    [key: string]: MetadataFact<unknown> | undefined;
 }
 
 export interface ProvenanceInfo {
@@ -235,6 +247,7 @@ export function createEmptyMetadata(companyId: string): CompanyMetadataJSON {
         markets: {},
         projects: [],
         policies: {},
+        legal: [],
         provenance: {
             total_documents_processed: 0,
             extraction_model: "",

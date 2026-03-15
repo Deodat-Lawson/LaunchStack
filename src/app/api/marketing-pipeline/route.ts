@@ -52,9 +52,13 @@ export async function POST(request: Request) {
             );
         }
 
+        const url = new URL(request.url);
+        const debug = url.searchParams.get("debug") === "true";
+
         const result = await runMarketingPipeline({
             companyId,
             input: validation.data,
+            debug,
         });
 
         return NextResponse.json(

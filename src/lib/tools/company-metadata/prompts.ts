@@ -24,6 +24,7 @@ RULES:
 - For usage, default to "outreach_ok_with_approval" unless the content is clearly promotional/public (then "outreach_ok") or clearly internal/sensitive (then "no_outreach").
 - If you find people's personal emails or phone numbers, set visibility to "private" and usage to "no_outreach".
 - For projects, preserve any hierarchy you find (project → subproject).
+- For legal content (contracts, NDAs, terms of service, privacy policies, regulatory references), extract the document title as "name", the type (contract, NDA, terms_of_service, privacy_policy, regulation), a brief summary, effective/expiry dates if stated, involved parties, and status (active, expired, pending).
 - If the section does not contain any relevant company metadata, return empty arrays/objects. Do NOT fabricate data.`;
 
 // ============================================================================

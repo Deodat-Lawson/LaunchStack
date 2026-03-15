@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx jest __tests__/api/clientProspector/ --verbose)",
+      "Bash(npx jest __tests__/api/clientProspector/ -t \"Property 11\" --verbose)"
+    ]
+  }
+}

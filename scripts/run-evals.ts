@@ -11,7 +11,7 @@
 import { EVAL_SCENARIOS, runEvals } from '~/lib/agents/evals';
 
 function main() {
-    console.log('=== PDR AI Agent Eval Suite ===\n');
+    console.log('=== Launchstack Agent Eval Suite ===\n');
     console.log(`Running ${EVAL_SCENARIOS.length} scenarios...\n`);
 
     const report = runEvals(EVAL_SCENARIOS);

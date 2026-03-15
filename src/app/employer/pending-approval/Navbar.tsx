@@ -11,7 +11,7 @@ const NavBar = () => {
             <div className={styles.navContent}>
                 <div className={styles.logoContainer}>
                     <Brain className={styles.logoIcon} />
-                    <span className={styles.logoText}>PDR AI</span>
+                    <span className={styles.logoText}>Launchstack</span>
                 </div>
                 <ProfileDropdown />
             </div>

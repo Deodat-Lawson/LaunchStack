@@ -1,4 +1,4 @@
-# PDR AI — Modular Architecture Overview
+# Launchstack — Modular Architecture Overview
 
 ## Three-Layer Architecture
 

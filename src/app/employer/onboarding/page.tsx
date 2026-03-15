@@ -90,10 +90,10 @@ export default function OnboardingPage() {
       <div className={styles.cardBody}>
         <div className={styles.welcomeLogo}>
           <Brain className={styles.welcomeLogoIcon} />
-          <span className={styles.welcomeLogoText}>PDR AI</span>
+          <span className={styles.welcomeLogoText}>Launchstack</span>
         </div>
 
-        <h1 className={styles.welcomeTitle}>Welcome to PDR AI</h1>
+        <h1 className={styles.welcomeTitle}>Welcome to Launchstack</h1>
         <p className={styles.welcomeSubtitle}>
           Turn your company&apos;s documents into a living knowledge base that
           powers smarter decisions, automated marketing, and team-wide insights.

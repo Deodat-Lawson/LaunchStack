@@ -42,8 +42,8 @@ CLERK_SECRET_KEY=sk_live_xxx`;
             number={1}
             title="Create Clerk account and application"
             description="In Clerk dashboard, create a new application instance for this project."
-            code="Create a new Clerk application instance for PDR AI."
-            onCopy={() => copyToClipboard('Create a new Clerk application instance for PDR AI.', 'clerk-step-1')}
+            code="Create a new Clerk application instance for Launchstack."
+            onCopy={() => copyToClipboard('Create a new Clerk application instance for Launchstack.', 'clerk-step-1')}
             copied={copiedCode === 'clerk-step-1'}
             darkMode={darkMode}
           />

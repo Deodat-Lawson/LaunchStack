@@ -379,7 +379,7 @@ export default function MarketingPipelinePage() {
                         tabIndex={0}
                     >
                         <Brain className={homeStyles.logoIcon} />
-                        <span className={homeStyles.logoText}>PDR AI</span>
+                        <span className={homeStyles.logoText}>Launchstack</span>
                     </div>
                     <div className={homeStyles.navActions}>
                         <button

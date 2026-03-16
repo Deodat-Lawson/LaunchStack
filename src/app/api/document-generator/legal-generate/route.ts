@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await request.json();
+    const body: unknown = await request.json();
     const parsed = GenerateSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -59,7 +59,12 @@ export async function POST(request: Request) {
 
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: "Validation failed", details: result.errors },
+        {
+          success: false,
+          error: "Validation failed",
+          details: result.errors,
+          fieldErrors: result.fieldErrors ?? {},
+        },
         { status: 422 }
       );
     }

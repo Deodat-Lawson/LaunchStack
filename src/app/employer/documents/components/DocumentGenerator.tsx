@@ -48,6 +48,7 @@ export function DocumentGenerator() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [legalFieldErrors, setLegalFieldErrors] = useState<Record<string, string>>({});
 
   const fetchDocuments = useCallback(async () => {
     try {
@@ -101,6 +102,8 @@ export function DocumentGenerator() {
   };
 
   const handleNewDocument = (template: DocumentTemplate) => {
+    setError(null);
+    setLegalFieldErrors({});
     setSelectedTemplate(template);
     setCurrentView('config');
   };
@@ -110,6 +113,7 @@ export function DocumentGenerator() {
 
     setIsSaving(true);
     setError(null);
+    setLegalFieldErrors({});
 
     try {
       const legalResponse = await fetch('/api/document-generator/legal-generate', {
@@ -126,15 +130,22 @@ export function DocumentGenerator() {
         success: boolean;
         error?: string;
         details?: string[];
+        fieldErrors?: Record<string, string>;
         title?: string;
         sections?: EditorSection[];
         docxBase64?: string;
         filename?: string;
       };
 
+      if (legalResponse.status === 422) {
+        setCurrentView('config');
+        setLegalFieldErrors(legalData.fieldErrors ?? {});
+        setError('Please fill in all required fields before generating the document.');
+        return;
+      }
+
       if (!legalData.success) {
         setError(legalData.error ?? 'Failed to generate legal document');
-        setIsSaving(false);
         return;
       }
 
@@ -237,6 +248,8 @@ export function DocumentGenerator() {
     setCurrentView('home');
     setCurrentDocument(null);
     setSelectedTemplate(null);
+    setLegalFieldErrors({});
+    setError(null);
   };
 
   if (isLoading) {
@@ -308,6 +321,8 @@ export function DocumentGenerator() {
             onBack={handleBackToHome}
             onGenerate={(data) => void handleLegalGenerate(data)}
             isGenerating={isSaving}
+            serverErrors={legalFieldErrors}
+            globalError={error}
           />
         </div>
       );

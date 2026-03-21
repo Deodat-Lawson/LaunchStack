@@ -25,7 +25,7 @@ type UploadBootstrapResponse = {
     landingAI: boolean;
   };
   storageProvider: "cloud" | "local";
-  s3Endpoint: string;
+  s3Endpoint?: string;
 };
 
 export async function GET() {
@@ -99,7 +99,9 @@ export async function GET() {
       storageProvider:
         (process.env.NEXT_PUBLIC_STORAGE_PROVIDER as "cloud" | "local") ??
         "cloud",
-      s3Endpoint: process.env.NEXT_PUBLIC_S3_ENDPOINT ?? "",
+      ...(process.env.NEXT_PUBLIC_STORAGE_PROVIDER === "local" && process.env.NEXT_PUBLIC_S3_ENDPOINT
+        ? { s3Endpoint: process.env.NEXT_PUBLIC_S3_ENDPOINT }
+        : {}),
     };
 
     return NextResponse.json(response);

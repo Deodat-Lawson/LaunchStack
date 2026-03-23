@@ -8,6 +8,7 @@ import type {
   ProviderStrategy,
   SearchExecutionResult,
   SearchProviderFn,
+  SearchProviderUsed,
 } from "~/lib/tools/trend-search/providers/types";
 
 const MAX_RETRIES = 2;
@@ -21,6 +22,10 @@ function normalizeUrl(url: string): string {
   }
 }
 
+/**
+ * Runs all sub-queries through a single provider with retry and URL deduplication.
+ * @returns Combined RawSearchResult[] (deduplicated by URL).
+ */
 async function executeWithProvider(
   subQueries: PlannedQuery[],
   provider: SearchProviderFn,
@@ -111,28 +116,34 @@ export async function executeSearch(
 ): Promise<SearchExecutionResult> {
   const strategy = resolveStrategy(strategyOverride);
 
+  const hasTavilyKey = Boolean(env.server.TAVILY_API_KEY);
+  const hasSerperKey = Boolean(env.server.SERPER_API_KEY);
+
   const useSerper =
-    env.server.SERPER_API_KEY &&
+    hasSerperKey &&
     (strategy === "serper" ||
       strategy === "fallback" ||
       strategy === "parallel");
 
   if (!useSerper && strategy === "serper") {
     console.warn(
-      "[web-search] SERPER_API_KEY not set; falling back to Tavily strategy.",
+      "[web-search] SERPER_API_KEY not set; downgrading strategy to tavily.",
     );
   }
 
   const tavilyProvider = getProvider("tavily");
   const serperProvider = getProvider("serper");
 
-  // Basic single-provider strategies
+  // Basic single-provider strategies (tavily default, or Serper strategies downgraded without key)
   if (strategy === "tavily" || !useSerper) {
     if (!tavilyProvider) {
       return { results: [], providerUsed: "none" };
     }
     const results = await executeWithProvider(subQueries, tavilyProvider);
-    return { results, providerUsed: "tavily" };
+    return {
+      results,
+      providerUsed: hasTavilyKey ? "tavily" : "none",
+    };
   }
 
   if (strategy === "serper") {
@@ -153,7 +164,10 @@ export async function executeSearch(
         return { results: [], providerUsed: "none" };
       }
       const results = await executeWithProvider(subQueries, tavilyProvider);
-      return { results, providerUsed: "tavily" };
+      return {
+        results,
+        providerUsed: hasTavilyKey ? "tavily" : "none",
+      };
     }
 
     const primaryResults = await executeWithProvider(
@@ -168,7 +182,7 @@ export async function executeSearch(
       "[web-search] Serper returned no results for all sub-queries, falling back to Tavily.",
     );
     if (!tavilyProvider) {
-      return { results: [], providerUsed: "serper" };
+      return { results: [], providerUsed: "none" };
     }
 
     const fallbackResults = await executeWithProvider(
@@ -177,7 +191,7 @@ export async function executeSearch(
     );
     return {
       results: fallbackResults,
-      providerUsed: "tavily (fallback)",
+      providerUsed: hasTavilyKey ? "tavily" : "none",
     };
   }
 
@@ -198,24 +212,31 @@ export async function executeSearch(
       })),
     );
 
-    const merged: RawSearchResult[] = [];
-    const bestByUrl = new Map<string, RawSearchResult>();
+    // First URL wins per provider order (Serper then Tavily). Do not compare
+    // `score` across providers — Tavily and Serper use different scales.
+    const byUrl = new Map<string, RawSearchResult>();
 
     for (const { results } of resultsPerProvider) {
       for (const r of results) {
         const normalizedUrl = normalizeUrl(r.url);
-        const existing = bestByUrl.get(normalizedUrl);
-        if (!existing || r.score > existing.score) {
-          bestByUrl.set(normalizedUrl, r);
+        if (normalizedUrl && !byUrl.has(normalizedUrl)) {
+          byUrl.set(normalizedUrl, r);
         }
       }
     }
 
-    for (const value of bestByUrl.values()) {
-      merged.push(value);
+    const merged: RawSearchResult[] = [...byUrl.values()];
+
+    let providerUsed: SearchProviderUsed;
+    if (hasTavilyKey && hasSerperKey) {
+      providerUsed = "tavily+serper";
+    } else if (hasSerperKey) {
+      providerUsed = "serper";
+    } else {
+      providerUsed = "none";
     }
 
-    return { results: merged, providerUsed: "tavily+serper" };
+    return { results: merged, providerUsed };
   }
 
   // Fallback safety – should not reach here
@@ -224,6 +245,11 @@ export async function executeSearch(
     return { results: [], providerUsed: "none" };
   }
   const defaultResults = await executeWithProvider(subQueries, defaultProvider);
-  return { results: defaultResults, providerUsed: "auto" };
+  const providerUsed: SearchProviderUsed =
+    defaultProvider === tavilyProvider
+      ? hasTavilyKey
+        ? "tavily"
+        : "none"
+      : "serper";
+  return { results: defaultResults, providerUsed };
 }
-

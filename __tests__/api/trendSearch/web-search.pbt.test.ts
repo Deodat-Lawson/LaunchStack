@@ -112,11 +112,11 @@ describe("Unit: one sub-query returns 0 results, pipeline continues", () => {
             );
         });
 
-        const result = await executeSearch(subQueries);
+        const { results } = await executeSearch(subQueries);
 
         expect(fetchSpy).toHaveBeenCalledTimes(3);
-        expect(result.results).toHaveLength(2);
-        expect(result.results.map((r) => r.url)).toEqual(["https://b.com", "https://c.com"]);
+        expect(results).toHaveLength(2);
+        expect(results.map((r) => r.url)).toEqual(["https://b.com", "https://c.com"]);
     });
 });
 
@@ -151,14 +151,14 @@ describe("Unit: Tavily fails, retries 2 times then marks sub-query failed", () =
         const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
         const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
 
-        const result = await executeSearch(subQueries);
+        const { results } = await executeSearch(subQueries);
 
         consoleErrorSpy.mockRestore();
         consoleWarnSpy.mockRestore();
 
         // 1 + 2 retries for first sub-query, then 1 for second
         expect(fetchSpy).toHaveBeenCalledTimes(4);
-        expect(result.results).toHaveLength(1);
-        expect(result.results[0].url).toBe("https://ok.com");
+        expect(results).toHaveLength(1);
+        expect(results[0]!.url).toBe("https://ok.com");
     });
 });

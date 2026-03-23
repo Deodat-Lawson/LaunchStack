@@ -12,7 +12,7 @@ const teamMembers = [
         id: 1,
         name: 'Richard Zhou',
         role: 'Founder and CEO',
-        description: 'Director overseeing full-stack development with a focus on AI integration and document processing systems. Leads the strategic and technical development of PDR AI.',
+        description: 'Director overseeing full-stack development with a focus on AI integration and document processing systems. Leads the strategic and technical development of Launchstack.',
         image: '/api/placeholder/400/400',
         email: 'richardzhou1688@gmail.com',
         github: 'https://github.com/DuckyCodes',
@@ -22,7 +22,7 @@ const teamMembers = [
         id: 2,
         name: 'Timothy Lin',
         role: 'Tech Lead',
-        description: 'Developed and built the PDR AI platform. Specializes in full-stack development, AI integration, and Machine Learning. Leads the technical development of PDR AI.',
+        description: 'Developed and built the Launchstack platform. Specializes in full-stack development, AI integration, and Machine Learning. Leads the technical development of Launchstack.',
         image: 'https://h0xotvuawi.ufs.sh/f/KSLubuOGoQY2NnwtVGR6HJrBbtv7fyQpxVMN4nEGLsh1mcT9',
         email: 'tlin56@jh.edu',
         github: 'https://github.com/Deodat-Lawson',
@@ -40,7 +40,7 @@ export default function About() {
                 <div className={styles.header}>
                     <h1 className={styles.title}>Meet Our Team</h1>
                     <p className={styles.subtitle}>
-                        The minds behind PDR AI, working to make professional documents easier to read and interpret.
+                        The minds behind Launchstack, working to make professional documents easier to read and interpret.
                     </p>
                 </div>
 

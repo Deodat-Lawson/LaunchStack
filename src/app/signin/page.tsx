@@ -24,7 +24,7 @@ const SigninPage: React.FC = () => {
             <div className={styles.brandContent}>
                 <div className={styles.brandLogo}>
                     <Brain className={styles.brandLogoIcon} />
-                    <span className={styles.brandLogoText}>PDR AI</span>
+                    <span className={styles.brandLogoText}>Launchstack</span>
                 </div>
 
                 <h2 className={styles.brandTitle}>
@@ -76,7 +76,7 @@ const SigninPage: React.FC = () => {
                 <div className={styles.testimonial}>
                     <CheckCircle className={styles.testimonialIcon} />
                     <p className={styles.testimonialText}>
-                        &ldquo;PDR AI reduced our document review time by 80% and dramatically improved our compliance workflow.&rdquo;
+                        &ldquo;Launchstack reduced our document review time by 80% and dramatically improved our compliance workflow.&rdquo;
                     </p>
                 </div>
             </div>

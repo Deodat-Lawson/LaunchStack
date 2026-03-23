@@ -34,7 +34,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
 
       <Section title="What is Vercel Blob?" darkMode={darkMode}>
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-          Vercel Blob is a serverless file storage service that integrates natively with Vercel deployments. PDR AI uses it to store uploaded documents with:
+          Vercel Blob is a serverless file storage service that integrates natively with Vercel deployments. Launchstack uses it to store uploaded documents with:
         </p>
         <ul className={`space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
           <li className="flex items-start gap-2">
@@ -59,7 +59,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
       <Section title="Why is Vercel Blob required?" darkMode={darkMode}>
         <WarningBox
           title="No fallback storage"
-          description="PDR AI uses Vercel Blob as the primary document storage backend. If BLOB_READ_WRITE_TOKEN is not configured, document uploads will fail with a MissingBlobTokenError. There is currently no database-only fallback for file storage."
+          description="Launchstack uses Vercel Blob as the primary document storage backend. If BLOB_READ_WRITE_TOKEN is not configured, document uploads will fail with a MissingBlobTokenError. There is currently no database-only fallback for file storage."
           darkMode={darkMode}
         />
         <div className="mt-6 grid md:grid-cols-2 gap-4">
@@ -112,7 +112,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
               Step 2: Connect the Store to Your Project
             </h3>
             <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-              In the blob store settings, click <strong>Connect Project</strong> and select your PDR AI project.
+              In the blob store settings, click <strong>Connect Project</strong> and select your Launchstack project.
               Vercel will automatically inject the <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-purple-300' : 'bg-gray-100 text-purple-700'}`}>BLOB_READ_WRITE_TOKEN</code> environment variable into your deployment.
             </p>
           </div>
@@ -146,7 +146,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
               Step 4: Deploy
             </h3>
             <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-              Once connected, push your code or trigger a redeploy. PDR AI will automatically detect the token
+              Once connected, push your code or trigger a redeploy. Launchstack will automatically detect the token
               and use Vercel Blob for document storage. No code changes are needed.
             </p>
           </div>
@@ -162,20 +162,20 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
       <Section title="Public vs Private Stores" darkMode={darkMode}>
         <InfoBox title="Automatic Access Detection" icon={<Database className="w-5 h-5" />} darkMode={darkMode}>
           <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-            PDR AI automatically detects whether your blob store is configured as public or private.
+            Launchstack automatically detects whether your blob store is configured as public or private.
             It first attempts a public upload — if your store only allows private access, it retries with private mode
             and caches the result for subsequent uploads.
           </p>
           <ul className={`text-sm space-y-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
             <li><strong>Public stores</strong> — files are served directly via a CDN URL. Simpler, faster delivery.</li>
-            <li><strong>Private stores</strong> — files require a Bearer token to access. PDR AI handles this automatically when fetching documents.</li>
+            <li><strong>Private stores</strong> — files require a Bearer token to access. Launchstack handles this automatically when fetching documents.</li>
           </ul>
         </InfoBox>
       </Section>
 
       <Section title="How It Works" darkMode={darkMode}>
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-          When a document is uploaded, PDR AI:
+          When a document is uploaded, Launchstack:
         </p>
         <div className="space-y-3">
           {[

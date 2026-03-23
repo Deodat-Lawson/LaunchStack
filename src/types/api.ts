@@ -1,5 +1,5 @@
 /**
- * Common API types used across the PDR AI application
+ * Common API types used across the Launchstack application
  */
 
 import type { AnalysisType, PriorityLevel, UrgencyLevel, ErrorType } from "~/lib/constants";

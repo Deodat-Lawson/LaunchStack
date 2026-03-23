@@ -16,7 +16,7 @@ export function EmployerNavbar() {
                         <Brain className="w-6 h-6 text-white" />
                     </div>
                     <span className="text-xl font-bold text-foreground tracking-tight group-hover:text-purple-600 transition-colors">
-                        PDR AI
+                        Launchstack
                     </span>
                 </Link>
 

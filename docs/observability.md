@@ -1,6 +1,6 @@
 # Observability & Metrics
 
-The PDR AI backend exposes Prometheus-compatible metrics for request health, cache efficiency, and search behavior.
+The Launchstack backend exposes Prometheus-compatible metrics for request health, cache efficiency, and search behavior.
 
 ## Available Metrics
 

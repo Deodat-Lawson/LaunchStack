@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'PDR AI — AI-Powered Document Analysis Platform';
+export const alt = 'Launchstack — The Open-Source Launch Stack for Tech Founders';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -56,7 +56,7 @@ export default function OGImage() {
                             fontWeight: 700,
                         }}
                     >
-                        P
+                        L
                     </div>
                     <span
                         style={{
@@ -66,14 +66,14 @@ export default function OGImage() {
                             letterSpacing: '-1px',
                         }}
                     >
-                        PDR AI
+                        Launchstack
                     </span>
                 </div>
 
                 {/* Title */}
                 <div
                     style={{
-                        fontSize: '56px',
+                        fontSize: '52px',
                         fontWeight: 700,
                         color: 'white',
                         textAlign: 'center',
@@ -84,8 +84,8 @@ export default function OGImage() {
                         alignItems: 'center',
                     }}
                 >
-                    <span>AI-Powered Document</span>
-                    <span style={{ color: '#a78bfa' }}>Analysis Platform</span>
+                    <span>The Open-Source Launch Stack</span>
+                    <span style={{ color: '#a78bfa' }}>for Tech Founders</span>
                 </div>
 
                 {/* Description */}
@@ -99,7 +99,7 @@ export default function OGImage() {
                         lineHeight: 1.5,
                     }}
                 >
-                    Document RAG · Predictive Analysis · Contract Review · AI Q&A
+                    Document AI · Growth Tools · Team Management · 100% Free
                 </p>
 
                 {/* Feature pills */}
@@ -110,7 +110,7 @@ export default function OGImage() {
                         marginTop: '32px',
                     }}
                 >
-                    {['Open Source', '12+ Doc Types', 'Self-Deployable'].map(
+                    {['Open Source', 'Self-Hostable', 'Free Forever'].map(
                         (label) => (
                             <div
                                 key={label}

@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This document covers deployment options for PDR AI.
+This document covers deployment options for Launchstack.
 
 ## Prerequisites
 

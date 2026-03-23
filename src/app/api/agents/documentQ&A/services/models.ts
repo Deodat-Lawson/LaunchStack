@@ -106,4 +106,3 @@ export function getEmbeddings(): OpenAIEmbeddings {
         openAIApiKey: process.env.OPENAI_API_KEY,
     });
 }
-

@@ -27,6 +27,7 @@ import type {
     ServiceEntry,
     ProjectEntry,
     SubprojectEntry,
+    LegalEntry,
     MarketsInfo,
 } from "./types";
 
@@ -95,6 +96,16 @@ export function mergeCompanyMetadata(
             merged.projects,
             extracted.facts.projects,
             "projects",
+            diff,
+        );
+    }
+
+    // ---- Legal ----
+    if (extracted.facts.legal) {
+        merged.legal = mergeNamedArray(
+            merged.legal ?? [],
+            extracted.facts.legal,
+            "legal",
             diff,
         );
     }
@@ -221,7 +232,7 @@ function normaliseName(fact: MetadataFact<unknown>): string {
     return String(fact.value).toLowerCase().trim().replace(/\s+/g, " ");
 }
 
-type NamedEntry = PersonEntry | ServiceEntry | ProjectEntry | SubprojectEntry;
+type NamedEntry = PersonEntry | ServiceEntry | ProjectEntry | SubprojectEntry | LegalEntry;
 
 /**
  * Merge an array of named entries. Entries are matched by normalised name.

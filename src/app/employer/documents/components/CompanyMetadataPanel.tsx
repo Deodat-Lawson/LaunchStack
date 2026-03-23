@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import {
   Building2,
@@ -8,9 +8,12 @@ import {
   Briefcase,
   RefreshCw,
   AlertCircle,
+  AlertTriangle,
   FileText,
+  Scale,
   Sparkles,
   Pencil,
+  Download,
 } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "~/app/employer/documents/components/ui/card";
@@ -20,7 +23,9 @@ import { PeopleSection } from "~/app/employer/metadata/components/PeopleSection"
 import { ServicesSection } from "~/app/employer/metadata/components/ServicesSection";
 import { MarketsSection } from "~/app/employer/metadata/components/MarketsSection";
 import { ProvenanceCard } from "~/app/employer/metadata/components/ProvenanceCard";
-import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
+import { MetadataHistorySection } from "~/app/employer/metadata/components/MetadataHistorySection";
+import { LegalSection } from "~/app/employer/metadata/components/LegalSection";
+import type { CompanyMetadataJSON, CompanyInfo, PersonEntry } from "~/lib/tools/company-metadata/types";
 
 interface CompanyProfile {
   name: string;
@@ -42,7 +47,7 @@ interface StatsCardProps {
   title: string;
   value: number | string;
   icon: React.ComponentType<{ className?: string }>;
-  color: "purple" | "blue" | "green" | "amber";
+  color: "purple" | "blue" | "green" | "amber" | "rose";
 }
 
 const colorMap = {
@@ -50,6 +55,7 @@ const colorMap = {
   blue: { border: "border-l-blue-500", text: "text-blue-500" },
   green: { border: "border-l-green-500", text: "text-green-500" },
   amber: { border: "border-l-amber-500", text: "text-amber-500" },
+  rose: { border: "border-l-rose-500", text: "text-rose-500" },
 };
 
 function MetadataStatsCard({ title, value, icon: Icon, color }: StatsCardProps) {
@@ -78,6 +84,8 @@ export function CompanyMetadataPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [extracting, setExtracting] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const previousDataRef = useRef<MetadataResponse | null>(null);
 
   const fetchMetadata = useCallback(async () => {
     setLoading(true);
@@ -102,12 +110,95 @@ export function CompanyMetadataPanel() {
     }
   }, []);
 
-  const runExtraction = useCallback(async () => {
+  const handleFieldSave = useCallback(async (path: string, value: string) => {
+    previousDataRef.current = data;
+    const now = new Date().toISOString();
+    const manualSource = { doc_id: 0, doc_name: "Manual edit", extracted_at: now };
+
+    // Optimistic update
+    setData((prev) => {
+      if (!prev?.metadata) return prev;
+      const m = structuredClone(prev.metadata);
+      const segments = path.split(".");
+
+      const buildFact = (val: string | number, existing?: { visibility?: string; usage?: string }) => ({
+        value: val,
+        visibility: existing?.visibility ?? "public",
+        usage: existing?.usage ?? "outreach_ok",
+        confidence: 1.0,
+        priority: "manual_override" as const,
+        status: "active" as const,
+        last_updated: now,
+        sources: [manualSource],
+      });
+
+      if (segments[0] === "company" && segments[1]) {
+        const field = segments[1];
+        const existing = m.company[field];
+        (m.company as Record<string, unknown>)[field] = buildFact(field === "founded_year" ? Number(value) : value, existing);
+      } else if (segments[0] === "people" && segments[1] && segments[2]) {
+        const idx = Number(segments[1]);
+        const field = segments[2];
+        const person = m.people[idx];
+        if (person) {
+          (person as Record<string, unknown>)[field] = buildFact(value, person[field]);
+        }
+      } else if (segments[0] === "services" && segments[1] && segments[2]) {
+        const idx = Number(segments[1]);
+        const field = segments[2];
+        const service = m.services[idx];
+        if (service) {
+          (service as Record<string, unknown>)[field] = buildFact(value, service[field]);
+        }
+      } else if (segments[0] === "markets" && segments[1] && segments[2] != null) {
+        const sub = segments[1] as "primary" | "verticals" | "geographies";
+        const idx = Number(segments[2]);
+        const arr = m.markets[sub];
+        if (arr?.[idx]) {
+          arr[idx] = buildFact(value, arr[idx]) as typeof arr[number];
+        }
+      }
+      m.updated_at = now;
+      return { ...prev, metadata: m };
+    });
+    try {
+      const res = await fetch("/api/company/metadata", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path, value }),
+      });
+      if (!res.ok) throw new Error("Save failed");
+      await fetchMetadata();
+    } catch (err) {
+      if (previousDataRef.current !== null) {
+        setData(previousDataRef.current);
+      }
+      throw err;
+    }
+  }, [data, fetchMetadata]);
+
+  const handleExportJson = useCallback(() => {
+    if (!data?.metadata) return;
+    const json = JSON.stringify(data.metadata, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `company-metadata-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [data]);
+
+  const runExtraction = useCallback(async (force = false) => {
     setExtracting(true);
     setError(null);
     try {
-      const response = await fetch("/api/company/metadata/extract", { method: "POST" });
-      const result = (await response.json()) as { error?: string };
+      const response = await fetch("/api/company/metadata/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ force }),
+      });
+      const result = (await response.json()) as { error?: string; message?: string };
       if (result.error) throw new Error(result.error);
       await fetchMetadata();
     } catch (err) {
@@ -183,13 +274,44 @@ export function CompanyMetadataPanel() {
           </div>
           <div className="flex gap-3">
             <Button
-              onClick={() => void runExtraction()}
-              disabled={extracting}
+              onClick={handleExportJson}
+              disabled={!data?.metadata}
               variant="outline"
               className="rounded-xl h-9 px-4 gap-2 font-bold"
             >
+              <Download className="w-4 h-4" />
+              Export JSON
+            </Button>
+            <Button
+              onClick={() => void runExtraction(false)}
+              disabled={extracting}
+              variant="outline"
+              className="rounded-xl h-9 px-4 gap-2 font-bold"
+              title="Process only new documents since last extraction"
+            >
               <Sparkles className={cn("w-4 h-4", extracting && "animate-pulse")} />
-              {extracting ? "Extracting..." : "Re-extract"}
+              {extracting ? "Extracting..." : "Extract New"}
+            </Button>
+            <Button
+              onClick={() => void runExtraction(true)}
+              disabled={extracting}
+              variant="outline"
+              className="rounded-xl h-9 px-4 gap-2 font-bold text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300"
+              title="Re-process all documents from scratch"
+            >
+              <RefreshCw className={cn("w-4 h-4", extracting && "animate-spin")} />
+              Full Re-extract
+            </Button>
+            <Button
+              onClick={() => setIsEditMode((prev) => !prev)}
+              variant={isEditMode ? "default" : "outline"}
+              className={cn(
+                "rounded-xl h-9 px-4 gap-2 font-bold",
+                isEditMode && "bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20",
+              )}
+            >
+              <Pencil className="w-4 h-4" />
+              {isEditMode ? "Done" : "Edit"}
             </Button>
             <Button
               onClick={() => void fetchMetadata()}
@@ -301,7 +423,7 @@ export function CompanyMetadataPanel() {
           </Card>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <MetadataStatsCard
                 title="Company Fields"
                 value={Object.keys(metadata.company).filter((k) => metadata.company[k]).length}
@@ -316,6 +438,12 @@ export function CompanyMetadataPanel() {
                 color="green"
               />
               <MetadataStatsCard
+                title="Legal"
+                value={(metadata.legal ?? []).length}
+                icon={Scale}
+                color="rose"
+              />
+              <MetadataStatsCard
                 title="Documents Processed"
                 value={metadata.provenance.total_documents_processed}
                 icon={FileText}
@@ -323,21 +451,91 @@ export function CompanyMetadataPanel() {
               />
             </div>
 
-            <CompanyInfoCard company={metadata.company} />
+            <MissingMetadataAlert company={metadata.company} people={metadata.people} />
 
-            {metadata.people.length > 0 && <PeopleSection people={metadata.people} />}
+            <CompanyInfoCard
+              company={metadata.company}
+              isEditMode={isEditMode}
+              onFieldSave={handleFieldSave}
+            />
 
-            {metadata.services.length > 0 && <ServicesSection services={metadata.services} />}
+            {metadata.people.length > 0 && (
+              <PeopleSection people={metadata.people} isEditMode={isEditMode} onFieldSave={handleFieldSave} />
+            )}
+
+            {metadata.services.length > 0 && (
+              <ServicesSection services={metadata.services} isEditMode={isEditMode} onFieldSave={handleFieldSave} />
+            )}
 
             {(metadata.markets.primary?.length ?? 0) > 0 ||
             (metadata.markets.geographies?.length ?? 0) > 0 ? (
-              <MarketsSection markets={metadata.markets} />
+              <MarketsSection markets={metadata.markets} isEditMode={isEditMode} onFieldSave={handleFieldSave} />
             ) : null}
 
+            {(metadata.legal ?? []).length > 0 && (
+              <LegalSection legal={metadata.legal ?? []} />
+            )}
+
             <ProvenanceCard provenance={metadata.provenance} updatedAt={data?.updatedAt} />
+
+            <MetadataHistorySection />
           </>
         )}
       </div>
     </div>
+  );
+}
+
+/* Missing Metadata Alert */
+const EXPECTED_FIELDS: Array<{ key: keyof CompanyInfo; label: string }> = [
+  { key: "name", label: "Company Name" },
+  { key: "industry", label: "Industry" },
+  { key: "headquarters", label: "Headquarters" },
+  { key: "founded_year", label: "Founded Year" },
+  { key: "description", label: "Description" },
+  { key: "website", label: "Website" },
+  { key: "size", label: "Company Size" },
+];
+
+function MissingMetadataAlert({ company, people }: { company: CompanyInfo; people: PersonEntry[] }) {
+  const missingFields = EXPECTED_FIELDS.filter((f) => {
+    const field = company[f.key];
+    if (!field) return true;
+    const val = (field as { value?: unknown }).value;
+    return val === undefined || val === null || val === "";
+  });
+  const peopleWithoutRoles = people.filter((p) => !p.role);
+
+  if (missingFields.length === 0 && peopleWithoutRoles.length === 0) return null;
+
+  return (
+    <Card className="p-4 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/30 shadow-sm">
+      <div className="flex items-start gap-3">
+        <div className="p-2 bg-amber-100 dark:bg-amber-900/40 rounded-lg shrink-0">
+          <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h4 className="text-sm font-bold text-amber-800 dark:text-amber-300">
+            Incomplete Metadata
+          </h4>
+          {missingFields.length > 0 && (
+            <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+              Missing company fields:{" "}
+              <span className="font-semibold">
+                {missingFields.map((f) => f.label).join(", ")}
+              </span>
+            </p>
+          )}
+          {peopleWithoutRoles.length > 0 && (
+            <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+              {peopleWithoutRoles.length} {peopleWithoutRoles.length === 1 ? "person" : "people"} missing role information
+            </p>
+          )}
+          <p className="text-xs text-amber-600 dark:text-amber-500 mt-2">
+            Upload more documents or manually edit fields to fill in missing information.
+          </p>
+        </div>
+      </div>
+    </Card>
   );
 }

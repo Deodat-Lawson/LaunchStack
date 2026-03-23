@@ -2,7 +2,7 @@ import { db } from "~/server/db";
 import { document, ocrJobs } from "~/server/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
 
-export type StorageType = "cloud" | "database";
+export type StorageType = "cloud" | "database" | "local";
 
 export interface DocumentUploadUserContext {
   userId: string;
@@ -36,10 +36,15 @@ export interface DocumentUploadResult {
 
 /**
  * Determines the storage type from the URL. Relative URLs are treated as database storage.
+ * Local S3 URLs (matching NEXT_PUBLIC_S3_ENDPOINT) are treated as local storage.
  */
 export function detectStorageType(url: string): StorageType {
   if (url.startsWith("/api/files/")) {
     return "database";
+  }
+  const s3Endpoint = process.env.NEXT_PUBLIC_S3_ENDPOINT;
+  if (s3Endpoint && url.startsWith(s3Endpoint)) {
+    return "local";
   }
   if (url.startsWith("http://") || url.startsWith("https://")) {
     return "cloud";

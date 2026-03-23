@@ -46,6 +46,8 @@ interface UploadBootstrapResponse {
     company: CompanyData | null;
     isUploadThingConfigured: boolean;
     availableProviders: AvailableProviders;
+    storageProvider: "cloud" | "local";
+    s3Endpoint: string;
 }
 
 const Page: React.FC = () => {
@@ -60,6 +62,8 @@ const Page: React.FC = () => {
         datalab: false,
         landingAI: false,
     });
+    const [storageProvider, setStorageProvider] = useState<"cloud" | "local">("cloud");
+    const [s3Endpoint, setS3Endpoint] = useState("");
 
     const fetchUploadBootstrap = useCallback(async () => {
         try {
@@ -76,6 +80,8 @@ const Page: React.FC = () => {
             setCategories(data.categories);
             setIsUploadThingConfigured(data.isUploadThingConfigured);
             setAvailableProviders(data.availableProviders);
+            setStorageProvider(data.storageProvider);
+            setS3Endpoint(data.s3Endpoint);
 
             if (!data.isUploadThingConfigured) {
                 setUseUploadThing(false);
@@ -261,6 +267,8 @@ const Page: React.FC = () => {
                     isUpdatingPreference={isUpdatingPreference}
                     availableProviders={availableProviders}
                     onAddCategory={handleAddCategory}
+                    storageProvider={storageProvider}
+                    s3Endpoint={s3Endpoint}
                 />
 
                 <CategoryManagement

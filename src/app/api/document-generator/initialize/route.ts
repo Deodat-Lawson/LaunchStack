@@ -70,7 +70,7 @@ async function searchArxiv(query: string, maxResults = 5, category?: string): Pr
         console.log(`📚 [Initialize] Searching arXiv: ${query}`);
 
         const response = await fetch(arxivUrl, {
-            headers: { "User-Agent": "PDR-AI-Research/1.0" },
+            headers: { "User-Agent": "Launchstack-Research/1.0" },
         });
 
         if (!response.ok) {
@@ -299,7 +299,7 @@ export async function POST(request: Request) {
         }
 
         // Get the AI model
-        const modelId = "gpt-4o" as AIModelType;
+        const modelId = "gpt-5-mini" as AIModelType;
         const chat = getChatModel(modelId);
 
         // Build system prompt

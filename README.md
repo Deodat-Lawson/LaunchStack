@@ -1,6 +1,6 @@
-# PDR AI - Professional Document Reader AI
+# Launchstack - Professional Document Reader AI
 
-PDR AI is a Next.js platform for role-based document management, AI-assisted Q&A, and predictive document analysis. It combines document upload, optional OCR, embeddings, and retrieval to help teams find gaps and act faster.
+Launchstack is a Next.js platform for role-based document management, AI-assisted Q&A, and predictive document analysis. It combines document upload, optional OCR, embeddings, and retrieval to help teams find gaps and act faster.
 
 ## Core Features
 
@@ -16,7 +16,7 @@ PDR AI is a Next.js platform for role-based document management, AI-assisted Q&A
 
 ## Predictive Analysis — Supported Document Types
 
-PDR AI runs domain-specific analysis tailored to your document type:
+Launchstack runs domain-specific analysis tailored to your document type:
 
 | Type | What It Detects |
 |------|----------------|
@@ -33,11 +33,11 @@ Each analysis type also extracts insights (deadlines, action items, resources, c
 
 ## Importing External Knowledge
 
-PDR AI can ingest content exported from third-party tools. No API keys or OAuth setup required — export your data, upload the files, and the ingestion pipeline handles the rest.
+Launchstack can ingest content exported from third-party tools. No API keys or OAuth setup required — export your data, upload the files, and the ingestion pipeline handles the rest.
 
 ### Supported Export Formats
 
-| Source | Export Method | Resulting Format | PDR AI Adapter |
+| Source | Export Method | Resulting Format | Launchstack Adapter |
 |--------|-------------|-----------------|----------------|
 | **Notion** | Settings > Export > Markdown & CSV | `.md`, `.csv` (ZIP) | TextAdapter, SpreadsheetAdapter |
 | **Notion** | Page > Export > HTML | `.html` | HtmlAdapter |
@@ -55,7 +55,7 @@ PDR AI can ingest content exported from third-party tools. No API keys or OAuth 
 1. Open your Notion workspace.
 2. Click the **...** menu on a page, or go to **Settings & members > Export** for a full workspace export.
 3. Select **Markdown & CSV** as the format and check **Include subpages** if needed.
-4. Download the ZIP and upload it directly to PDR AI.
+4. Download the ZIP and upload it directly to Launchstack.
 
 **Google Docs / Sheets**
 1. Open the document in Google Docs or Sheets.
@@ -65,7 +65,7 @@ PDR AI can ingest content exported from third-party tools. No API keys or OAuth 
 **Slack**
 1. Go to **Workspace Settings > Import/Export Data > Export**.
 2. Choose a date range and start the export.
-3. Download the ZIP and upload it to PDR AI. Each channel's messages will be ingested as a separate document.
+3. Download the ZIP and upload it to Launchstack. Each channel's messages will be ingested as a separate document.
 
 **GitHub**
 1. **Repo docs**: Click **Code > Download ZIP** on any GitHub repository. Upload the ZIP — all Markdown and text files will be ingested.
@@ -84,7 +84,7 @@ All uploaded content flows through the standard ingestion pipeline (chunking, em
 
 ## Architecture
 
-PDR AI follows a three-layer modular architecture:
+Launchstack follows a three-layer modular architecture:
 
 ```mermaid
 block-beta
@@ -208,6 +208,10 @@ Optional integrations:
 - `LANDING_AI_API_KEY`, `DATALAB_API_KEY`
 - `LANGCHAIN_TRACING_V2`, `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`
 - `DEBUG_PERF` (`1` or `true`) to enable dev perf logs for middleware and key auth/dashboard APIs
+- `SIDECAR_URL`
+- `NEO4J_URI`
+- `NEO4J_USERNAME`
+- `NEO4J_PASSWORD`
 
 ### 2.1) Configure Vercel Blob Storage
 

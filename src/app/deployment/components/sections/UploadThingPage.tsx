@@ -62,7 +62,7 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
 
       <Section title="UploadThing vs Vercel Blob" darkMode={darkMode}>
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-          PDR AI supports two cloud storage backends for uploaded documents. Vercel Blob is the default and required; UploadThing is an optional alternative.
+          Launchstack supports two cloud storage backends for uploaded documents. Vercel Blob is the default and required; UploadThing is an optional alternative.
         </p>
         <div className="grid md:grid-cols-2 gap-4">
           <div className={`p-4 rounded-xl ${darkMode ? 'bg-slate-800/50 border border-slate-600/30' : 'bg-slate-50 border border-slate-200'}`}>
@@ -136,7 +136,7 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
 
           <WarningBox
             title="Note"
-            description="Without UploadThing configured, PDR AI uses Vercel Blob for all uploads. UploadThing is fully optional — Vercel Blob is the required default storage backend."
+            description="Without UploadThing configured, Launchstack uses Vercel Blob for all uploads. UploadThing is fully optional — Vercel Blob is the required default storage backend."
             darkMode={darkMode}
           />
         </div>

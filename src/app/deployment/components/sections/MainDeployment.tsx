@@ -146,11 +146,11 @@ export const MainDeployment: React.FC<DeploymentProps> = ({
         className="mb-12"
       >
         <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-          Deploy PDR AI
+          Deploy Launchstack
         </h1>
 
         <p className={`text-xl leading-relaxed max-w-2xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          PDR AI is an AI-powered document analysis platform. Set up your accounts, configure environment variables, and deploy to production in minutes.
+          Launchstack is an AI-powered document analysis platform. Set up your accounts, configure environment variables, and deploy to production in minutes.
         </p>
 
         <div className="flex flex-wrap gap-3 mt-8">
@@ -225,7 +225,7 @@ export const MainDeployment: React.FC<DeploymentProps> = ({
       {/* ── Quick start steps ── */}
       <Section
         title="Quick start"
-        subtitle="Once your accounts and keys are ready, follow these steps to run PDR AI locally."
+        subtitle="Once your accounts and keys are ready, follow these steps to run Launchstack locally."
         darkMode={darkMode}
       >
         <div className="space-y-6">
@@ -317,7 +317,7 @@ INNGEST_EVENT_KEY=dev-placeholder`}
       {/* ── Required integrations ── */}
       <Section
         title="Required integrations"
-        subtitle="These services must be configured for PDR AI to function."
+        subtitle="These services must be configured for Launchstack to function."
         darkMode={darkMode}
       >
         <div className="grid sm:grid-cols-2 gap-5">

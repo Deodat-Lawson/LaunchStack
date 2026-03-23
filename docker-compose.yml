@@ -77,6 +77,12 @@ services:
       AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
       AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
       LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
+      # Anthropic / Google (optional — enables Claude and Gemini models)
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
+      # Ollama (optional — set OLLAMA_BASE_URL to an Ollama instance)
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-}
     ports:
       - "3000:3000"
 

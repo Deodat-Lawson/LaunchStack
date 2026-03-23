@@ -86,7 +86,7 @@ export async function synthesizeResults(
 
     const chat = new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
-        modelName: "gpt-4o-mini",
+        modelName: "gpt-5-nano",
         temperature: 0.2,
     });
 

@@ -52,7 +52,7 @@ const CHUNKS_PER_BATCH = 15;
 const MAX_CONCURRENCY = 5;
 
 /** Model to use for extraction. */
-const EXTRACTION_MODEL = "gpt-4o-mini";
+const EXTRACTION_MODEL = "gpt-5-nano";
 
 /**
  * Confidence boost when a fact is seen in multiple batches.

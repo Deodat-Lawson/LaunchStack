@@ -12,6 +12,11 @@ const optionalString = () =>
 const serverSchema = z.object({
   DATABASE_URL: z.preprocess(normalize, z.string().url()),
   OPENAI_API_KEY: requiredString(),
+  OPENAI_MODEL: optionalString(),
+  ANTHROPIC_API_KEY: optionalString(),
+  GOOGLE_AI_API_KEY: optionalString(),
+  OLLAMA_BASE_URL: optionalString(),
+  OLLAMA_MODEL: optionalString(),
   CLERK_SECRET_KEY: requiredString(),
   BLOB_READ_WRITE_TOKEN: optionalString(),
   UPLOADTHING_TOKEN: optionalString(),
@@ -49,6 +54,14 @@ const serverSchema = z.object({
   // Sidecar configuration (optional, for local ML compute)
   // When set, Graph RAG entity extraction is automatically enabled
   SIDECAR_URL: optionalString(),
+  // Enable Graph RAG retrieval
+  ENABLE_GRAPH_RETRIEVER: z.preprocess(
+    (val) => val === "true" || val === "1",
+    z.boolean().optional()
+  ),
+  NEO4J_URI: optionalString(),
+  NEO4J_USERNAME: optionalString(),
+  NEO4J_PASSWORD: optionalString(),
   // Storage provider configuration
   NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
   NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
@@ -113,6 +126,11 @@ function parseServerEnv() {
   const rawValues = {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    OPENAI_MODEL: process.env.OPENAI_MODEL,
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
+    OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
+    OLLAMA_MODEL: process.env.OLLAMA_MODEL,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
@@ -141,6 +159,10 @@ function parseServerEnv() {
     JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
+    ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
+    NEO4J_URI: process.env.NEO4J_URI,
+    NEO4J_USERNAME: process.env.NEO4J_USERNAME,
+    NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
     NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
       | "cloud"
       | "local"

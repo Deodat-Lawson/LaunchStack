@@ -3,6 +3,8 @@ import {
   PutObjectCommand,
   GetObjectCommand,
   DeleteObjectCommand,
+  CreateBucketCommand,
+  HeadBucketCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -13,6 +15,7 @@ import { env } from "~/env";
 // ---------------------------------------------------------------------------
 
 let _client: S3Client | null = null;
+let _bucketEnsured = false;
 
 export function getS3Client(): S3Client {
   if (!_client) {
@@ -31,6 +34,33 @@ export function getS3Client(): S3Client {
 
 export function getS3BucketName(): string {
   return env.server.S3_BUCKET_NAME!;
+}
+
+// ---------------------------------------------------------------------------
+// Bucket bootstrap — idempotent, runs once per process lifetime
+// ---------------------------------------------------------------------------
+
+export async function ensureBucketExists(): Promise<void> {
+  if (_bucketEnsured) return;
+
+  const client = getS3Client();
+  const bucket = getS3BucketName();
+
+  try {
+    await client.send(new HeadBucketCommand({ Bucket: bucket }));
+  } catch {
+    // Bucket doesn't exist — create it
+    try {
+      await client.send(new CreateBucketCommand({ Bucket: bucket }));
+      console.log(`[S3] Created bucket "${bucket}" at ${env.server.NEXT_PUBLIC_S3_ENDPOINT}`);
+    } catch (createErr) {
+      throw new Error(
+        `Failed to create S3 bucket "${bucket}" at ${env.server.NEXT_PUBLIC_S3_ENDPOINT}: ${createErr instanceof Error ? createErr.message : String(createErr)}`,
+      );
+    }
+  }
+
+  _bucketEnsured = true;
 }
 
 // ---------------------------------------------------------------------------

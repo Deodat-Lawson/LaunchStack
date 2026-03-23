@@ -68,7 +68,7 @@ export async function uploadFile(input: UploadInput): Promise<UploadResult> {
 
 async function uploadToS3(input: UploadInput): Promise<UploadResult> {
   try {
-    const { putObject, getObjectUrl } = await import("~/server/storage/s3-client");
+    const { putObject, getObjectUrl, ensureBucketExists } = await import("~/server/storage/s3-client");
 
     const safeName = sanitizeFilename(input.filename);
     const key = `documents/${randomUUID()}-${safeName || "upload"}`;
@@ -76,6 +76,7 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
       input.data instanceof ArrayBuffer ? new Uint8Array(input.data) : input.data,
     );
 
+    await ensureBucketExists();
     await putObject(key, body, input.contentType);
 
     return {

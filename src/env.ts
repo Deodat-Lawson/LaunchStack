@@ -10,11 +10,14 @@ const optionalString = () =>
   z.preprocess(normalize, z.string().min(1).optional());
 
 const serverSchema = z.object({
-  DATABASE_URL: z.preprocess(normalize, z.string().url()),
+  // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
+  DATABASE_URL: requiredString(),
   OPENAI_API_KEY: requiredString(),
   OPENAI_MODEL: optionalString(),
   ANTHROPIC_API_KEY: optionalString(),
+  ANTHROPIC_MODEL: optionalString(),
   GOOGLE_AI_API_KEY: optionalString(),
+  GOOGLE_MODEL: optionalString(),
   OLLAMA_BASE_URL: optionalString(),
   OLLAMA_MODEL: optionalString(),
   CLERK_SECRET_KEY: requiredString(),
@@ -98,7 +101,9 @@ function parseServerEnv() {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL,
     GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
+    GOOGLE_MODEL: process.env.GOOGLE_MODEL,
     OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
     OLLAMA_MODEL: process.env.OLLAMA_MODEL,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
@@ -107,12 +112,7 @@ function parseServerEnv() {
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
     SERPER_API_KEY: process.env.SERPER_API_KEY,
-    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as
-      | "tavily"
-      | "serper"
-      | "fallback"
-      | "parallel"
-      | undefined,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as "tavily" | "serper" | "fallback" | "parallel" | undefined,
     REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
     REDDIT_CLIENT_SECRET: process.env.REDDIT_CLIENT_SECRET,
     REDDIT_USER_AGENT: process.env.REDDIT_USER_AGENT,

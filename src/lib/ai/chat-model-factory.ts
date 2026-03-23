@@ -10,18 +10,25 @@ import {
   type AIModelType,
   type LLMProvider,
 } from "~/app/api/agents/documentQ&A/services/types";
+import { env } from "~/env";
 
 const REASONING_MODELS: ReadonlySet<string> = new Set([
   "gpt-5-mini",
   "gpt-5-nano",
 ]);
 
-const PROVIDER_ENV_MODEL_KEY: Record<LLMProvider, string> = {
-  openai: "OPENAI_MODEL",
-  anthropic: "ANTHROPIC_MODEL",
-  google: "GOOGLE_MODEL",
-  ollama: "OLLAMA_MODEL",
-};
+function getServerModelOverride(provider: LLMProvider): string | undefined {
+  switch (provider) {
+    case "openai":
+      return env.server.OPENAI_MODEL;
+    case "anthropic":
+      return env.server.ANTHROPIC_MODEL;
+    case "google":
+      return env.server.GOOGLE_MODEL;
+    case "ollama":
+      return env.server.OLLAMA_MODEL;
+  }
+}
 
 function coerceModel(
   provider: LLMProvider,
@@ -31,10 +38,7 @@ function coerceModel(
     return requested;
   }
 
-  const envValue = process.env[PROVIDER_ENV_MODEL_KEY[provider]] as
-    | AIModelType
-    | undefined;
-
+  const envValue = getServerModelOverride(provider);
   if (envValue && isModelAllowedForProvider(provider, envValue)) {
     return envValue;
   }
@@ -46,17 +50,15 @@ export function getProviderDefaultModel(provider: LLMProvider): AIModelType {
   return coerceModel(provider);
 }
 
-export function getProviderBaseUrl(provider: LLMProvider): string {
-  if (provider === "ollama") {
-    const url = process.env.OLLAMA_BASE_URL;
-    if (!url) {
-      throw new Error(
-        "OLLAMA_BASE_URL is not set. Add it to your .env file (e.g. OLLAMA_BASE_URL=\"http://localhost:11434\").",
-      );
-    }
-    return url;
+/** Base URL for the local Ollama HTTP API (used by ChatOllama only). */
+export function getOllamaBaseUrl(): string {
+  const url = process.env.OLLAMA_BASE_URL;
+  if (!url) {
+    throw new Error(
+      "OLLAMA_BASE_URL is not set. Add it to your .env file (e.g. OLLAMA_BASE_URL=\"http://localhost:11434\").",
+    );
   }
-  return "https://api.openai.com/v1";
+  return url;
 }
 
 export function getChatModelForProvider(opts: {
@@ -70,14 +72,14 @@ export function getChatModelForProvider(opts: {
 
   if (!(ProviderModelMap[provider] as readonly string[]).includes(modelName)) {
     throw new Error(
-      `Model \"${modelName}\" is not supported for provider \"${provider}\"`,
+      `Model \"${String(modelName)}\" is not supported for provider \"${String(provider)}\"`,
     );
   }
 
   switch (provider) {
     case "ollama":
       return new ChatOllama({
-        baseUrl: getProviderBaseUrl("ollama"),
+        baseUrl: getOllamaBaseUrl(),
         model: modelName,
         temperature: temperature ?? 0.7,
       });
@@ -136,9 +138,7 @@ export function describeProviderError(
     ) {
       return {
         status: 502,
-        message: `Unable to reach Ollama at ${getProviderBaseUrl(
-          "ollama",
-        )}. Please ensure the Ollama server is running.`,
+        message: `Unable to reach Ollama at ${process.env.OLLAMA_BASE_URL ?? "(OLLAMA_BASE_URL not set)"}. Please ensure the Ollama server is running.`,
       };
     }
     if (
@@ -176,7 +176,7 @@ export function assertProviderModelSupport(
 ) {
   if (!isModelAllowedForProvider(provider, model)) {
     throw new Error(
-      `Model \"${model}\" is not supported for provider \"${provider}\"`,
+      `Model \"${String(model)}\" is not supported for provider \"${String(provider)}\"`,
     );
   }
 }

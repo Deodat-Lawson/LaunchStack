@@ -59,25 +59,26 @@ export async function callSerper(query: string): Promise<RawSearchResult[]> {
     return [];
   }
 
-  const total = items.length;
+  const filtered = items.filter(
+    (item): item is SerperNewsItem & { link: string } => Boolean(item?.link),
+  );
+  if (filtered.length === 0) {
+    console.warn("[web-search] Serper returned no news results.");
+    return [];
+  }
 
-  return items
-    .filter((item): item is SerperNewsItem & { link: string } =>
-      Boolean(item?.link),
-    )
-    .map((item, index) => {
-      const position =
-        typeof item.position === "number" && item.position > 0
-          ? item.position
-          : index + 1;
-      const score = Math.max(0, 1 - position / total);
+  const total = filtered.length;
 
-      return {
-        url: item.link,
-        title: item.title ?? "Untitled",
-        content: item.snippet ?? "",
-        score,
-        ...(item.date && { publishedDate: item.date }),
-      };
-    });
+  return filtered.map((item, index) => {
+    const position = index + 1;
+    const score = Math.max(0, 1 - position / total);
+
+    return {
+      url: item.link,
+      title: item.title ?? "Untitled",
+      content: item.snippet ?? "",
+      score,
+      ...(item.date && { publishedDate: item.date }),
+    };
+  });
 }

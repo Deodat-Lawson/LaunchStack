@@ -113,7 +113,7 @@ describe("executeSearch strategy logic", () => {
     });
 
     describe('"fallback" strategy tries Serper first, falls back to Tavily on total failure', () => {
-        it("when Serper returns no results for all sub-queries, Tavily is called and providerUsed is tavily (fallback)", async () => {
+        it("when Serper returns no results for all sub-queries, Tavily is called and providerUsed is tavily", async () => {
             env.server.SEARCH_PROVIDER = "fallback";
             let callCount = 0;
             fetchSpy.mockImplementation((input: RequestInfo | URL) => {
@@ -130,7 +130,7 @@ describe("executeSearch strategy logic", () => {
 
             const { results, providerUsed } = await executeSearch(subQueries);
 
-            expect(providerUsed).toBe("tavily (fallback)");
+            expect(providerUsed).toBe("tavily");
             const { tavily, serper } = getFetchCallsByUrl(fetchSpy);
             expect(serper).toBe(1);
             expect(tavily).toBe(1);
@@ -190,8 +190,8 @@ describe("executeSearch strategy logic", () => {
         });
     });
 
-    describe('"parallel" strategy deduplicates by URL, keeping higher score', () => {
-        it("when both providers return the same URL, result has the higher score", async () => {
+    describe('"parallel" strategy deduplicates by URL (first provider wins)', () => {
+        it("when both providers return the same URL, Serper row is kept — scores are not comparable across providers", async () => {
             env.server.SEARCH_PROVIDER = "parallel";
             const sameUrl = "https://example.com/same";
             fetchSpy.mockImplementation((input: RequestInfo | URL) => {
@@ -214,8 +214,9 @@ describe("executeSearch strategy logic", () => {
             expect(providerUsed).toBe("tavily+serper");
             expect(results).toHaveLength(1);
             expect(results[0]!.url).toBe(sameUrl);
-            expect(results[0]!.score).toBe(0.95);
-            expect(results[0]!.title).toBe("From Tavily");
+            // One Serper hit: rank 1 of 1 → score 0 (see serper adapter); Tavily is ignored for this URL.
+            expect(results[0]!.score).toBe(0);
+            expect(results[0]!.title).toBe("From Serper");
         });
     });
 
@@ -237,6 +238,52 @@ describe("executeSearch strategy logic", () => {
                 "[web-search] SERPER_API_KEY not set; downgrading strategy to tavily."
             );
             warnSpy.mockRestore();
+        });
+    });
+
+    describe("missing TAVILY_API_KEY on tavily path", () => {
+        it("returns empty results, providerUsed none, and does not call Tavily API", async () => {
+            env.server.SEARCH_PROVIDER = undefined;
+            env.server.TAVILY_API_KEY = undefined as unknown as string;
+            env.server.SERPER_API_KEY = "test-serper-key";
+            const warnSpy = jest.spyOn(console, "warn").mockImplementation();
+
+            const { results, providerUsed } = await executeSearch(subQueries);
+
+            expect(providerUsed).toBe("none");
+            expect(results).toHaveLength(0);
+            const { tavily, serper } = getFetchCallsByUrl(fetchSpy);
+            expect(tavily).toBe(0);
+            expect(serper).toBe(0);
+
+            warnSpy.mockRestore();
+        });
+    });
+
+    describe('"parallel" with Serper key but no Tavily key', () => {
+        it("uses providerUsed serper and only Serper fetch is made", async () => {
+            env.server.SEARCH_PROVIDER = "parallel";
+            env.server.SERPER_API_KEY = "test-serper-key";
+            env.server.TAVILY_API_KEY = undefined as unknown as string;
+            fetchSpy.mockImplementation((input: RequestInfo | URL) => {
+                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                if (url === SERPER_URL) {
+                    return Promise.resolve(serperResponse([{ link: "https://serper.com/1", title: "S", snippet: "S" }]));
+                }
+                if (url === TAVILY_URL) {
+                    return Promise.resolve(tavilyResponse([{ url: "https://tavily.com/1", title: "T", content: "C", score: 0.9 }]));
+                }
+                return Promise.reject(new Error(`Unexpected URL: ${url}`));
+            });
+
+            const { results, providerUsed } = await executeSearch(subQueries);
+
+            expect(providerUsed).toBe("serper");
+            expect(results).toHaveLength(1);
+            expect(results[0]!.url).toBe("https://serper.com/1");
+            const { tavily, serper } = getFetchCallsByUrl(fetchSpy);
+            expect(serper).toBe(1);
+            expect(tavily).toBe(0);
         });
     });
 });

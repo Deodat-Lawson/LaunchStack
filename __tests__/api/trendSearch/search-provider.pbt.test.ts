@@ -3,7 +3,7 @@
  * Feature: Serper dual-channel search — Task 4.3
  * Property 13: Serper adapter output conforms to RawSearchResult.
  * Property 14: Fallback strategy invokes secondary when primary returns empty.
- * Property 15: Parallel merge deduplicates by URL and keeps higher score.
+ * Property 15: Parallel merge deduplicates by URL (Serper first, then Tavily).
  * Property 16: Default (no env) matches Tavily-only behavior.
  * Property 17: Serper-dependent strategies downgrade when key missing.
  */
@@ -163,10 +163,10 @@ describe("Property 14: Fallback strategy invokes secondary when primary returns 
     });
 });
 
-// ─── Property 15: Parallel dedup keeps higher score, no duplicate URLs ──────────
+// ─── Property 15: Parallel dedup — Serper rows first, then Tavily (no cross-provider score compare) ──────────
 
-describe("Property 15: Parallel merge deduplicates by URL and keeps higher score", () => {
-    it("for two random result sets with overlapping URLs, merged result has no duplicate URLs and each URL has the higher score", async () => {
+describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () => {
+    it("for two random result sets with overlapping URLs, merged result has no duplicate URLs and Serper wins on URL tie", async () => {
         await fc.assert(
             fc.asyncProperty(
                 fc.array(rawSearchResultArb, { minLength: 0, maxLength: 5 }),
@@ -178,13 +178,17 @@ describe("Property 15: Parallel merge deduplicates by URL and keeps higher score
                         ? setB.map((_, i) => 1 - (i + 1) / setB.length)
                         : [];
                     const setBWithSerperScores = setB.map((r, i) => ({ ...r, score: serperScores[i] ?? 0 }));
-                    // Replicate mergeDedupByUrl logic so expected matches implementation
+                    // Replicate executeSearch parallel merge: Serper first, then Tavily; first URL wins
                     const byUrl = new Map<string, RawSearchResult>();
-                    for (const r of [...setA, ...setBWithSerperScores]) {
+                    for (const r of setBWithSerperScores) {
                         const key = normalizeUrl(r.url);
                         if (!key) continue;
-                        const existing = byUrl.get(key);
-                        if (!existing || r.score > existing.score) byUrl.set(key, r);
+                        if (!byUrl.has(key)) byUrl.set(key, r);
+                    }
+                    for (const r of setA) {
+                        const key = normalizeUrl(r.url);
+                        if (!key) continue;
+                        if (!byUrl.has(key)) byUrl.set(key, r);
                     }
                     const pairKey = (r: RawSearchResult) => `${normalizeUrl(r.url)}::${Number(r.score).toFixed(10)}`;
                     const expectedPairs = new Set([...byUrl.values()].map(pairKey));

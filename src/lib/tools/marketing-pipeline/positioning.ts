@@ -18,6 +18,12 @@ export async function buildMessagingStrategy(args: {
 }): Promise<MessagingStrategy> {
   const { dna, competitors, trendsSummary = "", userPrompt = "" } = args;
 
+  const MAX_COMPETITORS = 3;
+  const MAX_WEAKNESSES = 2;
+  const MAX_TRENDS_CHARS = 800;
+
+  const topCompetitors = competitors.competitors.slice(0, MAX_COMPETITORS);
+
   const contextParts: string[] = [
     "## Company DNA",
     `Mission: ${dna.coreMission}`,
@@ -27,16 +33,17 @@ export async function buildMessagingStrategy(args: {
     `Technical edge: ${dna.technicalEdge}`,
     "",
     "## Competitor landscape",
-    ...competitors.competitors.map(
+    ...topCompetitors.map(
       (c) =>
-        `- ${c.name}: ${c.positioning}. Weaknesses: ${c.weaknesses.join(", ")}`,
+        `- ${c.name}: ${c.positioning}. Weaknesses: ${c.weaknesses.slice(0, MAX_WEAKNESSES).join(", ")}`,
     ),
     `Our advantages: ${competitors.ourAdvantages.join("; ")}`,
     `Market gaps: ${competitors.marketGaps.join("; ")}`,
     `Messaging to avoid: ${competitors.messagingAntiPatterns.join("; ")}`,
   ];
   if (trendsSummary.trim()) {
-    contextParts.push("", "## Platform / trend context", trendsSummary.trim());
+    const trimmed = trendsSummary.trim().slice(0, MAX_TRENDS_CHARS);
+    contextParts.push("", "## Platform / trend context", trimmed);
   }
   if (userPrompt.trim()) {
     contextParts.push("", "## User request", userPrompt.trim());
@@ -52,7 +59,7 @@ Rules:
 
 Use only information from the provided context. Return valid JSON matching the schema.`;
 
-  const chat = getChatModel(MARKETING_MODELS.contentGeneration);
+  const chat = getChatModel(MARKETING_MODELS.strategyBuilding);
   const model = chat.withStructuredOutput(MessagingStrategySchema, {
     name: "messaging_strategy",
   });

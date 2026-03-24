@@ -296,6 +296,20 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   }, [isRoleLoading, documents]);
 
   useEffect(() => {
+    if (isRoleLoading || userRole !== "employer") return;
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedView = params.get("view");
+    if (requestedView === "rewrite") {
+      setViewMode("rewrite");
+      params.delete("view");
+      const next = params.toString();
+      const newUrl = next ? `${window.location.pathname}?${next}` : window.location.pathname;
+      window.history.replaceState({}, "", newUrl);
+    }
+  }, [isRoleLoading, userRole]);
+
+  useEffect(() => {
     if (!userId || isRoleLoading) return;
     void fetchDocuments();
   }, [userId, isRoleLoading, fetchDocuments]);

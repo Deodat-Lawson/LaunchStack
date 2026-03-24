@@ -118,7 +118,8 @@ export function getEmbeddings(): OpenAIEmbeddings {
 
 /** Marketing pipeline model config: one place to swap models per stage. */
 export const MARKETING_MODELS = {
-  dnaExtraction: "gpt-4o" as AIModelType,
-  competitorAnalysis: "gpt-4o" as AIModelType,
+  dnaExtraction: "gpt-5-nano" as AIModelType,
+  competitorAnalysis: "gpt-5-nano" as AIModelType,
+  strategyBuilding: "gpt-5-nano" as AIModelType,
   contentGeneration: "gpt-4o" as AIModelType,
 } as const;

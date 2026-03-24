@@ -4,6 +4,7 @@ export {
     MarketingPipelineInputSchema,
     MarketingPipelineOutputSchema,
     MarketingPlatformEnum,
+    PIPELINE_STEPS,
 } from "~/lib/tools/marketing-pipeline/types";
 export type {
     MarketingPipelineInput,
@@ -11,5 +12,8 @@ export type {
     MarketingPipelineResult,
     MarketingPlatform,
     MarketingResearchResult,
+    PipelineStepId,
+    PipelineSSEEvent,
+    OnPipelineProgress,
 } from "~/lib/tools/marketing-pipeline/types";
 

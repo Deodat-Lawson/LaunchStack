@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { executeSearch } from "~/lib/tools/trend-search/web-search";
 import type { PlannedQuery } from "~/lib/tools/trend-search/types";
@@ -5,39 +6,85 @@ import { getChatModel, MARKETING_MODELS } from "~/lib/models";
 import type { CompetitorAnalysis } from "~/lib/tools/marketing-pipeline/types";
 import { CompetitorAnalysisSchema } from "~/lib/tools/marketing-pipeline/types";
 
-/**
- * Build search queries to find competitor messaging and positioning.
- */
+/* ──────────────────────────────────────────────────────────────
+ * In-memory cache — competitor landscape changes slowly.
+ * ────────────────────────────────────────────────────────────── */
+
+const COMPETITOR_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+interface CompetitorCacheEntry {
+  result: CompetitorAnalysis;
+  expiresAt: number;
+}
+
+const cache = new Map<string, CompetitorCacheEntry>();
+
+function buildCacheKey(companyName: string, categories: string[]): string {
+  const normalized = `${companyName.trim().toLowerCase()}::${[...categories].sort().join(",").toLowerCase()}`;
+  return createHash("sha256").update(normalized).digest("hex");
+}
+
+function pruneCache(): void {
+  const now = Date.now();
+  for (const [key, entry] of cache.entries()) {
+    if (entry.expiresAt <= now) cache.delete(key);
+  }
+}
+
+function getCached(companyName: string, categories: string[]): CompetitorAnalysis | null {
+  const key = buildCacheKey(companyName, categories);
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (entry.expiresAt <= Date.now()) {
+    cache.delete(key);
+    return null;
+  }
+  return entry.result;
+}
+
+function setCache(companyName: string, categories: string[], result: CompetitorAnalysis): void {
+  if (cache.size > 50) pruneCache();
+  const key = buildCacheKey(companyName, categories);
+  cache.set(key, { result, expiresAt: Date.now() + COMPETITOR_CACHE_TTL_MS });
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Search query builder
+ * ────────────────────────────────────────────────────────────── */
+
 function buildCompetitorQueries(companyName: string, categories: string[]): PlannedQuery[] {
   const categoryStr = categories.length > 0 ? categories.join(" ") : "industry";
+  const currentYear = new Date().getFullYear();
   return [
     {
-      searchQuery: `${companyName} competitors ${categoryStr} positioning`,
+      searchQuery: `${companyName} competitors ${categoryStr} positioning ${currentYear}`,
       category: "business",
       rationale: "Find direct competitors and their positioning",
     },
     {
-      searchQuery: `${categoryStr} market leaders alternative solutions 2025`,
+      searchQuery: `${categoryStr} market leaders alternative solutions ${currentYear}`,
       category: "business",
       rationale: "Find alternatives and market leaders",
-    },
-    {
-      searchQuery: `${companyName} vs competitors comparison`,
-      category: "business",
-      rationale: "Find comparison content and differentiators",
     },
   ];
 }
 
-/**
- * Use web search + LLM to synthesize a competitor landscape for the company.
- */
+/* ──────────────────────────────────────────────────────────────
+ * Main competitor analysis
+ * ────────────────────────────────────────────────────────────── */
+
 export async function analyzeCompetitors(args: {
   companyName: string;
   categories: string[];
   companyContext?: string;
 }): Promise<CompetitorAnalysis> {
   const { companyName, categories, companyContext = "" } = args;
+
+  const cached = getCached(companyName, categories);
+  if (cached) {
+    console.log("[marketing-pipeline] competitor analysis cache HIT for %s", companyName);
+    return cached;
+  }
 
   const plannedQueries = buildCompetitorQueries(companyName, categories);
 
@@ -84,5 +131,7 @@ Return valid JSON matching the schema.`;
     new HumanMessage(rawContext),
   ]);
 
-  return CompetitorAnalysisSchema.parse(response);
+  const result = CompetitorAnalysisSchema.parse(response);
+  setCache(companyName, categories, result);
+  return result;
 }

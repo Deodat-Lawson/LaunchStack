@@ -73,15 +73,20 @@ const AUDIENCE_OPTIONS = [
 ] as const;
 
 export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persistedState, onStateChange }: RewriteWorkflowProps) {
-  const [currentStep, setCurrentStep] = useState<WorkflowStep>(persistedState?.currentStep ?? (initialText ? 'options' : 'input'));
-  const [text, setText] = useState(persistedState?.text ?? initialText);
+  const persistedStep = persistedState?.currentStep;
+  const effectiveStep = persistedStep === 'complete'
+    ? (initialText ? 'options' : 'input')
+    : (persistedStep ?? (initialText ? 'options' : 'input'));
+
+  const [currentStep, setCurrentStep] = useState<WorkflowStep>(effectiveStep);
+  const [text, setText] = useState(persistedStep === 'complete' ? initialText : (persistedState?.text ?? initialText));
   const [options, setOptions] = useState<RewriteOptions>({
     tone: persistedState?.options?.tone ?? 'professional',
     length: persistedState?.options?.length ?? 'medium',
     audience: persistedState?.options?.audience ?? 'general',
     customPrompt: persistedState?.options?.customPrompt ?? "",
   });
-  const [rewrittenText, setRewrittenText] = useState(persistedState?.rewrittenText ?? "");
+  const [rewrittenText, setRewrittenText] = useState(persistedStep === 'complete' ? "" : (persistedState?.rewrittenText ?? ""));
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDraftMode, setIsDraftMode] = useState(persistedState?.isDraftMode ?? true);

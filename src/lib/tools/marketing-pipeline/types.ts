@@ -120,10 +120,16 @@ export const MessagingStrategySchema = z.object({
 export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
 export type MarketingPlatform = z.infer<typeof MarketingPlatformEnum>;
 
+export const PlatformMetaSchema = z.object({
+    subreddit: z.string().max(100).optional(),
+    hashtags: z.array(z.string().max(50)).max(5).optional(),
+}).optional();
+
 export const MarketingPipelineInputSchema = z.object({
     platform: MarketingPlatformEnum,
     prompt: z.string().min(1).max(2000).optional(),
     maxResearchResults: z.number().int().min(1).max(12).optional(),
+    platformMeta: PlatformMetaSchema,
 });
 export type MarketingPipelineInput = z.infer<typeof MarketingPipelineInputSchema>;
 
@@ -161,4 +167,36 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
     /** Debug info about DNA extraction, included when debug mode is on. */
     dnaDebug?: DNADebugInfo;
 }
+
+/* ──────────────────────────────────────────────────────────────
+ * Pipeline progress / SSE streaming types
+ * ────────────────────────────────────────────────────────────── */
+
+export type PipelineStepId =
+    | "loading-context"
+    | "extracting-dna"
+    | "analyzing-competitors"
+    | "researching-trends"
+    | "building-strategy"
+    | "generating-content";
+
+export const PIPELINE_STEPS: ReadonlyArray<{ id: PipelineStepId; label: string }> = [
+    { id: "loading-context", label: "Loading company knowledge" },
+    { id: "extracting-dna", label: "Extracting company DNA" },
+    { id: "analyzing-competitors", label: "Analyzing competitors" },
+    { id: "researching-trends", label: "Researching platform trends" },
+    { id: "building-strategy", label: "Building messaging strategy" },
+    { id: "generating-content", label: "Generating campaign draft" },
+];
+
+export type PipelineSSEEvent =
+    | { type: "step_start"; step: PipelineStepId; label: string }
+    | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string }
+    | { type: "result"; success: true; data: MarketingPipelineResult }
+    | { type: "error"; success: false; message: string; error?: string };
+
+export type OnPipelineProgress = (event:
+    | { type: "step_start"; step: PipelineStepId; label: string }
+    | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string }
+) => void;
 

@@ -2,8 +2,34 @@ import type {
   MarketingPlatform,
   MarketingResearchResult,
 } from "~/lib/tools/marketing-pipeline/types";
+import type { PlannedQuery } from "~/lib/tools/trend-search";
 import { runTrendSearch } from "~/lib/tools/trend-search";
 import { getCachedTrendSearch, setCachedTrendSearch } from "~/lib/tools/trend-search/cache";
+
+function buildTrendQueries(
+  platform: MarketingPlatform,
+  companyName: string,
+  prompt: string,
+): PlannedQuery[] {
+  const year = new Date().getFullYear();
+  return [
+    {
+      searchQuery: `${platform} marketing trends ${year} ${prompt}`,
+      category: "business" as const,
+      rationale: "Platform-specific trends for the campaign",
+    },
+    {
+      searchQuery: `${companyName} ${platform} content strategy best practices ${year}`,
+      category: "tech" as const,
+      rationale: "Company-relevant content strategy trends",
+    },
+    {
+      searchQuery: `${platform} engagement strategies ${prompt} ${year}`,
+      category: "business" as const,
+      rationale: "Engagement tactics for the target platform",
+    },
+  ];
+}
 
 export async function researchPlatformTrends(args: {
   platform: MarketingPlatform;
@@ -12,15 +38,15 @@ export async function researchPlatformTrends(args: {
   companyContext: string;
   maxResults: number;
 }): Promise<MarketingResearchResult[]> {
-  const { platform, prompt, companyContext, maxResults } = args;
+  const { platform, prompt, companyName, companyContext, maxResults } = args;
 
   try {
     const cached = getCachedTrendSearch(prompt, companyContext);
-    const trendOutput = cached ?? (await runTrendSearch({
-      query: prompt,
-      companyContext,
-      categories: undefined,
-    }));
+    const preBuiltQueries = buildTrendQueries(platform, companyName, prompt);
+    const trendOutput = cached ?? (await runTrendSearch(
+      { query: prompt, companyContext, categories: undefined },
+      { preBuiltQueries },
+    ));
 
     if (!cached) {
       setCachedTrendSearch(prompt, companyContext, trendOutput);

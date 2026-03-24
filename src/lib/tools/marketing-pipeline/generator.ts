@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { getChatModel, MARKETING_MODELS } from "~/lib/models";
 import type {
@@ -14,7 +15,7 @@ Voice & craft:
 - Lead every post with tension, contrast, or a surprising insight. The first line must stop the scroll.
 - Every sentence must earn its place. Cut filler, qualifiers, and throat-clearing ("Introducing…", "We're excited to…").
 - Match format to content: use narrative paragraphs for stories and lessons learned; use structured bullets/lists for educational breakdowns, comparisons, or frameworks. Pick whichever serves the message best.
-- End with a question or soft CTA that invites genuine conversation, not a generic "Let's connect!"
+- End with a SINGLE question or soft CTA that invites genuine conversation, not a generic "Let's connect!" Only one question — never two in a row.
 - Use trend references to frame the narrative or set up a tension, but never quote or attribute them directly.
 
 Staying honest:
@@ -22,6 +23,14 @@ Staying honest:
 - Never invent capabilities, partnerships, customers, or numbers not in the company context.
 - If a detail isn't in the context, reframe it as a general industry observation or an open question.
 - Skip hype words ("revolutionary", "game-changing", "best-in-class") unless the context explicitly supports them.
+
+STRICT anti-patterns — NEVER do any of these:
+- NEVER list product features as bullet points (e.g. "Here's how X empowers you: - Feature A… - Feature B…"). Weave capabilities into a narrative instead.
+- NEVER acknowledge product shortcomings, roadmap gaps, or areas "we're still working on." Marketing copy should project confidence.
+- NEVER open with generic statements like "Many teams find themselves…" or "In today's fast-paced world…". These are the same as "Excited to announce" — instant scroll-past.
+- NEVER use more than 3 hashtags on LinkedIn, 2 on X, or 0 on Reddit. Fewer is always better.
+- NEVER end with two questions. Pick one focused question.
+- NEVER write in a way that reads like a product page, press release, or ad copy.
 
 Media selection:
 - Pick "image" for static visuals (diagrams, workflows, checklists, data snapshots).
@@ -122,7 +131,7 @@ function formatStrategyBlock(strategy: MessagingStrategy): string {
 const PLATFORM_EXAMPLES: Record<MarketingPlatform, string> = {
     linkedin: `Two examples of strong LinkedIn posts (for style reference only — do NOT copy content):
 
-Example A — Narrative style:
+Example A — Narrative style (GOOD):
 """
 Most marketing teams are still building campaigns the same way they did in 2019. The ones pulling ahead aren't just adopting AI — they're rethinking the entire pipeline.
 
@@ -135,7 +144,7 @@ The result isn't just speed — it's focus. Our team now spends time on strategy
 What's the biggest bottleneck in your marketing workflow right now?
 """
 
-Example B — Educational breakdown style:
+Example B — Educational breakdown style (GOOD):
 """
 Marketing automation and marketing strategy are not the same thing. But they're increasingly being treated like they are.
 
@@ -158,7 +167,24 @@ Predictive analytics can surface which segments are underserved. Trend analysis 
 But the risk is real — when automation outpaces strategy, you're scaling the wrong things faster.
 
 Where does your team draw the line between automating and strategizing?
-"""`,
+"""
+
+Example C — BAD post (DO NOT write like this):
+"""
+Many teams find themselves buried under a mountain of documents, but those who succeed transform this challenge into an advantage.
+
+Here's how ProductX empowers you:
+- Feature A: It analyzes your documents, turning them into actionable insights.
+- Feature B: Our open-source platform benefits from a vibrant community.
+- Feature C: While enhancing customizability remains a priority, our workflows already support quick decision-making.
+
+This isn't just about speed—it's about clarity and focus.
+
+How does your team handle document overload? Where do you see the biggest opportunity to streamline?
+
+#Marketing #AI #Efficiency #Automation #Tech #ProductX
+"""
+Why this is bad: Generic opener, feature bullet list reads like a product page, acknowledges a weakness ("remains a priority"), two questions at the end, 6 hashtags is excessive, hollow claims without specific proof.`,
     x: `Example of a strong X post (for style reference only — do NOT copy content):
 """
 Your marketing team's bottleneck isn't creative talent — it's manual processes eating 60% of their week.
@@ -185,12 +211,18 @@ We rebuilt our pipeline around that idea. Early results are promising.
 """`,
 };
 
+interface PlatformMeta {
+  subreddit?: string;
+  hashtags?: string[];
+}
+
 function buildPrompt(args: {
     platform: MarketingPlatform;
     prompt: string;
     companyContext: string;
     research: MarketingResearchResult[];
     strategy?: MessagingStrategy;
+    platformMeta?: PlatformMeta;
 }): string {
   const parts = [
     `Selected platform: ${args.platform}`,
@@ -205,6 +237,21 @@ function buildPrompt(args: {
   if (args.strategy) {
     parts.push("", "Messaging strategy (use this angle and proof; respect avoid list):", formatStrategyBlock(args.strategy));
   }
+
+  if (args.platformMeta?.subreddit) {
+    parts.push(
+      "",
+      `Target subreddit: ${args.platformMeta.subreddit}`,
+      "Tailor your tone and content to match this subreddit's norms and audience.",
+    );
+  }
+  if (args.platformMeta?.hashtags?.length) {
+    parts.push(
+      "",
+      `Preferred hashtags (incorporate naturally if relevant): ${args.platformMeta.hashtags.join(", ")}`,
+    );
+  }
+
   parts.push(
     "",
     platformTemplate(args.platform),
@@ -215,14 +262,62 @@ function buildPrompt(args: {
     args.strategy
       ? "- Write ONE post using the messaging strategy angle and proof; respect the avoid list."
       : "- Pick ONE angle — a tension, trend, or insight — and commit to it.",
-    "- Open with a hook that creates curiosity or contrast. Never open with an announcement.",
+    "- Open with a hook that creates curiosity or contrast. Never open with an announcement or generic statement.",
     "- Build a short narrative arc: hook → insight/story → takeaway → CTA/question.",
     "- Write as a person sharing what they've learned, not a brand listing features.",
+    "- NEVER list features as bullet points. Weave capabilities into the narrative naturally.",
+    "- NEVER acknowledge product weaknesses or areas under development.",
     "- Ground all product claims in the company context. Reframe anything unsupported as an industry observation.",
+    "- End with exactly ONE question or CTA, not two.",
+    `- Use at most ${args.platform === "linkedin" ? 3 : args.platform === "x" ? 2 : 0} hashtags. Fewer is better.`,
+    args.platformMeta?.hashtags?.length
+      ? "- Prefer the user's preferred hashtags over generic ones."
+      : "",
     "- Return JSON matching the schema exactly.",
   );
   return parts.join("\n");
 }
+
+/* ──────────────────────────────────────────────────────────────
+ * Quality gate — optional post-generation validation
+ * ────────────────────────────────────────────────────────────── */
+
+const QualityScoreSchema = z.object({
+  score: z.number().min(1).max(10),
+  issues: z.array(z.string()),
+  rewrite: z.string().nullable(),
+});
+
+const QUALITY_THRESHOLD = 6;
+
+async function validatePostQuality(
+  post: string,
+  platform: MarketingPlatform,
+): Promise<{ score: number; issues: string[]; rewrite: string | null }> {
+  const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
+  const model = chat.withStructuredOutput(QualityScoreSchema, { name: "quality_check" });
+
+  const response = await model.invoke([
+    new SystemMessage(
+      `You are a social media copy editor. Score this ${platform} post 1-10 on these criteria:
+1. Hook strength (does the first line stop the scroll?)
+2. Authenticity (does it sound like a person, not a brand?)
+3. Platform fit (does it match ${platform} conventions?)
+4. Specificity (are claims backed by concrete details, not vague hype?)
+5. Structure (is it narrative-driven rather than a feature list?)
+
+If score < ${QUALITY_THRESHOLD}, provide a "rewrite" field with an improved version that fixes the issues.
+Flag specific issues in "issues" array.`,
+    ),
+    new HumanMessage(post),
+  ]);
+
+  return QualityScoreSchema.parse(response);
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Main generation
+ * ────────────────────────────────────────────────────────────── */
 
 export async function generateCampaignOutput(args: {
     platform: MarketingPlatform;
@@ -230,6 +325,8 @@ export async function generateCampaignOutput(args: {
     companyContext: string;
     research: MarketingResearchResult[];
     strategy?: MessagingStrategy;
+    enableQualityGate?: boolean;
+    platformMeta?: PlatformMeta;
 }): Promise<{
   platform: MarketingPlatform;
   message: string;
@@ -248,10 +345,34 @@ export async function generateCampaignOutput(args: {
 
   const response = await model.invoke([
     new SystemMessage(systemPrompt),
-    new HumanMessage(buildPrompt(args)),
+    new HumanMessage(buildPrompt({
+      platform: args.platform,
+      prompt: args.prompt,
+      companyContext: args.companyContext,
+      research: args.research,
+      strategy: args.strategy,
+      platformMeta: args.platformMeta,
+    })),
   ]);
 
-  const parsed = MarketingPipelineOutputSchema.parse(response);
+  let parsed = MarketingPipelineOutputSchema.parse(response);
+
+  if (args.enableQualityGate) {
+    try {
+      const quality = await validatePostQuality(parsed.message, args.platform);
+      console.log(
+        "[marketing-pipeline] quality gate: score=%d issues=%d",
+        quality.score, quality.issues.length,
+      );
+      if (quality.score < QUALITY_THRESHOLD && quality.rewrite) {
+        parsed = { ...parsed, message: quality.rewrite };
+        console.log("[marketing-pipeline] quality gate rewrote post (score was %d)", quality.score);
+      }
+    } catch (err) {
+      console.warn("[marketing-pipeline] quality gate failed, using original:", err);
+    }
+  }
+
   const out: {
     platform: MarketingPlatform;
     message: string;

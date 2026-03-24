@@ -7,6 +7,7 @@ import { Check, X, RotateCw, Eye, EyeOff, ArrowLeftRight } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
 import { Card } from "../ui/card";
+import MarkdownMessage from "~/app/_components/MarkdownMessage";
 
 export interface RewritePreviewProps {
   originalText: string;
@@ -66,7 +67,7 @@ export function RewritePreviewPanel({
           </span>
         </div>
         <div className="p-3 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50 dark:border-red-900/50 text-sm leading-relaxed max-h-80 overflow-y-auto">
-          {safeOriginal}
+          <MarkdownMessage content={safeOriginal} className="prose prose-sm dark:prose-invert max-w-none" />
         </div>
       </Card>
       
@@ -79,7 +80,7 @@ export function RewritePreviewPanel({
           </span>
         </div>
         <div className="p-3 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50 dark:border-green-900/50 text-sm leading-relaxed max-h-80 overflow-y-auto">
-          {safeProposed}
+          <MarkdownMessage content={safeProposed} className="prose prose-sm dark:prose-invert max-w-none" />
         </div>
       </Card>
     </div>
@@ -87,7 +88,7 @@ export function RewritePreviewPanel({
 
   const renderCleanView = () => (
     <div className="p-4 rounded-lg bg-background border border-border text-sm leading-relaxed max-h-96 overflow-y-auto">
-      {safeProposed}
+      <MarkdownMessage content={safeProposed} className="prose prose-sm dark:prose-invert max-w-none" />
     </div>
   );
 
@@ -117,7 +118,7 @@ export function RewritePreviewPanel({
           </Button>
           <Button variant="outline" size="sm" onClick={onTryAgain} disabled={isRetrying}>
             <RotateCw className={cn("w-3 h-3 mr-1.5", isRetrying && "animate-spin")} />
-            Try Again
+            Regenerate
           </Button>
           <Button
             size="sm"
@@ -126,7 +127,7 @@ export function RewritePreviewPanel({
             className="bg-green-600 hover:bg-green-700 text-white"
           >
             <Check className="w-3 h-3 mr-1.5" />
-            Accept
+            Push to Rewrite
           </Button>
         </div>
       </div>

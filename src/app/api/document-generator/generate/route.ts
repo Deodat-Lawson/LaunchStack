@@ -91,7 +91,7 @@ Guidelines:
 - Apply the requested tone if specified
 - Keep similar length to the original unless otherwise specified
 - Output ONLY the rewritten text: no quotation marks, no "Here is the rewrite:", no wrapper text
-- Use HTML tags for formatting: <strong> for bold, <em> for italic, <u> for underline. Do NOT use Markdown (** or *).`,
+- Use Markdown for formatting: **bold**, *italic*, __underline__. Do NOT use raw HTML tags.`,
 
     summarize: `You are an expert editor specializing in summarization. Your task is to create a concise summary of the given text.
 
@@ -140,7 +140,15 @@ export async function POST(request: Request) {
             );
         }
 
-        const body = await request.json() as unknown;
+        let body: unknown;
+        try {
+            body = (await request.json()) as unknown;
+        } catch {
+            return NextResponse.json(
+                { success: false, message: "Invalid JSON body", error: "Request body must be valid JSON" },
+                { status: 400 },
+            );
+        }
         const validation = GenerateSchema.safeParse(body);
 
         if (!validation.success) {
@@ -153,8 +161,8 @@ export async function POST(request: Request) {
         const { action, content, prompt, context, options } = validation.data;
         const startTime = Date.now();
 
-        // Get the AI model
-        const modelId = (options?.model ?? "gpt-5-mini") as AIModelType;
+        // Get the AI model (gpt-4o is widely available; gpt-5-mini may require newer API access)
+        const modelId = (options?.model ?? "gpt-4o") as AIModelType;
         const chat = getChatModel(modelId);
 
         // Build the system prompt
@@ -221,6 +229,17 @@ export async function POST(request: Request) {
                 const firstDraft = normalizeModelContent(firstPass.content);
 
                 // Refining through second pass
+                const refinementInstructions = [
+                    "Improve sentence flow and rhythm",
+                    "Remove any redundancy or filler phrases",
+                    "Ensure it reads naturally, not like it was AI-generated",
+                    "Preserve all factual information, names, numbers, and technical terms",
+                    prompt
+                        ? "IMPORTANT: The user requested specific additions or changes. Make sure these are fully incorporated and prioritized: " + prompt
+                        : "Do not change the meaning or add new information beyond what was requested",
+                    "Output ONLY the refined text: no quotation marks, no wrapper phrases",
+                ].join("\n- ");
+
                 const secondPass = await chat.call([
                     new SystemMessage(systemPrompt),
                     new HumanMessage(`Here is a rewritten version of the original text:
@@ -228,12 +247,7 @@ export async function POST(request: Request) {
 "${firstDraft}"
 
 Now refine it further:
-- Improve sentence flow and rhythm
-- Remove any redundancy or filler phrases
-- Ensure it reads naturally, not like it was AI-generated
-- Preserve all factual information, names, numbers, and technical terms
-- Do not change the meaning or add new information
-- Output ONLY the refined text: no quotation marks, no wrapper phrases`),
+- ${refinementInstructions}`),
                 ]);
 
                 // Use the refined second pass for rewrite (skip the generic call below)
@@ -287,13 +301,17 @@ Now refine it further:
         });
 
     } catch (error) {
+        const errMessage = error instanceof Error ? error.message : String(error);
+        const stack = error instanceof Error ? error.stack : undefined;
+        console.error("[document-generator/generate] error:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to generate content",
-                error: error instanceof Error ? error.message : "Unknown error"
+                error: errMessage,
+                ...(process.env.NODE_ENV === "development" && stack ? { stack } : {}),
             },
-            { status: 500 }
+            { status: 500, headers: { "Content-Type": "application/json" } },
         );
     }
 }

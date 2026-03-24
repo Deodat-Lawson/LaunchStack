@@ -3,6 +3,7 @@ import type {
   MarketingResearchResult,
 } from "~/lib/tools/marketing-pipeline/types";
 import { runTrendSearch } from "~/lib/tools/trend-search";
+import { getCachedTrendSearch, setCachedTrendSearch } from "~/lib/tools/trend-search/cache";
 
 export async function researchPlatformTrends(args: {
   platform: MarketingPlatform;
@@ -14,12 +15,16 @@ export async function researchPlatformTrends(args: {
   const { platform, prompt, companyContext, maxResults } = args;
 
   try {
-    const trendOutput = await runTrendSearch({
+    const cached = getCachedTrendSearch(prompt, companyContext);
+    const trendOutput = cached ?? (await runTrendSearch({
       query: prompt,
       companyContext,
-      // Categories are optional; let the planner infer from query + context for now.
       categories: undefined,
-    });
+    }));
+
+    if (!cached) {
+      setCachedTrendSearch(prompt, companyContext, trendOutput);
+    }
 
     const top = trendOutput.results.slice(0, maxResults);
 

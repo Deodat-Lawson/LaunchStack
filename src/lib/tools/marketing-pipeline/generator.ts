@@ -110,6 +110,15 @@ return research
 }
 
 
+function formatStrategyBlock(strategy: MessagingStrategy): string {
+  return [
+    `Positioning angle: ${strategy.angle}`,
+    `Key proof: ${strategy.keyProof.join("; ")}`,
+    `Human hook: ${strategy.humanHook}`,
+    `Avoid: ${strategy.avoidList.join("; ")}`,
+  ].join("\n");
+}
+
 const PLATFORM_EXAMPLES: Record<MarketingPlatform, string> = {
     linkedin: `Two examples of strong LinkedIn posts (for style reference only — do NOT copy content):
 
@@ -176,15 +185,6 @@ We rebuilt our pipeline around that idea. Early results are promising.
 """`,
 };
 
-function formatStrategyBlock(strategy: MessagingStrategy): string {
-  return [
-    `Positioning angle: ${strategy.angle}`,
-    `Key proof: ${strategy.keyProof.join("; ")}`,
-    `Human hook: ${strategy.humanHook}`,
-    `Avoid: ${strategy.avoidList.join("; ")}`,
-  ].join("\n");
-}
-
 function buildPrompt(args: {
     platform: MarketingPlatform;
     prompt: string;
@@ -209,15 +209,17 @@ function buildPrompt(args: {
     "",
     platformTemplate(args.platform),
     "",
-    PLATFORM_EXAMPLES[args.platform] ?? "",
+    (PLATFORM_EXAMPLES[args.platform] ?? ""),
     "",
     "Task:",
     args.strategy
       ? "- Write ONE post using the messaging strategy angle and proof; respect the avoid list."
-      : "- Pick ONE angle (either from trend references or company context).",
-    "- Write ONE post that fits the platform format above.",
-    "- Do NOT add facts not supported by company context.",
-    "- Return JSON only matching the schema.",
+      : "- Pick ONE angle — a tension, trend, or insight — and commit to it.",
+    "- Open with a hook that creates curiosity or contrast. Never open with an announcement.",
+    "- Build a short narrative arc: hook → insight/story → takeaway → CTA/question.",
+    "- Write as a person sharing what they've learned, not a brand listing features.",
+    "- Ground all product claims in the company context. Reframe anything unsupported as an industry observation.",
+    "- Return JSON matching the schema exactly.",
   );
   return parts.join("\n");
 }

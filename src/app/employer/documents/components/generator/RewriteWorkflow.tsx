@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { 
   CheckCircle, 
   ArrowRight, 
@@ -18,6 +18,7 @@ import { Card } from "../ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Badge } from "../ui/badge";
+import { Switch } from "../ui/switch";
 import { cn } from "~/lib/utils";
 import { RewritePreviewPanel } from "./RewritePreviewPanel";
 
@@ -25,15 +26,25 @@ interface RewriteWorkflowProps {
   initialText?: string;
   onComplete: (rewrittenText: string) => void;
   onCancel: () => void;
+  persistedState?: Partial<RewriteWorkflowStateSnapshot>;
+  onStateChange?: (state: RewriteWorkflowStateSnapshot) => void;
 }
 
-type WorkflowStep = 'input' | 'options' | 'preview' | 'complete';
+export type WorkflowStep = 'input' | 'options' | 'preview' | 'complete';
 
-interface RewriteOptions {
+export interface RewriteOptions {
   tone: 'professional' | 'casual' | 'formal' | 'technical' | 'creative' | 'persuasive';
   length: 'brief' | 'medium' | 'detailed' | 'comprehensive';
   audience: 'general' | 'technical' | 'executives' | 'students' | 'customers' | 'team';
   customPrompt?: string;
+}
+
+export interface RewriteWorkflowStateSnapshot {
+  currentStep: WorkflowStep;
+  text: string;
+  options: RewriteOptions;
+  rewrittenText: string;
+  isDraftMode: boolean;
 }
 
 const TONE_OPTIONS = [
@@ -61,17 +72,30 @@ const AUDIENCE_OPTIONS = [
   { value: 'team', label: 'Team Members', desc: 'Internal colleagues' }
 ] as const;
 
-export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: RewriteWorkflowProps) {
-  const [currentStep, setCurrentStep] = useState<WorkflowStep>(initialText ? 'options' : 'input');
-  const [text, setText] = useState(initialText);
+export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persistedState, onStateChange }: RewriteWorkflowProps) {
+  const [currentStep, setCurrentStep] = useState<WorkflowStep>(persistedState?.currentStep ?? (initialText ? 'options' : 'input'));
+  const [text, setText] = useState(persistedState?.text ?? initialText);
   const [options, setOptions] = useState<RewriteOptions>({
-    tone: 'professional',
-    length: 'medium',
-    audience: 'general'
+    tone: persistedState?.options?.tone ?? 'professional',
+    length: persistedState?.options?.length ?? 'medium',
+    audience: persistedState?.options?.audience ?? 'general',
+    customPrompt: persistedState?.options?.customPrompt ?? "",
   });
-  const [rewrittenText, setRewrittenText] = useState("");
+  const [rewrittenText, setRewrittenText] = useState(persistedState?.rewrittenText ?? "");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDraftMode, setIsDraftMode] = useState(persistedState?.isDraftMode ?? true);
+
+  useEffect(() => {
+    if (!onStateChange) return;
+    onStateChange({
+      currentStep,
+      text,
+      options,
+      rewrittenText,
+      isDraftMode,
+    });
+  }, [currentStep, isDraftMode, onStateChange, options, rewrittenText, text]);
 
   const handleRewrite = useCallback(async () => {
     if (!text.trim()) return;
@@ -95,13 +119,24 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
         })
       });
 
-      const data = await response.json() as { success: boolean; message?: string; generatedContent?: string };
+      const responseText = await response.text();
+      let data: { success: boolean; message?: string; generatedContent?: string; error?: string };
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        setError(responseText?.slice(0, 120) || 'Server returned an invalid response. Please try again.');
+        return;
+      }
       
       if (data.success && typeof data.generatedContent === "string" && data.generatedContent.trim().length > 0) {
-        setRewrittenText(data.generatedContent);
-        setCurrentStep('preview');
+        if (isDraftMode) {
+          setRewrittenText(data.generatedContent);
+          setCurrentStep('preview');
+        } else {
+          onComplete(data.generatedContent);
+        }
       } else {
-        setError(data.message ?? 'Failed to rewrite text');
+        setError(data.message ?? data.error ?? 'Failed to rewrite text');
       }
     } catch (err) {
       console.error('Rewrite request failed', err);
@@ -109,7 +144,7 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
     } finally {
       setIsProcessing(false);
     }
-  }, [text, options]);
+  }, [isDraftMode, onComplete, options, text]);
 
   const handleAcceptRewrite = useCallback(() => {
     onComplete(rewrittenText);
@@ -237,8 +272,8 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
             </div>
           )}
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div>
+          <div className="flex flex-col gap-6 mb-6">
+            <div className="min-w-0">
               <label className="block text-sm font-medium mb-2">Tone</label>
               <Select
                 value={options.tone}
@@ -246,23 +281,21 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
                   setOptions(prev => ({ ...prev, tone: value }))
                 }
               >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3">
+                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {TONE_OPTIONS.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      <div className="text-left">
-                        <div className="font-medium">{option.label}</div>
-                        <div className="text-xs text-muted-foreground">{option.desc}</div>
-                      </div>
+                      <span className="block truncate font-medium">{option.label}</span>
+                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className="block text-sm font-medium mb-2">Length</label>
               <Select
                 value={options.length}
@@ -270,23 +303,21 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
                   setOptions(prev => ({ ...prev, length: value }))
                 }
               >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3">
+                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {LENGTH_OPTIONS.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      <div className="text-left">
-                        <div className="font-medium">{option.label}</div>
-                        <div className="text-xs text-muted-foreground">{option.desc}</div>
-                      </div>
+                      <span className="block truncate font-medium">{option.label}</span>
+                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className="block text-sm font-medium mb-2">Audience</label>
               <Select
                 value={options.audience}
@@ -294,16 +325,14 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
                   setOptions(prev => ({ ...prev, audience: value }))
                 }
               >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3">
+                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {AUDIENCE_OPTIONS.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      <div className="text-left">
-                        <div className="font-medium">{option.label}</div>
-                        <div className="text-xs text-muted-foreground">{option.desc}</div>
-                      </div>
+                      <span className="block truncate font-medium">{option.label}</span>
+                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -322,6 +351,21 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
             />
           </div>
 
+          <div className="mb-6 flex items-start justify-between gap-4 rounded-lg border border-border bg-muted/30 p-4">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium">Draft Mode</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                ON: show generated draft below so you can regenerate or push to Rewrite. OFF: apply directly to document.
+              </p>
+            </div>
+            <Switch
+              aria-label="Draft mode"
+              checked={isDraftMode}
+              onCheckedChange={setIsDraftMode}
+              className="flex-shrink-0"
+            />
+          </div>
+
           <div className="border-t pt-4">
             <div className="mb-4">
               <p className="text-sm font-medium mb-2">Selected Options:</p>
@@ -333,25 +377,30 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
             </div>
           </div>
           
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setCurrentStep('input')}>
+          <div className="flex flex-wrap gap-3 items-center min-h-[44px]">
+            <Button variant="outline" onClick={() => setCurrentStep('input')} className="flex-shrink-0">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
             <Button 
               onClick={handleRewrite}
               disabled={isProcessing}
-              className="bg-amber-600 hover:bg-amber-700 text-white"
+              className="!bg-amber-600 hover:!bg-amber-500 !text-white border-2 border-amber-700 flex-shrink-0 min-w-[180px] dark:!bg-amber-500 dark:hover:!bg-amber-400 dark:!text-white dark:border-amber-400 shadow-lg"
             >
               {isProcessing ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Rewriting...
                 </>
+              ) : isDraftMode ? (
+                <>
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Generate Draft
+                </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 mr-2" />
-                  Generate Rewrite
+                  Generate & Apply
                 </>
               )}
             </Button>
@@ -382,14 +431,14 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
             proposedText={rewrittenText}
             onAccept={handleAcceptRewrite}
             onReject={onCancel}
-            onTryAgain={handleRetry}
+            onTryAgain={handleRewrite}
             isRetrying={isProcessing}
           />
 
           <div className="flex gap-3">
             <Button variant="outline" onClick={handleRetry}>
               <RotateCw className="w-4 h-4 mr-2" />
-              Try Different Options
+              Edit Options
             </Button>
             <Button variant="outline" onClick={onCancel}>
               Cancel
@@ -399,7 +448,7 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel }: Rewr
               className="bg-green-600 hover:bg-green-700 text-white"
             >
               <Check className="w-4 h-4 mr-2" />
-              Accept Rewrite
+              Push to Rewrite
             </Button>
           </div>
         </div>

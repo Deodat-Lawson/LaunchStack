@@ -18,7 +18,15 @@ export async function POST(request: Request) {
             );
         }
 
-        const body = (await request.json()) as unknown;
+        let body: unknown;
+        try {
+            body = (await request.json()) as unknown;
+        } catch {
+            return NextResponse.json(
+                { success: false, message: "Invalid JSON body", error: "Request body must be valid JSON" },
+                { status: 400 },
+            );
+        }
         const validation = MarketingPipelineInputSchema.safeParse(body);
         if (!validation.success) {
             return NextResponse.json(
@@ -69,14 +77,24 @@ export async function POST(request: Request) {
             { status: 200 },
         );
     } catch (error) {
+        const errMessage = error instanceof Error ? error.message : String(error);
         console.error("[marketing-pipeline] POST error:", error);
+
+        // Surface common setup errors for easier debugging
+        const hint =
+            !process.env.OPENAI_API_KEY && errMessage.toLowerCase().includes("openai")
+                ? " (Ensure OPENAI_API_KEY is set in .env)"
+                : errMessage.toLowerCase().includes("company")
+                  ? " (Ensure your user has a valid company profile)"
+                  : "";
+
         return NextResponse.json(
             {
                 success: false,
                 message: "Failed to run marketing pipeline",
-                error: error instanceof Error ? error.message : "Unknown error",
+                error: errMessage + hint,
             },
-            { status: 500 },
+            { status: 500, headers: { "Content-Type": "application/json" } },
         );
     }
 }

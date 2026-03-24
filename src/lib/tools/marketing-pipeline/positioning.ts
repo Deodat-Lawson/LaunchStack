@@ -52,7 +52,7 @@ Rules:
 
 Use only information from the provided context. Return valid JSON matching the schema.`;
 
-  const chat = getChatModel(MARKETING_MODELS.contentGeneration);
+  const chat = getChatModel(MARKETING_MODELS.strategyBuilding);
   const model = chat.withStructuredOutput(MessagingStrategySchema, {
     name: "messaging_strategy",
   });

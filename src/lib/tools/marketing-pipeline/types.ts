@@ -1,5 +1,65 @@
 import { z } from "zod";
 
+/**
+ * till company DNA - adds a lower level structured layer before CompanyDNA
+ * this layer gives normalized structured facts, citations, confidence, validation
+ * so model has to be stricter
+ */
+
+/** OpenAI structured outputs require .nullable() instead of .optional() - all fields must be present. */
+export const EvidenceCitationSchema = z.object({
+  documentId: z.union([z.string(), z.number()]).nullable(),
+  title: z.string().nullable(),
+  page: z.number().int().nullable(),
+  sectionPath: z.string().nullable(),
+  snippet: z.string().min(1),
+  sourceType: z.string().nullable(),
+});
+
+export type EvidenceCitation = z.infer<typeof EvidenceCitationSchema>;
+
+export const NormalizedClaimSchema = z.object({
+  claim: z.string(),
+  category: z.string(),
+  confidence: z.enum(["high", "medium", "low"]),
+  citations: z.array(EvidenceCitationSchema).default([]),
+});
+
+export type NormalizedClaim = z.infer<typeof NormalizedClaimSchema>;
+
+export const NormalizedCompanyKnowledgeSchema = z.object({
+  companyName: z.string(),
+  whatItDoes: z.string(),
+  targetAudience: z.array(z.string()).default([]),
+  categories: z.array(z.string()).default([]),
+  keyDifferentiators: z.array(z.string()).default([]),
+  proofPoints: z.array(z.string()).default([]),
+  capabilities: z.array(z.string()).default([]),
+  customerPainPoints: z.array(z.string()).default([]),
+  outcomes: z.array(z.string()).default([]),
+  brandValues: z.array(z.string()).default([]),
+  founderStory: z.string(),
+  technicalEdge: z.string(),
+  risksOrUnknowns: z.array(z.string()).default([]),
+  claims: z.array(NormalizedClaimSchema).default([]),
+  summary: z.string(),
+  missingInformation: z.array(z.string()).default([]),
+});
+
+export type NormalizedCompanyKnowledge = z.infer<typeof NormalizedCompanyKnowledgeSchema>;
+
+export const KnowledgeValidationReportSchema = z.object({
+  groundednessScore: z.number().min(0).max(10),
+  completenessScore: z.number().min(0).max(10),
+  consistencyScore: z.number().min(0).max(10),
+  needsRevision: z.boolean(),
+  unsupportedClaims: z.array(z.string()).default([]),
+  missingCriticalFields: z.array(z.string()).default([]),
+  revisionNotes: z.array(z.string()).default([]),
+});
+
+export type KnowledgeValidationReport = z.infer<typeof KnowledgeValidationReportSchema>;
+
 /** Structured company profile distilled from KB for marketing (issue #232). */
 export interface CompanyDNA {
   coreMission: string;

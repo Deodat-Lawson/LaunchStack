@@ -26,53 +26,55 @@ function normalizeUrl(url: string): string {
  * Runs all sub-queries through a single provider with retry and URL deduplication.
  * @returns Combined RawSearchResult[] (deduplicated by URL).
  */
+async function runSubQueryWithRetry(
+  query: string,
+  provider: SearchProviderFn,
+): Promise<RawSearchResult[]> {
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      return await provider(query);
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      if (attempt < MAX_RETRIES) {
+        console.warn(
+          `[web-search] Sub-query failed (attempt ${
+            attempt + 1
+          }/${MAX_RETRIES + 1}): "${query.slice(0, 50)}..."`,
+          lastError.message,
+        );
+      } else {
+        console.error(
+          `[web-search] Sub-query failed after ${
+            MAX_RETRIES + 1
+          } attempts: "${query.slice(0, 50)}..."`,
+          lastError,
+        );
+      }
+    }
+  }
+
+  if (lastError) return [];
+
+  console.warn(
+    `[web-search] Zero results for sub-query: "${query.slice(0, 80)}..."`,
+  );
+  return [];
+}
+
 async function executeWithProvider(
   subQueries: PlannedQuery[],
   provider: SearchProviderFn,
 ): Promise<RawSearchResult[]> {
+  const perQueryResults = await Promise.all(
+    subQueries.map((sub) => runSubQueryWithRetry(sub.searchQuery, provider)),
+  );
+
   const seenUrls = new Set<string>();
   const combined: RawSearchResult[] = [];
 
-  for (const sub of subQueries) {
-    const query = sub.searchQuery;
-    let lastError: Error | null = null;
-    let results: RawSearchResult[] = [];
-
-    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-      try {
-        results = await provider(query);
-        lastError = null;
-        break;
-      } catch (err) {
-        lastError = err instanceof Error ? err : new Error(String(err));
-        if (attempt < MAX_RETRIES) {
-          console.warn(
-            `[web-search] Sub-query failed (attempt ${
-              attempt + 1
-            }/${MAX_RETRIES + 1}): "${query.slice(0, 50)}..."`,
-            lastError.message,
-          );
-        } else {
-          console.error(
-            `[web-search] Sub-query failed after ${
-              MAX_RETRIES + 1
-            } attempts: "${query.slice(0, 50)}..."`,
-            lastError,
-          );
-        }
-      }
-    }
-
-    if (results.length === 0 && lastError) {
-      continue;
-    }
-    if (results.length === 0) {
-      console.warn(
-        `[web-search] Zero results for sub-query: "${query.slice(0, 80)}..."`,
-      );
-      continue;
-    }
-
+  for (const results of perQueryResults) {
     for (const r of results) {
       const normalizedUrl = normalizeUrl(r.url);
       if (normalizedUrl && !seenUrls.has(normalizedUrl)) {

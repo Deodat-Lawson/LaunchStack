@@ -1,4 +1,5 @@
 import type {
+  PlannedQuery,
   TrendSearchInput,
   TrendSearchOutput,
 } from "~/lib/tools/trend-search/types";
@@ -10,6 +11,8 @@ export type TrendSearchPipelineStage = "searching" | "synthesizing";
 
 export interface RunTrendSearchOptions {
     onStageChange?: (stage: TrendSearchPipelineStage) => Promise<void> | void;
+    /** Pre-built queries to skip the LLM planQueries step. */
+    preBuiltQueries?: PlannedQuery[];
 }
 
 /**
@@ -22,13 +25,9 @@ export async function runTrendSearch(
   input: TrendSearchInput,
   options: RunTrendSearchOptions = {},
 ): Promise<TrendSearchOutput> {
-  // Step 1: Plan queries
   const categories = input.categories;
-  const plannedQueries = await planQueries(
-    input.query,
-    input.companyContext,
-    categories,
-  );
+  const plannedQueries = options.preBuiltQueries
+    ?? await planQueries(input.query, input.companyContext, categories);
 
   // Step 2: Execute web searches
   await options.onStageChange?.("searching");

@@ -8,6 +8,11 @@ import {
 
 const ProfileDropdown: React.FC = () => {
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [isMounted, setIsMounted] = React.useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -26,7 +31,7 @@ const ProfileDropdown: React.FC = () => {
 
     return (
         <div className={styles.dropdownContainer} ref={dropdownRef}>
-            <UserButton />
+            {isMounted ? <UserButton /> : <div aria-hidden="true" />}
         </div>
     );
 };

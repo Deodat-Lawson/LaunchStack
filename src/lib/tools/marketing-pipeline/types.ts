@@ -1,5 +1,65 @@
 import { z } from "zod";
 
+/**
+ * till company DNA - adds a lower level structured layer before CompanyDNA
+ * this layer gives normalized structured facts, citations, confidence, validation
+ * so model has to be stricter
+ */
+
+/** OpenAI structured outputs require .nullable() instead of .optional() - all fields must be present. */
+export const EvidenceCitationSchema = z.object({
+  documentId: z.union([z.string(), z.number()]).nullable(),
+  title: z.string().nullable(),
+  page: z.number().int().nullable(),
+  sectionPath: z.string().nullable(),
+  snippet: z.string().min(1),
+  sourceType: z.string().nullable(),
+});
+
+export type EvidenceCitation = z.infer<typeof EvidenceCitationSchema>;
+
+export const NormalizedClaimSchema = z.object({
+  claim: z.string(),
+  category: z.string(),
+  confidence: z.enum(["high", "medium", "low"]),
+  citations: z.array(EvidenceCitationSchema).default([]),
+});
+
+export type NormalizedClaim = z.infer<typeof NormalizedClaimSchema>;
+
+export const NormalizedCompanyKnowledgeSchema = z.object({
+  companyName: z.string(),
+  whatItDoes: z.string(),
+  targetAudience: z.array(z.string()).default([]),
+  categories: z.array(z.string()).default([]),
+  keyDifferentiators: z.array(z.string()).default([]),
+  proofPoints: z.array(z.string()).default([]),
+  capabilities: z.array(z.string()).default([]),
+  customerPainPoints: z.array(z.string()).default([]),
+  outcomes: z.array(z.string()).default([]),
+  brandValues: z.array(z.string()).default([]),
+  founderStory: z.string(),
+  technicalEdge: z.string(),
+  risksOrUnknowns: z.array(z.string()).default([]),
+  claims: z.array(NormalizedClaimSchema).default([]),
+  summary: z.string(),
+  missingInformation: z.array(z.string()).default([]),
+});
+
+export type NormalizedCompanyKnowledge = z.infer<typeof NormalizedCompanyKnowledgeSchema>;
+
+export const KnowledgeValidationReportSchema = z.object({
+  groundednessScore: z.number().min(0).max(10),
+  completenessScore: z.number().min(0).max(10),
+  consistencyScore: z.number().min(0).max(10),
+  needsRevision: z.boolean(),
+  unsupportedClaims: z.array(z.string()).default([]),
+  missingCriticalFields: z.array(z.string()).default([]),
+  revisionNotes: z.array(z.string()).default([]),
+});
+
+export type KnowledgeValidationReport = z.infer<typeof KnowledgeValidationReportSchema>;
+
 /** Structured company profile distilled from KB for marketing (issue #232). */
 export interface CompanyDNA {
   coreMission: string;
@@ -60,10 +120,16 @@ export const MessagingStrategySchema = z.object({
 export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
 export type MarketingPlatform = z.infer<typeof MarketingPlatformEnum>;
 
+export const PlatformMetaSchema = z.object({
+    subreddit: z.string().max(100).optional(),
+    hashtags: z.array(z.string().max(50)).max(5).optional(),
+}).optional();
+
 export const MarketingPipelineInputSchema = z.object({
     platform: MarketingPlatformEnum,
     prompt: z.string().min(1).max(2000).optional(),
     maxResearchResults: z.number().int().min(1).max(12).optional(),
+    platformMeta: PlatformMetaSchema,
 });
 export type MarketingPipelineInput = z.infer<typeof MarketingPipelineInputSchema>;
 
@@ -101,4 +167,36 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
     /** Debug info about DNA extraction, included when debug mode is on. */
     dnaDebug?: DNADebugInfo;
 }
+
+/* ──────────────────────────────────────────────────────────────
+ * Pipeline progress / SSE streaming types
+ * ────────────────────────────────────────────────────────────── */
+
+export type PipelineStepId =
+    | "loading-context"
+    | "extracting-dna"
+    | "analyzing-competitors"
+    | "researching-trends"
+    | "building-strategy"
+    | "generating-content";
+
+export const PIPELINE_STEPS: ReadonlyArray<{ id: PipelineStepId; label: string }> = [
+    { id: "loading-context", label: "Loading company knowledge" },
+    { id: "extracting-dna", label: "Extracting company DNA" },
+    { id: "analyzing-competitors", label: "Analyzing competitors" },
+    { id: "researching-trends", label: "Researching platform trends" },
+    { id: "building-strategy", label: "Building messaging strategy" },
+    { id: "generating-content", label: "Generating campaign draft" },
+];
+
+export type PipelineSSEEvent =
+    | { type: "step_start"; step: PipelineStepId; label: string }
+    | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string }
+    | { type: "result"; success: true; data: MarketingPipelineResult }
+    | { type: "error"; success: false; message: string; error?: string };
+
+export type OnPipelineProgress = (event:
+    | { type: "step_start"; step: PipelineStepId; label: string }
+    | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string }
+) => void;
 

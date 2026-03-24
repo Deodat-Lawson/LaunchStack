@@ -1556,3 +1556,52 @@
 [data-theme="dark"] .mediaBadge {
     background: rgba(139, 92, 246, 0.15);
 }
+
+/* Session sidebar dark mode — ensure readable text on dark background */
+[data-theme="dark"] .sessionPanel {
+    background: rgba(15, 15, 30, 0.85);
+    border-color: rgba(139, 92, 246, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(139, 92, 246, 0.06);
+}
+
+[data-theme="dark"] .sessionPanelTitle {
+    color: var(--foreground);
+}
+
+[data-theme="dark"] .newSessionButton {
+    color: var(--muted-foreground);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="dark"] .newSessionButton:hover {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--foreground);
+}
+
+[data-theme="dark"] .sessionEmpty {
+    color: var(--muted-foreground);
+}
+
+[data-theme="dark"] .sessionItem {
+    background: rgba(30, 30, 50, 0.6);
+    border-color: rgba(139, 92, 246, 0.2);
+    color: var(--foreground);
+}
+
+[data-theme="dark"] .sessionItem:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    background: rgba(139, 92, 246, 0.1);
+}
+
+[data-theme="dark"] .sessionItemActive {
+    border-color: rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.18);
+}
+
+[data-theme="dark"] .sessionItemTitle {
+    color: var(--foreground);
+}
+
+[data-theme="dark"] .sessionItemMeta {
+    color: var(--muted-foreground);
+}

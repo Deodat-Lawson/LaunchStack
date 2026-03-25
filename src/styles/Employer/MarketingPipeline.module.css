@@ -1504,6 +1504,153 @@
     font-style: italic;
 }
 
+/* ─── Thinking stream (Claude-style) ─── */
+
+.thinkingStream {
+    border-radius: 0.75rem;
+    border: 1px solid rgba(124, 58, 237, 0.18);
+    background: rgba(250, 248, 255, 0.7);
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+
+.thinkingHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #7c3aed;
+    text-align: left;
+    transition: background 0.15s ease;
+}
+
+.thinkingHeader:hover {
+    background: rgba(124, 58, 237, 0.06);
+}
+
+.thinkingHeaderLabel {
+    flex: 1;
+}
+
+.thinkingEntryCount {
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--muted-foreground);
+}
+
+.thinkingBody {
+    max-height: 240px;
+    overflow-y: auto;
+    padding: 0 0.85rem 0.75rem;
+    border-top: 1px solid rgba(124, 58, 237, 0.1);
+    scroll-behavior: smooth;
+}
+
+.thinkingEntry {
+    padding: 0.4rem 0;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--muted-foreground);
+    font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", "Consolas", monospace;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.06);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.thinkingEntry:last-child {
+    border-bottom: none;
+}
+
+.thinkingCursor {
+    display: inline-block;
+    animation: blink 0.8s step-end infinite;
+    color: #7c3aed;
+    font-weight: 300;
+}
+
+.thinkingPulse {
+    animation: thinkingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+@keyframes thinkingPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+[data-theme="dark"] .thinkingStream {
+    border-color: rgba(139, 92, 246, 0.25);
+    background: rgba(15, 15, 30, 0.5);
+}
+
+[data-theme="dark"] .thinkingHeader {
+    color: #a78bfa;
+}
+
+[data-theme="dark"] .thinkingHeader:hover {
+    background: rgba(139, 92, 246, 0.08);
+}
+
+[data-theme="dark"] .thinkingBody {
+    border-top-color: rgba(139, 92, 246, 0.15);
+}
+
+[data-theme="dark"] .thinkingEntry {
+    border-bottom-color: rgba(139, 92, 246, 0.08);
+}
+
+[data-theme="dark"] .thinkingCursor {
+    color: #a78bfa;
+}
+
+/* ─── Skipped / failed step states ─── */
+
+.stepperSkipped .stepperIndicator {
+    color: var(--muted-foreground);
+    opacity: 0.5;
+}
+
+.stepperSkipped .stepperLabel {
+    color: var(--muted-foreground);
+    text-decoration: line-through;
+    opacity: 0.65;
+}
+
+.stepperSkipped:not(:last-child)::after {
+    background: var(--border);
+    opacity: 0.4;
+}
+
+.stepperFailed .stepperIndicator {
+    color: #ef4444;
+}
+
+.stepperFailed .stepperLabel {
+    color: var(--foreground);
+    opacity: 0.8;
+}
+
+.stepperFailed:not(:last-child)::after {
+    background: #fca5a5;
+}
+
+[data-theme="dark"] .stepperFailed .stepperIndicator {
+    color: #f87171;
+}
+
+[data-theme="dark"] .stepperFailed:not(:last-child)::after {
+    background: #7f1d1d;
+}
+
 /* ─── How-it-works (Fix 1) ─── */
 
 .howItWorks {

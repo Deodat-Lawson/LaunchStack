@@ -11,8 +11,12 @@ export type PipelineStepId =
   | "extracting-dna"
   | "analyzing-competitors"
   | "researching-trends"
+  | "extracting-voice"
+  | "extracting-persona"
+  | "checking-performance"
   | "building-strategy"
-  | "generating-content";
+  | "generating-content"
+  | "verifying-claims";
 
 export interface PipelineStepInfo {
   id: PipelineStepId;
@@ -24,11 +28,15 @@ export const PIPELINE_STEP_ORDER: PipelineStepInfo[] = [
   { id: "extracting-dna", label: "Extracting company DNA" },
   { id: "analyzing-competitors", label: "Analyzing competitors" },
   { id: "researching-trends", label: "Researching platform trends" },
-  { id: "building-strategy", label: "Building messaging strategy" },
-  { id: "generating-content", label: "Generating campaign draft" },
+  { id: "extracting-voice", label: "Detecting brand voice" },
+  { id: "extracting-persona", label: "Building target persona" },
+  { id: "checking-performance", label: "Checking performance history" },
+  { id: "building-strategy", label: "Building messaging strategies" },
+  { id: "generating-content", label: "Generating content variants" },
+  { id: "verifying-claims", label: "Verifying claim sources" },
 ];
 
-export type StepStatus = "pending" | "active" | "completed";
+export type StepStatus = "pending" | "active" | "completed" | "skipped" | "failed";
 
 export interface PipelineStepState {
   id: PipelineStepId;
@@ -36,13 +44,25 @@ export interface PipelineStepState {
   status: StepStatus;
   durationMs?: number;
   detail?: string;
+  /** Structured intermediate result streamed as the step completes. */
+  stepData?: Record<string, unknown>;
+  /** Steps sharing the same parallelGroup number ran concurrently. */
+  parallelGroup?: number;
 }
 
 export type PipelineSSEEvent =
-  | { type: "step_start"; step: PipelineStepId; label: string }
-  | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string }
+  | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
+  | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string; status?: "completed" | "skipped" | "failed" }
+  | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
+  | { type: "step_thinking"; step: PipelineStepId; text: string }
   | { type: "result"; success: true; data: PipelineData }
   | { type: "error"; success: false; message: string; error?: string };
+
+export interface ThinkingEntry {
+  step: PipelineStepId;
+  text: string;
+  timestamp: number;
+}
 
 export interface DNADebugInfo {
   source: "metadata" | "rag";
@@ -54,6 +74,58 @@ export interface DNADebugInfo {
     humanStory: string;
     technicalEdge: string;
   };
+}
+
+export interface ContentVariantUI {
+  variantId: string;
+  angleRationale: string;
+  message: string;
+  mediaType: "image" | "video";
+}
+
+export interface ClaimSourceUI {
+  claim: string;
+  sourceDoc: string;
+  chunk: string;
+  confidence: number;
+}
+
+export interface StrategyVariantUI {
+  variantId: string;
+  angleRationale: string;
+  angle: string;
+  keyProof: string[];
+  humanHook: string;
+  avoidList: string[];
+}
+
+export interface BrandVoiceUI {
+  toneDescriptor: string;
+  vocabularyExamples: string[];
+  sentenceStyle: string;
+  formalityLevel: string;
+}
+
+export interface TargetPersonaUI {
+  role: string;
+  painPoints: string[];
+  priorities: string[];
+  languageStyle: string;
+}
+
+export interface PipelineStagesUI {
+  dna: DNADebugInfo["dna"];
+  competitors: {
+    competitors: Array<{ name: string; positioning: string; weaknesses: string[] }>;
+    ourAdvantages: string[];
+    marketGaps: string[];
+    messagingAntiPatterns: string[];
+  };
+  trends: Array<{ title: string; url: string; snippet: string; source: string }>;
+  strategies: StrategyVariantUI[];
+  brandVoice?: BrandVoiceUI;
+  targetPersona?: TargetPersonaUI;
+  performanceInsights?: string[];
 }
 
 /** Mirrors API success payload fields used by the marketing UI. */
@@ -75,6 +147,9 @@ export interface PipelineData {
     humanHook: string;
     avoidList: string[];
   };
+  variants?: ContentVariantUI[];
+  pipelineStages?: PipelineStagesUI;
+  claimSources?: ClaimSourceUI[];
 }
 
 export interface PipelineResponse {
@@ -83,6 +158,9 @@ export interface PipelineResponse {
   error?: string;
   data?: PipelineData;
 }
+
+export type FormalityLevel = "formal" | "conversational" | "technical" | "bold";
+export type ContentType = "post" | "thread" | "ad_copy" | "email" | "multi_platform";
 
 export interface MarketingSession {
   id: string;
@@ -97,6 +175,9 @@ export interface MarketingSession {
   platformMeta?: PlatformMeta;
   messageVariants?: MessageVariant[];
   activeVariantId?: string;
+  toneOverride?: FormalityLevel;
+  targetAudience?: string;
+  contentType?: ContentType;
 }
 
 export const REDDIT_SNOO_URL = "/images/reddit-snoo.png";

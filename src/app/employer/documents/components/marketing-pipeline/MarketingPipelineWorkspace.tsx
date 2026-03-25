@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
+  AlertTriangle,
+  Brain,
   Check,
   ChevronDown,
   ChevronRight,
@@ -17,9 +19,11 @@ import {
   MessageSquareText,
   Pencil,
   Plus,
+  SkipForward,
   Sparkles,
   Target,
   X,
+  Zap,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/app/employer/documents/components/ui/sheet";
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
@@ -28,10 +32,15 @@ import {
   PIPELINE_STEP_ORDER,
   PLATFORM_OPTIONS,
   REDDIT_SNOO_URL,
+  type ClaimSourceUI,
+  type ContentType,
+  type FormalityLevel,
   type MessageVariant,
+  type PipelineStagesUI,
   type PipelineStepState,
   type PlatformFieldConfig,
   type PlatformMeta,
+  type ThinkingEntry,
 } from "./shared";
 import { useMarketingPipelineController } from "./useMarketingPipelineController";
 
@@ -75,16 +84,85 @@ function HowItWorks() {
   );
 }
 
-/* ─── Pipeline stepper with progress fraction (Fix 3) ─── */
+/* ─── Pipeline stepper with progress bar, parallel groups, expandable details ─── */
+
+function StepIcon({ status }: { status: PipelineStepState["status"] }) {
+  switch (status) {
+    case "completed":
+      return <Check size={14} />;
+    case "active":
+      return <Loader2 size={14} className={styles.spinIcon} />;
+    case "skipped":
+      return <SkipForward size={12} />;
+    case "failed":
+      return <AlertTriangle size={13} />;
+    default:
+      return <Circle size={10} />;
+  }
+}
+
+function stepStatusClass(status: PipelineStepState["status"]): string {
+  const classMap: Record<string, string | undefined> = {
+    completed: styles.stepperCompleted,
+    active: styles.stepperActive,
+    skipped: styles.stepperSkipped,
+    failed: styles.stepperFailed,
+    pending: styles.stepperPending,
+  };
+  return classMap[status] ?? styles.stepperPending ?? "";
+}
+
+function StepDataPreview({ data }: { data: Record<string, unknown> }) {
+  const entries = Object.entries(data).slice(0, 6);
+  if (entries.length === 0) return null;
+
+  return (
+    <div
+      style={{
+        marginTop: "0.375rem",
+        padding: "0.375rem 0.5rem",
+        borderRadius: "0.25rem",
+        background: "var(--bg-secondary, #f9fafb)",
+        fontSize: "0.6875rem",
+        lineHeight: 1.5,
+        color: "var(--text-muted, #6b7280)",
+      }}
+    >
+      {entries.map(([key, value]) => {
+        const displayValue = Array.isArray(value)
+          ? value.length <= 4
+            ? value.map((v) => (typeof v === "object" && v !== null && "name" in v) ? (v as { name: string }).name : String(v)).join(", ")
+            : `${value.length} items`
+          : typeof value === "object" && value !== null
+            ? JSON.stringify(value).slice(0, 100)
+            : String(value);
+
+        return (
+          <div key={key} style={{ display: "flex", gap: "0.375rem" }}>
+            <span style={{ fontWeight: 600, minWidth: "5rem", flexShrink: 0 }}>
+              {key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}:
+            </span>
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {displayValue}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 function PipelineStepper({
   steps,
   generationStartTime,
+  isComplete,
 }: {
   steps: PipelineStepState[];
   generationStartTime: number | null;
+  isComplete: boolean;
 }) {
   const [elapsed, setElapsed] = useState(0);
+  const [expandedSteps, setExpandedSteps] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!generationStartTime) return;
@@ -94,52 +172,212 @@ function PipelineStepper({
     return () => clearInterval(timer);
   }, [generationStartTime]);
 
-  const completedCount = steps.filter((s) => s.status === "completed").length;
+  const finishedCount = steps.filter((s) => s.status !== "pending" && s.status !== "active").length;
+  const activeCount = steps.filter((s) => s.status === "active").length;
   const totalSteps = steps.length;
+  const progressPct = totalSteps > 0 ? Math.round((finishedCount / totalSteps) * 100) : 0;
+
+  const parallelGroups = new Set(
+    steps.filter((s) => s.parallelGroup != null).map((s) => s.parallelGroup),
+  );
+  const hasParallelSteps = parallelGroups.size > 0;
+
+  const toggleExpand = (id: string) => {
+    setExpandedSteps((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const totalDurationMs = steps.reduce((sum, s) => sum + (s.durationMs ?? 0), 0);
 
   return (
     <div className={styles.pipelineStepper}>
       <div className={styles.stepperHeader}>
         <span className={styles.stepperProgress}>
-          Step {Math.min(completedCount + 1, totalSteps)} of {totalSteps}
+          {isComplete
+            ? `Completed in ${(totalDurationMs / 1000).toFixed(1)}s`
+            : activeCount > 1
+              ? `${activeCount} steps running (${finishedCount}/${totalSteps} done)`
+              : `Step ${Math.min(finishedCount + 1, totalSteps)} of ${totalSteps}`}
         </span>
-        <span className={styles.stepperElapsed}>{elapsed}s elapsed</span>
+        {!isComplete && (
+          <span className={styles.stepperElapsed}>{elapsed}s elapsed</span>
+        )}
       </div>
-      {steps.map((step) => (
+
+      {/* Progress bar */}
+      <div
+        style={{
+          height: "3px",
+          borderRadius: "2px",
+          background: "var(--border-color, #e5e7eb)",
+          marginBottom: "0.5rem",
+          overflow: "hidden",
+        }}
+      >
         <div
-          key={step.id}
-          className={`${styles.stepperItem} ${
-            step.status === "completed"
-              ? styles.stepperCompleted
-              : step.status === "active"
-                ? styles.stepperActive
-                : styles.stepperPending
-          }`}
-        >
-          <div className={styles.stepperIndicator}>
-            {step.status === "completed" ? (
-              <Check size={14} />
-            ) : step.status === "active" ? (
-              <Loader2 size={14} className={styles.spinIcon} />
-            ) : (
-              <Circle size={10} />
+          style={{
+            height: "100%",
+            width: `${progressPct}%`,
+            borderRadius: "2px",
+            background: isComplete ? "var(--success-color, #22c55e)" : "var(--accent-color, #6366f1)",
+            transition: "width 0.3s ease",
+          }}
+        />
+      </div>
+
+      {steps.map((step) => {
+        const isParallel = step.parallelGroup != null && hasParallelSteps;
+        const hasData = step.stepData && Object.keys(step.stepData).length > 0;
+        const isExpanded = expandedSteps.has(step.id);
+        const isClickable = hasData && step.status !== "pending" && step.status !== "active";
+
+        return (
+          <div key={step.id}>
+            <div
+              className={`${styles.stepperItem} ${stepStatusClass(step.status)}`}
+              onClick={isClickable ? () => toggleExpand(step.id) : undefined}
+              onKeyDown={isClickable ? (e) => e.key === "Enter" && toggleExpand(step.id) : undefined}
+              role={isClickable ? "button" : undefined}
+              tabIndex={isClickable ? 0 : undefined}
+              style={{ cursor: isClickable ? "pointer" : "default" }}
+            >
+              <div className={styles.stepperIndicator}>
+                <StepIcon status={step.status} />
+              </div>
+              <div className={styles.stepperContent} style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
+                  <span className={styles.stepperLabel}>{step.label}</span>
+                  {isParallel && step.status === "active" && (
+                    <Zap size={10} style={{ color: "var(--accent-color, #6366f1)", flexShrink: 0 }} />
+                  )}
+                  {isClickable && (
+                    <span style={{ marginLeft: "auto", color: "var(--text-muted, #9ca3af)", flexShrink: 0 }}>
+                      {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                    </span>
+                  )}
+                </div>
+                <div className={styles.stepperMeta}>
+                  {(step.status === "completed" || step.status === "skipped" || step.status === "failed") && step.durationMs != null && (
+                    <span className={styles.stepperDuration}>
+                      {(step.durationMs / 1000).toFixed(1)}s
+                    </span>
+                  )}
+                  {step.detail && (
+                    <span
+                      className={styles.stepperDetail}
+                      style={
+                        step.status === "failed"
+                          ? { color: "var(--error-color, #ef4444)" }
+                          : step.status === "skipped"
+                            ? { color: "var(--text-muted, #9ca3af)", fontStyle: "italic" }
+                            : undefined
+                      }
+                    >
+                      {step.detail}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+            {isExpanded && step.stepData && (
+              <div style={{ marginLeft: "1.75rem", marginBottom: "0.25rem" }}>
+                <StepDataPreview data={step.stepData} />
+              </div>
             )}
           </div>
-          <div className={styles.stepperContent}>
-            <span className={styles.stepperLabel}>{step.label}</span>
-            <div className={styles.stepperMeta}>
-              {step.status === "completed" && step.durationMs != null && (
-                <span className={styles.stepperDuration}>
-                  {(step.durationMs / 1000).toFixed(1)}s
-                </span>
-              )}
-              {step.detail && (
-                <span className={styles.stepperDetail}>{step.detail}</span>
-              )}
-            </div>
-          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ─── Thinking stream (Claude-style) ─── */
+
+function TypewriterText({ text, speed = 18 }: { text: string; speed?: number }) {
+  const [displayedLength, setDisplayedLength] = useState(0);
+  const targetLength = text.length;
+
+  useEffect(() => {
+    if (displayedLength >= targetLength) return;
+    const charsPerTick = Math.max(1, Math.ceil(targetLength / 60));
+    const timer = setTimeout(() => {
+      setDisplayedLength((prev) => Math.min(prev + charsPerTick, targetLength));
+    }, speed);
+    return () => clearTimeout(timer);
+  }, [displayedLength, targetLength, speed]);
+
+  useEffect(() => {
+    setDisplayedLength(0);
+  }, [text]);
+
+  return (
+    <span>
+      {text.slice(0, displayedLength)}
+      {displayedLength < targetLength && (
+        <span className={styles.thinkingCursor}>|</span>
+      )}
+    </span>
+  );
+}
+
+function ThinkingStream({
+  entries,
+  isGenerating,
+}: {
+  entries: ThinkingEntry[];
+  isGenerating: boolean;
+}) {
+  const [collapsed, setCollapsed] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isGenerating) setCollapsed(false);
+  }, [isGenerating]);
+
+  useEffect(() => {
+    if (scrollRef.current && !collapsed) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [entries.length, collapsed]);
+
+  const toggleCollapsed = useCallback(() => setCollapsed((prev) => !prev), []);
+
+  if (entries.length === 0) return null;
+
+  return (
+    <div className={styles.thinkingStream}>
+      <button
+        type="button"
+        className={styles.thinkingHeader}
+        onClick={toggleCollapsed}
+      >
+        <Brain size={14} className={isGenerating ? styles.thinkingPulse : undefined} />
+        <span className={styles.thinkingHeaderLabel}>
+          {isGenerating ? "Thinking..." : "Thought process"}
+        </span>
+        <span className={styles.thinkingEntryCount}>{entries.length} step{entries.length !== 1 ? "s" : ""}</span>
+        {collapsed ? <ChevronRight size={14} /> : <ChevronDown size={14} />}
+      </button>
+      {!collapsed && (
+        <div ref={scrollRef} className={styles.thinkingBody}>
+          {entries.map((entry, i) => {
+            const isLatest = i === entries.length - 1 && isGenerating;
+            return (
+              <div key={`${entry.step}-${entry.timestamp}`} className={styles.thinkingEntry}>
+                {isLatest ? (
+                  <TypewriterText text={entry.text} />
+                ) : (
+                  <span>{entry.text}</span>
+                )}
+              </div>
+            );
+          })}
         </div>
-      ))}
+      )}
     </div>
   );
 }
@@ -198,6 +436,372 @@ function StrategyInsights({
               </ul>
             </div>
           )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Pipeline transparency panels ─── */
+
+function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+
+  const toggle = (key: string) =>
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  return (
+    <div className={styles.strategyCard}>
+      <button
+        type="button"
+        className={styles.strategyToggle}
+        onClick={() => toggle("_root")}
+      >
+        <Sparkles size={14} />
+        <span>Pipeline thought process</span>
+        {openSections._root ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+      </button>
+      {openSections._root && (
+        <div className={styles.strategyContent}>
+          {/* Brand Voice */}
+          {stages.brandVoice && (
+            <div className={styles.strategySection}>
+              <button
+                type="button"
+                className={styles.strategyToggle}
+                onClick={() => toggle("voice")}
+                style={{ padding: 0, marginBottom: "0.25rem" }}
+              >
+                <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
+                  Brand voice
+                </span>
+                {openSections.voice ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+              </button>
+              {openSections.voice && (
+                <div style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}>
+                  <p><strong>Tone:</strong> {stages.brandVoice.toneDescriptor}</p>
+                  <p><strong>Formality:</strong> {stages.brandVoice.formalityLevel}</p>
+                  <p><strong>Style:</strong> {stages.brandVoice.sentenceStyle}</p>
+                  {stages.brandVoice.vocabularyExamples.length > 0 && (
+                    <p><strong>Vocabulary:</strong> {stages.brandVoice.vocabularyExamples.join(", ")}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Target Persona */}
+          {stages.targetPersona && (
+            <div className={styles.strategySection}>
+              <button
+                type="button"
+                className={styles.strategyToggle}
+                onClick={() => toggle("persona")}
+                style={{ padding: 0, marginBottom: "0.25rem" }}
+              >
+                <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
+                  Target persona
+                </span>
+                {openSections.persona ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+              </button>
+              {openSections.persona && (
+                <div style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}>
+                  <p><strong>Role:</strong> {stages.targetPersona.role}</p>
+                  <p><strong>Pain points:</strong> {stages.targetPersona.painPoints.join("; ")}</p>
+                  <p><strong>Priorities:</strong> {stages.targetPersona.priorities.join("; ")}</p>
+                  <p><strong>Language:</strong> {stages.targetPersona.languageStyle}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Competitor Analysis */}
+          {stages.competitors.competitors.length > 0 && (
+            <div className={styles.strategySection}>
+              <button
+                type="button"
+                className={styles.strategyToggle}
+                onClick={() => toggle("competitors")}
+                style={{ padding: 0, marginBottom: "0.25rem" }}
+              >
+                <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
+                  Competitors ({stages.competitors.competitors.length})
+                </span>
+                {openSections.competitors ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+              </button>
+              {openSections.competitors && (
+                <div style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}>
+                  {stages.competitors.competitors.map((c, i) => (
+                    <div key={i} style={{ marginBottom: "0.5rem" }}>
+                      <strong>{c.name}</strong>: {c.positioning}
+                      {c.weaknesses.length > 0 && (
+                        <div style={{ color: "var(--text-muted, #6b7280)", marginLeft: "0.5rem" }}>
+                          Weaknesses: {c.weaknesses.join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {stages.competitors.ourAdvantages.length > 0 && (
+                    <p><strong>Our advantages:</strong> {stages.competitors.ourAdvantages.join("; ")}</p>
+                  )}
+                  {stages.competitors.marketGaps.length > 0 && (
+                    <p><strong>Market gaps:</strong> {stages.competitors.marketGaps.join("; ")}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Strategy Variants */}
+          {stages.strategies.length > 0 && (
+            <div className={styles.strategySection}>
+              <button
+                type="button"
+                className={styles.strategyToggle}
+                onClick={() => toggle("strategies")}
+                style={{ padding: 0, marginBottom: "0.25rem" }}
+              >
+                <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
+                  Strategy variants ({stages.strategies.length})
+                </span>
+                {openSections.strategies ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+              </button>
+              {openSections.strategies && (
+                <div style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}>
+                  {stages.strategies.map((s, i) => (
+                    <div
+                      key={s.variantId}
+                      style={{
+                        marginBottom: "0.75rem",
+                        padding: "0.5rem",
+                        borderRadius: "0.375rem",
+                        background: "var(--bg-secondary, #f9fafb)",
+                      }}
+                    >
+                      <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>
+                        {i + 1}. {s.variantId.replace(/-/g, " ")}
+                      </div>
+                      <p style={{ color: "var(--text-muted, #6b7280)", marginBottom: "0.25rem" }}>
+                        {s.angleRationale}
+                      </p>
+                      <p><strong>Angle:</strong> {s.angle}</p>
+                      <p><strong>Key proof:</strong> {s.keyProof.join("; ")}</p>
+                      <p><strong>Hook:</strong> {s.humanHook}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Performance Insights */}
+          {stages.performanceInsights && stages.performanceInsights.length > 0 && (
+            <div className={styles.strategySection}>
+              <div className={styles.strategySectionLabel}>Performance insights</div>
+              <ul className={styles.strategyList}>
+                {stages.performanceInsights.map((insight, i) => (
+                  <li key={i}>{insight}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
+  const [open, setOpen] = useState(false);
+
+  if (claims.length === 0) return null;
+
+  const verified = claims.filter((c) => c.confidence > 0.5);
+  const unverified = claims.filter((c) => c.confidence <= 0.5);
+
+  return (
+    <div className={styles.strategyCard}>
+      <button
+        type="button"
+        className={styles.strategyToggle}
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <FileText size={14} />
+        <span>
+          Claim verification ({verified.length}/{claims.length} verified)
+        </span>
+        {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+      </button>
+      {open && (
+        <div className={styles.strategyContent}>
+          {claims.map((claim, i) => (
+            <div
+              key={i}
+              style={{
+                marginBottom: "0.5rem",
+                padding: "0.5rem",
+                borderRadius: "0.375rem",
+                background: claim.confidence > 0.5
+                  ? "var(--bg-success, #f0fdf4)"
+                  : "var(--bg-warning, #fffbeb)",
+                fontSize: "0.8125rem",
+              }}
+            >
+              <div style={{ fontWeight: 600, marginBottom: "0.125rem" }}>
+                {claim.confidence > 0.5 ? "✓" : "?"} {claim.claim}
+              </div>
+              <div style={{ color: "var(--text-muted, #6b7280)" }}>
+                Source: {claim.sourceDoc}
+                {claim.confidence > 0 && (
+                  <span style={{ marginLeft: "0.5rem" }}>
+                    ({Math.round(claim.confidence * 100)}% match)
+                  </span>
+                )}
+              </div>
+              {claim.chunk && (
+                <div
+                  style={{
+                    marginTop: "0.25rem",
+                    fontStyle: "italic",
+                    color: "var(--text-muted, #6b7280)",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  &ldquo;{claim.chunk}&rdquo;
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Customization controls ─── */
+
+const TONE_OPTIONS: { id: FormalityLevel; label: string }[] = [
+  { id: "conversational", label: "Conversational" },
+  { id: "formal", label: "Formal" },
+  { id: "technical", label: "Technical" },
+  { id: "bold", label: "Bold" },
+];
+
+const CONTENT_TYPE_OPTIONS: { id: ContentType; label: string; hint: string }[] = [
+  { id: "post", label: "Single post", hint: "Standard social post" },
+  { id: "thread", label: "Thread", hint: "Multi-part narrative" },
+  { id: "ad_copy", label: "Ad copy", hint: "Conversion-focused" },
+  { id: "email", label: "Email", hint: "Marketing email" },
+];
+
+function CustomizationControls({
+  toneOverride,
+  onToneChange,
+  targetAudience,
+  onTargetAudienceChange,
+  contentType,
+  onContentTypeChange,
+}: {
+  toneOverride?: FormalityLevel;
+  onToneChange: (v: FormalityLevel | undefined) => void;
+  targetAudience: string;
+  onTargetAudienceChange: (v: string) => void;
+  contentType?: ContentType;
+  onContentTypeChange: (v: ContentType | undefined) => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div style={{ marginTop: "0.75rem" }}>
+      <button
+        type="button"
+        onClick={() => setExpanded((p) => !p)}
+        style={{
+          display: "flex", alignItems: "center", gap: "0.375rem",
+          background: "none", border: "none", cursor: "pointer", padding: 0,
+          fontSize: "0.8125rem", fontWeight: 600, color: "var(--text-muted, #6b7280)",
+        }}
+      >
+        <Target size={14} />
+        Customize generation
+        {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+      </button>
+      {expanded && (
+        <div style={{ marginTop: "0.5rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+          <div>
+            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, marginBottom: "0.25rem", color: "var(--text-muted, #6b7280)" }}>
+              Tone
+            </label>
+            <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
+              {TONE_OPTIONS.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => onToneChange(toneOverride === t.id ? undefined : t.id)}
+                  style={{
+                    padding: "0.25rem 0.625rem",
+                    borderRadius: "9999px",
+                    fontSize: "0.75rem",
+                    fontWeight: 500,
+                    border: toneOverride === t.id ? "1.5px solid var(--accent-color, #6366f1)" : "1px solid var(--border-color, #e5e7eb)",
+                    background: toneOverride === t.id ? "var(--accent-bg, #eef2ff)" : "transparent",
+                    color: toneOverride === t.id ? "var(--accent-color, #6366f1)" : "var(--text-secondary, #4b5563)",
+                    cursor: "pointer",
+                  }}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, marginBottom: "0.25rem", color: "var(--text-muted, #6b7280)" }}>
+              Target audience (optional)
+            </label>
+            <input
+              type="text"
+              value={targetAudience}
+              onChange={(e) => onTargetAudienceChange(e.target.value)}
+              placeholder="e.g., CTOs at mid-stage SaaS companies"
+              style={{
+                width: "100%",
+                padding: "0.375rem 0.5rem",
+                borderRadius: "0.375rem",
+                border: "1px solid var(--border-color, #e5e7eb)",
+                fontSize: "0.8125rem",
+                background: "var(--bg-primary, #fff)",
+              }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 600, marginBottom: "0.25rem", color: "var(--text-muted, #6b7280)" }}>
+              Content type
+            </label>
+            <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
+              {CONTENT_TYPE_OPTIONS.map((ct) => (
+                <button
+                  key={ct.id}
+                  type="button"
+                  onClick={() => onContentTypeChange(contentType === ct.id ? undefined : ct.id)}
+                  title={ct.hint}
+                  style={{
+                    padding: "0.25rem 0.625rem",
+                    borderRadius: "9999px",
+                    fontSize: "0.75rem",
+                    fontWeight: 500,
+                    border: contentType === ct.id ? "1.5px solid var(--accent-color, #6366f1)" : "1px solid var(--border-color, #e5e7eb)",
+                    background: contentType === ct.id ? "var(--accent-bg, #eef2ff)" : "transparent",
+                    color: contentType === ct.id ? "var(--accent-color, #6366f1)" : "var(--text-secondary, #4b5563)",
+                    cursor: "pointer",
+                  }}
+                >
+                  {ct.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -482,12 +1086,19 @@ export function MarketingPipelineWorkspace({
     runPipeline,
     cancelPipeline,
     pipelineSteps,
+    thinkingLog,
     generationStartTime,
     platformMeta,
     setPlatformMeta,
     messageVariants,
     activeVariantId,
     selectVariant,
+    toneOverride,
+    setToneOverride,
+    targetAudience,
+    setTargetAudience,
+    contentType,
+    setContentType,
   } = useMarketingPipelineController({ debug });
 
   const hasSessions = sessions.length > 0;
@@ -698,6 +1309,15 @@ export function MarketingPipelineWorkspace({
                       />
                     )}
 
+                    <CustomizationControls
+                      toneOverride={toneOverride}
+                      onToneChange={setToneOverride}
+                      targetAudience={targetAudience}
+                      onTargetAudienceChange={setTargetAudience}
+                      contentType={contentType}
+                      onContentTypeChange={setContentType}
+                    />
+
                     {error && (
                       <div className={styles.inlineAlert}>
                         <span>{error}</span>
@@ -737,10 +1357,14 @@ export function MarketingPipelineWorkspace({
                     </div>
                   </div>
                   <div className={styles.assistantContent}>
-                    {loading && (
+                    {thinkingLog.length > 0 && (
+                      <ThinkingStream entries={thinkingLog} isGenerating={loading} />
+                    )}
+                    {pipelineSteps.length > 0 && (
                       <PipelineStepper
                         steps={pipelineSteps}
                         generationStartTime={generationStartTime}
+                        isComplete={!loading && pipelineSteps.some((s) => s.status !== "pending")}
                       />
                     )}
 
@@ -873,6 +1497,14 @@ export function MarketingPipelineWorkspace({
                           strategyUsed={result.strategyUsed}
                           competitiveAngle={result.competitiveAngle}
                         />
+
+                        {result.pipelineStages && (
+                          <PipelineStagesPanel stages={result.pipelineStages} />
+                        )}
+
+                        {result.claimSources && result.claimSources.length > 0 && (
+                          <ClaimSourcesPanel claims={result.claimSources} />
+                        )}
 
                         {showDnaDebugSection && result.dnaDebug && (
                           <div

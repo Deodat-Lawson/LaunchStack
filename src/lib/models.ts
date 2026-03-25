@@ -37,7 +37,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
       return new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName: "gpt-5.2",
-        temperature: 0.7,
+        temperature: 1,
         timeout: 600000,
       });
 
@@ -45,7 +45,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
       return new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName: "gpt-5.1",
-        temperature: 0.7,
+        temperature: 1,
         timeout: 600000,
       });
 
@@ -53,6 +53,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
       return new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName: "gpt-5-nano-2025-08-07",
+        temperature: 1,
         timeout: 300000,
       });
 
@@ -60,7 +61,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
       return new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName: "gpt-5-mini-2025-08-07",
-        temperature: 0.3,
+        temperature: 1,
         timeout: 600000,
       });
 
@@ -111,14 +112,16 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
 
 export function getEmbeddings(): OpenAIEmbeddings {
   return new OpenAIEmbeddings({
-    model: "text-embedding-ada-002",
+    model: "text-embedding-3-large",
     openAIApiKey: process.env.OPENAI_API_KEY,
   });
 }
 
 /** Marketing pipeline model config: one place to swap models per stage. */
 export const MARKETING_MODELS = {
-  dnaExtraction: "gpt-4o" as AIModelType,
-  competitorAnalysis: "gpt-4o" as AIModelType,
-  contentGeneration: "gpt-4o" as AIModelType,
+  dnaExtraction: "gpt-5-mini" as AIModelType,
+  competitorAnalysis: "gpt-5-mini" as AIModelType,
+  contentGeneration: "gpt-5-mini" as AIModelType,
+  claimVerification: "gpt-5-mini" as AIModelType,
+  refinement: "gpt-5-mini" as AIModelType,
 } as const;

@@ -365,7 +365,7 @@ async function callLLM(
     const chat = new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName: EXTRACTION_MODEL,
-        temperature: 0,
+        temperature: 1,
     });
 
     const structured = chat.withStructuredOutput(ExtractionOutputSchema, {

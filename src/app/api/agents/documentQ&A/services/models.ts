@@ -23,7 +23,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
             return new ChatOpenAI({
                 openAIApiKey: process.env.OPENAI_API_KEY,
                 modelName: "gpt-5.2",
-                temperature: 0.7,
+                temperature: 1,
                 timeout: 600000,
             });
 
@@ -31,7 +31,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
             return new ChatOpenAI({
                 openAIApiKey: process.env.OPENAI_API_KEY,
                 modelName: "gpt-5.1",
-                temperature: 0.7,
+                temperature: 1,
                 timeout: 600000,
             });
 
@@ -39,6 +39,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
             return new ChatOpenAI({
                 openAIApiKey: process.env.OPENAI_API_KEY,
                 modelName: "gpt-5-nano-2025-08-07",
+                temperature: 1,
                 timeout: 300000,
             });
 
@@ -46,6 +47,7 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
             return new ChatOpenAI({
                 openAIApiKey: process.env.OPENAI_API_KEY,
                 modelName: "gpt-5-mini-2025-08-07",
+                temperature: 1,
                 timeout: 600000,
             });
 
@@ -90,8 +92,8 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
         default:
             return new ChatOpenAI({
                 openAIApiKey: process.env.OPENAI_API_KEY,
-                modelName: "gpt-5-mini",
-                temperature: 0.7,
+                modelName: "gpt-5-mini-2025-08-07",
+                temperature: 1,
                 timeout: 600000,
             });
     }

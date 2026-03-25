@@ -86,8 +86,8 @@ export async function synthesizeResults(
 
     const chat = new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
-        modelName: "gpt-5-nano",
-        temperature: 0.2,
+        modelName: "gpt-5-nano-2025-08-07",
+        temperature: 1,
     });
 
     const structuredModel = chat.withStructuredOutput(SynthesizerOutputSchema, {

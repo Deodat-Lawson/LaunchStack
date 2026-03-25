@@ -207,7 +207,7 @@ export async function callAIAnalysis(
     const chat = new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName: "gpt-5.2",
-        temperature: 0.3,
+        temperature: 1,
     });
 
     const structuredModel = chat.withStructuredOutput(AnalysisResultSchema, {
@@ -271,7 +271,7 @@ async function verifyPredictions(
     const chat = new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName: "gpt-5.2",
-        temperature: 0.0,
+        temperature: 1,
     });
 
     const structuredModel = chat.withStructuredOutput(VerificationResultSchema, {

@@ -154,7 +154,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
         (file: File): DocumentFile => ({
             id: `${Date.now()}-${Math.random()}`,
             file,
-            title: file.name.replace(/\.[^/.]+$/, ""),
+            title: file.name,
             category: batchSettings.category,
             uploadDate: batchSettings.uploadDate,
             processingMethod: batchSettings.processingMethod,

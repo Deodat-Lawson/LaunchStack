@@ -87,8 +87,8 @@ async function refineSearchQuery(
 ): Promise<{ refinedQuery: string; reasoning: string }> {
     const chat = new ChatOpenAI({
         openAIApiKey: env.server.OPENAI_API_KEY,
-        modelName: "gpt-5-mini",
-        temperature: 0.3,
+        modelName: "gpt-5-mini-2025-08-07",
+        temperature: 1,
     });
 
     const contextPrompt = documentContext
@@ -176,8 +176,8 @@ async function synthesizeResults(
 
     const chat = new ChatOpenAI({
         openAIApiKey: env.server.OPENAI_API_KEY,
-        modelName: "gpt-5-mini",
-        temperature: 0.2,
+        modelName: "gpt-5-mini-2025-08-07",
+        temperature: 1,
     });
 
     const searchResultsText = rawResults

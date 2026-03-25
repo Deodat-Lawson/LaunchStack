@@ -12,7 +12,10 @@ import {
 } from "~/app/api/agents/documentQ&A/services/types";
 import { env } from "~/env";
 
+/** OpenAI GPT-5 models only accept default temperature; see `openAiTemperatureOption` in ~/lib/models. */
 const REASONING_MODELS: ReadonlySet<string> = new Set([
+  "gpt-5.2",
+  "gpt-5.1",
   "gpt-5-mini",
   "gpt-5-nano",
 ]);
@@ -104,7 +107,7 @@ export function getChatModelForProvider(opts: {
       return new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
         modelName,
-        ...(useTemp ? { temperature: temperature ?? 0.7 } : {}),
+        ...(useTemp ? { temperature: temperature ?? 0.7 } : { temperature: 1 }),
         timeout: timeoutMs ?? 600_000,
       });
     }

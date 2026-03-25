@@ -12,12 +12,15 @@ import {
   PLATFORM_OPTIONS,
   markdownToHtml,
   markdownToPlainText,
+  type ContentType,
+  type FormalityLevel,
   type MarketingSession,
   type MessageVariant,
   type PipelineData,
   type PipelineSSEEvent,
   type PipelineStepState,
   type PlatformMeta,
+  type ThinkingEntry,
 } from "./shared";
 
 function buildInitialSteps(): PipelineStepState[] {
@@ -47,6 +50,10 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
   const [platformMeta, setPlatformMeta] = useState<PlatformMeta>({});
   const [messageVariants, setMessageVariants] = useState<MessageVariant[]>([]);
   const [activeVariantId, setActiveVariantId] = useState<string | null>(null);
+  const [toneOverride, setToneOverride] = useState<FormalityLevel | undefined>(undefined);
+  const [targetAudience, setTargetAudience] = useState("");
+  const [contentType, setContentType] = useState<ContentType | undefined>(undefined);
+  const [thinkingLog, setThinkingLog] = useState<ThinkingEntry[]>([]);
   const abortRef = useRef<AbortController | null>(null);
 
   const selectedPlatform = PLATFORM_OPTIONS.find((option) => option.id === platform) ?? null;
@@ -60,6 +67,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     setPlatformMeta(session.platformMeta ?? {});
     setMessageVariants(session.messageVariants ?? []);
     setActiveVariantId(session.activeVariantId ?? null);
+    setToneOverride(session.toneOverride);
+    setTargetAudience(session.targetAudience ?? "");
+    setContentType(session.contentType);
     setError(null);
     setShowRewriteSheet(false);
   }, []);
@@ -163,6 +173,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     setPlatformMeta({});
     setMessageVariants([]);
     setActiveVariantId(null);
+    setToneOverride(undefined);
+    setTargetAudience("");
+    setContentType(undefined);
   }, []);
 
   const handleRewriteComplete = useCallback(
@@ -272,7 +285,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
       case "step_start":
         setPipelineSteps((prev) =>
           prev.map((s) =>
-            s.id === event.step ? { ...s, status: "active" as const, label: event.label } : s,
+            s.id === event.step
+              ? { ...s, status: "active" as const, label: event.label, parallelGroup: event.parallelGroup }
+              : s,
           ),
         );
         break;
@@ -280,10 +295,28 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         setPipelineSteps((prev) =>
           prev.map((s) =>
             s.id === event.step
-              ? { ...s, status: "completed" as const, durationMs: event.durationMs, detail: event.detail }
+              ? {
+                  ...s,
+                  status: (event.status ?? "completed") as PipelineStepState["status"],
+                  durationMs: event.durationMs,
+                  detail: event.detail,
+                }
               : s,
           ),
         );
+        break;
+      case "step_data":
+        setPipelineSteps((prev) =>
+          prev.map((s) =>
+            s.id === event.step ? { ...s, stepData: event.data } : s,
+          ),
+        );
+        break;
+      case "step_thinking":
+        setThinkingLog((prev) => [
+          ...prev,
+          { step: event.step, text: event.text, timestamp: Date.now() },
+        ]);
         break;
     }
   }, []);
@@ -309,6 +342,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
 
     setLoading(true);
     setPipelineSteps(buildInitialSteps());
+    setThinkingLog([]);
     setGenerationStartTime(Date.now());
 
     try {
@@ -320,6 +354,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
           platform,
           prompt: normalizedPrompt,
           platformMeta: Object.keys(platformMeta).length > 0 ? platformMeta : undefined,
+          toneOverride: toneOverride ?? undefined,
+          targetAudience: targetAudience.trim() || undefined,
+          contentType: contentType ?? undefined,
         }),
         signal: controller.signal,
       });
@@ -358,7 +395,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
           try {
             const event = JSON.parse(json) as PipelineSSEEvent;
 
-            if (event.type === "step_start" || event.type === "step_complete") {
+            if (event.type === "step_start" || event.type === "step_complete" || event.type === "step_data" || event.type === "step_thinking") {
               handleSSEEvent(event);
             } else if (event.type === "result" && event.success) {
               pipelineResult = event.data;
@@ -385,16 +422,31 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
           ? crypto.randomUUID()
           : `session-${now}`);
 
-      const originalVariantId =
-        typeof crypto !== "undefined" && "randomUUID" in crypto
-          ? crypto.randomUUID()
-          : `variant-${now}`;
-      const originalVariant: MessageVariant = {
-        id: originalVariantId,
-        label: "Original",
-        text: pipelineResult.message,
-        createdAt: now,
-      };
+      const pipelineVariants = pipelineResult.variants;
+      let initialVariants: MessageVariant[];
+      let initialActiveId: string;
+
+      if (pipelineVariants && pipelineVariants.length > 0) {
+        initialVariants = pipelineVariants.map((v, i) => ({
+          id: v.variantId,
+          label: i === 0 ? "Best" : `Variant ${i + 1}: ${v.variantId.replace(/-/g, " ")}`,
+          text: v.message,
+          createdAt: now + i,
+        }));
+        initialActiveId = initialVariants[0]!.id;
+      } else {
+        const originalVariantId =
+          typeof crypto !== "undefined" && "randomUUID" in crypto
+            ? crypto.randomUUID()
+            : `variant-${now}`;
+        initialVariants = [{
+          id: originalVariantId,
+          label: "Original",
+          text: pipelineResult.message,
+          createdAt: now,
+        }];
+        initialActiveId = originalVariantId;
+      }
 
       const nextSession: MarketingSession = {
         id: sessionId,
@@ -407,15 +459,18 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         viewMode: "preview",
         rewriteWorkflowState: undefined,
         platformMeta: Object.keys(platformMeta).length > 0 ? platformMeta : undefined,
-        messageVariants: [originalVariant],
-        activeVariantId: originalVariantId,
+        messageVariants: initialVariants,
+        activeVariantId: initialActiveId,
+        toneOverride,
+        targetAudience: targetAudience.trim() || undefined,
+        contentType,
       };
 
       setResult(pipelineResult);
       setEditableMessage(pipelineResult.message);
       setViewMode("preview");
-      setMessageVariants([originalVariant]);
-      setActiveVariantId(originalVariantId);
+      setMessageVariants(initialVariants);
+      setActiveVariantId(initialActiveId);
       setActiveSessionId(nextSession.id);
       setSessions((prev) => {
         const existingIndex = prev.findIndex((session) => session.id === nextSession.id);
@@ -438,13 +493,16 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     } finally {
       setLoading(false);
       setGenerationStartTime(null);
+      // Pipeline steps are intentionally NOT cleared here so the stepper
+      // remains visible after generation completes (transparency).
     }
-  }, [activeSessionId, debug, handleSSEEvent, platform, platformMeta, prompt]);
+  }, [activeSessionId, contentType, debug, handleSSEEvent, platform, platformMeta, prompt, targetAudience, toneOverride]);
 
   const cancelPipeline = useCallback(() => {
     abortRef.current?.abort();
     setLoading(false);
     setPipelineSteps([]);
+    setThinkingLog([]);
     setGenerationStartTime(null);
   }, []);
 
@@ -473,12 +531,19 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     selectedPlatform,
     activeSession,
     pipelineSteps,
+    thinkingLog,
     generationStartTime,
     platformMeta,
     setPlatformMeta,
     messageVariants,
     activeVariantId,
     selectVariant,
+    toneOverride,
+    setToneOverride,
+    targetAudience,
+    setTargetAudience,
+    contentType,
+    setContentType,
     handleSelectSession,
     handleStartNewSession,
     handleRewriteComplete,

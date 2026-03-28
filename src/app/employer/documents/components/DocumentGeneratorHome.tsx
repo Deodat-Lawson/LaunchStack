@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Search, Plus, FileText, Clock, Scale, Brain } from 'lucide-react';
+import { Search, Plus, FileText, Clock, Scale, Brain, Sparkles, ArrowRight } from 'lucide-react';
 import { Input } from "~/app/employer/documents/components/ui/input";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Card } from "~/app/employer/documents/components/ui/card";
@@ -30,6 +30,7 @@ interface GeneratedDocument {
 interface DocumentGeneratorHomeProps {
   onNewDocument: (template: DocumentTemplate) => void;
   onOpenDocument: (document: GeneratedDocument) => void;
+  onStartChat: (initialMessage?: string) => void;
   generatedDocuments: GeneratedDocument[];
 }
 
@@ -71,10 +72,11 @@ const STAGE_ORDER = [
   'Offboarding',
 ];
 
-export function DocumentGeneratorHome({ onNewDocument, onOpenDocument, generatedDocuments }: DocumentGeneratorHomeProps) {
+export function DocumentGeneratorHome({ onNewDocument, onOpenDocument, onStartChat, generatedDocuments }: DocumentGeneratorHomeProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'new' | 'existing'>('new');
+  const [chatInput, setChatInput] = useState('');
 
   const categories = ['all', ...STAGE_ORDER];
 
@@ -175,6 +177,54 @@ export function DocumentGeneratorHome({ onNewDocument, onOpenDocument, generated
         <div className="max-w-7xl mx-auto p-6">
           {viewMode === 'new' ? (
             <div className="space-y-8">
+              {/* AI Assistant Banner */}
+              <Card className="relative overflow-hidden border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30">
+                <div className="p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="p-2.5 bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20 shrink-0">
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground mb-1">
+                        Not sure which template you need?
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Describe your situation and our AI assistant will recommend the right template and help you fill it out.
+                      </p>
+                      <div className="flex gap-2">
+                        <div className="flex-1 relative">
+                          <input
+                            type="text"
+                            value={chatInput}
+                            onChange={(e) => setChatInput(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && chatInput.trim()) {
+                                onStartChat(chatInput.trim());
+                              }
+                            }}
+                            placeholder="e.g. I need an NDA for new employees..."
+                            className={cn(
+                              "w-full rounded-lg border border-blue-200 dark:border-blue-700 bg-background px-3 py-2",
+                              "text-sm text-foreground placeholder:text-muted-foreground",
+                              "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            )}
+                          />
+                        </div>
+                        <Button
+                          className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
+                          size="sm"
+                          onClick={() => onStartChat(chatInput.trim() || undefined)}
+                        >
+                          <Sparkles className="w-4 h-4 mr-1.5" />
+                          Ask AI
+                          <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
               {groupedTemplates.map(({ stage, items }) => (
                 <div key={stage}>
                   <div className="flex items-center gap-2 mb-4">

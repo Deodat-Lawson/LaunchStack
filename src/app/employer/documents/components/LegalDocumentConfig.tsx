@@ -32,6 +32,7 @@ interface LegalDocumentConfigProps {
   isGenerating?: boolean;
   serverErrors?: Record<string, string>;
   globalError?: string | null;
+  initialData?: Record<string, string>;
 }
 
 export function LegalDocumentConfig({
@@ -41,8 +42,9 @@ export function LegalDocumentConfig({
   isGenerating = false,
   serverErrors,
   globalError = null,
+  initialData,
 }: LegalDocumentConfigProps) {
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<Record<string, string>>(initialData ?? {});
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {

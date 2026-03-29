@@ -14,6 +14,7 @@ from app.models.ner import EntityExtractor
 from app.routes.embed import router as embed_router
 from app.routes.rerank import router as rerank_router
 from app.routes.entities import router as entities_router
+from app.routes.adeu import router as adeu_router
 
 
 # ---------------------------------------------------------------------------
@@ -46,8 +47,16 @@ app = FastAPI(
 app.include_router(embed_router)
 app.include_router(rerank_router)
 app.include_router(entities_router)
+app.include_router(adeu_router)
 
 
 @app.get("/health")
 async def health():
-    return {"status": "ok"}
+    try:
+        from adeu import __version__ as adeu_version
+        adeu_status = {"available": True, "version": adeu_version}
+    except ImportError:
+        adeu_status = {"available": False, "version": None}
+
+    status = "ok" if adeu_status["available"] else "degraded"
+    return {"status": status, "adeu": adeu_status}

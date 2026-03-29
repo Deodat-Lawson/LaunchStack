@@ -1,7 +1,7 @@
 fastapi>=0.115.0
 uvicorn[standard]>=0.34.0
 pydantic>=2.10.0
-adeu>=0.7.0
+adeu==0.9.0
 
 # ML dependencies
 sentence-transformers>=3.3.0

@@ -65,6 +65,34 @@ function getLegalSectionsForDocument(doc: GeneratedDocument): EditorSection[] {
   return parseLegalDocumentHtmlToSections(doc.content);
 }
 
+async function regenerateLegalDocxBase64(
+  templateId: string,
+  contentHtml: string,
+  legalData?: Record<string, string>,
+): Promise<string | undefined> {
+  if (!templateId || !TEMPLATE_REGISTRY[templateId]) return undefined;
+  const data = buildTemplateFieldDataForDocx(templateId, contentHtml, legalData);
+  try {
+    const res = await fetch('/api/document-generator/legal-generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        templateId,
+        data,
+        format: 'json',
+      }),
+    });
+    const json = (await res.json()) as {
+      success?: boolean;
+      docxBase64?: string;
+    };
+    if (!json.success || !json.docxBase64) return undefined;
+    return json.docxBase64;
+  } catch {
+    return undefined;
+  }
+}
+
 export function DocumentGenerator() {
   const [currentView, setCurrentView] = useState<'home' | 'config' | 'editor'>('home');
   const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null);

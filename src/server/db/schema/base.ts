@@ -719,6 +719,14 @@ export const generatedDocuments = pgTable(
             description?: string;
             templateType?: "general" | "legal";
             legalData?: Record<string, string>;
+            /** Full section list from LegalDocumentEditor (labels + structure) */
+            legalSections?: Array<{
+                id: string;
+                type: "title" | "heading" | "paragraph";
+                label?: string;
+                content: string;
+                editable?: boolean;
+            }>;
         }>(),
         citations: jsonb("citations").$type<Array<{
             id: string;

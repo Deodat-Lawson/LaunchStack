@@ -7,8 +7,13 @@ import { LegalDocumentEditor } from './LegalDocumentEditor';
 import { DocumentGeneratorEditor } from './DocumentGeneratorEditor';
 import { Loader2 } from 'lucide-react';
 import type { Citation } from './generator';
-import type { TemplateField } from '~/lib/legal-templates/template-registry';
+import { TEMPLATE_REGISTRY, type TemplateField } from '~/lib/legal-templates/template-registry';
 import type { EditorSection } from '~/lib/legal-templates/section-builders';
+import { parseLegalDocumentHtmlToSections } from '~/lib/legal-templates/html-to-sections';
+import {
+  buildTemplateFieldDataForDocx,
+  extractFieldValuesFromSections,
+} from '~/lib/legal-templates/legal-document-validation';
 
 interface GeneratedDocument {
   id: string;
@@ -26,6 +31,8 @@ interface GeneratedDocument {
     description?: string;
     templateType?: "general" | "legal";
     legalData?: Record<string, string>;
+    /** Persisted from editor so reopen keeps section labels and field layout */
+    legalSections?: EditorSection[];
   };
 }
 
@@ -38,6 +45,24 @@ interface APIDocument {
   citations?: Citation[];
   createdAt: string;
   updatedAt?: string;
+}
+
+function shouldOpenAsLegalEditor(doc: GeneratedDocument): boolean {
+  const id = doc.template;
+  if (!id || !TEMPLATE_REGISTRY[id]) return false;
+  if (doc.metadata?.templateType === 'legal') return true;
+  return /<mark[^>]*\bdata-field-key=/i.test(doc.content);
+}
+
+function getLegalSectionsForDocument(doc: GeneratedDocument): EditorSection[] {
+  if (doc.sections && doc.sections.length > 0) {
+    return doc.sections;
+  }
+  const fromMeta = doc.metadata?.legalSections;
+  if (fromMeta && Array.isArray(fromMeta) && fromMeta.length > 0) {
+    return fromMeta;
+  }
+  return parseLegalDocumentHtmlToSections(doc.content);
 }
 
 export function DocumentGenerator() {
@@ -168,6 +193,7 @@ export function DocumentGenerator() {
           metadata: {
             templateType: 'legal',
             legalData: formData,
+            legalSections: sections,
           },
         }),
       });
@@ -178,7 +204,7 @@ export function DocumentGenerator() {
         const newDoc: GeneratedDocument = {
           id: data.document.id.toString(),
           title: legalData.title ?? selectedTemplate.name,
-          template: selectedTemplate.name,
+          template: selectedTemplate.id,
           lastEdited: 'Just now',
           content: htmlContent,
           docxBase64: legalData.docxBase64,
@@ -186,6 +212,7 @@ export function DocumentGenerator() {
           metadata: {
             templateType: 'legal',
             legalData: formData,
+            legalSections: sections,
           },
         };
 
@@ -204,12 +231,64 @@ export function DocumentGenerator() {
   };
 
   const handleOpenDocument = (document: GeneratedDocument) => {
-    setCurrentDocument(document);
-    setCurrentView('editor');
+    void (async () => {
+      let next: GeneratedDocument = document;
+      if (shouldOpenAsLegalEditor(document)) {
+        const sections = getLegalSectionsForDocument(document);
+        next = {
+          ...document,
+          sections,
+          metadata: {
+            ...(document.metadata ?? {}),
+            templateType: 'legal',
+            legalSections: sections,
+          },
+        };
+        const docx = await regenerateLegalDocxBase64(
+          next.template,
+          next.content,
+          next.metadata?.legalData,
+        );
+        if (docx) {
+          next = { ...next, docxBase64: docx };
+        }
+      }
+      setCurrentDocument(next);
+      setCurrentView('editor');
+    })();
   };
 
-  const handleSaveDocument = async (title: string, content: string, citations?: Citation[]) => {
+  const handleSaveDocument = async (
+    title: string,
+    content: string,
+    citations?: Citation[],
+    editorSections?: EditorSection[],
+  ) => {
     if (!currentDocument) return;
+
+    const isLegalDoc =
+      shouldOpenAsLegalEditor(currentDocument) ||
+      currentDocument.metadata?.templateType === 'legal';
+    const legalSectionsSnapshot = isLegalDoc
+      ? (() => {
+          if (editorSections && editorSections.length > 0) {
+            return editorSections;
+          }
+          const parsed = parseLegalDocumentHtmlToSections(content);
+          if (parsed.length > 0) {
+            return parsed;
+          }
+          return currentDocument.metadata?.legalSections ?? [];
+        })()
+      : undefined;
+    const legalMetadata = isLegalDoc
+      ? {
+          ...(currentDocument.metadata ?? {}),
+          templateType: 'legal' as const,
+          legalData: extractFieldValuesFromSections([content]),
+          legalSections: legalSectionsSnapshot ?? [],
+        }
+      : undefined;
 
     try {
       const response = await fetch('/api/document-generator/documents', {
@@ -220,17 +299,39 @@ export function DocumentGenerator() {
           title,
           content,
           citations,
+          ...(legalMetadata !== undefined ? { metadata: legalMetadata } : {}),
         }),
       });
 
       const data = await response.json() as { success: boolean };
       
       if (data.success) {
+        let docxBase64: string | undefined = currentDocument.docxBase64;
+        if (
+          isLegalDoc &&
+          currentDocument.template &&
+          TEMPLATE_REGISTRY[currentDocument.template]
+        ) {
+          const refreshed = await regenerateLegalDocxBase64(
+            currentDocument.template,
+            content,
+            legalMetadata?.legalData,
+          );
+          if (refreshed) {
+            docxBase64 = refreshed;
+          }
+        }
+
         const updatedDoc: GeneratedDocument = {
           ...currentDocument,
           title,
           content,
           citations,
+          docxBase64,
+          ...(legalSectionsSnapshot !== undefined
+            ? { sections: legalSectionsSnapshot }
+            : {}),
+          ...(legalMetadata !== undefined ? { metadata: legalMetadata } : {}),
           lastEdited: 'Just now',
         };
 
@@ -280,18 +381,29 @@ export function DocumentGenerator() {
   }
 
   if (currentView === 'editor' && currentDocument) {
-    const isLegal = currentDocument.metadata?.templateType === 'legal';
+    const templateId = currentDocument.template;
+    const resolvedFields = templateId
+      ? (TEMPLATE_REGISTRY[templateId]?.fields ?? [])
+      : [];
+    const legalSections = getLegalSectionsForDocument(currentDocument);
+    const useLegalEditor =
+      shouldOpenAsLegalEditor(currentDocument) &&
+      resolvedFields.length > 0 &&
+      legalSections.length > 0;
 
-    if (isLegal && currentDocument.sections && currentDocument.sections.length > 0) {
+    if (useLegalEditor) {
       return (
         <div className="h-full">
           <LegalDocumentEditor
             initialTitle={currentDocument.title}
-            sections={currentDocument.sections}
-            docxBase64={currentDocument.docxBase64}
+            sections={legalSections}
+            templateId={currentDocument.template}
             documentId={parseInt(currentDocument.id)}
+            templateFields={resolvedFields}
             onBack={handleBackToHome}
-            onSave={(title, content) => void handleSaveDocument(title, content)}
+            onSave={(title, content, editorSections) =>
+              void handleSaveDocument(title, content, undefined, editorSections)
+            }
           />
         </div>
       );

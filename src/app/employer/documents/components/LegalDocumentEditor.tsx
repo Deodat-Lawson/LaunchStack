@@ -91,6 +91,104 @@ function extractFieldKeysFromHtml(html: string): string[] {
   return Array.from(new Set(keys));
 }
 
+/** First-seen order of field keys as they appear in the HTML (for restoring removed marks in place). */
+function extractFieldKeysInDocumentOrder(html: string): string[] {
+  const keys: string[] = [];
+  const seen = new Set<string>();
+  const re = /<mark[^>]*data-field-key=(["'])([^"']+)\1[^>]*>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) !== null) {
+    const k = m[2];
+    if (k && !seen.has(k)) {
+      seen.add(k);
+      keys.push(k);
+    }
+  }
+  return keys;
+}
+
+function insertMissingMarkAtOrderedPosition(
+  el: HTMLElement,
+  missingKey: string,
+  orderedKeys: string[],
+) {
+  const mark = document.createElement("mark");
+  mark.setAttribute("data-field-key", missingKey);
+  mark.textContent = "\u200B";
+
+  const idx = orderedKeys.indexOf(missingKey);
+  if (idx < 0) {
+    el.appendChild(mark);
+    return;
+  }
+
+  for (let i = idx + 1; i < orderedKeys.length; i++) {
+    const nextKey = orderedKeys[i];
+    if (!nextKey) continue;
+    let nextMark: Element | null = null;
+    try {
+      nextMark = el.querySelector(
+        `mark[data-field-key="${CSS.escape(nextKey)}"]`,
+      );
+    } catch {
+      nextMark = null;
+    }
+    if (nextMark?.parentNode) {
+      nextMark.parentNode.insertBefore(mark, nextMark);
+      return;
+    }
+  }
+
+  for (let i = idx - 1; i >= 0; i--) {
+    const prevKey = orderedKeys[i];
+    if (!prevKey) continue;
+    let prevMark: Element | null = null;
+    try {
+      prevMark = el.querySelector(
+        `mark[data-field-key="${CSS.escape(prevKey)}"]`,
+      );
+    } catch {
+      prevMark = null;
+    }
+    if (prevMark?.parentNode) {
+      prevMark.parentNode.insertBefore(mark, prevMark.nextSibling);
+      return;
+    }
+  }
+
+  if (el.firstChild) {
+    el.insertBefore(mark, el.firstChild);
+  } else {
+    el.appendChild(mark);
+  }
+}
+
+/** Collapses repeated spaces in text nodes (edits can leave double spaces between marks). */
+function collapseRunsOfSpacesInTextNodes(el: HTMLElement) {
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  const nodes: Text[] = [];
+  let n: Node | null;
+  while ((n = walker.nextNode())) {
+    if (n.nodeType === Node.TEXT_NODE) nodes.push(n as Text);
+  }
+  for (const textNode of nodes) {
+    let t = textNode.textContent ?? "";
+    const next = t.replace(/ {2,}/g, " ");
+    if (next !== t) textNode.textContent = next;
+  }
+}
+
+function syncLegalMarkEmptyClass(el: HTMLElement) {
+  el.querySelectorAll<HTMLElement>("mark[data-field-key]").forEach((mark) => {
+    const text = (mark.textContent ?? "").replace(/\u200B/g, "").trim();
+    if (text === "") {
+      mark.classList.add("legal-mark-empty");
+    } else {
+      mark.classList.remove("legal-mark-empty");
+    }
+  });
+}
+
 function extractAllFieldKeysFromSections(
   sectionList: EditorSection[],
 ): string[] {
@@ -99,6 +197,316 @@ function extractAllFieldKeysFromSections(
     for (const k of extractFieldKeysFromHtml(s.content)) keys.add(k);
   }
   return Array.from(keys);
+}
+
+function findParentMarkInElement(el: HTMLElement, node: Node): HTMLElement | null {
+  let current: Node | null = node;
+  while (current && current !== el) {
+    if (
+      current instanceof HTMLElement &&
+      current.tagName === "MARK" &&
+      current.hasAttribute("data-field-key")
+    ) {
+      return current;
+    }
+    current = current.parentNode;
+  }
+  return null;
+}
+
+function placeCaretInsideMark(mark: HTMLElement) {
+  const selection = window.getSelection();
+  if (!selection) return;
+  const range = document.createRange();
+  range.selectNodeContents(mark);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+/**
+ * After deleting the last character, the browser often moves the caret outside the
+ * <mark>, while beforeinput only allows typing inside a mark — so typing appears "stuck".
+ */
+function ensureCaretInsideMarkAfterRepair(
+  el: HTMLElement,
+  preferredFieldKey: string | null,
+) {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+  const anchor = sel.anchorNode;
+  if (!anchor || !el.contains(anchor)) return;
+  if (findParentMarkInElement(el, anchor)) return;
+
+  let target: HTMLElement | null = null;
+  if (preferredFieldKey) {
+    try {
+      target = el.querySelector(
+        `mark[data-field-key="${CSS.escape(preferredFieldKey)}"]`,
+      );
+    } catch {
+      target = null;
+    }
+  }
+  if (!target) {
+    for (const m of el.querySelectorAll<HTMLElement>("mark[data-field-key]")) {
+      const t = (m.textContent ?? "").replace(/\u200B/g, "").trim();
+      if (t === "") {
+        target = m;
+        break;
+      }
+    }
+  }
+  if (!target) {
+    target = el.querySelector("mark[data-field-key]");
+  }
+  if (target) placeCaretInsideMark(target);
+}
+
+/**
+ * Stops the browser from removing or unwrapping the <mark> when the last visible
+ * character is deleted — the highlight stays in the original sentence position.
+ */
+function interceptDeleteThatEmptiesMark(
+  e: InputEvent,
+  mark: HTMLElement,
+  range: Range,
+  onSync: () => void,
+): boolean {
+  const it = e.inputType;
+  if (it !== "deleteContentBackward" && it !== "deleteContentForward") {
+    return false;
+  }
+  const text = mark.textContent ?? "";
+  const visible = text.replace(/\u200B/g, "");
+  if (visible.length === 0) {
+    e.preventDefault();
+    mark.textContent = "\u200B";
+    placeCaretInsideMark(mark);
+    onSync();
+    return true;
+  }
+  if (!range.collapsed) return false;
+  if (visible.length !== 1) return false;
+
+  const sc = range.startContainer;
+  if (sc.nodeType !== Node.TEXT_NODE || !mark.contains(sc)) return false;
+  const tn = sc.textContent ?? "";
+  const off = range.startOffset;
+  const onlyChar = visible[0]!;
+
+  if (it === "deleteContentBackward") {
+    if (off <= 0) return false;
+    const before = tn.slice(0, off).replace(/\u200B/g, "");
+    if (before.length === 1 && before[0] === onlyChar) {
+      e.preventDefault();
+      mark.textContent = "\u200B";
+      placeCaretInsideMark(mark);
+      onSync();
+      return true;
+    }
+    return false;
+  }
+
+  if (off >= tn.length) return false;
+  if (tn[off] === "\u200B") return false;
+  const fromOff = tn.slice(off).replace(/\u200B/g, "");
+  if (fromOff.length >= 1 && fromOff[0] === onlyChar) {
+    e.preventDefault();
+    mark.textContent = "\u200B";
+    placeCaretInsideMark(mark);
+    onSync();
+    return true;
+  }
+  return false;
+}
+
+/**
+ * When the caret sits in static "glue" text (between marks, after <strong>, etc.),
+ * insertText targets that text node — characters become uneditable. Route typing into
+ * the nearest field mark instead.
+ */
+function findTargetMarkForStrayInsertion(
+  el: HTMLElement,
+  range: Range,
+  preferredKey: string | null,
+): HTMLElement | null {
+  if (preferredKey) {
+    try {
+      const m = el.querySelector(
+        `mark[data-field-key="${CSS.escape(preferredKey)}"]`,
+      ) as HTMLElement | null;
+      if (m) return m;
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const node = range.startContainer;
+  const offset = range.startOffset;
+
+  const markFromElement = (n: HTMLElement): HTMLElement | null => {
+    if (n.tagName === "MARK" && n.hasAttribute("data-field-key")) return n;
+    return n.querySelector("mark[data-field-key]") as HTMLElement | null;
+  };
+
+  if (node.nodeType === Node.TEXT_NODE) {
+    const tn = node.textContent ?? "";
+    if (offset === 0) {
+      let prev: Node | null = node.previousSibling;
+      while (prev) {
+        if (prev.nodeType === Node.ELEMENT_NODE) {
+          const hit = markFromElement(prev as HTMLElement);
+          if (hit) return hit;
+        }
+        prev = prev.previousSibling;
+      }
+      let next: Node | null = node.nextSibling;
+      while (next) {
+        if (next.nodeType === Node.ELEMENT_NODE) {
+          const hit = markFromElement(next as HTMLElement);
+          if (hit) return hit;
+        }
+        next = next.nextSibling;
+      }
+    }
+    if (offset === tn.length) {
+      let next: Node | null = node.nextSibling;
+      while (next) {
+        if (next.nodeType === Node.ELEMENT_NODE) {
+          const hit = markFromElement(next as HTMLElement);
+          if (hit) return hit;
+        }
+        next = next.nextSibling;
+      }
+      let prev: Node | null = node.previousSibling;
+      while (prev) {
+        if (prev.nodeType === Node.ELEMENT_NODE) {
+          const hit = markFromElement(prev as HTMLElement);
+          if (hit) return hit;
+        }
+        prev = prev.previousSibling;
+      }
+    }
+  }
+
+  if (node === el && typeof offset === "number") {
+    if (offset > 0) {
+      const before = el.childNodes[offset - 1];
+      if (before instanceof HTMLElement) {
+        const hit = markFromElement(before);
+        if (hit) return hit;
+      }
+    }
+    if (offset < el.childNodes.length) {
+      const after = el.childNodes[offset];
+      if (after instanceof HTMLElement) {
+        const hit = markFromElement(after);
+        if (hit) return hit;
+      }
+    }
+  }
+
+  const marks = el.querySelectorAll<HTMLElement>("mark[data-field-key]");
+  if (marks.length === 0) return null;
+  if (marks.length === 1) return marks[0] ?? null;
+
+  let cr: DOMRect;
+  try {
+    cr = range.getBoundingClientRect();
+  } catch {
+    return marks[0] ?? null;
+  }
+  const cx = cr.left + cr.width / 2;
+  let best: HTMLElement | null = null;
+  let bestDist = Infinity;
+  for (const m of marks) {
+    const r = m.getBoundingClientRect();
+    const mx = r.left + r.width / 2;
+    const d = Math.abs(mx - cx);
+    if (d < bestDist) {
+      bestDist = d;
+      best = m;
+    }
+  }
+  return best;
+}
+
+function interceptStrayTextInsertion(
+  e: InputEvent,
+  el: HTMLElement,
+  range: Range,
+  preferredFieldKey: string | null,
+  onSync: () => void,
+): boolean {
+  const it = e.inputType;
+  if (it !== "insertText" && it !== "insertReplacementText") {
+    return false;
+  }
+  const data = typeof e.data === "string" ? e.data : "";
+  if (data.length === 0) return false;
+  if (!range.collapsed) return false;
+
+  const startMark = findParentMarkInElement(el, range.startContainer);
+  const endMark = findParentMarkInElement(el, range.endContainer);
+  if (startMark && endMark && startMark === endMark) {
+    return false;
+  }
+
+  if (!el.contains(range.startContainer)) return false;
+
+  const target = findTargetMarkForStrayInsertion(
+    el,
+    range,
+    preferredFieldKey,
+  );
+  if (!target) return false;
+
+  e.preventDefault();
+  placeCaretInsideMark(target);
+  document.execCommand("insertText", false, data);
+  onSync();
+  return true;
+}
+
+/**
+ * After clearing a field, the mark often only holds ZWSP. Browsers still report the
+ * caret as "inside" the mark, so interceptStrayTextInsertion bails out — but the
+ * default insertText then lands in adjacent glue text. Force the typed text into
+ * the last-focused mark while it is still empty.
+ */
+function interceptInsertIntoLastFocusedEmptyMark(
+  e: InputEvent,
+  el: HTMLElement,
+  range: Range,
+  preferredKey: string | null,
+  onSync: () => void,
+): boolean {
+  if (e.inputType !== "insertText" && e.inputType !== "insertReplacementText") {
+    return false;
+  }
+  const data = typeof e.data === "string" ? e.data : "";
+  if (!data || !range.collapsed) return false;
+  if (!preferredKey) return false;
+
+  let mark: HTMLElement | null = null;
+  try {
+    mark = el.querySelector(
+      `mark[data-field-key="${CSS.escape(preferredKey)}"]`,
+    ) as HTMLElement | null;
+  } catch {
+    return false;
+  }
+  if (!mark || !el.contains(mark)) return false;
+
+  const visible = (mark.textContent ?? "").replace(/\u200B/g, "").trim();
+  if (visible.length > 0) return false;
+
+  e.preventDefault();
+  mark.textContent = data;
+  placeCaretInsideMark(mark);
+  onSync();
+  return true;
 }
 
 function getSectionFieldLabels(
@@ -230,14 +638,78 @@ function EditableSection({
   const ref = useRef<HTMLDivElement>(null);
   const isInternalEdit = useRef(false);
   const lastSetContent = useRef(section.content);
+  /**
+   * Field keys in original document order (plus any keys merged in later). Used so
+   * restored <mark>s insert next to their neighbors instead of at the end of the paragraph.
+   */
+  const expectedFieldKeysOrderedRef = useRef<string[]>([]);
+  /** Last field the user placed the caret in — survives one-char delete when the caret jumps outside the mark. */
+  const lastFocusedFieldKeyRef = useRef<string | null>(null);
+
+  useLayoutEffect(() => {
+    const keys = extractFieldKeysInDocumentOrder(section.content);
+    const prev = expectedFieldKeysOrderedRef.current;
+    if (prev.length === 0) {
+      expectedFieldKeysOrderedRef.current = keys;
+    } else {
+      const seen = new Set(prev);
+      for (const k of keys) {
+        if (!seen.has(k)) {
+          seen.add(k);
+          expectedFieldKeysOrderedRef.current.push(k);
+        }
+      }
+    }
+  }, [section.content]);
+
+  const repairFieldMarksInDom = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.querySelectorAll<HTMLElement>("mark[data-field-key]").forEach((mark) => {
+      const text = (mark.textContent ?? "").replace(/\u200B/g, "").trim();
+      if (text === "") {
+        mark.textContent = "\u200B";
+      }
+    });
+    const present = new Set(extractFieldKeysFromHtml(el.innerHTML));
+    const ordered = expectedFieldKeysOrderedRef.current;
+    for (const key of ordered) {
+      if (!present.has(key)) {
+        insertMissingMarkAtOrderedPosition(el, key, ordered);
+        present.add(key);
+      }
+    }
+    collapseRunsOfSpacesInTextNodes(el);
+    syncLegalMarkEmptyClass(el);
+  }, []);
 
   const handleInput = useCallback(() => {
-    if (ref.current) {
-      isInternalEdit.current = true;
-      lastSetContent.current = ref.current.innerHTML;
-      onUpdate(section.id, ref.current.innerHTML);
+    const el = ref.current;
+    if (!el) return;
+    isInternalEdit.current = true;
+    const sel = window.getSelection();
+    let preferredKey: string | null = null;
+    if (sel?.anchorNode && el.contains(sel.anchorNode)) {
+      const m = findParentMarkInElement(el, sel.anchorNode);
+      preferredKey = m?.getAttribute("data-field-key") ?? null;
     }
-  }, [section.id, onUpdate]);
+    if (!preferredKey) preferredKey = lastFocusedFieldKeyRef.current;
+
+    repairFieldMarksInDom();
+    ensureCaretInsideMarkAfterRepair(el, preferredKey);
+    const selAfter = window.getSelection();
+    if (selAfter?.anchorNode && el.contains(selAfter.anchorNode)) {
+      const mAfter = findParentMarkInElement(el, selAfter.anchorNode);
+      const nk = mAfter?.getAttribute("data-field-key");
+      if (nk) lastFocusedFieldKeyRef.current = nk;
+    }
+
+    lastSetContent.current = el.innerHTML;
+    onUpdate(section.id, el.innerHTML);
+  }, [section.id, onUpdate, repairFieldMarksInDom]);
+
+  const handleInputRef = useRef(handleInput);
+  handleInputRef.current = handleInput;
 
   useLayoutEffect(() => {
     const currentDomContent = ref.current?.innerHTML ?? "";
@@ -263,31 +735,6 @@ function EditableSection({
     const el = ref.current;
     if (!el || section.type !== "paragraph") return;
 
-    const findParentMark = (node: Node): HTMLElement | null => {
-      let current: Node | null = node;
-      while (current && current !== el) {
-        if (
-          current instanceof HTMLElement &&
-          current.tagName === "MARK" &&
-          current.hasAttribute("data-field-key")
-        ) {
-          return current;
-        }
-        current = current.parentNode;
-      }
-      return null;
-    };
-
-    const placeCaretInsideMark = (mark: HTMLElement) => {
-      const selection = window.getSelection();
-      if (!selection) return;
-      const range = document.createRange();
-      range.selectNodeContents(mark);
-      range.collapse(false);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    };
-
     const handleBeforeInput = (e: InputEvent) => {
       const sel = window.getSelection();
       if (!sel || sel.rangeCount === 0) {
@@ -295,8 +742,42 @@ function EditableSection({
         return;
       }
       const range = sel.getRangeAt(0);
-      const startMark = findParentMark(range.startContainer);
-      const endMark = findParentMark(range.endContainer);
+      const startMark = findParentMarkInElement(el, range.startContainer);
+      const endMark = findParentMarkInElement(el, range.endContainer);
+
+      if (
+        startMark &&
+        endMark &&
+        startMark === endMark &&
+        interceptDeleteThatEmptiesMark(e, startMark, range, () => {
+          handleInputRef.current();
+        })
+      ) {
+        return;
+      }
+
+      if (
+        interceptInsertIntoLastFocusedEmptyMark(
+          e,
+          el,
+          range,
+          lastFocusedFieldKeyRef.current,
+          () => {
+            handleInputRef.current();
+          },
+        )
+      ) {
+        return;
+      }
+
+      if (
+        interceptStrayTextInsertion(e, el, range, lastFocusedFieldKeyRef.current, () => {
+          handleInputRef.current();
+        })
+      ) {
+        return;
+      }
+
       if (!startMark || !endMark || startMark !== endMark) {
         e.preventDefault();
       }
@@ -306,7 +787,7 @@ function EditableSection({
       if (e.key === "a" && (e.ctrlKey || e.metaKey)) {
         const sel = window.getSelection();
         if (!sel || !sel.anchorNode) return;
-        const mark = findParentMark(sel.anchorNode);
+        const mark = findParentMarkInElement(el, sel.anchorNode);
         if (mark) {
           e.preventDefault();
           const range = document.createRange();
@@ -321,7 +802,8 @@ function EditableSection({
       e.preventDefault();
       const sel = window.getSelection();
       if (!sel || sel.rangeCount === 0) return;
-      if (!findParentMark(sel.getRangeAt(0).startContainer)) return;
+      if (!findParentMarkInElement(el, sel.getRangeAt(0).startContainer))
+        return;
       const text = e.clipboardData?.getData("text/plain") ?? "";
       if (text) document.execCommand("insertText", false, text);
     };
@@ -333,12 +815,14 @@ function EditableSection({
     const handleMouseDown = (e: MouseEvent) => {
       const target = e.target;
       if (!(target instanceof Node)) return;
-      const mark = findParentMark(target);
+      const mark = findParentMarkInElement(el, target);
       if (!mark) return;
       e.preventDefault();
       el.focus();
+      const key = mark.getAttribute("data-field-key");
+      if (key) lastFocusedFieldKeyRef.current = key;
       placeCaretInsideMark(mark);
-      onFieldFocus(mark.getAttribute("data-field-key")!);
+      onFieldFocus(key!);
       onFocus(section.id);
     };
 
@@ -349,7 +833,9 @@ function EditableSection({
         target.tagName === "MARK" &&
         target.hasAttribute("data-field-key")
       ) {
-        onFieldFocus(target.getAttribute("data-field-key")!);
+        const k = target.getAttribute("data-field-key");
+        if (k) lastFocusedFieldKeyRef.current = k;
+        onFieldFocus(k!);
       }
       onFocus(section.id);
     };
@@ -368,6 +854,14 @@ function EditableSection({
       }
     };
 
+    const handleSelectionChange = () => {
+      const sel = window.getSelection();
+      if (!sel?.anchorNode || !el.contains(sel.anchorNode)) return;
+      const mark = findParentMarkInElement(el, sel.anchorNode);
+      const k = mark?.getAttribute("data-field-key");
+      if (k) lastFocusedFieldKeyRef.current = k;
+    };
+
     el.addEventListener("beforeinput", handleBeforeInput);
     el.addEventListener("keydown", handleKeyDown);
     el.addEventListener("paste", handlePaste);
@@ -375,6 +869,7 @@ function EditableSection({
     el.addEventListener("mousedown", handleMouseDown);
     el.addEventListener("focusin", handleFocusIn);
     el.addEventListener("focusout", handleFocusOut);
+    document.addEventListener("selectionchange", handleSelectionChange);
 
     return () => {
       el.removeEventListener("beforeinput", handleBeforeInput);
@@ -384,6 +879,7 @@ function EditableSection({
       el.removeEventListener("mousedown", handleMouseDown);
       el.removeEventListener("focusin", handleFocusIn);
       el.removeEventListener("focusout", handleFocusOut);
+      document.removeEventListener("selectionchange", handleSelectionChange);
     };
   }, [section.type, section.id, onFocus, onFieldBlur, onFieldFocus]);
 
@@ -404,6 +900,7 @@ function EditableSection({
         mark.classList.remove("field-invalid");
       }
     });
+    syncLegalMarkEmptyClass(el);
   }, [invalidFields, showErrors, section.content, fieldMap]);
 
   if (section.type === "title") {
@@ -461,6 +958,8 @@ function EditableSection({
           "cursor-default select-text",
           "[&_mark[data-field-key]]:cursor-text [&_mark[data-field-key]]:outline-none [&_mark[data-field-key]]:rounded",
           "[&_mark[data-field-key]]:py-[1px] [&_mark[data-field-key]]:px-1",
+          // Empty fields (ZWSP-only): full px-1 on each adjacent mark looks like extra gaps in a sentence.
+          "[&_mark[data-field-key].legal-mark-empty]:!px-0.5 [&_mark[data-field-key].legal-mark-empty]:inline-block [&_mark[data-field-key].legal-mark-empty]:min-w-[3px]",
           "[&_mark[data-field-key]]:transition-all [&_mark[data-field-key]]:duration-150",
           "[&_mark:focus]:ring-2 [&_mark:focus]:ring-blue-400/50 [&_mark:focus]:bg-blue-50 dark:[&_mark:focus]:bg-blue-900/30",
           "[&_.field-invalid]:!bg-red-50 [&_.field-invalid]:!border-b-2 [&_.field-invalid]:!border-red-400 dark:[&_.field-invalid]:!bg-red-900/20 dark:[&_.field-invalid]:!border-red-500",

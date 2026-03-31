@@ -33,12 +33,17 @@ function isPositiveIntField(key: string): boolean {
   );
 }
 
+/** Strips HTML, zero-width placeholders used to keep empty marks editable, then trims. */
+function normalizeMarkedFieldText(value: string): string {
+  return value.replace(/<[^>]*>/g, "").replace(/\u200B/g, "").trim();
+}
+
 export function validateFieldValue(
   key: string,
   value: string,
   field: TemplateField,
 ): string | null {
-  const cleaned = value.replace(/<[^>]*>/g, "").trim();
+  const cleaned = normalizeMarkedFieldText(value);
 
   if (field.required && (cleaned === "" || cleaned === `[${key}]`)) {
     return `${field.label} is required`;
@@ -78,7 +83,7 @@ export function extractFieldValuesFromSections(
     let match;
     while ((match = regex.exec(html)) !== null) {
       const key = match[2] ?? "";
-      const rawVal = (match[3] ?? "").replace(/<[^>]*>/g, "").trim();
+      const rawVal = normalizeMarkedFieldText(match[3] ?? "");
       if (!key) continue;
       if (!(key in values) || values[key]!.startsWith("[")) {
         values[key] = rawVal;

@@ -31,6 +31,7 @@ const UploadDocumentSchema = z.object({
   mimeType: z.string().optional(),
   /** Original filename with extension — used for adapter routing when documentName has been cleaned */
   originalFilename: z.string().optional(),
+  embeddingIndexKey: z.string().min(1).optional(),
 });
 
 export async function POST(request: Request) {
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
         storageType: explicitStorageType,
         mimeType,
         originalFilename,
+        embeddingIndexKey,
       } = validation.data;
 
       console.log(
@@ -82,6 +84,7 @@ export async function POST(request: Request) {
         explicitStorageType,
         mimeType,
         originalFilename,
+        embeddingIndexKey,
         requestUrl: request.url,
       });
 

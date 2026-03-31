@@ -21,6 +21,7 @@ export interface TriggerOptions {
   mimeType?: string;
   /** Original filename with extension — used for adapter routing */
   originalFilename?: string;
+  embeddingIndexKey?: string;
 }
 
 /**
@@ -60,6 +61,7 @@ export async function triggerDocumentProcessing(
     options: {
       forceOCR: options?.forceOCR,
       preferredProvider: options?.preferredProvider,
+      embeddingIndexKey: options?.embeddingIndexKey,
     },
   };
 

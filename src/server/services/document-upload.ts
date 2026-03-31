@@ -19,6 +19,7 @@ export interface DocumentUploadParams {
   explicitStorageType?: StorageType;
   mimeType?: string;
   originalFilename?: string;
+  embeddingIndexKey?: string;
 }
 
 export interface DocumentUploadResult {
@@ -73,6 +74,7 @@ export async function processDocumentUpload({
   explicitStorageType,
   mimeType,
   originalFilename,
+  embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
   const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
   const resolvedDocumentUrl =
@@ -114,6 +116,7 @@ export async function processDocumentUpload({
       preferredProvider: parseProvider(preferredProvider),
       mimeType,
       originalFilename,
+      embeddingIndexKey,
     }
   );
 

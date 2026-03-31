@@ -21,6 +21,7 @@ import {
     type TokenBudgetOptions,
 } from "~/lib/tools/rag/retrievers";
 import { getEmbeddings } from "./models";
+import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
 import type { SemanticType, PreviewType } from "~/server/db/schema";
 
 // ============================================================================
@@ -45,6 +46,8 @@ export interface RLMSearchOptions {
     pageRange?: { start: number; end: number };
     /** Preview types to include if includePreviews is true */
     previewTypes?: PreviewType[];
+    /** Embedding index key for semantic retrieval */
+    embeddingIndexKey?: string;
 }
 
 /**
@@ -98,6 +101,7 @@ export async function performRLMSearch(
         prioritize = "relevance",
         pageRange,
         previewTypes = ["summary", "keywords"],
+        embeddingIndexKey,
     } = options;
 
     console.log(`🔍 [RLM Search] Starting search for document ${documentId}`);
@@ -105,8 +109,9 @@ export async function performRLMSearch(
 
     // Create retriever with embeddings if we need semantic search
     const needsEmbeddings = prioritize === "relevance";
-    const embeddings = needsEmbeddings ? getEmbeddings() : undefined;
-    const retriever = createRLMRetriever(embeddings);
+    const embeddingIndex = resolveEmbeddingIndex(embeddingIndexKey);
+    const embeddings = needsEmbeddings ? getEmbeddings(embeddingIndex.indexKey) : undefined;
+    const retriever = createRLMRetriever(embeddings, embeddingIndex);
 
     // Fetch overview and previews in parallel if needed
     const [overview, previews] = await Promise.all([

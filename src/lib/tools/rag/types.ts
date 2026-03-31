@@ -22,16 +22,17 @@ export interface BaseSearchMetadata {
   source?: string;
   searchScope: SearchScope;
   retrievalMethod?: RetrievalMethod;
+  embeddingIndexKey?: string;
   rerankScore?: number;
   timestamp?: string;
 }
 
 export interface SearchResult<T extends BaseSearchMetadata = BaseSearchMetadata> {
-  retrievalMethod: string | undefined;
-  source: string | undefined;
-  pageNumber: number | undefined;
-  title: string | undefined;
-  documentId: string | number | undefined;
+  retrievalMethod?: string;
+  source?: string;
+  pageNumber?: number;
+  title?: string;
+  documentId?: string | number;
   pageContent: string;
   metadata: T;
 }
@@ -66,6 +67,7 @@ export interface EnsembleSearchOptions {
   minSimilarity?: number;
   filters?: SearchFilters;
   companyId?: number;
+  embeddingIndexKey?: string;
 }
 
 export interface DocumentSearchOptions extends EnsembleSearchOptions {

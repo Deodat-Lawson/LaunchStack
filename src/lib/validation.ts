@@ -103,6 +103,7 @@ export const QuestionSchema = z
     aiModel: z.enum(aiModelOptions).optional(),
     provider: z.enum(providerOptions).default("openai"),
     conversationHistory: z.string().optional(),
+    embeddingIndexKey: z.string().min(1).optional(),
   })
   .superRefine((data, ctx) => {
     assertProviderModelCombination(data.provider, data.aiModel, ctx);
@@ -112,14 +113,15 @@ export const QuestionSchema = z
       documentId: data.documentId,
       companyId: data.companyId,
       question: data.question,
-      style: (data.style ?? "concise") as const,
-      searchScope: (data.searchScope ?? "document") as const,
+      style: data.style ?? "concise",
+      searchScope: data.searchScope ?? "document",
       archiveName: data.archiveName,
       enableWebSearch: data.enableWebSearch ?? false,
       aiPersona: data.aiPersona ?? "general",
       aiModel: data.aiModel,
       provider: data.provider,
       conversationHistory: data.conversationHistory,
+      embeddingIndexKey: data.embeddingIndexKey,
     };
   });
 
@@ -226,6 +228,7 @@ export const RLMQuestionSchema = z
     aiModel: z.enum(aiModelOptions).optional(),
     provider: z.enum(providerOptions).default("openai"),
     conversationHistory: z.string().optional(),
+    embeddingIndexKey: z.string().min(1).optional(),
     // RLM-specific options
     maxTokens: z.number().int().min(500).max(100000).optional(),
     includeOverview: z.boolean().optional(),
@@ -249,17 +252,18 @@ export const RLMQuestionSchema = z
     return {
       documentId: data.documentId,
       question: data.question,
-      style: (data.style ?? "concise") as const,
+      style: data.style ?? "concise",
       enableWebSearch: data.enableWebSearch ?? false,
       aiPersona: data.aiPersona ?? "general",
       aiModel: data.aiModel,
       provider: data.provider,
       conversationHistory: data.conversationHistory,
+      embeddingIndexKey: data.embeddingIndexKey,
       maxTokens: data.maxTokens ?? 4000,
       includeOverview: data.includeOverview ?? true,
       includePreviews: data.includePreviews ?? false,
       semanticTypes: data.semanticTypes,
-      prioritize: (data.prioritize ?? "relevance") as const,
+      prioritize: data.prioritize ?? "relevance",
       pageRange: data.pageRange,
     };
   });

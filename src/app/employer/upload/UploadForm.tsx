@@ -207,7 +207,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
             if (nonZipErrorCount > 0) {
                 toast.error(`${nonZipErrorCount} file(s) were rejected`, {
-                    description: `Please upload PDF, DOCX, images (PNG, JPG, etc.) under ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB`,
+                    description: `Please upload PDF, DOCX, images (PNG, JPG, etc.), or audio (MP3, MP4) under ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB`,
                 });
             }
 
@@ -686,7 +686,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     Drag and drop files or folders here
                                 </p>
                                 <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">
-                                    PDF, DOC, DOCX, PNG, JPG, ZIP — Max {DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB per file
+                                    PDF, DOC, DOCX, PNG, JPG, MP3, MP4, ZIP — Max {DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB per file
                                 </p>
                                 <p className="text-xs text-gray-400">
                                     Or choose exactly what to upload

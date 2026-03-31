@@ -86,67 +86,143 @@ export async function processDocumentUpload({
   const documentCategory = category ?? "Uncategorized";
   const companyIdString = user.companyId.toString();
 
-  // Check if this is an audio file that needs transcription
-  let transcriptionMetadata: object | null = null;
-  let finalMimeType = mimeType ?? null;
-  let finalDocumentName = documentName;
-  let finalDocumentUrl = resolvedDocumentUrl;
-
+  // ------------------------------------------------------------------
+  // Audio file: save the original audio as a document, then create a
+  // separate transcript document that goes through the embedding pipeline.
+  // ------------------------------------------------------------------
   if (shouldTranscribeFile(mimeType, originalFilename)) {
     console.log(`[DocumentUpload] Audio file detected: ${documentName}, transcribing...`);
 
+    // 1. Save the original audio file as a document (marked as processed — nothing more to do)
+    const [audioDocument] = await db
+      .insert(document)
+      .values({
+        url: rawDocumentUrl,
+        title: documentName,
+        mimeType: mimeType ?? null,
+        category: documentCategory,
+        companyId: user.companyId,
+        ocrEnabled: false,
+        ocrProcessed: true,
+      })
+      .returning({
+        id: document.id,
+        url: document.url,
+        title: document.title,
+        category: document.category,
+      });
+
+    if (!audioDocument) {
+      throw new Error("Failed to create audio document record");
+    }
+
+    // 2. Transcribe and create a separate transcript document
     try {
       const transcriptionResult = await transcribeAudioFromUrl(
         resolvedDocumentUrl,
         originalFilename || documentName
       );
 
-      // Upload the transcribed text as a .txt file so the pipeline can process it
       const textBlob = await putFile({
         filename: `${documentName}-transcription.txt`,
         data: Buffer.from(transcriptionResult.text, "utf-8"),
         contentType: "text/plain",
       });
-      finalDocumentUrl = textBlob.url;
 
-      transcriptionMetadata = {
+      const transcriptionMetadata = {
         source: "whisper",
         audioFilename: originalFilename || documentName,
+        audioDocumentId: audioDocument.id,
         audioUrl: resolvedDocumentUrl,
         language: transcriptionResult.language,
         confidence: transcriptionResult.confidence,
         transcribedAt: new Date().toISOString(),
       };
 
-      // Update the document name to indicate it's a transcription
-      finalDocumentName = `${documentName} (Transcription)`;
+      const transcriptName = `${documentName} (Transcription)`;
 
-      // Mark as text for processing
-      finalMimeType = "text/plain";
+      const [transcriptDocument] = await db
+        .insert(document)
+        .values({
+          url: textBlob.url,
+          title: transcriptName,
+          mimeType: "text/plain",
+          category: documentCategory,
+          companyId: user.companyId,
+          ocrEnabled: true,
+          ocrProcessed: false,
+          ocrMetadata: transcriptionMetadata,
+        })
+        .returning({
+          id: document.id,
+          url: document.url,
+          title: document.title,
+          category: document.category,
+        });
 
-      console.log(`[DocumentUpload] Successfully transcribed audio: ${documentName}, text stored at ${textBlob.url}`);
+      if (!transcriptDocument) {
+        throw new Error("Failed to create transcript document record");
+      }
+
+      const { jobId, eventIds } = await triggerDocumentProcessing(
+        textBlob.url,
+        transcriptName,
+        companyIdString,
+        user.userId,
+        transcriptDocument.id,
+        documentCategory,
+        {
+          preferredProvider: parseProvider(preferredProvider),
+          mimeType: "text/plain",
+          originalFilename: `${documentName}-transcription.txt`,
+          transcriptionMetadata,
+        }
+      );
+
+      await db.insert(ocrJobs).values({
+        id: jobId,
+        companyId: user.companyId,
+        userId: user.userId,
+        status: "queued",
+        documentUrl: textBlob.url,
+        documentName: transcriptName,
+      });
+
+      console.log(`[DocumentUpload] Audio + transcript saved: audio docId=${audioDocument.id}, transcript docId=${transcriptDocument.id}`);
+
+      return {
+        jobId,
+        eventIds,
+        storageType,
+        document: audioDocument,
+        resolvedDocumentUrl,
+      };
     } catch (error) {
       console.error(`[DocumentUpload] Audio transcription failed for ${documentName}:`, error);
-      transcriptionMetadata = {
-        source: "whisper",
-        audioFilename: originalFilename || documentName,
-        error: error instanceof Error ? error.message : "Unknown error",
-        failedAt: new Date().toISOString(),
+      // Transcription failed but the audio document is still saved
+      return {
+        jobId: "",
+        eventIds: [],
+        storageType,
+        document: audioDocument,
+        resolvedDocumentUrl,
       };
     }
   }
 
+  // ------------------------------------------------------------------
+  // Normal (non-audio) document processing
+  // ------------------------------------------------------------------
   const [newDocument] = await db
     .insert(document)
     .values({
-      url: finalDocumentUrl,
-      title: finalDocumentName,
-      mimeType: finalMimeType,
+      url: rawDocumentUrl,
+      title: documentName,
+      mimeType: mimeType ?? null,
       category: documentCategory,
       companyId: user.companyId,
       ocrEnabled: true,
       ocrProcessed: false,
-      ocrMetadata: transcriptionMetadata,
     })
     .returning({
       id: document.id,
@@ -160,19 +236,16 @@ export async function processDocumentUpload({
   }
 
   const { jobId, eventIds } = await triggerDocumentProcessing(
-    finalDocumentUrl,
-    finalDocumentName,
+    resolvedDocumentUrl,
+    documentName,
     companyIdString,
     user.userId,
     newDocument.id,
     documentCategory,
     {
       preferredProvider: parseProvider(preferredProvider),
-      mimeType: finalMimeType,
-      originalFilename: finalMimeType === "text/plain" && shouldTranscribeFile(mimeType, originalFilename)
-        ? `${documentName}-transcription.txt`
-        : originalFilename,
-      transcriptionMetadata,
+      mimeType,
+      originalFilename,
     }
   );
 
@@ -181,8 +254,8 @@ export async function processDocumentUpload({
     companyId: user.companyId,
     userId: user.userId,
     status: "queued",
-    documentUrl: finalDocumentUrl,
-    documentName: finalDocumentName,
+    documentUrl: resolvedDocumentUrl,
+    documentName,
   });
 
   return {

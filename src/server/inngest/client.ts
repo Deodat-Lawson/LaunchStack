@@ -1,6 +1,7 @@
 import { EventSchemas, Inngest } from "inngest";
 import type { ProcessDocumentEventData } from "~/lib/ocr/types";
 import type { TrendSearchEventData } from "~/lib/tools/trend-search/types";
+import type { DocumentEdit, ReviewAction } from "~/lib/adeu/types";
 
 export type ProcessDocumentEvent = {
   name: "document/process.requested";
@@ -28,11 +29,23 @@ export type PredictiveAnalysisEvent = {
   };
 };
 
+export type DocumentModifyEvent = {
+  name: "document/modify.requested";
+  data: {
+    documentId: number;
+    documentUrl: string;
+    authorName: string;
+    edits?: DocumentEdit[];
+    actions?: ReviewAction[];
+  };
+};
+
 export type Events =
   | ProcessDocumentEvent
   | TrendSearchEvent
   | CompanyMetadataExtractEvent
-  | PredictiveAnalysisEvent;
+  | PredictiveAnalysisEvent
+  | DocumentModifyEvent;
 
 /**
  * Create the Inngest client.

@@ -4,6 +4,8 @@ import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
 import {
   shouldTranscribeFile,
   transcribeAudioFromUrl,
+  isVideoUrl,
+  transcribeVideoFromUrl,
 } from "~/lib/audio/transcription";
 import { putFile } from "~/server/storage/vercel-blob";
 
@@ -264,5 +266,119 @@ export async function processDocumentUpload({
     storageType,
     document: newDocument,
     resolvedDocumentUrl,
+  };
+}
+
+// ------------------------------------------------------------------
+// Video URL upload — download + transcribe via sidecar, then embed
+// ------------------------------------------------------------------
+
+export interface VideoUrlUploadParams {
+  user: DocumentUploadUserContext;
+  videoUrl: string;
+  requestUrl: string;
+  category: string;
+  title?: string;
+  preferredProvider?: string;
+}
+
+export async function processVideoUrlUpload({
+  user,
+  videoUrl,
+  requestUrl,
+  category,
+  title,
+  preferredProvider,
+}: VideoUrlUploadParams): Promise<DocumentUploadResult> {
+  if (!isVideoUrl(videoUrl)) {
+    throw new Error("Unsupported video URL. Supported platforms include YouTube, Vimeo, TikTok, Twitter/X, and more.");
+  }
+
+  const documentCategory = category;
+  const companyIdString = user.companyId.toString();
+
+  console.log(`[DocumentUpload] Video URL detected: ${videoUrl}, downloading & transcribing...`);
+
+  // 1. Transcribe via sidecar (downloads audio with yt-dlp, then runs Whisper)
+  const transcriptionResult = await transcribeVideoFromUrl(videoUrl);
+
+  const documentName = title || transcriptionResult.title || "Video Transcription";
+
+  // 2. Store the transcript as a text file in blob storage
+  const textBlob = await putFile({
+    filename: `${documentName}-transcription.txt`,
+    data: Buffer.from(transcriptionResult.text, "utf-8"),
+    contentType: "text/plain",
+  });
+
+  const transcriptionMetadata = {
+    source: "whisper-ytdlp",
+    videoTitle: transcriptionResult.title,
+    videoDuration: transcriptionResult.duration,
+    videoUrl,
+    language: transcriptionResult.language,
+    confidence: transcriptionResult.confidence,
+    transcribedAt: new Date().toISOString(),
+  };
+
+  const transcriptName = `${documentName} (Transcription)`;
+
+  // 3. Create the transcript document record
+  const [transcriptDocument] = await db
+    .insert(document)
+    .values({
+      url: textBlob.url,
+      title: transcriptName,
+      mimeType: "text/plain",
+      category: documentCategory,
+      companyId: user.companyId,
+      ocrEnabled: true,
+      ocrProcessed: false,
+      ocrMetadata: transcriptionMetadata,
+    })
+    .returning({
+      id: document.id,
+      url: document.url,
+      title: document.title,
+      category: document.category,
+    });
+
+  if (!transcriptDocument) {
+    throw new Error("Failed to create transcript document record");
+  }
+
+  // 4. Trigger embedding pipeline
+  const { jobId, eventIds } = await triggerDocumentProcessing(
+    textBlob.url,
+    transcriptName,
+    companyIdString,
+    user.userId,
+    transcriptDocument.id,
+    documentCategory,
+    {
+      preferredProvider: parseProvider(preferredProvider),
+      mimeType: "text/plain",
+      originalFilename: `${documentName}-transcription.txt`,
+      transcriptionMetadata,
+    }
+  );
+
+  await db.insert(ocrJobs).values({
+    id: jobId,
+    companyId: user.companyId,
+    userId: user.userId,
+    status: "queued",
+    documentUrl: textBlob.url,
+    documentName: transcriptName,
+  });
+
+  console.log(`[DocumentUpload] Video transcript saved: docId=${transcriptDocument.id}, title="${documentName}"`);
+
+  return {
+    jobId,
+    eventIds,
+    storageType: "cloud",
+    document: transcriptDocument,
+    resolvedDocumentUrl: textBlob.url,
   };
 }

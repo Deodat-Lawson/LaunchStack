@@ -78,6 +78,8 @@ const config: NextConfig = {
   // Exclude heavy packages from serverless bundle to reduce size (Next.js 15+)
   // These packages are loaded from node_modules at runtime instead
   serverExternalPackages: [
+    "@aws-sdk/client-s3",
+    "@aws-sdk/s3-request-presigner",
     "@huggingface/transformers",
     "pdf2pic",
     "pdfjs-serverless",

@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Legal document flow (intended pipeline):
+ * 1. Home — pick a template from the library, or open the legal assistant (chat).
+ * 2. Chat (optional) — assistant recommends a template and collects field values.
+ * 3. Template form — LegalDocumentConfig + TEMPLATE_REGISTRY validation (always after chat).
+ * 4. Document — save + LegalDocumentEditor (highlighted fields, docx, etc.).
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { DocumentGeneratorHome, type DocumentTemplate } from './DocumentGeneratorHome';
 import { LegalDocumentConfig } from './LegalDocumentConfig';
@@ -105,6 +113,10 @@ export function DocumentGenerator() {
   const [legalFieldErrors, setLegalFieldErrors] = useState<Record<string, string>>({});
   const [chatInitialMessage, setChatInitialMessage] = useState<string | undefined>(undefined);
   const [prefilledData, setPrefilledData] = useState<Record<string, string> | undefined>(undefined);
+  /** Remount LegalDocumentConfig when template/prefill changes; bump when entering config. */
+  const [legalConfigNonce, setLegalConfigNonce] = useState(0);
+  /** Whether the field form was opened from chat (back returns to assistant) vs template library. */
+  const [configSource, setConfigSource] = useState<'home' | 'chat' | null>(null);
 
   const fetchDocuments = useCallback(async () => {
     try {
@@ -160,6 +172,9 @@ export function DocumentGenerator() {
   const handleNewDocument = (template: DocumentTemplate) => {
     setError(null);
     setLegalFieldErrors({});
+    setPrefilledData(undefined);
+    setConfigSource('home');
+    setLegalConfigNonce((n) => n + 1);
     setSelectedTemplate(template);
     setCurrentView('config');
   };
@@ -170,25 +185,15 @@ export function DocumentGenerator() {
     setCurrentView('chat');
   };
 
-  const handleChatGenerate = (templateId: string, data: Record<string, string>) => {
-    const registryTemplate = TEMPLATE_REGISTRY[templateId];
-    if (!registryTemplate) return;
-
-    // Build a DocumentTemplate to reuse the existing generate flow
-    const template: DocumentTemplate = {
-      id: registryTemplate.id,
-      name: registryTemplate.name,
-      category: 'Legal',
-      description: registryTemplate.description,
-      preview: '',
-      isLegal: true,
-      fields: registryTemplate.fields,
-    };
-    setSelectedTemplate(template);
-    void handleLegalGenerate(data, template);
-  };
-
-  const handleChatReviewFields = (templateId: string, prefilled: Record<string, string>) => {
+  /**
+   * After the chat assistant collects data, always continue to the template field form
+   * so TEMPLATE_REGISTRY validation and required-field UX run before we call legal-generate
+   * and open the document editor.
+   */
+  const handleChatProceedToTemplateForm = (
+    templateId: string,
+    prefilled: Record<string, string>,
+  ) => {
     const registryTemplate = TEMPLATE_REGISTRY[templateId];
     if (!registryTemplate) return;
 
@@ -204,6 +209,9 @@ export function DocumentGenerator() {
     setSelectedTemplate(template);
     setPrefilledData(prefilled);
     setLegalFieldErrors({});
+    setError(null);
+    setConfigSource('chat');
+    setLegalConfigNonce((n) => n + 1);
     setCurrentView('config');
   };
 
@@ -293,6 +301,8 @@ export function DocumentGenerator() {
 
         setCurrentDocument(newDoc);
         setGeneratedDocuments((prev) => [newDoc, ...prev]);
+        setPrefilledData(undefined);
+        setConfigSource(null);
         setCurrentView('editor');
       } else {
         setError(data.message ?? 'Failed to save legal document');
@@ -428,6 +438,16 @@ export function DocumentGenerator() {
     setPrefilledData(undefined);
     setChatInitialMessage(undefined);
     setError(null);
+    setConfigSource(null);
+  };
+
+  const handleLegalConfigBack = () => {
+    if (configSource === 'chat') {
+      setCurrentView('chat');
+      setConfigSource(null);
+      return;
+    }
+    handleBackToHome();
   };
 
   if (isLoading) {
@@ -506,8 +526,7 @@ export function DocumentGenerator() {
       <div className="h-full">
         <LegalChatbot
           onBack={handleBackToHome}
-          onGenerate={handleChatGenerate}
-          onReviewFields={handleChatReviewFields}
+          onContinueToTemplateForm={handleChatProceedToTemplateForm}
           initialMessage={chatInitialMessage}
         />
       </div>
@@ -519,13 +538,22 @@ export function DocumentGenerator() {
       return (
         <div className="h-full">
           <LegalDocumentConfig
+            key={`${selectedTemplate.id}-${legalConfigNonce}`}
             template={selectedTemplate as DocumentTemplate & { isLegal: true; fields: TemplateField[] }}
-            onBack={handleBackToHome}
+            onBack={handleLegalConfigBack}
             onGenerate={(data) => void handleLegalGenerate(data)}
             isGenerating={isSaving}
             serverErrors={legalFieldErrors}
             globalError={error}
             initialData={prefilledData}
+            backButtonLabel={
+              configSource === 'chat' ? 'Back to assistant' : 'Back to templates'
+            }
+            flowHint={
+              configSource === 'chat'
+                ? 'Assistant pre-filled these fields. Review required items, then generate — your document opens next for editing and export.'
+                : undefined
+            }
           />
         </div>
       );

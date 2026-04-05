@@ -22,7 +22,7 @@ const MessageSchema = z.object({
 
 const LegalChatSchema = z.object({
   messages: z.array(MessageSchema).min(1),
-  accumulatedFields: z.record(z.string()).optional(),
+  accumulatedFields: z.record(z.coerce.string()).optional(),
 });
 
 // ─── Template summary for the LLM ─────────────────────────────────────────────

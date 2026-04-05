@@ -26,6 +26,8 @@ const serverSchema = z.object({
   DATALAB_API_KEY: optionalString(),
   // Web search providers
   TAVILY_API_KEY: optionalString(),
+  // Foursquare Places API (for Client Prospector)
+  FOURSQUARE_SERVICE_KEY: optionalString(),
   SERPER_API_KEY: optionalString(),
   SEARCH_PROVIDER: z
     .enum(["tavily", "serper", "fallback", "parallel"])
@@ -141,6 +143,7 @@ function parseServerEnv() {
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+    FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
     SERPER_API_KEY: process.env.SERPER_API_KEY,
     SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as "tavily" | "serper" | "fallback" | "parallel" | undefined,
     REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,

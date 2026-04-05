@@ -56,11 +56,6 @@ interface ChatMessage {
   content: string;
   parsed?: ChatResponse;
   isError?: boolean;
-  isSelectPrompt?: {
-    fieldKey: string;
-    fieldLabel: string;
-    options: string[];
-  };
 }
 
 interface LegalChatbotProps {
@@ -86,33 +81,6 @@ function carryOverFields(
     }
   }
   return carried;
-}
-
-// ─── Detect select fields the LLM is asking about ─────────────────────────────
-
-function detectSelectFieldPrompt(
-  message: string,
-  templateId: string | null,
-  alreadyFilled: Record<string, string>
-): ChatMessage["isSelectPrompt"] | undefined {
-  if (!templateId) return undefined;
-  const template = TEMPLATE_REGISTRY[templateId];
-  if (!template) return undefined;
-
-  const selectFields = template.fields.filter((f) => f.type === "select" && f.options);
-  for (const field of selectFields) {
-    // Skip fields that are already filled
-    if (alreadyFilled[field.key]) continue;
-    // Check if the message mentions this field's label
-    if (message.toLowerCase().includes(field.label.toLowerCase())) {
-      return {
-        fieldKey: field.key,
-        fieldLabel: field.label,
-        options: field.options!,
-      };
-    }
-  }
-  return undefined;
 }
 
 // ─── Expandable Field List ─────────────────────────────────────────────────────
@@ -299,42 +267,6 @@ function TemplateConfirmCard({
   );
 }
 
-// ─── Inline Select Buttons ─────────────────────────────────────────────────────
-
-function SelectButtons({
-  fieldKey,
-  fieldLabel,
-  options,
-  onSelect,
-}: {
-  fieldKey: string;
-  fieldLabel: string;
-  options: string[];
-  onSelect: (fieldLabel: string, fieldKey: string, value: string) => void;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <p className="text-xs font-medium text-muted-foreground">{fieldLabel}:</p>
-      <div className="flex flex-wrap gap-1.5">
-        {options.map((opt) => (
-          <button
-            key={opt}
-            onClick={() => onSelect(fieldLabel, fieldKey, opt)}
-            className={cn(
-              "px-3 py-1.5 rounded-lg text-xs border border-border",
-              "bg-card text-foreground",
-              "hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/30",
-              "transition-colors cursor-pointer"
-            )}
-          >
-            {opt.replace(/_/g, " ")}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ─── No Match Card ─────────────────────────────────────────────────────────────
 
 function NoMatchCard({ onStartOver }: { onStartOver: () => void }) {
@@ -503,7 +435,7 @@ function FieldsSidebar({
                 )}
                 {isFilled && (
                   <p className="text-muted-foreground truncate mt-0.5">
-                    {value!.replace(/_/g, " ")}
+                    {String(value).replace(/_/g, " ")}
                   </p>
                 )}
               </div>
@@ -604,13 +536,10 @@ export function LegalChatbot({
           }
 
           // Detect if the LLM is asking about a select field
-          const selectPrompt = detectSelectFieldPrompt(parsed.message, parsed.selectedTemplateId, accumulatedFields);
-
           const assistantMessage: ChatMessage = {
             role: "assistant",
             content: parsed.message,
             parsed,
-            isSelectPrompt: selectPrompt,
           };
           setMessages((prev) => [...prev, assistantMessage]);
           setCurrentResponse(parsed);
@@ -740,11 +669,6 @@ export function LegalChatbot({
     }
   };
 
-  const handleSelectOption = (fieldLabel: string, fieldKey: string, value: string) => {
-    // Directly set the field value client-side so we don't depend on LLM parsing
-    setAccumulatedFields((prev) => ({ ...prev, [fieldKey]: value }));
-    void sendMessage(`${fieldLabel}: ${value}`);
-  };
 
   const handleGenerate = () => {
     if (!currentResponse?.selectedTemplateId) return;
@@ -914,15 +838,7 @@ export function LegalChatbot({
                     </div>
                   )}
 
-                  {/* Inline select buttons */}
-                  {msg.isSelectPrompt && !msg.isError && (
-                    <SelectButtons
-                      fieldKey={msg.isSelectPrompt.fieldKey}
-                      fieldLabel={msg.isSelectPrompt.fieldLabel}
-                      options={msg.isSelectPrompt.options}
-                      onSelect={handleSelectOption}
-                    />
-                  )}
+
 
                   {/* Template recommendations */}
                   {msg.parsed?.phase === "recommending" &&

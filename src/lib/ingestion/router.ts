@@ -13,7 +13,7 @@ import {
   type StandardizedDocument,
 } from "./types";
 import type { NormalizedDocument } from "~/lib/ocr/types";
-import { fetchBlob } from "~/server/storage/vercel-blob";
+import { fetchFile } from "~/lib/storage";
 
 export interface IngestOptions extends SourceAdapterOptions {
   mimeType?: string;
@@ -63,8 +63,8 @@ export async function ingestDocument(
 
   let resolvedInput: string | Buffer = input;
   if (typeof input === "string" && (input.startsWith("http://") || input.startsWith("https://"))) {
-    console.log(`[IngestionRouter] Pre-fetching URL via fetchBlob`);
-    const res = await fetchBlob(input);
+    console.log(`[IngestionRouter] Pre-fetching URL via fetchFile`);
+    const res = await fetchFile(input);
     if (!res.ok) {
       throw new Error(`[IngestionRouter] Failed to fetch document: ${res.status} ${res.statusText}`);
     }

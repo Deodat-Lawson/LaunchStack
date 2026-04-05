@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { MarketingPipelineInputSchema, runMarketingPipeline } from "~/lib/tools/marketing-pipeline";
+import type { PipelineSSEEvent } from "~/lib/tools/marketing-pipeline";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -60,38 +61,67 @@ export async function POST(request: Request) {
             );
         }
 
-        const result = await runMarketingPipeline({
-            companyId,
-            input: validation.data,
+        const url = new URL(request.url);
+        const debug = url.searchParams.get("debug") === "true";
+
+        const encoder = new TextEncoder();
+        const stream = new ReadableStream({
+            async start(controller) {
+                function send(event: PipelineSSEEvent) {
+                    controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+                }
+
+                try {
+                    const result = await runMarketingPipeline({
+                        companyId,
+                        input: validation.data,
+                        debug,
+                        onProgress: (progressEvent) => send(progressEvent),
+                    });
+
+                    send({ type: "result", success: true, data: result });
+                } catch (error) {
+                    const errMessage = error instanceof Error ? error.message : String(error);
+                    console.error("[marketing-pipeline] POST error:", error);
+
+                    const hint =
+                        !process.env.OPENAI_API_KEY && errMessage.toLowerCase().includes("openai")
+                            ? " (Ensure OPENAI_API_KEY is set in .env)"
+                            : errMessage.toLowerCase().includes("company")
+                              ? " (Ensure your user has a valid company profile)"
+                              : "";
+
+                    send({
+                        type: "error",
+                        success: false,
+                        message: "Failed to run marketing pipeline",
+                        error: errMessage + hint,
+                    });
+                } finally {
+                    controller.close();
+                }
+            },
         });
 
-        return NextResponse.json(
-            {
-                success: true,
-                data: result,
+        return new Response(stream, {
+            headers: {
+                "Content-Type": "text/event-stream",
+                "Cache-Control": "no-cache, no-transform",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
             },
-            { status: 200 },
-        );
+        });
     } catch (error) {
         const errMessage = error instanceof Error ? error.message : String(error);
         console.error("[marketing-pipeline] POST error:", error);
-
-        // Surface common setup errors for easier debugging
-        const hint =
-            !process.env.OPENAI_API_KEY && errMessage.toLowerCase().includes("openai")
-                ? " (Ensure OPENAI_API_KEY is set in .env)"
-                : errMessage.toLowerCase().includes("company")
-                  ? " (Ensure your user has a valid company profile)"
-                  : "";
 
         return NextResponse.json(
             {
                 success: false,
                 message: "Failed to run marketing pipeline",
-                error: errMessage + hint,
+                error: errMessage,
             },
             { status: 500, headers: { "Content-Type": "application/json" } },
         );
     }
 }
-

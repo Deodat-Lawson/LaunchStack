@@ -120,10 +120,25 @@ export const MessagingStrategySchema = z.object({
 export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
 export type MarketingPlatform = z.infer<typeof MarketingPlatformEnum>;
 
+export const PlatformMetaSchema = z.object({
+    subreddit: z.string().max(100).optional(),
+    hashtags: z.array(z.string().max(50)).max(5).optional(),
+}).optional();
+
+export const FormalityLevelEnum = z.enum(["formal", "conversational", "technical", "bold"]);
+export type FormalityLevel = z.infer<typeof FormalityLevelEnum>;
+
+export const ContentTypeEnum = z.enum(["post", "thread", "ad_copy", "email", "multi_platform"]);
+export type ContentType = z.infer<typeof ContentTypeEnum>;
+
 export const MarketingPipelineInputSchema = z.object({
     platform: MarketingPlatformEnum,
     prompt: z.string().min(1).max(2000).optional(),
     maxResearchResults: z.number().int().min(1).max(12).optional(),
+    platformMeta: PlatformMetaSchema,
+    toneOverride: FormalityLevelEnum.optional(),
+    targetAudience: z.string().max(200).optional(),
+    contentType: ContentTypeEnum.optional(),
 });
 export type MarketingPipelineInput = z.infer<typeof MarketingPipelineInputSchema>;
 
@@ -141,6 +156,13 @@ export const MarketingPipelineOutputSchema = z.object({
 });
 export type MarketingPipelineOutput = z.infer<typeof MarketingPipelineOutputSchema>;
 
+/** Debug info about the DNA extraction source, included when ?debug=true. */
+export interface DNADebugInfo {
+    source: "metadata" | "rag";
+    contextUsed: string;
+    dna: CompanyDNA;
+}
+
 export interface MarketingPipelineResult extends MarketingPipelineOutput {
     research: MarketingResearchResult[];
     normalizedInput: {
@@ -151,5 +173,122 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
     competitiveAngle?: string;
     /** Optional summary of strategy (angle + proof + hook) for transparency. */
     strategyUsed?: MessagingStrategy;
+    /** Debug info about DNA extraction, included when debug mode is on. */
+    dnaDebug?: DNADebugInfo;
+    /** All generated content variants (multi-variant generation). */
+    variants?: ContentVariant[];
+    /** All intermediate pipeline stages for transparency. */
+    pipelineStages?: PipelineStages;
+    /** Claim sources mapped back to KB documents. */
+    claimSources?: ClaimSource[];
 }
+
+/* ──────────────────────────────────────────────────────────────
+ * Brand voice, persona, content types, multi-variant types
+ * ────────────────────────────────────────────────────────────── */
+
+export const BrandVoiceSchema = z.object({
+    toneDescriptor: z.string(),
+    vocabularyExamples: z.array(z.string()),
+    sentenceStyle: z.string(),
+    formalityLevel: FormalityLevelEnum,
+});
+export type BrandVoice = z.infer<typeof BrandVoiceSchema>;
+
+export const TargetPersonaSchema = z.object({
+    role: z.string(),
+    painPoints: z.array(z.string()),
+    priorities: z.array(z.string()),
+    languageStyle: z.string(),
+});
+export type TargetPersona = z.infer<typeof TargetPersonaSchema>;
+
+export const StrategyVariantSchema = z.object({
+    variantId: z.string(),
+    angleRationale: z.string(),
+    angle: z.string(),
+    keyProof: z.array(z.string()),
+    humanHook: z.string(),
+    avoidList: z.array(z.string()),
+});
+export type StrategyVariant = z.infer<typeof StrategyVariantSchema>;
+
+export const MultiStrategySchema = z.object({
+    variants: z.array(StrategyVariantSchema).min(1).max(3),
+});
+
+export interface ContentVariant {
+    variantId: string;
+    angleRationale: string;
+    message: string;
+    mediaType: "image" | "video";
+}
+
+export interface ClaimSource {
+    claim: string;
+    sourceDoc: string;
+    chunk: string;
+    confidence: number;
+}
+
+export interface PipelineStages {
+    dna: CompanyDNA;
+    competitors: CompetitorAnalysis;
+    trends: MarketingResearchResult[];
+    strategies: StrategyVariant[];
+    brandVoice?: BrandVoice;
+    targetPersona?: TargetPersona;
+    performanceInsights?: string[];
+}
+
+export interface RefinementResult {
+    variantId: string;
+    message: string;
+    mediaType: "image" | "video";
+    feedbackApplied: string;
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Pipeline progress / SSE streaming types
+ * ────────────────────────────────────────────────────────────── */
+
+export type PipelineStepId =
+    | "loading-context"
+    | "extracting-dna"
+    | "analyzing-competitors"
+    | "researching-trends"
+    | "extracting-voice"
+    | "extracting-persona"
+    | "checking-performance"
+    | "building-strategy"
+    | "generating-content"
+    | "verifying-claims";
+
+export const PIPELINE_STEPS: ReadonlyArray<{ id: PipelineStepId; label: string }> = [
+    { id: "loading-context", label: "Loading company knowledge" },
+    { id: "extracting-dna", label: "Extracting company DNA" },
+    { id: "analyzing-competitors", label: "Analyzing competitors" },
+    { id: "researching-trends", label: "Researching platform trends" },
+    { id: "extracting-voice", label: "Detecting brand voice" },
+    { id: "extracting-persona", label: "Building target persona" },
+    { id: "checking-performance", label: "Checking performance history" },
+    { id: "building-strategy", label: "Building messaging strategies" },
+    { id: "generating-content", label: "Generating content variants" },
+    { id: "verifying-claims", label: "Verifying claim sources" },
+];
+
+export type PipelineSSEEvent =
+    | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
+    | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string; status?: "completed" | "skipped" | "failed" }
+    | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
+    | { type: "step_thinking"; step: PipelineStepId; text: string }
+    | { type: "result"; success: true; data: MarketingPipelineResult }
+    | { type: "error"; success: false; message: string; error?: string };
+
+export type OnPipelineProgress = (event:
+    | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
+    | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string; status?: "completed" | "skipped" | "failed" }
+    | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
+    | { type: "step_thinking"; step: PipelineStepId; text: string }
+) => void;
 

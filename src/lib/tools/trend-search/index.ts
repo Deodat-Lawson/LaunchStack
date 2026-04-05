@@ -8,6 +8,7 @@
 export { runTrendSearch } from "~/lib/tools/trend-search/run";
 export type { RunTrendSearchOptions, TrendSearchPipelineStage } from "~/lib/tools/trend-search/run";
 export type {
+    PlannedQuery,
     TrendSearchInput,
     TrendSearchOutput,
     SearchResult,

@@ -1,7 +1,7 @@
 import type { OCRProvider } from "~/lib/ocr/types";
 import type { ClassificationResult } from "@huggingface/transformers";
 import { PDFDocument } from "pdf-lib";
-import { fetchBlob } from "~/server/storage/vercel-blob";
+import { fetchFile } from "~/lib/storage";
 
 const SAMPLING_CONFIG = {
     MIN_PAGES_TO_SAMPLE: 3,
@@ -132,7 +132,7 @@ function getDefaultOCRProvider(): OCRProvider {
 }
 
 export async function determineDocumentRouting(documentUrl: string): Promise<RoutingDecision> {
-  const response = await fetchBlob(documentUrl);
+  const response = await fetchFile(documentUrl);
   const buffer = await response.arrayBuffer();
 
   let pageCount = 0;

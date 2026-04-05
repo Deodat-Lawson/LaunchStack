@@ -74,8 +74,8 @@ export async function planQueries(
     // Initialize the OpenAI chat model
     const chat = new ChatOpenAI({
         openAIApiKey: process.env.OPENAI_API_KEY,
-        modelName: "gpt-4o-mini",
-        temperature: 0.2,
+        modelName: "gpt-5-nano",
+        temperature: 1, // gpt-5-nano only supports default (1), not 0.2
     });
 
     const structuredModel = chat.withStructuredOutput(QueryPlannerOutputSchema, {

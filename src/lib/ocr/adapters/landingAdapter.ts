@@ -13,7 +13,7 @@ import type {
   PageContent,
   OCRProvider,
 } from "../types";
-import { fetchBlob } from "~/server/storage/vercel-blob";
+import { fetchFile } from "~/lib/storage";
 
 /** ADE Parse API base URL (use api.va.eu-west-1.landing.ai for EU) */
 const ADE_BASE_URL = "https://api.va.landing.ai";
@@ -78,7 +78,7 @@ export class LandingAIAdapter implements OCRAdapter {
 
     // Fetch document server-side and send as binary. Landing AI's servers cannot reach
     // localhost or private URLs (e.g. /api/files/7), so we must upload the file ourselves.
-    const docResponse = await fetchBlob(documentUrl);
+    const docResponse = await fetchFile(documentUrl);
     if (!docResponse.ok) {
       throw new Error(
         `Failed to fetch document from ${documentUrl}: ${docResponse.status} ${docResponse.statusText}`

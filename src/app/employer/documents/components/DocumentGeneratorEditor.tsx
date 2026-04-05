@@ -16,6 +16,7 @@ import {
   Send,
   Loader2,
   CheckCircle,
+  Download,
 } from 'lucide-react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "~/app/employer/documents/components/ui/resizable";
 import { Button } from "~/app/employer/documents/components/ui/button";
@@ -91,6 +92,7 @@ interface DocumentGeneratorEditorProps {
   onBack: () => void;
   onSave: (title: string, content: string, citations?: Citation[]) => void;
   mode?: 'full' | 'rewrite';
+  docxBase64?: string;
 }
 
 export function DocumentGeneratorEditor({ 
@@ -101,6 +103,7 @@ export function DocumentGeneratorEditor({
   onBack, 
   onSave,
   mode = 'full',
+  docxBase64,
 }: DocumentGeneratorEditorProps) {
   const isRewriteMode = mode === 'rewrite';
   const componentId = useId();
@@ -398,7 +401,14 @@ export function DocumentGeneratorEditor({
         }),
       });
 
-      const data = (await response.json()) as { success: boolean; generatedContent?: string };
+      const rawText = await response.text();
+      let data: { success: boolean; generatedContent?: string; message?: string; error?: string };
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        setAiError(rawText?.slice(0, 120) || "Server returned an invalid response. Please try again.");
+        return;
+      }
 
       if (data.success && data.generatedContent) {
         const generatedContent = data.generatedContent;
@@ -511,7 +521,14 @@ export function DocumentGeneratorEditor({
           options: { tone: "professional", length: "medium" },
         }),
       });
-      const data = (await response.json()) as { success: boolean; generatedContent?: string };
+      const rawText = await response.text();
+      let data: { success: boolean; generatedContent?: string };
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        setAiError(rawText?.slice(0, 120) || "Server returned an invalid response. Please try again.");
+        return;
+      }
       if (data.success && data.generatedContent) {
         setRewritePreview((p) => (p ? { ...p, proposedText: stripRewriteQuotes(data.generatedContent!) } : null));
       }
@@ -714,6 +731,35 @@ export function DocumentGeneratorEditor({
                       <CheckCircle className="w-3 h-3 text-green-500" />
                       Saved {lastSaved.toLocaleTimeString()}
                     </span>
+                  )}
+                  {docxBase64 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        const byteCharacters = atob(docxBase64);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                          byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const blob = new Blob([byteArray], {
+                          type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${title || 'document'}.docx`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                      }}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download DOCX
+                    </Button>
                   )}
                   <Button 
                     variant="ghost" 

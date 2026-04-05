@@ -28,10 +28,13 @@ import {
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModel,
+    getChatModelForProvider,
+    getProviderDefaultModel,
+    describeProviderError,
 } from "../services";
 import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
-import type { AIModelType } from "../services";
+import type { AIModelType, LLMProvider } from "../services";
+import { LLMProviders, isModelAllowedForProvider } from "../services/types";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "~/server/db/schema";
 
@@ -47,6 +50,7 @@ interface RLMQueryRequest {
     // Standard options
     style?: keyof typeof SYSTEM_PROMPTS;
     aiModel?: AIModelType;
+    provider: LLMProvider;
     enableWebSearch?: boolean;
     aiPersona?: string;
     conversationHistory?: string | undefined;
@@ -75,6 +79,18 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
 
     if (typeof req.question !== "string" || req.question.trim().length === 0) {
         return { success: false, error: "question is required and must be a non-empty string" };
+    }
+
+    // Normalize provider
+    const providerInput = typeof req.provider === "string" ? (req.provider.trim() || undefined) : undefined;
+    const providerCandidate = (providerInput ?? "openai") as string;
+    if (!LLMProviders.includes(providerCandidate as LLMProvider)) {
+        return { success: false, error: `provider must be one of: ${LLMProviders.join(", ")}` };
+    }
+    const providerValue = providerCandidate as LLMProvider;
+
+    if (req.aiModel && !isModelAllowedForProvider(providerValue, req.aiModel as string)) {
+        return { success: false, error: `Model ${req.aiModel as string} is not available for provider ${providerValue}` };
     }
 
     // Validate maxTokens if provided
@@ -106,6 +122,7 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
             question: req.question,
             style: req.style as keyof typeof SYSTEM_PROMPTS | undefined,
             aiModel: req.aiModel as AIModelType | undefined,
+            provider: providerValue,
             enableWebSearch: req.enableWebSearch as boolean | undefined,
             aiPersona: req.aiPersona as string | undefined,
             conversationHistory: req.conversationHistory as string | undefined,
@@ -145,6 +162,7 @@ export async function POST(request: Request) {
                 question,
                 style,
                 aiModel,
+                provider,
                 enableWebSearch,
                 aiPersona,
                 conversationHistory,
@@ -233,8 +251,12 @@ export async function POST(request: Request) {
             );
 
             // Get AI model and generate response
-            const selectedAiModel = (aiModel ?? "gpt4") as AIModelType;
-            const chat = getChatModel(selectedAiModel);
+            const resolvedProvider = provider;
+            const selectedAiModel = aiModel ?? getProviderDefaultModel(resolvedProvider);
+            const chat = getChatModelForProvider({
+                provider: resolvedProvider,
+                model: selectedAiModel,
+            });
             const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
 
             // Build conversation context
@@ -268,10 +290,25 @@ ${searchResult.combinedContent}${webSearch.content}${webSearchInstruction}
 
 Provide a comprehensive answer based on the provided content. When referencing specific sections, mention the page number if available. When using information from web sources, cite them using [Source X] format.`;
 
-            const response = await chat.call([
-                new SystemMessage(systemPrompt),
-                new HumanMessage(userPrompt),
-            ]);
+            let response;
+            try {
+                response = await chat.call([
+                    new SystemMessage(systemPrompt),
+                    new HumanMessage(userPrompt),
+                ]);
+            } catch (modelError) {
+                const friendly = describeProviderError(resolvedProvider, modelError, selectedAiModel);
+                if (friendly) {
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            message: friendly.message,
+                        },
+                        { status: friendly.status },
+                    );
+                }
+                throw modelError;
+            }
 
             const summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;

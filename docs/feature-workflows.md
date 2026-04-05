@@ -1,10 +1,10 @@
 # Feature Workflows and Architecture
 
-This document explains how major PDR AI features connect end to end.
+This document explains how major Launchstack features connect end to end.
 
 ## End-to-end workflow
 
-PDR AI follows this loop:
+Launchstack follows this loop:
 
 1. Authenticate user with role context (Employer/Employee)
 2. Upload document (cloud or database storage)

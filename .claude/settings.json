@@ -3,6 +3,20 @@
     "allow": [
       "Bash(npx jest __tests__/api/clientProspector/ --verbose)",
       "Bash(npx jest __tests__/api/clientProspector/ -t \"Property 11\" --verbose)"
+      "Bash(docker info:*)",
+      "Bash(docker compose:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm db:push)",
+      "Bash(pkill -f 'drizzle-kit push')",
+      "Bash(pkill -f \"drizzle-kit\")",
+      "Bash(npx drizzle-kit:*)",
+      "Bash(pnpm run:*)",
+      "Bash(npx jest:*)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(grep -r export.*delb /Users/kaaneroltu/Desktop/LaunchStack/node_modules/@vercel/blob/dist/index.js)",
+      "Bash(node -e \"const b = require\\(''@vercel/blob''\\); console.log\\(Object.keys\\(b\\).filter\\(k => k.includes\\(''del''\\) || k.includes\\(''Del''\\) || k.includes\\(''remove''\\)\\)\\)\")",
+      "Bash(npx tsx -e \":*)",
+      "Bash(npx tsx -r dotenv/config -e \":*)"
     ]
   }
 }

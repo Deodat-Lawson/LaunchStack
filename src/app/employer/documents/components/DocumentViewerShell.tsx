@@ -29,9 +29,11 @@ import { toast } from "sonner";
 import type { ImperativePanelHandle } from "react-resizable-panels";
 
 import { RESPONSE_STYLES, type ResponseStyleId } from "~/lib/ai/styles";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
+import type { AIModelType, LLMProvider } from "~/app/api/agents/documentQ&A/services/types";
+import { ProviderModelMap, ProviderDefaultModels } from "~/app/api/agents/documentQ&A/services/types";
 
 type AIModelAvailability = Record<AIModelType, boolean>;
+type ProviderAvailability = Record<LLMProvider, boolean>;
 
 const ChatPanel = dynamic(
   () => import("./ChatPanel").then((module) => module.ChatPanel),
@@ -145,8 +147,17 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const { createChat, getChat } = useAIChatbot();
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [aiPersona, setAiPersona] = useState<string>('general');
-  const [aiModel, setAiModel] = useState<AIModelType>("gpt-5.2");
+  const [provider, setProvider] = useState<LLMProvider>("openai");
+  const [aiModel, setAiModel] = useState<AIModelType>(ProviderDefaultModels.openai);
   const [modelAvailability, setModelAvailability] = useState<Partial<AIModelAvailability>>({});
+  const [providerAvailability, setProviderAvailability] = useState<Partial<ProviderAvailability>>({});
+
+  useEffect(() => {
+    const allowedModels = ProviderModelMap[provider];
+    if (allowedModels && !allowedModels.includes(aiModel)) {
+      setAiModel(ProviderDefaultModels[provider]);
+    }
+  }, [provider, aiModel]);
 
   // Handle chat selection and auto-document binding
   useEffect(() => {
@@ -285,6 +296,20 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   }, [isRoleLoading, documents]);
 
   useEffect(() => {
+    if (isRoleLoading || userRole !== "employer") return;
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedView = params.get("view");
+    if (requestedView === "rewrite") {
+      setViewMode("rewrite");
+      params.delete("view");
+      const next = params.toString();
+      const newUrl = next ? `${window.location.pathname}?${next}` : window.location.pathname;
+      window.history.replaceState({}, "", newUrl);
+    }
+  }, [isRoleLoading, userRole]);
+
+  useEffect(() => {
     if (!userId || isRoleLoading) return;
     void fetchDocuments();
   }, [userId, isRoleLoading, fetchDocuments]);
@@ -311,10 +336,14 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         const response = await fetch("/api/config/ai-models");
         if (!response.ok) return;
         const data = (await response.json()) as {
+          providers?: Partial<Record<LLMProvider, boolean>>;
           models?: Partial<Record<AIModelType, boolean>>;
         };
         if (data.models) {
           setModelAvailability(data.models);
+        }
+        if (data.providers) {
+          setProviderAvailability(data.providers);
         }
       } catch (error) {
         console.error("Error fetching AI model availability:", error);
@@ -443,7 +472,8 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setReferencePages([]);
 
     const currentQuestion = aiQuestion;
-    const modelUsedForQuery = aiModel;
+    const modelUsedForQuery = aiModel; // Capture the model at query time
+    const providerUsedForQuery = provider;
     setAiQuestion("");
 
     try {
@@ -452,6 +482,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         searchScope,
         style: aiStyle as ResponseStyleId,
         aiModel: modelUsedForQuery,
+        provider: providerUsedForQuery,
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
         companyId: (searchScope === "company" || searchScope === "archive") ? resolvedCompanyId ?? undefined : undefined,
         archiveName: searchScope === "archive" && selectedDoc?.sourceArchiveName ? selectedDoc.sourceArchiveName : undefined,
@@ -639,10 +670,13 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                       setSearchScope={handleSearchScopeChange}
                       aiStyle={aiStyle}
                       setAiStyle={setAiStyle}
+                      provider={provider}
+                      setProvider={setProvider}
                       aiModel={aiModel}
                       setAiModel={setAiModel}
                       aiAnswerModel={aiAnswerModel}
                       modelAvailability={modelAvailability}
+                      providerAvailability={providerAvailability}
                       styleOptions={STYLE_OPTIONS}
                       referencePages={referencePages}
                       setPdfPageNumber={setPdfPageNumber}
@@ -662,9 +696,12 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                               setAiStyle={setAiStyle}
                               aiPersona={aiPersona}
                               setAiPersona={setAiPersona}
+                              provider={provider}
+                              setProvider={setProvider}
                               aiModel={aiModel}
                               setAiModel={setAiModel}
                               modelAvailability={modelAvailability}
+                              providerAvailability={providerAvailability}
                               searchScope={searchScope}
                               setSearchScope={handleSearchScopeChange}
                               companyId={companyId}

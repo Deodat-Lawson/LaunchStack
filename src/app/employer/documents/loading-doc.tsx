@@ -11,7 +11,7 @@ export default function LoadingDoc() {
                 <div className={styles.sidebarHeader}>
                     <button className={styles.logoContainer}>
                         <Brain className={styles.logoIcon} />
-                        <span className={styles.logoText}>PDR AI</span>
+                        <span className={styles.logoText}>Launchstack</span>
                     </button>
                 </div>
                 

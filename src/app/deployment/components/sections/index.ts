@@ -7,6 +7,7 @@ export { LangChainPage } from './LangChainPage';
 export { TavilyPage } from './TavilyPage';
 export { UploadThingPage } from './UploadThingPage';
 export { VercelBlobPage } from './VercelBlobPage';
+export { AIProvidersPage } from './AIProvidersPage';
 export { OCRAzurePage } from './OCRAzurePage';
 export { OCRLandingPage } from './OCRLandingPage';
 export { OCRDatalabPage } from './OCRDatalabPage';

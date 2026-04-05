@@ -19,9 +19,9 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
                         className={styles.logoIcon}
                         aria-hidden="true"
                         role="img"
-                        aria-label="PDR AI Brain Icon"
+                        aria-label="Launchstack Brain Icon"
                     />
-                    <span className={styles.logoText}>PDR AI</span>
+                    <span className={styles.logoText}>Launchstack</span>
                 </div>
 
                 <div className={styles.spinnerContainer}>

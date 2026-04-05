@@ -65,6 +65,9 @@ const serverSchema = z.object({
   NEO4J_URI: optionalString(),
   NEO4J_USERNAME: optionalString(),
   NEO4J_PASSWORD: optionalString(),
+  // Gemma extraction via Ollama (optional — enables relationship extraction)
+  GEMMA_BASE_URL: optionalString(),
+  GEMMA_MODEL: optionalString(),
 });
 
 const clientSchema = z.object({
@@ -133,6 +136,8 @@ function parseServerEnv() {
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
+    GEMMA_BASE_URL: process.env.GEMMA_BASE_URL,
+    GEMMA_MODEL: process.env.GEMMA_MODEL,
   });
   if (
     !skipValidation &&

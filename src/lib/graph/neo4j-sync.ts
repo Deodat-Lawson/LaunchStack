@@ -23,6 +23,7 @@ interface SyncResult {
   entities: number;
   mentions: number;
   relationships: number;
+  dynamicRelTypes: string[];
   durationMs: number;
 }
 
@@ -47,7 +48,7 @@ export async function syncDocumentToNeo4j(
 
   if (mentions.length === 0) {
     console.log(`[Neo4jSync] No mentions for document ${documentId}, skipping`);
-    return { entities: 0, mentions: 0, relationships: 0, durationMs: 0 };
+    return { entities: 0, mentions: 0, relationships: 0, dynamicRelTypes: [], durationMs: 0 };
   }
 
   const entityIds = [...new Set(mentions.map((m) => m.entityId))];
@@ -60,6 +61,7 @@ export async function syncDocumentToNeo4j(
       label: kgEntities.label,
       confidence: kgEntities.confidence,
       mentionCount: kgEntities.mentionCount,
+      embedding: kgEntities.embedding,
     })
     .from(kgEntities)
     .where(inArray(kgEntities.id, entityIds));
@@ -71,6 +73,7 @@ export async function syncDocumentToNeo4j(
       relationshipType: kgRelationships.relationshipType,
       weight: kgRelationships.weight,
       evidenceCount: kgRelationships.evidenceCount,
+      detail: kgRelationships.detail,
     })
     .from(kgRelationships)
     .where(
@@ -88,18 +91,23 @@ export async function syncDocumentToNeo4j(
 
     await syncEntities(session, entities, companyId);
     await syncSectionsAndMentions(session, mentions, entityById, documentId, companyId);
-    await syncRelationships(session, relationships, entityById, companyId, documentId);
+    const dynamicRelTypes = await syncRelationships(session, relationships, entityById, companyId, documentId);
+
+    // Create vector index for entity embeddings (idempotent)
+    await ensureVectorIndex(session);
 
     const durationMs = Date.now() - start;
     console.log(
       `[Neo4jSync] Document ${documentId}: synced ${entities.length} entities, ` +
-        `${mentions.length} mentions, ${relationships.length} relationships (${durationMs}ms)`,
+      `${mentions.length} mentions, ${relationships.length} relationships ` +
+      `(${dynamicRelTypes.length} types: ${dynamicRelTypes.join(", ")}) (${durationMs}ms)`,
     );
 
     return {
       entities: entities.length,
       mentions: mentions.length,
       relationships: relationships.length,
+      dynamicRelTypes,
       durationMs,
     };
   } finally {
@@ -116,6 +124,7 @@ async function syncEntities(
     label: string;
     confidence: number;
     mentionCount: number;
+    embedding: number[] | null;
   }[],
   companyId: bigint,
 ): Promise<void> {
@@ -128,6 +137,7 @@ async function syncEntities(
     confidence: e.confidence,
     mentionCount: e.mentionCount,
     companyId: companyId.toString(),
+    embedding: e.embedding ?? null,
   }));
 
   await session.run(
@@ -135,9 +145,11 @@ async function syncEntities(
      MERGE (n:Entity {name: e.name, label: e.label, companyId: e.companyId})
      ON CREATE SET n.displayName = e.displayName,
                    n.confidence = e.confidence,
-                   n.mentionCount = e.mentionCount
+                   n.mentionCount = e.mentionCount,
+                   n.embedding = e.embedding
      ON MATCH SET  n.confidence = e.confidence,
-                   n.mentionCount = e.mentionCount`,
+                   n.mentionCount = e.mentionCount,
+                   n.embedding = CASE WHEN e.embedding IS NOT NULL THEN e.embedding ELSE n.embedding END`,
     { entities: params },
   );
 }
@@ -196,12 +208,13 @@ async function syncRelationships(
     relationshipType: string;
     weight: number;
     evidenceCount: number;
+    detail: string | null;
   }[],
   entityById: Map<number, { name: string; label: string }>,
   companyId: bigint,
   documentId: number,
-): Promise<void> {
-  if (relationships.length === 0) return;
+): Promise<string[]> {
+  if (relationships.length === 0) return [];
 
   const relParams = relationships
     .filter(
@@ -219,6 +232,7 @@ async function syncRelationships(
         relType: r.relationshipType,
         weight: r.weight,
         evidenceCount: r.evidenceCount,
+        detail: r.detail ?? null,
         documentId,
       };
     });
@@ -240,10 +254,37 @@ async function syncRelationships(
        MERGE (src)-[rel:${relType}]->(tgt)
        ON CREATE SET rel.weight = r.weight,
                      rel.evidenceCount = r.evidenceCount,
+                     rel.detail = r.detail,
                      rel.documentId = r.documentId
        ON MATCH SET  rel.weight = r.weight,
-                     rel.evidenceCount = r.evidenceCount`,
+                     rel.evidenceCount = r.evidenceCount,
+                     rel.detail = CASE WHEN r.detail IS NOT NULL THEN r.detail ELSE rel.detail END`,
       { rels: params },
+    );
+  }
+
+  return [...byType.keys()];
+}
+
+/**
+ * Ensure the Neo4j vector index for entity embeddings exists.
+ * Idempotent — uses IF NOT EXISTS.
+ */
+async function ensureVectorIndex(session: Session): Promise<void> {
+  try {
+    await session.run(
+      `CREATE VECTOR INDEX \`entity-embeddings\` IF NOT EXISTS
+       FOR (e:Entity) ON (e.embedding)
+       OPTIONS {indexConfig: {
+         \`vector.dimensions\`: 768,
+         \`vector.similarity_function\`: 'cosine'
+       }}`,
+    );
+  } catch (error) {
+    // Non-fatal — index creation may fail on Neo4j Community without GDS plugin
+    console.warn(
+      "[Neo4jSync] Vector index creation skipped:",
+      error instanceof Error ? error.message : error,
     );
   }
 }

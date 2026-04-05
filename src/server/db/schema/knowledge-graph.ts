@@ -48,6 +48,12 @@ export type EntityLabel = (typeof entityLabelEnum)[number];
 // Relationship Types
 // ============================================================================
 
+/**
+ * Well-known relationship types from BERT NER extraction.
+ * Gemma produces arbitrary types (CEO_OF, ACQUIRED, etc.) so the DB column
+ * is varchar(50) without an enum constraint. This list is kept for reference
+ * and backward compatibility with existing code that checks known types.
+ */
 export const relationshipTypeEnum = [
   "WORKS_FOR",
   "LOCATED_IN",
@@ -59,7 +65,7 @@ export const relationshipTypeEnum = [
   "CO_OCCURS",    // Two entities appear in the same chunk
 ] as const;
 
-export type RelationshipType = (typeof relationshipTypeEnum)[number];
+export type RelationshipType = string;
 
 // ============================================================================
 // 1. Knowledge Graph Entities
@@ -80,6 +86,8 @@ export const kgEntities = pgTable(
     mentionCount: integer("mention_count").notNull().default(1),
     /** Company scope — entities are company-specific */
     companyId: bigint("company_id", { mode: "bigint" }).notNull(),
+    /** 768-dim BERT CLS embedding vector (nullable — populated when sidecar provides it) */
+    embedding: real("embedding").array(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -148,13 +156,14 @@ export const kgRelationships = pgTable(
       .notNull()
       .references(() => kgEntities.id, { onDelete: "cascade" }),
     relationshipType: varchar("relationship_type", {
-      length: 30,
-      enum: relationshipTypeEnum,
+      length: 50,
     }).notNull(),
     /** Strength/weight of the relationship (0-1) */
     weight: real("weight").notNull().default(0.5),
     /** Number of co-occurrences supporting this relationship */
     evidenceCount: integer("evidence_count").notNull().default(1),
+    /** Brief evidence description (from Gemma extraction) */
+    detail: varchar("detail", { length: 512 }),
     /** Source document where relationship was first observed */
     documentId: bigint("document_id", { mode: "bigint" }).references(
       () => document.id,

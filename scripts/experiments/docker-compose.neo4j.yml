@@ -1,0 +1,19 @@
+# Standalone Neo4j for entity extraction experiments
+# Usage: docker compose -f scripts/experiments/docker-compose.neo4j.yml up -d
+# Browser: http://localhost:7474  (login: neo4j / testpassword)
+
+services:
+  neo4j:
+    image: neo4j:5-community
+    container_name: neo4j-experiment
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/testpassword
+    volumes:
+      - neo4j_experiment_data:/data
+    ports:
+      - "7474:7474"   # Browser UI
+      - "7687:7687"   # Bolt protocol
+
+volumes:
+  neo4j_experiment_data:

@@ -43,7 +43,7 @@ export interface ProcessBatchResponse {
 
 function toBlob(input: Buffer | Blob): Blob {
     if (input instanceof Blob) return input;
-    return new Blob([input]);
+    return new Blob([new Uint8Array(input)]);
 }
 
 async function handleErrorResponse(res: Response): Promise<never> {

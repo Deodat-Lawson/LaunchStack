@@ -233,10 +233,10 @@ describe("modifyDocument Inngest function", () => {
             edits: [{ target_text: "missing", new_text: "x" }],
           });
           return { summary: null, fileBase64: null };
-        } catch (err) {
-          if (err instanceof MockAdeuServiceError && err.statusCode === 422) {
-            await db.update({}).set({ updatedAt: new Date() });
-            return { summary: null, fileBase64: null, validationError: err.detail };
+        } catch (err: unknown) {
+          if (err instanceof MockAdeuServiceError && (err as { statusCode: number }).statusCode === 422) {
+            await db.update({} as never).set({ updatedAt: new Date() });
+            return { summary: null, fileBase64: null, validationError: (err as { detail: string }).detail };
           }
           throw err;
         }
@@ -261,9 +261,9 @@ describe("modifyDocument Inngest function", () => {
               edits: [{ target_text: "x", new_text: "y" }],
             });
             return {};
-          } catch (err) {
-            if (err instanceof MockAdeuServiceError && err.statusCode === 422) {
-              return { validationError: err.detail };
+          } catch (err: unknown) {
+            if (err instanceof MockAdeuServiceError && (err as { statusCode: number }).statusCode === 422) {
+              return { validationError: (err as { detail: string }).detail };
             }
             throw err;
           }
@@ -286,9 +286,9 @@ describe("modifyDocument Inngest function", () => {
               author_name: "Author",
             });
             return {};
-          } catch (err) {
-            if (err instanceof MockAdeuServiceError && err.statusCode === 422) {
-              return { validationError: err.detail };
+          } catch (err: unknown) {
+            if (err instanceof MockAdeuServiceError && (err as { statusCode: number }).statusCode === 422) {
+              return { validationError: (err as { detail: string }).detail };
             }
             throw err;
           }
@@ -324,7 +324,7 @@ describe("modifyDocument Inngest function", () => {
           contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         });
 
-        await db.update({}).set({ url: stored.url, updatedAt: new Date() });
+        await db.update({} as never).set({ url: stored.url, updatedAt: new Date() });
 
         return stored.url;
       });

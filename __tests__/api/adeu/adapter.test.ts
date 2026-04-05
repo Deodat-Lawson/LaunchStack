@@ -147,7 +147,7 @@ describe("readDocx", () => {
   it("accepts Blob input", async () => {
     mockFetch.mockResolvedValueOnce(jsonResponse({ text: "blob text", filename: "doc.docx" }));
 
-    const blob = new Blob([makeDocxBuffer()]);
+    const blob = new Blob([new Uint8Array(makeDocxBuffer())]);
     const result = await readDocx(blob);
 
     expect(result.text).toBe("blob text");

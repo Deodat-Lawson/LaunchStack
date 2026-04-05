@@ -83,7 +83,7 @@ export const modifyDocument = inngest.createFunction(
     });
 
     // If validation failed, stop here (no retry)
-    if (result.validationError) {
+    if ("validationError" in result && result.validationError) {
       return { success: false, error: result.validationError };
     }
 

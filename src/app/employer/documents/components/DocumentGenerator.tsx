@@ -5,6 +5,7 @@ import { DocumentGeneratorHome, type DocumentTemplate } from './DocumentGenerato
 import { LegalDocumentConfig } from './LegalDocumentConfig';
 import { LegalDocumentEditor } from './LegalDocumentEditor';
 import { DocumentGeneratorEditor } from './DocumentGeneratorEditor';
+import { LegalChatbot } from './LegalChatbot';
 import { Loader2 } from 'lucide-react';
 import type { Citation } from './generator';
 import { TEMPLATE_REGISTRY, type TemplateField } from '~/lib/legal-templates/template-registry';
@@ -94,7 +95,7 @@ async function regenerateLegalDocxBase64(
 }
 
 export function DocumentGenerator() {
-  const [currentView, setCurrentView] = useState<'home' | 'config' | 'editor'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'config' | 'editor' | 'chat'>('home');
   const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null);
   const [currentDocument, setCurrentDocument] = useState<GeneratedDocument | null>(null);
   const [generatedDocuments, setGeneratedDocuments] = useState<GeneratedDocument[]>([]);
@@ -102,6 +103,8 @@ export function DocumentGenerator() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [legalFieldErrors, setLegalFieldErrors] = useState<Record<string, string>>({});
+  const [chatInitialMessage, setChatInitialMessage] = useState<string | undefined>(undefined);
+  const [prefilledData, setPrefilledData] = useState<Record<string, string> | undefined>(undefined);
 
   const fetchDocuments = useCallback(async () => {
     try {
@@ -161,8 +164,52 @@ export function DocumentGenerator() {
     setCurrentView('config');
   };
 
-  const handleLegalGenerate = async (formData: Record<string, string>) => {
-    if (!selectedTemplate) return;
+  const handleStartChat = (initialMessage?: string) => {
+    setError(null);
+    setChatInitialMessage(initialMessage);
+    setCurrentView('chat');
+  };
+
+  const handleChatGenerate = (templateId: string, data: Record<string, string>) => {
+    const registryTemplate = TEMPLATE_REGISTRY[templateId];
+    if (!registryTemplate) return;
+
+    // Build a DocumentTemplate to reuse the existing generate flow
+    const template: DocumentTemplate = {
+      id: registryTemplate.id,
+      name: registryTemplate.name,
+      category: 'Legal',
+      description: registryTemplate.description,
+      preview: '',
+      isLegal: true,
+      fields: registryTemplate.fields,
+    };
+    setSelectedTemplate(template);
+    void handleLegalGenerate(data, template);
+  };
+
+  const handleChatReviewFields = (templateId: string, prefilled: Record<string, string>) => {
+    const registryTemplate = TEMPLATE_REGISTRY[templateId];
+    if (!registryTemplate) return;
+
+    const template: DocumentTemplate = {
+      id: registryTemplate.id,
+      name: registryTemplate.name,
+      category: 'Legal',
+      description: registryTemplate.description,
+      preview: '',
+      isLegal: true,
+      fields: registryTemplate.fields,
+    };
+    setSelectedTemplate(template);
+    setPrefilledData(prefilled);
+    setLegalFieldErrors({});
+    setCurrentView('config');
+  };
+
+  const handleLegalGenerate = async (formData: Record<string, string>, templateOverride?: DocumentTemplate) => {
+    const template = templateOverride ?? selectedTemplate;
+    if (!template) return;
 
     setIsSaving(true);
     setError(null);
@@ -173,7 +220,7 @@ export function DocumentGenerator() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          templateId: selectedTemplate.id,
+          templateId: template.id,
           data: formData,
           format: 'json',
         }),
@@ -215,9 +262,9 @@ export function DocumentGenerator() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: legalData.title ?? selectedTemplate.name,
+          title: legalData.title ?? template.name,
           content: htmlContent,
-          templateId: selectedTemplate.id,
+          templateId: template.id,
           metadata: {
             templateType: 'legal',
             legalData: formData,
@@ -231,8 +278,8 @@ export function DocumentGenerator() {
       if (data.success && data.document) {
         const newDoc: GeneratedDocument = {
           id: data.document.id.toString(),
-          title: legalData.title ?? selectedTemplate.name,
-          template: selectedTemplate.id,
+          title: legalData.title ?? template.name,
+          template: template.id,
           lastEdited: 'Just now',
           content: htmlContent,
           docxBase64: legalData.docxBase64,
@@ -378,6 +425,8 @@ export function DocumentGenerator() {
     setCurrentDocument(null);
     setSelectedTemplate(null);
     setLegalFieldErrors({});
+    setPrefilledData(undefined);
+    setChatInitialMessage(undefined);
     setError(null);
   };
 
@@ -452,6 +501,19 @@ export function DocumentGenerator() {
     );
   }
 
+  if (currentView === 'chat') {
+    return (
+      <div className="h-full">
+        <LegalChatbot
+          onBack={handleBackToHome}
+          onGenerate={handleChatGenerate}
+          onReviewFields={handleChatReviewFields}
+          initialMessage={chatInitialMessage}
+        />
+      </div>
+    );
+  }
+
   if (currentView === 'config' && selectedTemplate) {
     if (selectedTemplate.isLegal && selectedTemplate.fields) {
       return (
@@ -463,6 +525,7 @@ export function DocumentGenerator() {
             isGenerating={isSaving}
             serverErrors={legalFieldErrors}
             globalError={error}
+            initialData={prefilledData}
           />
         </div>
       );
@@ -474,6 +537,7 @@ export function DocumentGenerator() {
       <DocumentGeneratorHome
         onNewDocument={handleNewDocument}
         onOpenDocument={handleOpenDocument}
+        onStartChat={handleStartChat}
         generatedDocuments={generatedDocuments}
       />
     </div>

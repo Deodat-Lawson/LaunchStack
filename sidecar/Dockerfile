@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt .
 
+# Install Adeu (lightweight DOCX redlining) in its own layer — cached independently from ML deps
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install adeu==0.9.0
+
 # Install CPU-only PyTorch first (~200MB vs ~2GB with CUDA), then remaining deps.
 # BuildKit cache mount keeps pip's download cache across rebuilds.
 RUN --mount=type=cache,target=/root/.cache/pip \

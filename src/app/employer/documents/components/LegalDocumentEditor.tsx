@@ -28,6 +28,7 @@ import {
   ChevronUp,
   Pencil,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Input } from "~/app/employer/documents/components/ui/input";
 import { Textarea } from "~/app/employer/documents/components/ui/textarea";
@@ -993,6 +994,7 @@ export function LegalDocumentEditor({
   const [status, setStatus] = useState<"draft" | "editing" | "saved">("draft");
   const [isSaving, setIsSaving] = useState(false);
   const [isDownloadingDocx, setIsDownloadingDocx] = useState(false);
+  const [isApplyingEdits, setIsApplyingEdits] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   const [aiPrompt, setAiPrompt] = useState("");
@@ -1169,8 +1171,16 @@ export function LegalDocumentEditor({
   }, [onSave, title, getLiveExportSnapshot, templateFields]);
 
   const downloadDocx = async () => {
-    if (!templateId || !TEMPLATE_REGISTRY[templateId]) return;
+    if (!templateId || !TEMPLATE_REGISTRY[templateId]) {
+      toast.error("Template not configured", {
+        description: "Unable to export document.",
+      });
+      return;
+    }
+    
     setIsDownloadingDocx(true);
+    const loadingToast = toast.loading("Generating DOCX...");
+
     try {
       const { html } = getLiveExportSnapshot();
       const data = buildTemplateFieldDataForDocx(templateId, html);
@@ -1183,15 +1193,21 @@ export function LegalDocumentEditor({
           format: "json",
         }),
       });
+
+      if (!res.ok) {
+        throw new Error(`Export failed: HTTP ${res.status}`);
+      }
+
       const json = (await res.json()) as {
         success?: boolean;
         docxBase64?: string;
         error?: string;
       };
+
       if (!json.success || !json.docxBase64) {
-        console.error("DOCX export failed", json.error ?? json);
-        return;
+        throw new Error(json.error || "Failed to generate DOCX");
       }
+
       const byteChars = atob(json.docxBase64);
       const byteArray = new Uint8Array(byteChars.length);
       for (let i = 0; i < byteChars.length; i++)
@@ -1205,7 +1221,19 @@ export function LegalDocumentEditor({
       a.download = `${title || "document"}.docx`;
       a.click();
       URL.revokeObjectURL(url);
+      
+      toast.success("Document downloaded!", {
+        description: `${title || "Document"}.docx`,
+        id: loadingToast,
+      });
       setStatus("saved");
+    } catch (error) {
+      console.error("DOCX export error:", error);
+      toast.error("Export failed", {
+        description: error instanceof Error ? error.message : "Could not generate DOCX file",
+        id: loadingToast,
+        duration: 5000,
+      });
     } finally {
       setIsDownloadingDocx(false);
     }
@@ -1213,6 +1241,180 @@ export function LegalDocumentEditor({
 
   const exportPdf = () => {
     window.print();
+  };
+
+  const applyEditsWithTrackChanges = async () => {
+    if (!templateId || !TEMPLATE_REGISTRY[templateId]) {
+      toast.error("Template not configured", {
+        description: "Unable to generate document. Please contact support.",
+      });
+      return;
+    }
+
+    // Validate document before applying track changes
+    const validation = runValidation();
+    if (!validation.valid) {
+      toast.error("Document has validation errors", {
+        description: `Please fix ${validation.errors.length} field error${validation.errors.length > 1 ? "s" : ""} before applying track changes.`,
+      });
+      setShowValidationDetails(true);
+      setSaveAttempted(true);
+      return;
+    }
+
+    setIsApplyingEdits(true);
+    
+    // Show loading toast
+    const loadingToast = toast.loading("Generating document with track changes...", {
+      description: "This may take a few moments",
+    });
+
+    try {
+      const { html } = getLiveExportSnapshot();
+      const fieldValues = extractFieldValuesFromSections([html]);
+      const data = buildTemplateFieldDataForDocx(templateId, html);
+      
+      // Step 1: Generate the base DOCX with placeholders
+      toast.loading("Step 1: Generating base document...", {
+        description: "Creating DOCX template",
+        id: loadingToast,
+      });
+
+      const res = await fetch("/api/document-generator/legal-generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          templateId,
+          data,
+          format: "json",
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Document generation failed: HTTP ${res.status}`);
+      }
+
+      const json = (await res.json()) as {
+        success?: boolean;
+        docxBase64?: string;
+        error?: string;
+      };
+
+      if (!json.success || !json.docxBase64) {
+        throw new Error(json.error || "Failed to generate DOCX");
+      }
+
+      // Step 2: Prepare edits from field values
+      const edits: Array<{ target_text: string; new_text: string; comment?: string }> = [];
+      for (const [key, value] of Object.entries(fieldValues)) {
+        const cleanValue = value.replace(/<[^>]*>/g, "").replace(/\u200B/g, "").trim();
+        if (cleanValue && !cleanValue.startsWith("[")) {
+          const field = fieldMap[key];
+          edits.push({
+            target_text: `{${key}}`,
+            new_text: cleanValue,
+            comment: field ? `Updated ${field.label}` : undefined,
+          });
+        }
+      }
+
+      if (edits.length === 0) {
+        toast.warning("No edits to apply", {
+          description: "All fields are using default placeholders",
+          id: loadingToast,
+        });
+        setIsApplyingEdits(false);
+        return;
+      }
+
+      // Step 3: Apply edits using Adeu to add Track Changes
+      toast.loading(`Step 2: Applying ${edits.length} edit${edits.length > 1 ? "s" : ""} as track changes...`, {
+        description: "Processing with Adeu service",
+        id: loadingToast,
+      });
+
+      const applyRes = await fetch("/api/legal/apply-edits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          documentBase64: json.docxBase64,
+          authorName: "Legal Document Editor",
+          edits,
+        }),
+      });
+
+      if (!applyRes.ok) {
+        throw new Error(`Apply edits failed: HTTP ${applyRes.status}`);
+      }
+
+      const applyJson = (await applyRes.json()) as {
+        success?: boolean;
+        modifiedDocxBase64?: string;
+        summary?: {
+          applied_edits: number;
+          skipped_edits: number;
+        };
+        error?: string;
+        message?: string;
+      };
+
+      if (!applyJson.success || !applyJson.modifiedDocxBase64) {
+        throw new Error(applyJson.error || applyJson.message || "Failed to apply edits");
+      }
+
+      // Step 4: Download the modified DOCX with Track Changes
+      const byteChars = atob(applyJson.modifiedDocxBase64);
+      const byteArray = new Uint8Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++)
+        byteArray[i] = byteChars.charCodeAt(i);
+      const blob = new Blob([byteArray], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${title || "document"}-tracked.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      // Success notification with details
+      const { applied_edits = 0, skipped_edits = 0 } = applyJson.summary || {};
+      toast.success("Document ready with track changes!", {
+        description: `${applied_edits} edit${applied_edits > 1 ? "s" : ""} applied${skipped_edits > 0 ? `, ${skipped_edits} skipped` : ""}. Download started.`,
+        id: loadingToast,
+        duration: 5000,
+      });
+      
+      setStatus("saved");
+    } catch (error) {
+      console.error("Track changes error:", error);
+      
+      // User-friendly error messages
+      let errorMessage = "Failed to apply track changes";
+      let errorDescription = error instanceof Error ? error.message : "Unknown error occurred";
+
+      if (errorDescription.includes("ECONNREFUSED") || errorDescription.includes("ENOTFOUND")) {
+        errorMessage = "Service unavailable";
+        errorDescription = "The Adeu redlining service is not responding. Please try again later.";
+      } else if (errorDescription.includes("HTTP 401") || errorDescription.includes("Unauthorized")) {
+        errorMessage = "Authentication failed";
+        errorDescription = "Please log in again to continue.";
+      } else if (errorDescription.includes("HTTP 422")) {
+        errorMessage = "Invalid document format";
+        errorDescription = "The document could not be processed. Please check your field values.";
+      } else if (errorDescription.includes("HTTP 5")) {
+        errorMessage = "Server error";
+        errorDescription = "An internal error occurred. Please try again or contact support.";
+      }
+
+      toast.error(errorMessage, {
+        description: errorDescription,
+        id: loadingToast,
+        duration: 7000,
+      });
+    } finally {
+      setIsApplyingEdits(false);
+    }
   };
 
   const getSelectedSectionContent = (): string => {
@@ -1583,19 +1785,35 @@ export function LegalDocumentEditor({
             </button>
 
             {templateId && TEMPLATE_REGISTRY[templateId] && (
-              <button
-                type="button"
-                onClick={() => void downloadDocx()}
-                disabled={isDownloadingDocx}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold bg-[#1a1a2e] text-[#f0ebe3] rounded cursor-pointer hover:bg-[#2a2a3e] transition-colors disabled:opacity-60"
-              >
-                {isDownloadingDocx ? (
-                  <Loader2 className="w-3 h-3 animate-spin" />
-                ) : (
-                  <Download className="w-3 h-3" />
-                )}
-                DOCX
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => void downloadDocx()}
+                  disabled={isDownloadingDocx}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold bg-[#1a1a2e] text-[#f0ebe3] rounded cursor-pointer hover:bg-[#2a2a3e] transition-colors disabled:opacity-60"
+                >
+                  {isDownloadingDocx ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                  ) : (
+                    <Download className="w-3 h-3" />
+                  )}
+                  DOCX
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void applyEditsWithTrackChanges()}
+                  disabled={isApplyingEdits}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold bg-[#8B7355] text-white rounded cursor-pointer hover:bg-[#7a6548] transition-colors disabled:opacity-60"
+                  title="Apply field changes as Track Changes in DOCX"
+                >
+                  {isApplyingEdits ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                  ) : (
+                    <Pencil className="w-3 h-3" />
+                  )}
+                  Track Changes
+                </button>
+              </>
             )}
             <button
               onClick={exportPdf}

@@ -22,8 +22,6 @@
     "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.31.9",
-    "@clerk/themes": "^2.4.29",
     "@elevenlabs/elevenlabs-js": "^2.27.0",
     "@emailjs/browser": "^4.4.1",
     "@esbuild-kit/core-utils": "^3.3.2",
@@ -74,6 +72,7 @@
     "@uploadthing/react": "^7.3.3",
     "@vercel/analytics": "^1.6.1",
     "@vercel/blob": "^2.3.0",
+    "better-auth": "^1.6.0",
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "*",

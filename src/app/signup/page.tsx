@@ -2,7 +2,8 @@
 
 import React, { Suspense, useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth, useUser, SignUp } from "@clerk/nextjs";
+import { useAuth, useUser } from "~/lib/auth-hooks";
+import { authClient } from "~/lib/auth-client";
 import {
     Building,
     Users,
@@ -16,7 +17,9 @@ import {
     ArrowLeft,
     AlertCircle,
     Info,
+    Loader2,
 } from "lucide-react";
+import Link from "next/link";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
 
@@ -80,6 +83,13 @@ const SignupPage: React.FC = () => {
     const [joinSuccess, setJoinSuccess] = useState<string | null>(null);
     const [registrationError, setRegistrationError] = useState<string | null>(null);
 
+    // ─── Sign-up form state (pre-auth) ─────────────────────────────────────
+    const [signupName, setSignupName] = useState("");
+    const [signupEmail, setSignupEmail] = useState("");
+    const [signupPassword, setSignupPassword] = useState("");
+    const [signupError, setSignupError] = useState<string | null>(null);
+    const [isSigningUp, setIsSigningUp] = useState(false);
+
     // Guard so the auto-join from ?code= only fires once
     const autoJoinTriggered = useRef(false);
 
@@ -110,9 +120,6 @@ const SignupPage: React.FC = () => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        userId,
-                        name: user.fullName ?? user.username,
-                        email: user.emailAddresses[0]?.emailAddress,
                         inviteCode: code,
                     }),
                 });
@@ -221,9 +228,6 @@ const SignupPage: React.FC = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userId,
-                    name: user?.fullName,
-                    email: user?.emailAddresses[0]?.emailAddress,
                     companyName: createFormData.companyName,
                     numberOfEmployees: createFormData.staffCount,
                 }),
@@ -478,18 +482,121 @@ const SignupPage: React.FC = () => {
         );
     }
 
-    // ── Not authenticated: show Clerk SignUp component ─────────────────────
+    // ── Not authenticated: show sign-up form ────────────────────────────────
     if (!userId) {
+        const handleSignUp = async (e: React.FormEvent) => {
+            e.preventDefault();
+            setSignupError(null);
+            setIsSigningUp(true);
+            try {
+                const result = await authClient.signUp.email({
+                    name: signupName,
+                    email: signupEmail,
+                    password: signupPassword,
+                });
+                if (result.error) {
+                    setSignupError(result.error.message ?? "Sign up failed. Please try again.");
+                }
+                // On success, session is set automatically and useAuth will update
+            } catch {
+                setSignupError("An unexpected error occurred. Please try again.");
+            } finally {
+                setIsSigningUp(false);
+            }
+        };
+
         return (
             <div className={styles.container}>
                 <SignupNavbar />
                 <div className={styles.splitLayout}>
                     <div className={styles.formPanel}>
-                        <SignUp
-                            routing="hash"
-                            forceRedirectUrl="/"
-                            signInUrl="/signin"
-                        />
+                        <div className={styles.formCard}>
+                            <div className={styles.form}>
+                                <h2 className={styles.title}>Create Account</h2>
+                                <p className={styles.subtitle}>
+                                    Sign up to get started with Launchstack
+                                </p>
+
+                                <form onSubmit={handleSignUp} className="space-y-4 w-full max-w-sm">
+                                    <div>
+                                        <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">
+                                            Full Name
+                                        </label>
+                                        <input
+                                            id="name"
+                                            type="text"
+                                            value={signupName}
+                                            onChange={(e) => setSignupName(e.target.value)}
+                                            required
+                                            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                            placeholder="Your full name"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
+                                            Email
+                                        </label>
+                                        <input
+                                            id="email"
+                                            type="email"
+                                            value={signupEmail}
+                                            onChange={(e) => setSignupEmail(e.target.value)}
+                                            required
+                                            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                            placeholder="you@example.com"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
+                                            Password
+                                        </label>
+                                        <input
+                                            id="password"
+                                            type="password"
+                                            value={signupPassword}
+                                            onChange={(e) => setSignupPassword(e.target.value)}
+                                            required
+                                            minLength={8}
+                                            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                            placeholder="At least 8 characters"
+                                        />
+                                    </div>
+
+                                    {signupError && (
+                                        <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">
+                                            {signupError}
+                                        </div>
+                                    )}
+
+                                    <button
+                                        type="submit"
+                                        disabled={isSigningUp}
+                                        className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-2"
+                                    >
+                                        {isSigningUp ? (
+                                            <>
+                                                <Loader2 className="w-4 h-4 animate-spin" />
+                                                Creating account...
+                                            </>
+                                        ) : (
+                                            "Sign Up"
+                                        )}
+                                    </button>
+
+                                    <p className="text-sm text-muted-foreground text-center">
+                                        Already have an account?{" "}
+                                        <Link
+                                            href="/signin"
+                                            className="text-purple-600 dark:text-purple-400 hover:underline font-medium"
+                                        >
+                                            Sign in
+                                        </Link>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     {renderBrandPanel()}
                 </div>

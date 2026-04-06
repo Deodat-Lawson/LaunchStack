@@ -1,5 +1,6 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { auth } from "~/lib/auth";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { eq } from "drizzle-orm";
@@ -10,30 +11,18 @@ const shouldLogPerf =
     (process.env.DEBUG_PERF === "1" || process.env.DEBUG_PERF === "true");
 const middlewareUserCacheTtlMs = 10_000;
 
-// Routes that require authentication
-const isProtectedRoute = createRouteMatcher([
-    '/employer(.*)',
-    '/employee(.*)',
-]);
+// Route matchers (replacing Clerk's createRouteMatcher)
+const protectedPrefixes = ["/employer", "/employee"];
+const publicPaths = new Set(["/", "/pricing", "/deployment", "/contact", "/about", "/signup", "/signin"]);
 
-// Routes that are always public
-const isPublicRoute = createRouteMatcher([
-    '/',
-    '/pricing',
-    '/deployment',
-    '/contact',
-    '/about',
-    '/signup',
-    '/signin',
-    '/api/webhooks(.*)',
-]);
+const isProtectedRoute = (pathname: string) =>
+    protectedPrefixes.some((p) => pathname.startsWith(p));
 
-// Routes where authenticated users should be redirected to their dashboard
-const isAuthRedirectRoute = createRouteMatcher([
-    '/',
-    '/signup',
-    '/signin',
-]);
+const isPublicRoute = (pathname: string) =>
+    publicPaths.has(pathname) || pathname.startsWith("/api/webhooks");
+
+const isAuthRedirectRoute = (pathname: string) =>
+    pathname === "/" || pathname === "/signup" || pathname === "/signin";
 
 const isEmployerPath = (pathname: string) => pathname.startsWith("/employer");
 const isEmployeePath = (pathname: string) => pathname.startsWith("/employee");
@@ -77,28 +66,31 @@ const setCachedMiddlewareUser = (userId: string, value: CachedUserValue) => {
     });
 };
 
-export default clerkMiddleware(async (auth, req) => {
+export default async function middleware(req: NextRequest) {
     const requestStart = Date.now();
     let dbQueryMs: number | null = null;
-    const { userId } = await auth();
     const pathname = req.nextUrl.pathname;
+
+    // Get session from Better Auth
+    const session = await auth.api.getSession({ headers: req.headers });
+    const userId = session?.user?.id ?? null;
 
     try {
         // Skip API routes and static files for redirect logic
         if (pathname.startsWith('/api/') || pathname.startsWith('/_next/')) {
-            if (isProtectedRoute(req) && !isPublicRoute(req)) {
-                await auth.protect({ unauthenticatedUrl: new URL('/signin', req.url).toString() });
+            if (isProtectedRoute(pathname) && !isPublicRoute(pathname) && !userId) {
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
             }
             return;
         }
 
         // Protect routes that require authentication
-        if (isProtectedRoute(req) && !isPublicRoute(req)) {
-            await auth.protect({ unauthenticatedUrl: new URL('/signin', req.url).toString() });
+        if (isProtectedRoute(pathname) && !isPublicRoute(pathname) && !userId) {
+            return NextResponse.redirect(new URL('/signin', req.url));
         }
 
         // Route authenticated users based on their DB role + status
-        if (userId && (isAuthRedirectRoute(req) || isProtectedRoute(req))) {
+        if (userId && (isAuthRedirectRoute(pathname) || isProtectedRoute(pathname))) {
             const hasCodeParam = pathname === '/signup' && req.nextUrl.searchParams.has('code');
 
             try {
@@ -120,7 +112,7 @@ export default clerkMiddleware(async (auth, req) => {
                 }
 
                 if (!existingUser) {
-                    // User exists in Clerk but not in DB – send to signup to finish registration
+                    // User exists in Better Auth but not in DB – send to signup to finish registration
                     if (pathname !== '/signup') {
                         return NextResponse.redirect(new URL('/signup?from=signin', req.url));
                     }
@@ -135,7 +127,7 @@ export default clerkMiddleware(async (auth, req) => {
                     if (pathname !== pendingPath) {
                         return NextResponse.redirect(new URL(pendingPath, req.url));
                     }
-                } else if (isProtectedRoute(req)) {
+                } else if (isProtectedRoute(pathname)) {
                     const isEmployerRole =
                         existingUser.role === "employer" || existingUser.role === "owner";
                     const isEmployeeRole = existingUser.role === "employee";
@@ -147,7 +139,7 @@ export default clerkMiddleware(async (auth, req) => {
                     if (isEmployeePath(pathname) && !isEmployeeRole) {
                         return NextResponse.redirect(new URL('/employer/documents', req.url));
                     }
-                } else if (isAuthRedirectRoute(req)) {
+                } else if (isAuthRedirectRoute(pathname)) {
                     // Verified user on / or /signup – send to their dashboard
                     if (existingUser.role === "employer" || existingUser.role === "owner") {
                         return NextResponse.redirect(new URL('/employer/documents', req.url));
@@ -168,7 +160,7 @@ export default clerkMiddleware(async (auth, req) => {
             console.info(`[perf] middleware path=${pathname} total=${totalMs}ms db=${dbSegment}`);
         }
     }
-});
+}
 
 export const config = {
     runtime: 'nodejs',

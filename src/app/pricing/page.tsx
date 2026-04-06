@@ -13,14 +13,9 @@ import { Brain, Check, Users, Heart, Award, GraduationCap } from 'lucide-react';
 import styles from '../../styles/pricing.module.css';
 import Image from "next/image";
 import { Navbar } from '../_components/Navbar';
-import {
-    ClerkProvider,
-    SignUpButton,
-} from '@clerk/nextjs'
 
 export default function PricingPage() {
     return (
-        <ClerkProvider>
             <div className={styles.container}>
                 <Navbar />
 
@@ -125,11 +120,9 @@ export default function PricingPage() {
                             </div>
 
                             <div className={styles.ctaContainer}>
-                                <SignUpButton>
-                                    <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
-                                        Try Demo Now
-                                    </button>
-                                </SignUpButton>
+                                <Link href="/signup" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnLg}`}>
+                                    Try Demo Now
+                                </Link>
                             </div>
                         </div>
 
@@ -246,6 +239,5 @@ export default function PricingPage() {
                     </div>
                 </div>
             </div>
-        </ClerkProvider>
     );
 } 

@@ -80,8 +80,8 @@ export const DockerDeploymentPage: React.FC<DeploymentProps> = ({
   const appOnlyCmd = `docker build -t pdr-ai-app .
 docker run --rm -p 3000:3000 \\
   -e DATABASE_URL="$DATABASE_URL" \\
-  -e CLERK_SECRET_KEY="$CLERK_SECRET_KEY" \\
-  -e NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" \\
+  -e BETTER_AUTH_SECRET="$BETTER_AUTH_SECRET" \\
+  -e BETTER_AUTH_URL="$BETTER_AUTH_URL" \\
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \\
   -e BLOB_READ_WRITE_TOKEN="$BLOB_READ_WRITE_TOKEN" \\
   -e INNGEST_EVENT_KEY="$INNGEST_EVENT_KEY" \\
@@ -129,8 +129,8 @@ docker run --rm -p 3000:3000 \\
             title="Create .env"
             description="Set the required variables at the project root."
             code={`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx
-CLERK_SECRET_KEY=sk_live_xxx
+BETTER_AUTH_SECRET=your_generated_secret_here
+BETTER_AUTH_URL=http://localhost:3000
 OPENAI_API_KEY=sk-proj-xxx
 
 # Vercel Blob — required for document uploads
@@ -138,7 +138,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx
 
 # Inngest — use a placeholder for local dev
 INNGEST_EVENT_KEY=dev-placeholder`}
-            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nOPENAI_API_KEY=sk-proj-xxx\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
+            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nBETTER_AUTH_SECRET=your_generated_secret_here\nBETTER_AUTH_URL=http://localhost:3000\nOPENAI_API_KEY=sk-proj-xxx\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
             copied={copiedCode === 'docker-1'}
             darkMode={darkMode}
           />

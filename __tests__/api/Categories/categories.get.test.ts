@@ -1,8 +1,8 @@
 import { GET } from "~/app/api/Categories/GetCategories/route";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 import { db } from "~/server/db/index";
 
-jest.mock("@clerk/nextjs/server", () => ({
+jest.mock("~/lib/auth-server", () => ({
   auth: jest.fn(),
 }));
 

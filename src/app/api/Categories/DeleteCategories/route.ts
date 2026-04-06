@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "../../../../server/db/index";
 import { category, users } from "../../../../server/db/schema";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 import { validateRequestBody } from "~/lib/validation";
 import { z } from "zod";
 

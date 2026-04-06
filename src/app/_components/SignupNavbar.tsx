@@ -3,7 +3,8 @@
 import Link from "next/link";
 import React from 'react';
 import { Brain } from 'lucide-react';
-import { useAuth, useUser, UserButton } from '@clerk/nextjs';
+import { useAuth, useUser } from '~/lib/auth-hooks';
+import { UserButton } from '~/components/UserButton';
 import styles from '../../styles/navbar.module.css';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -26,14 +27,7 @@ export function SignupNavbar() {
                                 <span className={styles.userName}>
                                     {user.fullName ?? user.primaryEmailAddress?.emailAddress ?? user.username ?? 'User'}
                                 </span>
-                                <UserButton
-                                    afterSignOutUrl="/"
-                                    appearance={{
-                                        elements: {
-                                            avatarBox: 'w-8 h-8',
-                                        },
-                                    }}
-                                />
+                                <UserButton />
                             </div>
                         )}
                     </div>

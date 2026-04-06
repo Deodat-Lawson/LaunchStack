@@ -3,7 +3,7 @@ import { db } from "../../../server/db/index";
 import { document, ChatHistory, documentReferenceResolution, documentSections, documentRetrievalChunks, documentStructure, documentMetadata, documentPreviews, documentViews, predictiveDocumentAnalysisResults, workspaceResults, users, kgEntityMentions } from "../../../server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 
 export async function DELETE(request: Request) {
     try {

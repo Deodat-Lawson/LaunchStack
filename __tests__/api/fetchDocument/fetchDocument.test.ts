@@ -4,7 +4,7 @@ jest.mock("~/server/storage/vercel-blob", () => ({
   putFile: jest.fn(),
 }));
 
-jest.mock("@clerk/nextjs/server", () => ({
+jest.mock("~/lib/auth-server", () => ({
   auth: jest.fn(),
 }));
 
@@ -19,7 +19,7 @@ jest.mock("~/server/db/core", () => ({
 }));
 
 import { POST } from "~/app/api/fetchDocument/route";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 import { validateRequestBody } from "~/lib/validation";
 import { dbCore } from "~/server/db/core";
 

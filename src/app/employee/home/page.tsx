@@ -5,7 +5,7 @@ import { FileText, Brain, HelpCircle, BookOpen } from "lucide-react";
 import styles from "~/styles/Employer/Home.module.css";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-hooks";
 import LoadingPage from "~/app/_components/loading";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
 

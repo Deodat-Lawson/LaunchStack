@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(A/AIQuery/route.ts)",
+      "Bash(pnpm remove:*)",
+      "Bash(pnpm add:*)",
+      "Bash(node -e \"const ba = require\\('better-auth'\\); console.log\\(Object.keys\\(ba\\)\\)\")",
+      "Bash(node -e ':*)",
+      "Bash(SKIP_ENV_VALIDATION=true pnpm build)",
+      "Bash(SKIP_ENV_VALIDATION=true pnpm tsc --noEmit)",
+      "Bash(grep -rE \"requestPasswordReset|forgetPassword|resetPassword\" node_modules/better-auth/dist/client/*.d.ts node_modules/better-auth/dist/client/*.d.mts)",
+      "Bash(grep -rE \"request-password|forget-password\" node_modules/better-auth/dist/api/routes/*.d.mts)"
+    ]
+  }
+}

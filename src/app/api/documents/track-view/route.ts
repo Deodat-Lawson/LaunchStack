@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { users, documentViews, document } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 
 interface TrackViewRequest {
     documentId: number;

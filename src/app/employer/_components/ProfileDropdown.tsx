@@ -1,9 +1,7 @@
 "use client";
 import React, { useRef, useEffect } from "react";
 import styles from "~/styles/Employer/ProfileDropdown.module.css";
-import {
-    UserButton
-} from '@clerk/nextjs'
+import { UserButton } from '~/components/UserButton';
 
 
 const ProfileDropdown: React.FC = () => {

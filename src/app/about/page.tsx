@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Github, Linkedin, Mail } from 'lucide-react';
 import styles from '../../styles/about.module.css';
 import { Navbar } from '../_components/Navbar';
-import { ClerkProvider } from '@clerk/nextjs';
+
 
 const teamMembers = [
     {
@@ -32,7 +32,6 @@ const teamMembers = [
 
 export default function About() {
     return (
-        <ClerkProvider>
             <div className={styles.container}>
                 <Navbar />
 
@@ -104,6 +103,5 @@ export default function About() {
                 </div>
             </main>
             </div>
-        </ClerkProvider>
     );
 }

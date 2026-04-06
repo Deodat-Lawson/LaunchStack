@@ -1,22 +1,33 @@
 import { db } from "~/server/db";
-import { users, inviteCodes, company } from "~/server/db/schema";
+import { users, inviteCodes, company, authUser } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
+import { handleApiError, createSuccessResponse, createValidationError, createUnauthorizedError } from "~/lib/api-utils";
+import { auth } from "~/lib/auth-server";
 
 type PostBody = {
-    userId: string;
-    name: string;
-    email: string;
     inviteCode: string;
 };
 
 export async function POST(request: Request) {
     try {
-        const { userId, name, email, inviteCode } = (await request.json()) as PostBody;
-
-        if (!inviteCode || !userId) {
-            return createValidationError("Invite code and user ID are required");
+        const { userId } = await auth();
+        if (!userId) {
+            return createUnauthorizedError("You must be signed in.");
         }
+
+        const { inviteCode } = (await request.json()) as PostBody;
+
+        if (!inviteCode) {
+            return createValidationError("Invite code is required");
+        }
+
+        // Get name and email from Better Auth user table
+        const [authUserRecord] = await db
+            .select({ name: authUser.name, email: authUser.email })
+            .from(authUser)
+            .where(eq(authUser.id, userId));
+        const name = authUserRecord?.name ?? "";
+        const email = authUserRecord?.email ?? "";
 
         // Find the active invite code
         const [codeRecord] = await db

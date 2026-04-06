@@ -1,19 +1,59 @@
 "use client";
 
-import React, { Suspense } from "react";
-import { useAuth, SignIn } from "@clerk/nextjs";
+import React, { Suspense, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "~/lib/auth-hooks";
+import { authClient } from "~/lib/auth-client";
 import {
     Brain,
     FileSearch,
     BarChart3,
     Shield,
     CheckCircle,
+    Loader2,
 } from "lucide-react";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
+import Link from "next/link";
 
 const SigninPage: React.FC = () => {
-    const { isLoaded: isAuthLoaded } = useAuth();
+    const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
+    const router = useRouter();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // If already signed in, redirect
+    React.useEffect(() => {
+        if (isAuthLoaded && isSignedIn) {
+            router.push("/");
+        }
+    }, [isAuthLoaded, isSignedIn, router]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        setIsSubmitting(true);
+
+        try {
+            const result = await authClient.signIn.email({
+                email,
+                password,
+            });
+
+            if (result.error) {
+                setError(result.error.message ?? "Sign in failed. Please check your credentials.");
+            } else {
+                router.push("/");
+            }
+        } catch {
+            setError("An unexpected error occurred. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     // ═════════════════════════════════════════════════════════════════════════
     // RENDER HELPERS
@@ -87,7 +127,6 @@ const SigninPage: React.FC = () => {
     // RENDER
     // ═════════════════════════════════════════════════════════════════════════
 
-    // While Clerk is still loading, show a spinner
     if (!isAuthLoaded) {
         return (
             <div className={styles.container}>
@@ -109,17 +148,90 @@ const SigninPage: React.FC = () => {
         );
     }
 
-    // Show the Clerk SignIn component in the same split-screen layout
     return (
         <div className={styles.container}>
             <SignupNavbar />
             <div className={styles.splitLayout}>
                 <div className={styles.formPanel}>
-                    <SignIn
-                        routing="hash"
-                        forceRedirectUrl="/"
-                        signUpUrl="/signup"
-                    />
+                    <div className={styles.formCard}>
+                        <div className={styles.form}>
+                            <h2 className={styles.title}>Sign In</h2>
+                            <p className={styles.subtitle}>
+                                Enter your credentials to access your account
+                            </p>
+
+                            <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
+                                        Email
+                                    </label>
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                        placeholder="you@example.com"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
+                                        Password
+                                    </label>
+                                    <input
+                                        id="password"
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                        placeholder="Enter your password"
+                                    />
+                                </div>
+
+                                {error && (
+                                    <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">
+                                        {error}
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-2"
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Signing in...
+                                        </>
+                                    ) : (
+                                        "Sign In"
+                                    )}
+                                </button>
+
+                                <div className="text-center space-y-2">
+                                    <Link
+                                        href="/forgot-password"
+                                        className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                                    >
+                                        Forgot password?
+                                    </Link>
+                                    <p className="text-sm text-muted-foreground">
+                                        Don&apos;t have an account?{" "}
+                                        <Link
+                                            href="/signup"
+                                            className="text-purple-600 dark:text-purple-400 hover:underline font-medium"
+                                        >
+                                            Sign up
+                                        </Link>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 {renderBrandPanel()}
             </div>

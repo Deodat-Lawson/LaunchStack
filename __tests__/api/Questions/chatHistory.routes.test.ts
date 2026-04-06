@@ -2,7 +2,7 @@ import { POST as addChatHistory } from "~/app/api/Questions/add/route";
 import { POST as fetchChatHistory } from "~/app/api/Questions/fetch/route";
 
 const mockAuth = jest.fn();
-jest.mock("@clerk/nextjs/server", () => ({
+jest.mock("~/lib/auth-server", () => ({
     auth: (...args: unknown[]) => mockAuth(...args),
 }));
 

@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Clock, Building, Mail } from 'lucide-react';
 import { useRouter } from "next/navigation"
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-hooks";
 import styles from '~/styles/Employee/PendingApproval.module.css';
 import NavBar from "~/app/employer/employees/NavBar";
 

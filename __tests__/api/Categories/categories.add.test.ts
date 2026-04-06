@@ -1,9 +1,9 @@
 import { POST } from "~/app/api/Categories/AddCategories/route";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db/index";
 
-jest.mock("@clerk/nextjs/server", () => ({
+jest.mock("~/lib/auth-server", () => ({
   auth: jest.fn(),
 }));
 

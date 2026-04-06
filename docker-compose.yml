@@ -11,7 +11,6 @@
 #   docker compose --env-file .env --profile minimal up db      # just the database
 
 x-app-build-args: &app-build-args
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
   OPENAI_API_KEY: ${OPENAI_API_KEY}
 
 services:
@@ -64,8 +63,8 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
       UPLOADTHING_TOKEN: ${UPLOADTHING_TOKEN:-}
       NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
       INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:-}

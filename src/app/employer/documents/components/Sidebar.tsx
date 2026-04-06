@@ -28,7 +28,8 @@ import {
   Megaphone,
   Archive,
 } from 'lucide-react';
-import { UserButton, useUser } from '@clerk/nextjs';
+import { useUser } from '~/lib/auth-hooks';
+import { UserButton } from '~/components/UserButton';
 import { Input } from '~/app/employer/documents/components/ui/input';
 import { Button } from '~/app/employer/documents/components/ui/button';
 import { cn } from "~/lib/utils";

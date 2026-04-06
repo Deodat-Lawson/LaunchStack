@@ -16,7 +16,7 @@ import {
     BookOpen,
 } from "lucide-react";
 import Link from "next/link";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-hooks";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { genUploader } from "uploadthing/client";

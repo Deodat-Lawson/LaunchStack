@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { users, document, documentViews } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 
 interface Viewer {
     name: string;

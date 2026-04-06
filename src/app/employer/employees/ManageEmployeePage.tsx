@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-hooks";
 
 import NavBar from "./NavBar";
 import EmployeeTable from "./CurrentEmployeeTable";

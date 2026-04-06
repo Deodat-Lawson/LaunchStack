@@ -1,20 +1,30 @@
 import { db } from "~/server/db/index";
-import { users, company } from "~/server/db/schema";
+import { users, company, authUser } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
+import { handleApiError, createSuccessResponse, createValidationError, createUnauthorizedError } from "~/lib/api-utils";
+import { auth } from "~/lib/auth-server";
 
 type PostBody = {
-    userId: string;
-    name: string;
-    email: string;
     employerPasskey: string;
     companyName: string;
 }
 
-
 export async function POST(request: Request) {
     try {
-        const {userId, name, email, employerPasskey, companyName} = (await request.json()) as PostBody;
+        const { userId } = await auth();
+        if (!userId) {
+            return createUnauthorizedError("You must be signed in.");
+        }
+
+        // Get name and email from Better Auth user table
+        const [authUserRecord] = await db
+            .select({ name: authUser.name, email: authUser.email })
+            .from(authUser)
+            .where(eq(authUser.id, userId));
+        const name = authUserRecord?.name ?? "";
+        const email = authUserRecord?.email ?? "";
+
+        const {employerPasskey, companyName} = (await request.json()) as PostBody;
 
         let companyId: bigint;
         const [existingCompany] = await db

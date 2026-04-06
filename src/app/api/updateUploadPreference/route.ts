@@ -5,7 +5,7 @@
 
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 
 import { db } from "~/server/db";
 import { company, users } from "~/server/db/schema";

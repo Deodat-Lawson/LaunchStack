@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "~/lib/auth-hooks";
 import { useRouter } from "next/navigation";
 import { Brain, Home } from "lucide-react";
 

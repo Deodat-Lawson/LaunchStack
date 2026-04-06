@@ -12,3 +12,4 @@ export * from "./schema/document-notes";
 export * from "./schema/trend-search";
 export * from "./schema/company-metadata";
 export * from "./schema/marketing-history";
+export * from "./schema/auth";

@@ -5,9 +5,6 @@ import { ThemeProvider } from "next-themes";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
 
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://launchstack.app';
@@ -54,7 +51,6 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`} suppressHydrationWarning>
       <body suppressHydrationWarning>
       <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="dark" enableSystem>
@@ -63,7 +59,6 @@ export default function RootLayout({
       </ThemeProvider>
       </body>
       </html>
-    </ClerkProvider>
 
   );
 }

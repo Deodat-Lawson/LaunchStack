@@ -20,7 +20,8 @@ const serverSchema = z.object({
   GOOGLE_MODEL: optionalString(),
   OLLAMA_BASE_URL: optionalString(),
   OLLAMA_MODEL: optionalString(),
-  CLERK_SECRET_KEY: requiredString(),
+  BETTER_AUTH_SECRET: requiredString(),
+  BETTER_AUTH_URL: optionalString(),
   BLOB_READ_WRITE_TOKEN: optionalString(),
   UPLOADTHING_TOKEN: optionalString(),
   DATALAB_API_KEY: optionalString(),
@@ -68,7 +69,6 @@ const serverSchema = z.object({
 });
 
 const clientSchema = z.object({
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: requiredString(),
   NEXT_PUBLIC_UPLOADTHING_ENABLED: z.preprocess(
     (val) => val === "true" || val === "1",
     z.boolean().optional()
@@ -106,7 +106,8 @@ function parseServerEnv() {
     GOOGLE_MODEL: process.env.GOOGLE_MODEL,
     OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
     OLLAMA_MODEL: process.env.OLLAMA_MODEL,
-    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
@@ -146,8 +147,6 @@ function parseServerEnv() {
 export const env = {
   server: parseServerEnv(),
   client: parseEnv(clientSchema, {
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     NEXT_PUBLIC_UPLOADTHING_ENABLED:
       process.env.NEXT_PUBLIC_UPLOADTHING_ENABLED,
   }),

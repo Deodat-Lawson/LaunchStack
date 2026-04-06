@@ -4,7 +4,7 @@ import { Mail, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from '~/styles/SupportPage.module.css';
 import emailjs from '@emailjs/browser';
 import { Navbar } from '../_components/Navbar';
-import { ClerkProvider } from '@clerk/nextjs';
+
 
 
 
@@ -87,7 +87,6 @@ const SupportPage = () => {
     };
 
     return (
-        <ClerkProvider>
             <div className={styles.container}>
                 <Navbar />
 
@@ -210,7 +209,6 @@ const SupportPage = () => {
                     </div>
                 </main>
             </div>
-        </ClerkProvider>
     );
 };
 

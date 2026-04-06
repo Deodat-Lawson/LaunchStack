@@ -10,7 +10,7 @@ import {
     type SearchResult
 } from "~/lib/tools/rag";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
 import { users, document, documentSections } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";

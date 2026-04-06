@@ -4,7 +4,7 @@ import { users, category } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { validateRequestBody } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 
 const AddCategorySchema = z.object({
     CategoryName: z.string().min(1, "Category name is required").max(256, "Category name is too long"),

@@ -11,7 +11,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 import TurndownService from "turndown";
 

@@ -175,17 +175,8 @@ export const MainDeployment: React.FC<DeploymentProps> = ({
         darkMode={darkMode}
       >
         <div className="space-y-4">
-          <StepCard icon={<Shield className="w-5 h-5" />} title="Create a Clerk account" darkMode={darkMode}>
-            Sign up at{' '}
-            <a
-              href="https://dashboard.clerk.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-purple-500 hover:underline inline-flex items-center gap-1"
-            >
-              dashboard.clerk.com <ExternalLink className="w-3 h-3" />
-            </a>
-            . Create a new application, then copy your <strong>Publishable Key</strong> and <strong>Secret Key</strong>.
+          <StepCard icon={<Shield className="w-5 h-5" />} title="Generate a Better Auth secret" darkMode={darkMode}>
+            Run <code>openssl rand -base64 32</code> to generate a strong random secret for <strong>BETTER_AUTH_SECRET</strong>. No external account needed — authentication runs entirely on your own infrastructure.
           </StepCard>
 
           <StepCard icon={<Key className="w-5 h-5" />} title="Create an OpenAI API key" darkMode={darkMode}>
@@ -253,8 +244,8 @@ export const MainDeployment: React.FC<DeploymentProps> = ({
             description="Create a .env file at the project root with the keys you collected above."
             code={`DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"
 
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_your_key_here
-CLERK_SECRET_KEY=sk_live_your_key_here
+BETTER_AUTH_SECRET=your_generated_secret_here
+BETTER_AUTH_URL=http://localhost:3000
 
 OPENAI_API_KEY=sk-proj-your_key_here
 
@@ -263,7 +254,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx
 
 # Inngest — use a placeholder for local dev
 INNGEST_EVENT_KEY=dev-placeholder`}
-            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"\n\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_your_key_here\nCLERK_SECRET_KEY=sk_live_your_key_here\n\nOPENAI_API_KEY=sk-proj-your_key_here\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'step-3')}
+            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"\n\nBETTER_AUTH_SECRET=your_generated_secret_here\nBETTER_AUTH_URL=http://localhost:3000\n\nOPENAI_API_KEY=sk-proj-your_key_here\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'step-3')}
             copied={copiedCode === 'step-3'}
             darkMode={darkMode}
           />
@@ -378,7 +369,7 @@ INNGEST_EVENT_KEY=dev-placeholder`}
             }`}
           >
             <video
-              src="/deployment-demos/clerk-setup.mov"
+              src="/deployment-demos/auth-setup.mov"
               controls
               loop
               muted
@@ -389,12 +380,12 @@ INNGEST_EVENT_KEY=dev-placeholder`}
               <div className="flex items-center gap-2 mb-1">
                 <Play className="w-4 h-4 text-purple-500" />
                 <h4 className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  Clerk Setup
+                  Auth Setup
                 </h4>
               </div>
               <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                 <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded`}>
-                  public/deployment-demos/clerk-setup.mov
+                  public/deployment-demos/auth-setup.mov
                 </code>
               </p>
             </div>
@@ -439,7 +430,7 @@ INNGEST_EVENT_KEY=dev-placeholder`}
         </Callout>
 
         <Callout icon={<Shield className="w-5 h-5" />} darkMode={darkMode} variant="info">
-          Need help with Clerk configuration? Open the <strong>Clerk Setup</strong> tab in the sidebar for a full walkthrough including redirect URLs and production keys.
+          Need help with authentication configuration? Open the <strong>Auth Setup</strong> tab in the sidebar for a full walkthrough.
         </Callout>
       </div>
     </>

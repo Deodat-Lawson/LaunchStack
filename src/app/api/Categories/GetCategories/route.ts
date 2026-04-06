@@ -3,7 +3,7 @@ import { db } from "../../../../server/db";
 import {category, users} from "../../../../server/db/schema";
 import { eq } from "drizzle-orm";
 import * as console from "console";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 
 export async function GET(_request: Request) {
     try {

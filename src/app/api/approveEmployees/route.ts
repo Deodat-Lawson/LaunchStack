@@ -1,7 +1,7 @@
 import { db } from "../../../server/db/index";
 import { users } from "../../../server/db/schema";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "~/lib/auth-server";
 import {
     handleApiError,
     createSuccessResponse,

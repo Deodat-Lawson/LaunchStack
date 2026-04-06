@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-hooks";
 import { useRouter } from "next/navigation";
 import { Brain, Home, Mail, MessageSquare, Phone, Send } from "lucide-react";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";

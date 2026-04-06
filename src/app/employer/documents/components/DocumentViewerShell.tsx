@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "~/lib/auth-hooks";
 import LoadingPage from "~/app/_components/loading";
 import { Sidebar } from "./Sidebar";
 import { DocumentViewer } from "./DocumentViewer";

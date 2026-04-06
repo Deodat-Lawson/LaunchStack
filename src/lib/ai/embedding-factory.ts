@@ -4,6 +4,10 @@ import { env } from "~/env";
 import { generateEmbeddings } from "./embeddings";
 import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
 import type { EmbeddingIndexConfig } from "./embedding-index-registry";
+import {
+  resolveEffectiveEmbeddingConfig,
+  type CompanyEmbeddingConfig,
+} from "./company-embedding-config";
 
 class SidecarEmbeddings implements EmbeddingsProvider {
   constructor(private readonly index: EmbeddingIndexConfig) {}
@@ -53,7 +57,10 @@ class SidecarEmbeddings implements EmbeddingsProvider {
 }
 
 class HuggingFaceEmbeddings implements EmbeddingsProvider {
-  constructor(private readonly index: EmbeddingIndexConfig) {}
+  constructor(
+    private readonly index: EmbeddingIndexConfig,
+    private readonly config?: CompanyEmbeddingConfig,
+  ) {}
 
   async embedQuery(query: string): Promise<number[]> {
     const [vector] = await this.embedDocuments([query]);
@@ -61,7 +68,7 @@ class HuggingFaceEmbeddings implements EmbeddingsProvider {
   }
 
   async embedDocuments(documents: string[]): Promise<number[][]> {
-    const apiKey = env.server.HUGGINGFACE_API_KEY;
+    const apiKey = resolveEffectiveEmbeddingConfig(this.config).huggingFaceApiKey;
     if (!apiKey) {
       throw new Error(
         "HUGGINGFACE_API_KEY is required for Hugging Face embeddings",
@@ -141,11 +148,14 @@ function validateEmbeddingDimension(
 
 export function createEmbeddingModel(
   index: EmbeddingIndexConfig,
+  config?: CompanyEmbeddingConfig,
 ): EmbeddingsProvider {
+  const effectiveConfig = resolveEffectiveEmbeddingConfig(config);
   if (index.provider === "openai") {
     return {
       embedQuery: async (query: string) => {
         const result = await generateEmbeddings([query], {
+          apiKey: effectiveConfig.openAIApiKey,
           model: index.model,
           dimensions: index.dimension,
         });
@@ -153,6 +163,7 @@ export function createEmbeddingModel(
       },
       embedDocuments: async (documents: string[]) => {
         const result = await generateEmbeddings(documents, {
+          apiKey: effectiveConfig.openAIApiKey,
           model: index.model,
           dimensions: index.dimension,
         });
@@ -168,15 +179,15 @@ export function createEmbeddingModel(
   if (index.provider === "ollama") {
     return new ValidatedEmbeddingsProvider(
       new OllamaEmbeddings({
-        baseUrl: env.server.OLLAMA_BASE_URL,
-        model: index.model,
+        baseUrl: effectiveConfig.ollamaBaseUrl,
+        model: effectiveConfig.ollamaModel ?? index.model,
       }),
       index,
     );
   }
 
   return new ValidatedEmbeddingsProvider(
-    new HuggingFaceEmbeddings(index),
+    new HuggingFaceEmbeddings(index, config),
     index,
   );
 }

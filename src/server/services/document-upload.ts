@@ -1,5 +1,6 @@
+import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { document, ocrJobs } from "~/server/db/schema";
+import { company, document, ocrJobs } from "~/server/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
 import {
   shouldTranscribeFile,
@@ -92,6 +93,13 @@ export async function processDocumentUpload({
 
   const documentCategory = category ?? "Uncategorized";
   const companyIdString = user.companyId.toString();
+  const [companyRecord] = await db
+    .select({ embeddingIndexKey: company.embeddingIndexKey })
+    .from(company)
+    .where(eq(company.id, Number(user.companyId)))
+    .limit(1);
+  const resolvedEmbeddingIndexKey =
+    embeddingIndexKey ?? companyRecord?.embeddingIndexKey ?? undefined;
 
   // ------------------------------------------------------------------
   // Audio file: save the original audio as a document, then create a
@@ -183,6 +191,7 @@ export async function processDocumentUpload({
           mimeType: "text/plain",
           originalFilename: `${documentName}-transcription.txt`,
           transcriptionMetadata,
+          embeddingIndexKey: resolvedEmbeddingIndexKey,
         }
       );
 
@@ -253,7 +262,7 @@ export async function processDocumentUpload({
       preferredProvider: parseProvider(preferredProvider),
       mimeType,
       originalFilename,
-      embeddingIndexKey,
+      embeddingIndexKey: resolvedEmbeddingIndexKey,
     }
   );
 

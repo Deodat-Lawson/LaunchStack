@@ -9,11 +9,27 @@ type PostBody = {
     name: string;
     email: string;
     numberOfEmployees: string;
+    embeddingIndexKey?: string;
+    embeddingOpenAIApiKey?: string | null;
+    embeddingHuggingFaceApiKey?: string | null;
+    embeddingOllamaBaseUrl?: string | null;
+    embeddingOllamaModel?: string | null;
 }
 
 export async function POST(request: Request) {
     try {
-        const {userId, name, email, companyName, numberOfEmployees} = (await request.json()) as PostBody;
+        const {
+            userId,
+            name,
+            email,
+            companyName,
+            numberOfEmployees,
+            embeddingIndexKey,
+            embeddingOpenAIApiKey,
+            embeddingHuggingFaceApiKey,
+            embeddingOllamaBaseUrl,
+            embeddingOllamaModel,
+        } = (await request.json()) as PostBody;
 
         // Validate required fields
         if (!name?.trim()) {
@@ -39,6 +55,11 @@ export async function POST(request: Request) {
             .values({
                 name: companyName,
                 numberOfEmployees: numberOfEmployees || "0",
+                embeddingIndexKey: embeddingIndexKey?.trim() || null,
+                embeddingOpenAIApiKey: embeddingOpenAIApiKey?.trim() || null,
+                embeddingHuggingFaceApiKey: embeddingHuggingFaceApiKey?.trim() || null,
+                embeddingOllamaBaseUrl: embeddingOllamaBaseUrl?.trim() || null,
+                embeddingOllamaModel: embeddingOllamaModel?.trim() || null,
             })
             .returning({ id: company.id });
 

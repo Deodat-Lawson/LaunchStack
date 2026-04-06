@@ -15,6 +15,7 @@ import {
 } from "~/lib/ocr/processor";
 import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "~/lib/ocr/chunker";
 import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
 import {
   resolveEmbeddingIndex,
   supportsShortVectorSearch,
@@ -145,6 +146,7 @@ function isAzureSupportedFile(documentUrl: string, documentName: string): boolea
 async function vectorizeWithIndex(
   chunks: DocumentChunk[],
   embeddingIndex: EmbeddingIndexConfig,
+  embeddingConfig: CompanyEmbeddingConfig | undefined,
   batchSize: number,
   documentId: number,
   rootStructureId: number,
@@ -152,7 +154,7 @@ async function vectorizeWithIndex(
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
 
-  const embeddings = createEmbeddingModel(embeddingIndex);
+  const embeddings = createEmbeddingModel(embeddingIndex, embeddingConfig);
   const contentStrings = prepareForEmbedding(chunks);
   const childCounts = chunks.map(
     (chunk) => (chunk.children && chunk.children.length > 0 ? chunk.children.length : 1),
@@ -336,7 +338,9 @@ export async function runDocIngestionTool(
   const embeddingBatchSize = runtime?.sidecarBatchSize ?? DEFAULT_EMBEDDING_BATCH_SIZE;
   const updateJobStatus = runtime?.updateJobStatus ?? false;
   const markFailureInDb = runtime?.markFailureInDb ?? false;
-  const embeddingIndex = resolveEmbeddingIndex(options?.embeddingIndexKey);
+  const { getCompanyEmbeddingConfig } = await import("~/lib/ai/company-embedding-config");
+  const companyEmbeddingConfig = await getCompanyEmbeddingConfig(companyId);
+  const embeddingIndex = resolveEmbeddingIndex(options?.embeddingIndexKey, companyEmbeddingConfig ?? undefined);
 
   const fastTextPath = runtime?.fastTextPath ?? false;
 
@@ -498,6 +502,7 @@ export async function runDocIngestionTool(
       const result = await vectorizeWithIndex(
         chunks,
         embeddingIndex,
+        companyEmbeddingConfig ?? undefined,
         embeddingBatchSize,
         documentId,
         rootStructureId,

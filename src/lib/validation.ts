@@ -163,6 +163,11 @@ export const UpdateCompanySchema = z.object({
   name: z.string().min(1, "Company name is required").max(256, "Company name is too long").trim(),
   description: z.string().max(5000, "Description is too long").trim().optional().nullable(),
   industry: z.string().max(256, "Industry is too long").trim().optional().nullable(),
+  embeddingIndexKey: z.string().max(128, "Embedding index key is too long").trim().optional().nullable(),
+  embeddingOpenAIApiKey: z.string().max(5000, "OpenAI API key is too long").trim().optional().nullable(),
+  embeddingHuggingFaceApiKey: z.string().max(5000, "Hugging Face API key is too long").trim().optional().nullable(),
+  embeddingOllamaBaseUrl: z.string().max(1024, "Ollama base URL is too long").trim().optional().nullable(),
+  embeddingOllamaModel: z.string().max(256, "Ollama model is too long").trim().optional().nullable(),
   employerPasskey: z.string().max(256, "Employer passkey is too long").trim().optional(),
   employeePasskey: z.string().max(256, "Employee passkey is too long").trim().optional(),
   numberOfEmployees: z
@@ -176,6 +181,36 @@ export const UpdateCompanySchema = z.object({
   name: data.name,
   description: data.description,
   industry: data.industry,
+  embeddingIndexKey:
+    data.embeddingIndexKey === undefined
+      ? undefined
+      : data.embeddingIndexKey.trim()
+        ? data.embeddingIndexKey.trim()
+        : null,
+  embeddingOpenAIApiKey:
+    data.embeddingOpenAIApiKey === undefined
+      ? undefined
+      : data.embeddingOpenAIApiKey.trim()
+        ? data.embeddingOpenAIApiKey.trim()
+        : null,
+  embeddingHuggingFaceApiKey:
+    data.embeddingHuggingFaceApiKey === undefined
+      ? undefined
+      : data.embeddingHuggingFaceApiKey.trim()
+        ? data.embeddingHuggingFaceApiKey.trim()
+        : null,
+  embeddingOllamaBaseUrl:
+    data.embeddingOllamaBaseUrl === undefined
+      ? undefined
+      : data.embeddingOllamaBaseUrl.trim()
+        ? data.embeddingOllamaBaseUrl.trim()
+        : null,
+  embeddingOllamaModel:
+    data.embeddingOllamaModel === undefined
+      ? undefined
+      : data.embeddingOllamaModel.trim()
+        ? data.embeddingOllamaModel.trim()
+        : null,
   employerPasskey: data.employerPasskey,
   employeePasskey: data.employeePasskey,
   numberOfEmployees: data.numberOfEmployees && data.numberOfEmployees !== "" ? data.numberOfEmployees : "0",

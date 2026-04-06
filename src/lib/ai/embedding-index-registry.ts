@@ -1,4 +1,8 @@
 import { env } from "~/env";
+import {
+  resolveEffectiveEmbeddingConfig,
+  type CompanyEmbeddingConfig,
+} from "./company-embedding-config";
 
 export type EmbeddingProvider =
   | "openai"
@@ -42,8 +46,9 @@ function isSupportedDimensionTableDimension(dimension: number): boolean {
   return dimension === 768 || dimension === 1024;
 }
 
-function buildDynamicIndexes(): EmbeddingIndexConfig[] {
+function buildDynamicIndexes(config?: CompanyEmbeddingConfig): EmbeddingIndexConfig[] {
   const indexes: EmbeddingIndexConfig[] = [];
+  const effectiveConfig = resolveEffectiveEmbeddingConfig(config);
 
   const sidecarDimension = parseDimension(env.server.SIDECAR_EMBEDDING_DIMENSION);
   if (env.server.SIDECAR_URL && sidecarDimension && isSupportedDimensionTableDimension(sidecarDimension)) {
@@ -60,8 +65,9 @@ function buildDynamicIndexes(): EmbeddingIndexConfig[] {
   }
 
   const ollamaDimension = parseDimension(env.server.OLLAMA_EMBEDDING_DIMENSION);
-  const ollamaModel = env.server.OLLAMA_EMBEDDING_MODEL ?? env.server.OLLAMA_MODEL;
-  if (env.server.OLLAMA_BASE_URL && ollamaModel && ollamaDimension && isSupportedDimensionTableDimension(ollamaDimension)) {
+  const ollamaModel = effectiveConfig.ollamaModel;
+  const ollamaBaseUrl = effectiveConfig.ollamaBaseUrl;
+  if (ollamaBaseUrl && ollamaModel && ollamaDimension && isSupportedDimensionTableDimension(ollamaDimension)) {
     indexes.push({
       indexKey: "ollama-default",
       provider: "ollama",
@@ -91,17 +97,20 @@ function buildDynamicIndexes(): EmbeddingIndexConfig[] {
   return indexes;
 }
 
-export function getEmbeddingIndexRegistry(): EmbeddingIndexConfig[] {
-  return [LEGACY_OPENAI_INDEX, ...buildDynamicIndexes()];
+export function getEmbeddingIndexRegistry(config?: CompanyEmbeddingConfig): EmbeddingIndexConfig[] {
+  return [LEGACY_OPENAI_INDEX, ...buildDynamicIndexes(config)];
 }
 
-export function getDefaultEmbeddingIndexKey(): string {
-  return env.server.EMBEDDING_INDEX ?? LEGACY_OPENAI_INDEX.indexKey;
+export function getDefaultEmbeddingIndexKey(config?: CompanyEmbeddingConfig): string {
+  return resolveEffectiveEmbeddingConfig(config).embeddingIndexKey ?? LEGACY_OPENAI_INDEX.indexKey;
 }
 
-export function resolveEmbeddingIndex(indexKey?: string): EmbeddingIndexConfig {
-  const targetKey = indexKey ?? getDefaultEmbeddingIndexKey();
-  const index = getEmbeddingIndexRegistry().find(
+export function resolveEmbeddingIndex(
+  indexKey?: string,
+  config?: CompanyEmbeddingConfig,
+): EmbeddingIndexConfig {
+  const targetKey = indexKey ?? getDefaultEmbeddingIndexKey(config);
+  const index = getEmbeddingIndexRegistry(config).find(
     (candidate) => candidate.indexKey === targetKey && candidate.enabled,
   );
 

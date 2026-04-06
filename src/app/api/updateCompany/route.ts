@@ -26,7 +26,20 @@ export async function POST(request: Request) {
     if (!validation.success) {
       return validation.response;
     }
-    const { name, description, industry, employerPasskey, employeePasskey, numberOfEmployees, useUploadThing } = validation.data;
+    const {
+      name,
+      description,
+      industry,
+      embeddingIndexKey,
+      embeddingOpenAIApiKey,
+      embeddingHuggingFaceApiKey,
+      embeddingOllamaBaseUrl,
+      embeddingOllamaModel,
+      employerPasskey,
+      employeePasskey,
+      numberOfEmployees,
+      useUploadThing,
+    } = validation.data;
 
     const [userRecord] = await db
       .select({
@@ -61,6 +74,11 @@ export async function POST(request: Request) {
       name: string;
       description: string | null;
       industry: string | null;
+      embeddingIndexKey: string | null;
+      embeddingOpenAIApiKey: string | null;
+      embeddingHuggingFaceApiKey: string | null;
+      embeddingOllamaBaseUrl: string | null;
+      embeddingOllamaModel: string | null;
       employerpasskey: string;
       employeepasskey: string;
       numberOfEmployees: string;
@@ -75,6 +93,21 @@ export async function POST(request: Request) {
     }
     if (industry !== undefined) {
       updateData.industry = industry?.trim() ?? null;
+    }
+    if (embeddingIndexKey !== undefined) {
+      updateData.embeddingIndexKey = embeddingIndexKey;
+    }
+    if (embeddingOpenAIApiKey !== undefined) {
+      updateData.embeddingOpenAIApiKey = embeddingOpenAIApiKey;
+    }
+    if (embeddingHuggingFaceApiKey !== undefined) {
+      updateData.embeddingHuggingFaceApiKey = embeddingHuggingFaceApiKey;
+    }
+    if (embeddingOllamaBaseUrl !== undefined) {
+      updateData.embeddingOllamaBaseUrl = embeddingOllamaBaseUrl;
+    }
+    if (embeddingOllamaModel !== undefined) {
+      updateData.embeddingOllamaModel = embeddingOllamaModel;
     }
 
     if (employerPasskey !== undefined) {

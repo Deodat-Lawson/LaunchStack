@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import {
   Settings,
+  Brain,
   Building2,
   User,
   Mail,
@@ -30,10 +31,22 @@ interface Company {
   industry: string | null;
   employerpasskey: string;
   employeepasskey: string;
+  embeddingIndexKey: string | null;
+  embeddingOpenAIApiKey: string | null;
+  embeddingHuggingFaceApiKey: string | null;
+  embeddingOllamaBaseUrl: string | null;
+  embeddingOllamaModel: string | null;
   numberOfEmployees: string;
   createdAt: string;
   updatedAt: string;
 }
+
+const EMBEDDING_INDEX_OPTIONS = [
+  { value: "legacy-openai-1536", label: "OpenAI Legacy (1536)" },
+  { value: "ollama-default", label: "Ollama Default" },
+  { value: "huggingface-default", label: "Hugging Face Default" },
+  { value: "sidecar-default", label: "Sidecar Default" },
+] as const;
 
 export function EmployerSettingsPanel() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -47,6 +60,11 @@ export function EmployerSettingsPanel() {
   const [companyDescription, setCompanyDescription] = useState("");
   const [companyIndustry, setCompanyIndustry] = useState("");
   const [staffCount, setStaffCount] = useState("");
+  const [embeddingIndexKey, setEmbeddingIndexKey] = useState("legacy-openai-1536");
+  const [embeddingOpenAIApiKey, setEmbeddingOpenAIApiKey] = useState("");
+  const [embeddingHuggingFaceApiKey, setEmbeddingHuggingFaceApiKey] = useState("");
+  const [embeddingOllamaBaseUrl, setEmbeddingOllamaBaseUrl] = useState("");
+  const [embeddingOllamaModel, setEmbeddingOllamaModel] = useState("");
   const [employerPasskey, setEmployerPasskey] = useState("");
   const [employeePasskey, setEmployeePasskey] = useState("");
   const [showEmployerPasskey, setShowEmployerPasskey] = useState(false);
@@ -67,6 +85,11 @@ export function EmployerSettingsPanel() {
         setCompanyDescription(data.description ?? "");
         setCompanyIndustry(data.industry ?? "");
         setStaffCount(data.numberOfEmployees ?? "");
+        setEmbeddingIndexKey(data.embeddingIndexKey ?? "legacy-openai-1536");
+        setEmbeddingOpenAIApiKey(data.embeddingOpenAIApiKey ?? "");
+        setEmbeddingHuggingFaceApiKey(data.embeddingHuggingFaceApiKey ?? "");
+        setEmbeddingOllamaBaseUrl(data.embeddingOllamaBaseUrl ?? "");
+        setEmbeddingOllamaModel(data.embeddingOllamaModel ?? "");
         setEmployerPasskey(data.employerpasskey ?? "");
         setEmployeePasskey(data.employeepasskey ?? "");
       } catch (err) {
@@ -91,6 +114,11 @@ export function EmployerSettingsPanel() {
           name: companyName,
           description: companyDescription || null,
           industry: companyIndustry || null,
+          embeddingIndexKey: embeddingIndexKey || null,
+          embeddingOpenAIApiKey: embeddingOpenAIApiKey || null,
+          embeddingHuggingFaceApiKey: embeddingHuggingFaceApiKey || null,
+          embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
+          embeddingOllamaModel: embeddingOllamaModel || null,
           numberOfEmployees: staffCount,
           employerPasskey,
           employeePasskey,
@@ -261,6 +289,102 @@ export function EmployerSettingsPanel() {
                 placeholder="e.g. 25"
                 className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500"
               />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-xs font-black text-muted-foreground uppercase tracking-[0.15em] mb-4">
+            Embedding Configuration
+          </h2>
+          <div className="bg-card border border-border rounded-xl p-5 space-y-4">
+            <div className="space-y-1.5">
+              <label
+                htmlFor="embeddingIndexKey"
+                className="flex items-center gap-1.5 text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em]"
+              >
+                <Brain className="w-3 h-3" />
+                Default Embedding Index
+              </label>
+              <select
+                id="embeddingIndexKey"
+                value={embeddingIndexKey}
+                onChange={(e) => setEmbeddingIndexKey(e.target.value)}
+                className="flex h-9 w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500"
+              >
+                {EMBEDDING_INDEX_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <p className="text-[10px] text-muted-foreground">
+                Optional provider config below is demo-only and currently stored in plaintext. Leave fields blank to keep using env defaults.
+              </p>
+            </div>
+            <div className="space-y-1.5">
+              <label
+                htmlFor="embeddingOpenAIApiKey"
+                className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em] block"
+              >
+                OpenAI API Key (optional)
+              </label>
+              <Input
+                id="embeddingOpenAIApiKey"
+                type="password"
+                value={embeddingOpenAIApiKey}
+                onChange={(e) => setEmbeddingOpenAIApiKey(e.target.value)}
+                placeholder="Falls back to server env when blank"
+                className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label
+                htmlFor="embeddingHuggingFaceApiKey"
+                className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em] block"
+              >
+                Hugging Face API Key (optional)
+              </label>
+              <Input
+                id="embeddingHuggingFaceApiKey"
+                type="password"
+                value={embeddingHuggingFaceApiKey}
+                onChange={(e) => setEmbeddingHuggingFaceApiKey(e.target.value)}
+                placeholder="Falls back to server env when blank"
+                className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="embeddingOllamaBaseUrl"
+                  className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em] block"
+                >
+                  Ollama Base URL (optional)
+                </label>
+                <Input
+                  id="embeddingOllamaBaseUrl"
+                  value={embeddingOllamaBaseUrl}
+                  onChange={(e) => setEmbeddingOllamaBaseUrl(e.target.value)}
+                  placeholder="http://localhost:11434"
+                  className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="embeddingOllamaModel"
+                  className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em] block"
+                >
+                  Ollama Model (optional)
+                </label>
+                <Input
+                  id="embeddingOllamaModel"
+                  value={embeddingOllamaModel}
+                  onChange={(e) => setEmbeddingOllamaModel(e.target.value)}
+                  placeholder="nomic-embed-text"
+                  className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500"
+                />
+              </div>
             </div>
           </div>
         </section>

@@ -36,11 +36,23 @@ interface ValidatedCodeInfo {
 interface CreateCompanyFormData {
     companyName: string;
     staffCount: string;
+    embeddingIndexKey: string;
+    embeddingOpenAIApiKey: string;
+    embeddingHuggingFaceApiKey: string;
+    embeddingOllamaBaseUrl: string;
+    embeddingOllamaModel: string;
 }
 interface CreateCompanyFormErrors {
     companyName?: string;
     staffCount?: string;
 }
+
+const EMBEDDING_INDEX_OPTIONS = [
+    { value: "legacy-openai-1536", label: "OpenAI Legacy (1536)" },
+    { value: "ollama-default", label: "Ollama Default" },
+    { value: "huggingface-default", label: "Hugging Face Default" },
+    { value: "sidecar-default", label: "Sidecar Default" },
+] as const;
 
 // ─── Join Company Form ──────────────────────────────────────────────────────
 interface JoinFormData {
@@ -64,6 +76,11 @@ const SignupPage: React.FC = () => {
     const [createFormData, setCreateFormData] = useState<CreateCompanyFormData>({
         companyName: "",
         staffCount: "",
+        embeddingIndexKey: "legacy-openai-1536",
+        embeddingOpenAIApiKey: "",
+        embeddingHuggingFaceApiKey: "",
+        embeddingOllamaBaseUrl: "",
+        embeddingOllamaModel: "",
     });
     const [createErrors, setCreateErrors] = useState<CreateCompanyFormErrors>({});
     const [isCreating, setIsCreating] = useState(false);
@@ -226,6 +243,11 @@ const SignupPage: React.FC = () => {
                     email: user?.emailAddresses[0]?.emailAddress,
                     companyName: createFormData.companyName,
                     numberOfEmployees: createFormData.staffCount,
+                    embeddingIndexKey: createFormData.embeddingIndexKey,
+                    embeddingOpenAIApiKey: createFormData.embeddingOpenAIApiKey || null,
+                    embeddingHuggingFaceApiKey: createFormData.embeddingHuggingFaceApiKey || null,
+                    embeddingOllamaBaseUrl: createFormData.embeddingOllamaBaseUrl || null,
+                    embeddingOllamaModel: createFormData.embeddingOllamaModel || null,
                 }),
             });
 
@@ -588,13 +610,110 @@ const SignupPage: React.FC = () => {
                                     )}
                                 </div>
 
-                                <button
-                                    type="submit"
-                                    className={styles.submitButton}
-                                    disabled={isCreating}
-                                >
-                                    {isCreating ? "Creating..." : "Create Company"}
-                                </button>
+                                <div className={styles.formGroup}>
+                                    <label className={styles.label}>Default Embedding Index</label>
+                                    <div className={styles.inputWrapper}>
+                                        <Brain className={styles.inputIcon} />
+                                        <select
+                                            name="embeddingIndexKey"
+                                            value={createFormData.embeddingIndexKey}
+                                            onChange={(e) =>
+                                                setCreateFormData((prev) => ({
+                                                    ...prev,
+                                                    embeddingIndexKey: e.target.value,
+                                                }))
+                                            }
+                                            className={styles.input}
+                                        >
+                                            {EMBEDDING_INDEX_OPTIONS.map((option) => (
+                                                <option key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className={styles.configSection}>
+                                    <div className={styles.configSectionHeader}>
+                                        <h3 className={styles.configSectionTitle}>Optional Provider Config</h3>
+                                        <p className={styles.configSectionHint}>
+                                            Leave these blank to keep using shared env defaults for the demo.
+                                        </p>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.label}>OpenAI API Key</label>
+                                        <div className={styles.inputWrapper}>
+                                            <input
+                                                type="password"
+                                                name="embeddingOpenAIApiKey"
+                                                value={createFormData.embeddingOpenAIApiKey}
+                                                onChange={handleCreateChange}
+                                                className={styles.plainInput}
+                                                placeholder="Optional company-specific OpenAI key"
+                                                autoComplete="off"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.label}>Hugging Face API Key</label>
+                                        <div className={styles.inputWrapper}>
+                                            <input
+                                                type="password"
+                                                name="embeddingHuggingFaceApiKey"
+                                                value={createFormData.embeddingHuggingFaceApiKey}
+                                                onChange={handleCreateChange}
+                                                className={styles.plainInput}
+                                                placeholder="Optional company-specific HF token"
+                                                autoComplete="off"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.configGrid}>
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.label}>Ollama Base URL</label>
+                                            <div className={styles.inputWrapper}>
+                                                <input
+                                                    type="url"
+                                                    name="embeddingOllamaBaseUrl"
+                                                    value={createFormData.embeddingOllamaBaseUrl}
+                                                    onChange={handleCreateChange}
+                                                    className={styles.plainInput}
+                                                    placeholder="http://localhost:11434"
+                                                    autoComplete="off"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.label}>Ollama Model</label>
+                                            <div className={styles.inputWrapper}>
+                                                <input
+                                                    type="text"
+                                                    name="embeddingOllamaModel"
+                                                    value={createFormData.embeddingOllamaModel}
+                                                    onChange={handleCreateChange}
+                                                    className={styles.plainInput}
+                                                    placeholder="nomic-embed-text"
+                                                    autoComplete="off"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={styles.submitSection}>
+                                    <button
+                                        type="submit"
+                                        className={styles.submitButton}
+                                        disabled={isCreating}
+                                    >
+                                        {isCreating ? "Creating..." : "Create Company"}
+                                    </button>
+                                </div>
                             </form>
                         )}
 

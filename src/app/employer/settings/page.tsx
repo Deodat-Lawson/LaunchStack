@@ -19,6 +19,11 @@ import styles from "~/styles/Employer/Settings.module.css";
 interface Company {
     id: number;
     name: string;
+    embeddingIndexKey: string | null;
+    embeddingOpenAIApiKey: string | null;
+    embeddingHuggingFaceApiKey: string | null;
+    embeddingOllamaBaseUrl: string | null;
+    embeddingOllamaModel: string | null;
     numberOfEmployees: string;
     createdAt: string;
     updatedAt: string;
@@ -45,6 +50,11 @@ const SettingsPage = () => {
     // New fields
     const [companyName, setCompanyName] = useState("");
     const [staffCount, setStaffCount] = useState("");
+    const [embeddingIndexKey, setEmbeddingIndexKey] = useState("legacy-openai-1536");
+    const [embeddingOpenAIApiKey, setEmbeddingOpenAIApiKey] = useState("");
+    const [embeddingHuggingFaceApiKey, setEmbeddingHuggingFaceApiKey] = useState("");
+    const [embeddingOllamaBaseUrl, setEmbeddingOllamaBaseUrl] = useState("");
+    const [embeddingOllamaModel, setEmbeddingOllamaModel] = useState("");
 
     // --------------------------------------------------------------------------
     // Popup (Modal) Management
@@ -108,6 +118,11 @@ const SettingsPage = () => {
 
                 setCompanyName(data.name ?? "");
                 setStaffCount(data.numberOfEmployees ?? "");
+                setEmbeddingIndexKey(data.embeddingIndexKey ?? "legacy-openai-1536");
+                setEmbeddingOpenAIApiKey(data.embeddingOpenAIApiKey ?? "");
+                setEmbeddingHuggingFaceApiKey(data.embeddingHuggingFaceApiKey ?? "");
+                setEmbeddingOllamaBaseUrl(data.embeddingOllamaBaseUrl ?? "");
+                setEmbeddingOllamaModel(data.embeddingOllamaModel ?? "");
 
                 setDisplayName(user?.fullName ?? "");
                 setEmail(user?.emailAddresses[0]?.emailAddress ?? "");
@@ -134,6 +149,11 @@ const SettingsPage = () => {
                 body: JSON.stringify({
                     name: companyName,
                     numberOfEmployees: staffCount,
+                    embeddingIndexKey,
+                    embeddingOpenAIApiKey: embeddingOpenAIApiKey || null,
+                    embeddingHuggingFaceApiKey: embeddingHuggingFaceApiKey || null,
+                    embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
+                    embeddingOllamaModel: embeddingOllamaModel || null,
                 }),
             });
 
@@ -189,9 +209,19 @@ const SettingsPage = () => {
                 email={email}
                 companyName={companyName}
                 staffCount={staffCount}
+                embeddingIndexKey={embeddingIndexKey}
+                embeddingOpenAIApiKey={embeddingOpenAIApiKey}
+                embeddingHuggingFaceApiKey={embeddingHuggingFaceApiKey}
+                embeddingOllamaBaseUrl={embeddingOllamaBaseUrl}
+                embeddingOllamaModel={embeddingOllamaModel}
                 isSaving={isSaving}
                 onCompanyNameChange={setCompanyName}
                 onStaffCountChange={setStaffCount}
+                onEmbeddingIndexKeyChange={setEmbeddingIndexKey}
+                onEmbeddingOpenAIApiKeyChange={setEmbeddingOpenAIApiKey}
+                onEmbeddingHuggingFaceApiKeyChange={setEmbeddingHuggingFaceApiKey}
+                onEmbeddingOllamaBaseUrlChange={setEmbeddingOllamaBaseUrl}
+                onEmbeddingOllamaModelChange={setEmbeddingOllamaModel}
                 onSave={handleSave}
             />
 

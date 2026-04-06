@@ -30,7 +30,23 @@ export async function GET() {
         const companyId = userInfo.companyId;
 
         const [companyRecord] = await db
-            .select()
+            .select({
+                id: company.id,
+                name: company.name,
+                description: company.description,
+                industry: company.industry,
+                embeddingIndexKey: company.embeddingIndexKey,
+                embeddingOpenAIApiKey: company.embeddingOpenAIApiKey,
+                embeddingHuggingFaceApiKey: company.embeddingHuggingFaceApiKey,
+                embeddingOllamaBaseUrl: company.embeddingOllamaBaseUrl,
+                embeddingOllamaModel: company.embeddingOllamaModel,
+                employerpasskey: company.employerpasskey,
+                employeepasskey: company.employeepasskey,
+                numberOfEmployees: company.numberOfEmployees,
+                useUploadThing: company.useUploadThing,
+                createdAt: company.createdAt,
+                updatedAt: company.updatedAt,
+            })
             .from(company)
             .where(eq(company.id, Number(companyId)));
 

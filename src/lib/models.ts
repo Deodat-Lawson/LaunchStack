@@ -8,6 +8,7 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
 import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
 import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
 
 export type AIModelType =
@@ -112,8 +113,11 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
   }
 }
 
-export function getEmbeddings(indexKey?: string): EmbeddingsProvider {
-  return createEmbeddingModel(resolveEmbeddingIndex(indexKey));
+export function getEmbeddings(
+  indexKey?: string,
+  config?: CompanyEmbeddingConfig,
+): EmbeddingsProvider {
+  return createEmbeddingModel(resolveEmbeddingIndex(indexKey, config), config);
 }
 
 /** Marketing pipeline model config: one place to swap models per stage. */

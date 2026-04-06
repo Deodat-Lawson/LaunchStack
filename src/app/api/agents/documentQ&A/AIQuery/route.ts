@@ -11,6 +11,7 @@ import {
     type SearchResult
 } from "~/lib/tools/rag";
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
@@ -137,9 +138,18 @@ export async function POST(request: Request) {
                 }, { status: 403 });
             }
 
+            const companyConfig =
+                await getCompanyEmbeddingConfig(requestingUser.companyId);
+
             // Perform document search
-            const resolvedEmbeddingIndex = resolveEmbeddingIndex(embeddingIndexKey);
-            const embeddings = getEmbeddings(resolvedEmbeddingIndex.indexKey);
+            const resolvedEmbeddingIndex = resolveEmbeddingIndex(
+                embeddingIndexKey,
+                companyConfig ?? undefined,
+            );
+            const embeddings = getEmbeddings(
+                resolvedEmbeddingIndex.indexKey,
+                companyConfig ?? undefined,
+            );
             let documents: SearchResult[] = [];
             retrievalMethod = 'document_ensemble_rrf';
 

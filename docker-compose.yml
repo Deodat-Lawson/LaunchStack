@@ -85,8 +85,30 @@ services:
       # Ollama (optional — set OLLAMA_BASE_URL to an Ollama instance)
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-}
+      # Sidecar (ML compute — embeddings, reranking, transcription)
+      SIDECAR_URL: http://sidecar:8000
     ports:
       - "3000:3000"
+
+  sidecar:
+    build:
+      context: ./sidecar
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-sidecar
+    restart: unless-stopped
+    environment:
+      TRANSFORMERS_CACHE: /app/model-cache
+      HF_HOME: /app/model-cache
+    volumes:
+      - sidecar_models:/app/model-cache
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 120s
 
   # Inngest dev server — local dashboard & event processing for development
   # Start with: docker compose --profile dev up
@@ -126,4 +148,4 @@ services:
 
 volumes:
   postgres_data:
-  seaweedfs_data:
+  sidecar_models:

@@ -94,7 +94,7 @@ export async function POST(request: Request) {
       {
         success: false,
         error: "Internal server error",
-        message: error instanceof Error ? error.message : "Unknown error",
+        message: "Failed to generate legal document",
       },
       { status: 500 }
     );

@@ -19,6 +19,20 @@ export const createErrorResponse = (message: string, status = 400) => {
   );
 };
 
+/**
+ * Standard 500 response for unexpected server errors.
+ * Never include error.message — log server-side instead.
+ *
+ * @example
+ * } catch (error) {
+ *   console.error('[route] error:', error)
+ *   return serverError('Failed to process request')
+ * }
+ */
+export const serverError = (message = "Internal server error", status = 500) => {
+  return NextResponse.json({ success: false, error: message }, { status });
+};
+
 export const validateRequestBody = async <T>(
   request: Request,
   schema: z.ZodSchema<T>

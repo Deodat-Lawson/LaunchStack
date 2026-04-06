@@ -1,7 +1,7 @@
 import { EnsembleRetriever } from "langchain/retrievers/ensemble";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import type { BaseRetriever } from "@langchain/core/retrievers";
+import type { Embeddings } from "@langchain/core/embeddings";
 import {
   createDocumentVectorRetriever,
   createCompanyVectorRetriever,
@@ -29,7 +29,7 @@ import type {
   EmbeddingsProvider,
   SearchScope,
 } from "../types";
-import { getEmbeddingsForCompany } from "~/lib/ai/embedding-factory";
+import { getEmbeddingsForCompanyId, getEmbeddingsForCompany } from "~/lib/ai/embedding-factory";
 import type { CompanyEmbeddingConfig } from "~/lib/ai/embedding-config";
 
 const DEFAULT_WEIGHTS_2: number[] = [0.4, 0.6];
@@ -45,9 +45,19 @@ function isGraphRetrievalEnabled(): boolean {
   );
 }
 
+export async function createEmbeddingsForCompany(
+  companyId: number,
+): Promise<Embeddings> {
+  return getEmbeddingsForCompanyId(companyId);
+}
+
+/**
+ * @deprecated Use `createEmbeddingsForCompany(companyId)` instead.
+ * Kept for backward compatibility with marketing pipeline and other callers.
+ */
 export function createOpenAIEmbeddings(
   config?: CompanyEmbeddingConfig | null,
-): OpenAIEmbeddings {
+): Embeddings {
   return getEmbeddingsForCompany(config);
 }
 
@@ -56,11 +66,11 @@ export async function createDocumentEnsembleRetriever(
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
   const { documentId, companyId, topK = DEFAULT_TOP_K, filters } = options;
-  const emb = embeddings ?? createOpenAIEmbeddings();
+  const emb = embeddings ?? (companyId != null ? await createEmbeddingsForCompany(companyId) : await getEmbeddingsForCompanyId(0));
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
   const bm25Retriever = await createDocumentBM25Retriever(documentId, candidateK);
-  const vectorRetriever = createDocumentVectorRetriever(documentId, emb, candidateK, filters);
+  const vectorRetriever = createDocumentVectorRetriever(documentId, companyId ?? 0, emb, candidateK, filters);
 
   const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
   let weights = options.weights ?? DEFAULT_WEIGHTS_2;
@@ -84,7 +94,7 @@ export async function createCompanyEnsembleRetriever(
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
   const { companyId, topK = 10, filters } = options;
-  const emb = embeddings ?? createOpenAIEmbeddings();
+  const emb = embeddings ?? await createEmbeddingsForCompany(companyId);
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
   const bm25Retriever = await createCompanyBM25Retriever(companyId, candidateK);
@@ -111,11 +121,11 @@ export async function createMultiDocEnsembleRetriever(
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
   const { documentIds, companyId, topK = DEFAULT_TOP_K, filters } = options;
-  const emb = embeddings ?? createOpenAIEmbeddings();
+  const emb = embeddings ?? (companyId != null ? await createEmbeddingsForCompany(companyId) : await getEmbeddingsForCompanyId(0));
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
   const bm25Retriever = await createMultiDocBM25Retriever(documentIds, candidateK);
-  const vectorRetriever = createMultiDocVectorRetriever(documentIds, emb, candidateK, filters);
+  const vectorRetriever = createMultiDocVectorRetriever(documentIds, companyId ?? 0, emb, candidateK, filters);
 
   const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
   let weights = options.weights ?? DEFAULT_WEIGHTS_2;

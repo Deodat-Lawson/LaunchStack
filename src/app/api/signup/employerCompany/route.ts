@@ -1,7 +1,15 @@
 import {db} from "~/server/db";
-import {company, users} from "~/server/db/schema";
+import {company, users, companyApiKeys} from "~/server/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
+import {
+    isValidEmbeddingConfig,
+    isEmbeddingProvider,
+    DEFAULT_EMBEDDING_CONFIG,
+    type CompanyEmbeddingConfig,
+} from "~/lib/ai/embedding-config";
+import { encryptApiKey } from "~/lib/crypto/api-key-encryption";
+import { createCompanyEmbeddingTable } from "~/lib/db/company-embeddings";
 
 type PostBody = {
     userId: string;
@@ -9,11 +17,15 @@ type PostBody = {
     name: string;
     email: string;
     numberOfEmployees: string;
+    embeddingProvider?: string;
+    embeddingModel?: string;
+    embeddingDimensions?: number;
+    providerApiKey?: string;
 }
 
 export async function POST(request: Request) {
     try {
-        const {userId, name, email, companyName, numberOfEmployees} = (await request.json()) as PostBody;
+        const {userId, name, email, companyName, numberOfEmployees, embeddingProvider, embeddingModel, embeddingDimensions, providerApiKey} = (await request.json()) as PostBody;
 
         // Validate required fields
         if (!name?.trim()) {
@@ -34,11 +46,25 @@ export async function POST(request: Request) {
             );
         }
 
+        // Build embedding config if provided
+        let embeddingConfig: CompanyEmbeddingConfig | undefined;
+        if (embeddingProvider && embeddingModel && embeddingDimensions) {
+            const cfg: CompanyEmbeddingConfig = {
+                provider: embeddingProvider as CompanyEmbeddingConfig["provider"],
+                model: embeddingModel,
+                dimensions: embeddingDimensions,
+            };
+            if (isValidEmbeddingConfig(cfg)) {
+                embeddingConfig = cfg;
+            }
+        }
+
         const [newCompany] = await db
             .insert(company)
             .values({
                 name: companyName,
                 numberOfEmployees: numberOfEmployees || "0",
+                embeddingConfig: embeddingConfig ?? DEFAULT_EMBEDDING_CONFIG,
             })
             .returning({ id: company.id });
 
@@ -59,6 +85,22 @@ export async function POST(request: Request) {
             status: "verified",
             role: "owner",
         });
+
+        // Store API key if provided
+        if (providerApiKey && embeddingConfig) {
+            const encrypted = encryptApiKey(providerApiKey);
+            await db.insert(companyApiKeys).values({
+                companyId,
+                provider: embeddingConfig.provider,
+                encryptedApiKey: encrypted.ciphertext,
+                keyIv: encrypted.iv,
+                keyTag: encrypted.tag,
+            });
+        }
+
+        // Create per-company embedding table
+        const resolvedConfig = embeddingConfig ?? DEFAULT_EMBEDDING_CONFIG;
+        await createCompanyEmbeddingTable(Number(companyId), resolvedConfig.dimensions);
 
         return createSuccessResponse(
             { userId, role: "owner" },

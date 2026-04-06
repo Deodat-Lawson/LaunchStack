@@ -7,9 +7,15 @@ import {
 import { Document } from "@langchain/core/documents";
 import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 import type { EmbeddingsProvider, SearchScope, SearchFilters } from "../types";
+import {
+  getCompanyEmbeddingTableName,
+  companyEmbeddingTableExists,
+} from "~/lib/db/company-embeddings";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 
 interface VectorRetrieverConfig extends BaseRetrieverInput {
   embeddings: EmbeddingsProvider;
+  companyId: number;
   topK?: number;
   searchScope: SearchScope;
   filters?: SearchFilters;
@@ -32,14 +38,24 @@ interface MultiDocConfig extends VectorRetrieverConfig {
 
 type VectorRetrieverFields = SingleDocConfig | CompanyConfig | MultiDocConfig;
 
+type VectorRow = {
+  child_id: number;
+  parent_content: string;
+  child_content: string;
+  page: number;
+  document_id: number;
+  document_title: string;
+  distance: number;
+};
+
 export class VectorRetriever extends BaseRetriever {
   lc_namespace = ["rag", "retrievers", "vector"];
 
   private embeddings: EmbeddingsProvider;
   private topK: number;
   private searchScope: SearchScope;
+  private companyId: number;
   private documentId?: number;
-  private companyId?: number;
   private documentIds?: number[];
   private filters?: SearchFilters;
 
@@ -48,12 +64,11 @@ export class VectorRetriever extends BaseRetriever {
     this.embeddings = fields.embeddings;
     this.topK = fields.topK ?? 8;
     this.searchScope = fields.searchScope;
+    this.companyId = fields.companyId;
     this.filters = fields.filters;
 
     if (fields.searchScope === "document") {
       this.documentId = fields.documentId;
-    } else if (fields.searchScope === "company") {
-      this.companyId = fields.companyId;
     } else if (fields.searchScope === "multi-document") {
       this.documentIds = fields.documentIds;
     }
@@ -65,126 +80,18 @@ export class VectorRetriever extends BaseRetriever {
   ): Promise<Document[]> {
     try {
       const fullEmbedding = await this.embeddings.embedQuery(query);
-      const shortEmbedding = fullEmbedding.slice(0, 512);
-
       const fullBracketed = `[${fullEmbedding.join(",")}]`;
-      const shortBracketed = `[${shortEmbedding.join(",")}]`;
+      const dimensions = fullEmbedding.length;
 
-      // 1. Try Parent-Child Retrieval (New Architecture)
-      // let sqlQuery; // Removed unused declaration
-      let baseWhere;
+      // Try per-company embedding table first
+      const hasCompanyTable = await companyEmbeddingTableExists(this.companyId);
 
-      if (this.searchScope === "document" && this.documentId !== undefined) {
-        baseWhere = sql`rc.document_id = ${this.documentId}`;
-      } else if (this.searchScope === "company" && this.companyId !== undefined) {
-        baseWhere = sql`d.company_id = ${this.companyId}`;
-      } else if (this.searchScope === "multi-document" && this.documentIds?.length) {
-        baseWhere = sql`rc.document_id = ANY(${`{${this.documentIds.join(",")}}`}::int[])`;
+      let rows: VectorRow[];
+      if (hasCompanyTable) {
+        rows = await this.searchCompanyTable(fullBracketed, dimensions);
       } else {
-        return [];
-      }
-
-      // Add Metadata Filters
-      let filterWhere = sql``;
-      if (this.filters) {
-        if (this.filters.documentClass) {
-          filterWhere = sql`${filterWhere} AND dm.document_class = ${this.filters.documentClass}`;
-        }
-        if (this.filters.dateRange?.start) {
-          filterWhere = sql`${filterWhere} AND dm.date_range_start >= ${this.filters.dateRange.start.toISOString()}`;
-        }
-        if (this.filters.dateRange?.end) {
-          filterWhere = sql`${filterWhere} AND dm.date_range_end <= ${this.filters.dateRange.end.toISOString()}`;
-        }
-        // Topic tags filtering (using JSONB containment @>)
-        if (this.filters.topicTags && this.filters.topicTags.length > 0) {
-           const tagsJson = JSON.stringify(this.filters.topicTags);
-           filterWhere = sql`${filterWhere} AND dm.topic_tags @> ${tagsJson}::jsonb`;
-        }
-      }
-
-      const fullWhere = sql`${baseWhere} ${filterWhere}`;
-
-      // 2-Step Retrieval with Filters
-      const sqlQuery = sql`
-        WITH candidates AS (
-            SELECT
-                rc.id,
-                rc.context_chunk_id,
-                rc.content as child_content,
-                rc.token_count as child_tokens,
-                rc.embedding,
-                (rc.embedding_short <-> ${shortBracketed}::vector(512)) as rough_distance
-            FROM pdr_ai_v2_document_retrieval_chunks rc
-            JOIN pdr_ai_v2_document d ON rc.document_id = d.id
-            LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
-            WHERE ${fullWhere}
-            ORDER BY rc.embedding_short <-> ${shortBracketed}::vector(512)
-            LIMIT ${this.topK * 5}
-        )
-        SELECT
-            c.id as child_id,
-            cc.content as parent_content,
-            c.child_content,
-            cc.page_number as page,
-            cc.document_id,
-            d.title as document_title,
-            (c.embedding <-> ${fullBracketed}::vector(1536)) as distance
-        FROM candidates c
-        JOIN pdr_ai_v2_document_context_chunks cc ON c.context_chunk_id = cc.id
-        JOIN pdr_ai_v2_document d ON cc.document_id = d.id
-        ORDER BY distance ASC
-        LIMIT ${this.topK}
-      `;
-
-      type VectorRow = {
-        child_id: number;
-        parent_content: string;
-        child_content: string;
-        page: number;
-        document_id: number;
-        document_title: string;
-        distance: number;
-      };
-
-      const result = await db.execute<VectorRow>(sqlQuery);
-      let rows = toRows<VectorRow>(result);
-
-      // 2. Fallback: Old Context Chunks Search
-      if (rows.length === 0) {
-        console.log(`[VectorRetriever] No retrieval chunks found, falling back to Context Chunks search`);
-        
-        let fallbackBaseWhere;
-        if (this.searchScope === "document" && this.documentId !== undefined) {
-             fallbackBaseWhere = sql`s.document_id = ${this.documentId}`;
-        } else if (this.searchScope === "company" && this.companyId !== undefined) {
-             fallbackBaseWhere = sql`d.company_id = ${this.companyId}`;
-        } else if (this.searchScope === "multi-document" && this.documentIds?.length) {
-             fallbackBaseWhere = sql`s.document_id = ANY(${`{${this.documentIds.join(",")}}`}::int[])`;
-        }
-
-        const fallbackFullWhere = sql`${fallbackBaseWhere} ${filterWhere}`;
-
-        const fallbackQuery = sql`
-          SELECT
-            s.id as child_id,
-            s.content as parent_content,
-            s.content as child_content,
-            s.page_number as page,
-            s.document_id,
-            d.title as document_title,
-            s.embedding <-> ${fullBracketed}::vector(1536) AS distance
-          FROM pdr_ai_v2_document_context_chunks s
-          JOIN pdr_ai_v2_document d ON s.document_id = d.id
-          LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
-          WHERE ${fallbackFullWhere}
-          AND s.embedding IS NOT NULL
-          ORDER BY s.embedding <-> ${fullBracketed}::vector(1536)
-          LIMIT ${this.topK}
-        `;
-        
-        const fallbackResult = await db.execute<VectorRow>(fallbackQuery);
-        rows = toRows<VectorRow>(fallbackResult);
+        // Fallback to legacy shared tables for companies not yet migrated
+        rows = await this.searchLegacyTables(fullBracketed, fullEmbedding);
       }
 
       const documents = rows.map((row) => {
@@ -205,7 +112,7 @@ export class VectorRetriever extends BaseRetriever {
       });
 
       console.log(
-        `✅ [VectorRetriever] Retrieved ${documents.length} chunks (scope: ${this.searchScope})`
+        `✅ [VectorRetriever] Retrieved ${documents.length} chunks (scope: ${this.searchScope}, companyTable: ${hasCompanyTable})`
       );
 
       return documents;
@@ -214,16 +121,201 @@ export class VectorRetriever extends BaseRetriever {
       return [];
     }
   }
+
+  /**
+   * Search the per-company embedding table.
+   * Joins back to context chunks and documents for metadata.
+   */
+  private async searchCompanyTable(
+    fullBracketed: string,
+    dimensions: number,
+  ): Promise<VectorRow[]> {
+    const tableName = getCompanyEmbeddingTableName(this.companyId);
+    const dimStr = String(dimensions);
+
+    let scopeWhere: ReturnType<typeof sql>;
+    if (this.searchScope === "document" && this.documentId !== undefined) {
+      scopeWhere = sql`e.document_id = ${this.documentId}`;
+    } else if (this.searchScope === "company") {
+      scopeWhere = sql`1=1`; // All docs in this company's table belong to this company
+    } else if (this.searchScope === "multi-document" && this.documentIds?.length) {
+      scopeWhere = sql`e.document_id = ANY(${`{${this.documentIds.join(",")}}`}::int[])`;
+    } else {
+      return [];
+    }
+
+    // Metadata filters
+    let filterWhere = sql``;
+    if (this.filters) {
+      if (this.filters.documentClass) {
+        filterWhere = sql`${filterWhere} AND dm.document_class = ${this.filters.documentClass}`;
+      }
+      if (this.filters.dateRange?.start) {
+        filterWhere = sql`${filterWhere} AND dm.date_range_start >= ${this.filters.dateRange.start.toISOString()}`;
+      }
+      if (this.filters.dateRange?.end) {
+        filterWhere = sql`${filterWhere} AND dm.date_range_end <= ${this.filters.dateRange.end.toISOString()}`;
+      }
+      if (this.filters.topicTags && this.filters.topicTags.length > 0) {
+        const tagsJson = JSON.stringify(this.filters.topicTags);
+        filterWhere = sql`${filterWhere} AND dm.topic_tags @> ${tagsJson}::jsonb`;
+      }
+    }
+
+    const fullWhere = sql`${scopeWhere} ${filterWhere}`;
+
+    // Search per-company table, join to context chunks for parent content + page
+    const query = sql`
+      SELECT
+          e.id as child_id,
+          COALESCE(cc.content, e.content) as parent_content,
+          e.content as child_content,
+          COALESCE(cc.page_number, 0) as page,
+          e.document_id,
+          d.title as document_title,
+          e.embedding <-> ${fullBracketed}::vector(${sql.raw(dimStr)}) AS distance
+      FROM ${sql.raw(tableName)} e
+      JOIN pdr_ai_v2_document d ON e.document_id = d.id
+      LEFT JOIN pdr_ai_v2_document_context_chunks cc ON e.chunk_type = 'retrieval' AND e.chunk_id = cc.id
+      LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
+      WHERE ${fullWhere}
+      AND e.embedding IS NOT NULL
+      ORDER BY e.embedding <-> ${fullBracketed}::vector(${sql.raw(dimStr)})
+      LIMIT ${this.topK}
+    `;
+
+    const result = await db.execute<VectorRow>(query);
+    return toRows<VectorRow>(result);
+  }
+
+  /**
+   * Fallback: search the legacy shared tables (for companies not yet migrated
+   * to per-company embedding tables). Uses the original 2-step retrieval
+   * with 1536-dim embeddings.
+   */
+  private async searchLegacyTables(
+    fullBracketed: string,
+    fullEmbedding: number[],
+  ): Promise<VectorRow[]> {
+    const shortEmbedding = fullEmbedding.slice(0, 512);
+    const shortBracketed = `[${shortEmbedding.join(",")}]`;
+
+    let baseWhere;
+    if (this.searchScope === "document" && this.documentId !== undefined) {
+      baseWhere = sql`rc.document_id = ${this.documentId}`;
+    } else if (this.searchScope === "company") {
+      baseWhere = sql`d.company_id = ${this.companyId}`;
+    } else if (this.searchScope === "multi-document" && this.documentIds?.length) {
+      baseWhere = sql`rc.document_id = ANY(${`{${this.documentIds.join(",")}}`}::int[])`;
+    } else {
+      return [];
+    }
+
+    let filterWhere = sql``;
+    if (this.filters) {
+      if (this.filters.documentClass) {
+        filterWhere = sql`${filterWhere} AND dm.document_class = ${this.filters.documentClass}`;
+      }
+      if (this.filters.dateRange?.start) {
+        filterWhere = sql`${filterWhere} AND dm.date_range_start >= ${this.filters.dateRange.start.toISOString()}`;
+      }
+      if (this.filters.dateRange?.end) {
+        filterWhere = sql`${filterWhere} AND dm.date_range_end <= ${this.filters.dateRange.end.toISOString()}`;
+      }
+      if (this.filters.topicTags && this.filters.topicTags.length > 0) {
+        const tagsJson = JSON.stringify(this.filters.topicTags);
+        filterWhere = sql`${filterWhere} AND dm.topic_tags @> ${tagsJson}::jsonb`;
+      }
+    }
+
+    const fullWhere = sql`${baseWhere} ${filterWhere}`;
+
+    // 2-Step Retrieval with legacy shared tables
+    const sqlQuery = sql`
+      WITH candidates AS (
+          SELECT
+              rc.id,
+              rc.context_chunk_id,
+              rc.content as child_content,
+              rc.token_count as child_tokens,
+              rc.embedding,
+              (rc.embedding_short <-> ${shortBracketed}::vector(512)) as rough_distance
+          FROM pdr_ai_v2_document_retrieval_chunks rc
+          JOIN pdr_ai_v2_document d ON rc.document_id = d.id
+          LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
+          WHERE ${fullWhere}
+          ORDER BY rc.embedding_short <-> ${shortBracketed}::vector(512)
+          LIMIT ${this.topK * 5}
+      )
+      SELECT
+          c.id as child_id,
+          cc.content as parent_content,
+          c.child_content,
+          cc.page_number as page,
+          cc.document_id,
+          d.title as document_title,
+          (c.embedding <-> ${fullBracketed}::vector(1536)) as distance
+      FROM candidates c
+      JOIN pdr_ai_v2_document_context_chunks cc ON c.context_chunk_id = cc.id
+      JOIN pdr_ai_v2_document d ON cc.document_id = d.id
+      ORDER BY distance ASC
+      LIMIT ${this.topK}
+    `;
+
+    const result = await db.execute<VectorRow>(sqlQuery);
+    let rows = toRows<VectorRow>(result);
+
+    // Fallback: Old Context Chunks Search
+    if (rows.length === 0) {
+      console.log(`[VectorRetriever] No retrieval chunks found, falling back to Context Chunks search`);
+
+      let fallbackBaseWhere;
+      if (this.searchScope === "document" && this.documentId !== undefined) {
+        fallbackBaseWhere = sql`s.document_id = ${this.documentId}`;
+      } else if (this.searchScope === "company") {
+        fallbackBaseWhere = sql`d.company_id = ${this.companyId}`;
+      } else if (this.searchScope === "multi-document" && this.documentIds?.length) {
+        fallbackBaseWhere = sql`s.document_id = ANY(${`{${this.documentIds.join(",")}}`}::int[])`;
+      }
+
+      const fallbackFullWhere = sql`${fallbackBaseWhere} ${filterWhere}`;
+
+      const fallbackQuery = sql`
+        SELECT
+          s.id as child_id,
+          s.content as parent_content,
+          s.content as child_content,
+          s.page_number as page,
+          s.document_id,
+          d.title as document_title,
+          s.embedding <-> ${fullBracketed}::vector(1536) AS distance
+        FROM pdr_ai_v2_document_context_chunks s
+        JOIN pdr_ai_v2_document d ON s.document_id = d.id
+        LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
+        WHERE ${fallbackFullWhere}
+        AND s.embedding IS NOT NULL
+        ORDER BY s.embedding <-> ${fullBracketed}::vector(1536)
+        LIMIT ${this.topK}
+      `;
+
+      const fallbackResult = await db.execute<VectorRow>(fallbackQuery);
+      rows = toRows<VectorRow>(fallbackResult);
+    }
+
+    return rows;
+  }
 }
 
 export function createDocumentVectorRetriever(
   documentId: number,
+  companyId: number,
   embeddings: EmbeddingsProvider,
   topK = 8,
   filters?: SearchFilters
 ): VectorRetriever {
   return new VectorRetriever({
     documentId,
+    companyId,
     embeddings,
     topK,
     searchScope: "document",
@@ -248,12 +340,14 @@ export function createCompanyVectorRetriever(
 
 export function createMultiDocVectorRetriever(
   documentIds: number[],
+  companyId: number,
   embeddings: EmbeddingsProvider,
   topK = 8,
   filters?: SearchFilters
 ): VectorRetriever {
   return new VectorRetriever({
     documentIds,
+    companyId,
     embeddings,
     topK,
     searchScope: "multi-document",

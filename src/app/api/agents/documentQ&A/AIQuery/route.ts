@@ -191,16 +191,17 @@ export async function POST(request: Request) {
                     
                     const questionEmbedding = await embeddings.embedQuery(question);
                     const bracketedEmbedding = `[${questionEmbedding.join(",")}]`;
+                    const dimStr = String(questionEmbedding.length);
 
                     const rows = await db.select({
                         id: documentSections.id,
                         content: documentSections.content,
                         page: documentSections.pageNumber,
-                        distance: sql<number>`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`,
+                        distance: sql<number>`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(${sql.raw(dimStr)})`,
                     })
                     .from(documentSections)
                     .where(eq(documentSections.documentId, BigInt(documentId)))
-                    .orderBy(sql`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`)
+                    .orderBy(sql`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(${sql.raw(dimStr)})`)
                     .limit(3);
 
                     documents = rows.map((row) => ({

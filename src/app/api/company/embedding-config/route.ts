@@ -1,16 +1,24 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, company, document } from "~/server/db/schema";
+import { users, company, document, companyApiKeys } from "~/server/db/schema";
 import {
     type CompanyEmbeddingConfig,
+    type EmbeddingProvider,
     SUPPORTED_EMBEDDING_MODELS,
     DEFAULT_EMBEDDING_CONFIG,
+    EMBEDDING_PROVIDERS,
     isValidEmbeddingConfig,
+    isEmbeddingProvider,
     resolveEmbeddingConfig,
 } from "~/lib/ai/embedding-config";
+import {
+    createCompanyEmbeddingTable,
+    dropCompanyEmbeddingTable,
+    companyEmbeddingTableExists,
+} from "~/lib/db/company-embeddings";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -41,9 +49,17 @@ export async function GET() {
 
         const config = resolveEmbeddingConfig(companyRow?.embeddingConfig);
 
+        // Check which providers have stored API keys
+        const storedKeys = await db
+            .select({ provider: companyApiKeys.provider })
+            .from(companyApiKeys)
+            .where(eq(companyApiKeys.companyId, userInfo.companyId));
+        const connectedProviders = storedKeys.map((k) => k.provider);
+
         return NextResponse.json({
             config,
             supportedModels: SUPPORTED_EMBEDDING_MODELS,
+            connectedProviders,
         });
     } catch (error) {
         console.error("[company/embedding-config] GET error:", error);
@@ -102,6 +118,25 @@ export async function POST(request: Request) {
             );
         }
 
+        // For non-OpenAI providers, check that an API key is stored
+        if (newConfig.provider !== "openai") {
+            const [keyRow] = await db
+                .select({ id: companyApiKeys.id })
+                .from(companyApiKeys)
+                .where(
+                    and(
+                        eq(companyApiKeys.companyId, userInfo.companyId),
+                        eq(companyApiKeys.provider, newConfig.provider),
+                    )
+                );
+            if (!keyRow) {
+                return NextResponse.json(
+                    { error: `No API key stored for ${newConfig.provider}. Please add one first.` },
+                    { status: 400 },
+                );
+            }
+        }
+
         // Check if the company has existing documents (warn about model change)
         const [docCount] = await db
             .select({ count: eq(document.companyId, userInfo.companyId) })
@@ -116,19 +151,35 @@ export async function POST(request: Request) {
 
         const oldConfig = resolveEmbeddingConfig(currentConfig[0]?.embeddingConfig);
         const modelChanged = oldConfig.model !== newConfig.model;
+        const dimensionsChanged = oldConfig.dimensions !== newConfig.dimensions;
         const hasDocuments = !!docCount;
 
+        // Update the company's embedding config
         await db
             .update(company)
             .set({ embeddingConfig: newConfig })
             .where(eq(company.id, Number(userInfo.companyId)));
+
+        // Manage the per-company embedding table
+        const companyIdNum = Number(userInfo.companyId);
+        if (dimensionsChanged) {
+            // Dimensions changed — drop and recreate the table
+            await dropCompanyEmbeddingTable(companyIdNum);
+            await createCompanyEmbeddingTable(companyIdNum, newConfig.dimensions);
+        } else {
+            // Ensure the table exists (may be first time setup)
+            const exists = await companyEmbeddingTableExists(companyIdNum);
+            if (!exists) {
+                await createCompanyEmbeddingTable(companyIdNum, newConfig.dimensions);
+            }
+        }
 
         return NextResponse.json({
             success: true,
             config: newConfig,
             warning:
                 modelChanged && hasDocuments
-                    ? "Embedding model changed. Existing documents were embedded with a different model. New documents will use the updated model. For best search accuracy, consider re-uploading existing documents."
+                    ? "Embedding model changed. Existing documents were embedded with a different model and need to be re-embedded for accurate search results."
                     : undefined,
         });
     } catch (error) {

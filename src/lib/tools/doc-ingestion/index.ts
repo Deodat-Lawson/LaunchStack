@@ -149,6 +149,7 @@ async function vectorizeWithSidecar(
   documentId: number,
   rootStructureId: number,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
+  companyId?: number,
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   const batches = splitIntoBatches(chunks, sidecarBatchSize);
   let totalStored = 0;
@@ -180,7 +181,7 @@ async function vectorizeWithSidecar(
           vector: data.embeddings[idx] ?? [],
         }));
 
-        const sections = await storeBatch(documentId, rootStructureId, vectorized);
+        const sections = await storeBatch(documentId, rootStructureId, vectorized, companyId);
         return { batchIndex: i, stored: sections.length };
       },
     );
@@ -212,6 +213,7 @@ async function vectorizeWithOpenAI(
   rootStructureId: number,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
   embeddingConfig?: CompanyEmbeddingConfig,
+  companyId?: number,
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
 
@@ -254,7 +256,7 @@ async function vectorizeWithOpenAI(
           dimensions: embeddingConfig?.dimensions ?? 1536,
         });
         const vectorized = mergeWithEmbeddings(batch, embedResult.embeddings);
-        const sections = await storeBatch(documentId, rootStructureId, vectorized);
+        const sections = await storeBatch(documentId, rootStructureId, vectorized, companyId);
         return { batchIndex: i, stored: sections.length };
       },
     );
@@ -556,6 +558,7 @@ export async function runDocIngestionTool(
         },
       );
 
+      const numericCompanyId = Number(companyId);
       if (sidecarUrl) {
         const result = await vectorizeWithSidecar(
           chunks,
@@ -564,6 +567,7 @@ export async function runDocIngestionTool(
           documentId,
           rootStructureId,
           runStep,
+          numericCompanyId,
         );
         storedSections = result.storedSections;
         totalStored = result.totalStored;
@@ -576,6 +580,7 @@ export async function runDocIngestionTool(
           rootStructureId,
           runStep,
           embeddingConfig,
+          numericCompanyId,
         );
         storedSections = result.storedSections;
         totalStored = result.totalStored;

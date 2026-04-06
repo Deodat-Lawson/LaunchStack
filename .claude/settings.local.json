@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(grep -r \"embedding\\\\|vector\\\\|pgVector\" /Users/timothylin/pdr_ai_v2-2/src/server/db/schema/*.ts)",
+      "Bash(find /Users/timothylin/pdr_ai_v2-2/src/app/api/invite-codes -type f -name \"*.ts\" -exec head -50 {} +)",
+      "Bash(npm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(node -e ':*)",
+      "Bash(node --input-type=module -e ':*)",
+      "Bash(npm info:*)"
     ]
   }
 }

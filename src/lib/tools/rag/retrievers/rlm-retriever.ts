@@ -748,6 +748,7 @@ export class RLMRetriever {
         const { topK = 10, maxTokens } = options;
         const queryEmbedding = await this.embeddings.embedQuery(query);
         const bracketedEmbedding = `[${queryEmbedding.join(",")}]`;
+        const dimStr = String(queryEmbedding.length);
 
         const results = await db.select({
             id: documentSections.id,
@@ -756,12 +757,12 @@ export class RLMRetriever {
             pageNumber: documentSections.pageNumber,
             semanticType: documentSections.semanticType,
             structurePath: documentStructure.path,
-            distance: sql<number>`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`,
+            distance: sql<number>`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(${sql.raw(dimStr)})`,
         })
         .from(documentSections)
         .leftJoin(documentStructure, eq(documentSections.structureId, documentStructure.id))
         .where(eq(documentSections.documentId, BigInt(documentId)))
-        .orderBy(sql`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`)
+        .orderBy(sql`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(${sql.raw(dimStr)})`)
         .limit(topK);
 
         // Apply token budget if specified

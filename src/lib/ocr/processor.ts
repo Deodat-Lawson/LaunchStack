@@ -22,6 +22,11 @@ import {
 import { eq, sql } from "drizzle-orm";
 import crypto from "crypto";
 import { fetchBlob } from "~/server/storage/vercel-blob";
+import {
+  insertCompanyEmbeddings,
+  companyEmbeddingTableExists,
+} from "~/lib/db/company-embeddings";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 
 import type {
   ProcessDocumentEventData,
@@ -445,10 +450,11 @@ export async function storeBatch(
   documentId: number,
   rootStructureId: number,
   vectorizedChunks: VectorizedChunk[],
+  companyId?: number,
 ): Promise<StoredSection[]> {
   if (vectorizedChunks.length === 0) return [];
 
-  return withDbRetry(async () => {
+  const storedSections = await withDbRetry(async () => {
     return db.transaction(async (tx) => {
       const parentValues = vectorizedChunks.map((chunk) => {
         const semanticType: "tabular" | "narrative" = chunk.metadata.isTable
@@ -478,7 +484,7 @@ export async function storeBatch(
         .values(parentValues)
         .returning({ id: documentContextChunks.id, content: documentContextChunks.content });
 
-      const storedSections: StoredSection[] = parentRows.map((r) => ({
+      const sections: StoredSection[] = parentRows.map((r) => ({
         sectionId: r.id,
         content: r.content,
       }));
@@ -518,9 +524,64 @@ export async function storeBatch(
           .values(childValues.slice(i, i + CHILD_BATCH_SIZE));
       }
 
-      return storedSections;
+      return sections;
     });
   });
+
+  // Also write to per-company embedding table if it exists
+  if (companyId && storedSections.length > 0) {
+    try {
+      const hasTable = await companyEmbeddingTableExists(companyId);
+      if (hasTable) {
+        const cfg = await getCompanyEmbeddingConfig(companyId);
+        const embeddingRows: Array<{
+          documentId: number;
+          chunkType: string;
+          chunkId: number;
+          content: string | null;
+          embedding: number[];
+        }> = [];
+
+        for (let i = 0; i < vectorizedChunks.length; i++) {
+          const chunk = vectorizedChunks[i]!;
+          const parentId = storedSections[i]?.sectionId;
+          if (!parentId) continue;
+
+          if (chunk.vector && chunk.vector.length > 0) {
+            embeddingRows.push({
+              documentId,
+              chunkType: "context",
+              chunkId: parentId,
+              content: chunk.content,
+              embedding: chunk.vector,
+            });
+          }
+
+          if (chunk.children) {
+            for (const child of chunk.children) {
+              if (child.vector && child.vector.length > 0) {
+                embeddingRows.push({
+                  documentId,
+                  chunkType: "retrieval",
+                  chunkId: parentId,
+                  content: child.content,
+                  embedding: child.vector,
+                });
+              }
+            }
+          }
+        }
+
+        if (embeddingRows.length > 0) {
+          await insertCompanyEmbeddings(companyId, cfg.dimensions, embeddingRows);
+        }
+      }
+    } catch (err) {
+      console.warn("[storeBatch] Failed to write to per-company embedding table:", err);
+    }
+  }
+
+  return storedSections;
 }
 
 /**

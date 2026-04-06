@@ -21,6 +21,13 @@ import {
 } from "lucide-react";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
+import {
+    SUPPORTED_EMBEDDING_MODELS,
+    EMBEDDING_PROVIDERS,
+    PROVIDER_LABELS,
+    DEFAULT_EMBEDDING_CONFIG,
+    type EmbeddingProvider,
+} from "~/lib/ai/embedding-config";
 
 type ActiveTab = "create" | "join" | "solo";
 
@@ -69,6 +76,38 @@ const SignupPage: React.FC = () => {
     });
     const [createErrors, setCreateErrors] = useState<CreateCompanyFormErrors>({});
     const [isCreating, setIsCreating] = useState(false);
+
+    // ─── Embedding Configuration State ────────────────────────────────────
+    const [showEmbeddingConfig, setShowEmbeddingConfig] = useState(false);
+    const [selectedProvider, setSelectedProvider] = useState<EmbeddingProvider>("openai");
+    const [selectedModel, setSelectedModel] = useState(DEFAULT_EMBEDDING_CONFIG.model);
+    const [apiKeyInput, setApiKeyInput] = useState("");
+    const [showApiKey, setShowApiKey] = useState(false);
+
+    const availableModels = SUPPORTED_EMBEDDING_MODELS.filter(
+        (m) => m.provider === selectedProvider
+    );
+
+    const handleProviderChange = (provider: EmbeddingProvider) => {
+        setSelectedProvider(provider);
+        const firstModel = SUPPORTED_EMBEDDING_MODELS.find((m) => m.provider === provider);
+        if (firstModel) setSelectedModel(firstModel.model);
+        setApiKeyInput("");
+    };
+
+    const getEmbeddingPayload = () => {
+        if (!showEmbeddingConfig) return {};
+        const model = SUPPORTED_EMBEDDING_MODELS.find(
+            (m) => m.provider === selectedProvider && m.model === selectedModel
+        );
+        if (!model) return {};
+        return {
+            embeddingProvider: selectedProvider,
+            embeddingModel: selectedModel,
+            embeddingDimensions: model.dimensions,
+            ...(apiKeyInput ? { providerApiKey: apiKeyInput } : {}),
+        };
+    };
 
     // ─── Solo Workspace State ───────────────────────────────────────────────
     const [isCreatingSolo, setIsCreatingSolo] = useState(false);
@@ -232,6 +271,7 @@ const SignupPage: React.FC = () => {
                     email: user?.emailAddresses[0]?.emailAddress,
                     companyName: createFormData.companyName,
                     numberOfEmployees: createFormData.staffCount,
+                    ...getEmbeddingPayload(),
                 }),
             });
 
@@ -290,6 +330,7 @@ const SignupPage: React.FC = () => {
                     userId,
                     name: user.fullName ?? user.username,
                     email: user.emailAddresses[0]?.emailAddress,
+                    ...getEmbeddingPayload(),
                 }),
             });
 
@@ -401,6 +442,106 @@ const SignupPage: React.FC = () => {
         setJoinErrors({});
         setJoinSuccess(null);
     };
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // EMBEDDING CONFIG UI (shared between Create Company and Solo)
+    // ═════════════════════════════════════════════════════════════════════════
+
+    const renderEmbeddingConfig = () => (
+        <div className={styles.formGroup}>
+            <button
+                type="button"
+                onClick={() => setShowEmbeddingConfig(!showEmbeddingConfig)}
+                style={{
+                    background: "none",
+                    border: "1px solid var(--color-border, #e5e7eb)",
+                    borderRadius: "0.5rem",
+                    padding: "0.75rem 1rem",
+                    width: "100%",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    fontSize: "0.875rem",
+                    color: "var(--color-text-secondary, #6b7280)",
+                }}
+            >
+                <span>Configure Embedding Provider (Optional)</span>
+                <span>{showEmbeddingConfig ? "▲" : "▼"}</span>
+            </button>
+
+            {showEmbeddingConfig && (
+                <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                    <div>
+                        <label className={styles.label}>Provider</label>
+                        <select
+                            value={selectedProvider}
+                            onChange={(e) => handleProviderChange(e.target.value as EmbeddingProvider)}
+                            className={styles.input}
+                            style={{ paddingLeft: "0.75rem" }}
+                        >
+                            {EMBEDDING_PROVIDERS.map((p) => (
+                                <option key={p} value={p}>{PROVIDER_LABELS[p]}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className={styles.label}>Model</label>
+                        <select
+                            value={selectedModel}
+                            onChange={(e) => setSelectedModel(e.target.value)}
+                            className={styles.input}
+                            style={{ paddingLeft: "0.75rem" }}
+                        >
+                            {availableModels.map((m) => (
+                                <option key={m.model} value={m.model}>
+                                    {m.label} ({m.dimensions}d — {m.costPer1MTokens}/M tokens)
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className={styles.label}>
+                            API Key {selectedProvider === "openai" ? "(optional — uses platform key if empty)" : "(required)"}
+                        </label>
+                        <div style={{ position: "relative" }}>
+                            <input
+                                type={showApiKey ? "text" : "password"}
+                                value={apiKeyInput}
+                                onChange={(e) => setApiKeyInput(e.target.value)}
+                                className={styles.input}
+                                placeholder={`Enter your ${PROVIDER_LABELS[selectedProvider]} API key`}
+                                style={{ paddingLeft: "0.75rem", paddingRight: "3rem" }}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowApiKey(!showApiKey)}
+                                style={{
+                                    position: "absolute",
+                                    right: "0.5rem",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    background: "none",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    fontSize: "0.75rem",
+                                    color: "var(--color-text-secondary, #6b7280)",
+                                }}
+                            >
+                                {showApiKey ? "Hide" : "Show"}
+                            </button>
+                        </div>
+                    </div>
+
+                    <p style={{ fontSize: "0.75rem", opacity: 0.6, margin: 0 }}>
+                        You can change this later in Settings. If skipped, the default OpenAI embedding model will be used.
+                    </p>
+                </div>
+            )}
+        </div>
+    );
 
     // ═════════════════════════════════════════════════════════════════════════
     // TAB DATA
@@ -620,6 +761,8 @@ const SignupPage: React.FC = () => {
                                     </ul>
                                 </div>
 
+                                {renderEmbeddingConfig()}
+
                                 {soloError && (
                                     <span className={styles.error}>{soloError}</span>
                                 )}
@@ -678,6 +821,8 @@ const SignupPage: React.FC = () => {
                                         <span className={styles.error}>{createErrors.staffCount}</span>
                                     )}
                                 </div>
+
+                                {renderEmbeddingConfig()}
 
                                 <button
                                     type="submit"

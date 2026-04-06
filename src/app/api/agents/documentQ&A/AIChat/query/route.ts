@@ -314,16 +314,17 @@ export async function POST(request: Request) {
                         
                         const questionEmbedding = await embeddings.embedQuery(question);
                         const bracketedEmbedding = `[${questionEmbedding.join(",")}]`;
+                        const dimStr = String(questionEmbedding.length);
 
                         const query = sql`
                           SELECT
                             id,
                             content,
                             page,
-                            embedding <-> ${bracketedEmbedding}::vector(1536) AS distance
+                            embedding <-> ${bracketedEmbedding}::vector(${sql.raw(dimStr)}) AS distance
                           FROM pdr_ai_v2_pdf_chunks
                           WHERE document_id = ${documentId}
-                          ORDER BY embedding <-> ${bracketedEmbedding}::vector(1536)
+                          ORDER BY embedding <-> ${bracketedEmbedding}::vector(${sql.raw(dimStr)})
                           LIMIT 3
                         `;
 

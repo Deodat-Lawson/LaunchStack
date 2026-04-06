@@ -3,6 +3,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import {
     boolean,
     index,
+    uniqueIndex,
     integer,
     jsonb,
     serial,
@@ -91,6 +92,38 @@ export const inviteCodes = pgTable(
     (table) => ({
         codeIdx: index("invite_codes_code_idx").on(table.code),
         companyIdIdx: index("invite_codes_company_id_idx").on(table.companyId),
+    })
+);
+
+// ============================================================================
+// Company API Keys
+// ============================================================================
+
+export const companyApiKeys = pgTable(
+    "company_api_keys",
+    {
+        id: serial("id").primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        provider: varchar("provider", { length: 64 }).notNull(),
+        encryptedApiKey: text("encrypted_api_key").notNull(),
+        keyIv: varchar("key_iv", { length: 64 }).notNull(),
+        keyTag: varchar("key_tag", { length: 64 }).notNull(),
+        label: varchar("label", { length: 128 }),
+        lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+            () => new Date()
+        ),
+    },
+    (table) => ({
+        companyProviderUniq: uniqueIndex("company_api_keys_company_provider_uniq").on(
+            table.companyId,
+            table.provider
+        ),
     })
 );
 
@@ -608,11 +641,19 @@ export const companyRelations = relations(company, ({ many }) => ({
     documents: many(document),
     categories: many(category),
     inviteCodes: many(inviteCodes),
+    apiKeys: many(companyApiKeys),
 }));
 
 export const inviteCodesRelations = relations(inviteCodes, ({ one }) => ({
     company: one(company, {
         fields: [inviteCodes.companyId],
+        references: [company.id],
+    }),
+}));
+
+export const companyApiKeysRelations = relations(companyApiKeys, ({ one }) => ({
+    company: one(company, {
+        fields: [companyApiKeys.companyId],
         references: [company.id],
     }),
 }));

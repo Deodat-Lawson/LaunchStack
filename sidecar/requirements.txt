@@ -5,9 +5,5 @@ torch>=2.5.0
 transformers>=4.47.0
 numpy>=1.26.0
 pydantic>=2.10.0
-<<<<<<< HEAD
-pydantic>=2.10.0
 openai-whisper>=20231117
 python-multipart>=0.0.6
-=======
->>>>>>> pr-260-adeu

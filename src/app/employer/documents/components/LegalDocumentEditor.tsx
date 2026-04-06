@@ -1272,11 +1272,26 @@ export function LegalDocumentEditor({
     try {
       const { html } = getLiveExportSnapshot();
       const fieldValues = extractFieldValuesFromSections([html]);
-      const data = buildTemplateFieldDataForDocx(templateId, html);
-      
-      // Step 1: Generate the base DOCX with placeholders
+
+      const template = TEMPLATE_REGISTRY[templateId];
+      if (!template) throw new Error("Template not found");
+
+      // Use unique tokens per field so Adeu can match each occurrence unambiguously.
+      // Format: __FLD_<idx>_<key>__   (guaranteed unique, never appears in real text)
+      const placeholderData: Record<string, string> = {};
+      const tokenMap: Record<string, string> = {};
+      template.fields.forEach((f, idx) => {
+        if (f.type === "select" && f.options?.length) {
+          placeholderData[f.key] = f.options[0]!;
+        } else {
+          const token = `__FLD_${idx}_${f.key}__`;
+          placeholderData[f.key] = token;
+          tokenMap[f.key] = token;
+        }
+      });
+
       toast.loading("Step 1: Generating base document...", {
-        description: "Creating DOCX template",
+        description: "Creating DOCX template with placeholders",
         id: loadingToast,
       });
 
@@ -1285,13 +1300,14 @@ export function LegalDocumentEditor({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           templateId,
-          data,
+          data: placeholderData,
           format: "json",
         }),
       });
 
       if (!res.ok) {
-        throw new Error(`Document generation failed: HTTP ${res.status}`);
+        const errBody = await res.json().catch(() => null) as { error?: string } | null;
+        throw new Error(errBody?.error || `Document generation failed: HTTP ${res.status}`);
       }
 
       const json = (await res.json()) as {
@@ -1304,18 +1320,21 @@ export function LegalDocumentEditor({
         throw new Error(json.error || "Failed to generate DOCX");
       }
 
-      // Step 2: Prepare edits from field values
+      // Build edits: each targets the unique token and replaces with the real value.
       const edits: Array<{ target_text: string; new_text: string; comment?: string }> = [];
       for (const [key, value] of Object.entries(fieldValues)) {
         const cleanValue = value.replace(/<[^>]*>/g, "").replace(/\u200B/g, "").trim();
-        if (cleanValue && !cleanValue.startsWith("[")) {
-          const field = fieldMap[key];
-          edits.push({
-            target_text: `{${key}}`,
-            new_text: cleanValue,
-            comment: field ? `Updated ${field.label}` : undefined,
-          });
-        }
+        if (!cleanValue || cleanValue.startsWith("[")) continue;
+
+        const field = fieldMap[key];
+        const placeholder = tokenMap[key] ?? placeholderData[key];
+        if (!placeholder || cleanValue === placeholder) continue;
+
+        edits.push({
+          target_text: placeholder,
+          new_text: cleanValue,
+          comment: field ? `Updated ${field.label}` : undefined,
+        });
       }
 
       if (edits.length === 0) {
@@ -1327,7 +1346,6 @@ export function LegalDocumentEditor({
         return;
       }
 
-      // Step 3: Apply edits using Adeu to add Track Changes
       toast.loading(`Step 2: Applying ${edits.length} edit${edits.length > 1 ? "s" : ""} as track changes...`, {
         description: "Processing with Adeu service",
         id: loadingToast,
@@ -1343,10 +1361,6 @@ export function LegalDocumentEditor({
         }),
       });
 
-      if (!applyRes.ok) {
-        throw new Error(`Apply edits failed: HTTP ${applyRes.status}`);
-      }
-
       const applyJson = (await applyRes.json()) as {
         success?: boolean;
         modifiedDocxBase64?: string;
@@ -1358,8 +1372,10 @@ export function LegalDocumentEditor({
         message?: string;
       };
 
-      if (!applyJson.success || !applyJson.modifiedDocxBase64) {
-        throw new Error(applyJson.error || applyJson.message || "Failed to apply edits");
+      if (!applyRes.ok || !applyJson.success || !applyJson.modifiedDocxBase64) {
+        const err = new Error(applyJson.message || applyJson.error || "Failed to apply edits");
+        (err as Error & { serverError?: string }).serverError = applyJson.error;
+        throw err;
       }
 
       // Step 4: Download the modified DOCX with Track Changes
@@ -1389,22 +1405,24 @@ export function LegalDocumentEditor({
     } catch (error) {
       console.error("Track changes error:", error);
       
-      // User-friendly error messages
-      let errorMessage = "Failed to apply track changes";
-      let errorDescription = error instanceof Error ? error.message : "Unknown error occurred";
+      const serverError = (error as Error & { serverError?: string }).serverError ?? "";
+      const errMsg = error instanceof Error ? error.message : "Unknown error occurred";
 
-      if (errorDescription.includes("ECONNREFUSED") || errorDescription.includes("ENOTFOUND")) {
-        errorMessage = "Service unavailable";
-        errorDescription = "The Adeu redlining service is not responding. Please try again later.";
-      } else if (errorDescription.includes("HTTP 401") || errorDescription.includes("Unauthorized")) {
-        errorMessage = "Authentication failed";
-        errorDescription = "Please log in again to continue.";
-      } else if (errorDescription.includes("HTTP 422")) {
-        errorMessage = "Invalid document format";
-        errorDescription = "The document could not be processed. Please check your field values.";
-      } else if (errorDescription.includes("HTTP 5")) {
-        errorMessage = "Server error";
-        errorDescription = "An internal error occurred. Please try again or contact support.";
+      let errorMessage = "Failed to apply track changes";
+      let errorDescription = errMsg;
+
+      if (serverError.includes("not configured") || errMsg.includes("not configured") || errMsg.includes("ADEU_SERVICE_URL")) {
+        errorMessage = "Track Changes not configured";
+        errorDescription = "The redlining service (Adeu) is not set up. Ask your admin to configure ADEU_SERVICE_URL.";
+      } else if (
+        errMsg.includes("ECONNREFUSED") || errMsg.includes("ENOTFOUND") ||
+        errMsg.includes("fetch failed") || errMsg.includes("Failed to fetch")
+      ) {
+        errorMessage = "Redlining service unreachable";
+        errorDescription = "The Adeu service is not running. Start it with Docker Compose or check ADEU_SERVICE_URL in your .env.";
+      } else if (errMsg.includes("Batch rejected") || errMsg.includes("Ambiguous match")) {
+        errorMessage = "Track Changes failed";
+        errorDescription = "Some field edits could not be applied. The document may have duplicate field references.";
       }
 
       toast.error(errorMessage, {
@@ -1803,7 +1821,7 @@ export function LegalDocumentEditor({
                   type="button"
                   onClick={() => void applyEditsWithTrackChanges()}
                   disabled={isApplyingEdits}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold bg-[#8B7355] text-white rounded cursor-pointer hover:bg-[#7a6548] transition-colors disabled:opacity-60"
+                  className="inline-flex items-center gap-1 px-2 py-1.5 text-[11px] font-semibold bg-[#8B7355] text-white rounded cursor-pointer hover:bg-[#7a6548] transition-colors disabled:opacity-60 whitespace-nowrap"
                   title="Apply field changes as Track Changes in DOCX"
                 >
                   {isApplyingEdits ? (
@@ -1811,7 +1829,7 @@ export function LegalDocumentEditor({
                   ) : (
                     <Pencil className="w-3 h-3" />
                   )}
-                  Track Changes
+                  Tracked
                 </button>
               </>
             )}

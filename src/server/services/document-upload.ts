@@ -143,6 +143,7 @@ export async function processDocumentUpload({
         audioUrl: resolvedDocumentUrl,
         language: transcriptionResult.language,
         confidence: transcriptionResult.confidence,
+        segments: transcriptionResult.segments,
         transcribedAt: new Date().toISOString(),
       };
 

@@ -9,11 +9,18 @@ import { fetchBlob } from "~/server/storage/vercel-blob";
 
 const SIDECAR_URL = process.env.SIDECAR_URL || "http://localhost:8000";
 
+export interface TranscriptSegment {
+  start: number;
+  end: number;
+  text: string;
+}
+
 export interface TranscriptionResult {
   text: string;
   language: string;
   confidence: number;
   filename: string;
+  segments: TranscriptSegment[];
 }
 
 export interface VideoTranscriptionResult {

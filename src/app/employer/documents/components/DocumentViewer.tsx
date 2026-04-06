@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { FileText, FileImage, FileSpreadsheet, FileCode, Loader2, AlertTriangle, RotateCw, Presentation, Archive } from 'lucide-react';
+import { FileText, FileImage, FileSpreadsheet, FileCode, Loader2, AlertTriangle, RotateCw, Presentation, Archive, Music } from 'lucide-react';
 import type { DocumentType } from '../types';
 import { getDocumentDisplayType, type DocumentDisplayType } from '../types/document';
 import { DocxViewer } from './DocxViewer';
@@ -9,6 +9,7 @@ import { XlsxViewer } from './XlsxViewer';
 import { PptxViewer } from './PptxViewer';
 import { ImageViewer } from './ImageViewer';
 import { CodeViewer } from './CodeViewer';
+import { AudioViewer } from './AudioViewer';
 
 interface DocumentViewerProps {
   document: DocumentType | null;
@@ -28,6 +29,7 @@ export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
   text: "Text / HTML",
   code: "Source Code",
   zip: "Archive",
+  audio: "Audio",
   unknown: "File",
 };
 
@@ -40,6 +42,7 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
   text: FileCode,
   code: FileCode,
   zip: Archive,
+  audio: Music,
   unknown: FileText,
 };
 
@@ -179,6 +182,8 @@ export function DocumentViewer({
         return <PptxViewer url={document.url} title={document.title} />;
       case "code":
         return <CodeViewer url={document.url} title={document.title} mimeType={document.mimeType} />;
+      case "audio":
+        return <AudioViewer document={document} />;
       case "zip":
       case "text":
         return (

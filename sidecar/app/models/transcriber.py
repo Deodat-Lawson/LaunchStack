@@ -48,11 +48,21 @@ class Transcriber:
 
             print(f"[Transcriber] Transcribing: {audio_path.name}...")
             result = self.model.transcribe(str(audio_path), language=None)  # auto-detect language
-            
+
+            segments = [
+                {
+                    "start": seg["start"],
+                    "end": seg["end"],
+                    "text": seg["text"].strip(),
+                }
+                for seg in result.get("segments", [])
+            ]
+
             return {
                 "text": result["text"].strip(),
                 "language": result.get("language", "unknown"),
                 "confidence": result.get("confidence", 0.0),
+                "segments": segments,
             }
         except Exception as e:
             print(f"[Transcriber] Error transcribing {audio_path.name}: {e}")

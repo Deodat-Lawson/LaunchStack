@@ -109,7 +109,16 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
   }
 }
 
-export function getEmbeddings(): OpenAIEmbeddings {
+export function getEmbeddings(
+  config?: import("~/lib/ai/embedding-config").CompanyEmbeddingConfig | null,
+): OpenAIEmbeddings {
+  if (config) {
+    return new OpenAIEmbeddings({
+      modelName: config.model,
+      dimensions: config.dimensions,
+      openAIApiKey: process.env.OPENAI_API_KEY,
+    });
+  }
   return new OpenAIEmbeddings({
     model: "text-embedding-ada-002",
     openAIApiKey: process.env.OPENAI_API_KEY,

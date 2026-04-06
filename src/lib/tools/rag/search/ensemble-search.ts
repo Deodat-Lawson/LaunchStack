@@ -29,6 +29,8 @@ import type {
   EmbeddingsProvider,
   SearchScope,
 } from "../types";
+import { getEmbeddingsForCompany } from "~/lib/ai/embedding-factory";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/embedding-config";
 
 const DEFAULT_WEIGHTS_2: number[] = [0.4, 0.6];
 const DEFAULT_WEIGHTS_3: number[] = [0.3, 0.5, 0.2];
@@ -43,12 +45,10 @@ function isGraphRetrievalEnabled(): boolean {
   );
 }
 
-export function createOpenAIEmbeddings(): OpenAIEmbeddings {
-  return new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY,
-    modelName: "text-embedding-3-large",
-    dimensions: 1536,
-  });
+export function createOpenAIEmbeddings(
+  config?: CompanyEmbeddingConfig | null,
+): OpenAIEmbeddings {
+  return getEmbeddingsForCompany(config);
 }
 
 export async function createDocumentEnsembleRetriever(

@@ -6,6 +6,7 @@ import { useAuth, useUser, SignUp } from "@clerk/nextjs";
 import {
     Building,
     Users,
+    User,
     Briefcase,
     Ticket,
     Brain,
@@ -16,11 +17,12 @@ import {
     ArrowLeft,
     AlertCircle,
     Info,
+    Sparkles,
 } from "lucide-react";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
 
-type ActiveTab = "create" | "join";
+type ActiveTab = "create" | "join" | "solo";
 
 // ─── Join flow steps (simplified – no "authenticate" step since auth happens first) ──
 type JoinStep = "enter-code" | "joining";
@@ -58,7 +60,7 @@ const SignupPage: React.FC = () => {
 
     const fromSignin = searchParams.get("from") === "signin";
 
-    const [activeTab, setActiveTab] = useState<ActiveTab>("create");
+    const [activeTab, setActiveTab] = useState<ActiveTab>("solo");
 
     // ─── Create Company State ────────────────────────────────────────────────
     const [createFormData, setCreateFormData] = useState<CreateCompanyFormData>({
@@ -67,6 +69,10 @@ const SignupPage: React.FC = () => {
     });
     const [createErrors, setCreateErrors] = useState<CreateCompanyFormErrors>({});
     const [isCreating, setIsCreating] = useState(false);
+
+    // ─── Solo Workspace State ───────────────────────────────────────────────
+    const [isCreatingSolo, setIsCreatingSolo] = useState(false);
+    const [soloError, setSoloError] = useState<string | null>(null);
 
     // ─── Join Company State ──────────────────────────────────────────────────
     const [joinFormData, setJoinFormData] = useState<JoinFormData>({
@@ -266,6 +272,52 @@ const SignupPage: React.FC = () => {
     };
 
     // ═════════════════════════════════════════════════════════════════════════
+    // SOLO WORKSPACE HANDLER
+    // ═════════════════════════════════════════════════════════════════════════
+
+    const handleSoloSubmit = async () => {
+        if (!userId || !user) {
+            setSoloError("Please sign in first to create a workspace.");
+            return;
+        }
+        setIsCreatingSolo(true);
+        setSoloError(null);
+        try {
+            const response = await fetch("/api/signup/soloWorkspace", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId,
+                    name: user.fullName ?? user.username,
+                    email: user.emailAddresses[0]?.emailAddress,
+                }),
+            });
+
+            if (response.status === 400) {
+                const rawData: unknown = await response.json();
+                if (typeof rawData === "object" && rawData !== null && "message" in rawData) {
+                    const errorData = rawData as { message: string };
+                    setSoloError(errorData.message);
+                } else {
+                    setSoloError("Registration failed.");
+                }
+                setIsCreatingSolo(false);
+                return;
+            }
+            if (!response.ok) {
+                setSoloError("Registration failed. Please try again.");
+                setIsCreatingSolo(false);
+                return;
+            }
+            router.push("/employer/onboarding");
+        } catch (error) {
+            console.error("Solo workspace error:", error);
+            setSoloError("Registration failed. Please check your connection.");
+            setIsCreatingSolo(false);
+        }
+    };
+
+    // ═════════════════════════════════════════════════════════════════════════
     // JOIN WITH CODE HANDLERS
     // ═════════════════════════════════════════════════════════════════════════
 
@@ -355,6 +407,7 @@ const SignupPage: React.FC = () => {
     // ═════════════════════════════════════════════════════════════════════════
 
     const tabs: { key: ActiveTab; label: string; icon: React.ReactNode }[] = [
+        { key: "solo", label: "Use Solo", icon: <User className={styles.tabIcon} /> },
         { key: "create", label: "Create Company", icon: <Briefcase className={styles.tabIcon} /> },
         { key: "join", label: "Join with Code", icon: <Ticket className={styles.tabIcon} /> },
     ];
@@ -373,6 +426,10 @@ const SignupPage: React.FC = () => {
     };
 
     const headings: Record<ActiveTab, { title: string; subtitle: string }> = {
+        solo: {
+            title: "Get Started Solo",
+            subtitle: "Create a personal workspace — no company needed",
+        },
         create: {
             title: "Create Your Company",
             subtitle: "Set up your organization on Launchstack",
@@ -547,6 +604,40 @@ const SignupPage: React.FC = () => {
                             <h1 className={styles.title}>{headings[activeTab].title}</h1>
                             <p className={styles.subtitle}>{headings[activeTab].subtitle}</p>
                         </div>
+
+                        {/* ── Solo Workspace ─────────────────────────── */}
+                        {activeTab === "solo" && (
+                            <div className={styles.form}>
+                                <div className={styles.formGroup}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+                                        <Sparkles style={{ width: 20, height: 20, color: "var(--color-purple-500, #8b5cf6)" }} />
+                                        <span style={{ fontWeight: 600 }}>Perfect for</span>
+                                    </div>
+                                    <ul style={{ listStyle: "disc", paddingLeft: "1.5rem", lineHeight: 1.8, opacity: 0.85 }}>
+                                        <li>Students exploring AI-powered document analysis</li>
+                                        <li>Founders building a knowledge base from scratch</li>
+                                        <li>Individuals managing personal documents</li>
+                                    </ul>
+                                </div>
+
+                                {soloError && (
+                                    <span className={styles.error}>{soloError}</span>
+                                )}
+
+                                <button
+                                    type="button"
+                                    className={styles.submitButton}
+                                    disabled={isCreatingSolo}
+                                    onClick={() => void handleSoloSubmit()}
+                                >
+                                    {isCreatingSolo ? "Creating workspace..." : "Create Personal Workspace"}
+                                </button>
+
+                                <p className={styles.hint}>
+                                    You can upgrade to a company workspace later from Settings.
+                                </p>
+                            </div>
+                        )}
 
                         {/* ── Create Company Form ─────────────────────── */}
                         {activeTab === "create" && (

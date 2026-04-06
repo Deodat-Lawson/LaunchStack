@@ -20,6 +20,7 @@ import {
 } from "~/lib/tools/rag";
 import { performTavilySearch } from "~/app/api/agents/documentQ&A/services/tavilySearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -257,8 +258,9 @@ export async function POST(request: Request) {
         if (sources.includes("documents")) {
             const documentSearchPromise = (async () => {
                 try {
-                    const embeddings = getEmbeddings();
                     const companyId = Number(requestingUser.companyId);
+                    const embeddingConfig = await getCompanyEmbeddingConfig(requestingUser.companyId);
+                    const embeddings = getEmbeddings(embeddingConfig);
                     
                     if (Number.isNaN(companyId)) {
                         console.warn("Invalid company ID for document search");

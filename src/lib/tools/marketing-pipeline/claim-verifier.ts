@@ -7,6 +7,7 @@ import {
 } from "~/lib/tools/rag";
 import { getChatModel, MARKETING_MODELS } from "~/lib/models";
 import type { ClaimSource } from "~/lib/tools/marketing-pipeline/types";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 
 const ClaimListSchema = z.object({
     claims: z.array(z.string()),
@@ -31,7 +32,8 @@ export async function verifyClaimSources(args: {
     const { claims } = ClaimListSchema.parse(extractResponse);
     if (claims.length === 0) return [];
 
-    const embeddings = createOpenAIEmbeddings();
+    const embeddingConfig = await getCompanyEmbeddingConfig(companyId);
+    const embeddings = createOpenAIEmbeddings(embeddingConfig);
     const options: CompanySearchOptions = { companyId, topK: 2, weights: [0.4, 0.6] };
 
     const results: ClaimSource[] = await Promise.all(

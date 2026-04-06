@@ -73,6 +73,7 @@ export async function GET() {
         name: company.name,
         description: company.description,
         industry: company.industry,
+        type: company.type,
       })
       .from(company)
       .where(eq(company.id, Number(userInfo.companyId)));
@@ -81,6 +82,7 @@ export async function GET() {
       name: companyRow?.name ?? null,
       description: companyRow?.description ?? null,
       industry: companyRow?.industry ?? null,
+      type: companyRow?.type ?? "company",
     });
   } catch (error) {
     console.error("[company/onboarding] GET error:", error);

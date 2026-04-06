@@ -12,6 +12,7 @@ import { getChatModel, MARKETING_MODELS } from "~/lib/models";
 import type { CompanyDNA, DNADebugInfo } from "~/lib/tools/marketing-pipeline/types";
 import { CompanyDNASchema } from "~/lib/tools/marketing-pipeline/types";
 import type { CompanyMetadataJSON, MetadataFact } from "~/lib/tools/company-metadata/types";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 
 const DIFFERENTIATOR_QUERY_PARTS = [
     "unique strengths",
@@ -39,7 +40,8 @@ export async function buildCompanyKnowledgeContext(args: {
 
     let kbSnippets: string[] = [];
     try {
-        const embeddings = createOpenAIEmbeddings();
+        const embeddingConfig = await getCompanyEmbeddingConfig(companyId);
+        const embeddings = createOpenAIEmbeddings(embeddingConfig);
         const options: CompanySearchOptions = {
             companyId,
             topK: 6,
@@ -243,7 +245,8 @@ async function buildRAGContext(companyId: number, prompt: string): Promise<strin
     const categoryNames = categoryRows.map((r) => r.name).filter(Boolean);
     const baseMeta = `Company: ${companyInfo?.name ?? "Unknown"}. Categories: ${categoryNames.join(", ") || "None"}.`;
 
-    const embeddings = createOpenAIEmbeddings();
+    const embeddingConfig = await getCompanyEmbeddingConfig(companyId);
+    const embeddings = createOpenAIEmbeddings(embeddingConfig);
     const options: CompanySearchOptions = { companyId, topK: 4, weights: [0.4, 0.6] };
 
     let generalSnippets: string[] = [];

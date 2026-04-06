@@ -13,6 +13,7 @@ import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
 import { users, document, documentSections } from "~/server/db/schema";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -135,7 +136,8 @@ export async function POST(request: Request) {
             }
 
             // Perform document search
-            const embeddings = getEmbeddings();
+            const embeddingConfig = await getCompanyEmbeddingConfig(requestingUser.companyId);
+            const embeddings = getEmbeddings(embeddingConfig);
             let documents: SearchResult[] = [];
             retrievalMethod = 'document_ensemble_rrf';
 

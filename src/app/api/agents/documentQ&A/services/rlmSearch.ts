@@ -21,6 +21,8 @@ import {
     type TokenBudgetOptions,
 } from "~/lib/tools/rag/retrievers";
 import { getEmbeddings } from "./models";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/embedding-config";
 import type { SemanticType, PreviewType } from "~/server/db/schema";
 
 // ============================================================================
@@ -45,6 +47,8 @@ export interface RLMSearchOptions {
     pageRange?: { start: number; end: number };
     /** Preview types to include if includePreviews is true */
     previewTypes?: PreviewType[];
+    /** Company embedding config for query embedding generation */
+    embeddingConfig?: CompanyEmbeddingConfig | null;
 }
 
 /**
@@ -105,7 +109,7 @@ export async function performRLMSearch(
 
     // Create retriever with embeddings if we need semantic search
     const needsEmbeddings = prioritize === "relevance";
-    const embeddings = needsEmbeddings ? getEmbeddings() : undefined;
+    const embeddings = needsEmbeddings ? getEmbeddings(options.embeddingConfig) : undefined;
     const retriever = createRLMRetriever(embeddings);
 
     // Fetch overview and previews in parallel if needed

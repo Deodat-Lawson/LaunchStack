@@ -16,6 +16,7 @@ import {
 } from "~/lib/tools/rag";
 
 import { getChatModel, MARKETING_MODELS } from "~/lib/models";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 
 import type {
   CompanyDNA,
@@ -106,7 +107,8 @@ export async function retrieveCompanyKnowledgeEvidence(args: {
   const { companyId, prompt } = args;
   const { baseMeta } = await getCompanyMetadata(companyId);
 
-  const embeddings = createOpenAIEmbeddings();
+  const embeddingConfig = await getCompanyEmbeddingConfig(companyId);
+  const embeddings = createOpenAIEmbeddings(embeddingConfig);
   const options: CompanySearchOptions = {
     companyId,
     topK: DEFAULT_TOP_K,

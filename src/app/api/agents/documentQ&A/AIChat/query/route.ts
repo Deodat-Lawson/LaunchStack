@@ -18,6 +18,7 @@ import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
 import { users, document, ChatHistory } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 import {
     normalizeModelContent,
     performWebSearch,
@@ -221,7 +222,8 @@ export async function POST(request: Request) {
             }
 
             // Perform comprehensive search
-            const embeddings = getEmbeddings();
+            const embeddingConfig = await getCompanyEmbeddingConfig(requestingUser.companyId);
+            const embeddings = getEmbeddings(embeddingConfig);
             let documents: SearchResult[] = [];
             retrievalMethod = searchScope === "company"
                 ? 'company_ensemble_rrf'

@@ -16,6 +16,8 @@ import {
 } from "~/lib/ocr/processor";
 import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "~/lib/ocr/chunker";
 import { generateEmbeddings } from "~/lib/ai/embeddings";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/embedding-config";
 import type {
   DocumentChunk,
   PageContent,
@@ -209,12 +211,13 @@ async function vectorizeWithOpenAI(
   documentId: number,
   rootStructureId: number,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
+  embeddingConfig?: CompanyEmbeddingConfig,
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
 
   const contentStrings = prepareForEmbedding(chunks);
   console.log(
-    `[Vectorize] Prepared ${chunks.length} parents -> ${contentStrings.length} strings for embedding`,
+    `[Vectorize] Prepared ${chunks.length} parents -> ${contentStrings.length} strings for embedding (model=${embeddingConfig?.model ?? "default"})`,
   );
 
   const childCounts = chunks.map(
@@ -247,8 +250,8 @@ async function vectorizeWithOpenAI(
           `[Vectorize] Batch ${i + 1}/${parentBatches.length}: ${batch.length} parents, ${batchStrings.length} strings`,
         );
         const embedResult = await generateEmbeddings(batchStrings, {
-          model: "text-embedding-3-large",
-          dimensions: 1536,
+          model: embeddingConfig?.model ?? "text-embedding-3-large",
+          dimensions: embeddingConfig?.dimensions ?? 1536,
         });
         const vectorized = mergeWithEmbeddings(batch, embedResult.embeddings);
         const sections = await storeBatch(documentId, rootStructureId, vectorized);
@@ -565,12 +568,14 @@ export async function runDocIngestionTool(
         storedSections = result.storedSections;
         totalStored = result.totalStored;
       } else {
+        const embeddingConfig = await getCompanyEmbeddingConfig(BigInt(companyId));
         const result = await vectorizeWithOpenAI(
           chunks,
           DEFAULT_OPENAI_BATCH_SIZE,
           documentId,
           rootStructureId,
           runStep,
+          embeddingConfig,
         );
         storedSections = result.storedSections;
         totalStored = result.totalStored;

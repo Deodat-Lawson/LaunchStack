@@ -14,6 +14,7 @@ import {
 
 import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/embedding-config";
 
 // ============================================================================
 // Users
@@ -54,10 +55,12 @@ export const company = pgTable("company", {
     name: varchar("name", { length: 256 }).notNull(),
     description: text("description"),
     industry: varchar("industry", { length: 256 }),
+    type: varchar("type", { length: 20 }).notNull().default("company"),
     employerpasskey: varchar("employerPasskey", { length: 256 }).notNull().default(""),
     employeepasskey: varchar("employeePasskey", { length: 256 }).notNull().default(""),
     numberOfEmployees: varchar("numberOfEmployees", { length: 256 }).notNull(),
     useUploadThing: boolean("use_uploadthing").default(true).notNull(),
+    embeddingConfig: jsonb("embedding_config").$type<CompanyEmbeddingConfig>(),
     createdAt: timestamp("created_at", { withTimezone: true })
         .default(sql`CURRENT_TIMESTAMP`)
         .notNull(),

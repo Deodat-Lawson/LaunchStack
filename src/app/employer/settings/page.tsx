@@ -20,6 +20,7 @@ interface Company {
     id: number;
     name: string;
     numberOfEmployees: string;
+    type?: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -45,6 +46,7 @@ const SettingsPage = () => {
     // New fields
     const [companyName, setCompanyName] = useState("");
     const [staffCount, setStaffCount] = useState("");
+    const [companyType, setCompanyType] = useState<"company" | "personal">("company");
 
     // --------------------------------------------------------------------------
     // Popup (Modal) Management
@@ -108,6 +110,7 @@ const SettingsPage = () => {
 
                 setCompanyName(data.name ?? "");
                 setStaffCount(data.numberOfEmployees ?? "");
+                if (data.type === "personal") setCompanyType("personal");
 
                 setDisplayName(user?.fullName ?? "");
                 setEmail(user?.emailAddresses[0]?.emailAddress ?? "");
@@ -189,6 +192,7 @@ const SettingsPage = () => {
                 email={email}
                 companyName={companyName}
                 staffCount={staffCount}
+                companyType={companyType}
                 isSaving={isSaving}
                 onCompanyNameChange={setCompanyName}
                 onStaffCountChange={setStaffCount}

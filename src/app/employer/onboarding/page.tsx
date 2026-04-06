@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Brain,
@@ -11,8 +11,13 @@ import {
   ArrowRight,
   ChevronRight,
   ChevronLeft,
+  Cpu,
 } from "lucide-react";
 import styles from "~/styles/Employer/Onboarding.module.css";
+import {
+  SUPPORTED_EMBEDDING_MODELS,
+  DEFAULT_EMBEDDING_CONFIG,
+} from "~/lib/ai/embedding-config";
 
 const INDUSTRIES = [
   "Technology",
@@ -35,27 +40,56 @@ export default function OnboardingPage() {
   const [description, setDescription] = useState("");
   const [industry, setIndustry] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [companyType, setCompanyType] = useState<"company" | "personal">("company");
+  const [selectedEmbeddingModel, setSelectedEmbeddingModel] = useState(
+    DEFAULT_EMBEDDING_CONFIG.model,
+  );
+
+  useEffect(() => {
+    fetch("/api/company/onboarding")
+      .then((res) => res.json())
+      .then((data: { type?: string }) => {
+        if (data.type === "personal") {
+          setCompanyType("personal");
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const skip = () => {
     router.replace("/employer/documents");
   };
 
   const saveAndContinue = async () => {
-    if (!description.trim() && !industry) {
-      setStep(2);
-      return;
-    }
-
     setIsSaving(true);
     try {
-      await fetch("/api/company/onboarding", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          description: description.trim() || undefined,
-          industry: industry || undefined,
-        }),
-      });
+      // Save company info (for company type)
+      if (companyType === "company" && (description.trim() || industry)) {
+        await fetch("/api/company/onboarding", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            description: description.trim() || undefined,
+            industry: industry || undefined,
+          }),
+        });
+      }
+
+      // Save embedding config if not the default
+      const chosenModel = SUPPORTED_EMBEDDING_MODELS.find(
+        (m) => m.model === selectedEmbeddingModel,
+      );
+      if (chosenModel && chosenModel.model !== DEFAULT_EMBEDDING_CONFIG.model) {
+        await fetch("/api/company/embedding-config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider: chosenModel.provider,
+            model: chosenModel.model,
+            dimensions: chosenModel.dimensions,
+          }),
+        });
+      }
     } catch (err) {
       console.error("Failed to save onboarding data:", err);
     } finally {
@@ -95,8 +129,9 @@ export default function OnboardingPage() {
 
         <h1 className={styles.welcomeTitle}>Welcome to Launchstack</h1>
         <p className={styles.welcomeSubtitle}>
-          Turn your company&apos;s documents into a living knowledge base that
-          powers smarter decisions, automated marketing, and team-wide insights.
+          {companyType === "personal"
+            ? "Turn your documents into a personal knowledge base that powers smarter decisions, content creation, and AI-driven insights."
+            : "Turn your company\u2019s documents into a living knowledge base that powers smarter decisions, automated marketing, and team-wide insights."}
         </p>
 
         <div className={styles.features}>
@@ -149,46 +184,97 @@ export default function OnboardingPage() {
   const renderCompanyInfo = () => (
     <>
       <div className={styles.cardBody}>
-        <h2 className={styles.stepTitle}>Tell us about your company</h2>
+        <h2 className={styles.stepTitle}>
+          {companyType === "personal"
+            ? "Configure your workspace"
+            : "Tell us about your company"}
+        </h2>
         <p className={styles.stepSubtitle}>
-          Your description feeds directly into your company knowledge base --
-          powering smarter document analysis, more relevant marketing campaigns,
-          and better AI answers across the platform.
+          {companyType === "personal"
+            ? "Choose your preferred embedding model for document analysis. You can change this later in Settings."
+            : "Your description feeds directly into your company knowledge base — powering smarter document analysis, more relevant marketing campaigns, and better AI answers across the platform."}
         </p>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="description" className={styles.label}>
-            Company Description{" "}
-            <span className={styles.labelHint}>(optional)</span>
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className={styles.textarea}
-            placeholder="Briefly describe what your company does, your products or services, and your target market..."
-            rows={4}
-          />
-        </div>
+        {companyType === "company" && (
+          <>
+            <div className={styles.formGroup}>
+              <label htmlFor="description" className={styles.label}>
+                Company Description{" "}
+                <span className={styles.labelHint}>(optional)</span>
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className={styles.textarea}
+                placeholder="Briefly describe what your company does, your products or services, and your target market..."
+                rows={4}
+              />
+            </div>
 
+            <div className={styles.formGroup}>
+              <label htmlFor="industry" className={styles.label}>
+                Industry / Sector{" "}
+                <span className={styles.labelHint}>(optional)</span>
+              </label>
+              <select
+                id="industry"
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+                className={styles.selectTrigger}
+              >
+                <option value="">Select an industry...</option>
+                {INDUSTRIES.map((ind) => (
+                  <option key={ind} value={ind}>
+                    {ind}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </>
+        )}
+
+        {/* Embedding model picker */}
         <div className={styles.formGroup}>
-          <label htmlFor="industry" className={styles.label}>
-            Industry / Sector{" "}
+          <label className={styles.label}>
+            <Cpu className="inline w-4 h-4 mr-1" />
+            Embedding Model{" "}
             <span className={styles.labelHint}>(optional)</span>
           </label>
-          <select
-            id="industry"
-            value={industry}
-            onChange={(e) => setIndustry(e.target.value)}
-            className={styles.selectTrigger}
-          >
-            <option value="">Select an industry...</option>
-            {INDUSTRIES.map((ind) => (
-              <option key={ind} value={ind}>
-                {ind}
-              </option>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {SUPPORTED_EMBEDDING_MODELS.map((model) => (
+              <label
+                key={model.model}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "0.75rem",
+                  padding: "0.75rem 1rem",
+                  borderRadius: "0.5rem",
+                  border: selectedEmbeddingModel === model.model
+                    ? "2px solid var(--color-purple-500, #8b5cf6)"
+                    : "1px solid var(--color-gray-300, #d1d5db)",
+                  cursor: "pointer",
+                  transition: "border-color 0.15s",
+                }}
+              >
+                <input
+                  type="radio"
+                  name="embeddingModel"
+                  value={model.model}
+                  checked={selectedEmbeddingModel === model.model}
+                  onChange={() => setSelectedEmbeddingModel(model.model)}
+                  style={{ marginTop: "0.2rem" }}
+                />
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: "0.9rem" }}>{model.label}</div>
+                  <div style={{ fontSize: "0.8rem", opacity: 0.7 }}>
+                    {model.description} &middot; {model.costPer1MTokens}/1M tokens
+                  </div>
+                </div>
+              </label>
             ))}
-          </select>
+          </div>
         </div>
       </div>
 
@@ -226,7 +312,9 @@ export default function OnboardingPage() {
       {
         icon: Upload,
         title: "Upload documents to build your knowledge base",
-        text: "Every upload enriches your company profile and powers AI features",
+        text: companyType === "personal"
+          ? "Every upload enriches your workspace and powers AI features"
+          : "Every upload enriches your company profile and powers AI features",
         iconWrap: styles.quickStartIconPurple,
         iconColor: styles.quickStartIconColorPurple,
         href: "/employer/documents?view=upload",
@@ -234,15 +322,19 @@ export default function OnboardingPage() {
       {
         icon: Megaphone,
         title: "Create a marketing campaign",
-        text: "Generate platform-ready posts using your company knowledge",
+        text: companyType === "personal"
+          ? "Generate platform-ready posts using your knowledge base"
+          : "Generate platform-ready posts using your company knowledge",
         iconWrap: styles.quickStartIconIndigo,
         iconColor: styles.quickStartIconColorIndigo,
         href: "/employer/documents?view=marketing-pipeline",
       },
       {
         icon: Building2,
-        title: "View your company metadata",
-        text: "See AI-extracted facts about your people, services, and markets",
+        title: companyType === "personal"
+          ? "View your workspace metadata"
+          : "View your company metadata",
+        text: "See AI-extracted facts about your documents and topics",
         iconWrap: styles.quickStartIconViolet,
         iconColor: styles.quickStartIconColorViolet,
         href: "/employer/documents?view=metadata",

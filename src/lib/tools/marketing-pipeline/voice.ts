@@ -7,6 +7,7 @@ import {
 import { getChatModel, MARKETING_MODELS } from "~/lib/models";
 import type { BrandVoice, FormalityLevel } from "~/lib/tools/marketing-pipeline/types";
 import { BrandVoiceSchema } from "~/lib/tools/marketing-pipeline/types";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/embedding-factory";
 
 export async function extractBrandVoice(args: {
     companyId: number;
@@ -14,7 +15,8 @@ export async function extractBrandVoice(args: {
 }): Promise<BrandVoice> {
     const { companyId, toneOverride } = args;
 
-    const embeddings = createOpenAIEmbeddings();
+    const embeddingConfig = await getCompanyEmbeddingConfig(companyId);
+    const embeddings = createOpenAIEmbeddings(embeddingConfig);
     const options: CompanySearchOptions = { companyId, topK: 6, weights: [0.4, 0.6] };
     const results = await companyEnsembleSearch(
         "company tone voice communication style brand personality writing examples",

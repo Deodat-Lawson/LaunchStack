@@ -104,6 +104,9 @@ export const ourFileRouter = {
         "text/plain": { maxFileSize: "128MB", maxFileCount: 1 },
         "text/markdown": { maxFileSize: "128MB", maxFileCount: 1 },
         "text/html": { maxFileSize: "128MB", maxFileCount: 1 },
+        "audio/mpeg": { maxFileSize: "128MB", maxFileCount: 1 },
+        "audio/mp4": { maxFileSize: "128MB", maxFileCount: 1 },
+        "video/mp4": { maxFileSize: "128MB", maxFileCount: 1 },
     })
         .middleware(async () => {
             const { userId } = await auth();

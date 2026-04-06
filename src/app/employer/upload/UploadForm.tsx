@@ -89,6 +89,73 @@ export interface AvailableProviders {
     landingAI: boolean;
 }
 
+interface PresignResponse {
+    presignedUrl: string;
+    objectKey: string;
+    bucket: string;
+}
+
+function uploadToS3WithProgress(
+    file: File,
+    presignedUrl: string,
+    onProgress: (percent: number) => void,
+    endpoint: string,
+): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("PUT", presignedUrl, true);
+        xhr.setRequestHeader(
+            "Content-Type",
+            file.type || "application/octet-stream",
+        );
+        xhr.timeout = 10 * 60 * 1000;
+
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                onProgress(Math.round((event.loaded / event.total) * 100));
+            }
+        };
+
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve();
+            } else if (xhr.status === 403) {
+                reject(
+                    new Error(
+                        "SeaweedFS: Storage access denied — the upload URL may have expired. Please retry.",
+                    ),
+                );
+            } else if (xhr.status >= 500) {
+                reject(
+                    new Error(
+                        `SeaweedFS: Storage service error at ${endpoint} — please try again later`,
+                    ),
+                );
+            } else {
+                reject(
+                    new Error(
+                        `SeaweedFS: Upload to storage failed (HTTP ${xhr.status})`,
+                    ),
+                );
+            }
+        };
+
+        xhr.ontimeout = () =>
+            reject(
+                new Error(
+                    `SeaweedFS: Upload timed out at ${endpoint} — check your connection and try again`,
+                ),
+            );
+        xhr.onerror = () =>
+            reject(
+                new Error(
+                    `SeaweedFS: Local storage service unavailable at ${endpoint}`,
+                ),
+            );
+        xhr.send(file);
+    });
+}
+
 interface UploadFormProps {
     categories: { id: string; name: string }[];
     useUploadThing: boolean;
@@ -97,6 +164,8 @@ interface UploadFormProps {
     isUpdatingPreference: boolean;
     availableProviders: AvailableProviders;
     onAddCategory?: (newCategory: string) => Promise<void>;
+    storageProvider: "cloud" | "local";
+    s3Endpoint: string;
 }
 
 const UploadForm: React.FC<UploadFormProps> = ({
@@ -107,6 +176,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
     isUpdatingPreference,
     availableProviders,
     onAddCategory,
+    storageProvider,
+    s3Endpoint,
 }) => {
     const { userId } = useAuth();
     const router = useRouter();
@@ -207,7 +278,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
             if (nonZipErrorCount > 0) {
                 toast.error(`${nonZipErrorCount} file(s) were rejected`, {
-                    description: `Please upload PDF, DOCX, images (PNG, JPG, etc.) under ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB`,
+                    description: `Please upload PDF, DOCX, images (PNG, JPG, etc.), or audio (MP3, MP4) under ${DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB`,
                 });
             }
 
@@ -464,61 +535,135 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const uploadSingleDocument = async (doc: DocumentFile) => {
         updateDocument(doc.id, { status: "uploading", progress: 10 });
 
-        const useUploadThingForDoc = doc.storageMethod === "cloud" && isUploadThingConfigured;
-        let resolvedStorageType: "cloud" | "database" = "cloud";
+        let resolvedStorageType: "cloud" | "database" | "local" = "cloud";
         let fileUrl: string;
+        let uploadedObjectKey: string | undefined;
         const mimeType: string | undefined = doc.file.type || undefined;
 
-        if (useUploadThingForDoc) {
-            updateDocument(doc.id, { progress: 30 });
-            const res = await uploadFiles("documentUploaderRestricted", {
-                files: [doc.file],
+        if (storageProvider === "local") {
+            updateDocument(doc.id, { progress: 15 });
+
+            const presignRes = await fetch("/api/storage/presign", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    fileName: doc.file.name,
+                    contentType: doc.file.type || "application/octet-stream",
+                }),
             });
-            if (!res?.[0]?.url) throw new Error("Cloud upload failed");
-            fileUrl = res[0].url;
-        } else {
-            updateDocument(doc.id, { progress: 30 });
-            const fd = new FormData();
-            fd.append("file", doc.file);
-            const res = await fetch("/api/upload-local", { method: "POST", body: fd });
-            if (!res.ok) {
-                const err = (await res.json()) as { error?: string };
-                throw new Error(err.error ?? "Local upload failed");
+
+            if (!presignRes.ok) {
+                const errBody = await presignRes.text().catch(() => "");
+                let parsed = "";
+                try {
+                    const json = JSON.parse(errBody) as { error?: string; message?: string };
+                    parsed = json.error ?? json.message ?? "";
+                } catch { /* not JSON */ }
+                const detail = parsed || errBody;
+
+                if (presignRes.status === 401) {
+                    throw new Error(
+                        "Authentication required — please sign in and try again",
+                    );
+                } else if (presignRes.status === 400) {
+                    throw new Error(
+                        detail || "Invalid upload request — check file name and type",
+                    );
+                } else if (presignRes.status >= 500) {
+                    throw new Error(
+                        detail || "Storage service is unavailable — please try again later",
+                    );
+                } else {
+                    throw new Error(
+                        detail || `Presign request failed (HTTP ${presignRes.status})`,
+                    );
+                }
             }
-            const data = (await res.json()) as { url: string; provider?: string };
-            fileUrl = data.url;
-            if (data.provider !== "vercel_blob") {
-                resolvedStorageType = "database";
+
+            const { presignedUrl, objectKey, bucket } =
+                (await presignRes.json()) as PresignResponse;
+
+            updateDocument(doc.id, { progress: 20 });
+
+            await uploadToS3WithProgress(doc.file, presignedUrl, (pct) => {
+                updateDocument(doc.id, {
+                    progress: 20 + Math.round(pct * 0.7),
+                });
+            }, s3Endpoint);
+
+            fileUrl = `${s3Endpoint}/${bucket}/${objectKey}`;
+            uploadedObjectKey = objectKey;
+            resolvedStorageType = "local";
+        } else {
+            const useUploadThingForDoc =
+                doc.storageMethod === "cloud" && isUploadThingConfigured;
+
+            if (useUploadThingForDoc) {
+                updateDocument(doc.id, { progress: 30 });
+                const res = await uploadFiles("documentUploaderRestricted", {
+                    files: [doc.file],
+                });
+                if (!res?.[0]?.url) throw new Error("UploadThing: Cloud upload failed — no URL returned");
+                fileUrl = res[0].url;
+            } else {
+                updateDocument(doc.id, { progress: 30 });
+                const fd = new FormData();
+                fd.append("file", doc.file);
+                const res = await fetch("/api/upload-local", {
+                    method: "POST",
+                    body: fd,
+                });
+                if (!res.ok) {
+                    const err = (await res.json()) as { error?: string };
+                    throw new Error("Vercel Blob: " + (err.error ?? "Upload failed"));
+                }
+                const data = (await res.json()) as {
+                    url: string;
+                    provider?: string;
+                };
+                fileUrl = data.url;
+                if (data.provider !== "vercel_blob") {
+                    resolvedStorageType = "database";
+                }
             }
         }
 
-        updateDocument(doc.id, { progress: 60 });
+        updateDocument(doc.id, { progress: 92 });
 
         const preferredProvider =
             doc.processingMethod === "auto" ? undefined
             : doc.processingMethod === "standard" ? "NATIVE_PDF"
             : doc.processingMethod.toUpperCase();
 
+        const body: Record<string, unknown> = {
+            userId,
+            documentName: doc.title,
+            category: doc.category,
+            documentUrl: fileUrl,
+            storageType: resolvedStorageType,
+            mimeType,
+            originalFilename: doc.file.name,
+            preferredProvider:
+                preferredProvider === "LANDING_AI"
+                    ? "LANDING_AI"
+                    : preferredProvider,
+        };
+
+        if (resolvedStorageType === "local") {
+            body.storageProvider = "seaweedfs";
+            body.storagePathname = uploadedObjectKey;
+        }
+
         const response = await fetch("/api/uploadDocument", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                userId,
-                documentName: doc.title,
-                category: doc.category,
-                documentUrl: fileUrl,
-                storageType: resolvedStorageType,
-                mimeType,
-                originalFilename: doc.file.name,
-                preferredProvider:
-                    preferredProvider === "LANDING_AI" ? "LANDING_AI" : preferredProvider,
-            }),
+            body: JSON.stringify(body),
         });
 
         if (!response.ok) {
             const text = await response.text().catch(() => "");
             throw new Error(
-                `Document registration failed for ${doc.title} (HTTP ${response.status}) ${text}`
+                `Document registration failed for ${doc.title} (HTTP ${response.status}) ${text}`,
             );
         }
         updateDocument(doc.id, { status: "success", progress: 100 });
@@ -645,7 +790,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                 Upload Documents
                             </h2>
 
-                            {!isUploadThingConfigured && (
+                            {storageProvider === "cloud" && !isUploadThingConfigured && (
                                 <div className="flex items-start gap-3 p-4 rounded-xl mb-4 bg-amber-50 border border-amber-200 dark:bg-amber-900/30 dark:border-amber-500/40">
                                     <AlertCircle className="w-5 h-5 text-amber-500 dark:text-amber-400 flex-shrink-0 mt-0.5" />
                                     <div className="flex flex-col gap-1">
@@ -686,7 +831,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                     Drag and drop files or folders here
                                 </p>
                                 <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">
-                                    PDF, DOC, DOCX, PNG, JPG, ZIP — Max {DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB per file
+                                    PDF, DOC, DOCX, PNG, JPG, MP3, MP4, ZIP — Max {DOCUMENT_LIMITS.MAX_FILE_SIZE_MB}MB per file
                                 </p>
                                 <p className="text-xs text-gray-400">
                                     Or choose exactly what to upload
@@ -1328,35 +1473,50 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                             <Label htmlFor="storageMethod">
                                                 Storage Method (Batch)
                                             </Label>
-                                            <Select
-                                                value={currentStorageValue}
-                                                onValueChange={handleToggleChange}
-                                            >
-                                                <SelectTrigger id="storageMethod">
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="database">
-                                                        Vercel Blob
-                                                    </SelectItem>
-                                                    <SelectItem
-                                                        value="cloud"
-                                                        disabled={!isUploadThingConfigured}
+                                            {storageProvider === "local" ? (
+                                                <>
+                                                    <div className="flex items-center gap-2 mt-1 px-3 py-2 rounded-md border border-gray-200 dark:border-purple-500/20 bg-gray-50 dark:bg-slate-800/60">
+                                                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                                                            SeaweedFS (Local Storage)
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-xs text-gray-500 mt-1">
+                                                        Storage provider is set to local. All uploads go to SeaweedFS.
+                                                    </p>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Select
+                                                        value={currentStorageValue}
+                                                        onValueChange={handleToggleChange}
                                                     >
-                                                        UploadThing
-                                                        {!isUploadThingConfigured &&
-                                                            " (not configured)"}
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            {isUpdatingPreference && (
-                                                <p className="text-xs text-gray-400 animate-pulse mt-1">
-                                                    Updating preference...
-                                                </p>
+                                                        <SelectTrigger id="storageMethod">
+                                                            <SelectValue />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="database">
+                                                                Vercel Blob
+                                                            </SelectItem>
+                                                            <SelectItem
+                                                                value="cloud"
+                                                                disabled={!isUploadThingConfigured}
+                                                            >
+                                                                UploadThing
+                                                                {!isUploadThingConfigured &&
+                                                                    " (not configured)"}
+                                                            </SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    {isUpdatingPreference && (
+                                                        <p className="text-xs text-gray-400 animate-pulse mt-1">
+                                                            Updating preference...
+                                                        </p>
+                                                    )}
+                                                    <p className="text-xs text-gray-500 mt-1">
+                                                        Vercel Blob is the default. UploadThing is an optional alternative.
+                                                    </p>
+                                                </>
                                             )}
-                                            <p className="text-xs text-gray-500 mt-1">
-                                                Vercel Blob is the default. UploadThing is an optional alternative.
-                                            </p>
                                         </div>
                                     </div>
                                 </CollapsibleContent>

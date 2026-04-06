@@ -13,7 +13,7 @@ import { runDocIngestionTool } from "~/lib/tools";
 import { db } from "~/server/db";
 import { document, ocrJobs } from "~/server/db/schema";
 import { putFile } from "~/server/storage/vercel-blob";
-import { fetchBlob } from "~/server/storage/vercel-blob";
+import { fetchFile } from "~/lib/storage";
 
 import type {
   ProcessDocumentEventData,
@@ -251,7 +251,7 @@ export const uploadDocument = inngest.createFunction(
         async (): Promise<ExtractedFileInfo[]> => {
           const JSZip = (await import("jszip")).default;
 
-          const res = await fetchBlob(eventData.documentUrl);
+          const res = await fetchFile(eventData.documentUrl);
           if (!res.ok) {
             throw new Error(
               `Failed to fetch ZIP archive: ${res.status} ${res.statusText}`,
@@ -389,7 +389,7 @@ export const uploadDocument = inngest.createFunction(
           const archiveName = routingName;
           const JSZip = (await import("jszip")).default;
 
-          const res = await fetchBlob(eventData.documentUrl).catch(() => null);
+          const res = await fetchFile(eventData.documentUrl).catch(() => null);
           let readmeContent = "";
           let fileTree = "";
 

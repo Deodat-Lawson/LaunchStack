@@ -34,6 +34,8 @@ const serverSchema = z.object({
   DATALAB_API_KEY: optionalString(),
   // Web search providers
   TAVILY_API_KEY: optionalString(),
+  // Foursquare Places API (for Client Prospector)
+  FOURSQUARE_SERVICE_KEY: optionalString(),
   SERPER_API_KEY: optionalString(),
   SEARCH_PROVIDER: z
     .enum(["tavily", "serper", "fallback", "parallel"])
@@ -76,6 +78,34 @@ const serverSchema = z.object({
   NEO4J_URI: optionalString(),
   NEO4J_USERNAME: optionalString(),
   NEO4J_PASSWORD: optionalString(),
+  // Storage provider configuration
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+  NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
+  S3_REGION: optionalString(),
+  S3_ACCESS_KEY: optionalString(),
+  S3_SECRET_KEY: optionalString(),
+  S3_BUCKET_NAME: optionalString(),
+});
+
+const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
+  if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "local") {
+    const required = [
+      "NEXT_PUBLIC_S3_ENDPOINT",
+      "S3_REGION",
+      "S3_ACCESS_KEY",
+      "S3_SECRET_KEY",
+      "S3_BUCKET_NAME",
+    ] as const;
+    for (const key of required) {
+      if (!data[key]) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [key],
+          message: `${key} is required when NEXT_PUBLIC_STORAGE_PROVIDER is "local"`,
+        });
+      }
+    }
+  }
 });
 
 const clientSchema = z.object({
@@ -84,6 +114,8 @@ const clientSchema = z.object({
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+  NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
 });
 
 const skipValidation =
@@ -107,7 +139,7 @@ const parseEnv = <T extends z.AnyZodObject>(
 };
 
 function parseServerEnv() {
-  const server = parseEnv(serverSchema, {
+  const rawValues = {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
@@ -130,6 +162,7 @@ function parseServerEnv() {
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+    FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
     SERPER_API_KEY: process.env.SERPER_API_KEY,
     SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as "tavily" | "serper" | "fallback" | "parallel" | undefined,
     REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
@@ -155,7 +188,25 @@ function parseServerEnv() {
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
-  });
+    NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
+      | "cloud"
+      | "local"
+      | undefined,
+    NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+    S3_REGION: process.env.S3_REGION,
+    S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+    S3_SECRET_KEY: process.env.S3_SECRET_KEY,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+  };
+
+  let server: z.infer<typeof serverSchemaRefined>;
+  if (skipValidation) {
+    const result = serverSchema.partial().safeParse(rawValues);
+    server = (result.success ? result.data : rawValues) as z.infer<typeof serverSchemaRefined>;
+  } else {
+    server = serverSchemaRefined.parse(rawValues);
+  }
+
   if (
     !skipValidation &&
     (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)
@@ -172,6 +223,11 @@ export const env = {
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     NEXT_PUBLIC_UPLOADTHING_ENABLED:
       process.env.NEXT_PUBLIC_UPLOADTHING_ENABLED,
+    NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
+      | "cloud"
+      | "local"
+      | undefined,
+    NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
   }),
 };
 

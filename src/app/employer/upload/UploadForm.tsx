@@ -197,7 +197,11 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const [isSavingCategory, setIsSavingCategory] = useState(false);
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [showImportGuide, setShowImportGuide] = useState(false);
-    const [importTab, setImportTab] = useState<"notion" | "google" | "slack" | "github">("notion");
+    const [importTab, setImportTab] = useState<"notion" | "google" | "slack" | "github" | "youtube">("notion");
+    const [videoUrl, setVideoUrl] = useState("");
+    const [videoCategory, setVideoCategory] = useState("");
+    const [videoTitle, setVideoTitle] = useState("");
+    const [isVideoSubmitting, setIsVideoSubmitting] = useState(false);
     const [expandedDocId, setExpandedDocId] = useState<string | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -891,7 +895,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                         <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0" />
                                         <div className="flex-1 min-w-0">
                                             <span className="text-sm font-medium text-gray-900 dark:text-gray-200">
-                                                Import from Notion, Google Docs, Slack, or GitHub
+                                                Import from Notion, Google Docs, Slack, GitHub, or YouTube
                                             </span>
                                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                                                 Export your existing knowledge and upload it here
@@ -907,7 +911,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                 <CollapsibleContent>
                                     <div className="mt-3 border border-gray-200 dark:border-purple-500/20 rounded-lg overflow-hidden">
                                         <div className="flex border-b border-gray-200 dark:border-purple-500/20">
-                                            {(["notion", "google", "slack", "github"] as const).map((tab) => (
+                                            {(["notion", "google", "slack", "github", "youtube"] as const).map((tab) => (
                                                 <button
                                                     key={tab}
                                                     onClick={() => setImportTab(tab)}
@@ -917,7 +921,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                                             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800/60"
                                                     }`}
                                                 >
-                                                    {tab === "notion" ? "Notion" : tab === "google" ? "Google" : tab === "slack" ? "Slack" : "GitHub"}
+                                                    {tab === "notion" ? "Notion" : tab === "google" ? "Google" : tab === "slack" ? "Slack" : tab === "github" ? "GitHub" : "YouTube"}
                                                 </button>
                                             ))}
                                         </div>
@@ -1007,6 +1011,127 @@ const UploadForm: React.FC<UploadFormProps> = ({
                                                     </div>
                                                     <p className="text-xs text-gray-500 dark:text-gray-500 mt-3">
                                                         Supported formats: GitHub CLI JSON (.json), repo ZIP (.zip with .md files)
+                                                    </p>
+                                                </>
+                                            )}
+                                            {importTab === "youtube" && (
+                                                <>
+                                                    <p className="font-medium text-gray-900 dark:text-gray-100">Import from YouTube or Video Platforms</p>
+                                                    <p className="text-gray-600 dark:text-gray-400">
+                                                        Paste a video URL below. The audio will be automatically extracted and transcribed into a searchable document.
+                                                    </p>
+                                                    <div className="mt-3 space-y-3">
+                                                        <div>
+                                                            <Label htmlFor="video-url" className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                                Video URL
+                                                            </Label>
+                                                            <Input
+                                                                id="video-url"
+                                                                type="url"
+                                                                placeholder="https://www.youtube.com/watch?v=..."
+                                                                value={videoUrl}
+                                                                onChange={(e) => setVideoUrl(e.target.value)}
+                                                                disabled={isVideoSubmitting}
+                                                                className="mt-1"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <Label htmlFor="video-title" className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                                Document Title <span className="text-gray-400">(optional &mdash; defaults to video title)</span>
+                                                            </Label>
+                                                            <Input
+                                                                id="video-title"
+                                                                type="text"
+                                                                placeholder="e.g. Q1 All-Hands Recording"
+                                                                value={videoTitle}
+                                                                onChange={(e) => setVideoTitle(e.target.value)}
+                                                                disabled={isVideoSubmitting}
+                                                                className="mt-1"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <Label htmlFor="video-category" className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                                                Category
+                                                            </Label>
+                                                            <Select
+                                                                value={videoCategory || undefined}
+                                                                onValueChange={(value) => setVideoCategory(value)}
+                                                            >
+                                                                <SelectTrigger id="video-category" className="mt-1">
+                                                                    <SelectValue placeholder="Select a category" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {categories.length === 0 ? (
+                                                                        <div className="p-2 text-sm text-gray-500">
+                                                                            No categories yet
+                                                                        </div>
+                                                                    ) : (
+                                                                        categories.map((c) => (
+                                                                            <SelectItem key={c.id} value={c.name}>
+                                                                                {c.name}
+                                                                            </SelectItem>
+                                                                        ))
+                                                                    )}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                        <div className="flex items-center gap-2 pt-1">
+                                                            <Button
+                                                                type="button"
+                                                                disabled={!videoUrl.trim() || !videoCategory || isVideoSubmitting || !userId}
+                                                                onClick={async () => {
+                                                                    if (!userId || !videoUrl.trim() || !videoCategory) return;
+                                                                    setIsVideoSubmitting(true);
+                                                                    try {
+                                                                        const res = await fetch("/api/upload/video-url", {
+                                                                            method: "POST",
+                                                                            headers: { "Content-Type": "application/json" },
+                                                                            body: JSON.stringify({
+                                                                                userId,
+                                                                                videoUrl: videoUrl.trim(),
+                                                                                category: videoCategory,
+                                                                                title: videoTitle.trim() || undefined,
+                                                                            }),
+                                                                        });
+                                                                        if (!res.ok) {
+                                                                            const err = await res.json().catch(() => ({ details: res.statusText }));
+                                                                            throw new Error(err.details || "Failed to process video");
+                                                                        }
+                                                                        const data = await res.json();
+                                                                        toast.success(`Video transcribed successfully: "${data.document?.title || "Video"}"`);
+                                                                        setVideoUrl("");
+                                                                        setVideoTitle("");
+                                                                        setVideoCategory("");
+                                                                        router.refresh();
+                                                                    } catch (error) {
+                                                                        toast.error(error instanceof Error ? error.message : "Failed to process video URL");
+                                                                    } finally {
+                                                                        setIsVideoSubmitting(false);
+                                                                    }
+                                                                }}
+                                                                size="sm"
+                                                            >
+                                                                {isVideoSubmitting ? (
+                                                                    <>
+                                                                        <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                                                                        Transcribing...
+                                                                    </>
+                                                                ) : (
+                                                                    "Transcribe & Upload"
+                                                                )}
+                                                            </Button>
+                                                            {!videoCategory && videoUrl.trim() && (
+                                                                <p className="text-xs text-red-500">Please select a category</p>
+                                                            )}
+                                                        </div>
+                                                        {isVideoSubmitting && (
+                                                            <p className="text-xs text-amber-600 dark:text-amber-400">
+                                                                This may take a few minutes depending on the video length. Please don&apos;t close this page.
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-3">
+                                                        Supported platforms: YouTube, Vimeo, TikTok, Twitter/X, Twitch, Dailymotion, and more
                                                     </p>
                                                 </>
                                             )}

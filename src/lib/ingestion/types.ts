@@ -16,6 +16,7 @@ export type SourceType =
   | "html"
   | "zip"
   | "email"
+  | "audio"
   | "unknown";
 
 export type IngestionProvider =
@@ -106,6 +107,9 @@ export const MIME_TO_SOURCE_TYPE: Record<string, SourceType> = {
   "application/csv": "csv",
   "message/rfc822": "email",
   "application/vnd.ms-outlook": "email",
+  "audio/mpeg": "audio",
+  "audio/mp4": "audio",
+  "video/mp4": "audio",
 };
 
 export const EXTENSION_TO_SOURCE_TYPE: Record<string, SourceType> = {
@@ -133,6 +137,9 @@ export const EXTENSION_TO_SOURCE_TYPE: Record<string, SourceType> = {
   ".htm": "html",
   ".eml": "email",
   ".msg": "email",
+  ".mp3": "audio",
+  ".mp4": "audio",
+  ".m4a": "audio",
 };
 
 export const ALLOWED_MIME_TYPES: string[] = Object.keys(MIME_TO_SOURCE_TYPE);

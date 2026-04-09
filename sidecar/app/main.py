@@ -11,9 +11,11 @@ from fastapi import FastAPI
 from app.models.embedder import Embedder
 from app.models.reranker import Reranker
 from app.models.ner import EntityExtractor
+from app.models.transcriber import Transcriber
 from app.routes.embed import router as embed_router
 from app.routes.rerank import router as rerank_router
 from app.routes.entities import router as entities_router
+from app.routes.transcribe import router as transcribe_router
 
 
 # ---------------------------------------------------------------------------
@@ -26,6 +28,7 @@ async def lifespan(app: FastAPI):
     app.state.embedder = Embedder()
     app.state.reranker = Reranker()
     app.state.entity_extractor = EntityExtractor()
+    app.state.transcriber = Transcriber()
 
     print("[Sidecar] Models loaded — ready to serve.")
     yield
@@ -38,7 +41,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Launchstack Sidecar",
-    description="Local ML compute for embedding, reranking, and entity extraction.",
+    description="Local ML compute for embedding, reranking, entity extraction, and transcription.",
     version="0.1.0",
     lifespan=lifespan,
 )
@@ -46,6 +49,7 @@ app = FastAPI(
 app.include_router(embed_router)
 app.include_router(rerank_router)
 app.include_router(entities_router)
+app.include_router(transcribe_router)
 
 # Conditionally register adeu routes — sidecar starts even if adeu is not installed
 try:

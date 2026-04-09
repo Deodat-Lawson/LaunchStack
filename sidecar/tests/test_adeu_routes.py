@@ -186,6 +186,89 @@ class TestApplyEditsMarkdown:
         assert "{--" in md or "{++" in md
 
 
+# ── /adeu/diff (error cases) ────────────────────────────────────────────────
+
+
+class TestDiffErrors:
+    """Req 2.21 — negative test cases for /adeu/diff."""
+
+    def test_diff_missing_original_returns_422(self, client, simple_docx):
+        """Missing 'original' field returns 422."""
+        resp = client.post(
+            "/adeu/diff",
+            files={"modified": ("b.docx", simple_docx)},
+            data={"compare_clean": "true"},
+        )
+        assert resp.status_code == 422
+
+    def test_diff_missing_modified_returns_422(self, client, simple_docx):
+        """Missing 'modified' field returns 422."""
+        resp = client.post(
+            "/adeu/diff",
+            files={"original": ("a.docx", simple_docx)},
+            data={"compare_clean": "true"},
+        )
+        assert resp.status_code == 422
+
+    def test_diff_invalid_docx_bytes_returns_error(self, client):
+        """Invalid DOCX bytes return 400 or 422."""
+        resp = client.post(
+            "/adeu/diff",
+            files={
+                "original": ("a.docx", b"not a docx"),
+                "modified": ("b.docx", b"not a docx"),
+            },
+            data={"compare_clean": "true"},
+        )
+        assert resp.status_code in (400, 422)
+
+
+# ── /adeu/accept-all (error cases) ──────────────────────────────────────────
+
+
+class TestAcceptAllErrors:
+    """Req 2.21 — negative test cases for /adeu/accept-all."""
+
+    def test_accept_all_missing_file_returns_422(self, client):
+        """Missing 'file' field returns 422."""
+        resp = client.post("/adeu/accept-all")
+        assert resp.status_code == 422
+
+    def test_accept_all_invalid_docx_bytes_returns_error(self, client):
+        """Invalid DOCX bytes return 400, 422, or 500."""
+        resp = client.post(
+            "/adeu/accept-all",
+            files={"file": ("bad.docx", b"not a docx")},
+        )
+        assert resp.status_code in (400, 422, 500)
+
+
+# ── /adeu/apply-edits-markdown (error cases) ────────────────────────────────
+
+
+class TestApplyEditsMarkdownErrors:
+    """Req 2.21 — negative test cases for /adeu/apply-edits-markdown."""
+
+    def test_apply_edits_markdown_missing_file_returns_422(self, client):
+        """Missing 'file' field returns 422."""
+        body = json.dumps({"edits": [{"target_text": "x", "new_text": "y"}]})
+        resp = client.post(
+            "/adeu/apply-edits-markdown",
+            data={"body": body},
+        )
+        assert resp.status_code == 422
+
+    def test_apply_edits_markdown_invalid_docx_returns_error(self, client):
+        """Invalid DOCX bytes return 400 or 422."""
+        body = json.dumps({"edits": [{"target_text": "x", "new_text": "y"}]})
+        resp = client.post(
+            "/adeu/apply-edits-markdown",
+            files={"file": ("bad.docx", b"not a docx")},
+            data={"body": body},
+        )
+        assert resp.status_code in (400, 422)
+
+
 # ── /adeu/diff ──────────────────────────────────────────────────────────────
 
 

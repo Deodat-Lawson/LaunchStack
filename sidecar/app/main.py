@@ -14,7 +14,6 @@ from app.models.ner import EntityExtractor
 from app.routes.embed import router as embed_router
 from app.routes.rerank import router as rerank_router
 from app.routes.entities import router as entities_router
-from app.routes.adeu import router as adeu_router
 
 
 # ---------------------------------------------------------------------------
@@ -47,16 +46,23 @@ app = FastAPI(
 app.include_router(embed_router)
 app.include_router(rerank_router)
 app.include_router(entities_router)
-app.include_router(adeu_router)
+
+# Conditionally register adeu routes — sidecar starts even if adeu is not installed
+try:
+    from app.routes.adeu import router as adeu_router
+    app.include_router(adeu_router)
+    _adeu_available = True
+except ImportError:
+    _adeu_available = False
+    print("[Sidecar] adeu package not installed — ADEU routes disabled")
 
 
 @app.get("/health")
 async def health():
-    try:
-        from adeu import __version__ as adeu_version
-        adeu_status = {"available": True, "version": adeu_version}
-    except ImportError:
-        adeu_status = {"available": False, "version": None}
-
-    status = "ok" if adeu_status["available"] else "degraded"
-    return {"status": status, "adeu": adeu_status}
+    if _adeu_available:
+        try:
+            from adeu import __version__ as adeu_version
+            return {"status": "ok", "adeu": {"available": True, "version": adeu_version}}
+        except Exception:
+            return {"status": "ok", "adeu": {"available": True, "version": "unknown"}}
+    return {"status": "degraded", "adeu": {"available": False, "version": None}}

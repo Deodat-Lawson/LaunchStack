@@ -143,9 +143,8 @@ describe("modifyDocument Inngest function", () => {
       // Simulate calling the function handler
       // We need to extract and call the handler manually
       const handler = (modifyDocument as unknown as { fn: Function }).fn;
-      if (handler) {
-        await handler({ event, step });
-      }
+      expect(handler).toBeDefined();
+      await handler({ event, step });
 
       expect(fetchBlob).toHaveBeenCalledWith("https://blob.store/original.docx");
     });
@@ -383,10 +382,9 @@ describe("DocumentModifyEvent in Inngest client", () => {
 // ===========================================================================
 describe("Inngest route registration", () => {
   it("route file imports modifyDocument", async () => {
-    // Verify the import doesn't throw
-    const routeModule = await import("~/app/api/inngest/route").catch(() => null);
-    // If it imports correctly (or fails due to serve() needing runtime),
-    // the import itself validates the registration
-    expect(true).toBe(true);
+    const { modifyDocument: fn } = await import("~/server/inngest/functions/modifyDocument");
+    expect(fn).toBeDefined();
+    const opts = (fn as unknown as { opts?: { id?: string } }).opts;
+    expect(opts?.id).toBe("modify-document");
   });
 });

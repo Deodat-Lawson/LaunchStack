@@ -3,7 +3,15 @@
 import React, { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Loader2, CheckCircle, ArrowLeft } from "lucide-react";
+import {
+    Loader2,
+    CheckCircle,
+    ArrowLeft,
+    Lock,
+    Eye,
+    EyeOff,
+    AlertCircle,
+} from "lucide-react";
 import { authClient } from "~/lib/auth-client";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
@@ -14,6 +22,8 @@ function ResetPasswordForm() {
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -63,95 +73,132 @@ function ResetPasswordForm() {
             <div className={styles.splitLayout}>
                 <div className={styles.formPanel}>
                     <div className={styles.formCard}>
-                        <div className={styles.form}>
-                            {success ? (
-                                <>
-                                    <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                                    <h2 className={styles.title}>Password Reset</h2>
+                        {success ? (
+                            <>
+                                <div className={styles.formHeader}>
+                                    <div className="flex justify-center mb-3">
+                                        <div className="w-14 h-14 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                            <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+                                        </div>
+                                    </div>
+                                    <h1 className={styles.title}>Password reset</h1>
                                     <p className={styles.subtitle}>
                                         Your password has been reset successfully.
                                     </p>
-                                    <Link
-                                        href="/signin"
-                                        className="mt-4 text-sm text-purple-600 dark:text-purple-400 hover:underline font-medium"
-                                    >
+                                </div>
+                                <div className={`${styles.form} ${styles.formFooter}`}>
+                                    <Link href="/signin" className={styles.footerLink}>
                                         Sign in with your new password
                                     </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <h2 className={styles.title}>Set New Password</h2>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className={styles.formHeader}>
+                                    <h1 className={styles.title}>Set new password</h1>
                                     <p className={styles.subtitle}>
                                         Choose a new password for your account.
                                     </p>
+                                </div>
 
-                                    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
-                                        <div>
-                                            <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
-                                                New Password
-                                            </label>
+                                <form onSubmit={handleSubmit} className={styles.form} noValidate>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor="password" className={styles.label}>
+                                            New Password
+                                        </label>
+                                        <div className={styles.inputWrapper}>
+                                            <Lock className={styles.inputIcon} />
                                             <input
                                                 id="password"
-                                                type="password"
+                                                type={showPassword ? "text" : "password"}
+                                                autoComplete="new-password"
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 required
                                                 minLength={8}
-                                                className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                                className={`${styles.input} ${styles.inputTrailing}`}
                                                 placeholder="At least 8 characters"
                                             />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword((v) => !v)}
+                                                className={styles.passwordToggle}
+                                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                                tabIndex={-1}
+                                            >
+                                                {showPassword ? (
+                                                    <EyeOff className={styles.passwordToggleIcon} />
+                                                ) : (
+                                                    <Eye className={styles.passwordToggleIcon} />
+                                                )}
+                                            </button>
                                         </div>
+                                    </div>
 
-                                        <div>
-                                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-1">
-                                                Confirm Password
-                                            </label>
+                                    <div className={styles.formGroup}>
+                                        <label htmlFor="confirmPassword" className={styles.label}>
+                                            Confirm Password
+                                        </label>
+                                        <div className={styles.inputWrapper}>
+                                            <Lock className={styles.inputIcon} />
                                             <input
                                                 id="confirmPassword"
-                                                type="password"
+                                                type={showConfirm ? "text" : "password"}
+                                                autoComplete="new-password"
                                                 value={confirmPassword}
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                                 required
                                                 minLength={8}
-                                                className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                                className={`${styles.input} ${styles.inputTrailing}`}
                                                 placeholder="Confirm your password"
                                             />
-                                        </div>
-
-                                        {error && (
-                                            <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">
-                                                {error}
-                                            </div>
-                                        )}
-
-                                        <button
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                            className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-2"
-                                        >
-                                            {isSubmitting ? (
-                                                <>
-                                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                                    Resetting...
-                                                </>
-                                            ) : (
-                                                "Reset Password"
-                                            )}
-                                        </button>
-
-                                        <p className="text-sm text-muted-foreground text-center">
-                                            <Link
-                                                href="/signin"
-                                                className="text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center gap-1"
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowConfirm((v) => !v)}
+                                                className={styles.passwordToggle}
+                                                aria-label={showConfirm ? "Hide password" : "Show password"}
+                                                tabIndex={-1}
                                             >
-                                                <ArrowLeft className="w-3 h-3" />
-                                                Back to sign in
-                                            </Link>
-                                        </p>
-                                    </form>
-                                </>
-                            )}
-                        </div>
+                                                {showConfirm ? (
+                                                    <EyeOff className={styles.passwordToggleIcon} />
+                                                ) : (
+                                                    <Eye className={styles.passwordToggleIcon} />
+                                                )}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {error && (
+                                        <div className={styles.formError} role="alert">
+                                            <AlertCircle className={styles.formErrorIcon} />
+                                            <span>{error}</span>
+                                        </div>
+                                    )}
+
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className={styles.submitButton}
+                                    >
+                                        {isSubmitting ? (
+                                            <span className="inline-flex items-center justify-center gap-2">
+                                                <Loader2 className="w-4 h-4 animate-spin" />
+                                                Resetting...
+                                            </span>
+                                        ) : (
+                                            "Reset Password"
+                                        )}
+                                    </button>
+
+                                    <div className={styles.formFooter}>
+                                        <Link href="/signin" className={styles.footerLinkMuted}>
+                                            <ArrowLeft className="w-3 h-3" />
+                                            Back to sign in
+                                        </Link>
+                                    </div>
+                                </form>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

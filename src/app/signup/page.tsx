@@ -18,6 +18,11 @@ import {
     AlertCircle,
     Info,
     Loader2,
+    Mail,
+    Lock,
+    User as UserIcon,
+    Eye,
+    EyeOff,
 } from "lucide-react";
 import Link from "next/link";
 import styles from "~/styles/signup.module.css";
@@ -87,6 +92,7 @@ const SignupPage: React.FC = () => {
     const [signupName, setSignupName] = useState("");
     const [signupEmail, setSignupEmail] = useState("");
     const [signupPassword, setSignupPassword] = useState("");
+    const [showSignupPassword, setShowSignupPassword] = useState(false);
     const [signupError, setSignupError] = useState<string | null>(null);
     const [isSigningUp, setIsSigningUp] = useState(false);
 
@@ -460,7 +466,7 @@ const SignupPage: React.FC = () => {
     // RENDER
     // ═════════════════════════════════════════════════════════════════════════
 
-    // While Clerk is still loading, show nothing to avoid flash
+    // While auth is loading, show a spinner to avoid flash
     if (!isAuthLoaded) {
         return (
             <div className={styles.container}>
@@ -484,9 +490,16 @@ const SignupPage: React.FC = () => {
 
     // ── Not authenticated: show sign-up form ────────────────────────────────
     if (!userId) {
+        const passwordTooShort =
+            signupPassword.length > 0 && signupPassword.length < 8;
+
         const handleSignUp = async (e: React.FormEvent) => {
             e.preventDefault();
             setSignupError(null);
+            if (signupPassword.length < 8) {
+                setSignupError("Password must be at least 8 characters.");
+                return;
+            }
             setIsSigningUp(true);
             try {
                 const result = await authClient.signUp.email({
@@ -497,7 +510,8 @@ const SignupPage: React.FC = () => {
                 if (result.error) {
                     setSignupError(result.error.message ?? "Sign up failed. Please try again.");
                 }
-                // On success, session is set automatically and useAuth will update
+                // On success, the better-auth session hook updates and the
+                // component re-renders in the authenticated Create/Join view.
             } catch {
                 setSignupError("An unexpected error occurred. Please try again.");
             } finally {
@@ -511,91 +525,126 @@ const SignupPage: React.FC = () => {
                 <div className={styles.splitLayout}>
                     <div className={styles.formPanel}>
                         <div className={styles.formCard}>
-                            <div className={styles.form}>
-                                <h2 className={styles.title}>Create Account</h2>
+                            <div className={styles.formHeader}>
+                                <h1 className={styles.title}>Create your account</h1>
                                 <p className={styles.subtitle}>
-                                    Sign up to get started with Launchstack
+                                    Get started with Launchstack in seconds
                                 </p>
+                            </div>
 
-                                <form onSubmit={handleSignUp} className="space-y-4 w-full max-w-sm">
-                                    <div>
-                                        <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">
-                                            Full Name
-                                        </label>
+                            <form onSubmit={handleSignUp} className={styles.form} noValidate>
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="name" className={styles.label}>
+                                        Full Name
+                                    </label>
+                                    <div className={styles.inputWrapper}>
+                                        <UserIcon className={styles.inputIcon} />
                                         <input
                                             id="name"
                                             type="text"
+                                            autoComplete="name"
                                             value={signupName}
                                             onChange={(e) => setSignupName(e.target.value)}
                                             required
-                                            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
-                                            placeholder="Your full name"
+                                            className={styles.input}
+                                            placeholder="Jane Doe"
                                         />
                                     </div>
+                                </div>
 
-                                    <div>
-                                        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
-                                            Email
-                                        </label>
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="email" className={styles.label}>
+                                        Email
+                                    </label>
+                                    <div className={styles.inputWrapper}>
+                                        <Mail className={styles.inputIcon} />
                                         <input
                                             id="email"
                                             type="email"
+                                            autoComplete="email"
                                             value={signupEmail}
                                             onChange={(e) => setSignupEmail(e.target.value)}
                                             required
-                                            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                            className={styles.input}
                                             placeholder="you@example.com"
                                         />
                                     </div>
+                                </div>
 
-                                    <div>
-                                        <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
-                                            Password
-                                        </label>
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="password" className={styles.label}>
+                                        Password
+                                    </label>
+                                    <div className={styles.inputWrapper}>
+                                        <Lock className={styles.inputIcon} />
                                         <input
                                             id="password"
-                                            type="password"
+                                            type={showSignupPassword ? "text" : "password"}
+                                            autoComplete="new-password"
                                             value={signupPassword}
                                             onChange={(e) => setSignupPassword(e.target.value)}
                                             required
                                             minLength={8}
-                                            className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                            className={`${styles.input} ${styles.inputTrailing}`}
                                             placeholder="At least 8 characters"
                                         />
-                                    </div>
-
-                                    {signupError && (
-                                        <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">
-                                            {signupError}
-                                        </div>
-                                    )}
-
-                                    <button
-                                        type="submit"
-                                        disabled={isSigningUp}
-                                        className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-2"
-                                    >
-                                        {isSigningUp ? (
-                                            <>
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                Creating account...
-                                            </>
-                                        ) : (
-                                            "Sign Up"
-                                        )}
-                                    </button>
-
-                                    <p className="text-sm text-muted-foreground text-center">
-                                        Already have an account?{" "}
-                                        <Link
-                                            href="/signin"
-                                            className="text-purple-600 dark:text-purple-400 hover:underline font-medium"
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowSignupPassword((v) => !v)}
+                                            className={styles.passwordToggle}
+                                            aria-label={showSignupPassword ? "Hide password" : "Show password"}
+                                            tabIndex={-1}
                                         >
+                                            {showSignupPassword ? (
+                                                <EyeOff className={styles.passwordToggleIcon} />
+                                            ) : (
+                                                <Eye className={styles.passwordToggleIcon} />
+                                            )}
+                                        </button>
+                                    </div>
+                                    {passwordTooShort ? (
+                                        <p className={styles.helperText}>
+                                            <AlertCircle className="w-3 h-3 text-amber-500" />
+                                            Password must be at least 8 characters
+                                        </p>
+                                    ) : (
+                                        <p className={styles.helperText}>
+                                            Use at least 8 characters
+                                        </p>
+                                    )}
+                                </div>
+
+                                {signupError && (
+                                    <div className={styles.formError} role="alert">
+                                        <AlertCircle className={styles.formErrorIcon} />
+                                        <span>{signupError}</span>
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={isSigningUp}
+                                    className={styles.submitButton}
+                                >
+                                    {isSigningUp ? (
+                                        <span className="inline-flex items-center justify-center gap-2">
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Creating account...
+                                        </span>
+                                    ) : (
+                                        "Create Account"
+                                    )}
+                                </button>
+
+                                <div className={styles.formFooter}>
+                                    <div className={styles.formFooterRow}>
+                                        <span>Already have an account?</span>
+                                        <Link href="/signin" className={styles.footerLink}>
                                             Sign in
                                         </Link>
-                                    </p>
-                                </form>
-                            </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     {renderBrandPanel()}

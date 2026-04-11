@@ -25,7 +25,16 @@ export const auth = betterAuth({
         },
     }),
     secret: process.env.BETTER_AUTH_SECRET,
-    baseURL: process.env.BETTER_AUTH_URL ?? process.env.NEXT_PUBLIC_SITE_URL,
+    baseURL: process.env.NEXT_PUBLIC_SITE_URL,
+    // Trust any localhost port so `next dev` works even when bumped off 3000.
+    // better-auth's matchesOriginPattern() supports glob wildcards when the
+    // pattern contains `://` — see node_modules/better-auth/dist/auth/trusted-origins.mjs.
+    // The production origin from `baseURL` is still auto-trusted by better-auth,
+    // so this merges with, rather than replaces, the prod whitelist.
+    trustedOrigins: [
+        "http://localhost:*",
+        "http://127.0.0.1:*",
+    ],
     emailAndPassword: {
         enabled: true,
     },

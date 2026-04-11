@@ -170,11 +170,11 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
             description="Paste these into Vercel's Environment Variables panel before the first deploy. BLOB_READ_WRITE_TOKEN is auto-injected when you connect a Blob store (see below)."
             code={`DATABASE_URL=postgresql://<neon-connection-string>
 BETTER_AUTH_SECRET=<your-random-secret>
-BETTER_AUTH_URL=https://your-app-domain.com
+NEXT_PUBLIC_SITE_URL=https://your-app-domain.com
 OPENAI_API_KEY=sk-proj-xxx
 INNGEST_EVENT_KEY=evt_xxx
 BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
-            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nBETTER_AUTH_SECRET=<your-random-secret>\nBETTER_AUTH_URL=https://your-app-domain.com\nOPENAI_API_KEY=sk-proj-xxx\nINNGEST_EVENT_KEY=evt_xxx\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`, 'v-2')}
+            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nBETTER_AUTH_SECRET=<your-random-secret>\nNEXT_PUBLIC_SITE_URL=https://your-app-domain.com\nOPENAI_API_KEY=sk-proj-xxx\nINNGEST_EVENT_KEY=evt_xxx\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`, 'v-2')}
             copied={copiedCode === 'v-2'}
             darkMode={darkMode}
           />

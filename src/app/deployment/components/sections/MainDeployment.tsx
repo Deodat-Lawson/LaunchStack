@@ -245,7 +245,7 @@ export const MainDeployment: React.FC<DeploymentProps> = ({
             code={`DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"
 
 BETTER_AUTH_SECRET=your_generated_secret_here
-BETTER_AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 OPENAI_API_KEY=sk-proj-your_key_here
 
@@ -254,7 +254,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx
 
 # Inngest — use a placeholder for local dev
 INNGEST_EVENT_KEY=dev-placeholder`}
-            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"\n\nBETTER_AUTH_SECRET=your_generated_secret_here\nBETTER_AUTH_URL=http://localhost:3000\n\nOPENAI_API_KEY=sk-proj-your_key_here\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'step-3')}
+            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"\n\nBETTER_AUTH_SECRET=your_generated_secret_here\nNEXT_PUBLIC_SITE_URL=http://localhost:3000\n\nOPENAI_API_KEY=sk-proj-your_key_here\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'step-3')}
             copied={copiedCode === 'step-3'}
             darkMode={darkMode}
           />

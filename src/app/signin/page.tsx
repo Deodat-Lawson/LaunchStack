@@ -11,6 +11,11 @@ import {
     Shield,
     CheckCircle,
     Loader2,
+    Mail,
+    Lock,
+    Eye,
+    EyeOff,
+    AlertCircle,
 } from "lucide-react";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
@@ -22,10 +27,11 @@ const SigninPage: React.FC = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // If already signed in, redirect
+    // If already signed in, redirect — middleware will then role-route.
     React.useEffect(() => {
         if (isAuthLoaded && isSignedIn) {
             router.push("/");
@@ -154,83 +160,99 @@ const SigninPage: React.FC = () => {
             <div className={styles.splitLayout}>
                 <div className={styles.formPanel}>
                     <div className={styles.formCard}>
-                        <div className={styles.form}>
-                            <h2 className={styles.title}>Sign In</h2>
+                        <div className={styles.formHeader}>
+                            <h1 className={styles.title}>Welcome back</h1>
                             <p className={styles.subtitle}>
-                                Enter your credentials to access your account
+                                Sign in to continue to Launchstack
                             </p>
+                        </div>
 
-                            <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
-                                        Email
-                                    </label>
+                        <form onSubmit={handleSubmit} className={styles.form} noValidate>
+                            <div className={styles.formGroup}>
+                                <label htmlFor="email" className={styles.label}>
+                                    Email
+                                </label>
+                                <div className={styles.inputWrapper}>
+                                    <Mail className={styles.inputIcon} />
                                     <input
                                         id="email"
                                         type="email"
+                                        autoComplete="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
-                                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                        className={styles.input}
                                         placeholder="you@example.com"
                                     />
                                 </div>
+                            </div>
 
-                                <div>
-                                    <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1">
-                                        Password
-                                    </label>
+                            <div className={styles.formGroup}>
+                                <label htmlFor="password" className={styles.label}>
+                                    Password
+                                </label>
+                                <div className={styles.inputWrapper}>
+                                    <Lock className={styles.inputIcon} />
                                     <input
                                         id="password"
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
+                                        autoComplete="current-password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                                        className={`${styles.input} ${styles.inputTrailing}`}
                                         placeholder="Enter your password"
                                     />
-                                </div>
-
-                                {error && (
-                                    <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">
-                                        {error}
-                                    </div>
-                                )}
-
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-2"
-                                >
-                                    {isSubmitting ? (
-                                        <>
-                                            <Loader2 className="w-4 h-4 animate-spin" />
-                                            Signing in...
-                                        </>
-                                    ) : (
-                                        "Sign In"
-                                    )}
-                                </button>
-
-                                <div className="text-center space-y-2">
-                                    <Link
-                                        href="/forgot-password"
-                                        className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword((v) => !v)}
+                                        className={styles.passwordToggle}
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                        tabIndex={-1}
                                     >
-                                        Forgot password?
-                                    </Link>
-                                    <p className="text-sm text-muted-foreground">
-                                        Don&apos;t have an account?{" "}
-                                        <Link
-                                            href="/signup"
-                                            className="text-purple-600 dark:text-purple-400 hover:underline font-medium"
-                                        >
-                                            Sign up
-                                        </Link>
-                                    </p>
+                                        {showPassword ? (
+                                            <EyeOff className={styles.passwordToggleIcon} />
+                                        ) : (
+                                            <Eye className={styles.passwordToggleIcon} />
+                                        )}
+                                    </button>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+
+                            {error && (
+                                <div className={styles.formError} role="alert">
+                                    <AlertCircle className={styles.formErrorIcon} />
+                                    <span>{error}</span>
+                                </div>
+                            )}
+
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className={styles.submitButton}
+                            >
+                                {isSubmitting ? (
+                                    <span className="inline-flex items-center justify-center gap-2">
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        Signing in...
+                                    </span>
+                                ) : (
+                                    "Sign In"
+                                )}
+                            </button>
+
+                            <div className={styles.formFooter}>
+                                <Link href="/forgot-password" className={styles.footerLink}>
+                                    Forgot password?
+                                </Link>
+                                <div className={styles.formFooterRow}>
+                                    <span>Don&apos;t have an account?</span>
+                                    <Link href="/signup" className={styles.footerLink}>
+                                        Sign up
+                                    </Link>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 {renderBrandPanel()}

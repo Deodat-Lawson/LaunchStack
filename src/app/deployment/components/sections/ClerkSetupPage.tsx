@@ -12,7 +12,7 @@ export const ClerkSetupPage: React.FC<DeploymentProps> = ({
   copiedCode,
 }) => {
   const envSnippet = `BETTER_AUTH_SECRET=your-random-secret-here
-BETTER_AUTH_URL=https://your-app-domain.com`;
+NEXT_PUBLIC_SITE_URL=https://your-app-domain.com`;
 
   return (
     <>
@@ -93,7 +93,7 @@ BETTER_AUTH_URL=https://your-app-domain.com`;
             darkMode={darkMode}
           >
             <p className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
-              Use a unique, strong BETTER_AUTH_SECRET for each environment. Ensure BETTER_AUTH_URL matches your production domain exactly (including https://).
+              Use a unique, strong BETTER_AUTH_SECRET for each environment. Ensure NEXT_PUBLIC_SITE_URL matches your production domain exactly (including https://).
             </p>
           </InfoBox>
           <WarningBox

@@ -81,7 +81,7 @@ export const DockerDeploymentPage: React.FC<DeploymentProps> = ({
 docker run --rm -p 3000:3000 \\
   -e DATABASE_URL="$DATABASE_URL" \\
   -e BETTER_AUTH_SECRET="$BETTER_AUTH_SECRET" \\
-  -e BETTER_AUTH_URL="$BETTER_AUTH_URL" \\
+  -e NEXT_PUBLIC_SITE_URL="$NEXT_PUBLIC_SITE_URL" \\
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \\
   -e BLOB_READ_WRITE_TOKEN="$BLOB_READ_WRITE_TOKEN" \\
   -e INNGEST_EVENT_KEY="$INNGEST_EVENT_KEY" \\
@@ -130,7 +130,7 @@ docker run --rm -p 3000:3000 \\
             description="Set the required variables at the project root."
             code={`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"
 BETTER_AUTH_SECRET=your_generated_secret_here
-BETTER_AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 OPENAI_API_KEY=sk-proj-xxx
 
 # Vercel Blob — required for document uploads
@@ -138,7 +138,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx
 
 # Inngest — use a placeholder for local dev
 INNGEST_EVENT_KEY=dev-placeholder`}
-            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nBETTER_AUTH_SECRET=your_generated_secret_here\nBETTER_AUTH_URL=http://localhost:3000\nOPENAI_API_KEY=sk-proj-xxx\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
+            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nBETTER_AUTH_SECRET=your_generated_secret_here\nNEXT_PUBLIC_SITE_URL=http://localhost:3000\nOPENAI_API_KEY=sk-proj-xxx\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
             copied={copiedCode === 'docker-1'}
             darkMode={darkMode}
           />

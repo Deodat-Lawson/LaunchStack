@@ -19,7 +19,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
-      BETTER_AUTH_URL: ${{ secrets.BETTER_AUTH_URL }}
+      NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
       UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
       POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
       POSTGRES_URL_NO_SSL: ${{ secrets.POSTGRES_URL_NO_SSL }}
@@ -71,7 +71,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
-      BETTER_AUTH_URL: ${{ secrets.BETTER_AUTH_URL }}
+      NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
       UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
       POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
       POSTGRES_URL_NO_SSL: ${{ secrets.POSTGRES_URL_NO_SSL }}

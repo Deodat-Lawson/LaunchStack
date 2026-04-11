@@ -14,7 +14,7 @@
 
 x-app-build-args: &app-build-args
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-  OPENAI_API_KEY: ${OPENAI_API_KEY}
+  # OPENAI_API_KEY removed — passed only as runtime env var, never baked into image layers
 
 services:
   db:
@@ -51,6 +51,21 @@ services:
       SKIP_ENV_VALIDATION: "1"
     restart: "no"
 
+  sidecar:
+    build:
+      context: ./sidecar
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-sidecar
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   app:
     build:
       context: .
@@ -63,6 +78,8 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
+      sidecar:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
       OPENAI_API_KEY: ${OPENAI_API_KEY}
@@ -85,6 +102,8 @@ services:
       # Ollama (optional — set OLLAMA_BASE_URL to an Ollama instance)
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-}
+      # Adeu DOCX redlining service
+      ADEU_SERVICE_URL: http://sidecar:8000
     ports:
       - "3000:3000"
 

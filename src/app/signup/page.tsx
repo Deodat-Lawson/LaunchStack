@@ -27,6 +27,7 @@ import {
 import Link from "next/link";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
+import { PASSWORD_RULES } from "~/lib/validation";
 
 type ActiveTab = "create" | "join";
 
@@ -95,6 +96,7 @@ const SignupPage: React.FC = () => {
     const [showSignupPassword, setShowSignupPassword] = useState(false);
     const [signupError, setSignupError] = useState<string | null>(null);
     const [isSigningUp, setIsSigningUp] = useState(false);
+    const [verificationPending, setVerificationPending] = useState(false);
 
     // Guard so the auto-join from ?code= only fires once
     const autoJoinTriggered = useRef(false);
@@ -490,14 +492,17 @@ const SignupPage: React.FC = () => {
 
     // ── Not authenticated: show sign-up form ────────────────────────────────
     if (!userId) {
-        const passwordTooShort =
-            signupPassword.length > 0 && signupPassword.length < 8;
+        const passwordRuleResults = PASSWORD_RULES.map((rule) => ({
+            label: rule.label,
+            passed: signupPassword.length > 0 && rule.test(signupPassword),
+        }));
+        const allRulesPassed = passwordRuleResults.every((r) => r.passed);
 
         const handleSignUp = async (e: React.FormEvent) => {
             e.preventDefault();
             setSignupError(null);
-            if (signupPassword.length < 8) {
-                setSignupError("Password must be at least 8 characters.");
+            if (!allRulesPassed) {
+                setSignupError("Please meet all password requirements.");
                 return;
             }
             setIsSigningUp(true);
@@ -509,15 +514,53 @@ const SignupPage: React.FC = () => {
                 });
                 if (result.error) {
                     setSignupError(result.error.message ?? "Sign up failed. Please try again.");
+                } else {
+                    // Email verification is required — show "check your inbox" state.
+                    setVerificationPending(true);
                 }
-                // On success, the better-auth session hook updates and the
-                // component re-renders in the authenticated Create/Join view.
             } catch {
                 setSignupError("An unexpected error occurred. Please try again.");
             } finally {
                 setIsSigningUp(false);
             }
         };
+
+        if (verificationPending) {
+            return (
+                <div className={styles.container}>
+                    <SignupNavbar />
+                    <div className={styles.splitLayout}>
+                        <div className={styles.formPanel}>
+                            <div className={styles.formCard}>
+                                <div className={styles.formHeader}>
+                                    <div className="flex items-center justify-center mb-4">
+                                        <Mail className="w-12 h-12 text-purple-600" />
+                                    </div>
+                                    <h1 className={styles.title}>Check your inbox</h1>
+                                    <p className={styles.subtitle}>
+                                        We sent a verification link to <strong>{signupEmail}</strong>.
+                                        Click the link to verify your email and sign in.
+                                    </p>
+                                </div>
+                                <div className={styles.form}>
+                                    <p className="text-xs text-center text-gray-500">
+                                        Didn&apos;t receive it? Check your spam folder or{" "}
+                                        <button
+                                            type="button"
+                                            className="text-purple-600 hover:underline font-medium"
+                                            onClick={() => setVerificationPending(false)}
+                                        >
+                                            try again
+                                        </button>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {renderBrandPanel()}
+                    </div>
+                </div>
+            );
+        }
 
         return (
             <div className={styles.container}>
@@ -602,16 +645,27 @@ const SignupPage: React.FC = () => {
                                             )}
                                         </button>
                                     </div>
-                                    {passwordTooShort ? (
-                                        <p className={styles.helperText}>
-                                            <AlertCircle className="w-3 h-3 text-amber-500" />
-                                            Password must be at least 8 characters
-                                        </p>
-                                    ) : (
-                                        <p className={styles.helperText}>
-                                            Use at least 8 characters
-                                        </p>
-                                    )}
+                                    <ul className="mt-1.5 space-y-0.5 list-none p-0 m-0">
+                                        {passwordRuleResults.map((r) => (
+                                            <li
+                                                key={r.label}
+                                                className={`flex items-center gap-1.5 text-xs ${
+                                                    signupPassword.length === 0
+                                                        ? "text-gray-400"
+                                                        : r.passed
+                                                          ? "text-emerald-600"
+                                                          : "text-amber-500"
+                                                }`}
+                                            >
+                                                {signupPassword.length > 0 && r.passed ? (
+                                                    <CheckCircle className="w-3 h-3" />
+                                                ) : (
+                                                    <AlertCircle className="w-3 h-3" />
+                                                )}
+                                                {r.label}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
 
                                 {signupError && (

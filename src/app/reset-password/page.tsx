@@ -13,6 +13,7 @@ import {
     AlertCircle,
 } from "lucide-react";
 import { authClient } from "~/lib/auth-client";
+import { PASSWORD_RULES } from "~/lib/validation";
 import styles from "~/styles/signup.module.css";
 import { SignupNavbar } from "../_components/SignupNavbar";
 
@@ -28,6 +29,12 @@ function ResetPasswordForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    const passwordRuleResults = PASSWORD_RULES.map((rule) => ({
+        label: rule.label,
+        passed: password.length > 0 && rule.test(password),
+    }));
+    const allRulesPassed = passwordRuleResults.every((r) => r.passed);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
@@ -37,8 +44,8 @@ function ResetPasswordForm() {
             return;
         }
 
-        if (password.length < 8) {
-            setError("Password must be at least 8 characters.");
+        if (!allRulesPassed) {
+            setError("Please meet all password requirements.");
             return;
         }
 
@@ -133,6 +140,27 @@ function ResetPasswordForm() {
                                                 )}
                                             </button>
                                         </div>
+                                        <ul className="mt-1.5 space-y-0.5 list-none p-0 m-0">
+                                            {passwordRuleResults.map((r) => (
+                                                <li
+                                                    key={r.label}
+                                                    className={`flex items-center gap-1.5 text-xs ${
+                                                        password.length === 0
+                                                            ? "text-gray-400"
+                                                            : r.passed
+                                                              ? "text-emerald-600"
+                                                              : "text-amber-500"
+                                                    }`}
+                                                >
+                                                    {password.length > 0 && r.passed ? (
+                                                        <CheckCircle className="w-3 h-3" />
+                                                    ) : (
+                                                        <AlertCircle className="w-3 h-3" />
+                                                    )}
+                                                    {r.label}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>
 
                                     <div className={styles.formGroup}>

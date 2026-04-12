@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     if (!validation.success) {
       return validation.response;
     }
-    const { name, description, industry, employerPasskey, employeePasskey, numberOfEmployees, useUploadThing } = validation.data;
+    const { name, description, industry, numberOfEmployees, useUploadThing } = validation.data;
 
     const [userRecord] = await db
       .select({
@@ -61,8 +61,6 @@ export async function POST(request: Request) {
       name: string;
       description: string | null;
       industry: string | null;
-      employerpasskey: string;
-      employeepasskey: string;
       numberOfEmployees: string;
       useUploadThing: boolean;
     }> = {
@@ -75,13 +73,6 @@ export async function POST(request: Request) {
     }
     if (industry !== undefined) {
       updateData.industry = industry?.trim() ?? null;
-    }
-
-    if (employerPasskey !== undefined) {
-      updateData.employerpasskey = employerPasskey;
-    }
-    if (employeePasskey !== undefined) {
-      updateData.employeepasskey = employeePasskey;
     }
 
     if (useUploadThing !== undefined) {

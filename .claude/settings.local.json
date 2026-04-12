@@ -34,7 +34,10 @@
       "Bash(curl -sS -i -X POST http://localhost:3005/api/auth/sign-in/email -H 'Origin: http://localhost:3005' -H 'Content-Type: application/json' -H 'Sec-Fetch-Site: same-origin' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Dest: empty' --cookie theme=dark -d '{\"email\":\"nobody@example.com\",\"password\":\"wrong\"}')",
       "Bash(grep -n \"tableCreator\\\\|pgTableCreator\\\\|pdr_ai_v2\" src/server/db/schema/*.ts)",
       "Bash(pnpm db:push)",
-      "Bash(curl -sS -i -X POST http://localhost:3006/api/auth/sign-up/email -H 'Origin: http://localhost:3006' -H 'Content-Type: application/json' -H 'Sec-Fetch-Site: same-origin' -H 'Sec-Fetch-Mode: cors' -d '{\"name\":\"Test User\",\"email\":\"__TRACKED_VAR__\",\"password\":\"password123\"}')"
+      "Bash(curl -sS -i -X POST http://localhost:3006/api/auth/sign-up/email -H 'Origin: http://localhost:3006' -H 'Content-Type: application/json' -H 'Sec-Fetch-Site: same-origin' -H 'Sec-Fetch-Mode: cors' -d '{\"name\":\"Test User\",\"email\":\"__TRACKED_VAR__\",\"password\":\"password123\"}')",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" pnpm add resend @react-email/components @react-email/render)",
+      "Bash(node -e \"const re = require\\('@react-email/components'\\); console.log\\(Object.keys\\(re\\).sort\\(\\).join\\(', '\\)\\)\")",
+      "Bash(node -e \"const re = require\\('@react-email/render'\\); console.log\\(Object.keys\\(re\\).sort\\(\\).join\\(', '\\)\\)\")"
     ]
   }
 }

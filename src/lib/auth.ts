@@ -8,6 +8,10 @@ import {
     authAccount,
     authVerification,
 } from "~/server/db/schema/auth";
+import {
+    sendVerificationEmail,
+    sendResetPasswordEmail,
+} from "~/server/email/send";
 
 // Better Auth needs its own lightweight DB client to avoid circular imports
 // with the main db (which imports schema, which could re-trigger module init).
@@ -37,6 +41,19 @@ export const auth = betterAuth({
     ],
     emailAndPassword: {
         enabled: true,
+        requireEmailVerification: true,
+        minPasswordLength: 8,
+        maxPasswordLength: 128,
+        sendResetPassword: async ({ user, url }) => {
+            await sendResetPasswordEmail(user.email, url);
+        },
+    },
+    emailVerification: {
+        sendOnSignUp: true,
+        autoSignInAfterVerification: true,
+        sendVerificationEmail: async ({ user, url }) => {
+            await sendVerificationEmail(user.email, url);
+        },
     },
     session: {
         expiresIn: 60 * 60 * 24 * 30, // 30 days

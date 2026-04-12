@@ -17,12 +17,11 @@
  */
 
 import { z } from "zod";
-import { ChatOpenAI } from "@langchain/openai";
-import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { documentContextChunks, document as documentTable } from "~/server/db/schema";
+import { generateStructured } from "~/lib/llm";
 import {
     EXTRACTION_SYSTEM_PROMPT,
     buildChunkExtractionPrompt,
@@ -49,11 +48,16 @@ import type {
 /** Number of chunks per LLM batch. */
 const CHUNKS_PER_BATCH = 15;
 
-/** Max parallel LLM calls. */
+/**
+ * Max parallel LLM calls.
+ *
+ * Note: this was chosen for OpenAI cloud throughput. When the active provider
+ * is Ollama (single-GPU local inference) this may be too aggressive and
+ * saturate the local model. The unified LLM library doesn't currently expose
+ * per-provider concurrency hints; if we see problems in practice, add a
+ * capability-level `maxConcurrency` to the config and plumb it through here.
+ */
 const MAX_CONCURRENCY = 5;
-
-/** Model to use for extraction. */
-const EXTRACTION_MODEL = "gpt-5-nano";
 
 /**
  * Confidence boost when a fact is seen in multiple batches.
@@ -356,34 +360,36 @@ async function runWithConcurrency<T>(
 // LLM call (per-batch)
 // ============================================================================
 
+/**
+ * Per-batch extraction call. Routes through the unified LLM library rather
+ * than instantiating a specific provider, so the same call works against
+ * OpenAI, Anthropic, Gemini, or local Ollama depending on which credentials
+ * are available. See `src/lib/llm/` for the resolution logic.
+ *
+ * On any failure (network, rate limit, schema validation) this returns
+ * `null` so the caller can drop the batch and continue with the rest.
+ * Individual batch failures are logged but not thrown — consistent with
+ * the pre-migration behavior that treated partial extraction as acceptable.
+ */
 async function callLLM(
     documentName: string,
     batchContent: string,
     batchIndex: number,
     totalBatches: number,
 ): Promise<ExtractionOutput | null> {
-    const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
-        modelName: EXTRACTION_MODEL,
-        temperature: 0,
-    });
-
-    const structured = chat.withStructuredOutput(ExtractionOutputSchema, {
-        name: "company_metadata_extraction",
-    });
-
     try {
-        return await structured.invoke([
-            new SystemMessage(EXTRACTION_SYSTEM_PROMPT),
-            new HumanMessage(
-                buildChunkExtractionPrompt(
-                    documentName,
-                    batchContent,
-                    batchIndex,
-                    totalBatches,
-                ),
+        return await generateStructured({
+            capability: "smallExtraction",
+            system: EXTRACTION_SYSTEM_PROMPT,
+            prompt: buildChunkExtractionPrompt(
+                documentName,
+                batchContent,
+                batchIndex,
+                totalBatches,
             ),
-        ]);
+            schema: ExtractionOutputSchema,
+            schemaName: "company_metadata_extraction",
+        });
     } catch (error) {
         console.error(
             `[CompanyMetadataExtractor] Batch ${batchIndex + 1}/${totalBatches} failed:`,

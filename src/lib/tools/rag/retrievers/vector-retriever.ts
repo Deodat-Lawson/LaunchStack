@@ -84,6 +84,23 @@ export class VectorRetriever extends BaseRetriever {
         return [];
       }
 
+      // Version filter: only return chunks from the current version of each
+      // document. Chunks from older versions stay indexed (so revert is O(1))
+      // but must be hidden from RAG results.
+      //
+      // The `IS NULL` branches keep this safe during the Phase 1 rollout:
+      //   - If d.current_version_id IS NULL, the document has not been
+      //     backfilled yet — return all its chunks unfiltered.
+      //   - If rc.version_id IS NULL, the chunk pre-dates Step 2 and the
+      //     backfill hasn't populated it yet — also return it.
+      // Once backfill + Step 2 have been running for a while, both columns
+      // are always set and this degenerates to a strict equality filter.
+      const versionFilter = sql` AND (
+        d.current_version_id IS NULL
+        OR rc.version_id IS NULL
+        OR rc.version_id = d.current_version_id
+      )`;
+
       // Add Metadata Filters
       let filterWhere = sql``;
       if (this.filters) {
@@ -103,7 +120,7 @@ export class VectorRetriever extends BaseRetriever {
         }
       }
 
-      const fullWhere = sql`${baseWhere} ${filterWhere}`;
+      const fullWhere = sql`${baseWhere}${versionFilter} ${filterWhere}`;
 
       // 2-Step Retrieval with Filters
       const sqlQuery = sql`
@@ -163,7 +180,15 @@ export class VectorRetriever extends BaseRetriever {
              fallbackBaseWhere = sql`s.document_id = ANY(${`{${this.documentIds.join(",")}}`}::int[])`;
         }
 
-        const fallbackFullWhere = sql`${fallbackBaseWhere} ${filterWhere}`;
+        // Same version filter semantics as the primary query above, but with
+        // `s` (context chunks) as the chunk alias instead of `rc`.
+        const fallbackVersionFilter = sql` AND (
+          d.current_version_id IS NULL
+          OR s.version_id IS NULL
+          OR s.version_id = d.current_version_id
+        )`;
+
+        const fallbackFullWhere = sql`${fallbackBaseWhere}${fallbackVersionFilter} ${filterWhere}`;
 
         const fallbackQuery = sql`
           SELECT

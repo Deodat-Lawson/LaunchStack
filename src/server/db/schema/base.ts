@@ -12,6 +12,8 @@ import {
     bigint,
 } from "drizzle-orm/pg-core";
 
+import { uniqueIndex } from "drizzle-orm/pg-core";
+
 import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
 
@@ -115,6 +117,8 @@ export const document = pgTable(
         ocrCostCents: integer("ocr_cost_cents"),
         mimeType: varchar("mime_type", { length: 128 }),
         sourceArchiveName: varchar("source_archive_name", { length: 256 }),
+        fileType: varchar("file_type", { length: 128 }),
+        currentVersionId: bigint("current_version_id", { mode: "bigint" }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
@@ -128,6 +132,43 @@ export const document = pgTable(
         companyIdCategoryIdx: index("document_company_id_category_idx").on(
             table.companyId,
             table.category
+        ),
+        currentVersionIdIdx: index("document_current_version_id_idx").on(
+            table.currentVersionId
+        ),
+    })
+);
+
+// ============================================================================
+// Document Versions
+// ============================================================================
+
+export const documentVersions = pgTable(
+    "document_versions",
+    {
+        id: serial("id").primaryKey(),
+        documentId: bigint("document_id", { mode: "bigint" })
+            .notNull()
+            .references(() => document.id, { onDelete: "cascade" }),
+        versionNumber: integer("version_number").notNull(),
+        url: varchar("url", { length: 512 }).notNull(),
+        mimeType: varchar("mime_type", { length: 128 }).notNull(),
+        fileSize: bigint("file_size", { mode: "bigint" }),
+        uploadedBy: varchar("uploaded_by", { length: 256 }),
+        changelog: text("changelog"),
+        ocrJobId: varchar("ocr_job_id", { length: 256 }),
+        ocrProvider: varchar("ocr_provider", { length: 50 }),
+        ocrProcessed: boolean("ocr_processed").default(false),
+        ocrMetadata: jsonb("ocr_metadata"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    (table) => ({
+        documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
+        documentVersionUnique: uniqueIndex("doc_versions_document_version_unique").on(
+            table.documentId,
+            table.versionNumber
         ),
     })
 );
@@ -630,6 +671,19 @@ export const documentsRelations = relations(document, ({ one, many }) => ({
     chatHistory: many(ChatHistory),
     predictiveAnalysisResults: many(predictiveDocumentAnalysisResults),
     views: many(documentViews),
+    versions: many(documentVersions),
+    currentVersion: one(documentVersions, {
+        fields: [document.currentVersionId],
+        references: [documentVersions.id],
+        relationName: "document_current_version",
+    }),
+}));
+
+export const documentVersionsRelations = relations(documentVersions, ({ one }) => ({
+    document: one(document, {
+        fields: [documentVersions.documentId],
+        references: [document.id],
+    }),
 }));
 
 export const categoryRelations = relations(category, ({ one }) => ({
@@ -759,6 +813,7 @@ export const generatedDocumentsRelations = relations(generatedDocuments, ({ one 
 export type User = InferSelectModel<typeof users>;
 export type Company = InferSelectModel<typeof company>;
 export type Document = InferSelectModel<typeof document>;
+export type DocumentVersion = InferSelectModel<typeof documentVersions>;
 export type Category = InferSelectModel<typeof category>;
 export type PdfChunk = InferSelectModel<typeof pdfChunks>;
 export type ChatHistoryEntry = InferSelectModel<typeof ChatHistory>;

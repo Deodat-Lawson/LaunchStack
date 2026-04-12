@@ -146,6 +146,7 @@ async function vectorizeWithSidecar(
   sidecarBatchSize: number,
   documentId: number,
   rootStructureId: number,
+  versionId: number | undefined,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   const batches = splitIntoBatches(chunks, sidecarBatchSize);
@@ -178,7 +179,7 @@ async function vectorizeWithSidecar(
           vector: data.embeddings[idx] ?? [],
         }));
 
-        const sections = await storeBatch(documentId, rootStructureId, vectorized);
+        const sections = await storeBatch(documentId, rootStructureId, vectorized, versionId);
         return { batchIndex: i, stored: sections.length };
       },
     );
@@ -208,6 +209,7 @@ async function vectorizeWithOpenAI(
   batchSize: number,
   documentId: number,
   rootStructureId: number,
+  versionId: number | undefined,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
@@ -251,7 +253,7 @@ async function vectorizeWithOpenAI(
           dimensions: 1536,
         });
         const vectorized = mergeWithEmbeddings(batch, embedResult.embeddings);
-        const sections = await storeBatch(documentId, rootStructureId, vectorized);
+        const sections = await storeBatch(documentId, rootStructureId, vectorized, versionId);
         return { batchIndex: i, stored: sections.length };
       },
     );
@@ -383,6 +385,7 @@ export async function runDocIngestionTool(
     companyId,
     mimeType,
     originalFilename,
+    versionId,
     options,
     runtime,
   } = input;
@@ -549,7 +552,12 @@ export async function runDocIngestionTool(
           const estimatedTokens = Math.ceil(
             chunks.reduce((sum, c) => sum + c.content.length / 4, 0),
           );
-          return createRootStructure(documentId, normSummary.pageCount, estimatedTokens);
+          return createRootStructure(
+            documentId,
+            normSummary.pageCount,
+            estimatedTokens,
+            versionId,
+          );
         },
       );
 
@@ -560,6 +568,7 @@ export async function runDocIngestionTool(
           sidecarBatchSize,
           documentId,
           rootStructureId,
+          versionId,
           runStep,
         );
         storedSections = result.storedSections;
@@ -570,6 +579,7 @@ export async function runDocIngestionTool(
           DEFAULT_OPENAI_BATCH_SIZE,
           documentId,
           rootStructureId,
+          versionId,
           runStep,
         );
         storedSections = result.storedSections;
@@ -587,7 +597,7 @@ export async function runDocIngestionTool(
         provider: normSummary.provider,
         processingTimeMs: normSummary.processingTimeMs,
         confidenceScore: normSummary.confidenceScore,
-      }, pipelineStartTime);
+      }, pipelineStartTime, versionId);
       return { ok: true };
     });
 

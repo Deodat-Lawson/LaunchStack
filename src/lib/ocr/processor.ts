@@ -16,6 +16,7 @@ import {
   documentRetrievalChunks,
   documentStructure,
   documentMetadata,
+  documentVersions,
   document as documentTable,
   ocrJobs,
 } from "~/server/db/schema";
@@ -405,17 +406,23 @@ export async function ensureDocumentExists(documentId: number): Promise<void> {
 
 /**
  * Create the root document structure node. Must be called once before storeBatch.
+ *
+ * When `versionId` is provided, the root structure node is tagged with it so
+ * deleting that version cascades and removes this node (and everything under
+ * it) automatically.
  */
 export async function createRootStructure(
   documentId: number,
   totalPages: number,
   estimatedTokens: number,
+  versionId?: number,
 ): Promise<number> {
   await ensureDocumentExists(documentId);
 
   return withDbRetry(async () => {
     const rootStructure = await db.insert(documentStructure).values({
       documentId: BigInt(documentId),
+      versionId: versionId !== undefined ? BigInt(versionId) : null,
       parentId: null,
       contentType: "section",
       path: "/",
@@ -445,8 +452,12 @@ export async function storeBatch(
   documentId: number,
   rootStructureId: number,
   vectorizedChunks: VectorizedChunk[],
+  versionId?: number,
 ): Promise<StoredSection[]> {
   if (vectorizedChunks.length === 0) return [];
+
+  const versionBigInt =
+    versionId !== undefined ? BigInt(versionId) : null;
 
   return withDbRetry(async () => {
     return db.transaction(async (tx) => {
@@ -456,6 +467,7 @@ export async function storeBatch(
           : "narrative";
         return {
           documentId: BigInt(documentId),
+          versionId: versionBigInt,
           structureId: BigInt(rootStructureId),
           content: chunk.content,
           tokenCount: Math.ceil(chunk.content.length / 4),
@@ -486,6 +498,7 @@ export async function storeBatch(
       const childValues: Array<{
         contextChunkId: bigint;
         documentId: bigint;
+        versionId: bigint | null;
         content: string;
         tokenCount: number;
         embedding: ReturnType<typeof sql>;
@@ -501,6 +514,7 @@ export async function storeBatch(
           childValues.push({
             contextChunkId: BigInt(parentId),
             documentId: BigInt(documentId),
+            versionId: versionBigInt,
             content: child.content,
             tokenCount: Math.ceil(child.content.length / 4),
             embedding: sql`${JSON.stringify(child.vector)}::vector(1536)`,
@@ -540,12 +554,14 @@ export async function finalizeStorage(
     confidenceScore?: number;
   },
   pipelineStartTime: number,
+  versionId?: number,
 ): Promise<void> {
   return withDbRetry(async () => {
     const summaryPreview = summaryText.substring(0, 500) + (summaryText.length > 500 ? "..." : "");
 
     await db.insert(documentMetadata).values({
       documentId: BigInt(documentId),
+      versionId: versionId !== undefined ? BigInt(versionId) : null,
       summary: summaryPreview,
       outline: Array.from({ length: meta.totalPages }, (_, i) => ({
         id: i + 1,
@@ -561,6 +577,13 @@ export async function finalizeStorage(
       entities: {},
     });
 
+    const ocrMetadataPayload = {
+      totalPages: meta.totalPages,
+      totalChunks,
+      processingTimeMs: meta.processingTimeMs,
+      processedAt: new Date().toISOString(),
+    };
+
     await db
       .update(documentTable)
       .set({
@@ -568,14 +591,24 @@ export async function finalizeStorage(
         ocrJobId: jobId,
         ocrProvider: meta.provider,
         ocrConfidenceScore: meta.confidenceScore,
-        ocrMetadata: {
-          totalPages: meta.totalPages,
-          totalChunks,
-          processingTimeMs: meta.processingTimeMs,
-          processedAt: new Date().toISOString(),
-        },
+        ocrMetadata: ocrMetadataPayload,
       })
       .where(eq(documentTable.id, documentId));
+
+    // Mirror OCR completion onto the per-version row so each version carries
+    // its own processing provenance. Important when different versions of the
+    // same document were run through different OCR providers.
+    if (versionId !== undefined) {
+      await db
+        .update(documentVersions)
+        .set({
+          ocrProcessed: true,
+          ocrJobId: jobId,
+          ocrProvider: meta.provider,
+          ocrMetadata: ocrMetadataPayload,
+        })
+        .where(eq(documentVersions.id, versionId));
+    }
 
     await db
       .update(ocrJobs)

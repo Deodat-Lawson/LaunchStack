@@ -21,6 +21,18 @@ export interface TriggerOptions {
   mimeType?: string;
   /** Original filename with extension — used for adapter routing */
   originalFilename?: string;
+  /**
+   * `document_versions.id` for this processing run. When set, every chunk
+   * written to the RLM tables is tagged with this version_id so RAG can
+   * filter to the current version of each document.
+   */
+  versionId?: number;
+  /**
+   * Opaque transcription provenance metadata, set only for documents that
+   * were produced by audio transcription. Carried through so the pipeline
+   * can record the source in document metadata.
+   */
+  transcriptionMetadata?: Record<string, unknown>;
 }
 
 /**
@@ -57,6 +69,8 @@ export async function triggerDocumentProcessing(
     category,
     mimeType: options?.mimeType,
     originalFilename: options?.originalFilename,
+    versionId: options?.versionId,
+    transcriptionMetadata: options?.transcriptionMetadata,
     options: {
       forceOCR: options?.forceOCR,
       preferredProvider: options?.preferredProvider,

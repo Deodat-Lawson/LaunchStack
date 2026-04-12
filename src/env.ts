@@ -68,6 +68,14 @@ const serverSchema = z.object({
   // Gemma extraction via Ollama (optional — enables relationship extraction)
   GEMMA_BASE_URL: optionalString(),
   GEMMA_MODEL: optionalString(),
+  // Extraction LLM (optional — model-agnostic, any OpenAI-compatible endpoint)
+  EXTRACTION_LLM_BASE_URL: optionalString(),
+  EXTRACTION_LLM_MODEL: optionalString(),
+  // Embedding provider (optional — defaults to BERT via Sidecar)
+  EMBEDDING_PROVIDER: z.enum(["bert", "openai-compatible"]).optional(),
+  EMBEDDING_API_URL: optionalString(),
+  EMBEDDING_MODEL: optionalString(),
+  EMBEDDING_DIMENSIONS: z.coerce.number().int().positive().optional(),
 });
 
 const clientSchema = z.object({
@@ -138,6 +146,12 @@ function parseServerEnv() {
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
     GEMMA_BASE_URL: process.env.GEMMA_BASE_URL,
     GEMMA_MODEL: process.env.GEMMA_MODEL,
+    EXTRACTION_LLM_BASE_URL: process.env.EXTRACTION_LLM_BASE_URL,
+    EXTRACTION_LLM_MODEL: process.env.EXTRACTION_LLM_MODEL,
+    EMBEDDING_PROVIDER: process.env.EMBEDDING_PROVIDER as "bert" | "openai-compatible" | undefined,
+    EMBEDDING_API_URL: process.env.EMBEDDING_API_URL,
+    EMBEDDING_MODEL: process.env.EMBEDDING_MODEL,
+    EMBEDDING_DIMENSIONS: process.env.EMBEDDING_DIMENSIONS,
   });
   if (
     !skipValidation &&

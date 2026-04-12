@@ -1,8 +1,11 @@
-# Usage:
-#   make up         — spin up everything
-#   make down       — stop containers
-#   make down-clean — stop + wipe volumes (fresh DB)
-#   make logs       — tail all container logs
+# Usage (no Makefile — run docker compose directly):
+#   docker compose --env-file .env up                           — spin up everything (db + migrate + app)
+#   docker compose --env-file .env up --build                   — rebuild images then start
+#   docker compose --env-file .env down                         — stop containers
+#   docker compose --env-file .env down -v                      — stop + wipe volumes (fresh DB)
+#   docker compose --env-file .env logs -f                      — tail all container logs
+#   docker compose --env-file .env --profile dev up             — with Inngest dev server
+#   docker compose --env-file .env --profile minimal up db      — just the database (for local pnpm dev)
 #
 # Ports:
 #   3000 — Next.js app

@@ -47,38 +47,39 @@ export async function DELETE(request: Request) {
             }, { status: 400 });
         }
 
-        // Delete related data in proper order to maintain referential integrity
-        await db.delete(ChatHistory).where(eq(ChatHistory.documentId, BigInt(docId)));
-        await db.delete(documentReferenceResolution).where(
-            eq(documentReferenceResolution.resolvedInDocumentId, documentId)
-        );
-        await db.delete(predictiveDocumentAnalysisResults).where(eq(predictiveDocumentAnalysisResults.documentId, BigInt(documentId)));
-        await db.delete(documentViews).where(eq(documentViews.documentId, BigInt(documentId)));
+        // All deletes in a single transaction — if any step fails, nothing is partially deleted
+        await db.transaction(async (tx) => {
+            await tx.delete(ChatHistory).where(eq(ChatHistory.documentId, BigInt(docId)));
+            await tx.delete(documentReferenceResolution).where(
+                eq(documentReferenceResolution.resolvedInDocumentId, documentId)
+            );
+            await tx.delete(predictiveDocumentAnalysisResults).where(eq(predictiveDocumentAnalysisResults.documentId, BigInt(documentId)));
+            await tx.delete(documentViews).where(eq(documentViews.documentId, BigInt(documentId)));
 
-        // Delete RLM schema tables — order matters for FK constraints:
-        // kgEntityMentions & workspaceResults & documentPreviews reference documentSections (contextChunks),
-        // documentRetrievalChunks references both documentSections and document.
-        await db.delete(kgEntityMentions).where(eq(kgEntityMentions.documentId, BigInt(documentId)));
-        await db.delete(workspaceResults).where(eq(workspaceResults.documentId, BigInt(documentId)));
-        await db.delete(documentPreviews).where(eq(documentPreviews.documentId, BigInt(documentId)));
-        await db.delete(documentRetrievalChunks).where(eq(documentRetrievalChunks.documentId, BigInt(documentId)));
-        await db.delete(documentSections).where(eq(documentSections.documentId, BigInt(documentId)));
-        await db.delete(documentStructure).where(eq(documentStructure.documentId, BigInt(documentId)));
-        await db.delete(documentMetadata).where(eq(documentMetadata.documentId, BigInt(documentId)));
-        console.log(`Deleted RLM data for document ${documentId}`);
+            // Delete RLM schema tables — order matters for FK constraints:
+            // kgEntityMentions & workspaceResults & documentPreviews reference documentSections (contextChunks),
+            // documentRetrievalChunks references both documentSections and document.
+            await tx.delete(kgEntityMentions).where(eq(kgEntityMentions.documentId, BigInt(documentId)));
+            await tx.delete(workspaceResults).where(eq(workspaceResults.documentId, BigInt(documentId)));
+            await tx.delete(documentPreviews).where(eq(documentPreviews.documentId, BigInt(documentId)));
+            await tx.delete(documentRetrievalChunks).where(eq(documentRetrievalChunks.documentId, BigInt(documentId)));
+            await tx.delete(documentSections).where(eq(documentSections.documentId, BigInt(documentId)));
+            await tx.delete(documentStructure).where(eq(documentStructure.documentId, BigInt(documentId)));
+            await tx.delete(documentMetadata).where(eq(documentMetadata.documentId, BigInt(documentId)));
 
-        // Finally delete the document itself
-        await db.delete(document).where(eq(document.id, documentId));
+            // Finally delete the document itself
+            await tx.delete(document).where(eq(document.id, documentId));
+        });
 
-        return NextResponse.json({ 
-            success: true, 
-            message: 'Document and all related data deleted successfully' 
+        return NextResponse.json({
+            success: true,
+            message: 'Document and all related data deleted successfully'
         }, { status: 200 });
     } catch (error) {
         console.error('Error deleting document:', error);
-        return NextResponse.json({ 
-            error: 'Error deleting document and related data',
-            details: error instanceof Error ? error.message : 'Unknown error'
+        return NextResponse.json({
+            success: false,
+            error: 'Failed to delete document'
         }, { status: 500 });
     }
 }

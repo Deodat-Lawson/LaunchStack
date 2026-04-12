@@ -9,6 +9,7 @@ const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
     (process.env.DEBUG_PERF === "1" || process.env.DEBUG_PERF === "true");
 const middlewareUserCacheTtlMs = 10_000;
+const middlewareUserCacheMaxSize = 500;
 
 // Routes that require authentication
 const isProtectedRoute = createRouteMatcher([
@@ -42,7 +43,7 @@ const isEmployeePath = (pathname: string) => pathname.startsWith("/employee");
 let _middlewareDb: ReturnType<typeof drizzle<{ users: typeof users }>> | null = null;
 const getDb = () => {
     if (!_middlewareDb) {
-        const client = postgres(process.env.DATABASE_URL!, { max: 1 });
+        const client = postgres(process.env.DATABASE_URL!, { max: 5 });
         _middlewareDb = drizzle(client, { schema: { users } });
     }
     return _middlewareDb;
@@ -71,6 +72,11 @@ const getCachedMiddlewareUser = (userId: string): CachedUserValue | undefined =>
 };
 
 const setCachedMiddlewareUser = (userId: string, value: CachedUserValue) => {
+    // Evict oldest entry when at capacity to prevent unbounded memory growth
+    if (middlewareUserCache.size >= middlewareUserCacheMaxSize) {
+        const oldestKey = middlewareUserCache.keys().next().value;
+        if (oldestKey) middlewareUserCache.delete(oldestKey);
+    }
     middlewareUserCache.set(userId, {
         value,
         expiresAt: Date.now() + middlewareUserCacheTtlMs,

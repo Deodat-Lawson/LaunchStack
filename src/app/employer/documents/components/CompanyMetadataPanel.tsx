@@ -25,6 +25,7 @@ import { MarketsSection } from "~/app/employer/metadata/components/MarketsSectio
 import { ProvenanceCard } from "~/app/employer/metadata/components/ProvenanceCard";
 import { MetadataHistorySection } from "~/app/employer/metadata/components/MetadataHistorySection";
 import { LegalSection } from "~/app/employer/metadata/components/LegalSection";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/app/employer/documents/components/ui/tooltip";
 import type { CompanyMetadataJSON, CompanyInfo, PersonEntry } from "~/lib/tools/company-metadata/types";
 
 interface CompanyProfile {
@@ -272,56 +273,81 @@ export function CompanyMetadataPanel() {
               </p>
             </div>
           </div>
+          <TooltipProvider delayDuration={300}>
           <div className="flex gap-3">
-            <Button
-              onClick={handleExportJson}
-              disabled={!data?.metadata}
-              variant="outline"
-              className="rounded-xl h-9 px-4 gap-2 font-bold"
-            >
-              <Download className="w-4 h-4" />
-              Export JSON
-            </Button>
-            <Button
-              onClick={() => void runExtraction(false)}
-              disabled={extracting}
-              variant="outline"
-              className="rounded-xl h-9 px-4 gap-2 font-bold"
-              title="Process only new documents since last extraction"
-            >
-              <Sparkles className={cn("w-4 h-4", extracting && "animate-pulse")} />
-              {extracting ? "Extracting..." : "Extract New"}
-            </Button>
-            <Button
-              onClick={() => void runExtraction(true)}
-              disabled={extracting}
-              variant="outline"
-              className="rounded-xl h-9 px-4 gap-2 font-bold text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300"
-              title="Re-process all documents from scratch"
-            >
-              <RefreshCw className={cn("w-4 h-4", extracting && "animate-spin")} />
-              Full Re-extract
-            </Button>
-            <Button
-              onClick={() => setIsEditMode((prev) => !prev)}
-              variant={isEditMode ? "default" : "outline"}
-              className={cn(
-                "rounded-xl h-9 px-4 gap-2 font-bold",
-                isEditMode && "bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20",
-              )}
-            >
-              <Pencil className="w-4 h-4" />
-              {isEditMode ? "Done" : "Edit"}
-            </Button>
-            <Button
-              onClick={() => void fetchMetadata()}
-              disabled={loading}
-              className="bg-purple-600 hover:bg-purple-700 text-white rounded-xl h-9 px-4 shadow-lg shadow-purple-500/20 gap-2 font-bold"
-            >
-              <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
-              {loading ? "Refreshing..." : "Refresh"}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={handleExportJson}
+                  disabled={!data?.metadata}
+                  variant="outline"
+                  className="rounded-xl h-9 px-4 gap-2 font-bold"
+                >
+                  <Download className="w-4 h-4" />
+                  Export JSON
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Download company metadata as a JSON file</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => void runExtraction(false)}
+                  disabled={extracting}
+                  variant="outline"
+                  className="rounded-xl h-9 px-4 gap-2 font-bold"
+                >
+                  <Sparkles className={cn("w-4 h-4", extracting && "animate-pulse")} />
+                  {extracting ? "Extracting..." : "Extract New"}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Process only new documents added since last extraction</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => void runExtraction(true)}
+                  disabled={extracting}
+                  variant="outline"
+                  className="rounded-xl h-9 px-4 gap-2 font-bold text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300"
+                >
+                  <RefreshCw className={cn("w-4 h-4", extracting && "animate-spin")} />
+                  Full Re-extract
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Re-process all documents from scratch (takes longer)</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => setIsEditMode((prev) => !prev)}
+                  variant={isEditMode ? "default" : "outline"}
+                  className={cn(
+                    "rounded-xl h-9 px-4 gap-2 font-bold",
+                    isEditMode && "bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20",
+                  )}
+                >
+                  <Pencil className="w-4 h-4" />
+                  {isEditMode ? "Done" : "Edit"}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Manually edit metadata fields</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => void fetchMetadata()}
+                  disabled={loading}
+                  className="bg-purple-600 hover:bg-purple-700 text-white rounded-xl h-9 px-4 shadow-lg shadow-purple-500/20 gap-2 font-bold"
+                >
+                  <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
+                  {loading ? "Refreshing..." : "Refresh"}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Reload metadata from the server</TooltipContent>
+            </Tooltip>
           </div>
+          </TooltipProvider>
         </div>
 
         {/* Company Profile (user-authored) */}

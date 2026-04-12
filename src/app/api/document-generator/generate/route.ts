@@ -301,15 +301,11 @@ Now refine it further:
         });
 
     } catch (error) {
-        const errMessage = error instanceof Error ? error.message : String(error);
-        const stack = error instanceof Error ? error.stack : undefined;
         console.error("[document-generator/generate] error:", error);
         return NextResponse.json(
             {
                 success: false,
                 message: "Failed to generate content",
-                error: errMessage,
-                ...(process.env.NODE_ENV === "development" && stack ? { stack } : {}),
             },
             { status: 500, headers: { "Content-Type": "application/json" } },
         );

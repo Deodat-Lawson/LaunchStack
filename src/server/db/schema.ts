@@ -10,6 +10,7 @@ export * from "./schema/rlm-knowledge-base";
 export * from "./schema/knowledge-graph";
 export * from "./schema/document-notes";
 export * from "./schema/trend-search";
+export * from "./schema/client-prospector";
 export * from "./schema/company-metadata";
 export * from "./schema/marketing-history";
 export * from "./schema/auth";

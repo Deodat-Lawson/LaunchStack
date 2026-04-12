@@ -455,7 +455,7 @@ export async function POST(request: Request) {
             { 
                 success: false, 
                 message: "Failed to export document",
-                error: error instanceof Error ? error.message : "Unknown error"
+                error: "Failed to export document"
             },
             { status: 500 }
         );

@@ -498,7 +498,6 @@ export async function POST(request: Request) {
                 {
                     success: false,
                     error: "An error occurred while processing your question.",
-                    details: error instanceof Error ? error.message : "Unknown error"
                 },
                 { status: 500 }
             );

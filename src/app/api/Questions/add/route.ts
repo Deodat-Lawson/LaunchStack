@@ -70,7 +70,7 @@ export async function POST(request: Request) {
         console.error(error);
         return NextResponse.json({
             success: false,
-            error: error instanceof Error ? error.message : "Unknown error"
+            error: "Failed to save question"
         }, { status: 500 });
     }
 }

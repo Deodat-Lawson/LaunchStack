@@ -397,7 +397,7 @@ export async function POST(request: Request) {
             { 
                 success: false, 
                 message: "Failed to perform research",
-                error: error instanceof Error ? error.message : "Unknown error"
+                error: "Failed to perform research"
             },
             { status: 500 }
         );

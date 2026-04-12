@@ -395,7 +395,7 @@ export async function POST(request: Request) {
             { 
                 success: false, 
                 message: "Failed to initialize document",
-                error: error instanceof Error ? error.message : "Unknown error"
+                error: "Failed to initialize document"
             },
             { status: 500 }
         );

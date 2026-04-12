@@ -46,6 +46,8 @@ interface UploadBootstrapResponse {
     company: CompanyData | null;
     isUploadThingConfigured: boolean;
     availableProviders: AvailableProviders;
+    storageProvider: "cloud" | "local";
+    s3Endpoint: string;
 }
 
 const Page: React.FC = () => {
@@ -60,6 +62,8 @@ const Page: React.FC = () => {
         datalab: false,
         landingAI: false,
     });
+    const [storageProvider, setStorageProvider] = useState<"cloud" | "local">("cloud");
+    const [s3Endpoint, setS3Endpoint] = useState("");
 
     const fetchUploadBootstrap = useCallback(async () => {
         try {
@@ -76,6 +80,8 @@ const Page: React.FC = () => {
             setCategories(data.categories);
             setIsUploadThingConfigured(data.isUploadThingConfigured);
             setAvailableProviders(data.availableProviders);
+            setStorageProvider(data.storageProvider);
+            setS3Endpoint(data.s3Endpoint);
 
             if (!data.isUploadThingConfigured) {
                 setUseUploadThing(false);
@@ -212,45 +218,10 @@ const Page: React.FC = () => {
                 </nav>
 
                 <div className={styles.header}>
-                    <h1 className={styles.title}>Upload Documents</h1>
+                    <h1 className={styles.title}>Add Knowledge</h1>
                     <p className={styles.subtitle}>
-                        Add new documents to your collection. Upload multiple files at once, provide details, and organize them with categories.
+                        Index anything into your knowledge base — files, GitHub repos, pasted text, and more.
                     </p>
-                    <div className={styles.featureHighlights}>
-                        <div className={styles.featureItem}>
-                            <div className={styles.featureIcon}>
-                                <svg className={styles.featureCheck} fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p className={styles.featureTitle}>Multiple Files</p>
-                                <p className={styles.featureDesc}>Upload many documents at once</p>
-                            </div>
-                        </div>
-                        <div className={styles.featureItem}>
-                            <div className={styles.featureIcon}>
-                                <svg className={styles.featureCheck} fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p className={styles.featureTitle}>Batch Settings</p>
-                                <p className={styles.featureDesc}>Apply category to all files</p>
-                            </div>
-                        </div>
-                        <div className={styles.featureItem}>
-                            <div className={styles.featureIcon}>
-                                <svg className={styles.featureCheck} fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p className={styles.featureTitle}>Individual Control</p>
-                                <p className={styles.featureDesc}>Customize each document</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <UploadForm 
@@ -261,6 +232,8 @@ const Page: React.FC = () => {
                     isUpdatingPreference={isUpdatingPreference}
                     availableProviders={availableProviders}
                     onAddCategory={handleAddCategory}
+                    storageProvider={storageProvider}
+                    s3Endpoint={s3Endpoint}
                 />
 
                 <CategoryManagement

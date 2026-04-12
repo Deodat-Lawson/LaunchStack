@@ -395,7 +395,7 @@ export async function POST(request: Request) {
             { 
                 success: false, 
                 message: "Failed to format citations",
-                error: error instanceof Error ? error.message : "Unknown error"
+                error: "Failed to format citations"
             },
             { status: 500 }
         );

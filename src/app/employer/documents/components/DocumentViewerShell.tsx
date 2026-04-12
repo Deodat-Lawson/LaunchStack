@@ -86,6 +86,10 @@ const MarketingPipelinePanel = dynamic(
   () => import("./MarketingPipelinePanel").then((module) => module.MarketingPipelinePanel),
   { loading: () => <LoadingPage /> }
 );
+const RepoExplainerPanel = dynamic(
+  () => import("./RepoExplainerPanel").then((module) => module.RepoExplainerPanel),
+  { loading: () => <LoadingPage /> }
+);
 
 const STYLE_OPTIONS = Object.entries(RESPONSE_STYLES).reduce((acc, [key, config]) => {
   acc[key as ResponseStyleId] = config.label;
@@ -106,6 +110,7 @@ const VALID_VIEW_MODES = new Set<string>([
   "document-only", "with-ai-qa", "with-ai-qa-history", "predictive-analysis",
   "generator", "rewrite", "upload", "dashboard", "analytics",
   "employees", "settings", "metadata", "marketing-pipeline", "notes",
+  "repo-explainer",
 ]);
 
 export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
@@ -185,6 +190,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   
   const [pdfPageNumber, setPdfPageNumber] = useState<number>(1);
   
+  // Repo diagram state
+  const [diagramRepoUrl, setDiagramRepoUrl] = useState<string | null>(null);
+
   // Delete confirmation state
   const [deleteConfirmDocId, setDeleteConfirmDocId] = useState<number | null>(null);
 
@@ -371,6 +379,19 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setReferencePages([]);
     setPredictiveAnalysis(null);
   };
+
+  const handleGenerateDiagram = useCallback((archiveName: string) => {
+    // Find a doc from this archive whose title contains owner/repo (set by the upload API)
+    const archiveDoc = documents.find(d =>
+      d.sourceArchiveName === archiveName && d.title.includes('/')
+    );
+    const repoSlug = archiveName.replace(/\.zip$/, '');
+    const repoUrl = archiveDoc?.title.includes('/')
+      ? `https://github.com/${archiveDoc.title}`
+      : `https://github.com/${repoSlug}`;
+    setDiagramRepoUrl(repoUrl);
+    setViewMode("repo-explainer");
+  }, [documents]);
 
   const requestDeleteDocument = (docId: number) => {
     setDeleteConfirmDocId(docId);
@@ -811,6 +832,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       case "marketing-pipeline":
         if (userRole !== 'employer') return null;
         return <MarketingPipelinePanel />;
+      case "repo-explainer":
+        if (userRole !== 'employer') return null;
+        return <RepoExplainerPanel initialRepoUrl={diagramRepoUrl} />;
       case "notes":
         return (
           <ResizablePanelGroup direction="horizontal" className="h-full">
@@ -879,6 +903,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
             }}
             userRole={userRole}
             totalDocuments={documents.length}
+            onGenerateDiagram={handleGenerateDiagram}
           />
         </ResizablePanel>
 

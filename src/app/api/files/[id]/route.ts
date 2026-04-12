@@ -7,7 +7,8 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { fileUploads } from "~/server/db/schema";
-import { isPrivateBlobUrl, fetchBlob } from "~/server/storage/vercel-blob";
+import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
+import { fetchFile } from "~/lib/storage";
 
 const MIME_BY_EXTENSION: Record<string, string> = {
   pdf: "application/pdf",
@@ -72,9 +73,10 @@ export async function GET(
       );
     }
 
-    if (file.storageProvider === "vercel_blob" && file.storageUrl) {
-      if (isPrivateBlobUrl(file.storageUrl)) {
-        const blobRes = await fetchBlob(file.storageUrl);
+    if ((file.storageProvider === "vercel_blob" || file.storageProvider === "seaweedfs") && file.storageUrl) {
+      // SeaweedFS or private Vercel Blob: proxy the content via fetchFile
+      if (file.storageProvider === "seaweedfs" || isPrivateBlobUrl(file.storageUrl)) {
+        const blobRes = await fetchFile(file.storageUrl);
         if (!blobRes.ok) {
           return NextResponse.json(
             { error: "Failed to retrieve file from storage" },
@@ -97,6 +99,7 @@ export async function GET(
           },
         });
       }
+      // Public Vercel Blob: redirect directly
       return NextResponse.redirect(file.storageUrl, {
         status: 307,
       });
@@ -128,7 +131,6 @@ export async function GET(
     return NextResponse.json(
       {
         error: "Failed to serve file",
-        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );

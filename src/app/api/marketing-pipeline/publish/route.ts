@@ -53,7 +53,7 @@ export async function POST(request: Request) {
             {
                 success: false,
                 message: 'Failed to publish content',
-                error: error instanceof Error ? error.message : 'Unknown error',
+                error: 'Failed to publish content',
             },
             { status: 500 },
         );

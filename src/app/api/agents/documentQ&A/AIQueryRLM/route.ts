@@ -363,7 +363,6 @@ Provide a comprehensive answer based on the provided content. When referencing s
                 {
                     success: false,
                     error: "An error occurred while processing your question.",
-                    details: error instanceof Error ? error.message : "Unknown error",
                 },
                 { status: 500 }
             );

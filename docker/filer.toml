@@ -1,0 +1,10 @@
+[postgres]
+enabled = true
+hostname = "db"
+port = 5432
+database = "seaweedfs"
+username = "postgres"
+password = "password"
+sslmode = "disable"
+connection_max_idle = 2
+connection_max_open = 100

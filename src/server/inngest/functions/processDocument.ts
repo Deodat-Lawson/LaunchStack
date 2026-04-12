@@ -13,7 +13,7 @@ import { runDocIngestionTool } from "~/lib/tools";
 import { db } from "~/server/db";
 import { document, ocrJobs } from "~/server/db/schema";
 import { putFile } from "~/server/storage/vercel-blob";
-import { fetchBlob } from "~/server/storage/vercel-blob";
+import { fetchFile } from "~/lib/storage";
 
 import type {
   ProcessDocumentEventData,
@@ -58,6 +58,112 @@ const ZIP_SKIP_PATTERNS = [
   /chroma-collections$/,
   /chroma-embeddings$/,
 ];
+
+// ---------------------------------------------------------------------------
+// Smart relevance filtering for GitHub repos — skip low-value files that
+// dilute the vector space without contributing useful retrieval results.
+// ---------------------------------------------------------------------------
+
+/** Files that should never be indexed — generated, build output, vendored */
+const REPO_LOW_VALUE_PATTERNS = [
+  // Build output & generated code
+  /\bdist\//,
+  /\bbuild\//,
+  /\bout\//,
+  /\b\.next\//,
+  /\b\.nuxt\//,
+  /\bcoverage\//,
+  /\b\.turbo\//,
+  /\b\.cache\//,
+  /\b\.parcel-cache\//,
+  // Minified & sourcemaps
+  /\.min\.(js|css)$/i,
+  /\.map$/i,
+  /\.bundle\.(js|css)$/i,
+  // TypeScript declarations (generated)
+  /\.d\.ts$/i,
+  /\.d\.mts$/i,
+  // Test fixtures & snapshots
+  /\b__snapshots__\//,
+  /\bfixtures?\//i,
+  /\b__fixtures__\//,
+  /\b__mocks__\//,
+  /\.snap$/,
+  // Vendored dependencies
+  /\bvendor\//,
+  /\bthird.?party\//i,
+  /\bextern(al)?s?\//i,
+  // Package manager artifacts
+  /\.yarn\//,
+  /\.pnp\./,
+  // Assets that don't contain searchable code
+  /\.(png|jpg|jpeg|gif|svg|ico|webp|woff2?|ttf|eot|mp3|mp4|mov|avi)$/i,
+  // IDE & editor config
+  /\.idea\//,
+  /\.vscode\//,
+  /\.editorconfig$/i,
+];
+
+/** Tier 1: High-value files — sorted first for indexing priority */
+const REPO_HIGH_VALUE_PATTERNS = [
+  /readme/i,
+  /contributing/i,
+  /changelog/i,
+  /^src\//,
+  /^lib\//,
+  /^app\//,
+  /^server\//,
+  /^api\//,
+  /^pages\//,
+  /^components\//,
+  /schema/i,
+  /migrat/i,
+  /route/i,
+  /model/i,
+  /service/i,
+  /package\.json$/,
+  /requirements\.txt$/,
+  /go\.mod$/,
+  /Cargo\.toml$/,
+  /docker/i,
+  /\.env\.example$/,
+];
+
+function isLowValueFile(path: string): boolean {
+  return REPO_LOW_VALUE_PATTERNS.some((re) => re.test(path));
+}
+
+function fileRelevanceScore(path: string): number {
+  if (REPO_HIGH_VALUE_PATTERNS.some((re) => re.test(path))) return 0; // highest priority
+  return 1; // normal priority
+}
+
+/**
+ * Filter and rank files by relevance, returning at most `limit` paths.
+ * Skips low-value files first, then ranks remainder by relevance tier.
+ */
+function selectRelevantFiles(
+  paths: string[],
+  limit: number,
+): { selected: string[]; totalBefore: number; skippedLowValue: number } {
+  const totalBefore = paths.length;
+  const afterLowValue = paths.filter((p) => !isLowValueFile(p));
+  const skippedLowValue = totalBefore - afterLowValue.length;
+
+  // Sort: high-value files first, then alphabetical within each tier
+  afterLowValue.sort((a, b) => {
+    const scoreA = fileRelevanceScore(a);
+    const scoreB = fileRelevanceScore(b);
+    if (scoreA !== scoreB) return scoreA - scoreB;
+    return a.localeCompare(b);
+  });
+
+  return {
+    selected: afterLowValue.slice(0, limit),
+    totalBefore,
+    skippedLowValue,
+  };
+}
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -149,6 +255,21 @@ interface ExtractedFileInfo {
   originalFilename: string;
   mimeType: string | undefined;
   jobId: string;
+}
+
+interface ZipExtractionResult {
+  files: ExtractedFileInfo[];
+  /** Full file tree (all paths after basic filtering) for the project summary */
+  fileTree: string;
+  /** README content extracted during the main pass (avoids re-downloading ZIP) */
+  readmeContent: string;
+  /** Stats for logging/user feedback */
+  stats: {
+    totalEntries: number;
+    afterBasicFilter: number;
+    skippedLowValue: number;
+    indexed: number;
+  };
 }
 
 const TEXT_FAST_PATH_MIMES = new Set([
@@ -246,12 +367,12 @@ export const uploadDocument = inngest.createFunction(
       const MAX_EXTRACTED_FILES = 500;
       const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB per file
 
-      const extractedFiles = await step.run(
+      const extraction = await step.run(
         "extract-zip-archive",
-        async (): Promise<ExtractedFileInfo[]> => {
+        async (): Promise<ZipExtractionResult> => {
           const JSZip = (await import("jszip")).default;
 
-          const res = await fetchBlob(eventData.documentUrl);
+          const res = await fetchFile(eventData.documentUrl);
           if (!res.ok) {
             throw new Error(
               `Failed to fetch ZIP archive: ${res.status} ${res.statusText}`,
@@ -265,17 +386,28 @@ export const uploadDocument = inngest.createFunction(
             .filter((p) => !zip.files[p]!.dir && !shouldSkipEntry(p))
             .sort();
 
-          if (entries.length > MAX_EXTRACTED_FILES) {
-            console.warn(
-              `[ProcessDocument] ZIP has ${entries.length} files, capping at ${MAX_EXTRACTED_FILES}`,
-            );
-          }
-          const cappedEntries = entries.slice(0, MAX_EXTRACTED_FILES);
+          // Smart relevance filter: skip low-value files, prioritize high-value ones
+          const { selected: cappedEntries, totalBefore, skippedLowValue } =
+            selectRelevantFiles(entries, MAX_EXTRACTED_FILES);
 
           console.log(
             `[ProcessDocument] ZIP contains ${allPaths.length} entries, ` +
-              `${cappedEntries.length} processable files after filtering (${entries.length} before cap)`,
+              `${totalBefore} after basic filter, ${skippedLowValue} skipped as low-value, ` +
+              `${cappedEntries.length} selected for indexing`,
           );
+
+          // Build file tree + extract README in same pass (avoids re-downloading ZIP later)
+          const fileTree = entries.map((p) => `  ${p}`).join("\n");
+          let readmeContent = "";
+          const readmePath = entries.find((p) => {
+            const name = p.split("/").pop()?.toLowerCase() ?? "";
+            return name === "readme.md" || name === "readme" || name === "readme.txt" || name === "readme.rst";
+          });
+          if (readmePath) {
+            try {
+              readmeContent = (await zip.files[readmePath]!.async("string")).slice(0, 8000);
+            } catch { /* ignore read errors */ }
+          }
 
           const archiveName = routingName;
           const results: ExtractedFileInfo[] = [];
@@ -377,9 +509,21 @@ export const uploadDocument = inngest.createFunction(
           console.log(
             `[ProcessDocument] Extracted ${results.length} files from ${archiveName}`,
           );
-          return results;
+          return {
+            files: results,
+            fileTree,
+            readmeContent,
+            stats: {
+              totalEntries: allPaths.length,
+              afterBasicFilter: totalBefore,
+              skippedLowValue,
+              indexed: results.length,
+            },
+          };
         },
       );
+
+      const extractedFiles = extraction.files;
 
       // ----------------------------------------------------------------
       // Generate a project summary chunk from file tree + README content
@@ -387,42 +531,15 @@ export const uploadDocument = inngest.createFunction(
       if (extractedFiles.length > 0) {
         await step.run("generate-project-summary", async () => {
           const archiveName = routingName;
-          const JSZip = (await import("jszip")).default;
-
-          const res = await fetchBlob(eventData.documentUrl).catch(() => null);
-          let readmeContent = "";
-          let fileTree = "";
-
-          if (res?.ok) {
-            const zipBuffer = Buffer.from(await res.arrayBuffer());
-            const zip = await JSZip.loadAsync(zipBuffer);
-
-            const allPaths = Object.keys(zip.files)
-              .filter((p) => !zip.files[p]!.dir && !shouldSkipEntry(p))
-              .sort();
-            fileTree = allPaths.map((p) => `  ${p}`).join("\n");
-
-            const readmePath = allPaths.find((p) => {
-              const name = p.split("/").pop()?.toLowerCase() ?? "";
-              return name === "readme.md" || name === "readme" || name === "readme.txt" || name === "readme.rst";
-            });
-
-            if (readmePath) {
-              try {
-                const buf = await zip.files[readmePath]!.async("string");
-                readmeContent = buf.slice(0, 8000);
-              } catch {
-                /* ignore read errors */
-              }
-            }
-          } else {
-            fileTree = extractedFiles.map((f) => `  ${f.originalFilename}`).join("\n");
-          }
+          const { fileTree, readmeContent, stats } = extraction;
 
           const summaryText = [
             `# Project Summary: ${archiveName}`,
             "",
-            `## File Structure (${extractedFiles.length} files)`,
+            `**Indexing stats:** ${stats.indexed} files indexed out of ${stats.afterBasicFilter} ` +
+              `(${stats.skippedLowValue} low-value files skipped: build output, generated code, assets)`,
+            "",
+            `## File Structure (${stats.afterBasicFilter} files)`,
             fileTree,
             "",
             ...(readmeContent
@@ -517,7 +634,12 @@ export const uploadDocument = inngest.createFunction(
         );
       });
 
-      return { success: true, jobId: eventData.jobId, extracted: extractedFiles.length };
+      return {
+        success: true,
+        jobId: eventData.jobId,
+        extracted: extractedFiles.length,
+        stats: extraction.stats,
+      };
     }
 
     // ------------------------------------------------------------------

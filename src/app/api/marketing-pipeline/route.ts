@@ -86,16 +86,15 @@ export async function POST(request: Request) {
 
                     const hint =
                         !process.env.OPENAI_API_KEY && errMessage.toLowerCase().includes("openai")
-                            ? " (Ensure OPENAI_API_KEY is set in .env)"
+                            ? " Ensure OPENAI_API_KEY is set in .env."
                             : errMessage.toLowerCase().includes("company")
-                              ? " (Ensure your user has a valid company profile)"
+                              ? " Ensure your user has a valid company profile."
                               : "";
 
                     send({
                         type: "error",
                         success: false,
-                        message: "Failed to run marketing pipeline",
-                        error: errMessage + hint,
+                        message: "Failed to run marketing pipeline" + hint,
                     });
                 } finally {
                     controller.close();
@@ -112,14 +111,12 @@ export async function POST(request: Request) {
             },
         });
     } catch (error) {
-        const errMessage = error instanceof Error ? error.message : String(error);
         console.error("[marketing-pipeline] POST error:", error);
 
         return NextResponse.json(
             {
                 success: false,
                 message: "Failed to run marketing pipeline",
-                error: errMessage,
             },
             { status: 500, headers: { "Content-Type": "application/json" } },
         );

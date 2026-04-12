@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  FileText, 
-  ChevronRight, 
-  ChevronDown, 
-  ChevronLeft, 
-  ShieldCheck, 
-  Trash2, 
-  MoreVertical, 
+import {
+  Search,
+  FileText,
+  ChevronRight,
+  ChevronDown,
+  ChevronLeft,
+  ShieldCheck,
+  Trash2,
+  MoreVertical,
   MessageCircle,
   PenTool,
   PenLine,
@@ -27,6 +27,7 @@ import {
   Building2,
   Megaphone,
   Archive,
+  Network,
 } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { Input } from '~/app/employer/documents/components/ui/input';
@@ -64,6 +65,7 @@ interface SidebarProps {
   onNewChat?: () => void;
   userRole?: 'employer' | 'employee';
   totalDocuments?: number;
+  onGenerateDiagram?: (archiveName: string) => void;
 }
 
 interface NavItem {
@@ -142,6 +144,7 @@ export function Sidebar({
   onNewChat,
   userRole = 'employer',
   totalDocuments = 0,
+  onGenerateDiagram,
 }: SidebarProps) {
   const isEmployer = userRole === 'employer';
   const showDelete = isEmployer && !!deleteDocument;
@@ -463,24 +466,38 @@ export function Sidebar({
                       {Object.entries(archiveGroups).map(([archiveName, docs]) => {
                         const isOpen = openArchives.has(archiveName);
                         return (
-                          <div key={`archive-${archiveName}`}>
-                            <button
-                              onClick={() => setOpenArchives(prev => {
-                                const next = new Set(prev);
-                                if (next.has(archiveName)) next.delete(archiveName);
-                                else next.add(archiveName);
-                                return next;
-                              })}
-                              className="w-full flex items-center gap-1.5 px-2 py-1.5 hover:bg-muted/70 rounded-md text-[10px] font-semibold text-muted-foreground transition-all"
-                            >
-                              {isOpen
-                                ? <ChevronDown className="w-2.5 h-2.5 text-purple-500 flex-shrink-0" />
-                                : <ChevronRight className="w-2.5 h-2.5 flex-shrink-0" />
-                              }
-                              <Archive className="w-2.5 h-2.5 flex-shrink-0 text-purple-500" />
-                              <span className="truncate flex-1 text-left">{archiveName}</span>
-                              <span className="font-mono text-[9px] opacity-60">{docs.length}</span>
-                            </button>
+                          <div key={`archive-${archiveName}`} className="group/archive">
+                            <div className="flex items-center">
+                              <button
+                                onClick={() => setOpenArchives(prev => {
+                                  const next = new Set(prev);
+                                  if (next.has(archiveName)) next.delete(archiveName);
+                                  else next.add(archiveName);
+                                  return next;
+                                })}
+                                className="flex-1 flex items-center gap-1.5 px-2 py-1.5 hover:bg-muted/70 rounded-md text-[10px] font-semibold text-muted-foreground transition-all"
+                              >
+                                {isOpen
+                                  ? <ChevronDown className="w-2.5 h-2.5 text-purple-500 flex-shrink-0" />
+                                  : <ChevronRight className="w-2.5 h-2.5 flex-shrink-0" />
+                                }
+                                <Archive className="w-2.5 h-2.5 flex-shrink-0 text-purple-500" />
+                                <span className="truncate flex-1 text-left">{archiveName}</span>
+                                <span className="font-mono text-[9px] opacity-60">{docs.length}</span>
+                              </button>
+                              {isEmployer && onGenerateDiagram && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onGenerateDiagram(archiveName);
+                                  }}
+                                  className="opacity-0 group-hover/archive:opacity-100 flex-shrink-0 p-1 mr-1 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 text-muted-foreground hover:text-purple-600 transition-all"
+                                  title="Generate architecture diagram"
+                                >
+                                  <Network className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
                             {isOpen && (
                               <div className="ml-3 border-l border-purple-200 dark:border-purple-800/40 pl-1 space-y-0.5 animate-in slide-in-from-left-1 duration-150">
                                 {docs.map(renderDocItem)}

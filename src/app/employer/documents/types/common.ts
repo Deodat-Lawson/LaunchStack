@@ -19,7 +19,8 @@ export type ViewMode =
   | "settings"
   | "metadata"
   | "marketing-pipeline"
-  | "notes";
+  | "notes"
+  | "repo-explainer";
 
 export type AiPersona =
   | "general"

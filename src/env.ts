@@ -70,10 +70,14 @@ const serverSchema = z.object({
   // Storage provider configuration
   NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
   NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
+  S3_PUBLIC_ENDPOINT: optionalString(), // Browser-facing S3 URL (defaults to NEXT_PUBLIC_S3_ENDPOINT)
   S3_REGION: optionalString(),
   S3_ACCESS_KEY: optionalString(),
   S3_SECRET_KEY: optionalString(),
   S3_BUCKET_NAME: optionalString(),
+  // Repo Explainer
+  REPO_EXPLAINER_MODEL: optionalString(),
+  GITHUB_TOKEN: optionalString(),
 });
 
 const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
@@ -166,11 +170,14 @@ function parseServerEnv() {
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
+    REPO_EXPLAINER_MODEL: process.env.REPO_EXPLAINER_MODEL,
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN,
     NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
       | "cloud"
       | "local"
       | undefined,
     NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+    S3_PUBLIC_ENDPOINT: process.env.S3_PUBLIC_ENDPOINT,
     S3_REGION: process.env.S3_REGION,
     S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
     S3_SECRET_KEY: process.env.S3_SECRET_KEY,

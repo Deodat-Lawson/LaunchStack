@@ -95,12 +95,6 @@ export function VoiceChat({
     };
   }, []);
 
-  const dummyVad = useRef({
-    isRunning: false,
-    start: async () => {},
-    resume: () => {},
-  }).current;
-
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     if (
@@ -121,8 +115,6 @@ export function VoiceChat({
         setIsLoadingAudio,
         setIsPlayingAudio,
         setError,
-        continuousListening: false,
-        vad: dummyVad,
         isProcessingRef,
         ttsStartedAtRef,
       });

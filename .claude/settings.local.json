@@ -58,7 +58,10 @@
       "Bash(grep -E \"\\(chunk|split|RecursiveCharacterTextSplitter|CharacterTextSplitter|[0-9]{3,}\\)\")",
       "Bash(grep -n \"downloadGitHubRepoZip\" /Users/aurea/LaunchStack/src/server/services/*.ts)",
       "Bash(A --include=\"*.ts\")",
-      "Bash(gh pr:*)"
+      "Bash(gh pr:*)",
+      "Bash(A/)",
+      "Bash(find /Users/aurea/LaunchStack/src/app/api/agents/documentQ* -name \"*.ts\")",
+      "WebSearch"
     ]
   }
 }

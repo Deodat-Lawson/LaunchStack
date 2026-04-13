@@ -1,15 +1,17 @@
 import base64
-import cgi
 import io
 import json
 import logging
 import os
+import re
 import sys
 from typing import Any, Optional
 from urllib.parse import urlparse
 
 
 logger = logging.getLogger(__name__)
+
+MAX_UPLOAD_SIZE = 50 * 1024 * 1024  # 50 MB
 
 
 # ---------------------------------------------------------------------------
@@ -36,17 +38,27 @@ try:
         ReadDocxResponse,
         ErrorResponse,
     )
-except Exception:
+except ImportError:
     # Sidecar uses an `app.*` import style; mirror sidecar runtime imports.
-    from app.schemas.adeu import (  # type: ignore
-        ApplyEditsMarkdownRequest,
-        ApplyEditsMarkdownResponse,
-        BatchSummary,
-        DiffResponse,
-        ProcessBatchRequest,
-        ReadDocxResponse,
-        ErrorResponse,
-    )
+    try:
+        from app.schemas.adeu import (  # type: ignore
+            ApplyEditsMarkdownRequest,
+            ApplyEditsMarkdownResponse,
+            BatchSummary,
+            DiffResponse,
+            ProcessBatchRequest,
+            ReadDocxResponse,
+            ErrorResponse,
+        )
+    except ImportError as e:
+        logger.warning(f"Optional sidecar schema import failed: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error importing sidecar schemas: {e}", exc_info=True)
+        raise
+except Exception as e:
+    logger.error(f"Unexpected error importing sidecar schemas: {e}", exc_info=True)
+    raise
 
 
 # ---------------------------------------------------------------------------
@@ -97,6 +109,11 @@ def _parse_bool(value: Any, default: bool = False) -> bool:
     return default
 
 
+def sanitize_filename(name: str) -> str:
+    """Strip characters that could enable header injection."""
+    return re.sub(r'[\r\n";/\\]', '_', name)
+
+
 def _get_headers(request: dict[str, Any]) -> dict[str, str]:
     headers = request.get("headers") or {}
     # Vercel normalizes headers, but handle case differences.
@@ -141,44 +158,100 @@ def _get_raw_body(request: dict[str, Any]) -> bytes:
     return b
 
 
-def _parse_multipart(request: dict[str, Any]) -> cgi.FieldStorage:
+def _parse_multipart(request: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Parse a multipart/form-data body into a dict of parts.
+
+    Returns a dict keyed by field name. Each value is a dict with:
+      - ``value``: decoded string for text fields, raw bytes for file fields
+      - ``filename``: the filename from Content-Disposition (None for text fields)
+    """
     headers = _get_headers(request)
-    content_type = headers.get("content-type") or headers.get("Content-Type".lower())
+    content_type = headers.get("content-type", "")
     if not content_type:
         raise ValueError("Missing Content-Type header")
 
+    # Extract boundary from Content-Type header
+    match = re.search(r"boundary=([^\s;]+)", content_type)
+    if not match:
+        raise ValueError("Missing boundary in Content-Type header")
+    boundary = match.group(1).strip('"')
+
     raw_body = _get_raw_body(request)
-    environ = {
-        "REQUEST_METHOD": request.get("method", "POST"),
-        "CONTENT_TYPE": content_type,
-        "CONTENT_LENGTH": str(len(raw_body)),
-    }
-    fp = io.BytesIO(raw_body)
-    return cgi.FieldStorage(fp=fp, environ=environ, keep_blank_values=True)
+
+    boundary_bytes = boundary.encode("utf-8")
+    delimiter = b"--" + boundary_bytes
+    end_delimiter = delimiter + b"--"
+
+    parts: dict[str, dict[str, Any]] = {}
+
+    # Split body on boundary markers
+    chunks = raw_body.split(delimiter)
+    for chunk in chunks:
+        # Skip preamble and epilogue
+        stripped = chunk.strip(b"\r\n")
+        if not stripped or stripped == b"--":
+            continue
+
+        # Split headers from body (separated by \r\n\r\n)
+        sep_idx = chunk.find(b"\r\n\r\n")
+        if sep_idx == -1:
+            continue
+        header_block = chunk[:sep_idx].decode("utf-8", errors="replace")
+        body = chunk[sep_idx + 4 :]
+
+        # Trim trailing \r\n (before next boundary)
+        if body.endswith(b"\r\n"):
+            body = body[:-2]
+        # Also strip the end delimiter suffix if present
+        if body.endswith(b"--"):
+            body = body[:-2]
+            if body.endswith(b"\r\n"):
+                body = body[:-2]
+
+        # Parse Content-Disposition to get field name and optional filename
+        cd_match = re.search(
+            r'Content-Disposition:\s*form-data;\s*name="([^"]*)"',
+            header_block,
+            re.IGNORECASE,
+        )
+        if not cd_match:
+            continue
+        field_name = cd_match.group(1)
+
+        fn_match = re.search(r'filename="([^"]*)"', header_block, re.IGNORECASE)
+        filename = fn_match.group(1) if fn_match else None
+
+        if filename is not None:
+            # File field — keep as raw bytes
+            parts[field_name] = {"value": body, "filename": filename}
+        else:
+            # Text field — decode to string
+            parts[field_name] = {
+                "value": body.decode("utf-8", errors="replace"),
+                "filename": None,
+            }
+
+    return parts
 
 
-def _field_str(form: cgi.FieldStorage, name: str) -> Optional[str]:
-    try:
-        item = form[name]
-    except Exception:
+def _field_str(form: dict[str, dict[str, Any]], name: str) -> Optional[str]:
+    part = form.get(name)
+    if part is None:
         return None
-    if item is None:
-        return None
-    # Non-file fields expose `.value` as string (or bytes in some cases).
-    v = getattr(item, "value", None)
-    if v is None:
-        return None
+    v = part["value"]
     if isinstance(v, bytes):
         return v.decode("utf-8", errors="replace")
-    return str(v)
+    return str(v) if v is not None else None
 
 
-def _field_file(form: cgi.FieldStorage, name: str) -> tuple[io.BytesIO, str]:
-    item = form[name]
-    if item is None or getattr(item, "file", None) is None:
+def _field_file(form: dict[str, dict[str, Any]], name: str) -> tuple[io.BytesIO, str]:
+    part = form.get(name)
+    if part is None:
         raise ValueError(f"Missing file field: {name}")
-    filename = getattr(item, "filename", None) or f"{name}.docx"
-    raw = item.file.read()
+    raw = part["value"]
+    if isinstance(raw, str):
+        raw = raw.encode("utf-8")
+    filename = part.get("filename") or f"{name}.docx"
     return io.BytesIO(raw), filename
 
 
@@ -222,7 +295,7 @@ def _read_docx(request: dict[str, Any]) -> dict[str, Any]:
         return _error(422, f"Invalid DOCX file: {exc}")
     except Exception as exc:
         logger.exception("read_docx failed")
-        return _error(500, f"Internal error: {exc}")
+        return _error(500, "Internal server error")
 
 
 def _process_batch(request: dict[str, Any]) -> dict[str, Any]:
@@ -287,14 +360,14 @@ def _process_batch(request: dict[str, Any]) -> dict[str, Any]:
         return _docx_response(
             200,
             result_stream,
-            content_disposition=f'attachment; filename="{filename or "modified.docx"}"',
+            content_disposition=f'attachment; filename="{sanitize_filename(filename or "modified.docx")}"',
             extra_headers={"X-Batch-Summary": summary.model_dump_json()},
         )
     except ValueError as exc:
         return _error(422, f"Invalid DOCX file: {exc}")
     except Exception as exc:
         logger.exception("process_batch failed")
-        return _error(500, f"Internal error: {exc}")
+        return _error(500, "Internal server error")
 
 
 def _accept_all(request: dict[str, Any]) -> dict[str, Any]:
@@ -307,13 +380,13 @@ def _accept_all(request: dict[str, Any]) -> dict[str, Any]:
         return _docx_response(
             200,
             result_stream,
-            content_disposition=f'attachment; filename="{filename or "accepted.docx"}"',
+            content_disposition=f'attachment; filename="{sanitize_filename(filename or "accepted.docx")}"',
         )
     except ValueError as exc:
         return _error(422, f"Invalid DOCX file: {exc}")
     except Exception as exc:
         logger.exception("accept_all failed")
-        return _error(500, f"Internal error: {exc}")
+        return _error(500, "Internal server error")
 
 
 def _apply_edits_markdown(request: dict[str, Any]) -> dict[str, Any]:
@@ -346,7 +419,7 @@ def _apply_edits_markdown(request: dict[str, Any]) -> dict[str, Any]:
         return _error(422, f"Invalid DOCX file: {exc}")
     except Exception as exc:
         logger.exception("apply_edits_markdown failed")
-        return _error(500, f"Internal error: {exc}")
+        return _error(500, "Internal server error")
 
 
 def _diff_docx(request: dict[str, Any]) -> dict[str, Any]:
@@ -378,7 +451,7 @@ def _diff_docx(request: dict[str, Any]) -> dict[str, Any]:
         return _error(422, f"Invalid DOCX file: {exc}")
     except Exception as exc:
         logger.exception("diff_docx failed")
-        return _error(500, f"Internal error: {exc}")
+        return _error(500, "Internal server error")
 
 
 def handler(request: dict[str, Any], context: Any = None) -> dict[str, Any]:
@@ -393,6 +466,17 @@ def handler(request: dict[str, Any], context: Any = None) -> dict[str, Any]:
       - /api/adeu/diff
     """
     path = _get_path(request)
+
+    # Reject oversized uploads before any processing.
+    headers = _get_headers(request)
+    content_length = headers.get("content-length")
+    if content_length:
+        try:
+            if int(content_length) > MAX_UPLOAD_SIZE:
+                return _error(413, "File too large")
+        except ValueError:
+            pass
+
     # Normalize: keep only the portion after `/api/adeu`.
     base = "/api/adeu"
     if path.startswith(base):

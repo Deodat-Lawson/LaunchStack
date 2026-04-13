@@ -14,9 +14,6 @@ import {
   Loader2,
   FileText,
   Briefcase,
-  KeyRound,
-  Eye,
-  EyeOff,
 } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Input } from "~/app/employer/documents/components/ui/input";
@@ -49,8 +46,6 @@ export function EmployerSettingsPanel() {
   const [staffCount, setStaffCount] = useState("");
   const [employerPasskey, setEmployerPasskey] = useState("");
   const [employeePasskey, setEmployeePasskey] = useState("");
-  const [showEmployerPasskey, setShowEmployerPasskey] = useState(false);
-  const [showEmployeePasskey, setShowEmployeePasskey] = useState(false);
 
   const displayName = user?.fullName ?? "";
   const email = user?.emailAddresses[0]?.emailAddress ?? "";
@@ -265,74 +260,6 @@ export function EmployerSettingsPanel() {
           </div>
         </section>
 
-        {/* Security & Access */}
-        <section>
-          <h2 className="text-xs font-black text-muted-foreground uppercase tracking-[0.15em] mb-4">
-            Security &amp; Access
-          </h2>
-          <div className="bg-card border border-border rounded-xl p-5 space-y-4">
-            <div className="space-y-1.5">
-              <label
-                htmlFor="employerPasskey"
-                className="flex items-center gap-1.5 text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em]"
-              >
-                <KeyRound className="w-3 h-3" />
-                Employer Passkey
-              </label>
-              <div className="relative">
-                <Input
-                  id="employerPasskey"
-                  type={showEmployerPasskey ? "text" : "password"}
-                  value={employerPasskey}
-                  onChange={(e) => setEmployerPasskey(e.target.value)}
-                  placeholder="Passkey for employer sign-up"
-                  className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500 pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowEmployerPasskey((v) => !v)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={showEmployerPasskey ? "Hide passkey" : "Show passkey"}
-                >
-                  {showEmployerPasskey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-              <p className="text-[10px] text-muted-foreground">
-                Required when new employers join your company.
-              </p>
-            </div>
-            <div className="space-y-1.5">
-              <label
-                htmlFor="employeePasskey"
-                className="flex items-center gap-1.5 text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em]"
-              >
-                <KeyRound className="w-3 h-3" />
-                Employee Passkey
-              </label>
-              <div className="relative">
-                <Input
-                  id="employeePasskey"
-                  type={showEmployeePasskey ? "text" : "password"}
-                  value={employeePasskey}
-                  onChange={(e) => setEmployeePasskey(e.target.value)}
-                  placeholder="Passkey for employee sign-up"
-                  className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500 pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowEmployeePasskey((v) => !v)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={showEmployeePasskey ? "Hide passkey" : "Show passkey"}
-                >
-                  {showEmployeePasskey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-              <p className="text-[10px] text-muted-foreground">
-                Required when new employees join your company.
-              </p>
-            </div>
-          </div>
-        </section>
 
         {/* Save button */}
         <div className="flex items-center gap-3">

@@ -30,8 +30,8 @@ const faqs = [
         answer: "We employ enterprise-grade encryption and security measures. All documents are encrypted at rest and in transit."
     },
     {
-        question: "Can I change my employee passcode?",
-        answer: "Yes, you can change your passcode through your account settings once your account is approved."
+        question: "Can I change my employee invite code?",
+        answer: "Yes, you can change your invite code through your account settings once your account is approved."
     },
     {
         question: "How do I add multiple employees?",
@@ -44,7 +44,7 @@ const SupportPage = () => {
     const [formData, setFormData] = useState<ContactForm>({
         from_name: '',
         from_email: '',
-        to_name: 'PRD AI support team',
+        to_name: 'Launchstack Support',
         subject: '',
         message: ''
     });

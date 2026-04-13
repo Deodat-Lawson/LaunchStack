@@ -5,6 +5,16 @@
  * Fetches a DOCX from Vercel Blob, sends it through the Adeu service
  * for batch edits/review actions, stores the modified DOCX back to Blob,
  * and updates the document record in the database.
+ *
+ * Key design decisions:
+ * - Modified DOCX is stored in blob storage (not returned as base64) to stay
+ *   under Inngest's 4 MB step output limit (Fix 1.1)
+ * - Concurrency is scoped per-document so different documents process in
+ *   parallel (Fix 1.2)
+ * - Failure metadata is written to the document record so failed edits are
+ *   distinguishable from successes (Fix 1.4)
+ * - The DB update lives in its own step.run so Inngest memoizes it separately,
+ *   preventing duplicate writes on replay (Fix 1.15)
  */
 
 import { eq } from "drizzle-orm";
@@ -17,7 +27,9 @@ import { processDocumentBatch, AdeuServiceError } from "~/lib/adeu/client";
 export const modifyDocument = inngest.createFunction(
   {
     id: "modify-document",
-    concurrency: [{ limit: 1 }],
+    // Fix 1.2: scope concurrency by documentId so different documents
+    // process in parallel while edits to the same document are serialized
+    concurrency: [{ limit: 1, key: "event.data.documentId" }],
     retries: 3,
     onFailure: async ({ event, error }) => {
       const documentId = event.data.event.data.documentId;
@@ -26,9 +38,17 @@ export const modifyDocument = inngest.createFunction(
         error.message,
       );
       try {
+        // Fix 1.4: write failure metadata so failed documents are distinguishable
         await db
           .update(document)
-          .set({ updatedAt: new Date() })
+          .set({
+            updatedAt: new Date(),
+            ocrMetadata: {
+              error: "editing_failed",
+              errorMessage: error instanceof Error ? error.message : String(error),
+              failedAt: new Date().toISOString(),
+            },
+          })
           .where(eq(document.id, documentId));
       } catch (dbErr) {
         console.error("[modifyDocument] Failed to mark document as failed:", dbErr);
@@ -49,7 +69,7 @@ export const modifyDocument = inngest.createFunction(
       return Buffer.from(arrayBuffer).toString("base64");
     });
 
-    // Step 2: Send to Adeu for modification
+    // Step 2: Send to Adeu for modification, store result in blob storage
     const result = await step.run("modify-document", async () => {
       const buffer = Buffer.from(docBuffer, "base64");
 
@@ -61,52 +81,66 @@ export const modifyDocument = inngest.createFunction(
         });
 
         const modifiedBuffer = Buffer.from(await file.arrayBuffer());
+
+        // Fix 1.1: store modified DOCX in blob storage instead of returning
+        // raw base64, keeping step output well under Inngest's 4 MB limit
+        const stored = await putFile({
+          filename: `adeu-modified-${documentId}.docx`,
+          data: modifiedBuffer,
+          contentType:
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
+
         return {
           summary,
-          fileBase64: modifiedBuffer.toString("base64"),
+          blobUrl: stored.url,
         };
       } catch (err) {
-        // 422 = validation error — mark as failed, don't retry
+        // 422 = validation error — don't retry
         if (err instanceof AdeuServiceError && err.statusCode === 422) {
-          await db
-            .update(document)
-            .set({ updatedAt: new Date() })
-            .where(eq(document.id, documentId));
           console.error(
             `[modifyDocument] Validation error for document ${documentId}: ${err.detail}`,
           );
-          return { summary: null, fileBase64: null, validationError: err.detail };
+          return { summary: null, blobUrl: null, validationError: err.detail };
         }
         // 5xx or network error — throw to let Inngest retry
         throw err;
       }
     });
 
-    // If validation failed, stop here (no retry)
+    // If validation failed, record the failure and stop (no retry)
     if ("validationError" in result && result.validationError) {
+      // Fix 1.4: write failure metadata for 422 validation errors
+      // Fix 1.15: DB update in its own step for memoization
+      await step.run("record-validation-failure", async () => {
+        await db
+          .update(document)
+          .set({
+            updatedAt: new Date(),
+            ocrMetadata: {
+              error: "editing_failed",
+              errorMessage: result.validationError!,
+              failedAt: new Date().toISOString(),
+            },
+          })
+          .where(eq(document.id, documentId));
+      });
       return { success: false, error: result.validationError };
     }
 
-    // Step 3: Store the modified DOCX and update the DB
-    const storedUrl = await step.run("store-result", async () => {
-      const modifiedBuffer = Buffer.from(result.fileBase64!, "base64");
-
-      const stored = await putFile({
-        filename: `modified-${documentId}.docx`,
-        data: modifiedBuffer,
-        contentType:
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      });
-
+    // Step 3: Store the final URL on the document record
+    // Fix 1.15: DB update is in its own step.run so Inngest memoizes it
+    // separately — replays won't re-execute the write
+    const storedUrl = await step.run("update-document-record", async () => {
       await db
         .update(document)
         .set({
-          url: stored.url,
+          url: result.blobUrl!,
           updatedAt: new Date(),
         })
         .where(eq(document.id, documentId));
 
-      return stored.url;
+      return result.blobUrl!;
     });
 
     return {

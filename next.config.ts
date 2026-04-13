@@ -39,6 +39,9 @@ const config: NextConfig = {
     middlewareClientMaxBodySize: "128mb",
   },
 
+  // Transpile mermaid for client-side Mermaid diagram rendering
+  transpilePackages: ["mermaid"],
+
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 

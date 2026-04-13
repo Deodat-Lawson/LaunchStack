@@ -37,6 +37,7 @@ function normalizeInput(input: MarketingPipelineInput): MarketingPipelineInput {
         toneOverride: input.toneOverride,
         targetAudience: input.targetAudience,
         contentType: input.contentType,
+        documentIds: input.documentIds,
     };
 }
 
@@ -98,6 +99,7 @@ export async function runMarketingPipeline(args: {
 
   const normalizedInput = normalizeInput(args.input);
   const userPrompt = normalizedInput.prompt ?? DEFAULT_PROMPT;
+  const scopedDocIds = normalizedInput.documentIds?.length ? normalizedInput.documentIds : undefined;
 
   // 1) Fetch company name, description, industry + categories (fast DB query)
   const [companyRow] = await db
@@ -144,6 +146,7 @@ export async function runMarketingPipeline(args: {
       const ctx = await buildCompanyKnowledgeContext({
         companyId: args.companyId,
         prompt: userPrompt,
+        documentIds: scopedDocIds,
       });
       emitComplete("loading-context", t0, `Loaded knowledge for ${companyName}`);
       const snippetCount = ctx.split("\n").length;
@@ -157,7 +160,7 @@ export async function runMarketingPipeline(args: {
     (async () => {
       const t1 = Date.now();
       emitStart("extracting-dna", PG_GATHER);
-      const result = await extractCompanyDNA({ companyId: args.companyId, prompt: userPrompt });
+      const result = await extractCompanyDNA({ companyId: args.companyId, prompt: userPrompt, documentIds: scopedDocIds });
       const diffCount = result.dna.keyDifferentiators.length;
       emitComplete("extracting-dna", t1,
         `Found ${diffCount} differentiator${diffCount !== 1 ? "s" : ""} (source: ${result.debug.source})`,
@@ -247,6 +250,7 @@ export async function runMarketingPipeline(args: {
         brandVoice = await extractBrandVoice({
           companyId: args.companyId,
           toneOverride: normalizedInput.toneOverride,
+          documentIds: scopedDocIds,
         });
         emitComplete("extracting-voice", tv, `Tone: ${brandVoice.toneDescriptor}`);
         emitData("extracting-voice", {
@@ -273,6 +277,7 @@ export async function runMarketingPipeline(args: {
           targetPersona = await extractTargetPersona({
             companyId: args.companyId,
             targetAudience: normalizedInput.targetAudience,
+            documentIds: scopedDocIds,
           });
           emitComplete("extracting-persona", tp, `Role: ${targetPersona.role}`);
           emitData("extracting-persona", {
@@ -410,6 +415,7 @@ export async function runMarketingPipeline(args: {
     claimSources = await verifyClaimSources({
       companyId: args.companyId,
       message: bestVariant.message,
+      documentIds: scopedDocIds,
     });
     const verified = claimSources.filter((c) => c.confidence > 0.5).length;
     emitComplete("verifying-claims", t6,
@@ -438,6 +444,7 @@ export async function runMarketingPipeline(args: {
     message: bestVariant.message,
     angle: primaryStrategy?.angle,
     contentType: normalizedInput.contentType ?? "post",
+    sourceDocumentIds: scopedDocIds,
   }).catch((err) => console.warn("[marketing-pipeline] save history failed:", err));
 
   const totalMs = Date.now() - pipelineStart;
@@ -452,6 +459,7 @@ export async function runMarketingPipeline(args: {
       platform: normalizedInput.platform,
       prompt: userPrompt,
     },
+    sourceDocumentIds: scopedDocIds,
     competitiveAngle: primaryStrategy?.angle,
     strategyUsed: primaryStrategy
       ? { angle: primaryStrategy.angle, keyProof: primaryStrategy.keyProof, humanHook: primaryStrategy.humanHook, avoidList: primaryStrategy.avoidList }

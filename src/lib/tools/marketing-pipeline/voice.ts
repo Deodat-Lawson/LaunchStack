@@ -11,11 +11,12 @@ import { BrandVoiceSchema } from "~/lib/tools/marketing-pipeline/types";
 export async function extractBrandVoice(args: {
     companyId: number;
     toneOverride?: FormalityLevel;
+    documentIds?: number[];
 }): Promise<BrandVoice> {
-    const { companyId, toneOverride } = args;
+    const { companyId, toneOverride, documentIds } = args;
 
     const embeddings = createOpenAIEmbeddings();
-    const options: CompanySearchOptions = { companyId, topK: 6, weights: [0.4, 0.6] };
+    const options: CompanySearchOptions = { companyId, topK: 6, weights: [0.4, 0.6], documentIds };
     const results = await companyEnsembleSearch(
         "company tone voice communication style brand personality writing examples",
         options,

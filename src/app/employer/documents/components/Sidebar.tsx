@@ -42,6 +42,7 @@ import {
 } from '~/app/employer/documents/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/app/employer/documents/components/ui/tooltip';
 import { ChatSelector } from './ChatSelector';
+import { DocumentContextSelector } from './DocumentContextSelector';
 import { DISPLAY_TYPE_ICONS } from './DocumentViewer';
 import type { ViewMode, DocumentType, CategoryGroup } from '../types';
 import { getDocumentDisplayType, type DocumentDisplayType } from '../types/document';
@@ -67,6 +68,9 @@ interface SidebarProps {
   userRole?: 'employer' | 'employee';
   totalDocuments?: number;
   onGenerateDiagram?: (archiveName: string) => void;
+  documents?: DocumentType[];
+  contextDocumentIds?: number[];
+  onContextDocumentIdsChange?: (ids: number[]) => void;
 }
 
 interface NavItem {
@@ -147,6 +151,9 @@ export function Sidebar({
   userRole = 'employer',
   totalDocuments = 0,
   onGenerateDiagram,
+  documents = [],
+  contextDocumentIds = [],
+  onContextDocumentIdsChange,
 }: SidebarProps) {
   const isEmployer = userRole === 'employer';
   const showDelete = isEmployer && !!deleteDocument;
@@ -362,6 +369,17 @@ export function Sidebar({
               </button>
             )}
           </div>
+
+          {/* ── Pipeline Context Selector ── */}
+          {isEmployer && documents.length > 0 && onContextDocumentIdsChange && (
+            <div className="mb-2">
+              <DocumentContextSelector
+                documents={documents}
+                selectedIds={contextDocumentIds}
+                onChange={onContextDocumentIdsChange}
+              />
+            </div>
+          )}
 
           <div className="space-y-0.5">
             {/* All Documents option */}

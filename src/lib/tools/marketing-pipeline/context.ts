@@ -26,8 +26,9 @@ const DIFFERENTIATOR_QUERY_PARTS = [
 export async function buildCompanyKnowledgeContext(args: {
     companyId: number;
     prompt: string;
+    documentIds?: number[];
 }): Promise<string> {
-    const { companyId, prompt } = args;
+    const { companyId, prompt, documentIds } = args;
 
     const [companyRow, categoryRows] = await Promise.all([
         db.select().from(company).where(eq(company.id, companyId)).limit(1),
@@ -40,16 +41,19 @@ export async function buildCompanyKnowledgeContext(args: {
     let kbSnippets: string[] = [];
     try {
         const embeddings = createOpenAIEmbeddings();
+        const isScoped = documentIds && documentIds.length > 0;
         const options: CompanySearchOptions = {
             companyId,
-            topK: 6,
+            topK: isScoped ? 10 : 6,
             weights: [0.4, 0.6],
+            documentIds,
         };
         const kbResults: SearchResult[] = await companyEnsembleSearch(prompt, options, embeddings);
 
+        const snippetLimit = isScoped ? 800 : 400;
         kbSnippets = kbResults
-            .slice(0, 6)
-            .map((row) => row.pageContent.trim().replace(/\s+/g, " ").slice(0, 400))
+            .slice(0, isScoped ? 10 : 6)
+            .map((row) => row.pageContent.trim().replace(/\s+/g, " ").slice(0, snippetLimit))
             .filter(Boolean);
     } catch (error) {
         console.warn("[marketing-pipeline] company KB context retrieval failed:", error);
@@ -82,20 +86,23 @@ export interface ExtractCompanyDNAResult {
 export async function extractCompanyDNA(args: {
     companyId: number;
     prompt: string;
+    documentIds?: number[];
 }): Promise<ExtractCompanyDNAResult> {
-    const { companyId, prompt } = args;
+    const { companyId, prompt, documentIds } = args;
 
-    // Try metadata-first approach
-    const metadataContext = await buildMetadataContext(companyId);
-    if (metadataContext) {
-        console.log("[marketing-pipeline] extractCompanyDNA: using METADATA for company %d", companyId);
-        const dna = await synthesizeDNA(metadataContext, prompt);
-        return { dna, debug: { source: "metadata", contextUsed: metadataContext, dna } };
+    // When specific documents are selected, skip metadata and go straight to RAG
+    // so the DNA is derived only from the chosen context.
+    if (!documentIds || documentIds.length === 0) {
+        const metadataContext = await buildMetadataContext(companyId);
+        if (metadataContext) {
+            console.log("[marketing-pipeline] extractCompanyDNA: using METADATA for company %d", companyId);
+            const dna = await synthesizeDNA(metadataContext, prompt);
+            return { dna, debug: { source: "metadata", contextUsed: metadataContext, dna } };
+        }
     }
 
-    // Fallback: dual RAG extraction for companies without metadata
-    console.log("[marketing-pipeline] extractCompanyDNA: using RAG FALLBACK for company %d (no metadata found)", companyId);
-    const ragContext = await buildRAGContext(companyId, prompt);
+    console.log("[marketing-pipeline] extractCompanyDNA: using RAG for company %d (documents=%s)", companyId, documentIds?.length ?? "all");
+    const ragContext = await buildRAGContext(companyId, prompt, documentIds);
     const dna = await synthesizeDNA(ragContext, prompt);
     return { dna, debug: { source: "rag", contextUsed: ragContext, dna } };
 }
@@ -233,7 +240,7 @@ async function buildMetadataContext(companyId: number): Promise<string | null> {
 // RAG-based context (fallback)
 // ============================================================================
 
-async function buildRAGContext(companyId: number, prompt: string): Promise<string> {
+async function buildRAGContext(companyId: number, prompt: string, documentIds?: number[]): Promise<string> {
     const [companyRow, categoryRows] = await Promise.all([
         db.select().from(company).where(eq(company.id, companyId)).limit(1),
         db.select().from(category).where(eq(category.companyId, BigInt(companyId))).limit(8),
@@ -243,8 +250,9 @@ async function buildRAGContext(companyId: number, prompt: string): Promise<strin
     const categoryNames = categoryRows.map((r) => r.name).filter(Boolean);
     const baseMeta = `Company: ${companyInfo?.name ?? "Unknown"}. Categories: ${categoryNames.join(", ") || "None"}.`;
 
+    const isScoped = documentIds && documentIds.length > 0;
     const embeddings = createOpenAIEmbeddings();
-    const options: CompanySearchOptions = { companyId, topK: 4, weights: [0.4, 0.6] };
+    const options: CompanySearchOptions = { companyId, topK: isScoped ? 8 : 4, weights: [0.4, 0.6], documentIds };
 
     let generalSnippets: string[] = [];
     let differentiatorSnippets: string[] = [];
@@ -254,18 +262,19 @@ async function buildRAGContext(companyId: number, prompt: string): Promise<strin
             companyEnsembleSearch(prompt, options, embeddings),
             companyEnsembleSearch(
                 `${baseMeta} ${DIFFERENTIATOR_QUERY_PARTS.join(" ")}`,
-                { ...options, topK: 4 },
+                { ...options, topK: isScoped ? 8 : 4 },
                 embeddings,
             ),
         ]);
 
+        const snippetLimit = isScoped ? 600 : 320;
         generalSnippets = generalResults
-            .slice(0, 4)
-            .map((r) => r.pageContent.trim().replace(/\s+/g, " ").slice(0, 320))
+            .slice(0, isScoped ? 8 : 4)
+            .map((r) => r.pageContent.trim().replace(/\s+/g, " ").slice(0, snippetLimit))
             .filter(Boolean);
         differentiatorSnippets = diffResults
-            .slice(0, 4)
-            .map((r) => r.pageContent.trim().replace(/\s+/g, " ").slice(0, 320))
+            .slice(0, isScoped ? 8 : 4)
+            .map((r) => r.pageContent.trim().replace(/\s+/g, " ").slice(0, snippetLimit))
             .filter(Boolean);
     } catch (error) {
         console.warn("[marketing-pipeline] extractCompanyDNA RAG failed:", error);

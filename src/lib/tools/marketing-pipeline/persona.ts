@@ -11,11 +11,12 @@ import { TargetPersonaSchema } from "~/lib/tools/marketing-pipeline/types";
 export async function extractTargetPersona(args: {
     companyId: number;
     targetAudience: string;
+    documentIds?: number[];
 }): Promise<TargetPersona> {
-    const { companyId, targetAudience } = args;
+    const { companyId, targetAudience, documentIds } = args;
 
     const embeddings = createOpenAIEmbeddings();
-    const options: CompanySearchOptions = { companyId, topK: 6, weights: [0.4, 0.6] };
+    const options: CompanySearchOptions = { companyId, topK: 6, weights: [0.4, 0.6], documentIds };
     const results = await companyEnsembleSearch(
         `target audience customer persona ${targetAudience} pain points needs priorities`,
         options,

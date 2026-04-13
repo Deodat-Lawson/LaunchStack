@@ -137,6 +137,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [qaSubMode, setQaSubMode] = useState<"simple" | "chat">("simple");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isPreviewCollapsed, setIsPreviewCollapsed] = useState(false);
+  const [contextDocumentIds, setContextDocumentIds] = useState<number[]>([]);
   
   // AI States (Simple Query)
   const [aiQuestion, setAiQuestion] = useState("");
@@ -831,7 +832,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         return <CompanyMetadataPanel />;
       case "marketing-pipeline":
         if (userRole !== 'employer') return null;
-        return <MarketingPipelinePanel />;
+        return <MarketingPipelinePanel contextDocumentIds={contextDocumentIds} />;
       case "repo-explainer":
         if (userRole !== 'employer') return null;
         return <RepoExplainerPanel initialRepoUrl={diagramRepoUrl} />;
@@ -904,6 +905,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
             userRole={userRole}
             totalDocuments={documents.length}
             onGenerateDiagram={handleGenerateDiagram}
+            documents={documents}
+            contextDocumentIds={contextDocumentIds}
+            onContextDocumentIdsChange={setContextDocumentIds}
           />
         </ResizablePanel>
 

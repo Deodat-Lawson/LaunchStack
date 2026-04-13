@@ -75,6 +75,7 @@ export async function saveGeneratedContent(args: {
     message: string;
     angle?: string;
     contentType?: string;
+    sourceDocumentIds?: number[];
 }): Promise<void> {
     await db.insert(marketingContentHistory).values({
         companyId: BigInt(args.companyId),
@@ -82,5 +83,8 @@ export async function saveGeneratedContent(args: {
         message: args.message,
         angle: args.angle ?? null,
         contentType: args.contentType ?? "post",
+        metadata: args.sourceDocumentIds?.length
+            ? { sourceDocumentIds: args.sourceDocumentIds }
+            : null,
     });
 }

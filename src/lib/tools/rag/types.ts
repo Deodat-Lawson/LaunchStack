@@ -74,6 +74,8 @@ export interface DocumentSearchOptions extends EnsembleSearchOptions {
 
 export interface CompanySearchOptions extends EnsembleSearchOptions {
   companyId: number;
+  /** When set, restrict retrieval to only these documents instead of all company docs. */
+  documentIds?: number[];
 }
 
 export interface MultiDocSearchOptions extends EnsembleSearchOptions {

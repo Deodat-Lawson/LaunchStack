@@ -54,6 +54,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
   const [targetAudience, setTargetAudience] = useState("");
   const [contentType, setContentType] = useState<ContentType | undefined>(undefined);
   const [thinkingLog, setThinkingLog] = useState<ThinkingEntry[]>([]);
+  const [contextDocumentIds, setContextDocumentIds] = useState<number[]>([]);
   const abortRef = useRef<AbortController | null>(null);
 
   const selectedPlatform = PLATFORM_OPTIONS.find((option) => option.id === platform) ?? null;
@@ -70,6 +71,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     setToneOverride(session.toneOverride);
     setTargetAudience(session.targetAudience ?? "");
     setContentType(session.contentType);
+    setContextDocumentIds(session.contextDocumentIds ?? []);
     setError(null);
     setShowRewriteSheet(false);
   }, []);
@@ -357,6 +359,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
           toneOverride: toneOverride ?? undefined,
           targetAudience: targetAudience.trim() || undefined,
           contentType: contentType ?? undefined,
+          documentIds: contextDocumentIds.length > 0 ? contextDocumentIds : undefined,
         }),
         signal: controller.signal,
       });
@@ -464,6 +467,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         toneOverride,
         targetAudience: targetAudience.trim() || undefined,
         contentType,
+        contextDocumentIds: contextDocumentIds.length > 0 ? contextDocumentIds : undefined,
       };
 
       setResult(pipelineResult);
@@ -496,7 +500,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
       // Pipeline steps are intentionally NOT cleared here so the stepper
       // remains visible after generation completes (transparency).
     }
-  }, [activeSessionId, contentType, debug, handleSSEEvent, platform, platformMeta, prompt, targetAudience, toneOverride]);
+  }, [activeSessionId, contentType, contextDocumentIds, debug, handleSSEEvent, platform, platformMeta, prompt, targetAudience, toneOverride]);
 
   const cancelPipeline = useCallback(() => {
     abortRef.current?.abort();
@@ -544,6 +548,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     setTargetAudience,
     contentType,
     setContentType,
+    contextDocumentIds,
+    setContextDocumentIds,
     handleSelectSession,
     handleStartNewSession,
     handleRewriteComplete,

@@ -150,6 +150,7 @@ export interface PipelineData {
   variants?: ContentVariantUI[];
   pipelineStages?: PipelineStagesUI;
   claimSources?: ClaimSourceUI[];
+  sourceDocumentIds?: number[];
 }
 
 export interface PipelineResponse {
@@ -178,6 +179,8 @@ export interface MarketingSession {
   toneOverride?: FormalityLevel;
   targetAudience?: string;
   contentType?: ContentType;
+  /** Document IDs selected as RAG context (empty = all company docs). */
+  contextDocumentIds?: number[];
 }
 
 export const REDDIT_SNOO_URL = "/images/reddit-snoo.png";

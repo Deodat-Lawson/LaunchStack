@@ -139,6 +139,8 @@ export const MarketingPipelineInputSchema = z.object({
     toneOverride: FormalityLevelEnum.optional(),
     targetAudience: z.string().max(200).optional(),
     contentType: ContentTypeEnum.optional(),
+    /** Restrict RAG context to specific documents. Omit or empty = all company docs. */
+    documentIds: z.array(z.number().int().positive()).max(50).optional(),
 });
 export type MarketingPipelineInput = z.infer<typeof MarketingPipelineInputSchema>;
 
@@ -169,6 +171,8 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
         platform: MarketingPlatform;
         prompt: string;
     };
+    /** Document IDs used as context (empty = all company docs). */
+    sourceDocumentIds?: number[];
     /** Positioning angle used for this campaign (issue #232). */
     competitiveAngle?: string;
     /** Optional summary of strategy (angle + proof + hook) for transparency. */

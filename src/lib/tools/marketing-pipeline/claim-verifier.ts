@@ -15,8 +15,9 @@ const ClaimListSchema = z.object({
 export async function verifyClaimSources(args: {
     companyId: number;
     message: string;
+    documentIds?: number[];
 }): Promise<ClaimSource[]> {
-    const { companyId, message } = args;
+    const { companyId, message, documentIds } = args;
 
     const chat = getChatModel(MARKETING_MODELS.claimVerification);
     const extractModel = chat.withStructuredOutput(ClaimListSchema, { name: "claim_list" });
@@ -32,7 +33,7 @@ export async function verifyClaimSources(args: {
     if (claims.length === 0) return [];
 
     const embeddings = createOpenAIEmbeddings();
-    const options: CompanySearchOptions = { companyId, topK: 2, weights: [0.4, 0.6] };
+    const options: CompanySearchOptions = { companyId, topK: 2, weights: [0.4, 0.6], documentIds };
 
     const results: ClaimSource[] = await Promise.all(
         claims.slice(0, 5).map(async (claim) => {

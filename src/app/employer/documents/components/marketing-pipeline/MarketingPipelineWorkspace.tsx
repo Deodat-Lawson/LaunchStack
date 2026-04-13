@@ -47,6 +47,7 @@ import { useMarketingPipelineController } from "./useMarketingPipelineController
 export interface MarketingPipelineWorkspaceProps {
   debug?: boolean;
   showDnaDebugSection?: boolean;
+  contextDocumentIds?: number[];
 }
 
 function usePlatformLogoClassNames() {
@@ -1051,6 +1052,7 @@ function VariantStack({
 export function MarketingPipelineWorkspace({
   debug = false,
   showDnaDebugSection = false,
+  contextDocumentIds: externalContextDocIds,
 }: MarketingPipelineWorkspaceProps) {
   const [debugOpen, setDebugOpen] = useState(false);
   const [confirmNewCampaign, setConfirmNewCampaign] = useState(false);
@@ -1099,7 +1101,15 @@ export function MarketingPipelineWorkspace({
     setTargetAudience,
     contentType,
     setContentType,
+    contextDocumentIds,
+    setContextDocumentIds,
   } = useMarketingPipelineController({ debug });
+
+  useEffect(() => {
+    if (externalContextDocIds != null) {
+      setContextDocumentIds(externalContextDocIds);
+    }
+  }, [externalContextDocIds, setContextDocumentIds]);
 
   const hasSessions = sessions.length > 0;
 

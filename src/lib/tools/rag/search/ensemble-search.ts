@@ -197,7 +197,18 @@ export async function companyEnsembleSearch(
   options: CompanySearchOptions,
   embeddings?: EmbeddingsProvider
 ): Promise<SearchResult[]> {
-  const { companyId, topK = 10 } = options;
+  const { companyId, topK = 10, documentIds } = options;
+
+  if (documentIds && documentIds.length > 0) {
+    console.log(
+      `[EnsembleSearch] Scoped company search → ${documentIds.length} selected document(s)`,
+    );
+    return multiDocEnsembleSearch(
+      query,
+      { documentIds, companyId, topK, weights: options.weights, filters: options.filters },
+      embeddings,
+    );
+  }
 
   const chunks = await getCompanyChunks(companyId);
   if (chunks.length === 0) {

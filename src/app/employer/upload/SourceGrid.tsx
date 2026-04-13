@@ -17,7 +17,7 @@ const cardClasses =
 export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: SourceGridProps) {
     return (
         <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
-            <button type="button" onClick={onFileClick} className={cardClasses}>
+            <div role="button" tabIndex={0} onClick={onFileClick} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onFileClick(); } }} className={cardClasses}>
                 <Upload className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     Files &amp; Folders
@@ -35,7 +35,7 @@ export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: Sourc
                 >
                     or select folder
                 </button>
-            </button>
+            </div>
 
             <button type="button" onClick={() => onSelectSource("github")} className={cardClasses}>
                 <Github className="w-6 h-6 text-gray-900 dark:text-white" />

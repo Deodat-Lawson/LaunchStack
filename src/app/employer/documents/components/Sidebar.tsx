@@ -370,7 +370,7 @@ export function Sidebar({
             )}
           </div>
 
-          {/* ── Pipeline Context Selector ── */}
+          {/* ── Pipeline Context Selector (opens as a dialog) ── */}
           {isEmployer && documents.length > 0 && onContextDocumentIdsChange && (
             <div className="mb-2">
               <DocumentContextSelector

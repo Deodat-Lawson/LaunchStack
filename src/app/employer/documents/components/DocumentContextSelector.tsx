@@ -5,12 +5,21 @@ import {
   Building2,
   FileText,
   Search,
-  ChevronDown,
-  ChevronRight,
   X,
+  ListFilter,
+  Check,
 } from "lucide-react";
 import { Input } from "~/app/employer/documents/components/ui/input";
 import { Checkbox } from "~/app/employer/documents/components/ui/checkbox";
+import { Button } from "~/app/employer/documents/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "~/app/employer/documents/components/ui/dialog";
 import { cn } from "~/lib/utils";
 import { DISPLAY_TYPE_ICONS } from "./DocumentViewer";
 import { getDocumentDisplayType } from "../types/document";
@@ -20,7 +29,6 @@ export interface DocumentContextSelectorProps {
   documents: DocumentType[];
   selectedIds: number[];
   onChange: (ids: number[]) => void;
-  compact?: boolean;
 }
 
 export function DocumentContextSelector({
@@ -28,8 +36,8 @@ export function DocumentContextSelector({
   selectedIds,
   onChange,
 }: DocumentContextSelectorProps) {
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [isExpanded, setIsExpanded] = useState(true);
 
   const processed = useMemo(
     () => documents.filter((d) => d.ocrProcessed !== false),
@@ -56,18 +64,10 @@ export function DocumentContextSelector({
         onChange(allExcept);
       } else if (selectedSet.has(id)) {
         const next = selectedIds.filter((x) => x !== id);
-        if (next.length === 0 || next.length === processed.length) {
-          onChange([]);
-        } else {
-          onChange(next);
-        }
+        onChange(next.length === 0 || next.length === processed.length ? [] : next);
       } else {
         const next = [...selectedIds, id];
-        if (next.length === processed.length) {
-          onChange([]);
-        } else {
-          onChange(next);
-        }
+        onChange(next.length === processed.length ? [] : next);
       }
     },
     [allSelected, selectedIds, selectedSet, processed, onChange],
@@ -78,127 +78,180 @@ export function DocumentContextSelector({
   const selectedCount = allSelected ? processed.length : selectedIds.length;
 
   return (
-    <div className="space-y-1">
-      {/* Header — collapsible */}
+    <>
+      {/* Trigger button */}
       <button
-        onClick={() => setIsExpanded((v) => !v)}
-        className="w-full flex items-center gap-1.5 px-1 py-1 hover:bg-muted/50 rounded-md transition-colors"
-      >
-        {isExpanded ? (
-          <ChevronDown className="w-2.5 h-2.5 text-purple-500 flex-shrink-0" />
-        ) : (
-          <ChevronRight className="w-2.5 h-2.5 flex-shrink-0 text-muted-foreground" />
+        onClick={() => setOpen(true)}
+        className={cn(
+          "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all duration-150",
+          "text-muted-foreground hover:bg-muted hover:text-foreground",
+          !allSelected && "text-purple-600 dark:text-purple-400",
         )}
-        <span className="text-[9px] font-black text-muted-foreground tracking-[0.15em] uppercase">
-          Sources
-        </span>
-        <span className="text-[9px] font-mono font-bold bg-muted text-muted-foreground rounded px-1 py-0.5 ml-auto">
+      >
+        <ListFilter className="w-3.5 h-3.5 flex-shrink-0" />
+        <span className="flex-1 text-left">Sources</span>
+        <span
+          className={cn(
+            "text-[9px] font-mono font-bold px-1.5 py-0.5 rounded",
+            allSelected
+              ? "bg-muted text-muted-foreground"
+              : "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300",
+          )}
+        >
           {selectedCount}/{processed.length}
         </span>
       </button>
 
-      {isExpanded && (
-        <div className="space-y-0.5">
-          {/* Company Knowledge — always on */}
-          <div className="flex items-center gap-2 px-2 py-1.5 rounded-md bg-emerald-50/60 dark:bg-emerald-900/15">
-            <div className="w-3.5 h-3.5 rounded-sm bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-300 flex-1">
-              Company Context
-            </span>
-            <span className="text-[9px] text-emerald-600/60 dark:text-emerald-400/60 font-medium">
-              Always on
-            </span>
-          </div>
+      {/* Dialog */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-md max-h-[80vh] flex flex-col gap-0 p-0 overflow-hidden">
+          <DialogHeader className="px-5 pt-5 pb-3 border-b border-border space-y-1">
+            <DialogTitle className="text-base">Pipeline Sources</DialogTitle>
+            <DialogDescription className="text-xs">
+              Select which documents to use as context. Company metadata is always included.
+            </DialogDescription>
+          </DialogHeader>
 
-          {/* Search (only for many docs) */}
-          {processed.length > 8 && (
-            <div className="relative px-0.5 pt-1">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 mt-0.5 w-3 h-3 text-muted-foreground" />
-              <Input
-                placeholder="Filter documents..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="h-6 pl-7 text-[10px] bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-purple-500 rounded-md"
-              />
-            </div>
-          )}
-
-          {/* Document rows */}
-          <div className="space-y-0.5 max-h-[200px] overflow-y-auto custom-scrollbar">
-            {filtered.map((doc) => {
-              const isChecked = allSelected || selectedSet.has(doc.id);
-              const displayType = getDocumentDisplayType(doc);
-              const DocIcon = DISPLAY_TYPE_ICONS[displayType] ?? FileText;
-
-              return (
-                <div
-                  key={doc.id}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => toggle(doc.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      toggle(doc.id);
-                    }
-                  }}
-                  className={cn(
-                    "flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] transition-all cursor-pointer group",
-                    isChecked
-                      ? "text-foreground"
-                      : "text-muted-foreground/50 hover:text-muted-foreground",
-                  )}
-                >
-                  <Checkbox
-                    checked={isChecked}
-                    onCheckedChange={() => toggle(doc.id)}
-                    className="flex-shrink-0 h-3.5 w-3.5"
-                    aria-label={`Include ${doc.title} as context`}
-                  />
-                  <DocIcon
-                    className={cn(
-                      "w-3 h-3 flex-shrink-0 transition-colors",
-                      isChecked
-                        ? "text-purple-500"
-                        : "text-muted-foreground/40",
-                    )}
-                  />
-                  <span className={cn(
-                    "flex-1 truncate transition-colors",
-                    !isChecked && "line-through decoration-muted-foreground/30",
-                  )}>
-                    {doc.title}
-                  </span>
+          <div className="flex flex-col flex-1 overflow-hidden">
+            {/* Company Context — always on */}
+            <div className="flex items-center gap-3 px-5 py-3 bg-emerald-50/60 dark:bg-emerald-900/10 border-b border-border">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
+                <Building2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                  Company Context
                 </div>
-              );
-            })}
+                <div className="text-[11px] text-emerald-600/70 dark:text-emerald-400/60">
+                  Name, industry, metadata — always included
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">
+                <Check className="w-3 h-3" />
+                Always on
+              </div>
+            </div>
 
-            {filtered.length === 0 && search && (
-              <div className="py-3 text-center text-[10px] text-muted-foreground">
-                No match for &quot;{search}&quot;
+            {/* Search */}
+            {processed.length > 5 && (
+              <div className="relative px-5 py-3 border-b border-border">
+                <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                <Input
+                  placeholder="Search documents..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="h-8 pl-8 text-xs bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-purple-500 rounded-lg"
+                />
+                {search && (
+                  <button
+                    onClick={() => setSearch("")}
+                    className="absolute right-8 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
               </div>
             )}
+
+            {/* Document list */}
+            <div className="flex-1 overflow-y-auto px-2 py-2">
+              {filtered.length === 0 && search ? (
+                <div className="py-8 text-center text-sm text-muted-foreground">
+                  No documents matching &quot;{search}&quot;
+                </div>
+              ) : (
+                <div className="space-y-0.5">
+                  {filtered.map((doc) => {
+                    const isChecked = allSelected || selectedSet.has(doc.id);
+                    const displayType = getDocumentDisplayType(doc);
+                    const DocIcon = DISPLAY_TYPE_ICONS[displayType] ?? FileText;
+
+                    return (
+                      <div
+                        key={doc.id}
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => toggle(doc.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            toggle(doc.id);
+                          }
+                        }}
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all cursor-pointer group",
+                          isChecked
+                            ? "bg-purple-50/60 dark:bg-purple-900/10 hover:bg-purple-50 dark:hover:bg-purple-900/15"
+                            : "hover:bg-muted/50",
+                        )}
+                      >
+                        <Checkbox
+                          checked={isChecked}
+                          onCheckedChange={() => toggle(doc.id)}
+                          className="flex-shrink-0 h-4 w-4"
+                          aria-label={`Include ${doc.title} as context`}
+                        />
+                        <DocIcon
+                          className={cn(
+                            "w-4 h-4 flex-shrink-0 transition-colors",
+                            isChecked
+                              ? "text-purple-500"
+                              : "text-muted-foreground/40",
+                          )}
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div
+                            className={cn(
+                              "text-sm truncate transition-colors",
+                              isChecked
+                                ? "text-foreground font-medium"
+                                : "text-muted-foreground line-through decoration-muted-foreground/30",
+                            )}
+                          >
+                            {doc.title}
+                          </div>
+                          <div className="text-[10px] text-muted-foreground truncate">
+                            {doc.category}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Footer — reset when filtered */}
-          {!allSelected && (
-            <div className="flex items-center justify-between px-2 pt-1">
-              <span className="text-[9px] text-muted-foreground">
-                {selectedIds.length} of {processed.length} selected
-              </span>
-              <button
-                onClick={resetAll}
-                className="text-[9px] text-purple-600 dark:text-purple-400 font-semibold hover:underline flex items-center gap-0.5"
-              >
-                <X className="w-2.5 h-2.5" />
-                Use all
-              </button>
+          {/* Footer */}
+          <DialogFooter className="px-5 py-3 border-t border-border bg-muted/30 sm:justify-between">
+            <div className="text-xs text-muted-foreground">
+              {allSelected
+                ? `All ${processed.length} documents selected`
+                : `${selectedIds.length} of ${processed.length} selected`}
             </div>
-          )}
-        </div>
-      )}
-    </div>
+            <div className="flex items-center gap-2">
+              {!allSelected && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={resetAll}
+                  className="h-7 text-xs text-purple-600 dark:text-purple-400 hover:text-purple-700"
+                >
+                  <X className="w-3 h-3 mr-1" />
+                  Reset to all
+                </Button>
+              )}
+              <Button
+                size="sm"
+                onClick={() => setOpen(false)}
+                className="h-7 text-xs bg-purple-600 hover:bg-purple-700 text-white"
+              >
+                Done
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

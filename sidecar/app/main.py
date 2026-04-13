@@ -14,6 +14,7 @@ from app.models.ner import EntityExtractor
 from app.routes.embed import router as embed_router
 from app.routes.rerank import router as rerank_router
 from app.routes.entities import router as entities_router
+from app.routes.relationships import router as relationships_router
 
 
 # ---------------------------------------------------------------------------
@@ -46,6 +47,7 @@ app = FastAPI(
 app.include_router(embed_router)
 app.include_router(rerank_router)
 app.include_router(entities_router)
+app.include_router(relationships_router)
 
 
 @app.get("/health")

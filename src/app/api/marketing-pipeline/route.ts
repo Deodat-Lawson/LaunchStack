@@ -64,6 +64,10 @@ export async function POST(request: Request) {
         const url = new URL(request.url);
         const debug = url.searchParams.get("debug") === "true";
 
+        console.log(
+            `[marketing-pipeline] companyId=${companyId}, platform=${validation.data.platform}, documentIds=${JSON.stringify(validation.data.documentIds ?? "ALL")}`,
+        );
+
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
             async start(controller) {

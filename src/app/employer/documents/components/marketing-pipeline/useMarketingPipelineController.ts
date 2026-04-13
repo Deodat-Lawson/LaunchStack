@@ -55,6 +55,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
   const [contentType, setContentType] = useState<ContentType | undefined>(undefined);
   const [thinkingLog, setThinkingLog] = useState<ThinkingEntry[]>([]);
   const [contextDocumentIds, setContextDocumentIds] = useState<number[]>([]);
+  const contextDocIdsRef = useRef<number[]>([]);
+  contextDocIdsRef.current = contextDocumentIds;
   const abortRef = useRef<AbortController | null>(null);
 
   const selectedPlatform = PLATFORM_OPTIONS.find((option) => option.id === platform) ?? null;
@@ -349,6 +351,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
 
     try {
       const apiUrl = debug ? "/api/marketing-pipeline?debug=true" : "/api/marketing-pipeline";
+      const docIds = contextDocIdsRef.current;
+      console.log("[MarketingPipeline] Sending documentIds:", docIds.length > 0 ? docIds : "ALL");
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -359,7 +363,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
           toneOverride: toneOverride ?? undefined,
           targetAudience: targetAudience.trim() || undefined,
           contentType: contentType ?? undefined,
-          documentIds: contextDocumentIds.length > 0 ? contextDocumentIds : undefined,
+          documentIds: docIds.length > 0 ? docIds : undefined,
         }),
         signal: controller.signal,
       });

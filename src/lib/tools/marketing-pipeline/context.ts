@@ -42,17 +42,46 @@ export async function buildCompanyKnowledgeContext(args: {
     try {
         const embeddings = createOpenAIEmbeddings();
         const isScoped = documentIds && documentIds.length > 0;
-        const options: CompanySearchOptions = {
+        const baseOptions: CompanySearchOptions = {
             companyId,
             topK: isScoped ? 10 : 6,
             weights: [0.4, 0.6],
             documentIds,
         };
-        const kbResults: SearchResult[] = await companyEnsembleSearch(prompt, options, embeddings);
+
+        const searches: Promise<SearchResult[]>[] = [
+            companyEnsembleSearch(prompt, baseOptions, embeddings),
+        ];
+
+        // When documents are scoped, also do a broad "retrieve everything" search
+        // so short/unique content (like a single-chunk doc) isn't drowned out by
+        // longer documents that dominate semantic similarity.
+        if (isScoped) {
+            searches.push(
+                companyEnsembleSearch(
+                    "all content context information data",
+                    { ...baseOptions, topK: 6 },
+                    embeddings,
+                ),
+            );
+        }
+
+        const allResults = await Promise.all(searches);
+        const seen = new Set<string>();
+        const merged: SearchResult[] = [];
+        for (const results of allResults) {
+            for (const r of results) {
+                const key = r.pageContent.trim().slice(0, 100);
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    merged.push(r);
+                }
+            }
+        }
 
         const snippetLimit = isScoped ? 800 : 400;
-        kbSnippets = kbResults
-            .slice(0, isScoped ? 10 : 6)
+        kbSnippets = merged
+            .slice(0, isScoped ? 14 : 6)
             .map((row) => row.pageContent.trim().replace(/\s+/g, " ").slice(0, snippetLimit))
             .filter(Boolean);
     } catch (error) {
@@ -256,16 +285,29 @@ async function buildRAGContext(companyId: number, prompt: string, documentIds?: 
 
     let generalSnippets: string[] = [];
     let differentiatorSnippets: string[] = [];
+    let broadSnippets: string[] = [];
 
     try {
-        const [generalResults, diffResults] = await Promise.all([
+        const searches: Promise<SearchResult[]>[] = [
             companyEnsembleSearch(prompt, options, embeddings),
             companyEnsembleSearch(
                 `${baseMeta} ${DIFFERENTIATOR_QUERY_PARTS.join(" ")}`,
                 { ...options, topK: isScoped ? 8 : 4 },
                 embeddings,
             ),
-        ]);
+        ];
+
+        if (isScoped) {
+            searches.push(
+                companyEnsembleSearch(
+                    "all content context information data",
+                    { ...options, topK: 6 },
+                    embeddings,
+                ),
+            );
+        }
+
+        const [generalResults, diffResults, broadResults] = await Promise.all(searches);
 
         const snippetLimit = isScoped ? 600 : 320;
         generalSnippets = generalResults
@@ -276,11 +318,17 @@ async function buildRAGContext(companyId: number, prompt: string, documentIds?: 
             .slice(0, isScoped ? 8 : 4)
             .map((r) => r.pageContent.trim().replace(/\s+/g, " ").slice(0, snippetLimit))
             .filter(Boolean);
+        if (broadResults) {
+            broadSnippets = broadResults
+                .slice(0, 6)
+                .map((r) => r.pageContent.trim().replace(/\s+/g, " ").slice(0, snippetLimit))
+                .filter(Boolean);
+        }
     } catch (error) {
         console.warn("[marketing-pipeline] extractCompanyDNA RAG failed:", error);
     }
 
-    const combinedSnippets = [...new Set([...generalSnippets, ...differentiatorSnippets])];
+    const combinedSnippets = [...new Set([...generalSnippets, ...differentiatorSnippets, ...broadSnippets])];
     return combinedSnippets.length > 0
         ? combinedSnippets.map((s, i) => `${i + 1}. ${s}`).join("\n\n")
         : `Company Name: ${companyInfo?.name ?? "Unknown Company"}. No KB snippets available.`;

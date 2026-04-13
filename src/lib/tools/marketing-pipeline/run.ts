@@ -101,6 +101,10 @@ export async function runMarketingPipeline(args: {
   const userPrompt = normalizedInput.prompt ?? DEFAULT_PROMPT;
   const scopedDocIds = normalizedInput.documentIds?.length ? normalizedInput.documentIds : undefined;
 
+  console.log(
+    `[marketing-pipeline] ▶ RUN companyId=${args.companyId} scopedDocIds=${JSON.stringify(scopedDocIds ?? "ALL")} rawInput.documentIds=${JSON.stringify(args.input.documentIds ?? "undefined")}`,
+  );
+
   // 1) Fetch company name, description, industry + categories (fast DB query)
   const [companyRow] = await db
     .select({

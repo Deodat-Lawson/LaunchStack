@@ -199,6 +199,19 @@ export async function fetchFile(url: string, init?: RequestInit): Promise<Respon
     }
   }
 
+  // Database-served files (e.g. http://localhost:3000/api/files/123) — plain fetch
+  if (url.includes("/api/files/")) {
+    try {
+      return await fetch(url, init);
+    } catch (err) {
+      throw new StorageError(
+        `Failed to fetch database-stored file at ${url}: ${err instanceof Error ? err.message : String(err)}`,
+        "database",
+        err instanceof Error ? err : undefined,
+      );
+    }
+  }
+
   // Cloud URLs — delegate to fetchBlob (handles private blob auth)
   try {
     const { fetchBlob } = await import("~/server/storage/vercel-blob");

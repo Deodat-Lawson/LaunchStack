@@ -252,9 +252,21 @@ export async function POST(
         // between flip and embedding completion is acceptable — search will
         // return zero results for this document during that window, which
         // matches the behavior of a brand new upload.
+        //
+        // We ALSO update `document.url` and `document.mimeType` to match the
+        // new current version. These two columns predate versioning and are
+        // treated by every legacy read path (fetchDocument, DocumentViewer,
+        // etc.) as "the document's blob." Leaving them frozen on v1 means
+        // the main viewer keeps showing v1's content even after v2 becomes
+        // current — which is exactly the bug we hit in production. Keep
+        // them denormalized in lockstep with `currentVersionId`.
         await tx
           .update(document)
-          .set({ currentVersionId: BigInt(inserted.id) })
+          .set({
+            currentVersionId: BigInt(inserted.id),
+            url: documentUrl,
+            mimeType,
+          })
           .where(eq(document.id, parsed.documentId));
 
         return inserted;

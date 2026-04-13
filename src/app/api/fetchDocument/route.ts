@@ -151,6 +151,13 @@ export async function POST(request: Request) {
                 url,
                 id: Number(doc.id),
                 companyId: Number(doc.companyId),
+                // currentVersionId is a nullable bigint from the versioning
+                // schema — convert to number|null so JSON.stringify doesn't
+                // choke on the raw BigInt.
+                currentVersionId:
+                    doc.currentVersionId !== null
+                        ? Number(doc.currentVersionId)
+                        : null,
                 ...(mimeType && { mimeType }),
             };
         });

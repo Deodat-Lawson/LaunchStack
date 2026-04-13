@@ -79,10 +79,15 @@ export async function POST(
       // Look up the target version and verify it actually belongs to this
       // document. Without this check a caller could revert Document A to use
       // a version row from Document B.
+      // Also pull url + mimeType so we can mirror them onto the document row
+      // below, keeping the legacy `document.url` / `document.mimeType`
+      // denormalized cache in lockstep with the currently-selected version.
       const [targetVersion] = await db
         .select({
           id: documentVersions.id,
           versionNumber: documentVersions.versionNumber,
+          url: documentVersions.url,
+          mimeType: documentVersions.mimeType,
         })
         .from(documentVersions)
         .where(
@@ -117,9 +122,20 @@ export async function POST(
         );
       }
 
+      // Flip the current-version pointer AND refresh the legacy url/mimeType
+      // fields so every non-version-aware read path sees the right blob.
+      // Same rationale as the versions POST route: `document.url` is the
+      // legacy "document's blob" field used by DocumentViewer, fetchDocument,
+      // and anything else that predates versioning. Leaving it stale causes
+      // the main viewer to keep showing the previously-current version after
+      // revert.
       await db
         .update(document)
-        .set({ currentVersionId: BigInt(targetVersion.id) })
+        .set({
+          currentVersionId: BigInt(targetVersion.id),
+          url: targetVersion.url,
+          mimeType: targetVersion.mimeType,
+        })
         .where(eq(document.id, documentId));
 
       console.log(

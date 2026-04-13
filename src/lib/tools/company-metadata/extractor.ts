@@ -17,7 +17,7 @@
  */
 
 import { z } from "zod";
-import { eq } from "drizzle-orm";
+import { and, eq, isNull, or, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { documentContextChunks, document as documentTable } from "~/server/db/schema";
@@ -231,7 +231,23 @@ export async function extractCompanyFacts(
         return null;
     }
 
-    // 2. Fetch all chunks, sorted by page
+    // 2. Fetch chunks for the CURRENT version only, sorted by page.
+    //
+    // The join + version filter is important: without it, this query returns
+    // chunks from every historical version of the document. On a doc with N
+    // versions that's N× the chunks and N× the input tokens into the LLM
+    // call below, plus it re-extracts facts from content that was already
+    // processed when prior versions uploaded — wasted work that scales
+    // super-linearly because structured output latency grows with prompt size.
+    //
+    // The semantics also match RAG: the company metadata should reflect the
+    // document's *current* authoritative content, not a union of every
+    // historical claim. Reverting to an old version will cause the next run
+    // to re-extract from that version's chunks, which is the correct behavior.
+    //
+    // The IS NULL branches preserve Phase-1 rollout safety: if the document
+    // or its chunks predate the versioning backfill, we fall through to
+    // returning all chunks rather than hiding them.
     const chunks = await db
         .select({
             content: documentContextChunks.content,
@@ -239,7 +255,20 @@ export async function extractCompanyFacts(
             semanticType: documentContextChunks.semanticType,
         })
         .from(documentContextChunks)
-        .where(eq(documentContextChunks.documentId, BigInt(documentId)));
+        .innerJoin(
+            documentTable,
+            eq(documentContextChunks.documentId, documentTable.id),
+        )
+        .where(
+            and(
+                eq(documentContextChunks.documentId, BigInt(documentId)),
+                or(
+                    isNull(documentTable.currentVersionId),
+                    isNull(documentContextChunks.versionId),
+                    sql`${documentContextChunks.versionId} = ${documentTable.currentVersionId}`,
+                ),
+            ),
+        );
 
     if (chunks.length === 0) {
         console.warn(

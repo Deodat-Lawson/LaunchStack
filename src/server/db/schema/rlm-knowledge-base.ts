@@ -286,8 +286,20 @@ export const documentMetadata = pgTable(
         ),
     },
     (table) => ({
-        documentIdUnique: uniqueIndex("doc_metadata_document_id_unique").on(
-            table.documentId
+        // Prior to versioning, metadata was a single row per document.
+        // With versioning, each version of a document gets its own metadata
+        // row (summary, token count, complexity, etc. are computed per-version
+        // during the OCR pipeline). Uniqueness is now scoped to the pair.
+        //
+        // Note: PostgreSQL treats NULLs as distinct in unique indexes by
+        // default, so during the Phase 1 transition — when some rows may
+        // still have version_id = NULL from unbackfilled data — multiple
+        // NULL-versioned rows could technically coexist. After backfill runs
+        // everywhere this degenerates to strict (document_id, version_id)
+        // uniqueness.
+        documentVersionUnique: uniqueIndex("doc_metadata_document_version_unique").on(
+            table.documentId,
+            table.versionId
         ),
         complexityIdx: index("doc_metadata_complexity_idx").on(table.complexityScore),
         documentClassIdx: index("doc_metadata_class_idx").on(table.documentClass),

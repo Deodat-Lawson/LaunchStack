@@ -335,11 +335,41 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     return () => clearInterval(interval);
   }, [selectedDoc, fetchDocuments]);
 
-  // Sync selectedDoc when the documents list refreshes (e.g. after OCR completes)
+  // Sync selectedDoc when the documents list refreshes.
+  //
+  // This runs whenever fetchDocuments() repopulates the `documents` array,
+  // which happens on initial load, after deletes, after OCR polling, and
+  // crucially after a new version is uploaded (the VersionHistoryPanel
+  // calls onVersionsChanged -> fetchDocuments to refresh the list).
+  //
+  // The original effect only handled the "ocrProcessed: false -> true"
+  // transition — that missed the version-upload case entirely, because
+  // on version upload the selected document's ocrProcessed is already true
+  // (it was set to true the first time the document was processed). So the
+  // effect would early-return and `selectedDoc.url` would stay pinned to
+  // whichever version was current when the user first clicked the sidebar
+  // entry, ignoring any subsequent version swaps. The visible symptom was
+  // the main viewer continuing to render the old blob in an iframe even
+  // though the DB had been updated with the new one.
+  //
+  // The fix: compare the relevant fields explicitly and only call
+  // setSelectedDoc when something meaningful actually changed. We intentionally
+  // do NOT unconditionally setSelectedDoc(updated), because every call to
+  // fetchDocuments produces new object references even for unchanged rows,
+  // which would cause an extra render on every refresh with no value change.
   useEffect(() => {
-    if (!selectedDoc || selectedDoc.ocrProcessed !== false) return;
+    if (!selectedDoc) return;
     const updated = documents.find((d) => d.id === selectedDoc.id);
-    if (updated && updated.ocrProcessed === true) {
+    if (!updated) return;
+
+    const hasChanged =
+      updated.url !== selectedDoc.url ||
+      updated.mimeType !== selectedDoc.mimeType ||
+      updated.ocrProcessed !== selectedDoc.ocrProcessed ||
+      updated.title !== selectedDoc.title ||
+      updated.category !== selectedDoc.category;
+
+    if (hasChanged) {
       setSelectedDoc(updated);
     }
   }, [documents, selectedDoc]);
@@ -434,6 +464,25 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
           url: `/api/documents/${previewVersion.documentId}/versions/${previewVersion.versionId}/content`,
         }
       : selectedDoc;
+
+  /**
+   * Callback passed into every non-minimal `DocumentViewer` so it can render
+   * a visible "Versions" button in its header. Only wired for employers —
+   * for employees we pass undefined and the button won't render.
+   *
+   * Uses `selectedDoc` (not `displayDoc`) so the modal always opens for the
+   * canonical document, not the preview variant. They share the same id and
+   * title so the difference is cosmetic, but this avoids any future confusion
+   * if `displayDoc` ever diverges from `selectedDoc` in other fields.
+   */
+  const openVersionHistoryForSelected =
+    userRole === "employer" && selectedDoc
+      ? () =>
+          setVersionHistoryTarget({
+            id: selectedDoc.id,
+            title: selectedDoc.title,
+          })
+      : undefined;
 
   const requestDeleteDocument = (docId: number) => {
     setDeleteConfirmDocId(docId);
@@ -708,10 +757,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
               {qaSubMode === "simple" ? (
                 <ResizablePanelGroup direction="horizontal" className="h-full">
                   <ResizablePanel defaultSize={65} minSize={40}>
-                    <DocumentViewer 
-                      document={displayDoc} 
+                    <DocumentViewer
+                      document={displayDoc}
                       pdfPageNumber={pdfPageNumber}
                       setPdfPageNumber={setPdfPageNumber}
+                      onOpenVersionHistory={openVersionHistoryForSelected}
                     />
                   </ResizablePanel>
                   
@@ -810,15 +860,16 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         return (
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={60} minSize={35}>
-              <DocumentViewer 
-                document={displayDoc} 
+              <DocumentViewer
+                document={displayDoc}
                 pdfPageNumber={pdfPageNumber}
                 setPdfPageNumber={setPdfPageNumber}
+                onOpenVersionHistory={openVersionHistoryForSelected}
               />
             </ResizablePanel>
-            
+
             <ResizableHandle className="w-px bg-border" />
-            
+
             <ResizablePanel defaultSize={40} minSize={28} maxSize={55}>
               <DocumentSanityChecker 
                 selectedDoc={selectedDoc}
@@ -845,10 +896,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         );
       case "document-only":
         return (
-          <DocumentViewer 
-            document={displayDoc} 
+          <DocumentViewer
+            document={displayDoc}
             pdfPageNumber={pdfPageNumber}
             setPdfPageNumber={setPdfPageNumber}
+            onOpenVersionHistory={openVersionHistoryForSelected}
           />
         );
       case "generator":
@@ -878,13 +930,14 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         return (
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={60} minSize={35}>
-              <DocumentViewer 
-                document={displayDoc} 
+              <DocumentViewer
+                document={displayDoc}
                 pdfPageNumber={pdfPageNumber}
                 setPdfPageNumber={setPdfPageNumber}
+                onOpenVersionHistory={openVersionHistoryForSelected}
               />
             </ResizablePanel>
-            
+
             <ResizableHandle className="w-px bg-border" />
             
             <ResizablePanel defaultSize={40} minSize={25} maxSize={50}>

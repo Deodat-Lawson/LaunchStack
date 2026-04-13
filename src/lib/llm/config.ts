@@ -61,8 +61,16 @@ const LlmConfigSchema = z.object({
 const HARDCODED_DEFAULTS: LlmConfig = {
   providerPriority: ["openai", "anthropic", "google", "ollama"],
   capabilities: {
+    // Small extraction tasks (metadata, field extraction, classification).
+    // These models are specifically chosen to be *non-reasoning*: the task
+    // is straightforward schema-guided extraction, not chain-of-thought.
+    // Reasoning models (gpt-5-nano, o1, o3, etc.) consistently take 15–30
+    // seconds per call even on tiny inputs because they spend most of their
+    // wall-clock time on internal CoT — wildly inappropriate for a capability
+    // whose whole point is "cheap and fast." The original project hardcoded
+    // gpt-5-nano in company-metadata/extractor.ts; do not restore it here.
     smallExtraction: {
-      openai: { model: "gpt-5-nano", temperature: 0 },
+      openai: { model: "gpt-4o-mini", temperature: 0 },
       anthropic: { model: "claude-3-5-haiku-latest", temperature: 0 },
       google: { model: "gemini-2.0-flash", temperature: 0 },
       ollama: { model: "llama3.2:3b", temperature: 0 },

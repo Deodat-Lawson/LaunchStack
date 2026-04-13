@@ -35,6 +35,22 @@ import type { OurFileRouter } from "~/app/api/uploadthing/core";
 const { uploadFiles } = genUploader<OurFileRouter>();
 
 /**
+ * Shape of the upload bootstrap response we need here. We only read a few
+ * fields — everything else the endpoint returns is ignored.
+ */
+interface UploadBootstrap {
+  isUploadThingConfigured: boolean;
+  storageProvider: "cloud" | "local";
+  s3Endpoint?: string;
+}
+
+interface PresignResponse {
+  presignedUrl: string;
+  objectKey: string;
+  bucket: string;
+}
+
+/**
  * Shape of a single version as returned by `GET /api/documents/[id]/versions`.
  * Kept permissive because the server may evolve; unknown fields are ignored.
  */
@@ -113,28 +129,206 @@ export function VersionHistoryPanel({
   const [busyVersionId, setBusyVersionId] = useState<number | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  // Storage config fetched from the same bootstrap endpoint UploadForm uses.
+  // Null while loading — we block uploads until it resolves so we never fire
+  // against an unknown storage backend.
+  const [bootstrap, setBootstrap] = useState<UploadBootstrap | null>(null);
 
-  const loadVersions = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  const loadBootstrap = useCallback(async () => {
     try {
-      const res = await fetch(`/api/documents/${documentId}/versions`);
+      const res = await fetch("/api/employer/upload/bootstrap");
       if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? `HTTP ${res.status}`);
+        // Non-fatal — we'll fall back to assuming Vercel Blob / database
+        // storage below if bootstrap can't be fetched. A failed bootstrap
+        // shouldn't kill the rest of the panel (version list, revert, delete
+        // still work without storage info).
+        console.warn(
+          `[VersionHistoryPanel] bootstrap fetch failed: HTTP ${res.status}`
+        );
+        setBootstrap({ isUploadThingConfigured: false, storageProvider: "cloud" });
+        return;
       }
-      const json = (await res.json()) as VersionListResponse;
-      setData(json);
+      const json = (await res.json()) as UploadBootstrap;
+      setBootstrap({
+        isUploadThingConfigured: Boolean(json.isUploadThingConfigured),
+        storageProvider: json.storageProvider ?? "cloud",
+        s3Endpoint: json.s3Endpoint,
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setLoading(false);
+      console.warn("[VersionHistoryPanel] bootstrap fetch threw:", err);
+      setBootstrap({ isUploadThingConfigured: false, storageProvider: "cloud" });
     }
-  }, [documentId]);
+  }, []);
+
+  /**
+   * Fetch the current versions list from the server.
+   *
+   * When `silent: true`, we don't flip the `loading` state or clear `error`.
+   * This is used by the background polling loop below — we don't want the
+   * entire panel to flash into a loading spinner every 2 seconds while a
+   * version is processing.
+   */
+  const loadVersions = useCallback(
+    async (opts?: { silent?: boolean }) => {
+      const silent = opts?.silent ?? false;
+      if (!silent) {
+        setLoading(true);
+        setError(null);
+      }
+      try {
+        const res = await fetch(`/api/documents/${documentId}/versions`);
+        if (!res.ok) {
+          const body = (await res.json().catch(() => ({}))) as { error?: string };
+          throw new Error(body.error ?? `HTTP ${res.status}`);
+        }
+        const json = (await res.json()) as VersionListResponse;
+        setData(json);
+      } catch (err) {
+        // Silent polling errors are swallowed — we don't want a transient
+        // 500 mid-poll to wipe the panel's displayed data. Non-silent
+        // errors (initial load, manual refresh) are surfaced.
+        if (!silent) {
+          setError(err instanceof Error ? err.message : String(err));
+        } else {
+          console.warn("[VersionHistoryPanel] silent poll failed:", err);
+        }
+      } finally {
+        if (!silent) {
+          setLoading(false);
+        }
+      }
+    },
+    [documentId],
+  );
 
   useEffect(() => {
     void loadVersions();
-  }, [loadVersions]);
+    void loadBootstrap();
+  }, [loadVersions, loadBootstrap]);
+
+  /**
+   * Background polling while any version is still being processed.
+   *
+   * The version panel's data is fetched once on mount and once after each
+   * user action. That doesn't cover the time window between "upload
+   * finished, pipeline started" and "pipeline finished, ocrProcessed is
+   * now true" — during that window, the panel shows stale "Processing"
+   * state forever unless the user triggers a refetch manually.
+   *
+   * Rather than polling always, we poll *only* when the server's most
+   * recent response still reports at least one version with
+   * `ocrProcessed === false`. That makes the polling load exactly
+   * proportional to work-in-progress: idle when nothing is processing,
+   * active during processing, automatically stops when finalizeStorage
+   * flips the flag to true.
+   *
+   * Interval is 2 seconds — fast enough that users see the "Ready" state
+   * within a few hundred milliseconds of it becoming true in the DB, but
+   * not so fast that it hammers the API. The server query is cheap
+   * (a simple SELECT from document_versions), so 2s is comfortable.
+   */
+  useEffect(() => {
+    if (!data) return;
+    const anyProcessing = data.versions.some((v) => v.ocrProcessed === false);
+    if (!anyProcessing) return;
+
+    const interval = setInterval(() => {
+      void loadVersions({ silent: true });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [data, loadVersions]);
+
+  /**
+   * Result of pushing raw bytes to whichever storage backend is active.
+   * `storagePathname` is only populated for the local-S3 path — the versions
+   * registration endpoint uses it to know the object key for future deletes.
+   */
+  interface BlobUploadResult {
+    url: string;
+    storagePathname?: string;
+  }
+
+  /**
+   * Upload the file to blob storage using the same three-path strategy the
+   * regular UploadForm uses. Ordered by preference:
+   *
+   *   1. Local SeaweedFS presigned S3 — used when the app is configured
+   *      for local storage (`NEXT_PUBLIC_STORAGE_PROVIDER=local`). The
+   *      browser uploads directly to the S3-compatible endpoint via a
+   *      short-lived presigned URL from `/api/storage/presign`.
+   *   2. UploadThing — used when `UPLOADTHING_TOKEN` is set on the server.
+   *      Direct browser-to-cloud upload with no Next server hop.
+   *   3. Database-backed fallback via `/api/upload-local` — posts the file
+   *      to the Next server which stores it via Vercel Blob + a row in
+   *      `file_uploads`. Used when neither of the above is available.
+   *
+   * If bootstrap hasn't loaded yet (`bootstrap === null`) we conservatively
+   * take path 3, since it doesn't depend on any client-side config.
+   */
+  const uploadBlob = async (file: File): Promise<BlobUploadResult> => {
+    // Path 1: local SeaweedFS (presigned S3)
+    if (bootstrap?.storageProvider === "local" && bootstrap.s3Endpoint) {
+      const presignRes = await fetch("/api/storage/presign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type || "application/octet-stream",
+        }),
+      });
+      if (!presignRes.ok) {
+        const body = await presignRes.text().catch(() => "");
+        throw new Error(`Presign failed (HTTP ${presignRes.status}): ${body}`);
+      }
+      const { presignedUrl, objectKey, bucket } =
+        (await presignRes.json()) as PresignResponse;
+
+      const s3Res = await fetch(presignedUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type || "application/octet-stream" },
+        body: file,
+      });
+      if (!s3Res.ok) {
+        throw new Error(`Direct S3 upload failed (HTTP ${s3Res.status})`);
+      }
+
+      return {
+        url: `${bootstrap.s3Endpoint.replace(/\/+$/, "")}/${bucket}/${objectKey}`,
+        storagePathname: objectKey,
+      };
+    }
+
+    // Path 2: UploadThing (only when server confirms the token is set)
+    if (bootstrap?.isUploadThingConfigured) {
+      const uploadRes = await uploadFiles("documentUploaderRestricted", {
+        files: [file],
+      });
+      const uploaded = uploadRes?.[0];
+      if (!uploaded?.url) {
+        throw new Error("UploadThing upload did not return a file URL");
+      }
+      return { url: uploaded.url };
+    }
+
+    // Path 3: database-backed fallback via /api/upload-local
+    const fd = new FormData();
+    fd.append("file", file);
+    const localRes = await fetch("/api/upload-local", {
+      method: "POST",
+      body: fd,
+    });
+    if (!localRes.ok) {
+      const body = (await localRes.json().catch(() => ({}))) as {
+        error?: string;
+      };
+      throw new Error(
+        body.error ?? `Local upload failed (HTTP ${localRes.status})`
+      );
+    }
+    const json = (await localRes.json()) as { url: string };
+    return { url: json.url };
+  };
 
   const handleFilePicked = async (file: File) => {
     if (!data?.fileType) {
@@ -156,29 +350,33 @@ export function VersionHistoryPanel({
     setUploadError(null);
     setUploading(true);
     try {
-      // Stage 1: push the raw bytes to blob storage via UploadThing. Mirrors
-      // the existing single-file upload path in UploadForm.tsx.
-      const uploadRes = await uploadFiles("documentUploaderRestricted", {
-        files: [file],
-      });
-      const uploaded = uploadRes?.[0];
-      if (!uploaded) {
-        throw new Error("Upload did not return a file URL");
-      }
+      // Stage 1: push the raw bytes to whichever storage backend is active.
+      // The helper mirrors UploadForm's three-path strategy so version
+      // uploads work in every deployment the regular upload supports.
+      const uploaded = await uploadBlob(file);
 
       // Stage 2: register the new version against the document. Server will
       // trigger the OCR pipeline and flip currentVersionId.
+      const registerBody: Record<string, unknown> = {
+        documentUrl: uploaded.url,
+        mimeType: file.type,
+        originalFilename: file.name,
+        fileSize: file.size,
+      };
+      // Forward local-S3 metadata when we used path 1, mirroring the shape
+      // `POST /api/uploadDocument` expects so future delete/blob cleanup
+      // can identify the object key.
+      if (uploaded.storagePathname) {
+        registerBody.storageProvider = "seaweedfs";
+        registerBody.storagePathname = uploaded.storagePathname;
+      }
+
       const registerRes = await fetch(
         `/api/documents/${documentId}/versions`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            documentUrl: uploaded.url,
-            mimeType: file.type,
-            originalFilename: file.name,
-            fileSize: file.size,
-          }),
+          body: JSON.stringify(registerBody),
         }
       );
 
@@ -356,6 +554,15 @@ export function VersionHistoryPanel({
                 const isOnlyVersion = data.versions.length === 1;
                 const canDelete = !v.isCurrent && !isOnlyVersion;
                 const canRevert = !v.isCurrent;
+                // "View" for the current version is a no-op in inline-preview
+                // mode — the main viewer is already showing it, and flipping
+                // into preview mode would show a misleading "not current"
+                // banner. Hide the View button in that specific combination.
+                // When the parent does NOT provide onPreviewVersion (new-tab
+                // fallback mode), View stays visible for every version since
+                // opening the current version in a new tab is still a valid
+                // "download" action.
+                const canView = !(v.isCurrent && onPreviewVersion);
                 const isBusy = busyVersionId === v.id;
 
                 return (
@@ -398,31 +605,33 @@ export function VersionHistoryPanel({
                       </div>
 
                       <div className="flex items-center gap-1 flex-shrink-0">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7 rounded-md"
-                          title={
-                            onPreviewVersion
-                              ? "Preview this version in the viewer"
-                              : "View this version in a new tab"
-                          }
-                          disabled={isBusy}
-                          onClick={() => {
-                            if (onPreviewVersion) {
-                              onPreviewVersion(v.id, v.versionNumber);
-                              onClose();
-                            } else {
-                              window.open(
-                                `/api/documents/${documentId}/versions/${v.id}/content`,
-                                "_blank",
-                                "noopener,noreferrer"
-                              );
+                        {canView && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 rounded-md"
+                            title={
+                              onPreviewVersion
+                                ? "Preview this version in the viewer"
+                                : "View this version in a new tab"
                             }
-                          }}
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                        </Button>
+                            disabled={isBusy}
+                            onClick={() => {
+                              if (onPreviewVersion) {
+                                onPreviewVersion(v.id, v.versionNumber);
+                                onClose();
+                              } else {
+                                window.open(
+                                  `/api/documents/${documentId}/versions/${v.id}/content`,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                                );
+                              }
+                            }}
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </Button>
+                        )}
                         {canRevert && (
                           <Button
                             variant="ghost"

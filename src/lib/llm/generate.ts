@@ -42,18 +42,48 @@ export async function generateStructured<TSchema extends ZodType>(
 ): Promise<ReturnType<TSchema["parse"]>> {
   const resolved = resolveModel(input.capability, input.forceProvider);
 
-  const result = await generateObject({
-    model: resolved.model,
-    temperature: resolved.temperature,
-    schema: input.schema,
-    schemaName: input.schemaName,
-    system: input.system,
-    prompt: input.prompt,
-  });
+  // Diagnostic logging: capture the chosen provider/model, prompt size, and
+  // wall-clock duration for every call. This is intentionally verbose in
+  // dev so slowness in any specific capability surfaces in the console.
+  // If this becomes noisy in production, gate it behind an env flag.
+  const promptChars =
+    (input.system?.length ?? 0) + input.prompt.length;
+  const startedAt = Date.now();
+  console.log(
+    `[llm] generateStructured start capability=${input.capability} ` +
+      `provider=${resolved.provider} model=${resolved.modelId} ` +
+      `prompt=${promptChars} chars`,
+  );
 
-  // Cast is safe: `generateObject` returns `{ object: z.infer<TSchema> }`
-  // when given a Zod schema. The `ZodType` generic constraint is a
-  // pragmatic choice — it trades a small amount of type precision for
-  // simpler call-site ergonomics.
-  return result.object as ReturnType<TSchema["parse"]>;
+  try {
+    const result = await generateObject({
+      model: resolved.model,
+      temperature: resolved.temperature,
+      schema: input.schema,
+      schemaName: input.schemaName,
+      system: input.system,
+      prompt: input.prompt,
+    });
+
+    const elapsed = Date.now() - startedAt;
+    console.log(
+      `[llm] generateStructured ok  capability=${input.capability} ` +
+        `provider=${resolved.provider} model=${resolved.modelId} ` +
+        `${elapsed}ms`,
+    );
+
+    // Cast is safe: `generateObject` returns `{ object: z.infer<TSchema> }`
+    // when given a Zod schema. The `ZodType` generic constraint is a
+    // pragmatic choice — it trades a small amount of type precision for
+    // simpler call-site ergonomics.
+    return result.object as ReturnType<TSchema["parse"]>;
+  } catch (err) {
+    const elapsed = Date.now() - startedAt;
+    console.error(
+      `[llm] generateStructured FAIL capability=${input.capability} ` +
+        `provider=${resolved.provider} model=${resolved.modelId} ` +
+        `${elapsed}ms err=${err instanceof Error ? err.message : String(err)}`,
+    );
+    throw err;
+  }
 }

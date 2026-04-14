@@ -1551,9 +1551,11 @@ export function MarketingPipelineWorkspace({
                                   fontWeight: 700,
                                   textTransform: "uppercase",
                                   letterSpacing: "0.05em",
-                                  background:
-                                    result.dnaDebug.source === "metadata" ? "#dcfce7" : "#fef3c7",
-                                  color: result.dnaDebug.source === "metadata" ? "#166534" : "#92400e",
+                                  ...(result.dnaDebug.source === "metadata"
+                                    ? { background: "#dcfce7", color: "#166534" }
+                                    : result.dnaDebug.source === "metadata_and_rag"
+                                      ? { background: "#dbeafe", color: "#1e40af" }
+                                      : { background: "#fef3c7", color: "#92400e" }),
                                 }}
                               >
                                 {result.dnaDebug.source}

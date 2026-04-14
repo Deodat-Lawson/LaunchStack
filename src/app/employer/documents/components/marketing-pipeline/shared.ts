@@ -1,4 +1,5 @@
 import type { RewriteWorkflowStateSnapshot } from "~/app/employer/documents/components/generator/RewriteWorkflow";
+import type { DNADebugInfo as DNADebugInfoFromApi } from "~/lib/tools/marketing-pipeline/types";
 
 export type MarketingPlatform = "x" | "linkedin" | "reddit" | "bluesky";
 
@@ -64,17 +65,8 @@ export interface ThinkingEntry {
   timestamp: number;
 }
 
-export interface DNADebugInfo {
-  source: "metadata" | "rag";
-  contextUsed: string;
-  dna: {
-    coreMission: string;
-    keyDifferentiators: string[];
-    provenResults: string[];
-    humanStory: string;
-    technicalEdge: string;
-  };
-}
+/** DNA debug payload from `/api/marketing-pipeline` (kept in sync with server types). */
+export type DNADebugInfo = DNADebugInfoFromApi;
 
 export interface ContentVariantUI {
   variantId: string;

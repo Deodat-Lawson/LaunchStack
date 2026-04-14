@@ -65,6 +65,7 @@ interface LegalChatbotProps {
     prefilled: Record<string, string>,
   ) => void;
   initialMessage?: string;
+  contextDocumentIds?: number[];
 }
 
 // ─── Field carry-over helper ───────────────────────────────────────────────────
@@ -438,6 +439,7 @@ export function LegalChatbot({
   onBack,
   onContinueToTemplateForm,
   initialMessage,
+  contextDocumentIds,
 }: LegalChatbotProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -490,6 +492,9 @@ export function LegalChatbot({
           body: JSON.stringify({
             messages: apiMessages,
             accumulatedFields,
+            ...(contextDocumentIds && contextDocumentIds.length > 0
+              ? { contextDocumentIds }
+              : {}),
           }),
         });
 
@@ -578,7 +583,7 @@ export function LegalChatbot({
         setIsLoading(false);
       }
     },
-    [messages, isLoading, currentResponse, accumulatedFields]
+    [messages, isLoading, currentResponse, accumulatedFields, contextDocumentIds]
   );
 
   // Send initial message if provided

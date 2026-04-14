@@ -39,9 +39,9 @@ export async function buildCompanyKnowledgeContext(args: {
     const categoryNames = categoryRows.map((row) => row.name).filter(Boolean);
 
     let kbSnippets: string[] = [];
+    const isScoped = Boolean(documentIds && documentIds.length > 0);
     try {
         const embeddings = createOpenAIEmbeddings();
-        const isScoped = documentIds && documentIds.length > 0;
         const baseOptions: CompanySearchOptions = {
             companyId,
             topK: isScoped ? 10 : 6,
@@ -88,24 +88,41 @@ export async function buildCompanyKnowledgeContext(args: {
         console.warn("[marketing-pipeline] company KB context retrieval failed:", error);
     }
 
-    const contextParts = [
+    const kbBlock =
+        kbSnippets.length > 0
+            ? kbSnippets.map((s, i) => `${i + 1}. ${s}`).join(" | ")
+            : "No matching KB snippets found";
+
+    const directoryBlock = [
         `Company Name: ${companyInfo?.name ?? "Unknown Company"}`,
         ...(companyInfo?.description ? [`Company Description: ${companyInfo.description}`] : []),
         ...(companyInfo?.industry ? [`Industry / Sector: ${companyInfo.industry}`] : []),
         `Employee Count Range: ${companyInfo?.numberOfEmployees ?? "Unknown"}`,
         `Company Categories: ${categoryNames.length > 0 ? categoryNames.join(", ") : "None"}`,
-        `Knowledge Base Signals: ${
-            kbSnippets.length > 0 ? kbSnippets.map((s, i) => `${i + 1}. ${s}`).join(" | ") : "No matching KB snippets found"
-        }`,
     ];
 
-    return contextParts.join("\n");
+    // When the user pinned specific sources, those excerpts must lead — not the CRM directory fields.
+    if (isScoped) {
+        return [
+            "PRIMARY (user-selected documents): treat this as the source of truth for the prompt.",
+            `Knowledge Base Signals: ${kbBlock}`,
+            "",
+            "SECONDARY (company directory — may not match selected files):",
+            ...directoryBlock,
+        ].join("\n");
+    }
+
+    return [
+        ...directoryBlock,
+        `Knowledge Base Signals: ${kbBlock}`,
+    ].join("\n");
 }
 
 /**
- * Extract CompanyDNA using stored metadata when available, falling back to RAG.
+ * Extract CompanyDNA from structured metadata and/or indexed documents.
  *
- * Priority: company_metadata table → dual RAG queries → minimal fallback.
+ * - Scoped `documentIds`: RAG only (chosen files), never metadata-only.
+ * - Unscoped: merge curated metadata (if any) with company-wide RAG so uploads are never ignored.
  */
 export interface ExtractCompanyDNAResult {
     dna: CompanyDNA;
@@ -118,22 +135,46 @@ export async function extractCompanyDNA(args: {
     documentIds?: number[];
 }): Promise<ExtractCompanyDNAResult> {
     const { companyId, prompt, documentIds } = args;
+    const isScoped = Boolean(documentIds && documentIds.length > 0);
 
-    // When specific documents are selected, skip metadata and go straight to RAG
-    // so the DNA is derived only from the chosen context.
-    if (!documentIds || documentIds.length === 0) {
-        const metadataContext = await buildMetadataContext(companyId);
-        if (metadataContext) {
-            console.log("[marketing-pipeline] extractCompanyDNA: using METADATA for company %d", companyId);
-            const dna = await synthesizeDNA(metadataContext, prompt);
-            return { dna, debug: { source: "metadata", contextUsed: metadataContext, dna } };
-        }
+    if (isScoped) {
+        console.log(
+            "[marketing-pipeline] extractCompanyDNA: scoped RAG only for company %d (%d doc(s))",
+            companyId,
+            documentIds!.length,
+        );
+        const ragContext = await buildRAGContext(companyId, prompt, documentIds);
+        const dna = await synthesizeDNA(ragContext, prompt);
+        return { dna, debug: { source: "rag", contextUsed: ragContext, dna } };
     }
 
-    console.log("[marketing-pipeline] extractCompanyDNA: using RAG for company %d (documents=%s)", companyId, documentIds?.length ?? "all");
-    const ragContext = await buildRAGContext(companyId, prompt, documentIds);
-    const dna = await synthesizeDNA(ragContext, prompt);
-    return { dna, debug: { source: "rag", contextUsed: ragContext, dna } };
+    const [metadataContext, ragContext] = await Promise.all([
+        buildMetadataContext(companyId),
+        buildRAGContext(companyId, prompt, undefined),
+    ]);
+
+    const sections: string[] = [];
+    if (metadataContext) {
+        sections.push(
+            "=== Curated company profile (structured metadata) ===\n" + metadataContext,
+        );
+    }
+    sections.push(
+        "=== Knowledge base (uploaded & indexed documents) ===\n" + ragContext,
+    );
+
+    const mergedContext = sections.join("\n\n");
+    const source: DNADebugInfo["source"] = metadataContext ? "metadata_and_rag" : "rag";
+
+    console.log(
+        "[marketing-pipeline] extractCompanyDNA: company %d → %s (metadata=%s)",
+        companyId,
+        source,
+        metadataContext ? "yes" : "no",
+    );
+
+    const dna = await synthesizeDNA(mergedContext, prompt);
+    return { dna, debug: { source, contextUsed: mergedContext, dna } };
 }
 
 // ============================================================================
@@ -341,6 +382,8 @@ async function buildRAGContext(companyId: number, prompt: string, documentIds?: 
 const DNA_SYSTEM_PROMPT = `You are a strategist. Given company information, distill it into a structured CompanyDNA.
 Rules:
 - Use ONLY information present in the input. Do not invent.
+- The "Knowledge base" section contains raw document text; the "Curated company profile" section is structured metadata. If they disagree, prefer facts that appear in the knowledge base when they are concrete (names, numbers, stated facts).
+- If the user focus asks about specific content (e.g. a phrase, filename, or fact stated in an upload), reflect that in provenResults, technicalEdge, or humanStory as appropriate—do not substitute unrelated profile fields.
 - If something is missing, use a short placeholder like "Not specified" or an empty array.
 - coreMission: one sentence on what the company does and for whom.
 - keyDifferentiators: 2-5 short phrases (e.g. "open source", "no vendor lock-in").

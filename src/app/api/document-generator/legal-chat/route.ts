@@ -9,6 +9,8 @@ import { users } from "~/server/db/schema";
 import { companyMetadata } from "~/server/db/schema/company-metadata";
 import { TEMPLATE_REGISTRY } from "~/lib/legal-templates/template-service";
 import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
+import { buildCompanyKnowledgeContext } from "~/lib/tools/marketing-pipeline/context";
+import { assertDocumentIdsBelongToCompany } from "~/lib/knowledge/context-scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -23,6 +25,7 @@ const MessageSchema = z.object({
 const LegalChatSchema = z.object({
   messages: z.array(MessageSchema).min(1),
   accumulatedFields: z.record(z.coerce.string()).optional(),
+  contextDocumentIds: z.array(z.number().int().positive()).max(50).optional(),
 });
 
 // ─── Template summary for the LLM ─────────────────────────────────────────────
@@ -142,7 +145,8 @@ RULES:
 - When a user says something like "use this one" or "yes, that one" or "the first one", treat it as confirming the top recommended template.
 - If the user wants to switch templates, carry over any extractedFields whose keys exist in the new template.
 - Do NOT summarize or list already-collected fields in your message. The user can see them in a sidebar. Only ask about fields that are still missing.
-- When the user provides a value for a specific field (e.g. "Pro Rata Rights: no"), map it directly to the correct field key without asking for clarification.`;
+- When the user provides a value for a specific field (e.g. "Pro Rata Rights: no"), map it directly to the correct field key without asking for clarification.
+- If a "Knowledge base" section is present, use it for company-specific facts; do not contradict it with generic assumptions.`;
 }
 
 // ─── POST handler ──────────────────────────────────────────────────────────────
@@ -195,6 +199,32 @@ export async function POST(request: Request) {
 
     const companyId = Number(requestingUser.companyId);
 
+    let kbContext = "";
+    const ctxIds = parsed.data.contextDocumentIds?.length
+      ? [...new Set(parsed.data.contextDocumentIds)]
+      : undefined;
+    if (ctxIds?.length && !Number.isNaN(companyId)) {
+      const gate = await assertDocumentIdsBelongToCompany(ctxIds, companyId);
+      if (!gate.ok) {
+        return NextResponse.json(
+          { success: false, message: gate.message },
+          { status: gate.status },
+        );
+      }
+      const lastUser = [...parsed.data.messages]
+        .reverse()
+        .find((m) => m.role === "user");
+      const kbPrompt =
+        typeof lastUser?.content === "string"
+          ? lastUser.content.slice(0, 4000)
+          : "Legal assistant context";
+      kbContext = await buildCompanyKnowledgeContext({
+        companyId,
+        prompt: kbPrompt,
+        documentIds: ctxIds,
+      });
+    }
+
     // Fetch company metadata for pre-filling
     let companyDefaults: Record<string, string> = {};
     if (!Number.isNaN(companyId)) {
@@ -213,7 +243,11 @@ export async function POST(request: Request) {
 
     // Build conversation for the LLM
     const templateSummary = buildTemplateSummary();
-    const systemPrompt = buildSystemPrompt(templateSummary, companyDefaults);
+    const systemPrompt =
+      buildSystemPrompt(templateSummary, companyDefaults) +
+      (kbContext
+        ? `\n\n=== Knowledge base (selected documents only) ===\n${kbContext}`
+        : "");
 
     // Include field details when a template has been selected in prior messages
     const lastAssistantMsg = [...parsed.data.messages]

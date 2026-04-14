@@ -41,6 +41,7 @@ interface AgentChatInterfaceProps {
   selectedDocId?: number | null;
   companyId?: number | null;
   archiveName?: string | null;
+  contextDocumentIds?: number[];
   aiStyle?: string;
   aiPersona?: string;
   aiModel?: AIModelType;
@@ -60,6 +61,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   selectedDocId,
   companyId,
   archiveName,
+  contextDocumentIds,
   aiStyle = 'concise',
   aiPersona = 'general',
   aiModel = 'gpt-5.2',
@@ -233,6 +235,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
           companyId: (searchScope === "company" || searchScope === "archive") && companyId ? companyId : undefined,
           archiveName: searchScope === "archive" && archiveName ? archiveName : undefined,
+          contextDocumentIds,
         });
 
         if (!aiData) {

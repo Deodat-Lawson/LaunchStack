@@ -160,7 +160,8 @@ export type MarketingPipelineOutput = z.infer<typeof MarketingPipelineOutputSche
 
 /** Debug info about the DNA extraction source, included when ?debug=true. */
 export interface DNADebugInfo {
-    source: "metadata" | "rag";
+    /** metadata_and_rag = merged curated profile + KB; rag = KB only (incl. scoped docs). */
+    source: "metadata" | "rag" | "metadata_and_rag";
     contextUsed: string;
     dna: CompanyDNA;
 }

@@ -5,6 +5,7 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { MarketingPipelineInputSchema, runMarketingPipeline } from "~/lib/tools/marketing-pipeline";
 import type { PipelineSSEEvent } from "~/lib/tools/marketing-pipeline";
+import { assertDocumentIdsBelongToCompany } from "~/lib/knowledge/context-scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -59,6 +60,16 @@ export async function POST(request: Request) {
                 { success: false, message: "Invalid company ID" },
                 { status: 400 },
             );
+        }
+
+        if (validation.data.documentIds?.length) {
+            const gate = await assertDocumentIdsBelongToCompany(validation.data.documentIds, companyId);
+            if (!gate.ok) {
+                return NextResponse.json(
+                    { success: false, message: gate.message },
+                    { status: gate.status },
+                );
+            }
         }
 
         const url = new URL(request.url);

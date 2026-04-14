@@ -234,6 +234,8 @@ function buildPrompt(args: {
     research: MarketingResearchResult[];
     strategy?: MessagingStrategy;
     platformMeta?: PlatformMeta;
+    /** When the user pinned specific docs, we must honor explicit KB requests (names, codewords) over generic hooks. */
+    sourceDocumentIds?: number[];
 }): string {
   const parts = [
     `Selected platform: ${args.platform}`,
@@ -247,6 +249,17 @@ function buildPrompt(args: {
   ];
   if (args.strategy) {
     parts.push("", "Messaging strategy (use this angle and proof; respect avoid list):", formatStrategyBlock(args.strategy));
+  }
+
+  if (args.sourceDocumentIds?.length) {
+    parts.push(
+      "",
+      "── Selected knowledge sources (user pinned specific documents) ──",
+      "The company context is grounded in those uploads (plus directory fields). This is NOT generic web research.",
+      "- If the user prompt asks you to name, quote, or explicitly mention a concrete fact, phrase, codeword, or 'secret word' that appears in the company context, you MUST state it clearly in the post. Do not substitute a metaphor, unrelated anecdote, or 'Wordle-style' story when a literal answer exists in the context.",
+      "- If the user asks for something that does not appear in the company context, say so honestly in one short phrase or sentence, then write a reasonable post from what IS available.",
+      "- The user’s explicit instructions and verbatim KB facts outrank a clever hook: satisfy the explicit ask first, then deliver the narrative.",
+    );
   }
 
   if (args.platformMeta?.subreddit) {
@@ -273,7 +286,15 @@ function buildPrompt(args: {
     args.strategy
       ? "- Write ONE post using the messaging strategy angle and proof; respect the avoid list."
       : "- Pick ONE angle — a tension, trend, or insight — and commit to it.",
-    "- Open with a hook that creates curiosity or contrast. Never open with an announcement or generic statement.",
+    args.sourceDocumentIds?.length
+      ? "- If the user asked you to state a specific fact, phrase, codeword, or quote from the materials first, put that in the opening lines (that can be your hook), then transition into the broader story."
+      : "",
+    args.sourceDocumentIds?.length
+      ? "- If the user prompt has multiple parts (e.g. answer a factual question, then discuss the company), cover them in that order."
+      : "",
+    args.sourceDocumentIds?.length
+      ? "- If you did not open with a required verbatim fact from the user prompt, open with a hook that creates curiosity or contrast (never a hollow announcement)."
+      : "- Open with a hook that creates curiosity or contrast. Never open with an announcement or generic statement.",
     "- Build a short narrative arc: hook → insight/story → takeaway → CTA/question.",
     "- Write as a person sharing what they've learned, not a brand listing features.",
     "- NEVER list features as bullet points. Weave capabilities into the narrative naturally.",
@@ -338,6 +359,7 @@ export async function generateCampaignOutput(args: {
     strategy?: MessagingStrategy;
     enableQualityGate?: boolean;
     platformMeta?: PlatformMeta;
+    sourceDocumentIds?: number[];
 }): Promise<{
   platform: MarketingPlatform;
   message: string;
@@ -354,7 +376,7 @@ export async function generateCampaignOutput(args: {
     name: "marketing_pipeline_output",
   });
 
-  const response = await model.invoke([
+    const response = await model.invoke([
     new SystemMessage(systemPrompt),
     new HumanMessage(buildPrompt({
       platform: args.platform,
@@ -363,6 +385,7 @@ export async function generateCampaignOutput(args: {
       research: args.research,
       strategy: args.strategy,
       platformMeta: args.platformMeta,
+      sourceDocumentIds: args.sourceDocumentIds,
     })),
   ]);
 
@@ -458,6 +481,8 @@ export async function generateVariants(args: {
   brandVoice?: BrandVoice;
   targetPersona?: TargetPersona;
   contentType?: ContentType;
+  /** User-pinned docs — enables stricter honoring of verbatim facts in the prompt. */
+  sourceDocumentIds?: number[];
 }): Promise<ContentVariant[]> {
   const results = await Promise.all(
     args.strategies.map(async (strategy) => {
@@ -487,6 +512,7 @@ export async function generateVariants(args: {
           research: args.research,
           strategy: strategyAsMessaging,
           platformMeta: args.platformMeta,
+          sourceDocumentIds: args.sourceDocumentIds,
         })),
       ]);
 

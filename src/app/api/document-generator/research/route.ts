@@ -20,6 +20,7 @@ import {
 } from "~/lib/tools/rag";
 import { performTavilySearch } from "~/app/api/agents/documentQ&A/services/tavilySearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
+import { assertDocumentIdsBelongToCompany } from "~/lib/knowledge/context-scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -270,6 +271,15 @@ export async function POST(request: Request) {
                         topK: Math.min(maxResults, 10),
                         companyId,
                     };
+
+                    if (options?.documentIds?.length) {
+                        const gate = await assertDocumentIdsBelongToCompany(options.documentIds, companyId);
+                        if (!gate.ok) {
+                            console.warn("[Research] Document scope validation failed:", gate.message);
+                            return;
+                        }
+                        searchOptions.documentIds = [...new Set(options.documentIds)];
+                    }
 
                     const searchResults: SearchResult[] = await companyEnsembleSearch(
                         query,

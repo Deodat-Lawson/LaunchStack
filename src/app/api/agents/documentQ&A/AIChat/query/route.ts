@@ -32,6 +32,7 @@ import {
 } from "../../services";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
+import { assertDocumentIdsBelongToCompany } from "~/lib/knowledge/context-scope";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -49,6 +50,27 @@ const qaAnnOptimizer = new ANNOptimizer({
 });
 
 const COMPANY_SCOPE_ROLES = new Set(["employer", "owner"]);
+
+function buildGroundingAddendum(args: {
+    searchScope: "document" | "company" | "archive";
+    contextDocumentIds?: number[];
+}): string {
+    const narrowedSubset =
+        Boolean(args.contextDocumentIds?.length) &&
+        (args.searchScope === "company" || args.searchScope === "archive");
+    const singleDoc = args.searchScope === "document";
+    if (!singleDoc && !narrowedSubset) {
+        return "";
+    }
+
+    return `
+
+GROUNDING (mandatory for this request):
+- Answer ONLY from the "Relevant document content" below. Do not invent a marketing story, thought-leadership narrative, or long analogy unless the user clearly asks for that tone.
+- For questions that seek a specific fact (e.g. a "secret word", password, name, number, or date), state that fact directly first—no extended setup. Quote or closely paraphrase the excerpts.
+- CRM or directory profile information is NOT part of these excerpts unless it appears verbatim in them—do not fill gaps with generic company boilerplate.
+- If the excerpts do not contain the answer, say the material reviewed does not state it.`;
+}
 
 /**
  * AIChat Query - Comprehensive search solution
@@ -94,6 +116,7 @@ export async function POST(request: Request) {
                 style,
                 searchScope,
                 archiveName,
+                contextDocumentIds,
                 enableWebSearch,
                 aiPersona,
                 aiModel,
@@ -207,7 +230,7 @@ export async function POST(request: Request) {
                     .from(document)
                     .where(and(
                         eq(document.sourceArchiveName, archiveName),
-                        eq(document.companyId, String(numericCompanyId))
+                        eq(document.companyId, BigInt(numericCompanyId))
                     ));
 
                 archiveDocumentIds = archiveDocs.map(d => d.id);
@@ -220,11 +243,33 @@ export async function POST(request: Request) {
                 }
             }
 
+            if (searchScope === "company" && contextDocumentIds?.length) {
+                const gate = await assertDocumentIdsBelongToCompany(contextDocumentIds, numericCompanyId);
+                if (!gate.ok) {
+                    recordResult("error");
+                    return NextResponse.json({ success: false, message: gate.message }, { status: gate.status });
+                }
+            }
+
+            if (searchScope === "archive" && archiveDocumentIds?.length && contextDocumentIds?.length) {
+                const allow = new Set(contextDocumentIds);
+                archiveDocumentIds = archiveDocumentIds.filter((id) => allow.has(id));
+                if (archiveDocumentIds.length === 0) {
+                    recordResult("error");
+                    return NextResponse.json({
+                        success: false,
+                        message: "None of your selected context documents are in this archive.",
+                    }, { status: 400 });
+                }
+            }
+
             // Perform comprehensive search
             const embeddings = getEmbeddings();
             let documents: SearchResult[] = [];
             retrievalMethod = searchScope === "company"
-                ? 'company_ensemble_rrf'
+                ? contextDocumentIds?.length
+                    ? "company_ensemble_rrf_scoped"
+                    : "company_ensemble_rrf"
                 : searchScope === "archive"
                     ? 'archive_ensemble_rrf'
                     : 'document_ensemble_rrf';
@@ -233,8 +278,9 @@ export async function POST(request: Request) {
                 if (searchScope === "company") {
                     const companyOptions: CompanySearchOptions = {
                         weights: [0.4, 0.6],
-                        topK: 10,
-                        companyId: numericCompanyId
+                        topK: contextDocumentIds?.length ? 12 : 10,
+                        companyId: numericCompanyId,
+                        ...(contextDocumentIds?.length ? { documentIds: contextDocumentIds } : {}),
                     };
                     
                     documents = await companyEnsembleSearch(
@@ -357,13 +403,21 @@ export async function POST(request: Request) {
             const combinedContent = documents
                 .map((doc, idx) => {
                     const page = doc.metadata?.page ?? 'Unknown';
+                    const docTitle =
+                        (typeof doc.title === "string" && doc.title.length > 0
+                            ? doc.title
+                            : undefined) ??
+                        (typeof doc.metadata?.documentTitle === "string"
+                            ? doc.metadata.documentTitle
+                            : undefined) ??
+                        "Unknown document";
                     const source = doc.metadata?.source ?? retrievalMethod;
                     const distance = doc.metadata?.distance ?? 0;
                     const relevanceScore = Math.round((1 - Number(distance)) * 100);
                     
-                    console.log(`📄 [AIChat] Document ${idx + 1}: page ${page}, source: ${source}, relevance: ${relevanceScore}%`);
+                    console.log(`📄 [AIChat] Document ${idx + 1}: "${docTitle}" page ${page}, source: ${source}, relevance: ${relevanceScore}%`);
                     
-                    return `=== Chunk #${idx + 1}, Page ${page} ===\n${doc.pageContent}`;
+                    return `=== Chunk #${idx + 1} | File: ${docTitle} | Page ${page} ===\n${doc.pageContent}`;
                 })
                 .join("\n\n");
             
@@ -401,7 +455,11 @@ export async function POST(request: Request) {
             }
 
             // Build comprehensive prompts
-            const systemPrompt = getSystemPrompt(selectedStyle, aiPersona);
+            const grounding = buildGroundingAddendum({
+                searchScope: searchScope ?? "document",
+                contextDocumentIds,
+            });
+            const systemPrompt = getSystemPrompt(selectedStyle, aiPersona) + grounding;
             const webSearchInstruction = getWebSearchInstruction(
                 enableWebSearchFlag,
                 webSearch.results,
@@ -409,7 +467,7 @@ export async function POST(request: Request) {
                 webSearch.reasoning
             );
 
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${webSearchInstruction}\n\nProvide a natural, conversational answer based primarily on the provided content. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${webSearchInstruction}\n\nAnswer based primarily on the provided excerpts above. Be direct when the question asks for a specific fact. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation where appropriate.`;
             
             let response;
             try {

@@ -106,9 +106,11 @@ export function DocumentContextSelector({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md max-h-[80vh] flex flex-col gap-0 p-0 overflow-hidden">
           <DialogHeader className="px-5 pt-5 pb-3 border-b border-border space-y-1">
-            <DialogTitle className="text-base">Pipeline Sources</DialogTitle>
+            <DialogTitle className="text-base">Knowledge sources</DialogTitle>
             <DialogDescription className="text-xs">
-              Select which documents to use as context. Company metadata is always included.
+              Choose which indexed files are eligible for retrieval. When you narrow the list, Q&amp;A and search
+              only pull text from those files—not from every upload. The row below is your company profile (name,
+              industry, etc.); it is not a substitute for the text inside your selected files.
             </DialogDescription>
           </DialogHeader>
 
@@ -120,10 +122,10 @@ export function DocumentContextSelector({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-                  Company Context
+                  Company profile (directory)
                 </div>
                 <div className="text-[11px] text-emerald-600/70 dark:text-emerald-400/60">
-                  Name, industry, metadata — always included
+                  Basic org fields — separate from file contents above
                 </div>
               </div>
               <div className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">

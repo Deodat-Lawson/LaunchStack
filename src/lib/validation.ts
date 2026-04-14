@@ -112,6 +112,7 @@ export const QuestionSchema = z
     style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
     searchScope: z.enum(["document", "company", "archive"]).optional(),
     archiveName: z.string().optional(),
+    contextDocumentIds: z.array(z.number().int().positive()).max(50).optional(),
     enableWebSearch: z.boolean().optional().default(false),
     aiPersona: z.enum(aiPersonaOptions).optional(),
     aiModel: z.enum(aiModelOptions).optional(),
@@ -122,13 +123,17 @@ export const QuestionSchema = z
     assertProviderModelCombination(data.provider, data.aiModel, ctx);
   })
   .transform((data) => {
+    const raw = data.contextDocumentIds;
+    const contextDocumentIds =
+      raw && raw.length > 0 ? [...new Set(raw)] : undefined;
     return {
       documentId: data.documentId,
       companyId: data.companyId,
       question: data.question,
-      style: (data.style ?? "concise") as const,
-      searchScope: (data.searchScope ?? "document") as const,
+      style: (data.style ?? "concise") as "concise" | "detailed" | "academic" | "bullet-points",
+      searchScope: (data.searchScope ?? "document") as "document" | "company" | "archive",
       archiveName: data.archiveName,
+      contextDocumentIds,
       enableWebSearch: data.enableWebSearch ?? false,
       aiPersona: data.aiPersona ?? "general",
       aiModel: data.aiModel,
@@ -263,7 +268,7 @@ export const RLMQuestionSchema = z
     return {
       documentId: data.documentId,
       question: data.question,
-      style: (data.style ?? "concise") as const,
+      style: (data.style ?? "concise") as "concise" | "detailed" | "academic" | "bullet-points",
       enableWebSearch: data.enableWebSearch ?? false,
       aiPersona: data.aiPersona ?? "general",
       aiModel: data.aiModel,
@@ -273,7 +278,7 @@ export const RLMQuestionSchema = z
       includeOverview: data.includeOverview ?? true,
       includePreviews: data.includePreviews ?? false,
       semanticTypes: data.semanticTypes,
-      prioritize: (data.prioritize ?? "relevance") as const,
+      prioritize: (data.prioritize ?? "relevance") as "start" | "end" | "relevance",
       pageRange: data.pageRange,
     };
   });

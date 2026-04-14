@@ -499,6 +499,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setAiQuestion("");
 
     try {
+      const scopeContextIds =
+        (searchScope === "company" || searchScope === "archive") && contextDocumentIds.length > 0
+          ? contextDocumentIds
+          : undefined;
+
       const data = await sendAIChatQuery({
         question: currentQuestion,
         searchScope,
@@ -508,6 +513,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
         companyId: (searchScope === "company" || searchScope === "archive") ? resolvedCompanyId ?? undefined : undefined,
         archiveName: searchScope === "archive" && selectedDoc?.sourceArchiveName ? selectedDoc.sourceArchiveName : undefined,
+        contextDocumentIds: scopeContextIds,
       });
 
       if (!data) throw new Error("Failed to get AI response");
@@ -736,6 +742,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                                 else previewPanelRef.current?.collapse();
                               }}
                               userRole={userRole}
+                              contextDocumentIds={contextDocumentIds}
                             />
                           </ResizablePanel>
                           

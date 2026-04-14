@@ -60,6 +60,7 @@ interface ChatPanelProps {
   isPreviewCollapsed?: boolean;
   onTogglePreview?: () => void;
   userRole?: 'employer' | 'employee';
+  contextDocumentIds?: number[];
 }
 
 const styleConfig = [
@@ -127,6 +128,7 @@ export function ChatPanel({
   isPreviewCollapsed,
   onTogglePreview,
   userRole = 'employer',
+  contextDocumentIds = [],
 }: ChatPanelProps) {
   const showCompanyScope = userRole === 'employer';
   const hasArchive = !!selectedDoc?.sourceArchiveName;
@@ -368,6 +370,11 @@ export function ChatPanel({
           selectedDocId={selectedDoc?.id}
           companyId={companyId}
           archiveName={selectedDoc?.sourceArchiveName}
+          contextDocumentIds={
+            (searchScope === "company" || searchScope === "archive") && contextDocumentIds.length > 0
+              ? contextDocumentIds
+              : undefined
+          }
           aiStyle={aiStyle}
           aiPersona={aiPersona}
           provider={provider}

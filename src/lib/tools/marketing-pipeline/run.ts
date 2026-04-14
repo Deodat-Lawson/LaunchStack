@@ -389,6 +389,7 @@ export async function runMarketingPipeline(args: {
     brandVoice,
     targetPersona,
     contentType: normalizedInput.contentType,
+    sourceDocumentIds: scopedDocIds,
   });
   emitComplete("generating-content", t5,
     `Generated ${variants.length} variant${variants.length !== 1 ? "s" : ""}: ${variants.map((v) => v.variantId).join(", ")}`,

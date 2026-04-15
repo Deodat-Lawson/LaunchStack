@@ -51,3 +51,4 @@ yarn-error.log*
 
 # kiro
 .kiro
+models/

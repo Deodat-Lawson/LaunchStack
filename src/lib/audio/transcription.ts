@@ -1,11 +1,13 @@
 /**
  * Audio Transcription Service
- * 
- * Handles transcription of MP3/MP4 audio files using the sidecar Whisper endpoint.
- * Converts audio files to text for processing through the standard document pipeline.
+ *
+ * Handles transcription of MP3/MP4 audio files.
+ * Uses Whisper.js (@huggingface/transformers) for local transcription —
+ * no Python sidecar needed.
  */
 
 import { fetchBlob } from "~/server/storage/vercel-blob";
+import { transcribeWithWhisperJS } from "./whisper-js";
 
 const SIDECAR_URL = process.env.SIDECAR_URL || "http://localhost:8000";
 
@@ -70,7 +72,9 @@ export function shouldTranscribeFile(
 }
 
 /**
- * Transcribe audio file by downloading from URL and sending to sidecar
+ * Transcribe audio file by downloading from URL.
+ * Prefers the Python sidecar (higher quality) when available,
+ * falls back to Whisper.js (WASM) when sidecar is not running.
  */
 export async function transcribeAudioFromUrl(
   audioUrl: string,
@@ -79,7 +83,6 @@ export async function transcribeAudioFromUrl(
   try {
     console.log(`[TranscribeAudio] Fetching audio from: ${audioUrl}`);
 
-    // Fetch the audio file (use fetchBlob to handle private Vercel Blob URLs)
     const audioResponse = await fetchBlob(audioUrl);
     if (!audioResponse.ok) {
       throw new Error(`Failed to fetch audio file: ${audioResponse.statusText}`);
@@ -89,25 +92,36 @@ export async function transcribeAudioFromUrl(
     const audioBuffer = Buffer.from(audioArrayBuffer);
     console.log(`[TranscribeAudio] Downloaded audio: ${filename} (${audioBuffer.length} bytes)`);
 
-    // Send to sidecar for transcription
-    const formData = new FormData();
-    const audioBlob = new Blob([audioBuffer], { type: "application/octet-stream" });
-    formData.append("file", audioBlob, filename);
+    // Try sidecar first (better quality, faster)
+    if (SIDECAR_URL) {
+      try {
+        const healthCheck = await fetch(`${SIDECAR_URL}/health`, { signal: AbortSignal.timeout(2000) }).catch(() => null);
+        if (healthCheck?.ok) {
+          console.log(`[TranscribeAudio] Using sidecar at ${SIDECAR_URL}`);
+          const formData = new FormData();
+          const audioBlob = new Blob([audioBuffer], { type: "application/octet-stream" });
+          formData.append("file", audioBlob, filename);
 
-    console.log(`[TranscribeAudio] Sending to sidecar: ${SIDECAR_URL}/transcribe`);
+          const transcribeResponse = await fetch(`${SIDECAR_URL}/transcribe`, {
+            method: "POST",
+            body: formData as unknown as BodyInit,
+          });
 
-    const transcribeResponse = await fetch(`${SIDECAR_URL}/transcribe`, {
-      method: "POST",
-      body: formData as any,
-    });
-
-    if (!transcribeResponse.ok) {
-      const errorText = await transcribeResponse.text();
-      throw new Error(`Transcription failed: ${transcribeResponse.statusText} - ${errorText}`);
+          if (transcribeResponse.ok) {
+            const result = (await transcribeResponse.json()) as TranscriptionResult;
+            console.log(`[TranscribeAudio] Sidecar complete: ${filename} → ${result.text.length} chars, lang=${result.language}`);
+            return result;
+          }
+        }
+      } catch {
+        console.log(`[TranscribeAudio] Sidecar not available, falling back to Whisper.js`);
+      }
     }
 
-    const result = (await transcribeResponse.json()) as TranscriptionResult;
-    console.log(`[TranscribeAudio] Complete: ${filename} → ${result.text.length} chars, lang=${result.language}`);
+    // Fallback: Whisper.js (local WASM, no sidecar needed)
+    console.log(`[TranscribeAudio] Running Whisper.js locally...`);
+    const result = await transcribeWithWhisperJS(audioBuffer, filename);
+    console.log(`[TranscribeAudio] Complete: ${filename} → ${result.text.length} chars, ${result.segments.length} segments`);
 
     return result;
   } catch (error) {

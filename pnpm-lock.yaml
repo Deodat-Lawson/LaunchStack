@@ -332,6 +332,9 @@ importers:
       remark-math:
         specifier: ^6.0.0
         version: 6.0.0
+      sherpa-onnx-node:
+        specifier: ^1.12.38
+        version: 1.12.38
       sonner:
         specifier: ^2.0.3
         version: 2.0.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -8329,6 +8332,39 @@ packages:
   shell-quote@1.8.3:
     resolution: {integrity: sha512-ObmnIF4hXNg1BqhnHmgbDETF8dLPCggZWBjkQfhZpbszZnYur5DUljTcCHii5LC3J5E0yeO/1LIMyH+UvHQgyw==}
     engines: {node: '>= 0.4'}
+
+  sherpa-onnx-darwin-arm64@1.12.38:
+    resolution: {integrity: sha512-UIU8gyA2t0oYRobkf2MGUeo0KMjuNn+rHP3y1xZPoZinEVdo+56rUXIJBUbIWmVX4W6mkdKSOHU/ouRKt138vQ==}
+    cpu: [arm64]
+    os: [darwin]
+
+  sherpa-onnx-darwin-x64@1.12.38:
+    resolution: {integrity: sha512-+Wa/RmmZys7UzP9nUnaBq9+npj5LrQ73amqFO5cFX5CycYV1h36Dv+X2nyTYYp1nmt7oI/eKg7VPIvv8iMcHxQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  sherpa-onnx-linux-arm64@1.12.38:
+    resolution: {integrity: sha512-sZmH66L6o1QNBh2MYgFFUTsbqEj1q+uwV0ChBIH6nVDHYQBtPyBndbcXv+KmJQSRpTBmRGET10CYZsK5Y+SCpA==}
+    cpu: [arm64]
+    os: [linux]
+
+  sherpa-onnx-linux-x64@1.12.38:
+    resolution: {integrity: sha512-2kZmoD8kE077gKu5AWYB5P5giqDOjKVd20PvUjdu3+tu6FhFXGiAywP2biTu7ivloWiKtx8nygnih+cCHigx6A==}
+    cpu: [x64]
+    os: [linux]
+
+  sherpa-onnx-node@1.12.38:
+    resolution: {integrity: sha512-WrfTnQd9uy6Y6aJisnS1X7lELLzc/Q/w6Gi3zj8VawTNL1HIPIAYeKVLuDaxio/0IHanrz0hgu7VIIiDGJkwCQ==}
+
+  sherpa-onnx-win-ia32@1.12.38:
+    resolution: {integrity: sha512-NBluqnyXM2DemURbTnGPdkpRSQGlhJ+8RbtxFt6hRYSaJ7gTN0154rJ6IebHI7UiZSuXe3r8ZYUs3UZYqhplAQ==}
+    cpu: [ia32]
+    os: [win32]
+
+  sherpa-onnx-win-x64@1.12.38:
+    resolution: {integrity: sha512-D7kimY7oosJID+9gTZI3g/Pc43/3ZYQ6EP8rpBhCGTDlND9DaDXpOS7aUCVqUAVRZU3+w6rZyE0s9LVuWoo/9w==}
+    cpu: [x64]
+    os: [win32]
 
   side-channel-list@1.0.0:
     resolution: {integrity: sha512-FCLHtRD/gnpCiCHEiJLOwdmFP+wzCmDEkc9y7NsYxeF4u7Btsn1ZuwgwJGxImImHicJArLP4R0yX4c2KCrMrTA==}
@@ -18154,6 +18190,33 @@ snapshots:
   shebang-regex@3.0.0: {}
 
   shell-quote@1.8.3: {}
+
+  sherpa-onnx-darwin-arm64@1.12.38:
+    optional: true
+
+  sherpa-onnx-darwin-x64@1.12.38:
+    optional: true
+
+  sherpa-onnx-linux-arm64@1.12.38:
+    optional: true
+
+  sherpa-onnx-linux-x64@1.12.38:
+    optional: true
+
+  sherpa-onnx-node@1.12.38:
+    optionalDependencies:
+      sherpa-onnx-darwin-arm64: 1.12.38
+      sherpa-onnx-darwin-x64: 1.12.38
+      sherpa-onnx-linux-arm64: 1.12.38
+      sherpa-onnx-linux-x64: 1.12.38
+      sherpa-onnx-win-ia32: 1.12.38
+      sherpa-onnx-win-x64: 1.12.38
+
+  sherpa-onnx-win-ia32@1.12.38:
+    optional: true
+
+  sherpa-onnx-win-x64@1.12.38:
+    optional: true
 
   side-channel-list@1.0.0:
     dependencies:

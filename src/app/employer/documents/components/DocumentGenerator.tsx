@@ -118,37 +118,30 @@ export function DocumentGenerator() {
     setCurrentView('chat');
   };
 
-  const handleChatGenerate = (templateId: string, data: Record<string, string>) => {
-    const registryTemplate = TEMPLATE_REGISTRY[templateId];
-    if (!registryTemplate) return;
-
-    // Build a DocumentTemplate to reuse the existing generate flow
-    const template: DocumentTemplate = {
-      id: registryTemplate.id,
-      name: registryTemplate.name,
+  const buildDocumentTemplate = (templateId: string): DocumentTemplate | null => {
+    const reg = TEMPLATE_REGISTRY[templateId];
+    if (!reg) return null;
+    return {
+      id: reg.id,
+      name: reg.name,
       category: 'Legal',
-      description: registryTemplate.description,
+      description: reg.description,
       preview: '',
       isLegal: true,
-      fields: registryTemplate.fields,
+      fields: reg.fields,
     };
+  };
+
+  const handleChatGenerate = (templateId: string, data: Record<string, string>) => {
+    const template = buildDocumentTemplate(templateId);
+    if (!template) return;
     setSelectedTemplate(template);
     void handleLegalGenerate(data, template);
   };
 
   const handleChatReviewFields = (templateId: string, prefilled: Record<string, string>) => {
-    const registryTemplate = TEMPLATE_REGISTRY[templateId];
-    if (!registryTemplate) return;
-
-    const template: DocumentTemplate = {
-      id: registryTemplate.id,
-      name: registryTemplate.name,
-      category: 'Legal',
-      description: registryTemplate.description,
-      preview: '',
-      isLegal: true,
-      fields: registryTemplate.fields,
-    };
+    const template = buildDocumentTemplate(templateId);
+    if (!template) return;
     setSelectedTemplate(template);
     setPrefilledData(prefilled);
     setLegalFieldErrors({});

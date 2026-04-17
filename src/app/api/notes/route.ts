@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { documentNotes } from "~/server/db/schema";
 import { eq, and, desc, ilike, arrayContains } from "drizzle-orm";
+import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
 
 export async function GET(request: Request) {
   try {
@@ -54,20 +55,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = (await request.json()) as {
-      documentId?: string;
-      companyId?: string;
-      title?: string;
-      content?: string;
-      tags?: string[];
-    };
-
-    if (!body.title && !body.content) {
-      return NextResponse.json(
-        { error: "At least one of title or content is required" },
-        { status: 400 }
-      );
-    }
+    const validation = await validateRequestBody(request, CreateNoteSchema);
+    if (!validation.success) return validation.response;
+    const body = validation.data;
 
     const [note] = await db
       .insert(documentNotes)

@@ -17,10 +17,17 @@ const REASONING_MODELS: ReadonlySet<string> = new Set([
   "gpt-5-nano",
 ]);
 
+/** When AI_BASE_URL is set, we're using a custom OpenAI-compatible provider
+ *  and should accept any model string (DeepSeek, Qwen, etc.) */
+const AI_BASE_URL = process.env.AI_BASE_URL;
+const AI_API_KEY = process.env.AI_API_KEY;
+const isCustomProvider = !!AI_BASE_URL;
+
 function getServerModelOverride(provider: LLMProvider): string | undefined {
   switch (provider) {
     case "openai":
-      return env.server.OPENAI_MODEL;
+      // CHAT_MODEL takes priority over OPENAI_MODEL (provider-agnostic naming)
+      return env.server.CHAT_MODEL ?? env.server.OPENAI_MODEL;
     case "anthropic":
       return env.server.ANTHROPIC_MODEL;
     case "google":
@@ -33,7 +40,16 @@ function getServerModelOverride(provider: LLMProvider): string | undefined {
 function coerceModel(
   provider: LLMProvider,
   requested?: AIModelType,
-): AIModelType {
+): string {
+  // When using a custom OpenAI-compatible provider (AI_BASE_URL),
+  // accept any model string — don't validate against the allowlist
+  if (isCustomProvider && provider === "openai") {
+    if (requested) return requested;
+    const envValue = getServerModelOverride(provider);
+    if (envValue) return envValue;
+    return ProviderDefaultModels[provider];
+  }
+
   if (requested && isModelAllowedForProvider(provider, requested)) {
     return requested;
   }
@@ -46,7 +62,7 @@ function coerceModel(
   return ProviderDefaultModels[provider];
 }
 
-export function getProviderDefaultModel(provider: LLMProvider): AIModelType {
+export function getProviderDefaultModel(provider: LLMProvider): string {
   return coerceModel(provider);
 }
 
@@ -70,10 +86,13 @@ export function getChatModelForProvider(opts: {
   const { provider, temperature, timeoutMs } = opts;
   const modelName = coerceModel(provider, opts.model);
 
-  if (!(ProviderModelMap[provider] as readonly string[]).includes(modelName)) {
-    throw new Error(
-      `Model \"${String(modelName)}\" is not supported for provider \"${String(provider)}\"`,
-    );
+  // Skip allowlist validation when using a custom provider (AI_BASE_URL)
+  if (!(isCustomProvider && provider === "openai")) {
+    if (!(ProviderModelMap[provider] as readonly string[]).includes(modelName)) {
+      throw new Error(
+        `Model \"${String(modelName)}\" is not supported for provider \"${String(provider)}\"`,
+      );
+    }
   }
 
   switch (provider) {
@@ -102,10 +121,12 @@ export function getChatModelForProvider(opts: {
     default: {
       const useTemp = !REASONING_MODELS.has(modelName);
       return new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || AI_API_KEY,
         modelName,
         ...(useTemp ? { temperature: temperature ?? 0.7 } : {}),
         timeout: timeoutMs ?? 600_000,
+        // Route to custom provider when AI_BASE_URL is set
+        ...(AI_BASE_URL ? { configuration: { baseURL: AI_BASE_URL } } : {}),
       });
     }
   }

@@ -5,7 +5,7 @@ import { eq, inArray } from "drizzle-orm";
 import { validateRequestBody, UserIdSchema } from "~/lib/validation";
 import { auth } from '@clerk/nextjs/server';
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
-import { isLocalStorage } from "~/lib/storage";
+import { isS3Storage } from "~/lib/storage";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -144,7 +144,7 @@ export async function POST(request: Request) {
                 ?? inferMimeFromName(doc.title)
                 ?? inferMimeFromName(doc.url);
             const needsProxy = isPrivateBlobUrl(doc.url)
-                || (isLocalStorage() && doc.url.startsWith("http"));
+                || (isS3Storage() && doc.url.startsWith("http"));
             const url = needsProxy
                 ? `/api/documents/${Number(doc.id)}/content`
                 : doc.url;

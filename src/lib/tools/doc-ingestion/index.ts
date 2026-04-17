@@ -24,6 +24,8 @@ import type {
 } from "~/lib/ocr/types";
 import { db } from "~/server/db";
 import { ocrJobs, documentContextChunks } from "~/server/db/schema";
+import { debitTokens, embeddingTokens, ocrTokens, ocrProviderToTokenKey } from "~/lib/credits";
+import { isCloudMode } from "~/lib/providers/registry";
 
 import type {
   DocIngestionToolInput,
@@ -250,6 +252,9 @@ async function vectorizeWithOpenAI(
           model: "text-embedding-3-large",
           dimensions: 1536,
         });
+        console.log(
+          `[Vectorize] Batch ${i + 1} embedded: ${embedResult.totalTokens} tokens, ${embedResult.processingTimeMs}ms`,
+        );
         const vectorized = mergeWithEmbeddings(batch, embedResult.embeddings);
         const sections = await storeBatch(documentId, rootStructureId, vectorized);
         return { batchIndex: i, stored: sections.length };
@@ -277,18 +282,20 @@ async function maybeExtractEntities(
   companyId: string,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
 ): Promise<void> {
-  if (!sidecarUrl || storedSections.length === 0) return;
+  if (storedSections.length === 0) return;
 
-  await runStep("step-f-graph-rag", async () => {
+  // In sidecar mode, check health first. In cloud mode, always proceed (uses LLM-based NER).
+  if (sidecarUrl) {
     const sidecarHealthy = await fetch(`${sidecarUrl}/health`)
       .then((response) => response.ok)
       .catch(() => false);
-
     if (!sidecarHealthy) {
       console.warn("[DocIngestionTool] Step F skipped: sidecar unhealthy");
-      return null;
+      return;
     }
+  }
 
+  await runStep("step-f-graph-rag", async () => {
     const { extractAndStoreEntities } = await import(
       "~/lib/ingestion/entity-extraction"
     );
@@ -383,6 +390,7 @@ export async function runDocIngestionTool(
     companyId,
     mimeType,
     originalFilename,
+    isWebsite,
     options,
     runtime,
   } = input;
@@ -458,6 +466,7 @@ export async function runDocIngestionTool(
               mimeType,
               filename: routingFilename,
               forceOCR: options?.forceOCR,
+              isWebsite,
             });
             await savePipelineState(jobId, "pages", normalizedDoc.pages);
             return {
@@ -478,6 +487,7 @@ export async function runDocIngestionTool(
               mimeType,
               filename: routingFilename,
               forceOCR: options?.forceOCR,
+              isWebsite,
             });
             return {
               pages: normalizedDoc.pages,
@@ -574,6 +584,45 @@ export async function runDocIngestionTool(
         );
         storedSections = result.storedSections;
         totalStored = result.totalStored;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Credit debits (cloud mode only)
+    // -----------------------------------------------------------------------
+    if (isCloudMode() && companyId) {
+      const bigCompanyId = BigInt(companyId);
+
+      // Embedding credits: estimate from total content length (~4 chars per token)
+      if (totalStored > 0) {
+        const estimatedTokens = Math.ceil(
+          chunks.reduce((sum, c) => sum + c.content.length / 4, 0),
+        );
+        const embedCost = embeddingTokens(estimatedTokens);
+        await debitTokens({
+          companyId: bigCompanyId,
+          amount: embedCost,
+          service: "embedding",
+          description: `Embed ${totalStored} chunks for document ${documentId}`,
+          referenceId: String(documentId),
+          metadata: { estimatedTokens, chunks: totalStored },
+        }).catch((err) => console.warn("[DocIngestion] Embedding credit debit failed:", err));
+      }
+
+      // OCR credits: based on provider and page count
+      if (normSummary.pageCount > 0 && normSummary.provider !== "NATIVE_PDF") {
+        const providerKey = ocrProviderToTokenKey(normSummary.provider);
+        const credits = ocrTokens(normSummary.pageCount, providerKey);
+        if (credits > 0) {
+          await debitTokens({
+            companyId: bigCompanyId,
+            amount: credits,
+            service: `ocr_${providerKey}` as any,
+            description: `OCR ${normSummary.pageCount} pages via ${normSummary.provider}`,
+            referenceId: String(documentId),
+            metadata: { pages: normSummary.pageCount, provider: normSummary.provider },
+          }).catch((err) => console.warn("[DocIngestion] OCR credit debit failed:", err));
+        }
       }
     }
 

@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { agentAiChatbotToolCall } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { validateRequestBody, CreateToolCallSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -11,20 +12,9 @@ export const maxDuration = 300;
 // POST /api/agent-ai-chatbot/tools - Create a tool call
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as {
-      messageId?: string;
-      taskId?: string;
-      toolName?: string;
-      toolInput?: unknown;
-    };
-    const { messageId, taskId, toolName, toolInput } = body;
-
-    if (!messageId || !toolName || !toolInput) {
-      return NextResponse.json(
-        { error: "messageId, toolName, and toolInput are required" },
-        { status: 400 }
-      );
-    }
+    const validation = await validateRequestBody(request, CreateToolCallSchema);
+    if (!validation.success) return validation.response;
+    const { messageId, taskId, toolName, toolInput } = validation.data;
 
     const toolCallId = randomUUID();
 

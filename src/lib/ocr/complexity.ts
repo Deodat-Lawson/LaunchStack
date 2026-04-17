@@ -1,46 +1,26 @@
+/**
+ * Document complexity analysis and OCR routing.
+ * Delegates heavy work (vision classification, PDF rendering) to the ocr-router sidecar.
+ * Falls back to env-based heuristics if the sidecar is unavailable.
+ */
+
 import type { OCRProvider } from "~/lib/ocr/types";
-import type { ClassificationResult } from "@huggingface/transformers";
-import { PDFDocument } from "pdf-lib";
-import { fetchFile } from "~/lib/storage";
-
-const SAMPLING_CONFIG = {
-    MIN_PAGES_TO_SAMPLE: 3,
-    MAX_PAGES_TO_SAMPLE: 5,
-    VISION_MODEL_ID: "google/siglip-base-patch16-224",
-    CONFIDENCE_THRESHOLD: 0.60,
-    RENDER_SCALE: 2,
-  };
-
-const COMPLEX_LABELS = [
-  "handwritten notes",
-  "messy scanned document",
-  "receipt or invoice",
-  "complex table structure"
-];
-
-const SIMPLE_LABELS = [
-  "digital text document",
-  "clean screenshot",
-  "blank page"
-];
-
-const ALL_COMPLEXITY_LABELS = [...COMPLEX_LABELS, ...SIMPLE_LABELS];
-
-interface VisionClassification {
-  label: string;
-  score: number;
-}
 
 export interface RoutingDecision {
   provider: OCRProvider;
   reason: string;
   confidence: number;
-  pageCount: number; 
-  visionResult?: VisionClassification;
+  pageCount: number;
+  visionResult?: { label: string; score: number };
 }
 
+const OCR_ROUTER_URL = process.env.OCR_ROUTER_URL ?? "http://ocr-router:8002";
+
+/**
+ * Selects representative sample pages for analysis.
+ */
 export function selectSamplePages(totalPages: number): number[] {
-  if (totalPages <= SAMPLING_CONFIG.MIN_PAGES_TO_SAMPLE) {
+  if (totalPages <= 3) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
@@ -54,174 +34,103 @@ export function selectSamplePages(totalPages: number): number[] {
     pages.add(randomPage);
   }
 
-  return Array.from(pages).sort((a, b) => a - b).slice(0, SAMPLING_CONFIG.MAX_PAGES_TO_SAMPLE);
+  return Array.from(pages)
+    .sort((a, b) => a - b)
+    .slice(0, 5);
 }
 
-async function runVisionCheck(images: Uint8Array[]): Promise<VisionClassification> {
-  console.log("Loading Vision Model (SigLIP) - lazy import with WASM backend...");
-  const { pipeline } = await import("@huggingface/transformers");
-
-  const classifier = await pipeline("zero-shot-image-classification", SAMPLING_CONFIG.VISION_MODEL_ID);
-
-  let maxComplexityScore = 0;
-  let dominantLabel = "digital text document";
-
-  for (const image of images) {
-    const result = await classifier(image, ALL_COMPLEXITY_LABELS) as ClassificationResult[];
-    const topMatch = result[0];
-
-    if (topMatch && COMPLEX_LABELS.includes(topMatch.label)) {
-      if (topMatch.score > maxComplexityScore) {
-        maxComplexityScore = topMatch.score;
-        dominantLabel = topMatch.label;
-      }
-    }
-  }
-
-  if (maxComplexityScore === 0 && images.length > 0) {
-     const result = await classifier(images[0]!, ALL_COMPLEXITY_LABELS) as ClassificationResult[];
-     const firstResult = result[0];
-     if (firstResult) {
-       return { label: firstResult.label, score: firstResult.score };
-     }
-  }
-
-  return { label: dominantLabel, score: maxComplexityScore };
-}
-
-export async function renderPagesToImages(buffer: ArrayBuffer, pageIndices: number[]): Promise<Uint8Array[]> {
+/**
+ * Renders PDF pages to PNG images via the ocr-router sidecar.
+ * Used by processor.ts for VLM enrichment.
+ */
+export async function renderPagesToImages(
+  buffer: ArrayBuffer,
+  pageIndices: number[]
+): Promise<Uint8Array[]> {
   try {
-    const { fromBuffer } = await import("pdf2pic");
-
-    const converter = fromBuffer(Buffer.from(buffer), {
-      density: 200,
-      format: "png",
-      width: 1024,
-      height: 1448,
+    const response = await fetch(`${OCR_ROUTER_URL}/render-pages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        buffer: Buffer.from(buffer).toString("base64"),
+        pageIndices,
+      }),
     });
 
-    const images: Uint8Array[] = [];
-
-    for (const pageIndex of pageIndices) {
-      try {
-        const result = await converter(pageIndex, { responseType: "buffer" });
-        if (result?.buffer) {
-          images.push(result.buffer);
-        }
-      } catch (pageError: unknown) {
-        const errorMessage = pageError instanceof Error ? pageError.message : String(pageError);
-        if (!errorMessage.includes('page number')) {
-          console.warn(`Failed to render page ${pageIndex}:`, pageError);
-        }
-      }
+    if (!response.ok) {
+      const err = await response.text();
+      console.warn(`OCR router render-pages failed (${response.status}): ${err}`);
+      return [];
     }
 
-    return images;
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'unknown error';
-    console.warn(`PDF rendering unavailable (${errorMessage}), falling back to OCR`);
+    const { images } = (await response.json()) as { images: string[] };
+    return images.map((b64) => new Uint8Array(Buffer.from(b64, "base64")));
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`OCR router unreachable for render-pages: ${message}`);
     return [];
   }
 }
 
 function getDefaultOCRProvider(): OCRProvider {
+  const configured = process.env.OCR_DEFAULT_PROVIDER?.toUpperCase();
+  if (configured === "MARKER" || configured === "DOCLING") {
+    if (process.env.OCR_WORKER_URL) return configured as OCRProvider;
+  }
+  if (process.env.OCR_WORKER_URL) return "DOCLING";
   if (process.env.AZURE_DOC_INTELLIGENCE_KEY && process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT) return "AZURE";
   if (process.env.LANDING_AI_API_KEY) return "LANDING_AI";
   if (process.env.DATALAB_API_KEY) return "DATALAB";
-  return "NATIVE_PDF";
+  return "DOCLING";
 }
 
-export async function determineDocumentRouting(documentUrl: string): Promise<RoutingDecision> {
-  const response = await fetchFile(documentUrl);
-  const buffer = await response.arrayBuffer();
-
-  let pageCount = 0;
-  let hasInteractiveForms = false;
-
+/**
+ * Determines the optimal OCR provider for a document by delegating to the
+ * ocr-router sidecar (which runs the vision model and PDF analysis).
+ * Falls back to a simple env-based default if the sidecar is unavailable.
+ */
+export async function determineDocumentRouting(
+  documentUrl: string
+): Promise<RoutingDecision> {
   try {
-    const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-    pageCount = doc.getPageCount();
-    hasInteractiveForms = doc.getForm().getFields().length > 0;
-    
-    if (hasInteractiveForms) {
-      return {
-        provider: "NATIVE_PDF",
-        reason: "Interactive form fields detected",
-        confidence: 0.99,
-        pageCount
-      };
-    }
-  } catch (e) {
-    console.warn("PDF Structure load failed, assuming standard processing needed", e);
-    pageCount = 1; 
-  }
+    const response = await fetch(`${OCR_ROUTER_URL}/route`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        documentUrl,
+        env: {
+          OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER ?? "",
+          OCR_WORKER_URL: process.env.OCR_WORKER_URL ?? "",
+          AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY ?? "",
+          AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT ?? "",
+          LANDING_AI_API_KEY: process.env.LANDING_AI_API_KEY ?? "",
+          DATALAB_API_KEY: process.env.DATALAB_API_KEY ?? "",
+          // AI vision keys — ocr-router uses OpenAI-compatible vision for classification
+          OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "",
+          AI_API_KEY: process.env.AI_API_KEY ?? "",
+          AI_BASE_URL: process.env.AI_BASE_URL ?? "",
+          OCR_VISION_MODEL: process.env.OCR_VISION_MODEL ?? "",
+        },
+      }),
+    });
 
-try {
-    const { default: pdfParse } = await import("pdf-parse");
-    const data = await pdfParse(new Uint8Array(buffer));
-    const sampleText = data.text.substring(0, 200).trim();
-
-    if (sampleText.length > 50) {
-      return {
-        provider: "NATIVE_PDF",
-        reason: `Text layer detected (sampled ~${sampleText.length} chars)`,
-        confidence: 0.95,
-        pageCount: pageCount || data.numpages
-      };
-    }
-  } catch (e: unknown) {
-    const err = e as { code?: string; path?: string };
-    if (err.code !== 'ENOENT' || !err.path?.includes('test/data')) {
-      console.warn("Text extraction failed, proceeding to vision check.", e);
-    }
-  }
-
-  try {
-    const pagesToSample = selectSamplePages(pageCount);
-    const images = await renderPagesToImages(buffer, pagesToSample);
-
-    if (images.length === 0) {
-       const fallback = getDefaultOCRProvider();
-       return {
-         provider: fallback,
-         reason: `No text layer detected, using ${fallback}`,
-         confidence: 0.5,
-         pageCount
-        };
+    if (!response.ok) {
+      const err = await response.text();
+      console.warn(`OCR router /route failed (${response.status}): ${err}`);
+      throw new Error(`OCR router returned ${response.status}`);
     }
 
-    const visionResult = await runVisionCheck(images);
+    return (await response.json()) as RoutingDecision;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`OCR router unavailable, using default provider: ${message}`);
 
-    if (COMPLEX_LABELS.includes(visionResult.label) && visionResult.score > SAMPLING_CONFIG.CONFIDENCE_THRESHOLD) {
-      return {
-        provider: "LANDING_AI",
-        reason: `Vision detected '${visionResult.label}'`,
-        confidence: visionResult.score,
-        visionResult,
-        pageCount
-      };
-    }
-
-    const cleanFallback = getDefaultOCRProvider();
+    const fallback = getDefaultOCRProvider();
     return {
-      provider: cleanFallback,
-      reason: `Vision detected clean layout '${visionResult.label}', using ${cleanFallback}`,
-      confidence: visionResult.score,
-      visionResult,
-      pageCount
-    };
-
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    const errorFallback = getDefaultOCRProvider();
-    if (!errorMessage.includes('ENOENT')) {
-      console.warn(`Vision routing failed, defaulting to ${errorFallback}:`, errorMessage);
-    }
-    return {
-      provider: errorFallback,
-      reason: `Defaulting to ${errorFallback}`,
+      provider: fallback,
+      reason: `OCR router unavailable, defaulting to ${fallback}`,
       confidence: 0.5,
-      pageCount
+      pageCount: 0,
     };
   }
 }

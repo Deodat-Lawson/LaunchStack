@@ -15,31 +15,12 @@ import {
   type RelationshipType,
 } from "~/server/db/schema";
 import { eq, and, sql } from "drizzle-orm";
+import { getNERProvider } from "~/lib/providers/ner";
+import { debitTokens } from "~/lib/credits";
+import { isCloudMode } from "~/lib/providers/registry";
 
 function isEntityLabel(s: string): s is EntityLabel {
   return (entityLabelEnum as readonly string[]).includes(s);
-}
-
-const SIDECAR_URL = process.env.SIDECAR_URL;
-
-// ============================================================================
-// Types (matching sidecar response)
-// ============================================================================
-
-interface SidecarEntity {
-  text: string;
-  label: string;
-  score: number;
-}
-
-interface SidecarChunkResult {
-  text: string;
-  entities: SidecarEntity[];
-}
-
-interface SidecarResponse {
-  results: SidecarChunkResult[];
-  total_entities: number;
 }
 
 // ============================================================================
@@ -59,27 +40,29 @@ export async function extractAndStoreEntities(
   documentId: number,
   companyId: bigint,
 ): Promise<{ totalEntities: number; totalRelationships: number }> {
-  if (!SIDECAR_URL) {
-    console.warn("[EntityExtraction] No SIDECAR_URL configured, skipping.");
-    return { totalEntities: 0, totalRelationships: 0 };
-  }
-
   if (chunks.length === 0) {
     return { totalEntities: 0, totalRelationships: 0 };
   }
 
-  // 1. Call sidecar
-  const resp = await fetch(`${SIDECAR_URL}/extract-entities`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chunks: chunks.map((c) => c.content) }),
-  });
+  // 1. Call provider (LLM-based NER or sidecar)
+  const provider = await getNERProvider();
+  console.log(`[EntityExtraction] Using ${provider.name} for ${chunks.length} chunks`);
 
-  if (!resp.ok) {
-    throw new Error(`Sidecar /extract-entities failed: ${resp.status}`);
+  const { data, usage } = await provider.extract(chunks.map((c) => c.content));
+
+  // Debit credits if cloud mode
+  if (isCloudMode() && usage.tokensUsed > 0) {
+    await debitTokens({
+      companyId,
+      amount: usage.tokensUsed,
+      service: "ner",
+      description: `NER extraction for ${chunks.length} chunks via ${provider.name}`,
+      referenceId: String(documentId),
+      metadata: usage.details,
+    }).catch((err) => {
+      console.warn("[EntityExtraction] Credit debit failed (non-blocking):", err);
+    });
   }
-
-  const data = (await resp.json()) as SidecarResponse;
 
   let totalEntities = 0;
   let totalRelationships = 0;

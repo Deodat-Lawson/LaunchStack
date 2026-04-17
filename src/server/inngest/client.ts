@@ -46,13 +46,33 @@ export type DocumentModifyEvent = {
   };
 };
 
+export type WebsiteCrawlEvent = {
+  name: "website/crawl.requested";
+  data: {
+    /** Starting URL to crawl */
+    url: string;
+    userId: string;
+    companyId: string;
+    category?: string;
+    /** Max link-following depth (1-3) */
+    maxDepth: number;
+    /** Max total pages to crawl */
+    maxPages: number;
+    /** Unique crawl group identifier */
+    crawlGroupId: string;
+    /** Base request URL for storage resolution */
+    requestUrl: string;
+  };
+};
+
 export type Events =
   | ProcessDocumentEvent
   | TrendSearchEvent
   | ClientProspectorEvent
   | CompanyMetadataExtractEvent
   | PredictiveAnalysisEvent
-  | DocumentModifyEvent;
+  | DocumentModifyEvent
+  | WebsiteCrawlEvent;
 
 /**
  * Create the Inngest client.

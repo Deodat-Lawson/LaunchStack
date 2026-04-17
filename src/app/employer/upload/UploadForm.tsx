@@ -64,6 +64,7 @@ export interface AvailableProviders {
     azure: boolean;
     datalab: boolean;
     landingAI: boolean;
+    docling: boolean;
 }
 
 
@@ -118,7 +119,7 @@ interface UploadFormProps {
     isUpdatingPreference: boolean;
     availableProviders: AvailableProviders;
     onAddCategory?: (newCategory: string) => Promise<void>;
-    storageProvider: "cloud" | "local";
+    storageProvider: "s3" | "database";
     s3Endpoint: string;
 }
 
@@ -151,7 +152,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const [isDragging, setIsDragging] = useState(false);
     const [activeSource, setActiveSource] = useState<SourceType | null>(null);
 
-    const hasAnyOCR = availableProviders.azure || availableProviders.landingAI || availableProviders.datalab;
+    const hasAnyOCR = availableProviders.azure || availableProviders.landingAI || availableProviders.datalab || availableProviders.docling;
 
     const processingMethods = [
         ...(hasAnyOCR
@@ -166,6 +167,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
             : []),
         ...(availableProviders.datalab
             ? [{ value: "datalab", label: "Datalab", description: "Advanced data extraction" }]
+            : []),
+        ...(availableProviders.docling
+            ? [{ value: "docling", label: "Docling", description: "Open-source document understanding via docling-serve" }]
             : []),
     ];
 
@@ -414,12 +418,12 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const uploadSingleDocument = async (doc: DocumentFile) => {
         updateDocument(doc.id, { status: "uploading", progress: 10 });
 
-        let resolvedStorageType: "cloud" | "database" | "local" = "cloud";
+        let resolvedStorageType: "s3" | "database" = "s3";
         let fileUrl: string;
         let uploadedObjectKey: string | undefined;
         const mimeType: string | undefined = doc.file.type || undefined;
 
-        if (storageProvider === "local") {
+        if (storageProvider === "s3") {
             updateDocument(doc.id, { progress: 15 });
 
             const { objectKey, url } = await uploadToS3WithProgress(
@@ -433,7 +437,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
             fileUrl = url;
             uploadedObjectKey = objectKey;
-            resolvedStorageType = "local";
+            resolvedStorageType = "s3";
         } else {
             const useUploadThingForDoc =
                 doc.storageMethod === "cloud" && isUploadThingConfigured;
@@ -445,6 +449,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 });
                 if (!res?.[0]?.url) throw new Error("UploadThing: Cloud upload failed — no URL returned");
                 fileUrl = res[0].url;
+                resolvedStorageType = "s3";
             } else {
                 updateDocument(doc.id, { progress: 30 });
                 const fd = new FormData();
@@ -455,16 +460,14 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 });
                 if (!res.ok) {
                     const err = (await res.json()) as { error?: string };
-                    throw new Error("Vercel Blob: " + (err.error ?? "Upload failed"));
+                    throw new Error("Upload failed: " + (err.error ?? "unknown error"));
                 }
                 const data = (await res.json()) as {
                     url: string;
-                    provider?: string;
+                    provider?: "s3" | "database";
                 };
                 fileUrl = data.url;
-                if (data.provider !== "vercel_blob") {
-                    resolvedStorageType = "database";
-                }
+                resolvedStorageType = data.provider === "s3" ? "s3" : "database";
             }
         }
 
@@ -489,8 +492,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
                     : preferredProvider,
         };
 
-        if (resolvedStorageType === "local") {
-            body.storageProvider = "seaweedfs";
+        if (resolvedStorageType === "s3" && uploadedObjectKey) {
+            body.storageProvider = "s3";
             body.storagePathname = uploadedObjectKey;
         }
 

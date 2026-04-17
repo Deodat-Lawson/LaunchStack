@@ -3,10 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import { randomUUID } from "node:crypto";
 
 import { getPresignedUploadUrl, getS3BucketName, ensureBucketExists } from "~/server/storage/s3-client";
-
-function sanitizeFilename(filename: string): string {
-    return filename.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
-}
+import { isS3Storage } from "~/lib/storage";
+import { validateRequestBody, PresignUploadSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {
     try {
@@ -19,30 +17,21 @@ export async function POST(request: Request) {
             );
         }
 
-        // Only applicable for local storage
-        if (process.env.NEXT_PUBLIC_STORAGE_PROVIDER !== "local") {
+        // Presigned URLs require an S3 backend
+        if (!isS3Storage()) {
             return NextResponse.json(
-                { error: "Presigned URLs are not applicable for cloud storage" },
+                { error: "Presigned URLs are not applicable: no S3 endpoint configured" },
                 { status: 400 },
             );
         }
 
-        const body = (await request.json()) as {
-            filename?: string;
-            fileName?: string;
-            contentType?: string;
-        };
+        const validation = await validateRequestBody(request, PresignUploadSchema);
+        if (!validation.success) return validation.response;
+        const body = validation.data;
 
-        const resolvedFilename = body.filename ?? body.fileName;
+        const resolvedFilename = (body.filename ?? body.fileName)!;
 
-        if (!resolvedFilename || !body.contentType) {
-            return NextResponse.json(
-                { error: "filename and contentType are required" },
-                { status: 400 },
-            );
-        }
-
-        const safeName = sanitizeFilename(resolvedFilename);
+        const safeName = resolvedFilename.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
         const objectKey = `documents/${randomUUID()}-${safeName || "upload"}`;
         const bucket = getS3BucketName();
 

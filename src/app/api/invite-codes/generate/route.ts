@@ -5,6 +5,7 @@ import crypto from "crypto";
 
 import { db } from "~/server/db";
 import { users, inviteCodes } from "~/server/db/schema";
+import { validateRequestBody, GenerateInviteCodeSchema } from "~/lib/validation";
 
 function generateCode(): string {
     return crypto.randomBytes(4).toString("hex").toUpperCase(); // 8-char hex code
@@ -17,15 +18,9 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
         }
 
-        const body = (await request.json()) as { role?: string };
-        const role = body.role;
-
-        if (!role || (role !== "employer" && role !== "employee")) {
-            return NextResponse.json(
-                { success: false, message: "Role must be 'employer' or 'employee'" },
-                { status: 400 }
-            );
-        }
+        const validation = await validateRequestBody(request, GenerateInviteCodeSchema);
+        if (!validation.success) return validation.response;
+        const { role } = validation.data;
 
         // Verify the caller is an owner or employer
         const [userRecord] = await db

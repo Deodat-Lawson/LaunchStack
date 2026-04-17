@@ -4,11 +4,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users, company } from "~/server/db/schema";
-
-interface OnboardingBody {
-  description?: string;
-  industry?: string;
-}
+import { validateRequestBody, CompanyOnboardingSchema } from "~/lib/validation";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -32,13 +28,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const body = (await request.json()) as OnboardingBody;
+    const validation = await validateRequestBody(request, CompanyOnboardingSchema);
+    if (!validation.success) return validation.response;
+    const body = validation.data;
 
     await db
       .update(company)
       .set({
-        description: body.description?.trim() ?? null,
-        industry: body.industry?.trim() ?? null,
+        description: body.description ?? null,
+        industry: body.industry ?? null,
       })
       .where(eq(company.id, Number(userInfo.companyId)));
 

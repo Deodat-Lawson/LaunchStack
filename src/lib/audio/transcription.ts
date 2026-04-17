@@ -1,13 +1,15 @@
 /**
  * Audio Transcription Service
- * 
- * Handles transcription of MP3/MP4 audio files using the sidecar Whisper endpoint.
+ *
+ * Handles transcription of MP3/MP4 audio files using the configured provider
+ * (Groq Whisper, OpenAI Whisper, or sidecar).
  * Converts audio files to text for processing through the standard document pipeline.
  */
 
 import { fetchBlob } from "~/server/storage/vercel-blob";
-
-const SIDECAR_URL = process.env.SIDECAR_URL || "http://localhost:8000";
+import { getTranscriptionProvider } from "~/lib/providers/transcription";
+import { debitTokens } from "~/lib/credits";
+import { isCloudMode } from "~/lib/providers/registry";
 
 export interface TranscriptionResult {
   text: string;
@@ -54,11 +56,13 @@ export function shouldTranscribeFile(
 }
 
 /**
- * Transcribe audio file by downloading from URL and sending to sidecar
+ * Transcribe audio file by downloading from URL and sending to the configured provider.
+ * Optionally debits credits for cloud deployments.
  */
 export async function transcribeAudioFromUrl(
   audioUrl: string,
-  filename: string
+  filename: string,
+  companyId?: bigint,
 ): Promise<TranscriptionResult> {
   try {
     console.log(`[TranscribeAudio] Fetching audio from: ${audioUrl}`);
@@ -73,27 +77,33 @@ export async function transcribeAudioFromUrl(
     const audioBuffer = Buffer.from(audioArrayBuffer);
     console.log(`[TranscribeAudio] Downloaded audio: ${filename} (${audioBuffer.length} bytes)`);
 
-    // Send to sidecar for transcription
-    const formData = new FormData();
-    const audioBlob = new Blob([audioBuffer], { type: "application/octet-stream" });
-    formData.append("file", audioBlob, filename);
+    // Send to provider for transcription
+    const provider = await getTranscriptionProvider();
+    console.log(`[TranscribeAudio] Using ${provider.name} for: ${filename}`);
 
-    console.log(`[TranscribeAudio] Sending to sidecar: ${SIDECAR_URL}/transcribe`);
+    const { data, usage } = await provider.transcribe(audioBuffer, filename);
 
-    const transcribeResponse = await fetch(`${SIDECAR_URL}/transcribe`, {
-      method: "POST",
-      body: formData as any,
-    });
-
-    if (!transcribeResponse.ok) {
-      const errorText = await transcribeResponse.text();
-      throw new Error(`Transcription failed: ${transcribeResponse.statusText} - ${errorText}`);
+    // Debit credits if cloud mode and companyId available
+    if (isCloudMode() && companyId != null && usage.tokensUsed > 0) {
+      await debitTokens({
+        companyId,
+        amount: usage.tokensUsed,
+        service: "transcription",
+        description: `Transcribe ${filename} via ${provider.name}`,
+        metadata: { ...usage.details, filename },
+      }).catch((err) => {
+        console.warn("[TranscribeAudio] Credit debit failed (non-blocking):", err);
+      });
     }
 
-    const result = (await transcribeResponse.json()) as TranscriptionResult;
-    console.log(`[TranscribeAudio] Complete: ${filename} → ${result.text.length} chars, lang=${result.language}`);
+    console.log(`[TranscribeAudio] Complete: ${filename} → ${data.text.length} chars, lang=${data.language}`);
 
-    return result;
+    return {
+      text: data.text,
+      language: data.language,
+      confidence: data.confidence,
+      filename,
+    };
   } catch (error) {
     console.error(`[TranscribeAudio] Error transcribing ${filename}:`, error);
     throw error;

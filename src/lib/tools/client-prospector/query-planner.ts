@@ -120,9 +120,10 @@ export async function planSearches(
     categories?: string[],
 ): Promise<PlannedSearch[]> {
     const chat = new ChatOpenAI({
-        openAIApiKey: env.server.OPENAI_API_KEY,
+        apiKey: env.server.OPENAI_API_KEY || process.env.AI_API_KEY,
         modelName: "gpt-4o-mini",
         temperature: 0.2,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
     });
 
     const structuredModel = chat.withStructuredOutput(QueryPlannerOutputSchema, {

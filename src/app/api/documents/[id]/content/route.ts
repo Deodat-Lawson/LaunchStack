@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { document } from "~/server/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
-import { fetchFile, isLocalStorage } from "~/lib/storage";
+import { fetchFile, isS3Storage } from "~/lib/storage";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -56,7 +56,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
     }
 
-    if (!isLocalStorage() && !isPrivateBlobUrl(doc.url)) {
+    if (!isS3Storage() && !isPrivateBlobUrl(doc.url)) {
       return NextResponse.redirect(doc.url, { status: 307 });
     }
 

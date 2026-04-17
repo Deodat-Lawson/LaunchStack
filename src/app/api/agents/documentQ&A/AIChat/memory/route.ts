@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { agentAiChatbotMemory } from "~/server/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { validateRequestBody, CreateMemorySchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -11,31 +12,17 @@ export const maxDuration = 300;
 // POST /api/agent-ai-chatbot/memory - Store memory
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as {
-      chatId?: string;
-      memoryType?: string;
-      key?: string;
-      value?: unknown;
-      importance?: number;
-      embedding?: unknown;
-      expiresAt?: string | Date;
-    };
-    const { 
-      chatId, 
-      memoryType, 
-      key, 
-      value, 
-      importance = 5, 
+    const validation = await validateRequestBody(request, CreateMemorySchema);
+    if (!validation.success) return validation.response;
+    const {
+      chatId,
+      memoryType,
+      key,
+      value,
+      importance,
       embedding,
-      expiresAt 
-    } = body;
-
-    if (!chatId || !memoryType || !key || !value) {
-      return NextResponse.json(
-        { error: "chatId, memoryType, key, and value are required" },
-        { status: 400 }
-      );
-    }
+      expiresAt
+    } = validation.data;
 
     const memoryId = randomUUID();
 
@@ -46,7 +33,7 @@ export async function POST(request: NextRequest) {
       key,
       value,
       importance,
-      embedding: embedding && Array.isArray(embedding) ? embedding as number[] : null,
+      embedding: embedding ?? null,
       expiresAt: expiresAt ? (expiresAt instanceof Date ? expiresAt : new Date(expiresAt)) : null,
     };
 

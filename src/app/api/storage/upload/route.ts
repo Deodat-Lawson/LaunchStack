@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { randomUUID } from "node:crypto";
 
 import { putObject, getS3BucketName, ensureBucketExists, getObjectUrl } from "~/server/storage/s3-client";
+import { isS3Storage } from "~/lib/storage";
 
 function sanitizeFilename(filename: string): string {
     return filename.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
@@ -18,9 +19,9 @@ export async function POST(request: Request) {
             );
         }
 
-        if (process.env.NEXT_PUBLIC_STORAGE_PROVIDER !== "local") {
+        if (!isS3Storage()) {
             return NextResponse.json(
-                { error: "S3 upload is not applicable for cloud storage" },
+                { error: "S3 upload is not applicable: no S3 endpoint configured" },
                 { status: 400 },
             );
         }

@@ -205,7 +205,8 @@ export async function callAIAnalysis(
     const prompt = createAnalysisPrompt(content, specification);
 
     const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
         modelName: "gpt-5.2",
         temperature: 0.3,
     });
@@ -269,7 +270,8 @@ async function verifyPredictions(
     const contentWindow = fullContent.slice(0, 30000);
 
     const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
         modelName: "gpt-5.2",
         temperature: 0.0,
     });

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { agentAiChatbotToolCall } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
+import { validateRequestBody, UpdateToolCallSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -14,13 +15,9 @@ export async function PATCH(
 ) {
   try {
     const { toolCallId } = await params;
-    const body = await request.json() as {
-      toolOutput?: unknown;
-      status?: string;
-      errorMessage?: string;
-      executionTimeMs?: number;
-    };
-    const { toolOutput, status, errorMessage, executionTimeMs } = body;
+    const validation = await validateRequestBody(request, UpdateToolCallSchema);
+    if (!validation.success) return validation.response;
+    const { toolOutput, status, errorMessage, executionTimeMs } = validation.data;
 
     const updateData: Record<string, unknown> = {};
     if (toolOutput) updateData.toolOutput = toolOutput;

@@ -106,9 +106,10 @@ export async function scoreLeads(
     }
 
     const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
         modelName: "gpt-4o-mini",
         temperature: 0.2,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
     });
 
     const structuredModel = chat.withStructuredOutput(ScorerOutputSchema, {

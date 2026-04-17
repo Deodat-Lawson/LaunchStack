@@ -43,7 +43,7 @@ interface UploadSettingsProps {
     onToggleChange: (value: string) => void;
     isUpdatingPreference: boolean;
     onAddCategory?: (name: string) => Promise<void>;
-    storageProvider?: "cloud" | "local";
+    storageProvider?: "s3" | "database";
 }
 
 export function UploadSettings({
@@ -268,9 +268,9 @@ export function UploadSettings({
                         {/* Storage Method */}
                         <div>
                             <Label htmlFor="storageMethod">Storage Method</Label>
-                            {storageProvider === "local" ? (
+                            {storageProvider === "s3" ? (
                                 <div className="flex items-center h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                                    SeaweedFS (S3)
+                                    S3
                                 </div>
                             ) : (
                                 <Select

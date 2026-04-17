@@ -33,7 +33,7 @@ const titles: Record<SourceType, { title: string; description: string }> = {
     },
     website: {
         title: "Import from Website",
-        description: "Crawl a web page and add its content to your knowledge base.",
+        description: "Fetch a single web page and add its content to your knowledge base.",
     },
 };
 
@@ -48,7 +48,7 @@ export function SourceDialog({
 
     return (
         <Dialog open={!!open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-            <DialogContent className={`max-h-[85vh] overflow-y-auto ${open === "github" ? "sm:max-w-2xl" : "sm:max-w-lg"}`}>
+            <DialogContent className={`max-h-[85vh] overflow-y-auto ${open === "github" || open === "website" ? "sm:max-w-2xl" : "sm:max-w-lg"}`}>
                 {info && (
                     <DialogHeader>
                         <DialogTitle>{info.title}</DialogTitle>
@@ -72,7 +72,12 @@ export function SourceDialog({
                     />
                 )}
 
-                {open === "website" && <WebsiteSourceTab />}
+                {open === "website" && (
+                    <WebsiteSourceTab
+                        categories={categories}
+                        defaultCategory={defaultCategory}
+                    />
+                )}
             </DialogContent>
         </Dialog>
     );

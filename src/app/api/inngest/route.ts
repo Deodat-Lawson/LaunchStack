@@ -15,11 +15,12 @@ import { clientProspectorJob } from "~/server/inngest/functions/clientProspector
 import { extractCompanyMetadataJob } from "~/server/inngest/functions/extractCompanyMetadata";
 import { predictiveAnalysisJob } from "~/server/inngest/functions/predictiveAnalysis";
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
+import { crawlWebsite } from "~/server/inngest/functions/crawlWebsite";
 
 // Register all Inngest functions
 const handler = serve({
   client: inngest,
-  functions: [uploadDocument, trendSearchJob, clientProspectorJob, extractCompanyMetadataJob, predictiveAnalysisJob, modifyDocument],
+  functions: [uploadDocument, trendSearchJob, clientProspectorJob, extractCompanyMetadataJob, predictiveAnalysisJob, modifyDocument, crawlWebsite],
 });
 
 export const GET = handler.GET;

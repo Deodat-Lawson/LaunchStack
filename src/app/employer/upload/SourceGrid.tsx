@@ -62,7 +62,7 @@ export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: Sourc
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     Website
                 </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">Coming soon</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">Fetch a single web page</span>
             </button>
         </div>
     );

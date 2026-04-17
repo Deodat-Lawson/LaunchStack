@@ -73,10 +73,73 @@ services:
       - "8000:8000"
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
-      interval: 10s
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+
+  # Optional: Docling-powered OCR for Office docs (DOCX, PPTX, XLSX, EPUB).
+  # Adds ~800MB RAM. Skip with: docker compose up (without --profile ocr)
+  # Enable with:  docker compose --profile ocr up
+  docling-serve:
+    image: ghcr.io/docling-project/docling-serve
+    container_name: pdr_ai_v2-docling-serve
+    profiles: ["ocr"]
+    restart: unless-stopped
+    environment:
+      DOCLING_SERVE_MAX_NUM_PAGES: "200"
+    volumes:
+      - docling_models:/opt/app-root/src/.cache
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:5001/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+
+  # OCR router sidecar — runs vision classification + PDF rendering
+  # for document routing decisions (moved out of the Next.js app to reduce build time)
+  ocr-router:
+    build:
+      context: ./services/ocr-router
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-ocr-router
+    restart: unless-stopped
+    environment:
+      # AI vision — used for OpenAI-based document classification (optional)
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_BASE_URL: ${AI_BASE_URL:-}
+      OCR_VISION_MODEL: ${OCR_VISION_MODEL:-gpt-4o-mini}
+    ports:
+      - "8002:8002"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8002/health || exit 1"]
+      interval: 15s
       timeout: 5s
       retries: 5
       start_period: 30s
+
+  ocr-worker:
+    build:
+      context: ./services/ocr-worker
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-ocr-worker
+    profiles: ["ocr"]
+    restart: unless-stopped
+    depends_on:
+      docling-serve:
+        condition: service_healthy
+    environment:
+      DOCLING_SERVE_URL: http://docling-serve:5001
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8001/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   app:
     build:
@@ -94,11 +157,25 @@ services:
         condition: service_started
       sidecar:
         condition: service_healthy
+      ocr-router:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      # AI providers — global + per-capability
+      AI_BASE_URL: ${AI_BASE_URL:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      CHAT_MODEL: ${CHAT_MODEL:-}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+      RERANK_MODEL: ${RERANK_MODEL:-}
+      NER_MODEL: ${NER_MODEL:-}
+      TRANSCRIPTION_MODEL: ${TRANSCRIPTION_MODEL:-}
+      TRANSCRIPTION_API_BASE_URL: ${TRANSCRIPTION_API_BASE_URL:-}
+      TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}
+      # Auth
       CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      # Services
       UPLOADTHING_TOKEN: ${UPLOADTHING_TOKEN:-}
       NEXT_PUBLIC_UPLOADTHING_ENABLED: ${NEXT_PUBLIC_UPLOADTHING_ENABLED:-}
       INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:-}
@@ -115,7 +192,8 @@ services:
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-}
       BLOB_READ_WRITE_TOKEN: ${BLOB_READ_WRITE_TOKEN:-}
-      NEXT_PUBLIC_STORAGE_PROVIDER: local
+      TOKEN_SIGNUP_BONUS: ${TOKEN_SIGNUP_BONUS:-10000000}
+      NEXT_PUBLIC_STORAGE_PROVIDER: s3
       NEXT_PUBLIC_S3_ENDPOINT: http://seaweedfs:8333
       S3_REGION: ${S3_REGION:-us-east-1}
       S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
@@ -123,6 +201,11 @@ services:
       S3_BUCKET_NAME: ${S3_BUCKET_NAME:-launchstack}
       # Adeu DOCX redlining service
       ADEU_SERVICE_URL: http://sidecar:8000
+      # OCR router sidecar — vision classification + PDF rendering
+      OCR_ROUTER_URL: http://ocr-router:8002
+      # OSS OCR worker (thin proxy → docling-serve) — only set when using --profile ocr
+      OCR_WORKER_URL: ${OCR_WORKER_URL:-}
+      OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
     ports:
       - "3000:3000"
 
@@ -139,3 +222,4 @@ services:
 volumes:
   postgres_data:
   seaweedfs_data:
+  docling_models:

@@ -229,6 +229,236 @@ const prioritizeOptions = ["start", "end", "relevance"] as const;
  * Schema for RLM-style hierarchical document queries
  * Extends QuestionSchema with cost-aware retrieval options
  */
+// ============================================================================
+// Signup & Auth Schemas
+// ============================================================================
+
+export const EmployerCompanySignupSchema = z.object({
+  userId: z.string().min(1, "User ID is required"),
+  companyName: z.string().min(1, "Company name is required").max(256).trim(),
+  name: z.string().min(1, "User name is required").max(256).trim(),
+  email: z.string().email("Valid email is required"),
+  numberOfEmployees: z.string().max(9).optional().default("0"),
+});
+
+export const EmployerSignupSchema = z.object({
+  userId: z.string().min(1, "User ID is required"),
+  name: z.string().min(1, "Name is required").max(256).trim(),
+  email: z.string().email("Valid email is required"),
+  employerPasskey: z.string().min(1, "Employer passkey is required"),
+  companyName: z.string().min(1, "Company name is required").max(256).trim(),
+});
+
+export const EmployeeSignupSchema = z.object({
+  userId: z.string().min(1, "User ID is required"),
+  name: z.string().min(1, "Name is required").max(256).trim(),
+  email: z.string().email("Valid email is required"),
+  employeePasskey: z.string().min(1, "Employee passkey is required"),
+  companyName: z.string().min(1, "Company name is required").max(256).trim(),
+});
+
+export const JoinWithInviteSchema = z.object({
+  userId: z.string().min(1, "User ID is required"),
+  name: z.string().min(1, "Name is required").max(256).trim(),
+  email: z.string().email("Valid email is required"),
+  inviteCode: z.string().min(1, "Invite code is required").trim(),
+});
+
+// ============================================================================
+// Employee Management Schemas
+// ============================================================================
+
+export const ApproveEmployeeByIdSchema = z.object({
+  employeeId: z.string().min(1, "Employee ID is required"),
+});
+
+export const RemoveEmployeeSchema = z.object({
+  employeeId: z.string().min(1, "Employee ID is required"),
+});
+
+// ============================================================================
+// Invite Code Schemas
+// ============================================================================
+
+export const GenerateInviteCodeSchema = z.object({
+  role: z.enum(["employer", "employee"], {
+    errorMap: () => ({ message: "Role must be 'employer' or 'employee'" }),
+  }),
+});
+
+export const ValidateInviteCodeSchema = z.object({
+  code: z.string().min(1, "Invite code is required").trim(),
+});
+
+export const DeactivateInviteCodeSchema = z.object({
+  codeId: z.number().int().positive("Code ID must be a positive integer"),
+});
+
+// ============================================================================
+// Notes Schemas
+// ============================================================================
+
+export const CreateNoteSchema = z.object({
+  documentId: z.string().optional(),
+  companyId: z.string().optional(),
+  title: z.string().max(512).optional(),
+  content: z.string().max(50000).optional(),
+  tags: z.array(z.string().max(128)).max(50).optional(),
+}).refine((data) => data.title || data.content, {
+  message: "At least one of title or content is required",
+});
+
+export const UpdateNoteSchema = z.object({
+  title: z.string().max(512).optional(),
+  content: z.string().max(50000).optional(),
+  tags: z.array(z.string().max(128)).max(50).optional(),
+});
+
+// ============================================================================
+// Document Tracking Schema
+// ============================================================================
+
+export const TrackDocumentViewSchema = z.object({
+  documentId: z.number().int().positive("Document ID must be a positive integer"),
+});
+
+// ============================================================================
+// Company Schemas
+// ============================================================================
+
+export const CompanyOnboardingSchema = z.object({
+  description: z.string().max(5000).trim().optional(),
+  industry: z.string().max(256).trim().optional(),
+});
+
+export const CompanyMetadataExtractSchema = z.object({
+  debug: z.boolean().optional().default(false),
+  force: z.boolean().optional().default(false),
+});
+
+// ============================================================================
+// Storage Schemas
+// ============================================================================
+
+export const PresignUploadSchema = z.object({
+  filename: z.string().optional(),
+  fileName: z.string().optional(),
+  contentType: z.string().min(1, "contentType is required"),
+}).refine((data) => data.filename || data.fileName, {
+  message: "filename or fileName is required",
+});
+
+// ============================================================================
+// Voice Schemas
+// ============================================================================
+
+export const TextToSpeechSchema = z.object({
+  text: z.string().min(1, "Text is required").max(10000),
+  voiceId: z.string().optional(),
+  modelId: z.string().optional(),
+  stability: z.number().min(0).max(1).optional(),
+  similarityBoost: z.number().min(0).max(1).optional(),
+  style: z.number().min(0).max(1).optional(),
+  useSpeakerBoost: z.boolean().optional(),
+});
+
+// ============================================================================
+// AI Chatbot Schemas
+// ============================================================================
+
+export const CreateChatSchema = z.object({
+  userId: z.string().min(1, "userId is required"),
+  title: z.string().min(1, "title is required").max(512),
+  agentMode: z.enum(["autonomous", "interactive", "assisted"]).optional().default("interactive"),
+  visibility: z.enum(["public", "private"]).optional().default("private"),
+  aiStyle: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional().default("concise"),
+  aiPersona: z.enum(["general", "learning-coach", "financial-expert", "legal-expert", "math-reasoning"]).optional().default("general"),
+  documentId: z.union([z.string(), z.number()]).optional(),
+});
+
+export const UpdateChatSchema = z.object({
+  title: z.string().min(1).max(512).optional(),
+  status: z.enum(["active", "archived", "deleted"]).optional(),
+  agentMode: z.enum(["autonomous", "interactive", "assisted"]).optional(),
+  visibility: z.enum(["public", "private"]).optional(),
+  aiStyle: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
+  aiPersona: z.enum(["general", "learning-coach", "financial-expert", "legal-expert", "math-reasoning"]).optional(),
+});
+
+export const CreateMessageSchema = z.object({
+  chatId: z.string().min(1, "chatId is required"),
+  role: z.enum(["user", "assistant", "system", "tool"]),
+  content: z.unknown(),
+  messageType: z.enum(["text", "tool_call", "tool_result", "thinking"]).optional().default("text"),
+  parentMessageId: z.string().optional(),
+});
+
+export const CreateVoteSchema = z.object({
+  chatId: z.string().min(1, "chatId is required"),
+  messageId: z.string().min(1, "messageId is required"),
+  isUpvoted: z.boolean(),
+  feedback: z.string().max(2000).optional(),
+});
+
+export const CreateTaskSchema = z.object({
+  chatId: z.string().min(1, "chatId is required"),
+  description: z.string().min(1, "description is required").max(2000),
+  objective: z.string().min(1, "objective is required").max(2000),
+  priority: z.number().int().min(0).max(100).optional().default(0),
+  metadata: z.unknown().optional(),
+});
+
+export const UpdateTaskSchema = z.object({
+  status: z.enum(["pending", "in_progress", "completed", "failed", "cancelled"]).optional(),
+  result: z.unknown().optional(),
+  metadata: z.unknown().optional(),
+  completedAt: z.union([z.string().datetime(), z.date()]).optional(),
+});
+
+export const CreateToolCallSchema = z.object({
+  messageId: z.string().min(1, "messageId is required"),
+  taskId: z.string().optional(),
+  toolName: z.string().min(1, "toolName is required"),
+  toolInput: z.unknown(),
+});
+
+export const UpdateToolCallSchema = z.object({
+  toolOutput: z.unknown().optional(),
+  status: z.enum(["pending", "running", "completed", "failed"]).optional(),
+  errorMessage: z.string().max(5000).optional(),
+  executionTimeMs: z.number().int().min(0).optional(),
+});
+
+export const CreateMemorySchema = z.object({
+  chatId: z.string().min(1, "chatId is required"),
+  memoryType: z.enum(["short_term", "long_term", "working", "episodic"]),
+  key: z.string().min(1, "key is required").max(512),
+  value: z.unknown(),
+  importance: z.number().int().min(0).max(10).optional().default(5),
+  embedding: z.array(z.number()).optional(),
+  expiresAt: z.union([z.string().datetime(), z.date()]).optional(),
+});
+
+export const CreateExecutionStepSchema = z.object({
+  taskId: z.string().min(1, "taskId is required"),
+  stepNumber: z.number().int().min(0),
+  stepType: z.enum(["reasoning", "planning", "execution", "evaluation", "decision"]),
+  description: z.string().min(1, "description is required").max(5000),
+  reasoning: z.string().max(10000).optional(),
+  input: z.unknown().optional(),
+  output: z.unknown().optional(),
+});
+
+export const UpdateExecutionStepSchema = z.object({
+  status: z.enum(["pending", "in_progress", "completed", "failed", "skipped"]).optional(),
+  output: z.unknown().optional(),
+  reasoning: z.string().max(10000).optional(),
+});
+
+// ============================================================================
+// RLM (Recursive Language Model) Query Schema
+// ============================================================================
+
 export const RLMQuestionSchema = z
   .object({
     documentId: z.number().int().positive("Document ID must be a positive integer"),

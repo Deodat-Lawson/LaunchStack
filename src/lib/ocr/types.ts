@@ -205,6 +205,8 @@ export interface ProcessDocumentEventData {
   mimeType?: string;
   /** Original filename with extension — used for adapter routing when documentName has been cleaned */
   originalFilename?: string;
+  /** True when the document originated from a website upload */
+  isWebsite?: boolean;
   options?: {
     forceOCR?: boolean;
     preferredProvider?: OCRProvider;

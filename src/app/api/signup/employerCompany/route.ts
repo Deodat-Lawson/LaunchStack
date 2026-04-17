@@ -2,37 +2,14 @@ import {db} from "~/server/db";
 import {company, users} from "~/server/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
-
-type PostBody = {
-    userId: string;
-    companyName: string;
-    name: string;
-    email: string;
-    numberOfEmployees: string;
-}
+import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
+import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {
     try {
-        const {userId, name, email, companyName, numberOfEmployees} = (await request.json()) as PostBody;
-
-        // Validate required fields
-        if (!name?.trim()) {
-            return createValidationError(
-                "User name is required. Please ensure you are logged in with a complete profile."
-            );
-        }
-
-        // Check if company already exists
-        const [existingCompany] = await db
-            .select()
-            .from(company)
-            .where(eq(company.name, companyName));
-
-        if (existingCompany) {
-            return createValidationError(
-                "Company already exists. Please use a different company name."
-            );
-        }
+        const validation = await validateRequestBody(request, EmployerCompanySignupSchema);
+        if (!validation.success) return validation.response;
+        const { userId, name, email, companyName, numberOfEmployees } = validation.data;
 
         const [newCompany] = await db
             .insert(company)
@@ -59,6 +36,9 @@ export async function POST(request: Request) {
             status: "verified",
             role: "owner",
         });
+
+        // Initialize credit account with signup bonus
+        await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
 
         return createSuccessResponse(
             { userId, role: "owner" },

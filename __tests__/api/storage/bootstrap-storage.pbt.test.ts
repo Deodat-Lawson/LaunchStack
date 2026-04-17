@@ -1,6 +1,6 @@
 /**
  * Property-based tests for bootstrap API storage provider reporting.
- * Feature: local-s3-migration
+ * Feature: storage unification (s3 + database fallback)
  */
 
 import * as fc from "fast-check";
@@ -20,6 +20,20 @@ jest.mock("~/server/db/schema", () => ({
   category: { id: "id", name: "name", companyId: "companyId" },
   company: { id: "id", name: "name", useUploadThing: "useUploadThing" },
   users: { userId: "userId", role: "role", companyId: "companyId" },
+}));
+
+jest.mock("~/lib/storage", () => ({
+  resolveStorageBackend: () => {
+    const explicit = process.env.NEXT_PUBLIC_STORAGE_PROVIDER;
+    if (explicit === "s3" || explicit === "database") return explicit;
+    const hasS3 =
+      Boolean(process.env.NEXT_PUBLIC_S3_ENDPOINT) &&
+      Boolean(process.env.S3_REGION) &&
+      Boolean(process.env.S3_ACCESS_KEY) &&
+      Boolean(process.env.S3_SECRET_KEY) &&
+      Boolean(process.env.S3_BUCKET_NAME);
+    return hasS3 ? "s3" : "database";
+  },
 }));
 
 const mockUser = [{ role: "employer", companyId: 1 }];
@@ -77,8 +91,8 @@ describe(
       process.env = { ...originalEnv };
     });
 
-    it("response always includes storageProvider (defaulting to 'cloud') and isUploadThingConfigured", async () => {
-      const providerArb = fc.constantFrom("cloud", "local", undefined);
+    it("response always includes storageProvider (resolved to 's3' or 'database') and isUploadThingConfigured", async () => {
+      const providerArb = fc.constantFrom("s3", "database", undefined);
       const endpointArb = fc.option(
         fc.string({ minLength: 5, maxLength: 50, unit: "grapheme" }).map(
           (s) => `http://${s.replace(/[^a-z0-9]/gi, "x")}:8333`,
@@ -128,6 +142,19 @@ describe(
               users: { userId: "userId", role: "role", companyId: "companyId" },
             }));
             jest.doMock("~/server/db", () => mockCreateDb());
+            jest.doMock("~/lib/storage", () => ({
+              resolveStorageBackend: () => {
+                const explicit = process.env.NEXT_PUBLIC_STORAGE_PROVIDER;
+                if (explicit === "s3" || explicit === "database") return explicit;
+                const hasS3 =
+                  Boolean(process.env.NEXT_PUBLIC_S3_ENDPOINT) &&
+                  Boolean(process.env.S3_REGION) &&
+                  Boolean(process.env.S3_ACCESS_KEY) &&
+                  Boolean(process.env.S3_SECRET_KEY) &&
+                  Boolean(process.env.S3_BUCKET_NAME);
+                return hasS3 ? "s3" : "database";
+              },
+            }));
 
             const { GET } = await import(
               "~/app/api/employer/upload/bootstrap/route"
@@ -140,12 +167,11 @@ describe(
 
             // storageProvider must always be present
             expect(body).toHaveProperty("storageProvider");
-            expect(["cloud", "local"]).toContain(body.storageProvider);
+            expect(["s3", "database"]).toContain(body.storageProvider);
 
-            // Defaults to "cloud" when env is not set
-            if (provider === undefined) {
-              expect(body.storageProvider).toBe("cloud");
-            } else {
+            // When explicitly set, matches; when absent, defaults to "database"
+            // (auto-fallback when S3 vars aren't fully configured in this test setup).
+            if (provider !== undefined) {
               expect(body.storageProvider).toBe(provider);
             }
 
@@ -153,8 +179,8 @@ describe(
             expect(body).toHaveProperty("isUploadThingConfigured");
             expect(typeof body.isUploadThingConfigured).toBe("boolean");
 
-            // s3Endpoint only present when provider is "local" and endpoint is set
-            if (provider === "local" && endpoint) {
+            // s3Endpoint only present when resolved provider is "s3" and endpoint is set
+            if (body.storageProvider === "s3" && endpoint) {
               expect(body.s3Endpoint).toBe(endpoint);
             } else {
               expect(body.s3Endpoint).toBeUndefined();

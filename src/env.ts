@@ -12,8 +12,10 @@ const optionalString = () =>
 const serverSchema = z.object({
   // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
   DATABASE_URL: requiredString(),
-  OPENAI_API_KEY: requiredString(),
+  // OPENAI_API_KEY is optional when AI_API_KEY is set (validated in superRefine)
+  OPENAI_API_KEY: optionalString(),
   OPENAI_MODEL: optionalString(),
+  CHAT_MODEL: optionalString(),         // provider-agnostic chat model (e.g. deepseek-ai/DeepSeek-V3)
   ANTHROPIC_API_KEY: optionalString(),
   ANTHROPIC_MODEL: optionalString(),
   GOOGLE_AI_API_KEY: optionalString(),
@@ -59,6 +61,18 @@ const serverSchema = z.object({
   // Sidecar configuration (optional, for local ML compute)
   // When set, Graph RAG entity extraction is automatically enabled
   SIDECAR_URL: optionalString(),
+  // OSS OCR worker (Marker + Docling). When set, MARKER becomes the default
+  // OCR provider and DoclingIngestionAdapter takes over Office formats.
+  OCR_WORKER_URL: optionalString(),
+  // OCR router sidecar — vision classification + PDF rendering for document routing
+  OCR_ROUTER_URL: optionalString(),
+  // Model for OCR vision classification (default: gpt-4o-mini). Any OpenAI-compatible vision model.
+  OCR_VISION_MODEL: optionalString(),
+  OCR_DEFAULT_PROVIDER: z.enum(["MARKER", "DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"]).optional(),
+  // Publicly-reachable origin of this Next.js app. Required when OCR_WORKER_URL
+  // is set and documents live behind relative /api/files URLs — the worker
+  // needs an absolute URL to fetch them.
+  APP_PUBLIC_URL: optionalString(),
   // Enable Graph RAG retrieval
   ENABLE_GRAPH_RETRIEVER: z.preprocess(
     (val) => val === "true" || val === "1",
@@ -68,7 +82,10 @@ const serverSchema = z.object({
   NEO4J_USERNAME: optionalString(),
   NEO4J_PASSWORD: optionalString(),
   // Storage provider configuration
-  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+  // "s3" → any S3-compatible endpoint (AWS, MinIO, SeaweedFS, etc.)
+  // "database" → base64 fallback stored in Postgres fileUploads.fileData
+  // Unset → auto-detect: "s3" if S3 env vars are present, else "database"
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["s3", "database"]).optional(),
   NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
   S3_PUBLIC_ENDPOINT: optionalString(), // Browser-facing S3 URL (defaults to NEXT_PUBLIC_S3_ENDPOINT)
   S3_REGION: optionalString(),
@@ -78,10 +95,49 @@ const serverSchema = z.object({
   // Repo Explainer
   REPO_EXPLAINER_MODEL: optionalString(),
   GITHUB_TOKEN: optionalString(),
+  // Global AI provider fallback — set once to route ALL capabilities to one provider
+  // Per-capability env vars override these when set
+  AI_BASE_URL: optionalString(),           // e.g. https://api.siliconflow.cn/v1
+  AI_API_KEY: optionalString(),
+  // Per-capability overrides (optional — falls back to AI_BASE_URL / AI_API_KEY / OPENAI_API_KEY)
+  EMBEDDING_API_BASE_URL: optionalString(),
+  EMBEDDING_API_KEY: optionalString(),
+  EMBEDDING_MODEL: optionalString(),
+  RERANK_API_BASE_URL: optionalString(),
+  RERANK_API_KEY: optionalString(),
+  RERANK_MODEL: optionalString(),          // e.g. jina-reranker-v2-base-multilingual or BAAI/bge-reranker-v2-m3
+  NER_API_BASE_URL: optionalString(),      // e.g. https://api.siliconflow.cn/v1 (Qwen3.5-4B free)
+  NER_API_KEY: optionalString(),
+  NER_MODEL: optionalString(),             // e.g. gpt-4o-mini or Qwen/Qwen3.5-4B
+  TRANSCRIPTION_API_BASE_URL: optionalString(), // e.g. https://api.groq.com/openai/v1
+  TRANSCRIPTION_API_KEY: optionalString(),
+  TRANSCRIPTION_MODEL: optionalString(),   // e.g. whisper-large-v3-turbo
+  // Legacy provider API keys (fallback when per-capability keys not set)
+  JINA_API_KEY: optionalString(),
+  GROQ_API_KEY: optionalString(),
+  // Provider overrides (cloud vs sidecar)
+  RERANK_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
+  NER_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
+  TRANSCRIPTION_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
+  // Token system
+  TOKEN_SIGNUP_BONUS: optionalString(),
+  // CORS
+  CORS_ALLOWED_ORIGINS: optionalString(),
+  // Logging
+  LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).optional(),
 });
 
 const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
-  if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "local") {
+  // At least one AI API key must be set
+  if (!data.OPENAI_API_KEY && !data.AI_API_KEY) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["AI_API_KEY"],
+      message: "Either AI_API_KEY or OPENAI_API_KEY must be set",
+    });
+  }
+
+  if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "s3") {
     const required = [
       "NEXT_PUBLIC_S3_ENDPOINT",
       "S3_REGION",
@@ -94,7 +150,7 @@ const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: [key],
-          message: `${key} is required when NEXT_PUBLIC_STORAGE_PROVIDER is "local"`,
+          message: `${key} is required when NEXT_PUBLIC_STORAGE_PROVIDER is "s3"`,
         });
       }
     }
@@ -107,7 +163,7 @@ const clientSchema = z.object({
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
-  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["s3", "database"]).optional(),
   NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
 });
 
@@ -136,6 +192,7 @@ function parseServerEnv() {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
+    CHAT_MODEL: process.env.CHAT_MODEL,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL,
     GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
@@ -166,15 +223,40 @@ function parseServerEnv() {
     JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
+    OCR_WORKER_URL: process.env.OCR_WORKER_URL,
+    OCR_ROUTER_URL: process.env.OCR_ROUTER_URL,
+    OCR_VISION_MODEL: process.env.OCR_VISION_MODEL,
+    OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER as "MARKER" | "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB" | undefined,
+    APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
     REPO_EXPLAINER_MODEL: process.env.REPO_EXPLAINER_MODEL,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+    AI_BASE_URL: process.env.AI_BASE_URL,
+    AI_API_KEY: process.env.AI_API_KEY,
+    EMBEDDING_API_BASE_URL: process.env.EMBEDDING_API_BASE_URL,
+    EMBEDDING_API_KEY: process.env.EMBEDDING_API_KEY,
+    EMBEDDING_MODEL: process.env.EMBEDDING_MODEL,
+    RERANK_API_BASE_URL: process.env.RERANK_API_BASE_URL,
+    RERANK_API_KEY: process.env.RERANK_API_KEY,
+    RERANK_MODEL: process.env.RERANK_MODEL,
+    NER_API_BASE_URL: process.env.NER_API_BASE_URL,
+    NER_API_KEY: process.env.NER_API_KEY,
+    NER_MODEL: process.env.NER_MODEL,
+    TRANSCRIPTION_API_BASE_URL: process.env.TRANSCRIPTION_API_BASE_URL,
+    TRANSCRIPTION_API_KEY: process.env.TRANSCRIPTION_API_KEY,
+    TRANSCRIPTION_MODEL: process.env.TRANSCRIPTION_MODEL,
+    JINA_API_KEY: process.env.JINA_API_KEY,
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
+    RERANK_PROVIDER: process.env.RERANK_PROVIDER as "cloud" | "sidecar" | undefined,
+    NER_PROVIDER: process.env.NER_PROVIDER as "cloud" | "sidecar" | undefined,
+    TRANSCRIPTION_PROVIDER: process.env.TRANSCRIPTION_PROVIDER as "cloud" | "sidecar" | undefined,
+    TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
     NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
-      | "cloud"
-      | "local"
+      | "s3"
+      | "database"
       | undefined,
     NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
     S3_PUBLIC_ENDPOINT: process.env.S3_PUBLIC_ENDPOINT,
@@ -209,8 +291,8 @@ export const env = {
     NEXT_PUBLIC_UPLOADTHING_ENABLED:
       process.env.NEXT_PUBLIC_UPLOADTHING_ENABLED,
     NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
-      | "cloud"
-      | "local"
+      | "s3"
+      | "database"
       | undefined,
     NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
   }),

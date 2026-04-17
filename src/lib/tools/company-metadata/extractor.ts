@@ -363,9 +363,10 @@ async function callLLM(
     totalBatches: number,
 ): Promise<ExtractionOutput | null> {
     const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
         modelName: EXTRACTION_MODEL,
         temperature: 0,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
     });
 
     const structured = chat.withStructuredOutput(ExtractionOutputSchema, {
@@ -373,7 +374,7 @@ async function callLLM(
     });
 
     try {
-        return await structured.invoke([
+        const result = await structured.invoke([
             new SystemMessage(EXTRACTION_SYSTEM_PROMPT),
             new HumanMessage(
                 buildChunkExtractionPrompt(
@@ -384,6 +385,11 @@ async function callLLM(
                 ),
             ),
         ]);
+        const usage = (chat as any).lastResponse?.usage ?? (result as any)?.__run?.response_metadata?.tokenUsage;
+        console.log(
+            `[CompanyMetadata] Extraction batch ${batchIndex + 1}/${totalBatches} for "${documentName}": model=${EXTRACTION_MODEL}, content=${batchContent.length} chars`
+        );
+        return result;
     } catch (error) {
         console.error(
             `[CompanyMetadataExtractor] Batch ${batchIndex + 1}/${totalBatches} failed:`,

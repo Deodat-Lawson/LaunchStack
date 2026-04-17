@@ -33,7 +33,7 @@ interface UploadBootstrapResponse {
   company: CompanyData | null;
   isUploadThingConfigured: boolean;
   availableProviders: AvailableProviders;
-  storageProvider: "cloud" | "local";
+  storageProvider: "s3" | "database";
   s3Endpoint: string;
 }
 
@@ -52,7 +52,7 @@ export function UploadView({ onDocumentUploaded: _onDocumentUploaded }: UploadVi
     datalab: false,
     landingAI: false,
   });
-  const [storageProvider, setStorageProvider] = useState<"cloud" | "local">("cloud");
+  const [storageProvider, setStorageProvider] = useState<"s3" | "database">("s3");
   const [s3Endpoint, setS3Endpoint] = useState("");
 
   const fetchBootstrap = useCallback(async () => {

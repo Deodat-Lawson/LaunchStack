@@ -7,7 +7,13 @@
 import type { RoutingDecision } from "~/lib/ocr/complexity";
 import { renderPagesToImages } from "~/lib/ocr/complexity";
 import { enrichPageWithVlm } from "~/lib/ocr/enrichment";
-import { createAzureAdapter, createLandingAIAdapter, createDatalabAdapter } from "~/lib/ocr/adapters";
+import {
+  createAzureAdapter,
+  createLandingAIAdapter,
+  createDatalabAdapter,
+  createMarkerAdapter,
+  createDoclingAdapter,
+} from "~/lib/ocr/adapters";
 import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "~/lib/ocr/chunker";
 import { generateEmbeddings } from "~/lib/ai/embeddings";
 import { db } from "~/server/db";
@@ -120,7 +126,7 @@ export function isKnownOfficeDocument(filename: string): boolean {
 // Step A: Router - Determine document routing
 // ============================================================================
 
-const OCR_ONLY_PROVIDERS = ["AZURE", "LANDING_AI", "DATALAB"] as const;
+const OCR_ONLY_PROVIDERS = ["AZURE", "LANDING_AI", "DATALAB", "MARKER", "DOCLING"] as const;
 
 function isValidOCRProvider(p: string): p is (typeof OCR_ONLY_PROVIDERS)[number] {
   return OCR_ONLY_PROVIDERS.includes(p as (typeof OCR_ONLY_PROVIDERS)[number]);
@@ -222,6 +228,12 @@ export async function normalizeDocument(
       case "DATALAB":
         normalizedDoc = await processWithDatalab(documentUrl);
         break;
+      case "MARKER":
+        normalizedDoc = await processWithDocling(documentUrl);
+        break;
+      case "DOCLING":
+        normalizedDoc = await processWithDocling(documentUrl);
+        break;
       case "NATIVE_PDF":
         normalizedDoc = await processNativePDF(documentUrl);
         break;
@@ -241,7 +253,8 @@ export async function normalizeDocument(
   const isPdf = documentUrl.toLowerCase().endsWith(".pdf") || 
                 (await fetchFile(documentUrl, { method: "HEAD" }).then(r => r.headers.get("content-type") === "application/pdf").catch(() => false));
 
-  if (isPdf && process.env.OPENAI_API_KEY) {
+  const vlmAvailable = !!(process.env.OLLAMA_BASE_URL ?? process.env.OPENAI_API_KEY);
+  if (isPdf && vlmAvailable) {
     const isComplex = routerDecision.visionLabel 
       ? ["complex", "handwritten", "messy", "figure", "diagram"].some(l => routerDecision.visionLabel?.toLowerCase().includes(l))
       : false;
@@ -883,5 +896,21 @@ export async function processWithLandingAI(documentUrl: string): Promise<Normali
  */
 export async function processWithDatalab(documentUrl: string): Promise<NormalizedDocument> {
   const adapter = createDatalabAdapter();
+  return adapter.uploadDocument(documentUrl);
+}
+
+/**
+ * Process document with Marker via the OSS OCR worker (PDF-focused).
+ */
+export async function processWithMarker(documentUrl: string): Promise<NormalizedDocument> {
+  const adapter = createMarkerAdapter();
+  return adapter.uploadDocument(documentUrl);
+}
+
+/**
+ * Process document with Docling via the OSS OCR worker (Office + broad formats).
+ */
+export async function processWithDocling(documentUrl: string): Promise<NormalizedDocument> {
+  const adapter = createDoclingAdapter();
   return adapter.uploadDocument(documentUrl);
 }

@@ -1,0 +1,56 @@
+# syntax=docker/dockerfile:1
+#
+# Fast Docker image that skips the Next.js build — you run `pnpm build`
+# on the host first, then this just copies the output into a slim image.
+#
+# Usage:
+#   SKIP_ENV_VALIDATION=1 pnpm build
+#   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml build app
+#   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml up -d
+
+# ── Base: shared Alpine + corepack-managed pnpm ──────────────────────
+FROM node:20-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable && corepack prepare pnpm@10.15.1 --activate
+WORKDIR /app
+
+# ── Dependencies ─────────────────────────────────────────────────────
+FROM base AS deps
+COPY package.json pnpm-lock.yaml ./
+COPY scripts ./scripts
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile
+
+# ── Schema sync (migrate) ───────────────────────────────────────────
+FROM base AS migrate
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./package.json
+COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY drizzle.config.ts ./drizzle.config.ts
+COPY src ./src
+COPY scripts ./scripts
+
+CMD ["sh", "-c", "node scripts/ensure-pgvector.mjs && pnpm db:push"]
+
+# ── Runner (uses pre-built .next from host) ──────────────────────────
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+COPY public ./public
+COPY --chown=nextjs:nodejs .next/standalone ./
+COPY --chown=nextjs:nodejs .next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]

@@ -4,6 +4,7 @@ import { eq, and } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users, inviteCodes } from "~/server/db/schema";
+import { validateRequestBody, DeactivateInviteCodeSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {
     try {
@@ -12,15 +13,9 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
         }
 
-        const body = (await request.json()) as { codeId?: number };
-        const codeId = body.codeId;
-
-        if (!codeId) {
-            return NextResponse.json(
-                { success: false, message: "codeId is required" },
-                { status: 400 }
-            );
-        }
+        const validation = await validateRequestBody(request, DeactivateInviteCodeSchema);
+        if (!validation.success) return validation.response;
+        const { codeId } = validation.data;
 
         // Verify the caller is an owner or employer
         const [userRecord] = await db

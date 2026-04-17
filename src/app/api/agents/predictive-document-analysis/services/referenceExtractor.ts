@@ -50,9 +50,10 @@ export async function extractReferences(
     const prompt = createReferenceExtractionPrompt(content);
     
     const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
         modelName: "gpt-5.2",
         temperature: 0.1,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
     });
 
     const structuredModel = chat.withStructuredOutput(ReferenceExtractionSchema, {

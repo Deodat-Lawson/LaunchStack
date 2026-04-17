@@ -13,7 +13,7 @@ This guide walks through setting up and verifying SeaweedFS as a local S3-compat
 Add these variables to your `.env` file:
 
 ```bash
-NEXT_PUBLIC_STORAGE_PROVIDER="local"
+NEXT_PUBLIC_STORAGE_PROVIDER="s3"
 NEXT_PUBLIC_S3_ENDPOINT="http://localhost:8333"
 S3_REGION="us-east-1"
 S3_ACCESS_KEY="pdr_local_key"
@@ -101,15 +101,15 @@ You can also test the file proxy API directly:
 curl -I http://localhost:3000/api/files/<file_upload_id>
 ```
 
-## 7. Regression Check — Cloud Mode
+## 7. Regression Check — Database Fallback Mode
 
-Swap back to cloud mode in `.env`:
+Swap to the Postgres fallback by unsetting S3 vars (or explicitly setting):
 
 ```bash
-NEXT_PUBLIC_STORAGE_PROVIDER="cloud"
+NEXT_PUBLIC_STORAGE_PROVIDER="database"
 ```
 
-Restart the dev server and do a test upload. It should go through UploadThing or Vercel Blob as before. Verify `storage_provider = 'vercel_blob'` in the database.
+Restart the dev server and do a test upload. The file should be stored as base64 in the `file_uploads.file_data` column, and the document URL should be `/api/files/<id>`. Verify `storage_provider = 'database'` in the database.
 
 ## 8. Infrastructure Smoke Test (Optional)
 
@@ -126,7 +126,7 @@ This validates containers, PostgreSQL databases, S3 operations (upload, download
 | Symptom | Cause | Fix |
 |---|---|---|
 | Container name conflict on `docker compose up` | Leftover containers from previous runs | `docker container prune -f` then retry |
-| Presign returns 400 "not applicable for cloud storage" | `NEXT_PUBLIC_STORAGE_PROVIDER` not set to `"local"` | Check `.env`, restart dev server |
+| Presign returns 400 "no S3 endpoint configured" | `NEXT_PUBLIC_STORAGE_PROVIDER` not set to `"s3"` (or S3 vars missing) | Check `.env`, restart dev server |
 | Presign returns 500 with S3 error | SeaweedFS not running or not healthy | Check `docker ps`, restart containers |
 | XHR upload fails with 403 | Presigned URL expired (>5 min) or credential mismatch | Retry upload; verify `.env` credentials match `docker/s3-config.json` |
 | SeaweedFS won't start | Postgres not healthy yet | Wait for db, then `docker compose restart seaweedfs` |

@@ -1,0 +1,19 @@
+# Override: use pre-built Next.js output from host instead of building in Docker.
+#
+# Usage:
+#   SKIP_ENV_VALIDATION=1 pnpm build
+#   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml build app migrate
+#   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml up -d
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prebuilt
+      target: runner
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.prebuilt
+      target: migrate

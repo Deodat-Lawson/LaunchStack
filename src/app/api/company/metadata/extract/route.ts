@@ -53,9 +53,10 @@ export async function POST(request: Request) {
         let debug = false;
         let force = false;
         try {
-            const body = (await request.json()) as { debug?: boolean; force?: boolean };
-            debug = body.debug === true;
-            force = body.force === true;
+            const { CompanyMetadataExtractSchema } = await import("~/lib/validation");
+            const body = CompanyMetadataExtractSchema.parse(await request.json());
+            debug = body.debug;
+            force = body.force;
         } catch {
             // No body or invalid JSON — that's fine, defaults apply
         }

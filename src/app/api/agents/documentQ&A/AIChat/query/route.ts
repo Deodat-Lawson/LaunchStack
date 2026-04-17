@@ -30,6 +30,8 @@ import {
     buildReferences,
     extractRecommendedPages,
 } from "../../services";
+import { debitTokens, llmChatTokens } from "~/lib/credits";
+import { isCloudMode } from "~/lib/providers/registry";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 
@@ -434,6 +436,35 @@ export async function POST(request: Request) {
 
             let summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;
+
+            // Log + meter LLM token usage
+            {
+                const usage = response.response_metadata?.tokenUsage as
+                    | { promptTokens?: number; completionTokens?: number }
+                    | undefined;
+                const promptTokens = usage?.promptTokens ?? 0;
+                const completionTokens = usage?.completionTokens ?? 0;
+                console.log(
+                    `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
+                );
+            }
+            if (isCloudMode() && userCompanyId) {
+                const usage = response.response_metadata?.tokenUsage as
+                    | { promptTokens?: number; completionTokens?: number }
+                    | undefined;
+                const promptTokens = usage?.promptTokens ?? 0;
+                const completionTokens = usage?.completionTokens ?? 0;
+                if (promptTokens + completionTokens > 0) {
+                    const tokenCost = llmChatTokens(promptTokens, completionTokens);
+                    debitTokens({
+                        companyId: userCompanyId,
+                        amount: tokenCost,
+                        service: "llm_chat",
+                        description: `Chat query via ${resolvedProvider}/${selectedAiModel}`,
+                        metadata: { promptTokens, completionTokens, provider: resolvedProvider, model: selectedAiModel },
+                    }).catch((err) => console.warn("[AIChat] Token debit failed:", err));
+                }
+            }
 
             const sourceTexts = documents.map(d => d.pageContent);
             const supervision = validateQAResponse(summarizedAnswer, sourceTexts, aiPersona);

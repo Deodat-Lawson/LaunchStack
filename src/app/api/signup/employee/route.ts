@@ -2,18 +2,13 @@ import { db } from "~/server/db/index";
 import { users, company } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
-
-type PostBody = {
-    userId: string;
-    name: string;
-    email: string;
-    employeePasskey: string;
-    companyName: string;
-};
+import { validateRequestBody, EmployeeSignupSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {
     try {
-        const { userId, name, email, employeePasskey, companyName } = (await request.json()) as PostBody;
+        const validation = await validateRequestBody(request, EmployeeSignupSchema);
+        if (!validation.success) return validation.response;
+        const { userId, name, email, employeePasskey, companyName } = validation.data;
 
         // Find company by company name
         const [existingCompany] = await db

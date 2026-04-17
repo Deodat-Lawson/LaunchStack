@@ -1,57 +1,17 @@
 """
-FastAPI Sidecar — The Muscle
-Provides /embed, /rerank, and /extract-entities endpoints
-powered by local ML models (sentence-transformers, cross-encoders).
+FastAPI Sidecar — DOCX Redlining Service (Adeu)
+Lightweight service for reading, editing, and diffing DOCX files.
 """
-
-from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.models.embedder import Embedder
-from app.models.reranker import Reranker
-from app.models.ner import EntityExtractor
-from app.models.transcriber import Transcriber
-from app.routes.embed import router as embed_router
-from app.routes.rerank import router as rerank_router
-from app.routes.entities import router as entities_router
-from app.routes.transcribe import router as transcribe_router
-
-
-# ---------------------------------------------------------------------------
-# Lifespan — warm up models once at startup
-# ---------------------------------------------------------------------------
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Load heavy ML models once and share them for the app lifetime."""
-    app.state.embedder = Embedder()
-    app.state.reranker = Reranker()
-    app.state.entity_extractor = EntityExtractor()
-    app.state.transcriber = Transcriber()
-
-    print("[Sidecar] Models loaded — ready to serve.")
-    yield
-    print("[Sidecar] Shutting down.")
-
-
-# ---------------------------------------------------------------------------
-# App
-# ---------------------------------------------------------------------------
-
 app = FastAPI(
-    title="Launchstack Sidecar",
-    description="Local ML compute for embedding, reranking, entity extraction, and transcription.",
-    version="0.1.0",
-    lifespan=lifespan,
+    title="Launchstack DOCX Service",
+    description="DOCX redlining via Adeu — read, edit, accept, diff.",
+    version="0.2.0",
 )
 
-app.include_router(embed_router)
-app.include_router(rerank_router)
-app.include_router(entities_router)
-app.include_router(transcribe_router)
-
-# Conditionally register adeu routes — sidecar starts even if adeu is not installed
+# Register adeu routes
 try:
     from app.routes.adeu import router as adeu_router
     app.include_router(adeu_router)

@@ -1,6 +1,6 @@
 /**
  * Property-based tests for environment validation — storage provider configuration.
- * Feature: local-s3-migration
+ * Feature: s3-or-database storage unification
  */
 
 import * as fc from "fast-check";
@@ -20,7 +20,7 @@ const optionalString = () =>
  */
 const storageServerSchema = z
     .object({
-        NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+        NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["s3", "database"]).optional(),
         NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
         S3_REGION: optionalString(),
         S3_ACCESS_KEY: optionalString(),
@@ -28,7 +28,7 @@ const storageServerSchema = z
         S3_BUCKET_NAME: optionalString(),
     })
     .superRefine((data, ctx) => {
-        if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "local") {
+        if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "s3") {
             const required = [
                 "NEXT_PUBLIC_S3_ENDPOINT",
                 "S3_REGION",
@@ -41,7 +41,7 @@ const storageServerSchema = z
                     ctx.addIssue({
                         code: z.ZodIssueCode.custom,
                         path: [key],
-                        message: `${key} is required when NEXT_PUBLIC_STORAGE_PROVIDER is "local"`,
+                        message: `${key} is required when NEXT_PUBLIC_STORAGE_PROVIDER is "s3"`,
                     });
                 }
             }
@@ -50,10 +50,10 @@ const storageServerSchema = z
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
-/** Any string that is not "cloud" or "local" */
+/** Any string that is not "s3" or "database" */
 const invalidProviderArb = fc
     .string()
-    .filter((s) => s !== "cloud" && s !== "local");
+    .filter((s) => s !== "s3" && s !== "database");
 
 /** Non-empty, non-whitespace string suitable as an S3 config value */
 const s3ValueArb = fc
@@ -81,25 +81,24 @@ const s3VarNames = [
 type S3VarName = (typeof s3VarNames)[number];
 
 // ─── Property 1: Storage provider enum validation ─────────────────────────────
-// Validates: Requirement 2.1
 
 describe(
-    'Feature: local-s3-migration, Property 1: Storage provider enum validation',
+    'Feature: storage unification, Property 1: Storage provider enum validation',
     () => {
-        it('"cloud" is accepted by the schema', () => {
+        it('"database" is accepted by the schema', () => {
             const result = storageServerSchema.safeParse({
-                NEXT_PUBLIC_STORAGE_PROVIDER: "cloud",
+                NEXT_PUBLIC_STORAGE_PROVIDER: "database",
             });
             expect(result.success).toBe(true);
             if (result.success) {
-                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBe("cloud");
+                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBe("database");
             }
         });
 
-        it('"local" is accepted by the schema', () => {
+        it('"s3" is accepted by the schema', () => {
             // Provide all required S3 vars so superRefine doesn't fail
             const result = storageServerSchema.safeParse({
-                NEXT_PUBLIC_STORAGE_PROVIDER: "local",
+                NEXT_PUBLIC_STORAGE_PROVIDER: "s3",
                 NEXT_PUBLIC_S3_ENDPOINT: "http://localhost:8333",
                 S3_REGION: "us-east-1",
                 S3_ACCESS_KEY: "key",
@@ -108,29 +107,29 @@ describe(
             });
             expect(result.success).toBe(true);
             if (result.success) {
-                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBe("local");
+                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBe("s3");
             }
         });
 
-        it('defaults to "cloud" when NEXT_PUBLIC_STORAGE_PROVIDER is absent', () => {
+        it('NEXT_PUBLIC_STORAGE_PROVIDER is optional (undefined is accepted)', () => {
             const result = storageServerSchema.safeParse({});
             expect(result.success).toBe(true);
             if (result.success) {
-                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBe("cloud");
+                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBeUndefined();
             }
         });
 
-        it('defaults to "cloud" when NEXT_PUBLIC_STORAGE_PROVIDER is undefined', () => {
+        it('explicit undefined is accepted', () => {
             const result = storageServerSchema.safeParse({
                 NEXT_PUBLIC_STORAGE_PROVIDER: undefined,
             });
             expect(result.success).toBe(true);
             if (result.success) {
-                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBe("cloud");
+                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBeUndefined();
             }
         });
 
-        it('any string other than "cloud" or "local" is rejected', () => {
+        it('any string other than "s3" or "database" is rejected', () => {
             fc.assert(
                 fc.property(invalidProviderArb, (invalidValue) => {
                     const result = storageServerSchema.safeParse({
@@ -145,16 +144,15 @@ describe(
 );
 
 // ─── Property 2: Conditional S3 variable requirement ─────────────────────────
-// Validates: Requirements 2.2, 2.4
 
 describe(
-    'Feature: local-s3-migration, Property 2: Conditional S3 variable requirement',
+    'Feature: storage unification, Property 2: Conditional S3 variable requirement',
     () => {
-        it('when provider is "local" and all S3 vars are present, validation succeeds', () => {
+        it('when provider is "s3" and all S3 vars are present, validation succeeds', () => {
             fc.assert(
                 fc.property(fullS3VarsArb, (s3Vars) => {
                     const result = storageServerSchema.safeParse({
-                        NEXT_PUBLIC_STORAGE_PROVIDER: "local",
+                        NEXT_PUBLIC_STORAGE_PROVIDER: "s3",
                         ...s3Vars,
                     });
                     expect(result.success).toBe(true);
@@ -163,17 +161,16 @@ describe(
             );
         });
 
-        it('when provider is "local" and any single S3 var is missing, validation fails', () => {
+        it('when provider is "s3" and any single S3 var is missing, validation fails', () => {
             fc.assert(
                 fc.property(
                     fullS3VarsArb,
                     fc.constantFrom(...s3VarNames),
                     (s3Vars, missingKey: S3VarName) => {
                         const input: Record<string, string | undefined> = {
-                            NEXT_PUBLIC_STORAGE_PROVIDER: "local",
+                            NEXT_PUBLIC_STORAGE_PROVIDER: "s3",
                             ...s3Vars,
                         };
-                        // Remove one required variable
                         delete input[missingKey];
 
                         const result = storageServerSchema.safeParse(input);
@@ -184,7 +181,7 @@ describe(
             );
         });
 
-        it('when provider is "local" and any S3 var is an empty/whitespace string, validation fails', () => {
+        it('when provider is "s3" and any S3 var is an empty/whitespace string, validation fails', () => {
             fc.assert(
                 fc.property(
                     fullS3VarsArb,
@@ -194,7 +191,7 @@ describe(
                     ),
                     (s3Vars, targetKey: S3VarName, whitespaceValue) => {
                         const input = {
-                            NEXT_PUBLIC_STORAGE_PROVIDER: "local",
+                            NEXT_PUBLIC_STORAGE_PROVIDER: "s3",
                             ...s3Vars,
                             [targetKey]: whitespaceValue,
                         };
@@ -207,15 +204,14 @@ describe(
             );
         });
 
-        it('when provider is "cloud", S3 vars are not required (validation succeeds without them)', () => {
+        it('when provider is "database", S3 vars are not required (validation succeeds without them)', () => {
             fc.assert(
                 fc.property(
-                    // Generate a subset of S3 vars (0 to all 5 present)
                     fc.subarray(s3VarNames as unknown as S3VarName[]),
                     s3ValueArb,
                     (presentKeys, value) => {
                         const input: Record<string, string> = {
-                            NEXT_PUBLIC_STORAGE_PROVIDER: "cloud",
+                            NEXT_PUBLIC_STORAGE_PROVIDER: "database",
                         };
                         for (const key of presentKeys) {
                             input[key] = value;
@@ -229,11 +225,11 @@ describe(
             );
         });
 
-        it('when provider is absent (defaults to "cloud"), S3 vars are not required', () => {
+        it('when provider is absent, S3 vars are not required', () => {
             const result = storageServerSchema.safeParse({});
             expect(result.success).toBe(true);
             if (result.success) {
-                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBe("cloud");
+                expect(result.data.NEXT_PUBLIC_STORAGE_PROVIDER).toBeUndefined();
             }
         });
     }

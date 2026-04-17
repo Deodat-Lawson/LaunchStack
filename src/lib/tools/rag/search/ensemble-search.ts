@@ -44,10 +44,13 @@ function isGraphRetrievalEnabled(): boolean {
 }
 
 export function createOpenAIEmbeddings(): OpenAIEmbeddings {
+  const apiKey = process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
+  const baseURL = process.env.EMBEDDING_API_BASE_URL || process.env.AI_BASE_URL;
   return new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY,
-    modelName: "text-embedding-3-large",
+    openAIApiKey: apiKey,
+    modelName: process.env.EMBEDDING_MODEL || "text-embedding-3-large",
     dimensions: 1536,
+    ...(baseURL ? { configuration: { baseURL } } : {}),
   });
 }
 

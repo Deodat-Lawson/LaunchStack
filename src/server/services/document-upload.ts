@@ -1,13 +1,20 @@
-import { db } from "~/server/db";
-import { document, ocrJobs } from "~/server/db/schema";
-import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
 import {
   shouldTranscribeFile,
   transcribeAudioFromUrl,
 } from "~/lib/audio/transcription";
 import { putFile } from "~/server/storage/vercel-blob";
+import {
+  detectStorageType,
+  toAbsoluteUrl,
+  type StorageType,
+} from "./detect-storage-type";
+import { createDocumentRecord } from "./create-document";
+import { triggerJob } from "./trigger-job";
+import { hasTokens } from "~/lib/credits";
+import { isCloudMode } from "~/lib/providers/registry";
 
-export type StorageType = "cloud" | "database" | "local";
+export type { StorageType } from "./detect-storage-type";
+export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
 
 export interface DocumentUploadUserContext {
   userId: string;
@@ -24,6 +31,9 @@ export interface DocumentUploadParams {
   explicitStorageType?: StorageType;
   mimeType?: string;
   originalFilename?: string;
+  isWebsite?: boolean;
+  /** Links crawled pages together for UI grouping */
+  crawlGroupId?: string;
 }
 
 export interface DocumentUploadResult {
@@ -40,37 +50,6 @@ export interface DocumentUploadResult {
 }
 
 /**
- * Determines the storage type from the URL. Relative URLs are treated as database storage.
- * Local S3 URLs (matching NEXT_PUBLIC_S3_ENDPOINT) are treated as local storage.
- */
-export function detectStorageType(url: string): StorageType {
-  if (url.startsWith("/api/files/")) {
-    return "database";
-  }
-  const s3Endpoint = process.env.NEXT_PUBLIC_S3_ENDPOINT;
-  if (s3Endpoint && url.startsWith(s3Endpoint)) {
-    return "local";
-  }
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return "cloud";
-  }
-  return "database";
-}
-
-/**
- * Converts a relative URL to an absolute URL using the current request origin.
- */
-export function toAbsoluteUrl(url: string, requestUrl: string): string {
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
-  }
-
-  const parsedUrl = new URL(requestUrl);
-  const origin = parsedUrl.origin;
-  return `${origin}${url.startsWith("/") ? "" : "/"}${url}`;
-}
-
-/**
  * Core document upload handler shared by single-file and batch commits.
  */
 export async function processDocumentUpload({
@@ -83,13 +62,27 @@ export async function processDocumentUpload({
   explicitStorageType,
   mimeType,
   originalFilename,
+  isWebsite,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
   const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
   const resolvedDocumentUrl =
     storageType === "database" ? toAbsoluteUrl(rawDocumentUrl, requestUrl) : rawDocumentUrl;
 
   const documentCategory = category ?? "Uncategorized";
-  const companyIdString = user.companyId.toString();
+
+  // ------------------------------------------------------------------
+  // Credit pre-check (cloud mode only)
+  // ------------------------------------------------------------------
+  if (isCloudMode()) {
+    // Rough estimate: 20 credits covers a typical document (OCR + embeddings)
+    const estimatedCredits = shouldTranscribeFile(mimeType, originalFilename) ? 30 : 20;
+    const sufficient = await hasTokens(user.companyId, estimatedCredits);
+    if (!sufficient) {
+      throw new Error(
+        "Insufficient credits to process this document. Please add more credits to continue."
+      );
+    }
+  }
 
   // ------------------------------------------------------------------
   // Audio file: save the original audio as a document, then create a
@@ -98,34 +91,21 @@ export async function processDocumentUpload({
   if (shouldTranscribeFile(mimeType, originalFilename)) {
     console.log(`[DocumentUpload] Audio file detected: ${documentName}, transcribing...`);
 
-    // 1. Save the original audio file as a document (marked as processed — nothing more to do)
-    const [audioDocument] = await db
-      .insert(document)
-      .values({
-        url: rawDocumentUrl,
-        title: documentName,
-        mimeType: mimeType ?? null,
-        category: documentCategory,
-        companyId: user.companyId,
-        ocrEnabled: false,
-        ocrProcessed: true,
-      })
-      .returning({
-        id: document.id,
-        url: document.url,
-        title: document.title,
-        category: document.category,
-      });
+    const audioDocument = await createDocumentRecord({
+      url: rawDocumentUrl,
+      title: documentName,
+      mimeType,
+      category: documentCategory,
+      companyId: user.companyId,
+      ocrEnabled: false,
+      ocrProcessed: true,
+    });
 
-    if (!audioDocument) {
-      throw new Error("Failed to create audio document record");
-    }
-
-    // 2. Transcribe and create a separate transcript document
     try {
       const transcriptionResult = await transcribeAudioFromUrl(
         resolvedDocumentUrl,
-        originalFilename || documentName
+        originalFilename || documentName,
+        user.companyId,
       );
 
       const textBlob = await putFile({
@@ -146,51 +126,28 @@ export async function processDocumentUpload({
 
       const transcriptName = `${documentName} (Transcription)`;
 
-      const [transcriptDocument] = await db
-        .insert(document)
-        .values({
-          url: textBlob.url,
-          title: transcriptName,
-          mimeType: "text/plain",
-          category: documentCategory,
-          companyId: user.companyId,
-          ocrEnabled: true,
-          ocrProcessed: false,
-          ocrMetadata: transcriptionMetadata,
-        })
-        .returning({
-          id: document.id,
-          url: document.url,
-          title: document.title,
-          category: document.category,
-        });
-
-      if (!transcriptDocument) {
-        throw new Error("Failed to create transcript document record");
-      }
-
-      const { jobId, eventIds } = await triggerDocumentProcessing(
-        textBlob.url,
-        transcriptName,
-        companyIdString,
-        user.userId,
-        transcriptDocument.id,
-        documentCategory,
-        {
-          preferredProvider: parseProvider(preferredProvider),
-          mimeType: "text/plain",
-          originalFilename: `${documentName}-transcription.txt`,
-          transcriptionMetadata,
-        }
-      );
-
-      await db.insert(ocrJobs).values({
-        id: jobId,
+      const transcriptDocument = await createDocumentRecord({
+        url: textBlob.url,
+        title: transcriptName,
+        mimeType: "text/plain",
+        category: documentCategory,
         companyId: user.companyId,
-        userId: user.userId,
-        status: "queued",
+        ocrEnabled: true,
+        ocrProcessed: false,
+        ocrMetadata: transcriptionMetadata,
+      });
+
+      const { jobId, eventIds } = await triggerJob({
         documentUrl: textBlob.url,
         documentName: transcriptName,
+        companyId: user.companyId,
+        userId: user.userId,
+        documentId: transcriptDocument.id,
+        category: documentCategory,
+        preferredProvider,
+        mimeType: "text/plain",
+        originalFilename: `${documentName}-transcription.txt`,
+        transcriptionMetadata,
       });
 
       console.log(`[DocumentUpload] Audio + transcript saved: audio docId=${audioDocument.id}, transcript docId=${transcriptDocument.id}`);
@@ -204,7 +161,6 @@ export async function processDocumentUpload({
       };
     } catch (error) {
       console.error(`[DocumentUpload] Audio transcription failed for ${documentName}:`, error);
-      // Transcription failed but the audio document is still saved
       return {
         jobId: "",
         eventIds: [],
@@ -218,49 +174,27 @@ export async function processDocumentUpload({
   // ------------------------------------------------------------------
   // Normal (non-audio) document processing
   // ------------------------------------------------------------------
-  const [newDocument] = await db
-    .insert(document)
-    .values({
-      url: rawDocumentUrl,
-      title: documentName,
-      mimeType: mimeType ?? null,
-      category: documentCategory,
-      companyId: user.companyId,
-      ocrEnabled: true,
-      ocrProcessed: false,
-    })
-    .returning({
-      id: document.id,
-      url: document.url,
-      title: document.title,
-      category: document.category,
-    });
-
-  if (!newDocument) {
-    throw new Error("Failed to create document record");
-  }
-
-  const { jobId, eventIds } = await triggerDocumentProcessing(
-    resolvedDocumentUrl,
-    documentName,
-    companyIdString,
-    user.userId,
-    newDocument.id,
-    documentCategory,
-    {
-      preferredProvider: parseProvider(preferredProvider),
-      mimeType,
-      originalFilename,
-    }
-  );
-
-  await db.insert(ocrJobs).values({
-    id: jobId,
+  const newDocument = await createDocumentRecord({
+    url: rawDocumentUrl,
+    title: documentName,
+    mimeType,
+    category: documentCategory,
     companyId: user.companyId,
-    userId: user.userId,
-    status: "queued",
+    ocrEnabled: true,
+    ocrProcessed: false,
+  });
+
+  const { jobId, eventIds } = await triggerJob({
     documentUrl: resolvedDocumentUrl,
     documentName,
+    companyId: user.companyId,
+    userId: user.userId,
+    documentId: newDocument.id,
+    category: documentCategory,
+    preferredProvider,
+    mimeType,
+    originalFilename,
+    isWebsite,
   });
 
   return {

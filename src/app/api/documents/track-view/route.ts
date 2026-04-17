@@ -3,10 +3,7 @@ import { db } from "~/server/db/index";
 import { users, documentViews, document } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
-
-interface TrackViewRequest {
-    documentId: number;
-}
+import { validateRequestBody, TrackDocumentViewSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {
     try {
@@ -18,15 +15,9 @@ export async function POST(request: Request) {
             );
         }
 
-        const body = (await request.json()) as TrackViewRequest;
-        const { documentId } = body;
-
-        if (!documentId) {
-            return NextResponse.json(
-                { success: false, error: "Document ID is required" },
-                { status: 400 }
-            );
-        }
+        const validation = await validateRequestBody(request, TrackDocumentViewSchema);
+        if (!validation.success) return validation.response;
+        const { documentId } = validation.data;
 
         // Get user info
         const [userInfo] = await db

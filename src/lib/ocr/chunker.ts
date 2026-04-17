@@ -4,14 +4,19 @@ import type {
   ExtractedTable,
   VectorizedChunk,
 } from "./types";
+import { hasMarkdownHeadings, splitByHeadings } from "~/lib/ingestion/heading-chunker";
 
 import OpenAI from "openai";
 
 // Lazy init to avoid issues if env var missing at module load
 let openai: OpenAI | null = null;
 function getOpenAI() {
-  if (!openai && process.env.OPENAI_API_KEY) {
-    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const apiKey = process.env.OPENAI_API_KEY || process.env.AI_API_KEY;
+  if (!openai && apiKey) {
+    openai = new OpenAI({
+      apiKey,
+      ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
+    });
   }
   return openai;
 }
@@ -71,19 +76,90 @@ function chunkTextBlocks(
 
   const mergedText = textBlocks.join("\n\n");
 
+  // If the content has Markdown headings, split by headings first
+  if (hasMarkdownHeadings(mergedText)) {
+    return chunkByHeadings(mergedText, pageNumber, config);
+  }
+
+  return chunkPlainText(mergedText, pageNumber, config);
+}
+
+/**
+ * Heading-aware chunking: splits on heading boundaries, then applies
+ * size-based splitting within each section. Sets structurePath metadata.
+ */
+function chunkByHeadings(
+  text: string,
+  pageNumber: number,
+  config: Required<ChunkingConfig>
+): DocumentChunk[] {
+  const sections = splitByHeadings(text);
+  if (sections.length === 0) {
+    return chunkPlainText(text, pageNumber, config);
+  }
+
+  const parentMaxChars = config.parentMaxTokens * config.charsPerToken;
+  const childMaxChars = config.childMaxTokens * config.charsPerToken;
+  const overlapChars = config.overlapTokens * config.charsPerToken;
+  const chunks: DocumentChunk[] = [];
+
+  for (const section of sections) {
+    const parentTexts = splitWithOverlap(section.content, parentMaxChars, overlapChars);
+
+    for (const parentContent of parentTexts) {
+      const childTexts = splitWithOverlap(parentContent, childMaxChars, overlapChars);
+
+      const children: DocumentChunk[] = childTexts.map((childContent, cIndex) => ({
+        id: "",
+        content: childContent,
+        type: "text" as const,
+        metadata: {
+          pageNumber,
+          chunkIndex: cIndex,
+          totalChunksInPage: childTexts.length,
+          isTable: false,
+          structurePath: section.path,
+        },
+      }));
+
+      chunks.push({
+        id: "",
+        content: parentContent,
+        type: "text" as const,
+        metadata: {
+          pageNumber,
+          chunkIndex: 0,
+          totalChunksInPage: 0,
+          isTable: false,
+          structurePath: section.path,
+        },
+        children,
+      });
+    }
+  }
+
+  return chunks;
+}
+
+/**
+ * Original plain-text chunking (no heading awareness).
+ */
+function chunkPlainText(
+  mergedText: string,
+  pageNumber: number,
+  config: Required<ChunkingConfig>
+): DocumentChunk[] {
   const parentMaxChars = config.parentMaxTokens * config.charsPerToken;
   const childMaxChars = config.childMaxTokens * config.charsPerToken;
   const overlapChars = config.overlapTokens * config.charsPerToken;
 
-  // 1. Create Parent Chunks (Context)
   const parentTexts = splitWithOverlap(mergedText, parentMaxChars, overlapChars);
 
   return parentTexts.map((parentContent, pIndex) => {
-    // 2. Create Child Chunks (Retrieval) from Parent Content
     const childTexts = splitWithOverlap(parentContent, childMaxChars, overlapChars);
-    
+
     const children: DocumentChunk[] = childTexts.map((childContent, cIndex) => ({
-      id: "", // Assigned later or ignored
+      id: "",
       content: childContent,
       type: "text" as const,
       metadata: {
@@ -101,7 +177,7 @@ function chunkTextBlocks(
       metadata: {
         pageNumber,
         chunkIndex: pIndex,
-        totalChunksInPage: 0, // Set by caller
+        totalChunksInPage: 0,
         isTable: false,
       },
       children

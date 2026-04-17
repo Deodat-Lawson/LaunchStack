@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
+import { validateRequestBody, UpdateExecutionStepSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -14,12 +15,9 @@ export async function PATCH(
 ) {
   try {
     const { stepId } = await params;
-    const body = await request.json() as {
-      status?: string;
-      output?: unknown;
-      reasoning?: string;
-    };
-    const { status, output, reasoning } = body;
+    const validation = await validateRequestBody(request, UpdateExecutionStepSchema);
+    if (!validation.success) return validation.response;
+    const { status, output, reasoning } = validation.data;
 
     const updateData: Record<string, unknown> = {};
     if (status) updateData.status = status;

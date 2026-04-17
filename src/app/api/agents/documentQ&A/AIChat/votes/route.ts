@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { agentAiChatbotVote } from "~/server/db/schema";
 import { eq, and } from "drizzle-orm";
+import { validateRequestBody, CreateVoteSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -10,20 +11,9 @@ export const maxDuration = 300;
 // POST /api/agent-ai-chatbot/votes - Vote on a message
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as {
-      chatId?: string;
-      messageId?: string;
-      isUpvoted?: boolean;
-      feedback?: string;
-    };
-    const { chatId, messageId, isUpvoted, feedback } = body;
-
-    if (!chatId || !messageId || isUpvoted === undefined) {
-      return NextResponse.json(
-        { error: "chatId, messageId, and isUpvoted are required" },
-        { status: 400 }
-      );
-    }
+    const validation = await validateRequestBody(request, CreateVoteSchema);
+    if (!validation.success) return validation.response;
+    const { chatId, messageId, isUpvoted, feedback } = validation.data;
 
     // Check if vote already exists
     const [existingVote] = await db

@@ -176,9 +176,13 @@ async function markFileFailed(batchId: string, fileId: number, message: string) 
     .where(and(eq(uploadBatchFiles.id, fileId), eq(uploadBatchFiles.batchId, batchId)));
 }
 
-function inferStorageType(value: string | null): "cloud" | "database" | undefined {
-  if (value === "cloud" || value === "database") {
+function inferStorageType(value: string | null): "s3" | "database" | undefined {
+  if (value === "s3" || value === "database") {
     return value;
+  }
+  // Legacy rows stored "cloud" (Vercel Blob) — treat as S3 for routing purposes
+  if (value === "cloud") {
+    return "s3";
   }
   return undefined;
 }

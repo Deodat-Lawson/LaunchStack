@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { agentAiChatbotChat, agentAiChatbotDocument } from "~/server/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { validateRequestBody, CreateChatSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -43,42 +44,28 @@ export async function GET(request: NextRequest) {
 // POST /api/agent-ai-chatbot/chats - Create a new chat
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as {
-      userId?: string;
-      title?: string;
-      agentMode?: string;
-      visibility?: string;
-      aiStyle?: string;
-      aiPersona?: string;
-      documentId?: string | number;
-    };
-    const { 
-      userId, 
-      title, 
-      agentMode = "interactive", 
-      visibility = "private",
-      aiStyle = "concise",
-      aiPersona = "general",
+    const validation = await validateRequestBody(request, CreateChatSchema);
+    if (!validation.success) return validation.response;
+    const {
+      userId,
+      title,
+      agentMode,
+      visibility,
+      aiStyle,
+      aiPersona,
       documentId
-    } = body;
-
-    if (!userId || !title) {
-      return NextResponse.json(
-        { error: "userId and title are required" },
-        { status: 400 }
-      );
-    }
+    } = validation.data;
 
     const chatId = randomUUID();
     const insertValues = {
       id: chatId,
       userId,
       title,
-      agentMode: (agentMode ?? "interactive") as "autonomous" | "interactive" | "assisted",
-      visibility: (visibility ?? "private") as "public" | "private",
+      agentMode: agentMode as "autonomous" | "interactive" | "assisted",
+      visibility: visibility as "public" | "private",
       status: "active" as const,
-      aiStyle: (aiStyle ?? "concise") as "concise" | "detailed" | "academic" | "bullet-points" | undefined,
-      aiPersona: (aiPersona ?? "general") as "general" | "learning-coach" | "financial-expert" | "legal-expert" | "math-reasoning" | undefined,
+      aiStyle: aiStyle as "concise" | "detailed" | "academic" | "bullet-points" | undefined,
+      aiPersona: aiPersona as "general" | "learning-coach" | "financial-expert" | "legal-expert" | "math-reasoning" | undefined,
     };
 
     const [newChat] = await db

@@ -25,10 +25,14 @@ export type IngestionProvider =
   | "mammoth"
   | "sheetjs"
   | "cheerio"
+  | "readability"
+  | "crawl4ai"
   | "azure"
   | "landing_ai"
   | "tesseract"
-  | "sidecar";
+  | "sidecar"
+  | "docling"
+  | "marker";
 
 export interface StandardizedDocument {
   pages: StandardizedPage[];
@@ -66,6 +70,8 @@ export interface LayoutCoordinate {
 
 export interface SourceAdapter {
   readonly name: string;
+  /** When true, the router passes the original URL instead of pre-fetching to a Buffer. */
+  readonly needsUrl?: boolean;
   canHandle(mimeType: string, extension: string, filename?: string): boolean;
   process(
     input: string | Buffer,
@@ -78,6 +84,10 @@ export interface SourceAdapterOptions {
   mimeType?: string;
   forceOCR?: boolean;
   language?: string;
+  /** The original URL when the source is a website upload */
+  sourceUrl?: string;
+  /** True when the document originated from a website upload (not a file upload) */
+  isWebsite?: boolean;
 }
 
 // ============================================================================
@@ -175,6 +185,8 @@ export function toNormalizedDocument(doc: StandardizedDocument): NormalizedDocum
     mammoth: "NATIVE_PDF",
     sheetjs: "NATIVE_PDF",
     cheerio: "NATIVE_PDF",
+    readability: "NATIVE_PDF",
+    crawl4ai: "NATIVE_PDF",
     azure: "AZURE",
     landing_ai: "LANDING_AI",
     tesseract: "NATIVE_PDF",

@@ -21,6 +21,10 @@ export interface TriggerOptions {
   mimeType?: string;
   /** Original filename with extension — used for adapter routing */
   originalFilename?: string;
+  /** True when the document originated from a website upload */
+  isWebsite?: boolean;
+  /** Metadata from audio transcription */
+  transcriptionMetadata?: Record<string, unknown>;
 }
 
 /**
@@ -57,6 +61,7 @@ export async function triggerDocumentProcessing(
     category,
     mimeType: options?.mimeType,
     originalFilename: options?.originalFilename,
+    isWebsite: options?.isWebsite,
     options: {
       forceOCR: options?.forceOCR,
       preferredProvider: options?.preferredProvider,

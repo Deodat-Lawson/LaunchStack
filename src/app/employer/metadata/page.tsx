@@ -7,7 +7,9 @@ import {
     Briefcase,
     RefreshCw,
     AlertCircle,
+    AlertTriangle,
     FileText,
+    Scale,
     Sparkles,
 } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
@@ -19,6 +21,7 @@ import { PeopleSection } from "./components/PeopleSection";
 import { ServicesSection } from "./components/ServicesSection";
 import { MarketsSection } from "./components/MarketsSection";
 import { ProvenanceCard } from "./components/ProvenanceCard";
+import { LegalSection } from "./components/LegalSection";
 import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
 
 interface MetadataResponse {
@@ -205,7 +208,7 @@ export default function MetadataPage() {
                     ) : (
                         <>
                             {/* Summary Stats */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                                 <StatsCard
                                     title="Company Fields"
                                     value={Object.keys(metadata.company).filter(k => metadata.company[k]).length}
@@ -225,12 +228,21 @@ export default function MetadataPage() {
                                     color="green"
                                 />
                                 <StatsCard
-                                    title="Documents Processed"
+                                    title="Legal"
+                                    value={(metadata.legal ?? []).length}
+                                    icon={Scale}
+                                    color="rose"
+                                />
+                                <StatsCard
+                                    title="Docs Processed"
                                     value={metadata.provenance.total_documents_processed}
                                     icon={FileText}
                                     color="amber"
                                 />
                             </div>
+
+                            {/* Missing Info Alert */}
+                            <MissingInfoAlert company={metadata.company} people={metadata.people} />
 
                             {/* Company Info */}
                             <CompanyInfoCard company={metadata.company} />
@@ -251,6 +263,11 @@ export default function MetadataPage() {
                                 <MarketsSection markets={metadata.markets} />
                             ) : null}
 
+                            {/* Legal Section */}
+                            {(metadata.legal ?? []).length > 0 && (
+                                <LegalSection legal={metadata.legal ?? []} />
+                            )}
+
                             {/* Provenance */}
                             <ProvenanceCard
                                 provenance={metadata.provenance}
@@ -264,12 +281,68 @@ export default function MetadataPage() {
     );
 }
 
+/* Missing Info Alert */
+import type { CompanyInfo, PersonEntry } from "~/lib/tools/company-metadata/types";
+
+const EXPECTED_COMPANY_FIELDS: Array<{ key: keyof CompanyInfo; label: string }> = [
+    { key: "name", label: "Company Name" },
+    { key: "industry", label: "Industry" },
+    { key: "headquarters", label: "Headquarters" },
+    { key: "founded_year", label: "Founded Year" },
+    { key: "description", label: "Description" },
+    { key: "website", label: "Website" },
+    { key: "size", label: "Company Size" },
+];
+
+function MissingInfoAlert({ company, people }: { company: CompanyInfo; people: PersonEntry[] }) {
+    const missingFields = EXPECTED_COMPANY_FIELDS.filter((f) => {
+        const field = company[f.key];
+        if (!field) return true;
+        const val = (field as { value?: unknown }).value;
+        return val === undefined || val === null || val === "";
+    });
+    const peopleWithoutRoles = people.filter((p) => !p.role);
+
+    if (missingFields.length === 0 && peopleWithoutRoles.length === 0) return null;
+
+    return (
+        <Card className="p-4 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/30 shadow-sm">
+            <div className="flex items-start gap-3">
+                <div className="p-2 bg-amber-100 dark:bg-amber-900/40 rounded-lg shrink-0">
+                    <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-bold text-amber-800 dark:text-amber-300">
+                        Incomplete Metadata
+                    </h4>
+                    {missingFields.length > 0 && (
+                        <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+                            Missing company fields:{" "}
+                            <span className="font-semibold">
+                                {missingFields.map((f) => f.label).join(", ")}
+                            </span>
+                        </p>
+                    )}
+                    {peopleWithoutRoles.length > 0 && (
+                        <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+                            {peopleWithoutRoles.length} {peopleWithoutRoles.length === 1 ? "person" : "people"} missing role information
+                        </p>
+                    )}
+                    <p className="text-xs text-amber-600 dark:text-amber-500 mt-2">
+                        Upload more documents or manually edit fields to fill in missing information.
+                    </p>
+                </div>
+            </div>
+        </Card>
+    );
+}
+
 /* Local StatsCard component */
 interface StatsCardProps {
     title: string;
     value: number | string;
     icon: React.ComponentType<{ className?: string }>;
-    color: "purple" | "blue" | "green" | "amber";
+    color: "purple" | "blue" | "green" | "amber" | "rose";
 }
 
 const colorMap = {
@@ -277,6 +350,7 @@ const colorMap = {
     blue: { border: "border-l-blue-500", text: "text-blue-500" },
     green: { border: "border-l-green-500", text: "text-green-500" },
     amber: { border: "border-l-amber-500", text: "text-amber-500" },
+    rose: { border: "border-l-rose-500", text: "text-rose-500" },
 };
 
 function StatsCard({ title, value, icon: Icon, color }: StatsCardProps) {

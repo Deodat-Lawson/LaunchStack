@@ -275,7 +275,7 @@ export async function POST(request: Request) {
             { 
                 success: false, 
                 message: "Failed to check grammar",
-                error: error instanceof Error ? error.message : "Unknown error"
+                error: "Failed to check grammar"
             },
             { status: 500 }
         );

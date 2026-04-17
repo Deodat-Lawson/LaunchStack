@@ -3,6 +3,9 @@
  * Stores uploaded files in the database when UploadThing is disabled
  */
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
@@ -14,7 +17,7 @@ import { DOCUMENT_LIMITS } from "~/lib/constants";
 const MAX_FILE_SIZE = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const UNSUPPORTED_TYPE_MESSAGE =
-  "Unsupported file type. Accepted: PDF, Word, Excel, PowerPoint, text, HTML, images (PNG, JPG, TIFF, etc.).";
+  "Unsupported file type. Accepted: PDF, Word, Excel, PowerPoint, text, HTML, images (PNG, JPG, TIFF, etc.), audio (MP3, MP4).";
 
 export async function POST(request: Request) {
   const uploadStart = Date.now();
@@ -119,7 +122,6 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error: "Failed to upload file",
-        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );

@@ -19,6 +19,20 @@ export const createErrorResponse = (message: string, status = 400) => {
   );
 };
 
+/**
+ * Standard 500 response for unexpected server errors.
+ * Never include error.message — log server-side instead.
+ *
+ * @example
+ * } catch (error) {
+ *   console.error('[route] error:', error)
+ *   return serverError('Failed to process request')
+ * }
+ */
+export const serverError = (message = "Internal server error", status = 500) => {
+  return NextResponse.json({ success: false, error: message }, { status });
+};
+
 export const validateRequestBody = async <T>(
   request: Request,
   schema: z.ZodSchema<T>
@@ -85,7 +99,7 @@ function assertProviderModelCombination(
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["aiModel"],
-      message: `Model \"${model}\" is not available for provider \"${provider}\"`,
+      message: `Model \"${String(model)}\" is not available for provider \"${String(provider)}\"`,
     });
   }
 }
@@ -101,15 +115,13 @@ export const QuestionSchema = z
     enableWebSearch: z.boolean().optional().default(false),
     aiPersona: z.enum(aiPersonaOptions).optional(),
     aiModel: z.enum(aiModelOptions).optional(),
-    provider: z.enum(providerOptions).optional(),
+    provider: z.enum(providerOptions).default("openai"),
     conversationHistory: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    const provider = (data.provider ?? "openai") as LLMProvider;
-    assertProviderModelCombination(provider, data.aiModel, ctx);
+    assertProviderModelCombination(data.provider, data.aiModel, ctx);
   })
   .transform((data) => {
-    const provider = (data.provider ?? "openai") as LLMProvider;
     return {
       documentId: data.documentId,
       companyId: data.companyId,
@@ -120,7 +132,7 @@ export const QuestionSchema = z
       enableWebSearch: data.enableWebSearch ?? false,
       aiPersona: data.aiPersona ?? "general",
       aiModel: data.aiModel,
-      provider,
+      provider: data.provider,
       conversationHistory: data.conversationHistory,
     };
   });
@@ -226,7 +238,7 @@ export const RLMQuestionSchema = z
     enableWebSearch: z.boolean().optional().default(false),
     aiPersona: z.enum(aiPersonaOptions).optional(),
     aiModel: z.enum(aiModelOptions).optional(),
-    provider: z.enum(providerOptions).optional(),
+    provider: z.enum(providerOptions).default("openai"),
     conversationHistory: z.string().optional(),
     // RLM-specific options
     maxTokens: z.number().int().min(500).max(100000).optional(),
@@ -245,11 +257,9 @@ export const RLMQuestionSchema = z
       .optional(),
   })
   .superRefine((data, ctx) => {
-    const provider = (data.provider ?? "openai") as LLMProvider;
-    assertProviderModelCombination(provider, data.aiModel, ctx);
+    assertProviderModelCombination(data.provider, data.aiModel, ctx);
   })
   .transform((data) => {
-    const provider = (data.provider ?? "openai") as LLMProvider;
     return {
       documentId: data.documentId,
       question: data.question,
@@ -257,7 +267,7 @@ export const RLMQuestionSchema = z
       enableWebSearch: data.enableWebSearch ?? false,
       aiPersona: data.aiPersona ?? "general",
       aiModel: data.aiModel,
-      provider,
+      provider: data.provider,
       conversationHistory: data.conversationHistory,
       maxTokens: data.maxTokens ?? 4000,
       includeOverview: data.includeOverview ?? true,

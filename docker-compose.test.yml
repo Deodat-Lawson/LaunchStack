@@ -1,0 +1,18 @@
+# Docker Compose override for integration testing: app → sidecar → Adeu
+# Usage: docker compose -f docker-compose.yml -f docker-compose.test.yml up sidecar --build
+#
+# Then run: ./scripts/test-sidecar-integration.sh
+
+services:
+  sidecar:
+    build:
+      context: ./sidecar
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-sidecar-test
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

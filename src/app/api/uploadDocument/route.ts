@@ -26,11 +26,15 @@ const UploadDocumentSchema = z.object({
   documentName: z.string().min(1, "Document name is required"),
   category: z.string().optional(),
   preferredProvider: z.string().optional(),
-  storageType: z.enum(["cloud", "database"]).optional(),
+  storageType: z.enum(["cloud", "database", "local"]).optional(),
   /** MIME type of the uploaded file — used to route non-PDF files to the correct adapter */
   mimeType: z.string().optional(),
   /** Original filename with extension — used for adapter routing when documentName has been cleaned */
   originalFilename: z.string().optional(),
+  /** Storage provider identifier for local S3 uploads (e.g. "seaweedfs") */
+  storageProvider: z.string().optional(),
+  /** S3 object key for local uploads */
+  storagePathname: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -106,7 +110,6 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error: "Failed to start document processing",
-          details: error instanceof Error ? error.message : "Unknown error",
         },
         { status: 500 }
       );

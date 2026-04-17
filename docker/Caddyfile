@@ -1,0 +1,7 @@
+{$DOMAIN:localhost}:{$PORT:80} {
+    reverse_proxy app:3000
+
+    handle_path /inngest/* {
+        reverse_proxy inngest-dev:8288
+    }
+}

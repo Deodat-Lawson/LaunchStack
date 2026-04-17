@@ -31,7 +31,11 @@ try {
     process.exit(1);
   }
 } catch (err) {
-  console.error("[ensure-pgvector] Failed to enable pgvector:", err.message);
+  console.error("[ensure-pgvector] Failed to enable pgvector");
+  console.error("  message:", err?.message || "(empty)");
+  console.error("  code:   ", err?.code ?? "(none)");
+  console.error("  name:   ", err?.name ?? "(none)");
+  if (err?.stack) console.error(err.stack);
   process.exit(1);
 } finally {
   await sql.end();

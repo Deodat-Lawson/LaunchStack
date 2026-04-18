@@ -131,7 +131,9 @@ export const Neo4jDynamicRelPropertiesSchema = z.object({
     weight: z.number().min(0).max(1),
     evidenceCount: z.number().int().positive(),
     detail: z.string().nullable(),
-    documentId: z.number().int().positive(),
+    // Array of document IDs that contributed evidence for this relationship.
+    // Enables correct scoped deletion in R15 without losing provenance.
+    documentIds: z.array(z.number().int().positive()).min(1),
 });
 
 // ── Neo4j Write Result ───────────────────────────────────────

@@ -113,11 +113,14 @@ export class Neo4jDirectWriterImpl implements Neo4jDirectWriter {
              rel.weight        = r.weight,
              rel.evidenceCount = r.evidenceCount,
              rel.detail        = r.detail,
-             rel.documentId    = r.documentId
+             rel.documentIds   = [r.documentId]
            ON MATCH SET
              rel.weight        = r.weight,
              rel.evidenceCount = r.evidenceCount,
-             rel.detail        = CASE WHEN r.detail IS NOT NULL THEN r.detail ELSE rel.detail END`,
+             rel.detail        = CASE WHEN r.detail IS NOT NULL THEN r.detail ELSE rel.detail END,
+             rel.documentIds   = CASE WHEN r.documentId IN rel.documentIds
+                                   THEN rel.documentIds
+                                   ELSE rel.documentIds + r.documentId END`,
           {
             rels: rels.map((r) => ({
               sourceName: r.sourceName,
@@ -290,96 +293,82 @@ export class Neo4jDirectWriterImpl implements Neo4jDirectWriter {
   }
 
   // ─── R6: resolveEntities ────────────────────────────────────────────────────
-  // Not part of the Neo4jDirectWriter interface — called externally after writeEntities.
+  // Extracted to standalone function below — see resolveEntities().
+}
 
-  async resolveEntities(
-    entities: Neo4jEntityInput[],
-    companyId: string,
-  ): Promise<void> {
-    const raw = process.env.ENTITY_RESOLUTION_THRESHOLD;
-    const threshold = raw != null && raw !== "" ? parseFloat(raw) : 0.85;
+/**
+ * R6 — Entity Resolution.
+ * Run after writeEntities() to deduplicate near-duplicate entities via the
+ * entity-embeddings vector index. Creates ALIAS_OF edges for provenance.
+ * Standalone function (not on Neo4jDirectWriter interface) because resolution
+ * is a post-write orchestration step, not a write primitive.
+ */
+export async function resolveEntities(
+  entities: Neo4jEntityInput[],
+  companyId: string,
+): Promise<void> {
+  const raw = process.env.ENTITY_RESOLUTION_THRESHOLD;
+  const threshold = raw != null && raw !== "" ? parseFloat(raw) : 0.85;
 
-    const entitiesWithEmbeddings = entities.filter((e) => e.embedding && e.embedding.length > 0);
-    if (entitiesWithEmbeddings.length === 0) return;
+  const entitiesWithEmbeddings = entities.filter((e) => e.embedding && e.embedding.length > 0);
+  if (entitiesWithEmbeddings.length === 0) return;
 
-    let session: Session | null = null;
-    try {
-      session = getNeo4jSession();
+  let session: Session | null = null;
+  try {
+    session = getNeo4jSession();
 
-      for (const entity of entitiesWithEmbeddings) {
-        let candidates: Array<{ name: string; label: string; mentionCount: number; score: number }>;
-        try {
-          const result = await session.run(
-            `CALL db.index.vector.queryNodes('entity-embeddings', 10, $embedding)
-             YIELD node, score
-             WHERE node.companyId = $companyId
-               AND node.name <> $name
-               AND score >= $threshold
-             RETURN node.name AS name, node.label AS label, node.mentionCount AS mentionCount, score
-             ORDER BY score DESC`,
-            {
-              embedding: entity.embedding,
-              companyId,
-              name: entity.name,
-              threshold,
-            },
-          );
-          candidates = result.records.map((r) => ({
-            name: r.get("name") as string,
-            label: r.get("label") as string,
-            mentionCount: r.get("mentionCount") as number,
-            score: r.get("score") as number,
-          }));
-        } catch (err) {
-          console.warn("[Neo4jDirectWriter] Vector index query failed (skipping resolution):", err instanceof Error ? err.message : err);
-          return;
-        }
-
-        for (const candidate of candidates) {
-          // Determine canonical: higher mentionCount wins; tie → existing node (candidate) is canonical
-          const entityMentionCount = entity.mentionCount;
-          const isEntityCanonical = entityMentionCount > candidate.mentionCount;
-
-          if (isEntityCanonical) {
-            // entity is canonical, candidate is alias
-            await session.run(
-              `MATCH (alias:Entity {name: $aliasName, label: $aliasLabel, companyId: $companyId})
-               MATCH (canonical:Entity {name: $canonicalName, label: $canonicalLabel, companyId: $companyId})
-               MERGE (alias)-[:ALIAS_OF]->(canonical)`,
-              {
-                aliasName: candidate.name,
-                aliasLabel: candidate.label,
-                canonicalName: entity.name,
-                canonicalLabel: entity.label,
-                companyId,
-              },
-            );
-          } else {
-            // candidate is canonical (higher or equal mentionCount → existing wins on tie)
-            await session.run(
-              `MATCH (alias:Entity {name: $aliasName, label: $aliasLabel, companyId: $companyId})
-               MATCH (canonical:Entity {name: $canonicalName, label: $canonicalLabel, companyId: $companyId})
-               MERGE (alias)-[:ALIAS_OF]->(canonical)`,
-              {
-                aliasName: entity.name,
-                aliasLabel: entity.label,
-                canonicalName: candidate.name,
-                canonicalLabel: candidate.label,
-                companyId,
-              },
-            );
-          }
-        }
+    for (const entity of entitiesWithEmbeddings) {
+      let candidates: Array<{ name: string; label: string; mentionCount: number; score: number }>;
+      try {
+        const result = await session.run(
+          `CALL db.index.vector.queryNodes('entity-embeddings', 10, $embedding)
+           YIELD node, score
+           WHERE node.companyId = $companyId
+             AND node.name <> $name
+             AND score >= $threshold
+           RETURN node.name AS name, node.label AS label, node.mentionCount AS mentionCount, score
+           ORDER BY score DESC`,
+          {
+            embedding: entity.embedding,
+            companyId,
+            name: entity.name,
+            threshold,
+          },
+        );
+        candidates = result.records.map((r) => ({
+          name: r.get("name") as string,
+          label: r.get("label") as string,
+          mentionCount: r.get("mentionCount") as number,
+          score: r.get("score") as number,
+        }));
+      } catch (err) {
+        console.warn("[resolveEntities] Vector index query failed (skipping resolution):", err instanceof Error ? err.message : err);
+        return;
       }
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      if (msg.includes("index") || msg.includes("vector")) {
-        console.warn("[Neo4jDirectWriter] Vector index not available, skipping entity resolution:", msg);
-      } else {
-        console.warn("[Neo4jDirectWriter] resolveEntities failed:", msg);
+
+      for (const candidate of candidates) {
+        // Canonical = higher mentionCount; tie → existing node (candidate) wins
+        const isEntityCanonical = entity.mentionCount > candidate.mentionCount;
+        const [aliasName, aliasLabel, canonicalName, canonicalLabel] = isEntityCanonical
+          ? [candidate.name, candidate.label, entity.name, entity.label]
+          : [entity.name, entity.label, candidate.name, candidate.label];
+
+        await session.run(
+          `MATCH (alias:Entity {name: $aliasName, label: $aliasLabel, companyId: $companyId})
+           MATCH (canonical:Entity {name: $canonicalName, label: $canonicalLabel, companyId: $companyId})
+           MERGE (alias)-[:ALIAS_OF]->(canonical)`,
+          { aliasName, aliasLabel, canonicalName, canonicalLabel, companyId },
+        );
       }
-    } finally {
-      await session?.close();
     }
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes("index") || msg.includes("vector")) {
+      console.warn("[resolveEntities] Vector index not available, skipping entity resolution:", msg);
+    } else {
+      console.warn("[resolveEntities] failed:", msg);
+    }
+  } finally {
+    await session?.close();
   }
 }

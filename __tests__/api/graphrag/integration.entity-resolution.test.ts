@@ -7,7 +7,7 @@
  */
 
 // TODO: import your implementation
-// import { Neo4jDirectWriterImpl } from "~/lib/graph/neo4j-direct-writer-impl";
+// import { Neo4jDirectWriterImpl, resolveEntities } from "~/lib/graph/neo4j-direct-writer-impl";
 
 /** Generates a 768-dim embedding with a given base value (for deterministic similarity). */
 function makeEmbedding(base: number): number[] {

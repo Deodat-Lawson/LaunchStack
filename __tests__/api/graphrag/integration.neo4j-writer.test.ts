@@ -118,24 +118,6 @@ describe("Integration: Neo4jDirectWriter", () => {
     // await expect(Promise.all([writer.ensureIndexes(), writer.ensureIndexes()])).resolves.not.toThrow();
   });
 
-  // ─── deleteDocumentGraph ────────────────────────────────────────────────────
-
-  it("deleteDocumentGraph removes Document, Sections, and MENTIONED_IN edges for the document", async () => {
-    // Write a full document graph + mentions, then delete
-    // Verify Document node gone, Section nodes gone, MENTIONED_IN edges gone
-    // Verify result.deletedSections > 0, result.deletedMentions > 0
-  });
-
-  it("deleteDocumentGraph removes orphaned entities after deletion", async () => {
-    // Write entity mentioned only in this document, then delete document
-    // Verify entity is removed (orphanedEntitiesRemoved > 0)
-  });
-
-  it("deleteDocumentGraph preserves entities still mentioned in other documents", async () => {
-    // Write entity mentioned in two documents, delete one document
-    // Verify entity still exists
-  });
-
   // ─── graceful degradation ───────────────────────────────────────────────────
 
   it("all methods return gracefully when Neo4j is unreachable", async () => {

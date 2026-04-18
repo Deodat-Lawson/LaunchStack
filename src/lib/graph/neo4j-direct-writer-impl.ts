@@ -269,112 +269,24 @@ export class Neo4jDirectWriterImpl implements Neo4jDirectWriter {
     }
   }
 
-  // ─── R5: deleteDocumentGraph ────────────────────────────────────────────────
+  // ─── deleteDocumentGraph (R15 — stub, not scoped for this spec) ──────────
 
   async deleteDocumentGraph(
-    documentId: number,
-    companyId: string,
+    _documentId: number,
+    _companyId: string,
   ): Promise<Neo4jDeleteResult> {
-    const start = Date.now();
-    let session: Session | null = null;
-    try {
-      session = getNeo4jSession();
-
-      // Count and delete MENTIONED_IN edges from this document's sections
-      const mentionResult = await session.run(
-        `MATCH (e:Entity)-[r:MENTIONED_IN]->(s:Section {documentId: $documentId})
-         WHERE e.companyId = $companyId
-         WITH r, count(r) AS cnt
-         DELETE r
-         RETURN sum(cnt) AS deleted`,
-        { documentId, companyId },
-      );
-      const deletedMentions = (mentionResult.records[0]?.get("deleted") as number | null) ?? 0;
-
-      // Count and delete Section nodes for this document
-      const sectionResult = await session.run(
-        `MATCH (s:Section {documentId: $documentId})
-         WITH s, count(s) AS cnt
-         DETACH DELETE s
-         RETURN sum(cnt) AS deleted`,
-        { documentId },
-      );
-      const deletedSections = (sectionResult.records[0]?.get("deleted") as number | null) ?? 0;
-
-      // Delete dynamic relationships that reference this documentId
-      const relResult = await session.run(
-        `MATCH (src:Entity {companyId: $companyId})-[r]->(tgt:Entity {companyId: $companyId})
-         WHERE r.documentId = $documentId AND type(r) <> 'ALIAS_OF'
-         WITH r, count(r) AS cnt
-         DELETE r
-         RETURN sum(cnt) AS deleted`,
-        { documentId, companyId },
-      );
-      const deletedRelationships = (relResult.records[0]?.get("deleted") as number | null) ?? 0;
-
-      // Remove orphaned entities (no remaining MENTIONED_IN edges, same companyId)
-      const orphanEntityResult = await session.run(
-        `MATCH (e:Entity {companyId: $companyId})
-         WHERE NOT (e)-[:MENTIONED_IN]->()
-           AND NOT (e)-[:ALIAS_OF]->()
-           AND NOT ()-[:ALIAS_OF]->(e)
-         WITH e, count(e) AS cnt
-         DETACH DELETE e
-         RETURN sum(cnt) AS deleted`,
-        { companyId },
-      );
-      const orphanedEntitiesRemoved = (orphanEntityResult.records[0]?.get("deleted") as number | null) ?? 0;
-
-      // Remove orphaned topics (no remaining DISCUSSES edges, same companyId)
-      const orphanTopicResult = await session.run(
-        `MATCH (t:Topic {companyId: $companyId})
-         WHERE NOT ()-[:DISCUSSES]->(t)
-         WITH t, count(t) AS cnt
-         DETACH DELETE t
-         RETURN sum(cnt) AS deleted`,
-        { companyId },
-      );
-      const orphanedTopicsRemoved = (orphanTopicResult.records[0]?.get("deleted") as number | null) ?? 0;
-
-      // Decrement mentionCount on entities that had mentions in this document
-      const updateResult = await session.run(
-        `MATCH (e:Entity {companyId: $companyId})
-         WHERE e.mentionCount > 0
-         SET e.mentionCount = e.mentionCount - 1
-         RETURN count(e) AS updated`,
-        { companyId },
-      );
-      const entitiesUpdated = (updateResult.records[0]?.get("updated") as number | null) ?? 0;
-
-      // Delete the Document node itself
-      await session.run(
-        `MATCH (d:Document {id: $documentId, companyId: $companyId}) DETACH DELETE d`,
-        { documentId, companyId },
-      );
-
-      return {
-        deletedSections,
-        deletedMentions,
-        deletedRelationships,
-        orphanedEntitiesRemoved,
-        orphanedTopicsRemoved,
-        entitiesUpdated,
-        durationMs: Date.now() - start,
-      };
-    } catch (err) {
-      console.warn("[Neo4jDirectWriter] deleteDocumentGraph failed:", err instanceof Error ? err.message : err);
-      return {
-        deletedSections: 0,
-        deletedMentions: 0,
-        deletedRelationships: 0,
-        orphanedEntitiesRemoved: 0,
-        orphanedTopicsRemoved: 0,
-        entitiesUpdated: 0,
-        durationMs: Date.now() - start,
-      };
-    } finally {
-      await session?.close();
-    }
+    // R15 (Graph Deletion Pipeline) is a separate sub-spec. This stub satisfies
+    // the interface contract; the real implementation comes in the R15 sub-spec.
+    console.warn("[Neo4jDirectWriter] deleteDocumentGraph is not yet implemented (R15 scope)");
+    return {
+      deletedSections: 0,
+      deletedMentions: 0,
+      deletedRelationships: 0,
+      orphanedEntitiesRemoved: 0,
+      orphanedTopicsRemoved: 0,
+      entitiesUpdated: 0,
+      durationMs: 0,
+    };
   }
 
   // ─── R6: resolveEntities ────────────────────────────────────────────────────
@@ -384,10 +296,8 @@ export class Neo4jDirectWriterImpl implements Neo4jDirectWriter {
     entities: Neo4jEntityInput[],
     companyId: string,
   ): Promise<void> {
-    const threshold =
-      (process.env.ENTITY_RESOLUTION_THRESHOLD != null
-        ? parseFloat(process.env.ENTITY_RESOLUTION_THRESHOLD)
-        : NaN) || 0.85;
+    const raw = process.env.ENTITY_RESOLUTION_THRESHOLD;
+    const threshold = raw != null && raw !== "" ? parseFloat(raw) : 0.85;
 
     const entitiesWithEmbeddings = entities.filter((e) => e.embedding && e.embedding.length > 0);
     if (entitiesWithEmbeddings.length === 0) return;

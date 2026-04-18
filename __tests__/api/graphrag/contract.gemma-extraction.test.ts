@@ -1,9 +1,7 @@
-import { describe, it, expect } from "@jest/globals";
 import {
     GemmaExtractionResponseSchema,
     GemmaEntitySchema,
     GemmaRelationshipSchema,
-    GemmaChunkResultSchema,
 } from "./contracts/gemma-schemas";
 
 describe("Contract: POST /extract-relationships", () => {

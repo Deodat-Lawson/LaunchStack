@@ -1,4 +1,3 @@
-import { describe, it, expect } from "@jest/globals";
 import { Neo4jSyncResultSchema } from "./contracts/gemma-schemas";
 
 describe("Contract: Neo4j Sync Result", () => {

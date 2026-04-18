@@ -69,7 +69,7 @@ export class OpenAICompatibleEmbeddingProvider implements EmbeddingProvider {
             throw new Error(`[EmbeddingProvider] OpenAI-compatible /v1/embeddings failed: ${response.status} ${response.statusText}`);
         }
         const data = (await response.json()) as { data: { embedding: number[] }[] };
-        return data.data[0].embedding;
+        return data.data[0]!.embedding;
     }
 
     async embedBatch(texts: string[]): Promise<number[][]> {

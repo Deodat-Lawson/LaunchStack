@@ -76,6 +76,8 @@ const serverSchema = z.object({
   EMBEDDING_API_URL: optionalString(),
   EMBEDDING_MODEL: optionalString(),
   EMBEDDING_DIMENSIONS: z.coerce.number().int().positive().optional(),
+  // Entity resolution similarity threshold (0–1, default 0.85)
+  ENTITY_RESOLUTION_THRESHOLD: z.coerce.number().min(0).max(1).optional(),
 });
 
 const clientSchema = z.object({
@@ -151,7 +153,8 @@ function parseServerEnv() {
     EMBEDDING_PROVIDER: process.env.EMBEDDING_PROVIDER as "bert" | "openai-compatible" | undefined,
     EMBEDDING_API_URL: process.env.EMBEDDING_API_URL,
     EMBEDDING_MODEL: process.env.EMBEDDING_MODEL,
-    EMBEDDING_DIMENSIONS: process.env.EMBEDDING_DIMENSIONS,
+    EMBEDDING_DIMENSIONS: process.env.EMBEDDING_DIMENSIONS as unknown as number | undefined,
+    ENTITY_RESOLUTION_THRESHOLD: process.env.ENTITY_RESOLUTION_THRESHOLD as unknown as number | undefined,
   });
   if (
     !skipValidation &&

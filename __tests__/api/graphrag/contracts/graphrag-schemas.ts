@@ -172,6 +172,20 @@ export const GraphRetrieverResultSchema = z.object({
 });
 
 // ═══════════════════════════════════════════════════════════════
+// GRAPH DELETION SCHEMAS (Req 15)
+// ═══════════════════════════════════════════════════════════════
+
+export const Neo4jDeleteResultSchema = z.object({
+    deletedSections: z.number().int().nonnegative(),
+    deletedMentions: z.number().int().nonnegative(),
+    deletedRelationships: z.number().int().nonnegative(),
+    orphanedEntitiesRemoved: z.number().int().nonnegative(),
+    orphanedTopicsRemoved: z.number().int().nonnegative(),
+    entitiesUpdated: z.number().int().nonnegative(),
+    durationMs: z.number().nonnegative(),
+});
+
+// ═══════════════════════════════════════════════════════════════
 // TYPE EXPORTS
 // ═══════════════════════════════════════════════════════════════
 
@@ -191,3 +205,4 @@ export type EmbeddingResult = z.infer<typeof EmbeddingResultSchema>;
 export type EmbeddingBatchResult = z.infer<typeof EmbeddingBatchResultSchema>;
 export type GraphRetrieverResult = z.infer<typeof GraphRetrieverResultSchema>;
 export type Neo4jDynamicRelProperties = z.infer<typeof Neo4jDynamicRelPropertiesSchema>;
+export type Neo4jDeleteResult = z.infer<typeof Neo4jDeleteResultSchema>;

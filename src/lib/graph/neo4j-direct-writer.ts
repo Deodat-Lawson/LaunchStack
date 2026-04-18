@@ -18,6 +18,8 @@ export interface Neo4jDirectWriter {
     writeDocumentGraph(doc: Neo4jDocumentGraphInput, companyId: string): Promise<void>;
     /** Ensure vector indexes exist (idempotent) */
     ensureIndexes(): Promise<void>;
+    /** Remove all graph data originating from a document (idempotent, Req 15) */
+    deleteDocumentGraph(documentId: number, companyId: string): Promise<Neo4jDeleteResult>;
 }
 
 export interface Neo4jEntityInput {
@@ -82,5 +84,16 @@ export interface Neo4jWriteResult {
     mentions: number;
     relationships: number;
     dynamicRelTypes: string[];
+    durationMs: number;
+}
+
+/** Result of document-scoped graph deletion (Req 15) */
+export interface Neo4jDeleteResult {
+    deletedSections: number;
+    deletedMentions: number;
+    deletedRelationships: number;
+    orphanedEntitiesRemoved: number;
+    orphanedTopicsRemoved: number;
+    entitiesUpdated: number;
     durationMs: number;
 }

@@ -9,14 +9,27 @@ import pathlib
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from app.main import app
+from app.routes.relationships import router as relationships_router
+
+
+def _build_relationships_app() -> FastAPI:
+    """Minimal app with only the relationships router — no ML models."""
+    test_app = FastAPI()
+    test_app.include_router(relationships_router)
+
+    @test_app.get("/health")
+    async def health():
+        return {"status": "ok"}
+
+    return test_app
 
 
 @pytest.fixture()
 def client():
-    return TestClient(app)
+    return TestClient(_build_relationships_app())
 
 
 # ------------------------------------------------------------------

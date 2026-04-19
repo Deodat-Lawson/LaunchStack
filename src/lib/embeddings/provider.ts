@@ -54,15 +54,22 @@ export class OpenAICompatibleEmbeddingProvider implements EmbeddingProvider {
     constructor(
         private readonly apiUrl: string,
         private readonly model: string,
-        dimensions: number
+        dimensions: number,
+        private readonly apiKey?: string,
     ) {
         this.dimensions = dimensions;
+    }
+
+    private get headers(): Record<string, string> {
+        const h: Record<string, string> = { "Content-Type": "application/json" };
+        if (this.apiKey) h["Authorization"] = `Bearer ${this.apiKey}`;
+        return h;
     }
 
     async embed(text: string): Promise<number[]> {
         const response = await fetch(`${this.apiUrl}/v1/embeddings`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: this.headers,
             body: JSON.stringify({ input: text, model: this.model, dimensions: this.dimensions }),
         });
         if (!response.ok) {
@@ -75,7 +82,7 @@ export class OpenAICompatibleEmbeddingProvider implements EmbeddingProvider {
     async embedBatch(texts: string[]): Promise<number[][]> {
         const response = await fetch(`${this.apiUrl}/v1/embeddings`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: this.headers,
             body: JSON.stringify({ input: texts, model: this.model, dimensions: this.dimensions }),
         });
         if (!response.ok) {
@@ -109,7 +116,7 @@ export function createEmbeddingProvider(): EmbeddingProvider {
             return new BertEmbeddingProvider();
         }
 
-        return new OpenAICompatibleEmbeddingProvider(apiUrl, model, dimensions);
+        return new OpenAICompatibleEmbeddingProvider(apiUrl, model, dimensions, process.env.EMBEDDING_API_KEY);
     }
 
     console.warn(`[EmbeddingProvider] Unknown provider "${provider}" — falling back to BERT`);

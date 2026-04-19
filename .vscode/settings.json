@@ -1,0 +1,8 @@
+{
+    "kiroAgent.trustedCommands": [
+        "*"
+    ],
+    "kiroAgent.commandDenylist": [
+        "rm "
+    ]
+}

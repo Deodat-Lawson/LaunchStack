@@ -2,12 +2,13 @@
 #
 # Profiles:
 #   default (no flag)        — db + migrate + app
-#   --profile dev            — adds Inngest dev server (local dashboard at :8288)
+#   --profile dev            — adds Inngest dev server, Neo4j, and sidecar (BERT embeddings)
 #   --profile minimal        — db only (for local Next.js dev with `pnpm dev`)
+#   --profile neo4j          — adds Neo4j only
 #
 # Examples:
 #   docker compose --env-file .env up                           # production-like
-#   docker compose --env-file .env --profile dev up             # with Inngest dev server
+#   docker compose --env-file .env --profile dev up             # with Inngest, Neo4j, sidecar
 #   docker compose --env-file .env --profile minimal up db      # just the database
 
 x-app-build-args: &app-build-args
@@ -93,11 +94,15 @@ services:
       # Extraction LLM (optional — model-agnostic relationship extraction)
       EXTRACTION_LLM_BASE_URL: ${EXTRACTION_LLM_BASE_URL:-}
       EXTRACTION_LLM_MODEL: ${EXTRACTION_LLM_MODEL:-}
+      EXTRACTION_LLM_API_KEY: ${EXTRACTION_LLM_API_KEY:-}
       # Embedding provider (optional — defaults to BERT via Sidecar)
       EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-}
       EMBEDDING_API_URL: ${EMBEDDING_API_URL:-}
       EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+      EMBEDDING_API_KEY: ${EMBEDDING_API_KEY:-}
       EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-}
+      # Entity resolution (optional — cosine similarity threshold for dedup)
+      ENTITY_RESOLUTION_THRESHOLD: ${ENTITY_RESOLUTION_THRESHOLD:-}
     ports:
       - "3000:3000"
 
@@ -125,6 +130,24 @@ services:
       - dev
       - neo4j
 
+  # Python sidecar — BERT embeddings and ML inference
+  # Start with: docker compose --profile dev up
+  # API: http://localhost:8000
+  sidecar:
+    build:
+      context: ./sidecar
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-sidecar
+    restart: unless-stopped
+    environment:
+      SIDECAR_API_KEY: ${SIDECAR_API_KEY:-}
+    volumes:
+      - sidecar_model_cache:/app/model-cache
+    ports:
+      - "8000:8000"
+    profiles:
+      - dev
+
   # Inngest dev server — local dashboard & event processing for development
   # Start with: docker compose --profile dev up
   # Dashboard: http://localhost:8288
@@ -143,3 +166,4 @@ services:
 volumes:
   postgres_data:
   neo4j_data:
+  sidecar_model_cache:

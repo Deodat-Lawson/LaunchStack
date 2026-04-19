@@ -88,8 +88,12 @@ async def call_llm(
     }
 
     try:
+        headers = {"Content-Type": "application/json"}
+        api_key = os.environ.get("EXTRACTION_LLM_API_KEY", "")
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
         async with httpx.AsyncClient(timeout=LLM_TIMEOUT) as client:
-            resp = await client.post(url, json=payload)
+            resp = await client.post(url, json=payload, headers=headers)
             resp.raise_for_status()
             data = resp.json()
             return data["choices"][0]["message"]["content"]

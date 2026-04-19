@@ -16,7 +16,7 @@ export function parseLegalDocumentHtmlToSections(html: string): EditorSection[] 
   let index = 0;
 
   while ((match = pattern.exec(trimmed)) !== null) {
-    const tag = match[1].toLowerCase();
+    const tag = match[1]!.toLowerCase();
     const inner = match[2] ?? "";
     const id = `section-${index}`;
     if (tag === "h1") {

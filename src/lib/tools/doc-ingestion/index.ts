@@ -143,6 +143,12 @@ function isAzureSupportedFile(documentUrl: string, documentName: string): boolea
   return [...AZURE_SUPPORTED_EXTENSIONS].some((ext) => nameToCheck.includes(ext));
 }
 
+/**
+ * Vectorize chunks using the resolved embedding index (sidecar or OpenAI).
+ * Each step embeds a batch of parent chunks AND writes them directly to the
+ * database, returning only a tiny count. This avoids Inngest's output_too_large
+ * error since vectors never pass through step serialization.
+ */
 async function vectorizeWithIndex(
   chunks: DocumentChunk[],
   embeddingIndex: EmbeddingIndexConfig,
@@ -150,6 +156,7 @@ async function vectorizeWithIndex(
   batchSize: number,
   documentId: number,
   rootStructureId: number,
+  versionId: number | undefined,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
@@ -194,6 +201,7 @@ async function vectorizeWithIndex(
           rootStructureId,
           vectorized,
           embeddingIndex,
+          versionId,
         );
         return { batchIndex: i, stored: sections.length };
       },
@@ -326,6 +334,7 @@ export async function runDocIngestionTool(
     companyId,
     mimeType,
     originalFilename,
+    versionId,
     options,
     runtime,
   } = input;
@@ -495,7 +504,12 @@ export async function runDocIngestionTool(
           const estimatedTokens = Math.ceil(
             chunks.reduce((sum, c) => sum + c.content.length / 4, 0),
           );
-          return createRootStructure(documentId, normSummary.pageCount, estimatedTokens);
+          return createRootStructure(
+            documentId,
+            normSummary.pageCount,
+            estimatedTokens,
+            versionId,
+          );
         },
       );
 
@@ -506,6 +520,7 @@ export async function runDocIngestionTool(
         embeddingBatchSize,
         documentId,
         rootStructureId,
+        versionId,
         runStep,
       );
       storedSections = result.storedSections;
@@ -523,7 +538,7 @@ export async function runDocIngestionTool(
         processingTimeMs: normSummary.processingTimeMs,
         confidenceScore: normSummary.confidenceScore,
         embeddingIndexKey: embeddingIndex.indexKey,
-      }, pipelineStartTime);
+      }, pipelineStartTime, versionId);
       return { ok: true };
     });
 

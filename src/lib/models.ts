@@ -10,18 +10,9 @@ import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
 import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
 import type { CompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
 import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
+import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
 
-export type AIModelType =
-  | "gpt-4o"
-  | "gpt-5.2"
-  | "gpt-5.1"
-  | "gpt-5-nano"
-  | "gpt-5-mini"
-  | "claude-sonnet-4"
-  | "claude-opus-4.5"
-  | "gemini-2.5-flash"
-  | "gemini-3-flash"
-  | "gemini-3-pro";
+export type { AIModelType };
 
 /**
  * Get a chat model instance based on the model type.

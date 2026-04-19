@@ -63,11 +63,12 @@
       "Bash(find /Users/aurea/LaunchStack/src/app/api/agents/documentQ* -name \"*.ts\")",
       "WebSearch",
       "Bash(grep -r \"className.*p-\" /Users/aurea/LaunchStack/src/app/employer/documents/components/*.tsx)",
+      "Bash(pnpm tsc *)",
+      "Bash(git stash *)",
       "Bash(grep -rn *)",
       "Bash(python3 -c \"import ast; ast.parse\\(open\\('sidecar/app/main.py'\\).read\\(\\)\\); print\\('main.py: OK'\\)\")",
       "Bash(pnpm exec *)",
-      "Bash(pnpm tsc *)",
-      "Bash(pnpm test *)"
+      "Bash(pnpm test *)",
       "Bash(git grep *)",
       "Bash(git add *)"
     ]

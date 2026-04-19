@@ -27,6 +27,7 @@ import {
   Building2,
   Megaphone,
   Archive,
+  History,
   Network,
 } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
@@ -66,6 +67,13 @@ interface SidebarProps {
   onNewChat?: () => void;
   userRole?: 'employer' | 'employee';
   totalDocuments?: number;
+  /**
+   * Called when the user clicks "Version history" in the document dropdown.
+   * The parent (DocumentViewerShell) owns the modal's lifecycle and preview
+   * state so it can wire the panel's "view this version" button into its
+   * existing document viewer.
+   */
+  onOpenVersionHistory?: (doc: DocumentType) => void;
   onGenerateDiagram?: (archiveName: string) => void;
 }
 
@@ -146,10 +154,13 @@ export function Sidebar({
   onNewChat,
   userRole = 'employer',
   totalDocuments = 0,
+  onOpenVersionHistory,
   onGenerateDiagram,
 }: SidebarProps) {
   const isEmployer = userRole === 'employer';
   const showDelete = isEmployer && !!deleteDocument;
+  // Only employers/owners can manage versions — same permission gate as delete.
+  const showVersionActions = isEmployer && !!onOpenVersionHistory;
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const navGroups = NAV_GROUPS(isEmployer);
   const flatNavItems = allNavItems(isEmployer);
@@ -449,29 +460,43 @@ export function Sidebar({
                           )}
                         </button>
 
-                        {showDelete && deleteDocument && (
+                        {(showDelete || showVersionActions) && (
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-6 w-6 opacity-0 group-hover/doc:opacity-100 transition-opacity mr-1 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 flex-shrink-0"
+                                className="h-6 w-6 opacity-0 group-hover/doc:opacity-100 transition-opacity mr-1 hover:bg-muted flex-shrink-0"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <MoreVertical className="w-3 h-3" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-40">
-                              <DropdownMenuItem
-                                className="text-red-600 dark:text-red-400 cursor-pointer focus:bg-red-50 dark:focus:bg-red-900/20 focus:text-red-600 text-xs"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  deleteDocument(doc.id);
-                                }}
-                              >
-                                <Trash2 className="w-3.5 h-3.5 mr-2" />
-                                Delete Document
-                              </DropdownMenuItem>
+                            <DropdownMenuContent align="end" className="w-44">
+                              {showVersionActions && onOpenVersionHistory && (
+                                <DropdownMenuItem
+                                  className="cursor-pointer text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onOpenVersionHistory(doc);
+                                  }}
+                                >
+                                  <History className="w-3.5 h-3.5 mr-2" />
+                                  Version history
+                                </DropdownMenuItem>
+                              )}
+                              {showDelete && deleteDocument && (
+                                <DropdownMenuItem
+                                  className="text-red-600 dark:text-red-400 cursor-pointer focus:bg-red-50 dark:focus:bg-red-900/20 focus:text-red-600 text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteDocument(doc.id);
+                                  }}
+                                >
+                                  <Trash2 className="w-3.5 h-3.5 mr-2" />
+                                  Delete Document
+                                </DropdownMenuItem>
+                              )}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         )}

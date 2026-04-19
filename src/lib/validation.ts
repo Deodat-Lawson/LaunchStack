@@ -196,32 +196,32 @@ export const UpdateCompanySchema = z.object({
   description: data.description,
   industry: data.industry,
   embeddingIndexKey:
-    data.embeddingIndexKey === undefined
-      ? undefined
+    data.embeddingIndexKey == null
+      ? data.embeddingIndexKey
       : data.embeddingIndexKey.trim()
         ? data.embeddingIndexKey.trim()
         : null,
   embeddingOpenAIApiKey:
-    data.embeddingOpenAIApiKey === undefined
-      ? undefined
+    data.embeddingOpenAIApiKey == null
+      ? data.embeddingOpenAIApiKey
       : data.embeddingOpenAIApiKey.trim()
         ? data.embeddingOpenAIApiKey.trim()
         : null,
   embeddingHuggingFaceApiKey:
-    data.embeddingHuggingFaceApiKey === undefined
-      ? undefined
+    data.embeddingHuggingFaceApiKey == null
+      ? data.embeddingHuggingFaceApiKey
       : data.embeddingHuggingFaceApiKey.trim()
         ? data.embeddingHuggingFaceApiKey.trim()
         : null,
   embeddingOllamaBaseUrl:
-    data.embeddingOllamaBaseUrl === undefined
-      ? undefined
+    data.embeddingOllamaBaseUrl == null
+      ? data.embeddingOllamaBaseUrl
       : data.embeddingOllamaBaseUrl.trim()
         ? data.embeddingOllamaBaseUrl.trim()
         : null,
   embeddingOllamaModel:
-    data.embeddingOllamaModel === undefined
-      ? undefined
+    data.embeddingOllamaModel == null
+      ? data.embeddingOllamaModel
       : data.embeddingOllamaModel.trim()
         ? data.embeddingOllamaModel.trim()
         : null,

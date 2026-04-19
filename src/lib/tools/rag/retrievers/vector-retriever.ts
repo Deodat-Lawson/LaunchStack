@@ -96,6 +96,14 @@ function getDimensionTableName(index: EmbeddingIndexConfig): string {
   );
 }
 
+// Version filter: only return chunks from the current version of each
+// document. Chunks from older versions stay indexed (so revert is O(1)) but
+// must be hidden from RAG results. The `IS NULL` branches keep this safe
+// during rollout — documents/chunks not yet backfilled return unfiltered,
+// and once backfill is complete this degenerates to strict equality.
+const rcVersionFilter = sql` AND (d.current_version_id IS NULL OR rc.version_id IS NULL OR rc.version_id = d.current_version_id)`;
+const sVersionFilter = sql` AND (d.current_version_id IS NULL OR s.version_id IS NULL OR s.version_id = d.current_version_id)`;
+
 async function searchLegacyIndex(args: {
   embeddingIndex: EmbeddingIndexConfig;
   fullEmbedding: number[];
@@ -124,7 +132,7 @@ async function searchLegacyIndex(args: {
         FROM pdr_ai_v2_document_retrieval_chunks rc
         JOIN pdr_ai_v2_document d ON rc.document_id = d.id
         LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
-        WHERE ${scopeWhere} ${filterWhere}
+        WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}
         AND rc.embedding IS NOT NULL
         AND rc.embedding_short IS NOT NULL
         ORDER BY rc.embedding_short <-> ${shortVectorLiteral}
@@ -164,7 +172,7 @@ async function searchLegacyIndex(args: {
     JOIN pdr_ai_v2_document_context_chunks cc ON rc.context_chunk_id = cc.id
     JOIN pdr_ai_v2_document d ON rc.document_id = d.id
     LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
-    WHERE ${scopeWhere} ${filterWhere}
+    WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}
     AND rc.embedding IS NOT NULL
     ORDER BY rc.embedding <-> ${fullVectorLiteral}
     LIMIT ${topK}
@@ -187,7 +195,7 @@ async function searchLegacyIndex(args: {
     FROM pdr_ai_v2_document_context_chunks s
     JOIN pdr_ai_v2_document d ON s.document_id = d.id
     LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
-    WHERE ${fallbackScopeWhere} ${filterWhere}
+    WHERE ${fallbackScopeWhere}${sVersionFilter} ${filterWhere}
     AND s.embedding IS NOT NULL
     ORDER BY s.embedding <-> ${fullVectorLiteral}
     LIMIT ${topK}
@@ -222,7 +230,7 @@ async function searchDimensionTableIndex(args: {
     JOIN pdr_ai_v2_document_context_chunks cc ON rc.context_chunk_id = cc.id
     JOIN pdr_ai_v2_document d ON rc.document_id = d.id
     LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
-    WHERE ${scopeWhere} ${filterWhere}
+    WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}
     AND de.index_key = ${embeddingIndex.indexKey}
     ORDER BY de.embedding <-> ${fullVectorLiteral}
     LIMIT ${topK}

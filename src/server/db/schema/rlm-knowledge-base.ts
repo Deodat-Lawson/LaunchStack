@@ -14,7 +14,7 @@ import {
 
 import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
-import { document, company } from "./base";
+import { document, company, documentVersions } from "./base";
 
 // ============================================================================
 // Enums as string unions (Drizzle style)
@@ -93,6 +93,13 @@ export const documentStructure = pgTable(
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
+        // Versioning: which version of the document this structure node belongs to.
+        // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
+        // Deleting a version cascades and removes its structure nodes.
+        versionId: bigint("version_id", { mode: "bigint" }).references(
+            () => documentVersions.id,
+            { onDelete: "cascade" }
+        ),
         parentId: bigint("parent_id", { mode: "bigint" }), // Self-reference, null for root
         level: integer("level").notNull().default(0), // Depth: 0=root, 1=section, 2+=subsection
         ordering: integer("ordering").notNull().default(0), // Sibling order for traversal
@@ -132,6 +139,7 @@ export const documentStructure = pgTable(
             table.parentId,
             table.ordering
         ),
+        versionIdIdx: index("doc_structure_version_id_idx").on(table.versionId),
     })
 );
 
@@ -143,6 +151,12 @@ export const documentContextChunks = pgTable(
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
+        // Versioning: which version of the document this chunk belongs to.
+        // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
+        versionId: bigint("version_id", { mode: "bigint" }).references(
+            () => documentVersions.id,
+            { onDelete: "cascade" }
+        ),
         structureId: bigint("structure_id", { mode: "bigint" }).references(
             () => documentStructure.id,
             { onDelete: "cascade" }
@@ -180,6 +194,7 @@ export const documentContextChunks = pgTable(
             table.documentId,
             table.semanticType
         ),
+        versionIdIdx: index("doc_ctx_chunks_version_id_idx").on(table.versionId),
     })
 );
 
@@ -193,9 +208,15 @@ export const documentRetrievalChunks = pgTable(
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
+        // Versioning: which version of the document this retrieval chunk belongs to.
+        // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
+        versionId: bigint("version_id", { mode: "bigint" }).references(
+            () => documentVersions.id,
+            { onDelete: "cascade" }
+        ),
         content: text("content").notNull(),
         tokenCount: integer("token_count").notNull().default(0),
-        
+
         // Full dimension embedding (storage)
         embedding: pgVector({ dimension: 1536 })("embedding"),
         
@@ -213,8 +234,9 @@ export const documentRetrievalChunks = pgTable(
         embeddingShortIdx: index("doc_ret_chunks_embedding_short_idx").using(
             "hnsw",
             table.embeddingShort.op("vector_cosine_ops")
-    ),
-  })
+        ),
+        versionIdIdx: index("doc_ret_chunks_version_id_idx").on(table.versionId),
+    })
 );
 
 export const experimentalDocumentEmbeddings = pgTable(
@@ -327,6 +349,12 @@ export const documentMetadata = pgTable(
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
+        // Versioning: which version of the document this metadata belongs to.
+        // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
+        versionId: bigint("version_id", { mode: "bigint" }).references(
+            () => documentVersions.id,
+            { onDelete: "cascade" }
+        ),
         // Token/size metrics for cost-aware planning
         totalTokens: integer("total_tokens").default(0),
         totalSections: integer("total_sections").default(0),
@@ -361,12 +389,25 @@ export const documentMetadata = pgTable(
         ),
     },
     (table) => ({
-        documentIdUnique: uniqueIndex("doc_metadata_document_id_unique").on(
-            table.documentId
+        // Prior to versioning, metadata was a single row per document.
+        // With versioning, each version of a document gets its own metadata
+        // row (summary, token count, complexity, etc. are computed per-version
+        // during the OCR pipeline). Uniqueness is now scoped to the pair.
+        //
+        // Note: PostgreSQL treats NULLs as distinct in unique indexes by
+        // default, so during the Phase 1 transition — when some rows may
+        // still have version_id = NULL from unbackfilled data — multiple
+        // NULL-versioned rows could technically coexist. After backfill runs
+        // everywhere this degenerates to strict (document_id, version_id)
+        // uniqueness.
+        documentVersionUnique: uniqueIndex("doc_metadata_document_version_unique").on(
+            table.documentId,
+            table.versionId
         ),
         complexityIdx: index("doc_metadata_complexity_idx").on(table.complexityScore),
         documentClassIdx: index("doc_metadata_class_idx").on(table.documentClass),
         totalTokensIdx: index("doc_metadata_total_tokens_idx").on(table.totalTokens),
+        versionIdIdx: index("doc_metadata_version_id_idx").on(table.versionId),
     })
 );
 
@@ -382,6 +423,12 @@ export const documentPreviews = pgTable(
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
+        // Versioning: which version of the document this preview belongs to.
+        // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
+        versionId: bigint("version_id", { mode: "bigint" }).references(
+            () => documentVersions.id,
+            { onDelete: "cascade" }
+        ),
         sectionId: bigint("section_id", { mode: "bigint" }).references(
             () => documentContextChunks.id,
             { onDelete: "cascade" }
@@ -408,6 +455,7 @@ export const documentPreviews = pgTable(
             table.documentId,
             table.previewType
         ),
+        versionIdIdx: index("doc_previews_version_id_idx").on(table.versionId),
     })
 );
 

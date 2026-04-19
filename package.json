@@ -7,6 +7,7 @@
     "build": "next build",
     "check": "eslint . && tsc --noEmit",
     "db:push": "node scripts/ensure-pgvector.mjs && drizzle-kit push",
+    "db:backfill:versions": "tsx scripts/backfill-document-versions.ts",
     "db:studio": "drizzle-kit studio",
     "dev": "concurrently --names next,inngest --prefix-colors blue,magenta \"next dev --turbo\" \"pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest\"",
     "dev:next": "next dev --turbo",
@@ -21,6 +22,9 @@
     "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.69",
+    "@ai-sdk/google": "^3.0.62",
+    "@ai-sdk/openai": "^3.0.52",
     "@aws-sdk/client-s3": "^3.1004.0",
     "@aws-sdk/s3-request-presigner": "^3.1004.0",
     "@clerk/nextjs": "^6.31.9",
@@ -76,6 +80,7 @@
     "@uploadthing/react": "^7.3.3",
     "@vercel/analytics": "^1.6.1",
     "@vercel/blob": "^2.3.0",
+    "ai": "^6.0.158",
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "*",
@@ -107,6 +112,7 @@
     "next-themes": "^0.4.6",
     "node-fetch": "^3.3.2",
     "okapibm25": "^1.4.1",
+    "ollama-ai-provider": "^1.2.0",
     "onnxruntime-web": "^1.23.2",
     "openai": "^4.62.1",
     "p-limit": "^7.1.1",

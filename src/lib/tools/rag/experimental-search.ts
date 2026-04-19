@@ -1,6 +1,7 @@
 ﻿import { and, eq, sql } from "drizzle-orm";
 import { db } from "~/server/db";
 import {
+  documentContextChunks,
   documentRetrievalChunks,
   experimentalDocumentEmbeddings,
 } from "~/server/db/schema";
@@ -36,7 +37,7 @@ export async function experimentalDocumentSearch(
       chunkId: documentRetrievalChunks.id,
       documentId: documentRetrievalChunks.documentId,
       content: documentRetrievalChunks.content,
-      pageNumber: documentRetrievalChunks.pageNumber,
+      pageNumber: documentContextChunks.pageNumber,
       distance: sql<number>`(${experimentalDocumentEmbeddings.embedding} <-> ${queryVector})`,
     })
     .from(experimentalDocumentEmbeddings)
@@ -46,6 +47,10 @@ export async function experimentalDocumentSearch(
         experimentalDocumentEmbeddings.retrievalChunkId,
         documentRetrievalChunks.id,
       ),
+    )
+    .innerJoin(
+      documentContextChunks,
+      eq(documentRetrievalChunks.contextChunkId, documentContextChunks.id),
     )
     .where(
       and(
@@ -58,11 +63,11 @@ export async function experimentalDocumentSearch(
     .orderBy(sql`(${experimentalDocumentEmbeddings.embedding} <-> ${queryVector})`)
     .limit(topK);
 
-  return rows.map((row) => ({
+  return rows.map((row): SearchResult => ({
     pageContent: row.content ?? "",
     metadata: {
-      retrievalMethod: "experimental_vector" as const,
-      searchScope: "document" as const,
+      retrievalMethod: "experimental_vector",
+      searchScope: "document",
       distance: row.distance,
       chunkId: Number(row.chunkId),
       page: row.pageNumber ?? undefined,

@@ -10,7 +10,8 @@ export type RetrievalMethod =
   | "ann_ivf"
   | "ann_hybrid"
   | "ann_prefiltered"
-  | "graph_traversal";
+  | "graph_traversal"
+  | "experimental_vector";
 
 export interface BaseSearchMetadata {
   chunkId?: number;

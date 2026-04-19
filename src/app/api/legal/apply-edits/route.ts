@@ -96,7 +96,7 @@ function tryDisambiguate(
 function cleanupRemainingTokens(
   docBuffer: Buffer,
   edits: Array<{ target_text: string; new_text: string }>,
-): Buffer {
+): Buffer<ArrayBuffer> {
   const zip = new PizZip(docBuffer);
   const tokenMap = new Map<string, string>();
   for (const e of edits) {
@@ -121,7 +121,7 @@ function cleanupRemainingTokens(
     }
   }
 
-  return zip.generate({ type: "nodebuffer", compression: "DEFLATE" }) as Buffer;
+  return zip.generate({ type: "nodebuffer", compression: "DEFLATE" }) as Buffer<ArrayBuffer>;
 }
 
 export async function POST(request: Request) {

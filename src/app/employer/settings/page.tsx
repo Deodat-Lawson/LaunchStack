@@ -16,12 +16,17 @@ import LoadingPage from "~/app/_components/loading";
 // Styles
 import styles from "~/styles/Employer/Settings.module.css";
 
+interface RedactedKey {
+    hasKey: boolean;
+    last4: string | null;
+}
+
 interface Company {
     id: number;
     name: string;
     embeddingIndexKey: string | null;
-    embeddingOpenAIApiKey: string | null;
-    embeddingHuggingFaceApiKey: string | null;
+    embeddingOpenAIApiKey: RedactedKey;
+    embeddingHuggingFaceApiKey: RedactedKey;
     embeddingOllamaBaseUrl: string | null;
     embeddingOllamaModel: string | null;
     numberOfEmployees: string;
@@ -119,8 +124,10 @@ const SettingsPage = () => {
                 setCompanyName(data.name ?? "");
                 setStaffCount(data.numberOfEmployees ?? "");
                 setEmbeddingIndexKey(data.embeddingIndexKey ?? "legacy-openai-1536");
-                setEmbeddingOpenAIApiKey(data.embeddingOpenAIApiKey ?? "");
-                setEmbeddingHuggingFaceApiKey(data.embeddingHuggingFaceApiKey ?? "");
+                // API keys are never returned from the server; leave inputs
+                // blank and treat blank-on-save as "keep existing key".
+                setEmbeddingOpenAIApiKey("");
+                setEmbeddingHuggingFaceApiKey("");
                 setEmbeddingOllamaBaseUrl(data.embeddingOllamaBaseUrl ?? "");
                 setEmbeddingOllamaModel(data.embeddingOllamaModel ?? "");
 
@@ -143,26 +150,53 @@ const SettingsPage = () => {
     const handleSave = async () => {
         setIsSaving(true);
         try {
+            const body: Record<string, unknown> = {
+                name: companyName,
+                numberOfEmployees: staffCount,
+                embeddingIndexKey,
+                embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
+                embeddingOllamaModel: embeddingOllamaModel || null,
+            };
+            // Only include API keys when the user typed something. Blank
+            // means "keep whatever is already stored on the server".
+            if (embeddingOpenAIApiKey.trim().length > 0) {
+                body.embeddingOpenAIApiKey = embeddingOpenAIApiKey.trim();
+            }
+            if (embeddingHuggingFaceApiKey.trim().length > 0) {
+                body.embeddingHuggingFaceApiKey = embeddingHuggingFaceApiKey.trim();
+            }
+
             const response = await fetch("/api/updateCompany", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: companyName,
-                    numberOfEmployees: staffCount,
-                    embeddingIndexKey,
-                    embeddingOpenAIApiKey: embeddingOpenAIApiKey || null,
-                    embeddingHuggingFaceApiKey: embeddingHuggingFaceApiKey || null,
-                    embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
-                    embeddingOllamaModel: embeddingOllamaModel || null,
-                }),
+                body: JSON.stringify(body),
             });
-
-            const result: { success?: boolean; message?: string } | null = await response
+            const result = (await response
                 .json()
-                .catch(() => null) as { success?: boolean; message?: string } | null;
+                .catch(() => null)) as {
+                success?: boolean;
+                message?: string;
+                code?: string;
+                documentCount?: number;
+            } | null;
+
+            if (response.status === 409 && result?.code === "REINDEX_IN_PROGRESS") {
+                throw new Error(
+                    result.message ??
+                        "A reindex is already running for this company. Please wait for it to finish.",
+                );
+            }
 
             if (!response.ok || result?.success !== true) {
                 throw new Error(result?.message ?? "Error updating settings");
+            }
+
+            if (response.status === 202 && result?.code === "REINDEX_SCHEDULED") {
+                showPopup(
+                    result.message ??
+                        `Reindex scheduled for ${result.documentCount ?? 0} document chunks. Existing searches keep using the previous index until the rewrite completes.`,
+                );
+                return;
             }
 
             showPopup(result?.message ?? "Company settings saved!");

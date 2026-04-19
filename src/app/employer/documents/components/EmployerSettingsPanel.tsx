@@ -24,6 +24,11 @@ import { Input } from "~/app/employer/documents/components/ui/input";
 import { cn } from "~/lib/utils";
 import { toast } from "sonner";
 
+interface RedactedKey {
+  hasKey: boolean;
+  last4: string | null;
+}
+
 interface Company {
   id: number;
   name: string;
@@ -32,8 +37,8 @@ interface Company {
   employerpasskey: string;
   employeepasskey: string;
   embeddingIndexKey: string | null;
-  embeddingOpenAIApiKey: string | null;
-  embeddingHuggingFaceApiKey: string | null;
+  embeddingOpenAIApiKey: RedactedKey;
+  embeddingHuggingFaceApiKey: RedactedKey;
   embeddingOllamaBaseUrl: string | null;
   embeddingOllamaModel: string | null;
   numberOfEmployees: string;
@@ -41,12 +46,12 @@ interface Company {
   updatedAt: string;
 }
 
-const EMBEDDING_INDEX_OPTIONS = [
-  { value: "legacy-openai-1536", label: "OpenAI Legacy (1536)" },
-  { value: "ollama-default", label: "Ollama Default" },
-  { value: "huggingface-default", label: "Hugging Face Default" },
-  { value: "sidecar-default", label: "Sidecar Default" },
-] as const;
+interface EmbeddingIndexOption {
+  indexKey: string;
+  label: string;
+  provider: string;
+  dimension: number;
+}
 
 export function EmployerSettingsPanel() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -65,6 +70,11 @@ export function EmployerSettingsPanel() {
   const [embeddingHuggingFaceApiKey, setEmbeddingHuggingFaceApiKey] = useState("");
   const [embeddingOllamaBaseUrl, setEmbeddingOllamaBaseUrl] = useState("");
   const [embeddingOllamaModel, setEmbeddingOllamaModel] = useState("");
+  const [hasExistingOpenAIKey, setHasExistingOpenAIKey] = useState(false);
+  const [openAIKeyLast4, setOpenAIKeyLast4] = useState<string | null>(null);
+  const [hasExistingHFKey, setHasExistingHFKey] = useState(false);
+  const [hfKeyLast4, setHFKeyLast4] = useState<string | null>(null);
+  const [indexOptions, setIndexOptions] = useState<EmbeddingIndexOption[]>([]);
   const [employerPasskey, setEmployerPasskey] = useState("");
   const [employeePasskey, setEmployeePasskey] = useState("");
   const [showEmployerPasskey, setShowEmployerPasskey] = useState(false);
@@ -76,18 +86,31 @@ export function EmployerSettingsPanel() {
   useEffect(() => {
     if (!isLoaded || !isSignedIn) return;
 
-    const fetchCompany = async () => {
+    const fetchAll = async () => {
       try {
-        const res = await fetch("/api/fetchCompany");
-        if (!res.ok) throw new Error("Failed to fetch company info");
-        const data = (await res.json()) as Company;
+        const [companyRes, indexesRes] = await Promise.all([
+          fetch("/api/fetchCompany"),
+          fetch("/api/embedding-indexes"),
+        ]);
+        if (!companyRes.ok) throw new Error("Failed to fetch company info");
+        const data = (await companyRes.json()) as Company;
+        if (indexesRes.ok) {
+          const indexesJson = (await indexesRes.json()) as {
+            indexes: EmbeddingIndexOption[];
+          };
+          setIndexOptions(indexesJson.indexes ?? []);
+        }
         setCompanyName(data.name ?? "");
         setCompanyDescription(data.description ?? "");
         setCompanyIndustry(data.industry ?? "");
         setStaffCount(data.numberOfEmployees ?? "");
         setEmbeddingIndexKey(data.embeddingIndexKey ?? "legacy-openai-1536");
-        setEmbeddingOpenAIApiKey(data.embeddingOpenAIApiKey ?? "");
-        setEmbeddingHuggingFaceApiKey(data.embeddingHuggingFaceApiKey ?? "");
+        setHasExistingOpenAIKey(data.embeddingOpenAIApiKey?.hasKey ?? false);
+        setOpenAIKeyLast4(data.embeddingOpenAIApiKey?.last4 ?? null);
+        setHasExistingHFKey(data.embeddingHuggingFaceApiKey?.hasKey ?? false);
+        setHFKeyLast4(data.embeddingHuggingFaceApiKey?.last4 ?? null);
+        setEmbeddingOpenAIApiKey("");
+        setEmbeddingHuggingFaceApiKey("");
         setEmbeddingOllamaBaseUrl(data.embeddingOllamaBaseUrl ?? "");
         setEmbeddingOllamaModel(data.embeddingOllamaModel ?? "");
         setEmployerPasskey(data.employerpasskey ?? "");
@@ -100,35 +123,77 @@ export function EmployerSettingsPanel() {
       }
     };
 
-    void fetchCompany();
+    void fetchAll();
   }, [isLoaded, isSignedIn]);
 
   const handleSave = async () => {
     setIsSaving(true);
     setSaveSuccess(false);
     try {
+      const body: Record<string, unknown> = {
+        name: companyName,
+        description: companyDescription || null,
+        industry: companyIndustry || null,
+        embeddingIndexKey: embeddingIndexKey || null,
+        embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
+        embeddingOllamaModel: embeddingOllamaModel || null,
+        numberOfEmployees: staffCount,
+        employerPasskey,
+        employeePasskey,
+      };
+      // Only send API keys if the user actually typed something. Blank means
+      // "keep whatever is already stored"; we never round-trip the stored key.
+      if (embeddingOpenAIApiKey.trim().length > 0) {
+        body.embeddingOpenAIApiKey = embeddingOpenAIApiKey.trim();
+      }
+      if (embeddingHuggingFaceApiKey.trim().length > 0) {
+        body.embeddingHuggingFaceApiKey = embeddingHuggingFaceApiKey.trim();
+      }
+
       const response = await fetch("/api/updateCompany", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: companyName,
-          description: companyDescription || null,
-          industry: companyIndustry || null,
-          embeddingIndexKey: embeddingIndexKey || null,
-          embeddingOpenAIApiKey: embeddingOpenAIApiKey || null,
-          embeddingHuggingFaceApiKey: embeddingHuggingFaceApiKey || null,
-          embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
-          embeddingOllamaModel: embeddingOllamaModel || null,
-          numberOfEmployees: staffCount,
-          employerPasskey,
-          employeePasskey,
-        }),
+        body: JSON.stringify(body),
       });
-      const result = (await response.json()) as { success?: boolean; message?: string };
+      const result = (await response.json()) as {
+        success?: boolean;
+        message?: string;
+        code?: string;
+        documentCount?: number;
+      };
+
+      if (response.status === 409 && result?.code === "REINDEX_IN_PROGRESS") {
+        throw new Error(
+          result.message ??
+            "A reindex is already running. Wait for it to finish before changing the index again.",
+        );
+      }
+
       if (!response.ok || result?.success !== true) {
         throw new Error(result?.message ?? "Error updating settings");
       }
+
+      // 202 with REINDEX_SCHEDULED: the index change is queued as a
+      // background job. Surface a clear message so the user knows their
+      // change was accepted and is re-embedding.
+      if (response.status === 202 && result?.code === "REINDEX_SCHEDULED") {
+        toast.success(
+          result.message ??
+            `Reindex scheduled for ${result.documentCount ?? 0} document(s). Queries continue to use the previous index until the rewrite completes.`,
+          { duration: 8000 },
+        );
+      }
       setSaveSuccess(true);
+      if (embeddingOpenAIApiKey.trim().length > 0) {
+        setHasExistingOpenAIKey(true);
+        setOpenAIKeyLast4(embeddingOpenAIApiKey.trim().slice(-4));
+        setEmbeddingOpenAIApiKey("");
+      }
+      if (embeddingHuggingFaceApiKey.trim().length > 0) {
+        setHasExistingHFKey(true);
+        setHFKeyLast4(embeddingHuggingFaceApiKey.trim().slice(-4));
+        setEmbeddingHuggingFaceApiKey("");
+      }
       toast.success(result?.message ?? "Company settings saved!");
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (err) {
@@ -311,12 +376,17 @@ export function EmployerSettingsPanel() {
                 value={embeddingIndexKey}
                 onChange={(e) => setEmbeddingIndexKey(e.target.value)}
                 className="flex h-9 w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-500"
+                disabled={indexOptions.length === 0}
               >
-                {EMBEDDING_INDEX_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
+                {indexOptions.length === 0 ? (
+                  <option value="">Loading available indexes…</option>
+                ) : (
+                  indexOptions.map((option) => (
+                    <option key={option.indexKey} value={option.indexKey}>
+                      {option.label}
+                    </option>
+                  ))
+                )}
               </select>
               <p className="text-[10px] text-muted-foreground">
                 Optional provider config below is demo-only and currently stored in plaintext. Leave fields blank to keep using env defaults.
@@ -334,7 +404,12 @@ export function EmployerSettingsPanel() {
                 type="password"
                 value={embeddingOpenAIApiKey}
                 onChange={(e) => setEmbeddingOpenAIApiKey(e.target.value)}
-                placeholder="Falls back to server env when blank"
+                placeholder={
+                  hasExistingOpenAIKey
+                    ? `Stored key ending in …${openAIKeyLast4 ?? "****"} — leave blank to keep`
+                    : "Falls back to server env when blank"
+                }
+                autoComplete="off"
                 className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500"
               />
             </div>
@@ -350,7 +425,12 @@ export function EmployerSettingsPanel() {
                 type="password"
                 value={embeddingHuggingFaceApiKey}
                 onChange={(e) => setEmbeddingHuggingFaceApiKey(e.target.value)}
-                placeholder="Falls back to server env when blank"
+                placeholder={
+                  hasExistingHFKey
+                    ? `Stored key ending in …${hfKeyLast4 ?? "****"} — leave blank to keep`
+                    : "Falls back to server env when blank"
+                }
+                autoComplete="off"
                 className="h-9 text-sm border-border focus-visible:ring-1 focus-visible:ring-purple-500"
               />
             </div>

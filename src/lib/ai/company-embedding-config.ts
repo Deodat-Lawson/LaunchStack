@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { company } from "~/server/db/schema";
+import { getCompanyCredentialsPlaintext } from "./company-credentials";
 
 export interface CompanyEmbeddingConfig {
   embeddingIndexKey?: string | null;
@@ -54,6 +55,12 @@ export function resolveEffectiveEmbeddingConfig(
   };
 }
 
+/**
+ * Load the effective per-company embedding configuration. Secrets (API
+ * keys) are decrypted from `company_embedding_credentials`; the
+ * `embeddingIndexKey` still lives on the `company` row because it isn't a
+ * secret and is frequently read alongside non-credential metadata.
+ */
 export async function getCompanyEmbeddingConfig(
   companyId: bigint | number | string,
 ): Promise<CompanyEmbeddingConfig | null> {
@@ -64,17 +71,33 @@ export async function getCompanyEmbeddingConfig(
     return null;
   }
 
-  const [record] = await db
-    .select({
-      embeddingIndexKey: company.embeddingIndexKey,
-      openAIApiKey: company.embeddingOpenAIApiKey,
-      huggingFaceApiKey: company.embeddingHuggingFaceApiKey,
-      ollamaBaseUrl: company.embeddingOllamaBaseUrl,
-      ollamaModel: company.embeddingOllamaModel,
-    })
-    .from(company)
-    .where(eq(company.id, numericCompanyId))
-    .limit(1);
+  const [indexRow, creds] = await Promise.all([
+    db
+      .select({
+        activeIndexKey: company.activeEmbeddingIndexKey,
+        legacyIndexKey: company.embeddingIndexKey,
+      })
+      .from(company)
+      .where(eq(company.id, numericCompanyId))
+      .limit(1),
+    getCompanyCredentialsPlaintext(numericCompanyId),
+  ]);
 
-  return record ?? null;
+  if (!indexRow[0] && !creds) return null;
+
+  // Prefer the new active column; fall back to the legacy column for
+  // companies that pre-date migration 0012. Callers who need the
+  // ingest-time vs query-time distinction should use
+  // `resolveIngestIndexKey` / `resolveQueryIndexKey` from
+  // `company-reindex-state` instead of reading this field directly.
+  const indexKey =
+    indexRow[0]?.activeIndexKey ?? indexRow[0]?.legacyIndexKey ?? null;
+
+  return {
+    embeddingIndexKey: indexKey,
+    openAIApiKey: creds?.openAIApiKey ?? null,
+    huggingFaceApiKey: creds?.huggingFaceApiKey ?? null,
+    ollamaBaseUrl: creds?.ollamaBaseUrl ?? null,
+    ollamaModel: creds?.ollamaModel ?? null,
+  };
 }

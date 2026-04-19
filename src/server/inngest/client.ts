@@ -34,12 +34,22 @@ export type PredictiveAnalysisEvent = {
   };
 };
 
+export type ReindexCompanyEmbeddingsEvent = {
+  name: "company/reindex-embeddings.requested";
+  data: {
+    companyId: number;
+    pendingIndexKey: string;
+    triggeredByUserId?: string;
+  };
+};
+
 export type Events =
   | ProcessDocumentEvent
   | TrendSearchEvent
   | ClientProspectorEvent
   | CompanyMetadataExtractEvent
-  | PredictiveAnalysisEvent;
+  | PredictiveAnalysisEvent
+  | ReindexCompanyEmbeddingsEvent;
 
 /**
  * Create the Inngest client.

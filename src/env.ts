@@ -15,6 +15,11 @@ const serverSchema = z.object({
   OPENAI_API_KEY: requiredString(),
   OPENAI_MODEL: optionalString(),
   EMBEDDING_INDEX: optionalString(),
+  // 32 raw bytes encoded as base64 (44 chars). Used to encrypt per-company
+  // embedding provider credentials at rest. Required whenever a company sets
+  // its own API key through the settings UI. Generate with:
+  //   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+  EMBEDDING_SECRETS_KEY: optionalString(),
   ANTHROPIC_API_KEY: optionalString(),
   ANTHROPIC_MODEL: optionalString(),
   GOOGLE_AI_API_KEY: optionalString(),
@@ -144,6 +149,7 @@ function parseServerEnv() {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
     EMBEDDING_INDEX: process.env.EMBEDDING_INDEX,
+    EMBEDDING_SECRETS_KEY: process.env.EMBEDDING_SECRETS_KEY,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL,
     GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,

@@ -5,6 +5,7 @@
  */
 export { pgTable } from "./schema/helpers";
 export * from "./schema/base";
+export * from "./schema/company-credentials";
 export * from "./schema/agent-ai";
 export * from "./schema/rlm-knowledge-base";
 export * from "./schema/knowledge-graph";

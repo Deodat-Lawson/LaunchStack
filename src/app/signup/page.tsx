@@ -47,12 +47,10 @@ interface CreateCompanyFormErrors {
     staffCount?: string;
 }
 
-const EMBEDDING_INDEX_OPTIONS = [
-    { value: "legacy-openai-1536", label: "OpenAI Legacy (1536)" },
-    { value: "ollama-default", label: "Ollama Default" },
-    { value: "huggingface-default", label: "Hugging Face Default" },
-    { value: "sidecar-default", label: "Sidecar Default" },
-] as const;
+interface EmbeddingIndexOption {
+    indexKey: string;
+    label: string;
+}
 
 // ─── Join Company Form ──────────────────────────────────────────────────────
 interface JoinFormData {
@@ -76,7 +74,7 @@ const SignupPage: React.FC = () => {
     const [createFormData, setCreateFormData] = useState<CreateCompanyFormData>({
         companyName: "",
         staffCount: "",
-        embeddingIndexKey: "legacy-openai-1536",
+        embeddingIndexKey: "",
         embeddingOpenAIApiKey: "",
         embeddingHuggingFaceApiKey: "",
         embeddingOllamaBaseUrl: "",
@@ -84,6 +82,31 @@ const SignupPage: React.FC = () => {
     });
     const [createErrors, setCreateErrors] = useState<CreateCompanyFormErrors>({});
     const [isCreating, setIsCreating] = useState(false);
+    const [embeddingIndexOptions, setEmbeddingIndexOptions] = useState<EmbeddingIndexOption[]>([]);
+
+    useEffect(() => {
+        if (!userId) return;
+        let cancelled = false;
+        void (async () => {
+            try {
+                const res = await fetch("/api/embedding-indexes");
+                if (!res.ok) return;
+                const json = (await res.json()) as { indexes: EmbeddingIndexOption[] };
+                if (cancelled) return;
+                setEmbeddingIndexOptions(json.indexes ?? []);
+                setCreateFormData((prev) =>
+                    prev.embeddingIndexKey || json.indexes.length === 0
+                        ? prev
+                        : { ...prev, embeddingIndexKey: json.indexes[0]!.indexKey },
+                );
+            } catch (err) {
+                console.error("Failed to load embedding indexes:", err);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [userId]);
 
     // ─── Join Company State ──────────────────────────────────────────────────
     const [joinFormData, setJoinFormData] = useState<JoinFormData>({
@@ -624,12 +647,17 @@ const SignupPage: React.FC = () => {
                                                 }))
                                             }
                                             className={styles.input}
+                                            disabled={embeddingIndexOptions.length === 0}
                                         >
-                                            {EMBEDDING_INDEX_OPTIONS.map((option) => (
-                                                <option key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </option>
-                                            ))}
+                                            {embeddingIndexOptions.length === 0 ? (
+                                                <option value="">Loading available indexes…</option>
+                                            ) : (
+                                                embeddingIndexOptions.map((option) => (
+                                                    <option key={option.indexKey} value={option.indexKey}>
+                                                        {option.label}
+                                                    </option>
+                                                ))
+                                            )}
                                         </select>
                                     </div>
                                 </div>

@@ -4,6 +4,8 @@ import { company, users } from "../../../server/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 
+import { getRedactedCredentials } from "~/lib/ai/company-credentials";
+
 
 export async function GET() {
     try {
@@ -36,10 +38,6 @@ export async function GET() {
                 description: company.description,
                 industry: company.industry,
                 embeddingIndexKey: company.embeddingIndexKey,
-                embeddingOpenAIApiKey: company.embeddingOpenAIApiKey,
-                embeddingHuggingFaceApiKey: company.embeddingHuggingFaceApiKey,
-                embeddingOllamaBaseUrl: company.embeddingOllamaBaseUrl,
-                embeddingOllamaModel: company.embeddingOllamaModel,
                 employerpasskey: company.employerpasskey,
                 employeepasskey: company.employeepasskey,
                 numberOfEmployees: company.numberOfEmployees,
@@ -57,7 +55,20 @@ export async function GET() {
             );
         }
 
-        return NextResponse.json(companyRecord, { status: 200 });
+        // Embedding provider credentials come from the encrypted table; the
+        // API route only ever surfaces a redacted summary (hasKey + last4).
+        const creds = await getRedactedCredentials(Number(companyId));
+
+        return NextResponse.json(
+            {
+                ...companyRecord,
+                embeddingOpenAIApiKey: creds.openAI,
+                embeddingHuggingFaceApiKey: creds.huggingFace,
+                embeddingOllamaBaseUrl: creds.ollamaBaseUrl,
+                embeddingOllamaModel: creds.ollamaModel,
+            },
+            { status: 200 },
+        );
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
         return NextResponse.json(

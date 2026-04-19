@@ -1,7 +1,7 @@
-import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { company, document, ocrJobs } from "~/server/db/schema";
+import { document, ocrJobs } from "~/server/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
+import { resolveIngestIndexKey } from "~/lib/ai/company-reindex-state";
 import {
   shouldTranscribeFile,
   transcribeAudioFromUrl,
@@ -93,13 +93,15 @@ export async function processDocumentUpload({
 
   const documentCategory = category ?? "Uncategorized";
   const companyIdString = user.companyId.toString();
-  const [companyRecord] = await db
-    .select({ embeddingIndexKey: company.embeddingIndexKey })
-    .from(company)
-    .where(eq(company.id, Number(user.companyId)))
-    .limit(1);
+  // Resolve the index key ONCE at enqueue time and thread it through the
+  // Inngest event payload. The worker must never re-resolve from DB — that
+  // would race against a mid-flight `updateCompany` index switch and
+  // produce embeddings under the wrong index_key. Prefer `pending` during
+  // an active reindex so new docs end up in the in-flight target.
   const resolvedEmbeddingIndexKey =
-    embeddingIndexKey ?? companyRecord?.embeddingIndexKey ?? undefined;
+    embeddingIndexKey ??
+    (await resolveIngestIndexKey(user.companyId)) ??
+    undefined;
 
   // ------------------------------------------------------------------
   // Audio file: save the original audio as a document, then create a

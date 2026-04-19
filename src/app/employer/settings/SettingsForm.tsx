@@ -1,7 +1,12 @@
 "use client";
 
-import React, { type FC } from "react";
+import React, { useEffect, useState, type FC } from "react";
 import styles from "~/styles/Employer/Settings.module.css";
+
+interface EmbeddingIndexOption {
+    indexKey: string;
+    label: string;
+}
 
 interface SettingsFormProps {
     // Display-only fields
@@ -53,6 +58,25 @@ const SettingsForm: FC<SettingsFormProps> = ({
                                                  onEmbeddingOllamaModelChange,
                                                  onSave,
                                              }) => {
+    const [indexOptions, setIndexOptions] = useState<EmbeddingIndexOption[]>([]);
+
+    useEffect(() => {
+        let cancelled = false;
+        void (async () => {
+            try {
+                const res = await fetch("/api/embedding-indexes");
+                if (!res.ok) return;
+                const json = (await res.json()) as { indexes: EmbeddingIndexOption[] };
+                if (!cancelled) setIndexOptions(json.indexes ?? []);
+            } catch (err) {
+                console.error("Failed to load embedding indexes:", err);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
     return (
         <div className={styles.settingsContainer}>
             <h1 className={styles.settingsTitle}>Settings</h1>
@@ -122,11 +146,17 @@ const SettingsForm: FC<SettingsFormProps> = ({
                     className={styles.input}
                     value={embeddingIndexKey}
                     onChange={(e) => onEmbeddingIndexKeyChange(e.target.value)}
+                    disabled={indexOptions.length === 0}
                 >
-                    <option value="legacy-openai-1536">OpenAI Legacy (1536)</option>
-                    <option value="ollama-default">Ollama Default</option>
-                    <option value="huggingface-default">Hugging Face Default</option>
-                    <option value="sidecar-default">Sidecar Default</option>
+                    {indexOptions.length === 0 ? (
+                        <option value="">Loading available indexes…</option>
+                    ) : (
+                        indexOptions.map((opt) => (
+                            <option key={opt.indexKey} value={opt.indexKey}>
+                                {opt.label}
+                            </option>
+                        ))
+                    )}
                 </select>
             </div>
 

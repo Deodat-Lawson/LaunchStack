@@ -101,6 +101,29 @@ export function getEmbeddingIndexRegistry(config?: CompanyEmbeddingConfig): Embe
   return [LEGACY_OPENAI_INDEX, ...buildDynamicIndexes(config)];
 }
 
+// Validate EMBEDDING_INDEX once per process so a typo in `.env` surfaces in
+// server logs instead of failing at document-ingestion time. Warn rather
+// than throw: a missing dynamic index might just mean the corresponding
+// env vars aren't set yet (which is expected in dev).
+let embeddingIndexEnvChecked = false;
+function checkEmbeddingIndexEnv(): void {
+  if (embeddingIndexEnvChecked) return;
+  embeddingIndexEnvChecked = true;
+  const configured = env.server.EMBEDDING_INDEX;
+  if (!configured) return;
+  const registry = getEmbeddingIndexRegistry();
+  const known = registry.find((idx) => idx.indexKey === configured);
+  if (!known) {
+    console.warn(
+      `[embedding-index-registry] EMBEDDING_INDEX="${configured}" is not in the enabled registry. ` +
+        `Enabled indexes: ${registry.map((idx) => idx.indexKey).join(", ") || "(none)"}. ` +
+        "Companies without a per-row index key will fail to ingest or query. " +
+        "Either set the provider env vars that enable this index, or update EMBEDDING_INDEX.",
+    );
+  }
+}
+checkEmbeddingIndexEnv();
+
 export function getDefaultEmbeddingIndexKey(config?: CompanyEmbeddingConfig): string {
   return resolveEffectiveEmbeddingConfig(config).embeddingIndexKey ?? LEGACY_OPENAI_INDEX.indexKey;
 }

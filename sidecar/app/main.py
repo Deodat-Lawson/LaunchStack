@@ -16,6 +16,7 @@ from app.routes.embed import router as embed_router
 from app.routes.rerank import router as rerank_router
 from app.routes.entities import router as entities_router
 from app.routes.transcribe import router as transcribe_router
+from app.routes.download_and_transcribe import router as download_transcribe_router
 
 
 # ---------------------------------------------------------------------------
@@ -50,6 +51,7 @@ app.include_router(embed_router)
 app.include_router(rerank_router)
 app.include_router(entities_router)
 app.include_router(transcribe_router)
+app.include_router(download_transcribe_router)
 
 # Conditionally register adeu routes — sidecar starts even if adeu is not installed
 try:

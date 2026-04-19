@@ -12,11 +12,18 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
+class TranscriptSegment(BaseModel):
+    start: float
+    end: float
+    text: str
+
+
 class TranscribeResponse(BaseModel):
     text: str
     language: str
     confidence: float
     filename: str
+    segments: list[TranscriptSegment] = []
 
 
 @router.post("/transcribe", response_model=TranscribeResponse)
@@ -58,6 +65,10 @@ async def transcribe(file: UploadFile, request: Request):
             language=result["language"],
             confidence=result["confidence"],
             filename=file.filename,
+            segments=[
+                TranscriptSegment(start=s["start"], end=s["end"], text=s["text"])
+                for s in result.get("segments", [])
+            ],
         )
 
     except Exception as e:

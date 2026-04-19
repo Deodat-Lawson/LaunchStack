@@ -10,6 +10,7 @@ export type DocumentDisplayType =
   | "text"   // Plain text, HTML, Markdown
   | "code"   // Source code files (.py, .ts, .tsx, .js, .jsx, .css, etc.)
   | "zip"    // ZIP archives (extracted content shown)
+  | "audio"  // Audio files (.mp3, .m4a) and audio transcriptions
   | "unknown";
 
 export interface DocumentType {
@@ -22,8 +23,18 @@ export interface DocumentType {
   mimeType?: string;
   /** Whether OCR processing has completed for this document */
   ocrProcessed?: boolean;
-  /** OCR metadata including potential error state */
-  ocrMetadata?: { error?: string; errorMessage?: string; failedAt?: string } | null;
+  /** OCR metadata including potential error state or transcription data */
+  ocrMetadata?: {
+    error?: string;
+    errorMessage?: string;
+    failedAt?: string;
+    audioUrl?: string;
+    audioDocumentId?: number;
+    language?: string;
+    confidence?: number;
+    segments?: { start: number; end: number; text: string }[];
+    [key: string]: unknown;
+  } | null;
   /** When set, this document was extracted from a ZIP archive with this name */
   sourceArchiveName?: string | null;
 }
@@ -39,6 +50,9 @@ const CODE_EXTENSIONS_RE =
 
 /** Infer display type from document for viewer rendering */
 export function getDocumentDisplayType(doc: { url: string; title: string; mimeType?: string }): DocumentDisplayType {
+  // Check title first — transcription documents are stored as text/plain but should render as audio
+  if (doc.title.toLowerCase().includes("(transcription)")) return "audio";
+
   const mime = (doc.mimeType ?? "").toLowerCase();
   if (mime) {
     if (mime === "application/pdf") return "pdf";
@@ -60,6 +74,7 @@ export function getDocumentDisplayType(doc: { url: string; title: string; mimeTy
       mime === "application/vnd.oasis.opendocument.spreadsheet"
     )
       return "xlsx";
+    if (mime.startsWith("audio/") || mime === "video/mp4") return "audio";
     if (CODE_MIME_PREFIXES.some((p) => mime.startsWith(p) || mime === p)) return "code";
     if (mime.startsWith("text/") || mime === "application/csv") return "text";
     if (mime === "application/zip" || mime === "application/x-zip-compressed") return "zip";
@@ -67,6 +82,7 @@ export function getDocumentDisplayType(doc: { url: string; title: string; mimeTy
   const src = `${doc.url} ${doc.title}`.toLowerCase();
   if (/\b\.pdf\b/.test(src)) return "pdf";
   if (/\.(png|jpg|jpeg|gif|webp|tiff|tif|bmp|svg)\b/.test(src)) return "image";
+  if (/\.(mp3|m4a)\b/.test(src)) return "audio";
   if (/\.(docx?|odt)\b/.test(src)) return "docx";
   if (/\.(pptx?|odp)\b/.test(src)) return "pptx";
   if (/\.(xlsx?|ods)\b/.test(src)) return "xlsx";

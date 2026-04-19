@@ -134,10 +134,13 @@ services:
       S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
       S3_SECRET_KEY: ${S3_SECRET_KEY:-pdr_local_secret}
       S3_BUCKET_NAME: ${S3_BUCKET_NAME:-launchstack}
+      # Sidecar (ML compute — embeddings, reranking, transcription)
+      SIDECAR_URL: http://sidecar:8000
       # Adeu DOCX redlining service
       ADEU_SERVICE_URL: http://sidecar:8000
     ports:
       - "3000:3000"
+
 
   inngest-dev:
     image: inngest/inngest:latest

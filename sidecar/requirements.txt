@@ -8,3 +8,4 @@ pydantic>=2.10.0
 openai-whisper>=20231117
 adeu
 python-multipart>=0.0.6
+yt-dlp>=2024.1.0

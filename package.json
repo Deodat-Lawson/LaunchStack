@@ -138,6 +138,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
+    "sherpa-onnx-node": "^1.12.38",
     "sonner": "^2.0.3",
     "string-similarity-js": "^2.1.4",
     "tailwind-merge": "*",

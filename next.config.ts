@@ -94,6 +94,7 @@ const config: NextConfig = {
     "jszip",
     "readable-stream",
     "mammoth",
+    "sherpa-onnx-node",
   ],
 };
 

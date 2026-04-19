@@ -70,7 +70,8 @@
       "Bash(pnpm exec *)",
       "Bash(pnpm test *)",
       "Bash(git grep *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(python3 -c \"import yaml; yaml.safe_load\\(open\\('/Users/aurea/LaunchStack/docker-compose.yml'\\)\\); print\\('YAML OK'\\)\")"
     ]
   }
 }

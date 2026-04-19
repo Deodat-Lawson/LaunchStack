@@ -1,13 +1,16 @@
+import { eq } from "drizzle-orm";
+
 import { db } from "~/server/db";
-import { document, ocrJobs } from "~/server/db/schema";
+import { document, documentVersions, ocrJobs } from "~/server/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
+import { resolveIngestIndexKey } from "~/lib/ai/company-reindex-state";
 import {
   shouldTranscribeFile,
   transcribeAudioFromUrl,
   isVideoUrl,
   transcribeVideoFromUrl,
 } from "~/lib/audio/transcription";
-import { putFile } from "~/server/storage/vercel-blob";
+import { uploadFile } from "~/lib/storage";
 
 export type StorageType = "cloud" | "database" | "local";
 
@@ -26,6 +29,7 @@ export interface DocumentUploadParams {
   explicitStorageType?: StorageType;
   mimeType?: string;
   originalFilename?: string;
+  embeddingIndexKey?: string;
 }
 
 export interface DocumentUploadResult {
@@ -73,6 +77,64 @@ export function toAbsoluteUrl(url: string, requestUrl: string): string {
 }
 
 /**
+ * Create the initial (version 1) row in `document_versions` for a freshly-inserted
+ * document, point the document at it via `currentVersionId`, and lock in `fileType`.
+ *
+ * This is the authoritative path for new uploads. Every document created after
+ * Step 2 of the versioning rollout will have a v1 row from the start — the
+ * backfill script is only for documents that existed before this change.
+ *
+ * Runs as a single transaction so the document row and its v1 version are
+ * always consistent with each other.
+ */
+async function createInitialVersion(params: {
+  documentId: number;
+  url: string;
+  mimeType: string | null | undefined;
+  uploadedBy: string;
+  ocrProcessed?: boolean;
+  ocrMetadata?: Record<string, unknown>;
+}): Promise<number> {
+  const { documentId, url, mimeType, uploadedBy, ocrProcessed, ocrMetadata } = params;
+
+  // Fall back to application/octet-stream only if the caller genuinely has no
+  // MIME info. This matches the backfill script's behavior so old and new rows
+  // look the same.
+  const resolvedMime = mimeType ?? "application/octet-stream";
+
+  return db.transaction(async (tx) => {
+    const [version] = await tx
+      .insert(documentVersions)
+      .values({
+        documentId: BigInt(documentId),
+        versionNumber: 1,
+        url,
+        mimeType: resolvedMime,
+        uploadedBy,
+        ocrProcessed: ocrProcessed ?? false,
+        ocrMetadata: ocrMetadata ?? null,
+      })
+      .returning({ id: documentVersions.id });
+
+    if (!version) {
+      throw new Error(
+        `Failed to create initial document_versions row for document ${documentId}`
+      );
+    }
+
+    await tx
+      .update(document)
+      .set({
+        currentVersionId: BigInt(version.id),
+        fileType: resolvedMime,
+      })
+      .where(eq(document.id, documentId));
+
+    return Number(version.id);
+  });
+}
+
+/**
  * Core document upload handler shared by single-file and batch commits.
  */
 export async function processDocumentUpload({
@@ -85,6 +147,7 @@ export async function processDocumentUpload({
   explicitStorageType,
   mimeType,
   originalFilename,
+  embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
   const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
   const resolvedDocumentUrl =
@@ -92,6 +155,15 @@ export async function processDocumentUpload({
 
   const documentCategory = category ?? "Uncategorized";
   const companyIdString = user.companyId.toString();
+  // Resolve the index key ONCE at enqueue time and thread it through the
+  // Inngest event payload. The worker must never re-resolve from DB — that
+  // would race against a mid-flight `updateCompany` index switch and
+  // produce embeddings under the wrong index_key. Prefer `pending` during
+  // an active reindex so new docs end up in the in-flight target.
+  const resolvedEmbeddingIndexKey =
+    embeddingIndexKey ??
+    (await resolveIngestIndexKey(user.companyId)) ??
+    undefined;
 
   // ------------------------------------------------------------------
   // Audio file: save the original audio as a document, then create a
@@ -123,6 +195,17 @@ export async function processDocumentUpload({
       throw new Error("Failed to create audio document record");
     }
 
+    // The original audio file is its own v1. Embeddings are generated from the
+    // transcript document (below), not the audio itself — but we still create
+    // a version row so delete/revert works consistently across file types.
+    await createInitialVersion({
+      documentId: audioDocument.id,
+      url: rawDocumentUrl,
+      mimeType: mimeType ?? null,
+      uploadedBy: user.userId,
+      ocrProcessed: true,
+    });
+
     // 2. Transcribe and create a separate transcript document
     try {
       const transcriptionResult = await transcribeAudioFromUrl(
@@ -130,10 +213,11 @@ export async function processDocumentUpload({
         originalFilename || documentName
       );
 
-      const textBlob = await putFile({
+      const textBlob = await uploadFile({
         filename: `${documentName}-transcription.txt`,
         data: Buffer.from(transcriptionResult.text, "utf-8"),
         contentType: "text/plain",
+        userId: user.userId,
       });
 
       const transcriptionMetadata = {
@@ -172,6 +256,19 @@ export async function processDocumentUpload({
         throw new Error("Failed to create transcript document record");
       }
 
+      // The transcript document is what goes through the OCR-to-Vector pipeline,
+      // so its v1 version is the one that will receive embeddings. We capture
+      // the versionId and forward it to the pipeline so every chunk/structure/
+      // metadata/preview row gets tagged with the correct version.
+      const transcriptVersionId = await createInitialVersion({
+        documentId: transcriptDocument.id,
+        url: textBlob.url,
+        mimeType: "text/plain",
+        uploadedBy: user.userId,
+        ocrProcessed: false,
+        ocrMetadata: transcriptionMetadata,
+      });
+
       const { jobId, eventIds } = await triggerDocumentProcessing(
         textBlob.url,
         transcriptName,
@@ -184,6 +281,8 @@ export async function processDocumentUpload({
           mimeType: "text/plain",
           originalFilename: `${documentName}-transcription.txt`,
           transcriptionMetadata,
+          versionId: transcriptVersionId,
+          embeddingIndexKey: resolvedEmbeddingIndexKey,
         }
       );
 
@@ -243,6 +342,16 @@ export async function processDocumentUpload({
     throw new Error("Failed to create document record");
   }
 
+  // Create the v1 row for this document and lock in its file type. The
+  // returned versionId is forwarded to the OCR-to-Vector pipeline so every
+  // embedding/structure/metadata row gets tagged with the version it came from.
+  const versionId = await createInitialVersion({
+    documentId: newDocument.id,
+    url: rawDocumentUrl,
+    mimeType,
+    uploadedBy: user.userId,
+  });
+
   const { jobId, eventIds } = await triggerDocumentProcessing(
     resolvedDocumentUrl,
     documentName,
@@ -254,6 +363,8 @@ export async function processDocumentUpload({
       preferredProvider: parseProvider(preferredProvider),
       mimeType,
       originalFilename,
+      versionId,
+      embeddingIndexKey: resolvedEmbeddingIndexKey,
     }
   );
 

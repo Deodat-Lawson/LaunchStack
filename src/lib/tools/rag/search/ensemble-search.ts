@@ -1,7 +1,8 @@
 import { EnsembleRetriever } from "langchain/retrievers/ensemble";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import type { BaseRetriever } from "@langchain/core/retrievers";
+import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
 import {
   createDocumentVectorRetriever,
   createCompanyVectorRetriever,
@@ -43,12 +44,12 @@ function isGraphRetrievalEnabled(): boolean {
   );
 }
 
-export function createOpenAIEmbeddings(): OpenAIEmbeddings {
-  return new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY,
-    modelName: "text-embedding-3-large",
-    dimensions: 1536,
-  });
+export function createOpenAIEmbeddings(): EmbeddingsProvider {
+  return createEmbeddingModel(resolveEmbeddingIndex());
+}
+
+export function createEmbeddingsForIndex(indexKey?: string): EmbeddingsProvider {
+  return createEmbeddingModel(resolveEmbeddingIndex(indexKey));
 }
 
 export async function createDocumentEnsembleRetriever(
@@ -56,11 +57,17 @@ export async function createDocumentEnsembleRetriever(
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
   const { documentId, companyId, topK = DEFAULT_TOP_K, filters } = options;
-  const emb = embeddings ?? createOpenAIEmbeddings();
+  const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
   const bm25Retriever = await createDocumentBM25Retriever(documentId, candidateK);
-  const vectorRetriever = createDocumentVectorRetriever(documentId, emb, candidateK, filters);
+  const vectorRetriever = createDocumentVectorRetriever(
+    documentId,
+    emb,
+    resolveEmbeddingIndex(options.embeddingIndexKey),
+    candidateK,
+    filters,
+  );
 
   const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
   let weights = options.weights ?? DEFAULT_WEIGHTS_2;
@@ -84,11 +91,17 @@ export async function createCompanyEnsembleRetriever(
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
   const { companyId, topK = 10, filters } = options;
-  const emb = embeddings ?? createOpenAIEmbeddings();
+  const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
   const bm25Retriever = await createCompanyBM25Retriever(companyId, candidateK);
-  const vectorRetriever = createCompanyVectorRetriever(companyId, emb, candidateK, filters);
+  const vectorRetriever = createCompanyVectorRetriever(
+    companyId,
+    emb,
+    resolveEmbeddingIndex(options.embeddingIndexKey),
+    candidateK,
+    filters,
+  );
 
   const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
   let weights = options.weights ?? DEFAULT_WEIGHTS_2;
@@ -111,11 +124,17 @@ export async function createMultiDocEnsembleRetriever(
   embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
   const { documentIds, companyId, topK = DEFAULT_TOP_K, filters } = options;
-  const emb = embeddings ?? createOpenAIEmbeddings();
+  const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
   const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
   const bm25Retriever = await createMultiDocBM25Retriever(documentIds, candidateK);
-  const vectorRetriever = createMultiDocVectorRetriever(documentIds, emb, candidateK, filters);
+  const vectorRetriever = createMultiDocVectorRetriever(
+    documentIds,
+    emb,
+    resolveEmbeddingIndex(options.embeddingIndexKey),
+    candidateK,
+    filters,
+  );
 
   const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
   let weights = options.weights ?? DEFAULT_WEIGHTS_2;

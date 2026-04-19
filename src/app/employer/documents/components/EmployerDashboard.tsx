@@ -28,6 +28,7 @@ import type { DocumentType, CategoryGroup } from "../types";
 import type { ViewMode } from "../types";
 import { getDocumentDisplayType } from "../types/document";
 import { DISPLAY_TYPE_ICONS } from "./DocumentViewer";
+import { ProcessingStatusBar } from "./ProcessingStatusBar";
 
 interface EmployerDashboardProps {
   documents: DocumentType[];
@@ -462,21 +463,7 @@ export function EmployerDashboard({
             )}
 
             {/* Processing Status */}
-            {stats.processing > 0 && (
-              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/60 rounded-xl p-4">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
-                      {stats.processing} document{stats.processing !== 1 ? "s" : ""} processing
-                    </p>
-                    <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">
-                      OCR and indexing in progress. Documents will be ready for AI queries shortly.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
+            <ProcessingStatusBar initialProcessingCount={stats.processing} />
           </div>
         </div>
       </div>

@@ -205,9 +205,23 @@ export interface ProcessDocumentEventData {
   mimeType?: string;
   /** Original filename with extension — used for adapter routing when documentName has been cleaned */
   originalFilename?: string;
+  /**
+   * The `document_versions.id` this pipeline run is producing embeddings for.
+   * When set, every chunk/structure/metadata/preview row written to the RLM
+   * tables is tagged with this version_id so RAG can later filter to only the
+   * current version and reverting a document is an O(1) pointer flip.
+   * Optional for backwards compatibility with pre-versioning callers.
+   */
+  versionId?: number;
+  /**
+   * Opaque metadata passed through when the source document was produced by
+   * audio transcription. Used by the ingestion tool to record provenance.
+   */
+  transcriptionMetadata?: Record<string, unknown>;
   options?: {
     forceOCR?: boolean;
     preferredProvider?: OCRProvider;
+    embeddingIndexKey?: string;
   };
 }
 

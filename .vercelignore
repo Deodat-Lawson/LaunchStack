@@ -5,6 +5,9 @@ __tests__
 .github
 .vscode
 
+# Sidecar (ML deps too large for Vercel — Adeu runs via api/adeu/ instead)
+sidecar/
+
 # Large static files not needed in serverless
 public/vad/*.js.map
 public/vad/*.wasm.map

@@ -9,13 +9,20 @@ import { renderPagesToImages } from "~/lib/ocr/complexity";
 import { enrichPageWithVlm } from "~/lib/ocr/enrichment";
 import { createAzureAdapter, createLandingAIAdapter, createDatalabAdapter } from "~/lib/ocr/adapters";
 import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "~/lib/ocr/chunker";
-import { generateEmbeddings } from "~/lib/ai/embeddings";
+import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+import {
+  isLegacyEmbeddingIndex,
+  supportsShortVectorSearch,
+  type EmbeddingIndexConfig,
+} from "~/lib/ai/embedding-index-registry";
+import { storeDimensionTableEmbeddings } from "~/lib/ai/dimension-table-store";
 import { db } from "~/server/db";
 import {
   documentContextChunks,
   documentRetrievalChunks,
   documentStructure,
   documentMetadata,
+  documentVersions,
   document as documentTable,
   ocrJobs,
 } from "~/server/db/schema";
@@ -344,7 +351,10 @@ export async function chunkPages(pages: PageContent[], filename?: string): Promi
 /**
  * Generate embeddings for document chunks
  */
-export async function vectorizeChunks(chunks: DocumentChunk[]): Promise<VectorizedChunk[]> {
+export async function vectorizeChunks(
+  chunks: DocumentChunk[],
+  embeddingIndex: EmbeddingIndexConfig,
+): Promise<VectorizedChunk[]> {
   if (chunks.length === 0) {
     console.log("[Vectorize] No chunks to vectorize, returning empty");
     return [];
@@ -355,13 +365,15 @@ export async function vectorizeChunks(chunks: DocumentChunk[]): Promise<Vectoriz
   console.log(`[Vectorize] Flattened to ${contentStrings.length} Child/Table chunks for embedding, total chars=${contentStrings.reduce((s, c) => s + c.length, 0)}`);
 
   const embedStart = Date.now();
-  const embeddingResult = await generateEmbeddings(contentStrings, {
-    model: "text-embedding-3-large",
-    dimensions: 1536,
-  });
-  console.log(`[Vectorize] Embeddings generated: ${embeddingResult.embeddings.length} vectors (${Date.now() - embedStart}ms)`);
+  const embeddings = createEmbeddingModel(embeddingIndex);
+  const vectors = await embeddings.embedDocuments?.(contentStrings)
+    ?? await Promise.all(contentStrings.map((text) => embeddings.embedQuery(text)));
+  console.log(`[Vectorize] Embeddings generated: ${vectors.length} vectors (${Date.now() - embedStart}ms)`);
 
-  const merged = mergeWithEmbeddings(chunks, embeddingResult.embeddings);
+  const merged = mergeWithEmbeddings(chunks, vectors, {
+    shortDimension: embeddingIndex.shortDimension,
+    supportsMatryoshka: supportsShortVectorSearch(embeddingIndex),
+  });
   console.log(`[Vectorize] Merged back into ${merged.length} Parent chunks`);
   return merged;
 }
@@ -381,41 +393,45 @@ export interface StoredSection {
 
 /**
  * Verify that the target document exists before inserting chunks.
- * Retries once after 2s to handle replication lag.
+ * Retries up to 3 times with exponential backoff to handle replication lag.
  */
 export async function ensureDocumentExists(documentId: number): Promise<void> {
-  let [existingDoc] = await db
-    .select({ id: documentTable.id })
-    .from(documentTable)
-    .where(eq(documentTable.id, documentId));
-  if (!existingDoc) {
-    await new Promise((r) => setTimeout(r, 2000));
-    [existingDoc] = await db
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const [existingDoc] = await db
       .select({ id: documentTable.id })
       .from(documentTable)
       .where(eq(documentTable.id, documentId));
+    if (existingDoc) return;
+    if (attempt < maxAttempts) {
+      await new Promise((r) => setTimeout(r, attempt * 500));
+    }
   }
-  if (!existingDoc) {
-    throw new Error(
-      `Document ${documentId} does not exist. Cannot store chunks. ` +
-      `The document may have been deleted before the job completed.`
-    );
-  }
+  throw new Error(
+    `Document ${documentId} does not exist. Cannot store chunks. ` +
+    `The document may have been deleted before the job completed.`
+  );
 }
 
 /**
  * Create the root document structure node. Must be called once before storeBatch.
+ *
+ * When `versionId` is provided, the root structure node is tagged with it so
+ * deleting that version cascades and removes this node (and everything under
+ * it) automatically.
  */
 export async function createRootStructure(
   documentId: number,
   totalPages: number,
   estimatedTokens: number,
+  versionId?: number,
 ): Promise<number> {
   await ensureDocumentExists(documentId);
 
   return withDbRetry(async () => {
     const rootStructure = await db.insert(documentStructure).values({
       documentId: BigInt(documentId),
+      versionId: versionId !== undefined ? BigInt(versionId) : null,
       parentId: null,
       contentType: "section",
       path: "/",
@@ -445,23 +461,31 @@ export async function storeBatch(
   documentId: number,
   rootStructureId: number,
   vectorizedChunks: VectorizedChunk[],
+  embeddingIndex: EmbeddingIndexConfig,
+  versionId?: number,
 ): Promise<StoredSection[]> {
   if (vectorizedChunks.length === 0) return [];
 
+  const versionBigInt =
+    versionId !== undefined ? BigInt(versionId) : null;
+
   return withDbRetry(async () => {
-    return db.transaction(async (tx) => {
+    const result = await db.transaction(async (tx) => {
       const parentValues = vectorizedChunks.map((chunk) => {
         const semanticType: "tabular" | "narrative" = chunk.metadata.isTable
           ? "tabular"
           : "narrative";
         return {
           documentId: BigInt(documentId),
+          versionId: versionBigInt,
           structureId: BigInt(rootStructureId),
           content: chunk.content,
           tokenCount: Math.ceil(chunk.content.length / 4),
           charCount: chunk.content.length,
           embedding:
-            chunk.vector && chunk.vector.length > 0
+            isLegacyEmbeddingIndex(embeddingIndex) &&
+            chunk.vector &&
+            chunk.vector.length > 0
               ? sql`${JSON.stringify(chunk.vector)}::vector(1536)`
               : null,
           pageNumber: chunk.metadata.pageNumber,
@@ -486,11 +510,13 @@ export async function storeBatch(
       const childValues: Array<{
         contextChunkId: bigint;
         documentId: bigint;
+        versionId: bigint | null;
         content: string;
         tokenCount: number;
-        embedding: ReturnType<typeof sql>;
+        embedding: ReturnType<typeof sql> | null;
         embeddingShort: ReturnType<typeof sql> | null;
       }> = [];
+      const dimensionTableVectors: number[][] = [];
 
       for (let i = 0; i < vectorizedChunks.length; i++) {
         const chunk = vectorizedChunks[i]!;
@@ -501,25 +527,51 @@ export async function storeBatch(
           childValues.push({
             contextChunkId: BigInt(parentId),
             documentId: BigInt(documentId),
+            versionId: versionBigInt,
             content: child.content,
             tokenCount: Math.ceil(child.content.length / 4),
-            embedding: sql`${JSON.stringify(child.vector)}::vector(1536)`,
-            embeddingShort: child.vectorShort
+            embedding: isLegacyEmbeddingIndex(embeddingIndex)
+              ? sql`${JSON.stringify(child.vector)}::vector(1536)`
+              : null,
+            embeddingShort: isLegacyEmbeddingIndex(embeddingIndex) && child.vectorShort
               ? sql`${JSON.stringify(child.vectorShort)}::vector(512)`
               : null,
           });
+          if (!isLegacyEmbeddingIndex(embeddingIndex)) {
+            dimensionTableVectors.push(child.vector);
+          }
         }
       }
 
       const CHILD_BATCH_SIZE = 50;
+      const insertedDimensionTableChunkIds: number[] = [];
       for (let i = 0; i < childValues.length; i += CHILD_BATCH_SIZE) {
-        await tx
+        const insertedRows = await tx
           .insert(documentRetrievalChunks)
-          .values(childValues.slice(i, i + CHILD_BATCH_SIZE));
+          .values(childValues.slice(i, i + CHILD_BATCH_SIZE))
+          .returning({ id: documentRetrievalChunks.id });
+        if (!isLegacyEmbeddingIndex(embeddingIndex)) {
+          insertedDimensionTableChunkIds.push(...insertedRows.map((row) => row.id));
+        }
       }
 
-      return storedSections;
+      return {
+        storedSections,
+        insertedDimensionTableChunkIds,
+        dimensionTableVectors,
+      };
     });
+
+    if (!isLegacyEmbeddingIndex(embeddingIndex) && result.dimensionTableVectors.length > 0) {
+      await storeDimensionTableEmbeddings({
+        documentId,
+        retrievalChunkIds: result.insertedDimensionTableChunkIds,
+        vectors: result.dimensionTableVectors,
+        index: embeddingIndex,
+      });
+    }
+
+    return result.storedSections;
   });
 }
 
@@ -538,14 +590,17 @@ export async function finalizeStorage(
     provider: string;
     processingTimeMs: number;
     confidenceScore?: number;
+    embeddingIndexKey?: string;
   },
   pipelineStartTime: number,
+  versionId?: number,
 ): Promise<void> {
   return withDbRetry(async () => {
     const summaryPreview = summaryText.substring(0, 500) + (summaryText.length > 500 ? "..." : "");
 
     await db.insert(documentMetadata).values({
       documentId: BigInt(documentId),
+      versionId: versionId !== undefined ? BigInt(versionId) : null,
       summary: summaryPreview,
       outline: Array.from({ length: meta.totalPages }, (_, i) => ({
         id: i + 1,
@@ -561,6 +616,14 @@ export async function finalizeStorage(
       entities: {},
     });
 
+    const ocrMetadataPayload = {
+      totalPages: meta.totalPages,
+      totalChunks,
+      processingTimeMs: meta.processingTimeMs,
+      embeddingIndexKey: meta.embeddingIndexKey,
+      processedAt: new Date().toISOString(),
+    };
+
     await db
       .update(documentTable)
       .set({
@@ -568,14 +631,24 @@ export async function finalizeStorage(
         ocrJobId: jobId,
         ocrProvider: meta.provider,
         ocrConfidenceScore: meta.confidenceScore,
-        ocrMetadata: {
-          totalPages: meta.totalPages,
-          totalChunks,
-          processingTimeMs: meta.processingTimeMs,
-          processedAt: new Date().toISOString(),
-        },
+        ocrMetadata: ocrMetadataPayload,
       })
       .where(eq(documentTable.id, documentId));
+
+    // Mirror OCR completion onto the per-version row so each version carries
+    // its own processing provenance. Important when different versions of the
+    // same document were run through different OCR providers.
+    if (versionId !== undefined) {
+      await db
+        .update(documentVersions)
+        .set({
+          ocrProcessed: true,
+          ocrJobId: jobId,
+          ocrProvider: meta.provider,
+          ocrMetadata: ocrMetadataPayload,
+        })
+        .where(eq(documentVersions.id, versionId));
+    }
 
     await db
       .update(ocrJobs)

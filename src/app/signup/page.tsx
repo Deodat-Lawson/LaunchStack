@@ -36,10 +36,20 @@ interface ValidatedCodeInfo {
 interface CreateCompanyFormData {
     companyName: string;
     staffCount: string;
+    embeddingIndexKey: string;
+    embeddingOpenAIApiKey: string;
+    embeddingHuggingFaceApiKey: string;
+    embeddingOllamaBaseUrl: string;
+    embeddingOllamaModel: string;
 }
 interface CreateCompanyFormErrors {
     companyName?: string;
     staffCount?: string;
+}
+
+interface EmbeddingIndexOption {
+    indexKey: string;
+    label: string;
 }
 
 // ─── Join Company Form ──────────────────────────────────────────────────────
@@ -64,9 +74,39 @@ const SignupPage: React.FC = () => {
     const [createFormData, setCreateFormData] = useState<CreateCompanyFormData>({
         companyName: "",
         staffCount: "",
+        embeddingIndexKey: "",
+        embeddingOpenAIApiKey: "",
+        embeddingHuggingFaceApiKey: "",
+        embeddingOllamaBaseUrl: "",
+        embeddingOllamaModel: "",
     });
     const [createErrors, setCreateErrors] = useState<CreateCompanyFormErrors>({});
     const [isCreating, setIsCreating] = useState(false);
+    const [embeddingIndexOptions, setEmbeddingIndexOptions] = useState<EmbeddingIndexOption[]>([]);
+
+    useEffect(() => {
+        if (!userId) return;
+        let cancelled = false;
+        void (async () => {
+            try {
+                const res = await fetch("/api/embedding-indexes");
+                if (!res.ok) return;
+                const json = (await res.json()) as { indexes: EmbeddingIndexOption[] };
+                if (cancelled) return;
+                setEmbeddingIndexOptions(json.indexes ?? []);
+                setCreateFormData((prev) =>
+                    prev.embeddingIndexKey || json.indexes.length === 0
+                        ? prev
+                        : { ...prev, embeddingIndexKey: json.indexes[0]!.indexKey },
+                );
+            } catch (err) {
+                console.error("Failed to load embedding indexes:", err);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [userId]);
 
     // ─── Join Company State ──────────────────────────────────────────────────
     const [joinFormData, setJoinFormData] = useState<JoinFormData>({
@@ -226,6 +266,11 @@ const SignupPage: React.FC = () => {
                     email: user?.emailAddresses[0]?.emailAddress,
                     companyName: createFormData.companyName,
                     numberOfEmployees: createFormData.staffCount,
+                    embeddingIndexKey: createFormData.embeddingIndexKey,
+                    embeddingOpenAIApiKey: createFormData.embeddingOpenAIApiKey || null,
+                    embeddingHuggingFaceApiKey: createFormData.embeddingHuggingFaceApiKey || null,
+                    embeddingOllamaBaseUrl: createFormData.embeddingOllamaBaseUrl || null,
+                    embeddingOllamaModel: createFormData.embeddingOllamaModel || null,
                 }),
             });
 
@@ -397,7 +442,7 @@ const SignupPage: React.FC = () => {
                 </div>
 
                 <h2 className={styles.brandTitle}>
-                    Professional Document Reader AI
+                    AI-Powered Document Intelligence
                 </h2>
                 <p className={styles.brandDescription}>
                     Transform how your team analyzes and interprets professional documents with cutting-edge AI technology.
@@ -588,13 +633,115 @@ const SignupPage: React.FC = () => {
                                     )}
                                 </div>
 
-                                <button
-                                    type="submit"
-                                    className={styles.submitButton}
-                                    disabled={isCreating}
-                                >
-                                    {isCreating ? "Creating..." : "Create Company"}
-                                </button>
+                                <div className={styles.formGroup}>
+                                    <label className={styles.label}>Default Embedding Index</label>
+                                    <div className={styles.inputWrapper}>
+                                        <Brain className={styles.inputIcon} />
+                                        <select
+                                            name="embeddingIndexKey"
+                                            value={createFormData.embeddingIndexKey}
+                                            onChange={(e) =>
+                                                setCreateFormData((prev) => ({
+                                                    ...prev,
+                                                    embeddingIndexKey: e.target.value,
+                                                }))
+                                            }
+                                            className={styles.input}
+                                            disabled={embeddingIndexOptions.length === 0}
+                                        >
+                                            {embeddingIndexOptions.length === 0 ? (
+                                                <option value="">Loading available indexes…</option>
+                                            ) : (
+                                                embeddingIndexOptions.map((option) => (
+                                                    <option key={option.indexKey} value={option.indexKey}>
+                                                        {option.label}
+                                                    </option>
+                                                ))
+                                            )}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className={styles.configSection}>
+                                    <div className={styles.configSectionHeader}>
+                                        <h3 className={styles.configSectionTitle}>Optional Provider Config</h3>
+                                        <p className={styles.configSectionHint}>
+                                            Leave these blank to keep using shared env defaults for the demo.
+                                        </p>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.label}>OpenAI API Key</label>
+                                        <div className={styles.inputWrapper}>
+                                            <input
+                                                type="password"
+                                                name="embeddingOpenAIApiKey"
+                                                value={createFormData.embeddingOpenAIApiKey}
+                                                onChange={handleCreateChange}
+                                                className={styles.plainInput}
+                                                placeholder="Optional company-specific OpenAI key"
+                                                autoComplete="off"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.label}>Hugging Face API Key</label>
+                                        <div className={styles.inputWrapper}>
+                                            <input
+                                                type="password"
+                                                name="embeddingHuggingFaceApiKey"
+                                                value={createFormData.embeddingHuggingFaceApiKey}
+                                                onChange={handleCreateChange}
+                                                className={styles.plainInput}
+                                                placeholder="Optional company-specific HF token"
+                                                autoComplete="off"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.configGrid}>
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.label}>Ollama Base URL</label>
+                                            <div className={styles.inputWrapper}>
+                                                <input
+                                                    type="url"
+                                                    name="embeddingOllamaBaseUrl"
+                                                    value={createFormData.embeddingOllamaBaseUrl}
+                                                    onChange={handleCreateChange}
+                                                    className={styles.plainInput}
+                                                    placeholder="http://localhost:11434"
+                                                    autoComplete="off"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.label}>Ollama Model</label>
+                                            <div className={styles.inputWrapper}>
+                                                <input
+                                                    type="text"
+                                                    name="embeddingOllamaModel"
+                                                    value={createFormData.embeddingOllamaModel}
+                                                    onChange={handleCreateChange}
+                                                    className={styles.plainInput}
+                                                    placeholder="nomic-embed-text"
+                                                    autoComplete="off"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={styles.submitSection}>
+                                    <button
+                                        type="submit"
+                                        className={styles.submitButton}
+                                        disabled={isCreating}
+                                    >
+                                        {isCreating ? "Creating..." : "Create Company"}
+                                    </button>
+                                </div>
                             </form>
                         )}
 

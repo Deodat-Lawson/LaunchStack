@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
-import { db, toRows } from "~/server/db/index";
-import { and, eq, sql } from "drizzle-orm";
+import { db } from "~/server/db/index";
+import { and, eq } from "drizzle-orm";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
     companyEnsembleSearch,
+    createDocumentVectorRetriever,
     documentEnsembleSearch,
     multiDocEnsembleSearch,
     type CompanySearchOptions,
@@ -12,6 +13,8 @@ import {
     type MultiDocSearchOptions,
     type SearchResult
 } from "~/lib/tools/rag";
+import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
@@ -35,13 +38,6 @@ import { validateQAResponse } from "~/lib/agents/supervisor";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
-
-type PdfChunkRow = Record<string, unknown> & {
-    id: number;
-    content: string;
-    page: number;
-    distance: number;
-};
 
 const qaAnnOptimizer = new ANNOptimizer({ 
     strategy: 'hnsw',
@@ -99,6 +95,7 @@ export async function POST(request: Request) {
                 aiModel,
                 provider,
                 conversationHistory,
+                embeddingIndexKey,
             } = validation.data;
 
             // Validate search scope requirements
@@ -199,6 +196,8 @@ export async function POST(request: Request) {
                 }
             }
 
+            const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
+
             // Resolve archive document IDs if archive scope
             let archiveDocumentIds: number[] | undefined;
             if (searchScope === "archive" && archiveName) {
@@ -207,7 +206,7 @@ export async function POST(request: Request) {
                     .from(document)
                     .where(and(
                         eq(document.sourceArchiveName, archiveName),
-                        eq(document.companyId, String(numericCompanyId))
+                        eq(document.companyId, BigInt(numericCompanyId))
                     ));
 
                 archiveDocumentIds = archiveDocs.map(d => d.id);
@@ -221,7 +220,14 @@ export async function POST(request: Request) {
             }
 
             // Perform comprehensive search
-            const embeddings = getEmbeddings();
+            const resolvedEmbeddingIndex = resolveEmbeddingIndex(
+                embeddingIndexKey,
+                companyConfig ?? undefined,
+            );
+            const embeddings = getEmbeddings(
+                resolvedEmbeddingIndex.indexKey,
+                companyConfig ?? undefined,
+            );
             let documents: SearchResult[] = [];
             retrievalMethod = searchScope === "company"
                 ? 'company_ensemble_rrf'
@@ -234,7 +240,8 @@ export async function POST(request: Request) {
                     const companyOptions: CompanySearchOptions = {
                         weights: [0.4, 0.6],
                         topK: 10,
-                        companyId: numericCompanyId
+                        companyId: numericCompanyId,
+                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
                     
                     documents = await companyEnsembleSearch(
@@ -246,7 +253,8 @@ export async function POST(request: Request) {
                     const archiveOptions: MultiDocSearchOptions = {
                         weights: [0.4, 0.6],
                         topK: 10,
-                        documentIds: archiveDocumentIds
+                        documentIds: archiveDocumentIds,
+                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
 
                     documents = await multiDocEnsembleSearch(
@@ -259,6 +267,7 @@ export async function POST(request: Request) {
                         topK: 5,
                         documentId,
                         companyId: numericCompanyId,
+                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
                     
                     documents = await documentEnsembleSearch(
@@ -281,63 +290,62 @@ export async function POST(request: Request) {
                     retrievalMethod = 'company_fallback_failed';
                     documents = [];
                 } else if (searchScope === "document" && documentId) {
-                    retrievalMethod = 'ann_hybrid';
-                    
-                    try {
-                        const questionEmbedding = await embeddings.embedQuery(question);
-                        const annResults = await qaAnnOptimizer.searchSimilarChunks(
-                            questionEmbedding,
-                            [documentId],
-                            5,
-                            0.8
-                        );
-
-                        documents = annResults.map(result => ({
-                            pageContent: result.content,
-                            metadata: {
-                                chunkId: result.id,
-                                page: result.page,
-                                documentId: result.documentId,
-                                distance: 1 - result.confidence,
-                                source: 'ann_hybrid',
-                                searchScope: 'document' as const,
-                                retrievalMethod: 'ann_hybrid' as const,
-                                timestamp: new Date().toISOString()
-                            }
-                        }));
-
-                    } catch (annError) {
-                        console.warn(`⚠️ [AIChat] ANN search failed, using vector search:`, annError);
-                        retrievalMethod = 'vector_fallback';
+                    if (isLegacyEmbeddingIndex(resolvedEmbeddingIndex)) {
+                        retrievalMethod = 'ann_hybrid';
                         
-                        const questionEmbedding = await embeddings.embedQuery(question);
-                        const bracketedEmbedding = `[${questionEmbedding.join(",")}]`;
+                        try {
+                            const questionEmbedding = await embeddings.embedQuery(question);
+                            const annResults = await qaAnnOptimizer.searchSimilarChunks(
+                                questionEmbedding,
+                                [documentId],
+                                5,
+                                0.8
+                            );
 
-                        const query = sql`
-                          SELECT
-                            id,
-                            content,
-                            page,
-                            embedding <-> ${bracketedEmbedding}::vector(1536) AS distance
-                          FROM pdr_ai_v2_pdf_chunks
-                          WHERE document_id = ${documentId}
-                          ORDER BY embedding <-> ${bracketedEmbedding}::vector(1536)
-                          LIMIT 3
-                        `;
+                            documents = annResults.map(result => ({
+                                pageContent: result.content,
+                                metadata: {
+                                    chunkId: result.id,
+                                    page: result.page,
+                                    documentId: result.documentId,
+                                    distance: 1 - result.confidence,
+                                    source: 'ann_hybrid',
+                                    searchScope: 'document' as const,
+                                    retrievalMethod: 'ann_hybrid' as const,
+                                    timestamp: new Date().toISOString()
+                                }
+                            }));
 
-                        const result = await db.execute<PdfChunkRow>(query);
-                        const rows = toRows<PdfChunkRow>(result);
-                        documents = rows.map((row) => ({
-                            pageContent: row.content,
+                        } catch (annError) {
+                            console.warn(`⚠️ [AIChat] ANN search failed, using vector search:`, annError);
+                            retrievalMethod = 'vector_fallback';
+                        }
+                    } else {
+                        retrievalMethod = 'vector_fallback';
+                    }
+
+                    if (documents.length === 0) {
+                        const retriever = createDocumentVectorRetriever(
+                            documentId,
+                            embeddings,
+                            resolvedEmbeddingIndex,
+                            3,
+                        );
+                        const vectorDocs = await retriever.getRelevantDocuments(question);
+                        documents = vectorDocs.map((doc) => ({
+                            retrievalMethod: 'vector_fallback',
+                            source: typeof doc.metadata?.source === "string" ? doc.metadata.source : undefined,
+                            pageNumber: typeof doc.metadata?.page === "number" ? doc.metadata.page : undefined,
+                            title: typeof doc.metadata?.documentTitle === "string" ? doc.metadata.documentTitle : undefined,
+                            documentId: typeof doc.metadata?.documentId === "number" ? doc.metadata.documentId : undefined,
+                            pageContent: doc.pageContent,
                             metadata: {
-                                chunkId: row.id,
-                                page: row.page,
-                                distance: row.distance,
-                                source: 'vector_fallback',
+                                ...doc.metadata,
                                 searchScope: 'document' as const,
+                                retrievalMethod: 'vector_fallback' as const,
                                 timestamp: new Date().toISOString()
                             }
-                        }));
+                        })) as unknown as SearchResult[];
                     }
                 } else {
                     retrievalMethod = 'invalid_parameters';
@@ -498,7 +506,6 @@ export async function POST(request: Request) {
                 {
                     success: false,
                     error: "An error occurred while processing your question.",
-                    details: error instanceof Error ? error.message : "Unknown error"
                 },
                 { status: 500 }
             );

@@ -19,6 +19,20 @@ export const createErrorResponse = (message: string, status = 400) => {
   );
 };
 
+/**
+ * Standard 500 response for unexpected server errors.
+ * Never include error.message — log server-side instead.
+ *
+ * @example
+ * } catch (error) {
+ *   console.error('[route] error:', error)
+ *   return serverError('Failed to process request')
+ * }
+ */
+export const serverError = (message = "Internal server error", status = 500) => {
+  return NextResponse.json({ success: false, error: message }, { status });
+};
+
 export const validateRequestBody = async <T>(
   request: Request,
   schema: z.ZodSchema<T>
@@ -103,6 +117,7 @@ export const QuestionSchema = z
     aiModel: z.enum(aiModelOptions).optional(),
     provider: z.enum(providerOptions).default("openai"),
     conversationHistory: z.string().optional(),
+    embeddingIndexKey: z.string().min(1).optional(),
   })
   .superRefine((data, ctx) => {
     assertProviderModelCombination(data.provider, data.aiModel, ctx);
@@ -112,14 +127,15 @@ export const QuestionSchema = z
       documentId: data.documentId,
       companyId: data.companyId,
       question: data.question,
-      style: (data.style ?? "concise") as const,
-      searchScope: (data.searchScope ?? "document") as const,
+      style: data.style ?? "concise",
+      searchScope: data.searchScope ?? "document",
       archiveName: data.archiveName,
       enableWebSearch: data.enableWebSearch ?? false,
       aiPersona: data.aiPersona ?? "general",
       aiModel: data.aiModel,
       provider: data.provider,
       conversationHistory: data.conversationHistory,
+      embeddingIndexKey: data.embeddingIndexKey,
     };
   });
 
@@ -161,6 +177,11 @@ export const UpdateCompanySchema = z.object({
   name: z.string().min(1, "Company name is required").max(256, "Company name is too long").trim(),
   description: z.string().max(5000, "Description is too long").trim().optional().nullable(),
   industry: z.string().max(256, "Industry is too long").trim().optional().nullable(),
+  embeddingIndexKey: z.string().max(128, "Embedding index key is too long").trim().optional().nullable(),
+  embeddingOpenAIApiKey: z.string().max(5000, "OpenAI API key is too long").trim().optional().nullable(),
+  embeddingHuggingFaceApiKey: z.string().max(5000, "Hugging Face API key is too long").trim().optional().nullable(),
+  embeddingOllamaBaseUrl: z.string().max(1024, "Ollama base URL is too long").trim().optional().nullable(),
+  embeddingOllamaModel: z.string().max(256, "Ollama model is too long").trim().optional().nullable(),
   employerPasskey: z.string().max(256, "Employer passkey is too long").trim().optional(),
   employeePasskey: z.string().max(256, "Employee passkey is too long").trim().optional(),
   numberOfEmployees: z
@@ -174,6 +195,36 @@ export const UpdateCompanySchema = z.object({
   name: data.name,
   description: data.description,
   industry: data.industry,
+  embeddingIndexKey:
+    data.embeddingIndexKey == null
+      ? data.embeddingIndexKey
+      : data.embeddingIndexKey.trim()
+        ? data.embeddingIndexKey.trim()
+        : null,
+  embeddingOpenAIApiKey:
+    data.embeddingOpenAIApiKey == null
+      ? data.embeddingOpenAIApiKey
+      : data.embeddingOpenAIApiKey.trim()
+        ? data.embeddingOpenAIApiKey.trim()
+        : null,
+  embeddingHuggingFaceApiKey:
+    data.embeddingHuggingFaceApiKey == null
+      ? data.embeddingHuggingFaceApiKey
+      : data.embeddingHuggingFaceApiKey.trim()
+        ? data.embeddingHuggingFaceApiKey.trim()
+        : null,
+  embeddingOllamaBaseUrl:
+    data.embeddingOllamaBaseUrl == null
+      ? data.embeddingOllamaBaseUrl
+      : data.embeddingOllamaBaseUrl.trim()
+        ? data.embeddingOllamaBaseUrl.trim()
+        : null,
+  embeddingOllamaModel:
+    data.embeddingOllamaModel == null
+      ? data.embeddingOllamaModel
+      : data.embeddingOllamaModel.trim()
+        ? data.embeddingOllamaModel.trim()
+        : null,
   employerPasskey: data.employerPasskey,
   employeePasskey: data.employeePasskey,
   numberOfEmployees: data.numberOfEmployees && data.numberOfEmployees !== "" ? data.numberOfEmployees : "0",
@@ -226,6 +277,7 @@ export const RLMQuestionSchema = z
     aiModel: z.enum(aiModelOptions).optional(),
     provider: z.enum(providerOptions).default("openai"),
     conversationHistory: z.string().optional(),
+    embeddingIndexKey: z.string().min(1).optional(),
     // RLM-specific options
     maxTokens: z.number().int().min(500).max(100000).optional(),
     includeOverview: z.boolean().optional(),
@@ -249,17 +301,18 @@ export const RLMQuestionSchema = z
     return {
       documentId: data.documentId,
       question: data.question,
-      style: (data.style ?? "concise") as const,
+      style: data.style ?? "concise",
       enableWebSearch: data.enableWebSearch ?? false,
       aiPersona: data.aiPersona ?? "general",
       aiModel: data.aiModel,
       provider: data.provider,
       conversationHistory: data.conversationHistory,
+      embeddingIndexKey: data.embeddingIndexKey,
       maxTokens: data.maxTokens ?? 4000,
       includeOverview: data.includeOverview ?? true,
       includePreviews: data.includePreviews ?? false,
       semanticTypes: data.semanticTypes,
-      prioritize: (data.prioritize ?? "relevance") as const,
+      prioritize: data.prioritize ?? "relevance",
       pageRange: data.pageRange,
     };
   });

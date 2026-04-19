@@ -1,18 +1,21 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
     documentEnsembleSearch,
+    createDocumentVectorRetriever,
     type RetrievalMethod,
     type DocumentSearchOptions,
     type SearchResult
 } from "~/lib/tools/rag";
+import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { users, document, documentSections } from "~/server/db/schema";
+import { users, document } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -83,6 +86,7 @@ export async function POST(request: Request) {
                 aiModel,
                 provider,
                 conversationHistory,
+                embeddingIndexKey,
             } = validation.data;
 
             // AIQuery only supports document-level search
@@ -134,8 +138,18 @@ export async function POST(request: Request) {
                 }, { status: 403 });
             }
 
+            const companyConfig =
+                await getCompanyEmbeddingConfig(requestingUser.companyId);
+
             // Perform document search
-            const embeddings = getEmbeddings();
+            const resolvedEmbeddingIndex = resolveEmbeddingIndex(
+                embeddingIndexKey,
+                companyConfig ?? undefined,
+            );
+            const embeddings = getEmbeddings(
+                resolvedEmbeddingIndex.indexKey,
+                companyConfig ?? undefined,
+            );
             let documents: SearchResult[] = [];
             retrievalMethod = 'document_ensemble_rrf';
 
@@ -144,6 +158,7 @@ export async function POST(request: Request) {
                     topK: 5,
                     documentId,
                     companyId: Number(requestingUser.companyId),
+                    embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                 };
                 
                 documents = await documentEnsembleSearch(
@@ -158,59 +173,55 @@ export async function POST(request: Request) {
 
             } catch (ensembleError) {
                 console.warn(`⚠️ [AIQuery] Ensemble search failed, falling back:`, ensembleError);
-                retrievalMethod = 'ann_hybrid';
-                
-                try {
-                    const questionEmbedding = await embeddings.embedQuery(question);
-                    const annResults = await qaAnnOptimizer.searchSimilarChunks(
-                        questionEmbedding,
-                        [documentId],
-                        5,
-                        0.8
-                    );
-
-                    documents = annResults.map(result => ({
-                        pageContent: result.content,
-                        metadata: {
-                            chunkId: result.id,
-                            page: result.page,
-                            documentId: result.documentId,
-                            distance: 1 - result.confidence,
-                            source: 'ann_hybrid',
-                            searchScope: 'document' as const,
-                            retrievalMethod: 'ann_hybrid' as const,
-                            timestamp: new Date().toISOString()
-                        }
-                    }));
-
-                } catch (annError) {
-                    console.warn(`⚠️ [AIQuery] ANN search failed, using vector search:`, annError);
-                    retrievalMethod = 'vector_fallback';
+                if (isLegacyEmbeddingIndex(resolvedEmbeddingIndex)) {
+                    retrievalMethod = 'ann_hybrid';
                     
-                    const questionEmbedding = await embeddings.embedQuery(question);
-                    const bracketedEmbedding = `[${questionEmbedding.join(",")}]`;
+                    try {
+                        const questionEmbedding = await embeddings.embedQuery(question);
+                        const annResults = await qaAnnOptimizer.searchSimilarChunks(
+                            questionEmbedding,
+                            [documentId],
+                            5,
+                            0.8
+                        );
 
-                    const rows = await db.select({
-                        id: documentSections.id,
-                        content: documentSections.content,
-                        page: documentSections.pageNumber,
-                        distance: sql<number>`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`,
-                    })
-                    .from(documentSections)
-                    .where(eq(documentSections.documentId, BigInt(documentId)))
-                    .orderBy(sql`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`)
-                    .limit(3);
+                        documents = annResults.map(result => ({
+                            pageContent: result.content,
+                            metadata: {
+                                chunkId: result.id,
+                                page: result.page,
+                                documentId: result.documentId,
+                                distance: 1 - result.confidence,
+                                source: 'ann_hybrid',
+                                searchScope: 'document' as const,
+                                retrievalMethod: 'ann_hybrid' as const,
+                                timestamp: new Date().toISOString()
+                            }
+                        }));
 
-                    documents = rows.map((row) => ({
-                        pageContent: row.content,
+                    } catch (annError) {
+                        console.warn(`⚠️ [AIQuery] ANN search failed, using vector search:`, annError);
+                        retrievalMethod = 'vector_fallback';
+                    }
+                } else {
+                    retrievalMethod = 'vector_fallback';
+                }
+
+                if (documents.length === 0) {
+                    const retriever = createDocumentVectorRetriever(
+                        documentId,
+                        embeddings,
+                        resolvedEmbeddingIndex,
+                        3,
+                    );
+                    const vectorDocs = await retriever.getRelevantDocuments(question);
+                    documents = vectorDocs.map((doc) => ({
+                        pageContent: doc.pageContent,
                         metadata: {
-                            chunkId: row.id,
-                            page: row.page ?? 1,
-                            distance: row.distance,
-                            source: 'vector_fallback',
+                            ...doc.metadata,
                             searchScope: 'document' as const,
                             retrievalMethod: 'vector_fallback' as RetrievalMethod,
-                            timestamp: new Date().toISOString()
+                            timestamp: new Date().toISOString(),
                         }
                     }));
                 }
@@ -331,7 +342,6 @@ export async function POST(request: Request) {
                 {
                     success: false,
                     error: "An error occurred while processing your question.",
-                    details: error instanceof Error ? error.message : "Unknown error"
                 },
                 { status: 500 }
             );

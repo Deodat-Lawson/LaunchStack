@@ -14,12 +14,25 @@ const serverSchema = z.object({
   DATABASE_URL: requiredString(),
   OPENAI_API_KEY: requiredString(),
   OPENAI_MODEL: optionalString(),
+  EMBEDDING_INDEX: optionalString(),
+  // 32 raw bytes encoded as base64 (44 chars). Used to encrypt per-company
+  // embedding provider credentials at rest. Required whenever a company sets
+  // its own API key through the settings UI. Generate with:
+  //   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+  EMBEDDING_SECRETS_KEY: optionalString(),
   ANTHROPIC_API_KEY: optionalString(),
   ANTHROPIC_MODEL: optionalString(),
   GOOGLE_AI_API_KEY: optionalString(),
   GOOGLE_MODEL: optionalString(),
   OLLAMA_BASE_URL: optionalString(),
   OLLAMA_MODEL: optionalString(),
+  OLLAMA_EMBEDDING_MODEL: optionalString(),
+  OLLAMA_EMBEDDING_DIMENSION: optionalString(),
+  OLLAMA_EMBEDDING_VERSION: optionalString(),
+  HUGGINGFACE_API_KEY: optionalString(),
+  HUGGINGFACE_EMBEDDING_MODEL: optionalString(),
+  HUGGINGFACE_EMBEDDING_DIMENSION: optionalString(),
+  HUGGINGFACE_EMBEDDING_VERSION: optionalString(),
   CLERK_SECRET_KEY: requiredString(),
   BLOB_READ_WRITE_TOKEN: optionalString(),
   UPLOADTHING_TOKEN: optionalString(),
@@ -59,6 +72,9 @@ const serverSchema = z.object({
   // Sidecar configuration (optional, for local ML compute)
   // When set, Graph RAG entity extraction is automatically enabled
   SIDECAR_URL: optionalString(),
+  SIDECAR_EMBEDDING_MODEL: optionalString(),
+  SIDECAR_EMBEDDING_DIMENSION: optionalString(),
+  SIDECAR_EMBEDDING_VERSION: optionalString(),
   // Enable Graph RAG retrieval
   ENABLE_GRAPH_RETRIEVER: z.preprocess(
     (val) => val === "true" || val === "1",
@@ -70,10 +86,14 @@ const serverSchema = z.object({
   // Storage provider configuration
   NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
   NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
+  S3_PUBLIC_ENDPOINT: optionalString(), // Browser-facing S3 URL (defaults to NEXT_PUBLIC_S3_ENDPOINT)
   S3_REGION: optionalString(),
   S3_ACCESS_KEY: optionalString(),
   S3_SECRET_KEY: optionalString(),
   S3_BUCKET_NAME: optionalString(),
+  // Repo Explainer
+  REPO_EXPLAINER_MODEL: optionalString(),
+  GITHUB_TOKEN: optionalString(),
 });
 
 const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
@@ -132,12 +152,21 @@ function parseServerEnv() {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
+    EMBEDDING_INDEX: process.env.EMBEDDING_INDEX,
+    EMBEDDING_SECRETS_KEY: process.env.EMBEDDING_SECRETS_KEY,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL,
     GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
     GOOGLE_MODEL: process.env.GOOGLE_MODEL,
     OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
     OLLAMA_MODEL: process.env.OLLAMA_MODEL,
+    OLLAMA_EMBEDDING_MODEL: process.env.OLLAMA_EMBEDDING_MODEL,
+    OLLAMA_EMBEDDING_DIMENSION: process.env.OLLAMA_EMBEDDING_DIMENSION,
+    OLLAMA_EMBEDDING_VERSION: process.env.OLLAMA_EMBEDDING_VERSION,
+    HUGGINGFACE_API_KEY: process.env.HUGGINGFACE_API_KEY,
+    HUGGINGFACE_EMBEDDING_MODEL: process.env.HUGGINGFACE_EMBEDDING_MODEL,
+    HUGGINGFACE_EMBEDDING_DIMENSION: process.env.HUGGINGFACE_EMBEDDING_DIMENSION,
+    HUGGINGFACE_EMBEDDING_VERSION: process.env.HUGGINGFACE_EMBEDDING_VERSION,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
@@ -162,15 +191,21 @@ function parseServerEnv() {
     JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
+    SIDECAR_EMBEDDING_MODEL: process.env.SIDECAR_EMBEDDING_MODEL,
+    SIDECAR_EMBEDDING_DIMENSION: process.env.SIDECAR_EMBEDDING_DIMENSION,
+    SIDECAR_EMBEDDING_VERSION: process.env.SIDECAR_EMBEDDING_VERSION,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
+    REPO_EXPLAINER_MODEL: process.env.REPO_EXPLAINER_MODEL,
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN,
     NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
       | "cloud"
       | "local"
       | undefined,
     NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+    S3_PUBLIC_ENDPOINT: process.env.S3_PUBLIC_ENDPOINT,
     S3_REGION: process.env.S3_REGION,
     S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
     S3_SECRET_KEY: process.env.S3_SECRET_KEY,

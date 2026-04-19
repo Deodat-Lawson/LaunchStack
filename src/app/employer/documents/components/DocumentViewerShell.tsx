@@ -7,6 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
 import { Sidebar } from "./Sidebar";
 import { DocumentViewer } from "./DocumentViewer";
+import { VersionHistoryPanel } from "./VersionHistoryPanel";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "~/app/employer/documents/components/ui/resizable";
 import { cn } from "~/lib/utils";
 import type { ViewMode, DocumentType, CategoryGroup, errorType, PredictiveAnalysisResponse } from "../types";
@@ -86,6 +87,10 @@ const MarketingPipelinePanel = dynamic(
   () => import("./MarketingPipelinePanel").then((module) => module.MarketingPipelinePanel),
   { loading: () => <LoadingPage /> }
 );
+const RepoExplainerPanel = dynamic(
+  () => import("./RepoExplainerPanel").then((module) => module.RepoExplainerPanel),
+  { loading: () => <LoadingPage /> }
+);
 
 const STYLE_OPTIONS = Object.entries(RESPONSE_STYLES).reduce((acc, [key, config]) => {
   acc[key as ResponseStyleId] = config.label;
@@ -106,6 +111,7 @@ const VALID_VIEW_MODES = new Set<string>([
   "document-only", "with-ai-qa", "with-ai-qa-history", "predictive-analysis",
   "generator", "rewrite", "upload", "dashboard", "analytics",
   "employees", "settings", "metadata", "marketing-pipeline", "notes",
+  "repo-explainer",
 ]);
 
 export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
@@ -132,6 +138,19 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [qaSubMode, setQaSubMode] = useState<"simple" | "chat">("simple");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isPreviewCollapsed, setIsPreviewCollapsed] = useState(false);
+
+  // Version history: which document's history modal is open.
+  const [versionHistoryTarget, setVersionHistoryTarget] = useState<
+    { id: number; title: string } | null
+  >(null);
+
+  // Inline "viewing an older version" preview state. When set, the viewer
+  // renders the old version's content via the version-scoped content endpoint
+  // and a banner offers "Return to current" / "Revert" actions. Cleared when
+  // the user picks another document, closes the preview, or reverts.
+  const [previewVersion, setPreviewVersion] = useState<
+    { documentId: number; versionId: number; versionNumber: number } | null
+  >(null);
   
   // AI States (Simple Query)
   const [aiQuestion, setAiQuestion] = useState("");
@@ -153,7 +172,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [providerAvailability, setProviderAvailability] = useState<Partial<ProviderAvailability>>({});
 
   useEffect(() => {
-    const allowedModels = ProviderModelMap[provider];
+    const allowedModels = ProviderModelMap[provider] as readonly AIModelType[] | undefined;
     if (allowedModels && !allowedModels.includes(aiModel)) {
       setAiModel(ProviderDefaultModels[provider]);
     }
@@ -185,6 +204,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   
   const [pdfPageNumber, setPdfPageNumber] = useState<number>(1);
   
+  // Repo diagram state
+  const [diagramRepoUrl, setDiagramRepoUrl] = useState<string | null>(null);
+
   // Delete confirmation state
   const [deleteConfirmDocId, setDeleteConfirmDocId] = useState<number | null>(null);
 
@@ -321,11 +343,41 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     return () => clearInterval(interval);
   }, [selectedDoc, fetchDocuments]);
 
-  // Sync selectedDoc when the documents list refreshes (e.g. after OCR completes)
+  // Sync selectedDoc when the documents list refreshes.
+  //
+  // This runs whenever fetchDocuments() repopulates the `documents` array,
+  // which happens on initial load, after deletes, after OCR polling, and
+  // crucially after a new version is uploaded (the VersionHistoryPanel
+  // calls onVersionsChanged -> fetchDocuments to refresh the list).
+  //
+  // The original effect only handled the "ocrProcessed: false -> true"
+  // transition — that missed the version-upload case entirely, because
+  // on version upload the selected document's ocrProcessed is already true
+  // (it was set to true the first time the document was processed). So the
+  // effect would early-return and `selectedDoc.url` would stay pinned to
+  // whichever version was current when the user first clicked the sidebar
+  // entry, ignoring any subsequent version swaps. The visible symptom was
+  // the main viewer continuing to render the old blob in an iframe even
+  // though the DB had been updated with the new one.
+  //
+  // The fix: compare the relevant fields explicitly and only call
+  // setSelectedDoc when something meaningful actually changed. We intentionally
+  // do NOT unconditionally setSelectedDoc(updated), because every call to
+  // fetchDocuments produces new object references even for unchanged rows,
+  // which would cause an extra render on every refresh with no value change.
   useEffect(() => {
-    if (!selectedDoc || selectedDoc.ocrProcessed !== false) return;
+    if (!selectedDoc) return;
     const updated = documents.find((d) => d.id === selectedDoc.id);
-    if (updated && updated.ocrProcessed === true) {
+    if (!updated) return;
+
+    const hasChanged =
+      updated.url !== selectedDoc.url ||
+      updated.mimeType !== selectedDoc.mimeType ||
+      updated.ocrProcessed !== selectedDoc.ocrProcessed ||
+      updated.title !== selectedDoc.title ||
+      updated.category !== selectedDoc.category;
+
+    if (hasChanged) {
       setSelectedDoc(updated);
     }
   }, [documents, selectedDoc]);
@@ -370,7 +422,88 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setAiAnswerModel(undefined);
     setReferencePages([]);
     setPredictiveAnalysis(null);
+    // Switching to a different document cancels any active version preview.
+    // Without this, the viewer would keep showing the previous document's old
+    // version while the sidebar highlights the new document.
+    setPreviewVersion(null);
   };
+
+  /**
+   * Revert the previewed version to current, via the revert API. On success,
+   * the viewer switches back to showing the current version (which is now
+   * the formerly-previewed one) and we refresh the document list so any
+   * derived fields are up to date.
+   */
+  const handleRevertPreview = useCallback(async () => {
+    if (!previewVersion) return;
+    try {
+      const res = await fetch(
+        `/api/documents/${previewVersion.documentId}/versions/${previewVersion.versionId}/revert`,
+        { method: "POST" }
+      );
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(body.error ?? `HTTP ${res.status}`);
+      }
+      toast.success(`Reverted to version ${previewVersion.versionNumber}`);
+      setPreviewVersion(null);
+      await fetchDocuments();
+    } catch (err) {
+      toast.error(
+        `Failed to revert: ${err instanceof Error ? err.message : String(err)}`
+      );
+    }
+  }, [previewVersion, fetchDocuments]);
+
+  /**
+   * Derived viewer document. When the user has opened a past version from the
+   * version-history panel, the viewer renders that version's content by
+   * swapping `selectedDoc.url` for a version-scoped content URL. The rest of
+   * the document metadata (title, mimeType, etc.) stays the same so display
+   * type detection still works.
+   *
+   * Cache-busting via the versionId in the query string ensures iframes don't
+   * accidentally keep serving a previous version's content.
+   */
+  const displayDoc: DocumentType | null =
+    previewVersion && selectedDoc && previewVersion.documentId === selectedDoc.id
+      ? {
+          ...selectedDoc,
+          url: `/api/documents/${previewVersion.documentId}/versions/${previewVersion.versionId}/content`,
+        }
+      : selectedDoc;
+
+  /**
+   * Callback passed into every non-minimal `DocumentViewer` so it can render
+   * a visible "Versions" button in its header. Only wired for employers —
+   * for employees we pass undefined and the button won't render.
+   *
+   * Uses `selectedDoc` (not `displayDoc`) so the modal always opens for the
+   * canonical document, not the preview variant. They share the same id and
+   * title so the difference is cosmetic, but this avoids any future confusion
+   * if `displayDoc` ever diverges from `selectedDoc` in other fields.
+   */
+  const openVersionHistoryForSelected =
+    userRole === "employer" && selectedDoc
+      ? () =>
+          setVersionHistoryTarget({
+            id: selectedDoc.id,
+            title: selectedDoc.title,
+          })
+      : undefined;
+
+  const handleGenerateDiagram = useCallback((archiveName: string) => {
+    // Find a doc from this archive whose title contains owner/repo (set by the upload API)
+    const archiveDoc = documents.find(d =>
+      d.sourceArchiveName === archiveName && d.title.includes('/')
+    );
+    const repoSlug = archiveName.replace(/\.zip$/, '');
+    const repoUrl = archiveDoc?.title.includes('/')
+      ? `https://github.com/${archiveDoc.title}`
+      : `https://github.com/${repoSlug}`;
+    setDiagramRepoUrl(repoUrl);
+    setViewMode("repo-explainer");
+  }, [documents]);
 
   const requestDeleteDocument = (docId: number) => {
     setDeleteConfirmDocId(docId);
@@ -645,10 +778,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
               {qaSubMode === "simple" ? (
                 <ResizablePanelGroup direction="horizontal" className="h-full">
                   <ResizablePanel defaultSize={65} minSize={40}>
-                    <DocumentViewer 
-                      document={selectedDoc} 
+                    <DocumentViewer
+                      document={displayDoc}
                       pdfPageNumber={pdfPageNumber}
                       setPdfPageNumber={setPdfPageNumber}
+                      onOpenVersionHistory={openVersionHistoryForSelected}
                     />
                   </ResizablePanel>
                   
@@ -730,7 +864,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                             onExpand={() => setIsPreviewCollapsed(false)}
                           >
                             <DocumentViewer 
-                              document={selectedDoc} 
+                              document={displayDoc} 
                               pdfPageNumber={pdfPageNumber}
                               setPdfPageNumber={setPdfPageNumber}
                               hideActions={true}
@@ -747,15 +881,16 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         return (
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={60} minSize={35}>
-              <DocumentViewer 
-                document={selectedDoc} 
+              <DocumentViewer
+                document={displayDoc}
                 pdfPageNumber={pdfPageNumber}
                 setPdfPageNumber={setPdfPageNumber}
+                onOpenVersionHistory={openVersionHistoryForSelected}
               />
             </ResizablePanel>
-            
+
             <ResizableHandle className="w-px bg-border" />
-            
+
             <ResizablePanel defaultSize={40} minSize={28} maxSize={55}>
               <DocumentSanityChecker 
                 selectedDoc={selectedDoc}
@@ -782,10 +917,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         );
       case "document-only":
         return (
-          <DocumentViewer 
-            document={selectedDoc} 
+          <DocumentViewer
+            document={displayDoc}
             pdfPageNumber={pdfPageNumber}
             setPdfPageNumber={setPdfPageNumber}
+            onOpenVersionHistory={openVersionHistoryForSelected}
           />
         );
       case "generator":
@@ -811,17 +947,21 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       case "marketing-pipeline":
         if (userRole !== 'employer') return null;
         return <MarketingPipelinePanel />;
+      case "repo-explainer":
+        if (userRole !== 'employer') return null;
+        return <RepoExplainerPanel initialRepoUrl={diagramRepoUrl} />;
       case "notes":
         return (
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={60} minSize={35}>
-              <DocumentViewer 
-                document={selectedDoc} 
+              <DocumentViewer
+                document={displayDoc}
                 pdfPageNumber={pdfPageNumber}
                 setPdfPageNumber={setPdfPageNumber}
+                onOpenVersionHistory={openVersionHistoryForSelected}
               />
             </ResizablePanel>
-            
+
             <ResizableHandle className="w-px bg-border" />
             
             <ResizablePanel defaultSize={40} minSize={25} maxSize={50}>
@@ -879,6 +1019,13 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
             }}
             userRole={userRole}
             totalDocuments={documents.length}
+            onOpenVersionHistory={
+              userRole === 'employer'
+                ? (doc) =>
+                    setVersionHistoryTarget({ id: doc.id, title: doc.title })
+                : undefined
+            }
+            onGenerateDiagram={handleGenerateDiagram}
           />
         </ResizablePanel>
 
@@ -886,8 +1033,64 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
 
         {/* Main Content Area */}
         <ResizablePanel defaultSize={80} minSize={50}>
-          <div className="h-full w-full">
-            {renderContent()}
+          <div className="h-full w-full flex flex-col">
+            {/*
+              Old-version preview banner. Rendered above the viewer when the
+              user has opened a non-current version from the version-history
+              panel. Clicking "Return to current" clears preview state; the
+              viewer then shows the current version again. "Revert to this
+              version" makes the previewed version authoritative.
+            */}
+            {previewVersion &&
+              selectedDoc &&
+              previewVersion.documentId === selectedDoc.id && (
+                <div className="flex-shrink-0 px-4 py-2.5 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-800/50 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-3.5 h-3.5 text-amber-700 dark:text-amber-300"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold text-amber-900 dark:text-amber-100">
+                        Viewing version {previewVersion.versionNumber} (not
+                        current)
+                      </div>
+                      <div className="text-[10px] text-amber-700 dark:text-amber-300 truncate">
+                        Search and Q&amp;A still use the current version.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-xs border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-100 hover:bg-amber-100 dark:hover:bg-amber-900/40"
+                      onClick={() => setPreviewVersion(null)}
+                    >
+                      Return to current
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="h-7 text-xs bg-amber-600 hover:bg-amber-700 text-white"
+                      onClick={() => void handleRevertPreview()}
+                    >
+                      Revert to this version
+                    </Button>
+                  </div>
+                </div>
+              )}
+            <div className="flex-1 min-h-0">{renderContent()}</div>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
@@ -914,6 +1117,37 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {versionHistoryTarget && (
+        <VersionHistoryPanel
+          documentId={versionHistoryTarget.id}
+          documentTitle={versionHistoryTarget.title}
+          onClose={() => setVersionHistoryTarget(null)}
+          onVersionsChanged={() => void fetchDocuments()}
+          onPreviewVersion={(versionId, versionNumber) => {
+            // Switch the viewer to the previewed version. We scope the
+            // preview to whichever doc the history panel was opened for,
+            // which may not be the currently-selected doc — e.g. the user
+            // could have opened history from one doc's dropdown while a
+            // different doc is selected in the viewer. In that case we also
+            // flip selectedDoc to the target so the banner + viewer stay
+            // consistent.
+            if (versionHistoryTarget) {
+              if (selectedDoc?.id !== versionHistoryTarget.id) {
+                const target = documents.find(
+                  (d) => d.id === versionHistoryTarget.id
+                );
+                if (target) setSelectedDoc(target);
+              }
+              setPreviewVersion({
+                documentId: versionHistoryTarget.id,
+                versionId,
+                versionNumber,
+              });
+            }
+          }}
+        />
+      )}
 
       <Toaster />
     </div>

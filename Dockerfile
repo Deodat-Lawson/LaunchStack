@@ -18,7 +18,6 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-COPY --from=deps /app/public/vad ./public/vad
 
 ENV SKIP_ENV_VALIDATION=1
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -40,7 +39,7 @@ COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/scripts ./scripts
 
-CMD ["sh", "-c", "node scripts/ensure-pgvector.mjs && pnpm db:push"]
+CMD ["sh", "-c", "node scripts/ensure-pgvector.mjs && pnpm db:push && pnpm db:backfill:versions"]
 
 # ── Runner ───────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner

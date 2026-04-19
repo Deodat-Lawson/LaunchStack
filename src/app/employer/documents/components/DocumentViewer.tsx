@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { FileText, FileImage, FileSpreadsheet, FileCode, Loader2, AlertTriangle, RotateCw, Presentation, Archive, Music } from 'lucide-react';
+import { FileText, FileImage, FileSpreadsheet, FileCode, Loader2, AlertTriangle, RotateCw, Presentation, Archive, Music, History } from 'lucide-react';
 import type { DocumentType } from '../types';
 import { getDocumentDisplayType, type DocumentDisplayType } from '../types/document';
 import { DocxViewer } from './DocxViewer';
@@ -18,6 +18,14 @@ interface DocumentViewerProps {
   hideActions?: boolean;
   minimal?: boolean;
   isCollapsed?: boolean;
+  /**
+   * Optional callback to open the version history modal for the currently
+   * displayed document. When provided, a "Versions" button is rendered in
+   * the header toolbar (non-minimal mode only). This is the primary
+   * discoverable entry point for the versioning feature — the hidden
+   * three-dot menu in the sidebar is the secondary path.
+   */
+  onOpenVersionHistory?: () => void;
 }
 
 export const DISPLAY_TYPE_LABELS: Record<DocumentDisplayType, string> = {
@@ -103,13 +111,14 @@ function IframeWithState({
   );
 }
 
-export function DocumentViewer({ 
-  document, 
-  pdfPageNumber = 1, 
+export function DocumentViewer({
+  document,
+  pdfPageNumber = 1,
   setPdfPageNumber: _setPdfPageNumber,
   hideActions: _hideActions = false,
   minimal = false,
-  isCollapsed = false
+  isCollapsed = false,
+  onOpenVersionHistory,
 }: DocumentViewerProps) {
   
   // Track document view
@@ -230,6 +239,17 @@ export function DocumentViewer({
             </div>
             
             <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+              {onOpenVersionHistory && (
+                <button
+                  type="button"
+                  onClick={onOpenVersionHistory}
+                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-border text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300 dark:hover:border-purple-700 transition-colors text-[11px] font-semibold"
+                  title="View and manage document versions"
+                >
+                  <History className="w-3.5 h-3.5" />
+                  Versions
+                </button>
+              )}
               <span>Browser Native Viewer</span>
             </div>
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ArrowLeft, FileText, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Input } from "~/app/employer/documents/components/ui/input";
@@ -30,6 +30,13 @@ interface LegalDocumentConfigProps {
   onBack: () => void;
   onGenerate: (data: Record<string, string>) => void;
   isGenerating?: boolean;
+  serverErrors?: Record<string, string>;
+  globalError?: string | null;
+  initialData?: Record<string, string>;
+  /** Shown on the back button (e.g. after chat vs from template library). */
+  backButtonLabel?: string;
+  /** Optional note under the title (e.g. after legal assistant). */
+  flowHint?: string;
 }
 
 export function LegalDocumentConfig({
@@ -37,9 +44,26 @@ export function LegalDocumentConfig({
   onBack,
   onGenerate,
   isGenerating = false,
+  serverErrors,
+  globalError = null,
+  initialData,
+  backButtonLabel = "Back to templates",
+  flowHint,
 }: LegalDocumentConfigProps) {
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<Record<string, string>>(() => {
+    if (!initialData) return {};
+    const coerced: Record<string, string> = {};
+    for (const [k, v] of Object.entries(initialData)) {
+      coerced[k] = String(v);
+    }
+    return coerced;
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!serverErrors) return;
+    setErrors(serverErrors);
+  }, [serverErrors]);
 
   const fieldGroups = useMemo(() => {
     const groups: { label: string; fields: TemplateField[] }[] = [];
@@ -90,10 +114,10 @@ export function LegalDocumentConfig({
     }
   };
 
-  const validate = (): boolean => {
+  const validate = (): { valid: boolean; firstInvalidField?: string } => {
     const newErrors: Record<string, string> = {};
     for (const field of template.fields) {
-      const val = formData[field.key] ?? "";
+      const val = String(formData[field.key] ?? "");
       if (field.required && val.trim() === "") {
         newErrors[field.key] = `${field.label} is required`;
       }
@@ -107,13 +131,22 @@ export function LegalDocumentConfig({
       }
     }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const firstInvalidField = Object.keys(newErrors)[0];
+    return { valid: Object.keys(newErrors).length === 0, firstInvalidField };
   };
 
   const handleSubmit = () => {
-    if (validate()) {
-      onGenerate(formData);
+    const { valid, firstInvalidField } = validate();
+    if (!valid) {
+      if (firstInvalidField) {
+        const field = document.getElementById(firstInvalidField);
+        field?.scrollIntoView({ behavior: "smooth", block: "center" });
+        field?.focus();
+      }
+      return;
     }
+
+    onGenerate(formData);
   };
 
   const renderField = (field: TemplateField) => {
@@ -131,7 +164,7 @@ export function LegalDocumentConfig({
               {field.required && <span className="text-red-500 ml-1">*</span>}
             </Label>
             <Select
-              value={formData[field.key] || ""}
+              value={formData[field.key] ?? ""}
               onValueChange={(val) => handleChange(field.key, val)}
             >
               <SelectTrigger
@@ -169,7 +202,7 @@ export function LegalDocumentConfig({
             </Label>
             <Textarea
               id={field.key}
-              value={formData[field.key] || ""}
+              value={formData[field.key] ?? ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
               placeholder={`Enter ${field.label.toLowerCase()}`}
               className={`min-h-[80px] ${hasError ? "border-red-500" : ""}`}
@@ -196,7 +229,7 @@ export function LegalDocumentConfig({
             <Input
               id={field.key}
               type="date"
-              value={formData[field.key] || ""}
+              value={formData[field.key] ?? ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
               className={hasError ? "border-red-500" : ""}
             />
@@ -222,7 +255,7 @@ export function LegalDocumentConfig({
             <Input
               id={field.key}
               type="number"
-              value={formData[field.key] || ""}
+              value={formData[field.key] ?? ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
               placeholder={`Enter ${field.label.toLowerCase()}`}
               className={hasError ? "border-red-500" : ""}
@@ -249,7 +282,7 @@ export function LegalDocumentConfig({
             <Input
               id={field.key}
               type="text"
-              value={formData[field.key] || ""}
+              value={formData[field.key] ?? ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
               placeholder={`Enter ${field.label.toLowerCase()}`}
               className={hasError ? "border-red-500" : ""}
@@ -276,7 +309,7 @@ export function LegalDocumentConfig({
             className="mb-4 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Templates
+            {backButtonLabel}
           </Button>
 
           <div className="flex items-center gap-3 mb-2">
@@ -290,6 +323,11 @@ export function LegalDocumentConfig({
               <p className="text-sm text-muted-foreground">
                 {template.description}
               </p>
+              {flowHint ? (
+                <p className="text-sm text-blue-700 dark:text-blue-300 mt-2">
+                  {flowHint}
+                </p>
+              ) : null}
             </div>
           </div>
         </div>
@@ -308,11 +346,23 @@ export function LegalDocumentConfig({
             </Card>
           ))}
 
-          {Object.keys(errors).length > 0 && (
+          {(Object.keys(errors).length > 0 || globalError) && (
             <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-              <p className="text-sm text-red-600 dark:text-red-400 font-medium">
-                Please fill in all required fields before generating the document.
-              </p>
+              <div className="flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 text-red-500 mt-0.5" />
+                <div className="space-y-2">
+                  <p className="text-sm text-red-600 dark:text-red-400 font-medium">
+                    {globalError ?? "Please fill in all required fields before generating the document."}
+                  </p>
+                  {Object.keys(errors).length > 0 && (
+                    <ul className="list-disc pl-5 text-xs text-red-600 dark:text-red-400 space-y-1">
+                      {Object.entries(errors).map(([key, message]) => (
+                        <li key={key}>{message}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 

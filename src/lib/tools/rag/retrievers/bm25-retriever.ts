@@ -1,12 +1,33 @@
 import { db } from "~/server/db/index";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { documentSections, document, pdfChunks } from "~/server/db/schema";
 import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import { Document } from "@langchain/core/documents";
 import type { ChunkRow, SearchScope } from "../types";
 
+/**
+ * Version filter shared by every chunk lookup in this file.
+ *
+ * Semantics:
+ *   - If the document has no current_version_id (fully unbackfilled), return
+ *     all its chunks — we can't tell which version is current.
+ *   - If the chunk itself has no version_id (pre-Step-2 data that the
+ *     backfill hasn't touched yet), return it as a safety net.
+ *   - Otherwise, only return chunks whose version_id matches the document's
+ *     current_version_id. Older versions stay indexed but are hidden from RAG.
+ *
+ * Once the backfill has run everywhere, this degenerates to a strict equality
+ * check. The IS NULL branches are defensive, not load-bearing.
+ */
+const currentVersionFilter = or(
+  isNull(document.currentVersionId),
+  isNull(documentSections.versionId),
+  sql`${documentSections.versionId} = ${document.currentVersionId}`,
+);
+
 export async function getDocumentChunks(documentId: number): Promise<ChunkRow[]> {
-  // Try primary table first
+  // Try primary table first. Joined to `document` so we can filter out chunks
+  // that belong to non-current versions of this document.
   const rows = await db
     .select({
       id: documentSections.id,
@@ -15,7 +36,13 @@ export async function getDocumentChunks(documentId: number): Promise<ChunkRow[]>
       documentId: documentSections.documentId,
     })
     .from(documentSections)
-    .where(eq(documentSections.documentId, BigInt(documentId)));
+    .innerJoin(document, eq(documentSections.documentId, document.id))
+    .where(
+      and(
+        eq(documentSections.documentId, BigInt(documentId)),
+        currentVersionFilter,
+      )
+    );
 
   // Fallback to legacy table if no results
   if (rows.length === 0) {
@@ -59,7 +86,12 @@ export async function getCompanyChunks(companyId: number): Promise<ChunkRow[]> {
     })
     .from(documentSections)
     .innerJoin(document, eq(documentSections.documentId, document.id))
-    .where(eq(document.companyId, BigInt(companyId)));
+    .where(
+      and(
+        eq(document.companyId, BigInt(companyId)),
+        currentVersionFilter,
+      )
+    );
 
   // Fallback to legacy table
   if (rows.length === 0) {
@@ -111,7 +143,12 @@ export async function getMultiDocChunks(documentIds: number[]): Promise<ChunkRow
     })
     .from(documentSections)
     .innerJoin(document, eq(documentSections.documentId, document.id))
-    .where(inArray(documentSections.documentId, bigIntDocIds));
+    .where(
+      and(
+        inArray(documentSections.documentId, bigIntDocIds),
+        currentVersionFilter,
+      )
+    );
 
   // Fallback to legacy table
   if (rows.length === 0) {

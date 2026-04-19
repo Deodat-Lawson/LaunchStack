@@ -40,11 +40,12 @@ type GenerateAction =
     | "rewrite"
     | "summarize"
     | "change_tone"
+    | "field_update"
     | "continue";
 
 // Validation schema
 const GenerateSchema = z.object({
-    action: z.enum(["generate_section", "expand", "rewrite", "summarize", "change_tone", "continue"]),
+    action: z.enum(["generate_section", "expand", "rewrite", "summarize", "change_tone", "field_update", "continue"]),
     content: z.string().optional(), // Selected text or current content
     prompt: z.string().optional(), // User's instruction
     context: z.object({
@@ -110,6 +111,17 @@ Guidelines:
 - Keep similar length to the original
 - Ensure the content remains appropriate for the audience`,
 
+    field_update: `You are assisting with a legal document editor that has locked contract text and editable highlighted fields.
+
+Guidelines:
+- Update ONLY field values, never surrounding prose
+- You will receive a list of editable fields with keys, labels, and current values
+- Return ONLY valid JSON in the form {"field_key":"new value"}
+- Use only keys from the provided list
+- Omit unchanged fields
+- If no fields should change, return {}
+- Do not include explanations, markdown, or wrapper text`,
+
     continue: `You are an expert document writer. Your task is to continue writing from where the current content ends.
 
 Guidelines:
@@ -160,6 +172,7 @@ export async function POST(request: Request) {
 
         const { action, content, prompt, context, options } = validation.data;
         const startTime = Date.now();
+        const containsEditableHtml = (content?.includes("<mark") ?? false) || (prompt?.includes("<mark") ?? false);
 
         // Get the AI model (gpt-4o is widely available; gpt-5-mini may require newer API access)
         const modelId = (options?.model ?? "gpt-4o") as AIModelType;
@@ -167,6 +180,14 @@ export async function POST(request: Request) {
 
         // Build the system prompt
         let systemPrompt = ACTION_PROMPTS[action];
+
+        if (containsEditableHtml) {
+            systemPrompt += `\n\nThe input may contain an HTML fragment with editable <mark data-field-key="...">...</mark> tags.
+- Preserve all existing HTML structure unless the user explicitly asks to rewrite surrounding wording
+- Preserve every <mark> tag and its data-field-key attribute exactly
+- If the user asks to change a field value, only change the text inside the relevant <mark> tag
+- Return ONLY the updated HTML fragment with no markdown fences or wrapper text`;
+        }
 
         // Add tone context for change_tone action
         if (action === "change_tone" && options?.tone) {
@@ -214,7 +235,9 @@ export async function POST(request: Request) {
                 break;
 
             case "rewrite":
-                userPrompt = `Rewrite the following text:\n\n"${content}"`;
+                userPrompt = containsEditableHtml
+                    ? `Update the following HTML fragment.\n\nUser instruction: ${prompt ?? "Rewrite this section while preserving structure."}\n\nHTML fragment:\n${content ?? ""}`
+                    : `Rewrite the following text:\n\n"${content}"`;
                 if (prompt) {
                     userPrompt += `\n\nAdditional instructions: ${prompt}`;
                 }
@@ -234,10 +257,15 @@ export async function POST(request: Request) {
                     "Remove any redundancy or filler phrases",
                     "Ensure it reads naturally, not like it was AI-generated",
                     "Preserve all factual information, names, numbers, and technical terms",
+                    containsEditableHtml
+                        ? "IMPORTANT: Preserve the HTML structure and every <mark data-field-key> tag exactly. If the user requested a field change, update only the text inside the correct mark tag."
+                        : "Keep the output as plain text unless the original formatting requires otherwise",
                     prompt
                         ? "IMPORTANT: The user requested specific additions or changes. Make sure these are fully incorporated and prioritized: " + prompt
                         : "Do not change the meaning or add new information beyond what was requested",
-                    "Output ONLY the refined text: no quotation marks, no wrapper phrases",
+                    containsEditableHtml
+                        ? "Output ONLY the refined HTML fragment: no quotation marks, no wrapper phrases"
+                        : "Output ONLY the refined text: no quotation marks, no wrapper phrases",
                 ].join("\n- ");
 
                 const secondPass = await chat.call([
@@ -281,6 +309,13 @@ Now refine it further:
                     userPrompt += `\n\nDocument title: "${context.documentTitle}"`;
                 }
                 break;
+
+            case "field_update":
+                userPrompt = `User request:\n${prompt ?? "Update the requested field values."}\n\nEditable fields:\n${content ?? "[]"}`;
+                if (context?.documentTitle) {
+                    userPrompt += `\n\nDocument title: "${context.documentTitle}"`;
+                }
+                break;
         }
 
         // Call the AI model
@@ -301,15 +336,11 @@ Now refine it further:
         });
 
     } catch (error) {
-        const errMessage = error instanceof Error ? error.message : String(error);
-        const stack = error instanceof Error ? error.stack : undefined;
         console.error("[document-generator/generate] error:", error);
         return NextResponse.json(
             {
                 success: false,
                 message: "Failed to generate content",
-                error: errMessage,
-                ...(process.env.NODE_ENV === "development" && stack ? { stack } : {}),
             },
             { status: 500, headers: { "Content-Type": "application/json" } },
         );

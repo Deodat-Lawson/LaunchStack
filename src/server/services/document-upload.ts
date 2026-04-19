@@ -1,6 +1,7 @@
 import { db } from "~/server/db";
 import { document, ocrJobs } from "~/server/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
+import { resolveIngestIndexKey } from "~/lib/ai/company-reindex-state";
 import {
   shouldTranscribeFile,
   transcribeAudioFromUrl,
@@ -24,6 +25,7 @@ export interface DocumentUploadParams {
   explicitStorageType?: StorageType;
   mimeType?: string;
   originalFilename?: string;
+  embeddingIndexKey?: string;
 }
 
 export interface DocumentUploadResult {
@@ -83,6 +85,7 @@ export async function processDocumentUpload({
   explicitStorageType,
   mimeType,
   originalFilename,
+  embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
   const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
   const resolvedDocumentUrl =
@@ -90,6 +93,15 @@ export async function processDocumentUpload({
 
   const documentCategory = category ?? "Uncategorized";
   const companyIdString = user.companyId.toString();
+  // Resolve the index key ONCE at enqueue time and thread it through the
+  // Inngest event payload. The worker must never re-resolve from DB — that
+  // would race against a mid-flight `updateCompany` index switch and
+  // produce embeddings under the wrong index_key. Prefer `pending` during
+  // an active reindex so new docs end up in the in-flight target.
+  const resolvedEmbeddingIndexKey =
+    embeddingIndexKey ??
+    (await resolveIngestIndexKey(user.companyId)) ??
+    undefined;
 
   // ------------------------------------------------------------------
   // Audio file: save the original audio as a document, then create a
@@ -181,6 +193,7 @@ export async function processDocumentUpload({
           mimeType: "text/plain",
           originalFilename: `${documentName}-transcription.txt`,
           transcriptionMetadata,
+          embeddingIndexKey: resolvedEmbeddingIndexKey,
         }
       );
 
@@ -251,6 +264,7 @@ export async function processDocumentUpload({
       preferredProvider: parseProvider(preferredProvider),
       mimeType,
       originalFilename,
+      embeddingIndexKey: resolvedEmbeddingIndexKey,
     }
   );
 

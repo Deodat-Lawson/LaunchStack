@@ -62,7 +62,9 @@
       "Bash(A/)",
       "Bash(find /Users/aurea/LaunchStack/src/app/api/agents/documentQ* -name \"*.ts\")",
       "WebSearch",
-      "Bash(grep -r \"className.*p-\" /Users/aurea/LaunchStack/src/app/employer/documents/components/*.tsx)"
+      "Bash(grep -r \"className.*p-\" /Users/aurea/LaunchStack/src/app/employer/documents/components/*.tsx)",
+      "Bash(git grep *)",
+      "Bash(git add *)"
     ]
   }
 }

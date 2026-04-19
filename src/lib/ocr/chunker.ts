@@ -334,7 +334,11 @@ export function prepareForEmbedding(chunks: DocumentChunk[]): string[] {
  */
 export function mergeWithEmbeddings(
   chunks: DocumentChunk[],
-  embeddings: number[][]
+  embeddings: number[][],
+  options?: {
+    shortDimension?: number;
+    supportsMatryoshka?: boolean;
+  },
 ): VectorizedChunk[] {
   
   // We need to consume embeddings sequentially
@@ -350,8 +354,10 @@ export function mergeWithEmbeddings(
             if (!vector) {
                 throw new Error("Embedding mismatch: fewer embeddings than children");
             }
-            // Logic for Matryoshka Short Embedding (first 512 dims)
-            const vectorShort = vector.slice(0, 512);
+            const vectorShort =
+              options?.supportsMatryoshka && options.shortDimension
+                ? vector.slice(0, options.shortDimension)
+                : undefined;
 
             vectorizedChildren.push({
                 content: child.content,

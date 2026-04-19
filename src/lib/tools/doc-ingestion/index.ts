@@ -4,7 +4,6 @@ import {
   chunkPages,
   createRootStructure,
   finalizeStorage,
-  isKnownOfficeDocument,
   markJobFailed,
   normalizeDocument,
   routeDocument,
@@ -15,12 +14,17 @@ import {
   type StoredSection,
 } from "~/lib/ocr/processor";
 import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "~/lib/ocr/chunker";
-import { generateEmbeddings } from "~/lib/ai/embeddings";
+import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import {
+  resolveEmbeddingIndex,
+  supportsShortVectorSearch,
+  type EmbeddingIndexConfig,
+} from "~/lib/ai/embedding-index-registry";
 import type {
   DocumentChunk,
   PageContent,
   PipelineResult,
-  VectorizedChunk,
 } from "~/lib/ocr/types";
 import { db } from "~/server/db";
 import { ocrJobs, documentContextChunks } from "~/server/db/schema";
@@ -31,8 +35,7 @@ import type {
   DocIngestionToolRuntimeOptions,
 } from "./types";
 
-const DEFAULT_SIDECAR_BATCH_SIZE = 50;
-const DEFAULT_OPENAI_BATCH_SIZE = 50;
+const DEFAULT_EMBEDDING_BATCH_SIZE = 50;
 
 /**
  * Lightweight step output for normalize, kept under Inngest's ~4MB step output limit.
@@ -140,71 +143,10 @@ function isAzureSupportedFile(documentUrl: string, documentName: string): boolea
   return [...AZURE_SUPPORTED_EXTENSIONS].some((ext) => nameToCheck.includes(ext));
 }
 
-async function vectorizeWithSidecar(
+async function vectorizeWithIndex(
   chunks: DocumentChunk[],
-  sidecarUrl: string,
-  sidecarBatchSize: number,
-  documentId: number,
-  rootStructureId: number,
-  runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
-): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
-  const batches = splitIntoBatches(chunks, sidecarBatchSize);
-  let totalStored = 0;
-
-  for (let i = 0; i < batches.length; i++) {
-    const batch = batches[i];
-    if (!batch) continue;
-
-    const result = await runStep(
-      `step-d-batch-${i}`,
-      async (): Promise<{ batchIndex: number; stored: number }> => {
-        const texts = batch.map((chunk) => chunk.content);
-        const response = await fetch(`${sidecarUrl}/embed`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ texts }),
-        });
-
-        if (!response.ok) {
-          throw new Error(
-            `Sidecar /embed failed (batch ${i}): ${response.status} ${await response.text()}`,
-          );
-        }
-
-        const data = (await response.json()) as { embeddings: number[][] };
-        const vectorized: VectorizedChunk[] = batch.map((chunk, idx) => ({
-          content: chunk.content,
-          metadata: chunk.metadata,
-          vector: data.embeddings[idx] ?? [],
-        }));
-
-        const sections = await storeBatch(documentId, rootStructureId, vectorized);
-        return { batchIndex: i, stored: sections.length };
-      },
-    );
-
-    totalStored += result.stored;
-  }
-
-  const rows = await db
-    .select({ id: documentContextChunks.id, content: documentContextChunks.content })
-    .from(documentContextChunks)
-    .where(eq(documentContextChunks.documentId, BigInt(documentId)));
-
-  return {
-    totalStored,
-    storedSections: rows.map((r) => ({ sectionId: r.id, content: r.content })),
-  };
-}
-
-/**
- * Vectorize chunks via OpenAI using batched Inngest steps.
- * Each step embeds a batch of parent chunks AND writes them directly to the
- * database, returning only a tiny count. This avoids Inngest's output_too_large
- * error since vectors never pass through step serialization.
- */
-async function vectorizeWithOpenAI(
-  chunks: DocumentChunk[],
+  embeddingIndex: EmbeddingIndexConfig,
+  embeddingConfig: CompanyEmbeddingConfig | undefined,
   batchSize: number,
   documentId: number,
   rootStructureId: number,
@@ -212,31 +154,26 @@ async function vectorizeWithOpenAI(
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
 
+  const embeddings = createEmbeddingModel(embeddingIndex, embeddingConfig);
   const contentStrings = prepareForEmbedding(chunks);
-  console.log(
-    `[Vectorize] Prepared ${chunks.length} parents -> ${contentStrings.length} strings for embedding`,
-  );
-
   const childCounts = chunks.map(
-    (c) => (c.children && c.children.length > 0 ? c.children.length : 1),
+    (chunk) => (chunk.children && chunk.children.length > 0 ? chunk.children.length : 1),
   );
-
-  const parentBatches = splitIntoBatches(chunks, batchSize);
+  const batches = splitIntoBatches(chunks, batchSize);
   let totalStored = 0;
   let stringOffset = 0;
 
-  for (let i = 0; i < parentBatches.length; i++) {
-    const batch = parentBatches[i];
+  for (let i = 0; i < batches.length; i++) {
+    const batch = batches[i];
     if (!batch) continue;
 
     const batchChildCount = batch.reduce(
       (sum, _, idx) => sum + (childCounts[i * batchSize + idx] ?? 0),
       0,
     );
-    const batchStringsStart = stringOffset;
     const batchStrings = contentStrings.slice(
-      batchStringsStart,
-      batchStringsStart + batchChildCount,
+      stringOffset,
+      stringOffset + batchChildCount,
     );
     stringOffset += batchChildCount;
 
@@ -244,14 +181,20 @@ async function vectorizeWithOpenAI(
       `step-d-batch-${i}`,
       async (): Promise<{ batchIndex: number; stored: number }> => {
         console.log(
-          `[Vectorize] Batch ${i + 1}/${parentBatches.length}: ${batch.length} parents, ${batchStrings.length} strings`,
+          `[Vectorize] Batch ${i + 1}/${batches.length}: ${batch.length} parents, ${batchStrings.length} strings, index=${embeddingIndex.indexKey}`,
         );
-        const embedResult = await generateEmbeddings(batchStrings, {
-          model: "text-embedding-3-large",
-          dimensions: 1536,
+        const vectors = await embeddings.embedDocuments?.(batchStrings)
+          ?? await Promise.all(batchStrings.map((text) => embeddings.embedQuery(text)));
+        const vectorized = mergeWithEmbeddings(batch, vectors, {
+          shortDimension: embeddingIndex.shortDimension,
+          supportsMatryoshka: supportsShortVectorSearch(embeddingIndex),
         });
-        const vectorized = mergeWithEmbeddings(batch, embedResult.embeddings);
-        const sections = await storeBatch(documentId, rootStructureId, vectorized);
+        const sections = await storeBatch(
+          documentId,
+          rootStructureId,
+          vectorized,
+          embeddingIndex,
+        );
         return { batchIndex: i, stored: sections.length };
       },
     );
@@ -392,9 +335,12 @@ export async function runDocIngestionTool(
   const runStep = createStepRunner(runtime);
   const isInngest = !!runtime?.runStep;
   const sidecarUrl = runtime?.sidecarUrl ?? process.env.SIDECAR_URL;
-  const sidecarBatchSize = runtime?.sidecarBatchSize ?? DEFAULT_SIDECAR_BATCH_SIZE;
+  const embeddingBatchSize = runtime?.sidecarBatchSize ?? DEFAULT_EMBEDDING_BATCH_SIZE;
   const updateJobStatus = runtime?.updateJobStatus ?? false;
   const markFailureInDb = runtime?.markFailureInDb ?? false;
+  const { getCompanyEmbeddingConfig } = await import("~/lib/ai/company-embedding-config");
+  const companyEmbeddingConfig = await getCompanyEmbeddingConfig(companyId);
+  const embeddingIndex = resolveEmbeddingIndex(options?.embeddingIndexKey, companyEmbeddingConfig ?? undefined);
 
   const fastTextPath = runtime?.fastTextPath ?? false;
 
@@ -553,28 +499,17 @@ export async function runDocIngestionTool(
         },
       );
 
-      if (sidecarUrl) {
-        const result = await vectorizeWithSidecar(
-          chunks,
-          sidecarUrl,
-          sidecarBatchSize,
-          documentId,
-          rootStructureId,
-          runStep,
-        );
-        storedSections = result.storedSections;
-        totalStored = result.totalStored;
-      } else {
-        const result = await vectorizeWithOpenAI(
-          chunks,
-          DEFAULT_OPENAI_BATCH_SIZE,
-          documentId,
-          rootStructureId,
-          runStep,
-        );
-        storedSections = result.storedSections;
-        totalStored = result.totalStored;
-      }
+      const result = await vectorizeWithIndex(
+        chunks,
+        embeddingIndex,
+        companyEmbeddingConfig ?? undefined,
+        embeddingBatchSize,
+        documentId,
+        rootStructureId,
+        runStep,
+      );
+      storedSections = result.storedSections;
+      totalStored = result.totalStored;
     }
 
     // -----------------------------------------------------------------------
@@ -587,6 +522,7 @@ export async function runDocIngestionTool(
         provider: normSummary.provider,
         processingTimeMs: normSummary.processingTimeMs,
         confidenceScore: normSummary.confidenceScore,
+        embeddingIndexKey: embeddingIndex.indexKey,
       }, pipelineStartTime);
       return { ok: true };
     });

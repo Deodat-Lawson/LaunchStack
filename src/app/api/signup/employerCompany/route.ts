@@ -2,6 +2,7 @@ import {db} from "~/server/db";
 import {company, users} from "~/server/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
+import { upsertCompanyCredentials } from "~/lib/ai/company-credentials";
 
 type PostBody = {
     userId: string;
@@ -9,11 +10,27 @@ type PostBody = {
     name: string;
     email: string;
     numberOfEmployees: string;
+    embeddingIndexKey?: string;
+    embeddingOpenAIApiKey?: string | null;
+    embeddingHuggingFaceApiKey?: string | null;
+    embeddingOllamaBaseUrl?: string | null;
+    embeddingOllamaModel?: string | null;
 }
 
 export async function POST(request: Request) {
     try {
-        const {userId, name, email, companyName, numberOfEmployees} = (await request.json()) as PostBody;
+        const {
+            userId,
+            name,
+            email,
+            companyName,
+            numberOfEmployees,
+            embeddingIndexKey,
+            embeddingOpenAIApiKey,
+            embeddingHuggingFaceApiKey,
+            embeddingOllamaBaseUrl,
+            embeddingOllamaModel,
+        } = (await request.json()) as PostBody;
 
         // Validate required fields
         if (!name?.trim()) {
@@ -39,6 +56,7 @@ export async function POST(request: Request) {
             .values({
                 name: companyName,
                 numberOfEmployees: numberOfEmployees || "0",
+                embeddingIndexKey: embeddingIndexKey?.trim() || null,
             })
             .returning({ id: company.id });
 
@@ -50,6 +68,38 @@ export async function POST(request: Request) {
         }
 
         const companyId = BigInt(newCompany.id);
+
+        // Persist embedding provider credentials into the encrypted table.
+        // Empty/null values are skipped so we never write empty ciphertext.
+        const credentialsInput: {
+            openAIApiKey?: string | null;
+            huggingFaceApiKey?: string | null;
+            ollamaBaseUrl?: string | null;
+            ollamaModel?: string | null;
+        } = {};
+        if (embeddingOpenAIApiKey?.trim()) {
+            credentialsInput.openAIApiKey = embeddingOpenAIApiKey.trim();
+        }
+        if (embeddingHuggingFaceApiKey?.trim()) {
+            credentialsInput.huggingFaceApiKey = embeddingHuggingFaceApiKey.trim();
+        }
+        if (embeddingOllamaBaseUrl?.trim()) {
+            credentialsInput.ollamaBaseUrl = embeddingOllamaBaseUrl.trim();
+        }
+        if (embeddingOllamaModel?.trim()) {
+            credentialsInput.ollamaModel = embeddingOllamaModel.trim();
+        }
+
+        if (Object.keys(credentialsInput).length > 0) {
+            try {
+                await upsertCompanyCredentials(newCompany.id, credentialsInput);
+            } catch (credErr) {
+                console.error("Failed to persist embedding credentials during signup:", credErr);
+                // Fatal — the company row is already created; bubble up so
+                // the caller sees the failure and can retry with valid input.
+                return handleApiError(credErr);
+            }
+        }
 
         await db.insert(users).values({
             userId,

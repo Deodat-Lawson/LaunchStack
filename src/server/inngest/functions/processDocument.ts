@@ -613,6 +613,9 @@ export const uploadDocument = inngest.createFunction(
                 documentId: f.documentId,
                 category: eventData.category,
                 mimeType: f.mimeType,
+                options: {
+                  embeddingIndexKey: eventData.options?.embeddingIndexKey,
+                },
               },
             })),
           );

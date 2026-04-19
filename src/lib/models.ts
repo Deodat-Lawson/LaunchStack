@@ -2,10 +2,14 @@
  * Shared chat model factory for use across the app (document Q&A, marketing pipeline, etc.).
  * Swap models in one place; all callers use LangChain BaseChatModel.
  */
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { ChatOpenAI } from "@langchain/openai";
 import { ChatAnthropic } from "@langchain/anthropic";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
 
 export type AIModelType =
   | "gpt-4o"
@@ -109,11 +113,11 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
   }
 }
 
-export function getEmbeddings(): OpenAIEmbeddings {
-  return new OpenAIEmbeddings({
-    model: "text-embedding-ada-002",
-    openAIApiKey: process.env.OPENAI_API_KEY,
-  });
+export function getEmbeddings(
+  indexKey?: string,
+  config?: CompanyEmbeddingConfig,
+): EmbeddingsProvider {
+  return createEmbeddingModel(resolveEmbeddingIndex(indexKey, config), config);
 }
 
 /** Marketing pipeline model config: one place to swap models per stage. */

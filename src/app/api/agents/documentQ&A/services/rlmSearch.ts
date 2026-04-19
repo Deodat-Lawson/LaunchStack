@@ -13,6 +13,7 @@
  * For simple queries, use the standard ensemble search (AIQuery).
  */
 
+import { eq } from "drizzle-orm";
 import {
     createRLMRetriever,
     type DocumentOverview,
@@ -21,7 +22,10 @@ import {
     type TokenBudgetOptions,
 } from "~/lib/tools/rag/retrievers";
 import { getEmbeddings } from "./models";
-import type { SemanticType, PreviewType } from "~/server/db/schema";
+import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import { db } from "~/server/db";
+import { document, type SemanticType, type PreviewType } from "~/server/db/schema";
 
 // ============================================================================
 // Types
@@ -45,6 +49,8 @@ export interface RLMSearchOptions {
     pageRange?: { start: number; end: number };
     /** Preview types to include if includePreviews is true */
     previewTypes?: PreviewType[];
+    /** Embedding index key for semantic retrieval */
+    embeddingIndexKey?: string;
 }
 
 /**
@@ -98,15 +104,33 @@ export async function performRLMSearch(
         prioritize = "relevance",
         pageRange,
         previewTypes = ["summary", "keywords"],
+        embeddingIndexKey,
     } = options;
 
     console.log(`🔍 [RLM Search] Starting search for document ${documentId}`);
     console.log(`   Token budget: ${maxTokens}, Prioritize: ${prioritize}`);
 
+    const [documentRecord] = await db
+        .select({
+            companyId: document.companyId,
+        })
+        .from(document)
+        .where(eq(document.id, documentId))
+        .limit(1);
+    const companyConfig = documentRecord
+        ? await getCompanyEmbeddingConfig(documentRecord.companyId)
+        : null;
+
     // Create retriever with embeddings if we need semantic search
     const needsEmbeddings = prioritize === "relevance";
-    const embeddings = needsEmbeddings ? getEmbeddings() : undefined;
-    const retriever = createRLMRetriever(embeddings);
+    const embeddingIndex = resolveEmbeddingIndex(
+        embeddingIndexKey,
+        companyConfig ?? undefined,
+    );
+    const embeddings = needsEmbeddings
+        ? getEmbeddings(embeddingIndex.indexKey, companyConfig ?? undefined)
+        : undefined;
+    const retriever = createRLMRetriever(embeddings, embeddingIndex);
 
     // Fetch overview and previews in parallel if needed
     const [overview, previews] = await Promise.all([

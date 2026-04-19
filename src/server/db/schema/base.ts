@@ -54,6 +54,26 @@ export const company = pgTable("company", {
     name: varchar("name", { length: 256 }).notNull(),
     description: text("description"),
     industry: varchar("industry", { length: 256 }),
+    // Legacy column; kept in sync with activeEmbeddingIndexKey via
+    // updateCompany during the migration window. Drop after callers migrate.
+    embeddingIndexKey: varchar("embedding_index_key", { length: 128 }),
+    // SearchSettings-style lifecycle. `active` is what ingest/query use;
+    // `pending` is the target of an in-progress reindex.
+    activeEmbeddingIndexKey: varchar("active_embedding_index_key", { length: 128 }),
+    pendingEmbeddingIndexKey: varchar("pending_embedding_index_key", { length: 128 }),
+    reindexStatus: varchar("reindex_status", { length: 16 }).notNull().default("STABLE"),
+    reindexJobId: text("reindex_job_id"),
+    reindexStartedAt: timestamp("reindex_started_at", { withTimezone: true }),
+    reindexCompletedAt: timestamp("reindex_completed_at", { withTimezone: true }),
+    reindexError: text("reindex_error"),
+    // Legacy plaintext credential columns. Read-only during migration;
+    // writes go through src/lib/ai/company-credentials.ts into the
+    // encrypted `company_embedding_credentials` table. Dropped by
+    // drizzle/0011 once backfill has run.
+    embeddingOpenAIApiKey: text("embedding_openai_api_key"),
+    embeddingHuggingFaceApiKey: text("embedding_huggingface_api_key"),
+    embeddingOllamaBaseUrl: varchar("embedding_ollama_base_url", { length: 1024 }),
+    embeddingOllamaModel: varchar("embedding_ollama_model", { length: 256 }),
     employerpasskey: varchar("employerPasskey", { length: 256 }).notNull().default(""),
     employeepasskey: varchar("employeePasskey", { length: 256 }).notNull().default(""),
     numberOfEmployees: varchar("numberOfEmployees", { length: 256 }).notNull(),

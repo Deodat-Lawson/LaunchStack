@@ -16,7 +16,7 @@
  * 5. Workspace operations - Store/retrieve intermediate results
  */
 
-import { db } from "~/server/db/index";
+import { db, toRows } from "~/server/db/index";
 import { eq, and, sql, asc, desc, lte, inArray, isNull } from "drizzle-orm";
 import {
     documentStructure,
@@ -32,6 +32,10 @@ import {
     type PreviewType,
     type ResultType,
 } from "~/server/db/schema";
+import {
+    isLegacyEmbeddingIndex,
+    type EmbeddingIndexConfig,
+} from "~/lib/ai/embedding-index-registry";
 import type { EmbeddingsProvider } from "../types";
 
 // ============================================================================
@@ -125,9 +129,11 @@ export interface WorkspaceStoreOptions {
 
 export class RLMRetriever {
     private embeddings?: EmbeddingsProvider;
+    private embeddingIndex?: EmbeddingIndexConfig;
 
-    constructor(embeddings?: EmbeddingsProvider) {
+    constructor(embeddings?: EmbeddingsProvider, embeddingIndex?: EmbeddingIndexConfig) {
         this.embeddings = embeddings;
+        this.embeddingIndex = embeddingIndex;
     }
 
     // ========================================================================
@@ -748,21 +754,54 @@ export class RLMRetriever {
         const { topK = 10, maxTokens } = options;
         const queryEmbedding = await this.embeddings.embedQuery(query);
         const bracketedEmbedding = `[${queryEmbedding.join(",")}]`;
+        const legacyVectorLiteral = sql.raw(`'${bracketedEmbedding}'::vector(1536)`);
+        const useLegacyPath = !this.embeddingIndex || isLegacyEmbeddingIndex(this.embeddingIndex);
+        const activeEmbeddingIndex = this.embeddingIndex;
+        const dimensionTableVectorLiteral = activeEmbeddingIndex
+            ? sql.raw(`'${bracketedEmbedding}'::vector(${activeEmbeddingIndex.dimension})`)
+            : null;
 
-        const results = await db.select({
-            id: documentSections.id,
-            content: documentSections.content,
-            tokenCount: documentSections.tokenCount,
-            pageNumber: documentSections.pageNumber,
-            semanticType: documentSections.semanticType,
-            structurePath: documentStructure.path,
-            distance: sql<number>`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`,
-        })
-        .from(documentSections)
-        .leftJoin(documentStructure, eq(documentSections.structureId, documentStructure.id))
-        .where(eq(documentSections.documentId, BigInt(documentId)))
-        .orderBy(sql`${documentSections.embedding} <-> ${bracketedEmbedding}::vector(1536)`)
-        .limit(topK);
+        const results = useLegacyPath
+            ? await db.select({
+                id: documentSections.id,
+                content: documentSections.content,
+                tokenCount: documentSections.tokenCount,
+                pageNumber: documentSections.pageNumber,
+                semanticType: documentSections.semanticType,
+                structurePath: documentStructure.path,
+                distance: sql<number>`${documentSections.embedding} <-> ${legacyVectorLiteral}`,
+            })
+            .from(documentSections)
+            .leftJoin(documentStructure, eq(documentSections.structureId, documentStructure.id))
+            .where(eq(documentSections.documentId, BigInt(documentId)))
+            .orderBy(sql`${documentSections.embedding} <-> ${legacyVectorLiteral}`)
+            .limit(topK)
+            : toRows<{
+                id: number;
+                content: string;
+                tokenCount: number;
+                pageNumber: number | null;
+                semanticType: SemanticType | null;
+                structurePath: string | null;
+                distance: number;
+            }>(await db.execute(sql`
+                SELECT
+                    cc.id,
+                    cc.content,
+                    cc.token_count as "tokenCount",
+                    cc.page_number as "pageNumber",
+                    cc.semantic_type as "semanticType",
+                    ds.path as "structurePath",
+                    de.embedding <-> ${dimensionTableVectorLiteral} as distance
+                FROM ${sql.raw(activeEmbeddingIndex!.dimension === 768 ? "pdr_ai_v2_document_embeddings_768" : "pdr_ai_v2_document_embeddings_1024")} de
+                JOIN pdr_ai_v2_document_retrieval_chunks rc ON de.retrieval_chunk_id = rc.id
+                JOIN pdr_ai_v2_document_context_chunks cc ON rc.context_chunk_id = cc.id
+                LEFT JOIN pdr_ai_v2_document_structure ds ON cc.structure_id = ds.id
+                WHERE cc.document_id = ${documentId}
+                AND de.index_key = ${activeEmbeddingIndex!.indexKey}
+                ORDER BY de.embedding <-> ${dimensionTableVectorLiteral}
+                LIMIT ${topK}
+            `));
 
         // Apply token budget if specified
         let cumulative = 0;
@@ -796,8 +835,11 @@ export class RLMRetriever {
 /**
  * Create an RLM retriever instance.
  */
-export function createRLMRetriever(embeddings?: EmbeddingsProvider): RLMRetriever {
-    return new RLMRetriever(embeddings);
+export function createRLMRetriever(
+    embeddings?: EmbeddingsProvider,
+    embeddingIndex?: EmbeddingIndexConfig,
+): RLMRetriever {
+    return new RLMRetriever(embeddings, embeddingIndex);
 }
 
 /**

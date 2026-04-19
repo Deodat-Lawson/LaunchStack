@@ -35,6 +35,15 @@ export type PredictiveAnalysisEvent = {
   };
 };
 
+export type ReindexCompanyEmbeddingsEvent = {
+  name: "company/reindex-embeddings.requested";
+  data: {
+    companyId: number;
+    pendingIndexKey: string;
+    triggeredByUserId?: string;
+  };
+};
+
 export type DocumentModifyEvent = {
   name: "document/modify.requested";
   data: {
@@ -52,6 +61,7 @@ export type Events =
   | ClientProspectorEvent
   | CompanyMetadataExtractEvent
   | PredictiveAnalysisEvent
+  | ReindexCompanyEmbeddingsEvent
   | DocumentModifyEvent;
 
 /**

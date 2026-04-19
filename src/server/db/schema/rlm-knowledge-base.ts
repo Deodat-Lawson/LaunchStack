@@ -184,8 +184,8 @@ export const documentContextChunks = pgTable(
 );
 
 export const documentRetrievalChunks = pgTable(
-    "document_retrieval_chunks",
-    {
+  "document_retrieval_chunks",
+  {
         id: serial("id").primaryKey(),
         contextChunkId: bigint("context_chunk_id", { mode: "bigint" })
             .notNull()
@@ -202,19 +202,122 @@ export const documentRetrievalChunks = pgTable(
         // Matryoshka optimization: Index only the first 512 dimensions for speed
         embeddingShort: pgVector({ dimension: 512 })("embedding_short"),
         
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-    },
-    (table) => ({
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
         contextChunkIdIdx: index("doc_ret_chunks_context_chunk_id_idx").on(table.contextChunkId),
         documentIdIdx: index("doc_ret_chunks_document_id_idx").on(table.documentId),
         // Index on the short embedding for fast ANN search
         embeddingShortIdx: index("doc_ret_chunks_embedding_short_idx").using(
             "hnsw",
             table.embeddingShort.op("vector_cosine_ops")
-        ),
-    })
+    ),
+  })
+);
+
+export const experimentalDocumentEmbeddings = pgTable(
+  "document_embeddings_exp",
+  {
+    id: serial("id").primaryKey(),
+    documentId: bigint("document_id", { mode: "bigint" })
+      .notNull()
+      .references(() => document.id, { onDelete: "cascade" }),
+    retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
+      .notNull()
+      .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
+    provider: text("provider").notNull(),
+    model: text("model").notNull(),
+    version: text("version").notNull(),
+    dimension: integer("dimension").notNull().default(1024),
+    embedding: pgVector({ dimension: 1024 })("embedding").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
+    documentProviderIdx: index("document_embeddings_exp_doc_idx").on(
+      table.documentId,
+      table.provider,
+      table.model,
+      table.version
+    ),
+    chunkIdx: index("document_embeddings_exp_chunk_idx").on(
+      table.retrievalChunkId
+    ),
+    chunkProviderUnique: uniqueIndex(
+      "document_embeddings_exp_chunk_unique"
+    ).on(table.retrievalChunkId, table.provider, table.model, table.version),
+  })
+);
+
+export const documentEmbeddings768 = pgTable(
+  "document_embeddings_768",
+  {
+    id: serial("id").primaryKey(),
+    documentId: bigint("document_id", { mode: "bigint" })
+      .notNull()
+      .references(() => document.id, { onDelete: "cascade" }),
+    retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
+      .notNull()
+      .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
+    indexKey: varchar("index_key", { length: 128 }).notNull(),
+    provider: text("provider").notNull(),
+    model: text("model").notNull(),
+    version: text("version").notNull(),
+    embedding: pgVector({ dimension: 768 })("embedding").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
+    documentIndexIdx: index("document_embeddings_768_doc_idx").on(
+      table.documentId,
+      table.indexKey,
+    ),
+    chunkIdx: index("document_embeddings_768_chunk_idx").on(
+      table.retrievalChunkId,
+    ),
+    chunkIndexUnique: uniqueIndex("document_embeddings_768_chunk_unique").on(
+      table.retrievalChunkId,
+      table.indexKey,
+    ),
+  }),
+);
+
+export const documentEmbeddings1024 = pgTable(
+  "document_embeddings_1024",
+  {
+    id: serial("id").primaryKey(),
+    documentId: bigint("document_id", { mode: "bigint" })
+      .notNull()
+      .references(() => document.id, { onDelete: "cascade" }),
+    retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
+      .notNull()
+      .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
+    indexKey: varchar("index_key", { length: 128 }).notNull(),
+    provider: text("provider").notNull(),
+    model: text("model").notNull(),
+    version: text("version").notNull(),
+    embedding: pgVector({ dimension: 1024 })("embedding").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
+    documentIndexIdx: index("document_embeddings_1024_doc_idx").on(
+      table.documentId,
+      table.indexKey,
+    ),
+    chunkIdx: index("document_embeddings_1024_chunk_idx").on(
+      table.retrievalChunkId,
+    ),
+    chunkIndexUnique: uniqueIndex("document_embeddings_1024_chunk_unique").on(
+      table.retrievalChunkId,
+      table.indexKey,
+    ),
+  }),
 );
 
 export const documentMetadata = pgTable(

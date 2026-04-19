@@ -26,6 +26,8 @@ const serverSchema = z.object({
   DATALAB_API_KEY: optionalString(),
   // Web search providers
   TAVILY_API_KEY: optionalString(),
+  // Foursquare Places API (for Client Prospector)
+  FOURSQUARE_SERVICE_KEY: optionalString(),
   SERPER_API_KEY: optionalString(),
   SEARCH_PROVIDER: z
     .enum(["tavily", "serper", "fallback", "parallel"])
@@ -71,6 +73,7 @@ const serverSchema = z.object({
   // Extraction LLM (optional — model-agnostic, any OpenAI-compatible endpoint)
   EXTRACTION_LLM_BASE_URL: optionalString(),
   EXTRACTION_LLM_MODEL: optionalString(),
+  EXTRACTION_LLM_API_KEY: optionalString(),
   // Embedding provider (optional — defaults to BERT via Sidecar)
   EMBEDDING_PROVIDER: z.enum(["bert", "openai-compatible"]).optional(),
   EMBEDDING_API_URL: optionalString(),
@@ -79,6 +82,38 @@ const serverSchema = z.object({
   EMBEDDING_DIMENSIONS: z.coerce.number().int().positive().optional(),
   // Entity resolution similarity threshold (0–1, default 0.85)
   ENTITY_RESOLUTION_THRESHOLD: z.coerce.number().min(0).max(1).optional(),
+  // Storage provider configuration
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+  NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
+  S3_PUBLIC_ENDPOINT: optionalString(), // Browser-facing S3 URL (defaults to NEXT_PUBLIC_S3_ENDPOINT)
+  S3_REGION: optionalString(),
+  S3_ACCESS_KEY: optionalString(),
+  S3_SECRET_KEY: optionalString(),
+  S3_BUCKET_NAME: optionalString(),
+  // Repo Explainer
+  REPO_EXPLAINER_MODEL: optionalString(),
+  GITHUB_TOKEN: optionalString(),
+});
+
+const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
+  if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "local") {
+    const required = [
+      "NEXT_PUBLIC_S3_ENDPOINT",
+      "S3_REGION",
+      "S3_ACCESS_KEY",
+      "S3_SECRET_KEY",
+      "S3_BUCKET_NAME",
+    ] as const;
+    for (const key of required) {
+      if (!data[key]) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [key],
+          message: `${key} is required when NEXT_PUBLIC_STORAGE_PROVIDER is "local"`,
+        });
+      }
+    }
+  }
 });
 
 const clientSchema = z.object({
@@ -87,6 +122,8 @@ const clientSchema = z.object({
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["cloud", "local"]).default("cloud"),
+  NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
 });
 
 const skipValidation =
@@ -110,7 +147,7 @@ const parseEnv = <T extends z.AnyZodObject>(
 };
 
 function parseServerEnv() {
-  const server = parseEnv(serverSchema, {
+  const rawValues = {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
@@ -125,6 +162,7 @@ function parseServerEnv() {
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
     TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+    FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
     SERPER_API_KEY: process.env.SERPER_API_KEY,
     SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as "tavily" | "serper" | "fallback" | "parallel" | undefined,
     REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
@@ -151,13 +189,34 @@ function parseServerEnv() {
     GEMMA_MODEL: process.env.GEMMA_MODEL,
     EXTRACTION_LLM_BASE_URL: process.env.EXTRACTION_LLM_BASE_URL,
     EXTRACTION_LLM_MODEL: process.env.EXTRACTION_LLM_MODEL,
+    EXTRACTION_LLM_API_KEY: process.env.EXTRACTION_LLM_API_KEY,
     EMBEDDING_PROVIDER: process.env.EMBEDDING_PROVIDER as "bert" | "openai-compatible" | undefined,
     EMBEDDING_API_URL: process.env.EMBEDDING_API_URL,
     EMBEDDING_MODEL: process.env.EMBEDDING_MODEL,
     EMBEDDING_API_KEY: process.env.EMBEDDING_API_KEY,
     EMBEDDING_DIMENSIONS: process.env.EMBEDDING_DIMENSIONS as unknown as number | undefined,
     ENTITY_RESOLUTION_THRESHOLD: process.env.ENTITY_RESOLUTION_THRESHOLD as unknown as number | undefined,
-  });
+    REPO_EXPLAINER_MODEL: process.env.REPO_EXPLAINER_MODEL,
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+    NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
+      | "cloud"
+      | "local"
+      | undefined,
+    NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+    S3_PUBLIC_ENDPOINT: process.env.S3_PUBLIC_ENDPOINT,
+    S3_REGION: process.env.S3_REGION,
+    S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+    S3_SECRET_KEY: process.env.S3_SECRET_KEY,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+  };
+
+  let server: z.infer<typeof serverSchemaRefined>;
+  if (skipValidation) {
+    const result = serverSchema.partial().safeParse(rawValues);
+    server = (result.success ? result.data : rawValues) as z.infer<typeof serverSchemaRefined>;
+  } else {
+    server = serverSchemaRefined.parse(rawValues);
+  }
   if (
     !skipValidation &&
     (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)
@@ -174,6 +233,11 @@ export const env = {
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     NEXT_PUBLIC_UPLOADTHING_ENABLED:
       process.env.NEXT_PUBLIC_UPLOADTHING_ENABLED,
+    NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
+      | "cloud"
+      | "local"
+      | undefined,
+    NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
   }),
 };
 

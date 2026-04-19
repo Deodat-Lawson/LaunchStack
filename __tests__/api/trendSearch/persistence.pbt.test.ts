@@ -142,7 +142,9 @@ const searchResultArb = fc.record({
 
 const searchResultsArb = fc.array(searchResultArb, { minLength: 0, maxLength: 12 });
 
-const isoDateArb = fc.date().map((d) => d.toISOString());
+const isoDateArb = fc.date({ min: new Date("2000-01-01T00:00:00Z"), max: new Date("2100-01-01T00:00:00Z") })
+    .filter((d) => !isNaN(d.getTime()))
+    .map((d) => d.toISOString());
 
 const trendSearchOutputArb = fc.record({
     results: searchResultsArb,

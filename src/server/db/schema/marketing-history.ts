@@ -1,4 +1,5 @@
-import { bigint, index, integer, jsonb, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { bigint, index, integer, jsonb, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgTable } from "./helpers";
 
 export const marketingContentHistory = pgTable(
     "marketing_content_history",

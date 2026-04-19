@@ -1,8 +1,13 @@
 fastapi>=0.115.0
 uvicorn[standard]>=0.34.0
+pydantic>=2.10.0
+adeu==0.9.0
+
+# ML dependencies
 sentence-transformers>=3.3.0
 torch>=2.5.0
 transformers>=4.47.0
 numpy>=1.26.0
-pydantic>=2.10.0
 httpx>=0.27.0
+openai-whisper>=20231117
+python-multipart>=0.0.6

@@ -3,7 +3,8 @@ import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { document } from "~/server/db/schema";
-import { isPrivateBlobUrl, fetchBlob } from "~/server/storage/vercel-blob";
+import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
+import { fetchFile, isLocalStorage } from "~/lib/storage";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -55,11 +56,11 @@ export async function GET(_request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
     }
 
-    if (!isPrivateBlobUrl(doc.url)) {
+    if (!isLocalStorage() && !isPrivateBlobUrl(doc.url)) {
       return NextResponse.redirect(doc.url, { status: 307 });
     }
 
-    const blobRes = await fetchBlob(doc.url);
+    const blobRes = await fetchFile(doc.url);
     if (!blobRes.ok) {
       return NextResponse.json(
         { error: "Failed to retrieve document from storage" },
@@ -84,7 +85,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("Error serving document content:", error);
     return NextResponse.json(
-      { error: "Failed to serve document", details: error instanceof Error ? error.message : "Unknown error" },
+      { error: "Failed to serve document" },
       { status: 500 },
     );
   }

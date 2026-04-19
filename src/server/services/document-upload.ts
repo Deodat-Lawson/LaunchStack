@@ -3,11 +3,12 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document, documentVersions, ocrJobs } from "~/server/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
+import { resolveIngestIndexKey } from "~/lib/ai/company-reindex-state";
 import {
   shouldTranscribeFile,
   transcribeAudioFromUrl,
 } from "~/lib/audio/transcription";
-import { putFile } from "~/server/storage/vercel-blob";
+import { uploadFile } from "~/lib/storage";
 
 export type StorageType = "cloud" | "database" | "local";
 
@@ -26,6 +27,7 @@ export interface DocumentUploadParams {
   explicitStorageType?: StorageType;
   mimeType?: string;
   originalFilename?: string;
+  embeddingIndexKey?: string;
 }
 
 export interface DocumentUploadResult {
@@ -143,6 +145,7 @@ export async function processDocumentUpload({
   explicitStorageType,
   mimeType,
   originalFilename,
+  embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
   const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
   const resolvedDocumentUrl =
@@ -150,6 +153,15 @@ export async function processDocumentUpload({
 
   const documentCategory = category ?? "Uncategorized";
   const companyIdString = user.companyId.toString();
+  // Resolve the index key ONCE at enqueue time and thread it through the
+  // Inngest event payload. The worker must never re-resolve from DB — that
+  // would race against a mid-flight `updateCompany` index switch and
+  // produce embeddings under the wrong index_key. Prefer `pending` during
+  // an active reindex so new docs end up in the in-flight target.
+  const resolvedEmbeddingIndexKey =
+    embeddingIndexKey ??
+    (await resolveIngestIndexKey(user.companyId)) ??
+    undefined;
 
   // ------------------------------------------------------------------
   // Audio file: save the original audio as a document, then create a
@@ -199,10 +211,11 @@ export async function processDocumentUpload({
         originalFilename || documentName
       );
 
-      const textBlob = await putFile({
+      const textBlob = await uploadFile({
         filename: `${documentName}-transcription.txt`,
         data: Buffer.from(transcriptionResult.text, "utf-8"),
         contentType: "text/plain",
+        userId: user.userId,
       });
 
       const transcriptionMetadata = {
@@ -266,6 +279,7 @@ export async function processDocumentUpload({
           originalFilename: `${documentName}-transcription.txt`,
           transcriptionMetadata,
           versionId: transcriptVersionId,
+          embeddingIndexKey: resolvedEmbeddingIndexKey,
         }
       );
 
@@ -347,6 +361,7 @@ export async function processDocumentUpload({
       mimeType,
       originalFilename,
       versionId,
+      embeddingIndexKey: resolvedEmbeddingIndexKey,
     }
   );
 

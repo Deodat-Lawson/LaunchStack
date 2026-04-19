@@ -172,7 +172,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [providerAvailability, setProviderAvailability] = useState<Partial<ProviderAvailability>>({});
 
   useEffect(() => {
-    const allowedModels = ProviderModelMap[provider];
+    const allowedModels = ProviderModelMap[provider] as readonly AIModelType[] | undefined;
     if (allowedModels && !allowedModels.includes(aiModel)) {
       setAiModel(ProviderDefaultModels[provider]);
     }

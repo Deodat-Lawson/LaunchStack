@@ -9,7 +9,7 @@ export interface AIChatRequest {
   companyId?: number;
   archiveName?: string;
   question: string;
-  searchScope: 'document' | 'company';
+  searchScope: 'document' | 'company' | 'archive';
   aiModel?: AIModelType;
   provider?: LLMProvider;
   style?: string;
@@ -81,6 +81,7 @@ export function useAIChat() {
         body: JSON.stringify({
           documentId: params.documentId,
           companyId: params.companyId,
+          archiveName: params.archiveName,
           question: params.question,
           searchScope: params.searchScope,
           aiModel: mappedModel,

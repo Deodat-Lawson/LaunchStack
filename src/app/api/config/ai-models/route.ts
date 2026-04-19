@@ -6,6 +6,7 @@ export const revalidate = 3600;
 type ProviderKey = "openai" | "anthropic" | "google" | "ollama";
 
 const MODEL_PROVIDER_MAP: Record<AIModelType, ProviderKey> = {
+  "gpt-4o": "openai",
   "gpt-5.2": "openai",
   "gpt-5.1": "openai",
   "gpt-5-nano": "openai",

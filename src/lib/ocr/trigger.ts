@@ -33,6 +33,7 @@ export interface TriggerOptions {
    * can record the source in document metadata.
    */
   transcriptionMetadata?: Record<string, unknown>;
+  embeddingIndexKey?: string;
 }
 
 /**
@@ -74,6 +75,7 @@ export async function triggerDocumentProcessing(
     options: {
       forceOCR: options?.forceOCR,
       preferredProvider: options?.preferredProvider,
+      embeddingIndexKey: options?.embeddingIndexKey,
     },
   };
 

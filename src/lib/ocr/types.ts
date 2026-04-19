@@ -221,6 +221,7 @@ export interface ProcessDocumentEventData {
   options?: {
     forceOCR?: boolean;
     preferredProvider?: OCRProvider;
+    embeddingIndexKey?: string;
   };
 }
 

@@ -65,6 +65,11 @@
       "Bash(grep -r \"className.*p-\" /Users/aurea/LaunchStack/src/app/employer/documents/components/*.tsx)",
       "Bash(pnpm tsc *)",
       "Bash(git stash *)",
+      "Bash(grep -rn *)",
+      "Bash(python3 -c \"import ast; ast.parse\\(open\\('sidecar/app/main.py'\\).read\\(\\)\\); print\\('main.py: OK'\\)\")",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm test *)",
+      "Bash(git grep *)",
       "Bash(git add *)"
     ]
   }

@@ -33,6 +33,10 @@ interface LegalDocumentConfigProps {
   serverErrors?: Record<string, string>;
   globalError?: string | null;
   initialData?: Record<string, string>;
+  /** Shown on the back button (e.g. after chat vs from template library). */
+  backButtonLabel?: string;
+  /** Optional note under the title (e.g. after legal assistant). */
+  flowHint?: string;
 }
 
 export function LegalDocumentConfig({
@@ -43,8 +47,17 @@ export function LegalDocumentConfig({
   serverErrors,
   globalError = null,
   initialData,
+  backButtonLabel = "Back to templates",
+  flowHint,
 }: LegalDocumentConfigProps) {
-  const [formData, setFormData] = useState<Record<string, string>>(initialData ?? {});
+  const [formData, setFormData] = useState<Record<string, string>>(() => {
+    if (!initialData) return {};
+    const coerced: Record<string, string> = {};
+    for (const [k, v] of Object.entries(initialData)) {
+      coerced[k] = String(v);
+    }
+    return coerced;
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -104,7 +117,7 @@ export function LegalDocumentConfig({
   const validate = (): { valid: boolean; firstInvalidField?: string } => {
     const newErrors: Record<string, string> = {};
     for (const field of template.fields) {
-      const val = formData[field.key] ?? "";
+      const val = String(formData[field.key] ?? "");
       if (field.required && val.trim() === "") {
         newErrors[field.key] = `${field.label} is required`;
       }
@@ -296,7 +309,7 @@ export function LegalDocumentConfig({
             className="mb-4 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Templates
+            {backButtonLabel}
           </Button>
 
           <div className="flex items-center gap-3 mb-2">
@@ -310,6 +323,11 @@ export function LegalDocumentConfig({
               <p className="text-sm text-muted-foreground">
                 {template.description}
               </p>
+              {flowHint ? (
+                <p className="text-sm text-blue-700 dark:text-blue-300 mt-2">
+                  {flowHint}
+                </p>
+              ) : null}
             </div>
           </div>
         </div>

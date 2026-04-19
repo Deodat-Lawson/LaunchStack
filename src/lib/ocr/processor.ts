@@ -9,7 +9,13 @@ import { renderPagesToImages } from "~/lib/ocr/complexity";
 import { enrichPageWithVlm } from "~/lib/ocr/enrichment";
 import { createAzureAdapter, createLandingAIAdapter, createDatalabAdapter } from "~/lib/ocr/adapters";
 import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "~/lib/ocr/chunker";
-import { generateEmbeddings } from "~/lib/ai/embeddings";
+import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+import {
+  isLegacyEmbeddingIndex,
+  supportsShortVectorSearch,
+  type EmbeddingIndexConfig,
+} from "~/lib/ai/embedding-index-registry";
+import { storeDimensionTableEmbeddings } from "~/lib/ai/dimension-table-store";
 import { db } from "~/server/db";
 import {
   documentContextChunks,
@@ -345,7 +351,10 @@ export async function chunkPages(pages: PageContent[], filename?: string): Promi
 /**
  * Generate embeddings for document chunks
  */
-export async function vectorizeChunks(chunks: DocumentChunk[]): Promise<VectorizedChunk[]> {
+export async function vectorizeChunks(
+  chunks: DocumentChunk[],
+  embeddingIndex: EmbeddingIndexConfig,
+): Promise<VectorizedChunk[]> {
   if (chunks.length === 0) {
     console.log("[Vectorize] No chunks to vectorize, returning empty");
     return [];
@@ -356,13 +365,15 @@ export async function vectorizeChunks(chunks: DocumentChunk[]): Promise<Vectoriz
   console.log(`[Vectorize] Flattened to ${contentStrings.length} Child/Table chunks for embedding, total chars=${contentStrings.reduce((s, c) => s + c.length, 0)}`);
 
   const embedStart = Date.now();
-  const embeddingResult = await generateEmbeddings(contentStrings, {
-    model: "text-embedding-3-large",
-    dimensions: 1536,
-  });
-  console.log(`[Vectorize] Embeddings generated: ${embeddingResult.embeddings.length} vectors (${Date.now() - embedStart}ms)`);
+  const embeddings = createEmbeddingModel(embeddingIndex);
+  const vectors = await embeddings.embedDocuments?.(contentStrings)
+    ?? await Promise.all(contentStrings.map((text) => embeddings.embedQuery(text)));
+  console.log(`[Vectorize] Embeddings generated: ${vectors.length} vectors (${Date.now() - embedStart}ms)`);
 
-  const merged = mergeWithEmbeddings(chunks, embeddingResult.embeddings);
+  const merged = mergeWithEmbeddings(chunks, vectors, {
+    shortDimension: embeddingIndex.shortDimension,
+    supportsMatryoshka: supportsShortVectorSearch(embeddingIndex),
+  });
   console.log(`[Vectorize] Merged back into ${merged.length} Parent chunks`);
   return merged;
 }
@@ -450,6 +461,7 @@ export async function storeBatch(
   documentId: number,
   rootStructureId: number,
   vectorizedChunks: VectorizedChunk[],
+  embeddingIndex: EmbeddingIndexConfig,
   versionId?: number,
 ): Promise<StoredSection[]> {
   if (vectorizedChunks.length === 0) return [];
@@ -458,7 +470,7 @@ export async function storeBatch(
     versionId !== undefined ? BigInt(versionId) : null;
 
   return withDbRetry(async () => {
-    return db.transaction(async (tx) => {
+    const result = await db.transaction(async (tx) => {
       const parentValues = vectorizedChunks.map((chunk) => {
         const semanticType: "tabular" | "narrative" = chunk.metadata.isTable
           ? "tabular"
@@ -471,7 +483,9 @@ export async function storeBatch(
           tokenCount: Math.ceil(chunk.content.length / 4),
           charCount: chunk.content.length,
           embedding:
-            chunk.vector && chunk.vector.length > 0
+            isLegacyEmbeddingIndex(embeddingIndex) &&
+            chunk.vector &&
+            chunk.vector.length > 0
               ? sql`${JSON.stringify(chunk.vector)}::vector(1536)`
               : null,
           pageNumber: chunk.metadata.pageNumber,
@@ -499,9 +513,10 @@ export async function storeBatch(
         versionId: bigint | null;
         content: string;
         tokenCount: number;
-        embedding: ReturnType<typeof sql>;
+        embedding: ReturnType<typeof sql> | null;
         embeddingShort: ReturnType<typeof sql> | null;
       }> = [];
+      const dimensionTableVectors: number[][] = [];
 
       for (let i = 0; i < vectorizedChunks.length; i++) {
         const chunk = vectorizedChunks[i]!;
@@ -515,23 +530,48 @@ export async function storeBatch(
             versionId: versionBigInt,
             content: child.content,
             tokenCount: Math.ceil(child.content.length / 4),
-            embedding: sql`${JSON.stringify(child.vector)}::vector(1536)`,
-            embeddingShort: child.vectorShort
+            embedding: isLegacyEmbeddingIndex(embeddingIndex)
+              ? sql`${JSON.stringify(child.vector)}::vector(1536)`
+              : null,
+            embeddingShort: isLegacyEmbeddingIndex(embeddingIndex) && child.vectorShort
               ? sql`${JSON.stringify(child.vectorShort)}::vector(512)`
               : null,
           });
+          if (!isLegacyEmbeddingIndex(embeddingIndex)) {
+            dimensionTableVectors.push(child.vector);
+          }
         }
       }
 
       const CHILD_BATCH_SIZE = 50;
+      const insertedDimensionTableChunkIds: number[] = [];
       for (let i = 0; i < childValues.length; i += CHILD_BATCH_SIZE) {
-        await tx
+        const insertedRows = await tx
           .insert(documentRetrievalChunks)
-          .values(childValues.slice(i, i + CHILD_BATCH_SIZE));
+          .values(childValues.slice(i, i + CHILD_BATCH_SIZE))
+          .returning({ id: documentRetrievalChunks.id });
+        if (!isLegacyEmbeddingIndex(embeddingIndex)) {
+          insertedDimensionTableChunkIds.push(...insertedRows.map((row) => row.id));
+        }
       }
 
-      return storedSections;
+      return {
+        storedSections,
+        insertedDimensionTableChunkIds,
+        dimensionTableVectors,
+      };
     });
+
+    if (!isLegacyEmbeddingIndex(embeddingIndex) && result.dimensionTableVectors.length > 0) {
+      await storeDimensionTableEmbeddings({
+        documentId,
+        retrievalChunkIds: result.insertedDimensionTableChunkIds,
+        vectors: result.dimensionTableVectors,
+        index: embeddingIndex,
+      });
+    }
+
+    return result.storedSections;
   });
 }
 
@@ -550,6 +590,7 @@ export async function finalizeStorage(
     provider: string;
     processingTimeMs: number;
     confidenceScore?: number;
+    embeddingIndexKey?: string;
   },
   pipelineStartTime: number,
   versionId?: number,
@@ -579,6 +620,7 @@ export async function finalizeStorage(
       totalPages: meta.totalPages,
       totalChunks,
       processingTimeMs: meta.processingTimeMs,
+      embeddingIndexKey: meta.embeddingIndexKey,
       processedAt: new Date().toISOString(),
     };
 

@@ -27,7 +27,7 @@ import {
 
 // ProspectResult is the shape of each scored business lead (name, address,
 // relevanceScore 0-100, rationale, etc.). We store an array of them as JSONB.
-import type { ProspectResult } from "~/lib/tools/client-prospector/types";
+import type { ProspectResult } from "../../../lib/tools/client-prospector/types";
 
 // company is the parent table — every job belongs to a company.
 import { company } from "./base";

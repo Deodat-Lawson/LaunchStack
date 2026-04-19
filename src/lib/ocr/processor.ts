@@ -392,26 +392,24 @@ export interface StoredSection {
 
 /**
  * Verify that the target document exists before inserting chunks.
- * Retries once after 2s to handle replication lag.
+ * Retries up to 3 times with exponential backoff to handle replication lag.
  */
 export async function ensureDocumentExists(documentId: number): Promise<void> {
-  let [existingDoc] = await db
-    .select({ id: documentTable.id })
-    .from(documentTable)
-    .where(eq(documentTable.id, documentId));
-  if (!existingDoc) {
-    await new Promise((r) => setTimeout(r, 2000));
-    [existingDoc] = await db
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const [existingDoc] = await db
       .select({ id: documentTable.id })
       .from(documentTable)
       .where(eq(documentTable.id, documentId));
+    if (existingDoc) return;
+    if (attempt < maxAttempts) {
+      await new Promise((r) => setTimeout(r, attempt * 500));
+    }
   }
-  if (!existingDoc) {
-    throw new Error(
-      `Document ${documentId} does not exist. Cannot store chunks. ` +
-      `The document may have been deleted before the job completed.`
-    );
-  }
+  throw new Error(
+    `Document ${documentId} does not exist. Cannot store chunks. ` +
+    `The document may have been deleted before the job completed.`
+  );
 }
 
 /**

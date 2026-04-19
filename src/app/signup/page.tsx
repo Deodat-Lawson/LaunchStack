@@ -442,7 +442,7 @@ const SignupPage: React.FC = () => {
                 </div>
 
                 <h2 className={styles.brandTitle}>
-                    Professional Document Reader AI
+                    AI-Powered Document Intelligence
                 </h2>
                 <p className={styles.brandDescription}>
                     Transform how your team analyzes and interprets professional documents with cutting-edge AI technology.

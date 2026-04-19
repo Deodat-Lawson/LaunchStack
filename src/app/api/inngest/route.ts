@@ -15,6 +15,7 @@ import { clientProspectorJob } from "~/server/inngest/functions/clientProspector
 import { extractCompanyMetadataJob } from "~/server/inngest/functions/extractCompanyMetadata";
 import { predictiveAnalysisJob } from "~/server/inngest/functions/predictiveAnalysis";
 import { reindexCompanyEmbeddingsJob } from "~/server/inngest/functions/reindexCompanyEmbeddings";
+import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 
 // Register all Inngest functions
 const handler = serve({
@@ -26,6 +27,7 @@ const handler = serve({
     extractCompanyMetadataJob,
     predictiveAnalysisJob,
     reindexCompanyEmbeddingsJob,
+    modifyDocument,
   ],
 });
 

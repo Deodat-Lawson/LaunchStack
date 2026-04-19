@@ -100,7 +100,7 @@ export async function GET() {
         (process.env.NEXT_PUBLIC_STORAGE_PROVIDER as "cloud" | "local") ??
         "cloud",
       ...(process.env.NEXT_PUBLIC_STORAGE_PROVIDER === "local" && process.env.NEXT_PUBLIC_S3_ENDPOINT
-        ? { s3Endpoint: process.env.NEXT_PUBLIC_S3_ENDPOINT }
+        ? { s3Endpoint: process.env.S3_PUBLIC_ENDPOINT || process.env.NEXT_PUBLIC_S3_ENDPOINT }
         : {}),
     };
 

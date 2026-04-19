@@ -1,6 +1,7 @@
 import { EventSchemas, Inngest } from "inngest";
 import type { ProcessDocumentEventData } from "~/lib/ocr/types";
 import type { TrendSearchEventData } from "~/lib/tools/trend-search/types";
+import type { DocumentEdit, ReviewAction } from "~/lib/adeu/types";
 import type { ProspectorEventData } from "~/lib/tools/client-prospector/types";
 
 export type ProcessDocumentEvent = {
@@ -43,13 +44,25 @@ export type ReindexCompanyEmbeddingsEvent = {
   };
 };
 
+export type DocumentModifyEvent = {
+  name: "document/modify.requested";
+  data: {
+    documentId: number;
+    documentUrl: string;
+    authorName: string;
+    edits?: DocumentEdit[];
+    actions?: ReviewAction[];
+  };
+};
+
 export type Events =
   | ProcessDocumentEvent
   | TrendSearchEvent
   | ClientProspectorEvent
   | CompanyMetadataExtractEvent
   | PredictiveAnalysisEvent
-  | ReindexCompanyEmbeddingsEvent;
+  | ReindexCompanyEmbeddingsEvent
+  | DocumentModifyEvent;
 
 /**
  * Create the Inngest client.

@@ -279,7 +279,7 @@ export async function POST(request: Request) {
             { 
                 success: false, 
                 message: "Failed to generate outline",
-                error: error instanceof Error ? error.message : "Unknown error"
+                error: "Failed to generate outline"
             },
             { status: 500 }
         );

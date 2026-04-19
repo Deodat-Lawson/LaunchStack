@@ -11,8 +11,6 @@ interface PlayTextToSpeechParams {
   setIsLoadingAudio: Dispatch<SetStateAction<boolean>>;
   setIsPlayingAudio: Dispatch<SetStateAction<boolean>>;
   setError: Dispatch<SetStateAction<string | null>>;
-  continuousListening: boolean;
-  vad: { isRunning: boolean; start: () => Promise<void>; resume: () => void };
   isProcessingRef: MutableRefObject<boolean>;
   ttsStartedAtRef: MutableRefObject<number>;
 }
@@ -36,8 +34,6 @@ export async function playTextToSpeech({
   setIsLoadingAudio,
   setIsPlayingAudio,
   setError,
-  continuousListening,
-  vad,
   isProcessingRef,
   ttsStartedAtRef,
 }: PlayTextToSpeechParams) {
@@ -83,19 +79,6 @@ export async function playTextToSpeech({
         URL.revokeObjectURL(urlToRevoke);
         audioRef.current = null;
         isGeneratingTTSRef.current = false;
-
-        if (continuousListening) {
-          setTimeout(() => {
-            if (!isProcessingRef.current) {
-              if (vad.isRunning) {
-                vad.resume();
-                setCallState("listening");
-              } else {
-                void vad.start();
-              }
-            }
-          }, 300);
-        }
       };
       audio.onerror = () => {
         setIsPlayingAudio(false);

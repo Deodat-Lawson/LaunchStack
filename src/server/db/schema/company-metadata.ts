@@ -26,8 +26,8 @@ import type {
     CompanyMetadataJSON,
     MetadataDiff,
     ChangeType,
-} from "~/lib/tools/company-metadata/types";
-import { CHANGE_TYPE_VALUES } from "~/lib/tools/company-metadata/types";
+} from "../../../lib/tools/company-metadata/types";
+import { CHANGE_TYPE_VALUES } from "../../../lib/tools/company-metadata/types";
 
 // ============================================================================
 // Company Metadata (canonical current state — one row per company)

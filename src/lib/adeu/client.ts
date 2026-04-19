@@ -36,6 +36,22 @@ export function getBaseUrl(): string {
     return url;
 }
 
+const ADEU_TIMEOUT_MS = Number(process.env.ADEU_TIMEOUT_MS) || 30_000;
+
+function getAuthHeaders(): Record<string, string> {
+    return { "X-API-Key": process.env.SIDECAR_API_KEY ?? "" };
+}
+
+async function fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), ADEU_TIMEOUT_MS);
+    try {
+        return await fetch(url, { ...options, signal: controller.signal });
+    } finally {
+        clearTimeout(timeoutId);
+    }
+}
+
 export interface ProcessBatchResponse {
     summary: BatchSummary;
     file: Blob;
@@ -72,7 +88,7 @@ export async function readDocx(
 
     let res: Response;
     try {
-        res = await fetch(`${baseUrl}/adeu/read`, { method: "POST", body: form });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/read`, { method: "POST", body: form, headers: getAuthHeaders() });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }
@@ -92,7 +108,7 @@ export async function processDocumentBatch(
 
     let res: Response;
     try {
-        res = await fetch(`${baseUrl}/adeu/process-batch`, { method: "POST", body: form });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/process-batch`, { method: "POST", body: form, headers: getAuthHeaders() });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }
@@ -101,9 +117,14 @@ export async function processDocumentBatch(
 
     // The sidecar returns the modified DOCX binary with a X-Batch-Summary JSON header
     const summaryHeader = res.headers.get("x-batch-summary");
-    const summary: BatchSummary = summaryHeader
-        ? JSON.parse(summaryHeader)
-        : { applied_edits: 0, skipped_edits: 0, applied_actions: 0, skipped_actions: 0 };
+    let summary: BatchSummary = { applied_edits: 0, skipped_edits: 0, applied_actions: 0, skipped_actions: 0 };
+    if (summaryHeader) {
+        try {
+            summary = JSON.parse(summaryHeader);
+        } catch {
+            console.warn("[adeu/client] Failed to parse x-batch-summary header, using default");
+        }
+    }
     const blob = await res.blob();
 
     return { summary, file: blob };
@@ -116,7 +137,7 @@ export async function acceptAllChanges(file: Buffer | Blob): Promise<Blob> {
 
     let res: Response;
     try {
-        res = await fetch(`${baseUrl}/adeu/accept-all`, { method: "POST", body: form });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/accept-all`, { method: "POST", body: form, headers: getAuthHeaders() });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }
@@ -136,7 +157,7 @@ export async function applyEditsAsMarkdown(
 
     let res: Response;
     try {
-        res = await fetch(`${baseUrl}/adeu/apply-edits-markdown`, { method: "POST", body: form });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/apply-edits-markdown`, { method: "POST", body: form, headers: getAuthHeaders() });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }
@@ -160,7 +181,7 @@ export async function diffDocxFiles(
 
     let res: Response;
     try {
-        res = await fetch(`${baseUrl}/adeu/diff`, { method: "POST", body: form });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/diff`, { method: "POST", body: form, headers: getAuthHeaders() });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }

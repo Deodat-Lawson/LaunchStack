@@ -206,7 +206,7 @@ export function DocumentGeneratorHome({ onNewDocument, onOpenDocument, onStartCh
                             className={cn(
                               "w-full rounded-lg border border-blue-200 dark:border-blue-700 bg-background px-3 py-2",
                               "text-sm text-foreground placeholder:text-muted-foreground",
-                              "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              "focus:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring"
                             )}
                           />
                         </div>

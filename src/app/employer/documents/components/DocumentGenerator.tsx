@@ -185,11 +185,6 @@ export function DocumentGenerator() {
     setCurrentView('chat');
   };
 
-  /**
-   * After the chat assistant collects data, always continue to the template field form
-   * so TEMPLATE_REGISTRY validation and required-field UX run before we call legal-generate
-   * and open the document editor.
-   */
   const handleChatProceedToTemplateForm = (
     templateId: string,
     prefilled: Record<string, string>,

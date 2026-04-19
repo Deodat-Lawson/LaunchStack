@@ -116,7 +116,7 @@ function ExpandableFieldList({
                 e.stopPropagation();
                 setExpanded(true);
               }}
-              className="ml-1 text-blue-600 hover:text-blue-700 hover:underline cursor-pointer"
+              className="ml-1 text-primary hover:text-primary/80 hover:underline cursor-pointer"
             >
               +{remaining} more
             </button>
@@ -127,7 +127,7 @@ function ExpandableFieldList({
                 e.stopPropagation();
                 setExpanded(false);
               }}
-              className="ml-1 text-blue-600 hover:text-blue-700 hover:underline cursor-pointer"
+              className="ml-1 text-primary hover:text-primary/80 hover:underline cursor-pointer"
             >
               show less
             </button>
@@ -159,8 +159,8 @@ function TemplateMiniCard({
           onClick={() => onSelect(template.templateId)}
           onTouchStart={() => setExpanded((p) => !p)}
           className={cn(
-            "flex items-start gap-3 p-3 rounded-lg border-2 border-border",
-            "hover:border-blue-500 hover:shadow-md transition-all",
+            "flex items-start gap-3 p-3 rounded-lg border border-border",
+            "hover:border-ring hover:shadow-md transition-all",
             "bg-card text-left w-full cursor-pointer group"
           )}
         >
@@ -233,7 +233,7 @@ function TemplateConfirmCard({
   onPickDifferent: () => void;
 }) {
   return (
-    <Card className="p-3 border-2 border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/20">
+    <Card className="p-4 border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/20">
       <div className="flex items-start gap-3 mb-2">
         <div className="p-1.5 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
           <Scale className="w-4 h-4 text-blue-600" />
@@ -273,7 +273,7 @@ function TemplateConfirmCard({
 
 function NoMatchCard({ onStartOver }: { onStartOver: () => void }) {
   return (
-    <Card className="p-4 border-2 border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/20">
+    <Card className="p-4 border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/20">
       <div className="flex items-center gap-2 mb-2">
         <AlertCircle className="w-5 h-5 text-amber-600" />
         <h4 className="font-semibold text-foreground">No exact match found</h4>
@@ -303,7 +303,7 @@ function GenerateActionCard({
 }) {
   const fieldCount = Object.keys(extractedFields).length;
   return (
-    <Card className="p-4 border-2 border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20">
+    <Card className="p-4 border border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20">
       <div className="flex items-center gap-2 mb-2">
         <CheckCircle2 className="w-5 h-5 text-green-600" />
         <h4 className="font-semibold text-foreground">Ready for the field form</h4>
@@ -451,6 +451,11 @@ export function LegalChatbot({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const hasSentInitial = useRef(false);
   const hasShownIntro = useRef(false);
+  const currentResponseRef = useRef<ChatResponse | null>(null);
+
+  useEffect(() => {
+    currentResponseRef.current = currentResponse;
+  }, [currentResponse]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -492,6 +497,18 @@ export function LegalChatbot({
             accumulatedFields,
           }),
         });
+
+        if (!response.ok) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: `Server error (${response.status}). Please try again.`,
+              isError: true,
+            },
+          ]);
+          return;
+        }
 
         const data = (await response.json()) as {
           success: boolean;
@@ -535,10 +552,11 @@ export function LegalChatbot({
               stringified[k] = String(v);
             }
             setAccumulatedFields((prev) => {
+              const prevTemplateId = currentResponseRef.current?.selectedTemplateId;
               if (
                 parsed.selectedTemplateId &&
-                currentResponse?.selectedTemplateId &&
-                parsed.selectedTemplateId !== currentResponse.selectedTemplateId
+                prevTemplateId &&
+                parsed.selectedTemplateId !== prevTemplateId
               ) {
                 const carried = carryOverFields(prev, parsed.selectedTemplateId);
                 return { ...carried, ...stringified };
@@ -578,16 +596,17 @@ export function LegalChatbot({
         setIsLoading(false);
       }
     },
-    [messages, isLoading, currentResponse, accumulatedFields]
+    [messages, isLoading, accumulatedFields]
   );
 
-  // Send initial message if provided
+  // Send initial message if provided (only runs once via ref guard)
   useEffect(() => {
     if (initialMessage && !hasSentInitial.current) {
       hasSentInitial.current = true;
       void sendMessage(initialMessage);
     }
-  }, [initialMessage, sendMessage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- sendMessage changes every render; ref guard prevents double-send
+  }, [initialMessage]);
 
   const handleRetry = (errorIndex: number) => {
     const lastUserMsg = [...messages.slice(0, errorIndex)]
@@ -655,7 +674,6 @@ export function LegalChatbot({
       void sendMessage(input);
     }
   };
-
 
   const handleContinueToTemplateForm = () => {
     if (!currentResponse?.selectedTemplateId) return;
@@ -753,7 +771,7 @@ export function LegalChatbot({
                       onClick={() => void sendMessage(suggestion)}
                       className={cn(
                         "px-3 py-1.5 rounded-full text-sm border border-border",
-                        "text-muted-foreground hover:text-foreground hover:border-blue-500",
+                        "text-muted-foreground hover:text-foreground hover:border-ring",
                         "transition-colors cursor-pointer"
                       )}
                     >
@@ -917,7 +935,7 @@ export function LegalChatbot({
                   className={cn(
                     "w-full resize-none rounded-xl border border-border bg-background px-4 py-3 pr-12",
                     "text-sm text-foreground placeholder:text-muted-foreground",
-                    "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                    "focus:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring",
                     "max-h-32 disabled:opacity-50"
                   )}
                   style={{
@@ -946,7 +964,7 @@ export function LegalChatbot({
 
       {/* Fields Sidebar */}
       {showSidebar && activeTemplateId && (
-        <div className="w-72 border-l border-border bg-background flex-shrink-0 flex flex-col overflow-hidden">
+        <div className="hidden md:flex w-72 border-l border-border bg-background flex-shrink-0 flex-col overflow-hidden">
           <FieldsSidebar
             templateId={activeTemplateId}
             accumulatedFields={accumulatedFields}

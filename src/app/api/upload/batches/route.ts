@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     } catch (error) {
       console.error("[UploadBatches] Failed to create batch", error);
       return NextResponse.json(
-        { error: "Failed to create upload batch", details: error instanceof Error ? error.message : "Unknown error" },
+        { error: "Failed to create upload batch" },
         { status: 500 }
       );
     }

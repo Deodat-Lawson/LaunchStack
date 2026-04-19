@@ -59,7 +59,15 @@ ADEU_VER=$(echo "$HEALTH" | python3 -c "import sys,json; print(json.load(sys.std
 
 assert_eq "health status is ok" "ok" "$STATUS"
 assert_eq "adeu available is True" "True" "$ADEU_AVAIL"
-assert_eq "adeu version is 0.9.0" "0.9.0" "$ADEU_VER"
+
+# Read expected adeu version dynamically from requirements.txt
+EXPECTED_ADEU_VER=$(grep -E '^adeu==' "$(dirname "$0")/../sidecar/requirements.txt" | head -1 | cut -d'=' -f3)
+if [ -z "$EXPECTED_ADEU_VER" ]; then
+  red "Could not determine expected adeu version from sidecar/requirements.txt"
+  FAIL=$((FAIL + 1))
+else
+  assert_eq "adeu version matches requirements.txt ($EXPECTED_ADEU_VER)" "$EXPECTED_ADEU_VER" "$ADEU_VER"
+fi
 
 # ── Create a test DOCX ────────────────────────────────────────────────────
 TMPDIR=$(mktemp -d)

@@ -48,23 +48,6 @@ function buildFieldList(templateId: string): string {
     .join("\n");
 }
 
-function buildFieldLabelsPreview(templateId: string): string {
-  const template = TEMPLATE_REGISTRY[templateId];
-  if (!template) return "";
-  const required = template.fields.filter((f) => f.required);
-  return required.map((f) => f.label).join(", ");
-}
-
-// ─── Shared field keys across templates ────────────────────────────────────────
-
-function getSharedFieldKeys(fromId: string, toId: string): string[] {
-  const fromTemplate = TEMPLATE_REGISTRY[fromId];
-  const toTemplate = TEMPLATE_REGISTRY[toId];
-  if (!fromTemplate || !toTemplate) return [];
-  const toKeys = new Set(toTemplate.fields.map((f) => f.key));
-  return fromTemplate.fields.filter((f) => toKeys.has(f.key)).map((f) => f.key);
-}
-
 // ─── Company metadata helper ───────────────────────────────────────────────────
 
 function extractCompanyDefaults(
@@ -234,22 +217,35 @@ export async function POST(request: Request) {
       }
     }
 
-    // Inject client-side accumulated fields so the LLM knows what's already collected
-    const clientFields = parsed.data.accumulatedFields;
-    let accumulatedContext = "";
-    if (clientFields && Object.keys(clientFields).length > 0) {
-      accumulatedContext = `\n\nALREADY COLLECTED FIELDS (do NOT ask for these again, include them in extractedFields):\n${JSON.stringify(clientFields, null, 2)}`;
-    }
-
     // Build LangChain messages with proper role mapping
     const langchainMessages = [
-      new SystemMessage(systemPrompt + fieldContext + accumulatedContext),
+      new SystemMessage(systemPrompt + fieldContext),
       ...parsed.data.messages.map((m) =>
         m.role === "user"
           ? new HumanMessage(m.content)
           : new AIMessage(m.content)
       ),
     ];
+
+    // Inject accumulated fields as a separate system-context message after conversation
+    // (kept out of the main system prompt to limit prompt-injection surface from client data)
+    const clientFields = parsed.data.accumulatedFields;
+    if (clientFields && Object.keys(clientFields).length > 0) {
+      // Sanitize: only keep string key/value pairs, strip control characters
+      const sanitized: Record<string, string> = {};
+      for (const [key, value] of Object.entries(clientFields)) {
+        if (typeof key === "string" && typeof value === "string") {
+          sanitized[key.slice(0, 100)] = value.slice(0, 1000);
+        }
+      }
+      if (Object.keys(sanitized).length > 0) {
+        langchainMessages.push(
+          new HumanMessage(
+            `[SYSTEM CONTEXT] Already collected field values (include these in extractedFields, do NOT ask for them again):\n${JSON.stringify(sanitized)}`
+          )
+        );
+      }
+    }
 
     const chat = getChatModel("gpt-4o");
     const response = await chat.invoke(langchainMessages);

@@ -65,8 +65,10 @@ function toBlob(input: Buffer | Blob): Blob {
 async function handleErrorResponse(res: Response): Promise<never> {
     let detail: string;
     try {
-        const body = await res.json();
-        detail = body.detail ?? JSON.stringify(body);
+        const body = (await res.json()) as { detail?: string; errors?: string[] };
+        const base = body.detail ?? "Unknown error";
+        const errors = body.errors;
+        detail = errors?.length ? `${base}: ${errors.join("; ")}` : base;
     } catch {
         detail = await res.text().catch(() => `HTTP ${res.status}`);
     }

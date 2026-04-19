@@ -9,7 +9,6 @@ import {
   FileText,
   CheckCircle2,
   ChevronRight,
-  Sparkles,
   RotateCcw,
   RefreshCw,
   AlertCircle,
@@ -60,8 +59,11 @@ interface ChatMessage {
 
 interface LegalChatbotProps {
   onBack: () => void;
-  onGenerate: (templateId: string, data: Record<string, string>) => void;
-  onReviewFields: (templateId: string, prefilled: Record<string, string>) => void;
+  /** Next step: template field form (registry validation) → then document editor. */
+  onContinueToTemplateForm: (
+    templateId: string,
+    prefilled: Record<string, string>,
+  ) => void;
   initialMessage?: string;
 }
 
@@ -293,48 +295,31 @@ function NoMatchCard({ onStartOver }: { onStartOver: () => void }) {
 function GenerateActionCard({
   templateName,
   extractedFields,
-  onGenerate,
-  onReview,
-  isGenerating,
+  onContinue,
 }: {
   templateName: string;
   extractedFields: Record<string, string>;
-  onGenerate: () => void;
-  onReview: () => void;
-  isGenerating: boolean;
+  onContinue: () => void;
 }) {
   const fieldCount = Object.keys(extractedFields).length;
   return (
     <Card className="p-4 border border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20">
       <div className="flex items-center gap-2 mb-2">
         <CheckCircle2 className="w-5 h-5 text-green-600" />
-        <h4 className="font-semibold text-foreground">Ready to generate</h4>
+        <h4 className="font-semibold text-foreground">Ready for the field form</h4>
       </div>
       <p className="text-sm text-muted-foreground mb-3">
-        {templateName} &middot; {fieldCount} fields collected
+        {templateName} &middot; {fieldCount} fields collected from chat. Next,
+        confirm and complete fields on the template form (required checks), then
+        your document opens for editing.
       </p>
-      <div className="flex gap-2 flex-wrap">
-        <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-          onClick={onGenerate}
-          disabled={isGenerating}
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
-              Generating...
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-4 h-4 mr-1.5" />
-              Generate Document
-            </>
-          )}
-        </Button>
-        <Button variant="outline" onClick={onReview} disabled={isGenerating}>
-          Review & Edit Fields
-        </Button>
-      </div>
+      <Button
+        className="bg-blue-600 hover:bg-blue-700 text-white"
+        onClick={onContinue}
+      >
+        <ChevronRight className="w-4 h-4 mr-1.5" />
+        Continue to template fields
+      </Button>
     </Card>
   );
 }
@@ -451,14 +436,12 @@ function FieldsSidebar({
 
 export function LegalChatbot({
   onBack,
-  onGenerate,
-  onReviewFields,
+  onContinueToTemplateForm,
   initialMessage,
 }: LegalChatbotProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [pendingConfirm, setPendingConfirm] = useState<RecommendedTemplate | null>(null);
   const [currentResponse, setCurrentResponse] = useState<ChatResponse | null>(null);
   const [accumulatedFields, setAccumulatedFields] = useState<Record<string, string>>({});
@@ -561,8 +544,13 @@ export function LegalChatbot({
           setMessages((prev) => [...prev, assistantMessage]);
           setCurrentResponse(parsed);
 
-          // Update accumulated fields
+          // Update accumulated fields (coerce all values to strings — the LLM
+          // may return numbers for numeric fields which would break the Zod schema)
           if (parsed.extractedFields && Object.keys(parsed.extractedFields).length > 0) {
+            const stringified: Record<string, string> = {};
+            for (const [k, v] of Object.entries(parsed.extractedFields)) {
+              stringified[k] = String(v);
+            }
             setAccumulatedFields((prev) => {
               const prevTemplateId = currentResponseRef.current?.selectedTemplateId;
               if (
@@ -571,9 +559,9 @@ export function LegalChatbot({
                 parsed.selectedTemplateId !== prevTemplateId
               ) {
                 const carried = carryOverFields(prev, parsed.selectedTemplateId);
-                return { ...carried, ...parsed.extractedFields };
+                return { ...carried, ...stringified };
               }
-              return { ...prev, ...parsed.extractedFields };
+              return { ...prev, ...stringified };
             });
           }
 
@@ -675,7 +663,6 @@ export function LegalChatbot({
     setCurrentResponse(null);
     setAccumulatedFields({});
     setConfirmedTemplateId(null);
-    setIsGenerating(false);
     setSidebarOpen(false);
     hasSentInitial.current = false;
     hasShownIntro.current = false;
@@ -688,21 +675,10 @@ export function LegalChatbot({
     }
   };
 
-  const handleGenerate = () => {
-    if (!currentResponse?.selectedTemplateId) return;
-    setIsGenerating(true);
-    try {
-      const finalFields = { ...accumulatedFields, ...currentResponse.extractedFields };
-      onGenerate(currentResponse.selectedTemplateId, finalFields);
-    } catch {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleReview = () => {
+  const handleContinueToTemplateForm = () => {
     if (!currentResponse?.selectedTemplateId) return;
     const finalFields = { ...accumulatedFields, ...currentResponse.extractedFields };
-    onReviewFields(currentResponse.selectedTemplateId, finalFields);
+    onContinueToTemplateForm(currentResponse.selectedTemplateId, finalFields);
   };
 
   const lastAssistantMsg = [...messages].reverse().find((m) => m.role === "assistant" && m.parsed);
@@ -884,9 +860,7 @@ export function LegalChatbot({
                           msg.parsed.selectedTemplateId
                         }
                         extractedFields={msg.parsed.extractedFields}
-                        onGenerate={handleGenerate}
-                        onReview={handleReview}
-                        isGenerating={isGenerating}
+                        onContinue={handleContinueToTemplateForm}
                       />
                     )}
                 </div>
@@ -958,7 +932,6 @@ export function LegalChatbot({
                   onKeyDown={handleKeyDown}
                   placeholder="Describe what you need..."
                   rows={1}
-                  disabled={isGenerating}
                   className={cn(
                     "w-full resize-none rounded-xl border border-border bg-background px-4 py-3 pr-12",
                     "text-sm text-foreground placeholder:text-muted-foreground",
@@ -980,7 +953,7 @@ export function LegalChatbot({
                 size="icon"
                 className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 w-11 shrink-0"
                 onClick={() => void sendMessage(input)}
-                disabled={!input.trim() || isLoading || isGenerating}
+                disabled={!input.trim() || isLoading}
               >
                 <Send className="w-4 h-4" />
               </Button>

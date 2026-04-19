@@ -6,7 +6,7 @@ import {
   shouldTranscribeFile,
   transcribeAudioFromUrl,
 } from "~/lib/audio/transcription";
-import { putFile } from "~/server/storage/vercel-blob";
+import { uploadFile } from "~/lib/storage";
 
 export type StorageType = "cloud" | "database" | "local";
 
@@ -140,10 +140,11 @@ export async function processDocumentUpload({
         originalFilename || documentName
       );
 
-      const textBlob = await putFile({
+      const textBlob = await uploadFile({
         filename: `${documentName}-transcription.txt`,
         data: Buffer.from(transcriptionResult.text, "utf-8"),
         contentType: "text/plain",
+        userId: user.userId,
       });
 
       const transcriptionMetadata = {

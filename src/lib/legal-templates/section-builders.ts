@@ -12,7 +12,7 @@ type SectionBuilder = (data: Record<string, string>) => EditorSection[];
 
 function m(data: Record<string, string>, key: string): string {
   const val = data[key] || `[${key}]`;
-  return `<mark>${val}</mark>`;
+  return `<mark data-field-key="${key}">${val}</mark>`;
 }
 
 const SECTION_BUILDERS: Record<string, SectionBuilder> = {

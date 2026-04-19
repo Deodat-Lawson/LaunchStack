@@ -111,7 +111,7 @@ export function DocumentGeneratorEditor({
   // Core state
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
-  const [citations, setCitations] = useState<Citation[]>(initialCitations);
+  const [citations, setCitations] = useState<Citation[]>(initialCitations ?? []);
   const [outline, setOutline] = useState<OutlineItem[]>([]);
   
   // UI state

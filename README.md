@@ -239,51 +239,58 @@ pnpm run dev
 
 Open `http://localhost:3000`.
 
-## Docker Deployment Methods
+## Docker Deployment
 
-### Method 1: Full stack (recommended)
-
-Runs `db` + `migrate` + `app` via Compose:
+`make up` spins up the entire stack behind a Caddy reverse proxy — no external cloud dependencies beyond API keys. Works for both local development and production.
 
 ```bash
-docker compose --env-file .env --profile dev up
+make up         # start everything (foreground)
+make up-prod    # start everything (detached, for servers)
+make down       # stop containers
+make down-clean # stop + wipe volumes (fresh DB)
+make logs       # tail all container logs
 ```
 
-Detached mode:
+### Local vs production
 
-```bash
-docker compose --env-file .env --profile dev up -d
+Set `DOMAIN` in your `.env`:
+
+| Environment | `.env` setting | What happens |
+|---|---|---|
+| Local dev | `DOMAIN=localhost` (default) | HTTPS with self-signed cert |
+| Production | `DOMAIN=yourdomain.com` | HTTPS with auto-provisioned Let's Encrypt cert |
+
+All routes go through one domain — no port numbers to remember:
+
+| URL | What it serves |
+|-----|---------------|
+| `https://yourdomain.com/` | Application |
+| `https://yourdomain.com/s3/...` | File uploads/downloads (SeaweedFS) |
+| `https://yourdomain.com/inngest/` | Background job dashboard |
+
+### Services
+
+| Container | Image | Role |
+|-----------|-------|------|
+| `caddy` | `caddy:2-alpine` | Reverse proxy, auto-HTTPS, only exposed service (ports 80/443) |
+| `db` | `pgvector/pgvector:pg16` | PostgreSQL with vector extension |
+| `migrate` | Dockerfile | Pushes Drizzle schema on startup, then exits |
+| `seaweedfs` | `chrislusf/seaweedfs` | S3-compatible file storage |
+| `app` | Dockerfile | Production Next.js standalone server |
+| `inngest-dev` | `inngest/inngest` | Background job processing + dashboard |
+
+### Production checklist
+
+Override defaults in `.env` before deploying:
+
+```env
+DOMAIN=yourdomain.com
+POSTGRES_PASSWORD=<strong-password>
+S3_ACCESS_KEY=<strong-random-key>
+S3_SECRET_KEY=<strong-random-secret>
 ```
 
-### Method 2: App container only (external DB)
-
-Use this when your database is managed externally.
-
-```bash
-docker build -t pdr-ai-app .
-docker run --rm -p 3000:3000 \
-  -e DATABASE_URL="$DATABASE_URL" \
-  -e CLERK_SECRET_KEY="$CLERK_SECRET_KEY" \
-  -e NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" \
-  -e OPENAI_API_KEY="$OPENAI_API_KEY" \
-  pdr-ai-app
-```
-
-### Method 3: DB container only (host app)
-
-```bash
-docker compose --env-file .env up -d db
-pnpm dev
-```
-
-For host DB tools, use `localhost:5433`.
-
-## How Docker Supports Platform Features
-
-- `app` service runs auth, upload, OCR integration, RAG chat, and predictive analysis.
-- `db` service provides pgvector-backed storage/retrieval for embeddings.
-- `migrate` service ensures schema readiness before app startup.
-- Optional providers (Inngest, Tavily, OCR, LangSmith) are enabled by env vars in the same runtime.
+Ensure ports 80 and 443 are open on your server. Caddy handles everything else — TLS provisioning, HTTP→HTTPS redirect, certificate renewal.
 
 ## Documentation
 

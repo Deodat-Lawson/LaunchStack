@@ -85,7 +85,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
   } catch (error) {
     console.error("Error serving document content:", error);
     return NextResponse.json(
-      { error: "Failed to serve document", details: error instanceof Error ? error.message : "Unknown error" },
+      { error: "Failed to serve document" },
       { status: 500 },
     );
   }

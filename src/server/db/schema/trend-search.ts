@@ -9,7 +9,7 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
-import type { SearchCategory, SearchResult } from "~/lib/tools/trend-search/types";
+import type { SearchCategory, SearchResult } from "../../../lib/tools/trend-search/types";
 import { company } from "./base";
 import { pgTable } from "./helpers";
 

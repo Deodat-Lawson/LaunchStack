@@ -72,6 +72,7 @@ export function ChartsSection({ data }: ChartsSectionProps) {
                             axisLine={false}
                             tick={{ fontSize: 10 }}
                             width={30}
+                            allowDecimals={false}
                         />
                         <ChartTooltip
                             content={

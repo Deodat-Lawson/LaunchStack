@@ -1,20 +1,17 @@
-# Pass env file as argument: docker compose --env-file .env up
+# Usage:
+#   make up         — spin up everything
+#   make down       — stop containers
+#   make down-clean — stop + wipe volumes (fresh DB)
+#   make logs       — tail all container logs
 #
-# Profiles:
-#   default (no flag)        — db + migrate + app
-#   --profile dev            — adds Inngest dev server (local dashboard at :8288)
-#   --profile minimal        — db only (for local Next.js dev with `pnpm dev`)
-#   --profile local-storage  — adds SeaweedFS S3-compatible storage (gateway at :8333)
-#
-# Examples:
-#   docker compose --env-file .env up                                          # production-like
-#   docker compose --env-file .env --profile dev up                            # with Inngest dev server
-#   docker compose --env-file .env --profile minimal up db                     # just the database
-#   docker compose --env-file .env --profile local-storage up                  # with SeaweedFS local storage
+# Ports:
+#   3000 — Next.js app
+#   8288 — Inngest dashboard
+#   5433 — PostgreSQL (for local tools like psql/pgAdmin)
 
 x-app-build-args: &app-build-args
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-  OPENAI_API_KEY: ${OPENAI_API_KEY}
+  # OPENAI_API_KEY removed — passed only as runtime env var, never baked into image layers
 
 services:
   db:
@@ -51,6 +48,36 @@ services:
       SKIP_ENV_VALIDATION: "1"
     restart: "no"
 
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
+    container_name: pdr_ai_v2-seaweedfs
+    entrypoint: /etc/seaweedfs/entrypoint.sh
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-pdr_local_secret}
+    volumes:
+      - seaweedfs_data:/data
+      - ./docker/filer.toml:/etc/seaweedfs/filer.toml:ro
+      - ./docker/seaweedfs-entrypoint.sh:/etc/seaweedfs/entrypoint.sh:ro
+  sidecar:
+    build:
+      context: ./sidecar
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-sidecar
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   app:
     build:
       context: .
@@ -63,6 +90,10 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
+      seaweedfs:
+        condition: service_started
+      sidecar:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
       OPENAI_API_KEY: ${OPENAI_API_KEY}
@@ -77,52 +108,33 @@ services:
       AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
       AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
       LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
-      # Anthropic / Google (optional — enables Claude and Gemini models)
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-}
       GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
       GOOGLE_MODEL: ${GOOGLE_MODEL:-}
-      # Ollama (optional — set OLLAMA_BASE_URL to an Ollama instance)
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-}
+      BLOB_READ_WRITE_TOKEN: ${BLOB_READ_WRITE_TOKEN:-}
+      NEXT_PUBLIC_STORAGE_PROVIDER: local
+      NEXT_PUBLIC_S3_ENDPOINT: http://seaweedfs:8333
+      S3_REGION: ${S3_REGION:-us-east-1}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-pdr_local_secret}
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME:-launchstack}
+      # Adeu DOCX redlining service
+      ADEU_SERVICE_URL: http://sidecar:8000
     ports:
       - "3000:3000"
 
-  # Inngest dev server — local dashboard & event processing for development
-  # Start with: docker compose --profile dev up
-  # Dashboard: http://localhost:8288
   inngest-dev:
     image: inngest/inngest:latest
     container_name: pdr_ai_v2-inngest
     restart: unless-stopped
     ports:
-      - "8288:8288"
+      - "${INNGEST_PORT:-8288}:8288"
     command: inngest dev -u http://app:3000/api/inngest
     depends_on:
       - app
-    profiles:
-      - dev
-
-  # SeaweedFS — self-hosted S3-compatible object storage
-  # Start with: docker compose --profile local-storage up
-  # S3 gateway: http://localhost:8333
-  seaweedfs:
-    image: chrislusf/seaweedfs:latest
-    container_name: pdr_ai_v2-seaweedfs
-    command: server -s3 -s3.config=/etc/seaweedfs/s3-config.json -filer -dir=/data -volume.max=0 -master.volumeSizeLimitMB=1024 -volume.port=8080
-    ports:
-      - "8333:8333"
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-    volumes:
-      - seaweedfs_data:/data
-      - ./docker/filer.toml:/etc/seaweedfs/filer.toml:ro
-      - ./docker/s3-config.json:/etc/seaweedfs/s3-config.json:ro
-    profiles:
-      - local-storage
 
 volumes:
   postgres_data:

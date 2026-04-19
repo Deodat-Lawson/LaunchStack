@@ -28,6 +28,7 @@ import {
   Megaphone,
   Archive,
   History,
+  Network,
 } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { Input } from '~/app/employer/documents/components/ui/input';
@@ -40,6 +41,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '~/app/employer/documents/components/ui/dropdown-menu';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~/app/employer/documents/components/ui/tooltip';
 import { ChatSelector } from './ChatSelector';
 import { DISPLAY_TYPE_ICONS } from './DocumentViewer';
 import type { ViewMode, DocumentType, CategoryGroup } from '../types';
@@ -72,6 +74,7 @@ interface SidebarProps {
    * existing document viewer.
    */
   onOpenVersionHistory?: (doc: DocumentType) => void;
+  onGenerateDiagram?: (archiveName: string) => void;
 }
 
 interface NavItem {
@@ -80,6 +83,7 @@ interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
   employerOnly?: boolean;
   badge?: string;
+  description?: string;
 }
 
 interface NavGroup {
@@ -92,26 +96,26 @@ const NAV_GROUPS = (isEmployer: boolean): NavGroup[] => [
   ...(isEmployer ? [{
     label: "Workspace",
     items: [
-      { id: "dashboard" as ViewMode, label: "Home", icon: LayoutDashboard, employerOnly: true },
+      { id: "dashboard" as ViewMode, label: "Home", icon: LayoutDashboard, employerOnly: true, description: "Dashboard overview with document stats and quick actions" },
     ],
   }] : []),
   {
     label: "Knowledge",
     items: [
-      { id: "with-ai-qa" as ViewMode, label: "Ask AI", icon: MessageCircle },
-      { id: "predictive-analysis" as ViewMode, label: "Audit", icon: ShieldCheck },
-      { id: "notes" as ViewMode, label: "Notes", icon: StickyNote },
+      { id: "with-ai-qa" as ViewMode, label: "Ask AI", icon: MessageCircle, description: "Chat with AI about your uploaded documents" },
+      { id: "predictive-analysis" as ViewMode, label: "Audit", icon: ShieldCheck, description: "AI-powered compliance and gap analysis" },
+      { id: "notes" as ViewMode, label: "Notes", icon: StickyNote, description: "Create and manage notes about your documents" },
     ],
   },
   {
     label: "Create",
     items: [
       ...(isEmployer ? [
-        { id: "generator" as ViewMode, label: "Draft", icon: PenTool, employerOnly: true, badge: "Beta" },
+        { id: "generator" as ViewMode, label: "Draft", icon: PenTool, employerOnly: true, badge: "Beta", description: "Generate new documents with AI assistance" },
       ] : []),
-      { id: "rewrite" as ViewMode, label: "Rewrite", icon: PenLine },
+      { id: "rewrite" as ViewMode, label: "Rewrite", icon: PenLine, description: "Improve and edit existing document content" },
       ...(isEmployer ? [
-        { id: "marketing-pipeline" as ViewMode, label: "Marketing", icon: Megaphone, employerOnly: true },
+        { id: "marketing-pipeline" as ViewMode, label: "Marketing", icon: Megaphone, employerOnly: true, description: "Create marketing content from your documents" },
       ] : []),
     ],
   },
@@ -119,10 +123,10 @@ const NAV_GROUPS = (isEmployer: boolean): NavGroup[] => [
     label: "Company",
     employerOnly: true,
     items: [
-      { id: "employees" as ViewMode, label: "Team", icon: Users },
-      { id: "metadata" as ViewMode, label: "Company Profile", icon: Building2 },
-      { id: "analytics" as ViewMode, label: "Analytics", icon: TrendingUp },
-      { id: "settings" as ViewMode, label: "Settings", icon: Settings },
+      { id: "employees" as ViewMode, label: "Team", icon: Users, description: "View and manage employee accounts" },
+      { id: "metadata" as ViewMode, label: "Company Profile", icon: Building2, description: "AI-extracted company intelligence from documents" },
+      { id: "analytics" as ViewMode, label: "Analytics", icon: TrendingUp, description: "Usage statistics and document insights" },
+      { id: "settings" as ViewMode, label: "Settings", icon: Settings, description: "Configure company settings and preferences" },
     ],
   }] : []),
 ];
@@ -151,6 +155,7 @@ export function Sidebar({
   userRole = 'employer',
   totalDocuments = 0,
   onOpenVersionHistory,
+  onGenerateDiagram,
 }: SidebarProps) {
   const isEmployer = userRole === 'employer';
   const showDelete = isEmployer && !!deleteDocument;
@@ -185,6 +190,7 @@ export function Sidebar({
   /* ── COLLAPSED STATE ── */
   if (isCollapsed) {
     return (
+      <TooltipProvider delayDuration={0}>
       <div className="w-full h-full bg-background border-r border-border flex flex-col items-center py-3 overflow-hidden">
         {/* Logo / Expand */}
         <Button
@@ -203,21 +209,27 @@ export function Sidebar({
             <React.Fragment key={group.label}>
               {gi > 0 && <div className="w-8 h-px bg-border mx-auto my-1" />}
               {group.items.map((item) => (
-                <Button
-                  key={item.id}
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setViewMode(item.id)}
-                  className={cn(
-                    "w-full h-10 rounded-xl transition-all duration-200",
-                    viewMode === item.id
-                      ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
-                      : "text-muted-foreground hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                  )}
-                  title={item.label}
-                >
-                  <item.icon className="w-4 h-4" />
-                </Button>
+                <Tooltip key={item.id}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setViewMode(item.id)}
+                      className={cn(
+                        "w-full h-10 rounded-xl transition-all duration-200",
+                        viewMode === item.id
+                          ? "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400"
+                          : "text-muted-foreground hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                      )}
+                    >
+                      <item.icon className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-[200px]">
+                    <p className="font-semibold">{item.label}</p>
+                    {item.description && <p className="text-xs text-muted-foreground">{item.description}</p>}
+                  </TooltipContent>
+                </Tooltip>
               ))}
             </React.Fragment>
           ))}
@@ -231,6 +243,7 @@ export function Sidebar({
           </div>
         </div>
       </div>
+      </TooltipProvider>
     );
   }
 
@@ -289,34 +302,44 @@ export function Sidebar({
           <div className="text-[9px] font-black text-muted-foreground mb-1.5 px-1 tracking-[0.15em] uppercase">
             {group.label}
           </div>
+          <TooltipProvider delayDuration={400}>
           <div className="space-y-0.5">
             {group.items.map((item) => (
-              <Button
-                key={item.id}
-                variant="ghost"
-                className={cn(
-                  "w-full justify-start gap-2.5 h-8 rounded-lg px-2.5 text-xs font-medium transition-all duration-150",
-                  viewMode === item.id
-                    ? "bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              <Tooltip key={item.id}>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      "w-full justify-start gap-2.5 h-8 rounded-lg px-2.5 text-xs font-medium transition-all duration-150",
+                      viewMode === item.id
+                        ? "bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    )}
+                    onClick={() => setViewMode(item.id)}
+                  >
+                    <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {item.badge && (
+                      <span className={cn(
+                        "text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider",
+                        viewMode === item.id
+                          ? "bg-white/20 text-white"
+                          : "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400"
+                      )}>
+                        {item.badge}
+                      </span>
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                {item.description && (
+                  <TooltipContent side="right">
+                    {item.description}
+                  </TooltipContent>
                 )}
-                onClick={() => setViewMode(item.id)}
-              >
-                <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
-                <span className="flex-1 text-left">{item.label}</span>
-                {item.badge && (
-                  <span className={cn(
-                    "text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider",
-                    viewMode === item.id
-                      ? "bg-white/20 text-white"
-                      : "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400"
-                  )}>
-                    {item.badge}
-                  </span>
-                )}
-              </Button>
+              </Tooltip>
             ))}
           </div>
+          </TooltipProvider>
         </div>
       ))}
 
@@ -488,24 +511,38 @@ export function Sidebar({
                       {Object.entries(archiveGroups).map(([archiveName, docs]) => {
                         const isOpen = openArchives.has(archiveName);
                         return (
-                          <div key={`archive-${archiveName}`}>
-                            <button
-                              onClick={() => setOpenArchives(prev => {
-                                const next = new Set(prev);
-                                if (next.has(archiveName)) next.delete(archiveName);
-                                else next.add(archiveName);
-                                return next;
-                              })}
-                              className="w-full flex items-center gap-1.5 px-2 py-1.5 hover:bg-muted/70 rounded-md text-[10px] font-semibold text-muted-foreground transition-all"
-                            >
-                              {isOpen
-                                ? <ChevronDown className="w-2.5 h-2.5 text-purple-500 flex-shrink-0" />
-                                : <ChevronRight className="w-2.5 h-2.5 flex-shrink-0" />
-                              }
-                              <Archive className="w-2.5 h-2.5 flex-shrink-0 text-purple-500" />
-                              <span className="truncate flex-1 text-left">{archiveName}</span>
-                              <span className="font-mono text-[9px] opacity-60">{docs.length}</span>
-                            </button>
+                          <div key={`archive-${archiveName}`} className="group/archive">
+                            <div className="flex items-center">
+                              <button
+                                onClick={() => setOpenArchives(prev => {
+                                  const next = new Set(prev);
+                                  if (next.has(archiveName)) next.delete(archiveName);
+                                  else next.add(archiveName);
+                                  return next;
+                                })}
+                                className="flex-1 flex items-center gap-1.5 px-2 py-1.5 hover:bg-muted/70 rounded-md text-[10px] font-semibold text-muted-foreground transition-all"
+                              >
+                                {isOpen
+                                  ? <ChevronDown className="w-2.5 h-2.5 text-purple-500 flex-shrink-0" />
+                                  : <ChevronRight className="w-2.5 h-2.5 flex-shrink-0" />
+                                }
+                                <Archive className="w-2.5 h-2.5 flex-shrink-0 text-purple-500" />
+                                <span className="truncate flex-1 text-left">{archiveName}</span>
+                                <span className="font-mono text-[9px] opacity-60">{docs.length}</span>
+                              </button>
+                              {isEmployer && onGenerateDiagram && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onGenerateDiagram(archiveName);
+                                  }}
+                                  className="opacity-0 group-hover/archive:opacity-100 flex-shrink-0 p-1 mr-1 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 text-muted-foreground hover:text-purple-600 transition-all"
+                                  title="Generate architecture diagram"
+                                >
+                                  <Network className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
                             {isOpen && (
                               <div className="ml-3 border-l border-purple-200 dark:border-purple-800/40 pl-1 space-y-0.5 animate-in slide-in-from-left-1 duration-150">
                                 {docs.map(renderDocItem)}

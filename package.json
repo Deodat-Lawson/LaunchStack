@@ -19,7 +19,6 @@
     "typecheck": "tsc --noEmit",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "postinstall": "node scripts/copy-vad-assets.mjs",
     "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
@@ -104,6 +103,7 @@
     "lru-cache": "^11.2.6",
     "lucide-react": "^0.487.0",
     "mammoth": "^1.11.0",
+    "mermaid": "^11.12.2",
     "marked": "^17.0.3",
     "motion": "^12.29.2",
     "neo4j-driver": "^6.0.1",

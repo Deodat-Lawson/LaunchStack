@@ -208,7 +208,9 @@
       "Bash(grep -n *)",
       "Bash(grep -A 12 \"src/app/employer/documents/components/Sidebar.tsx$\\\\|src/lib/validation.ts$\")",
       "Bash(SKIP_ENV_VALIDATION=1 pnpm typecheck)",
-      "Bash(grep -B 1 -A 30 \"Sidebar.tsx$\")"
+      "Bash(grep -B 1 -A 30 \"Sidebar.tsx$\")",
+      "Bash(grep -E \"^import \\\\{|  PenLine,|  Upload,\" src/app/employer/documents/components/Sidebar.tsx)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

@@ -3,8 +3,8 @@ import type {
   DocumentChunk,
   ExtractedTable,
   VectorizedChunk,
-} from "./types";
-import { hasMarkdownHeadings, splitByHeadings } from "~/lib/ingestion/heading-chunker";
+} from "@launchstack/core/ocr/types";
+import { hasMarkdownHeadings, splitByHeadings } from "@launchstack/core/ingestion/heading-chunker";
 
 import OpenAI from "openai";
 

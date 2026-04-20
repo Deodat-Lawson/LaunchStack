@@ -7,7 +7,7 @@
 
 import { env } from "~/env";
 import type { JobDispatcher, DispatchResult } from "./types";
-import type { ProcessDocumentEventData } from "~/lib/ocr/types";
+import type { ProcessDocumentEventData } from "@launchstack/core/ocr/types";
 
 export class InngestDispatcher implements JobDispatcher {
   readonly name = "Inngest";

@@ -12,7 +12,7 @@ import type {
   NormalizedDocument,
   PageContent,
   OCRProvider,
-} from "../types";
+} from "@launchstack/core/ocr/types";
 import { fetchFile } from "~/lib/storage";
 
 /** ADE Parse API base URL (use api.va.eu-west-1.landing.ai for EU) */

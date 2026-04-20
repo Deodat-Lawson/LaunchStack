@@ -70,7 +70,7 @@ export class JsonExportAdapter implements SourceAdapter {
     );
 
     const PAGE_CHAR_LIMIT = 4000;
-    const pages: { pageNumber: number; textBlocks: string[]; tables: import("~/lib/ocr/types").ExtractedTable[] }[] = [];
+    const pages: { pageNumber: number; textBlocks: string[]; tables: import("@launchstack/core/ocr/types").ExtractedTable[] }[] = [];
     let cursor = 0;
     let pageNum = 1;
     while (cursor < raw.length) {
@@ -142,7 +142,7 @@ export class JsonExportAdapter implements SourceAdapter {
       return {
         pageNumber: idx + 1,
         textBlocks: [header + lines.join("\n\n")],
-        tables: [] as import("~/lib/ocr/types").ExtractedTable[],
+        tables: [] as import("@launchstack/core/ocr/types").ExtractedTable[],
       };
     });
 

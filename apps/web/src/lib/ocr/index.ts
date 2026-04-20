@@ -4,7 +4,7 @@
  */
 
 // Types
-export * from "./types";
+export * from "@launchstack/core/ocr/types";
 
 // Adapters
 export { createAzureAdapter } from "./adapters/azureAdapter";

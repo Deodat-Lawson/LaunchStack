@@ -35,6 +35,14 @@
     "./graph": {
       "types": "./src/graph/index.ts",
       "default": "./src/graph/index.ts"
+    },
+    "./ocr/types": {
+      "types": "./src/ocr/types.ts",
+      "default": "./src/ocr/types.ts"
+    },
+    "./ingestion/heading-chunker": {
+      "types": "./src/ingestion/heading-chunker.ts",
+      "default": "./src/ingestion/heading-chunker.ts"
     }
   },
   "scripts": {

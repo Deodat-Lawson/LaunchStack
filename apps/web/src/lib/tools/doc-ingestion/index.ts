@@ -25,7 +25,7 @@ import type {
   DocumentChunk,
   PageContent,
   PipelineResult,
-} from "~/lib/ocr/types";
+} from "@launchstack/core/ocr/types";
 import { db } from "~/server/db";
 import { ocrJobs, documentContextChunks } from "@launchstack/core/db/schema";
 import { debitTokens, embeddingTokens, ocrTokens, ocrProviderToTokenKey } from "~/lib/credits";

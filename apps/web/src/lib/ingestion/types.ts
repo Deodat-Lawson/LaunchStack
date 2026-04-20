@@ -2,7 +2,7 @@
  * Unified Document Ingestion Types
  */
 
-import type { PageContent, NormalizedDocument, ExtractedTable } from "~/lib/ocr/types";
+import type { PageContent, NormalizedDocument, ExtractedTable } from "@launchstack/core/ocr/types";
 
 export type SourceType =
   | "pdf"

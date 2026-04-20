@@ -4,7 +4,7 @@ import type {
   StandardizedDocument,
   StandardizedPage,
 } from "../types";
-import type { ExtractedTable } from "~/lib/ocr/types";
+import type { ExtractedTable } from "@launchstack/core/ocr/types";
 
 export class HtmlAdapter implements SourceAdapter {
   readonly name = "HtmlAdapter";

@@ -44,7 +44,7 @@ import type {
   NormalizedDocument,
   VectorizedChunk,
   DocumentChunk,
-} from "~/lib/ocr/types";
+} from "@launchstack/core/ocr/types";
 
 export type { ProcessDocumentEventData, PipelineResult, VectorizedChunk };
 

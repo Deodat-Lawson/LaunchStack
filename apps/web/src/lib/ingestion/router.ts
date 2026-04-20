@@ -12,7 +12,7 @@ import {
   type SourceAdapterOptions,
   type StandardizedDocument,
 } from "./types";
-import type { NormalizedDocument } from "~/lib/ocr/types";
+import type { NormalizedDocument } from "@launchstack/core/ocr/types";
 import { fetchFile } from "~/lib/storage";
 
 export interface IngestOptions extends SourceAdapterOptions {

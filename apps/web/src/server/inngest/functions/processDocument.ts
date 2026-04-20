@@ -19,7 +19,7 @@ import type {
   ProcessDocumentEventData,
   PipelineResult,
   VectorizedChunk,
-} from "~/lib/ocr/types";
+} from "@launchstack/core/ocr/types";
 
 export type { ProcessDocumentEventData, PipelineResult, VectorizedChunk };
 

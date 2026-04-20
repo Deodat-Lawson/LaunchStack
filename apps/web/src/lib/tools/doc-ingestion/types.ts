@@ -1,4 +1,4 @@
-import type { PipelineResult, ProcessDocumentEventData } from "~/lib/ocr/types";
+import type { PipelineResult, ProcessDocumentEventData } from "@launchstack/core/ocr/types";
 
 export interface DocIngestionToolRuntimeOptions {
   sidecarUrl?: string;

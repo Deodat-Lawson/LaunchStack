@@ -1,4 +1,4 @@
-import type { OCRAdapter, OCRAdapterOptions, PageContent, NormalizedDocument } from "../types";
+import type { OCRAdapter, OCRAdapterOptions, PageContent, NormalizedDocument } from "@launchstack/core/ocr/types";
 
 interface OCRSubmitResponse {
   success: boolean;

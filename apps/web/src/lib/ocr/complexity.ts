@@ -4,7 +4,7 @@
  * Falls back to env-based heuristics if the sidecar is unavailable.
  */
 
-import type { OCRProvider } from "~/lib/ocr/types";
+import type { OCRProvider } from "@launchstack/core/ocr/types";
 
 export interface RoutingDecision {
   provider: OCRProvider;

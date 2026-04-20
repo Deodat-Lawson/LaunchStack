@@ -7,7 +7,7 @@
  */
 
 import { env } from "~/env";
-import type { ProcessDocumentEventData, OCRProvider } from "./types";
+import type { ProcessDocumentEventData, OCRProvider } from "@launchstack/core/ocr/types";
 
 /**
  * Options for triggering the document processing pipeline

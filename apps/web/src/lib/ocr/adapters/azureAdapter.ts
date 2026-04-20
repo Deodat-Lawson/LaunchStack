@@ -10,7 +10,7 @@ import type {
   PageContent,
   ExtractedTable,
   OCRProvider,
-} from "../types";
+} from "@launchstack/core/ocr/types";
 import { fetchFile } from "~/lib/storage";
 
 /**

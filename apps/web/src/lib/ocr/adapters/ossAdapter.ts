@@ -12,7 +12,7 @@ import type {
   NormalizedDocument,
   PageContent,
   OCRProvider,
-} from "../types";
+} from "@launchstack/core/ocr/types";
 
 type OssProvider = Extract<OCRProvider, "MARKER" | "DOCLING">;
 

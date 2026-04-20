@@ -1,4 +1,4 @@
-import type { DocumentChunk, PageContent } from "./types";
+import type { DocumentChunk, PageContent } from "@launchstack/core/ocr/types";
 
 const CODE_EXTENSIONS = new Set([
   ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".c", ".cpp", ".h", ".hpp",

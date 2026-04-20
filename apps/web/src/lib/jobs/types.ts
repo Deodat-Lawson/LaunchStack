@@ -5,7 +5,7 @@
  * Implementation: Inngest.
  */
 
-import type { ProcessDocumentEventData } from "~/lib/ocr/types";
+import type { ProcessDocumentEventData } from "@launchstack/core/ocr/types";
 
 /**
  * Result returned when a job is dispatched

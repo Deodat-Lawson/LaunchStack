@@ -13,7 +13,7 @@ import type {
   StandardizedDocument,
   StandardizedPage,
 } from "../types";
-import type { ExtractedTable } from "~/lib/ocr/types";
+import type { ExtractedTable } from "@launchstack/core/ocr/types";
 
 export class ReadabilityAdapter implements SourceAdapter {
   readonly name = "ReadabilityAdapter";

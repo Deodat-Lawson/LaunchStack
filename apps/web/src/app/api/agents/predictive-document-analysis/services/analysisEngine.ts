@@ -20,7 +20,7 @@ import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analy
 import { validatePredictiveAnalysis } from "~/lib/agents/supervisor";
 import pLimit from "p-limit";
 import { db } from "~/server/db/index";
-import { document } from "~/server/db/schema";
+import { document } from "@launchstack/core/db/schema";
 import { and, eq, ne } from "drizzle-orm";
 import stringSimilarity from 'string-similarity-js';
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";

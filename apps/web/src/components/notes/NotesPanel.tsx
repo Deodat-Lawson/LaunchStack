@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { FileText, Tag, X, Plus, Edit2, Trash2 } from "lucide-react";
-import type { DocumentNote } from "~/server/db/schema/document-notes";
+import type { DocumentNote } from "@launchstack/core/db/schema/document-notes";
 
 interface NotesPanelProps {
   documentId?: string | null;

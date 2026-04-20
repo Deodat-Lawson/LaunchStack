@@ -1,6 +1,6 @@
 import { db } from "~/server/db/index";
 import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
-import { documentSections, document, pdfChunks } from "~/server/db/schema";
+import { documentSections, document, pdfChunks } from "@launchstack/core/db/schema";
 import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import { Document } from "@langchain/core/documents";
 import type { ChunkRow, SearchScope } from "../types";

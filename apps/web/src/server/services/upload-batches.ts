@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { uploadBatches, uploadBatchFiles } from "~/server/db/schema";
+import { uploadBatches, uploadBatchFiles } from "@launchstack/core/db/schema";
 
 export type BatchStatus = "created" | "uploading" | "committed" | "processing" | "complete" | "failed";
 export type BatchFileStatus = "queued" | "uploaded" | "processing" | "complete" | "failed";

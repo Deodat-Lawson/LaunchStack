@@ -15,7 +15,7 @@ import {
   kgEntities,
   kgEntityMentions,
   kgRelationships,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import { eq, and, inArray } from "drizzle-orm";
 import { getNeo4jSession } from "./neo4j-client";
 

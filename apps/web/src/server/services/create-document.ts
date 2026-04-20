@@ -1,5 +1,5 @@
 import { db } from "~/server/db";
-import { document } from "~/server/db/schema";
+import { document } from "@launchstack/core/db/schema";
 
 export interface CreateDocumentParams {
   url: string;

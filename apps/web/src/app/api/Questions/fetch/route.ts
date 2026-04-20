@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db/index";
-import { ChatHistory, users, document } from "~/server/db/schema";
+import { ChatHistory, users, document } from "@launchstack/core/db/schema";
 import { validateRequestBody, ChatHistoryFetchSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {

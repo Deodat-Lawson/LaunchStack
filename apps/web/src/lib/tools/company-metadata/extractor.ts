@@ -20,7 +20,7 @@ import { z } from "zod";
 import { and, eq, isNull, or, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { documentContextChunks, document as documentTable } from "~/server/db/schema";
+import { documentContextChunks, document as documentTable } from "@launchstack/core/db/schema";
 import { generateStructured } from "~/lib/llm";
 import {
     EXTRACTION_SYSTEM_PROMPT,

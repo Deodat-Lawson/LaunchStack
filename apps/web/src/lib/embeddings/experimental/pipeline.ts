@@ -1,6 +1,6 @@
 ﻿import { asc, eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { documentRetrievalChunks } from "~/server/db/schema";
+import { documentRetrievalChunks } from "@launchstack/core/db/schema";
 import { ExperimentalEmbeddingClient } from "./client";
 import { ExperimentalEmbeddingConfig, ExperimentalEmbeddingMetadata } from "./types";
 import { storeExperimentalEmbeddings } from "./store";

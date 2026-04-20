@@ -1,6 +1,6 @@
 
 import { db } from "../../../server/db/index";
-import { users } from "../../../server/db/schema";
+import { users } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import {

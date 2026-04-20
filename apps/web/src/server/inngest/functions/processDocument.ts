@@ -11,7 +11,7 @@ import { eq } from "drizzle-orm";
 import { inngest } from "../client";
 import { runDocIngestionTool } from "~/lib/tools";
 import { db } from "~/server/db";
-import { document, ocrJobs } from "~/server/db/schema";
+import { document, ocrJobs } from "@launchstack/core/db/schema";
 import { putFile } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
 

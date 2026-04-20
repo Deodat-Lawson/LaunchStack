@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { ocrJobs, users } from "~/server/db/schema";
+import { ocrJobs, users } from "@launchstack/core/db/schema";
 import { eq, and, inArray, gte } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 

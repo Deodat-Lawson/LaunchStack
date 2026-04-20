@@ -6,7 +6,7 @@ import {
     documentContextChunks,
     documentStructure,
     predictiveDocumentAnalysisResults,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import { eq, and, ne } from "drizzle-orm";
 import { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";

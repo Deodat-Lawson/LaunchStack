@@ -10,8 +10,8 @@ import { auth } from "@clerk/nextjs/server";
 import { eq, desc } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
-import { companyMetadataHistory } from "~/server/db/schema/company-metadata";
+import { users } from "@launchstack/core/db/schema";
+import { companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
 
 export async function GET() {
     try {

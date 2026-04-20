@@ -6,7 +6,7 @@ import {
   agentAiChatbotMessage,
   agentAiChatbotTask,
   agentAiChatbotDocument
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
 

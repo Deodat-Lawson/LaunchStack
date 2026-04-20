@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dbCore } from "../../../server/db/core";
-import { document, users, fileUploads } from "../../../server/db/schema/base";
+import { document, users, fileUploads } from "@launchstack/core/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { validateRequestBody, UserIdSchema } from "~/lib/validation";
 import { auth } from '@clerk/nextjs/server';

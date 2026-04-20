@@ -1,6 +1,6 @@
 ﻿import { sql } from "drizzle-orm";
 import { db } from "~/server/db";
-import { experimentalDocumentEmbeddings } from "~/server/db/schema";
+import { experimentalDocumentEmbeddings } from "@launchstack/core/db/schema";
 import { ExperimentalEmbeddingMetadata } from "./types";
 
 export interface StoreEmbeddingsInput extends ExperimentalEmbeddingMetadata {

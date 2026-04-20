@@ -1,6 +1,6 @@
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import { document, users } from "~/server/db/schema";
+import { document, users } from "@launchstack/core/db/schema";
 import type { SearchResult } from "./types";
 
 export async function validateDocumentAccess(

@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import { users } from "@launchstack/core/db/schema";
 import { getJobById } from "~/lib/tools/trend-search/db";
 
 export async function GET(

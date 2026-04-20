@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { agentAiChatbotChat, agentAiChatbotDocument } from "~/server/db/schema";
+import { agentAiChatbotChat, agentAiChatbotDocument } from "@launchstack/core/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateChatSchema } from "~/lib/validation";

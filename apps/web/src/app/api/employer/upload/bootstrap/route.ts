@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { category, company, users } from "~/server/db/schema";
+import { category, company, users } from "@launchstack/core/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
 
 type BootstrapCategory = {

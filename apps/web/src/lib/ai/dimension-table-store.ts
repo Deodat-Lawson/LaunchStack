@@ -4,7 +4,7 @@ import { db } from "~/server/db";
 import {
   documentEmbeddings768,
   documentEmbeddings1024,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import type { EmbeddingIndexConfig } from "./embedding-index-registry";
 
 interface StoreDimensionTableEmbeddingsInput {

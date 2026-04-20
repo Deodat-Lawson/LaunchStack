@@ -1,5 +1,5 @@
 import { db } from "~/server/db";
-import { inviteCodes, company } from "~/server/db/schema";
+import { inviteCodes, company } from "@launchstack/core/db/schema";
 import { and, eq } from "drizzle-orm";
 import {
     createSuccessResponse,

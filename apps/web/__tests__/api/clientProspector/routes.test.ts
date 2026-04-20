@@ -43,7 +43,7 @@ jest.mock("~/server/db", () => ({
 }));
 
 // Mock the schema export so drizzle-orm's eq() doesn't fail.
-jest.mock("~/server/db/schema", () => ({
+jest.mock("@launchstack/core/db/schema", () => ({
     users: { userId: "userId" },
 }));
 

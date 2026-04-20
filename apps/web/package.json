@@ -21,6 +21,8 @@
     "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
+    "@launchstack/core": "workspace:*",
+    "@launchstack/features": "workspace:*",
     "@ai-sdk/anthropic": "^3.0.69",
     "@ai-sdk/google": "^3.0.62",
     "@ai-sdk/openai": "^3.0.52",

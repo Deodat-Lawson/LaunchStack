@@ -22,7 +22,7 @@ import {
   company,
   document,
   documentRetrievalChunks,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import {
   resolveEmbeddingIndex,
   isLegacyEmbeddingIndex,

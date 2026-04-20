@@ -1,6 +1,6 @@
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import * as schema from "./schema";
+import * as schema from "@launchstack/core/db/schema";
 
 // Use postgres.js for compatibility with standard PostgreSQL (Docker, local, etc.)
 const client = postgres(process.env.DATABASE_URL!, { max: 10 });

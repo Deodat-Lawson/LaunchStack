@@ -8,7 +8,7 @@ import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 
 import { db } from "~/server/db";
-import { company, users } from "~/server/db/schema";
+import { company, users } from "@launchstack/core/db/schema";
 import { validateRequestBody, UpdateUploadPreferenceSchema } from "~/lib/validation";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);

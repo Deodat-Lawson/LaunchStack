@@ -27,7 +27,7 @@ import type {
   PipelineResult,
 } from "~/lib/ocr/types";
 import { db } from "~/server/db";
-import { ocrJobs, documentContextChunks } from "~/server/db/schema";
+import { ocrJobs, documentContextChunks } from "@launchstack/core/db/schema";
 import { debitTokens, embeddingTokens, ocrTokens, ocrProviderToTokenKey } from "~/lib/credits";
 import { isCloudMode } from "~/lib/providers/registry";
 

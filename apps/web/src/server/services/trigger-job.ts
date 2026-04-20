@@ -1,5 +1,5 @@
 import { db } from "~/server/db";
-import { ocrJobs } from "~/server/db/schema";
+import { ocrJobs } from "@launchstack/core/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
 
 export interface TriggerJobParams {

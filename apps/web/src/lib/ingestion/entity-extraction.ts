@@ -13,7 +13,7 @@ import {
   entityLabelEnum,
   type EntityLabel,
   type RelationshipType,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { getNERProvider } from "~/lib/providers/ner";
 import { debitTokens } from "~/lib/credits";

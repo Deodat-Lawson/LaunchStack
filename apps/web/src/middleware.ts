@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { eq } from "drizzle-orm";
-import { users } from "~/server/db/schema";
+import { users } from "@launchstack/core/db/schema";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&

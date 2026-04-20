@@ -4,7 +4,7 @@ import {
   documentContextChunks,
   documentRetrievalChunks,
   experimentalDocumentEmbeddings,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import type { SearchResult } from "./types";
 import { experimentalEmbedQuery } from "~/lib/embeddings/experimental/pipeline";
 

@@ -23,7 +23,7 @@ import {
   kgEntityMentions,
   predictiveDocumentAnalysisResults,
   workspaceResults,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import type { db as DbType } from "~/server/db";
 
 type Tx = Parameters<Parameters<(typeof DbType)["transaction"]>[0]>[0];

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { company } from "~/server/db/schema";
+import { company } from "@launchstack/core/db/schema";
 
 /**
  * Onyx-style SearchSettings lifecycle for per-company embedding model

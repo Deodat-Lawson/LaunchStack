@@ -9,7 +9,15 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
-import type { SearchCategory, SearchResult } from "../../../lib/tools/trend-search/types";
+// Canonical shapes for trend-search JSONB columns. The feature module
+// re-exports these so callers can keep importing from the feature's types.ts.
+export type SearchCategory = "fashion" | "finance" | "business" | "tech";
+
+export interface SearchResult {
+    sourceUrl: string;
+    summary: string;
+    description: string;
+}
 import { company } from "./base";
 import { pgTable } from "./helpers";
 

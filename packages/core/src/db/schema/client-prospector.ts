@@ -25,9 +25,22 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
-// ProspectResult is the shape of each scored business lead (name, address,
-// relevanceScore 0-100, rationale, etc.). We store an array of them as JSONB.
-import type { ProspectResult } from "../../../lib/tools/client-prospector/types";
+// Shape of each scored business lead (name, address, relevanceScore 0-100,
+// rationale, etc.). We store an array of them as JSONB. The feature module
+// re-exports this type so downstream callers can keep importing from the
+// feature's own types.ts barrel.
+export interface ProspectResult {
+    fsqId: string;
+    name: string;
+    address: string;
+    location: { lat: number; lng: number };
+    categories: string[];
+    phone?: string;
+    website?: string;
+    rating?: number;
+    relevanceScore: number; // 0-100, LLM-assigned
+    rationale: string;
+}
 
 // company is the parent table — every job belongs to a company.
 import { company } from "./base";

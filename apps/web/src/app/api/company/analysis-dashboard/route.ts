@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { users, document, documentViews, ChatHistory, agentAiChatbotMessage, agentAiChatbotChat } from "~/server/db/schema";
+import { users, document, documentViews, ChatHistory, agentAiChatbotMessage, agentAiChatbotChat } from "@launchstack/core/db/schema";
 import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 

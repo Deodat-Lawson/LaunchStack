@@ -1,6 +1,6 @@
 import { db } from "~/server/db/index";
 import { and, eq, inArray, sql } from "drizzle-orm";
-import { documentSections, pdfChunks, documentRetrievalChunks } from "~/server/db/schema";
+import { documentSections, pdfChunks, documentRetrievalChunks } from "@launchstack/core/db/schema";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 
 interface ANNConfig {

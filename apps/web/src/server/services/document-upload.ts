@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document, documentVersions } from "~/server/db/schema";
+import { document, documentVersions } from "@launchstack/core/db/schema";
 import { resolveIngestIndexKey } from "~/lib/ai/company-reindex-state";
 import {
   shouldTranscribeFile,

@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "~/server/db/index";
-import { users } from "~/server/db/schema";
+import { users } from "@launchstack/core/db/schema";
 import { env } from "~/env";
 import {
   parseGitHubUrl,

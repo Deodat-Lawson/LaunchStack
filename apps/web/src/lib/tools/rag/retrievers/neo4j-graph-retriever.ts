@@ -21,7 +21,7 @@ import {
 import { Document } from "@langchain/core/documents";
 import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 import { db } from "~/server/db/index";
-import { documentSections } from "~/server/db/schema";
+import { documentSections } from "@launchstack/core/db/schema";
 import { inArray, and } from "drizzle-orm";
 import { isNeo4jConfigured, getNeo4jSession } from "~/lib/graph/neo4j-client";
 import neo4j, { type Session } from "neo4j-driver";

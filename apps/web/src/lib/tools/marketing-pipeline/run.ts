@@ -22,7 +22,7 @@ import { PIPELINE_STEPS } from "~/lib/tools/marketing-pipeline/types";
 
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { company, category } from "~/server/db/schema";
+import { company, category } from "@launchstack/core/db/schema";
 import { researchPlatformTrends } from "~/lib/tools/marketing-pipeline/research";
 
 const DEFAULT_PROMPT = "Generate a compelling campaign post for this platform.";

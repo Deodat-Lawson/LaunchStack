@@ -10,7 +10,7 @@ jest.mock("~/server/db", () => ({
   },
 }));
 
-jest.mock("~/server/db/schema", () => ({
+jest.mock("@launchstack/core/db/schema", () => ({
   company: {
     id: "company.id",
     activeEmbeddingIndexKey: "company.active_embedding_index_key",

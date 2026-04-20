@@ -5,7 +5,7 @@ import {
     predictiveDocumentAnalysisResults,
     document,
     documentContextChunks,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation";
 import { CACHE_CONFIG, ERROR_TYPES, HTTP_STATUS, type AnalysisType } from "~/lib/constants";

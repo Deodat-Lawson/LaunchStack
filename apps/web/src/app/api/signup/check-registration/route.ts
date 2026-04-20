@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, company } from "~/server/db/schema";
+import { users, company } from "@launchstack/core/db/schema";
 import {
     createSuccessResponse,
     createUnauthorizedError,

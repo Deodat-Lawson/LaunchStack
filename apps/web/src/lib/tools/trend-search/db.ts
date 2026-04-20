@@ -2,7 +2,7 @@ import { and, desc, eq } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { trendSearchJobs } from "~/server/db/schema";
+import { trendSearchJobs } from "@launchstack/core/db/schema";
 import type {
     SearchCategory,
     TrendSearchJobRecord,

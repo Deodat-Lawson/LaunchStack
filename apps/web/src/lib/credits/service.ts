@@ -10,7 +10,7 @@ import {
     tokenTransactions,
     tokenUsageDaily,
     tokenGrants,
-} from "~/server/db/schema/credits";
+} from "@launchstack/core/db/schema/credits";
 import type { TokenService } from "./costs";
 
 // ── Balance ─────────────────────────────────────────────────────────

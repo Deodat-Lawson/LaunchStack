@@ -20,7 +20,7 @@ import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
-import { users, document } from "~/server/db/schema";
+import { users, document } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -36,7 +36,7 @@ import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
 import type { AIModelType, LLMProvider } from "../services";
 import { LLMProviders, isModelAllowedForProvider } from "../services/types";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
-import type { SemanticType } from "~/server/db/schema";
+import type { SemanticType } from "@launchstack/core/db/schema";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
-import { company } from "~/server/db/schema";
+import { company } from "@launchstack/core/db/schema";
 import { getCompanyCredentialsPlaintext } from "./company-credentials";
 
 export interface CompanyEmbeddingConfig {

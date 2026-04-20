@@ -26,7 +26,7 @@ import {
   kgEntityMentions,
   kgRelationships,
   documentSections,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 
 // ============================================================================
 // Config

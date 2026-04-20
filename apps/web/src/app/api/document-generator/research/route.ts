@@ -12,7 +12,7 @@ import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import { users } from "~/server/db/schema";
+import { users } from "@launchstack/core/db/schema";
 import { 
     companyEnsembleSearch,
     type CompanySearchOptions,

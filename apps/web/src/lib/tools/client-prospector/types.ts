@@ -60,19 +60,12 @@ export interface RawPlaceResult {
 }
 
 // ─── Scored Result ───────────────────────────────────────────────────────────
+// Canonical shape lives in @launchstack/core/db/schema (source of truth for
+// the JSONB column). Re-exported here so feature code can keep its existing
+// import path.
 
-export interface ProspectResult {
-    fsqId: string;
-    name: string;
-    address: string;
-    location: LatLng;
-    categories: string[]; // category names
-    phone?: string;
-    website?: string;
-    rating?: number;
-    relevanceScore: number; // 0-100, LLM-assigned
-    rationale: string; // why this is a good prospect
-}
+import type { ProspectResult } from "@launchstack/core/db/schema";
+export type { ProspectResult };
 
 // ─── Output ──────────────────────────────────────────────────────────────────
 

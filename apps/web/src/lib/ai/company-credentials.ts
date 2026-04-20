@@ -4,7 +4,7 @@ import { db } from "~/server/db";
 import {
   company,
   companyEmbeddingCredentials,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import {
   CiphertextDecodeError,
   decryptSecret,

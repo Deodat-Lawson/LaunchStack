@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { eq, asc } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
-import { document, documentContextChunks } from "~/server/db/schema";
+import { document, documentContextChunks } from "@launchstack/core/db/schema";
 
 interface RouteParams {
   params: Promise<{ id: string }>;

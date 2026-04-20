@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { agentAiChatbotTask } from "~/server/db/schema";
+import { agentAiChatbotTask } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateTaskSchema } from "~/lib/validation";

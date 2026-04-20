@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { db } from "~/server/db";
-import { category, company, companyMetadata } from "~/server/db/schema";
+import { category, company, companyMetadata } from "@launchstack/core/db/schema";
 import {
     companyEnsembleSearch,
     createOpenAIEmbeddings,

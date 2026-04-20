@@ -5,8 +5,8 @@ import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { getChatModel } from "~/lib/models";
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
-import { companyMetadata } from "~/server/db/schema/company-metadata";
+import { users } from "@launchstack/core/db/schema";
+import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
 import { TEMPLATE_REGISTRY } from "~/lib/legal-templates/template-service";
 import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
 

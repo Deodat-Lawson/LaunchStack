@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../server/db/index";
-import { users } from "../../../server/db/schema";
+import { users } from "@launchstack/core/db/schema";
 import {eq, and } from "drizzle-orm";
 import * as console from "console";
 import { auth } from "@clerk/nextjs/server";

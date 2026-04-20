@@ -25,7 +25,7 @@ import { getEmbeddings } from "./models";
 import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
 import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
 import { db } from "~/server/db";
-import { document, type SemanticType, type PreviewType } from "~/server/db/schema";
+import { document, type SemanticType, type PreviewType } from "@launchstack/core/db/schema";
 
 // ============================================================================
 // Types

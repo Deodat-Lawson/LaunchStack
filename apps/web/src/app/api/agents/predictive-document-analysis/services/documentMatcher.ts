@@ -1,6 +1,6 @@
 import { db } from "~/server/db/index";
 import { and, eq, inArray, ne, sql } from "drizzle-orm";
-import { documentSections, document } from "~/server/db/schema";
+import { documentSections, document } from "@launchstack/core/db/schema";
 import type { 
     MissingDocumentPrediction, 
     CompanyDocument, 

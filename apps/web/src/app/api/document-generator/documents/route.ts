@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db/index";
 import { eq, and, desc } from "drizzle-orm";
-import { users, generatedDocuments } from "~/server/db/schema";
+import { users, generatedDocuments } from "@launchstack/core/db/schema";
 import { z } from "zod";
 
 export const runtime = "nodejs";

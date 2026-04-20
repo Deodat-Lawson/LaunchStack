@@ -15,8 +15,8 @@ const config: NextConfig = {
     middlewareClientMaxBodySize: "128mb",
   },
 
-  // Mermaid loaded client-side at runtime — no need to transpile
-  // transpilePackages: ["mermaid"],
+  // Workspace packages ship raw TypeScript; Next's SWC transpiles on demand.
+  transpilePackages: ["@launchstack/core", "@launchstack/features"],
 
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },

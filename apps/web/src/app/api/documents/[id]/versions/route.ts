@@ -35,7 +35,7 @@ import {
   documentVersions,
   ocrJobs,
   users,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";

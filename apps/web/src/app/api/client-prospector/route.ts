@@ -17,7 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import { users } from "@launchstack/core/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import {

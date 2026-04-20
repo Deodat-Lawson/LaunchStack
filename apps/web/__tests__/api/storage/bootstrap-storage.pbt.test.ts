@@ -16,7 +16,7 @@ jest.mock("drizzle-orm", () => ({
   eq: jest.fn((...args: unknown[]) => args),
 }));
 
-jest.mock("~/server/db/schema", () => ({
+jest.mock("@launchstack/core/db/schema", () => ({
   category: { id: "id", name: "name", companyId: "companyId" },
   company: { id: "id", name: "name", useUploadThing: "useUploadThing" },
   users: { userId: "userId", role: "role", companyId: "companyId" },
@@ -136,7 +136,7 @@ describe(
               and: jest.fn((...args: unknown[]) => args),
               eq: jest.fn((...args: unknown[]) => args),
             }));
-            jest.doMock("~/server/db/schema", () => ({
+            jest.doMock("@launchstack/core/db/schema", () => ({
               category: { id: "id", name: "name", companyId: "companyId" },
               company: { id: "id", name: "name", useUploadThing: "useUploadThing" },
               users: { userId: "userId", role: "role", companyId: "companyId" },

@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq, and } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, inviteCodes } from "~/server/db/schema";
+import { users, inviteCodes } from "@launchstack/core/db/schema";
 
 export async function GET() {
     try {

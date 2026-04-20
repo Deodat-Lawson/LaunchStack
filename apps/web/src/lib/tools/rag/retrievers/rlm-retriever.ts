@@ -31,7 +31,7 @@ import {
     type SemanticType,
     type PreviewType,
     type ResultType,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import {
     isLegacyEmbeddingIndex,
     type EmbeddingIndexConfig,

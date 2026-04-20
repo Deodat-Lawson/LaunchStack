@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import { users } from "@launchstack/core/db/schema";
 import { ensureTokenAccount } from "~/lib/credits";
 
 export async function GET() {

@@ -31,7 +31,7 @@ import {
   documentVersions,
   document as documentTable,
   ocrJobs,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import { eq, sql } from "drizzle-orm";
 import crypto from "crypto";
 import { fetchFile } from "~/lib/storage";

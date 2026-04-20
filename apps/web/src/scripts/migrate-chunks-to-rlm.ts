@@ -25,7 +25,7 @@ import {
     documentMetadata,
     documentPreviews,
     type ContentType,
-} from "~/server/db/schema";
+} from "@launchstack/core/db/schema";
 import { eq, asc } from "drizzle-orm";
 import crypto from "crypto";
 

@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
 import { db } from "~/server/db";
-import { company, category } from "~/server/db/schema";
+import { company, category } from "@launchstack/core/db/schema";
 
 import {
   companyEnsembleSearch,

@@ -130,7 +130,7 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
 async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
   try {
     const { db } = await import("~/server/db");
-    const { fileUploads } = await import("~/server/db/schema");
+    const { fileUploads } = await import("@launchstack/core/db/schema");
 
     const body = toBuffer(input.data);
     const safeName = sanitizeFilename(input.filename);
@@ -227,7 +227,7 @@ export async function deleteFile(
     const id = parseInt(match[1], 10);
     if (isNaN(id)) return;
     const { db } = await import("~/server/db");
-    const { fileUploads } = await import("~/server/db/schema");
+    const { fileUploads } = await import("@launchstack/core/db/schema");
     const { eq } = await import("drizzle-orm");
     await db.delete(fileUploads).where(eq(fileUploads.id, id));
   } catch (err) {

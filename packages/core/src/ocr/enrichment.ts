@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import { getChatModelsConfig, getOpenAIClient } from "../llm";
 
 /**
  * Visual Layout Model (VLM) Enrichment Service
@@ -7,16 +7,12 @@ import OpenAI from "openai";
  * diagrams, and complex layouts that plain OCR may miss.
  *
  * Provider preference (first available wins):
- *   1. Ollama — if OLLAMA_BASE_URL is set. Uses OLLAMA_VLM_MODEL (default
- *      "llava:13b"). Zero cost, self-hosted.
- *   2. OpenAI — if OPENAI_API_KEY is set. Uses gpt-5-mini by default.
+ *   1. Ollama — if config.llm.ollama.baseUrl is set. Defaults to "llava:13b";
+ *      callers can override via options.model. Zero cost, self-hosted.
+ *   2. OpenAI — if config.llm.openai.apiKey (or aiApiKey) is set. Uses
+ *      gpt-5-mini by default; callers can override via options.model.
  *   3. Skip — return empty string.
  */
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY || "placeholder",
-  ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
-});
 
 const SYSTEM_PROMPT = `You are a document analysis assistant. Your job is to analyze the visual layout of a document page and describe its key components, especially those that OCR might miss.
 
@@ -43,22 +39,24 @@ export async function enrichPageWithVlm(
   imageBuffer: Buffer,
   options?: VlmEnrichmentOptions
 ): Promise<string> {
-  if (process.env.OLLAMA_BASE_URL) {
-    return enrichWithOllama(imageBuffer, options);
+  const config = getChatModelsConfig();
+  if (config.ollama?.baseUrl) {
+    return enrichWithOllama(imageBuffer, config.ollama.baseUrl, options);
   }
-  if (process.env.OPENAI_API_KEY) {
+  if (config.openai?.apiKey || config.aiApiKey) {
     return enrichWithOpenAI(imageBuffer, options);
   }
-  console.warn("[VLM] No VLM provider configured (set OLLAMA_BASE_URL or OPENAI_API_KEY), skipping enrichment");
+  console.warn("[VLM] No VLM provider configured (register Ollama or OpenAI via configureChatModels), skipping enrichment");
   return "";
 }
 
 async function enrichWithOllama(
   imageBuffer: Buffer,
-  options?: VlmEnrichmentOptions
+  ollamaBaseUrl: string,
+  options?: VlmEnrichmentOptions,
 ): Promise<string> {
-  const baseUrl = process.env.OLLAMA_BASE_URL!.replace(/\/$/, "");
-  const model = options?.model ?? process.env.OLLAMA_VLM_MODEL ?? "llava:13b";
+  const baseUrl = ollamaBaseUrl.replace(/\/$/, "");
+  const model = options?.model ?? "llava:13b";
   const maxTokens = options?.maxTokens ?? 500;
 
   try {
@@ -98,6 +96,11 @@ async function enrichWithOpenAI(
   imageBuffer: Buffer,
   options?: VlmEnrichmentOptions
 ): Promise<string> {
+  const openai = getOpenAIClient();
+  if (!openai) {
+    console.warn("[VLM] getOpenAIClient() returned null — skipping OpenAI enrichment");
+    return "";
+  }
   const model = options?.model ?? "gpt-5-mini";
   const detail = options?.detail ?? "auto";
   const maxTokens = options?.maxTokens ?? 500;

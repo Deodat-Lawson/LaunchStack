@@ -60,6 +60,10 @@
       "types": "./src/ocr/chunker.ts",
       "default": "./src/ocr/chunker.ts"
     },
+    "./ocr/enrichment": {
+      "types": "./src/ocr/enrichment.ts",
+      "default": "./src/ocr/enrichment.ts"
+    },
     "./ingestion": {
       "types": "./src/ingestion/index.ts",
       "default": "./src/ingestion/index.ts"

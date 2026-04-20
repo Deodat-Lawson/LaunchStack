@@ -6,7 +6,7 @@
 
 import type { RoutingDecision } from "@launchstack/core/ocr/complexity";
 import { renderPagesToImages } from "@launchstack/core/ocr/complexity";
-import { enrichPageWithVlm } from "~/lib/ocr/enrichment";
+import { enrichPageWithVlm } from "@launchstack/core/ocr/enrichment";
 import {
   createAzureAdapter,
   createLandingAIAdapter,

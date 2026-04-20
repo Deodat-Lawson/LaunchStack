@@ -4,7 +4,7 @@
  * and normalizes responses into the canonical NormalizedDocument shape.
  */
 
-import { createMarkerAdapter, createDoclingAdapter } from "~/lib/ocr/adapters/ossAdapter";
+import { createMarkerAdapter, createDoclingAdapter } from "@launchstack/core/ocr/adapters/ossAdapter";
 
 const WORKER_URL = "http://test-worker:8001";
 

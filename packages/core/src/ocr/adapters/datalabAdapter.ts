@@ -1,4 +1,5 @@
-import type { OCRAdapter, OCRAdapterOptions, PageContent, NormalizedDocument } from "@launchstack/core/ocr/types";
+import type { OCRAdapter, OCRAdapterOptions, PageContent, NormalizedDocument } from "../types";
+import { getOcrConfig } from "../config";
 
 interface OCRSubmitResponse {
   success: boolean;
@@ -35,7 +36,7 @@ export class DatalabAdapter implements OCRAdapter {
   private apiKey: string;
 
   constructor() {
-    const key = process.env.DATALAB_API_KEY;
+    const key = getOcrConfig().datalabApiKey;
     if (!key) {
       throw new Error("DATALAB_API_KEY is not set");
     }

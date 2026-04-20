@@ -64,6 +64,18 @@
       "types": "./src/ocr/enrichment.ts",
       "default": "./src/ocr/enrichment.ts"
     },
+    "./ocr/config": {
+      "types": "./src/ocr/config.ts",
+      "default": "./src/ocr/config.ts"
+    },
+    "./ocr/adapters/datalabAdapter": {
+      "types": "./src/ocr/adapters/datalabAdapter.ts",
+      "default": "./src/ocr/adapters/datalabAdapter.ts"
+    },
+    "./ocr/adapters/ossAdapter": {
+      "types": "./src/ocr/adapters/ossAdapter.ts",
+      "default": "./src/ocr/adapters/ossAdapter.ts"
+    },
     "./ingestion": {
       "types": "./src/ingestion/index.ts",
       "default": "./src/ingestion/index.ts"

@@ -12,7 +12,8 @@ import type {
   NormalizedDocument,
   PageContent,
   OCRProvider,
-} from "@launchstack/core/ocr/types";
+} from "../types";
+import { getOcrConfig } from "../config";
 
 type OssProvider = Extract<OCRProvider, "MARKER" | "DOCLING">;
 
@@ -38,7 +39,7 @@ class OssOCRAdapter implements OCRAdapter {
 
   constructor(provider: OssProvider, workerUrl?: string, timeoutMs?: number) {
     this.provider = provider;
-    this.workerUrl = (workerUrl ?? process.env.OCR_WORKER_URL ?? DEFAULT_WORKER_URL).replace(/\/$/, "");
+    this.workerUrl = (workerUrl ?? getOcrConfig().workerUrl ?? DEFAULT_WORKER_URL).replace(/\/$/, "");
     this.endpoint = provider === "MARKER" ? "/parse/marker" : "/parse/docling";
     this.timeoutMs = timeoutMs ?? DEFAULT_TIMEOUT_MS;
   }
@@ -107,7 +108,7 @@ class OssOCRAdapter implements OCRAdapter {
    */
   private toWorkerReachableUrl(url: string): string {
     if (/^https?:\/\//i.test(url)) return url;
-    const base = process.env.APP_PUBLIC_URL ?? process.env.NEXTAUTH_URL ?? "http://app:3000";
+    const base = getOcrConfig().appPublicUrl ?? "http://app:3000";
     return new URL(url, base).toString();
   }
 }

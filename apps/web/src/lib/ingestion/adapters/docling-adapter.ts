@@ -16,7 +16,7 @@ import type {
   StandardizedDocument,
   StandardizedPage,
 } from "@launchstack/core/ingestion/types";
-import { createDoclingAdapter } from "~/lib/ocr/adapters/ossAdapter";
+import { createDoclingAdapter } from "@launchstack/core/ocr/adapters/ossAdapter";
 
 const OFFICE_MIMES = new Set([
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",

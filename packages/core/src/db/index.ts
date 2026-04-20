@@ -50,3 +50,26 @@ export function createDb(config: DbConfig): Db {
 export function toRows<T>(result: unknown): T[] {
   return (Array.isArray(result) ? result : []) as T[];
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// Module-level DbClient slot — populated by createEngine so subsystems that
+// live in core can use getDb() without the caller threading the client.
+// Call sites that can reach the Engine directly should prefer engine.db over
+// getDb() — the singleton exists specifically for library-internal modules
+// that were ported from environments where db was a global.
+// ────────────────────────────────────────────────────────────────────────────
+
+let _db: DbClient | null = null;
+
+export function configureDatabase(db: DbClient): void {
+  _db = db;
+}
+
+export function getDb(): DbClient {
+  if (!_db) {
+    throw new Error(
+      "[@launchstack/core/db] No DbClient registered. The host must call createEngine(config) (or configureDatabase(db) directly) before any subsystem that uses getDb().",
+    );
+  }
+  return _db;
+}

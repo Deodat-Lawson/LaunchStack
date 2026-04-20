@@ -7,7 +7,7 @@
  * as they migrate in subsequent refactor steps.
  */
 
-import { createDb, type Db, type DbClient } from "./db";
+import { createDb, configureDatabase, type Db, type DbClient } from "./db";
 import { configureNeo4j, getNeo4jDriver, type Driver } from "./graph/neo4j-client";
 import type { CoreConfig } from "./config/types";
 
@@ -44,6 +44,7 @@ export interface Engine {
  */
 export function createEngine(config: CoreConfig): Engine {
   const dbHandle = createDb(config.db);
+  configureDatabase(dbHandle.db);
   configureNeo4j(config.neo4j ? {
     uri: config.neo4j.uri,
     user: config.neo4j.user,

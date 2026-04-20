@@ -4,7 +4,7 @@
  */
 
 import { extractDeterministicInsights } from '~/app/api/agents/predictive-document-analysis/utils/insightExtractors';
-import { runGuardrails } from '~/lib/agents/guardrails';
+import { runGuardrails } from '@launchstack/core/guardrails';
 import type { EvalScenario, EvalResult, EvalMetric, EvalReport, EvalDomain } from './types';
 import type { PdfChunk } from '~/app/api/agents/predictive-document-analysis/types';
 

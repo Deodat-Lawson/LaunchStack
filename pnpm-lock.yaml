@@ -512,6 +512,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.0)(@types/pg@8.15.6)(postgres@3.4.7)
+      string-similarity-js:
+        specifier: ^2.1.4
+        version: 2.1.4
 
   packages/features:
     dependencies:

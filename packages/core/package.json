@@ -27,12 +27,17 @@
     "./db/schema/*": {
       "types": "./src/db/schema/*.ts",
       "default": "./src/db/schema/*.ts"
+    },
+    "./guardrails": {
+      "types": "./src/guardrails/index.ts",
+      "default": "./src/guardrails/index.ts"
     }
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "drizzle-orm": "^0.45.1"
+    "drizzle-orm": "^0.45.1",
+    "string-similarity-js": "^2.1.4"
   }
 }

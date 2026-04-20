@@ -51,6 +51,7 @@ export function UploadView({ onDocumentUploaded: _onDocumentUploaded }: UploadVi
     azure: false,
     datalab: false,
     landingAI: false,
+    docling: false,
   });
   const [storageProvider, setStorageProvider] = useState<"s3" | "database">("s3");
   const [s3Endpoint, setS3Endpoint] = useState("");

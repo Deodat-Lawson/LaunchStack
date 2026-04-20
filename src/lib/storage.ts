@@ -50,6 +50,10 @@ export function isS3Storage(): boolean {
   return resolveStorageBackend() === "s3";
 }
 
+export function isLocalStorage(): boolean {
+  return resolveStorageBackend() === "database";
+}
+
 // ---------------------------------------------------------------------------
 // Upload interface
 // ---------------------------------------------------------------------------
@@ -258,15 +262,16 @@ export async function deleteFileByUrl(url: string): Promise<void> {
     env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
 
   if (s3Endpoint && url.startsWith(s3Endpoint)) {
-    // SeaweedFS stores objects by key; recover it from the endpoint prefix.
+    // SeaweedFS is S3-compatible; recover the object key from the endpoint prefix.
     // e.g. "http://localhost:8333/pdr-documents/documents/abc-file.pdf"
     //   -> "pdr-documents/documents/abc-file.pdf"
     const key = url.slice(s3Endpoint.replace(/\/+$/, "").length + 1);
-    return deleteFile(key, "seaweedfs");
+    return deleteFile(key, "s3");
   }
 
-  // Cloud (Vercel Blob) accepts the full URL as its "key".
-  return deleteFile(url, "vercel_blob");
+  // Vercel Blob has no delete handler wired up; fall through as a no-op via
+  // the database branch (the regex won't match a blob URL).
+  return deleteFile(url, "database");
 }
 
 // ---------------------------------------------------------------------------

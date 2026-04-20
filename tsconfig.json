@@ -37,5 +37,12 @@
     "**/*.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "public/vad"]
+  "exclude": [
+    "node_modules",
+    "public/vad",
+    "services",
+    "sidecar",
+    "packages",
+    "apps"
+  ]
 }

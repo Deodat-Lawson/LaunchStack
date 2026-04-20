@@ -58,7 +58,14 @@ export interface DocumentMetadata {
 /**
  * Supported OCR providers
  */
-export type OCRProvider = "AZURE" | "LANDING_AI" | "NATIVE_PDF" | "DATALAB" | "INGESTION";
+export type OCRProvider =
+  | "AZURE"
+  | "LANDING_AI"
+  | "NATIVE_PDF"
+  | "DATALAB"
+  | "INGESTION"
+  | "MARKER"
+  | "DOCLING";
 
 /**
  * Document complexity assessment result

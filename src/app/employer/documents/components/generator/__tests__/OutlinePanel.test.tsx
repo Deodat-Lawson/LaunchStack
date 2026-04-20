@@ -98,7 +98,7 @@ describe("OutlinePanel", () => {
         renderPanel(makeOutline());
 
         // Find the expand button for "Introduction" (the first treeitem with children)
-        const introItem = screen.getByText("Introduction").closest('[role="treeitem"]')!;
+        const introItem = screen.getByText("Introduction").closest('[role="treeitem"]') as HTMLElement;
         const expandBtn = within(introItem).getAllByRole("button")[0]!;
 
         await user.click(expandBtn);
@@ -120,7 +120,7 @@ describe("OutlinePanel", () => {
         await user.click(addBtn);
 
         expect(props.onOutlineChange).toHaveBeenCalledTimes(1);
-        const newOutline = props.onOutlineChange.mock.calls[0][0] as OutlineItem[];
+        const newOutline = (props.onOutlineChange as jest.Mock).mock.calls[0][0] as OutlineItem[];
         expect(newOutline).toHaveLength(3); // 2 original + 1 new
         expect(newOutline[2]!.title).toBe("New Section");
         expect(newOutline[2]!.level).toBe(1);
@@ -132,12 +132,12 @@ describe("OutlinePanel", () => {
         const { props } = renderPanel(outline);
 
         // Expand "Introduction" first so we can see children
-        const introItem = screen.getByText("Introduction").closest('[role="treeitem"]')!;
+        const introItem = screen.getByText("Introduction").closest('[role="treeitem"]') as HTMLElement;
         const expandBtn = within(introItem).getAllByRole("button")[0]!;
         await user.click(expandBtn);
 
         // Find and click delete on "Background"
-        const bgItem = screen.getByText("Background").closest('[role="treeitem"]')!;
+        const bgItem = screen.getByText("Background").closest('[role="treeitem"]') as HTMLElement;
         const deleteBtn = within(bgItem).getByRole("button", { name: /Delete/i });
         await user.click(deleteBtn);
 

@@ -32,6 +32,7 @@ import {
     getEmbeddings,
     buildReferences,
     extractRecommendedPages,
+    type AIModelType,
 } from "../../services";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
 import { isCloudMode } from "~/lib/providers/registry";
@@ -451,7 +452,7 @@ export async function POST(request: Request) {
 
             // Get AI model and generate comprehensive response
             const resolvedProvider = provider ?? "openai";
-            const selectedAiModel = aiModel ?? getProviderDefaultModel(resolvedProvider);
+            const selectedAiModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
             const chat = getChatModelForProvider({
                 provider: resolvedProvider,
                 model: selectedAiModel,

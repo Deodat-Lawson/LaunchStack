@@ -7,8 +7,8 @@
 export * from "@launchstack/core/ocr/types";
 
 // Adapters
-export { createAzureAdapter } from "./adapters/azureAdapter";
-export { createLandingAIAdapter } from "./adapters/landingAdapter";
+export { createAzureAdapter } from "@launchstack/core/ocr/adapters/azureAdapter";
+export { createLandingAIAdapter } from "@launchstack/core/ocr/adapters/landingAdapter";
 
 // Complexity analysis & Vision-based routing
 export {

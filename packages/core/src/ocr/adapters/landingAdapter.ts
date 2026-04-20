@@ -12,8 +12,9 @@ import type {
   NormalizedDocument,
   PageContent,
   OCRProvider,
-} from "@launchstack/core/ocr/types";
-import { fetchFile } from "~/lib/storage";
+} from "../types";
+import { getStoragePort } from "../../storage/slot";
+import { getOcrConfig } from "../config";
 
 /** ADE Parse API base URL (use api.va.eu-west-1.landing.ai for EU) */
 const ADE_BASE_URL = "https://api.va.landing.ai";
@@ -51,7 +52,7 @@ export class LandingAIAdapter implements OCRAdapter {
   private apiKey: string;
 
   constructor(apiKey?: string) {
-    this.apiKey = apiKey ?? process.env.LANDING_AI_API_KEY ?? "";
+    this.apiKey = apiKey ?? getOcrConfig().landingAi?.apiKey ?? "";
 
     if (!this.apiKey) {
       console.warn(
@@ -78,7 +79,7 @@ export class LandingAIAdapter implements OCRAdapter {
 
     // Fetch document server-side and send as binary. Landing AI's servers cannot reach
     // localhost or private URLs (e.g. /api/files/7), so we must upload the file ourselves.
-    const docResponse = await fetchFile(documentUrl);
+    const docResponse = await getStoragePort().download(documentUrl);
     if (!docResponse.ok) {
       throw new Error(
         `Failed to fetch document from ${documentUrl}: ${docResponse.status} ${docResponse.statusText}`

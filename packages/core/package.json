@@ -76,6 +76,14 @@
       "types": "./src/ocr/adapters/ossAdapter.ts",
       "default": "./src/ocr/adapters/ossAdapter.ts"
     },
+    "./ocr/adapters/azureAdapter": {
+      "types": "./src/ocr/adapters/azureAdapter.ts",
+      "default": "./src/ocr/adapters/azureAdapter.ts"
+    },
+    "./ocr/adapters/landingAdapter": {
+      "types": "./src/ocr/adapters/landingAdapter.ts",
+      "default": "./src/ocr/adapters/landingAdapter.ts"
+    },
     "./ingestion": {
       "types": "./src/ingestion/index.ts",
       "default": "./src/ingestion/index.ts"

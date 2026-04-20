@@ -10,8 +10,9 @@ import type {
   PageContent,
   ExtractedTable,
   OCRProvider,
-} from "@launchstack/core/ocr/types";
-import { fetchFile } from "~/lib/storage";
+} from "../types";
+import { getStoragePort } from "../../storage/slot";
+import { getOcrConfig } from "../config";
 
 /**
  * Azure Document Intelligence API response types
@@ -134,8 +135,9 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
   private apiVersion = "2024-11-30"; // Latest stable version
 
   constructor(endpoint?: string, apiKey?: string) {
-    this.endpoint = endpoint ?? process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT ?? "";
-    this.apiKey = apiKey ?? process.env.AZURE_DOC_INTELLIGENCE_KEY ?? "";
+    const cfg = getOcrConfig().azure;
+    this.endpoint = endpoint ?? cfg?.endpoint ?? "";
+    this.apiKey = apiKey ?? cfg?.key ?? "";
 
     if (!this.endpoint || !this.apiKey) {
       console.warn(
@@ -220,7 +222,7 @@ export class AzureDocumentIntelligenceAdapter implements OCRAdapter {
     const fullUrl = queryParams.toString() ? `${url}&${queryParams}` : url;
 
     // Fetch document server-side and send as binary. Azure cannot reach localhost/private URLs.
-    const docResponse = await fetchFile(documentUrl);
+    const docResponse = await getStoragePort().download(documentUrl);
     if (!docResponse.ok) {
       throw new Error(
         `Failed to fetch document from ${documentUrl}: ${docResponse.status} ${docResponse.statusText}`

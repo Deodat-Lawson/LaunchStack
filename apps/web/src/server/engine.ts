@@ -11,6 +11,7 @@
 import { createEngine, type CoreConfig, type Engine } from "@launchstack/core";
 
 import { env } from "~/env";
+import { configureProviders } from "~/lib/providers/registry";
 import { createAppStoragePort } from "./storage/port";
 
 type EngineHolder = { engine: Engine };
@@ -144,7 +145,23 @@ export function getEngine(): Engine {
   if (globalHolder.__launchstackEngine) {
     return globalHolder.__launchstackEngine.engine;
   }
-  const engine = createEngine(buildConfig());
+  const config = buildConfig();
+
+  // Register provider config so resolveBaseUrl / resolveApiKey / etc. in
+  // ~/lib/providers/registry see the same values as core does.
+  configureProviders({
+    aiBaseUrl: config.llm.aiBaseUrl,
+    aiApiKey: config.llm.aiApiKey,
+    sidecarUrl: config.embeddings.sidecar?.url,
+    rerankProviderMode: config.providers.rerank?.provider,
+    nerProviderMode: config.providers.ner?.provider,
+    transcriptionProviderMode: config.providers.transcription?.provider,
+    rerankBaseUrl: config.providers.rerank?.baseUrl,
+    nerBaseUrl: config.providers.ner?.baseUrl,
+    transcriptionBaseUrl: config.providers.transcription?.baseUrl,
+  });
+
+  const engine = createEngine(config);
   globalHolder.__launchstackEngine = { engine };
   return engine;
 }

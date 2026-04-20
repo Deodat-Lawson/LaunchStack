@@ -10,12 +10,79 @@
  * This means a user can set AI_BASE_URL + AI_API_KEY once to route
  * ALL capabilities to one provider (e.g. SiliconFlow), then override
  * individual capabilities as needed.
+ *
+ * Historically this module read process.env directly at module load. It now
+ * takes configuration via configureProviders() so the core package can
+ * consume the same resolvers without env coupling. apps/web/src/server/
+ * engine.ts registers the config during startup; legacy callers continue
+ * to pass per-capability env values via the `capabilityEnv` parameters.
  */
 
-// ── Global fallback ─────────────────────────────────────────────────
+export type ProviderMode = "cloud" | "sidecar";
 
-const AI_BASE_URL = process.env.AI_BASE_URL; // e.g. https://api.siliconflow.cn/v1
-const AI_API_KEY = process.env.AI_API_KEY;
+export interface ProvidersRegistryConfig {
+    /** Global OpenAI-compatible base URL (AI_BASE_URL). */
+    aiBaseUrl?: string;
+    /** Global OpenAI-compatible key (AI_API_KEY). */
+    aiApiKey?: string;
+    /** Sidecar service URL — presence enables sidecar auto-selection. */
+    sidecarUrl?: string;
+    /** Explicit per-capability provider mode override (from *_PROVIDER env). */
+    rerankProviderMode?: ProviderMode;
+    nerProviderMode?: ProviderMode;
+    transcriptionProviderMode?: ProviderMode;
+    /** Presence of per-capability base URLs (factored into sidecar selection). */
+    rerankBaseUrl?: string;
+    nerBaseUrl?: string;
+    transcriptionBaseUrl?: string;
+}
+
+let _config: ProvidersRegistryConfig | null = null;
+
+/**
+ * Register provider config. Called once at startup by the hosting app (see
+ * apps/web/src/server/engine.ts). Idempotent — subsequent calls replace the
+ * captured config entirely.
+ */
+export function configureProviders(config: ProvidersRegistryConfig): void {
+    _config = config;
+}
+
+/**
+ * Read the active config. Falls back to process.env for the transitional
+ * window while registry.ts still lives in apps/web — this fallback is
+ * removed when the file moves into @launchstack/core in step 6. Callers
+ * should not need to invoke this directly.
+ */
+function getConfig(): ProvidersRegistryConfig {
+    if (_config) return _config;
+    return {
+        aiBaseUrl: process.env.AI_BASE_URL,
+        aiApiKey: process.env.AI_API_KEY,
+        sidecarUrl: process.env.SIDECAR_URL,
+        rerankProviderMode:
+            process.env.RERANK_PROVIDER?.toLowerCase() === "sidecar"
+                ? "sidecar"
+                : process.env.RERANK_PROVIDER?.toLowerCase() === "cloud"
+                    ? "cloud"
+                    : undefined,
+        nerProviderMode:
+            process.env.NER_PROVIDER?.toLowerCase() === "sidecar"
+                ? "sidecar"
+                : process.env.NER_PROVIDER?.toLowerCase() === "cloud"
+                    ? "cloud"
+                    : undefined,
+        transcriptionProviderMode:
+            process.env.TRANSCRIPTION_PROVIDER?.toLowerCase() === "sidecar"
+                ? "sidecar"
+                : process.env.TRANSCRIPTION_PROVIDER?.toLowerCase() === "cloud"
+                    ? "cloud"
+                    : undefined,
+        rerankBaseUrl: process.env.RERANK_API_BASE_URL,
+        nerBaseUrl: process.env.NER_API_BASE_URL,
+        transcriptionBaseUrl: process.env.TRANSCRIPTION_API_BASE_URL,
+    };
+}
 
 // ── Resolve helpers ─────────────────────────────────────────────────
 
@@ -23,7 +90,7 @@ export function resolveBaseUrl(
     capabilityEnv: string | undefined,
     defaultUrl: string,
 ): string {
-    const url = capabilityEnv ?? AI_BASE_URL ?? defaultUrl;
+    const url = capabilityEnv ?? getConfig().aiBaseUrl ?? defaultUrl;
     return url.replace(/\/$/, "");
 }
 
@@ -32,7 +99,8 @@ export function resolveApiKey(
     ...legacyFallbacks: (string | undefined)[]
 ): string {
     if (capabilityEnv) return capabilityEnv;
-    if (AI_API_KEY) return AI_API_KEY;
+    const aiKey = getConfig().aiApiKey;
+    if (aiKey) return aiKey;
     for (const key of legacyFallbacks) {
         if (key) return key;
     }
@@ -48,29 +116,28 @@ export function resolveModel(
 
 // ── Provider type resolution ────────────────────────────────────────
 
-export type ProviderMode = "cloud" | "sidecar";
-
-const SIDECAR_URL = process.env.SIDECAR_URL;
-
 export function resolveRerankProvider(): ProviderMode {
-    if (process.env.RERANK_PROVIDER?.toLowerCase() === "sidecar") return "sidecar";
-    if (SIDECAR_URL && !process.env.RERANK_API_BASE_URL && !AI_BASE_URL) return "sidecar";
+    const c = getConfig();
+    if (c.rerankProviderMode === "sidecar") return "sidecar";
+    if (c.sidecarUrl && !c.rerankBaseUrl && !c.aiBaseUrl) return "sidecar";
     return "cloud";
 }
 
 export function resolveNERProvider(): ProviderMode {
-    if (process.env.NER_PROVIDER?.toLowerCase() === "sidecar") return "sidecar";
-    if (SIDECAR_URL && !process.env.NER_API_BASE_URL && !AI_BASE_URL) return "sidecar";
+    const c = getConfig();
+    if (c.nerProviderMode === "sidecar") return "sidecar";
+    if (c.sidecarUrl && !c.nerBaseUrl && !c.aiBaseUrl) return "sidecar";
     return "cloud";
 }
 
 export function resolveTranscriptionProvider(): ProviderMode {
-    if (process.env.TRANSCRIPTION_PROVIDER?.toLowerCase() === "sidecar") return "sidecar";
-    if (SIDECAR_URL && !process.env.TRANSCRIPTION_API_BASE_URL && !AI_BASE_URL) return "sidecar";
+    const c = getConfig();
+    if (c.transcriptionProviderMode === "sidecar") return "sidecar";
+    if (c.sidecarUrl && !c.transcriptionBaseUrl && !c.aiBaseUrl) return "sidecar";
     return "cloud";
 }
 
 /** Whether the current deployment uses cloud providers (tokens apply) */
 export function isCloudMode(): boolean {
-    return !SIDECAR_URL;
+    return !getConfig().sidecarUrl;
 }

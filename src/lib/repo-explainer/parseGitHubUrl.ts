@@ -18,7 +18,7 @@ export function parseGitHubUrl(url: string): { owner: string; repo: string } | n
 
   for (const pattern of patterns) {
     const match = value.match(pattern);
-    if (match) {
+    if (match?.[1] && match[2]) {
       return { owner: match[1], repo: match[2] };
     }
   }

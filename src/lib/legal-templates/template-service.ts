@@ -7,6 +7,7 @@ import { TEMPLATE_REGISTRY } from "./template-registry";
 export interface ValidationResult {
   valid: boolean;
   errors: string[];
+  fieldErrors: Record<string, string>;
 }
 
 export interface GenerateResult {
@@ -14,6 +15,7 @@ export interface GenerateResult {
   errors: string[];
   document: Buffer | null;
   filename: string;
+  fieldErrors?: Record<string, string>;
 }
 
 export function validateData(
@@ -22,14 +24,21 @@ export function validateData(
 ): ValidationResult {
   const template = TEMPLATE_REGISTRY[templateId];
   if (!template) {
-    return { valid: false, errors: [`Unknown template: ${templateId}`] };
+    return {
+      valid: false,
+      errors: [`Unknown template: ${templateId}`],
+      fieldErrors: {},
+    };
   }
 
   const errors: string[] = [];
+  const fieldErrors: Record<string, string> = {};
   for (const field of template.fields) {
     const val = data[field.key] ?? "";
     if (field.required && val.trim() === "") {
-      errors.push(`Missing required field: ${field.label} (${field.key})`);
+      const message = `${field.label} is required`;
+      errors.push(message);
+      fieldErrors[field.key] = message;
     }
     if (
       field.type === "select" &&
@@ -37,13 +46,13 @@ export function validateData(
       field.options &&
       !field.options.includes(val)
     ) {
-      errors.push(
-        `Invalid value for ${field.label}: "${val}". Must be one of: ${field.options.join(", ")}`
-      );
+      const message = `Invalid selection for ${field.label}`;
+      errors.push(message);
+      fieldErrors[field.key] = message;
     }
   }
 
-  return { valid: errors.length === 0, errors };
+  return { valid: errors.length === 0, errors, fieldErrors };
 }
 
 export function fillTemplate(
@@ -92,6 +101,7 @@ export function generateDocument(
     return {
       success: false,
       errors: validation.errors,
+      fieldErrors: validation.fieldErrors,
       document: null,
       filename: "",
     };

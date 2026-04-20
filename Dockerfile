@@ -53,7 +53,7 @@ COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/scripts ./scripts
 
-CMD ["sh", "-c", "node scripts/ensure-pgvector.mjs && pnpm db:push"]
+CMD ["sh", "-c", "node scripts/ensure-pgvector.mjs && pnpm db:push && pnpm db:backfill:versions"]
 
 # ── Runner ───────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner

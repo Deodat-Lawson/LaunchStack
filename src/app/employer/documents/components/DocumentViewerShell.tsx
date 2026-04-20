@@ -7,6 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
 import { Sidebar } from "./Sidebar";
 import { DocumentViewer } from "./DocumentViewer";
+import { VersionHistoryPanel } from "./VersionHistoryPanel";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "~/app/employer/documents/components/ui/resizable";
 import { cn } from "~/lib/utils";
 import type { ViewMode, DocumentType, CategoryGroup, errorType, PredictiveAnalysisResponse } from "../types";
@@ -137,6 +138,26 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [qaSubMode, setQaSubMode] = useState<"simple" | "chat">("simple");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isPreviewCollapsed, setIsPreviewCollapsed] = useState(false);
+
+  // Version history: which document's history modal is open.
+  // `autoOpenUpload` lets the dropdown's "Upload new version" shortcut open
+  // the modal with its file picker already triggered — saves the user a click.
+  const [versionHistoryTarget, setVersionHistoryTarget] = useState<
+    { id: number; title: string; autoOpenUpload?: boolean } | null
+  >(null);
+
+  // Multi-select state for bulk operations + the "Selected" chat scope.
+  // Stored as numeric IDs so it survives document refetches (which produce
+  // new object references). Pruned after fetches to drop deleted docs.
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+
+  // Inline "viewing an older version" preview state. When set, the viewer
+  // renders the old version's content via the version-scoped content endpoint
+  // and a banner offers "Return to current" / "Revert" actions. Cleared when
+  // the user picks another document, closes the preview, or reverts.
+  const [previewVersion, setPreviewVersion] = useState<
+    { documentId: number; versionId: number; versionNumber: number } | null
+  >(null);
   
   // AI States (Simple Query)
   const [aiQuestion, setAiQuestion] = useState("");
@@ -144,7 +165,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [aiError, setAiError] = useState("");
   const [referencePages, setReferencePages] = useState<number[]>([]);
   const [aiStyle, setAiStyle] = useState<string>("concise");
-  const [searchScope, setSearchScope] = useState<"document" | "company" | "archive">("document");
+  const [searchScope, setSearchScope] = useState<"document" | "company" | "archive" | "selected">("document");
   const [aiAnswerModel, setAiAnswerModel] = useState<AIModelType | undefined>(undefined);
   const { sendQuery: sendAIChatQuery, loading: isAiLoading } = useAIChat();
   
@@ -158,7 +179,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const [providerAvailability, setProviderAvailability] = useState<Partial<ProviderAvailability>>({});
 
   useEffect(() => {
-    const allowedModels = ProviderModelMap[provider];
+    const allowedModels = ProviderModelMap[provider] as readonly AIModelType[] | undefined;
     if (allowedModels && !allowedModels.includes(aiModel)) {
       setAiModel(ProviderDefaultModels[provider]);
     }
@@ -193,8 +214,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   // Repo diagram state
   const [diagramRepoUrl, setDiagramRepoUrl] = useState<string | null>(null);
 
-  // Delete confirmation state
-  const [deleteConfirmDocId, setDeleteConfirmDocId] = useState<number | null>(null);
+  // Delete confirmation state. `deleteConfirmIds` drives the same dialog for
+  // both single and bulk delete — a single-item array is just a bulk of one.
+  // Keeping two separate state slots would force two dialogs; unifying here
+  // means one confirm flow, one copy-pattern that branches on length.
+  const [deleteConfirmIds, setDeleteConfirmIds] = useState<number[] | null>(null);
 
   const previewPanelRef = useRef<ImperativePanelHandle>(null);
   const sidebarPanelRef = useRef<ImperativePanelHandle>(null);
@@ -329,11 +353,41 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     return () => clearInterval(interval);
   }, [selectedDoc, fetchDocuments]);
 
-  // Sync selectedDoc when the documents list refreshes (e.g. after OCR completes)
+  // Sync selectedDoc when the documents list refreshes.
+  //
+  // This runs whenever fetchDocuments() repopulates the `documents` array,
+  // which happens on initial load, after deletes, after OCR polling, and
+  // crucially after a new version is uploaded (the VersionHistoryPanel
+  // calls onVersionsChanged -> fetchDocuments to refresh the list).
+  //
+  // The original effect only handled the "ocrProcessed: false -> true"
+  // transition — that missed the version-upload case entirely, because
+  // on version upload the selected document's ocrProcessed is already true
+  // (it was set to true the first time the document was processed). So the
+  // effect would early-return and `selectedDoc.url` would stay pinned to
+  // whichever version was current when the user first clicked the sidebar
+  // entry, ignoring any subsequent version swaps. The visible symptom was
+  // the main viewer continuing to render the old blob in an iframe even
+  // though the DB had been updated with the new one.
+  //
+  // The fix: compare the relevant fields explicitly and only call
+  // setSelectedDoc when something meaningful actually changed. We intentionally
+  // do NOT unconditionally setSelectedDoc(updated), because every call to
+  // fetchDocuments produces new object references even for unchanged rows,
+  // which would cause an extra render on every refresh with no value change.
   useEffect(() => {
-    if (!selectedDoc || selectedDoc.ocrProcessed !== false) return;
+    if (!selectedDoc) return;
     const updated = documents.find((d) => d.id === selectedDoc.id);
-    if (updated && updated.ocrProcessed === true) {
+    if (!updated) return;
+
+    const hasChanged =
+      updated.url !== selectedDoc.url ||
+      updated.mimeType !== selectedDoc.mimeType ||
+      updated.ocrProcessed !== selectedDoc.ocrProcessed ||
+      updated.title !== selectedDoc.title ||
+      updated.category !== selectedDoc.category;
+
+    if (hasChanged) {
       setSelectedDoc(updated);
     }
   }, [documents, selectedDoc]);
@@ -378,7 +432,75 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     setAiAnswerModel(undefined);
     setReferencePages([]);
     setPredictiveAnalysis(null);
+    // Switching to a different document cancels any active version preview.
+    // Without this, the viewer would keep showing the previous document's old
+    // version while the sidebar highlights the new document.
+    setPreviewVersion(null);
   };
+
+  /**
+   * Revert the previewed version to current, via the revert API. On success,
+   * the viewer switches back to showing the current version (which is now
+   * the formerly-previewed one) and we refresh the document list so any
+   * derived fields are up to date.
+   */
+  const handleRevertPreview = useCallback(async () => {
+    if (!previewVersion) return;
+    try {
+      const res = await fetch(
+        `/api/documents/${previewVersion.documentId}/versions/${previewVersion.versionId}/revert`,
+        { method: "POST" }
+      );
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(body.error ?? `HTTP ${res.status}`);
+      }
+      toast.success(`Reverted to version ${previewVersion.versionNumber}`);
+      setPreviewVersion(null);
+      await fetchDocuments();
+    } catch (err) {
+      toast.error(
+        `Failed to revert: ${err instanceof Error ? err.message : String(err)}`
+      );
+    }
+  }, [previewVersion, fetchDocuments]);
+
+  /**
+   * Derived viewer document. When the user has opened a past version from the
+   * version-history panel, the viewer renders that version's content by
+   * swapping `selectedDoc.url` for a version-scoped content URL. The rest of
+   * the document metadata (title, mimeType, etc.) stays the same so display
+   * type detection still works.
+   *
+   * Cache-busting via the versionId in the query string ensures iframes don't
+   * accidentally keep serving a previous version's content.
+   */
+  const displayDoc: DocumentType | null =
+    previewVersion && selectedDoc && previewVersion.documentId === selectedDoc.id
+      ? {
+          ...selectedDoc,
+          url: `/api/documents/${previewVersion.documentId}/versions/${previewVersion.versionId}/content`,
+        }
+      : selectedDoc;
+
+  /**
+   * Callback passed into every non-minimal `DocumentViewer` so it can render
+   * a visible "Versions" button in its header. Only wired for employers —
+   * for employees we pass undefined and the button won't render.
+   *
+   * Uses `selectedDoc` (not `displayDoc`) so the modal always opens for the
+   * canonical document, not the preview variant. They share the same id and
+   * title so the difference is cosmetic, but this avoids any future confusion
+   * if `displayDoc` ever diverges from `selectedDoc` in other fields.
+   */
+  const openVersionHistoryForSelected =
+    userRole === "employer" && selectedDoc
+      ? () =>
+          setVersionHistoryTarget({
+            id: selectedDoc.id,
+            title: selectedDoc.title,
+          })
+      : undefined;
 
   const handleGenerateDiagram = useCallback((archiveName: string) => {
     // Find a doc from this archive whose title contains owner/repo (set by the upload API)
@@ -394,33 +516,124 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   }, [documents]);
 
   const requestDeleteDocument = (docId: number) => {
-    setDeleteConfirmDocId(docId);
+    setDeleteConfirmIds([docId]);
   };
 
-  const confirmDeleteDocument = async () => {
-    const docId = deleteConfirmDocId;
-    setDeleteConfirmDocId(null);
-    if (!docId) return;
+  const requestBulkDelete = useCallback((ids: number[]) => {
+    if (ids.length > 0) setDeleteConfirmIds(ids);
+  }, []);
+
+  const confirmDeleteDocuments = async () => {
+    const ids = deleteConfirmIds;
+    setDeleteConfirmIds(null);
+    if (!ids || ids.length === 0) return;
 
     try {
-      const response = await fetch('/api/deleteDocument', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ docId: docId.toString() }),
+      // Single-doc delete keeps the existing lightweight endpoint; batch uses
+      // the atomic batchDelete endpoint so N docs succeed-or-fail together.
+      let result: { message?: string; error?: string } = {};
+      if (ids.length === 1) {
+        const response = await fetch('/api/deleteDocument', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ docId: String(ids[0]) }),
+        });
+        result = (await response.json()) as errorType;
+        if (!response.ok) throw new Error(result.error ?? 'Failed to delete document');
+      } else {
+        const response = await fetch('/api/documents/batchDelete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ docIds: ids }),
+        });
+        result = (await response.json()) as { message?: string; error?: string };
+        if (!response.ok) throw new Error(result.error ?? 'Failed to delete documents');
+      }
+
+      const deletedSet = new Set(ids);
+      setDocuments(prev => prev.filter(doc => !deletedSet.has(doc.id)));
+      if (selectedDoc && deletedSet.has(selectedDoc.id)) handleSelectDoc(null);
+      setSelectedIds(prev => {
+        const next = new Set(prev);
+        for (const id of ids) next.delete(id);
+        return next;
       });
-
-      const result = (await response.json()) as errorType;
-
-      if (!response.ok) throw new Error(result.error ?? 'Failed to delete document');
-
-      setDocuments(prev => prev.filter(doc => doc.id !== docId));
-      if (selectedDoc?.id === docId) handleSelectDoc(null);
-      toast.success(result.message ?? 'Document deleted successfully');
+      toast.success(result.message ?? `Deleted ${ids.length} document${ids.length === 1 ? '' : 's'}`);
     } catch (error) {
-      console.error('Error deleting document:', error);
-      toast.error(`Failed to delete document: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Error deleting document(s):', error);
+      toast.error(`Failed to delete: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
+
+  /**
+   * Rename a document. Optimistic update for snappy UX: the sidebar and
+   * preview reflect the new title immediately. On server failure we roll the
+   * local state back and surface a toast. The existing documents-sync effect
+   * propagates the change to `selectedDoc` when `documents` is updated.
+   */
+  const handleRenameDocument = useCallback(
+    async (docId: number, nextTitle: string): Promise<boolean> => {
+      const trimmed = nextTitle.trim();
+      if (!trimmed) return false;
+
+      const prevDocs = documents;
+      const target = prevDocs.find(d => d.id === docId);
+      if (!target || target.title === trimmed) return false;
+
+      // Optimistic: flip the local copy first.
+      setDocuments(prev => prev.map(d => (d.id === docId ? { ...d, title: trimmed } : d)));
+
+      try {
+        const res = await fetch(`/api/documents/${docId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: trimmed }),
+        });
+        if (!res.ok) {
+          const body = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
+          throw new Error(body.message ?? body.error ?? `HTTP ${res.status}`);
+        }
+        return true;
+      } catch (err) {
+        // Roll back on failure.
+        setDocuments(prevDocs);
+        toast.error(
+          `Failed to rename: ${err instanceof Error ? err.message : 'Unknown error'}`
+        );
+        return false;
+      }
+    },
+    [documents]
+  );
+
+  const handleUploadNewVersion = useCallback((doc: DocumentType) => {
+    setVersionHistoryTarget({ id: doc.id, title: doc.title, autoOpenUpload: true });
+  }, []);
+
+  const toggleDocSelection = useCallback((id: number) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const clearDocSelection = useCallback(() => setSelectedIds(new Set()), []);
+
+  // Prune selectedIds of docs that no longer exist after a document refetch.
+  // Runs only when the documents array identity actually changes.
+  useEffect(() => {
+    if (selectedIds.size === 0) return;
+    const existing = new Set(documents.map(d => d.id));
+    let changed = false;
+    const next = new Set<number>();
+    for (const id of selectedIds) {
+      if (existing.has(id)) next.add(id);
+      else changed = true;
+    }
+    if (changed) setSelectedIds(next);
+  }, [documents, selectedIds]);
 
   const fetchPredictiveAnalysis = useCallback(async (documentId: number, forceRefresh = false) => {
     setPredictiveError("");
@@ -476,8 +689,9 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
   const handleAiSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!aiQuestion.trim()) return;
-    
+
     if (searchScope === "document" && !selectedDoc) return;
+    if (searchScope === "selected" && selectedIds.size < 2) return;
     let resolvedCompanyId = companyId;
     if ((searchScope === "company" || searchScope === "archive") && !resolvedCompanyId) {
       resolvedCompanyId = await ensureCompanyContext();
@@ -507,6 +721,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         documentId: searchScope === "document" && selectedDoc ? selectedDoc.id : undefined,
         companyId: (searchScope === "company" || searchScope === "archive") ? resolvedCompanyId ?? undefined : undefined,
         archiveName: searchScope === "archive" && selectedDoc?.sourceArchiveName ? selectedDoc.sourceArchiveName : undefined,
+        selectedDocumentIds: searchScope === "selected" ? Array.from(selectedIds) : undefined,
       });
 
       if (!data) throw new Error("Failed to get AI response");
@@ -522,7 +737,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
     }
   };
 
-  const handleSearchScopeChange = useCallback((scope: "document" | "company" | "archive") => {
+  const handleSearchScopeChange = useCallback((scope: "document" | "company" | "archive" | "selected") => {
     if (scope === "company") {
       void ensureCompanyContext().then((resolvedCompanyId) => {
         if (resolvedCompanyId) {
@@ -545,8 +760,31 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
       });
       return;
     }
+    if (scope === "selected") {
+      // No company context needed — selected scope works against doc IDs the
+      // user already owns. Guard against "Selected" with <2 checked just in
+      // case the button survived a stale render.
+      if (selectedIds.size >= 2) {
+        setSearchScope("selected");
+      } else {
+        setSearchScope("document");
+      }
+      return;
+    }
     setSearchScope("document");
-  }, [ensureCompanyContext]);
+  }, [ensureCompanyContext, selectedIds]);
+
+  // Auto-promote to "selected" when the user checks 2+ docs, and auto-demote
+  // back to "document" when they drop below 2. Only flips to/from "document"
+  // so that a manual pick of "company"/"archive" sticks even if the checked
+  // set changes — we don't want to yank users out of their chosen scope.
+  useEffect(() => {
+    if (selectedIds.size >= 2 && searchScope === "document") {
+      setSearchScope("selected");
+    } else if (selectedIds.size < 2 && searchScope === "selected") {
+      setSearchScope("document");
+    }
+  }, [selectedIds.size, searchScope]);
 
   const handleCreateChat = async () => {
     if (!userId) return null;
@@ -666,10 +904,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
               {qaSubMode === "simple" ? (
                 <ResizablePanelGroup direction="horizontal" className="h-full">
                   <ResizablePanel defaultSize={65} minSize={40}>
-                    <DocumentViewer 
-                      document={selectedDoc} 
+                    <DocumentViewer
+                      document={displayDoc}
                       pdfPageNumber={pdfPageNumber}
                       setPdfPageNumber={setPdfPageNumber}
+                      onOpenVersionHistory={openVersionHistoryForSelected}
                     />
                   </ResizablePanel>
                   
@@ -725,6 +964,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                               providerAvailability={providerAvailability}
                               searchScope={searchScope}
                               setSearchScope={handleSearchScopeChange}
+                              selectedDocumentIds={Array.from(selectedIds)}
                               companyId={companyId}
                               setPdfPageNumber={setPdfPageNumber}
                               styleOptions={STYLE_OPTIONS}
@@ -751,7 +991,7 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
                             onExpand={() => setIsPreviewCollapsed(false)}
                           >
                             <DocumentViewer 
-                              document={selectedDoc} 
+                              document={displayDoc} 
                               pdfPageNumber={pdfPageNumber}
                               setPdfPageNumber={setPdfPageNumber}
                               hideActions={true}
@@ -768,15 +1008,16 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         return (
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={60} minSize={35}>
-              <DocumentViewer 
-                document={selectedDoc} 
+              <DocumentViewer
+                document={displayDoc}
                 pdfPageNumber={pdfPageNumber}
                 setPdfPageNumber={setPdfPageNumber}
+                onOpenVersionHistory={openVersionHistoryForSelected}
               />
             </ResizablePanel>
-            
+
             <ResizableHandle className="w-px bg-border" />
-            
+
             <ResizablePanel defaultSize={40} minSize={28} maxSize={55}>
               <DocumentSanityChecker 
                 selectedDoc={selectedDoc}
@@ -803,10 +1044,11 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         );
       case "document-only":
         return (
-          <DocumentViewer 
-            document={selectedDoc} 
+          <DocumentViewer
+            document={displayDoc}
             pdfPageNumber={pdfPageNumber}
             setPdfPageNumber={setPdfPageNumber}
+            onOpenVersionHistory={openVersionHistoryForSelected}
           />
         );
       case "generator":
@@ -839,13 +1081,14 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
         return (
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={60} minSize={35}>
-              <DocumentViewer 
-                document={selectedDoc} 
+              <DocumentViewer
+                document={displayDoc}
                 pdfPageNumber={pdfPageNumber}
                 setPdfPageNumber={setPdfPageNumber}
+                onOpenVersionHistory={openVersionHistoryForSelected}
               />
             </ResizablePanel>
-            
+
             <ResizableHandle className="w-px bg-border" />
             
             <ResizablePanel defaultSize={40} minSize={25} maxSize={50}>
@@ -886,6 +1129,12 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
             setViewMode={setViewMode}
             toggleCategory={toggleCategory}
             deleteDocument={userRole === 'employer' ? requestDeleteDocument : undefined}
+            renameDocument={userRole === 'employer' ? handleRenameDocument : undefined}
+            onUploadNewVersion={userRole === 'employer' ? handleUploadNewVersion : undefined}
+            selectedIds={selectedIds}
+            onToggleSelect={userRole === 'employer' ? toggleDocSelection : undefined}
+            onClearSelection={clearDocSelection}
+            onBulkDelete={userRole === 'employer' ? requestBulkDelete : undefined}
             isCollapsed={isSidebarCollapsed}
             onCollapseToggle={(collapsed) => {
               if (collapsed) sidebarPanelRef.current?.collapse();
@@ -903,6 +1152,12 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
             }}
             userRole={userRole}
             totalDocuments={documents.length}
+            onOpenVersionHistory={
+              userRole === 'employer'
+                ? (doc) =>
+                    setVersionHistoryTarget({ id: doc.id, title: doc.title })
+                : undefined
+            }
             onGenerateDiagram={handleGenerateDiagram}
           />
         </ResizablePanel>
@@ -911,34 +1166,130 @@ export function DocumentViewerShell({ userRole }: DocumentViewerShellProps) {
 
         {/* Main Content Area */}
         <ResizablePanel defaultSize={80} minSize={50}>
-          <div className="h-full w-full">
-            {renderContent()}
+          <div className="h-full w-full flex flex-col">
+            {/*
+              Old-version preview banner. Rendered above the viewer when the
+              user has opened a non-current version from the version-history
+              panel. Clicking "Return to current" clears preview state; the
+              viewer then shows the current version again. "Revert to this
+              version" makes the previewed version authoritative.
+            */}
+            {previewVersion &&
+              selectedDoc &&
+              previewVersion.documentId === selectedDoc.id && (
+                <div className="flex-shrink-0 px-4 py-2.5 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-800/50 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-3.5 h-3.5 text-amber-700 dark:text-amber-300"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold text-amber-900 dark:text-amber-100">
+                        Viewing version {previewVersion.versionNumber} (not
+                        current)
+                      </div>
+                      <div className="text-[10px] text-amber-700 dark:text-amber-300 truncate">
+                        Search and Q&amp;A still use the current version.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-xs border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-100 hover:bg-amber-100 dark:hover:bg-amber-900/40"
+                      onClick={() => setPreviewVersion(null)}
+                    >
+                      Return to current
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="h-7 text-xs bg-amber-600 hover:bg-amber-700 text-white"
+                      onClick={() => void handleRevertPreview()}
+                    >
+                      Revert to this version
+                    </Button>
+                  </div>
+                </div>
+              )}
+            <div className="flex-1 min-h-0">{renderContent()}</div>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
 
       <AlertDialog
-        open={deleteConfirmDocId !== null}
-        onOpenChange={(open) => { if (!open) setDeleteConfirmDocId(null); }}
+        open={deleteConfirmIds !== null}
+        onOpenChange={(open) => { if (!open) setDeleteConfirmIds(null); }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete document?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {deleteConfirmIds && deleteConfirmIds.length > 1
+                ? `Delete ${deleteConfirmIds.length} documents?`
+                : "Delete document?"}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently remove the document and all related data. This action cannot be undone.
+              {deleteConfirmIds && deleteConfirmIds.length > 1
+                ? `This will permanently remove all ${deleteConfirmIds.length} selected documents and their related data. This action cannot be undone.`
+                : "This will permanently remove the document and all related data. This action cannot be undone."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-600 hover:bg-red-700 text-white"
-              onClick={() => void confirmDeleteDocument()}
+              onClick={() => void confirmDeleteDocuments()}
             >
-              Delete
+              {deleteConfirmIds && deleteConfirmIds.length > 1
+                ? `Delete ${deleteConfirmIds.length}`
+                : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {versionHistoryTarget && (
+        <VersionHistoryPanel
+          documentId={versionHistoryTarget.id}
+          documentTitle={versionHistoryTarget.title}
+          autoOpenUpload={versionHistoryTarget.autoOpenUpload}
+          onClose={() => setVersionHistoryTarget(null)}
+          onVersionsChanged={() => void fetchDocuments()}
+          onPreviewVersion={(versionId, versionNumber) => {
+            // Switch the viewer to the previewed version. We scope the
+            // preview to whichever doc the history panel was opened for,
+            // which may not be the currently-selected doc — e.g. the user
+            // could have opened history from one doc's dropdown while a
+            // different doc is selected in the viewer. In that case we also
+            // flip selectedDoc to the target so the banner + viewer stay
+            // consistent.
+            if (versionHistoryTarget) {
+              if (selectedDoc?.id !== versionHistoryTarget.id) {
+                const target = documents.find(
+                  (d) => d.id === versionHistoryTarget.id
+                );
+                if (target) setSelectedDoc(target);
+              }
+              setPreviewVersion({
+                documentId: versionHistoryTarget.id,
+                versionId,
+                versionNumber,
+              });
+            }
+          }}
+        />
+      )}
 
       <Toaster />
     </div>

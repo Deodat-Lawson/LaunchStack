@@ -37,8 +37,10 @@ interface AgentChatInterfaceProps {
   userId: string;
   onAIResponse?: (response: string) => void;
   selectedDocTitle?: string | null;
-  searchScope: 'document' | 'company' | 'archive';
+  searchScope: 'document' | 'company' | 'archive' | 'selected';
   selectedDocId?: number | null;
+  /** User-picked doc IDs, used when searchScope === 'selected'. */
+  selectedDocumentIds?: number[];
   companyId?: number | null;
   archiveName?: string | null;
   aiStyle?: string;
@@ -58,6 +60,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
   selectedDocTitle,
   searchScope,
   selectedDocId,
+  selectedDocumentIds,
   companyId,
   archiveName,
   aiStyle = 'concise',
@@ -233,6 +236,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
           companyId: (searchScope === "company" || searchScope === "archive") && companyId ? companyId : undefined,
           archiveName: searchScope === "archive" && archiveName ? archiveName : undefined,
+          selectedDocumentIds: searchScope === "selected" ? selectedDocumentIds : undefined,
         });
 
         if (!aiData) {
@@ -355,6 +359,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
           documentId: searchScope === "document" && selectedDocId ? selectedDocId : undefined,
           companyId: (searchScope === "company" || searchScope === "archive") && companyId ? companyId : undefined,
           archiveName: searchScope === "archive" && archiveName ? archiveName : undefined,
+          selectedDocumentIds: searchScope === "selected" ? selectedDocumentIds : undefined,
         });
         if (!aiData) throw new Error("Failed to get AI response");
 
@@ -375,7 +380,7 @@ export const AgentChatInterface: React.FC<AgentChatInterfaceProps> = ({
         setIsSubmitting(false);
       }
     })();
-  }, [isSubmitting, chatId, onCreateChat, sendMessage, searchScope, selectedDocTitle, messages, sendAIChatQuery, aiStyle, enableWebSearch, aiPersona, aiModel, selectedDocId, companyId, archiveName, onAIResponse]);
+  }, [isSubmitting, chatId, onCreateChat, sendMessage, searchScope, selectedDocTitle, messages, sendAIChatQuery, aiStyle, enableWebSearch, aiPersona, aiModel, selectedDocId, selectedDocumentIds, companyId, archiveName, onAIResponse]);
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">

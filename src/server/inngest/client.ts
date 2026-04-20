@@ -1,8 +1,8 @@
 import { EventSchemas, Inngest } from "inngest";
 import type { ProcessDocumentEventData } from "~/lib/ocr/types";
 import type { TrendSearchEventData } from "~/lib/tools/trend-search/types";
-import type { DocumentEdit, ReviewAction } from "~/lib/adeu/types";
 import type { ProspectorEventData } from "~/lib/tools/client-prospector/types";
+import type { DocumentEdit, ReviewAction } from "~/lib/adeu/types";
 
 export type ProcessDocumentEvent = {
   name: "document/process.requested";
@@ -32,6 +32,15 @@ export type PredictiveAnalysisEvent = {
     includeRelatedDocs: boolean;
     timeoutMs?: number;
     jobId: string;
+  };
+};
+
+export type ReindexCompanyEmbeddingsEvent = {
+  name: "company/reindex-embeddings.requested";
+  data: {
+    companyId: number;
+    pendingIndexKey: string;
+    triggeredByUserId?: string;
   };
 };
 
@@ -71,6 +80,7 @@ export type Events =
   | ClientProspectorEvent
   | CompanyMetadataExtractEvent
   | PredictiveAnalysisEvent
+  | ReindexCompanyEmbeddingsEvent
   | DocumentModifyEvent
   | WebsiteCrawlEvent;
 

@@ -16,12 +16,25 @@ const serverSchema = z.object({
   OPENAI_API_KEY: optionalString(),
   OPENAI_MODEL: optionalString(),
   CHAT_MODEL: optionalString(),         // provider-agnostic chat model (e.g. deepseek-ai/DeepSeek-V3)
+  EMBEDDING_INDEX: optionalString(),
+  // 32 raw bytes encoded as base64 (44 chars). Used to encrypt per-company
+  // embedding provider credentials at rest. Required whenever a company sets
+  // its own API key through the settings UI. Generate with:
+  //   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+  EMBEDDING_SECRETS_KEY: optionalString(),
   ANTHROPIC_API_KEY: optionalString(),
   ANTHROPIC_MODEL: optionalString(),
   GOOGLE_AI_API_KEY: optionalString(),
   GOOGLE_MODEL: optionalString(),
   OLLAMA_BASE_URL: optionalString(),
   OLLAMA_MODEL: optionalString(),
+  OLLAMA_EMBEDDING_MODEL: optionalString(),
+  OLLAMA_EMBEDDING_DIMENSION: optionalString(),
+  OLLAMA_EMBEDDING_VERSION: optionalString(),
+  HUGGINGFACE_API_KEY: optionalString(),
+  HUGGINGFACE_EMBEDDING_MODEL: optionalString(),
+  HUGGINGFACE_EMBEDDING_DIMENSION: optionalString(),
+  HUGGINGFACE_EMBEDDING_VERSION: optionalString(),
   CLERK_SECRET_KEY: requiredString(),
   BLOB_READ_WRITE_TOKEN: optionalString(),
   UPLOADTHING_TOKEN: optionalString(),
@@ -61,6 +74,9 @@ const serverSchema = z.object({
   // Sidecar configuration (optional, for local ML compute)
   // When set, Graph RAG entity extraction is automatically enabled
   SIDECAR_URL: optionalString(),
+  SIDECAR_EMBEDDING_MODEL: optionalString(),
+  SIDECAR_EMBEDDING_DIMENSION: optionalString(),
+  SIDECAR_EMBEDDING_VERSION: optionalString(),
   // OSS OCR worker (Marker + Docling). When set, MARKER becomes the default
   // OCR provider and DoclingIngestionAdapter takes over Office formats.
   OCR_WORKER_URL: optionalString(),
@@ -193,12 +209,21 @@ function parseServerEnv() {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
     CHAT_MODEL: process.env.CHAT_MODEL,
+    EMBEDDING_INDEX: process.env.EMBEDDING_INDEX,
+    EMBEDDING_SECRETS_KEY: process.env.EMBEDDING_SECRETS_KEY,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL,
     GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
     GOOGLE_MODEL: process.env.GOOGLE_MODEL,
     OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
     OLLAMA_MODEL: process.env.OLLAMA_MODEL,
+    OLLAMA_EMBEDDING_MODEL: process.env.OLLAMA_EMBEDDING_MODEL,
+    OLLAMA_EMBEDDING_DIMENSION: process.env.OLLAMA_EMBEDDING_DIMENSION,
+    OLLAMA_EMBEDDING_VERSION: process.env.OLLAMA_EMBEDDING_VERSION,
+    HUGGINGFACE_API_KEY: process.env.HUGGINGFACE_API_KEY,
+    HUGGINGFACE_EMBEDDING_MODEL: process.env.HUGGINGFACE_EMBEDDING_MODEL,
+    HUGGINGFACE_EMBEDDING_DIMENSION: process.env.HUGGINGFACE_EMBEDDING_DIMENSION,
+    HUGGINGFACE_EMBEDDING_VERSION: process.env.HUGGINGFACE_EMBEDDING_VERSION,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
@@ -223,6 +248,9 @@ function parseServerEnv() {
     JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
+    SIDECAR_EMBEDDING_MODEL: process.env.SIDECAR_EMBEDDING_MODEL,
+    SIDECAR_EMBEDDING_DIMENSION: process.env.SIDECAR_EMBEDDING_DIMENSION,
+    SIDECAR_EMBEDDING_VERSION: process.env.SIDECAR_EMBEDDING_VERSION,
     OCR_WORKER_URL: process.env.OCR_WORKER_URL,
     OCR_ROUTER_URL: process.env.OCR_ROUTER_URL,
     OCR_VISION_MODEL: process.env.OCR_VISION_MODEL,

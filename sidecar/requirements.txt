@@ -4,3 +4,7 @@ pydantic>=2.10.0
 adeu==0.9.0
 python-multipart>=0.0.6
 structlog>=24.0.0
+openai-whisper>=20231117
+yt-dlp>=2024.1.0
+torch>=2.5.0
+numpy>=1.26.0

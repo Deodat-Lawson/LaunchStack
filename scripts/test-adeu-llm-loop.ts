@@ -282,7 +282,7 @@ async function main() {
             }
 
             try {
-                const result = await matchedTool.invoke(toolCall.args);
+                const result = await (matchedTool.invoke as (args: unknown) => Promise<unknown>)(toolCall.args);
                 const resultStr = typeof result === "string" ? result : JSON.stringify(result);
                 messages.push(
                     new ToolMessage({ content: resultStr, tool_call_id: toolCall.id! })

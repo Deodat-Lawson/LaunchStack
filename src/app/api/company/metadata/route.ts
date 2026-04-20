@@ -12,6 +12,7 @@ import { z } from "zod";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { companyMetadata, companyMetadataHistory } from "~/server/db/schema/company-metadata";
+import type { MetadataFact, Visibility, Usage } from "~/lib/tools/company-metadata/types";
 
 export async function GET() {
     try {
@@ -72,15 +73,15 @@ const PatchSchema = z.object({
     value: z.string(),
 });
 
-function buildManualFact(value: string | number, existing?: { visibility?: string; usage?: string }) {
+function buildManualFact(value: string | number, existing?: { visibility?: string; usage?: string }): MetadataFact<string | number> {
     const now = new Date().toISOString();
     return {
         value,
-        visibility: (existing?.visibility as "public" | "internal" | "confidential") ?? ("public" as const),
-        usage: (existing?.usage as "outreach_ok" | "internal_only" | "do_not_use") ?? ("outreach_ok" as const),
+        visibility: (existing?.visibility as Visibility | undefined) ?? "public",
+        usage: (existing?.usage as Usage | undefined) ?? "outreach_ok",
         confidence: 1.0,
-        priority: "manual_override" as const,
-        status: "active" as const,
+        priority: "manual_override",
+        status: "active",
         last_updated: now,
         sources: [{ doc_id: 0, doc_name: "Manual edit", extracted_at: now }],
     };
@@ -124,8 +125,8 @@ export async function PATCH(request: Request) {
         const updatedMetadata = structuredClone(existing.metadata);
         const now = new Date().toISOString();
         const segments = path.split(".");
-        let oldFact: unknown = undefined;
-        let updatedFact: unknown = undefined;
+        let oldFact: MetadataFact<unknown> | undefined = undefined;
+        let updatedFact: MetadataFact<string | number> | undefined = undefined;
 
         if (segments[0] === "company" && segments[1]) {
             const field = segments[1];
@@ -165,7 +166,7 @@ export async function PATCH(request: Request) {
             }
             oldFact = arr[idx];
             updatedFact = buildManualFact(value, arr[idx]);
-            arr[idx] = updatedFact;
+            arr[idx] = updatedFact as MetadataFact<string>;
         } else {
             return NextResponse.json({ error: `Unsupported path: ${path}` }, { status: 400 });
         }

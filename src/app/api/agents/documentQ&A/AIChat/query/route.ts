@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
-import { db, toRows } from "~/server/db/index";
-import { and, eq, sql } from "drizzle-orm";
+import { db } from "~/server/db/index";
+import { and, eq, inArray } from "drizzle-orm";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
     companyEnsembleSearch,
+    createDocumentVectorRetriever,
     documentEnsembleSearch,
     multiDocEnsembleSearch,
     type CompanySearchOptions,
@@ -12,6 +13,8 @@ import {
     type MultiDocSearchOptions,
     type SearchResult
 } from "~/lib/tools/rag";
+import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
@@ -37,13 +40,6 @@ import { validateQAResponse } from "~/lib/agents/supervisor";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
-
-type PdfChunkRow = Record<string, unknown> & {
-    id: number;
-    content: string;
-    page: number;
-    distance: number;
-};
 
 const qaAnnOptimizer = new ANNOptimizer({ 
     strategy: 'hnsw',
@@ -96,11 +92,13 @@ export async function POST(request: Request) {
                 style,
                 searchScope,
                 archiveName,
+                selectedDocumentIds,
                 enableWebSearch,
                 aiPersona,
                 aiModel,
                 provider,
                 conversationHistory,
+                embeddingIndexKey,
             } = validation.data;
 
             // Validate search scope requirements
@@ -125,6 +123,14 @@ export async function POST(request: Request) {
                 return NextResponse.json({
                     success: false,
                     message: "archiveName is required for archive search"
+                }, { status: 400 });
+            }
+
+            if (searchScope === "selected" && (!selectedDocumentIds || selectedDocumentIds.length === 0)) {
+                recordResult("error");
+                return NextResponse.json({
+                    success: false,
+                    message: "selectedDocumentIds is required for selected-documents search"
                 }, { status: 400 });
             }
 
@@ -201,6 +207,8 @@ export async function POST(request: Request) {
                 }
             }
 
+            const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
+
             // Resolve archive document IDs if archive scope
             let archiveDocumentIds: number[] | undefined;
             if (searchScope === "archive" && archiveName) {
@@ -209,7 +217,7 @@ export async function POST(request: Request) {
                     .from(document)
                     .where(and(
                         eq(document.sourceArchiveName, archiveName),
-                        eq(document.companyId, String(numericCompanyId))
+                        eq(document.companyId, BigInt(numericCompanyId))
                     ));
 
                 archiveDocumentIds = archiveDocs.map(d => d.id);
@@ -222,23 +230,60 @@ export async function POST(request: Request) {
                 }
             }
 
+            // For the "selected" scope, verify every supplied document ID belongs
+            // to the caller's company before retrieval. A mismatch means the
+            // client passed a stale or cross-company ID — reject rather than
+            // silently drop, so the user sees an explicit error.
+            let verifiedSelectedIds: number[] | undefined;
+            if (searchScope === "selected" && selectedDocumentIds?.length) {
+                const uniqueIds = Array.from(new Set(selectedDocumentIds));
+                const rows = await db
+                    .select({ id: document.id, companyId: document.companyId })
+                    .from(document)
+                    .where(inArray(document.id, uniqueIds));
+
+                const allowed = rows
+                    .filter((r) => r.companyId === userCompanyId)
+                    .map((r) => r.id);
+
+                if (allowed.length !== uniqueIds.length) {
+                    recordResult("error");
+                    return NextResponse.json({
+                        success: false,
+                        message: "One or more selected documents are not accessible."
+                    }, { status: 403 });
+                }
+
+                verifiedSelectedIds = allowed;
+            }
+
             // Perform comprehensive search
-            const embeddings = getEmbeddings();
+            const resolvedEmbeddingIndex = resolveEmbeddingIndex(
+                embeddingIndexKey,
+                companyConfig ?? undefined,
+            );
+            const embeddings = getEmbeddings(
+                resolvedEmbeddingIndex.indexKey,
+                companyConfig ?? undefined,
+            );
             let documents: SearchResult[] = [];
             retrievalMethod = searchScope === "company"
                 ? 'company_ensemble_rrf'
                 : searchScope === "archive"
                     ? 'archive_ensemble_rrf'
-                    : 'document_ensemble_rrf';
+                    : searchScope === "selected"
+                        ? 'selected_ensemble_rrf'
+                        : 'document_ensemble_rrf';
 
             try {
                 if (searchScope === "company") {
                     const companyOptions: CompanySearchOptions = {
                         weights: [0.4, 0.6],
                         topK: 10,
-                        companyId: numericCompanyId
+                        companyId: numericCompanyId,
+                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
-                    
+
                     documents = await companyEnsembleSearch(
                         question,
                         companyOptions,
@@ -248,7 +293,8 @@ export async function POST(request: Request) {
                     const archiveOptions: MultiDocSearchOptions = {
                         weights: [0.4, 0.6],
                         topK: 10,
-                        documentIds: archiveDocumentIds
+                        documentIds: archiveDocumentIds,
+                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
 
                     documents = await multiDocEnsembleSearch(
@@ -256,11 +302,28 @@ export async function POST(request: Request) {
                         archiveOptions,
                         embeddings
                     );
+                } else if (searchScope === "selected" && verifiedSelectedIds?.length) {
+                    // Reuse the archive scope's multi-doc path; from the retriever's
+                    // perspective a user-picked set and an archive-resolved set are
+                    // identical (both narrow to `document_id = ANY(...)`).
+                    const selectedOptions: MultiDocSearchOptions = {
+                        weights: [0.4, 0.6],
+                        topK: 10,
+                        documentIds: verifiedSelectedIds,
+                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
+                    };
+
+                    documents = await multiDocEnsembleSearch(
+                        question,
+                        selectedOptions,
+                        embeddings
+                    );
                 } else if (searchScope === "document" && documentId) {
                     const documentOptions: DocumentSearchOptions = {
                         topK: 5,
                         documentId,
                         companyId: numericCompanyId,
+                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
                     
                     documents = await documentEnsembleSearch(
@@ -283,63 +346,62 @@ export async function POST(request: Request) {
                     retrievalMethod = 'company_fallback_failed';
                     documents = [];
                 } else if (searchScope === "document" && documentId) {
-                    retrievalMethod = 'ann_hybrid';
-                    
-                    try {
-                        const questionEmbedding = await embeddings.embedQuery(question);
-                        const annResults = await qaAnnOptimizer.searchSimilarChunks(
-                            questionEmbedding,
-                            [documentId],
-                            5,
-                            0.8
-                        );
-
-                        documents = annResults.map(result => ({
-                            pageContent: result.content,
-                            metadata: {
-                                chunkId: result.id,
-                                page: result.page,
-                                documentId: result.documentId,
-                                distance: 1 - result.confidence,
-                                source: 'ann_hybrid',
-                                searchScope: 'document' as const,
-                                retrievalMethod: 'ann_hybrid' as const,
-                                timestamp: new Date().toISOString()
-                            }
-                        }));
-
-                    } catch (annError) {
-                        console.warn(`⚠️ [AIChat] ANN search failed, using vector search:`, annError);
-                        retrievalMethod = 'vector_fallback';
+                    if (isLegacyEmbeddingIndex(resolvedEmbeddingIndex)) {
+                        retrievalMethod = 'ann_hybrid';
                         
-                        const questionEmbedding = await embeddings.embedQuery(question);
-                        const bracketedEmbedding = `[${questionEmbedding.join(",")}]`;
+                        try {
+                            const questionEmbedding = await embeddings.embedQuery(question);
+                            const annResults = await qaAnnOptimizer.searchSimilarChunks(
+                                questionEmbedding,
+                                [documentId],
+                                5,
+                                0.8
+                            );
 
-                        const query = sql`
-                          SELECT
-                            id,
-                            content,
-                            page,
-                            embedding <-> ${bracketedEmbedding}::vector(1536) AS distance
-                          FROM pdr_ai_v2_pdf_chunks
-                          WHERE document_id = ${documentId}
-                          ORDER BY embedding <-> ${bracketedEmbedding}::vector(1536)
-                          LIMIT 3
-                        `;
+                            documents = annResults.map(result => ({
+                                pageContent: result.content,
+                                metadata: {
+                                    chunkId: result.id,
+                                    page: result.page,
+                                    documentId: result.documentId,
+                                    distance: 1 - result.confidence,
+                                    source: 'ann_hybrid',
+                                    searchScope: 'document' as const,
+                                    retrievalMethod: 'ann_hybrid' as const,
+                                    timestamp: new Date().toISOString()
+                                }
+                            }));
 
-                        const result = await db.execute<PdfChunkRow>(query);
-                        const rows = toRows<PdfChunkRow>(result);
-                        documents = rows.map((row) => ({
-                            pageContent: row.content,
+                        } catch (annError) {
+                            console.warn(`⚠️ [AIChat] ANN search failed, using vector search:`, annError);
+                            retrievalMethod = 'vector_fallback';
+                        }
+                    } else {
+                        retrievalMethod = 'vector_fallback';
+                    }
+
+                    if (documents.length === 0) {
+                        const retriever = createDocumentVectorRetriever(
+                            documentId,
+                            embeddings,
+                            resolvedEmbeddingIndex,
+                            3,
+                        );
+                        const vectorDocs = await retriever.getRelevantDocuments(question);
+                        documents = vectorDocs.map((doc) => ({
+                            retrievalMethod: 'vector_fallback',
+                            source: typeof doc.metadata?.source === "string" ? doc.metadata.source : undefined,
+                            pageNumber: typeof doc.metadata?.page === "number" ? doc.metadata.page : undefined,
+                            title: typeof doc.metadata?.documentTitle === "string" ? doc.metadata.documentTitle : undefined,
+                            documentId: typeof doc.metadata?.documentId === "number" ? doc.metadata.documentId : undefined,
+                            pageContent: doc.pageContent,
                             metadata: {
-                                chunkId: row.id,
-                                page: row.page,
-                                distance: row.distance,
-                                source: 'vector_fallback',
+                                ...doc.metadata,
                                 searchScope: 'document' as const,
+                                retrievalMethod: 'vector_fallback' as const,
                                 timestamp: new Date().toISOString()
                             }
-                        }));
+                        })) as unknown as SearchResult[];
                     }
                 } else {
                     retrievalMethod = 'invalid_parameters';

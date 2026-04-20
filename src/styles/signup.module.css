@@ -84,6 +84,28 @@
     @apply space-y-1;
 }
 
+.configSection {
+    @apply rounded-xl border border-gray-200 bg-gray-50/80 p-4 space-y-4;
+}
+
+.configSectionHeader {
+    @apply space-y-1;
+}
+
+.configSectionTitle {
+    @apply text-sm font-semibold text-gray-900;
+}
+
+.configSectionHint {
+    @apply text-xs leading-relaxed text-gray-500;
+}
+
+.configGrid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
 .label {
     @apply block text-sm font-medium text-gray-700;
 }
@@ -94,6 +116,13 @@
 
 .input {
     @apply block w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg
+    text-gray-900 placeholder-gray-400
+    focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
+    transition-colors duration-200;
+}
+
+.plainInput {
+    @apply block w-full min-w-0 px-4 py-2.5 border border-gray-300 rounded-lg
     text-gray-900 placeholder-gray-400
     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
     transition-colors duration-200;
@@ -122,12 +151,20 @@
 /* ── Submit Button ──────────────────────────────────────────────────────── */
 
 .submitButton {
-    @apply w-full bg-gradient-to-r from-purple-600 to-indigo-600
+    @apply w-full inline-flex items-center justify-center border border-transparent
+    bg-gradient-to-r from-purple-600 to-indigo-600
     text-white py-3 px-4 rounded-lg font-semibold
     hover:from-purple-700 hover:to-indigo-700
     focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
     transition-all duration-200 shadow-md hover:shadow-lg
     disabled:opacity-60 disabled:cursor-not-allowed;
+    color: #ffffff;
+    -webkit-text-fill-color: #ffffff;
+    background-color: #6d28d9;
+}
+
+.submitSection {
+    @apply rounded-xl border border-gray-200 bg-gradient-to-r from-slate-50 to-purple-50/80 p-3;
 }
 
 /* ── Number Input Arrows ────────────────────────────────────────────────── */
@@ -362,7 +399,24 @@
     @apply text-gray-300;
 }
 
+:global([data-theme="dark"]) .configSection {
+    @apply border-purple-500/20 bg-slate-800/60;
+}
+
+:global([data-theme="dark"]) .configSectionTitle {
+    @apply text-white;
+}
+
+:global([data-theme="dark"]) .configSectionHint {
+    @apply text-gray-400;
+}
+
 :global([data-theme="dark"]) .input {
+    @apply bg-slate-800/80 border-purple-500/20 text-white placeholder-gray-400
+    focus:border-purple-400;
+}
+
+:global([data-theme="dark"]) .plainInput {
     @apply bg-slate-800/80 border-purple-500/20 text-white placeholder-gray-400
     focus:border-purple-400;
 }
@@ -385,6 +439,13 @@
 
 :global([data-theme="dark"]) .submitButton {
     @apply from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600;
+    color: #ffffff;
+    -webkit-text-fill-color: #ffffff;
+    background-color: #7c3aed;
+}
+
+:global([data-theme="dark"]) .submitSection {
+    @apply border-purple-500/20 bg-gradient-to-r from-slate-800/80 to-purple-950/40;
 }
 
 :global([data-theme="dark"]) .brandPanel {

@@ -2,22 +2,17 @@
  * Shared chat model factory for use across the app (document Q&A, marketing pipeline, etc.).
  * Swap models in one place; all callers use LangChain BaseChatModel.
  */
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { ChatOpenAI } from "@langchain/openai";
 import { ChatAnthropic } from "@langchain/anthropic";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import type { CompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
+import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
 
-export type AIModelType =
-  | "gpt-4o"
-  | "gpt-5.2"
-  | "gpt-5.1"
-  | "gpt-5-nano"
-  | "gpt-5-mini"
-  | "claude-sonnet-4"
-  | "claude-opus-4.5"
-  | "gemini-2.5-flash"
-  | "gemini-3-flash"
-  | "gemini-3-pro";
+export type { AIModelType };
 
 /**
  * Get a chat model instance based on the model type.
@@ -115,15 +110,11 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
   }
 }
 
-export function getEmbeddings(): OpenAIEmbeddings {
-  const apiKey = process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
-  const baseURL = process.env.EMBEDDING_API_BASE_URL || process.env.AI_BASE_URL;
-  return new OpenAIEmbeddings({
-    model: process.env.EMBEDDING_MODEL || "text-embedding-3-large",
-    openAIApiKey: apiKey,
-    dimensions: 1536,
-    ...(baseURL ? { configuration: { baseURL } } : {}),
-  });
+export function getEmbeddings(
+  indexKey?: string,
+  config?: CompanyEmbeddingConfig,
+): EmbeddingsProvider {
+  return createEmbeddingModel(resolveEmbeddingIndex(indexKey, config), config);
 }
 
 /** Marketing pipeline model config: one place to swap models per stage. */

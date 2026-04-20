@@ -14,6 +14,8 @@ export interface TriggerJobParams {
   originalFilename?: string;
   isWebsite?: boolean;
   transcriptionMetadata?: Record<string, unknown>;
+  versionId?: number;
+  embeddingIndexKey?: string;
 }
 
 export interface TriggerJobResult {
@@ -38,6 +40,8 @@ export async function triggerJob(params: TriggerJobParams): Promise<TriggerJobRe
       originalFilename: params.originalFilename,
       isWebsite: params.isWebsite,
       transcriptionMetadata: params.transcriptionMetadata,
+      versionId: params.versionId,
+      embeddingIndexKey: params.embeddingIndexKey,
     },
   );
 

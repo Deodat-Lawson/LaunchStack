@@ -185,7 +185,24 @@
       "Bash(python3 -c \"print\\('a' * 10000\\)\")",
       "Bash(curl -s -w \"\\\\nHTTP_STATUS: %{http_code}\" -H \"Authorization: Bearer sk-dwWVekeKjIa5H7q7dx7srTY0WZYaYj40RDEaniyh8XXPKkxG\" -H \"Content-Type: application/json\" \"https://api.vectorengine.ai/v1/chat/completions\" -d \"{\\\\\"model\\\\\":\\\\\"gpt-5.4-mini\\\\\",\\\\\"messages\\\\\":[{\\\\\"role\\\\\":\\\\\"user\\\\\",\\\\\"content\\\\\":\\\\\"$\\(python3 -c \"print\\('a' * 10000\\)\"\\)\\\\\"}],\\\\\"temperature\\\\\":0.7,\\\\\"max_tokens\\\\\":5}\")",
       "Bash(curl -s -w \"\\\\nHTTP: %{http_code}\" -H \"Authorization: Bearer sk-dwWVekeKjIa5H7q7dx7srTY0WZYaYj40RDEaniyh8XXPKkxG\" -H \"Content-Type: application/json\" \"https://api.vectorengine.ai/v1/chat/completions\" -d '{\"model\":\"gpt-5.4-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"max_tokens\":5}')",
-      "Bash(grep -E 'services:|^\\\\s+\\\\w+\\(-\\\\w+\\)*:$' /Users/timothylin/pdr_ai_v2-2/docker-compose.yml)"
+      "Bash(grep -E 'services:|^\\\\s+\\\\w+\\(-\\\\w+\\)*:$' /Users/timothylin/pdr_ai_v2-2/docker-compose.yml)",
+      "Bash(A/)",
+      "Bash(find /Users/aurea/LaunchStack/src/app/api/agents/documentQ* -name \"*.ts\")",
+      "Bash(grep -r \"className.*p-\" /Users/aurea/LaunchStack/src/app/employer/documents/components/*.tsx)",
+      "Bash(pnpm tsc *)",
+      "Bash(grep -rn *)",
+      "Bash(python3 -c \"import ast; ast.parse\\(open\\('sidecar/app/main.py'\\).read\\(\\)\\); print\\('main.py: OK'\\)\")",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm test *)",
+      "Bash(git grep *)",
+      "Bash(git add *)",
+      "Bash(python3 -c \"import yaml; yaml.safe_load\\(open\\('/Users/aurea/LaunchStack/docker-compose.yml'\\)\\); print\\('YAML OK'\\)\")",
+      "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
+      "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")",
+      "WebFetch(domain:docs.nango.dev)",
+      "WebFetch(domain:nango.dev)",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm lint *)"
     ]
   }
 }

@@ -45,6 +45,7 @@ const FILE_TYPE_LABELS: Record<string, string> = {
   xlsx: "Excel",
   pptx: "PowerPoint",
   text: "Text",
+  audio: "Audio",
   unknown: "Unknown",
 };
 
@@ -55,6 +56,7 @@ const FILE_TYPE_COLORS: Record<string, string> = {
   xlsx: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   pptx: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
   text: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400",
+  audio: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
   unknown: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-500",
 };
 

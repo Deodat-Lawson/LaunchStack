@@ -21,6 +21,7 @@ const CommitSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   preferredProvider: z.string().optional(),
   category: z.string().optional(),
+  embeddingIndexKey: z.string().min(1).optional(),
 });
 
 const MAX_CONCURRENCY = 3;
@@ -40,7 +41,7 @@ export async function POST(
       return validation.response;
     }
 
-    const { userId, preferredProvider, category } = validation.data;
+    const { userId, preferredProvider, category, embeddingIndexKey } = validation.data;
 
     const batch = await findBatchOwnedByUser(batchId, userId, true);
     if (!batch) {
@@ -101,6 +102,7 @@ export async function POST(
               preferredProvider,
               explicitStorageType: inferStorageType(file.storageType),
               mimeType: file.mimeType ?? undefined,
+              embeddingIndexKey,
             });
 
             await db

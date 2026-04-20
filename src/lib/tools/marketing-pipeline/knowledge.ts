@@ -51,12 +51,12 @@ function buildKnowledgeQueries(baseMeta: string, userPrompt: string): string[] {
 
 function searchResultToCitation(result: SearchResult): EvidenceCitation {
   return {
-    documentId: result.documentId,
-    title: result.title,
-    page: result.pageNumber,
-    sectionPath: result.source,
+    documentId: result.documentId ?? null,
+    title: result.title ?? null,
+    page: result.pageNumber ?? null,
+    sectionPath: result.source ?? null,
     snippet: cleanSnippet(result.pageContent, 280),
-    sourceType: result.retrievalMethod,
+    sourceType: result.retrievalMethod ?? null,
   };
 }
 

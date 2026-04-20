@@ -17,12 +17,11 @@
  */
 
 import { z } from "zod";
-import { ChatOpenAI } from "@langchain/openai";
-import { SystemMessage, HumanMessage } from "@langchain/core/messages";
-import { eq } from "drizzle-orm";
+import { and, eq, isNull, or, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { documentContextChunks, document as documentTable } from "~/server/db/schema";
+import { generateStructured } from "~/lib/llm";
 import {
     EXTRACTION_SYSTEM_PROMPT,
     buildChunkExtractionPrompt,
@@ -49,11 +48,16 @@ import type {
 /** Number of chunks per LLM batch. */
 const CHUNKS_PER_BATCH = 15;
 
-/** Max parallel LLM calls. */
+/**
+ * Max parallel LLM calls.
+ *
+ * Note: this was chosen for OpenAI cloud throughput. When the active provider
+ * is Ollama (single-GPU local inference) this may be too aggressive and
+ * saturate the local model. The unified LLM library doesn't currently expose
+ * per-provider concurrency hints; if we see problems in practice, add a
+ * capability-level `maxConcurrency` to the config and plumb it through here.
+ */
 const MAX_CONCURRENCY = 5;
-
-/** Model to use for extraction. */
-const EXTRACTION_MODEL = "gpt-5-nano";
 
 /**
  * Confidence boost when a fact is seen in multiple batches.
@@ -227,7 +231,23 @@ export async function extractCompanyFacts(
         return null;
     }
 
-    // 2. Fetch all chunks, sorted by page
+    // 2. Fetch chunks for the CURRENT version only, sorted by page.
+    //
+    // The join + version filter is important: without it, this query returns
+    // chunks from every historical version of the document. On a doc with N
+    // versions that's N× the chunks and N× the input tokens into the LLM
+    // call below, plus it re-extracts facts from content that was already
+    // processed when prior versions uploaded — wasted work that scales
+    // super-linearly because structured output latency grows with prompt size.
+    //
+    // The semantics also match RAG: the company metadata should reflect the
+    // document's *current* authoritative content, not a union of every
+    // historical claim. Reverting to an old version will cause the next run
+    // to re-extract from that version's chunks, which is the correct behavior.
+    //
+    // The IS NULL branches preserve Phase-1 rollout safety: if the document
+    // or its chunks predate the versioning backfill, we fall through to
+    // returning all chunks rather than hiding them.
     const chunks = await db
         .select({
             content: documentContextChunks.content,
@@ -235,7 +255,20 @@ export async function extractCompanyFacts(
             semanticType: documentContextChunks.semanticType,
         })
         .from(documentContextChunks)
-        .where(eq(documentContextChunks.documentId, BigInt(documentId)));
+        .innerJoin(
+            documentTable,
+            eq(documentContextChunks.documentId, documentTable.id),
+        )
+        .where(
+            and(
+                eq(documentContextChunks.documentId, BigInt(documentId)),
+                or(
+                    isNull(documentTable.currentVersionId),
+                    isNull(documentContextChunks.versionId),
+                    sql`${documentContextChunks.versionId} = ${documentTable.currentVersionId}`,
+                ),
+            ),
+        );
 
     if (chunks.length === 0) {
         console.warn(
@@ -356,40 +389,36 @@ async function runWithConcurrency<T>(
 // LLM call (per-batch)
 // ============================================================================
 
+/**
+ * Per-batch extraction call. Routes through the unified LLM library rather
+ * than instantiating a specific provider, so the same call works against
+ * OpenAI, Anthropic, Gemini, or local Ollama depending on which credentials
+ * are available. See `src/lib/llm/` for the resolution logic.
+ *
+ * On any failure (network, rate limit, schema validation) this returns
+ * `null` so the caller can drop the batch and continue with the rest.
+ * Individual batch failures are logged but not thrown — consistent with
+ * the pre-migration behavior that treated partial extraction as acceptable.
+ */
 async function callLLM(
     documentName: string,
     batchContent: string,
     batchIndex: number,
     totalBatches: number,
 ): Promise<ExtractionOutput | null> {
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        modelName: EXTRACTION_MODEL,
-        temperature: 0,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-    });
-
-    const structured = chat.withStructuredOutput(ExtractionOutputSchema, {
-        name: "company_metadata_extraction",
-    });
-
     try {
-        const result = await structured.invoke([
-            new SystemMessage(EXTRACTION_SYSTEM_PROMPT),
-            new HumanMessage(
-                buildChunkExtractionPrompt(
-                    documentName,
-                    batchContent,
-                    batchIndex,
-                    totalBatches,
-                ),
+        return await generateStructured({
+            capability: "smallExtraction",
+            system: EXTRACTION_SYSTEM_PROMPT,
+            prompt: buildChunkExtractionPrompt(
+                documentName,
+                batchContent,
+                batchIndex,
+                totalBatches,
             ),
-        ]);
-        const usage = (chat as any).lastResponse?.usage ?? (result as any)?.__run?.response_metadata?.tokenUsage;
-        console.log(
-            `[CompanyMetadata] Extraction batch ${batchIndex + 1}/${totalBatches} for "${documentName}": model=${EXTRACTION_MODEL}, content=${batchContent.length} chars`
-        );
-        return result;
+            schema: ExtractionOutputSchema,
+            schemaName: "company_metadata_extraction",
+        });
     } catch (error) {
         console.error(
             `[CompanyMetadataExtractor] Batch ${batchIndex + 1}/${totalBatches} failed:`,

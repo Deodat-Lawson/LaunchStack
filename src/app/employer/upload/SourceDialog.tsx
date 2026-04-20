@@ -11,6 +11,7 @@ import {
 import { GitHubSourceTab } from "./GitHubSourceTab";
 import { PasteSourceTab } from "./PasteSourceTab";
 import { WebsiteSourceTab } from "./WebsiteSourceTab";
+import { YouTubeSourceTab } from "./YouTubeSourceTab";
 
 import type { SourceType } from "./SourceGrid";
 
@@ -34,6 +35,11 @@ const titles: Record<SourceType, { title: string; description: string }> = {
     website: {
         title: "Import from Website",
         description: "Fetch a single web page and add its content to your knowledge base.",
+    },
+    youtube: {
+        title: "Import from YouTube or Video Platforms",
+        description:
+            "Paste a video URL — audio will be extracted and transcribed into a searchable document.",
     },
 };
 
@@ -76,6 +82,14 @@ export function SourceDialog({
                     <WebsiteSourceTab
                         categories={categories}
                         defaultCategory={defaultCategory}
+                    />
+                )}
+
+                {open === "youtube" && (
+                    <YouTubeSourceTab
+                        categories={categories}
+                        defaultCategory={defaultCategory}
+                        onSuccess={onClose}
                     />
                 )}
             </DialogContent>

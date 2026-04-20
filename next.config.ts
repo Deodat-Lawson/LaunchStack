@@ -92,7 +92,13 @@ const config: NextConfig = {
     "langchain",
     // AI SDKs
     "openai",
+    // AWS SDK
+    "@aws-sdk/client-s3",
+    "@aws-sdk/s3-request-presigner",
+    // ML
+    "@huggingface/transformers",
     // Document processing
+    "pdf2pic",
     "pdfjs-serverless",
     "pdf-lib",
     "mammoth",
@@ -104,8 +110,9 @@ const config: NextConfig = {
     "@img/sharp-libvips-linux-x64",
     // Database
     "neo4j-driver",
-    // Transitive dep via @langchain/community — not available on Alpine (musl)
+    // Transitive deps via @langchain/community — not available on Alpine (musl)
     "onnxruntime-node",
+    "sherpa-onnx-node",
     // Structured logging
     "pino",
     "pino-pretty",

@@ -236,6 +236,39 @@ export async function deleteFile(
   }
 }
 
+/**
+ * Delete a stored file by its URL, regardless of provider.
+ *
+ * This is the friendlier counterpart to `deleteFile(key, provider)` — most
+ * callers only have the URL stored in the DB (e.g. `document_versions.url`)
+ * and don't know which provider put it there. This helper inspects the URL,
+ * strips the SeaweedFS endpoint prefix to recover the object key when needed,
+ * and dispatches to `deleteFile` with the correct provider.
+ *
+ * Database-backed URLs (`/api/files/{id}`) are silently ignored because there
+ * is nothing to delete from a blob provider — the row itself is the storage.
+ */
+export async function deleteFileByUrl(url: string): Promise<void> {
+  if (!url) return;
+
+  // Database-backed storage: nothing to delete at the blob layer.
+  if (url.startsWith("/api/files/")) return;
+
+  const s3Endpoint =
+    env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
+
+  if (s3Endpoint && url.startsWith(s3Endpoint)) {
+    // SeaweedFS stores objects by key; recover it from the endpoint prefix.
+    // e.g. "http://localhost:8333/pdr-documents/documents/abc-file.pdf"
+    //   -> "pdr-documents/documents/abc-file.pdf"
+    const key = url.slice(s3Endpoint.replace(/\/+$/, "").length + 1);
+    return deleteFile(key, "seaweedfs");
+  }
+
+  // Cloud (Vercel Blob) accepts the full URL as its "key".
+  return deleteFile(url, "vercel_blob");
+}
+
 // ---------------------------------------------------------------------------
 // fetchFile — unified retrieval for any storage URL
 // ---------------------------------------------------------------------------

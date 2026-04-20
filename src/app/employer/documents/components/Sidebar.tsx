@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Search,
   FileText,
@@ -27,11 +27,13 @@ import {
   Building2,
   Megaphone,
   Archive,
+  History,
   Network,
 } from 'lucide-react';
 import { UserButton, useUser } from '@clerk/nextjs';
 import { Input } from '~/app/employer/documents/components/ui/input';
 import { Button } from '~/app/employer/documents/components/ui/button';
+import { Checkbox } from '~/app/employer/documents/components/ui/checkbox';
 import { cn } from "~/lib/utils";
 import { ThemeToggle } from '~/app/_components/ThemeToggle';
 import {
@@ -58,6 +60,23 @@ interface SidebarProps {
   setViewMode: (mode: ViewMode) => void;
   toggleCategory?: (categoryName: string) => void;
   deleteDocument?: (docId: number) => void;
+  /**
+   * Rename a document. Invoked from the inline double-click-to-edit flow on
+   * each document row in the library. Undefined disables rename (e.g. for
+   * employee role). Parent (Shell) performs the optimistic update and the
+   * network call; we only supply id + new title.
+   */
+  renameDocument?: (id: number, title: string) => Promise<boolean>;
+  /**
+   * Upload a new version for this document. Opens the version-history modal
+   * in upload mode. Undefined disables the dropdown entry.
+   */
+  onUploadNewVersion?: (doc: DocumentType) => void;
+  /** Checked-document IDs for multi-select / bulk-op UI. */
+  selectedIds?: Set<number>;
+  onToggleSelect?: (id: number) => void;
+  onClearSelection?: () => void;
+  onBulkDelete?: (ids: number[]) => void;
   isCollapsed?: boolean;
   onCollapseToggle?: (collapsed: boolean) => void;
   userId?: string;
@@ -66,6 +85,13 @@ interface SidebarProps {
   onNewChat?: () => void;
   userRole?: 'employer' | 'employee';
   totalDocuments?: number;
+  /**
+   * Called when the user clicks "Version history" in the document dropdown.
+   * The parent (DocumentViewerShell) owns the modal's lifecycle and preview
+   * state so it can wire the panel's "view this version" button into its
+   * existing document viewer.
+   */
+  onOpenVersionHistory?: (doc: DocumentType) => void;
   onGenerateDiagram?: (archiveName: string) => void;
 }
 
@@ -138,6 +164,12 @@ export function Sidebar({
   setViewMode,
   toggleCategory,
   deleteDocument,
+  renameDocument,
+  onUploadNewVersion,
+  selectedIds,
+  onToggleSelect,
+  onClearSelection,
+  onBulkDelete,
   isCollapsed = false,
   onCollapseToggle,
   userId,
@@ -146,11 +178,53 @@ export function Sidebar({
   onNewChat,
   userRole = 'employer',
   totalDocuments = 0,
+  onOpenVersionHistory,
   onGenerateDiagram,
 }: SidebarProps) {
   const isEmployer = userRole === 'employer';
   const showDelete = isEmployer && !!deleteDocument;
+  // Only employers/owners can manage versions — same permission gate as delete.
+  const showVersionActions = isEmployer && !!onOpenVersionHistory;
+  const showRename = isEmployer && !!renameDocument;
+  const showUploadVersion = isEmployer && !!onUploadNewVersion;
+  const showCheckboxes = isEmployer && !!onToggleSelect;
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  // Which document row is currently showing the inline rename input.
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const renameInputRef = useRef<HTMLInputElement | null>(null);
+
+  // When the user double-clicks a title, focus + select-all the input so they
+  // can immediately start typing or overwrite. Runs whenever editingId flips
+  // from null to a doc id. autoFocus alone doesn't trigger select() and React
+  // unmount/remount isn't enough to rely on uncontrolled focus behavior.
+  useEffect(() => {
+    if (editingId !== null) {
+      const input = renameInputRef.current;
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    }
+  }, [editingId]);
+
+  const commitRename = async (docId: number, rawValue: string) => {
+    const next = rawValue.trim();
+    // Silently bail if the value is unchanged or empty — the original title
+    // stays untouched. Callers still reset editingId via state below.
+    if (next && next !== (
+      // Walk categories to find the current title rather than threading it
+      // through commit args — saves an explicit state for the original value.
+      categories
+        .flatMap((c) => c.documents)
+        .find((d) => d.id === docId)?.title ?? ""
+    )) {
+      // Fire-and-await the prop; Shell handles optimistic state + toasts.
+      await renameDocument?.(docId, next);
+    }
+    setEditingId(null);
+  };
+
+  const cancelRename = () => setEditingId(null);
   const navGroups = NAV_GROUPS(isEmployer);
   const flatNavItems = allNavItems(isEmployer);
 
@@ -414,6 +488,10 @@ export function Sidebar({
                     const docDisplayType = getDocumentDisplayType(doc);
                     const DocIcon = DISPLAY_TYPE_ICONS[docDisplayType];
                     const isSelected = selectedDoc?.id === doc.id;
+                    const isEditing = editingId === doc.id;
+                    const isChecked = selectedIds?.has(doc.id) ?? false;
+                    const hasAnyMenuAction =
+                      showDelete || showVersionActions || showUploadVersion;
                     return (
                       <div
                         key={doc.id}
@@ -427,51 +505,141 @@ export function Sidebar({
                         {isSelected && (
                           <div className="absolute left-0 top-1 bottom-1 w-0.5 bg-purple-600 rounded-r-full" />
                         )}
-                        <button
-                          onClick={() => setSelectedDoc(doc)}
-                          className={cn(
-                            "flex-1 flex items-center gap-2 px-2.5 py-2 text-xs transition-all",
-                            isSelected
-                              ? "text-purple-700 dark:text-purple-300 font-semibold"
-                              : "text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          <DocIcon className={cn(
-                            "w-3.5 h-3.5 flex-shrink-0 transition-colors",
-                            isSelected ? "text-purple-600 dark:text-purple-400" : "text-muted-foreground"
-                          )} />
-                          <span className="flex-1 text-left truncate">{doc.title}</span>
-                          {doc.ocrProcessed === false && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse flex-shrink-0" title="Processing" />
-                          )}
-                          {doc.ocrProcessed === true && doc.ocrMetadata?.error && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" title={`Failed: ${doc.ocrMetadata.errorMessage ?? doc.ocrMetadata.error}`} />
-                          )}
-                        </button>
+                        {showCheckboxes && (
+                          <div
+                            className="pl-2 pr-0.5 py-2 flex items-center"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Checkbox
+                              checked={isChecked}
+                              onCheckedChange={() => onToggleSelect?.(doc.id)}
+                              aria-label={`Select ${doc.title}`}
+                              className="h-3.5 w-3.5"
+                            />
+                          </div>
+                        )}
+                        {isEditing ? (
+                          <div className={cn(
+                            "flex-1 flex items-center gap-2 px-2.5 py-2 text-xs",
+                            showCheckboxes && "pl-1",
+                          )}>
+                            <DocIcon className="w-3.5 h-3.5 flex-shrink-0 text-purple-600 dark:text-purple-400" />
+                            <input
+                              ref={renameInputRef}
+                              defaultValue={doc.title}
+                              maxLength={256}
+                              onClick={(e) => e.stopPropagation()}
+                              onKeyDown={(e) => {
+                                e.stopPropagation();
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  void commitRename(doc.id, e.currentTarget.value);
+                                } else if (e.key === 'Escape') {
+                                  e.preventDefault();
+                                  cancelRename();
+                                }
+                              }}
+                              onBlur={(e) => void commitRename(doc.id, e.currentTarget.value)}
+                              className="flex-1 min-w-0 bg-background border border-purple-400 dark:border-purple-500 rounded px-1 py-0.5 text-xs text-foreground outline-none focus:ring-1 focus:ring-purple-500"
+                            />
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setSelectedDoc(doc)}
+                            className={cn(
+                              "flex-1 flex items-center gap-2 px-2.5 py-2 text-xs transition-all min-w-0",
+                              showCheckboxes && "pl-1",
+                              isSelected
+                                ? "text-purple-700 dark:text-purple-300 font-semibold"
+                                : "text-muted-foreground hover:text-foreground"
+                            )}
+                          >
+                            <DocIcon className={cn(
+                              "w-3.5 h-3.5 flex-shrink-0 transition-colors",
+                              isSelected ? "text-purple-600 dark:text-purple-400" : "text-muted-foreground"
+                            )} />
+                            <span
+                              className="flex-1 text-left truncate"
+                              onDoubleClick={(e) => {
+                                if (!showRename) return;
+                                e.stopPropagation();
+                                e.preventDefault();
+                                setEditingId(doc.id);
+                              }}
+                              title={showRename ? "Double-click to rename" : undefined}
+                            >
+                              {doc.title}
+                            </span>
+                            {doc.ocrProcessed === false && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse flex-shrink-0" title="Processing" />
+                            )}
+                            {doc.ocrProcessed === true && doc.ocrMetadata?.error && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" title={`Failed: ${doc.ocrMetadata.errorMessage ?? doc.ocrMetadata.error}`} />
+                            )}
+                          </button>
+                        )}
 
-                        {showDelete && deleteDocument && (
+                        {!isEditing && hasAnyMenuAction && (
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-6 w-6 opacity-0 group-hover/doc:opacity-100 transition-opacity mr-1 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 flex-shrink-0"
+                                className="h-6 w-6 opacity-0 group-hover/doc:opacity-100 transition-opacity mr-1 hover:bg-muted flex-shrink-0"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <MoreVertical className="w-3 h-3" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-40">
-                              <DropdownMenuItem
-                                className="text-red-600 dark:text-red-400 cursor-pointer focus:bg-red-50 dark:focus:bg-red-900/20 focus:text-red-600 text-xs"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  deleteDocument(doc.id);
-                                }}
-                              >
-                                <Trash2 className="w-3.5 h-3.5 mr-2" />
-                                Delete Document
-                              </DropdownMenuItem>
+                            <DropdownMenuContent align="end" className="w-48">
+                              {showRename && (
+                                <DropdownMenuItem
+                                  className="cursor-pointer text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setEditingId(doc.id);
+                                  }}
+                                >
+                                  <PenLine className="w-3.5 h-3.5 mr-2" />
+                                  Rename
+                                </DropdownMenuItem>
+                              )}
+                              {showUploadVersion && onUploadNewVersion && (
+                                <DropdownMenuItem
+                                  className="cursor-pointer text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onUploadNewVersion(doc);
+                                  }}
+                                >
+                                  <Upload className="w-3.5 h-3.5 mr-2" />
+                                  Upload new version
+                                </DropdownMenuItem>
+                              )}
+                              {showVersionActions && onOpenVersionHistory && (
+                                <DropdownMenuItem
+                                  className="cursor-pointer text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onOpenVersionHistory(doc);
+                                  }}
+                                >
+                                  <History className="w-3.5 h-3.5 mr-2" />
+                                  Version history
+                                </DropdownMenuItem>
+                              )}
+                              {showDelete && deleteDocument && (
+                                <DropdownMenuItem
+                                  className="text-red-600 dark:text-red-400 cursor-pointer focus:bg-red-50 dark:focus:bg-red-900/20 focus:text-red-600 text-xs"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteDocument(doc.id);
+                                  }}
+                                >
+                                  <Trash2 className="w-3.5 h-3.5 mr-2" />
+                                  Delete Document
+                                </DropdownMenuItem>
+                              )}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         )}
@@ -573,6 +741,35 @@ export function Sidebar({
           </div>
         )}
       </div>
+
+      {/* ── BULK ACTION BAR (visible when any doc is checked) ── */}
+      {showCheckboxes && selectedIds && selectedIds.size > 0 && (
+        <div className="flex-shrink-0 border-t border-purple-200 dark:border-purple-800/40 bg-purple-50/70 dark:bg-purple-900/20 px-3 py-2 flex items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300 flex-shrink-0">
+            {selectedIds.size} selected
+          </span>
+          <div className="flex-1" />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground"
+            onClick={() => onClearSelection?.()}
+          >
+            Clear
+          </Button>
+          {onBulkDelete && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+              onClick={() => onBulkDelete(Array.from(selectedIds))}
+            >
+              <Trash2 className="w-3 h-3 mr-1" />
+              Delete {selectedIds.size}
+            </Button>
+          )}
+        </div>
+      )}
 
       {/* ── BOTTOM USER PROFILE ── */}
       <div className="flex-shrink-0 px-3 py-3 border-t border-border bg-background">

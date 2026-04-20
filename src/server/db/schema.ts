@@ -5,11 +5,13 @@
  */
 export { pgTable } from "./schema/helpers";
 export * from "./schema/base";
+export * from "./schema/company-credentials";
 export * from "./schema/agent-ai";
 export * from "./schema/rlm-knowledge-base";
 export * from "./schema/knowledge-graph";
 export * from "./schema/document-notes";
 export * from "./schema/trend-search";
+export * from "./schema/trend-search-cache";
 export * from "./schema/client-prospector";
 export * from "./schema/company-metadata";
 export * from "./schema/marketing-history";

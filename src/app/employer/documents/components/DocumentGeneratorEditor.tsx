@@ -111,7 +111,7 @@ export function DocumentGeneratorEditor({
   // Core state
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
-  const [citations, setCitations] = useState<Citation[]>(initialCitations);
+  const [citations, setCitations] = useState<Citation[]>(initialCitations ?? []);
   const [outline, setOutline] = useState<OutlineItem[]>([]);
   
   // UI state
@@ -123,6 +123,7 @@ export function DocumentGeneratorEditor({
   
   // AI state
   const [aiPrompt, setAiPrompt] = useState('');
+  const [, setAiError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedText, setSelectedText] = useState('');
   const [selectionStart, setSelectionStart] = useState(0);

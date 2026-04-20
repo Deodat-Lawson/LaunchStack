@@ -9,7 +9,7 @@
 import { fetchBlob } from "~/server/storage/vercel-blob";
 import { getTranscriptionProvider } from "~/lib/providers/transcription";
 import { debitTokens } from "~/lib/credits";
-import { isCloudMode } from "~/lib/providers/registry";
+import { isCloudMode } from "@launchstack/core/providers/registry";
 
 const SIDECAR_URL = process.env.SIDECAR_URL ?? "http://localhost:8000";
 

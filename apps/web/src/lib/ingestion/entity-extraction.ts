@@ -17,7 +17,7 @@ import {
 import { eq, and, sql } from "drizzle-orm";
 import { getNERProvider } from "~/lib/providers/ner";
 import { debitTokens } from "~/lib/credits";
-import { isCloudMode } from "~/lib/providers/registry";
+import { isCloudMode } from "@launchstack/core/providers/registry";
 
 function isEntityLabel(s: string): s is EntityLabel {
   return (entityLabelEnum as readonly string[]).includes(s);

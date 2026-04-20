@@ -48,40 +48,9 @@ export function configureProviders(config: ProvidersRegistryConfig): void {
     _config = config;
 }
 
-/**
- * Read the active config. Falls back to process.env for the transitional
- * window while registry.ts still lives in apps/web — this fallback is
- * removed when the file moves into @launchstack/core in step 6. Callers
- * should not need to invoke this directly.
- */
+/** Returns the active config. The host must call configureProviders() first. */
 function getConfig(): ProvidersRegistryConfig {
-    if (_config) return _config;
-    return {
-        aiBaseUrl: process.env.AI_BASE_URL,
-        aiApiKey: process.env.AI_API_KEY,
-        sidecarUrl: process.env.SIDECAR_URL,
-        rerankProviderMode:
-            process.env.RERANK_PROVIDER?.toLowerCase() === "sidecar"
-                ? "sidecar"
-                : process.env.RERANK_PROVIDER?.toLowerCase() === "cloud"
-                    ? "cloud"
-                    : undefined,
-        nerProviderMode:
-            process.env.NER_PROVIDER?.toLowerCase() === "sidecar"
-                ? "sidecar"
-                : process.env.NER_PROVIDER?.toLowerCase() === "cloud"
-                    ? "cloud"
-                    : undefined,
-        transcriptionProviderMode:
-            process.env.TRANSCRIPTION_PROVIDER?.toLowerCase() === "sidecar"
-                ? "sidecar"
-                : process.env.TRANSCRIPTION_PROVIDER?.toLowerCase() === "cloud"
-                    ? "cloud"
-                    : undefined,
-        rerankBaseUrl: process.env.RERANK_API_BASE_URL,
-        nerBaseUrl: process.env.NER_API_BASE_URL,
-        transcriptionBaseUrl: process.env.TRANSCRIPTION_API_BASE_URL,
-    };
+    return _config ?? {};
 }
 
 // ── Resolve helpers ─────────────────────────────────────────────────

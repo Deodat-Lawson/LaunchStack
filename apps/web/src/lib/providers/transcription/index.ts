@@ -1,5 +1,5 @@
-import type { ProviderResult } from "../types";
-import { resolveTranscriptionProvider } from "../registry";
+import type { ProviderResult } from "@launchstack/core/providers";
+import { resolveTranscriptionProvider } from "@launchstack/core/providers/registry";
 
 export interface TranscriptionResult {
     text: string;

@@ -1,7 +1,7 @@
-import type { ProviderResult } from "../types";
+import type { ProviderResult } from "@launchstack/core/providers";
 import type { NERProvider, NERResult, ChunkEntities } from "./index";
 import { TOKEN_COSTS } from "~/lib/credits/costs";
-import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
+import { resolveBaseUrl, resolveApiKey, resolveModel } from "@launchstack/core/providers/registry";
 import OpenAI from "openai";
 
 const NER_SYSTEM_PROMPT = `You are a named entity recognition (NER) system. Extract entities from the given text.

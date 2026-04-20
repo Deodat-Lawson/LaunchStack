@@ -1,5 +1,5 @@
-import type { ProviderResult } from "../types";
-import { resolveRerankProvider } from "../registry";
+import type { ProviderResult } from "@launchstack/core/providers";
+import { resolveRerankProvider } from "@launchstack/core/providers/registry";
 
 export interface RerankResult {
     scores: number[];

@@ -1,7 +1,7 @@
-import type { ProviderResult } from "../types";
+import type { ProviderResult } from "@launchstack/core/providers";
 import type { RerankProvider, RerankResult } from "./index";
 import { TOKEN_COSTS } from "~/lib/credits/costs";
-import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
+import { resolveBaseUrl, resolveApiKey, resolveModel } from "@launchstack/core/providers/registry";
 
 /**
  * OpenAI-compatible reranking provider.

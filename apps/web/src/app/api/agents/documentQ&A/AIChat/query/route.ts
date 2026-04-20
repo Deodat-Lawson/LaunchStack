@@ -35,7 +35,7 @@ import {
     type AIModelType,
 } from "../../services";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
-import { isCloudMode } from "~/lib/providers/registry";
+import { isCloudMode } from "@launchstack/core/providers/registry";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 

@@ -29,7 +29,7 @@ import type {
 import { db } from "~/server/db";
 import { ocrJobs, documentContextChunks } from "@launchstack/core/db/schema";
 import { debitTokens, embeddingTokens, ocrTokens, ocrProviderToTokenKey } from "~/lib/credits";
-import { isCloudMode } from "~/lib/providers/registry";
+import { isCloudMode } from "@launchstack/core/providers/registry";
 
 import type {
   DocIngestionToolInput,

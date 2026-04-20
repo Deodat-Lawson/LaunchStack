@@ -1,5 +1,5 @@
-import type { ProviderResult } from "../types";
-import { resolveNERProvider } from "../registry";
+import type { ProviderResult } from "@launchstack/core/providers";
+import { resolveNERProvider } from "@launchstack/core/providers/registry";
 
 export interface EntityResult {
     text: string;

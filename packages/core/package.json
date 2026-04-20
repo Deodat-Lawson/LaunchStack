@@ -51,6 +51,14 @@
     "./ingestion/heading-chunker": {
       "types": "./src/ingestion/heading-chunker.ts",
       "default": "./src/ingestion/heading-chunker.ts"
+    },
+    "./providers": {
+      "types": "./src/providers/index.ts",
+      "default": "./src/providers/index.ts"
+    },
+    "./providers/registry": {
+      "types": "./src/providers/registry.ts",
+      "default": "./src/providers/registry.ts"
     }
   },
   "scripts": {

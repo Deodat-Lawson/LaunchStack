@@ -11,7 +11,7 @@
 import { createEngine, type CoreConfig, type Engine } from "@launchstack/core";
 
 import { env } from "~/env";
-import { configureProviders } from "~/lib/providers/registry";
+import { configureProviders } from "@launchstack/core/providers/registry";
 import { configureChatModels } from "~/lib/ai/chat-model-factory";
 import { configureEmbeddingIndexRegistry } from "~/lib/ai/embedding-index-registry";
 import { configureEmbeddingFactory } from "~/lib/ai/embedding-factory";

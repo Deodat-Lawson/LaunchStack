@@ -1,4 +1,4 @@
-import type { ProviderResult } from "../types";
+import type { ProviderResult } from "@launchstack/core/providers";
 import type { TranscriptionProvider, TranscriptionResult } from "./index";
 import { transcriptionTokens } from "~/lib/credits/costs";
 import OpenAI from "openai";

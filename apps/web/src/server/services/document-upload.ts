@@ -19,7 +19,7 @@ import {
 import { createDocumentRecord } from "./create-document";
 import { triggerJob } from "./trigger-job";
 import { hasTokens } from "~/lib/credits";
-import { isCloudMode } from "~/lib/providers/registry";
+import { isCloudMode } from "@launchstack/core/providers/registry";
 
 export type { StorageType } from "./detect-storage-type";
 export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";

@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
 
-import { env } from "~/env";
 import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { getCompanyCredentialsPlaintext } from "./company-credentials";
@@ -21,6 +20,41 @@ export interface EffectiveEmbeddingConfig {
   ollamaModel?: string;
 }
 
+/**
+ * Defaults used when a per-company override is absent or blank. apps/web/
+ * src/server/engine.ts registers these via configureCompanyEmbeddingDefaults
+ * so this module can be env-agnostic when it later moves to core. A
+ * process.env fallback is retained for the transitional window.
+ */
+export interface CompanyEmbeddingDefaults {
+  embeddingIndexKey?: string;
+  openAIApiKey?: string;
+  huggingFaceApiKey?: string;
+  ollamaBaseUrl?: string;
+  ollamaEmbeddingModel?: string;
+  ollamaModel?: string;
+}
+
+let _defaults: CompanyEmbeddingDefaults | null = null;
+
+export function configureCompanyEmbeddingDefaults(
+  defaults: CompanyEmbeddingDefaults,
+): void {
+  _defaults = defaults;
+}
+
+function getDefaults(): CompanyEmbeddingDefaults {
+  if (_defaults) return _defaults;
+  return {
+    embeddingIndexKey: process.env.EMBEDDING_INDEX,
+    openAIApiKey: process.env.OPENAI_API_KEY,
+    huggingFaceApiKey: process.env.HUGGINGFACE_API_KEY,
+    ollamaBaseUrl: process.env.OLLAMA_BASE_URL,
+    ollamaEmbeddingModel: process.env.OLLAMA_EMBEDDING_MODEL,
+    ollamaModel: process.env.OLLAMA_MODEL,
+  };
+}
+
 function normalizeOptional(value: string | null | undefined): string | undefined {
   if (typeof value !== "string") return undefined;
   const trimmed = value.trim();
@@ -30,27 +64,28 @@ function normalizeOptional(value: string | null | undefined): string | undefined
 export function resolveEffectiveEmbeddingConfig(
   config?: CompanyEmbeddingConfig,
 ): EffectiveEmbeddingConfig {
+  const defaults = getDefaults();
   return {
     embeddingIndexKey:
       normalizeOptional(config?.embeddingIndexKey) ??
-      env.server.EMBEDDING_INDEX ??
+      defaults.embeddingIndexKey ??
       undefined,
     openAIApiKey:
       normalizeOptional(config?.openAIApiKey) ??
-      env.server.OPENAI_API_KEY ??
+      defaults.openAIApiKey ??
       undefined,
     huggingFaceApiKey:
       normalizeOptional(config?.huggingFaceApiKey) ??
-      env.server.HUGGINGFACE_API_KEY ??
+      defaults.huggingFaceApiKey ??
       undefined,
     ollamaBaseUrl:
       normalizeOptional(config?.ollamaBaseUrl) ??
-      env.server.OLLAMA_BASE_URL ??
+      defaults.ollamaBaseUrl ??
       undefined,
     ollamaModel:
       normalizeOptional(config?.ollamaModel) ??
-      env.server.OLLAMA_EMBEDDING_MODEL ??
-      env.server.OLLAMA_MODEL ??
+      defaults.ollamaEmbeddingModel ??
+      defaults.ollamaModel ??
       undefined,
   };
 }

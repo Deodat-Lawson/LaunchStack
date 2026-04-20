@@ -1,6 +1,5 @@
 import { OllamaEmbeddings } from "@langchain/ollama";
 
-import { env } from "~/env";
 import { generateEmbeddings } from "./embeddings";
 import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
 import type { EmbeddingIndexConfig } from "./embedding-index-registry";
@@ -8,6 +7,26 @@ import {
   resolveEffectiveEmbeddingConfig,
   type CompanyEmbeddingConfig,
 } from "./company-embedding-config";
+
+/**
+ * Module-level config holding the sidecar URL used by SidecarEmbeddings.
+ * apps/web/src/server/engine.ts registers this at startup via
+ * configureEmbeddingFactory; a process.env fallback is retained for the
+ * transitional window before this file moves into @launchstack/core.
+ */
+export interface EmbeddingFactoryConfig {
+  sidecarUrl?: string;
+}
+
+let _config: EmbeddingFactoryConfig | null = null;
+
+export function configureEmbeddingFactory(config: EmbeddingFactoryConfig): void {
+  _config = config;
+}
+
+function getSidecarUrl(): string | undefined {
+  return _config?.sidecarUrl ?? process.env.SIDECAR_URL;
+}
 
 class SidecarEmbeddings implements EmbeddingsProvider {
   constructor(private readonly index: EmbeddingIndexConfig) {}
@@ -18,9 +37,8 @@ class SidecarEmbeddings implements EmbeddingsProvider {
   }
 
   async embedDocuments(documents: string[]): Promise<number[][]> {
-    const endpoint = env.server.SIDECAR_URL
-      ? `${env.server.SIDECAR_URL}/embed`
-      : "";
+    const sidecarUrl = getSidecarUrl();
+    const endpoint = sidecarUrl ? `${sidecarUrl}/embed` : "";
 
     if (!endpoint) {
       throw new Error("SIDECAR_URL is required for sidecar embeddings");

@@ -1,4 +1,3 @@
-import { env } from "~/env";
 import {
   resolveEffectiveEmbeddingConfig,
   type CompanyEmbeddingConfig,
@@ -24,6 +23,59 @@ export interface EmbeddingIndexConfig {
   version: string;
 }
 
+/**
+ * Registry-wide config injected by the hosting app (see
+ * apps/web/src/server/engine.ts). When unset, getRegistryConfig() falls
+ * back to process.env — retained for the transitional window before
+ * this file moves to @launchstack/core in step 6.
+ */
+export interface EmbeddingIndexRegistryConfig {
+  sidecar?: { url: string; model?: string; dimension: number; version?: string };
+  ollama?: { embeddingDimension?: number; embeddingVersion?: string };
+  huggingface?: { embeddingModel?: string; embeddingDimension?: number; embeddingVersion?: string };
+  defaultIndexKey?: string;
+}
+
+let _registryConfig: EmbeddingIndexRegistryConfig | null = null;
+
+export function configureEmbeddingIndexRegistry(
+  config: EmbeddingIndexRegistryConfig,
+): void {
+  _registryConfig = config;
+  embeddingIndexEnvChecked = false; // re-check on next access
+}
+
+function parseDimension(value: string | number | undefined): number | undefined {
+  if (value === undefined || value === null) return undefined;
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+}
+
+function getRegistryConfig(): EmbeddingIndexRegistryConfig {
+  if (_registryConfig) return _registryConfig;
+  return {
+    sidecar:
+      process.env.SIDECAR_URL && process.env.SIDECAR_EMBEDDING_DIMENSION
+        ? {
+            url: process.env.SIDECAR_URL,
+            model: process.env.SIDECAR_EMBEDDING_MODEL,
+            dimension: Number(process.env.SIDECAR_EMBEDDING_DIMENSION),
+            version: process.env.SIDECAR_EMBEDDING_VERSION,
+          }
+        : undefined,
+    ollama: {
+      embeddingDimension: parseDimension(process.env.OLLAMA_EMBEDDING_DIMENSION),
+      embeddingVersion: process.env.OLLAMA_EMBEDDING_VERSION,
+    },
+    huggingface: {
+      embeddingModel: process.env.HUGGINGFACE_EMBEDDING_MODEL,
+      embeddingDimension: parseDimension(process.env.HUGGINGFACE_EMBEDDING_DIMENSION),
+      embeddingVersion: process.env.HUGGINGFACE_EMBEDDING_VERSION,
+    },
+    defaultIndexKey: process.env.EMBEDDING_INDEX,
+  };
+}
+
 const LEGACY_OPENAI_INDEX: EmbeddingIndexConfig = {
   indexKey: "legacy-openai-1536",
   provider: "openai",
@@ -36,12 +88,6 @@ const LEGACY_OPENAI_INDEX: EmbeddingIndexConfig = {
   version: "v1",
 };
 
-function parseDimension(value: string | undefined): number | undefined {
-  if (!value) return undefined;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
-}
-
 function isSupportedDimensionTableDimension(dimension: number): boolean {
   return dimension === 768 || dimension === 1024;
 }
@@ -49,22 +95,23 @@ function isSupportedDimensionTableDimension(dimension: number): boolean {
 function buildDynamicIndexes(config?: CompanyEmbeddingConfig): EmbeddingIndexConfig[] {
   const indexes: EmbeddingIndexConfig[] = [];
   const effectiveConfig = resolveEffectiveEmbeddingConfig(config);
+  const registry = getRegistryConfig();
 
-  const sidecarDimension = parseDimension(env.server.SIDECAR_EMBEDDING_DIMENSION);
-  if (env.server.SIDECAR_URL && sidecarDimension && isSupportedDimensionTableDimension(sidecarDimension)) {
+  const sidecarDimension = registry.sidecar?.dimension;
+  if (registry.sidecar?.url && sidecarDimension && isSupportedDimensionTableDimension(sidecarDimension)) {
     indexes.push({
       indexKey: "sidecar-default",
       provider: "sidecar",
-      model: env.server.SIDECAR_EMBEDDING_MODEL ?? "sidecar-embedding-model",
+      model: registry.sidecar.model ?? "sidecar-embedding-model",
       dimension: sidecarDimension,
       supportsMatryoshka: false,
       enabled: true,
       storageKind: "dimension_table",
-      version: env.server.SIDECAR_EMBEDDING_VERSION ?? "v1",
+      version: registry.sidecar.version ?? "v1",
     });
   }
 
-  const ollamaDimension = parseDimension(env.server.OLLAMA_EMBEDDING_DIMENSION);
+  const ollamaDimension = registry.ollama?.embeddingDimension;
   const ollamaModel = effectiveConfig.ollamaModel;
   const ollamaBaseUrl = effectiveConfig.ollamaBaseUrl;
   if (ollamaBaseUrl && ollamaModel && ollamaDimension && isSupportedDimensionTableDimension(ollamaDimension)) {
@@ -76,21 +123,21 @@ function buildDynamicIndexes(config?: CompanyEmbeddingConfig): EmbeddingIndexCon
       supportsMatryoshka: false,
       enabled: true,
       storageKind: "dimension_table",
-      version: env.server.OLLAMA_EMBEDDING_VERSION ?? "v1",
+      version: registry.ollama?.embeddingVersion ?? "v1",
     });
   }
 
-  const huggingFaceDimension = parseDimension(env.server.HUGGINGFACE_EMBEDDING_DIMENSION);
-  if (env.server.HUGGINGFACE_EMBEDDING_MODEL && huggingFaceDimension && isSupportedDimensionTableDimension(huggingFaceDimension)) {
+  const huggingFaceDimension = registry.huggingface?.embeddingDimension;
+  if (registry.huggingface?.embeddingModel && huggingFaceDimension && isSupportedDimensionTableDimension(huggingFaceDimension)) {
     indexes.push({
       indexKey: "huggingface-default",
       provider: "huggingface",
-      model: env.server.HUGGINGFACE_EMBEDDING_MODEL,
+      model: registry.huggingface.embeddingModel,
       dimension: huggingFaceDimension,
       supportsMatryoshka: false,
       enabled: true,
       storageKind: "dimension_table",
-      version: env.server.HUGGINGFACE_EMBEDDING_VERSION ?? "v1",
+      version: registry.huggingface.embeddingVersion ?? "v1",
     });
   }
 
@@ -109,7 +156,7 @@ let embeddingIndexEnvChecked = false;
 function checkEmbeddingIndexEnv(): void {
   if (embeddingIndexEnvChecked) return;
   embeddingIndexEnvChecked = true;
-  const configured = env.server.EMBEDDING_INDEX;
+  const configured = getRegistryConfig().defaultIndexKey;
   if (!configured) return;
   const registry = getEmbeddingIndexRegistry();
   const known = registry.find((idx) => idx.indexKey === configured);
@@ -122,9 +169,9 @@ function checkEmbeddingIndexEnv(): void {
     );
   }
 }
-checkEmbeddingIndexEnv();
 
 export function getDefaultEmbeddingIndexKey(config?: CompanyEmbeddingConfig): string {
+  checkEmbeddingIndexEnv();
   return resolveEffectiveEmbeddingConfig(config).embeddingIndexKey ?? LEGACY_OPENAI_INDEX.indexKey;
 }
 
@@ -132,6 +179,7 @@ export function resolveEmbeddingIndex(
   indexKey?: string,
   config?: CompanyEmbeddingConfig,
 ): EmbeddingIndexConfig {
+  checkEmbeddingIndexEnv();
   const targetKey = indexKey ?? getDefaultEmbeddingIndexKey(config);
   const index = getEmbeddingIndexRegistry(config).find(
     (candidate) => candidate.indexKey === targetKey && candidate.enabled,

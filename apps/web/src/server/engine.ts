@@ -13,6 +13,9 @@ import { createEngine, type CoreConfig, type Engine } from "@launchstack/core";
 import { env } from "~/env";
 import { configureProviders } from "~/lib/providers/registry";
 import { configureChatModels } from "~/lib/ai/chat-model-factory";
+import { configureEmbeddingIndexRegistry } from "~/lib/ai/embedding-index-registry";
+import { configureEmbeddingFactory } from "~/lib/ai/embedding-factory";
+import { configureCompanyEmbeddingDefaults } from "~/lib/ai/company-embedding-config";
 import { createAppStoragePort } from "./storage/port";
 
 type EngineHolder = { engine: Engine };
@@ -163,6 +166,43 @@ export function getEngine(): Engine {
     anthropic: config.llm.anthropic,
     google: config.llm.google,
     ollama: config.llm.ollama,
+  });
+
+  // Register embedding-related defaults so the index registry, the
+  // embedding factory, and the company-override resolver all read from
+  // the same config tree instead of env.ts at runtime.
+  configureEmbeddingIndexRegistry({
+    sidecar: config.embeddings.sidecar
+      ? {
+          url: config.embeddings.sidecar.url,
+          model: config.embeddings.sidecar.model,
+          dimension: config.embeddings.sidecar.dimension,
+          version: config.embeddings.sidecar.version,
+        }
+      : undefined,
+    ollama: {
+      embeddingDimension: config.llm.ollama?.embeddingDimension,
+      embeddingVersion: config.llm.ollama?.embeddingVersion,
+    },
+    huggingface: {
+      embeddingModel: config.llm.huggingface?.embeddingModel,
+      embeddingDimension: config.llm.huggingface?.embeddingDimension,
+      embeddingVersion: config.llm.huggingface?.embeddingVersion,
+    },
+    defaultIndexKey: config.embeddings.indexName,
+  });
+
+  configureEmbeddingFactory({
+    sidecarUrl: config.embeddings.sidecar?.url,
+  });
+
+  configureCompanyEmbeddingDefaults({
+    embeddingIndexKey: config.embeddings.indexName,
+    openAIApiKey: config.llm.openai?.apiKey,
+    huggingFaceApiKey: config.llm.huggingface?.apiKey,
+    ollamaBaseUrl: config.llm.ollama?.baseUrl,
+    ollamaEmbeddingModel: config.llm.ollama?.embeddingModel,
+    ollamaModel: config.llm.ollama?.model,
   });
 
   // Register provider config so resolveBaseUrl / resolveApiKey / etc. in

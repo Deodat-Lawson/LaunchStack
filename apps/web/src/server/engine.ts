@@ -14,9 +14,9 @@ import { env } from "~/env";
 import { configureProviders } from "@launchstack/core/providers/registry";
 import { configureChatModels } from "@launchstack/core/llm";
 import { configureSecretBox } from "@launchstack/core/crypto";
-import { configureEmbeddingIndexRegistry } from "~/lib/ai/embedding-index-registry";
-import { configureEmbeddingFactory } from "~/lib/ai/embedding-factory";
-import { configureCompanyEmbeddingDefaults } from "~/lib/ai/company-embedding-config";
+import { configureEmbeddingIndexRegistry } from "@launchstack/core/embeddings";
+import { configureEmbeddingFactory } from "@launchstack/core/embeddings";
+import { configureCompanyEmbeddingDefaults } from "@launchstack/core/embeddings";
 import { createAppStoragePort } from "./storage/port";
 
 type EngineHolder = { engine: Engine };

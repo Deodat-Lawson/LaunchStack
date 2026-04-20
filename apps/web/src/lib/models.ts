@@ -6,9 +6,9 @@ import { ChatOpenAI } from "@langchain/openai";
 import { ChatAnthropic } from "@langchain/anthropic";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
-import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
-import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
-import type { CompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import { createEmbeddingModel } from "@launchstack/core/embeddings";
+import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
+import type { CompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
 import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
 

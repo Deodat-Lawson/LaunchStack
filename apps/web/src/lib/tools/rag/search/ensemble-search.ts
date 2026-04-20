@@ -1,8 +1,8 @@
 import { EnsembleRetriever } from "langchain/retrievers/ensemble";
 import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import type { BaseRetriever } from "@langchain/core/retrievers";
-import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
-import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
+import { createEmbeddingModel } from "@launchstack/core/embeddings";
+import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
 import {
   createDocumentVectorRetriever,
   createCompanyVectorRetriever,

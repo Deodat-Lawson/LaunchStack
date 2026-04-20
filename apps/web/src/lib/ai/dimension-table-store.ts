@@ -5,7 +5,7 @@ import {
   documentEmbeddings768,
   documentEmbeddings1024,
 } from "@launchstack/core/db/schema";
-import type { EmbeddingIndexConfig } from "./embedding-index-registry";
+import type { EmbeddingIndexConfig } from "@launchstack/core/embeddings";
 
 interface StoreDimensionTableEmbeddingsInput {
   documentId: number;

@@ -35,7 +35,7 @@ import {
 import {
     isLegacyEmbeddingIndex,
     type EmbeddingIndexConfig,
-} from "~/lib/ai/embedding-index-registry";
+} from "@launchstack/core/embeddings";
 import type { EmbeddingsProvider } from "../types";
 
 // ============================================================================

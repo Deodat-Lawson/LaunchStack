@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
-import { getCompanyCredentialsPlaintext } from "@launchstack/core/embeddings";
+import { getDb } from "../db";
+import { company } from "../db/schema";
+import { getCompanyCredentialsPlaintext } from "./company-credentials";
 
 export interface CompanyEmbeddingConfig {
   embeddingIndexKey?: string | null;
@@ -107,7 +107,7 @@ export async function getCompanyEmbeddingConfig(
   }
 
   const [indexRow, creds] = await Promise.all([
-    db
+    getDb()
       .select({
         activeIndexKey: company.activeEmbeddingIndexKey,
         legacyIndexKey: company.embeddingIndexKey,

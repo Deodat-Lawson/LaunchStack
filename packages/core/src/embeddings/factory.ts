@@ -1,18 +1,17 @@
 import { OllamaEmbeddings } from "@langchain/ollama";
 
 import { generateEmbeddings } from "./embeddings";
-import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
-import type { EmbeddingIndexConfig } from "./embedding-index-registry";
+import type { EmbeddingsProvider } from "./types";
+import type { EmbeddingIndexConfig } from "./index-registry";
 import {
   resolveEffectiveEmbeddingConfig,
   type CompanyEmbeddingConfig,
-} from "./company-embedding-config";
+} from "./company-config";
 
 /**
  * Module-level config holding the sidecar URL used by SidecarEmbeddings.
- * apps/web/src/server/engine.ts registers this at startup via
- * configureEmbeddingFactory; a process.env fallback is retained for the
- * transitional window before this file moves into @launchstack/core.
+ * Registered by createEngine via configureEmbeddingFactory; no process.env
+ * fallback — the host is responsible for injecting it.
  */
 export interface EmbeddingFactoryConfig {
   sidecarUrl?: string;
@@ -25,7 +24,7 @@ export function configureEmbeddingFactory(config: EmbeddingFactoryConfig): void 
 }
 
 function getSidecarUrl(): string | undefined {
-  return _config?.sidecarUrl ?? process.env.SIDECAR_URL;
+  return _config?.sidecarUrl;
 }
 
 class SidecarEmbeddings implements EmbeddingsProvider {

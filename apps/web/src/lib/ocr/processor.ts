@@ -15,12 +15,12 @@ import {
   createDoclingAdapter,
 } from "~/lib/ocr/adapters";
 import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "~/lib/ocr/chunker";
-import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import {
   isLegacyEmbeddingIndex,
   supportsShortVectorSearch,
   type EmbeddingIndexConfig,
-} from "~/lib/ai/embedding-index-registry";
+} from "@launchstack/core/embeddings";
 import { storeDimensionTableEmbeddings } from "~/lib/ai/dimension-table-store";
 import { db } from "~/server/db";
 import {

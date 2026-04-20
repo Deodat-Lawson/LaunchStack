@@ -11,7 +11,7 @@ import {
   isLegacyEmbeddingIndex,
   supportsShortVectorSearch,
   type EmbeddingIndexConfig,
-} from "~/lib/ai/embedding-index-registry";
+} from "@launchstack/core/embeddings";
 import type { EmbeddingsProvider, SearchScope, SearchFilters } from "../types";
 
 interface VectorRetrieverConfig extends BaseRetrieverInput {

@@ -5,7 +5,7 @@ import {
   getEmbeddingIndexRegistry,
   type EmbeddingIndexConfig,
   type EmbeddingProvider,
-} from "~/lib/ai/embedding-index-registry";
+} from "@launchstack/core/embeddings";
 
 const PROVIDER_LABELS: Record<EmbeddingProvider, string> = {
   openai: "OpenAI",

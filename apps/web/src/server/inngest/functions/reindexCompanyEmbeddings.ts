@@ -27,10 +27,10 @@ import {
   resolveEmbeddingIndex,
   isLegacyEmbeddingIndex,
   type EmbeddingIndexConfig,
-} from "~/lib/ai/embedding-index-registry";
-import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
+} from "@launchstack/core/embeddings";
+import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import { storeDimensionTableEmbeddings } from "~/lib/ai/dimension-table-store";
-import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import {
   completeReindex,
   failReindex,

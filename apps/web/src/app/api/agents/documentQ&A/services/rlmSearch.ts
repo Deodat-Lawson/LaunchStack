@@ -22,8 +22,8 @@ import {
     type TokenBudgetOptions,
 } from "~/lib/tools/rag/retrievers";
 import { getEmbeddings } from "./models";
-import { resolveEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
-import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
+import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import { db } from "~/server/db";
 import { document, type SemanticType, type PreviewType } from "@launchstack/core/db/schema";
 

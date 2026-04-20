@@ -119,10 +119,7 @@ export interface DocumentCluster {
   lastUpdated: Date;
 }
 
-export interface EmbeddingsProvider {
-  embedQuery(query: string): Promise<number[]>;
-  embedDocuments?(documents: string[]): Promise<number[][]>;
-}
+export type { EmbeddingsProvider } from "@launchstack/core/embeddings";
 
 export interface RAGSearchResult {
   content: string;

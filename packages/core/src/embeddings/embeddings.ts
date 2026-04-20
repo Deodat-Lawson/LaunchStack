@@ -9,6 +9,8 @@
  */
 export interface EmbeddingConfig {
   apiKey?: string;
+  /** Base URL for the OpenAI-compatible endpoint. Defaults to api.openai.com/v1. */
+  baseUrl?: string;
   model?: string;
   batchSize?: number;
   maxRetries?: number;
@@ -18,9 +20,16 @@ export interface EmbeddingConfig {
   concurrency?: number;
 }
 
+/**
+ * Library defaults. The caller is expected to pass apiKey (and optionally
+ * override model / dimensions / baseUrl) on every call; the default apiKey
+ * is empty so a missing config throws a clear "OpenAI API key not
+ * configured" error rather than silently swallowing.
+ */
 const DEFAULT_CONFIG: Required<EmbeddingConfig> = {
-  apiKey: process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY || process.env.OPENAI_API_KEY || "",
-  model: process.env.EMBEDDING_MODEL ?? "text-embedding-3-large",
+  apiKey: "",
+  baseUrl: "https://api.openai.com/v1",
+  model: "text-embedding-3-large",
   batchSize: 100,
   maxRetries: 5,
   retryDelayMs: 2000,
@@ -194,11 +203,7 @@ async function callEmbeddingAPI(
     text.replace(/\0/g, "").trim() || " "
   );
 
-  const baseUrl = (
-    process.env.EMBEDDING_API_BASE_URL ??
-    process.env.AI_BASE_URL ??
-    "https://api.openai.com/v1"
-  ).replace(/\/$/, "");
+  const baseUrl = config.baseUrl.replace(/\/$/, "");
 
   const response = await fetch(`${baseUrl}/embeddings`, {
     method: "POST",

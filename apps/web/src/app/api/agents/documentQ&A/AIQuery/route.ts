@@ -10,8 +10,8 @@ import {
     type DocumentSearchOptions,
     type SearchResult
 } from "~/lib/tools/rag";
-import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "~/lib/ai/embedding-index-registry";
-import { getCompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
+import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";

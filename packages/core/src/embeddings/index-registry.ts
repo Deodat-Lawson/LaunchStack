@@ -1,7 +1,7 @@
 import {
   resolveEffectiveEmbeddingConfig,
   type CompanyEmbeddingConfig,
-} from "./company-embedding-config";
+} from "./company-config";
 
 export type EmbeddingProvider =
   | "openai"
@@ -24,10 +24,9 @@ export interface EmbeddingIndexConfig {
 }
 
 /**
- * Registry-wide config injected by the hosting app (see
- * apps/web/src/server/engine.ts). When unset, getRegistryConfig() falls
- * back to process.env — retained for the transitional window before
- * this file moves to @launchstack/core in step 6.
+ * Registry-wide config injected by the hosting app via createEngine. The
+ * hosting app is responsible for populating all fields; there is no
+ * process.env fallback.
  */
 export interface EmbeddingIndexRegistryConfig {
   sidecar?: { url: string; model?: string; dimension: number; version?: string };
@@ -45,35 +44,8 @@ export function configureEmbeddingIndexRegistry(
   embeddingIndexEnvChecked = false; // re-check on next access
 }
 
-function parseDimension(value: string | number | undefined): number | undefined {
-  if (value === undefined || value === null) return undefined;
-  const parsed = typeof value === "number" ? value : Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
-}
-
 function getRegistryConfig(): EmbeddingIndexRegistryConfig {
-  if (_registryConfig) return _registryConfig;
-  return {
-    sidecar:
-      process.env.SIDECAR_URL && process.env.SIDECAR_EMBEDDING_DIMENSION
-        ? {
-            url: process.env.SIDECAR_URL,
-            model: process.env.SIDECAR_EMBEDDING_MODEL,
-            dimension: Number(process.env.SIDECAR_EMBEDDING_DIMENSION),
-            version: process.env.SIDECAR_EMBEDDING_VERSION,
-          }
-        : undefined,
-    ollama: {
-      embeddingDimension: parseDimension(process.env.OLLAMA_EMBEDDING_DIMENSION),
-      embeddingVersion: process.env.OLLAMA_EMBEDDING_VERSION,
-    },
-    huggingface: {
-      embeddingModel: process.env.HUGGINGFACE_EMBEDDING_MODEL,
-      embeddingDimension: parseDimension(process.env.HUGGINGFACE_EMBEDDING_DIMENSION),
-      embeddingVersion: process.env.HUGGINGFACE_EMBEDDING_VERSION,
-    },
-    defaultIndexKey: process.env.EMBEDDING_INDEX,
-  };
+  return _registryConfig ?? {};
 }
 
 const LEGACY_OPENAI_INDEX: EmbeddingIndexConfig = {

@@ -14,13 +14,13 @@ import {
   type StoredSection,
 } from "~/lib/ocr/processor";
 import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "~/lib/ocr/chunker";
-import { createEmbeddingModel } from "~/lib/ai/embedding-factory";
-import type { CompanyEmbeddingConfig } from "~/lib/ai/company-embedding-config";
+import { createEmbeddingModel } from "@launchstack/core/embeddings";
+import type { CompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import {
   resolveEmbeddingIndex,
   supportsShortVectorSearch,
   type EmbeddingIndexConfig,
-} from "~/lib/ai/embedding-index-registry";
+} from "@launchstack/core/embeddings";
 import type {
   DocumentChunk,
   PageContent,
@@ -355,7 +355,7 @@ export async function runDocIngestionTool(
   const embeddingBatchSize = runtime?.sidecarBatchSize ?? DEFAULT_EMBEDDING_BATCH_SIZE;
   const updateJobStatus = runtime?.updateJobStatus ?? false;
   const markFailureInDb = runtime?.markFailureInDb ?? false;
-  const { getCompanyEmbeddingConfig } = await import("~/lib/ai/company-embedding-config");
+  const { getCompanyEmbeddingConfig } = await import("@launchstack/core/embeddings");
   const companyEmbeddingConfig = await getCompanyEmbeddingConfig(companyId);
   const embeddingIndex = resolveEmbeddingIndex(options?.embeddingIndexKey, companyEmbeddingConfig ?? undefined);
 

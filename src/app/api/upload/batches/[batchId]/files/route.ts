@@ -24,7 +24,7 @@ const RegisterFilesSchema = z.object({
         filename: z.string().min(1, "Filename is required"),
         relativePath: z.string().optional(),
         storageUrl: z.string().min(1, "storageUrl is required"),
-        storageType: z.enum(["cloud", "database"]).optional(),
+        storageType: z.enum(["s3", "database"]).optional(),
         mimeType: z.string().optional(),
         size: z.number().int().nonnegative().optional(),
         metadata: z.record(z.any()).optional(),

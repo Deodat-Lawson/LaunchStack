@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { documentNotes } from "~/server/db/schema";
 import { eq, and } from "drizzle-orm";
+import { validateRequestBody, UpdateNoteSchema } from "~/lib/validation";
 
 export async function GET(
   _request: Request,
@@ -55,11 +56,9 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
 
-    const body = (await request.json()) as {
-      title?: string;
-      content?: string;
-      tags?: string[];
-    };
+    const validation = await validateRequestBody(request, UpdateNoteSchema);
+    if (!validation.success) return validation.response;
+    const body = validation.data;
 
     const [updated] = await db
       .update(documentNotes)

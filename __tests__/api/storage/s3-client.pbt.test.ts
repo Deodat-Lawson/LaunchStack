@@ -21,10 +21,10 @@ jest.mock("~/env", () => ({
       S3_ACCESS_KEY: TEST_ACCESS_KEY,
       S3_SECRET_KEY: TEST_SECRET_KEY,
       S3_BUCKET_NAME: TEST_BUCKET,
-      NEXT_PUBLIC_STORAGE_PROVIDER: "local",
+      NEXT_PUBLIC_STORAGE_PROVIDER: "s3",
     },
     client: {
-      NEXT_PUBLIC_STORAGE_PROVIDER: "local",
+      NEXT_PUBLIC_STORAGE_PROVIDER: "s3",
       NEXT_PUBLIC_S3_ENDPOINT: TEST_ENDPOINT,
     },
   },

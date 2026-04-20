@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { validateRequestBody, CreateExecutionStepSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -11,31 +12,17 @@ export const maxDuration = 300;
 // POST /api/agent-ai-chatbot/execution-steps - Create an execution step
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as {
-      taskId?: string;
-      stepNumber?: number;
-      stepType?: string;
-      description?: string;
-      reasoning?: string;
-      input?: unknown;
-      output?: unknown;
-    };
-    const { 
-      taskId, 
-      stepNumber, 
-      stepType, 
-      description, 
+    const validation = await validateRequestBody(request, CreateExecutionStepSchema);
+    if (!validation.success) return validation.response;
+    const {
+      taskId,
+      stepNumber,
+      stepType,
+      description,
       reasoning,
       input,
-      output 
-    } = body;
-
-    if (!taskId || stepNumber === undefined || !stepType || !description) {
-      return NextResponse.json(
-        { error: "taskId, stepNumber, stepType, and description are required" },
-        { status: 400 }
-      );
-    }
+      output
+    } = validation.data;
 
     const stepId = randomUUID();
 

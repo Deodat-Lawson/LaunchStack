@@ -1,0 +1,11 @@
+# Override: wire up OCR worker when using --profile ocr
+# Usage: docker compose --profile ocr -f docker-compose.yml -f docker-compose.ocr.yml up -d
+
+services:
+  app:
+    depends_on:
+      ocr-worker:
+        condition: service_healthy
+    environment:
+      OCR_WORKER_URL: http://ocr-worker:8001
+      OCR_DEFAULT_PROVIDER: DOCLING

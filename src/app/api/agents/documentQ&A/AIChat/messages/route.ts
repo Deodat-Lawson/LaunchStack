@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { agentAiChatbotMessage, agentAiChatbotChat } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { validateRequestBody, CreateMessageSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -11,21 +12,9 @@ export const maxDuration = 300;
 // POST /api/agent-ai-chatbot/messages - Send a message
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as {
-      chatId?: string;
-      role?: string;
-      content?: unknown;
-      messageType?: string;
-      parentMessageId?: string;
-    };
-    const { chatId, role, content, messageType = "text", parentMessageId } = body;
-
-    if (!chatId || !role || !content) {
-      return NextResponse.json(
-        { error: "chatId, role, and content are required" },
-        { status: 400 }
-      );
-    }
+    const validation = await validateRequestBody(request, CreateMessageSchema);
+    if (!validation.success) return validation.response;
+    const { chatId, role, content, messageType, parentMessageId } = validation.data;
 
     const messageId = randomUUID();
 
@@ -34,7 +23,7 @@ export async function POST(request: NextRequest) {
       chatId,
       role: role as "user" | "assistant" | "system" | "tool",
       content,
-      messageType: (messageType ?? "text") as "text" | "tool_call" | "tool_result" | "thinking",
+      messageType: messageType as "text" | "tool_call" | "tool_result" | "thinking",
       parentMessageId,
     };
 

@@ -8,8 +8,14 @@ export interface AIChatRequest {
   documentId?: number;
   companyId?: number;
   archiveName?: string;
+  /**
+   * User-picked subset of documents for the "selected" scope. Passed to the
+   * backend which verifies company ownership and runs a multi-doc ensemble
+   * search over exactly those IDs. Required when searchScope === 'selected'.
+   */
+  selectedDocumentIds?: number[];
   question: string;
-  searchScope: 'document' | 'company' | 'archive';
+  searchScope: 'document' | 'company' | 'archive' | 'selected';
   aiModel?: AIModelType;
   provider?: LLMProvider;
   style?: string;
@@ -39,7 +45,7 @@ export interface AIChatResponse {
   processingTimeMs?: number;
   chunksAnalyzed?: number;
   fusionWeights?: number[];
-  searchScope?: 'document' | 'company' | 'archive';
+  searchScope?: 'document' | 'company' | 'archive' | 'selected';
   aiModel?: string;
   webSources?: WebSource[];
   webSearch?: WebSearchInfo;
@@ -82,6 +88,7 @@ export function useAIChat() {
           documentId: params.documentId,
           companyId: params.companyId,
           archiveName: params.archiveName,
+          selectedDocumentIds: params.selectedDocumentIds,
           question: params.question,
           searchScope: params.searchScope,
           aiModel: mappedModel,

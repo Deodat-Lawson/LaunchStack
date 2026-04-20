@@ -19,8 +19,8 @@ export interface EmbeddingConfig {
 }
 
 const DEFAULT_CONFIG: Required<EmbeddingConfig> = {
-  apiKey: process.env.OPENAI_API_KEY ?? "",
-  model: "text-embedding-3-large",
+  apiKey: process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY || process.env.OPENAI_API_KEY || "",
+  model: process.env.EMBEDDING_MODEL ?? "text-embedding-3-large",
   batchSize: 100,
   maxRetries: 5,
   retryDelayMs: 2000,
@@ -119,6 +119,10 @@ export async function generateEmbeddings(
     }
   }
 
+  console.log(
+    `[Embeddings] Done: ${chunks.length} chunks, ${totalTokens} tokens used (model=${cfg.model})`
+  );
+
   const missingIndices = allEmbeddings
     .map((e, i) => (e === undefined ? i : -1))
     .filter((i) => i !== -1);
@@ -190,7 +194,13 @@ async function callEmbeddingAPI(
     text.replace(/\0/g, "").trim() || " "
   );
 
-  const response = await fetch("https://api.openai.com/v1/embeddings", {
+  const baseUrl = (
+    process.env.EMBEDDING_API_BASE_URL ??
+    process.env.AI_BASE_URL ??
+    "https://api.openai.com/v1"
+  ).replace(/\/$/, "");
+
+  const response = await fetch(`${baseUrl}/embeddings`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -212,7 +222,10 @@ async function callEmbeddingAPI(
   const data = (await response.json()) as OpenAIEmbeddingResponse;
 
   const sortedData = [...data.data].sort((a, b) => a.index - b.index);
-  const embeddings = sortedData.map((item) => item.embedding);
+  const dim = config.dimensions;
+  const embeddings = sortedData.map((item) =>
+    item.embedding.length > dim ? item.embedding.slice(0, dim) : item.embedding
+  );
 
   return {
     embeddings,

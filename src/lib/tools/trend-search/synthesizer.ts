@@ -85,9 +85,10 @@ export async function synthesizeResults(
     }
 
     const chat = new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
         modelName: "gpt-5-nano",
         temperature: 1, // gpt-5-nano only supports default (1), not 0.2
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
     });
 
     const structuredModel = chat.withStructuredOutput(SynthesizerOutputSchema, {

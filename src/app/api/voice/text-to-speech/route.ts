@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { validateRequestBody, TextToSpeechSchema } from "~/lib/validation";
 
 interface TextToSpeechRequest {
   text: string;
@@ -68,7 +69,10 @@ async function streamElevenLabs(body: TextToSpeechRequest): Promise<NextResponse
 
 async function streamOpenAI(body: TextToSpeechRequest): Promise<NextResponse> {
   const OpenAI = (await import("openai")).default;
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+    ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
+  });
 
   const voice = (body.voiceId as "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer") ?? "nova";
 
@@ -100,11 +104,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = (await request.json()) as TextToSpeechRequest;
-
-    if (!body.text || body.text.trim().length === 0) {
-      return NextResponse.json({ error: "Text is required" }, { status: 400 });
-    }
+    const validation = await validateRequestBody(request, TextToSpeechSchema);
+    if (!validation.success) return validation.response;
+    const body = validation.data as TextToSpeechRequest;
 
     if (ELEVENLABS_API_KEY) {
       return await streamElevenLabs(body);

@@ -110,7 +110,7 @@ export async function POST(request: Request) {
                 rawDocumentUrl: blob.url,
                 requestUrl: request.url,
                 category,
-                explicitStorageType: "cloud",
+                explicitStorageType: "s3",
                 mimeType: "application/zip",
                 originalFilename: filename,
             });

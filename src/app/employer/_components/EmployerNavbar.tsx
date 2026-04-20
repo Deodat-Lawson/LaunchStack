@@ -5,6 +5,7 @@ import React from "react";
 import { Brain, Home } from "lucide-react";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
+import { TokenBalance } from "~/app/employer/_components/TokenBalance";
 import { Button } from "~/app/employer/documents/components/ui/button";
 
 export function EmployerNavbar() {
@@ -21,8 +22,9 @@ export function EmployerNavbar() {
                 </Link>
 
                 <div className="flex items-center gap-4">
+                    <TokenBalance />
                     <ThemeToggle />
-                    
+
                     <Link href="/employer/home">
                         <Button variant="ghost" size="icon" className="rounded-full">
                             <Home className="w-5 h-5" />

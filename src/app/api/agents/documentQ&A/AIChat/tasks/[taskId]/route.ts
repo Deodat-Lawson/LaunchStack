@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { agentAiChatbotTask, agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
+import { validateRequestBody, UpdateTaskSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -55,13 +56,9 @@ export async function PATCH(
 ) {
   try {
     const { taskId } = await params;
-    const body = await request.json() as {
-      status?: string;
-      result?: unknown;
-      metadata?: unknown;
-      completedAt?: string | Date;
-    };
-    const { status, result, metadata, completedAt } = body;
+    const validation = await validateRequestBody(request, UpdateTaskSchema);
+    if (!validation.success) return validation.response;
+    const { status, result, metadata, completedAt } = validation.data;
 
     const updateData: Record<string, unknown> = {};
     if (status) updateData.status = status;

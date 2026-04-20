@@ -1,6 +1,6 @@
 "use client";
 
-import { 
+import {
   FileText,
   Building2,
   Archive,
@@ -16,6 +16,7 @@ import {
   PanelRightClose,
   PanelRightOpen,
   Loader2,
+  CheckSquare,
 } from 'lucide-react';
 import { Button } from '~/app/employer/documents/components/ui/button';
 import {
@@ -51,8 +52,14 @@ interface ChatPanelProps {
   setAiModel: (m: AIModelType) => void;
   modelAvailability?: Partial<Record<AIModelType, boolean>>;
   providerAvailability?: Partial<Record<LLMProvider, boolean>>;
-  searchScope: 'document' | 'company' | 'archive';
-  setSearchScope: (s: 'document' | 'company' | 'archive') => void;
+  searchScope: 'document' | 'company' | 'archive' | 'selected';
+  setSearchScope: (s: 'document' | 'company' | 'archive' | 'selected') => void;
+  /**
+   * User-picked subset of documents from the sidebar checkboxes. When this
+   * has ≥2 IDs the "Selected (N)" scope button appears and auto-activates;
+   * empty/single means the button is hidden and scope falls back to Doc.
+   */
+  selectedDocumentIds?: number[];
   companyId: number | null;
   setPdfPageNumber: (p: number) => void;
   styleOptions: Record<string, string>;
@@ -120,6 +127,7 @@ export function ChatPanel({
   providerAvailability = {},
   searchScope,
   setSearchScope,
+  selectedDocumentIds,
   companyId,
   setPdfPageNumber,
   styleOptions: _styleOptions,
@@ -130,6 +138,8 @@ export function ChatPanel({
 }: ChatPanelProps) {
   const showCompanyScope = userRole === 'employer';
   const hasArchive = !!selectedDoc?.sourceArchiveName;
+  const selectedCount = selectedDocumentIds?.length ?? 0;
+  const showSelectedScope = selectedCount >= 2;
 
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden">
@@ -172,6 +182,21 @@ export function ChatPanel({
                   >
                     <Archive className="w-2.5 h-2.5" />
                     Zip
+                  </button>
+                )}
+                {showSelectedScope && (
+                  <button
+                    onClick={() => setSearchScope('selected')}
+                    className={cn(
+                      "flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all",
+                      searchScope === 'selected'
+                        ? "bg-background text-purple-600 dark:text-purple-400 shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                    title={`Search the ${selectedCount} checked documents`}
+                  >
+                    <CheckSquare className="w-2.5 h-2.5" />
+                    Selected ({selectedCount})
                   </button>
                 )}
                 <button
@@ -366,6 +391,7 @@ export function ChatPanel({
           selectedDocTitle={selectedDoc?.title}
           searchScope={searchScope}
           selectedDocId={selectedDoc?.id}
+          selectedDocumentIds={selectedDocumentIds}
           companyId={companyId}
           archiveName={selectedDoc?.sourceArchiveName}
           aiStyle={aiStyle}

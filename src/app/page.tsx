@@ -172,6 +172,48 @@ export default function HomePage() {
                 </div>
             </section>
 
+            {/* ── Free Token Package ────────────────────────────────── */}
+            <section className="max-w-5xl mx-auto px-4 mb-32">
+                <div className="relative bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/60 dark:to-indigo-950/40 border border-purple-200 dark:border-purple-700/50 rounded-3xl p-10 md:p-14 overflow-hidden">
+                    <div className="absolute top-0 right-0 w-72 h-72 bg-purple-400/10 dark:bg-purple-400/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+                    <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <span className="inline-flex items-center gap-2 bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-5">
+                                <Sparkles className="w-3.5 h-3.5" /> Free for every team
+                            </span>
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+                                10 million tokens<br />
+                                <span className="text-purple-600 dark:text-purple-400">on the house</span>
+                            </h2>
+                            <p className="text-gray-600 dark:text-gray-400 text-lg mb-6 leading-relaxed">
+                                Every new team gets 10M tokens free — enough to process hundreds of documents, run thousands of searches, and chat with your AI assistant without worrying about costs.
+                            </p>
+                            <Link href="/signup">
+                                <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-7 py-3 rounded-full transition-colors text-base cursor-pointer flex items-center gap-2">
+                                    Claim your free tokens <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </Link>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            {[
+                                { label: "Document OCR", value: "~650 pages", desc: "Azure AI extraction" },
+                                { label: "Embeddings", value: "10M tokens", desc: "Semantic indexing" },
+                                { label: "AI Chat", value: "10M tokens", desc: "Ask anything" },
+                                { label: "Search Rerank", value: "~50K queries", desc: "Smart result ranking" },
+                                { label: "Entity Extraction", value: "~20K chunks", desc: "Auto-detect names, orgs, dates" },
+                                { label: "Transcription", value: "~2K minutes", desc: "Audio to text" },
+                            ].map((item) => (
+                                <div key={item.label} className="bg-white/70 dark:bg-white/5 border border-purple-100 dark:border-purple-800/30 rounded-xl p-4">
+                                    <div className="text-lg font-bold text-purple-600 dark:text-purple-400">{item.value}</div>
+                                    <div className="text-sm font-semibold text-gray-900 dark:text-white mt-1">{item.label}</div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-500 mt-0.5">{item.desc}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* ── Feature 1: Document RAG ───────────────────────────── */}
             <section className="max-w-6xl mx-auto px-4 mb-32">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">

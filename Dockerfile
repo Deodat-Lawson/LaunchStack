@@ -9,7 +9,7 @@ WORKDIR /app
 
 # ── Dependencies ─────────────────────────────────────────────────────
 FROM base AS deps
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml .pnpmfile.cjs ./
 COPY scripts ./scripts
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
@@ -17,17 +17,31 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 # ── Builder ──────────────────────────────────────────────────────────
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+
+# Copy config files first (change less often → better layer caching)
+COPY package.json tsconfig.json next.config.ts drizzle.config.ts tailwind.config.ts postcss.config.js ./
+COPY src/env.ts ./src/env.ts
+# Copy stable library/server code first (changes less often → better layer caching)
+COPY src/lib ./src/lib
+COPY src/server ./src/server
+COPY src/types ./src/types
+COPY src/scripts ./src/scripts
+COPY src/styles ./src/styles
+COPY src/middleware.ts ./src/middleware.ts
+# Copy application code last (changes most often — only this layer rebuilds)
+COPY src/app ./src/app
+COPY src/components ./src/components
+COPY public ./public
+COPY scripts ./scripts
 
 ENV SKIP_ENV_VALIDATION=1
 ENV NEXT_TELEMETRY_DISABLED=1
 
 ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ARG OPENAI_API_KEY
 ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 
-RUN pnpm build
+RUN --mount=type=cache,id=nextjs-cache,target=/app/.next/cache \
+    pnpm build
 
 # ── Schema sync (migrate) ───────────────────────────────────────────
 # Reuses node_modules from deps instead of running a second install

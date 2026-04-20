@@ -22,7 +22,8 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
   switch (modelType) {
     case "gpt-4o":
       return new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
         modelName: "gpt-4o",
         temperature: 0.7,
         timeout: 600000,
@@ -30,7 +31,8 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
 
     case "gpt-5.2":
       return new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
         modelName: "gpt-5.2",
         temperature: 0.7,
         timeout: 600000,
@@ -38,7 +40,8 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
 
     case "gpt-5.1":
       return new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
         modelName: "gpt-5.1",
         temperature: 0.7,
         timeout: 600000,
@@ -46,14 +49,16 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
 
     case "gpt-5-nano":
       return new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
         modelName: "gpt-5-nano-2025-08-07",
         timeout: 300000,
       });
 
     case "gpt-5-mini":
       return new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
         modelName: "gpt-5-mini-2025-08-07",
         temperature: 0.3,
         timeout: 600000,
@@ -96,7 +101,8 @@ export function getChatModel(modelType: AIModelType): BaseChatModel {
 
     default:
       return new ChatOpenAI({
-        openAIApiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
+        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
         modelName: "gpt-4o",
         temperature: 0.7,
         timeout: 600000,

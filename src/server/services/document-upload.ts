@@ -1,8 +1,7 @@
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document, documentVersions, ocrJobs } from "~/server/db/schema";
-import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
+import { document, documentVersions } from "~/server/db/schema";
 import { resolveIngestIndexKey } from "~/lib/ai/company-reindex-state";
 import {
   shouldTranscribeFile,
@@ -11,8 +10,19 @@ import {
   transcribeVideoFromUrl,
 } from "~/lib/audio/transcription";
 import { uploadFile } from "~/lib/storage";
+import { putFile } from "~/server/storage/vercel-blob";
+import {
+  detectStorageType,
+  toAbsoluteUrl,
+  type StorageType,
+} from "./detect-storage-type";
+import { createDocumentRecord } from "./create-document";
+import { triggerJob } from "./trigger-job";
+import { hasTokens } from "~/lib/credits";
+import { isCloudMode } from "~/lib/providers/registry";
 
-export type StorageType = "cloud" | "database" | "local";
+export type { StorageType } from "./detect-storage-type";
+export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
 
 export interface DocumentUploadUserContext {
   userId: string;
@@ -29,6 +39,9 @@ export interface DocumentUploadParams {
   explicitStorageType?: StorageType;
   mimeType?: string;
   originalFilename?: string;
+  isWebsite?: boolean;
+  /** Links crawled pages together for UI grouping */
+  crawlGroupId?: string;
   embeddingIndexKey?: string;
 }
 
@@ -43,37 +56,6 @@ export interface DocumentUploadResult {
     category: string;
   };
   resolvedDocumentUrl: string;
-}
-
-/**
- * Determines the storage type from the URL. Relative URLs are treated as database storage.
- * Local S3 URLs (matching NEXT_PUBLIC_S3_ENDPOINT) are treated as local storage.
- */
-export function detectStorageType(url: string): StorageType {
-  if (url.startsWith("/api/files/")) {
-    return "database";
-  }
-  const s3Endpoint = process.env.NEXT_PUBLIC_S3_ENDPOINT;
-  if (s3Endpoint && url.startsWith(s3Endpoint)) {
-    return "local";
-  }
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return "cloud";
-  }
-  return "database";
-}
-
-/**
- * Converts a relative URL to an absolute URL using the current request origin.
- */
-export function toAbsoluteUrl(url: string, requestUrl: string): string {
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
-  }
-
-  const parsedUrl = new URL(requestUrl);
-  const origin = parsedUrl.origin;
-  return `${origin}${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
 /**
@@ -147,6 +129,7 @@ export async function processDocumentUpload({
   explicitStorageType,
   mimeType,
   originalFilename,
+  isWebsite,
   embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
   const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
@@ -154,12 +137,26 @@ export async function processDocumentUpload({
     storageType === "database" ? toAbsoluteUrl(rawDocumentUrl, requestUrl) : rawDocumentUrl;
 
   const documentCategory = category ?? "Uncategorized";
-  const companyIdString = user.companyId.toString();
-  // Resolve the index key ONCE at enqueue time and thread it through the
-  // Inngest event payload. The worker must never re-resolve from DB — that
-  // would race against a mid-flight `updateCompany` index switch and
-  // produce embeddings under the wrong index_key. Prefer `pending` during
-  // an active reindex so new docs end up in the in-flight target.
+
+  // ------------------------------------------------------------------
+  // Credit pre-check (cloud mode only)
+  // ------------------------------------------------------------------
+  if (isCloudMode()) {
+    // Rough estimate: 20 credits covers a typical document (OCR + embeddings)
+    const estimatedCredits = shouldTranscribeFile(mimeType, originalFilename) ? 30 : 20;
+    const sufficient = await hasTokens(user.companyId, estimatedCredits);
+    if (!sufficient) {
+      throw new Error(
+        "Insufficient credits to process this document. Please add more credits to continue."
+      );
+    }
+  }
+
+  // Resolve the embedding index key ONCE at enqueue time and thread it through
+  // the Inngest event payload. The worker must never re-resolve from DB — that
+  // would race against a mid-flight `updateCompany` index switch and produce
+  // embeddings under the wrong index_key. Prefer `pending` during an active
+  // reindex so new docs end up in the in-flight target.
   const resolvedEmbeddingIndexKey =
     embeddingIndexKey ??
     (await resolveIngestIndexKey(user.companyId)) ??
@@ -172,28 +169,15 @@ export async function processDocumentUpload({
   if (shouldTranscribeFile(mimeType, originalFilename)) {
     console.log(`[DocumentUpload] Audio file detected: ${documentName}, transcribing...`);
 
-    // 1. Save the original audio file as a document (marked as processed — nothing more to do)
-    const [audioDocument] = await db
-      .insert(document)
-      .values({
-        url: rawDocumentUrl,
-        title: documentName,
-        mimeType: mimeType ?? null,
-        category: documentCategory,
-        companyId: user.companyId,
-        ocrEnabled: false,
-        ocrProcessed: true,
-      })
-      .returning({
-        id: document.id,
-        url: document.url,
-        title: document.title,
-        category: document.category,
-      });
-
-    if (!audioDocument) {
-      throw new Error("Failed to create audio document record");
-    }
+    const audioDocument = await createDocumentRecord({
+      url: rawDocumentUrl,
+      title: documentName,
+      mimeType,
+      category: documentCategory,
+      companyId: user.companyId,
+      ocrEnabled: false,
+      ocrProcessed: true,
+    });
 
     // The original audio file is its own v1. Embeddings are generated from the
     // transcript document (below), not the audio itself — but we still create
@@ -206,11 +190,11 @@ export async function processDocumentUpload({
       ocrProcessed: true,
     });
 
-    // 2. Transcribe and create a separate transcript document
     try {
       const transcriptionResult = await transcribeAudioFromUrl(
         resolvedDocumentUrl,
-        originalFilename || documentName
+        originalFilename || documentName,
+        user.companyId,
       );
 
       const textBlob = await uploadFile({
@@ -233,28 +217,16 @@ export async function processDocumentUpload({
 
       const transcriptName = `${documentName} (Transcription)`;
 
-      const [transcriptDocument] = await db
-        .insert(document)
-        .values({
-          url: textBlob.url,
-          title: transcriptName,
-          mimeType: "text/plain",
-          category: documentCategory,
-          companyId: user.companyId,
-          ocrEnabled: true,
-          ocrProcessed: false,
-          ocrMetadata: transcriptionMetadata,
-        })
-        .returning({
-          id: document.id,
-          url: document.url,
-          title: document.title,
-          category: document.category,
-        });
-
-      if (!transcriptDocument) {
-        throw new Error("Failed to create transcript document record");
-      }
+      const transcriptDocument = await createDocumentRecord({
+        url: textBlob.url,
+        title: transcriptName,
+        mimeType: "text/plain",
+        category: documentCategory,
+        companyId: user.companyId,
+        ocrEnabled: true,
+        ocrProcessed: false,
+        ocrMetadata: transcriptionMetadata,
+      });
 
       // The transcript document is what goes through the OCR-to-Vector pipeline,
       // so its v1 version is the one that will receive embeddings. We capture
@@ -269,30 +241,19 @@ export async function processDocumentUpload({
         ocrMetadata: transcriptionMetadata,
       });
 
-      const { jobId, eventIds } = await triggerDocumentProcessing(
-        textBlob.url,
-        transcriptName,
-        companyIdString,
-        user.userId,
-        transcriptDocument.id,
-        documentCategory,
-        {
-          preferredProvider: parseProvider(preferredProvider),
-          mimeType: "text/plain",
-          originalFilename: `${documentName}-transcription.txt`,
-          transcriptionMetadata,
-          versionId: transcriptVersionId,
-          embeddingIndexKey: resolvedEmbeddingIndexKey,
-        }
-      );
-
-      await db.insert(ocrJobs).values({
-        id: jobId,
-        companyId: user.companyId,
-        userId: user.userId,
-        status: "queued",
+      const { jobId, eventIds } = await triggerJob({
         documentUrl: textBlob.url,
         documentName: transcriptName,
+        companyId: user.companyId,
+        userId: user.userId,
+        documentId: transcriptDocument.id,
+        category: documentCategory,
+        preferredProvider,
+        mimeType: "text/plain",
+        originalFilename: `${documentName}-transcription.txt`,
+        transcriptionMetadata,
+        versionId: transcriptVersionId,
+        embeddingIndexKey: resolvedEmbeddingIndexKey,
       });
 
       console.log(`[DocumentUpload] Audio + transcript saved: audio docId=${audioDocument.id}, transcript docId=${transcriptDocument.id}`);
@@ -306,7 +267,6 @@ export async function processDocumentUpload({
       };
     } catch (error) {
       console.error(`[DocumentUpload] Audio transcription failed for ${documentName}:`, error);
-      // Transcription failed but the audio document is still saved
       return {
         jobId: "",
         eventIds: [],
@@ -320,27 +280,15 @@ export async function processDocumentUpload({
   // ------------------------------------------------------------------
   // Normal (non-audio) document processing
   // ------------------------------------------------------------------
-  const [newDocument] = await db
-    .insert(document)
-    .values({
-      url: rawDocumentUrl,
-      title: documentName,
-      mimeType: mimeType ?? null,
-      category: documentCategory,
-      companyId: user.companyId,
-      ocrEnabled: true,
-      ocrProcessed: false,
-    })
-    .returning({
-      id: document.id,
-      url: document.url,
-      title: document.title,
-      category: document.category,
-    });
-
-  if (!newDocument) {
-    throw new Error("Failed to create document record");
-  }
+  const newDocument = await createDocumentRecord({
+    url: rawDocumentUrl,
+    title: documentName,
+    mimeType,
+    category: documentCategory,
+    companyId: user.companyId,
+    ocrEnabled: true,
+    ocrProcessed: false,
+  });
 
   // Create the v1 row for this document and lock in its file type. The
   // returned versionId is forwarded to the OCR-to-Vector pipeline so every
@@ -352,29 +300,19 @@ export async function processDocumentUpload({
     uploadedBy: user.userId,
   });
 
-  const { jobId, eventIds } = await triggerDocumentProcessing(
-    resolvedDocumentUrl,
-    documentName,
-    companyIdString,
-    user.userId,
-    newDocument.id,
-    documentCategory,
-    {
-      preferredProvider: parseProvider(preferredProvider),
-      mimeType,
-      originalFilename,
-      versionId,
-      embeddingIndexKey: resolvedEmbeddingIndexKey,
-    }
-  );
-
-  await db.insert(ocrJobs).values({
-    id: jobId,
-    companyId: user.companyId,
-    userId: user.userId,
-    status: "queued",
+  const { jobId, eventIds } = await triggerJob({
     documentUrl: resolvedDocumentUrl,
     documentName,
+    companyId: user.companyId,
+    userId: user.userId,
+    documentId: newDocument.id,
+    category: documentCategory,
+    preferredProvider,
+    mimeType,
+    originalFilename,
+    isWebsite,
+    versionId,
+    embeddingIndexKey: resolvedEmbeddingIndexKey,
   });
 
   return {
@@ -397,22 +335,27 @@ export interface VideoUrlUploadParams {
   category: string;
   title?: string;
   preferredProvider?: string;
+  embeddingIndexKey?: string;
 }
 
 export async function processVideoUrlUpload({
   user,
   videoUrl,
-  requestUrl,
   category,
   title,
   preferredProvider,
+  embeddingIndexKey,
 }: VideoUrlUploadParams): Promise<DocumentUploadResult> {
   if (!isVideoUrl(videoUrl)) {
     throw new Error("Unsupported video URL. Supported platforms include YouTube, Vimeo, TikTok, Twitter/X, and more.");
   }
 
   const documentCategory = category;
-  const companyIdString = user.companyId.toString();
+
+  const resolvedEmbeddingIndexKey =
+    embeddingIndexKey ??
+    (await resolveIngestIndexKey(user.companyId)) ??
+    undefined;
 
   console.log(`[DocumentUpload] Video URL detected: ${videoUrl}, downloading & transcribing...`);
 
@@ -441,52 +384,40 @@ export async function processVideoUrlUpload({
   const transcriptName = `${documentName} (Transcription)`;
 
   // 3. Create the transcript document record
-  const [transcriptDocument] = await db
-    .insert(document)
-    .values({
-      url: textBlob.url,
-      title: transcriptName,
-      mimeType: "text/plain",
-      category: documentCategory,
-      companyId: user.companyId,
-      ocrEnabled: true,
-      ocrProcessed: false,
-      ocrMetadata: transcriptionMetadata,
-    })
-    .returning({
-      id: document.id,
-      url: document.url,
-      title: document.title,
-      category: document.category,
-    });
+  const transcriptDocument = await createDocumentRecord({
+    url: textBlob.url,
+    title: transcriptName,
+    mimeType: "text/plain",
+    category: documentCategory,
+    companyId: user.companyId,
+    ocrEnabled: true,
+    ocrProcessed: false,
+    ocrMetadata: transcriptionMetadata,
+  });
 
-  if (!transcriptDocument) {
-    throw new Error("Failed to create transcript document record");
-  }
+  const transcriptVersionId = await createInitialVersion({
+    documentId: transcriptDocument.id,
+    url: textBlob.url,
+    mimeType: "text/plain",
+    uploadedBy: user.userId,
+    ocrProcessed: false,
+    ocrMetadata: transcriptionMetadata,
+  });
 
   // 4. Trigger embedding pipeline
-  const { jobId, eventIds } = await triggerDocumentProcessing(
-    textBlob.url,
-    transcriptName,
-    companyIdString,
-    user.userId,
-    transcriptDocument.id,
-    documentCategory,
-    {
-      preferredProvider: parseProvider(preferredProvider),
-      mimeType: "text/plain",
-      originalFilename: `${documentName}-transcription.txt`,
-      transcriptionMetadata,
-    }
-  );
-
-  await db.insert(ocrJobs).values({
-    id: jobId,
-    companyId: user.companyId,
-    userId: user.userId,
-    status: "queued",
+  const { jobId, eventIds } = await triggerJob({
     documentUrl: textBlob.url,
     documentName: transcriptName,
+    companyId: user.companyId,
+    userId: user.userId,
+    documentId: transcriptDocument.id,
+    category: documentCategory,
+    preferredProvider,
+    mimeType: "text/plain",
+    originalFilename: `${documentName}-transcription.txt`,
+    transcriptionMetadata,
+    versionId: transcriptVersionId,
+    embeddingIndexKey: resolvedEmbeddingIndexKey,
   });
 
   console.log(`[DocumentUpload] Video transcript saved: docId=${transcriptDocument.id}, title="${documentName}"`);
@@ -494,7 +425,7 @@ export async function processVideoUrlUpload({
   return {
     jobId,
     eventIds,
-    storageType: "cloud",
+    storageType: detectStorageType(textBlob.url),
     document: transcriptDocument,
     resolvedDocumentUrl: textBlob.url,
   };

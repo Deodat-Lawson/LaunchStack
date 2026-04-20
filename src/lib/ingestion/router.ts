@@ -62,7 +62,8 @@ export async function ingestDocument(
   console.log(`[IngestionRouter] Selected adapter: ${adapter.name}`);
 
   let resolvedInput: string | Buffer = input;
-  if (typeof input === "string" && (input.startsWith("http://") || input.startsWith("https://"))) {
+  const isUrl = typeof input === "string" && (input.startsWith("http://") || input.startsWith("https://"));
+  if (isUrl && !adapter.needsUrl) {
     console.log(`[IngestionRouter] Pre-fetching URL via fetchFile`);
     const res = await fetchFile(input);
     if (!res.ok) {
@@ -70,6 +71,8 @@ export async function ingestDocument(
     }
     resolvedInput = Buffer.from(await res.arrayBuffer());
     console.log(`[IngestionRouter] Fetched ${resolvedInput.length} bytes`);
+  } else if (isUrl && adapter.needsUrl) {
+    console.log(`[IngestionRouter] Passing URL directly to ${adapter.name} (needsUrl=true)`);
   }
 
   const adapterStart = Date.now();

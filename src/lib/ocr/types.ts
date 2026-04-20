@@ -205,6 +205,8 @@ export interface ProcessDocumentEventData {
   mimeType?: string;
   /** Original filename with extension — used for adapter routing when documentName has been cleaned */
   originalFilename?: string;
+  /** True when the document originated from a website upload */
+  isWebsite?: boolean;
   /**
    * The `document_versions.id` this pipeline run is producing embeddings for.
    * When set, every chunk/structure/metadata/preview row written to the RLM

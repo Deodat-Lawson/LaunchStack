@@ -2,21 +2,13 @@ import { db } from "~/server/db";
 import { users, inviteCodes, company } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
-
-type PostBody = {
-    userId: string;
-    name: string;
-    email: string;
-    inviteCode: string;
-};
+import { validateRequestBody, JoinWithInviteSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {
     try {
-        const { userId, name, email, inviteCode } = (await request.json()) as PostBody;
-
-        if (!inviteCode || !userId) {
-            return createValidationError("Invite code and user ID are required");
-        }
+        const validation = await validateRequestBody(request, JoinWithInviteSchema);
+        if (!validation.success) return validation.response;
+        const { userId, name, email, inviteCode } = validation.data;
 
         // Find the active invite code
         const [codeRecord] = await db

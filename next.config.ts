@@ -11,36 +11,12 @@ const config: NextConfig = {
   // Standalone output for Docker deployment (smaller production image)
   output: useStandalone ? "standalone" : undefined,
 
-  // Force HuggingFace Transformers to use web backend (WASM) instead of Node.js (onnxruntime-node)
-  // This prevents the 404MB onnxruntime-node package from being required
-  env: {
-    TRANSFORMERS_BACKEND: "wasm",
-    USE_ONNX_NODE: "false",
-    ONNX_EXECUTION_PROVIDERS: "wasm",
-  },
-
-  // Webpack config: externals for optional / heavy packages
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  webpack: (webpackConfig: any, { isServer }: { isServer: boolean }) => {
-    if (isServer) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-      webpackConfig.externals = webpackConfig.externals ?? [];
-      // Mark onnxruntime-node as external - never bundle it
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      webpackConfig.externals.push({
-        "onnxruntime-node": "commonjs onnxruntime-node",
-      });
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return webpackConfig;
-  },
-
   experimental: {
     middlewareClientMaxBodySize: "128mb",
   },
 
-  // Transpile mermaid for client-side Mermaid diagram rendering
-  transpilePackages: ["mermaid"],
+  // Mermaid loaded client-side at runtime — no need to transpile
+  // transpilePackages: ["mermaid"],
 
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
@@ -58,43 +34,88 @@ const config: NextConfig = {
 
   // Exclude unnecessary files from Vercel output (moved from experimental in Next.js 15)
   // Apply to all routes using "/*" wildcard
+  // Disable server-side source maps to reduce build I/O and output size
+  productionBrowserSourceMaps: false,
+
+  // CORS and security headers
+  async headers() {
+    const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS?.split(",") ?? [];
+    return [
+      {
+        source: "/api/:path*",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: allowedOrigins.length > 0 ? allowedOrigins[0]! : "",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Content-Type, Authorization",
+          },
+          {
+            key: "Access-Control-Max-Age",
+            value: "86400",
+          },
+        ],
+      },
+    ];
+  },
+
   outputFileTracingExcludes: {
     "/*": [
-      // Exclude the massive onnxruntime-node package (404MB) - we use web/WASM backend only
+      // Exclude onnxruntime-node (transitive dep via @langchain/community → @huggingface/transformers)
       "node_modules/.pnpm/onnxruntime-node@*/**",
       "node_modules/onnxruntime-node/**",
       "**/onnxruntime-node/**",
-      // Exclude sharp native bindings - use external package
+      // Exclude sharp native bindings — loaded as serverExternalPackage
       "node_modules/.pnpm/@img+sharp-libvips-linuxmusl-x64@*/**",
       "node_modules/.pnpm/@img+sharp-libvips-linux-x64@*/**",
-      // Exclude HuggingFace heavy files since we lazy load
-      "node_modules/.pnpm/@huggingface+transformers@*/node_modules/@huggingface/transformers/dist/**/*.wasm",
-      "node_modules/.pnpm/@huggingface+transformers@*/node_modules/@huggingface/transformers/models/**",
-      // Exclude pdfjs heavy files since we lazy load (keep legacy build - used for Node.js/Inngest)
+      // Exclude pdfjs source maps (keep legacy build — used for Node.js/Inngest)
       "node_modules/.pnpm/pdfjs-dist@*/node_modules/pdfjs-dist/build/**/*.map",
-      // Exclude pdf-parse test data (8MB)
-      "node_modules/.pnpm/pdf-parse@*/node_modules/pdf-parse/test/**",
-      "node_modules/pdf-parse/test/**",
     ],
   },
 
-  // Exclude heavy packages from serverless bundle to reduce size (Next.js 15+)
-  // These packages are loaded from node_modules at runtime instead
   serverExternalPackages: [
+    // LangChain ecosystem — skip webpack tracing, load from node_modules at runtime
+    "@langchain/core",
+    "@langchain/openai",
+    "@langchain/anthropic",
+    "@langchain/google-genai",
+    "@langchain/ollama",
+    "@langchain/community",
+    "@langchain/langgraph",
+    "@langchain/textsplitters",
+    "langchain",
+    // AI SDKs
+    "openai",
+    // AWS SDK
     "@aws-sdk/client-s3",
     "@aws-sdk/s3-request-presigner",
+    // ML
     "@huggingface/transformers",
+    // Document processing
     "pdf2pic",
     "pdfjs-serverless",
-    "onnxruntime-web",
+    "pdf-lib",
+    "mammoth",
+    "jszip",
+    "readable-stream",
+    // Native bindings
     "sharp",
     "@img/sharp-libvips-linuxmusl-x64",
     "@img/sharp-libvips-linux-x64",
-    "pdf-lib",
-    "jszip",
-    "readable-stream",
-    "mammoth",
+    // Database
+    "neo4j-driver",
+    // Transitive deps via @langchain/community — not available on Alpine (musl)
+    "onnxruntime-node",
     "sherpa-onnx-node",
+    // Structured logging
+    "pino",
+    "pino-pretty",
   ],
 };
 

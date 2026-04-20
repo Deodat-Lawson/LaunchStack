@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import ANNOptimizer from "~/app/api/agents/predictive-document-analysis/services/annOptimizer";
 import {
     companyEnsembleSearch,
@@ -33,6 +33,8 @@ import {
     buildReferences,
     extractRecommendedPages,
 } from "../../services";
+import { debitTokens, llmChatTokens } from "~/lib/credits";
+import { isCloudMode } from "~/lib/providers/registry";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 
@@ -90,6 +92,7 @@ export async function POST(request: Request) {
                 style,
                 searchScope,
                 archiveName,
+                selectedDocumentIds,
                 enableWebSearch,
                 aiPersona,
                 aiModel,
@@ -120,6 +123,14 @@ export async function POST(request: Request) {
                 return NextResponse.json({
                     success: false,
                     message: "archiveName is required for archive search"
+                }, { status: 400 });
+            }
+
+            if (searchScope === "selected" && (!selectedDocumentIds || selectedDocumentIds.length === 0)) {
+                recordResult("error");
+                return NextResponse.json({
+                    success: false,
+                    message: "selectedDocumentIds is required for selected-documents search"
                 }, { status: 400 });
             }
 
@@ -219,6 +230,33 @@ export async function POST(request: Request) {
                 }
             }
 
+            // For the "selected" scope, verify every supplied document ID belongs
+            // to the caller's company before retrieval. A mismatch means the
+            // client passed a stale or cross-company ID — reject rather than
+            // silently drop, so the user sees an explicit error.
+            let verifiedSelectedIds: number[] | undefined;
+            if (searchScope === "selected" && selectedDocumentIds?.length) {
+                const uniqueIds = Array.from(new Set(selectedDocumentIds));
+                const rows = await db
+                    .select({ id: document.id, companyId: document.companyId })
+                    .from(document)
+                    .where(inArray(document.id, uniqueIds));
+
+                const allowed = rows
+                    .filter((r) => r.companyId === userCompanyId)
+                    .map((r) => r.id);
+
+                if (allowed.length !== uniqueIds.length) {
+                    recordResult("error");
+                    return NextResponse.json({
+                        success: false,
+                        message: "One or more selected documents are not accessible."
+                    }, { status: 403 });
+                }
+
+                verifiedSelectedIds = allowed;
+            }
+
             // Perform comprehensive search
             const resolvedEmbeddingIndex = resolveEmbeddingIndex(
                 embeddingIndexKey,
@@ -233,7 +271,9 @@ export async function POST(request: Request) {
                 ? 'company_ensemble_rrf'
                 : searchScope === "archive"
                     ? 'archive_ensemble_rrf'
-                    : 'document_ensemble_rrf';
+                    : searchScope === "selected"
+                        ? 'selected_ensemble_rrf'
+                        : 'document_ensemble_rrf';
 
             try {
                 if (searchScope === "company") {
@@ -243,7 +283,7 @@ export async function POST(request: Request) {
                         companyId: numericCompanyId,
                         embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                     };
-                    
+
                     documents = await companyEnsembleSearch(
                         question,
                         companyOptions,
@@ -260,6 +300,22 @@ export async function POST(request: Request) {
                     documents = await multiDocEnsembleSearch(
                         question,
                         archiveOptions,
+                        embeddings
+                    );
+                } else if (searchScope === "selected" && verifiedSelectedIds?.length) {
+                    // Reuse the archive scope's multi-doc path; from the retriever's
+                    // perspective a user-picked set and an archive-resolved set are
+                    // identical (both narrow to `document_id = ANY(...)`).
+                    const selectedOptions: MultiDocSearchOptions = {
+                        weights: [0.4, 0.6],
+                        topK: 10,
+                        documentIds: verifiedSelectedIds,
+                        embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
+                    };
+
+                    documents = await multiDocEnsembleSearch(
+                        question,
+                        selectedOptions,
                         embeddings
                     );
                 } else if (searchScope === "document" && documentId) {
@@ -442,6 +498,35 @@ export async function POST(request: Request) {
 
             let summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;
+
+            // Log + meter LLM token usage
+            {
+                const usage = response.response_metadata?.tokenUsage as
+                    | { promptTokens?: number; completionTokens?: number }
+                    | undefined;
+                const promptTokens = usage?.promptTokens ?? 0;
+                const completionTokens = usage?.completionTokens ?? 0;
+                console.log(
+                    `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
+                );
+            }
+            if (isCloudMode() && userCompanyId) {
+                const usage = response.response_metadata?.tokenUsage as
+                    | { promptTokens?: number; completionTokens?: number }
+                    | undefined;
+                const promptTokens = usage?.promptTokens ?? 0;
+                const completionTokens = usage?.completionTokens ?? 0;
+                if (promptTokens + completionTokens > 0) {
+                    const tokenCost = llmChatTokens(promptTokens, completionTokens);
+                    debitTokens({
+                        companyId: userCompanyId,
+                        amount: tokenCost,
+                        service: "llm_chat",
+                        description: `Chat query via ${resolvedProvider}/${selectedAiModel}`,
+                        metadata: { promptTokens, completionTokens, provider: resolvedProvider, model: selectedAiModel },
+                    }).catch((err) => console.warn("[AIChat] Token debit failed:", err));
+                }
+            }
 
             const sourceTexts = documents.map(d => d.pageContent);
             const supervision = validateQAResponse(summarizedAnswer, sourceTexts, aiPersona);

@@ -9,10 +9,7 @@ import {
     createForbiddenError,
     createNotFoundError
 } from "~/lib/api-utils";
-
-type PostBody = {
-    employeeId: string;
-}
+import { validateRequestBody, ApproveEmployeeByIdSchema } from "~/lib/validation";
 
 
 export async function POST(request: Request) {
@@ -36,7 +33,9 @@ export async function POST(request: Request) {
             return createForbiddenError("Insufficient permissions. Only employers and owners can approve employees.");
         }
 
-        const { employeeId } = (await request.json()) as PostBody;
+        const validation = await validateRequestBody(request, ApproveEmployeeByIdSchema);
+        if (!validation.success) return validation.response;
+        const { employeeId } = validation.data;
 
         await db
             .update(users)

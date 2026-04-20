@@ -21,6 +21,8 @@ export interface TriggerOptions {
   mimeType?: string;
   /** Original filename with extension — used for adapter routing */
   originalFilename?: string;
+  /** True when the document originated from a website upload */
+  isWebsite?: boolean;
   /**
    * `document_versions.id` for this processing run. When set, every chunk
    * written to the RLM tables is tagged with this version_id so RAG can
@@ -70,6 +72,7 @@ export async function triggerDocumentProcessing(
     category,
     mimeType: options?.mimeType,
     originalFilename: options?.originalFilename,
+    isWebsite: options?.isWebsite,
     versionId: options?.versionId,
     transcriptionMetadata: options?.transcriptionMetadata,
     options: {

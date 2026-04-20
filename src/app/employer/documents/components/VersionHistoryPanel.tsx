@@ -15,7 +15,7 @@
  * always reflects server state.
  */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Clock,
   Upload,
@@ -87,6 +87,13 @@ interface VersionHistoryPanelProps {
    * back to opening the content endpoint in a new tab.
    */
   onPreviewVersion?: (versionId: number, versionNumber: number) => void;
+  /**
+   * If true, trigger the file picker automatically on mount. Used by the
+   * sidebar's "Upload new version" dropdown shortcut so the user lands
+   * directly in the OS file chooser rather than having to click the upload
+   * area inside the modal first.
+   */
+  autoOpenUpload?: boolean;
   onClose: () => void;
 }
 
@@ -121,6 +128,7 @@ export function VersionHistoryPanel({
   documentTitle,
   onVersionsChanged,
   onPreviewVersion,
+  autoOpenUpload,
   onClose,
 }: VersionHistoryPanelProps) {
   const [data, setData] = useState<VersionListResponse | null>(null);
@@ -133,6 +141,11 @@ export function VersionHistoryPanel({
   // Null while loading — we block uploads until it resolves so we never fire
   // against an unknown storage backend.
   const [bootstrap, setBootstrap] = useState<UploadBootstrap | null>(null);
+  // Ref on the hidden file input so the "Upload new version" dropdown
+  // shortcut can programmatically open the OS file picker when the modal
+  // first renders.
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const autoOpenFiredRef = useRef(false);
 
   const loadBootstrap = useCallback(async () => {
     try {
@@ -205,6 +218,20 @@ export function VersionHistoryPanel({
     void loadVersions();
     void loadBootstrap();
   }, [loadVersions, loadBootstrap]);
+
+  // When opened via the sidebar's "Upload new version" shortcut, fire the
+  // file picker automatically. We gate on `data?.fileType` so the file input
+  // is enabled (it's disabled until fileType is known), and guard with a ref
+  // so the picker never opens twice in the same session if `data` re-renders.
+  useEffect(() => {
+    if (!autoOpenUpload) return;
+    if (autoOpenFiredRef.current) return;
+    if (!data?.fileType) return;
+    const input = fileInputRef.current;
+    if (!input) return;
+    autoOpenFiredRef.current = true;
+    input.click();
+  }, [autoOpenUpload, data?.fileType]);
 
   /**
    * Background polling while any version is still being processed.
@@ -497,6 +524,7 @@ export function VersionHistoryPanel({
             }`}
           >
             <input
+              ref={fileInputRef}
               type="file"
               className="hidden"
               accept={data?.fileType ?? undefined}

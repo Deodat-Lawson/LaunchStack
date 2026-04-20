@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { fileUploads } from "~/server/db/schema";
-import { putFile } from "~/server/storage/vercel-blob";
+import { uploadFile, resolveStorageBackend } from "~/lib/storage";
 import { isUploadAccepted } from "~/lib/upload-accepted";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
 
@@ -52,8 +52,9 @@ export async function POST(request: Request) {
       );
     }
 
+    const backend = resolveStorageBackend();
     console.log(
-      `[UploadLocal] Uploading to Vercel Blob: name=${file.name}, mime=${file.type}, size=${(file.size / 1024).toFixed(1)}KB, user=${userId}`
+      `[UploadLocal] Uploading via ${backend}: name=${file.name}, mime=${file.type}, size=${(file.size / 1024).toFixed(1)}KB, user=${userId}`
     );
 
     if (file.size > MAX_FILE_SIZE) {
@@ -66,55 +67,60 @@ export async function POST(request: Request) {
       );
     }
 
-    const blob = await putFile({
+    const uploaded = await uploadFile({
       filename: file.name,
       data: await file.arrayBuffer(),
       contentType: file.type || undefined,
+      userId,
     });
 
-    const [uploadedFile] = await db
-      .insert(fileUploads)
-      .values({
-        userId,
-        filename: file.name,
-        mimeType: file.type,
-        fileData: null,
-        fileSize: file.size,
-        storageProvider: "vercel_blob",
-        storageUrl: blob.url,
-        storagePathname: blob.pathname,
-        blobChecksum: blob.checksum ?? null,
-      })
-      .returning({
-        id: fileUploads.id,
-        filename: fileUploads.filename,
-        storageProvider: fileUploads.storageProvider,
-        storageUrl: fileUploads.storageUrl,
-      });
+    // For S3, record a fileUploads row so the /api/files/<id> route can also
+    // resolve this upload. For database backend, uploadFile already inserted
+    // the row and the URL is /api/files/<id>.
+    let fileId: number | null = null;
+    let fileUrl = uploaded.url;
 
-    if (!uploadedFile) {
-      console.error("[UploadLocal] Database insert returned no result");
-      return NextResponse.json(
-        { error: "Failed to store file" },
-        { status: 500 }
-      );
+    if (uploaded.provider === "s3") {
+      const [row] = await db
+        .insert(fileUploads)
+        .values({
+          userId,
+          filename: file.name,
+          mimeType: file.type,
+          fileData: null,
+          fileSize: file.size,
+          storageProvider: "s3",
+          storageUrl: uploaded.url,
+          storagePathname: uploaded.pathname,
+        })
+        .returning({ id: fileUploads.id });
+
+      if (!row) {
+        console.error("[UploadLocal] Database insert returned no result");
+        return NextResponse.json(
+          { error: "Failed to store file" },
+          { status: 500 }
+        );
+      }
+      fileId = row.id;
+    } else {
+      const match = /\/api\/files\/(\d+)/.exec(uploaded.url);
+      fileId = match?.[1] ? parseInt(match[1], 10) : null;
     }
 
-    // Return URL that can be used to fetch the file
-    const fileUrl = blob.url;
     const elapsed = Date.now() - uploadStart;
 
     console.log(
-      `[UploadLocal] Success: id=${uploadedFile.id}, url=${fileUrl}, name=${uploadedFile.filename}, mime=${file.type} (${elapsed}ms)`
+      `[UploadLocal] Success: id=${fileId}, url=${fileUrl}, provider=${uploaded.provider}, name=${file.name}, mime=${file.type} (${elapsed}ms)`
     );
 
     return NextResponse.json({
       success: true,
       url: fileUrl,
-      name: uploadedFile.filename,
-      id: uploadedFile.id,
-      provider: uploadedFile.storageProvider,
-      pathname: blob.pathname,
+      name: file.name,
+      id: fileId,
+      provider: uploaded.provider,
+      pathname: uploaded.pathname,
     });
   } catch (error) {
     const elapsed = Date.now() - uploadStart;

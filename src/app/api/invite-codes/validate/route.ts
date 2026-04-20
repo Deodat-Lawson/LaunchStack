@@ -6,6 +6,7 @@ import {
     createValidationError,
     handleApiError,
 } from "~/lib/api-utils";
+import { validateRequestBody, ValidateInviteCodeSchema } from "~/lib/validation";
 
 /**
  * POST /api/invite-codes/validate
@@ -14,12 +15,9 @@ import {
  */
 export async function POST(request: Request) {
     try {
-        const body = (await request.json()) as { code?: string };
-        const code = body.code?.trim().toUpperCase();
-
-        if (!code) {
-            return createValidationError("Invite code is required.");
-        }
+        const validation = await validateRequestBody(request, ValidateInviteCodeSchema);
+        if (!validation.success) return validation.response;
+        const code = validation.data.code.toUpperCase();
 
         // Look up the active invite code
         const [codeRecord] = await db

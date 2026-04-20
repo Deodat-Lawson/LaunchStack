@@ -1,15 +1,23 @@
 /**
  * Audio Transcription Service
  *
- * Handles transcription of MP3/MP4 audio files.
- * Uses Whisper.js (@huggingface/transformers) for local transcription —
- * no Python sidecar needed.
+ * Handles transcription of MP3/MP4 audio files using the configured provider
+ * (Groq Whisper, OpenAI Whisper, or sidecar).
+ * Converts audio files to text for processing through the standard document pipeline.
  */
 
 import { fetchBlob } from "~/server/storage/vercel-blob";
-import { transcribeWithWhisperJS } from "./whisper-js";
+import { getTranscriptionProvider } from "~/lib/providers/transcription";
+import { debitTokens } from "~/lib/credits";
+import { isCloudMode } from "~/lib/providers/registry";
 
-const SIDECAR_URL = process.env.SIDECAR_URL || "http://localhost:8000";
+const SIDECAR_URL = process.env.SIDECAR_URL ?? "http://localhost:8000";
+
+export interface TranscriptSegment {
+  start: number;
+  end: number;
+  text: string;
+}
 
 export interface TranscriptSegment {
   start: number;
@@ -22,7 +30,7 @@ export interface TranscriptionResult {
   language: string;
   confidence: number;
   filename: string;
-  segments: TranscriptSegment[];
+  segments?: TranscriptSegment[];
 }
 
 export interface VideoTranscriptionResult {
@@ -62,23 +70,23 @@ export function shouldTranscribeFile(
   if (mimeType) {
     return mimeType === "audio/mpeg" || mimeType === "video/mp4" || mimeType === "audio/mp4";
   }
-  
+
   if (originalFilename) {
     const ext = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
     return ext === ".mp3" || ext === ".mp4";
   }
-  
+
   return false;
 }
 
 /**
- * Transcribe audio file by downloading from URL.
- * Prefers the Python sidecar (higher quality) when available,
- * falls back to Whisper.js (WASM) when sidecar is not running.
+ * Transcribe audio file by downloading from URL and sending to the configured provider.
+ * Optionally debits credits for cloud deployments.
  */
 export async function transcribeAudioFromUrl(
   audioUrl: string,
-  filename: string
+  filename: string,
+  companyId?: bigint,
 ): Promise<TranscriptionResult> {
   try {
     console.log(`[TranscribeAudio] Fetching audio from: ${audioUrl}`);
@@ -92,38 +100,33 @@ export async function transcribeAudioFromUrl(
     const audioBuffer = Buffer.from(audioArrayBuffer);
     console.log(`[TranscribeAudio] Downloaded audio: ${filename} (${audioBuffer.length} bytes)`);
 
-    // Try sidecar first (better quality, faster)
-    if (SIDECAR_URL) {
-      try {
-        const healthCheck = await fetch(`${SIDECAR_URL}/health`, { signal: AbortSignal.timeout(2000) }).catch(() => null);
-        if (healthCheck?.ok) {
-          console.log(`[TranscribeAudio] Using sidecar at ${SIDECAR_URL}`);
-          const formData = new FormData();
-          const audioBlob = new Blob([audioBuffer], { type: "application/octet-stream" });
-          formData.append("file", audioBlob, filename);
+    // Send to provider for transcription
+    const provider = await getTranscriptionProvider();
+    console.log(`[TranscribeAudio] Using ${provider.name} for: ${filename}`);
 
-          const transcribeResponse = await fetch(`${SIDECAR_URL}/transcribe`, {
-            method: "POST",
-            body: formData as unknown as BodyInit,
-          });
+    const { data, usage } = await provider.transcribe(audioBuffer, filename);
 
-          if (transcribeResponse.ok) {
-            const result = (await transcribeResponse.json()) as TranscriptionResult;
-            console.log(`[TranscribeAudio] Sidecar complete: ${filename} → ${result.text.length} chars, lang=${result.language}`);
-            return result;
-          }
-        }
-      } catch {
-        console.log(`[TranscribeAudio] Sidecar not available, falling back to Whisper.js`);
-      }
+    // Debit credits if cloud mode and companyId available
+    if (isCloudMode() && companyId != null && usage.tokensUsed > 0) {
+      await debitTokens({
+        companyId,
+        amount: usage.tokensUsed,
+        service: "transcription",
+        description: `Transcribe ${filename} via ${provider.name}`,
+        metadata: { ...usage.details, filename },
+      }).catch((err) => {
+        console.warn("[TranscribeAudio] Credit debit failed (non-blocking):", err);
+      });
     }
 
-    // Fallback: Whisper.js (local WASM, no sidecar needed)
-    console.log(`[TranscribeAudio] Running Whisper.js locally...`);
-    const result = await transcribeWithWhisperJS(audioBuffer, filename);
-    console.log(`[TranscribeAudio] Complete: ${filename} → ${result.text.length} chars, ${result.segments.length} segments`);
+    console.log(`[TranscribeAudio] Complete: ${filename} → ${data.text.length} chars, lang=${data.language}`);
 
-    return result;
+    return {
+      text: data.text,
+      language: data.language,
+      confidence: data.confidence,
+      filename,
+    };
   } catch (error) {
     console.error(`[TranscribeAudio] Error transcribing ${filename}:`, error);
     throw error;
@@ -201,7 +204,7 @@ export function isVideoUrl(url: string): boolean {
  */
 export async function transcribeVideoFromUrl(
   videoUrl: string,
-  maxDuration: number = 7200
+  maxDuration = 7200
 ): Promise<VideoTranscriptionResult> {
   console.log(`[TranscribeVideo] Sending to sidecar: ${videoUrl}`);
 

@@ -73,9 +73,16 @@ export async function GET(
       );
     }
 
-    if ((file.storageProvider === "vercel_blob" || file.storageProvider === "seaweedfs") && file.storageUrl) {
-      // SeaweedFS or private Vercel Blob: proxy the content via fetchFile
-      if (file.storageProvider === "seaweedfs" || isPrivateBlobUrl(file.storageUrl)) {
+    // External storage (S3 or legacy Vercel Blob): proxy or redirect.
+    // Database-backed files (storageProvider === "database") fall through to
+    // the base64 branch below.
+    if (file.storageProvider !== "database" && file.storageUrl) {
+      const needsProxy =
+        file.storageProvider === "s3" ||
+        file.storageProvider === "seaweedfs" ||
+        isPrivateBlobUrl(file.storageUrl);
+
+      if (needsProxy) {
         const blobRes = await fetchFile(file.storageUrl);
         if (!blobRes.ok) {
           return NextResponse.json(
@@ -99,7 +106,7 @@ export async function GET(
           },
         });
       }
-      // Public Vercel Blob: redirect directly
+      // Public external URL: redirect directly
       return NextResponse.redirect(file.storageUrl, {
         status: 307,
       });

@@ -62,7 +62,17 @@ export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: Sourc
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     Website
                 </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">Coming soon</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">Fetch a single web page</span>
+            </button>
+
+            <button type="button" onClick={() => onSelectSource("youtube")} className={cardClasses}>
+                <Youtube className="w-6 h-6 text-red-600 dark:text-red-400" />
+                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    YouTube &amp; Video
+                </span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">
+                    Transcribe a video URL
+                </span>
             </button>
 
             <button type="button" onClick={() => onSelectSource("youtube")} className={cardClasses}>

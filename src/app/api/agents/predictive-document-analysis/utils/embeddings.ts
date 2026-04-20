@@ -16,11 +16,15 @@ export async function getEmbeddings(text: string): Promise<number[]> {
     }
     
     try {
+        const apiKey = process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
+        const baseURL = process.env.EMBEDDING_API_BASE_URL || process.env.AI_BASE_URL;
         const embeddings = new OpenAIEmbeddings({
-            openAIApiKey: process.env.OPENAI_API_KEY,
+            openAIApiKey: apiKey,
             modelName: EMBEDDING_MODEL,
+            dimensions: 1536,
+            ...(baseURL ? { configuration: { baseURL } } : {}),
         });
-        
+
         const [embedding] = await embeddings.embedDocuments([text]);
         const result = embedding ?? [];
         
@@ -36,11 +40,15 @@ export async function batchGetEmbeddings(texts: string[]): Promise<number[][]> {
     const uniqueTexts = [...new Set(texts)];
     
     try {
+        const apiKey = process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
+        const baseURL = process.env.EMBEDDING_API_BASE_URL || process.env.AI_BASE_URL;
         const embeddings = new OpenAIEmbeddings({
-            openAIApiKey: process.env.OPENAI_API_KEY,
+            openAIApiKey: apiKey,
             modelName: EMBEDDING_MODEL,
+            dimensions: 1536,
+            ...(baseURL ? { configuration: { baseURL } } : {}),
         });
-        
+
         const results = await embeddings.embedDocuments(uniqueTexts);
         const embeddingMap = new Map(uniqueTexts.map((text, i) => [text, results[i]]));
         

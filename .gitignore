@@ -54,4 +54,5 @@ yarn-error.log*
 
 # kiro
 .kiro
-models/
+backups/
+/models/

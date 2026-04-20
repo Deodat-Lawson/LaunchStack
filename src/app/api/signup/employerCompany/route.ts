@@ -2,23 +2,14 @@ import {db} from "~/server/db";
 import {company, users} from "~/server/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
+import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
+import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 import { upsertCompanyCredentials } from "~/lib/ai/company-credentials";
-
-type PostBody = {
-    userId: string;
-    companyName: string;
-    name: string;
-    email: string;
-    numberOfEmployees: string;
-    embeddingIndexKey?: string;
-    embeddingOpenAIApiKey?: string | null;
-    embeddingHuggingFaceApiKey?: string | null;
-    embeddingOllamaBaseUrl?: string | null;
-    embeddingOllamaModel?: string | null;
-}
 
 export async function POST(request: Request) {
     try {
+        const validation = await validateRequestBody(request, EmployerCompanySignupSchema);
+        if (!validation.success) return validation.response;
         const {
             userId,
             name,
@@ -30,14 +21,7 @@ export async function POST(request: Request) {
             embeddingHuggingFaceApiKey,
             embeddingOllamaBaseUrl,
             embeddingOllamaModel,
-        } = (await request.json()) as PostBody;
-
-        // Validate required fields
-        if (!name?.trim()) {
-            return createValidationError(
-                "User name is required. Please ensure you are logged in with a complete profile."
-            );
-        }
+        } = validation.data;
 
         // Check if company already exists
         const [existingCompany] = await db
@@ -109,6 +93,9 @@ export async function POST(request: Request) {
             status: "verified",
             role: "owner",
         });
+
+        // Initialize credit account with signup bonus
+        await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
 
         return createSuccessResponse(
             { userId, role: "owner" },

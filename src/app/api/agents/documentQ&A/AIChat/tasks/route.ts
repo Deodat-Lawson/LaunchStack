@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { agentAiChatbotTask } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { validateRequestBody, CreateTaskSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -11,21 +12,9 @@ export const maxDuration = 300;
 // POST /api/agent-ai-chatbot/tasks - Create a new task
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as {
-      chatId?: string;
-      description?: string;
-      objective?: string;
-      priority?: number;
-      metadata?: unknown;
-    };
-    const { chatId, description, objective, priority = 0, metadata } = body;
-
-    if (!chatId || !description || !objective) {
-      return NextResponse.json(
-        { error: "chatId, description, and objective are required" },
-        { status: 400 }
-      );
-    }
+    const validation = await validateRequestBody(request, CreateTaskSchema);
+    if (!validation.success) return validation.response;
+    const { chatId, description, objective, priority, metadata } = validation.data;
 
     const taskId = randomUUID();
 

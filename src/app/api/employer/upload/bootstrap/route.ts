@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { category, company, users } from "~/server/db/schema";
+import { resolveStorageBackend } from "~/lib/storage";
 
 type BootstrapCategory = {
   id: string;
@@ -23,8 +24,9 @@ type UploadBootstrapResponse = {
     azure: boolean;
     datalab: boolean;
     landingAI: boolean;
+    docling: boolean;
   };
-  storageProvider: "cloud" | "local";
+  storageProvider: "s3" | "database";
   s3Endpoint?: string;
 };
 
@@ -95,11 +97,10 @@ export async function GET() {
           Boolean(process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT),
         datalab: Boolean(process.env.DATALAB_API_KEY),
         landingAI: Boolean(process.env.LANDING_AI_API_KEY),
+        docling: Boolean(process.env.OCR_WORKER_URL),
       },
-      storageProvider:
-        (process.env.NEXT_PUBLIC_STORAGE_PROVIDER as "cloud" | "local") ??
-        "cloud",
-      ...(process.env.NEXT_PUBLIC_STORAGE_PROVIDER === "local" && process.env.NEXT_PUBLIC_S3_ENDPOINT
+      storageProvider: resolveStorageBackend(),
+      ...(resolveStorageBackend() === "s3" && process.env.NEXT_PUBLIC_S3_ENDPOINT
         ? { s3Endpoint: process.env.S3_PUBLIC_ENDPOINT || process.env.NEXT_PUBLIC_S3_ENDPOINT }
         : {}),
     };

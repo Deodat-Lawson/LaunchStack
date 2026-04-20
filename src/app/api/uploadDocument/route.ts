@@ -26,7 +26,7 @@ const UploadDocumentSchema = z.object({
   documentName: z.string().min(1, "Document name is required"),
   category: z.string().optional(),
   preferredProvider: z.string().optional(),
-  storageType: z.enum(["cloud", "database", "local"]).optional(),
+  storageType: z.enum(["s3", "database"]).optional(),
   /** MIME type of the uploaded file — used to route non-PDF files to the correct adapter */
   mimeType: z.string().optional(),
   /** Original filename with extension — used for adapter routing when documentName has been cleaned */
@@ -58,11 +58,6 @@ export async function POST(request: Request) {
         embeddingIndexKey,
       } = validation.data;
 
-      console.log(
-        `[UploadDocument] Incoming: name="${documentName}", url="${rawDocumentUrl.substring(0, 80)}", ` +
-        `mime=${mimeType ?? "not provided"}, user=${userId}, provider=${preferredProvider ?? "auto"}`
-      );
-
       const [userInfo] = await db
         .select()
         .from(users)
@@ -91,11 +86,6 @@ export async function POST(request: Request) {
         embeddingIndexKey,
         requestUrl: request.url,
       });
-
-      console.log(
-        `[UploadDocument] Pipeline triggered: jobId=${uploadResult.jobId}, docId=${uploadResult.document.id}, ` +
-        `mime=${mimeType ?? "none"}, eventIds=${uploadResult.eventIds.length}`
-      );
 
       return NextResponse.json(
         {

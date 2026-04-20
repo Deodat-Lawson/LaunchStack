@@ -12,6 +12,9 @@ dist
 # Generated assets (created by postinstall from node_modules)
 public/vad
 
+# Heavy static assets not needed in Docker image
+public/deployment-demos
+
 # Git
 .git
 .gitignore

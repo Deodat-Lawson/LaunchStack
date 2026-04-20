@@ -1,13 +1,14 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { 
-  agentAiChatbotChat, 
+import {
+  agentAiChatbotChat,
   agentAiChatbotMessage,
   agentAiChatbotTask,
   agentAiChatbotDocument
 } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
+import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -76,15 +77,9 @@ export async function PATCH(
 ) {
   try {
     const { chatId } = await params;
-    const body = await request.json() as {
-      title?: string;
-      status?: string;
-      agentMode?: string;
-      visibility?: string;
-      aiStyle?: string;
-      aiPersona?: string;
-    };
-    const { title, status, agentMode, visibility, aiStyle, aiPersona } = body;
+    const validation = await validateRequestBody(request, UpdateChatSchema);
+    if (!validation.success) return validation.response;
+    const { title, status, agentMode, visibility, aiStyle, aiPersona } = validation.data;
 
     const updateData: Record<string, unknown> = {};
     if (title) updateData.title = title;

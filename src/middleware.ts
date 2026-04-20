@@ -27,6 +27,7 @@ const isPublicRoute = createRouteMatcher([
     '/signup',
     '/signin',
     '/api/webhooks(.*)',
+    '/api/health',
 ]);
 
 // Routes where authenticated users should be redirected to their dashboard

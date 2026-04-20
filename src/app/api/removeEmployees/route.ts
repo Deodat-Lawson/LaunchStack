@@ -8,12 +8,8 @@ import {
     createUnauthorizedError,
     createForbiddenError,
     createNotFoundError,
-    createValidationError
 } from "~/lib/api-utils";
-
-type PostBody = {
-    employeeId: string;
-}
+import { validateRequestBody, RemoveEmployeeSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {
     try {
@@ -35,11 +31,9 @@ export async function POST(request: Request) {
             return createForbiddenError("Insufficient permissions. Only employers and owners can remove employees.");
         }
 
-        const { employeeId } = (await request.json()) as PostBody;
-
-        if (!employeeId) {
-            return createValidationError("Employee ID is required.");
-        }
+        const validation = await validateRequestBody(request, RemoveEmployeeSchema);
+        if (!validation.success) return validation.response;
+        const { employeeId } = validation.data;
 
         await db.delete(users).where(eq(users.id, Number(employeeId)));
 

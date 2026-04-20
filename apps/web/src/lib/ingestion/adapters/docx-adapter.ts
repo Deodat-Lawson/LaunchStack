@@ -3,7 +3,7 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   StandardizedPage,
-} from "../types";
+} from "@launchstack/core/ingestion/types";
 
 export class DocxAdapter implements SourceAdapter {
   readonly name = "DocxAdapter";

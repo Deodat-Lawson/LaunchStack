@@ -16,7 +16,7 @@ export { ZipAdapter } from "./zip-adapter";
 export { FallbackAdapter } from "./fallback-adapter";
 export { DoclingIngestionAdapter } from "./docling-adapter";
 
-import type { SourceAdapter } from "../types";
+import type { SourceAdapter } from "@launchstack/core/ingestion/types";
 import { TextAdapter } from "./text-adapter";
 import { DocxAdapter } from "./docx-adapter";
 import { PptxAdapter } from "./pptx-adapter";

@@ -2,7 +2,7 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   StandardizedPage,
-} from "../types";
+} from "@launchstack/core/ingestion/types";
 
 interface GitHubLabel {
   name?: string;

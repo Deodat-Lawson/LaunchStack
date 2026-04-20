@@ -2,7 +2,7 @@ import type {
   SourceAdapter,
   SourceAdapterOptions,
   StandardizedDocument,
-} from "../types";
+} from "@launchstack/core/ingestion/types";
 import { isGitHubExport, processGitHubExport } from "./github-export-adapter";
 
 interface SlackMessage {

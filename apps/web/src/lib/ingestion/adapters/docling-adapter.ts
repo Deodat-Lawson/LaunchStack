@@ -15,7 +15,7 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   StandardizedPage,
-} from "../types";
+} from "@launchstack/core/ingestion/types";
 import { createDoclingAdapter } from "~/lib/ocr/adapters/ossAdapter";
 
 const OFFICE_MIMES = new Set([

@@ -3,7 +3,7 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   StandardizedPage,
-} from "../types";
+} from "@launchstack/core/ingestion/types";
 import type { ExtractedTable } from "@launchstack/core/ocr/types";
 
 export class HtmlAdapter implements SourceAdapter {

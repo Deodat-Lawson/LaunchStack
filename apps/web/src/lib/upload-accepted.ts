@@ -7,7 +7,7 @@
 import {
   EXTENSION_TO_SOURCE_TYPE,
   MIME_TO_SOURCE_TYPE,
-} from "~/lib/ingestion/types";
+} from "@launchstack/core/ingestion/types";
 
 const EMAIL_SOURCE = "email";
 const UNKNOWN_SOURCE = "unknown";

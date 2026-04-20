@@ -48,6 +48,14 @@
       "types": "./src/ocr/types.ts",
       "default": "./src/ocr/types.ts"
     },
+    "./ingestion": {
+      "types": "./src/ingestion/index.ts",
+      "default": "./src/ingestion/index.ts"
+    },
+    "./ingestion/types": {
+      "types": "./src/ingestion/types.ts",
+      "default": "./src/ingestion/types.ts"
+    },
     "./ingestion/heading-chunker": {
       "types": "./src/ingestion/heading-chunker.ts",
       "default": "./src/ingestion/heading-chunker.ts"

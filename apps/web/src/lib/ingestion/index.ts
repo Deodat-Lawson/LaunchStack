@@ -13,7 +13,7 @@ export {
   ALLOWED_MIME_TYPES,
   MIME_TO_SOURCE_TYPE,
   EXTENSION_TO_SOURCE_TYPE,
-} from "./types";
+} from "@launchstack/core/ingestion/types";
 
 export type {
   SourceType,
@@ -23,6 +23,6 @@ export type {
   StandardizedMetadata,
   SourceAdapter,
   SourceAdapterOptions,
-} from "./types";
+} from "@launchstack/core/ingestion/types";
 
 export { findAdapter, getAllAdapters } from "./adapters";

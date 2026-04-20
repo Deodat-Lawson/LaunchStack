@@ -2,7 +2,7 @@ import type {
   SourceAdapter,
   SourceAdapterOptions,
   StandardizedDocument,
-} from "../types";
+} from "@launchstack/core/ingestion/types";
 
 export class PdfAdapter implements SourceAdapter {
   readonly name = "PdfAdapter";

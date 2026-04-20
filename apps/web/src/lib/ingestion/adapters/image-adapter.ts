@@ -9,7 +9,7 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   IngestionProvider,
-} from "../types";
+} from "@launchstack/core/ingestion/types";
 
 export class ImageAdapter implements SourceAdapter {
   readonly name = "ImageAdapter";

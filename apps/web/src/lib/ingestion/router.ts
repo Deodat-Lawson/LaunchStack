@@ -11,7 +11,7 @@ import {
   toNormalizedDocument,
   type SourceAdapterOptions,
   type StandardizedDocument,
-} from "./types";
+} from "@launchstack/core/ingestion/types";
 import type { NormalizedDocument } from "@launchstack/core/ocr/types";
 import { fetchFile } from "~/lib/storage";
 

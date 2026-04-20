@@ -16,6 +16,14 @@
       "types": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./config": {
+      "types": "./src/config/index.ts",
+      "default": "./src/config/index.ts"
+    },
+    "./storage": {
+      "types": "./src/storage/index.ts",
+      "default": "./src/storage/index.ts"
+    },
     "./db": {
       "types": "./src/db/index.ts",
       "default": "./src/db/index.ts"
@@ -50,6 +58,7 @@
   },
   "dependencies": {
     "drizzle-orm": "^0.45.1",
+    "postgres": "^3.4.7",
     "string-similarity-js": "^2.1.4"
   },
   "peerDependencies": {

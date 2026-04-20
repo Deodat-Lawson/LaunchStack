@@ -1,4 +1,4 @@
-import type { ProviderResult } from "@launchstack/core/providers";
+import type { ProviderResult } from "../types";
 import type { NERProvider, NERResult, ChunkEntities } from "./index";
 
 const SIDECAR_URL = process.env.SIDECAR_URL ?? "http://localhost:8000";

@@ -1,8 +1,14 @@
-import type { ProviderResult } from "@launchstack/core/providers";
+import type { ProviderResult } from "../types";
 import type { NERProvider, NERResult, ChunkEntities } from "./index";
-import { TOKEN_COSTS } from "~/lib/credits/costs";
-import { resolveBaseUrl, resolveApiKey, resolveModel } from "@launchstack/core/providers/registry";
+import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
 import OpenAI from "openai";
+
+/**
+ * Token cost per NER chunk (~500 tokens of prompt + completion averaged).
+ * LLM responses do return usage, but we bill a flat rate per chunk for
+ * predictability and to match the historical cost table.
+ */
+const NER_TOKENS_PER_CHUNK = 500;
 
 const NER_SYSTEM_PROMPT = `You are a named entity recognition (NER) system. Extract entities from the given text.
 
@@ -60,7 +66,7 @@ export class LLMNERProvider implements NERProvider {
         return {
             data: { results, totalEntities },
             usage: {
-                tokensUsed: chunks.length * TOKEN_COSTS.ner,
+                tokensUsed: chunks.length * NER_TOKENS_PER_CHUNK,
                 details: { chunks: chunks.length, totalEntities },
             },
         };

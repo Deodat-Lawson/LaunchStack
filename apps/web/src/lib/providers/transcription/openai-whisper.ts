@@ -1,7 +1,13 @@
 import type { ProviderResult } from "@launchstack/core/providers";
 import type { TranscriptionProvider, TranscriptionResult } from "./index";
-import { transcriptionTokens } from "~/lib/credits/costs";
 import OpenAI from "openai";
+
+/** Transcription is billed per minute. See groq.ts for the same constant. */
+const TRANSCRIPTION_TOKENS_PER_MINUTE = 5000;
+function transcriptionTokens(durationSeconds: number): number {
+    const minutes = Math.max(1, Math.ceil(durationSeconds / 60));
+    return minutes * TRANSCRIPTION_TOKENS_PER_MINUTE;
+}
 
 export class OpenAIWhisperProvider implements TranscriptionProvider {
     name = "openai";

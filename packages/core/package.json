@@ -104,6 +104,14 @@
       "types": "./src/providers/registry.ts",
       "default": "./src/providers/registry.ts"
     },
+    "./providers/reranking": {
+      "types": "./src/providers/reranking/index.ts",
+      "default": "./src/providers/reranking/index.ts"
+    },
+    "./providers/ner": {
+      "types": "./src/providers/ner/index.ts",
+      "default": "./src/providers/ner/index.ts"
+    },
     "./llm": {
       "types": "./src/llm/index.ts",
       "default": "./src/llm/index.ts"

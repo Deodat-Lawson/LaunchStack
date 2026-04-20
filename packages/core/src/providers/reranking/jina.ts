@@ -1,7 +1,15 @@
-import type { ProviderResult } from "@launchstack/core/providers";
+import type { ProviderResult } from "../types";
 import type { RerankProvider, RerankResult } from "./index";
-import { TOKEN_COSTS } from "~/lib/credits/costs";
-import { resolveBaseUrl, resolveApiKey, resolveModel } from "@launchstack/core/providers/registry";
+import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
+
+/**
+ * Token cost per rerank query. This is the provider's billing rate (rerank
+ * APIs don't return token counts in their responses), so the value is baked
+ * in here rather than computed from the request shape. Apps that want a
+ * different cost ratio can patch this file when bundling or wrap the
+ * provider with their own accounting layer.
+ */
+const RERANK_TOKENS_PER_QUERY = 200;
 
 /**
  * OpenAI-compatible reranking provider.
@@ -71,7 +79,7 @@ export class OpenAICompatibleRerankProvider implements RerankProvider {
         return {
             data: { scores },
             usage: {
-                tokensUsed: TOKEN_COSTS.rerank,
+                tokensUsed: RERANK_TOKENS_PER_QUERY,
                 details: { documents: documents.length },
             },
         };

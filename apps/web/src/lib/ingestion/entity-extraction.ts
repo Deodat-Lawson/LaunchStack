@@ -15,7 +15,7 @@ import {
   type RelationshipType,
 } from "@launchstack/core/db/schema";
 import { eq, and, sql } from "drizzle-orm";
-import { getNERProvider } from "~/lib/providers/ner";
+import { getNERProvider } from "@launchstack/core/providers/ner";
 import { debitTokens } from "~/lib/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
 

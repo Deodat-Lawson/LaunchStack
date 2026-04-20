@@ -1,4 +1,4 @@
-import type { ProviderResult } from "@launchstack/core/providers";
+import type { ProviderResult } from "../types";
 import type { RerankProvider, RerankResult } from "./index";
 
 const SIDECAR_URL = process.env.SIDECAR_URL ?? "http://localhost:8000";

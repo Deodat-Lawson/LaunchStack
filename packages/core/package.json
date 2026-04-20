@@ -31,6 +31,10 @@
     "./guardrails": {
       "types": "./src/guardrails/index.ts",
       "default": "./src/guardrails/index.ts"
+    },
+    "./graph": {
+      "types": "./src/graph/index.ts",
+      "default": "./src/graph/index.ts"
     }
   },
   "scripts": {
@@ -39,5 +43,11 @@
   "dependencies": {
     "drizzle-orm": "^0.45.1",
     "string-similarity-js": "^2.1.4"
+  },
+  "peerDependencies": {
+    "neo4j-driver": "^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "neo4j-driver": { "optional": true }
   }
 }

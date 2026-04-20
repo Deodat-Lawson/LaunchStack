@@ -23,7 +23,7 @@ import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/m
 import { db } from "~/server/db/index";
 import { documentSections } from "@launchstack/core/db/schema";
 import { inArray, and } from "drizzle-orm";
-import { isNeo4jConfigured, getNeo4jSession } from "~/lib/graph/neo4j-client";
+import { isNeo4jConfigured, getNeo4jSession } from "@launchstack/core/graph";
 import neo4j, { type Session } from "neo4j-driver";
 
 interface Neo4jGraphRetrieverConfig extends BaseRetrieverInput {

@@ -17,7 +17,7 @@ import {
   kgRelationships,
 } from "@launchstack/core/db/schema";
 import { eq, and, inArray } from "drizzle-orm";
-import { getNeo4jSession } from "./neo4j-client";
+import { getNeo4jSession } from "@launchstack/core/graph";
 
 interface SyncResult {
   entities: number;

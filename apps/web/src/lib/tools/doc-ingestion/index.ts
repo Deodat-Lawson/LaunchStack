@@ -273,7 +273,7 @@ async function maybeSyncToNeo4j(
 
   await runStep("step-g-neo4j-sync", async () => {
     const { isNeo4jConfigured, checkNeo4jHealth } = await import(
-      "~/lib/graph/neo4j-client"
+      "@launchstack/core/graph"
     );
 
     if (!isNeo4jConfigured()) return null;

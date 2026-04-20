@@ -425,7 +425,7 @@ export async function processVideoUrlUpload({
   return {
     jobId,
     eventIds,
-    storageType: "cloud",
+    storageType: detectStorageType(textBlob.url),
     document: transcriptDocument,
     resolvedDocumentUrl: textBlob.url,
   };

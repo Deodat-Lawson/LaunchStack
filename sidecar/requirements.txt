@@ -8,3 +8,5 @@ openai-whisper>=20231117
 yt-dlp>=2024.1.0
 torch>=2.5.0
 numpy>=1.26.0
+sentence-transformers>=3.3.0
+transformers>=4.47.0

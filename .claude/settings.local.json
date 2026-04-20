@@ -202,7 +202,13 @@
       "WebFetch(domain:docs.nango.dev)",
       "WebFetch(domain:nango.dev)",
       "Bash(pnpm typecheck *)",
-      "Bash(pnpm lint *)"
+      "Bash(pnpm lint *)",
+      "Bash(python3 -c \"import json; json.load\\(open\\('.claude/settings.local.json'\\)\\)\")",
+      "Bash(git diff *)",
+      "Bash(grep -n *)",
+      "Bash(grep -A 12 \"src/app/employer/documents/components/Sidebar.tsx$\\\\|src/lib/validation.ts$\")",
+      "Bash(SKIP_ENV_VALIDATION=1 pnpm typecheck)",
+      "Bash(grep -B 1 -A 30 \"Sidebar.tsx$\")"
     ]
   }
 }

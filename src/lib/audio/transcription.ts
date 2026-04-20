@@ -19,6 +19,12 @@ export interface TranscriptSegment {
   text: string;
 }
 
+export interface TranscriptSegment {
+  start: number;
+  end: number;
+  text: string;
+}
+
 export interface TranscriptionResult {
   text: string;
   language: string;

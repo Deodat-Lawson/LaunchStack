@@ -29,7 +29,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
       data: { id: "123" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
 
     // Mock user lookup - return employer
     const mockSelect = jest.fn().mockReturnValue({
@@ -67,7 +67,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
       data: { id: "456" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "owner-user-456" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "owner-user-456" });
 
     // Mock user lookup - return owner
     const mockSelect = jest.fn().mockReturnValue({
@@ -103,7 +103,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
       data: { id: "123" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
 
     // Mock user lookup - return empty array (user not found)
     const mockSelect = jest.fn().mockReturnValue({
@@ -132,7 +132,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
       data: { id: "123" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "employee-user-789" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employee-user-789" });
 
     // Mock user lookup - return employee (invalid role)
     const mockSelect = jest.fn().mockReturnValue({
@@ -212,7 +212,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
         data: { id: "123" },
       });
 
-      (auth as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
+      (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
       // Mock database error on select
       const mockSelect = jest.fn().mockReturnValue({
@@ -247,7 +247,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
         data: { id: "123" },
       });
 
-      (auth as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
+      (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
 
       const mockSelect = jest.fn().mockReturnValue({
         from: jest.fn().mockReturnValue({
@@ -285,7 +285,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
       data: { id: "123" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: null });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: null });
 
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({

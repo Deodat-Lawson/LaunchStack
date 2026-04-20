@@ -31,7 +31,7 @@ describe("POST /api/Categories/AddCategories", () => {
     });
 
     // Mock authenticated user
-    (auth as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
     // Mock database select (user lookup) - return employer user
     const mockSelect = jest.fn().mockReturnValue({
@@ -72,7 +72,7 @@ describe("POST /api/Categories/AddCategories", () => {
       data: { CategoryName: "Owner Category" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "owner-user-456" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "owner-user-456" });
 
     // Mock database select - return owner user
     const mockSelect = jest.fn().mockReturnValue({
@@ -111,7 +111,7 @@ describe("POST /api/Categories/AddCategories", () => {
       data: { CategoryName: "Test Category" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
 
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({
@@ -139,7 +139,7 @@ describe("POST /api/Categories/AddCategories", () => {
       data: { CategoryName: "Test Category" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "employee-user-789" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employee-user-789" });
 
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({
@@ -195,7 +195,7 @@ describe("POST /api/Categories/AddCategories", () => {
         data: { CategoryName: "Test Category" },
       });
 
-      (auth as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
+      (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
       const mockSelect = jest.fn().mockReturnValue({
         from: jest.fn().mockReturnValue({
@@ -225,7 +225,7 @@ describe("POST /api/Categories/AddCategories", () => {
       data: { CategoryName: "Test Category" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: null });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: null });
 
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({

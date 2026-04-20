@@ -18,7 +18,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should allow an authenticated employer to get categories", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
 
     const mockCategories = [
       { id: 1, name: "Category 1", companyId: 1 },
@@ -57,7 +57,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should allow an authenticated owner to get categories", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "owner-user-456" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "owner-user-456" });
 
     const mockCategories = [
       { id: 10, name: "Owner Category 1", companyId: 2 },
@@ -93,7 +93,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should return empty array if no categories exist for company", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "employer-user-789" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-789" });
 
     const mockSelect = jest.fn()
       .mockReturnValueOnce({
@@ -124,7 +124,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should return 400 if user is not found", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
 
     // Mock user lookup - return empty array (user not found)
     const mockSelect = jest.fn().mockReturnValue({
@@ -146,7 +146,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should return 400 if user has invalid role (employee)", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "employee-user-111" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employee-user-111" });
 
     // Mock user lookup - return employee (invalid role)
     const mockSelect = jest.fn().mockReturnValue({
@@ -170,7 +170,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should return 500 on database error during user lookup", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
     // Mock database error on user lookup
     const mockSelect = jest.fn().mockReturnValue({
@@ -192,7 +192,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should return 500 on database error during categories fetch", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
 
     // First call succeeds (user lookup), second call fails (categories fetch)
     const mockSelect = jest.fn()
@@ -223,7 +223,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should return 400 if auth returns null userId", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: null });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: null });
 
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({
@@ -244,7 +244,7 @@ describe("GET /api/Categories/GetCategories", () => {
   });
 
   it("should only return categories for the user's company", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
 
     // Categories for company 1 only
     const mockCategories = [

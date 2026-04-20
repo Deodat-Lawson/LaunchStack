@@ -35,7 +35,7 @@ describe("POST /api/fetchDocument", () => {
       data: { userId: "test-user-123" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
     const mockDocuments = [
       { id: 1, name: "Document 1", companyId: 1, content: "Content 1" },
@@ -81,7 +81,7 @@ describe("POST /api/fetchDocument", () => {
       data: { userId: "test-user-456" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "test-user-456" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-456" });
 
     const mockSelect = jest.fn()
       .mockReturnValueOnce({
@@ -119,7 +119,7 @@ describe("POST /api/fetchDocument", () => {
       data: { userId: "invalid-user-999" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
 
     // Mock user lookup - return empty array (user not found)
     const mockSelect = jest.fn().mockReturnValue({
@@ -197,7 +197,7 @@ describe("POST /api/fetchDocument", () => {
         data: { userId: "test-user-123" },
       });
 
-      (auth as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
+      (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
       // Mock database error on user lookup
       const mockSelect = jest.fn().mockReturnValue({
@@ -234,7 +234,7 @@ describe("POST /api/fetchDocument", () => {
         data: { userId: "test-user-123" },
       });
 
-      (auth as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
+      (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
       // First call succeeds (user lookup), second call fails (documents fetch)
       const mockSelect = jest.fn()
@@ -276,7 +276,7 @@ describe("POST /api/fetchDocument", () => {
       data: { userId: "test-user-123" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: null });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: null });
 
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({
@@ -304,7 +304,7 @@ describe("POST /api/fetchDocument", () => {
       data: { userId: "test-user-123" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
     // Documents for company 1 only
     const mockDocuments = [
@@ -350,7 +350,7 @@ describe("POST /api/fetchDocument", () => {
       data: { userId: "test-user-789" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "test-user-789" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-789" });
 
     const mockDocuments = [
       { id: 10, name: "Company 5 Doc", companyId: 5 },
@@ -395,7 +395,7 @@ describe("POST /api/fetchDocument", () => {
       data: { userId: "employee-user-111" },
     });
 
-    (auth as jest.Mock).mockResolvedValue({ userId: "employee-user-111" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employee-user-111" });
 
     const mockDocuments = [
       { id: 20, name: "Employee Doc", companyId: 3 },

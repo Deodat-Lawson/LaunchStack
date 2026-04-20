@@ -78,9 +78,9 @@ Third page content here.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(3);
-      expect(result[0].metadata.loc?.pageNumber).toBe(0);
-      expect(result[1].metadata.loc?.pageNumber).toBe(1);
-      expect(result[2].metadata.loc?.pageNumber).toBe(2);
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(0);
+      expect(result[1]!.metadata.loc?.pageNumber).toBe(1);
+      expect(result[2]!.metadata.loc?.pageNumber).toBe(2);
     });
   });
 
@@ -90,8 +90,8 @@ Third page content here.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(1);
-      expect(result[0].pageContent).toBe("This is page 1 content with some text.");
-      expect(result[0].metadata.loc?.pageNumber).toBe(1);
+      expect(result[0]!.pageContent).toBe("This is page 1 content with some text.");
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(1);
     });
 
     it("should handle empty content", () => {
@@ -99,8 +99,8 @@ Third page content here.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(1);
-      expect(result[0].pageContent).toBe("");
-      expect(result[0].metadata.loc?.pageNumber).toBe(1);
+      expect(result[0]!.pageContent).toBe("");
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(1);
     });
 
     it("should handle whitespace-only content", () => {
@@ -108,8 +108,8 @@ Third page content here.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(1);
-      expect(result[0].pageContent).toBe("");
-      expect(result[0].metadata.loc?.pageNumber).toBe(1);
+      expect(result[0]!.pageContent).toBe("");
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(1);
     });
   });
 
@@ -127,10 +127,10 @@ Page 2 content here.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(2);
-      expect(result[0].pageContent).toBe("Page 1 content here.");
-      expect(result[0].metadata.loc?.pageNumber).toBe(1);
-      expect(result[1].pageContent).toBe("Page 2 content here.");
-      expect(result[1].metadata.loc?.pageNumber).toBe(2);
+      expect(result[0]!.pageContent).toBe("Page 1 content here.");
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(1);
+      expect(result[1]!.pageContent).toBe("Page 2 content here.");
+      expect(result[1]!.metadata.loc?.pageNumber).toBe(2);
     });
 
     it("should parse three pages with correct separators", () => {
@@ -153,9 +153,9 @@ Third page content.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(3);
-      expect(result[0].metadata.loc?.pageNumber).toBe(1);
-      expect(result[1].metadata.loc?.pageNumber).toBe(2);
-      expect(result[2].metadata.loc?.pageNumber).toBe(3);
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(1);
+      expect(result[1]!.metadata.loc?.pageNumber).toBe(2);
+      expect(result[2]!.metadata.loc?.pageNumber).toBe(3);
     });
 
     it("should handle non-sequential page numbers", () => {
@@ -178,10 +178,10 @@ Page 15 content.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(3);
-      expect(result[0].metadata.loc?.pageNumber).toBe(5);
-      expect(result[1].metadata.loc?.pageNumber).toBe(10);
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(5);
+      expect(result[1]!.metadata.loc?.pageNumber).toBe(10);
       // Content after last separator is page 11 (10 + 1)
-      expect(result[2].metadata.loc?.pageNumber).toBe(11);
+      expect(result[2]!.metadata.loc?.pageNumber).toBe(11);
     });
   });
 
@@ -206,9 +206,9 @@ Page 3 content.`;
 
       // Should skip empty page 2, content after page 2 separator is page 2 (last seen + 1)
       expect(result).toHaveLength(2);
-      expect(result[0].metadata.loc?.pageNumber).toBe(1);
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(1);
       // Since we skipped empty page 2, last page in array is 1, so next is 2
-      expect(result[1].metadata.loc?.pageNumber).toBe(2);
+      expect(result[1]!.metadata.loc?.pageNumber).toBe(2);
     });
 
     it("should handle pages with complex content", () => {
@@ -239,10 +239,10 @@ const code = "block";
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(2);
-      expect(result[0].pageContent).toContain("# Header 1");
-      expect(result[0].pageContent).toContain("| Table | Header |");
-      expect(result[1].pageContent).toContain("## Header 2");
-      expect(result[1].pageContent).toContain("const code");
+      expect(result[0]!.pageContent).toContain("# Header 1");
+      expect(result[0]!.pageContent).toContain("| Table | Header |");
+      expect(result[1]!.pageContent).toContain("## Header 2");
+      expect(result[1]!.pageContent).toContain("const code");
     });
 
     it("should handle separator-like content in page text", () => {
@@ -260,8 +260,8 @@ Page 2 content.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(2);
-      expect(result[0].pageContent).toContain("But this is not a separator");
-      expect(result[1].pageContent).toBe("Page 2 content.");
+      expect(result[0]!.pageContent).toContain("But this is not a separator");
+      expect(result[1]!.pageContent).toBe("Page 2 content.");
     });
 
     it("should handle last page without trailing separator", () => {
@@ -284,8 +284,8 @@ Page 3 is the last page.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(3);
-      expect(result[2].pageContent).toBe("Page 3 is the last page.");
-      expect(result[2].metadata.loc?.pageNumber).toBe(3);
+      expect(result[2]!.pageContent).toBe("Page 3 is the last page.");
+      expect(result[2]!.metadata.loc?.pageNumber).toBe(3);
     });
 
     it("should handle large page numbers", () => {
@@ -301,8 +301,8 @@ Page 1000.`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(2);
-      expect(result[0].metadata.loc?.pageNumber).toBe(999);
-      expect(result[1].metadata.loc?.pageNumber).toBe(1000);
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(999);
+      expect(result[1]!.metadata.loc?.pageNumber).toBe(1000);
     });
   });
 
@@ -380,9 +380,9 @@ Item B: $734.56`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(3);
-      expect(result[0].pageContent).toContain("INVOICE #12345");
-      expect(result[1].pageContent).toContain("TERMS AND CONDITIONS");
-      expect(result[2].pageContent).toContain("ITEMIZED BREAKDOWN");
+      expect(result[0]!.pageContent).toContain("INVOICE #12345");
+      expect(result[1]!.pageContent).toContain("TERMS AND CONDITIONS");
+      expect(result[2]!.pageContent).toContain("ITEMIZED BREAKDOWN");
     });
 
     it("should handle contract with page numbers", () => {
@@ -411,9 +411,9 @@ Signed by...`;
       const result = parseNativePaginatedOcr(content);
 
       expect(result).toHaveLength(3);
-      expect(result[0].metadata.loc?.pageNumber).toBe(1);
-      expect(result[1].metadata.loc?.pageNumber).toBe(2);
-      expect(result[2].metadata.loc?.pageNumber).toBe(3);
+      expect(result[0]!.metadata.loc?.pageNumber).toBe(1);
+      expect(result[1]!.metadata.loc?.pageNumber).toBe(2);
+      expect(result[2]!.metadata.loc?.pageNumber).toBe(3);
     });
   });
 });

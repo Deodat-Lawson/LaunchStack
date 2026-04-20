@@ -413,7 +413,7 @@ export async function analyzeDocumentChunks(
     allChunks: PdfChunk[],
     specification: AnalysisSpecification,
     timeoutMs = 30000,
-    maxConcurrency = ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY
+    maxConcurrency: number = ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY
 ): Promise<AnalyzeDocumentChunksResponse> {
     const batches = createChunkBatches(allChunks, {
         maxChunksPerCall: ANALYSIS_BATCH_CONFIG.MAX_CHUNKS_PER_CALL,

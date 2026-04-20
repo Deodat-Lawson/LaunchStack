@@ -254,7 +254,7 @@ describe("Rate Limiter", () => {
         headers: {
           get: () => null,
         },
-      } as Request;
+      } as unknown as Request;
 
       // Should still work with 'unknown' as the key
       const result1 = await rateLimiter(request);

@@ -16,9 +16,9 @@ export function levenshteinDistance(a: string, b: string): number {
     curr[0] = i;
     for (let j = 1; j <= b.length; j++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-      curr[j] = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost);
+      curr[j] = Math.min(curr[j - 1]! + 1, prev[j]! + 1, prev[j - 1]! + cost);
     }
-    for (let j = 0; j <= b.length; j++) prev[j] = curr[j];
+    for (let j = 0; j <= b.length; j++) prev[j] = curr[j]!;
   }
   return prev[b.length]!;
 }

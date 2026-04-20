@@ -175,7 +175,7 @@ async function runTarget(cli: CliArgs, fixturePath: string): Promise<TargetOutpu
 async function runLaunchstack(baseUrl: string, fixturePath: string): Promise<TargetOutput> {
   const buf = await readFile(fixturePath);
   const form = new FormData();
-  form.append("file", new Blob([buf]), basename(fixturePath));
+  form.append("file", new Blob([new Uint8Array(buf)]), basename(fixturePath));
   const res = await fetch(`${baseUrl.replace(/\/$/, "")}/api/ocr/benchmark`, {
     method: "POST",
     body: form,
@@ -195,7 +195,7 @@ async function runLaunchstack(baseUrl: string, fixturePath: string): Promise<Tar
 async function runOnyx(baseUrl: string, fixturePath: string): Promise<TargetOutput> {
   const buf = await readFile(fixturePath);
   const form = new FormData();
-  form.append("files", new Blob([buf]), basename(fixturePath));
+  form.append("files", new Blob([new Uint8Array(buf)]), basename(fixturePath));
   const ingestRes = await fetch(`${baseUrl.replace(/\/$/, "")}/manage/admin/connector/file/upload`, {
     method: "POST",
     body: form,

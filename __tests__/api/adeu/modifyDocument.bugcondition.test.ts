@@ -154,7 +154,7 @@ describe("Fix 1.2: Per-document concurrency — concurrency config has key field
         expect(concurrency).toHaveLength(1);
 
         // FIX: The key field is present, scoping concurrency per document.
-        const config = concurrency![0];
+        const config = concurrency![0]!;
         expect(config.limit).toBe(1);
         expect(config.key).toBeDefined();
         expect(config.key).toContain("documentId");
@@ -196,7 +196,7 @@ describe("Fix 1.4: Failure status — onFailure sets error metadata on document"
         expect(mockSet).toHaveBeenCalled();
 
         // FIX: The set() call should include error metadata (ocrMetadata).
-        const setArg = capturedSets[0];
+        const setArg = capturedSets[0]!;
         expect(setArg).toBeDefined();
         expect(setArg.updatedAt).toBeDefined();
         // Confirm the fix: error metadata IS set

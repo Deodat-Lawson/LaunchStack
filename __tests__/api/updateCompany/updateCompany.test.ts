@@ -35,7 +35,7 @@ describe("POST /api/updateCompany", () => {
   });
 
   it("updates company settings for authorized employer", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "user-123" });
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: {
@@ -75,7 +75,7 @@ describe("POST /api/updateCompany", () => {
   });
 
   it("returns 401 when user is not authenticated", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: null });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: null });
 
     const response = await POST(makeRequest({}));
     const json = await response.json();
@@ -89,7 +89,7 @@ describe("POST /api/updateCompany", () => {
   });
 
   it("returns 403 when user lacks employer privileges", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "user-123" });
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: {
@@ -118,7 +118,7 @@ describe("POST /api/updateCompany", () => {
   });
 
   it("bubbles validation failure response", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "user-123" });
 
     const validationResponse = new Response(
       JSON.stringify({ success: false, message: "Invalid payload" }),
@@ -139,7 +139,7 @@ describe("POST /api/updateCompany", () => {
   });
 
   it("returns 404 when company record is missing", async () => {
-    (auth as jest.Mock).mockResolvedValue({ userId: "user-123" });
+    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "user-123" });
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: {

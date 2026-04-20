@@ -3,7 +3,6 @@ import {
   withRateLimit,
   applyRateLimitHeaders,
   createRateLimitResponse,
-  checkRateLimit,
 } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets, clearRateLimitStore } from "~/lib/rate-limiter";
 import type { RateLimitInfo } from "~/lib/rate-limiter";

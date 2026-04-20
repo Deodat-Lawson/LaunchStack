@@ -26,7 +26,7 @@ describe("Fix 1.8: Secret removed from Docker build args — OPENAI_API_KEY not 
         );
         expect(buildArgsSection).not.toBeNull();
 
-        const buildArgs = buildArgsSection![1];
+        const buildArgs = buildArgsSection![1]!;
         // Filter out comment lines (lines starting with #) before checking
         const nonCommentLines = buildArgs
             .split("\n")

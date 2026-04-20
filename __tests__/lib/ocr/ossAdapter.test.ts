@@ -50,7 +50,7 @@ describe("OSS OCR Adapters", () => {
 
       expect(result.metadata.provider).toBe("DOCLING");
       expect(result.pages).toHaveLength(1);
-      expect(result.pages[0].textBlocks).toEqual(["hello"]);
+      expect(result.pages[0]!.textBlocks).toEqual(["hello"]);
     });
 
     it("reports getProviderName=DOCLING", () => {
@@ -100,8 +100,8 @@ describe("OSS OCR Adapters", () => {
       const [url] = (global.fetch as jest.Mock).mock.calls[0];
       expect(url).toBe(`${WORKER_URL}/parse/docling`);
       expect(result.metadata.provider).toBe("DOCLING");
-      expect(result.pages[0].tables).toHaveLength(1);
-      expect(result.pages[0].tables[0].rowCount).toBe(2);
+      expect(result.pages[0]!.tables).toHaveLength(1);
+      expect(result.pages[0]!.tables![0]!.rowCount).toBe(2);
     });
   });
 

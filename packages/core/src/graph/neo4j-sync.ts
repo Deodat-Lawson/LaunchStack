@@ -10,15 +10,15 @@
  */
 
 import type { Session } from "neo4j-driver";
-import { db } from "~/server/db";
+import { eq, and, inArray } from "drizzle-orm";
+
+import { getDb } from "../db";
 import {
   kgEntities,
   kgEntityMentions,
   kgRelationships,
-} from "@launchstack/core/db/schema";
-import { eq, and, inArray } from "drizzle-orm";
-import { getNeo4jSession } from "@launchstack/core/graph";
-import { getEngine } from "~/server/engine";
+} from "../db/schema";
+import { getNeo4jSession } from "./neo4j-client";
 
 interface SyncResult {
   entities: number;
@@ -37,7 +37,7 @@ export async function syncDocumentToNeo4j(
 ): Promise<SyncResult> {
   const start = Date.now();
 
-  const mentions = await db
+  const mentions = await getDb()
     .select({
       entityId: kgEntityMentions.entityId,
       sectionId: kgEntityMentions.sectionId,
@@ -53,7 +53,7 @@ export async function syncDocumentToNeo4j(
 
   const entityIds = [...new Set(mentions.map((m) => m.entityId))];
 
-  const entities = await db
+  const entities = await getDb()
     .select({
       id: kgEntities.id,
       name: kgEntities.name,
@@ -65,7 +65,7 @@ export async function syncDocumentToNeo4j(
     .from(kgEntities)
     .where(inArray(kgEntities.id, entityIds));
 
-  const relationships = await db
+  const relationships = await getDb()
     .select({
       sourceEntityId: kgRelationships.sourceEntityId,
       targetEntityId: kgRelationships.targetEntityId,
@@ -85,7 +85,6 @@ export async function syncDocumentToNeo4j(
 
   let session: Session | null = null;
   try {
-    getEngine(); // ensures configureNeo4j has run
     session = getNeo4jSession();
 
     await syncEntities(session, entities, companyId);

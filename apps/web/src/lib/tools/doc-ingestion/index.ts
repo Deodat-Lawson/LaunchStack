@@ -287,7 +287,7 @@ async function maybeSyncToNeo4j(
       return null;
     }
 
-    const { syncDocumentToNeo4j } = await import("~/lib/graph/neo4j-sync");
+    const { syncDocumentToNeo4j } = await import("@launchstack/core/graph");
 
     const result = await syncDocumentToNeo4j(documentId, BigInt(companyId));
 

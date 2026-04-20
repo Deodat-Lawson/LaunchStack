@@ -9,3 +9,5 @@ export {
   type Driver,
   type Session,
 } from "./neo4j-client";
+
+export { syncDocumentToNeo4j } from "./neo4j-sync";

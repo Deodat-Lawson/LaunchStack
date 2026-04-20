@@ -8,7 +8,7 @@ import { validateRequestBody, UpdateCompanySchema } from "~/lib/validation";
 import {
   getCompanyCredentialsPlaintext,
   upsertCompanyCredentials,
-} from "~/lib/ai/company-credentials";
+} from "@launchstack/core/embeddings";
 import { validateEmbeddingCredentials } from "~/lib/ai/validate-credentials";
 import {
   beginReindex,

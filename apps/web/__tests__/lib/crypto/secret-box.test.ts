@@ -3,7 +3,7 @@ import {
   decryptSecret,
   MissingSecretsKeyError,
   CiphertextDecodeError,
-} from "~/lib/crypto/secret-box";
+} from "@launchstack/core/crypto";
 
 function setKey() {
   // Deterministic 32-byte key for tests — never use in production.

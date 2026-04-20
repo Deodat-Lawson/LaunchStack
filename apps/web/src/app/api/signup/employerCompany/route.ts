@@ -4,7 +4,7 @@ import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
 import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
-import { upsertCompanyCredentials } from "~/lib/ai/company-credentials";
+import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
 
 export async function POST(request: Request) {
     try {

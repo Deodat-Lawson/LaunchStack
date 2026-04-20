@@ -5,11 +5,25 @@ import {
   timingSafeEqual,
 } from "node:crypto";
 
-// Read the key directly from process.env instead of going through the
-// validated `~/env` module. The secret-box primitive must be importable
-// from contexts (e.g. tests, migration scripts) where the full server env
-// schema hasn't been configured, and this key is a simple opaque string —
-// nothing to cross-validate against other env vars.
+/**
+ * The master key (base64-encoded 32-byte random value) is injected by the
+ * host at startup via configureSecretBox(). A process.env fallback is kept
+ * for the transitional window where some callers (tests, migration scripts,
+ * CLI tools) still expect to import this module without a configured
+ * Engine. Remove the fallback once all such entry points route through
+ * createEngine / configureSecretBox.
+ */
+
+let _keyBase64: string | null = null;
+
+export interface SecretBoxConfig {
+  /** EMBEDDING_SECRETS_KEY — base64-encoded 32-byte random value. */
+  key: string | undefined;
+}
+
+export function configureSecretBox(config: SecretBoxConfig): void {
+  _keyBase64 = config.key ?? null;
+}
 
 /**
  * AES-256-GCM envelope encryption for short secrets (API keys) stored in the
@@ -54,7 +68,7 @@ function resolveKey(version: number): Buffer {
       `Unknown encryption key version ${version}; expected ${CURRENT_KEY_VERSION}`,
     );
   }
-  const raw = process.env.EMBEDDING_SECRETS_KEY;
+  const raw = _keyBase64 ?? process.env.EMBEDDING_SECRETS_KEY;
   if (!raw) {
     throw new MissingSecretsKeyError();
   }

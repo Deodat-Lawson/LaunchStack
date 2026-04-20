@@ -13,6 +13,7 @@ import { createEngine, type CoreConfig, type Engine } from "@launchstack/core";
 import { env } from "~/env";
 import { configureProviders } from "@launchstack/core/providers/registry";
 import { configureChatModels } from "@launchstack/core/llm";
+import { configureSecretBox } from "@launchstack/core/crypto";
 import { configureEmbeddingIndexRegistry } from "~/lib/ai/embedding-index-registry";
 import { configureEmbeddingFactory } from "~/lib/ai/embedding-factory";
 import { configureCompanyEmbeddingDefaults } from "~/lib/ai/company-embedding-config";
@@ -218,6 +219,9 @@ export function getEngine(): Engine {
     nerBaseUrl: config.providers.ner?.baseUrl,
     transcriptionBaseUrl: config.providers.transcription?.baseUrl,
   });
+
+  // Register the encryption key used by company-credentials secret-box.
+  configureSecretBox({ key: config.embeddings.secretsKey });
 
   const engine = createEngine(config);
   globalHolder.__launchstackEngine = { engine };

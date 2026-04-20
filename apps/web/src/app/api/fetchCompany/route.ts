@@ -4,7 +4,7 @@ import { company, users } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 
-import { getRedactedCredentials } from "~/lib/ai/company-credentials";
+import { getRedactedCredentials } from "@launchstack/core/embeddings";
 
 
 export async function GET() {

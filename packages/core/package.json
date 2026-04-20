@@ -67,6 +67,14 @@
     "./llm/types": {
       "types": "./src/llm/types.ts",
       "default": "./src/llm/types.ts"
+    },
+    "./crypto": {
+      "types": "./src/crypto/index.ts",
+      "default": "./src/crypto/index.ts"
+    },
+    "./embeddings": {
+      "types": "./src/embeddings/index.ts",
+      "default": "./src/embeddings/index.ts"
     }
   },
   "scripts": {

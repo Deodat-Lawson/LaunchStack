@@ -1,15 +1,15 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
+import { getDb } from "../db";
 import {
   company,
   companyEmbeddingCredentials,
-} from "@launchstack/core/db/schema";
+} from "../db/schema";
 import {
   CiphertextDecodeError,
   decryptSecret,
   encryptSecret,
-} from "~/lib/crypto/secret-box";
+} from "../crypto/secret-box";
 
 /**
  * Per-company embedding provider credentials, separated from the rest of
@@ -72,13 +72,13 @@ export async function getCompanyCredentialsPlaintext(
   const id = toNumericId(companyId);
   if (id === null) return null;
 
-  const [encrypted] = await db
+  const [encrypted] = await getDb()
     .select()
     .from(companyEmbeddingCredentials)
     .where(eq(companyEmbeddingCredentials.companyId, id))
     .limit(1);
 
-  const [legacy] = await db
+  const [legacy] = await getDb()
     .select({
       openAIApiKey: company.embeddingOpenAIApiKey,
       huggingFaceApiKey: company.embeddingHuggingFaceApiKey,
@@ -138,7 +138,7 @@ export async function getRedactedCredentials(
     };
   }
 
-  const [encrypted] = await db
+  const [encrypted] = await getDb()
     .select({
       openAIApiKeyCiphertext: companyEmbeddingCredentials.openAIApiKeyCiphertext,
       openAIApiKeyLast4: companyEmbeddingCredentials.openAIApiKeyLast4,
@@ -152,7 +152,7 @@ export async function getRedactedCredentials(
     .where(eq(companyEmbeddingCredentials.companyId, id))
     .limit(1);
 
-  const [legacy] = await db
+  const [legacy] = await getDb()
     .select({
       openAIApiKey: company.embeddingOpenAIApiKey,
       huggingFaceApiKey: company.embeddingHuggingFaceApiKey,
@@ -254,7 +254,7 @@ export async function upsertCompanyCredentials(
   patch.updatedAt = new Date();
   if (hasEncryptedChange) patch.encryptionKeyVersion = 1;
 
-  await db
+  await getDb()
     .insert(companyEmbeddingCredentials)
     .values({ companyId: id, ...patch })
     .onConflictDoUpdate({

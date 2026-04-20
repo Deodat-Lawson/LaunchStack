@@ -6,7 +6,6 @@
  * INNGEST_EVENT_KEY is required. On dispatch failure, throws (no sync fallback).
  */
 
-import { env } from "~/env";
 import type { ProcessDocumentEventData, OCRProvider } from "@launchstack/core/ocr/types";
 
 /**
@@ -85,7 +84,7 @@ export async function triggerDocumentProcessing(
   console.log(
     `[Trigger] Dispatching job=${jobId}, doc="${documentName}", docId=${documentId}, ` +
     `mime=${options?.mimeType ?? "none"}, provider=${options?.preferredProvider ?? "auto"}, ` +
-    `runner=${env.server.JOB_RUNNER ?? "inngest"}`
+    `runner=${process.env.JOB_RUNNER ?? "inngest"}`
   );
 
   const { getDispatcher } = await import("~/lib/jobs");

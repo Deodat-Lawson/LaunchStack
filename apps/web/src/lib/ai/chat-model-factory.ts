@@ -10,30 +10,83 @@ import {
   type AIModelType,
   type LLMProvider,
 } from "~/app/api/agents/documentQ&A/services/types";
-import { env } from "~/env";
+
+/**
+ * Chat-model factory.
+ *
+ * API keys, base URLs, and per-provider model defaults come from a
+ * ChatModelsConfig the hosting app registers via configureChatModels().
+ * A process.env fallback exists for the transitional window before this
+ * file relocates to @launchstack/core in step 6 — when it moves, the
+ * fallback is removed and the factory becomes fully env-agnostic.
+ */
 
 const REASONING_MODELS: ReadonlySet<string> = new Set([
   "gpt-5-mini",
   "gpt-5-nano",
 ]);
 
-/** When AI_BASE_URL is set, we're using a custom OpenAI-compatible provider
- *  and should accept any model string (DeepSeek, Qwen, etc.) */
-const AI_BASE_URL = process.env.AI_BASE_URL;
-const AI_API_KEY = process.env.AI_API_KEY;
-const isCustomProvider = !!AI_BASE_URL;
+export interface ChatModelsConfig {
+  /** Global OpenAI-compatible fallback endpoint (AI_BASE_URL). */
+  aiBaseUrl?: string;
+  /** Global OpenAI-compatible key (AI_API_KEY). */
+  aiApiKey?: string;
+  openai?: { apiKey: string; model?: string; chatModel?: string };
+  anthropic?: { apiKey: string; model?: string };
+  google?: { apiKey: string; model?: string };
+  ollama?: { baseUrl: string; model?: string };
+}
+
+let _config: ChatModelsConfig | null = null;
+
+/**
+ * Register chat-model config. apps/web/src/server/engine.ts calls this
+ * during getEngine() initialization with the relevant slice of CoreConfig.
+ */
+export function configureChatModels(config: ChatModelsConfig): void {
+  _config = config;
+}
+
+function getConfig(): ChatModelsConfig {
+  if (_config) return _config;
+  return {
+    aiBaseUrl: process.env.AI_BASE_URL,
+    aiApiKey: process.env.AI_API_KEY,
+    openai: process.env.OPENAI_API_KEY
+      ? {
+          apiKey: process.env.OPENAI_API_KEY,
+          model: process.env.OPENAI_MODEL,
+          chatModel: process.env.CHAT_MODEL,
+        }
+      : undefined,
+    anthropic: process.env.ANTHROPIC_API_KEY
+      ? { apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL }
+      : undefined,
+    google: process.env.GOOGLE_AI_API_KEY
+      ? { apiKey: process.env.GOOGLE_AI_API_KEY, model: process.env.GOOGLE_MODEL }
+      : undefined,
+    ollama: process.env.OLLAMA_BASE_URL
+      ? { baseUrl: process.env.OLLAMA_BASE_URL, model: process.env.OLLAMA_MODEL }
+      : undefined,
+  };
+}
+
+function isCustomProvider(): boolean {
+  return !!getConfig().aiBaseUrl;
+}
 
 function getServerModelOverride(provider: LLMProvider): string | undefined {
+  const c = getConfig();
   switch (provider) {
     case "openai":
       // CHAT_MODEL takes priority over OPENAI_MODEL (provider-agnostic naming)
-      return env.server.CHAT_MODEL ?? env.server.OPENAI_MODEL;
+      return c.openai?.chatModel ?? c.openai?.model;
     case "anthropic":
-      return env.server.ANTHROPIC_MODEL;
+      return c.anthropic?.model;
     case "google":
-      return env.server.GOOGLE_MODEL;
+      return c.google?.model;
     case "ollama":
-      return env.server.OLLAMA_MODEL;
+      return c.ollama?.model;
   }
 }
 
@@ -43,7 +96,7 @@ function coerceModel(
 ): string {
   // When using a custom OpenAI-compatible provider (AI_BASE_URL),
   // accept any model string — don't validate against the allowlist
-  if (isCustomProvider && provider === "openai") {
+  if (isCustomProvider() && provider === "openai") {
     if (requested) return requested;
     const envValue = getServerModelOverride(provider);
     if (envValue) return envValue;
@@ -68,7 +121,7 @@ export function getProviderDefaultModel(provider: LLMProvider): string {
 
 /** Base URL for the local Ollama HTTP API (used by ChatOllama only). */
 export function getOllamaBaseUrl(): string {
-  const url = process.env.OLLAMA_BASE_URL;
+  const url = getConfig().ollama?.baseUrl;
   if (!url) {
     throw new Error(
       "OLLAMA_BASE_URL is not set. Add it to your .env file (e.g. OLLAMA_BASE_URL=\"http://localhost:11434\").",
@@ -85,9 +138,10 @@ export function getChatModelForProvider(opts: {
 }): BaseChatModel {
   const { provider, temperature, timeoutMs } = opts;
   const modelName = coerceModel(provider, opts.model);
+  const c = getConfig();
 
   // Skip allowlist validation when using a custom provider (AI_BASE_URL)
-  if (!(isCustomProvider && provider === "openai")) {
+  if (!(isCustomProvider() && provider === "openai")) {
     if (!(ProviderModelMap[provider] as readonly string[]).includes(modelName)) {
       throw new Error(
         `Model \"${String(modelName)}\" is not supported for provider \"${String(provider)}\"`,
@@ -105,14 +159,14 @@ export function getChatModelForProvider(opts: {
 
     case "anthropic":
       return new ChatAnthropic({
-        anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+        anthropicApiKey: c.anthropic?.apiKey,
         modelName,
         temperature: temperature ?? 0.7,
       });
 
     case "google":
       return new ChatGoogleGenerativeAI({
-        apiKey: process.env.GOOGLE_AI_API_KEY,
+        apiKey: c.google?.apiKey,
         model: modelName,
         temperature: temperature ?? 0.7,
       });
@@ -121,12 +175,12 @@ export function getChatModelForProvider(opts: {
     default: {
       const useTemp = !REASONING_MODELS.has(modelName);
       return new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || AI_API_KEY,
+        apiKey: c.openai?.apiKey ?? c.aiApiKey,
         modelName,
         ...(useTemp ? { temperature: temperature ?? 0.7 } : {}),
         timeout: timeoutMs ?? 600_000,
         // Route to custom provider when AI_BASE_URL is set
-        ...(AI_BASE_URL ? { configuration: { baseURL: AI_BASE_URL } } : {}),
+        ...(c.aiBaseUrl ? { configuration: { baseURL: c.aiBaseUrl } } : {}),
       });
     }
   }
@@ -159,7 +213,7 @@ export function describeProviderError(
     ) {
       return {
         status: 502,
-        message: `Unable to reach Ollama at ${process.env.OLLAMA_BASE_URL ?? "(OLLAMA_BASE_URL not set)"}. Please ensure the Ollama server is running.`,
+        message: `Unable to reach Ollama at ${getConfig().ollama?.baseUrl ?? "(OLLAMA_BASE_URL not set)"}. Please ensure the Ollama server is running.`,
       };
     }
     if (

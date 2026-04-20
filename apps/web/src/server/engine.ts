@@ -12,6 +12,7 @@ import { createEngine, type CoreConfig, type Engine } from "@launchstack/core";
 
 import { env } from "~/env";
 import { configureProviders } from "~/lib/providers/registry";
+import { configureChatModels } from "~/lib/ai/chat-model-factory";
 import { createAppStoragePort } from "./storage/port";
 
 type EngineHolder = { engine: Engine };
@@ -146,6 +147,23 @@ export function getEngine(): Engine {
     return globalHolder.__launchstackEngine.engine;
   }
   const config = buildConfig();
+
+  // Register chat-model config so chat-model-factory sees the same
+  // provider credentials as core does.
+  configureChatModels({
+    aiBaseUrl: config.llm.aiBaseUrl,
+    aiApiKey: config.llm.aiApiKey,
+    openai: config.llm.openai
+      ? {
+          apiKey: config.llm.openai.apiKey,
+          model: env.server.OPENAI_MODEL,
+          chatModel: env.server.CHAT_MODEL,
+        }
+      : undefined,
+    anthropic: config.llm.anthropic,
+    google: config.llm.google,
+    ollama: config.llm.ollama,
+  });
 
   // Register provider config so resolveBaseUrl / resolveApiKey / etc. in
   // ~/lib/providers/registry see the same values as core does.

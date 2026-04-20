@@ -3,22 +3,16 @@ import type {
   DocumentChunk,
   ExtractedTable,
   VectorizedChunk,
-} from "@launchstack/core/ocr/types";
-import { hasMarkdownHeadings, splitByHeadings } from "@launchstack/core/ingestion/heading-chunker";
+} from "./types";
+import { hasMarkdownHeadings, splitByHeadings } from "../ingestion/heading-chunker";
+import { getOpenAIClient } from "../llm/openai-client";
 
-import OpenAI from "openai";
-
-// Lazy init to avoid issues if env var missing at module load
-let openai: OpenAI | null = null;
+/**
+ * The OpenAI client is shared across subsystems — configured once by the
+ * host via configureChatModels and reached here through getOpenAIClient().
+ */
 function getOpenAI() {
-  const apiKey = process.env.OPENAI_API_KEY || process.env.AI_API_KEY;
-  if (!openai && apiKey) {
-    openai = new OpenAI({
-      apiKey,
-      ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
-    });
-  }
-  return openai;
+  return getOpenAIClient();
 }
 
 export interface ChunkingConfig {

@@ -13,7 +13,7 @@ import {
   type RouterDecisionResult,
   type StoredSection,
 } from "~/lib/ocr/processor";
-import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "~/lib/ocr/chunker";
+import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "@launchstack/core/ocr/chunker";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import {

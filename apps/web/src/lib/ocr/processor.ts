@@ -14,7 +14,7 @@ import {
   createMarkerAdapter,
   createDoclingAdapter,
 } from "~/lib/ocr/adapters";
-import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "~/lib/ocr/chunker";
+import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "@launchstack/core/ocr/chunker";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import {
   isLegacyEmbeddingIndex,

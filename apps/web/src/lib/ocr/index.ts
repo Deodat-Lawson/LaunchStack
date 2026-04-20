@@ -24,7 +24,7 @@ export {
   prepareForEmbedding,
   mergeWithEmbeddings,
   type ChunkingConfig,
-} from "./chunker";
+} from "@launchstack/core/ocr/chunker";
 
 // Pipeline trigger
 export {

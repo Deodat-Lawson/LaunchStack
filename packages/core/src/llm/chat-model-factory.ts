@@ -48,6 +48,11 @@ function getConfig(): ChatModelsConfig {
   return _config ?? {};
 }
 
+/** Exposed so sibling modules (openai-client) can read the same captured config. */
+export function getChatModelsConfig(): ChatModelsConfig {
+  return getConfig();
+}
+
 function isCustomProvider(): boolean {
   return !!getConfig().aiBaseUrl;
 }

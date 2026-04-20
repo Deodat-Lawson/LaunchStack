@@ -56,6 +56,10 @@
       "types": "./src/ocr/code-chunker.ts",
       "default": "./src/ocr/code-chunker.ts"
     },
+    "./ocr/chunker": {
+      "types": "./src/ocr/chunker.ts",
+      "default": "./src/ocr/chunker.ts"
+    },
     "./ingestion": {
       "types": "./src/ingestion/index.ts",
       "default": "./src/ingestion/index.ts"
@@ -103,6 +107,7 @@
     "@langchain/ollama": "^0.1.6",
     "@langchain/openai": "^0.6.11",
     "drizzle-orm": "^0.45.1",
+    "openai": "^4.62.1",
     "postgres": "^3.4.7",
     "string-similarity-js": "^2.1.4"
   },

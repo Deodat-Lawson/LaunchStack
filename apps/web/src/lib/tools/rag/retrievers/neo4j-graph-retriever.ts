@@ -25,6 +25,7 @@ import { documentSections } from "@launchstack/core/db/schema";
 import { inArray, and } from "drizzle-orm";
 import { isNeo4jConfigured, getNeo4jSession } from "@launchstack/core/graph";
 import neo4j, { type Session } from "neo4j-driver";
+import { getEngine } from "~/server/engine";
 
 interface Neo4jGraphRetrieverConfig extends BaseRetrieverInput {
   companyId: number;
@@ -71,6 +72,7 @@ export class Neo4jGraphRetriever extends BaseRetriever {
 
     let session: Session | null = null;
     try {
+      getEngine(); // ensures configureNeo4j has run
       session = getNeo4jSession();
 
       const sectionIds = await this.findSectionsViaCypher(
@@ -234,6 +236,7 @@ export function createNeo4jGraphRetriever(
  * Returns true if Neo4j graph retrieval should be used.
  */
 export function shouldUseNeo4jRetriever(): boolean {
+  getEngine(); // ensures configureNeo4j has run
   return (
     isNeo4jConfigured() &&
     (process.env.ENABLE_GRAPH_RETRIEVER === "true" ||

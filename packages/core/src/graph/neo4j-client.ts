@@ -1,35 +1,61 @@
 /**
  * Neo4j Client
  *
- * Thin wrapper around the Neo4j JavaScript driver.
- * Connection is created lazily on first use and reused for the app lifetime.
- * All Neo4j features are disabled when NEO4J_URI is not set.
+ * Thin wrapper around the Neo4j JavaScript driver. Configuration is injected
+ * by the hosting app (typically createEngine) via configureNeo4j; the driver
+ * is then created lazily on first use and reused for the process lifetime.
+ *
+ * Legacy callers that do not pass config explicitly continue to work when the
+ * app has already called configureNeo4j during startup. Calling a driver
+ * accessor before configureNeo4j has been called throws, so the host app
+ * must wire this up early (see apps/web/src/server/engine.ts).
  */
 
 import neo4j, { type Driver, type Session } from "neo4j-driver";
 
-let _driver: Driver | null = null;
+export interface Neo4jClientConfig {
+  uri: string;
+  user: string;
+  password: string;
+}
 
-function getConfig() {
-  const uri = process.env.NEO4J_URI;
-  const user = process.env.NEO4J_USERNAME ?? "neo4j";
-  const password = process.env.NEO4J_PASSWORD ?? "";
-  return { uri, user, password };
+let _driver: Driver | null = null;
+let _config: Neo4jClientConfig | null = null;
+
+/**
+ * Inject Neo4j credentials. Idempotent — calling with the same config is a
+ * no-op; calling with a different config closes the previous driver so the
+ * next getNeo4jDriver() call rebuilds against the new credentials. Pass
+ * `null` to mark Neo4j as unconfigured (disables graph-dependent features).
+ */
+export function configureNeo4j(config: Neo4jClientConfig | null): void {
+  if (_config && config && _config.uri === config.uri && _config.user === config.user && _config.password === config.password) {
+    return;
+  }
+  if (_driver) {
+    void _driver.close();
+    _driver = null;
+  }
+  _config = config;
 }
 
 export function isNeo4jConfigured(): boolean {
-  return !!process.env.NEO4J_URI;
+  return !!_config;
 }
 
 export function getNeo4jDriver(): Driver {
   if (_driver) return _driver;
 
-  const { uri, user, password } = getConfig();
-  if (!uri) {
-    throw new Error("[Neo4j] NEO4J_URI is not configured");
+  if (!_config) {
+    throw new Error(
+      "[Neo4j] Not configured. The host must call configureNeo4j({ uri, user, password }) during startup.",
+    );
   }
 
-  _driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
+  _driver = neo4j.driver(
+    _config.uri,
+    neo4j.auth.basic(_config.user, _config.password),
+  );
   return _driver;
 }
 
@@ -46,6 +72,7 @@ export async function checkNeo4jHealth(): Promise<boolean> {
     await session.run("RETURN 1");
     return true;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.warn(
       "[Neo4j] Health check failed:",
       error instanceof Error ? error.message : error,
@@ -62,3 +89,6 @@ export async function closeNeo4jDriver(): Promise<void> {
     _driver = null;
   }
 }
+
+/** Re-export Driver / Session types so callers do not need to depend directly on neo4j-driver. */
+export type { Driver, Session };

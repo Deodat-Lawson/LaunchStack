@@ -18,6 +18,7 @@ import {
 } from "@launchstack/core/db/schema";
 import { eq, and, inArray } from "drizzle-orm";
 import { getNeo4jSession } from "@launchstack/core/graph";
+import { getEngine } from "~/server/engine";
 
 interface SyncResult {
   entities: number;
@@ -84,6 +85,7 @@ export async function syncDocumentToNeo4j(
 
   let session: Session | null = null;
   try {
+    getEngine(); // ensures configureNeo4j has run
     session = getNeo4jSession();
 
     await syncEntities(session, entities, companyId);

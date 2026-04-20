@@ -272,6 +272,9 @@ async function maybeSyncToNeo4j(
   if (!neo4jUri) return;
 
   await runStep("step-g-neo4j-sync", async () => {
+    // Ensure getEngine() has run so configureNeo4j has registered credentials.
+    const { getEngine } = await import("~/server/engine");
+    getEngine();
     const { isNeo4jConfigured, checkNeo4jHealth } = await import(
       "@launchstack/core/graph"
     );

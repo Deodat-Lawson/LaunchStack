@@ -59,12 +59,25 @@
     "./providers/registry": {
       "types": "./src/providers/registry.ts",
       "default": "./src/providers/registry.ts"
+    },
+    "./llm": {
+      "types": "./src/llm/index.ts",
+      "default": "./src/llm/index.ts"
+    },
+    "./llm/types": {
+      "types": "./src/llm/types.ts",
+      "default": "./src/llm/types.ts"
     }
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@langchain/anthropic": "^1.3.3",
+    "@langchain/core": "^0.3.74",
+    "@langchain/google-genai": "^2.1.3",
+    "@langchain/ollama": "^0.1.6",
+    "@langchain/openai": "^0.6.11",
     "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.7",
     "string-similarity-js": "^2.1.4"

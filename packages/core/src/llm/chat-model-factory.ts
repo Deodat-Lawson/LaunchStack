@@ -9,16 +9,13 @@ import {
   isModelAllowedForProvider,
   type AIModelType,
   type LLMProvider,
-} from "~/app/api/agents/documentQ&A/services/types";
+} from "./types";
 
 /**
  * Chat-model factory.
  *
  * API keys, base URLs, and per-provider model defaults come from a
  * ChatModelsConfig the hosting app registers via configureChatModels().
- * A process.env fallback exists for the transitional window before this
- * file relocates to @launchstack/core in step 6 — when it moves, the
- * fallback is removed and the factory becomes fully env-agnostic.
  */
 
 const REASONING_MODELS: ReadonlySet<string> = new Set([
@@ -48,27 +45,7 @@ export function configureChatModels(config: ChatModelsConfig): void {
 }
 
 function getConfig(): ChatModelsConfig {
-  if (_config) return _config;
-  return {
-    aiBaseUrl: process.env.AI_BASE_URL,
-    aiApiKey: process.env.AI_API_KEY,
-    openai: process.env.OPENAI_API_KEY
-      ? {
-          apiKey: process.env.OPENAI_API_KEY,
-          model: process.env.OPENAI_MODEL,
-          chatModel: process.env.CHAT_MODEL,
-        }
-      : undefined,
-    anthropic: process.env.ANTHROPIC_API_KEY
-      ? { apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL }
-      : undefined,
-    google: process.env.GOOGLE_AI_API_KEY
-      ? { apiKey: process.env.GOOGLE_AI_API_KEY, model: process.env.GOOGLE_MODEL }
-      : undefined,
-    ollama: process.env.OLLAMA_BASE_URL
-      ? { baseUrl: process.env.OLLAMA_BASE_URL, model: process.env.OLLAMA_MODEL }
-      : undefined,
-  };
+  return _config ?? {};
 }
 
 function isCustomProvider(): boolean {

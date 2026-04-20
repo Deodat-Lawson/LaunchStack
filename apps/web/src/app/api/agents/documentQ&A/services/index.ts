@@ -17,7 +17,7 @@ export { performTavilySearch } from "./tavilySearch";
 export { executeWebSearchAgent } from "./webSearchAgent";
 export { SYSTEM_PROMPTS, getSystemPrompt, getWebSearchInstruction } from "./prompts";
 export { getChatModel, getEmbeddings } from "./models";
-export { getChatModelForProvider, getProviderDefaultModel, describeOllamaError, describeProviderError } from "~/lib/ai/chat-model-factory";
+export { getChatModelForProvider, getProviderDefaultModel, describeOllamaError, describeProviderError } from "@launchstack/core/llm";
 export { ProviderModelMap, ProviderDefaultModels } from "./types";
 
 // RLM Search (hierarchical, cost-aware retrieval for large documents)

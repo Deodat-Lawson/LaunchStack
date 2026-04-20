@@ -1,0 +1,7 @@
+{
+  "name": "@launchstack/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Launchstack Next.js app. (Scaffolding stub — the real src/ tree moves here in the next migration step.)"
+}

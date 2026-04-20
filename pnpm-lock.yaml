@@ -498,6 +498,16 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
+  apps/web: {}
+
+  packages/core: {}
+
+  packages/features:
+    dependencies:
+      '@launchstack/core':
+        specifier: workspace:*
+        version: link:../core
+
 packages:
 
   '@adobe/css-tools@4.4.4':

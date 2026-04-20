@@ -1,0 +1,20 @@
+{
+  "name": "@launchstack/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. (Scaffolding stub — real sources land in later migration steps.)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "sideEffects": false,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}

@@ -21,7 +21,7 @@ import {
   supportsShortVectorSearch,
   type EmbeddingIndexConfig,
 } from "@launchstack/core/embeddings";
-import { storeDimensionTableEmbeddings } from "~/lib/ai/dimension-table-store";
+import { storeDimensionTableEmbeddings } from "@launchstack/core/embeddings";
 import { db } from "~/server/db";
 import {
   documentContextChunks,

@@ -32,7 +32,7 @@ import {
   getCompanyReindexState,
   resolveIngestIndexKey,
   resolveQueryIndexKey,
-} from "~/lib/ai/company-reindex-state";
+} from "@launchstack/core/embeddings";
 
 const selectMock = db.select as jest.Mock;
 const updateMock = db.update as jest.Mock;

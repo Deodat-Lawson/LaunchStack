@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
-import { company } from "@launchstack/core/db/schema";
+import { getDb } from "../db";
+import { company } from "../db/schema";
 
 /**
  * Onyx-style SearchSettings lifecycle for per-company embedding model
@@ -48,7 +48,7 @@ export async function getCompanyReindexState(
   companyId: bigint | number | string,
 ): Promise<CompanyReindexState | null> {
   const id = toNumeric(companyId);
-  const [row] = await db
+  const [row] = await getDb()
     .select({
       id: company.id,
       active: company.activeEmbeddingIndexKey,
@@ -126,7 +126,7 @@ export async function beginReindex(args: {
   const now = new Date();
 
   // Allow STABLE → REINDEXING or FAILED → REINDEXING (retry).
-  const result = await db
+  const result = await getDb()
     .update(company)
     .set({
       pendingEmbeddingIndexKey: args.pendingIndexKey,
@@ -149,7 +149,7 @@ export async function completeReindex(
   const id = toNumeric(companyId);
   const now = new Date();
 
-  const [current] = await db
+  const [current] = await getDb()
     .select({ pending: company.pendingEmbeddingIndexKey })
     .from(company)
     .where(eq(company.id, id))
@@ -159,7 +159,7 @@ export async function completeReindex(
     throw new Error(`completeReindex: company ${id} has no pending index key`);
   }
 
-  await db
+  await getDb()
     .update(company)
     .set({
       activeEmbeddingIndexKey: current.pending,
@@ -178,7 +178,7 @@ export async function failReindex(
   errorMessage: string,
 ): Promise<void> {
   const id = toNumeric(companyId);
-  await db
+  await getDb()
     .update(company)
     .set({
       reindexStatus: "FAILED",

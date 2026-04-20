@@ -29,12 +29,12 @@ import {
   type EmbeddingIndexConfig,
 } from "@launchstack/core/embeddings";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
-import { storeDimensionTableEmbeddings } from "~/lib/ai/dimension-table-store";
+import { storeDimensionTableEmbeddings } from "@launchstack/core/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import {
   completeReindex,
   failReindex,
-} from "~/lib/ai/company-reindex-state";
+} from "@launchstack/core/embeddings";
 
 const BATCH_SIZE = 64;
 

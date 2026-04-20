@@ -1,11 +1,11 @@
 import { sql } from "drizzle-orm";
 
-import { db } from "~/server/db";
+import { getDb } from "../db";
 import {
   documentEmbeddings768,
   documentEmbeddings1024,
-} from "@launchstack/core/db/schema";
-import type { EmbeddingIndexConfig } from "@launchstack/core/embeddings";
+} from "../db/schema";
+import type { EmbeddingIndexConfig } from "./index-registry";
 
 interface StoreDimensionTableEmbeddingsInput {
   documentId: number;
@@ -52,7 +52,7 @@ export async function storeDimensionTableEmbeddings(
     embedding: vectors[idx]!,
   }));
 
-  await db
+  await getDb()
     .insert(table)
     .values(rows)
     .onConflictDoUpdate({

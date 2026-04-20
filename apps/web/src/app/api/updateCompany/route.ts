@@ -13,7 +13,7 @@ import { validateEmbeddingCredentials } from "~/lib/ai/validate-credentials";
 import {
   beginReindex,
   getCompanyReindexState,
-} from "~/lib/ai/company-reindex-state";
+} from "@launchstack/core/embeddings";
 import { inngest } from "~/server/inngest/client";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);

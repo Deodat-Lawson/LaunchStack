@@ -4,7 +4,7 @@ jest.mock("~/server/storage/vercel-blob", () => ({
   isPrivateBlobUrl: jest.fn(() => false),
 }));
 
-import { selectSamplePages } from "~/lib/ocr/complexity";
+import { selectSamplePages } from "@launchstack/core/ocr/complexity";
 
 describe("OCR Complexity Module", () => {
   describe("selectSamplePages", () => {

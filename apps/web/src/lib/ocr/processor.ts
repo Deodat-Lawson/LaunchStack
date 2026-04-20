@@ -4,8 +4,8 @@
  * Can be used by both Inngest background jobs and synchronous processing
  */
 
-import type { RoutingDecision } from "~/lib/ocr/complexity";
-import { renderPagesToImages } from "~/lib/ocr/complexity";
+import type { RoutingDecision } from "@launchstack/core/ocr/complexity";
+import { renderPagesToImages } from "@launchstack/core/ocr/complexity";
 import { enrichPageWithVlm } from "~/lib/ocr/enrichment";
 import {
   createAzureAdapter,
@@ -162,7 +162,7 @@ export async function routeDocument(
     };
   }
 
-  const { determineDocumentRouting } = await import("~/lib/ocr/complexity");
+  const { determineDocumentRouting } = await import("@launchstack/core/ocr/complexity");
   const decision: RoutingDecision = await determineDocumentRouting(documentUrl);
 
   const isNativePDF = decision.provider === "NATIVE_PDF";
@@ -324,7 +324,7 @@ export async function normalizeDocument(
  * chunking that respects function/class boundaries.
  */
 export async function chunkPages(pages: PageContent[], filename?: string): Promise<DocumentChunk[]> {
-  const { isCodeFile, chunkCodeFile } = await import("./code-chunker");
+  const { isCodeFile, chunkCodeFile } = await import("@launchstack/core/ocr/code-chunker");
 
   if (filename && isCodeFile(filename)) {
     console.log(`[Chunking] Using code-aware chunker for ${filename}`);

@@ -14,7 +14,7 @@ export { createLandingAIAdapter } from "./adapters/landingAdapter";
 export {
   determineDocumentRouting,
   type RoutingDecision,
-} from "./complexity";
+} from "@launchstack/core/ocr/complexity";
 
 // Chunking
 export {

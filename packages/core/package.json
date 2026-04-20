@@ -48,6 +48,14 @@
       "types": "./src/ocr/types.ts",
       "default": "./src/ocr/types.ts"
     },
+    "./ocr/complexity": {
+      "types": "./src/ocr/complexity.ts",
+      "default": "./src/ocr/complexity.ts"
+    },
+    "./ocr/code-chunker": {
+      "types": "./src/ocr/code-chunker.ts",
+      "default": "./src/ocr/code-chunker.ts"
+    },
     "./ingestion": {
       "types": "./src/ingestion/index.ts",
       "default": "./src/ingestion/index.ts"

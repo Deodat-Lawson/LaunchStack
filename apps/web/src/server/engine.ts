@@ -14,6 +14,7 @@ import { env } from "~/env";
 import { configureProviders } from "@launchstack/core/providers/registry";
 import { configureChatModels } from "@launchstack/core/llm";
 import { configureSecretBox } from "@launchstack/core/crypto";
+import { configureOcrRouter } from "@launchstack/core/ocr/complexity";
 import { configureEmbeddingIndexRegistry } from "@launchstack/core/embeddings";
 import { configureEmbeddingFactory } from "@launchstack/core/embeddings";
 import { configureCompanyEmbeddingDefaults } from "@launchstack/core/embeddings";
@@ -222,6 +223,9 @@ export function getEngine(): Engine {
 
   // Register the encryption key used by company-credentials secret-box.
   configureSecretBox({ key: config.embeddings.secretsKey });
+
+  // Register the ocr-router URL so complexity.ts reaches the right host.
+  configureOcrRouter({ routerUrl: config.ocr.routerUrl });
 
   const engine = createEngine(config);
   globalHolder.__launchstackEngine = { engine };

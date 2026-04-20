@@ -4,7 +4,7 @@
  * Falls back to env-based heuristics if the sidecar is unavailable.
  */
 
-import type { OCRProvider } from "@launchstack/core/ocr/types";
+import type { OCRProvider } from "./types";
 
 export interface RoutingDecision {
   provider: OCRProvider;
@@ -14,7 +14,20 @@ export interface RoutingDecision {
   visionResult?: { label: string; score: number };
 }
 
-const OCR_ROUTER_URL = process.env.OCR_ROUTER_URL ?? "http://ocr-router:8002";
+/**
+ * OCR-router URL — the vision-classifier + PDF-renderer sidecar. Injected
+ * via configureOcrRouter from the hosting app's CoreConfig; falls back to
+ * the compose-default hostname when nothing has been registered.
+ */
+let _ocrRouterUrl: string | null = null;
+
+export function configureOcrRouter(config: { routerUrl?: string }): void {
+  _ocrRouterUrl = config.routerUrl ?? null;
+}
+
+function getOcrRouterUrl(): string {
+  return _ocrRouterUrl ?? "http://ocr-router:8002";
+}
 
 /**
  * Selects representative sample pages for analysis.
@@ -48,7 +61,7 @@ export async function renderPagesToImages(
   pageIndices: number[]
 ): Promise<Uint8Array[]> {
   try {
-    const response = await fetch(`${OCR_ROUTER_URL}/render-pages`, {
+    const response = await fetch(`${getOcrRouterUrl()}/render-pages`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -72,6 +85,12 @@ export async function renderPagesToImages(
   }
 }
 
+/**
+ * TODO(step 7): replace the remaining process.env reads in this file
+ * (getDefaultOCRProvider and the `env:` object forwarded to the router)
+ * with a full OcrConfig registered via configureOcr. The hosting app
+ * already has the values in CoreConfig.ocr — thread them here.
+ */
 function getDefaultOCRProvider(): OCRProvider {
   const configured = process.env.OCR_DEFAULT_PROVIDER?.toUpperCase();
   if (configured === "MARKER" || configured === "DOCLING") {
@@ -93,7 +112,7 @@ export async function determineDocumentRouting(
   documentUrl: string
 ): Promise<RoutingDecision> {
   try {
-    const response = await fetch(`${OCR_ROUTER_URL}/route`, {
+    const response = await fetch(`${getOcrRouterUrl()}/route`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

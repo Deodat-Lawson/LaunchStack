@@ -1,7 +1,7 @@
 import { POST } from "~/app/api/uploadDocument/route";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db/index";
-import { triggerDocumentProcessing } from "~/lib/ocr/trigger";
+import { triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 
 jest.mock("~/lib/validation", () => {
   const actual = jest.requireActual("~/lib/validation");
@@ -18,7 +18,7 @@ jest.mock("~/server/db/index", () => ({
   },
 }));
 
-jest.mock("~/lib/ocr/trigger", () => ({
+jest.mock("@launchstack/core/ocr/trigger", () => ({
   triggerDocumentProcessing: jest.fn(),
   parseProvider: jest.fn((provider?: string) => provider?.toUpperCase()),
 }));

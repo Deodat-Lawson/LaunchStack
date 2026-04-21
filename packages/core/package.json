@@ -24,6 +24,14 @@
       "types": "./src/storage/index.ts",
       "default": "./src/storage/index.ts"
     },
+    "./jobs": {
+      "types": "./src/jobs/index.ts",
+      "default": "./src/jobs/index.ts"
+    },
+    "./ocr/trigger": {
+      "types": "./src/ocr/trigger.ts",
+      "default": "./src/ocr/trigger.ts"
+    },
     "./db": {
       "types": "./src/db/index.ts",
       "default": "./src/db/index.ts"

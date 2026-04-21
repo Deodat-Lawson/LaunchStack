@@ -31,7 +31,7 @@ export {
   triggerDocumentProcessing,
   parseProvider,
   type TriggerOptions,
-} from "./trigger";
+} from "@launchstack/core/ocr/trigger";
 
 // Processor (shared logic for sync/async processing)
 export {

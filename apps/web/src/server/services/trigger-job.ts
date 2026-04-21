@@ -1,6 +1,7 @@
 import { db } from "~/server/db";
 import { ocrJobs } from "@launchstack/core/db/schema";
-import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
+import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
+import { getEngine } from "~/server/engine";
 
 export interface TriggerJobParams {
   documentUrl: string;
@@ -27,6 +28,7 @@ export interface TriggerJobResult {
  * Triggers the OCR/processing job for a document and records the queued job.
  */
 export async function triggerJob(params: TriggerJobParams): Promise<TriggerJobResult> {
+  getEngine();
   const { jobId, eventIds } = await triggerDocumentProcessing(
     params.documentUrl,
     params.documentName,

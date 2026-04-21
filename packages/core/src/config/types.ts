@@ -1,4 +1,5 @@
 import type { StoragePort } from "../storage/types";
+import type { JobDispatcherPort } from "../jobs/types";
 
 /**
  * CoreConfig is the single parameter to createEngine. The app constructs one
@@ -16,7 +17,13 @@ export interface CoreConfig {
   neo4j?: Neo4jConfig;
   providers: ProvidersConfig;
   storage: StoragePort;
+  jobs?: JobsConfig;
   logger?: LoggerPort;
+}
+
+export interface JobsConfig {
+  /** Port that dispatches background jobs (Inngest, Trigger.dev, etc.). */
+  dispatcher: JobDispatcherPort;
 }
 
 export interface DbConfig {

@@ -1,12 +1,20 @@
 /**
- * Pipeline Trigger Utilities
- * Helper functions to invoke the OCR-to-Vector pipeline
+ * Pipeline trigger utilities.
  *
- * Always dispatches via the configured job runner (JOB_RUNNER, default: Inngest).
- * INNGEST_EVENT_KEY is required. On dispatch failure, throws (no sync fallback).
+ * Dispatches document processing jobs via the configured JobDispatcherPort.
+ * The host (apps/web) wires the port in createEngine, so this module does not
+ * import any runner-specific SDK.
  */
 
-import type { ProcessDocumentEventData, OCRProvider } from "@launchstack/core/ocr/types";
+import { getJobDispatcher } from "../jobs/slot";
+import type { ProcessDocumentEventData, OCRProvider } from "./types";
+
+/**
+ * Inngest / trigger.dev event name used for document processing.
+ * Kept as a named constant so runner implementations can subscribe to the
+ * same literal.
+ */
+export const DOCUMENT_PROCESS_EVENT = "document/process.requested";
 
 /**
  * Options for triggering the document processing pipeline
@@ -38,17 +46,10 @@ export interface TriggerOptions {
 }
 
 /**
- * Check if the sidecar ML service is available
- */
-export function isSidecarEnabled(): boolean {
-  return !!process.env.SIDECAR_URL;
-}
-
-/**
  * Trigger the OCR-to-Vector pipeline for a document.
  *
- * Dispatches via the configured job runner (Inngest or Trigger.dev).
- * Throws on dispatch failure; no sync fallback.
+ * Dispatches via the configured JobDispatcherPort. Throws on dispatch
+ * failure; no sync fallback.
  */
 export async function triggerDocumentProcessing(
   documentUrl: string,
@@ -57,7 +58,7 @@ export async function triggerDocumentProcessing(
   userId: string,
   documentId: number,
   category: string,
-  options?: TriggerOptions
+  options?: TriggerOptions,
 ): Promise<{ jobId: string; eventIds: string[] }> {
   const jobId = generateJobId();
 
@@ -81,27 +82,28 @@ export async function triggerDocumentProcessing(
     },
   };
 
+  const dispatcher = getJobDispatcher();
   console.log(
     `[Trigger] Dispatching job=${jobId}, doc="${documentName}", docId=${documentId}, ` +
-    `mime=${options?.mimeType ?? "none"}, provider=${options?.preferredProvider ?? "auto"}, ` +
-    `runner=${process.env.JOB_RUNNER ?? "inngest"}`
+      `mime=${options?.mimeType ?? "none"}, provider=${options?.preferredProvider ?? "auto"}, ` +
+      `runner=${dispatcher.name}`,
   );
 
-  const { getDispatcher } = await import("~/lib/jobs");
-  const dispatcher = getDispatcher();
-
   try {
-    const result = await dispatcher.dispatch(eventData);
+    const result = await dispatcher.dispatch({
+      name: DOCUMENT_PROCESS_EVENT,
+      data: eventData as unknown as Record<string, unknown>,
+    });
 
     console.log(
       `[Trigger] Successfully queued job=${jobId} via ${dispatcher.name}, ` +
-      `eventIds=${result.eventIds.length}`
+        `eventIds=${result.eventIds.length}`,
     );
-    return result;
+    return { jobId, eventIds: result.eventIds };
   } catch (error) {
     console.error(`[Trigger] Job dispatch failed for job=${jobId}:`, error);
     throw new Error(
-      `Job dispatch failed for job=${jobId}: ${error instanceof Error ? error.message : String(error)}`
+      `Job dispatch failed for job=${jobId}: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 }

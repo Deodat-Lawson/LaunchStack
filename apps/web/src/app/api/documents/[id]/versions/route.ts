@@ -36,7 +36,8 @@ import {
   ocrJobs,
   users,
 } from "@launchstack/core/db/schema";
-import { parseProvider, triggerDocumentProcessing } from "~/lib/ocr/trigger";
+import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
+import { getEngine } from "~/server/engine";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -278,6 +279,7 @@ export async function POST(
       // chunk/structure/metadata row gets tagged with this specific version.
       // Old version chunks stay indexed under their own versionId and are
       // hidden from RAG results by the version filter in the retrievers.
+      getEngine();
       const { jobId, eventIds } = await triggerDocumentProcessing(
         documentUrl,
         doc.title,

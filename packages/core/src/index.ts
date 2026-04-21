@@ -10,6 +10,7 @@
 import { createDb, configureDatabase, type Db, type DbClient } from "./db";
 import { configureNeo4j, getNeo4jDriver, type Driver } from "./graph/neo4j-client";
 import { configureStorage } from "./storage/slot";
+import { configureJobDispatcher } from "./jobs/slot";
 import type { CoreConfig } from "./config/types";
 
 export * from "./config";
@@ -47,6 +48,9 @@ export function createEngine(config: CoreConfig): Engine {
   const dbHandle = createDb(config.db);
   configureDatabase(dbHandle.db);
   configureStorage(config.storage);
+  if (config.jobs?.dispatcher) {
+    configureJobDispatcher(config.jobs.dispatcher);
+  }
   configureNeo4j(config.neo4j ? {
     uri: config.neo4j.uri,
     user: config.neo4j.user,

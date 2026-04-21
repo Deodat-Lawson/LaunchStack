@@ -7,7 +7,7 @@ import { Button } from "~/app/employer/documents/components/ui/button";
 import { Card } from "~/app/employer/documents/components/ui/card";
 import { cn } from "~/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "~/app/employer/documents/components/ui/tabs";
-import { TEMPLATE_REGISTRY, type TemplateField } from "~/lib/legal-templates/template-registry";
+import { TEMPLATE_REGISTRY, type TemplateField } from "@launchstack/features/legal-templates";
 
 export interface DocumentTemplate {
   id: string;

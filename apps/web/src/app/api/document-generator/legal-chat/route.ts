@@ -7,7 +7,7 @@ import { getChatModel } from "~/lib/models";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
-import { TEMPLATE_REGISTRY } from "~/lib/legal-templates/template-service";
+import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
 import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
 
 export const runtime = "nodejs";

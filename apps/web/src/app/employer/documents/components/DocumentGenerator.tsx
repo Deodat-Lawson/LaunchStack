@@ -16,13 +16,13 @@ import { DocumentGeneratorEditor } from './DocumentGeneratorEditor';
 import { LegalChatbot } from './LegalChatbot';
 import { Loader2 } from 'lucide-react';
 import type { Citation } from './generator';
-import { TEMPLATE_REGISTRY, type TemplateField } from '~/lib/legal-templates/template-registry';
-import type { EditorSection } from '~/lib/legal-templates/section-builders';
-import { parseLegalDocumentHtmlToSections } from '~/lib/legal-templates/html-to-sections';
+import { TEMPLATE_REGISTRY, type TemplateField } from '@launchstack/features/legal-templates';
+import type { EditorSection } from '@launchstack/features/legal-templates';
+import { parseLegalDocumentHtmlToSections } from '@launchstack/features/legal-templates';
 import {
   buildTemplateFieldDataForDocx,
   extractFieldValuesFromSections,
-} from '~/lib/legal-templates/legal-document-validation';
+} from '@launchstack/features/legal-templates';
 
 interface GeneratedDocument {
   id: string;

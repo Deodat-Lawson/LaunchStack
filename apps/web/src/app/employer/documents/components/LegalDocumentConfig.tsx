@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "~/app/employer/documents/components/ui/select";
 import { Card } from "~/app/employer/documents/components/ui/card";
-import type { TemplateField } from "~/lib/legal-templates/template-registry";
+import type { TemplateField } from "@launchstack/features/legal-templates";
 
 interface LegalDocumentTemplate {
   id: string;

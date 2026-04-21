@@ -16,12 +16,18 @@
     "./adeu": {
       "types": "./src/adeu/index.ts",
       "default": "./src/adeu/index.ts"
+    },
+    "./legal-templates": {
+      "types": "./src/legal-templates/index.ts",
+      "default": "./src/legal-templates/index.ts"
     }
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@launchstack/core": "workspace:*"
+    "@launchstack/core": "workspace:*",
+    "docxtemplater": "^3.68.3",
+    "pizzip": "^3.2.0"
   }
 }

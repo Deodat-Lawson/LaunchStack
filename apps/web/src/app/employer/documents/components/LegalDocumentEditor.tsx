@@ -33,15 +33,15 @@ import { Button } from "~/app/employer/documents/components/ui/button";
 import { Input } from "~/app/employer/documents/components/ui/input";
 import { Textarea } from "~/app/employer/documents/components/ui/textarea";
 import { cn } from "~/lib/utils";
-import type { EditorSection } from "~/lib/legal-templates/section-builders";
-import type { TemplateField } from "~/lib/legal-templates/template-registry";
+import type { EditorSection } from "@launchstack/features/legal-templates";
+import type { TemplateField } from "@launchstack/features/legal-templates";
 import {
   type FieldValidationError,
   buildTemplateFieldDataForDocx,
   extractFieldValuesFromSections,
   validateDocument,
-} from "~/lib/legal-templates/legal-document-validation";
-import { TEMPLATE_REGISTRY } from "~/lib/legal-templates/template-registry";
+} from "@launchstack/features/legal-templates";
+import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
 
 interface LegalDocumentEditorProps {
   initialTitle: string;

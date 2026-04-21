@@ -4,8 +4,8 @@ import { z } from "zod";
 import {
   generateDocument,
   TEMPLATE_REGISTRY,
-} from "~/lib/legal-templates/template-service";
-import { buildEditorSections } from "~/lib/legal-templates/section-builders";
+} from "@launchstack/features/legal-templates";
+import { buildEditorSections } from "@launchstack/features/legal-templates";
 
 export const runtime = "nodejs";
 

@@ -24,7 +24,7 @@ import {
   HoverCardContent,
 } from "~/app/employer/documents/components/ui/hover-card";
 import { cn } from "~/lib/utils";
-import { TEMPLATE_REGISTRY } from "~/lib/legal-templates/template-registry";
+import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────

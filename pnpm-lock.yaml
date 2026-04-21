@@ -582,6 +582,12 @@ importers:
       '@launchstack/core':
         specifier: workspace:*
         version: link:../core
+      docxtemplater:
+        specifier: ^3.68.3
+        version: 3.68.3
+      pizzip:
+        specifier: ^3.2.0
+        version: 3.2.0
 
 packages:
 

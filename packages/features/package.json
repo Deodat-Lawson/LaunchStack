@@ -84,6 +84,10 @@
     "./client-prospector/db": {
       "types": "./src/client-prospector/db.ts",
       "default": "./src/client-prospector/db.ts"
+    },
+    "./doc-ingestion": {
+      "types": "./src/doc-ingestion/index.ts",
+      "default": "./src/doc-ingestion/index.ts"
     }
   },
   "scripts": {

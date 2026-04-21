@@ -26,9 +26,14 @@ import type {
   PageContent,
   PipelineResult,
 } from "@launchstack/core/ocr/types";
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/core/db";
 import { ocrJobs, documentContextChunks } from "@launchstack/core/db/schema";
-import { debitTokens, embeddingTokens, ocrTokens, ocrProviderToTokenKey } from "~/lib/credits";
+import {
+  creditsDebitSafe,
+  embeddingTokens,
+  ocrTokens,
+  ocrProviderToTokenKey,
+} from "@launchstack/core/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
 
 import type {
@@ -69,6 +74,7 @@ async function savePipelineState(
   data: unknown,
 ): Promise<void> {
   return withDbRetry(async () => {
+    const db = getDb();
     const [job] = await db
       .select({ ocrResult: ocrJobs.ocrResult })
       .from(ocrJobs)
@@ -84,6 +90,7 @@ async function savePipelineState(
 
 async function loadPipelineState<T>(jobId: string, key: string): Promise<T> {
   return withDbRetry(async () => {
+    const db = getDb();
     const [job] = await db
       .select({ ocrResult: ocrJobs.ocrResult })
       .from(ocrJobs)
@@ -120,7 +127,7 @@ async function maybeMarkProcessing(
 ): Promise<void> {
   if (!shouldUpdateStatus) return;
 
-  await db
+  await getDb()
     .update(ocrJobs)
     .set({
       status: "processing",
@@ -212,7 +219,7 @@ async function vectorizeWithIndex(
     totalStored += result.stored;
   }
 
-  const rows = await db
+  const rows = await getDb()
     .select({ id: documentContextChunks.id, content: documentContextChunks.content })
     .from(documentContextChunks)
     .where(eq(documentContextChunks.documentId, BigInt(documentId)));
@@ -272,9 +279,10 @@ async function maybeSyncToNeo4j(
   if (!neo4jUri) return;
 
   await runStep("step-g-neo4j-sync", async () => {
-    // Ensure getEngine() has run so configureNeo4j has registered credentials.
-    const { getEngine } = await import("~/server/engine");
-    getEngine();
+    // The host (apps/web) is expected to have run getEngine() by the time
+    // doc ingestion fires, which calls configureNeo4j with the Neo4j
+    // credentials. isNeo4jConfigured() returns false when that hasn't
+    // happened, so we can short-circuit without importing apps/web code.
     const { isNeo4jConfigured, checkNeo4jHealth } = await import(
       "@launchstack/core/graph"
     );
@@ -549,14 +557,14 @@ export async function runDocIngestionTool(
           chunks.reduce((sum, c) => sum + c.content.length / 4, 0),
         );
         const embedCost = embeddingTokens(estimatedTokens);
-        await debitTokens({
+        await creditsDebitSafe({
           companyId: bigCompanyId,
-          amount: embedCost,
+          tokens: embedCost,
           service: "embedding",
           description: `Embed ${totalStored} chunks for document ${documentId}`,
           referenceId: String(documentId),
           metadata: { estimatedTokens, chunks: totalStored },
-        }).catch((err) => console.warn("[DocIngestion] Embedding credit debit failed:", err));
+        });
       }
 
       // OCR credits: based on provider and page count
@@ -564,14 +572,18 @@ export async function runDocIngestionTool(
         const providerKey = ocrProviderToTokenKey(normSummary.provider);
         const credits = ocrTokens(normSummary.pageCount, providerKey);
         if (credits > 0) {
-          await debitTokens({
+          await creditsDebitSafe({
             companyId: bigCompanyId,
-            amount: credits,
-            service: `ocr_${providerKey}` as any,
+            tokens: credits,
+            service: `ocr_${providerKey}` as
+              | "ocr_azure"
+              | "ocr_landingai"
+              | "ocr_datalab"
+              | "ocr_native",
             description: `OCR ${normSummary.pageCount} pages via ${normSummary.provider}`,
             referenceId: String(documentId),
             metadata: { pages: normSummary.pageCount, provider: normSummary.provider },
-          }).catch((err) => console.warn("[DocIngestion] OCR credit debit failed:", err));
+          });
         }
       }
     }

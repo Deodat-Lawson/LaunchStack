@@ -8,8 +8,8 @@ import type {
   SourceAdapter,
   SourceAdapterOptions,
   StandardizedDocument,
-} from "@launchstack/core/ingestion/types";
-import { detectSourceType } from "@launchstack/core/ingestion/types";
+} from "../types";
+import { detectSourceType } from "../types";
 
 const PAGE_CHAR_LIMIT = 4000;
 const BINARY_THRESHOLD = 0.3; // treat as binary if >30% non-printable/replacement

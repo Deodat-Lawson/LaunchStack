@@ -14,7 +14,7 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   StandardizedPage,
-} from "@launchstack/core/ingestion/types";
+} from "../types";
 
 const SKIP_PATTERNS = [
   /^__MACOSX\//,

@@ -2,7 +2,7 @@ import type {
   SourceAdapter,
   SourceAdapterOptions,
   StandardizedDocument,
-} from "@launchstack/core/ingestion/types";
+} from "../types";
 
 export class PdfAdapter implements SourceAdapter {
   readonly name = "PdfAdapter";
@@ -28,7 +28,7 @@ export class PdfAdapter implements SourceAdapter {
     console.log(`[PdfAdapter] Delegating to existing OCR pipeline: url=${documentUrl.substring(0, 100)}`);
 
     const { routeDocument, normalizeDocument } = await import(
-      "@launchstack/core/ocr/processor"
+      "../../ocr/processor"
     );
 
     const routeStart = Date.now();

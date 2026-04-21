@@ -11,9 +11,9 @@ import {
   toNormalizedDocument,
   type SourceAdapterOptions,
   type StandardizedDocument,
-} from "@launchstack/core/ingestion/types";
-import type { NormalizedDocument } from "@launchstack/core/ocr/types";
-import { fetchFile } from "~/lib/storage";
+} from "./types";
+import type { NormalizedDocument } from "../ocr/types";
+import { getStoragePort } from "../storage/slot";
 
 export interface IngestOptions extends SourceAdapterOptions {
   mimeType?: string;
@@ -65,7 +65,7 @@ export async function ingestDocument(
   const isUrl = typeof input === "string" && (input.startsWith("http://") || input.startsWith("https://"));
   if (isUrl && !adapter.needsUrl) {
     console.log(`[IngestionRouter] Pre-fetching URL via fetchFile`);
-    const res = await fetchFile(input);
+    const res = await getStoragePort().download(input);
     if (!res.ok) {
       throw new Error(`[IngestionRouter] Failed to fetch document: ${res.status} ${res.statusText}`);
     }

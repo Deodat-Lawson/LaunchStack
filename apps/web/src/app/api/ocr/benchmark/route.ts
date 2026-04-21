@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { routeDocument, normalizeDocument } from "@launchstack/core/ocr/processor";
-import { ingestDocument } from "~/lib/ingestion/router";
+import { ingestDocument } from "@launchstack/core/ingestion/router";
 
 export const runtime = "nodejs";
 export const maxDuration = 600;

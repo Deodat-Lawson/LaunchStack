@@ -2,7 +2,7 @@ import type {
   SourceAdapter,
   SourceAdapterOptions,
   StandardizedDocument,
-} from "@launchstack/core/ingestion/types";
+} from "../types";
 
 export class TextAdapter implements SourceAdapter {
   readonly name = "TextAdapter";

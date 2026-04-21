@@ -416,7 +416,7 @@ export async function runDocIngestionTool(
         normSummary = await runStep(
           "step-ab-ingest",
           async (): Promise<NormalizeSummary> => {
-            const { ingestToNormalized } = await import("~/lib/ingestion");
+            const { ingestToNormalized } = await import("@launchstack/core/ingestion");
             const normalizedDoc = await ingestToNormalized(documentUrl, {
               mimeType,
               filename: routingFilename,
@@ -437,7 +437,7 @@ export async function runDocIngestionTool(
         const result = await runStep(
           "step-ab-ingest",
           async (): Promise<NormalizationResult> => {
-            const { ingestToNormalized } = await import("~/lib/ingestion");
+            const { ingestToNormalized } = await import("@launchstack/core/ingestion");
             const normalizedDoc = await ingestToNormalized(documentUrl, {
               mimeType,
               filename: routingFilename,

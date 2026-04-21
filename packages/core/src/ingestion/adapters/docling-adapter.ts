@@ -15,8 +15,9 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   StandardizedPage,
-} from "@launchstack/core/ingestion/types";
-import { createDoclingAdapter } from "@launchstack/core/ocr/adapters/ossAdapter";
+} from "../types";
+import { createDoclingAdapter } from "../../ocr/adapters/ossAdapter";
+import { getOcrConfig } from "../../ocr/config";
 
 const OFFICE_MIMES = new Set([
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -43,7 +44,7 @@ export class DoclingIngestionAdapter implements SourceAdapter {
   readonly needsUrl = true;
 
   canHandle(mimeType: string, extension: string): boolean {
-    if (!process.env.OCR_WORKER_URL) return false;
+    if (!getOcrConfig().workerUrl) return false;
     return OFFICE_MIMES.has(mimeType) || OFFICE_EXTS.has(extension.toLowerCase());
   }
 

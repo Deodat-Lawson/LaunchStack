@@ -9,7 +9,8 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   IngestionProvider,
-} from "@launchstack/core/ingestion/types";
+} from "../types";
+import { getOcrConfig } from "../../ocr/config";
 
 export class ImageAdapter implements SourceAdapter {
   readonly name = "ImageAdapter";
@@ -106,20 +107,14 @@ export class ImageAdapter implements SourceAdapter {
 
   // TODO: Make this select based on a workflow determining which is best
   private selectProvider(): "azure" | "landing_ai" | "tesseract" {
-    if (process.env.LANDING_AI_API_KEY) {
-      return "landing_ai";
-    }
-    if (
-      process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT &&
-      process.env.AZURE_DOC_INTELLIGENCE_KEY
-    ) {
-      return "azure";
-    }
+    const cfg = getOcrConfig();
+    if (cfg.landingAi?.apiKey) return "landing_ai";
+    if (cfg.azure?.endpoint && cfg.azure?.key) return "azure";
     return "tesseract";
   }
 
   private async processWithAzure(input: string | Buffer) {
-    const { createAzureAdapter } = await import("~/lib/ocr/adapters");
+    const { createAzureAdapter } = await import("../../ocr/adapters/azureAdapter");
     const adapter = createAzureAdapter();
 
     const url = this.resolveUrl(input);
@@ -135,7 +130,7 @@ export class ImageAdapter implements SourceAdapter {
   }
 
   private async processWithLandingAI(input: string | Buffer) {
-    const { createLandingAIAdapter } = await import("~/lib/ocr/adapters");
+    const { createLandingAIAdapter } = await import("../../ocr/adapters/landingAdapter");
     const adapter = createLandingAIAdapter();
 
     const url = this.resolveUrl(input);

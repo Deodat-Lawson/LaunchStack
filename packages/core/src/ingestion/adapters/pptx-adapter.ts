@@ -3,7 +3,7 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   StandardizedPage,
-} from "@launchstack/core/ingestion/types";
+} from "../types";
 
 export class PptxAdapter implements SourceAdapter {
   readonly name = "PptxAdapter";

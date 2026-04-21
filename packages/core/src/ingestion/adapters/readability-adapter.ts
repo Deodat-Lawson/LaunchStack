@@ -12,8 +12,8 @@ import type {
   SourceAdapterOptions,
   StandardizedDocument,
   StandardizedPage,
-} from "@launchstack/core/ingestion/types";
-import type { ExtractedTable } from "@launchstack/core/ocr/types";
+} from "../types";
+import type { ExtractedTable } from "../../ocr/types";
 
 export class ReadabilityAdapter implements SourceAdapter {
   readonly name = "ReadabilityAdapter";

@@ -100,6 +100,10 @@
       "types": "./src/ingestion/heading-chunker.ts",
       "default": "./src/ingestion/heading-chunker.ts"
     },
+    "./ingestion/router": {
+      "types": "./src/ingestion/router.ts",
+      "default": "./src/ingestion/router.ts"
+    },
     "./providers": {
       "types": "./src/providers/index.ts",
       "default": "./src/providers/index.ts"
@@ -136,23 +140,36 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
+  "devDependencies": {
+    "@types/jsdom": "^28.0.1",
+    "@types/turndown": "^5.0.6"
+  },
   "dependencies": {
     "@langchain/anthropic": "^1.3.3",
     "@langchain/core": "^0.3.74",
     "@langchain/google-genai": "^2.1.3",
     "@langchain/ollama": "^0.1.6",
     "@langchain/openai": "^0.6.11",
+    "@mozilla/readability": "^0.6.0",
+    "cheerio": "^1.2.0",
     "drizzle-orm": "^0.45.1",
+    "jsdom": "^29.0.2",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.11.0",
     "openai": "^4.62.1",
     "pdf-lib": "^1.17.1",
     "pdfjs-serverless": "^1.1.0",
     "postgres": "^3.4.7",
-    "string-similarity-js": "^2.1.4"
+    "string-similarity-js": "^2.1.4",
+    "turndown": "^7.2.2",
+    "xlsx": "^0.18.5"
   },
   "peerDependencies": {
-    "neo4j-driver": "^6.0.0"
+    "neo4j-driver": "^6.0.0",
+    "tesseract.js": "^7.0.0"
   },
   "peerDependenciesMeta": {
-    "neo4j-driver": { "optional": true }
+    "neo4j-driver": { "optional": true },
+    "tesseract.js": { "optional": true }
   }
 }

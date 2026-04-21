@@ -15,7 +15,7 @@ import {
   applyEditsAsMarkdown,
   diffDocxFiles,
   AdeuServiceError,
-} from "~/lib/adeu/client";
+} from "@launchstack/features/adeu";
 
 const mockFetch = jest.fn();
 global.fetch = mockFetch;

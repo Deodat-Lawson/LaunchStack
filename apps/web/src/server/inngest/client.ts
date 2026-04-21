@@ -2,7 +2,7 @@ import { EventSchemas, Inngest } from "inngest";
 import type { ProcessDocumentEventData } from "@launchstack/core/ocr/types";
 import type { TrendSearchEventData } from "~/lib/tools/trend-search/types";
 import type { ProspectorEventData } from "~/lib/tools/client-prospector/types";
-import type { DocumentEdit, ReviewAction } from "~/lib/adeu/types";
+import type { DocumentEdit, ReviewAction } from "@launchstack/features/adeu";
 
 export type ProcessDocumentEvent = {
   name: "document/process.requested";

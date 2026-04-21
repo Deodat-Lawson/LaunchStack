@@ -22,7 +22,7 @@ import { inngest } from "../client";
 import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
 import { putFile, fetchBlob } from "~/server/storage/vercel-blob";
-import { processDocumentBatch, AdeuServiceError } from "~/lib/adeu/client";
+import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
 
 export const modifyDocument = inngest.createFunction(
   {

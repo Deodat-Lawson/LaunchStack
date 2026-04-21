@@ -4,8 +4,8 @@
  */
 
 import { POST } from "~/app/api/legal/apply-edits/route";
-import { processDocumentBatch } from "~/lib/adeu/client";
-import type { BatchSummary } from "~/lib/adeu/types";
+import { processDocumentBatch } from "@launchstack/features/adeu";
+import type { BatchSummary } from "@launchstack/features/adeu";
 
 // Mock Clerk auth
 jest.mock("@clerk/nextjs/server", () => ({
@@ -13,7 +13,7 @@ jest.mock("@clerk/nextjs/server", () => ({
 }));
 
 // Mock Adeu client
-jest.mock("~/lib/adeu/client", () => ({
+jest.mock("@launchstack/features/adeu", () => ({
   processDocumentBatch: jest.fn(),
   AdeuServiceError: class AdeuServiceError extends Error {
     statusCode: number;

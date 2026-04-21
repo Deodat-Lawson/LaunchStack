@@ -20,9 +20,9 @@ import {
     applyEditsAsMarkdown,
     diffDocxFiles,
     AdeuServiceError,
-} from "~/lib/adeu/client";
+} from "@launchstack/features/adeu";
 
-import type { BatchSummary } from "~/lib/adeu/types";
+import type { BatchSummary } from "@launchstack/features/adeu";
 
 // ---------------------------------------------------------------------------
 // Mock fetch globally

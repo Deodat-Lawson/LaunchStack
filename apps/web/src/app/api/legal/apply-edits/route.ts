@@ -14,8 +14,8 @@ import {
   readDocx,
   AdeuConfigError,
   AdeuServiceError,
-} from "~/lib/adeu/client";
-import type { DocumentEdit } from "~/lib/adeu/types";
+  type DocumentEdit,
+} from "@launchstack/features/adeu";
 
 export const runtime = "nodejs";
 

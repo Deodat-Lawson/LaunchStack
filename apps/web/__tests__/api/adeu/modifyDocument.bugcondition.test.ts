@@ -28,7 +28,7 @@ jest.mock("~/server/storage/vercel-blob", () => ({
     putFile: jest.fn(),
 }));
 
-jest.mock("~/lib/adeu/client", () => ({
+jest.mock("@launchstack/features/adeu", () => ({
     processDocumentBatch: jest.fn(),
     AdeuServiceError: class AdeuServiceError extends Error {
         statusCode: number;
@@ -45,7 +45,7 @@ jest.mock("~/lib/adeu/client", () => ({
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
 import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
-import { processDocumentBatch } from "~/lib/adeu/client";
+import { processDocumentBatch } from "@launchstack/features/adeu";
 
 // ---------------------------------------------------------------------------
 // Helpers

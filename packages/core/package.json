@@ -1,14 +1,36 @@
 {
   "name": "@launchstack/core",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
-  "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. Publishable once the full API surface lands (see plan).",
+  "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. Framework-agnostic — runs under Next, Node, or any host that supplies a StoragePort, JobDispatcherPort, and CreditsPort.",
   "license": "MIT",
+  "author": "Launchstack",
+  "homepage": "https://github.com/launchstack/launchstack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/launchstack/launchstack.git",
+    "directory": "packages/core"
+  },
+  "keywords": [
+    "rag",
+    "ingestion",
+    "ocr",
+    "llm",
+    "embeddings",
+    "knowledge-graph",
+    "document-processing"
+  ],
   "engines": {
     "node": ">=20"
   },
   "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "exports": {
@@ -153,7 +175,156 @@
       "default": "./src/embeddings/index.ts"
     }
   },
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./config": {
+        "types": "./dist/config/index.d.ts",
+        "default": "./dist/config/index.js"
+      },
+      "./storage": {
+        "types": "./dist/storage/index.d.ts",
+        "default": "./dist/storage/index.js"
+      },
+      "./jobs": {
+        "types": "./dist/jobs/index.d.ts",
+        "default": "./dist/jobs/index.js"
+      },
+      "./credits": {
+        "types": "./dist/credits/index.d.ts",
+        "default": "./dist/credits/index.js"
+      },
+      "./ingestion/entity-extraction": {
+        "types": "./dist/ingestion/entity-extraction.d.ts",
+        "default": "./dist/ingestion/entity-extraction.js"
+      },
+      "./ocr/trigger": {
+        "types": "./dist/ocr/trigger.d.ts",
+        "default": "./dist/ocr/trigger.js"
+      },
+      "./db": {
+        "types": "./dist/db/index.d.ts",
+        "default": "./dist/db/index.js"
+      },
+      "./db/schema": {
+        "types": "./dist/db/schema.d.ts",
+        "default": "./dist/db/schema.js"
+      },
+      "./db/schema/*": {
+        "types": "./dist/db/schema/*.d.ts",
+        "default": "./dist/db/schema/*.js"
+      },
+      "./guardrails": {
+        "types": "./dist/guardrails/index.d.ts",
+        "default": "./dist/guardrails/index.js"
+      },
+      "./graph": {
+        "types": "./dist/graph/index.d.ts",
+        "default": "./dist/graph/index.js"
+      },
+      "./ocr/types": {
+        "types": "./dist/ocr/types.d.ts",
+        "default": "./dist/ocr/types.js"
+      },
+      "./ocr/complexity": {
+        "types": "./dist/ocr/complexity.d.ts",
+        "default": "./dist/ocr/complexity.js"
+      },
+      "./ocr/code-chunker": {
+        "types": "./dist/ocr/code-chunker.d.ts",
+        "default": "./dist/ocr/code-chunker.js"
+      },
+      "./ocr/chunker": {
+        "types": "./dist/ocr/chunker.d.ts",
+        "default": "./dist/ocr/chunker.js"
+      },
+      "./ocr/enrichment": {
+        "types": "./dist/ocr/enrichment.d.ts",
+        "default": "./dist/ocr/enrichment.js"
+      },
+      "./ocr/config": {
+        "types": "./dist/ocr/config.d.ts",
+        "default": "./dist/ocr/config.js"
+      },
+      "./ocr/processor": {
+        "types": "./dist/ocr/processor.d.ts",
+        "default": "./dist/ocr/processor.js"
+      },
+      "./ocr/adapters/datalabAdapter": {
+        "types": "./dist/ocr/adapters/datalabAdapter.d.ts",
+        "default": "./dist/ocr/adapters/datalabAdapter.js"
+      },
+      "./ocr/adapters/ossAdapter": {
+        "types": "./dist/ocr/adapters/ossAdapter.d.ts",
+        "default": "./dist/ocr/adapters/ossAdapter.js"
+      },
+      "./ocr/adapters/azureAdapter": {
+        "types": "./dist/ocr/adapters/azureAdapter.d.ts",
+        "default": "./dist/ocr/adapters/azureAdapter.js"
+      },
+      "./ocr/adapters/landingAdapter": {
+        "types": "./dist/ocr/adapters/landingAdapter.d.ts",
+        "default": "./dist/ocr/adapters/landingAdapter.js"
+      },
+      "./ingestion": {
+        "types": "./dist/ingestion/index.d.ts",
+        "default": "./dist/ingestion/index.js"
+      },
+      "./ingestion/types": {
+        "types": "./dist/ingestion/types.d.ts",
+        "default": "./dist/ingestion/types.js"
+      },
+      "./ingestion/heading-chunker": {
+        "types": "./dist/ingestion/heading-chunker.d.ts",
+        "default": "./dist/ingestion/heading-chunker.js"
+      },
+      "./ingestion/router": {
+        "types": "./dist/ingestion/router.d.ts",
+        "default": "./dist/ingestion/router.js"
+      },
+      "./providers": {
+        "types": "./dist/providers/index.d.ts",
+        "default": "./dist/providers/index.js"
+      },
+      "./providers/registry": {
+        "types": "./dist/providers/registry.d.ts",
+        "default": "./dist/providers/registry.js"
+      },
+      "./providers/reranking": {
+        "types": "./dist/providers/reranking/index.d.ts",
+        "default": "./dist/providers/reranking/index.js"
+      },
+      "./providers/ner": {
+        "types": "./dist/providers/ner/index.d.ts",
+        "default": "./dist/providers/ner/index.js"
+      },
+      "./llm": {
+        "types": "./dist/llm/index.d.ts",
+        "default": "./dist/llm/index.js"
+      },
+      "./llm/types": {
+        "types": "./dist/llm/types.d.ts",
+        "default": "./dist/llm/types.js"
+      },
+      "./crypto": {
+        "types": "./dist/crypto/index.d.ts",
+        "default": "./dist/crypto/index.js"
+      },
+      "./embeddings": {
+        "types": "./dist/embeddings/index.d.ts",
+        "default": "./dist/embeddings/index.js"
+      }
+    }
+  },
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist .tsbuildinfo",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {

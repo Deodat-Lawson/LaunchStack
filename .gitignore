@@ -48,6 +48,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# package build outputs
+packages/*/dist/
+
 # idea files
 .idea
 /.localFiles

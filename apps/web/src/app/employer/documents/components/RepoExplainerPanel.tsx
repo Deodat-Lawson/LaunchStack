@@ -3,7 +3,7 @@
 import { Loader2, Network, Share2 } from "lucide-react";
 import { MermaidDiagram } from "~/app/employer/tools/repo-explainer/MermaidDiagram";
 import { useRepoExplainer } from "~/app/employer/tools/repo-explainer/useRepoExplainer";
-import type { DiagramType } from "~/lib/repo-explainer/types";
+import type { DiagramType } from "@launchstack/features/repo-explainer";
 
 const DIAGRAM_TYPE_OPTIONS: { value: DiagramType; label: string; description: string }[] = [
   { value: "architecture", label: "Architecture", description: "High-level system overview with modules and layers" },

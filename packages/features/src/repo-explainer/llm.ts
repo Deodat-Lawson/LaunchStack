@@ -1,7 +1,10 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
-import { env } from "~/env";
+import {
+  getChatModelByType,
+  normalizeModelContent,
+  isAIModelType,
+  type AIModelType,
+} from "@launchstack/core/llm";
 import type { DiagramType, RepoInfo } from "./types";
 import {
   FILES_TO_EXPLORE_SYSTEM,
@@ -32,7 +35,9 @@ function normalizeLlmpath(path: string, repoPrefix: string): string {
 }
 
 function getDefaultModel(): AIModelType {
-  return (env.server.REPO_EXPLAINER_MODEL as AIModelType) || ("gpt-4o" as AIModelType);
+  const envValue = process.env.REPO_EXPLAINER_MODEL;
+  if (envValue && isAIModelType(envValue)) return envValue;
+  return "gpt-4o";
 }
 
 export async function getFilesToExplore(
@@ -42,7 +47,7 @@ export async function getFilesToExplore(
 ): Promise<string[]> {
   try {
     const user = buildFilesToExploreUserPrompt(tree);
-    const model = getChatModel(getDefaultModel());
+    const model = getChatModelByType(getDefaultModel());
     const systemPrompt = diagramType
       ? getFilesToExploreSystem(diagramType)
       : FILES_TO_EXPLORE_SYSTEM;
@@ -76,7 +81,7 @@ export async function explainRepoWithLlm(
 ): Promise<{ explanation: string; success: boolean; error?: string }> {
   try {
     const prompt = buildUserPrompt(repo, repoContext, instructions);
-    const model = getChatModel(getDefaultModel());
+    const model = getChatModelByType(getDefaultModel());
     const systemPrompt = diagramType
       ? getSystemPrompt(diagramType)
       : SYSTEM_PROMPT;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import type { DiagramType, RepoExplanationResult } from "~/lib/repo-explainer/types";
+import type { DiagramType, RepoExplanationResult } from "@launchstack/features/repo-explainer";
 
 interface ApiResponse {
   success: boolean;

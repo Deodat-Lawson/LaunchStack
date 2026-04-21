@@ -7,10 +7,12 @@ import { env } from "~/env";
 import {
   parseGitHubUrl,
   getRepoContext,
-} from "~/lib/repo-explainer";
-import { explainRepoWithLlm } from "~/lib/repo-explainer/llm";
-import { extractMermaidCode, extractSummary } from "~/lib/repo-explainer/prompts";
-import type { RepoInfo, RepoExplanationRequest } from "~/lib/repo-explainer/types";
+  explainRepoWithLlm,
+  extractMermaidCode,
+  extractSummary,
+  type RepoInfo,
+  type RepoExplanationRequest,
+} from "@launchstack/features/repo-explainer";
 import { validateRequestBody } from "~/lib/validation";
 import {
   createSuccessResponse,

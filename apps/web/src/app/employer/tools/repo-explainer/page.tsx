@@ -7,7 +7,7 @@ import { ThemeToggle } from "~/app/_components/ThemeToggle";
 import homeStyles from "~/styles/Employer/Home.module.css";
 import { MermaidDiagram } from "./MermaidDiagram";
 import { useRepoExplainer } from "./useRepoExplainer";
-import type { DiagramType } from "~/lib/repo-explainer/types";
+import type { DiagramType } from "@launchstack/features/repo-explainer";
 
 const DIAGRAM_TYPE_OPTIONS: { value: DiagramType; label: string }[] = [
   { value: "architecture", label: "Architecture" },

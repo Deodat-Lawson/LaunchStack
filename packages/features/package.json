@@ -28,12 +28,17 @@
     "./voice/whisper-js": {
       "types": "./src/voice/whisper-js.ts",
       "default": "./src/voice/whisper-js.ts"
+    },
+    "./repo-explainer": {
+      "types": "./src/repo-explainer/index.ts",
+      "default": "./src/repo-explainer/index.ts"
     }
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.74",
     "@launchstack/core": "workspace:*",
     "docxtemplater": "^3.68.3",
     "openai": "^4.62.1",

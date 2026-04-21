@@ -21,6 +21,10 @@
       "types": "./src/legal-templates/index.ts",
       "default": "./src/legal-templates/index.ts"
     },
+    "./legal-templates/template-service": {
+      "types": "./src/legal-templates/template-service.ts",
+      "default": "./src/legal-templates/template-service.ts"
+    },
     "./voice": {
       "types": "./src/voice/index.ts",
       "default": "./src/voice/index.ts"

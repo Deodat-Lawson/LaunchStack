@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 import "./src/env";
@@ -8,8 +9,14 @@ const useStandalone =
   process.env.STANDALONE_BUILD === "1" || process.platform !== "win32";
 
 const config: NextConfig = {
-  // Standalone output for Docker deployment (smaller production image)
+  // Standalone output for Docker deployment (smaller production image).
+  // outputFileTracingRoot pins the workspace root so Next traces workspace
+  // packages (@launchstack/core, @launchstack/features) into the standalone
+  // bundle instead of inferring the root and emitting noisy warnings.
   output: useStandalone ? "standalone" : undefined,
+  outputFileTracingRoot: useStandalone
+    ? path.join(__dirname, "../../")
+    : undefined,
 
   experimental: {
     middlewareClientMaxBodySize: "128mb",

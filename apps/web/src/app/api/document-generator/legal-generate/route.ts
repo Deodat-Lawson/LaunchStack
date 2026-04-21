@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import {
-  generateDocument,
   TEMPLATE_REGISTRY,
+  buildEditorSections,
 } from "@launchstack/features/legal-templates";
-import { buildEditorSections } from "@launchstack/features/legal-templates";
+import { generateDocument } from "@launchstack/features/legal-templates/template-service";
 
 export const runtime = "nodejs";
 

@@ -16,12 +16,11 @@
  * This is a pure extraction step — it does NOT write to the database.
  */
 
-import { z } from "zod";
+import { z, type ZodType } from "zod";
 import { and, eq, isNull, or, sql } from "drizzle-orm";
 
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/core/db";
 import { documentContextChunks, document as documentTable } from "@launchstack/core/db/schema";
-import { generateStructured } from "~/lib/llm";
 import {
     EXTRACTION_SYSTEM_PROMPT,
     buildChunkExtractionPrompt,
@@ -203,9 +202,30 @@ type RawFact = z.infer<typeof MetadataFactSchema>;
 // Public API
 // ============================================================================
 
+/**
+ * Structured LLM call contract. Shape intentionally mirrors Vercel AI SDK's
+ * `generateObject` (system + prompt + schema) so hosts can adapt their
+ * existing LLM layer with a thin wrapper. Callers pass a concrete function
+ * — apps/web passes its `generateStructured` from ~/lib/llm.
+ */
+export type GenerateStructuredFn = <TSchema extends ZodType>(
+    input: {
+        system?: string;
+        prompt: string;
+        schema: TSchema;
+        schemaName?: string;
+    },
+) => Promise<z.infer<TSchema>>;
+
 export interface ExtractorInput {
     documentId: number;
     companyId: string;
+    /**
+     * Host-supplied structured-extraction function. The feature has no
+     * opinion on which LLM provider to call — apps/web threads its own
+     * `generateStructured` through here.
+     */
+    generate: GenerateStructuredFn;
 }
 
 /**
@@ -217,7 +237,8 @@ export interface ExtractorInput {
 export async function extractCompanyFacts(
     input: ExtractorInput,
 ): Promise<ExtractedCompanyFacts | null> {
-    const { documentId } = input;
+    const { documentId, generate } = input;
+    const db = getDb();
 
     // 1. Fetch document name
     const [doc] = await db
@@ -313,7 +334,7 @@ export async function extractCompanyFacts(
 
     // 4. Extract from each batch in parallel (capped concurrency)
     const batchResults = await runWithConcurrency(
-        batches.map((batch, idx) => () => callLLM(doc.title, batch.join("\n\n"), idx, batches.length)),
+        batches.map((batch, idx) => () => callLLM(generate, doc.title, batch.join("\n\n"), idx, batches.length)),
         MAX_CONCURRENCY,
     );
 
@@ -401,14 +422,14 @@ async function runWithConcurrency<T>(
  * the pre-migration behavior that treated partial extraction as acceptable.
  */
 async function callLLM(
+    generate: GenerateStructuredFn,
     documentName: string,
     batchContent: string,
     batchIndex: number,
     totalBatches: number,
 ): Promise<ExtractionOutput | null> {
     try {
-        return await generateStructured({
-            capability: "smallExtraction",
+        return await generate({
             system: EXTRACTION_SYSTEM_PROMPT,
             prompt: buildChunkExtractionPrompt(
                 documentName,

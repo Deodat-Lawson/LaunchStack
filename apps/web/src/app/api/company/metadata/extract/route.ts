@@ -20,10 +20,11 @@ import { eq, sql } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users, document as documentTable, documentContextChunks } from "@launchstack/core/db/schema";
 import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
-import { extractCompanyFacts } from "~/lib/tools/company-metadata/extractor";
-import { mergeCompanyMetadata } from "~/lib/tools/company-metadata/merger";
-import { createEmptyMetadata } from "~/lib/tools/company-metadata/types";
-import type { CompanyMetadataJSON, MetadataDiff } from "~/lib/tools/company-metadata/types";
+import { extractCompanyFacts } from "@launchstack/features/company-metadata";
+import { mergeCompanyMetadata } from "@launchstack/features/company-metadata";
+import { createEmptyMetadata } from "@launchstack/features/company-metadata";
+import type { CompanyMetadataJSON, MetadataDiff } from "@launchstack/features/company-metadata";
+import { generateStructured } from "~/lib/llm";
 
 export async function POST(request: Request) {
     try {
@@ -152,6 +153,11 @@ async function processDocuments(
         const extracted = await extractCompanyFacts({
             documentId: doc.id,
             companyId,
+            generate: (input) =>
+                generateStructured({
+                    ...input,
+                    capability: "smallExtraction",
+                }),
         });
 
         if (!extracted) continue;

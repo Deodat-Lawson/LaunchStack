@@ -3,7 +3,7 @@
 import React from "react";
 import { FileText, Clock, Cpu, Hash } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "~/app/employer/documents/components/ui/card";
-import type { ProvenanceInfo } from "~/lib/tools/company-metadata/types";
+import type { ProvenanceInfo } from "@launchstack/features/company-metadata";
 
 interface ProvenanceCardProps {
     provenance: ProvenanceInfo;

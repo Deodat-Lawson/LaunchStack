@@ -32,6 +32,10 @@
     "./repo-explainer": {
       "types": "./src/repo-explainer/index.ts",
       "default": "./src/repo-explainer/index.ts"
+    },
+    "./company-metadata": {
+      "types": "./src/company-metadata/index.ts",
+      "default": "./src/company-metadata/index.ts"
     }
   },
   "scripts": {
@@ -41,8 +45,10 @@
     "@langchain/core": "^0.3.74",
     "@launchstack/core": "workspace:*",
     "docxtemplater": "^3.68.3",
+    "drizzle-orm": "^0.45.1",
     "openai": "^4.62.1",
-    "pizzip": "^3.2.0"
+    "pizzip": "^3.2.0",
+    "zod": "^3.23.8"
   },
   "peerDependencies": {
     "sherpa-onnx-node": "^1.12.38"

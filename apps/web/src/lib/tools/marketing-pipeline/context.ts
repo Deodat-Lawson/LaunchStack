@@ -11,7 +11,7 @@ import {
 import { getChatModel, MARKETING_MODELS } from "~/lib/models";
 import type { CompanyDNA, DNADebugInfo } from "~/lib/tools/marketing-pipeline/types";
 import { CompanyDNASchema } from "~/lib/tools/marketing-pipeline/types";
-import type { CompanyMetadataJSON, MetadataFact } from "~/lib/tools/company-metadata/types";
+import type { CompanyMetadataJSON, MetadataFact } from "@launchstack/features/company-metadata";
 
 const DIFFERENTIATOR_QUERY_PARTS = [
     "unique strengths",

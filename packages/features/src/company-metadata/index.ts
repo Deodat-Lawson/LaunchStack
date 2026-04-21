@@ -11,10 +11,18 @@
  *   - Persisting the updated metadata + diff afterwards
  */
 
-import { extractCompanyFacts } from "./extractor";
+import { extractCompanyFacts, type GenerateStructuredFn } from "./extractor";
 import { mergeCompanyMetadata } from "./merger";
 import { createEmptyMetadata } from "./types";
 import type { CompanyMetadataJSON, MergeResult } from "./types";
+
+// Re-export the full types surface (CompanyInfo / PersonEntry / ServiceEntry /
+// MetadataFact / Visibility / Usage / Priority / etc.) so consumers can import
+// everything from a single @launchstack/features/company-metadata path.
+export * from "./types";
+export { extractCompanyFacts } from "./extractor";
+export { mergeCompanyMetadata } from "./merger";
+export type { GenerateStructuredFn } from "./extractor";
 
 // ============================================================================
 // Public types
@@ -31,6 +39,12 @@ export interface CompanyMetadataToolInput {
      * extracted facts become the initial state.
      */
     existingMetadata?: CompanyMetadataJSON;
+    /**
+     * Host-supplied structured-extraction function. See
+     * {@link GenerateStructuredFn}. Threaded straight through to the
+     * extractor so this package stays provider-agnostic.
+     */
+    generate: GenerateStructuredFn;
 }
 
 export interface CompanyMetadataToolResult {
@@ -56,11 +70,11 @@ export interface CompanyMetadataToolResult {
 export async function runCompanyMetadataTool(
     input: CompanyMetadataToolInput,
 ): Promise<CompanyMetadataToolResult> {
-    const { documentId, companyId, existingMetadata } = input;
+    const { documentId, companyId, existingMetadata, generate } = input;
 
     try {
         // 1. Extract facts from the document's chunks
-        const extracted = await extractCompanyFacts({ documentId, companyId });
+        const extracted = await extractCompanyFacts({ documentId, companyId, generate });
 
         if (!extracted) {
             // Not an error — the document simply had no extractable company facts

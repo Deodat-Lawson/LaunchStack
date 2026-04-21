@@ -26,7 +26,7 @@ import { ProvenanceCard } from "~/app/employer/metadata/components/ProvenanceCar
 import { MetadataHistorySection } from "~/app/employer/metadata/components/MetadataHistorySection";
 import { LegalSection } from "~/app/employer/metadata/components/LegalSection";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/app/employer/documents/components/ui/tooltip";
-import type { CompanyMetadataJSON, CompanyInfo, PersonEntry } from "~/lib/tools/company-metadata/types";
+import type { CompanyMetadataJSON, CompanyInfo, PersonEntry } from "@launchstack/features/company-metadata";
 
 interface CompanyProfile {
   name: string;

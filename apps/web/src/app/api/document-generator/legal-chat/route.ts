@@ -8,7 +8,7 @@ import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
 import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
-import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
+import type { CompanyMetadataJSON } from "@launchstack/features/company-metadata";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;

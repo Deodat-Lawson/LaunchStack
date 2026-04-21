@@ -22,7 +22,7 @@ import { ServicesSection } from "./components/ServicesSection";
 import { MarketsSection } from "./components/MarketsSection";
 import { ProvenanceCard } from "./components/ProvenanceCard";
 import { LegalSection } from "./components/LegalSection";
-import type { CompanyMetadataJSON } from "~/lib/tools/company-metadata/types";
+import type { CompanyMetadataJSON } from "@launchstack/features/company-metadata";
 
 interface MetadataResponse {
     metadata: CompanyMetadataJSON | null;
@@ -282,7 +282,7 @@ export default function MetadataPage() {
 }
 
 /* Missing Info Alert */
-import type { CompanyInfo, PersonEntry } from "~/lib/tools/company-metadata/types";
+import type { CompanyInfo, PersonEntry } from "@launchstack/features/company-metadata";
 
 const EXPECTED_COMPANY_FIELDS: Array<{ key: keyof CompanyInfo; label: string }> = [
     { key: "name", label: "Company Name" },

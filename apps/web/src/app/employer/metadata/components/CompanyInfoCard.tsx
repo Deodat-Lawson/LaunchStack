@@ -14,7 +14,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "~/app/employer/documen
 import { ConfidenceBadge } from "./ConfidenceBadge";
 import { VisibilityBadge } from "./VisibilityBadge";
 import { PriorityBadge } from "./PriorityBadge";
-import type { CompanyInfo, MetadataFact } from "~/lib/tools/company-metadata/types";
+import type { CompanyInfo, MetadataFact } from "@launchstack/features/company-metadata";
 
 type AnyMetadataFact = MetadataFact<string> | MetadataFact<number> | MetadataFact<unknown>;
 

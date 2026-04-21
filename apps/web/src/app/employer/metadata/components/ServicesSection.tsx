@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "~/app/employer/documen
 import { ConfidenceBadge } from "./ConfidenceBadge";
 import { VisibilityBadge } from "./VisibilityBadge";
 import { PriorityBadge } from "./PriorityBadge";
-import type { ServiceEntry, MetadataFact } from "~/lib/tools/company-metadata/types";
+import type { ServiceEntry, MetadataFact } from "@launchstack/features/company-metadata";
 
 interface ServicesSectionProps {
     services: ServiceEntry[];

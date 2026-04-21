@@ -3,7 +3,7 @@
 import React from "react";
 import { Eye, EyeOff, Users, Lock } from "lucide-react";
 import { cn } from "~/lib/utils";
-import type { Visibility } from "~/lib/tools/company-metadata/types";
+import type { Visibility } from "@launchstack/features/company-metadata";
 
 interface VisibilityBadgeProps {
     visibility: Visibility;

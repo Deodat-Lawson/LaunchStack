@@ -20,7 +20,8 @@ import {
     companyMetadata,
     companyMetadataHistory,
 } from "@launchstack/core/db/schema/company-metadata";
-import { runCompanyMetadataTool } from "~/lib/tools/company-metadata";
+import { runCompanyMetadataTool } from "@launchstack/features/company-metadata";
+import { generateStructured } from "~/lib/llm";
 
 // ============================================================================
 // Inngest Function
@@ -66,6 +67,11 @@ export const extractCompanyMetadataJob = inngest.createFunction(
                 documentId,
                 companyId,
                 existingMetadata: existingMetadata ?? undefined,
+                generate: (input) =>
+                    generateStructured({
+                        ...input,
+                        capability: "smallExtraction",
+                    }),
             });
         });
 

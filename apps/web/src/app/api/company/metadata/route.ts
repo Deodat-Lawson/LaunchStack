@@ -12,7 +12,7 @@ import { z } from "zod";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
-import type { MetadataFact, Visibility, Usage } from "~/lib/tools/company-metadata/types";
+import type { MetadataFact, Visibility, Usage } from "@launchstack/features/company-metadata";
 
 export async function GET() {
     try {

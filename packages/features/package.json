@@ -76,6 +76,14 @@
     "./trend-search/providers/types": {
       "types": "./src/trend-search/providers/types.ts",
       "default": "./src/trend-search/providers/types.ts"
+    },
+    "./client-prospector": {
+      "types": "./src/client-prospector/index.ts",
+      "default": "./src/client-prospector/index.ts"
+    },
+    "./client-prospector/db": {
+      "types": "./src/client-prospector/db.ts",
+      "default": "./src/client-prospector/db.ts"
     }
   },
   "scripts": {

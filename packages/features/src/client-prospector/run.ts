@@ -7,12 +7,12 @@
 // The Inngest function calls this and handles persistence separately.
 // This can also be invoked directly by AI agents for synchronous use.
 
-import type { ProspectorOutput } from "~/lib/tools/client-prospector/types";
-import { DEFAULT_SEARCH_RADIUS, FoursquareCategoryIdSchema } from "~/lib/tools/client-prospector/types";
-import { resolveLocation } from "~/lib/tools/client-prospector/location-resolver";
-import { planSearches } from "~/lib/tools/client-prospector/query-planner";
-import { executePlaceSearch } from "~/lib/tools/client-prospector/place-search";
-import { scoreLeads } from "~/lib/tools/client-prospector/scorer";
+import type { ProspectorOutput } from "./types";
+import { DEFAULT_SEARCH_RADIUS, FoursquareCategoryIdSchema } from "./types";
+import { resolveLocation } from "./location-resolver";
+import { planSearches } from "./query-planner";
+import { executePlaceSearch } from "./place-search";
+import { scoreLeads } from "./scorer";
 
 // Pipeline stages that the Inngest function tracks.
 // These correspond to the status enum values in the DB schema.

@@ -17,14 +17,14 @@
 // (no DB writes), while this Inngest wrapper owns persistence and status.
 
 import { inngest } from "../client";
-import { runClientProspector } from "~/lib/tools/client-prospector/run";
-import { updateJobResults, updateJobStatus } from "~/lib/tools/client-prospector/db";
+import { runClientProspector } from "@launchstack/features/client-prospector";
+import { updateJobResults, updateJobStatus } from "@launchstack/features/client-prospector/db";
 import {
     ProspectorEventDataSchema,
     type ProspectorEventData,
     type ProspectorOutput,
-} from "~/lib/tools/client-prospector/types";
-import type { ClientProspectorPipelineStage } from "~/lib/tools/client-prospector/run";
+} from "@launchstack/features/client-prospector";
+import type { ClientProspectorPipelineStage } from "@launchstack/features/client-prospector";
 
 // Safely extract an error message from any thrown value.
 // Inngest can throw Error objects, strings, or anything else.

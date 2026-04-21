@@ -8,7 +8,7 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import type { ProspectResult, RawPlaceResult } from "~/lib/tools/client-prospector/types";
+import type { ProspectResult, RawPlaceResult } from "./types";
 
 // ─── Structured output schema for LLM ───────────────────────────────────────
 

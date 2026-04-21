@@ -16,14 +16,14 @@
 import { and, desc, eq } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/core/db";
 import { clientProspectorJobs } from "@launchstack/core/db/schema";
 import type {
     LatLng,
     ProspectorJobRecord,
     ProspectorJobStatus,
     ProspectorOutput,
-} from "~/lib/tools/client-prospector/types";
+} from "./types";
 
 // ─── Row types derived from the Drizzle schema ──────────────────────────────
 // These represent the raw shape of data as it sits in PostgreSQL.
@@ -121,6 +121,7 @@ function mapRowToJobRecord(row: ClientProspectorJobRow): ProspectorJobRecord {
 export function createDrizzleClientProspectorJobStore(): ClientProspectorJobStore {
     return {
         async insert(values) {
+            const db = getDb();
             const [row] = await db.insert(clientProspectorJobs).values(values).returning();
             if (!row) {
                 throw new Error("Failed to create client prospector job");
@@ -128,6 +129,7 @@ export function createDrizzleClientProspectorJobStore(): ClientProspectorJobStor
             return row;
         },
         async update(jobId, companyId, patch) {
+            const db = getDb();
             const [row] = await db
                 .update(clientProspectorJobs)
                 .set(patch)
@@ -142,6 +144,7 @@ export function createDrizzleClientProspectorJobStore(): ClientProspectorJobStor
             return row ?? null;
         },
         async findById(jobId, companyId) {
+            const db = getDb();
             const [row] = await db
                 .select()
                 .from(clientProspectorJobs)
@@ -159,6 +162,7 @@ export function createDrizzleClientProspectorJobStore(): ClientProspectorJobStor
             const limit = options.limit ?? 100;
             const offset = options.offset ?? 0;
 
+            const db = getDb();
             return await db
                 .select()
                 .from(clientProspectorJobs)

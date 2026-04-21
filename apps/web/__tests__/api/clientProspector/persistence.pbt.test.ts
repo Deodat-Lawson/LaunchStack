@@ -16,13 +16,13 @@ jest.mock("~/server/db", () => ({
     db: {},
 }));
 
-import { createClientProspectorJobHelpers } from "~/lib/tools/client-prospector/db";
+import { createClientProspectorJobHelpers } from "@launchstack/features/client-prospector/db";
 import type {
     LatLng,
     ProspectorJobStatus,
     ProspectorOutput,
     ProspectResult,
-} from "~/lib/tools/client-prospector/types";
+} from "@launchstack/features/client-prospector";
 
 // ─── In-memory store (mirrors the ClientProspectorJobStore interface) ────────
 // This replaces the real Drizzle store so tests run without a database.

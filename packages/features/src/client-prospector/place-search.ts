@@ -10,8 +10,8 @@
 // IMPORTANT: Do NOT pass the `fields` parameter — it triggers Premium pricing.
 // The default Pro response includes all the fields we need.
 
-import { env } from "~/env";
-import type { LatLng, PlannedSearch, RawPlaceResult } from "~/lib/tools/client-prospector/types";
+
+import type { LatLng, PlannedSearch, RawPlaceResult } from "./types";
 
 // Foursquare new Places API endpoint (post June 17 2025 accounts)
 const FOURSQUARE_SEARCH_URL = "https://places-api.foursquare.com/places/search";
@@ -64,7 +64,7 @@ interface FoursquareSearchResponse {
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getApiKey(): string {
-    const key = env.server.FOURSQUARE_SERVICE_KEY;
+    const key = process.env.FOURSQUARE_SERVICE_KEY;
     if (!key) {
         throw new Error("FOURSQUARE_SERVICE_KEY environment variable is not set.");
     }

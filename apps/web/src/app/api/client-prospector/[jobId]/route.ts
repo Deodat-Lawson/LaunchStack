@@ -11,7 +11,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
-import { getJobById } from "~/lib/tools/client-prospector/db";
+import { getJobById } from "@launchstack/features/client-prospector/db";
 
 export async function GET(
     _request: Request,

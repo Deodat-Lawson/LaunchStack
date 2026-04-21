@@ -8,9 +8,9 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import { env } from "~/env";
-import { LatLngSchema } from "~/lib/tools/client-prospector/types";
-import type { LatLng, SearchLocation } from "~/lib/tools/client-prospector/types";
+
+import { LatLngSchema } from "./types";
+import type { LatLng, SearchLocation } from "./types";
 
 // ─── Structured output schema for geocoding ──────────────────────────────────
 
@@ -58,7 +58,7 @@ export async function resolveLocation(location: SearchLocation): Promise<LatLng>
     }
 
     const chat = new ChatOpenAI({
-        apiKey: env.server.OPENAI_API_KEY || process.env.AI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
         modelName: "gpt-4o-mini",
         temperature: 0,
         ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),

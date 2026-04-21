@@ -23,8 +23,8 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import {
     ProspectorInputSchema,
     DEFAULT_SEARCH_RADIUS,
-} from "~/lib/tools/client-prospector/types";
-import { createJob, getJobsByCompanyId } from "~/lib/tools/client-prospector/db";
+} from "@launchstack/features/client-prospector";
+import { createJob, getJobsByCompanyId } from "@launchstack/features/client-prospector/db";
 
 // ─── POST /api/client-prospector ─────────────────────────────────────────────
 export async function POST(request: NextRequest) {

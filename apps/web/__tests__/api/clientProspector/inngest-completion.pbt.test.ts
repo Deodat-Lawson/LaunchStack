@@ -27,7 +27,7 @@ jest.mock("~/server/db", () => ({
 }));
 
 // Mock the pipeline function so we control what it returns.
-jest.mock("~/lib/tools/client-prospector/run", () => ({
+jest.mock("@launchstack/features/client-prospector", () => ({
     runClientProspector: jest.fn(),
 }));
 
@@ -35,8 +35,8 @@ jest.mock("~/lib/tools/client-prospector/run", () => ({
 // can redirect them to our in-memory store per test iteration.
 // We keep the rest of the module (createClientProspectorJobHelpers, etc.)
 // as the real implementation.
-jest.mock("~/lib/tools/client-prospector/db", () => {
-    const actual = jest.requireActual("~/lib/tools/client-prospector/db");
+jest.mock("@launchstack/features/client-prospector/db", () => {
+    const actual = jest.requireActual("@launchstack/features/client-prospector/db");
 
     return {
         ...actual,
@@ -45,16 +45,16 @@ jest.mock("~/lib/tools/client-prospector/db", () => {
     };
 });
 
-import { createClientProspectorJobHelpers } from "~/lib/tools/client-prospector/db";
-import * as clientProspectorDb from "~/lib/tools/client-prospector/db";
+import { createClientProspectorJobHelpers } from "@launchstack/features/client-prospector/db";
+import * as clientProspectorDb from "@launchstack/features/client-prospector/db";
 import { clientProspectorJob } from "~/server/inngest/functions/clientProspector";
-import { runClientProspector } from "~/lib/tools/client-prospector/run";
+import { runClientProspector } from "@launchstack/features/client-prospector";
 import type {
     LatLng,
     ProspectorJobStatus,
     ProspectorOutput,
     ProspectResult,
-} from "~/lib/tools/client-prospector/types";
+} from "@launchstack/features/client-prospector";
 
 // ─── In-memory store ─────────────────────────────────────────────────────────
 // Same pattern as persistence.pbt.test.ts — mirrors the real Drizzle store

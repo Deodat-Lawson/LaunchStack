@@ -10,9 +10,9 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import { env } from "~/env";
-import { FoursquareCategoryIdSchema } from "~/lib/tools/client-prospector/types";
-import type { PlannedSearch } from "~/lib/tools/client-prospector/types";
+
+import { FoursquareCategoryIdSchema } from "./types";
+import type { PlannedSearch } from "./types";
 
 // ─── Structured output schema for LLM ───────────────────────────────────────
 
@@ -120,7 +120,7 @@ export async function planSearches(
     categories?: string[],
 ): Promise<PlannedSearch[]> {
     const chat = new ChatOpenAI({
-        apiKey: env.server.OPENAI_API_KEY || process.env.AI_API_KEY,
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
         modelName: "gpt-4o-mini",
         temperature: 0.2,
         ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),

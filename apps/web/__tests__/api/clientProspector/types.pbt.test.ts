@@ -8,7 +8,7 @@ import {
     ProspectorInputSchema,
     ProspectorEventDataSchema,
     LatLngSchema,
-} from "~/lib/tools/client-prospector/types";
+} from "@launchstack/features/client-prospector";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

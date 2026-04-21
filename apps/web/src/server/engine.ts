@@ -21,6 +21,7 @@ import { configureEmbeddingFactory } from "@launchstack/core/embeddings";
 import { configureCompanyEmbeddingDefaults } from "@launchstack/core/embeddings";
 import { createAppStoragePort } from "./storage/port";
 import { createAppJobDispatcherPort } from "./jobs/port";
+import { createAppCreditsPort } from "./credits/port";
 
 type EngineHolder = { engine: Engine };
 
@@ -149,6 +150,10 @@ function buildConfig(): CoreConfig {
 
     jobs: {
       dispatcher: createAppJobDispatcherPort(),
+    },
+
+    credits: {
+      port: createAppCreditsPort(),
     },
   };
 }

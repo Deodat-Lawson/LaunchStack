@@ -28,6 +28,14 @@
       "types": "./src/jobs/index.ts",
       "default": "./src/jobs/index.ts"
     },
+    "./credits": {
+      "types": "./src/credits/index.ts",
+      "default": "./src/credits/index.ts"
+    },
+    "./ingestion/entity-extraction": {
+      "types": "./src/ingestion/entity-extraction.ts",
+      "default": "./src/ingestion/entity-extraction.ts"
+    },
     "./ocr/trigger": {
       "types": "./src/ocr/trigger.ts",
       "default": "./src/ocr/trigger.ts"

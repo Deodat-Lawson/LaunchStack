@@ -245,7 +245,7 @@ async function maybeExtractEntities(
 
   await runStep("step-f-graph-rag", async () => {
     const { extractAndStoreEntities } = await import(
-      "~/lib/ingestion/entity-extraction"
+      "@launchstack/core/ingestion/entity-extraction"
     );
 
     const result = await extractAndStoreEntities(

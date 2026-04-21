@@ -1,5 +1,6 @@
 import type { StoragePort } from "../storage/types";
 import type { JobDispatcherPort } from "../jobs/types";
+import type { CreditsPort } from "../credits/types";
 
 /**
  * CoreConfig is the single parameter to createEngine. The app constructs one
@@ -18,12 +19,18 @@ export interface CoreConfig {
   providers: ProvidersConfig;
   storage: StoragePort;
   jobs?: JobsConfig;
+  credits?: CreditsConfig;
   logger?: LoggerPort;
 }
 
 export interface JobsConfig {
   /** Port that dispatches background jobs (Inngest, Trigger.dev, etc.). */
   dispatcher: JobDispatcherPort;
+}
+
+export interface CreditsConfig {
+  /** Port that debits per-company token balances when absent is a no-op. */
+  port: CreditsPort;
 }
 
 export interface DbConfig {

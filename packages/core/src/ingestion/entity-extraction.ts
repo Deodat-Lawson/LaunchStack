@@ -5,7 +5,7 @@
  * the results in the knowledge graph tables.
  */
 
-import { db } from "~/server/db";
+import { getDb } from "../db";
 import {
   kgEntities,
   kgEntityMentions,
@@ -13,11 +13,11 @@ import {
   entityLabelEnum,
   type EntityLabel,
   type RelationshipType,
-} from "@launchstack/core/db/schema";
+} from "../db/schema";
 import { eq, and, sql } from "drizzle-orm";
-import { getNERProvider } from "@launchstack/core/providers/ner";
-import { debitTokens } from "~/lib/credits";
-import { isCloudMode } from "@launchstack/core/providers/registry";
+import { getNERProvider } from "../providers/ner";
+import { creditsDebitSafe } from "../credits/slot";
+import { isCloudMode } from "../providers/registry";
 
 function isEntityLabel(s: string): s is EntityLabel {
   return (entityLabelEnum as readonly string[]).includes(s);
@@ -50,17 +50,16 @@ export async function extractAndStoreEntities(
 
   const { data, usage } = await provider.extract(chunks.map((c) => c.content));
 
-  // Debit credits if cloud mode
+  // Debit credits if cloud mode. creditsDebitSafe no-ops when no port is
+  // registered and swallows bookkeeping errors.
   if (isCloudMode() && usage.tokensUsed > 0) {
-    await debitTokens({
+    await creditsDebitSafe({
       companyId,
-      amount: usage.tokensUsed,
+      tokens: usage.tokensUsed,
       service: "ner",
       description: `NER extraction for ${chunks.length} chunks via ${provider.name}`,
       referenceId: String(documentId),
       metadata: usage.details,
-    }).catch((err) => {
-      console.warn("[EntityExtraction] Credit debit failed (non-blocking):", err);
     });
   }
 
@@ -128,6 +127,7 @@ async function upsertEntity(
   companyId: bigint,
 ): Promise<number> {
   // Try to find existing entity
+  const db = getDb();
   const [existing] = await db
     .select({ id: kgEntities.id })
     .from(kgEntities)
@@ -175,7 +175,7 @@ async function upsertMention(
   confidence: number,
 ): Promise<void> {
   // Insert ignore on conflict (entity+section unique)
-  await db
+  await getDb()
     .insert(kgEntityMentions)
     .values({
       entityId,
@@ -196,6 +196,7 @@ async function upsertRelationship(
   // Normalise direction: always store smaller ID as source
   const [src, tgt] = sourceId < targetId ? [sourceId, targetId] : [targetId, sourceId];
 
+  const db = getDb();
   const [existing] = await db
     .select({ id: kgRelationships.id })
     .from(kgRelationships)

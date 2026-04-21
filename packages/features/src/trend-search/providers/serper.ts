@@ -1,5 +1,4 @@
-import { env } from "~/env";
-import type { RawSearchResult } from "~/lib/tools/trend-search/types";
+import type { RawSearchResult } from "../types";
 
 const SERPER_NEWS_URL = "https://google.serper.dev/news";
 const MAX_RESULTS_PER_QUERY = 10;
@@ -23,7 +22,7 @@ interface SerperNewsResponse {
  * @returns RawSearchResult[] or empty array if SERPER_API_KEY not set; throws on non-2xx.
  */
 export async function callSerper(query: string): Promise<RawSearchResult[]> {
-  const apiKey = env.server.SERPER_API_KEY;
+  const apiKey = process.env.SERPER_API_KEY;
   if (!apiKey) {
     console.warn("[web-search] SERPER_API_KEY not set; skipping Serper search.");
     return [];

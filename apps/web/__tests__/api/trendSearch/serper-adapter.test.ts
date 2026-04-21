@@ -14,7 +14,7 @@ jest.mock("~/env", () => ({
 }));
 
 import { env } from "~/env";
-import { callSerper } from "~/lib/tools/trend-search/providers/serper";
+import { callSerper } from "@launchstack/features/trend-search/providers/serper";
 
 const mockServer = env.server as { SERPER_API_KEY?: string | undefined };
 

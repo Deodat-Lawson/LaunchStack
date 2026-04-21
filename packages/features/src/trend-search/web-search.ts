@@ -1,15 +1,14 @@
-import { env } from "~/env";
 import type {
   PlannedQuery,
   RawSearchResult,
-} from "~/lib/tools/trend-search/types";
-import { providerRegistry } from "~/lib/tools/trend-search/providers/registry";
+} from "./types";
+import { providerRegistry } from "./providers/registry";
 import type {
   ProviderStrategy,
   SearchExecutionResult,
   SearchProviderFn,
   SearchProviderUsed,
-} from "~/lib/tools/trend-search/providers/types";
+} from "./providers/types";
 
 const MAX_RETRIES = 2;
 
@@ -92,7 +91,7 @@ function resolveStrategy(
 ): ProviderStrategy {
   if (override) return override;
 
-  const fromEnv = env.server.SEARCH_PROVIDER;
+  const fromEnv = process.env.SEARCH_PROVIDER;
   if (
     fromEnv === "serper" ||
     fromEnv === "fallback" ||
@@ -118,8 +117,8 @@ export async function executeSearch(
 ): Promise<SearchExecutionResult> {
   const strategy = resolveStrategy(strategyOverride);
 
-  const hasTavilyKey = Boolean(env.server.TAVILY_API_KEY);
-  const hasSerperKey = Boolean(env.server.SERPER_API_KEY);
+  const hasTavilyKey = Boolean(process.env.TAVILY_API_KEY);
+  const hasSerperKey = Boolean(process.env.SERPER_API_KEY);
 
   const useSerper =
     hasSerperKey &&

@@ -16,9 +16,9 @@ jest.mock("@langchain/openai", () => {
 });
 
 import * as fc from "fast-check";
-import { planQueries } from "~/lib/tools/trend-search/query-planner";
-import { SearchCategoryEnum } from "~/lib/tools/trend-search/types";
-import type { PlannedQuery, SearchCategory } from "~/lib/tools/trend-search/types";
+import { planQueries } from "@launchstack/features/trend-search/query-planner";
+import { SearchCategoryEnum } from "@launchstack/features/trend-search";
+import type { PlannedQuery, SearchCategory } from "@launchstack/features/trend-search";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

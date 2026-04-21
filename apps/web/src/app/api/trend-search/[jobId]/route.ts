@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
-import { getJobById } from "~/lib/tools/trend-search/db";
+import { getJobById } from "@launchstack/features/trend-search/db";
 
 export async function GET(
     _request: Request,

@@ -19,8 +19,8 @@ jest.mock("@langchain/openai", () => {
 });
 
 import * as fc from "fast-check";
-import { synthesizeResults } from "~/lib/tools/trend-search/synthesizer";
-import type { RawSearchResult, SearchCategory } from "~/lib/tools/trend-search/types";
+import { synthesizeResults } from "@launchstack/features/trend-search/synthesizer";
+import type { RawSearchResult, SearchCategory } from "@launchstack/features/trend-search";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 

@@ -1,7 +1,7 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import type { RawSearchResult, SearchCategory, SearchResult } from "~/lib/tools/trend-search/types";
+import type { RawSearchResult, SearchCategory, SearchResult } from "./types";
 
 // ─── Output schema for LLM (validate SearchResult[]) ──────────────────────────
 

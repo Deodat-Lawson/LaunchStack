@@ -22,10 +22,10 @@ jest.mock("~/env", () => {
 
 import * as fc from "fast-check";
 import { env } from "~/env";
-import { callSerper } from "~/lib/tools/trend-search/providers/serper";
-import { executeSearch } from "~/lib/tools/trend-search/web-search";
-import type { PlannedQuery, RawSearchResult } from "~/lib/tools/trend-search/types";
-import type { ProviderStrategy } from "~/lib/tools/trend-search/providers/types";
+import { callSerper } from "@launchstack/features/trend-search/providers/serper";
+import { executeSearch } from "@launchstack/features/trend-search/web-search";
+import type { PlannedQuery, RawSearchResult } from "@launchstack/features/trend-search";
+import type { ProviderStrategy } from "@launchstack/features/trend-search/providers/types";
 
 beforeEach(() => {
     env.server.TAVILY_API_KEY = "test-tavily-key";

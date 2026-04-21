@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { executeSearch } from "~/lib/tools/trend-search/web-search";
-import type { PlannedQuery } from "~/lib/tools/trend-search/types";
+import { executeSearch } from "@launchstack/features/trend-search/web-search";
+import type { PlannedQuery } from "@launchstack/features/trend-search";
 import { getChatModel, MARKETING_MODELS } from "~/lib/models";
 import type { CompetitorAnalysis } from "~/lib/tools/marketing-pipeline/types";
 import { CompetitorAnalysisSchema } from "~/lib/tools/marketing-pipeline/types";

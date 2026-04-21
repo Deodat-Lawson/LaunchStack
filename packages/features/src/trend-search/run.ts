@@ -2,10 +2,10 @@ import type {
   PlannedQuery,
   TrendSearchInput,
   TrendSearchOutput,
-} from "~/lib/tools/trend-search/types";
-import { planQueries } from "~/lib/tools/trend-search/query-planner";
-import { executeSearch } from "~/lib/tools/trend-search/web-search";
-import { synthesizeResults } from "~/lib/tools/trend-search/synthesizer";
+} from "./types";
+import { planQueries } from "./query-planner";
+import { executeSearch } from "./web-search";
+import { synthesizeResults } from "./synthesizer";
 
 export type TrendSearchPipelineStage = "searching" | "synthesizing";
 

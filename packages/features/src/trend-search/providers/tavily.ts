@@ -1,5 +1,4 @@
-import { env } from "~/env";
-import type { RawSearchResult } from "~/lib/tools/trend-search/types";
+import type { RawSearchResult } from "../types";
 
 const TAVILY_SEARCH_URL = "https://api.tavily.com/search";
 const MAX_RESULTS_PER_QUERY = 10;
@@ -22,7 +21,7 @@ interface TavilySearchResponse {
  * @returns RawSearchResult[] or empty array on missing key / parse failure
  */
 export async function callTavily(query: string): Promise<RawSearchResult[]> {
-  const apiKey = env.server.TAVILY_API_KEY;
+  const apiKey = process.env.TAVILY_API_KEY;
   if (!apiKey) {
     console.warn("[web-search] TAVILY_API_KEY not set; skipping Tavily search.");
     return [];

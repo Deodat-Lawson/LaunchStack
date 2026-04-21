@@ -1,14 +1,14 @@
 import { and, desc, eq } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/core/db";
 import { trendSearchJobs } from "@launchstack/core/db/schema";
 import type {
     SearchCategory,
     TrendSearchJobRecord,
     TrendSearchJobStatus,
     TrendSearchOutput,
-} from "~/lib/tools/trend-search/types";
+} from "./types";
 
 type TrendSearchJobRow = InferSelectModel<typeof trendSearchJobs>;
 type TrendSearchJobInsert = InferInsertModel<typeof trendSearchJobs>;
@@ -79,6 +79,7 @@ function mapRowToJobRecord(row: TrendSearchJobRow): TrendSearchJobRecord {
 export function createDrizzleTrendSearchJobStore(): TrendSearchJobStore {
     return {
         async insert(values) {
+            const db = getDb();
             const [row] = await db.insert(trendSearchJobs).values(values).returning();
             if (!row) {
                 throw new Error("Failed to create trend search job");
@@ -86,6 +87,7 @@ export function createDrizzleTrendSearchJobStore(): TrendSearchJobStore {
             return row;
         },
         async update(jobId, companyId, patch) {
+            const db = getDb();
             const [row] = await db
                 .update(trendSearchJobs)
                 .set({
@@ -103,6 +105,7 @@ export function createDrizzleTrendSearchJobStore(): TrendSearchJobStore {
             return row ?? null;
         },
         async findById(jobId, companyId) {
+            const db = getDb();
             const [row] = await db
                 .select()
                 .from(trendSearchJobs)
@@ -120,6 +123,7 @@ export function createDrizzleTrendSearchJobStore(): TrendSearchJobStore {
             const limit = options.limit ?? 100;
             const offset = options.offset ?? 0;
 
+            const db = getDb();
             return await db
                 .select()
                 .from(trendSearchJobs)

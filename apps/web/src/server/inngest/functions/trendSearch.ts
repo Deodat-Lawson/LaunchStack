@@ -1,12 +1,12 @@
 import { inngest } from "../client";
-import { runTrendSearch } from "~/lib/tools/trend-search/run";
-import { updateJobResults, updateJobStatus } from "~/lib/tools/trend-search/db";
+import { runTrendSearch } from "@launchstack/features/trend-search/run";
+import { updateJobResults, updateJobStatus } from "@launchstack/features/trend-search/db";
 import {
   TrendSearchEventDataSchema,
   type TrendSearchEventData,
   type TrendSearchOutput,
-} from "~/lib/tools/trend-search/types";
-import type { TrendSearchPipelineStage } from "~/lib/tools/trend-search/run";
+} from "@launchstack/features/trend-search";
+import type { TrendSearchPipelineStage } from "@launchstack/features/trend-search/run";
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error && error.message) {

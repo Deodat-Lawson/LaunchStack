@@ -36,6 +36,46 @@
     "./company-metadata": {
       "types": "./src/company-metadata/index.ts",
       "default": "./src/company-metadata/index.ts"
+    },
+    "./trend-search": {
+      "types": "./src/trend-search/index.ts",
+      "default": "./src/trend-search/index.ts"
+    },
+    "./trend-search/db": {
+      "types": "./src/trend-search/db.ts",
+      "default": "./src/trend-search/db.ts"
+    },
+    "./trend-search/run": {
+      "types": "./src/trend-search/run.ts",
+      "default": "./src/trend-search/run.ts"
+    },
+    "./trend-search/web-search": {
+      "types": "./src/trend-search/web-search.ts",
+      "default": "./src/trend-search/web-search.ts"
+    },
+    "./trend-search/cache": {
+      "types": "./src/trend-search/cache.ts",
+      "default": "./src/trend-search/cache.ts"
+    },
+    "./trend-search/synthesizer": {
+      "types": "./src/trend-search/synthesizer.ts",
+      "default": "./src/trend-search/synthesizer.ts"
+    },
+    "./trend-search/query-planner": {
+      "types": "./src/trend-search/query-planner.ts",
+      "default": "./src/trend-search/query-planner.ts"
+    },
+    "./trend-search/providers/serper": {
+      "types": "./src/trend-search/providers/serper.ts",
+      "default": "./src/trend-search/providers/serper.ts"
+    },
+    "./trend-search/providers/registry": {
+      "types": "./src/trend-search/providers/registry.ts",
+      "default": "./src/trend-search/providers/registry.ts"
+    },
+    "./trend-search/providers/types": {
+      "types": "./src/trend-search/providers/types.ts",
+      "default": "./src/trend-search/providers/types.ts"
     }
   },
   "scripts": {
@@ -43,6 +83,7 @@
   },
   "dependencies": {
     "@langchain/core": "^0.3.74",
+    "@langchain/openai": "^0.6.11",
     "@launchstack/core": "workspace:*",
     "docxtemplater": "^3.68.3",
     "drizzle-orm": "^0.45.1",

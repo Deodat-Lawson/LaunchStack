@@ -2,9 +2,9 @@ import type {
   MarketingPlatform,
   MarketingResearchResult,
 } from "~/lib/tools/marketing-pipeline/types";
-import type { PlannedQuery } from "~/lib/tools/trend-search";
-import { runTrendSearch } from "~/lib/tools/trend-search";
-import { getCachedTrendSearch, setCachedTrendSearch } from "~/lib/tools/trend-search/cache";
+import type { PlannedQuery } from "@launchstack/features/trend-search";
+import { runTrendSearch } from "@launchstack/features/trend-search";
+import { getCachedTrendSearch, setCachedTrendSearch } from "@launchstack/features/trend-search/cache";
 
 function buildTrendQueries(
   platform: MarketingPlatform,

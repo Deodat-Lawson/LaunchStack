@@ -1,8 +1,8 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import type { PlannedQuery, SearchCategory } from "~/lib/tools/trend-search/types";
-import { SearchCategoryEnum } from "~/lib/tools/trend-search/types";
+import type { PlannedQuery, SearchCategory } from "./types";
+import { SearchCategoryEnum } from "./types";
 
 // ─── Structured output schema for LLM ───────────────────────────────────────
 

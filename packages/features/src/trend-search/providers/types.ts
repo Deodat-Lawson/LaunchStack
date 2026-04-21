@@ -1,4 +1,4 @@
-import type { RawSearchResult } from "~/lib/tools/trend-search/types";
+import type { RawSearchResult } from "../types";
 
 /** A search provider function: takes a query string, returns normalized results. */
 export type SearchProviderFn = (query: string) => Promise<RawSearchResult[]>;

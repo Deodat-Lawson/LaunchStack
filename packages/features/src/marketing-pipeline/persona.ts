@@ -1,12 +1,12 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import {
-    companyEnsembleSearch,
-    createOpenAIEmbeddings,
+    getRag,
     type CompanySearchOptions,
-} from "~/lib/tools/rag";
-import { getChatModel, MARKETING_MODELS } from "~/lib/models";
-import type { TargetPersona } from "~/lib/tools/marketing-pipeline/types";
-import { TargetPersonaSchema } from "~/lib/tools/marketing-pipeline/types";
+} from "@launchstack/core/rag";
+import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
+import { MARKETING_MODELS } from "./models";
+import type { TargetPersona } from "./types";
+import { TargetPersonaSchema } from "./types";
 
 export async function extractTargetPersona(args: {
     companyId: number;
@@ -14,12 +14,10 @@ export async function extractTargetPersona(args: {
 }): Promise<TargetPersona> {
     const { companyId, targetAudience } = args;
 
-    const embeddings = createOpenAIEmbeddings();
     const options: CompanySearchOptions = { companyId, topK: 6, weights: [0.4, 0.6] };
-    const results = await companyEnsembleSearch(
+    const results = await getRag().companyEnsembleSearch(
         `target audience customer persona ${targetAudience} pain points needs priorities`,
         options,
-        embeddings,
     );
 
     const snippets = results

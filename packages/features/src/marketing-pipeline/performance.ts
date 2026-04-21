@@ -1,7 +1,7 @@
 import { eq, and, desc } from "drizzle-orm";
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/core/db";
 import { marketingContentHistory } from "@launchstack/core/db/schema/marketing-history";
-import type { MarketingPlatform } from "~/lib/tools/marketing-pipeline/types";
+import type { MarketingPlatform } from "./types";
 
 interface HistoryRow {
     platform: string;
@@ -17,6 +17,7 @@ export async function getPerformanceHistory(args: {
     platform: MarketingPlatform;
     limit?: number;
 }): Promise<HistoryRow[]> {
+    const db = getDb();
     const rows = await db
         .select({
             platform: marketingContentHistory.platform,
@@ -76,7 +77,7 @@ export async function saveGeneratedContent(args: {
     angle?: string;
     contentType?: string;
 }): Promise<void> {
-    await db.insert(marketingContentHistory).values({
+    await getDb().insert(marketingContentHistory).values({
         companyId: BigInt(args.companyId),
         platform: args.platform,
         message: args.message,

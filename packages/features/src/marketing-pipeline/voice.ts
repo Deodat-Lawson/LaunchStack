@@ -1,12 +1,12 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import {
-    companyEnsembleSearch,
-    createOpenAIEmbeddings,
+    getRag,
     type CompanySearchOptions,
-} from "~/lib/tools/rag";
-import { getChatModel, MARKETING_MODELS } from "~/lib/models";
-import type { BrandVoice, FormalityLevel } from "~/lib/tools/marketing-pipeline/types";
-import { BrandVoiceSchema } from "~/lib/tools/marketing-pipeline/types";
+} from "@launchstack/core/rag";
+import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
+import { MARKETING_MODELS } from "./models";
+import type { BrandVoice, FormalityLevel } from "./types";
+import { BrandVoiceSchema } from "./types";
 
 export async function extractBrandVoice(args: {
     companyId: number;
@@ -14,12 +14,10 @@ export async function extractBrandVoice(args: {
 }): Promise<BrandVoice> {
     const { companyId, toneOverride } = args;
 
-    const embeddings = createOpenAIEmbeddings();
     const options: CompanySearchOptions = { companyId, topK: 6, weights: [0.4, 0.6] };
-    const results = await companyEnsembleSearch(
+    const results = await getRag().companyEnsembleSearch(
         "company tone voice communication style brand personality writing examples",
         options,
-        embeddings,
     );
 
     const textSamples = results

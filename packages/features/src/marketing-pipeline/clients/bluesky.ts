@@ -1,5 +1,5 @@
-import { env } from "~/env";
-import type { MarketingResearchResult } from "~/lib/tools/marketing-pipeline/types";
+
+import type { MarketingResearchResult } from "../types";
 
 interface BlueskySession {
     accessJwt: string;
@@ -36,8 +36,8 @@ class BlueskyClient {
     private sessionExpiry = 0;
 
     private get credentials() {
-        const handle = env.server.BLUESKY_HANDLE;
-        const password = env.server.BLUESKY_APP_PASSWORD;
+        const handle = process.env.BLUESKY_HANDLE;
+        const password = process.env.BLUESKY_APP_PASSWORD;
         
         if (!handle || !password) {
             throw new Error("Bluesky credentials not configured");

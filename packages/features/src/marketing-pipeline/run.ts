@@ -1,11 +1,11 @@
-import { buildCompanyKnowledgeContext, extractCompanyDNA } from "~/lib/tools/marketing-pipeline/context";
-import { generateCampaignOutput, generateVariants } from "~/lib/tools/marketing-pipeline/generator";
-import { analyzeCompetitors } from "~/lib/tools/marketing-pipeline/competitor";
-import { buildMessagingStrategy, buildMultiStrategy } from "~/lib/tools/marketing-pipeline/positioning";
-import { extractBrandVoice } from "~/lib/tools/marketing-pipeline/voice";
-import { extractTargetPersona } from "~/lib/tools/marketing-pipeline/persona";
-import { verifyClaimSources } from "~/lib/tools/marketing-pipeline/claim-verifier";
-import { getPerformanceHistory, buildPerformanceInsights, saveGeneratedContent } from "~/lib/tools/marketing-pipeline/performance";
+import { buildCompanyKnowledgeContext, extractCompanyDNA } from "./context";
+import { generateCampaignOutput, generateVariants } from "./generator";
+import { analyzeCompetitors } from "./competitor";
+import { buildMessagingStrategy, buildMultiStrategy } from "./positioning";
+import { extractBrandVoice } from "./voice";
+import { extractTargetPersona } from "./persona";
+import { verifyClaimSources } from "./claim-verifier";
+import { getPerformanceHistory, buildPerformanceInsights, saveGeneratedContent } from "./performance";
 import type {
   MarketingPipelineInput,
   MarketingPipelineResult,
@@ -17,13 +17,13 @@ import type {
   StrategyVariant,
   ContentVariant,
   ClaimSource,
-} from "~/lib/tools/marketing-pipeline/types";
-import { PIPELINE_STEPS } from "~/lib/tools/marketing-pipeline/types";
+} from "./types";
+import { PIPELINE_STEPS } from "./types";
 
 import { eq } from "drizzle-orm";
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/core/db";
 import { company, category } from "@launchstack/core/db/schema";
-import { researchPlatformTrends } from "~/lib/tools/marketing-pipeline/research";
+import { researchPlatformTrends } from "./research";
 
 const DEFAULT_PROMPT = "Generate a compelling campaign post for this platform.";
 
@@ -100,6 +100,7 @@ export async function runMarketingPipeline(args: {
   const userPrompt = normalizedInput.prompt ?? DEFAULT_PROMPT;
 
   // 1) Fetch company name, description, industry + categories (fast DB query)
+  const db = getDb();
   const [companyRow] = await db
     .select({
       name: company.name,

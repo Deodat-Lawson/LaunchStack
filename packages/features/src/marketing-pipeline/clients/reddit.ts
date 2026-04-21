@@ -1,5 +1,5 @@
-import { env } from "~/env";
-import type { MarketingResearchResult } from "~/lib/tools/marketing-pipeline/types";
+
+import type { MarketingResearchResult } from "../types";
 
 interface RedditPost {
     data: {
@@ -24,9 +24,9 @@ class RedditClient {
     private tokenExpiry = 0;
 
     private async getAccessToken(): Promise<string> {
-        const clientId = env.server.REDDIT_CLIENT_ID;
-        const clientSecret = env.server.REDDIT_CLIENT_SECRET;
-        const userAgent = env.server.REDDIT_USER_AGENT;
+        const clientId = process.env.REDDIT_CLIENT_ID;
+        const clientSecret = process.env.REDDIT_CLIENT_SECRET;
+        const userAgent = process.env.REDDIT_USER_AGENT;
 
         if (!clientId || !clientSecret || !userAgent) {
             throw new Error("Reddit API credentials not configured");
@@ -62,9 +62,9 @@ class RedditClient {
     }
 
     async searchTrendingPosts(query: string, maxResults: number): Promise<MarketingResearchResult[]> {
-        const clientId = env.server.REDDIT_CLIENT_ID;
-        const clientSecret = env.server.REDDIT_CLIENT_SECRET;
-        const userAgent = env.server.REDDIT_USER_AGENT;
+        const clientId = process.env.REDDIT_CLIENT_ID;
+        const clientSecret = process.env.REDDIT_CLIENT_SECRET;
+        const userAgent = process.env.REDDIT_USER_AGENT;
         if (!clientId || !clientSecret || !userAgent) {
             return [];
         }

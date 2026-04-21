@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { z } from 'zod';
-import { MarketingPlatformEnum } from '~/lib/tools/marketing-pipeline/types';
-import { publishContent } from '~/lib/tools/marketing-pipeline/publish';
+import { MarketingPlatformEnum } from '@launchstack/features/marketing-pipeline';
+import { publishContent } from '@launchstack/features/marketing-pipeline';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;

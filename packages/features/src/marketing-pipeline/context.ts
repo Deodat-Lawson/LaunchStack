@@ -1,16 +1,16 @@
 import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/core/db";
 import { category, company, companyMetadata } from "@launchstack/core/db/schema";
 import {
-    companyEnsembleSearch,
-    createOpenAIEmbeddings,
+    getRag,
     type CompanySearchOptions,
-    type SearchResult,
-} from "~/lib/tools/rag";
-import { getChatModel, MARKETING_MODELS } from "~/lib/models";
-import type { CompanyDNA, DNADebugInfo } from "~/lib/tools/marketing-pipeline/types";
-import { CompanyDNASchema } from "~/lib/tools/marketing-pipeline/types";
+    type RagSearchResult as SearchResult,
+} from "@launchstack/core/rag";
+import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
+import { MARKETING_MODELS } from "./models";
+import type { CompanyDNA, DNADebugInfo } from "./types";
+import { CompanyDNASchema } from "./types";
 import type { CompanyMetadataJSON, MetadataFact } from "@launchstack/features/company-metadata";
 
 const DIFFERENTIATOR_QUERY_PARTS = [
@@ -28,6 +28,7 @@ export async function buildCompanyKnowledgeContext(args: {
     prompt: string;
 }): Promise<string> {
     const { companyId, prompt } = args;
+    const db = getDb();
 
     const [companyRow, categoryRows] = await Promise.all([
         db.select().from(company).where(eq(company.id, companyId)).limit(1),
@@ -39,13 +40,12 @@ export async function buildCompanyKnowledgeContext(args: {
 
     let kbSnippets: string[] = [];
     try {
-        const embeddings = createOpenAIEmbeddings();
         const options: CompanySearchOptions = {
             companyId,
             topK: 6,
             weights: [0.4, 0.6],
         };
-        const kbResults: SearchResult[] = await companyEnsembleSearch(prompt, options, embeddings);
+        const kbResults: SearchResult[] = await getRag().companyEnsembleSearch(prompt, options);
 
         kbSnippets = kbResults
             .slice(0, 6)
@@ -119,6 +119,7 @@ function readFact<T>(fact: MetadataFact<T> | undefined): T | undefined {
  * Returns null if no metadata row exists.
  */
 async function buildMetadataContext(companyId: number): Promise<string | null> {
+    const db = getDb();
     const [row] = await db
         .select({ metadata: companyMetadata.metadata })
         .from(companyMetadata)
@@ -234,6 +235,7 @@ async function buildMetadataContext(companyId: number): Promise<string | null> {
 // ============================================================================
 
 async function buildRAGContext(companyId: number, prompt: string): Promise<string> {
+    const db = getDb();
     const [companyRow, categoryRows] = await Promise.all([
         db.select().from(company).where(eq(company.id, companyId)).limit(1),
         db.select().from(category).where(eq(category.companyId, BigInt(companyId))).limit(8),
@@ -243,7 +245,7 @@ async function buildRAGContext(companyId: number, prompt: string): Promise<strin
     const categoryNames = categoryRows.map((r) => r.name).filter(Boolean);
     const baseMeta = `Company: ${companyInfo?.name ?? "Unknown"}. Categories: ${categoryNames.join(", ") || "None"}.`;
 
-    const embeddings = createOpenAIEmbeddings();
+    const rag = getRag();
     const options: CompanySearchOptions = { companyId, topK: 4, weights: [0.4, 0.6] };
 
     let generalSnippets: string[] = [];
@@ -251,11 +253,10 @@ async function buildRAGContext(companyId: number, prompt: string): Promise<strin
 
     try {
         const [generalResults, diffResults] = await Promise.all([
-            companyEnsembleSearch(prompt, options, embeddings),
-            companyEnsembleSearch(
+            rag.companyEnsembleSearch(prompt, options),
+            rag.companyEnsembleSearch(
                 `${baseMeta} ${DIFFERENTIATOR_QUERY_PARTS.join(" ")}`,
                 { ...options, topK: 4 },
-                embeddings,
             ),
         ]);
 

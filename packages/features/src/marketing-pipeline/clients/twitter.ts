@@ -1,5 +1,4 @@
-import { env } from "~/env";
-import type { MarketingResearchResult } from "~/lib/tools/marketing-pipeline/types";
+import type { MarketingResearchResult } from "../types";
 
 interface TwitterTweet {
     id: string;
@@ -23,7 +22,7 @@ interface TwitterSearchResponse {
 
 class TwitterClient {
     private get bearerToken(): string {
-        const token = env.server.TWITTER_BEARER_TOKEN;
+        const token = process.env.TWITTER_BEARER_TOKEN;
         if (!token) {
             throw new Error("Twitter Bearer Token not configured");
         }

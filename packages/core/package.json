@@ -54,6 +54,10 @@
       "types": "./src/credits/index.ts",
       "default": "./src/credits/index.ts"
     },
+    "./rag": {
+      "types": "./src/rag/index.ts",
+      "default": "./src/rag/index.ts"
+    },
     "./ingestion/entity-extraction": {
       "types": "./src/ingestion/entity-extraction.ts",
       "default": "./src/ingestion/entity-extraction.ts"
@@ -199,6 +203,10 @@
       "./credits": {
         "types": "./dist/credits/index.d.ts",
         "default": "./dist/credits/index.js"
+      },
+      "./rag": {
+        "types": "./dist/rag/index.d.ts",
+        "default": "./dist/rag/index.js"
       },
       "./ingestion/entity-extraction": {
         "types": "./dist/ingestion/entity-extraction.d.ts",

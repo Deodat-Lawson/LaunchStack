@@ -88,6 +88,10 @@
     "./doc-ingestion": {
       "types": "./src/doc-ingestion/index.ts",
       "default": "./src/doc-ingestion/index.ts"
+    },
+    "./marketing-pipeline": {
+      "types": "./src/marketing-pipeline/index.ts",
+      "default": "./src/marketing-pipeline/index.ts"
     }
   },
   "scripts": {

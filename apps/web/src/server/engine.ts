@@ -22,6 +22,7 @@ import { configureCompanyEmbeddingDefaults } from "@launchstack/core/embeddings"
 import { createAppStoragePort } from "./storage/port";
 import { createAppJobDispatcherPort } from "./jobs/port";
 import { createAppCreditsPort } from "./credits/port";
+import { createAppRagPort } from "./rag/port";
 
 type EngineHolder = { engine: Engine };
 
@@ -154,6 +155,10 @@ function buildConfig(): CoreConfig {
 
     credits: {
       port: createAppCreditsPort(),
+    },
+
+    rag: {
+      port: createAppRagPort(),
     },
   };
 }

@@ -1,12 +1,12 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import {
-    companyEnsembleSearch,
-    createOpenAIEmbeddings,
+    getRag,
     type CompanySearchOptions,
-} from "~/lib/tools/rag";
-import { getChatModel, MARKETING_MODELS } from "~/lib/models";
-import type { ClaimSource } from "~/lib/tools/marketing-pipeline/types";
+} from "@launchstack/core/rag";
+import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
+import { MARKETING_MODELS } from "./models";
+import type { ClaimSource } from "./types";
 
 const ClaimListSchema = z.object({
     claims: z.array(z.string()),
@@ -31,13 +31,13 @@ export async function verifyClaimSources(args: {
     const { claims } = ClaimListSchema.parse(extractResponse);
     if (claims.length === 0) return [];
 
-    const embeddings = createOpenAIEmbeddings();
+    const rag = getRag();
     const options: CompanySearchOptions = { companyId, topK: 2, weights: [0.4, 0.6] };
 
     const results: ClaimSource[] = await Promise.all(
         claims.slice(0, 5).map(async (claim) => {
             try {
-                const searchResults = await companyEnsembleSearch(claim, options, embeddings);
+                const searchResults = await rag.companyEnsembleSearch(claim, options);
                 const topResult = searchResults[0];
 
                 if (!topResult) {

@@ -1,6 +1,7 @@
 import type { StoragePort } from "../storage/types";
 import type { JobDispatcherPort } from "../jobs/types";
 import type { CreditsPort } from "../credits/types";
+import type { RagPort } from "../rag/types";
 
 /**
  * CoreConfig is the single parameter to createEngine. The app constructs one
@@ -20,7 +21,13 @@ export interface CoreConfig {
   storage: StoragePort;
   jobs?: JobsConfig;
   credits?: CreditsConfig;
+  rag?: RagConfig;
   logger?: LoggerPort;
+}
+
+export interface RagConfig {
+  /** Port that runs retrieval queries against the hosted RAG pipeline. */
+  port: RagPort;
 }
 
 export interface JobsConfig {

@@ -6,7 +6,7 @@
  * gracefully return an error instead of crashing.
  */
 
-import { env } from '~/env';
+
 import type { MarketingPlatform } from './types';
 
 export type PublishResult = {
@@ -17,7 +17,7 @@ export type PublishResult = {
 };
 
 async function publishToTwitter(message: string): Promise<PublishResult> {
-    const token = env.server.TWITTER_BEARER_TOKEN;
+    const token = process.env.TWITTER_BEARER_TOKEN;
     if (!token) {
         return { success: false, platform: 'x', error: 'Twitter credentials not configured' };
     }
@@ -50,8 +50,8 @@ async function publishToTwitter(message: string): Promise<PublishResult> {
 }
 
 async function publishToBluesky(message: string): Promise<PublishResult> {
-    const handle = env.server.BLUESKY_HANDLE;
-    const password = env.server.BLUESKY_APP_PASSWORD;
+    const handle = process.env.BLUESKY_HANDLE;
+    const password = process.env.BLUESKY_APP_PASSWORD;
     if (!handle || !password) {
         return { success: false, platform: 'bluesky', error: 'Bluesky credentials not configured' };
     }
@@ -102,9 +102,9 @@ async function publishToBluesky(message: string): Promise<PublishResult> {
 }
 
 async function publishToReddit(message: string, title?: string): Promise<PublishResult> {
-    const clientId = env.server.REDDIT_CLIENT_ID;
-    const clientSecret = env.server.REDDIT_CLIENT_SECRET;
-    const userAgent = env.server.REDDIT_USER_AGENT;
+    const clientId = process.env.REDDIT_CLIENT_ID;
+    const clientSecret = process.env.REDDIT_CLIENT_SECRET;
+    const userAgent = process.env.REDDIT_USER_AGENT;
     if (!clientId || !clientSecret || !userAgent) {
         return { success: false, platform: 'reddit', error: 'Reddit credentials not configured' };
     }
@@ -153,7 +153,7 @@ async function publishToReddit(message: string, title?: string): Promise<Publish
 }
 
 async function publishToLinkedIn(message: string): Promise<PublishResult> {
-    const token = env.server.LINKEDIN_ACCESS_TOKEN;
+    const token = process.env.LINKEDIN_ACCESS_TOKEN;
     if (!token) {
         return { success: false, platform: 'linkedin', error: 'LinkedIn credentials not configured' };
     }

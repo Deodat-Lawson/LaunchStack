@@ -5,30 +5,30 @@
 import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 
-import { db } from "~/server/db";
+import { getDb } from "@launchstack/core/db";
 import { company, category } from "@launchstack/core/db/schema";
 
 import {
-  companyEnsembleSearch,
-  createOpenAIEmbeddings,
+  getRag,
   type CompanySearchOptions,
-  type SearchResult,
-} from "~/lib/tools/rag";
+  type RagSearchResult as SearchResult,
+} from "@launchstack/core/rag";
 
-import { getChatModel, MARKETING_MODELS } from "~/lib/models";
+import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
+import { MARKETING_MODELS } from "./models";
 
 import type {
   CompanyDNA,
   EvidenceCitation,
   KnowledgeValidationReport,
   NormalizedCompanyKnowledge,
-} from "~/lib/tools/marketing-pipeline/types";
+} from "./types";
 
 import {
   CompanyDNASchema,
   KnowledgeValidationReportSchema,
   NormalizedCompanyKnowledgeSchema,
-} from "~/lib/tools/marketing-pipeline/types";
+} from "./types";
 
 const DEFAULT_TOP_K = 4;
 
@@ -84,6 +84,7 @@ async function getCompanyMetadata(companyId: number): Promise<{
   categoryNames: string[];
   baseMeta: string;
 }> {
+  const db = getDb();
   const [companyRow, categoryRows] = await Promise.all([
     db.select().from(company).where(eq(company.id, companyId)).limit(1),
     db.select().from(category).where(eq(category.companyId, BigInt(companyId))).limit(8),
@@ -106,7 +107,7 @@ export async function retrieveCompanyKnowledgeEvidence(args: {
   const { companyId, prompt } = args;
   const { baseMeta } = await getCompanyMetadata(companyId);
 
-  const embeddings = createOpenAIEmbeddings();
+  const rag = getRag();
   const options: CompanySearchOptions = {
     companyId,
     topK: DEFAULT_TOP_K,
@@ -118,7 +119,7 @@ export async function retrieveCompanyKnowledgeEvidence(args: {
   const resultsPerQuery = await Promise.all(
     queries.map(async (query) => {
       try {
-        return await companyEnsembleSearch(query, options, embeddings);
+        return await rag.companyEnsembleSearch(query, options);
       } catch (error) {
         console.warn("[marketing-pipeline] evidence retrieval failed for query:", query, error);
         return [];

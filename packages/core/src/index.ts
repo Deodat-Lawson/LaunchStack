@@ -12,6 +12,7 @@ import { configureNeo4j, getNeo4jDriver, type Driver } from "./graph/neo4j-clien
 import { configureStorage } from "./storage/slot";
 import { configureJobDispatcher } from "./jobs/slot";
 import { configureCredits } from "./credits/slot";
+import { configureRag } from "./rag/slot";
 import type { CoreConfig } from "./config/types";
 
 export * from "./config";
@@ -54,6 +55,9 @@ export function createEngine(config: CoreConfig): Engine {
   }
   if (config.credits?.port) {
     configureCredits(config.credits.port);
+  }
+  if (config.rag?.port) {
+    configureRag(config.rag.port);
   }
   configureNeo4j(config.neo4j ? {
     uri: config.neo4j.uri,

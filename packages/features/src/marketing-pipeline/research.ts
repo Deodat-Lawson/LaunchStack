@@ -1,7 +1,7 @@
 import type {
   MarketingPlatform,
   MarketingResearchResult,
-} from "~/lib/tools/marketing-pipeline/types";
+} from "./types";
 import type { PlannedQuery } from "@launchstack/features/trend-search";
 import { runTrendSearch } from "@launchstack/features/trend-search";
 import { getCachedTrendSearch, setCachedTrendSearch } from "@launchstack/features/trend-search/cache";

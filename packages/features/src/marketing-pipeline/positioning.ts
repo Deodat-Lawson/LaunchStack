@@ -1,5 +1,6 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModel, MARKETING_MODELS } from "~/lib/models";
+import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
+import { MARKETING_MODELS } from "./models";
 import type {
   CompanyDNA,
   CompetitorAnalysis,
@@ -7,8 +8,8 @@ import type {
   StrategyVariant,
   BrandVoice,
   TargetPersona,
-} from "~/lib/tools/marketing-pipeline/types";
-import { MessagingStrategySchema, MultiStrategySchema } from "~/lib/tools/marketing-pipeline/types";
+} from "./types";
+import { MessagingStrategySchema, MultiStrategySchema } from "./types";
 
 /**
  * Build a single MessagingStrategy from company DNA, competitor analysis, and optional trend summary.

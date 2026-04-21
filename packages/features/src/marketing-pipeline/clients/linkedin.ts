@@ -1,5 +1,5 @@
-import { env } from "~/env";
-import type { MarketingResearchResult } from "~/lib/tools/marketing-pipeline/types";
+
+import type { MarketingResearchResult } from "../types";
 
 interface LinkedInPost {
     id: string;
@@ -34,7 +34,7 @@ interface LinkedInSearchResponse {
 
 class LinkedInClient {
     private get accessToken(): string {
-        const token = env.server.LINKEDIN_ACCESS_TOKEN;
+        const token = process.env.LINKEDIN_ACCESS_TOKEN;
         if (!token) {
             throw new Error("LinkedIn Access Token not configured");
         }

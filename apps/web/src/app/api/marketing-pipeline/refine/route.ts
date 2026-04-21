@@ -4,9 +4,9 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
-import { refineContent } from "~/lib/tools/marketing-pipeline";
-import { buildCompanyKnowledgeContext } from "~/lib/tools/marketing-pipeline/context";
-import { MarketingPlatformEnum, BrandVoiceSchema } from "~/lib/tools/marketing-pipeline/types";
+import { refineContent } from "@launchstack/features/marketing-pipeline";
+import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
+import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/features/marketing-pipeline";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;

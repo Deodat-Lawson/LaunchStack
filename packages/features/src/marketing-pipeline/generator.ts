@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModel, MARKETING_MODELS } from "~/lib/models";
+import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
+import { MARKETING_MODELS } from "./models";
 import type {
   MarketingPlatform,
   MarketingResearchResult,
@@ -11,8 +12,8 @@ import type {
   StrategyVariant,
   ContentVariant,
   RefinementResult,
-} from "~/lib/tools/marketing-pipeline/types";
-import { MarketingPipelineOutputSchema } from "~/lib/tools/marketing-pipeline/types";
+} from "./types";
+import { MarketingPipelineOutputSchema } from "./types";
 
 const SYSTEM_PROMPT_BASE = `You are a sharp B2B copywriter who writes like an operator sharing hard-won lessons—not a brand broadcasting announcements.
 

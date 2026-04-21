@@ -1,113 +1,26 @@
 /**
- * Shared chat model factory for use across the app (document Q&A, marketing pipeline, etc.).
- * Swap models in one place; all callers use LangChain BaseChatModel.
+ * Legacy re-export shim.
+ *
+ * getChatModel + AIModelType now live in @launchstack/core/llm so that
+ * features (packages/features/*) can build chat models without reaching
+ * back into apps/web. getEmbeddings stays app-local because it pulls in
+ * ~/lib/tools/rag types; refactor the RAG layer first if that needs to
+ * move.
+ *
+ * New call sites should import from @launchstack/core/llm directly — this
+ * file exists only so the ~120 existing callers keep working unchanged.
  */
-import { ChatOpenAI } from "@langchain/openai";
-import { ChatAnthropic } from "@langchain/anthropic";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { getChatModelByType, type AIModelType } from "@launchstack/core/llm";
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
 
 export type { AIModelType };
 
-/**
- * Get a chat model instance based on the model type.
- * Supports OpenAI, Anthropic, and Google Gemini.
- */
 export function getChatModel(modelType: AIModelType): BaseChatModel {
-  switch (modelType) {
-    case "gpt-4o":
-      return new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-        modelName: "gpt-4o",
-        temperature: 0.7,
-        timeout: 600000,
-      });
-
-    case "gpt-5.2":
-      return new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-        modelName: "gpt-5.2",
-        temperature: 0.7,
-        timeout: 600000,
-      });
-
-    case "gpt-5.1":
-      return new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-        modelName: "gpt-5.1",
-        temperature: 0.7,
-        timeout: 600000,
-      });
-
-    case "gpt-5-nano":
-      return new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-        modelName: "gpt-5-nano-2025-08-07",
-        timeout: 300000,
-      });
-
-    case "gpt-5-mini":
-      return new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-        modelName: "gpt-5-mini-2025-08-07",
-        temperature: 0.3,
-        timeout: 600000,
-      });
-
-    case "claude-sonnet-4":
-      return new ChatAnthropic({
-        anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-        modelName: "claude-sonnet-4-20250514",
-        temperature: 0.7,
-      });
-
-    case "claude-opus-4.5":
-      return new ChatAnthropic({
-        anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-        modelName: "claude-opus-4.5",
-        temperature: 0.7,
-      });
-
-    case "gemini-2.5-flash":
-      return new ChatGoogleGenerativeAI({
-        apiKey: process.env.GOOGLE_AI_API_KEY,
-        model: "gemini-2.5-flash",
-        temperature: 0.7,
-      });
-
-    case "gemini-3-flash":
-      return new ChatGoogleGenerativeAI({
-        apiKey: process.env.GOOGLE_AI_API_KEY,
-        model: "gemini-3-flash-preview",
-        temperature: 0.7,
-      });
-
-    case "gemini-3-pro":
-      return new ChatGoogleGenerativeAI({
-        apiKey: process.env.GOOGLE_AI_API_KEY,
-        model: "gemini-3-pro-preview",
-        temperature: 0.7,
-      });
-
-    default:
-      return new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-        modelName: "gpt-4o",
-        temperature: 0.7,
-        timeout: 600000,
-      });
-  }
+  return getChatModelByType(modelType);
 }
 
 export function getEmbeddings(

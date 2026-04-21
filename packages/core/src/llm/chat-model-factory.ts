@@ -237,3 +237,33 @@ export function assertProviderModelSupport(
     );
   }
 }
+
+/**
+ * Infer the LLM provider from a model identifier. Falls back to "openai".
+ * Uses the canonical ProviderModelMap so adding a new model in types.ts
+ * automatically updates the inference — callers don't have to re-enumerate.
+ */
+export function inferProviderFromModel(model: AIModelType): LLMProvider {
+  for (const provider of Object.keys(ProviderModelMap) as LLMProvider[]) {
+    if ((ProviderModelMap[provider] as readonly string[]).includes(model)) {
+      return provider;
+    }
+  }
+  return "openai";
+}
+
+/**
+ * Return a chat model directly from an AIModelType, inferring the provider.
+ * Convenience for callers that only know the model string (e.g. feature code
+ * that previously consumed the apps/web-only `~/lib/models.getChatModel`).
+ */
+export function getChatModelByType(
+  model: AIModelType,
+  opts: { temperature?: number; timeoutMs?: number } = {},
+): BaseChatModel {
+  return getChatModelForProvider({
+    provider: inferProviderFromModel(model),
+    model,
+    ...opts,
+  });
+}

@@ -21,9 +21,13 @@
     "db:push": "pnpm --filter @launchstack/web db:push",
     "db:studio": "pnpm --filter @launchstack/web db:studio",
     "db:backfill:versions": "pnpm --filter @launchstack/web db:backfill:versions",
-    "inngest:dev": "pnpm --filter @launchstack/web inngest:dev"
+    "inngest:dev": "pnpm --filter @launchstack/web inngest:dev",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm --filter @launchstack/core build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.35.0",
     "@types/eslint": "^9.6.1",

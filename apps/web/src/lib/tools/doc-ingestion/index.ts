@@ -12,7 +12,7 @@ import {
   type NormalizationResult,
   type RouterDecisionResult,
   type StoredSection,
-} from "~/lib/ocr/processor";
+} from "@launchstack/core/ocr/processor";
 import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "@launchstack/core/ocr/chunker";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/core/embeddings";

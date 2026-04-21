@@ -68,6 +68,10 @@
       "types": "./src/ocr/config.ts",
       "default": "./src/ocr/config.ts"
     },
+    "./ocr/processor": {
+      "types": "./src/ocr/processor.ts",
+      "default": "./src/ocr/processor.ts"
+    },
     "./ocr/adapters/datalabAdapter": {
       "types": "./src/ocr/adapters/datalabAdapter.ts",
       "default": "./src/ocr/adapters/datalabAdapter.ts"
@@ -140,6 +144,8 @@
     "@langchain/openai": "^0.6.11",
     "drizzle-orm": "^0.45.1",
     "openai": "^4.62.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-serverless": "^1.1.0",
     "postgres": "^3.4.7",
     "string-similarity-js": "^2.1.4"
   },

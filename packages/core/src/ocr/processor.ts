@@ -4,25 +4,22 @@
  * Can be used by both Inngest background jobs and synchronous processing
  */
 
-import type { RoutingDecision } from "@launchstack/core/ocr/complexity";
-import { renderPagesToImages } from "@launchstack/core/ocr/complexity";
-import { enrichPageWithVlm } from "@launchstack/core/ocr/enrichment";
-import {
-  createAzureAdapter,
-  createLandingAIAdapter,
-  createDatalabAdapter,
-  createMarkerAdapter,
-  createDoclingAdapter,
-} from "~/lib/ocr/adapters";
-import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "@launchstack/core/ocr/chunker";
-import { createEmbeddingModel } from "@launchstack/core/embeddings";
+import type { RoutingDecision } from "./complexity";
+import { renderPagesToImages } from "./complexity";
+import { enrichPageWithVlm } from "./enrichment";
+import { createAzureAdapter } from "./adapters/azureAdapter";
+import { createLandingAIAdapter } from "./adapters/landingAdapter";
+import { createDatalabAdapter } from "./adapters/datalabAdapter";
+import { createMarkerAdapter, createDoclingAdapter } from "./adapters/ossAdapter";
+import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "./chunker";
+import { createEmbeddingModel } from "../embeddings/factory";
 import {
   isLegacyEmbeddingIndex,
   supportsShortVectorSearch,
   type EmbeddingIndexConfig,
-} from "@launchstack/core/embeddings";
-import { storeDimensionTableEmbeddings } from "@launchstack/core/embeddings";
-import { db } from "~/server/db";
+} from "../embeddings/index-registry";
+import { storeDimensionTableEmbeddings } from "../embeddings/dimension-table-store";
+import { getDb } from "../db";
 import {
   documentContextChunks,
   documentRetrievalChunks,
@@ -31,10 +28,11 @@ import {
   documentVersions,
   document as documentTable,
   ocrJobs,
-} from "@launchstack/core/db/schema";
+} from "../db/schema";
 import { eq, sql } from "drizzle-orm";
 import crypto from "crypto";
-import { fetchFile } from "~/lib/storage";
+import { getStoragePort } from "../storage/slot";
+import { getChatModelsConfig } from "../llm/chat-model-factory";
 
 import type {
   ProcessDocumentEventData,
@@ -44,7 +42,7 @@ import type {
   NormalizedDocument,
   VectorizedChunk,
   DocumentChunk,
-} from "@launchstack/core/ocr/types";
+} from "./types";
 
 export type { ProcessDocumentEventData, PipelineResult, VectorizedChunk };
 
@@ -197,7 +195,7 @@ export async function routeDocument(
 async function getPageCount(documentUrl: string): Promise<number> {
   try {
     const { PDFDocument } = await import("pdf-lib");
-    const response = await fetchFile(documentUrl);
+    const response = await getStoragePort().download(documentUrl);
     const buffer = await response.arrayBuffer();
     const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
     return doc.getPageCount();
@@ -258,9 +256,10 @@ export async function normalizeDocument(
   // 3. Explicitly requested via options (future)
   
   const isPdf = documentUrl.toLowerCase().endsWith(".pdf") || 
-                (await fetchFile(documentUrl, { method: "HEAD" }).then(r => r.headers.get("content-type") === "application/pdf").catch(() => false));
+                (await getStoragePort().download(documentUrl, { method: "HEAD" }).then(r => r.headers.get("content-type") === "application/pdf").catch(() => false));
 
-  const vlmAvailable = !!(process.env.OLLAMA_BASE_URL ?? process.env.OPENAI_API_KEY);
+  const llmConfig = getChatModelsConfig();
+  const vlmAvailable = !!(llmConfig.ollama?.baseUrl ?? llmConfig.openai?.apiKey ?? llmConfig.aiApiKey);
   if (isPdf && vlmAvailable) {
     const isComplex = routerDecision.visionLabel 
       ? ["complex", "handwritten", "messy", "figure", "diagram"].some(l => routerDecision.visionLabel?.toLowerCase().includes(l))
@@ -271,7 +270,7 @@ export async function normalizeDocument(
     if (isComplex || isLowConfidence) {
       console.log(`[Enrichment] Triggering VLM enrichment (Complex=${isComplex}, LowConf=${isLowConfidence})`);
       try {
-        const response = await fetchFile(documentUrl);
+        const response = await getStoragePort().download(documentUrl);
         const buffer = await response.arrayBuffer();
         
         // Identify pages to enrich (all for now, or sample? Plan says "Complex" or "Low Conf").
@@ -411,7 +410,7 @@ export interface StoredSection {
 export async function ensureDocumentExists(documentId: number): Promise<void> {
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    const [existingDoc] = await db
+    const [existingDoc] = await getDb()
       .select({ id: documentTable.id })
       .from(documentTable)
       .where(eq(documentTable.id, documentId));
@@ -442,7 +441,7 @@ export async function createRootStructure(
   await ensureDocumentExists(documentId);
 
   return withDbRetry(async () => {
-    const rootStructure = await db.insert(documentStructure).values({
+    const rootStructure = await getDb().insert(documentStructure).values({
       documentId: BigInt(documentId),
       versionId: versionId !== undefined ? BigInt(versionId) : null,
       parentId: null,
@@ -483,7 +482,7 @@ export async function storeBatch(
     versionId !== undefined ? BigInt(versionId) : null;
 
   return withDbRetry(async () => {
-    const result = await db.transaction(async (tx) => {
+    const result = await getDb().transaction(async (tx) => {
       const parentValues = vectorizedChunks.map((chunk) => {
         const semanticType: "tabular" | "narrative" = chunk.metadata.isTable
           ? "tabular"
@@ -611,7 +610,7 @@ export async function finalizeStorage(
   return withDbRetry(async () => {
     const summaryPreview = summaryText.substring(0, 500) + (summaryText.length > 500 ? "..." : "");
 
-    await db.insert(documentMetadata).values({
+    await getDb().insert(documentMetadata).values({
       documentId: BigInt(documentId),
       versionId: versionId !== undefined ? BigInt(versionId) : null,
       summary: summaryPreview,
@@ -637,7 +636,7 @@ export async function finalizeStorage(
       processedAt: new Date().toISOString(),
     };
 
-    await db
+    await getDb()
       .update(documentTable)
       .set({
         ocrProcessed: true,
@@ -652,7 +651,7 @@ export async function finalizeStorage(
     // its own processing provenance. Important when different versions of the
     // same document were run through different OCR providers.
     if (versionId !== undefined) {
-      await db
+      await getDb()
         .update(documentVersions)
         .set({
           ocrProcessed: true,
@@ -663,7 +662,7 @@ export async function finalizeStorage(
         .where(eq(documentVersions.id, versionId));
     }
 
-    await db
+    await getDb()
       .update(ocrJobs)
       .set({
         status: "completed",
@@ -707,13 +706,13 @@ export async function storeDocument(
 
   // Ensure document exists before inserting (avoids opaque FK violation).
   // Retry once after 2s to handle replication lag or timing races.
-  let [existingDoc] = await db
+  let [existingDoc] = await getDb()
     .select({ id: documentTable.id })
     .from(documentTable)
     .where(eq(documentTable.id, documentId));
   if (!existingDoc) {
     await new Promise((r) => setTimeout(r, 2000));
-    [existingDoc] = await db
+    [existingDoc] = await getDb()
       .select({ id: documentTable.id })
       .from(documentTable)
       .where(eq(documentTable.id, documentId));
@@ -727,7 +726,7 @@ export async function storeDocument(
 
   // 1. Create root document structure
   console.log("[Storage] 1/5 Creating root document structure...");
-  const rootStructure = await db.insert(documentStructure).values({
+  const rootStructure = await getDb().insert(documentStructure).values({
     documentId: BigInt(documentId),
     parentId: null,
     contentType: "section",
@@ -755,7 +754,7 @@ export async function storeDocument(
     const isTable = chunk.metadata.isTable;
 
     // Insert Parent (Context Chunk)
-    const [row] = await db.insert(documentContextChunks).values({
+    const [row] = await getDb().insert(documentContextChunks).values({
       documentId: BigInt(documentId),
       structureId: BigInt(rootId),
       content: chunk.content,
@@ -777,7 +776,7 @@ export async function storeDocument(
       // Insert Children (Retrieval Chunks)
       if (chunk.children && chunk.children.length > 0) {
           for (const child of chunk.children) {
-              await db.insert(documentRetrievalChunks).values({
+              await getDb().insert(documentRetrievalChunks).values({
                   contextChunkId: BigInt(row.id),
                   documentId: BigInt(documentId),
                   content: child.content,
@@ -799,7 +798,7 @@ export async function storeDocument(
   const fullText = vectorizedChunks.map(c => c.content).join("\n\n");
   const summaryPreview = fullText.substring(0, 500) + (fullText.length > 500 ? "..." : "");
 
-  await db.insert(documentMetadata).values({
+  await getDb().insert(documentMetadata).values({
     documentId: BigInt(documentId),
     summary: summaryPreview,
     outline: normalizationResult.pages.map((_, i) => ({
@@ -818,7 +817,7 @@ export async function storeDocument(
 
   // 4. Update document record with OCR metadata
   console.log("[Storage] 4/5 Updating document record...");
-  await db
+  await getDb()
     .update(documentTable)
     .set({
       ocrProcessed: true,
@@ -836,7 +835,7 @@ export async function storeDocument(
 
   // 5. Update OCR job status
   console.log("[Storage] 5/5 Updating OCR job status...");
-  await db
+  await getDb()
     .update(ocrJobs)
     .set({
       status: "completed",
@@ -859,7 +858,7 @@ export async function storeDocument(
  * Mark OCR job as failed
  */
 export async function markJobFailed(jobId: string, error: Error): Promise<void> {
-  await db
+  await getDb()
     .update(ocrJobs)
     .set({
       status: "failed",
@@ -873,25 +872,11 @@ export async function markJobFailed(jobId: string, error: Error): Promise<void> 
 // Full Pipeline - Synchronous Processing
 // ============================================================================
 
-/**
- * Process a document synchronously (all steps in sequence)
- * Used when Inngest is disabled.
- *
- * For PDFs this uses the existing 5-step routing pipeline.
- * For all other file types it delegates to the Source Adapter ingestion layer.
- */
-export async function processDocumentSync(
-  eventData: ProcessDocumentEventData
-): Promise<PipelineResult> {
-  const { runDocIngestionTool } = await import("~/lib/tools");
-  return runDocIngestionTool({
-    ...eventData,
-    runtime: {
-      updateJobStatus: true,
-      markFailureInDb: true,
-    },
-  });
-}
+// processDocumentSync was a convenience wrapper that dynamically imported
+// apps/web's lib/tools doc-ingestion orchestrator. It had no callers inside
+// this repo (verified via grep) and crossed the core → app boundary, so it
+// has been removed. Callers that want the sync pipeline should invoke the
+// orchestration tool from the hosting app directly.
 
 // ============================================================================
 // Helper Functions
@@ -907,7 +892,7 @@ export async function processNativePDF(documentUrl: string): Promise<NormalizedD
   const { getDocument } = await import("pdfjs-serverless");
 
   // 1. Fetch PDF data
-  const response = await fetchFile(documentUrl);
+  const response = await getStoragePort().download(documentUrl);
   if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
   const arrayBuffer = await response.arrayBuffer();
   const uint8Array = new Uint8Array(arrayBuffer);

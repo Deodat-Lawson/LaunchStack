@@ -35,7 +35,6 @@ export {
 
 // Processor (shared logic for sync/async processing)
 export {
-  processDocumentSync,
   routeDocument,
   normalizeDocument,
   chunkPages,
@@ -47,5 +46,5 @@ export {
   processWithLandingAI,
   type RouterDecisionResult,
   type NormalizationResult,
-} from "./processor";
+} from "@launchstack/core/ocr/processor";
 

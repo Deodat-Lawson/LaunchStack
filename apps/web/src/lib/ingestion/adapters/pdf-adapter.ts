@@ -28,7 +28,7 @@ export class PdfAdapter implements SourceAdapter {
     console.log(`[PdfAdapter] Delegating to existing OCR pipeline: url=${documentUrl.substring(0, 100)}`);
 
     const { routeDocument, normalizeDocument } = await import(
-      "~/lib/ocr/processor"
+      "@launchstack/core/ocr/processor"
     );
 
     const routeStart = Date.now();

@@ -13,7 +13,7 @@ import { writeFile, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { routeDocument, normalizeDocument } from "~/lib/ocr/processor";
+import { routeDocument, normalizeDocument } from "@launchstack/core/ocr/processor";
 import { ingestDocument } from "~/lib/ingestion/router";
 
 export const runtime = "nodejs";

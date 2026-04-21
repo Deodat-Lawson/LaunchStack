@@ -585,9 +585,16 @@ importers:
       docxtemplater:
         specifier: ^3.68.3
         version: 3.68.3
+      openai:
+        specifier: ^4.62.1
+        version: 4.104.0(ws@8.19.0)(zod@3.25.76)
       pizzip:
         specifier: ^3.2.0
         version: 3.2.0
+    devDependencies:
+      sherpa-onnx-node:
+        specifier: ^1.12.38
+        version: 1.12.38
 
 packages:
 
@@ -17057,7 +17064,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.3
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.7.4)
+      retry-axios: 2.6.0(axios@1.7.4(debug@4.4.3))
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -19605,7 +19612,7 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  retry-axios@2.6.0(axios@1.7.4):
+  retry-axios@2.6.0(axios@1.7.4(debug@4.4.3)):
     dependencies:
       axios: 1.7.4(debug@4.4.3)
 

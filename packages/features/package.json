@@ -20,6 +20,14 @@
     "./legal-templates": {
       "types": "./src/legal-templates/index.ts",
       "default": "./src/legal-templates/index.ts"
+    },
+    "./voice": {
+      "types": "./src/voice/index.ts",
+      "default": "./src/voice/index.ts"
+    },
+    "./voice/whisper-js": {
+      "types": "./src/voice/whisper-js.ts",
+      "default": "./src/voice/whisper-js.ts"
     }
   },
   "scripts": {
@@ -28,6 +36,16 @@
   "dependencies": {
     "@launchstack/core": "workspace:*",
     "docxtemplater": "^3.68.3",
+    "openai": "^4.62.1",
     "pizzip": "^3.2.0"
+  },
+  "peerDependencies": {
+    "sherpa-onnx-node": "^1.12.38"
+  },
+  "peerDependenciesMeta": {
+    "sherpa-onnx-node": { "optional": true }
+  },
+  "devDependencies": {
+    "sherpa-onnx-node": "^1.12.38"
   }
 }

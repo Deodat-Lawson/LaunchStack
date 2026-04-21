@@ -8,7 +8,8 @@ import {
   transcribeAudioFromUrl,
   isVideoUrl,
   transcribeVideoFromUrl,
-} from "~/lib/audio/transcription";
+} from "@launchstack/features/voice";
+import { getEngine } from "~/server/engine";
 import { uploadFile } from "~/lib/storage";
 import { putFile } from "~/server/storage/vercel-blob";
 import {
@@ -191,6 +192,7 @@ export async function processDocumentUpload({
     });
 
     try {
+      getEngine();
       const transcriptionResult = await transcribeAudioFromUrl(
         resolvedDocumentUrl,
         originalFilename || documentName,

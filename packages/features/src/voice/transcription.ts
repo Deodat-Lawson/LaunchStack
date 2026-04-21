@@ -6,9 +6,9 @@
  * Converts audio files to text for processing through the standard document pipeline.
  */
 
-import { fetchBlob } from "~/server/storage/vercel-blob";
-import { getTranscriptionProvider } from "~/lib/providers/transcription";
-import { debitTokens } from "~/lib/credits";
+import { getStoragePort } from "@launchstack/core/storage";
+import { getTranscriptionProvider } from "./providers";
+import { creditsDebitSafe } from "@launchstack/core/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
 
 const SIDECAR_URL = process.env.SIDECAR_URL ?? "http://localhost:8000";
@@ -91,7 +91,7 @@ export async function transcribeAudioFromUrl(
   try {
     console.log(`[TranscribeAudio] Fetching audio from: ${audioUrl}`);
 
-    const audioResponse = await fetchBlob(audioUrl);
+    const audioResponse = await getStoragePort().download(audioUrl);
     if (!audioResponse.ok) {
       throw new Error(`Failed to fetch audio file: ${audioResponse.statusText}`);
     }
@@ -106,16 +106,15 @@ export async function transcribeAudioFromUrl(
 
     const { data, usage } = await provider.transcribe(audioBuffer, filename);
 
-    // Debit credits if cloud mode and companyId available
+    // Debit credits if cloud mode and companyId available. creditsDebitSafe
+    // no-ops when no CreditsPort is registered and swallows bookkeeping errors.
     if (isCloudMode() && companyId != null && usage.tokensUsed > 0) {
-      await debitTokens({
+      await creditsDebitSafe({
         companyId,
-        amount: usage.tokensUsed,
+        tokens: usage.tokensUsed,
         service: "transcription",
         description: `Transcribe ${filename} via ${provider.name}`,
         metadata: { ...usage.details, filename },
-      }).catch((err) => {
-        console.warn("[TranscribeAudio] Credit debit failed (non-blocking):", err);
       });
     }
 

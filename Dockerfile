@@ -16,7 +16,6 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml .pnpmfile.cjs ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/features/package.json ./packages/features/
 COPY apps/web/package.json ./apps/web/
-COPY scripts ./scripts
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
@@ -43,19 +42,20 @@ RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
 
 # ── Schema sync (migrate) ────────────────────────────────────────────
 # Runs drizzle-kit push from apps/web against the core schema via the
-# relative path in drizzle.config.ts. The ensure-pgvector script lives
-# at the repo root. db:backfill:versions runs a tsx script that imports
-# ~/server/db, so we need the apps/web/src tree at migrate time too.
+# relative path in drizzle.config.ts. ensure-pgvector.mjs +
+# backfill-document-versions.ts both live under apps/web/scripts/ so
+# they resolve postgres + dotenv from apps/web's isolated node_modules.
 FROM deps AS migrate
 COPY --from=builder /app/packages/core/src ./packages/core/src
 COPY --from=builder /app/packages/features/src ./packages/features/src
 COPY --from=builder /app/apps/web/drizzle.config.ts ./apps/web/drizzle.config.ts
+COPY --from=builder /app/apps/web/scripts ./apps/web/scripts
 COPY --from=builder /app/apps/web/src ./apps/web/src
 COPY --from=builder /app/apps/web/tsconfig.json ./apps/web/tsconfig.json
 COPY --from=builder /app/tsconfig.base.json ./tsconfig.base.json
 
 WORKDIR /app/apps/web
-CMD ["sh", "-c", "node ../../scripts/ensure-pgvector.mjs && pnpm db:push && pnpm db:backfill:versions"]
+CMD ["sh", "-c", "pnpm db:push && pnpm db:backfill:versions"]
 
 # ── Runner ───────────────────────────────────────────────────────────
 # Next's standalone output for a pnpm workspace places the server entry

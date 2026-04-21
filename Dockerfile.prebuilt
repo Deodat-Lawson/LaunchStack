@@ -21,7 +21,6 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml .pnpmfile.cjs ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/features/package.json ./packages/features/
 COPY apps/web/package.json ./apps/web/
-COPY scripts ./scripts
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
@@ -35,10 +34,10 @@ COPY packages/core/package.json ./packages/core/package.json
 COPY packages/core/src ./packages/core/src
 COPY apps/web/package.json ./apps/web/package.json
 COPY apps/web/drizzle.config.ts ./apps/web/drizzle.config.ts
-COPY scripts ./scripts
+COPY apps/web/scripts ./apps/web/scripts
 
 WORKDIR /app/apps/web
-CMD ["sh", "-c", "node ../../scripts/ensure-pgvector.mjs && pnpm db:push"]
+CMD ["sh", "-c", "pnpm db:push"]
 
 # ── Runner (uses pre-built .next from host) ──────────────────────────
 # Reads the host's build output rather than rebuilding in Docker. The

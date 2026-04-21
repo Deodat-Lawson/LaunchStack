@@ -21,7 +21,7 @@
 import "dotenv/config";
 import { sql } from "drizzle-orm";
 
-import { db } from "../apps/web/src/server/db";
+import { db } from "../src/server/db";
 
 async function backfill() {
     console.log("[backfill-document-versions] Starting...");

@@ -79,6 +79,65 @@ const eslintConfig = [
             }],
         },
     },
+    // @launchstack/core is the publishable engine — it must stay free of
+    // Next, Clerk, React, apps/web env.ts, and raw process.env reads. Any
+    // runtime config must come through CoreConfig. These guards enforce the
+    // boundary so regressions show up at lint time, not when someone tries
+    // to consume the package from a non-Next host.
+    {
+        files: ["packages/core/src/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": ["error", {
+                patterns: [
+                    {
+                        group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
+                        message:
+                            "@launchstack/core must stay framework-agnostic. " +
+                            "No Next, Clerk, React, or UI libraries in core.",
+                    },
+                    {
+                        group: ["~/*", "@launchstack/features", "@launchstack/features/*"],
+                        message:
+                            "@launchstack/core cannot depend on apps/web (~/*) " +
+                            "or @launchstack/features. Features depend on core, " +
+                            "not the other way around.",
+                    },
+                ],
+            }],
+            "no-restricted-globals": ["error", {
+                name: "process",
+                message:
+                    "@launchstack/core must not read process.env. " +
+                    "Accept runtime config through CoreConfig / configure* hooks.",
+            }],
+        },
+    },
+    // @launchstack/features builds vertical features on top of core. It can
+    // read process.env, but must not depend on Next / Clerk / React (those
+    // live in apps/web — features should work in any Node host).
+    {
+        files: ["packages/features/src/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": ["error", {
+                patterns: [
+                    {
+                        group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
+                        message:
+                            "@launchstack/features must not import Next, Clerk, " +
+                            "or React. Those belong in apps/web. Feature code " +
+                            "has to work in any Node host.",
+                    },
+                    {
+                        group: ["~/*"],
+                        message:
+                            "@launchstack/features cannot import from apps/web " +
+                            "(~/*). Rewrite as a relative import inside the " +
+                            "feature or as an @launchstack/core subpath.",
+                    },
+                ],
+            }],
+        },
+    },
 ];
 
 export default eslintConfig; 

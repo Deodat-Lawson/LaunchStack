@@ -1,0 +1,370 @@
+{
+  "name": "@launchstack/core",
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. Framework-agnostic — runs under Next, Node, or any host that supplies a StoragePort, JobDispatcherPort, and CreditsPort.",
+  "license": "MIT",
+  "author": "Launchstack",
+  "homepage": "https://github.com/launchstack/launchstack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/launchstack/launchstack.git",
+    "directory": "packages/core"
+  },
+  "keywords": [
+    "rag",
+    "ingestion",
+    "ocr",
+    "llm",
+    "embeddings",
+    "knowledge-graph",
+    "document-processing"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./config": {
+      "types": "./src/config/index.ts",
+      "default": "./src/config/index.ts"
+    },
+    "./storage": {
+      "types": "./src/storage/index.ts",
+      "default": "./src/storage/index.ts"
+    },
+    "./jobs": {
+      "types": "./src/jobs/index.ts",
+      "default": "./src/jobs/index.ts"
+    },
+    "./credits": {
+      "types": "./src/credits/index.ts",
+      "default": "./src/credits/index.ts"
+    },
+    "./rag": {
+      "types": "./src/rag/index.ts",
+      "default": "./src/rag/index.ts"
+    },
+    "./ingestion/entity-extraction": {
+      "types": "./src/ingestion/entity-extraction.ts",
+      "default": "./src/ingestion/entity-extraction.ts"
+    },
+    "./ocr/trigger": {
+      "types": "./src/ocr/trigger.ts",
+      "default": "./src/ocr/trigger.ts"
+    },
+    "./db": {
+      "types": "./src/db/index.ts",
+      "default": "./src/db/index.ts"
+    },
+    "./db/schema": {
+      "types": "./src/db/schema.ts",
+      "default": "./src/db/schema.ts"
+    },
+    "./db/schema/*": {
+      "types": "./src/db/schema/*.ts",
+      "default": "./src/db/schema/*.ts"
+    },
+    "./guardrails": {
+      "types": "./src/guardrails/index.ts",
+      "default": "./src/guardrails/index.ts"
+    },
+    "./graph": {
+      "types": "./src/graph/index.ts",
+      "default": "./src/graph/index.ts"
+    },
+    "./ocr/types": {
+      "types": "./src/ocr/types.ts",
+      "default": "./src/ocr/types.ts"
+    },
+    "./ocr/complexity": {
+      "types": "./src/ocr/complexity.ts",
+      "default": "./src/ocr/complexity.ts"
+    },
+    "./ocr/code-chunker": {
+      "types": "./src/ocr/code-chunker.ts",
+      "default": "./src/ocr/code-chunker.ts"
+    },
+    "./ocr/chunker": {
+      "types": "./src/ocr/chunker.ts",
+      "default": "./src/ocr/chunker.ts"
+    },
+    "./ocr/enrichment": {
+      "types": "./src/ocr/enrichment.ts",
+      "default": "./src/ocr/enrichment.ts"
+    },
+    "./ocr/config": {
+      "types": "./src/ocr/config.ts",
+      "default": "./src/ocr/config.ts"
+    },
+    "./ocr/processor": {
+      "types": "./src/ocr/processor.ts",
+      "default": "./src/ocr/processor.ts"
+    },
+    "./ocr/adapters/datalabAdapter": {
+      "types": "./src/ocr/adapters/datalabAdapter.ts",
+      "default": "./src/ocr/adapters/datalabAdapter.ts"
+    },
+    "./ocr/adapters/ossAdapter": {
+      "types": "./src/ocr/adapters/ossAdapter.ts",
+      "default": "./src/ocr/adapters/ossAdapter.ts"
+    },
+    "./ocr/adapters/azureAdapter": {
+      "types": "./src/ocr/adapters/azureAdapter.ts",
+      "default": "./src/ocr/adapters/azureAdapter.ts"
+    },
+    "./ocr/adapters/landingAdapter": {
+      "types": "./src/ocr/adapters/landingAdapter.ts",
+      "default": "./src/ocr/adapters/landingAdapter.ts"
+    },
+    "./ingestion": {
+      "types": "./src/ingestion/index.ts",
+      "default": "./src/ingestion/index.ts"
+    },
+    "./ingestion/types": {
+      "types": "./src/ingestion/types.ts",
+      "default": "./src/ingestion/types.ts"
+    },
+    "./ingestion/heading-chunker": {
+      "types": "./src/ingestion/heading-chunker.ts",
+      "default": "./src/ingestion/heading-chunker.ts"
+    },
+    "./ingestion/router": {
+      "types": "./src/ingestion/router.ts",
+      "default": "./src/ingestion/router.ts"
+    },
+    "./providers": {
+      "types": "./src/providers/index.ts",
+      "default": "./src/providers/index.ts"
+    },
+    "./providers/registry": {
+      "types": "./src/providers/registry.ts",
+      "default": "./src/providers/registry.ts"
+    },
+    "./providers/reranking": {
+      "types": "./src/providers/reranking/index.ts",
+      "default": "./src/providers/reranking/index.ts"
+    },
+    "./providers/ner": {
+      "types": "./src/providers/ner/index.ts",
+      "default": "./src/providers/ner/index.ts"
+    },
+    "./llm": {
+      "types": "./src/llm/index.ts",
+      "default": "./src/llm/index.ts"
+    },
+    "./llm/types": {
+      "types": "./src/llm/types.ts",
+      "default": "./src/llm/types.ts"
+    },
+    "./crypto": {
+      "types": "./src/crypto/index.ts",
+      "default": "./src/crypto/index.ts"
+    },
+    "./embeddings": {
+      "types": "./src/embeddings/index.ts",
+      "default": "./src/embeddings/index.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./config": {
+        "types": "./dist/config/index.d.ts",
+        "default": "./dist/config/index.js"
+      },
+      "./storage": {
+        "types": "./dist/storage/index.d.ts",
+        "default": "./dist/storage/index.js"
+      },
+      "./jobs": {
+        "types": "./dist/jobs/index.d.ts",
+        "default": "./dist/jobs/index.js"
+      },
+      "./credits": {
+        "types": "./dist/credits/index.d.ts",
+        "default": "./dist/credits/index.js"
+      },
+      "./rag": {
+        "types": "./dist/rag/index.d.ts",
+        "default": "./dist/rag/index.js"
+      },
+      "./ingestion/entity-extraction": {
+        "types": "./dist/ingestion/entity-extraction.d.ts",
+        "default": "./dist/ingestion/entity-extraction.js"
+      },
+      "./ocr/trigger": {
+        "types": "./dist/ocr/trigger.d.ts",
+        "default": "./dist/ocr/trigger.js"
+      },
+      "./db": {
+        "types": "./dist/db/index.d.ts",
+        "default": "./dist/db/index.js"
+      },
+      "./db/schema": {
+        "types": "./dist/db/schema.d.ts",
+        "default": "./dist/db/schema.js"
+      },
+      "./db/schema/*": {
+        "types": "./dist/db/schema/*.d.ts",
+        "default": "./dist/db/schema/*.js"
+      },
+      "./guardrails": {
+        "types": "./dist/guardrails/index.d.ts",
+        "default": "./dist/guardrails/index.js"
+      },
+      "./graph": {
+        "types": "./dist/graph/index.d.ts",
+        "default": "./dist/graph/index.js"
+      },
+      "./ocr/types": {
+        "types": "./dist/ocr/types.d.ts",
+        "default": "./dist/ocr/types.js"
+      },
+      "./ocr/complexity": {
+        "types": "./dist/ocr/complexity.d.ts",
+        "default": "./dist/ocr/complexity.js"
+      },
+      "./ocr/code-chunker": {
+        "types": "./dist/ocr/code-chunker.d.ts",
+        "default": "./dist/ocr/code-chunker.js"
+      },
+      "./ocr/chunker": {
+        "types": "./dist/ocr/chunker.d.ts",
+        "default": "./dist/ocr/chunker.js"
+      },
+      "./ocr/enrichment": {
+        "types": "./dist/ocr/enrichment.d.ts",
+        "default": "./dist/ocr/enrichment.js"
+      },
+      "./ocr/config": {
+        "types": "./dist/ocr/config.d.ts",
+        "default": "./dist/ocr/config.js"
+      },
+      "./ocr/processor": {
+        "types": "./dist/ocr/processor.d.ts",
+        "default": "./dist/ocr/processor.js"
+      },
+      "./ocr/adapters/datalabAdapter": {
+        "types": "./dist/ocr/adapters/datalabAdapter.d.ts",
+        "default": "./dist/ocr/adapters/datalabAdapter.js"
+      },
+      "./ocr/adapters/ossAdapter": {
+        "types": "./dist/ocr/adapters/ossAdapter.d.ts",
+        "default": "./dist/ocr/adapters/ossAdapter.js"
+      },
+      "./ocr/adapters/azureAdapter": {
+        "types": "./dist/ocr/adapters/azureAdapter.d.ts",
+        "default": "./dist/ocr/adapters/azureAdapter.js"
+      },
+      "./ocr/adapters/landingAdapter": {
+        "types": "./dist/ocr/adapters/landingAdapter.d.ts",
+        "default": "./dist/ocr/adapters/landingAdapter.js"
+      },
+      "./ingestion": {
+        "types": "./dist/ingestion/index.d.ts",
+        "default": "./dist/ingestion/index.js"
+      },
+      "./ingestion/types": {
+        "types": "./dist/ingestion/types.d.ts",
+        "default": "./dist/ingestion/types.js"
+      },
+      "./ingestion/heading-chunker": {
+        "types": "./dist/ingestion/heading-chunker.d.ts",
+        "default": "./dist/ingestion/heading-chunker.js"
+      },
+      "./ingestion/router": {
+        "types": "./dist/ingestion/router.d.ts",
+        "default": "./dist/ingestion/router.js"
+      },
+      "./providers": {
+        "types": "./dist/providers/index.d.ts",
+        "default": "./dist/providers/index.js"
+      },
+      "./providers/registry": {
+        "types": "./dist/providers/registry.d.ts",
+        "default": "./dist/providers/registry.js"
+      },
+      "./providers/reranking": {
+        "types": "./dist/providers/reranking/index.d.ts",
+        "default": "./dist/providers/reranking/index.js"
+      },
+      "./providers/ner": {
+        "types": "./dist/providers/ner/index.d.ts",
+        "default": "./dist/providers/ner/index.js"
+      },
+      "./llm": {
+        "types": "./dist/llm/index.d.ts",
+        "default": "./dist/llm/index.js"
+      },
+      "./llm/types": {
+        "types": "./dist/llm/types.d.ts",
+        "default": "./dist/llm/types.js"
+      },
+      "./crypto": {
+        "types": "./dist/crypto/index.d.ts",
+        "default": "./dist/crypto/index.js"
+      },
+      "./embeddings": {
+        "types": "./dist/embeddings/index.d.ts",
+        "default": "./dist/embeddings/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^28.0.1",
+    "@types/turndown": "^5.0.6"
+  },
+  "dependencies": {
+    "@langchain/anthropic": "^1.3.3",
+    "@langchain/core": "^0.3.74",
+    "@langchain/google-genai": "^2.1.3",
+    "@langchain/ollama": "^0.1.6",
+    "@langchain/openai": "^0.6.11",
+    "@mozilla/readability": "^0.6.0",
+    "cheerio": "^1.2.0",
+    "drizzle-orm": "^0.45.1",
+    "jsdom": "^29.0.2",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.11.0",
+    "openai": "^4.62.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-serverless": "^1.1.0",
+    "postgres": "^3.4.7",
+    "string-similarity-js": "^2.1.4",
+    "turndown": "^7.2.2",
+    "xlsx": "^0.18.5"
+  },
+  "peerDependencies": {
+    "neo4j-driver": "^6.0.0",
+    "tesseract.js": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "neo4j-driver": { "optional": true },
+    "tesseract.js": { "optional": true }
+  }
+}

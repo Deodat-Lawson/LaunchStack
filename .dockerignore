@@ -10,10 +10,10 @@ build
 dist
 
 # Generated assets (created by postinstall from node_modules)
-public/vad
+apps/web/public/vad
 
 # Heavy static assets not needed in Docker image
-public/deployment-demos
+apps/web/public/deployment-demos
 
 # Git
 .git
@@ -64,5 +64,14 @@ sidecar
 # Docker files (don't copy into context recursively)
 docker-compose*.yml
 Dockerfile
+Dockerfile.*
 .dockerignore
 start-database.sh
+
+# Workspace package build outputs (rebuilt inside container)
+packages/*/dist
+packages/*/.tsbuildinfo
+
+# Services with their own build contexts
+services
+sidecar

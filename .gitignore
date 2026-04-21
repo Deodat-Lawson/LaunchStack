@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+node_modules/
 /.pnp
 .pnp.js
 
@@ -17,7 +18,9 @@ db.sqlite
 
 # next.js
 /.next/
+.next/
 /out/
+out/
 next-env.d.ts
 
 # production
@@ -44,6 +47,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# package build outputs
+packages/*/dist/
 
 # idea files
 .idea

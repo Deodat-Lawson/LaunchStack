@@ -1,0 +1,123 @@
+{
+  "name": "@launchstack/features",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub — real sources land in later migration steps.)",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "sideEffects": false,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./adeu": {
+      "types": "./src/adeu/index.ts",
+      "default": "./src/adeu/index.ts"
+    },
+    "./legal-templates": {
+      "types": "./src/legal-templates/index.ts",
+      "default": "./src/legal-templates/index.ts"
+    },
+    "./legal-templates/template-service": {
+      "types": "./src/legal-templates/template-service.ts",
+      "default": "./src/legal-templates/template-service.ts"
+    },
+    "./voice": {
+      "types": "./src/voice/index.ts",
+      "default": "./src/voice/index.ts"
+    },
+    "./voice/whisper-js": {
+      "types": "./src/voice/whisper-js.ts",
+      "default": "./src/voice/whisper-js.ts"
+    },
+    "./repo-explainer": {
+      "types": "./src/repo-explainer/index.ts",
+      "default": "./src/repo-explainer/index.ts"
+    },
+    "./company-metadata": {
+      "types": "./src/company-metadata/index.ts",
+      "default": "./src/company-metadata/index.ts"
+    },
+    "./trend-search": {
+      "types": "./src/trend-search/index.ts",
+      "default": "./src/trend-search/index.ts"
+    },
+    "./trend-search/db": {
+      "types": "./src/trend-search/db.ts",
+      "default": "./src/trend-search/db.ts"
+    },
+    "./trend-search/run": {
+      "types": "./src/trend-search/run.ts",
+      "default": "./src/trend-search/run.ts"
+    },
+    "./trend-search/web-search": {
+      "types": "./src/trend-search/web-search.ts",
+      "default": "./src/trend-search/web-search.ts"
+    },
+    "./trend-search/cache": {
+      "types": "./src/trend-search/cache.ts",
+      "default": "./src/trend-search/cache.ts"
+    },
+    "./trend-search/synthesizer": {
+      "types": "./src/trend-search/synthesizer.ts",
+      "default": "./src/trend-search/synthesizer.ts"
+    },
+    "./trend-search/query-planner": {
+      "types": "./src/trend-search/query-planner.ts",
+      "default": "./src/trend-search/query-planner.ts"
+    },
+    "./trend-search/providers/serper": {
+      "types": "./src/trend-search/providers/serper.ts",
+      "default": "./src/trend-search/providers/serper.ts"
+    },
+    "./trend-search/providers/registry": {
+      "types": "./src/trend-search/providers/registry.ts",
+      "default": "./src/trend-search/providers/registry.ts"
+    },
+    "./trend-search/providers/types": {
+      "types": "./src/trend-search/providers/types.ts",
+      "default": "./src/trend-search/providers/types.ts"
+    },
+    "./client-prospector": {
+      "types": "./src/client-prospector/index.ts",
+      "default": "./src/client-prospector/index.ts"
+    },
+    "./client-prospector/db": {
+      "types": "./src/client-prospector/db.ts",
+      "default": "./src/client-prospector/db.ts"
+    },
+    "./doc-ingestion": {
+      "types": "./src/doc-ingestion/index.ts",
+      "default": "./src/doc-ingestion/index.ts"
+    },
+    "./marketing-pipeline": {
+      "types": "./src/marketing-pipeline/index.ts",
+      "default": "./src/marketing-pipeline/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.74",
+    "@langchain/openai": "^0.6.11",
+    "@launchstack/core": "workspace:*",
+    "docxtemplater": "^3.68.3",
+    "drizzle-orm": "^0.45.1",
+    "openai": "^4.62.1",
+    "pizzip": "^3.2.0",
+    "zod": "^3.23.8"
+  },
+  "peerDependencies": {
+    "sherpa-onnx-node": "^1.12.38"
+  },
+  "peerDependenciesMeta": {
+    "sherpa-onnx-node": { "optional": true }
+  },
+  "devDependencies": {
+    "sherpa-onnx-node": "^1.12.38"
+  }
+}

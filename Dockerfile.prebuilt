@@ -4,8 +4,8 @@
 # on the host first, then this just copies the output into a slim image.
 #
 # Usage:
-#   SKIP_ENV_VALIDATION=1 pnpm build
-#   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml build app
+#   SKIP_ENV_VALIDATION=1 STANDALONE_BUILD=1 pnpm --filter @launchstack/web build
+#   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml build app migrate
 #   docker compose -f docker-compose.yml -f docker-compose.prebuilt.yml up -d
 
 # ── Base: shared Alpine + corepack-managed pnpm ──────────────────────
@@ -15,25 +15,35 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@10.15.1 --activate
 WORKDIR /app
 
-# ── Dependencies ─────────────────────────────────────────────────────
+# ── Dependencies (workspace-aware) ───────────────────────────────────
 FROM base AS deps
-COPY package.json pnpm-lock.yaml ./
-COPY scripts ./scripts
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml .pnpmfile.cjs ./
+COPY packages/core/package.json ./packages/core/
+COPY packages/features/package.json ./packages/features/
+COPY apps/web/package.json ./apps/web/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
-# ── Schema sync (migrate) ───────────────────────────────────────────
+# ── Schema sync (migrate) ────────────────────────────────────────────
 FROM base AS migrate
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/package.json ./package.json
-COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
-COPY drizzle.config.ts ./drizzle.config.ts
-COPY src ./src
-COPY scripts ./scripts
+COPY --from=deps /app/packages/core/node_modules ./packages/core/node_modules
+COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY packages/core/package.json ./packages/core/package.json
+COPY packages/core/src ./packages/core/src
+COPY apps/web/package.json ./apps/web/package.json
+COPY apps/web/drizzle.config.ts ./apps/web/drizzle.config.ts
+COPY apps/web/scripts ./apps/web/scripts
 
-CMD ["sh", "-c", "node scripts/ensure-pgvector.mjs && pnpm db:push"]
+WORKDIR /app/apps/web
+CMD ["sh", "-c", "pnpm db:push"]
 
 # ── Runner (uses pre-built .next from host) ──────────────────────────
+# Reads the host's build output rather than rebuilding in Docker. The
+# Next.js standalone layout for a pnpm workspace lives at
+# apps/web/.next/standalone/ and contains apps/web/server.js + a pruned
+# node_modules tree.
 FROM node:20-alpine AS runner
 WORKDIR /app
 
@@ -42,9 +52,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-COPY public ./public
-COPY --chown=nextjs:nodejs .next/standalone ./
-COPY --chown=nextjs:nodejs .next/static ./.next/static
+COPY --chown=nextjs:nodejs apps/web/.next/standalone ./
+COPY --chown=nextjs:nodejs apps/web/.next/static ./apps/web/.next/static
+COPY --chown=nextjs:nodejs apps/web/public ./apps/web/public
 
 USER nextjs
 
@@ -53,4 +63,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["node", "apps/web/server.js"]

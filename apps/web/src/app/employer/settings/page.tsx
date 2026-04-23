@@ -3,270 +3,421 @@
 import React, { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { Brain, Home } from "lucide-react";
 
-// Child Components
-import SettingsForm from "~/app/employer/settings/SettingsForm";
-import PopupModal from "~/app/employer/settings/PopupModal";
-import { ThemeToggle } from "~/app/_components/ThemeToggle";
-
-// Loading component
 import LoadingPage from "~/app/_components/loading";
-
-// Styles
-import styles from "~/styles/Employer/Settings.module.css";
+import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
+import {
+  Badge,
+  Button,
+  Card,
+  Field,
+  PageHeader,
+  PageShell,
+  Section,
+  SelectInput,
+  TextInput,
+} from "~/app/employer/_components/primitives";
 
 interface RedactedKey {
-    hasKey: boolean;
-    last4: string | null;
+  hasKey: boolean;
+  last4: string | null;
 }
 
 interface Company {
-    id: number;
-    name: string;
-    embeddingIndexKey: string | null;
-    embeddingOpenAIApiKey: RedactedKey;
-    embeddingHuggingFaceApiKey: RedactedKey;
-    embeddingOllamaBaseUrl: string | null;
-    embeddingOllamaModel: string | null;
-    numberOfEmployees: string;
-    createdAt: string;
-    updatedAt: string;
+  id: number;
+  name: string;
+  embeddingIndexKey: string | null;
+  embeddingOpenAIApiKey: RedactedKey;
+  embeddingHuggingFaceApiKey: RedactedKey;
+  embeddingOllamaBaseUrl: string | null;
+  embeddingOllamaModel: string | null;
+  numberOfEmployees: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
+const INDEX_OPTIONS: { value: string; label: string; desc: string }[] = [
+  {
+    value: "legacy-openai-1536",
+    label: "OpenAI · 1536 dims",
+    desc: "text-embedding-3-small. Default. Highest accuracy.",
+  },
+  {
+    value: "huggingface-minilm-384",
+    label: "HuggingFace MiniLM · 384 dims",
+    desc: "Free inference API. Good balance of cost and quality.",
+  },
+  {
+    value: "ollama-768",
+    label: "Ollama (self-hosted)",
+    desc: "Run your own embedding model locally via Ollama.",
+  },
+];
 
-const SettingsPage = () => {
-    const router = useRouter();
+export default function SettingsPage() {
+  const router = useRouter();
+  const { isLoaded, isSignedIn, userId } = useAuth();
+  const { user } = useUser();
 
-    // Clerk Auth
-    const { isLoaded, isSignedIn, userId } = useAuth();
-    const { user } = useUser();
+  const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
-    // --------------------------------------------------------------------------
-    // Page & Form States
-    // --------------------------------------------------------------------------
-    const [loading, setLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
+  const [displayName, setDisplayName] = useState(user?.fullName ?? "");
+  const [email, setEmail] = useState(user?.emailAddresses[0]?.emailAddress ?? "");
 
-    // Existing fields (from Clerk user)
-    const [displayName, setDisplayName] = useState(user?.fullName ?? "");
-    const [email, setEmail] = useState(user?.emailAddresses[0]?.emailAddress ?? "");
+  const [companyName, setCompanyName] = useState("");
+  const [staffCount, setStaffCount] = useState("");
+  const [embeddingIndexKey, setEmbeddingIndexKey] = useState("legacy-openai-1536");
+  const [embeddingOpenAIApiKey, setEmbeddingOpenAIApiKey] = useState("");
+  const [embeddingHuggingFaceApiKey, setEmbeddingHuggingFaceApiKey] = useState("");
+  const [embeddingOllamaBaseUrl, setEmbeddingOllamaBaseUrl] = useState("");
+  const [embeddingOllamaModel, setEmbeddingOllamaModel] = useState("");
 
-    // New fields
-    const [companyName, setCompanyName] = useState("");
-    const [staffCount, setStaffCount] = useState("");
-    const [embeddingIndexKey, setEmbeddingIndexKey] = useState("legacy-openai-1536");
-    const [embeddingOpenAIApiKey, setEmbeddingOpenAIApiKey] = useState("");
-    const [embeddingHuggingFaceApiKey, setEmbeddingHuggingFaceApiKey] = useState("");
-    const [embeddingOllamaBaseUrl, setEmbeddingOllamaBaseUrl] = useState("");
-    const [embeddingOllamaModel, setEmbeddingOllamaModel] = useState("");
+  const [openAIKeyStored, setOpenAIKeyStored] = useState<RedactedKey | null>(null);
+  const [huggingFaceKeyStored, setHuggingFaceKeyStored] = useState<RedactedKey | null>(null);
 
-    // --------------------------------------------------------------------------
-    // Popup (Modal) Management
-    // --------------------------------------------------------------------------
-    const [popupVisible, setPopupVisible] = useState(false);
-    const [popupMessage, setPopupMessage] = useState("");
-    const [redirectPath, setRedirectPath] = useState("");
+  const [toast, setToast] = useState<{ message: string; tone: "ok" | "warn" | "danger" } | null>(
+    null,
+  );
 
-    // A helper to show a popup without redirect
-    const showPopup = (message: string) => {
-        setPopupMessage(message);
-        setRedirectPath("");
-        setPopupVisible(true);
-    };
-
-    // A helper to show a popup *and* redirect after closing
-    const showPopupAndRedirect = (message: string, path: string) => {
-        setPopupMessage(message);
-        setRedirectPath(path);
-        setPopupVisible(true);
-    };
-
-    // Called when user clicks "OK" on the popup
-    const handlePopupClose = () => {
-        setPopupVisible(false);
-        if (redirectPath) {
-            router.push(redirectPath);
-        }
-    };
-
-    // --------------------------------------------------------------------------
-    // Fetch & Validate on Mount
-    // --------------------------------------------------------------------------
-    useEffect(() => {
-        if (!isLoaded) return;
-
-        // Use isSignedIn for reliable auth check
-        if (!isSignedIn || !userId) {
-            console.error("[Auth Debug] isLoaded:", isLoaded, "isSignedIn:", isSignedIn, "userId:", userId);
-            router.push("/");
-            return;
-        }
-
-        const checkEmployerAndFetchCompany = async () => {
-            try {
-                // Fetch company info after middleware-authenticated navigation.
-                const companyResponse = await fetch("/api/fetchCompany", {
-                    method: "GET",
-                });
-
-                if (!companyResponse.ok) {
-                    throw new Error("Failed to fetch company info");
-                }
-
-                const rawData: unknown = await companyResponse.json();
-                if (typeof rawData !== "object") {
-                    throw new Error("Invalid response from server");
-                }
-
-                const data = rawData as Company;
-
-                setCompanyName(data.name ?? "");
-                setStaffCount(data.numberOfEmployees ?? "");
-                setEmbeddingIndexKey(data.embeddingIndexKey ?? "legacy-openai-1536");
-                // API keys are never returned from the server; leave inputs
-                // blank and treat blank-on-save as "keep existing key".
-                setEmbeddingOpenAIApiKey("");
-                setEmbeddingHuggingFaceApiKey("");
-                setEmbeddingOllamaBaseUrl(data.embeddingOllamaBaseUrl ?? "");
-                setEmbeddingOllamaModel(data.embeddingOllamaModel ?? "");
-
-                setDisplayName(user?.fullName ?? "");
-                setEmail(user?.emailAddresses[0]?.emailAddress ?? "");
-            } catch (error) {
-                console.error("Error:", error);
-                showPopupAndRedirect("Something went wrong. Redirecting you home.", "/");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        void checkEmployerAndFetchCompany();
-    }, [isLoaded, isSignedIn, userId, user, router]);
-
-    // --------------------------------------------------------------------------
-    // Save Handler
-    // --------------------------------------------------------------------------
-    const handleSave = async () => {
-        setIsSaving(true);
-        try {
-            const body: Record<string, unknown> = {
-                name: companyName,
-                numberOfEmployees: staffCount,
-                embeddingIndexKey,
-                embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
-                embeddingOllamaModel: embeddingOllamaModel || null,
-            };
-            // Only include API keys when the user typed something. Blank
-            // means "keep whatever is already stored on the server".
-            if (embeddingOpenAIApiKey.trim().length > 0) {
-                body.embeddingOpenAIApiKey = embeddingOpenAIApiKey.trim();
-            }
-            if (embeddingHuggingFaceApiKey.trim().length > 0) {
-                body.embeddingHuggingFaceApiKey = embeddingHuggingFaceApiKey.trim();
-            }
-
-            const response = await fetch("/api/updateCompany", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body),
-            });
-            const result = (await response
-                .json()
-                .catch(() => null)) as {
-                success?: boolean;
-                message?: string;
-                code?: string;
-                documentCount?: number;
-            } | null;
-
-            if (response.status === 409 && result?.code === "REINDEX_IN_PROGRESS") {
-                throw new Error(
-                    result.message ??
-                        "A reindex is already running for this company. Please wait for it to finish.",
-                );
-            }
-
-            if (!response.ok || result?.success !== true) {
-                throw new Error(result?.message ?? "Error updating settings");
-            }
-
-            if (response.status === 202 && result?.code === "REINDEX_SCHEDULED") {
-                showPopup(
-                    result.message ??
-                        `Reindex scheduled for ${result.documentCount ?? 0} document chunks. Existing searches keep using the previous index until the rewrite completes.`,
-                );
-                return;
-            }
-
-            showPopup(result?.message ?? "Company settings saved!");
-        } catch (error) {
-            console.error(error);
-            showPopup(error instanceof Error ? error.message : "Failed to update settings. Please try again.");
-        } finally {
-            setIsSaving(false);
-        }
-    };
-
-    // --------------------------------------------------------------------------
-    // Render
-    // --------------------------------------------------------------------------
-    if (loading) {
-        return <LoadingPage />;
+  useEffect(() => {
+    if (!isLoaded) return;
+    if (!isSignedIn || !userId) {
+      router.push("/");
+      return;
     }
+    (async () => {
+      try {
+        const companyResponse = await fetch("/api/fetchCompany", { method: "GET" });
+        if (!companyResponse.ok) throw new Error("Failed to fetch company info");
+        const data = (await companyResponse.json()) as Company;
 
-    return (
-        <div className={styles.container}>
-            {/* Navbar */}
-            <nav className={styles.navbar}>
-                <div className={styles.navContent}>
-                    <div className={styles.logoWrapper}>
-                        <Brain className={styles.logoIcon} />
-                        <span className={styles.logoText}>Launchstack</span>
-                    </div>
-                    <div className={styles.navActions}>
-                        <ThemeToggle />
-                        <button
-                            onClick={() => router.push("/employer/home")}
-                            className={styles.iconButton}
-                            aria-label="Go to home"
-                        >
-                            <Home className={styles.iconButtonIcon} />
-                        </button>
-                    </div>
-                </div>
-            </nav>
+        setCompanyName(data.name ?? "");
+        setStaffCount(data.numberOfEmployees ?? "");
+        setEmbeddingIndexKey(data.embeddingIndexKey ?? "legacy-openai-1536");
+        setOpenAIKeyStored(data.embeddingOpenAIApiKey);
+        setHuggingFaceKeyStored(data.embeddingHuggingFaceApiKey);
+        setEmbeddingOpenAIApiKey("");
+        setEmbeddingHuggingFaceApiKey("");
+        setEmbeddingOllamaBaseUrl(data.embeddingOllamaBaseUrl ?? "");
+        setEmbeddingOllamaModel(data.embeddingOllamaModel ?? "");
 
-            {/* Child Form Component */}
-            <SettingsForm
-                displayName={displayName}
-                email={email}
-                companyName={companyName}
-                staffCount={staffCount}
-                embeddingIndexKey={embeddingIndexKey}
-                embeddingOpenAIApiKey={embeddingOpenAIApiKey}
-                embeddingHuggingFaceApiKey={embeddingHuggingFaceApiKey}
-                embeddingOllamaBaseUrl={embeddingOllamaBaseUrl}
-                embeddingOllamaModel={embeddingOllamaModel}
-                isSaving={isSaving}
-                onCompanyNameChange={setCompanyName}
-                onStaffCountChange={setStaffCount}
-                onEmbeddingIndexKeyChange={setEmbeddingIndexKey}
-                onEmbeddingOpenAIApiKeyChange={setEmbeddingOpenAIApiKey}
-                onEmbeddingHuggingFaceApiKeyChange={setEmbeddingHuggingFaceApiKey}
-                onEmbeddingOllamaBaseUrlChange={setEmbeddingOllamaBaseUrl}
-                onEmbeddingOllamaModelChange={setEmbeddingOllamaModel}
-                onSave={handleSave}
-            />
+        setDisplayName(user?.fullName ?? "");
+        setEmail(user?.emailAddresses[0]?.emailAddress ?? "");
+      } catch (error) {
+        console.error(error);
+        setToast({ message: "Something went wrong loading settings.", tone: "danger" });
+      } finally {
+        setLoading(false);
+      }
+    })().catch(() => {
+      setLoading(false);
+    });
+  }, [isLoaded, isSignedIn, userId, user, router]);
 
-            {/* Child Popup Component */}
-            <PopupModal
-                visible={popupVisible}
-                message={popupMessage}
-                onClose={handlePopupClose}
-            />
+  const handleSave = async () => {
+    setIsSaving(true);
+    setToast(null);
+    try {
+      const body: Record<string, unknown> = {
+        name: companyName,
+        numberOfEmployees: staffCount,
+        embeddingIndexKey,
+        embeddingOllamaBaseUrl: embeddingOllamaBaseUrl || null,
+        embeddingOllamaModel: embeddingOllamaModel || null,
+      };
+      if (embeddingOpenAIApiKey.trim().length > 0) {
+        body.embeddingOpenAIApiKey = embeddingOpenAIApiKey.trim();
+      }
+      if (embeddingHuggingFaceApiKey.trim().length > 0) {
+        body.embeddingHuggingFaceApiKey = embeddingHuggingFaceApiKey.trim();
+      }
+      const response = await fetch("/api/updateCompany", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const result = (await response.json().catch(() => null)) as {
+        success?: boolean;
+        message?: string;
+        code?: string;
+        documentCount?: number;
+      } | null;
+
+      if (response.status === 409 && result?.code === "REINDEX_IN_PROGRESS") {
+        throw new Error(
+          result.message ??
+            "A reindex is already running. Please wait for it to finish.",
+        );
+      }
+      if (!response.ok || result?.success !== true) {
+        throw new Error(result?.message ?? "Error updating settings");
+      }
+
+      if (response.status === 202 && result?.code === "REINDEX_SCHEDULED") {
+        setToast({
+          tone: "warn",
+          message:
+            result.message ??
+            `Reindex scheduled for ${result.documentCount ?? 0} document chunks. Existing searches keep using the previous index until the rewrite completes.`,
+        });
+        return;
+      }
+      setToast({ tone: "ok", message: result?.message ?? "Company settings saved." });
+      setEmbeddingOpenAIApiKey("");
+      setEmbeddingHuggingFaceApiKey("");
+    } catch (error) {
+      setToast({
+        tone: "danger",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to update settings. Please try again.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  const storedLabel = (k: RedactedKey | null) =>
+    k?.hasKey ? `Stored · ending ${k.last4 ?? "****"}` : "Not set";
+
+  return (
+    <>
+      <EmployerChrome pageLabel="Launchstack" pageTitle="Settings" />
+      <PageShell>
+        <PageHeader
+          eyebrow="Company"
+          title="Settings"
+          description="Manage your company profile, embedding configuration, and API keys. Changes to the embedding index may schedule a reindex of your document corpus."
+          actions={
+            <Button
+              onClick={() => void handleSave()}
+              disabled={isSaving}
+              style={{ padding: "9px 16px" }}
+            >
+              {isSaving ? "Saving…" : "Save changes"}
+            </Button>
+          }
+        />
+
+        {toast && (
+          <div
+            style={{
+              marginBottom: 20,
+              padding: "10px 14px",
+              borderRadius: 10,
+              fontSize: 13,
+              lineHeight: 1.5,
+              background:
+                toast.tone === "ok"
+                  ? "var(--accent-soft)"
+                  : toast.tone === "warn"
+                  ? "oklch(0.96 0.07 70)"
+                  : "oklch(0.96 0.05 25)",
+              color:
+                toast.tone === "ok"
+                  ? "var(--accent-ink)"
+                  : toast.tone === "warn"
+                  ? "oklch(0.4 0.13 55)"
+                  : "var(--danger)",
+              border:
+                "1px solid " +
+                (toast.tone === "ok"
+                  ? "var(--accent-glow)"
+                  : toast.tone === "warn"
+                  ? "oklch(0.85 0.12 70)"
+                  : "oklch(0.85 0.09 25)"),
+            }}
+          >
+            {toast.message}
+          </div>
+        )}
+
+        <Section title="Identity" description="Your Clerk profile. Update via your account page.">
+          <Card>
+            <Field label="Full name">
+              <TextInput value={displayName} disabled readOnly />
+            </Field>
+            <Field label="Email">
+              <TextInput value={email} disabled readOnly />
+            </Field>
+          </Card>
+        </Section>
+
+        <Section
+          title="Company"
+          description="Public-facing details the workspace uses to tailor suggestions."
+        >
+          <Card>
+            <Field label="Company name">
+              <TextInput
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder="Acme Inc."
+              />
+            </Field>
+            <Field label="Staff count" hint="Rough headcount is fine.">
+              <TextInput
+                value={staffCount}
+                onChange={(e) => setStaffCount(e.target.value)}
+                placeholder="e.g. 1, 3, 10, 50"
+              />
+            </Field>
+          </Card>
+        </Section>
+
+        <Section
+          title="Embedding index"
+          description="The vector index that powers semantic search across your documents. Changing this will schedule a reindex."
+        >
+          <Card>
+            <Field label="Index">
+              <SelectInput
+                value={embeddingIndexKey}
+                onChange={(e) => setEmbeddingIndexKey(e.target.value)}
+              >
+                {INDEX_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </SelectInput>
+              <div
+                style={{
+                  fontSize: 11,
+                  color: "var(--ink-3)",
+                  marginTop: 4,
+                  lineHeight: 1.5,
+                }}
+              >
+                {INDEX_OPTIONS.find((o) => o.value === embeddingIndexKey)?.desc}
+              </div>
+            </Field>
+
+            {embeddingIndexKey === "legacy-openai-1536" && (
+              <Field
+                label="OpenAI API key"
+                hint={`Leave blank to keep the existing key. ${storedLabel(openAIKeyStored)}.`}
+              >
+                <TextInput
+                  type="password"
+                  value={embeddingOpenAIApiKey}
+                  onChange={(e) => setEmbeddingOpenAIApiKey(e.target.value)}
+                  placeholder="sk-…"
+                  autoComplete="off"
+                />
+              </Field>
+            )}
+
+            {embeddingIndexKey === "huggingface-minilm-384" && (
+              <Field
+                label="HuggingFace API key"
+                hint={`Leave blank to keep the existing key. ${storedLabel(
+                  huggingFaceKeyStored,
+                )}.`}
+              >
+                <TextInput
+                  type="password"
+                  value={embeddingHuggingFaceApiKey}
+                  onChange={(e) => setEmbeddingHuggingFaceApiKey(e.target.value)}
+                  placeholder="hf_…"
+                  autoComplete="off"
+                />
+              </Field>
+            )}
+
+            {embeddingIndexKey === "ollama-768" && (
+              <>
+                <Field label="Ollama base URL" hint="e.g. http://localhost:11434">
+                  <TextInput
+                    value={embeddingOllamaBaseUrl}
+                    onChange={(e) => setEmbeddingOllamaBaseUrl(e.target.value)}
+                    placeholder="http://localhost:11434"
+                  />
+                </Field>
+                <Field label="Ollama model" hint="e.g. nomic-embed-text">
+                  <TextInput
+                    value={embeddingOllamaModel}
+                    onChange={(e) => setEmbeddingOllamaModel(e.target.value)}
+                    placeholder="nomic-embed-text"
+                  />
+                </Field>
+              </>
+            )}
+          </Card>
+        </Section>
+
+        <Section
+          title="Self-host / BYOK"
+          description="Bring-your-own-keys status. Update the keys above to change them."
+        >
+          <Card>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: 14,
+              }}
+            >
+              <KeyStatus label="OpenAI" stored={openAIKeyStored} />
+              <KeyStatus label="HuggingFace" stored={huggingFaceKeyStored} />
+              <KeyStatus
+                label="Ollama"
+                stored={embeddingOllamaBaseUrl ? { hasKey: true, last4: null } : null}
+                detail={embeddingOllamaBaseUrl || "Not configured"}
+              />
+            </div>
+          </Card>
+        </Section>
+
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 12 }}>
+          <Button onClick={() => void handleSave()} disabled={isSaving}>
+            {isSaving ? "Saving…" : "Save changes"}
+          </Button>
         </div>
-    );
-};
+      </PageShell>
+    </>
+  );
+}
 
-export default SettingsPage;
+function KeyStatus({
+  label,
+  stored,
+  detail,
+}: {
+  label: string;
+  stored: RedactedKey | null;
+  detail?: string;
+}) {
+  const has = !!stored?.hasKey;
+  return (
+    <div
+      style={{
+        padding: "12px 14px",
+        border: "1px solid var(--line)",
+        borderRadius: 10,
+        background: "var(--panel-2)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 6,
+        }}
+      >
+        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--ink)" }}>{label}</span>
+        <Badge tone={has ? "ok" : "neutral"}>{has ? "Configured" : "Not set"}</Badge>
+      </div>
+      <div className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
+        {detail ?? (stored?.last4 ? `ending ${stored.last4}` : "—")}
+      </div>
+    </div>
+  );
+}

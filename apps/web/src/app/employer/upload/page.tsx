@@ -2,27 +2,18 @@
 
 import React, { useState, useCallback } from "react";
 import Link from "next/link";
-import { Brain, Home, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import EmployerAuthCheck from "./EmployerAuthCheck";
 import UploadForm, { type AvailableProviders } from "./UploadForm";
-import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
+import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { Toaster } from "~/app/employer/documents/components/ui/sonner";
 import styles from "~/styles/Employer/Upload.module.css";
 
 const CategoryManagement = dynamic(() => import("./CategoryManagement"), {
     ssr: false,
 });
-
-const ThemeToggle = dynamic(
-    () =>
-        import("~/app/_components/ThemeToggle").then(
-            (module) => module.ThemeToggle
-        ),
-    { ssr: false }
-);
 
 interface Category {
     id: string;
@@ -51,8 +42,6 @@ interface UploadBootstrapResponse {
 }
 
 const Page: React.FC = () => {
-    const router = useRouter();
-
     const [categories, setCategories] = useState<Category[]>([]);
     const [useUploadThing, setUseUploadThing] = useState<boolean>(true);
     const [isUploadThingConfigured, setIsUploadThingConfigured] = useState<boolean>(false);
@@ -177,29 +166,8 @@ const Page: React.FC = () => {
 
     return (
         <EmployerAuthCheck onAuthSuccess={handleAuthSuccess}>
+            <EmployerChrome pageLabel="Launchstack" pageTitle="Upload" />
             <div className={styles.mainContainer}>
-                <nav className={styles.navbar}>
-                    <div className={styles.navContent}>
-                        <div className={styles.logoWrapper}>
-                            <Brain className={styles.logoIcon} />
-                            <span className={styles.logoText}>Launchstack</span>
-                        </div>
-                        <div className={styles.navActions}>
-                            <ThemeToggle />
-                            <button
-                                onClick={() => router.push("/employer/home")}
-                                className={styles.iconButton}
-                                aria-label="Go to home"
-                            >
-                                <Home className={styles.iconButtonIcon} />
-                            </button>
-                            <div className={styles.navProfile}>
-                                <ProfileDropdown />
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-
                 <div className={styles.container}>
                 {/* Breadcrumb */}
                 <nav className={styles.breadcrumb} aria-label="Breadcrumb">

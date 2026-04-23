@@ -36,3 +36,8 @@ const handler = serve({
 export const GET = handler.GET;
 export const POST = handler.POST;
 export const PUT = handler.PUT;
+
+// Long-running Inngest steps (embeddings, OCR, RAG) can take minutes.
+// Requires Vercel Pro — on Hobby the effective cap is 60s, which limits
+// how much work each step can do.
+export const maxDuration = 300;

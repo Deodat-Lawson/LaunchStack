@@ -115,6 +115,16 @@ export interface OcrConfig {
   workerUrl?: string;
   /** OCR router URL (vision classifier + PDF renderer). */
   routerUrl?: string;
+  /**
+   * Credentials forwarded to the OCR router so it can call an OpenAI-compatible
+   * vision endpoint for classification. Kept alongside the router URL because
+   * it's the only caller that needs them.
+   */
+  vision?: {
+    openaiApiKey?: string;
+    aiApiKey?: string;
+    aiBaseUrl?: string;
+  };
 }
 
 export type OcrProviderName =

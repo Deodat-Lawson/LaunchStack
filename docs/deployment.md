@@ -49,21 +49,21 @@ docker compose --env-file .env --profile dev up
 
 ## Option 2: Vercel + managed PostgreSQL
 
-1. Import repository into Vercel.
-2. Configure managed PostgreSQL (Vercel Postgres, Neon, Supabase, etc.).
-3. Set `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, and the other app environment variables.
-4. Deploy with Vercel defaults.
-5. Apply schema once:
+**See the full guide: [`deployment/vercel.md`](./deployment/vercel.md).**
 
-```bash
-DATABASE_URL="your_production_db_url" pnpm db:push
-```
+Short version:
+
+1. Import the repository into Vercel — framework auto-detects as Next.js, root directory stays `./`.
+2. Provision Postgres with pgvector (Vercel Postgres, Neon, Supabase, etc.).
+3. Set env vars per the [Vercel deployment guide](./deployment/vercel.md#3-configure-environment-variables).
+4. Deploy. Migrations run automatically on production builds via [`vercel.json`](../vercel.json).
+5. Register `https://<app>.vercel.app/api/inngest` in Inngest Cloud.
 
 Optional integrations:
 
-- Inngest for background document processing
-- LangSmith for tracing
-- Sidecar (deploy separately and set `SIDECAR_URL`)
+- Inngest Cloud for background jobs (required in production)
+- LangSmith for LLM tracing
+- Python sidecars (embeddings/OCR) deployed separately to Fly.io / Railway / Cloud Run
 
 ### Trend search (optional)
 
@@ -77,7 +77,7 @@ Trend search calls external search APIs. Configure `TAVILY_API_KEY` and/or `SERP
 
 ## Option 3: VPS self-hosted (Node + reverse proxy)
 
-1. Install Node.js 18+, pnpm, Nginx, and PostgreSQL with pgvector.
+1. Install Node.js 20+, pnpm 10+, Nginx, and PostgreSQL with pgvector.
 2. Clone repo and install dependencies.
 3. Configure `.env`.
 4. Build and run with PM2/systemd.
@@ -85,7 +85,7 @@ Trend search calls external search APIs. Configure `TAVILY_API_KEY` and/or `SERP
 6. Apply schema:
 
 ```bash
-pnpm db:push
+pnpm db:migrate
 ```
 
 Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
@@ -115,7 +115,7 @@ Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
 - [ ] Environment variables set for all enabled features
 - [ ] `DATABASE_URL` points to production DB
 - [ ] `vector` extension enabled on PostgreSQL
-- [ ] Schema applied (`pnpm db:push`)
+- [ ] Schema applied (`pnpm db:migrate` locally, or automatic on Vercel production builds)
 - [ ] Clerk, UploadThing, and OpenAI integrations validated
 - [ ] OCR providers validated if OCR is enabled
 - [ ] Inngest validated if background processing is used

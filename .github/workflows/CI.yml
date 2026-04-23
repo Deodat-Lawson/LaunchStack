@@ -1,112 +1,100 @@
-name: CI Pipeline
+name: CI
 
 on:
   push:
-    branches: [stable]
+    branches: [main]
   pull_request:
-    branches: [stable]
+    branches: [main]
+
 env:
-  NODE_VERSION: '18'
-  PNPM_VERSION: '8'
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10.15.1'
 
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: launchstack_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     env:
-      LANGCHAIN_TRACING_V2: ${{ secrets.LANGCHAIN_TRACING_V2 }}
-      LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY}}
-      UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
-      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-      POSTGRES_URL_NO_SSL: ${{ secrets.POSTGRES_URL_NO_SSL }}
-      PGUSER: ${{ secrets.PGUSER }}
-      PGHOST_UNPOOLED: ${{ secrets.PGHOST_UNPOOLED }}
-      PGDATABASE: ${{ secrets.PGDATABASE }}
-      PGPASSWORD: ${{ secrets.PGPASSWORD }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      PGHOST: ${{ secrets.PGHOST }}
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
-      DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
-      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL}}
-      POSTGRES_URL: ${{ secrets.POSTGRES_URL }} 
-      INNGEST_EVENT_KEY: ${{ secrets.INNGEST_EVENT_KEY }} 
-  
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchstack_test
+      SKIP_ENV_VALIDATION: '1'
+      # CI needs a dummy key so env.ts's superRefine doesn't fail the load.
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'sk-ci-placeholder' }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY || 'sk_test_ci_placeholder' }}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'pk_test_ci_placeholder' }}
+      INNGEST_EVENT_KEY: ci-placeholder
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
-      - name: Setup pnpm 
-        uses: pnpm/action-setup@v2
-        with:
-          node-version: ${{ env.PNPM_VERSOPM }}
-
-      - name: pnpm install
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Push database schema
+      - name: Push schema to test database
         run: pnpm db:push
 
-      - name: Checking lint
+      - name: Lint
         run: pnpm lint
 
-      - name: Run tests
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
         run: pnpm test
 
   build:
     runs-on: ubuntu-latest
+    needs: check
 
     env:
-      LANGCHAIN_TRACING_V2: ${{ secrets.LANGCHAIN_TRACING_V2 }}
-      LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY}}
-      UPLOADTHING_TOKEN: ${{ secrets.UPLOADTHING_TOKEN }}
-      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-      POSTGRES_URL_NO_SSL: ${{ secrets.POSTGRES_URL_NO_SSL }}
-      PGUSER: ${{ secrets.PGUSER }}
-      PGHOST_UNPOOLED: ${{ secrets.PGHOST_UNPOOLED }}
-      PGDATABASE: ${{ secrets.PGDATABASE }}
-      PGPASSWORD: ${{ secrets.PGPASSWORD }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      PGHOST: ${{ secrets.PGHOST }}
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
-      DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
-      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL}}
-      POSTGRES_URL: ${{ secrets.POSTGRES_URL }} 
-      INNGEST_EVENT_KEY: ${{ secrets.INNGEST_EVENT_KEY }} 
-      
+      SKIP_ENV_VALIDATION: '1'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
-      - name: Setup pnpm 
-        uses: pnpm/action-setup@v2
-        with:
-          pnpm-version: ${{ env.PNPM_VERSION }}
-
-      - name: pnpm install
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build application
+      - name: Build web app
         run: pnpm build
-        
 
-    
+      - name: Build @launchstack/core
+        run: pnpm --filter @launchstack/core build

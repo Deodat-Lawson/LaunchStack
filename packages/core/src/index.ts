@@ -8,7 +8,7 @@
  */
 
 import { createDb, configureDatabase, type Db, type DbClient } from "./db";
-import { configureNeo4j, getNeo4jDriver, type Driver } from "./graph/neo4j-client";
+import { configureNeo4j, getNeo4jDriver, closeNeo4jDriver, type Driver } from "./graph/neo4j-client";
 import { configureStorage } from "./storage/slot";
 import { configureJobDispatcher } from "./jobs/slot";
 import { configureCredits } from "./credits/slot";
@@ -16,6 +16,7 @@ import { configureRag } from "./rag/slot";
 import type { CoreConfig } from "./config/types";
 
 export * from "./config";
+export * from "./errors";
 export type { StoragePort, UploadInput, UploadResult } from "./storage/types";
 export type { Db, DbClient, SqlClient } from "./db";
 export { createDb, toRows } from "./db";
@@ -37,6 +38,12 @@ export interface Engine {
    * instantiated lazily inside the graph client module.
    */
   neo4j: () => Driver | null;
+  /**
+   * Closes the DB pool and the Neo4j driver (if configured). Hosts should
+   * call this on graceful shutdown (SIGTERM handler, Inngest worker exit,
+   * etc.). Idempotent — safe to call multiple times.
+   */
+  close: () => Promise<void>;
 }
 
 /**
@@ -65,11 +72,21 @@ export function createEngine(config: CoreConfig): Engine {
     password: config.neo4j.password,
   } : null);
 
+  let closed = false;
+
   return {
     config,
     db: dbHandle.db,
     dbHandle,
     storage: config.storage,
     neo4j: () => (config.neo4j ? getNeo4jDriver() : null),
+    async close() {
+      if (closed) return;
+      closed = true;
+      await Promise.allSettled([
+        dbHandle.close(),
+        config.neo4j ? closeNeo4jDriver() : Promise.resolve(),
+      ]);
+    },
   };
 }

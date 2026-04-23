@@ -123,3 +123,73 @@ html, body {
 .theme-toggle-btn:active {
   transform: scale(0.95);
 }
+
+/* ==========================================================================
+   Launchstack Workspace (LSW) — scoped OKLCH token system.
+   Only takes effect inside a `.lsw-root` subtree, so existing pages keep
+   their HSL tokens untouched. Values mirror the design prototype exactly.
+   ========================================================================== */
+.lsw-root {
+  --accent-h: 285;
+  --accent: oklch(0.54 0.24 var(--accent-h));
+  --accent-2: oklch(0.46 0.25 var(--accent-h));
+  --accent-deep: oklch(0.40 0.25 var(--accent-h));
+  --accent-glow: oklch(0.54 0.24 var(--accent-h) / 0.28);
+  --accent-soft: oklch(0.96 0.03 var(--accent-h));
+  --accent-ink: oklch(0.42 0.20 var(--accent-h));
+  --scrim: oklch(0.22 0.04 280 / 0.55);
+  --scrim-shadow: oklch(0.22 0.04 280 / 0.22);
+  --bg: oklch(0.992 0.003 80);
+  --panel: #ffffff;
+  --panel-2: oklch(0.985 0.004 280);
+  --ink: oklch(0.22 0.015 280);
+  --ink-2: oklch(0.42 0.01 280);
+  --ink-3: oklch(0.60 0.008 280);
+  --ink-4: oklch(0.78 0.006 280);
+  --line: oklch(0.90 0.006 280);
+  --line-2: oklch(0.965 0.004 280);
+  --danger: oklch(0.6 0.18 25);
+  --ok: oklch(0.62 0.14 150);
+  --radius: 10px;
+  --radius-lg: 14px;
+  color: var(--ink);
+  background: var(--bg);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark .lsw-root,
+[data-theme="dark"] .lsw-root,
+.lsw-root[data-theme="dark"] {
+  --bg: oklch(0.145 0.02 290);
+  --panel: oklch(0.20 0.025 290);
+  --panel-2: oklch(0.235 0.03 290);
+  --ink: oklch(0.97 0.005 280);
+  --ink-2: oklch(0.80 0.008 280);
+  --ink-3: oklch(0.62 0.008 280);
+  --ink-4: oklch(0.45 0.008 280);
+  --line: oklch(0.32 0.04 290);
+  --line-2: oklch(0.26 0.035 290);
+  --accent: oklch(0.72 0.19 var(--accent-h));
+  --accent-2: oklch(0.62 0.22 var(--accent-h));
+  --accent-deep: oklch(0.52 0.22 var(--accent-h));
+  --accent-glow: oklch(0.72 0.19 var(--accent-h) / 0.32);
+  --accent-soft: oklch(0.30 0.08 var(--accent-h));
+  --accent-ink: oklch(0.86 0.16 var(--accent-h));
+  --scrim: oklch(0.05 0.02 290 / 0.72);
+  --scrim-shadow: oklch(0.05 0.02 290 / 0.55);
+}
+
+.lsw-root .mono { font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace; }
+.lsw-root .serif { font-family: var(--font-instrument-serif, 'Instrument Serif'), Georgia, serif; font-feature-settings: normal; }
+.lsw-root button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; padding: 0; }
+.lsw-root input, .lsw-root textarea { font-family: inherit; }
+.lsw-root ::-webkit-scrollbar { width: 8px; height: 8px; }
+.lsw-root ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+.lsw-root ::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+
+@keyframes lsw-fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes lsw-modalIn { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes lsw-drawerIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes lsw-shimmer { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes lsw-spin { to { transform: rotate(360deg); } }

@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "description": "Launchstack monorepo root. Run package-level scripts via pnpm --filter <pkg>.",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "pnpm --filter @launchstack/web build",
     "check": "eslint . && pnpm -r typecheck",
@@ -19,6 +20,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "postinstall": "echo 'postinstall: no-op'",
     "db:push": "pnpm --filter @launchstack/web db:push",
+    "db:migrate": "pnpm --filter @launchstack/web db:migrate",
     "db:studio": "pnpm --filter @launchstack/web db:studio",
     "db:backfill:versions": "pnpm --filter @launchstack/web db:backfill:versions",
     "inngest:dev": "pnpm --filter @launchstack/web inngest:dev",

@@ -15,7 +15,7 @@ import {
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Card } from "~/app/employer/documents/components/ui/card";
 import { cn } from "~/lib/utils";
-import { EmployerNavbar } from "~/app/employer/_components/EmployerNavbar";
+import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { CompanyInfoCard } from "./components/CompanyInfoCard";
 import { PeopleSection } from "./components/PeopleSection";
 import { ServicesSection } from "./components/ServicesSection";
@@ -89,7 +89,7 @@ export default function MetadataPage() {
     if (loading && !data) {
         return (
             <div className="flex flex-col min-h-screen bg-background">
-                <EmployerNavbar />
+                <EmployerChrome pageLabel="Launchstack" pageTitle="Metadata" />
                 <div className="flex flex-col items-center justify-center flex-1 py-20">
                     <div className="relative mb-8">
                         <div className="w-20 h-20 border-4 border-purple-100 dark:border-purple-900/30 rounded-full border-t-purple-600 dark:border-t-purple-500 animate-spin" />
@@ -107,7 +107,7 @@ export default function MetadataPage() {
     if (error) {
         return (
             <div className="flex flex-col min-h-screen bg-background">
-                <EmployerNavbar />
+                <EmployerChrome pageLabel="Launchstack" pageTitle="Metadata" />
                 <div className="flex flex-col items-center justify-center flex-1 py-20">
                     <Card className="p-6 border-destructive/20 bg-destructive/10 max-w-md">
                         <div className="flex items-start gap-4">
@@ -138,7 +138,7 @@ export default function MetadataPage() {
 
     return (
         <div className="flex flex-col min-h-screen bg-background">
-            <EmployerNavbar />
+            <EmployerChrome pageLabel="Launchstack" pageTitle="Metadata" />
 
             {/* Header */}
             <div className="bg-background border-b border-border px-8 py-6 flex-shrink-0 z-10 shadow-sm sticky top-[73px]">

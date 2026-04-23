@@ -1,11 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "pnpm install --ignore-scripts",
-  "buildCommand": "pnpm build",
-  "rewrites": [
-    {
-      "source": "/api/adeu/:path*",
-      "destination": "/api/adeu"
-    }
-  ]
+  "installCommand": "pnpm install --frozen-lockfile --ignore-scripts",
+  "buildCommand": "if [ \"$VERCEL_ENV\" = \"production\" ]; then pnpm db:migrate; fi && pnpm build",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD . ':(exclude)docs/**' ':(exclude)*.md' ':(exclude).github/**'"
 }

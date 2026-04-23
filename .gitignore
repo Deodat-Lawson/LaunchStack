@@ -62,3 +62,6 @@ packages/*/dist/
 .kiro
 backups/
 /models/
+
+# test output
+test-output/

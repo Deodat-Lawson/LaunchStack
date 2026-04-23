@@ -105,7 +105,6 @@ export class ImageAdapter implements SourceAdapter {
     };
   }
 
-  // TODO: Make this select based on a workflow determining which is best
   private selectProvider(): "azure" | "landing_ai" | "tesseract" {
     const cfg = getOcrConfig();
     if (cfg.landingAi?.apiKey) return "landing_ai";

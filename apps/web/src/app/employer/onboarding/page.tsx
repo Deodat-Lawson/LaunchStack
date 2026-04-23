@@ -3,16 +3,24 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Brain,
-  Building2,
-  Megaphone,
-  FileSearch,
-  Upload,
   ArrowRight,
-  ChevronRight,
+  Building2,
   ChevronLeft,
+  ChevronRight,
+  FileSearch,
+  Megaphone,
+  Upload,
 } from "lucide-react";
-import styles from "~/styles/Employer/Onboarding.module.css";
+
+import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
+import {
+  Button,
+  Card,
+  Field,
+  PageShell,
+  SelectInput,
+  TextArea,
+} from "~/app/employer/_components/primitives";
 
 const INDUSTRIES = [
   "Technology",
@@ -36,16 +44,13 @@ export default function OnboardingPage() {
   const [industry, setIndustry] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
-  const skip = () => {
-    router.replace("/employer/documents");
-  };
+  const skip = () => router.replace("/employer/documents");
 
   const saveAndContinue = async () => {
     if (!description.trim() && !industry) {
       setStep(2);
       return;
     }
-
     setIsSaving(true);
     try {
       await fetch("/api/company/onboarding", {
@@ -64,245 +69,438 @@ export default function OnboardingPage() {
     }
   };
 
-  const finish = () => {
-    router.replace("/employer/documents");
-  };
+  const finish = () => router.replace("/employer/documents");
 
-  const renderProgress = () => (
-    <div className={styles.progressBar}>
+  return (
+    <>
+      <EmployerChrome pageLabel="First steps" pageTitle="Onboarding" />
+      <PageShell>
+        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+          <ProgressBar step={step} />
+          <Card style={{ padding: 0, overflow: "hidden" }}>
+            {step === 0 && <WelcomeStep onNext={() => setStep(1)} onSkip={skip} />}
+            {step === 1 && (
+              <CompanyInfoStep
+                description={description}
+                setDescription={setDescription}
+                industry={industry}
+                setIndustry={setIndustry}
+                onBack={() => setStep(0)}
+                onNext={() => void saveAndContinue()}
+                onSkip={skip}
+                isSaving={isSaving}
+              />
+            )}
+            {step === 2 && <QuickStartStep router={router} onFinish={finish} />}
+          </Card>
+        </div>
+      </PageShell>
+    </>
+  );
+}
+
+function ProgressBar({ step }: { step: Step }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: 8,
+        margin: "8px 0 20px",
+        padding: "0 2px",
+      }}
+    >
       {[0, 1, 2].map((i) => (
         <div
           key={i}
-          className={`${styles.progressStep} ${
-            i === step
-              ? styles.progressStepActive
-              : i < step
-                ? styles.progressStepDone
-                : styles.progressStepPending
-          }`}
+          style={{
+            flex: 1,
+            height: 4,
+            borderRadius: 2,
+            background:
+              i === step
+                ? "var(--accent)"
+                : i < step
+                ? "var(--accent-glow)"
+                : "var(--line)",
+            transition: "background 200ms",
+          }}
         />
       ))}
     </div>
   );
+}
 
-  const renderWelcome = () => (
-    <>
-      <div className={styles.cardBody}>
-        <div className={styles.welcomeLogo}>
-          <Brain className={styles.welcomeLogoIcon} />
-          <span className={styles.welcomeLogoText}>Launchstack</span>
-        </div>
-
-        <h1 className={styles.welcomeTitle}>Welcome to Launchstack</h1>
-        <p className={styles.welcomeSubtitle}>
-          Turn your company&apos;s documents into a living knowledge base that
-          powers smarter decisions, automated marketing, and team-wide insights.
-        </p>
-
-        <div className={styles.features}>
-          <div className={styles.featureCard}>
-            <div className={styles.featureIconWrap}>
-              <Building2 className={styles.featureIcon} />
-            </div>
-            <h4 className={styles.featureTitle}>Company Knowledge</h4>
-            <p className={styles.featureText}>
-              AI extracts and organizes key facts from every document you upload
-            </p>
-          </div>
-          <div className={styles.featureCard}>
-            <div className={styles.featureIconWrap}>
-              <Megaphone className={styles.featureIcon} />
-            </div>
-            <h4 className={styles.featureTitle}>Marketing Pipeline</h4>
-            <p className={styles.featureText}>
-              Generate on-brand campaigns for LinkedIn, X, Reddit, and more
-            </p>
-          </div>
-          <div className={styles.featureCard}>
-            <div className={styles.featureIconWrap}>
-              <FileSearch className={styles.featureIcon} />
-            </div>
-            <h4 className={styles.featureTitle}>AI Q&amp;A</h4>
-            <p className={styles.featureText}>
-              Ask questions across all your documents and get instant answers
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.footer}>
-        <button type="button" onClick={skip} className={styles.skipLink}>
-          Skip for now
-        </button>
-        <button
-          type="button"
-          onClick={() => setStep(1)}
-          className={styles.primaryButton}
-        >
-          Get Started
-          <ChevronRight className="inline w-4 h-4 ml-1 -mr-1" />
-        </button>
-      </div>
-    </>
+function StepFooter({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        padding: "14px 24px",
+        borderTop: "1px solid var(--line)",
+        background: "var(--line-2)",
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+      }}
+    >
+      {children}
+    </div>
   );
+}
 
-  const renderCompanyInfo = () => (
+function WelcomeStep({
+  onNext,
+  onSkip,
+}: {
+  onNext: () => void;
+  onSkip: () => void;
+}) {
+  return (
     <>
-      <div className={styles.cardBody}>
-        <h2 className={styles.stepTitle}>Tell us about your company</h2>
-        <p className={styles.stepSubtitle}>
-          Your description feeds directly into your company knowledge base --
-          powering smarter document analysis, more relevant marketing campaigns,
-          and better AI answers across the platform.
-        </p>
+      <div style={{ padding: "32px 30px 24px" }}>
+        <div
+          className="mono"
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.1em",
+            color: "var(--ink-3)",
+            textTransform: "uppercase",
+            marginBottom: 8,
+          }}
+        >
+          Welcome
+        </div>
+        <h1
+          className="serif"
+          style={{
+            fontSize: 34,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            color: "var(--ink)",
+            margin: "0 0 10px",
+          }}
+        >
+          Turn your team&apos;s context into answers.
+        </h1>
+        <div style={{ fontSize: 14, color: "var(--ink-3)", lineHeight: 1.55 }}>
+          Launchstack ingests your docs, emails, transcripts, and repos into one
+          place you can ask anything. A couple of short steps and you&apos;re live.
+        </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="description" className={styles.label}>
-            Company Description{" "}
-            <span className={styles.labelHint}>(optional)</span>
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className={styles.textarea}
-            placeholder="Briefly describe what your company does, your products or services, and your target market..."
-            rows={4}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gap: 12,
+            marginTop: 24,
+          }}
+        >
+          <FeatureTile
+            Icon={Building2}
+            title="Company knowledge"
+            text="AI extracts and organizes key facts from every document"
+          />
+          <FeatureTile
+            Icon={Megaphone}
+            title="Marketing pipeline"
+            text="Generate on-brand campaigns for LinkedIn, X, Reddit"
+          />
+          <FeatureTile
+            Icon={FileSearch}
+            title="Grounded Q&A"
+            text="Ask across every source; answers cite the exact passage"
           />
         </div>
+      </div>
+      <StepFooter>
+        <Button variant="ghost" onClick={onSkip}>
+          Skip for now
+        </Button>
+        <div style={{ flex: 1 }} />
+        <Button onClick={onNext}>
+          Get started <ChevronRight style={{ width: 14, height: 14 }} />
+        </Button>
+      </StepFooter>
+    </>
+  );
+}
 
-        <div className={styles.formGroup}>
-          <label htmlFor="industry" className={styles.label}>
-            Industry / Sector{" "}
-            <span className={styles.labelHint}>(optional)</span>
-          </label>
-          <select
-            id="industry"
+function FeatureTile({
+  Icon,
+  title,
+  text,
+}: {
+  Icon: React.ComponentType<{ style?: React.CSSProperties }>;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div
+      style={{
+        padding: 14,
+        borderRadius: 10,
+        border: "1px solid var(--line)",
+        background: "var(--panel-2)",
+      }}
+    >
+      <div
+        style={{
+          width: 32,
+          height: 32,
+          borderRadius: 8,
+          background: "var(--accent-soft)",
+          color: "var(--accent)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: 10,
+        }}
+      >
+        <Icon style={{ width: 16, height: 16 }} />
+      </div>
+      <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>{title}</div>
+      <div style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 4, lineHeight: 1.5 }}>
+        {text}
+      </div>
+    </div>
+  );
+}
+
+function CompanyInfoStep({
+  description,
+  setDescription,
+  industry,
+  setIndustry,
+  onBack,
+  onNext,
+  onSkip,
+  isSaving,
+}: {
+  description: string;
+  setDescription: (v: string) => void;
+  industry: string;
+  setIndustry: (v: string) => void;
+  onBack: () => void;
+  onNext: () => void;
+  onSkip: () => void;
+  isSaving: boolean;
+}) {
+  return (
+    <>
+      <div style={{ padding: "32px 30px 24px" }}>
+        <div
+          className="mono"
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.1em",
+            color: "var(--ink-3)",
+            textTransform: "uppercase",
+            marginBottom: 8,
+          }}
+        >
+          About your company
+        </div>
+        <h2
+          className="serif"
+          style={{
+            fontSize: 28,
+            lineHeight: 1.15,
+            letterSpacing: "-0.02em",
+            color: "var(--ink)",
+            margin: "0 0 8px",
+          }}
+        >
+          Tell us who you are.
+        </h2>
+        <div
+          style={{
+            fontSize: 13,
+            color: "var(--ink-3)",
+            lineHeight: 1.55,
+            marginBottom: 20,
+          }}
+        >
+          Your description feeds into every AI call — better context here means
+          sharper answers everywhere.
+        </div>
+
+        <Field label="Company description (optional)">
+          <TextArea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="What does your company do? Products, services, target market…"
+            rows={4}
+          />
+        </Field>
+        <Field label="Industry / sector (optional)">
+          <SelectInput
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
-            className={styles.selectTrigger}
           >
-            <option value="">Select an industry...</option>
+            <option value="">Select an industry…</option>
             {INDUSTRIES.map((ind) => (
               <option key={ind} value={ind}>
                 {ind}
               </option>
             ))}
-          </select>
-        </div>
+          </SelectInput>
+        </Field>
       </div>
-
-      <div className={styles.footer}>
-        <button type="button" onClick={skip} className={styles.skipLink}>
+      <StepFooter>
+        <Button variant="ghost" onClick={onSkip}>
           Skip for now
-        </button>
-        <div className={styles.buttonGroup}>
-          <button
-            type="button"
-            onClick={() => setStep(0)}
-            className={styles.secondaryButton}
-          >
-            <ChevronLeft className="inline w-4 h-4 mr-1 -ml-1" />
-            Back
-          </button>
-          <button
-            type="button"
-            onClick={() => void saveAndContinue()}
-            disabled={isSaving}
-            className={styles.primaryButton}
-          >
-            {isSaving ? "Saving..." : "Continue"}
-            {!isSaving && (
-              <ChevronRight className="inline w-4 h-4 ml-1 -mr-1" />
-            )}
-          </button>
-        </div>
-      </div>
+        </Button>
+        <div style={{ flex: 1 }} />
+        <Button variant="secondary" onClick={onBack}>
+          <ChevronLeft style={{ width: 14, height: 14 }} /> Back
+        </Button>
+        <Button onClick={onNext} disabled={isSaving}>
+          {isSaving ? "Saving…" : "Continue"}
+          {!isSaving && <ChevronRight style={{ width: 14, height: 14 }} />}
+        </Button>
+      </StepFooter>
     </>
   );
+}
 
-  const renderQuickStart = () => {
-    const actions = [
-      {
-        icon: Upload,
-        title: "Upload documents to build your knowledge base",
-        text: "Every upload enriches your company profile and powers AI features",
-        iconWrap: styles.quickStartIconPurple,
-        iconColor: styles.quickStartIconColorPurple,
-        href: "/employer/documents?view=upload",
-      },
-      {
-        icon: Megaphone,
-        title: "Create a marketing campaign",
-        text: "Generate platform-ready posts using your company knowledge",
-        iconWrap: styles.quickStartIconIndigo,
-        iconColor: styles.quickStartIconColorIndigo,
-        href: "/employer/documents?view=marketing-pipeline",
-      },
-      {
-        icon: Building2,
-        title: "View your company metadata",
-        text: "See AI-extracted facts about your people, services, and markets",
-        iconWrap: styles.quickStartIconViolet,
-        iconColor: styles.quickStartIconColorViolet,
-        href: "/employer/documents?view=metadata",
-      },
-    ];
-
-    return (
-      <>
-        <div className={styles.cardBody}>
-          <h2 className={styles.stepTitle}>You&apos;re all set!</h2>
-          <p className={styles.stepSubtitle}>
-            Here are some things you can do right away to get started.
-          </p>
-
-          <div className={styles.quickStartCards}>
-            {actions.map((action) => (
-              <button
-                key={action.title}
-                type="button"
-                onClick={() => router.push(action.href)}
-                className={styles.quickStartCard}
-              >
-                <div
-                  className={`${styles.quickStartIconWrap} ${action.iconWrap}`}
-                >
-                  <action.icon
-                    className={`${styles.quickStartIcon} ${action.iconColor}`}
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className={styles.quickStartTitle}>{action.title}</div>
-                  <div className={styles.quickStartText}>{action.text}</div>
-                </div>
-                <ArrowRight className={styles.quickStartArrow} />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.footer}>
-          <div />
-          <button type="button" onClick={finish} className={styles.primaryButton}>
-            Go to Dashboard
-            <ArrowRight className="inline w-4 h-4 ml-1 -mr-1" />
-          </button>
-        </div>
-      </>
-    );
-  };
+function QuickStartStep({
+  router,
+  onFinish,
+}: {
+  router: ReturnType<typeof useRouter>;
+  onFinish: () => void;
+}) {
+  const actions = [
+    {
+      Icon: Upload,
+      title: "Upload documents to build your knowledge base",
+      text: "Every upload enriches your company profile and powers AI features",
+      href: "/employer/documents?view=upload",
+    },
+    {
+      Icon: Megaphone,
+      title: "Create a marketing campaign",
+      text: "Generate platform-ready posts using your company knowledge",
+      href: "/employer/documents?view=marketing-pipeline",
+    },
+    {
+      Icon: Building2,
+      title: "View your company metadata",
+      text: "See AI-extracted facts about your people, services, and markets",
+      href: "/employer/documents?view=metadata",
+    },
+  ];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        {renderProgress()}
-        <div className={styles.card}>
-          {step === 0 && renderWelcome()}
-          {step === 1 && renderCompanyInfo()}
-          {step === 2 && renderQuickStart()}
+    <>
+      <div style={{ padding: "32px 30px 24px" }}>
+        <div
+          className="mono"
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.1em",
+            color: "var(--ink-3)",
+            textTransform: "uppercase",
+            marginBottom: 8,
+          }}
+        >
+          You&apos;re in
+        </div>
+        <h2
+          className="serif"
+          style={{
+            fontSize: 28,
+            lineHeight: 1.15,
+            letterSpacing: "-0.02em",
+            color: "var(--ink)",
+            margin: "0 0 8px",
+          }}
+        >
+          Let&apos;s get your first win.
+        </h2>
+        <div
+          style={{
+            fontSize: 13,
+            color: "var(--ink-3)",
+            lineHeight: 1.55,
+            marginBottom: 20,
+          }}
+        >
+          Pick one to start — you can always come back to the rest.
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {actions.map((a) => (
+            <button
+              key={a.title}
+              onClick={() => router.push(a.href)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                padding: "14px 16px",
+                borderRadius: 12,
+                border: "1px solid var(--line)",
+                background: "var(--panel-2)",
+                textAlign: "left",
+                cursor: "pointer",
+                transition: "border-color 120ms, background 120ms",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--accent)";
+                e.currentTarget.style.background = "var(--accent-soft)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--line)";
+                e.currentTarget.style.background = "var(--panel-2)";
+              }}
+            >
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 10,
+                  background: "var(--panel)",
+                  color: "var(--accent)",
+                  border: "1px solid var(--line)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <a.Icon style={{ width: 18, height: 18 }} />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
+                  {a.title}
+                </div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "var(--ink-3)",
+                    marginTop: 2,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {a.text}
+                </div>
+              </div>
+              <ArrowRight
+                style={{ width: 16, height: 16, color: "var(--ink-3)", flexShrink: 0 }}
+              />
+            </button>
+          ))}
         </div>
       </div>
-    </div>
+      <StepFooter>
+        <div style={{ flex: 1 }} />
+        <Button onClick={onFinish}>
+          Go to workspace <ArrowRight style={{ width: 14, height: 14 }} />
+        </Button>
+      </StepFooter>
+    </>
   );
 }

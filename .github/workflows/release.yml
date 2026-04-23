@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+# Prevent two simultaneous releases from racing the npm registry / version PR.
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10.15.1'
+
+jobs:
+  release:
+    name: Publish @launchstack/core
+    runs-on: ubuntu-latest
+    # Only run when the repo owns the NPM_TOKEN secret.
+    # On forks, this skips gracefully.
+    if: github.repository == 'launchstack/launchstack'
+
+    permissions:
+      contents: write   # to create the version PR + tags
+      pull-requests: write
+      id-token: write   # for npm provenance
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build @launchstack/core
+        run: pnpm --filter @launchstack/core build
+
+      - name: Validate packed tarball
+        run: |
+          cd packages/core
+          pnpm pack --pack-destination ./
+          TARBALL=$(ls launchstack-core-*.tgz)
+          npx --yes publint ./${TARBALL}
+          npx --yes @arethetypeswrong/cli ./${TARBALL} || true
+
+      - name: Create Release PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          version: pnpm changeset version
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true

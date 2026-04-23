@@ -14,7 +14,6 @@ import { env } from "~/env";
 import { configureProviders } from "@launchstack/core/providers/registry";
 import { configureChatModels } from "@launchstack/core/llm";
 import { configureSecretBox } from "@launchstack/core/crypto";
-import { configureOcrRouter } from "@launchstack/core/ocr/complexity";
 import { configureOcr } from "@launchstack/core/ocr/config";
 import { configureEmbeddingIndexRegistry } from "@launchstack/core/embeddings";
 import { configureEmbeddingFactory } from "@launchstack/core/embeddings";
@@ -115,6 +114,11 @@ function buildConfig(): CoreConfig {
         : undefined,
       workerUrl: server.OCR_WORKER_URL,
       routerUrl: server.OCR_ROUTER_URL,
+      vision: {
+        openaiApiKey: server.OPENAI_API_KEY,
+        aiApiKey: server.AI_API_KEY,
+        aiBaseUrl: server.AI_BASE_URL,
+      },
     },
 
     neo4j: server.NEO4J_URI
@@ -240,10 +244,8 @@ export function getEngine(): Engine {
   // Register the encryption key used by company-credentials secret-box.
   configureSecretBox({ key: config.embeddings.secretsKey });
 
-  // Register the ocr-router URL so complexity.ts reaches the right host,
-  // plus the full OcrConfig so adapters read credentials and worker URLs
-  // from the same source.
-  configureOcrRouter({ routerUrl: config.ocr.routerUrl });
+  // Register the full OcrConfig so the complexity router, worker adapters,
+  // and vision-credential forwarding all read from the same source.
   configureOcr(config.ocr);
 
   const engine = createEngine(config);

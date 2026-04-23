@@ -4,7 +4,7 @@
   "private": false,
   "type": "module",
   "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. Framework-agnostic — runs under Next, Node, or any host that supplies a StoragePort, JobDispatcherPort, and CreditsPort.",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "Launchstack",
   "homepage": "https://github.com/launchstack/launchstack",
   "repository": {
@@ -41,6 +41,10 @@
     "./config": {
       "types": "./src/config/index.ts",
       "default": "./src/config/index.ts"
+    },
+    "./errors": {
+      "types": "./src/errors/index.ts",
+      "default": "./src/errors/index.ts"
     },
     "./storage": {
       "types": "./src/storage/index.ts",
@@ -191,6 +195,10 @@
       "./config": {
         "types": "./dist/config/index.d.ts",
         "default": "./dist/config/index.js"
+      },
+      "./errors": {
+        "types": "./dist/errors/index.d.ts",
+        "default": "./dist/errors/index.js"
       },
       "./storage": {
         "types": "./dist/storage/index.d.ts",

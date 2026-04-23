@@ -1,10 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Brain, Github, Loader2, Network, Share2 } from "lucide-react";
-import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
-import { ThemeToggle } from "~/app/_components/ThemeToggle";
-import homeStyles from "~/styles/Employer/Home.module.css";
+import { Loader2, Network, Share2 } from "lucide-react";
+import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { MermaidDiagram } from "./MermaidDiagram";
 import { useRepoExplainer } from "./useRepoExplainer";
 import type { DiagramType } from "@launchstack/features/repo-explainer";
@@ -18,7 +15,6 @@ const DIAGRAM_TYPE_OPTIONS: { value: DiagramType; label: string }[] = [
 ];
 
 export default function RepoExplainerPage() {
-  const router = useRouter();
   const {
     url,
     setUrl,
@@ -37,34 +33,8 @@ export default function RepoExplainerPage() {
   } = useRepoExplainer();
 
   return (
-    <div className={homeStyles.container}>
-      <nav className={homeStyles.navbar}>
-        <div className={homeStyles.navContent}>
-          <div
-            className={homeStyles.logoContainer}
-            onClick={() => router.push("/employer/home")}
-            onKeyDown={(e) => e.key === "Enter" && router.push("/employer/home")}
-            role="button"
-            tabIndex={0}
-          >
-            <Brain className={homeStyles.logoIcon} />
-            <span className={homeStyles.logoText}>PDR AI</span>
-          </div>
-          <div className={homeStyles.navActions}>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-              onClick={() => router.push("/employer/home")}
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Home
-            </button>
-            <ThemeToggle />
-            <ProfileDropdown />
-          </div>
-        </div>
-      </nav>
-
+    <>
+      <EmployerChrome pageLabel="Tools" pageTitle="Repo explainer" />
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 pb-10 pt-8">
         <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
@@ -259,6 +229,6 @@ export default function RepoExplainerPage() {
           </section>
         )}
       </main>
-    </div>
+    </>
   );
 }

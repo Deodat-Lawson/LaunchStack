@@ -1,179 +1,249 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-    Users,
-    FileText,
-    TrendingUp,
-    MousePointerClick,
-    RefreshCw,
-    Clock,
-    AlertCircle,
+  AlertCircle,
+  Clock,
+  FileText,
+  MousePointerClick,
+  RefreshCw,
+  Users,
 } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Card } from "~/app/employer/documents/components/ui/card";
-import { cn } from "~/lib/utils";
-import { EmployerNavbar } from "~/app/employer/_components/EmployerNavbar";
-import { StatsCard } from "./components/StatsCard";
+
+import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
+import {
+  Button,
+  Card,
+  PageHeader,
+  PageShell,
+  Section,
+} from "~/app/employer/_components/primitives";
 import { ChartsSection } from "./components/ChartsSection";
 import { DocumentStatsTable } from "./components/DocumentStatsTable";
 import { EmployeeActivityTable } from "./components/EmployeeActivityTable";
 import type { DashboardData } from "./types";
 
+interface StatTileProps {
+  label: string;
+  value: number | string;
+  Icon: React.ComponentType<{ size?: number | string; className?: string; style?: React.CSSProperties }>;
+  accent: string;
+}
+
+function StatTile({ label, value, Icon, accent }: StatTileProps) {
+  return (
+    <Card style={{ borderLeft: `3px solid ${accent}` }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 8,
+        }}
+      >
+        <span
+          className="mono"
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.1em",
+            color: "var(--ink-3)",
+            textTransform: "uppercase",
+          }}
+        >
+          {label}
+        </span>
+        <Icon style={{ width: 16, height: 16, color: accent }} />
+      </div>
+      <div
+        style={{
+          fontSize: 30,
+          fontWeight: 800,
+          letterSpacing: "-0.02em",
+          color: "var(--ink)",
+          lineHeight: 1.1,
+        }}
+      >
+        {value}
+      </div>
+    </Card>
+  );
+}
+
 export default function StatisticsPage() {
-    const [data, setData] = useState<DashboardData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-    const fetchDashboardData = useCallback(async () => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await fetch("/api/company/analysis-dashboard");
-            const result = (await response.json()) as {
-                success: boolean;
-                data?: DashboardData;
-                error?: string;
-            };
-
-            if (!result.success || !result.data) {
-                throw new Error(result.error ?? "Failed to fetch dashboard data");
-            }
-
-            setData(result.data);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred");
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        void fetchDashboardData();
-    }, [fetchDashboardData]);
-
-    if (loading && !data) {
-    return (
-            <div className="flex flex-col min-h-screen bg-background">
-                <EmployerNavbar />
-                <div className="flex flex-col items-center justify-center flex-1 py-20">
-                    <div className="relative mb-8">
-                        <div className="w-20 h-20 border-4 border-purple-100 dark:border-purple-900/30 rounded-full border-t-purple-600 dark:border-t-purple-500 animate-spin" />
-                        <TrendingUp className="w-8 h-8 text-purple-600 dark:text-purple-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
-                    </div>
-                    <h3 className="text-xl font-bold text-foreground mb-2">Loading Dashboard</h3>
-                    <p className="text-muted-foreground max-w-sm text-center font-medium">
-                        Fetching company analytics and employee data...
-                    </p>
-                </div>
-            </div>
-        );
+  const fetchDashboardData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/company/analysis-dashboard");
+      const result = (await response.json()) as {
+        success: boolean;
+        data?: DashboardData;
+        error?: string;
+      };
+      if (!result.success || !result.data) {
+        throw new Error(result.error ?? "Failed to fetch dashboard data");
+      }
+      setData(result.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
     }
+  }, []);
 
-    if (error) {
-        return (
-            <div className="flex flex-col min-h-screen bg-background">
-                <EmployerNavbar />
-                <div className="flex flex-col items-center justify-center flex-1 py-20">
-                    <Card className="p-6 border-destructive/20 bg-destructive/10 max-w-md">
-                        <div className="flex items-start gap-4">
-                            <div className="p-2 bg-destructive/20 rounded-lg">
-                                <AlertCircle className="w-6 h-6 text-destructive" />
-                            </div>
-                        <div>
-                                <h3 className="text-lg font-bold text-destructive">Failed to Load</h3>
-                                <p className="text-destructive text-sm mt-1 font-medium">{error}</p>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => void fetchDashboardData()}
-                                    className="mt-4 border-destructive/30 text-destructive hover:bg-destructive/10"
-                                >
-                                    Try Again
-                                </Button>
-                            </div>
-                        </div>
-                    </Card>
+  useEffect(() => {
+    void fetchDashboardData();
+  }, [fetchDashboardData]);
+
+  return (
+    <>
+      <EmployerChrome pageLabel="Launchstack" pageTitle="Analytics" />
+      <PageShell wide>
+        <PageHeader
+          eyebrow="Analytics"
+          title="Analytics dashboard"
+          description="Company-wide view of documents, employee activity, and query trends. Refresh to pull the latest."
+          actions={
+            <Button
+              onClick={() => void fetchDashboardData()}
+              disabled={loading}
+              style={{ padding: "9px 16px" }}
+            >
+              <RefreshCw
+                style={{
+                  width: 14,
+                  height: 14,
+                  animation: loading ? "lsw-spin 800ms linear infinite" : undefined,
+                }}
+              />
+              {loading ? "Refreshing…" : "Refresh data"}
+            </Button>
+          }
+        />
+
+        {error && (
+          <Card
+            style={{
+              marginBottom: 20,
+              borderColor: "oklch(0.85 0.09 25)",
+              background: "oklch(0.96 0.05 25)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+              <AlertCircle style={{ width: 18, height: 18, color: "var(--danger)" }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "var(--danger)" }}>
+                  Failed to load
                 </div>
-            </div>
-        );
-    }
-
-    if (!data) return null;
-
-    return (
-        <div className="flex flex-col min-h-screen bg-background">
-            <EmployerNavbar />
-            
-            {/* Header */}
-            <div className="bg-background border-b border-border px-8 py-6 flex-shrink-0 z-10 shadow-sm sticky top-[73px]">
-                <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-purple-600 rounded-2xl shadow-lg shadow-purple-500/20">
-                            <TrendingUp className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-2xl font-bold text-foreground leading-tight">
-                                Analytics Dashboard
-                            </h1>
-                            <p className="text-sm text-muted-foreground font-medium mt-1">
-                                Company-wide analytics, document performance, and employee activity
-                            </p>
-                        </div>
-                    </div>
-
-                    <Button
-                        onClick={() => void fetchDashboardData()}
-                        disabled={loading}
-                        className="bg-purple-600 hover:bg-purple-700 text-white rounded-xl h-11 px-6 shadow-lg shadow-purple-500/20 gap-2 font-bold transition-all hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                        <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
-                        {loading ? "Refreshing..." : "Refresh Data"}
-                    </Button>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "oklch(0.4 0.12 25)",
+                    marginTop: 4,
+                  }}
+                >
+                  {error}
                 </div>
+                <Button
+                  variant="secondary"
+                  onClick={() => void fetchDashboardData()}
+                  style={{ marginTop: 10, padding: "5px 10px" }}
+                >
+                  Try again
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {loading && !data && !error && (
+          <Card>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 14,
+                padding: "20px 0",
+                color: "var(--ink-3)",
+              }}
+            >
+              <RefreshCw
+                style={{
+                  width: 18,
+                  height: 18,
+                  color: "var(--accent)",
+                  animation: "lsw-spin 800ms linear infinite",
+                }}
+              />
+              <div style={{ fontSize: 14 }}>Fetching company analytics and employee data…</div>
+            </div>
+          </Card>
+        )}
+
+        {data && (
+          <>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                gap: 12,
+                marginBottom: 28,
+              }}
+            >
+              <StatTile
+                label="Total employees"
+                value={data.totalEmployees}
+                Icon={Users}
+                accent="var(--accent)"
+              />
+              <StatTile
+                label="Total documents"
+                value={data.totalDocuments}
+                Icon={FileText}
+                accent="oklch(0.6 0.16 225)"
+              />
+              <StatTile
+                label="Active users"
+                value={data.employees.filter((e) => e.status === "verified").length}
+                Icon={Clock}
+                accent="oklch(0.58 0.15 160)"
+              />
+              <StatTile
+                label="30-day views"
+                value={data.documentViewsTrend.reduce((sum, d) => sum + d.count, 0)}
+                Icon={MousePointerClick}
+                accent="oklch(0.65 0.16 65)"
+              />
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar">
-                <div className="max-w-7xl mx-auto p-8 space-y-8">
-                    {/* Summary Stats */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <StatsCard 
-                            title="Total Employees" 
-                            value={data.totalEmployees} 
-                            icon={Users} 
-                            color="purple" 
-                        />
-                        <StatsCard 
-                            title="Total Documents" 
-                            value={data.totalDocuments} 
-                            icon={FileText} 
-                            color="blue" 
-                        />
-                        <StatsCard 
-                            title="Active Users" 
-                            value={data.employees.filter((e) => e.status === "verified").length} 
-                            icon={Clock} 
-                            color="green" 
-                        />
-                        <StatsCard 
-                            title="30 Days Views" 
-                            value={data.documentViewsTrend.reduce((sum, d) => sum + d.count, 0)} 
-                            icon={MousePointerClick} 
-                            color="amber" 
-                        />
-                    </div>
+            <Section
+              title="Trends"
+              description="Query volume and activity over the last 30 days."
+            >
+              <Card padding={18}>
+                <ChartsSection data={data} />
+              </Card>
+            </Section>
 
-                    {/* Charts Grid */}
-                    <ChartsSection data={data} />
+            <Section title="Documents" description="Per-document stats and hit rates.">
+              <Card padding={0}>
+                <DocumentStatsTable documents={data.documentStats} />
+              </Card>
+            </Section>
 
-                    {/* Document Statistics Table */}
-                    <DocumentStatsTable documents={data.documentStats} />
-
-                    {/* Employees Table */}
-                    <EmployeeActivityTable employees={data.employees} />
-                </div>
-            </div>
-        </div>
-    );
+            <Section title="Employees" description="Activity broken down by team member.">
+              <Card padding={0}>
+                <EmployeeActivityTable employees={data.employees} />
+              </Card>
+            </Section>
+          </>
+        )}
+      </PageShell>
+    </>
+  );
 }

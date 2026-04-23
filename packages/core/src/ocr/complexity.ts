@@ -1,9 +1,10 @@
 /**
  * Document complexity analysis and OCR routing.
  * Delegates heavy work (vision classification, PDF rendering) to the ocr-router sidecar.
- * Falls back to env-based heuristics if the sidecar is unavailable.
+ * Falls back to configured heuristics if the sidecar is unavailable.
  */
 
+import { getOcrConfig } from "./config";
 import type { OCRProvider } from "./types";
 
 export interface RoutingDecision {
@@ -14,19 +15,8 @@ export interface RoutingDecision {
   visionResult?: { label: string; score: number };
 }
 
-/**
- * OCR-router URL — the vision-classifier + PDF-renderer sidecar. Injected
- * via configureOcrRouter from the hosting app's CoreConfig; falls back to
- * the compose-default hostname when nothing has been registered.
- */
-let _ocrRouterUrl: string | null = null;
-
-export function configureOcrRouter(config: { routerUrl?: string }): void {
-  _ocrRouterUrl = config.routerUrl ?? null;
-}
-
 function getOcrRouterUrl(): string {
-  return _ocrRouterUrl ?? "http://ocr-router:8002";
+  return getOcrConfig().routerUrl ?? "http://ocr-router:8002";
 }
 
 /**
@@ -85,21 +75,16 @@ export async function renderPagesToImages(
   }
 }
 
-/**
- * TODO(step 7): replace the remaining process.env reads in this file
- * (getDefaultOCRProvider and the `env:` object forwarded to the router)
- * with a full OcrConfig registered via configureOcr. The hosting app
- * already has the values in CoreConfig.ocr — thread them here.
- */
 function getDefaultOCRProvider(): OCRProvider {
-  const configured = process.env.OCR_DEFAULT_PROVIDER?.toUpperCase();
+  const cfg = getOcrConfig();
+  const configured = cfg.defaultProvider?.toUpperCase();
   if (configured === "MARKER" || configured === "DOCLING") {
-    if (process.env.OCR_WORKER_URL) return configured as OCRProvider;
+    if (cfg.workerUrl) return configured as OCRProvider;
   }
-  if (process.env.OCR_WORKER_URL) return "DOCLING";
-  if (process.env.AZURE_DOC_INTELLIGENCE_KEY && process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT) return "AZURE";
-  if (process.env.LANDING_AI_API_KEY) return "LANDING_AI";
-  if (process.env.DATALAB_API_KEY) return "DATALAB";
+  if (cfg.workerUrl) return "DOCLING";
+  if (cfg.azure?.key && cfg.azure.endpoint) return "AZURE";
+  if (cfg.landingAi?.apiKey) return "LANDING_AI";
+  if (cfg.datalabApiKey) return "DATALAB";
   return "DOCLING";
 }
 
@@ -111,6 +96,7 @@ function getDefaultOCRProvider(): OCRProvider {
 export async function determineDocumentRouting(
   documentUrl: string
 ): Promise<RoutingDecision> {
+  const cfg = getOcrConfig();
   try {
     const response = await fetch(`${getOcrRouterUrl()}/route`, {
       method: "POST",
@@ -118,17 +104,16 @@ export async function determineDocumentRouting(
       body: JSON.stringify({
         documentUrl,
         env: {
-          OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER ?? "",
-          OCR_WORKER_URL: process.env.OCR_WORKER_URL ?? "",
-          AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY ?? "",
-          AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT ?? "",
-          LANDING_AI_API_KEY: process.env.LANDING_AI_API_KEY ?? "",
-          DATALAB_API_KEY: process.env.DATALAB_API_KEY ?? "",
-          // AI vision keys — ocr-router uses OpenAI-compatible vision for classification
-          OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "",
-          AI_API_KEY: process.env.AI_API_KEY ?? "",
-          AI_BASE_URL: process.env.AI_BASE_URL ?? "",
-          OCR_VISION_MODEL: process.env.OCR_VISION_MODEL ?? "",
+          OCR_DEFAULT_PROVIDER: cfg.defaultProvider ?? "",
+          OCR_WORKER_URL: cfg.workerUrl ?? "",
+          AZURE_DOC_INTELLIGENCE_KEY: cfg.azure?.key ?? "",
+          AZURE_DOC_INTELLIGENCE_ENDPOINT: cfg.azure?.endpoint ?? "",
+          LANDING_AI_API_KEY: cfg.landingAi?.apiKey ?? "",
+          DATALAB_API_KEY: cfg.datalabApiKey ?? "",
+          OPENAI_API_KEY: cfg.vision?.openaiApiKey ?? "",
+          AI_API_KEY: cfg.vision?.aiApiKey ?? "",
+          AI_BASE_URL: cfg.vision?.aiBaseUrl ?? "",
+          OCR_VISION_MODEL: cfg.visionModel ?? "",
         },
       }),
     });

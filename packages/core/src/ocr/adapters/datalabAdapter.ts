@@ -99,14 +99,6 @@ export class DatalabAdapter implements OCRAdapter {
         tables: [] // Extraction of tables from markdown is a separate task, leaving empty for now
       }];
 
-      // If we really want pages, we'd need Datalab to return JSON with page breakdown.
-      // 'json' field in response might have it.
-      // Let's check if 'json' is available and has pages.
-      if (result.json && typeof result.json === 'object' && 'pages' in result.json && Array.isArray((result.json as { pages: unknown[] }).pages)) {
-         // If JSON output is supported and requested/returned
-         // TODO: Implement JSON parsing if Datalab supports it matching our structure
-      }
-
       return {
         pages,
         metadata: {

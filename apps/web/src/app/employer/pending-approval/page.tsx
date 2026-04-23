@@ -1,114 +1,207 @@
-"use client"
+"use client";
 
-import React, { useCallback, useEffect, useState} from 'react';
-import { Clock, Building, Mail } from 'lucide-react';
-import { useRouter } from "next/navigation"
+import React, { useCallback, useEffect, useState } from "react";
+import { Building, Clock, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
-import styles from '~/styles/Employer/PendingApproval.module.css';
-import NavBar from "~/app/employer/pending-approval/Navbar";
+
+import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
+import {
+  Card,
+  PageShell,
+} from "~/app/employer/_components/primitives";
 
 interface EmployerData {
-    name?: string;
-    email?: string;
-    company?: string;
-    submissionDate?: string;
+  name?: string;
+  email?: string;
+  company?: string;
+  submissionDate?: string;
 }
 
-const PendingApproval: React.FC = () => {
-    const router = useRouter();
-    const {userId} = useAuth();
+export default function PendingApproval() {
+  const router = useRouter();
+  const { userId } = useAuth();
 
-    const [currentEmployeeData, setCurrentEmployeeData] = useState<EmployerData>();
+  const [currentEmployeeData, setCurrentEmployeeData] = useState<EmployerData>();
 
-    const checkEmployerRole = useCallback(async () => {
-        try {
-            const response = await fetch("/api/fetchUserInfo", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId }),
-            });
+  const checkEmployerRole = useCallback(async () => {
+    try {
+      const response = await fetch("/api/fetchUserInfo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+      const data = (await response.json()) as EmployerData;
+      setCurrentEmployeeData({
+        name: data?.name,
+        email: data?.email,
+        company: data?.company,
+        submissionDate: data?.submissionDate,
+      });
+    } catch (error) {
+      console.error(error);
+      router.push("/");
+    }
+  }, [userId, router]);
 
-            const rawData:unknown = await response.json();
-            console.log("Raw data:", rawData);
-            const data = rawData as EmployerData
-            console.log("Employee data:", data);
+  useEffect(() => {
+    if (userId) void checkEmployerRole();
+  }, [userId, checkEmployerRole]);
 
-            setCurrentEmployeeData({
-                name: data?.name,
-                email: data?.email,
-                company: data?.company,
-                submissionDate: data?.submissionDate,
-            });
-        } catch (error) {
-            console.error("Error checking employee role:", error);
-            window.alert("Authentication failed! You are not an employee.");
-            router.push("/");
-        }
-    }, [userId, router]);
+  return (
+    <>
+      <EmployerChrome pageLabel="Launchstack" pageTitle="Pending approval" />
+      <PageShell>
+        <div style={{ maxWidth: 540, margin: "0 auto", paddingTop: 40 }}>
+          <Card style={{ padding: 28, textAlign: "center" }}>
+            <div
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 18,
+                background: "var(--accent-soft)",
+                color: "var(--accent)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 18px",
+              }}
+            >
+              <Clock style={{ width: 28, height: 28 }} />
+            </div>
+            <h1
+              className="serif"
+              style={{
+                fontSize: 28,
+                lineHeight: 1.15,
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                margin: 0,
+              }}
+            >
+              Pending approval
+            </h1>
+            <div
+              style={{
+                fontSize: 14,
+                color: "var(--ink-3)",
+                marginTop: 8,
+                lineHeight: 1.55,
+              }}
+            >
+              Your account is waiting for your employer to confirm access. You&apos;ll
+              get an email as soon as it&apos;s approved.
+            </div>
 
-    useEffect(() => {
-        if (userId) {
-            checkEmployerRole().catch(console.error);
-        }
-    }, [userId, checkEmployerRole]);
+            <div
+              style={{
+                marginTop: 24,
+                padding: "18px 20px",
+                borderRadius: 12,
+                border: "1px solid var(--line)",
+                background: "var(--panel-2)",
+                textAlign: "left",
+              }}
+            >
+              <div
+                className="mono"
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
+                  color: "var(--ink-3)",
+                  textTransform: "uppercase",
+                  marginBottom: 10,
+                }}
+              >
+                Application details
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr",
+                  gap: 10,
+                }}
+              >
+                <DetailRow
+                  Icon={Building}
+                  label="Company"
+                  value={currentEmployeeData?.company ?? "—"}
+                />
+                <DetailRow
+                  Icon={Mail}
+                  label="Email"
+                  value={currentEmployeeData?.email ?? "—"}
+                />
+                <DetailRow
+                  Icon={Clock}
+                  label="Submitted"
+                  value={currentEmployeeData?.submissionDate ?? "—"}
+                />
+              </div>
+            </div>
 
-    return (
-        <div className={styles.container}>
-            <NavBar />
-
-            <main className={styles.main}>
-                <div className={styles.statusCard}>
-                    <div className={styles.statusIconContainer}>
-                        <Clock className={styles.statusIcon} />
-                    </div>
-
-                    <h1 className={styles.title}>Pending Approval</h1>
-                    <p className={styles.subtitle}>
-                        Your account is currently awaiting approval from your employer
-                    </p>
-
-                    <div className={styles.detailsContainer}>
-                        <h2 className={styles.detailsTitle}>Application Details</h2>
-
-                        <div className={styles.detailsGrid}>
-                            <div className={styles.detailItem}>
-                                <Building className={styles.detailIcon} />
-                                <div className={styles.detailContent}>
-                                    <span className={styles.detailLabel}>Company</span>
-                                    <span className={styles.detailValue}>{currentEmployeeData?.company ?? ""}</span>
-                                </div>
-                            </div>
-
-                            <div className={styles.detailItem}>
-                                <Mail className={styles.detailIcon} />
-                                <div className={styles.detailContent}>
-                                    <span className={styles.detailLabel}>Email</span>
-                                    <span className={styles.detailValue}>{currentEmployeeData?.email ?? ""}</span>
-                                </div>
-                            </div>
-
-                            <div className={styles.detailItem}>
-                                <Clock className={styles.detailIcon} />
-                                <div className={styles.detailContent}>
-                                    <span className={styles.detailLabel}>Submission Date</span>
-                                    <span className={styles.detailValue}>{currentEmployeeData?.submissionDate ?? ""}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.supportSection}>
-                        <p className={styles.supportText}>
-                            Need assistance? Contact support at{' '}
-                            <a href="mailto:pdraionline@gmail.com" className={styles.supportLink}>
-                                pdraionline@gmail.com
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </main>
+            <div
+              style={{
+                marginTop: 20,
+                fontSize: 12,
+                color: "var(--ink-3)",
+              }}
+            >
+              Need help? Email{" "}
+              <a
+                href="mailto:pdraionline@gmail.com"
+                style={{ color: "var(--accent)", fontWeight: 600 }}
+              >
+                pdraionline@gmail.com
+              </a>
+            </div>
+          </Card>
         </div>
-    );
-};
+      </PageShell>
+    </>
+  );
+}
 
-export default PendingApproval;
+function DetailRow({
+  Icon,
+  label,
+  value,
+}: {
+  Icon: React.ComponentType<{ style?: React.CSSProperties }>;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <Icon
+        style={{ width: 15, height: 15, color: "var(--ink-3)", flexShrink: 0 }}
+      />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div
+          className="mono"
+          style={{
+            fontSize: 10,
+            fontWeight: 600,
+            letterSpacing: "0.08em",
+            color: "var(--ink-3)",
+            textTransform: "uppercase",
+          }}
+        >
+          {label}
+        </div>
+        <div
+          style={{
+            fontSize: 13,
+            color: "var(--ink)",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {value}
+        </div>
+      </div>
+    </div>
+  );
+}

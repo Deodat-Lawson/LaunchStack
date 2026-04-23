@@ -15,6 +15,7 @@ import {
     Github, Heart, Code2, ExternalLink, HelpCircle,
 } from 'lucide-react';
 import { Navbar } from './_components/Navbar';
+import { LaunchstackMark } from './_components/LaunchstackLogo';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://launchstack.app';
 const GITHUB_REPO = "https://github.com/Deodat-Lawson/pdr_ai_v2";
@@ -562,7 +563,7 @@ export default function HomePage() {
             <footer className="border-t border-gray-100 dark:border-purple-900/40 py-12">
                 <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
-                        <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        <LaunchstackMark size={22} title="Launchstack" />
                         <span className="font-bold text-gray-900 dark:text-white">Launchstack</span>
                     </div>
                     <div className="flex gap-8 text-sm text-gray-500">

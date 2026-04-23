@@ -63,5 +63,8 @@ packages/*/dist/
 backups/
 /models/
 
+
+.claude
+
 # test output
 test-output/

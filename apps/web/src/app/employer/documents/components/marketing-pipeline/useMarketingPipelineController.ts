@@ -252,7 +252,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     } catch {
       // Ignore storage errors and still navigate.
     }
-    router.push("/employer/documents?view=rewrite");
+    router.push("/employer/documents?feature=rewrite");
   }, [editableMessage, router, selectedPlatform?.label]);
 
   const handleCopy = useCallback(async () => {

@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import {Brain, Home} from "lucide-react";
+import { Home } from "lucide-react";
 import styles from "~/styles/Employer/EmployeeManagement.module.css";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 
 const NavBar = () => {
     const router = useRouter();
@@ -12,7 +13,7 @@ const NavBar = () => {
         <nav className={styles.navbar}>
             <div className={styles.navContent}>
                 <div className={styles.logoContainer}>
-                    <Brain className={styles.logoIcon} />
+                    <LaunchstackMark size={26} title="Launchstack" />
                     <span className={styles.logoText}>Launchstack</span>
                 </div>
                 <div className={styles.navActions}>

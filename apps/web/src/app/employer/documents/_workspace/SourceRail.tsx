@@ -10,7 +10,6 @@ import React, {
   useState,
 } from "react";
 import {
-  IconBolt,
   IconCheck,
   IconChevronLeft,
   IconChevronRight,
@@ -20,6 +19,7 @@ import {
   IconShield,
   IconX,
 } from "./icons";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { SOURCE_META, type WorkspaceFolder, type WorkspaceSource } from "./types";
 
 interface TagChipProps {
@@ -464,20 +464,7 @@ export function SourceRail({
   return (
     <aside style={asideStyle}>
       <div style={{ padding: "14px 14px 10px", display: "flex", alignItems: "center", gap: 9 }}>
-        <div
-          style={{
-            width: 22,
-            height: 22,
-            borderRadius: 5,
-            background: "var(--ink)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--accent)",
-          }}
-        >
-          <IconBolt size={13} />
-        </div>
+        <LaunchstackMark size={22} title={logoLabel} />
         <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "-0.01em", flex: 1 }}>
           {logoLabel}
         </div>

@@ -193,3 +193,86 @@ html, body {
 @keyframes lsw-drawerIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes lsw-shimmer { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
 @keyframes lsw-spin { to { transform: rotate(360deg); } }
+
+/* ==========================================================================
+   Legacy shim: when legacy shadcn/Tailwind components render inside `.lsw-root`
+   (e.g. full-screen Studio feature pages that embed DocumentGenerator,
+   RewriteDiffView, DocumentSanityChecker, legacy DocumentViewer, NotesPanel),
+   override the shadcn HSL tokens with HSL approximations of Launchstack tokens
+   so the legacy Tailwind classes (bg-background, text-foreground, border-border
+   …) automatically match the new design. Purple utilities are re-mapped to the
+   accent token so the brand color is unified end-to-end.
+
+   Light theme only needs one definition; the existing `.dark .lsw-root` block
+   above already switches the Launchstack tokens, so the shadcn shim below
+   re-reads them via var() and follows automatically.
+   ========================================================================== */
+.lsw-root {
+  --background: 60 30% 99%;
+  --foreground: 264 6% 17%;
+  --card: 0 0% 100%;
+  --card-foreground: 264 6% 17%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 264 6% 17%;
+  --primary: 268 83% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 264 3% 96%;
+  --secondary-foreground: 264 6% 20%;
+  --muted: 264 3% 96%;
+  --muted-foreground: 264 3% 48%;
+  --accent-foreground: 270 60% 38%;
+  --border: 264 3% 89%;
+  --input: 264 3% 89%;
+  --ring: 268 83% 55%;
+}
+.dark .lsw-root,
+[data-theme="dark"] .lsw-root,
+.lsw-root[data-theme="dark"] {
+  --background: 264 20% 11%;
+  --foreground: 270 10% 97%;
+  --card: 264 20% 15%;
+  --card-foreground: 270 10% 97%;
+  --popover: 264 20% 15%;
+  --popover-foreground: 270 10% 97%;
+  --primary: 270 70% 68%;
+  --primary-foreground: 270 20% 12%;
+  --secondary: 264 15% 22%;
+  --secondary-foreground: 270 10% 92%;
+  --muted: 264 15% 19%;
+  --muted-foreground: 264 5% 62%;
+  --accent-foreground: 270 70% 82%;
+  --border: 264 15% 25%;
+  --input: 264 15% 25%;
+  --ring: 270 70% 68%;
+}
+
+/* Bridge the most common Tailwind purple utilities onto the accent token so the
+   brand color in legacy components matches Launchstack. */
+.lsw-root .bg-purple-50,
+.lsw-root .bg-purple-100,
+.lsw-root [class*="dark:bg-purple-900"] { background-color: var(--accent-soft); }
+.lsw-root .bg-purple-500,
+.lsw-root .bg-purple-600,
+.lsw-root .bg-purple-700,
+.lsw-root .hover\:bg-purple-600:hover,
+.lsw-root .hover\:bg-purple-700:hover { background-color: var(--accent); }
+.lsw-root .text-purple-500,
+.lsw-root .text-purple-600,
+.lsw-root .text-purple-700,
+.lsw-root [class*="dark:text-purple-"] { color: var(--accent-ink); }
+.lsw-root .border-purple-200,
+.lsw-root .border-purple-300,
+.lsw-root .border-purple-400,
+.lsw-root .border-purple-500,
+.lsw-root [class*="dark:border-purple-"],
+.lsw-root .hover\:border-purple-400:hover { border-color: var(--accent); }
+.lsw-root .focus\:ring-purple-500:focus,
+.lsw-root .focus\:border-purple-500:focus { --tw-ring-color: var(--accent); border-color: var(--accent); }
+.lsw-root .shadow-purple-500\/20,
+.lsw-root .shadow-purple-500\/10 { --tw-shadow-color: var(--accent-glow); }
+
+/* Slate dark-mode chrome used throughout legacy components. Map onto panel/line
+   tokens so dark Launchstack surface stays consistent. */
+.lsw-root [class*="dark:bg-slate-800"],
+.lsw-root [class*="dark:bg-slate-900"] { background-color: var(--panel-2); }
+.lsw-root [class*="dark:border-slate-"] { border-color: var(--line); }

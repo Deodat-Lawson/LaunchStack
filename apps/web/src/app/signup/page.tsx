@@ -1,64 +1,54 @@
 "use client";
 
-import React, { Suspense, useState, useEffect, useCallback, useRef } from "react";
+import React, {
+    Suspense,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth, useUser, SignUp } from "@clerk/nextjs";
+import { SignUp, useAuth, useUser } from "@clerk/nextjs";
 import {
-    Building,
-    Users,
-    Briefcase,
-    Ticket,
-    Brain,
-    FileSearch,
-    BarChart3,
-    Shield,
-    CheckCircle,
-    ArrowLeft,
     AlertCircle,
-    Info,
+    ArrowRight,
+    CheckCircle2,
+    ChevronDown,
+    Rocket,
+    Ticket,
+    Users,
 } from "lucide-react";
-import styles from "~/styles/signup.module.css";
-import { SignupNavbar } from "../_components/SignupNavbar";
+import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
+import { AuthChrome } from "~/app/_components/AuthChrome";
 
-type ActiveTab = "create" | "join";
+/**
+ * Sign-up page.
+ *
+ * Solo-first flow. After the user authenticates via Clerk, they see three
+ * clearly-ranked paths:
+ *
+ *   1. Start solo (default, one click) — auto-provisions a workspace using
+ *      the user's name. No form to fill out.
+ *   2. Join with an invite code — a short inline form for team members.
+ *   3. Advanced / team setup — expanded form with company name, staff count,
+ *      and optional BYOK embedding keys for self-host users.
+ *
+ * The team-oriented copy ("Create Your Company", "Approximate Number of
+ * Staff", "Enterprise Security") from the old design is gone. This product is
+ * for solo founders / devs / students first.
+ */
 
-// ─── Join flow steps (simplified – no "authenticate" step since auth happens first) ──
-type JoinStep = "enter-code" | "joining";
+// ────────────────────────── Types ──────────────────────────
 
-// ─── Validated code info ────────────────────────────────────────────────────
-interface ValidatedCodeInfo {
-    code: string;
-    companyName: string;
-    role: string;
-}
-
-// ─── Create Company Form ────────────────────────────────────────────────────
-interface CreateCompanyFormData {
-    companyName: string;
-    staffCount: string;
-    embeddingIndexKey: string;
-    embeddingOpenAIApiKey: string;
-    embeddingHuggingFaceApiKey: string;
-    embeddingOllamaBaseUrl: string;
-    embeddingOllamaModel: string;
-}
-interface CreateCompanyFormErrors {
-    companyName?: string;
-    staffCount?: string;
-}
+type Mode = "solo" | "invite" | "team";
 
 interface EmbeddingIndexOption {
     indexKey: string;
     label: string;
 }
 
-// ─── Join Company Form ──────────────────────────────────────────────────────
-interface JoinFormData {
-    inviteCode: string;
-}
-interface JoinFormErrors {
-    inviteCode?: string;
-}
+// ────────────────────────── Page ──────────────────────────
 
 const SignupPage: React.FC = () => {
     const router = useRouter();
@@ -66,24 +56,35 @@ const SignupPage: React.FC = () => {
     const { userId, isLoaded: isAuthLoaded } = useAuth();
     const { user } = useUser();
 
-    const fromSignin = searchParams.get("from") === "signin";
+    const [mode, setMode] = useState<Mode>("solo");
+    const [embeddingIndexOptions, setEmbeddingIndexOptions] = useState<
+        EmbeddingIndexOption[]
+    >([]);
+    const [defaultIndexKey, setDefaultIndexKey] = useState("");
 
-    const [activeTab, setActiveTab] = useState<ActiveTab>("create");
+    // ── Solo flow ──
+    const [isCreatingSolo, setIsCreatingSolo] = useState(false);
+    const [soloError, setSoloError] = useState<string | null>(null);
 
-    // ─── Create Company State ────────────────────────────────────────────────
-    const [createFormData, setCreateFormData] = useState<CreateCompanyFormData>({
-        companyName: "",
-        staffCount: "",
-        embeddingIndexKey: "",
-        embeddingOpenAIApiKey: "",
-        embeddingHuggingFaceApiKey: "",
-        embeddingOllamaBaseUrl: "",
-        embeddingOllamaModel: "",
-    });
-    const [createErrors, setCreateErrors] = useState<CreateCompanyFormErrors>({});
-    const [isCreating, setIsCreating] = useState(false);
-    const [embeddingIndexOptions, setEmbeddingIndexOptions] = useState<EmbeddingIndexOption[]>([]);
+    // ── Invite flow ──
+    const [inviteCode, setInviteCode] = useState("");
+    const [inviteError, setInviteError] = useState<string | null>(null);
+    const [inviteSuccess, setInviteSuccess] = useState<string | null>(null);
+    const [isJoining, setIsJoining] = useState(false);
+    const autoJoinTriggered = useRef(false);
 
+    // ── Team flow ──
+    const [teamName, setTeamName] = useState("");
+    const [teamSize, setTeamSize] = useState("");
+    const [teamError, setTeamError] = useState<string | null>(null);
+    const [isCreatingTeam, setIsCreatingTeam] = useState(false);
+    const [showAdvanced, setShowAdvanced] = useState(false);
+    const [openaiKey, setOpenaiKey] = useState("");
+    const [hfKey, setHfKey] = useState("");
+    const [ollamaUrl, setOllamaUrl] = useState("");
+    const [ollamaModel, setOllamaModel] = useState("");
+
+    // Load embedding indexes (used by solo + team flow as a default)
     useEffect(() => {
         if (!userId) return;
         let cancelled = false;
@@ -91,14 +92,14 @@ const SignupPage: React.FC = () => {
             try {
                 const res = await fetch("/api/embedding-indexes");
                 if (!res.ok) return;
-                const json = (await res.json()) as { indexes: EmbeddingIndexOption[] };
+                const json = (await res.json()) as {
+                    indexes: EmbeddingIndexOption[];
+                };
                 if (cancelled) return;
                 setEmbeddingIndexOptions(json.indexes ?? []);
-                setCreateFormData((prev) =>
-                    prev.embeddingIndexKey || json.indexes.length === 0
-                        ? prev
-                        : { ...prev, embeddingIndexKey: json.indexes[0]!.indexKey },
-                );
+                if (json.indexes?.[0]) {
+                    setDefaultIndexKey(json.indexes[0].indexKey);
+                }
             } catch (err) {
                 console.error("Failed to load embedding indexes:", err);
             }
@@ -108,44 +109,27 @@ const SignupPage: React.FC = () => {
         };
     }, [userId]);
 
-    // ─── Join Company State ──────────────────────────────────────────────────
-    const [joinFormData, setJoinFormData] = useState<JoinFormData>({
-        inviteCode: "",
-    });
-    const [joinErrors, setJoinErrors] = useState<JoinFormErrors>({});
-    const [joinStep, setJoinStep] = useState<JoinStep>("enter-code");
-    const [validatedCode, setValidatedCode] = useState<ValidatedCodeInfo | null>(null);
-    const [isValidating, setIsValidating] = useState(false);
-    const [isJoining, setIsJoining] = useState(false);
-    const [joinSuccess, setJoinSuccess] = useState<string | null>(null);
-    const [registrationError, setRegistrationError] = useState<string | null>(null);
-
-    // Guard so the auto-join from ?code= only fires once
-    const autoJoinTriggered = useRef(false);
-
+    // ── Join performed (shared by inline form + auto-join from ?code=) ──
     const performJoin = useCallback(
         async (code: string) => {
             if (!userId || !user) return;
             setIsJoining(true);
-            setJoinSuccess(null);
-            setRegistrationError(null);
+            setInviteError(null);
+            setInviteSuccess(null);
 
             try {
-                // First check if user is already registered
                 const regRes = await fetch("/api/signup/check-registration");
                 const regData = (await regRes.json()) as {
                     data?: { registered: boolean; companyName?: string };
                 };
-
                 if (regData.data?.registered) {
-                    setRegistrationError(
-                        `You are already registered with "${regData.data.companyName ?? "a company"}". You cannot join another company.`
+                    setInviteError(
+                        `You're already part of "${regData.data.companyName ?? "a workspace"}". You can't join a second one.`,
                     );
                     setIsJoining(false);
                     return;
                 }
 
-                // Proceed with join
                 const response = await fetch("/api/signup/join", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -156,675 +140,1063 @@ const SignupPage: React.FC = () => {
                         inviteCode: code,
                     }),
                 });
-
-                const rawData: unknown = await response.json();
-
-                if (response.status === 400) {
-                    if (
-                        typeof rawData === "object" &&
-                        rawData !== null &&
-                        "message" in rawData
-                    ) {
-                        const errorData = rawData as { message: string };
-                        setJoinErrors({ inviteCode: errorData.message });
-                    } else {
-                        setJoinErrors({ inviteCode: "Invalid invite code" });
-                    }
-                    setJoinStep("enter-code");
-                    setIsJoining(false);
-                    return;
-                }
+                const raw: unknown = await response.json();
 
                 if (!response.ok) {
-                    setJoinErrors({
-                        inviteCode: "Failed to join. Please try again.",
-                    });
-                    setJoinStep("enter-code");
+                    const msg =
+                        typeof raw === "object" && raw !== null && "message" in raw
+                            ? (raw as { message: string }).message
+                            : "Invalid or expired invite code.";
+                    setInviteError(msg);
                     setIsJoining(false);
                     return;
                 }
 
-                const data = rawData as {
-                    data?: { redirectPath?: string; companyName?: string; role?: string };
+                const data = raw as {
+                    data?: { redirectPath?: string };
                     message?: string;
                 };
-                setJoinSuccess(data.message ?? "Successfully joined!");
-
+                setInviteSuccess(data.message ?? "You're in!");
                 setTimeout(() => {
                     router.push(data.data?.redirectPath ?? "/");
-                }, 1500);
-            } catch (error) {
-                console.error("Join company error:", error);
-                setJoinErrors({
-                    inviteCode: "Failed to join. Please check your connection.",
-                });
-                setJoinStep("enter-code");
+                }, 1200);
+            } catch (err) {
+                console.error("Join failed:", err);
+                setInviteError(
+                    "Something went wrong. Check your connection and try again.",
+                );
                 setIsJoining(false);
             }
         },
-        [userId, user, router]
+        [userId, user, router],
     );
 
-    // Handle ?code= query param on mount / auth change
+    // ── Auto-join when arriving via ?code=XYZ ──
     useEffect(() => {
         if (!isAuthLoaded || autoJoinTriggered.current) return;
-
         const codeFromUrl = searchParams.get("code");
         if (!codeFromUrl) return;
-
-        // Switch to the join tab and populate the code
-        setActiveTab("join");
-        setJoinFormData({ inviteCode: codeFromUrl.toUpperCase() });
-
+        setMode("invite");
+        setInviteCode(codeFromUrl.toUpperCase());
         if (userId && user) {
             autoJoinTriggered.current = true;
-            setJoinStep("joining");
             void performJoin(codeFromUrl);
         }
     }, [isAuthLoaded, userId, user, searchParams, performJoin]);
 
-    // ═════════════════════════════════════════════════════════════════════════
-    // CREATE COMPANY HANDLERS
-    // ═════════════════════════════════════════════════════════════════════════
-
-    const handleCreateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setCreateFormData((prev) => ({ ...prev, [name]: value }));
-        if (createErrors[name as keyof CreateCompanyFormErrors]) {
-            setCreateErrors((prev) => ({ ...prev, [name]: undefined }));
-        }
-    };
-
-    const validateCreateForm = (): boolean => {
-        const errors: CreateCompanyFormErrors = {};
-        if (!createFormData.companyName.trim()) {
-            errors.companyName = "Company name is required";
-        }
-        if (!createFormData.staffCount) {
-            errors.staffCount = "Please enter approximate staff count";
-        }
-        setCreateErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    const submitCreateCompany = async () => {
-        if (!userId || !user) {
-            setCreateErrors((prev) => ({
-                ...prev,
-                companyName: "Please sign in first to create an account",
-            }));
-            return;
-        }
-        setIsCreating(true);
+    // ── Solo: one-click workspace creation ──
+    const startSolo = async () => {
+        if (!userId || !user) return;
+        setSoloError(null);
+        setIsCreatingSolo(true);
+        const firstName =
+            user.firstName ??
+            user.fullName?.split(" ")[0] ??
+            user.username ??
+            "Personal";
+        const workspaceName = `${firstName}'s workspace`;
         try {
             const response = await fetch("/api/signup/employerCompany", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     userId,
-                    name: user?.fullName,
-                    email: user?.emailAddresses[0]?.emailAddress,
-                    companyName: createFormData.companyName,
-                    numberOfEmployees: createFormData.staffCount,
-                    embeddingIndexKey: createFormData.embeddingIndexKey,
-                    embeddingOpenAIApiKey: createFormData.embeddingOpenAIApiKey || null,
-                    embeddingHuggingFaceApiKey: createFormData.embeddingHuggingFaceApiKey || null,
-                    embeddingOllamaBaseUrl: createFormData.embeddingOllamaBaseUrl || null,
-                    embeddingOllamaModel: createFormData.embeddingOllamaModel || null,
+                    name: user.fullName ?? user.username,
+                    email: user.emailAddresses[0]?.emailAddress,
+                    companyName: workspaceName,
+                    numberOfEmployees: "1",
+                    embeddingIndexKey: defaultIndexKey,
                 }),
             });
-
-            if (response.status === 400) {
-                const rawData: unknown = await response.json();
-                if (typeof rawData === "object" && rawData !== null && "error" in rawData) {
-                    const errorData = rawData as { error: string };
-                    setCreateErrors((prev) => ({ ...prev, companyName: errorData.error }));
-                } else {
-                    setCreateErrors((prev) => ({ ...prev, companyName: "Registration failed" }));
-                }
-                setIsCreating(false);
-                return;
-            }
             if (!response.ok) {
-                setCreateErrors((prev) => ({
-                    ...prev,
-                    companyName: "Registration failed. Please try again.",
-                }));
-                setIsCreating(false);
+                const raw: unknown = await response.json();
+                const msg =
+                    typeof raw === "object" && raw !== null && "error" in raw
+                        ? (raw as { error: string }).error
+                        : "We couldn't set up your workspace. Please try again.";
+                setSoloError(msg);
+                setIsCreatingSolo(false);
                 return;
             }
             router.push("/employer/onboarding");
-        } catch (error) {
-            console.error("Create company error:", error);
-            setCreateErrors((prev) => ({
-                ...prev,
-                companyName: "Registration failed. Please check your connection.",
-            }));
-            setIsCreating(false);
+        } catch (err) {
+            console.error("Solo signup failed:", err);
+            setSoloError(
+                "We couldn't reach the server. Check your connection and try again.",
+            );
+            setIsCreatingSolo(false);
         }
     };
 
-    const handleCreateSubmit = async (e: React.FormEvent) => {
+    // ── Team: create company with a form ──
+    const createTeam = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validateCreateForm()) return;
-        await submitCreateCompany();
-    };
-
-    // ═════════════════════════════════════════════════════════════════════════
-    // JOIN WITH CODE HANDLERS
-    // ═════════════════════════════════════════════════════════════════════════
-
-    const handleJoinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setJoinFormData((prev) => ({ ...prev, [name]: value.toUpperCase() }));
-        if (joinErrors[name as keyof JoinFormErrors]) {
-            setJoinErrors((prev) => ({ ...prev, [name]: undefined }));
-        }
-        setJoinSuccess(null);
-        setRegistrationError(null);
-    };
-
-    /** Step 1: validate the invite code via public API */
-    const handleValidateCode = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const code = joinFormData.inviteCode.trim();
-        if (!code) {
-            setJoinErrors({ inviteCode: "Invite code is required" });
+        setTeamError(null);
+        if (!teamName.trim()) {
+            setTeamError("Please name your team workspace.");
             return;
         }
-
-        setIsValidating(true);
-        setJoinErrors({});
-        setRegistrationError(null);
-
+        if (!userId || !user) return;
+        setIsCreatingTeam(true);
         try {
-            const res = await fetch("/api/invite-codes/validate", {
+            const response = await fetch("/api/signup/employerCompany", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ code }),
+                body: JSON.stringify({
+                    userId,
+                    name: user.fullName ?? user.username,
+                    email: user.emailAddresses[0]?.emailAddress,
+                    companyName: teamName.trim(),
+                    numberOfEmployees: teamSize || "2",
+                    embeddingIndexKey: defaultIndexKey,
+                    embeddingOpenAIApiKey: openaiKey || null,
+                    embeddingHuggingFaceApiKey: hfKey || null,
+                    embeddingOllamaBaseUrl: ollamaUrl || null,
+                    embeddingOllamaModel: ollamaModel || null,
+                }),
             });
-
-            const rawData: unknown = await res.json();
-
-            if (!res.ok) {
-                const errData = rawData as { message?: string };
-                setJoinErrors({
-                    inviteCode:
-                        errData.message ??
-                        "Invalid or expired invite code.",
-                });
-                setIsValidating(false);
+            if (!response.ok) {
+                const raw: unknown = await response.json();
+                const msg =
+                    typeof raw === "object" && raw !== null && "error" in raw
+                        ? (raw as { error: string }).error
+                        : "Something went wrong. Please try again.";
+                setTeamError(msg);
+                setIsCreatingTeam(false);
                 return;
             }
-
-            const data = rawData as {
-                data?: { companyName: string; role: string };
-            };
-
-            if (!data.data) {
-                setJoinErrors({ inviteCode: "Unexpected response. Try again." });
-                setIsValidating(false);
-                return;
-            }
-
-            setValidatedCode({
-                code,
-                companyName: data.data.companyName,
-                role: data.data.role,
-            });
-
-            // User is already authenticated (auth-first flow), so auto-join directly
-                setJoinStep("joining");
-                setIsValidating(false);
-                void performJoin(code);
-        } catch (error) {
-            console.error("Code validation error:", error);
-            setJoinErrors({
-                inviteCode: "Could not validate code. Check your connection.",
-            });
-            setIsValidating(false);
+            router.push("/employer/onboarding");
+        } catch (err) {
+            console.error("Team signup failed:", err);
+            setTeamError(
+                "We couldn't reach the server. Check your connection and try again.",
+            );
+            setIsCreatingTeam(false);
         }
     };
 
-    /** Go back to step 1 */
-    const handleBackToCode = () => {
-        setJoinStep("enter-code");
-        setValidatedCode(null);
-        setRegistrationError(null);
-        setJoinErrors({});
-        setJoinSuccess(null);
-    };
-
-    // ═════════════════════════════════════════════════════════════════════════
-    // TAB DATA
-    // ═════════════════════════════════════════════════════════════════════════
-
-    const tabs: { key: ActiveTab; label: string; icon: React.ReactNode }[] = [
-        { key: "create", label: "Create Company", icon: <Briefcase className={styles.tabIcon} /> },
-        { key: "join", label: "Join with Code", icon: <Ticket className={styles.tabIcon} /> },
-    ];
-
-    const getJoinHeading = (): { title: string; subtitle: string } => {
-        if (joinStep === "joining") {
-            return {
-                title: "Joining Company...",
-                subtitle: `Setting up your account with ${validatedCode?.companyName ?? "the company"}`,
-            };
+    // ── Invite: validate + join ──
+    const submitInvite = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const code = inviteCode.trim();
+        if (!code) {
+            setInviteError("Enter your invite code to continue.");
+            return;
         }
-        return {
-            title: "Join a Company",
-            subtitle: "Enter an invite code from your organization",
-        };
+        setInviteError(null);
+        // No separate validate step — /api/signup/join handles it in one hop.
+        await performJoin(code);
     };
 
-    const headings: Record<ActiveTab, { title: string; subtitle: string }> = {
-        create: {
-            title: "Create Your Company",
-            subtitle: "Set up your organization on Launchstack",
-        },
-        join: getJoinHeading(),
-    };
-
-    // ═════════════════════════════════════════════════════════════════════════
-    // RENDER
-    // ═════════════════════════════════════════════════════════════════════════
-
-    // ═════════════════════════════════════════════════════════════════════════
-    // RENDER HELPERS
-    // ═════════════════════════════════════════════════════════════════════════
+    // ────────────────────────── Render ──────────────────────────
 
     const renderBrandPanel = () => (
-        <div className={styles.brandPanel}>
-            <div className={styles.brandContent}>
-                <div className={styles.brandLogo}>
-                    <Brain className={styles.brandLogoIcon} />
-                    <span className={styles.brandLogoText}>Launchstack</span>
-                </div>
-
-                <h2 className={styles.brandTitle}>
-                    AI-Powered Document Intelligence
-                </h2>
-                <p className={styles.brandDescription}>
-                    Transform how your team analyzes and interprets professional documents with cutting-edge AI technology.
-                </p>
-
-                <div className={styles.featureList}>
-                    <div className={styles.featureItem}>
-                        <FileSearch className={styles.featureIcon} />
-                        <div>
-                            <h4 className={styles.featureTitle}>Predictive Analysis</h4>
-                            <p className={styles.featureText}>AI identifies missing documents and suggests relevant content</p>
-                        </div>
-                    </div>
-                    <div className={styles.featureItem}>
-                        <BarChart3 className={styles.featureIcon} />
-                        <div>
-                            <h4 className={styles.featureTitle}>Analytics &amp; Insights</h4>
-                            <p className={styles.featureText}>Real-time dashboards tracking usage and compliance</p>
-                        </div>
-                    </div>
-                    <div className={styles.featureItem}>
-                        <Shield className={styles.featureIcon} />
-                        <div>
-                            <h4 className={styles.featureTitle}>Enterprise Security</h4>
-                            <p className={styles.featureText}>Bank-level security with role-based access control</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={styles.brandStats}>
-                    <div className={styles.brandStat}>
-                        <span className={styles.brandStatNumber}>5k+</span>
-                        <span className={styles.brandStatLabel}>Documents</span>
-                    </div>
-                    <div className={styles.brandStat}>
-                        <span className={styles.brandStatNumber}>99%</span>
-                        <span className={styles.brandStatLabel}>Accuracy</span>
-                    </div>
-                    <div className={styles.brandStat}>
-                        <span className={styles.brandStatNumber}>50+</span>
-                        <span className={styles.brandStatLabel}>Companies</span>
-                    </div>
-                </div>
-
-                <div className={styles.testimonial}>
-                    <CheckCircle className={styles.testimonialIcon} />
-                    <p className={styles.testimonialText}>
-                        &ldquo;Launchstack reduced our document review time by 80% and dramatically improved our compliance workflow.&rdquo;
-                    </p>
-                </div>
-            </div>
+        <div style={{ width: "46%", display: "flex" }} className="auth-brand-col">
+            <AuthBrandPanel
+                tagline="Free · open source"
+                headline="Your workspace, set up in under a minute."
+                description="Built for solo founders, indie developers, and students. Start alone — invite people later if you ever need to."
+            />
         </div>
     );
 
-    // ═════════════════════════════════════════════════════════════════════════
-    // RENDER
-    // ═════════════════════════════════════════════════════════════════════════
+    const soloName =
+        user?.firstName ?? user?.fullName?.split(" ")[0] ?? user?.username ?? null;
 
-    // While Clerk is still loading, show nothing to avoid flash
-    if (!isAuthLoaded) {
+    // ── Not yet authenticated: show Clerk SignUp ──
+    if (isAuthLoaded && !userId) {
         return (
-            <div className={styles.container}>
-                <SignupNavbar />
-                <div className={styles.splitLayout}>
-                    <div className={styles.formPanel}>
-                        <div className={styles.formCard}>
-                            <div className={styles.form}>
-                                <div className={styles.joiningSpinner}>
-                                    <div className={styles.spinner} />
-                                    <p className={styles.subtitle}>Loading...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {renderBrandPanel()}
-                </div>
-            </div>
-        );
-    }
-
-    // ── Not authenticated: show Clerk SignUp component ─────────────────────
-    if (!userId) {
-        return (
-            <div className={styles.container}>
-                <SignupNavbar />
-                <div className={styles.splitLayout}>
-                    <div className={styles.formPanel}>
+            <Shell>
+                <div style={formPanelStyle}>
+                    <div style={{ width: "100%", maxWidth: 440 }}>
+                        <Eyebrow>Get started</Eyebrow>
+                        <Headline>Create your Launchstack account.</Headline>
+                        <SubHeadline>
+                            One account covers your solo workspace — and any team you
+                            might create down the road.
+                        </SubHeadline>
                         <SignUp
                             routing="hash"
                             forceRedirectUrl="/"
                             signInUrl="/signin"
                         />
+                        <div style={bottomLinkStyle}>
+                            Already have an account?{" "}
+                            <Link href="/signin" style={linkStyle}>
+                                Sign in →
+                            </Link>
+                        </div>
                     </div>
-                    {renderBrandPanel()}
+                </div>
+                {renderBrandPanel()}
+            </Shell>
+        );
+    }
+
+    // ── Loading state ──
+    if (!isAuthLoaded) {
+        return (
+            <Shell>
+                <div style={formPanelStyle}>
+                    <LoadingState label="Loading…" />
+                </div>
+                {renderBrandPanel()}
+            </Shell>
+        );
+    }
+
+    // ── Authenticated: pick a path ──
+    return (
+        <Shell>
+            <div style={formPanelStyle}>
+                <div style={{ width: "100%", maxWidth: 520 }}>
+                    <Eyebrow>You&apos;re signed in</Eyebrow>
+                    <Headline>
+                        {soloName ? `Hey, ${soloName}.` : "Let's set you up."}
+                    </Headline>
+                    <SubHeadline>
+                        One more step — pick how you want to use Launchstack.
+                        You can always invite teammates later.
+                    </SubHeadline>
+
+                    <ModeSelect mode={mode} setMode={setMode} />
+
+                    {mode === "solo" && (
+                        <SoloCard
+                            workspaceName={
+                                soloName ? `${soloName}'s workspace` : "Your workspace"
+                            }
+                            onStart={() => void startSolo()}
+                            isCreating={isCreatingSolo}
+                            error={soloError}
+                        />
+                    )}
+
+                    {mode === "invite" && (
+                        <InviteCard
+                            code={inviteCode}
+                            setCode={setInviteCode}
+                            onSubmit={(e) => void submitInvite(e)}
+                            isJoining={isJoining}
+                            error={inviteError}
+                            success={inviteSuccess}
+                            onClear={() => {
+                                setInviteError(null);
+                                setInviteSuccess(null);
+                            }}
+                        />
+                    )}
+
+                    {mode === "team" && (
+                        <TeamCard
+                            name={teamName}
+                            setName={setTeamName}
+                            size={teamSize}
+                            setSize={setTeamSize}
+                            onSubmit={(e) => void createTeam(e)}
+                            isCreating={isCreatingTeam}
+                            error={teamError}
+                            showAdvanced={showAdvanced}
+                            setShowAdvanced={setShowAdvanced}
+                            openaiKey={openaiKey}
+                            setOpenaiKey={setOpenaiKey}
+                            hfKey={hfKey}
+                            setHfKey={setHfKey}
+                            ollamaUrl={ollamaUrl}
+                            setOllamaUrl={setOllamaUrl}
+                            ollamaModel={ollamaModel}
+                            setOllamaModel={setOllamaModel}
+                            defaultIndexKey={defaultIndexKey}
+                            indexOptions={embeddingIndexOptions}
+                        />
+                    )}
+                </div>
+            </div>
+            {renderBrandPanel()}
+        </Shell>
+    );
+};
+
+// ────────────────────────── Layout primitives ──────────────────────────
+
+const formPanelStyle: React.CSSProperties = {
+    flex: 1,
+    minWidth: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "40px 24px",
+};
+
+const linkStyle: React.CSSProperties = {
+    color: "var(--accent)",
+    fontWeight: 600,
+    textDecoration: "none",
+};
+
+const bottomLinkStyle: React.CSSProperties = {
+    marginTop: 24,
+    fontSize: 12.5,
+    color: "var(--ink-3)",
+    textAlign: "center",
+};
+
+function Shell({ children }: { children: React.ReactNode }) {
+    return (
+        <div
+            style={{
+                minHeight: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                background: "var(--bg)",
+                color: "var(--ink)",
+            }}
+        >
+            <AuthChrome />
+            <div
+                style={{
+                    flex: 1,
+                    display: "flex",
+                    alignItems: "stretch",
+                    minHeight: 0,
+                }}
+            >
+                {children}
+            </div>
+            <style>{`
+                @media (max-width: 960px) {
+                    .auth-brand-col { display: none !important; }
+                }
+            `}</style>
+        </div>
+    );
+}
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+    return (
+        <div
+            className="mono"
+            style={{
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                color: "var(--ink-3)",
+                textTransform: "uppercase",
+                marginBottom: 10,
+            }}
+        >
+            {children}
+        </div>
+    );
+}
+
+function Headline({ children }: { children: React.ReactNode }) {
+    return (
+        <h1
+            className="serif"
+            style={{
+                fontSize: 32,
+                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                margin: "0 0 8px",
+            }}
+        >
+            {children}
+        </h1>
+    );
+}
+
+function SubHeadline({ children }: { children: React.ReactNode }) {
+    return (
+        <p
+            style={{
+                fontSize: 14,
+                color: "var(--ink-3)",
+                lineHeight: 1.55,
+                margin: 0,
+                marginBottom: 24,
+            }}
+        >
+            {children}
+        </p>
+    );
+}
+
+function LoadingState({ label }: { label: string }) {
+    return (
+        <div
+            style={{
+                padding: "48px 0",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 14,
+                color: "var(--ink-3)",
+                fontSize: 13,
+            }}
+        >
+            <div
+                style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: "50%",
+                    border: "2px solid var(--line)",
+                    borderTopColor: "var(--accent)",
+                    animation: "lsw-spin 700ms linear infinite",
+                }}
+            />
+            {label}
+        </div>
+    );
+}
+
+// ────────────────────────── Mode selector ──────────────────────────
+
+function ModeSelect({
+    mode,
+    setMode,
+}: {
+    mode: Mode;
+    setMode: (m: Mode) => void;
+}) {
+    const options: {
+        key: Mode;
+        label: string;
+        sub: string;
+        Icon: React.ComponentType<{ style?: React.CSSProperties }>;
+    }[] = [
+        {
+            key: "solo",
+            label: "Start solo",
+            sub: "Just you — recommended",
+            Icon: Rocket,
+        },
+        {
+            key: "invite",
+            label: "Use an invite code",
+            sub: "Join an existing workspace",
+            Icon: Ticket,
+        },
+        {
+            key: "team",
+            label: "Set up a team",
+            sub: "Bring others in from day one",
+            Icon: Users,
+        },
+    ];
+
+    return (
+        <div
+            role="tablist"
+            aria-label="How will you use Launchstack?"
+            style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gap: 8,
+                marginBottom: 20,
+            }}
+        >
+            {options.map((opt) => {
+                const active = mode === opt.key;
+                return (
+                    <button
+                        key={opt.key}
+                        role="tab"
+                        aria-selected={active}
+                        onClick={() => setMode(opt.key)}
+                        style={{
+                            textAlign: "left",
+                            padding: "12px 14px",
+                            borderRadius: 12,
+                            border: `1px solid ${
+                                active ? "var(--accent)" : "var(--line)"
+                            }`,
+                            background: active
+                                ? "var(--accent-soft)"
+                                : "var(--panel)",
+                            transition:
+                                "background 120ms, border-color 120ms, box-shadow 120ms",
+                            boxShadow: active
+                                ? "0 0 0 3px var(--accent-glow)"
+                                : "none",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 6,
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 8,
+                            }}
+                        >
+                            <opt.Icon
+                                style={{
+                                    width: 14,
+                                    height: 14,
+                                    color: active
+                                        ? "var(--accent)"
+                                        : "var(--ink-3)",
+                                }}
+                            />
+                            <span
+                                style={{
+                                    fontSize: 13,
+                                    fontWeight: 600,
+                                    color: "var(--ink)",
+                                }}
+                            >
+                                {opt.label}
+                            </span>
+                        </div>
+                        <span
+                            style={{
+                                fontSize: 11.5,
+                                color: active
+                                    ? "var(--accent-ink)"
+                                    : "var(--ink-3)",
+                                lineHeight: 1.45,
+                            }}
+                        >
+                            {opt.sub}
+                        </span>
+                    </button>
+                );
+            })}
+        </div>
+    );
+}
+
+// ────────────────────────── Solo card ──────────────────────────
+
+function SoloCard({
+    workspaceName,
+    onStart,
+    isCreating,
+    error,
+}: {
+    workspaceName: string;
+    onStart: () => void;
+    isCreating: boolean;
+    error: string | null;
+}) {
+    return (
+        <div style={cardStyle}>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    marginBottom: 8,
+                }}
+            >
+                <div
+                    style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 8,
+                        background: "var(--accent-soft)",
+                        color: "var(--accent)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Rocket style={{ width: 14, height: 14 }} />
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 700 }}>
+                    Your personal workspace
+                </div>
+            </div>
+            <div
+                style={{
+                    fontSize: 13,
+                    color: "var(--ink-3)",
+                    lineHeight: 1.6,
+                    marginBottom: 14,
+                }}
+            >
+                We&apos;ll spin up{" "}
+                <span
+                    style={{
+                        color: "var(--ink-2)",
+                        fontWeight: 600,
+                    }}
+                >
+                    {workspaceName}
+                </span>{" "}
+                for you. No billing, no team setup — just you, your sources, and
+                an AI that knows them.
+            </div>
+            {error && <ErrorBanner>{error}</ErrorBanner>}
+            <button
+                onClick={onStart}
+                disabled={isCreating}
+                style={primaryButtonStyle(isCreating)}
+            >
+                {isCreating ? (
+                    <>
+                        <Spinner /> Setting things up…
+                    </>
+                ) : (
+                    <>
+                        Start my workspace
+                        <ArrowRight style={{ width: 14, height: 14 }} />
+                    </>
+                )}
+            </button>
+        </div>
+    );
+}
+
+// ────────────────────────── Invite card ──────────────────────────
+
+function InviteCard({
+    code,
+    setCode,
+    onSubmit,
+    isJoining,
+    error,
+    success,
+    onClear,
+}: {
+    code: string;
+    setCode: (v: string) => void;
+    onSubmit: (e: React.FormEvent) => void;
+    isJoining: boolean;
+    error: string | null;
+    success: string | null;
+    onClear: () => void;
+}) {
+    if (success) {
+        return (
+            <div style={cardStyle}>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        color: "var(--ok)",
+                        fontSize: 14,
+                        fontWeight: 600,
+                        marginBottom: 6,
+                    }}
+                >
+                    <CheckCircle2 style={{ width: 16, height: 16 }} /> {success}
+                </div>
+                <div style={{ fontSize: 12.5, color: "var(--ink-3)" }}>
+                    Taking you to your workspace…
                 </div>
             </div>
         );
     }
-
-    // ── Authenticated: show Create Company / Join with Code tabs ───────────
     return (
-        <div className={styles.container}>
-            <SignupNavbar />
+        <form onSubmit={onSubmit} style={cardStyle}>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    marginBottom: 8,
+                }}
+            >
+                <div
+                    style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 8,
+                        background: "var(--accent-soft)",
+                        color: "var(--accent)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Ticket style={{ width: 14, height: 14 }} />
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 700 }}>
+                    Enter your invite code
+                </div>
+            </div>
+            <div
+                style={{
+                    fontSize: 12.5,
+                    color: "var(--ink-3)",
+                    marginBottom: 12,
+                    lineHeight: 1.55,
+                }}
+            >
+                Ask whoever invited you for the 8–12 character code they got from
+                Launchstack.
+            </div>
+            <input
+                value={code}
+                onChange={(e) => {
+                    setCode(e.target.value.toUpperCase());
+                    onClear();
+                }}
+                placeholder="ABCD-1234"
+                maxLength={16}
+                autoComplete="off"
+                style={{
+                    ...inputStyle,
+                    letterSpacing: "0.08em",
+                    fontFamily:
+                        "var(--font-jetbrains-mono), ui-monospace, monospace",
+                    textTransform: "uppercase",
+                    marginBottom: 10,
+                }}
+            />
+            {error && <ErrorBanner>{error}</ErrorBanner>}
+            <button
+                type="submit"
+                disabled={isJoining || code.trim().length === 0}
+                style={primaryButtonStyle(isJoining || code.trim().length === 0)}
+            >
+                {isJoining ? (
+                    <>
+                        <Spinner /> Joining…
+                    </>
+                ) : (
+                    <>
+                        Join workspace
+                        <ArrowRight style={{ width: 14, height: 14 }} />
+                    </>
+                )}
+            </button>
+        </form>
+    );
+}
 
-            <div className={styles.splitLayout}>
-                {/* ── Left: Form Panel ──────────────────────────────── */}
-                <div className={styles.formPanel}>
-                    <div className={styles.formCard}>
-                        {fromSignin && (
-                            <div className={styles.infoBanner}>
-                                <Info className={styles.infoBannerIcon} />
-                                <p>
-                                    Welcome! You&apos;ve signed in successfully, but you still need to
-                                    complete your registration by creating a company or joining one
-                                    with an invite code.
-                                </p>
-                            </div>
-                        )}
+// ────────────────────────── Team card ──────────────────────────
 
-                        {/* Tab Bar */}
-                        <div className={styles.tabBar}>
-                            {tabs.map((tab) => (
-                                <button
-                                    key={tab.key}
-                                    type="button"
-                                    className={`${styles.tab} ${activeTab === tab.key ? styles.tabActive : ""}`}
-                                    onClick={() => {
-                                        setActiveTab(tab.key);
-                                        // Reset join state when switching tabs
-                                        if (tab.key === "join") {
-                                            setJoinStep("enter-code");
-                                            setValidatedCode(null);
-                                            setRegistrationError(null);
-                                            setJoinErrors({});
-                                            setJoinSuccess(null);
-                                        }
-                                    }}
-                                >
-                                    {tab.icon}
-                                    <span className={styles.tabLabel}>{tab.label}</span>
-                                </button>
-                            ))}
+function TeamCard({
+    name,
+    setName,
+    size,
+    setSize,
+    onSubmit,
+    isCreating,
+    error,
+    showAdvanced,
+    setShowAdvanced,
+    openaiKey,
+    setOpenaiKey,
+    hfKey,
+    setHfKey,
+    ollamaUrl,
+    setOllamaUrl,
+    ollamaModel,
+    setOllamaModel,
+    defaultIndexKey,
+    indexOptions,
+}: {
+    name: string;
+    setName: (v: string) => void;
+    size: string;
+    setSize: (v: string) => void;
+    onSubmit: (e: React.FormEvent) => void;
+    isCreating: boolean;
+    error: string | null;
+    showAdvanced: boolean;
+    setShowAdvanced: (v: boolean) => void;
+    openaiKey: string;
+    setOpenaiKey: (v: string) => void;
+    hfKey: string;
+    setHfKey: (v: string) => void;
+    ollamaUrl: string;
+    setOllamaUrl: (v: string) => void;
+    ollamaModel: string;
+    setOllamaModel: (v: string) => void;
+    defaultIndexKey: string;
+    indexOptions: EmbeddingIndexOption[];
+}) {
+    const selectedLabel =
+        indexOptions.find((i) => i.indexKey === defaultIndexKey)?.label ??
+        (indexOptions.length === 0 ? "loading…" : defaultIndexKey);
+
+    return (
+        <form onSubmit={onSubmit} style={cardStyle}>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    marginBottom: 8,
+                }}
+            >
+                <div
+                    style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 8,
+                        background: "var(--accent-soft)",
+                        color: "var(--accent)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Users style={{ width: 14, height: 14 }} />
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 700 }}>Team workspace</div>
+            </div>
+            <div
+                style={{
+                    fontSize: 12.5,
+                    color: "var(--ink-3)",
+                    marginBottom: 14,
+                    lineHeight: 1.55,
+                }}
+            >
+                Pick a name everyone will recognize. You can invite teammates
+                right after setup.
+            </div>
+
+            <Label>Workspace name</Label>
+            <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Acme, Research Lab, YC W26 Team…"
+                style={{ ...inputStyle, marginBottom: 12 }}
+            />
+
+            <Label>How many people (approx)</Label>
+            <input
+                type="number"
+                min={1}
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+                placeholder="2"
+                style={{ ...inputStyle, marginBottom: 14 }}
+            />
+
+            <button
+                type="button"
+                onClick={() => setShowAdvanced(!showAdvanced)}
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    fontSize: 12,
+                    color: "var(--ink-3)",
+                    marginBottom: 12,
+                    padding: "2px 0",
+                }}
+            >
+                <ChevronDown
+                    style={{
+                        width: 12,
+                        height: 12,
+                        transform: showAdvanced ? "rotate(0deg)" : "rotate(-90deg)",
+                        transition: "transform 140ms",
+                    }}
+                />
+                Advanced (BYOK &amp; self-host)
+            </button>
+
+            {showAdvanced && (
+                <div
+                    style={{
+                        padding: 14,
+                        borderRadius: 10,
+                        background: "var(--panel-2)",
+                        border: "1px solid var(--line)",
+                        marginBottom: 14,
+                    }}
+                >
+                    <div
+                        style={{
+                            fontSize: 11.5,
+                            color: "var(--ink-3)",
+                            lineHeight: 1.55,
+                            marginBottom: 12,
+                        }}
+                    >
+                        Bring your own keys. Leave empty to use the shared
+                        defaults. Embedding index:{" "}
+                        <span
+                            className="mono"
+                            style={{
+                                color: "var(--ink-2)",
+                            }}
+                        >
+                            {selectedLabel}
+                        </span>
+                        .
+                    </div>
+                    <Label>OpenAI API key</Label>
+                    <input
+                        type="password"
+                        value={openaiKey}
+                        onChange={(e) => setOpenaiKey(e.target.value)}
+                        placeholder="sk-…"
+                        autoComplete="off"
+                        style={{ ...inputStyle, marginBottom: 10 }}
+                    />
+                    <Label>Hugging Face token</Label>
+                    <input
+                        type="password"
+                        value={hfKey}
+                        onChange={(e) => setHfKey(e.target.value)}
+                        placeholder="hf_…"
+                        autoComplete="off"
+                        style={{ ...inputStyle, marginBottom: 10 }}
+                    />
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            gap: 10,
+                        }}
+                    >
+                        <div>
+                            <Label>Ollama URL</Label>
+                            <input
+                                value={ollamaUrl}
+                                onChange={(e) => setOllamaUrl(e.target.value)}
+                                placeholder="http://localhost:11434"
+                                autoComplete="off"
+                                style={inputStyle}
+                            />
                         </div>
-
-                        {/* Header */}
-                        <div className={styles.formHeader}>
-                            <h1 className={styles.title}>{headings[activeTab].title}</h1>
-                            <p className={styles.subtitle}>{headings[activeTab].subtitle}</p>
+                        <div>
+                            <Label>Ollama model</Label>
+                            <input
+                                value={ollamaModel}
+                                onChange={(e) => setOllamaModel(e.target.value)}
+                                placeholder="nomic-embed-text"
+                                autoComplete="off"
+                                style={inputStyle}
+                            />
                         </div>
-
-                        {/* ── Create Company Form ─────────────────────── */}
-                        {activeTab === "create" && (
-                            <form onSubmit={handleCreateSubmit} className={styles.form}>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Company Name</label>
-                                    <div className={styles.inputWrapper}>
-                                        <Building className={styles.inputIcon} />
-                                        <input
-                                            type="text"
-                                            name="companyName"
-                                            value={createFormData.companyName}
-                                            onChange={handleCreateChange}
-                                            className={styles.input}
-                                            placeholder="Enter company name"
-                                        />
-                                    </div>
-                                    {createErrors.companyName && (
-                                        <span className={styles.error}>{createErrors.companyName}</span>
-                                    )}
-                                </div>
-
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Approximate Number of Staff</label>
-                                    <div className={styles.inputWrapper}>
-                                        <Users className={styles.inputIcon} />
-                                        <input
-                                            type="number"
-                                            name="staffCount"
-                                            value={createFormData.staffCount}
-                                            onChange={handleCreateChange}
-                                            className={styles.input}
-                                            placeholder="Enter staff count"
-                                            min="1"
-                                        />
-                                    </div>
-                                    {createErrors.staffCount && (
-                                        <span className={styles.error}>{createErrors.staffCount}</span>
-                                    )}
-                                </div>
-
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Default Embedding Index</label>
-                                    <div className={styles.inputWrapper}>
-                                        <Brain className={styles.inputIcon} />
-                                        <select
-                                            name="embeddingIndexKey"
-                                            value={createFormData.embeddingIndexKey}
-                                            onChange={(e) =>
-                                                setCreateFormData((prev) => ({
-                                                    ...prev,
-                                                    embeddingIndexKey: e.target.value,
-                                                }))
-                                            }
-                                            className={styles.input}
-                                            disabled={embeddingIndexOptions.length === 0}
-                                        >
-                                            {embeddingIndexOptions.length === 0 ? (
-                                                <option value="">Loading available indexes…</option>
-                                            ) : (
-                                                embeddingIndexOptions.map((option) => (
-                                                    <option key={option.indexKey} value={option.indexKey}>
-                                                        {option.label}
-                                                    </option>
-                                                ))
-                                            )}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div className={styles.configSection}>
-                                    <div className={styles.configSectionHeader}>
-                                        <h3 className={styles.configSectionTitle}>Optional Provider Config</h3>
-                                        <p className={styles.configSectionHint}>
-                                            Leave these blank to keep using shared env defaults for the demo.
-                                        </p>
-                                    </div>
-
-                                    <div className={styles.formGroup}>
-                                        <label className={styles.label}>OpenAI API Key</label>
-                                        <div className={styles.inputWrapper}>
-                                            <input
-                                                type="password"
-                                                name="embeddingOpenAIApiKey"
-                                                value={createFormData.embeddingOpenAIApiKey}
-                                                onChange={handleCreateChange}
-                                                className={styles.plainInput}
-                                                placeholder="Optional company-specific OpenAI key"
-                                                autoComplete="off"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.formGroup}>
-                                        <label className={styles.label}>Hugging Face API Key</label>
-                                        <div className={styles.inputWrapper}>
-                                            <input
-                                                type="password"
-                                                name="embeddingHuggingFaceApiKey"
-                                                value={createFormData.embeddingHuggingFaceApiKey}
-                                                onChange={handleCreateChange}
-                                                className={styles.plainInput}
-                                                placeholder="Optional company-specific HF token"
-                                                autoComplete="off"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.configGrid}>
-                                        <div className={styles.formGroup}>
-                                            <label className={styles.label}>Ollama Base URL</label>
-                                            <div className={styles.inputWrapper}>
-                                                <input
-                                                    type="url"
-                                                    name="embeddingOllamaBaseUrl"
-                                                    value={createFormData.embeddingOllamaBaseUrl}
-                                                    onChange={handleCreateChange}
-                                                    className={styles.plainInput}
-                                                    placeholder="http://localhost:11434"
-                                                    autoComplete="off"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className={styles.formGroup}>
-                                            <label className={styles.label}>Ollama Model</label>
-                                            <div className={styles.inputWrapper}>
-                                                <input
-                                                    type="text"
-                                                    name="embeddingOllamaModel"
-                                                    value={createFormData.embeddingOllamaModel}
-                                                    onChange={handleCreateChange}
-                                                    className={styles.plainInput}
-                                                    placeholder="nomic-embed-text"
-                                                    autoComplete="off"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className={styles.submitSection}>
-                                    <button
-                                        type="submit"
-                                        className={styles.submitButton}
-                                        disabled={isCreating}
-                                    >
-                                        {isCreating ? "Creating..." : "Create Company"}
-                                    </button>
-                                </div>
-                            </form>
-                        )}
-
-                        {/* ── Join with Code: Step 1 – Enter Code ─────── */}
-                        {activeTab === "join" && joinStep === "enter-code" && (
-                            <form onSubmit={handleValidateCode} className={styles.form}>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Invite Code</label>
-                                    <div className={styles.inputWrapper}>
-                                        <Ticket className={styles.inputIcon} />
-                                        <input
-                                            type="text"
-                                            name="inviteCode"
-                                            value={joinFormData.inviteCode}
-                                            onChange={handleJoinChange}
-                                            className={`${styles.input} ${styles.codeInput}`}
-                                            placeholder="Enter invite code"
-                                            maxLength={12}
-                                            autoComplete="off"
-                                        />
-                                    </div>
-                                    {joinErrors.inviteCode && (
-                                        <span className={styles.error}>{joinErrors.inviteCode}</span>
-                                    )}
-                                </div>
-
-                                <button
-                                    type="submit"
-                                    className={styles.submitButton}
-                                    disabled={isValidating}
-                                >
-                                    {isValidating ? "Validating..." : "Continue"}
-                                </button>
-
-                                <p className={styles.hint}>
-                                    Ask your company admin for an invite code or use the invite link they shared.
-                                </p>
-                            </form>
-                        )}
-
-                        {/* ── Join with Code: Joining / Already Registered ── */}
-                        {activeTab === "join" && joinStep === "joining" && (
-                            <div className={styles.form}>
-                                {registrationError ? (
-                                    <div className={styles.registrationError}>
-                                        <AlertCircle className={styles.registrationErrorIcon} />
-                                        <p className={styles.registrationErrorText}>
-                                            {registrationError}
-                                        </p>
-                                        <button
-                                            type="button"
-                                            className={styles.backButton}
-                                            onClick={handleBackToCode}
-                                        >
-                                            <ArrowLeft className={styles.backIcon} />
-                                            Go back
-                                        </button>
-                                    </div>
-                                ) : joinSuccess ? (
-                                    <div className={styles.successMessage}>
-                                        <CheckCircle className={styles.successIcon} />
-                                        <p className={styles.success}>{joinSuccess}</p>
-                                        <p className={styles.hint}>Redirecting to your dashboard...</p>
-                                    </div>
-                                ) : (
-                                    <div className={styles.joiningSpinner}>
-                                        <div className={styles.spinner} />
-                                        <p className={styles.subtitle}>
-                                            {isJoining ? "Setting up your account..." : "Preparing..."}
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
                     </div>
                 </div>
+            )}
 
-                {/* ── Right: Branding Panel ─────────────────────────── */}
-                {renderBrandPanel()}
-            </div>
+            {error && <ErrorBanner>{error}</ErrorBanner>}
+            <button
+                type="submit"
+                disabled={isCreating}
+                style={primaryButtonStyle(isCreating)}
+            >
+                {isCreating ? (
+                    <>
+                        <Spinner /> Creating…
+                    </>
+                ) : (
+                    <>
+                        Create team workspace
+                        <ArrowRight style={{ width: 14, height: 14 }} />
+                    </>
+                )}
+            </button>
+        </form>
+    );
+}
+
+// ────────────────────────── Small bits ──────────────────────────
+
+const cardStyle: React.CSSProperties = {
+    padding: 20,
+    borderRadius: 14,
+    border: "1px solid var(--line)",
+    background: "var(--panel)",
+    animation: "lsw-fadeIn 180ms",
+};
+
+const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "9px 12px",
+    borderRadius: 9,
+    border: "1px solid var(--line)",
+    background: "var(--panel)",
+    fontSize: 14,
+    color: "var(--ink)",
+    outline: "none",
+    fontFamily: "inherit",
+};
+
+function Label({ children }: { children: React.ReactNode }) {
+    return (
+        <label
+            style={{
+                display: "block",
+                fontSize: 12,
+                fontWeight: 600,
+                color: "var(--ink-2)",
+                marginBottom: 6,
+            }}
+        >
+            {children}
+        </label>
+    );
+}
+
+function primaryButtonStyle(disabled: boolean): React.CSSProperties {
+    return {
+        width: "100%",
+        padding: "11px 14px",
+        borderRadius: 10,
+        background: disabled ? "var(--line)" : "var(--accent)",
+        color: disabled ? "var(--ink-3)" : "white",
+        fontSize: 14,
+        fontWeight: 600,
+        cursor: disabled ? "not-allowed" : "pointer",
+        boxShadow: disabled ? "none" : "0 1px 6px var(--accent-glow)",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+        transition: "background 120ms, box-shadow 120ms",
+    };
+}
+
+function Spinner() {
+    return (
+        <div
+            style={{
+                width: 14,
+                height: 14,
+                borderRadius: "50%",
+                border: "2px solid rgba(255,255,255,0.4)",
+                borderTopColor: "white",
+                animation: "lsw-spin 700ms linear infinite",
+            }}
+        />
+    );
+}
+
+function ErrorBanner({ children }: { children: React.ReactNode }) {
+    return (
+        <div
+            style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 8,
+                padding: "9px 12px",
+                borderRadius: 9,
+                background: "oklch(0.96 0.04 25)",
+                color: "var(--danger)",
+                fontSize: 12.5,
+                lineHeight: 1.5,
+                marginBottom: 12,
+            }}
+        >
+            <AlertCircle
+                style={{
+                    width: 14,
+                    height: 14,
+                    marginTop: 2,
+                    flexShrink: 0,
+                }}
+            />
+            <div style={{ flex: 1 }}>{children}</div>
         </div>
     );
-};
+}
 
 export default function SignupPageWrapper() {
     return (

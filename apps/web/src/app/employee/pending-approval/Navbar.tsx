@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import { Brain } from "lucide-react";
 import styles from "~/styles/Employee/PendingApproval.module.css";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 
 const NavBar = () => {
     return (
         <nav className={styles.navbar}>
             <div className={styles.navContent}>
                 <div className={styles.logoContainer}>
-                    <Brain className={styles.logoIcon} />
+                    <LaunchstackMark size={26} title="Launchstack" />
                     <span className={styles.logoText}>Launchstack</span>
                 </div>
                 <ProfileDropdown />

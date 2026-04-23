@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { Brain, ArrowLeft, Home, BookOpen, Github } from 'lucide-react';
+import { ArrowLeft, Home, BookOpen, Github } from 'lucide-react';
 import type { Metadata } from 'next';
+import { LaunchstackMark } from './_components/LaunchstackLogo';
 
 export const metadata: Metadata = {
     title: 'Page Not Found',
@@ -16,7 +17,7 @@ export default function NotFound() {
 
             <div className="relative text-center max-w-lg">
                 <div className="flex items-center justify-center gap-2 mb-8">
-                    <Brain className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                    <LaunchstackMark size={26} title="Launchstack" />
                     <span className="font-bold text-lg">Launchstack</span>
                 </div>
 

@@ -1,12 +1,12 @@
 "use client";
 
 import { Suspense } from "react";
-import { DocumentViewerShell } from "~/app/employer/documents/components/DocumentViewerShell";
+import { WorkspaceShell } from "~/app/employer/documents/_workspace/WorkspaceShell";
 
-export default function EmployeeDocumentViewerPage() {
+export default function EmployeeDocumentsPage() {
   return (
     <Suspense>
-      <DocumentViewerShell userRole="employee" />
+      <WorkspaceShell />
     </Suspense>
   );
 }

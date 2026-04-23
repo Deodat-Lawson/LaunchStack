@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth, useUser } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
@@ -18,33 +17,41 @@ import { StudioFAB, StudioMenu } from "./StudioMenu";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type { ThreadMessage, WorkspaceFolder, WorkspaceSource } from "./types";
 
-// Lazy — only loaded when ?view=<legacy view> is present, so the new workspace
-// stays lean for the common landing case.
-const DocumentViewerShell = dynamic(
-  () =>
-    import("../components/DocumentViewerShell").then(
-      (m) => m.DocumentViewerShell,
-    ),
-  { loading: () => <LoadingPage /> },
-);
+/**
+ * Legacy `?view=X` URL params that used to drive the deleted DocumentViewerShell.
+ * Studio features now open inline in the workspace drawer via `?feature=X`;
+ * upload opens inline in the AddSourceModal via `?add=1`. Admin views redirect
+ * to their standalone `/employer/<name>` routes. Values folded into the default
+ * workspace map to the workspace root — any `docId` in the URL is preserved so
+ * the DocumentViewer modal can pick it up.
+ */
+const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
+  "document-only": "/employer/documents/viewer",
+  "with-ai-qa": "/employer/documents",
+  "with-ai-qa-history": "/employer/documents",
+  "predictive-analysis": "/employer/documents?feature=audit",
+  generator: "/employer/documents?feature=draft",
+  rewrite: "/employer/documents?feature=rewrite",
+  upload: "/employer/documents?add=1",
+  dashboard: "/employer/home",
+  analytics: "/employer/statistics",
+  employees: "/employer/employees",
+  settings: "/employer/settings",
+  metadata: "/employer/metadata",
+  "marketing-pipeline": "/employer/tools/marketing-pipeline",
+  "repo-explainer": "/employer/tools/repo-explainer",
+  notes: "/employer/documents?feature=notes",
+  workflows: "/employer/documents?feature=workflows",
+};
 
-const LEGACY_VIEW_MODES = new Set([
-  "document-only",
-  "with-ai-qa",
-  "with-ai-qa-history",
-  "predictive-analysis",
-  "generator",
+/** Studio features that open inline in the workspace drawer via `?feature=X`. */
+const FEATURE_IDS = new Set([
+  "draft",
   "rewrite",
-  "upload",
-  "dashboard",
-  "analytics",
-  "employees",
-  "settings",
-  "metadata",
-  "marketing-pipeline",
   "notes",
-  "repo-explainer",
+  "audit",
   "workflows",
+  "marketing",
 ]);
 
 function initialsOf(first?: string | null, last?: string | null, email?: string | null) {
@@ -62,13 +69,26 @@ export function WorkspaceShell() {
   const { isLoaded, isSignedIn, userId, signOut } = useAuth();
   const { user } = useUser();
 
-  // When a legacy `?view=` param is present we fall back to the classic shell so
-  // every existing Studio feature keeps working without re-porting.
+  // Legacy `?view=X` URLs redirect to their new destinations. Any other params
+  // (docId, versionId, prompt, etc.) are carried across so deep links survive.
   const legacyView = searchParams.get("view");
-  const isLegacy = !!legacyView && LEGACY_VIEW_MODES.has(legacyView);
+  const legacyRedirect = legacyView ? LEGACY_VIEW_REDIRECTS[legacyView] : null;
 
-  // Redirect unauthenticated users back to the landing page — mirrors the
-  // previous DocumentViewerShell auth check.
+  useEffect(() => {
+    if (!legacyRedirect) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("view");
+    // Some redirects already include a query (e.g. `?feature=X`). Merge, not
+    // clobber, so carry-over params land alongside.
+    const [basePath, baseQuery] = legacyRedirect.split("?");
+    if (baseQuery) {
+      for (const [k, v] of new URLSearchParams(baseQuery)) params.set(k, v);
+    }
+    const query = params.toString();
+    router.replace(query ? `${basePath}?${query}` : basePath!);
+  }, [legacyRedirect, searchParams, router]);
+
+  // Redirect unauthenticated users back to the landing page.
   useEffect(() => {
     if (isLoaded && !isSignedIn) router.push("/");
   }, [isLoaded, isSignedIn, router]);
@@ -210,6 +230,27 @@ export function WorkspaceShell() {
     setStudioOpen(true);
   }, []);
 
+  // `?feature=X` opens the Studio drawer on that feature; `?add=1` opens the
+  // AddSourceModal. Both are stripped from the URL after firing so refreshes
+  // don't re-open the overlay.
+  const featureParam = searchParams.get("feature");
+  const addParam = searchParams.get("add");
+  useEffect(() => {
+    if (!featureParam && !addParam) return;
+    if (legacyRedirect) return;
+    if (featureParam && FEATURE_IDS.has(featureParam)) {
+      openStudio(featureParam);
+    }
+    if (addParam) {
+      setAddOpen(true);
+    }
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("feature");
+    params.delete("add");
+    const query = params.toString();
+    router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
+  }, [featureParam, addParam, legacyRedirect, openStudio, router, searchParams]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -240,10 +281,8 @@ export function WorkspaceShell() {
   if (!isLoaded) return <LoadingPage />;
   if (!isSignedIn) return <LoadingPage />;
 
-  // Preserve legacy feature routes by delegating to the classic shell.
-  if (isLegacy) {
-    return <DocumentViewerShell userRole="employer" />;
-  }
+  // While a legacy `?view=X` redirect is in flight, avoid flashing the workspace.
+  if (legacyRedirect) return <LoadingPage />;
 
   const userName =
     user?.fullName ??
@@ -269,28 +308,37 @@ export function WorkspaceShell() {
         setActiveTag={setActiveTag}
       />
 
-      <AskPanel
-        sources={sources}
-        selected={selected}
-        setSelected={setSelected}
-        thread={thread}
-        sendMessage={sendMessage}
-        isSending={isSending}
-        onOpenAdd={() => setAddOpen(true)}
-        onNewChat={() => setThread([])}
-        openPalette={() => setPalOpen(true)}
-        onStudioNavigate={(href) => router.push(href)}
-        userInitials={initials}
-        userName={userName}
-        userEmail={userEmail}
-        onSignOut={() => signOut({ redirectUrl: "/" })}
-        studioSlot={
-          <StudioMenu
-            onOpenStudio={() => openStudio()}
-            onPickFeature={(id) => openStudio(id)}
-          />
-        }
-      />
+      {studioOpen ? (
+        <StudioDrawer
+          open
+          inline
+          initialFeatureId={studioFeatureId}
+          onClose={() => setStudioOpen(false)}
+        />
+      ) : (
+        <AskPanel
+          sources={sources}
+          selected={selected}
+          setSelected={setSelected}
+          thread={thread}
+          sendMessage={sendMessage}
+          isSending={isSending}
+          onOpenAdd={() => setAddOpen(true)}
+          onNewChat={() => setThread([])}
+          openPalette={() => setPalOpen(true)}
+          onStudioNavigate={(href) => router.push(href)}
+          userInitials={initials}
+          userName={userName}
+          userEmail={userEmail}
+          onSignOut={() => signOut({ redirectUrl: "/" })}
+          studioSlot={
+            <StudioMenu
+              onOpenStudio={() => openStudio()}
+              onPickFeature={(id) => openStudio(id)}
+            />
+          }
+        />
+      )}
 
       <AddSourceModal
         open={addOpen}
@@ -355,12 +403,6 @@ export function WorkspaceShell() {
           onVersionChanged={() => void refresh()}
         />
       )}
-
-      <StudioDrawer
-        open={studioOpen}
-        initialFeatureId={studioFeatureId}
-        onClose={() => setStudioOpen(false)}
-      />
 
       <StudioFAB
         hidden={

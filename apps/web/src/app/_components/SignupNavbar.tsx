@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import React from 'react';
-import { Brain } from 'lucide-react';
 import { useAuth, useUser, UserButton } from '@clerk/nextjs';
 import styles from '../../styles/navbar.module.css';
 import { ThemeToggle } from './ThemeToggle';
+import { LaunchstackMark } from './LaunchstackLogo';
 
 export function SignupNavbar() {
     const { isLoaded, isSignedIn } = useAuth();
@@ -16,7 +16,7 @@ export function SignupNavbar() {
             <div className={styles.navContent}>
                 <div className={styles.navWrapper}>
                     <Link href="/" className={styles.logoContainer}>
-                        <Brain className={styles.iconPurple} />
+                        <LaunchstackMark size={28} />
                         <span className={styles.logoText}>Launchstack</span>
                     </Link>
                     <div className={styles.navLinks}>

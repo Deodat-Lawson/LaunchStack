@@ -3,7 +3,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
-import { Upload, CheckCircle2 } from "lucide-react";
 import UploadForm, { type AvailableProviders } from "~/app/employer/upload/UploadForm";
 
 const CategoryManagement = dynamic(
@@ -40,9 +39,16 @@ interface UploadBootstrapResponse {
 interface UploadViewProps {
   /** Called after a successful upload so the parent can refresh its document list */
   onDocumentUploaded?: () => void;
+  /**
+   * When rendered inside a host chrome (e.g. AddSourceModal), set this to skip
+   * the outer heading + scroll shell and let the parent drive layout. Also
+   * suppresses the post-upload `router.push("/employer/documents")` since the
+   * workspace is already the host.
+   */
+  embedded?: boolean;
 }
 
-export function UploadView({ onDocumentUploaded: _onDocumentUploaded }: UploadViewProps) {
+export function UploadView({ onDocumentUploaded, embedded = false }: UploadViewProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [useUploadThing, setUseUploadThing] = useState<boolean>(true);
   const [isUploadThingConfigured, setIsUploadThingConfigured] = useState<boolean>(false);
@@ -152,59 +158,101 @@ export function UploadView({ onDocumentUploaded: _onDocumentUploaded }: UploadVi
     }
   }, []);
 
-  return (
-    <div className="h-full overflow-y-auto bg-background">
-      <div className="max-w-3xl mx-auto px-6 py-8 space-y-8">
-        {/* Header */}
-        <div>
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
-              <Upload className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight">Upload Documents</h1>
-          </div>
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            Add new documents to your collection. Upload multiple files at once, provide details, and organize them with categories.
-          </p>
+  const form = (
+    <UploadForm
+      categories={categories}
+      useUploadThing={useUploadThing}
+      isUploadThingConfigured={isUploadThingConfigured}
+      onToggleUploadMethod={handleToggleUploadMethod}
+      isUpdatingPreference={isUpdatingPreference}
+      availableProviders={availableProviders}
+      onAddCategory={handleAddCategory}
+      storageProvider={storageProvider}
+      s3Endpoint={s3Endpoint}
+      embedded={embedded}
+      onCompleted={onDocumentUploaded}
+    />
+  );
 
-          <div className="flex flex-wrap gap-4 mt-4">
-            {[
-              { title: "Multiple Files", desc: "Upload many documents at once" },
-              { title: "Batch Settings", desc: "Apply category to all files" },
-              { title: "Individual Control", desc: "Customize each document" },
-            ].map((f) => (
-              <div key={f.title} className="flex items-center gap-2 text-sm">
-                <div className="w-5 h-5 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle2 className="w-3 h-3 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div>
-                  <span className="font-medium">{f.title}</span>
-                  <span className="text-muted-foreground ml-1">— {f.desc}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Upload Form */}
-        <UploadForm
-          categories={categories}
-          useUploadThing={useUploadThing}
-          isUploadThingConfigured={isUploadThingConfigured}
-          onToggleUploadMethod={handleToggleUploadMethod}
-          isUpdatingPreference={isUpdatingPreference}
-          availableProviders={availableProviders}
-          onAddCategory={handleAddCategory}
-          storageProvider={storageProvider}
-          s3Endpoint={s3Endpoint}
-        />
-
-        {/* Category Management */}
+  if (embedded) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        {form}
         <CategoryManagement
           categories={categories}
           onAddCategory={handleAddCategory}
           onRemoveCategory={handleRemoveCategory}
         />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        height: "100%",
+        overflowY: "auto",
+        background: "var(--bg)",
+        color: "var(--ink)",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 860,
+          margin: "0 auto",
+          padding: "40px 24px 96px",
+        }}
+      >
+        <div style={{ marginBottom: 32 }}>
+          <div
+            className="mono"
+            style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              color: "var(--ink-3)",
+              textTransform: "uppercase",
+              marginBottom: 10,
+            }}
+          >
+            Upload
+          </div>
+          <h1
+            className="serif"
+            style={{
+              fontSize: 38,
+              lineHeight: 1.08,
+              letterSpacing: "-0.02em",
+              color: "var(--ink)",
+              margin: 0,
+            }}
+          >
+            Add sources
+          </h1>
+          <div
+            style={{
+              fontSize: 14.5,
+              color: "var(--ink-3)",
+              marginTop: 10,
+              lineHeight: 1.55,
+              maxWidth: 640,
+            }}
+          >
+            Drop files, connect a repo, paste text, or point us at a URL. Everything you
+            bring in is indexed into your knowledge base, chunked for retrieval, and ready
+            for the workspace.
+          </div>
+        </div>
+
+        {form}
+
+        <div style={{ marginTop: 32 }}>
+          <CategoryManagement
+            categories={categories}
+            onAddCategory={handleAddCategory}
+            onRemoveCategory={handleRemoveCategory}
+          />
+        </div>
       </div>
     </div>
   );

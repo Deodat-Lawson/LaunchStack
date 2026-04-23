@@ -1,6 +1,7 @@
 import React from 'react';
-import { Brain, Loader } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import styles from '../../styles/authenticating.module.css';
+import { LaunchstackMark } from './LaunchstackLogo';
 
 interface LoadingPageProps {
     message?: string;
@@ -15,11 +16,10 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
         <div className={styles.container} role="status" aria-live="polite">
             <div className={styles.content}>
                 <div className={styles.logoWrapper}>
-                    <Brain
-                        className={styles.logoIcon}
-                        aria-hidden="true"
-                        role="img"
-                        aria-label="Launchstack Brain Icon"
+                    <LaunchstackMark
+                        size={48}
+                        title="Launchstack"
+                        style={{ marginRight: 10 }}
                     />
                     <span className={styles.logoText}>Launchstack</span>
                 </div>

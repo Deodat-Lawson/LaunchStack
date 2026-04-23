@@ -157,10 +157,8 @@ export function DocumentViewer({
 
   const previewVersion = (versionId: number) => {
     if (!source.documentId) return;
-    // Route to the legacy viewer with a version preview param — DocumentViewerShell
-    // already handles this mode and shows a "Viewing non-current version" banner.
     router.push(
-      `/employer/documents?view=document-only&docId=${source.documentId}&versionId=${versionId}`,
+      `/employer/documents/viewer?docId=${source.documentId}&versionId=${versionId}`,
     );
   };
 
@@ -200,7 +198,7 @@ export function DocumentViewer({
 
   const openOriginal = () => {
     if (!source.documentId) return;
-    router.push(`/employer/documents?view=document-only&docId=${source.documentId}`);
+    router.push(`/employer/documents/viewer?docId=${source.documentId}`);
   };
 
   const statusText =

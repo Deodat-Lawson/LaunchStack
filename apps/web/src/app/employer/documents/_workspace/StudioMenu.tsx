@@ -102,7 +102,7 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
           >
             <div style={{ fontSize: 13, fontWeight: 600 }}>Studio</div>
             <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
-              Tools that don&apos;t disturb your ask thread
+              Pick a tool — opens right here in your workspace
             </div>
           </div>
 
@@ -321,7 +321,7 @@ export function StudioFAB({ hidden, onPickFeature }: StudioFABProps) {
       )}
 
       <button
-        onClick={() => pickFeature(undefined, "/employer/documents?view=generator")}
+        onClick={() => pickFeature(undefined, "/employer/documents?feature=draft")}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         title="Studio"

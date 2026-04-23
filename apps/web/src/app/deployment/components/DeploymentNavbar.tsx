@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Brain,
   Search as SearchIcon,
   Menu,
   X,
@@ -18,6 +17,7 @@ import {
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { DeploymentSection, SectionConfig } from '../types';
+import { LaunchstackMark } from '~/app/_components/LaunchstackLogo';
 
 interface DeploymentNavbarProps {
   darkMode: boolean;
@@ -75,9 +75,7 @@ export const DeploymentNavbar: React.FC<DeploymentNavbarProps> = ({
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 flex-shrink-0 group">
               <div className="relative">
-                <div className="w-9 h-9 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/25 group-hover:shadow-purple-500/40 transition-shadow">
-                  <Brain className="w-5 h-5 text-white" />
-                </div>
+                <LaunchstackMark size={36} title="Launchstack" />
                 <div className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 ${darkMode ? 'border-gray-950' : 'border-white'}`} />
               </div>
               <div className="flex flex-col">

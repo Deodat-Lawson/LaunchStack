@@ -6,21 +6,25 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import {
-  IconAudio,
   IconBolt,
   IconCheck,
-  IconFile,
-  IconFolder,
   IconLink,
   IconPaste,
-  IconVideo,
   IconX,
   IconYoutube,
   type IconProps,
 } from "./icons";
 import { ADD_TABS, SOURCE_META, type AddSourceTab } from "./types";
+
+const UploadView = dynamic(
+  () =>
+    import("~/app/employer/documents/components/UploadView").then(
+      (m) => m.UploadView,
+    ),
+  { ssr: false },
+);
 
 interface ModalBackdropProps {
   onClose: () => void;
@@ -57,109 +61,17 @@ function ModalBackdrop({ onClose, children }: ModalBackdropProps) {
 }
 
 interface TabPanelFilesProps {
-  onOpenFullUploader: () => void;
-  kind?: "files" | "folder" | "audio" | "video";
+  onCompleted: () => void;
 }
 
-function TabPanelUpload({ onOpenFullUploader, kind = "files" }: TabPanelFilesProps) {
-  const [dragging, setDragging] = useState(false);
-  const Icon = (
-    {
-      files: IconFile,
-      folder: IconFolder,
-      audio: IconAudio,
-      video: IconVideo,
-    } as const
-  )[kind];
-  const title = {
-    files: "Drop files here",
-    folder: "Drop a folder",
-    audio: "Drop audio files",
-    video: "Drop video files",
-  }[kind];
-  const subtitle = {
-    files: "PDF, DOCX, XLSX, PPTX, images, code files — up to 500 MB each",
-    folder: "Each file becomes its own source; folder stays as a library folder",
-    audio: "MP3, WAV, M4A, FLAC — transcribed automatically",
-    video: "MP4, MOV, WEBM — transcribed automatically",
-  }[kind];
-
-  return (
-    <div>
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDragging(true);
-        }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={(e) => {
-          e.preventDefault();
-          setDragging(false);
-          onOpenFullUploader();
-        }}
-        style={{
-          border: `1.5px dashed ${dragging ? "var(--accent)" : "var(--line)"}`,
-          background: dragging ? "var(--accent-soft)" : "var(--line-2)",
-          borderRadius: 12,
-          padding: "40px 24px",
-          textAlign: "center",
-          transition: "all 140ms",
-        }}
-      >
-        <div
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 12,
-            background: "var(--panel)",
-            border: "1px solid var(--line)",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--accent)",
-            marginBottom: 12,
-          }}
-        >
-          <Icon size={20} />
-        </div>
-        <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>{title}</div>
-        <div style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 16 }}>
-          {subtitle}
-        </div>
-        <button
-          onClick={onOpenFullUploader}
-          style={{
-            background: "var(--accent)",
-            color: "white",
-            padding: "8px 16px",
-            borderRadius: 8,
-            fontSize: 13,
-            fontWeight: 600,
-          }}
-        >
-          Open full uploader
-        </button>
-      </div>
-      <div
-        style={{
-          marginTop: 16,
-          padding: "12px 14px",
-          background: "var(--line-2)",
-          borderRadius: 8,
-          fontSize: 12,
-          color: "var(--ink-3)",
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-        }}
-      >
-        <IconBolt size={14} />
-        <span>
-          Full uploader handles OCR, category assignment, and large-file chunking.
-        </span>
-      </div>
-    </div>
-  );
+/**
+ * Renders the full `<UploadView embedded>` inline so users can drop files,
+ * queue them, pick categories, and submit — all without leaving the workspace.
+ * All four of the "Upload" group tabs (files / folder / audio / video) share
+ * this panel since the underlying uploader accepts every file type anyway.
+ */
+function TabPanelUpload({ onCompleted }: TabPanelFilesProps) {
+  return <UploadView embedded onDocumentUploaded={onCompleted} />;
 }
 
 interface ComingSoonProps {
@@ -400,59 +312,10 @@ function TabPanelUrl({ kind, userId, defaultCategory, onSubmitted }: UrlTabProps
   );
 }
 
-function TabPanelPaste({ onOpenFullUploader }: { onOpenFullUploader: () => void }) {
-  return (
-    <div>
-      <div
-        style={{
-          border: "1.5px dashed var(--line)",
-          background: "var(--line-2)",
-          borderRadius: 12,
-          padding: "40px 24px",
-          textAlign: "center",
-        }}
-      >
-        <div
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 12,
-            background: "var(--panel)",
-            border: "1px solid var(--line)",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--accent)",
-            marginBottom: 12,
-          }}
-        >
-          <IconPaste size={20} />
-        </div>
-        <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Paste text</div>
-        <div style={{ fontSize: 13, color: "var(--ink-3)", marginBottom: 16, maxWidth: 340, margin: "0 auto 16px" }}>
-          Drop in notes, an email, a transcript, anything. Full editor lives in the uploader.
-        </div>
-        <button
-          onClick={onOpenFullUploader}
-          style={{
-            background: "var(--accent)",
-            color: "white",
-            padding: "8px 16px",
-            borderRadius: 8,
-            fontSize: 13,
-            fontWeight: 600,
-          }}
-        >
-          Open full uploader
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export interface AddSourceModalProps {
   open: boolean;
   onClose: () => void;
+  /** Fires after any source add (upload, URL fetch) so the workspace can refresh its list. */
   onOpenFullUploader: () => void;
   userId: string | null;
   defaultCategory: string;
@@ -465,33 +328,29 @@ export function AddSourceModal({
   userId,
   defaultCategory,
 }: AddSourceModalProps) {
-  const router = useRouter();
   const [tab, setTab] = useState<string>("files");
   if (!open) return null;
 
   const allTabs: AddSourceTab[] = ADD_TABS.flatMap((g) => g.items);
   const active = allTabs.find((t) => t.id === tab) ?? allTabs[0]!;
 
-  const openFull = () => {
+  const handleUploadCompleted = () => {
     onOpenFullUploader();
     onClose();
-    router.push("/employer/documents?view=upload");
   };
 
   const handleUrlSubmitted = () => {
     onOpenFullUploader();
   };
 
-  const isUpload = ["files", "folder", "audio", "video"].includes(tab);
+  // Files / folder / audio / video / paste all share the embedded UploadView
+  // which already contains a source grid covering every upload type. URL and
+  // YouTube stay as quick inline URL forms. The rest are "coming soon".
+  const isUpload = ["files", "folder", "audio", "video", "paste"].includes(tab);
   const isUrl = tab === "url" || tab === "youtube";
   let panel: ReactNode;
   if (isUpload) {
-    panel = (
-      <TabPanelUpload
-        kind={tab as "files" | "folder" | "audio" | "video"}
-        onOpenFullUploader={openFull}
-      />
-    );
+    panel = <TabPanelUpload onCompleted={handleUploadCompleted} />;
   } else if (isUrl) {
     panel = (
       <TabPanelUrl
@@ -501,8 +360,6 @@ export function AddSourceModal({
         onSubmitted={handleUrlSubmitted}
       />
     );
-  } else if (tab === "paste") {
-    panel = <TabPanelPaste onOpenFullUploader={openFull} />;
   } else {
     const meta = SOURCE_META[tab as keyof typeof SOURCE_META];
     panel = (
@@ -519,15 +376,17 @@ export function AddSourceModal({
     <ModalBackdrop onClose={onClose}>
       <div
         style={{
-          width: 780,
-          maxWidth: "92vw",
-          maxHeight: "86vh",
+          width: isUpload ? 1100 : 780,
+          maxWidth: "94vw",
+          height: isUpload ? "92vh" : undefined,
+          maxHeight: "92vh",
           background: "var(--panel)",
           borderRadius: 16,
           boxShadow: "0 30px 80px var(--scrim-shadow), 0 0 0 1px var(--line)",
           display: "flex",
           overflow: "hidden",
           animation: "lsw-modalIn 180ms ease-out",
+          transition: "width 180ms ease-out",
         }}
       >
         <div

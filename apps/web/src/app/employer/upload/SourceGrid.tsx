@@ -1,89 +1,152 @@
 "use client";
 
-import React from "react";
-import { Upload, Github, ClipboardPaste, Globe, Youtube } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Upload,
+  Github,
+  ClipboardPaste,
+  Globe,
+  Youtube,
+  type LucideIcon,
+} from "lucide-react";
 
 export type SourceType = "github" | "paste" | "website" | "youtube";
 
 interface SourceGridProps {
-    onSelectSource: (source: SourceType) => void;
-    onFileClick: () => void;
-    onFolderClick: () => void;
+  onSelectSource: (source: SourceType) => void;
+  onFileClick: () => void;
+  onFolderClick: () => void;
 }
 
-const cardClasses =
-    "flex flex-col items-center gap-2 p-5 rounded-xl border border-gray-200 dark:border-purple-500/20 bg-white dark:bg-slate-800/60 hover:border-purple-400 dark:hover:border-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all cursor-pointer text-center";
+interface CardProps {
+  Icon: LucideIcon;
+  iconColor?: string;
+  title: string;
+  subtitle: string;
+  onClick: () => void;
+  children?: React.ReactNode;
+}
+
+function SourceCard({
+  Icon,
+  iconColor = "var(--accent)",
+  title,
+  subtitle,
+  onClick,
+  children,
+}: CardProps) {
+  const [hover, setHover] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 6,
+        padding: "18px 14px",
+        borderRadius: 12,
+        border: `1px solid ${hover ? "var(--accent)" : "var(--line)"}`,
+        background: hover ? "var(--accent-soft)" : "var(--panel)",
+        textAlign: "center",
+        cursor: "pointer",
+        transition: "background 120ms, border-color 120ms",
+        fontFamily: "inherit",
+      }}
+    >
+      <Icon size={22} color={iconColor} />
+      <span
+        style={{
+          fontSize: 13.5,
+          fontWeight: 600,
+          color: "var(--ink)",
+        }}
+      >
+        {title}
+      </span>
+      <span
+        style={{
+          fontSize: 11.5,
+          color: "var(--ink-3)",
+          lineHeight: 1.35,
+        }}
+      >
+        {subtitle}
+      </span>
+      {children}
+    </button>
+  );
+}
 
 export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: SourceGridProps) {
-    return (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-2xl mx-auto">
-            <button type="button" onClick={onFileClick} className={cardClasses}>
-                <Upload className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    Files &amp; Folders
-                </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">
-                    PDF, DOCX, images, ZIP
-                </span>
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onFolderClick();
-                    }}
-                    className="text-xs text-purple-600 dark:text-purple-400 hover:underline"
-                >
-                    or select folder
-                </button>
-            </button>
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+        gap: 10,
+        maxWidth: 680,
+        margin: "0 auto",
+      }}
+    >
+      <SourceCard
+        Icon={Upload}
+        title="Files & folders"
+        subtitle="PDF, DOCX, images, ZIP"
+        onClick={onFileClick}
+      >
+        <span
+          role="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onFolderClick();
+          }}
+          style={{
+            fontSize: 11,
+            color: "var(--accent-ink)",
+            fontWeight: 600,
+            textDecoration: "underline",
+            marginTop: 2,
+            cursor: "pointer",
+          }}
+        >
+          or select folder
+        </span>
+      </SourceCard>
 
-            <button type="button" onClick={() => onSelectSource("github")} className={cardClasses}>
-                <Github className="w-6 h-6 text-gray-900 dark:text-white" />
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    GitHub Repo
-                </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">
-                    Clone &amp; index a repository
-                </span>
-            </button>
+      <SourceCard
+        Icon={Github}
+        iconColor="var(--ink)"
+        title="GitHub repo"
+        subtitle="Clone & index a repository"
+        onClick={() => onSelectSource("github")}
+      />
 
-            <button type="button" onClick={() => onSelectSource("paste")} className={cardClasses}>
-                <ClipboardPaste className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    Paste Text
-                </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">
-                    Markdown or plain text
-                </span>
-            </button>
+      <SourceCard
+        Icon={ClipboardPaste}
+        title="Paste text"
+        subtitle="Markdown or plain text"
+        onClick={() => onSelectSource("paste")}
+      />
 
-            <button type="button" onClick={() => onSelectSource("website")} className={cardClasses}>
-                <Globe className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    Website
-                </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">Fetch a single web page</span>
-            </button>
+      <SourceCard
+        Icon={Globe}
+        iconColor="oklch(0.55 0.18 240)"
+        title="Website"
+        subtitle="Fetch a single web page"
+        onClick={() => onSelectSource("website")}
+      />
 
-            <button type="button" onClick={() => onSelectSource("youtube")} className={cardClasses}>
-                <Youtube className="w-6 h-6 text-red-600 dark:text-red-400" />
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    YouTube &amp; Video
-                </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">
-                    Transcribe a video URL
-                </span>
-            </button>
-
-            <button type="button" onClick={() => onSelectSource("youtube")} className={cardClasses}>
-                <Youtube className="w-6 h-6 text-red-600 dark:text-red-400" />
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    YouTube &amp; Video
-                </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500">
-                    Transcribe a video URL
-                </span>
-            </button>
-        </div>
-    );
+      <SourceCard
+        Icon={Youtube}
+        iconColor="oklch(0.58 0.2 25)"
+        title="YouTube & video"
+        subtitle="Transcribe a video URL"
+        onClick={() => onSelectSource("youtube")}
+      />
+    </div>
+  );
 }

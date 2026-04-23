@@ -17,6 +17,12 @@ export interface StudioDrawerProps {
   open: boolean;
   initialFeatureId?: string | null;
   onClose: () => void;
+  /**
+   * When `true`, renders as a flex sibling that fills the remaining workspace
+   * width (replacing the chat area). When `false` (default), keeps the legacy
+   * right-side overlay behavior with its own backdrop.
+   */
+  inline?: boolean;
 }
 
 // Feature ids whose panes need custom UI (not just a link-out).
@@ -106,7 +112,12 @@ const LINK_DETAILS: Record<
   },
 };
 
-export function StudioDrawer({ open, initialFeatureId, onClose }: StudioDrawerProps) {
+export function StudioDrawer({
+  open,
+  initialFeatureId,
+  onClose,
+  inline = false,
+}: StudioDrawerProps) {
   const allFeatures = useMemo(
     () => [...DEMOTED_FEATURES, MARKETING_FEATURE],
     [],
@@ -167,31 +178,24 @@ export function StudioDrawer({ open, initialFeatureId, onClose }: StudioDrawerPr
     );
   }
 
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 90,
-        background: "var(--scrim)",
-        backdropFilter: "blur(3px)",
-        display: "flex",
-        justifyContent: "flex-end",
-        animation: "lsw-fadeIn 140ms",
-      }}
-    >
+  const body = (
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 820,
-          maxWidth: "96vw",
+          width: inline
+            ? "100%"
+            : CUSTOM_PANE_IDS.has(active.id) || active.id === "marketing"
+              ? 1280
+              : 820,
+          maxWidth: inline ? "100%" : "96vw",
           height: "100%",
+          flex: inline ? 1 : undefined,
           background: "var(--panel)",
-          borderLeft: "1px solid var(--line)",
-          boxShadow: "-24px 0 60px var(--scrim-shadow)",
+          borderLeft: inline ? "none" : "1px solid var(--line)",
+          boxShadow: inline ? "none" : "-24px 0 60px var(--scrim-shadow)",
           display: "flex",
-          animation: "lsw-drawerIn 220ms ease-out",
+          animation: inline ? "lsw-fadeIn 140ms ease-out" : "lsw-drawerIn 220ms ease-out",
+          transition: "width 180ms ease-out",
         }}
       >
         {/* Left rail — feature list */}
@@ -359,6 +363,25 @@ export function StudioDrawer({ open, initialFeatureId, onClose }: StudioDrawerPr
           {pane}
         </section>
       </div>
+  );
+
+  if (inline) return body;
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 90,
+        background: "var(--scrim)",
+        backdropFilter: "blur(3px)",
+        display: "flex",
+        justifyContent: "flex-end",
+        animation: "lsw-fadeIn 140ms",
+      }}
+    >
+      {body}
     </div>
   );
 }

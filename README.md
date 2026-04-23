@@ -117,8 +117,31 @@ pnpm dev                      # Next.js + Inngest on :3000 and :8288
 Or spin the full stack (Postgres + SeaweedFS + sidecars) with Docker:
 
 ```bash
+# macOS / Linux
 make up          # lite (~400MB RAM)
 make up-ocr      # with Docling for Office docs (~1.2GB RAM)
+```
+
+```powershell
+# Windows (PowerShell or cmd — requires Docker Desktop)
+docker compose --env-file .env up --build                                                      # lite (~400MB RAM)
+docker compose --env-file .env --profile ocr -f docker-compose.yml -f docker-compose.ocr.yml up --build -d   # with Docling (~1.2GB RAM)
+```
+
+> Or install `make` on Windows via [Chocolatey](https://chocolatey.org/) (`choco install make`) or [Scoop](https://scoop.sh/) (`scoop install make`) to use the `make up` shortcuts.
+
+**Stop the stack:**
+
+```bash
+# macOS / Linux
+make down         # stop containers (keeps volumes — DB + S3 data persists)
+make down-clean   # stop + wipe volumes (fresh DB on next up)
+```
+
+```powershell
+# Windows
+docker compose --env-file .env down                     # stop containers (keeps volumes)
+docker compose --env-file .env down -v --remove-orphans # stop + wipe volumes (fresh DB)
 ```
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full dev guide.

@@ -13,11 +13,11 @@ function buildQuery(
   return params.toString();
 }
 
-export default async function UploadRedirect({
+export default async function RewriteRedirect({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const sp = await searchParams;
-  redirect(`/employer/documents?${buildQuery(sp, { add: "1" })}`);
+  redirect(`/employer/documents?${buildQuery(sp, { feature: "rewrite" })}`);
 }

@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Brain, Building2 } from "lucide-react";
+import { Building2 } from "lucide-react";
 import styles from "../../../styles/Employer/DocumentViewer.module.css";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 
 export default function LoadingDoc() {
     return (
@@ -10,7 +11,7 @@ export default function LoadingDoc() {
             <aside className={styles.sidebar}>
                 <div className={styles.sidebarHeader}>
                     <button className={styles.logoContainer}>
-                        <Brain className={styles.logoIcon} />
+                        <LaunchstackMark size={26} title="Launchstack" />
                         <span className={styles.logoText}>Launchstack</span>
                     </button>
                 </div>

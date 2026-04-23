@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
 import {
-  IconBolt,
   IconChevronDown,
   IconList,
   IconLogout,
@@ -14,6 +13,7 @@ import {
   IconSettings,
   IconSun,
 } from "../documents/_workspace/icons";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { DEMOTED_FEATURES } from "../documents/_workspace/types";
 
 function initialsOf(
@@ -97,20 +97,7 @@ export function EmployerChrome({
             color: "inherit",
           }}
         >
-          <div
-            style={{
-              width: 26,
-              height: 26,
-              borderRadius: 6,
-              background: "var(--ink)",
-              color: "var(--accent)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <IconBolt size={14} />
-          </div>
+          <LaunchstackMark size={26} title="Launchstack" />
           <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em" }}>
             Launchstack
           </span>

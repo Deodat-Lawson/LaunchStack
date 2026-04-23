@@ -1,26 +1,31 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import {
-  IconChevronRight,
-  IconPlus,
-  IconShield,
-  IconSparkle,
-} from "./icons";
+import { IconChevronRight, IconSparkle } from "./icons";
+import LoadingPage from "~/app/_components/loading";
 
-const FORMAT_OPTIONS = ["Email", "Blog post", "LinkedIn post", "X thread", "One-pager"];
-const TONE_OPTIONS = ["Warm", "Formal", "Technical", "Punchy", "Analytical"];
-const LENGTH_OPTIONS = ["Short (<150w)", "Medium (~300w)", "Long (~800w)"];
+const DocumentGenerator = dynamic(
+  () =>
+    import("~/app/employer/documents/components/DocumentGenerator").then(
+      (m) => m.DocumentGenerator,
+    ),
+  { loading: () => <LoadingPage /> },
+);
 
-const REWRITE_INTENTS = [
-  "Punchier · half the length",
-  "Plainer English",
-  "Active voice",
-  "Cut hedges",
-  "More formal",
-  "Match our blog voice",
-];
+const RewriteDiffView = dynamic(
+  () =>
+    import("~/app/employer/documents/components/RewriteDiffView").then(
+      (m) => m.RewriteDiffView,
+    ),
+  { loading: () => <LoadingPage /> },
+);
+
+const NotesPanel = dynamic(
+  () => import("~/components/notes/NotesPanel").then((m) => m.NotesPanel),
+  { loading: () => <LoadingPage /> },
+);
 
 interface PaneProps {
   onClose: () => void;
@@ -202,280 +207,171 @@ function SecondaryLink({
   );
 }
 
-export function DraftPane({ onClose }: PaneProps) {
-  const router = useRouter();
-  const [prompt, setPrompt] = useState(
-    "A cold email to launch partners, warm, ~120 words, CTA = 15 min chat.",
-  );
-  const [format, setFormat] = useState(FORMAT_OPTIONS[0]!);
-  const [tone, setTone] = useState(TONE_OPTIONS[0]!);
-  const [length, setLength] = useState(LENGTH_OPTIONS[1]!);
-
-  const open = () => {
-    const params = new URLSearchParams();
-    params.set("view", "generator");
-    if (prompt.trim()) params.set("prompt", prompt.trim());
-    if (format) params.set("format", format);
-    if (tone) params.set("tone", tone);
-    if (length) params.set("length", length);
-    router.push(`/employer/documents?${params.toString()}`);
-    onClose();
-  };
-
+function InlineFeatureShell({
+  eyebrow,
+  title,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  children: ReactNode;
+}) {
   return (
-    <PaneShell
-      eyebrow="Compose"
-      title="Draft something new"
-      body="Pinned sources are passed in as context. The full generator opens with these settings pre-filled."
-      footer={
-        <>
-          <SecondaryLink onClick={onClose}>Cancel</SecondaryLink>
-          <div style={{ flex: 1 }} />
-          <PrimaryCTA onClick={open}>
-            <IconSparkle size={13} />
-            Open full generator <IconChevronRight size={12} />
-          </PrimaryCTA>
-        </>
-      }
-    >
-      <div style={{ marginBottom: 18 }}>
-        <FieldLabel>What should I write?</FieldLabel>
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          rows={4}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            borderRadius: 9,
-            border: "1px solid var(--line)",
-            background: "var(--panel)",
-            fontSize: 14,
-            lineHeight: 1.55,
-            color: "var(--ink)",
-            outline: "none",
-            resize: "vertical",
-            fontFamily: "inherit",
-          }}
-        />
-      </div>
-
-      <div style={{ marginBottom: 18 }}>
-        <FieldLabel>Format</FieldLabel>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {FORMAT_OPTIONS.map((o) => (
-            <Chip key={o} active={format === o} onClick={() => setFormat(o)}>
-              {o}
-            </Chip>
-          ))}
-        </div>
-      </div>
-
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 18,
-          marginBottom: 18,
+          padding: "14px 24px 12px",
+          borderBottom: "1px solid var(--line)",
+          background: "var(--panel)",
+          flexShrink: 0,
         }}
       >
-        <div>
-          <FieldLabel>Tone</FieldLabel>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {TONE_OPTIONS.map((o) => (
-              <Chip key={o} active={tone === o} onClick={() => setTone(o)}>
-                {o}
-              </Chip>
-            ))}
-          </div>
+        <div
+          className="mono"
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.1em",
+            color: "var(--ink-3)",
+            textTransform: "uppercase",
+            marginBottom: 2,
+          }}
+        >
+          {eyebrow}
         </div>
-        <div>
-          <FieldLabel>Length</FieldLabel>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {LENGTH_OPTIONS.map((o) => (
-              <Chip key={o} active={length === o} onClick={() => setLength(o)}>
-                {o}
-              </Chip>
-            ))}
-          </div>
-        </div>
+        <h2
+          className="serif"
+          style={{
+            fontSize: 22,
+            lineHeight: 1.15,
+            letterSpacing: "-0.02em",
+            color: "var(--ink)",
+            margin: 0,
+          }}
+        >
+          {title}
+        </h2>
       </div>
-    </PaneShell>
+      <div style={{ flex: 1, overflowY: "auto", minHeight: 0 }}>{children}</div>
+    </div>
   );
 }
 
-export function RewritePane({ onClose }: PaneProps) {
-  const router = useRouter();
-  const [text, setText] = useState("");
-  const [intent, setIntent] = useState(REWRITE_INTENTS[0]!);
-
-  const open = () => {
-    const params = new URLSearchParams();
-    params.set("view", "rewrite");
-    if (text.trim()) params.set("text", text.trim().slice(0, 2000));
-    if (intent) params.set("intent", intent);
-    router.push(`/employer/documents?${params.toString()}`);
-    onClose();
-  };
-
+export function DraftPane(_: PaneProps) {
   return (
-    <PaneShell
-      eyebrow="Rewrite"
-      title="Improve existing prose"
-      body="Paste a draft, pick an intent. We rewrite it using your in-scope sources as style references."
-      footer={
-        <>
-          <SecondaryLink onClick={onClose}>Cancel</SecondaryLink>
-          <div style={{ flex: 1 }} />
-          <PrimaryCTA onClick={open} disabled={!text.trim()}>
-            <IconSparkle size={13} />
-            Open rewrite view <IconChevronRight size={12} />
-          </PrimaryCTA>
-        </>
-      }
-    >
-      <div style={{ marginBottom: 18 }}>
-        <FieldLabel>Original</FieldLabel>
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Paste the text you want rewritten…"
-          rows={6}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            borderRadius: 9,
-            border: "1px solid var(--line)",
-            background: "var(--panel)",
-            fontSize: 14,
-            lineHeight: 1.55,
-            color: "var(--ink)",
-            outline: "none",
-            resize: "vertical",
-            fontFamily: "inherit",
-          }}
-        />
-      </div>
-
-      <div>
-        <FieldLabel>What should change?</FieldLabel>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {REWRITE_INTENTS.map((o) => (
-            <Chip key={o} active={intent === o} onClick={() => setIntent(o)}>
-              {o}
-            </Chip>
-          ))}
-        </div>
-      </div>
-    </PaneShell>
+    <InlineFeatureShell eyebrow="Compose" title="Draft something new">
+      <DocumentGenerator />
+    </InlineFeatureShell>
   );
 }
 
-export function NotesPane({ onClose }: PaneProps) {
-  const router = useRouter();
+export function RewritePane(_: PaneProps) {
   return (
-    <PaneShell
-      eyebrow="Notes"
-      title="Thinking attached to sources"
-      body="Pin quick notes next to the source that sparked them. Searchable alongside every other source in your library."
-      footer={
-        <>
-          <SecondaryLink onClick={onClose}>Cancel</SecondaryLink>
-          <div style={{ flex: 1 }} />
-          <PrimaryCTA
-            onClick={() => {
-              router.push("/employer/documents?view=notes");
-              onClose();
-            }}
-          >
-            <IconPlus size={13} />
-            Open notes <IconChevronRight size={12} />
-          </PrimaryCTA>
-        </>
-      }
-    >
-      <div
-        style={{
-          padding: 16,
-          borderRadius: 10,
-          background: "var(--panel-2)",
-          border: "1px dashed var(--line)",
-          color: "var(--ink-3)",
-          fontSize: 13,
-          lineHeight: 1.6,
-        }}
-      >
-        Select a source in the rail, then open its notes from here. Every note
-        stays tied to the document it came from, so the context never drifts.
+    <InlineFeatureShell eyebrow="Rewrite" title="Improve existing prose">
+      <RewriteDiffView />
+    </InlineFeatureShell>
+  );
+}
+
+export function NotesPane(_: PaneProps) {
+  return (
+    <InlineFeatureShell eyebrow="Notes" title="Thinking attached to sources">
+      <div style={{ padding: "16px 20px" }}>
+        <NotesPanel documentId={null} />
       </div>
-    </PaneShell>
+    </InlineFeatureShell>
   );
 }
 
 export function PredictiveGapsPane({ onClose }: PaneProps) {
   const router = useRouter();
   return (
-    <PaneShell
+    <InlineFeatureShell
       eyebrow="Predictive gaps"
       title="What's missing from this document"
-      body="Runs across the active document and flags cross-references that point to attachments that don't exist, numeric inconsistencies, and missing schedules."
-      footer={
-        <>
-          <SecondaryLink onClick={onClose}>Cancel</SecondaryLink>
-          <div style={{ flex: 1 }} />
-          <PrimaryCTA
-            onClick={() => {
-              router.push("/employer/documents?view=predictive-analysis");
-              onClose();
-            }}
-          >
-            <IconShield size={13} />
-            Run on current document <IconChevronRight size={12} />
-          </PrimaryCTA>
-        </>
-      }
     >
-      <ul
+      <div
         style={{
-          listStyle: "none",
-          margin: 0,
-          padding: 0,
+          padding: "20px 24px",
           display: "flex",
           flexDirection: "column",
-          gap: 10,
+          gap: 16,
         }}
       >
-        {[
-          "Cross-references Schedules, Exhibits, Appendices against the actual corpus",
-          "Domain-aware: Contract / Financial / Compliance / Research / HR / Educational",
-          "Findings link back to the source span that triggered them",
-        ].map((b) => (
-          <li
-            key={b}
-            style={{
-              display: "flex",
-              gap: 10,
-              alignItems: "flex-start",
-              fontSize: 13,
-              color: "var(--ink-2)",
-              lineHeight: 1.55,
-            }}
-          >
-            <span
+        <div
+          style={{
+            fontSize: 13,
+            color: "var(--ink-3)",
+            lineHeight: 1.55,
+          }}
+        >
+          Runs across a document and flags cross-references pointing to missing
+          attachments, numeric inconsistencies, and missing schedules. Pick a
+          document from the source rail, then run the analyzer.
+        </div>
+        <ul
+          style={{
+            listStyle: "none",
+            margin: 0,
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+          }}
+        >
+          {[
+            "Cross-references Schedules, Exhibits, Appendices against the actual corpus",
+            "Domain-aware: Contract / Financial / Compliance / Research / HR / Educational",
+            "Findings link back to the source span that triggered them",
+          ].map((b) => (
+            <li
+              key={b}
               style={{
-                marginTop: 7,
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                background: "var(--accent)",
-                flexShrink: 0,
+                display: "flex",
+                gap: 10,
+                alignItems: "flex-start",
+                fontSize: 13,
+                color: "var(--ink-2)",
+                lineHeight: 1.55,
               }}
-            />
-            {b}
-          </li>
-        ))}
-      </ul>
-    </PaneShell>
+            >
+              <span
+                style={{
+                  marginTop: 7,
+                  width: 5,
+                  height: 5,
+                  borderRadius: "50%",
+                  background: "var(--accent)",
+                  flexShrink: 0,
+                }}
+              />
+              {b}
+            </li>
+          ))}
+        </ul>
+        <button
+          onClick={() => {
+            router.push("/employer/documents");
+            onClose();
+          }}
+          style={{
+            alignSelf: "flex-start",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "9px 16px",
+            borderRadius: 8,
+            background: "var(--accent)",
+            color: "white",
+            fontSize: 13,
+            fontWeight: 600,
+            boxShadow: "0 2px 10px var(--accent-glow)",
+          }}
+        >
+          Back to workspace <IconChevronRight size={12} />
+        </button>
+      </div>
+    </InlineFeatureShell>
   );
 }
 

@@ -180,10 +180,10 @@ function WelcomeStep({
             margin: "0 0 10px",
           }}
         >
-          Turn your team&apos;s context into answers.
+          Your second brain — grounded in your own sources.
         </h1>
         <div style={{ fontSize: 14, color: "var(--ink-3)", lineHeight: 1.55 }}>
-          Launchstack ingests your docs, emails, transcripts, and repos into one
+          Launchstack pulls your docs, notes, transcripts, and repos into one
           place you can ask anything. A couple of short steps and you&apos;re live.
         </div>
 
@@ -197,13 +197,13 @@ function WelcomeStep({
         >
           <FeatureTile
             Icon={Building2}
-            title="Company knowledge"
-            text="AI extracts and organizes key facts from every document"
+            title="Knowledge capture"
+            text="AI extracts and organizes the facts inside every source you add"
           />
           <FeatureTile
             Icon={Megaphone}
             title="Marketing pipeline"
-            text="Generate on-brand campaigns for LinkedIn, X, Reddit"
+            text="Generate on-brand posts for LinkedIn, X, Reddit in one click"
           />
           <FeatureTile
             Icon={FileSearch}
@@ -299,7 +299,7 @@ function CompanyInfoStep({
             marginBottom: 8,
           }}
         >
-          About your company
+          About you
         </div>
         <h2
           className="serif"
@@ -311,7 +311,7 @@ function CompanyInfoStep({
             margin: "0 0 8px",
           }}
         >
-          Tell us who you are.
+          What are you working on?
         </h2>
         <div
           style={{
@@ -321,19 +321,19 @@ function CompanyInfoStep({
             marginBottom: 20,
           }}
         >
-          Your description feeds into every AI call — better context here means
-          sharper answers everywhere.
+          This description feeds into every AI call — sharper context here means
+          sharper answers everywhere. Skip if you&apos;d rather set it up later.
         </div>
 
-        <Field label="Company description (optional)">
+        <Field label="What you're building (optional)">
           <TextArea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="What does your company do? Products, services, target market…"
+            placeholder="A sentence or two — your product, research, or project. The AI uses this to ground its answers."
             rows={4}
           />
         </Field>
-        <Field label="Industry / sector (optional)">
+        <Field label="Focus area (optional)">
           <SelectInput
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
@@ -376,19 +376,19 @@ function QuickStartStep({
       Icon: Upload,
       title: "Upload documents to build your knowledge base",
       text: "Every upload enriches your company profile and powers AI features",
-      href: "/employer/documents?view=upload",
+      href: "/employer/documents?add=1",
     },
     {
       Icon: Megaphone,
       title: "Create a marketing campaign",
       text: "Generate platform-ready posts using your company knowledge",
-      href: "/employer/documents?view=marketing-pipeline",
+      href: "/employer/tools/marketing-pipeline",
     },
     {
       Icon: Building2,
       title: "View your company metadata",
       text: "See AI-extracted facts about your people, services, and markets",
-      href: "/employer/documents?view=metadata",
+      href: "/employer/metadata",
     },
   ];
 

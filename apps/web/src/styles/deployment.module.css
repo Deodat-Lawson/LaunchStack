@@ -1,432 +1,659 @@
-/* Container */
-.container {
-    @apply min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950;
+/* =====================================================================
+   Deployment guide — docs-style shell on the Launchstack design system.
+   Scoped under `.root`. Mirrors marketing.module.css tokens + landing
+   ambient layer, adds a glass nav / sidebar / code-surface for docs.
+   ===================================================================== */
+
+.root {
+  --accent-h: 285;
+  --accent: oklch(0.54 0.24 var(--accent-h));
+  --accent-2: oklch(0.46 0.25 var(--accent-h));
+  --accent-deep: oklch(0.38 0.22 var(--accent-h));
+  --accent-soft: oklch(0.96 0.03 var(--accent-h));
+  --accent-glow: oklch(0.60 0.24 var(--accent-h) / 0.35);
+  --accent-ink: oklch(0.42 0.20 var(--accent-h));
+
+  --bg: oklch(0.992 0.003 80);
+  --bg-2: oklch(0.985 0.004 280);
+  --panel: #ffffff;
+  --panel-2: oklch(0.98 0.005 280);
+  --ink: oklch(0.22 0.015 280);
+  --ink-2: oklch(0.42 0.01 280);
+  --ink-3: oklch(0.60 0.008 280);
+  --ink-4: oklch(0.78 0.006 280);
+  --line: oklch(0.90 0.006 280);
+  --line-2: oklch(0.955 0.004 280);
+
+  --code-bg: oklch(0.22 0.025 280);
+  --code-ink: oklch(0.94 0.005 280);
+  --code-line: oklch(0.32 0.03 280);
+
+  --ok: oklch(0.62 0.14 150);
+  --ok-soft: oklch(0.95 0.06 150);
+  --warn: oklch(0.65 0.16 75);
+  --warn-soft: oklch(0.96 0.06 85);
+  --info: oklch(0.60 0.16 240);
+  --info-soft: oklch(0.96 0.04 240);
+
+  --nav-h: 64px;
+  --sb-w: 260px;
+
+  color: var(--ink);
+  background: var(--bg);
+  font-family: 'Inter', var(--font-inter, system-ui), sans-serif;
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* Navigation */
-.navContainer {
-    @apply bg-slate-950/80 backdrop-blur-md border-b border-purple-500/20 sticky top-0 z-50;
+:global(.dark) .root,
+:global([data-theme="dark"]) .root {
+  --accent: oklch(0.72 0.19 285);
+  --accent-2: oklch(0.62 0.22 285);
+  --accent-deep: oklch(0.46 0.25 285);
+  --accent-soft: oklch(0.30 0.08 285);
+  --accent-glow: oklch(0.72 0.19 285 / 0.35);
+  --accent-ink: oklch(0.86 0.16 285);
+  --bg: oklch(0.14 0.02 290);
+  --bg-2: oklch(0.18 0.025 290);
+  --panel: oklch(0.20 0.025 290);
+  --panel-2: oklch(0.235 0.03 290);
+  --ink: oklch(0.97 0.005 280);
+  --ink-2: oklch(0.80 0.008 280);
+  --ink-3: oklch(0.62 0.008 280);
+  --ink-4: oklch(0.45 0.008 280);
+  --line: oklch(0.32 0.04 290);
+  --line-2: oklch(0.26 0.035 290);
+  --code-bg: oklch(0.12 0.02 290);
+  --code-ink: oklch(0.94 0.005 280);
+  --code-line: oklch(0.28 0.035 290);
+  --ok-soft: oklch(0.28 0.08 150);
+  --warn-soft: oklch(0.28 0.08 75);
+  --info-soft: oklch(0.28 0.06 240);
 }
 
-.navContent {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+.root ::selection { background: var(--accent-glow); color: var(--ink); }
+
+/* Typography helpers matching landing */
+.serif {
+  font-family: var(--font-instrument-serif, 'Instrument Serif'), Georgia, serif;
+  font-feature-settings: normal;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--accent);
+}
+.mono {
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace;
 }
 
-.navWrapper {
-    @apply flex justify-between h-16 items-center;
+/* ---------------- STATIC BACKDROP ----------------
+   Quiet gradient wash behind the docs shell. Keeps the token theme but
+   loses the animated orbs (those live on the landing page). */
+.root::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 50% at 50% -10%, var(--accent-soft) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+}
+:global(.dark) .root::before,
+:global([data-theme="dark"]) .root::before {
+  background:
+    radial-gradient(ellipse 90% 50% at 50% -10%, oklch(0.28 0.08 285 / 0.4) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
 }
 
-.logoContainer {
-    @apply flex items-center space-x-2 no-underline;
+/* ---------------- GLASS NAVBAR ---------------- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  padding: 0 24px;
+  display: flex; align-items: center; gap: 16px;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: oklch(from var(--bg) l c h / 0.72);
+  border-bottom: 1px solid var(--line-2);
+}
+.navBrand {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--ink); text-decoration: none;
+  flex-shrink: 0;
+}
+.navBrandText {
+  display: flex; flex-direction: column; line-height: 1.1;
+}
+.navBrandTitle { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; color: var(--ink); }
+.navBrandEyebrow {
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.navSearch {
+  flex: 1; max-width: 560px;
+  position: relative;
+  margin: 0 12px;
+}
+.navSearchInput {
+  width: 100%;
+  padding: 9px 40px 9px 38px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  color: var(--ink);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.navSearchInput::placeholder { color: var(--ink-3); }
+.navSearchInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.navSearchIcon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--ink-3); pointer-events: none;
+}
+.navSearchKbd {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 6px; border-radius: 5px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-2);
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace;
+  font-size: 11px; color: var(--ink-3);
+  pointer-events: none;
+}
+.navLinks { display: flex; align-items: center; gap: 4px; margin-left: auto; flex-shrink: 0; }
+.navLink {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-radius: 8px;
+  color: var(--ink-2); text-decoration: none;
+  font-size: 13px; font-weight: 500;
+  transition: background .2s, color .2s;
+}
+.navLink:hover { color: var(--ink); background: var(--panel-2); }
+.navThemeBtn {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--ink-3); border: 1px solid var(--line-2); background: var(--panel);
+  transition: all .2s; cursor: pointer;
+}
+.navThemeBtn:hover { color: var(--ink); border-color: var(--line); }
+.navMobileBtn {
+  display: none;
+  width: 36px; height: 36px; border-radius: 10px;
+  align-items: center; justify-content: center;
+  border: 1px solid var(--line-2); background: var(--panel);
+  color: var(--ink-2); cursor: pointer;
+}
+.navMobileBtn:hover { color: var(--ink); }
+.navMobileBtnOpen { background: var(--accent); border-color: var(--accent); color: white; }
+
+.navDropdown {
+  position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 48px oklch(0 0 0 / 0.08), 0 4px 12px oklch(0 0 0 / 0.04);
+  padding: 8px;
+  max-height: 400px; overflow-y: auto;
+  z-index: 110;
+}
+.navDropdownLabel {
+  padding: 8px 10px 4px;
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.navDropdownItem {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 8px 10px; border-radius: 8px;
+  color: var(--ink-2); font-size: 13px; text-align: left;
+  background: transparent; border: none; cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.navDropdownItem:hover { background: var(--panel-2); color: var(--ink); }
+.navDropdownIcon {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--accent-soft); color: var(--accent-ink);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.navDropdownEmpty {
+  padding: 32px 16px; text-align: center;
+  color: var(--ink-3); font-size: 13px;
 }
 
-.iconPurple {
-    @apply w-8 h-8 text-purple-400;
+@media (max-width: 1023px) {
+  .nav { padding: 0 16px; }
+  .navSearch { max-width: none; }
+  .navLinks .navLinkLabel { display: none; }
+  .navMobileBtn { display: inline-flex; }
+}
+@media (max-width: 640px) {
+  .navBrandEyebrow { display: none; }
 }
 
-.logoText {
-    @apply text-2xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent;
+/* ---------------- SIDEBAR ---------------- */
+.shell { position: relative; z-index: 1; padding-top: var(--nav-h); display: flex; }
+.sidebar {
+  position: fixed; top: var(--nav-h); bottom: 0; left: 0;
+  width: var(--sb-w);
+  background: var(--panel);
+  border-right: 1px solid var(--line-2);
+  overflow-y: auto;
+  z-index: 40;
+}
+.sidebarInner { padding: 22px 14px; display: flex; flex-direction: column; gap: 22px; }
+.sidebarGroup { display: flex; flex-direction: column; gap: 2px; }
+.sidebarGroupLabel {
+  padding: 4px 12px 6px;
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.sidebarItem {
+  position: relative;
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 7px 10px 7px 14px; border-radius: 8px;
+  color: var(--ink-2); font-size: 13px; line-height: 1.3;
+  background: transparent; border: none; text-align: left; cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.sidebarItem:hover { background: var(--panel-2); color: var(--ink); }
+.sidebarItemActive {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-weight: 500;
+}
+.sidebarItemParent { color: var(--ink); font-weight: 500; }
+.sidebarActiveBar {
+  position: absolute; left: 0; top: 6px; bottom: 6px;
+  width: 3px; border-radius: 2px; background: var(--accent);
+}
+.sidebarItemIcon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 6px;
+  color: var(--ink-3);
+  flex-shrink: 0;
+}
+.sidebarItemActive .sidebarItemIcon { color: var(--accent); }
+.sidebarItemLabel { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebarChevron {
+  width: 14px; height: 14px; color: var(--ink-4);
+  transition: transform .18s;
+}
+.sidebarChevronOpen { transform: rotate(90deg); color: var(--ink-2); }
+.sidebarChildren {
+  margin: 2px 0 4px 22px;
+  padding-left: 10px;
+  border-left: 1px dashed var(--line);
+  display: flex; flex-direction: column; gap: 1px;
+}
+.sidebarChild {
+  display: block; width: 100%;
+  padding: 6px 10px; border-radius: 6px;
+  color: var(--ink-3); font-size: 12.5px;
+  background: transparent; border: none; text-align: left; cursor: pointer;
+  transition: color .15s, background .15s;
+}
+.sidebarChild:hover { color: var(--ink); background: var(--panel-2); }
+.sidebarChildActive { color: var(--accent-ink); font-weight: 500; }
+
+/* Mobile sidebar becomes a drawer */
+.sidebarMobile { z-index: 60; box-shadow: 0 20px 48px oklch(0 0 0 / 0.18); }
+.sidebarBackdrop {
+  position: fixed; inset: var(--nav-h) 0 0 0;
+  background: oklch(0.15 0.02 280 / 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+@media (max-width: 1023px) {
+  .sidebar { transform: translateX(-100%); transition: transform .22s; }
+  .sidebarOpen { transform: translateX(0); }
 }
 
-.navLinks {
-    @apply flex items-center space-x-4;
+/* ---------------- MAIN CONTENT ---------------- */
+.main {
+  flex: 1;
+  margin-left: var(--sb-w);
+  min-width: 0;
+}
+.mainInner {
+  max-width: 820px; margin: 0 auto;
+  padding: 56px 32px 96px;
+}
+@media (max-width: 1023px) {
+  .main { margin-left: 0; }
+  .mainInner { padding: 40px 22px 72px; }
 }
 
-/* Buttons */
-.btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer border-0 text-sm flex items-center gap-2;
+/* ---------------- SHARED CONTENT TOKENS ---------------- */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 18px;
 }
-
-.btnGhost {
-    @apply bg-transparent text-gray-400 hover:bg-purple-500/10 hover:text-purple-300;
+.eyebrow::before {
+  content: ''; width: 16px; height: 1px; background: var(--accent);
 }
-
-.btnPrimary {
-    @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:opacity-90 hover:-translate-y-0.5;
-}
-
-.btnOutline {
-    @apply bg-transparent text-purple-400 border-2 border-purple-400 hover:bg-purple-600 hover:text-white;
-}
-
-.btnLg {
-    @apply px-8 py-3 text-base;
-}
-
-.btnIcon {
-    @apply w-5 h-5;
-}
-
-/* Hero Section */
-.heroSection {
-    @apply py-24 px-6 text-center;
-}
-
-.heroContent {
-    @apply max-w-4xl mx-auto;
-}
-
 .heroTitle {
-    @apply text-5xl md:text-6xl font-extrabold mb-4 leading-tight;
-    @apply bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent;
-}
-
-.heroDescription {
-    @apply text-xl text-gray-300 mb-8;
-}
-
-.heroButtons {
-    @apply flex gap-4 justify-center flex-wrap;
-}
-
-/* Content Section */
-.contentSection {
-    @apply py-8 px-6 pb-24;
-}
-
-.contentContainer {
-    @apply max-w-5xl mx-auto;
-}
-
-.section {
-    @apply mb-16;
-}
-
-.sectionTitle {
-    @apply text-3xl font-bold text-white mb-6 flex items-center gap-3;
-}
-
-.sectionIcon {
-    @apply w-8 h-8 text-purple-400;
-}
-
-/* Prerequisites Grid */
-.prerequisitesGrid {
-    @apply grid grid-cols-1 md:grid-cols-3 gap-6 mt-8;
-}
-
-.prerequisiteCard {
-    @apply bg-slate-900/50 border border-purple-500/20 rounded-2xl p-6 backdrop-blur-sm;
-}
-
-.prerequisiteIcon {
-    @apply w-10 h-10 text-purple-400 mb-4;
-}
-
-.prerequisiteCard h3 {
-    @apply text-xl font-semibold text-white mb-4;
-}
-
-/* Code Section */
-.codeSection {
-    @apply mb-8;
-}
-
-.stepTitle {
-    @apply text-2xl font-semibold text-white mb-3;
-}
-
-.stepDescription {
-    @apply text-gray-300 mb-3 leading-relaxed;
-}
-
-.stepDescription code {
-    @apply bg-slate-800/80 px-2 py-1 rounded text-sm font-mono text-purple-400;
-}
-
-.codeBlock {
-    @apply bg-slate-900/80 border border-purple-500/20 rounded-lg p-6 overflow-x-auto mt-3;
-}
-
-.codeBlock code {
-    @apply font-mono text-sm text-gray-200 leading-relaxed;
-}
-
-/* API Key Section */
-.apiKeySection {
-    @apply bg-slate-900/50 border border-purple-500/20 rounded-2xl p-6 mb-6 backdrop-blur-sm;
-}
-
-.apiKeyTitle {
-    @apply text-xl font-semibold text-white mb-4;
-}
-
-/* Lists */
-.list {
-    @apply list-disc pl-6 text-gray-300 leading-relaxed;
-}
-
-.list li {
-    @apply mb-2;
-}
-
-.orderedList {
-    @apply list-decimal pl-6 text-gray-300 leading-relaxed;
-}
-
-.orderedList li {
-    @apply mb-3;
-}
-
-.orderedList code {
-    @apply bg-slate-800/80 px-2 py-1 rounded text-sm font-mono text-purple-400;
-}
-
-/* Links */
-.link {
-    @apply text-purple-400 no-underline inline-flex items-center gap-1 font-medium hover:underline;
-}
-
-.linkIcon {
-    @apply w-4 h-4;
-}
-
-/* Deployment Options */
-.deploymentOption {
-    @apply bg-slate-900/50 border border-purple-500/20 rounded-2xl p-6 mb-6 backdrop-blur-sm;
-}
-
-.deploymentTitle {
-    @apply text-2xl font-semibold text-white mb-4;
-}
-
-/* Info Box */
-.infoBox {
-    @apply bg-slate-900/50 border border-purple-500/40 rounded-2xl p-6 backdrop-blur-sm;
-}
-
-.infoBox h3 {
-    @apply text-xl font-semibold text-white mb-4;
-}
-
-/* Troubleshooting */
-.troubleshootSection {
-    @apply bg-slate-900/50 border border-purple-500/20 rounded-2xl p-6 mb-6 backdrop-blur-sm;
-}
-
-.troubleshootTitle {
-    @apply text-xl font-semibold text-white mb-4;
-}
-
-.troubleshootSection code {
-    @apply bg-slate-800/80 px-2 py-1 rounded text-sm font-mono text-purple-400;
-}
-
-/* Features Grid */
-.featuresGrid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8;
-}
-
-.featureCard {
-    @apply bg-slate-900/50 border border-purple-500/20 rounded-2xl p-6 backdrop-blur-sm;
-}
-
-.featureIcon {
-    @apply w-8 h-8 text-purple-400 mb-4;
-}
-
-.featureCard h3 {
-    @apply text-lg font-semibold text-white mb-2;
-}
-
-.featureCard p {
-    @apply text-gray-300 leading-relaxed;
-}
-
-/* Support Box */
-.supportBox {
-    @apply bg-gradient-to-br from-purple-900/50 to-indigo-900/50 border border-purple-500/40 rounded-3xl p-12 text-center backdrop-blur-sm;
-}
-
-.supportBox h2 {
-    @apply text-3xl font-bold text-white mb-4;
-}
-
-.supportBox p {
-    @apply text-lg text-gray-300 mb-8;
-}
-
-.supportButtons {
-    @apply flex gap-4 justify-center flex-wrap;
-}
-
-/* Light Theme Overrides */
-:global([data-theme="light"]) .container {
-    @apply bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50;
-}
-
-:global([data-theme="light"]) .navContainer {
-    @apply bg-white/80 border-b border-purple-200;
-}
-
-:global([data-theme="light"]) .btnGhost {
-    @apply text-gray-600 hover:bg-purple-100 hover:text-purple-700;
-}
-
-:global([data-theme="light"]) .btnOutline {
-    @apply text-purple-600 border-purple-600 hover:bg-purple-600;
-}
-
-:global([data-theme="light"]) .iconPurple {
-    @apply text-purple-600;
-}
-
-:global([data-theme="light"]) .logoText {
-    @apply bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent;
-}
-
-:global([data-theme="light"]) .heroTitle {
-    @apply bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent;
-}
-
-:global([data-theme="light"]) .heroDescription {
-    @apply text-gray-700;
-}
-
-:global([data-theme="light"]) .sectionTitle {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .sectionIcon {
-    @apply text-purple-600;
-}
-
-:global([data-theme="light"]) .prerequisiteCard {
-    @apply bg-white/80 border border-purple-200;
-}
-
-:global([data-theme="light"]) .prerequisiteCard h3 {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .prerequisiteIcon {
-    @apply text-purple-600;
-}
-
-:global([data-theme="light"]) .stepTitle {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .stepDescription {
-    @apply text-gray-700;
-}
-
-:global([data-theme="light"]) .stepDescription code {
-    @apply bg-purple-100 text-purple-700;
-}
-
-:global([data-theme="light"]) .codeBlock {
-    @apply bg-gray-50 border border-gray-200;
-}
-
-:global([data-theme="light"]) .codeBlock code {
-    @apply text-gray-800;
-}
-
-:global([data-theme="light"]) .apiKeySection {
-    @apply bg-white/80 border border-purple-200;
-}
-
-:global([data-theme="light"]) .apiKeyTitle {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .list {
-    @apply text-gray-700;
-}
-
-:global([data-theme="light"]) .orderedList {
-    @apply text-gray-700;
-}
-
-:global([data-theme="light"]) .orderedList code {
-    @apply bg-purple-100 text-purple-700;
-}
-
-:global([data-theme="light"]) .link {
-    @apply text-purple-600;
-}
-
-:global([data-theme="light"]) .deploymentOption {
-    @apply bg-white/80 border border-purple-200;
-}
-
-:global([data-theme="light"]) .deploymentTitle {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .infoBox {
-    @apply bg-white/80 border border-purple-300;
-}
-
-:global([data-theme="light"]) .infoBox h3 {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .troubleshootSection {
-    @apply bg-white/80 border border-purple-200;
-}
-
-:global([data-theme="light"]) .troubleshootTitle {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .troubleshootSection code {
-    @apply bg-purple-100 text-purple-700;
-}
-
-:global([data-theme="light"]) .featureCard {
-    @apply bg-white/80 border border-purple-200;
-}
-
-:global([data-theme="light"]) .featureCard h3 {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .featureCard p {
-    @apply text-gray-700;
-}
-
-:global([data-theme="light"]) .featureIcon {
-    @apply text-purple-600;
-}
-
-:global([data-theme="light"]) .supportBox {
-    @apply bg-gradient-to-br from-purple-100 to-indigo-100 border border-purple-300;
-}
-
-:global([data-theme="light"]) .supportBox h2 {
-    @apply text-gray-900;
-}
-
-:global([data-theme="light"]) .supportBox p {
-    @apply text-gray-700;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .heroTitle {
-        @apply text-4xl;
-    }
-
-    .heroDescription {
-        @apply text-base;
-    }
-
-    .sectionTitle {
-        @apply text-2xl;
-    }
-
-    .supportBox {
-        @apply p-8;
-    }
-
-    .navLinks {
-        @apply space-x-2;
-    }
-
-    .btn {
-        @apply px-3 py-2 text-xs;
-    }
-}
-
+  margin: 0 0 18px;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 1.02; letter-spacing: -0.035em;
+  font-weight: 600;
+  color: var(--ink);
+}
+.heroSub {
+  font-size: clamp(16px, 1.2vw, 19px);
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0 0 28px;
+  max-width: 620px;
+}
+.sectionH2 {
+  display: flex; align-items: center; gap: 14px;
+  margin: 0 0 10px;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.2; letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--ink);
+}
+.sectionH2Bar {
+  width: 4px; height: 28px; border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+  flex-shrink: 0;
+}
+.sectionSub {
+  margin: 0 0 22px 18px;
+  color: var(--ink-3);
+  font-size: 14.5px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 20px;
+}
+.panelHover {
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+.panelHover:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px oklch(0 0 0 / 0.06);
+}
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 11px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-ink);
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.pillMuted {
+  background: var(--panel-2); color: var(--ink-3);
+  border: 1px solid var(--line-2);
+}
+
+.stepCircle {
+  flex-shrink: 0;
+  width: 38px; height: 38px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+  color: white; font-weight: 600;
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.35) inset, 0 6px 16px var(--accent-glow);
+}
+
+.codeSurface {
+  position: relative;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border: 1px solid var(--code-line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.codeCopyBtn {
+  position: absolute; top: 10px; right: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px;
+  background: oklch(from var(--code-bg) calc(l + 0.08) c h);
+  border: 1px solid var(--code-line);
+  color: var(--code-ink);
+  cursor: pointer;
+  opacity: 0; transition: opacity .15s, background .15s;
+}
+.codeSurface:hover .codeCopyBtn,
+.codeCopyBtn:focus-visible { opacity: 1; }
+.codeCopyBtn:hover { background: oklch(from var(--code-bg) calc(l + 0.15) c h); }
+.codeCopyOk { color: var(--ok); }
+
+.calloutInfo {
+  display: flex; gap: 14px;
+  padding: 18px 20px; border-radius: 14px;
+  background: var(--info-soft);
+  border: 1px solid oklch(from var(--info) l c h / 0.3);
+  color: var(--ink);
+}
+.calloutInfoIcon { color: var(--info); flex-shrink: 0; }
+.calloutWarn {
+  display: flex; gap: 14px;
+  padding: 18px 20px; border-radius: 14px;
+  background: var(--warn-soft);
+  border: 1px solid oklch(from var(--warn) l c h / 0.3);
+  color: var(--ink);
+}
+.calloutWarnIcon { color: var(--warn); flex-shrink: 0; }
+
+.okIcon { color: var(--ok); flex-shrink: 0; }
+
+/* Brand mark (mini) used in navbar */
+.brandMark {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+  position: relative; overflow: hidden;
+  box-shadow: 0 4px 14px var(--accent-glow);
+  flex-shrink: 0;
+}
+.brandMark::after {
+  content: ''; position: absolute; inset: 8px; border-radius: 2px;
+  background: white; opacity: 0.95;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+/* ---------------- TAILWIND UTILITY REMAPS ------------------
+   Redirect legacy gradient / gray / indigo / status-color utilities
+   to design tokens so per-section files mostly "just work" without
+   hand-rewriting every class. Kept narrow to utilities actually used
+   in the existing deployment pages. */
+
+/* Purple / indigo (accent family) */
+.root :global(.bg-purple-50),
+.root :global(.bg-purple-100),
+.root :global(.bg-purple-500\/10),
+.root :global(.bg-purple-500\/15),
+.root :global(.bg-purple-500\/20),
+.root :global(.bg-indigo-100),
+.root :global(.bg-indigo-500\/10) {
+  background-color: var(--accent-soft) !important;
+}
+.root :global(.bg-purple-500),
+.root :global(.bg-purple-600),
+.root :global(.bg-purple-700),
+.root :global(.bg-indigo-500),
+.root :global(.bg-indigo-600) {
+  background-color: var(--accent) !important;
+  color: white !important;
+}
+.root :global(.text-purple-400),
+.root :global(.text-purple-500),
+.root :global(.text-purple-600),
+.root :global(.text-purple-700),
+.root :global(.text-indigo-400),
+.root :global(.text-indigo-500),
+.root :global(.text-indigo-600),
+.root :global(.text-violet-400),
+.root :global(.text-violet-500),
+.root :global(.text-fuchsia-400) {
+  color: var(--accent-ink) !important;
+}
+.root :global(.border-purple-200),
+.root :global(.border-purple-300),
+.root :global(.border-purple-400),
+.root :global(.border-purple-500),
+.root :global(.border-purple-500\/40),
+.root :global(.border-purple-500\/50),
+.root :global(.border-indigo-500),
+.root :global(.hover\:border-purple-300:hover),
+.root :global(.hover\:border-purple-400:hover),
+.root :global(.hover\:border-purple-500\/40:hover),
+.root :global(.hover\:border-purple-500\/50:hover) {
+  border-color: var(--accent) !important;
+}
+.root :global(.focus\:ring-purple-500:focus),
+.root :global(.focus\:ring-purple-500\/50:focus),
+.root :global(.focus\:border-purple-500:focus),
+.root :global(.focus\:border-purple-500\/50:focus) {
+  --tw-ring-color: var(--accent-glow) !important;
+  border-color: var(--accent) !important;
+}
+.root :global(.shadow-purple-500\/20),
+.root :global(.shadow-purple-500\/10) {
+  --tw-shadow-color: var(--accent-glow) !important;
+}
+
+/* Purple / indigo gradients → accent gradient */
+.root :global(.from-purple-400),
+.root :global(.from-purple-500),
+.root :global(.from-purple-600),
+.root :global(.from-violet-400),
+.root :global(.from-violet-500) { --tw-gradient-from: var(--accent) !important; }
+.root :global(.via-purple-400),
+.root :global(.via-purple-500) { --tw-gradient-via: var(--accent) !important; }
+.root :global(.to-indigo-400),
+.root :global(.to-indigo-500),
+.root :global(.to-indigo-600),
+.root :global(.to-fuchsia-400),
+.root :global(.to-purple-600) { --tw-gradient-to: var(--accent-deep) !important; }
+.root :global(.bg-clip-text).root :global(.text-transparent) { color: var(--accent) !important; }
+
+/* Slate / gray (surface + text) */
+.root :global(.bg-gray-50),
+.root :global(.bg-gray-50\/80),
+.root :global(.bg-slate-50) {
+  background-color: var(--panel-2) !important;
+}
+.root :global(.bg-white),
+.root :global(.bg-white\/95) {
+  background-color: var(--panel) !important;
+}
+.root :global(.bg-gray-100),
+.root :global(.bg-gray-200) {
+  background-color: var(--panel-2) !important;
+}
+.root :global(.bg-gray-700),
+.root :global(.bg-gray-800),
+.root :global(.bg-gray-800\/50),
+.root :global(.bg-gray-800\/60),
+.root :global(.bg-gray-800\/80),
+.root :global(.bg-gray-900),
+.root :global(.bg-gray-900\/80),
+.root :global(.bg-gray-900\/95),
+.root :global(.bg-gray-950),
+.root :global(.bg-gray-950\/80),
+.root :global(.bg-gray-950\/95),
+.root :global(.bg-slate-800),
+.root :global(.bg-slate-900),
+.root :global(.bg-slate-950) {
+  background-color: var(--panel) !important;
+}
+.root :global(.text-gray-900),
+.root :global(.text-white),
+.root :global(.text-slate-900) { color: var(--ink) !important; }
+.root :global(.text-gray-700),
+.root :global(.text-gray-600),
+.root :global(.text-gray-300),
+.root :global(.text-slate-300) { color: var(--ink-2) !important; }
+.root :global(.text-gray-500),
+.root :global(.text-gray-400),
+.root :global(.text-slate-400) { color: var(--ink-3) !important; }
+
+.root :global(.border-gray-200),
+.root :global(.border-gray-200\/50),
+.root :global(.border-gray-300),
+.root :global(.border-gray-700),
+.root :global(.border-gray-700\/50),
+.root :global(.border-gray-700\/60),
+.root :global(.border-gray-800),
+.root :global(.border-gray-800\/50),
+.root :global(.border-slate-700),
+.root :global(.border-slate-800) { border-color: var(--line) !important; }
+
+.root :global(.hover\:bg-gray-50:hover),
+.root :global(.hover\:bg-gray-100:hover),
+.root :global(.hover\:bg-gray-200:hover),
+.root :global(.hover\:bg-gray-700:hover),
+.root :global(.hover\:bg-gray-800:hover) {
+  background-color: var(--panel-2) !important;
+}
+
+.root :global(.hover\:text-gray-200:hover),
+.root :global(.hover\:text-gray-300:hover),
+.root :global(.hover\:text-white:hover),
+.root :global(.hover\:text-gray-900:hover) { color: var(--ink) !important; }
+
+/* Status colors (green / yellow / blue / orange) use token soft backgrounds
+   so callouts feel like part of the same palette family. */
+.root :global(.bg-green-50),
+.root :global(.bg-green-500\/10),
+.root :global(.bg-emerald-500\/10),
+.root :global(.bg-emerald-400\/10),
+.root :global(.bg-emerald-50) { background-color: var(--ok-soft) !important; }
+.root :global(.text-green-400),
+.root :global(.text-green-500),
+.root :global(.text-green-600),
+.root :global(.text-emerald-400),
+.root :global(.text-emerald-500) { color: var(--ok) !important; }
+.root :global(.border-green-200),
+.root :global(.border-green-500\/30),
+.root :global(.border-emerald-500\/30) { border-color: oklch(from var(--ok) l c h / 0.35) !important; }
+.root :global(.bg-emerald-400) { background-color: var(--ok) !important; }
+
+.root :global(.bg-yellow-50),
+.root :global(.bg-yellow-900\/20),
+.root :global(.bg-orange-50),
+.root :global(.bg-orange-100),
+.root :global(.bg-orange-900\/50) { background-color: var(--warn-soft) !important; }
+.root :global(.text-yellow-600),
+.root :global(.text-yellow-400),
+.root :global(.text-yellow-300),
+.root :global(.text-orange-600),
+.root :global(.text-orange-700),
+.root :global(.text-orange-300) { color: var(--warn) !important; }
+.root :global(.border-yellow-200),
+.root :global(.border-yellow-800),
+.root :global(.border-orange-200),
+.root :global(.border-orange-900) { border-color: oklch(from var(--warn) l c h / 0.35) !important; }
+
+.root :global(.bg-blue-50),
+.root :global(.bg-blue-900\/20) { background-color: var(--info-soft) !important; }
+.root :global(.text-blue-600),
+.root :global(.text-blue-400),
+.root :global(.text-blue-300) { color: var(--info) !important; }
+.root :global(.border-blue-200),
+.root :global(.border-blue-800) { border-color: oklch(from var(--info) l c h / 0.35) !important; }
+
+/* Placeholder color normalisation */
+.root :global(.placeholder-gray-400::placeholder),
+.root :global(.placeholder-gray-500::placeholder) { color: var(--ink-3) !important; }

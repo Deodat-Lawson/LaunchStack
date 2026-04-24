@@ -1,14 +1,43 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import {
   IconChevronLeft,
   IconFolder,
   IconSparkle,
   IconTrash,
 } from "./icons";
+import type { DocumentType } from "../types/document";
 import { SOURCE_META, type WorkspaceSource } from "./types";
+import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
+import type { DocumentNote } from "@launchstack/core/db/schema/document-notes";
+import { getDocumentDisplayType } from "../types/document";
+import type { PdfNoteLite } from "~/components/notes/PdfViewerWithNotes";
+
+const PdfViewerWithNotes = dynamic(
+  () =>
+    import("~/components/notes/PdfViewerWithNotes").then(
+      (m) => m.PdfViewerWithNotes,
+    ),
+  { ssr: false },
+);
+
+type UploadState =
+  | { phase: "idle" }
+  | { phase: "uploading"; percent: number; fileName: string }
+  | { phase: "finalizing"; fileName: string }
+  | { phase: "error"; message: string };
+
+const FullDocumentViewer = dynamic(
+  () =>
+    import("~/app/employer/documents/components/DocumentViewer").then(
+      (m) => m.DocumentViewer,
+    ),
+  { ssr: false },
+);
 
 interface VersionRow {
   id: number;
@@ -54,6 +83,57 @@ function humanDate(raw: string): string {
   return d.toLocaleDateString();
 }
 
+function TabButton({
+  label,
+  count,
+  active,
+  onClick,
+}: {
+  label: string;
+  count?: number;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        appearance: "none",
+        border: "none",
+        background: "transparent",
+        padding: "10px 12px 11px",
+        marginBottom: -1,
+        borderBottom: `2px solid ${active ? "var(--accent)" : "transparent"}`,
+        color: active ? "var(--ink)" : "var(--ink-3)",
+        fontSize: 12,
+        fontWeight: 600,
+        letterSpacing: "0.02em",
+        cursor: "pointer",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+      }}
+    >
+      {label}
+      {typeof count === "number" && (
+        <span
+          className="mono"
+          style={{
+            fontSize: 10,
+            padding: "1px 6px",
+            borderRadius: 4,
+            background: active ? "var(--accent-soft)" : "var(--panel-2)",
+            color: active ? "var(--accent-ink)" : "var(--ink-3)",
+          }}
+        >
+          {count}
+        </span>
+      )}
+    </button>
+  );
+}
+
 function MetaRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div
@@ -80,6 +160,7 @@ export function DocumentViewer({
   onVersionChanged,
 }: DocumentViewerProps) {
   const router = useRouter();
+  const { userId } = useAuth();
   const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
   const Icon = meta.Icon;
   const [title, setTitle] = useState(source.title);
@@ -90,13 +171,88 @@ export function DocumentViewer({
   const [versions, setVersions] = useState<VersionRow[]>([]);
   const [versionsError, setVersionsError] = useState<string | null>(null);
   const [activeVersionId, setActiveVersionId] = useState<number | null>(null);
+  const [expectedMime, setExpectedMime] = useState<string | null>(null);
   const [reverting, setReverting] = useState(false);
+  const [fullDoc, setFullDoc] = useState<DocumentType | null>(null);
+  const [fullDocError, setFullDocError] = useState<string | null>(null);
+  const [uploadState, setUploadState] = useState<UploadState>({ phase: "idle" });
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [sidebarTab, setSidebarTab] = useState<"versions" | "notes">("versions");
+  const [pdfNotes, setPdfNotes] = useState<DocumentNote[]>([]);
+  const [notesNonce, setNotesNonce] = useState(0);
+  const [pdfAnchorDraft, setPdfAnchorDraft] = useState<PrefilledAnchor | null>(null);
+  const [pdfScrollToNoteId, setPdfScrollToNoteId] = useState<number | null>(null);
+
+  const isPdf =
+    fullDoc !== null && getDocumentDisplayType(fullDoc) === "pdf";
+
+  // Fetch the underlying document so the inline preview can render PDFs,
+  // audio, DOCX, etc. via the full viewer — same endpoint the standalone
+  // viewer page uses.
+  useEffect(() => {
+    if (!source.documentId || !userId || source.pending) {
+      setFullDoc(null);
+      return;
+    }
+    let cancelled = false;
+    setFullDocError(null);
+    void (async () => {
+      try {
+        const res = await fetch("/api/fetchDocument", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+        });
+        if (!res.ok) throw new Error(`Failed (${res.status})`);
+        const data = (await res.json()) as DocumentType[];
+        if (cancelled) return;
+        setFullDoc(data.find((d) => d.id === source.documentId) ?? null);
+      } catch (err) {
+        if (!cancelled) {
+          setFullDocError(err instanceof Error ? err.message : "Failed to load preview");
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [source.documentId, source.pending, userId]);
 
   useEffect(() => {
     setTitle(source.title);
     setDirty(false);
     setSaveStatus("idle");
   }, [source.id, source.title]);
+
+  // Fetch notes for the PDF overlay whenever the doc changes or a note
+  // CRUD operation bumps `notesNonce`. The DocumentNotesPanel sidebar
+  // fetches its own copy independently; this duplicate is the cost of not
+  // plumbing a shared store through, and is fine at note-count scales.
+  useEffect(() => {
+    if (!source.documentId || !isPdf) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch(
+          `/api/notes?documentId=${encodeURIComponent(String(source.documentId))}`,
+        );
+        if (!res.ok) return;
+        const data = (await res.json()) as { notes: DocumentNote[] };
+        if (!cancelled) setPdfNotes(data.notes ?? []);
+      } catch {
+        /* ignore — PDF overlay degrades to "no pins" */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [source.documentId, isPdf, notesNonce]);
+
+  // When the PDF viewer captures a selection, pop the notes panel open so
+  // the user can type the body without hunting for the sidebar.
+  useEffect(() => {
+    if (pdfAnchorDraft) setSidebarTab("notes");
+  }, [pdfAnchorDraft]);
 
   // Fetch version history on mount
   useEffect(() => {
@@ -114,6 +270,7 @@ export function DocumentViewer({
         if (cancelled) return;
         setVersions(data.versions);
         setActiveVersionId(data.currentVersionId);
+        setExpectedMime(data.fileType);
       } catch (err) {
         if (!cancelled) {
           setVersionsError(err instanceof Error ? err.message : "Failed to load versions");
@@ -162,6 +319,116 @@ export function DocumentViewer({
     );
   };
 
+  const refreshVersions = useCallback(async () => {
+    if (!source.documentId) return;
+    const res = await fetch(`/api/documents/${source.documentId}/versions`);
+    if (!res.ok) return;
+    const data = (await res.json()) as VersionsResponse;
+    setVersions(data.versions);
+    setActiveVersionId(data.currentVersionId);
+    setExpectedMime(data.fileType);
+  }, [source.documentId]);
+
+  const uploadNewVersion = useCallback(
+    (file: File) => {
+      if (!source.documentId) return;
+      if (uploadState.phase === "uploading" || uploadState.phase === "finalizing") return;
+
+      if (expectedMime && file.type && file.type !== expectedMime) {
+        setUploadState({
+          phase: "error",
+          message: `File type must match the current version (${expectedMime}). Got ${file.type || "unknown"}.`,
+        });
+        return;
+      }
+
+      const storageForm = new FormData();
+      storageForm.append("file", file);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/storage/upload", true);
+      xhr.timeout = 10 * 60 * 1000;
+
+      setUploadState({ phase: "uploading", percent: 0, fileName: file.name });
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          setUploadState({
+            phase: "uploading",
+            percent: Math.round((event.loaded / event.total) * 100),
+            fileName: file.name,
+          });
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status < 200 || xhr.status >= 300) {
+          setUploadState({
+            phase: "error",
+            message:
+              xhr.status === 401
+                ? "Please sign in and try again."
+                : `Storage upload failed (HTTP ${xhr.status}).`,
+          });
+          return;
+        }
+
+        let storage: { url: string } | null = null;
+        try {
+          storage = JSON.parse(xhr.responseText) as { url: string };
+        } catch {
+          setUploadState({ phase: "error", message: "Invalid storage response." });
+          return;
+        }
+        if (!storage?.url) {
+          setUploadState({ phase: "error", message: "Storage did not return a URL." });
+          return;
+        }
+
+        setUploadState({ phase: "finalizing", fileName: file.name });
+
+        void (async () => {
+          try {
+            const res = await fetch(`/api/documents/${source.documentId}/versions`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                documentUrl: storage!.url,
+                mimeType: file.type || expectedMime || "application/octet-stream",
+                originalFilename: file.name,
+                fileSize: file.size,
+              }),
+            });
+            if (!res.ok) {
+              const body = (await res.json().catch(() => ({}))) as { error?: string };
+              throw new Error(body.error ?? `Failed (${res.status})`);
+            }
+            setUploadState({ phase: "idle" });
+            await refreshVersions();
+            onVersionChanged?.();
+          } catch (err) {
+            setUploadState({
+              phase: "error",
+              message: err instanceof Error ? err.message : "Version upload failed",
+            });
+          }
+        })();
+      };
+      xhr.ontimeout = () =>
+        setUploadState({ phase: "error", message: "Upload timed out." });
+      xhr.onerror = () =>
+        setUploadState({ phase: "error", message: "Storage service unavailable." });
+      xhr.send(storageForm);
+    },
+    [source.documentId, expectedMime, uploadState.phase, refreshVersions, onVersionChanged],
+  );
+
+  const handlePickFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (file) uploadNewVersion(file);
+  };
+
   const restoreVersion = async (versionId: number) => {
     if (!source.documentId) return;
     if (!confirm("Restore this version as the current one?")) return;
@@ -175,13 +442,7 @@ export function DocumentViewer({
         const body = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(body.error ?? `Failed (${res.status})`);
       }
-      // Refetch versions
-      const r = await fetch(`/api/documents/${source.documentId}/versions`);
-      if (r.ok) {
-        const data = (await r.json()) as VersionsResponse;
-        setVersions(data.versions);
-        setActiveVersionId(data.currentVersionId);
-      }
+      await refreshVersions();
       onVersionChanged?.();
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to restore version");
@@ -356,100 +617,159 @@ export function DocumentViewer({
       </div>
 
       <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
-        <div style={{ flex: 1, overflowY: "auto", padding: "40px 0" }}>
-          <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 32px" }}>
-            {viewingOld && (
-              <div
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+          {viewingOld && (
+            <div
+              style={{
+                padding: "10px 14px",
+                margin: "12px 16px 0",
+                borderRadius: 10,
+                background: "oklch(0.95 0.06 70)",
+                border: "1px solid oklch(0.86 0.11 75)",
+                color: "oklch(0.4 0.12 40)",
+                fontSize: 13,
+                flexShrink: 0,
+              }}
+            >
+              Previewing v{currentVersion?.versionNumber}. Search still uses the current version.
+            </div>
+          )}
+          {source.pending ? (
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "60px 40px",
+                textAlign: "center",
+                color: "var(--ink-3)",
+                fontSize: 14,
+              }}
+            >
+              This source is still processing — content will appear once indexing finishes.
+            </div>
+          ) : fullDoc ? (
+            <div style={{ flex: 1, overflow: "hidden", display: "flex", minWidth: 0, minHeight: 0 }}>
+              {isPdf ? (
+                <PdfViewerWithNotes
+                  url={fullDoc.url}
+                  notes={toPdfNoteLites(pdfNotes)}
+                  scrollToNoteId={pdfScrollToNoteId}
+                  onCreateAnchoredNote={(anchor) => {
+                    setPdfAnchorDraft({
+                      page: anchor.page,
+                      quads: anchor.quads,
+                      quote: anchor.quote,
+                    });
+                  }}
+                  onNotePinClick={(id) => {
+                    setPdfScrollToNoteId(id);
+                    setSidebarTab("notes");
+                  }}
+                />
+              ) : (
+                <div style={{ flex: 1, minWidth: 0, minHeight: 0, overflow: "hidden" }}>
+                  <FullDocumentViewer document={fullDoc} minimal />
+                </div>
+              )}
+            </div>
+          ) : fullDocError ? (
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 12,
+                padding: "60px 40px",
+                color: "var(--ink-3)",
+                fontSize: 14,
+              }}
+            >
+              <div>Couldn&apos;t load preview: {fullDocError}</div>
+              <button
+                onClick={openOriginal}
                 style={{
-                  padding: "10px 14px",
-                  borderRadius: 10,
-                  background: "oklch(0.95 0.06 70)",
-                  border: "1px solid oklch(0.86 0.11 75)",
-                  color: "oklch(0.4 0.12 40)",
                   fontSize: 13,
-                  marginBottom: 20,
+                  fontWeight: 600,
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                  background: "var(--accent)",
+                  color: "white",
                 }}
               >
-                Previewing v{currentVersion?.versionNumber}. Search still uses the current version.
-              </div>
-            )}
-            {source.pending ? (
-              <div
-                style={{
-                  padding: "60px 40px",
-                  textAlign: "center",
-                  color: "var(--ink-3)",
-                  fontSize: 14,
-                }}
-              >
-                This source is still processing — content will appear once indexing finishes.
-              </div>
-            ) : (
-              <>
-                <div
-                  className="serif"
-                  style={{
-                    fontSize: 32,
-                    lineHeight: 1.15,
-                    letterSpacing: "-0.02em",
-                    marginBottom: 20,
-                    color: "var(--ink)",
-                  }}
-                >
-                  {title}
-                </div>
-                <div
-                  style={{
-                    fontSize: 15,
-                    lineHeight: 1.7,
-                    color: "var(--ink-2)",
-                    whiteSpace: "pre-wrap",
-                    minHeight: 200,
-                  }}
-                >
-                  {source.type === "paste" ? (
-                    "This note is indexed inline — open the full viewer to edit."
-                  ) : (
-                    <>
-                      <p>
-                        {meta.label} · {source.size || source.added || "indexed"}
-                      </p>
-                      <p style={{ marginTop: 12 }}>
-                        Workspace view is a quick reference. For full preview (PDF, audio playback,
-                        transcripts, inline page navigation), open the original viewer.
-                      </p>
-                    </>
-                  )}
-                </div>
-                <div style={{ marginTop: 28, display: "flex", gap: 8 }}>
-                  <button
-                    onClick={openOriginal}
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 600,
-                      padding: "8px 14px",
-                      borderRadius: 8,
-                      background: "var(--accent)",
-                      color: "white",
-                    }}
-                  >
-                    Open original viewer
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+                Open standalone viewer
+              </button>
+            </div>
+          ) : (
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--ink-3)",
+                fontSize: 13,
+              }}
+            >
+              Loading preview…
+            </div>
+          )}
         </div>
 
         <aside
           style={{
-            width: 280,
+            width: 320,
             flexShrink: 0,
             borderLeft: "1px solid var(--line)",
             background: "var(--panel)",
-            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
           }}
         >
+          <div
+            style={{
+              display: "flex",
+              borderBottom: "1px solid var(--line-2)",
+              padding: "0 10px",
+              flexShrink: 0,
+            }}
+          >
+            <TabButton
+              label="Versions"
+              count={versions.length}
+              active={sidebarTab === "versions"}
+              onClick={() => setSidebarTab("versions")}
+            />
+            <TabButton
+              label="Notes"
+              active={sidebarTab === "notes"}
+              onClick={() => setSidebarTab("notes")}
+            />
+          </div>
+
+          {sidebarTab === "notes" ? (
+            <div style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
+              <DocumentNotesPanel
+                documentId={
+                  source.documentId ? String(source.documentId) : null
+                }
+                versionId={activeVersionId}
+                prefilledAnchor={pdfAnchorDraft}
+                onChanged={() => {
+                  setNotesNonce((n) => n + 1);
+                  setPdfAnchorDraft(null);
+                }}
+                onNoteClick={({ id, page }) => {
+                  if (page !== null) setPdfScrollToNoteId(id);
+                }}
+              />
+            </div>
+          ) : (
+            <div style={{ flex: 1, overflowY: "auto" }}>
           <div style={{ padding: "16px 16px 10px" }}>
             <div
               className="mono"
@@ -463,9 +783,83 @@ export function DocumentViewer({
             >
               Version history
             </div>
-            <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2 }}>
+            <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 2, marginBottom: 10 }}>
               Uploaded revisions of this source.
             </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={expectedMime ?? undefined}
+              style={{ display: "none" }}
+              onChange={handlePickFile}
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={
+                uploadState.phase === "uploading" ||
+                uploadState.phase === "finalizing" ||
+                !source.documentId
+              }
+              style={{
+                width: "100%",
+                padding: "7px 10px",
+                borderRadius: 7,
+                background:
+                  uploadState.phase === "uploading" || uploadState.phase === "finalizing"
+                    ? "var(--line)"
+                    : "var(--accent)",
+                color:
+                  uploadState.phase === "uploading" || uploadState.phase === "finalizing"
+                    ? "var(--ink-3)"
+                    : "white",
+                fontSize: 12,
+                fontWeight: 600,
+                cursor:
+                  uploadState.phase === "uploading" || uploadState.phase === "finalizing"
+                    ? "not-allowed"
+                    : "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
+              {uploadState.phase === "uploading"
+                ? `Uploading ${uploadState.percent}%…`
+                : uploadState.phase === "finalizing"
+                ? "Indexing new version…"
+                : "Upload new version"}
+            </button>
+            {expectedMime && (
+              <div
+                className="mono"
+                style={{
+                  fontSize: 10,
+                  color: "var(--ink-3)",
+                  marginTop: 6,
+                  textAlign: "center",
+                }}
+              >
+                Must match: {expectedMime}
+              </div>
+            )}
+            {uploadState.phase === "error" && (
+              <div
+                style={{
+                  marginTop: 8,
+                  padding: "8px 10px",
+                  borderRadius: 7,
+                  background: "oklch(0.96 0.04 30)",
+                  border: "1px solid oklch(0.86 0.11 30)",
+                  color: "oklch(0.4 0.14 30)",
+                  fontSize: 11,
+                  lineHeight: 1.45,
+                }}
+              >
+                {uploadState.message}
+              </div>
+            )}
           </div>
 
           <div style={{ padding: "0 10px 16px" }}>
@@ -632,8 +1026,52 @@ export function DocumentViewer({
               value={<span style={{ color: "var(--ok)" }}>✓ ready to query</span>}
             />
           </div>
+            </div>
+          )}
         </aside>
       </div>
     </div>
   );
+}
+
+/**
+ * Project a list of server-side `documentNotes` rows down to the minimal
+ * shape the PDF overlay needs. Only notes with a `pdf` primary anchor can
+ * render as pins; the rest show up in the sidebar list only.
+ */
+function toPdfNoteLites(notes: DocumentNote[]): PdfNoteLite[] {
+  return notes
+    .map((n) => {
+      const anchor = n.anchor as
+        | {
+            type?: string;
+            primary?: {
+              kind?: string;
+              page?: number;
+              quads?: Array<[number, number, number, number]>;
+            };
+            quote?: { exact?: string };
+          }
+        | null;
+      if (!anchor?.primary || anchor.primary.kind !== "pdf") return null;
+      const page = typeof anchor.primary.page === "number" ? anchor.primary.page : null;
+      if (page === null) return null;
+      const quads = Array.isArray(anchor.primary.quads)
+        ? anchor.primary.quads
+        : [];
+      if (quads.length === 0) return null;
+      const lite: PdfNoteLite = {
+        id: n.id,
+        title: n.title ?? null,
+        page,
+        quads,
+        quote: anchor.quote?.exact,
+        anchorStatus: (n.anchorStatus ?? "resolved") as
+          | "resolved"
+          | "drifted"
+          | "orphaned",
+      };
+      return lite;
+    })
+    .filter((x): x is PdfNoteLite => x !== null);
 }

@@ -14,6 +14,7 @@ import { LegalDocumentConfig } from './LegalDocumentConfig';
 import { LegalDocumentEditor } from './LegalDocumentEditor';
 import { DocumentGeneratorEditor } from './DocumentGeneratorEditor';
 import { LegalChatbot } from './LegalChatbot';
+import { LegalGeneratorTheme, legalTheme } from './LegalGeneratorTheme';
 import { Loader2 } from 'lucide-react';
 import type { Citation } from './generator';
 import { TEMPLATE_REGISTRY, type TemplateField } from '@launchstack/features/legal-templates';
@@ -447,28 +448,35 @@ export function DocumentGenerator() {
 
   if (isLoading) {
     return (
-      <div className="h-full flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-          <p className="text-muted-foreground">Loading documents...</p>
+      <LegalGeneratorTheme>
+        <div className="flex h-full items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2
+              className="w-8 h-8 animate-spin"
+              style={{ color: "var(--accent)" }}
+            />
+            <p style={{ color: "var(--ink-3)" }}>Loading documents…</p>
+          </div>
         </div>
-      </div>
+      </LegalGeneratorTheme>
     );
   }
 
   if (error && currentView === 'home') {
     return (
-      <div className="h-full flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4 max-w-md text-center">
-          <p className="text-red-500">{error}</p>
-          <button 
-            onClick={() => void fetchDocuments()}
-            className="text-blue-600 hover:underline"
-          >
-            Try again
-          </button>
+      <LegalGeneratorTheme>
+        <div className="flex h-full items-center justify-center">
+          <div className="flex max-w-md flex-col items-center gap-4 text-center">
+            <p style={{ color: "var(--danger)" }}>{error}</p>
+            <button
+              onClick={() => void fetchDocuments()}
+              className={legalTheme.btn + " " + legalTheme.btnOutline}
+            >
+              Try again
+            </button>
+          </div>
         </div>
-      </div>
+      </LegalGeneratorTheme>
     );
   }
 
@@ -485,7 +493,7 @@ export function DocumentGenerator() {
 
     if (useLegalEditor) {
       return (
-        <div className="h-full">
+        <LegalGeneratorTheme ambient={false}>
           <LegalDocumentEditor
             initialTitle={currentDocument.title}
             sections={legalSections}
@@ -497,12 +505,12 @@ export function DocumentGenerator() {
               void handleSaveDocument(title, content, undefined, editorSections)
             }
           />
-        </div>
+        </LegalGeneratorTheme>
       );
     }
 
     return (
-      <div className="h-full">
+      <LegalGeneratorTheme ambient={false}>
         <DocumentGeneratorEditor
           initialTitle={currentDocument.title}
           initialContent={currentDocument.content}
@@ -512,26 +520,26 @@ export function DocumentGenerator() {
           onSave={handleSaveDocument}
           docxBase64={currentDocument.docxBase64}
         />
-      </div>
+      </LegalGeneratorTheme>
     );
   }
 
   if (currentView === 'chat') {
     return (
-      <div className="h-full">
+      <LegalGeneratorTheme>
         <LegalChatbot
           onBack={handleBackToHome}
           onContinueToTemplateForm={handleChatProceedToTemplateForm}
           initialMessage={chatInitialMessage}
         />
-      </div>
+      </LegalGeneratorTheme>
     );
   }
 
   if (currentView === 'config' && selectedTemplate) {
     if (selectedTemplate.isLegal && selectedTemplate.fields) {
       return (
-        <div className="h-full">
+        <LegalGeneratorTheme>
           <LegalDocumentConfig
             key={`${selectedTemplate.id}-${legalConfigNonce}`}
             template={selectedTemplate as DocumentTemplate & { isLegal: true; fields: TemplateField[] }}
@@ -550,19 +558,19 @@ export function DocumentGenerator() {
                 : undefined
             }
           />
-        </div>
+        </LegalGeneratorTheme>
       );
     }
   }
 
   return (
-    <div className="h-full">
+    <LegalGeneratorTheme>
       <DocumentGeneratorHome
         onNewDocument={handleNewDocument}
         onOpenDocument={handleOpenDocument}
         onStartChat={handleStartChat}
         generatedDocuments={generatedDocuments}
       />
-    </div>
+    </LegalGeneratorTheme>
   );
 }

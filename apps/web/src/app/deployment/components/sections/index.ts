@@ -4,7 +4,7 @@ export { VercelDeploymentPage } from './VercelDeploymentPage';
 export { ClerkSetupPage } from './ClerkSetupPage';
 export { InngestPage } from './InngestPage';
 export { LangChainPage } from './LangChainPage';
-export { TavilyPage } from './TavilyPage';
+export { ExaPage } from './ExaPage';
 export { UploadThingPage } from './UploadThingPage';
 export { VercelBlobPage } from './VercelBlobPage';
 export { AIProvidersPage } from './AIProvidersPage';

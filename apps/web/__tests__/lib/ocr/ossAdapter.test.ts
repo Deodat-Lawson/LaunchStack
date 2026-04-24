@@ -5,6 +5,7 @@
  */
 
 import { createMarkerAdapter, createDoclingAdapter } from "@launchstack/core/ocr/adapters/ossAdapter";
+import { configureOcr } from "@launchstack/core/ocr/config";
 
 const WORKER_URL = "http://test-worker:8001";
 
@@ -14,11 +15,13 @@ describe("OSS OCR Adapters", () => {
 
   beforeEach(() => {
     process.env = { ...originalEnv, OCR_WORKER_URL: WORKER_URL };
+    configureOcr({ workerUrl: WORKER_URL });
     global.fetch = jest.fn() as unknown as typeof fetch;
   });
 
   afterEach(() => {
     process.env = originalEnv;
+    configureOcr({});
     global.fetch = originalFetch;
   });
 

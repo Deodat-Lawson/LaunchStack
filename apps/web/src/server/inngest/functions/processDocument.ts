@@ -672,6 +672,19 @@ export const uploadDocument = inngest.createFunction(
             companyId: String(eventData.companyId),
           },
         });
+
+        // Re-anchor sticky notes against the new version once chunks are
+        // in place. Skips the initial v1 pipeline since no prior anchors
+        // can exist; only meaningful for subsequent versions.
+        if (eventData.versionId) {
+          await step.sendEvent("trigger-rehydrate-note-anchors", {
+            name: "notes-anchors/rehydrate.requested" as const,
+            data: {
+              documentId: eventData.documentId,
+              versionId: eventData.versionId,
+            },
+          });
+        }
       }
 
       return result;

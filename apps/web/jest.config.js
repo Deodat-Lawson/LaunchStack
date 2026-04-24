@@ -1,6 +1,7 @@
 /** @type {import('jest').Config} */
 export const config = {
   testEnvironment: 'node',
+  setupFiles: ['<rootDir>/jest.setup.ts'],
   transform: {
     '^.+\\.(ts|tsx|js|jsx|mjs)$': [
       'babel-jest',

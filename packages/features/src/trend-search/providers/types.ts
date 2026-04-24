@@ -4,14 +4,14 @@ import type { RawSearchResult } from "../types";
 export type SearchProviderFn = (query: string) => Promise<RawSearchResult[]>;
 
 /** The supported provider strategy names. */
-export type ProviderStrategy = "tavily" | "serper" | "fallback" | "parallel";
+export type ProviderStrategy = "exa" | "serper" | "fallback" | "parallel";
 
 /** Which provider(s) produced the merged result (see `executeSearch`). */
 export type SearchProviderUsed =
-  | "tavily"
+  | "exa"
   | "serper"
-  | "tavily (fallback)"
-  | "tavily+serper"
+  | "exa (fallback)"
+  | "exa+serper"
   | "none"
   | "auto";
 

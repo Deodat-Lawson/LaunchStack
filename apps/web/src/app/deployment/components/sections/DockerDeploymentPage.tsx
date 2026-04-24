@@ -18,10 +18,12 @@ interface StepCardProps {
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
-  darkMode: boolean;
+  
 }
 
-const StepCard: React.FC<StepCardProps> = ({ icon, title, children, darkMode }) => (
+const StepCard: React.FC<StepCardProps> = ({ icon, title, children }) => {
+  const darkMode = false;
+  return (
   <div
     className={`flex items-start gap-4 p-5 rounded-xl border transition-all duration-200 ${
       darkMode
@@ -37,16 +39,18 @@ const StepCard: React.FC<StepCardProps> = ({ icon, title, children, darkMode }) 
       <div className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{children}</div>
     </div>
   </div>
-);
+  );
+};
 
 interface CalloutProps {
   icon: React.ReactNode;
-  darkMode: boolean;
+  
   variant?: 'info' | 'warning';
   children: React.ReactNode;
 }
 
-const Callout: React.FC<CalloutProps> = ({ icon, darkMode, variant = 'info', children }) => {
+const Callout: React.FC<CalloutProps> = ({ icon, variant = 'info', children }) => {
+  const darkMode = false;
   const colors = {
     info: darkMode
       ? 'bg-purple-900/20 border-purple-800/50 text-purple-300'
@@ -64,17 +68,17 @@ const Callout: React.FC<CalloutProps> = ({ icon, darkMode, variant = 'info', chi
   );
 };
 
-const Divider: React.FC<{ darkMode: boolean }> = ({ darkMode }) => (
-  <hr className={`my-12 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`} />
+const Divider: React.FC = () => (
+  <hr className="my-12 border-t border-gray-200" />
 );
 
 /* ── Page ── */
 
 export const DockerDeploymentPage: React.FC<DeploymentProps> = ({
-  darkMode,
   copyToClipboard,
   copiedCode,
 }) => {
+  const darkMode = false;
   const fullStackCmd = 'docker compose --env-file .env --profile dev up --build';
   const detachedCmd = 'docker compose --env-file .env --profile dev up -d';
   const appOnlyCmd = `docker build -t pdr-ai-app .
@@ -104,25 +108,25 @@ docker run --rm -p 3000:3000 \\
         </p>
       </motion.div>
 
-      <Divider darkMode={darkMode} />
+      <Divider />
 
       {/* ── What&apos;s in the stack ── */}
-      <Section title="What runs" subtitle="Docker Compose starts three coordinated services." darkMode={darkMode}>
+      <Section title="What runs" subtitle="Docker Compose starts three coordinated services.">
         <div className="space-y-3">
-          <StepCard icon={<Database className="w-5 h-5" />} title="db" darkMode={darkMode}>
+          <StepCard icon={<Database className="w-5 h-5" />} title="db">
             PostgreSQL 16 with pgvector pre-installed. Data is persisted in a named volume.
           </StepCard>
-          <StepCard icon={<RefreshCw className="w-5 h-5" />} title="migrate" darkMode={darkMode}>
+          <StepCard icon={<RefreshCw className="w-5 h-5" />} title="migrate">
             Runs <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>pnpm db:push</code> once after the database is healthy, then exits.
           </StepCard>
-          <StepCard icon={<Server className="w-5 h-5" />} title="app" darkMode={darkMode}>
+          <StepCard icon={<Server className="w-5 h-5" />} title="app">
             Production Next.js server on port 3000. Connects to the same Compose network as the database.
           </StepCard>
         </div>
       </Section>
 
       {/* ── Full stack steps ── */}
-      <Section title="Full stack setup" subtitle="Run the entire stack with one command." darkMode={darkMode}>
+      <Section title="Full stack setup" subtitle="Run the entire stack with one command.">
         <div className="space-y-6">
           <Step
             number={1}
@@ -140,7 +144,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx
 INNGEST_EVENT_KEY=dev-placeholder`}
             onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nOPENAI_API_KEY=sk-proj-xxx\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
             copied={copiedCode === 'docker-1'}
-            darkMode={darkMode}
+
           />
 
           <Step
@@ -149,7 +153,7 @@ INNGEST_EVENT_KEY=dev-placeholder`}
             code={fullStackCmd}
             onCopy={() => copyToClipboard(fullStackCmd, 'docker-2')}
             copied={copiedCode === 'docker-2'}
-            darkMode={darkMode}
+
           />
 
           <Step
@@ -158,7 +162,7 @@ INNGEST_EVENT_KEY=dev-placeholder`}
             code={detachedCmd}
             onCopy={() => copyToClipboard(detachedCmd, 'docker-3')}
             copied={copiedCode === 'docker-3'}
-            darkMode={darkMode}
+
           />
 
           <Step
@@ -169,18 +173,18 @@ INNGEST_EVENT_KEY=dev-placeholder`}
 curl http://localhost:3000`}
             onCopy={() => copyToClipboard('docker compose ps\ncurl http://localhost:3000', 'docker-4')}
             copied={copiedCode === 'docker-4'}
-            darkMode={darkMode}
+
           />
         </div>
       </Section>
 
-      <Divider darkMode={darkMode} />
+      <Divider />
 
       {/* ── App-only alternative ── */}
       <Section
         title="App container only"
         subtitle="Use this when your PostgreSQL is managed externally (Neon, Supabase, RDS, etc.)."
-        darkMode={darkMode}
+
       >
         <Step
           number={1}
@@ -188,14 +192,14 @@ curl http://localhost:3000`}
           code={appOnlyCmd}
           onCopy={() => copyToClipboard(appOnlyCmd, 'docker-5')}
           copied={copiedCode === 'docker-5'}
-          darkMode={darkMode}
+
         />
       </Section>
 
-      <Divider darkMode={darkMode} />
+      <Divider />
 
       {/* ── Compose profiles ── */}
-      <Section title="Compose profiles" darkMode={darkMode}>
+      <Section title="Compose profiles">
         <div className={`overflow-hidden rounded-xl border ${darkMode ? 'border-gray-700/60' : 'border-gray-200'}`}>
           <table className="w-full text-sm">
             <thead>
@@ -234,11 +238,11 @@ curl http://localhost:3000`}
 
       {/* ── Callouts ── */}
       <div className="space-y-4 mb-16">
-        <Callout icon={<CheckCircle2 className="w-5 h-5" />} darkMode={darkMode}>
+        <Callout icon={<CheckCircle2 className="w-5 h-5" />}>
           <strong>Health check:</strong> Run <code className={`${darkMode ? 'bg-gray-800' : 'bg-purple-100'} px-1.5 py-0.5 rounded text-xs`}>docker compose ps</code> to confirm <em>db</em> is running, <em>migrate</em> exited successfully, and <em>app</em> is healthy.
         </Callout>
 
-        <Callout icon={<ShieldAlert className="w-5 h-5" />} darkMode={darkMode} variant="warning">
+        <Callout icon={<ShieldAlert className="w-5 h-5" />} variant="warning">
           <strong>If migration fails:</strong> Rebuild without cache and restart:{' '}
           <code className={`${darkMode ? 'bg-gray-800' : 'bg-yellow-100'} px-1.5 py-0.5 rounded text-xs`}>
             docker compose --env-file .env build --no-cache migrate && docker compose --env-file .env up

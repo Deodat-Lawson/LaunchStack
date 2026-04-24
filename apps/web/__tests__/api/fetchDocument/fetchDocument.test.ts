@@ -38,9 +38,9 @@ describe("POST /api/fetchDocument", () => {
     (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
     const mockDocuments = [
-      { id: 1, name: "Document 1", companyId: 1, content: "Content 1" },
-      { id: 2, name: "Document 2", companyId: 1, content: "Content 2" },
-      { id: 3, name: "Document 3", companyId: 1, content: "Content 3" },
+      { id: 1, name: "Document 1", companyId: 1, content: "Content 1", currentVersionId: null },
+      { id: 2, name: "Document 2", companyId: 1, content: "Content 2", currentVersionId: null },
+      { id: 3, name: "Document 3", companyId: 1, content: "Content 3", currentVersionId: null },
     ];
 
     // First call: user lookup
@@ -398,7 +398,7 @@ describe("POST /api/fetchDocument", () => {
     (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employee-user-111" });
 
     const mockDocuments = [
-      { id: 20, name: "Employee Doc", companyId: 3 },
+      { id: 20, name: "Employee Doc", companyId: 3, currentVersionId: null },
     ];
 
     const mockSelect = jest.fn()

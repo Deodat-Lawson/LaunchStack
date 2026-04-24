@@ -9,7 +9,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-const ROOT = path.resolve(__dirname, "../../..");
+const ROOT = path.resolve(__dirname, "../../../../..");
 
 // ===========================================================================
 // Fix 1.8 — OPENAI_API_KEY removed from Docker build args

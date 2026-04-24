@@ -15,10 +15,10 @@ import type { DeploymentProps } from '../../types';
 import { Section, CodeBlock, Step, ApiKeyCard, InfoBox, WarningBox } from '../ui';
 
 export const InngestPage: React.FC<DeploymentProps> = ({
-  darkMode,
   copyToClipboard,
   copiedCode,
 }) => {
+  const darkMode = false;
   return (
     <>
       <motion.div
@@ -49,70 +49,70 @@ export const InngestPage: React.FC<DeploymentProps> = ({
       </motion.div>
 
       {/* Benefits */}
-      <Section title="Why Inngest?" darkMode={darkMode}>
+      <Section title="Why Inngest?">
         <div className="grid md:grid-cols-2 gap-6">
           <BenefitCard
             icon={<RefreshCw className="w-6 h-6" />}
             title="Automatic Retries"
             description="Failed steps automatically retry with exponential backoff. No lost documents due to transient failures."
-            darkMode={darkMode}
+
           />
           <BenefitCard
             icon={<Layers className="w-6 h-6" />}
             title="Step-Based Execution"
             description="Each pipeline step (Router → OCR → Chunking → Vectorize → Store) runs independently. Failures only retry the failed step."
-            darkMode={darkMode}
+
           />
           <BenefitCard
             icon={<Clock className="w-6 h-6" />}
             title="Long-Running Jobs"
             description="Process large documents without timeout limits. Inngest handles jobs that take minutes or hours."
-            darkMode={darkMode}
+
           />
           <BenefitCard
             icon={<BarChart3 className="w-6 h-6" />}
             title="Observability Dashboard"
             description="Visual timeline of every job, step durations, error logs, and retry history in one dashboard."
-            darkMode={darkMode}
+
           />
           <BenefitCard
             icon={<Shield className="w-6 h-6" />}
             title="Rate Limiting & Concurrency"
             description="Control how many documents process simultaneously. Prevent overwhelming external APIs."
-            darkMode={darkMode}
+
           />
           <BenefitCard
             icon={<Zap className="w-6 h-6" />}
             title="Vercel Integration"
             description="One-click setup with Vercel. Auto-configures keys and endpoints."
-            darkMode={darkMode}
+
           />
         </div>
       </Section>
 
       {/* How the Pipeline Works */}
-      <Section title="How the Pipeline Works" darkMode={darkMode}>
+      <Section title="How the Pipeline Works">
         <div
           className={`rounded-xl p-6 ${
             darkMode ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'
           }`}
         >
           <div className="space-y-4">
-            <PipelineStep step="A" title="Router" description="Analyzes PDF to determine: native text extraction or OCR needed? Which provider (Azure, Landing.AI)?" darkMode={darkMode} />
-            <PipelineStep step="B" title="Normalize" description="Extracts content using the selected provider. Outputs standardized PageContent[] structure." darkMode={darkMode} />
-            <PipelineStep step="C" title="Chunking" description="Splits pages into semantic chunks (500 tokens, 50 overlap). Separates tables from text." darkMode={darkMode} />
-            <PipelineStep step="D" title="Vectorize" description="Generates embeddings via OpenAI text-embedding-3-large (1536 dimensions)." darkMode={darkMode} />
-            <PipelineStep step="E" title="Storage" description="Persists chunks with vectors to PostgreSQL. Updates document and job status." darkMode={darkMode} />
+            <PipelineStep step="A" title="Router" description="Analyzes PDF to determine: native text extraction or OCR needed? Which provider (Azure, Landing.AI)?" />
+            <PipelineStep step="B" title="Normalize" description="Extracts content using the selected provider. Outputs standardized PageContent[] structure." />
+            <PipelineStep step="C" title="Chunking" description="Splits pages into semantic chunks (500 tokens, 50 overlap). Separates tables from text." />
+            <PipelineStep step="D" title="Vectorize" description="Generates embeddings via OpenAI text-embedding-3-large (1536 dimensions)." />
+            <PipelineStep step="E" title="Storage" description="Persists chunks with vectors to PostgreSQL. Updates document and job status." />
           </div>
         </div>
       </Section>
 
       {/* Development Setup */}
-      <Section title="Development Setup" darkMode={darkMode}>
+      <Section title="Development Setup">
         <InfoBox
           title="Inngest starts automatically"
           icon={<Zap className="w-5 h-5" />}
-          darkMode={darkMode}
+
         >
           <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
             Running <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-emerald-300' : 'bg-gray-100 text-emerald-700'}`}>pnpm dev</code> automatically
@@ -135,7 +135,7 @@ export const InngestPage: React.FC<DeploymentProps> = ({
               code="pnpm dev"
               onCopy={() => copyToClipboard('pnpm dev', 'inngest-dev')}
               copied={copiedCode === 'inngest-dev'}
-              darkMode={darkMode}
+
             />
             <p className={`text-sm mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               This runs the equivalent of:
@@ -146,7 +146,7 @@ export const InngestPage: React.FC<DeploymentProps> = ({
   "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"`}
               onCopy={() => copyToClipboard('concurrently "next dev --turbo" "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"', 'inngest-dev-full')}
               copied={copiedCode === 'inngest-dev-full'}
-              darkMode={darkMode}
+
             />
           </div>
 
@@ -163,19 +163,19 @@ export const InngestPage: React.FC<DeploymentProps> = ({
 INNGEST_EVENT_KEY=dev-placeholder`}
               onCopy={() => copyToClipboard('INNGEST_EVENT_KEY=dev-placeholder', 'inngest-dev-key')}
               copied={copiedCode === 'inngest-dev-key'}
-              darkMode={darkMode}
+
             />
             <WarningBox
               title="Required at startup"
               description="INNGEST_EVENT_KEY must be set to a non-empty value or the app will throw an error on startup. In development, any placeholder string works fine."
-              darkMode={darkMode}
+
             />
           </div>
         </div>
       </Section>
 
       {/* Production Setup */}
-      <Section title="Production Setup" darkMode={darkMode}>
+      <Section title="Production Setup">
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
           In production, Inngest Cloud handles job scheduling, retries, and monitoring.
           You need a real event key and signing key from your Inngest account.
@@ -193,7 +193,7 @@ INNGEST_EVENT_KEY=dev-placeholder`}
               'Environment variables are automatically added',
               'Redeploy your application',
             ]}
-            darkMode={darkMode}
+
           />
 
           <ApiKeyCard
@@ -208,7 +208,7 @@ INNGEST_EVENT_KEY=dev-placeholder`}
               'Go to Settings → Signing Key',
               'Copy INNGEST_SIGNING_KEY to your environment',
             ]}
-            darkMode={darkMode}
+
           />
         </div>
 
@@ -227,13 +227,13 @@ INNGEST_SIGNING_KEY=signkey-prod-xxxxx`}
               )
             }
             copied={copiedCode === 'inngest-prod-env'}
-            darkMode={darkMode}
+
           />
         </div>
       </Section>
 
       {/* Architecture Diagram */}
-      <Section title="Architecture" darkMode={darkMode}>
+      <Section title="Architecture">
         <div className="rounded-xl p-6 font-mono text-sm bg-gray-900 text-gray-300">
           <pre className="overflow-x-auto">
             {`┌─────────────────────────────────────────────────────────────┐
@@ -265,17 +265,17 @@ INNGEST_SIGNING_KEY=signkey-prod-xxxxx`}
       </Section>
 
       {/* Verify */}
-      <Section title="Verify Setup" darkMode={darkMode}>
+      <Section title="Verify Setup">
         <div className="space-y-4">
-          <VerificationStep text="Run pnpm dev — both Next.js and Inngest dev server start" darkMode={darkMode} />
-          <VerificationStep text="Open http://localhost:8288 — Inngest dashboard shows 'pdr-ai' app" darkMode={darkMode} />
-          <VerificationStep text="Upload a document — 'process-document' function appears in the dashboard" darkMode={darkMode} />
-          <VerificationStep text="View step-by-step execution and logs in the Inngest timeline" darkMode={darkMode} />
+          <VerificationStep text="Run pnpm dev — both Next.js and Inngest dev server start" />
+          <VerificationStep text="Open http://localhost:8288 — Inngest dashboard shows 'pdr-ai' app" />
+          <VerificationStep text="Upload a document — 'process-document' function appears in the dashboard" />
+          <VerificationStep text="View step-by-step execution and logs in the Inngest timeline" />
         </div>
       </Section>
 
       {/* Troubleshooting */}
-      <Section title="Troubleshooting" darkMode={darkMode}>
+      <Section title="Troubleshooting">
         <div className="space-y-4">
           <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
             <h4 className={`font-semibold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -318,10 +318,12 @@ interface BenefitCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-  darkMode: boolean;
+  
 }
 
-const BenefitCard: React.FC<BenefitCardProps> = ({ icon, title, description, darkMode }) => (
+const BenefitCard: React.FC<BenefitCardProps> = ({ icon, title, description }) => {
+  const darkMode = false;
+  return (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
@@ -335,16 +337,19 @@ const BenefitCard: React.FC<BenefitCardProps> = ({ icon, title, description, dar
     <h3 className={`font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{title}</h3>
     <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{description}</p>
   </motion.div>
-);
+  );
+};
 
 interface PipelineStepProps {
   step: string;
   title: string;
   description: string;
-  darkMode: boolean;
+  
 }
 
-const PipelineStep: React.FC<PipelineStepProps> = ({ step, title, description, darkMode }) => (
+const PipelineStep: React.FC<PipelineStepProps> = ({ step, title, description }) => {
+  const darkMode = false;
+  return (
   <div className="flex items-start gap-4">
     <div
       className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${
@@ -358,16 +363,20 @@ const PipelineStep: React.FC<PipelineStepProps> = ({ step, title, description, d
       <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{description}</p>
     </div>
   </div>
-);
+  );
+};
 
 interface VerificationStepProps {
   text: string;
-  darkMode: boolean;
+  
 }
 
-const VerificationStep: React.FC<VerificationStepProps> = ({ text, darkMode }) => (
+const VerificationStep: React.FC<VerificationStepProps> = ({ text }) => {
+  const darkMode = false;
+  return (
   <div className="flex items-center gap-3">
     <CheckCircle2 className={`w-5 h-5 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
     <span className={darkMode ? 'text-gray-300' : 'text-gray-700'}>{text}</span>
   </div>
-);
+  );
+};

@@ -29,10 +29,9 @@ import {
   Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Button } from "~/app/employer/documents/components/ui/button";
 import { Input } from "~/app/employer/documents/components/ui/input";
-import { Textarea } from "~/app/employer/documents/components/ui/textarea";
 import { cn } from "~/lib/utils";
+import { legalTheme as lt } from "./LegalGeneratorTheme";
 import type { EditorSection } from "@launchstack/features/legal-templates";
 import type { TemplateField } from "@launchstack/features/legal-templates";
 import {
@@ -962,12 +961,12 @@ function EditableSection({
           // Empty fields (ZWSP-only): full px-1 on each adjacent mark looks like extra gaps in a sentence.
           "[&_mark[data-field-key].legal-mark-empty]:!px-0.5 [&_mark[data-field-key].legal-mark-empty]:inline-block [&_mark[data-field-key].legal-mark-empty]:min-w-[3px]",
           "[&_mark[data-field-key]]:transition-all [&_mark[data-field-key]]:duration-150",
-          "[&_mark:focus]:ring-2 [&_mark:focus]:ring-blue-400/50 [&_mark:focus]:bg-blue-50 dark:[&_mark:focus]:bg-blue-900/30",
+          "[&_mark:focus]:ring-2 [&_mark:focus]:ring-purple-400/50 [&_mark:focus]:bg-purple-50 dark:[&_mark:focus]:bg-purple-900/30",
           "[&_.field-invalid]:!bg-red-50 [&_.field-invalid]:!border-b-2 [&_.field-invalid]:!border-red-400 dark:[&_.field-invalid]:!bg-red-900/20 dark:[&_.field-invalid]:!border-red-500",
           showHighlights
             ? "[&_mark]:bg-amber-100/80 [&_mark]:border-b-2 [&_mark]:border-amber-300 dark:[&_mark]:bg-amber-900/30 dark:[&_mark]:border-amber-600"
             : "[&_mark]:bg-slate-100 [&_mark]:border-b [&_mark]:border-dashed [&_mark]:border-slate-300 dark:[&_mark]:bg-slate-800/30 dark:[&_mark]:border-slate-600",
-          "[&_mark:hover]:bg-blue-50 [&_mark:hover]:border-blue-300 dark:[&_mark:hover]:bg-blue-900/20 dark:[&_mark:hover]:border-blue-500",
+          "[&_mark:hover]:bg-purple-50 [&_mark:hover]:border-purple-300 dark:[&_mark:hover]:bg-purple-900/20 dark:[&_mark:hover]:border-purple-500",
         )}
         style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
       />
@@ -1617,22 +1616,22 @@ export function LegalDocumentEditor({
 
   const statusConfig = {
     draft: {
-      bg: "bg-orange-50 dark:bg-orange-900/20",
-      text: "text-orange-700 dark:text-orange-300",
-      border: "border-orange-300 dark:border-orange-700",
-      dot: "bg-orange-600",
+      bg: "oklch(from var(--warn) l c h / 0.12)",
+      text: "var(--warn)",
+      border: "oklch(from var(--warn) l c h / 0.35)",
+      dot: "var(--warn)",
     },
     editing: {
-      bg: "bg-green-50 dark:bg-green-900/20",
-      text: "text-green-700 dark:text-green-300",
-      border: "border-green-300 dark:border-green-700",
-      dot: "bg-green-600",
+      bg: "oklch(from var(--success) l c h / 0.12)",
+      text: "var(--success)",
+      border: "oklch(from var(--success) l c h / 0.35)",
+      dot: "var(--success)",
     },
     saved: {
-      bg: "bg-blue-50 dark:bg-blue-900/20",
-      text: "text-blue-700 dark:text-blue-300",
-      border: "border-blue-300 dark:border-blue-700",
-      dot: "bg-blue-600",
+      bg: "var(--accent-soft)",
+      text: "var(--accent-ink)",
+      border: "oklch(from var(--accent) l c h / 0.35)",
+      dot: "var(--accent)",
     },
   };
   const sc = statusConfig[status];
@@ -1650,46 +1649,64 @@ export function LegalDocumentEditor({
       `}</style>
 
       {/* Top Bar */}
-      <div className="no-print flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-border bg-background">
+      <div
+        className="no-print flex-shrink-0 flex items-center justify-between"
+        style={{
+          padding: "12px 20px",
+          borderBottom: "1px solid var(--line-2)",
+          background: "oklch(from var(--bg) l c h / 0.7)",
+          backdropFilter: "blur(14px) saturate(140%)",
+        }}
+      >
         <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={onBack}
-            className="text-muted-foreground hover:text-foreground"
+            className={`${lt.btn} ${lt.btnGhost} ${lt.btnSm}`}
+            style={{ paddingLeft: 6, paddingRight: 10 }}
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="w-4 h-4" />
             Back
-          </Button>
-          <div className="h-6 w-px bg-border" />
+          </button>
+          <div className={lt.dividerVert} style={{ height: 22 }} />
+          <div className={lt.brandMarkSm} style={{ width: 30, height: 30 }}>
+            <FileText className="h-[14px] w-[14px]" />
+          </div>
           <Input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="border-0 focus-visible:ring-0 font-medium text-lg px-2 bg-transparent text-foreground max-w-[400px]"
+            className="border-0 focus-visible:ring-0 bg-transparent max-w-[400px]"
+            style={{
+              fontSize: 17,
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+              color: "var(--ink)",
+              padding: "4px 6px",
+            }}
             placeholder="Document Title"
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {lastSaved && (
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+            <span
+              className="flex items-center gap-1"
+              style={{ fontSize: 12, color: "var(--ink-3)" }}
+            >
+              <CheckCircle className="w-3 h-3" style={{ color: "var(--success)" }} />
               Saved {lastSaved.toLocaleTimeString()}
             </span>
           )}
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={() => void handleSave()}
             disabled={isSaving}
-            className="text-muted-foreground hover:text-foreground"
+            className={`${lt.btn} ${lt.btnAccent} ${lt.btnSm}`}
           >
             {isSaving ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <Save className="w-4 h-4 mr-2" />
+              <Save className="w-4 h-4" />
             )}
             Save
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -1697,12 +1714,42 @@ export function LegalDocumentEditor({
         {/* Main Editor Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Toolbar */}
-          <div className="no-print flex-shrink-0 sticky top-0 z-20 flex items-center gap-1.5 px-4 py-2 bg-[#f9f6f1] dark:bg-card backdrop-blur border-b border-[#e0d8cf] dark:border-border">
+          <div
+            className="no-print flex-shrink-0 sticky top-0 z-20 flex items-center gap-1.5"
+            style={{
+              padding: "8px 20px",
+              background: "oklch(from var(--panel) l c h / 0.85)",
+              backdropFilter: "blur(10px)",
+              borderBottom: "1px solid var(--line-2)",
+            }}
+          >
             {(["bold", "italic", "underline"] as const).map((cmd) => (
               <button
                 key={cmd}
                 onClick={() => handleFormat(cmd)}
-                className="w-8 h-8 border border-[#d5cec4] dark:border-border rounded bg-white dark:bg-muted hover:bg-gray-50 dark:hover:bg-muted/80 cursor-pointer flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                style={{
+                  width: 32,
+                  height: 32,
+                  border: "1px solid var(--line-2)",
+                  borderRadius: 8,
+                  background: "var(--panel)",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--ink-2)",
+                  transition: "all .15s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--panel-2)";
+                  e.currentTarget.style.color = "var(--ink)";
+                  e.currentTarget.style.borderColor = "var(--line)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "var(--panel)";
+                  e.currentTarget.style.color = "var(--ink-2)";
+                  e.currentTarget.style.borderColor = "var(--line-2)";
+                }}
               >
                 {cmd === "bold" && <Bold className="w-3.5 h-3.5" />}
                 {cmd === "italic" && <Italic className="w-3.5 h-3.5" />}
@@ -1710,44 +1757,85 @@ export function LegalDocumentEditor({
               </button>
             ))}
 
-            <div className="w-px h-5 bg-[#d5cec4] dark:bg-border mx-1" />
+            <div className={lt.dividerVert} style={{ margin: "0 4px" }} />
 
             <button
               onClick={() => handleFormat("highlight")}
               title="Highlight"
-              className="w-8 h-8 border border-[#d5cec4] dark:border-border rounded bg-white dark:bg-muted hover:bg-gray-50 dark:hover:bg-muted/80 cursor-pointer flex items-center justify-center"
+              style={{
+                width: 32,
+                height: 32,
+                border: "1px solid var(--line-2)",
+                borderRadius: 8,
+                background: "var(--panel)",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all .15s",
+              }}
             >
-              <Highlighter className="w-3.5 h-3.5 text-yellow-600" />
+              <Highlighter className="w-3.5 h-3.5" style={{ color: "oklch(0.72 0.16 80)" }} />
             </button>
 
-            <div className="w-px h-5 bg-[#d5cec4] dark:bg-border mx-1" />
+            <div className={lt.dividerVert} style={{ margin: "0 4px" }} />
 
             {/* Active field info */}
             {focusedField ? (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 dark:bg-blue-900/25 rounded-md border border-blue-200 dark:border-blue-800 min-w-0 overflow-hidden">
-                <Pencil className="w-3 h-3 text-blue-500 flex-shrink-0" />
-                <span className="text-[11px] font-semibold text-blue-700 dark:text-blue-300 truncate">
+              <div
+                className="flex items-center gap-1.5 min-w-0 overflow-hidden"
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  background: "var(--accent-soft)",
+                  border: "1px solid oklch(from var(--accent) l c h / 0.28)",
+                }}
+              >
+                <Pencil className="w-3 h-3 flex-shrink-0" style={{ color: "var(--accent)" }} />
+                <span
+                  className="truncate"
+                  style={{ fontSize: 11, fontWeight: 600, color: "var(--accent-ink)" }}
+                >
                   {focusedField.label}
                 </span>
-                <span className="text-[10px] text-blue-400 dark:text-blue-500 flex-shrink-0">
+                <span className="flex-shrink-0" style={{ fontSize: 10, color: "var(--accent)" }}>
                   ·
                 </span>
-                <span className="text-[10px] text-blue-500/80 dark:text-blue-400/80 truncate flex-shrink-0">
+                <span
+                  className="truncate flex-shrink-0"
+                  style={{ fontSize: 10, color: "var(--accent-ink)", opacity: 0.8 }}
+                >
                   {getFieldFormatHint(focusedField)}
                 </span>
                 {focusedField.required && (
-                  <span className="text-[9px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-1 py-px rounded flex-shrink-0">
+                  <span
+                    className="flex-shrink-0"
+                    style={{
+                      fontSize: 9,
+                      fontWeight: 700,
+                      padding: "1px 6px",
+                      borderRadius: 999,
+                      background: "oklch(from var(--warn) l c h / 0.16)",
+                      color: "var(--warn)",
+                    }}
+                  >
                     Required
                   </span>
                 )}
                 {saveAttempted && focusedFieldError && (
-                  <span className="text-[10px] text-red-500 dark:text-red-400 flex-shrink-0 truncate">
+                  <span
+                    className="truncate flex-shrink-0"
+                    style={{ fontSize: 10, color: "var(--danger)" }}
+                  >
                     — {focusedFieldError.message}
                   </span>
                 )}
               </div>
             ) : (
-              <span className="text-[11px] text-muted-foreground/50 italic select-none">
+              <span
+                className="italic select-none"
+                style={{ fontSize: 11, color: "var(--ink-4)" }}
+              >
                 Click a highlighted field to edit
               </span>
             )}
@@ -1755,44 +1843,60 @@ export function LegalDocumentEditor({
             <div className="flex-1" />
 
             {editCount > 0 && (
-              <span className="text-xs text-[#8B7355]">
+              <span style={{ fontSize: 12, color: "var(--ink-3)" }}>
                 {editCount} edit{editCount !== 1 ? "s" : ""}
               </span>
             )}
 
             <span
-              className={cn(
-                "inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded border",
-                sc.bg,
-                sc.text,
-                sc.border,
-              )}
+              className="inline-flex items-center gap-1.5"
+              style={{
+                padding: "3px 10px",
+                fontSize: 10,
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                borderRadius: 999,
+                background: sc.bg,
+                color: sc.text,
+                border: `1px solid ${sc.border}`,
+              }}
             >
               <span
                 className={cn(
                   "w-1.5 h-1.5 rounded-full",
-                  sc.dot,
                   status === "editing" && "animate-pulse",
                 )}
+                style={{ background: sc.dot }}
               />
               {status}
             </span>
 
-            <div className="w-px h-5 bg-[#d5cec4] dark:bg-border mx-1" />
+            <div className={lt.dividerVert} style={{ margin: "0 4px" }} />
 
             <button
               onClick={() => setShowHighlights(!showHighlights)}
               title={
-                showHighlights
-                  ? "Dim field highlights"
-                  : "Show field highlights"
+                showHighlights ? "Dim field highlights" : "Show field highlights"
               }
-              className={cn(
-                "inline-flex items-center gap-1 px-2 py-1 text-[11px] border rounded cursor-pointer transition-colors",
-                showHighlights
-                  ? "text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20"
-                  : "text-muted-foreground hover:text-foreground border-[#d5cec4] dark:border-border bg-white dark:bg-muted hover:bg-gray-50 dark:hover:bg-muted/80",
-              )}
+              className="inline-flex items-center gap-1"
+              style={{
+                padding: "5px 10px",
+                fontSize: 11,
+                fontWeight: 500,
+                borderRadius: 8,
+                cursor: "pointer",
+                transition: "all .15s",
+                background: showHighlights
+                  ? "oklch(from var(--warn) l c h / 0.14)"
+                  : "var(--panel)",
+                color: showHighlights ? "var(--warn)" : "var(--ink-2)",
+                border: `1px solid ${
+                  showHighlights
+                    ? "oklch(from var(--warn) l c h / 0.3)"
+                    : "var(--line-2)"
+                }`,
+              }}
             >
               {showHighlights ? (
                 <Eye className="w-3 h-3" />
@@ -1808,7 +1912,8 @@ export function LegalDocumentEditor({
                   type="button"
                   onClick={() => void downloadDocx()}
                   disabled={isDownloadingDocx}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold bg-[#1a1a2e] text-[#f0ebe3] rounded cursor-pointer hover:bg-[#2a2a3e] transition-colors disabled:opacity-60"
+                  className={`${lt.btn} ${lt.btnAccent} ${lt.btnSm}`}
+                  style={{ padding: "6px 12px", fontSize: 11 }}
                 >
                   {isDownloadingDocx ? (
                     <Loader2 className="w-3 h-3 animate-spin" />
@@ -1821,7 +1926,8 @@ export function LegalDocumentEditor({
                   type="button"
                   onClick={() => void applyEditsWithTrackChanges()}
                   disabled={isApplyingEdits}
-                  className="inline-flex items-center gap-1 px-2 py-1.5 text-[11px] font-semibold bg-[#8B7355] text-white rounded cursor-pointer hover:bg-[#7a6548] transition-colors disabled:opacity-60 whitespace-nowrap"
+                  className={`${lt.btn} ${lt.btnOutline} ${lt.btnSm}`}
+                  style={{ padding: "6px 10px", fontSize: 11, whiteSpace: "nowrap" }}
                   title="Apply field changes as Track Changes in DOCX"
                 >
                   {isApplyingEdits ? (
@@ -1835,7 +1941,8 @@ export function LegalDocumentEditor({
             )}
             <button
               onClick={exportPdf}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold bg-[#8B7355] text-white rounded cursor-pointer hover:bg-[#7a6548] transition-colors"
+              className={`${lt.btn} ${lt.btnOutline} ${lt.btnSm}`}
+              style={{ padding: "6px 12px", fontSize: 11 }}
             >
               <FileText className="w-3 h-3" />
               PDF
@@ -1844,13 +1951,19 @@ export function LegalDocumentEditor({
 
           {/* Validation Banner — only after save attempt */}
           {saveAttempted && hasErrors && (
-            <div className="no-print flex-shrink-0 mx-4 mt-2 p-2.5 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+            <div
+              className={`no-print flex-shrink-0 ${lt.banner} ${lt.bannerDanger}`}
+              style={{ margin: "10px 20px 0", padding: 12 }}
+            >
               <div className="flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                <div className="flex-1 text-xs text-red-700 dark:text-red-300">
+                <AlertTriangle
+                  className="w-4 h-4 flex-shrink-0 mt-0.5"
+                  style={{ color: "var(--danger)" }}
+                />
+                <div className="flex-1" style={{ fontSize: 12, color: "var(--danger)" }}>
                   <div className="flex items-center justify-between">
                     <span>
-                      <span className="font-semibold">
+                      <span style={{ fontWeight: 600 }}>
                         {validationErrors.length} issue
                         {validationErrors.length > 1 ? "s" : ""}.
                       </span>{" "}
@@ -1858,7 +1971,8 @@ export function LegalDocumentEditor({
                     </span>
                     <button
                       onClick={() => setShowValidationDetails((v) => !v)}
-                      className="ml-2 inline-flex items-center gap-0.5 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 font-medium"
+                      className="ml-2 inline-flex items-center gap-0.5"
+                      style={{ color: "var(--danger)", fontWeight: 500 }}
                     >
                       {showValidationDetails ? "Hide" : "Show all"}
                       {showValidationDetails ? (
@@ -1875,7 +1989,10 @@ export function LegalDocumentEditor({
                           key={e.key}
                           className="flex items-center gap-1.5 py-0.5"
                         >
-                          <span className="w-1 h-1 rounded-full bg-red-400 flex-shrink-0" />
+                          <span
+                            className="w-1 h-1 rounded-full flex-shrink-0"
+                            style={{ background: "var(--danger)" }}
+                          />
                           <span>{e.message}</span>
                         </li>
                       ))}
@@ -1887,9 +2004,22 @@ export function LegalDocumentEditor({
           )}
 
           {/* Document Body */}
-          <div className="flex-1 overflow-y-auto bg-[#eee8df] dark:bg-muted/30">
-            <div className="max-w-[820px] mx-auto py-6 px-6 pb-20">
-              <div className="legal-paper bg-[#f9f6f1] dark:bg-card rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.04)] overflow-hidden border border-border/30">
+          <div
+            className={`flex-1 overflow-y-auto ${lt.scrollbar}`}
+            style={{
+              background:
+                "radial-gradient(ellipse 60% 40% at 50% 0%, var(--accent-glow) 0%, transparent 55%), var(--bg-2)",
+            }}
+          >
+            <div className="max-w-[820px] mx-auto py-8 px-6 pb-20">
+              <div
+                className="legal-paper bg-[#f9f6f1] dark:bg-card rounded-xl overflow-hidden"
+                style={{
+                  border: "1px solid var(--line-2)",
+                  boxShadow:
+                    "0 1px 3px rgba(0,0,0,0.04), 0 24px 60px oklch(0 0 0 / 0.08)",
+                }}
+              >
                 <div
                   id="legal-document-export-root"
                   className="px-12 py-5 pb-14"
@@ -1935,42 +2065,103 @@ export function LegalDocumentEditor({
         </div>
 
         {/* AI Panel */}
-        <div className="no-print w-[350px] flex-shrink-0 bg-background border-l border-border flex flex-col h-full">
-          <div className="flex-shrink-0 p-4 border-b border-border bg-background/50 backdrop-blur-md">
+        <div
+          className="no-print w-[350px] flex-shrink-0 flex flex-col h-full"
+          style={{
+            borderLeft: "1px solid var(--line-2)",
+            background: "oklch(from var(--bg) l c h / 0.7)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          <div
+            className="flex-shrink-0"
+            style={{
+              padding: 16,
+              borderBottom: "1px solid var(--line-2)",
+            }}
+          >
             <div className="flex items-center gap-2 mb-1">
-              <Sparkles className="w-5 h-5 text-blue-600" />
-              <h3 className="font-semibold text-foreground">AI Assistant</h3>
+              <div className={lt.brandMarkSm} style={{ width: 26, height: 26 }}>
+                <Sparkles className="h-[13px] w-[13px]" />
+              </div>
+              <h3
+                style={{
+                  margin: 0,
+                  fontWeight: 600,
+                  color: "var(--ink)",
+                  fontSize: 15,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                AI Assistant
+              </h3>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p style={{ margin: 0, fontSize: 12, color: "var(--ink-3)" }}>
               {activeSection
                 ? "Ask AI to update only the highlighted field values"
                 : "Select a section to get started"}
             </p>
           </div>
 
-          <div className="flex-1 p-4 overflow-y-auto">
+          <div className={`flex-1 overflow-y-auto ${lt.scrollbar}`} style={{ padding: 16 }}>
             <div className="space-y-4">
               {chatMessages.length === 0 && (
                 <div className="space-y-3">
-                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <p className="text-sm font-medium mb-2 flex items-center gap-2 text-foreground">
-                      <Sparkles className="w-4 h-4 text-blue-600" />
+                  <div className={lt.banner} style={{ padding: 14 }}>
+                    <p
+                      className="flex items-center gap-2"
+                      style={{
+                        margin: "0 0 6px",
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                      }}
+                    >
+                      <Sparkles
+                        className="w-4 h-4"
+                        style={{ color: "var(--accent)" }}
+                      />
                       How to use AI
                     </p>
-                    <ul className="text-xs text-muted-foreground space-y-1">
-                      <li>&bull; Click a section to select it</li>
-                      <li>&bull; Ask AI to update highlighted field values</li>
-                      <li>&bull; AI will not rewrite the contract text</li>
-                      <li>&bull; Hover highlighted fields to see names</li>
+                    <ul
+                      style={{
+                        margin: 0,
+                        padding: 0,
+                        listStyle: "none",
+                        fontSize: 12,
+                        color: "var(--ink-3)",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <li>• Click a section to select it</li>
+                      <li>• Ask AI to update highlighted field values</li>
+                      <li>• AI will not rewrite the contract text</li>
+                      <li>• Hover highlighted fields to see names</li>
                     </ul>
                   </div>
 
                   {activeSection && (
                     <div>
-                      <p className="text-xs font-bold mb-2 text-muted-foreground uppercase tracking-widest">
-                        EDIT HIGHLIGHTED FIELDS
+                      <p
+                        style={{
+                          margin: "0 0 6px",
+                          fontSize: 11,
+                          fontWeight: 700,
+                          color: "var(--ink-3)",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.12em",
+                        }}
+                      >
+                        Edit highlighted fields
                       </p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p
+                        style={{
+                          margin: 0,
+                          fontSize: 12,
+                          color: "var(--ink-3)",
+                          lineHeight: 1.55,
+                        }}
+                      >
                         Ask for exact field changes like changing a date, name,
                         address, title, or ownership percentage. Only the
                         highlighted values will be updated.
@@ -1984,38 +2175,75 @@ export function LegalDocumentEditor({
                 <div
                   key={index}
                   className={cn(
-                    "p-3 rounded-2xl shadow-sm border border-border/50",
-                    message.role === "user"
-                      ? "bg-blue-100 dark:bg-blue-900/30 ml-4 border-blue-200/50"
-                      : "bg-muted/50 mr-4",
+                    "flex",
+                    message.role === "user" ? "justify-end" : "justify-start",
                   )}
                 >
-                  <p className="text-[10px] font-black mb-1 text-muted-foreground uppercase tracking-widest">
-                    {message.role === "user" ? "You" : "AI Assistant"}
-                  </p>
-                  <p className="text-sm text-foreground leading-relaxed">
+                  <div
+                    className={
+                      message.role === "user"
+                        ? lt.chatBubbleUser
+                        : lt.chatBubbleAssistant
+                    }
+                    style={{ maxWidth: "92%", fontSize: 13 }}
+                  >
                     {message.content}
-                  </p>
+                  </div>
                 </div>
               ))}
 
               {isProcessing && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground animate-pulse">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  AI is processing...
+                <div
+                  className="flex items-center gap-2"
+                  style={{ fontSize: 13, color: "var(--ink-3)" }}
+                >
+                  <span className={lt.loadingDot} />
+                  <span className={lt.loadingDot} />
+                  <span className={lt.loadingDot} />
+                  <span style={{ marginLeft: 4 }}>AI is processing…</span>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="flex-shrink-0 p-4 border-t border-border bg-background">
+          <div
+            className="flex-shrink-0"
+            style={{
+              padding: 16,
+              borderTop: "1px solid var(--line-2)",
+            }}
+          >
             <div className="space-y-2">
               {activeSection && (
-                <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100/50 dark:border-blue-900/50 text-[10px]">
-                  <p className="font-black mb-1 uppercase tracking-widest text-blue-600 dark:text-blue-400">
-                    Fields In This Section
+                <div
+                  style={{
+                    padding: "8px 10px",
+                    borderRadius: 10,
+                    background: "var(--accent-soft)",
+                    border: "1px solid oklch(from var(--accent) l c h / 0.28)",
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: "0 0 2px",
+                      fontSize: 10,
+                      fontWeight: 700,
+                      color: "var(--accent-ink)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.12em",
+                    }}
+                  >
+                    Fields in this section
                   </p>
-                  <p className="text-muted-foreground italic leading-relaxed">
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: 11,
+                      color: "var(--ink-2)",
+                      fontStyle: "italic",
+                      lineHeight: 1.5,
+                    }}
+                  >
                     {activeSectionFieldLabels.length > 0
                       ? activeSectionFieldLabels.join(", ")
                       : sections.find((s) => s.id === activeSection)?.label ??
@@ -2023,15 +2251,15 @@ export function LegalDocumentEditor({
                   </p>
                 </div>
               )}
-              <Textarea
+              <textarea
                 placeholder={
                   activeSection
-                    ? "Ask AI to update highlighted fields..."
-                    : "Select a section first..."
+                    ? "Ask AI to update highlighted fields…"
+                    : "Select a section first…"
                 }
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
-                className="resize-none bg-muted/30 border-border rounded-xl focus-visible:ring-blue-500"
+                className={lt.textarea}
                 rows={3}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
@@ -2040,24 +2268,24 @@ export function LegalDocumentEditor({
                   }
                 }}
               />
-              <Button
+              <button
                 onClick={() => void handleAIRequest()}
                 disabled={!aiPrompt.trim() || isProcessing}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20 rounded-xl"
-                size="sm"
+                className={`${lt.btn} ${lt.btnAccent}`}
+                style={{ width: "100%", justifyContent: "center" }}
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Processing…
                   </>
                 ) : (
                   <>
-                    <Send className="w-4 h-4 mr-2" />
+                    <Send className="w-4 h-4" />
                     Send to AI
                   </>
                 )}
-              </Button>
+              </button>
             </div>
           </div>
         </div>

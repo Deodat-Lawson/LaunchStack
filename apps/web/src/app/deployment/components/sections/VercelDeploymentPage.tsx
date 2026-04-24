@@ -20,10 +20,12 @@ interface StepCardProps {
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
-  darkMode: boolean;
+  
 }
 
-const StepCard: React.FC<StepCardProps> = ({ icon, title, children, darkMode }) => (
+const StepCard: React.FC<StepCardProps> = ({ icon, title, children }) => {
+  const darkMode = false;
+  return (
   <div
     className={`flex items-start gap-4 p-5 rounded-xl border transition-all duration-200 ${
       darkMode
@@ -39,16 +41,18 @@ const StepCard: React.FC<StepCardProps> = ({ icon, title, children, darkMode }) 
       <div className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{children}</div>
     </div>
   </div>
-);
+  );
+};
 
 interface CalloutProps {
   icon: React.ReactNode;
-  darkMode: boolean;
+  
   variant?: 'info' | 'warning';
   children: React.ReactNode;
 }
 
-const Callout: React.FC<CalloutProps> = ({ icon, darkMode, variant = 'info', children }) => {
+const Callout: React.FC<CalloutProps> = ({ icon, variant = 'info', children }) => {
+  const darkMode = false;
   const colors = {
     info: darkMode
       ? 'bg-purple-900/20 border-purple-800/50 text-purple-300'
@@ -66,17 +70,20 @@ const Callout: React.FC<CalloutProps> = ({ icon, darkMode, variant = 'info', chi
   );
 };
 
-const Divider: React.FC<{ darkMode: boolean }> = ({ darkMode }) => (
+const Divider: React.FC = () => {
+  const darkMode = false;
+  return (
   <hr className={`my-12 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`} />
-);
+  );
+};
 
 /* ── Page ── */
 
 export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
-  darkMode,
   copyToClipboard,
   copiedCode,
 }) => {
+  const darkMode = false;
   return (
     <>
       {/* ── Hero ── */}
@@ -94,12 +101,12 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
         </p>
       </motion.div>
 
-      <Divider darkMode={darkMode} />
+      <Divider />
 
       {/* ── How it works ── */}
-      <Section title="How it works" subtitle="Vercel handles builds and hosting. You provide the database and API keys." darkMode={darkMode}>
+      <Section title="How it works" subtitle="Vercel handles builds and hosting. You provide the database and API keys.">
         <div className="space-y-3">
-          <StepCard icon={<Rocket className="w-5 h-5" />} title="Fork and import" darkMode={darkMode}>
+          <StepCard icon={<Rocket className="w-5 h-5" />} title="Fork and import">
             First, fork{' '}
             <a href="https://github.com/Deodat-Lawson/pdr_ai_v2/fork" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline inline-flex items-center gap-1">
               Deodat-Lawson/pdr_ai_v2 <ExternalLink className="w-3 h-3" />
@@ -110,21 +117,21 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
             </a>{' '}
             and import your fork. Vercel auto-detects Next.js and configures builds.
           </StepCard>
-          <StepCard icon={<Database className="w-5 h-5" />} title="Neon serverless database" darkMode={darkMode}>
+          <StepCard icon={<Database className="w-5 h-5" />} title="Neon serverless database">
             Use{' '}
             <a href="https://neon.tech" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline inline-flex items-center gap-1">
               Neon <ExternalLink className="w-3 h-3" />
             </a>{' '}
             for managed PostgreSQL with pgvector. Paste the connection string as <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>DATABASE_URL</code>.
           </StepCard>
-          <StepCard icon={<Settings className="w-5 h-5" />} title="Environment variables" darkMode={darkMode}>
+          <StepCard icon={<Settings className="w-5 h-5" />} title="Environment variables">
             Set all required keys in <strong>Project Settings → Environment Variables</strong> for Production (and Preview if needed).
           </StepCard>
         </div>
       </Section>
 
       {/* ── Step-by-step ── */}
-      <Section title="Step-by-step setup" darkMode={darkMode}>
+      <Section title="Step-by-step setup">
         <div className="space-y-6">
           <Step
             number={1}
@@ -132,7 +139,7 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
             description="Go to the Launchstack repo and click Fork to create a copy under your GitHub account."
             onCopy={() => copyToClipboard('https://github.com/Deodat-Lawson/pdr_ai_v2/fork', 'v-1a')}
             copied={copiedCode === 'v-1a'}
-            darkMode={darkMode}
+
           >
             <a
               href="https://github.com/Deodat-Lawson/pdr_ai_v2/fork"
@@ -151,7 +158,7 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
             description="Select your forked repo and keep the Next.js framework defaults."
             onCopy={() => copyToClipboard('https://vercel.com/new', 'v-1b')}
             copied={copiedCode === 'v-1b'}
-            darkMode={darkMode}
+
           >
             <a
               href="https://vercel.com/new"
@@ -176,7 +183,7 @@ INNGEST_EVENT_KEY=evt_xxx
 BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
             onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nOPENAI_API_KEY=sk-proj-xxx\nINNGEST_EVENT_KEY=evt_xxx\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`, 'v-2')}
             copied={copiedCode === 'v-2'}
-            darkMode={darkMode}
+
           />
 
           <Step
@@ -185,7 +192,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
             description="Go to your Vercel project → Storage → Create Database → Blob. Connect it to your project — this auto-injects BLOB_READ_WRITE_TOKEN. Document uploads will fail without this."
             onCopy={() => copyToClipboard('https://vercel.com/dashboard', 'v-blob')}
             copied={copiedCode === 'v-blob'}
-            darkMode={darkMode}
+
           >
             <a
               href="https://vercel.com/dashboard"
@@ -204,7 +211,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
             description="Click Deploy in your Vercel project dashboard. Vercel builds and publishes the app automatically."
             onCopy={() => copyToClipboard('https://vercel.com/dashboard', 'v-3')}
             copied={copiedCode === 'v-3'}
-            darkMode={darkMode}
+
           >
             <a
               href="https://vercel.com/dashboard"
@@ -223,7 +230,7 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
             description="Open your production domain and confirm these routes work:"
             onCopy={() => copyToClipboard('https://your-app.vercel.app\nhttps://your-app.vercel.app/sign-in\nhttps://your-app.vercel.app/dashboard', 'v-4')}
             copied={copiedCode === 'v-4'}
-            darkMode={darkMode}
+
           >
             <div className="space-y-1">
               <div><code className="text-sm text-purple-500">your-app.vercel.app</code></div>
@@ -234,10 +241,10 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
         </div>
       </Section>
 
-      <Divider darkMode={darkMode} />
+      <Divider />
 
       {/* ── Post-deploy checklist ── */}
-      <Section title="Post-deploy checklist" darkMode={darkMode}>
+      <Section title="Post-deploy checklist">
         <div className={`overflow-hidden rounded-xl border ${darkMode ? 'border-gray-700/60' : 'border-gray-200'}`}>
           <table className="w-full text-sm">
             <thead>
@@ -264,13 +271,13 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
         </div>
       </Section>
 
-      <Divider darkMode={darkMode} />
+      <Divider />
 
       {/* ── Video walkthrough ── */}
       <Section
         title="Video walkthrough"
         subtitle="Drop a recording to show the full Vercel setup flow on a loop."
-        darkMode={darkMode}
+
       >
         <div
           className={`rounded-xl border overflow-hidden ${
@@ -303,11 +310,11 @@ BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
 
       {/* ── Callouts ── */}
       <div className="space-y-4 mb-16">
-        <Callout icon={<ShieldAlert className="w-5 h-5" />} darkMode={darkMode} variant="warning">
+        <Callout icon={<ShieldAlert className="w-5 h-5" />} variant="warning">
           <strong>Security:</strong> Never commit secrets to git. Keep all API keys in Vercel project settings only.
         </Callout>
 
-        <Callout icon={<Globe className="w-5 h-5" />} darkMode={darkMode}>
+        <Callout icon={<Globe className="w-5 h-5" />}>
           Every push to <code className={`${darkMode ? 'bg-gray-800' : 'bg-purple-100'} px-1.5 py-0.5 rounded text-xs`}>main</code> triggers a new production deploy automatically.
         </Callout>
       </div>

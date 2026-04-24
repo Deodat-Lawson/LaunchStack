@@ -1,7 +1,6 @@
 'use client';
 
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
 import { useSearchParams } from 'next/navigation';
 import { DeploymentNavbar } from './components/DeploymentNavbar';
 import { DeploymentSidebar } from './components/DeploymentSidebar';
@@ -12,7 +11,7 @@ import {
   ClerkSetupPage,
   InngestPage,
   LangChainPage,
-  TavilyPage,
+  ExaPage,
   UploadThingPage,
   VercelBlobPage,
   AIProvidersPage,
@@ -23,6 +22,7 @@ import {
 } from './components/sections';
 import type { DeploymentSection } from './types';
 import { SECTIONS } from './types';
+import styles from '~/styles/deployment.module.css';
 
 const VALID_SECTIONS = new Set<string>(
   SECTIONS.flatMap(s => [s.id, ...(s.children?.map(c => c.id) ?? [])])
@@ -40,20 +40,11 @@ function SectionFromParams({ onSection }: { onSection: (s: DeploymentSection) =>
 }
 
 const DeploymentPage = () => {
-  const [mounted, setMounted] = useState(false);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<DeploymentSection>('main');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedSections, setExpandedSections] = useState<string[]>(['ocr']);
-  
-  // Use standard next-themes hook
-  const { theme, resolvedTheme } = useTheme();
-  const darkMode = mounted && (resolvedTheme === 'dark' || theme === 'dark');
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleSectionFromParams = useCallback((section: DeploymentSection) => {
     setActiveSection(section);
@@ -61,10 +52,6 @@ const DeploymentPage = () => {
       setExpandedSections(prev => prev.includes('ocr') ? prev : [...prev, 'ocr']);
     }
   }, []);
-
-  if (!mounted) {
-    return <div className="min-h-screen bg-white dark:bg-gray-900" />;
-  }
 
   const copyToClipboard = (code: string, id: string) => {
     void navigator.clipboard.writeText(code);
@@ -80,30 +67,26 @@ const DeploymentPage = () => {
     );
   };
 
-  // Filter sections based on search query
   const filteredSections = SECTIONS.filter(section => {
-    const titleMatch = section.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const q = searchQuery.toLowerCase();
+    const titleMatch = section.title.toLowerCase().includes(q);
     const childrenMatch = section.children?.some(child =>
-      child.title.toLowerCase().includes(searchQuery.toLowerCase())
+      child.title.toLowerCase().includes(q)
     );
     return titleMatch || childrenMatch;
   });
 
-  // Helper to handle navigation from search results
   const handleSelection = (id: DeploymentSection) => {
     setActiveSection(id);
-    setSearchQuery(''); // Clear search
-    setMobileMenuOpen(false); // Close mobile menu
-    
-    // Auto-expand OCR parent if a child is selected
+    setSearchQuery('');
+    setMobileMenuOpen(false);
     if (id.startsWith('ocr-') && !expandedSections.includes('ocr')) {
       setExpandedSections(prev => [...prev, 'ocr']);
     }
   };
 
-  // Render the active section content
   const renderActiveSection = () => {
-    const props = { darkMode, copyToClipboard, copiedCode };
+    const props = { copyToClipboard, copiedCode };
 
     switch (activeSection) {
       case 'main':
@@ -118,8 +101,8 @@ const DeploymentPage = () => {
         return <InngestPage {...props} />;
       case 'langchain':
         return <LangChainPage {...props} />;
-      case 'tavily':
-        return <TavilyPage {...props} />;
+      case 'exa':
+        return <ExaPage {...props} />;
       case 'uploadthing':
         return <UploadThingPage {...props} />;
       case 'vercel-blob':
@@ -141,13 +124,12 @@ const DeploymentPage = () => {
   };
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-slate-50 via-white to-purple-50'}`}>
+    <div className={styles.root}>
       <Suspense>
         <SectionFromParams onSection={handleSectionFromParams} />
       </Suspense>
-      {/* Top Navigation */}
+
       <DeploymentNavbar
-        darkMode={darkMode}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         filteredSections={filteredSections}
@@ -156,33 +138,24 @@ const DeploymentPage = () => {
         setMobileMenuOpen={setMobileMenuOpen}
       />
 
-      <div className="pt-16 flex">
-        {/* Desktop Sidebar - always visible */}
+      <div className={styles.shell}>
         <DeploymentSidebar
-          darkMode={darkMode}
           activeSection={activeSection}
           setActiveSection={handleSelection}
           expandedSections={expandedSections}
           toggleSection={toggleSection}
         />
-
-        {/* Mobile Sidebar - shown when menu is open */}
         <DeploymentSidebar
-          darkMode={darkMode}
           activeSection={activeSection}
           setActiveSection={handleSelection}
           expandedSections={expandedSections}
           toggleSection={toggleSection}
-          isMobile={true}
+          isMobile
           mobileMenuOpen={mobileMenuOpen}
-          searchQuery={searchQuery}
-          filteredSections={filteredSections}
-          handleSelection={handleSelection}
+          onBackdropClick={() => setMobileMenuOpen(false)}
         />
-
-        {/* Main Content */}
-        <main className="flex-1 ml-64">
-          <div className="max-w-3xl mx-auto px-6 lg:px-8 py-12">
+        <main className={styles.main}>
+          <div className={styles.mainInner}>
             {renderActiveSection()}
           </div>
         </main>

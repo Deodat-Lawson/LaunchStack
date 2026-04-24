@@ -1,0 +1,757 @@
+/* =====================================================================
+   Legal Document Generator theme — mirrors the marketing/landing tokens
+   so the generator, chat, and editor visually belong to the same family.
+   Scoped under `.root` (see <LegalGeneratorTheme>).
+   ===================================================================== */
+
+.root {
+  --accent-h: 285;
+  --accent: oklch(0.54 0.24 var(--accent-h));
+  --accent-2: oklch(0.46 0.25 var(--accent-h));
+  --accent-deep: oklch(0.38 0.22 var(--accent-h));
+  --accent-soft: oklch(0.96 0.03 var(--accent-h));
+  --accent-glow: oklch(0.60 0.24 var(--accent-h) / 0.35);
+  --accent-ink: oklch(0.42 0.20 var(--accent-h));
+
+  --bg: oklch(0.992 0.003 80);
+  --bg-2: oklch(0.985 0.004 280);
+  --panel: #ffffff;
+  --panel-2: oklch(0.98 0.005 280);
+  --ink: oklch(0.22 0.015 280);
+  --ink-2: oklch(0.42 0.01 280);
+  --ink-3: oklch(0.60 0.008 280);
+  --ink-4: oklch(0.78 0.006 280);
+  --line: oklch(0.90 0.006 280);
+  --line-2: oklch(0.955 0.004 280);
+
+  --success: oklch(0.58 0.16 150);
+  --success-soft: oklch(0.95 0.06 150);
+  --warn: oklch(0.70 0.16 75);
+  --warn-soft: oklch(0.96 0.05 80);
+  --danger: oklch(0.55 0.22 30);
+  --danger-soft: oklch(0.96 0.04 30);
+
+  position: relative;
+  color: var(--ink);
+  background: var(--bg);
+  font-family: 'Inter', var(--font-inter, system-ui), sans-serif;
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  height: 100%;
+  overflow: hidden;
+}
+
+:global(.dark) .root,
+:global([data-theme="dark"]) .root {
+  --accent: oklch(0.72 0.19 285);
+  --accent-2: oklch(0.62 0.22 285);
+  --accent-deep: oklch(0.46 0.25 285);
+  --accent-soft: oklch(0.30 0.08 285);
+  --accent-glow: oklch(0.72 0.19 285 / 0.35);
+  --accent-ink: oklch(0.86 0.16 285);
+  --bg: oklch(0.14 0.02 290);
+  --bg-2: oklch(0.18 0.025 290);
+  --panel: oklch(0.20 0.025 290);
+  --panel-2: oklch(0.235 0.03 290);
+  --ink: oklch(0.97 0.005 280);
+  --ink-2: oklch(0.80 0.008 280);
+  --ink-3: oklch(0.62 0.008 280);
+  --ink-4: oklch(0.45 0.008 280);
+  --line: oklch(0.32 0.04 290);
+  --line-2: oklch(0.26 0.035 290);
+
+  --success: oklch(0.78 0.17 150);
+  --success-soft: oklch(0.28 0.08 150);
+  --warn: oklch(0.80 0.17 75);
+  --warn-soft: oklch(0.28 0.08 80);
+  --danger: oklch(0.75 0.20 30);
+  --danger-soft: oklch(0.28 0.10 30);
+}
+
+.root ::selection { background: var(--accent-glow); color: var(--ink); }
+
+.serif {
+  font-family: var(--font-instrument-serif, 'Instrument Serif'), Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* ---------------- Ambient background ---------------- */
+.ambient {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ambient::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, transparent 0%, var(--bg) 75%);
+  z-index: 2;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+:global(.dark) .orb,
+:global([data-theme="dark"]) .orb {
+  opacity: 0.45;
+  filter: blur(90px);
+}
+.orb1 {
+  width: 520px; height: 520px;
+  left: -80px; top: -100px;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 65%);
+  animation: driftA 26s ease-in-out infinite alternate;
+}
+.orb2 {
+  width: 640px; height: 640px;
+  right: -180px; top: 40%;
+  background: radial-gradient(circle, oklch(0.7 0.22 340 / 0.28) 0%, transparent 65%);
+  animation: driftB 32s ease-in-out infinite alternate;
+}
+.orb3 {
+  width: 520px; height: 520px;
+  left: 35%; bottom: -160px;
+  background: radial-gradient(circle, oklch(0.72 0.18 200 / 0.22) 0%, transparent 65%);
+  animation: driftC 38s ease-in-out infinite alternate;
+}
+:global(.dark) .orb2,
+:global([data-theme="dark"]) .orb2 {
+  background: radial-gradient(circle, oklch(0.65 0.22 330 / 0.35) 0%, transparent 65%);
+}
+
+.dots {
+  position: absolute; inset: -40px; z-index: 1;
+  background-image: radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 30%, black 0%, transparent 85%);
+  mask-image: radial-gradient(ellipse 60% 60% at 50% 30%, black 0%, transparent 85%);
+  opacity: 0.30;
+}
+
+@keyframes driftA {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(100px, 60px, 0) scale(1.08); }
+  100% { transform: translate3d(40px, 140px, 0) scale(0.95); }
+}
+@keyframes driftB {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(-80px, 100px, 0) scale(1.1); }
+  100% { transform: translate3d(-140px, 20px, 0) scale(0.94); }
+}
+@keyframes driftC {
+  0%   { transform: translate3d(0, 0, 0) scale(1.05); }
+  50%  { transform: translate3d(140px, -40px, 0) scale(0.94); }
+  100% { transform: translate3d(-100px, 60px, 0) scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb { animation: none !important; }
+}
+
+/* Layer above the ambient background */
+.content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
+
+/* ---------------- Reusable surface + controls ---------------- */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+}
+.panelAccent {
+  background:
+    radial-gradient(ellipse 70% 140% at 0% 0%, var(--accent-glow) 0%, transparent 55%),
+    var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 18px;
+}
+
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px 6px 6px; border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  font-size: 13px; color: var(--ink-2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.5) inset, 0 4px 12px oklch(0 0 0 / 0.04);
+}
+.pillBadge {
+  padding: 2px 9px; border-radius: 999px;
+  background: var(--accent); color: white;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+}
+.pillChip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-ink);
+  font-size: 11px; font-weight: 600;
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+}
+.eyebrow::before {
+  content: ''; width: 16px; height: 1px; background: var(--accent);
+}
+
+.title {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.05; letter-spacing: -0.03em;
+  font-weight: 600; color: var(--ink);
+  margin: 0;
+}
+.sub {
+  font-size: 15px; color: var(--ink-2);
+  line-height: 1.55; margin: 0;
+}
+
+.highlight {
+  position: relative; display: inline-block; white-space: nowrap;
+}
+.highlight::after {
+  content: ''; position: absolute; left: -2%; right: -2%; bottom: 6%;
+  height: 22%; background: var(--accent-glow);
+  border-radius: 3px; z-index: -1;
+  transform: skew(-6deg);
+}
+
+/* ---------------- Buttons ------------------------------------------------
+   Drift-style: flat fills, restrained transitions, tiny active squish.
+   No gradients, no glow halos, no dramatic shadows — let the accent color
+   do the talking.
+
+   Variants (following Drift's taxonomy):
+     primary  — dark inverted (ink → panel) for highest-emphasis neutral
+     accent   — flat accent color, for brand/primary actions
+     outline  — secondary (elevated surface + 1px line)
+     ghost    — tertiary / toolbar
+     danger   — destructive
+     soft     — low-emphasis accent-tinted
+*/
+.btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 14px; border-radius: 10px;
+  font-family: inherit; font-size: 13px; font-weight: 500; line-height: 1.2;
+  letter-spacing: -0.005em;
+  border: 1px solid transparent; cursor: pointer; text-decoration: none;
+  color: var(--ink); background: transparent;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 120ms ease;
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+}
+.btn:active:not(:disabled) { transform: translateY(0.5px) scale(0.995); }
+
+/* Primary — dark inverted (highest emphasis, neutral color) */
+.btnPrimary {
+  background: var(--ink);
+  color: var(--panel);
+}
+.btnPrimary:hover:not(:disabled) {
+  background: oklch(from var(--ink) calc(l + 0.06) c h);
+}
+
+/* Accent — flat brand color */
+.btnAccent {
+  background: var(--accent);
+  color: white;
+}
+.btnAccent:hover:not(:disabled) { background: var(--accent-2); }
+
+/* Outline — secondary, sits on elevated surface with a line */
+.btnOutline {
+  background: var(--panel);
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btnOutline:hover:not(:disabled) {
+  background: var(--panel-2);
+  border-color: var(--ink-4);
+}
+
+/* Ghost — tertiary / toolbar */
+.btnGhost { color: var(--ink-2); }
+.btnGhost:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--panel-2);
+}
+
+/* Danger — destructive */
+.btnDanger {
+  background: var(--danger);
+  color: white;
+}
+.btnDanger:hover:not(:disabled) {
+  background: oklch(from var(--danger) calc(l - 0.05) c h);
+}
+.btnDanger:focus-visible {
+  box-shadow: 0 0 0 3px oklch(from var(--danger) l c h / 0.25);
+}
+
+/* Soft — low-emphasis accent-tinted */
+.btnSoft {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.btnSoft:hover:not(:disabled) {
+  background: oklch(from var(--accent-soft) calc(l - 0.03) c h);
+}
+
+/* Sizes */
+.btnSm { padding: 5px 10px; font-size: 12px; border-radius: 6px; gap: 5px; }
+.btnLg { padding: 11px 18px; font-size: 14px; border-radius: 12px; }
+.btnXl { padding: 14px 22px; font-size: 15px; border-radius: 12px; }
+
+/* Icon-only */
+.btnIcon {
+  width: 32px; height: 32px; padding: 0; border-radius: 8px;
+  gap: 0;
+}
+.btnIconSm { width: 26px; height: 26px; border-radius: 6px; }
+.btnIconLg { width: 40px; height: 40px; border-radius: 10px; }
+
+/* Button group — joined segmented */
+.btnGroup {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+  gap: 2px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--ink);
+  font-family: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+.input::placeholder,
+.textarea::placeholder { color: var(--ink-3); }
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px oklch(from var(--danger) l c h / 0.18);
+}
+.textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+
+.label {
+  font-size: 13px; font-weight: 500; color: var(--ink);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.labelError { color: var(--danger); }
+.required { color: var(--danger); font-weight: 600; }
+
+/* ---------------- Brand mark ---------------- */
+.brandMark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+  position: relative; overflow: hidden;
+  box-shadow: 0 6px 18px var(--accent-glow);
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: white;
+}
+.brandMarkSm { width: 28px; height: 28px; border-radius: 8px; box-shadow: 0 4px 14px var(--accent-glow); }
+
+/* ---------------- Template / doc card ---------------- */
+.card {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+  transition: all .25s ease;
+  display: flex; flex-direction: column;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+}
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 24px 50px oklch(0 0 0 / 0.08), 0 4px 14px var(--accent-glow);
+}
+:global(.dark) .card:hover,
+:global([data-theme="dark"]) .card:hover {
+  box-shadow: 0 30px 60px oklch(0 0 0 / 0.4), 0 4px 14px var(--accent-glow);
+}
+.cardPreview {
+  position: relative;
+  padding: 18px;
+  height: 168px;
+  display: flex; align-items: flex-start; justify-content: center;
+  background: linear-gradient(180deg, var(--bg-2) 0%, var(--panel-2) 100%);
+  border-bottom: 1px solid var(--line-2);
+  overflow: hidden;
+}
+.cardPreview::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 0%, var(--accent-glow) 0%, transparent 55%);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.miniPaper {
+  width: 100%; height: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 8px 20px oklch(0 0 0 / 0.06);
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.miniLine {
+  height: 6px; border-radius: 3px;
+  background: var(--line-2);
+}
+.miniLineDark { background: var(--ink-4); }
+.miniLineAccent {
+  background: linear-gradient(90deg, var(--accent-soft), var(--accent-glow));
+}
+.cardBadge {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 999px;
+  background: var(--accent); color: white;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.03em;
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+.cardBody {
+  padding: 16px 18px 18px;
+  display: flex; flex-direction: column; gap: 6px;
+  flex: 1;
+}
+.cardBody h3 {
+  margin: 0; font-size: 15px; font-weight: 600;
+  letter-spacing: -0.01em; color: var(--ink);
+}
+.cardBody p {
+  margin: 0; font-size: 13px; color: var(--ink-2);
+  line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cardFooter {
+  padding: 0 18px 18px;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity .2s, transform .2s;
+}
+.card:hover .cardFooter { opacity: 1; transform: translateY(0); }
+
+/* ---------------- Doc row (my documents) ---------------- */
+.docRow {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 18px;
+  transition: all .2s;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.docRow:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px oklch(0 0 0 / 0.06);
+}
+
+/* ---------------- Tabs ---------------- */
+/* Segmented control — iOS/Linear style.
+   Track is recessed; active tab is an elevated panel inside it, not a
+   loud gradient. Keeps the rest of the page breathing. */
+.tabs {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  gap: 0;
+  box-shadow: 0 1px 2px oklch(0 0 0 / 0.03) inset;
+}
+.tab {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-size: 13px; font-weight: 500; line-height: 1;
+  color: var(--ink-3);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color .14s ease,
+    background-color .14s ease,
+    border-color .14s ease,
+    box-shadow .14s ease;
+}
+.tab:hover:not(.tabActive):not(:disabled) { color: var(--ink); }
+.tab:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+.tab:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Divider between inactive tabs */
+.tab + .tab:not(.tabActive)::before,
+.tab:not(.tabActive) + .tab::before {
+  content: '';
+  position: absolute;
+  left: -0.5px;
+  top: 20%;
+  bottom: 20%;
+  width: 1px;
+  background: var(--line);
+  opacity: 0.6;
+}
+
+/* Active — elevated panel floating inside the recessed track */
+.tabActive {
+  color: var(--ink);
+  background: var(--panel);
+  border-color: var(--line-2);
+  box-shadow:
+    0 1px 0 oklch(1 0 0 / 0.6) inset,
+    0 1px 2px oklch(0 0 0 / 0.06),
+    0 2px 4px oklch(0 0 0 / 0.03);
+}
+.tabActive > svg { color: var(--accent); }
+
+/* Count badge — quiet on inactive, accent-tinted on active */
+.tabCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: oklch(from var(--ink) l c h / 0.06);
+  color: var(--ink-3);
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  transition: background-color .14s ease, color .14s ease;
+}
+.tabActive .tabCount {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.chipBtn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  background: var(--panel);
+  color: var(--ink-2);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.chipBtn:hover { color: var(--ink); border-color: var(--line); }
+.chipBtnActive {
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.35) inset, 0 6px 14px var(--accent-glow);
+}
+
+/* ---------------- Chat ---------------- */
+.chatBubbleUser {
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border-bottom-right-radius: 4px;
+  font-size: 14px; line-height: 1.55;
+  box-shadow: 0 4px 12px var(--accent-glow);
+  max-width: 100%;
+  word-break: break-word;
+}
+.chatBubbleAssistant {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: 14px;
+  border-bottom-left-radius: 4px;
+  font-size: 14px; line-height: 1.55;
+  max-width: 100%;
+  word-break: break-word;
+}
+.chatAvatar {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  color: white; font-size: 13px;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px var(--accent-glow);
+}
+.chatAvatarError {
+  background: linear-gradient(135deg, var(--danger), oklch(0.42 0.22 30));
+  box-shadow: 0 4px 10px oklch(from var(--danger) l c h / 0.35);
+}
+
+.suggestPill {
+  padding: 6px 13px; border-radius: 999px;
+  border: 1px solid var(--line-2);
+  background: var(--panel);
+  color: var(--ink-2);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.suggestPill:hover {
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.composer {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 8px 8px 8px 14px;
+  display: flex; align-items: flex-end; gap: 8px;
+  box-shadow: 0 20px 40px oklch(0 0 0 / 0.06), 0 2px 8px oklch(0 0 0 / 0.03);
+  transition: border-color .15s, box-shadow .15s;
+}
+.composer:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.composer textarea {
+  flex: 1;
+  resize: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 6px 0;
+  min-height: 28px;
+  max-height: 160px;
+}
+.composer textarea::placeholder { color: var(--ink-3); }
+
+/* ---------------- Accent inline card (banner, info) ---------------- */
+.banner {
+  position: relative;
+  border-radius: 18px;
+  padding: 20px 22px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 120% at 0% 0%, var(--accent-glow) 0%, transparent 55%),
+    var(--panel);
+  border: 1px solid var(--line-2);
+}
+.bannerDanger {
+  background:
+    radial-gradient(ellipse 80% 120% at 0% 0%, oklch(from var(--danger) l c h / 0.2) 0%, transparent 55%),
+    var(--panel);
+  border: 1px solid oklch(from var(--danger) l c h / 0.3);
+}
+.bannerSuccess {
+  background:
+    radial-gradient(ellipse 80% 120% at 0% 0%, oklch(from var(--success) l c h / 0.22) 0%, transparent 55%),
+    var(--panel);
+  border: 1px solid oklch(from var(--success) l c h / 0.32);
+}
+.bannerWarn {
+  background:
+    radial-gradient(ellipse 80% 120% at 0% 0%, oklch(from var(--warn) l c h / 0.24) 0%, transparent 55%),
+    var(--panel);
+  border: 1px solid oklch(from var(--warn) l c h / 0.34);
+}
+
+/* ---------------- Misc ---------------- */
+.sep { color: var(--line); }
+.hair { border: none; height: 1px; background: var(--line-2); margin: 0; }
+
+.dividerVert {
+  width: 1px; height: 18px; background: var(--line-2);
+}
+
+.progressTrack {
+  position: relative;
+  height: 6px; background: var(--panel-2);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+}
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-deep));
+  border-radius: 999px;
+  transition: width .3s ease;
+}
+
+.loadingDot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  animation: loadingPulse 1.4s ease-in-out infinite;
+}
+.loadingDot:nth-child(2) { animation-delay: 0.2s; }
+.loadingDot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes loadingPulse {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.9); }
+  40% { opacity: 1; transform: scale(1.1); }
+}
+
+.scrollbar::-webkit-scrollbar { width: 10px; height: 10px; }
+.scrollbar::-webkit-scrollbar-track { background: transparent; }
+.scrollbar::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+.scrollbar::-webkit-scrollbar-thumb:hover { background-color: var(--ink-4); background-clip: padding-box; }

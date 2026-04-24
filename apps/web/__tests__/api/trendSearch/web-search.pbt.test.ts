@@ -5,17 +5,30 @@
  * Unit: edge cases 3.3 (zero results), 3.4 (retries then fail).
  */
 
-jest.mock("~/env", () => ({
-    env: {
-        server: {
-            TAVILY_API_KEY: "test-tavily-key",
-        },
-    },
-}));
-
 import * as fc from "fast-check";
 import { executeSearch } from "@launchstack/features/trend-search/web-search";
 import type { PlannedQuery, SearchCategory } from "@launchstack/features/trend-search";
+
+// Providers read API keys from process.env directly, so manipulate process.env
+// (not a mocked ~/env module) in these tests.
+const ORIGINAL_ENV = {
+    EXA_API_KEY: process.env.EXA_API_KEY,
+    SERPER_API_KEY: process.env.SERPER_API_KEY,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER,
+};
+
+beforeEach(() => {
+    process.env.EXA_API_KEY = "test-exa-key";
+    delete process.env.SERPER_API_KEY;
+    delete process.env.SEARCH_PROVIDER;
+});
+
+afterAll(() => {
+    for (const [key, value] of Object.entries(ORIGINAL_ENV)) {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+    }
+});
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
@@ -39,7 +52,7 @@ const plannedQueriesArb = fc.array(plannedQueryArb(categoryArb), {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function makeTavilyOkResponse(results: { url: string; title?: string; content?: string; score?: number }[]) {
+function makeExaOkResponse(results: { url: string; title?: string; text?: string; score?: number }[]) {
     return {
         ok: true,
         text: async () => "",
@@ -54,7 +67,7 @@ describe("Property 6: Every sub-query triggers a search call", () => {
 
     beforeEach(() => {
         fetchSpy = jest.spyOn(globalThis, "fetch").mockResolvedValue(
-            makeTavilyOkResponse([{ url: "https://example.com/1", title: "T", content: "C", score: 0.9 }])
+            makeExaOkResponse([{ url: "https://example.com/1", title: "T", text: "C", score: 0.9 }])
         );
     });
 
@@ -62,12 +75,12 @@ describe("Property 6: Every sub-query triggers a search call", () => {
         fetchSpy.mockRestore();
     });
 
-    it("mock Tavily called once per sub-query for any random PlannedQuery array", async () => {
+    it("mock Exa called once per sub-query for any random PlannedQuery array", async () => {
         await fc.assert(
             fc.asyncProperty(plannedQueriesArb, async (subQueries) => {
                 fetchSpy.mockClear();
                 fetchSpy.mockResolvedValue(
-                    makeTavilyOkResponse([{ url: "https://example.com/1", title: "T", content: "C", score: 0.9 }])
+                    makeExaOkResponse([{ url: "https://example.com/1", title: "T", text: "C", score: 0.9 }])
                 );
 
                 await executeSearch(subQueries);
@@ -100,15 +113,15 @@ describe("Unit: one sub-query returns 0 results, pipeline continues", () => {
             callCount++;
             // First sub-query: zero results; second and third: one result each
             if (callCount === 1) {
-                return Promise.resolve(makeTavilyOkResponse([]));
+                return Promise.resolve(makeExaOkResponse([]));
             }
             if (callCount === 2) {
                 return Promise.resolve(
-                    makeTavilyOkResponse([{ url: "https://b.com", title: "B", content: "C2", score: 0.8 }])
+                    makeExaOkResponse([{ url: "https://b.com", title: "B", text: "C2", score: 0.8 }])
                 );
             }
             return Promise.resolve(
-                makeTavilyOkResponse([{ url: "https://c.com", title: "C", content: "C3", score: 0.7 }])
+                makeExaOkResponse([{ url: "https://c.com", title: "C", text: "C3", score: 0.7 }])
             );
         });
 
@@ -120,31 +133,28 @@ describe("Unit: one sub-query returns 0 results, pipeline continues", () => {
     });
 });
 
-// ─── Unit test: Tavily fails, retries 2 times then sub-query failed (edge 3.4) ──
+// ─── Unit test: Exa fails, retries 2 times then sub-query failed (edge 3.4) ──
 
-describe("Unit: Tavily fails, retries 2 times then marks sub-query failed", () => {
+describe("Unit: Exa fails, retries 2 times then marks sub-query failed", () => {
     let fetchSpy: jest.SpyInstance;
 
     afterEach(() => {
         fetchSpy?.mockRestore();
     });
 
-    it("when Tavily fails 3 times for one sub-query, that sub-query is skipped and others still run", async () => {
+    it("when Exa fails 3 times for one sub-query, that sub-query is skipped and others still run", async () => {
         const subQueries: PlannedQuery[] = [
             { searchQuery: "failing-query", category: "tech", rationale: "r1" },
             { searchQuery: "ok-query", category: "business", rationale: "r2" },
         ];
 
-        let callCount = 0;
-        fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation(() => {
-            callCount++;
-            // First 3 calls: same sub-query (1 initial + 2 retries) — all fail
-            if (callCount <= 3) {
-                return Promise.reject(new Error("Tavily API error: 500"));
+        fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((_input, init) => {
+            const body = JSON.parse(String(init?.body ?? "{}")) as { query?: string };
+            if (body.query === "failing-query") {
+                return Promise.reject(new Error("Exa API error: 500"));
             }
-            // 4th call: second sub-query succeeds
             return Promise.resolve(
-                makeTavilyOkResponse([{ url: "https://ok.com", title: "OK", content: "Content", score: 0.9 }])
+                makeExaOkResponse([{ url: "https://ok.com", title: "OK", text: "Content", score: 0.9 }])
             );
         });
 
@@ -156,7 +166,7 @@ describe("Unit: Tavily fails, retries 2 times then marks sub-query failed", () =
         consoleErrorSpy.mockRestore();
         consoleWarnSpy.mockRestore();
 
-        // 1 + 2 retries for first sub-query, then 1 for second
+        // 3 attempts (initial + 2 retries) for failing query, 1 attempt for ok-query
         expect(fetchSpy).toHaveBeenCalledTimes(4);
         expect(results).toHaveLength(1);
         expect(results[0]!.url).toBe("https://ok.com");

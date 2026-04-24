@@ -2,26 +2,23 @@
 
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
+import styles from '~/styles/deployment.module.css';
 
 interface WarningBoxProps {
   title: string;
   description: string;
-  darkMode: boolean;
 }
 
-export const WarningBox: React.FC<WarningBoxProps> = ({ title, description, darkMode }) => (
-  <div className={`${darkMode ? 'bg-yellow-900/20 border-yellow-800' : 'bg-yellow-50 border-yellow-200'} border rounded-xl p-6`}>
-    <div className="flex items-start gap-3">
-      <AlertCircle className="w-6 h-6 text-yellow-600 flex-shrink-0" />
-      <div>
-        <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
-          {title}
-        </h3>
-        <p className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
-          {description}
-        </p>
-      </div>
+export const WarningBox: React.FC<WarningBoxProps> = ({ title, description }) => (
+  <div className={styles.calloutWarn}>
+    <AlertCircle size={18} className={styles.calloutWarnIcon} style={{ marginTop: 2 }} />
+    <div style={{ flex: 1 }}>
+      <h3 style={{ margin: '0 0 6px', fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>
+        {title}
+      </h3>
+      <p style={{ margin: 0, color: 'var(--ink-2)', lineHeight: 1.55, fontSize: 14 }}>
+        {description}
+      </p>
     </div>
   </div>
 );
-

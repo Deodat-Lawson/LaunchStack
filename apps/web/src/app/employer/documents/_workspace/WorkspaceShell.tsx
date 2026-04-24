@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth, useUser } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
@@ -9,13 +9,26 @@ import { AddSourceModal } from "./AddSourceModal";
 import { AskPanel } from "./AskPanel";
 import { CommandPalette } from "./CommandPalette";
 import { DocumentViewer } from "./DocumentViewer";
+import { IconChevronLeft } from "./icons";
 import { NewFolderDialog } from "./NewFolderDialog";
 import { RenameFolderDialog } from "./RenameFolderDialog";
 import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioFAB, StudioMenu } from "./StudioMenu";
+import { renderStudioPane } from "./StudioPanes";
+import {
+  DEFAULT_COMPOSER_MODEL,
+  STUDIO_FEATURES_BY_ID,
+  findComposerModel,
+} from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
-import type { ThreadMessage, WorkspaceFolder, WorkspaceSource } from "./types";
+import type {
+  ComposerModelOption,
+  ComposerSend,
+  ThreadMessage,
+  WorkspaceFolder,
+  WorkspaceSource,
+} from "./types";
 
 /**
  * Legacy `?view=X` URL params that used to drive the deleted DocumentViewerShell.
@@ -44,14 +57,23 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
   workflows: "/employer/documents?feature=workflows",
 };
 
-/** Studio features that open inline in the workspace drawer via `?feature=X`. */
+/**
+ * Features accessible via `?feature=X`. All open the Studio drawer on the
+ * corresponding pane; draft/rewrite/workflows/notes remain independently
+ * reachable via the AskPanel QuickPen view.
+ */
 const FEATURE_IDS = new Set([
   "draft",
   "rewrite",
   "notes",
-  "audit",
   "workflows",
+  "video-gen",
+  "image-gen",
+  "audio-gen",
   "marketing",
+  "metadata",
+  "settings",
+  "analytics",
 ]);
 
 function initialsOf(first?: string | null, last?: string | null, email?: string | null) {
@@ -93,7 +115,7 @@ export function WorkspaceShell() {
     if (isLoaded && !isSignedIn) router.push("/");
   }, [isLoaded, isSignedIn, router]);
 
-  const { sources, folders, companyId, refresh } = useWorkspaceData(userId ?? null);
+  const { sources, folders, companyId, role, refresh } = useWorkspaceData(userId ?? null);
 
   const [selected, setSelected] = useState<string[]>([]);
   const [thread, setThread] = useState<ThreadMessage[]>([]);
@@ -106,14 +128,74 @@ export function WorkspaceShell() {
   const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
   const [studioOpen, setStudioOpen] = useState(false);
   const [studioFeatureId, setStudioFeatureId] = useState<string | null>(null);
+  /**
+   * Which feature is "expanded" into the main workspace area. Defaults to
+   * `chat`, which renders the AskPanel; any other id renders the corresponding
+   * pane inline. Set via the drawer's Expand button or `?feature=X` deep links.
+   */
+  const [activeFeatureId, setActiveFeatureId] = useState<string>("chat");
+
+  // Composer preferences persisted across reloads so picking a model or
+  // toggling Web/Think doesn't reset on every refresh. Ephemeral attachments
+  // are NOT persisted — those are turn-scoped, owned by the Composer.
+  const [composerModel, setComposerModel] =
+    useState<ComposerModelOption>(DEFAULT_COMPOSER_MODEL);
+  const [composerWebSearch, setComposerWebSearch] = useState(false);
+  const [composerThinking, setComposerThinking] = useState(false);
+  const composerPrefsReady = useRef(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("askPanel.composer.v1");
+      if (raw) {
+        const parsed = JSON.parse(raw) as {
+          model?: string;
+          webSearch?: boolean;
+          thinking?: boolean;
+        };
+        if (parsed.model) setComposerModel(findComposerModel(parsed.model));
+        if (typeof parsed.webSearch === "boolean")
+          setComposerWebSearch(parsed.webSearch);
+        if (typeof parsed.thinking === "boolean")
+          setComposerThinking(parsed.thinking);
+      }
+    } catch {
+      // Corrupt storage — fall back to defaults.
+    }
+    composerPrefsReady.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!composerPrefsReady.current) return;
+    try {
+      localStorage.setItem(
+        "askPanel.composer.v1",
+        JSON.stringify({
+          model: composerModel.id,
+          webSearch: composerWebSearch,
+          thinking: composerThinking,
+        }),
+      );
+    } catch {
+      // Quota / private mode — drop silently.
+    }
+  }, [composerModel, composerWebSearch, composerThinking]);
 
   const { sendQuery, loading: isSending } = useAIChat();
 
   const sendMessage = useCallback(
-    async (text: string, refs: string[]) => {
-      setThread((prev) => [...prev, { role: "user", text, refs }]);
+    async (send: ComposerSend) => {
+      setThread((prev) => [
+        ...prev,
+        {
+          role: "user",
+          text: send.text,
+          refs: send.refs,
+          attachments: send.attachments.length > 0 ? send.attachments : undefined,
+        },
+      ]);
 
-      const numericIds = refs
+      const numericIds = send.refs
         .map((r) => sources.find((s) => s.id === r)?.documentId)
         .filter((n): n is number => typeof n === "number");
 
@@ -127,11 +209,21 @@ export function WorkspaceShell() {
           : "document";
 
       const data = await sendQuery({
-        question: text,
+        question: send.text,
         searchScope: scope as "document" | "company" | "selected",
         documentId: scope === "document" ? numericIds[0] : undefined,
         selectedDocumentIds: scope === "selected" ? numericIds : undefined,
         companyId: scope === "company" ? companyId ?? undefined : undefined,
+        aiModel: send.model as never,
+        provider: send.provider as never,
+        enableWebSearch: send.webSearch,
+        thinkingMode: send.thinking,
+        attachments: send.attachments.map((a) => ({
+          url: a.url,
+          name: a.name,
+          mimeType: a.mimeType,
+          kind: a.kind,
+        })),
       });
 
       if (data) {
@@ -225,12 +317,47 @@ export function WorkspaceShell() {
     setViewerSource(null);
   }, []);
 
-  const openStudio = useCallback((featureId?: string) => {
-    setStudioFeatureId(featureId ?? null);
-    setStudioOpen(true);
+  const handleMoveToFolder = useCallback(
+    async (sourceId: string, folderName: string) => {
+      const src = sources.find((s) => s.id === sourceId);
+      if (!src?.documentId) return;
+      if ((src.folder ?? "Unfiled") === folderName) return;
+      try {
+        const res = await fetch(`/api/documents/${src.documentId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ category: folderName }),
+        });
+        if (!res.ok) {
+          const body = (await res.json().catch(() => ({}))) as { error?: string };
+          alert(body.error ?? "Failed to move document");
+          return;
+        }
+        await refresh();
+      } catch (err) {
+        alert(err instanceof Error ? err.message : "Failed to move document");
+      }
+    },
+    [sources, refresh],
+  );
+
+  const openFeature = useCallback(
+    (featureId?: string) => {
+      // When no id is supplied, land on the feature currently expanded in the
+      // main area (defaults to "chat" — the Workspace group's Chat entry).
+      setStudioFeatureId(featureId ?? activeFeatureId);
+      setStudioOpen(true);
+    },
+    [activeFeatureId],
+  );
+
+  const expandFeature = useCallback((featureId: string) => {
+    setActiveFeatureId(featureId);
+    setStudioOpen(false);
   }, []);
 
-  // `?feature=X` opens the Studio drawer on that feature; `?add=1` opens the
+  // `?feature=X` switches the AskPanel to QuickPen (draft/rewrite/workflows/notes)
+  // or opens the Studio drawer overlay (audit/marketing/...); `?add=1` opens the
   // AddSourceModal. Both are stripped from the URL after firing so refreshes
   // don't re-open the overlay.
   const featureParam = searchParams.get("feature");
@@ -239,7 +366,7 @@ export function WorkspaceShell() {
     if (!featureParam && !addParam) return;
     if (legacyRedirect) return;
     if (featureParam && FEATURE_IDS.has(featureParam)) {
-      openStudio(featureParam);
+      openFeature(featureParam);
     }
     if (addParam) {
       setAddOpen(true);
@@ -249,7 +376,7 @@ export function WorkspaceShell() {
     params.delete("add");
     const query = params.toString();
     router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
-  }, [featureParam, addParam, legacyRedirect, openStudio, router, searchParams]);
+  }, [featureParam, addParam, legacyRedirect, openFeature, router, searchParams]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -302,20 +429,14 @@ export function WorkspaceShell() {
         onOpenSource={handleOpenSource}
         onNewFolder={() => setNewFolderOpen(true)}
         onRenameFolder={(folder) => setRenameFolder(folder)}
+        onMoveToFolder={(id, name) => void handleMoveToFolder(id, name)}
         activeFolder={activeFolder}
         setActiveFolder={setActiveFolder}
         activeTag={activeTag}
         setActiveTag={setActiveTag}
       />
 
-      {studioOpen ? (
-        <StudioDrawer
-          open
-          inline
-          initialFeatureId={studioFeatureId}
-          onClose={() => setStudioOpen(false)}
-        />
-      ) : (
+      {activeFeatureId === "chat" ? (
         <AskPanel
           sources={sources}
           selected={selected}
@@ -331,12 +452,38 @@ export function WorkspaceShell() {
           userName={userName}
           userEmail={userEmail}
           onSignOut={() => signOut({ redirectUrl: "/" })}
+          model={composerModel}
+          onPickModel={setComposerModel}
+          webSearch={composerWebSearch}
+          onToggleWebSearch={() => setComposerWebSearch((v) => !v)}
+          thinking={composerThinking}
+          onToggleThinking={() => setComposerThinking((v) => !v)}
           studioSlot={
             <StudioMenu
-              onOpenStudio={() => openStudio()}
-              onPickFeature={(id) => openStudio(id)}
+              role={role}
+              onOpenStudio={() => openFeature()}
+              onPickFeature={(id) => openFeature(id)}
             />
           }
+        />
+      ) : (
+        <ExpandedFeatureView
+          featureId={activeFeatureId}
+          role={role}
+          onBackToChat={() => setActiveFeatureId("chat")}
+          onOpenStudio={() => openFeature()}
+          onPickFeature={(id) => openFeature(id)}
+        />
+      )}
+
+      {studioOpen && (
+        <StudioDrawer
+          open
+          role={role}
+          initialFeatureId={studioFeatureId}
+          activeFeatureId={activeFeatureId}
+          onClose={() => setStudioOpen(false)}
+          onExpand={expandFeature}
         />
       )}
 
@@ -344,10 +491,9 @@ export function WorkspaceShell() {
         open={addOpen}
         onClose={() => setAddOpen(false)}
         userId={userId ?? null}
-        defaultCategory={
-          activeFolder ?? folders[0]?.name ?? "Unfiled"
-        }
-        onOpenFullUploader={() => {
+        defaultCategory={activeFolder ?? folders[0]?.name ?? "Unfiled"}
+        folders={folders.map((f) => f.name)}
+        onUploaded={() => {
           void refresh();
         }}
       />
@@ -365,7 +511,7 @@ export function WorkspaceShell() {
         }}
         onPickFeature={(id) => {
           setPalOpen(false);
-          setTimeout(() => openStudio(id), 100);
+          setTimeout(() => openFeature(id), 100);
         }}
       />
 
@@ -413,8 +559,116 @@ export function WorkspaceShell() {
           !!viewerSource ||
           studioOpen
         }
-        onPickFeature={(id) => openStudio(id)}
+        onPickFeature={(id) => openFeature(id)}
       />
     </div>
+  );
+}
+
+interface ExpandedFeatureViewProps {
+  featureId: string;
+  role: string | null;
+  onBackToChat: () => void;
+  onOpenStudio: () => void;
+  onPickFeature: (featureId: string) => void;
+}
+
+/**
+ * Main-area container for a Studio feature that's been expanded out of the
+ * drawer. Mirrors AskPanel's topbar (Studio menu + back-to-chat) so the
+ * navigation stays consistent across feature swaps.
+ */
+function ExpandedFeatureView({
+  featureId,
+  role,
+  onBackToChat,
+  onOpenStudio,
+  onPickFeature,
+}: ExpandedFeatureViewProps) {
+  const feature = STUDIO_FEATURES_BY_ID[featureId];
+
+  return (
+    <main
+      style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        overflow: "hidden",
+        background: "var(--bg)",
+      }}
+    >
+      <div
+        style={{
+          padding: "10px 20px",
+          borderBottom: "1px solid var(--line)",
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          background: "var(--panel)",
+          flexShrink: 0,
+        }}
+      >
+        <button
+          onClick={onBackToChat}
+          title="Back to Chat"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "5px 10px",
+            borderRadius: 7,
+            border: "1px solid var(--line)",
+            background: "var(--panel)",
+            color: "var(--ink-2)",
+            fontSize: 12,
+            fontWeight: 500,
+            cursor: "pointer",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "var(--accent)";
+            e.currentTarget.style.color = "var(--accent)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "var(--line)";
+            e.currentTarget.style.color = "var(--ink-2)";
+          }}
+        >
+          <IconChevronLeft size={12} />
+          Back to Chat
+        </button>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 13, fontWeight: 600 }}>
+            {feature?.label ?? "Studio"}
+          </div>
+          <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
+            {feature?.desc ?? ""}
+          </div>
+        </div>
+        <StudioMenu
+          role={role}
+          onOpenStudio={onOpenStudio}
+          onPickFeature={onPickFeature}
+        />
+      </div>
+      <div style={{ flex: 1, overflow: "hidden" }}>
+        {feature ? (
+          renderStudioPane(feature, onBackToChat)
+        ) : (
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--ink-3)",
+              fontSize: 13,
+            }}
+          >
+            Unknown feature — returning to Chat…
+          </div>
+        )}
+      </div>
+    </main>
   );
 }

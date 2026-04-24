@@ -26,10 +26,15 @@ jest.mock("~/server/db", () => ({
     db: {},
 }));
 
-// Mock the pipeline function so we control what it returns.
-jest.mock("@launchstack/features/client-prospector", () => ({
-    runClientProspector: jest.fn(),
-}));
+// Mock the pipeline function so we control what it returns; preserve other
+// exports (schemas, types) so the Inngest wrapper can still import them.
+jest.mock("@launchstack/features/client-prospector", () => {
+    const actual = jest.requireActual("@launchstack/features/client-prospector");
+    return {
+        ...actual,
+        runClientProspector: jest.fn(),
+    };
+});
 
 // Mock the DB helper exports (updateJobStatus, updateJobResults) so we
 // can redirect them to our in-memory store per test iteration.

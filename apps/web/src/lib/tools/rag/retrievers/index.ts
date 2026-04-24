@@ -39,3 +39,10 @@ export {
   createNeo4jGraphRetriever,
   shouldUseNeo4jRetriever,
 } from "./neo4j-graph-retriever";
+
+export {
+  NotesRetriever,
+  createDocumentNotesRetriever,
+  createCompanyNotesRetriever,
+  createMultiDocNotesRetriever,
+} from "./notes-retriever";

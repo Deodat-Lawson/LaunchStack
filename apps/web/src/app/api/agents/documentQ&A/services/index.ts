@@ -13,7 +13,7 @@
 export { normalizeModelContent } from "./normalizeModelContent";
 export { performWebSearch } from "./webSearch";
 export { buildReferences, extractRecommendedPages, filterPagesByAICitation } from "./references";
-export { performTavilySearch } from "./tavilySearch";
+export { performExaSearch } from "./exaSearch";
 export { executeWebSearchAgent } from "./webSearchAgent";
 export { SYSTEM_PROMPTS, getSystemPrompt, getWebSearchInstruction } from "./prompts";
 export { getChatModel, getEmbeddings } from "./models";

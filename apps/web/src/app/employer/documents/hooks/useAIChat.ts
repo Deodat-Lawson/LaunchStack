@@ -4,6 +4,13 @@ import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/serv
 
 export type { SourceReference };
 
+export interface AIChatAttachmentPayload {
+  url: string;
+  name: string;
+  mimeType: string;
+  kind: 'image' | 'text';
+}
+
 export interface AIChatRequest {
   documentId?: number;
   companyId?: number;
@@ -22,6 +29,8 @@ export interface AIChatRequest {
   enableWebSearch?: boolean;
   conversationHistory?: string;
   aiPersona?: 'general' | 'learning-coach' | 'financial-expert' | 'legal-expert' | 'math-reasoning';
+  thinkingMode?: boolean;
+  attachments?: AIChatAttachmentPayload[];
 }
 
 export interface WebSource {
@@ -97,6 +106,8 @@ export function useAIChat() {
           enableWebSearch: params.enableWebSearch,
           conversationHistory: params.conversationHistory,
           aiPersona: params.aiPersona,
+          thinkingMode: params.thinkingMode,
+          attachments: params.attachments,
         }),
       });
 

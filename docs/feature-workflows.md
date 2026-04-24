@@ -112,4 +112,4 @@ Both rely on persisted session state and document-grounded retrieval.
 - Category-scoped retrieval
 - Company-scoped retrieval
 - Multi-document retrieval
-- Optional web-enriched retrieval (Tavily) when configured
+- Optional web-enriched retrieval (Exa) when configured

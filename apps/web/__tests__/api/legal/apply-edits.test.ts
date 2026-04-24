@@ -4,7 +4,7 @@
  */
 
 import { POST } from "~/app/api/legal/apply-edits/route";
-import { processDocumentBatch } from "@launchstack/features/adeu";
+import { processDocumentBatch, readDocx } from "@launchstack/features/adeu";
 import type { BatchSummary } from "@launchstack/features/adeu";
 
 // Mock Clerk auth
@@ -15,6 +15,7 @@ jest.mock("@clerk/nextjs/server", () => ({
 // Mock Adeu client
 jest.mock("@launchstack/features/adeu", () => ({
   processDocumentBatch: jest.fn(),
+  readDocx: jest.fn(),
   AdeuServiceError: class AdeuServiceError extends Error {
     statusCode: number;
     detail: string;
@@ -25,6 +26,12 @@ jest.mock("@launchstack/features/adeu", () => ({
       this.detail = detail;
     }
   },
+  AdeuConfigError: class AdeuConfigError extends Error {
+    constructor(message: string) {
+      super(message);
+      this.name = "AdeuConfigError";
+    }
+  },
 }));
 
 import { auth } from "@clerk/nextjs/server";
@@ -33,6 +40,7 @@ const mockAuth = auth as jest.MockedFunction<typeof auth>;
 const mockProcessDocumentBatch = processDocumentBatch as jest.MockedFunction<
   typeof processDocumentBatch
 >;
+const mockReadDocx = readDocx as jest.MockedFunction<typeof readDocx>;
 
 describe("POST /api/legal/apply-edits", () => {
   beforeEach(() => {
@@ -148,6 +156,7 @@ describe("POST /api/legal/apply-edits", () => {
         }),
       });
 
+      mockReadDocx.mockResolvedValue({ text: "old document content" } as any);
       mockProcessDocumentBatch.mockResolvedValueOnce({
         summary: {
           applied_edits: 1,
@@ -247,7 +256,9 @@ describe("POST /api/legal/apply-edits", () => {
     });
 
     // Test: Proper conversion and parameter passing to Adeu service
-    // Verifies base64 is decoded to Buffer and all parameters are correctly passed
+    // Verifies base64 is decoded to Buffer and all parameters are correctly passed.
+    // The route now calls processDocumentBatch once per edit (not once total),
+    // each with a single-edit array.
     it("calls processDocumentBatch with correct parameters", async () => {
       const docBase64 = Buffer.from("test-docx").toString("base64");
       const edits = [
@@ -255,9 +266,15 @@ describe("POST /api/legal/apply-edits", () => {
         { target_text: "old2", new_text: "new2", comment: "update" },
       ];
 
-      mockProcessDocumentBatch.mockResolvedValueOnce({
+      // readDocx must return text containing both target_texts so
+      // tryDisambiguate returns a resolved edit.
+      mockReadDocx.mockResolvedValue({
+        text: "old1 old2 some document",
+      } as any);
+
+      mockProcessDocumentBatch.mockResolvedValue({
         summary: {
-          applied_edits: 2,
+          applied_edits: 1,
           skipped_edits: 0,
           applied_actions: 0,
           skipped_actions: 0,
@@ -276,20 +293,25 @@ describe("POST /api/legal/apply-edits", () => {
 
       await POST(request);
 
-      expect(mockProcessDocumentBatch).toHaveBeenCalledTimes(1);
-      const [buffer, params] = mockProcessDocumentBatch.mock.calls[0]!;
-      
-      expect(Buffer.isBuffer(buffer)).toBe(true);
-      expect(buffer.toString()).toBe("test-docx");
-      expect(params.author_name).toBe("Custom Author");
-      expect(params.edits).toEqual(edits);
+      expect(mockProcessDocumentBatch).toHaveBeenCalledTimes(edits.length);
+
+      for (let i = 0; i < edits.length; i++) {
+        const [buffer, params] = mockProcessDocumentBatch.mock.calls[i]!;
+        expect(Buffer.isBuffer(buffer)).toBe(true);
+        expect(params.author_name).toBe("Custom Author");
+        expect(params.edits).toHaveLength(1);
+        expect(params.edits[0]).toEqual(edits[i]);
+      }
     });
 
     // Test: Response conversion from Blob to base64
-    // Adeu service returns Blob; API must convert it to base64 for client
+    // Adeu service returns Blob; API must convert it to base64 for client.
+    // With a single edit, the last processDocumentBatch blob result becomes
+    // the final buffer converted to base64.
     it("converts Blob result to base64", async () => {
       const modifiedContent = "modified-docx-content";
-      mockProcessDocumentBatch.mockResolvedValueOnce({
+      mockReadDocx.mockResolvedValue({ text: "a some document" } as any);
+      mockProcessDocumentBatch.mockResolvedValue({
         summary: {
           applied_edits: 1,
           skipped_edits: 0,
@@ -316,20 +338,57 @@ describe("POST /api/legal/apply-edits", () => {
       );
     });
 
-    // Test: BatchSummary is correctly passed through to client
-    // The summary tells users how many edits were applied/skipped
+    // Test: BatchSummary is correctly aggregated across per-edit calls
+    // The summary tells users how many edits were applied/skipped.
+    // The route sums applied_edits/skipped_edits across each per-edit call.
     it("returns summary from Adeu service", async () => {
-      const summary: BatchSummary = {
+      const expectedSummary: BatchSummary = {
         applied_edits: 3,
         skipped_edits: 1,
         applied_actions: 0,
         skipped_actions: 0,
       };
 
-      mockProcessDocumentBatch.mockResolvedValueOnce({
-        summary,
-        file: new Blob(["modified"]),
-      });
+      mockReadDocx.mockResolvedValue({ text: "a c e g some document" } as any);
+
+      // 4 per-edit calls summing to applied=3, skipped=1
+      mockProcessDocumentBatch
+        .mockResolvedValueOnce({
+          summary: {
+            applied_edits: 1,
+            skipped_edits: 0,
+            applied_actions: 0,
+            skipped_actions: 0,
+          },
+          file: new Blob(["modified"]),
+        })
+        .mockResolvedValueOnce({
+          summary: {
+            applied_edits: 1,
+            skipped_edits: 0,
+            applied_actions: 0,
+            skipped_actions: 0,
+          },
+          file: new Blob(["modified"]),
+        })
+        .mockResolvedValueOnce({
+          summary: {
+            applied_edits: 1,
+            skipped_edits: 0,
+            applied_actions: 0,
+            skipped_actions: 0,
+          },
+          file: new Blob(["modified"]),
+        })
+        .mockResolvedValueOnce({
+          summary: {
+            applied_edits: 0,
+            skipped_edits: 1,
+            applied_actions: 0,
+            skipped_actions: 0,
+          },
+          file: new Blob(["modified"]),
+        });
 
       const request = new Request("http://localhost/api/legal/apply-edits", {
         method: "POST",
@@ -347,7 +406,7 @@ describe("POST /api/legal/apply-edits", () => {
       const response = await POST(request);
       const json = await response.json();
 
-      expect(json.summary).toEqual(summary);
+      expect(json.summary).toEqual(expectedSummary);
     });
   });
 
@@ -361,9 +420,12 @@ describe("POST /api/legal/apply-edits", () => {
       mockAuth.mockResolvedValue({ userId: "user123" } as any);
     });
 
-    // Test: Adeu service errors should return 500 with helpful message
-    // Users should get clear error feedback when the service fails
+    // Test: When Adeu service throws, the failed edit is deferred to the
+    // Phase 2 XML cleanup. If the original document isn't a valid DOCX zip
+    // (as in these tests with plaintext stubs), the cleanup throws and the
+    // outer catch returns 500 with an internal server error.
     it("returns 500 when Adeu service throws error", async () => {
+      mockReadDocx.mockResolvedValue({ text: "a some document" } as any);
       mockProcessDocumentBatch.mockRejectedValueOnce(
         new Error("Adeu service unavailable")
       );
@@ -382,12 +444,16 @@ describe("POST /api/legal/apply-edits", () => {
       expect(response.status).toBe(500);
       expect(json.success).toBe(false);
       expect(json.error).toBe("Internal server error");
-      expect(json.message).toContain("Adeu service unavailable");
+      expect(json.message).toBeDefined();
     });
 
-    // Test: Invalid base64 should be caught and reported
-    // Malformed base64 could cause Buffer.from() to throw
+    // Test: Invalid base64 / non-DOCX input should fail downstream
+    // When the decoded buffer isn't a valid DOCX zip, readDocx (or the
+    // Phase 2 XML cleanup fallback) will ultimately throw and the
+    // outer catch returns 500.
     it("returns 500 when base64 decoding fails", async () => {
+      mockReadDocx.mockRejectedValue(new Error("Invalid DOCX"));
+
       const request = new Request("http://localhost/api/legal/apply-edits", {
         method: "POST",
         body: JSON.stringify({
@@ -406,6 +472,7 @@ describe("POST /api/legal/apply-edits", () => {
     });
 
     it("handles network errors gracefully", async () => {
+      mockReadDocx.mockResolvedValue({ text: "a some document" } as any);
       mockProcessDocumentBatch.mockRejectedValueOnce(
         new Error("ECONNREFUSED")
       );
@@ -421,8 +488,11 @@ describe("POST /api/legal/apply-edits", () => {
       const response = await POST(request);
       const json = await response.json();
 
+      // The per-edit catch swallows the network error and defers to Phase 2
+      // XML cleanup. Cleanup then throws on the non-DOCX plaintext buffer,
+      // which bubbles up to the outer catch returning 500.
       expect(response.status).toBe(500);
-      expect(json.message).toContain("ECONNREFUSED");
+      expect(json.success).toBe(false);
     });
 
     // Test: Malformed request body should be caught
@@ -457,7 +527,8 @@ describe("POST /api/legal/apply-edits", () => {
       const largeDoc = Buffer.alloc(10 * 1024 * 1024); // 10MB
       const docBase64 = largeDoc.toString("base64");
 
-      mockProcessDocumentBatch.mockResolvedValueOnce({
+      mockReadDocx.mockResolvedValue({ text: "a some document" } as any);
+      mockProcessDocumentBatch.mockResolvedValue({
         summary: {
           applied_edits: 1,
           skipped_edits: 0,
@@ -494,9 +565,12 @@ describe("POST /api/legal/apply-edits", () => {
         },
       ];
 
-      mockProcessDocumentBatch.mockResolvedValueOnce({
+      mockReadDocx.mockResolvedValue({
+        text: "Company: {company_name} owes {amount} today",
+      } as any);
+      mockProcessDocumentBatch.mockResolvedValue({
         summary: {
-          applied_edits: 2,
+          applied_edits: 1,
           skipped_edits: 0,
           applied_actions: 0,
           skipped_actions: 0,

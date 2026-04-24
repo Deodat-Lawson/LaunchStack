@@ -17,6 +17,7 @@ import { predictiveAnalysisJob } from "~/server/inngest/functions/predictiveAnal
 import { reindexCompanyEmbeddingsJob } from "~/server/inngest/functions/reindexCompanyEmbeddings";
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { crawlWebsite } from "~/server/inngest/functions/crawlWebsite";
+import { rehydrateNoteAnchorsJob } from "~/server/inngest/functions/rehydrateNoteAnchors";
 
 // Register all Inngest functions
 const handler = serve({
@@ -30,6 +31,7 @@ const handler = serve({
     reindexCompanyEmbeddingsJob,
     modifyDocument,
     crawlWebsite,
+    rehydrateNoteAnchorsJob,
   ],
 });
 

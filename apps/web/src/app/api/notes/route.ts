@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { documentNotes } from "@launchstack/core/db/schema";
 import { eq, and, desc, ilike, arrayContains } from "drizzle-orm";
 import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
+import { embedNoteAsync } from "~/server/notes/embed-note";
 
 export async function GET(request: Request) {
   try {
@@ -16,6 +17,7 @@ export async function GET(request: Request) {
     const documentId = searchParams.get("documentId");
     const search = searchParams.get("search");
     const tagsParam = searchParams.get("tags");
+    const anchorStatus = searchParams.get("anchorStatus");
 
     const conditions = [eq(documentNotes.userId, userId)];
 
@@ -30,6 +32,14 @@ export async function GET(request: Request) {
     if (tagsParam) {
       const tags = tagsParam.split(",").map((t) => t.trim());
       conditions.push(arrayContains(documentNotes.tags, tags));
+    }
+
+    if (
+      anchorStatus === "resolved" ||
+      anchorStatus === "drifted" ||
+      anchorStatus === "orphaned"
+    ) {
+      conditions.push(eq(documentNotes.anchorStatus, anchorStatus));
     }
 
     const notes = await db
@@ -59,17 +69,29 @@ export async function POST(request: Request) {
     if (!validation.success) return validation.response;
     const body = validation.data;
 
+    const versionIdBigint =
+      body.versionId !== undefined && body.versionId !== null
+        ? BigInt(body.versionId)
+        : null;
+
     const [note] = await db
       .insert(documentNotes)
       .values({
         userId,
         documentId: body.documentId ?? null,
         companyId: body.companyId ?? null,
+        versionId: versionIdBigint,
         title: body.title ?? null,
         content: body.content ?? null,
+        contentRich: body.contentRich ?? null,
+        contentMarkdown: body.contentMarkdown ?? null,
+        anchor: body.anchor ?? null,
+        anchorStatus: body.anchorStatus ?? "resolved",
         tags: body.tags ?? [],
       })
       .returning();
+
+    if (note) embedNoteAsync(note.id);
 
     return NextResponse.json({ note }, { status: 201 });
   } catch (error) {

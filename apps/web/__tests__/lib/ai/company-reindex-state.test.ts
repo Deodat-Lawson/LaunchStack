@@ -3,13 +3,6 @@
  * the branching logic in resolve / begin / complete / fail.
  */
 
-jest.mock("~/server/db", () => ({
-  db: {
-    select: jest.fn(),
-    update: jest.fn(),
-  },
-}));
-
 jest.mock("@launchstack/core/db/schema", () => ({
   company: {
     id: "company.id",
@@ -24,7 +17,7 @@ jest.mock("@launchstack/core/db/schema", () => ({
   },
 }));
 
-import { db } from "~/server/db";
+import { configureDatabase, type DbClient } from "@launchstack/core/db";
 import {
   beginReindex,
   completeReindex,
@@ -34,8 +27,12 @@ import {
   resolveQueryIndexKey,
 } from "@launchstack/core/embeddings";
 
-const selectMock = db.select as jest.Mock;
-const updateMock = db.update as jest.Mock;
+const selectMock = jest.fn();
+const updateMock = jest.fn();
+
+// Register a fake DbClient so reindex-state's getDb() resolves. Only the
+// select/update methods are used by the code under test.
+configureDatabase({ select: selectMock, update: updateMock } as unknown as DbClient);
 
 function chainableSelect(result: unknown) {
   const chain = {

@@ -1,4 +1,4 @@
-import { performTavilySearch } from "./tavilySearch";
+import { performExaSearch } from "./exaSearch";
 import { executeWebSearchAgent } from "./webSearchAgent";
 import type { WebSearchResult } from "./types";
 
@@ -73,10 +73,10 @@ export async function performWebSearch(
     }
   } catch (webSearchError: unknown) {
     console.error("❌ Web search agent error:", webSearchError);
-    // Fallback to direct Tavily search
+    // Fallback to direct Exa search
     try {
-      console.log('🔄 Falling back to direct Tavily search...');
-      const fallbackResults = await performTavilySearch(question, maxResults);
+      console.log('🔄 Falling back to direct Exa search...');
+      const fallbackResults = await performExaSearch(question, maxResults);
       if (fallbackResults.length > 0) {
         const webSearchContent = `\n\n=== Web Search Results ===\n${fallbackResults.map((result, idx) => 
           `[Source ${idx + 1}] ${result.title}\nURL: ${result.url}\nSnippet: ${result.snippet}`

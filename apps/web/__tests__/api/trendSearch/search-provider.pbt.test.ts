@@ -3,34 +3,44 @@
  * Feature: Serper dual-channel search — Task 4.3
  * Property 13: Serper adapter output conforms to RawSearchResult.
  * Property 14: Fallback strategy invokes secondary when primary returns empty.
- * Property 15: Parallel merge deduplicates by URL (Serper first, then Tavily).
- * Property 16: Default (no env) matches Tavily-only behavior.
+ * Property 15: Parallel merge deduplicates by URL (Serper first, then Exa).
+ * Property 16: Default (no env) matches Exa-only behavior.
  * Property 17: Serper-dependent strategies downgrade when key missing.
  */
 
-const TAVILY_URL = "https://api.tavily.com/search";
-const SERPER_URL = "https://google.serper.dev/news";
-
-jest.mock("~/env", () => {
-    const server = {
-        TAVILY_API_KEY: "test-tavily-key",
-        SERPER_API_KEY: "test-serper-key",
-        SEARCH_PROVIDER: undefined as "tavily" | "serper" | "fallback" | "parallel" | undefined,
-    };
-    return { env: { server } };
-});
-
 import * as fc from "fast-check";
-import { env } from "~/env";
 import { callSerper } from "@launchstack/features/trend-search/providers/serper";
 import { executeSearch } from "@launchstack/features/trend-search/web-search";
 import type { PlannedQuery, RawSearchResult } from "@launchstack/features/trend-search";
 import type { ProviderStrategy } from "@launchstack/features/trend-search/providers/types";
 
+const EXA_URL = "https://api.exa.ai/search";
+const SERPER_URL = "https://google.serper.dev/news";
+
+// Providers read API keys from process.env directly; manipulate process.env.
+const ORIGINAL_ENV = {
+    EXA_API_KEY: process.env.EXA_API_KEY,
+    SERPER_API_KEY: process.env.SERPER_API_KEY,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER,
+};
+
+function setEnv(overrides: Partial<Record<"EXA_API_KEY" | "SERPER_API_KEY" | "SEARCH_PROVIDER", string | undefined>>) {
+    for (const [key, value] of Object.entries(overrides)) {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+    }
+}
+
 beforeEach(() => {
-    env.server.TAVILY_API_KEY = "test-tavily-key";
-    env.server.SERPER_API_KEY = "test-serper-key";
-    env.server.SEARCH_PROVIDER = undefined;
+    setEnv({
+        EXA_API_KEY: "test-exa-key",
+        SERPER_API_KEY: "test-serper-key",
+        SEARCH_PROVIDER: undefined,
+    });
+});
+
+afterAll(() => {
+    setEnv(ORIGINAL_ENV);
 });
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
@@ -120,11 +130,11 @@ describe("Property 13: Serper-shaped responses normalize to RawSearchResult", ()
 // ─── Property 14: Fallback invokes secondary when primary returns empty ─────────
 
 describe("Property 14: Fallback strategy invokes secondary when primary returns empty", () => {
-    it("for random sub-query lists, when primary (Serper) returns empty, Tavily is invoked once per sub-query", async () => {
+    it("for random sub-query lists, when primary (Serper) returns empty, Exa is invoked once per sub-query", async () => {
         await fc.assert(
             fc.asyncProperty(subQueriesArb, async (subQueries) => {
                 let serperCalls = 0;
-                let tavilyCalls = 0;
+                let exaCalls = 0;
                 const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
                     const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
                     if (url === SERPER_URL) {
@@ -135,35 +145,34 @@ describe("Property 14: Fallback strategy invokes secondary when primary returns 
                             json: async () => ({ news: [] }),
                         } as Response);
                     }
-                    if (url === TAVILY_URL) {
-                        tavilyCalls++;
+                    if (url === EXA_URL) {
+                        exaCalls++;
                         return Promise.resolve({
                             ok: true,
                             text: async () => "",
                             json: async () => ({
-                                results: [{ url: "https://tavily.com/1", title: "T", content: "C", score: 0.9 }],
+                                results: [{ url: "https://exa.ai/1", title: "T", text: "C", score: 0.9 }],
                             }),
                         } as Response);
                     }
                     return Promise.reject(new Error(`Unexpected URL: ${url}`));
                 });
 
-                env.server.SEARCH_PROVIDER = "fallback";
-                env.server.SERPER_API_KEY = "test-serper-key";
+                setEnv({ SEARCH_PROVIDER: "fallback", SERPER_API_KEY: "test-serper-key" });
 
                 await executeSearch(subQueries);
 
                 fetchSpy.mockRestore();
 
                 expect(serperCalls).toBe(subQueries.length);
-                expect(tavilyCalls).toBe(subQueries.length);
+                expect(exaCalls).toBe(subQueries.length);
             }),
             { numRuns: 50 }
         );
     });
 });
 
-// ─── Property 15: Parallel dedup — Serper rows first, then Tavily (no cross-provider score compare) ──────────
+// ─── Property 15: Parallel dedup — Serper rows first, then Exa (no cross-provider score compare) ──────────
 
 describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () => {
     it("for two random result sets with overlapping URLs, merged result has no duplicate URLs and Serper wins on URL tie", async () => {
@@ -173,12 +182,12 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
                 fc.array(rawSearchResultArb, { minLength: 0, maxLength: 5 }),
                 fc.string({ minLength: 1, maxLength: 100 }),
                 async (setA, setB, _query) => {
-                    // Tavily returns setA with original scores; Serper adapter recomputes score as 1 - position/totalResults
+                    // Exa returns setA with original scores; Serper adapter recomputes score as 1 - position/totalResults
                     const serperScores = setB.length > 0
                         ? setB.map((_, i) => 1 - (i + 1) / setB.length)
                         : [];
                     const setBWithSerperScores = setB.map((r, i) => ({ ...r, score: serperScores[i] ?? 0 }));
-                    // Replicate executeSearch parallel merge: Serper first, then Tavily; first URL wins
+                    // Replicate executeSearch parallel merge: Serper first, then Exa; first URL wins
                     const byUrl = new Map<string, RawSearchResult>();
                     for (const r of setBWithSerperScores) {
                         const key = normalizeUrl(r.url);
@@ -195,11 +204,19 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
 
                     const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
                         const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
-                        if (url === TAVILY_URL) {
+                        if (url === EXA_URL) {
                             return Promise.resolve({
                                 ok: true,
                                 text: async () => "",
-                                json: async () => ({ results: setA }),
+                                json: async () => ({
+                                    results: setA.map((r) => ({
+                                        url: r.url,
+                                        title: r.title,
+                                        text: r.content,
+                                        score: r.score,
+                                        publishedDate: r.publishedDate,
+                                    })),
+                                }),
                             } as Response);
                         }
                         if (url === SERPER_URL) {
@@ -218,8 +235,7 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
                         return Promise.reject(new Error(`Unexpected URL: ${url}`));
                     });
 
-                    env.server.SEARCH_PROVIDER = "parallel";
-                    env.server.SERPER_API_KEY = "test-serper-key";
+                    setEnv({ SEARCH_PROVIDER: "parallel", SERPER_API_KEY: "test-serper-key" });
 
                     const { results } = await executeSearch(
                         [{ searchQuery: "q", category: "tech", rationale: "r" }],
@@ -244,23 +260,23 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
     });
 });
 
-// ─── Property 16: Default (no env) matches Tavily-only ──────────────────────────
+// ─── Property 16: Default (no env) matches Exa-only ──────────────────────────
 
-describe("Property 16: Default strategy matches Tavily-only behavior", () => {
-    it("when SEARCH_PROVIDER is unset, providerUsed is tavily and only Tavily is called", async () => {
+describe("Property 16: Default strategy matches Exa-only behavior", () => {
+    it("when SEARCH_PROVIDER is unset, providerUsed is exa and only Exa is called", async () => {
         await fc.assert(
             fc.asyncProperty(subQueriesArb, async (subQueries) => {
-                let tavilyCalls = 0;
+                let exaCalls = 0;
                 let serperCalls = 0;
                 const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
                     const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
-                    if (url === TAVILY_URL) {
-                        tavilyCalls++;
+                    if (url === EXA_URL) {
+                        exaCalls++;
                         return Promise.resolve({
                             ok: true,
                             text: async () => "",
                             json: async () => ({
-                                results: [{ url: "https://tavily.com/1", title: "T", content: "C", score: 0.9 }],
+                                results: [{ url: "https://exa.ai/1", title: "T", text: "C", score: 0.9 }],
                             }),
                         } as Response);
                     }
@@ -275,15 +291,14 @@ describe("Property 16: Default strategy matches Tavily-only behavior", () => {
                     return Promise.reject(new Error(`Unexpected URL: ${url}`));
                 });
 
-                env.server.SEARCH_PROVIDER = undefined;
-                env.server.SERPER_API_KEY = "test-serper-key";
+                setEnv({ SEARCH_PROVIDER: undefined, SERPER_API_KEY: "test-serper-key" });
 
                 const { providerUsed } = await executeSearch(subQueries);
 
                 fetchSpy.mockRestore();
 
-                expect(providerUsed).toBe("tavily");
-                expect(tavilyCalls).toBe(subQueries.length);
+                expect(providerUsed).toBe("exa");
+                expect(exaCalls).toBe(subQueries.length);
                 expect(serperCalls).toBe(0);
             }),
             { numRuns: 50 }
@@ -293,10 +308,10 @@ describe("Property 16: Default strategy matches Tavily-only behavior", () => {
 
 // ─── Property 17: Serper-dependent strategies downgrade when key missing ───────
 
-describe("Property 17: Missing Serper key downgrades Serper-dependent strategies to tavily", () => {
+describe("Property 17: Missing Serper key downgrades Serper-dependent strategies to exa", () => {
     const serperDependentStrategies: ProviderStrategy[] = ["serper", "fallback", "parallel"];
 
-    it("for each Serper-dependent strategy, when SERPER_API_KEY is unset, providerUsed is tavily and no throw", async () => {
+    it("for each Serper-dependent strategy, when SERPER_API_KEY is unset, providerUsed is exa and no throw", async () => {
         await fc.assert(
             fc.asyncProperty(
                 fc.constantFrom(...serperDependentStrategies),
@@ -304,12 +319,12 @@ describe("Property 17: Missing Serper key downgrades Serper-dependent strategies
                 async (strategy, subQueries) => {
                     const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
                         const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
-                        if (url === TAVILY_URL) {
+                        if (url === EXA_URL) {
                             return Promise.resolve({
                                 ok: true,
                                 text: async () => "",
                                 json: async () => ({
-                                    results: [{ url: "https://tavily.com/1", title: "T", content: "C", score: 0.9 }],
+                                    results: [{ url: "https://exa.ai/1", title: "T", text: "C", score: 0.9 }],
                                 }),
                             } as Response);
                         }
@@ -323,7 +338,7 @@ describe("Property 17: Missing Serper key downgrades Serper-dependent strategies
                         return Promise.reject(new Error(`Unexpected URL: ${url}`));
                     });
 
-                    env.server.SERPER_API_KEY = undefined as unknown as string;
+                    setEnv({ SERPER_API_KEY: undefined });
                     const warnSpy = jest.spyOn(console, "warn").mockImplementation();
 
                     const { providerUsed } = await executeSearch(subQueries, strategy);
@@ -331,7 +346,7 @@ describe("Property 17: Missing Serper key downgrades Serper-dependent strategies
                     warnSpy.mockRestore();
                     fetchSpy.mockRestore();
 
-                    expect(providerUsed).toBe("tavily");
+                    expect(providerUsed).toBe("exa");
                 }
             ),
             { numRuns: 30 }

@@ -2,31 +2,31 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
+import styles from '~/styles/deployment.module.css';
 
 interface SectionProps {
   title: string;
   subtitle?: string;
-  darkMode: boolean;
   children: React.ReactNode;
 }
 
-export const Section: React.FC<SectionProps> = ({ title, subtitle, darkMode, children }) => (
+export const Section: React.FC<SectionProps> = ({ title, subtitle, children }) => (
   <motion.section
-    initial={{ opacity: 0, y: 20 }}
+    initial={{ opacity: 0, y: 16 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.6 }}
-    className="mb-16"
+    viewport={{ once: true, margin: '-80px' }}
+    transition={{ duration: 0.5 }}
+    style={{ marginBottom: 56 }}
   >
-    <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'} flex items-center gap-3`}>
-      <div className="w-2 h-8 bg-gradient-to-b from-purple-600 to-indigo-600 rounded-full"></div>
+    <h2 className={styles.sectionH2}>
+      <span className={styles.sectionH2Bar} aria-hidden />
       {title}
     </h2>
-    {subtitle && (
-      <p className={`ml-5 mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{subtitle}</p>
+    {subtitle ? (
+      <p className={styles.sectionSub}>{subtitle}</p>
+    ) : (
+      <div style={{ height: 20 }} />
     )}
-    {!subtitle && <div className="mb-8" />}
     {children}
   </motion.section>
 );
-

@@ -59,6 +59,17 @@ function makeErrorResponse(status: number, body: object): Response {
   });
 }
 
+/**
+ * Mirrors the adapter's `handleErrorResponse` formatting: appends joined
+ * errors to `detail` when the `errors` array is non-empty.
+ */
+function expectedDetail(body: { detail: string; errors?: string[] | null }): string {
+  const errors = body.errors;
+  return errors && errors.length > 0
+    ? `${body.detail}: ${errors.join("; ")}`
+    : body.detail;
+}
+
 // ---------------------------------------------------------------------------
 // Property 12: Error propagation across all adapter functions
 // ---------------------------------------------------------------------------
@@ -75,7 +86,7 @@ describe("Feature: adeu-integration, Property 12: TypeScript adapter error propa
           expect(e).toBeInstanceOf(AdeuServiceError);
           const err = e as AdeuServiceError;
           expect(err.statusCode).toBe(status);
-          expect(err.detail).toBe(body.detail);
+          expect(err.detail).toBe(expectedDetail(body));
         }
       }),
       { numRuns: 100 },
@@ -94,7 +105,7 @@ describe("Feature: adeu-integration, Property 12: TypeScript adapter error propa
           expect(e).toBeInstanceOf(AdeuServiceError);
           const err = e as AdeuServiceError;
           expect(err.statusCode).toBe(status);
-          expect(err.detail).toBe(body.detail);
+          expect(err.detail).toBe(expectedDetail(body));
         }
       }),
       { numRuns: 100 },
@@ -113,7 +124,7 @@ describe("Feature: adeu-integration, Property 12: TypeScript adapter error propa
           expect(e).toBeInstanceOf(AdeuServiceError);
           const err = e as AdeuServiceError;
           expect(err.statusCode).toBe(status);
-          expect(err.detail).toBe(body.detail);
+          expect(err.detail).toBe(expectedDetail(body));
         }
       }),
       { numRuns: 100 },
@@ -134,7 +145,7 @@ describe("Feature: adeu-integration, Property 12: TypeScript adapter error propa
           expect(e).toBeInstanceOf(AdeuServiceError);
           const err = e as AdeuServiceError;
           expect(err.statusCode).toBe(status);
-          expect(err.detail).toBe(body.detail);
+          expect(err.detail).toBe(expectedDetail(body));
         }
       }),
       { numRuns: 100 },
@@ -153,7 +164,7 @@ describe("Feature: adeu-integration, Property 12: TypeScript adapter error propa
           expect(e).toBeInstanceOf(AdeuServiceError);
           const err = e as AdeuServiceError;
           expect(err.statusCode).toBe(status);
-          expect(err.detail).toBe(body.detail);
+          expect(err.detail).toBe(expectedDetail(body));
         }
       }),
       { numRuns: 100 },

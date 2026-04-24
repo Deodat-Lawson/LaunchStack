@@ -99,7 +99,7 @@ function resolveStrategy(
   ) {
     return fromEnv;
   }
-  return "tavily";
+  return "exa";
 }
 
 function getProvider(name: string): SearchProviderFn | null {
@@ -117,7 +117,7 @@ export async function executeSearch(
 ): Promise<SearchExecutionResult> {
   const strategy = resolveStrategy(strategyOverride);
 
-  const hasTavilyKey = Boolean(process.env.TAVILY_API_KEY);
+  const hasExaKey = Boolean(process.env.EXA_API_KEY);
   const hasSerperKey = Boolean(process.env.SERPER_API_KEY);
 
   const useSerper =
@@ -128,22 +128,22 @@ export async function executeSearch(
 
   if (!useSerper && strategy === "serper") {
     console.warn(
-      "[web-search] SERPER_API_KEY not set; downgrading strategy to tavily.",
+      "[web-search] SERPER_API_KEY not set; downgrading strategy to exa.",
     );
   }
 
-  const tavilyProvider = getProvider("tavily");
+  const exaProvider = getProvider("exa");
   const serperProvider = getProvider("serper");
 
-  // Basic single-provider strategies (tavily default, or Serper strategies downgraded without key)
-  if (strategy === "tavily" || !useSerper) {
-    if (!tavilyProvider) {
+  // Basic single-provider strategies (exa default, or Serper strategies downgraded without key)
+  if (strategy === "exa" || !useSerper) {
+    if (!exaProvider) {
       return { results: [], providerUsed: "none" };
     }
-    const results = await executeWithProvider(subQueries, tavilyProvider);
+    const results = await executeWithProvider(subQueries, exaProvider);
     return {
       results,
-      providerUsed: hasTavilyKey ? "tavily" : "none",
+      providerUsed: hasExaKey ? "exa" : "none",
     };
   }
 
@@ -155,19 +155,19 @@ export async function executeSearch(
     return { results, providerUsed: "serper" };
   }
 
-  // Fallback: try Serper first, then Tavily if Serper yields nothing
+  // Fallback: try Serper first, then Exa if Serper yields nothing
   if (strategy === "fallback") {
     if (!serperProvider) {
       console.warn(
-        "[web-search] Serper provider not available; using Tavily only.",
+        "[web-search] Serper provider not available; using Exa only.",
       );
-      if (!tavilyProvider) {
+      if (!exaProvider) {
         return { results: [], providerUsed: "none" };
       }
-      const results = await executeWithProvider(subQueries, tavilyProvider);
+      const results = await executeWithProvider(subQueries, exaProvider);
       return {
         results,
-        providerUsed: hasTavilyKey ? "tavily" : "none",
+        providerUsed: hasExaKey ? "exa" : "none",
       };
     }
 
@@ -180,19 +180,19 @@ export async function executeSearch(
     }
 
     console.warn(
-      "[web-search] Serper returned no results for all sub-queries, falling back to Tavily.",
+      "[web-search] Serper returned no results for all sub-queries, falling back to Exa.",
     );
-    if (!tavilyProvider) {
+    if (!exaProvider) {
       return { results: [], providerUsed: "none" };
     }
 
     const fallbackResults = await executeWithProvider(
       subQueries,
-      tavilyProvider,
+      exaProvider,
     );
     return {
       results: fallbackResults,
-      providerUsed: hasTavilyKey ? "tavily" : "none",
+      providerUsed: hasExaKey ? "exa" : "none",
     };
   }
 
@@ -200,7 +200,7 @@ export async function executeSearch(
   if (strategy === "parallel") {
     const providers: Array<{ name: string; fn: SearchProviderFn }> = [];
     if (serperProvider) providers.push({ name: "serper", fn: serperProvider });
-    if (tavilyProvider) providers.push({ name: "tavily", fn: tavilyProvider });
+    if (exaProvider) providers.push({ name: "exa", fn: exaProvider });
 
     if (providers.length === 0) {
       return { results: [], providerUsed: "none" };
@@ -213,8 +213,8 @@ export async function executeSearch(
       })),
     );
 
-    // First URL wins per provider order (Serper then Tavily). Do not compare
-    // `score` across providers — Tavily and Serper use different scales.
+    // First URL wins per provider order (Serper then Exa). Do not compare
+    // `score` across providers — Exa and Serper use different scales.
     const byUrl = new Map<string, RawSearchResult>();
 
     for (const { results } of resultsPerProvider) {
@@ -229,8 +229,8 @@ export async function executeSearch(
     const merged: RawSearchResult[] = [...byUrl.values()];
 
     let providerUsed: SearchProviderUsed;
-    if (hasTavilyKey && hasSerperKey) {
-      providerUsed = "tavily+serper";
+    if (hasExaKey && hasSerperKey) {
+      providerUsed = "exa+serper";
     } else if (hasSerperKey) {
       providerUsed = "serper";
     } else {
@@ -241,15 +241,15 @@ export async function executeSearch(
   }
 
   // Fallback safety – should not reach here
-  const defaultProvider = tavilyProvider ?? serperProvider;
+  const defaultProvider = exaProvider ?? serperProvider;
   if (!defaultProvider) {
     return { results: [], providerUsed: "none" };
   }
   const defaultResults = await executeWithProvider(subQueries, defaultProvider);
   const providerUsed: SearchProviderUsed =
-    defaultProvider === tavilyProvider
-      ? hasTavilyKey
-        ? "tavily"
+    defaultProvider === exaProvider
+      ? hasExaKey
+        ? "exa"
         : "none"
       : "serper";
   return { results: defaultResults, providerUsed };

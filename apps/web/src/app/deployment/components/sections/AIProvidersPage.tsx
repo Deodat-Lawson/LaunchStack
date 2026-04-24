@@ -3,452 +3,261 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import {
-  CheckCircle2,
+  BrainCircuit,
+  Sparkles,
   ShieldAlert,
-  Terminal,
-  Cpu,
-  Key,
-  AlertTriangle,
   Lightbulb,
+  ExternalLink,
+  Check,
 } from 'lucide-react';
 import type { DeploymentProps } from '../../types';
-import { Section, Step } from '../ui';
+import { Section, CodeBlock } from '../ui';
+import styles from '~/styles/deployment.module.css';
 
-interface StepCardProps {
-  icon: React.ReactNode;
-  title: string;
-  children: React.ReactNode;
-  darkMode: boolean;
-}
+type Provider = {
+  id: string;
+  name: string;
+  defaultModel: string;
+  link: string;
+  bullets: string[];
+  envKey: string;
+};
 
-const StepCard: React.FC<StepCardProps> = ({ icon, title, children, darkMode }) => (
-  <div
-    className={`flex items-start gap-4 p-5 rounded-xl border transition-all duration-200 ${
-      darkMode
-        ? 'bg-gray-800/60 border-gray-700/60 hover:border-purple-500/40'
-        : 'bg-white border-gray-200 hover:border-purple-300 hover:shadow-md'
-    }`}
-  >
-    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/20">
-      {icon}
+const PROVIDERS: Provider[] = [
+  {
+    id: 'openai',
+    name: 'OpenAI',
+    defaultModel: 'gpt-5-mini',
+    link: 'https://platform.openai.com/api-keys',
+    bullets: [
+      'Default chat model out of the box',
+      'text-embedding-3-large used for embeddings',
+      'Most thoroughly tested path end-to-end',
+    ],
+    envKey: 'OPENAI_API_KEY=sk-proj-your_key_here',
+  },
+  {
+    id: 'anthropic',
+    name: 'Anthropic',
+    defaultModel: 'claude-sonnet-4-6',
+    link: 'https://console.anthropic.com',
+    bullets: [
+      'Drop-in Claude Sonnet / Opus / Haiku',
+      'Longer-context reasoning for legal and analysis flows',
+      'Works with the same orchestration layer as OpenAI',
+    ],
+    envKey: 'ANTHROPIC_API_KEY=sk-ant-your_key_here',
+  },
+  {
+    id: 'google',
+    name: 'Google AI',
+    defaultModel: 'gemini-2.5-pro',
+    link: 'https://aistudio.google.com/app/apikey',
+    bullets: [
+      'Gemini 2.5 family for multimodal inputs',
+      'Cost-efficient embeddings via text-embedding-004',
+      'Useful for image-heavy documents',
+    ],
+    envKey: 'GOOGLE_API_KEY=your_google_ai_key_here',
+  },
+  {
+    id: 'ollama',
+    name: 'Ollama (self-hosted)',
+    defaultModel: 'llama3.1:70b',
+    link: 'https://ollama.com',
+    bullets: [
+      'Run models on your own hardware — no per-token cost',
+      'Pair with the bundled Docker compose for an air-gapped stack',
+      'Supports embedding models (nomic-embed-text, bge-m3)',
+    ],
+    envKey: 'OLLAMA_BASE_URL=http://localhost:11434',
+  },
+  {
+    id: 'siliconflow',
+    name: 'SiliconFlow',
+    defaultModel: 'Qwen/Qwen2.5-72B-Instruct',
+    link: 'https://siliconflow.cn',
+    bullets: [
+      'OpenAI-compatible API with open-weight models',
+      'Cheaper token pricing for high-volume routes',
+      'Good fallback for regions where OpenAI is restricted',
+    ],
+    envKey: 'SILICONFLOW_API_KEY=your_siliconflow_key_here',
+  },
+];
+
+export const AIProvidersPage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCode }) => {
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ marginBottom: 44 }}
+      >
+        <div className={styles.pill} style={{ marginBottom: 18 }}>
+          <BrainCircuit size={12} /> Core
+        </div>
+        <h1 className={styles.heroTitle}>AI model providers</h1>
+        <p className={styles.heroSub}>
+          Launchstack is <span className={styles.serif}>provider-agnostic</span>. Pick one from the
+          list below, swap it for another whenever you want — the orchestration, RAG, and analysis
+          layers stay the same.
+        </p>
+      </motion.div>
+
+      <Section title="Pick a chat model" subtitle="Any one of these is enough to boot the app.">
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 14,
+          }}
+        >
+          {PROVIDERS.map((p) => (
+            <ProviderCard
+              key={p.id}
+              provider={p}
+              copied={copiedCode === `provider-${p.id}`}
+              onCopy={() => copyToClipboard(p.envKey, `provider-${p.id}`)}
+            />
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        title="Switch providers with one flag"
+        subtitle="The orchestrator reads these env vars to route chat, embeddings, and reranking."
+      >
+        <CodeBlock
+          code={SWITCH_ENV}
+          onCopy={() => copyToClipboard(SWITCH_ENV, 'switch-env')}
+          copied={copiedCode === 'switch-env'}
+        />
+        <div style={{ marginTop: 14 }}>
+          <div className={styles.calloutInfo}>
+            <Lightbulb size={18} className={styles.calloutInfoIcon} style={{ marginTop: 1 }} />
+            <div>
+              <strong>Mix and match.</strong> Chat and embeddings are independent — e.g. Claude for
+              chat with OpenAI embeddings is a common pairing.
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        title="Embeddings & reranking"
+        subtitle="RAG retrieval quality lives here — choose once, reuse everywhere."
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <InlineRow
+            title="Embeddings"
+            badge="Default: OpenAI text-embedding-3-large"
+            body="Swap for Hugging Face BGE-M3, Ollama nomic-embed-text, or Google text-embedding-004. Re-run pnpm db:reindex after switching so existing chunks get re-embedded with the new model."
+          />
+          <InlineRow
+            title="Reranker"
+            badge="Default: Jina jina-reranker-v2-base-multilingual"
+            body="Optional but recommended for high-precision retrieval. Set JINA_API_KEY or disable via ENABLE_RERANKER=false."
+          />
+        </div>
+      </Section>
+
+      <Section title="Production notes">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div className={styles.calloutWarn}>
+            <ShieldAlert size={18} className={styles.calloutWarnIcon} style={{ marginTop: 1 }} />
+            <div>
+              <strong>Rate limits matter more than raw speed.</strong> Provider throttling on the
+              embedding route will surface as stuck document uploads. Start with conservative batch
+              sizes (<code className={styles.mono}>EMBED_BATCH_SIZE=16</code>) when moving to a new
+              provider.
+            </div>
+          </div>
+          <div className={styles.calloutInfo}>
+            <Sparkles size={18} className={styles.calloutInfoIcon} style={{ marginTop: 1 }} />
+            <div>
+              <strong>Cost visibility.</strong> Enable LangSmith tracing (see the LangChain Tracing
+              page) to see per-run token usage across providers — invaluable when deciding where to
+              route each workload.
+            </div>
+          </div>
+        </div>
+      </Section>
+    </>
+  );
+};
+
+const ProviderCard: React.FC<{ provider: Provider; copied: boolean; onCopy: () => void }> = ({
+  provider,
+  copied,
+  onCopy,
+}) => (
+  <div className={`${styles.panel} ${styles.panelHover}`} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
+      <div>
+        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: 'var(--ink)' }}>{provider.name}</h3>
+        <code className={styles.mono} style={{ fontSize: 11, color: 'var(--ink-3)' }}>
+          {provider.defaultModel}
+        </code>
+      </div>
+      <a
+        href={provider.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          color: 'var(--accent)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 4,
+          fontSize: 12,
+          fontWeight: 500,
+          textDecoration: 'none',
+          flexShrink: 0,
+        }}
+      >
+        Get key <ExternalLink size={11} />
+      </a>
     </div>
-    <div className="flex-1 min-w-0">
-      <h3 className={`font-semibold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{title}</h3>
-      <div className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{children}</div>
+    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
+      {provider.bullets.map((b) => (
+        <li key={b} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.5 }}>
+          <Check size={14} className={styles.okIcon} style={{ marginTop: 2 }} />
+          <span>{b}</span>
+        </li>
+      ))}
+    </ul>
+    <div style={{ marginTop: 2 }}>
+      <CodeBlock code={provider.envKey} copied={copied} onCopy={onCopy} />
     </div>
   </div>
 );
 
-interface CalloutProps {
-  icon: React.ReactNode;
-  darkMode: boolean;
-  variant?: 'info' | 'warning';
-  children: React.ReactNode;
-}
-
-const Callout: React.FC<CalloutProps> = ({ icon, darkMode, variant = 'info', children }) => {
-  const colors = {
-    info: darkMode
-      ? 'bg-purple-900/20 border-purple-800/50 text-purple-300'
-      : 'bg-purple-50 border-purple-200 text-purple-800',
-    warning: darkMode
-      ? 'bg-yellow-900/20 border-yellow-800/50 text-yellow-300'
-      : 'bg-yellow-50 border-yellow-200 text-yellow-800',
-  };
-
-  return (
-    <div className={`flex items-start gap-3 p-4 rounded-xl border text-sm leading-relaxed ${colors[variant]}`}>
-      <div className="flex-shrink-0 mt-0.5">{icon}</div>
-      <div>{children}</div>
+const InlineRow: React.FC<{ title: string; badge: string; body: string }> = ({ title, badge, body }) => (
+  <div className={styles.panel}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
+      <h3 style={{ margin: 0, fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>{title}</h3>
+      <span className={styles.pillMuted}>{badge}</span>
     </div>
-  );
-};
-
-const Divider: React.FC<{ darkMode: boolean }> = ({ darkMode }) => (
-  <hr className={`my-12 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`} />
+    <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-2)', lineHeight: 1.6 }}>{body}</p>
+  </div>
 );
 
-const Code: React.FC<{ darkMode: boolean; children: React.ReactNode }> = ({ darkMode, children }) => (
-  <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded text-xs`}>{children}</code>
-);
+const SWITCH_ENV = `# Primary chat model — set ONE of:
+OPENAI_API_KEY=sk-proj-...
+ANTHROPIC_API_KEY=sk-ant-...
+GOOGLE_API_KEY=...
+SILICONFLOW_API_KEY=...
+OLLAMA_BASE_URL=http://localhost:11434
 
-const ProviderBadge: React.FC<{ label: string; required?: boolean; darkMode: boolean }> = ({ label, required, darkMode }) => (
-  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${
-    required
-      ? darkMode
-        ? 'bg-purple-900/30 border-purple-700 text-purple-300'
-        : 'bg-purple-50 border-purple-200 text-purple-700'
-      : darkMode
-        ? 'bg-gray-800 border-gray-700 text-gray-400'
-        : 'bg-gray-100 border-gray-200 text-gray-500'
-  }`}>
-    {label}
-  </span>
-);
+# Route selection (falls back to whichever key is present)
+CHAT_PROVIDER=openai       # openai | anthropic | google | siliconflow | ollama
+CHAT_MODEL=gpt-5-mini      # provider-specific model id
 
-export const AIProvidersPage: React.FC<DeploymentProps> = ({
-  darkMode,
-  copyToClipboard,
-  copiedCode,
-}) => {
-  const allKeysEnvBlock = `# === AI Model Providers ===
+# Embeddings
+EMBEDDING_PROVIDER=openai
+EMBEDDING_MODEL=text-embedding-3-large
 
-# OpenAI (required — used for embeddings + GPT-5 chat models)
-OPENAI_API_KEY=sk-proj-xxx
-
-# Anthropic (optional — enables Claude models)
-ANTHROPIC_API_KEY=sk-ant-xxx
-
-# Google AI (optional — enables Gemini models)
-GOOGLE_AI_API_KEY=AIzaSy-xxx
-
-# Ollama (optional — enables local open-source models)
-OLLAMA_BASE_URL="http://localhost:11434"
-OLLAMA_MODEL="llama3.1:8b"`;
-
-  const dockerOllamaBlock = `# When using Docker Compose, point to the host machine
-OLLAMA_BASE_URL="http://host.docker.internal:11434"`;
-
-  return (
-    <>
-      {/* Hero */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-12"
-      >
-        <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-          AI Model Providers
-        </h1>
-        <p className={`text-xl leading-relaxed max-w-2xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          Launchstack supports multiple LLM providers simultaneously. Users can switch providers and models from the UI at query time.
-        </p>
-      </motion.div>
-
-      <Callout icon={<AlertTriangle className="w-5 h-5" />} darkMode={darkMode} variant="warning">
-        <strong>OpenAI is currently required</strong> even if you only plan to use other providers for chat.
-        The embedding pipeline (<Code darkMode={darkMode}>text-embedding-3-large</Code>) used for document ingestion and
-        RAG search depends on the OpenAI API. See the <strong>Embeddings</strong> section below for details and future alternatives.
-      </Callout>
-
-      <Divider darkMode={darkMode} />
-
-      {/* ── Provider overview ── */}
-      <Section title="Supported providers" subtitle="Configure one or more providers to enable their models." darkMode={darkMode}>
-        <div className={`overflow-hidden rounded-xl border ${darkMode ? 'border-gray-700/60' : 'border-gray-200'}`}>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className={darkMode ? 'bg-gray-800/80' : 'bg-gray-50'}>
-                <th className={`text-left px-4 py-3 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Provider</th>
-                <th className={`text-left px-4 py-3 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Models</th>
-                <th className={`text-left px-4 py-3 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Env Variable</th>
-                <th className={`text-left px-4 py-3 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Status</th>
-              </tr>
-            </thead>
-            <tbody className={`divide-y ${darkMode ? 'divide-gray-700/60' : 'divide-gray-200'}`}>
-              <tr className={darkMode ? 'bg-gray-800/40' : 'bg-white'}>
-                <td className={`px-4 py-3 font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>OpenAI</td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>GPT-5.2, GPT-5.1, GPT-5 Mini, GPT-5 Nano</td>
-                <td className={`px-4 py-3 font-mono text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>OPENAI_API_KEY</td>
-                <td className="px-4 py-3"><ProviderBadge label="Required" required darkMode={darkMode} /></td>
-              </tr>
-              <tr className={darkMode ? 'bg-gray-800/40' : 'bg-white'}>
-                <td className={`px-4 py-3 font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Anthropic</td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Claude Sonnet 4, Claude Opus 4.5</td>
-                <td className={`px-4 py-3 font-mono text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>ANTHROPIC_API_KEY</td>
-                <td className="px-4 py-3"><ProviderBadge label="Optional" darkMode={darkMode} /></td>
-              </tr>
-              <tr className={darkMode ? 'bg-gray-800/40' : 'bg-white'}>
-                <td className={`px-4 py-3 font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Google</td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Gemini 2.5 Flash, Gemini 3 Flash, Gemini 3 Pro</td>
-                <td className={`px-4 py-3 font-mono text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>GOOGLE_AI_API_KEY</td>
-                <td className="px-4 py-3"><ProviderBadge label="Optional" darkMode={darkMode} /></td>
-              </tr>
-              <tr className={darkMode ? 'bg-gray-800/40' : 'bg-white'}>
-                <td className={`px-4 py-3 font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Ollama</td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Llama 3.1, Mistral, CodeLlama, Gemma 2, Phi-3, Qwen 2.5</td>
-                <td className={`px-4 py-3 font-mono text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>OLLAMA_BASE_URL</td>
-                <td className="px-4 py-3"><ProviderBadge label="Optional" darkMode={darkMode} /></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p className={`mt-3 text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-          Only providers with configured API keys appear in the UI. Users select a provider and model per query.
-        </p>
-      </Section>
-
-      <Divider darkMode={darkMode} />
-
-      {/* ── Quick setup ── */}
-      <Section title="Configuration" subtitle="Add provider API keys to your .env file." darkMode={darkMode}>
-        <div className="space-y-6">
-          <Step
-            number={1}
-            title="Add API keys to .env"
-            code={allKeysEnvBlock}
-            onCopy={() => copyToClipboard(allKeysEnvBlock, 'ai-1')}
-            copied={copiedCode === 'ai-1'}
-            darkMode={darkMode}
-          >
-            <p>Only <Code darkMode={darkMode}>OPENAI_API_KEY</Code> is required. Add other keys to enable those providers.</p>
-          </Step>
-
-          <Step
-            number={2}
-            title="Get your API keys"
-            darkMode={darkMode}
-            onCopy={() => {/* no-op */}}
-            copied={false}
-          >
-            <div className="space-y-2 mt-1">
-              {[
-                { name: 'OpenAI', url: 'https://platform.openai.com/api-keys' },
-                { name: 'Anthropic', url: 'https://console.anthropic.com/settings/keys' },
-                { name: 'Google AI', url: 'https://aistudio.google.com/apikey' },
-                { name: 'Ollama', url: 'https://ollama.com/download', note: 'No API key needed — install locally' },
-              ].map((p) => (
-                <div key={p.name} className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
-                  <span className={`font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{p.name}:</span>
-                  <a
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-purple-600 dark:text-purple-400 hover:underline text-sm"
-                  >
-                    {p.url.replace('https://', '')}
-                  </a>
-                  {p.note && (
-                    <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>({p.note})</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </Step>
-
-          <Step
-            number={3}
-            title="Restart the app"
-            description="After updating .env, restart Next.js (or re-run Docker Compose) for the changes to take effect."
-            code="pnpm dev"
-            onCopy={() => copyToClipboard('pnpm dev', 'ai-3')}
-            copied={copiedCode === 'ai-3'}
-            darkMode={darkMode}
-          />
-        </div>
-      </Section>
-
-      <Divider darkMode={darkMode} />
-
-      {/* ── OpenAI (required) ── */}
-      <Section title="OpenAI" subtitle="Required provider — powers both chat models and the embedding pipeline." darkMode={darkMode}>
-        <div className="space-y-4">
-          <StepCard icon={<Key className="w-5 h-5" />} title="Why is OpenAI required?" darkMode={darkMode}>
-            Launchstack uses OpenAI&apos;s <Code darkMode={darkMode}>text-embedding-3-large</Code> model for all document embeddings
-            (1536 dimensions). These embeddings power the RAG search pipeline, ensemble retrieval, document matching, and
-            predictive document analysis. Without an OpenAI key, documents cannot be ingested or searched.
-          </StepCard>
-          <StepCard icon={<Cpu className="w-5 h-5" />} title="Available chat models" darkMode={darkMode}>
-            <span className="flex flex-wrap gap-1.5 mt-1">
-              {['GPT-5.2', 'GPT-5.1', 'GPT-5 Mini', 'GPT-5 Nano'].map((m) => (
-                <Code key={m} darkMode={darkMode}>{m}</Code>
-              ))}
-            </span>
-          </StepCard>
-        </div>
-      </Section>
-
-      <Divider darkMode={darkMode} />
-
-      {/* ── Anthropic ── */}
-      <Section title="Anthropic (Claude)" subtitle="Optional — add ANTHROPIC_API_KEY to enable Claude models." darkMode={darkMode}>
-        <StepCard icon={<Key className="w-5 h-5" />} title="Available chat models" darkMode={darkMode}>
-          <span className="flex flex-wrap gap-1.5 mt-1">
-            {['Claude Sonnet 4', 'Claude Opus 4.5'].map((m) => (
-              <Code key={m} darkMode={darkMode}>{m}</Code>
-            ))}
-          </span>
-          <p className="mt-2">
-            Get an API key from{' '}
-            <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer" className="text-purple-600 dark:text-purple-400 hover:underline">
-              console.anthropic.com
-            </a>
-          </p>
-        </StepCard>
-      </Section>
-
-      <Divider darkMode={darkMode} />
-
-      {/* ── Google ── */}
-      <Section title="Google (Gemini)" subtitle="Optional — add GOOGLE_AI_API_KEY to enable Gemini models." darkMode={darkMode}>
-        <StepCard icon={<Key className="w-5 h-5" />} title="Available chat models" darkMode={darkMode}>
-          <span className="flex flex-wrap gap-1.5 mt-1">
-            {['Gemini 2.5 Flash', 'Gemini 3 Flash', 'Gemini 3 Pro'].map((m) => (
-              <Code key={m} darkMode={darkMode}>{m}</Code>
-            ))}
-          </span>
-          <p className="mt-2">
-            Get an API key from{' '}
-            <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-purple-600 dark:text-purple-400 hover:underline">
-              aistudio.google.com
-            </a>
-          </p>
-        </StepCard>
-      </Section>
-
-      <Divider darkMode={darkMode} />
-
-      {/* ── Ollama ── */}
-      <Section title="Ollama (Local Models)" subtitle="Optional — run open-source models locally without API costs." darkMode={darkMode}>
-        <div className="space-y-4">
-          <StepCard icon={<Cpu className="w-5 h-5" />} title="Why use Ollama?" darkMode={darkMode}>
-            Models run entirely on your hardware. No data leaves your network — perfect for sensitive documents. Free and open-source with no per-token costs.
-          </StepCard>
-
-          <div className={`overflow-hidden rounded-xl border ${darkMode ? 'border-gray-700/60' : 'border-gray-200'}`}>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className={darkMode ? 'bg-gray-800/80' : 'bg-gray-50'}>
-                  <th className={`text-left px-4 py-3 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Model</th>
-                  <th className={`text-left px-4 py-3 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Size</th>
-                  <th className={`text-left px-4 py-3 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Notes</th>
-                </tr>
-              </thead>
-              <tbody className={`divide-y ${darkMode ? 'divide-gray-700/60' : 'divide-gray-200'}`}>
-                {[
-                  { model: 'llama3.1:8b', size: '~4.7 GB', note: 'Default. Good balance of speed and quality.' },
-                  { model: 'llama3.2:3b', size: '~2.0 GB', note: 'Lightweight, fast. Great for low-resource machines.' },
-                  { model: 'mistral:7b', size: '~4.1 GB', note: 'Strong general-purpose model from Mistral AI.' },
-                  { model: 'codellama:7b', size: '~3.8 GB', note: 'Optimized for code understanding and generation.' },
-                  { model: 'gemma2:9b', size: '~5.4 GB', note: 'Google\'s open model. Strong reasoning capabilities.' },
-                  { model: 'phi3:mini', size: '~2.3 GB', note: 'Microsoft\'s compact model. Fast with solid quality.' },
-                  { model: 'qwen2.5:7b', size: '~4.4 GB', note: 'Alibaba\'s model. Strong multilingual support.' },
-                ].map((row) => (
-                  <tr key={row.model} className={darkMode ? 'bg-gray-800/40' : 'bg-white'}>
-                    <td className={`px-4 py-3 font-mono text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{row.model}</td>
-                    <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{row.size}</td>
-                    <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{row.note}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="space-y-6 mt-8">
-          <Step
-            number={1}
-            title="Install Ollama"
-            description="Download and install from ollama.com, or use a package manager."
-            code={`# macOS / Linux
-curl -fsSL https://ollama.com/install.sh | sh
-
-# Windows — download the installer from https://ollama.com/download`}
-            onCopy={() => copyToClipboard('curl -fsSL https://ollama.com/install.sh | sh', 'ollama-1')}
-            copied={copiedCode === 'ollama-1'}
-            darkMode={darkMode}
-          />
-
-          <Step
-            number={2}
-            title="Pull a model"
-            description="Download the model(s) you want. This only needs to be done once per model."
-            code={`ollama pull llama3.1:8b
-# Or try other models:
-# ollama pull mistral:7b
-# ollama pull codellama:7b
-# ollama pull gemma2:9b`}
-            onCopy={() => copyToClipboard('ollama pull llama3.1:8b', 'ollama-2')}
-            copied={copiedCode === 'ollama-2'}
-            darkMode={darkMode}
-          />
-
-          <Step
-            number={3}
-            title="Start the Ollama server"
-            description="The server runs on port 11434 by default."
-            code="ollama serve"
-            onCopy={() => copyToClipboard('ollama serve', 'ollama-3')}
-            copied={copiedCode === 'ollama-3'}
-            darkMode={darkMode}
-          />
-
-          <Step
-            number={4}
-            title="Verify"
-            code={`curl http://localhost:11434/api/tags
-# Should return a JSON list of your pulled models`}
-            onCopy={() => copyToClipboard('curl http://localhost:11434/api/tags', 'ollama-4')}
-            copied={copiedCode === 'ollama-4'}
-            darkMode={darkMode}
-          />
-        </div>
-
-        <div className="mt-6">
-          <Callout icon={<Terminal className="w-5 h-5" />} darkMode={darkMode}>
-            <strong>Docker users:</strong> Ollama runs on the host machine (needs direct GPU/CPU access).
-            Use <Code darkMode={darkMode}>OLLAMA_BASE_URL=&quot;http://host.docker.internal:11434&quot;</Code> in
-            your <Code darkMode={darkMode}>.env</Code> so the container can reach it.
-            On Linux, you may also need <Code darkMode={darkMode}>extra_hosts: [&quot;host.docker.internal:host-gateway&quot;]</Code> in your compose file.
-          </Callout>
-        </div>
-      </Section>
-
-      <Divider darkMode={darkMode} />
-
-      {/* ── Embeddings ── */}
-      <Section title="Embeddings" subtitle="How document vectorization works and how to reduce OpenAI dependency." darkMode={darkMode}>
-        <div className="space-y-4">
-          <StepCard icon={<AlertTriangle className="w-5 h-5" />} title="Current architecture" darkMode={darkMode}>
-            All document embeddings are generated with OpenAI&apos;s <Code darkMode={darkMode}>text-embedding-3-large</Code> (1536
-            dimensions). This is used during document ingestion, RAG search, ensemble retrieval, and predictive analysis.
-            The <Code darkMode={darkMode}>OPENAI_API_KEY</Code> must be set for documents to be processed and searched,
-            regardless of which chat provider you use.
-          </StepCard>
-
-          <StepCard icon={<Lightbulb className="w-5 h-5" />} title="Making embeddings provider-agnostic (future)" darkMode={darkMode}>
-            <p className="mb-2">To fully decouple from OpenAI, the embedding pipeline would need an abstraction layer similar to the chat model factory. Possible approaches:</p>
-            <ol className="list-decimal list-inside space-y-1.5 ml-1">
-              <li>
-                <strong>Ollama embeddings</strong> — Use <Code darkMode={darkMode}>OllamaEmbeddings</Code> from <Code darkMode={darkMode}>@langchain/ollama</Code> with
-                models like <Code darkMode={darkMode}>nomic-embed-text</Code> or <Code darkMode={darkMode}>mxbai-embed-large</Code>.
-                Free, local, and privacy-preserving. Dimensions would need to match the pgvector column.
-              </li>
-              <li>
-                <strong>Google embeddings</strong> — Use <Code darkMode={darkMode}>GoogleGenerativeAIEmbeddings</Code> with
-                <Code darkMode={darkMode}>text-embedding-004</Code>. Requires a Google AI API key (already configured if using Gemini).
-              </li>
-              <li>
-                <strong>HuggingFace Inference API</strong> — Use <Code darkMode={darkMode}>HuggingFaceInferenceEmbeddings</Code> from <Code darkMode={darkMode}>@langchain/community</Code>.
-                Cloud-hosted open-source models with a free tier.
-              </li>
-              <li>
-                <strong>Local ONNX models</strong> — Run embedding models locally via the sidecar service
-                (e.g. <Code darkMode={darkMode}>BAAI/bge-large-en-v1.5</Code>). Zero external API calls, but requires more compute.
-              </li>
-            </ol>
-            <p className="mt-3">
-              The key constraint is that all existing embeddings in the database must use the <strong>same model and dimensions</strong>.
-              Switching embedding providers requires re-indexing all documents and updating the pgvector column dimensions.
-            </p>
-          </StepCard>
-        </div>
-      </Section>
-
-      {/* ── Footer callouts ── */}
-      <div className="space-y-4 mb-16">
-        <Callout icon={<CheckCircle2 className="w-5 h-5" />} darkMode={darkMode}>
-          <strong>Tip:</strong> You can enable all four providers at once. Users pick the provider per query, so you can
-          compare cloud vs. local answers side-by-side.
-        </Callout>
-
-        <Callout icon={<ShieldAlert className="w-5 h-5" />} darkMode={darkMode} variant="warning">
-          <strong>Performance note:</strong> Local Ollama models are slower than cloud APIs, especially without a GPU.
-          For production workloads, consider a machine with at least 16 GB RAM and a CUDA-capable GPU.
-        </Callout>
-      </div>
-    </>
-  );
-};
+# Reranker (optional)
+RERANKER_PROVIDER=jina
+JINA_API_KEY=jina_your_key`;

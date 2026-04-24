@@ -20,13 +20,19 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
-// `title` column is varchar(256) — match the schema constraint.
+// `title` and `category` columns are both varchar(256) — match schema.
 const PatchDocumentSchema = z.object({
   title: z
     .string()
     .trim()
     .min(1, "Title cannot be empty")
     .max(256, "Title is too long (max 256 characters)")
+    .optional(),
+  category: z
+    .string()
+    .trim()
+    .min(1, "Category cannot be empty")
+    .max(256, "Category is too long (max 256 characters)")
     .optional(),
 });
 
@@ -93,10 +99,11 @@ export async function PATCH(
       const validation = await validateRequestBody(request, PatchDocumentSchema);
       if (!validation.success) return validation.response;
 
-      const { title } = validation.data;
+      const { title, category } = validation.data;
 
       const patch: Record<string, string> = {};
       if (title !== undefined) patch.title = title;
+      if (category !== undefined) patch.category = category;
 
       if (Object.keys(patch).length === 0) {
         return NextResponse.json(

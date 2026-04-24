@@ -34,6 +34,8 @@ import {
     extractRecommendedPages,
     type AIModelType,
 } from "../../services";
+import { supportsVision } from "@launchstack/core/llm/types";
+import type { AttachmentPayload } from "~/lib/validation";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
@@ -48,6 +50,137 @@ const qaAnnOptimizer = new ANNOptimizer({
 });
 
 const COMPANY_SCOPE_ROLES = new Set(["employer", "owner"]);
+
+/**
+ * Cap on total plaintext pulled from text attachments across a single turn.
+ * Chosen to leave room for the retrieved RAG context and web results while
+ * still accommodating a multi-page text file. Anything past this is truncated
+ * with a visible marker so the model knows content was cut.
+ */
+const ATTACHMENT_TEXT_CAP_BYTES = 40_000;
+const ATTACHMENT_PER_FILE_CAP_BYTES = 30_000;
+const ATTACHMENT_PDF_MAX_PAGES = 40;
+
+function guessAttachmentKind(name: string, mime: string): "pdf" | "docx" | "plaintext" {
+    const lower = name.toLowerCase();
+    if (mime === "application/pdf" || lower.endsWith(".pdf")) return "pdf";
+    if (
+        mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+        mime === "application/msword" ||
+        lower.endsWith(".docx") ||
+        lower.endsWith(".doc")
+    ) {
+        return "docx";
+    }
+    return "plaintext";
+}
+
+/**
+ * Extract text from a PDF via pdfjs-dist legacy build. No OCR — scanned PDFs
+ * will produce empty output. For OCR, the user should add the file as a
+ * Source and let the ingestion pipeline handle it.
+ */
+async function extractPdfText(buffer: ArrayBuffer): Promise<string> {
+    const pdfjs = (await import("pdfjs-dist/legacy/build/pdf.mjs")) as {
+        getDocument: (src: { data: Uint8Array }) => { promise: Promise<PdfDoc> };
+    };
+    interface PdfDoc {
+        numPages: number;
+        getPage: (n: number) => Promise<PdfPage>;
+    }
+    interface PdfPage {
+        getTextContent: () => Promise<{ items: { str?: string }[] }>;
+    }
+    const data = new Uint8Array(buffer);
+    const doc = await pdfjs.getDocument({ data }).promise;
+    const pages: string[] = [];
+    const max = Math.min(doc.numPages, ATTACHMENT_PDF_MAX_PAGES);
+    for (let i = 1; i <= max; i++) {
+        const page = await doc.getPage(i);
+        const content = await page.getTextContent();
+        const text = content.items
+            .map((it) => (typeof it.str === "string" ? it.str : ""))
+            .join(" ")
+            .replace(/\s+/g, " ")
+            .trim();
+        if (text) pages.push(`--- Page ${i} ---\n${text}`);
+    }
+    if (doc.numPages > max) {
+        pages.push(`[…${doc.numPages - max} more page(s) not extracted]`);
+    }
+    return pages.join("\n\n");
+}
+
+async function extractDocxText(buffer: ArrayBuffer): Promise<string> {
+    const mammoth = (await import("mammoth")) as unknown as {
+        extractRawText: (input: { buffer: Buffer }) => Promise<{ value: string }>;
+    };
+    const result = await mammoth.extractRawText({
+        buffer: Buffer.from(buffer),
+    });
+    return result.value ?? "";
+}
+
+async function extractAttachmentText(att: AttachmentPayload): Promise<string> {
+    const res = await fetch(att.url);
+    if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+    }
+    const kind = guessAttachmentKind(att.name, att.mimeType);
+    if (kind === "pdf") {
+        return await extractPdfText(await res.arrayBuffer());
+    }
+    if (kind === "docx") {
+        return await extractDocxText(await res.arrayBuffer());
+    }
+    return await res.text();
+}
+
+async function buildAttachmentTextBlock(
+    textAttachments: AttachmentPayload[],
+): Promise<string> {
+    if (textAttachments.length === 0) return "";
+
+    let remainingBudget = ATTACHMENT_TEXT_CAP_BYTES;
+    const blocks: string[] = [];
+
+    for (const att of textAttachments) {
+        if (remainingBudget <= 0) {
+            blocks.push(
+                `=== User Attachment: ${att.name} ===\n[omitted — prior attachments filled the context budget]`,
+            );
+            continue;
+        }
+
+        try {
+            const raw = await extractAttachmentText(att);
+            if (!raw.trim()) {
+                blocks.push(
+                    `=== User Attachment: ${att.name} ===\n[no extractable text — if this is a scanned PDF or image-only doc, add it as a Source to run OCR]`,
+                );
+                continue;
+            }
+            const perFile = raw.slice(0, ATTACHMENT_PER_FILE_CAP_BYTES);
+            const trimmed = perFile.slice(0, remainingBudget);
+            const suffix =
+                trimmed.length < raw.length ? "\n[…attachment truncated]" : "";
+            remainingBudget -= trimmed.length;
+            blocks.push(
+                `=== User Attachment: ${att.name} (${att.mimeType}) ===\n${trimmed}${suffix}`,
+            );
+        } catch (err) {
+            console.warn(
+                `[AIChat] Failed to read attachment "${att.name}":`,
+                err,
+            );
+            blocks.push(
+                `=== User Attachment: ${att.name} ===\n[could not read attachment content]`,
+            );
+        }
+    }
+
+    return `\n\n${blocks.join("\n\n")}`;
+}
 
 /**
  * AIChat Query - Comprehensive search solution
@@ -100,6 +233,8 @@ export async function POST(request: Request) {
                 provider,
                 conversationHistory,
                 embeddingIndexKey,
+                thinkingMode,
+                attachments,
             } = validation.data;
 
             // Validate search scope requirements
@@ -453,9 +588,32 @@ export async function POST(request: Request) {
             // Get AI model and generate comprehensive response
             const resolvedProvider = provider ?? "openai";
             const selectedAiModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
+
+            // Ephemeral attachment handling. Images require a vision-capable
+            // model; fail fast with a clear error before the LLM call.
+            const imageAttachments = (attachments ?? []).filter(
+                (a) => a.kind === "image",
+            );
+            const textAttachments = (attachments ?? []).filter(
+                (a) => a.kind === "text",
+            );
+            if (imageAttachments.length > 0 && !supportsVision(selectedAiModel)) {
+                recordResult("error");
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: `Image attachments require a vision-capable model. "${selectedAiModel}" cannot read images — pick GPT-5, Claude Sonnet 4, or Gemini.`,
+                    },
+                    { status: 400 },
+                );
+            }
+
+            const attachmentTextBlock = await buildAttachmentTextBlock(textAttachments);
+
             const chat = getChatModelForProvider({
                 provider: resolvedProvider,
                 model: selectedAiModel,
+                thinking: thinkingMode,
             });
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
@@ -474,13 +632,30 @@ export async function POST(request: Request) {
                 webSearch.reasoning
             );
 
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${webSearchInstruction}\n\nProvide a natural, conversational answer based primarily on the provided content. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
-            
+            const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${attachmentTextBlock}${webSearchInstruction}\n\nProvide a natural, conversational answer based primarily on the provided content. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
+
+            // When images are attached, send a multimodal HumanMessage so the
+            // vision model sees the text prompt and the image URLs in one turn.
+            // Text-only: keep the single-string form for backward compatibility
+            // with existing LangChain adapters.
+            const humanMessage =
+                imageAttachments.length > 0
+                    ? new HumanMessage({
+                          content: [
+                              { type: "text", text: userPrompt },
+                              ...imageAttachments.map((img) => ({
+                                  type: "image_url" as const,
+                                  image_url: { url: img.url },
+                              })),
+                          ],
+                      })
+                    : new HumanMessage(userPrompt);
+
             let response;
             try {
                 response = await chat.call([
                     new SystemMessage(systemPrompt),
-                    new HumanMessage(userPrompt),
+                    humanMessage,
                 ]);
             } catch (modelError) {
                 const friendly = describeProviderError(resolvedProvider, modelError, selectedAiModel);

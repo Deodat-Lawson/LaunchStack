@@ -53,7 +53,7 @@ export function isResponseStyle(value: string): value is ResponseStyle {
 // ============================================================================
 
 /**
- * Web search result from Tavily API or web search agent
+ * Web search result from Exa API or web search agent
  * 
  * @property title - Title of the search result
  * @property url - URL of the source

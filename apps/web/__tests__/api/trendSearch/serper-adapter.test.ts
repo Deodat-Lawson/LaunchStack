@@ -5,27 +5,24 @@
 
 const mockFetch = jest.fn();
 
-jest.mock("~/env", () => ({
-  env: {
-    server: {
-      SERPER_API_KEY: "test-serper-key",
-    },
-  },
-}));
-
-import { env } from "~/env";
 import { callSerper } from "@launchstack/features/trend-search/providers/serper";
 
-const mockServer = env.server as { SERPER_API_KEY?: string | undefined };
+// callSerper reads SERPER_API_KEY from process.env directly.
+const ORIGINAL_SERPER_KEY = process.env.SERPER_API_KEY;
 
 beforeEach(() => {
-  mockServer.SERPER_API_KEY = "test-serper-key";
+  process.env.SERPER_API_KEY = "test-serper-key";
   mockFetch.mockReset();
   jest.spyOn(globalThis, "fetch").mockImplementation(mockFetch);
 });
 
 afterEach(() => {
   jest.restoreAllMocks();
+});
+
+afterAll(() => {
+  if (ORIGINAL_SERPER_KEY === undefined) delete process.env.SERPER_API_KEY;
+  else process.env.SERPER_API_KEY = ORIGINAL_SERPER_KEY;
 });
 
 const SERPER_NEWS_URL = "https://google.serper.dev/news";
@@ -108,7 +105,7 @@ describe("callSerper", () => {
   describe("missing SERPER_API_KEY returns empty array", () => {
     it("returns [] and does not call fetch when key is undefined", async () => {
       const warnSpy = jest.spyOn(console, "warn").mockImplementation();
-      mockServer.SERPER_API_KEY = undefined;
+      delete process.env.SERPER_API_KEY;
 
       const results = await callSerper("query");
 

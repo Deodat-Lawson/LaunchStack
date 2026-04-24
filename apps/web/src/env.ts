@@ -40,12 +40,12 @@ const serverSchema = z.object({
   UPLOADTHING_TOKEN: optionalString(),
   DATALAB_API_KEY: optionalString(),
   // Web search providers
-  TAVILY_API_KEY: optionalString(),
+  EXA_API_KEY: optionalString(),
   // Foursquare Places API (for Client Prospector)
   FOURSQUARE_SERVICE_KEY: optionalString(),
   SERPER_API_KEY: optionalString(),
   SEARCH_PROVIDER: z
-    .enum(["tavily", "serper", "fallback", "parallel"])
+    .enum(["exa", "serper", "fallback", "parallel"])
     .optional(),
   // Platform API Keys for Marketing Pipeline
   REDDIT_CLIENT_ID: optionalString(),
@@ -228,10 +228,10 @@ function parseServerEnv() {
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DATALAB_API_KEY: process.env.DATALAB_API_KEY,
-    TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+    EXA_API_KEY: process.env.EXA_API_KEY,
     FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
     SERPER_API_KEY: process.env.SERPER_API_KEY,
-    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as "tavily" | "serper" | "fallback" | "parallel" | undefined,
+    SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as "exa" | "serper" | "fallback" | "parallel" | undefined,
     REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
     REDDIT_CLIENT_SECRET: process.env.REDDIT_CLIENT_SECRET,
     REDDIT_USER_AGENT: process.env.REDDIT_USER_AGENT,

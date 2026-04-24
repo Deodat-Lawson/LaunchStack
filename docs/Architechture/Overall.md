@@ -24,7 +24,7 @@ block-beta
 
   TLABEL["Tools\nLayer"]:1
   RAG["RAG Pipeline\n(BM25 + Vector)"]:2
-  WEB["Web Search\n(Tavily, Firecrawl)"]:2
+  WEB["Web Search\n(Exa, Firecrawl)"]:2
   REW["Doc Rewrite\n(Summarize, Refine)"]:2
   TMPL["Template Engine\n(Form → PDF)"]:2
   space:1

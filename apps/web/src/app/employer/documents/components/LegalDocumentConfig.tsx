@@ -1,11 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { ArrowLeft, FileText, Loader2, AlertCircle } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Input } from "~/app/employer/documents/components/ui/input";
-import { Label } from "~/app/employer/documents/components/ui/label";
-import { Textarea } from "~/app/employer/documents/components/ui/textarea";
+import { ArrowLeft, FileText, Loader2, AlertCircle, Sparkles } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -13,8 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/app/employer/documents/components/ui/select";
-import { Card } from "~/app/employer/documents/components/ui/card";
 import type { TemplateField } from "@launchstack/features/legal-templates";
+import { legalTheme as s } from "./LegalGeneratorTheme";
 
 interface LegalDocumentTemplate {
   id: string;
@@ -71,10 +67,7 @@ export function LegalDocumentConfig({
     let lastType = "";
 
     for (const field of template.fields) {
-      if (
-        field.key.includes("signature") ||
-        field.key.includes("signatory")
-      ) {
+      if (field.key.includes("signature") || field.key.includes("signatory")) {
         if (currentGroup.length > 0) {
           groups.push({ label: "Document Details", fields: [...currentGroup] });
           currentGroup = [];
@@ -102,6 +95,12 @@ export function LegalDocumentConfig({
 
     return groups;
   }, [template.fields]);
+
+  const filledRequired = useMemo(() => {
+    const required = template.fields.filter((f) => f.required);
+    const filled = required.filter((f) => String(formData[f.key] ?? "").trim() !== "").length;
+    return { filled, total: required.length };
+  }, [template.fields, formData]);
 
   const handleChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -132,7 +131,10 @@ export function LegalDocumentConfig({
     }
     setErrors(newErrors);
     const firstInvalidField = Object.keys(newErrors)[0];
-    return { valid: Object.keys(newErrors).length === 0, firstInvalidField };
+    return {
+      valid: Object.keys(newErrors).length === 0,
+      firstInvalidField,
+    };
   };
 
   const handleSubmit = () => {
@@ -145,31 +147,55 @@ export function LegalDocumentConfig({
       }
       return;
     }
-
     onGenerate(formData);
   };
 
   const renderField = (field: TemplateField) => {
     const hasError = !!errors[field.key];
+    const labelEl = (
+      <label
+        htmlFor={field.key}
+        className={`${s.label} ${hasError ? s.labelError : ""}`}
+      >
+        {field.label}
+        {field.required && <span className={s.required}>*</span>}
+      </label>
+    );
+
+    const errorMsg = hasError && (
+      <p
+        className="flex items-center gap-1"
+        style={{ fontSize: 12, color: "var(--danger)", margin: 0 }}
+      >
+        <AlertCircle className="h-3 w-3" />
+        {errors[field.key]}
+      </p>
+    );
+
+    const colSpan = field.type === "textarea" ? "md:col-span-2" : "";
 
     switch (field.type) {
       case "select":
         return (
-          <div key={field.key} className="space-y-2">
-            <Label
-              htmlFor={field.key}
-              className={`text-sm font-medium ${hasError ? "text-red-500" : "text-foreground"}`}
-            >
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </Label>
+          <div key={field.key} className={`space-y-2 ${colSpan}`}>
+            {labelEl}
             <Select
               value={formData[field.key] ?? ""}
               onValueChange={(val) => handleChange(field.key, val)}
             >
               <SelectTrigger
                 id={field.key}
-                className={hasError ? "border-red-500" : ""}
+                className={s.input}
+                style={{
+                  height: 42,
+                  ...(hasError
+                    ? {
+                        borderColor: "var(--danger)",
+                        boxShadow:
+                          "0 0 0 3px oklch(from var(--danger) l c h / 0.18)",
+                      }
+                    : {}),
+                }}
               >
                 <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
               </SelectTrigger>
@@ -181,212 +207,235 @@ export function LegalDocumentConfig({
                 ))}
               </SelectContent>
             </Select>
-            {hasError && (
-              <p className="text-xs text-red-500 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors[field.key]}
-              </p>
-            )}
+            {errorMsg}
           </div>
         );
 
       case "textarea":
         return (
-          <div key={field.key} className="space-y-2 col-span-2">
-            <Label
-              htmlFor={field.key}
-              className={`text-sm font-medium ${hasError ? "text-red-500" : "text-foreground"}`}
-            >
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </Label>
-            <Textarea
+          <div key={field.key} className={`space-y-2 ${colSpan}`}>
+            {labelEl}
+            <textarea
               id={field.key}
+              className={s.textarea}
               value={formData[field.key] ?? ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
               placeholder={`Enter ${field.label.toLowerCase()}`}
-              className={`min-h-[80px] ${hasError ? "border-red-500" : ""}`}
+              aria-invalid={hasError ? "true" : undefined}
             />
-            {hasError && (
-              <p className="text-xs text-red-500 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors[field.key]}
-              </p>
-            )}
+            {errorMsg}
           </div>
         );
 
       case "date":
         return (
-          <div key={field.key} className="space-y-2">
-            <Label
-              htmlFor={field.key}
-              className={`text-sm font-medium ${hasError ? "text-red-500" : "text-foreground"}`}
-            >
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </Label>
-            <Input
+          <div key={field.key} className={`space-y-2 ${colSpan}`}>
+            {labelEl}
+            <input
               id={field.key}
               type="date"
+              className={s.input}
               value={formData[field.key] ?? ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
-              className={hasError ? "border-red-500" : ""}
+              aria-invalid={hasError ? "true" : undefined}
             />
-            {hasError && (
-              <p className="text-xs text-red-500 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors[field.key]}
-              </p>
-            )}
+            {errorMsg}
           </div>
         );
 
       case "number":
         return (
-          <div key={field.key} className="space-y-2">
-            <Label
-              htmlFor={field.key}
-              className={`text-sm font-medium ${hasError ? "text-red-500" : "text-foreground"}`}
-            >
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </Label>
-            <Input
+          <div key={field.key} className={`space-y-2 ${colSpan}`}>
+            {labelEl}
+            <input
               id={field.key}
               type="number"
+              className={s.input}
               value={formData[field.key] ?? ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
               placeholder={`Enter ${field.label.toLowerCase()}`}
-              className={hasError ? "border-red-500" : ""}
+              aria-invalid={hasError ? "true" : undefined}
             />
-            {hasError && (
-              <p className="text-xs text-red-500 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors[field.key]}
-              </p>
-            )}
+            {errorMsg}
           </div>
         );
 
       default:
         return (
-          <div key={field.key} className="space-y-2">
-            <Label
-              htmlFor={field.key}
-              className={`text-sm font-medium ${hasError ? "text-red-500" : "text-foreground"}`}
-            >
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </Label>
-            <Input
+          <div key={field.key} className={`space-y-2 ${colSpan}`}>
+            {labelEl}
+            <input
               id={field.key}
               type="text"
+              className={s.input}
               value={formData[field.key] ?? ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
               placeholder={`Enter ${field.label.toLowerCase()}`}
-              className={hasError ? "border-red-500" : ""}
+              aria-invalid={hasError ? "true" : undefined}
             />
-            {hasError && (
-              <p className="text-xs text-red-500 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors[field.key]}
-              </p>
-            )}
+            {errorMsg}
           </div>
         );
     }
   };
 
-  return (
-    <div className="flex flex-col h-full bg-background">
-      <div className="flex-shrink-0 bg-background border-b border-border p-6">
-        <div className="max-w-4xl mx-auto">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onBack}
-            className="mb-4 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {backButtonLabel}
-          </Button>
+  const progressPct =
+    filledRequired.total > 0
+      ? Math.round((filledRequired.filled / filledRequired.total) * 100)
+      : 100;
 
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20">
-              <FileText className="w-6 h-6 text-white" />
+  return (
+    <div className="flex h-full flex-col">
+      {/* Header */}
+      <div className="flex-shrink-0 px-6 pt-8 pb-5 md:px-10 md:pt-10">
+        <div className="mx-auto w-full max-w-4xl">
+          <button
+            className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
+            onClick={onBack}
+            style={{ marginBottom: 18, paddingLeft: 6, paddingRight: 10 }}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {backButtonLabel}
+          </button>
+
+          <div className="flex items-start gap-4">
+            <div className={s.brandMark}>
+              <FileText className="h-[18px] w-[18px]" />
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">
+            <div className="min-w-0 flex-1 space-y-2">
+              <span className={s.eyebrow}>Template fields</span>
+              <h1 className={s.title} style={{ fontSize: "clamp(26px, 2.6vw, 34px)" }}>
                 {template.name}
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className={s.sub} style={{ maxWidth: 680 }}>
                 {template.description}
               </p>
               {flowHint ? (
-                <p className="text-sm text-blue-700 dark:text-blue-300 mt-2">
-                  {flowHint}
-                </p>
+                <div
+                  className={s.banner}
+                  style={{ padding: "12px 14px", marginTop: 12 }}
+                >
+                  <div className="flex items-start gap-3">
+                    <Sparkles
+                      className="h-4 w-4 flex-shrink-0 mt-0.5"
+                      style={{ color: "var(--accent)" }}
+                    />
+                    <p style={{ margin: 0, fontSize: 13, color: "var(--ink-2)", lineHeight: 1.55 }}>
+                      {flowHint}
+                    </p>
+                  </div>
+                </div>
               ) : null}
             </div>
           </div>
+
+          {filledRequired.total > 0 && (
+            <div className="mt-6 flex items-center gap-3">
+              <div className={s.progressTrack}>
+                <div
+                  className={s.progressFill}
+                  style={{ width: `${progressPct}%` }}
+                />
+              </div>
+              <span style={{ fontSize: 12, color: "var(--ink-3)", whiteSpace: "nowrap" }}>
+                {filledRequired.filled}/{filledRequired.total} required
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {fieldGroups.map((group, groupIdx) => (
-            <Card key={groupIdx} className="p-6">
-              <h2 className="text-lg font-semibold text-foreground mb-4">
-                {group.label}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {group.fields.map(renderField)}
-              </div>
-            </Card>
-          ))}
+      {/* Body */}
+      <div className={`flex-1 overflow-y-auto ${s.scrollbar}`}>
+        <div className="mx-auto w-full max-w-4xl px-6 pb-10 md:px-10">
+          <div className="space-y-6">
+            {fieldGroups.map((group, groupIdx) => (
+              <section key={groupIdx} className={s.panel} style={{ padding: 22 }}>
+                <h2
+                  style={{
+                    margin: 0,
+                    fontSize: 16,
+                    fontWeight: 600,
+                    color: "var(--ink)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {group.label}
+                </h2>
+                <hr className={s.hair} style={{ margin: "14px 0 18px" }} />
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                  {group.fields.map(renderField)}
+                </div>
+              </section>
+            ))}
 
-          {(Object.keys(errors).length > 0 || globalError) && (
-            <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-              <div className="flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-red-500 mt-0.5" />
-                <div className="space-y-2">
-                  <p className="text-sm text-red-600 dark:text-red-400 font-medium">
-                    {globalError ?? "Please fill in all required fields before generating the document."}
-                  </p>
-                  {Object.keys(errors).length > 0 && (
-                    <ul className="list-disc pl-5 text-xs text-red-600 dark:text-red-400 space-y-1">
-                      {Object.entries(errors).map(([key, message]) => (
-                        <li key={key}>{message}</li>
-                      ))}
-                    </ul>
-                  )}
+            {(Object.keys(errors).length > 0 || globalError) && (
+              <div className={`${s.banner} ${s.bannerDanger}`} style={{ padding: 16 }}>
+                <div className="flex items-start gap-3">
+                  <AlertCircle
+                    className="h-4 w-4 flex-shrink-0 mt-0.5"
+                    style={{ color: "var(--danger)" }}
+                  />
+                  <div className="space-y-2">
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: "var(--danger)",
+                      }}
+                    >
+                      {globalError ??
+                        "Please fill in all required fields before generating the document."}
+                    </p>
+                    {Object.keys(errors).length > 0 && (
+                      <ul
+                        style={{
+                          margin: 0,
+                          paddingLeft: 18,
+                          fontSize: 12,
+                          color: "var(--danger)",
+                          listStyle: "disc",
+                        }}
+                      >
+                        {Object.entries(errors).map(([key, message]) => (
+                          <li key={key} style={{ marginTop: 3 }}>
+                            {message}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div className="flex justify-end gap-3 pb-6">
-            <Button variant="outline" onClick={onBack} disabled={isGenerating}>
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={isGenerating}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Generating Document...
-                </>
-              ) : (
-                <>
-                  <FileText className="w-4 h-4 mr-2" />
-                  Generate Document
-                </>
-              )}
-            </Button>
+            <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
+              <button
+                className={`${s.btn} ${s.btnOutline}`}
+                onClick={onBack}
+                disabled={isGenerating}
+              >
+                Cancel
+              </button>
+              <button
+                className={`${s.btn} ${s.btnAccent} ${s.btnLg}`}
+                onClick={handleSubmit}
+                disabled={isGenerating}
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Generating document…
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-4 w-4" />
+                    Generate document
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

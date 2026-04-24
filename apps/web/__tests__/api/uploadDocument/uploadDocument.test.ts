@@ -1,6 +1,6 @@
 import { POST } from "~/app/api/uploadDocument/route";
 import { validateRequestBody } from "~/lib/validation";
-import { db } from "~/server/db/index";
+import { db } from "~/server/db";
 import { triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 
 jest.mock("~/lib/validation", () => {
@@ -11,12 +11,36 @@ jest.mock("~/lib/validation", () => {
   };
 });
 
-jest.mock("~/server/db/index", () => ({
-  db: {
-    select: jest.fn(),
-    insert: jest.fn(),
-  },
-}));
+jest.mock("~/server/db", () => {
+  // `db.transaction(cb)` invokes cb with a tx object that has the same
+  // chainable query shape as db itself. Tests that exercise the upload path
+  // override `db.insert` to return document rows — the transaction callback
+  // inserts into `documentVersions` + updates `document`, neither of which
+  // the tests care about, so we give it a permissive tx that resolves each
+  // step to something harmless.
+  const transaction = jest.fn().mockImplementation(async (cb: (tx: unknown) => unknown) => {
+    const tx = {
+      insert: jest.fn().mockImplementation(() => ({
+        values: jest.fn().mockImplementation(() => ({
+          returning: jest.fn().mockResolvedValue([{ id: 1 }]),
+        })),
+      })),
+      update: jest.fn().mockImplementation(() => ({
+        set: jest.fn().mockImplementation(() => ({
+          where: jest.fn().mockResolvedValue(undefined),
+        })),
+      })),
+    };
+    return cb(tx);
+  });
+  return {
+    db: {
+      select: jest.fn(),
+      insert: jest.fn(),
+      transaction,
+    },
+  };
+});
 
 jest.mock("@launchstack/core/ocr/trigger", () => ({
   triggerDocumentProcessing: jest.fn(),
@@ -28,6 +52,35 @@ jest.mock("~/env", () => ({
     DATALAB_API_KEY: undefined,
   },
 }));
+
+// Skip the cloud-mode credit pre-check so the upload path doesn't throw
+// "Insufficient credits" under test.
+jest.mock("~/lib/credits", () => ({
+  hasTokens: jest.fn().mockResolvedValue(true),
+}));
+
+// The upload path funnels through ~/server/engine.ts::getEngine() via
+// trigger-job.ts. That pulls ~/env and constructs a full CoreConfig, which
+// is way more wiring than these tests should care about — stub it out so
+// getEngine() becomes a no-op.
+jest.mock("~/server/engine", () => ({
+  getEngine: jest.fn().mockReturnValue({}),
+}));
+
+// The upload path calls getCompanyReindexState() which uses getDb() from
+// @launchstack/core/db. Register a stub so getDb() doesn't throw. Returning
+// an empty array is fine — resolveIngestIndexKey() will resolve to null and
+// the pipeline will enqueue without an explicit index key.
+import { configureDatabase, type DbClient } from "@launchstack/core/db";
+configureDatabase({
+  select: jest.fn().mockReturnValue({
+    from: jest.fn().mockReturnValue({
+      where: jest.fn().mockReturnValue({
+        limit: jest.fn().mockResolvedValue([]),
+      }),
+    }),
+  }),
+} as unknown as DbClient);
 
 describe("POST /api/uploadDocument", () => {
   beforeEach(() => {
@@ -258,7 +311,15 @@ describe("POST /api/uploadDocument", () => {
 
       expect(response.status).toBe(500);
       expect(json.error).toBe("Failed to start document processing");
-      expect(json.details).toContain("Inngest API Error");
+      // The refactored route doesn't surface error details in the response
+      // body — it only logs them. Assert the log captured the Inngest error
+      // so regressions in the logging path still get caught.
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Error triggering document processing"),
+        expect.objectContaining({
+          message: expect.stringContaining("Inngest API Error"),
+        }),
+      );
     } finally {
       // Restore console.error even if test fails
       consoleErrorSpy.mockRestore();

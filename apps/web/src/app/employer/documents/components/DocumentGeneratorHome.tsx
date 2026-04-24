@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from 'react';
-import { Search, Plus, FileText, Clock, Scale, Brain, Sparkles, ArrowRight } from 'lucide-react';
-import { Input } from "~/app/employer/documents/components/ui/input";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Card } from "~/app/employer/documents/components/ui/card";
-import { cn } from "~/lib/utils";
-import { Tabs, TabsList, TabsTrigger } from "~/app/employer/documents/components/ui/tabs";
+import {
+  Search,
+  Plus,
+  FileText,
+  Clock,
+  Scale,
+  Sparkles,
+  ArrowRight,
+} from 'lucide-react';
 import { TEMPLATE_REGISTRY, type TemplateField } from "@launchstack/features/legal-templates";
+import { legalTheme as s } from './LegalGeneratorTheme';
 
 export interface DocumentTemplate {
   id: string;
@@ -72,7 +76,12 @@ const STAGE_ORDER = [
   'Offboarding',
 ];
 
-export function DocumentGeneratorHome({ onNewDocument, onOpenDocument, onStartChat, generatedDocuments }: DocumentGeneratorHomeProps) {
+export function DocumentGeneratorHome({
+  onNewDocument,
+  onOpenDocument,
+  onStartChat,
+  generatedDocuments,
+}: DocumentGeneratorHomeProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'new' | 'existing'>('new');
@@ -80,275 +89,375 @@ export function DocumentGeneratorHome({ onNewDocument, onOpenDocument, onStartCh
 
   const categories = ['all', ...STAGE_ORDER];
 
-  const filteredTemplates = templates.filter(template => {
-    const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         template.description.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredTemplates = templates.filter((template) => {
+    const matchesSearch =
+      template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      template.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const filteredDocuments = generatedDocuments.filter(doc =>
-    doc.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredDocuments = generatedDocuments.filter((doc) =>
+    doc.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const groupedTemplates = selectedCategory === 'all'
-    ? STAGE_ORDER.map(stage => ({
-        stage,
-        items: filteredTemplates.filter(t => t.category === stage),
-      })).filter(g => g.items.length > 0)
-    : [{ stage: selectedCategory, items: filteredTemplates }];
+  const groupedTemplates =
+    selectedCategory === 'all'
+      ? STAGE_ORDER.map((stage) => ({
+          stage,
+          items: filteredTemplates.filter((t) => t.category === stage),
+        })).filter((g) => g.items.length > 0)
+      : [{ stage: selectedCategory, items: filteredTemplates }];
 
   return (
-    <div className="flex flex-col h-full bg-background">
-      {/* Header */}
-      <div className="flex-shrink-0 bg-background border-b border-border p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20">
-                  <Scale className="w-6 h-6 text-white" />
-                </div>
-                <h1 className="text-2xl font-bold text-foreground">Legal Document Generator</h1>
+    <div className="flex h-full flex-col">
+      {/* Hero header */}
+      <div className="flex-shrink-0 px-6 pt-8 pb-4 md:px-10 md:pt-10">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="flex items-start gap-4">
+              <div className={s.brandMark}>
+                <Scale className="h-[18px] w-[18px]" />
               </div>
-              <p className="text-muted-foreground">
-                Generate legal documents from professional templates
-              </p>
+              <div className="space-y-2">
+                <span className={s.eyebrow}>Legal Documents</span>
+                <h1 className={s.title}>
+                  Draft your next{' '}
+                  <span className={s.highlight}>
+                    <span className={s.serif}>agreement</span>
+                  </span>
+                </h1>
+                <p className={s.sub} style={{ maxWidth: 560 }}>
+                  Pick a template or describe what you need. The assistant will
+                  pre-fill fields and open a polished document ready to export.
+                </p>
+              </div>
+            </div>
+
+            <div className={s.tabs}>
+              <button
+                className={`${s.tab} ${viewMode === 'new' ? s.tabActive : ''}`}
+                onClick={() => setViewMode('new')}
+              >
+                <Plus className="h-4 w-4" />
+                New document
+              </button>
+              <button
+                className={`${s.tab} ${viewMode === 'existing' ? s.tabActive : ''}`}
+                onClick={() => setViewMode('existing')}
+              >
+                <Clock className="h-4 w-4" />
+                My documents
+                <span className={s.tabCount}>{generatedDocuments.length}</span>
+              </button>
             </div>
           </div>
-
-          <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as 'new' | 'existing')}>
-            <TabsList className="bg-muted">
-              <TabsTrigger value="new" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-                <Plus className="w-4 h-4 mr-2" />
-                New Document
-              </TabsTrigger>
-              <TabsTrigger value="existing" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-                <Clock className="w-4 h-4 mr-2" />
-                My Documents ({generatedDocuments.length})
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
       </div>
 
-      {/* Search */}
-      <div className="flex-shrink-0 bg-background border-b border-border px-6 py-4">
-        <div className="max-w-7xl mx-auto">
+      {/* Search + filter strip */}
+      <div className="flex-shrink-0 px-6 pt-4 md:px-10">
+        <div className="mx-auto w-full max-w-7xl space-y-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <Input
-              placeholder={viewMode === 'new' ? "Search legal templates..." : "Search your documents..."}
+            <Search
+              className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2"
+              style={{ color: 'var(--ink-3)' }}
+            />
+            <input
+              type="text"
+              className={s.input}
+              placeholder={
+                viewMode === 'new'
+                  ? 'Search legal templates…'
+                  : 'Search your documents…'
+              }
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-background border-border"
+              style={{ paddingLeft: 40 }}
             />
           </div>
-        </div>
-      </div>
 
-      {/* Stage Filter */}
-      {viewMode === 'new' && (
-        <div className="flex-shrink-0 bg-background border-b border-border px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex gap-2 overflow-x-auto pb-2">
+          {viewMode === 'new' && (
+            <div className="flex gap-2 overflow-x-auto pb-1">
               {categories.map((category) => (
-                <Button
+                <button
                   key={category}
-                  variant={selectedCategory === category ? 'default' : 'outline'}
-                  size="sm"
                   onClick={() => setSelectedCategory(category)}
-                  className={cn(
-                    selectedCategory === category
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : "border-border text-muted-foreground hover:text-foreground"
-                  )}
+                  className={`${s.chipBtn} ${
+                    selectedCategory === category ? s.chipBtnActive : ''
+                  }`}
                 >
-                  {category === 'all' ? 'All Templates' : category}
-                </Button>
+                  {category === 'all' ? 'All templates' : category}
+                </button>
               ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto p-6">
-          {viewMode === 'new' ? (
-            <div className="space-y-8">
-              {/* AI Assistant Banner */}
-              <Card className="relative overflow-hidden border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30">
-                <div className="p-5">
-                  <div className="flex items-start gap-4">
-                    <div className="p-2.5 bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20 shrink-0">
-                      <Sparkles className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground mb-1">
-                        Not sure which template you need?
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Describe your situation and our AI assistant will recommend the right template and help you fill it out.
-                      </p>
-                      <div className="flex gap-2">
-                        <div className="flex-1 relative">
-                          <input
-                            type="text"
-                            value={chatInput}
-                            onChange={(e) => setChatInput(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' && chatInput.trim()) {
-                                onStartChat(chatInput.trim());
-                              }
-                            }}
-                            placeholder="e.g. I need an NDA for new employees..."
-                            className={cn(
-                              "w-full rounded-lg border border-blue-200 dark:border-blue-700 bg-background px-3 py-2",
-                              "text-sm text-foreground placeholder:text-muted-foreground",
-                              "focus:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring"
-                            )}
-                          />
-                        </div>
-                        <Button
-                          className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
-                          size="sm"
-                          onClick={() => onStartChat(chatInput.trim() || undefined)}
-                        >
-                          <Sparkles className="w-4 h-4 mr-1.5" />
-                          Ask AI
-                          <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              {groupedTemplates.map(({ stage, items }) => (
-                <div key={stage}>
-                  <div className="flex items-center gap-2 mb-4">
-                    <h2 className="text-lg font-semibold text-foreground">{stage}</h2>
-                    <span className="text-xs px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full font-medium">
-                      {items.length}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {items.map((template) => (
-                      <Card
-                        key={template.id}
-                        className="group cursor-pointer hover:shadow-lg transition-all hover:scale-[1.02] border-2 border-border hover:border-blue-600 overflow-hidden flex flex-col bg-card"
-                        onClick={() => onNewDocument(template)}
-                      >
-                        {/* Document Preview */}
-                        <div className="bg-muted p-4 h-44 flex items-start justify-center relative overflow-hidden">
-                          <div className="w-full h-full overflow-hidden">
-                            <div className="bg-white dark:bg-gray-900 rounded shadow-lg border border-gray-200 dark:border-gray-700 relative p-3 h-full">
-                              <div className="space-y-2 mb-3">
-                                <div className="h-3 bg-gray-900 dark:bg-gray-100 rounded w-3/4" />
-                                <div className="h-0.5 bg-gray-300 dark:bg-gray-600 rounded w-full" />
-                              </div>
-                              <div className="space-y-1.5">
-                                <div className="h-2 bg-gray-400 dark:bg-gray-500 rounded w-1/3 mb-1" />
-                                <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded w-full" />
-                                <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
-                                <div className="h-1.5 bg-amber-200 dark:bg-amber-800/40 rounded w-2/3" />
-                                <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded w-full" />
-                                <div className="pt-1.5">
-                                  <div className="h-2 bg-gray-400 dark:bg-gray-500 rounded w-2/5 mb-1" />
-                                  <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded w-full" />
-                                  <div className="h-1.5 bg-amber-200 dark:bg-amber-800/40 rounded w-4/5" />
-                                  <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="absolute top-2 right-2">
-                            <span className="text-[0.5rem] px-1.5 py-0.5 bg-blue-600 text-white rounded font-medium shadow-sm flex items-center gap-0.5">
-                              <Scale className="w-2.5 h-2.5" />
-                              DOCX
-                            </span>
-                          </div>
-                          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-gray-200/50 dark:from-background/50 to-transparent" />
-                        </div>
-
-                        <div className="p-4 flex-1 flex flex-col">
-                          <h3 className="font-semibold mb-2 text-foreground">{template.name}</h3>
-                          <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
-                            {template.description}
-                          </p>
-                        </div>
-
-                        <div className="px-4 pb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button
-                            size="sm"
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                          >
-                            <Scale className="w-4 h-4 mr-2" />
-                            Generate Document
-                          </Button>
-                        </div>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>
-              {filteredDocuments.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filteredDocuments.map((doc) => (
-                    <Card
-                      key={doc.id}
-                      className="group cursor-pointer hover:shadow-lg transition-all hover:scale-[1.02] border-2 border-border hover:border-blue-600 p-5 bg-card"
-                      onClick={() => onOpenDocument(doc)}
-                    >
-                      <div className="flex items-start gap-3 mb-3">
-                        <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded">
-                          <FileText className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold truncate mb-1 text-foreground">{doc.title}</h3>
-                          <p className="text-xs text-muted-foreground">
-                            {doc.template} &middot; Last edited {doc.lastEdited}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground line-clamp-3 mb-3">
-                        {doc.content.replace(/<[^>]*>/g, '').slice(0, 150)}...
-                      </p>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="w-full group-hover:bg-blue-600 group-hover:text-white border-border"
-                      >
-                        Open Document
-                      </Button>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <FileText className="w-16 h-16 text-muted-foreground/30 mb-4" />
-                  <h3 className="text-xl font-semibold mb-2 text-foreground">No documents yet</h3>
-                  <p className="text-muted-foreground mb-6">
-                    Generate your first legal document to get started
-                  </p>
-                  <Button
-                    onClick={() => setViewMode('new')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create New Document
-                  </Button>
-                </div>
-              )}
             </div>
           )}
         </div>
       </div>
+
+      {/* Content */}
+      <div className={`flex-1 overflow-y-auto ${s.scrollbar}`}>
+        <div className="mx-auto w-full max-w-7xl px-6 py-6 md:px-10 md:py-8">
+          {viewMode === 'new' ? (
+            <div className="space-y-10">
+              {/* Assistant banner */}
+              <div className={s.banner}>
+                <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                  <div className="flex items-start gap-3">
+                    <div className={s.brandMark}>
+                      <Sparkles className="h-[18px] w-[18px]" />
+                    </div>
+                    <div className="min-w-0 space-y-1">
+                      <h3
+                        style={{
+                          fontSize: 17,
+                          fontWeight: 600,
+                          letterSpacing: '-0.01em',
+                          color: 'var(--ink)',
+                        }}
+                      >
+                        Not sure which template you need?
+                      </h3>
+                      <p style={{ fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.55 }}>
+                        Describe your situation — the assistant recommends a
+                        template and pre-fills fields from chat.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-1 items-center gap-2 md:justify-end">
+                    <div className="relative flex-1 md:min-w-[300px]">
+                      <input
+                        type="text"
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && chatInput.trim()) {
+                            onStartChat(chatInput.trim());
+                          }
+                        }}
+                        placeholder="e.g. NDA for new employees…"
+                        className={s.input}
+                      />
+                    </div>
+                    <button
+                      className={`${s.btn} ${s.btnAccent}`}
+                      onClick={() => onStartChat(chatInput.trim() || undefined)}
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Ask AI
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {groupedTemplates.length === 0 && (
+                <EmptyTemplates query={searchQuery} />
+              )}
+
+              {groupedTemplates.map(({ stage, items }) => (
+                <section key={stage} className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <h2
+                      style={{
+                        margin: 0,
+                        fontSize: 18,
+                        fontWeight: 600,
+                        color: 'var(--ink)',
+                        letterSpacing: '-0.01em',
+                      }}
+                    >
+                      {stage}
+                    </h2>
+                    <span className={s.pillChip}>{items.length}</span>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {items.map((template) => (
+                      <TemplateCard
+                        key={template.id}
+                        template={template}
+                        onSelect={onNewDocument}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          ) : filteredDocuments.length > 0 ? (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {filteredDocuments.map((doc) => (
+                <DocumentRow key={doc.id} doc={doc} onOpen={onOpenDocument} />
+              ))}
+            </div>
+          ) : (
+            <EmptyDocuments onSwitch={() => setViewMode('new')} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Template card ──────────────────────────────────────────────────────────
+
+function TemplateCard({
+  template,
+  onSelect,
+}: {
+  template: DocumentTemplate;
+  onSelect: (t: DocumentTemplate) => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={s.card}
+      onClick={() => onSelect(template)}
+    >
+      <div className={s.cardPreview}>
+        <span className={s.cardBadge}>
+          <Scale className="h-2.5 w-2.5" />
+          DOCX
+        </span>
+        <div className={s.miniPaper}>
+          <div className={`${s.miniLine} ${s.miniLineDark}`} style={{ width: '55%', height: 8 }} />
+          <hr
+            style={{
+              border: 'none',
+              height: 1,
+              background: 'var(--line)',
+              margin: '2px 0',
+            }}
+          />
+          <div className={`${s.miniLine}`} style={{ width: '30%', height: 5 }} />
+          <div className={`${s.miniLine}`} style={{ width: '92%' }} />
+          <div className={`${s.miniLine} ${s.miniLineAccent}`} style={{ width: '72%' }} />
+          <div className={`${s.miniLine}`} style={{ width: '88%' }} />
+          <div className={`${s.miniLine}`} style={{ width: '30%', height: 5 }} />
+          <div className={`${s.miniLine}`} style={{ width: '85%' }} />
+          <div className={`${s.miniLine} ${s.miniLineAccent}`} style={{ width: '60%' }} />
+        </div>
+      </div>
+      <div className={s.cardBody}>
+        <h3>{template.name}</h3>
+        <p>{template.description}</p>
+      </div>
+      <div className={s.cardFooter}>
+        <span
+          className={`${s.btn} ${s.btnAccent} ${s.btnSm}`}
+          style={{ width: '100%' }}
+        >
+          <Scale className="h-3.5 w-3.5" />
+          Generate document
+        </span>
+      </div>
+    </button>
+  );
+}
+
+// ─── Document row (my documents) ────────────────────────────────────────────
+
+function DocumentRow({
+  doc,
+  onOpen,
+}: {
+  doc: GeneratedDocument;
+  onOpen: (doc: GeneratedDocument) => void;
+}) {
+  const preview = doc.content.replace(/<[^>]*>/g, '').slice(0, 150);
+  return (
+    <button type="button" className={s.docRow} onClick={() => onOpen(doc)}>
+      <div className="flex items-start gap-3">
+        <div className={s.brandMarkSm}>
+          <FileText className="h-[14px] w-[14px]" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3
+            style={{
+              margin: 0,
+              fontSize: 15,
+              fontWeight: 600,
+              color: 'var(--ink)',
+              letterSpacing: '-0.01em',
+            }}
+            className="truncate"
+          >
+            {doc.title}
+          </h3>
+          <p style={{ margin: 0, fontSize: 12, color: 'var(--ink-3)' }}>
+            {doc.template} · Last edited {doc.lastEdited}
+          </p>
+        </div>
+      </div>
+      <p
+        style={{
+          margin: 0,
+          fontSize: 13,
+          color: 'var(--ink-2)',
+          lineHeight: 1.5,
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+        }}
+      >
+        {preview}
+        {preview.length >= 150 ? '…' : ''}
+      </p>
+      <div className="mt-auto">
+        <span
+          className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
+          style={{ width: '100%' }}
+        >
+          Open document
+          <ArrowRight className="h-3.5 w-3.5" />
+        </span>
+      </div>
+    </button>
+  );
+}
+
+// ─── Empty states ───────────────────────────────────────────────────────────
+
+function EmptyTemplates({ query }: { query: string }) {
+  return (
+    <div
+      className={`${s.panel} flex flex-col items-center gap-3 py-16 text-center`}
+      style={{ borderStyle: 'dashed' }}
+    >
+      <FileText className="h-10 w-10" style={{ color: 'var(--ink-4)' }} />
+      <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: 'var(--ink)' }}>
+        No templates match
+      </h3>
+      <p style={{ margin: 0, fontSize: 14, color: 'var(--ink-3)', maxWidth: 360 }}>
+        {query
+          ? `Nothing matched “${query}”. Try a different keyword or clear the filter.`
+          : 'Try a different filter.'}
+      </p>
+    </div>
+  );
+}
+
+function EmptyDocuments({ onSwitch }: { onSwitch: () => void }) {
+  return (
+    <div
+      className={`${s.panel} mx-auto flex max-w-md flex-col items-center gap-3 py-16 text-center`}
+      style={{ borderStyle: 'dashed' }}
+    >
+      <FileText className="h-12 w-12" style={{ color: 'var(--ink-4)' }} />
+      <h3 style={{ margin: 0, fontSize: 19, fontWeight: 600, color: 'var(--ink)' }}>
+        No documents yet
+      </h3>
+      <p style={{ margin: 0, fontSize: 14, color: 'var(--ink-3)', maxWidth: 340 }}>
+        Generate your first legal document from a template to see it here.
+      </p>
+      <button
+        className={`${s.btn} ${s.btnAccent}`}
+        onClick={onSwitch}
+        style={{ marginTop: 8 }}
+      >
+        <Plus className="h-4 w-4" />
+        Create new document
+      </button>
     </div>
   );
 }

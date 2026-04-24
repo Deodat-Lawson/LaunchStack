@@ -67,7 +67,7 @@ Optional integrations:
 
 ### Trend search (optional)
 
-Trend search calls external search APIs. Configure `TAVILY_API_KEY` and/or `SERPER_API_KEY` and set `SEARCH_PROVIDER` as documented in [`.env.example`](../.env.example) (`tavily`, `serper`, `fallback`, or `parallel`). If no API key backs the chosen path, the pipeline returns empty results and `providerUsed` may be `none`—this is expected when keys are omitted for local or OSS setups.
+Trend search calls external search APIs. Configure `EXA_API_KEY` and/or `SERPER_API_KEY` and set `SEARCH_PROVIDER` as documented in [`.env.example`](../.env.example) (`exa`, `serper`, `fallback`, or `parallel`). If no API key backs the chosen path, the pipeline returns empty results and `providerUsed` may be `none`—this is expected when keys are omitted for local or OSS setups.
 
 ### Verifying Blob uploads on Vercel
 
@@ -102,9 +102,9 @@ Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
 | `BLOB_READ_WRITE_TOKEN` | Yes (Vercel) | Required for Vercel Blob uploads |
 | `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
 | `SIDECAR_URL` | Optional | Sidecar URL for reranking and Graph RAG |
-| `TAVILY_API_KEY` | Optional | Tavily (trend search); required for `tavily` / `fallback` / `parallel` when using Tavily |
+| `EXA_API_KEY` | Optional | Exa (trend search); required for `exa` / `fallback` / `parallel` when using Exa |
 | `SERPER_API_KEY` | Optional | Serper Google News (trend search); required for `serper` / `fallback` / `parallel` when using Serper |
-| `SEARCH_PROVIDER` | Optional | `tavily` (default), `serper`, `fallback`, or `parallel` — see `.env.example` |
+| `SEARCH_PROVIDER` | Optional | `exa` (default), `serper`, `fallback`, or `parallel` — see `.env.example` |
 | `AZURE_DOC_INTELLIGENCE_*` | Optional | OCR for scanned PDFs |
 | `DATALAB_API_KEY` | Optional | Alternative OCR |
 | `LANDING_AI_API_KEY` | Optional | Fallback OCR |

@@ -104,6 +104,13 @@ function assertProviderModelCombination(
   }
 }
 
+const AttachmentPayloadSchema = z.object({
+  url: z.string().url("Attachment url must be a valid URL"),
+  name: z.string().min(1).max(512),
+  mimeType: z.string().min(1).max(256),
+  kind: z.enum(["image", "text"]),
+});
+
 export const QuestionSchema = z
   .object({
     documentId: z.number().int().positive().optional(),
@@ -122,6 +129,11 @@ export const QuestionSchema = z
     provider: z.enum(providerOptions).default("openai"),
     conversationHistory: z.string().optional(),
     embeddingIndexKey: z.string().min(1).optional(),
+    thinkingMode: z.boolean().optional().default(false),
+    // Ephemeral per-turn attachments (NOT indexed as Sources). Images are sent
+    // as multimodal content blocks on vision-capable models; text files are
+    // inlined into the prompt. Capped at 5 to bound context growth.
+    attachments: z.array(AttachmentPayloadSchema).max(5).optional(),
   })
   .superRefine((data, ctx) => {
     assertProviderModelCombination(data.provider, data.aiModel, ctx);
@@ -141,8 +153,12 @@ export const QuestionSchema = z
       provider: data.provider,
       conversationHistory: data.conversationHistory,
       embeddingIndexKey: data.embeddingIndexKey,
+      thinkingMode: data.thinkingMode ?? false,
+      attachments: data.attachments,
     };
   });
+
+export type AttachmentPayload = z.infer<typeof AttachmentPayloadSchema>;
 
 export const ChatHistoryAddSchema = z.object({
   documentId: z.number().int().positive("Document ID must be a positive integer"),
@@ -345,19 +361,58 @@ export const DeactivateInviteCodeSchema = z.object({
 // Notes Schemas
 // ============================================================================
 
-export const CreateNoteSchema = z.object({
-  documentId: z.string().optional(),
-  companyId: z.string().optional(),
-  title: z.string().max(512).optional(),
-  content: z.string().max(50000).optional(),
-  tags: z.array(z.string().max(128)).max(50).optional(),
-}).refine((data) => data.title || data.content, {
-  message: "At least one of title or content is required",
+/**
+ * Tiptap JSON is a recursive tree; we accept any JSON-serializable value and
+ * let the client be the authority on shape. Server stores it verbatim.
+ */
+const TiptapJsonSchema: z.ZodType<unknown> = z.any();
+
+const QuoteSelectorSchema = z.object({
+  exact: z.string().max(10_000),
+  prefix: z.string().max(2000).optional(),
+  suffix: z.string().max(2000).optional(),
 });
+
+const AnchorSchema = z.object({
+  type: z.enum(["pdf", "docx", "media", "image", "code", "markdown", "text"]),
+  // `primary` is format-specific — validated loosely so future primaries
+  // don't require a schema bump. Client controls the per-format shape.
+  primary: z.any().optional(),
+  quote: QuoteSelectorSchema,
+  chunkIdAtCreate: z.number().int().optional(),
+});
+
+export const CreateNoteSchema = z
+  .object({
+    documentId: z.string().optional(),
+    companyId: z.string().optional(),
+    versionId: z.union([z.number().int().positive(), z.string()]).optional(),
+    title: z.string().max(512).optional(),
+    content: z.string().max(50_000).optional(),
+    contentRich: TiptapJsonSchema.optional(),
+    contentMarkdown: z.string().max(100_000).optional(),
+    anchor: AnchorSchema.optional(),
+    anchorStatus: z.enum(["resolved", "drifted", "orphaned"]).optional(),
+    tags: z.array(z.string().max(128)).max(50).optional(),
+  })
+  .refine(
+    (data) =>
+      Boolean(
+        data.title || data.content || data.contentMarkdown || data.contentRich,
+      ),
+    {
+      message:
+        "At least one of title, content, contentMarkdown, or contentRich is required",
+    },
+  );
 
 export const UpdateNoteSchema = z.object({
   title: z.string().max(512).optional(),
-  content: z.string().max(50000).optional(),
+  content: z.string().max(50_000).optional(),
+  contentRich: TiptapJsonSchema.optional(),
+  contentMarkdown: z.string().max(100_000).optional(),
+  anchor: AnchorSchema.optional(),
+  anchorStatus: z.enum(["resolved", "drifted", "orphaned"]).optional(),
   tags: z.array(z.string().max(128)).max(50).optional(),
 });
 

@@ -69,6 +69,8 @@ export interface UseWorkspaceDataResult {
   loading: boolean;
   error: string | null;
   companyId: number | null;
+  /** DB role of the current user (`employer`, `owner`, `employee`, or null while loading). */
+  role: string | null;
   refresh: () => Promise<void>;
   /** Optimistically insert a row before the backend confirms it. */
   addOptimistic: (source: WorkspaceSource) => void;
@@ -87,6 +89,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<number | null>(null);
+  const [role, setRole] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     if (!userId) return;
@@ -130,8 +133,12 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         body: JSON.stringify({ userId }),
       });
       if (!response.ok) return;
-      const data = (await response.json()) as { companyId?: number | string };
+      const data = (await response.json()) as {
+        companyId?: number | string;
+        role?: string;
+      };
       if (data?.companyId != null) setCompanyId(Number(data.companyId));
+      if (typeof data?.role === "string") setRole(data.role);
     } catch {
       // non-fatal — AskPanel falls back to document-scoped queries
     }
@@ -173,6 +180,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     loading,
     error,
     companyId,
+    role,
     refresh,
     addOptimistic,
   };

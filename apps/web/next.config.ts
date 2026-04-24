@@ -36,6 +36,12 @@ const config: NextConfig = {
         port: "",
         pathname: "/f/**",
       },
+      {
+        protocol: "https",
+        hostname: "h0xotvuawi.ufs.sh",
+        port: "",
+        pathname: "/f/**",
+      },
     ],
   },
 
@@ -123,6 +129,15 @@ const config: NextConfig = {
     // Structured logging
     "pino",
     "pino-pretty",
+    // Pure-CJS fuzzy match library used by note-anchor rehydration; webpack
+    // tracing against its minimal package.json confuses Next's route manifest
+    // in certain builds — bypass by externalizing.
+    "diff-match-patch",
+    // react-pdf + its pdfjs peer use native `new URL('...', import.meta.url)`
+    // worker resolution and ship multiple entry points that trip up Next's
+    // route-manifest tracing; same remedy as pdfjs-serverless above.
+    "react-pdf",
+    "pdfjs-dist",
   ],
 };
 

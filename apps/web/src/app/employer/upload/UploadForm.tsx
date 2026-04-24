@@ -586,8 +586,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
       });
       setTimeout(() => {
         setDocuments([]);
-        if (embedded) {
-          onCompleted?.();
+        if (onCompleted) {
+          onCompleted();
         } else {
           router.push("/employer/documents");
         }
@@ -631,8 +631,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
       toast.success("All uploads completed successfully!");
       setTimeout(() => {
         setDocuments([]);
-        if (embedded) {
-          onCompleted?.();
+        if (onCompleted) {
+          onCompleted();
         } else {
           router.push("/employer/documents");
         }

@@ -7,10 +7,10 @@ import type { DeploymentProps } from '../../types';
 import { Section, CodeBlock, WarningBox, InfoBox } from '../ui';
 
 export const VercelBlobPage: React.FC<DeploymentProps> = ({
-  darkMode,
   copyToClipboard,
   copiedCode,
 }) => {
+  const darkMode = false;
   return (
     <>
       <motion.div
@@ -32,7 +32,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
         </p>
       </motion.div>
 
-      <Section title="What is Vercel Blob?" darkMode={darkMode}>
+      <Section title="What is Vercel Blob?">
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
           Vercel Blob is a serverless file storage service that integrates natively with Vercel deployments. Launchstack uses it to store uploaded documents with:
         </p>
@@ -56,11 +56,11 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
         </ul>
       </Section>
 
-      <Section title="Why is Vercel Blob required?" darkMode={darkMode}>
+      <Section title="Why is Vercel Blob required?">
         <WarningBox
           title="No fallback storage"
           description="Launchstack uses Vercel Blob as the primary document storage backend. If BLOB_READ_WRITE_TOKEN is not configured, document uploads will fail with a MissingBlobTokenError. There is currently no database-only fallback for file storage."
-          darkMode={darkMode}
+
         />
         <div className="mt-6 grid md:grid-cols-2 gap-4">
           <div className={`p-4 rounded-xl ${darkMode ? 'bg-purple-900/30 border border-purple-500/30' : 'bg-purple-50 border border-purple-200'}`}>
@@ -88,7 +88,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
         </div>
       </Section>
 
-      <Section title="Setup Instructions" darkMode={darkMode}>
+      <Section title="Setup Instructions">
         <div className="space-y-6">
           <div>
             <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -128,7 +128,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
               code={`BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx`}
               onCopy={() => copyToClipboard('BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx', 'blob-env')}
               copied={copiedCode === 'blob-env'}
-              darkMode={darkMode}
+
             />
             <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm mt-2`}>
               You can also pull your Vercel env variables locally with:
@@ -137,7 +137,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
               code={`vercel env pull .env.local`}
               onCopy={() => copyToClipboard('vercel env pull .env.local', 'blob-env-pull')}
               copied={copiedCode === 'blob-env-pull'}
-              darkMode={darkMode}
+
             />
           </div>
 
@@ -154,13 +154,13 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
           <WarningBox
             title="Token Required"
             description="Without BLOB_READ_WRITE_TOKEN, document uploads will fail. This is a required environment variable — there is no database-only fallback for file storage."
-            darkMode={darkMode}
+
           />
         </div>
       </Section>
 
-      <Section title="Public vs Private Stores" darkMode={darkMode}>
-        <InfoBox title="Automatic Access Detection" icon={<Database className="w-5 h-5" />} darkMode={darkMode}>
+      <Section title="Public vs Private Stores">
+        <InfoBox title="Automatic Access Detection" icon={<Database className="w-5 h-5" />}>
           <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
             Launchstack automatically detects whether your blob store is configured as public or private.
             It first attempts a public upload — if your store only allows private access, it retries with private mode
@@ -173,7 +173,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
         </InfoBox>
       </Section>
 
-      <Section title="How It Works" darkMode={darkMode}>
+      <Section title="How It Works">
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
           When a document is uploaded, Launchstack:
         </p>
@@ -194,7 +194,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
         </div>
       </Section>
 
-      <Section title="Vercel CLI Reference" darkMode={darkMode}>
+      <Section title="Vercel CLI Reference">
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
           Useful Vercel CLI commands for managing your blob store:
         </p>
@@ -205,7 +205,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
               code="vercel env pull .env.local"
               onCopy={() => copyToClipboard('vercel env pull .env.local', 'cli-pull')}
               copied={copiedCode === 'cli-pull'}
-              darkMode={darkMode}
+
             />
           </div>
           <div>
@@ -214,7 +214,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
               code="vercel storage ls"
               onCopy={() => copyToClipboard('vercel storage ls', 'cli-ls')}
               copied={copiedCode === 'cli-ls'}
-              darkMode={darkMode}
+
             />
           </div>
         </div>

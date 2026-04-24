@@ -2,12 +2,9 @@
 
 import React, { useState } from "react";
 import { diffWords } from "diff";
-import { Button } from "../ui/button";
 import { Check, X, RotateCw, Eye, EyeOff, ArrowLeftRight } from "lucide-react";
-import { cn } from "~/lib/utils";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
-import { Card } from "../ui/card";
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
+import { legalTheme as s } from "../LegalGeneratorTheme";
 
 export interface RewritePreviewProps {
   originalText: string;
@@ -18,6 +15,8 @@ export interface RewritePreviewProps {
   isRetrying?: boolean;
 }
 
+type ViewMode = "diff" | "sidebyside" | "clean";
+
 export function RewritePreviewPanel({
   originalText,
   proposedText,
@@ -26,171 +25,333 @@ export function RewritePreviewPanel({
   onTryAgain,
   isRetrying = false,
 }: RewritePreviewProps) {
-  const [viewMode, setViewMode] = useState<"diff" | "sidebyside" | "clean">("sidebyside");
+  const [viewMode, setViewMode] = useState<ViewMode>("sidebyside");
   const safeOriginal = typeof originalText === "string" ? originalText : "";
   const safeProposed = typeof proposedText === "string" ? proposedText : "";
   const changes = diffWords(safeOriginal, safeProposed);
-  
+
   const stats = {
     wordsOriginal: safeOriginal.trim() ? safeOriginal.split(/\s+/).length : 0,
     wordsRewritten: safeProposed.trim() ? safeProposed.split(/\s+/).length : 0,
     charactersOriginal: safeOriginal.length,
     charactersRewritten: safeProposed.length,
-    changes: changes.filter(part => part.added || part.removed).length
+    changes: changes.filter((part) => part.added || part.removed).length,
+  };
+
+  const wordDelta = stats.wordsRewritten - stats.wordsOriginal;
+
+  const paneStyle: React.CSSProperties = {
+    maxHeight: 360,
+    overflowY: "auto",
+    padding: 14,
+    borderRadius: 12,
+    fontSize: 13,
+    lineHeight: 1.65,
+    color: "var(--ink)",
+    background: "var(--panel)",
+    border: "1px solid var(--line-2)",
   };
 
   const renderDiffView = () => (
-    <div className="p-4 rounded-lg bg-muted/50 border border-border font-mono text-sm leading-relaxed max-h-96 overflow-y-auto">
-      {changes.map((part, i) => (
-        <span
-          key={i}
-          className={cn(
-            part.added && "bg-green-500/20 text-green-800 dark:text-green-200 font-medium",
-            part.removed && "bg-red-500/20 text-red-800 dark:text-red-200 line-through",
-            !part.added && !part.removed && "text-foreground"
-          )}
-        >
-          {part.value}
-        </span>
-      ))}
+    <div
+      style={{
+        ...paneStyle,
+        fontFamily:
+          'ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", monospace',
+        background: "var(--panel-2)",
+      }}
+    >
+      {changes.map((part, i) => {
+        if (part.added) {
+          return (
+            <span
+              key={i}
+              style={{
+                background: "oklch(from var(--success) l c h / 0.18)",
+                color: "var(--success)",
+                padding: "0 2px",
+                borderRadius: 3,
+                fontWeight: 500,
+              }}
+            >
+              {part.value}
+            </span>
+          );
+        }
+        if (part.removed) {
+          return (
+            <span
+              key={i}
+              style={{
+                background: "oklch(from var(--danger) l c h / 0.15)",
+                color: "var(--danger)",
+                padding: "0 2px",
+                borderRadius: 3,
+                textDecoration: "line-through",
+              }}
+            >
+              {part.value}
+            </span>
+          );
+        }
+        return (
+          <span key={i} style={{ color: "var(--ink-2)" }}>
+            {part.value}
+          </span>
+        );
+      })}
     </div>
   );
 
   const renderSideBySideView = () => (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <Card className="p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-          <p className="text-sm font-semibold text-foreground">Original</p>
-          <span className="text-xs text-muted-foreground">
-            ({stats.wordsOriginal} words, {stats.charactersOriginal} chars)
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+      <div
+        style={{
+          padding: 14,
+          borderRadius: 12,
+          border: "1px solid oklch(from var(--danger) l c h / 0.28)",
+          background: "oklch(from var(--danger) l c h / 0.05)",
+        }}
+      >
+        <div
+          className="mb-2 flex items-center gap-2"
+          style={{ fontSize: 12 }}
+        >
+          <span
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: 999,
+              background: "var(--danger)",
+              boxShadow: "0 0 0 3px oklch(from var(--danger) l c h / 0.2)",
+            }}
+          />
+          <span style={{ fontWeight: 600, color: "var(--ink)" }}>
+            Original
+          </span>
+          <span style={{ color: "var(--ink-3)", marginLeft: "auto" }}>
+            {stats.wordsOriginal}w · {stats.charactersOriginal}c
           </span>
         </div>
-        <div className="p-3 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200/50 dark:border-red-900/50 text-sm leading-relaxed max-h-80 overflow-y-auto">
-          <MarkdownMessage content={safeOriginal} className="prose prose-sm dark:prose-invert max-w-none" />
+        <div
+          style={{
+            maxHeight: 340,
+            overflowY: "auto",
+            fontSize: 13,
+            lineHeight: 1.6,
+            color: "var(--ink-2)",
+          }}
+        >
+          <MarkdownMessage
+            content={safeOriginal}
+            className="prose prose-sm dark:prose-invert max-w-none"
+          />
         </div>
-      </Card>
-      
-      <Card className="p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <p className="text-sm font-semibold text-foreground">Rewritten</p>
-          <span className="text-xs text-muted-foreground">
-            ({stats.wordsRewritten} words, {stats.charactersRewritten} chars)
+      </div>
+
+      <div
+        style={{
+          padding: 14,
+          borderRadius: 12,
+          border: "1px solid oklch(from var(--success) l c h / 0.3)",
+          background: "oklch(from var(--success) l c h / 0.06)",
+        }}
+      >
+        <div
+          className="mb-2 flex items-center gap-2"
+          style={{ fontSize: 12 }}
+        >
+          <span
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: 999,
+              background: "var(--success)",
+              boxShadow: "0 0 0 3px oklch(from var(--success) l c h / 0.2)",
+            }}
+          />
+          <span style={{ fontWeight: 600, color: "var(--ink)" }}>
+            Rewritten
+          </span>
+          <span style={{ color: "var(--ink-3)", marginLeft: "auto" }}>
+            {stats.wordsRewritten}w · {stats.charactersRewritten}c
           </span>
         </div>
-        <div className="p-3 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200/50 dark:border-green-900/50 text-sm leading-relaxed max-h-80 overflow-y-auto">
-          <MarkdownMessage content={safeProposed} className="prose prose-sm dark:prose-invert max-w-none" />
+        <div
+          style={{
+            maxHeight: 340,
+            overflowY: "auto",
+            fontSize: 13,
+            lineHeight: 1.6,
+            color: "var(--ink)",
+          }}
+        >
+          <MarkdownMessage
+            content={safeProposed}
+            className="prose prose-sm dark:prose-invert max-w-none"
+          />
         </div>
-      </Card>
+      </div>
     </div>
   );
 
   const renderCleanView = () => (
-    <div className="p-4 rounded-lg bg-background border border-border text-sm leading-relaxed max-h-96 overflow-y-auto">
-      <MarkdownMessage content={safeProposed} className="prose prose-sm dark:prose-invert max-w-none" />
+    <div style={paneStyle}>
+      <MarkdownMessage
+        content={safeProposed}
+        className="prose prose-sm dark:prose-invert max-w-none"
+      />
     </div>
   );
 
   return (
-    <div className="flex flex-col gap-6 p-6 border border-border rounded-xl bg-card shadow-lg">
-      <div className="flex items-center justify-between">
+    <div
+      className={s.panel}
+      style={{ padding: 18, display: "flex", flexDirection: "column", gap: 18 }}
+    >
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h4 className="text-lg font-semibold text-foreground">Rewrite Preview</h4>
-          <p className="text-sm text-muted-foreground">
-            {stats.changes} changes • 
-            {stats.wordsRewritten > stats.wordsOriginal 
-              ? `+${stats.wordsRewritten - stats.wordsOriginal}` 
-              : `${stats.wordsRewritten - stats.wordsOriginal}`
-            } words
+          <h4
+            style={{
+              margin: 0,
+              fontSize: 16,
+              fontWeight: 600,
+              color: "var(--ink)",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Rewrite preview
+          </h4>
+          <p style={{ margin: "2px 0 0", fontSize: 12, color: "var(--ink-3)" }}>
+            {stats.changes} changes ·{" "}
+            {wordDelta > 0 ? "+" : ""}
+            {wordDelta} words
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
+        <div className="flex flex-wrap gap-2">
+          <button
+            className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
+            onClick={onTryAgain}
+            disabled={isRetrying}
+          >
+            <RotateCw
+              className={`h-3.5 w-3.5${isRetrying ? " animate-spin" : ""}`}
+            />
+            Regenerate
+          </button>
+          <button
+            className={`${s.btn} ${s.btnDanger} ${s.btnSm}`}
             onClick={onReject}
             disabled={isRetrying}
-            className="border-destructive/50 text-destructive hover:bg-destructive/10"
           >
-            <X className="w-3 h-3 mr-1.5" />
+            <X className="h-3.5 w-3.5" />
             Reject
-          </Button>
-          <Button variant="outline" size="sm" onClick={onTryAgain} disabled={isRetrying}>
-            <RotateCw className={cn("w-3 h-3 mr-1.5", isRetrying && "animate-spin")} />
-            Regenerate
-          </Button>
-          <Button
-            size="sm"
+          </button>
+          <button
+            className={`${s.btn} ${s.btnAccent} ${s.btnSm}`}
             onClick={onAccept}
             disabled={isRetrying}
-            className="bg-green-600 hover:bg-green-700 text-white"
           >
-            <Check className="w-3 h-3 mr-1.5" />
-            Push to Rewrite
-          </Button>
+            <Check className="h-3.5 w-3.5" />
+            Push to rewrite
+          </button>
         </div>
       </div>
 
-      <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as typeof viewMode)} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="sidebyside" className="data-[state=active]:bg-amber-600 data-[state=active]:text-white">
-            <ArrowLeftRight className="w-4 h-4 mr-2" />
-            Side by Side
-          </TabsTrigger>
-          <TabsTrigger value="diff" className="data-[state=active]:bg-amber-600 data-[state=active]:text-white">
-            <Eye className="w-4 h-4 mr-2" />
-            Show Changes
-          </TabsTrigger>
-          <TabsTrigger value="clean" className="data-[state=active]:bg-amber-600 data-[state=active]:text-white">
-            <EyeOff className="w-4 h-4 mr-2" />
-            Clean View
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="sidebyside" className="mt-4">
-          {renderSideBySideView()}
-        </TabsContent>
-        
-        <TabsContent value="diff" className="mt-4">
-          <div>
-            <p className="text-sm font-medium mb-2 text-muted-foreground">Changes highlighted</p>
-            {renderDiffView()}
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="clean" className="mt-4">
-          <div>
-            <p className="text-sm font-medium mb-2 text-muted-foreground">Final result</p>
-            {renderCleanView()}
-          </div>
-        </TabsContent>
-      </Tabs>
+      {/* View switcher */}
+      <div className={s.btnGroup} style={{ alignSelf: "flex-start" }}>
+        {(
+          [
+            { id: "sidebyside", label: "Side by side", Icon: ArrowLeftRight },
+            { id: "diff", label: "Show changes", Icon: Eye },
+            { id: "clean", label: "Clean view", Icon: EyeOff },
+          ] as const
+        ).map(({ id, label, Icon }) => {
+          const active = viewMode === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              className={`${s.tab} ${active ? s.tabActive : ""}`}
+              onClick={() => setViewMode(id)}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {label}
+            </button>
+          );
+        })}
+      </div>
 
-      {/* Statistics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-muted/30 rounded-lg">
-        <div className="text-center">
-          <div className="text-lg font-semibold text-foreground">{stats.wordsOriginal}</div>
-          <div className="text-xs text-muted-foreground">Original Words</div>
-        </div>
-        <div className="text-center">
-          <div className="text-lg font-semibold text-foreground">{stats.wordsRewritten}</div>
-          <div className="text-xs text-muted-foreground">New Words</div>
-        </div>
-        <div className="text-center">
-          <div className={cn(
-            "text-lg font-semibold",
-            stats.wordsRewritten > stats.wordsOriginal ? "text-green-600" : 
-            stats.wordsRewritten < stats.wordsOriginal ? "text-red-600" : "text-foreground"
-          )}>
-            {stats.wordsRewritten > stats.wordsOriginal ? '+' : ''}{stats.wordsRewritten - stats.wordsOriginal}
-          </div>
-          <div className="text-xs text-muted-foreground">Word Difference</div>
-        </div>
-        <div className="text-center">
-          <div className="text-lg font-semibold text-amber-600">{stats.changes}</div>
-          <div className="text-xs text-muted-foreground">Changes Made</div>
-        </div>
+      {/* Content */}
+      <div>
+        {viewMode === "sidebyside" && renderSideBySideView()}
+        {viewMode === "diff" && renderDiffView()}
+        {viewMode === "clean" && renderCleanView()}
+      </div>
+
+      {/* Stats */}
+      <div
+        className="grid grid-cols-2 gap-4 md:grid-cols-4"
+        style={{
+          padding: 14,
+          borderRadius: 12,
+          background: "var(--panel-2)",
+          border: "1px solid var(--line-2)",
+        }}
+      >
+        <Stat label="Original words" value={stats.wordsOriginal} />
+        <Stat label="New words" value={stats.wordsRewritten} />
+        <Stat
+          label="Word difference"
+          value={`${wordDelta > 0 ? "+" : ""}${wordDelta}`}
+          tone={wordDelta > 0 ? "success" : wordDelta < 0 ? "danger" : "neutral"}
+        />
+        <Stat label="Changes made" value={stats.changes} tone="accent" />
+      </div>
+    </div>
+  );
+}
+
+function Stat({
+  label,
+  value,
+  tone = "neutral",
+}: {
+  label: string;
+  value: number | string;
+  tone?: "neutral" | "accent" | "success" | "danger";
+}) {
+  const color =
+    tone === "accent"
+      ? "var(--accent)"
+      : tone === "success"
+      ? "var(--success)"
+      : tone === "danger"
+      ? "var(--danger)"
+      : "var(--ink)";
+  return (
+    <div style={{ textAlign: "center" }}>
+      <div
+        style={{
+          fontSize: 20,
+          fontWeight: 600,
+          color,
+          letterSpacing: "-0.02em",
+          lineHeight: 1.1,
+        }}
+      >
+        {value}
+      </div>
+      <div
+        style={{
+          fontSize: 11,
+          color: "var(--ink-3)",
+          marginTop: 2,
+          letterSpacing: "0.02em",
+        }}
+      >
+        {label}
       </div>
     </div>
   );

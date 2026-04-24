@@ -81,3 +81,6 @@ export const IconSun = (p: IconProps) => <Ic {...p}><circle cx="10" cy="10" r="3
 export const IconMoon = (p: IconProps) => <Ic {...p}><path d="M16 11a6 6 0 0 1-8-8 7 7 0 1 0 8 8Z"/></Ic>;
 export const IconWorkflow = (p: IconProps) => <Ic {...p}><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="12" y="3" width="5" height="5" rx="1"/><rect x="3" y="12" width="5" height="5" rx="1"/><rect x="12" y="12" width="5" height="5" rx="1"/><path d="M8 5.5h4M8 14.5h4M5.5 8v4M14.5 8v4"/></Ic>;
 export const IconCopy = (p: IconProps) => <Ic {...p}><rect x="6" y="6" width="10" height="11" rx="1"/><path d="M12 3H5a1 1 0 0 0-1 1v9"/></Ic>;
+export const IconBrain = (p: IconProps) => <Ic {...p}><path d="M7.5 4a2.5 2.5 0 0 0-2.5 2.5c-1 0-1.5 1-1.5 2s.5 2 1.5 2c0 1.5 1 2.5 2.5 2.5V4Z"/><path d="M12.5 4a2.5 2.5 0 0 1 2.5 2.5c1 0 1.5 1 1.5 2s-.5 2-1.5 2c0 1.5-1 2.5-2.5 2.5V4Z"/><path d="M10 4v9M7.5 7.5h1.5M11 7.5h1.5M7.5 10.5h1.5M11 10.5h1.5M8 13.5v2.5M12 13.5v2.5"/></Ic>;
+export const IconImage = (p: IconProps) => <Ic {...p}><rect x="3" y="3.5" width="14" height="13" rx="1.5"/><circle cx="7" cy="7.5" r="1.5"/><path d="m3.5 13.5 4-3.5 3 2.5 2-1.5 4 3"/></Ic>;
+export const IconMegaphone = (p: IconProps) => <Ic {...p}><path d="M4 8.5v3a1 1 0 0 0 1 1h1.5l3 3.5V5L6.5 8.5H5a1 1 0 0 0-1 1Z"/><path d="M13 6.5a5 5 0 0 1 0 7"/><path d="M16 4.5a8 8 0 0 1 0 11"/></Ic>;

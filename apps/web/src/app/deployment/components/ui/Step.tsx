@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Copy, CheckCircle2 } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
+import styles from '~/styles/deployment.module.css';
 
 interface StepProps {
   number: number;
@@ -11,56 +12,54 @@ interface StepProps {
   children?: React.ReactNode;
   onCopy: () => void;
   copied: boolean;
-  darkMode: boolean;
 }
 
-export const Step: React.FC<StepProps> = ({ 
-  number, 
-  title, 
-  code, 
+export const Step: React.FC<StepProps> = ({
+  number,
+  title,
+  code,
   description,
   children,
-  onCopy, 
-  copied, 
-  darkMode 
+  onCopy,
+  copied,
 }) => (
-  <div className="relative">
-    <div className="flex items-start gap-4">
-      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-        {number}
-      </div>
-      <div className="flex-1">
-        <h3 className={`text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
-          {title}
-        </h3>
-        {description && (
-          <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-3`}>
-            {description}
-          </p>
-        )}
-        {children && (
-          <div className={`mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            {children}
-          </div>
-        )}
-        {code && (
-          <div className="relative group">
-            <pre className="bg-gray-900 text-gray-100 rounded-xl p-4 overflow-x-auto text-sm font-mono">
-              <code>{code}</code>
-            </pre>
-            <button
-              onClick={onCopy}
-              className="absolute top-3 right-3 p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-            >
-              {copied ? (
-                <CheckCircle2 className="w-4 h-4 text-green-400" />
-              ) : (
-                <Copy className="w-4 h-4 text-gray-400" />
-              )}
-            </button>
-          </div>
-        )}
-      </div>
+  <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+    <div className={styles.stepCircle}>{number}</div>
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <h3
+        style={{
+          margin: '2px 0 6px',
+          fontSize: 18,
+          fontWeight: 600,
+          letterSpacing: '-0.01em',
+          color: 'var(--ink)',
+        }}
+      >
+        {title}
+      </h3>
+      {description && (
+        <p style={{ margin: '0 0 12px', color: 'var(--ink-2)', lineHeight: 1.55 }}>
+          {description}
+        </p>
+      )}
+      {children && (
+        <div style={{ marginBottom: 12, color: 'var(--ink-2)', lineHeight: 1.55 }}>
+          {children}
+        </div>
+      )}
+      {code && (
+        <pre className={styles.codeSurface}>
+          <code>{code}</code>
+          <button
+            type="button"
+            onClick={onCopy}
+            className={`${styles.codeCopyBtn} ${copied ? styles.codeCopyOk : ''}`}
+            aria-label={copied ? 'Copied' : 'Copy code'}
+          >
+            {copied ? <Check size={14} /> : <Copy size={14} />}
+          </button>
+        </pre>
+      )}
     </div>
   </div>
 );

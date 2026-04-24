@@ -3,22 +3,26 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconBolt } from "./icons";
-import { DEMOTED_FEATURES } from "./types";
+import { STUDIO_FEATURES_BY_ID, STUDIO_GROUPS } from "./types";
 
 export interface StudioMenuProps {
   /** Fires with the feature id when the user picks one; if omitted, falls back to direct navigation. */
   onPickFeature?: (featureId: string) => void;
   /** Fires when the main Studio button is clicked; if omitted, opens the menu. */
   onOpenStudio?: () => void;
+  /** Role of the current user — filters company-only Management entries. */
+  role?: string | null;
 }
+
+const COMPANY_ROLES = new Set(["employer", "owner"]);
 
 /**
  * Studio "header" button + hover mega-menu — lives in the AskPanel topbar.
- * Clicking or hovering reveals the 9 demoted features. Primary action opens
- * the StudioDrawer (via `onOpenStudio`); falls back to direct navigation if
- * no handler is wired.
+ * Surfaces every Studio feature (Tools + Management) grouped by section.
+ * Primary action opens the StudioDrawer (via `onOpenStudio`); falls back to
+ * direct navigation if no handler is wired.
  */
-export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
+export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProps) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -31,16 +35,20 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
     closeTimer.current = setTimeout(() => setMenuOpen(false), 120);
   };
 
-  const pickFeature = (featureId: string, href: string) => {
+  const canSeeCompany = role ? COMPANY_ROLES.has(role) : true;
+  const groups = STUDIO_GROUPS.map((g) => ({
+    ...g,
+    features: g.features.filter((f) => canSeeCompany || !f.companyOnly),
+  })).filter((g) => g.features.length > 0);
+
+  const pickFeature = (featureId: string, href?: string) => {
     setMenuOpen(false);
     if (onPickFeature) {
       onPickFeature(featureId);
-    } else {
+    } else if (href) {
       router.push(href);
     }
   };
-
-  const features = DEMOTED_FEATURES;
 
   return (
     <div style={{ position: "relative" }} onMouseEnter={open} onMouseLeave={close}>
@@ -82,7 +90,7 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
             top: "calc(100% + 6px)",
             right: 0,
             zIndex: 60,
-            width: 440,
+            width: 460,
             padding: 10,
             background: "var(--panel)",
             border: "1px solid var(--line)",
@@ -102,84 +110,118 @@ export function StudioMenu({ onPickFeature, onOpenStudio }: StudioMenuProps) {
           >
             <div style={{ fontSize: 13, fontWeight: 600 }}>Studio</div>
             <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
-              Pick a tool — opens right here in your workspace
+              Tools and management for your workspace
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
-            {features.map((f) => {
-              const Icon = f.Icon;
-              return (
-                <button
-                  key={f.id}
-                  onClick={() => pickFeature(f.id, f.href)}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 9,
-                    padding: "8px 10px",
-                    borderRadius: 8,
-                    textAlign: "left",
-                    transition: "background 120ms",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--line-2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 26,
-                      height: 26,
-                      borderRadius: 6,
-                      flexShrink: 0,
-                      background: "var(--accent-soft)",
-                      color: "var(--accent-ink)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Icon size={12} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div
-                      style={{ display: "flex", alignItems: "baseline", gap: 6 }}
-                    >
-                      <div style={{ fontSize: 12.5, fontWeight: 500, color: "var(--ink)" }}>
-                        {f.label}
-                      </div>
-                      {f.kbd && (
-                        <span
-                          className="mono"
-                          style={{ fontSize: 9.5, color: "var(--ink-4)" }}
-                        >
-                          {f.kbd}
-                        </span>
-                      )}
-                    </div>
-                    <div
+          {groups.map((group) => (
+            <div key={group.id} style={{ marginTop: 4 }}>
+              <div
+                className="mono"
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
+                  color: "var(--ink-3)",
+                  textTransform: "uppercase",
+                  padding: "6px 10px 4px",
+                }}
+              >
+                {group.label}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
+                {group.features.map((f) => {
+                  const Icon = f.Icon;
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => pickFeature(f.id, f.href)}
                       style={{
-                        fontSize: 11,
-                        color: "var(--ink-3)",
-                        lineHeight: 1.35,
-                        marginTop: 1,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 9,
+                        padding: "8px 10px",
+                        borderRadius: 8,
+                        textAlign: "left",
+                        transition: "background 120ms",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "var(--line-2)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "transparent";
                       }}
                     >
-                      {f.desc}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                      <div
+                        style={{
+                          width: 26,
+                          height: 26,
+                          borderRadius: 6,
+                          flexShrink: 0,
+                          background: "var(--accent-soft)",
+                          color: "var(--accent-ink)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Icon size={12} />
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div
+                          style={{ display: "flex", alignItems: "center", gap: 6 }}
+                        >
+                          <div
+                            style={{
+                              fontSize: 12.5,
+                              fontWeight: 500,
+                              color: "var(--ink)",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {f.label}
+                          </div>
+                          {f.comingSoon && (
+                            <span
+                              className="mono"
+                              style={{
+                                fontSize: 9,
+                                fontWeight: 600,
+                                letterSpacing: "0.04em",
+                                color: "var(--ink-3)",
+                                padding: "1px 5px",
+                                borderRadius: 4,
+                                background: "var(--line-2)",
+                              }}
+                            >
+                              SOON
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 11,
+                            color: "var(--ink-3)",
+                            lineHeight: 1.35,
+                            marginTop: 1,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                          }}
+                        >
+                          {f.desc}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -199,9 +241,9 @@ export function StudioFAB({ hidden, onPickFeature }: StudioFABProps) {
   const [miniOpen, setMiniOpen] = useState(false);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const pinnedIds: readonly string[] = ["draft", "workflows", "notes", "audit"];
+  const pinnedIds: readonly string[] = ["draft", "rewrite", "marketing", "analytics"];
   const pinned = pinnedIds
-    .map((id) => DEMOTED_FEATURES.find((f) => f.id === id))
+    .map((id) => STUDIO_FEATURES_BY_ID[id])
     .filter((f): f is NonNullable<typeof f> => !!f);
 
   const openMini = () => {
@@ -272,7 +314,7 @@ export function StudioFAB({ hidden, onPickFeature }: StudioFABProps) {
             return (
               <button
                 key={f.id}
-                onClick={() => pickFeature(f.id, f.href)}
+                onClick={() => pickFeature(f.id, f.href ?? null)}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -309,11 +351,6 @@ export function StudioFAB({ hidden, onPickFeature }: StudioFABProps) {
                   <Icon size={11} />
                 </div>
                 <span style={{ flex: 1 }}>{f.label}</span>
-                {f.kbd && (
-                  <span className="mono" style={{ fontSize: 10, color: "var(--ink-4)" }}>
-                    {f.kbd}
-                  </span>
-                )}
               </button>
             );
           })}
@@ -321,7 +358,7 @@ export function StudioFAB({ hidden, onPickFeature }: StudioFABProps) {
       )}
 
       <button
-        onClick={() => pickFeature(undefined, "/employer/documents?feature=draft")}
+        onClick={() => pickFeature(undefined, null)}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         title="Studio"

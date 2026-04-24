@@ -12,8 +12,12 @@ import { useTheme } from "next-themes";
 import {
   IconArrowUp,
   IconBolt,
+  IconBrain,
+  IconCheck,
   IconChevronDown,
+  IconGlobe,
   IconGraph,
+  IconImage,
   IconLogout,
   IconMoon,
   IconPaperclip,
@@ -28,9 +32,15 @@ import {
 } from "./icons";
 import { GraphView } from "./GraphView";
 import {
+  COMPOSER_MODELS,
+  DEFAULT_COMPOSER_MODEL,
   DEMOTED_FEATURES,
   SOURCE_META,
+  findComposerModel,
+  type ComposerModelOption,
+  type ComposerSend,
   type DemotedFeature,
+  type EphemeralAttachment,
   type ThreadMessage,
   type WorkspaceSource,
 } from "./types";
@@ -168,6 +178,13 @@ function Message({ msg, sources }: MessageProps) {
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
             {refs.map((s) => (
               <SourceChip key={s.id} source={s} size="sm" />
+            ))}
+          </div>
+        )}
+        {msg.attachments && msg.attachments.length > 0 && (
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 10 }}>
+            {msg.attachments.map((a) => (
+              <AttachmentChip key={a.id} attachment={a} />
             ))}
           </div>
         )}
@@ -349,23 +366,123 @@ interface ComposerProps {
   sources: WorkspaceSource[];
   selected: string[];
   setSelected: Dispatch<SetStateAction<string[]>>;
-  onSend: (text: string, refs: string[]) => void;
-  onOpenAdd: () => void;
+  onSend: (send: ComposerSend) => void;
   disabled?: boolean;
+  model: ComposerModelOption;
+  onPickModel: (model: ComposerModelOption) => void;
+  webSearch: boolean;
+  onToggleWebSearch: () => void;
+  thinking: boolean;
+  onToggleThinking: () => void;
 }
 
-function Composer({ sources, selected, setSelected, onSend, onOpenAdd, disabled }: ComposerProps) {
+const ATTACH_IMAGE_MIME = /^image\//;
+const ATTACH_MAX_COUNT = 5;
+const ATTACH_MAX_BYTES = 20 * 1024 * 1024;
+
+// Mime + extension whitelist for ephemeral attachments. Anything here the
+// backend can extract text from (or send as a vision block). Media files
+// (audio/video) are intentionally excluded — those belong in Sources where
+// the transcription pipeline runs; ephemeral is for "look at this one thing
+// for this turn" docs and images.
+const ATTACH_TEXT_MIMES = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/json",
+  "application/xml",
+  "application/x-ndjson",
+  "application/yaml",
+  "application/x-yaml",
+  "application/rtf",
+]);
+const ATTACH_TEXT_EXTS = new Set([
+  "pdf",
+  "doc",
+  "docx",
+  "txt",
+  "md",
+  "markdown",
+  "csv",
+  "tsv",
+  "json",
+  "jsonl",
+  "xml",
+  "yaml",
+  "yml",
+  "rtf",
+  "log",
+  "html",
+  "htm",
+]);
+
+function extOf(filename: string): string {
+  const i = filename.lastIndexOf(".");
+  return i >= 0 ? filename.slice(i + 1).toLowerCase() : "";
+}
+
+function kindForFile(file: File): "image" | "text" | null {
+  if (ATTACH_IMAGE_MIME.test(file.type)) return "image";
+  if (file.type.startsWith("text/")) return "text";
+  if (ATTACH_TEXT_MIMES.has(file.type)) return "text";
+  if (ATTACH_TEXT_EXTS.has(extOf(file.name))) return "text";
+  return null;
+}
+
+function Composer({
+  sources,
+  selected,
+  setSelected,
+  onSend,
+  disabled,
+  model,
+  onPickModel,
+  webSearch,
+  onToggleWebSearch,
+  thinking,
+  onToggleThinking,
+}: ComposerProps) {
   const [text, setText] = useState("");
   const [focus, setFocus] = useState(false);
+  const [attachments, setAttachments] = useState<EphemeralAttachment[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [modelOpen, setModelOpen] = useState(false);
+  const [attachError, setAttachError] = useState<string | null>(null);
   const ref = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const modelRef = useRef<HTMLDivElement>(null);
+
   const selSources = selected
     .map((id) => sources.find((s) => s.id === id))
     .filter((s): s is WorkspaceSource => Boolean(s));
 
+  const thinkingAllowed = model.supportsThinking;
+  const visionAllowed = model.supportsVision;
+
+  const hasImageAttachment = attachments.some((a) => a.kind === "image");
+  const imageBlockedReason =
+    hasImageAttachment && !visionAllowed
+      ? `${model.label} can't read images — switch to a vision-capable model or remove the image.`
+      : null;
+
   const handleSend = () => {
-    if (!text.trim() || disabled) return;
-    onSend(text.trim(), selected);
+    if (!text.trim() || disabled || uploading) return;
+    if (imageBlockedReason) {
+      setAttachError(imageBlockedReason);
+      return;
+    }
+    onSend({
+      text: text.trim(),
+      refs: selected,
+      attachments,
+      webSearch,
+      thinking: thinking && thinkingAllowed,
+      model: model.id,
+      provider: model.provider,
+    });
     setText("");
+    setAttachments([]);
+    setAttachError(null);
   };
 
   useEffect(() => {
@@ -374,6 +491,74 @@ function Composer({ sources, selected, setSelected, onSend, onOpenAdd, disabled 
       ref.current.style.height = Math.min(ref.current.scrollHeight, 200) + "px";
     }
   }, [text]);
+
+  useEffect(() => {
+    const onClick = (e: globalThis.MouseEvent) => {
+      if (modelRef.current && !modelRef.current.contains(e.target as Node)) {
+        setModelOpen(false);
+      }
+    };
+    if (modelOpen) {
+      document.addEventListener("mousedown", onClick);
+      return () => document.removeEventListener("mousedown", onClick);
+    }
+  }, [modelOpen]);
+
+  const handleFilesPicked = useCallback(async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    if (attachments.length + files.length > ATTACH_MAX_COUNT) {
+      setAttachError(`You can attach up to ${ATTACH_MAX_COUNT} files per message.`);
+      return;
+    }
+
+    setUploading(true);
+    setAttachError(null);
+    const next: EphemeralAttachment[] = [];
+    try {
+      for (const file of Array.from(files)) {
+        if (file.size > ATTACH_MAX_BYTES) {
+          setAttachError(`"${file.name}" is too large (max 20MB per file).`);
+          continue;
+        }
+        const kind = kindForFile(file);
+        if (!kind) {
+          setAttachError(
+            `"${file.name}" isn't a supported attachment type. Use PDFs, DOCX, images, or text files — audio/video belong in Sources.`,
+          );
+          continue;
+        }
+        const form = new FormData();
+        form.append("file", file);
+        const res = await fetch("/api/storage/upload", { method: "POST", body: form });
+        if (!res.ok) {
+          const body = (await res.json().catch(() => ({}))) as { error?: string };
+          setAttachError(body.error ?? `Upload failed for "${file.name}"`);
+          continue;
+        }
+        const data = (await res.json()) as { url: string; objectKey: string };
+        next.push({
+          id: data.objectKey || `${Date.now()}-${file.name}`,
+          name: file.name,
+          mimeType: file.type,
+          size: file.size,
+          url: data.url,
+          kind,
+        });
+      }
+      if (next.length > 0) {
+        setAttachments((prev) => [...prev, ...next]);
+      }
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }, [attachments.length]);
+
+  const removeAttachment = (id: string) => {
+    setAttachments((prev) => prev.filter((a) => a.id !== id));
+    setAttachError(null);
+  };
 
   return (
     <div
@@ -425,6 +610,46 @@ function Composer({ sources, selected, setSelected, onSend, onOpenAdd, disabled 
           ))}
         </div>
       )}
+      {attachments.length > 0 && (
+        <div
+          style={{
+            display: "flex",
+            gap: 6,
+            flexWrap: "wrap",
+            marginBottom: 10,
+            paddingBottom: 10,
+            borderBottom: "1px dashed var(--line)",
+          }}
+        >
+          <span
+            className="mono"
+            style={{
+              fontSize: 10,
+              color: "var(--ink-3)",
+              alignSelf: "center",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              fontWeight: 600,
+            }}
+          >
+            Attached
+          </span>
+          {attachments.map((a) => (
+            <AttachmentChip key={a.id} attachment={a} onRemove={() => removeAttachment(a.id)} />
+          ))}
+        </div>
+      )}
+      {(imageBlockedReason ?? attachError) && (
+        <div
+          style={{
+            fontSize: 11,
+            color: "oklch(0.55 0.18 25)",
+            marginBottom: 8,
+          }}
+        >
+          {imageBlockedReason ?? attachError}
+        </div>
+      )}
       <textarea
         ref={ref}
         value={text}
@@ -455,38 +680,78 @@ function Composer({ sources, selected, setSelected, onSend, onOpenAdd, disabled 
           minHeight: 44,
         }}
       />
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
-        <button
-          onClick={onOpenAdd}
-          style={{
-            width: 30,
-            height: 30,
-            borderRadius: 8,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--ink-3)",
-            border: "1px solid var(--line)",
-          }}
-          title="Add a source"
-        >
-          <IconPaperclip size={14} />
-        </button>
-        <button
-          style={{
-            fontSize: 12,
-            padding: "6px 10px",
-            borderRadius: 8,
-            color: "var(--ink-2)",
-            border: "1px solid var(--line)",
-            display: "flex",
-            alignItems: "center",
-            gap: 5,
-          }}
-        >
-          <IconSparkle size={12} /> Claude Sonnet 4.6
-          <IconChevronDown size={10} />
-        </button>
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/*,.pdf,.doc,.docx,.txt,.md,.markdown,.csv,.tsv,.json,.jsonl,.xml,.yaml,.yml,.rtf,.log,.html,.htm"
+        style={{ display: "none" }}
+        onChange={(e) => void handleFilesPicked(e.target.files)}
+      />
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4, flexWrap: "wrap" }}>
+        <ToolbarPill
+          label="Attach"
+          title={`Attach up to ${ATTACH_MAX_COUNT} files to this message only (PDFs, DOCX, images, text)`}
+          icon={<IconPaperclip size={12} />}
+          active={attachments.length > 0}
+          disabled={uploading || disabled}
+          onClick={() => fileInputRef.current?.click()}
+          badge={
+            uploading
+              ? "…"
+              : attachments.length > 0
+              ? String(attachments.length)
+              : undefined
+          }
+        />
+        <ToolbarPill
+          label="Web"
+          title="Search the web in addition to your sources"
+          icon={<IconGlobe size={12} />}
+          active={webSearch}
+          onClick={onToggleWebSearch}
+        />
+        <ToolbarPill
+          label="Think"
+          title={
+            thinkingAllowed
+              ? "Let the model reason step-by-step before answering"
+              : `${model.label} doesn't support extended thinking — pick a reasoning model (Claude, GPT-5, Gemini 3).`
+          }
+          icon={<IconBrain size={12} />}
+          active={thinking && thinkingAllowed}
+          disabled={!thinkingAllowed}
+          onClick={onToggleThinking}
+        />
+        <div ref={modelRef} style={{ position: "relative" }}>
+          <button
+            onClick={() => setModelOpen((v) => !v)}
+            style={{
+              fontSize: 12,
+              padding: "6px 10px",
+              borderRadius: 8,
+              color: "var(--ink-2)",
+              border: "1px solid var(--line)",
+              background: modelOpen ? "var(--line-2)" : "transparent",
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+            }}
+          >
+            <IconSparkle size={12} />
+            {model.label}
+            <IconChevronDown size={10} />
+          </button>
+          {modelOpen && (
+            <ModelDropdown
+              current={model}
+              onPick={(m) => {
+                onPickModel(m);
+                setModelOpen(false);
+              }}
+            />
+          )}
+        </div>
         <div style={{ flex: 1 }} />
         <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
           <kbd
@@ -502,23 +767,259 @@ function Composer({ sources, selected, setSelected, onSend, onOpenAdd, disabled 
         </span>
         <button
           onClick={handleSend}
-          disabled={!text.trim() || disabled}
+          disabled={!text.trim() || disabled || uploading}
           style={{
             width: 34,
             height: 34,
             borderRadius: 8,
-            background: text.trim() && !disabled ? "var(--accent)" : "var(--line)",
-            color: text.trim() && !disabled ? "white" : "var(--ink-3)",
+            background:
+              text.trim() && !disabled && !uploading
+                ? "var(--accent)"
+                : "var(--line)",
+            color:
+              text.trim() && !disabled && !uploading
+                ? "white"
+                : "var(--ink-3)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            cursor: text.trim() && !disabled ? "pointer" : "not-allowed",
+            cursor:
+              text.trim() && !disabled && !uploading ? "pointer" : "not-allowed",
           }}
         >
           <IconArrowUp size={15} />
         </button>
       </div>
     </div>
+  );
+}
+
+interface ToolbarPillProps {
+  label: string;
+  title: string;
+  icon: React.ReactNode;
+  active: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+  badge?: string;
+}
+
+function ToolbarPill({ label, title, icon, active, disabled, onClick, badge }: ToolbarPillProps) {
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      disabled={disabled}
+      style={{
+        fontSize: 12,
+        padding: "6px 10px",
+        borderRadius: 8,
+        color: active ? "white" : "var(--ink-2)",
+        background: active ? "var(--accent)" : "transparent",
+        border: `1px solid ${active ? "var(--accent)" : "var(--line)"}`,
+        display: "flex",
+        alignItems: "center",
+        gap: 5,
+        opacity: disabled ? 0.5 : 1,
+        cursor: disabled ? "not-allowed" : "pointer",
+        transition: "background 120ms, border-color 120ms, color 120ms",
+      }}
+    >
+      {icon}
+      {label}
+      {badge && (
+        <span
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            padding: "0 5px",
+            borderRadius: 999,
+            background: active ? "rgba(255,255,255,0.25)" : "var(--line-2)",
+            color: active ? "white" : "var(--ink-3)",
+            minWidth: 14,
+            textAlign: "center",
+          }}
+        >
+          {badge}
+        </span>
+      )}
+    </button>
+  );
+}
+
+interface ModelDropdownProps {
+  current: ComposerModelOption;
+  onPick: (m: ComposerModelOption) => void;
+}
+
+function ModelDropdown({ current, onPick }: ModelDropdownProps) {
+  const groups = (["openai", "anthropic", "google", "ollama"] as const).map((p) => ({
+    provider: p,
+    label: p === "openai" ? "OpenAI" : p === "anthropic" ? "Anthropic" : p === "google" ? "Google" : "Local (Ollama)",
+    models: COMPOSER_MODELS.filter((m) => m.provider === p),
+  }));
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        bottom: "calc(100% + 8px)",
+        left: 0,
+        width: 280,
+        maxHeight: 360,
+        overflowY: "auto",
+        background: "var(--panel)",
+        border: "1px solid var(--line)",
+        borderRadius: 12,
+        boxShadow: "0 16px 40px var(--scrim-shadow)",
+        padding: 6,
+        zIndex: 50,
+        animation: "lsw-fadeIn 120ms",
+      }}
+    >
+      {groups.map((g) => (
+        <div key={g.provider} style={{ marginBottom: 6 }}>
+          <div
+            className="mono"
+            style={{
+              fontSize: 10,
+              color: "var(--ink-3)",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              fontWeight: 600,
+              padding: "6px 10px 4px",
+            }}
+          >
+            {g.label}
+          </div>
+          {g.models.map((m) => {
+            const active = m.id === current.id;
+            return (
+              <button
+                key={m.id}
+                onClick={() => onPick(m)}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "7px 10px",
+                  borderRadius: 7,
+                  fontSize: 13,
+                  color: active ? "var(--accent-ink)" : "var(--ink-2)",
+                  background: active ? "var(--accent-soft)" : "transparent",
+                  textAlign: "left",
+                }}
+                onMouseEnter={(e) => {
+                  if (!active) e.currentTarget.style.background = "var(--line-2)";
+                }}
+                onMouseLeave={(e) => {
+                  if (!active) e.currentTarget.style.background = "transparent";
+                }}
+              >
+                <span style={{ flex: 1 }}>{m.label}</span>
+                {m.supportsThinking && (
+                  <span
+                    className="mono"
+                    style={{
+                      fontSize: 9,
+                      padding: "1px 5px",
+                      borderRadius: 4,
+                      background: "var(--line-2)",
+                      color: "var(--ink-3)",
+                      fontWeight: 600,
+                    }}
+                    title="Supports extended thinking"
+                  >
+                    THINK
+                  </span>
+                )}
+                {m.supportsVision && (
+                  <span
+                    className="mono"
+                    style={{
+                      fontSize: 9,
+                      padding: "1px 5px",
+                      borderRadius: 4,
+                      background: "var(--line-2)",
+                      color: "var(--ink-3)",
+                      fontWeight: 600,
+                    }}
+                    title="Can read images"
+                  >
+                    IMG
+                  </span>
+                )}
+                {active && <IconCheck size={12} />}
+              </button>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+interface AttachmentChipProps {
+  attachment: EphemeralAttachment;
+  onRemove?: () => void;
+}
+
+function AttachmentChip({ attachment, onRemove }: AttachmentChipProps) {
+  const isImage = attachment.kind === "image";
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        padding: "2px 8px 2px 4px",
+        background: "var(--line-2)",
+        border: "1px dashed var(--line)",
+        borderRadius: 999,
+        fontSize: 11,
+        fontWeight: 500,
+        color: "var(--ink-2)",
+        maxWidth: 260,
+      }}
+    >
+      {isImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={attachment.url}
+          alt={attachment.name}
+          style={{ width: 18, height: 18, borderRadius: 4, objectFit: "cover" }}
+        />
+      ) : (
+        <span
+          style={{
+            width: 18,
+            height: 18,
+            borderRadius: 4,
+            background: "var(--panel)",
+            border: "1px solid var(--line)",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "var(--ink-3)",
+          }}
+        >
+          <IconImage size={10} />
+        </span>
+      )}
+      <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        {attachment.name}
+      </span>
+      {onRemove && (
+        <button
+          onClick={onRemove}
+          style={{ color: "var(--ink-3)", display: "flex", alignItems: "center" }}
+          title="Remove attachment"
+        >
+          <IconX size={10} />
+        </button>
+      )}
+    </span>
   );
 }
 
@@ -792,7 +1293,7 @@ export interface AskPanelProps {
   selected: string[];
   setSelected: Dispatch<SetStateAction<string[]>>;
   thread: ThreadMessage[];
-  sendMessage: (text: string, refs: string[]) => void;
+  sendMessage: (send: ComposerSend) => void;
   isSending: boolean;
   onOpenAdd: () => void;
   onNewChat: () => void;
@@ -802,6 +1303,13 @@ export interface AskPanelProps {
   userName?: string;
   userEmail?: string;
   onSignOut?: () => void;
+  /** Composer options persisted across turns — owned by WorkspaceShell. */
+  model: ComposerModelOption;
+  onPickModel: (model: ComposerModelOption) => void;
+  webSearch: boolean;
+  onToggleWebSearch: () => void;
+  thinking: boolean;
+  onToggleThinking: () => void;
   /** Right-side custom slot, e.g. the Studio hover-menu button. */
   studioSlot?: React.ReactNode;
 }
@@ -823,6 +1331,12 @@ export function AskPanel({
   userName,
   userEmail,
   onSignOut,
+  model,
+  onPickModel,
+  webSearch,
+  onToggleWebSearch,
+  thinking,
+  onToggleThinking,
   studioSlot,
 }: AskPanelProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -852,7 +1366,7 @@ export function AskPanel({
       : `${thread.length} message${thread.length !== 1 ? "s" : ""} · updated just now`;
 
   const handleSend = useCallback(
-    (text: string, refs: string[]) => sendMessage(text, refs),
+    (send: ComposerSend) => sendMessage(send),
     [sendMessage],
   );
 
@@ -1036,8 +1550,13 @@ export function AskPanel({
               selected={selected}
               setSelected={setSelected}
               onSend={handleSend}
-              onOpenAdd={onOpenAdd}
               disabled={isSending}
+              model={model}
+              onPickModel={onPickModel}
+              webSearch={webSearch}
+              onToggleWebSearch={onToggleWebSearch}
+              thinking={thinking}
+              onToggleThinking={onToggleThinking}
             />
             <div
               style={{

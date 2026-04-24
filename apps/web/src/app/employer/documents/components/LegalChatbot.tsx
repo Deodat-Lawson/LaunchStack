@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import {
   ArrowLeft,
   Send,
-  Loader2,
   Scale,
   FileText,
   CheckCircle2,
@@ -15,17 +14,16 @@ import {
   PanelRightOpen,
   PanelRightClose,
   Circle,
+  Sparkles,
 } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Card } from "~/app/employer/documents/components/ui/card";
 import {
   HoverCard,
   HoverCardTrigger,
   HoverCardContent,
 } from "~/app/employer/documents/components/ui/hover-card";
-import { cn } from "~/lib/utils";
 import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
 import MarkdownMessage from "~/app/_components/MarkdownMessage";
+import { legalTheme as s } from "./LegalGeneratorTheme";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -59,7 +57,6 @@ interface ChatMessage {
 
 interface LegalChatbotProps {
   onBack: () => void;
-  /** Next step: template field form (registry validation) → then document editor. */
   onContinueToTemplateForm: (
     templateId: string,
     prefilled: Record<string, string>,
@@ -71,7 +68,7 @@ interface LegalChatbotProps {
 
 function carryOverFields(
   extractedFields: Record<string, string>,
-  newTemplateId: string
+  newTemplateId: string,
 ): Record<string, string> {
   const newTemplate = TEMPLATE_REGISTRY[newTemplateId];
   if (!newTemplate) return extractedFields;
@@ -103,8 +100,8 @@ function ExpandableFieldList({
   const remaining = requiredFields.length - previewCount;
 
   return (
-    <p className="text-xs text-muted-foreground">
-      <span className="font-medium text-foreground">Fields: </span>
+    <p style={{ fontSize: 12, color: "var(--ink-3)", margin: 0, lineHeight: 1.55 }}>
+      <span style={{ fontWeight: 600, color: "var(--ink-2)" }}>Fields: </span>
       {previewLabels.join(", ")}
       {remaining > 0 && (
         <>
@@ -116,7 +113,16 @@ function ExpandableFieldList({
                 e.stopPropagation();
                 setExpanded(true);
               }}
-              className="ml-1 text-primary hover:text-primary/80 hover:underline cursor-pointer"
+              style={{
+                marginLeft: 4,
+                color: "var(--accent)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                fontSize: "inherit",
+                fontFamily: "inherit",
+              }}
             >
               +{remaining} more
             </button>
@@ -127,7 +133,16 @@ function ExpandableFieldList({
                 e.stopPropagation();
                 setExpanded(false);
               }}
-              className="ml-1 text-primary hover:text-primary/80 hover:underline cursor-pointer"
+              style={{
+                marginLeft: 6,
+                color: "var(--accent)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                fontSize: "inherit",
+                fontFamily: "inherit",
+              }}
             >
               show less
             </button>
@@ -158,30 +173,76 @@ function TemplateMiniCard({
         <button
           onClick={() => onSelect(template.templateId)}
           onTouchStart={() => setExpanded((p) => !p)}
-          className={cn(
-            "flex items-start gap-3 p-3 rounded-lg border border-border",
-            "hover:border-ring hover:shadow-md transition-all",
-            "bg-card text-left w-full cursor-pointer group"
-          )}
+          className="group"
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 12,
+            padding: 14,
+            borderRadius: 14,
+            border: "1px solid var(--line-2)",
+            background: "var(--panel)",
+            textAlign: "left",
+            width: "100%",
+            cursor: "pointer",
+            fontFamily: "inherit",
+            color: "inherit",
+            transition: "all .2s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "var(--accent)";
+            e.currentTarget.style.transform = "translateY(-1px)";
+            e.currentTarget.style.boxShadow = "0 12px 28px var(--accent-glow)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "var(--line-2)";
+            e.currentTarget.style.transform = "none";
+            e.currentTarget.style.boxShadow = "none";
+          }}
         >
-          <div className="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded shrink-0 mt-0.5">
-            <FileText className="w-4 h-4 text-blue-600" />
+          <div className={s.brandMarkSm}>
+            <FileText className="h-[13px] w-[13px]" />
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="font-medium text-sm text-foreground truncate">
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: "var(--ink)",
+                letterSpacing: "-0.01em",
+              }}
+            >
               {template.name}
             </div>
-            <div className="text-xs text-muted-foreground mt-0.5">
+            <div
+              style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 2 }}
+            >
               {template.requiredFieldCount} required fields
             </div>
             {expanded && (
-              <div className="mt-2 pt-2 border-t border-border md:hidden">
-                <p className="text-xs text-muted-foreground mb-1">
+              <div
+                className="md:hidden"
+                style={{
+                  marginTop: 8,
+                  paddingTop: 8,
+                  borderTop: "1px solid var(--line-2)",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: 12,
+                    color: "var(--ink-3)",
+                    margin: "0 0 4px",
+                    lineHeight: 1.55,
+                  }}
+                >
                   {template.description}
                 </p>
                 {previewLabels.length > 0 && (
-                  <p className="text-xs text-muted-foreground">
-                    <span className="font-medium text-foreground">Fields: </span>
+                  <p style={{ fontSize: 12, color: "var(--ink-3)", margin: 0 }}>
+                    <span style={{ fontWeight: 600, color: "var(--ink-2)" }}>
+                      Fields:{" "}
+                    </span>
                     {previewLabels.join(", ")}
                     {requiredFields.length > 5
                       ? `, +${requiredFields.length - 5} more`
@@ -191,27 +252,54 @@ function TemplateMiniCard({
               </div>
             )}
           </div>
-          <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <ChevronRight
+            className="h-4 w-4 flex-shrink-0 transition-opacity"
+            style={{ color: "var(--ink-3)", marginTop: 3 }}
+          />
         </button>
       </HoverCardTrigger>
-      <HoverCardContent side="right" className="w-80 hidden md:block">
+      <HoverCardContent side="right" className="hidden w-80 md:block">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Scale className="w-4 h-4 text-blue-600" />
-            <span className="font-semibold text-sm">{template.name}</span>
+            <Scale className="h-4 w-4" style={{ color: "var(--accent)" }} />
+            <span style={{ fontWeight: 600, fontSize: 14 }}>{template.name}</span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">
+          <p
+            style={{
+              margin: 0,
+              fontSize: 12,
+              color: "var(--ink-3)",
+              lineHeight: 1.55,
+            }}
+          >
             {template.description}
           </p>
           {registryTemplate && (
-            <div className="pt-1 border-t border-border">
-              <p className="text-xs font-medium text-foreground mb-1">
+            <div style={{ paddingTop: 6, borderTop: "1px solid var(--line-2)" }}>
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: "var(--ink-2)",
+                  margin: "0 0 4px",
+                }}
+              >
                 Required fields:
               </p>
-              <ExpandableFieldList templateId={template.templateId} previewCount={5} />
+              <ExpandableFieldList
+                templateId={template.templateId}
+                previewCount={5}
+              />
             </div>
           )}
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              fontSize: 12,
+              color: "var(--ink-3)",
+            }}
+          >
             <span>{template.fieldCount} fields total</span>
             <span>{template.requiredFieldCount} required</span>
           </div>
@@ -221,7 +309,7 @@ function TemplateMiniCard({
   );
 }
 
-// ─── Template Confirmation Card ────────────────────────────────────────────────
+// ─── Confirm / No-match / Ready cards ──────────────────────────────────────────
 
 function TemplateConfirmCard({
   template,
@@ -233,64 +321,99 @@ function TemplateConfirmCard({
   onPickDifferent: () => void;
 }) {
   return (
-    <Card className="p-4 border border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/20">
-      <div className="flex items-start gap-3 mb-2">
-        <div className="p-1.5 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
-          <Scale className="w-4 h-4 text-blue-600" />
+    <div className={s.banner} style={{ padding: 16 }}>
+      <div className="mb-2 flex items-start gap-3">
+        <div className={s.brandMarkSm}>
+          <Scale className="h-[13px] w-[13px]" />
         </div>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-sm text-foreground">{template.name}</h4>
-          <p className="text-xs text-muted-foreground mt-0.5">
+        <div className="min-w-0 flex-1">
+          <h4
+            style={{
+              margin: 0,
+              fontSize: 14,
+              fontWeight: 600,
+              color: "var(--ink)",
+            }}
+          >
+            {template.name}
+          </h4>
+          <p
+            style={{
+              margin: "2px 0 0",
+              fontSize: 12,
+              color: "var(--ink-3)",
+              lineHeight: 1.5,
+            }}
+          >
             {template.description}
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-3 text-xs text-muted-foreground mb-1.5">
+      <div
+        style={{
+          display: "flex",
+          gap: 12,
+          fontSize: 12,
+          color: "var(--ink-3)",
+          marginBottom: 6,
+        }}
+      >
         <span>{template.fieldCount} fields</span>
         <span>{template.requiredFieldCount} required</span>
       </div>
-      <div className="mb-2.5">
+      <div style={{ marginBottom: 12 }}>
         <ExpandableFieldList templateId={template.templateId} previewCount={6} />
       </div>
-      <div className="flex gap-2 flex-wrap">
-        <Button
-          size="sm"
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-          onClick={onConfirm}
-        >
-          <CheckCircle2 className="w-4 h-4 mr-1.5" />
+      <div className="flex flex-wrap gap-2">
+        <button className={`${s.btn} ${s.btnAccent} ${s.btnSm}`} onClick={onConfirm}>
+          <CheckCircle2 className="h-4 w-4" />
           Proceed with this template
-        </Button>
-        <Button size="sm" variant="outline" onClick={onPickDifferent}>
+        </button>
+        <button
+          className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
+          onClick={onPickDifferent}
+        >
           Pick a different one
-        </Button>
+        </button>
       </div>
-    </Card>
+    </div>
   );
 }
-
-// ─── No Match Card ─────────────────────────────────────────────────────────────
 
 function NoMatchCard({ onStartOver }: { onStartOver: () => void }) {
   return (
-    <Card className="p-4 border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/20">
-      <div className="flex items-center gap-2 mb-2">
-        <AlertCircle className="w-5 h-5 text-amber-600" />
-        <h4 className="font-semibold text-foreground">No exact match found</h4>
+    <div className={`${s.banner} ${s.bannerWarn}`} style={{ padding: 16 }}>
+      <div className="mb-2 flex items-center gap-2">
+        <AlertCircle className="h-5 w-5" style={{ color: "var(--warn)" }} />
+        <h4
+          style={{
+            margin: 0,
+            fontSize: 14,
+            fontWeight: 600,
+            color: "var(--ink)",
+          }}
+        >
+          No exact match found
+        </h4>
       </div>
-      <p className="text-sm text-muted-foreground mb-3">
+      <p
+        style={{
+          margin: "0 0 12px",
+          fontSize: 13,
+          color: "var(--ink-2)",
+          lineHeight: 1.55,
+        }}
+      >
         None of our templates are a perfect fit. Try describing your needs
         differently, or browse the template library manually.
       </p>
-      <Button size="sm" variant="outline" onClick={onStartOver}>
-        <RotateCcw className="w-4 h-4 mr-1.5" />
+      <button className={`${s.btn} ${s.btnOutline} ${s.btnSm}`} onClick={onStartOver}>
+        <RotateCcw className="h-4 w-4" />
         Start over
-      </Button>
-    </Card>
+      </button>
+    </div>
   );
 }
-
-// ─── Generate Action Card ──────────────────────────────────────────────────────
 
 function GenerateActionCard({
   templateName,
@@ -303,28 +426,39 @@ function GenerateActionCard({
 }) {
   const fieldCount = Object.keys(extractedFields).length;
   return (
-    <Card className="p-4 border border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20">
-      <div className="flex items-center gap-2 mb-2">
-        <CheckCircle2 className="w-5 h-5 text-green-600" />
-        <h4 className="font-semibold text-foreground">Ready for the field form</h4>
+    <div className={`${s.banner} ${s.bannerSuccess}`} style={{ padding: 16 }}>
+      <div className="mb-2 flex items-center gap-2">
+        <CheckCircle2 className="h-5 w-5" style={{ color: "var(--success)" }} />
+        <h4
+          style={{
+            margin: 0,
+            fontSize: 14,
+            fontWeight: 600,
+            color: "var(--ink)",
+          }}
+        >
+          Ready for the field form
+        </h4>
       </div>
-      <p className="text-sm text-muted-foreground mb-3">
-        {templateName} &middot; {fieldCount} fields collected from chat. Next,
-        confirm and complete fields on the template form (required checks), then
-        your document opens for editing.
-      </p>
-      <Button
-        className="bg-blue-600 hover:bg-blue-700 text-white"
-        onClick={onContinue}
+      <p
+        style={{
+          margin: "0 0 12px",
+          fontSize: 13,
+          color: "var(--ink-2)",
+          lineHeight: 1.55,
+        }}
       >
-        <ChevronRight className="w-4 h-4 mr-1.5" />
+        {templateName} · {fieldCount} fields collected from chat. Next, confirm
+        and complete fields on the template form, then your document opens for
+        editing.
+      </p>
+      <button className={`${s.btn} ${s.btnAccent} ${s.btnSm}`} onClick={onContinue}>
+        <ChevronRight className="h-4 w-4" />
         Continue to template fields
-      </Button>
-    </Card>
+      </button>
+    </div>
   );
 }
-
-// ─── Error Message with Retry ──────────────────────────────────────────────────
 
 function ErrorBubble({
   content,
@@ -335,18 +469,24 @@ function ErrorBubble({
 }) {
   return (
     <div className="space-y-2">
-      <div className="rounded-2xl rounded-bl-md px-4 py-2.5 text-sm leading-relaxed bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
+      <div
+        style={{
+          borderRadius: 14,
+          borderBottomLeftRadius: 4,
+          padding: "10px 14px",
+          fontSize: 14,
+          lineHeight: 1.55,
+          background: "var(--danger-soft)",
+          color: "var(--danger)",
+          border: "1px solid oklch(from var(--danger) l c h / 0.3)",
+        }}
+      >
         {content}
       </div>
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={onRetry}
-        className="text-xs"
-      >
-        <RefreshCw className="w-3 h-3 mr-1.5" />
+      <button className={`${s.btn} ${s.btnOutline} ${s.btnSm}`} onClick={onRetry}>
+        <RefreshCw className="h-3 w-3" />
         Retry
-      </Button>
+      </button>
     </div>
   );
 }
@@ -370,56 +510,100 @@ function FieldsSidebar({
   const filledCount = requiredFields.filter((f) => merged[f.key]).length;
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="p-3 border-b border-border">
-        <h3 className="font-semibold text-sm text-foreground truncate">
+    <div className="flex h-full flex-col">
+      <div
+        style={{
+          padding: 14,
+          borderBottom: "1px solid var(--line-2)",
+        }}
+      >
+        <h3
+          style={{
+            margin: 0,
+            fontSize: 14,
+            fontWeight: 600,
+            color: "var(--ink)",
+            letterSpacing: "-0.01em",
+          }}
+          className="truncate"
+        >
           {template.name}
         </h3>
-        <div className="flex items-center gap-2 mt-1.5">
-          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+        <div className="mt-2 flex items-center gap-2">
+          <div className={s.progressTrack}>
             <div
-              className="h-full bg-blue-600 rounded-full transition-all duration-300"
+              className={s.progressFill}
               style={{
                 width: `${requiredFields.length > 0 ? (filledCount / requiredFields.length) * 100 : 0}%`,
               }}
             />
           </div>
-          <span className="text-xs text-muted-foreground whitespace-nowrap">
+          <span
+            style={{
+              fontSize: 11,
+              color: "var(--ink-3)",
+              whiteSpace: "nowrap",
+            }}
+          >
             {filledCount}/{requiredFields.length}
           </span>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto p-3 space-y-1">
+      <div className={`flex-1 overflow-y-auto p-3 ${s.scrollbar}`}>
         {template.fields.map((field) => {
           const value = merged[field.key];
           const isFilled = Boolean(value);
           return (
             <div
               key={field.key}
-              className={cn(
-                "flex items-start gap-2 py-1.5 px-2 rounded-md text-xs",
-                isFilled
-                  ? "bg-green-50 dark:bg-green-950/20"
-                  : "bg-transparent"
-              )}
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 8,
+                padding: "8px 10px",
+                borderRadius: 8,
+                fontSize: 12,
+                background: isFilled
+                  ? "oklch(from var(--success) l c h / 0.1)"
+                  : "transparent",
+                marginBottom: 2,
+              }}
             >
               {isFilled ? (
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-600 shrink-0 mt-0.5" />
+                <CheckCircle2
+                  className="h-[14px] w-[14px] flex-shrink-0"
+                  style={{ color: "var(--success)", marginTop: 2 }}
+                />
               ) : (
-                <Circle className="w-3.5 h-3.5 text-muted-foreground/40 shrink-0 mt-0.5" />
+                <Circle
+                  className="h-[14px] w-[14px] flex-shrink-0"
+                  style={{ color: "var(--ink-4)", marginTop: 2 }}
+                />
               )}
-              <div className="flex-1 min-w-0">
-                <span className={cn(
-                  "font-medium",
-                  isFilled ? "text-foreground" : "text-muted-foreground"
-                )}>
+              <div className="min-w-0 flex-1">
+                <span
+                  style={{
+                    fontWeight: 500,
+                    color: isFilled ? "var(--ink)" : "var(--ink-3)",
+                  }}
+                >
                   {field.label}
                 </span>
                 {!field.required && (
-                  <span className="text-muted-foreground/50 ml-1">(optional)</span>
+                  <span style={{ color: "var(--ink-4)", marginLeft: 4 }}>
+                    (optional)
+                  </span>
                 )}
                 {isFilled && (
-                  <p className="text-muted-foreground truncate mt-0.5">
+                  <p
+                    style={{
+                      margin: "2px 0 0",
+                      color: "var(--ink-3)",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     {String(value).replace(/_/g, " ")}
                   </p>
                 )}
@@ -442,10 +626,16 @@ export function LegalChatbot({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [pendingConfirm, setPendingConfirm] = useState<RecommendedTemplate | null>(null);
+  const [pendingConfirm, setPendingConfirm] = useState<RecommendedTemplate | null>(
+    null,
+  );
   const [currentResponse, setCurrentResponse] = useState<ChatResponse | null>(null);
-  const [accumulatedFields, setAccumulatedFields] = useState<Record<string, string>>({});
-  const [confirmedTemplateId, setConfirmedTemplateId] = useState<string | null>(null);
+  const [accumulatedFields, setAccumulatedFields] = useState<Record<string, string>>(
+    {},
+  );
+  const [confirmedTemplateId, setConfirmedTemplateId] = useState<string | null>(
+    null,
+  );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -465,8 +655,8 @@ export function LegalChatbot({
     scrollToBottom();
   }, [messages, pendingConfirm]);
 
-  // Track the active template from either client confirmation or LLM response
-  const activeTemplateId = confirmedTemplateId ?? currentResponse?.selectedTemplateId ?? null;
+  const activeTemplateId =
+    confirmedTemplateId ?? currentResponse?.selectedTemplateId ?? null;
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -484,9 +674,8 @@ export function LegalChatbot({
           .filter((m) => !m.isError)
           .map((m) => ({
             role: m.role,
-            content: m.role === "assistant" && m.parsed
-              ? JSON.stringify(m.parsed)
-              : m.content,
+            content:
+              m.role === "assistant" && m.parsed ? JSON.stringify(m.parsed) : m.content,
           }));
 
         const response = await fetch("/api/document-generator/legal-chat", {
@@ -519,13 +708,17 @@ export function LegalChatbot({
         if (data.success && data.data) {
           const parsed = data.data;
 
-          // Show company intro on first successful response
-          if (!hasShownIntro.current && parsed.companyDefaults && Object.keys(parsed.companyDefaults).length > 0) {
+          if (
+            !hasShownIntro.current &&
+            parsed.companyDefaults &&
+            Object.keys(parsed.companyDefaults).length > 0
+          ) {
             hasShownIntro.current = true;
             const defaults = parsed.companyDefaults;
             const parts: string[] = [];
             if (defaults.company_name) parts.push(`**${defaults.company_name}**`);
-            if (defaults.company_address) parts.push(`based in **${defaults.company_address}**`);
+            if (defaults.company_address)
+              parts.push(`based in **${defaults.company_address}**`);
             if (parts.length > 0) {
               const introContent = `I see your company is ${parts.join(", ")}. I'll pre-fill those details automatically.`;
               setMessages((prev) => [
@@ -535,7 +728,6 @@ export function LegalChatbot({
             }
           }
 
-          // Detect if the LLM is asking about a select field
           const assistantMessage: ChatMessage = {
             role: "assistant",
             content: parsed.message,
@@ -544,9 +736,10 @@ export function LegalChatbot({
           setMessages((prev) => [...prev, assistantMessage]);
           setCurrentResponse(parsed);
 
-          // Update accumulated fields (coerce all values to strings — the LLM
-          // may return numbers for numeric fields which would break the Zod schema)
-          if (parsed.extractedFields && Object.keys(parsed.extractedFields).length > 0) {
+          if (
+            parsed.extractedFields &&
+            Object.keys(parsed.extractedFields).length > 0
+          ) {
             const stringified: Record<string, string> = {};
             for (const [k, v] of Object.entries(parsed.extractedFields)) {
               stringified[k] = String(v);
@@ -565,7 +758,6 @@ export function LegalChatbot({
             });
           }
 
-          // Auto-show confirm card for single high-confidence match
           if (
             parsed.phase === "recommending" &&
             parsed.recommendedTemplates.length === 1 &&
@@ -596,16 +788,15 @@ export function LegalChatbot({
         setIsLoading(false);
       }
     },
-    [messages, isLoading, accumulatedFields]
+    [messages, isLoading, accumulatedFields],
   );
 
-  // Send initial message if provided (only runs once via ref guard)
   useEffect(() => {
     if (initialMessage && !hasSentInitial.current) {
       hasSentInitial.current = true;
       void sendMessage(initialMessage);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- sendMessage changes every render; ref guard prevents double-send
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- ref guard prevents double-send
   }, [initialMessage]);
 
   const handleRetry = (errorIndex: number) => {
@@ -619,13 +810,13 @@ export function LegalChatbot({
 
   const handleSelectTemplate = (templateId: string) => {
     let rec = currentResponse?.recommendedTemplates.find(
-      (t) => t.templateId === templateId
+      (t) => t.templateId === templateId,
     );
     if (!rec) {
       for (const msg of messages) {
         if (msg.parsed?.recommendedTemplates) {
           const found = msg.parsed.recommendedTemplates.find(
-            (t) => t.templateId === templateId
+            (t) => t.templateId === templateId,
           );
           if (found) {
             rec = found;
@@ -647,7 +838,7 @@ export function LegalChatbot({
     setSidebarOpen(true);
     setPendingConfirm(null);
     void sendMessage(
-      `I want to proceed with the "${pendingConfirm.name}" template.`
+      `I want to proceed with the "${pendingConfirm.name}" template.`,
     );
   };
 
@@ -677,11 +868,16 @@ export function LegalChatbot({
 
   const handleContinueToTemplateForm = () => {
     if (!currentResponse?.selectedTemplateId) return;
-    const finalFields = { ...accumulatedFields, ...currentResponse.extractedFields };
+    const finalFields = {
+      ...accumulatedFields,
+      ...currentResponse.extractedFields,
+    };
     onContinueToTemplateForm(currentResponse.selectedTemplateId, finalFields);
   };
 
-  const lastAssistantMsg = [...messages].reverse().find((m) => m.role === "assistant" && m.parsed);
+  const lastAssistantMsg = [...messages]
+    .reverse()
+    .find((m) => m.role === "assistant" && m.parsed);
   const isNoMatch =
     lastAssistantMsg?.parsed?.phase === "recommending" &&
     lastAssistantMsg.parsed.recommendedTemplates.length === 0;
@@ -689,158 +885,120 @@ export function LegalChatbot({
   const showSidebar = sidebarOpen && activeTemplateId;
 
   return (
-    <div className="flex h-full bg-background">
+    <div className="flex h-full">
       {/* Main chat area */}
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
-        <div className="flex-shrink-0 border-b border-border p-4">
-          <div className="max-w-3xl mx-auto flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
+        <div
+          className="flex-shrink-0"
+          style={{
+            padding: "14px 20px",
+            borderBottom: "1px solid var(--line-2)",
+            background: "oklch(from var(--bg) l c h / 0.6)",
+            backdropFilter: "blur(14px) saturate(140%)",
+          }}
+        >
+          <div className="mx-auto flex max-w-3xl items-center gap-3">
+            <button
+              className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
               onClick={onBack}
-              className="text-muted-foreground hover:text-foreground"
+              style={{ paddingLeft: 6, paddingRight: 10 }}
             >
-              <ArrowLeft className="w-4 h-4 mr-1.5" />
-              Back to templates
-            </Button>
-            <div className="h-4 w-px bg-border" />
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </button>
+            <div className={s.dividerVert} />
             <div className="flex items-center gap-2">
-              <div className="p-1.5 bg-blue-600 rounded-lg">
-                <Scale className="w-4 h-4 text-white" />
+              <div className={s.brandMarkSm}>
+                <Scale className="h-[14px] w-[14px]" />
               </div>
-              <span className="font-semibold text-foreground">
+              <span
+                style={{
+                  fontWeight: 600,
+                  color: "var(--ink)",
+                  fontSize: 14,
+                  letterSpacing: "-0.01em",
+                }}
+              >
                 Legal Document Assistant
               </span>
             </div>
             <div className="flex-1" />
             {activeTemplateId && (
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
+                className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
                 onClick={() => setSidebarOpen((p) => !p)}
-                className="text-muted-foreground hover:text-foreground"
               >
                 {sidebarOpen ? (
-                  <PanelRightClose className="w-4 h-4 mr-1.5" />
+                  <PanelRightClose className="h-4 w-4" />
                 ) : (
-                  <PanelRightOpen className="w-4 h-4 mr-1.5" />
+                  <PanelRightOpen className="h-4 w-4" />
                 )}
                 Fields
-              </Button>
+              </button>
             )}
             {messages.length > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
+                className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
                 onClick={handleStartOver}
-                className="text-muted-foreground hover:text-foreground"
               >
-                <RotateCcw className="w-4 h-4 mr-1.5" />
+                <RotateCcw className="h-4 w-4" />
                 Start over
-              </Button>
+              </button>
             )}
           </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto p-4 space-y-4">
-            {/* Welcome message */}
-            {messages.length === 0 && !isLoading && (
-              <div className="text-center py-12">
-                <div className="inline-flex p-3 bg-blue-100 dark:bg-blue-900/30 rounded-2xl mb-4">
-                  <Scale className="w-8 h-8 text-blue-600" />
-                </div>
-                <h2 className="text-xl font-semibold text-foreground mb-2">
-                  What legal document do you need?
-                </h2>
-                <p className="text-muted-foreground max-w-md mx-auto">
-                  Describe your situation and I&apos;ll recommend the right
-                  template and help you fill it out.
-                </p>
-                <div className="flex flex-wrap justify-center gap-2 mt-6">
-                  {[
-                    "I need an NDA for new employees",
-                    "Setting up a contractor agreement",
-                    "We're raising a seed round",
-                    "Need a privacy policy for our app",
-                  ].map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      onClick={() => void sendMessage(suggestion)}
-                      className={cn(
-                        "px-3 py-1.5 rounded-full text-sm border border-border",
-                        "text-muted-foreground hover:text-foreground hover:border-ring",
-                        "transition-colors cursor-pointer"
-                      )}
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+        <div className={`flex-1 overflow-y-auto ${s.scrollbar}`}>
+          <div className="mx-auto max-w-3xl space-y-5 px-5 py-6">
+            {messages.length === 0 && !isLoading && <WelcomeScreen onSuggest={(q) => void sendMessage(q)} />}
 
-            {/* Chat messages */}
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={cn(
-                  "flex gap-3",
-                  msg.role === "user" ? "justify-end" : "justify-start"
-                )}
+                className="flex gap-3"
+                style={{
+                  justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+                }}
               >
                 {msg.role === "assistant" && (
-                  <div className="shrink-0 mt-1">
-                    <div className={cn(
-                      "p-1.5 rounded-lg",
-                      msg.isError
-                        ? "bg-red-100 dark:bg-red-900/30"
-                        : "bg-blue-100 dark:bg-blue-900/30"
-                    )}>
-                      {msg.isError ? (
-                        <AlertCircle className="w-4 h-4 text-red-600" />
-                      ) : (
-                        <Scale className="w-4 h-4 text-blue-600" />
-                      )}
-                    </div>
+                  <div
+                    className={`${s.chatAvatar} ${msg.isError ? s.chatAvatarError : ""}`}
+                    style={{ marginTop: 2 }}
+                  >
+                    {msg.isError ? (
+                      <AlertCircle className="h-[14px] w-[14px]" />
+                    ) : (
+                      <Scale className="h-[14px] w-[14px]" />
+                    )}
                   </div>
                 )}
                 <div
-                  className={cn(
-                    "max-w-[80%] space-y-3",
-                    msg.role === "user" ? "items-end" : "items-start"
-                  )}
+                  className="space-y-3"
+                  style={{
+                    maxWidth: "80%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: msg.role === "user" ? "flex-end" : "flex-start",
+                  }}
                 >
                   {msg.isError ? (
                     <ErrorBubble
                       content={msg.content}
                       onRetry={() => handleRetry(i)}
                     />
+                  ) : msg.role === "user" ? (
+                    <div className={s.chatBubbleUser}>{msg.content}</div>
                   ) : (
-                    <div
-                      className={cn(
-                        "rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
-                        msg.role === "user"
-                          ? "bg-blue-600 text-white rounded-br-md"
-                          : "bg-muted text-foreground rounded-bl-md"
-                      )}
-                    >
-                      {msg.role === "assistant" ? (
-                        <MarkdownMessage content={msg.content} className="text-sm" />
-                      ) : (
-                        msg.content
-                      )}
+                    <div className={s.chatBubbleAssistant}>
+                      <MarkdownMessage content={msg.content} className="text-sm" />
                     </div>
                   )}
 
-
-
-                  {/* Template recommendations */}
                   {msg.parsed?.phase === "recommending" &&
                     msg.parsed.recommendedTemplates.length > 0 && (
-                      <div className="space-y-2 w-full">
+                      <div className="w-full space-y-2">
                         {msg.parsed.recommendedTemplates.map((rec) => (
                           <TemplateMiniCard
                             key={rec.templateId}
@@ -851,7 +1009,6 @@ export function LegalChatbot({
                       </div>
                     )}
 
-                  {/* Ready to generate card */}
                   {msg.parsed?.phase === "ready" &&
                     msg.parsed.selectedTemplateId && (
                       <GenerateActionCard
@@ -867,29 +1024,23 @@ export function LegalChatbot({
               </div>
             ))}
 
-            {/* No match card */}
             {isNoMatch && !isLoading && (
               <div className="flex gap-3">
-                <div className="shrink-0 mt-1">
-                  <div className="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
-                    <AlertCircle className="w-4 h-4 text-amber-600" />
-                  </div>
+                <div className={s.chatAvatar} style={{ marginTop: 2 }}>
+                  <AlertCircle className="h-[14px] w-[14px]" />
                 </div>
-                <div className="max-w-[80%]">
+                <div style={{ maxWidth: "80%" }}>
                   <NoMatchCard onStartOver={handleStartOver} />
                 </div>
               </div>
             )}
 
-            {/* Pending confirmation card */}
             {pendingConfirm && (
               <div className="flex gap-3">
-                <div className="shrink-0 mt-1">
-                  <div className="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                    <Scale className="w-4 h-4 text-blue-600" />
-                  </div>
+                <div className={s.chatAvatar} style={{ marginTop: 2 }}>
+                  <Scale className="h-[14px] w-[14px]" />
                 </div>
-                <div className="max-w-[80%]">
+                <div style={{ maxWidth: "80%" }}>
                   <TemplateConfirmCard
                     template={pendingConfirm}
                     onConfirm={handleConfirmTemplate}
@@ -899,18 +1050,17 @@ export function LegalChatbot({
               </div>
             )}
 
-            {/* Loading indicator */}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="shrink-0 mt-1">
-                  <div className="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                    <Scale className="w-4 h-4 text-blue-600" />
-                  </div>
+                <div className={s.chatAvatar} style={{ marginTop: 2 }}>
+                  <Scale className="h-[14px] w-[14px]" />
                 </div>
-                <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-3">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Thinking...
+                <div className={s.chatBubbleAssistant}>
+                  <div className="flex items-center gap-2" style={{ color: "var(--ink-3)" }}>
+                    <span className={s.loadingDot} />
+                    <span className={s.loadingDot} />
+                    <span className={s.loadingDot} />
+                    <span style={{ marginLeft: 4, fontSize: 13 }}>Thinking…</span>
                   </div>
                 </div>
               </div>
@@ -920,43 +1070,37 @@ export function LegalChatbot({
           </div>
         </div>
 
-        {/* Input */}
-        <div className="flex-shrink-0 border-t border-border p-4">
-          <div className="max-w-3xl mx-auto">
-            <div className="flex gap-2 items-end">
-              <div className="flex-1 relative">
-                <textarea
-                  ref={inputRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Describe what you need..."
-                  rows={1}
-                  className={cn(
-                    "w-full resize-none rounded-xl border border-border bg-background px-4 py-3 pr-12",
-                    "text-sm text-foreground placeholder:text-muted-foreground",
-                    "focus:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring",
-                    "max-h-32 disabled:opacity-50"
-                  )}
-                  style={{
-                    height: "auto",
-                    minHeight: "44px",
-                  }}
-                  onInput={(e) => {
-                    const target = e.target as HTMLTextAreaElement;
-                    target.style.height = "auto";
-                    target.style.height = `${Math.min(target.scrollHeight, 128)}px`;
-                  }}
-                />
-              </div>
-              <Button
-                size="icon"
-                className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 w-11 shrink-0"
+        {/* Composer */}
+        <div
+          className="flex-shrink-0"
+          style={{
+            padding: "12px 20px 20px",
+            borderTop: "1px solid var(--line-2)",
+          }}
+        >
+          <div className="mx-auto max-w-3xl">
+            <div className={s.composer}>
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Describe what you need…"
+                rows={1}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = "auto";
+                  target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
+                }}
+              />
+              <button
+                className={`${s.btn} ${s.btnAccent} ${s.btnIcon}`}
                 onClick={() => void sendMessage(input)}
                 disabled={!input.trim() || isLoading}
+                aria-label="Send message"
               >
-                <Send className="w-4 h-4" />
-              </Button>
+                <Send className="h-4 w-4" />
+              </button>
             </div>
           </div>
         </div>
@@ -964,7 +1108,15 @@ export function LegalChatbot({
 
       {/* Fields Sidebar */}
       {showSidebar && activeTemplateId && (
-        <div className="hidden md:flex w-72 border-l border-border bg-background flex-shrink-0 flex-col overflow-hidden">
+        <div
+          className="hidden flex-shrink-0 flex-col md:flex"
+          style={{
+            width: 288,
+            borderLeft: "1px solid var(--line-2)",
+            background: "oklch(from var(--bg) l c h / 0.6)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
           <FieldsSidebar
             templateId={activeTemplateId}
             accumulatedFields={accumulatedFields}
@@ -972,6 +1124,58 @@ export function LegalChatbot({
           />
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── Welcome screen ────────────────────────────────────────────────────────────
+
+function WelcomeScreen({ onSuggest }: { onSuggest: (q: string) => void }) {
+  const suggestions = [
+    "I need an NDA for new employees",
+    "Setting up a contractor agreement",
+    "We're raising a seed round",
+    "Need a privacy policy for our app",
+  ];
+  return (
+    <div className="flex flex-col items-center py-12 text-center">
+      <div className={s.brandMark} style={{ width: 52, height: 52, borderRadius: 14 }}>
+        <Sparkles className="h-6 w-6" />
+      </div>
+      <h2
+        style={{
+          margin: "18px 0 6px",
+          fontSize: 24,
+          fontWeight: 600,
+          color: "var(--ink)",
+          letterSpacing: "-0.02em",
+        }}
+      >
+        What legal document do you need?
+      </h2>
+      <p
+        style={{
+          margin: 0,
+          maxWidth: 420,
+          fontSize: 15,
+          color: "var(--ink-2)",
+          lineHeight: 1.55,
+        }}
+      >
+        Describe your situation and I&apos;ll recommend the right template and
+        help you fill it out.
+      </p>
+      <div className="mt-6 flex flex-wrap justify-center gap-2">
+        {suggestions.map((q) => (
+          <button
+            key={q}
+            className={s.suggestPill}
+            onClick={() => onSuggest(q)}
+          >
+            {q}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

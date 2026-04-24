@@ -1,6 +1,6 @@
 /**
  * In-memory cache for trend search results.
- * Reduces redundant API calls (Tavily/Serper) and LLM work when the same
+ * Reduces redundant API calls (Exa/Serper) and LLM work when the same
  * query + company context is used within the TTL window.
  */
 import { createHash } from "node:crypto";

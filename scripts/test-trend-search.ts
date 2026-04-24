@@ -1,10 +1,10 @@
 /**
  * Quick smoke-test for the trend search pipeline.
- * Calls the real OpenAI + Tavily APIs — no DB, no auth, no Inngest.
+ * Calls the real OpenAI + Exa APIs — no DB, no auth, no Inngest.
  *
  * Usage:
- * 
- * 1. Tavilly
+ *
+ * 1. Exa
  *   npx tsx scripts/test-trend-search.ts
  *
  * 2. Serper
@@ -12,22 +12,22 @@
  *
  * Required env vars (reads from .env automatically via dotenv):
  *   OPENAI_API_KEY
- *   TAVILY_API_KEY (if using Tavily)
+ *   EXA_API_KEY (if using Exa)
  *   SERPER_API_KEY (if using Serper)
- * 
+ *
  *
  *   ┌─────────────────────────────────────────────────────────────────────────────┐
  *   │  Running `npx tsx scripts/test-trend-search.ts`                             │
  *   │                                                                             │
  *   │  Required env vars:                                                         │
  *   │   - OPENAI_API_KEY                                                          │
- *   │   - TAVILY_API_KEY (if using Tavily)                                        │
+ *   │   - EXA_API_KEY (if using Exa)                                              │
  *   │   - SERPER_API_KEY (if using Serper)                                        │
  *   │                                                                             │
  *   │  Sample output:                                                             │
  *   └─────────────────────────────────────────────────────────────────────────────┘
  *
-─── Input ─── (tavily)
+─── Input ─── (exa)
 {
   "query": "latest AI trends in retail marketing",
   "companyContext": "We are a mid-size fashion retailer focused on Gen Z customers in the US market.",

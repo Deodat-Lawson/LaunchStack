@@ -1,13 +1,24 @@
 "use client";
 
 import React, { useCallback, useEffect, useState, useRef, useId } from "react";
-import { Search, Plus, FileText, Clock, PenLine, Loader2, Upload, FileUp, Type, Paperclip, Sparkles } from "lucide-react";
-import { Input } from "~/app/employer/documents/components/ui/input";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Card } from "~/app/employer/documents/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "~/app/employer/documents/components/ui/tabs";
+import {
+  Search,
+  Plus,
+  FileText,
+  Clock,
+  Loader2,
+  Upload,
+  FileUp,
+  Type,
+  Paperclip,
+  Sparkles,
+  PenLine,
+  ArrowRight,
+  Wand2,
+} from "lucide-react";
 import { DocumentGeneratorEditor } from "./DocumentGeneratorEditor";
 import { RewriteWorkflow } from "./generator/RewriteWorkflow";
+import { legalTheme as s } from "./LegalGeneratorTheme";
 import type { Citation } from "./generator";
 
 const DEFAULT_TITLE = "Untitled (Rewrite)";
@@ -247,80 +258,56 @@ export function RewriteDiffView() {
     [currentDocument]
   );
 
-  // File import handlers
   const handleFileRead = useCallback(async (file: File): Promise<string> => {
-    const fileType = file.name.split('.').pop()?.toLowerCase();
-    
+    const fileType = file.name.split(".").pop()?.toLowerCase();
     switch (fileType) {
-      case 'txt':
-      case 'md':
+      case "txt":
+      case "md":
         return file.text();
-      case 'pdf':
-        // For PDF, we'll need to use an external service or library
-        // For now, we'll show an error and suggest copying text manually
-        throw new Error('PDF import not yet supported. Please copy and paste the text manually.');
-      case 'docx':
-        throw new Error('DOCX import not yet supported. Please copy and paste the text manually.');
+      case "pdf":
+        throw new Error("PDF import not yet supported. Please copy and paste the text manually.");
+      case "docx":
+        throw new Error("DOCX import not yet supported. Please copy and paste the text manually.");
       default:
-        // Try to read as text for other formats
         return file.text();
     }
   }, []);
-
-  const handleFileImport = useCallback(async (files: FileList) => {
-    if (files.length === 0) return;
-    
-    const file = files[0];
-    if (!file) return;
-
-    setIsImporting(true);
-    setImportError(null);
-
-    try {
-      const content = await handleFileRead(file);
-      const fileName = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
-      
-      // Create a new document with the imported content
-      const newId = tempIdCounter + 1;
-      setTempIdCounter(newId);
-      setCurrentDocument({
-        id: `temp-${componentId}-${newId}`,
-        title: fileName,
-        content,
-        lastEdited: "Just now",
-      });
-      setViewMode("editor");
-    } catch (error) {
-      setImportError(error instanceof Error ? error.message : 'Failed to import file');
-    } finally {
-      setIsImporting(false);
-    }
-  }, [handleFileRead, tempIdCounter, componentId]);
 
   const handleStartWorkflow = useCallback((text?: string) => {
     setWorkflowText(text ?? "");
     setShowWorkflow(true);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragActive(false);
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
+  const handleFileImport = useCallback(
+    async (files: FileList) => {
+      if (files.length === 0) return;
       const file = files[0];
-      if (file) {
-        setIsImporting(true);
-        setImportError(null);
-        handleFileRead(file).then(content => {
-          setIsImporting(false);
-          handleStartWorkflow(content);
-        }).catch(error => {
-          setIsImporting(false);
-          setImportError(error instanceof Error ? error.message : 'Failed to import file');
-        });
+      if (!file) return;
+      setIsImporting(true);
+      setImportError(null);
+      try {
+        const content = await handleFileRead(file);
+        handleStartWorkflow(content);
+      } catch (error) {
+        setImportError(error instanceof Error ? error.message : "Failed to import file");
+      } finally {
+        setIsImporting(false);
       }
-    }
-  }, [handleFileRead, handleStartWorkflow]);
+    },
+    [handleFileRead, handleStartWorkflow],
+  );
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragActive(false);
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        void handleFileImport(files);
+      }
+    },
+    [handleFileImport],
+  );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -332,26 +319,31 @@ export function RewriteDiffView() {
     setIsDragActive(false);
   }, []);
 
-  const handleFileInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      void handleFileImport(files);
-    }
-  }, [handleFileImport]);
+  const handleFileInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files && files.length > 0) {
+        void handleFileImport(files);
+      }
+    },
+    [handleFileImport],
+  );
 
-  const handleWorkflowComplete = useCallback((rewrittenText: string) => {
-    // Create a new document with the rewritten content
-    const newId = tempIdCounter + 1;
-    setTempIdCounter(newId);
-    setCurrentDocument({
-      id: `temp-${componentId}-${newId}`,
-      title: "Rewritten Text",
-      content: rewrittenText,
-      lastEdited: "Just now",
-    });
-    setShowWorkflow(false);
-    setViewMode("editor");
-  }, [tempIdCounter, componentId]);
+  const handleWorkflowComplete = useCallback(
+    (rewrittenText: string) => {
+      const newId = tempIdCounter + 1;
+      setTempIdCounter(newId);
+      setCurrentDocument({
+        id: `temp-${componentId}-${newId}`,
+        title: "Rewritten Text",
+        content: rewrittenText,
+        lastEdited: "Just now",
+      });
+      setShowWorkflow(false);
+      setViewMode("editor");
+    },
+    [tempIdCounter, componentId],
+  );
 
   const handleWorkflowCancel = useCallback(() => {
     setShowWorkflow(false);
@@ -359,18 +351,28 @@ export function RewriteDiffView() {
   }, []);
 
   if (showWorkflow) {
-    return <RewriteWorkflow 
-      initialText={workflowText} 
-      onComplete={handleWorkflowComplete} 
-      onCancel={handleWorkflowCancel} 
-    />;
+    return (
+      <RewriteWorkflow
+        initialText={workflowText}
+        onComplete={handleWorkflowComplete}
+        onCancel={handleWorkflowCancel}
+      />
+    );
   }
 
   if (viewMode === "editor") {
     return (
-      <div className="flex flex-col h-full w-full">
+      <div className="flex h-full w-full flex-col">
         {saveError && (
-          <div className="flex-shrink-0 px-4 py-2 bg-destructive/10 text-destructive text-sm border-b border-border">
+          <div
+            className="flex-shrink-0 px-4 py-2"
+            style={{
+              fontSize: 13,
+              color: "var(--danger)",
+              background: "oklch(from var(--danger) l c h / 0.08)",
+              borderBottom: "1px solid oklch(from var(--danger) l c h / 0.28)",
+            }}
+          >
             {saveError}
           </div>
         )}
@@ -388,94 +390,149 @@ export function RewriteDiffView() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-background">
-      <div className="flex-shrink-0 bg-background border-b border-border p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-amber-600 rounded-xl shadow-lg shadow-amber-500/20">
-                  <PenLine className="w-6 h-6 text-white" />
-                </div>
-                <h1 className="text-2xl font-bold text-foreground">Rewrite</h1>
+    <div className="flex h-full flex-col">
+      {/* Hero header */}
+      <div className="flex-shrink-0 px-6 pt-8 pb-4 md:px-10 md:pt-10">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="flex items-start gap-4">
+              <div className={s.brandMark}>
+                <PenLine className="h-[18px] w-[18px]" />
               </div>
-              <p className="text-muted-foreground">
-                Refine and rewrite documents with AI assistance
-              </p>
+              <div className="space-y-2">
+                <span className={s.eyebrow}>Rewrite</span>
+                <h1 className={s.title}>
+                  Refine your{" "}
+                  <span className={s.highlight}>
+                    <span className={s.serif}>prose</span>
+                  </span>
+                </h1>
+                <p className={s.sub} style={{ maxWidth: 560 }}>
+                  Paste or import text, pick a tone, preview the changes,
+                  then push the polished version into your editor.
+                </p>
+              </div>
+            </div>
+
+            <div className={s.tabs}>
+              <button
+                className={`${s.tab} ${activeTab === "new" ? s.tabActive : ""}`}
+                onClick={() => setActiveTab("new")}
+              >
+                <Plus className="h-4 w-4" />
+                New rewrite
+              </button>
+              <button
+                className={`${s.tab} ${activeTab === "existing" ? s.tabActive : ""}`}
+                onClick={() => setActiveTab("existing")}
+              >
+                <Clock className="h-4 w-4" />
+                My rewrites
+                <span className={s.tabCount}>{rewriteDocuments.length}</span>
+              </button>
             </div>
           </div>
-
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "new" | "existing")} className="w-full">
-            <TabsList className="bg-muted">
-              <TabsTrigger value="new" className="data-[state=active]:bg-amber-600 data-[state=active]:text-white">
-                <Plus className="w-4 h-4 mr-2" />
-                New Document
-              </TabsTrigger>
-              <TabsTrigger value="existing" className="data-[state=active]:bg-amber-600 data-[state=active]:text-white">
-                <Clock className="w-4 h-4 mr-2" />
-                My Documents ({rewriteDocuments.length})
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
       </div>
 
-      <div className="flex-shrink-0 bg-background border-b border-border px-6 py-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <Input
-              placeholder="Search your documents..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-background border-border"
-            />
+      {/* Search strip (only on existing) */}
+      {activeTab === "existing" && (
+        <div className="flex-shrink-0 px-6 pt-4 md:px-10">
+          <div className="mx-auto w-full max-w-7xl">
+            <div className="relative">
+              <Search
+                className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2"
+                style={{ color: "var(--ink-3)" }}
+              />
+              <input
+                type="text"
+                className={s.input}
+                placeholder="Search your rewrites…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ paddingLeft: 40 }}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto p-6">
+      {/* Content */}
+      <div className={`flex-1 overflow-y-auto ${s.scrollbar}`}>
+        <div className="mx-auto w-full max-w-7xl px-6 py-6 md:px-10 md:py-8">
           {activeTab === "new" ? (
-            <div className="space-y-6">
+            <div className="space-y-8">
               {importError && (
-                <div className="p-4 bg-destructive/10 text-destructive text-sm rounded-lg border border-destructive/20">
-                  {importError}
+                <div className={`${s.banner} ${s.bannerDanger}`} style={{ padding: 14 }}>
+                  <p style={{ margin: 0, fontSize: 13, color: "var(--danger)" }}>
+                    {importError}
+                  </p>
                 </div>
               )}
-              
-              {/* Import Options */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Drag & Drop Zone */}
-                <div
+
+              {/* Primary CTA — start a workflow */}
+              <div className={s.banner}>
+                <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                  <div className="flex flex-1 items-start gap-3">
+                    <div className={s.brandMark}>
+                      <Sparkles className="h-[18px] w-[18px]" />
+                    </div>
+                    <div className="min-w-0 space-y-1">
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontSize: 17,
+                          fontWeight: 600,
+                          letterSpacing: "-0.01em",
+                          color: "var(--ink)",
+                        }}
+                      >
+                        Step-by-step rewrite
+                      </h3>
+                      <p style={{ margin: 0, fontSize: 14, color: "var(--ink-2)", lineHeight: 1.55 }}>
+                        Paste or drop in text, choose tone / length / audience,
+                        preview the diff, then push to your document.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex md:justify-end">
+                    <button
+                      className={`${s.btn} ${s.btnAccent} ${s.btnLg}`}
+                      onClick={() => handleStartWorkflow()}
+                    >
+                      <Wand2 className="h-4 w-4" />
+                      Start workflow
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action grid */}
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                {/* Drop zone */}
+                <button
+                  type="button"
+                  onClick={() => !isImporting && fileInputRef.current?.click()}
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
-                  className={`
-                    border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer
-                    ${isDragActive 
-                      ? 'border-amber-600 bg-amber-50 dark:bg-amber-900/20' 
-                      : 'border-border hover:border-amber-600 hover:bg-muted/50'
-                    }
-                    ${isImporting ? 'pointer-events-none opacity-50' : ''}
-                  `}
-                  onClick={() => {
-                    if (!isImporting && fileInputRef.current) {
-                      fileInputRef.current.addEventListener('change', (e) => {
-                        const files = (e.target as HTMLInputElement).files;
-                        if (files && files.length > 0) {
-                          const file = files[0];
-                          if (file) {
-                            handleFileRead(file).then(content => {
-                              handleStartWorkflow(content);
-                            }).catch(() => {
-                              setImportError('Failed to read file');
-                            });
-                          }
-                        }
-                      }, { once: true });
-                      fileInputRef.current.click();
-                    }
+                  disabled={isImporting}
+                  className={s.card}
+                  style={{
+                    padding: 22,
+                    border: isDragActive
+                      ? "1px dashed var(--accent)"
+                      : "1px dashed var(--line)",
+                    background: isDragActive
+                      ? "var(--accent-soft)"
+                      : "var(--panel)",
+                    textAlign: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: 220,
+                    cursor: isImporting ? "wait" : "pointer",
+                    opacity: isImporting ? 0.7 : 1,
                   }}
                 >
                   <input
@@ -485,167 +542,311 @@ export function RewriteDiffView() {
                     onChange={handleFileInputChange}
                     className="hidden"
                   />
-                  
-                  <div className="space-y-4">
-                    <div className="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-full w-fit mx-auto">
-                      {isImporting ? (
-                        <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
-                      ) : (
-                        <Upload className="w-8 h-8 text-amber-600" />
-                      )}
-                    </div>
-                    
-                    <div>
-                      <h3 className="font-semibold mb-2 text-foreground">
-                        {isImporting ? 'Importing...' : 'Import Document'}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        Drag & drop a file or click to browse
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Supports: .txt, .md files
-                      </p>
-                      <p className="text-xs text-muted-foreground italic mt-1">
-                        PDF & DOCX: Copy text manually for now
-                      </p>
-                    </div>
+                  <div
+                    className={s.brandMark}
+                    style={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 12,
+                      marginBottom: 12,
+                    }}
+                  >
+                    {isImporting ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Upload className="h-5 w-5" />
+                    )}
                   </div>
-                </div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: "var(--ink)",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {isImporting ? "Importing…" : "Import a document"}
+                  </h3>
+                  <p
+                    style={{
+                      margin: "6px 0 0",
+                      fontSize: 13,
+                      color: "var(--ink-3)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Drag &amp; drop or click to browse.
+                    <br />
+                    Supports <code style={{ fontSize: 12 }}>.txt</code>,{" "}
+                    <code style={{ fontSize: 12 }}>.md</code>.
+                  </p>
+                </button>
 
-                {/* Quick Actions */}
-                <div className="space-y-4">
-                  <div className="border border-border rounded-xl p-6 text-center hover:shadow-md transition-all">
-                    <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full w-fit mx-auto mb-4">
-                      <Sparkles className="w-8 h-8 text-purple-600" />
-                    </div>
-                    <h3 className="font-semibold mb-2 text-foreground">Step-by-Step Workflow</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Guided process with options and preview
-                    </p>
-                    <Button
-                      onClick={() => handleStartWorkflow()}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white mb-2"
-                    >
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Start Workflow
-                    </Button>
-                    <p className="text-xs text-muted-foreground">
-                      Choose tone, audience & preview changes
-                    </p>
+                {/* Paste clipboard */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard
+                      .readText()
+                      .then((text) => {
+                        if (text.trim()) handleStartWorkflow(text);
+                      })
+                      .catch(() => {
+                        setImportError("Failed to read from clipboard");
+                      });
+                  }}
+                  className={s.card}
+                  style={{
+                    padding: 22,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    minHeight: 220,
+                  }}
+                >
+                  <div
+                    className={s.brandMark}
+                    style={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 12,
+                      marginBottom: 12,
+                    }}
+                  >
+                    <Paperclip className="h-5 w-5" />
                   </div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: "var(--ink)",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Paste from clipboard
+                  </h3>
+                  <p
+                    style={{
+                      margin: "6px 0 0",
+                      fontSize: 13,
+                      color: "var(--ink-3)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Pull text you already copied and jump straight into the
+                    workflow.
+                  </p>
+                </button>
 
-                  <div className="border border-border rounded-xl p-6 text-center hover:shadow-md transition-all">
-                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full w-fit mx-auto mb-4">
-                      <Type className="w-8 h-8 text-blue-600" />
-                    </div>
-                    <h3 className="font-semibold mb-2 text-foreground">Paste Text</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Paste text and start workflow
-                    </p>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        navigator.clipboard.readText().then(text => {
-                          if (text.trim()) {
-                            handleStartWorkflow(text);
-                          }
-                        }).catch(() => {
-                          setImportError('Failed to read from clipboard');
-                        });
-                      }}
-                      className="w-full hover:bg-blue-600 hover:text-white border-border mb-2"
-                    >
-                      <Paperclip className="w-4 h-4 mr-2" />
-                      Paste & Start Workflow
-                    </Button>
-                    <p className="text-xs text-muted-foreground">
-                      Quick start with clipboard content
-                    </p>
+                {/* Blank slate */}
+                <button
+                  type="button"
+                  onClick={handleNewDocument}
+                  className={s.card}
+                  style={{
+                    padding: 22,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    minHeight: 220,
+                  }}
+                >
+                  <div
+                    className={s.brandMark}
+                    style={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 12,
+                      marginBottom: 12,
+                    }}
+                  >
+                    <FileUp className="h-5 w-5" />
                   </div>
-
-                  <div className="border border-border rounded-xl p-6 text-center hover:shadow-md transition-all">
-                    <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full w-fit mx-auto mb-4">
-                      <FileUp className="w-8 h-8 text-green-600" />
-                    </div>
-                    <h3 className="font-semibold mb-2 text-foreground">Start Fresh</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Create a blank document
-                    </p>
-                    <Button
-                      onClick={handleNewDocument}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white"
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      New Document
-                    </Button>
-                  </div>
-                </div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: "var(--ink)",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Start from blank
+                  </h3>
+                  <p
+                    style={{
+                      margin: "6px 0 0",
+                      fontSize: 13,
+                      color: "var(--ink-3)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Open an empty editor and type or paste whatever you want to
+                    rewrite.
+                  </p>
+                </button>
               </div>
 
-              {/* Quick Tips */}
-              <div className="bg-muted/50 rounded-xl p-6 border border-border">
-                <h4 className="font-semibold mb-3 text-foreground">✨ New Step-by-Step Workflow</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
-                  <div className="space-y-2">
-                    <p><strong>🎯 Guided Process:</strong> Input → Select Options → Preview → Apply</p>
-                    <p><strong>🎨 Smart Options:</strong> Tone, length, audience, custom prompts</p>
+              {/* Tips strip */}
+              <div
+                className={s.panel}
+                style={{ padding: 18 }}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={s.brandMarkSm}>
+                    <Type className="h-[13px] w-[13px]" />
                   </div>
-                  <div className="space-y-2">
-                    <p><strong>👀 Before/After:</strong> See exact changes with diff highlighting</p>
-                    <p><strong>📁 File Support:</strong> Drag & drop .txt, .md files</p>
+                  <div className="min-w-0 flex-1">
+                    <h4
+                      style={{
+                        margin: 0,
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                        letterSpacing: "-0.01em",
+                      }}
+                    >
+                      How the workflow works
+                    </h4>
+                    <div
+                      className="mt-2 grid grid-cols-1 gap-x-6 gap-y-1.5 md:grid-cols-2"
+                      style={{
+                        fontSize: 12,
+                        color: "var(--ink-3)",
+                        lineHeight: 1.55,
+                      }}
+                    >
+                      <p style={{ margin: 0 }}>
+                        <strong style={{ color: "var(--ink-2)" }}>Input →</strong>{" "}
+                        Paste, drop, or type the source text.
+                      </p>
+                      <p style={{ margin: 0 }}>
+                        <strong style={{ color: "var(--ink-2)" }}>Options →</strong>{" "}
+                        Pick tone, length, audience, extras.
+                      </p>
+                      <p style={{ margin: 0 }}>
+                        <strong style={{ color: "var(--ink-2)" }}>Preview →</strong>{" "}
+                        Side-by-side or inline diff, regenerate as needed.
+                      </p>
+                      <p style={{ margin: 0 }}>
+                        <strong style={{ color: "var(--ink-2)" }}>Apply →</strong>{" "}
+                        Push the chosen version to your document.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           ) : isLoading ? (
             <div className="flex items-center justify-center py-16">
-              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+              <Loader2
+                className="h-6 w-6 animate-spin"
+                style={{ color: "var(--accent)" }}
+              />
             </div>
           ) : filteredDocuments.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredDocuments.map((doc) => (
-                <Card
+                <RewriteDocumentRow
                   key={doc.id}
-                  className="group cursor-pointer hover:shadow-lg transition-all hover:scale-[1.02] border-2 border-border hover:border-amber-600 p-5 bg-card"
-                  onClick={() => handleOpenDocument(doc)}
-                >
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded">
-                      <FileText className="w-5 h-5 text-amber-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold truncate mb-1 text-foreground">{doc.title}</h3>
-                      <p className="text-xs text-muted-foreground">Last edited {doc.lastEdited}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-3 whitespace-pre-wrap break-words max-h-48 overflow-y-auto">
-                    {doc.content}
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="w-full group-hover:bg-amber-600 group-hover:text-white border-border"
-                  >
-                    Open Document
-                  </Button>
-                </Card>
+                  doc={doc}
+                  onOpen={handleOpenDocument}
+                />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-16">
-              <FileText className="w-16 h-16 text-muted-foreground/30 mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-foreground">No documents yet</h3>
-              <p className="text-muted-foreground mb-6 text-center">
-                Create your first rewrite document to get started
+            <div
+              className={`${s.panel} mx-auto flex max-w-md flex-col items-center gap-3 py-16 text-center`}
+              style={{ borderStyle: "dashed" }}
+            >
+              <FileText className="h-12 w-12" style={{ color: "var(--ink-4)" }} />
+              <h3 style={{ margin: 0, fontSize: 19, fontWeight: 600, color: "var(--ink)" }}>
+                {searchQuery ? "No rewrites match" : "No rewrites yet"}
+              </h3>
+              <p style={{ margin: 0, fontSize: 14, color: "var(--ink-3)", maxWidth: 340 }}>
+                {searchQuery
+                  ? `Nothing matched "${searchQuery}". Try a different keyword.`
+                  : "Rewrite some prose to keep a history of polished drafts."}
               </p>
-              <Button onClick={handleNewDocument} className="bg-amber-600 hover:bg-amber-700 text-white">
-                <Plus className="w-4 h-4 mr-2" />
-                Create New Document
-              </Button>
+              <button
+                className={`${s.btn} ${s.btnAccent}`}
+                onClick={() => {
+                  setActiveTab("new");
+                  setSearchQuery("");
+                }}
+                style={{ marginTop: 6 }}
+              >
+                <Plus className="h-4 w-4" />
+                New rewrite
+              </button>
             </div>
           )}
         </div>
       </div>
     </div>
+  );
+}
+
+// ─── Document row ───────────────────────────────────────────────────────────
+
+function RewriteDocumentRow({
+  doc,
+  onOpen,
+}: {
+  doc: RewriteDocument;
+  onOpen: (doc: RewriteDocument) => void;
+}) {
+  const preview = doc.content.replace(/<[^>]*>/g, "").slice(0, 160);
+  return (
+    <button type="button" className={s.docRow} onClick={() => onOpen(doc)}>
+      <div className="flex items-start gap-3">
+        <div className={s.brandMarkSm}>
+          <PenLine className="h-[14px] w-[14px]" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3
+            style={{
+              margin: 0,
+              fontSize: 15,
+              fontWeight: 600,
+              color: "var(--ink)",
+              letterSpacing: "-0.01em",
+            }}
+            className="truncate"
+          >
+            {doc.title}
+          </h3>
+          <p style={{ margin: 0, fontSize: 12, color: "var(--ink-3)" }}>
+            Last edited {doc.lastEdited}
+          </p>
+        </div>
+      </div>
+      <p
+        style={{
+          margin: 0,
+          fontSize: 13,
+          color: "var(--ink-2)",
+          lineHeight: 1.5,
+          display: "-webkit-box",
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}
+      >
+        {preview}
+        {preview.length >= 160 ? "…" : ""}
+      </p>
+      <div className="mt-auto">
+        <span
+          className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
+          style={{ width: "100%" }}
+        >
+          Open rewrite
+          <ArrowRight className="h-3.5 w-3.5" />
+        </span>
+      </div>
+    </button>
   );
 }

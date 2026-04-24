@@ -11,15 +11,23 @@ import {
 } from "react";
 
 /** Full-page shell for pages using the Launchstack theme. Keeps a readable
- *  max-width column and applies OKLCH background. */
+ *  max-width column and applies OKLCH background.
+ *
+ *  Pass `embedded` when rendering inside a bounded container (e.g. the Studio
+ *  drawer): swaps `minHeight: 100vh` for `height: 100%` so the shell fills its
+ *  flex parent instead of forcing a viewport-height scroll, and tightens the
+ *  outer padding to match the pane chrome.
+ */
 export function PageShell({
   children,
   wide = false,
+  embedded = false,
   className,
   style,
 }: {
   children: ReactNode;
   wide?: boolean;
+  embedded?: boolean;
   className?: string;
   style?: CSSProperties;
 }) {
@@ -29,7 +37,9 @@ export function PageShell({
       style={{
         background: "var(--bg)",
         color: "var(--ink)",
-        minHeight: "100vh",
+        ...(embedded
+          ? { height: "100%", overflowY: "auto" }
+          : { minHeight: "100vh" }),
         display: "flex",
         flexDirection: "column",
         ...style,
@@ -40,7 +50,7 @@ export function PageShell({
           maxWidth: wide ? 1200 : 840,
           width: "100%",
           margin: "0 auto",
-          padding: "32px 24px 80px",
+          padding: embedded ? "20px 24px 48px" : "32px 24px 80px",
           flex: 1,
         }}
       >

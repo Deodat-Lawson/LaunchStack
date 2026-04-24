@@ -8,6 +8,7 @@ import { type Metadata } from "next";
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
+import { inter, instrumentSerif, jetbrainsMono } from "./employer/fonts";
 
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://launchstack.app';
@@ -55,7 +56,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable}`} suppressHydrationWarning>
+      <html
+        lang="en"
+        className={`${GeistSans.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+        suppressHydrationWarning
+      >
       <body suppressHydrationWarning>
       <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="dark" enableSystem>
         {children}

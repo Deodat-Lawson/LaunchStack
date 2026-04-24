@@ -2,29 +2,23 @@
 
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
+import styles from '~/styles/deployment.module.css';
 
 interface ApiKeyCardProps {
   title: string;
   link: string;
   description: string;
   steps: string[];
-  darkMode: boolean;
 }
 
-export const ApiKeyCard: React.FC<ApiKeyCardProps> = ({ 
-  title, 
-  link, 
-  description, 
-  steps, 
-  darkMode 
-}) => (
-  <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl p-6 border hover:border-purple-300 hover:shadow-lg transition-all duration-300`}>
-    <div className="flex items-start justify-between mb-4">
+export const ApiKeyCard: React.FC<ApiKeyCardProps> = ({ title, link, description, steps }) => (
+  <div className={`${styles.panel} ${styles.panelHover}`}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 14 }}>
       <div>
-        <h3 className={`text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
+        <h3 style={{ margin: '0 0 4px', fontSize: 17, fontWeight: 600, color: 'var(--ink)' }}>
           {title}
         </h3>
-        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+        <p style={{ margin: 0, fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.5 }}>
           {description}
         </p>
       </div>
@@ -32,15 +26,54 @@ export const ApiKeyCard: React.FC<ApiKeyCardProps> = ({
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-purple-600 hover:text-purple-700 transition-colors"
+        style={{
+          color: 'var(--accent)',
+          flexShrink: 0,
+          display: 'inline-flex',
+          alignItems: 'flex-start',
+        }}
+        aria-label={`Open ${title}`}
       >
-        <ExternalLink className="w-5 h-5" />
+        <ExternalLink size={16} />
       </a>
     </div>
-    <ol className="space-y-2">
+    <ol
+      style={{
+        margin: 0,
+        padding: 0,
+        listStyle: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 8,
+      }}
+    >
       {steps.map((step, index) => (
-        <li key={index} className={`flex items-start gap-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-semibold">
+        <li
+          key={index}
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 10,
+            fontSize: 13.5,
+            color: 'var(--ink-2)',
+            lineHeight: 1.55,
+          }}
+        >
+          <span
+            style={{
+              flexShrink: 0,
+              width: 22,
+              height: 22,
+              borderRadius: '50%',
+              background: 'var(--accent-soft)',
+              color: 'var(--accent-ink)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 12,
+              fontWeight: 600,
+            }}
+          >
             {index + 1}
           </span>
           <span>{step}</span>
@@ -49,4 +82,3 @@ export const ApiKeyCard: React.FC<ApiKeyCardProps> = ({
     </ol>
   </div>
 );
-

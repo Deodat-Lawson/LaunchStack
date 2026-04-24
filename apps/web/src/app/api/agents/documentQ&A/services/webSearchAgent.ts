@@ -1,6 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
-import { performTavilySearch } from "./tavilySearch";
+import { performExaSearch } from "./exaSearch";
 import { env } from "~/env";
 import type { WebSearchResult, WebSearchAgentInput, WebSearchAgentResult } from "./types";
 
@@ -135,7 +135,7 @@ async function refineSearchQuery(
 }
 
 /**
- * Performs the actual web search using Tavily
+ * Performs the actual web search using Exa
  */
 async function executeSearch(
     query: string,
@@ -143,8 +143,8 @@ async function executeSearch(
 ): Promise<WebSearchResult[]> {
     try {
         console.log(`🌐 [WebSearchAgent] Executing search: "${query}"`);
-        
-        const results = await performTavilySearch(
+
+        const results = await performExaSearch(
             query,
             maxResults * 2 // Get more results for filtering
         );
@@ -313,7 +313,7 @@ export async function executeWebSearchAgent(
     } catch (error) {
         console.error("Web search agent error:", error);
         // Fallback to direct search
-        const fallbackResults = await performTavilySearch(
+        const fallbackResults = await performExaSearch(
             input.userQuestion,
             maxResults
         );

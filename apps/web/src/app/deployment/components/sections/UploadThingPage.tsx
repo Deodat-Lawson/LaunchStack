@@ -7,10 +7,11 @@ import type { DeploymentProps } from '../../types';
 import { Section, CodeBlock, WarningBox } from '../ui';
 
 export const UploadThingPage: React.FC<DeploymentProps> = ({ 
-  darkMode, 
+ 
   copyToClipboard, 
   copiedCode 
 }) => {
+  const darkMode = false;
   return (
     <>
       <motion.div
@@ -32,7 +33,7 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
         </p>
       </motion.div>
 
-      <Section title="What is UploadThing?" darkMode={darkMode}>
+      <Section title="What is UploadThing?">
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
           UploadThing provides a simple, type-safe file upload solution that enables:
         </p>
@@ -60,7 +61,7 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
         </ul>
       </Section>
 
-      <Section title="UploadThing vs Vercel Blob" darkMode={darkMode}>
+      <Section title="UploadThing vs Vercel Blob">
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
           Launchstack supports two cloud storage backends for uploaded documents. Vercel Blob is the default and required; UploadThing is an optional alternative.
         </p>
@@ -90,7 +91,7 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
         </div>
       </Section>
 
-      <Section title="Setup Instructions" darkMode={darkMode}>
+      <Section title="Setup Instructions">
         <div className="space-y-6">
           <div>
             <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -120,7 +121,7 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
               code={`UPLOADTHING_TOKEN=your_token_here`}
               onCopy={() => copyToClipboard('UPLOADTHING_TOKEN=your_token_here', 'uploadthing-env')}
               copied={copiedCode === 'uploadthing-env'}
-              darkMode={darkMode}
+
             />
           </div>
 
@@ -137,12 +138,12 @@ export const UploadThingPage: React.FC<DeploymentProps> = ({
           <WarningBox
             title="Note"
             description="Without UploadThing configured, Launchstack uses Vercel Blob for all uploads. UploadThing is fully optional — Vercel Blob is the required default storage backend."
-            darkMode={darkMode}
+
           />
         </div>
       </Section>
 
-      <Section title="File Limits" darkMode={darkMode}>
+      <Section title="File Limits">
         <div className={`p-4 rounded-xl ${darkMode ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
           <table className={`w-full text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
             <thead>

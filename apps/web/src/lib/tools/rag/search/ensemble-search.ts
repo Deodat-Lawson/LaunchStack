@@ -22,6 +22,11 @@ import {
   shouldUseNeo4jRetriever,
 } from "../retrievers/neo4j-graph-retriever";
 import { createGraphRetriever } from "../retrievers/graph-retriever";
+import {
+  createDocumentNotesRetriever,
+  createCompanyNotesRetriever,
+  createMultiDocNotesRetriever,
+} from "../retrievers/notes-retriever";
 import type {
   SearchResult,
   DocumentSearchOptions,
@@ -35,12 +40,31 @@ const DEFAULT_WEIGHTS_2: number[] = [0.4, 0.6];
 const DEFAULT_WEIGHTS_3: number[] = [0.3, 0.5, 0.2];
 const DEFAULT_TOP_K = 8;
 const RERANK_CANDIDATE_MULTIPLIER = 4;
+// Notes are often short and thin; boosting them above ~0.2 lets a handful of
+// sticky notes outweigh large document corpora under RRF. Keep the boost
+// modest unless a tenant explicitly opts into note-heavy retrieval.
+const NOTES_DEFAULT_WEIGHT = 0.15;
+// Cap note candidates so we don't flood the ensemble when a doc has dozens
+// of notes. The reranker downstream trims to the final topK anyway.
+const NOTES_MAX_CANDIDATES = 8;
 const SIDECAR_URL = process.env.SIDECAR_URL;
 
 function isGraphRetrievalEnabled(): boolean {
   return (
     process.env.ENABLE_GRAPH_RETRIEVER === "true" ||
     process.env.ENABLE_GRAPH_RETRIEVER === "1"
+  );
+}
+
+/**
+ * Notes retrieval is opt-in per deployment. Until a workspace actually has
+ * user-authored notes worth retrieving over, this flag should stay off —
+ * empty-notes paths run the SQL query anyway and just add noise.
+ */
+function isNotesRetrievalEnabled(): boolean {
+  return (
+    process.env.ENABLE_NOTES_RETRIEVER === "true" ||
+    process.env.ENABLE_NOTES_RETRIEVER === "1"
   );
 }
 
@@ -83,6 +107,16 @@ export async function createDocumentEnsembleRetriever(
     }
   }
 
+  if (isNotesRetrievalEnabled()) {
+    const notesRetriever = createDocumentNotesRetriever(
+      documentId,
+      emb,
+      Math.min(candidateK, NOTES_MAX_CANDIDATES),
+    );
+    retrievers.push(notesRetriever);
+    weights = [...weights, NOTES_DEFAULT_WEIGHT];
+  }
+
   return new EnsembleRetriever({ retrievers, weights });
 }
 
@@ -114,6 +148,16 @@ export async function createCompanyEnsembleRetriever(
       retrievers.push(graphRetriever);
       weights = options.weights ?? DEFAULT_WEIGHTS_3;
     }
+  }
+
+  if (isNotesRetrievalEnabled()) {
+    const notesRetriever = createCompanyNotesRetriever(
+      companyId,
+      emb,
+      Math.min(candidateK, NOTES_MAX_CANDIDATES),
+    );
+    retrievers.push(notesRetriever);
+    weights = [...weights, NOTES_DEFAULT_WEIGHT];
   }
 
   return new EnsembleRetriever({ retrievers, weights });
@@ -148,6 +192,16 @@ export async function createMultiDocEnsembleRetriever(
       retrievers.push(graphRetriever);
       weights = options.weights ?? DEFAULT_WEIGHTS_3;
     }
+  }
+
+  if (isNotesRetrievalEnabled()) {
+    const notesRetriever = createMultiDocNotesRetriever(
+      documentIds,
+      emb,
+      Math.min(candidateK, NOTES_MAX_CANDIDATES),
+    );
+    retrievers.push(notesRetriever);
+    weights = [...weights, NOTES_DEFAULT_WEIGHT];
   }
 
   return new EnsembleRetriever({ retrievers, weights });

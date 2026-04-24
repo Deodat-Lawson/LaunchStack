@@ -22,7 +22,7 @@ export type DeploymentSection =
   | 'clerk'
   | 'inngest'
   | 'langchain'
-  | 'tavily'
+  | 'exa'
   | 'uploadthing'
   | 'vercel-blob'
   | 'ai-providers'
@@ -41,17 +41,24 @@ export interface SectionConfig {
   id: DeploymentSection;
   title: string;
   icon: React.ReactNode;
-  badge: 'Core' | 'Optional';
+  badge: 'Core' | 'Optional' | 'Legacy';
   group?: string;
   hasChildren?: boolean;
   children?: SectionChild[];
 }
 
 export interface DeploymentProps {
-  darkMode: boolean;
   copyToClipboard: (code: string, id: string) => void;
   copiedCode: string | null;
 }
+
+export const SIDEBAR_GROUP_ORDER = [
+  'Get started',
+  'Deployment',
+  'Required',
+  'Optional',
+  'Legacy',
+] as const;
 
 // --- Section Configuration Data ---
 export const SECTIONS: SectionConfig[] = [
@@ -84,6 +91,13 @@ export const SECTIONS: SectionConfig[] = [
     group: 'Deployment',
   },
   {
+    id: 'ai-providers',
+    title: 'AI Model Providers',
+    icon: React.createElement(BrainCircuit, { className: 'w-4 h-4' }),
+    badge: 'Core',
+    group: 'Required',
+  },
+  {
     id: 'vercel-blob',
     title: 'Vercel Blob',
     icon: React.createElement(Database, { className: 'w-4 h-4' }),
@@ -98,34 +112,6 @@ export const SECTIONS: SectionConfig[] = [
     group: 'Required',
   },
   {
-    id: 'langchain',
-    title: 'LangChain Tracing',
-    icon: React.createElement(Eye, { className: 'w-4 h-4' }),
-    badge: 'Optional',
-    group: 'Optional',
-  },
-  {
-    id: 'tavily',
-    title: 'Tavily Search',
-    icon: React.createElement(SearchIcon, { className: 'w-4 h-4' }),
-    badge: 'Optional',
-    group: 'Optional',
-  },
-  {
-    id: 'uploadthing',
-    title: 'UploadThing',
-    icon: React.createElement(Upload, { className: 'w-4 h-4' }),
-    badge: 'Optional',
-    group: 'Optional',
-  },
-  {
-    id: 'ai-providers',
-    title: 'AI Model Providers',
-    icon: React.createElement(BrainCircuit, { className: 'w-4 h-4' }),
-    badge: 'Core',
-    group: 'Required',
-  },
-  {
     id: 'ocr',
     title: 'OCR Services',
     icon: React.createElement(FileSearch, { className: 'w-4 h-4' }),
@@ -135,7 +121,6 @@ export const SECTIONS: SectionConfig[] = [
     children: [
       { id: 'ocr-azure', title: 'Azure Document Intelligence' },
       { id: 'ocr-landing', title: 'Landing.AI' },
-      { id: 'ocr-datalab', title: 'Datalab (Legacy)' },
     ],
   },
   {
@@ -144,5 +129,33 @@ export const SECTIONS: SectionConfig[] = [
     icon: React.createElement(Mic, { className: 'w-4 h-4' }),
     badge: 'Optional',
     group: 'Optional',
+  },
+  {
+    id: 'langchain',
+    title: 'LangChain Tracing',
+    icon: React.createElement(Eye, { className: 'w-4 h-4' }),
+    badge: 'Optional',
+    group: 'Optional',
+  },
+  {
+    id: 'exa',
+    title: 'Exa Search',
+    icon: React.createElement(SearchIcon, { className: 'w-4 h-4' }),
+    badge: 'Optional',
+    group: 'Optional',
+  },
+  {
+    id: 'uploadthing',
+    title: 'UploadThing',
+    icon: React.createElement(Upload, { className: 'w-4 h-4' }),
+    badge: 'Legacy',
+    group: 'Legacy',
+  },
+  {
+    id: 'ocr-datalab',
+    title: 'Datalab OCR',
+    icon: React.createElement(FileSearch, { className: 'w-4 h-4' }),
+    badge: 'Legacy',
+    group: 'Legacy',
   },
 ];

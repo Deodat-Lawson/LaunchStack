@@ -78,3 +78,44 @@ export function isModelAllowedForProvider(
   if (!model) return false;
   return (ProviderModelMap[provider] as readonly string[]).includes(model);
 }
+
+/**
+ * Models that accept a reasoning / extended-thinking parameter. Shared between
+ * the frontend composer (to disable the Think toggle for unsupported models)
+ * and the backend factory (to actually pass the param).
+ */
+export const THINKING_CAPABLE_MODELS: ReadonlySet<AIModelType> = new Set([
+  "claude-sonnet-4",
+  "claude-opus-4.5",
+  "gpt-5.1",
+  "gpt-5.2",
+  "gpt-5-mini",
+  "gpt-5-nano",
+  "gemini-3-flash",
+  "gemini-3-pro",
+]);
+
+export function supportsThinking(model: AIModelType | undefined): boolean {
+  return model ? THINKING_CAPABLE_MODELS.has(model) : false;
+}
+
+/**
+ * Models that accept image inputs via multimodal HumanMessage content blocks.
+ * Drives the composer rejection of image attachments for non-vision models.
+ */
+export const VISION_CAPABLE_MODELS: ReadonlySet<AIModelType> = new Set([
+  "gpt-4o",
+  "gpt-5.1",
+  "gpt-5.2",
+  "gpt-5-mini",
+  "gpt-5-nano",
+  "claude-sonnet-4",
+  "claude-opus-4.5",
+  "gemini-2.5-flash",
+  "gemini-3-flash",
+  "gemini-3-pro",
+]);
+
+export function supportsVision(model: AIModelType | undefined): boolean {
+  return model ? VISION_CAPABLE_MODELS.has(model) : false;
+}

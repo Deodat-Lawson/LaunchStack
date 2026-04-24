@@ -1,26 +1,20 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import { 
-  CheckCircle, 
-  ArrowRight, 
-  ArrowLeft, 
-  Loader2, 
-  Sparkles, 
-  Eye, 
+import {
+  CheckCircle,
+  ArrowRight,
+  ArrowLeft,
+  Loader2,
+  Sparkles,
+  Eye,
   Settings,
   FileText,
   RotateCw,
-  Check
+  Check,
 } from "lucide-react";
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Textarea } from "../ui/textarea";
-import { Badge } from "../ui/badge";
-import { Switch } from "../ui/switch";
-import { cn } from "~/lib/utils";
 import { RewritePreviewPanel } from "./RewritePreviewPanel";
+import { LegalGeneratorTheme, legalTheme as s } from "../LegalGeneratorTheme";
 
 interface RewriteWorkflowProps {
   initialText?: string;
@@ -30,12 +24,24 @@ interface RewriteWorkflowProps {
   onStateChange?: (state: RewriteWorkflowStateSnapshot) => void;
 }
 
-export type WorkflowStep = 'input' | 'options' | 'preview' | 'complete';
+export type WorkflowStep = "input" | "options" | "preview" | "complete";
 
 export interface RewriteOptions {
-  tone: 'professional' | 'casual' | 'formal' | 'technical' | 'creative' | 'persuasive';
-  length: 'brief' | 'medium' | 'detailed' | 'comprehensive';
-  audience: 'general' | 'technical' | 'executives' | 'students' | 'customers' | 'team';
+  tone:
+    | "professional"
+    | "casual"
+    | "formal"
+    | "technical"
+    | "creative"
+    | "persuasive";
+  length: "brief" | "medium" | "detailed" | "comprehensive";
+  audience:
+    | "general"
+    | "technical"
+    | "executives"
+    | "students"
+    | "customers"
+    | "team";
   customPrompt?: string;
 }
 
@@ -48,45 +54,66 @@ export interface RewriteWorkflowStateSnapshot {
 }
 
 const TONE_OPTIONS = [
-  { value: 'professional', label: 'Professional', desc: 'Clear, business-appropriate language' },
-  { value: 'casual', label: 'Casual', desc: 'Friendly and conversational tone' },
-  { value: 'formal', label: 'Formal', desc: 'Academic or official style' },
-  { value: 'technical', label: 'Technical', desc: 'Precise, detail-oriented language' },
-  { value: 'creative', label: 'Creative', desc: 'Engaging and expressive style' },
-  { value: 'persuasive', label: 'Persuasive', desc: 'Compelling and convincing' }
+  { value: "professional", label: "Professional", desc: "Clear, business-appropriate language" },
+  { value: "casual", label: "Casual", desc: "Friendly and conversational tone" },
+  { value: "formal", label: "Formal", desc: "Academic or official style" },
+  { value: "technical", label: "Technical", desc: "Precise, detail-oriented language" },
+  { value: "creative", label: "Creative", desc: "Engaging and expressive style" },
+  { value: "persuasive", label: "Persuasive", desc: "Compelling and convincing" },
 ] as const;
 
 const LENGTH_OPTIONS = [
-  { value: 'brief', label: 'Brief', desc: 'Concise and to the point' },
-  { value: 'medium', label: 'Medium', desc: 'Balanced detail level' },
-  { value: 'detailed', label: 'Detailed', desc: 'Comprehensive coverage' },
-  { value: 'comprehensive', label: 'Comprehensive', desc: 'Thorough and complete' }
+  { value: "brief", label: "Brief", desc: "Concise and to the point" },
+  { value: "medium", label: "Medium", desc: "Balanced detail level" },
+  { value: "detailed", label: "Detailed", desc: "Comprehensive coverage" },
+  { value: "comprehensive", label: "Comprehensive", desc: "Thorough and complete" },
 ] as const;
 
 const AUDIENCE_OPTIONS = [
-  { value: 'general', label: 'General Audience', desc: 'Accessible to everyone' },
-  { value: 'technical', label: 'Technical Experts', desc: 'Industry professionals' },
-  { value: 'executives', label: 'Executives', desc: 'Decision makers and leaders' },
-  { value: 'students', label: 'Students', desc: 'Learning-focused audience' },
-  { value: 'customers', label: 'Customers', desc: 'External clients' },
-  { value: 'team', label: 'Team Members', desc: 'Internal colleagues' }
+  { value: "general", label: "General", desc: "Accessible to everyone" },
+  { value: "technical", label: "Technical experts", desc: "Industry professionals" },
+  { value: "executives", label: "Executives", desc: "Decision makers and leaders" },
+  { value: "students", label: "Students", desc: "Learning-focused audience" },
+  { value: "customers", label: "Customers", desc: "External clients" },
+  { value: "team", label: "Team members", desc: "Internal colleagues" },
 ] as const;
 
-export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persistedState, onStateChange }: RewriteWorkflowProps) {
+const STEP_ORDER: WorkflowStep[] = ["input", "options", "preview", "complete"];
+const STEP_LABEL: Record<WorkflowStep, string> = {
+  input: "Input",
+  options: "Options",
+  preview: "Preview",
+  complete: "Done",
+};
+
+export function RewriteWorkflow({
+  initialText = "",
+  onComplete,
+  onCancel,
+  persistedState,
+  onStateChange,
+}: RewriteWorkflowProps) {
   const persistedStep = persistedState?.currentStep;
-  const effectiveStep = persistedStep === 'complete'
-    ? (initialText ? 'options' : 'input')
-    : (persistedStep ?? (initialText ? 'options' : 'input'));
+  const effectiveStep: WorkflowStep =
+    persistedStep === "complete"
+      ? initialText
+        ? "options"
+        : "input"
+      : persistedStep ?? (initialText ? "options" : "input");
 
   const [currentStep, setCurrentStep] = useState<WorkflowStep>(effectiveStep);
-  const [text, setText] = useState(persistedStep === 'complete' ? initialText : (persistedState?.text ?? initialText));
+  const [text, setText] = useState(
+    persistedStep === "complete" ? initialText : persistedState?.text ?? initialText,
+  );
   const [options, setOptions] = useState<RewriteOptions>({
-    tone: persistedState?.options?.tone ?? 'professional',
-    length: persistedState?.options?.length ?? 'medium',
-    audience: persistedState?.options?.audience ?? 'general',
+    tone: persistedState?.options?.tone ?? "professional",
+    length: persistedState?.options?.length ?? "medium",
+    audience: persistedState?.options?.audience ?? "general",
     customPrompt: persistedState?.options?.customPrompt ?? "",
   });
-  const [rewrittenText, setRewrittenText] = useState(persistedStep === 'complete' ? "" : (persistedState?.rewrittenText ?? ""));
+  const [rewrittenText, setRewrittenText] = useState(
+    persistedStep === "complete" ? "" : persistedState?.rewrittenText ?? "",
+  );
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDraftMode, setIsDraftMode] = useState(persistedState?.isDraftMode ?? true);
@@ -104,48 +131,60 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persis
 
   const handleRewrite = useCallback(async () => {
     if (!text.trim()) return;
-    
+
     setIsProcessing(true);
     setError(null);
 
     try {
-      const response = await fetch('/api/document-generator/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/document-generator/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: 'rewrite',
+          action: "rewrite",
           content: text,
           prompt: options.customPrompt,
           options: {
             tone: options.tone,
             length: options.length,
-            audience: options.audience
-          }
-        })
+            audience: options.audience,
+          },
+        }),
       });
 
       const responseText = await response.text();
-      let data: { success: boolean; message?: string; generatedContent?: string; error?: string };
+      let data: {
+        success: boolean;
+        message?: string;
+        generatedContent?: string;
+        error?: string;
+      };
       try {
         data = JSON.parse(responseText);
       } catch {
-        setError(responseText?.slice(0, 120) || 'Server returned an invalid response. Please try again.');
+        setError(
+          responseText?.slice(0, 120) ||
+            "Server returned an invalid response. Please try again.",
+        );
         return;
       }
-      
-      if (data.success && typeof data.generatedContent === "string" && data.generatedContent.trim().length > 0) {
+
+      if (
+        data.success &&
+        typeof data.generatedContent === "string" &&
+        data.generatedContent.trim().length > 0
+      ) {
         if (isDraftMode) {
           setRewrittenText(data.generatedContent);
-          setCurrentStep('preview');
+          setCurrentStep("preview");
         } else {
           onComplete(data.generatedContent);
         }
       } else {
-        setError(data.message ?? data.error ?? 'Failed to rewrite text');
+        setError(data.message ?? data.error ?? "Failed to rewrite text");
       }
     } catch (err) {
-      console.error('Rewrite request failed', err);
-      setError('Network error occurred');
+      console.error("Rewrite request failed", err);
+      setError("Network error occurred");
     } finally {
       setIsProcessing(false);
     }
@@ -153,331 +192,534 @@ export function RewriteWorkflow({ initialText = "", onComplete, onCancel, persis
 
   const handleAcceptRewrite = useCallback(() => {
     onComplete(rewrittenText);
-    setCurrentStep('complete');
+    setCurrentStep("complete");
   }, [rewrittenText, onComplete]);
 
   const handleRetry = useCallback(() => {
-    setCurrentStep('options');
+    setCurrentStep("options");
     setRewrittenText("");
     setError(null);
   }, []);
 
-  const getStepNumber = (step: WorkflowStep): number => {
-    switch (step) {
-      case 'input': return 1;
-      case 'options': return 2;
-      case 'preview': return 3;
-      case 'complete': return 4;
-    }
-  };
+  const stepIndex = STEP_ORDER.indexOf(currentStep);
 
-  const renderStepIndicator = () => (
-    <div className="flex items-center gap-4 mb-8">
-      {(['input', 'options', 'preview', 'complete'] as const).map((step, index) => {
-        const stepNumber = index + 1;
-        const isActive = step === currentStep;
-        const isCompleted = getStepNumber(currentStep) > stepNumber;
-        
-        return (
-          <React.Fragment key={step}>
-            <div className="flex items-center gap-2">
-              <div className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium",
-                isCompleted 
-                  ? "bg-green-500 text-white"
-                  : isActive
-                    ? "bg-amber-600 text-white"
-                    : "bg-muted text-muted-foreground"
-              )}>
-                {isCompleted ? (
-                  <CheckCircle className="w-4 h-4" />
-                ) : (
-                  stepNumber
-                )}
-              </div>
-              <span className={cn(
-                "text-sm font-medium",
-                isActive ? "text-foreground" : "text-muted-foreground"
-              )}>
-                {step === 'input' && 'Input Text'}
-                {step === 'options' && 'Select Options'}  
-                {step === 'preview' && 'Preview Result'}
-                {step === 'complete' && 'Complete'}
-              </span>
+  return (
+    <LegalGeneratorTheme ambient={false}>
+      <div className="flex h-full flex-col">
+        {/* Header — step indicator */}
+        <div
+          className="flex-shrink-0 px-6 pt-6 pb-4 md:px-10"
+          style={{ borderBottom: "1px solid var(--line-2)" }}
+        >
+          <div className="mx-auto flex w-full max-w-5xl items-center gap-4">
+            <button
+              className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
+              onClick={onCancel}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Exit
+            </button>
+            <div className={s.dividerVert} />
+            <div
+              className="flex flex-1 items-center gap-2 overflow-x-auto"
+              style={{ minWidth: 0 }}
+            >
+              {STEP_ORDER.map((step, idx) => {
+                const isActive = step === currentStep;
+                const isDone = idx < stepIndex;
+                return (
+                  <React.Fragment key={step}>
+                    <div className="flex items-center gap-2">
+                      <div
+                        style={{
+                          width: 26,
+                          height: 26,
+                          borderRadius: 999,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: 12,
+                          fontWeight: 600,
+                          background: isDone
+                            ? "var(--success)"
+                            : isActive
+                            ? "var(--accent)"
+                            : "var(--panel-2)",
+                          color: isDone || isActive ? "white" : "var(--ink-3)",
+                          border:
+                            isDone || isActive
+                              ? "none"
+                              : "1px solid var(--line-2)",
+                          boxShadow: isActive
+                            ? "0 4px 12px var(--accent-glow)"
+                            : "none",
+                        }}
+                      >
+                        {isDone ? (
+                          <CheckCircle className="h-3.5 w-3.5" />
+                        ) : (
+                          idx + 1
+                        )}
+                      </div>
+                      <span
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 500,
+                          color: isActive ? "var(--ink)" : "var(--ink-3)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {STEP_LABEL[step]}
+                      </span>
+                    </div>
+                    {idx < STEP_ORDER.length - 1 && (
+                      <ArrowRight
+                        className="h-3.5 w-3.5"
+                        style={{ color: "var(--ink-4)" }}
+                      />
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </div>
-            {index < 3 && (
-              <ArrowRight className="w-4 h-4 text-muted-foreground" />
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className={`flex-1 overflow-y-auto ${s.scrollbar}`}>
+          <div className="mx-auto w-full max-w-5xl px-6 py-8 md:px-10">
+            {currentStep === "input" && (
+              <div className="space-y-6">
+                <SectionHeader
+                  icon={<FileText className="h-[14px] w-[14px]" />}
+                  eyebrow="Step 1"
+                  title="Paste or type your source text"
+                  description="Drop in the text you want to rewrite. You can refine it with options in the next step."
+                />
+
+                <div className={s.panel} style={{ padding: 20 }}>
+                  <textarea
+                    placeholder="Paste the text you want to rewrite…"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    className={s.textarea}
+                    style={{ minHeight: 220 }}
+                  />
+                  <div
+                    className="mt-3 flex items-center justify-between"
+                    style={{ fontSize: 12, color: "var(--ink-3)" }}
+                  >
+                    <span>
+                      {text.trim() ? `${text.trim().split(/\s+/).length} words` : "Empty"}
+                    </span>
+                    <span>{text.length} characters</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-end gap-2">
+                  <button
+                    className={`${s.btn} ${s.btnOutline}`}
+                    onClick={onCancel}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className={`${s.btn} ${s.btnAccent} ${s.btnLg}`}
+                    onClick={() => setCurrentStep("options")}
+                    disabled={!text.trim()}
+                  >
+                    Next: Options
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
             )}
-          </React.Fragment>
-        );
-      })}
+
+            {currentStep === "options" && (
+              <div className="space-y-6">
+                <SectionHeader
+                  icon={<Settings className="h-[14px] w-[14px]" />}
+                  eyebrow="Step 2"
+                  title="Shape how it reads"
+                  description="Pick a tone, length, and audience. Add extra instructions if you have any."
+                />
+
+                {error && (
+                  <div className={`${s.banner} ${s.bannerDanger}`} style={{ padding: 14 }}>
+                    <p style={{ margin: 0, fontSize: 13, color: "var(--danger)" }}>
+                      {error}
+                    </p>
+                  </div>
+                )}
+
+                <div className={s.panel} style={{ padding: 22 }}>
+                  <OptionGroup
+                    label="Tone"
+                    value={options.tone}
+                    onChange={(tone) =>
+                      setOptions((prev) => ({
+                        ...prev,
+                        tone: tone as RewriteOptions["tone"],
+                      }))
+                    }
+                    options={[...TONE_OPTIONS]}
+                  />
+                  <hr className={s.hair} style={{ margin: "20px 0" }} />
+                  <OptionGroup
+                    label="Length"
+                    value={options.length}
+                    onChange={(length) =>
+                      setOptions((prev) => ({
+                        ...prev,
+                        length: length as RewriteOptions["length"],
+                      }))
+                    }
+                    options={[...LENGTH_OPTIONS]}
+                  />
+                  <hr className={s.hair} style={{ margin: "20px 0" }} />
+                  <OptionGroup
+                    label="Audience"
+                    value={options.audience}
+                    onChange={(audience) =>
+                      setOptions((prev) => ({
+                        ...prev,
+                        audience: audience as RewriteOptions["audience"],
+                      }))
+                    }
+                    options={[...AUDIENCE_OPTIONS]}
+                  />
+                  <hr className={s.hair} style={{ margin: "20px 0" }} />
+
+                  <div>
+                    <label className={s.label} style={{ marginBottom: 8 }}>
+                      Additional instructions
+                      <span
+                        style={{
+                          marginLeft: 6,
+                          fontSize: 11,
+                          fontWeight: 400,
+                          color: "var(--ink-3)",
+                        }}
+                      >
+                        (optional)
+                      </span>
+                    </label>
+                    <textarea
+                      className={s.textarea}
+                      placeholder="e.g. Keep bullet structure. Prefer active voice."
+                      value={options.customPrompt ?? ""}
+                      onChange={(e) =>
+                        setOptions((prev) => ({ ...prev, customPrompt: e.target.value }))
+                      }
+                      rows={3}
+                    />
+                  </div>
+                </div>
+
+                {/* Draft-mode toggle */}
+                <button
+                  type="button"
+                  onClick={() => setIsDraftMode((v) => !v)}
+                  className={s.panel}
+                  style={{
+                    padding: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 14,
+                    cursor: "pointer",
+                    textAlign: "left",
+                    width: "100%",
+                    background: "var(--panel)",
+                    fontFamily: "inherit",
+                    color: "inherit",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 38,
+                      height: 22,
+                      borderRadius: 999,
+                      background: isDraftMode
+                        ? "var(--accent)"
+                        : "var(--panel-2)",
+                      border: isDraftMode
+                        ? "none"
+                        : "1px solid var(--line)",
+                      position: "relative",
+                      flexShrink: 0,
+                      transition: "all .2s",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 16,
+                        height: 16,
+                        borderRadius: 999,
+                        background: "white",
+                        position: "absolute",
+                        top: 2,
+                        left: isDraftMode ? 18 : 3,
+                        transition: "left .2s",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                      }}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                      }}
+                    >
+                      Draft mode
+                    </p>
+                    <p
+                      style={{
+                        margin: "2px 0 0",
+                        fontSize: 12,
+                        color: "var(--ink-3)",
+                        lineHeight: 1.55,
+                      }}
+                    >
+                      {isDraftMode
+                        ? "Preview the rewrite before applying — regenerate or reject if needed."
+                        : "Skip the preview and apply the rewrite straight to the document."}
+                    </p>
+                  </div>
+                </button>
+
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <button
+                    className={`${s.btn} ${s.btnOutline}`}
+                    onClick={() => setCurrentStep("input")}
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
+                  </button>
+                  <button
+                    className={`${s.btn} ${s.btnAccent} ${s.btnLg}`}
+                    onClick={handleRewrite}
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Rewriting…
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4" />
+                        {isDraftMode ? "Generate draft" : "Generate & apply"}
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {currentStep === "preview" && (
+              <div className="space-y-6">
+                <SectionHeader
+                  icon={<Eye className="h-[14px] w-[14px]" />}
+                  eyebrow="Step 3"
+                  title="Review the rewrite"
+                  description="Accept it, regenerate with the same options, or go back and tweak options."
+                />
+
+                <RewritePreviewPanel
+                  originalText={text}
+                  proposedText={rewrittenText}
+                  onAccept={handleAcceptRewrite}
+                  onReject={onCancel}
+                  onTryAgain={handleRewrite}
+                  isRetrying={isProcessing}
+                />
+
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <button
+                    className={`${s.btn} ${s.btnOutline}`}
+                    onClick={handleRetry}
+                  >
+                    <RotateCw className="h-4 w-4" />
+                    Edit options
+                  </button>
+                  <div className="flex gap-2">
+                    <button className={`${s.btn} ${s.btnGhost}`} onClick={onCancel}>
+                      Discard
+                    </button>
+                    <button
+                      className={`${s.btn} ${s.btnAccent} ${s.btnLg}`}
+                      onClick={handleAcceptRewrite}
+                    >
+                      <Check className="h-4 w-4" />
+                      Push to rewrite
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentStep === "complete" && (
+              <div
+                className={`${s.banner} ${s.bannerSuccess} mx-auto`}
+                style={{
+                  padding: 32,
+                  maxWidth: 520,
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  className={s.brandMark}
+                  style={{
+                    width: 52,
+                    height: 52,
+                    borderRadius: 14,
+                    margin: "0 auto 16px",
+                    background:
+                      "linear-gradient(135deg, var(--success) 0%, oklch(from var(--success) calc(l - 0.08) c h) 100%)",
+                    boxShadow:
+                      "0 6px 18px oklch(from var(--success) l c h / 0.4)",
+                  }}
+                >
+                  <CheckCircle className="h-6 w-6" />
+                </div>
+                <h2
+                  className={s.title}
+                  style={{ fontSize: 24, marginBottom: 8 }}
+                >
+                  Rewrite applied
+                </h2>
+                <p className={s.sub} style={{ marginBottom: 20 }}>
+                  Your text was rewritten and pushed into the editor.
+                </p>
+                <button className={`${s.btn} ${s.btnAccent}`} onClick={onCancel}>
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </LegalGeneratorTheme>
+  );
+}
+
+// ─── Helpers ───────────────────────────────────────────────────────────────
+
+function SectionHeader({
+  icon,
+  eyebrow,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className={s.brandMarkSm}>{icon}</div>
+      <div className="min-w-0 space-y-1">
+        <span className={s.eyebrow}>{eyebrow}</span>
+        <h2
+          style={{
+            margin: 0,
+            fontSize: 22,
+            fontWeight: 600,
+            color: "var(--ink)",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {title}
+        </h2>
+        <p style={{ margin: 0, fontSize: 14, color: "var(--ink-2)", lineHeight: 1.55 }}>
+          {description}
+        </p>
+      </div>
     </div>
   );
+}
 
-  if (currentStep === 'input') {
-    return (
-      <div className="max-w-4xl mx-auto p-6">
-        {renderStepIndicator()}
-        
-        <Card className="p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded">
-              <FileText className="w-5 h-5 text-amber-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold">Input Your Text</h2>
-              <p className="text-sm text-muted-foreground">Enter or paste the text you want to rewrite</p>
-            </div>
-          </div>
-          
-          <Textarea
-            placeholder="Paste your text here..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            className="min-h-40 mb-4"
-          />
-          
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={() => setCurrentStep('options')}
-              disabled={!text.trim()}
-              className="bg-amber-600 hover:bg-amber-700 text-white"
-            >
-              Next: Select Options
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
-  if (currentStep === 'options') {
-    return (
-      <div className="max-w-4xl mx-auto p-6">
-        {renderStepIndicator()}
-        
-        <Card className="p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded">
-              <Settings className="w-5 h-5 text-amber-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold">Transformation Options</h2>
-              <p className="text-sm text-muted-foreground">Choose how you want your text to be rewritten</p>
-            </div>
-          </div>
-
-          {error && (
-            <div className="p-3 bg-destructive/10 text-destructive text-sm rounded mb-6">
-              {error}
-            </div>
-          )}
-          
-          <div className="flex flex-col gap-6 mb-6">
-            <div className="min-w-0">
-              <label className="block text-sm font-medium mb-2">Tone</label>
-              <Select
-                value={options.tone}
-                onValueChange={(value: RewriteOptions['tone']) =>
-                  setOptions(prev => ({ ...prev, tone: value }))
-                }
-              >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {TONE_OPTIONS.map(option => (
-                    <SelectItem key={option.value} value={option.value}>
-                      <span className="block truncate font-medium">{option.label}</span>
-                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="min-w-0">
-              <label className="block text-sm font-medium mb-2">Length</label>
-              <Select
-                value={options.length}
-                onValueChange={(value: RewriteOptions['length']) =>
-                  setOptions(prev => ({ ...prev, length: value }))
-                }
-              >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {LENGTH_OPTIONS.map(option => (
-                    <SelectItem key={option.value} value={option.value}>
-                      <span className="block truncate font-medium">{option.label}</span>
-                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="min-w-0">
-              <label className="block text-sm font-medium mb-2">Audience</label>
-              <Select
-                value={options.audience}
-                onValueChange={(value: RewriteOptions['audience']) =>
-                  setOptions(prev => ({ ...prev, audience: value }))
-                }
-              >
-                <SelectTrigger className="text-left min-h-12 h-12 py-3 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {AUDIENCE_OPTIONS.map(option => (
-                    <SelectItem key={option.value} value={option.value}>
-                      <span className="block truncate font-medium">{option.label}</span>
-                      <span className="block text-xs text-muted-foreground">{option.desc}</span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-sm font-medium mb-2">Additional Instructions (Optional)</label>
-            <Textarea
-              placeholder="Any specific requirements or style preferences..."
-              value={options.customPrompt ?? ""}
-              onChange={(e) => setOptions(prev => ({ ...prev, customPrompt: e.target.value }))}
-              rows={5}
-              className="min-h-32"
-            />
-          </div>
-
-          <div className="mb-6 flex items-start justify-between gap-4 rounded-lg border border-border bg-muted/30 p-4">
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium">Draft Mode</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                ON: show generated draft below so you can regenerate or push to Rewrite. OFF: apply directly to document.
-              </p>
-            </div>
-            <Switch
-              aria-label="Draft mode"
-              checked={isDraftMode}
-              onCheckedChange={setIsDraftMode}
-              className="flex-shrink-0"
-            />
-          </div>
-
-          <div className="border-t pt-4">
-            <div className="mb-4">
-              <p className="text-sm font-medium mb-2">Selected Options:</p>
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary">{TONE_OPTIONS.find(t => t.value === options.tone)?.label}</Badge>
-                <Badge variant="secondary">{LENGTH_OPTIONS.find(l => l.value === options.length)?.label}</Badge>
-                <Badge variant="secondary">{AUDIENCE_OPTIONS.find(a => a.value === options.audience)?.label}</Badge>
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex flex-wrap gap-3 items-center min-h-[44px]">
-            <Button variant="outline" onClick={() => setCurrentStep('input')} className="flex-shrink-0">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-            <Button 
-              onClick={handleRewrite}
-              disabled={isProcessing}
-              className="!bg-amber-600 hover:!bg-amber-500 !text-white border-2 border-amber-700 flex-shrink-0 min-w-[180px] dark:!bg-amber-500 dark:hover:!bg-amber-400 dark:!text-white dark:border-amber-400 shadow-lg"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Rewriting...
-                </>
-              ) : isDraftMode ? (
-                <>
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Generate Draft
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Generate & Apply
-                </>
-              )}
-            </Button>
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
-  if (currentStep === 'preview') {
-    return (
-      <div className="max-w-6xl mx-auto p-6">
-        {renderStepIndicator()}
-        
-        <div className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded">
-              <Eye className="w-5 h-5 text-amber-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold">Preview Your Rewrite</h2>
-              <p className="text-sm text-muted-foreground">Review the changes and decide whether to accept them</p>
-            </div>
-          </div>
-
-          <RewritePreviewPanel
-            originalText={text}
-            proposedText={rewrittenText}
-            onAccept={handleAcceptRewrite}
-            onReject={onCancel}
-            onTryAgain={handleRewrite}
-            isRetrying={isProcessing}
-          />
-
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={handleRetry}>
-              <RotateCw className="w-4 h-4 mr-2" />
-              Edit Options
-            </Button>
-            <Button variant="outline" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleAcceptRewrite}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              <Check className="w-4 h-4 mr-2" />
-              Push to Rewrite
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Complete step
+function OptionGroup<T extends string>({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: T;
+  onChange: (value: T) => void;
+  options: readonly { value: T; label: string; desc: string }[];
+}) {
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {renderStepIndicator()}
-      
-      <Card className="p-6 text-center">
-        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full w-fit mx-auto mb-4">
-          <CheckCircle className="w-8 h-8 text-green-600" />
-        </div>
-        <h2 className="text-xl font-semibold mb-2">Rewrite Complete!</h2>
-        <p className="text-muted-foreground mb-6">
-          Your text has been successfully rewritten and applied to the document.
-        </p>
-        <Button onClick={onCancel} className="bg-amber-600 hover:bg-amber-700 text-white">
-          Close
-        </Button>
-      </Card>
+    <div>
+      <p
+        style={{
+          margin: "0 0 10px",
+          fontSize: 12,
+          fontWeight: 700,
+          color: "var(--ink-3)",
+          textTransform: "uppercase",
+          letterSpacing: "0.1em",
+        }}
+      >
+        {label}
+      </p>
+      <div
+        className="grid grid-cols-2 gap-2 md:grid-cols-3"
+      >
+        {options.map((opt) => {
+          const active = value === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => onChange(opt.value)}
+              style={{
+                textAlign: "left",
+                padding: "10px 12px",
+                borderRadius: 10,
+                border: active
+                  ? "1px solid var(--accent)"
+                  : "1px solid var(--line-2)",
+                background: active ? "var(--accent-soft)" : "var(--panel)",
+                cursor: "pointer",
+                transition: "all .15s",
+                boxShadow: active
+                  ? "0 0 0 3px var(--accent-glow)"
+                  : "0 1px 0 oklch(1 0 0 / 0.3) inset",
+                fontFamily: "inherit",
+                color: "inherit",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: active ? "var(--accent-ink)" : "var(--ink)",
+                  letterSpacing: "-0.005em",
+                }}
+              >
+                {opt.label}
+              </div>
+              <div
+                style={{
+                  fontSize: 11,
+                  marginTop: 2,
+                  color: active ? "var(--accent-ink)" : "var(--ink-3)",
+                  lineHeight: 1.4,
+                  opacity: active ? 0.85 : 1,
+                }}
+              >
+                {opt.desc}
+              </div>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

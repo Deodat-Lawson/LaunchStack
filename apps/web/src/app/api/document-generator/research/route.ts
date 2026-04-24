@@ -1,9 +1,9 @@
 /**
  * Document Generator - Research API
- * 
+ *
  * Unified research endpoint combining:
  * - Document Research (RAG): Search uploaded company documents
- * - Web Research: Search the web using Tavily
+ * - Web Research: Search the web using Exa
  * - arXiv Research: Search academic papers from arXiv.org
  */
 
@@ -18,7 +18,7 @@ import {
     type CompanySearchOptions,
     type SearchResult
 } from "~/lib/tools/rag";
-import { performTavilySearch } from "~/app/api/agents/documentQ&A/services/tavilySearch";
+import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
 
 export const runtime = "nodejs";
@@ -316,8 +316,8 @@ export async function POST(request: Request) {
                         adjustedQuery = `latest news: ${query}`;
                     }
 
-                    const webResults = await performTavilySearch(
-                        adjustedQuery, 
+                    const webResults = await performExaSearch(
+                        adjustedQuery,
                         Math.min(maxResults, 5)
                     );
 

@@ -74,6 +74,16 @@ export type WebsiteCrawlEvent = {
   };
 };
 
+export type RehydrateNoteAnchorsEvent = {
+  name: "notes-anchors/rehydrate.requested";
+  data: {
+    /** Document whose notes should be re-anchored. */
+    documentId: number;
+    /** `document_versions.id` of the freshly-indexed version. */
+    versionId: number;
+  };
+};
+
 export type Events =
   | ProcessDocumentEvent
   | TrendSearchEvent
@@ -82,7 +92,8 @@ export type Events =
   | PredictiveAnalysisEvent
   | ReindexCompanyEmbeddingsEvent
   | DocumentModifyEvent
-  | WebsiteCrawlEvent;
+  | WebsiteCrawlEvent
+  | RehydrateNoteAnchorsEvent;
 
 /**
  * Create the Inngest client.

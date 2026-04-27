@@ -6,6 +6,7 @@ All provider details come from env vars — nothing is hardcoded.
 """
 
 import json
+import os
 import re
 from typing import Any
 

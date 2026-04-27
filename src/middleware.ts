@@ -179,9 +179,10 @@ export default clerkMiddleware(async (auth, req) => {
 export const config = {
     runtime: 'nodejs',
     matcher: [
-        // Skip Next.js internals and all static files, unless found in search params
-        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+        // Skip Next.js internals, static files, and Inngest endpoint (called by Inngest dev server without Clerk auth)
+        '/((?!_next|api/inngest|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
         // Always run for API routes, but exclude file upload routes (body stream conflicts in standalone mode)
-        '/(api(?!/upload-local|/files)|trpc)(.*)',
+        // and Inngest endpoint (Inngest dev server calls back without Clerk auth)
+        '/(api(?!/upload-local|/files|/inngest)|trpc)(.*)',
     ],
 };

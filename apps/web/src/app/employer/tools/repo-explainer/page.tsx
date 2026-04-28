@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2, Network, Share2 } from "lucide-react";
-import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
+import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
 import { MermaidDiagram } from "./MermaidDiagram";
 import { useRepoExplainer } from "./useRepoExplainer";
 import type { DiagramType } from "@launchstack/features/repo-explainer";
@@ -33,8 +33,7 @@ export default function RepoExplainerPage() {
   } = useRepoExplainer();
 
   return (
-    <>
-      <EmployerChrome pageLabel="Tools" pageTitle="Repo explainer" />
+    <ToolsStudioShell>
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 pb-10 pt-8">
         <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
@@ -229,6 +228,6 @@ export default function RepoExplainerPage() {
           </section>
         )}
       </main>
-    </>
+    </ToolsStudioShell>
   );
 }

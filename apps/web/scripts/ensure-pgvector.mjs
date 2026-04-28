@@ -1,5 +1,10 @@
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
 import dotenv from "dotenv";
-dotenv.config();
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: resolve(__dirname, "../../../.env") });
+
 import postgres from "postgres";
 
 const url = process.env.DATABASE_URL;

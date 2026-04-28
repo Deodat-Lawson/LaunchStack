@@ -1,20 +1,29 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { diffWords } from "diff";
 import {
-  CheckCircle,
-  ArrowRight,
   ArrowLeft,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
   Loader2,
   Sparkles,
-  Eye,
-  Settings,
-  FileText,
-  RotateCw,
-  Check,
+  Wand2,
+  X,
 } from "lucide-react";
-import { RewritePreviewPanel } from "./RewritePreviewPanel";
 import { LegalGeneratorTheme, legalTheme as s } from "../LegalGeneratorTheme";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────────────────────────────────────
 
 interface RewriteWorkflowProps {
   initialText?: string;
@@ -53,38 +62,218 @@ export interface RewriteWorkflowStateSnapshot {
   isDraftMode: boolean;
 }
 
-const TONE_OPTIONS = [
-  { value: "professional", label: "Professional", desc: "Clear, business-appropriate language" },
-  { value: "casual", label: "Casual", desc: "Friendly and conversational tone" },
-  { value: "formal", label: "Formal", desc: "Academic or official style" },
-  { value: "technical", label: "Technical", desc: "Precise, detail-oriented language" },
-  { value: "creative", label: "Creative", desc: "Engaging and expressive style" },
-  { value: "persuasive", label: "Persuasive", desc: "Compelling and convincing" },
-] as const;
+type SectionStatus = "pending" | "accepted" | "rejected" | "unchanged";
 
-const LENGTH_OPTIONS = [
-  { value: "brief", label: "Brief", desc: "Concise and to the point" },
-  { value: "medium", label: "Medium", desc: "Balanced detail level" },
-  { value: "detailed", label: "Detailed", desc: "Comprehensive coverage" },
-  { value: "comprehensive", label: "Comprehensive", desc: "Thorough and complete" },
-] as const;
+interface Section {
+  id: string;
+  index: number;
+  title: string;
+  original: string;
+  proposed: string;
+  status: SectionStatus;
+  selected: boolean;
+}
 
-const AUDIENCE_OPTIONS = [
-  { value: "general", label: "General", desc: "Accessible to everyone" },
-  { value: "technical", label: "Technical experts", desc: "Industry professionals" },
-  { value: "executives", label: "Executives", desc: "Decision makers and leaders" },
-  { value: "students", label: "Students", desc: "Learning-focused audience" },
-  { value: "customers", label: "Customers", desc: "External clients" },
-  { value: "team", label: "Team members", desc: "Internal colleagues" },
-] as const;
+interface DiffPart {
+  value: string;
+  added?: boolean;
+  removed?: boolean;
+}
 
-const STEP_ORDER: WorkflowStep[] = ["input", "options", "preview", "complete"];
-const STEP_LABEL: Record<WorkflowStep, string> = {
-  input: "Input",
-  options: "Options",
-  preview: "Preview",
-  complete: "Done",
-};
+// ─────────────────────────────────────────────────────────────────────────────
+// Static config
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PRESETS: { id: string; label: string; instruction: string }[] = [
+  {
+    id: "tighten",
+    label: "Tighten language",
+    instruction: "Cut redundant words. Prefer concise phrasing.",
+  },
+  {
+    id: "casual",
+    label: "More casual",
+    instruction: "Use a friendlier, more conversational tone.",
+  },
+  {
+    id: "formal",
+    label: "More formal",
+    instruction: "Use a professional, formal register.",
+  },
+  {
+    id: "plain",
+    label: "Plain English",
+    instruction: "Avoid jargon. Use plain English.",
+  },
+  {
+    id: "detail",
+    label: "Add detail",
+    instruction: "Expand with additional context where helpful.",
+  },
+  {
+    id: "active",
+    label: "Active voice",
+    instruction: "Prefer active voice over passive.",
+  },
+];
+
+const GUARDRAILS: { id: string; label: string; sub: string }[] = [
+  {
+    id: "structure",
+    label: "Preserve structure",
+    sub: "Keep paragraph breaks intact",
+  },
+  {
+    id: "voice",
+    label: "Match my voice",
+    sub: "Don't drift from existing tone",
+  },
+  {
+    id: "conflict",
+    label: "Stop on conflict",
+    sub: "Flag rather than guess",
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Pure helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+function wordCountOf(s: string): number {
+  const trimmed = s.trim();
+  if (!trimmed) return 0;
+  return trimmed.split(/\s+/).length;
+}
+
+function deriveSourceTitle(text: string): string {
+  const trimmed = (text ?? "").trim();
+  if (!trimmed) return "Untitled source";
+  const firstLine = trimmed.split("\n")[0]?.trim() ?? "";
+  const stripped = firstLine.replace(/^#{1,6}\s*/, "").trim();
+  if (!stripped) return "Untitled source";
+  return stripped.length > 48 ? `${stripped.slice(0, 48)}…` : stripped;
+}
+
+function sectionTitleOf(chunk: string, index: number): string {
+  const firstLine = chunk.split("\n")[0]?.trim() ?? "";
+  const stripped = firstLine.replace(/^#{1,6}\s*/, "").trim();
+  const truncated =
+    stripped.length > 56 ? `${stripped.slice(0, 56)}…` : stripped;
+  return truncated.length > 0
+    ? `${index + 1}. ${truncated}`
+    : `${index + 1}. Section`;
+}
+
+function sectionShortName(title: string): string {
+  // Strip leading "1. " ordering for display in the diff header
+  return title.replace(/^\d+\.\s*/, "");
+}
+
+function splitIntoSections(text: string): Pick<
+  Section,
+  "id" | "index" | "title" | "original"
+>[] {
+  const safe = (text ?? "").trim();
+  if (!safe) return [];
+  const parts = safe
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+  const chunks = parts.length > 0 ? parts : [safe];
+  return chunks.map((chunk, i) => ({
+    id: `s${i + 1}`,
+    index: i,
+    title: sectionTitleOf(chunk, i),
+    original: chunk,
+  }));
+}
+
+function mapResponseToProposals(
+  baseSections: Section[],
+  response: string,
+): Section[] {
+  const safe = (response ?? "").trim();
+  if (!safe) {
+    return baseSections.map((sec) => ({ ...sec, proposed: "" }));
+  }
+  const parts = safe
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+
+  if (parts.length === baseSections.length) {
+    return baseSections.map((sec, i) => ({
+      ...sec,
+      proposed: parts[i] ?? "",
+    }));
+  }
+  if (baseSections.length === 1) {
+    const only = baseSections[0]!;
+    return [{ ...only, proposed: safe }];
+  }
+  // Mismatched chunk count — assign proposals 1:1 up to the shorter list and
+  // dump any overflow into the last source section so nothing gets lost.
+  return baseSections.map((sec, i) => {
+    if (i < parts.length - 1) return { ...sec, proposed: parts[i] ?? "" };
+    if (i === baseSections.length - 1) {
+      return { ...sec, proposed: parts.slice(i).join("\n\n") };
+    }
+    return { ...sec, proposed: "" };
+  });
+}
+
+function deriveDelta(original: string, proposed: string): string {
+  if (!proposed.trim()) return "—";
+  const parts = diffWords(original, proposed);
+  let added = 0;
+  let removed = 0;
+  for (const part of parts) {
+    const wc = wordCountOf(part.value);
+    if (part.added) added += wc;
+    else if (part.removed) removed += wc;
+  }
+  if (added === 0 && removed === 0) return "no edits";
+  return `+${added} / -${removed}`;
+}
+
+function deriveChangeCount(parts: DiffPart[]): number {
+  return parts.filter((p) => p.added || p.removed).length;
+}
+
+function summarizeSection(parts: DiffPart[]): string {
+  const editCount = deriveChangeCount(parts);
+  if (editCount === 0) {
+    return "No edits proposed for this section — the rewrite matches the source.";
+  }
+  let added = 0;
+  let removed = 0;
+  for (const p of parts) {
+    const wc = wordCountOf(p.value);
+    if (p.added) added += wc;
+    else if (p.removed) removed += wc;
+  }
+  const delta = added - removed;
+  if (delta > 0) {
+    return `Expanded by ${delta} word${delta === 1 ? "" : "s"} across ${editCount} edit${editCount === 1 ? "" : "s"}.`;
+  }
+  if (delta < 0) {
+    return `Tightened by ${Math.abs(delta)} word${Math.abs(delta) === 1 ? "" : "s"} across ${editCount} edit${editCount === 1 ? "" : "s"}.`;
+  }
+  return `${editCount} edit${editCount === 1 ? "" : "s"} without changing the overall length.`;
+}
+
+function assembleFinalText(sections: Section[]): string {
+  return sections
+    .map((sec) => {
+      if (sec.status === "accepted" && sec.proposed.trim()) return sec.proposed;
+      return sec.original;
+    })
+    .join("\n\n");
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main workspace
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function RewriteWorkflow({
   initialText = "",
@@ -93,45 +282,214 @@ export function RewriteWorkflow({
   persistedState,
   onStateChange,
 }: RewriteWorkflowProps) {
-  const persistedStep = persistedState?.currentStep;
-  const effectiveStep: WorkflowStep =
-    persistedStep === "complete"
-      ? initialText
-        ? "options"
-        : "input"
-      : persistedStep ?? (initialText ? "options" : "input");
-
-  const [currentStep, setCurrentStep] = useState<WorkflowStep>(effectiveStep);
-  const [text, setText] = useState(
-    persistedStep === "complete" ? initialText : persistedState?.text ?? initialText,
+  const [text, setText] = useState<string>(
+    persistedState?.text ?? initialText,
   );
-  const [options, setOptions] = useState<RewriteOptions>({
-    tone: persistedState?.options?.tone ?? "professional",
-    length: persistedState?.options?.length ?? "medium",
-    audience: persistedState?.options?.audience ?? "general",
-    customPrompt: persistedState?.options?.customPrompt ?? "",
-  });
-  const [rewrittenText, setRewrittenText] = useState(
-    persistedStep === "complete" ? "" : persistedState?.rewrittenText ?? "",
+  const [customPrompt, setCustomPrompt] = useState<string>(
+    persistedState?.options?.customPrompt ?? "",
+  );
+  const [activePresets, setActivePresets] = useState<Set<string>>(
+    () => new Set<string>(),
+  );
+  const [guardrailState, setGuardrailState] = useState<Record<string, boolean>>(
+    {
+      structure: true,
+      voice: true,
+      conflict: true,
+    },
+  );
+  const [proposedText, setProposedText] = useState<string>(
+    persistedState?.rewrittenText ?? "",
   );
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isDraftMode, setIsDraftMode] = useState(persistedState?.isDraftMode ?? true);
 
+  const baseDescriptors = useMemo(() => splitIntoSections(text), [text]);
+
+  const [sections, setSections] = useState<Section[]>(() => {
+    const base: Section[] = baseDescriptors.map((d) => ({
+      ...d,
+      proposed: "",
+      status: "unchanged" as SectionStatus,
+      selected: true,
+    }));
+    // Resume from a persisted rewrite: re-map the proposals onto the sections
+    // so the diff and review rail come back in the right state.
+    const resume = persistedState?.rewrittenText?.trim() ?? "";
+    if (!resume) return base;
+    return mapResponseToProposals(base, resume).map((sec) => ({
+      ...sec,
+      status:
+        sec.proposed.trim() && sec.proposed.trim() !== sec.original.trim()
+          ? "pending"
+          : "unchanged",
+    }));
+  });
+
+  const [currentSectionId, setCurrentSectionId] = useState<string>(
+    baseDescriptors[0]?.id ?? "",
+  );
+
+  // Re-derive sections whenever the source text changes (preserve flags)
+  const previousTextRef = useRef(text);
+  useEffect(() => {
+    if (previousTextRef.current === text) return;
+    previousTextRef.current = text;
+    setSections((prev) => {
+      return baseDescriptors.map((d) => {
+        const existing = prev.find((p) => p.id === d.id);
+        return {
+          ...d,
+          proposed: existing?.proposed ?? "",
+          status: existing?.status ?? "unchanged",
+          selected: existing?.selected ?? true,
+        };
+      });
+    });
+    setCurrentSectionId((prev) => {
+      if (baseDescriptors.find((d) => d.id === prev)) return prev;
+      return baseDescriptors[0]?.id ?? "";
+    });
+  }, [baseDescriptors, text]);
+
+  // Persist state up to the parent so the workflow can be paused / resumed
   useEffect(() => {
     if (!onStateChange) return;
     onStateChange({
-      currentStep,
+      currentStep: proposedText ? "preview" : "options",
       text,
-      options,
-      rewrittenText,
-      isDraftMode,
+      options: {
+        tone: "professional",
+        length: "medium",
+        audience: "general",
+        customPrompt,
+      },
+      rewrittenText: proposedText,
+      isDraftMode: true,
     });
-  }, [currentStep, isDraftMode, onStateChange, options, rewrittenText, text]);
+  }, [customPrompt, onStateChange, proposedText, text]);
 
-  const handleRewrite = useCallback(async () => {
-    if (!text.trim()) return;
+  // ── derived values ────────────────────────────────────────────────────────
+  const wordCount = wordCountOf(text);
+  const selectedCount = sections.filter((sec) => sec.selected).length;
+  const currentSection =
+    sections.find((sec) => sec.id === currentSectionId) ?? sections[0];
+  const currentIndex = currentSection
+    ? sections.findIndex((sec) => sec.id === currentSection.id)
+    : -1;
 
+  const currentDiffParts: DiffPart[] = useMemo(() => {
+    if (!currentSection?.proposed.trim()) return [];
+    return diffWords(currentSection.original, currentSection.proposed);
+  }, [currentSection?.original, currentSection?.proposed]);
+
+  const counts = useMemo(() => {
+    let acc = 0;
+    let rej = 0;
+    let pen = 0;
+    let unc = 0;
+    for (const sec of sections) {
+      if (sec.status === "accepted") acc += 1;
+      else if (sec.status === "rejected") rej += 1;
+      else if (sec.status === "pending") pen += 1;
+      else unc += 1;
+    }
+    return { acc, rej, pen, unc, total: sections.length };
+  }, [sections]);
+
+  const totalReviewable = counts.acc + counts.rej + counts.pen;
+  const acceptedPct =
+    totalReviewable > 0 ? (counts.acc / totalReviewable) * 100 : 0;
+  const rejectedPct =
+    totalReviewable > 0 ? (counts.rej / totalReviewable) * 100 : 0;
+
+  const composedPrompt = useMemo(() => {
+    const lines: string[] = [];
+    const base = customPrompt.trim();
+    if (base) lines.push(base);
+    for (const id of activePresets) {
+      const preset = PRESETS.find((p) => p.id === id);
+      if (preset) lines.push(preset.instruction);
+    }
+    if (guardrailState.structure)
+      lines.push("Preserve paragraph structure and breaks.");
+    if (guardrailState.voice)
+      lines.push("Match the existing tone of voice as closely as possible.");
+    if (guardrailState.conflict)
+      lines.push("If unsure about a phrasing, flag it rather than guessing.");
+    return lines.join("\n");
+  }, [activePresets, customPrompt, guardrailState]);
+
+  // ── handlers ──────────────────────────────────────────────────────────────
+  const togglePreset = useCallback((id: string) => {
+    setActivePresets((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleGuardrail = useCallback((id: string) => {
+    setGuardrailState((prev) => ({ ...prev, [id]: !prev[id] }));
+  }, []);
+
+  const toggleSectionSelected = useCallback((id: string) => {
+    setSections((prev) =>
+      prev.map((sec) =>
+        sec.id === id ? { ...sec, selected: !sec.selected } : sec,
+      ),
+    );
+  }, []);
+
+  const setSectionStatus = useCallback(
+    (id: string, status: SectionStatus) => {
+      setSections((prev) =>
+        prev.map((sec) => (sec.id === id ? { ...sec, status } : sec)),
+      );
+    },
+    [],
+  );
+
+  const advanceToNextPending = useCallback(() => {
+    setCurrentSectionId((prevId) => {
+      const idx = sections.findIndex((sec) => sec.id === prevId);
+      const after = sections.slice(idx + 1).find((sec) => sec.status === "pending");
+      if (after) return after.id;
+      const before = sections.slice(0, idx).find((sec) => sec.status === "pending");
+      if (before) return before.id;
+      return prevId;
+    });
+  }, [sections]);
+
+  const handleAcceptCurrent = useCallback(() => {
+    if (!currentSection) return;
+    setSectionStatus(currentSection.id, "accepted");
+    advanceToNextPending();
+  }, [advanceToNextPending, currentSection, setSectionStatus]);
+
+  const handleRejectCurrent = useCallback(() => {
+    if (!currentSection) return;
+    setSectionStatus(currentSection.id, "rejected");
+    advanceToNextPending();
+  }, [advanceToNextPending, currentSection, setSectionStatus]);
+
+  const goPrev = useCallback(() => {
+    if (currentIndex > 0) {
+      const prevSection = sections[currentIndex - 1];
+      if (prevSection) setCurrentSectionId(prevSection.id);
+    }
+  }, [currentIndex, sections]);
+
+  const goNext = useCallback(() => {
+    if (currentIndex >= 0 && currentIndex < sections.length - 1) {
+      const nextSection = sections[currentIndex + 1];
+      if (nextSection) setCurrentSectionId(nextSection.id);
+    }
+  }, [currentIndex, sections]);
+
+  const handleRunRewrite = useCallback(async () => {
+    if (!text.trim() || selectedCount === 0) return;
     setIsProcessing(true);
     setError(null);
 
@@ -142,11 +500,11 @@ export function RewriteWorkflow({
         body: JSON.stringify({
           action: "rewrite",
           content: text,
-          prompt: options.customPrompt,
+          prompt: composedPrompt,
           options: {
-            tone: options.tone,
-            length: options.length,
-            audience: options.audience,
+            tone: "professional",
+            length: "medium",
+            audience: "general",
           },
         }),
       });
@@ -162,7 +520,7 @@ export function RewriteWorkflow({
         data = JSON.parse(responseText);
       } catch {
         setError(
-          responseText?.slice(0, 120) ||
+          responseText.slice(0, 120) ||
             "Server returned an invalid response. Please try again.",
         );
         return;
@@ -173,12 +531,36 @@ export function RewriteWorkflow({
         typeof data.generatedContent === "string" &&
         data.generatedContent.trim().length > 0
       ) {
-        if (isDraftMode) {
-          setRewrittenText(data.generatedContent);
-          setCurrentStep("preview");
-        } else {
-          onComplete(data.generatedContent);
-        }
+        const generated = data.generatedContent;
+        setProposedText(generated);
+        setSections((prev) => {
+          const proposals = mapResponseToProposals(prev, generated);
+          return proposals.map((sec) => {
+            // Sections the user did not select: preserve original, mark unchanged.
+            if (!sec.selected) {
+              return { ...sec, proposed: "", status: "unchanged" as const };
+            }
+            // Sections that came back blank or matched the source: nothing to review.
+            if (
+              !sec.proposed.trim() ||
+              sec.proposed.trim() === sec.original.trim()
+            ) {
+              return { ...sec, status: "unchanged" as const };
+            }
+            return { ...sec, status: "pending" as const };
+          });
+        });
+        // Jump the user to the first pending section so they can start reviewing.
+        setCurrentSectionId((prev) => {
+          const proposals = mapResponseToProposals(sections, generated);
+          const pending = proposals.find(
+            (sec) =>
+              sec.selected &&
+              sec.proposed.trim() &&
+              sec.proposed.trim() !== sec.original.trim(),
+          );
+          return pending?.id ?? prev;
+        });
       } else {
         setError(data.message ?? data.error ?? "Failed to rewrite text");
       }
@@ -188,538 +570,764 @@ export function RewriteWorkflow({
     } finally {
       setIsProcessing(false);
     }
-  }, [isDraftMode, onComplete, options, text]);
+  }, [composedPrompt, sections, selectedCount, text]);
 
-  const handleAcceptRewrite = useCallback(() => {
-    onComplete(rewrittenText);
-    setCurrentStep("complete");
-  }, [rewrittenText, onComplete]);
+  const handleApply = useCallback(() => {
+    onComplete(assembleFinalText(sections));
+  }, [onComplete, sections]);
 
-  const handleRetry = useCallback(() => {
-    setCurrentStep("options");
-    setRewrittenText("");
-    setError(null);
+  const handleRejectAll = useCallback(() => {
+    setSections((prev) =>
+      prev.map((sec) =>
+        sec.status === "pending" || sec.status === "accepted"
+          ? { ...sec, status: "rejected" }
+          : sec,
+      ),
+    );
   }, []);
 
-  const stepIndex = STEP_ORDER.indexOf(currentStep);
+  // ── render ────────────────────────────────────────────────────────────────
+  const hasProposal = !!proposedText.trim();
+  const breadcrumbLast = hasProposal ? "Review v2" : "New rewrite";
 
   return (
     <LegalGeneratorTheme ambient={false}>
       <div className="flex h-full flex-col">
-        {/* Header — step indicator */}
-        <div
-          className="flex-shrink-0 px-6 pt-6 pb-4 md:px-10"
-          style={{ borderBottom: "1px solid var(--line-2)" }}
-        >
-          <div className="mx-auto flex w-full max-w-5xl items-center gap-4">
-            <button
-              className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
-              onClick={onCancel}
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Exit
-            </button>
-            <div className={s.dividerVert} />
-            <div
-              className="flex flex-1 items-center gap-2 overflow-x-auto"
-              style={{ minWidth: 0 }}
-            >
-              {STEP_ORDER.map((step, idx) => {
-                const isActive = step === currentStep;
-                const isDone = idx < stepIndex;
-                return (
-                  <React.Fragment key={step}>
-                    <div className="flex items-center gap-2">
-                      <div
-                        style={{
-                          width: 26,
-                          height: 26,
-                          borderRadius: 999,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: 12,
-                          fontWeight: 600,
-                          background: isDone
-                            ? "var(--success)"
-                            : isActive
-                            ? "var(--accent)"
-                            : "var(--panel-2)",
-                          color: isDone || isActive ? "white" : "var(--ink-3)",
-                          border:
-                            isDone || isActive
-                              ? "none"
-                              : "1px solid var(--line-2)",
-                          boxShadow: isActive
-                            ? "0 4px 12px var(--accent-glow)"
-                            : "none",
-                        }}
-                      >
-                        {isDone ? (
-                          <CheckCircle className="h-3.5 w-3.5" />
-                        ) : (
-                          idx + 1
-                        )}
-                      </div>
-                      <span
-                        style={{
-                          fontSize: 13,
-                          fontWeight: 500,
-                          color: isActive ? "var(--ink)" : "var(--ink-3)",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {STEP_LABEL[step]}
-                      </span>
-                    </div>
-                    {idx < STEP_ORDER.length - 1 && (
-                      <ArrowRight
-                        className="h-3.5 w-3.5"
-                        style={{ color: "var(--ink-4)" }}
-                      />
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </div>
+        {/* Top bar */}
+        <div className={s.rwsTop}>
+          <button
+            type="button"
+            className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
+            onClick={onCancel}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Exit
+          </button>
+          <span className={s.rwsNavSep} />
+          <div className={s.rwsCrumbs}>
+            <span>Documents</span>
+            <span className={s.rwsCrumbsSep}>›</span>
+            <span>Rewrite</span>
+            <span className={s.rwsCrumbsSep}>›</span>
+            <span className={s.rwsCrumbsLast}>{breadcrumbLast}</span>
           </div>
+          <div className={s.rwsTopSpacer} />
+          <span className={s.rwsTopPill}>
+            <FileText />v1 · {wordCount.toLocaleString()} words
+          </span>
         </div>
 
-        {/* Body */}
-        <div className={`flex-1 overflow-y-auto ${s.scrollbar}`}>
-          <div className="mx-auto w-full max-w-5xl px-6 py-8 md:px-10">
-            {currentStep === "input" && (
-              <div className="space-y-6">
-                <SectionHeader
-                  icon={<FileText className="h-[14px] w-[14px]" />}
-                  eyebrow="Step 1"
-                  title="Paste or type your source text"
-                  description="Drop in the text you want to rewrite. You can refine it with options in the next step."
-                />
+        {/* Three-pane workspace */}
+        <div className={s.rwsWorkspace}>
+          <ScopeRail
+            text={text}
+            onTextChange={setText}
+            sourceTitle={deriveSourceTitle(text)}
+            wordCount={wordCount}
+            sections={sections}
+            customPrompt={customPrompt}
+            onCustomPromptChange={setCustomPrompt}
+            activePresets={activePresets}
+            onTogglePreset={togglePreset}
+            guardrailState={guardrailState}
+            onToggleGuardrail={toggleGuardrail}
+            onToggleSection={toggleSectionSelected}
+            error={error}
+            isProcessing={isProcessing}
+            selectedCount={selectedCount}
+            onRunRewrite={handleRunRewrite}
+          />
 
-                <div className={s.panel} style={{ padding: 20 }}>
-                  <textarea
-                    placeholder="Paste the text you want to rewrite…"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    className={s.textarea}
-                    style={{ minHeight: 220 }}
-                  />
-                  <div
-                    className="mt-3 flex items-center justify-between"
-                    style={{ fontSize: 12, color: "var(--ink-3)" }}
-                  >
-                    <span>
-                      {text.trim() ? `${text.trim().split(/\s+/).length} words` : "Empty"}
-                    </span>
-                    <span>{text.length} characters</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center justify-end gap-2">
-                  <button
-                    className={`${s.btn} ${s.btnOutline}`}
-                    onClick={onCancel}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className={`${s.btn} ${s.btnAccent} ${s.btnLg}`}
-                    onClick={() => setCurrentStep("options")}
-                    disabled={!text.trim()}
-                  >
-                    Next: Options
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
+          <main className={s.rwsPipe}>
+            {hasProposal && currentSection && currentSection.proposed.trim() ? (
+              <DiffPipeline
+                section={currentSection}
+                index={currentIndex}
+                total={sections.length}
+                parts={currentDiffParts}
+                onPrev={currentIndex > 0 ? goPrev : undefined}
+                onNext={
+                  currentIndex >= 0 && currentIndex < sections.length - 1
+                    ? goNext
+                    : undefined
+                }
+                onAcceptSection={handleAcceptCurrent}
+                onRejectSection={handleRejectCurrent}
+                disabled={isProcessing}
+              />
+            ) : (
+              <PipelineEmpty
+                hasText={!!text.trim()}
+                isProcessing={isProcessing}
+                selectedCount={selectedCount}
+              />
             )}
+          </main>
 
-            {currentStep === "options" && (
-              <div className="space-y-6">
-                <SectionHeader
-                  icon={<Settings className="h-[14px] w-[14px]" />}
-                  eyebrow="Step 2"
-                  title="Shape how it reads"
-                  description="Pick a tone, length, and audience. Add extra instructions if you have any."
-                />
-
-                {error && (
-                  <div className={`${s.banner} ${s.bannerDanger}`} style={{ padding: 14 }}>
-                    <p style={{ margin: 0, fontSize: 13, color: "var(--danger)" }}>
-                      {error}
-                    </p>
-                  </div>
-                )}
-
-                <div className={s.panel} style={{ padding: 22 }}>
-                  <OptionGroup
-                    label="Tone"
-                    value={options.tone}
-                    onChange={(tone) =>
-                      setOptions((prev) => ({
-                        ...prev,
-                        tone: tone as RewriteOptions["tone"],
-                      }))
-                    }
-                    options={[...TONE_OPTIONS]}
-                  />
-                  <hr className={s.hair} style={{ margin: "20px 0" }} />
-                  <OptionGroup
-                    label="Length"
-                    value={options.length}
-                    onChange={(length) =>
-                      setOptions((prev) => ({
-                        ...prev,
-                        length: length as RewriteOptions["length"],
-                      }))
-                    }
-                    options={[...LENGTH_OPTIONS]}
-                  />
-                  <hr className={s.hair} style={{ margin: "20px 0" }} />
-                  <OptionGroup
-                    label="Audience"
-                    value={options.audience}
-                    onChange={(audience) =>
-                      setOptions((prev) => ({
-                        ...prev,
-                        audience: audience as RewriteOptions["audience"],
-                      }))
-                    }
-                    options={[...AUDIENCE_OPTIONS]}
-                  />
-                  <hr className={s.hair} style={{ margin: "20px 0" }} />
-
-                  <div>
-                    <label className={s.label} style={{ marginBottom: 8 }}>
-                      Additional instructions
-                      <span
-                        style={{
-                          marginLeft: 6,
-                          fontSize: 11,
-                          fontWeight: 400,
-                          color: "var(--ink-3)",
-                        }}
-                      >
-                        (optional)
-                      </span>
-                    </label>
-                    <textarea
-                      className={s.textarea}
-                      placeholder="e.g. Keep bullet structure. Prefer active voice."
-                      value={options.customPrompt ?? ""}
-                      onChange={(e) =>
-                        setOptions((prev) => ({ ...prev, customPrompt: e.target.value }))
-                      }
-                      rows={3}
-                    />
-                  </div>
-                </div>
-
-                {/* Draft-mode toggle */}
-                <button
-                  type="button"
-                  onClick={() => setIsDraftMode((v) => !v)}
-                  className={s.panel}
-                  style={{
-                    padding: 16,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 14,
-                    cursor: "pointer",
-                    textAlign: "left",
-                    width: "100%",
-                    background: "var(--panel)",
-                    fontFamily: "inherit",
-                    color: "inherit",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 38,
-                      height: 22,
-                      borderRadius: 999,
-                      background: isDraftMode
-                        ? "var(--accent)"
-                        : "var(--panel-2)",
-                      border: isDraftMode
-                        ? "none"
-                        : "1px solid var(--line)",
-                      position: "relative",
-                      flexShrink: 0,
-                      transition: "all .2s",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 16,
-                        height: 16,
-                        borderRadius: 999,
-                        background: "white",
-                        position: "absolute",
-                        top: 2,
-                        left: isDraftMode ? 18 : 3,
-                        transition: "left .2s",
-                        boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-                      }}
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: "var(--ink)",
-                      }}
-                    >
-                      Draft mode
-                    </p>
-                    <p
-                      style={{
-                        margin: "2px 0 0",
-                        fontSize: 12,
-                        color: "var(--ink-3)",
-                        lineHeight: 1.55,
-                      }}
-                    >
-                      {isDraftMode
-                        ? "Preview the rewrite before applying — regenerate or reject if needed."
-                        : "Skip the preview and apply the rewrite straight to the document."}
-                    </p>
-                  </div>
-                </button>
-
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <button
-                    className={`${s.btn} ${s.btnOutline}`}
-                    onClick={() => setCurrentStep("input")}
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back
-                  </button>
-                  <button
-                    className={`${s.btn} ${s.btnAccent} ${s.btnLg}`}
-                    onClick={handleRewrite}
-                    disabled={isProcessing}
-                  >
-                    {isProcessing ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Rewriting…
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="h-4 w-4" />
-                        {isDraftMode ? "Generate draft" : "Generate & apply"}
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {currentStep === "preview" && (
-              <div className="space-y-6">
-                <SectionHeader
-                  icon={<Eye className="h-[14px] w-[14px]" />}
-                  eyebrow="Step 3"
-                  title="Review the rewrite"
-                  description="Accept it, regenerate with the same options, or go back and tweak options."
-                />
-
-                <RewritePreviewPanel
-                  originalText={text}
-                  proposedText={rewrittenText}
-                  onAccept={handleAcceptRewrite}
-                  onReject={onCancel}
-                  onTryAgain={handleRewrite}
-                  isRetrying={isProcessing}
-                />
-
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <button
-                    className={`${s.btn} ${s.btnOutline}`}
-                    onClick={handleRetry}
-                  >
-                    <RotateCw className="h-4 w-4" />
-                    Edit options
-                  </button>
-                  <div className="flex gap-2">
-                    <button className={`${s.btn} ${s.btnGhost}`} onClick={onCancel}>
-                      Discard
-                    </button>
-                    <button
-                      className={`${s.btn} ${s.btnAccent} ${s.btnLg}`}
-                      onClick={handleAcceptRewrite}
-                    >
-                      <Check className="h-4 w-4" />
-                      Push to rewrite
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {currentStep === "complete" && (
-              <div
-                className={`${s.banner} ${s.bannerSuccess} mx-auto`}
-                style={{
-                  padding: 32,
-                  maxWidth: 520,
-                  textAlign: "center",
-                }}
-              >
-                <div
-                  className={s.brandMark}
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: 14,
-                    margin: "0 auto 16px",
-                    background:
-                      "linear-gradient(135deg, var(--success) 0%, oklch(from var(--success) calc(l - 0.08) c h) 100%)",
-                    boxShadow:
-                      "0 6px 18px oklch(from var(--success) l c h / 0.4)",
-                  }}
-                >
-                  <CheckCircle className="h-6 w-6" />
-                </div>
-                <h2
-                  className={s.title}
-                  style={{ fontSize: 24, marginBottom: 8 }}
-                >
-                  Rewrite applied
-                </h2>
-                <p className={s.sub} style={{ marginBottom: 20 }}>
-                  Your text was rewritten and pushed into the editor.
-                </p>
-                <button className={`${s.btn} ${s.btnAccent}`} onClick={onCancel}>
-                  Close
-                </button>
-              </div>
-            )}
-          </div>
+          <ReviewRail
+            sections={sections}
+            currentSectionId={currentSection?.id ?? ""}
+            counts={counts}
+            acceptedPct={acceptedPct}
+            rejectedPct={rejectedPct}
+            hasProposal={hasProposal}
+            onSelect={setCurrentSectionId}
+            onAcceptOne={(id) => setSectionStatus(id, "accepted")}
+            onRejectOne={(id) => setSectionStatus(id, "rejected")}
+            onApply={handleApply}
+            onRejectAll={handleRejectAll}
+          />
         </div>
       </div>
     </LegalGeneratorTheme>
   );
 }
 
-// ─── Helpers ───────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Left pane — Scope rail
+// ─────────────────────────────────────────────────────────────────────────────
 
-function SectionHeader({
-  icon,
-  eyebrow,
-  title,
-  description,
-}: {
-  icon: React.ReactNode;
-  eyebrow: string;
-  title: string;
-  description: string;
-}) {
+interface ScopeRailProps {
+  text: string;
+  onTextChange: (t: string) => void;
+  sourceTitle: string;
+  wordCount: number;
+  sections: Section[];
+  customPrompt: string;
+  onCustomPromptChange: (t: string) => void;
+  activePresets: Set<string>;
+  onTogglePreset: (id: string) => void;
+  guardrailState: Record<string, boolean>;
+  onToggleGuardrail: (id: string) => void;
+  onToggleSection: (id: string) => void;
+  error: string | null;
+  isProcessing: boolean;
+  selectedCount: number;
+  onRunRewrite: () => void;
+}
+
+function ScopeRail({
+  text,
+  onTextChange,
+  sourceTitle,
+  wordCount,
+  sections,
+  customPrompt,
+  onCustomPromptChange,
+  activePresets,
+  onTogglePreset,
+  guardrailState,
+  onToggleGuardrail,
+  onToggleSection,
+  error,
+  isProcessing,
+  selectedCount,
+  onRunRewrite,
+}: ScopeRailProps) {
   return (
-    <div className="flex items-start gap-3">
-      <div className={s.brandMarkSm}>{icon}</div>
-      <div className="min-w-0 space-y-1">
-        <span className={s.eyebrow}>{eyebrow}</span>
-        <h2
-          style={{
-            margin: 0,
-            fontSize: 22,
-            fontWeight: 600,
-            color: "var(--ink)",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          {title}
-        </h2>
-        <p style={{ margin: 0, fontSize: 14, color: "var(--ink-2)", lineHeight: 1.55 }}>
-          {description}
+    <aside className={s.rwsCfg}>
+      <div className={s.rwsCfgHead}>
+        <h2 className={s.rwsCfgHeadTitle}>Rewrite scope</h2>
+        <p className={s.rwsCfgHeadSub}>
+          Drift will rewrite only the sections you choose, keeping defined
+          terms and citations intact.
         </p>
       </div>
+
+      {/* Source */}
+      <div className={s.rwsCfgSection}>
+        <h3 className={s.rwsCfgSectionH}>Source</h3>
+        <div className={s.rwsSourceItem}>
+          <div className={s.rwsSourceIcon}>
+            <FileText />
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div className={s.rwsSourceName}>{sourceTitle}</div>
+            <div className={s.rwsSourceMeta}>
+              v1 · {wordCount.toLocaleString()} words
+            </div>
+          </div>
+          <div className={s.rwsSourceUsed}>
+            {sections.length} §
+          </div>
+        </div>
+        <textarea
+          className={s.rwsTextarea}
+          style={{ marginTop: 10, minHeight: 120 }}
+          placeholder="Paste or type the source text here…"
+          value={text}
+          onChange={(e) => onTextChange(e.target.value)}
+        />
+      </div>
+
+      {/* Instruction */}
+      <div className={s.rwsCfgSection}>
+        <h3 className={s.rwsCfgSectionH}>Instruction</h3>
+        <textarea
+          className={s.rwsTextarea}
+          placeholder="Describe how you want it rewritten…"
+          value={customPrompt}
+          onChange={(e) => onCustomPromptChange(e.target.value)}
+        />
+        <div className={s.rwsPresets}>
+          {PRESETS.map((p) => {
+            const active = activePresets.has(p.id);
+            return (
+              <button
+                key={p.id}
+                type="button"
+                className={`${s.rwsPreset}${active ? ` ${s.rwsPresetActive}` : ""}`}
+                onClick={() => onTogglePreset(p.id)}
+              >
+                {p.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Sections to rewrite */}
+      {sections.length > 0 && (
+        <div className={s.rwsCfgSection}>
+          <h3 className={s.rwsCfgSectionH}>Sections to rewrite</h3>
+          <div className={s.rwsSectionList}>
+            {sections.map((sec) => {
+              const delta = sec.proposed.trim()
+                ? deriveDelta(sec.original, sec.proposed)
+                : "—";
+              return (
+                <label key={sec.id} className={s.rwsSectionCheck}>
+                  <input
+                    type="checkbox"
+                    checked={sec.selected}
+                    onChange={() => onToggleSection(sec.id)}
+                  />
+                  <span className={s.rwsSectionCheckLabel}>{sec.title}</span>
+                  <span className={s.rwsSectionDelta}>{delta}</span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Guardrails */}
+      <div className={s.rwsCfgSection}>
+        <h3 className={s.rwsCfgSectionH}>Guardrails</h3>
+        {GUARDRAILS.map((g) => {
+          const on = !!guardrailState[g.id];
+          return (
+            <div key={g.id} className={s.rwsToggleRow}>
+              <div>
+                <div className={s.rwsToggleLabel}>{g.label}</div>
+                <div className={s.rwsToggleSub}>{g.sub}</div>
+              </div>
+              <button
+                type="button"
+                aria-pressed={on}
+                aria-label={`${g.label}: ${on ? "on" : "off"}`}
+                className={`${s.rwsToggle}${on ? ` ${s.rwsToggleOn}` : ""}`}
+                onClick={() => onToggleGuardrail(g.id)}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Error */}
+      {error && (
+        <div className={s.rwsCfgSection}>
+          <div
+            style={{
+              fontSize: 12,
+              color: "var(--danger)",
+              padding: "8px 10px",
+              borderRadius: 8,
+              background: "oklch(from var(--danger) l c h / 0.08)",
+              border: "1px solid oklch(from var(--danger) l c h / 0.28)",
+              lineHeight: 1.5,
+            }}
+          >
+            {error}
+          </div>
+        </div>
+      )}
+
+      {/* CTA */}
+      <div className={s.rwsCta}>
+        <button
+          type="button"
+          className={s.rwsCtaBtn}
+          onClick={onRunRewrite}
+          disabled={isProcessing || !text.trim() || selectedCount === 0}
+        >
+          {isProcessing ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <Wand2 />
+          )}
+          {isProcessing
+            ? "Rewriting…"
+            : `Run rewrite · ${selectedCount} section${selectedCount === 1 ? "" : "s"}`}
+        </button>
+        <div className={s.rwsCtaMeta}>
+          ~10s · {wordCount.toLocaleString()} words
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Center pane — Diff pipeline (when there's a proposal for the current section)
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface DiffPipelineProps {
+  section: Section;
+  index: number;
+  total: number;
+  parts: DiffPart[];
+  onPrev?: () => void;
+  onNext?: () => void;
+  onAcceptSection: () => void;
+  onRejectSection: () => void;
+  disabled?: boolean;
+}
+
+function DiffPipeline({
+  section,
+  index,
+  total,
+  parts,
+  onPrev,
+  onNext,
+  onAcceptSection,
+  onRejectSection,
+  disabled = false,
+}: DiffPipelineProps) {
+  const changeCount = deriveChangeCount(parts);
+  const dotColor =
+    section.status === "accepted"
+      ? "var(--success)"
+      : section.status === "rejected"
+        ? "var(--danger)"
+        : section.status === "unchanged"
+          ? "var(--ink-4)"
+          : "var(--accent)";
+  const statusText =
+    section.status === "accepted"
+      ? "accepted"
+      : section.status === "rejected"
+        ? "rejected"
+        : section.status === "unchanged"
+          ? "unchanged"
+          : `${changeCount} change${changeCount === 1 ? "" : "s"} · pending review`;
+
+  return (
+    <>
+      <div className={s.rwsPipeHead}>
+        <div style={{ minWidth: 0 }}>
+          <h1 className={s.rwsPipeTitle}>
+            Section {index + 1} ·{" "}
+            <em>{sectionShortName(section.title)}</em>
+          </h1>
+          <p className={s.rwsPipeSub}>
+            <span
+              className={`${s.statusDot}${
+                section.status === "pending" ? "" : ` ${s.statusDotIdle}`
+              }`}
+              style={
+                {
+                  ["--dot-color" as string]: dotColor,
+                } as React.CSSProperties
+              }
+            />
+            {statusText}
+          </p>
+        </div>
+        <div className={s.rwsPipeNav}>
+          <button
+            type="button"
+            className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
+            onClick={onPrev}
+            disabled={!onPrev || disabled}
+          >
+            <ChevronLeft className="h-3.5 w-3.5" />
+            Prev
+          </button>
+          <span className={s.rwsNavCount}>
+            {index + 1} / {total}
+          </span>
+          <button
+            type="button"
+            className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
+            onClick={onNext}
+            disabled={!onNext || disabled}
+          >
+            Next
+            <ChevronRight className="h-3.5 w-3.5" />
+          </button>
+          <span className={s.rwsNavSep} />
+          <button
+            type="button"
+            className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
+            onClick={onRejectSection}
+            disabled={disabled || section.status === "rejected"}
+          >
+            <X className="h-3.5 w-3.5" />
+            Reject section
+          </button>
+          <button
+            type="button"
+            className={`${s.btn} ${s.btnAccent} ${s.btnSm}`}
+            onClick={onAcceptSection}
+            disabled={disabled || section.status === "accepted"}
+          >
+            <Check className="h-3.5 w-3.5" />
+            Accept section
+          </button>
+        </div>
+      </div>
+
+      <div className={s.rwsPipeBody}>
+        {/* Original pane */}
+        <div className={`${s.rwsPane} ${s.rwsPaneOriginal}`}>
+          <div className={s.rwsPaneEyebrow}>Original · v1</div>
+          <DiffProse parts={parts} mode="original" />
+        </div>
+
+        {/* Proposed pane */}
+        <div className={`${s.rwsPane} ${s.rwsPaneProposed}`}>
+          <div
+            className={`${s.rwsPaneEyebrow} ${s.rwsPaneEyebrowProposed}`}
+          >
+            Proposed · v2
+          </div>
+          <DiffProse parts={parts} mode="proposed" />
+
+          {changeCount > 0 && (
+            <div className={s.rwsWhyCard}>
+              <div className={s.rwsWhyHead}>
+                <Sparkles />
+                <span>Why this change</span>
+              </div>
+              {summarizeSection(parts)}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function DiffProse({
+  parts,
+  mode,
+}: {
+  parts: DiffPart[];
+  mode: "original" | "proposed";
+}) {
+  const isOriginal = mode === "original";
+  const visibleParts = parts.filter((p) =>
+    isOriginal ? !p.added : !p.removed,
+  );
+
+  const hasContent = visibleParts.some((p) => p.value.length > 0);
+  if (!hasContent) {
+    return (
+      <p
+        style={{
+          margin: 0,
+          fontSize: 13,
+          color: "var(--ink-4)",
+          fontStyle: "italic",
+        }}
+      >
+        {isOriginal ? "No source text in this section." : "The rewrite is empty."}
+      </p>
+    );
+  }
+
+  return (
+    <div
+      className={`${s.rwsPaneText}${isOriginal ? "" : ` ${s.rwsPaneTextProposed}`}`}
+      style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+    >
+      {visibleParts.map((part, i) => {
+        if (isOriginal && part.removed) {
+          return (
+            <span key={i} className={s.rwsHlDel}>
+              {part.value}
+            </span>
+          );
+        }
+        if (!isOriginal && part.added) {
+          return (
+            <span key={i} className={s.rwsHlAdd}>
+              {part.value}
+            </span>
+          );
+        }
+        return <span key={i}>{part.value}</span>;
+      })}
     </div>
   );
 }
 
-function OptionGroup<T extends string>({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string;
-  value: T;
-  onChange: (value: T) => void;
-  options: readonly { value: T; label: string; desc: string }[];
-}) {
+// ─────────────────────────────────────────────────────────────────────────────
+// Center pane — Empty state (before generation, or while generating)
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface PipelineEmptyProps {
+  hasText: boolean;
+  isProcessing: boolean;
+  selectedCount: number;
+}
+
+function PipelineEmpty({
+  hasText,
+  isProcessing,
+  selectedCount,
+}: PipelineEmptyProps) {
+  let title = "Ready to ";
+  let serif = "rewrite";
+  let sub: string;
+
+  if (isProcessing) {
+    title = "Drafting the ";
+    serif = "rewrite";
+    sub = "Drift is reading every selected section and proposing changes. This usually takes about 10 seconds.";
+  } else if (!hasText) {
+    title = "Paste a ";
+    serif = "source";
+    sub = "Drop in the text you want to rewrite using the source field on the left, then run the rewrite.";
+  } else if (selectedCount === 0) {
+    title = "Pick a ";
+    serif = "section";
+    sub = "Select at least one section in the left rail. Drift only rewrites the parts you ask for.";
+  } else {
+    sub = "Adjust the instruction and presets on the left, then click Run rewrite. Drift will lay the proposal out side-by-side with the source.";
+  }
+
   return (
-    <div>
-      <p
-        style={{
-          margin: "0 0 10px",
-          fontSize: 12,
-          fontWeight: 700,
-          color: "var(--ink-3)",
-          textTransform: "uppercase",
-          letterSpacing: "0.1em",
-        }}
-      >
-        {label}
-      </p>
-      <div
-        className="grid grid-cols-2 gap-2 md:grid-cols-3"
-      >
-        {options.map((opt) => {
-          const active = value === opt.value;
-          return (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => onChange(opt.value)}
-              style={{
-                textAlign: "left",
-                padding: "10px 12px",
-                borderRadius: 10,
-                border: active
-                  ? "1px solid var(--accent)"
-                  : "1px solid var(--line-2)",
-                background: active ? "var(--accent-soft)" : "var(--panel)",
-                cursor: "pointer",
-                transition: "all .15s",
-                boxShadow: active
-                  ? "0 0 0 3px var(--accent-glow)"
-                  : "0 1px 0 oklch(1 0 0 / 0.3) inset",
-                fontFamily: "inherit",
-                color: "inherit",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: active ? "var(--accent-ink)" : "var(--ink)",
-                  letterSpacing: "-0.005em",
-                }}
-              >
-                {opt.label}
-              </div>
-              <div
-                style={{
-                  fontSize: 11,
-                  marginTop: 2,
-                  color: active ? "var(--accent-ink)" : "var(--ink-3)",
-                  lineHeight: 1.4,
-                  opacity: active ? 0.85 : 1,
-                }}
-              >
-                {opt.desc}
-              </div>
-            </button>
-          );
-        })}
+    <div className={s.rwsPipeEmpty}>
+      <div className={s.rwsPipeEmptyMark}>
+        {isProcessing ? (
+          <Loader2 className="animate-spin" />
+        ) : (
+          <Sparkles />
+        )}
       </div>
+      <h1 className={s.rwsPipeEmptyTitle}>
+        {title}
+        <em>{serif}</em>
+      </h1>
+      <p className={s.rwsPipeEmptySub}>{sub}</p>
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Right pane — Review rail
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface ReviewRailProps {
+  sections: Section[];
+  currentSectionId: string;
+  counts: { acc: number; rej: number; pen: number; unc: number; total: number };
+  acceptedPct: number;
+  rejectedPct: number;
+  hasProposal: boolean;
+  onSelect: (id: string) => void;
+  onAcceptOne: (id: string) => void;
+  onRejectOne: (id: string) => void;
+  onApply: () => void;
+  onRejectAll: () => void;
+}
+
+function ReviewRail({
+  sections,
+  currentSectionId,
+  counts,
+  acceptedPct,
+  rejectedPct,
+  hasProposal,
+  onSelect,
+  onAcceptOne,
+  onRejectOne,
+  onApply,
+  onRejectAll,
+}: ReviewRailProps) {
+  const sectionLabel = `Review · ${counts.total} section${counts.total === 1 ? "" : "s"}`;
+  const subLabel = hasProposal
+    ? `${counts.acc} accepted · ${counts.rej} rejected · ${counts.pen} pending`
+    : `${counts.total} section${counts.total === 1 ? "" : "s"} ready · run to start review`;
+  const finalCta =
+    counts.acc === 0
+      ? "Apply 0 accepted → v2"
+      : `Apply ${counts.acc} accepted → v2`;
+  const finalApplyDisabled = counts.acc === 0;
+  const finalRejectDisabled = counts.pen === 0 && counts.acc === 0;
+
+  return (
+    <aside className={s.rwsOut}>
+      <div className={s.rwsOutHead}>
+        <div className={s.rwsOutTitle}>{sectionLabel}</div>
+        <div className={s.rwsOutSub}>{subLabel}</div>
+      </div>
+
+      {/* Progress bar */}
+      <div className={s.rwsProgress}>
+        <div
+          className={s.rwsProgressAccepted}
+          style={{ width: `${acceptedPct}%` }}
+        />
+        <div
+          className={s.rwsProgressRejected}
+          style={{ width: `${rejectedPct}%` }}
+        />
+      </div>
+
+      <div className={s.rwsOutBody}>
+        <span className={s.rwsOutEyebrow}>Sections</span>
+
+        {sections.length === 0 ? (
+          <p
+            style={{
+              fontSize: 12,
+              color: "var(--ink-3)",
+              margin: "8px 0 0",
+              lineHeight: 1.5,
+            }}
+          >
+            No sections yet — paste source text on the left to get started.
+          </p>
+        ) : (
+          sections.map((sec) => {
+            const isPending = sec.status === "pending";
+            const isAccepted = sec.status === "accepted";
+            const isRejected = sec.status === "rejected";
+            const isUnchanged = sec.status === "unchanged";
+            const dotColor = isAccepted
+              ? "var(--success)"
+              : isRejected
+                ? "var(--danger)"
+                : isUnchanged
+                  ? "var(--ink-4)"
+                  : "var(--accent)";
+            const metaColor = isAccepted
+              ? "var(--success)"
+              : isRejected
+                ? "var(--danger)"
+                : isUnchanged
+                  ? "var(--ink-4)"
+                  : "var(--ink-3)";
+            const meta = isUnchanged
+              ? "unchanged"
+              : isAccepted
+                ? `accepted · ${deriveDelta(sec.original, sec.proposed)}`
+                : isRejected
+                  ? `rejected · ${deriveDelta(sec.original, sec.proposed)}`
+                  : `pending · ${deriveDelta(sec.original, sec.proposed)}`;
+            const isActive = sec.id === currentSectionId;
+
+            return (
+              <button
+                key={sec.id}
+                type="button"
+                className={`${s.rwsReviewRow}${
+                  isActive ? ` ${s.rwsReviewRowActive}` : ""
+                }`}
+                onClick={() => onSelect(sec.id)}
+              >
+                <span
+                  className={`${s.rwsReviewDot}${
+                    isPending ? ` ${s.rwsReviewDotPulse}` : ""
+                  }`}
+                  style={
+                    {
+                      background: dotColor,
+                      ["--dot-color" as string]: dotColor,
+                    } as React.CSSProperties
+                  }
+                />
+                <span style={{ minWidth: 0 }}>
+                  <span className={s.rwsReviewName}>{sec.title}</span>
+                  <span
+                    className={s.rwsReviewMeta}
+                    style={{ display: "block", color: metaColor }}
+                  >
+                    {meta}
+                  </span>
+                </span>
+                {isPending && (
+                  <span className={s.rwsReviewActions}>
+                    <button
+                      type="button"
+                      className={s.rwsIconBtn}
+                      title="Reject section"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRejectOne(sec.id);
+                      }}
+                    >
+                      <X />
+                    </button>
+                    <button
+                      type="button"
+                      className={`${s.rwsIconBtn} ${s.rwsIconBtnSuccess}`}
+                      title="Accept section"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onAcceptOne(sec.id);
+                      }}
+                    >
+                      <Check />
+                    </button>
+                  </span>
+                )}
+              </button>
+            );
+          })
+        )}
+
+        {/* Final review */}
+        {hasProposal && (
+          <div className={s.rwsFinal}>
+            <div className={s.rwsFinalHead}>
+              <span className={s.rwsFinalTitle}>Final review</span>
+              <span className={s.rwsFinalScore}>
+                {counts.pen === 0 ? "ready" : "in progress"}
+              </span>
+            </div>
+            <div className={s.rwsFinalBody}>
+              {counts.pen === 0
+                ? "All sections reviewed. Apply the accepted proposals to produce v2."
+                : `${counts.pen} section${counts.pen === 1 ? "" : "s"} still pending. Accept or reject before applying.`}
+            </div>
+            <div className={s.rwsFinalActions}>
+              <button
+                type="button"
+                className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
+                onClick={onRejectAll}
+                disabled={finalRejectDisabled}
+              >
+                Reject all
+              </button>
+              <button
+                type="button"
+                className={`${s.btn} ${s.btnAccent} ${s.btnSm}`}
+                onClick={onApply}
+                disabled={finalApplyDisabled}
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                <Check className="h-3.5 w-3.5" />
+                {finalCta}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </aside>
   );
 }

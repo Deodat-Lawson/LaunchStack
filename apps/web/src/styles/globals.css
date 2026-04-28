@@ -1,3 +1,5 @@
+@import "./drift.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -152,6 +154,71 @@ html, body {
   --ok: oklch(0.62 0.14 150);
   --radius: 10px;
   --radius-lg: 14px;
+
+  /* Drift design system aliases — additive, no rename. New components use these
+     names; existing CSS modules keep working through the original names above. */
+  --bg-elev: var(--panel);
+  --bg-sunk: oklch(0.972 0.005 80);
+  --fg-1: var(--ink);
+  --fg-2: var(--ink-2);
+  --fg-3: var(--ink-3);
+  --fg-4: var(--ink-4);
+  --line-1: var(--line);
+  --line-dot: oklch(0.78 0.012 285);
+  --accent-hi: var(--accent-2);
+  --accent-fg: oklch(0.99 0.002 285);
+
+  --hue-magenta: oklch(0.70 0.22 340);
+  --hue-magenta-glow: oklch(0.70 0.22 340 / 0.35);
+  --hue-teal: oklch(0.72 0.18 200);
+  --hue-teal-glow: oklch(0.72 0.18 200 / 0.28);
+
+  --success: var(--ok);
+  --warn: oklch(0.78 0.17 80);
+  --info: oklch(0.64 0.14 235);
+
+  --shadow-1: 0 1px 2px oklch(0.2 0.02 285 / 0.04);
+  --shadow-2: 0 4px 12px oklch(0.2 0.02 285 / 0.06),
+              0 1px 2px oklch(0.2 0.02 285 / 0.04);
+  --shadow-3: 0 12px 32px oklch(0.2 0.02 285 / 0.08),
+              0 2px 6px oklch(0.2 0.02 285 / 0.05);
+
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-full: 9999px;
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+
+  --fs-display: clamp(40px, 5.2vw, 72px);
+  --fs-h1: clamp(32px, 3.6vw, 48px);
+  --fs-h2: 28px;
+  --fs-h3: 22px;
+  --fs-h4: 18px;
+  --fs-body: 15px;
+  --fs-small: 13px;
+  --fs-micro: 11px;
+  --lh-display: 1.02;
+  --lh-heading: 1.15;
+  --lh-body: 1.55;
+  --ls-tight: -0.02em;
+  --ls-tighter: -0.035em;
+  --ls-wide: 0.04em;
+
+  --font-sans: var(--font-inter-tight), var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
   color: var(--ink);
   background: var(--bg);
   font-feature-settings: "cv11", "ss01", "ss03";
@@ -178,6 +245,22 @@ html, body {
   --accent-ink: oklch(0.86 0.16 var(--accent-h));
   --scrim: oklch(0.05 0.02 290 / 0.72);
   --scrim-shadow: oklch(0.05 0.02 290 / 0.55);
+
+  /* Drift dark-mode aliases */
+  --bg-sunk: oklch(0.12 0.02 290);
+  --line-dot: oklch(0.55 0.02 285);
+  --accent-fg: oklch(0.14 0.02 290);
+  --hue-magenta: oklch(0.65 0.22 330);
+  --hue-magenta-glow: oklch(0.65 0.22 330 / 0.40);
+  --hue-teal: oklch(0.70 0.18 200);
+  --hue-teal-glow: oklch(0.70 0.18 200 / 0.32);
+  --warn: oklch(0.82 0.17 80);
+  --info: oklch(0.72 0.14 235);
+  --shadow-1: 0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-2: 0 4px 12px oklch(0 0 0 / 0.5),
+              0 1px 2px oklch(0 0 0 / 0.4);
+  --shadow-3: 0 12px 32px oklch(0 0 0 / 0.55),
+              0 2px 6px oklch(0 0 0 / 0.4);
 }
 
 .lsw-root .mono { font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace; }
@@ -197,7 +280,7 @@ html, body {
 /* ==========================================================================
    Legacy shim: when legacy shadcn/Tailwind components render inside `.lsw-root`
    (e.g. full-screen Studio feature pages that embed DocumentGenerator,
-   RewriteDiffView, DocumentSanityChecker, legacy DocumentViewer, NotesPanel),
+   RewriteDiffView, legacy DocumentViewer),
    override the shadcn HSL tokens with HSL approximations of Launchstack tokens
    so the legacy Tailwind classes (bg-background, text-foreground, border-border
    …) automatically match the new design. Purple utilities are re-mapped to the

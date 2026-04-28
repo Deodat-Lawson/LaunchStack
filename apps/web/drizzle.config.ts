@@ -1,5 +1,11 @@
+import { resolve } from "node:path";
+import dotenv from "dotenv";
 import { type Config } from "drizzle-kit";
 
+// drizzle-kit bundles this config and may execute it in a context where
+// `import.meta.url` is unreliable, so resolve from cwd. db:push always runs
+// from apps/web/, putting the repo-root .env two levels up.
+dotenv.config({ path: resolve(process.cwd(), "../../.env") });
 
 export default {
   schema: "../../packages/core/src/db/schema.ts",

@@ -16,6 +16,15 @@ export interface StudioMenuProps {
 
 const COMPANY_ROLES = new Set(["employer", "owner"]);
 
+const WORKSPACE_LINKS = [
+  { label: "Home", href: "/employer/home" },
+  { label: "Documents", href: "/employer/documents" },
+  { label: "Marketing", href: "/employer/tools/marketing-pipeline" },
+  { label: "Workflows", href: "/employer/tools/repo-explainer" },
+  { label: "Library", href: "/employer/upload" },
+  { label: "Settings", href: "/employer/settings" },
+];
+
 /**
  * Studio "header" button + hover mega-menu — lives in the AskPanel topbar.
  * Surfaces every Studio feature (Tools + Management) grouped by section.
@@ -48,6 +57,11 @@ export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProp
     } else if (href) {
       router.push(href);
     }
+  };
+
+  const pickWorkspaceLink = (href: string) => {
+    setMenuOpen(false);
+    router.push(href);
   };
 
   return (
@@ -111,6 +125,48 @@ export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProp
             <div style={{ fontSize: 13, fontWeight: 600 }}>Studio</div>
             <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
               Tools and management for your workspace
+            </div>
+          </div>
+
+          <div style={{ marginTop: 2 }}>
+            <div
+              className="mono"
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                color: "var(--ink-3)",
+                textTransform: "uppercase",
+                padding: "6px 10px 4px",
+              }}
+            >
+              Workspace
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 4, padding: "0 2px 4px" }}>
+              {WORKSPACE_LINKS.map((link) => (
+                <button
+                  key={link.href}
+                  onClick={() => pickWorkspaceLink(link.href)}
+                  style={{
+                    padding: "6px 10px",
+                    borderRadius: 7,
+                    fontSize: 12,
+                    fontWeight: 500,
+                    color: "var(--ink-2)",
+                    transition: "background 120ms, color 120ms",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "var(--line-2)";
+                    e.currentTarget.style.color = "var(--ink)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "var(--ink-2)";
+                  }}
+                >
+                  {link.label}
+                </button>
+              ))}
             </div>
           </div>
 

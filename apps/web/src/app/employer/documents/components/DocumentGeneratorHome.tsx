@@ -168,7 +168,7 @@ export function DocumentGeneratorHome({
       {/* Search + filter strip */}
       <div className="flex-shrink-0 px-6 pt-4 md:px-10">
         <div className="mx-auto w-full max-w-7xl space-y-3">
-          <div className="relative">
+          <div className={`${s.searchWrap} relative`}>
             <Search
               className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2"
               style={{ color: 'var(--ink-3)' }}
@@ -185,6 +185,7 @@ export function DocumentGeneratorHome({
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{ paddingLeft: 40 }}
             />
+            <kbd className={s.kbd}>⌘K</kbd>
           </div>
 
           {viewMode === 'new' && (

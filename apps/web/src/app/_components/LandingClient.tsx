@@ -1239,7 +1239,7 @@ const countStyle = (active: boolean): React.CSSProperties => ({
 });
 const connGridInline: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
   gap: 12,
 };
 const connStyle: React.CSSProperties = {
@@ -1279,7 +1279,7 @@ const connTagStyle = (soon: boolean): React.CSSProperties => ({
 });
 const fmtGridInline: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(6, 1fr)',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(108px, 1fr))',
   gap: 10,
 };
 const fmtStyle: React.CSSProperties = {

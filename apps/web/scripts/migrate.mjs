@@ -21,7 +21,8 @@ import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
 import postgres from "postgres";
 
-dotenv.config();
+const __dirnameForEnv = dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: join(__dirnameForEnv, "..", "..", "..", ".env") });
 
 const url = process.env.DATABASE_URL;
 if (!url) {

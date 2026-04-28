@@ -18,6 +18,13 @@ const config: NextConfig = {
     ? path.join(__dirname, "../../")
     : undefined,
 
+  // Pin the Turbopack workspace root to the monorepo root. Without this Next
+  // walks up looking for a lockfile and can land on a stray ~/package-lock.json,
+  // which breaks module resolution under `next dev --turbo`.
+  turbopack: {
+    root: path.join(__dirname, "../../"),
+  },
+
   experimental: {
     middlewareClientMaxBodySize: "128mb",
   },

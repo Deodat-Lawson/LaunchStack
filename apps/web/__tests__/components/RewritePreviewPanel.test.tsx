@@ -5,22 +5,10 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
-jest.mock("react-markdown", () => {
-  return function ReactMarkdown({ children }: { children: string }) {
-    let processed = children.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    processed = processed.replace(/\*(.*?)\*/g, "<em>$1</em>");
-    return <div dangerouslySetInnerHTML={{ __html: processed }} />;
-  };
-});
-
-jest.mock("remark-gfm", () => () => {});
-jest.mock("remark-math", () => () => {});
-jest.mock("rehype-katex", () => () => {});
-
 import { RewritePreviewPanel } from "~/app/employer/documents/components/generator/RewritePreviewPanel";
 
 describe("RewritePreviewPanel", () => {
-  it("renders before/after diff and Push to Rewrite/Reject/Regenerate buttons", () => {
+  it("renders side-by-side diff with Accept/Reject/Regenerate controls", () => {
     const onAccept = jest.fn();
     const onReject = jest.fn();
     const onTryAgain = jest.fn();
@@ -35,12 +23,15 @@ describe("RewritePreviewPanel", () => {
       />
     );
 
-    expect(screen.getByText("Push to rewrite")).toBeInTheDocument();
-    expect(screen.getByText("Reject")).toBeInTheDocument();
+    expect(screen.getByText("Accept section")).toBeInTheDocument();
+    expect(screen.getByText("Reject section")).toBeInTheDocument();
     expect(screen.getByText("Regenerate")).toBeInTheDocument();
+    // Both panes show their eyebrow labels
+    expect(screen.getByText("Original")).toBeInTheDocument();
+    expect(screen.getByText("Proposed")).toBeInTheDocument();
   });
 
-  it("calls onAccept when Push to Rewrite is clicked", async () => {
+  it("calls onAccept when Accept section is clicked", async () => {
     const onAccept = jest.fn();
     const onReject = jest.fn();
     const onTryAgain = jest.fn();
@@ -55,11 +46,11 @@ describe("RewritePreviewPanel", () => {
       />
     );
 
-    await userEvent.click(screen.getByText("Push to rewrite"));
+    await userEvent.click(screen.getByText("Accept section"));
     expect(onAccept).toHaveBeenCalledTimes(1);
   });
 
-  it("calls onReject when Reject is clicked", async () => {
+  it("calls onReject when Reject section is clicked", async () => {
     const onAccept = jest.fn();
     const onReject = jest.fn();
     const onTryAgain = jest.fn();
@@ -74,7 +65,7 @@ describe("RewritePreviewPanel", () => {
       />
     );
 
-    await userEvent.click(screen.getByText("Reject"));
+    await userEvent.click(screen.getByText("Reject section"));
     expect(onReject).toHaveBeenCalledTimes(1);
   });
 
@@ -97,24 +88,22 @@ describe("RewritePreviewPanel", () => {
     expect(onTryAgain).toHaveBeenCalledTimes(1);
   });
 
-  it("renders markdown formatting in clean view", async () => {
+  it("hides the Why-this-change card when nothing changed", () => {
     const onAccept = jest.fn();
     const onReject = jest.fn();
     const onTryAgain = jest.fn();
 
     render(
       <RewritePreviewPanel
-        originalText="Plain text"
-        proposedText="**Bold** and *italic*"
+        originalText="identical text"
+        proposedText="identical text"
         onAccept={onAccept}
         onReject={onReject}
         onTryAgain={onTryAgain}
       />
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /clean view/i }));
-
-    expect(screen.getByText("Bold", { selector: "strong" })).toBeInTheDocument();
-    expect(screen.getByText("italic", { selector: "em" })).toBeInTheDocument();
+    expect(screen.queryByText("Why this change")).not.toBeInTheDocument();
+    expect(screen.getByText("no edits · matches source")).toBeInTheDocument();
   });
 });

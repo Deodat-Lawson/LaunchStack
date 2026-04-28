@@ -1367,116 +1367,78 @@
     top: auto !important;
 }
 
-/* ---------------- Pipeline stepper ---------------- */
+/* ---------------- Pipeline stepper (Drift redesign) ----------------
+   20px bullets with a 1.5px rail running through them. Done = accent fill,
+   active = pulsing ring, pending = hairline. Time column on the right is
+   mono. Data preview is a soft mono key-value block. */
 
 .pipelineStepper {
     display: flex;
     flex-direction: column;
     gap: 0;
-    padding: 0.75rem 0;
+    padding: 0.5rem 0 0.25rem;
 }
 
 .stepperItem {
-    display: flex;
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    gap: 14px;
     align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.45rem 0;
+    padding: 12px 0;
     position: relative;
 }
 
 .stepperItem:not(:last-child)::after {
     content: '';
     position: absolute;
-    left: 0.5rem;
-    top: 1.6rem;
-    bottom: -0.2rem;
-    width: 2px;
+    left: 9px;
+    top: 30px;
+    bottom: -12px;
+    width: 1.5px;
     background: var(--line);
     transition: background 0.3s ease;
 }
 
-.stepperCompleted:not(:last-child)::after {
-    background: var(--success);
-}
-
+.stepperCompleted:not(:last-child)::after { background: var(--accent); }
 .stepperActive:not(:last-child)::after {
-    background: linear-gradient(to bottom, var(--accent) 30%, var(--line-2) 100%);
+    background: linear-gradient(to bottom, var(--accent) 30%, var(--line) 100%);
+}
+.stepperSkipped:not(:last-child)::after { background: var(--line); opacity: 0.4; }
+.stepperFailed:not(:last-child)::after {
+    background: color-mix(in oklch, var(--danger) 50%, transparent);
 }
 
 .stepperIndicator {
-    width: 1.125rem;
-    height: 1.125rem;
-    display: flex;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     flex-shrink: 0;
-    margin-top: 0.1rem;
+    background: var(--bg);
+    border: 1.5px solid var(--line);
+    color: var(--ink-3);
     position: relative;
     z-index: 1;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .stepperPending .stepperIndicator {
     color: var(--ink-3);
-    opacity: 0.45;
 }
 
 .stepperActive .stepperIndicator {
+    background: color-mix(in oklch, var(--accent) 12%, var(--panel));
+    border-color: var(--accent);
     color: var(--accent);
+    animation: stepperPulse 1.6s ease-in-out infinite;
 }
 
 .stepperCompleted .stepperIndicator {
-    color: var(--success);
-}
-
-.stepperContent {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    min-width: 0;
-}
-
-.stepperLabel {
-    font-size: 0.85rem;
-    font-weight: 500;
-    line-height: 1.35;
-    color: var(--ink);
-}
-
-.stepperPending .stepperLabel {
-    color: var(--ink-3);
-    opacity: 0.6;
-}
-
-.stepperActive .stepperLabel {
-    color: var(--ink);
-    font-weight: 600;
-}
-
-.stepperCompleted .stepperLabel {
-    color: var(--ink);
-}
-
-.stepperMeta {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-}
-
-.stepperDuration {
-    font-size: 0.7rem;
-    color: var(--ink-2);
-    font-variant-numeric: tabular-nums;
-    background: var(--success-soft);
-    padding: 0.05rem 0.35rem;
-    border-radius: 5px;
-}
-
-.stepperDetail {
-    font-size: 0.7rem;
-    color: var(--ink-3);
-    font-style: italic;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
 }
 
 .stepperSkipped .stepperIndicator {
@@ -1484,48 +1446,161 @@
     opacity: 0.55;
 }
 
+.stepperFailed .stepperIndicator {
+    color: var(--danger);
+    border-color: color-mix(in oklch, var(--danger) 50%, transparent);
+}
+
+@keyframes stepperPulse {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+    50%      { box-shadow: 0 0 0 6px transparent; }
+}
+
+.stepperContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stepperLabel {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+}
+
+.stepperPending .stepperLabel { color: var(--ink-3); }
+.stepperActive .stepperLabel { color: var(--ink); font-weight: 600; }
 .stepperSkipped .stepperLabel {
     color: var(--ink-3);
     text-decoration: line-through;
     opacity: 0.7;
 }
 
-.stepperSkipped:not(:last-child)::after {
-    background: var(--line);
-    opacity: 0.4;
+.stepperMeta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
 }
 
-.stepperFailed .stepperIndicator {
-    color: var(--danger);
+.stepperDuration {
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
 }
 
-.stepperFailed .stepperLabel {
-    color: var(--ink);
-    opacity: 0.85;
+.stepperDetail {
+    font-size: 12px;
+    color: var(--ink-3);
+    line-height: 1.5;
 }
 
-.stepperFailed:not(:last-child)::after {
-    background: color-mix(in oklch, var(--danger) 50%, transparent);
+/* "∥ parallel" pill — mono uppercase, hairline */
+.stepperParallelTag {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    color: var(--ink-3);
+    background: var(--panel-2);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
+.stepperTime {
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+    align-self: flex-start;
+    padding-top: 4px;
+    white-space: nowrap;
+}
+
+/* Step data preview — mono key/value block */
+.stepperData {
+    margin-top: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--panel-2);
+    border: 1px solid var(--line-2);
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-2);
+    line-height: 1.6;
+}
+
+.stepperDataRow {
+    display: flex;
+    gap: 10px;
+}
+
+.stepperDataKey {
+    color: var(--ink-3);
+    min-width: 96px;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+}
+
+.stepperDataValue {
+    color: var(--ink-2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Stepper header (top progress bar) */
 .stepperHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    gap: 12px;
+    margin-bottom: 10px;
     padding: 0 0.1rem;
 }
 
 .stepperProgress {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--ink);
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-2);
+    letter-spacing: 0.02em;
 }
 
 .stepperElapsed {
-    font-size: 0.75rem;
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
     color: var(--ink-3);
     font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+}
+
+.stepperProgressBar {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--line-2);
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.stepperProgressFill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(to right, var(--accent), oklch(0.65 0.22 320));
+    transition: width 600ms ease;
+}
+
+.stepperProgressFillComplete {
+    background: var(--success);
 }
 
 /* ---------------- Thinking stream (Claude-style) ---------------- */
@@ -2258,4 +2333,268 @@
 :global([data-theme="dark"]) .platformLogoX {
     background: #0a0a14;
     box-shadow: 0 0 0 1px var(--line);
+}
+
+/* ====================================================================
+   Drift redesign primitives
+   Tightened look: flat accent buttons, soft translucent cards, mono
+   eyebrows and metadata, score pills, AI-suggestion gradient cards.
+   These coexist with the existing classes; legacy gradients are
+   relaxed below where they read as too heavy next to the new ones.
+   ==================================================================== */
+
+/* Mono eyebrow — uppercase 10–11px, 0.08em tracking (Drift voice) */
+.eyebrow {
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    font-weight: 500;
+}
+
+/* Score pill — mono numeric with colored dot */
+.scoreBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
+    background: var(--panel);
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.scoreBadge::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+.scoreBadgeGood {
+    color: var(--success);
+    border-color: oklch(0.78 0.10 145 / 0.5);
+}
+
+.scoreBadgeWarn {
+    color: var(--warn);
+    border-color: oklch(0.80 0.13 75 / 0.5);
+}
+
+.scoreBadgeNeutral {
+    color: var(--ink-2);
+    border-color: var(--line-2);
+}
+
+/* AI suggestion card — soft violet→magenta wash */
+.aiCard {
+    margin-top: 0.75rem;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, oklch(0.97 0.02 285) 0%, oklch(0.96 0.03 340) 100%);
+    border: 1px solid oklch(0.85 0.05 285);
+    position: relative;
+    overflow: hidden;
+}
+
+:global(.dark) .aiCard,
+:global([data-theme="dark"]) .aiCard {
+    background: linear-gradient(135deg, oklch(0.26 0.05 285) 0%, oklch(0.26 0.06 340) 100%);
+    border-color: oklch(0.40 0.08 285);
+}
+
+.aiCardHead {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.aiCardTitle {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: -0.005em;
+}
+
+.aiCardTitle svg {
+    width: 12px;
+    height: 12px;
+}
+
+.aiCardBody {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.5;
+}
+
+.aiCardActions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+/* Variant pill tabs — small mono, hairline, subtle hover */
+.variantTabs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--line-2);
+    background: color-mix(in oklch, var(--panel) 60%, transparent);
+    backdrop-filter: blur(8px);
+}
+
+.variantTab {
+    padding: 4px 11px;
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid var(--line-2);
+    color: var(--ink-3);
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+    font-family: inherit;
+}
+
+.variantTabActive {
+    background: var(--panel-2);
+    color: var(--ink);
+    border-color: var(--line);
+}
+
+.variantTab:hover:not(.variantTabActive) {
+    color: var(--ink-2);
+    border-color: var(--line);
+}
+
+/* Subtler generate button — drop the heavy gradient + glow halo
+   in favor of a flat accent fill (Drift "no fuss"). */
+.generateButton,
+.cfgCtaBtn {
+    background: var(--accent);
+    box-shadow: none;
+}
+
+.generateButton:hover:not(:disabled),
+.cfgCtaBtn:hover:not(:disabled) {
+    background: var(--accent-2);
+    transform: none;
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.generateButton:active:not(:disabled),
+.cfgCtaBtn:active:not(:disabled) {
+    transform: translateY(0.5px) scale(0.995);
+    box-shadow: none;
+}
+
+.actionPrimary,
+.copyButton,
+.confirmBarYes {
+    background: var(--accent);
+    box-shadow: none;
+}
+
+.actionPrimary:hover:not(:disabled),
+.copyButton:hover:not(:disabled) {
+    background: var(--accent-2);
+    transform: none;
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.actionPrimary:active:not(:disabled),
+.copyButton:active:not(:disabled) {
+    transform: translateY(0.5px) scale(0.995);
+    box-shadow: none;
+}
+
+.confirmBarYes {
+    background: var(--accent);
+    box-shadow: none;
+}
+
+.confirmBarYes:hover { background: var(--accent-2); transform: none; }
+
+/* Platform card hover — cleaner translate + smaller shadow */
+.platformCard:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px oklch(0 0 0 / 0.06);
+    background: var(--panel);
+}
+
+/* Cleaner translucent cards (Drift card primitive) */
+.promptCard,
+.assistantCard,
+.platformShell,
+.workspaceShell,
+.sessionPanel {
+    background: color-mix(in oklch, var(--panel) 82%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.platformPreviewCard {
+    background: color-mix(in oklch, var(--panel) 90%, transparent);
+    backdrop-filter: blur(8px);
+}
+
+/* How-it-works numbers — flatten the gradient to match flat-accent buttons */
+.howItWorksNumber {
+    background: var(--accent);
+    box-shadow: none;
+}
+
+/* Soft chip-button (used by promptChip) — match Drift's outline chip */
+.promptChip:hover {
+    border-color: var(--line);
+    background: var(--panel-2);
+    color: var(--ink);
+}
+
+/* Output rail header eyebrow */
+.outputEyebrow {
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    margin: 0 0 8px;
+    font-weight: 500;
+}
+
+/* Claim source list (verified post-claim provenance) */
+.claimsBlock {
+    margin-top: 0.875rem;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--panel-2);
+    border: 1px solid var(--line-2);
+}
+
+.claimsBlockHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.claimsBlockTitle {
+    font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, "SF Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    color: var(--ink-2);
 }

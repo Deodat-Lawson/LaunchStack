@@ -419,7 +419,16 @@ export function WorkspaceShell() {
   const initials = initialsOf(user?.firstName, user?.lastName, userEmail);
 
   return (
-    <div style={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden" }}>
+    <div
+      data-drift-immersive="true"
+      style={{
+        display: "flex",
+        height: "100vh",
+        width: "100%",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
       <SourceRail
         sources={sources}
         folders={folders}

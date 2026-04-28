@@ -273,18 +273,22 @@
 /* ---------------- HERO ---------------- */
 .hero {
   position: relative;
-  min-height: 100vh;
-  padding: 120px 32px 60px;
+  min-height: clamp(620px, 88vh, 960px);
+  padding: clamp(96px, 13vh, 140px) clamp(20px, 3vw, 32px) clamp(40px, 6vh, 72px);
   display: grid;
   grid-template-columns: 1.05fr 1fr;
-  gap: 48px;
-  max-width: 1400px;
+  gap: clamp(28px, 3.5vw, 56px);
+  max-width: min(1400px, 96vw);
   margin: 0 auto;
   align-items: center;
   overflow: visible;
 }
 @media (max-width: 1040px) {
-  .hero { grid-template-columns: 1fr; padding-top: 100px; }
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: clamp(88px, 11vh, 110px);
+    min-height: 0;
+  }
 }
 
 .heroBg {
@@ -365,7 +369,8 @@
 /* ---------------- STAGE (hero illustration) ---------------- */
 .stage {
   position: relative; z-index: 1;
-  height: min(640px, 80vh); min-height: 520px;
+  height: clamp(440px, 72vh, 680px);
+  min-height: min(520px, 64vh);
   border-radius: 22px;
   background:
     radial-gradient(ellipse at 50% 40%, oklch(from var(--accent) l c h / 0.05) 0%, transparent 70%),
@@ -514,9 +519,9 @@
 }
 
 /* ---------------- SECTIONS ---------------- */
-.section { padding: 110px 32px; position: relative; }
-.sectionTight { padding: 80px 32px; position: relative; }
-.container { max-width: 1180px; margin: 0 auto; }
+.section { padding: clamp(64px, 9vh, 120px) clamp(20px, 3vw, 32px); position: relative; }
+.sectionTight { padding: clamp(48px, 6.5vh, 88px) clamp(20px, 3vw, 32px); position: relative; }
+.container { max-width: min(1180px, 100%); margin: 0 auto; }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
   font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
@@ -664,8 +669,8 @@
 
 /* FINAL CTA */
 .finalCta {
-  margin: 72px 32px 32px;
-  padding: 80px 32px; border-radius: 28px;
+  margin: clamp(48px, 7vh, 80px) clamp(16px, 2.4vw, 32px) clamp(24px, 3.5vh, 40px);
+  padding: clamp(48px, 8vh, 96px) clamp(24px, 3.4vw, 48px); border-radius: 28px;
   background:
     radial-gradient(ellipse 70% 70% at 50% 50%, var(--accent-glow) 0%, transparent 70%),
     linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
@@ -686,8 +691,8 @@
 
 /* OPEN SOURCE */
 .oss {
-  margin-top: 36px;
-  padding: 40px;
+  margin-top: clamp(24px, 4vh, 40px);
+  padding: clamp(28px, 4vw, 48px);
   border-radius: 22px;
   background:
     radial-gradient(ellipse 70% 100% at 0% 0%, var(--accent-glow) 0%, transparent 55%),
@@ -750,9 +755,9 @@
 
 /* FOOTER */
 .footer {
-  padding: 52px 32px 32px;
+  padding: clamp(36px, 6vh, 64px) clamp(20px, 3vw, 32px) clamp(20px, 3vh, 36px);
   display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 36px;
+  gap: clamp(24px, 3vw, 40px);
   border-top: 1px solid var(--line-2);
   color: var(--ink-3); font-size: 14px;
 }
@@ -780,8 +785,8 @@
 .statsStrip {
   border-top: 1px solid var(--line-2);
   border-bottom: 1px solid var(--line-2);
-  padding: 36px 32px;
-  margin: 24px 0;
+  padding: clamp(24px, 4vh, 44px) clamp(20px, 3vw, 32px);
+  margin: clamp(16px, 2.5vh, 32px) 0;
 }
 .statsGrid {
   max-width: 1100px; margin: 0 auto;
@@ -829,7 +834,7 @@
 /* Generic reusable page styles */
 .pageShell { position: relative; z-index: 1; }
 .pageHero {
-  padding: 140px 32px 60px;
+  padding: clamp(108px, 15vh, 160px) clamp(20px, 3vw, 32px) clamp(40px, 6vh, 72px);
   max-width: 1180px; margin: 0 auto;
   position: relative; z-index: 2;
 }

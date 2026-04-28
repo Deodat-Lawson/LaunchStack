@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { diffWords } from "diff";
-import { Check, X, RotateCw, Eye, EyeOff, ArrowLeftRight } from "lucide-react";
-import MarkdownMessage from "~/app/_components/MarkdownMessage";
+import { Check, X, RotateCw, Sparkles } from "lucide-react";
 import { legalTheme as s } from "../LegalGeneratorTheme";
 
 export interface RewritePreviewProps {
@@ -15,7 +14,18 @@ export interface RewritePreviewProps {
   isRetrying?: boolean;
 }
 
-type ViewMode = "diff" | "sidebyside" | "clean";
+/* Drift redesign palette — matches `redesign-rewrite.jsx` byte-for-byte. */
+const REMOVAL_BG = "oklch(0.94 0.06 25 / 0.45)";
+const REMOVAL_DECORATION = "oklch(0.55 0.16 25 / 0.7)";
+const ADDITION_BG = "oklch(0.92 0.10 145 / 0.4)";
+const PROPOSED_PANE_TINT =
+  "color-mix(in oklch, oklch(0.78 0.10 145) 4%, transparent)";
+
+interface DiffPart {
+  value: string;
+  added?: boolean;
+  removed?: boolean;
+}
 
 export function RewritePreviewPanel({
   originalText,
@@ -25,213 +35,81 @@ export function RewritePreviewPanel({
   onTryAgain,
   isRetrying = false,
 }: RewritePreviewProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("sidebyside");
   const safeOriginal = typeof originalText === "string" ? originalText : "";
   const safeProposed = typeof proposedText === "string" ? proposedText : "";
-  const changes = diffWords(safeOriginal, safeProposed);
+  const parts: DiffPart[] = diffWords(safeOriginal, safeProposed);
 
-  const stats = {
-    wordsOriginal: safeOriginal.trim() ? safeOriginal.split(/\s+/).length : 0,
-    wordsRewritten: safeProposed.trim() ? safeProposed.split(/\s+/).length : 0,
-    charactersOriginal: safeOriginal.length,
-    charactersRewritten: safeProposed.length,
-    changes: changes.filter((part) => part.added || part.removed).length,
-  };
-
-  const wordDelta = stats.wordsRewritten - stats.wordsOriginal;
-
-  const paneStyle: React.CSSProperties = {
-    maxHeight: 360,
-    overflowY: "auto",
-    padding: 14,
-    borderRadius: 12,
-    fontSize: 13,
-    lineHeight: 1.65,
-    color: "var(--ink)",
-    background: "var(--panel)",
-    border: "1px solid var(--line-2)",
-  };
-
-  const renderDiffView = () => (
-    <div
-      style={{
-        ...paneStyle,
-        fontFamily:
-          'ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", monospace',
-        background: "var(--panel-2)",
-      }}
-    >
-      {changes.map((part, i) => {
-        if (part.added) {
-          return (
-            <span
-              key={i}
-              style={{
-                background: "oklch(from var(--success) l c h / 0.18)",
-                color: "var(--success)",
-                padding: "0 2px",
-                borderRadius: 3,
-                fontWeight: 500,
-              }}
-            >
-              {part.value}
-            </span>
-          );
-        }
-        if (part.removed) {
-          return (
-            <span
-              key={i}
-              style={{
-                background: "oklch(from var(--danger) l c h / 0.15)",
-                color: "var(--danger)",
-                padding: "0 2px",
-                borderRadius: 3,
-                textDecoration: "line-through",
-              }}
-            >
-              {part.value}
-            </span>
-          );
-        }
-        return (
-          <span key={i} style={{ color: "var(--ink-2)" }}>
-            {part.value}
-          </span>
-        );
-      })}
-    </div>
-  );
-
-  const renderSideBySideView = () => (
-    <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-      <div
-        style={{
-          padding: 14,
-          borderRadius: 12,
-          border: "1px solid oklch(from var(--danger) l c h / 0.28)",
-          background: "oklch(from var(--danger) l c h / 0.05)",
-        }}
-      >
-        <div
-          className="mb-2 flex items-center gap-2"
-          style={{ fontSize: 12 }}
-        >
-          <span
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: 999,
-              background: "var(--danger)",
-              boxShadow: "0 0 0 3px oklch(from var(--danger) l c h / 0.2)",
-            }}
-          />
-          <span style={{ fontWeight: 600, color: "var(--ink)" }}>
-            Original
-          </span>
-          <span style={{ color: "var(--ink-3)", marginLeft: "auto" }}>
-            {stats.wordsOriginal}w · {stats.charactersOriginal}c
-          </span>
-        </div>
-        <div
-          style={{
-            maxHeight: 340,
-            overflowY: "auto",
-            fontSize: 13,
-            lineHeight: 1.6,
-            color: "var(--ink-2)",
-          }}
-        >
-          <MarkdownMessage
-            content={safeOriginal}
-            className="prose prose-sm dark:prose-invert max-w-none"
-          />
-        </div>
-      </div>
-
-      <div
-        style={{
-          padding: 14,
-          borderRadius: 12,
-          border: "1px solid oklch(from var(--success) l c h / 0.3)",
-          background: "oklch(from var(--success) l c h / 0.06)",
-        }}
-      >
-        <div
-          className="mb-2 flex items-center gap-2"
-          style={{ fontSize: 12 }}
-        >
-          <span
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: 999,
-              background: "var(--success)",
-              boxShadow: "0 0 0 3px oklch(from var(--success) l c h / 0.2)",
-            }}
-          />
-          <span style={{ fontWeight: 600, color: "var(--ink)" }}>
-            Rewritten
-          </span>
-          <span style={{ color: "var(--ink-3)", marginLeft: "auto" }}>
-            {stats.wordsRewritten}w · {stats.charactersRewritten}c
-          </span>
-        </div>
-        <div
-          style={{
-            maxHeight: 340,
-            overflowY: "auto",
-            fontSize: 13,
-            lineHeight: 1.6,
-            color: "var(--ink)",
-          }}
-        >
-          <MarkdownMessage
-            content={safeProposed}
-            className="prose prose-sm dark:prose-invert max-w-none"
-          />
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderCleanView = () => (
-    <div style={paneStyle}>
-      <MarkdownMessage
-        content={safeProposed}
-        className="prose prose-sm dark:prose-invert max-w-none"
-      />
-    </div>
-  );
+  const changeCount = parts.filter((p) => p.added === true || p.removed === true).length;
+  const subtitle =
+    changeCount === 0
+      ? "no edits · matches source"
+      : `${changeCount} change${changeCount === 1 ? "" : "s"} · pending review`;
 
   return (
     <div
-      className={s.panel}
-      style={{ padding: 18, display: "flex", flexDirection: "column", gap: 18 }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+        borderRadius: 14,
+        border: "1px solid var(--line-2)",
+        background: "color-mix(in oklch, var(--panel) 30%, transparent)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+        overflow: "hidden",
+      }}
     >
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h4
+      {/* Header — matches redesign `.rd-pipe__head` */}
+      <div
+        style={{
+          padding: "18px 28px 14px",
+          borderBottom: "1px solid var(--line-2)",
+          display: "flex",
+          alignItems: "baseline",
+          justifyContent: "space-between",
+          gap: 16,
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ minWidth: 0 }}>
+          <h1
             style={{
               margin: 0,
-              fontSize: 16,
-              fontWeight: 600,
+              fontSize: 18,
+              fontWeight: 500,
               color: "var(--ink)",
-              letterSpacing: "-0.01em",
+              letterSpacing: "-0.015em",
             }}
           >
-            Rewrite preview
-          </h4>
-          <p style={{ margin: "2px 0 0", fontSize: 12, color: "var(--ink-3)" }}>
-            {stats.changes} changes ·{" "}
-            {wordDelta > 0 ? "+" : ""}
-            {wordDelta} words
+            Rewrite{" "}
+            <em
+              className={s.serif}
+              style={{ fontSize: 20, fontWeight: 400 }}
+            >
+              preview
+            </em>
+          </h1>
+          <p
+            style={{
+              margin: "4px 0 0",
+              fontSize: 12,
+              color: "var(--ink-3)",
+            }}
+          >
+            {subtitle}
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            flexWrap: "wrap",
+          }}
+        >
           <button
-            className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
+            type="button"
+            className={`${s.btn} ${s.btnGhost} ${s.btnSm}`}
             onClick={onTryAgain}
             disabled={isRetrying}
           >
@@ -240,119 +118,223 @@ export function RewritePreviewPanel({
             />
             Regenerate
           </button>
+          <span
+            aria-hidden
+            style={{
+              width: 1,
+              height: 20,
+              background: "var(--line-2)",
+              margin: "0 2px",
+            }}
+          />
           <button
-            className={`${s.btn} ${s.btnDanger} ${s.btnSm}`}
+            type="button"
+            className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
             onClick={onReject}
             disabled={isRetrying}
           >
             <X className="h-3.5 w-3.5" />
-            Reject
+            Reject section
           </button>
           <button
+            type="button"
             className={`${s.btn} ${s.btnAccent} ${s.btnSm}`}
             onClick={onAccept}
             disabled={isRetrying}
           >
             <Check className="h-3.5 w-3.5" />
-            Push to rewrite
+            Accept section
           </button>
         </div>
       </div>
 
-      {/* View switcher */}
-      <div className={s.btnGroup} style={{ alignSelf: "flex-start" }}>
-        {(
-          [
-            { id: "sidebyside", label: "Side by side", Icon: ArrowLeftRight },
-            { id: "diff", label: "Show changes", Icon: Eye },
-            { id: "clean", label: "Clean view", Icon: EyeOff },
-          ] as const
-        ).map(({ id, label, Icon }) => {
-          const active = viewMode === id;
-          return (
-            <button
-              key={id}
-              type="button"
-              className={`${s.tab} ${active ? s.tabActive : ""}`}
-              onClick={() => setViewMode(id)}
-            >
-              <Icon className="h-3.5 w-3.5" />
-              {label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Content */}
-      <div>
-        {viewMode === "sidebyside" && renderSideBySideView()}
-        {viewMode === "diff" && renderDiffView()}
-        {viewMode === "clean" && renderCleanView()}
-      </div>
-
-      {/* Stats */}
+      {/* Body — 50/50 split, flat panes, vertical hairline divider */}
       <div
-        className="grid grid-cols-2 gap-4 md:grid-cols-4"
         style={{
-          padding: 14,
-          borderRadius: 12,
-          background: "var(--panel-2)",
-          border: "1px solid var(--line-2)",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          minHeight: 280,
+          maxHeight: 520,
         }}
       >
-        <Stat label="Original words" value={stats.wordsOriginal} />
-        <Stat label="New words" value={stats.wordsRewritten} />
-        <Stat
-          label="Word difference"
-          value={`${wordDelta > 0 ? "+" : ""}${wordDelta}`}
-          tone={wordDelta > 0 ? "success" : wordDelta < 0 ? "danger" : "neutral"}
-        />
-        <Stat label="Changes made" value={stats.changes} tone="accent" />
+        {/* Original · v-prev */}
+        <div
+          style={{
+            borderRight: "1px solid var(--line-2)",
+            overflow: "auto",
+            padding: "20px 28px 32px",
+          }}
+        >
+          <div className={s.eyebrow} style={{ marginBottom: 14 }}>
+            Original
+          </div>
+          <DiffProse
+            parts={parts}
+            mode="original"
+            emptyHint="No source text to compare."
+          />
+        </div>
+
+        {/* Proposed · v-next */}
+        <div
+          style={{
+            overflow: "auto",
+            padding: "20px 28px 32px",
+            background: PROPOSED_PANE_TINT,
+          }}
+        >
+          <div
+            className={s.eyebrow}
+            style={{
+              marginBottom: 14,
+              color: "var(--success)",
+            }}
+          >
+            <span aria-hidden style={{ background: "var(--success)" }} />
+            Proposed
+          </div>
+          <DiffProse
+            parts={parts}
+            mode="proposed"
+            emptyHint="The rewrite is empty."
+          />
+
+          {/* "Why this change" card — exact redesign treatment */}
+          {changeCount > 0 && (
+            <div
+              style={{
+                marginTop: 16,
+                padding: 12,
+                borderRadius: 10,
+                background:
+                  "color-mix(in oklch, var(--panel) 90%, transparent)",
+                border: "1px solid var(--line-2)",
+                fontSize: 12,
+                color: "var(--ink-3)",
+                lineHeight: 1.55,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  color: "var(--accent)",
+                  marginBottom: 6,
+                  fontWeight: 500,
+                  fontSize: 11,
+                }}
+              >
+                <Sparkles className="h-3 w-3" />
+                <span>Why this change</span>
+              </div>
+              {summarizeRewrite(parts)}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-function Stat({
-  label,
-  value,
-  tone = "neutral",
+/* Renders one side of the diff as inline-highlighted prose. The redesign
+   keeps line-throughs on the original side and green-wash highlights on
+   the proposed side; unchanged text stays in body color. */
+function DiffProse({
+  parts,
+  mode,
+  emptyHint,
 }: {
-  label: string;
-  value: number | string;
-  tone?: "neutral" | "accent" | "success" | "danger";
+  parts: DiffPart[];
+  mode: "original" | "proposed";
+  emptyHint: string;
 }) {
-  const color =
-    tone === "accent"
-      ? "var(--accent)"
-      : tone === "success"
-      ? "var(--success)"
-      : tone === "danger"
-      ? "var(--danger)"
-      : "var(--ink)";
+  const isOriginal = mode === "original";
+  const visibleParts = parts.filter((p) =>
+    isOriginal ? !p.added : !p.removed,
+  );
+
+  const hasContent = visibleParts.some((p) => p.value.length > 0);
+  if (!hasContent) {
+    return (
+      <p
+        style={{
+          margin: 0,
+          fontSize: 13,
+          color: "var(--ink-4)",
+          fontStyle: "italic",
+        }}
+      >
+        {emptyHint}
+      </p>
+    );
+  }
+
   return (
-    <div style={{ textAlign: "center" }}>
-      <div
-        style={{
-          fontSize: 20,
-          fontWeight: 600,
-          color,
-          letterSpacing: "-0.02em",
-          lineHeight: 1.1,
-        }}
-      >
-        {value}
-      </div>
-      <div
-        style={{
-          fontSize: 11,
-          color: "var(--ink-3)",
-          marginTop: 2,
-          letterSpacing: "0.02em",
-        }}
-      >
-        {label}
-      </div>
+    <div
+      style={{
+        fontSize: 14,
+        lineHeight: 1.7,
+        color: isOriginal ? "var(--ink-2)" : "var(--ink)",
+        whiteSpace: "pre-wrap",
+        wordBreak: "break-word",
+      }}
+    >
+      {visibleParts.map((part, i) => {
+        if (isOriginal && part.removed) {
+          return (
+            <span
+              key={i}
+              style={{
+                background: REMOVAL_BG,
+                textDecoration: "line-through",
+                textDecorationColor: REMOVAL_DECORATION,
+                padding: "0 2px",
+              }}
+            >
+              {part.value}
+            </span>
+          );
+        }
+        if (!isOriginal && part.added) {
+          return (
+            <span
+              key={i}
+              style={{
+                background: ADDITION_BG,
+                borderRadius: 4,
+                padding: "0 3px",
+              }}
+            >
+              {part.value}
+            </span>
+          );
+        }
+        return <span key={i}>{part.value}</span>;
+      })}
     </div>
   );
+}
+
+function summarizeRewrite(parts: DiffPart[]): string {
+  let added = 0;
+  let removed = 0;
+  for (const part of parts) {
+    const words = part.value.trim() ? part.value.trim().split(/\s+/).length : 0;
+    if (part.added) added += words;
+    else if (part.removed) removed += words;
+  }
+  const delta = added - removed;
+  const editCount = parts.filter((p) => p.added === true || p.removed === true).length;
+
+  if (editCount === 0) {
+    return "No edits proposed — the rewrite matches the source word-for-word.";
+  }
+  if (delta > 0) {
+    return `Expanded by ${delta} word${delta === 1 ? "" : "s"} across ${editCount} edit${editCount === 1 ? "" : "s"}. Review the highlighted spans before accepting.`;
+  }
+  if (delta < 0) {
+    return `Tightened by ${Math.abs(delta)} word${Math.abs(delta) === 1 ? "" : "s"} across ${editCount} edit${editCount === 1 ? "" : "s"}. Review the highlighted spans before accepting.`;
+  }
+  return `${editCount} edit${editCount === 1 ? "" : "s"} proposed without changing the overall length. Review the highlighted spans before accepting.`;
 }

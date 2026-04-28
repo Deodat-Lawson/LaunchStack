@@ -118,9 +118,21 @@ export async function PATCH(
         .where(eq(document.id, parsed.documentId))
         .returning();
 
+      // `companyId` and `currentVersionId` are bigint columns; JSON.stringify
+      // can't serialize bigints, so coerce them to JSON-safe shapes before
+      // sending. Matches the convention used by /api/documents/[id]/versions.
+      const serialized = updated && {
+        ...updated,
+        companyId: updated.companyId.toString(),
+        currentVersionId:
+          updated.currentVersionId !== null
+            ? Number(updated.currentVersionId)
+            : null,
+      };
+
       return NextResponse.json({
         success: true,
-        document: updated,
+        document: serialized,
       });
     } catch (error) {
       console.error("[PATCH /api/documents/[id]] error:", error);

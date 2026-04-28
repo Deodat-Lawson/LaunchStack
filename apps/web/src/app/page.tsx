@@ -34,7 +34,7 @@ const jsonLd = {
     'Document RAG, Predictive Analysis, Contract Review, AI Q&A, Employee Management, Analytics Dashboard, Marketing Pipeline, Self-Hosting',
   screenshot: `${SITE_URL}/og-image.png`,
   softwareVersion: '2.0',
-  license: 'https://opensource.org/licenses/MIT',
+  license: 'https://www.apache.org/licenses/LICENSE-2.0',
 };
 
 const organizationLd = {
@@ -65,7 +65,7 @@ const faqLd = {
       name: 'Is Launchstack really free?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Launchstack is 100% free and open source under the MIT license. Self-host on your own infrastructure with your own API keys — no usage limits, no hidden costs.',
+        text: 'Yes. Launchstack is 100% free and open source under the Apache 2.0 license. Self-host on your own infrastructure with your own API keys — no usage limits, no hidden costs.',
       },
     },
     {

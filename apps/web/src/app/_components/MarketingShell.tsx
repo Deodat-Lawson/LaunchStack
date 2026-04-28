@@ -128,7 +128,7 @@ function MarketingFooter() {
           <li><a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer">GitHub repo ↗</a></li>
           <li><a href={`${GITHUB_REPO}#readme`} target="_blank" rel="noopener noreferrer">Documentation</a></li>
           <li><Link href="/deployment">Self-host guide</Link></li>
-          <li><a href={`${GITHUB_REPO}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer">MIT license</a></li>
+          <li><a href={`${GITHUB_REPO}/blob/main/LICENSE`} target="_blank" rel="noopener noreferrer">Apache 2.0 license</a></li>
         </ul>
       </div>
       <div>

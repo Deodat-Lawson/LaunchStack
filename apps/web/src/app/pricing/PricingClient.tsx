@@ -17,7 +17,7 @@ export function PricingClient() {
           Free to deploy. <span className={styles.serif}>Pay only the LLM bill.</span>
         </h1>
         <p className={styles.pageSub}>
-          Launchstack is fully open source under MIT. This hosted site is a
+          Launchstack is fully open source under Apache 2.0. This hosted site is a
           free demo — fork the repo, bring your own API keys, and run the
           whole stack on your own infrastructure with no usage limits.
         </p>

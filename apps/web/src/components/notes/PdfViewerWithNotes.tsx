@@ -64,6 +64,15 @@ interface Props {
      * with the anchor pre-filled.
      */
     onCreateAnchoredNote: (anchor: PdfAnchorCapture) => void;
+    /**
+     * When set, the selection popup also shows three AI-capture buttons.
+     * `intent` selects the prompt the server uses. Parent should call
+     * `/api/notes/ai-capture` with the selection + the requested intent.
+     */
+    onAiCapture?: (
+      anchor: PdfAnchorCapture,
+      intent: "summary" | "action" | "decision",
+    ) => void;
     /** Optional click handler for existing pins. */
     onNotePinClick?: (noteId: number) => void;
 }
@@ -88,6 +97,7 @@ export function PdfViewerWithNotes({
     notes,
     scrollToNoteId,
     onCreateAnchoredNote,
+    onAiCapture,
     onNotePinClick,
 }: Props) {
     const [numPages, setNumPages] = useState<number | null>(null);
@@ -235,6 +245,20 @@ export function PdfViewerWithNotes({
         setSelectionDraft(null);
     };
 
+    const handleAiCapture = (intent: "summary" | "action" | "decision") => {
+        if (!selectionDraft || !onAiCapture) return;
+        onAiCapture(
+            {
+                page: selectionDraft.page,
+                quads: selectionDraft.quads,
+                quote: { exact: selectionDraft.quote },
+            },
+            intent,
+        );
+        window.getSelection()?.removeAllRanges();
+        setSelectionDraft(null);
+    };
+
     return (
         <div
             ref={containerRef}
@@ -287,33 +311,83 @@ export function PdfViewerWithNotes({
             )}
 
             {selectionDraft && (
-                <button
+                <div
                     data-note-anchor-btn
-                    onClick={handleCreateFromSelection}
                     style={{
                         position: "absolute",
                         left: selectionDraft.buttonX,
                         top: selectionDraft.buttonY,
                         transform: "translate(-50%, 0)",
-                        padding: "6px 10px",
-                        borderRadius: 8,
-                        background: "var(--accent)",
-                        color: "white",
-                        fontSize: 12,
-                        fontWeight: 600,
-                        border: "none",
-                        cursor: "pointer",
-                        boxShadow:
-                            "0 1px 0 oklch(1 0 0 / 0.35) inset, 0 6px 18px var(--accent-glow)",
+                        display: "flex",
+                        gap: 4,
+                        padding: 3,
+                        borderRadius: 9,
+                        background: "var(--panel)",
+                        border: "1px solid var(--line)",
+                        boxShadow: "0 6px 18px oklch(0 0 0 / 0.18)",
                         zIndex: 20,
                     }}
                 >
-                    + Add note here
-                </button>
+                    <button
+                        type="button"
+                        onClick={handleCreateFromSelection}
+                        style={{
+                            padding: "5px 10px",
+                            borderRadius: 6,
+                            background: "var(--accent)",
+                            color: "white",
+                            fontSize: 12,
+                            fontWeight: 600,
+                            border: "none",
+                            cursor: "pointer",
+                        }}
+                    >
+                        + Note
+                    </button>
+                    {onAiCapture && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => handleAiCapture("summary")}
+                                title="Summarize as note"
+                                style={aiBtnStyle}
+                            >
+                                ✦ Summarize
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleAiCapture("action")}
+                                title="Extract action item"
+                                style={aiBtnStyle}
+                            >
+                                ✦ Action
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleAiCapture("decision")}
+                                title="Extract decision"
+                                style={aiBtnStyle}
+                            >
+                                ✦ Decision
+                            </button>
+                        </>
+                    )}
+                </div>
             )}
         </div>
     );
 }
+
+const aiBtnStyle: React.CSSProperties = {
+    padding: "5px 8px",
+    borderRadius: 6,
+    background: "var(--panel-2)",
+    color: "var(--ink-2)",
+    fontSize: 11,
+    fontWeight: 600,
+    border: "1px solid var(--line-2)",
+    cursor: "pointer",
+};
 
 function LoadingPlaceholder({ text = "Loading PDF…" }: { text?: string }) {
     return (

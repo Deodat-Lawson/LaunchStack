@@ -35,7 +35,7 @@ describe("RewritePreviewPanel", () => {
       />
     );
 
-    expect(screen.getByText("Push to Rewrite")).toBeInTheDocument();
+    expect(screen.getByText("Push to rewrite")).toBeInTheDocument();
     expect(screen.getByText("Reject")).toBeInTheDocument();
     expect(screen.getByText("Regenerate")).toBeInTheDocument();
   });
@@ -55,7 +55,7 @@ describe("RewritePreviewPanel", () => {
       />
     );
 
-    await userEvent.click(screen.getByText("Push to Rewrite"));
+    await userEvent.click(screen.getByText("Push to rewrite"));
     expect(onAccept).toHaveBeenCalledTimes(1);
   });
 
@@ -112,7 +112,7 @@ describe("RewritePreviewPanel", () => {
       />
     );
 
-    await userEvent.click(screen.getByRole("tab", { name: /clean view/i }));
+    await userEvent.click(screen.getByRole("button", { name: /clean view/i }));
 
     expect(screen.getByText("Bold", { selector: "strong" })).toBeInTheDocument();
     expect(screen.getByText("italic", { selector: "em" })).toBeInTheDocument();

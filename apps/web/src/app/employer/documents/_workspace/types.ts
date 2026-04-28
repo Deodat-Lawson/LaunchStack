@@ -223,7 +223,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
     href: "/employer/documents?feature=rewrite" },
   { id: "workflows", label: "Workflows",         Icon: IconWorkflow,  kbd: "⌘W", desc: "Automate recurring tasks across your sources",
     href: "/employer/documents?feature=workflows" },
-  { id: "notes",     label: "Notes",             Icon: IconNote,      kbd: "⌘N", desc: "Jot ideas, attached to sources",
+  { id: "notes",     label: "Notebook",          Icon: IconNote,      kbd: "⌘N", desc: "Freeform notes that span every source",
     href: "/employer/documents?feature=notes" },
   { id: "audit",     label: "Predictive gaps",   Icon: IconShield,              desc: "Missing exhibits, schedules, and compliance gaps",
     href: "/employer/documents?feature=audit" },
@@ -275,7 +275,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
     features: [
       { id: "draft",       label: "Templated Drafts",    Icon: IconPen,        desc: "Generate new docs from templates tuned to your sources" },
       { id: "rewrite",     label: "Rewrite",             Icon: IconSparkle,    desc: "Improve existing prose with a diff-first rewrite" },
-      { id: "notes",       label: "Notes",               Icon: IconNote,       desc: "Jot ideas attached to sources" },
+      { id: "notes",       label: "Notebook",            Icon: IconNote,       desc: "Freeform notes that span every source" },
       { id: "workflows",   label: "Workflow Generation", Icon: IconWorkflow,   desc: "Chain source-aware steps across your sources", comingSoon: true },
       { id: "video-gen",   label: "Video Generation",    Icon: IconVideo,      desc: "Generate videos grounded in your knowledge base",     comingSoon: true },
       { id: "image-gen",   label: "Image Generation",    Icon: IconImage,      desc: "Generate images from prompts grounded in your sources", comingSoon: true },

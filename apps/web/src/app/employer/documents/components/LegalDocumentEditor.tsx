@@ -1726,30 +1726,11 @@ export function LegalDocumentEditor({
             {(["bold", "italic", "underline"] as const).map((cmd) => (
               <button
                 key={cmd}
+                type="button"
                 onClick={() => handleFormat(cmd)}
-                style={{
-                  width: 32,
-                  height: 32,
-                  border: "1px solid var(--line-2)",
-                  borderRadius: 8,
-                  background: "var(--panel)",
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--ink-2)",
-                  transition: "all .15s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "var(--panel-2)";
-                  e.currentTarget.style.color = "var(--ink)";
-                  e.currentTarget.style.borderColor = "var(--line)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "var(--panel)";
-                  e.currentTarget.style.color = "var(--ink-2)";
-                  e.currentTarget.style.borderColor = "var(--line-2)";
-                }}
+                title={cmd.charAt(0).toUpperCase() + cmd.slice(1)}
+                aria-label={cmd}
+                className={`${lt.btn} ${lt.btnOutline} ${lt.btnIcon}`}
               >
                 {cmd === "bold" && <Bold className="w-3.5 h-3.5" />}
                 {cmd === "italic" && <Italic className="w-3.5 h-3.5" />}
@@ -1760,22 +1741,16 @@ export function LegalDocumentEditor({
             <div className={lt.dividerVert} style={{ margin: "0 4px" }} />
 
             <button
+              type="button"
               onClick={() => handleFormat("highlight")}
               title="Highlight"
-              style={{
-                width: 32,
-                height: 32,
-                border: "1px solid var(--line-2)",
-                borderRadius: 8,
-                background: "var(--panel)",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "all .15s",
-              }}
+              aria-label="Highlight"
+              className={`${lt.btn} ${lt.btnOutline} ${lt.btnIcon}`}
             >
-              <Highlighter className="w-3.5 h-3.5" style={{ color: "oklch(0.72 0.16 80)" }} />
+              <Highlighter
+                className="w-3.5 h-3.5"
+                style={{ color: "var(--warn)" }}
+              />
             </button>
 
             <div className={lt.dividerVert} style={{ margin: "0 4px" }} />

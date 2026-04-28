@@ -192,22 +192,37 @@
 
 .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
-  font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--accent);
 }
 .eyebrow::before {
   content: ''; width: 16px; height: 1px; background: var(--accent);
 }
+/* Variant: no leading line — use when paired with the brand mark */
+.eyebrowPlain::before { display: none; }
 
 .title {
   font-size: clamp(28px, 3vw, 40px);
-  line-height: 1.05; letter-spacing: -0.03em;
+  line-height: 1.08; letter-spacing: -0.03em;
   font-weight: 600; color: var(--ink);
   margin: 0;
 }
 .sub {
   font-size: 15px; color: var(--ink-2);
   line-height: 1.55; margin: 0;
+}
+
+/* Hero header — vertical title stack with consistent rhythm */
+.heroBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.heroEyebrowRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .highlight {
@@ -494,76 +509,70 @@
 }
 
 /* ---------------- Tabs ---------------- */
-/* Segmented control — iOS/Linear style.
-   Track is recessed; active tab is an elevated panel inside it, not a
-   loud gradient. Keeps the rest of the page breathing. */
+/* Drift-aligned segmented control — flat, recessed track, single 1px line
+   on the active tile. No layered shadows. Sized to btnSm so a row of
+   tabs sits next to btnSm controls without visual jitter. */
 .tabs {
   display: inline-flex;
+  align-items: stretch;
   padding: 3px;
   background: var(--panel-2);
   border: 1px solid var(--line-2);
-  border-radius: 10px;
-  gap: 0;
-  box-shadow: 0 1px 2px oklch(0 0 0 / 0.03) inset;
+  border-radius: 8px;
+  gap: 2px;
+  flex-shrink: 0;
 }
 .tab {
   position: relative;
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 7px 14px;
-  border-radius: 7px;
-  font-size: 13px; font-weight: 500; line-height: 1;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12.5px; font-weight: 500; line-height: 1.2;
+  letter-spacing: -0.005em;
   color: var(--ink-3);
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
-  font-family: inherit;
   white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
   transition:
-    color .14s ease,
-    background-color .14s ease,
-    border-color .14s ease,
-    box-shadow .14s ease;
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 120ms ease;
+}
+/* Icons sit a tick smaller than the text height so the tab feels balanced */
+.tab > svg {
+  width: 14px; height: 14px;
+  color: var(--ink-4);
+  transition: color 160ms ease;
+  flex-shrink: 0;
 }
 .tab:hover:not(.tabActive):not(:disabled) { color: var(--ink); }
+.tab:hover:not(.tabActive):not(:disabled) > svg { color: var(--ink-2); }
 .tab:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--accent-glow);
 }
+.tab:active:not(:disabled) { transform: translateY(0.5px) scale(0.995); }
 .tab:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Divider between inactive tabs */
-.tab + .tab:not(.tabActive)::before,
-.tab:not(.tabActive) + .tab::before {
-  content: '';
-  position: absolute;
-  left: -0.5px;
-  top: 20%;
-  bottom: 20%;
-  width: 1px;
-  background: var(--line);
-  opacity: 0.6;
-}
-
-/* Active — elevated panel floating inside the recessed track */
+/* Active — flat panel chip, hairline border, accent icon for selection cue */
 .tabActive {
   color: var(--ink);
   background: var(--panel);
-  border-color: var(--line-2);
-  box-shadow:
-    0 1px 0 oklch(1 0 0 / 0.6) inset,
-    0 1px 2px oklch(0 0 0 / 0.06),
-    0 2px 4px oklch(0 0 0 / 0.03);
+  border-color: var(--line);
 }
 .tabActive > svg { color: var(--accent); }
 
-/* Count badge — quiet on inactive, accent-tinted on active */
+/* Count badge — sized to match btnSm rhythm */
 .tabCount {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 17px;
+  min-width: 16px;
+  height: 16px;
   padding: 0 5px;
   border-radius: 999px;
   background: oklch(from var(--ink) l c h / 0.06);
@@ -572,7 +581,8 @@
   font-weight: 600;
   line-height: 1;
   letter-spacing: 0.01em;
-  transition: background-color .14s ease, color .14s ease;
+  margin-left: 1px;
+  transition: background-color 160ms ease, color 160ms ease;
 }
 .tabActive .tabCount {
   background: var(--accent-soft);

@@ -112,42 +112,52 @@ export function DocumentGeneratorHome({
   return (
     <div className="flex h-full flex-col">
       {/* Hero header */}
-      <div className="flex-shrink-0 px-6 pt-8 pb-4 md:px-10 md:pt-10">
+      <div className="flex-shrink-0 px-6 pt-8 pb-5 md:px-10 md:pt-10">
         <div className="mx-auto w-full max-w-7xl">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="flex items-start gap-4">
-              <div className={s.brandMark}>
-                <Scale className="h-[18px] w-[18px]" />
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+            <div className={s.heroBlock}>
+              <div className={s.heroEyebrowRow}>
+                <div className={s.brandMark}>
+                  <Scale className="h-[18px] w-[18px]" />
+                </div>
+                <span className={`${s.eyebrow} ${s.eyebrowPlain}`}>
+                  Legal Documents
+                </span>
               </div>
-              <div className="space-y-2">
-                <span className={s.eyebrow}>Legal Documents</span>
-                <h1 className={s.title}>
-                  Draft your next{' '}
-                  <span className={s.highlight}>
-                    <span className={s.serif}>agreement</span>
-                  </span>
-                </h1>
-                <p className={s.sub} style={{ maxWidth: 560 }}>
-                  Pick a template or describe what you need. The assistant will
-                  pre-fill fields and open a polished document ready to export.
-                </p>
-              </div>
+              <h1 className={s.title}>
+                Draft your next{' '}
+                <span className={s.highlight}>
+                  <span className={s.serif}>agreement</span>
+                </span>
+              </h1>
+              <p className={s.sub} style={{ maxWidth: 560 }}>
+                Pick a template or describe what you need. The assistant will
+                pre-fill fields and open a polished document ready to export.
+              </p>
             </div>
 
-            <div className={s.tabs}>
+            <div
+              className={s.tabs}
+              role="tablist"
+              aria-label="Document view"
+            >
               <button
+                role="tab"
+                aria-selected={viewMode === 'new'}
                 className={`${s.tab} ${viewMode === 'new' ? s.tabActive : ''}`}
                 onClick={() => setViewMode('new')}
               >
                 <Plus className="h-4 w-4" />
-                New document
+                <span>New document</span>
               </button>
               <button
+                role="tab"
+                aria-selected={viewMode === 'existing'}
                 className={`${s.tab} ${viewMode === 'existing' ? s.tabActive : ''}`}
                 onClick={() => setViewMode('existing')}
               >
                 <Clock className="h-4 w-4" />
-                My documents
+                <span>My documents</span>
                 <span className={s.tabCount}>{generatedDocuments.length}</span>
               </button>
             </div>

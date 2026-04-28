@@ -23,10 +23,18 @@ import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/m
 import { db, toRows } from "~/server/db/index";
 import type { EmbeddingsProvider, SearchScope } from "../types";
 
+/**
+ * Notes retrievers extend the global `SearchScope` with a "user" branch so
+ * Studio's Notebook + Ask My Notes can pull freeform notes that aren't tied
+ * to any document. Keeping it local avoids leaking the user-scope concept
+ * into the document RAG pipeline.
+ */
+type NotesSearchScope = SearchScope | "user";
+
 interface NotesRetrieverConfig extends BaseRetrieverInput {
   embeddings: EmbeddingsProvider;
   topK?: number;
-  searchScope: SearchScope;
+  searchScope: NotesSearchScope;
 }
 
 interface SingleDocConfig extends NotesRetrieverConfig {
@@ -41,8 +49,16 @@ interface MultiDocConfig extends NotesRetrieverConfig {
   documentIds: number[];
   searchScope: "multi-document";
 }
+interface UserConfig extends NotesRetrieverConfig {
+  userId: string;
+  searchScope: "user";
+}
 
-type NotesRetrieverFields = SingleDocConfig | CompanyConfig | MultiDocConfig;
+type NotesRetrieverFields =
+  | SingleDocConfig
+  | CompanyConfig
+  | MultiDocConfig
+  | UserConfig;
 
 type NoteRow = {
   note_id: number;
@@ -62,10 +78,11 @@ export class NotesRetriever extends BaseRetriever {
 
   private embeddings: EmbeddingsProvider;
   private topK: number;
-  private searchScope: SearchScope;
+  private searchScope: NotesSearchScope;
   private documentId?: number;
   private companyId?: number | string;
   private documentIds?: number[];
+  private userId?: string;
 
   constructor(fields: NotesRetrieverFields) {
     super(fields);
@@ -76,6 +93,7 @@ export class NotesRetriever extends BaseRetriever {
     else if (fields.searchScope === "company") this.companyId = fields.companyId;
     else if (fields.searchScope === "multi-document")
       this.documentIds = fields.documentIds;
+    else if (fields.searchScope === "user") this.userId = fields.userId;
   }
 
   async _getRelevantDocuments(
@@ -159,6 +177,9 @@ export class NotesRetriever extends BaseRetriever {
       const list = this.documentIds.map((n) => String(n));
       return sql`ne.document_id = ANY(${list})`;
     }
+    if (this.searchScope === "user" && this.userId) {
+      return sql`ne.user_id = ${this.userId}`;
+    }
     return null;
   }
 }
@@ -199,5 +220,23 @@ export function createMultiDocNotesRetriever(
     embeddings,
     topK,
     searchScope: "multi-document",
+  });
+}
+
+/**
+ * Retrieve notes scoped to a single user — used by Notebook semantic search
+ * and Ask My Notes. Pulls freeform (no `documentId`) and anchored notes
+ * alike, since both share the same `user_id` filter.
+ */
+export function createUserNotesRetriever(
+  userId: string,
+  embeddings: EmbeddingsProvider,
+  topK = 5,
+): NotesRetriever {
+  return new NotesRetriever({
+    userId,
+    embeddings,
+    topK,
+    searchScope: "user",
   });
 }

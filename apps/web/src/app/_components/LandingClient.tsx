@@ -5,19 +5,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
 import {
   ArrowRight,
-  Bot,
   Check,
   FileText,
-  FileType,
   Github,
   Link2,
-  Mail,
-  Mic,
   Play,
   Plus,
   Sparkles,
   Terminal,
-  Workflow,
 } from 'lucide-react';
 import { MarketingShell } from './MarketingShell';
 import { createHeroGraph, type HeroGraphApi } from './heroGraph';
@@ -59,7 +54,7 @@ const FORMATS: Array<{ ext: string; name: string; kind: 'doc' | 'audio' | 'video
 const FAQS = [
   {
     q: 'Is it really open source?',
-    a: `Yes — the retrieval core (chunking, embeddings, graph, cited synthesis) is MIT-licensed on GitHub. The hosted app adds the polished UI, connectors, and billing — you can skip all of that and run the engine yourself.`,
+    a: `Yes — the retrieval core (chunking, embeddings, graph, cited synthesis) is Apache 2.0–licensed on GitHub. The hosted app adds the polished UI, connectors, and billing — you can skip all of that and run the engine yourself.`,
   },
   {
     q: 'Do you train on my data?',
@@ -106,7 +101,7 @@ function Hero() {
       <div className={styles.heroCopy}>
         <div className={styles.pill}>
           <span className={styles.pillBadge}>OPEN SOURCE</span>
-          Free, MIT-licensed, self-hostable →
+          Free, Apache 2.0–licensed, self-hostable →
         </div>
 
         <h1 className={styles.heroTitle}>
@@ -144,7 +139,7 @@ function Hero() {
           <span className={styles.sep}>·</span>
           <span>Self-host with your own API keys</span>
           <span className={styles.sep}>·</span>
-          <span>MIT licensed</span>
+          <span>Apache 2.0 licensed</span>
         </div>
       </div>
 
@@ -243,47 +238,178 @@ function HeroStage() {
 }
 
 // ── Knowledge Pipeline section ──────────────────────────────────────────────
-// Recreates the Drift "knowledge-pipeline" animation spec:
-// sources (Gmail, Notion, PDFs, Audio, GitHub) → knowledge graph +
-// embeddings → consumers (OpenAI, Anthropic, Claude Code, n8n).
+// Drift "knowledge-pipeline" animation: sources (Gmail, Notion, PDF, Audio,
+// GitHub) flow into a knowledge graph + embeddings, then out to consumers
+// (OpenAI, Anthropic, Claude Code, n8n). 14s loop driven by rAF; particles
+// sample bezier paths each frame and synchronously trigger card pulses on
+// delivery.
 
-const PIPE_SOURCES = [
-  { Icon: Mail,     label: 'Gmail',  meta: '12,408 threads' },
-  { Icon: FileText, label: 'Notion', meta: '842 pages' },
-  { Icon: FileType, label: 'PDFs',   meta: '193 files' },
-  { Icon: Mic,      label: 'Audio',  meta: '76 calls' },
-  { Icon: Github,   label: 'GitHub', meta: '38 repos' },
+const KP_STAGE_W = 1920;
+const KP_STAGE_H = 1080;
+const KP_CARD_W = 260;
+const KP_CARD_H = 70;
+const KP_SRC_X = 140;
+const KP_CON_X = KP_STAGE_W - 140 - KP_CARD_W;
+const KP_HUB_X = KP_STAGE_W / 2;
+const KP_HUB_Y_GRAPH = 440;
+const KP_HUB_Y_EMBED = 780;
+const KP_LOOP = 14;
+
+type KpPt = { x: number; y: number };
+type KpCard = {
+  id: string;
+  label: string;
+  meta: string;
+  y: number;
+  Icon: React.ComponentType;
+};
+
+const KP_SOURCES: KpCard[] = [
+  { id: 'gmail',  label: 'Gmail',  meta: 'email · 14,204',      y: 220, Icon: IconGmail  },
+  { id: 'notion', label: 'Notion', meta: 'docs · 312 pages',    y: 360, Icon: IconNotion },
+  { id: 'pdf',    label: 'PDF',    meta: 'files · 87 uploaded', y: 500, Icon: IconPDF    },
+  { id: 'audio',  label: 'Audio',  meta: 'recordings · 42',     y: 640, Icon: IconAudio  },
+  { id: 'github', label: 'GitHub', meta: 'repos · 6 connected', y: 780, Icon: IconGithub },
 ];
 
-const PIPE_CONSUMERS = [
-  { Icon: Sparkles, label: 'OpenAI',      meta: 'GPT-4o' },
-  { Icon: Bot,      label: 'Anthropic',   meta: 'Claude 4' },
-  { Icon: Terminal, label: 'Claude Code', meta: 'CLI & IDE' },
-  { Icon: Workflow, label: 'n8n',         meta: 'Workflows' },
+const KP_CONSUMERS: KpCard[] = [
+  { id: 'openai',    label: 'OpenAI',      meta: 'gpt-5 · embed-3',      y: 260, Icon: IconOpenAI     },
+  { id: 'anthropic', label: 'Anthropic',   meta: 'claude-sonnet-4.5',    y: 400, Icon: IconAnthropic  },
+  { id: 'claude',    label: 'Claude Code', meta: 'agent · long-running', y: 540, Icon: IconClaudeCode },
+  { id: 'n8n',       label: 'n8n',         meta: 'workflow · 14 nodes',  y: 680, Icon: IconN8n        },
 ];
 
-// viewBox: 0 0 120 70. Cards sit in 22%-wide columns at the edges; paths
-// emit from x=26.4 (22% of 120) and arrive at x=93.6 (78% of 120).
-const KP_VB_W = 120;
-const KP_VB_H = 70;
-const KP_LEFT_EDGE = 26.4;
-const KP_RIGHT_EDGE = 93.6;
-const KP_GRAPH = { cx: 60, cy: 26 };
-const KP_EMB_Y = 54;
-const SOURCE_YS   = [10.5, 22.75, 35, 47.25, 59.5];
-const SOURCE_TOPS = ['15%', '32.5%', '50%', '67.5%', '85%'];
-const CONSUMER_YS   = [10.64, 26.88, 43.12, 59.36];
-const CONSUMER_TOPS = ['15.2%', '38.4%', '61.6%', '84.8%'];
+const KP_GRAPH_CENTER: KpPt = { x: KP_HUB_X, y: KP_HUB_Y_GRAPH };
+const KP_EMBED_CENTER: KpPt = { x: KP_HUB_X, y: KP_HUB_Y_EMBED };
+
+const kpPctX = (px: number) => `${(px / KP_STAGE_W) * 100}%`;
+const kpPctY = (py: number) => `${(py / KP_STAGE_H) * 100}%`;
+const kpClamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+
+function kpCurvePath(a: KpPt, b: KpPt) {
+  const dx = (b.x - a.x) * 0.55;
+  return `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`;
+}
+function kpBezier(a: KpPt, b: KpPt, t: number): KpPt {
+  const dx = (b.x - a.x) * 0.55;
+  const c1x = a.x + dx, c1y = a.y;
+  const c2x = b.x - dx, c2y = b.y;
+  const u = 1 - t;
+  return {
+    x: u*u*u*a.x + 3*u*u*t*c1x + 3*u*t*t*c2x + t*t*t*b.x,
+    y: u*u*u*a.y + 3*u*u*t*c1y + 3*u*t*t*c2y + t*t*t*b.y,
+  };
+}
+
+// Knowledge graph: 1 core + ring(60,6) + ring(110,10) + ring(155,12) = 29 nodes
+type KpNode = { x: number; y: number; r: number };
+const KP_GRAPH_NODES: KpNode[] = (() => {
+  const nodes: KpNode[] = [];
+  const cx = KP_GRAPH_CENTER.x, cy = KP_GRAPH_CENTER.y;
+  nodes.push({ x: cx, y: cy, r: 7 });
+  const rings = [
+    { r: 60,  count: 6,  offset: 0    },
+    { r: 110, count: 10, offset: 0.25 },
+    { r: 155, count: 12, offset: 0.6  },
+  ];
+  rings.forEach((ring, ri) => {
+    for (let i = 0; i < ring.count; i++) {
+      const a = ((i + ring.offset) / ring.count) * Math.PI * 2;
+      const rp = ring.r + Math.sin(i * 2.3 + ri) * 8;
+      nodes.push({
+        x: cx + Math.cos(a) * rp,
+        y: cy + Math.sin(a) * rp * 0.72,
+        r: ri === 2 ? 2.5 : ri === 1 ? 3.5 : 4.5,
+      });
+    }
+  });
+  return nodes;
+})();
+
+// Edges: each outer connects to nearest middle, each middle to nearest inner,
+// each inner to core.
+const KP_GRAPH_EDGES: Array<[number, number]> = (() => {
+  const out: Array<[number, number]> = [];
+  const middleStart = 1 + 6;
+  const outerStart  = 1 + 6 + 10;
+  const nodes = KP_GRAPH_NODES;
+  for (let i = outerStart; i < nodes.length; i++) {
+    let best = -1, bestD = Infinity;
+    for (let j = middleStart; j < outerStart; j++) {
+      const d = Math.hypot(nodes[i]!.x - nodes[j]!.x, nodes[i]!.y - nodes[j]!.y);
+      if (d < bestD) { bestD = d; best = j; }
+    }
+    out.push([i, best]);
+  }
+  for (let j = middleStart; j < outerStart; j++) {
+    let best = -1, bestD = Infinity;
+    for (let k = 1; k < middleStart; k++) {
+      const d = Math.hypot(nodes[j]!.x - nodes[k]!.x, nodes[j]!.y - nodes[k]!.y);
+      if (d < bestD) { bestD = d; best = k; }
+    }
+    out.push([j, best]);
+  }
+  for (let k = 1; k < middleStart; k++) out.push([k, 0]);
+  return out;
+})();
+
+type KpFlow = {
+  id: string;
+  from: KpPt;
+  to: KpPt;
+  kind: 'in' | 'out';
+  cardId: string;
+  delay: number;
+  period: number;
+  lifetime: number;
+};
+const KP_FLOWS: KpFlow[] = [
+  ...KP_SOURCES.map((s, i): KpFlow => ({
+    id: `in-${s.id}`,
+    from: { x: KP_SRC_X + KP_CARD_W, y: s.y + KP_CARD_H / 2 },
+    to: KP_GRAPH_CENTER,
+    kind: 'in',
+    cardId: s.id,
+    delay: i * 0.35,
+    period: 3.2,
+    lifetime: 2.4,
+  })),
+  ...KP_CONSUMERS.map((c, i): KpFlow => ({
+    id: `out-${c.id}`,
+    from: KP_EMBED_CENTER,
+    to: { x: KP_CON_X, y: c.y + KP_CARD_H / 2 },
+    kind: 'out',
+    cardId: c.id,
+    delay: 4 + i * 0.5,
+    period: 3.5,
+    lifetime: 2.2,
+  })),
+];
+
+function useKpTime(loop = KP_LOOP) {
+  const [t, setT] = useState(0);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+    let raf = 0;
+    let start = 0;
+    const tick = (ts: number) => {
+      if (!start) start = ts;
+      setT(((ts - start) / 1000) % loop);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [loop]);
+  return t;
+}
 
 function KnowledgePipeline() {
   return (
     <section id="pipeline" className={styles.section}>
       <div className={styles.container}>
         <div className={styles.eyebrow}>The pipeline</div>
-        <h2 className={styles.h2}>
-          Your data,{' '}
-          <span className={styles.serif}>indexed</span>, queryable.
-        </h2>
         <p className={styles.lead}>
           Gmail threads, Notion pages, PDFs, call recordings, and your GitHub
           repos stream into one living knowledge graph. Embeddings index
@@ -291,241 +417,386 @@ function KnowledgePipeline() {
           queries the same brain, with citations, every time.
         </p>
 
-        <div className="kp-stage" role="img" aria-label="Sources flow into a knowledge graph with embeddings, then out to LLMs, agents, and workflows.">
+        <div
+          className="kp-stage"
+          role="img"
+          aria-label="Sources flow into a knowledge graph and embeddings, then out to model consumers."
+        >
           <style>{KP_CSS}</style>
-
-          <div className="kp-ambient" aria-hidden>
-            <div className="kp-orb kp-orb1" />
-            <div className="kp-orb kp-orb2" />
-            <div className="kp-orb kp-orb3" />
-            <div className="kp-dots" />
-          </div>
-
-          <div className="kp-colLabel kp-colLabelL">Sources</div>
-          <div className="kp-colLabel kp-colLabelR">Consumers</div>
-
-          <svg
-            className="kp-svg"
-            viewBox={`0 0 ${KP_VB_W} ${KP_VB_H}`}
-            preserveAspectRatio="none"
-            aria-hidden
-          >
-            <defs>
-              {SOURCE_YS.map((y, i) => (
-                <path
-                  key={`inp${i}`}
-                  id={`kp-in-${i}`}
-                  d={`M ${KP_LEFT_EDGE} ${y} C ${KP_LEFT_EDGE + 16} ${y}, ${KP_GRAPH.cx - 10} ${KP_GRAPH.cy}, ${KP_GRAPH.cx} ${KP_GRAPH.cy}`}
-                />
-              ))}
-              {CONSUMER_YS.map((y, i) => (
-                <path
-                  key={`outp${i}`}
-                  id={`kp-out-${i}`}
-                  d={`M ${KP_GRAPH.cx + 20} ${KP_EMB_Y} C ${KP_GRAPH.cx + 26} ${KP_EMB_Y}, ${KP_RIGHT_EDGE - 8} ${y}, ${KP_RIGHT_EDGE} ${y}`}
-                />
-              ))}
-            </defs>
-
-            {SOURCE_YS.map((_, i) => (
-              <use key={`use-in-${i}`} href={`#kp-in-${i}`} className="kp-line" />
-            ))}
-            {CONSUMER_YS.map((_, i) => (
-              <use key={`use-out-${i}`} href={`#kp-out-${i}`} className="kp-line" />
-            ))}
-
-            <KnowledgeGraph cx={KP_GRAPH.cx} cy={KP_GRAPH.cy} />
-            <EmbeddingsRow cx={KP_GRAPH.cx} cy={KP_EMB_Y} />
-
-            {SOURCE_YS.map((_, i) => {
-              const stagger = i * 0.35;
-              return [0, 1, 2].map((k) => {
-                const begin = `${stagger + k * 1.07}s`;
-                return (
-                  <circle key={`pin${i}-${k}`} r={0.75} className="kp-dot kp-dotV" opacity={0}>
-                    <animateMotion dur="3.2s" begin={begin} repeatCount="indefinite">
-                      <mpath href={`#kp-in-${i}`} />
-                    </animateMotion>
-                    <animate
-                      attributeName="opacity"
-                      values="0;1;1;0"
-                      keyTimes="0;0.1;0.9;1"
-                      dur="3.2s"
-                      begin={begin}
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                );
-              });
-            })}
-
-            {CONSUMER_YS.map((_, i) => {
-              const stagger = 4 + i * 0.5;
-              return [0, 1, 2].map((k) => {
-                const begin = `${stagger + k * 1.17}s`;
-                return (
-                  <circle key={`pout${i}-${k}`} r={0.75} className="kp-dot kp-dotM" opacity={0}>
-                    <animateMotion dur="3.5s" begin={begin} repeatCount="indefinite">
-                      <mpath href={`#kp-out-${i}`} />
-                    </animateMotion>
-                    <animate
-                      attributeName="opacity"
-                      values="0;1;1;0"
-                      keyTimes="0;0.1;0.9;1"
-                      dur="3.5s"
-                      begin={begin}
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                );
-              });
-            })}
-          </svg>
-
-          {PIPE_SOURCES.map((s, i) => (
-            <PipeCard
-              key={s.label}
-              side="left"
-              top={SOURCE_TOPS[i]!}
-              delay={`${i * 0.35}s`}
-              Icon={s.Icon}
-              label={s.label}
-              meta={s.meta}
-            />
-          ))}
-
-          {PIPE_CONSUMERS.map((c, i) => (
-            <PipeCard
-              key={c.label}
-              side="right"
-              top={CONSUMER_TOPS[i]!}
-              delay={`${4 + i * 0.5}s`}
-              Icon={c.Icon}
-              label={c.label}
-              meta={c.meta}
-            />
-          ))}
-
-          <div className="kp-coreLabel">
-            <div className="kp-coreLabelTitle">Knowledge graph</div>
-            <div className="kp-coreLabelSub">29 nodes · live index</div>
-          </div>
-          <div className="kp-embLabel">
-            Embeddings <span className="kp-embLabelMono">· 1,536-dim</span>
-          </div>
+          <KnowledgePipelineStage />
         </div>
       </div>
     </section>
   );
 }
 
-function PipeCard({
-  side,
-  top,
-  delay,
+function KnowledgePipelineStage() {
+  const time = useKpTime();
+
+  const activeSources: Record<string, boolean> = {};
+  const activeConsumers: Record<string, boolean> = {};
+  let coreActivity = 0;
+  const particles: React.ReactNode[] = [];
+
+  for (const p of KP_FLOWS) {
+    let effT = (time - p.delay) % p.period;
+    if (effT < 0) effT += p.period;
+    if (effT > p.lifetime) continue;
+    const prog = effT / p.lifetime;
+    for (let idx = 0; idx < 2; idx++) {
+      const pr = prog - (idx === 0 ? 0 : 0.35);
+      if (pr < 0 || pr > 1) continue;
+      const pt = kpBezier(p.from, p.to, pr);
+      const hue = p.kind === 'in' ? 285 : 340;
+      const size = idx === 0 ? 5 : 3.5;
+      const alpha = pr < 0.1 ? pr / 0.1 : pr > 0.9 ? (1 - pr) / 0.1 : 1;
+      particles.push(
+        <circle
+          key={`${p.id}-${idx}`}
+          cx={pt.x}
+          cy={pt.y}
+          r={size}
+          fill={`oklch(0.65 0.22 ${hue} / ${alpha * 0.9})`}
+          style={{
+            filter: `drop-shadow(0 0 6px oklch(0.65 0.22 ${hue} / ${alpha * 0.6}))`,
+          }}
+        />
+      );
+      if (p.kind === 'in') {
+        if (pr < 0.08) activeSources[p.cardId] = true;
+        if (pr > 0.88) coreActivity = Math.max(coreActivity, 1 - (pr - 0.88) / 0.12);
+      } else if (pr > 0.88) {
+        activeConsumers[p.cardId] = true;
+      }
+    }
+  }
+
+  const nodeActivity: number[] = KP_GRAPH_NODES.map((_, i) =>
+    i === 0 ? 0 : kpClamp(Math.sin(time * 0.8 + i * 1.3) * 0.5 + 0.4, 0, 1)
+  );
+
+  return (
+    <>
+      <div className="kp-amb" aria-hidden>
+        <div className="kp-orb kp-orb-a" />
+        <div className="kp-orb kp-orb-b" />
+        <div className="kp-orb kp-orb-c" />
+      </div>
+      <div className="kp-dots" aria-hidden />
+
+      <div className="kp-eyebrow kp-eyebrow--src" style={{ left: kpPctX(KP_SRC_X) }}>
+        <span className="kp-eyebrow__line" />Sources
+      </div>
+      <div className="kp-eyebrow kp-eyebrow--idx">
+        <span className="kp-eyebrow__line" />Index
+      </div>
+      <div className="kp-eyebrow kp-eyebrow--con" style={{ left: kpPctX(KP_CON_X) }}>
+        <span className="kp-eyebrow__line" />Consumers
+      </div>
+
+      <svg
+        className="kp-svg"
+        viewBox={`0 0 ${KP_STAGE_W} ${KP_STAGE_H}`}
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden
+      >
+        <defs>
+          <linearGradient id="kp-path-in" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stopColor="oklch(0.54 0.24 285)" stopOpacity="0.08" />
+            <stop offset="60%"  stopColor="oklch(0.54 0.24 285)" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="oklch(0.54 0.24 285)" stopOpacity="0.08" />
+          </linearGradient>
+          <linearGradient id="kp-path-out" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stopColor="oklch(0.70 0.22 340)" stopOpacity="0.08" />
+            <stop offset="40%"  stopColor="oklch(0.70 0.22 340)" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="oklch(0.70 0.22 340)" stopOpacity="0.08" />
+          </linearGradient>
+        </defs>
+
+        {KP_FLOWS.map((p) => (
+          <path
+            key={p.id}
+            d={kpCurvePath(p.from, p.to)}
+            stroke={p.kind === 'in' ? 'url(#kp-path-in)' : 'url(#kp-path-out)'}
+            strokeWidth={1.5}
+            fill="none"
+          />
+        ))}
+
+        <ellipse
+          cx={KP_GRAPH_CENTER.x}
+          cy={KP_GRAPH_CENTER.y}
+          rx={185}
+          ry={140}
+          fill="none"
+          stroke="oklch(0.78 0.012 285)"
+          strokeDasharray="3 5"
+          strokeWidth={1}
+          opacity={0.5}
+        />
+
+        {KP_GRAPH_EDGES.map(([a, b], i) => {
+          const na = KP_GRAPH_NODES[a]!;
+          const nb = KP_GRAPH_NODES[b]!;
+          return (
+            <line
+              key={`edge-${i}`}
+              x1={na.x}
+              y1={na.y}
+              x2={nb.x}
+              y2={nb.y}
+              stroke="oklch(0.62 0.12 285)"
+              strokeWidth={1}
+              opacity={0.15 + 0.35 * coreActivity}
+            />
+          );
+        })}
+
+        {KP_GRAPH_NODES.map((n, i) => {
+          const act = i === 0 ? coreActivity : nodeActivity[i]!;
+          return (
+            <g key={`node-${i}`}>
+              {act > 0.05 && (
+                <circle
+                  cx={n.x}
+                  cy={n.y}
+                  r={n.r + 4 + act * 6}
+                  fill="none"
+                  stroke="oklch(0.54 0.24 285)"
+                  strokeWidth={1}
+                  opacity={act * 0.6}
+                />
+              )}
+              <circle
+                cx={n.x}
+                cy={n.y}
+                r={n.r + act * 2}
+                fill={
+                  i === 0
+                    ? `oklch(${0.54 + act * 0.12} 0.24 285)`
+                    : `oklch(${0.62 + act * 0.1} ${0.12 + act * 0.1} 285)`
+                }
+                opacity={0.5 + act * 0.5}
+              />
+            </g>
+          );
+        })}
+
+        <text
+          x={KP_GRAPH_CENTER.x}
+          y={KP_GRAPH_CENTER.y - 180}
+          textAnchor="middle"
+          fontSize={14}
+          letterSpacing={2}
+          fill="oklch(0.58 0.015 285)"
+          style={{ fontFamily: 'var(--font-jetbrains-mono, ui-monospace, monospace)' }}
+        >
+          KNOWLEDGE GRAPH
+        </text>
+        <text
+          x={KP_GRAPH_CENTER.x}
+          y={KP_GRAPH_CENTER.y + 200}
+          textAnchor="middle"
+          fontSize={15}
+          fontWeight={500}
+          fill="oklch(0.42 0.02 285)"
+        >
+          {Math.round(48 + coreActivity * 12)} entities · {KP_GRAPH_EDGES.length} relations
+        </text>
+
+        {particles}
+      </svg>
+
+      {KP_SOURCES.map((s) => (
+        <KpCardEl
+          key={s.id}
+          x={KP_SRC_X}
+          y={s.y}
+          active={!!activeSources[s.id]}
+          Icon={s.Icon}
+          label={s.label}
+          meta={s.meta}
+        />
+      ))}
+      {KP_CONSUMERS.map((c) => (
+        <KpCardEl
+          key={c.id}
+          x={KP_CON_X}
+          y={c.y}
+          active={!!activeConsumers[c.id]}
+          Icon={c.Icon}
+          label={c.label}
+          meta={c.meta}
+        />
+      ))}
+
+      <KpEmbeddings activity={coreActivity} time={time} />
+
+      <div className="kp-title">
+        <h3 className="kp-title__head">
+          Your data, <em>indexed</em>, queryable.
+        </h3>
+        <p className="kp-title__sub">
+          Sources · Knowledge graph · Embeddings · Any model, any workflow
+        </p>
+      </div>
+    </>
+  );
+}
+
+function KpCardEl({
+  x,
+  y,
+  active,
   Icon,
   label,
   meta,
 }: {
-  side: 'left' | 'right';
-  top: string;
-  delay: string;
-  Icon: React.ComponentType<{ size?: number }>;
+  x: number;
+  y: number;
+  active: boolean;
+  Icon: React.ComponentType;
   label: string;
   meta: string;
 }) {
   return (
     <div
-      className={`kp-card ${side === 'left' ? 'kp-cardL' : 'kp-cardR'}`}
-      style={{ top, animationDelay: delay }}
+      className={`kp-card${active ? ' kp-card--active' : ''}`}
+      style={{
+        left: kpPctX(x),
+        top: kpPctY(y + KP_CARD_H / 2),
+        width: `${(KP_CARD_W / KP_STAGE_W) * 100}%`,
+      }}
     >
-      <span className="kp-cardIco">
-        <Icon size={14} />
-      </span>
-      <div className="kp-cardText">
-        <div className="kp-cardName">{label}</div>
-        <div className="kp-cardMeta">{meta}</div>
+      <div className="kp-card__pulse" aria-hidden />
+      <div className="kp-card__icon">
+        <Icon />
       </div>
-      <span className="kp-cardPulse" style={{ animationDelay: delay }} aria-hidden />
+      <div className="kp-card__text">
+        <div className="kp-card__label">{label}</div>
+        <div className="kp-card__meta">{meta}</div>
+      </div>
     </div>
   );
 }
 
-function KnowledgeGraph({ cx, cy }: { cx: number; cy: number }) {
-  const RING1 = 6;
-  const RING2 = 8;
-  const nodes: Array<{ x: number; y: number; r: number; primary?: boolean; delay: number }> = [
-    { x: cx, y: cy, r: 2.2, primary: true, delay: 0 },
-  ];
-  for (let i = 0; i < RING1; i++) {
-    const a = (i / RING1) * Math.PI * 2 - Math.PI / 2;
-    nodes.push({ x: cx + Math.cos(a) * 7, y: cy + Math.sin(a) * 5.5, r: 0.95, delay: 0.2 + i * 0.15 });
-  }
-  for (let i = 0; i < RING2; i++) {
-    const a = (i / RING2) * Math.PI * 2 - Math.PI / 3;
-    nodes.push({ x: cx + Math.cos(a) * 13, y: cy + Math.sin(a) * 9.5, r: 0.7, delay: 1.2 + i * 0.13 });
-  }
-  const edges: Array<[number, number]> = [];
-  for (let i = 1; i <= RING1; i++) edges.push([0, i]);
-  for (let i = 1; i <= RING1; i++) edges.push([i, 1 + (i % RING1)]);
-  for (let j = 0; j < RING2; j++) {
-    const inner = 1 + (j % RING1);
-    edges.push([inner, 1 + RING1 + j]);
+function KpEmbeddings({ activity, time }: { activity: number; time: number }) {
+  const bars: React.ReactNode[] = [];
+  for (let i = 0; i < 24; i++) {
+    const base = 0.35 + 0.55 * Math.abs(Math.sin(i * 1.7 + 2.1));
+    const wave = 0.15 * Math.sin(time * 2.2 - i * 0.45);
+    const h = kpClamp((base + wave) * (0.65 + 0.35 * activity), 0.08, 1);
+    bars.push(
+      <div
+        key={i}
+        className="kp-embed__bar"
+        style={{ height: `${h * 100}%`, opacity: 0.45 + 0.45 * activity }}
+      />
+    );
   }
   return (
-    <g className="kp-graph">
-      {edges.map(([a, b], i) => (
-        <line
-          key={`edg${i}`}
-          x1={nodes[a]!.x}
-          y1={nodes[a]!.y}
-          x2={nodes[b]!.x}
-          y2={nodes[b]!.y}
-          style={{ animationDelay: `${(i % 8) * 0.2}s` }}
-        />
-      ))}
-      {nodes.map((n, i) => (
-        <circle
-          key={`nd${i}`}
-          cx={n.x}
-          cy={n.y}
-          r={n.r}
-          className={n.primary ? 'kp-node kp-nodeCore' : 'kp-node'}
-          style={{ animationDelay: `${n.delay}s` }}
-        />
-      ))}
-    </g>
+    <div
+      className="kp-embed"
+      style={{ transform: `translateX(-50%) scale(${0.98 + activity * 0.02})` }}
+    >
+      <div className="kp-embed__head">
+        <span className="kp-embed__title">Embeddings</span>
+        <span className="kp-embed__meta">1,536 dim · cosine</span>
+      </div>
+      <div className="kp-embed__bars">{bars}</div>
+    </div>
   );
 }
 
-function EmbeddingsRow({ cx, cy }: { cx: number; cy: number }) {
-  const COUNT = 24;
-  const W = 34;
-  const H = 9;
-  const x0 = cx - W / 2;
-  const y0 = cy - H / 2;
-  const barW = 0.85;
-  const step = (W - 2) / COUNT;
+// ── Brand glyphs (geometric homages, not traced logos). ───────────────────
+function IconGmail() {
   return (
-    <g className="kp-emb">
-      <rect x={x0} y={y0} width={W} height={H} rx={1.5} className="kp-embFrame" />
-      {Array.from({ length: COUNT }, (_, i) => {
-        const x = x0 + 1 + i * step;
-        const delay = (i * 0.08) % 2;
-        return (
-          <rect
-            key={i}
-            className="kp-embBar"
-            x={x}
-            y={y0 + 1}
-            width={barW}
-            height={H - 2}
-            rx={0.3}
-            style={{ animationDelay: `${delay}s` }}
-          />
-        );
-      })}
-    </g>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="2" y="5" width="20" height="14" rx="2" fill="#fff" stroke="#e6e6e6" strokeWidth={1} />
+      <path d="M3 7l9 6 9-6" stroke="#EA4335" strokeWidth={1.6} fill="none" strokeLinejoin="round" />
+      <path d="M3 7v10h3V10L3 7z" fill="#C5221F" />
+      <path d="M21 7v10h-3V10l3-3z" fill="#4285F4" />
+      <path d="M6 10l6 4 6-4v7H6v-7z" fill="#FBBC04" opacity={0.25} />
+    </svg>
+  );
+}
+function IconNotion() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="3" y="3" width="18" height="18" rx="2" fill="#fff" stroke="#111" strokeWidth={1.2} />
+      <path d="M8 7v10M8 7l8 10M16 7v10" stroke="#111" strokeWidth={1.4} strokeLinecap="round" />
+    </svg>
+  );
+}
+function IconPDF() {
+  return (
+    <svg viewBox="0 0 20 22" fill="none" aria-hidden>
+      <path d="M3 1h10l4 4v15a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" fill="#fff" stroke="#d0d0d0" />
+      <path d="M13 1v4h4" fill="none" stroke="#d0d0d0" />
+      <rect x="3" y="12" width="14" height="6" rx="1" fill="#E53935" />
+      <text x="10" y="16.5" textAnchor="middle" fontSize="4.5" fontWeight={700} fill="#fff" fontFamily="Inter, sans-serif">PDF</text>
+    </svg>
+  );
+}
+function IconAudio() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="10" fill="oklch(0.72 0.18 200 / 0.15)" stroke="oklch(0.55 0.18 200)" strokeWidth={1.2} />
+      <g stroke="oklch(0.45 0.18 200)" strokeWidth={1.8} strokeLinecap="round">
+        <line x1="8"    y1="9"  x2="8"    y2="15" />
+        <line x1="10.5" y1="7"  x2="10.5" y2="17" />
+        <line x1="13"   y1="10" x2="13"   y2="14" />
+        <line x1="15.5" y1="8"  x2="15.5" y2="16" />
+      </g>
+    </svg>
+  );
+}
+function IconGithub() {
+  return (
+    <svg viewBox="0 0 24 24" fill="#181717" aria-hidden>
+      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.38 7.86 10.9.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.76 2.7 1.25 3.36.95.1-.74.4-1.25.73-1.54-2.56-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.2-3.1-.12-.3-.52-1.48.11-3.08 0 0 .98-.31 3.2 1.19a11.1 11.1 0 0 1 5.82 0c2.22-1.5 3.2-1.19 3.2-1.19.63 1.6.23 2.78.11 3.08.75.81 1.2 1.84 1.2 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.07.78 2.15v3.18c0 .31.21.67.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z" />
+    </svg>
+  );
+}
+function IconOpenAI() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="11" fill="#0D0D0D" />
+      <path
+        d="M16.5 9.5l-4.5 -2.6 -4.5 2.6v5.2l4.5 2.6 4.5 -2.6zM12 9.8l3 1.7 -3 1.7 -3 -1.7z"
+        stroke="#fff"
+        strokeWidth={0.8}
+        fill="none"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+function IconAnthropic() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="2" y="2" width="20" height="20" rx="4" fill="#D97757" />
+      <path d="M9 17L12 7l3 10M10.2 13.5h3.6" stroke="#fff" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+}
+function IconClaudeCode() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="2" y="2" width="20" height="20" rx="4" fill="#0D0D0D" />
+      <path d="M8 10l-2 2 2 2M16 10l2 2 -2 2M13.5 8l-3 8" stroke="#D97757" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+}
+function IconN8n() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="5" cy="12" r="2.2" fill="#EA4B71" />
+      <circle cx="12" cy="7" r="2.2" fill="#EA4B71" />
+      <circle cx="12" cy="17" r="2.2" fill="#EA4B71" />
+      <circle cx="19" cy="12" r="2.2" fill="#EA4B71" />
+      <path d="M7 12C8.5 8.5 10 7 12 7M7 12c1.5 3.5 3 5 5 5M14 7c1.8 1 4.2 4 5 5M14 17c1.8 -1 4.2 -4 5 -5" stroke="#EA4B71" strokeWidth={1.4} strokeLinecap="round" fill="none" opacity={0.7} />
+    </svg>
   );
 }
 
@@ -535,88 +806,79 @@ const KP_CSS = `
   width: 100%;
   max-width: 1180px;
   margin: 40px auto 0;
-  aspect-ratio: 12 / 7;
+  aspect-ratio: 16 / 9;
   border-radius: 22px;
-  background:
-    radial-gradient(ellipse at 50% 40%, oklch(from var(--accent) l c h / 0.05) 0%, transparent 70%),
-    linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
+  background: var(--bg);
   border: 1px solid var(--line-2);
   box-shadow: 0 40px 80px oklch(0 0 0 / 0.08), 0 8px 24px oklch(0 0 0 / 0.04);
   overflow: hidden;
   isolation: isolate;
+  color: var(--ink);
 }
 :global(.dark) .kp-stage,
 :global([data-theme="dark"]) .kp-stage {
-  background:
-    radial-gradient(ellipse at 50% 40%, oklch(0.72 0.19 285 / 0.08) 0%, transparent 70%),
-    linear-gradient(180deg, var(--panel) 0%, var(--bg-2) 100%);
   box-shadow: 0 40px 100px oklch(0 0 0 / 0.5);
 }
 
-/* ambient — quieter orbs so the flow reads as the hero */
-.kp-ambient { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+/* Ambient orbs — quieter than default; content is the focus. */
+.kp-amb { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
 .kp-orb {
   position: absolute; border-radius: 50%;
-  filter: blur(80px); opacity: 0.55;
-  mix-blend-mode: plus-lighter;
+  filter: blur(100px); opacity: 0.55;
   will-change: transform;
 }
-.kp-orb1 {
-  width: 520px; height: 520px; left: -80px; top: -120px;
-  background: radial-gradient(circle at 50% 50%,
-    oklch(from var(--accent) l c h / 0.55) 0%,
-    oklch(from var(--accent) l c h / 0) 65%);
-  animation: kp-drift1 32s ease-in-out infinite alternate;
+.kp-orb-a {
+  width: 700px; height: 700px; left: -120px; top: -120px;
+  background: radial-gradient(circle, oklch(0.54 0.24 285 / 0.35) 0%, transparent 65%);
+  animation: kp-drift-a 28s ease-in-out infinite alternate;
 }
-.kp-orb2 {
-  width: 640px; height: 640px; right: -140px; top: 40px;
-  background: radial-gradient(circle at 50% 50%,
-    oklch(0.68 0.22 340 / 0.45) 0%,
-    oklch(0.68 0.22 340 / 0) 65%);
-  animation: kp-drift2 38s ease-in-out infinite alternate;
+.kp-orb-b {
+  width: 780px; height: 780px; right: -140px; top: 200px;
+  background: radial-gradient(circle, oklch(0.70 0.22 340 / 0.30) 0%, transparent 65%);
+  animation: kp-drift-b 34s ease-in-out infinite alternate;
 }
-.kp-orb3 {
-  width: 520px; height: 520px; left: 30%; bottom: -180px;
-  background: radial-gradient(circle at 50% 50%,
-    oklch(0.72 0.16 200 / 0.45) 0%,
-    oklch(0.72 0.16 200 / 0) 65%);
-  animation: kp-drift3 26s ease-in-out infinite alternate;
+.kp-orb-c {
+  width: 680px; height: 680px; left: 38%; top: 60%;
+  background: radial-gradient(circle, oklch(0.72 0.18 200 / 0.28) 0%, transparent 65%);
+  animation: kp-drift-c 38s ease-in-out infinite alternate;
 }
+@keyframes kp-drift-a { 50% { transform: translate(120px, 80px) scale(1.08); } 100% { transform: translate(60px, 160px) scale(0.96); } }
+@keyframes kp-drift-b { 50% { transform: translate(-80px, 120px) scale(1.10); } 100% { transform: translate(-160px, 40px) scale(0.94); } }
+@keyframes kp-drift-c { 50% { transform: translate(140px, -60px) scale(0.96); } 100% { transform: translate(-100px, 80px) scale(1.06); } }
+
+/* Dot grid — masked to ellipse so the edges fade out */
 .kp-dots {
-  position: absolute; inset: 0;
-  background-image: radial-gradient(oklch(0 0 0 / 0.35) 1px, transparent 1px);
+  position: absolute; inset: -40px;
+  background-image: radial-gradient(circle at 1px 1px, oklch(0.55 0.015 285) 1px, transparent 1.5px);
   background-size: 28px 28px;
-  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, #000 0%, transparent 85%);
-          mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, #000 0%, transparent 85%);
-  opacity: 0.18;
-}
-@keyframes kp-drift1 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(60px, 40px) scale(1.08); }
-}
-@keyframes kp-drift2 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(-80px, 50px) scale(0.95); }
-}
-@keyframes kp-drift3 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(30px, -40px) scale(1.05); }
+  opacity: 0.2;
+  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, black 40%, transparent 85%);
+          mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, black 40%, transparent 85%);
+  pointer-events: none;
 }
 
-/* column labels — editorial eyebrow style from the Drift brief */
-.kp-colLabel {
+/* Column eyebrows — small mono, with a leading rule */
+.kp-eyebrow {
   position: absolute;
-  top: 20px;
+  top: 6.5%;
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-3);
   z-index: 3;
+  white-space: nowrap;
 }
-.kp-colLabelL { left: calc(2% + 12px); }
-.kp-colLabelR { right: calc(2% + 12px); }
+.kp-eyebrow__line {
+  display: inline-block;
+  width: 22px; height: 1px;
+  background: var(--ink-4);
+  margin-right: 10px;
+}
+.kp-eyebrow--idx { left: 50%; transform: translateX(-50%); }
 
 /* SVG flow layer */
 .kp-svg {
@@ -625,193 +887,176 @@ const KP_CSS = `
   width: 100%; height: 100%;
   z-index: 1;
   overflow: visible;
-}
-.kp-line {
-  fill: none;
-  stroke: oklch(from var(--accent) l c h / 0.22);
-  stroke-width: 0.3;
-  stroke-linecap: round;
-}
-
-/* particles */
-.kp-dot { filter: drop-shadow(0 0 0.8px currentColor); }
-.kp-dotV { fill: oklch(from var(--accent) l c h / 1); color: oklch(from var(--accent) l c h / 0.9); }
-.kp-dotM { fill: oklch(0.66 0.22 340); color: oklch(0.66 0.22 340); }
-
-/* graph + embeddings */
-.kp-graph line {
-  stroke: oklch(from var(--accent) l c h / 0.4);
-  stroke-width: 0.25;
-  animation: kp-edgePulse 3.2s ease-in-out infinite;
-}
-@keyframes kp-edgePulse {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 0.85; }
-}
-.kp-node {
-  fill: var(--panel);
-  stroke: var(--accent);
-  stroke-width: 0.28;
-  transform-origin: center;
-  transform-box: fill-box;
-  animation: kp-nodePulse 2.8s ease-in-out infinite;
-}
-.kp-nodeCore {
-  fill: var(--accent);
-  stroke: var(--panel);
-  stroke-width: 0.35;
-  animation: kp-corePulse 2.4s ease-in-out infinite;
-}
-@keyframes kp-nodePulse {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.18); }
-}
-@keyframes kp-corePulse {
-  0%, 100% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.12); filter: brightness(1.25); }
-}
-.kp-embFrame {
-  fill: oklch(from var(--panel) l c h / 0.6);
-  stroke: var(--line-2);
-  stroke-width: 0.2;
-}
-.kp-embBar {
-  fill: oklch(0.66 0.22 340 / 0.75);
-  transform-origin: center bottom;
-  transform-box: fill-box;
-  animation: kp-embShimmer 2.2s ease-in-out infinite;
-}
-@keyframes kp-embShimmer {
-  0%, 100% { transform: scaleY(0.35); opacity: 0.55; }
-  50%      { transform: scaleY(1);    opacity: 1; }
-}
-
-/* core + embeddings text labels */
-.kp-coreLabel {
-  position: absolute;
-  left: 50%;
-  top: calc(26 / 70 * 100% - 38px);
-  transform: translateX(-50%);
-  text-align: center;
-  z-index: 2;
   pointer-events: none;
 }
-.kp-coreLabelTitle {
-  font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-}
-.kp-coreLabelSub {
-  font-size: 10px;
-  color: var(--ink-3);
-  margin-top: 2px;
-}
-.kp-embLabel {
-  position: absolute;
-  left: 50%;
-  top: calc(54 / 70 * 100% + 22px);
-  transform: translateX(-50%);
-  z-index: 2;
-  text-align: center;
-  font-size: 11px;
-  color: var(--ink-2);
-  pointer-events: none;
-}
-.kp-embLabelMono {
-  font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
-  color: var(--ink-3);
-}
 
-/* source + consumer cards */
+/* Source + consumer cards */
 .kp-card {
   position: absolute;
   transform: translateY(-50%);
-  width: 18%;
-  min-width: 148px;
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
   border-radius: 12px;
-  background: color-mix(in oklch, var(--panel) 85%, transparent);
+  background: color-mix(in oklch, var(--panel) 88%, transparent);
   border: 1px solid var(--line-2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 14px oklch(0 0 0 / 0.06);
-  animation: kp-cardPulse 3.2s ease-in-out infinite;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1px 2px oklch(0.2 0.02 285 / 0.04);
   z-index: 2;
+  box-sizing: border-box;
+  transition: box-shadow 240ms ease, border-color 240ms ease;
 }
-.kp-cardL { left: 2%; }
-.kp-cardR { right: 2%; }
-.kp-cardIco {
-  width: 26px; height: 26px; flex-shrink: 0;
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 7px;
-  background: oklch(from var(--accent) l c h / 0.12);
-  color: var(--accent);
+.kp-card__icon {
+  width: 28px; height: 28px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--line-2);
 }
-.kp-cardR .kp-cardIco {
-  background: oklch(0.66 0.22 340 / 0.14);
-  color: oklch(0.55 0.22 340);
+.kp-card__icon svg { width: 16px; height: 16px; display: block; }
+.kp-card__text { min-width: 0; }
+.kp-card__label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-:global(.dark) .kp-cardR .kp-cardIco,
-:global([data-theme="dark"]) .kp-cardR .kp-cardIco {
-  color: oklch(0.78 0.22 340);
-}
-.kp-cardText { min-width: 0; }
-.kp-cardName {
-  font-size: 12px; font-weight: 600; color: var(--ink);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.kp-cardMeta {
+.kp-card__meta {
   font-size: 10px;
   color: var(--ink-3);
   font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
-  margin-top: 1px;
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.kp-cardPulse {
-  position: absolute; inset: -1px;
-  border-radius: 12px; pointer-events: none;
-  box-shadow: 0 0 0 0 oklch(from var(--accent) l c h / 0);
-  animation: kp-ringPulse 3.2s ease-in-out infinite;
+.kp-card__pulse {
+  position: absolute; inset: -2px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 240ms ease;
 }
-.kp-cardR .kp-cardPulse { animation-duration: 3.5s; }
-@keyframes kp-cardPulse {
-  0%, 100% { transform: translateY(-50%); }
-  45%      { transform: translateY(calc(-50% - 2px)); }
+.kp-card--active .kp-card__pulse {
+  opacity: 1;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 4px color-mix(in oklch, var(--accent) 18%, transparent),
+    0 0 24px color-mix(in oklch, var(--accent) 35%, transparent);
+  animation: kp-pulse 0.8s ease-out;
 }
-@keyframes kp-ringPulse {
-  0%, 70%, 100% { box-shadow: 0 0 0 0 oklch(from var(--accent) l c h / 0); }
-  10% { box-shadow: 0 0 0 4px oklch(from var(--accent) l c h / 0.22); }
-  20% { box-shadow: 0 0 0 10px oklch(from var(--accent) l c h / 0); }
+@keyframes kp-pulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
 }
 
-/* reduced-motion: freeze ambient + pulses */
+/* Embeddings card sits below the graph hub */
+.kp-embed {
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  transform: translateX(-50%);
+  width: clamp(220px, 26%, 360px);
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: color-mix(in oklch, var(--panel) 84%, transparent);
+  border: 1px solid var(--line-2);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 2;
+}
+.kp-embed__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.kp-embed__title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.kp-embed__meta {
+  font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+.kp-embed__bars {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 2px;
+  height: 36px;
+  align-items: end;
+}
+.kp-embed__bar {
+  background: linear-gradient(to top, var(--accent), oklch(0.7 0.22 285));
+  border-radius: 1px;
+}
+
+/* Bottom title block — design's caption */
+.kp-title {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 3;
+  pointer-events: none;
+}
+.kp-title__head {
+  margin: 0;
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.kp-title__head em {
+  font-family: var(--font-instrument-serif, 'Instrument Serif', Georgia, serif);
+  font-style: italic;
+  font-weight: 400;
+}
+.kp-title__sub {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--ink-3);
+  font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
+  letter-spacing: 0.04em;
+}
+
+/* Reduced motion — freeze ambient + pulse */
 @media (prefers-reduced-motion: reduce) {
-  .kp-orb1, .kp-orb2, .kp-orb3 { animation: none; }
-  .kp-card, .kp-cardPulse, .kp-node, .kp-nodeCore, .kp-graph line, .kp-embBar {
-    animation: none;
-  }
-  .kp-card { transform: translateY(-50%); }
+  .kp-orb-a, .kp-orb-b, .kp-orb-c { animation: none; }
+  .kp-card--active .kp-card__pulse { animation: none; }
 }
 
-/* mobile: collapse to a vertical stack */
+/* Mobile — keep the proportions; just shrink the card text and embed */
 @media (max-width: 820px) {
-  .kp-stage { aspect-ratio: auto; height: auto; padding: 40px 16px 48px; }
-  .kp-svg, .kp-coreLabel, .kp-embLabel, .kp-colLabel { display: none; }
-  .kp-card {
-    position: relative;
-    top: auto !important;
-    left: auto !important; right: auto !important;
-    transform: none;
-    width: 100%;
-    min-width: 0;
-    margin: 6px 0;
-    animation: none;
-  }
-  .kp-card + .kp-card { margin-top: 6px; }
-  .kp-ambient { opacity: 0.6; }
+  .kp-stage { max-width: 100%; margin: 32px 0 0; border-radius: 16px; }
+  .kp-card { gap: 6px; padding: 5px 7px; border-radius: 8px; }
+  .kp-card__icon { width: 20px; height: 20px; border-radius: 5px; }
+  .kp-card__icon svg { width: 12px; height: 12px; }
+  .kp-card__label { font-size: 9px; }
+  .kp-card__meta { font-size: 7px; margin-top: 1px; }
+  .kp-embed { padding: 6px 8px; border-radius: 8px; }
+  .kp-embed__title { font-size: 9px; }
+  .kp-embed__meta { font-size: 7px; }
+  .kp-embed__bars { height: 20px; }
+  .kp-eyebrow { font-size: 8px; letter-spacing: 0.1em; }
+  .kp-eyebrow__line { width: 10px; margin-right: 5px; }
+  .kp-title__head { font-size: 16px; }
+  .kp-title__sub { font-size: 9px; }
 }
 `;
 
@@ -1312,7 +1557,7 @@ function OpenSource() {
             </h3>
             <p>
               The core retrieval pipeline — chunking, embedding, graph
-              construction, and cited synthesis — lives on GitHub under MIT.
+              construction, and cited synthesis — lives on GitHub under Apache 2.0.
               Audit the prompts, swap the model, self-host the whole thing. We
               keep the hosted app polished so you don&rsquo;t have to; but the
               brain is yours either way.
@@ -1367,7 +1612,7 @@ function OpenSource() {
               <TreeRow name="graph.py" comment="link discovery" nested />
               <TreeRow name="synthesize.py" comment="cited answers" nested />
               <TreeRow name="connectors/" comment="12 adapters" />
-              <TreeRow name="LICENSE" comment="MIT" />
+              <TreeRow name="LICENSE" comment="Apache 2.0" />
               <TreeRow name="README.md" comment="start here" />
             </div>
           </div>

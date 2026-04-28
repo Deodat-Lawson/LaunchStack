@@ -11,6 +11,7 @@
     "db:push": "node ./scripts/ensure-pgvector.mjs && drizzle-kit push",
     "db:migrate": "node ./scripts/ensure-pgvector.mjs && node ./scripts/migrate.mjs",
     "db:backfill:versions": "tsx ./scripts/backfill-document-versions.ts",
+    "db:backfill:note-embeddings": "tsx ./scripts/backfill-note-embeddings.ts",
     "db:studio": "drizzle-kit studio",
     "dev": "concurrently --names next,inngest --prefix-colors blue,magenta \"next dev --turbo\" \"pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest\"",
     "dev:next": "next dev --turbo",

@@ -31,8 +31,8 @@ const LegalGeneratorTheme = dynamic(
   { loading: () => <LoadingPage /> },
 );
 
-const NotesPanel = dynamic(
-  () => import("~/components/notes/NotesPanel").then((m) => m.NotesPanel),
+const NotebookPane = dynamic(
+  () => import("~/components/notes/NotebookPane").then((m) => m.NotebookPane),
   { loading: () => <LoadingPage /> },
 );
 
@@ -442,9 +442,9 @@ export function RewritePane(_: PaneProps) {
 
 export function NotesPane(_: PaneProps) {
   return (
-    <InlineFeatureShell eyebrow="Notes" title="Thinking attached to sources">
-      <div style={{ padding: "16px 20px" }}>
-        <NotesPanel documentId={null} />
+    <InlineFeatureShell eyebrow="Notebook" title="Cross-document scratchpad">
+      <div style={{ padding: 0, height: "100%" }}>
+        <NotebookPane />
       </div>
     </InlineFeatureShell>
   );

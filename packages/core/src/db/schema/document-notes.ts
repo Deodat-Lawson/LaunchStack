@@ -88,6 +88,12 @@ export const documentNoteEmbeddings = pgTable(
     {
         id: serial("id").primaryKey(),
         noteId: integer("note_id").notNull(),
+        /**
+         * Denormalized owner — JOIN-free filtering for "Ask My Notes" / Notebook
+         * search. Backfilled from `documentNotes.userId` and kept in sync on
+         * every embed write.
+         */
+        userId: varchar("user_id", { length: 256 }),
         documentId: varchar("document_id", { length: 256 }),
         companyId: varchar("company_id", { length: 256 }),
         versionId: bigint("version_id", { mode: "bigint" }),
@@ -107,6 +113,7 @@ export const documentNoteEmbeddings = pgTable(
     },
     (table) => ({
         noteIdIdx: index("doc_note_emb_note_id_idx").on(table.noteId),
+        userIdIdx: index("doc_note_emb_user_id_idx").on(table.userId),
         documentIdIdx: index("doc_note_emb_document_id_idx").on(table.documentId),
         companyIdIdx: index("doc_note_emb_company_id_idx").on(table.companyId),
         embeddingShortIdx: index("doc_note_emb_embedding_short_idx").using(
@@ -115,6 +122,46 @@ export const documentNoteEmbeddings = pgTable(
         ),
     })
 );
+
+/**
+ * Bidirectional link graph between notes and notes/documents. Populated at
+ * note write-time by parsing `[[Wiki Link]]` mentions out of the Tiptap JSON
+ * tree. Used to render clickable chips and the Backlinks panel.
+ *
+ * Resolution is best-effort: a row with null `targetNoteId` / `targetDocumentId`
+ * represents a "broken link" — the literal `[[Title]]` was typed but no match
+ * exists in the user's company scope. Renames re-resolve via `targetTitle`.
+ */
+export const noteLinks = pgTable(
+    "note_links",
+    {
+        id: serial("id").primaryKey(),
+        sourceNoteId: integer("source_note_id").notNull(),
+        targetType: varchar("target_type", { length: 8 }).notNull(),
+        targetNoteId: integer("target_note_id"),
+        targetDocumentId: varchar("target_document_id", { length: 256 }),
+        targetTitle: text("target_title").notNull(),
+        resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+        companyId: varchar("company_id", { length: 256 }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    (table) => ({
+        sourceIdx: index("note_links_source_idx").on(table.sourceNoteId),
+        targetNoteIdx: index("note_links_target_note_idx").on(table.targetNoteId),
+        targetDocumentIdx: index("note_links_target_document_idx").on(
+            table.targetDocumentId
+        ),
+        companyTitleIdx: index("note_links_company_title_idx").on(
+            table.companyId,
+            table.targetTitle
+        ),
+    })
+);
+
+export type NoteLink = InferSelectModel<typeof noteLinks>;
+export type NoteLinkTargetType = "note" | "document";
 
 export type DocumentNote = InferSelectModel<typeof documentNotes>;
 export type DocumentNoteEmbedding = InferSelectModel<typeof documentNoteEmbeddings>;

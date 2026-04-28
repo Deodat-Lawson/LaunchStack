@@ -18,23 +18,12 @@ import {
   documentNoteEmbeddings,
   type NoteAnchor,
 } from "@launchstack/core/db/schema";
-
-const EMBEDDING_MODEL = "text-embedding-3-large";
-const EMBEDDING_DIM = 1536;
-const EMBEDDING_SHORT_DIM = 512;
-
-function resolveEmbeddingConfig(): {
-  apiKey: string | undefined;
-  baseURL: string | undefined;
-} {
-  return {
-    apiKey:
-      process.env.EMBEDDING_API_KEY ??
-      process.env.AI_API_KEY ??
-      process.env.OPENAI_API_KEY,
-    baseURL: process.env.EMBEDDING_API_BASE_URL ?? process.env.AI_BASE_URL,
-  };
-}
+import {
+  EMBEDDING_DIM,
+  EMBEDDING_MODEL,
+  EMBEDDING_SHORT_DIM,
+  resolveEmbeddingConfig,
+} from "./embedding-config";
 
 /**
  * Build the exact text that gets embedded. Including the anchored quote in
@@ -112,6 +101,7 @@ export async function embedNote(noteId: number): Promise<void> {
 
     await db.insert(documentNoteEmbeddings).values({
       noteId,
+      userId: note.userId,
       documentId: note.documentId,
       companyId: note.companyId,
       versionId: note.versionId,

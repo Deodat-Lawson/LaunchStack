@@ -8,18 +8,20 @@
  */
 
 import type { StoragePort } from "./types";
+import { createSlot } from "../internal/slot";
 
-let _port: StoragePort | null = null;
+const portSlot = createSlot<StoragePort>("storage/port");
 
 export function configureStorage(port: StoragePort): void {
-  _port = port;
+  portSlot.set(port);
 }
 
 export function getStoragePort(): StoragePort {
-  if (!_port) {
+  const port = portSlot.get();
+  if (!port) {
     throw new Error(
       "[@launchstack/core/storage] No StoragePort registered. The host must call createEngine(config) (or configureStorage(port) directly) before any subsystem that uses getStoragePort().",
     );
   }
-  return _port;
+  return port;
 }

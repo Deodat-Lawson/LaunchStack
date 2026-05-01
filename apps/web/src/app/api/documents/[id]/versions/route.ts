@@ -41,6 +41,7 @@ import { getEngine } from "~/server/engine";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -138,7 +139,7 @@ async function authorizeDocumentAccess(documentId: number): Promise<
     };
   }
 
-  if (doc.companyId !== userInfo.companyId) {
+  if (doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
     // Don't leak existence to cross-company requests.
     return {
       ok: false,
@@ -149,7 +150,7 @@ async function authorizeDocumentAccess(documentId: number): Promise<
     };
   }
 
-  return { ok: true, userId, companyId: userInfo.companyId, doc };
+  return { ok: true, userId, companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)), doc };
 }
 
 export async function POST(

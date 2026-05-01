@@ -5,6 +5,7 @@ import { eq, and } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users, inviteCodes } from "@launchstack/core/db/schema";
 import { validateRequestBody, DeactivateInviteCodeSchema } from "~/lib/validation";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function POST(request: Request) {
     try {
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
 
         // Verify the caller is an owner or employer
         const [userRecord] = await db
-            .select({ companyId: users.companyId, role: users.role })
+            .select({ id: users.id, companyId: users.companyId, role: users.role })
             .from(users)
             .where(eq(users.userId, userId));
 
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
             .where(
                 and(
                     eq(inviteCodes.id, codeId),
-                    eq(inviteCodes.companyId, userRecord.companyId)
+                    eq(inviteCodes.companyId, (await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)))
                 )
             )
             .returning({ id: inviteCodes.id });

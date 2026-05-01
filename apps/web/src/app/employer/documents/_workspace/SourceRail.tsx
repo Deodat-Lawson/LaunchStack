@@ -374,6 +374,8 @@ export interface SourceRailProps {
   setActiveTag: Dispatch<SetStateAction<string | null>>;
   /** Rendered at the rail header; omit in minimal mode. */
   logoLabel?: string;
+  /** When provided, a collapse button appears in the header. */
+  onClose?: () => void;
 }
 
 interface GroupEntry {
@@ -398,6 +400,7 @@ export function SourceRail({
   activeTag,
   setActiveTag,
   logoLabel = "Launchstack",
+  onClose,
 }: SourceRailProps) {
   const [search, setSearch] = useState("");
   const [searchFocus, setSearchFocus] = useState(false);
@@ -494,6 +497,34 @@ export function SourceRail({
         >
           <IconPlus size={13} />
         </button>
+        {onClose && (
+          <button
+            onClick={onClose}
+            title="Hide sidebar  ⌘\"
+            aria-label="Hide sidebar"
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: 6,
+              background: "transparent",
+              color: "var(--ink-3)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "background 120ms, color 120ms",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--line-2)";
+              e.currentTarget.style.color = "var(--ink)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--ink-3)";
+            }}
+          >
+            <IconChevronLeft size={14} />
+          </button>
+        )}
       </div>
 
       <div style={{ padding: "0 14px 10px" }}>

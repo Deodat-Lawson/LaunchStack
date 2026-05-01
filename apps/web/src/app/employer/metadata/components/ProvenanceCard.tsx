@@ -1,173 +1,115 @@
 "use client";
 
 import React from "react";
-import { FileText, Clock, Cpu, Hash } from "lucide-react";
-import { legalTheme as s } from "~/app/employer/documents/components/LegalGeneratorTheme";
+import { FileText, Clock, Pencil } from "lucide-react";
+import m from "./metadata.module.css";
 import type { ProvenanceInfo } from "@launchstack/features/company-metadata";
 
 interface ProvenanceCardProps {
   provenance: ProvenanceInfo;
   updatedAt?: string;
+  manualEditCount?: number;
+  totalChunks?: number;
 }
 
-export function ProvenanceCard({ provenance, updatedAt }: ProvenanceCardProps) {
-  const formatDate = (dateStr: string | undefined) => {
-    if (!dateStr) return "Unknown";
-    try {
-      return new Date(dateStr).toLocaleString();
-    } catch {
-      return dateStr;
-    }
-  };
+function formatRelative(dateStr: string | undefined): {
+  short: string;
+  detail: string;
+} {
+  if (!dateStr) return { short: "Never", detail: "No extraction yet" };
+  let d: Date;
+  try {
+    d = new Date(dateStr);
+  } catch {
+    return { short: dateStr, detail: "" };
+  }
+  if (Number.isNaN(d.getTime())) return { short: dateStr, detail: "" };
 
-  return (
-    <div className={s.panel} style={{ padding: 22 }}>
-      <div className="flex items-center gap-3" style={{ marginBottom: 4 }}>
-        <div className={s.brandMarkSm}>
-          <Cpu className="h-[14px] w-[14px]" />
-        </div>
-        <div className="min-w-0">
-          <h2
-            style={{
-              margin: 0,
-              fontSize: 16,
-              fontWeight: 600,
-              color: "var(--ink)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Extraction details
-          </h2>
-          <p
-            style={{
-              margin: "2px 0 0",
-              fontSize: 12,
-              color: "var(--ink-3)",
-            }}
-          >
-            How this metadata was extracted
-          </p>
-        </div>
-      </div>
-      <hr className={s.hair} style={{ margin: "14px 0 18px" }} />
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <ProvenanceItem
-          icon={FileText}
-          label="Documents processed"
-          value={provenance.total_documents_processed.toString()}
-        />
-        <ProvenanceItem
-          icon={Hash}
-          label="Extraction version"
-          value={provenance.extraction_version || "1.0.0"}
-        />
-        <ProvenanceItem
-          icon={Clock}
-          label="Last updated"
-          value={formatDate(updatedAt)}
-        />
-        {provenance.last_document_processed && (
-          <ProvenanceItem
-            icon={FileText}
-            label="Last document"
-            value={provenance.last_document_processed.doc_name}
-          />
-        )}
-      </div>
+  const now = Date.now();
+  const diffMs = now - d.getTime();
+  const minute = 60_000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
 
-      {provenance.extraction_model && (
-        <div
-          style={{
-            marginTop: 14,
-            padding: "10px 14px",
-            borderRadius: 10,
-            background: "var(--panel-2)",
-            border: "1px solid var(--line-2)",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 10,
-              fontWeight: 700,
-              color: "var(--ink-3)",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-            }}
-          >
-            Extraction model
-          </span>
-          <p
-            style={{
-              margin: "3px 0 0",
-              fontSize: 13,
-              color: "var(--ink)",
-              fontFamily:
-                'ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", monospace',
-            }}
-          >
-            {provenance.extraction_model}
-          </p>
-        </div>
-      )}
-    </div>
-  );
+  let short: string;
+  if (diffMs < minute) short = "just now";
+  else if (diffMs < hour) short = `${Math.round(diffMs / minute)}m ago`;
+  else if (diffMs < day) short = `${Math.round(diffMs / hour)}h ago`;
+  else if (diffMs < 30 * day) short = `${Math.round(diffMs / day)}d ago`;
+  else short = d.toLocaleDateString();
+
+  const detail = d.toLocaleString();
+  return { short, detail };
 }
 
-function ProvenanceItem({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-}) {
+export function ProvenanceCard({
+  provenance,
+  updatedAt,
+  manualEditCount = 0,
+  totalChunks,
+}: ProvenanceCardProps) {
+  const { short, detail } = formatRelative(updatedAt);
+  const docCount = provenance.total_documents_processed;
+  const chunksLabel =
+    totalChunks && totalChunks > 0 ? `· ${totalChunks} chunks` : "";
+
   return (
-    <div className="flex items-start gap-3">
-      <div
-        style={{
-          width: 30,
-          height: 30,
-          borderRadius: 8,
-          background: "var(--panel-2)",
-          border: "1px solid var(--line-2)",
-          color: "var(--ink-2)",
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <Icon className="h-3.5 w-3.5" />
+    <div className={m.prov}>
+      <div>
+        <div className={m.provLabel}>
+          <FileText width={12} height={12} />
+          Documents processed
+        </div>
+        <div className={`${m.provValue} ${m.provValueMono}`}>
+          {docCount} {docCount === 1 ? "source" : "sources"}
+          {chunksLabel && (
+            <span style={{ color: "var(--ink-3)", fontWeight: 400 }}>
+              {" "}
+              {chunksLabel}
+            </span>
+          )}
+        </div>
+        <div className={m.provDetail}>
+          {provenance.last_document_processed?.doc_name
+            ? `Most recent: ${provenance.last_document_processed.doc_name}`
+            : "PDFs, recordings, repo READMEs and more"}
+        </div>
       </div>
-      <div className="min-w-0">
-        <span
-          style={{
-            display: "block",
-            fontSize: 10,
-            fontWeight: 700,
-            color: "var(--ink-3)",
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-          }}
-        >
-          {label}
-        </span>
-        <p
-          style={{
-            margin: "3px 0 0",
-            fontSize: 13,
-            fontWeight: 500,
-            color: "var(--ink)",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            maxWidth: 180,
-          }}
-          title={value}
-        >
-          {value}
-        </p>
+      <div>
+        <div className={m.provLabel}>
+          <Clock width={12} height={12} />
+          Last extraction
+        </div>
+        <div className={m.provValue}>
+          <span className={m.liveDot} aria-hidden />
+          {short}
+        </div>
+        <div className={m.provDetail}>
+          {detail ? `${detail} · ` : ""}
+          {provenance.extraction_version
+            ? `v${provenance.extraction_version}`
+            : ""}
+          {provenance.extraction_model && (
+            <>
+              {provenance.extraction_version ? " · " : ""}
+              <span style={{ fontFamily: "JetBrains Mono, ui-monospace, monospace" }}>
+                {provenance.extraction_model}
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+      <div>
+        <div className={m.provLabel}>
+          <Pencil width={12} height={12} />
+          Manual edits
+        </div>
+        <div className={m.provValue}>
+          {manualEditCount} {manualEditCount === 1 ? "field" : "fields"}
+        </div>
+        <div className={m.provDetail}>
+          Manual edits override AI on re-extract.
+        </div>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { validateRequestBody } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AddCategorySchema = z.object({
     CategoryName: z.string().min(1, "Category name is required").max(256, "Category name is too long"),
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const companyId = userInfo.companyId;
+        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
 
         const newCategoryId = await db.insert(category).values({
             name: validation.data.CategoryName,

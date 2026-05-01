@@ -10,11 +10,17 @@ import React, {
 } from "react";
 import { useTheme } from "next-themes";
 import {
+  useEmployerWorkspaceSwitcher,
+} from "../../_chrome/EmployerWorkspaceSwitcherContext";
+import { WorkspaceSwitcherDropdownRow } from "../../_chrome/WorkspaceSwitcherDropdownRow";
+import {
   IconArrowUp,
   IconBolt,
   IconBrain,
-  IconCheck,
   IconChevronDown,
+  IconChevronRight,
+  IconEye,
+  IconFile,
   IconGlobe,
   IconGraph,
   IconImage,
@@ -26,6 +32,8 @@ import {
   IconSettings,
   IconShield,
   IconSparkle,
+  IconStar,
+  IconStarFilled,
   IconSun,
   IconUser,
   IconX,
@@ -33,17 +41,62 @@ import {
 import { GraphView } from "./GraphView";
 import {
   COMPOSER_MODELS,
-  DEFAULT_COMPOSER_MODEL,
-  DEMOTED_FEATURES,
+  COMPOSER_PROVIDERS,
   SOURCE_META,
-  findComposerModel,
   type ComposerModelOption,
+  type ComposerProviderId,
+  type ComposerProviderMeta,
   type ComposerSend,
-  type DemotedFeature,
   type EphemeralAttachment,
   type ThreadMessage,
   type WorkspaceSource,
 } from "./types";
+
+const FAVORITES_STORAGE_KEY = "lsw.composer.favorites";
+
+/** Chat transcript column and composer share this width. */
+const CHAT_COLUMN_MAX_PX = 760;
+/** Horizontal gutter: main-area header bar, scroll column, and composer share this inset. */
+const CHAT_GUTTER_X_PX = 24;
+
+/** Shared chrome for AskPanel and ExpandedFeatureView top bars (padding aligns with chat body). */
+export function workspaceMainHeaderBarStyle(
+  leadingChromeInsetPx = 0,
+): React.CSSProperties {
+  return {
+    flexShrink: 0,
+    borderBottom: "1px solid var(--line)",
+    background: "var(--panel)",
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: CHAT_GUTTER_X_PX,
+    paddingLeft: CHAT_GUTTER_X_PX + leadingChromeInsetPx,
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+  };
+}
+
+function readFavoritesFromStorage(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeFavoritesToStorage(ids: string[]) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(ids));
+  } catch {
+    /* quota or disabled — ignore */
+  }
+}
 
 interface SourceChipProps {
   source: WorkspaceSource;
@@ -564,7 +617,7 @@ function Composer({
     <div
       style={{
         margin: "0 auto",
-        maxWidth: 760,
+        maxWidth: CHAT_COLUMN_MAX_PX,
         width: "100%",
         padding: 14,
         borderRadius: 14,
@@ -688,107 +741,158 @@ function Composer({
         style={{ display: "none" }}
         onChange={(e) => void handleFilesPicked(e.target.files)}
       />
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4, flexWrap: "wrap" }}>
-        <ToolbarPill
-          label="Attach"
-          title={`Attach up to ${ATTACH_MAX_COUNT} files to this message only (PDFs, DOCX, images, text)`}
-          icon={<IconPaperclip size={12} />}
-          active={attachments.length > 0}
-          disabled={uploading || disabled}
-          onClick={() => fileInputRef.current?.click()}
-          badge={
-            uploading
-              ? "…"
-              : attachments.length > 0
-              ? String(attachments.length)
-              : undefined
-          }
-        />
-        <ToolbarPill
-          label="Web"
-          title="Search the web in addition to your sources"
-          icon={<IconGlobe size={12} />}
-          active={webSearch}
-          onClick={onToggleWebSearch}
-        />
-        <ToolbarPill
-          label="Think"
-          title={
-            thinkingAllowed
-              ? "Let the model reason step-by-step before answering"
-              : `${model.label} doesn't support extended thinking — pick a reasoning model (Claude, GPT-5, Gemini 3).`
-          }
-          icon={<IconBrain size={12} />}
-          active={thinking && thinkingAllowed}
-          disabled={!thinkingAllowed}
-          onClick={onToggleThinking}
-        />
-        <div ref={modelRef} style={{ position: "relative" }}>
-          <button
-            onClick={() => setModelOpen((v) => !v)}
-            style={{
-              fontSize: 12,
-              padding: "6px 10px",
-              borderRadius: 8,
-              color: "var(--ink-2)",
-              border: "1px solid var(--line)",
-              background: modelOpen ? "var(--line-2)" : "transparent",
-              display: "flex",
-              alignItems: "center",
-              gap: 5,
-            }}
-          >
-            <IconSparkle size={12} />
-            {model.label}
-            <IconChevronDown size={10} />
-          </button>
-          {modelOpen && (
-            <ModelDropdown
-              current={model}
-              onPick={(m) => {
-                onPickModel(m);
-                setModelOpen(false);
-              }}
-            />
-          )}
-        </div>
-        <div style={{ flex: 1 }} />
-        <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
-          <kbd
-            style={{
-              padding: "1.5px 5px",
-              border: "1px solid var(--line)",
-              borderRadius: 4,
-            }}
-          >
-            ⏎
-          </kbd>{" "}
-          to send
-        </span>
-        <button
-          onClick={handleSend}
-          disabled={!text.trim() || disabled || uploading}
+      <div
+        style={{
+          marginTop: 8,
+          paddingTop: 12,
+          borderTop: "1px solid var(--line-2)",
+          width: "100%",
+        }}
+      >
+        <div
           style={{
-            width: 34,
-            height: 34,
-            borderRadius: 8,
-            background:
-              text.trim() && !disabled && !uploading
-                ? "var(--accent)"
-                : "var(--line)",
-            color:
-              text.trim() && !disabled && !uploading
-                ? "white"
-                : "var(--ink-3)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            cursor:
-              text.trim() && !disabled && !uploading ? "pointer" : "not-allowed",
+            justifyContent: "space-between",
+            gap: 8,
+            flexWrap: "wrap",
+            rowGap: 8,
+            minHeight: 40,
           }}
         >
-          <IconArrowUp size={15} />
-        </button>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: 8,
+            minWidth: 0,
+            flex: "1 1 auto",
+          }}
+        >
+          <ToolbarPill
+            label="Attach"
+            title={`Attach up to ${ATTACH_MAX_COUNT} files to this message only (PDFs, DOCX, images, text)`}
+            icon={<IconPaperclip size={12} />}
+            active={attachments.length > 0}
+            disabled={uploading || disabled}
+            onClick={() => fileInputRef.current?.click()}
+            badge={
+              uploading
+                ? "…"
+                : attachments.length > 0
+                ? String(attachments.length)
+                : undefined
+            }
+          />
+          <ToolbarPill
+            label="Web"
+            title="Search the web in addition to your sources"
+            icon={<IconGlobe size={12} />}
+            active={webSearch}
+            onClick={onToggleWebSearch}
+          />
+          <ToolbarPill
+            label="Think"
+            title={
+              thinkingAllowed
+                ? "Let the model reason step-by-step before answering"
+                : `${model.label} doesn't support extended thinking — pick a reasoning model (Claude, GPT-5, Gemini 3).`
+            }
+            icon={<IconBrain size={12} />}
+            active={thinking && thinkingAllowed}
+            disabled={!thinkingAllowed}
+            onClick={onToggleThinking}
+          />
+          <div ref={modelRef} style={{ position: "relative", flexShrink: 0 }}>
+            <button
+              type="button"
+              onClick={() => setModelOpen((v) => !v)}
+              style={{
+                fontSize: 12,
+                padding: "6px 10px",
+                borderRadius: 8,
+                color: "var(--ink-2)",
+                border: "1px solid var(--line)",
+                background: modelOpen ? "var(--line-2)" : "transparent",
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                maxWidth: "min(220px, 100%)",
+              }}
+            >
+              <IconSparkle size={12} />
+              <span
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  minWidth: 0,
+                }}
+              >
+                {model.label}
+              </span>
+              <IconChevronDown size={10} />
+            </button>
+            {modelOpen && (
+              <ModelDropdown
+                current={model}
+                onPick={(m) => {
+                  onPickModel(m);
+                  setModelOpen(false);
+                }}
+              />
+            )}
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            gap: 8,
+            flexShrink: 0,
+          }}
+        >
+          <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
+            <kbd
+              style={{
+                padding: "1.5px 5px",
+                border: "1px solid var(--line)",
+                borderRadius: 4,
+              }}
+            >
+              ⏎
+            </kbd>{" "}
+            to send
+          </span>
+          <button
+            type="button"
+            onClick={handleSend}
+            disabled={!text.trim() || disabled || uploading}
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: 8,
+              background:
+                text.trim() && !disabled && !uploading
+                  ? "var(--accent)"
+                  : "var(--line)",
+              color:
+                text.trim() && !disabled && !uploading
+                  ? "white"
+                  : "var(--ink-3)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor:
+                text.trim() && !disabled && !uploading ? "pointer" : "not-allowed",
+            }}
+          >
+            <IconArrowUp size={15} />
+          </button>
+        </div>
+        </div>
       </div>
     </div>
   );
@@ -852,12 +956,50 @@ interface ModelDropdownProps {
   onPick: (m: ComposerModelOption) => void;
 }
 
+type ProviderFilter = "favorites" | ComposerProviderId;
+
 function ModelDropdown({ current, onPick }: ModelDropdownProps) {
-  const groups = (["openai", "anthropic", "google", "ollama"] as const).map((p) => ({
-    provider: p,
-    label: p === "openai" ? "OpenAI" : p === "anthropic" ? "Anthropic" : p === "google" ? "Google" : "Local (Ollama)",
-    models: COMPOSER_MODELS.filter((m) => m.provider === p),
-  }));
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favoritesHydrated, setFavoritesHydrated] = useState(false);
+  const [filter, setFilter] = useState<ProviderFilter>(current.provider);
+  const [query, setQuery] = useState("");
+  const [showLegacy, setShowLegacy] = useState(false);
+
+  // Hydrate favorites once and persist on change. We track hydration so the
+  // first render doesn't flush an empty array over real saved data.
+  useEffect(() => {
+    setFavorites(readFavoritesFromStorage());
+    setFavoritesHydrated(true);
+  }, []);
+  useEffect(() => {
+    if (favoritesHydrated) writeFavoritesToStorage(favorites);
+  }, [favorites, favoritesHydrated]);
+
+  const toggleFavorite = useCallback((id: string) => {
+    setFavorites((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  }, []);
+
+  const q = query.trim().toLowerCase();
+  const matchesQuery = useCallback(
+    (m: ComposerModelOption) =>
+      !q || m.label.toLowerCase().includes(q) || m.description.toLowerCase().includes(q),
+    [q],
+  );
+
+  // When searching, ignore the provider filter — the user is fishing across
+  // all providers, so showing only one rail's matches feels broken.
+  const matchesFilter = useCallback(
+    (m: ComposerModelOption) => {
+      if (q) return true;
+      if (filter === "favorites") return favorites.includes(m.id);
+      return m.provider === filter;
+    },
+    [q, filter, favorites],
+  );
+
+  const visible = COMPOSER_MODELS.filter((m) => matchesFilter(m) && matchesQuery(m));
+  const primary = visible.filter((m) => !m.legacy);
+  const legacy = visible.filter((m) => m.legacy);
 
   return (
     <div
@@ -865,98 +1007,353 @@ function ModelDropdown({ current, onPick }: ModelDropdownProps) {
         position: "absolute",
         bottom: "calc(100% + 8px)",
         left: 0,
-        width: 280,
-        maxHeight: 360,
-        overflowY: "auto",
+        width: 460,
+        maxWidth: "calc(100vw - 48px)",
         background: "var(--panel)",
         border: "1px solid var(--line)",
-        borderRadius: 12,
+        borderRadius: 14,
         boxShadow: "0 16px 40px var(--scrim-shadow)",
-        padding: 6,
         zIndex: 50,
+        overflow: "hidden",
         animation: "lsw-fadeIn 120ms",
       }}
     >
-      {groups.map((g) => (
-        <div key={g.provider} style={{ marginBottom: 6 }}>
-          <div
-            className="mono"
-            style={{
-              fontSize: 10,
-              color: "var(--ink-3)",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              fontWeight: 600,
-              padding: "6px 10px 4px",
-            }}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "10px 12px",
+          borderBottom: "1px solid var(--line)",
+        }}
+      >
+        <IconSearch size={13} style={{ color: "var(--ink-3)", flexShrink: 0 }} />
+        <input
+          autoFocus
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search models…"
+          style={{
+            flex: 1,
+            border: "none",
+            outline: "none",
+            background: "transparent",
+            fontSize: 13,
+            color: "var(--ink)",
+            fontFamily: "inherit",
+          }}
+        />
+      </div>
+
+      <div style={{ display: "flex", maxHeight: 380 }}>
+        <div
+          style={{
+            width: 44,
+            flexShrink: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "8px 0",
+            gap: 4,
+            borderRight: "1px solid var(--line)",
+            background: "var(--line-2)",
+          }}
+        >
+          <ProviderRailButton
+            active={filter === "favorites"}
+            onClick={() => setFilter("favorites")}
+            title="Favorites"
+            color="oklch(0.6 0.16 30)"
           >
-            {g.label}
-          </div>
-          {g.models.map((m) => {
-            const active = m.id === current.id;
-            return (
+            <IconStarFilled size={13} fill="oklch(0.65 0.18 60)" />
+          </ProviderRailButton>
+          <div style={{ height: 1, width: 22, background: "var(--line)", margin: "4px 0" }} />
+          {COMPOSER_PROVIDERS.map((p) => (
+            <ProviderRailButton
+              key={p.id}
+              active={filter === p.id}
+              onClick={() => setFilter(p.id)}
+              title={p.label}
+              color={p.color}
+            >
+              <ProviderMark provider={p} active={filter === p.id} />
+            </ProviderRailButton>
+          ))}
+        </div>
+
+        <div style={{ flex: 1, overflowY: "auto", padding: 6 }}>
+          {primary.length === 0 && legacy.length === 0 && (
+            <div
+              style={{
+                padding: "28px 16px",
+                textAlign: "center",
+                fontSize: 12,
+                color: "var(--ink-3)",
+              }}
+            >
+              {filter === "favorites" && favorites.length === 0 && !q
+                ? "Star a model to pin it here."
+                : "No models match."}
+            </div>
+          )}
+          {primary.map((m) => (
+            <ModelRow
+              key={m.id}
+              model={m}
+              active={m.id === current.id}
+              favorited={favorites.includes(m.id)}
+              onPick={() => onPick(m)}
+              onToggleFavorite={() => toggleFavorite(m.id)}
+            />
+          ))}
+          {legacy.length > 0 && (
+            <div style={{ marginTop: 4 }}>
               <button
-                key={m.id}
-                onClick={() => onPick(m)}
+                type="button"
+                onClick={() => setShowLegacy((v) => !v)}
                 style={{
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
-                  padding: "7px 10px",
+                  padding: "8px 10px",
                   borderRadius: 7,
-                  fontSize: 13,
-                  color: active ? "var(--accent-ink)" : "var(--ink-2)",
-                  background: active ? "var(--accent-soft)" : "transparent",
+                  background: "transparent",
+                  fontSize: 12,
+                  color: "var(--ink-3)",
                   textAlign: "left",
                 }}
                 onMouseEnter={(e) => {
-                  if (!active) e.currentTarget.style.background = "var(--line-2)";
+                  e.currentTarget.style.background = "var(--line-2)";
                 }}
                 onMouseLeave={(e) => {
-                  if (!active) e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.background = "transparent";
                 }}
               >
-                <span style={{ flex: 1 }}>{m.label}</span>
-                {m.supportsThinking && (
-                  <span
-                    className="mono"
-                    style={{
-                      fontSize: 9,
-                      padding: "1px 5px",
-                      borderRadius: 4,
-                      background: "var(--line-2)",
-                      color: "var(--ink-3)",
-                      fontWeight: 600,
-                    }}
-                    title="Supports extended thinking"
-                  >
-                    THINK
-                  </span>
-                )}
-                {m.supportsVision && (
-                  <span
-                    className="mono"
-                    style={{
-                      fontSize: 9,
-                      padding: "1px 5px",
-                      borderRadius: 4,
-                      background: "var(--line-2)",
-                      color: "var(--ink-3)",
-                      fontWeight: 600,
-                    }}
-                    title="Can read images"
-                  >
-                    IMG
-                  </span>
-                )}
-                {active && <IconCheck size={12} />}
+                <span
+                  style={{
+                    display: "inline-flex",
+                    transform: showLegacy ? "rotate(90deg)" : "none",
+                    transition: "transform 120ms",
+                  }}
+                >
+                  <IconChevronRight size={11} />
+                </span>
+                <span style={{ flex: 1 }}>
+                  {legacy.length} legacy model{legacy.length !== 1 ? "s" : ""}
+                </span>
               </button>
-            );
-          })}
+              {showLegacy &&
+                legacy.map((m) => (
+                  <ModelRow
+                    key={m.id}
+                    model={m}
+                    active={m.id === current.id}
+                    favorited={favorites.includes(m.id)}
+                    onPick={() => onPick(m)}
+                    onToggleFavorite={() => toggleFavorite(m.id)}
+                  />
+                ))}
+            </div>
+          )}
         </div>
-      ))}
+      </div>
     </div>
+  );
+}
+
+interface ProviderRailButtonProps {
+  active: boolean;
+  onClick: () => void;
+  title: string;
+  color: string;
+  children: React.ReactNode;
+}
+
+function ProviderRailButton({ active, onClick, title, color, children }: ProviderRailButtonProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      style={{
+        width: 30,
+        height: 30,
+        borderRadius: 8,
+        border: "1px solid transparent",
+        background: active ? "var(--panel)" : "transparent",
+        boxShadow: active ? `inset 0 0 0 1px ${color}` : "none",
+        color: active ? color : "var(--ink-3)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        transition: "background 120ms, color 120ms, box-shadow 120ms",
+      }}
+      onMouseEnter={(e) => {
+        if (!active) e.currentTarget.style.background = "var(--panel)";
+      }}
+      onMouseLeave={(e) => {
+        if (!active) e.currentTarget.style.background = "transparent";
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ProviderMark({
+  provider,
+  active,
+}: {
+  provider: ComposerProviderMeta;
+  active: boolean;
+}) {
+  return (
+    <span
+      style={{
+        width: 18,
+        height: 18,
+        borderRadius: "50%",
+        background: active ? provider.color : "var(--line)",
+        color: active ? "white" : "var(--ink-2)",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 10,
+        fontWeight: 700,
+        fontFamily: "var(--font-mono, ui-monospace, monospace)",
+      }}
+    >
+      {provider.mark}
+    </span>
+  );
+}
+
+interface ModelRowProps {
+  model: ComposerModelOption;
+  active: boolean;
+  favorited: boolean;
+  onPick: () => void;
+  onToggleFavorite: () => void;
+}
+
+function ModelRow({ model, active, favorited, onPick, onToggleFavorite }: ModelRowProps) {
+  return (
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "8px 10px",
+        borderRadius: 8,
+        background: active ? "var(--accent-soft)" : "transparent",
+        cursor: "pointer",
+      }}
+      onClick={onPick}
+      onMouseEnter={(e) => {
+        if (!active) e.currentTarget.style.background = "var(--line-2)";
+      }}
+      onMouseLeave={(e) => {
+        if (!active) e.currentTarget.style.background = "transparent";
+      }}
+    >
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleFavorite();
+        }}
+        title={favorited ? "Unfavorite" : "Favorite"}
+        style={{
+          width: 22,
+          height: 22,
+          borderRadius: 5,
+          background: "transparent",
+          border: "none",
+          color: favorited ? "oklch(0.7 0.17 70)" : "var(--ink-4, var(--ink-3))",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          flexShrink: 0,
+          opacity: favorited ? 1 : 0.6,
+        }}
+      >
+        {favorited ? <IconStarFilled size={12} fill="oklch(0.7 0.17 70)" /> : <IconStar size={12} />}
+      </button>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div
+          style={{
+            fontSize: 13,
+            fontWeight: 600,
+            color: active ? "var(--accent-ink)" : "var(--ink)",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {model.label}
+        </div>
+        <div
+          style={{
+            fontSize: 11,
+            color: "var(--ink-3)",
+            marginTop: 1,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {model.description}
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+        {model.supportsVision && (
+          <CapabilityBadge title="Reads images" tone="vision">
+            <IconEye size={11} />
+          </CapabilityBadge>
+        )}
+        {model.supportsThinking && (
+          <CapabilityBadge title="Extended thinking / reasoning" tone="think">
+            <IconBrain size={11} />
+          </CapabilityBadge>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CapabilityBadge({
+  children,
+  title,
+  tone,
+}: {
+  children: React.ReactNode;
+  title: string;
+  tone: "vision" | "think";
+}) {
+  const palette =
+    tone === "vision"
+      ? { bg: "oklch(0.94 0.04 200)", fg: "oklch(0.45 0.12 220)" }
+      : { bg: "oklch(0.94 0.05 290)", fg: "oklch(0.45 0.14 290)" };
+  return (
+    <span
+      title={title}
+      style={{
+        width: 22,
+        height: 22,
+        borderRadius: 5,
+        background: palette.bg,
+        color: palette.fg,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {children}
+    </span>
   );
 }
 
@@ -1111,27 +1508,65 @@ function EmptyState({ onOpenAdd, sourceCount }: EmptyStateProps) {
   );
 }
 
-interface AvatarMenuProps {
-  features: readonly DemotedFeature[];
+/** Public README — same destination as MarketingShell footer "Documentation". */
+const EMPLOYER_DOCS_URL = "https://github.com/Deodat-Lawson/pdr_ai_v2#readme";
+
+export interface AvatarMenuProps {
   userInitials: string;
   userName?: string;
   userEmail?: string;
-  onPick: (href: string) => void;
+  onOpenSettings: () => void;
   onSignOut?: () => void;
 }
 
-function AvatarMenu({
-  features,
+/** Matches the workspace header “jump” control (⌘K) — reused in ExpandedFeatureView. */
+export function JumpToPaletteButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      title="Jump to anything  ⌘K"
+      type="button"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+        padding: "5px 9px",
+        borderRadius: 7,
+        border: "1px solid var(--line)",
+        background: "var(--line-2)",
+        fontSize: 12,
+        color: "var(--ink-3)",
+      }}
+    >
+      <IconSearch size={12} />
+      <span
+        className="mono"
+        style={{
+          fontSize: 10,
+          padding: "1px 5px",
+          border: "1px solid var(--line)",
+          borderRadius: 4,
+          background: "var(--panel)",
+        }}
+      >
+        ⌘K
+      </span>
+    </button>
+  );
+}
+
+export function AvatarMenu({
   userInitials,
   userName,
   userEmail,
-  onPick,
+  onOpenSettings,
   onSignOut,
 }: AvatarMenuProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
+  const workspaceSwitcher = useEmployerWorkspaceSwitcher();
 
   useEffect(() => {
     const onClick = (e: globalThis.MouseEvent) => {
@@ -1144,6 +1579,7 @@ function AvatarMenu({
   return (
     <div ref={ref} style={{ position: "relative" }}>
       <button
+        type="button"
         onClick={() => setOpen((v) => !v)}
         style={{
           width: 32,
@@ -1154,6 +1590,12 @@ function AvatarMenu({
           color: "white",
           fontSize: 12,
           fontWeight: 700,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 0,
+          border: "none",
+          cursor: "pointer",
         }}
       >
         {userInitials}
@@ -1177,8 +1619,8 @@ function AvatarMenu({
           <div
             style={{
               padding: "10px 10px 10px",
-              borderBottom: "1px solid var(--line)",
-              marginBottom: 6,
+              borderBottom: workspaceSwitcher ? "none" : "1px solid var(--line)",
+              marginBottom: workspaceSwitcher ? 0 : 6,
             }}
           >
             <div style={{ fontSize: 13, fontWeight: 600 }}>{userName ?? "Your account"}</div>
@@ -1186,65 +1628,109 @@ function AvatarMenu({
               <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{userEmail}</div>
             )}
           </div>
-          {features.map((f) => {
-            const Icon = f.Icon;
-            return (
-              <button
-                key={f.id}
-                onClick={() => {
-                  setOpen(false);
-                  onPick(f.href);
-                }}
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "7px 10px",
-                  borderRadius: 7,
-                  fontSize: 13,
-                  color: "var(--ink-2)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "var(--line-2)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                }}
-              >
-                <Icon size={14} />
-                <span style={{ flex: 1, textAlign: "left" }}>{f.label}</span>
-                {f.kbd && (
-                  <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                    {f.kbd}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-          <div style={{ borderTop: "1px solid var(--line)", marginTop: 6, paddingTop: 6 }}>
+          {workspaceSwitcher && (
+            <WorkspaceSwitcherDropdownRow
+              payload={workspaceSwitcher}
+              onNavigate={() => setOpen(false)}
+            />
+          )}
+          <button
+            type="button"
+            onClick={() => setTheme(isDark ? "light" : "dark")}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "7px 10px",
+              borderRadius: 7,
+              fontSize: 13,
+              color: "var(--ink-2)",
+              cursor: "pointer",
+              background: "transparent",
+              border: "none",
+              textAlign: "left",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--line-2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            {isDark ? <IconSun size={14} /> : <IconMoon size={14} />}
+            <span style={{ flex: 1 }}>
+              Switch to {isDark ? "light" : "dark"} theme
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              onOpenSettings();
+            }}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "7px 10px",
+              borderRadius: 7,
+              fontSize: 13,
+              color: "var(--ink-2)",
+              cursor: "pointer",
+              background: "transparent",
+              border: "none",
+              textAlign: "left",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--line-2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            <IconSettings size={14} />
+            <span style={{ flex: 1 }}>Settings</span>
+          </button>
+          <a
+            href={EMPLOYER_DOCS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "7px 10px",
+              borderRadius: 7,
+              fontSize: 13,
+              color: "var(--ink-2)",
+              cursor: "pointer",
+              background: "transparent",
+              textDecoration: "none",
+              boxSizing: "border-box",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--line-2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            <IconFile size={14} />
+            <span style={{ flex: 1 }}>Documentation</span>
+            <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
+              ↗
+            </span>
+          </a>
+          {onSignOut && (
             <button
-              onClick={() => setTheme(isDark ? "light" : "dark")}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                padding: "7px 10px",
-                borderRadius: 7,
-                fontSize: 13,
-                color: "var(--ink-2)",
-              }}
-            >
-              {isDark ? <IconSun size={14} /> : <IconMoon size={14} />}
-              <span style={{ flex: 1, textAlign: "left" }}>
-                {isDark ? "Light" : "Dark"} theme
-              </span>
-            </button>
-            <button
+              type="button"
               onClick={() => {
                 setOpen(false);
-                onPick("/employer/settings");
+                onSignOut();
               }}
               style={{
                 width: "100%",
@@ -1255,33 +1741,22 @@ function AvatarMenu({
                 borderRadius: 7,
                 fontSize: 13,
                 color: "var(--ink-2)",
+                cursor: "pointer",
+                background: "transparent",
+                border: "none",
+                textAlign: "left",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "var(--line-2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
               }}
             >
-              <IconSettings size={14} />
-              <span style={{ flex: 1, textAlign: "left" }}>Settings</span>
+              <IconLogout size={14} />
+              <span style={{ flex: 1 }}>Log out</span>
             </button>
-            {onSignOut && (
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  onSignOut();
-                }}
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "7px 10px",
-                  borderRadius: 7,
-                  fontSize: 13,
-                  color: "var(--ink-2)",
-                }}
-              >
-                <IconLogout size={14} />
-                <span style={{ flex: 1, textAlign: "left" }}>Sign out</span>
-              </button>
-            )}
-          </div>
+          )}
         </div>
       )}
     </div>
@@ -1312,6 +1787,8 @@ export interface AskPanelProps {
   onToggleThinking: () => void;
   /** Right-side custom slot, e.g. the Studio hover-menu button. */
   studioSlot?: React.ReactNode;
+  /** Extra pixels added to header `padding-left` when an overlay chrome control (e.g. show sidebar) sits at the viewport edge — see WorkspaceShell. */
+  leadingChromeInsetPx?: number;
 }
 
 type WorkspaceView = "chat" | "graph";
@@ -1338,6 +1815,7 @@ export function AskPanel({
   thinking,
   onToggleThinking,
   studioSlot,
+  leadingChromeInsetPx = 0,
 }: AskPanelProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<WorkspaceView>("chat");
@@ -1381,17 +1859,7 @@ export function AskPanel({
         background: "var(--bg)",
       }}
     >
-      <div
-        style={{
-          padding: "10px 20px",
-          borderBottom: "1px solid var(--line)",
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          background: "var(--panel)",
-          flexShrink: 0,
-        }}
-      >
+      <div style={workspaceMainHeaderBarStyle(leadingChromeInsetPx)}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 600 }}>{titleText}</div>
           <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{subText}</div>
@@ -1480,42 +1948,13 @@ export function AskPanel({
           New chat
         </button>
 
-        <button
-          onClick={openPalette}
-          title="Jump to anything  ⌘K"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "5px 9px",
-            borderRadius: 7,
-            border: "1px solid var(--line)",
-            background: "var(--line-2)",
-            fontSize: 12,
-            color: "var(--ink-3)",
-          }}
-        >
-          <IconSearch size={12} />
-          <span
-            className="mono"
-            style={{
-              fontSize: 10,
-              padding: "1px 5px",
-              border: "1px solid var(--line)",
-              borderRadius: 4,
-              background: "var(--panel)",
-            }}
-          >
-            ⌘K
-          </span>
-        </button>
+        <JumpToPaletteButton onClick={openPalette} />
         {studioSlot}
         <AvatarMenu
-          features={DEMOTED_FEATURES}
           userInitials={userInitials}
           userName={userName}
           userEmail={userEmail}
-          onPick={onStudioNavigate}
+          onOpenSettings={() => onStudioNavigate("/employer/settings")}
           onSignOut={onSignOut}
         />
       </div>
@@ -1528,9 +1967,16 @@ export function AskPanel({
         <>
           <div
             ref={scrollRef}
-            style={{ flex: 1, overflowY: "auto", padding: "28px 24px 20px" }}
+            style={{
+              flex: 1,
+              overflowY: "auto",
+              paddingTop: 28,
+              paddingBottom: 20,
+              paddingLeft: CHAT_GUTTER_X_PX + leadingChromeInsetPx,
+              paddingRight: CHAT_GUTTER_X_PX,
+            }}
           >
-            <div style={{ maxWidth: 760, margin: "0 auto" }}>
+            <div style={{ maxWidth: CHAT_COLUMN_MAX_PX, margin: "0 auto" }}>
               {isEmpty ? (
                 <EmptyState onOpenAdd={onOpenAdd} sourceCount={sources.length} />
               ) : (
@@ -1544,7 +1990,15 @@ export function AskPanel({
             </div>
           </div>
 
-          <div style={{ padding: "12px 24px 20px", flexShrink: 0 }}>
+          <div
+            style={{
+              paddingTop: 12,
+              paddingBottom: 20,
+              paddingLeft: CHAT_GUTTER_X_PX + leadingChromeInsetPx,
+              paddingRight: CHAT_GUTTER_X_PX,
+              flexShrink: 0,
+            }}
+          >
             <Composer
               sources={sources}
               selected={selected}
@@ -1560,7 +2014,7 @@ export function AskPanel({
             />
             <div
               style={{
-                maxWidth: 760,
+                maxWidth: CHAT_COLUMN_MAX_PX,
                 margin: "8px auto 0",
                 textAlign: "center",
                 fontSize: 11,

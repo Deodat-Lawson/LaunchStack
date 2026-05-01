@@ -1,26 +1,26 @@
 "use client";
 
 /**
- * Legal document flow (intended pipeline):
+ * Legal document flow:
  * 1. Home — pick a template from the library, or open the legal assistant (chat).
- * 2. Chat (optional) — assistant recommends a template and collects field values.
- * 3. Template form — LegalDocumentConfig + TEMPLATE_REGISTRY validation (always after chat).
- * 4. Document — save + LegalDocumentEditor (highlighted fields, docx, etc.).
+ * 2. Chat (optional) — assistant recommends a template and pre-fills field values.
+ * 3. Editor — LegalDocumentEditor opens directly with the templated draft.
+ *    Field values are filled inline via the right-pane Fields tab.
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { DocumentGeneratorHome, type DocumentTemplate } from './DocumentGeneratorHome';
-import { LegalDocumentConfig } from './LegalDocumentConfig';
 import { LegalDocumentEditor } from './LegalDocumentEditor';
 import { DocumentGeneratorEditor } from './DocumentGeneratorEditor';
 import { LegalChatbot } from './LegalChatbot';
 import { LegalGeneratorTheme, legalTheme } from './LegalGeneratorTheme';
 import { Loader2 } from 'lucide-react';
 import type { Citation } from './generator';
-import { TEMPLATE_REGISTRY, type TemplateField } from '@launchstack/features/legal-templates';
+import { TEMPLATE_REGISTRY } from '@launchstack/features/legal-templates';
 import type { EditorSection } from '@launchstack/features/legal-templates';
 import { parseLegalDocumentHtmlToSections } from '@launchstack/features/legal-templates';
 import {
+  buildEditorSections,
   buildTemplateFieldDataForDocx,
   extractFieldValuesFromSections,
 } from '@launchstack/features/legal-templates';
@@ -104,20 +104,12 @@ async function regenerateLegalDocxBase64(
 }
 
 export function DocumentGenerator() {
-  const [currentView, setCurrentView] = useState<'home' | 'config' | 'editor' | 'chat'>('home');
-  const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null);
+  const [currentView, setCurrentView] = useState<'home' | 'editor' | 'chat'>('home');
   const [currentDocument, setCurrentDocument] = useState<GeneratedDocument | null>(null);
   const [generatedDocuments, setGeneratedDocuments] = useState<GeneratedDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [legalFieldErrors, setLegalFieldErrors] = useState<Record<string, string>>({});
   const [chatInitialMessage, setChatInitialMessage] = useState<string | undefined>(undefined);
-  const [prefilledData, setPrefilledData] = useState<Record<string, string> | undefined>(undefined);
-  /** Remount LegalDocumentConfig when template/prefill changes; bump when entering config. */
-  const [legalConfigNonce, setLegalConfigNonce] = useState(0);
-  /** Whether the field form was opened from chat (back returns to assistant) vs template library. */
-  const [configSource, setConfigSource] = useState<'home' | 'chat' | null>(null);
 
   const fetchDocuments = useCallback(async () => {
     try {
@@ -170,14 +162,84 @@ export function DocumentGenerator() {
     return date.toLocaleDateString();
   };
 
+  /**
+   * Open the editor directly for a chosen legal template — no Configure step.
+   * Builds skeleton sections client-side and persists an empty draft so the
+   * editor's save/DOCX flows have a document id to work with.
+   */
+  const openLegalDraft = useCallback(
+    async (template: DocumentTemplate, prefilled?: Record<string, string>) => {
+      const registryTemplate = TEMPLATE_REGISTRY[template.id];
+      if (!registryTemplate) {
+        setError(`Unknown template: ${template.id}`);
+        return;
+      }
+
+      setError(null);
+      const data = prefilled ?? {};
+      const sections = buildEditorSections(registryTemplate, data);
+      const htmlContent = sections
+        .map((s) => {
+          if (s.type === 'title') return `<h1>${s.content}</h1>`;
+          if (s.type === 'heading') return `<h2>${s.content}</h2>`;
+          return `<p>${s.content}</p>`;
+        })
+        .join('\n');
+
+      try {
+        const response = await fetch('/api/document-generator/documents', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: template.name,
+            content: htmlContent,
+            templateId: template.id,
+            metadata: {
+              templateType: 'legal',
+              legalData: data,
+              legalSections: sections,
+            },
+          }),
+        });
+
+        const json = await response.json() as {
+          success: boolean;
+          message?: string;
+          document?: { id: number };
+        };
+
+        if (!json.success || !json.document) {
+          setError(json.message ?? 'Failed to create draft');
+          return;
+        }
+
+        const newDoc: GeneratedDocument = {
+          id: json.document.id.toString(),
+          title: template.name,
+          template: template.id,
+          lastEdited: 'Just now',
+          content: htmlContent,
+          sections,
+          metadata: {
+            templateType: 'legal',
+            legalData: data,
+            legalSections: sections,
+          },
+        };
+
+        setCurrentDocument(newDoc);
+        setGeneratedDocuments((prev) => [newDoc, ...prev]);
+        setCurrentView('editor');
+      } catch (err) {
+        console.error('Error opening legal draft:', err);
+        setError('Failed to open templated draft');
+      }
+    },
+    [],
+  );
+
   const handleNewDocument = (template: DocumentTemplate) => {
-    setError(null);
-    setLegalFieldErrors({});
-    setPrefilledData(undefined);
-    setConfigSource('home');
-    setLegalConfigNonce((n) => n + 1);
-    setSelectedTemplate(template);
-    setCurrentView('config');
+    void openLegalDraft(template);
   };
 
   const handleStartChat = (initialMessage?: string) => {
@@ -202,113 +264,7 @@ export function DocumentGenerator() {
       isLegal: true,
       fields: registryTemplate.fields,
     };
-    setSelectedTemplate(template);
-    setPrefilledData(prefilled);
-    setLegalFieldErrors({});
-    setError(null);
-    setConfigSource('chat');
-    setLegalConfigNonce((n) => n + 1);
-    setCurrentView('config');
-  };
-
-  const handleLegalGenerate = async (formData: Record<string, string>, templateOverride?: DocumentTemplate) => {
-    const template = templateOverride ?? selectedTemplate;
-    if (!template) return;
-
-    setIsSaving(true);
-    setError(null);
-    setLegalFieldErrors({});
-
-    try {
-      const legalResponse = await fetch('/api/document-generator/legal-generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          templateId: template.id,
-          data: formData,
-          format: 'json',
-        }),
-      });
-
-      const legalData = await legalResponse.json() as {
-        success: boolean;
-        error?: string;
-        details?: string[];
-        fieldErrors?: Record<string, string>;
-        title?: string;
-        sections?: EditorSection[];
-        docxBase64?: string;
-        filename?: string;
-      };
-
-      if (legalResponse.status === 422) {
-        setCurrentView('config');
-        setLegalFieldErrors(legalData.fieldErrors ?? {});
-        setError('Please fill in all required fields before generating the document.');
-        return;
-      }
-
-      if (!legalData.success) {
-        setError(legalData.error ?? 'Failed to generate legal document');
-        return;
-      }
-
-      const sections = legalData.sections ?? [];
-      const htmlContent = sections
-        .map((s) => {
-          if (s.type === 'title') return `<h1>${s.content}</h1>`;
-          if (s.type === 'heading') return `<h2>${s.content}</h2>`;
-          return `<p>${s.content}</p>`;
-        })
-        .join('\n');
-
-      const response = await fetch('/api/document-generator/documents', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: legalData.title ?? template.name,
-          content: htmlContent,
-          templateId: template.id,
-          metadata: {
-            templateType: 'legal',
-            legalData: formData,
-            legalSections: sections,
-          },
-        }),
-      });
-
-      const data = await response.json() as { success: boolean; message?: string; document?: { id: number } };
-
-      if (data.success && data.document) {
-        const newDoc: GeneratedDocument = {
-          id: data.document.id.toString(),
-          title: legalData.title ?? template.name,
-          template: template.id,
-          lastEdited: 'Just now',
-          content: htmlContent,
-          docxBase64: legalData.docxBase64,
-          sections,
-          metadata: {
-            templateType: 'legal',
-            legalData: formData,
-            legalSections: sections,
-          },
-        };
-
-        setCurrentDocument(newDoc);
-        setGeneratedDocuments((prev) => [newDoc, ...prev]);
-        setPrefilledData(undefined);
-        setConfigSource(null);
-        setCurrentView('editor');
-      } else {
-        setError(data.message ?? 'Failed to save legal document');
-      }
-    } catch (err) {
-      console.error('Error generating legal document:', err);
-      setError('Failed to generate legal document');
-    } finally {
-      setIsSaving(false);
-    }
+    void openLegalDraft(template, prefilled);
   };
 
   const handleOpenDocument = (document: GeneratedDocument) => {
@@ -429,21 +385,8 @@ export function DocumentGenerator() {
   const handleBackToHome = () => {
     setCurrentView('home');
     setCurrentDocument(null);
-    setSelectedTemplate(null);
-    setLegalFieldErrors({});
-    setPrefilledData(undefined);
     setChatInitialMessage(undefined);
     setError(null);
-    setConfigSource(null);
-  };
-
-  const handleLegalConfigBack = () => {
-    if (configSource === 'chat') {
-      setCurrentView('chat');
-      setConfigSource(null);
-      return;
-    }
-    handleBackToHome();
   };
 
   if (isLoading) {
@@ -534,33 +477,6 @@ export function DocumentGenerator() {
         />
       </LegalGeneratorTheme>
     );
-  }
-
-  if (currentView === 'config' && selectedTemplate) {
-    if (selectedTemplate.isLegal && selectedTemplate.fields) {
-      return (
-        <LegalGeneratorTheme>
-          <LegalDocumentConfig
-            key={`${selectedTemplate.id}-${legalConfigNonce}`}
-            template={selectedTemplate as DocumentTemplate & { isLegal: true; fields: TemplateField[] }}
-            onBack={handleLegalConfigBack}
-            onGenerate={(data) => void handleLegalGenerate(data)}
-            isGenerating={isSaving}
-            serverErrors={legalFieldErrors}
-            globalError={error}
-            initialData={prefilledData}
-            backButtonLabel={
-              configSource === 'chat' ? 'Back to assistant' : 'Back to templates'
-            }
-            flowHint={
-              configSource === 'chat'
-                ? 'Assistant pre-filled these fields. Review required items, then generate — your document opens next for editing and export.'
-                : undefined
-            }
-          />
-        </LegalGeneratorTheme>
-      );
-    }
   }
 
   return (

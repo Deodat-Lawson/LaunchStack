@@ -33,6 +33,7 @@ import {
 } from "../services";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -131,7 +132,7 @@ export async function POST(request: Request) {
                 }, { status: 404 });
             }
 
-            if (targetDocument.companyId !== requestingUser.companyId) {
+            if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
                 recordResult("error");
                 return NextResponse.json({
                     success: false,
@@ -140,7 +141,7 @@ export async function POST(request: Request) {
             }
 
             const companyConfig =
-                await getCompanyEmbeddingConfig(requestingUser.companyId);
+                await getCompanyEmbeddingConfig((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
 
             // Perform document search
             const resolvedEmbeddingIndex = resolveEmbeddingIndex(
@@ -158,7 +159,7 @@ export async function POST(request: Request) {
                 const documentOptions: DocumentSearchOptions = {
                     topK: 5,
                     documentId,
-                    companyId: Number(requestingUser.companyId),
+                    companyId: Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))),
                     embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                 };
                 

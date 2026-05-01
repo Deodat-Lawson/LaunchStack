@@ -15,6 +15,7 @@ import {
   getCompanyReindexState,
 } from "@launchstack/core/embeddings";
 import { inngest } from "~/server/inngest/client";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -104,7 +105,7 @@ export async function POST(request: Request) {
     } | null = null;
 
     if (embeddingIndexKey !== undefined) {
-      const companyIdForCheck = Number(userRecord.companyId);
+      const companyIdForCheck = Number((await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)));
       const state = await getCompanyReindexState(companyIdForCheck);
 
       if (state && state.status === "REINDEXING") {
@@ -233,7 +234,7 @@ export async function POST(request: Request) {
       updateData.useUploadThing = useUploadThing;
     }
 
-    const companyIdNum = Number(userRecord.companyId);
+    const companyIdNum = Number((await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)));
 
     // Credentials live in a separate encrypted table. Only write the fields
     // the caller actually included — `undefined` means "leave alone".

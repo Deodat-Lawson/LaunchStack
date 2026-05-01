@@ -45,6 +45,8 @@ import { useMarketingPipelineController } from "./useMarketingPipelineController
 export interface MarketingPipelineWorkspaceProps {
   debug?: boolean;
   showDnaDebugSection?: boolean;
+  /** When true, render without the standalone page header (used inside the Studio drawer). */
+  embedded?: boolean;
 }
 
 function usePlatformLogoClassNames() {
@@ -1017,6 +1019,7 @@ function VariantStack({
 export function MarketingPipelineWorkspace({
   debug = false,
   showDnaDebugSection = false,
+  embedded = false,
 }: MarketingPipelineWorkspaceProps) {
   const [debugOpen, setDebugOpen] = useState(false);
   const [confirmNewCampaign, setConfirmNewCampaign] = useState(false);
@@ -1083,19 +1086,24 @@ export function MarketingPipelineWorkspace({
   };
 
   return (
-    <>
-      <div className={styles.pageHeaderRow}>
-        <div className={styles.pageTitleIcon}>
-          <Megaphone className={styles.pageTitleIconInner} />
+    <div
+      className={embedded ? styles.embeddedRoot : undefined}
+      style={embedded ? undefined : { display: "contents" }}
+    >
+      {!embedded && (
+        <div className={styles.pageHeaderRow}>
+          <div className={styles.pageTitleIcon}>
+            <Megaphone className={styles.pageTitleIconInner} />
+          </div>
+          <div>
+            <h1 className={styles.pageTitle}>Marketing Pipeline</h1>
+            <p className={styles.pageSubtitle}>
+              Create campaign-ready posts for Reddit, X, LinkedIn & Bluesky from your company
+              knowledge base
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 className={styles.pageTitle}>Marketing Pipeline</h1>
-          <p className={styles.pageSubtitle}>
-            Create campaign-ready posts for Reddit, X, LinkedIn & Bluesky from your company
-            knowledge base
-          </p>
-        </div>
-      </div>
+      )}
 
       {!platform ? (
         <section className={styles.mainContent}>
@@ -1188,10 +1196,12 @@ export function MarketingPipelineWorkspace({
 
             <section className={styles.workspaceShell}>
               <div className={`${styles.workspaceMain} ${styles.workspaceMainSingle}`}>
-                <div className={styles.workspaceMainHeader}>
-                  <MessageSquareText size={18} className={styles.assistantIcon} />
-                  <h2 className={styles.assistantTitle}>AI Assistant</h2>
-                </div>
+                {!embedded && (
+                  <div className={styles.workspaceMainHeader}>
+                    <MessageSquareText size={18} className={styles.assistantIcon} />
+                    <h2 className={styles.workspaceMainTitle}>AI Assistant</h2>
+                  </div>
+                )}
                 <div className={styles.workspaceLeft}>
                   <header className={styles.workspaceLeftHeader}>
                     <div className={styles.selectedPlatformPill}>
@@ -1606,6 +1616,6 @@ export function MarketingPipelineWorkspace({
           </div>
         </section>
       )}
-    </>
+    </div>
   );
 }

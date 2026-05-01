@@ -1,5 +1,6 @@
 import type { ProviderResult } from "../types";
 import { resolveRerankProvider } from "../registry";
+import { createSlot } from "../../internal/slot";
 
 export interface RerankResult {
     scores: number[];
@@ -10,19 +11,22 @@ export interface RerankProvider {
     rerank(query: string, documents: string[]): Promise<ProviderResult<RerankResult>>;
 }
 
-let _provider: RerankProvider | null = null;
+const providerSlot = createSlot<RerankProvider>("providers/reranking");
 
 export async function getRerankProvider(): Promise<RerankProvider> {
-    if (_provider) return _provider;
+    const cached = providerSlot.get();
+    if (cached) return cached;
 
     const type = resolveRerankProvider();
+    let provider: RerankProvider;
     if (type === "sidecar") {
         const { SidecarRerankProvider } = await import("./sidecar");
-        _provider = new SidecarRerankProvider();
+        provider = new SidecarRerankProvider();
     } else {
         const { OpenAICompatibleRerankProvider } = await import("./jina");
-        _provider = new OpenAICompatibleRerankProvider();
+        provider = new OpenAICompatibleRerankProvider();
     }
+    providerSlot.set(provider);
 
-    return _provider;
+    return provider;
 }

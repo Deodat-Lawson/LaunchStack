@@ -13,31 +13,33 @@ import type {
   CompanySearchOptions,
   RagSearchResult,
 } from "./types";
+import { createSlot } from "../internal/slot";
 
-let _port: RagPort | null = null;
+const portSlot = createSlot<RagPort>("rag/port");
 
 export function configureRag(port: RagPort): void {
-  _port = port;
+  portSlot.set(port);
 }
 
 export function getRag(): RagPort {
-  if (!_port) {
+  const port = portSlot.get();
+  if (!port) {
     throw new Error(
       "[@launchstack/core/rag] No RagPort registered. Pass `rag.port` to createEngine, or call configureRag(port) directly.",
     );
   }
-  return _port;
+  return port;
 }
 
 export function getRagOrNull(): RagPort | null {
-  return _port;
+  return portSlot.get() ?? null;
 }
 
 export async function ragCompanySearchSafe(
   query: string,
   options: CompanySearchOptions,
 ): Promise<RagSearchResult[]> {
-  const port = _port;
+  const port = portSlot.get();
   if (!port) return [];
   try {
     return await port.companyEnsembleSearch(query, options);

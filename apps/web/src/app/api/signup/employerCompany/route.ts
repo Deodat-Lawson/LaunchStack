@@ -1,10 +1,11 @@
 import {db} from "~/server/db";
-import {company, users} from "@launchstack/core/db/schema";
+import {company, users, userCompanyMemberships} from "@launchstack/core/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
 import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
+import { generateUniqueSlug } from "~/lib/workspace-slug";
 
 export async function POST(request: Request) {
     try {
@@ -35,10 +36,13 @@ export async function POST(request: Request) {
             );
         }
 
+        const slug = await generateUniqueSlug(companyName);
+
         const [newCompany] = await db
             .insert(company)
             .values({
                 name: companyName,
+                slug,
                 numberOfEmployees: numberOfEmployees || "0",
                 embeddingIndexKey: embeddingIndexKey?.trim() || null,
             })
@@ -85,14 +89,25 @@ export async function POST(request: Request) {
             }
         }
 
-        await db.insert(users).values({
-            userId,
-            companyId,
-            name,
-            email,
-            status: "verified",
-            role: "owner",
-        });
+        const [insertedUser] = await db
+            .insert(users)
+            .values({
+                userId,
+                companyId,
+                name,
+                email,
+                status: "verified",
+                role: "owner",
+            })
+            .returning({ id: users.id });
+
+        if (insertedUser) {
+            await db.insert(userCompanyMemberships).values({
+                userId: BigInt(insertedUser.id),
+                companyId,
+                role: "owner",
+            });
+        }
 
         // Initialize credit account with signup bonus
         await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);

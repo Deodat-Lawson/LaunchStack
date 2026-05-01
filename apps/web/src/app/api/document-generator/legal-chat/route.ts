@@ -9,6 +9,7 @@ import { users } from "@launchstack/core/db/schema";
 import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
 import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
 import type { CompanyMetadataJSON } from "@launchstack/features/company-metadata";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -176,7 +177,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const companyId = Number(requestingUser.companyId);
+    const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
 
     // Fetch company metadata for pre-filling
     let companyDefaults: Record<string, string> = {};

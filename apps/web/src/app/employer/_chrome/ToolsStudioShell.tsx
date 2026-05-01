@@ -1,22 +1,34 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useSetBreadcrumbs } from "./BreadcrumbContext";
-
-const TOOLS_CRUMBS = ["Drift", "Tools"];
 
 /**
- * Tool pages render inside the global `DriftShell` (sidebar + topbar). This
- * wrapper just feeds a "Tools" breadcrumb into the shared topbar; visual
- * chrome is otherwise inherited.
+ * Full-height wrapper for standalone tool routes. Navigation lives inside Studio controls.
  */
-export function ToolsStudioShell({
-  children,
-  pageTitle,
-}: {
-  children: ReactNode;
-  pageTitle?: string;
-}) {
-  useSetBreadcrumbs(pageTitle ? [...TOOLS_CRUMBS, pageTitle] : TOOLS_CRUMBS);
-  return <>{children}</>;
+export function ToolsStudioShell({ children }: { children: ReactNode }) {
+  return (
+    <div
+      data-drift-immersive="true"
+      style={{
+        display: "flex",
+        height: "100vh",
+        width: "100%",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
+      <div
+        style={{
+          flex: 1,
+          minWidth: 0,
+          minHeight: 0,
+          overflow: "auto",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
 }

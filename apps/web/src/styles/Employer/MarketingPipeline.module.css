@@ -1302,6 +1302,55 @@
     gap: 0.6rem;
 }
 
+/* ── Studio drawer (embedded) ── clearer sections, less “wall of chrome” ── */
+
+.embeddedRoot .workspaceShell {
+    padding: 14px 16px 18px;
+    border-radius: 12px;
+    box-shadow: none;
+    border-color: var(--line);
+    background: var(--panel);
+}
+
+.embeddedRoot .platformShell {
+    margin-bottom: 0;
+    padding: 20px 20px 22px;
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+.embeddedRoot .workspaceLeft {
+    gap: 1.25rem;
+}
+
+.embeddedRoot .workspaceLeftHeader {
+    padding-bottom: 10px;
+    margin-bottom: 0;
+    border-bottom-color: var(--line);
+}
+
+.embeddedRoot .assistantContent {
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line-2);
+    background: var(--panel-2);
+    gap: 0.75rem;
+}
+
+.embeddedRoot .promptCard {
+    box-shadow: 0 1px 3px oklch(0 0 0 / 0.05);
+}
+
+.embeddedRoot .assistantContent .assistantSectionHeader:first-of-type {
+    margin-top: 0;
+}
+
+.embeddedRoot .assistantSectionHeader {
+    font-size: 0.6875rem;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
 /* ---------------- Workspace layout overrides ---------------- */
 
 .workspaceLayout {

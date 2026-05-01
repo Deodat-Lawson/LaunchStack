@@ -31,6 +31,8 @@ export interface StudioDrawerProps {
    * hidden.
    */
   onExpand?: (featureId: string) => void;
+  /** When user picks Chat in the rail, leave Studio and focus the workspace chat (expanded or main AskPanel). */
+  onOpenWorkspaceChat?: () => void;
 }
 
 /** Feature ids that render an interactive pane (not just a link-out). */
@@ -58,6 +60,7 @@ export function StudioDrawer({
   role,
   activeFeatureId,
   onExpand,
+  onOpenWorkspaceChat,
 }: StudioDrawerProps) {
   const visibleGroups = useMemo(() => {
     const canSeeCompany = role ? COMPANY_ROLES.has(role) : true;
@@ -183,7 +186,16 @@ export function StudioDrawer({
                 return (
                   <button
                     key={f.id}
-                    onClick={() => setActiveId(f.id)}
+                    type="button"
+                    onClick={() => {
+                      if (f.id === "chat") {
+                        if (onOpenWorkspaceChat) {
+                          onOpenWorkspaceChat();
+                          return;
+                        }
+                      }
+                      setActiveId(f.id);
+                    }}
                     style={{
                       width: "100%",
                       display: "flex",
@@ -257,29 +269,31 @@ export function StudioDrawer({
         </div>
       </aside>
 
-      {/* Right detail pane */}
+      {/* Right detail pane — chrome row reserves space so panes (e.g. Settings) don’t sit under Expand/Close */}
       <section
         style={{
           flex: 1,
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          position: "relative",
+          minWidth: 0,
         }}
       >
         <div
           style={{
-            position: "absolute",
-            top: 10,
-            right: 12,
+            flexShrink: 0,
             display: "flex",
             alignItems: "center",
+            justifyContent: "flex-end",
             gap: 6,
-            zIndex: 5,
+            padding: "10px 12px",
+            borderBottom: "1px solid var(--line)",
+            background: "var(--panel)",
           }}
         >
           {canExpand && (
             <button
+              type="button"
               onClick={() => onExpand!(active.id)}
               title={`Expand ${active.label} to main view`}
               style={{
@@ -324,6 +338,7 @@ export function StudioDrawer({
             </button>
           )}
           <button
+            type="button"
             onClick={onClose}
             title="Close Studio"
             style={{
@@ -347,7 +362,17 @@ export function StudioDrawer({
             <IconX size={14} />
           </button>
         </div>
-        {pane}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {pane}
+        </div>
       </section>
     </div>
   );

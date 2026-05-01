@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { getJobById } from "@launchstack/features/trend-search/db";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function GET(
     _request: Request,
@@ -32,7 +33,7 @@ export async function GET(
         }
 
         const { jobId } = await params;
-        const job = await getJobById(jobId, userInfo.companyId);
+        const job = await getJobById(jobId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)));
 
         if (!job) {
             return NextResponse.json(

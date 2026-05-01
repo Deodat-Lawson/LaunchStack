@@ -17,6 +17,7 @@ import { document, users } from "@launchstack/core/db/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -88,7 +89,7 @@ export async function PATCH(
         .from(document)
         .where(eq(document.id, parsed.documentId));
 
-      if (!doc || doc.companyId !== userInfo.companyId) {
+      if (!doc || doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
         // Don't leak existence to cross-company requests.
         return NextResponse.json(
           { error: "Document not found" },

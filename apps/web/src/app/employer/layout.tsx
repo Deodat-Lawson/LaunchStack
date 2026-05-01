@@ -1,8 +1,12 @@
 import type { ReactNode } from "react";
 import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
 import { DriftShell } from "./_chrome/DriftShell";
+import { EmployerWorkspaceSwitcherProvider } from "./_chrome/EmployerWorkspaceSwitcherContext";
+import { getWorkspaceSwitcherPayload } from "./_chrome/getWorkspaceSwitcherPayload";
 
-export default function EmployerLayout({ children }: { children: ReactNode }) {
+export default async function EmployerLayout({ children }: { children: ReactNode }) {
+  const workspaceSwitcher = await getWorkspaceSwitcherPayload();
+
   return (
     <div
       className={`lsw-root ${inter.variable} ${interTight.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
@@ -12,7 +16,9 @@ export default function EmployerLayout({ children }: { children: ReactNode }) {
         width: "100%",
       }}
     >
-      <DriftShell>{children}</DriftShell>
+      <EmployerWorkspaceSwitcherProvider value={workspaceSwitcher}>
+        <DriftShell>{children}</DriftShell>
+      </EmployerWorkspaceSwitcherProvider>
     </div>
   );
 }

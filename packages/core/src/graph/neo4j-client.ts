@@ -13,14 +13,17 @@
 
 import neo4j, { type Driver, type Session } from "neo4j-driver";
 
+import { createSlot } from "../internal/slot";
+
 export interface Neo4jClientConfig {
   uri: string;
   user: string;
   password: string;
 }
 
-let _driver: Driver | null = null;
-let _config: Neo4jClientConfig | null = null;
+const driverSlot = createSlot<Driver>("graph/neo4jDriver");
+// `null` means "explicitly unconfigured"; absence (`undefined`) means "never configured".
+const configSlot = createSlot<Neo4jClientConfig | null>("graph/neo4jConfig");
 
 /**
  * Inject Neo4j credentials. Idempotent — calling with the same config is a
@@ -29,34 +32,39 @@ let _config: Neo4jClientConfig | null = null;
  * `null` to mark Neo4j as unconfigured (disables graph-dependent features).
  */
 export function configureNeo4j(config: Neo4jClientConfig | null): void {
-  if (_config && config && _config.uri === config.uri && _config.user === config.user && _config.password === config.password) {
+  const current = configSlot.get();
+  if (current && config && current.uri === config.uri && current.user === config.user && current.password === config.password) {
     return;
   }
-  if (_driver) {
-    void _driver.close();
-    _driver = null;
+  const existingDriver = driverSlot.get();
+  if (existingDriver) {
+    void existingDriver.close();
+    driverSlot.clear();
   }
-  _config = config;
+  configSlot.set(config);
 }
 
 export function isNeo4jConfigured(): boolean {
-  return !!_config;
+  return !!configSlot.get();
 }
 
 export function getNeo4jDriver(): Driver {
-  if (_driver) return _driver;
+  const existing = driverSlot.get();
+  if (existing) return existing;
 
-  if (!_config) {
+  const config = configSlot.get();
+  if (!config) {
     throw new Error(
       "[Neo4j] Not configured. The host must call configureNeo4j({ uri, user, password }) during startup.",
     );
   }
 
-  _driver = neo4j.driver(
-    _config.uri,
-    neo4j.auth.basic(_config.user, _config.password),
+  const driver = neo4j.driver(
+    config.uri,
+    neo4j.auth.basic(config.user, config.password),
   );
-  return _driver;
+  driverSlot.set(driver);
+  return driver;
 }
 
 export function getNeo4jSession(): Session {
@@ -84,9 +92,10 @@ export async function checkNeo4jHealth(): Promise<boolean> {
 }
 
 export async function closeNeo4jDriver(): Promise<void> {
-  if (_driver) {
-    await _driver.close();
-    _driver = null;
+  const existing = driverSlot.get();
+  if (existing) {
+    await existing.close();
+    driverSlot.clear();
   }
 }
 

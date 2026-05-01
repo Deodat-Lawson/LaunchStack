@@ -12,6 +12,7 @@ import { eq, desc } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function GET() {
     try {
@@ -21,7 +22,7 @@ export async function GET() {
         }
 
         const [userInfo] = await db
-            .select({ companyId: users.companyId })
+            .select({ id: users.id, companyId: users.companyId })
             .from(users)
             .where(eq(users.userId, userId));
 
@@ -39,7 +40,7 @@ export async function GET() {
                 createdAt: companyMetadataHistory.createdAt,
             })
             .from(companyMetadataHistory)
-            .where(eq(companyMetadataHistory.companyId, userInfo.companyId))
+            .where(eq(companyMetadataHistory.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))))
             .orderBy(desc(companyMetadataHistory.createdAt))
             .limit(100);
 

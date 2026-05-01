@@ -133,8 +133,8 @@ html, body {
   --accent-h: 285;
   --accent: oklch(0.54 0.24 var(--accent-h));
   --accent-2: oklch(0.46 0.25 var(--accent-h));
-  --accent-deep: oklch(0.40 0.25 var(--accent-h));
-  --accent-glow: oklch(0.54 0.24 var(--accent-h) / 0.28);
+  --accent-deep: oklch(0.38 0.22 var(--accent-h));
+  --accent-glow: oklch(0.60 0.24 var(--accent-h) / 0.35);
   --accent-soft: oklch(0.96 0.03 var(--accent-h));
   --accent-ink: oklch(0.42 0.20 var(--accent-h));
   --scrim: oklch(0.22 0.04 280 / 0.55);
@@ -147,9 +147,9 @@ html, body {
   --ink-3: oklch(0.60 0.008 280);
   --ink-4: oklch(0.78 0.006 280);
   --line: oklch(0.90 0.006 280);
-  --line-2: oklch(0.965 0.004 280);
-  --danger: oklch(0.6 0.18 25);
-  --ok: oklch(0.62 0.14 150);
+  --line-2: oklch(0.955 0.004 280);
+  --danger: oklch(0.55 0.22 25);
+  --ok: oklch(0.58 0.16 150);
   --radius: 10px;
   --radius-lg: 14px;
 
@@ -226,7 +226,7 @@ html, body {
 .dark .lsw-root,
 [data-theme="dark"] .lsw-root,
 .lsw-root[data-theme="dark"] {
-  --bg: oklch(0.145 0.02 290);
+  --bg: oklch(0.14 0.02 290);
   --panel: oklch(0.20 0.025 290);
   --panel-2: oklch(0.235 0.03 290);
   --ink: oklch(0.97 0.005 280);
@@ -237,12 +237,15 @@ html, body {
   --line-2: oklch(0.26 0.035 290);
   --accent: oklch(0.72 0.19 var(--accent-h));
   --accent-2: oklch(0.62 0.22 var(--accent-h));
-  --accent-deep: oklch(0.52 0.22 var(--accent-h));
-  --accent-glow: oklch(0.72 0.19 var(--accent-h) / 0.32);
+  --accent-deep: oklch(0.46 0.25 var(--accent-h));
+  --accent-glow: oklch(0.72 0.19 var(--accent-h) / 0.35);
   --accent-soft: oklch(0.30 0.08 var(--accent-h));
   --accent-ink: oklch(0.86 0.16 var(--accent-h));
   --scrim: oklch(0.05 0.02 290 / 0.72);
   --scrim-shadow: oklch(0.05 0.02 290 / 0.55);
+
+  --success: oklch(0.72 0.16 150);
+  --danger: oklch(0.70 0.20 25);
 
   /* Drift dark-mode aliases */
   --bg-sunk: oklch(0.12 0.02 290);
@@ -252,7 +255,7 @@ html, body {
   --hue-magenta-glow: oklch(0.65 0.22 330 / 0.40);
   --hue-teal: oklch(0.70 0.18 200);
   --hue-teal-glow: oklch(0.70 0.18 200 / 0.32);
-  --warn: oklch(0.82 0.17 80);
+  --warn: oklch(0.78 0.16 75);
   --info: oklch(0.72 0.14 235);
   --shadow-1: 0 1px 2px oklch(0 0 0 / 0.4);
   --shadow-2: 0 4px 12px oklch(0 0 0 / 0.5),
@@ -263,7 +266,16 @@ html, body {
 
 .lsw-root .mono { font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace; }
 .lsw-root .serif { font-family: var(--font-instrument-serif, 'Instrument Serif'), Georgia, serif; font-feature-settings: normal; }
-.lsw-root button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; padding: 0; }
+/* Specificity (0,0,1) only — any single class on a button (e.g. CSS modules)
+   overrides padding, border, and background. */
+:where(.lsw-root) button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+}
 .lsw-root input, .lsw-root textarea { font-family: inherit; }
 .lsw-root ::-webkit-scrollbar { width: 8px; height: 8px; }
 .lsw-root ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }

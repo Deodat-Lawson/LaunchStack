@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { IconChevronRight, IconSparkle } from "./icons";
+import { IconChevronRight } from "./icons";
 import LoadingPage from "~/app/_components/loading";
 import type { StudioFeature } from "./types";
 
@@ -51,6 +51,14 @@ const StatisticsView = dynamic(
 const MetadataView = dynamic(
   () =>
     import("~/app/employer/metadata/MetadataView").then((m) => m.MetadataView),
+  { loading: () => <LoadingPage /> },
+);
+
+const MarketingPipelineWorkspace = dynamic(
+  () =>
+    import(
+      "~/app/employer/documents/components/marketing-pipeline/MarketingPipelineWorkspace"
+    ).then((m) => m.MarketingPipelineWorkspace),
   { loading: () => <LoadingPage /> },
 );
 
@@ -129,52 +137,6 @@ function PaneShell({
   );
 }
 
-function FieldLabel({ children }: { children: ReactNode }) {
-  return (
-    <div
-      className="mono"
-      style={{
-        fontSize: 10,
-        fontWeight: 700,
-        letterSpacing: "0.08em",
-        color: "var(--ink-3)",
-        textTransform: "uppercase",
-        marginBottom: 8,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function Chip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        padding: "6px 11px",
-        borderRadius: 999,
-        fontSize: 12,
-        fontWeight: active ? 600 : 500,
-        border: `1px solid ${active ? "var(--accent)" : "var(--line)"}`,
-        background: active ? "var(--accent-soft)" : "var(--panel)",
-        color: active ? "var(--accent-ink)" : "var(--ink-2)",
-        transition: "background 120ms, border-color 120ms, color 120ms",
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
 function PrimaryCTA({
   onClick,
   children,
@@ -237,10 +199,13 @@ function SecondaryLink({
 function InlineFeatureShell({
   eyebrow,
   title,
+  subtitle,
   children,
 }: {
   eyebrow: string;
   title: string;
+  /** One line shown under title (Studio panes where copy helps orientation). */
+  subtitle?: string;
   children: ReactNode;
 }) {
   return (
@@ -278,6 +243,19 @@ function InlineFeatureShell({
         >
           {title}
         </h2>
+        {subtitle ? (
+          <p
+            style={{
+              margin: "8px 0 0",
+              fontSize: 12.5,
+              lineHeight: 1.5,
+              color: "var(--ink-3)",
+              maxWidth: "min(560px, 100%)",
+            }}
+          >
+            {subtitle}
+          </p>
+        ) : null}
       </div>
       <div style={{ flex: 1, overflowY: "auto", minHeight: 0 }}>{children}</div>
     </div>
@@ -293,8 +271,8 @@ export function ChatPane(_: PaneProps) {
           left to scope your questions, or ask globally across the workspace.
         </p>
         <p style={{ marginTop: 12, color: "var(--ink-3)", fontSize: 12 }}>
-          Click <strong>Expand</strong> in the header to bring Chat into the main
-          workspace view.
+          Select <strong>Chat</strong> in the sidebar to return to your conversation,
+          or close Studio.
         </p>
       </div>
     </InlineFeatureShell>
@@ -566,94 +544,15 @@ export function PredictiveGapsPane({ onClose }: PaneProps) {
   );
 }
 
-export function MarketingPipelinePane({ onClose }: PaneProps) {
-  const router = useRouter();
-  const [goal, setGoal] = useState("Launch announcement");
-  const GOALS = [
-    "Launch announcement",
-    "Thought-leadership",
-    "Case study",
-    "Fundraising update",
-    "Hiring pitch",
-  ];
-  const CHANNELS = [
-    { id: "linkedin", label: "LinkedIn post", tone: "Warm · professional" },
-    { id: "x", label: "X thread", tone: "Punchy · concise" },
-    { id: "blog", label: "Blog post", tone: "Long-form · narrative" },
-    { id: "email", label: "Customer email", tone: "Conversational · direct" },
-  ];
+export function MarketingPipelinePane(_: PaneProps) {
   return (
-    <PaneShell
+    <InlineFeatureShell
       eyebrow="Marketing"
-      title="Multi-channel campaign"
-      body="One prompt, multiple channels. The pipeline generates a platform-tuned draft for each and lets you approve or regenerate per channel."
-      footer={
-        <>
-          <SecondaryLink onClick={onClose}>Cancel</SecondaryLink>
-          <div style={{ flex: 1 }} />
-          <PrimaryCTA
-            onClick={() => {
-              const params = new URLSearchParams();
-              params.set("goal", goal);
-              router.push(`/employer/tools/marketing-pipeline?${params.toString()}`);
-              onClose();
-            }}
-          >
-            <IconSparkle size={13} />
-            Open pipeline <IconChevronRight size={12} />
-          </PrimaryCTA>
-        </>
-      }
+      title="Marketing Pipeline"
+      subtitle="Pick a channel, describe the promotion — drafts use your indexed company knowledge. Progress and results stay in the bordered area below the form."
     >
-      <div style={{ marginBottom: 20 }}>
-        <FieldLabel>Campaign goal</FieldLabel>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {GOALS.map((g) => (
-            <Chip key={g} active={goal === g} onClick={() => setGoal(g)}>
-              {g}
-            </Chip>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <FieldLabel>Channels that will be generated</FieldLabel>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 10,
-          }}
-        >
-          {CHANNELS.map((c) => (
-            <div
-              key={c.id}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 10,
-                border: "1px solid var(--line)",
-                background: "var(--panel-2)",
-              }}
-            >
-              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                {c.label}
-              </div>
-              <div
-                className="mono"
-                style={{
-                  fontSize: 10,
-                  color: "var(--ink-3)",
-                  marginTop: 2,
-                  letterSpacing: "0.03em",
-                }}
-              >
-                {c.tone}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </PaneShell>
+      <MarketingPipelineWorkspace embedded />
+    </InlineFeatureShell>
   );
 }
 
@@ -810,7 +709,7 @@ export function DefaultLinkPane({
  * Single-entry pane renderer used by the Studio drawer *and* the main
  * workspace area when a non-chat feature is expanded. `onClose` is the pane's
  * exit path — the drawer passes its own close handler; the main area passes
- * "return to Chat".
+ * return-to-chat after removing the chrome back control (Studio sidebar Chat handles that too).
  */
 export function renderStudioPane(
   feature: StudioFeature,

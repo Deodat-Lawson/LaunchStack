@@ -7,6 +7,7 @@ import {
   resolveEffectiveEmbeddingConfig,
   type CompanyEmbeddingConfig,
 } from "./company-config";
+import { createSlot } from "../internal/slot";
 
 /**
  * Module-level config holding the sidecar URL used by SidecarEmbeddings.
@@ -17,14 +18,14 @@ export interface EmbeddingFactoryConfig {
   sidecarUrl?: string;
 }
 
-let _config: EmbeddingFactoryConfig | null = null;
+const configSlot = createSlot<EmbeddingFactoryConfig>("embeddings/factory");
 
 export function configureEmbeddingFactory(config: EmbeddingFactoryConfig): void {
-  _config = config;
+  configSlot.set(config);
 }
 
 function getSidecarUrl(): string | undefined {
-  return _config?.sidecarUrl;
+  return configSlot.get()?.sidecarUrl;
 }
 
 class SidecarEmbeddings implements EmbeddingsProvider {

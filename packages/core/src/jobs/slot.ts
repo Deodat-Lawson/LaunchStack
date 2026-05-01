@@ -10,18 +10,20 @@
  */
 
 import type { JobDispatcherPort } from "./types";
+import { createSlot } from "../internal/slot";
 
-let _port: JobDispatcherPort | null = null;
+const portSlot = createSlot<JobDispatcherPort>("jobs/port");
 
 export function configureJobDispatcher(port: JobDispatcherPort): void {
-  _port = port;
+  portSlot.set(port);
 }
 
 export function getJobDispatcher(): JobDispatcherPort {
-  if (!_port) {
+  const port = portSlot.get();
+  if (!port) {
     throw new Error(
       "[@launchstack/core/jobs] No JobDispatcherPort registered. The host must call createEngine(config) (or configureJobDispatcher(port) directly) before any subsystem that enqueues background work.",
     );
   }
-  return _port;
+  return port;
 }

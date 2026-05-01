@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconBolt } from "./icons";
-import { STUDIO_FEATURES_BY_ID, STUDIO_GROUPS } from "./types";
+import { STUDIO_GROUPS } from "./types";
 
 export interface StudioMenuProps {
   /** Fires with the feature id when the user picks one; if omitted, falls back to direct navigation. */
@@ -16,20 +16,11 @@ export interface StudioMenuProps {
 
 const COMPANY_ROLES = new Set(["employer", "owner"]);
 
-const WORKSPACE_LINKS = [
-  { label: "Home", href: "/employer/home" },
-  { label: "Documents", href: "/employer/documents" },
-  { label: "Marketing", href: "/employer/tools/marketing-pipeline" },
-  { label: "Workflows", href: "/employer/tools/repo-explainer" },
-  { label: "Library", href: "/employer/upload" },
-  { label: "Settings", href: "/employer/settings" },
-];
-
 /**
- * Studio "header" button + hover mega-menu — lives in the AskPanel topbar.
- * Surfaces every Studio feature (Tools + Management) grouped by section.
- * Primary action opens the StudioDrawer (via `onOpenStudio`); falls back to
- * direct navigation if no handler is wired.
+ * Studio "header" button + hover mega-menu — lives in the AskPanel / expanded
+ * tool topbar. **`onOpenStudio`** should open the drawer/sidebar only; individual
+ * tiles call **`onPickFeature`** to jump straight to full-width workspace (parent
+ * wires `expandFeature` vs `openFeature` accordingly).
  */
 export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProps) {
   const router = useRouter();
@@ -59,14 +50,10 @@ export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProp
     }
   };
 
-  const pickWorkspaceLink = (href: string) => {
-    setMenuOpen(false);
-    router.push(href);
-  };
-
   return (
     <div style={{ position: "relative" }} onMouseEnter={open} onMouseLeave={close}>
       <button
+        type="button"
         onClick={() => {
           if (onOpenStudio) {
             setMenuOpen(false);
@@ -128,48 +115,6 @@ export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProp
             </div>
           </div>
 
-          <div style={{ marginTop: 2 }}>
-            <div
-              className="mono"
-              style={{
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "0.1em",
-                color: "var(--ink-3)",
-                textTransform: "uppercase",
-                padding: "6px 10px 4px",
-              }}
-            >
-              Workspace
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 4, padding: "0 2px 4px" }}>
-              {WORKSPACE_LINKS.map((link) => (
-                <button
-                  key={link.href}
-                  onClick={() => pickWorkspaceLink(link.href)}
-                  style={{
-                    padding: "6px 10px",
-                    borderRadius: 7,
-                    fontSize: 12,
-                    fontWeight: 500,
-                    color: "var(--ink-2)",
-                    transition: "background 120ms, color 120ms",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--line-2)";
-                    e.currentTarget.style.color = "var(--ink)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                    e.currentTarget.style.color = "var(--ink-2)";
-                  }}
-                >
-                  {link.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {groups.map((group) => (
             <div key={group.id} style={{ marginTop: 4 }}>
               <div
@@ -191,12 +136,14 @@ export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProp
                   return (
                     <button
                       key={f.id}
+                      type="button"
                       onClick={() => pickFeature(f.id, f.href)}
                       style={{
                         display: "flex",
-                        alignItems: "flex-start",
-                        gap: 9,
-                        padding: "8px 10px",
+                        alignItems: "center",
+                        gap: 8,
+                        padding: "7px 10px",
+                        minHeight: 40,
                         borderRadius: 8,
                         textAlign: "left",
                         transition: "background 120ms",
@@ -280,175 +227,6 @@ export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProp
           ))}
         </div>
       )}
-    </div>
-  );
-}
-
-export interface StudioFABProps {
-  hidden?: boolean;
-  /** Fires with a feature id when a pinned item is clicked; undefined id means "open Studio home". */
-  onPickFeature?: (featureId: string | undefined) => void;
-}
-
-/** Floating action button — bottom-right. Hover reveals a mini quick-open panel. */
-export function StudioFAB({ hidden, onPickFeature }: StudioFABProps) {
-  const router = useRouter();
-  const [hover, setHover] = useState(false);
-  const [miniOpen, setMiniOpen] = useState(false);
-  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const pinnedIds: readonly string[] = ["draft", "rewrite", "marketing", "analytics"];
-  const pinned = pinnedIds
-    .map((id) => STUDIO_FEATURES_BY_ID[id])
-    .filter((f): f is NonNullable<typeof f> => !!f);
-
-  const openMini = () => {
-    if (hideTimer.current) clearTimeout(hideTimer.current);
-    setMiniOpen(true);
-  };
-  const closeMini = () => {
-    hideTimer.current = setTimeout(() => setMiniOpen(false), 180);
-  };
-
-  const pickFeature = (featureId: string | undefined, href: string | null) => {
-    setMiniOpen(false);
-    if (onPickFeature) {
-      onPickFeature(featureId);
-    } else if (href) {
-      router.push(href);
-    }
-  };
-
-  if (hidden) return null;
-
-  return (
-    <div
-      style={{
-        position: "fixed",
-        right: 18,
-        bottom: 18,
-        zIndex: 80,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-end",
-        gap: 8,
-      }}
-      onMouseEnter={openMini}
-      onMouseLeave={closeMini}
-    >
-      {miniOpen && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 4,
-            padding: 6,
-            background: "var(--panel)",
-            border: "1px solid var(--line)",
-            borderRadius: 12,
-            boxShadow: "0 12px 28px var(--scrim-shadow)",
-            animation: "lsw-fadeIn 120ms ease-out",
-            minWidth: 200,
-          }}
-        >
-          <div
-            className="mono"
-            style={{
-              fontSize: 9,
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              color: "var(--ink-3)",
-              textTransform: "uppercase",
-              padding: "6px 10px 4px",
-            }}
-          >
-            Quick open
-          </div>
-
-          {pinned.map((f) => {
-            const Icon = f.Icon;
-            return (
-              <button
-                key={f.id}
-                onClick={() => pickFeature(f.id, f.href ?? null)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "7px 10px",
-                  borderRadius: 7,
-                  textAlign: "left",
-                  fontSize: 12.5,
-                  color: "var(--ink-2)",
-                  transition: "background 120ms, color 120ms",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "var(--line-2)";
-                  e.currentTarget.style.color = "var(--ink)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.color = "var(--ink-2)";
-                }}
-              >
-                <div
-                  style={{
-                    width: 22,
-                    height: 22,
-                    borderRadius: 5,
-                    background: "var(--accent-soft)",
-                    color: "var(--accent-ink)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  <Icon size={11} />
-                </div>
-                <span style={{ flex: 1 }}>{f.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      <button
-        onClick={() => pickFeature(undefined, null)}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        title="Studio"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: hover || miniOpen ? "10px 16px" : "10px 12px",
-          borderRadius: 999,
-          background: "linear-gradient(180deg, var(--accent), var(--accent-deep))",
-          color: "white",
-          fontSize: 13,
-          fontWeight: 600,
-          boxShadow:
-            hover || miniOpen
-              ? "0 10px 28px var(--accent-glow), 0 2px 6px rgba(0,0,0,0.12)"
-              : "0 4px 14px var(--accent-glow), 0 1px 3px rgba(0,0,0,0.08)",
-          transition:
-            "padding 140ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 180ms, transform 120ms",
-          transform: hover || miniOpen ? "translateY(-1px)" : "none",
-        }}
-      >
-        <IconBolt size={15} />
-        <span
-          style={{
-            maxWidth: hover || miniOpen ? 60 : 0,
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            transition: "max-width 180ms cubic-bezier(0.2, 0.8, 0.2, 1)",
-          }}
-        >
-          Studio
-        </span>
-      </button>
     </div>
   );
 }

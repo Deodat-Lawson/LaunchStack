@@ -1,0 +1,100 @@
+.pill {
+    position: fixed;
+    top: 14px;
+    right: 18px;
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 12px 5px 5px;
+    border-radius: 999px;
+    background: var(--panel);
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    font-size: 12.5px;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: var(--shadow-2);
+    backdrop-filter: blur(8px);
+    transition: all 0.15s;
+}
+.pill:hover {
+    border-color: var(--line);
+    color: var(--ink);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-3);
+}
+.mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+}
+.name {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.gradient1 {
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    box-shadow: 0 2px 6px var(--accent-glow);
+}
+.gradient2 {
+    background: linear-gradient(135deg, oklch(0.62 0.18 200), oklch(0.42 0.2 220));
+}
+.gradient3 {
+    background: linear-gradient(135deg, oklch(0.66 0.2 30), oklch(0.46 0.22 30));
+}
+.gradient4 {
+    background: linear-gradient(135deg, oklch(0.62 0.18 150), oklch(0.42 0.16 165));
+}
+.gradient5 {
+    background: linear-gradient(135deg, oklch(0.62 0.2 340), oklch(0.42 0.22 340));
+}
+.gradient6 {
+    background: linear-gradient(135deg, oklch(0.62 0.18 70), oklch(0.42 0.16 60));
+}
+@media (max-width: 700px) {
+    .name {
+        display: none;
+    }
+}
+
+/* Inside AvatarMenu — directly under name/email */
+.dropdownRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 6px;
+    padding: 10px 10px 10px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--ink-2);
+    font-size: 13px;
+    font-weight: 500;
+    box-sizing: border-box;
+    transition: background 0.12s, color 0.12s;
+}
+.dropdownRow:hover {
+    background: var(--line-2);
+    color: var(--ink);
+}
+.dropdownRowName {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.dropdownRowChevron {
+    flex-shrink: 0;
+    color: var(--ink-3);
+}

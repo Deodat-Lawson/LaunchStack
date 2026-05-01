@@ -21,6 +21,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { deleteDocumentCore } from "~/server/services/document-delete";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -83,7 +84,7 @@ export async function DELETE(request: Request) {
       }
 
       for (const row of rows) {
-        if (row.companyId !== userInfo.companyId) {
+        if (row.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
           return NextResponse.json(
             { success: false, error: "One or more documents not found" },
             { status: 404 }

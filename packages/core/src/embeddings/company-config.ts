@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { getDb } from "../db";
 import { company } from "../db/schema";
 import { getCompanyCredentialsPlaintext } from "./company-credentials";
+import { createSlot } from "../internal/slot";
 
 export interface CompanyEmbeddingConfig {
   embeddingIndexKey?: string | null;
@@ -35,16 +36,19 @@ export interface CompanyEmbeddingDefaults {
   ollamaModel?: string;
 }
 
-let _defaults: CompanyEmbeddingDefaults | null = null;
+const defaultsSlot = createSlot<CompanyEmbeddingDefaults>(
+  "embeddings/companyDefaults",
+);
 
 export function configureCompanyEmbeddingDefaults(
   defaults: CompanyEmbeddingDefaults,
 ): void {
-  _defaults = defaults;
+  defaultsSlot.set(defaults);
 }
 
 function getDefaults(): CompanyEmbeddingDefaults {
-  if (_defaults) return _defaults;
+  const registered = defaultsSlot.get();
+  if (registered) return registered;
   return {
     embeddingIndexKey: process.env.EMBEDDING_INDEX,
     openAIApiKey: process.env.OPENAI_API_KEY,

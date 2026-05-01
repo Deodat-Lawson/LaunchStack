@@ -4,6 +4,7 @@ import {category, users} from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import * as console from "console";
 import { auth } from "@clerk/nextjs/server";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function GET(_request: Request) {
     try {
@@ -32,7 +33,7 @@ export async function GET(_request: Request) {
             );
         }
 
-        const companyId = userInfo.companyId;
+        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
 
         const categories = await db
             .select()

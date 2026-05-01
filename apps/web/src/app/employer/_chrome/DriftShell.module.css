@@ -1,195 +1,15 @@
-/* Drift app shell — sidebar + topbar + ambient layer.
-   Tokens come from `.lsw-root` in globals.css. */
-
 .app {
   position: relative;
   width: 100%;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 1fr;
   background: var(--bg);
-  color: var(--ink);
+  color: var(--fg-1);
   font-family: var(--font-sans);
-  overflow: hidden;
 }
 
-/* ─── Ambient layer ─── */
-.ambient {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(110px);
-  opacity: 0.55;
-}
-.orb1 {
-  width: 620px; height: 620px; left: -120px; top: 120px;
-  background: radial-gradient(circle, oklch(0.54 0.24 285 / 0.40) 0%, transparent 65%);
-  animation: drift1 28s ease-in-out infinite alternate;
-}
-.orb2 {
-  width: 720px; height: 720px; right: -160px; top: 220px;
-  background: radial-gradient(circle, oklch(0.70 0.22 340 / 0.35) 0%, transparent 65%);
-  animation: drift2 34s ease-in-out infinite alternate;
-}
-.orb3 {
-  width: 600px; height: 600px; left: 38%; top: 64%;
-  background: radial-gradient(circle, oklch(0.72 0.18 200 / 0.30) 0%, transparent 65%);
-  animation: drift3 38s ease-in-out infinite alternate;
-}
-@keyframes drift1 { 50% { transform: translate(120px, 80px) scale(1.06); } }
-@keyframes drift2 { 50% { transform: translate(-100px, 120px) scale(1.10); } }
-@keyframes drift3 { 50% { transform: translate(140px, -60px) scale(0.95); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .orb { animation: none; }
-}
-
-.dots {
-  position: fixed;
-  inset: -40px;
-  background-image: radial-gradient(circle at 1px 1px, oklch(0.55 0.015 285) 1px, transparent 1.5px);
-  background-size: 28px 28px;
-  opacity: 0.18;
-  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, black 40%, transparent 85%);
-  mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, black 40%, transparent 85%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ─── Sidebar ─── */
-.sidebar {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  padding: 16px 12px;
-  border-right: 1px solid var(--line-2);
-  background: color-mix(in oklch, var(--bg) 70%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  align-self: start;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 8px 18px;
-  text-decoration: none;
-  color: inherit;
-}
-.brandMark {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.brandMark::before {
-  content: '';
-  position: absolute;
-  inset: -30%;
-  background:
-    radial-gradient(circle at 30% 40%, oklch(0.54 0.24 285 / 0.45) 0%, transparent 55%),
-    radial-gradient(circle at 70% 60%, oklch(0.70 0.22 340 / 0.40) 0%, transparent 55%);
-  filter: blur(6px);
-}
-.brandMark span {
-  position: relative;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 16px;
-  color: var(--ink);
-  line-height: 1;
-}
-.brandWord {
-  font-size: 18px;
-  letter-spacing: -0.035em;
-  font-weight: 500;
-  color: var(--ink);
-}
-.brandWord em {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-style: italic;
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  margin-top: 4px;
-}
-.eyebrow {
-  padding: 16px 10px 6px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-3);
-  font-weight: 500;
-  font-family: var(--font-mono);
-}
-.navItem {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 10px;
-  border-radius: 6px;
-  color: var(--ink-2);
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 140ms ease, color 140ms ease;
-  user-select: none;
-  text-decoration: none;
-}
-.navItem:hover {
-  background: var(--panel-2);
-  color: var(--ink);
-}
-.navItemActive {
-  background: var(--panel-2);
-  color: var(--ink);
-}
-.navLabel {
-  flex: 1;
-  min-width: 0;
-}
-.navCount {
-  margin-left: auto;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-3);
-  padding: 1px 6px;
-  border-radius: 9999px;
-  border: 1px solid var(--line-2);
-}
-.navPill {
-  margin-left: auto;
-  font-size: 9px;
-  font-family: var(--font-mono);
-  letter-spacing: 0.04em;
-  padding: 2px 6px;
-  border-radius: 9999px;
-  background: oklch(0.54 0.24 285 / 0.12);
-  color: var(--accent);
-  text-transform: uppercase;
-}
-
-/* ─── Main column ─── */
+/* ── Main area ──────────────────────────────────────────────── */
 .main {
   position: relative;
   z-index: 1;
@@ -199,96 +19,16 @@
   min-height: 100vh;
 }
 
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 24px;
-  height: 52px;
-  border-bottom: 1px solid var(--line-2);
-  background: color-mix(in oklch, var(--bg) 70%, transparent);
-  backdrop-filter: blur(14px);
-  position: sticky;
-  top: 0;
-  z-index: 5;
-}
-
-.crumbs {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--ink-2);
-  min-width: 0;
-}
-.crumbsItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-.crumbsSep {
-  color: var(--ink-4);
-  font-size: 11px;
-}
-.crumbsLast {
-  color: var(--ink);
-  font-weight: 500;
-}
-.spacer { flex: 1; }
-
-.kbdPill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 9px 4px 7px;
-  border-radius: 9999px;
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  font-size: 11px;
-  color: var(--ink-2);
-  font-family: var(--font-mono);
-  cursor: pointer;
-  transition: color 140ms ease;
-}
-.kbdPill:hover { color: var(--ink); }
-
-.iconBtn {
-  background: transparent;
-  border: 0;
-  color: var(--ink-2);
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 140ms ease, color 140ms ease;
-}
-.iconBtn:hover {
-  background: var(--panel-2);
-  color: var(--ink);
-}
-
-.profileSlot {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 4px;
-}
-
-/* ─── Content area — pages render here ─── */
-.content {
+.body {
   flex: 1;
-  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
 
-@media (max-width: 900px) {
-  .app {
-    grid-template-columns: 1fr;
-  }
-  .sidebar {
-    display: none;
-  }
+/* When immersive children fill the viewport (e.g. the documents WorkspaceShell),
+   they can apply `data-drift-immersive="true"` to opt out of body padding. */
+.body > [data-drift-immersive="true"] {
+  flex: 1;
+  min-height: 0;
 }

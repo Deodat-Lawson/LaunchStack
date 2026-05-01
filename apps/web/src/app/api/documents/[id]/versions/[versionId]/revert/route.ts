@@ -18,6 +18,7 @@ import { db } from "~/server/db";
 import { document, documentVersions, users } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -69,7 +70,7 @@ export async function POST(
         .from(document)
         .where(eq(document.id, documentId));
 
-      if (!doc || doc.companyId !== userInfo.companyId) {
+      if (!doc || doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
         return NextResponse.json(
           { error: "Document not found" },
           { status: 404 }

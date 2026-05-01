@@ -1404,11 +1404,12 @@ function Pricing() {
       <div className={styles.container}>
         <div className={styles.eyebrow}>Pricing</div>
         <h2 className={styles.h2}>
-          Free to start. <span className={styles.serif}>Pay when your brain grows.</span>
+          Open source. <span className={styles.serif}>Pay for models, not connectors.</span>
         </h2>
         <p className={styles.lead}>
-          No seats, no per-source fees. Your library stays yours — export
-          anytime.
+          Fully open source — unlimited connectors and workspaces on every tier.
+          Hosted pricing covers LLM and API keys only; we don&apos;t charge per
+          source or seat. Your library stays yours — export anytime.
         </p>
 
         <div className={styles.pricingGrid}>
@@ -1416,11 +1417,11 @@ function Pricing() {
             name="Free"
             amount="$0"
             per="/mo"
-            tagline="For individuals exploring."
+            tagline="For trying the hosted stack."
             features={[
-              'Up to 100 sources',
-              '2 hours of transcription/mo',
-              '1 connector (Gmail OR Notion)',
+              '1M tokens / month',
+              'Unlimited connectors',
+              'Unlimited workspaces',
               'Cited answers',
             ]}
             cta="Start free"
@@ -1428,35 +1429,34 @@ function Pricing() {
             variant="outline"
           />
           <PriceCard
-            name="Pro"
-            amount="$18"
+            name="Plus"
+            amount="$4"
             per="/mo"
-            tagline="For founders & researchers."
-            badge="MOST LOVED"
+            tagline="More tokens for everyday use."
+            badge="HOSTED"
             featured
             features={[
-              'Unlimited sources',
-              '20 hours of transcription/mo',
-              'All connectors, live sync',
-              'Graph view, version history',
-              'Priority models',
+              '6M tokens / month',
+              'Unlimited connectors',
+              'Unlimited workspaces',
+              'Everything in Free',
             ]}
-            cta="Start 14-day trial"
+            cta="Get Plus"
             href="/signup"
             variant="accent"
           />
           <PriceCard
-            name="Team"
-            amount="$14"
-            per="/seat/mo"
-            tagline="For small teams that share sources."
+            name="Self-hosted"
+            amount="$0"
+            per=" + your keys"
+            tagline="Fork the repo and run your own stack."
             features={[
-              'Everything in Pro',
-              'Shared workspaces & tags',
-              'Per-source permissions',
+              'Bring your own API keys — no token caps from us',
+              'Unlimited connectors & workspaces',
+              'You control infra and model spend',
             ]}
-            cta="Contact us"
-            href="/contact"
+            cta="Deployment guide"
+            href="/deployment"
             variant="outline"
           />
         </div>

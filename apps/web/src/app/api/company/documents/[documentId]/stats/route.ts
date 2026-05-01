@@ -4,6 +4,7 @@ import { db } from "~/server/db/index";
 import { users, document, documentViews } from "@launchstack/core/db/schema";
 import { eq, and, sql, gte, desc, count } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 interface Viewer {
     name: string;
@@ -73,7 +74,7 @@ export async function GET(
             .from(document)
             .where(and(
                 eq(document.id, docId),
-                eq(document.companyId, userInfo.companyId)
+                eq(document.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))
             ));
 
         if (!doc) {

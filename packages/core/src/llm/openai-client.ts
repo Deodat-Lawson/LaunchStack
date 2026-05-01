@@ -11,9 +11,11 @@
 import OpenAI from "openai";
 
 import { getChatModelsConfig } from "./chat-model-factory";
+import { createSlot } from "../internal/slot";
 
-let _client: OpenAI | null = null;
-let _clientKey: string | null = null;
+const clientSlot = createSlot<{ client: OpenAI; key: string }>(
+  "llm/openaiClient",
+);
 
 /**
  * Returns an OpenAI SDK client configured from the registered
@@ -27,12 +29,13 @@ export function getOpenAIClient(): OpenAI | null {
 
   const baseURL = config.aiBaseUrl;
   const cacheKey = `${apiKey}:${baseURL ?? ""}`;
-  if (_client && _clientKey === cacheKey) return _client;
+  const cached = clientSlot.get();
+  if (cached && cached.key === cacheKey) return cached.client;
 
-  _client = new OpenAI({
+  const client = new OpenAI({
     apiKey,
     ...(baseURL ? { baseURL } : {}),
   });
-  _clientKey = cacheKey;
-  return _client;
+  clientSlot.set({ client, key: cacheKey });
+  return client;
 }

@@ -15,6 +15,7 @@ import { processDocumentUpload } from "~/server/services/document-upload";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 /**
  * Request validation schema
@@ -74,7 +75,7 @@ export async function POST(request: Request) {
       const uploadResult = await processDocumentUpload({
         user: {
           userId,
-          companyId: userInfo.companyId,
+          companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
         },
         documentName,
         rawDocumentUrl,

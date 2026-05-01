@@ -19,6 +19,7 @@ import { db } from "~/server/db";
 import { document, documentVersions, users } from "@launchstack/core/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isLocalStorage } from "~/lib/storage";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -91,7 +92,7 @@ export async function GET(
       .from(document)
       .where(eq(document.id, documentId));
 
-    if (!doc || doc.companyId !== userInfo.companyId) {
+    if (!doc || doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
       return NextResponse.json(
         { error: "Document not found" },
         { status: 404 }

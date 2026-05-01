@@ -13,6 +13,7 @@ import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
 import type { MetadataFact, Visibility, Usage } from "@launchstack/features/company-metadata";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function GET() {
     try {
@@ -25,7 +26,7 @@ export async function GET() {
         }
 
         const [userInfo] = await db
-            .select({ companyId: users.companyId })
+            .select({ id: users.id, companyId: users.companyId })
             .from(users)
             .where(eq(users.userId, userId));
 
@@ -44,7 +45,7 @@ export async function GET() {
                 updatedAt: companyMetadata.updatedAt,
             })
             .from(companyMetadata)
-            .where(eq(companyMetadata.companyId, userInfo.companyId));
+            .where(eq(companyMetadata.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
 
         if (!result) {
             return NextResponse.json({
@@ -102,7 +103,7 @@ export async function PATCH(request: Request) {
         const { path, value } = parsed.data;
 
         const [userInfo] = await db
-            .select({ companyId: users.companyId })
+            .select({ id: users.id, companyId: users.companyId })
             .from(users)
             .where(eq(users.userId, userId));
 
@@ -113,7 +114,7 @@ export async function PATCH(request: Request) {
         const [existing] = await db
             .select({ metadata: companyMetadata.metadata })
             .from(companyMetadata)
-            .where(eq(companyMetadata.companyId, userInfo.companyId));
+            .where(eq(companyMetadata.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
 
         if (!existing) {
             return NextResponse.json(
@@ -182,10 +183,10 @@ export async function PATCH(request: Request) {
         await db
             .update(companyMetadata)
             .set({ metadata: updatedMetadata })
-            .where(eq(companyMetadata.companyId, userInfo.companyId));
+            .where(eq(companyMetadata.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
 
         await db.insert(companyMetadataHistory).values({
-            companyId: userInfo.companyId,
+            companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
             changeType: "manual_override",
             diff,
             changedBy: userId,

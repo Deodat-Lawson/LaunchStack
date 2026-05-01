@@ -20,6 +20,7 @@ import {
 } from "~/lib/tools/rag";
 import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -258,7 +259,7 @@ export async function POST(request: Request) {
             const documentSearchPromise = (async () => {
                 try {
                     const embeddings = getEmbeddings();
-                    const companyId = Number(requestingUser.companyId);
+                    const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
                     
                     if (Number.isNaN(companyId)) {
                         console.warn("Invalid company ID for document search");

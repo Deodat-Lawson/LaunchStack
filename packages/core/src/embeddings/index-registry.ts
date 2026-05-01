@@ -2,6 +2,7 @@ import {
   resolveEffectiveEmbeddingConfig,
   type CompanyEmbeddingConfig,
 } from "./company-config";
+import { createSlot } from "../internal/slot";
 
 export type EmbeddingProvider =
   | "openai"
@@ -35,17 +36,19 @@ export interface EmbeddingIndexRegistryConfig {
   defaultIndexKey?: string;
 }
 
-let _registryConfig: EmbeddingIndexRegistryConfig | null = null;
+const registryConfigSlot = createSlot<EmbeddingIndexRegistryConfig>(
+  "embeddings/indexRegistry",
+);
 
 export function configureEmbeddingIndexRegistry(
   config: EmbeddingIndexRegistryConfig,
 ): void {
-  _registryConfig = config;
+  registryConfigSlot.set(config);
   embeddingIndexEnvChecked = false; // re-check on next access
 }
 
 function getRegistryConfig(): EmbeddingIndexRegistryConfig {
-  return _registryConfig ?? {};
+  return registryConfigSlot.get() ?? {};
 }
 
 const LEGACY_OPENAI_INDEX: EmbeddingIndexConfig = {

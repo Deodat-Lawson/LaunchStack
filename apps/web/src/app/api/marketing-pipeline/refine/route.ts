@@ -7,6 +7,7 @@ import { users } from "@launchstack/core/db/schema";
 import { refineContent } from "@launchstack/features/marketing-pipeline";
 import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
 import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/features/marketing-pipeline";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -59,7 +60,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const companyId = Number(requestingUser.companyId);
+        const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
         if (Number.isNaN(companyId)) {
             return NextResponse.json(
                 { success: false, message: "Invalid company ID" },

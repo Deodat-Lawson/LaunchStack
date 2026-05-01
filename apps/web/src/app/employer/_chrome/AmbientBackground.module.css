@@ -1,0 +1,71 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.55;
+}
+
+.orb1 {
+  width: 620px;
+  height: 620px;
+  left: -120px;
+  top: 120px;
+  background: radial-gradient(circle, oklch(0.54 0.24 285 / 0.40) 0%, transparent 65%);
+  animation: drift1 28s ease-in-out infinite alternate;
+}
+
+.orb2 {
+  width: 720px;
+  height: 720px;
+  right: -160px;
+  top: 220px;
+  background: radial-gradient(circle, var(--hue-magenta-glow) 0%, transparent 65%);
+  animation: drift2 34s ease-in-out infinite alternate;
+}
+
+.orb3 {
+  width: 600px;
+  height: 600px;
+  left: 38%;
+  top: 64%;
+  background: radial-gradient(circle, var(--hue-teal-glow) 0%, transparent 65%);
+  animation: drift3 38s ease-in-out infinite alternate;
+}
+
+@keyframes drift1 {
+  50% { transform: translate(120px, 80px) scale(1.06); }
+}
+
+@keyframes drift2 {
+  50% { transform: translate(-100px, 120px) scale(1.10); }
+}
+
+@keyframes drift3 {
+  50% { transform: translate(140px, -60px) scale(0.95); }
+}
+
+.dots {
+  position: absolute;
+  inset: -40px;
+  background-image: radial-gradient(circle at 1px 1px, var(--line-dot) 1px, transparent 1.5px);
+  background-size: 28px 28px;
+  opacity: 0.18;
+  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, black 40%, transparent 85%);
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 0%, black 40%, transparent 85%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb1,
+  .orb2,
+  .orb3 {
+    animation: none;
+  }
+}

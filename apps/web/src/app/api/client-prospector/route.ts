@@ -25,6 +25,7 @@ import {
     DEFAULT_SEARCH_RADIUS,
 } from "@launchstack/features/client-prospector";
 import { createJob, getJobsByCompanyId } from "@launchstack/features/client-prospector/db";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 // ─── POST /api/client-prospector ─────────────────────────────────────────────
 export async function POST(request: NextRequest) {
@@ -71,7 +72,7 @@ export async function POST(request: NextRequest) {
                     );
                 }
 
-                const companyId = userInfo.companyId;
+                const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
                 const jobId = uuidv4();
                 const radius = input.radius ?? DEFAULT_SEARCH_RADIUS;
                 const queuedLocation =
@@ -171,7 +172,7 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        const jobs = await getJobsByCompanyId(userInfo.companyId, { limit, offset });
+        const jobs = await getJobsByCompanyId((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)), { limit, offset });
 
         const results = jobs.map((job) => ({
             id: job.id,

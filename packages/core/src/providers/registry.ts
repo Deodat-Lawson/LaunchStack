@@ -37,7 +37,9 @@ export interface ProvidersRegistryConfig {
     transcriptionBaseUrl?: string;
 }
 
-let _config: ProvidersRegistryConfig | null = null;
+import { createSlot } from "../internal/slot";
+
+const configSlot = createSlot<ProvidersRegistryConfig>("providers/registry");
 
 /**
  * Register provider config. Called once at startup by the hosting app (see
@@ -45,12 +47,12 @@ let _config: ProvidersRegistryConfig | null = null;
  * captured config entirely.
  */
 export function configureProviders(config: ProvidersRegistryConfig): void {
-    _config = config;
+    configSlot.set(config);
 }
 
 /** Returns the active config. The host must call configureProviders() first. */
 function getConfig(): ProvidersRegistryConfig {
-    return _config ?? {};
+    return configSlot.get() ?? {};
 }
 
 // ── Resolve helpers ─────────────────────────────────────────────────

@@ -3,6 +3,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 
 import * as schema from "./schema";
 import type { DbConfig } from "../config/types";
+import { createSlot } from "../internal/slot";
 
 export { pgVector } from "./pgVector";
 export * as schema from "./schema";
@@ -59,17 +60,18 @@ export function toRows<T>(result: unknown): T[] {
 // that were ported from environments where db was a global.
 // ────────────────────────────────────────────────────────────────────────────
 
-let _db: DbClient | null = null;
+const dbSlot = createSlot<DbClient>("db/client");
 
 export function configureDatabase(db: DbClient): void {
-  _db = db;
+  dbSlot.set(db);
 }
 
 export function getDb(): DbClient {
-  if (!_db) {
+  const db = dbSlot.get();
+  if (!db) {
     throw new Error(
       "[@launchstack/core/db] No DbClient registered. The host must call createEngine(config) (or configureDatabase(db) directly) before any subsystem that uses getDb().",
     );
   }
-  return _db;
+  return db;
 }

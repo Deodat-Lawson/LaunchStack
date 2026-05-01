@@ -10,6 +10,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { company, users } from "@launchstack/core/db/schema";
 import { validateRequestBody, UpdateUploadPreferenceSchema } from "~/lib/validation";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
     const { useUploadThing } = validation.data;
 
     const [userRecord] = await db
-      .select({
+      .select({ id: users.id,
         companyId: users.companyId,
         role: users.role,
       })
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
     const updateResult = await db
       .update(company)
       .set({ useUploadThing })
-      .where(eq(company.id, Number(userRecord.companyId)))
+      .where(eq(company.id, Number((await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)))))
       .returning({ id: company.id, useUploadThing: company.useUploadThing });
 
     if (!updateResult || updateResult.length === 0) {

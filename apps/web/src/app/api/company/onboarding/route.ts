@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users, company } from "@launchstack/core/db/schema";
 import { validateRequestBody, CompanyOnboardingSchema } from "~/lib/validation";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
     }
 
     const [userInfo] = await db
-      .select({ companyId: users.companyId, role: users.role })
+      .select({ id: users.id, companyId: users.companyId, role: users.role })
       .from(users)
       .where(eq(users.userId, userId));
 
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
         description: body.description ?? null,
         industry: body.industry ?? null,
       })
-      .where(eq(company.id, Number(userInfo.companyId)));
+      .where(eq(company.id, Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))));
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -58,7 +59,7 @@ export async function GET() {
     }
 
     const [userInfo] = await db
-      .select({ companyId: users.companyId })
+      .select({ id: users.id, companyId: users.companyId })
       .from(users)
       .where(eq(users.userId, userId));
 
@@ -73,7 +74,7 @@ export async function GET() {
         industry: company.industry,
       })
       .from(company)
-      .where(eq(company.id, Number(userInfo.companyId)));
+      .where(eq(company.id, Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))));
 
     return NextResponse.json({
       name: companyRow?.name ?? null,

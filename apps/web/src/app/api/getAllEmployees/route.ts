@@ -4,6 +4,7 @@ import { users } from "@launchstack/core/db/schema";
 import {eq, and } from "drizzle-orm";
 import * as console from "console";
 import { auth } from "@clerk/nextjs/server";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 export async function GET() {
     try {
         const { userId } = await auth();
@@ -26,7 +27,7 @@ export async function GET() {
             );
         }
 
-        const companyId = userInfo.companyId;
+        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
 
         const docs = await db
             .select()

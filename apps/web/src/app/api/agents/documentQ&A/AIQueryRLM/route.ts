@@ -37,6 +37,7 @@ import type { AIModelType, LLMProvider } from "../services";
 import { LLMProviders, isModelAllowedForProvider } from "../services/types";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/core/db/schema";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -214,7 +215,7 @@ export async function POST(request: Request) {
                 );
             }
 
-            if (targetDocument.companyId !== requestingUser.companyId) {
+            if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
                 return NextResponse.json(
                     { success: false, message: "You do not have access to this document." },
                     { status: 403 }

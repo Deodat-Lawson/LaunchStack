@@ -6,6 +6,7 @@ import crypto from "crypto";
 import { db } from "~/server/db";
 import { users, inviteCodes } from "@launchstack/core/db/schema";
 import { validateRequestBody, GenerateInviteCodeSchema } from "~/lib/validation";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 function generateCode(): string {
     return crypto.randomBytes(4).toString("hex").toUpperCase(); // 8-char hex code
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
 
         // Verify the caller is an owner or employer
         const [userRecord] = await db
-            .select({ companyId: users.companyId, role: users.role })
+            .select({ id: users.id, companyId: users.companyId, role: users.role })
             .from(users)
             .where(eq(users.userId, userId));
 
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
             .insert(inviteCodes)
             .values({
                 code,
-                companyId: userRecord.companyId,
+                companyId: (await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)),
                 role,
                 createdBy: userId,
             })

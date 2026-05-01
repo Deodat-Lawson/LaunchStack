@@ -19,6 +19,7 @@ import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
 import { users, document, ChatHistory } from "@launchstack/core/db/schema";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -285,7 +286,10 @@ export async function POST(request: Request) {
                 }, { status: 401 });
             }
 
-            const userCompanyId = requestingUser.companyId;
+            const userCompanyId = await resolveActiveCompanyForUser(
+                requestingUser.id,
+                requestingUser.companyId
+            );
             const numericCompanyId = userCompanyId ? Number(userCompanyId) : null;
 
             if (numericCompanyId === null || Number.isNaN(numericCompanyId)) {

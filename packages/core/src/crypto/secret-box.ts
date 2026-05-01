@@ -5,6 +5,8 @@ import {
   timingSafeEqual,
 } from "node:crypto";
 
+import { createSlot } from "../internal/slot";
+
 /**
  * The master key (base64-encoded 32-byte random value) is injected by the
  * host at startup via configureSecretBox(). A process.env fallback is kept
@@ -14,7 +16,10 @@ import {
  * createEngine / configureSecretBox.
  */
 
-let _keyBase64: string | null = null;
+// The slot stores `string | null` so configureSecretBox(undefined) can
+// clear a previously-registered key (matches the prior `_keyBase64 = ... ?? null`
+// behavior used by tests).
+const keySlot = createSlot<string | null>("crypto/keyBase64");
 
 export interface SecretBoxConfig {
   /** EMBEDDING_SECRETS_KEY — base64-encoded 32-byte random value. */
@@ -22,7 +27,7 @@ export interface SecretBoxConfig {
 }
 
 export function configureSecretBox(config: SecretBoxConfig): void {
-  _keyBase64 = config.key ?? null;
+  keySlot.set(config.key ?? null);
 }
 
 /**
@@ -68,7 +73,7 @@ function resolveKey(version: number): Buffer {
       `Unknown encryption key version ${version}; expected ${CURRENT_KEY_VERSION}`,
     );
   }
-  const raw = _keyBase64 ?? process.env.EMBEDDING_SECRETS_KEY;
+  const raw = keySlot.get() ?? process.env.EMBEDDING_SECRETS_KEY;
   if (!raw) {
     throw new MissingSecretsKeyError();
   }

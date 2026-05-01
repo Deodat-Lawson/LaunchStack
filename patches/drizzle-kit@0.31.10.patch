@@ -1,0 +1,14 @@
+diff --git a/bin.cjs b/bin.cjs
+index 07274ea6f53fd54a129b3d338892feda6e995cff..b07aec6d67e8b0920929cdf4223b2625b5049b94 100755
+--- a/bin.cjs
++++ b/bin.cjs
+@@ -17858,6 +17858,9 @@ WHERE
+             for (const checks of tableChecks) {
+               let checkValue = checks.constraint_definition;
+               const constraintName = checks.constraint_name;
++              if (checkValue == null || checkValue === "") {
++                continue;
++              }
+               checkValue = checkValue.replace(/^CHECK\s*\(\(/, "").replace(/\)\)\s*$/, "");
+               checkConstraints[constraintName] = {
+                 name: constraintName,

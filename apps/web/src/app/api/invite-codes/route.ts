@@ -4,6 +4,7 @@ import { eq, and } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users, inviteCodes } from "@launchstack/core/db/schema";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function GET() {
     try {
@@ -14,7 +15,7 @@ export async function GET() {
 
         // Get the caller's company
         const [userRecord] = await db
-            .select({ companyId: users.companyId, role: users.role })
+            .select({ id: users.id, companyId: users.companyId, role: users.role })
             .from(users)
             .where(eq(users.userId, userId));
 
@@ -37,7 +38,7 @@ export async function GET() {
             .from(inviteCodes)
             .where(
                 and(
-                    eq(inviteCodes.companyId, userRecord.companyId),
+                    eq(inviteCodes.companyId, (await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId))),
                     eq(inviteCodes.isActive, true)
                 )
             );

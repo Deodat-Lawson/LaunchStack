@@ -84,3 +84,11 @@ export const IconCopy = (p: IconProps) => <Ic {...p}><rect x="6" y="6" width="10
 export const IconBrain = (p: IconProps) => <Ic {...p}><path d="M7.5 4a2.5 2.5 0 0 0-2.5 2.5c-1 0-1.5 1-1.5 2s.5 2 1.5 2c0 1.5 1 2.5 2.5 2.5V4Z"/><path d="M12.5 4a2.5 2.5 0 0 1 2.5 2.5c1 0 1.5 1 1.5 2s-.5 2-1.5 2c0 1.5-1 2.5-2.5 2.5V4Z"/><path d="M10 4v9M7.5 7.5h1.5M11 7.5h1.5M7.5 10.5h1.5M11 10.5h1.5M8 13.5v2.5M12 13.5v2.5"/></Ic>;
 export const IconImage = (p: IconProps) => <Ic {...p}><rect x="3" y="3.5" width="14" height="13" rx="1.5"/><circle cx="7" cy="7.5" r="1.5"/><path d="m3.5 13.5 4-3.5 3 2.5 2-1.5 4 3"/></Ic>;
 export const IconMegaphone = (p: IconProps) => <Ic {...p}><path d="M4 8.5v3a1 1 0 0 0 1 1h1.5l3 3.5V5L6.5 8.5H5a1 1 0 0 0-1 1Z"/><path d="M13 6.5a5 5 0 0 1 0 7"/><path d="M16 4.5a8 8 0 0 1 0 11"/></Ic>;
+export const IconStar = (p: IconProps) => <Ic {...p}><path d="m10 2.5 2.4 4.9 5.4.8-3.9 3.8.9 5.4L10 14.9l-4.8 2.5.9-5.4L2.2 8.2l5.4-.8z"/></Ic>;
+export const IconStarFilled = (p: IconProps & { fill?: string }) => (
+  <svg width={p.size ?? 16} height={p.size ?? 16} viewBox="0 0 20 20" fill={p.fill ?? "currentColor"} stroke={p.fill ?? "currentColor"} strokeWidth={1.4} strokeLinejoin="round" style={p.style} className={p.className}>
+    <path d="m10 2.5 2.4 4.9 5.4.8-3.9 3.8.9 5.4L10 14.9l-4.8 2.5.9-5.4L2.2 8.2l5.4-.8z"/>
+  </svg>
+);
+export const IconEye = (p: IconProps) => <Ic {...p}><path d="M2.5 10s2.5-5 7.5-5 7.5 5 7.5 5-2.5 5-7.5 5-7.5-5-7.5-5Z"/><circle cx="10" cy="10" r="2.2"/></Ic>;
+export const IconFilter = (p: IconProps) => <Ic {...p}><path d="M3 5h14l-5.5 6.5V16l-3-1.5v-3Z"/></Ic>;

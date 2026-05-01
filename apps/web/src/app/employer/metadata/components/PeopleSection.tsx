@@ -1,11 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Users, Mail, Phone, Building } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import {
+  Mail,
+  Phone,
+  Briefcase,
+  AlertCircle,
+  FileText,
+  Pencil,
+} from "lucide-react";
 import { legalTheme as s } from "~/app/employer/documents/components/LegalGeneratorTheme";
-import { ConfidenceBadge } from "./ConfidenceBadge";
-import { VisibilityBadge } from "./VisibilityBadge";
-import { PriorityBadge } from "./PriorityBadge";
+import m from "./metadata.module.css";
 import type {
   PersonEntry,
   MetadataFact,
@@ -13,123 +18,37 @@ import type {
 
 interface PeopleSectionProps {
   people: PersonEntry[];
-  isEditMode?: boolean;
   onFieldSave?: (path: string, value: string) => Promise<void>;
 }
 
-export function PeopleSection({
-  people,
-  isEditMode,
-  onFieldSave,
-}: PeopleSectionProps) {
+function confBucket(confidence: number): "high" | "med" | "low" {
+  if (confidence >= 0.75) return "high";
+  if (confidence >= 0.45) return "med";
+  return "low";
+}
+
+function ConfBar({ confidence }: { confidence: number }) {
+  const bucket = confBucket(confidence);
+  const filled = bucket === "high" ? 4 : bucket === "med" ? 3 : 2;
+  const cls =
+    bucket === "high" ? m.confBarHigh : bucket === "med" ? m.confBarMed : m.confBarLow;
   return (
-    <div className={s.panel} style={{ padding: 22 }}>
-      <div className="flex items-center gap-3" style={{ marginBottom: 4 }}>
-        <div className={s.brandMarkSm}>
-          <Users className="h-[14px] w-[14px]" />
-        </div>
-        <div className="min-w-0">
-          <h2
-            style={{
-              margin: 0,
-              fontSize: 16,
-              fontWeight: 600,
-              color: "var(--ink)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            People
-          </h2>
-          <p
-            style={{
-              margin: "2px 0 0",
-              fontSize: 12,
-              color: "var(--ink-3)",
-            }}
-          >
-            {people.length} {people.length === 1 ? "person" : "people"} extracted from documents
-          </p>
-        </div>
-      </div>
-      <hr className={s.hair} style={{ margin: "14px 0 18px" }} />
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-        {people.map((person, index) => (
-          <PersonCard
-            key={index}
-            person={person}
-            index={index}
-            isEditMode={isEditMode}
-            onFieldSave={onFieldSave}
-          />
-        ))}
-      </div>
-    </div>
+    <span className={`${m.confBar} ${cls}`} aria-label={`${bucket} confidence`}>
+      {[0, 1, 2, 3].map((i) => (
+        <i key={i} className={i < filled ? "on" : undefined} />
+      ))}
+    </span>
   );
 }
 
-function PersonFieldEditor({
-  path,
-  initialValue,
-  onSave,
-}: {
-  path: string;
-  initialValue: string;
-  onSave: (path: string, value: string) => Promise<void>;
-}) {
-  const [value, setValue] = useState(initialValue);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setValue(initialValue);
-    setError(null);
-  }, [initialValue]);
-
-  const handleSave = async () => {
-    if (value.trim() === initialValue) return;
-    setSaving(true);
-    setError(null);
-    try {
-      await onSave(path, value.trim());
-    } catch {
-      setError("Failed to save.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div className="mt-1 space-y-1.5">
-      <input
-        className={s.input}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        disabled={saving}
-      />
-      {error && (
-        <p style={{ margin: 0, fontSize: 11, color: "var(--danger)" }}>{error}</p>
-      )}
-      <div className="flex gap-2">
-        <button
-          onClick={() => void handleSave()}
-          disabled={saving || value.trim() === initialValue}
-          className={`${s.btn} ${s.btnAccent} ${s.btnSm}`}
-        >
-          {saving ? "Saving…" : "Save"}
-        </button>
-        <button
-          onClick={() => {
-            setValue(initialValue);
-            setError(null);
-          }}
-          disabled={saving}
-          className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
-        >
-          Reset
-        </button>
-      </div>
-    </div>
-  );
+function getInitials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 }
 
 function getPersonSource(person: PersonEntry): {
@@ -144,218 +63,231 @@ function getPersonSource(person: PersonEntry): {
     person.department,
   ];
   const hasManualEdit = allFacts.some((f) => f?.priority === "manual_override");
-  if (hasManualEdit) {
-    return { docName: "Manual edit", hasManualEdit: true };
-  }
+  if (hasManualEdit) return { docName: "Edited by you", hasManualEdit: true };
   const firstSource = person.name.sources[0]?.doc_name ?? "document";
   return { docName: firstSource, hasManualEdit: false };
 }
 
-function PersonCard({
-  person,
-  index,
-  isEditMode,
-  onFieldSave,
-}: {
+export function PeopleSection({ people, onFieldSave }: PeopleSectionProps) {
+  if (people.length === 0) return null;
+  return (
+    <div className={m.peopleGrid}>
+      {people.map((person, index) => (
+        <PersonCard
+          key={index}
+          person={person}
+          index={index}
+          onFieldSave={onFieldSave}
+        />
+      ))}
+    </div>
+  );
+}
+
+interface PersonCardProps {
   person: PersonEntry;
   index: number;
-  isEditMode?: boolean;
   onFieldSave?: (path: string, value: string) => Promise<void>;
-}) {
+}
+
+function PersonCard({ person, index, onFieldSave }: PersonCardProps) {
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const name = String(person.name.value);
-  const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+  const initials = getInitials(name);
+  const role = person.role ? String(person.role.value) : "";
+  const department = person.department ? String(person.department.value) : "";
+  const email = person.email ? String(person.email.value) : "";
+  const phone = person.phone ? String(person.phone.value) : "";
 
-  const avatarStyle: React.CSSProperties = {
-    width: 40,
-    height: 40,
-    borderRadius: 999,
-    background:
-      "linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)",
-    color: "white",
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 12,
-    fontWeight: 700,
-    flexShrink: 0,
-    boxShadow: "0 4px 12px var(--accent-glow)",
+  const source = getPersonSource(person);
+  const roleMissing = !person.role;
+
+  const startEdit = (field: string) => {
+    if (!onFieldSave) return;
+    setEditingField(field);
+    setError(null);
+  };
+  const cancelEdit = () => {
+    setEditingField(null);
+    setError(null);
   };
 
-  const itemStyle: React.CSSProperties = {
-    padding: 14,
-    borderRadius: 12,
-    background: "var(--panel-2)",
-    border: "1px solid var(--line-2)",
+  const save = async (field: string, currentValue: string, next: string) => {
+    if (!onFieldSave) return;
+    if (next === currentValue) {
+      setEditingField(null);
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      await onFieldSave(`people.${index}.${field}`, next);
+      setEditingField(null);
+    } catch {
+      setError("Failed to save.");
+    } finally {
+      setSaving(false);
+    }
   };
-
-  if (isEditMode && onFieldSave) {
-    const editableFields = [
-      { label: "Name", key: "name", value: name },
-      {
-        label: "Role",
-        key: "role",
-        value: person.role ? String(person.role.value) : "",
-      },
-      {
-        label: "Department",
-        key: "department",
-        value: person.department ? String(person.department.value) : "",
-      },
-      {
-        label: "Email",
-        key: "email",
-        value: person.email ? String(person.email.value) : "",
-      },
-      {
-        label: "Phone",
-        key: "phone",
-        value: person.phone ? String(person.phone.value) : "",
-      },
-    ];
-
-    return (
-      <div style={itemStyle} className="space-y-3">
-        <div className="flex items-center gap-3">
-          <div style={avatarStyle}>{initials}</div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span
-              style={{
-                fontSize: 14,
-                fontWeight: 600,
-                color: "var(--ink)",
-                letterSpacing: "-0.005em",
-              }}
-            >
-              {name}
-            </span>
-            <PriorityBadge priority={person.name.priority} />
-          </div>
-        </div>
-        <div className="space-y-2.5">
-          {editableFields.map(({ label, key, value: val }) => (
-            <div key={key}>
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 700,
-                  color: "var(--ink-3)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                {label}
-              </span>
-              <PersonFieldEditor
-                path={`people.${index}.${key}`}
-                initialValue={val}
-                onSave={onFieldSave}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  const { docName, hasManualEdit } = getPersonSource(person);
 
   return (
-    <div style={itemStyle}>
-      <div className="flex items-start gap-3">
-        <div style={avatarStyle}>{initials}</div>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h4
-              style={{
-                margin: 0,
-                fontSize: 14,
-                fontWeight: 600,
-                color: "var(--ink)",
-                letterSpacing: "-0.005em",
-              }}
-              className="truncate"
-            >
-              {name}
-            </h4>
-            <VisibilityBadge visibility={person.name.visibility} />
-            <PriorityBadge priority={person.name.priority} />
-          </div>
-
-          {person.role && (
-            <div
-              className="mt-1 flex items-center gap-1.5"
-              style={{ fontSize: 13, color: "var(--ink-2)" }}
-            >
-              <Building
-                className="h-3.5 w-3.5 flex-shrink-0"
-                style={{ color: "var(--ink-3)" }}
-              />
-              <span className="truncate">{String(person.role.value)}</span>
-              {person.role.priority === "manual_override" && (
-                <PriorityBadge priority={person.role.priority} />
-              )}
-            </div>
+    <div className={m.person}>
+      <div className={m.avatar} aria-hidden>
+        {initials || "·"}
+      </div>
+      <div className={m.pBody}>
+        <div className={m.pName}>
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+            {name}
+          </span>
+          {person.name.priority === "manual_override" && (
+            <span className={`${m.badge} ${m.badgeManual}`}>
+              <span className="dot" />
+              Manual
+            </span>
           )}
+        </div>
 
-          {person.department && (
-            <p
-              style={{
-                margin: "4px 0 0 22px",
-                fontSize: 12,
-                color: "var(--ink-3)",
-              }}
-            >
-              {String(person.department.value)}
-            </p>
-          )}
-
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            {person.email && (
-              <a
-                href={`mailto:${String(person.email.value)}`}
-                className="flex items-center gap-1"
-                style={{ fontSize: 12, color: "var(--accent-ink)" }}
-              >
-                <Mail className="h-3 w-3 flex-shrink-0" />
-                <span
-                  className="truncate"
-                  style={{ maxWidth: 160 }}
+        {editingField === "role" ? (
+          <PersonInlineInput
+            initialValue={role}
+            placeholder="e.g. Head of Engineering"
+            saving={saving}
+            error={error}
+            onCancel={cancelEdit}
+            onSave={(next) => void save("role", role, next)}
+          />
+        ) : roleMissing ? (
+          <div className={`${m.pRole} ${m.pRoleMissing}`}>
+            <AlertCircle width={12} height={12} />
+            Role unknown
+            {onFieldSave && (
+              <>
+                {" — "}
+                <button
+                  type="button"
+                  className={m.pAddRole}
+                  onClick={() => startEdit("role")}
                 >
-                  {String(person.email.value)}
+                  add
+                </button>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className={m.pRole}>
+            <Briefcase width={12} height={12} />
+            <span>{role}</span>
+          </div>
+        )}
+
+        {department && editingField !== "role" && (
+          <div className={m.pDept}>{department}</div>
+        )}
+
+        {(email || phone) && (
+          <div className={m.pContact}>
+            {email && (
+              <a href={`mailto:${email}`}>
+                <Mail width={11} height={11} />
+                <span
+                  style={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    maxWidth: 180,
+                  }}
+                >
+                  {email}
                 </span>
               </a>
             )}
-
-            {person.phone && (
-              <a
-                href={`tel:${String(person.phone.value)}`}
-                className="flex items-center gap-1"
-                style={{ fontSize: 12, color: "var(--accent-ink)" }}
-              >
-                <Phone className="h-3 w-3 flex-shrink-0" />
-                <span>{String(person.phone.value)}</span>
+            {phone && (
+              <a href={`tel:${phone}`}>
+                <Phone width={11} height={11} />
+                {phone}
               </a>
             )}
           </div>
+        )}
 
-          <div className="mt-2 flex items-center gap-2">
-            <ConfidenceBadge confidence={person.name.confidence} />
-            <span
-              style={{
-                fontSize: 10,
-                color: hasManualEdit ? "var(--accent-ink)" : "var(--ink-3)",
-                fontWeight: hasManualEdit ? 600 : 400,
-              }}
-            >
-              {hasManualEdit ? "Manual edit" : `from ${docName}`}
+        <div className={m.pMeta}>
+          <ConfBar confidence={person.name.confidence} />
+          {source.hasManualEdit ? (
+            <span className={`${m.src} ${m.srcManual}`}>
+              <Pencil width={10} height={10} />
+              Edited by you
             </span>
-          </div>
+          ) : (
+            <span className={m.src} title={source.docName}>
+              <FileText width={10} height={10} />
+              {source.docName}
+            </span>
+          )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+interface PersonInlineInputProps {
+  initialValue: string;
+  placeholder?: string;
+  saving: boolean;
+  error: string | null;
+  onCancel: () => void;
+  onSave: (next: string) => void;
+}
+
+function PersonInlineInput({
+  initialValue,
+  placeholder,
+  saving,
+  error,
+  onCancel,
+  onSave,
+}: PersonInlineInputProps) {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return (
+    <div className={m.editor} style={{ marginTop: 6 }}>
+      <input
+        autoFocus
+        className={s.input}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") onCancel();
+          if (e.key === "Enter") onSave(value.trim());
+        }}
+        disabled={saving}
+      />
+      {error && <p className={m.editorError}>{error}</p>}
+      <div className={m.editorRow}>
+        <button
+          type="button"
+          className={`${s.btn} ${s.btnOutline} ${s.btnSm}`}
+          onClick={onCancel}
+          disabled={saving}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className={`${s.btn} ${s.btnAccent} ${s.btnSm}`}
+          onClick={() => onSave(value.trim())}
+          disabled={saving || value.trim() === initialValue.trim()}
+        >
+          {saving ? "Saving…" : "Save"}
+        </button>
       </div>
     </div>
   );

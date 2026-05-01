@@ -1,185 +1,134 @@
 "use client";
 
 import React from "react";
-import { Scale, Calendar, Users as UsersIcon } from "lucide-react";
-import { legalTheme as s } from "~/app/employer/documents/components/LegalGeneratorTheme";
-import { ConfidenceBadge } from "./ConfidenceBadge";
-import { VisibilityBadge } from "./VisibilityBadge";
-import { PriorityBadge } from "./PriorityBadge";
+import { FileText, Pencil } from "lucide-react";
+import m from "./metadata.module.css";
 import type { LegalEntry } from "@launchstack/features/company-metadata";
 
 interface LegalSectionProps {
   legal: LegalEntry[];
 }
 
-export function LegalSection({ legal }: LegalSectionProps) {
+function confBucket(confidence: number): "high" | "med" | "low" {
+  if (confidence >= 0.75) return "high";
+  if (confidence >= 0.45) return "med";
+  return "low";
+}
+
+function ConfBar({ confidence }: { confidence: number }) {
+  const bucket = confBucket(confidence);
+  const filled = bucket === "high" ? 4 : bucket === "med" ? 3 : 2;
+  const cls =
+    bucket === "high" ? m.confBarHigh : bucket === "med" ? m.confBarMed : m.confBarLow;
   return (
-    <div className={s.panel} style={{ padding: 22 }}>
-      <div className="flex items-center gap-3" style={{ marginBottom: 4 }}>
-        <div className={s.brandMarkSm}>
-          <Scale className="h-[14px] w-[14px]" />
-        </div>
-        <div className="min-w-0">
-          <h2
-            style={{
-              margin: 0,
-              fontSize: 16,
-              fontWeight: 600,
-              color: "var(--ink)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Legal documents
-          </h2>
-          <p
-            style={{
-              margin: "2px 0 0",
-              fontSize: 12,
-              color: "var(--ink-3)",
-            }}
-          >
-            {legal.length} {legal.length === 1 ? "document" : "documents"} identified
-          </p>
-        </div>
-      </div>
-      <hr className={s.hair} style={{ margin: "14px 0 18px" }} />
-      <div className="space-y-3">
-        {legal.map((entry, index) => (
-          <LegalCard key={index} entry={entry} />
-        ))}
-      </div>
+    <span className={`${m.confBar} ${cls}`}>
+      {[0, 1, 2, 3].map((i) => (
+        <i key={i} className={i < filled ? "on" : undefined} />
+      ))}
+    </span>
+  );
+}
+
+function inferJurisdiction(name: string): string | null {
+  const upper = name.toUpperCase();
+  const match = upper.match(/\b(US-[A-Z]{2}|UK|US|EU|CA|SG|DE|FR|JP|IN|AU)\b/);
+  return match ? match[0] : null;
+}
+
+export function LegalSection({ legal }: LegalSectionProps) {
+  if (legal.length === 0) return null;
+
+  return (
+    <div style={{ overflowX: "auto" }}>
+      <table className={m.legalTable}>
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th>Type</th>
+            <th>Effective</th>
+            <th>Confidence</th>
+            <th>Source</th>
+            <th aria-label="Actions" />
+          </tr>
+        </thead>
+        <tbody>
+          {legal.map((entry, idx) => (
+            <LegalRow key={idx} entry={entry} />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
 
-function statusTone(status: string): { bg: string; fg: string; border: string } {
-  if (status === "active") {
-    return {
-      bg: "oklch(from var(--success) l c h / 0.12)",
-      fg: "var(--success)",
-      border: "oklch(from var(--success) l c h / 0.25)",
-    };
-  }
-  if (status === "expired") {
-    return {
-      bg: "oklch(from var(--danger) l c h / 0.1)",
-      fg: "var(--danger)",
-      border: "oklch(from var(--danger) l c h / 0.25)",
-    };
-  }
-  return {
-    bg: "oklch(from var(--warn) l c h / 0.14)",
-    fg: "var(--warn)",
-    border: "oklch(from var(--warn) l c h / 0.3)",
-  };
-}
-
-function LegalCard({ entry }: { entry: LegalEntry }) {
-  const typeValue = entry.type ? String(entry.type.value) : null;
-  const statusValue = entry.status
-    ? String(entry.status.value).toLowerCase()
+function LegalRow({ entry }: { entry: LegalEntry }) {
+  const name = String(entry.name.value);
+  const juris = inferJurisdiction(name);
+  const type = entry.type ? String(entry.type.value) : "—";
+  const summary = entry.summary ? String(entry.summary.value) : "";
+  const effective = entry.effective_date
+    ? String(entry.effective_date.value)
     : null;
-
-  const tone = statusValue ? statusTone(statusValue) : null;
-
-  const itemStyle: React.CSSProperties = {
-    padding: 14,
-    borderRadius: 12,
-    background: "var(--panel-2)",
-    border: "1px solid var(--line-2)",
-  };
-
-  const pillStyle: React.CSSProperties = {
-    padding: "2px 8px",
-    borderRadius: 999,
-    fontSize: 10,
-    fontWeight: 600,
-    background: "var(--accent-soft)",
-    color: "var(--accent-ink)",
-    border: "1px solid oklch(from var(--accent) l c h / 0.2)",
-  };
+  const expiry = entry.expiry_date ? String(entry.expiry_date.value) : null;
+  const status = entry.status ? String(entry.status.value).toLowerCase() : null;
+  const source = entry.name.sources[0]?.doc_name;
+  const isManual = entry.name.priority === "manual_override";
 
   return (
-    <div style={itemStyle}>
-      <div className="min-w-0 flex-1">
-        <div className="mb-2 flex flex-wrap items-center gap-2">
-          <h4
-            style={{
-              margin: 0,
-              fontSize: 14,
-              fontWeight: 600,
-              color: "var(--ink)",
-              letterSpacing: "-0.005em",
-            }}
-          >
-            {String(entry.name.value)}
-          </h4>
-          {typeValue && <span style={pillStyle}>{typeValue.replace(/_/g, " ")}</span>}
-          {statusValue && tone && (
-            <span
-              style={{
-                padding: "2px 8px",
-                borderRadius: 999,
-                fontSize: 10,
-                fontWeight: 600,
-                background: tone.bg,
-                color: tone.fg,
-                border: `1px solid ${tone.border}`,
-              }}
-            >
-              {statusValue.charAt(0).toUpperCase() + statusValue.slice(1)}
-            </span>
-          )}
-          <VisibilityBadge visibility={entry.name.visibility} />
-          <PriorityBadge priority={entry.name.priority} />
+    <tr>
+      <td>
+        <div className={m.legalName}>
+          <span>{name}</span>
+          {juris && <span className={m.legalJuris}>{juris}</span>}
         </div>
-
-        {entry.summary && (
-          <p
-            style={{
-              margin: "0 0 8px",
-              fontSize: 13,
-              color: "var(--ink-2)",
-              lineHeight: 1.55,
-            }}
-          >
-            {String(entry.summary.value)}
-          </p>
+        {summary && <div className={m.legalSub}>{summary}</div>}
+        {!summary && effective && (
+          <div className={m.legalSub}>Effective {effective}</div>
         )}
-
-        <div
-          className="flex flex-wrap gap-4"
-          style={{ fontSize: 12, color: "var(--ink-3)" }}
+      </td>
+      <td>{type !== "—" ? type.replace(/_/g, " ") : <span style={{ color: "var(--ink-4)" }}>—</span>}</td>
+      <td>
+        {effective ? (
+          <span className={m.legalId}>{effective}</span>
+        ) : (
+          <span style={{ color: "var(--ink-4)" }}>—</span>
+        )}
+        {expiry && (
+          <div className={m.legalSub}>
+            Expires {expiry}
+            {status && ` · ${status}`}
+          </div>
+        )}
+      </td>
+      <td>
+        <ConfBar confidence={entry.name.confidence} />
+      </td>
+      <td>
+        {isManual ? (
+          <span className={`${m.src} ${m.srcManual}`}>
+            <Pencil width={10} height={10} />
+            Edited by you
+          </span>
+        ) : source ? (
+          <span className={m.src} title={source}>
+            <FileText width={10} height={10} />
+            {source}
+          </span>
+        ) : (
+          <span style={{ color: "var(--ink-4)", fontSize: 12 }}>—</span>
+        )}
+      </td>
+      <td style={{ width: 36 }}>
+        <button
+          type="button"
+          className={m.fieldEdit}
+          style={{ opacity: 1 }}
+          aria-label={`Edit ${name}`}
+          title="Edit"
         >
-          {entry.effective_date && (
-            <span className="flex items-center gap-1">
-              <Calendar className="h-3 w-3" />
-              Effective: {String(entry.effective_date.value)}
-            </span>
-          )}
-          {entry.expiry_date && (
-            <span className="flex items-center gap-1">
-              <Calendar className="h-3 w-3" />
-              Expires: {String(entry.expiry_date.value)}
-            </span>
-          )}
-          {entry.parties && (
-            <span className="flex items-center gap-1">
-              <UsersIcon className="h-3 w-3" />
-              {String(entry.parties.value)}
-            </span>
-          )}
-        </div>
-
-        <div className="mt-3 flex items-center gap-2">
-          <ConfidenceBadge confidence={entry.name.confidence} />
-          {entry.name.sources.length > 0 && (
-            <span style={{ fontSize: 10, color: "var(--ink-3)" }}>
-              from {entry.name.sources[0]?.doc_name ?? "document"}
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
+          <Pencil width={12} height={12} />
+        </button>
+      </td>
+    </tr>
   );
 }

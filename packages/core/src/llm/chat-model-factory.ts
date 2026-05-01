@@ -11,6 +11,7 @@ import {
   type AIModelType,
   type LLMProvider,
 } from "./types";
+import { createSlot } from "../internal/slot";
 
 /**
  * Chat-model factory.
@@ -35,18 +36,18 @@ export interface ChatModelsConfig {
   ollama?: { baseUrl: string; model?: string };
 }
 
-let _config: ChatModelsConfig | null = null;
+const configSlot = createSlot<ChatModelsConfig>("llm/chatModels");
 
 /**
  * Register chat-model config. apps/web/src/server/engine.ts calls this
  * during getEngine() initialization with the relevant slice of CoreConfig.
  */
 export function configureChatModels(config: ChatModelsConfig): void {
-  _config = config;
+  configSlot.set(config);
 }
 
 function getConfig(): ChatModelsConfig {
-  return _config ?? {};
+  return configSlot.get() ?? {};
 }
 
 /** Exposed so sibling modules (openai-client) can read the same captured config. */

@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { category, company, users } from "@launchstack/core/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 type BootstrapCategory = {
   id: string;
@@ -41,7 +42,7 @@ export async function GET() {
     }
 
     const [userInfo] = await db
-      .select({
+      .select({ id: users.id,
         role: users.role,
         companyId: users.companyId,
       })
@@ -66,7 +67,7 @@ export async function GET() {
           name: category.name,
         })
         .from(category)
-        .where(eq(category.companyId, userInfo.companyId)),
+        .where(eq(category.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))),
       db
         .select({
           id: company.id,
@@ -74,7 +75,7 @@ export async function GET() {
           useUploadThing: company.useUploadThing,
         })
         .from(company)
-        .where(and(eq(company.id, Number(userInfo.companyId))))
+        .where(and(eq(company.id, Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))))))
         .limit(1),
     ]);
 

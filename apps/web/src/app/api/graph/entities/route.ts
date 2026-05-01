@@ -36,6 +36,7 @@ import {
   isNeo4jConfigured,
 } from "@launchstack/core/graph";
 import { getEngine } from "~/server/engine";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 interface GraphNode {
   id: number;
@@ -90,7 +91,7 @@ export async function GET(request: Request) {
     if (isNeo4jConfigured()) {
       try {
         const result = await queryNeo4j({
-          companyId: userInfo.companyId,
+          companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
           limit,
           minCount,
           documentId,
@@ -109,7 +110,7 @@ export async function GET(request: Request) {
     }
 
     const pg = await queryPostgres({
-      companyId: userInfo.companyId,
+      companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
       limit,
       minCount,
       documentId,

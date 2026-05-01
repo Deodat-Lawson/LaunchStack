@@ -22,6 +22,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { inngest } from "~/server/inngest/client";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const WebsiteUploadSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
@@ -182,7 +183,7 @@ export async function POST(request: Request) {
           data: {
             url,
             userId,
-            companyId: userInfo.companyId.toString(),
+            companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)).toString(),
             category,
             maxDepth: maxDepth ?? DEFAULT_MAX_DEPTH,
             maxPages: maxPages ?? DEFAULT_MAX_PAGES,
@@ -253,7 +254,7 @@ export async function POST(request: Request) {
       const uploadResult = await processDocumentUpload({
         user: {
           userId,
-          companyId: userInfo.companyId,
+          companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
         },
         documentName: resolvedTitle,
         rawDocumentUrl: uploaded.url,

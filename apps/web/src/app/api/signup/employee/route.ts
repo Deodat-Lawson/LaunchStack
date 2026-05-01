@@ -1,5 +1,5 @@
 import { db } from "~/server/db/index";
-import { users, company } from "@launchstack/core/db/schema";
+import { users, company, userCompanyMemberships } from "@launchstack/core/db/schema";
 import { and, eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
 import { validateRequestBody, EmployeeSignupSchema } from "~/lib/validation";
@@ -28,14 +28,25 @@ export async function POST(request: Request) {
         }
 
         // Insert new user
-        await db.insert(users).values({
-            userId,
-            name: name,
-            email: email,
-            companyId: BigInt(existingCompany.id),
-            status: "pending",
-            role: "employee",
-        });
+        const [insertedUser] = await db
+            .insert(users)
+            .values({
+                userId,
+                name: name,
+                email: email,
+                companyId: BigInt(existingCompany.id),
+                status: "pending",
+                role: "employee",
+            })
+            .returning({ id: users.id });
+
+        if (insertedUser) {
+            await db.insert(userCompanyMemberships).values({
+                userId: BigInt(insertedUser.id),
+                companyId: BigInt(existingCompany.id),
+                role: "editor",
+            });
+        }
 
         return createSuccessResponse(
             { userId, role: "employee" },

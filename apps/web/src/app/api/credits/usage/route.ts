@@ -13,7 +13,7 @@ export async function GET(request: Request) {
         }
 
         const [user] = await db
-            .select({ companyId: users.companyId })
+            .select({ id: users.id, companyId: users.companyId })
             .from(users)
             .where(eq(users.userId, userId));
 

@@ -2,8 +2,8 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import { eq } from "drizzle-orm";
-import { users } from "@launchstack/core/db/schema";
+import { eq, count } from "drizzle-orm";
+import { users, userCompanyMemberships } from "@launchstack/core/db/schema";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -15,6 +15,7 @@ const middlewareUserCacheMaxSize = 500;
 const isProtectedRoute = createRouteMatcher([
     '/employer(.*)',
     '/employee(.*)',
+    '/workspaces(.*)',
 ]);
 
 // Routes that are always public
@@ -41,11 +42,13 @@ const isEmployerPath = (pathname: string) => pathname.startsWith("/employer");
 const isEmployeePath = (pathname: string) => pathname.startsWith("/employee");
 
 // Lazy singleton for middleware (postgres.js works with standard PostgreSQL)
-let _middlewareDb: ReturnType<typeof drizzle<{ users: typeof users }>> | null = null;
+let _middlewareDb: ReturnType<
+    typeof drizzle<{ users: typeof users; userCompanyMemberships: typeof userCompanyMemberships }>
+> | null = null;
 const getDb = () => {
     if (!_middlewareDb) {
         const client = postgres(process.env.DATABASE_URL!, { max: 5 });
-        _middlewareDb = drizzle(client, { schema: { users } });
+        _middlewareDb = drizzle(client, { schema: { users, userCompanyMemberships } });
     }
     return _middlewareDb;
 };
@@ -53,6 +56,8 @@ const getDb = () => {
 type CachedUserValue = {
     role: string;
     status: string;
+    membershipCount: number;
+    userPk: number;
 };
 
 const middlewareUserCache = new Map<string, {
@@ -115,11 +120,26 @@ export default clerkMiddleware(async (auth, req) => {
                     const db = getDb();
                     const dbStart = Date.now();
                     const [queriedUser] = await db
-                        .select({ role: users.role, status: users.status })
+                        .select({
+                            id: users.id,
+                            role: users.role,
+                            status: users.status,
+                        })
                         .from(users)
                         .where(eq(users.userId, userId));
+                    if (queriedUser) {
+                        const [{ c: membershipCount } = { c: 0 }] = await db
+                            .select({ c: count(userCompanyMemberships.id) })
+                            .from(userCompanyMemberships)
+                            .where(eq(userCompanyMemberships.userId, BigInt(queriedUser.id)));
+                        existingUser = {
+                            role: queriedUser.role,
+                            status: queriedUser.status,
+                            membershipCount: Number(membershipCount ?? 0),
+                            userPk: Number(queriedUser.id),
+                        };
+                    }
                     dbQueryMs = Date.now() - dbStart;
-                    existingUser = queriedUser;
                     // Only cache verified users to avoid stale pending/signup states.
                     if (existingUser && existingUser.status === "verified") {
                         setCachedMiddlewareUser(userId, existingUser);
@@ -155,10 +175,17 @@ export default clerkMiddleware(async (auth, req) => {
                         return NextResponse.redirect(new URL('/employer/documents', req.url));
                     }
                 } else if (isAuthRedirectRoute(req)) {
-                    // Verified user on / or /signup – send to their dashboard
+                    // Verified user on / or /signup – send to their dashboard.
+                    // Users with 2+ memberships pick a workspace first.
                     if (existingUser.role === "employer" || existingUser.role === "owner") {
+                        if (existingUser.membershipCount >= 2) {
+                            return NextResponse.redirect(new URL('/workspaces', req.url));
+                        }
                         return NextResponse.redirect(new URL('/employer/documents', req.url));
                     } else if (existingUser.role === "employee") {
+                        if (existingUser.membershipCount >= 2) {
+                            return NextResponse.redirect(new URL('/workspaces', req.url));
+                        }
                         return NextResponse.redirect(new URL('/employee/documents', req.url));
                     }
                 }

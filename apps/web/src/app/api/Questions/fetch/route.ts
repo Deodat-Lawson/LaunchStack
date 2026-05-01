@@ -5,6 +5,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db/index";
 import { ChatHistory, users, document } from "@launchstack/core/db/schema";
 import { validateRequestBody, ChatHistoryFetchSchema } from "~/lib/validation";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function POST(request: Request) {
     try {
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
             }, { status: 404 });
         }
 
-        if (targetDocument.companyId !== requestingUser.companyId) {
+        if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
             return NextResponse.json({
                 success: false,
                 message: "You do not have access to this document."

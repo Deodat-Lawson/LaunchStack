@@ -3,6 +3,7 @@ import { db } from "~/server/db";
 import { ocrJobs, users } from "@launchstack/core/db/schema";
 import { eq, and, inArray, gte } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function GET() {
     try {
@@ -26,7 +27,7 @@ export async function GET() {
             );
         }
 
-        const companyId = userInfo.companyId;
+        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
         const sixtySecondsAgo = new Date(Date.now() - 60_000);
 
         // Fetch active jobs (queued/processing) and recently completed/failed ones

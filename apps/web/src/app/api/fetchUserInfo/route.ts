@@ -3,6 +3,7 @@ import { dbCore } from "../../../server/db/core";
 import { company, users } from "@launchstack/core/db/schema";
 import { and, eq } from "drizzle-orm";
 import { auth } from '@clerk/nextjs/server'
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function POST() {
     try {
@@ -20,7 +21,7 @@ export async function POST() {
             return NextResponse.json({ error: "Invalid user." }, { status: 400 });
         }
 
-        const companyId = userInfo.companyId;
+        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
 
         const [companyRecord] = await dbCore
             .select()
@@ -42,7 +43,7 @@ export async function POST() {
         // Convert BigInt fields to numbers for JSON serialization
         const serializedUserInfo = {
             ...userInfo,
-            companyId: Number(userInfo.companyId),
+            companyId: Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))),
         };
 
         return NextResponse.json(

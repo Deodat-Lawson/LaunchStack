@@ -4,6 +4,7 @@ import { users, documentViews, document } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { validateRequestBody, TrackDocumentViewSchema } from "~/lib/validation";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function POST(request: Request) {
     try {
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
             );
         }
 
-        if (doc.companyId !== userInfo.companyId) {
+        if (doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
             return NextResponse.json(
                 { success: false, error: "Unauthorized to view this document" },
                 { status: 403 }
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
         await db.insert(documentViews).values({
             documentId: BigInt(documentId),
             userId: userId,
-            companyId: userInfo.companyId,
+            companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
         });
 
         // Update user's last active time

@@ -10,25 +10,27 @@
  */
 
 import type { CreditsPort, DebitInput } from "./types";
+import { createSlot } from "../internal/slot";
 
-let _port: CreditsPort | null = null;
+const portSlot = createSlot<CreditsPort>("credits/port");
 
 export function configureCredits(port: CreditsPort): void {
-  _port = port;
+  portSlot.set(port);
 }
 
 /** Throws when no port has been registered — use only when a debit is required. */
 export function getCredits(): CreditsPort {
-  if (!_port) {
+  const port = portSlot.get();
+  if (!port) {
     throw new Error(
       "[@launchstack/core/credits] No CreditsPort registered. The host must pass `credits.port` to createEngine (or call configureCredits directly).",
     );
   }
-  return _port;
+  return port;
 }
 
 export function getCreditsOrNull(): CreditsPort | null {
-  return _port;
+  return portSlot.get() ?? null;
 }
 
 /**
@@ -37,7 +39,7 @@ export function getCreditsOrNull(): CreditsPort | null {
  * ingestion / NER / OCR paths.
  */
 export async function creditsDebitSafe(input: DebitInput): Promise<void> {
-  const port = _port;
+  const port = portSlot.get();
   if (!port) return;
   try {
     await port.debit(input);

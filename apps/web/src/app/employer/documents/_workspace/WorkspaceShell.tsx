@@ -6,15 +6,20 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
 import { useAIChat } from "../hooks/useAIChat";
 import { AddSourceModal } from "./AddSourceModal";
-import { AskPanel } from "./AskPanel";
+import {
+  AskPanel,
+  AvatarMenu,
+  JumpToPaletteButton,
+  workspaceMainHeaderBarStyle,
+} from "./AskPanel";
 import { CommandPalette } from "./CommandPalette";
 import { DocumentViewer } from "./DocumentViewer";
-import { IconChevronLeft } from "./icons";
+import { IconChevronRight } from "./icons";
 import { NewFolderDialog } from "./NewFolderDialog";
 import { RenameFolderDialog } from "./RenameFolderDialog";
 import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
-import { StudioFAB, StudioMenu } from "./StudioMenu";
+import { StudioMenu } from "./StudioMenu";
 import { renderStudioPane } from "./StudioPanes";
 import {
   DEFAULT_COMPOSER_MODEL,
@@ -56,6 +61,9 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
   notes: "/employer/documents?feature=notes",
   workflows: "/employer/documents?feature=workflows",
 };
+
+/** Extra horizontal inset for AskPanel / expanded feature headers when rail is hidden (clears overlay “show sidebar” at 12+28px + ~8px gap minus default 20px padding). */
+const RAIL_HIDDEN_HEADER_INSET_PX = 28;
 
 /**
  * Features accessible via `?feature=X`. All open the Studio drawer on the
@@ -134,6 +142,27 @@ export function WorkspaceShell() {
    * pane inline. Set via the drawer's Expand button or `?feature=X` deep links.
    */
   const [activeFeatureId, setActiveFeatureId] = useState<string>("chat");
+  const [railHidden, setRailHidden] = useState(false);
+  const railHiddenReady = useRef(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("workspace.railHidden.v1");
+      if (raw === "1") setRailHidden(true);
+    } catch {
+      // Private mode / corrupt storage — fall back to visible.
+    }
+    railHiddenReady.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!railHiddenReady.current) return;
+    try {
+      localStorage.setItem("workspace.railHidden.v1", railHidden ? "1" : "0");
+    } catch {
+      // Quota / private mode — drop silently.
+    }
+  }, [railHidden]);
 
   // Composer preferences persisted across reloads so picking a model or
   // toggling Web/Think doesn't reset on every refresh. Ephemeral attachments
@@ -341,32 +370,30 @@ export function WorkspaceShell() {
     [sources, refresh],
   );
 
+  /** Opens the Studio drawer / sidebar only — used by the header “Studio” control and ⌘J toggle. */
   const openFeature = useCallback(
     (featureId?: string) => {
-      // When no id is supplied, land on the feature currently expanded in the
-      // main area (defaults to "chat" — the Workspace group's Chat entry).
       setStudioFeatureId(featureId ?? activeFeatureId);
       setStudioOpen(true);
     },
     [activeFeatureId],
   );
 
+  /** Fills the main workspace with a feature and closes the drawer — used by mega-menu picks, palette, FAB pins. */
   const expandFeature = useCallback((featureId: string) => {
     setActiveFeatureId(featureId);
     setStudioOpen(false);
   }, []);
 
-  // `?feature=X` switches the AskPanel to QuickPen (draft/rewrite/workflows/notes)
-  // or opens the Studio drawer overlay (audit/marketing/...); `?add=1` opens the
-  // AddSourceModal. Both are stripped from the URL after firing so refreshes
-  // don't re-open the overlay.
+  // `?feature=X` expands that Studio feature full-width on the workspace (or opens
+  // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal.
   const featureParam = searchParams.get("feature");
   const addParam = searchParams.get("add");
   useEffect(() => {
     if (!featureParam && !addParam) return;
     if (legacyRedirect) return;
     if (featureParam && FEATURE_IDS.has(featureParam)) {
-      openFeature(featureParam);
+      expandFeature(featureParam);
     }
     if (addParam) {
       setAddOpen(true);
@@ -376,7 +403,7 @@ export function WorkspaceShell() {
     params.delete("add");
     const query = params.toString();
     router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
-  }, [featureParam, addParam, legacyRedirect, openFeature, router, searchParams]);
+  }, [featureParam, addParam, legacyRedirect, expandFeature, router, searchParams]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -393,6 +420,9 @@ export function WorkspaceShell() {
       } else if (mod && e.key.toLowerCase() === "j") {
         e.preventDefault();
         setStudioOpen((v) => !v);
+      } else if (mod && e.key === "\\") {
+        e.preventDefault();
+        setRailHidden((v) => !v);
       } else if (e.key === "/" && !inInput) {
         e.preventDefault();
         const el = document.querySelector<HTMLInputElement>(
@@ -429,24 +459,63 @@ export function WorkspaceShell() {
         position: "relative",
       }}
     >
-      <SourceRail
-        sources={sources}
-        folders={folders}
-        selected={selected}
-        setSelected={setSelected}
-        onOpenAdd={() => setAddOpen(true)}
-        onOpenSource={handleOpenSource}
-        onNewFolder={() => setNewFolderOpen(true)}
-        onRenameFolder={(folder) => setRenameFolder(folder)}
-        onMoveToFolder={(id, name) => void handleMoveToFolder(id, name)}
-        activeFolder={activeFolder}
-        setActiveFolder={setActiveFolder}
-        activeTag={activeTag}
-        setActiveTag={setActiveTag}
-      />
+      {!railHidden && (
+        <SourceRail
+          sources={sources}
+          folders={folders}
+          selected={selected}
+          setSelected={setSelected}
+          onOpenAdd={() => setAddOpen(true)}
+          onOpenSource={handleOpenSource}
+          onNewFolder={() => setNewFolderOpen(true)}
+          onRenameFolder={(folder) => setRenameFolder(folder)}
+          onMoveToFolder={(id, name) => void handleMoveToFolder(id, name)}
+          activeFolder={activeFolder}
+          setActiveFolder={setActiveFolder}
+          activeTag={activeTag}
+          setActiveTag={setActiveTag}
+          onClose={() => setRailHidden(true)}
+        />
+      )}
+
+      {railHidden && (
+        <button
+          onClick={() => setRailHidden(false)}
+          title="Show sidebar  ⌘\"
+          aria-label="Show sidebar"
+          style={{
+            position: "absolute",
+            top: 14,
+            left: 12,
+            zIndex: 5,
+            width: 28,
+            height: 28,
+            borderRadius: 7,
+            border: "1px solid var(--line)",
+            background: "var(--panel)",
+            color: "var(--ink-2)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+            transition: "background 120ms, color 120ms, border-color 120ms",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "var(--accent)";
+            e.currentTarget.style.color = "var(--accent)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "var(--line)";
+            e.currentTarget.style.color = "var(--ink-2)";
+          }}
+        >
+          <IconChevronRight size={14} />
+        </button>
+      )}
 
       {activeFeatureId === "chat" ? (
         <AskPanel
+          leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
           sources={sources}
           selected={selected}
           setSelected={setSelected}
@@ -471,7 +540,7 @@ export function WorkspaceShell() {
             <StudioMenu
               role={role}
               onOpenStudio={() => openFeature()}
-              onPickFeature={(id) => openFeature(id)}
+              onPickFeature={(id) => expandFeature(id)}
             />
           }
         />
@@ -479,9 +548,16 @@ export function WorkspaceShell() {
         <ExpandedFeatureView
           featureId={activeFeatureId}
           role={role}
-          onBackToChat={() => setActiveFeatureId("chat")}
+          leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
+          onPaneExit={() => setActiveFeatureId("chat")}
           onOpenStudio={() => openFeature()}
-          onPickFeature={(id) => openFeature(id)}
+          onPickFeature={(id) => expandFeature(id)}
+          openPalette={() => setPalOpen(true)}
+          userInitials={initials}
+          userName={userName}
+          userEmail={userEmail}
+          onOpenSettings={() => router.push("/employer/settings")}
+          onSignOut={() => signOut({ redirectUrl: "/" })}
         />
       )}
 
@@ -493,6 +569,10 @@ export function WorkspaceShell() {
           activeFeatureId={activeFeatureId}
           onClose={() => setStudioOpen(false)}
           onExpand={expandFeature}
+          onOpenWorkspaceChat={() => {
+            setActiveFeatureId("chat");
+            setStudioOpen(false);
+          }}
         />
       )}
 
@@ -520,7 +600,7 @@ export function WorkspaceShell() {
         }}
         onPickFeature={(id) => {
           setPalOpen(false);
-          setTimeout(() => openFeature(id), 100);
+          setTimeout(() => expandFeature(id), 100);
         }}
       />
 
@@ -558,18 +638,6 @@ export function WorkspaceShell() {
           onVersionChanged={() => void refresh()}
         />
       )}
-
-      <StudioFAB
-        hidden={
-          addOpen ||
-          palOpen ||
-          newFolderOpen ||
-          !!renameFolder ||
-          !!viewerSource ||
-          studioOpen
-        }
-        onPickFeature={(id) => openFeature(id)}
-      />
     </div>
   );
 }
@@ -577,22 +645,36 @@ export function WorkspaceShell() {
 interface ExpandedFeatureViewProps {
   featureId: string;
   role: string | null;
-  onBackToChat: () => void;
+  /** Extra left inset for top bar when an overlay chrome control (show sidebar) is visible — see WorkspaceShell.RAIL_HIDDEN_HEADER_INSET_PX. */
+  leadingChromeInsetPx?: number;
+  /** Return to workspace chat when panes invoke their exit / close callbacks. */
+  onPaneExit: () => void;
   onOpenStudio: () => void;
   onPickFeature: (featureId: string) => void;
+  openPalette: () => void;
+  userInitials: string;
+  userName?: string;
+  userEmail?: string;
+  onOpenSettings: () => void;
+  onSignOut?: () => void;
 }
 
 /**
- * Main-area container for a Studio feature that's been expanded out of the
- * drawer. Mirrors AskPanel's topbar (Studio menu + back-to-chat) so the
- * navigation stays consistent across feature swaps.
+ * Main-area container for a Studio feature expanded from the drawer; top bar aligns with AskPanel (jump, Studio, avatar).
  */
 function ExpandedFeatureView({
   featureId,
   role,
-  onBackToChat,
+  leadingChromeInsetPx = 0,
+  onPaneExit,
   onOpenStudio,
   onPickFeature,
+  openPalette,
+  userInitials,
+  userName,
+  userEmail,
+  onOpenSettings,
+  onSignOut,
 }: ExpandedFeatureViewProps) {
   const feature = STUDIO_FEATURES_BY_ID[featureId];
 
@@ -607,45 +689,7 @@ function ExpandedFeatureView({
         background: "var(--bg)",
       }}
     >
-      <div
-        style={{
-          padding: "10px 20px",
-          borderBottom: "1px solid var(--line)",
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          background: "var(--panel)",
-          flexShrink: 0,
-        }}
-      >
-        <button
-          onClick={onBackToChat}
-          title="Back to Chat"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "5px 10px",
-            borderRadius: 7,
-            border: "1px solid var(--line)",
-            background: "var(--panel)",
-            color: "var(--ink-2)",
-            fontSize: 12,
-            fontWeight: 500,
-            cursor: "pointer",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "var(--accent)";
-            e.currentTarget.style.color = "var(--accent)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "var(--line)";
-            e.currentTarget.style.color = "var(--ink-2)";
-          }}
-        >
-          <IconChevronLeft size={12} />
-          Back to Chat
-        </button>
+      <div style={workspaceMainHeaderBarStyle(leadingChromeInsetPx)}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 600 }}>
             {feature?.label ?? "Studio"}
@@ -654,15 +698,23 @@ function ExpandedFeatureView({
             {feature?.desc ?? ""}
           </div>
         </div>
+        <JumpToPaletteButton onClick={openPalette} />
         <StudioMenu
           role={role}
           onOpenStudio={onOpenStudio}
           onPickFeature={onPickFeature}
         />
+        <AvatarMenu
+          userInitials={userInitials}
+          userName={userName}
+          userEmail={userEmail}
+          onOpenSettings={onOpenSettings}
+          onSignOut={onSignOut}
+        />
       </div>
       <div style={{ flex: 1, overflow: "hidden" }}>
         {feature ? (
-          renderStudioPane(feature, onBackToChat)
+          renderStudioPane(feature, onPaneExit)
         ) : (
           <div
             style={{

@@ -40,5 +40,10 @@
     "prettier": "^3.6.2",
     "typescript": "^5.9.2"
   },
-  "packageManager": "pnpm@10.15.1"
+  "packageManager": "pnpm@10.15.1",
+  "pnpm": {
+    "patchedDependencies": {
+      "drizzle-kit@0.31.10": "patches/drizzle-kit@0.31.10.patch"
+    }
+  }
 }

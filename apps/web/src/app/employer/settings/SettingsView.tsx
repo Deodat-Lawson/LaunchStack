@@ -368,12 +368,6 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
           </div>
         </Card>
       </Section>
-
-      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 12 }}>
-        <Button onClick={() => void handleSave()} disabled={isSaving}>
-          {isSaving ? "Saving…" : "Save changes"}
-        </Button>
-      </div>
     </PageShell>
   );
 }

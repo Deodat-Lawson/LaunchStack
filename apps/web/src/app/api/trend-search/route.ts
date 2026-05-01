@@ -9,6 +9,7 @@ import { users } from "@launchstack/core/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { TrendSearchInputSchema } from "@launchstack/features/trend-search";
 import { createJob, getJobsByCompanyId } from "@launchstack/features/trend-search/db";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 // ─── POST /api/trend-search ─────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const companyId = userInfo.companyId;
+        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
         const jobId = uuidv4();
 
         // Create job record in DB
@@ -108,7 +109,7 @@ export async function GET() {
             );
         }
 
-        const jobs = await getJobsByCompanyId(userInfo.companyId);
+        const jobs = await getJobsByCompanyId((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)));
 
         const results = jobs.map((job) => ({
             id: job.id,

@@ -12,7 +12,10 @@ export default {
   dialect: "postgresql",
   out: "./drizzle",
   dbCredentials: {
-    url: process.env.DATABASE_URL,
+    url:
+      process.env.DRIZZLE_DATABASE_URL ??
+      process.env.DIRECT_URL ??
+      process.env.DATABASE_URL,
   },
   // Scope drizzle-kit to tables this project owns. Historically all project
   // tables used the `pdr_ai_v2_` prefix, but `marketing_content_history` was

@@ -14,12 +14,14 @@ export function PricingClient() {
       <section className={styles.pageHero}>
         <div className={styles.eyebrow}>Pricing</div>
         <h1 className={styles.pageTitle}>
-          Free to deploy. <span className={styles.serif}>Pay only the LLM bill.</span>
+          Open source. <span className={styles.serif}>Tokens fund the models.</span>
         </h1>
         <p className={styles.pageSub}>
-          Launchstack is fully open source under Apache 2.0. This hosted site is a
-          free demo — fork the repo, bring your own API keys, and run the
-          whole stack on your own infrastructure with no usage limits.
+          Launchstack is fully open source under Apache 2.0. Connectors and
+          workspaces are unlimited everywhere — hosted plans only differ by
+          included tokens (1M free / month, or $4 / month for 6M). Every dollar
+          goes to LLM and API keys; fork the repo anytime and run with your own
+          keys at unlimited scale.
         </p>
         <div className={styles.heroCtas}>
           <Link href="/signup" className={`${styles.btn} ${styles.btnAccent} ${styles.btnLg}`}>
@@ -42,64 +44,60 @@ export function PricingClient() {
         <div className={styles.container}>
           <div className={styles.pricingGrid}>
             <PriceCard
-              name="Demo Access"
+              name="Hosted — Free"
               badgeIcon={<Sparkles size={14} />}
-              badge="Hosted demo"
-              amount="Free"
-              per=""
-              tagline="Try every feature on our shared sandbox — no credit card."
+              badge="Hosted"
+              amount="$0"
+              per="/mo"
+              tagline="1M tokens / month on our keys — unlimited connectors & workspaces."
               features={[
-                'Document analysis',
-                'Predictive document analysis',
-                'AI-powered Q&A engine',
-                'Company management tools',
-                'Employee management system',
-                'Analytics dashboard',
+                '1M tokens / month included',
+                'Unlimited connectors',
+                'Unlimited workspaces',
+                'Document analysis & cited Q&A',
               ]}
-              cta="Try demo now"
+              cta="Start free"
               href="/signup"
               variant="outline"
+            />
+            <PriceCard
+              name="Hosted — Plus"
+              badgeIcon={<Sparkles size={14} />}
+              badge="More tokens"
+              amount="$4"
+              per="/mo"
+              tagline="6M tokens / month — same unlimited connectors & workspaces."
+              featured
+              features={[
+                '6M tokens / month',
+                'Unlimited connectors',
+                'Unlimited workspaces',
+                'All spend covers models & APIs',
+              ]}
+              cta="Get Plus"
+              href="/signup"
+              variant="accent"
             />
             <PriceCard
               name="Self-Hosted"
               badgeIcon={<Github size={14} />}
               badge="Open source"
-              amount="Free"
-              per=" + your LLM bill"
-              tagline="Deploy Launchstack on Vercel, Docker, or any server with your own API keys."
-              featured
+              amount="$0"
+              per=" + your keys"
+              tagline="Apache 2.0 — deploy anywhere with your own API keys."
               features={[
-                'Unlimited document analysis',
-                'All connectors, live sync',
-                'AI-powered Q&A engine',
-                'Graph view & version history',
-                'Company + employee management',
-                'Analytics & insights',
-                'Regular open-source updates',
+                'No token limits from us',
+                'Unlimited connectors & workspaces',
+                'You pay providers directly',
+                'Full source on GitHub',
               ]}
               cta="Deployment guide"
               href="/deployment"
-              variant="accent"
+              variant="outline"
               secondaryCta={{
                 label: 'View on GitHub',
                 href: GITHUB_REPO,
               }}
-            />
-            <PriceCard
-              name="Team"
-              amount="Contact us"
-              per=""
-              tagline="For teams that want priority support, SSO, and dedicated hosting."
-              features={[
-                'Everything in self-hosted',
-                'Priority support from maintainers',
-                'Dedicated cloud workspace',
-                'Shared workspaces & tags',
-                'Per-source permissions',
-              ]}
-              cta="Talk to us"
-              href="/contact"
-              variant="outline"
             />
           </div>
         </div>

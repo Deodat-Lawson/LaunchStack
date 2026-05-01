@@ -1,5 +1,5 @@
 import { db } from "~/server/db";
-import { users, inviteCodes, company } from "@launchstack/core/db/schema";
+import { users, inviteCodes, company, userCompanyMemberships } from "@launchstack/core/db/schema";
 import { and, eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
 import { validateRequestBody, JoinWithInviteSchema } from "~/lib/validation";
@@ -53,14 +53,29 @@ export async function POST(request: Request) {
         }
 
         // Insert new user with the role from the invite code
-        await db.insert(users).values({
-            userId,
-            name,
-            email,
-            companyId: codeRecord.companyId,
-            status: "pending",
-            role: codeRecord.role,
-        });
+        const [insertedUser] = await db
+            .insert(users)
+            .values({
+                userId,
+                name,
+                email,
+                companyId: codeRecord.companyId,
+                status: "pending",
+                role: codeRecord.role,
+            })
+            .returning({ id: users.id });
+
+        if (insertedUser) {
+            const membershipRole =
+                codeRecord.role === "employer" || codeRecord.role === "owner"
+                    ? "owner"
+                    : "editor";
+            await db.insert(userCompanyMemberships).values({
+                userId: BigInt(insertedUser.id),
+                companyId: codeRecord.companyId,
+                role: membershipRole,
+            });
+        }
 
         const redirectPath = codeRecord.role === "employee"
             ? "/employee/pending-approval"

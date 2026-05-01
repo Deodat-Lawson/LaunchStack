@@ -1,5 +1,6 @@
 import type { ProviderResult } from "../types";
 import { resolveNERProvider } from "../registry";
+import { createSlot } from "../../internal/slot";
 
 export interface EntityResult {
     text: string;
@@ -22,19 +23,22 @@ export interface NERProvider {
     extract(chunks: string[]): Promise<ProviderResult<NERResult>>;
 }
 
-let _provider: NERProvider | null = null;
+const providerSlot = createSlot<NERProvider>("providers/ner");
 
 export async function getNERProvider(): Promise<NERProvider> {
-    if (_provider) return _provider;
+    const cached = providerSlot.get();
+    if (cached) return cached;
 
     const type = resolveNERProvider();
+    let provider: NERProvider;
     if (type === "sidecar") {
         const { SidecarNERProvider } = await import("./sidecar");
-        _provider = new SidecarNERProvider();
+        provider = new SidecarNERProvider();
     } else {
         const { LLMNERProvider } = await import("./llm");
-        _provider = new LLMNERProvider();
+        provider = new LLMNERProvider();
     }
+    providerSlot.set(provider);
 
-    return _provider;
+    return provider;
 }

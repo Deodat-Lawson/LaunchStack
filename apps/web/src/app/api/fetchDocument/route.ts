@@ -6,6 +6,7 @@ import { validateRequestBody, UserIdSchema } from "~/lib/validation";
 import { auth } from '@clerk/nextjs/server';
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -109,7 +110,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const companyId = userInfo.companyId;
+        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
 
         const docs = await dbCore
             .select()

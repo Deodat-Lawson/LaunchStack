@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db } from "~/server/db";
 import { category, document, users } from "@launchstack/core/db/schema";
 import { validateRequestBody } from "~/lib/validation";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -71,7 +72,7 @@ export async function PATCH(
       .select()
       .from(category)
       .where(
-        and(eq(category.id, parsed.id), eq(category.companyId, userInfo.companyId)),
+        and(eq(category.id, parsed.id), eq(category.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))),
       );
 
     if (!existing) {
@@ -95,7 +96,7 @@ export async function PATCH(
         .set({ category: name })
         .where(
           and(
-            eq(document.companyId, userInfo.companyId),
+            eq(document.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))),
             eq(document.category, existing.name),
           ),
         );

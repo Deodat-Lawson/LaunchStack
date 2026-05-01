@@ -14,6 +14,7 @@ import { db } from "~/server/db/index";
 import { eq, and, desc } from "drizzle-orm";
 import { users, generatedDocuments } from "@launchstack/core/db/schema";
 import { z } from "zod";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export const runtime = "nodejs";
 
@@ -114,7 +115,7 @@ export async function GET(request: Request) {
 
         const conditions = [
             eq(generatedDocuments.userId, userId),
-            eq(generatedDocuments.companyId, requestingUser.companyId),
+            eq(generatedDocuments.companyId, (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))),
         ];
         if (templateId) {
             conditions.push(eq(generatedDocuments.templateId, templateId));
@@ -192,7 +193,7 @@ export async function POST(request: Request) {
             .insert(generatedDocuments)
             .values({
                 userId,
-                companyId: requestingUser.companyId,
+                companyId: (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)),
                 title,
                 content,
                 templateId,

@@ -54,8 +54,10 @@ export const users = pgTable(
 export const company = pgTable("company", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
+    slug: varchar("slug", { length: 64 }),
     description: text("description"),
     industry: varchar("industry", { length: 256 }),
+    swatch: integer("swatch").default(1).notNull(),
     // Legacy column; kept in sync with activeEmbeddingIndexKey via
     // updateCompany during the migration window. Drop after callers migrate.
     embeddingIndexKey: varchar("embedding_index_key", { length: 128 }),
@@ -110,6 +112,41 @@ export const inviteCodes = pgTable(
     (table) => ({
         codeIdx: index("invite_codes_code_idx").on(table.code),
         companyIdIdx: index("invite_codes_company_id_idx").on(table.companyId),
+    })
+);
+
+// ============================================================================
+// User <-> Company Memberships
+// ============================================================================
+// Lets a user belong to multiple workspaces. `users.companyId` remains the
+// user's *default* workspace; the active workspace per request is selected
+// from this table via the active-workspace cookie.
+
+export const userCompanyMemberships = pgTable(
+    "user_company_memberships",
+    {
+        id: serial("id").primaryKey(),
+        userId: bigint("user_id", { mode: "bigint" })
+            .notNull()
+            .references(() => users.id, { onDelete: "cascade" }),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        role: varchar("role", { length: 16 }).notNull(), // 'owner' | 'admin' | 'editor'
+        lastOpenedAt: timestamp("last_opened_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    (table) => ({
+        uniqUserCompany: uniqueIndex("user_company_memberships_user_company_unique").on(
+            table.userId,
+            table.companyId
+        ),
+        userIdIdx: index("user_company_memberships_user_id_idx").on(table.userId),
+        companyIdIdx: index("user_company_memberships_company_id_idx").on(table.companyId),
     })
 );
 
@@ -666,7 +703,22 @@ export const companyRelations = relations(company, ({ many }) => ({
     documents: many(document),
     categories: many(category),
     inviteCodes: many(inviteCodes),
+    memberships: many(userCompanyMemberships),
 }));
+
+export const userCompanyMembershipsRelations = relations(
+    userCompanyMemberships,
+    ({ one }) => ({
+        user: one(users, {
+            fields: [userCompanyMemberships.userId],
+            references: [users.id],
+        }),
+        company: one(company, {
+            fields: [userCompanyMemberships.companyId],
+            references: [company.id],
+        }),
+    })
+);
 
 export const inviteCodesRelations = relations(inviteCodes, ({ one }) => ({
     company: one(company, {
@@ -854,3 +906,4 @@ export type OcrCostTracking = InferSelectModel<typeof ocrCostTracking>;
 export type DocumentView = InferSelectModel<typeof documentViews>;
 export type GeneratedDocument = InferSelectModel<typeof generatedDocuments>;
 export type InviteCode = InferSelectModel<typeof inviteCodes>;
+export type UserCompanyMembership = InferSelectModel<typeof userCompanyMemberships>;

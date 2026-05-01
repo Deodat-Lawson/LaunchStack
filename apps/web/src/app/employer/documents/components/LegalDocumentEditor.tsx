@@ -9,27 +9,29 @@ import {
   useMemo,
 } from "react";
 import {
-  ArrowLeft,
-  Save,
-  Download,
-  FileText,
-  Loader2,
-  CheckCircle,
-  Sparkles,
-  Send,
   Bold,
   Italic,
   Underline,
-  Highlighter,
+  AlignLeft,
+  AlignCenter,
+  List as ListIcon,
+  Link as LinkIcon,
+  Undo as UndoIcon,
+  Redo as RedoIcon,
   Eye,
-  EyeOff,
+  Download,
+  Send,
+  Sparkles,
+  Wand2,
+  Shield,
+  FileText,
   AlertTriangle,
-  ChevronDown,
-  ChevronUp,
+  CheckCircle,
+  Loader2,
+  Save,
   Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Input } from "~/app/employer/documents/components/ui/input";
 import { cn } from "~/lib/utils";
 import { legalTheme as lt } from "./LegalGeneratorTheme";
 import type { EditorSection } from "@launchstack/features/legal-templates";
@@ -54,10 +56,10 @@ interface LegalDocumentEditorProps {
 }
 
 function getFieldFormatHint(field: TemplateField): string {
-  if (field.type === "date") return "Date";
+  if (field.type === "date") return "date";
   if (field.type === "number") {
     const k = field.key;
-    if (k.endsWith("_pct") || k === "discount_rate") return "Number, 0–100%";
+    if (k.endsWith("_pct") || k === "discount_rate") return "0–100%";
     if (
       k.endsWith("_months") ||
       k.endsWith("_years") ||
@@ -66,18 +68,20 @@ function getFieldFormatHint(field: TemplateField): string {
       k === "eligibility_age" ||
       k === "vacation_days"
     )
-      return "Positive number";
-    return "Number";
+      return "number";
+    return "number";
   }
   if (field.type === "select" && field.options)
     return field.options.join(" / ");
-  if (field.type === "textarea") return "Free text";
-  return "Text";
+  if (field.type === "textarea") return "free text";
+  return "";
 }
 
 function buildFieldTooltip(field: TemplateField): string {
-  const parts: string[] = [field.label, getFieldFormatHint(field)];
-  if (field.required) parts.push("Required");
+  const parts: string[] = [field.label];
+  const hint = getFieldFormatHint(field);
+  if (hint) parts.push(hint);
+  if (field.required) parts.push("required");
   return parts.join(" · ");
 }
 
@@ -91,7 +95,6 @@ function extractFieldKeysFromHtml(html: string): string[] {
   return Array.from(new Set(keys));
 }
 
-/** First-seen order of field keys as they appear in the HTML (for restoring removed marks in place). */
 function extractFieldKeysInDocumentOrder(html: string): string[] {
   const keys: string[] = [];
   const seen = new Set<string>();
@@ -114,7 +117,7 @@ function insertMissingMarkAtOrderedPosition(
 ) {
   const mark = document.createElement("mark");
   mark.setAttribute("data-field-key", missingKey);
-  mark.textContent = "\u200B";
+  mark.textContent = "​";
 
   const idx = orderedKeys.indexOf(missingKey);
   if (idx < 0) {
@@ -163,7 +166,6 @@ function insertMissingMarkAtOrderedPosition(
   }
 }
 
-/** Collapses repeated spaces in text nodes (edits can leave double spaces between marks). */
 function collapseRunsOfSpacesInTextNodes(el: HTMLElement) {
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
   const nodes: Text[] = [];
@@ -172,7 +174,7 @@ function collapseRunsOfSpacesInTextNodes(el: HTMLElement) {
     if (n.nodeType === Node.TEXT_NODE) nodes.push(n as Text);
   }
   for (const textNode of nodes) {
-    let t = textNode.textContent ?? "";
+    const t = textNode.textContent ?? "";
     const next = t.replace(/ {2,}/g, " ");
     if (next !== t) textNode.textContent = next;
   }
@@ -180,7 +182,7 @@ function collapseRunsOfSpacesInTextNodes(el: HTMLElement) {
 
 function syncLegalMarkEmptyClass(el: HTMLElement) {
   el.querySelectorAll<HTMLElement>("mark[data-field-key]").forEach((mark) => {
-    const text = (mark.textContent ?? "").replace(/\u200B/g, "").trim();
+    const text = (mark.textContent ?? "").replace(/​/g, "").trim();
     if (text === "") {
       mark.classList.add("legal-mark-empty");
     } else {
@@ -224,10 +226,6 @@ function placeCaretInsideMark(mark: HTMLElement) {
   selection.addRange(range);
 }
 
-/**
- * After deleting the last character, the browser often moves the caret outside the
- * <mark>, while beforeinput only allows typing inside a mark — so typing appears "stuck".
- */
 function ensureCaretInsideMarkAfterRepair(
   el: HTMLElement,
   preferredFieldKey: string | null,
@@ -250,7 +248,7 @@ function ensureCaretInsideMarkAfterRepair(
   }
   if (!target) {
     for (const m of el.querySelectorAll<HTMLElement>("mark[data-field-key]")) {
-      const t = (m.textContent ?? "").replace(/\u200B/g, "").trim();
+      const t = (m.textContent ?? "").replace(/​/g, "").trim();
       if (t === "") {
         target = m;
         break;
@@ -263,10 +261,6 @@ function ensureCaretInsideMarkAfterRepair(
   if (target) placeCaretInsideMark(target);
 }
 
-/**
- * Stops the browser from removing or unwrapping the <mark> when the last visible
- * character is deleted — the highlight stays in the original sentence position.
- */
 function interceptDeleteThatEmptiesMark(
   e: InputEvent,
   mark: HTMLElement,
@@ -278,10 +272,10 @@ function interceptDeleteThatEmptiesMark(
     return false;
   }
   const text = mark.textContent ?? "";
-  const visible = text.replace(/\u200B/g, "");
+  const visible = text.replace(/​/g, "");
   if (visible.length === 0) {
     e.preventDefault();
-    mark.textContent = "\u200B";
+    mark.textContent = "​";
     placeCaretInsideMark(mark);
     onSync();
     return true;
@@ -297,10 +291,10 @@ function interceptDeleteThatEmptiesMark(
 
   if (it === "deleteContentBackward") {
     if (off <= 0) return false;
-    const before = tn.slice(0, off).replace(/\u200B/g, "");
+    const before = tn.slice(0, off).replace(/​/g, "");
     if (before.length === 1 && before[0] === onlyChar) {
       e.preventDefault();
-      mark.textContent = "\u200B";
+      mark.textContent = "​";
       placeCaretInsideMark(mark);
       onSync();
       return true;
@@ -309,11 +303,11 @@ function interceptDeleteThatEmptiesMark(
   }
 
   if (off >= tn.length) return false;
-  if (tn[off] === "\u200B") return false;
-  const fromOff = tn.slice(off).replace(/\u200B/g, "");
+  if (tn[off] === "​") return false;
+  const fromOff = tn.slice(off).replace(/​/g, "");
   if (fromOff.length >= 1 && fromOff[0] === onlyChar) {
     e.preventDefault();
-    mark.textContent = "\u200B";
+    mark.textContent = "​";
     placeCaretInsideMark(mark);
     onSync();
     return true;
@@ -321,11 +315,6 @@ function interceptDeleteThatEmptiesMark(
   return false;
 }
 
-/**
- * When the caret sits in static "glue" text (between marks, after <strong>, etc.),
- * insertText targets that text node — characters become uneditable. Route typing into
- * the nearest field mark instead.
- */
 function findTargetMarkForStrayInsertion(
   el: HTMLElement,
   range: Range,
@@ -469,12 +458,6 @@ function interceptStrayTextInsertion(
   return true;
 }
 
-/**
- * After clearing a field, the mark often only holds ZWSP. Browsers still report the
- * caret as "inside" the mark, so interceptStrayTextInsertion bails out — but the
- * default insertText then lands in adjacent glue text. Force the typed text into
- * the last-focused mark while it is still empty.
- */
 function interceptInsertIntoLastFocusedEmptyMark(
   e: InputEvent,
   el: HTMLElement,
@@ -499,7 +482,7 @@ function interceptInsertIntoLastFocusedEmptyMark(
   }
   if (!mark || !el.contains(mark)) return false;
 
-  const visible = (mark.textContent ?? "").replace(/\u200B/g, "").trim();
+  const visible = (mark.textContent ?? "").replace(/​/g, "").trim();
   if (visible.length > 0) return false;
 
   e.preventDefault();
@@ -507,21 +490,6 @@ function interceptInsertIntoLastFocusedEmptyMark(
   placeCaretInsideMark(mark);
   onSync();
   return true;
-}
-
-function getSectionFieldLabels(
-  html: string,
-  fieldMap: Record<string, TemplateField>,
-): string[] {
-  return extractFieldKeysFromHtml(html)
-    .map((key) => fieldMap[key]?.label ?? key)
-    .filter(Boolean);
-}
-
-function formatFieldLabelList(labels: string[], maxVisible = 3): string {
-  if (labels.length === 0) return "";
-  if (labels.length <= maxVisible) return labels.join(", ");
-  return `${labels.slice(0, maxVisible).join(", ")} +${labels.length - maxVisible} more`;
 }
 
 function normalizeAiJson(text: string): string {
@@ -610,6 +578,58 @@ function applyFieldUpdatesToHtml(
   return nextHtml;
 }
 
+function groupFields(fields: TemplateField[]): {
+  group: string;
+  fields: TemplateField[];
+}[] {
+  const groups = new Map<string, TemplateField[]>();
+  const groupOrder: string[] = [];
+  for (const f of fields) {
+    const g = inferFieldGroup(f);
+    if (!groups.has(g)) {
+      groups.set(g, []);
+      groupOrder.push(g);
+    }
+    groups.get(g)!.push(f);
+  }
+  return groupOrder.map((g) => ({ group: g, fields: groups.get(g)! }));
+}
+
+function inferFieldGroup(field: TemplateField): string {
+  const k = field.key;
+  if (
+    k.includes("party") ||
+    k.includes("disclosing") ||
+    k.includes("receiving") ||
+    k.includes("assignor") ||
+    k.includes("assignee") ||
+    k.includes("founder") ||
+    k.includes("company")
+  ) {
+    return "Parties";
+  }
+  if (k.includes("signat") || k.includes("witness")) {
+    return "Signatures";
+  }
+  if (k.includes("governing_law") || k.includes("dispute") || k.includes("jurisdiction")) {
+    return "Governing law";
+  }
+  if (
+    k.includes("term") ||
+    k.includes("notice") ||
+    k.includes("survival") ||
+    k.includes("vesting") ||
+    k.includes("cliff") ||
+    k.includes("date") ||
+    k.includes("months") ||
+    k.includes("years") ||
+    k.includes("days")
+  ) {
+    return "Terms & dates";
+  }
+  return "Details";
+}
+
 function EditableSection({
   section,
   isActive,
@@ -617,11 +637,9 @@ function EditableSection({
   onUpdate,
   onFieldBlur,
   onFieldFocus,
-  showHighlights,
   invalidFields,
   showErrors,
   fieldMap,
-  sectionFieldLabels,
 }: {
   section: EditorSection;
   isActive: boolean;
@@ -629,21 +647,14 @@ function EditableSection({
   onUpdate: (id: string, html: string) => void;
   onFieldBlur: (key: string, value: string) => void;
   onFieldFocus: (key: string) => void;
-  showHighlights: boolean;
   invalidFields: Set<string>;
   showErrors: boolean;
   fieldMap: Record<string, TemplateField>;
-  sectionFieldLabels: string[];
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInternalEdit = useRef(false);
   const lastSetContent = useRef(section.content);
-  /**
-   * Field keys in original document order (plus any keys merged in later). Used so
-   * restored <mark>s insert next to their neighbors instead of at the end of the paragraph.
-   */
   const expectedFieldKeysOrderedRef = useRef<string[]>([]);
-  /** Last field the user placed the caret in — survives one-char delete when the caret jumps outside the mark. */
   const lastFocusedFieldKeyRef = useRef<string | null>(null);
 
   useLayoutEffect(() => {
@@ -666,9 +677,9 @@ function EditableSection({
     const el = ref.current;
     if (!el) return;
     el.querySelectorAll<HTMLElement>("mark[data-field-key]").forEach((mark) => {
-      const text = (mark.textContent ?? "").replace(/\u200B/g, "").trim();
+      const text = (mark.textContent ?? "").replace(/​/g, "").trim();
       if (text === "") {
-        mark.textContent = "\u200B";
+        mark.textContent = "​";
       }
     });
     const present = new Set(extractFieldKeysFromHtml(el.innerHTML));
@@ -904,73 +915,22 @@ function EditableSection({
   }, [invalidFields, showErrors, section.content, fieldMap]);
 
   if (section.type === "title") {
-    return (
-      <div className="text-center py-8 pb-4 border-b-2 border-[#1a1a2e] mb-6">
-        <h1
-          className="text-2xl font-bold tracking-wide text-[#1a1a2e] dark:text-foreground m-0"
-          style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            letterSpacing: "0.06em",
-          }}
-        >
-          {section.content}
-        </h1>
-      </div>
-    );
+    return <h1>{section.content}</h1>;
   }
 
   if (section.type === "heading") {
-    return (
-      <h2
-        className="text-base font-bold text-[#1a1a2e] dark:text-foreground mt-6 mb-1.5 pb-1 border-b border-[#e0d8cf] dark:border-border tracking-wide"
-        style={{
-          fontFamily: "'Playfair Display', Georgia, serif",
-          letterSpacing: "0.02em",
-        }}
-      >
-        {section.content}
-      </h2>
-    );
+    return <h2>{section.content}</h2>;
   }
 
   return (
     <div
-      className={cn(
-        "relative my-1 rounded transition-all",
-        isActive
-          ? "border border-[#8B7355] bg-[rgba(139,115,85,0.03)] dark:bg-[rgba(139,115,85,0.08)]"
-          : "border border-transparent",
-      )}
-    >
-      {isActive && sectionFieldLabels.length > 0 && (
-        <div className="absolute -top-2.5 left-3 max-w-[calc(100%-24px)] bg-[#f9f6f1] dark:bg-card px-1.5 text-[10px] font-semibold text-[#8B7355] tracking-wide truncate">
-          {formatFieldLabelList(sectionFieldLabels)}
-        </div>
-      )}
-      <div
-        ref={ref}
-        data-legal-section-id={section.id}
-        contentEditable
-        suppressContentEditableWarning
-        onInput={handleInput}
-        className={cn(
-          "text-sm leading-7 text-[#2c2c2c] dark:text-foreground px-3 py-2 outline-none min-h-[20px]",
-          "cursor-default select-text",
-          "[&_mark[data-field-key]]:cursor-text [&_mark[data-field-key]]:outline-none [&_mark[data-field-key]]:rounded",
-          "[&_mark[data-field-key]]:py-[1px] [&_mark[data-field-key]]:px-1",
-          // Empty fields (ZWSP-only): full px-1 on each adjacent mark looks like extra gaps in a sentence.
-          "[&_mark[data-field-key].legal-mark-empty]:!px-0.5 [&_mark[data-field-key].legal-mark-empty]:inline-block [&_mark[data-field-key].legal-mark-empty]:min-w-[3px]",
-          "[&_mark[data-field-key]]:transition-all [&_mark[data-field-key]]:duration-150",
-          "[&_mark:focus]:ring-2 [&_mark:focus]:ring-purple-400/50 [&_mark:focus]:bg-purple-50 dark:[&_mark:focus]:bg-purple-900/30",
-          "[&_.field-invalid]:!bg-red-50 [&_.field-invalid]:!border-b-2 [&_.field-invalid]:!border-red-400 dark:[&_.field-invalid]:!bg-red-900/20 dark:[&_.field-invalid]:!border-red-500",
-          showHighlights
-            ? "[&_mark]:bg-amber-100/80 [&_mark]:border-b-2 [&_mark]:border-amber-300 dark:[&_mark]:bg-amber-900/30 dark:[&_mark]:border-amber-600"
-            : "[&_mark]:bg-slate-100 [&_mark]:border-b [&_mark]:border-dashed [&_mark]:border-slate-300 dark:[&_mark]:bg-slate-800/30 dark:[&_mark]:border-slate-600",
-          "[&_mark:hover]:bg-purple-50 [&_mark:hover]:border-purple-300 dark:[&_mark:hover]:bg-purple-900/20 dark:[&_mark:hover]:border-purple-500",
-        )}
-        style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}
-      />
-    </div>
+      ref={ref}
+      data-legal-section-id={section.id}
+      contentEditable
+      suppressContentEditableWarning
+      onInput={handleInput}
+      className={cn(lt.rdDocSection, isActive && "is-active")}
+    />
   );
 }
 
@@ -978,7 +938,6 @@ export function LegalDocumentEditor({
   initialTitle,
   sections: initialSections,
   templateId,
-  documentId,
   templateFields,
   onBack,
   onSave,
@@ -996,6 +955,7 @@ export function LegalDocumentEditor({
   const [isApplyingEdits, setIsApplyingEdits] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
+  const [paneTab, setPaneTab] = useState<"fields" | "ai" | "validate">("fields");
   const [aiPrompt, setAiPrompt] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [chatMessages, setChatMessages] = useState<
@@ -1005,7 +965,6 @@ export function LegalDocumentEditor({
   const [validationErrors, setValidationErrors] = useState<
     FieldValidationError[]
   >([]);
-  const [showValidationDetails, setShowValidationDetails] = useState(false);
   const [saveAttempted, setSaveAttempted] = useState(false);
   const [focusedFieldKey, setFocusedFieldKey] = useState<string | null>(null);
 
@@ -1022,30 +981,38 @@ export function LegalDocumentEditor({
     [validationErrors],
   );
 
-  const sectionFieldLabelsById = useMemo(() => {
-    const entries = sections.map((section) => [
-      section.id,
-      getSectionFieldLabels(section.content, fieldMap),
-    ]);
-    return Object.fromEntries(entries) as Record<string, string[]>;
-  }, [sections, fieldMap]);
+  const fieldValues = useMemo(
+    () => extractFieldValuesFromSections(sections.map((s) => s.content)),
+    [sections],
+  );
+
+  const filledCount = useMemo(() => {
+    let n = 0;
+    for (const f of templateFields) {
+      const v = (fieldValues[f.key] ?? "").trim();
+      if (v && !v.startsWith("[")) n += 1;
+    }
+    return n;
+  }, [fieldValues, templateFields]);
+
+  const totalFields = templateFields.length;
+  const progressPct = totalFields > 0 ? Math.round((filledCount / totalFields) * 100) : 0;
+
+  const fieldGroups = useMemo(() => groupFields(templateFields), [templateFields]);
 
   const focusedField = focusedFieldKey ? (fieldMap[focusedFieldKey] ?? null) : null;
   const focusedFieldError = focusedFieldKey
     ? validationErrors.find((e) => e.key === focusedFieldKey)
     : null;
-  const activeSectionFieldLabels = activeSection
-    ? (sectionFieldLabelsById[activeSection] ?? [])
-    : [];
 
   const runValidation = useCallback(() => {
-    const fieldValues = extractFieldValuesFromSections(
-      sections.map((s) => s.content),
+    const values = extractFieldValuesFromSections(
+      sectionsRef.current.map((s) => s.content),
     );
-    const result = validateDocument(fieldValues, templateFields);
+    const result = validateDocument(values, templateFields);
     setValidationErrors(result.errors);
     return result;
-  }, [sections, templateFields]);
+  }, [templateFields]);
 
   const debouncedValidation = useCallback(() => {
     if (validationTimerRef.current) clearTimeout(validationTimerRef.current);
@@ -1106,6 +1073,18 @@ export function LegalDocumentEditor({
     return changed;
   }, []);
 
+  /** Apply an update typed in the right-pane field input. */
+  const handleFieldInputChange = useCallback(
+    (key: string, value: string) => {
+      const sanitized = value.replace(/[<>]/g, "");
+      applyFieldUpdates({ [key]: sanitized || "" });
+      setStatus("editing");
+      setEditCount((c) => c + 1);
+      debouncedValidation();
+    },
+    [applyFieldUpdates, debouncedValidation],
+  );
+
   const handleFormat = (cmd: string) => {
     if (cmd === "highlight") {
       document.execCommand("hiliteColor", false, "#FFF59D");
@@ -1116,10 +1095,6 @@ export function LegalDocumentEditor({
     }
   };
 
-  /**
-   * Paragraph HTML from live DOM — React `sections` can lag behind contentEditable
-   * (e.g. last keystroke before Save / DOCX). Use this for save + Word export.
-   */
   const getLiveExportSnapshot = useCallback((): {
     html: string;
     sections: EditorSection[];
@@ -1129,8 +1104,7 @@ export function LegalDocumentEditor({
       if (s.type !== "paragraph") return s;
       const safe = s.id.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
       const el = root?.querySelector(`[data-legal-section-id="${safe}"]`);
-      const inner =
-        el instanceof HTMLElement ? el.innerHTML : s.content;
+      const inner = el instanceof HTMLElement ? el.innerHTML : s.content;
       return { ...s, content: inner };
     });
     const html = nextSections
@@ -1146,13 +1120,13 @@ export function LegalDocumentEditor({
   const handleSave = useCallback(async () => {
     setSaveAttempted(true);
     const snapshot = getLiveExportSnapshot();
-    const fieldValues = extractFieldValuesFromSections(
+    const values = extractFieldValuesFromSections(
       snapshot.sections.map((s) => s.content),
     );
-    const result = validateDocument(fieldValues, templateFields);
+    const result = validateDocument(values, templateFields);
     setValidationErrors(result.errors);
     if (!result.valid) {
-      setShowValidationDetails(true);
+      setPaneTab("validate");
       return;
     }
     setIsSaving(true);
@@ -1176,7 +1150,7 @@ export function LegalDocumentEditor({
       });
       return;
     }
-    
+
     setIsDownloadingDocx(true);
     const loadingToast = toast.loading("Generating DOCX...");
 
@@ -1186,11 +1160,7 @@ export function LegalDocumentEditor({
       const res = await fetch("/api/document-generator/legal-generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          templateId,
-          data,
-          format: "json",
-        }),
+        body: JSON.stringify({ templateId, data, format: "json" }),
       });
 
       if (!res.ok) {
@@ -1220,7 +1190,7 @@ export function LegalDocumentEditor({
       a.download = `${title || "document"}.docx`;
       a.click();
       URL.revokeObjectURL(url);
-      
+
       toast.success("Document downloaded!", {
         description: `${title || "Document"}.docx`,
         id: loadingToast,
@@ -1229,17 +1199,14 @@ export function LegalDocumentEditor({
     } catch (error) {
       console.error("DOCX export error:", error);
       toast.error("Export failed", {
-        description: error instanceof Error ? error.message : "Could not generate DOCX file",
+        description:
+          error instanceof Error ? error.message : "Could not generate DOCX file",
         id: loadingToast,
         duration: 5000,
       });
     } finally {
       setIsDownloadingDocx(false);
     }
-  };
-
-  const exportPdf = () => {
-    window.print();
   };
 
   const applyEditsWithTrackChanges = async () => {
@@ -1250,33 +1217,26 @@ export function LegalDocumentEditor({
       return;
     }
 
-    // Validate document before applying track changes
     const validation = runValidation();
     if (!validation.valid) {
       toast.error("Document has validation errors", {
         description: `Please fix ${validation.errors.length} field error${validation.errors.length > 1 ? "s" : ""} before applying track changes.`,
       });
-      setShowValidationDetails(true);
+      setPaneTab("validate");
       setSaveAttempted(true);
       return;
     }
 
     setIsApplyingEdits(true);
-    
-    // Show loading toast
-    const loadingToast = toast.loading("Generating document with track changes...", {
-      description: "This may take a few moments",
-    });
+    const loadingToast = toast.loading("Generating document with track changes...");
 
     try {
       const { html } = getLiveExportSnapshot();
-      const fieldValues = extractFieldValuesFromSections([html]);
+      const values = extractFieldValuesFromSections([html]);
 
       const template = TEMPLATE_REGISTRY[templateId];
       if (!template) throw new Error("Template not found");
 
-      // Use unique tokens per field so Adeu can match each occurrence unambiguously.
-      // Format: __FLD_<idx>_<key>__   (guaranteed unique, never appears in real text)
       const placeholderData: Record<string, string> = {};
       const tokenMap: Record<string, string> = {};
       template.fields.forEach((f, idx) => {
@@ -1289,24 +1249,19 @@ export function LegalDocumentEditor({
         }
       });
 
-      toast.loading("Step 1: Generating base document...", {
-        description: "Creating DOCX template with placeholders",
-        id: loadingToast,
-      });
-
       const res = await fetch("/api/document-generator/legal-generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          templateId,
-          data: placeholderData,
-          format: "json",
-        }),
+        body: JSON.stringify({ templateId, data: placeholderData, format: "json" }),
       });
 
       if (!res.ok) {
-        const errBody = await res.json().catch(() => null) as { error?: string } | null;
-        throw new Error(errBody?.error || `Document generation failed: HTTP ${res.status}`);
+        const errBody = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(
+          errBody?.error || `Document generation failed: HTTP ${res.status}`,
+        );
       }
 
       const json = (await res.json()) as {
@@ -1319,10 +1274,12 @@ export function LegalDocumentEditor({
         throw new Error(json.error || "Failed to generate DOCX");
       }
 
-      // Build edits: each targets the unique token and replaces with the real value.
       const edits: Array<{ target_text: string; new_text: string; comment?: string }> = [];
-      for (const [key, value] of Object.entries(fieldValues)) {
-        const cleanValue = value.replace(/<[^>]*>/g, "").replace(/\u200B/g, "").trim();
+      for (const [key, value] of Object.entries(values)) {
+        const cleanValue = value
+          .replace(/<[^>]*>/g, "")
+          .replace(/​/g, "")
+          .trim();
         if (!cleanValue || cleanValue.startsWith("[")) continue;
 
         const field = fieldMap[key];
@@ -1345,11 +1302,6 @@ export function LegalDocumentEditor({
         return;
       }
 
-      toast.loading(`Step 2: Applying ${edits.length} edit${edits.length > 1 ? "s" : ""} as track changes...`, {
-        description: "Processing with Adeu service",
-        id: loadingToast,
-      });
-
       const applyRes = await fetch("/api/legal/apply-edits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1363,21 +1315,19 @@ export function LegalDocumentEditor({
       const applyJson = (await applyRes.json()) as {
         success?: boolean;
         modifiedDocxBase64?: string;
-        summary?: {
-          applied_edits: number;
-          skipped_edits: number;
-        };
+        summary?: { applied_edits: number; skipped_edits: number };
         error?: string;
         message?: string;
       };
 
       if (!applyRes.ok || !applyJson.success || !applyJson.modifiedDocxBase64) {
-        const err = new Error(applyJson.message || applyJson.error || "Failed to apply edits");
+        const err = new Error(
+          applyJson.message || applyJson.error || "Failed to apply edits",
+        );
         (err as Error & { serverError?: string }).serverError = applyJson.error;
         throw err;
       }
 
-      // Step 4: Download the modified DOCX with Track Changes
       const byteChars = atob(applyJson.modifiedDocxBase64);
       const byteArray = new Uint8Array(byteChars.length);
       for (let i = 0; i < byteChars.length; i++)
@@ -1391,37 +1341,47 @@ export function LegalDocumentEditor({
       a.download = `${title || "document"}-tracked.docx`;
       a.click();
       URL.revokeObjectURL(url);
-      
-      // Success notification with details
+
       const { applied_edits = 0, skipped_edits = 0 } = applyJson.summary || {};
       toast.success("Document ready with track changes!", {
         description: `${applied_edits} edit${applied_edits > 1 ? "s" : ""} applied${skipped_edits > 0 ? `, ${skipped_edits} skipped` : ""}. Download started.`,
         id: loadingToast,
         duration: 5000,
       });
-      
+
       setStatus("saved");
     } catch (error) {
       console.error("Track changes error:", error);
-      
       const serverError = (error as Error & { serverError?: string }).serverError ?? "";
       const errMsg = error instanceof Error ? error.message : "Unknown error occurred";
 
       let errorMessage = "Failed to apply track changes";
       let errorDescription = errMsg;
 
-      if (serverError.includes("not configured") || errMsg.includes("not configured") || errMsg.includes("ADEU_SERVICE_URL")) {
+      if (
+        serverError.includes("not configured") ||
+        errMsg.includes("not configured") ||
+        errMsg.includes("ADEU_SERVICE_URL")
+      ) {
         errorMessage = "Track Changes not configured";
-        errorDescription = "The redlining service (Adeu) is not set up. Ask your admin to configure ADEU_SERVICE_URL.";
+        errorDescription =
+          "The redlining service (Adeu) is not set up. Ask your admin to configure ADEU_SERVICE_URL.";
       } else if (
-        errMsg.includes("ECONNREFUSED") || errMsg.includes("ENOTFOUND") ||
-        errMsg.includes("fetch failed") || errMsg.includes("Failed to fetch")
+        errMsg.includes("ECONNREFUSED") ||
+        errMsg.includes("ENOTFOUND") ||
+        errMsg.includes("fetch failed") ||
+        errMsg.includes("Failed to fetch")
       ) {
         errorMessage = "Redlining service unreachable";
-        errorDescription = "The Adeu service is not running. Start it with Docker Compose or check ADEU_SERVICE_URL in your .env.";
-      } else if (errMsg.includes("Batch rejected") || errMsg.includes("Ambiguous match")) {
+        errorDescription =
+          "The Adeu service is not running. Start it with Docker Compose or check ADEU_SERVICE_URL in your .env.";
+      } else if (
+        errMsg.includes("Batch rejected") ||
+        errMsg.includes("Ambiguous match")
+      ) {
         errorMessage = "Track Changes failed";
-        errorDescription = "Some field edits could not be applied. The document may have duplicate field references.";
+        errorDescription =
+          "Some field edits could not be applied. The document may have duplicate field references.";
       }
 
       toast.error(errorMessage, {
@@ -1442,16 +1402,6 @@ export function LegalDocumentEditor({
 
   const handleAIRequest = async () => {
     if (!aiPrompt.trim()) return;
-    if (!activeSection) {
-      setChatMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Select a section with highlighted fields first.",
-        },
-      ]);
-      return;
-    }
 
     setIsProcessing(true);
     setChatMessages((prev) => [...prev, { role: "user", content: aiPrompt }]);
@@ -1459,8 +1409,12 @@ export function LegalDocumentEditor({
     setAiPrompt("");
 
     const sectionContent = getSelectedSectionContent();
-    const sectionFieldKeys = extractFieldKeysFromHtml(sectionContent);
-    const sectionFields = sectionFieldKeys
+    const sectionFieldKeys = sectionContent ? extractFieldKeysFromHtml(sectionContent) : [];
+    const targetKeys = sectionFieldKeys.length > 0
+      ? sectionFieldKeys
+      : templateFields.map((f) => f.key);
+
+    const sectionFields = targetKeys
       .map((key) => fieldMap[key])
       .filter((field): field is TemplateField => Boolean(field));
 
@@ -1469,18 +1423,15 @@ export function LegalDocumentEditor({
         ...prev,
         {
           role: "assistant",
-          content: "This section does not contain editable highlighted fields.",
+          content: "This document does not have editable highlighted fields.",
         },
       ]);
       setIsProcessing(false);
       return;
     }
 
-    const fieldValues = extractFieldValuesFromSections(
-      sections.map((s) => s.content),
-    );
     const focusedSectionField =
-      focusedFieldKey && sectionFieldKeys.includes(focusedFieldKey)
+      focusedFieldKey && targetKeys.includes(focusedFieldKey)
         ? fieldMap[focusedFieldKey]
         : null;
     const fieldContext = sectionFields.map((field) => ({
@@ -1513,7 +1464,7 @@ export function LegalDocumentEditor({
             .join("\n"),
           context: {
             documentTitle: title,
-            fullContent: sectionContent,
+            fullContent: sectionContent || sections.map((s) => s.content).join("\n"),
           },
           options: { tone: "professional", length: "brief" },
         }),
@@ -1533,7 +1484,7 @@ export function LegalDocumentEditor({
             {
               role: "assistant",
               content:
-                "The AI response could not be applied. Please name the exact highlighted field you want changed.",
+                "I couldn't parse a field change from that. Try naming the exact field, e.g. \"set Effective Date to March 4, 2026\".",
             },
           ]);
           return;
@@ -1543,22 +1494,14 @@ export function LegalDocumentEditor({
         for (const k of extractAllFieldKeysFromSections(sectionsRef.current)) {
           validKeys.add(k);
         }
-        for (const f of templateFields) {
-          validKeys.add(f.key);
-        }
+        for (const f of templateFields) validKeys.add(f.key);
 
         const allowedUpdates: Record<string, string> = {};
         for (const [rawKey, value] of Object.entries(parsedUpdates)) {
           const trimmed = value.trim();
           if (!trimmed) continue;
-          const canonical = resolveFieldKeyFromAi(
-            rawKey,
-            validKeys,
-            fieldMap,
-          );
-          if (canonical) {
-            allowedUpdates[canonical] = trimmed;
-          }
+          const canonical = resolveFieldKeyFromAi(rawKey, validKeys, fieldMap);
+          if (canonical) allowedUpdates[canonical] = trimmed;
         }
 
         if (Object.keys(allowedUpdates).length === 0) {
@@ -1567,7 +1510,7 @@ export function LegalDocumentEditor({
             {
               role: "assistant",
               content:
-                "No highlighted field values were changed. Try naming the exact field, like `Effective Date`.",
+                "No matching fields were updated. Try naming the exact field, like \"Effective Date\".",
             },
           ]);
           return;
@@ -1584,7 +1527,7 @@ export function LegalDocumentEditor({
             ...prev,
             {
               role: "assistant",
-              content: `Updated field values: ${changedLabels}.`,
+              content: `Updated: ${changedLabels}.`,
             },
           ]);
           setStatus("editing");
@@ -1595,8 +1538,7 @@ export function LegalDocumentEditor({
             ...prev,
             {
               role: "assistant",
-              content:
-                "No visible changes were applied. Try naming the exact highlighted field and new value.",
+              content: "No visible changes. Try naming the exact field and new value.",
             },
           ]);
         }
@@ -1604,666 +1546,608 @@ export function LegalDocumentEditor({
     } catch {
       setChatMessages((prev) => [
         ...prev,
-        {
-          role: "assistant",
-          content: "Sorry, there was an error. Please try again.",
-        },
+        { role: "assistant", content: "Sorry, there was an error. Please try again." },
       ]);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const statusConfig = {
-    draft: {
-      bg: "oklch(from var(--warn) l c h / 0.12)",
-      text: "var(--warn)",
-      border: "oklch(from var(--warn) l c h / 0.35)",
-      dot: "var(--warn)",
-    },
-    editing: {
-      bg: "oklch(from var(--success) l c h / 0.12)",
-      text: "var(--success)",
-      border: "oklch(from var(--success) l c h / 0.35)",
-      dot: "var(--success)",
-    },
-    saved: {
-      bg: "var(--accent-soft)",
-      text: "var(--accent-ink)",
-      border: "oklch(from var(--accent) l c h / 0.35)",
-      dot: "var(--accent)",
-    },
-  };
-  const sc = statusConfig[status];
+  const activeTemplateName =
+    TEMPLATE_REGISTRY[templateId]?.name ?? "Document";
 
-  const hasErrors = validationErrors.length > 0;
+  const statusBadgeClass =
+    status === "saved"
+      ? lt.rdDocBadge
+      : status === "editing"
+        ? lt.rdDocBadgeWarn
+        : lt.rdDocBadge;
+  const statusLabel =
+    status === "saved"
+      ? "SAVED"
+      : status === "editing"
+        ? "DRAFT · UNSAVED"
+        : "DRAFT · AUTOSAVED";
 
   return (
-    <div className="flex flex-col h-full bg-background print:bg-white">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap');
-        @media print {
-          .no-print { display: none !important; }
-          .legal-paper { box-shadow: none !important; border: none !important; }
-        }
-      `}</style>
-
-      {/* Top Bar */}
-      <div
-        className="no-print flex-shrink-0 flex items-center justify-between"
-        style={{
-          padding: "12px 20px",
-          borderBottom: "1px solid var(--line-2)",
-          background: "oklch(from var(--bg) l c h / 0.7)",
-          backdropFilter: "blur(14px) saturate(140%)",
-        }}
-      >
-        <div className="flex items-center gap-3">
+    <div className="flex h-full flex-col">
+      {/* Top bar (breadcrumb + global save) */}
+      <div className={lt.rdTop}>
+        <div className={lt.rdCrumbs}>
           <button
+            type="button"
             onClick={onBack}
-            className={`${lt.btn} ${lt.btnGhost} ${lt.btnSm}`}
-            style={{ paddingLeft: 6, paddingRight: 10 }}
+            className={lt.rdBtnGhost}
+            style={{ padding: "4px 8px" }}
+            aria-label="Back to documents"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back
+            Drift
           </button>
-          <div className={lt.dividerVert} style={{ height: 22 }} />
-          <div className={lt.brandMarkSm} style={{ width: 30, height: 30 }}>
-            <FileText className="h-[14px] w-[14px]" />
-          </div>
-          <Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="border-0 focus-visible:ring-0 bg-transparent max-w-[400px]"
-            style={{
-              fontSize: 17,
-              fontWeight: 600,
-              letterSpacing: "-0.01em",
-              color: "var(--ink)",
-              padding: "4px 6px",
-            }}
-            placeholder="Document Title"
-          />
+          <span className={lt.rdCrumbsSep}>/</span>
+          <span style={{ color: "var(--ink-2)" }}>Legal</span>
+          <span className={lt.rdCrumbsSep}>/</span>
+          <span className={lt.rdCrumbsLast} title={title || activeTemplateName}>
+            {title || activeTemplateName}
+          </span>
         </div>
-        <div className="flex items-center gap-3">
-          {lastSaved && (
-            <span
-              className="flex items-center gap-1"
-              style={{ fontSize: 12, color: "var(--ink-3)" }}
-            >
-              <CheckCircle className="w-3 h-3" style={{ color: "var(--success)" }} />
-              Saved {lastSaved.toLocaleTimeString()}
-            </span>
-          )}
-          <button
-            onClick={() => void handleSave()}
-            disabled={isSaving}
-            className={`${lt.btn} ${lt.btnAccent} ${lt.btnSm}`}
+        <div className={lt.rdTopSpacer} />
+        {lastSaved && (
+          <span
+            className="flex items-center gap-1.5"
+            style={{ fontSize: 11, color: "var(--ink-3)" }}
           >
-            {isSaving ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            Save
-          </button>
-        </div>
+            <CheckCircle className="h-3 w-3" style={{ color: "var(--success)" }} />
+            Saved {lastSaved.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={() => void handleSave()}
+          disabled={isSaving}
+          className={lt.rdBtnAccent}
+          style={{ padding: "6px 12px", fontSize: 12 }}
+        >
+          {isSaving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+          Save
+        </button>
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
-        {/* Main Editor Area */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Toolbar */}
-          <div
-            className="no-print flex-shrink-0 sticky top-0 z-20 flex items-center gap-1.5"
-            style={{
-              padding: "8px 20px",
-              background: "oklch(from var(--panel) l c h / 0.85)",
-              backdropFilter: "blur(10px)",
-              borderBottom: "1px solid var(--line-2)",
-            }}
-          >
-            {(["bold", "italic", "underline"] as const).map((cmd) => (
-              <button
-                key={cmd}
-                type="button"
-                onClick={() => handleFormat(cmd)}
-                title={cmd.charAt(0).toUpperCase() + cmd.slice(1)}
-                aria-label={cmd}
-                className={`${lt.btn} ${lt.btnOutline} ${lt.btnIcon}`}
-              >
-                {cmd === "bold" && <Bold className="w-3.5 h-3.5" />}
-                {cmd === "italic" && <Italic className="w-3.5 h-3.5" />}
-                {cmd === "underline" && <Underline className="w-3.5 h-3.5" />}
-              </button>
-            ))}
-
-            <div className={lt.dividerVert} style={{ margin: "0 4px" }} />
-
-            <button
-              type="button"
-              onClick={() => handleFormat("highlight")}
-              title="Highlight"
-              aria-label="Highlight"
-              className={`${lt.btn} ${lt.btnOutline} ${lt.btnIcon}`}
-            >
-              <Highlighter
-                className="w-3.5 h-3.5"
-                style={{ color: "var(--warn)" }}
-              />
-            </button>
-
-            <div className={lt.dividerVert} style={{ margin: "0 4px" }} />
-
-            {/* Active field info */}
-            {focusedField ? (
-              <div
-                className="flex items-center gap-1.5 min-w-0 overflow-hidden"
-                style={{
-                  padding: "4px 10px",
-                  borderRadius: 999,
-                  background: "var(--accent-soft)",
-                  border: "1px solid oklch(from var(--accent) l c h / 0.28)",
-                }}
-              >
-                <Pencil className="w-3 h-3 flex-shrink-0" style={{ color: "var(--accent)" }} />
-                <span
-                  className="truncate"
-                  style={{ fontSize: 11, fontWeight: 600, color: "var(--accent-ink)" }}
-                >
-                  {focusedField.label}
-                </span>
-                <span className="flex-shrink-0" style={{ fontSize: 10, color: "var(--accent)" }}>
-                  ·
-                </span>
-                <span
-                  className="truncate flex-shrink-0"
-                  style={{ fontSize: 10, color: "var(--accent-ink)", opacity: 0.8 }}
-                >
-                  {getFieldFormatHint(focusedField)}
-                </span>
-                {focusedField.required && (
-                  <span
-                    className="flex-shrink-0"
-                    style={{
-                      fontSize: 9,
-                      fontWeight: 700,
-                      padding: "1px 6px",
-                      borderRadius: 999,
-                      background: "oklch(from var(--warn) l c h / 0.16)",
-                      color: "var(--warn)",
-                    }}
-                  >
-                    Required
-                  </span>
-                )}
-                {saveAttempted && focusedFieldError && (
-                  <span
-                    className="truncate flex-shrink-0"
-                    style={{ fontSize: 10, color: "var(--danger)" }}
-                  >
-                    — {focusedFieldError.message}
-                  </span>
-                )}
+      {/* Three-pane workspace */}
+      <div className={lt.rdLegal}>
+        {/* Document */}
+        <section className={lt.rdDoc}>
+          <div className={lt.rdDocHead}>
+            <div>
+              <div className={lt.rdDocTitleRow}>
+                <input
+                  className={lt.rdDocTitle}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Document title"
+                />
+                <span className={statusBadgeClass}>{statusLabel}</span>
               </div>
-            ) : (
-              <span
-                className="italic select-none"
-                style={{ fontSize: 11, color: "var(--ink-4)" }}
-              >
-                Click a highlighted field to edit
-              </span>
-            )}
-
-            <div className="flex-1" />
-
-            {editCount > 0 && (
-              <span style={{ fontSize: 12, color: "var(--ink-3)" }}>
-                {editCount} edit{editCount !== 1 ? "s" : ""}
-              </span>
-            )}
-
-            <span
-              className="inline-flex items-center gap-1.5"
-              style={{
-                padding: "3px 10px",
-                fontSize: 10,
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                borderRadius: 999,
-                background: sc.bg,
-                color: sc.text,
-                border: `1px solid ${sc.border}`,
-              }}
-            >
-              <span
-                className={cn(
-                  "w-1.5 h-1.5 rounded-full",
-                  status === "editing" && "animate-pulse",
+              <div className={lt.rdDocMeta}>
+                <span className={lt.rdDocMetaItem}>
+                  <FileText />
+                  {activeTemplateName}
+                </span>
+                {editCount > 0 && (
+                  <span className={lt.rdDocMetaItem}>{editCount} edits</span>
                 )}
-                style={{ background: sc.dot }}
-              />
-              {status}
-            </span>
-
-            <div className={lt.dividerVert} style={{ margin: "0 4px" }} />
-
-            <button
-              onClick={() => setShowHighlights(!showHighlights)}
-              title={
-                showHighlights ? "Dim field highlights" : "Show field highlights"
-              }
-              className="inline-flex items-center gap-1"
-              style={{
-                padding: "5px 10px",
-                fontSize: 11,
-                fontWeight: 500,
-                borderRadius: 8,
-                cursor: "pointer",
-                transition: "all .15s",
-                background: showHighlights
-                  ? "oklch(from var(--warn) l c h / 0.14)"
-                  : "var(--panel)",
-                color: showHighlights ? "var(--warn)" : "var(--ink-2)",
-                border: `1px solid ${
-                  showHighlights
-                    ? "oklch(from var(--warn) l c h / 0.3)"
-                    : "var(--line-2)"
-                }`,
-              }}
-            >
-              {showHighlights ? (
-                <Eye className="w-3 h-3" />
-              ) : (
-                <EyeOff className="w-3 h-3" />
+                <span className={lt.rdDocProgress}>
+                  <span>
+                    {filledCount} of {totalFields} fields
+                  </span>
+                  <span className={lt.rdDocProgressBar}>
+                    <span
+                      className={lt.rdDocProgressFill}
+                      style={{ width: `${progressPct}%` }}
+                    />
+                  </span>
+                  <span>{progressPct}%</span>
+                </span>
+              </div>
+            </div>
+            <div className={lt.rdDocActions}>
+              <button
+                type="button"
+                className={lt.rdBtnGhost}
+                onClick={() => setShowHighlights((v) => !v)}
+                title={showHighlights ? "Hide field highlights" : "Show field highlights"}
+              >
+                <Eye />
+                {showHighlights ? "Hide fields" : "Show fields"}
+              </button>
+              {templateId && TEMPLATE_REGISTRY[templateId] && (
+                <>
+                  <button
+                    type="button"
+                    className={lt.rdBtnOutline}
+                    onClick={() => void downloadDocx()}
+                    disabled={isDownloadingDocx}
+                  >
+                    {isDownloadingDocx ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Download />
+                    )}
+                    Export DOCX
+                  </button>
+                  <button
+                    type="button"
+                    className={lt.rdBtnAccent}
+                    onClick={() => void applyEditsWithTrackChanges()}
+                    disabled={isApplyingEdits}
+                  >
+                    {isApplyingEdits ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Send />
+                    )}
+                    Send for review
+                  </button>
+                </>
               )}
-              Fields
-            </button>
-
-            {templateId && TEMPLATE_REGISTRY[templateId] && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => void downloadDocx()}
-                  disabled={isDownloadingDocx}
-                  className={`${lt.btn} ${lt.btnAccent} ${lt.btnSm}`}
-                  style={{ padding: "6px 12px", fontSize: 11 }}
-                >
-                  {isDownloadingDocx ? (
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                  ) : (
-                    <Download className="w-3 h-3" />
-                  )}
-                  DOCX
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void applyEditsWithTrackChanges()}
-                  disabled={isApplyingEdits}
-                  className={`${lt.btn} ${lt.btnOutline} ${lt.btnSm}`}
-                  style={{ padding: "6px 10px", fontSize: 11, whiteSpace: "nowrap" }}
-                  title="Apply field changes as Track Changes in DOCX"
-                >
-                  {isApplyingEdits ? (
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                  ) : (
-                    <Pencil className="w-3 h-3" />
-                  )}
-                  Tracked
-                </button>
-              </>
-            )}
-            <button
-              onClick={exportPdf}
-              className={`${lt.btn} ${lt.btnOutline} ${lt.btnSm}`}
-              style={{ padding: "6px 12px", fontSize: 11 }}
-            >
-              <FileText className="w-3 h-3" />
-              PDF
-            </button>
+            </div>
           </div>
 
-          {/* Validation Banner — only after save attempt */}
-          {saveAttempted && hasErrors && (
-            <div
-              className={`no-print flex-shrink-0 ${lt.banner} ${lt.bannerDanger}`}
-              style={{ margin: "10px 20px 0", padding: 12 }}
-            >
-              <div className="flex items-start gap-2">
-                <AlertTriangle
-                  className="w-4 h-4 flex-shrink-0 mt-0.5"
-                  style={{ color: "var(--danger)" }}
-                />
-                <div className="flex-1" style={{ fontSize: 12, color: "var(--danger)" }}>
-                  <div className="flex items-center justify-between">
-                    <span>
-                      <span style={{ fontWeight: 600 }}>
-                        {validationErrors.length} issue
-                        {validationErrors.length > 1 ? "s" : ""}.
-                      </span>{" "}
-                      Fix highlighted fields to save.
+          <div className={lt.rdToolbar}>
+            <div className={lt.rdToolbarGroup}>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("undo")}
+                title="Undo"
+                aria-label="Undo"
+              >
+                <UndoIcon />
+              </button>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("redo")}
+                title="Redo"
+                aria-label="Redo"
+              >
+                <RedoIcon />
+              </button>
+            </div>
+            <div className={lt.rdToolbarGroup}>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("bold")}
+                title="Bold"
+                aria-label="Bold"
+              >
+                <Bold />
+              </button>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("italic")}
+                title="Italic"
+                aria-label="Italic"
+              >
+                <Italic />
+              </button>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("underline")}
+                title="Underline"
+                aria-label="Underline"
+              >
+                <Underline />
+              </button>
+            </div>
+            <div className={lt.rdToolbarGroup}>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("justifyLeft")}
+                title="Align left"
+                aria-label="Align left"
+              >
+                <AlignLeft />
+              </button>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("justifyCenter")}
+                title="Align center"
+                aria-label="Align center"
+              >
+                <AlignCenter />
+              </button>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("insertUnorderedList")}
+                title="List"
+                aria-label="List"
+              >
+                <ListIcon />
+              </button>
+              <button
+                type="button"
+                className={lt.rdToolBtn}
+                onClick={() => handleFormat("highlight")}
+                title="Highlight"
+                aria-label="Highlight"
+              >
+                <LinkIcon />
+              </button>
+            </div>
+            <div className={lt.rdToolStatus}>
+              {focusedField ? (
+                <span
+                  className={lt.rdToolFieldChip}
+                  title={buildFieldTooltip(focusedField)}
+                >
+                  <Pencil />
+                  <span className={lt.rdToolFieldChipLabel}>{focusedField.label}</span>
+                  {getFieldFormatHint(focusedField) && (
+                    <span className={lt.rdToolFieldChipHint}>
+                      · {getFieldFormatHint(focusedField)}
                     </span>
-                    <button
-                      onClick={() => setShowValidationDetails((v) => !v)}
-                      className="ml-2 inline-flex items-center gap-0.5"
-                      style={{ color: "var(--danger)", fontWeight: 500 }}
-                    >
-                      {showValidationDetails ? "Hide" : "Show all"}
-                      {showValidationDetails ? (
-                        <ChevronUp className="w-3 h-3" />
-                      ) : (
-                        <ChevronDown className="w-3 h-3" />
-                      )}
-                    </button>
-                  </div>
-                  {showValidationDetails && (
-                    <ul className="mt-2 space-y-1">
-                      {validationErrors.map((e) => (
-                        <li
-                          key={e.key}
-                          className="flex items-center gap-1.5 py-0.5"
-                        >
-                          <span
-                            className="w-1 h-1 rounded-full flex-shrink-0"
-                            style={{ background: "var(--danger)" }}
-                          />
-                          <span>{e.message}</span>
-                        </li>
-                      ))}
-                    </ul>
                   )}
-                </div>
+                  {focusedField.required && (
+                    <span className={lt.rdToolFieldChipReq}>REQ</span>
+                  )}
+                  {saveAttempted && focusedFieldError && (
+                    <span style={{ color: "var(--danger)", fontSize: 10 }}>
+                      · {focusedFieldError.message}
+                    </span>
+                  )}
+                </span>
+              ) : (
+                <span style={{ color: "var(--ink-4)", fontStyle: "italic" }}>
+                  Click a highlighted field to edit
+                </span>
+              )}
+            </div>
+          </div>
+
+          {saveAttempted && validationErrors.length > 0 && (
+            <div className={lt.rdValBanner}>
+              <AlertTriangle />
+              <div>
+                <strong>{validationErrors.length}</strong> issue
+                {validationErrors.length > 1 ? "s" : ""} blocking save —{" "}
+                <button
+                  type="button"
+                  onClick={() => setPaneTab("validate")}
+                  style={{
+                    background: "transparent",
+                    border: 0,
+                    color: "var(--danger)",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    padding: 0,
+                  }}
+                >
+                  view in validate tab
+                </button>
               </div>
             </div>
           )}
 
-          {/* Document Body */}
-          <div
-            className={`flex-1 overflow-y-auto ${lt.scrollbar}`}
-            style={{
-              background:
-                "radial-gradient(ellipse 60% 40% at 50% 0%, var(--accent-glow) 0%, transparent 55%), var(--bg-2)",
-            }}
-          >
-            <div className="max-w-[820px] mx-auto py-8 px-6 pb-20">
-              <div
-                className="legal-paper bg-[#f9f6f1] dark:bg-card rounded-xl overflow-hidden"
-                style={{
-                  border: "1px solid var(--line-2)",
-                  boxShadow:
-                    "0 1px 3px rgba(0,0,0,0.04), 0 24px 60px oklch(0 0 0 / 0.08)",
-                }}
-              >
-                <div
-                  id="legal-document-export-root"
-                  className="px-12 py-5 pb-14"
-                >
-                  <div className="h-[3px] bg-gradient-to-r from-[#1a1a2e] via-[#8B7355] to-[#1a1a2e] rounded mb-2" />
-
-                  {sections.map((s) => (
-                    <EditableSection
-                      key={s.id}
-                      section={s}
-                      isActive={activeSection === s.id}
-                      onFocus={setActiveSection}
-                      onUpdate={handleUpdate}
-                      onFieldBlur={handleFieldSync}
-                      onFieldFocus={setFocusedFieldKey}
-                      showHighlights={showHighlights}
-                      invalidFields={invalidFieldKeys}
-                      showErrors={saveAttempted}
-                      fieldMap={fieldMap}
-                      sectionFieldLabels={sectionFieldLabelsById[s.id] ?? []}
-                    />
-                  ))}
-
-                  <div className="mt-9">
-                    <div className="h-px bg-[#d5cec4] dark:bg-border mb-2.5" />
-                    <div className="flex justify-between text-[10px] text-[#b0a797] dark:text-muted-foreground italic">
-                      <span>
-                        Generated{" "}
-                        {new Date().toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </span>
-                      <span>Page 1 of 1</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        {/* AI Panel */}
-        <div
-          className="no-print w-[350px] flex-shrink-0 flex flex-col h-full"
-          style={{
-            borderLeft: "1px solid var(--line-2)",
-            background: "oklch(from var(--bg) l c h / 0.7)",
-            backdropFilter: "blur(12px)",
-          }}
-        >
-          <div
-            className="flex-shrink-0"
-            style={{
-              padding: 16,
-              borderBottom: "1px solid var(--line-2)",
-            }}
-          >
-            <div className="flex items-center gap-2 mb-1">
-              <div className={lt.brandMarkSm} style={{ width: 26, height: 26 }}>
-                <Sparkles className="h-[13px] w-[13px]" />
-              </div>
-              <h3
-                style={{
-                  margin: 0,
-                  fontWeight: 600,
-                  color: "var(--ink)",
-                  fontSize: 15,
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                AI Assistant
-              </h3>
-            </div>
-            <p style={{ margin: 0, fontSize: 12, color: "var(--ink-3)" }}>
-              {activeSection
-                ? "Ask AI to update only the highlighted field values"
-                : "Select a section to get started"}
-            </p>
-          </div>
-
-          <div className={`flex-1 overflow-y-auto ${lt.scrollbar}`} style={{ padding: 16 }}>
-            <div className="space-y-4">
-              {chatMessages.length === 0 && (
-                <div className="space-y-3">
-                  <div className={lt.banner} style={{ padding: 14 }}>
-                    <p
-                      className="flex items-center gap-2"
-                      style={{
-                        margin: "0 0 6px",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: "var(--ink)",
-                      }}
-                    >
-                      <Sparkles
-                        className="w-4 h-4"
-                        style={{ color: "var(--accent)" }}
-                      />
-                      How to use AI
-                    </p>
-                    <ul
-                      style={{
-                        margin: 0,
-                        padding: 0,
-                        listStyle: "none",
-                        fontSize: 12,
-                        color: "var(--ink-3)",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      <li>• Click a section to select it</li>
-                      <li>• Ask AI to update highlighted field values</li>
-                      <li>• AI will not rewrite the contract text</li>
-                      <li>• Hover highlighted fields to see names</li>
-                    </ul>
-                  </div>
-
-                  {activeSection && (
-                    <div>
-                      <p
-                        style={{
-                          margin: "0 0 6px",
-                          fontSize: 11,
-                          fontWeight: 700,
-                          color: "var(--ink-3)",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.12em",
-                        }}
-                      >
-                        Edit highlighted fields
-                      </p>
-                      <p
-                        style={{
-                          margin: 0,
-                          fontSize: 12,
-                          color: "var(--ink-3)",
-                          lineHeight: 1.55,
-                        }}
-                      >
-                        Ask for exact field changes like changing a date, name,
-                        address, title, or ownership percentage. Only the
-                        highlighted values will be updated.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {chatMessages.map((message, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    "flex",
-                    message.role === "user" ? "justify-end" : "justify-start",
-                  )}
-                >
-                  <div
-                    className={
-                      message.role === "user"
-                        ? lt.chatBubbleUser
-                        : lt.chatBubbleAssistant
-                    }
-                    style={{ maxWidth: "92%", fontSize: 13 }}
-                  >
-                    {message.content}
-                  </div>
-                </div>
+          <div className={cn(lt.rdDocScroll, lt.scrollbar)}>
+            <div
+              id="legal-document-export-root"
+              className={cn(lt.rdDocPage, !showHighlights && lt.rdDocPageDimMarks)}
+            >
+              {sections.map((s) => (
+                <EditableSection
+                  key={s.id}
+                  section={s}
+                  isActive={activeSection === s.id}
+                  onFocus={setActiveSection}
+                  onUpdate={handleUpdate}
+                  onFieldBlur={handleFieldSync}
+                  onFieldFocus={setFocusedFieldKey}
+                  invalidFields={invalidFieldKeys}
+                  showErrors={saveAttempted}
+                  fieldMap={fieldMap}
+                />
               ))}
-
-              {isProcessing && (
-                <div
-                  className="flex items-center gap-2"
-                  style={{ fontSize: 13, color: "var(--ink-3)" }}
-                >
-                  <span className={lt.loadingDot} />
-                  <span className={lt.loadingDot} />
-                  <span className={lt.loadingDot} />
-                  <span style={{ marginLeft: 4 }}>AI is processing…</span>
-                </div>
-              )}
             </div>
           </div>
+        </section>
 
-          <div
-            className="flex-shrink-0"
-            style={{
-              padding: 16,
-              borderTop: "1px solid var(--line-2)",
-            }}
-          >
-            <div className="space-y-2">
-              {activeSection && (
-                <div
-                  style={{
-                    padding: "8px 10px",
-                    borderRadius: 10,
-                    background: "var(--accent-soft)",
-                    border: "1px solid oklch(from var(--accent) l c h / 0.28)",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: "0 0 2px",
-                      fontSize: 10,
-                      fontWeight: 700,
-                      color: "var(--accent-ink)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.12em",
-                    }}
-                  >
-                    Fields in this section
-                  </p>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: 11,
-                      color: "var(--ink-2)",
-                      fontStyle: "italic",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {activeSectionFieldLabels.length > 0
-                      ? activeSectionFieldLabels.join(", ")
-                      : sections.find((s) => s.id === activeSection)?.label ??
-                        activeSection}
-                  </p>
-                </div>
+        {/* Right: tabbed pane */}
+        <aside className={lt.rdPane}>
+          <div className={lt.rdPaneTabs}>
+            <button
+              type="button"
+              className={cn(lt.rdPaneTab, paneTab === "fields" && lt.rdPaneTabActive)}
+              onClick={() => setPaneTab("fields")}
+            >
+              <ListIcon />
+              Fields
+              <span className={lt.rdPaneTabCount}>
+                {filledCount}/{totalFields}
+              </span>
+            </button>
+            <button
+              type="button"
+              className={cn(lt.rdPaneTab, paneTab === "ai" && lt.rdPaneTabActive)}
+              onClick={() => setPaneTab("ai")}
+            >
+              <Sparkles />
+              AI Assist
+            </button>
+            <button
+              type="button"
+              className={cn(lt.rdPaneTab, paneTab === "validate" && lt.rdPaneTabActive)}
+              onClick={() => setPaneTab("validate")}
+            >
+              <Shield />
+              Validate
+              {validationErrors.length > 0 && (
+                <span className={cn(lt.rdPaneTabCount, lt.rdPaneTabCountWarn)}>
+                  {validationErrors.length}
+                </span>
               )}
-              <textarea
-                placeholder={
-                  activeSection
-                    ? "Ask AI to update highlighted fields…"
-                    : "Select a section first…"
-                }
-                value={aiPrompt}
-                onChange={(e) => setAiPrompt(e.target.value)}
-                className={lt.textarea}
-                rows={3}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    void handleAIRequest();
-                  }
-                }}
-              />
-              <button
-                onClick={() => void handleAIRequest()}
-                disabled={!aiPrompt.trim() || isProcessing}
-                className={`${lt.btn} ${lt.btnAccent}`}
-                style={{ width: "100%", justifyContent: "center" }}
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Processing…
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    Send to AI
-                  </>
+            </button>
+          </div>
+
+          <div className={cn(lt.rdPaneBody, lt.scrollbar)}>
+            {paneTab === "fields" &&
+              fieldGroups.map((group) => {
+                const groupFilled = group.fields.filter((f) => {
+                  const v = (fieldValues[f.key] ?? "").trim();
+                  return v && !v.startsWith("[");
+                }).length;
+                return (
+                  <div key={group.group} className={lt.rdFieldGroup}>
+                    <div className={lt.rdFieldGroupHead}>
+                      <span className={lt.rdFieldGroupTitle}>{group.group}</span>
+                      <span className={lt.rdFieldGroupCount}>
+                        {groupFilled} of {group.fields.length}
+                      </span>
+                    </div>
+                    {group.fields.map((field) => {
+                      const value = fieldValues[field.key] ?? "";
+                      const filled = value.trim() && !value.trim().startsWith("[");
+                      const err = saveAttempted
+                        ? validationErrors.find((e) => e.key === field.key)
+                        : null;
+                      const hint = getFieldFormatHint(field);
+                      const placeholder = field.required
+                        ? `e.g. ${field.label.toLowerCase()}`
+                        : `Optional · ${field.label.toLowerCase()}`;
+                      const id = `legal-field-${field.key}`;
+                      return (
+                        <div key={field.key} className={lt.rdField}>
+                          <label className={lt.rdFieldLabel} htmlFor={id}>
+                            <span className={lt.rdFieldLabelTitle}>
+                              {field.label}
+                              {field.required && (
+                                <span className={lt.rdFieldReq}>*</span>
+                              )}
+                            </span>
+                            {hint && <span className={lt.rdFieldHint}>{hint}</span>}
+                          </label>
+                          {field.type === "textarea" ? (
+                            <textarea
+                              id={id}
+                              className={cn(
+                                lt.rdFieldInput,
+                                filled && lt.rdFieldInputFilled,
+                                err && lt.rdFieldInputError,
+                              )}
+                              value={filled ? value : ""}
+                              placeholder={placeholder}
+                              rows={3}
+                              onChange={(e) =>
+                                handleFieldInputChange(field.key, e.target.value)
+                              }
+                              onFocus={() => setFocusedFieldKey(field.key)}
+                            />
+                          ) : field.type === "select" && field.options ? (
+                            <select
+                              id={id}
+                              className={cn(
+                                lt.rdFieldInput,
+                                filled && lt.rdFieldInputFilled,
+                                err && lt.rdFieldInputError,
+                              )}
+                              value={filled ? value : ""}
+                              onChange={(e) =>
+                                handleFieldInputChange(field.key, e.target.value)
+                              }
+                              onFocus={() => setFocusedFieldKey(field.key)}
+                            >
+                              <option value="">Select…</option>
+                              {field.options.map((opt) => (
+                                <option key={opt} value={opt}>
+                                  {opt}
+                                </option>
+                              ))}
+                            </select>
+                          ) : (
+                            <input
+                              id={id}
+                              type={field.type === "date" ? "date" : "text"}
+                              className={cn(
+                                lt.rdFieldInput,
+                                filled && lt.rdFieldInputFilled,
+                                err && lt.rdFieldInputError,
+                              )}
+                              value={filled ? value : ""}
+                              placeholder={placeholder}
+                              onChange={(e) =>
+                                handleFieldInputChange(field.key, e.target.value)
+                              }
+                              onFocus={() => setFocusedFieldKey(field.key)}
+                            />
+                          )}
+                          {err && (
+                            <div className={lt.rdFieldErrorMsg}>{err.message}</div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+
+            {paneTab === "ai" && (
+              <>
+                <div className={lt.rdFieldGroup}>
+                  <div className={lt.rdFieldGroupTitle} style={{ marginBottom: 10 }}>
+                    Ask Drift
+                  </div>
+                  <textarea
+                    className={lt.rdTextarea}
+                    placeholder={
+                      activeSection
+                        ? "Ask AI to update highlighted fields…"
+                        : "Click a section in the document, or describe a field change…"
+                    }
+                    value={aiPrompt}
+                    onChange={(e) => setAiPrompt(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        void handleAIRequest();
+                      }
+                    }}
+                  />
+                  <div className={lt.rdPresets}>
+                    {[
+                      "Set effective date to today",
+                      "Use Delaware as governing law",
+                      "Tighten the term to 18 months",
+                      "Fill remaining required fields with placeholders",
+                    ].map((preset) => (
+                      <button
+                        key={preset}
+                        type="button"
+                        className={lt.rdPreset}
+                        onClick={() => setAiPrompt(preset)}
+                        disabled={isProcessing}
+                      >
+                        {preset}
+                      </button>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end" }}>
+                    <button
+                      type="button"
+                      className={lt.rdBtnAccent}
+                      onClick={() => void handleAIRequest()}
+                      disabled={!aiPrompt.trim() || isProcessing}
+                    >
+                      {isProcessing ? (
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                      ) : (
+                        <Send />
+                      )}
+                      {isProcessing ? "Sending…" : "Send"}
+                    </button>
+                  </div>
+                </div>
+
+                {chatMessages.length > 0 && (
+                  <div className={lt.rdFieldGroup}>
+                    <div className={lt.rdFieldGroupTitle} style={{ marginBottom: 10 }}>
+                      Recent
+                    </div>
+                    <div className={lt.rdChatList}>
+                      {chatMessages.slice(-6).map((m, i) => (
+                        <div
+                          key={i}
+                          className={cn(
+                            lt.rdChatBubble,
+                            m.role === "user"
+                              ? lt.rdChatBubbleUser
+                              : lt.rdChatBubbleAssistant,
+                          )}
+                        >
+                          {m.content}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
-              </button>
-            </div>
+
+                <div className={lt.rdAiCard}>
+                  <div className={lt.rdAiCardHead}>
+                    <Wand2 />
+                    <span className={lt.rdAiCardTitle}>Tip</span>
+                  </div>
+                  <div className={lt.rdAiCardBody}>
+                    Drift only edits highlighted fields — it won't rewrite contract clauses.
+                    Reference fields by their exact label (e.g. "Effective Date") for the
+                    cleanest results.
+                  </div>
+                </div>
+              </>
+            )}
+
+            {paneTab === "validate" && (
+              <>
+                <div className={lt.rdFieldGroup}>
+                  <div className={lt.rdFieldGroupTitle} style={{ marginBottom: 10 }}>
+                    Open issues · {validationErrors.length}
+                  </div>
+                  {validationErrors.length === 0 ? (
+                    <div className={cn(lt.rdIssue, lt.rdIssueOk)}>
+                      <span className={lt.rdIssueIcon}>
+                        <CheckCircle />
+                      </span>
+                      <div>
+                        <div className={lt.rdIssueTitle}>All required fields complete</div>
+                        <div className={lt.rdIssueBody}>
+                          You can save or send this document for review.
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    validationErrors.map((err) => (
+                      <div key={err.key} className={cn(lt.rdIssue, lt.rdIssueWarn)}>
+                        <span className={lt.rdIssueIcon}>
+                          <AlertTriangle />
+                        </span>
+                        <div>
+                          <div className={lt.rdIssueTitle}>
+                            {fieldMap[err.key]?.label ?? err.key}
+                          </div>
+                          <div className={lt.rdIssueBody}>{err.message}</div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <div className={lt.rdFieldGroup}>
+                  <div className={lt.rdFieldGroupTitle} style={{ marginBottom: 10 }}>
+                    Passed checks · {totalFields - validationErrors.length}
+                  </div>
+                  {[
+                    `${filledCount} of ${totalFields} fields filled`,
+                    progressPct >= 100 ? "All required values present" : null,
+                    "Field placeholders preserved in source HTML",
+                  ]
+                    .filter(Boolean)
+                    .map((t, i) => (
+                      <div key={i} className={cn(lt.rdIssue, lt.rdIssueOk)}>
+                        <span className={lt.rdIssueIcon}>
+                          <CheckCircle />
+                        </span>
+                        <div>{t}</div>
+                      </div>
+                    ))}
+                </div>
+              </>
+            )}
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );

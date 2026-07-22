@@ -4,6 +4,7 @@ import { sql } from "drizzle-orm";
 import { company } from "@launchstack/core/db/schema";
 import {
     FounderWeeklyReviewConflictError,
+    FounderWeeklyReviewEvidenceSnapshotSchema,
     FounderWeeklyReviewInvalidPayloadError,
     FounderWeeklyReviewInvalidTransitionError,
     FounderWeeklyReviewNotFoundError,
@@ -22,7 +23,7 @@ const describeIfDatabase =
         : describe.skip;
 
 function createEvidenceSnapshot(): FounderWeeklyReviewEvidenceSnapshot {
-    return {
+    return FounderWeeklyReviewEvidenceSnapshotSchema.parse({
         schemaVersion: "founder-weekly-review-evidence/v1",
         capturedAt: "2026-07-18T10:00:00.000Z",
         reportingPeriod: {
@@ -32,7 +33,7 @@ function createEvidenceSnapshot(): FounderWeeklyReviewEvidenceSnapshot {
         workspaceTimezone: "America/Los_Angeles",
         items: [
             {
-                sourceType: "workspace_document",
+                sourceType: "document_change",
                 sourceId: "doc-1",
                 title: "Weekly Product Notes",
                 sourceTimestamp: "2026-07-10T18:15:00.000Z",
@@ -53,6 +54,12 @@ function createEvidenceSnapshot(): FounderWeeklyReviewEvidenceSnapshot {
                     sentiment: "mixed",
                 },
             },
+            {
+                sourceType: "founder_context",
+                sourceId: "founder-context-1",
+                title: "Founder weekly context",
+                excerpt: "Manual founder input: enterprise onboarding remains blocked on SSO setup.",
+            },
         ],
         sourceWarnings: [
             {
@@ -61,7 +68,7 @@ function createEvidenceSnapshot(): FounderWeeklyReviewEvidenceSnapshot {
                 sourceType: "github_activity",
             },
         ],
-    };
+    });
 }
 
 function createPayload(seed: string): FounderWeeklyReviewPayload {

@@ -47,9 +47,11 @@ const SerializableMetadataValueSchema: z.ZodType<
 export const FounderWeeklyReviewEvidenceItemSchema = z.object({
     sourceType: z.enum([
         "workspace_document",
+        "document_change",
         "customer_feedback",
         "github_activity",
         "manual_note",
+        "founder_context",
         "other",
     ]),
     sourceId: z.string().min(1).max(256),

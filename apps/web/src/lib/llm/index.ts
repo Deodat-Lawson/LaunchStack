@@ -11,7 +11,7 @@
  * to this library or file an issue explaining why it can't be abstracted.
  */
 
-export { generateStructured } from "./generate";
+export { generateStructured, generateStructuredWithMetadata } from "./generate";
 export {
   getAvailableProviders,
   resolveModel,
@@ -29,4 +29,6 @@ export {
   type LlmConfig,
   type CapabilityModelConfig,
   type GenerateStructuredInput,
+  type StructuredGenerationMetadata,
+  type StructuredGenerationResult,
 } from "./types";

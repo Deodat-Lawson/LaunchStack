@@ -15,7 +15,10 @@ import { generateObject } from "ai";
 import type { ZodType } from "zod";
 
 import { resolveModel } from "./providers";
-import type { GenerateStructuredInput } from "./types";
+import type {
+  GenerateStructuredInput,
+  StructuredGenerationResult,
+} from "./types";
 
 /**
  * Run a structured JSON-output LLM call against whichever provider is
@@ -40,6 +43,18 @@ import type { GenerateStructuredInput } from "./types";
 export async function generateStructured<TSchema extends ZodType>(
   input: GenerateStructuredInput<TSchema>,
 ): Promise<ReturnType<TSchema["parse"]>> {
+  const result = await generateStructuredWithMetadata(input);
+  return result.object;
+}
+
+/**
+ * Structured generation plus the single resolved model's reproducibility
+ * metadata. This is a companion API; generateStructured remains source and
+ * behavior compatible for existing callers.
+ */
+export async function generateStructuredWithMetadata<TSchema extends ZodType>(
+  input: GenerateStructuredInput<TSchema>,
+): Promise<StructuredGenerationResult<ReturnType<TSchema["parse"]>>> {
   const resolved = resolveModel(input.capability, input.forceProvider);
 
   // Diagnostic logging: capture the chosen provider/model, prompt size, and
@@ -76,7 +91,25 @@ export async function generateStructured<TSchema extends ZodType>(
     // when given a Zod schema. The `ZodType` generic constraint is a
     // pragmatic choice — it trades a small amount of type precision for
     // simpler call-site ergonomics.
-    return result.object as ReturnType<TSchema["parse"]>;
+    const responseResult = result as unknown as {
+      finishReason?: string;
+      usage?: Record<string, string | number | boolean | null>;
+      response?: { id?: string };
+    };
+    return {
+      object: result.object as ReturnType<TSchema["parse"]>,
+      metadata: {
+        provider: resolved.provider,
+        model: resolved.modelId,
+        capability: input.capability,
+        temperature: resolved.temperature,
+        ...(responseResult.finishReason ? { finishReason: responseResult.finishReason } : {}),
+        ...(responseResult.usage ? { usage: responseResult.usage } : {}),
+        ...(responseResult.response?.id
+          ? { providerRequestId: responseResult.response.id }
+          : {}),
+      },
+    };
   } catch (err) {
     const elapsed = Date.now() - startedAt;
     console.error(

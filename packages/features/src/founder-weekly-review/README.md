@@ -41,6 +41,15 @@ This module owns LAU-5 persistence and lifecycle foundations for company-scoped 
   - `markGenerationFailed`
   - `markQueuedRunFailed`
 
+## LAU-7 confidence semantics
+
+V2 generated items use numeric `confidence` from 0 through 1. It measures how
+strongly the generated review claim is supported by its cited supplied evidence.
+It is not a confidence score for the truthfulness or reliability of an
+underlying database row or source record. Unsupported claims must be omitted or
+represented as `no_evidence`; they must not be emitted with an arbitrarily low
+confidence value.
+
 ## Company isolation
 
 Every repository method accepts `companyId` explicitly and includes it in SQL predicates. Wrong-company access resolves as not found rather than leaking existence.
@@ -57,7 +66,10 @@ Multiple runs are allowed for the same company and reporting period. LAU-5 does 
 ## Deferred scope
 
 - LAU-6: evidence collection
-- LAU-7: review generation payload population
+- LAU-7: structured review generation is provider-agnostic and consumes the
+  canonical evidence snapshot. It emits `founder-weekly-review/v2`; v1 payloads
+  remain readable for backwards compatibility. Citation validity is checked
+  against the supplied snapshot after structured-output parsing.
 - LAU-8: workflow orchestration
 - LAU-9: HTTP APIs
 - LAU-10: dashboard/UI

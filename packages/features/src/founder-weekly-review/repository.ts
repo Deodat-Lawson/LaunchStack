@@ -10,6 +10,7 @@ import {
 import {
     FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
     FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
+    type FounderWeeklyReviewPayloadSchemaVersion,
     type CreateFounderWeeklyReviewRunInput,
     type FounderWeeklyReviewClaimInput,
     type FounderWeeklyReviewGenerationFailure,
@@ -22,6 +23,7 @@ import {
     parseFounderWeeklyReviewModelMetadata,
     parseFounderWeeklyReviewPayload,
 } from "./contracts";
+import { FounderWeeklyReviewInvalidPayloadError } from "./errors";
 
 export interface ConditionalRunMutationResult {
     updated: boolean;
@@ -35,6 +37,14 @@ export interface RetryFounderWeeklyReviewResult {
 }
 
 function mapRunRow(row: FounderWeeklyReviewRunRow): FounderWeeklyReviewRunRecord {
+    const reviewPayload = row.reviewPayload
+        ? parseFounderWeeklyReviewPayload(row.reviewPayload)
+        : null;
+    if (reviewPayload && reviewPayload.schemaVersion !== row.reviewSchemaVersion) {
+        throw new FounderWeeklyReviewInvalidPayloadError(
+            `Founder weekly review run "${row.id}" has mismatched review payload and review schema versions.`
+        );
+    }
     return {
         id: row.id,
         companyId: row.companyId,
@@ -44,10 +54,8 @@ function mapRunRow(row: FounderWeeklyReviewRunRow): FounderWeeklyReviewRunRecord
             end: row.reportingPeriodEnd,
         },
         status: row.status,
-        reviewPayload: row.reviewPayload
-            ? parseFounderWeeklyReviewPayload(row.reviewPayload)
-            : null,
-        reviewSchemaVersion: row.reviewSchemaVersion as typeof FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
+        reviewPayload,
+        reviewSchemaVersion: row.reviewSchemaVersion as FounderWeeklyReviewPayloadSchemaVersion,
         evidenceSnapshot: parseFounderWeeklyReviewEvidenceSnapshot(row.evidenceSnapshot),
         evidenceSchemaVersion:
             row.evidenceSchemaVersion as typeof FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
@@ -193,7 +201,7 @@ export class FounderWeeklyReviewRepository {
             .update(founderWeeklyReviewRuns)
             .set({
                 reviewPayload,
-                reviewSchemaVersion: FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
+                reviewSchemaVersion: reviewPayload.schemaVersion,
                 updatedAt: new Date(),
             })
             .where(
@@ -293,7 +301,7 @@ export class FounderWeeklyReviewRepository {
             .set({
                 status: "draft",
                 reviewPayload,
-                reviewSchemaVersion: FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
+                reviewSchemaVersion: reviewPayload.schemaVersion,
                 modelMetadata,
                 generatedAt: now,
                 errorCode: null,

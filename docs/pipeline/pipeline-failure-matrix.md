@@ -39,7 +39,7 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 
 | ID        | Stage             | Dependency                | Failure mode                                              | Status              |
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
-| [D1](#u1) | Embed / Store |               |                   |  |
+| [D1](#u1) | Embed / Store | Embedding Provider (OpenAI or external sidecar /embed)              |                   |  |
 | [D2](#u2) | Embed / Store |                          |                 |  |
 | [D3](#u3) | Embed / Store |                  |         |  |
 | [D4](#u4) | Embed / Store |        |                 |      |

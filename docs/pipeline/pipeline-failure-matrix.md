@@ -41,31 +41,24 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
 | [D1](#u1) | Embed / Store | Embedding Provider (OpenAI or external sidecar `/embed`)              |                   |  |
 | [D2](#u2) | Embed / Store | Postgres + pgvector (`storeBatch`)                         |                 |  |
-| [D3](#u3) | Embed / Store | Postgres structure/metadat writes                 |         |  |
+| [D3](#u3) | Embed / Store | Postgres structure/metadata writes                 |         |  |
 
 | ID        | Stage             | Dependency                | Failure mode                                              | Status              |
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
-| [E1](#u1) | Finalize |               |                   |  |
-| [E2](#u2) | Finalize |                          |                 |  |
-| [E3](#u3) | Finalize |                  |         |  |
-| [E4](#u4) | Finalize |        |                 |      |
-| [E5](#u5) | Finalize |      |           |     |
+| [E1](#u1) | Finalize | Postgres finalize path (`finalizeStorage`)              |                   |  |
+| [E2](#u2) | Finalize | Status model (`onFailure` + runtime flags)                         |                 |  |
+
 
 | ID        | Stage             | Dependency                | Failure mode                                              | Status              |
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
-| [F1](#u1) | GraphRAG |               |                   |  |
-| [F2](#u2) | GraphRAG |                          |                 |  |
-| [F3](#u3) | GraphRAG |                  |         |  |
-| [F4](#u4) | GraphRAG |        |                 |      |
-| [F5](#u5) | GraphRAG |      |           |     |
+| [F1](#u1) | GraphRAG | External sidecar health (`SIDECAR_URL/health`)              |                   |  |
+| [F2](#u2) | GraphRAG | Entity extraction + Postgres `kg_*` writes                         |                 |  |
+
 
 | ID        | Stage             | Dependency                | Failure mode                                              | Status              |
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
-| [G1](#u1) | Neo4j |               |                   |  |
-| [G2](#u2) | Neo4j |                          |                 |  |
-| [G3](#u3) | Neo4j |                  |         |  |
-| [G4](#u4) | Neo4j |        |                 |      |
-| [G5](#u5) | Neo4j |      |           |     |
+| [G1](#u1) | Neo4j | Neo4j availability/config (`NEO4J_URI`, config, health)              |                   |  |
+| [G2](#u2) | Neo4j | Neo4j write operation (`syncDocumentToNeo4j`)                         |                 |  |
 
 ---
 

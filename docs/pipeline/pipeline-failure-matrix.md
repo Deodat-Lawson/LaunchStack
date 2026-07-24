@@ -37,6 +37,14 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 | [U8](#u8) | Upload / dispatch | Inngest + Postgres        | Event dispatched before / without durable `ocr_jobs` row  | Needs fix (High)    |
 | [U9](#u9) | Upload / dispatch | Postgres + Inngest        | Client retry or concurrent upload creates duplicate trees | Needs discussion    |
 
+| ID        | Stage             | Dependency                | Failure mode                                              | Status              |
+| --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
+| [D1](#u1) | Embed / Store |               |                   |  |
+| [D2](#u2) | Embed / Store |                          |                 |  |
+| [D3](#u3) | Embed / Store |                  |         |  |
+| [D4](#u4) | Embed / Store |        |                 |      |
+| [D5](#u5) | Embed / Store |      |           |     |
+
 
 ---
 

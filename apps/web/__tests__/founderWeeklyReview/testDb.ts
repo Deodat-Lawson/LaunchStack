@@ -78,6 +78,18 @@ async function bootstrapIsolatedSchema(
             "updated_at" timestamptz
         );
 
+        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document_versions" (
+            "id" serial PRIMARY KEY,
+            "document_id" bigint NOT NULL REFERENCES "pdr_ai_v2_document"("id") ON DELETE CASCADE,
+            "version_number" integer NOT NULL,
+            "url" varchar(512) NOT NULL,
+            "mime_type" varchar(128) NOT NULL,
+            "file_size" bigint,
+            "uploaded_by" varchar(256),
+            "changelog" text,
+            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+
         CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document_retrieval_chunks" (
             "id" bigint PRIMARY KEY
         );

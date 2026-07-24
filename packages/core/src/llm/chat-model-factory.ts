@@ -34,7 +34,10 @@ export interface ChatModelsConfig {
   anthropic?: { apiKey: string; model?: string };
   google?: { apiKey: string; model?: string };
   ollama?: { baseUrl: string; model?: string };
+  openrouter?: { apiKey: string; model?: string };
 }
+
+const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 
 const configSlot = createSlot<ChatModelsConfig>("llm/chatModels");
 
@@ -71,6 +74,8 @@ function getServerModelOverride(provider: LLMProvider): string | undefined {
       return c.google?.model;
     case "ollama":
       return c.ollama?.model;
+    case "openrouter":
+      return c.openrouter?.model;
   }
 }
 
@@ -151,6 +156,28 @@ export function getChatModelForProvider(opts: {
   const thinkingEnabled = Boolean(thinking) && supportsThinking(modelName as AIModelType);
 
   switch (provider) {
+    case "openrouter": {
+      // ChatOpenAI falls back to OPENAI_API_KEY when apiKey is undefined.
+      // With an OpenRouter base URL that would send an OpenAI credential to a
+      // third party, so fail closed before constructing the SDK client.
+      const apiKey = c.openrouter?.apiKey;
+      if (!apiKey) {
+        throw new Error(
+          "OPENROUTER_API_KEY is not set. Configure OpenRouter before requesting an OpenRouter model.",
+        );
+      }
+      return new ChatOpenAI({
+        apiKey,
+        modelName,
+        temperature: temperature ?? 0.7,
+        timeout: timeoutMs ?? 600_000,
+        configuration: { baseURL: OPENROUTER_BASE_URL },
+        ...(thinkingEnabled
+          ? { modelKwargs: { reasoning: { effort: "high" as const } } }
+          : {}),
+      });
+    }
+
     case "ollama":
       return new ChatOllama({
         baseUrl: getOllamaBaseUrl(),
@@ -256,6 +283,22 @@ export function describeProviderError(
     return {
       status: 401,
       message: "Invalid or missing ANTHROPIC_API_KEY. Please check your API key configuration.",
+    };
+  }
+
+  if (
+    provider === "openrouter" &&
+    (
+      msg.includes("401") ||
+      msg.includes("no auth credentials") ||
+      msg.includes("invalid api key") ||
+      msg.includes("authentication") ||
+      msg.includes("openrouter_api_key")
+    )
+  ) {
+    return {
+      status: 401,
+      message: "Invalid or missing OPENROUTER_API_KEY. Please check your API key configuration.",
     };
   }
 

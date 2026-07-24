@@ -174,8 +174,8 @@ export async function POST(request: Request) {
         const startTime = Date.now();
         const containsEditableHtml = (content?.includes("<mark") ?? false) || (prompt?.includes("<mark") ?? false);
 
-        // Get the AI model (gpt-4o is widely available; gpt-5-mini may require newer API access)
-        const modelId = (options?.model ?? "gpt-4o") as AIModelType;
+        // Resolve the requested model, defaulting to the app's OpenRouter model.
+        const modelId = (options?.model ?? "moonshotai/kimi-k3") as AIModelType;
         const chat = getChatModel(modelId);
 
         // Build the system prompt

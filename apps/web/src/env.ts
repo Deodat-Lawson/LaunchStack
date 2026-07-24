@@ -23,6 +23,21 @@ const requiredString = () =>
 const optionalString = () =>
   z.preprocess(normalize, z.string().min(1).optional());
 
+const configuredSecret = (name: string) =>
+  z.preprocess(
+    normalize,
+    z
+      .string()
+      .min(1, "Value is required")
+      .refine(
+        (value) =>
+          !/(?:paste|replace|your)[-_ ]*(?:api[-_ ]*)?key|example|^x{3,}$/i.test(
+            value,
+          ),
+        `${name} must be a real credential, not a placeholder`,
+      ),
+  );
+
 const serverSchema = z.object({
   // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
   DATABASE_URL: requiredString(),
@@ -36,6 +51,9 @@ const serverSchema = z.object({
   // its own API key through the settings UI. Generate with:
   //   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
   EMBEDDING_SECRETS_KEY: optionalString(),
+  // Required by the primary workspace and document-generation model.
+  OPENROUTER_API_KEY: configuredSecret("OPENROUTER_API_KEY"),
+  OPENROUTER_MODEL: optionalString(),
   ANTHROPIC_API_KEY: optionalString(),
   ANTHROPIC_MODEL: optionalString(),
   GOOGLE_AI_API_KEY: optionalString(),
@@ -225,6 +243,8 @@ function parseServerEnv() {
     CHAT_MODEL: process.env.CHAT_MODEL,
     EMBEDDING_INDEX: process.env.EMBEDDING_INDEX,
     EMBEDDING_SECRETS_KEY: process.env.EMBEDDING_SECRETS_KEY,
+    OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+    OPENROUTER_MODEL: process.env.OPENROUTER_MODEL,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL,
     GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
@@ -339,4 +359,3 @@ export const env = {
     NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
   }),
 };
-

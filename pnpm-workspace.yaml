@@ -4,3 +4,11 @@ packages:
 
 patchedDependencies:
   drizzle-kit@0.31.10: patches/drizzle-kit@0.31.10.patch
+
+# eslint-plugin-drizzle 0.2.3 imports this package at runtime but only declares
+# it as a devDependency. Supply it explicitly so strict pnpm installs can load
+# the shared root ESLint config.
+packageExtensions:
+  eslint-plugin-drizzle@0.2.3:
+    dependencies:
+      "@typescript-eslint/utils": ^6.10.0

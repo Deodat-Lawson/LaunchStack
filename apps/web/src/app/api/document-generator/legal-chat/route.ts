@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { describeProviderError } from "@launchstack/core/llm";
 import { getChatModel } from "~/lib/models";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
@@ -248,7 +249,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const chat = getChatModel("gpt-4o");
+    const chat = getChatModel("moonshotai/kimi-k3");
     const response = await chat.invoke(langchainMessages);
     const content =
       typeof response.content === "string"
@@ -306,23 +307,19 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const errMessage =
-      error instanceof Error ? error.message : String(error);
     console.error("[legal-chat] POST error:", error);
-
-    const hint =
-      !process.env.OPENAI_API_KEY &&
-      errMessage.toLowerCase().includes("openai")
-        ? " (Ensure OPENAI_API_KEY is set in .env)"
-        : "";
+    const friendly = describeProviderError(
+      "openrouter",
+      error,
+      "moonshotai/kimi-k3",
+    );
 
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to process legal chat",
-        error: errMessage + hint,
+        message: friendly?.message ?? "Failed to process legal chat",
       },
-      { status: 500 }
+      { status: friendly?.status ?? 500 }
     );
   }
 }

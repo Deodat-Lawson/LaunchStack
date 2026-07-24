@@ -590,7 +590,7 @@ export async function POST(request: Request) {
             );
 
             // Get AI model and generate comprehensive response
-            const resolvedProvider = provider ?? "openai";
+            const resolvedProvider = provider ?? "openrouter";
             const selectedAiModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
 
             // Ephemeral attachment handling. Images require a vision-capable
@@ -614,11 +614,31 @@ export async function POST(request: Request) {
 
             const attachmentTextBlock = await buildAttachmentTextBlock(textAttachments);
 
-            const chat = getChatModelForProvider({
-                provider: resolvedProvider,
-                model: selectedAiModel,
-                thinking: thinkingMode,
-            });
+            let chat: ReturnType<typeof getChatModelForProvider>;
+            try {
+                chat = getChatModelForProvider({
+                    provider: resolvedProvider,
+                    model: selectedAiModel,
+                    thinking: thinkingMode,
+                });
+            } catch (modelError) {
+                const friendly = describeProviderError(
+                    resolvedProvider,
+                    modelError,
+                    selectedAiModel,
+                );
+                if (friendly) {
+                    recordResult("error");
+                    return NextResponse.json(
+                        {
+                            success: false,
+                            message: friendly.message,
+                        },
+                        { status: friendly.status },
+                    );
+                }
+                throw modelError;
+            }
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
             // Build conversation context
@@ -777,4 +797,3 @@ export async function POST(request: Request) {
         }
     });
 }
-

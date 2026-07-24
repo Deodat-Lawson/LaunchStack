@@ -17,9 +17,6 @@ import {
   IconArrowUp,
   IconBolt,
   IconBrain,
-  IconChevronDown,
-  IconChevronRight,
-  IconEye,
   IconFile,
   IconGlobe,
   IconGraph,
@@ -31,28 +28,19 @@ import {
   IconSearch,
   IconSettings,
   IconShield,
-  IconSparkle,
-  IconStar,
-  IconStarFilled,
   IconSun,
   IconUser,
   IconX,
 } from "./icons";
 import { GraphView } from "./GraphView";
 import {
-  COMPOSER_MODELS,
-  COMPOSER_PROVIDERS,
+  DEFAULT_COMPOSER_MODEL,
   SOURCE_META,
-  type ComposerModelOption,
-  type ComposerProviderId,
-  type ComposerProviderMeta,
   type ComposerSend,
   type EphemeralAttachment,
   type ThreadMessage,
   type WorkspaceSource,
 } from "./types";
-
-const FAVORITES_STORAGE_KEY = "lsw.composer.favorites";
 
 /** Chat transcript column and composer share this width. */
 const CHAT_COLUMN_MAX_PX = 760;
@@ -77,26 +65,6 @@ export function workspaceMainHeaderBarStyle(
   };
 }
 
-function readFavoritesFromStorage(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === "string") : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeFavoritesToStorage(ids: string[]) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(ids));
-  } catch {
-    /* quota or disabled — ignore */
-  }
-}
 
 interface SourceChipProps {
   source: WorkspaceSource;
@@ -421,15 +389,12 @@ interface ComposerProps {
   setSelected: Dispatch<SetStateAction<string[]>>;
   onSend: (send: ComposerSend) => void;
   disabled?: boolean;
-  model: ComposerModelOption;
-  onPickModel: (model: ComposerModelOption) => void;
   webSearch: boolean;
   onToggleWebSearch: () => void;
   thinking: boolean;
   onToggleThinking: () => void;
 }
 
-const ATTACH_IMAGE_MIME = /^image\//;
 const ATTACH_MAX_COUNT = 5;
 const ATTACH_MAX_BYTES = 20 * 1024 * 1024;
 
@@ -475,7 +440,7 @@ function extOf(filename: string): string {
 }
 
 function kindForFile(file: File): "image" | "text" | null {
-  if (ATTACH_IMAGE_MIME.test(file.type)) return "image";
+  if (file.type.startsWith("image/")) return "image";
   if (file.type.startsWith("text/")) return "text";
   if (ATTACH_TEXT_MIMES.has(file.type)) return "text";
   if (ATTACH_TEXT_EXTS.has(extOf(file.name))) return "text";
@@ -488,22 +453,19 @@ function Composer({
   setSelected,
   onSend,
   disabled,
-  model,
-  onPickModel,
   webSearch,
   onToggleWebSearch,
   thinking,
   onToggleThinking,
 }: ComposerProps) {
+  const model = DEFAULT_COMPOSER_MODEL;
   const [text, setText] = useState("");
   const [focus, setFocus] = useState(false);
   const [attachments, setAttachments] = useState<EphemeralAttachment[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [modelOpen, setModelOpen] = useState(false);
   const [attachError, setAttachError] = useState<string | null>(null);
   const ref = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const modelRef = useRef<HTMLDivElement>(null);
 
   const selSources = selected
     .map((id) => sources.find((s) => s.id === id))
@@ -544,18 +506,6 @@ function Composer({
       ref.current.style.height = Math.min(ref.current.scrollHeight, 200) + "px";
     }
   }, [text]);
-
-  useEffect(() => {
-    const onClick = (e: globalThis.MouseEvent) => {
-      if (modelRef.current && !modelRef.current.contains(e.target as Node)) {
-        setModelOpen(false);
-      }
-    };
-    if (modelOpen) {
-      document.addEventListener("mousedown", onClick);
-      return () => document.removeEventListener("mousedown", onClick);
-    }
-  }, [modelOpen]);
 
   const handleFilesPicked = useCallback(async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -794,56 +744,12 @@ function Composer({
           />
           <ToolbarPill
             label="Think"
-            title={
-              thinkingAllowed
-                ? "Let the model reason step-by-step before answering"
-                : `${model.label} doesn't support extended thinking — pick a reasoning model (Claude, GPT-5, Gemini 3).`
-            }
+            title="Let the model reason step-by-step before answering"
             icon={<IconBrain size={12} />}
             active={thinking && thinkingAllowed}
             disabled={!thinkingAllowed}
             onClick={onToggleThinking}
           />
-          <div ref={modelRef} style={{ position: "relative", flexShrink: 0 }}>
-            <button
-              type="button"
-              onClick={() => setModelOpen((v) => !v)}
-              style={{
-                fontSize: 12,
-                padding: "6px 10px",
-                borderRadius: 8,
-                color: "var(--ink-2)",
-                border: "1px solid var(--line)",
-                background: modelOpen ? "var(--line-2)" : "transparent",
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                maxWidth: "min(220px, 100%)",
-              }}
-            >
-              <IconSparkle size={12} />
-              <span
-                style={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  minWidth: 0,
-                }}
-              >
-                {model.label}
-              </span>
-              <IconChevronDown size={10} />
-            </button>
-            {modelOpen && (
-              <ModelDropdown
-                current={model}
-                onPick={(m) => {
-                  onPickModel(m);
-                  setModelOpen(false);
-                }}
-              />
-            )}
-          </div>
         </div>
         <div
           style={{
@@ -869,7 +775,7 @@ function Composer({
           <button
             type="button"
             onClick={handleSend}
-            disabled={!text.trim() || disabled || uploading}
+            disabled={!text.trim() || (disabled ?? false) || uploading}
             style={{
               width: 34,
               height: 34,
@@ -948,412 +854,6 @@ function ToolbarPill({ label, title, icon, active, disabled, onClick, badge }: T
         </span>
       )}
     </button>
-  );
-}
-
-interface ModelDropdownProps {
-  current: ComposerModelOption;
-  onPick: (m: ComposerModelOption) => void;
-}
-
-type ProviderFilter = "favorites" | ComposerProviderId;
-
-function ModelDropdown({ current, onPick }: ModelDropdownProps) {
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [favoritesHydrated, setFavoritesHydrated] = useState(false);
-  const [filter, setFilter] = useState<ProviderFilter>(current.provider);
-  const [query, setQuery] = useState("");
-  const [showLegacy, setShowLegacy] = useState(false);
-
-  // Hydrate favorites once and persist on change. We track hydration so the
-  // first render doesn't flush an empty array over real saved data.
-  useEffect(() => {
-    setFavorites(readFavoritesFromStorage());
-    setFavoritesHydrated(true);
-  }, []);
-  useEffect(() => {
-    if (favoritesHydrated) writeFavoritesToStorage(favorites);
-  }, [favorites, favoritesHydrated]);
-
-  const toggleFavorite = useCallback((id: string) => {
-    setFavorites((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
-  }, []);
-
-  const q = query.trim().toLowerCase();
-  const matchesQuery = useCallback(
-    (m: ComposerModelOption) =>
-      !q || m.label.toLowerCase().includes(q) || m.description.toLowerCase().includes(q),
-    [q],
-  );
-
-  // When searching, ignore the provider filter — the user is fishing across
-  // all providers, so showing only one rail's matches feels broken.
-  const matchesFilter = useCallback(
-    (m: ComposerModelOption) => {
-      if (q) return true;
-      if (filter === "favorites") return favorites.includes(m.id);
-      return m.provider === filter;
-    },
-    [q, filter, favorites],
-  );
-
-  const visible = COMPOSER_MODELS.filter((m) => matchesFilter(m) && matchesQuery(m));
-  const primary = visible.filter((m) => !m.legacy);
-  const legacy = visible.filter((m) => m.legacy);
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        bottom: "calc(100% + 8px)",
-        left: 0,
-        width: 460,
-        maxWidth: "calc(100vw - 48px)",
-        background: "var(--panel)",
-        border: "1px solid var(--line)",
-        borderRadius: 14,
-        boxShadow: "0 16px 40px var(--scrim-shadow)",
-        zIndex: 50,
-        overflow: "hidden",
-        animation: "lsw-fadeIn 120ms",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "10px 12px",
-          borderBottom: "1px solid var(--line)",
-        }}
-      >
-        <IconSearch size={13} style={{ color: "var(--ink-3)", flexShrink: 0 }} />
-        <input
-          autoFocus
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search models…"
-          style={{
-            flex: 1,
-            border: "none",
-            outline: "none",
-            background: "transparent",
-            fontSize: 13,
-            color: "var(--ink)",
-            fontFamily: "inherit",
-          }}
-        />
-      </div>
-
-      <div style={{ display: "flex", maxHeight: 380 }}>
-        <div
-          style={{
-            width: 44,
-            flexShrink: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: "8px 0",
-            gap: 4,
-            borderRight: "1px solid var(--line)",
-            background: "var(--line-2)",
-          }}
-        >
-          <ProviderRailButton
-            active={filter === "favorites"}
-            onClick={() => setFilter("favorites")}
-            title="Favorites"
-            color="oklch(0.6 0.16 30)"
-          >
-            <IconStarFilled size={13} fill="oklch(0.65 0.18 60)" />
-          </ProviderRailButton>
-          <div style={{ height: 1, width: 22, background: "var(--line)", margin: "4px 0" }} />
-          {COMPOSER_PROVIDERS.map((p) => (
-            <ProviderRailButton
-              key={p.id}
-              active={filter === p.id}
-              onClick={() => setFilter(p.id)}
-              title={p.label}
-              color={p.color}
-            >
-              <ProviderMark provider={p} active={filter === p.id} />
-            </ProviderRailButton>
-          ))}
-        </div>
-
-        <div style={{ flex: 1, overflowY: "auto", padding: 6 }}>
-          {primary.length === 0 && legacy.length === 0 && (
-            <div
-              style={{
-                padding: "28px 16px",
-                textAlign: "center",
-                fontSize: 12,
-                color: "var(--ink-3)",
-              }}
-            >
-              {filter === "favorites" && favorites.length === 0 && !q
-                ? "Star a model to pin it here."
-                : "No models match."}
-            </div>
-          )}
-          {primary.map((m) => (
-            <ModelRow
-              key={m.id}
-              model={m}
-              active={m.id === current.id}
-              favorited={favorites.includes(m.id)}
-              onPick={() => onPick(m)}
-              onToggleFavorite={() => toggleFavorite(m.id)}
-            />
-          ))}
-          {legacy.length > 0 && (
-            <div style={{ marginTop: 4 }}>
-              <button
-                type="button"
-                onClick={() => setShowLegacy((v) => !v)}
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  padding: "8px 10px",
-                  borderRadius: 7,
-                  background: "transparent",
-                  fontSize: 12,
-                  color: "var(--ink-3)",
-                  textAlign: "left",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "var(--line-2)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                }}
-              >
-                <span
-                  style={{
-                    display: "inline-flex",
-                    transform: showLegacy ? "rotate(90deg)" : "none",
-                    transition: "transform 120ms",
-                  }}
-                >
-                  <IconChevronRight size={11} />
-                </span>
-                <span style={{ flex: 1 }}>
-                  {legacy.length} legacy model{legacy.length !== 1 ? "s" : ""}
-                </span>
-              </button>
-              {showLegacy &&
-                legacy.map((m) => (
-                  <ModelRow
-                    key={m.id}
-                    model={m}
-                    active={m.id === current.id}
-                    favorited={favorites.includes(m.id)}
-                    onPick={() => onPick(m)}
-                    onToggleFavorite={() => toggleFavorite(m.id)}
-                  />
-                ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-interface ProviderRailButtonProps {
-  active: boolean;
-  onClick: () => void;
-  title: string;
-  color: string;
-  children: React.ReactNode;
-}
-
-function ProviderRailButton({ active, onClick, title, color, children }: ProviderRailButtonProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      title={title}
-      style={{
-        width: 30,
-        height: 30,
-        borderRadius: 8,
-        border: "1px solid transparent",
-        background: active ? "var(--panel)" : "transparent",
-        boxShadow: active ? `inset 0 0 0 1px ${color}` : "none",
-        color: active ? color : "var(--ink-3)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        transition: "background 120ms, color 120ms, box-shadow 120ms",
-      }}
-      onMouseEnter={(e) => {
-        if (!active) e.currentTarget.style.background = "var(--panel)";
-      }}
-      onMouseLeave={(e) => {
-        if (!active) e.currentTarget.style.background = "transparent";
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-function ProviderMark({
-  provider,
-  active,
-}: {
-  provider: ComposerProviderMeta;
-  active: boolean;
-}) {
-  return (
-    <span
-      style={{
-        width: 18,
-        height: 18,
-        borderRadius: "50%",
-        background: active ? provider.color : "var(--line)",
-        color: active ? "white" : "var(--ink-2)",
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 10,
-        fontWeight: 700,
-        fontFamily: "var(--font-mono, ui-monospace, monospace)",
-      }}
-    >
-      {provider.mark}
-    </span>
-  );
-}
-
-interface ModelRowProps {
-  model: ComposerModelOption;
-  active: boolean;
-  favorited: boolean;
-  onPick: () => void;
-  onToggleFavorite: () => void;
-}
-
-function ModelRow({ model, active, favorited, onPick, onToggleFavorite }: ModelRowProps) {
-  return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        padding: "8px 10px",
-        borderRadius: 8,
-        background: active ? "var(--accent-soft)" : "transparent",
-        cursor: "pointer",
-      }}
-      onClick={onPick}
-      onMouseEnter={(e) => {
-        if (!active) e.currentTarget.style.background = "var(--line-2)";
-      }}
-      onMouseLeave={(e) => {
-        if (!active) e.currentTarget.style.background = "transparent";
-      }}
-    >
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggleFavorite();
-        }}
-        title={favorited ? "Unfavorite" : "Favorite"}
-        style={{
-          width: 22,
-          height: 22,
-          borderRadius: 5,
-          background: "transparent",
-          border: "none",
-          color: favorited ? "oklch(0.7 0.17 70)" : "var(--ink-4, var(--ink-3))",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          flexShrink: 0,
-          opacity: favorited ? 1 : 0.6,
-        }}
-      >
-        {favorited ? <IconStarFilled size={12} fill="oklch(0.7 0.17 70)" /> : <IconStar size={12} />}
-      </button>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div
-          style={{
-            fontSize: 13,
-            fontWeight: 600,
-            color: active ? "var(--accent-ink)" : "var(--ink)",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {model.label}
-        </div>
-        <div
-          style={{
-            fontSize: 11,
-            color: "var(--ink-3)",
-            marginTop: 1,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {model.description}
-        </div>
-      </div>
-      <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
-        {model.supportsVision && (
-          <CapabilityBadge title="Reads images" tone="vision">
-            <IconEye size={11} />
-          </CapabilityBadge>
-        )}
-        {model.supportsThinking && (
-          <CapabilityBadge title="Extended thinking / reasoning" tone="think">
-            <IconBrain size={11} />
-          </CapabilityBadge>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function CapabilityBadge({
-  children,
-  title,
-  tone,
-}: {
-  children: React.ReactNode;
-  title: string;
-  tone: "vision" | "think";
-}) {
-  const palette =
-    tone === "vision"
-      ? { bg: "oklch(0.94 0.04 200)", fg: "oklch(0.45 0.12 220)" }
-      : { bg: "oklch(0.94 0.05 290)", fg: "oklch(0.45 0.14 290)" };
-  return (
-    <span
-      title={title}
-      style={{
-        width: 22,
-        height: 22,
-        borderRadius: 5,
-        background: palette.bg,
-        color: palette.fg,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {children}
-    </span>
   );
 }
 
@@ -1779,8 +1279,6 @@ export interface AskPanelProps {
   userEmail?: string;
   onSignOut?: () => void;
   /** Composer options persisted across turns — owned by WorkspaceShell. */
-  model: ComposerModelOption;
-  onPickModel: (model: ComposerModelOption) => void;
   webSearch: boolean;
   onToggleWebSearch: () => void;
   thinking: boolean;
@@ -1808,8 +1306,6 @@ export function AskPanel({
   userName,
   userEmail,
   onSignOut,
-  model,
-  onPickModel,
   webSearch,
   onToggleWebSearch,
   thinking,
@@ -2005,8 +1501,6 @@ export function AskPanel({
               setSelected={setSelected}
               onSend={handleSend}
               disabled={isSending}
-              model={model}
-              onPickModel={onPickModel}
               webSearch={webSearch}
               onToggleWebSearch={onToggleWebSearch}
               thinking={thinking}

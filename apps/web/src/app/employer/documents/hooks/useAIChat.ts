@@ -83,7 +83,7 @@ export function useAIChat() {
   const [error, setError] = useState<string | null>(null);
 
   // Send an AI chat query (supports both document and company-wide search)
-  const sendQuery = useCallback(async (params: AIChatRequest): Promise<AIChatResponse | null> => {
+  const sendQuery = useCallback(async (params: AIChatRequest): Promise<AIChatResponse> => {
     setLoading(true);
     setError(null);
     try {
@@ -127,7 +127,10 @@ export function useAIChat() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to send query';
       setError(errorMessage);
-      return null;
+      return {
+        success: false,
+        message: errorMessage,
+      };
     } finally {
       setLoading(false);
     }
@@ -139,4 +142,3 @@ export function useAIChat() {
     sendQuery,
   };
 }
-

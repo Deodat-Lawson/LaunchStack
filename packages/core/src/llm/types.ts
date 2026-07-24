@@ -16,6 +16,7 @@ export type AIModelType =
   | "gpt-5-mini"
   | "claude-sonnet-4"
   | "claude-opus-4.5"
+  | "moonshotai/kimi-k3"
   | "gemini-2.5-flash"
   | "gemini-3-flash"
   | "gemini-3-pro"
@@ -38,6 +39,7 @@ export const AIModelTypes = [
   "gpt-5-mini",
   "claude-sonnet-4",
   "claude-opus-4.5",
+  "moonshotai/kimi-k3",
   "gemini-2.5-flash",
   "gemini-3-flash",
   "gemini-3-pro",
@@ -54,7 +56,7 @@ export function isAIModelType(value: string): value is AIModelType {
   return AIModelTypes.includes(value as AIModelType);
 }
 
-export const LLMProviders = ["openai", "anthropic", "google", "ollama"] as const;
+export const LLMProviders = ["openai", "anthropic", "google", "ollama", "openrouter"] as const;
 export type LLMProvider = (typeof LLMProviders)[number];
 
 export const ProviderModelMap = {
@@ -62,6 +64,7 @@ export const ProviderModelMap = {
   anthropic: ["claude-sonnet-4", "claude-opus-4.5"] as const,
   google: ["gemini-2.5-flash", "gemini-3-flash", "gemini-3-pro"] as const,
   ollama: ["llama3.1:8b", "llama3.2:3b", "mistral:7b", "codellama:7b", "gemma2:9b", "phi3:mini", "qwen2.5:7b"] as const,
+  openrouter: ["moonshotai/kimi-k3"] as const,
 } satisfies Record<LLMProvider, readonly AIModelType[]>;
 
 export const ProviderDefaultModels: Record<LLMProvider, AIModelType> = {
@@ -69,6 +72,7 @@ export const ProviderDefaultModels: Record<LLMProvider, AIModelType> = {
   anthropic: "claude-sonnet-4",
   google: "gemini-2.5-flash",
   ollama: "llama3.1:8b",
+  openrouter: "moonshotai/kimi-k3",
 };
 
 export function isModelAllowedForProvider(
@@ -93,6 +97,7 @@ export const THINKING_CAPABLE_MODELS: ReadonlySet<AIModelType> = new Set([
   "gpt-5-nano",
   "gemini-3-flash",
   "gemini-3-pro",
+  "moonshotai/kimi-k3",
 ]);
 
 export function supportsThinking(model: AIModelType | undefined): boolean {
@@ -114,6 +119,7 @@ export const VISION_CAPABLE_MODELS: ReadonlySet<AIModelType> = new Set([
   "gemini-2.5-flash",
   "gemini-3-flash",
   "gemini-3-pro",
+  "moonshotai/kimi-k3",
 ]);
 
 export function supportsVision(model: AIModelType | undefined): boolean {

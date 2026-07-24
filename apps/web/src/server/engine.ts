@@ -188,6 +188,12 @@ export function getEngine(): Engine {
     anthropic: config.llm.anthropic,
     google: config.llm.google,
     ollama: config.llm.ollama,
+    openrouter: env.server.OPENROUTER_API_KEY
+      ? {
+          apiKey: env.server.OPENROUTER_API_KEY,
+          model: env.server.OPENROUTER_MODEL,
+        }
+      : undefined,
   });
 
   // Register embedding-related defaults so the index registry, the

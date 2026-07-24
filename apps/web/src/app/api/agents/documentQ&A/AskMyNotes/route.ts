@@ -101,7 +101,7 @@ export async function POST(request: Request) {
         })
         .join("\n\n---\n\n");
 
-      const llm = getChatModel("gpt-4o");
+      const llm = getChatModel("moonshotai/kimi-k3");
       const reply = await llm.invoke([
         new SystemMessage(SYSTEM_PROMPT),
         new HumanMessage(

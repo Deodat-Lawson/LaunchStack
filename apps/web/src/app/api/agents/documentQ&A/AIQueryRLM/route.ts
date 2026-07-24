@@ -84,7 +84,7 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
 
     // Normalize provider
     const providerInput = typeof req.provider === "string" ? (req.provider.trim() || undefined) : undefined;
-    const providerCandidate = (providerInput ?? "openai") as string;
+    const providerCandidate = providerInput ?? "openrouter";
     if (!LLMProviders.includes(providerCandidate as LLMProvider)) {
         return { success: false, error: `provider must be one of: ${LLMProviders.join(", ")}` };
     }

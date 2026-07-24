@@ -21,14 +21,9 @@ import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioMenu } from "./StudioMenu";
 import { renderStudioPane } from "./StudioPanes";
-import {
-  DEFAULT_COMPOSER_MODEL,
-  STUDIO_FEATURES_BY_ID,
-  findComposerModel,
-} from "./types";
+import { STUDIO_FEATURES_BY_ID } from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
-  ComposerModelOption,
   ComposerSend,
   ThreadMessage,
   WorkspaceFolder,
@@ -164,11 +159,9 @@ export function WorkspaceShell() {
     }
   }, [railHidden]);
 
-  // Composer preferences persisted across reloads so picking a model or
-  // toggling Web/Think doesn't reset on every refresh. Ephemeral attachments
-  // are NOT persisted — those are turn-scoped, owned by the Composer.
-  const [composerModel, setComposerModel] =
-    useState<ComposerModelOption>(DEFAULT_COMPOSER_MODEL);
+  // Composer preferences persisted across reloads so toggling Web/Think
+  // doesn't reset on every refresh. Ephemeral attachments are NOT persisted —
+  // those are turn-scoped, owned by the Composer.
   const [composerWebSearch, setComposerWebSearch] = useState(false);
   const [composerThinking, setComposerThinking] = useState(false);
   const composerPrefsReady = useRef(false);
@@ -178,11 +171,9 @@ export function WorkspaceShell() {
       const raw = localStorage.getItem("askPanel.composer.v1");
       if (raw) {
         const parsed = JSON.parse(raw) as {
-          model?: string;
           webSearch?: boolean;
           thinking?: boolean;
         };
-        if (parsed.model) setComposerModel(findComposerModel(parsed.model));
         if (typeof parsed.webSearch === "boolean")
           setComposerWebSearch(parsed.webSearch);
         if (typeof parsed.thinking === "boolean")
@@ -200,7 +191,6 @@ export function WorkspaceShell() {
       localStorage.setItem(
         "askPanel.composer.v1",
         JSON.stringify({
-          model: composerModel.id,
           webSearch: composerWebSearch,
           thinking: composerThinking,
         }),
@@ -208,7 +198,7 @@ export function WorkspaceShell() {
     } catch {
       // Quota / private mode — drop silently.
     }
-  }, [composerModel, composerWebSearch, composerThinking]);
+  }, [composerWebSearch, composerThinking]);
 
   const { sendQuery, loading: isSending } = useAIChat();
 
@@ -239,12 +229,12 @@ export function WorkspaceShell() {
 
       const data = await sendQuery({
         question: send.text,
-        searchScope: scope as "document" | "company" | "selected",
+        searchScope: scope,
         documentId: scope === "document" ? numericIds[0] : undefined,
         selectedDocumentIds: scope === "selected" ? numericIds : undefined,
         companyId: scope === "company" ? companyId ?? undefined : undefined,
-        aiModel: send.model as never,
-        provider: send.provider as never,
+        aiModel: send.model,
+        provider: send.provider,
         enableWebSearch: send.webSearch,
         thinkingMode: send.thinking,
         attachments: send.attachments.map((a) => ({
@@ -255,7 +245,7 @@ export function WorkspaceShell() {
         })),
       });
 
-      if (data) {
+      if (data.success) {
         const citations = (data.references ?? [])
           .map((r) => {
             const src = sources.find((s) => s.documentId === Number(r.documentId));
@@ -284,7 +274,10 @@ export function WorkspaceShell() {
           ...prev,
           {
             role: "assistant",
-            text: "Couldn't reach the model. Try again in a moment.",
+            text:
+              data.message ??
+              data.error ??
+              "Couldn't reach the model. Try again in a moment.",
           },
         ]);
       }
@@ -530,8 +523,6 @@ export function WorkspaceShell() {
           userName={userName}
           userEmail={userEmail}
           onSignOut={() => signOut({ redirectUrl: "/" })}
-          model={composerModel}
-          onPickModel={setComposerModel}
           webSearch={composerWebSearch}
           onToggleWebSearch={() => setComposerWebSearch((v) => !v)}
           thinking={composerThinking}

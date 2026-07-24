@@ -45,6 +45,29 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 | [D4](#u4) | Embed / Store |        |                 |      |
 | [D5](#u5) | Embed / Store |      |           |     |
 
+| ID        | Stage             | Dependency                | Failure mode                                              | Status              |
+| --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
+| [E1](#u1) | Finalize |               |                   |  |
+| [E2](#u2) | Finalize |                          |                 |  |
+| [E3](#u3) | Finalize |                  |         |  |
+| [E4](#u4) | Finalize |        |                 |      |
+| [E5](#u5) | Finalize |      |           |     |
+
+| ID        | Stage             | Dependency                | Failure mode                                              | Status              |
+| --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
+| [F1](#u1) | GraphRAG |               |                   |  |
+| [F2](#u2) | GraphRAG |                          |                 |  |
+| [F3](#u3) | GraphRAG |                  |         |  |
+| [F4](#u4) | GraphRAG |        |                 |      |
+| [F5](#u5) | GraphRAG |      |           |     |
+
+| ID        | Stage             | Dependency                | Failure mode                                              | Status              |
+| --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
+| [G1](#u1) | Neo4j |               |                   |  |
+| [G2](#u2) | Neo4j |                          |                 |  |
+| [G3](#u3) | Neo4j |                  |         |  |
+| [G4](#u4) | Neo4j |        |                 |      |
+| [G5](#u5) | Neo4j |      |           |     |
 
 ---
 

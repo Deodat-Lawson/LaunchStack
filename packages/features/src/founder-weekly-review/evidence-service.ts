@@ -1,4 +1,11 @@
-import type { FounderWeeklyReviewEvidenceItem } from "./contracts";
+import {
+    FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
+    FounderWeeklyReviewEvidenceSnapshotSchema,
+    type FounderWeeklyReviewEvidenceItem,
+    type FounderWeeklyReviewEvidenceSnapshot,
+    type ReportingPeriod,
+} from "./contracts";
+import { resolveReportingPeriodBounds } from "./reporting-period";
 import { and, asc, eq, gte, lt } from "drizzle-orm";
 import { getDb, type DbClient } from "@launchstack/core/db";
 import { document, documentVersions } from "@launchstack/core/db/schema";
@@ -44,6 +51,14 @@ export function mapDocumentVersionToEvidenceItem(
     };
 }
 
+export interface BuildFounderWeeklyReviewEvidenceSnapshotInput {
+    companyId: bigint;
+    reportingPeriod: ReportingPeriod;
+    workspaceTimezone: string;
+    capturedAt?: Date;
+    maxItems?: number;
+}
+
 export class FounderWeeklyReviewEvidenceService {
     constructor(private readonly db: DbClient = getDb()) {}
 
@@ -75,4 +90,79 @@ export class FounderWeeklyReviewEvidenceService {
             .orderBy(asc(documentVersions.createdAt), asc(documentVersions.id));
         return rows.map((row) => mapDocumentVersionToEvidenceItem(row));
     }
+
+    async buildEvidenceSnapshot(
+        input: BuildFounderWeeklyReviewEvidenceSnapshotInput
+    ): Promise<FounderWeeklyReviewEvidenceSnapshot> {
+        const { startInclusive, endExclusive } = resolveReportingPeriodBounds(
+            input.reportingPeriod,
+            input.workspaceTimezone
+        );
+
+        // only document_change exists right now
+        const collected = await this.collectDocumentChangeEvidence(
+            input.companyId,
+            startInclusive,
+            endExclusive
+        );
+
+        // more evidence can be merged later
+        const merged = [...collected];
+
+        // 4. Drop exact duplicates, keep distinct citations. (AC #5)
+        const deduped = dedupeEvidenceItems(merged);
+
+        // 5. Deterministic order, then cap at the schema's limit.
+        const maxItems = input.maxItems ?? 500;
+        const items = orderEvidenceItems(deduped).slice(0, maxItems);
+
+        // 6. Wrap in the envelope. Empty `items` is valid — an empty/partial
+        //    workspace returns a pack rather than throwing. (AC #6)
+        const snapshot = {
+            schemaVersion: FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
+            capturedAt: (input.capturedAt ?? new Date()).toISOString(),
+            reportingPeriod: input.reportingPeriod,
+            workspaceTimezone: input.workspaceTimezone,
+            items,
+            sourceWarnings: [],
+        };
+
+        // 7. Validate before returning — a malformed pack never leaves here.
+        return FounderWeeklyReviewEvidenceSnapshotSchema.parse(snapshot);
+    }
+}
+
+export function dedupeEvidenceItems(
+    items: FounderWeeklyReviewEvidenceItem[]
+): FounderWeeklyReviewEvidenceItem[] {
+    const seenIdentities = new Set<string>()
+
+    return items.filter(item => {
+        const identity = `${item.sourceType}:${item.sourceId}`
+
+        if (seenIdentities.has(identity)) {
+            return false
+        }
+
+        seenIdentities.add(identity)
+        return true
+    })
+}
+
+// order primarily based on createdAt timestamp, sourceId as tie breaker
+export function orderEvidenceItems(
+    items: FounderWeeklyReviewEvidenceItem[]
+): FounderWeeklyReviewEvidenceItem[] {
+    return [...items].sort((a, b) => {
+        // if timestamp is missing use empty string
+        const aTime = a.sourceTimestamp ?? "";
+        const bTime = b.sourceTimestamp ?? "";
+        if (aTime !== bTime) {
+            return aTime.localeCompare(bTime);
+        }
+
+        const identityA = `${a.sourceType}:${a.sourceId}`;
+        const identityB = `${b.sourceType}:${b.sourceId}`;
+        return identityA.localeCompare(identityB);
+    });
 }

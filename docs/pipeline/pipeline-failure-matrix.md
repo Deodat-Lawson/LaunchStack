@@ -64,26 +64,26 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 
 | ID        | Stage             | Dependency                | Failure mode                                              | Status              |
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
-| [D1](#u1) | Embed / Store | Embedding Provider (OpenAI or external sidecar `/embed`)              |                   |  |
-| [D2](#u2) | Embed / Store | Postgres + pgvector (`storeBatch`)                         |                 |  |
-| [D3](#u3) | Embed / Store | Postgres structure/metadata writes                 |         |  |
+| [D1](#d1) | Embed / Store | Embedding Provider (OpenAI or external sidecar `/embed`)              |   Embedding call fails in embedDocuments/embedQuery during step-d-batch-*                | Needs fix (high) |
+| [D2](#d2) | Embed / Store | Postgres + pgvector (`storeBatch`)                         |    Batch write fails after vectors computed; pipeline retries whole run             | Needs Discussion |
+| [D3](#d3) | Embed / Store | Postgres (`documentContextChunks` readback)                 |  Readback query fails or returns partial set used for downstream GraphRAG       | Needs Discussion |
 
 | ID        | Stage             | Dependency                | Failure mode                                              | Status              |
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
-| [E1](#u1) | Finalize | Postgres finalize path (`finalizeStorage`)              |                   |  |
-| [E2](#u2) | Finalize | Status model (`onFailure` + runtime flags)                         |                 |  |
-
-
-| ID        | Stage             | Dependency                | Failure mode                                              | Status              |
-| --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
-| [F1](#u1) | GraphRAG | External sidecar health (`SIDECAR_URL/health`)              |                   |  |
-| [F2](#u2) | GraphRAG | Entity extraction + Postgres `kg_*` writes                         |                 |  |
+| [E1](#e1) | Finalize | Postgres finalize path (`finalizeStorage`)              |  Finalize throws after successful embed/store                 | Needs fix (high) |
+| [E2](#e2) | Finalize | Failure/status model (`markFailureInDb`, Inngest retry semantics)                         |   Non-Inngest path can return failure result without DB failure mark unless flag enabled              | Needs Discussion |
 
 
 | ID        | Stage             | Dependency                | Failure mode                                              | Status              |
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
-| [G1](#u1) | Neo4j | Neo4j availability/config (`NEO4J_URI`, config, health)              |                   |  |
-| [G2](#u2) | Neo4j | Neo4j write operation (`syncDocumentToNeo4j`)                         |                 |  |
+| [F1](#f1) | GraphRAG | External sidecar health (`SIDECAR_URL/health`)              |   Sidecar unhealthy causes silent skip of entity extraction                | Needs Discussion |
+| [F2](#f2) | GraphRAG | Entity extraction + Postgres `kg_*` writes                         | `extractAndStoreEntities` throws; optional stage fails hard and can fail whole ingestion                | Needs fix (Medium-High) |
+
+
+| ID        | Stage             | Dependency                | Failure mode                                              | Status              |
+| --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
+| [G1](#g1) | Neo4j | Neo4j availability/config (`NEO4J_URI`, config, health)              |   Neo4j absent/unconfigured/unhealthy silently skips sync                | Working as intended |
+| [G2](#g2) | Neo4j | Neo4j write operation (`syncDocumentToNeo4j`)                         |    Sync throws and fails whole pipeline after finalize             | Needs Discussion |
 
 ---
 
@@ -255,3 +255,58 @@ Table-description LLM call fails or is unconfigured · OpenAI (via getOpenAIClie
 * What happens: `generateTableDescription` computes a rule-based fallback first, then wraps the optional OpenAI call in try/catch; any failure or missing config falls back cleanly.
 * Left behind: Nothing — chunking proceeds with a less-polished but usable description.
 * Notes: Good positive example of deliberate fail-soft design, worth citing in review. One unverified loose thread: `getOpenAI()` is called outside the try block — if `getOpenAIClient()` can itself throw rather than return `null`, that path is unprotected.
+
+### D1
+Embedding provider call fails during vectorization · Embedding provider (OpenAI or external index backend) · Needs fix (High)
+
+* What happens: In `vectorizeWithIndex`, each `step-d-batch-*` calls `embeddings.embedDocuments?.(...) ?? Promise.all(...embedQuery...)`. Any throw bubbles up and fails the ingestion run.
+* Left behind: `rootStructure` may already exist from `step-d-setup`; some earlier batches may already be stored, later ones not. On retry, duplicate/partial-write behavior depends on `storeBatch` idempotency (not enforced in this file).
+* Notes: Failure occurs after chunking, so retries can re-run expensive work.
+### D2
+`storeBatch` write failure after successful embedding for a batch · Postgres + pgvector (`storeBatch`) · Needs discussion
+
+* What happens: A batch can successfully produce vectors, then fail on `storeBatch(...)`, causing step failure.
+* Left behind: Prior batches may already be committed; current/remaining batches missing. Retry may re-embed and may duplicate previous rows if no uniqueness/idempotency guard exists in storage layer.
+* Notes: Consider per-batch idempotency key or deterministic upsert key to make retries safe.
+### D3
+Post-store readback for `storedSections` fails or is inconsistent · Postgres (`documentContextChunks`) · Needs discussion
+
+* What happens: After all batches, code re-queries `documentContextChunks` by `documentId` to build `storedSections` for Step F. Query failure throws.
+* Left behind: Embeddings may already be persisted; GraphRAG input construction fails, causing pipeline failure despite successful storage.
+* Notes: This tight coupling means optional Step F depends on a full readback of D outputs.
+### E1
+`finalizeStorage` fails after successful D writes · Postgres finalize path (`finalizeStorage`) · Needs fix (High)
+
+* What happens: `step-e-finalize` runs after D and can throw.
+* Left behind: Chunks/embeddings may already be stored, but document/job final status/metadata may remain unfinalized. On retry, duplicate finalize side effects depend on finalize idempotency.
+* Notes: Classic late-stage commit gap; worth ensuring finalize is idempotent and safely retryable.
+### E2
+Failure marking is runtime-flag dependent and can be skipped · Failure/status model (`markFailureInDb`, Inngest/runtime flags) · Needs discussion
+
+* What happens: In catch, DB failure mark happens only if `markFailureInDb` is true. Otherwise, non-Inngest path returns failure payload without status update in DB.
+* Left behind: Potential mismatch between returned failure and persisted job status.
+* Notes: Verify all production invocations set `markFailureInDb` as intended.
+### F1
+GraphRAG skipped when sidecar health check fails · Sidecar health (`SIDECAR_URL/health`) · Needs discussion
+
+* What happens: If `sidecarUrl` is set and `/health` is non-OK/unreachable, step F logs warning and returns (no throw).
+* Left behind: Ingestion succeeds without entity/relationship extraction; silent feature degradation except logs.
+* Notes: This is deliberate fail-soft behavior.
+### F2
+Entity extraction/write throws and fails whole ingestion · Entity extraction + Postgres `kg_*` writes · Needs fix (Medium-High)
+
+* What happens: Inside `step-f-graph-rag`, `extractAndStoreEntities(...)` exceptions are uncaught locally and bubble out.
+* Left behind: Core ingestion already finalized (E done), but optional graph stage failure can still fail the whole run.
+* Notes: Design tension: F is optional conceptually, fail-hard operationally.
+### G1
+Neo4j missing/unconfigured/unhealthy causes sync skip · Neo4j availability/config/health · Working as intended
+
+* What happens: If no `NEO4J_URI`, returns early. If `isNeo4jConfigured()` false or health check fails, logs warning and skips.
+* Left behind: Ingestion success with no Neo4j projection.
+* Notes: Explicit fail-soft design.
+### G2
+`syncDocumentToNeo4j` throw fails ingestion after finalize · Neo4j write operation (`syncDocumentToNeo4j`) · Needs discussion
+
+* What happens: `step-g-neo4j-sync` has no local try/catch around `syncDocumentToNeo4j`; throw bubbles and fails run.
+* Left behind: E and likely F may already be committed; Neo4j projection missing; overall run may still be marked failed depending on runtime flags.
+* Notes: Similar tension as F2; consider making G fail-soft like G1 health gating.

@@ -59,7 +59,6 @@ async function insertVersion(
     `);
 }
 
-// Reporting week (UTC keeps the assertions simple): 2026-02-16 .. 2026-02-22 inclusive.
 const REPORTING_PERIOD = { start: "2026-02-16", end: "2026-02-22" } as const;
 const START_BOUND = new Date("2026-02-16T00:00:00.000Z");
 const END_BOUND = new Date("2026-02-23T00:00:00.000Z");
@@ -72,6 +71,9 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
     let emptyCompany: bigint;
     let docA: bigint;
     let docB: bigint;
+    let companyC: bigint;
+    let docCProduct: bigint;
+    let docCFeedback: bigint;
 
     beforeAll(async () => {
         testDb = await createFounderWeeklyReviewTestDatabase();
@@ -92,6 +94,18 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
 
         // Company B: one version inside the window — must never leak into Company A.
         await insertVersion(testDb.db, docB, 1, "2026-02-18T10:00:00.000Z");
+
+        // Company C: one normal doc and one customer feedback doc, used to prove document_change / customer_feedback split
+        companyC = await insertCompany(testDb.db, "Gamma");
+        docCProduct = await insertDocument(testDb.db, companyC, "Product", "Gamma Product");
+        docCFeedback = await insertDocument(
+            testDb.db,
+            companyC,
+            "customer feedback",
+            "Gamma Feedback"
+        );
+        await insertVersion(testDb.db, docCProduct, 1, "2026-02-17T12:00:00.000Z");
+        await insertVersion(testDb.db, docCFeedback, 1, "2026-02-18T12:00:00.000Z");
     });
 
     afterAll(async () => {
@@ -145,5 +159,52 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
 
         expect(snapshot.items).toHaveLength(1);
         expect(snapshot.items[0]?.sourceId).toBe(`document-version:${docB}:1`);
+    });
+
+    it("classifies a normal document as document_change and excludes customer feedback", async () => {
+        const items = await service.collectDocumentChangeEvidence(
+            companyC,
+            START_BOUND,
+            END_BOUND
+        );
+
+        expect(items).toHaveLength(1);
+        expect(items[0]?.sourceId).toBe(`document-version:${docCProduct}:1`);
+        expect(items[0]?.sourceType).toBe("document_change");
+        // the customer-feedback doc must not show up here
+        expect(
+            items.some((i) => i.sourceId === `document-version:${docCFeedback}:1`)
+        ).toBe(false);
+    });
+
+    it("classifies a customer-feedback document as customer_feedback and excludes normal docs", async () => {
+        const items = await service.collectCustomerFeedbackEvidence(
+            companyC,
+            START_BOUND,
+            END_BOUND
+        );
+
+        expect(items).toHaveLength(1);
+        expect(items[0]?.sourceId).toBe(`document-version:${docCFeedback}:1`);
+        expect(items[0]?.sourceType).toBe("customer_feedback");
+        // the normal doc must not show up here
+        expect(
+            items.some((i) => i.sourceId === `document-version:${docCProduct}:1`)
+        ).toBe(false);
+    });
+
+    it("includes both source types in the snapshot without double-counting", async () => {
+        const snapshot = await service.buildEvidenceSnapshot({
+            companyId: companyC,
+            reportingPeriod: REPORTING_PERIOD,
+            workspaceTimezone: "UTC",
+        });
+
+        expect(snapshot.items).toHaveLength(2);
+        const sourceIdByType = Object.fromEntries(
+            snapshot.items.map((i) => [i.sourceType, i.sourceId])
+        );
+        expect(sourceIdByType.document_change).toBe(`document-version:${docCProduct}:1`);
+        expect(sourceIdByType.customer_feedback).toBe(`document-version:${docCFeedback}:1`);
     });
 });

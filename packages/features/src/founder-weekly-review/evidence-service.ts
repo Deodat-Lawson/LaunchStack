@@ -6,9 +6,11 @@ import {
     type ReportingPeriod,
 } from "./contracts";
 import { resolveReportingPeriodBounds } from "./reporting-period";
-import { and, asc, eq, gte, lt } from "drizzle-orm";
+import { and, asc, eq, gte, lt, ne } from "drizzle-orm";
 import { getDb, type DbClient } from "@launchstack/core/db";
 import { document, documentVersions } from "@launchstack/core/db/schema";
+
+const CUSTOMER_FEEDBACK_CATEGORY_NAME = "customer feedback"
 
 function normalizeText(value: string | null | undefined): string | null {
     const trimmed = value?.trim();
@@ -27,12 +29,13 @@ export interface DocumentVersionRow {
 }
 
 export function mapDocumentVersionToEvidenceItem(
-    row: DocumentVersionRow
+    row: DocumentVersionRow,
+    sourceType: FounderWeeklyReviewEvidenceItem["sourceType"] = "document_change"
 ): FounderWeeklyReviewEvidenceItem {
     const changelog = normalizeText(row.changelog);
 
     return {
-        sourceType: "document_change",
+        sourceType: sourceType,
         sourceId: `document-version:${row.documentId}:${row.versionNumber}`,
         title: row.documentTitle,
         sourceTimestamp: row.createdAt.toISOString(),
@@ -84,11 +87,42 @@ export class FounderWeeklyReviewEvidenceService {
                 and(
                     gte(documentVersions.createdAt, startInclusive),
                     lt(documentVersions.createdAt, endExclusive),
-                    eq(document.companyId, companyId)
+                    eq(document.companyId, companyId),
+                    ne(document.category, CUSTOMER_FEEDBACK_CATEGORY_NAME)
                 )
             )
             .orderBy(asc(documentVersions.createdAt), asc(documentVersions.id));
         return rows.map((row) => mapDocumentVersionToEvidenceItem(row));
+    }
+
+    async collectCustomerFeedbackEvidence(
+        companyId: bigint,
+        startInclusive: Date,
+        endExclusive: Date,
+    ): Promise<FounderWeeklyReviewEvidenceItem[]> {
+        const rows = await this.db
+            .select({
+                documentId: documentVersions.documentId,
+                documentTitle: document.title,
+                documentCategory: document.category,
+                versionId: documentVersions.id,
+                versionNumber: documentVersions.versionNumber,
+                uploadedBy: documentVersions.uploadedBy,
+                changelog: documentVersions.changelog,
+                createdAt: documentVersions.createdAt,
+            })
+            .from(documentVersions)
+            .innerJoin(document, eq(document.id, documentVersions.documentId))
+            .where(
+                and(
+                    gte(documentVersions.createdAt, startInclusive),
+                    lt(documentVersions.createdAt, endExclusive),
+                    eq(document.companyId, companyId),
+                    eq(document.category, CUSTOMER_FEEDBACK_CATEGORY_NAME)
+                )
+            )
+            .orderBy(asc(documentVersions.createdAt), asc(documentVersions.id));
+        return rows.map((row) => mapDocumentVersionToEvidenceItem(row, "customer_feedback"));
     }
 
     async buildEvidenceSnapshot(
@@ -99,25 +133,25 @@ export class FounderWeeklyReviewEvidenceService {
             input.workspaceTimezone
         );
 
-        // only document_change exists right now
-        const collected = await this.collectDocumentChangeEvidence(
+        const collectedDocumentChange = await this.collectDocumentChangeEvidence(
+            input.companyId,
+            startInclusive,
+            endExclusive
+        );
+        const collectedCustomerFeedback = await this.collectCustomerFeedbackEvidence(
             input.companyId,
             startInclusive,
             endExclusive
         );
 
         // more evidence can be merged later
-        const merged = [...collected];
+        const merged = [...collectedDocumentChange, ...collectedCustomerFeedback];
 
-        // 4. Drop exact duplicates, keep distinct citations. (AC #5)
         const deduped = dedupeEvidenceItems(merged);
 
-        // 5. Deterministic order, then cap at the schema's limit.
         const maxItems = input.maxItems ?? 500;
         const items = orderEvidenceItems(deduped).slice(0, maxItems);
 
-        // 6. Wrap in the envelope. Empty `items` is valid — an empty/partial
-        //    workspace returns a pack rather than throwing. (AC #6)
         const snapshot = {
             schemaVersion: FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
             capturedAt: (input.capturedAt ?? new Date()).toISOString(),
@@ -127,7 +161,6 @@ export class FounderWeeklyReviewEvidenceService {
             sourceWarnings: [],
         };
 
-        // 7. Validate before returning — a malformed pack never leaves here.
         return FounderWeeklyReviewEvidenceSnapshotSchema.parse(snapshot);
     }
 }

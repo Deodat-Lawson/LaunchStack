@@ -30,8 +30,6 @@ export function resolveReportingPeriodBounds(
     };
 }
 
-// dayjs.tz throws dayjs's own error for a bad zone; validate up front so callers
-// get a clear, feature-specific message instead.
 function assertValidTimeZone(timeZone: string): void {
     try {
         new Intl.DateTimeFormat("en-US", { timeZone });

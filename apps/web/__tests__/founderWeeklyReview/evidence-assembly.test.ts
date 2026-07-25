@@ -1,5 +1,6 @@
 import {
     dedupeEvidenceItems,
+    FounderWeeklyReviewEvidenceConflictError,
     orderEvidenceItems,
     type FounderWeeklyReviewEvidenceItem,
 } from "@launchstack/features/founder-weekly-review";
@@ -20,25 +21,22 @@ function makeItem(
 }
 
 describe("dedupeEvidenceItems", () => {
-    it("collapses items with the same sourceType+sourceId, keeping the first", () => {
+    it("collapses canonically identical items with the same sourceId", () => {
         const result = dedupeEvidenceItems([
             makeItem("a", "2026-01-01T00:00:00.000Z"),
-            makeItem("a", "2026-02-01T00:00:00.000Z"), // duplicate identity
+            makeItem("a", "2026-01-01T00:00:00.000Z"),
             makeItem("b"),
         ]);
 
         expect(result.map((i) => i.sourceId)).toEqual(["a", "b"]);
-        // the FIRST "a" survives, so its timestamp is the January one
         expect(result[0]?.sourceTimestamp).toBe("2026-01-01T00:00:00.000Z");
     });
 
-    it("keeps items that share a sourceId but differ in sourceType", () => {
-        const result = dedupeEvidenceItems([
+    it("rejects sourceId conflicts even across source types", () => {
+        expect(() => dedupeEvidenceItems([
             makeItem("x", undefined, "document_change"),
             makeItem("x", undefined, "customer_feedback"),
-        ]);
-
-        expect(result).toHaveLength(2);
+        ])).toThrow(FounderWeeklyReviewEvidenceConflictError);
     });
 
     it("returns an empty array unchanged", () => {
@@ -62,6 +60,17 @@ describe("orderEvidenceItems", () => {
         const result = orderEvidenceItems([makeItem("z", ts), makeItem("a", ts)]);
 
         expect(result.map((i) => i.sourceId)).toEqual(["a", "z"]);
+    });
+
+    it("orders source-type ties with ordinal comparison, not locale collation", () => {
+        const ts = "2026-01-01T00:00:00.000Z";
+        const result = orderEvidenceItems([
+            makeItem("same", ts, "github_activity"),
+            makeItem("same", ts, "customer_feedback"),
+        ]);
+        expect(result.map((item) => item.sourceType)).toEqual([
+            "customer_feedback", "github_activity",
+        ]);
     });
 
     it("sorts items without a timestamp first", () => {

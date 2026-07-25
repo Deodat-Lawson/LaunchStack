@@ -50,6 +50,30 @@ Every repository method accepts `companyId` explicitly and includes it in SQL pr
 - Evidence snapshot: `founder-weekly-review-evidence/v1`
 - Review payload: `founder-weekly-review/v1`
 
+## Evidence collection (LAU-6)
+
+Evidence `sourceType` is a provenance and citation-safety classification, not a
+generic document label. The production collector currently emits:
+
+- `document_change` for every company-scoped document version created in the
+  reporting period;
+- `customer_feedback` for cited, exact-version sections of documents whose
+  stored category is exactly `Customer Feedback`; and
+- `founder_context` for non-empty request-time founder input, with the actor
+  and stable request/context entry identity retained as provenance.
+
+`manual_note` is intentionally not collected: notes are user-owned and the
+current schema/API has no workspace-visible sharing policy. `github_activity`
+is intentionally not collected: the repository has GitHub archive upload and
+repo-explainer flows, but no company-scoped commit/PR event model.
+
+Every snapshot has globally unique `sourceId` values because citations refer to
+bare source IDs. Exact duplicate items collapse; conflicting duplicates fail
+collection. Optional-source absence and result truncation become bounded source
+warnings, while successful evidence remains in the snapshot. The evidence
+collector acquires and normalizes evidence only; it does not own review
+lifecycle, dispatch, persistence, or generation.
+
 ## Current V1 product decision
 
 Multiple runs are allowed for the same company and reporting period. LAU-5 does not enforce period uniqueness or a single published review per period.

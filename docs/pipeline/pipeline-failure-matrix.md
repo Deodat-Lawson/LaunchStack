@@ -37,6 +37,31 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 | [U8](#u8) | Upload / dispatch | Inngest + Postgres        | Event dispatched before / without durable `ocr_jobs` row  | Needs fix (High)    |
 | [U9](#u9) | Upload / dispatch | Postgres + Inngest        | Client retry or concurrent upload creates duplicate trees | Needs discussion    |
 
+
+| ID        | Stage | Dependency                | Failure mode                                                    | Status                   |
+| --------- | ----- | -------------------------- | ----------------------------------------------------------------- | ------------------------- |
+| [A1](#a1) | Route | ocr-router sidecar (external) | Sidecar unreachable/non-200 → silent fallback provider, `pageCount` forced to `0` | Needs fix (Medium-High)   |
+| [A2](#a2) | Route | Object storage + `pdf-lib`  | `getPageCount` fails, silently defaults to page count `1`         | Needs discussion (Low)    |
+| [A3](#a3) | Route | —                           | Invalid/unrecognized `preferredProvider` silently ignored, falls back to auto-detection | Working as intended       |
+
+
+| ID        | Stage            | Dependency                         | Failure mode                                                                                  | Status            |
+| --------- | ---------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------ |
+| [B1](#b1) | OCR / Normalize  | Object storage + `pdfjs-serverless` | `processNativePDF` throws on storage-download failure or corrupted/unparseable PDF               | Needs fix (High)   |
+| [B2](#b2) | OCR / Normalize  | Object storage (HEAD request)       | Content-type sniffing for non-`.pdf`-named URLs fails silently                                    | Needs discussion (Low) |
+| [B3](#b3) | OCR / Normalize  | —                                    | Unrecognized `selectedProvider` silently falls back to native PDF extraction                      | Working as intended |
+| [B4](#b4) | OCR / Normalize  | Azure Document Intelligence (external) | 5 unhandled throw points + 120s poll timeout                                                   | Needs fix (High)   |
+| [B5](#b5) | OCR / Normalize  | ocr-worker service (self-hosted)    | Unreachable, 10-min timeout, or non-200 response                                                  | Needs fix (High)   |
+
+
+| ID        | Stage | Dependency                     | Failure mode                                                                 | Status                      |
+| --------- | ----- | -------------------------------- | -------------------------------------------------------------------------------- | ----------------------------- |
+| [C1](#c1) | Chunk | —                                 | `chunkDocument` / `chunkCodeFile` throws on malformed or unexpected page content | Needs fix (High)              |
+| [C2](#c2) | Chunk | Postgres                         | `loadPipelineState` throws when `"pages"` key is missing from `ocr_jobs.ocrResult` | Needs discussion (Low probability) |
+| [C3](#c3) | Chunk | Postgres                         | `savePipelineState`'s read-then-write on `ocrResult` is not atomic               | Needs discussion              |
+| [C4](#c4) | Chunk | OpenAI (via `getOpenAIClient`)   | Table-description LLM call fails or is unconfigured                              | Working as intended           |
+
+
 | ID        | Stage             | Dependency                | Failure mode                                              | Status              |
 | --------- | ----------------- | ------------------------- | --------------------------------------------------------- | ------------------- |
 | [D1](#u1) | Embed / Store | Embedding Provider (OpenAI or external sidecar `/embed`)              |                   |  |
@@ -140,3 +165,93 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 - **Left behind:** Duplicate document trees; file processed 2× (double work/credits). Silent — no constraint violation.
 - **Notes:** Re-upload may be intended product behavior. Sharp case: [U7](#u7) 500 after commit → client retry → duplicates. Concurrent same-file uploads don’t collide on `versionNumber=1` because each gets a distinct `documentId`.
 
+### A1
+Sidecar unreachable/non-200 → silent fallback provider, `pageCount` forced to `0` · ocr-router sidecar (external) · Needs fix (Medium-High)
+
+* What happens: `determineDocumentRouting` (`[complexity.ts:L?]`) wraps its sidecar call in its own try/catch. On any failure it logs a warning and returns a synthetic fallback: a static provider from `getDefaultOCRProvider()` (env-config only, no document inspection), `confidence: 0.5`, `pageCount: 0`. Never throws to its caller.
+* Left behind: No error surfaces anywhere except a log line. Routing quality silently degrades (no vision-based complexity detection) for every document processed during an outage. `pageCount: 0` flows into `createRootStructure`'s `endPage` field downstream.
+* Notes: Opposite failure shape from the fail-hard stages — degrades silently instead of getting stuck. Worth discussing whether `pageCount: 0` was intentional and whether degraded routing should be surfaced somewhere.
+
+### A2
+`getPageCount` fails, silently defaults to page count `1` · Object storage + pdf-lib · Needs discussion (Low)
+
+* What happens: `getPageCount` (`[processor.ts:L?]`) wraps the PDF page-count read in try/catch. On failure, logs a warning and returns `1`. Only runs on the explicit `preferredProvider` branch of `routeDocument`.
+* Left behind: No error surfaces; a document with any real page count could get silently recorded with `totalPages: 1` downstream.
+* Notes: Low severity alone, but a silent data-correctness gap. Worth confirming whether wrong page counts affect anything downstream (search, UI, credit calculations).
+
+### A3
+Invalid/unrecognized `preferredProvider` value silently ignored, falls back to auto-detection · — · Working as intended
+
+* What happens: `routeDocument`'s entry check (`preferred === "NATIVE_PDF" || isValidOCRProvider(preferred)`) simply evaluates false for a bad value and falls through to auto-detection — no error, no warning.
+* Left behind: Caller gets no feedback that their explicit preference was ignored.
+* Notes: Likely fine as-is, but worth flagging since a typo'd provider name fails completely silently.
+
+### B1
+`processNativePDF` throws on storage-download failure or corrupted/unparseable PDF · Object storage + pdfjs-serverless · Needs fix (High)
+
+* What happens: No error handling anywhere in `processNativePDF` (`[processor.ts:L?]`). Failed download throws explicitly; malformed PDF causes `pdfjs-serverless`'s `getDocument(...).promise` to reject. Propagates unhandled to the outer pipeline catch → Inngest retry (5×) → `onFailure`.
+* Left behind: `ocr_jobs.status` stuck at `queued`; `document.ocrProcessed` incorrectly set `true` after retries exhaust; real error only in `ocrMetadata`.
+* Notes: Also reachable indirectly via the provider-switch `default` case (unrecognized provider falls back to `processNativePDF`), which could hit this on non-PDF content. Cross-reference with B3.
+
+### B2
+Content-type sniffing for non-`.pdf`-named URLs fails silently · Object storage (HEAD request) · Needs discussion (Low)
+
+* What happens: `normalizeDocument`'s `isPdf` check falls back to `.catch(() => false)` on a HEAD request if the URL doesn't literally end in `.pdf`.
+* Left behind: A real PDF served without a `.pdf` extension could silently lose VLM-enrichment eligibility if the HEAD check fails.
+* Notes: Low stakes since VLM enrichment is already optional.
+
+### B3
+Unrecognized `selectedProvider` silently falls back to native PDF extraction · — · Working as intended
+
+* What happens: `normalizeDocument`'s provider `switch` default case logs a warning and calls `processNativePDF` regardless of actual file type.
+* Left behind: Could cascade into B1 if the content isn't actually a valid PDF.
+* Notes: Cross-reference with B1.
+
+### B4
+Azure Document Intelligence adapter fails: missing credentials, fetch-document failure, submit failure, poll failure, or 120s poll timeout · Azure Document Intelligence (external) · Needs fix (High)
+
+* What happens: `AzureDocumentIntelligenceAdapter` (`[azureAdapter.ts:L?]`) throws unhandled at five distinct points — none locally caught. Includes a manual 60-poll × 2s (120s total) timeout that throws if Azure never resolves.
+* Left behind: Same "queued forever" signature as B1.
+* Notes: Two stacked timeout layers — Azure's own 120s internal timeout vs. Inngest's 120-minute function timeout. Worth checking whether re-polling for 120s on each of 5 Inngest retries is an efficient use of the retry budget.
+
+### B5
+Self-hosted OCR worker (Marker/Docling) unreachable, times out (10 min), or returns non-200 · ocr-worker service (self-hosted) · Needs fix (High)
+
+* What happens: `OssOCRAdapter.uploadDocument` (`[ossAdapter.ts:L?]`) wraps fetch in try/catch; network failure or the 10-minute `AbortController` timeout throws a rewrapped error; non-OK response also throws. Nothing swallowed.
+* Left behind: Same signature as B1/B4.
+* Notes: Third provider implementation confirming the same fail-hard shape across native PDF, Azure, and OSS worker. Landing.AI/Datalab assumed consistent but not independently verified.
+
+### X1
+`MARKER` provider is dead code / mislabeled as `DOCLING` · — · Needs fix (Medium — correctness bug)
+
+* What happens: `processor.ts`'s provider switch routes both `"MARKER"` and `"DOCLING"` cases to `processWithDocling`; separately, `createMarkerAdapter` in `ossAdapter.ts` hardcodes `"DOCLING"` regardless of intent.
+* Left behind: No crash — any document routed to "MARKER" is silently processed via Docling instead. Invisible without reading source.
+* Notes: Not a failure/retry issue — a genuine functional bug found while tracing. Flag to whoever owns OCR provider config.
+
+### C1
+`chunkDocument` / `chunkCodeFile` throws on malformed or unexpected page content · — · Needs fix (High)
+
+* What happens: No error handling in `chunkPages` or `chunkDocument`. Any throw propagates to `step-c-chunking` → outer catch → Inngest retry cycle.
+* Left behind: Same "queued forever" signature.
+* Notes: Exact trigger conditions unverified — would need deeper read of edge cases in `chunker.ts`/`code-chunker.ts`.
+
+### C2
+`loadPipelineState` throws when `"pages"` key is missing from `ocr_jobs.ocrResult` · Postgres · Needs discussion (Low probability)
+
+* What happens: Explicit, deliberate throw if the expected state key isn't present. Not retried by `withDbRetry` (not a transient DB error) — only Inngest's step retry governs recovery.
+* Left behind: Same fail-hard signature if retries exhaust; unlikely in practice given sequential step execution.
+* Notes: Confirm with the team whether any realistic scenario (replay, race, manual re-trigger) could actually hit this.
+
+### C3
+`savePipelineState`'s read-then-write on `ocrResult` is not atomic · Postgres · Needs discussion
+
+* What happens: Reads current JSON blob, merges new key locally, writes whole object back — a classic lost-update race if ever concurrent.
+* Left behind: Unlikely under normal sequential Inngest execution; latent risk rather than confirmed bug.
+* Notes: Worth discussing given it sits in some tension with the architecture doc's idempotency claims.
+
+### C4
+Table-description LLM call fails or is unconfigured · OpenAI (via getOpenAIClient) · Working as intended
+
+* What happens: `generateTableDescription` computes a rule-based fallback first, then wraps the optional OpenAI call in try/catch; any failure or missing config falls back cleanly.
+* Left behind: Nothing — chunking proceeds with a less-polished but usable description.
+* Notes: Good positive example of deliberate fail-soft design, worth citing in review. One unverified loose thread: `getOpenAI()` is called outside the try block — if `getOpenAIClient()` can itself throw rather than return `null`, that path is unprotected.

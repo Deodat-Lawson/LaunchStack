@@ -109,6 +109,7 @@
     "@langchain/core": "^0.3.74",
     "@langchain/openai": "^0.6.11",
     "@launchstack/core": "workspace:*",
+    "dayjs": "^1.11.18",
     "docxtemplater": "^3.68.3",
     "drizzle-orm": "^0.45.1",
     "openai": "^4.62.1",

@@ -23,6 +23,10 @@ export const founderWeeklyReviewRunStatusEnum = [
 ] as const;
 
 export const founderWeeklyReviewOperationTypeEnum = ["retry"] as const;
+export const founderWeeklyReviewDispatchOperationTypeEnum = ["create", "retry"] as const;
+export const founderWeeklyReviewDispatchStatusEnum = [
+    "pending", "dispatching", "dispatched", "failed",
+] as const;
 
 export const founderWeeklyReviewRuns = pgTable(
     "founder_weekly_review_runs",
@@ -130,7 +134,47 @@ export const founderWeeklyReviewOperations = pgTable(
     })
 );
 
+/** Durable handoff from LAU-5 lifecycle writes to the Inngest event bus. */
+export const founderWeeklyReviewDispatches = pgTable(
+    "founder_weekly_review_dispatches",
+    {
+        id: varchar("id", { length: 64 }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" }).notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        runId: varchar("run_id", { length: 64 }).notNull()
+            .references(() => founderWeeklyReviewRuns.id, { onDelete: "cascade" }),
+        operationType: varchar("operation_type", {
+            length: 16,
+            enum: founderWeeklyReviewDispatchOperationTypeEnum,
+        }).notNull(),
+        operationKey: varchar("operation_key", { length: 128 }).notNull(),
+        eventId: varchar("event_id", { length: 128 }).notNull(),
+        generationJobId: varchar("generation_job_id", { length: 128 }).notNull(),
+        generationClaimId: varchar("generation_claim_id", { length: 128 }).notNull(),
+        status: varchar("status", { length: 16, enum: founderWeeklyReviewDispatchStatusEnum })
+            .notNull().default("pending"),
+        attemptCount: integer("attempt_count").notNull().default(0),
+        availableAt: timestamp("available_at", { withTimezone: true }).notNull()
+            .default(sql`CURRENT_TIMESTAMP`),
+        dispatchedAt: timestamp("dispatched_at", { withTimezone: true }),
+        lastErrorCode: varchar("last_error_code", { length: 128 }),
+        createdAt: timestamp("created_at", { withTimezone: true }).notNull()
+            .default(sql`CURRENT_TIMESTAMP`),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+    },
+    (table) => ({
+        operationUnique: uniqueIndex("founder_weekly_review_dispatches_run_operation_key_unique")
+            .on(table.runId, table.operationType, table.operationKey),
+        eventUnique: uniqueIndex("founder_weekly_review_dispatches_event_id_unique").on(table.eventId),
+        pendingIdx: index("founder_weekly_review_dispatches_pending_idx")
+            .on(table.status, table.availableAt, table.createdAt),
+        companyRunIdx: index("founder_weekly_review_dispatches_company_run_idx")
+            .on(table.companyId, table.runId),
+    })
+);
+
 export type FounderWeeklyReviewRunRow = InferSelectModel<typeof founderWeeklyReviewRuns>;
 export type FounderWeeklyReviewOperationRow = InferSelectModel<
     typeof founderWeeklyReviewOperations
 >;
+export type FounderWeeklyReviewDispatchRow = InferSelectModel<typeof founderWeeklyReviewDispatches>;

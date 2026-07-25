@@ -55,6 +55,12 @@ export const qaRequestCounter = new Counter({
     registers: [metricsRegistry]
 });
 
+export const founderWeeklyReviewJobsEnqueued = new Counter({ name: "pdr_founder_weekly_review_jobs_enqueued_total", help: "Founder review jobs enqueued", labelNames: ["operation"], registers: [metricsRegistry] });
+export const founderWeeklyReviewGenerationTotal = new Counter({ name: "pdr_founder_weekly_review_generation_total", help: "Founder review generations by result", labelNames: ["result", "error_class"], registers: [metricsRegistry] });
+export const founderWeeklyReviewRetries = new Counter({ name: "pdr_founder_weekly_review_retries_total", help: "Founder review retries", registers: [metricsRegistry] });
+export const founderWeeklyReviewCitationFailures = new Counter({ name: "pdr_founder_weekly_review_citation_validation_failures_total", help: "Founder review citation validation failures", registers: [metricsRegistry] });
+export const founderWeeklyReviewStageDuration = new Histogram({ name: "pdr_founder_weekly_review_stage_duration_seconds", help: "Founder review stage duration", labelNames: ["stage", "result"], buckets: [0.1, 0.5, 1, 5, 15, 60, 300], registers: [metricsRegistry] });
+
 export async function getMetricsSnapshot(): Promise<string> {
     return metricsRegistry.metrics();
 }

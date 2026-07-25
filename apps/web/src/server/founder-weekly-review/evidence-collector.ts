@@ -1,4 +1,9 @@
-import type { FounderWeeklyReviewEvidenceSnapshot, ReportingPeriod } from "@launchstack/features/founder-weekly-review";
+import {
+    FounderWeeklyReviewEvidenceService,
+    FounderWeeklyReviewEvidenceSnapshotSchema,
+    type FounderWeeklyReviewEvidenceSnapshot,
+    type ReportingPeriod,
+} from "@launchstack/features/founder-weekly-review";
 
 export interface FounderWeeklyReviewEvidenceCollector {
     collectFounderWeeklyReviewEvidence(input: {
@@ -6,6 +11,10 @@ export interface FounderWeeklyReviewEvidenceCollector {
         reportingPeriod: ReportingPeriod;
         workspaceTimezone: string;
         founderContext?: string;
+        /** LAU-6 records request-time founder context against this actor. */
+        actor: { externalUserId: string };
+        /** Stable identity makes idempotent founder context source IDs stable. */
+        requestKey: string;
     }): Promise<FounderWeeklyReviewEvidenceSnapshot>;
 }
 
@@ -22,3 +31,34 @@ export const unavailableFounderWeeklyReviewEvidenceCollector: FounderWeeklyRevie
         throw new FounderWeeklyReviewEvidenceCollectorUnavailableError();
     },
 };
+
+/**
+ * App adapter over LAU-6's canonical workspace collector.  This is kept as an
+ * interface boundary deliberately: LAU-8 can compose github_activity here
+ * without changing routes, persistence, or the generation worker.
+ */
+export class CanonicalFounderWeeklyReviewEvidenceCollector implements FounderWeeklyReviewEvidenceCollector {
+    constructor(private readonly service = new FounderWeeklyReviewEvidenceService()) {}
+
+    async collectFounderWeeklyReviewEvidence(input: {
+        companyId: bigint;
+        reportingPeriod: ReportingPeriod;
+        workspaceTimezone: string;
+        founderContext?: string;
+        actor: { externalUserId: string };
+        requestKey: string;
+    }): Promise<FounderWeeklyReviewEvidenceSnapshot> {
+        const snapshot = await this.service.collectFounderWeeklyReviewEvidence({
+            companyId: input.companyId,
+            reportingPeriod: input.reportingPeriod,
+            workspaceTimezone: input.workspaceTimezone,
+            founderContext: input.founderContext,
+            actor: input.actor,
+            requestKey: input.requestKey,
+        });
+        return FounderWeeklyReviewEvidenceSnapshotSchema.parse(snapshot);
+    }
+}
+
+export const canonicalFounderWeeklyReviewEvidenceCollector =
+    new CanonicalFounderWeeklyReviewEvidenceCollector();

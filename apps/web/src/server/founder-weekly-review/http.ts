@@ -18,5 +18,6 @@ export function safeFounderWeeklyReviewError(error: unknown) {
     if (code === "not_found") return NextResponse.json({ error: "Not found" }, { status: 404 });
     if (code === "invalid_transition" || code === "conflict") return NextResponse.json({ error: "Conflict" }, { status: 409 });
     if (code === "invalid_payload") return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    if (code === "evidence_collector_unavailable" || code === "infrastructure_unavailable") return NextResponse.json({ error: "Generation unavailable" }, { status: 503 });
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 }

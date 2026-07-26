@@ -7,7 +7,7 @@
 [![CI](https://github.com/launchstack/launchstack/actions/workflows/CI.yml/badge.svg)](https://github.com/launchstack/launchstack/actions/workflows/CI.yml)
 [![types](https://img.shields.io/badge/types-TypeScript-blue.svg)](https://www.typescriptlang.org/)
 
-[Quickstart](#quickstart) · [Packages](#whats-in-the-box) · [Architecture](#architecture) · [Reference app](#reference-app) · [Contributing](CONTRIBUTING.md) · [Discussions](https://github.com/launchstack/launchstack/discussions)
+[Quickstart](#quickstart) · [Packages](#whats-in-the-box) · [Architecture](#architecture) · [Document pipeline](#document-ingestion-pipeline) · [Reference app](#reference-app) · [Contributing](CONTRIBUTING.md) · [Discussions](https://github.com/launchstack/launchstack/discussions)
 
 ---
 
@@ -87,6 +87,13 @@ Core exposes four **ports** that the host wires up. Features depend only on thes
 - **Features** can read `process.env`, but cannot import from the host app.
 - **Host** owns env, auth, routing, and implements the ports.
 - ESLint enforces these boundaries — see [`eslint.config.js`](eslint.config.js).
+
+### Document ingestion pipeline
+
+How a document moves from upload through OCR, chunking, embeddings, and GraphRAG — including persisted states and known failure modes:
+
+- [`docs/pipeline/pipeline-architecture.md`](docs/pipeline/pipeline-architecture.md) — stage map, stores, and how to read document/job status
+- [`docs/pipeline/pipeline-failure-matrix.md`](docs/pipeline/pipeline-failure-matrix.md) — failure-mode index (filter **Needs fix**) with detail cards per stage
 
 ---
 

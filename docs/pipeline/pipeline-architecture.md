@@ -1,6 +1,8 @@
 # Document Ingestion Pipeline
 
-> Grounded in `main` as of 2026-07-19. 
+> Grounded in `main` as of 2026-07-19.
+>
+> Companion: [pipeline-failure-matrix.md](./pipeline-failure-matrix.md) · Linked from the [root README](../../README.md#document-ingestion-pipeline).
 
 ---
 

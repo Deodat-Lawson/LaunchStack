@@ -257,6 +257,8 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
     href: "/employer/settings" },
   { id: "deploy",    label: "Self-host / BYOK",  Icon: IconBolt,                desc: "Vercel, Docker, your own keys",
     href: "/employer/settings#byok" },
+  { id: "review", label: "Weekly Review",        Icon: IconMegaphone,           desc: "Generate and review company insights", 
+    href: "/employer/founder-weekly-review" },
 ] as const;
 
 /**
@@ -295,14 +297,14 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
     id: "tools",
     label: "Tools",
     features: [
-      { id: "draft",       label: "Templated Drafts",    Icon: IconPen,        desc: "Generate new docs from templates tuned to your sources" },
-      { id: "rewrite",     label: "Rewrite",             Icon: IconSparkle,    desc: "Improve existing prose with a diff-first rewrite" },
-      { id: "notes",       label: "Notebook",            Icon: IconNote,       desc: "Freeform notes that span every source" },
-      { id: "workflows",   label: "Workflow Generation", Icon: IconWorkflow,   desc: "Chain source-aware steps across your sources", comingSoon: true },
-      { id: "video-gen",   label: "Video Generation",    Icon: IconVideo,      desc: "Generate videos grounded in your knowledge base",     comingSoon: true },
-      { id: "image-gen",   label: "Image Generation",    Icon: IconImage,      desc: "Generate images from prompts grounded in your sources", comingSoon: true },
-      { id: "audio-gen",   label: "Audio Generation",    Icon: IconAudio,      desc: "Narrate, summarize, or voice-over your content",      comingSoon: true },
-      { id: "marketing",   label: "Marketing Pipeline",  Icon: IconMegaphone,  desc: "Multi-channel campaigns from your company knowledge" },
+      { id: "draft",       label: "Templated Drafts",      Icon: IconPen,       desc: "Generate new docs from templates tuned to your sources" },
+      { id: "rewrite",     label: "Rewrite",               Icon: IconSparkle,   desc: "Improve existing prose with a diff-first rewrite" },
+      { id: "notes",       label: "Notebook",              Icon: IconNote,      desc: "Freeform notes that span every source" },
+      { id: "workflows",   label: "Workflow Generation",   Icon: IconWorkflow,  desc: "Chain source-aware steps across your sources", comingSoon: true },
+      { id: "video-gen",   label: "Video Generation",      Icon: IconVideo,     desc: "Generate videos grounded in your knowledge base",     comingSoon: true },
+      { id: "image-gen",   label: "Image Generation",      Icon: IconImage,     desc: "Generate images from prompts grounded in your sources", comingSoon: true },
+      { id: "audio-gen",   label: "Audio Generation",      Icon: IconAudio,     desc: "Narrate, summarize, or voice-over your content",      comingSoon: true },
+      { id: "marketing",   label: "Marketing Pipeline",    Icon: IconMegaphone, desc: "Multi-channel campaigns from your company knowledge" },
     ],
   },
   {
@@ -314,6 +316,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
       { id: "settings",   label: "Company Settings",  Icon: IconSettings,   desc: "Embedding model, API keys, workspace preferences",
         companyOnly: true },
       { id: "analytics",  label: "Analytics",         Icon: IconChart,      desc: "Queries, accuracy, gap trends" },
+      { id: "review",     label: "Weekly Review",     Icon: IconMegaphone,  desc: "Generate and review company insights"},
     ],
   },
 ];

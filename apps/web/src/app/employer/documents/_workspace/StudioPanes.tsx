@@ -62,6 +62,12 @@ const MarketingPipelineWorkspace = dynamic(
   { loading: () => <LoadingPage /> },
 );
 
+const FounderWeeklyReviewView = dynamic(
+  () =>
+    import("~/app/employer/founder-weekly-review/FounderWeeklyReviewView").then((m) => m.FounderWeeklyReviewView),
+  { loading: () => <LoadingPage /> },
+);
+
 interface PaneProps {
   onClose: () => void;
 }
@@ -627,6 +633,14 @@ export function WorkflowsPane({ onClose }: PaneProps) {
   );
 }
 
+export function FounderWeeklyReviewPane(_: PaneProps) {
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+      <FounderWeeklyReviewView embedded />
+    </div>
+  );
+}
+
 export function DefaultLinkPane({
   onClose,
   eyebrow,
@@ -740,6 +754,8 @@ export function renderStudioPane(
       return <CompanySettingsPane onClose={onClose} />;
     case "analytics":
       return <AnalyticsPane onClose={onClose} />;
+    case "review":
+      return <FounderWeeklyReviewPane onClose={onClose} />;
     default:
       if (feature.comingSoon) {
         return (

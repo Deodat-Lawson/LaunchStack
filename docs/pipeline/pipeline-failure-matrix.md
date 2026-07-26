@@ -1,6 +1,6 @@
 # Pipeline Failure Matrix
 
-> Companion to `[pipeline-architecture.md](./pipeline-architecture.md)`.
+> Companion to [`pipeline-architecture.md`](./pipeline-architecture.md) · Linked from the [root README](../../README.md#document-ingestion-pipeline).
 > Stage names match that doc. Cite failures by stable ID (e.g. `U7`) in tickets/PRs.
 
 **How to use:** skim the [Index](#index) for backlog (filter **Needs fix**). Open a detail card for mechanics and left-behind state.

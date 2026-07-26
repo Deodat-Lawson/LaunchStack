@@ -10,7 +10,9 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  AlertCircle,
   Copy,
+  ExternalLink,
   FileText,
   Hash,
   Loader2,
@@ -18,6 +20,7 @@ import {
   MessageSquareText,
   Pencil,
   Plus,
+  Send,
   SkipForward,
   Sparkles,
   Target,
@@ -1054,6 +1057,9 @@ export function MarketingPipelineWorkspace({
     handleCopy,
     runPipeline,
     cancelPipeline,
+    publishing,
+    publishResult,
+    publishPost,
     pipelineSteps,
     thinkingLog,
     generationStartTime,
@@ -1427,7 +1433,7 @@ export function MarketingPipelineWorkspace({
                           </button>
                           <button
                             type="button"
-                            className={styles.actionPrimary}
+                            className={styles.actionSecondary}
                             onClick={handleCopy}
                             disabled={!editableMessage.trim()}
                           >
@@ -1436,7 +1442,70 @@ export function MarketingPipelineWorkspace({
                               ? "Copied!"
                               : `Copy to ${PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? "platform"}`}
                           </button>
+                          <button
+                            type="button"
+                            className={styles.actionPrimary}
+                            onClick={() => void publishPost()}
+                            disabled={!editableMessage.trim() || publishing}
+                            title={`Publish this post directly to ${PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? "the platform"}`}
+                          >
+                            {publishing ? (
+                              <Loader2 size={14} className={styles.spinIcon} />
+                            ) : (
+                              <Send size={14} />
+                            )}
+                            {publishing
+                              ? "Publishing…"
+                              : `Publish to ${PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? "platform"}`}
+                          </button>
                         </div>
+
+                        {publishResult && (
+                          <div
+                            role="status"
+                            style={{
+                              marginTop: 10,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              fontSize: 13,
+                              color: publishResult.success ? "#15803d" : "#b91c1c",
+                            }}
+                          >
+                            {publishResult.success ? (
+                              <>
+                                <Check size={15} />
+                                <span>
+                                  Published to{" "}
+                                  {PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ??
+                                    "the platform"}
+                                  .
+                                </span>
+                                {publishResult.postUrl && (
+                                  <a
+                                    href={publishResult.postUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                      gap: 4,
+                                      color: "inherit",
+                                      textDecoration: "underline",
+                                    }}
+                                  >
+                                    View post <ExternalLink size={12} />
+                                  </a>
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                <AlertCircle size={15} />
+                                <span>{publishResult.error}</span>
+                              </>
+                            )}
+                          </div>
+                        )}
 
                         <Sheet open={showRewriteSheet} onOpenChange={setShowRewriteSheet}>
                           <SheetContent

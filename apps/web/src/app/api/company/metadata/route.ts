@@ -37,15 +37,16 @@ export async function GET() {
             );
         }
 
+        const activeCompanyId = await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId);
         const [result] = await db
-            .select({ id: users.id,
+            .select({
                 metadata: companyMetadata.metadata,
                 schemaVersion: companyMetadata.schemaVersion,
                 createdAt: companyMetadata.createdAt,
                 updatedAt: companyMetadata.updatedAt,
             })
             .from(companyMetadata)
-            .where(eq(companyMetadata.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
+            .where(eq(companyMetadata.companyId, activeCompanyId));
 
         if (!result) {
             return NextResponse.json({

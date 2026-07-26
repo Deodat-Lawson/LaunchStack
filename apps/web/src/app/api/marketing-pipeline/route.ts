@@ -66,10 +66,28 @@ export async function POST(request: Request) {
         const debug = url.searchParams.get("debug") === "true";
 
         const encoder = new TextEncoder();
+        // Tracks whether the SSE stream has been torn down — either because the
+        // client disconnected (tab close, navigation, refresh) or the stream
+        // finished. Guards every enqueue/close so a still-running pipeline does
+        // not throw "Invalid state: Controller is already closed" when it emits
+        // progress after the client has gone away.
+        let closed = false;
+
         const stream = new ReadableStream({
             async start(controller) {
+                const onAbort = () => {
+                    closed = true;
+                };
+                request.signal.addEventListener("abort", onAbort);
+
                 function send(event: PipelineSSEEvent) {
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+                    if (closed) return;
+                    try {
+                        controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+                    } catch {
+                        // Controller already closed (client disconnected mid-stream).
+                        closed = true;
+                    }
                 }
 
                 try {
@@ -102,8 +120,20 @@ export async function POST(request: Request) {
                         message: "Failed to run marketing pipeline" + hint,
                     });
                 } finally {
-                    controller.close();
+                    request.signal.removeEventListener("abort", onAbort);
+                    if (!closed) {
+                        closed = true;
+                        try {
+                            controller.close();
+                        } catch {
+                            // Already closed by the runtime after client disconnect.
+                        }
+                    }
                 }
+            },
+            cancel() {
+                // Consumer cancelled the stream (client went away).
+                closed = true;
             },
         });
 

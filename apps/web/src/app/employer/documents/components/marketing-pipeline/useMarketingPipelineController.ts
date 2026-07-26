@@ -54,6 +54,12 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
   const [targetAudience, setTargetAudience] = useState("");
   const [contentType, setContentType] = useState<ContentType | undefined>(undefined);
   const [thinkingLog, setThinkingLog] = useState<ThinkingEntry[]>([]);
+  const [publishing, setPublishing] = useState(false);
+  const [publishResult, setPublishResult] = useState<{
+    success: boolean;
+    postUrl?: string;
+    error?: string;
+  } | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const selectedPlatform = PLATFORM_OPTIONS.find((option) => option.id === platform) ?? null;
@@ -176,6 +182,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     setToneOverride(undefined);
     setTargetAudience("");
     setContentType(undefined);
+    setPublishResult(null);
   }, []);
 
   const handleRewriteComplete = useCallback(
@@ -213,6 +220,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
 
   const selectVariant = useCallback(
     (variantId: string) => {
+      setPublishResult(null);
       setActiveVariantId(variantId);
       setMessageVariants((prev) => {
         const variant = prev.find((v) => v.id === variantId);
@@ -324,6 +332,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
   const runPipeline = useCallback(async () => {
     setError(null);
     setResult(null);
+    setPublishResult(null);
 
     if (!platform) {
       setError("Choose a platform to continue.");
@@ -506,6 +515,46 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     setGenerationStartTime(null);
   }, []);
 
+  const publishPost = useCallback(async () => {
+    // Publish the currently-visible/edited post to its platform. Reddit posts
+    // default to the user's own profile (`u_me`) server-side; no subreddit is
+    // required here. Uses the existing /api/marketing-pipeline/publish route.
+    const targetPlatform = result?.platform ?? platform;
+    const message = editableMessage.trim();
+    if (!targetPlatform || !message) return;
+
+    setPublishing(true);
+    setPublishResult(null);
+    try {
+      const response = await fetch("/api/marketing-pipeline/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ platform: targetPlatform, message }),
+      });
+      const payload = (await response.json()) as {
+        success: boolean;
+        postUrl?: string;
+        message?: string;
+        error?: string;
+      };
+      if (response.ok && payload.success) {
+        setPublishResult({ success: true, postUrl: payload.postUrl });
+      } else {
+        setPublishResult({
+          success: false,
+          error: payload.message ?? payload.error ?? "Publish failed.",
+        });
+      }
+    } catch (err) {
+      setPublishResult({
+        success: false,
+        error: err instanceof Error ? err.message : "Network error while publishing.",
+      });
+    } finally {
+      setPublishing(false);
+    }
+  }, [editableMessage, platform, result?.platform]);
+
   const activeSession = sessions.find((session) => session.id === activeSessionId) ?? null;
 
   return {
@@ -552,5 +601,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     handleCopy,
     runPipeline,
     cancelPipeline,
+    publishing,
+    publishResult,
+    publishPost,
   };
 }

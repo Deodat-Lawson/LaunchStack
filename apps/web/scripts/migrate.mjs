@@ -63,10 +63,9 @@ async function listMigrationFiles() {
 }
 
 async function applyMigration(name) {
-  const body = normalizeSqlMigrationBody(
-    await readFile(join(migrationsDir, name), "utf8"),
-  );
-  const checksum = createHash("sha256").update(body).digest("hex");
+  const rawBody = await readFile(join(migrationsDir, name), "utf8");
+  const body = normalizeSqlMigrationBody(rawBody);
+  const checksum = createHash("sha256").update(rawBody).digest("hex");
 
   console.log(`[migrate] applying ${name}`);
   await sql.begin(async (tx) => {
@@ -89,10 +88,9 @@ async function main() {
   let drift = 0;
 
   for (const name of files) {
-    const body = normalizeSqlMigrationBody(
-      await readFile(join(migrationsDir, name), "utf8"),
-    );
-    const checksum = createHash("sha256").update(body).digest("hex");
+    const rawBody = await readFile(join(migrationsDir, name), "utf8");
+    const body = normalizeSqlMigrationBody(rawBody);
+    const checksum = createHash("sha256").update(rawBody).digest("hex");
     const recorded = applied.get(name);
 
     if (recorded === undefined) {

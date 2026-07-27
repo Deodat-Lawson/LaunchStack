@@ -254,6 +254,9 @@ export function FounderWeeklyReviewView({ embedded = false }: FounderWeeklyRevie
 
   const [isViewingHistory, setIsViewingHistory] = useState(false);
   
+  const isGenerating =
+  status === "queued" || status === "generating";
+
   const generateReview = async () => {
     try {
       console.log({
@@ -269,7 +272,7 @@ export function FounderWeeklyReviewView({ embedded = false }: FounderWeeklyRevie
 
       setDraft((prev) => ({
         review: mockReview,
-        context: prev?.context ?? founderContext,
+        context: founderContext,
         period: reportingPeriod,
         }));
 
@@ -458,7 +461,7 @@ export function FounderWeeklyReviewView({ embedded = false }: FounderWeeklyRevie
                 }}
                 >
                 <select
-                    disabled={isViewingHistory}
+                    disabled={isViewingHistory || isGenerating}
                     value={periodMode}
                     onChange={(e) =>
                     changePeriodMode(

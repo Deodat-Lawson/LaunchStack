@@ -89,7 +89,6 @@ async function main() {
 
   for (const name of files) {
     const rawBody = await readFile(join(migrationsDir, name), "utf8");
-    const body = normalizeSqlMigrationBody(rawBody);
     const checksum = createHash("sha256").update(rawBody).digest("hex");
     const recorded = applied.get(name);
 

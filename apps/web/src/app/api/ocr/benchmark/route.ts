@@ -17,7 +17,7 @@ import { routeDocument, normalizeDocument } from "@launchstack/core/ocr/processo
 import { ingestDocument } from "@launchstack/core/ingestion/router";
 
 export const runtime = "nodejs";
-export const maxDuration = 600;
+export const maxDuration = 300;
 
 export async function POST(request: Request) {
   if (process.env.OCR_BENCHMARK_ENABLED !== "true") {

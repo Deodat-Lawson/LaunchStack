@@ -2,6 +2,12 @@ import { POST } from "~/app/api/uploadDocument/route";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db";
 import { triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
+
+jest.mock("~/lib/require-workspace-context", () => ({
+  requireWorkspaceContext: jest.fn(),
+}));
 
 jest.mock("~/lib/validation", () => {
   const actual = jest.requireActual("~/lib/validation");
@@ -12,12 +18,6 @@ jest.mock("~/lib/validation", () => {
 });
 
 jest.mock("~/server/db", () => {
-  // `db.transaction(cb)` invokes cb with a tx object that has the same
-  // chainable query shape as db itself. Tests that exercise the upload path
-  // override `db.insert` to return document rows — the transaction callback
-  // inserts into `documentVersions` + updates `document`, neither of which
-  // the tests care about, so we give it a permissive tx that resolves each
-  // step to something harmless.
   const transaction = jest.fn().mockImplementation(async (cb: (tx: unknown) => unknown) => {
     const tx = {
       insert: jest.fn().mockImplementation(() => ({
@@ -53,24 +53,14 @@ jest.mock("~/env", () => ({
   },
 }));
 
-// Skip the cloud-mode credit pre-check so the upload path doesn't throw
-// "Insufficient credits" under test.
 jest.mock("~/lib/credits", () => ({
   hasTokens: jest.fn().mockResolvedValue(true),
 }));
 
-// The upload path funnels through ~/server/engine.ts::getEngine() via
-// trigger-job.ts. That pulls ~/env and constructs a full CoreConfig, which
-// is way more wiring than these tests should care about — stub it out so
-// getEngine() becomes a no-op.
 jest.mock("~/server/engine", () => ({
   getEngine: jest.fn().mockReturnValue({}),
 }));
 
-// The upload path calls getCompanyReindexState() which uses getDb() from
-// @launchstack/core/db. Register a stub so getDb() doesn't throw. Returning
-// an empty array is fine — resolveIngestIndexKey() will resolve to null and
-// the pipeline will enqueue without an explicit index key.
 import { configureDatabase, type DbClient } from "@launchstack/core/db";
 configureDatabase({
   select: jest.fn().mockReturnValue({
@@ -82,28 +72,56 @@ configureDatabase({
   }),
 } as unknown as DbClient);
 
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+const VERIFIED_CTX: WorkspaceContextResult = {
+  success: true,
+  data: {
+    clerkUserId: "user-1",
+    userPk: BigInt(7),
+    companyId: BigInt(5),
+    role: "employer",
+    status: "verified",
+  },
+};
+
+function mockAuthenticatedContext(overrides?: Partial<typeof VERIFIED_CTX.data>) {
+  const data = { ...(VERIFIED_CTX as { success: true; data: typeof VERIFIED_CTX extends { success: true; data: infer D } ? D : never }).data, ...overrides };
+  (requireWorkspaceContext as jest.Mock).mockResolvedValue({ success: true, data });
+}
+
+function mockUnauthenticated() {
+  (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+    success: false,
+    response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    }),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
+
 describe("POST /api/uploadDocument", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it("uploads and processes a document successfully", async () => {
+    mockAuthenticatedContext();
+
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: {
-        userId: "user-1",
         documentName: "Example Document",
         documentUrl: "https://example.com/doc.pdf",
         category: "contracts",
       },
     });
-
-    const mockWhere = jest.fn().mockResolvedValue([
-      { userId: "user-1", companyId: 5 },
-    ]);
-
-    const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
-    (db.select as jest.Mock).mockReturnValue({ from: mockFrom });
 
     const mockJobId = "ocr-test-job-123";
     const mockEventIds = ["event-1", "event-2"];
@@ -119,7 +137,6 @@ describe("POST /api/uploadDocument", () => {
       category: "contracts",
     };
 
-    // Mock db.insert: first call for document.insert().values().returning(), second for ocrJobs.insert().values()
     const mockReturning = jest.fn().mockResolvedValue([mockDocument]);
     const mockDocumentValues = jest.fn().mockReturnValue({
       returning: mockReturning,
@@ -138,7 +155,6 @@ describe("POST /api/uploadDocument", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: "user-1",
         documentName: "Example Document",
         documentUrl: "https://example.com/doc.pdf",
         category: "contracts",
@@ -175,23 +191,17 @@ describe("POST /api/uploadDocument", () => {
   });
 
   it("handles document with preferred provider", async () => {
+    mockAuthenticatedContext({ companyId: BigInt(9) });
+
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: {
-        userId: "user-1",
         documentName: "Example Document",
         documentUrl: "https://example.com/doc.pdf",
         category: "policies",
         preferredProvider: "azure",
       },
     });
-
-    const mockWhere = jest.fn().mockResolvedValue([
-      { userId: "user-1", companyId: 9 },
-    ]);
-
-    const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
-    (db.select as jest.Mock).mockReturnValue({ from: mockFrom });
 
     const mockJobId = "ocr-test-job-456";
     const mockEventIds = ["event-3"];
@@ -207,7 +217,6 @@ describe("POST /api/uploadDocument", () => {
       category: "policies",
     };
 
-    // Mock db.insert: first call for document.insert().values().returning(), second for ocrJobs.insert().values()
     const mockReturning = jest.fn().mockResolvedValue([mockDocument]);
     const mockDocumentValues = jest.fn().mockReturnValue({
       returning: mockReturning,
@@ -226,7 +235,6 @@ describe("POST /api/uploadDocument", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: "user-1",
         documentName: "Example Document",
         documentUrl: "https://example.com/doc.pdf",
         category: "policies",
@@ -254,26 +262,19 @@ describe("POST /api/uploadDocument", () => {
   });
 
   it("returns 500 when triggerDocumentProcessing fails", async () => {
-    // Mock console.error to prevent test failure from error logging
     const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
     try {
+      mockAuthenticatedContext({ companyId: BigInt(7) });
+
       (validateRequestBody as jest.Mock).mockResolvedValue({
         success: true,
         data: {
-          userId: "user-2",
           documentName: "Broken Document",
           documentUrl: "https://example.com/broken.pdf",
           category: "finance",
         },
       });
-
-      const mockWhere = jest.fn().mockResolvedValue([
-        { userId: "user-2", companyId: 7 },
-      ]);
-
-      const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
-      (db.select as jest.Mock).mockReturnValue({ from: mockFrom });
 
       const mockDocument = {
         id: 99,
@@ -282,7 +283,6 @@ describe("POST /api/uploadDocument", () => {
         category: "finance",
       };
 
-      // Mock db.insert for document.insert().values().returning()
       const mockReturning = jest.fn().mockResolvedValue([mockDocument]);
       const mockValues = jest.fn().mockReturnValue({
         returning: mockReturning,
@@ -299,7 +299,6 @@ describe("POST /api/uploadDocument", () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: "user-2",
           documentName: "Broken Document",
           documentUrl: "https://example.com/broken.pdf",
           category: "finance",
@@ -311,9 +310,6 @@ describe("POST /api/uploadDocument", () => {
 
       expect(response.status).toBe(500);
       expect(json.error).toBe("Failed to start document processing");
-      // The refactored route doesn't surface error details in the response
-      // body — it only logs them. Assert the log captured the Inngest error
-      // so regressions in the logging path still get caught.
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining("Error triggering document processing"),
         expect.objectContaining({
@@ -321,30 +317,17 @@ describe("POST /api/uploadDocument", () => {
         }),
       );
     } finally {
-      // Restore console.error even if test fails
       consoleErrorSpy.mockRestore();
     }
   });
 
-  it("returns 400 when user is not found", async () => {
-    (validateRequestBody as jest.Mock).mockResolvedValue({
-      success: true,
-      data: {
-        userId: "invalid-user",
-        documentName: "Example Document",
-        documentUrl: "https://example.com/doc.pdf",
-      },
-    });
-
-    const mockWhere = jest.fn().mockResolvedValue([]);
-    const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
-    (db.select as jest.Mock).mockReturnValue({ from: mockFrom });
+  it("returns 401 when workspace context fails (unauthenticated)", async () => {
+    mockUnauthenticated();
 
     const request = new Request("http://localhost/api/uploadDocument", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: "invalid-user",
         documentName: "Example Document",
         documentUrl: "https://example.com/doc.pdf",
       }),
@@ -353,12 +336,15 @@ describe("POST /api/uploadDocument", () => {
     const response = await POST(request);
     const json = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(json.error).toBe("Invalid user");
+    expect(response.status).toBe(401);
+    expect(json.error).toBe("Unauthorized");
+    expect(validateRequestBody).not.toHaveBeenCalled();
     expect(triggerDocumentProcessing).not.toHaveBeenCalled();
   });
 
   it("returns validation response when request body is invalid", async () => {
+    mockAuthenticatedContext();
+
     const validationResponse = new Response(
       JSON.stringify({ error: "Invalid request" }),
       { status: 400 },
@@ -380,7 +366,6 @@ describe("POST /api/uploadDocument", () => {
 
     expect(response.status).toBe(400);
     expect(json).toEqual({ error: "Invalid request" });
-    expect(db.select).not.toHaveBeenCalled();
     expect(triggerDocumentProcessing).not.toHaveBeenCalled();
   });
 });

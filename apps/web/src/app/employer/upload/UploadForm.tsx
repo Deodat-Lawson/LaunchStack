@@ -3,7 +3,7 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, AlertCircle, Loader2, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { useAuth } from "@clerk/nextjs";
+
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { genUploader } from "uploadthing/client";
@@ -136,7 +136,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
   embedded = false,
   onCompleted,
 }) => {
-  const { userId } = useAuth();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const folderInputRef = useRef<HTMLInputElement>(null);
@@ -505,7 +504,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
           : doc.processingMethod.toUpperCase();
 
     const body: Record<string, unknown> = {
-      userId,
       documentName: doc.title,
       category: doc.category,
       documentUrl: fileUrl,

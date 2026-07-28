@@ -1,0 +1,80 @@
+```mermaid
+
+%%{init: {'theme': 'dark', 'themeVariables': {'fontSize': '14px'}}}%%
+flowchart TD
+
+    subgraph LEGEND["Legend"]
+        direction LR
+        L1["Fail-hard stage<br/>(5 retries → stuck)"]:::failhard
+        L2["Fail-soft stage<br/>(silent, optional)"]:::failsoft
+        L3["Persisted write"]:::writeNode
+        L4["External dependency"]:::external
+        L5["User-facing done"]:::terminal
+    end
+
+    subgraph MAIN["Document Ingestion Pipeline — Stages A→G"]
+        direction TB
+
+        U["HTTP Upload"] --> REC["document + document_versions created<br/>ocr_jobs.status = queued"]:::writeNode
+        REC --> DISP["Inngest event fired:<br/>document/process.requested"]
+        DISP --> ROUTE{"A · Route by file type"}
+
+        ROUTE -->|"ZIP"| ZIP["Extract entries (≤500 files, ≤10MB each)<br/>insert child docs + child ocr_jobs<br/>fan out in batches of 10<br/>delete original ZIP doc"]
+        ZIP -.->|"re-dispatch per child"| DISP
+
+        ROUTE -->|"text / code"| FAST["Fast path — OCR skipped entirely"]
+        ROUTE -->|"everything else"| OCR["B · Normalize / OCR<br/>Azure · Landing.AI · Datalab · OSS · pdfjs<br/>(+ optional VLM enrichment)"]:::failhard
+
+        OCR --> OCRWRITE["writes: pages → ocr_jobs.ocrResult"]:::writeNode
+        OCR -.->|"fails all 5 retries"| FAIL["ocr_jobs.status stays 'queued' — forever<br/>onFailure → document.ocrProcessed = true<br/>ocrMetadata.error = 'processing_failed'<br/>⚠ looks identical to a doc still in progress"]:::failure
+
+        FAST --> CHUNK
+        OCRWRITE --> CHUNK["C · Chunk<br/>(parent/child text units)"]:::failhard
+        CHUNK --> CHUNKWRITE["writes: chunks → ocr_jobs.ocrResult"]:::writeNode
+
+        CHUNKWRITE --> EMBED["D · Embed + Store<br/>OpenAI (1536-dim) or sidecar /embed"]:::failhard
+        EMBED --> EMBEDWRITE["writes: document_structure,<br/>document_context_chunks,<br/>document_retrieval_chunks (vector 1536 + short 512)"]:::writeNode
+
+        EMBEDWRITE --> FIN["E · Finalize"]:::failhard
+        FIN --> FINWRITE["writes: document_metadata<br/>document.ocrProcessed = true<br/>ocr_jobs.status = completed"]:::writeNode
+
+        FINWRITE ==>|"SEARCHABLE — this is 'done' for the user"| DONE(("Document usable")):::terminal
+
+        FINWRITE --> GRAPH["F · GraphRAG extract<br/>(entities + relationships, one step)"]:::failsoft
+        GRAPH --> GRAPHWRITE["writes: Postgres kg_entities,<br/>kg_entity_mentions, kg_relationships<br/>(graph source of truth)"]:::writeNode
+        GRAPHWRITE --> NEO["G · Neo4j sync"]:::failsoft
+        NEO --> NEOWRITE["writes: Neo4j :Entity / :Section + edges<br/>mirror only — full text stays in Postgres<br/>⚠ can silently stay empty on a 'completed' doc"]:::writeNode
+
+        FINWRITE -.->|"always fires"| COMPANY["Downstream job:<br/>company-metadata/extract"]
+        FINWRITE -.->|"only if versionId (re-upload)"| REHYDRATE["Downstream job:<br/>notes-anchors/rehydrate"]
+    end
+
+    subgraph EXT["External dependencies touched"]
+        direction LR
+        PG[("Postgres + pgvector")]:::external
+        ING[/"Inngest — retries:5, concurrency:3,<br/>throttle:30/min, timeout:120m"/]:::external
+        OS[("Object storage — S3 or DB")]:::external
+        OCRP[/"OCR providers"/]:::external
+        N4J[("Neo4j — mirror only")]:::external
+        SC[/"sidecar/ folder — DOCX + Whisper only<br/>≠ SIDECAR_URL ML worker"/]:::external
+    end
+
+    U -.-> OS
+    DISP -.-> ING
+    OCR -.-> OCRP
+    REC -.-> PG
+    OCRWRITE -.-> PG
+    CHUNKWRITE -.-> PG
+    EMBEDWRITE -.-> PG
+    FINWRITE -.-> PG
+    GRAPHWRITE -.-> PG
+    NEOWRITE -.-> N4J
+
+    classDef failhard fill:#7f1d1d,stroke:#f87171,color:#fff,stroke-width:2px
+    classDef failsoft fill:#78350f,stroke:#fbbf24,color:#fff,stroke-width:2px
+    classDef writeNode fill:#1e293b,stroke:#64748b,color:#e2e8f0,stroke-dasharray: 3 3
+    classDef external fill:#0f172a,stroke:#38bdf8,color:#7dd3fc,stroke-dasharray: 2 2
+    classDef terminal fill:#14532d,stroke:#4ade80,color:#fff,stroke-width:2px
+    classDef failure fill:#450a0a,stroke:#ef4444,color:#fecaca,stroke-dasharray: 4 2
+
+```

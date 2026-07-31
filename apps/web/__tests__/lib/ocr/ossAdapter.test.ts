@@ -6,6 +6,10 @@
 
 import { createMarkerAdapter, createDoclingAdapter } from "@launchstack/core/ocr/adapters/ossAdapter";
 import { configureOcr } from "@launchstack/core/ocr/config";
+import {
+  FILE_ACCESS_TOKEN_PARAM,
+  verifyFileAccessToken,
+} from "@launchstack/core/crypto";
 
 const WORKER_URL = "http://test-worker:8001";
 
@@ -109,17 +113,54 @@ describe("OSS OCR Adapters", () => {
   });
 
   describe("relative URL resolution", () => {
-    it("rewrites /api/files/... using APP_PUBLIC_URL", async () => {
-      process.env.APP_PUBLIC_URL = "http://app:3000";
+    function mockEmptyDocument() {
       mockWorkerResponse({
         pages: [],
         metadata: { totalPages: 0, provider: "DOCLING", processingTimeMs: 1 },
       });
+    }
+
+    function workerRequestUrl(): string {
+      const [, init] = (global.fetch as jest.Mock).mock.calls[0];
+      return JSON.parse(init.body).url;
+    }
+
+    it("rewrites /api/files/... using appPublicUrl", async () => {
+      configureOcr({ workerUrl: WORKER_URL, appPublicUrl: "http://app:3000" });
+      mockEmptyDocument();
 
       await createMarkerAdapter().uploadDocument("/api/files/123");
 
-      const [, init] = (global.fetch as jest.Mock).mock.calls[0];
-      expect(JSON.parse(init.body).url).toBe("http://app:3000/api/files/123");
+      expect(workerRequestUrl()).toBe("http://app:3000/api/files/123");
+    });
+
+    it("signs /api/files/... URLs when a file access token secret is set", async () => {
+      configureOcr({
+        workerUrl: WORKER_URL,
+        appPublicUrl: "http://app:3000",
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      await createMarkerAdapter().uploadDocument("/api/files/123");
+
+      const url = new URL(workerRequestUrl());
+      expect(url.pathname).toBe("/api/files/123");
+      const token = url.searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+      expect(verifyFileAccessToken(token, "123", "worker-secret")).toBe(true);
+      expect(verifyFileAccessToken(token, "124", "worker-secret")).toBe(false);
+    });
+
+    it("does not sign URLs that are already absolute", async () => {
+      configureOcr({
+        workerUrl: WORKER_URL,
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      await createMarkerAdapter().uploadDocument("https://cdn.example.com/doc.pdf");
+
+      expect(workerRequestUrl()).toBe("https://cdn.example.com/doc.pdf");
     });
   });
 });

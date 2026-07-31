@@ -14,8 +14,14 @@ import type {
   OCRProvider,
 } from "../types";
 import { getOcrConfig } from "../config";
+import {
+  FILE_ACCESS_TOKEN_PARAM,
+  signFileAccessToken,
+} from "../../crypto/file-access-token";
 
 type OssProvider = Extract<OCRProvider, "MARKER" | "DOCLING">;
+
+const FILE_ROUTE_ID_PATTERN = /^\/api\/files\/(\d+)$/;
 
 interface WorkerParseResponse {
   pages: PageContent[];
@@ -105,11 +111,29 @@ class OssOCRAdapter implements OCRAdapter {
    * The worker runs in a separate container and cannot resolve Next.js
    * internal routes like /api/files/123. Rewrite relative URLs so the worker
    * can fetch them via the app's public origin.
+   *
+   * /api/files/{id} additionally requires auth, and the worker has no Clerk
+   * session, so we attach a short-lived token scoped to that one file.
    */
   private toWorkerReachableUrl(url: string): string {
     if (/^https?:\/\//i.test(url)) return url;
-    const base = getOcrConfig().appPublicUrl ?? "http://app:3000";
-    return new URL(url, base).toString();
+
+    const cfg = getOcrConfig();
+    const absolute = new URL(url, cfg.appPublicUrl ?? "http://app:3000");
+
+    const fileId = FILE_ROUTE_ID_PATTERN.exec(absolute.pathname)?.[1];
+    if (fileId) {
+      const token = signFileAccessToken(fileId, cfg.fileAccessTokenSecret);
+      if (token) {
+        absolute.searchParams.set(FILE_ACCESS_TOKEN_PARAM, token);
+      } else {
+        console.warn(
+          "[OssOCRAdapter] FILE_ACCESS_TOKEN_SECRET is not configured; the OCR worker cannot read database-backed documents."
+        );
+      }
+    }
+
+    return absolute.toString();
   }
 }
 

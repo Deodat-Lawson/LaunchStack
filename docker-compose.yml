@@ -221,6 +221,9 @@ services:
       # OSS OCR worker (thin proxy → docling-serve) — only set when using --profile ocr
       OCR_WORKER_URL: ${OCR_WORKER_URL:-}
       OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
+      # Lets the OCR worker read database-backed /api/files URLs, which
+      # otherwise require a Clerk session it does not have.
+      FILE_ACCESS_TOKEN_SECRET: ${FILE_ACCESS_TOKEN_SECRET:-}
     ports:
       - "3000:3000"
 

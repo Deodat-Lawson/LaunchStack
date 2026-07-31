@@ -103,6 +103,12 @@ const serverSchema = z.object({
   // is set and documents live behind relative /api/files URLs — the worker
   // needs an absolute URL to fetch them.
   APP_PUBLIC_URL: optionalString(),
+  // Signs short-lived tokens that let the OCR worker read /api/files URLs
+  // without a Clerk session. Required alongside OCR_WORKER_URL when documents
+  // are stored in the database; without it those fetches get a 401.
+  // Generate with:
+  //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+  FILE_ACCESS_TOKEN_SECRET: optionalString(),
   // Enable Graph RAG retrieval
   ENABLE_GRAPH_RETRIEVER: z.preprocess(
     (val) => val === "true" || val === "1",
@@ -270,6 +276,7 @@ function parseServerEnv() {
     OCR_VISION_MODEL: process.env.OCR_VISION_MODEL,
     OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER as "MARKER" | "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB" | undefined,
     APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
+    FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,

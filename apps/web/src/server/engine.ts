@@ -99,6 +99,7 @@ function buildConfig(): CoreConfig {
     ocr: {
       defaultProvider: server.OCR_DEFAULT_PROVIDER,
       appPublicUrl: server.APP_PUBLIC_URL,
+      fileAccessTokenSecret: server.FILE_ACCESS_TOKEN_SECRET,
       visionModel: server.OCR_VISION_MODEL,
       datalabApiKey: server.DATALAB_API_KEY,
       azure:

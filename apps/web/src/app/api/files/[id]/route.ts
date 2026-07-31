@@ -4,9 +4,15 @@
  */
 
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { fileUploads } from "@launchstack/core/db/schema";
+import {
+  FILE_ACCESS_TOKEN_PARAM,
+  verifyFileAccessToken,
+} from "@launchstack/core/crypto";
+import { env } from "~/env";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
 
@@ -45,6 +51,30 @@ interface RouteParams {
   }>;
 }
 
+/**
+ * Accepts either a signed-in user or a short-lived token scoped to this file
+ * id (used by the OCR worker, which fetches documents from another container
+ * and has no Clerk session).
+ *
+ * Temporary: this only proves the caller is authenticated, not that the file
+ * belongs to their company. C.2 replaces it with requireWorkspaceContext plus
+ * an ownership check.
+ */
+async function isAuthorizedFileRequest(
+  request: Request,
+  fileId: string,
+): Promise<boolean> {
+  const token = new URL(request.url).searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+  if (
+    verifyFileAccessToken(token, fileId, env.server.FILE_ACCESS_TOKEN_SECRET)
+  ) {
+    return true;
+  }
+
+  const { userId } = await auth();
+  return Boolean(userId);
+}
+
 export async function GET(
   request: Request,
   { params }: RouteParams
@@ -57,6 +87,13 @@ export async function GET(
       return NextResponse.json(
         { error: "Invalid file ID" },
         { status: 400 }
+      );
+    }
+
+    if (!(await isAuthorizedFileRequest(request, String(fileId)))) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
       );
     }
 

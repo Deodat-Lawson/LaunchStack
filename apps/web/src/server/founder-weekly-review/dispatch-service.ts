@@ -33,6 +33,16 @@ function identifiers(runId: string, operationType: "create" | "retry", operation
     };
 }
 
+export type FounderWeeklyReviewTransactionClient = Pick<DbClient, "insert" | "select">;
+export interface CreateFounderWeeklyReviewDispatchInput {
+    run: FounderWeeklyReviewRunRecord;
+    operationType: "create" | "retry";
+    operationKey: string;
+}
+export interface FounderWeeklyReviewDispatchServiceDependencies {
+    createDispatch?: (transaction: FounderWeeklyReviewTransactionClient, input: CreateFounderWeeklyReviewDispatchInput) => Promise<FounderWeeklyReviewDispatch>;
+}
+
 async function createDispatch(
     tx: Pick<DbClient, "insert" | "select">,
     run: FounderWeeklyReviewRunRecord,
@@ -61,32 +71,36 @@ async function createDispatch(
     return toDispatch(existing);
 }
 
-export async function createRunWithDispatch(input: {
+export type CreateRunWithDispatchInput = {
     actor: FounderWeeklyReviewUserActor;
     requestKey: string;
     reportingPeriod: ReportingPeriod;
     evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
-}): Promise<{ run: FounderWeeklyReviewRunRecord; dispatch: FounderWeeklyReviewDispatch }> {
-    return db.transaction(async (tx) => {
+};
+export type RetryRunWithDispatchInput = { actor: FounderWeeklyReviewUserActor; runId: string; requestKey: string };
+export type CreateRunWithDispatchResult = { run: FounderWeeklyReviewRunRecord; dispatch: FounderWeeklyReviewDispatch; created: boolean };
+export type RetryRunWithDispatchResult = { run: FounderWeeklyReviewRunRecord; dispatch: FounderWeeklyReviewDispatch; transitionApplied: boolean };
+
+export function createFounderWeeklyReviewDispatchService(database: Pick<DbClient, "transaction">, dependencies: FounderWeeklyReviewDispatchServiceDependencies = {}) {
+    const writeDispatch = dependencies.createDispatch ?? ((transaction, input) => createDispatch(transaction, input.run, input.operationType, input.operationKey));
+    const createRunWithDispatch = async (input: CreateRunWithDispatchInput): Promise<CreateRunWithDispatchResult> => database.transaction(async (tx) => {
         const service = new FounderWeeklyReviewUserService(new FounderWeeklyReviewRepository(tx as unknown as DbClient));
-        const run = await service.createOrGetRun(input.actor, input);
-        const dispatch = await createDispatch(tx, run, "create", input.requestKey);
-        return { run, dispatch };
+        const { run, created } = await service.createOrGetRunWithMetadata(input.actor, input);
+        const dispatch = await writeDispatch(tx, { run, operationType: "create", operationKey: input.requestKey });
+        return { run, dispatch, created };
     });
+    const retryRunWithDispatch = async (input: RetryRunWithDispatchInput): Promise<RetryRunWithDispatchResult> => database.transaction(async (tx) => {
+        const service = new FounderWeeklyReviewUserService(new FounderWeeklyReviewRepository(tx as unknown as DbClient));
+        const { run, transitionApplied } = await service.retryFailedRunWithMetadata(input.actor, input.runId, input.requestKey);
+        const dispatch = await writeDispatch(tx, { run, operationType: "retry", operationKey: input.requestKey });
+        return { run, dispatch, transitionApplied };
+    });
+    return { createRunWithDispatch, retryRunWithDispatch };
 }
 
-export async function retryRunWithDispatch(input: {
-    actor: FounderWeeklyReviewUserActor;
-    runId: string;
-    requestKey: string;
-}): Promise<{ run: FounderWeeklyReviewRunRecord; dispatch: FounderWeeklyReviewDispatch }> {
-    return db.transaction(async (tx) => {
-        const service = new FounderWeeklyReviewUserService(new FounderWeeklyReviewRepository(tx as unknown as DbClient));
-        const run = await service.retryFailedRun(input.actor, input.runId, input.requestKey);
-        const dispatch = await createDispatch(tx, run, "retry", input.requestKey);
-        return { run, dispatch };
-    });
-}
+const productionDispatchService = createFounderWeeklyReviewDispatchService(db);
+export const createRunWithDispatch = productionDispatchService.createRunWithDispatch;
+export const retryRunWithDispatch = productionDispatchService.retryRunWithDispatch;
 
 export async function claimPendingDispatches(limit = 20): Promise<FounderWeeklyReviewDispatch[]> {
     const now = new Date();

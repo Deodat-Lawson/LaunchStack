@@ -29,6 +29,14 @@ export interface CreateFounderWeeklyReviewRunRequest {
     };
     evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
 }
+export interface CreateFounderWeeklyReviewRunResult {
+    run: FounderWeeklyReviewRunRecord;
+    created: boolean;
+}
+export interface RetryFounderWeeklyReviewRunResult {
+    run: FounderWeeklyReviewRunRecord;
+    transitionApplied: boolean;
+}
 
 function assertWorkspaceMutationRole(role: string): void {
     if (!ALLOWED_WORKSPACE_ROLES.has(role)) {
@@ -71,14 +79,23 @@ export class FounderWeeklyReviewUserService {
         }
         assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
 
-        return this.repository.createOrGetByRequestKey({
+        return (await this.repository.createOrGetByRequestKeyWithResult({
             id: `fwr_${randomUUID()}`,
             companyId: actor.companyId,
             requestKey: input.requestKey,
             reportingPeriod: input.reportingPeriod,
             evidenceSnapshot,
             createdByActorId: buildFounderWeeklyReviewActorId(actor),
-        });
+        })).run;
+    }
+
+    async createOrGetRunWithMetadata(actor: FounderWeeklyReviewUserActor, input: CreateFounderWeeklyReviewRunRequest): Promise<CreateFounderWeeklyReviewRunResult> {
+        assertWorkspaceMutationRole(actor.role);
+        let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
+        try { evidenceSnapshot = parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot); }
+        catch (error) { if (error instanceof ZodError) throw new FounderWeeklyReviewInvalidPayloadError(error.message); throw error; }
+        assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
+        return this.repository.createOrGetByRequestKeyWithResult({ id: `fwr_${randomUUID()}`, companyId: actor.companyId, requestKey: input.requestKey, reportingPeriod: input.reportingPeriod, evidenceSnapshot, createdByActorId: buildFounderWeeklyReviewActorId(actor) });
     }
 
     async getRun(
@@ -127,6 +144,16 @@ export class FounderWeeklyReviewUserService {
         throw new FounderWeeklyReviewConflictError(
             `Retry request key "${requestKey}" belongs to a different failure cycle for run "${runId}".`
         );
+    }
+
+    async retryFailedRunWithMetadata(actor: FounderWeeklyReviewUserActor, runId: string, requestKey: string): Promise<RetryFounderWeeklyReviewRunResult> {
+        assertWorkspaceMutationRole(actor.role);
+        const result = await this.repository.retryFailedRun({ operationId: `fwrop_${randomUUID()}`, companyId: actor.companyId, runId, requestKey, actorId: buildFounderWeeklyReviewActorId(actor) });
+        if (result.outcome === "not_found" || !result.run) throw new FounderWeeklyReviewNotFoundError(runId);
+        if (result.outcome === "updated") return { run: result.run, transitionApplied: true };
+        if (result.outcome === "idempotent" && (result.run.status === "failed" || result.run.status === "queued")) return { run: result.run, transitionApplied: false };
+        if (result.run.status !== "failed") throw new FounderWeeklyReviewInvalidTransitionError(result.run.status, "retry");
+        throw new FounderWeeklyReviewConflictError(`Retry request key "${requestKey}" belongs to a different failure cycle for run "${runId}".`);
     }
 
     async updateDraft(

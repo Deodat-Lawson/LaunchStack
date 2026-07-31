@@ -19,6 +19,7 @@ export interface FounderWeeklyReviewRouteDependencies {
   repository: Pick<FounderWeeklyReviewRepository, "getByCompanyAndRequestKey">;
   createRunWithDispatch: typeof createRunWithDispatch;
   sendDispatchRequested: () => Promise<unknown>;
+  recordRunCreated: () => void;
 }
 
 export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRouteDependencies) {
@@ -39,8 +40,8 @@ export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRo
       const durationMs = Math.round(performance.now() - startedAt);
       founderWeeklyReviewStageDuration.observe({ stage: "evidence_collection", result: "success" }, durationMs / 1000);
       logFounderWeeklyReview({ runId: "pending", companyId: actor.companyId.toString(), stage: "evidence_collection_completed", status: "pending", durationMs });
-      const { run } = await deps.createRunWithDispatch({ actor, requestKey: parsed.data.requestKey, reportingPeriod: parsed.data.reportingPeriod, evidenceSnapshot });
-      founderWeeklyReviewRunsCreated.inc();
+      const { run, created } = await deps.createRunWithDispatch({ actor, requestKey: parsed.data.requestKey, reportingPeriod: parsed.data.reportingPeriod, evidenceSnapshot });
+      if (created) deps.recordRunCreated();
       logFounderWeeklyReview({ runId: run.id, companyId: run.companyId.toString(), stage: "run_created", status: run.status, retryCount: run.retryCount });
       logFounderWeeklyReview({ runId: run.id, companyId: run.companyId.toString(), stage: "dispatch_created", status: run.status });
       await deps.sendDispatchRequested();
@@ -55,8 +56,9 @@ export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRo
 const productionDependencies: FounderWeeklyReviewRouteDependencies = {
   actorResolver: productionFounderWeeklyReviewActorResolver,
   evidenceCollector: canonicalFounderWeeklyReviewEvidenceCollector,
-  repository: new FounderWeeklyReviewRepository(),
+  repository: { getByCompanyAndRequestKey: (companyId, requestKey) => new FounderWeeklyReviewRepository().getByCompanyAndRequestKey(companyId, requestKey) },
   createRunWithDispatch,
   sendDispatchRequested: () => inngest.send({ name: "founder-weekly-review/dispatch.requested", data: {} }),
+  recordRunCreated: () => founderWeeklyReviewRunsCreated.inc(),
 };
 export const POST = createFounderWeeklyReviewPostHandler(productionDependencies);

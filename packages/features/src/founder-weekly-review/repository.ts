@@ -29,6 +29,10 @@ export interface ConditionalRunMutationResult {
     updated: boolean;
     run: FounderWeeklyReviewRunRecord | null;
 }
+export interface CreateFounderWeeklyReviewResult {
+    run: FounderWeeklyReviewRunRecord;
+    created: boolean;
+}
 
 export interface RetryFounderWeeklyReviewResult {
     outcome: "updated" | "idempotent" | "conflict" | "not_found";
@@ -106,6 +110,12 @@ export class FounderWeeklyReviewRepository {
     async createOrGetByRequestKey(
         input: CreateFounderWeeklyReviewRunInput
     ): Promise<FounderWeeklyReviewRunRecord> {
+        return (await this.createOrGetByRequestKeyWithResult(input)).run;
+    }
+
+    async createOrGetByRequestKeyWithResult(
+        input: CreateFounderWeeklyReviewRunInput
+    ): Promise<CreateFounderWeeklyReviewResult> {
         const [inserted] = await this.db
             .insert(founderWeeklyReviewRuns)
             .values({
@@ -133,7 +143,7 @@ export class FounderWeeklyReviewRepository {
             .returning();
 
         if (inserted) {
-            return mapRunRow(inserted);
+            return { run: mapRunRow(inserted), created: true };
         }
 
         const existing = await this.getByCompanyAndRequestKey(
@@ -143,7 +153,7 @@ export class FounderWeeklyReviewRepository {
         if (!existing) {
             throw new Error("Failed to create or retrieve founder weekly review run");
         }
-        return existing;
+        return { run: existing, created: false };
     }
 
     async getByCompanyAndRunId(

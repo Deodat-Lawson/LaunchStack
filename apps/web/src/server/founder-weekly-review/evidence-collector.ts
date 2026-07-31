@@ -38,7 +38,9 @@ export const unavailableFounderWeeklyReviewEvidenceCollector: FounderWeeklyRevie
  * without changing routes, persistence, or the generation worker.
  */
 export class CanonicalFounderWeeklyReviewEvidenceCollector implements FounderWeeklyReviewEvidenceCollector {
-    constructor(private readonly service = new FounderWeeklyReviewEvidenceService()) {}
+    // Lazy construction keeps route composition importable in tests and does
+    // not open a DB dependency until production collection is actually used.
+    constructor(private service?: FounderWeeklyReviewEvidenceService) {}
 
     async collectFounderWeeklyReviewEvidence(input: {
         companyId: bigint;
@@ -48,7 +50,7 @@ export class CanonicalFounderWeeklyReviewEvidenceCollector implements FounderWee
         actor: { externalUserId: string };
         requestKey: string;
     }): Promise<FounderWeeklyReviewEvidenceSnapshot> {
-        const snapshot = await this.service.collectFounderWeeklyReviewEvidence({
+        const snapshot = await (this.service ??= new FounderWeeklyReviewEvidenceService()).collectFounderWeeklyReviewEvidence({
             companyId: input.companyId,
             reportingPeriod: input.reportingPeriod,
             workspaceTimezone: input.workspaceTimezone,

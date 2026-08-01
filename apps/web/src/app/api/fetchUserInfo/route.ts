@@ -2,23 +2,28 @@ import { NextResponse } from "next/server";
 import { dbCore } from "../../../server/db/core";
 import { company, users } from "@launchstack/core/db/schema";
 import { and, eq } from "drizzle-orm";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
+/**
+ * Profile lookup for the signed-in Clerk user — including unverified /
+ * pending-approval accounts. Uses requireClerkIdentity (not workspace
+ * context) so pending pages can load name/company/submission date.
+ */
 export async function POST() {
     try {
-        const ctx = await requireWorkspaceContext();
-        if (!ctx.success) return ctx.response;
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
 
         const [userInfo] = await dbCore
             .select()
             .from(users)
-            .where(eq(users.userId, ctx.data.clerkUserId));
+            .where(eq(users.userId, identity.data.clerkUserId));
 
         if (!userInfo) {
-            return NextResponse.json({ error: "Invalid user." }, { status: 400 });
+            return NextResponse.json({ error: "Invalid user." }, { status: 401 });
         }
 
-        const companyId = ctx.data.companyId;
+        const companyId = userInfo.companyId;
 
         const [companyRecord] = await dbCore
             .select()
@@ -37,7 +42,6 @@ export async function POST() {
             timeStyle: "short",
         });
 
-        // Convert BigInt fields to numbers for JSON serialization
         const serializedUserInfo = {
             ...userInfo,
             companyId: Number(companyId),

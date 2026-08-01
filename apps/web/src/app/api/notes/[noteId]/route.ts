@@ -1,7 +1,19 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { documentNotes, documentNoteEmbeddings, noteLinks } from "@launchstack/core/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, or, isNull } from "drizzle-orm";
+
+function noteOwnershipFilter(noteId: number, clerkUserId: string, companyId: bigint) {
+  const companyIdStr = String(companyId);
+  return and(
+    eq(documentNotes.id, noteId),
+    eq(documentNotes.userId, clerkUserId),
+    or(
+      eq(documentNotes.companyId, companyIdStr),
+      isNull(documentNotes.companyId),
+    ),
+  );
+}
 import { validateRequestBody, UpdateNoteSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { embedNoteAsync } from "~/server/notes/embed-note";
@@ -27,10 +39,7 @@ export async function GET(
       .select()
       .from(documentNotes)
       .where(
-        and(
-          eq(documentNotes.id, id),
-          eq(documentNotes.userId, ctx.data.clerkUserId),
-        ),
+        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
       );
 
     if (!note) {
@@ -79,10 +88,7 @@ export async function PUT(
         ...(body.tags !== undefined && { tags: body.tags }),
       })
       .where(
-        and(
-          eq(documentNotes.id, id),
-          eq(documentNotes.userId, ctx.data.clerkUserId),
-        ),
+        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
       )
       .returning();
 
@@ -141,10 +147,7 @@ export async function DELETE(
     const [deleted] = await db
       .delete(documentNotes)
       .where(
-        and(
-          eq(documentNotes.id, id),
-          eq(documentNotes.userId, ctx.data.clerkUserId),
-        ),
+        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
       )
       .returning();
 

@@ -5,6 +5,7 @@ import { agentAiChatbotExecutionStep } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateExecutionStepSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertStepOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -19,6 +20,10 @@ export async function PATCH(
 
   try {
     const { stepId } = await params;
+
+    const owned = await assertStepOwnedByUser(stepId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const validation = await validateRequestBody(request, UpdateExecutionStepSchema);
     if (!validation.success) return validation.response;
     const { status, output, reasoning } = validation.data;

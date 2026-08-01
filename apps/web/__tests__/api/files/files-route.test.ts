@@ -36,11 +36,17 @@ jest.mock("~/lib/storage", () => ({
 const DB_FILE = {
   id: 123,
   userId: "clerk_abc",
+  companyId: BigInt(5),
   filename: "notes.txt",
   mimeType: "text/plain",
   storageProvider: "database",
   storageUrl: null,
   fileData: Buffer.from("hello worker").toString("base64"),
+};
+
+const DB_FILE_LEGACY = {
+  ...DB_FILE,
+  companyId: null,
 };
 
 const VERIFIED_CTX: WorkspaceContextResult = {
@@ -105,7 +111,6 @@ describe("GET /api/files/[id]", () => {
   it("serves the file to a signed-in user who owns it", async () => {
     mockAuthenticated();
     setupFileQuery([DB_FILE]);
-    setupOwnershipQuery(true);
 
     const response = await GET(request("/api/files/123"), params("123"));
 
@@ -116,11 +121,20 @@ describe("GET /api/files/[id]", () => {
   it("returns 404 when file belongs to a different company", async () => {
     mockAuthenticated({ companyId: BigInt(999) });
     setupFileQuery([DB_FILE]);
-    setupOwnershipQuery(false);
 
     const response = await GET(request("/api/files/123"), params("123"));
 
     expect(response.status).toBe(404);
+  });
+
+  it("falls back to uploader membership for legacy rows without companyId", async () => {
+    mockAuthenticated();
+    setupFileQuery([DB_FILE_LEGACY]);
+    setupOwnershipQuery(true);
+
+    const response = await GET(request("/api/files/123"), params("123"));
+
+    expect(response.status).toBe(200);
   });
 
   it("serves the file to a caller holding a valid token (skips ownership)", async () => {

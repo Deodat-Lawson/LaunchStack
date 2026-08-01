@@ -252,14 +252,6 @@ export const UpdateUploadPreferenceSchema = z.object({
   useUploadThing: z.boolean(),
 });
 
-export const EmployeeAuthSchema = z.object({
-  companyPasskey: z.string().min(1, "Company passkey is required"),
-});
-
-export const EmployerAuthSchema = z.object({
-  companyPasskey: z.string().min(1, "Company passkey is required"),
-});
-
 // ============================================================================
 // RLM (Recursive Language Model) Query Schema
 // ============================================================================
@@ -374,7 +366,6 @@ const AnchorSchema = z.object({
 export const CreateNoteSchema = z
   .object({
     documentId: z.string().optional(),
-    companyId: z.string().optional(),
     versionId: z.union([z.number().int().positive(), z.string()]).optional(),
     title: z.string().max(512).optional(),
     content: z.string().max(50_000).optional(),

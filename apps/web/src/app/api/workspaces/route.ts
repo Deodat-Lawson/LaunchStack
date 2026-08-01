@@ -125,11 +125,17 @@ export async function POST(request: Request) {
         }
 
         const [user] = await db
-            .select({ id: users.id, name: users.name, email: users.email })
+            .select({ id: users.id, name: users.name, email: users.email, status: users.status })
             .from(users)
             .where(eq(users.userId, clerkUserId));
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
+        }
+        if (user.status !== "verified") {
+            return NextResponse.json(
+                { error: "Account not verified. Please wait for administrator approval." },
+                { status: 403 },
+            );
         }
 
         const teamSizeForCompany = teamSize?.trim() || "1";

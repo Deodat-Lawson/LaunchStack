@@ -212,7 +212,8 @@ export async function PUT(request: Request) {
             .where(
                 and(
                     eq(generatedDocuments.id, id),
-                    eq(generatedDocuments.userId, ctx.data.clerkUserId)
+                    eq(generatedDocuments.userId, ctx.data.clerkUserId),
+                    eq(generatedDocuments.companyId, ctx.data.companyId),
                 )
             )
             .limit(1);
@@ -287,7 +288,8 @@ export async function DELETE(request: Request) {
             .where(
                 and(
                     eq(generatedDocuments.id, id),
-                    eq(generatedDocuments.userId, ctx.data.clerkUserId)
+                    eq(generatedDocuments.userId, ctx.data.clerkUserId),
+                    eq(generatedDocuments.companyId, ctx.data.companyId),
                 )
             )
             .limit(1);

@@ -288,6 +288,7 @@ export const crawlWebsite = inngest.createFunction(
             data: htmlBuffer,
             contentType: "text/html",
             userId,
+            companyId: BigInt(companyId),
           });
 
           const uploadResult = await processDocumentUpload({

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { documentNotes } from "@launchstack/core/db/schema";
-import { eq, and, desc, ilike, arrayContains, isNull, inArray } from "drizzle-orm";
+import { eq, and, desc, ilike, arrayContains, isNull, inArray, or } from "drizzle-orm";
 import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { embedNoteAsync } from "~/server/notes/embed-note";
@@ -22,7 +22,16 @@ export async function GET(request: Request) {
     const anchorStatus = searchParams.get("anchorStatus");
     const surface = searchParams.get("surface");
 
-    const conditions = [eq(documentNotes.userId, ctx.data.clerkUserId)];
+    const companyIdStr = String(ctx.data.companyId);
+    // Scope to the active workspace. Legacy rows with null companyId still
+    // surface for the owning user so old notes are not silently dropped.
+    const conditions = [
+      eq(documentNotes.userId, ctx.data.clerkUserId),
+      or(
+        eq(documentNotes.companyId, companyIdStr),
+        isNull(documentNotes.companyId),
+      )!,
+    ];
 
     if (documentId) {
       conditions.push(eq(documentNotes.documentId, documentId));
@@ -40,8 +49,9 @@ export async function GET(request: Request) {
       const hits = await searchNotes({
         userId: ctx.data.clerkUserId,
         query: search,
-        scope: documentId ? "document" : "user",
+        scope: documentId ? "document" : "company",
         documentId: documentId ?? undefined,
+        companyId: companyIdStr,
         topK: 25,
       });
       if (hits.length > 0) {
@@ -108,7 +118,7 @@ export async function POST(request: Request) {
       .values({
         userId: ctx.data.clerkUserId,
         documentId: body.documentId ?? null,
-        companyId: body.companyId ?? null,
+        companyId: String(ctx.data.companyId),
         versionId: versionIdBigint,
         title: body.title ?? null,
         content: body.content ?? null,

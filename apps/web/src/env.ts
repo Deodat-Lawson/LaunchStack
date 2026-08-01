@@ -109,6 +109,9 @@ const serverSchema = z.object({
   // Generate with:
   //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
   FILE_ACCESS_TOKEN_SECRET: optionalString(),
+  // Bearer token required by GET /api/metrics (Prometheus scrapers).
+  // In production the endpoint returns 503 if this is unset.
+  METRICS_SCRAPE_TOKEN: optionalString(),
   // Enable Graph RAG retrieval
   ENABLE_GRAPH_RETRIEVER: z.preprocess(
     (val) => val === "true" || val === "1",
@@ -277,6 +280,7 @@ function parseServerEnv() {
     OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER as "MARKER" | "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB" | undefined,
     APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
     FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
+    METRICS_SCRAPE_TOKEN: process.env.METRICS_SCRAPE_TOKEN,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,

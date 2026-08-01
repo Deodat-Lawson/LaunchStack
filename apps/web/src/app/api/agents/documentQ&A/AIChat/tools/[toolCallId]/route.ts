@@ -5,6 +5,7 @@ import { agentAiChatbotToolCall } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateToolCallSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertToolCallOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -19,6 +20,10 @@ export async function PATCH(
 
   try {
     const { toolCallId } = await params;
+
+    const owned = await assertToolCallOwnedByUser(toolCallId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const validation = await validateRequestBody(request, UpdateToolCallSchema);
     if (!validation.success) return validation.response;
     const { toolOutput, status, errorMessage, executionTimeMs } = validation.data;

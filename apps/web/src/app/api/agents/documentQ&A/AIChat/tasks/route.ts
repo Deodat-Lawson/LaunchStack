@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateTaskSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -19,6 +20,9 @@ export async function POST(request: NextRequest) {
     const validation = await validateRequestBody(request, CreateTaskSchema);
     if (!validation.success) return validation.response;
     const { chatId, description, objective, priority, metadata } = validation.data;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const taskId = randomUUID();
 
@@ -63,6 +67,9 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const tasks = await db
       .select()

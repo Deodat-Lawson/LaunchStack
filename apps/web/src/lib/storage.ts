@@ -63,6 +63,8 @@ export interface UploadInput {
   data: Buffer | ArrayBuffer | Uint8Array;
   contentType?: string;
   userId: string;
+  /** Active workspace company at upload time; stamped onto file_uploads. */
+  companyId?: bigint;
 }
 
 export interface UploadResult {
@@ -140,6 +142,7 @@ async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
       .insert(fileUploads)
       .values({
         userId: input.userId,
+        companyId: input.companyId ?? null,
         filename: input.filename,
         mimeType: input.contentType ?? "application/octet-stream",
         fileData: body.toString("base64"),

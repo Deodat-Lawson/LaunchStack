@@ -10,6 +10,7 @@ import {
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -24,6 +25,9 @@ export async function GET(
 
   try {
     const { chatId } = await params;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     // Get chat details
     const [chat] = await db
@@ -84,6 +88,10 @@ export async function PATCH(
 
   try {
     const { chatId } = await params;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const validation = await validateRequestBody(request, UpdateChatSchema);
     if (!validation.success) return validation.response;
     const { title, status, agentMode, visibility, aiStyle, aiPersona } = validation.data;
@@ -132,6 +140,9 @@ export async function DELETE(
 
   try {
     const { chatId } = await params;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     await db
       .delete(agentAiChatbotChat)

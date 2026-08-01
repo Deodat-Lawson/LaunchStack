@@ -6,6 +6,10 @@ import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateToolCallSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  assertTaskOwnedByUser,
+  assertMessageOwnedByUser,
+} from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -19,6 +23,14 @@ export async function POST(request: NextRequest) {
     const validation = await validateRequestBody(request, CreateToolCallSchema);
     if (!validation.success) return validation.response;
     const { messageId, taskId, toolName, toolInput } = validation.data;
+
+    if (taskId) {
+      const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+      if (!owned.success) return owned.response;
+    } else {
+      const owned = await assertMessageOwnedByUser(messageId, ctx.data.clerkUserId);
+      if (!owned.success) return owned.response;
+    }
 
     const toolCallId = randomUUID();
 
@@ -64,16 +76,24 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const toolCalls = messageId
+    if (taskId) {
+      const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+      if (!owned.success) return owned.response;
+    } else if (messageId) {
+      const owned = await assertMessageOwnedByUser(messageId, ctx.data.clerkUserId);
+      if (!owned.success) return owned.response;
+    }
+
+    const toolCalls = taskId
       ? await db
           .select()
           .from(agentAiChatbotToolCall)
-          .where(eq(agentAiChatbotToolCall.messageId, messageId))
+          .where(eq(agentAiChatbotToolCall.taskId, taskId))
           .orderBy(agentAiChatbotToolCall.createdAt)
       : await db
           .select()
           .from(agentAiChatbotToolCall)
-          .where(eq(agentAiChatbotToolCall.taskId, taskId!))
+          .where(eq(agentAiChatbotToolCall.messageId, messageId!))
           .orderBy(agentAiChatbotToolCall.createdAt);
 
     return NextResponse.json({

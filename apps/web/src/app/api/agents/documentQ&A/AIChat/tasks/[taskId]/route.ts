@@ -5,6 +5,7 @@ import { agentAiChatbotTask, agentAiChatbotExecutionStep } from "@launchstack/co
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateTaskSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertTaskOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -19,6 +20,9 @@ export async function GET(
 
   try {
     const { taskId } = await params;
+
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const [task] = await db
       .select()
@@ -63,6 +67,10 @@ export async function PATCH(
 
   try {
     const { taskId } = await params;
+
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const validation = await validateRequestBody(request, UpdateTaskSchema);
     if (!validation.success) return validation.response;
     const { status, result, metadata, completedAt } = validation.data;

@@ -44,6 +44,25 @@ export async function POST(request: Request) {
     const typedAnalysisType: AnalysisType = analysisType ?? "general";
     const typedIncludeRelatedDocs = includeRelatedDocs ?? false;
 
+    // Ownership before cache: never stream another tenant's analysis.
+    const docCheck = await db
+        .select({ id: document.id })
+        .from(document)
+        .where(
+            and(
+                eq(document.id, documentId),
+                eq(document.companyId, ctx.data.companyId),
+            ),
+        )
+        .limit(1);
+
+    if (docCheck.length === 0) {
+        return NextResponse.json(
+            { success: false, message: "Document not found.", errorType: ERROR_TYPES.VALIDATION },
+            { status: HTTP_STATUS.NOT_FOUND }
+        );
+    }
+
     // Check cache first (unless forceRefresh)
     if (!forceRefresh) {
         const cached = await db
@@ -79,20 +98,6 @@ export async function POST(request: Request) {
                 },
             });
         }
-    }
-
-    // Verify document exists and has chunks
-    const docCheck = await db
-        .select({ id: document.id })
-        .from(document)
-        .where(eq(document.id, documentId))
-        .limit(1);
-
-    if (docCheck.length === 0) {
-        return NextResponse.json(
-            { success: false, message: "Document not found.", errorType: ERROR_TYPES.VALIDATION },
-            { status: HTTP_STATUS.NOT_FOUND }
-        );
     }
 
     const chunkCount = await db

@@ -44,8 +44,8 @@ const isPublicApiRoute = createRouteMatcher([
     '/api/invite-codes/validate',
     // CI-only extractor, refuses to run unless OCR_BENCHMARK_ENABLED=true.
     '/api/ocr/benchmark',
-    // TODO(sec): temporary. Prometheus scrapes this without a session, so
-    // locking it needs a scrape token or a network ACL first.
+    // Prometheus scrapes without a Clerk session; the route requires
+    // Authorization: Bearer $METRICS_SCRAPE_TOKEN (fail-closed in production).
     '/api/metrics',
     // UploadThing posts its onUploadComplete callback here server-to-server
     // with no session. Every branch of the file router calls auth() itself.

@@ -218,7 +218,6 @@ export async function POST(request: Request) {
 
             const {
                 documentId,
-                companyId,
                 question,
                 style,
                 searchScope,
@@ -238,14 +237,6 @@ export async function POST(request: Request) {
             const numericCompanyId = Number(userCompanyId);
 
             // Validate search scope requirements
-            if (searchScope === "company" && !companyId) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "companyId is required for company-wide search"
-                }, { status: 400 });
-            }
-
             if (searchScope === "document" && !documentId) {
                 recordResult("error");
                 return NextResponse.json({
@@ -270,21 +261,14 @@ export async function POST(request: Request) {
                 }, { status: 400 });
             }
 
-            // Validate company/archive search permissions
+            // Validate company/archive search permissions — company scope
+            // always uses the caller's active workspace (ignore body companyId).
             if (searchScope === "company" || searchScope === "archive") {
                 if (!COMPANY_SCOPE_ROLES.has(ctx.data.role)) {
                     recordResult("error");
                     return NextResponse.json({
                         success: false,
                         message: "Only employer accounts can run company-wide searches."
-                    }, { status: 403 });
-                }
-
-                if (companyId !== undefined && companyId !== numericCompanyId) {
-                    recordResult("error");
-                    return NextResponse.json({
-                        success: false,
-                        message: "Company mismatch detected for the current user."
                     }, { status: 403 });
                 }
             }

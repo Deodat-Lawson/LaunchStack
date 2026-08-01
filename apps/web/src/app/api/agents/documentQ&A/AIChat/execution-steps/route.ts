@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateExecutionStepSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertTaskOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -27,6 +28,9 @@ export async function POST(request: NextRequest) {
       input,
       output
     } = validation.data;
+
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const stepId = randomUUID();
 
@@ -75,6 +79,9 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const steps = await db
       .select()

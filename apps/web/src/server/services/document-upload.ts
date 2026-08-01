@@ -204,6 +204,7 @@ export async function processDocumentUpload({
         data: Buffer.from(transcriptionResult.text, "utf-8"),
         contentType: "text/plain",
         userId: user.userId,
+        companyId: user.companyId,
       });
 
       const transcriptionMetadata = {

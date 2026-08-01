@@ -235,6 +235,7 @@ export async function POST(request: Request) {
         data: htmlBuffer,
         contentType: "text/html",
         userId: ctx.data.clerkUserId,
+        companyId: ctx.data.companyId,
       });
 
       console.log(

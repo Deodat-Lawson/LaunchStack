@@ -4,11 +4,9 @@
  *
  * Auth: accepts a signed file-access token (OCR worker) OR a full workspace
  * session. Token-based requests skip the ownership check; session-based
- * requests verify the file belongs to the caller's company.
- *
- * Ownership gap: `fileUploads` has no `companyId` column, so ownership is
- * traced through the uploading user's company memberships. A future migration
- * should add `companyId` to `file_uploads` for a direct FK check.
+ * requests verify the file belongs to the caller's company via
+ * `file_uploads.company_id` when present, falling back to uploader membership
+ * for legacy rows without a company stamp.
  */
 
 import { NextResponse } from "next/server";
@@ -64,11 +62,10 @@ interface RouteParams {
 }
 
 /**
- * Check whether the uploading user belongs to the same company as the
- * requesting user. Traced via `users` + `userCompanyMemberships` because
- * `fileUploads` lacks a direct `companyId` FK.
+ * Legacy fallback: uploader is a member of the requesting company.
+ * Used only when `file_uploads.company_id` is null.
  */
-async function isFileOwnedByCompany(
+async function isUploaderInCompany(
   uploaderClerkId: string,
   companyId: bigint,
 ): Promise<boolean> {
@@ -135,7 +132,10 @@ export async function GET(
 
     // Company ownership check for session-based requests.
     if (sessionCompanyId !== null) {
-      const owned = await isFileOwnedByCompany(file.userId, sessionCompanyId);
+      const owned =
+        file.companyId != null
+          ? file.companyId === sessionCompanyId
+          : await isUploaderInCompany(file.userId, sessionCompanyId);
       if (!owned) {
         return NextResponse.json(
           { error: "File not found" },

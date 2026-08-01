@@ -92,11 +92,14 @@ async function storeAnalysisResult(documentId: number, analysisType: string, inc
     return result;
 }
 
-async function getDocumentDetails(documentId: number) : Promise<DocumentDetails | null> {
+async function getDocumentDetails(
+    documentId: number,
+    companyId: bigint,
+): Promise<DocumentDetails | null> {
     const results = await db
         .select({ title: document.title, category: document.category, companyId: document.companyId })
         .from(document)
-        .where(eq(document.id, documentId))
+        .where(and(eq(document.id, documentId), eq(document.companyId, companyId)))
         .limit(1);
 
     return results[0] ? { ...results[0], companyId: results[0].companyId.toString() } : null;
@@ -162,6 +165,17 @@ export async function POST(request: Request) {
             }, { status: HTTP_STATUS.BAD_REQUEST });
         }
 
+        // Ownership before cache: never return another tenant's analysis.
+        const docDetails = await getDocumentDetails(documentId, ctx.data.companyId);
+        if (!docDetails) {
+            recordResult("error");
+            return NextResponse.json({
+                success: false,
+                message: "Document not found.",
+                errorType: ERROR_TYPES.VALIDATION
+            }, { status: HTTP_STATUS.NOT_FOUND });
+        }
+
         if (!forceRefresh) {
             const cachedResult = await getCachedAnalysis(documentId, typedAnalysisType, typedIncludeRelatedDocs);
 
@@ -175,16 +189,6 @@ export async function POST(request: Request) {
                     fromCache: true
                 }, { status: HTTP_STATUS.OK });
             }
-        }
-
-        const docDetails = await getDocumentDetails(documentId);
-        if (!docDetails) {
-            recordResult("error");
-            return NextResponse.json({
-                success: false,
-                message: "Document not found.",
-                errorType: ERROR_TYPES.VALIDATION
-            }, { status: HTTP_STATUS.NOT_FOUND });
         }
 
         // Read from RLM table first (with structure headings), fall back to legacy pdfChunks
@@ -237,26 +241,17 @@ export async function POST(request: Request) {
 
         let existingDocuments: string[] = [];
         if (includeRelatedDocs) {
-            const currentDoc = await db.select({ companyId: document.companyId })
+            const existingDocs = await db
+                .selectDistinct({ title: document.title, url: document.url })
                 .from(document)
-                .where(eq(document.id, documentId))
-                .limit(1);
+                .where(
+                    and(
+                        eq(document.companyId, ctx.data.companyId),
+                        ne(document.id, documentId)
+                    )
+                );
 
-            const currentCompanyId = currentDoc[0]?.companyId;
-
-            if (currentCompanyId) {
-                const existingDocs = await db
-                    .selectDistinct({ title: document.title, url: document.url }) //getting title and document url
-                    .from(document)
-                    .where(
-                        and(
-                            eq(document.companyId, currentCompanyId),
-                            ne(document.id, documentId)
-                        )
-                    );
-
-                existingDocuments = existingDocs.map(row => `${row.title || row.url}`);
-            }
+            existingDocuments = existingDocs.map(row => `${row.title || row.url}`);
         }
 
         const specification = {

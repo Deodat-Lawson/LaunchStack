@@ -5,6 +5,7 @@ import { agentAiChatbotVote } from "@launchstack/core/db/schema";
 import { eq, and } from "drizzle-orm";
 import { validateRequestBody, CreateVoteSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -18,6 +19,9 @@ export async function POST(request: NextRequest) {
     const validation = await validateRequestBody(request, CreateVoteSchema);
     if (!validation.success) return validation.response;
     const { chatId, messageId, isUpvoted, feedback } = validation.data;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     // Check if vote already exists
     const [existingVote] = await db
@@ -94,6 +98,9 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const [vote] = await db
       .select()

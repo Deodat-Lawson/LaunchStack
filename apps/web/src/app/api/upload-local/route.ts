@@ -68,6 +68,7 @@ export async function POST(request: Request) {
       data: await file.arrayBuffer(),
       contentType: file.type || undefined,
       userId,
+      companyId: ctx.data.companyId,
     });
 
     // For S3, record a fileUploads row so the /api/files/<id> route can also
@@ -81,6 +82,7 @@ export async function POST(request: Request) {
         .insert(fileUploads)
         .values({
           userId,
+          companyId: ctx.data.companyId,
           filename: file.name,
           mimeType: file.type,
           fileData: null,

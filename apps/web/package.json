@@ -14,6 +14,7 @@
     "db:backfill:note-embeddings": "tsx ./scripts/backfill-note-embeddings.ts",
     "db:backfill:embedding-credentials": "tsx ./scripts/backfill-embedding-credentials.ts",
     "db:studio": "drizzle-kit studio",
+    "fwr:collect-evidence": "tsx ./scripts/collect-founder-weekly-review-evidence.ts",
     "dev": "concurrently --names next,inngest --prefix-colors blue,magenta \"next dev --turbo\" \"pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest\"",
     "dev:next": "next dev --turbo",
     "lint": "eslint .",

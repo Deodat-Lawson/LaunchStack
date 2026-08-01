@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { eq, asc } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { and, eq, asc } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document, documentContextChunks } from "@launchstack/core/db/schema";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -10,10 +10,8 @@ interface RouteParams {
 
 export async function GET(_request: Request, { params }: RouteParams) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { id } = await params;
     const docId = parseInt(id, 10);
@@ -24,7 +22,12 @@ export async function GET(_request: Request, { params }: RouteParams) {
     const [doc] = await db
       .select({ id: document.id, title: document.title })
       .from(document)
-      .where(eq(document.id, docId));
+      .where(
+        and(
+          eq(document.id, docId),
+          eq(document.companyId, ctx.data.companyId),
+        ),
+      );
 
     if (!doc) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });

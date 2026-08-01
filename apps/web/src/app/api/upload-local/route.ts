@@ -7,12 +7,12 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { fileUploads } from "@launchstack/core/db/schema";
 import { uploadFile, resolveStorageBackend } from "~/lib/storage";
 import { isUploadAccepted } from "~/lib/upload-accepted";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const MAX_FILE_SIZE = DOCUMENT_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024;
 
@@ -22,15 +22,11 @@ const UNSUPPORTED_TYPE_MESSAGE =
 export async function POST(request: Request) {
   const uploadStart = Date.now();
   try {
-    // Authenticate user
-    const { userId } = await auth();
-    if (!userId) {
-      console.warn("[UploadLocal] Rejected: no authenticated user");
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    // Workspace session required. file_uploads has no companyId column yet —
+    // ownership on read is enforced via uploader membership in /api/files/[id].
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+    const userId = ctx.data.clerkUserId;
 
     // Parse multipart form data
     const formData = await request.formData();
@@ -54,7 +50,7 @@ export async function POST(request: Request) {
 
     const backend = resolveStorageBackend();
     console.log(
-      `[UploadLocal] Uploading via ${backend}: name=${file.name}, mime=${file.type}, size=${(file.size / 1024).toFixed(1)}KB, user=${userId}`
+      `[UploadLocal] Uploading via ${backend}: name=${file.name}, mime=${file.type}, size=${(file.size / 1024).toFixed(1)}KB, user=${userId}, company=${ctx.data.companyId}`
     );
 
     if (file.size > MAX_FILE_SIZE) {

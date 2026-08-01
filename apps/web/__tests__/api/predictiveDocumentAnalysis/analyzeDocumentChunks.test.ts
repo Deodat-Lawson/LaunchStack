@@ -1,26 +1,48 @@
-const mockStructuredInvoke = jest.fn().mockResolvedValue({
-    missingDocuments: [],
-    recommendations: [],
-});
+import type * as CoreLlm from "@launchstack/core/llm";
+
+const mockStructuredInvoke = jest
+    .fn<Promise<{ missingDocuments: never[]; recommendations: never[] }>, []>()
+    .mockResolvedValue({
+        missingDocuments: [],
+        recommendations: [],
+    });
 
 jest.mock("p-limit", () => ({
     __esModule: true,
     default: () => (fn: () => Promise<unknown>) => fn(),
 }));
 
-jest.mock("@langchain/openai", () => {
-    const MockChatOpenAI = class {
-        withStructuredOutput() {
-            return {
-                invoke: mockStructuredInvoke,
-            };
-        }
-    };
+jest.mock("@launchstack/core/llm", () => {
+    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
     return {
         __esModule: true,
-        ChatOpenAI: MockChatOpenAI,
+        ...actual,
+        invokeStructured: jest.fn(() => mockStructuredInvoke()),
     };
 });
+
+jest.mock("~/lib/models", () => ({
+    resolveConfiguredChatModel: jest.fn(() => ({
+            route: "fast",
+        name: "primary",
+        modelId: "test-model",
+        behavior: {
+            input: ["text"],
+            reasoning: { mode: "none" },
+            nativeStructuredOutput: ["json-schema"],
+            parameters: {
+                temperature: "supported",
+                systemMessages: "supported",
+                streaming: "supported",
+                maxOutputTokens: "supported",
+            },
+        },
+        inheritsDefault: true,
+        reasoning: { mode: "none", enabled: false, requestPatch: {} },
+        chat: {},
+        prepareMessages: (messages: unknown[]) => messages,
+    })),
+}));
 
 import * as AnalysisEngine from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";
 import { createChunkBatches } from "~/app/api/agents/predictive-document-analysis/utils/batching";

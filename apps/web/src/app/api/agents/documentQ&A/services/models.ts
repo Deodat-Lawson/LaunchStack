@@ -1,10 +1,10 @@
 /**
- * Document Q&A chat model factory.
- * Re-exports from shared lib so one place controls model config.
+ * Document Q&A model access. Re-exported from the shared lib so one place
+ * controls how routes resolve.
  */
 export {
-  getDefaultChatModel,
-  getChatModel,
+  resolveConfiguredChatModel,
+  resolveConfiguredChatRoute,
+  selectChatRoute,
   getEmbeddings,
-  type AIModelType,
 } from "~/lib/models";

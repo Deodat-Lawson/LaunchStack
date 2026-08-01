@@ -13,13 +13,13 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { AIModelTypes } from "@launchstack/core/llm";
+import { invokeStructured } from "@launchstack/core/llm";
 import { z } from "zod";
 import {
-    getChatModel,
-    getDefaultChatModel,
     normalizeModelContent,
 } from "~/app/api/agents/documentQ&A/services";
+import { resolveConfiguredChatModel } from "~/lib/models";
+import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 
 /** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
 function stripRewriteQuotes(text: string): string {
@@ -61,7 +61,7 @@ const GenerateSchema = z.object({
         tone: z.enum(["professional", "casual", "formal", "technical", "creative", "persuasive"]).optional(),
         length: z.enum(["brief", "medium", "detailed", "comprehensive"]).optional(),
         audience: z.enum(["general", "technical", "executives", "students", "customers", "team"]).optional(),
-        model: z.enum(AIModelTypes).optional(),
+        model: z.string().min(1).optional(),
     }).optional(),
 });
 
@@ -145,6 +145,8 @@ const TONE_DESCRIPTIONS: Record<string, string> = {
     persuasive: "Compelling and convincing. Uses rhetorical techniques to influence the reader.",
 };
 
+const FieldUpdateSchema = z.record(z.string());
+
 export async function POST(request: Request) {
     try {
         const { userId } = await auth();
@@ -177,10 +179,22 @@ export async function POST(request: Request) {
         const startTime = Date.now();
         const containsEditableHtml = (content?.includes("<mark") ?? false) || (prompt?.includes("<mark") ?? false);
 
-        // Resolve the requested model, defaulting to the app's OpenRouter model.
-        const { model: modelId, chat } = options?.model
-            ? { model: options.model, chat: getChatModel(options.model) }
-            : getDefaultChatModel("openrouter");
+        // Field updates are short structured extractions — cheap enough for
+        // the operator's fast route; prose generation uses the default.
+        const resolved = resolveConfiguredChatModel({
+            route: action === "field_update" ? "fast" : "default",
+        });
+        const { modelId, chat } = resolved;
+        const compatibility = validateDeprecatedChatSelection(
+            { model: options?.model },
+            resolved,
+        );
+        if (!compatibility.ok) {
+            return NextResponse.json(
+                { success: false, message: compatibility.message },
+                { status: compatibility.status },
+            );
+        }
 
         // Build the system prompt
         let systemPrompt = ACTION_PROMPTS[action];
@@ -247,10 +261,12 @@ export async function POST(request: Request) {
                 }
 
                 // Writing first pass
-                const firstPass = await chat.call([
-                    new SystemMessage(systemPrompt),
-                    new HumanMessage(userPrompt),
-                ]);
+                const firstPass = await chat.invoke(
+                    resolved.prepareMessages([
+                        new SystemMessage(systemPrompt),
+                        new HumanMessage(userPrompt),
+                    ]),
+                );
                 
                 // Normalizing
                 const firstDraft = normalizeModelContent(firstPass.content);
@@ -272,7 +288,8 @@ export async function POST(request: Request) {
                         : "Output ONLY the refined text: no quotation marks, no wrapper phrases",
                 ].join("\n- ");
 
-                const secondPass = await chat.call([
+                const secondPass = await chat.invoke(
+                    resolved.prepareMessages([
                     new SystemMessage(systemPrompt),
                     new HumanMessage(`Here is a rewritten version of the original text:
 
@@ -280,7 +297,8 @@ export async function POST(request: Request) {
 
 Now refine it further:
 - ${refinementInstructions}`),
-                ]);
+                    ]),
+                );
 
                 // Use the refined second pass for rewrite (skip the generic call below)
                 const rewriteContent = stripRewriteQuotes(normalizeModelContent(secondPass.content));
@@ -322,11 +340,27 @@ Now refine it further:
                 break;
         }
 
+        if (action === "field_update") {
+            const fieldUpdates = await invokeStructured(resolved, FieldUpdateSchema, [
+                new SystemMessage(systemPrompt),
+                new HumanMessage(userPrompt),
+            ], { name: "field_updates" });
+            return NextResponse.json({
+                success: true,
+                action,
+                generatedContent: JSON.stringify(fieldUpdates),
+                processingTimeMs: Date.now() - startTime,
+                model: modelId,
+            });
+        }
+
         // Call the AI model
-        const response = await chat.call([
-            new SystemMessage(systemPrompt),
-            new HumanMessage(userPrompt),
-        ]);
+        const response = await chat.invoke(
+            resolved.prepareMessages([
+                new SystemMessage(systemPrompt),
+                new HumanMessage(userPrompt),
+            ]),
+        );
 
         const generatedContent = normalizeModelContent(response.content);
         const processingTimeMs = Date.now() - startTime;

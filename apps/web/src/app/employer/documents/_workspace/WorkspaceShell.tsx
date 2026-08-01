@@ -233,7 +233,6 @@ export function WorkspaceShell() {
         documentId: scope === "document" ? numericIds[0] : undefined,
         selectedDocumentIds: scope === "selected" ? numericIds : undefined,
         companyId: scope === "company" ? companyId ?? undefined : undefined,
-        provider: send.provider,
         enableWebSearch: send.webSearch,
         thinkingMode: send.thinking,
         attachments: send.attachments.map((a) => ({

@@ -37,8 +37,8 @@ describe("Fix 1.8: Secret removed from Docker build args — OPENAI_API_KEY not 
     });
 });
 
-describe("OpenRouter runtime configuration", () => {
-    it("forwards the OpenRouter key and model to the app container", () => {
+describe("Single-endpoint chat runtime configuration", () => {
+    it("forwards the chat endpoint and its config file to the app container", () => {
         const composePath = path.join(ROOT, "docker-compose.yml");
         const content = fs.readFileSync(composePath, "utf-8");
         const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(
@@ -46,12 +46,36 @@ describe("OpenRouter runtime configuration", () => {
         );
 
         expect(appService).not.toBeNull();
-        expect(appService![1]).toContain(
-            "OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}",
+        expect(appService![1]).toContain("CHAT_BASE_URL: ${CHAT_BASE_URL:-}");
+        expect(appService![1]).toContain("CHAT_API_KEY: ${CHAT_API_KEY:-}");
+        expect(appService![1]).toContain("CHAT_MODELS_CONFIG:");
+    });
+
+    it("mounts the chat model configuration so it is editable without a rebuild", () => {
+        const composePath = path.join(ROOT, "docker-compose.yml");
+        const content = fs.readFileSync(composePath, "utf-8");
+        const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(
+            content,
         );
+
         expect(appService![1]).toContain(
-            "OPENROUTER_MODEL: ${OPENROUTER_MODEL:-moonshotai/kimi-k3}",
+            "./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro",
         );
+    });
+
+    it("no longer forwards removed per-provider chat variables", () => {
+        const composePath = path.join(ROOT, "docker-compose.yml");
+        const content = fs.readFileSync(composePath, "utf-8");
+        for (const removed of [
+            "CHAT_PROVIDER",
+            "CHAT_CAPABILITIES",
+            "CHAT_FAST_PROVIDER",
+            "CHAT_REASONING_MODEL",
+            "CHAT_VISION_PROVIDER",
+            "CHAT_STRUCTURED_MODEL",
+        ]) {
+            expect(content).not.toContain(removed);
+        }
     });
 });
 

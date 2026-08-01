@@ -13,6 +13,7 @@ import {
   useEmployerWorkspaceSwitcher,
 } from "../../_chrome/EmployerWorkspaceSwitcherContext";
 import { WorkspaceSwitcherDropdownRow } from "../../_chrome/WorkspaceSwitcherDropdownRow";
+import { useChatRoutes } from "../hooks/useChatRoutes";
 import {
   IconArrowUp,
   IconBolt,
@@ -462,6 +463,7 @@ function Composer({
   const [attachments, setAttachments] = useState<EphemeralAttachment[]>([]);
   const [uploading, setUploading] = useState(false);
   const [attachError, setAttachError] = useState<string | null>(null);
+  const chatRoutes = useChatRoutes();
   const ref = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -477,7 +479,6 @@ function Composer({
       attachments,
       webSearch,
       thinking,
-      provider: "openrouter",
     });
     setText("");
     setAttachments([]);
@@ -515,6 +516,26 @@ function Composer({
           );
           continue;
         }
+        if (kind === "image" && !chatRoutes.visionEnabled) {
+          setAttachError(
+            chatRoutes.visionDisabledReason ??
+              `"${file.name}" needs a vision route. Assign an image-capable model to the "vision" route in the chat model configuration.`,
+          );
+          continue;
+        }
+        const maxImages = chatRoutes.config.routes.vision.vision?.maxImages;
+        if (
+          kind === "image" &&
+          maxImages !== undefined &&
+          attachments.filter((a) => a.kind === "image").length +
+            next.filter((a) => a.kind === "image").length >=
+            maxImages
+        ) {
+          setAttachError(
+            `The configured vision model accepts at most ${maxImages} image(s) per message.`,
+          );
+          continue;
+        }
         const form = new FormData();
         form.append("file", file);
         const res = await fetch("/api/storage/upload", { method: "POST", body: form });
@@ -540,7 +561,12 @@ function Composer({
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
-  }, [attachments.length]);
+  }, [
+    attachments,
+    chatRoutes.visionEnabled,
+    chatRoutes.visionDisabledReason,
+    chatRoutes.config,
+  ]);
 
   const removeAttachment = (id: string) => {
     setAttachments((prev) => prev.filter((a) => a.id !== id));
@@ -728,9 +754,15 @@ function Composer({
           />
           <ToolbarPill
             label="Think"
-            title="Let the model reason step-by-step before answering"
+            title={
+              chatRoutes.reasoningEnabled
+                ? "Let the configured reasoning model reason before answering"
+                : (chatRoutes.reasoningDisabledReason ??
+                  'Assign a reasoning-capable model to the "reasoning" route to enable this')
+            }
             icon={<IconBrain size={12} />}
-            active={thinking}
+            active={thinking && chatRoutes.reasoningEnabled}
+            disabled={!chatRoutes.reasoningEnabled}
             onClick={onToggleThinking}
           />
         </div>

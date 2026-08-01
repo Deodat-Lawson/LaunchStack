@@ -10,7 +10,7 @@ import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import {
-    getDefaultChatModel,
+    resolveConfiguredChatModel,
     normalizeModelContent,
 } from "~/app/api/agents/documentQ&A/services";
 
@@ -301,7 +301,8 @@ export async function POST(request: Request) {
         }
 
         // Get the AI model
-        const { chat } = getDefaultChatModel("openrouter");
+        const resolved = resolveConfiguredChatModel();
+        const { chat } = resolved;
 
         // Build system prompt
         let systemPrompt = getTemplateSystemPrompt(templateId);
@@ -356,10 +357,12 @@ export async function POST(request: Request) {
         console.log(`🤖 [Initialize] Generating document content...`);
 
         // Call the AI model
-        const response = await chat.call([
-            new SystemMessage(systemPrompt),
-            new HumanMessage(userPrompt),
-        ]);
+        const response = await chat.invoke(
+            resolved.prepareMessages([
+                new SystemMessage(systemPrompt),
+                new HumanMessage(userPrompt),
+            ]),
+        );
 
         let generatedContent = normalizeModelContent(response.content);
 

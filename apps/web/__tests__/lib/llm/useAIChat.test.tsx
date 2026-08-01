@@ -15,7 +15,7 @@ describe("useAIChat", () => {
     global.fetch = fetchMock as unknown as typeof fetch;
   });
 
-  it("omits aiModel so the server can apply the configured provider default", async () => {
+  it("omits provider and aiModel so the server applies the configured route", async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       json: async () => ({ success: true, summarizedAnswer: "Done" }),
@@ -27,7 +27,6 @@ describe("useAIChat", () => {
       await result.current.sendQuery({
         question: "Use the configured model",
         searchScope: "company",
-        provider: "openrouter",
       });
     });
 
@@ -37,17 +36,17 @@ describe("useAIChat", () => {
     ];
     const body = JSON.parse(request.body as string) as Record<string, unknown>;
     expect(body).not.toHaveProperty("aiModel");
-    expect(body.provider).toBe("openrouter");
+    expect(body).not.toHaveProperty("provider");
   });
 
-  it("returns the provider error so the workspace can display it", async () => {
+  it("returns the endpoint error so the workspace can display it", async () => {
     fetchMock.mockResolvedValue({
       ok: false,
       status: 401,
       json: async () => ({
         success: false,
         message:
-          "Invalid or missing OPENROUTER_API_KEY. Please check your API key configuration.",
+          "The chat endpoint rejected CHAT_API_KEY. Check the credential configured for CHAT_BASE_URL.",
       }),
     });
 
@@ -58,18 +57,16 @@ describe("useAIChat", () => {
       response = await result.current.sendQuery({
         question: "hi",
         searchScope: "company",
-        provider: "openrouter",
-        aiModel: "moonshotai/kimi-k3",
       });
     });
 
     expect(response).toEqual({
       success: false,
       message:
-        "Invalid or missing OPENROUTER_API_KEY. Please check your API key configuration.",
+        "The chat endpoint rejected CHAT_API_KEY. Check the credential configured for CHAT_BASE_URL.",
     });
     expect(result.current.error).toBe(
-      "Invalid or missing OPENROUTER_API_KEY. Please check your API key configuration.",
+      "The chat endpoint rejected CHAT_API_KEY. Check the credential configured for CHAT_BASE_URL.",
     );
   });
 });

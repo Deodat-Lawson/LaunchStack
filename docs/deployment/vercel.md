@@ -70,7 +70,8 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `DATABASE_URL` | Postgres connection string with SSL if remote |
 | `CLERK_SECRET_KEY` | From Clerk dashboard |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | From Clerk dashboard |
-| `OPENROUTER_API_KEY` | Dedicated key for workspace chat and document generation; validated in [`env.ts`](../../apps/web/src/env.ts) |
+| `CHAT_BASE_URL` | The OpenAI-compatible chat endpoint, e.g. `https://openrouter.ai/api/v1` |
+| `CHAT_API_KEY` | Bearer credential for that endpoint (omit only for keyless endpoints, which are rare on Vercel) |
 | `EMBEDDING_SECRETS_KEY` | 32-byte base64. Generate once: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`. **Keep constant across deploys** — rotating it invalidates stored per-company credentials |
 | `INNGEST_EVENT_KEY` | From Inngest Cloud (step 4) |
 | `INNGEST_SIGNING_KEY` | From Inngest Cloud (step 4) |
@@ -85,9 +86,22 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `ADEU_SERVICE_URL` | If using DOCX redlining (Adeu sidecar) |
 | `OPENAI_API_KEY`, `AI_API_KEY`, or per-capability keys | If enabled embeddings, reranking, NER, or transcription do not use a local provider |
 
-`OPENROUTER_MODEL` is optional and defaults to `moonshotai/kimi-k3`. It may be
-set to any provider-qualified OpenRouter model ID. The app never falls back to
-`OPENAI_API_KEY` for OpenRouter requests.
+OpenRouter is a convenient quick start, not a requirement — any endpoint
+implementing the OpenAI chat-completions protocol works. Vercel cannot host a
+local model itself, but it can call an externally hosted compatible endpoint.
+
+Which model serves each route lives in `apps/web/config/chat-models.yaml`,
+which is deployed with the repository, so changing a model is a commit rather
+than a dashboard edit. To keep separate model sets per environment, commit a
+second file and set `CHAT_MODELS_CONFIG` per Vercel environment:
+
+```
+CHAT_MODELS_CONFIG=config/chat-models.production.yaml
+```
+
+Routes that need a capability the configured model lacks report themselves
+unavailable rather than falling back, so verify the file before promoting a
+deployment. See [Chat Models](../chat-models.md) for the full reference.
 
 ### Optional (feature flags / overrides)
 

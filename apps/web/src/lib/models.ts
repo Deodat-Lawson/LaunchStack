@@ -1,23 +1,24 @@
 /**
- * Legacy re-export shim.
+ * App-side entry point for chat model resolution.
  *
- * getChatModel + AIModelType now live in @launchstack/core/llm so that
- * features (packages/features/*) can build chat models without reaching
- * back into apps/web. getEmbeddings stays app-local because it pulls in
- * ~/lib/tools/rag types; refactor the RAG layer first if that needs to
- * move.
+ * Everything here does one extra thing over the core resolver: install this
+ * deployment's configuration first. Serverless invocations cannot assume
+ * getEngine() ran, so each route helper wires the config itself — the parsed
+ * file is cached, so the repeat cost is a map lookup.
  *
- * New call sites should import from @launchstack/core/llm directly — this
- * file exists only so the ~120 existing callers keep working unchanged.
+ * Resolution is cheap and throws a typed 400. Call it *before* retrieval, web
+ * search, or embeddings, so an unavailable route fails before the deployment
+ * pays for work it is about to throw away.
  */
 import {
-  getChatModelByType,
-  getChatModelForProvider,
-  getProviderDefaultModel,
-  type AIModelType,
-  type LLMProvider,
+  getPublicChatConfig,
+  resolveChatModel,
+  resolveChatRoute,
+  selectChatRoute,
+  type PublicChatConfig,
+  type ResolveChatModelOptions,
+  type ResolvedChatModel,
 } from "@launchstack/core/llm";
-import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
 import type { CompanyEmbeddingConfig } from "@launchstack/core/embeddings";
@@ -25,23 +26,32 @@ import type { EmbeddingsProvider } from "~/lib/tools/rag/types";
 import { configureAppChatModels } from "~/server/chat-models";
 import { env } from "~/env";
 
-export type { AIModelType };
+export { selectChatRoute };
 
-export function getChatModel(modelType: AIModelType): BaseChatModel {
+/** Resolve a route to a ready-to-invoke model for this deployment. */
+export function resolveConfiguredChatModel(
+  options: ResolveChatModelOptions = {},
+): ResolvedChatModel {
   configureAppChatModels(env.server);
-  return getChatModelByType(modelType);
+  return resolveChatModel(options);
 }
 
-export function getDefaultChatModel(provider: LLMProvider): {
-  model: string;
-  chat: BaseChatModel;
-} {
+/**
+ * Which model serves a route, without constructing a client. Use when a
+ * caller only needs the effective model id — reporting it back in a response,
+ * for instance.
+ */
+export function resolveConfiguredChatRoute(
+  route: Parameters<typeof resolveChatRoute>[0] = "default",
+) {
   configureAppChatModels(env.server);
-  const model = getProviderDefaultModel(provider);
-  return {
-    model,
-    chat: getChatModelForProvider({ provider }),
-  };
+  return resolveChatRoute(route);
+}
+
+/** Sanitized route information for the browser. Never includes secrets. */
+export function getConfiguredPublicChatConfig(): PublicChatConfig {
+  configureAppChatModels(env.server);
+  return getPublicChatConfig();
 }
 
 export function getEmbeddings(
@@ -50,13 +60,3 @@ export function getEmbeddings(
 ): EmbeddingsProvider {
   return createEmbeddingModel(resolveEmbeddingIndex(indexKey, config), config);
 }
-
-/** Marketing pipeline model config: one place to swap models per stage. */
-export const MARKETING_MODELS = {
-  dnaExtraction: "gpt-5-nano" as AIModelType,
-  competitorAnalysis: "gpt-5-nano" as AIModelType,
-  strategyBuilding: "gpt-5-nano" as AIModelType,
-  contentGeneration: "gpt-4o" as AIModelType,
-  claimVerification: "gpt-5-nano" as AIModelType,
-  refinement: "gpt-4o" as AIModelType,
-} as const;

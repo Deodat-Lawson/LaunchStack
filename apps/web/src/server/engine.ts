@@ -21,7 +21,7 @@ import { createAppStoragePort } from "./storage/port";
 import { createAppJobDispatcherPort } from "./jobs/port";
 import { createAppCreditsPort } from "./credits/port";
 import { createAppRagPort } from "./rag/port";
-import { configureAppChatModels } from "./chat-models";
+import { configureAppChatModels, getAppChatModelsConfig } from "./chat-models";
 
 type EngineHolder = { engine: Engine };
 
@@ -59,16 +59,22 @@ function buildConfig(): CoreConfig {
     db: { url: server.DATABASE_URL },
 
     llm: {
+      // Chat: one OpenAI-compatible endpoint plus the validated model file.
+      chat: getAppChatModelsConfig(server),
+      // Non-chat OpenAI-compatible work (OCR chunking, VLM enrichment,
+      // embeddings fallback) keeps its own credentials — it must never
+      // borrow the chat endpoint's key.
+      auxiliaryOpenAI: {
+        apiKey: server.AI_API_KEY ?? server.OPENAI_API_KEY,
+        baseUrl: server.AI_BASE_URL,
+      },
       openai: server.OPENAI_API_KEY
         ? { apiKey: server.OPENAI_API_KEY, model: server.OPENAI_MODEL }
         : undefined,
-      anthropic: server.ANTHROPIC_API_KEY
-        ? { apiKey: server.ANTHROPIC_API_KEY, model: server.ANTHROPIC_MODEL }
-        : undefined,
-      google: server.GOOGLE_AI_API_KEY
-        ? { apiKey: server.GOOGLE_AI_API_KEY, model: server.GOOGLE_MODEL }
-        : undefined,
       ollama,
+      openaiCompatible: server.AI_BASE_URL
+        ? { baseUrl: server.AI_BASE_URL, apiKey: server.AI_API_KEY }
+        : undefined,
       huggingface,
       aiBaseUrl: server.AI_BASE_URL,
       aiApiKey: server.AI_API_KEY,

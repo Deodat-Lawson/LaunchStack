@@ -1,7 +1,8 @@
-import { ChatOpenAI } from "@langchain/openai";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
+import { z } from "zod";
+import { invokeStructured } from "@launchstack/core/llm";
 import { performExaSearch } from "./exaSearch";
-import { env } from "~/env";
+import { resolveConfiguredChatModel } from "~/lib/models";
 import type { WebSearchResult, WebSearchAgentInput, WebSearchAgentResult } from "./types";
 
 /**
@@ -78,6 +79,16 @@ const RESULT_SYNTHESIS_PROMPT =
     "reasoning": "Brief explanation of selection criteria"
     }`;
 
+const SearchSynthesisSchema = z.object({
+    selectedResults: z.array(z.object({
+        title: z.string(),
+        url: z.string(),
+        snippet: z.string(),
+        relevanceScore: z.number().optional(),
+    })),
+    reasoning: z.string().optional(),
+});
+
 /**
  * Refines the user's question into an optimized search query
  */
@@ -85,11 +96,7 @@ async function refineSearchQuery(
     userQuestion: string,
     documentContext?: string
 ): Promise<{ refinedQuery: string; reasoning: string }> {
-    const chat = new ChatOpenAI({
-        openAIApiKey: env.server.OPENAI_API_KEY,
-        modelName: "gpt-5-mini",
-        temperature: 0.3,
-    });
+    const resolved = resolveConfiguredChatModel({ route: "fast" });
 
     const contextPrompt = documentContext
         ? `\n\nDocument Context (use relevant terms from this):\n${documentContext.substring(0, 500)}`
@@ -103,7 +110,9 @@ async function refineSearchQuery(
     ];
 
     try {
-        const response = await chat.invoke(messages);
+        const response = await resolved.chat.invoke(
+            resolved.prepareMessages(messages),
+        );
         let content: string;
         if (typeof response.content === "string") {
             content = response.content;
@@ -174,11 +183,7 @@ async function synthesizeResults(
         };
     }
 
-    const chat = new ChatOpenAI({
-        openAIApiKey: env.server.OPENAI_API_KEY,
-        modelName: "gpt-5-mini",
-        temperature: 0.2,
-    });
+    const resolved = resolveConfiguredChatModel({ route: "fast" });
 
     const searchResultsText = rawResults
         .map(
@@ -194,48 +199,10 @@ async function synthesizeResults(
         .replace("{maxResults}", maxResults.toString());
 
     try {
-        const response = await chat.invoke([
+        const parsed = await invokeStructured(resolved, SearchSynthesisSchema, [
             new SystemMessage("You are a helpful assistant that returns only valid JSON."),
             new HumanMessage(prompt),
-        ]);
-
-        let responseText: string;
-        if (typeof response.content === "string") {
-            responseText = response.content;
-        } else if (Array.isArray(response.content)) {
-            responseText = response.content
-                .map((item) => typeof item === "string" ? item : JSON.stringify(item))
-                .join("");
-        } else {
-            responseText = JSON.stringify(response.content);
-        }
-        
-        // Extract JSON from response (handle markdown code blocks)
-        const jsonBlockRegex = /```json\s*([\s\S]*?)\s*```/;
-        const jsonObjectRegex = /\{[\s\S]*\}/;
-        
-        let jsonText = responseText;
-        const jsonBlockMatch = jsonBlockRegex.exec(responseText);
-        if (jsonBlockMatch) {
-            jsonText = jsonBlockMatch[1] ?? jsonText;
-        } else {
-            const jsonObjectMatch = jsonObjectRegex.exec(responseText);
-            if (jsonObjectMatch) {
-                jsonText = jsonObjectMatch[0] ?? jsonText;
-            }
-        }
-        
-        interface ParsedSynthesisResult {
-            selectedResults: Array<{
-                title: string;
-                url: string;
-                snippet: string;
-                relevanceScore?: number;
-            }>;
-            reasoning?: string;
-        }
-        
-        const parsed = JSON.parse(jsonText) as ParsedSynthesisResult;
+        ], { name: "web_search_synthesis" });
         
         // Map back to WebSearchResult format
         const synthesizedResults: WebSearchResult[] = parsed.selectedResults.map(
@@ -324,4 +291,3 @@ export async function executeWebSearchAgent(
         };
     }
 }
-

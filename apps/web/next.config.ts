@@ -103,8 +103,6 @@ const config: NextConfig = {
     // LangChain ecosystem — skip webpack tracing, load from node_modules at runtime
     "@langchain/core",
     "@langchain/openai",
-    "@langchain/anthropic",
-    "@langchain/google-genai",
     "@langchain/ollama",
     "@langchain/community",
     "@langchain/langgraph",

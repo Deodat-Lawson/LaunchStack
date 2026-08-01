@@ -204,7 +204,7 @@ type RawFact = z.infer<typeof MetadataFactSchema>;
 
 /**
  * Structured LLM call contract. Shape intentionally mirrors Vercel AI SDK's
- * `generateObject` (system + prompt + schema) so hosts can adapt their
+ * schema generation helper (system + prompt + schema) so hosts can adapt their
  * existing LLM layer with a thin wrapper. Callers pass a concrete function
  * — apps/web passes its `generateStructured` from ~/lib/llm.
  */

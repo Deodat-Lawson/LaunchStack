@@ -3,8 +3,11 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { describeProviderError } from "@launchstack/core/llm";
-import { getDefaultChatModel } from "~/lib/models";
+import { describeChatError } from "@launchstack/core/llm";
+import {
+  resolveConfiguredChatModel,
+  resolveConfiguredChatRoute,
+} from "~/lib/models";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
@@ -249,8 +252,10 @@ export async function POST(request: Request) {
       }
     }
 
-    const { chat } = getDefaultChatModel("openrouter");
-    const response = await chat.invoke(langchainMessages);
+    const resolved = resolveConfiguredChatModel();
+    const response = await resolved.chat.invoke(
+      resolved.prepareMessages(langchainMessages),
+    );
     const content =
       typeof response.content === "string"
         ? response.content
@@ -308,11 +313,8 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("[legal-chat] POST error:", error);
-    const friendly = describeProviderError(
-      "openrouter",
-      error,
-      "moonshotai/kimi-k3",
-    );
+    const selected = resolveConfiguredChatRoute();
+    const friendly = describeChatError(error, selected.definition.id);
 
     return NextResponse.json(
       {

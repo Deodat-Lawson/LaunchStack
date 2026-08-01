@@ -36,7 +36,11 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchstack_test
       SKIP_ENV_VALIDATION: "1"
-      # CI needs a dummy key so env.ts's superRefine doesn't fail the load.
+      # CI never calls the endpoint; these only satisfy env.ts's chat check.
+      # Set explicitly rather than relying on the deprecated OPENAI_API_KEY
+      # translation, so CI exercises the canonical variables.
+      CHAT_BASE_URL: https://ci.invalid/v1
+      CHAT_API_KEY: chat-ci-placeholder
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'sk-ci-placeholder' }}
       CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY || 'sk_test_ci_placeholder' }}
       INNGEST_EVENT_KEY: ci-placeholder

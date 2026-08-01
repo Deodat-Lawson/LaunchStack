@@ -1,8 +1,12 @@
 /**
- * Shared OpenAI client for subsystems that need the raw `openai` SDK
- * (chunker, enrichment, embeddings fallback path). Reads credentials from
- * the same ChatModelsConfig registered via configureChatModels, so the
- * hosting app only wires once.
+ * Shared OpenAI SDK client for **non-chat** subsystems: the OCR chunker, VLM
+ * enrichment, and the embeddings fallback path.
+ *
+ * Deliberately configured separately from the chat endpoint. Those subsystems
+ * have their own model requirements and often their own provider, and
+ * borrowing the chat credential for them is exactly the cross-service key
+ * reuse this architecture forbids. Hosts wire it from their auxiliary AI
+ * settings, never from `CHAT_BASE_URL` / `CHAT_API_KEY`.
  *
  * Lazy — the client is only instantiated on first use, which keeps the
  * openai package out of cold-start for subsystems that never call it.
@@ -10,32 +14,41 @@
 
 import OpenAI from "openai";
 
-import { getChatModelsConfig } from "./chat-model-factory";
 import { createSlot } from "../internal/slot";
 
+export interface AuxiliaryOpenAIConfig {
+  apiKey?: string;
+  /** OpenAI-compatible base URL. Omit for api.openai.com. */
+  baseUrl?: string;
+}
+
+const configSlot = createSlot<AuxiliaryOpenAIConfig>("llm/auxiliaryOpenAI");
 const clientSlot = createSlot<{ client: OpenAI; key: string }>(
-  "llm/openaiClient",
+  "llm/auxiliaryOpenAIClient",
 );
 
+/** Install credentials for the non-chat OpenAI-compatible subsystems. */
+export function configureAuxiliaryOpenAI(config: AuxiliaryOpenAIConfig): void {
+  configSlot.set(config);
+}
+
+export function getAuxiliaryOpenAIConfig(): AuxiliaryOpenAIConfig {
+  return configSlot.get() ?? {};
+}
+
 /**
- * Returns an OpenAI SDK client configured from the registered
- * ChatModelsConfig. Returns null if no API key is available — callers
- * should check before making a request.
+ * Returns a client for the auxiliary OpenAI-compatible endpoint, or null when
+ * no credential is configured — callers must check before making a request.
  */
 export function getOpenAIClient(): OpenAI | null {
-  const config = getChatModelsConfig();
-  const apiKey = config.openai?.apiKey ?? config.aiApiKey;
+  const { apiKey, baseUrl } = getAuxiliaryOpenAIConfig();
   if (!apiKey) return null;
 
-  const baseURL = config.aiBaseUrl;
-  const cacheKey = `${apiKey}:${baseURL ?? ""}`;
+  const cacheKey = `${apiKey}:${baseUrl ?? ""}`;
   const cached = clientSlot.get();
   if (cached && cached.key === cacheKey) return cached.client;
 
-  const client = new OpenAI({
-    apiKey,
-    ...(baseURL ? { baseURL } : {}),
-  });
+  const client = new OpenAI({ apiKey, ...(baseUrl ? { baseURL: baseUrl } : {}) });
   clientSlot.set({ client, key: cacheKey });
   return client;
 }

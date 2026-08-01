@@ -192,7 +192,10 @@ flowchart LR
   Expected["Expected ML contract:<br/>embed / rerank / extract-entities"] -. missing routes .-> Sidecar
 
   Web -. optional .-> Neo4j["Neo4j"]
-  Web --> Ai["OpenAI-compatible / Anthropic / Google / Ollama / Hugging Face"]
+  Web --> ChatResolver["Chat route resolver<br/>default / fast / reasoning / vision"]
+  ChatResolver --> ChatConfig["chat-models.yaml<br/>model ids + declared behavior"]
+  ChatResolver --> Ai["One OpenAI-compatible endpoint (CHAT_BASE_URL)"]
+  Web --> SupportingAi["Independent embeddings / OCR / reranking / transcription / TTS"]
 
   AdeuFn["api/adeu serverless handler"] -. deployment wiring unresolved .-> Web
 ```
@@ -231,6 +234,18 @@ Inngest Cloud is expected to call the Vercel deployment.
   a database fallback. Docker uses SeaweedFS as the S3-compatible implementation.
 - Neo4j is optional for graph retrieval; PostgreSQL also stores knowledge-graph
   entities, mentions, and relationships.
+- Chat reaches one OpenAI-compatible endpoint (`CHAT_BASE_URL`) that may serve
+  many models. Operators assign models to the `default`, `fast`, `reasoning`,
+  and `vision` routes in `apps/web/config/chat-models.yaml`; application
+  features name a route, never a model id or an endpoint.
+- Model behavior — image input, reasoning mode, native structured output,
+  accepted request parameters — is declared per model, never inferred from the
+  model id. Specialized routes fail closed rather than substituting a model.
+- Structured output is invocation behavior, not a route: models declaring a
+  native mechanism use it, and every other model goes through a strict JSON
+  prompt validated with Zod plus one repair attempt.
+- Non-chat AI capabilities (OCR, embeddings, reranking, NER, transcription)
+  keep independent configuration and never borrow the chat credential.
 
 ## Deployment modes
 
@@ -239,7 +254,7 @@ Inngest Cloud is expected to call the Vercel deployment.
 | Local pnpm           | Next.js + Inngest dev; externally supplied PostgreSQL and optional services       | Fastest web development loop                                                                               |
 | Docker default       | PostgreSQL, migration target, SeaweedFS, sidecar, OCR router, web, Inngest        | The sidecar and OCR router are hard startup dependencies even though documentation calls sidecars optional |
 | Docker `ocr` profile | Default stack + OCR worker + Docling serve                                        | Adds the heavier self-hosted Office/OCR path                                                               |
-| Vercel               | Next.js functions + managed PostgreSQL/storage + Inngest Cloud; sidecars external | Current config location and documentation disagree about the Vercel project root                           |
+| Vercel               | Next.js functions + managed PostgreSQL/storage + Inngest Cloud; sidecars external | Project Root Directory is `apps/web`, where the authoritative `vercel.json` lives                           |
 | Core package release | `@launchstack/core` built and published to npm                                    | Handled by Changesets on `main`                                                                            |
 
 The Docker `migrate` target runs `db:push` plus a backfill; the Vercel production
@@ -266,7 +281,7 @@ deploy correctness depends on the separate CI workflow being required.
 | Web contains legacy and new implementations          | Callers can choose multiple DB, RAG, LLM, OCR, and job access paths                                                          |
 | Sidecar implementation and callers disagree          | Configuring sidecar reranking, embeddings, or NER can call endpoints that do not exist                                       |
 | Two Adeu runtimes exist                              | Ownership, behavior parity, authentication, and deployment target are unclear                                                |
-| Existing Vercel project settings are not verified    | Repository config and docs require root `apps/web`, but an older project can retain `./` and miss the app-local config       |
+| Existing Vercel dashboard settings are external state | Repository config and docs require root `apps/web`; older projects must be checked for a retained `./` root                 |
 | Database schema ownership is split                   | Core declares schema; web owns migration files; Docker and Vercel apply schema differently                                   |
 | “Optional” services are mandatory in default Compose | Local startup cost and failure modes are larger than the documentation implies                                               |
 | Floating container/dependency versions               | `latest` images and broadly ranged Python packages reduce reproducibility                                                    |

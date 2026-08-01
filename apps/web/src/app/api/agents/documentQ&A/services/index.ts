@@ -16,9 +16,14 @@ export { buildReferences, extractRecommendedPages, filterPagesByAICitation } fro
 export { performExaSearch } from "./exaSearch";
 export { executeWebSearchAgent } from "./webSearchAgent";
 export { SYSTEM_PROMPTS, getSystemPrompt, getWebSearchInstruction } from "./prompts";
-export { getChatModel, getDefaultChatModel, getEmbeddings } from "./models";
-export { getChatModelForProvider, getProviderDefaultModel, describeOllamaError, describeProviderError } from "@launchstack/core/llm";
-export { ProviderModelMap, ProviderDefaultModels } from "./types";
+export {
+    resolveConfiguredChatModel,
+    resolveConfiguredChatRoute,
+    selectChatRoute,
+    getEmbeddings,
+} from "./models";
+export { describeChatError } from "@launchstack/core/llm";
+export { ChatRoutes, isChatRoute } from "./types";
 
 // RLM Search (hierarchical, cost-aware retrieval for large documents)
 export {
@@ -33,9 +38,9 @@ export {
 
 // Types - Centralized export from types.ts
 export type {
-    // AI Model Types
-    AIModelType,
-    LLMProvider,
+    // Chat routing types
+    ChatRoute,
+    ChatCapability,
     // Response Style Types
     ResponseStyle,
     // Source Reference Types
@@ -57,7 +62,6 @@ export type {
 
 // Type guards
 export {
-    isAIModelType,
     isResponseStyle,
     isAIPersona,
     isSearchScope,

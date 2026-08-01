@@ -1,5 +1,4 @@
 import type { ComponentType } from "react";
-import type { LLMProvider } from "@launchstack/core/llm";
 import {
   IconAudio,
   IconBolt,
@@ -144,7 +143,7 @@ export interface ThreadMessage {
 
 /**
  * Full payload a Composer send produces, so per-turn toggles (web search,
- * thinking, attachments, provider) can flow to the API without growing the
+ * thinking, and attachments) can flow to the API without growing the
  * argument list to sendMessage further.
  */
 export interface ComposerSend {
@@ -153,7 +152,6 @@ export interface ComposerSend {
   attachments: EphemeralAttachment[];
   webSearch: boolean;
   thinking: boolean;
-  provider: LLMProvider;
 }
 
 export interface DemotedFeature {

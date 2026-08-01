@@ -1,27 +1,34 @@
 import { NextResponse } from "next/server";
-import {
-  AIModelTypes,
-  inferProviderFromModel,
-  type AIModelType,
-} from "@launchstack/core/llm";
+import { getConfiguredPublicChatConfig } from "~/lib/models";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
+/**
+ * Sanitized chat configuration for the browser.
+ *
+ * The UI drives its vision and reasoning controls from this: a route reported
+ * unavailable disables the matching control, and the reasoning levels here
+ * are the only ones the server will accept. Endpoint URLs, credentials,
+ * reasoning request patches, and internal context/output limits never appear.
+ */
 export async function GET() {
-  const providers = {
-    openai: Boolean(process.env.OPENAI_API_KEY),
-    anthropic: Boolean(process.env.ANTHROPIC_API_KEY),
-    google: Boolean(process.env.GOOGLE_AI_API_KEY),
-    ollama: Boolean(process.env.OLLAMA_BASE_URL),
-    openrouter: Boolean(process.env.OPENROUTER_API_KEY),
-  } as const;
-
-  const models = Object.fromEntries(
-    AIModelTypes.map((model) => [
-      model,
-      providers[inferProviderFromModel(model)],
-    ]),
-  ) as Record<AIModelType, boolean>;
-
-  return NextResponse.json({ providers, models });
+  try {
+    return NextResponse.json(getConfiguredPublicChatConfig());
+  } catch (error) {
+    // A broken configuration must not take the whole UI down — report every
+    // route unavailable so controls disable themselves cleanly.
+    const message =
+      error instanceof Error ? error.message : "Chat models are not configured";
+    return NextResponse.json(
+      {
+        routes: {
+          default: { available: false, unavailableReason: message },
+          fast: { available: false, unavailableReason: message },
+          reasoning: { available: false, unavailableReason: message },
+          vision: { available: false, unavailableReason: message },
+        },
+      },
+      { status: 200 },
+    );
+  }
 }

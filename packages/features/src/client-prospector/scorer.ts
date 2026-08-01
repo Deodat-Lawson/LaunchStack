@@ -5,7 +5,7 @@
 // Each result gets a relevanceScore (0-100) and a rationale explaining
 // why it's a good prospect for the user's company.
 
-import { ChatOpenAI } from "@langchain/openai";
+import { invokeStructured, resolveChatModel } from "@launchstack/core/llm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import type { ProspectResult, RawPlaceResult } from "./types";
@@ -105,23 +105,19 @@ export async function scoreLeads(
         return [];
     }
 
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        modelName: "gpt-4o-mini",
+    const resolved = resolveChatModel({
+        route: "fast",
         temperature: 0.2,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-    });
-
-    const structuredModel = chat.withStructuredOutput(ScorerOutputSchema, {
-        name: "scored_prospects",
     });
 
     const humanPrompt = buildHumanPrompt(rawPlaces, query, companyContext, categories);
 
-    const response = await structuredModel.invoke([
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(humanPrompt),
-    ]);
+    const response = await invokeStructured(
+        resolved,
+        ScorerOutputSchema,
+        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
+        { name: "scored_prospects" },
+    );
 
     // Build a lookup map for raw places by fsqId
     const placeMap = new Map(rawPlaces.map((p) => [p.fsqId, p]));

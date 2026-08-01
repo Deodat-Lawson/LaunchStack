@@ -2,7 +2,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config as loadDotenv } from "dotenv";
 import { z } from "zod";
-import { hasConfiguredAiCredential } from "./server/ai-credentials";
+// Leaf module by design: importing ./server/chat-models here would pull the
+// core LLM barrel (ChatOpenAI, openai SDK, yaml) into everything that imports
+// ~/env, including next.config.ts at build time.
+import { resolveChatEndpoint } from "./server/chat-endpoint";
 
 // `.env` lives at the monorepo root, but Next.js (running from apps/web/) only
 // auto-loads `.env` from its own cwd. Load the root file here so this module
@@ -24,36 +27,25 @@ const requiredString = () =>
 const optionalString = () =>
   z.preprocess(normalize, z.string().min(1).optional());
 
-const configuredSecret = (name: string) =>
-  z.preprocess(
-    normalize,
-    z
-      .string()
-      .min(1, "Value is required")
-      .refine(
-        (value) =>
-          !/(?:paste|replace|your)[-_ ]*(?:api[-_ ]*)?key|example|^x{3,}$/i.test(
-            value,
-          ),
-        `${name} must be a real credential, not a placeholder`,
-      ),
-  );
-
 const serverSchema = z.object({
   // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
   DATABASE_URL: requiredString(),
   // OPENAI_API_KEY is optional when AI_API_KEY is set (validated in superRefine)
   OPENAI_API_KEY: optionalString(),
   OPENAI_MODEL: optionalString(),
-  CHAT_MODEL: optionalString(),         // provider-agnostic chat model (e.g. deepseek-ai/DeepSeek-V3)
+  // Chat: one OpenAI-compatible endpoint, its credential, and the file
+  // describing which models it serves. Model ids and per-model behavior live
+  // in that file, never here.
+  CHAT_BASE_URL: optionalString(),
+  CHAT_API_KEY: optionalString(),
+  CHAT_MODELS_CONFIG: optionalString(),
   EMBEDDING_INDEX: optionalString(),
   // 32 raw bytes encoded as base64 (44 chars). Used to encrypt per-company
   // embedding provider credentials at rest. Required whenever a company sets
   // its own API key through the settings UI. Generate with:
   //   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
   EMBEDDING_SECRETS_KEY: optionalString(),
-  // Required by the primary workspace and document-generation model.
-  OPENROUTER_API_KEY: configuredSecret("OPENROUTER_API_KEY"),
+  OPENROUTER_API_KEY: optionalString(),
   OPENROUTER_MODEL: optionalString(),
   ANTHROPIC_API_KEY: optionalString(),
   ANTHROPIC_MODEL: optionalString(),
@@ -142,7 +134,6 @@ const serverSchema = z.object({
   S3_SECRET_KEY: optionalString(),
   S3_BUCKET_NAME: optionalString(),
   // Repo Explainer
-  REPO_EXPLAINER_MODEL: optionalString(),
   GITHUB_TOKEN: optionalString(),
   // Global AI provider fallback — set once to route ALL capabilities to one provider
   // Per-capability env vars override these when set
@@ -177,15 +168,24 @@ const serverSchema = z.object({
 });
 
 const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
-  // At least one AI API key must be set
-  if (!hasConfiguredAiCredential(data)) {
+  // Chat reaches exactly one OpenAI-compatible endpoint. CHAT_BASE_URL names
+  // it; the deprecated single-provider variables are translated for one
+  // release when they unambiguously describe one endpoint. Which models that
+  // endpoint serves is validated when the configuration file is parsed, not
+  // here — env only has to establish that an endpoint exists.
+  try {
+    resolveChatEndpoint(data);
+  } catch (error) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ["AI_API_KEY"],
+      path: ["CHAT_BASE_URL"],
       message:
-        "At least one of AI_API_KEY, OPENAI_API_KEY, or OPENROUTER_API_KEY must be set",
+        error instanceof Error
+          ? error.message
+          : "Configure an OpenAI-compatible chat endpoint",
     });
   }
+
 
   if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "s3") {
     const required = [
@@ -242,7 +242,9 @@ function parseServerEnv() {
     DATABASE_URL: process.env.DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
-    CHAT_MODEL: process.env.CHAT_MODEL,
+    CHAT_BASE_URL: process.env.CHAT_BASE_URL,
+    CHAT_API_KEY: process.env.CHAT_API_KEY,
+    CHAT_MODELS_CONFIG: process.env.CHAT_MODELS_CONFIG,
     EMBEDDING_INDEX: process.env.EMBEDDING_INDEX,
     EMBEDDING_SECRETS_KEY: process.env.EMBEDDING_SECRETS_KEY,
     OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
@@ -296,7 +298,6 @@ function parseServerEnv() {
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
-    REPO_EXPLAINER_MODEL: process.env.REPO_EXPLAINER_MODEL,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
     AI_BASE_URL: process.env.AI_BASE_URL,
     AI_API_KEY: process.env.AI_API_KEY,

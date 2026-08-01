@@ -7,7 +7,7 @@
 [![CI](https://github.com/launchstack/launchstack/actions/workflows/CI.yml/badge.svg)](https://github.com/launchstack/launchstack/actions/workflows/CI.yml)
 [![types](https://img.shields.io/badge/types-TypeScript-blue.svg)](https://www.typescriptlang.org/)
 
-[Quickstart](#quickstart) · [Packages](#whats-in-the-box) · [Architecture](#architecture) · [Reference app](#reference-app) · [Contributing](CONTRIBUTING.md) · [Discussions](https://github.com/launchstack/launchstack/discussions)
+[Quickstart](#quickstart) · [Packages](#whats-in-the-box) · [Architecture](#architecture) · [Chat models](docs/chat-models.md) · [Reference app](#reference-app) · [Contributing](CONTRIBUTING.md) · [Discussions](https://github.com/launchstack/launchstack/discussions)
 
 ---
 
@@ -22,7 +22,16 @@ import { createEngine } from "@launchstack/core";
 
 const engine = createEngine({
   db: { url: process.env.DATABASE_URL! },
-  llm: { openai: { apiKey: process.env.OPENAI_API_KEY! } },
+  llm: {
+    // One OpenAI-compatible endpoint; models and routes come from YAML.
+    chat: createChatModelsConfig({
+      yaml: readFileSync("config/chat-models.yaml", "utf8"),
+      endpoint: {
+        baseUrl: process.env.CHAT_BASE_URL!,
+        apiKey: process.env.CHAT_API_KEY,   // omit for keyless endpoints
+      },
+    }),
+  },
   embeddings: { indexName: "openai-3-small" },
   ocr: { defaultProvider: "DOCLING" },
   providers: {},
@@ -114,16 +123,46 @@ pnpm db:push                  # sync Drizzle schema
 pnpm dev                      # Next.js + Inngest on :3000 and :8288
 ```
 
-The reference app requires `OPENROUTER_API_KEY` for workspace chat and
-document generation. It defaults to `moonshotai/kimi-k3`; set
-`OPENROUTER_MODEL` to any provider-qualified OpenRouter model ID to change the
-deployment-wide default. Configure OpenAI or per-capability providers only for
-the supporting capabilities you enable, such as embeddings or transcription.
+Chat reaches **one endpoint** that implements the OpenAI chat-completions
+protocol — OpenAI, OpenRouter, MiniMax, Together, Groq, vLLM, llama.cpp, LM
+Studio, Ollama's `/v1` surface, and most gateways all qualify. Point
+`CHAT_BASE_URL` at it and give it a credential if it needs one:
+
+```dotenv
+CHAT_BASE_URL=https://openrouter.ai/api/v1
+CHAT_API_KEY=sk-or-v1-...
+```
+
+That endpoint can serve **many models**. Which model handles general chat,
+cheap extraction, reasoning, and images is written in
+`apps/web/config/chat-models.yaml`, where each model either references a
+bundled preset or declares its own behavior:
+
+```yaml
+version: 1
+models:
+  primary:
+    id: openai/gpt-4o-mini
+    preset: openai/gpt-4o-mini
+routes:
+  default: primary
+```
+
+Behavior is never inferred from a model id, and specialized routes fail
+closed: if no vision-capable model is configured, the image control is
+disabled rather than an image being sent to a model that will ignore it.
+See [docs/chat-models.md](docs/chat-models.md) for presets, route inheritance,
+the five reasoning modes, and how to add a preset.
+
+Chat configuration is independent from embeddings, OCR, transcription,
+reranking, and text-to-speech; configure only the supporting capabilities you
+enable. Those never borrow the chat credential.
 
 Or spin the full stack (Postgres + SeaweedFS + sidecars) with Docker:
 
-Docker Compose forwards `OPENROUTER_API_KEY` and the optional
-`OPENROUTER_MODEL` override from `.env` to the reference app container.
+Docker Compose forwards `CHAT_BASE_URL`, `CHAT_API_KEY`, and
+`CHAT_MODELS_CONFIG` from `.env` to the reference app container, and mounts
+the chat model configuration file so you can edit it without rebuilding.
 
 ```bash
 # macOS / Linux

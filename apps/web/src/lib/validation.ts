@@ -62,10 +62,6 @@ export const DocumentIdSchema = z.object({
   documentId: z.number().int().positive("Document ID must be a positive integer"),
 });
 
-export const UserIdSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
-});
-
 export const CompanyIdSchema = z.object({
   companyId: z.string().min(1, "Company ID is required"),
 });
@@ -187,7 +183,6 @@ export const ApproveEmployeeSchema = z.object({
 });
 
 export const UploadDocumentSchema = z.object({
-  userId: z.string().min(1, "User ID is required").max(256, "User ID is too long").trim(),
   documentName: z.string().min(1, "Document name is required").max(256, "Document name is too long").trim(),
   documentUrl: z.string().url("Document URL must be a valid URL").max(2048, "Document URL is too long").trim(),
   documentCategory: z.string().min(1, "Document category is required").max(256, "Document category is too long").trim(),
@@ -258,12 +253,10 @@ export const UpdateUploadPreferenceSchema = z.object({
 });
 
 export const EmployeeAuthSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   companyPasskey: z.string().min(1, "Company passkey is required"),
 });
 
 export const EmployerAuthSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   companyPasskey: z.string().min(1, "Company passkey is required"),
 });
 

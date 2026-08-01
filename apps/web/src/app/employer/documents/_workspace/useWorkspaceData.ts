@@ -99,7 +99,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         fetch("/api/fetchDocument", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
+          body: "{}",
         }),
         fetch("/api/Categories/GetCategories"),
       ]);
@@ -130,7 +130,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
       const response = await fetch("/api/fetchUserInfo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
+        body: "{}",
       });
       if (!response.ok) return;
       const data = (await response.json()) as {

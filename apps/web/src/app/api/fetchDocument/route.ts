@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { dbCore } from "../../../server/db/core";
 import { document, fileUploads } from "@launchstack/core/db/schema";
 import { eq, inArray } from "drizzle-orm";
-import { validateRequestBody, UserIdSchema } from "~/lib/validation";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -82,13 +81,8 @@ function inferMimeFromName(name: string): string | undefined {
     return EXTENSION_TO_MIME[match[1].toLowerCase()];
 }
 
-export async function POST(request: Request) {
+export async function POST(_request?: Request) {
     try {
-        const validation = await validateRequestBody(request, UserIdSchema);
-        if (!validation.success) {
-            return validation.response;
-        }
-
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 

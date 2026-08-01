@@ -58,7 +58,6 @@ export function YouTubeSourceTab({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
           videoUrl: videoUrl.trim(),
           category: videoCategory,
           title: videoTitle.trim() || undefined,

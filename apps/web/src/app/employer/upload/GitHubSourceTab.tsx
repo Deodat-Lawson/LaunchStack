@@ -99,7 +99,6 @@ export function GitHubSourceTab({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
           repoUrl: repoUrl.trim(),
           branch: branch.trim() || undefined,
           accessToken: accessToken.trim() || undefined,

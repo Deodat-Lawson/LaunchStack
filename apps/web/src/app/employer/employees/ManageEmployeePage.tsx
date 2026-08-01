@@ -82,7 +82,7 @@ export default function ManageEmployeesPage() {
         const response = await fetch("/api/fetchUserInfo", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
+          body: "{}",
         });
         if (!response.ok) {
           router.push("/");

@@ -1321,7 +1321,7 @@ function UrlPanel({ userId, category, onUploaded }: TextPanelProps) {
       const res = await fetch("/api/upload/website", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, url: trimmed, category }),
+        body: JSON.stringify({ url: trimmed, category }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         success?: boolean;
@@ -1425,7 +1425,6 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
           videoUrl: trimmed,
           category,
           title: title.trim() || undefined,

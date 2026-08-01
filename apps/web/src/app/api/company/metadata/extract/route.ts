@@ -14,42 +14,25 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, document as documentTable, documentContextChunks } from "@launchstack/core/db/schema";
+import { document as documentTable, documentContextChunks } from "@launchstack/core/db/schema";
 import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
 import { extractCompanyFacts } from "@launchstack/features/company-metadata";
 import { mergeCompanyMetadata } from "@launchstack/features/company-metadata";
 import { createEmptyMetadata } from "@launchstack/features/company-metadata";
 import type { CompanyMetadataJSON, MetadataDiff } from "@launchstack/features/company-metadata";
 import { generateStructured } from "~/lib/llm";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select({ id: users.id, companyId: users.companyId })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
-
-        const companyId = String((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)));
+        const companyIdBigint = ctx.data.companyId;
+        const companyId = String(companyIdBigint);
 
         // Parse optional body flags
         let debug = false;
@@ -70,7 +53,7 @@ export async function POST(request: Request) {
                 lastExtractionDocumentId: companyMetadata.lastExtractionDocumentId,
             })
             .from(companyMetadata)
-            .where(eq(companyMetadata.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
+            .where(eq(companyMetadata.companyId, companyIdBigint));
 
         // Build document query — incremental by default, full if force=true or no prior extraction
         const lastDocId = existingRow?.lastExtractionDocumentId;
@@ -81,12 +64,12 @@ export async function POST(request: Request) {
                   .select({ id: documentTable.id, title: documentTable.title })
                   .from(documentTable)
                   .where(
-                      sql`${documentTable.companyId} = ${(await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))} AND ${documentTable.id} > ${lastDocId}`,
+                      sql`${documentTable.companyId} = ${companyIdBigint} AND ${documentTable.id} > ${lastDocId}`,
                   )
             : await db
                   .select({ id: documentTable.id, title: documentTable.title })
                   .from(documentTable)
-                  .where(eq(documentTable.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
+                  .where(eq(documentTable.companyId, companyIdBigint));
 
         if (docs.length === 0) {
             return NextResponse.json({
@@ -102,7 +85,7 @@ export async function POST(request: Request) {
         // For incremental: merge into existing. For full: start fresh (force) or merge into existing.
         const baseMetadata = force ? null : existingRow?.metadata ?? null;
 
-        return processDocuments(docs, companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)), baseMetadata, debug, isIncremental, userId);
+        return processDocuments(docs, companyId, companyIdBigint, baseMetadata, debug, isIncremental, ctx.data.clerkUserId);
     } catch (error) {
         console.error("[company-metadata] POST /extract error:", error);
         return NextResponse.json(

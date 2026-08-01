@@ -1,39 +1,18 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import { getJobById } from "@launchstack/features/trend-search/db";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET(
     _request: Request,
     { params }: { params: Promise<{ jobId: string }> },
 ) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
-
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const { jobId } = await params;
-        const job = await getJobById(jobId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)));
+        const job = await getJobById(jobId, ctx.data.companyId);
 
         if (!job) {
             return NextResponse.json(

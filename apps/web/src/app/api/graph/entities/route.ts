@@ -21,7 +21,6 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
@@ -29,14 +28,13 @@ import {
   kgEntities,
   kgEntityMentions,
   kgRelationships,
-  users,
 } from "@launchstack/core/db/schema";
 import {
   getNeo4jSession,
   isNeo4jConfigured,
 } from "@launchstack/core/graph";
 import { getEngine } from "~/server/engine";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface GraphNode {
   id: number;
@@ -59,18 +57,8 @@ const DEFAULT_LIMIT = 120;
 
 export async function GET(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const [userInfo] = await db
-      .select()
-      .from(users)
-      .where(eq(users.userId, userId));
-    if (!userInfo) {
-      return NextResponse.json({ error: "Unknown user" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const url = new URL(request.url);
     const limitParam = Number(url.searchParams.get("limit"));
@@ -91,7 +79,7 @@ export async function GET(request: Request) {
     if (isNeo4jConfigured()) {
       try {
         const result = await queryNeo4j({
-          companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
+          companyId: ctx.data.companyId,
           limit,
           minCount,
           documentId,
@@ -110,7 +98,7 @@ export async function GET(request: Request) {
     }
 
     const pg = await queryPostgres({
-      companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
+      companyId: ctx.data.companyId,
       limit,
       minCount,
       documentId,

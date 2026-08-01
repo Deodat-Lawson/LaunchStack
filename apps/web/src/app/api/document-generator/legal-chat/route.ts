@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { getChatModel } from "~/lib/models";
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
 import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
 import type { CompanyMetadataJSON } from "@launchstack/features/company-metadata";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -133,13 +131,8 @@ RULES:
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     let body: unknown;
     try {
@@ -163,21 +156,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Fetch user's company
-    const [requestingUser] = await db
-      .select()
-      .from(users)
-      .where(eq(users.userId, userId))
-      .limit(1);
-
-    if (!requestingUser) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
-    }
-
-    const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
+    const companyId = Number(ctx.data.companyId);
 
     // Fetch company metadata for pre-filling
     let companyDefaults: Record<string, string> = {};
@@ -185,7 +164,7 @@ export async function POST(request: Request) {
       const [metaRow] = await db
         .select({ metadata: companyMetadata.metadata })
         .from(companyMetadata)
-        .where(eq(companyMetadata.companyId, BigInt(companyId)))
+        .where(eq(companyMetadata.companyId, ctx.data.companyId))
         .limit(1);
 
       if (metaRow?.metadata) {

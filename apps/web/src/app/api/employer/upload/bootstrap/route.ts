@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { category, company, users } from "@launchstack/core/db/schema";
+import { category, company } from "@launchstack/core/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 type BootstrapCategory = {
   id: string;
@@ -33,32 +32,17 @@ type UploadBootstrapResponse = {
 
 export async function GET() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: "Authentication required." },
-        { status: 401 }
-      );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
-    const [userInfo] = await db
-      .select({ id: users.id,
-        role: users.role,
-        companyId: users.companyId,
-      })
-      .from(users)
-      .where(eq(users.userId, userId));
-
-    if (!userInfo) {
-      return NextResponse.json({ error: "Invalid user." }, { status: 400 });
-    }
-
-    if (userInfo.role !== "employer" && userInfo.role !== "owner") {
+    if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
       return NextResponse.json(
         { error: "Employer access required." },
         { status: 403 }
       );
     }
+
+    const companyId = ctx.data.companyId;
 
     const [categoriesRaw, companyRaw] = await Promise.all([
       db
@@ -67,7 +51,7 @@ export async function GET() {
           name: category.name,
         })
         .from(category)
-        .where(eq(category.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))),
+        .where(eq(category.companyId, companyId)),
       db
         .select({
           id: company.id,
@@ -75,7 +59,7 @@ export async function GET() {
           useUploadThing: company.useUploadThing,
         })
         .from(company)
-        .where(and(eq(company.id, Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))))))
+        .where(and(eq(company.id, Number(companyId))))
         .limit(1),
     ]);
 

@@ -1,13 +1,12 @@
-import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users, company } from "@launchstack/core/db/schema";
 import {
     createSuccessResponse,
-    createUnauthorizedError,
     handleApiError,
 } from "~/lib/api-utils";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 /**
  * GET /api/signup/check-registration
@@ -17,10 +16,9 @@ import {
  */
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return createUnauthorizedError("You must be signed in.");
-        }
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
+        const clerkUserId = identity.data.clerkUserId;
 
         const [existingUser] = await db
             .select({
@@ -29,7 +27,7 @@ export async function GET() {
                 companyId: users.companyId,
             })
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, clerkUserId));
 
         if (!existingUser) {
             return createSuccessResponse({ registered: false });

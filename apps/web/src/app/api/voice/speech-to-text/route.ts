@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import OpenAI from "openai";
 import { File } from "formdata-node";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /**
  * Speech-to-Text API using OpenAI Whisper.
@@ -11,13 +11,8 @@ import { File } from "formdata-node";
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json(

@@ -11,10 +11,11 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
+import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
 function stripRewriteQuotes(text: string): string {
@@ -28,7 +29,6 @@ function stripRewriteQuotes(text: string): string {
     }
     return s;
 }
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -144,13 +144,8 @@ const TONE_DESCRIPTIONS: Record<string, string> = {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         let body: unknown;
         try {

@@ -16,12 +16,11 @@ import {
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { users, document, ChatHistory } from "@launchstack/core/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { document, ChatHistory } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import {
     normalizeModelContent,
     performWebSearch,
@@ -205,19 +204,16 @@ export async function POST(request: Request) {
         };
 
         try {
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) {
+                recordResult("error");
+                return ctx.response;
+            }
+
             const validation = await validateRequestBody(request, QuestionSchema);
             if (!validation.success) {
                 recordResult("error");
                 return validation.response;
-            }
-
-            const { userId } = await auth();
-            if (!userId) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Unauthorized"
-                }, { status: 401 });
             }
 
             const {
@@ -237,6 +233,9 @@ export async function POST(request: Request) {
                 thinkingMode,
                 attachments,
             } = validation.data;
+
+            const userCompanyId = ctx.data.companyId;
+            const numericCompanyId = Number(userCompanyId);
 
             // Validate search scope requirements
             if (searchScope === "company" && !companyId) {
@@ -271,38 +270,9 @@ export async function POST(request: Request) {
                 }, { status: 400 });
             }
 
-            // Verify user and permissions
-            const [requestingUser] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId))
-                .limit(1);
-
-            if (!requestingUser) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Invalid user."
-                }, { status: 401 });
-            }
-
-            const userCompanyId = await resolveActiveCompanyForUser(
-                requestingUser.id,
-                requestingUser.companyId
-            );
-            const numericCompanyId = userCompanyId ? Number(userCompanyId) : null;
-
-            if (numericCompanyId === null || Number.isNaN(numericCompanyId)) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "User is not associated with a valid company."
-                }, { status: 403 });
-            }
-
             // Validate company/archive search permissions
             if (searchScope === "company" || searchScope === "archive") {
-                if (!COMPANY_SCOPE_ROLES.has(requestingUser.role)) {
+                if (!COMPANY_SCOPE_ROLES.has(ctx.data.role)) {
                     recordResult("error");
                     return NextResponse.json({
                         success: false,
@@ -357,7 +327,7 @@ export async function POST(request: Request) {
                     .from(document)
                     .where(and(
                         eq(document.sourceArchiveName, archiveName),
-                        eq(document.companyId, BigInt(numericCompanyId))
+                        eq(document.companyId, userCompanyId)
                     ));
 
                 archiveDocumentIds = archiveDocs.map(d => d.id);
@@ -690,7 +660,7 @@ export async function POST(request: Request) {
                     `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
                 );
             }
-            if (isCloudMode() && userCompanyId) {
+            if (isCloudMode()) {
                 const usage = response.response_metadata?.tokenUsage as
                     | { promptTokens?: number; completionTokens?: number }
                     | undefined;
@@ -724,7 +694,7 @@ export async function POST(request: Request) {
 
                     if (doc) {
                         await db.insert(ChatHistory).values({
-                            UserId: userId,
+                            UserId: ctx.data.clerkUserId,
                             documentId: BigInt(documentId),
                             documentTitle: doc.title,
                             question: question,

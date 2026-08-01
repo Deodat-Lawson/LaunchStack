@@ -7,9 +7,10 @@ import { POST } from "~/app/api/legal/apply-edits/route";
 import { processDocumentBatch, readDocx } from "@launchstack/features/adeu";
 import type { BatchSummary } from "@launchstack/features/adeu";
 
-// Mock Clerk auth
-jest.mock("@clerk/nextjs/server", () => ({
-  auth: jest.fn(),
+const mockRequireWorkspaceContext = jest.fn();
+
+jest.mock("~/lib/require-workspace-context", () => ({
+  requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
 // Mock Adeu client
@@ -34,13 +35,35 @@ jest.mock("@launchstack/features/adeu", () => ({
   },
 }));
 
-import { auth } from "@clerk/nextjs/server";
-
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
 const mockProcessDocumentBatch = processDocumentBatch as jest.MockedFunction<
   typeof processDocumentBatch
 >;
 const mockReadDocx = readDocx as jest.MockedFunction<typeof readDocx>;
+
+const VERIFIED_CTX = {
+  success: true as const,
+  data: {
+    clerkUserId: "user123",
+    userPk: BigInt(1),
+    companyId: BigInt(1),
+    role: "employer",
+    status: "verified",
+  },
+};
+
+function mockAuthenticated() {
+  mockRequireWorkspaceContext.mockResolvedValue(VERIFIED_CTX);
+}
+
+function mockUnauthenticated() {
+  mockRequireWorkspaceContext.mockResolvedValue({
+    success: false,
+    response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    }),
+  });
+}
 
 describe("POST /api/legal/apply-edits", () => {
   beforeEach(() => {
@@ -55,7 +78,7 @@ describe("POST /api/legal/apply-edits", () => {
     // Test: Unauthenticated requests should be rejected with 401
     // This ensures the API is protected and only logged-in users can apply edits
     it("returns 401 when user is not authenticated", async () => {
-      mockAuth.mockResolvedValueOnce({ userId: null } as any);
+      mockUnauthenticated();
 
       const request = new Request("http://localhost/api/legal/apply-edits", {
         method: "POST",
@@ -69,14 +92,13 @@ describe("POST /api/legal/apply-edits", () => {
       const json = await response.json();
 
       expect(response.status).toBe(401);
-      expect(json.success).toBe(false);
-      expect(json.message).toBe("Unauthorized");
+      expect(json.error).toBe("Unauthorized");
     });
 
     // Test: Authenticated requests should proceed successfully
-    // Verifies that valid Clerk userId allows the request to continue
+    // Verifies that valid workspace context allows the request to continue
     it("proceeds when user is authenticated", async () => {
-      mockAuth.mockResolvedValueOnce({ userId: "user123" } as any);
+      mockAuthenticated();
 
       const request = new Request("http://localhost/api/legal/apply-edits", {
         method: "POST",
@@ -98,7 +120,7 @@ describe("POST /api/legal/apply-edits", () => {
   // =========================================================================
   describe("Request Validation", () => {
     beforeEach(() => {
-      mockAuth.mockResolvedValue({ userId: "user123" } as any);
+      mockAuthenticated();
     });
 
     // Test: Missing required field should return validation error
@@ -197,7 +219,7 @@ describe("POST /api/legal/apply-edits", () => {
   // =========================================================================
   describe("No Edits Handling", () => {
     beforeEach(() => {
-      mockAuth.mockResolvedValue({ userId: "user123" } as any);
+      mockAuthenticated();
     });
 
     // Test: Undefined edits field should bypass Adeu service
@@ -252,7 +274,7 @@ describe("POST /api/legal/apply-edits", () => {
   // =========================================================================
   describe("Adeu Integration", () => {
     beforeEach(() => {
-      mockAuth.mockResolvedValue({ userId: "user123" } as any);
+      mockAuthenticated();
     });
 
     // Test: Proper conversion and parameter passing to Adeu service
@@ -417,7 +439,7 @@ describe("POST /api/legal/apply-edits", () => {
   // =========================================================================
   describe("Error Handling", () => {
     beforeEach(() => {
-      mockAuth.mockResolvedValue({ userId: "user123" } as any);
+      mockAuthenticated();
     });
 
     // Test: When Adeu service throws, the failed edit is deferred to the
@@ -518,7 +540,7 @@ describe("POST /api/legal/apply-edits", () => {
   // =========================================================================
   describe("Edge Cases", () => {
     beforeEach(() => {
-      mockAuth.mockResolvedValue({ userId: "user123" } as any);
+      mockAuthenticated();
     // Test: Large documents (10MB) should be processed without issues
     // Ensures no memory or buffer size limitations in the API layer
     });

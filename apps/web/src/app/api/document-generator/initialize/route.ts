@@ -6,11 +6,11 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
 import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 120; // Allow more time for research + generation
@@ -258,13 +258,8 @@ function getTemplateStructure(templateId: string): string {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const body = await request.json() as unknown;
         const validation = InitializeSchema.safeParse(body);

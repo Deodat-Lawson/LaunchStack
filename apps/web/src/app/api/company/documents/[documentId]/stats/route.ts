@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { users, document, documentViews } from "@launchstack/core/db/schema";
 import { eq, and, sql, gte, desc, count } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface Viewer {
     name: string;
@@ -38,22 +37,12 @@ export async function GET(
     { params }: { params: Promise<{ documentId: string }> }
 ) {
     try {
-        const { userId } = await auth();
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
+
         const documentId = (await params).documentId;
 
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo || (userInfo.role !== "employer" && userInfo.role !== "owner")) {
+        if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
             return NextResponse.json(
                 { success: false, error: "Unauthorized" },
                 { status: 403 }
@@ -74,7 +63,7 @@ export async function GET(
             .from(document)
             .where(and(
                 eq(document.id, docId),
-                eq(document.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))
+                eq(document.companyId, ctx.data.companyId)
             ));
 
         if (!doc) {

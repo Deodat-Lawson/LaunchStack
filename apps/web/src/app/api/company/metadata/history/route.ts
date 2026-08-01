@@ -6,29 +6,16 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq, desc } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import { companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-
-        const [userInfo] = await db
-            .select({ id: users.id, companyId: users.companyId })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json({ error: "User not found" }, { status: 400 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const history = await db
             .select({
@@ -40,7 +27,7 @@ export async function GET() {
                 createdAt: companyMetadataHistory.createdAt,
             })
             .from(companyMetadataHistory)
-            .where(eq(companyMetadataHistory.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))))
+            .where(eq(companyMetadataHistory.companyId, ctx.data.companyId))
             .orderBy(desc(companyMetadataHistory.createdAt))
             .limit(100);
 

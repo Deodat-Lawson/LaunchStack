@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { category, document, users } from "@launchstack/core/db/schema";
+import { category, document } from "@launchstack/core/db/schema";
 import { validateRequestBody } from "~/lib/validation";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -40,20 +39,10 @@ export async function PATCH(
     const parsed = parseId(rawId);
     if (!parsed.ok) return parsed.response;
 
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
-    const [userInfo] = await db
-      .select()
-      .from(users)
-      .where(eq(users.userId, userId));
-
-    if (!userInfo) {
-      return NextResponse.json({ error: "Unknown user" }, { status: 401 });
-    }
-    if (!AUTHORIZED_ROLES.has(userInfo.role)) {
+    if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
       return NextResponse.json(
         { error: "Forbidden: employer or owner role required" },
         { status: 403 },
@@ -72,7 +61,7 @@ export async function PATCH(
       .select()
       .from(category)
       .where(
-        and(eq(category.id, parsed.id), eq(category.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))),
+        and(eq(category.id, parsed.id), eq(category.companyId, ctx.data.companyId)),
       );
 
     if (!existing) {
@@ -96,7 +85,7 @@ export async function PATCH(
         .set({ category: name })
         .where(
           and(
-            eq(document.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))),
+            eq(document.companyId, ctx.data.companyId),
             eq(document.category, existing.name),
           ),
         );

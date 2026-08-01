@@ -2,26 +2,23 @@ import { NextResponse } from "next/server";
 import { dbCore } from "../../../server/db/core";
 import { company, users } from "@launchstack/core/db/schema";
 import { and, eq } from "drizzle-orm";
-import { auth } from '@clerk/nextjs/server'
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function POST() {
     try {
-        const { userId } = await auth()
-        if (!userId) {
-            return NextResponse.json({ error: "Invalid user." }, { status: 400 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const [userInfo] = await dbCore
             .select()
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, ctx.data.clerkUserId));
 
         if (!userInfo) {
             return NextResponse.json({ error: "Invalid user." }, { status: 400 });
         }
 
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
 
         const [companyRecord] = await dbCore
             .select()
@@ -43,7 +40,7 @@ export async function POST() {
         // Convert BigInt fields to numbers for JSON serialization
         const serializedUserInfo = {
             ...userInfo,
-            companyId: Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))),
+            companyId: Number(companyId),
         };
 
         return NextResponse.json(

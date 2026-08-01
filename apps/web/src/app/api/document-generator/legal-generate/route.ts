@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import {
   TEMPLATE_REGISTRY,
   buildEditorSections,
 } from "@launchstack/features/legal-templates";
 import { generateDocument } from "@launchstack/features/legal-templates/template-service";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 
@@ -27,13 +27,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const body: unknown = await request.json();
     const parsed = GenerateSchema.safeParse(body);

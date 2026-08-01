@@ -3,31 +3,13 @@ import { db } from "../../../server/db/index";
 import { users } from "@launchstack/core/db/schema";
 import {eq, and } from "drizzle-orm";
 import * as console from "console";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({
-                success: false,
-                message: "Unauthorized"
-            }, { status: 401 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        }
-
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
 
         const docs = await db
             .select()

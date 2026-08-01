@@ -1,33 +1,15 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { ocrJobs, users } from "@launchstack/core/db/schema";
+import { ocrJobs } from "@launchstack/core/db/schema";
 import { eq, and, inArray, gte } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo?.companyId) {
-            return NextResponse.json(
-                { error: "User or company not found." },
-                { status: 400 }
-            );
-        }
-
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
         const sixtySecondsAgo = new Date(Date.now() - 60_000);
 
         // Fetch active jobs (queued/processing) and recently completed/failed ones

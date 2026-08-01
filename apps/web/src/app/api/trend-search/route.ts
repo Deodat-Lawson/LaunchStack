@@ -1,26 +1,17 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
-import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { TrendSearchInputSchema } from "@launchstack/features/trend-search";
 import { createJob, getJobsByCompanyId } from "@launchstack/features/trend-search/db";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 // ─── POST /api/trend-search ─────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         // Parse and validate request body
         const body: unknown = await request.json();
@@ -34,20 +25,8 @@ export async function POST(request: NextRequest) {
 
         const input = parsed.data;
 
-        // Look up user's company_id
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
-
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
+        const userId = ctx.data.clerkUserId;
         const jobId = uuidv4();
 
         // Create job record in DB
@@ -89,27 +68,10 @@ export async function POST(request: NextRequest) {
 // ─── GET /api/trend-search ──────────────────────────────────────────────────
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
-
-        const jobs = await getJobsByCompanyId((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)));
+        const jobs = await getJobsByCompanyId(ctx.data.companyId);
 
         const results = jobs.map((job) => ({
             id: job.id,

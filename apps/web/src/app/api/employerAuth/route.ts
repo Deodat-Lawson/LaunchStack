@@ -2,14 +2,13 @@
 import { db } from "../../../server/db/index";
 import { users } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
 import {
     handleApiError,
     createSuccessResponse,
-    createUnauthorizedError,
     createForbiddenError,
     createNotFoundError
 } from "~/lib/api-utils";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -20,17 +19,18 @@ export async function GET() {
     let dbQueryMs: number | null = null;
     let outcome = "ok";
     try {
-        const { userId } = await auth();
-        if (!userId) {
+        const identity = await requireClerkIdentity();
+        if (!identity.success) {
             outcome = "unauthorized";
-            return createUnauthorizedError("Authentication required. Please sign in to continue.");
+            return identity.response;
         }
+        const clerkUserId = identity.data.clerkUserId;
 
         const dbStart = Date.now();
         const [userInfo] = await db
             .select()
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, clerkUserId));
         dbQueryMs = Date.now() - dbStart;
 
         if (!userInfo) {

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { searchNotes, type NoteSearchScope } from "~/server/notes/search";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface Body {
   query?: string;
@@ -12,10 +12,8 @@ interface Body {
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const body = (await request.json().catch(() => ({}))) as Body;
     const query = (body.query ?? "").trim();
@@ -27,11 +25,11 @@ export async function POST(request: Request) {
     const topK = Math.min(Math.max(body.topK ?? 8, 1), 25);
 
     const hits = await searchNotes({
-      userId,
+      userId: ctx.data.clerkUserId,
       query,
       scope,
       documentId: body.documentId,
-      companyId: body.companyId,
+      companyId: String(ctx.data.companyId),
       topK,
     });
 

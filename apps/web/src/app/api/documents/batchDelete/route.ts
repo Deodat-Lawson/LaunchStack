@@ -11,17 +11,16 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq, inArray } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { document, users } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { deleteDocumentCore } from "~/server/services/document-delete";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -38,27 +37,10 @@ export async function DELETE(request: Request) {
       const validation = await validateRequestBody(request, BatchDeleteSchema);
       if (!validation.success) return validation.response;
 
-      const { userId } = await auth();
-      if (!userId) {
-        return NextResponse.json(
-          { success: false, error: "Unauthorized" },
-          { status: 401 }
-        );
-      }
+      const ctx = await requireWorkspaceContext();
+      if (!ctx.success) return ctx.response;
 
-      const [userInfo] = await db
-        .select()
-        .from(users)
-        .where(eq(users.userId, userId));
-
-      if (!userInfo) {
-        return NextResponse.json(
-          { success: false, error: "Unknown user" },
-          { status: 401 }
-        );
-      }
-
-      if (!AUTHORIZED_ROLES.has(userInfo.role)) {
+      if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
         return NextResponse.json(
           { success: false, error: "Forbidden" },
           { status: 403 }
@@ -84,7 +66,7 @@ export async function DELETE(request: Request) {
       }
 
       for (const row of rows) {
-        if (row.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
+        if (row.companyId !== ctx.data.companyId) {
           return NextResponse.json(
             { success: false, error: "One or more documents not found" },
             { status: 404 }

@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { documentNotes, noteLinks } from "@launchstack/core/db/schema";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /**
  * Notes that reference this document via `[[Document Title]]`. Filtered by
@@ -14,10 +14,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { id: documentId } = await params;
     if (!documentId) {
@@ -43,7 +41,7 @@ export async function GET(
       .where(
         and(
           eq(noteLinks.targetDocumentId, documentId),
-          eq(documentNotes.userId, userId),
+          eq(documentNotes.userId, ctx.data.clerkUserId),
         ),
       )
       .orderBy(desc(noteLinks.createdAt));

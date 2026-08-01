@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { users, category } from "@launchstack/core/db/schema";
-import { eq } from "drizzle-orm";
+import { category } from "@launchstack/core/db/schema";
 import { z } from "zod";
 import { validateRequestBody } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const AddCategorySchema = z.object({
     CategoryName: z.string().min(1, "Category name is required").max(256, "Category name is too long"),
@@ -19,36 +17,19 @@ export async function POST(request: Request) {
             return validation.response;
         }
 
-			const { userId } = await auth();
-			if (!userId) {
-				return NextResponse.json(
-					{ error: "Invalid user." },
-					{ status: 400 }
-				);
-			}
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select()
-            .from(users)
-				.where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        } else if (userInfo.role !== "employer" && userInfo.role !== "owner") {
+        if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
             return NextResponse.json(
                 { error: "Invalid user role." },
                 { status: 400 }
             );
         }
 
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
-
         const newCategoryId = await db.insert(category).values({
             name: validation.data.CategoryName,
-            companyId: companyId,
+            companyId: ctx.data.companyId,
         }).returning({ id: category.id });
 
         return NextResponse.json({ success: true, id: newCategoryId[0], name: validation.data.CategoryName });

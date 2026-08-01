@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import {
-  getCompanyIdForUser,
-  searchWikiLinkCandidates,
-} from "~/server/notes/wiki-links";
+import { searchWikiLinkCandidates } from "~/server/notes/wiki-links";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { searchParams } = new URL(request.url);
     const title = searchParams.get("title") ?? "";
@@ -18,10 +13,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ candidates: [] }, { status: 200 });
     }
 
-    const companyId = await getCompanyIdForUser(userId);
+    const companyId = String(ctx.data.companyId);
     const candidates = await searchWikiLinkCandidates(title, {
       companyId,
-      userId,
+      userId: ctx.data.clerkUserId,
       limit: 10,
     });
 

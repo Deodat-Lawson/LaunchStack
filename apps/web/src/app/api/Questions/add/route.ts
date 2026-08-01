@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db/index";
-import { ChatHistory, users, document } from "@launchstack/core/db/schema";
+import { ChatHistory, document } from "@launchstack/core/db/schema";
 import { validateRequestBody, ChatHistoryAddSchema } from "~/lib/validation";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
@@ -16,26 +15,8 @@ export async function POST(request: Request) {
 
         const { documentId, question, documentTitle, response, pages } = validation.data;
 
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({
-                success: false,
-                message: "Unauthorized"
-            }, { status: 401 });
-        }
-
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json({
-                success: false,
-                message: "Invalid user."
-            }, { status: 401 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const [targetDocument] = await db
             .select()
@@ -50,7 +31,7 @@ export async function POST(request: Request) {
             }, { status: 404 });
         }
 
-        if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
+        if (targetDocument.companyId !== ctx.data.companyId) {
             return NextResponse.json({
                 success: false,
                 message: "You do not have access to this document."
@@ -58,7 +39,7 @@ export async function POST(request: Request) {
         }
 
         await db.insert(ChatHistory).values({
-            UserId: userId,
+            UserId: ctx.data.clerkUserId,
             documentId: BigInt(targetDocument.id),
             documentTitle: targetDocument.title ?? documentTitle,
             question,

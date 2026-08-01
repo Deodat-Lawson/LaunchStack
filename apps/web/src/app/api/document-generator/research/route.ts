@@ -8,11 +8,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { db } from "~/server/db/index";
-import { eq } from "drizzle-orm";
-import { users } from "@launchstack/core/db/schema";
 import { 
     companyEnsembleSearch,
     type CompanySearchOptions,
@@ -20,7 +16,7 @@ import {
 } from "~/lib/tools/rag";
 import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -215,13 +211,8 @@ function extractXmlValue(xml: string, tag: string): string | null {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const body = await request.json() as unknown;
         const validation = ResearchSchema.safeParse(body);
@@ -237,20 +228,6 @@ export async function POST(request: Request) {
         const startTime = Date.now();
         const maxResults = options?.maxResults ?? 10;
 
-        // Get user's company for document search
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json(
-                { success: false, message: "User not found" },
-                { status: 404 }
-            );
-        }
-
         const results: ResearchResult[] = [];
         const searchPromises: Promise<void>[] = [];
 
@@ -259,7 +236,7 @@ export async function POST(request: Request) {
             const documentSearchPromise = (async () => {
                 try {
                     const embeddings = getEmbeddings();
-                    const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
+                    const companyId = Number(ctx.data.companyId);
                     
                     if (Number.isNaN(companyId)) {
                         console.warn("Invalid company ID for document search");

@@ -19,8 +19,7 @@ import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { users, document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -37,7 +36,7 @@ import type { AIModelType, LLMProvider } from "../services";
 import { LLMProviders, isModelAllowedForProvider } from "../services/types";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/core/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -175,28 +174,8 @@ export async function POST(request: Request) {
                 pageRange,
             } = validation.data;
 
-            // Authenticate user
-            const { userId } = await auth();
-            if (!userId) {
-                return NextResponse.json(
-                    { success: false, message: "Unauthorized" },
-                    { status: 401 }
-                );
-            }
-
-            // Verify user and document access
-            const [requestingUser] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId))
-                .limit(1);
-
-            if (!requestingUser) {
-                return NextResponse.json(
-                    { success: false, message: "Invalid user." },
-                    { status: 401 }
-                );
-            }
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) return ctx.response;
 
             const [targetDocument] = await db
                 .select({
@@ -215,7 +194,7 @@ export async function POST(request: Request) {
                 );
             }
 
-            if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
+            if (targetDocument.companyId !== ctx.data.companyId) {
                 return NextResponse.json(
                     { success: false, message: "You do not have access to this document." },
                     { status: 403 }

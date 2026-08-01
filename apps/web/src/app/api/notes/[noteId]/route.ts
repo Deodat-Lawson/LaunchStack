@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { documentNotes, documentNoteEmbeddings, noteLinks } from "@launchstack/core/db/schema";
 import { eq, and } from "drizzle-orm";
 import { validateRequestBody, UpdateNoteSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { embedNoteAsync } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
@@ -14,10 +14,8 @@ export async function GET(
   { params }: { params: Promise<{ noteId: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { noteId } = await params;
     const id = parseInt(noteId, 10);
@@ -28,7 +26,12 @@ export async function GET(
     const [note] = await db
       .select()
       .from(documentNotes)
-      .where(and(eq(documentNotes.id, id), eq(documentNotes.userId, userId)));
+      .where(
+        and(
+          eq(documentNotes.id, id),
+          eq(documentNotes.userId, ctx.data.clerkUserId),
+        ),
+      );
 
     if (!note) {
       return NextResponse.json({ error: "Note not found" }, { status: 404 });
@@ -49,10 +52,8 @@ export async function PUT(
   { params }: { params: Promise<{ noteId: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { noteId } = await params;
     const id = parseInt(noteId, 10);
@@ -77,7 +78,12 @@ export async function PUT(
         ...(body.anchorStatus !== undefined && { anchorStatus: body.anchorStatus }),
         ...(body.tags !== undefined && { tags: body.tags }),
       })
-      .where(and(eq(documentNotes.id, id), eq(documentNotes.userId, userId)))
+      .where(
+        and(
+          eq(documentNotes.id, id),
+          eq(documentNotes.userId, ctx.data.clerkUserId),
+        ),
+      )
       .returning();
 
     if (!updated) {
@@ -123,10 +129,8 @@ export async function DELETE(
   { params }: { params: Promise<{ noteId: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { noteId } = await params;
     const id = parseInt(noteId, 10);
@@ -136,7 +140,12 @@ export async function DELETE(
 
     const [deleted] = await db
       .delete(documentNotes)
-      .where(and(eq(documentNotes.id, id), eq(documentNotes.userId, userId)))
+      .where(
+        and(
+          eq(documentNotes.id, id),
+          eq(documentNotes.userId, ctx.data.clerkUserId),
+        ),
+      )
       .returning();
 
     if (!deleted) {

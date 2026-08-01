@@ -9,7 +9,6 @@
 import { NextResponse } from "next/server";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { auth } from "@clerk/nextjs/server";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { getChatModel } from "~/lib/models";
@@ -20,6 +19,7 @@ import {
   resolveEmbeddingConfig,
 } from "~/server/notes/embedding-config";
 import { normalizeModelContent } from "../services";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -42,13 +42,8 @@ Rules:
 export async function POST(request: Request) {
   return withRateLimit(request, RateLimitPresets.strict, async () => {
     try {
-      const { userId } = await auth();
-      if (!userId) {
-        return NextResponse.json(
-          { success: false, message: "Unauthorized" },
-          { status: 401 },
-        );
-      }
+      const ctx = await requireWorkspaceContext();
+      if (!ctx.success) return ctx.response;
 
       const body = (await request.json().catch(() => ({}))) as Body;
       const question = (body.question ?? "").trim();
@@ -79,7 +74,11 @@ export async function POST(request: Request) {
         ...(baseURL ? { configuration: { baseURL } } : {}),
       });
 
-      const retriever = createUserNotesRetriever(userId, embeddings, topK);
+      const retriever = createUserNotesRetriever(
+        ctx.data.clerkUserId,
+        embeddings,
+        topK,
+      );
       const docs = await retriever.invoke(question);
 
       if (docs.length === 0) {

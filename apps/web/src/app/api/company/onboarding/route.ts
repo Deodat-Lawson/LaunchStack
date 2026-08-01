@@ -1,31 +1,19 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
 import { validateRequestBody, CompanyOnboardingSchema } from "~/lib/validation";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
-    const [userInfo] = await db
-      .select({ id: users.id, companyId: users.companyId, role: users.role })
-      .from(users)
-      .where(eq(users.userId, userId));
-
-    if (!userInfo) {
-      return NextResponse.json({ error: "User not found" }, { status: 400 });
-    }
-
-    if (!AUTHORIZED_ROLES.has(userInfo.role)) {
+    if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -39,7 +27,7 @@ export async function POST(request: Request) {
         description: body.description ?? null,
         industry: body.industry ?? null,
       })
-      .where(eq(company.id, Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))));
+      .where(eq(company.id, Number(ctx.data.companyId)));
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -53,19 +41,8 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const [userInfo] = await db
-      .select({ id: users.id, companyId: users.companyId })
-      .from(users)
-      .where(eq(users.userId, userId));
-
-    if (!userInfo) {
-      return NextResponse.json({ error: "User not found" }, { status: 400 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const [companyRow] = await db
       .select({
@@ -74,7 +51,7 @@ export async function GET() {
         industry: company.industry,
       })
       .from(company)
-      .where(eq(company.id, Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))));
+      .where(eq(company.id, Number(ctx.data.companyId)));
 
     return NextResponse.json({
       name: companyRow?.name ?? null,

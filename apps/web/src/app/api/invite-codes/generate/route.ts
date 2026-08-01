@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import crypto from "crypto";
 
 import { db } from "~/server/db";
-import { users, inviteCodes } from "@launchstack/core/db/schema";
+import { inviteCodes } from "@launchstack/core/db/schema";
 import { validateRequestBody, GenerateInviteCodeSchema } from "~/lib/validation";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 function generateCode(): string {
     return crypto.randomBytes(4).toString("hex").toUpperCase(); // 8-char hex code
@@ -14,26 +12,14 @@ function generateCode(): string {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const validation = await validateRequestBody(request, GenerateInviteCodeSchema);
         if (!validation.success) return validation.response;
         const { role } = validation.data;
 
-        // Verify the caller is an owner or employer
-        const [userRecord] = await db
-            .select({ id: users.id, companyId: users.companyId, role: users.role })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userRecord) {
-            return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
-        }
-
-        if (userRecord.role !== "owner" && userRecord.role !== "employer") {
+        if (ctx.data.role !== "owner" && ctx.data.role !== "employer") {
             return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
         }
 
@@ -43,9 +29,9 @@ export async function POST(request: Request) {
             .insert(inviteCodes)
             .values({
                 code,
-                companyId: (await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)),
+                companyId: ctx.data.companyId,
                 role,
-                createdBy: userId,
+                createdBy: ctx.data.clerkUserId,
             })
             .returning();
 

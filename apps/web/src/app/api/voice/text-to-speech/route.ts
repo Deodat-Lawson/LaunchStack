@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { validateRequestBody, TextToSpeechSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface TextToSpeechRequest {
   text: string;
@@ -99,10 +99,8 @@ async function streamOpenAI(body: TextToSpeechRequest): Promise<NextResponse> {
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const validation = await validateRequestBody(request, TextToSpeechSchema);
     if (!validation.success) return validation.response;

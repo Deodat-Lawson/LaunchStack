@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { users, document, documentViews, ChatHistory, agentAiChatbotMessage, agentAiChatbotChat } from "@launchstack/core/db/schema";
 import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -52,37 +51,19 @@ export async function GET() {
     let queryCountMs: number | null = null;
     let outcome = "ok";
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            outcome = "unauthorized";
-            return NextResponse.json(
-                { success: false, error: "Unauthorized" },
-                { status: 401 }
-            );
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) {
+            outcome = ctx.response.status === 401 ? "unauthorized" : ctx.response.status === 403 ? "forbidden" : "error";
+            return ctx.response;
         }
 
-        // Update activity + fetch current user in parallel.
-        const [, userRows] = await Promise.all([
-            db
-                .update(users)
-                .set({ lastActiveAt: new Date() })
-                .where(eq(users.userId, userId)),
-            db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId)),
-        ]);
-        const [userInfo] = userRows;
+        // Update last-active timestamp for the authenticated user.
+        await db
+            .update(users)
+            .set({ lastActiveAt: new Date() })
+            .where(eq(users.userId, ctx.data.clerkUserId));
 
-        if (!userInfo) {
-            outcome = "not_found";
-            return NextResponse.json(
-                { success: false, error: "User not found" },
-                { status: 404 }
-            );
-        }
-
-        if (userInfo.role !== "employer" && userInfo.role !== "owner") {
+        if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
             outcome = "forbidden";
             return NextResponse.json(
                 { success: false, error: "Unauthorized. Only employers and owners can access this data." },
@@ -90,7 +71,7 @@ export async function GET() {
             );
         }
 
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 

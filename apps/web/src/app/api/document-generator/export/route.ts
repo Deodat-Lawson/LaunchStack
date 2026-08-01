@@ -11,9 +11,9 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { PDFDocument, StandardFonts } from "pdf-lib";
 import TurndownService from "turndown";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const turndown = new TurndownService({ headingStyle: "atx" });
 turndown.keep(["u"]);
@@ -327,13 +327,8 @@ async function generatePDF(
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const body = await request.json() as unknown;
         const validation = ExportSchema.safeParse(body);

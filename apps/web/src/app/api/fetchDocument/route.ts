@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import { dbCore } from "../../../server/db/core";
-import { document, users, fileUploads } from "@launchstack/core/db/schema";
+import { document, fileUploads } from "@launchstack/core/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { validateRequestBody, UserIdSchema } from "~/lib/validation";
-import { auth } from '@clerk/nextjs/server';
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -90,27 +89,10 @@ export async function POST(request: Request) {
             return validation.response;
         }
 
-        const { userId } = await auth()
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await dbCore
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        }
-
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
 
         const docs = await dbCore
             .select()

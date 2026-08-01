@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { documentNotes } from "@launchstack/core/db/schema";
 import { eq, and, desc, ilike, arrayContains, isNull, inArray } from "drizzle-orm";
 import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { embedNoteAsync } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { searchNotes } from "~/server/notes/search";
@@ -12,10 +12,8 @@ import type { JSONContent } from "@tiptap/react";
 
 export async function GET(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { searchParams } = new URL(request.url);
     const documentId = searchParams.get("documentId");
@@ -24,7 +22,7 @@ export async function GET(request: Request) {
     const anchorStatus = searchParams.get("anchorStatus");
     const surface = searchParams.get("surface");
 
-    const conditions = [eq(documentNotes.userId, userId)];
+    const conditions = [eq(documentNotes.userId, ctx.data.clerkUserId)];
 
     if (documentId) {
       conditions.push(eq(documentNotes.documentId, documentId));
@@ -40,7 +38,7 @@ export async function GET(request: Request) {
     let semanticIds: number[] | null = null;
     if (search) {
       const hits = await searchNotes({
-        userId,
+        userId: ctx.data.clerkUserId,
         query: search,
         scope: documentId ? "document" : "user",
         documentId: documentId ?? undefined,
@@ -93,10 +91,8 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const validation = await validateRequestBody(request, CreateNoteSchema);
     if (!validation.success) return validation.response;
@@ -110,7 +106,7 @@ export async function POST(request: Request) {
     const [note] = await db
       .insert(documentNotes)
       .values({
-        userId,
+        userId: ctx.data.clerkUserId,
         documentId: body.documentId ?? null,
         companyId: body.companyId ?? null,
         versionId: versionIdBigint,

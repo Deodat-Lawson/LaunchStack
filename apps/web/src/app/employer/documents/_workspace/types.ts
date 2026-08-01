@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { AIModelType, LLMProvider } from "@launchstack/core/llm";
+import type { LLMProvider } from "@launchstack/core/llm";
 import {
   IconAudio,
   IconBolt,
@@ -155,30 +155,6 @@ export interface ComposerSend {
   thinking: boolean;
   provider: LLMProvider;
 }
-
-export type ComposerProviderId = "openrouter";
-
-export interface ComposerModelOption {
-  /** Wire value — matches AIModelType in @launchstack/core/llm/types. */
-  id: AIModelType;
-  /** Provider the model is routed through. */
-  provider: ComposerProviderId;
-  /** Display name. */
-  label: string;
-  /** True when the model accepts extended-thinking / reasoning-effort. */
-  supportsThinking: boolean;
-  /** True when the model accepts image inputs. */
-  supportsVision: boolean;
-}
-
-/** The single chat model — all workspace chat routes through OpenRouter. */
-export const DEFAULT_COMPOSER_MODEL: ComposerModelOption = {
-  id: "moonshotai/kimi-k3",
-  provider: "openrouter",
-  label: "Kimi K3",
-  supportsThinking: true,
-  supportsVision: true,
-};
 
 export interface DemotedFeature {
   id: string;

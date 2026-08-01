@@ -34,7 +34,6 @@ import {
 } from "./icons";
 import { GraphView } from "./GraphView";
 import {
-  DEFAULT_COMPOSER_MODEL,
   SOURCE_META,
   type ComposerSend,
   type EphemeralAttachment,
@@ -458,7 +457,6 @@ function Composer({
   thinking,
   onToggleThinking,
 }: ComposerProps) {
-  const model = DEFAULT_COMPOSER_MODEL;
   const [text, setText] = useState("");
   const [focus, setFocus] = useState(false);
   const [attachments, setAttachments] = useState<EphemeralAttachment[]>([]);
@@ -471,28 +469,15 @@ function Composer({
     .map((id) => sources.find((s) => s.id === id))
     .filter((s): s is WorkspaceSource => Boolean(s));
 
-  const thinkingAllowed = model.supportsThinking;
-  const visionAllowed = model.supportsVision;
-
-  const hasImageAttachment = attachments.some((a) => a.kind === "image");
-  const imageBlockedReason =
-    hasImageAttachment && !visionAllowed
-      ? `${model.label} can't read images — switch to a vision-capable model or remove the image.`
-      : null;
-
   const handleSend = () => {
     if (!text.trim() || disabled || uploading) return;
-    if (imageBlockedReason) {
-      setAttachError(imageBlockedReason);
-      return;
-    }
     onSend({
       text: text.trim(),
       refs: selected,
       attachments,
       webSearch,
-      thinking: thinking && thinkingAllowed,
-      provider: model.provider,
+      thinking,
+      provider: "openrouter",
     });
     setText("");
     setAttachments([]);
@@ -641,7 +626,7 @@ function Composer({
           ))}
         </div>
       )}
-      {(imageBlockedReason ?? attachError) && (
+      {attachError && (
         <div
           style={{
             fontSize: 11,
@@ -649,7 +634,7 @@ function Composer({
             marginBottom: 8,
           }}
         >
-          {imageBlockedReason ?? attachError}
+          {attachError}
         </div>
       )}
       <textarea
@@ -745,8 +730,7 @@ function Composer({
             label="Think"
             title="Let the model reason step-by-step before answering"
             icon={<IconBrain size={12} />}
-            active={thinking && thinkingAllowed}
-            disabled={!thinkingAllowed}
+            active={thinking}
             onClick={onToggleThinking}
           />
         </div>

@@ -41,6 +41,8 @@ describe("OpenRouter chat-model configuration", () => {
     expect(getProviderDefaultModel("openrouter")).toBe(
       "anthropic/claude-sonnet-4",
     );
+    expect(supportsThinking("anthropic/claude-sonnet-4")).toBe(false);
+    expect(supportsVision("anthropic/claude-sonnet-4")).toBe(false);
     expect(() =>
       getChatModelForProvider({ provider: "openrouter" }),
     ).not.toThrow();

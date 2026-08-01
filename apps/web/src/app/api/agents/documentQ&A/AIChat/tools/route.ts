@@ -5,12 +5,16 @@ import { agentAiChatbotToolCall } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateToolCallSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // POST /api/agent-ai-chatbot/tools - Create a tool call
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateToolCallSchema);
     if (!validation.success) return validation.response;
@@ -45,6 +49,9 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/tools?messageId=xxx - Get tool calls for a message
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const messageId = searchParams.get("messageId");
@@ -81,4 +88,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

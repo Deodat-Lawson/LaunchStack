@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { agentAiChatbotTask, agentAiChatbotExecutionStep } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateTaskSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -13,6 +14,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { taskId } = await params;
 
@@ -54,6 +58,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { taskId } = await params;
     const validation = await validateRequestBody(request, UpdateTaskSchema);
@@ -91,4 +98,3 @@ export async function PATCH(
     );
   }
 }
-

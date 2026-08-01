@@ -1,12 +1,13 @@
 import { GET } from "~/app/api/files/[id]/route";
 import { signFileAccessToken } from "@launchstack/core/crypto";
+import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
 
 const SECRET = "route-file-access-secret";
 
-const mockAuth = jest.fn<Promise<{ userId: string | null }>, []>();
+const mockRequireWorkspaceContext = jest.fn<Promise<WorkspaceContextResult>, []>();
 
-jest.mock("@clerk/nextjs/server", () => ({
-  auth: () => mockAuth(),
+jest.mock("~/lib/require-workspace-context", () => ({
+  requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
 jest.mock("~/env", () => ({
@@ -34,6 +35,7 @@ jest.mock("~/lib/storage", () => ({
 
 const DB_FILE = {
   id: 123,
+  userId: "clerk_abc",
   filename: "notes.txt",
   mimeType: "text/plain",
   storageProvider: "database",
@@ -41,9 +43,43 @@ const DB_FILE = {
   fileData: Buffer.from("hello worker").toString("base64"),
 };
 
+const VERIFIED_CTX: WorkspaceContextResult = {
+  success: true,
+  data: {
+    clerkUserId: "clerk_abc",
+    userPk: BigInt(7),
+    companyId: BigInt(5),
+    role: "employer",
+    status: "verified",
+  },
+};
+
+function mockAuthenticated(overrides?: Partial<(typeof VERIFIED_CTX)["data"]>) {
+  const data = { ...VERIFIED_CTX.data, ...overrides };
+  mockRequireWorkspaceContext.mockResolvedValue({ success: true, data });
+}
+
+function mockUnauthenticated() {
+  mockRequireWorkspaceContext.mockResolvedValue({
+    success: false,
+    response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    }),
+  } as WorkspaceContextResult);
+}
+
 function setupFileQuery(rows: Record<string, unknown>[]) {
   const where = jest.fn().mockResolvedValue(rows);
   const from = jest.fn().mockReturnValue({ where });
+  mockDbSelect.mockReturnValueOnce({ from });
+}
+
+function setupOwnershipQuery(owned: boolean) {
+  const limit = jest.fn().mockResolvedValue(owned ? [{ id: BigInt(7) }] : []);
+  const where = jest.fn().mockReturnValue({ limit });
+  const innerJoin = jest.fn().mockReturnValue({ where });
+  const from = jest.fn().mockReturnValue({ innerJoin });
   mockDbSelect.mockReturnValueOnce({ from });
 }
 
@@ -56,7 +92,7 @@ const params = (id: string) => ({ params: Promise.resolve({ id }) });
 describe("GET /api/files/[id]", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockAuth.mockResolvedValue({ userId: null });
+    mockUnauthenticated();
   });
 
   it("returns 401 for an anonymous request with no token", async () => {
@@ -64,12 +100,12 @@ describe("GET /api/files/[id]", () => {
 
     expect(response.status).toBe(401);
     expect(await response.json()).toEqual({ error: "Unauthorized" });
-    expect(mockDbSelect).not.toHaveBeenCalled();
   });
 
-  it("serves the file to a signed-in user", async () => {
-    mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+  it("serves the file to a signed-in user who owns it", async () => {
+    mockAuthenticated();
     setupFileQuery([DB_FILE]);
+    setupOwnershipQuery(true);
 
     const response = await GET(request("/api/files/123"), params("123"));
 
@@ -77,7 +113,17 @@ describe("GET /api/files/[id]", () => {
     expect(await response.text()).toBe("hello worker");
   });
 
-  it("serves the file to a caller holding a valid token for that file", async () => {
+  it("returns 404 when file belongs to a different company", async () => {
+    mockAuthenticated({ companyId: BigInt(999) });
+    setupFileQuery([DB_FILE]);
+    setupOwnershipQuery(false);
+
+    const response = await GET(request("/api/files/123"), params("123"));
+
+    expect(response.status).toBe(404);
+  });
+
+  it("serves the file to a caller holding a valid token (skips ownership)", async () => {
     const token = signFileAccessToken("123", SECRET);
     setupFileQuery([DB_FILE]);
 
@@ -87,7 +133,7 @@ describe("GET /api/files/[id]", () => {
     );
 
     expect(response.status).toBe(200);
-    expect(mockAuth).not.toHaveBeenCalled();
+    expect(mockRequireWorkspaceContext).not.toHaveBeenCalled();
   });
 
   it("rejects a token minted for a different file", async () => {
@@ -99,7 +145,6 @@ describe("GET /api/files/[id]", () => {
     );
 
     expect(response.status).toBe(401);
-    expect(mockDbSelect).not.toHaveBeenCalled();
   });
 
   it("rejects an expired token", async () => {
@@ -116,15 +161,14 @@ describe("GET /api/files/[id]", () => {
     expect(response.status).toBe(401);
   });
 
-  it("returns 400 for a non-numeric id without touching auth", async () => {
+  it("returns 400 for a non-numeric id", async () => {
     const response = await GET(request("/api/files/abc"), params("abc"));
 
     expect(response.status).toBe(400);
-    expect(mockAuth).not.toHaveBeenCalled();
   });
 
   it("returns 404 when the file row is missing", async () => {
-    mockAuth.mockResolvedValue({ userId: "clerk_abc" });
+    mockAuthenticated();
     setupFileQuery([]);
 
     const response = await GET(request("/api/files/123"), params("123"));

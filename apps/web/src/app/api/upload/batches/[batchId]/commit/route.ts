@@ -7,6 +7,7 @@ import { db } from "~/server/db";
 import { uploadBatchFiles } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { validateRequestBody } from "~/lib/validation";
 import {
   findBatchOwnedByUser,
@@ -18,7 +19,6 @@ import {
 import { processDocumentUpload } from "~/server/services/document-upload";
 
 const CommitSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   preferredProvider: z.string().optional(),
   category: z.string().optional(),
   embeddingIndexKey: z.string().min(1).optional(),
@@ -30,6 +30,9 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ batchId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   return withRateLimit(request, RateLimitPresets.strict, async () => {
     const { batchId } = await params;
     if (!batchId) {
@@ -41,9 +44,9 @@ export async function POST(
       return validation.response;
     }
 
-    const { userId, preferredProvider, category, embeddingIndexKey } = validation.data;
+    const { preferredProvider, category, embeddingIndexKey } = validation.data;
 
-    const batch = await findBatchOwnedByUser(batchId, userId, true);
+    const batch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
     if (!batch) {
       return NextResponse.json({ error: "Batch not found" }, { status: 404 });
     }
@@ -94,7 +97,7 @@ export async function POST(
 
           try {
             const uploadResult = await processDocumentUpload({
-              user: { userId, companyId: batch.companyId },
+              user: { userId: ctx.data.clerkUserId, companyId: batch.companyId },
               documentName: file.filename,
               rawDocumentUrl: file.storageUrl,
               requestUrl: request.url,
@@ -148,7 +151,7 @@ export async function POST(
       });
     }
 
-    const refreshedBatch = await findBatchOwnedByUser(batchId, userId, true);
+    const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
     if (!refreshedBatch) {
       return NextResponse.json({ error: "Batch not found after commit" }, { status: 404 });
     }
@@ -182,7 +185,6 @@ function inferStorageType(value: string | null): "s3" | "database" | undefined {
   if (value === "s3" || value === "database") {
     return value;
   }
-  // Legacy rows stored "cloud" (Vercel Blob) — treat as S3 for routing purposes
   if (value === "cloud") {
     return "s3";
   }

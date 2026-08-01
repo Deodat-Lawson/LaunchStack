@@ -292,7 +292,6 @@ const prioritizeOptions = ["start", "end", "relevance"] as const;
 // ============================================================================
 
 export const EmployerCompanySignupSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   companyName: z.string().min(1, "Company name is required").max(256).trim(),
   name: z.string().min(1, "User name is required").max(256).trim(),
   email: z.string().email("Valid email is required"),
@@ -305,7 +304,6 @@ export const EmployerCompanySignupSchema = z.object({
 });
 
 export const EmployerSignupSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   name: z.string().min(1, "Name is required").max(256).trim(),
   email: z.string().email("Valid email is required"),
   employerPasskey: z.string().min(1, "Employer passkey is required"),
@@ -313,7 +311,6 @@ export const EmployerSignupSchema = z.object({
 });
 
 export const EmployeeSignupSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   name: z.string().min(1, "Name is required").max(256).trim(),
   email: z.string().email("Valid email is required"),
   employeePasskey: z.string().min(1, "Employee passkey is required"),
@@ -321,7 +318,6 @@ export const EmployeeSignupSchema = z.object({
 });
 
 export const JoinWithInviteSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   name: z.string().min(1, "Name is required").max(256).trim(),
   email: z.string().email("Valid email is required"),
   inviteCode: z.string().min(1, "Invite code is required").trim(),
@@ -469,7 +465,6 @@ export const TextToSpeechSchema = z.object({
 // ============================================================================
 
 export const CreateChatSchema = z.object({
-  userId: z.string().min(1, "userId is required"),
   title: z.string().min(1, "title is required").max(512),
   agentMode: z.enum(["autonomous", "interactive", "assisted"]).optional().default("interactive"),
   visibility: z.enum(["public", "private"]).optional().default("private"),

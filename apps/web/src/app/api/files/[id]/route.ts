@@ -1,13 +1,24 @@
 /**
  * File Serving API Route
- * Retrieves and serves files stored in the database
+ * Retrieves and serves files stored in the database.
+ *
+ * Auth: accepts a signed file-access token (OCR worker) OR a full workspace
+ * session. Token-based requests skip the ownership check; session-based
+ * requests verify the file belongs to the caller's company.
+ *
+ * Ownership gap: `fileUploads` has no `companyId` column, so ownership is
+ * traced through the uploading user's company memberships. A future migration
+ * should add `companyId` to `file_uploads` for a direct FK check.
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { db } from "~/server/db";
-import { fileUploads } from "@launchstack/core/db/schema";
+import {
+  fileUploads,
+  users,
+  userCompanyMemberships,
+} from "@launchstack/core/db/schema";
 import {
   FILE_ACCESS_TOKEN_PARAM,
   verifyFileAccessToken,
@@ -15,6 +26,7 @@ import {
 import { env } from "~/env";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const MIME_BY_EXTENSION: Record<string, string> = {
   pdf: "application/pdf",
@@ -52,27 +64,28 @@ interface RouteParams {
 }
 
 /**
- * Accepts either a signed-in user or a short-lived token scoped to this file
- * id (used by the OCR worker, which fetches documents from another container
- * and has no Clerk session).
- *
- * Temporary: this only proves the caller is authenticated, not that the file
- * belongs to their company. C.2 replaces it with requireWorkspaceContext plus
- * an ownership check.
+ * Check whether the uploading user belongs to the same company as the
+ * requesting user. Traced via `users` + `userCompanyMemberships` because
+ * `fileUploads` lacks a direct `companyId` FK.
  */
-async function isAuthorizedFileRequest(
-  request: Request,
-  fileId: string,
+async function isFileOwnedByCompany(
+  uploaderClerkId: string,
+  companyId: bigint,
 ): Promise<boolean> {
-  const token = new URL(request.url).searchParams.get(FILE_ACCESS_TOKEN_PARAM);
-  if (
-    verifyFileAccessToken(token, fileId, env.server.FILE_ACCESS_TOKEN_SECRET)
-  ) {
-    return true;
-  }
+  const [match] = await db
+    .select({ id: users.id })
+    .from(users)
+    .innerJoin(
+      userCompanyMemberships,
+      and(
+        eq(userCompanyMemberships.userId, users.id),
+        eq(userCompanyMemberships.companyId, companyId),
+      ),
+    )
+    .where(eq(users.userId, uploaderClerkId))
+    .limit(1);
 
-  const { userId } = await auth();
-  return Boolean(userId);
+  return Boolean(match);
 }
 
 export async function GET(
@@ -90,11 +103,21 @@ export async function GET(
       );
     }
 
-    if (!(await isAuthorizedFileRequest(request, String(fileId)))) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+    // Token path: the OCR worker has no Clerk session but carries a
+    // short-lived HMAC token scoped to this file id.
+    const token = new URL(request.url).searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+    const hasValidToken = verifyFileAccessToken(
+      token,
+      String(fileId),
+      env.server.FILE_ACCESS_TOKEN_SECRET,
+    );
+
+    // Session path: full workspace context + company ownership check.
+    let sessionCompanyId: bigint | null = null;
+    if (!hasValidToken) {
+      const ctx = await requireWorkspaceContext();
+      if (!ctx.success) return ctx.response;
+      sessionCompanyId = ctx.data.companyId;
     }
 
     // Fetch file from database
@@ -108,6 +131,17 @@ export async function GET(
         { error: "File not found" },
         { status: 404 }
       );
+    }
+
+    // Company ownership check for session-based requests.
+    if (sessionCompanyId !== null) {
+      const owned = await isFileOwnedByCompany(file.userId, sessionCompanyId);
+      if (!owned) {
+        return NextResponse.json(
+          { error: "File not found" },
+          { status: 404 },
+        );
+      }
     }
 
     // External storage (S3 or legacy Vercel Blob): proxy or redirect.
@@ -180,4 +214,3 @@ export async function GET(
     );
   }
 }
-

@@ -25,6 +25,7 @@ import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation"
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { notifyOnCriticalFindings } from "~/lib/integrations/slack";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -102,6 +103,9 @@ async function getDocumentDetails(documentId: number) : Promise<DocumentDetails 
 }
 
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     // Apply rate limiting: 20 requests per 15 minutes for predictive analysis
     // This is a compute-intensive AI operation
     return withRateLimit(request, RateLimitPresets.strict, async () => {

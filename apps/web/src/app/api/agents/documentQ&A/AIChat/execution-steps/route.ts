@@ -5,12 +5,16 @@ import { agentAiChatbotExecutionStep } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateExecutionStepSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // POST /api/agent-ai-chatbot/execution-steps - Create an execution step
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateExecutionStepSchema);
     if (!validation.success) return validation.response;
@@ -58,6 +62,9 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/execution-steps?taskId=xxx - Get execution steps for a task
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const taskId = searchParams.get("taskId");
@@ -87,4 +94,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

@@ -9,6 +9,7 @@ import {
 import { inngest } from "~/server/inngest/client";
 import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation";
 import { CACHE_CONFIG, ERROR_TYPES, HTTP_STATUS, type AnalysisType } from "~/lib/constants";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -24,6 +25,9 @@ export const maxDuration = 300;
  *   - an "error" event if the job fails
  */
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     const validation = await validateRequestBody(request, PredictiveAnalysisSchema);
     if (!validation.success) {
         return validation.response;

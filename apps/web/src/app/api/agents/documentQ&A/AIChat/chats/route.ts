@@ -5,27 +5,21 @@ import { agentAiChatbotChat, agentAiChatbotDocument } from "@launchstack/core/db
 import { eq, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateChatSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // GET /api/agent-ai-chatbot/chats - Get all chats for a user
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: "userId is required" },
-        { status: 400 }
-      );
-    }
-
     const chats = await db
       .select()
       .from(agentAiChatbotChat)
-      .where(eq(agentAiChatbotChat.userId, userId))
+      .where(eq(agentAiChatbotChat.userId, ctx.data.clerkUserId))
       .orderBy(desc(agentAiChatbotChat.updatedAt));
 
     return NextResponse.json({
@@ -43,11 +37,13 @@ export async function GET(request: NextRequest) {
 
 // POST /api/agent-ai-chatbot/chats - Create a new chat
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateChatSchema);
     if (!validation.success) return validation.response;
     const {
-      userId,
       title,
       agentMode,
       visibility,
@@ -59,7 +55,7 @@ export async function POST(request: NextRequest) {
     const chatId = randomUUID();
     const insertValues = {
       id: chatId,
-      userId,
+      userId: ctx.data.clerkUserId,
       title,
       agentMode: agentMode as "autonomous" | "interactive" | "assisted",
       visibility: visibility as "public" | "private",
@@ -78,8 +74,8 @@ export async function POST(request: NextRequest) {
       await db.insert(agentAiChatbotDocument).values({
         id: documentId.toString(),
         chatId: chatId,
-        userId: userId,
-        title: title, // Use chat title as doc ref title for now
+        userId: ctx.data.clerkUserId,
+        title: title,
         kind: "text",
       });
     }
@@ -96,4 +92,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

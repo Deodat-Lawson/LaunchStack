@@ -11,21 +11,17 @@
  */
 
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { inngest } from "~/server/inngest/client";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const WebsiteUploadSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   url: z.string().url("A valid URL is required"),
   title: z.string().optional(),
   category: z.string().optional(),
@@ -134,6 +130,9 @@ async function fetchPageWithJsRender(
 }
 
 export async function POST(request: Request) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   return withRateLimit(request, RateLimitPresets.strict, async () => {
     try {
       const validation = await validateRequestBody(request, WebsiteUploadSchema);
@@ -141,7 +140,7 @@ export async function POST(request: Request) {
         return validation.response;
       }
 
-      const { userId, url, title, category, crawl, maxDepth, maxPages, jsRender } =
+      const { url, title, category, crawl, maxDepth, maxPages, jsRender } =
         validation.data;
 
       let parsedUrl: URL;
@@ -156,15 +155,6 @@ export async function POST(request: Request) {
           { error: "Only http(s) URLs are supported" },
           { status: 400 },
         );
-      }
-
-      const [userInfo] = await db
-        .select()
-        .from(users)
-        .where(eq(users.userId, userId));
-
-      if (!userInfo) {
-        return NextResponse.json({ error: "Invalid user" }, { status: 400 });
       }
 
       // ------------------------------------------------------------------
@@ -182,8 +172,8 @@ export async function POST(request: Request) {
           name: "website/crawl.requested",
           data: {
             url,
-            userId,
-            companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)).toString(),
+            userId: ctx.data.clerkUserId,
+            companyId: ctx.data.companyId.toString(),
             category,
             maxDepth: maxDepth ?? DEFAULT_MAX_DEPTH,
             maxPages: maxPages ?? DEFAULT_MAX_PAGES,
@@ -208,7 +198,7 @@ export async function POST(request: Request) {
       // Single-page mode
       // ------------------------------------------------------------------
       console.log(
-        `[WebsiteUpload] Fetching: ${url}, user=${userId}, jsRender=${jsRender ?? false}`,
+        `[WebsiteUpload] Fetching: ${url}, user=${ctx.data.clerkUserId}, jsRender=${jsRender ?? false}`,
       );
 
       let page: { html: string; finalUrl: string } | null = null;
@@ -244,7 +234,7 @@ export async function POST(request: Request) {
         filename,
         data: htmlBuffer,
         contentType: "text/html",
-        userId,
+        userId: ctx.data.clerkUserId,
       });
 
       console.log(
@@ -253,8 +243,8 @@ export async function POST(request: Request) {
 
       const uploadResult = await processDocumentUpload({
         user: {
-          userId,
-          companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
+          userId: ctx.data.clerkUserId,
+          companyId: ctx.data.companyId,
         },
         documentName: resolvedTitle,
         rawDocumentUrl: uploaded.url,

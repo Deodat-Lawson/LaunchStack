@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { agentAiChatbotToolCall } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateToolCallSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -13,6 +14,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ toolCallId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { toolCallId } = await params;
     const validation = await validateRequestBody(request, UpdateToolCallSchema);
@@ -53,4 +57,3 @@ export async function PATCH(
     );
   }
 }
-

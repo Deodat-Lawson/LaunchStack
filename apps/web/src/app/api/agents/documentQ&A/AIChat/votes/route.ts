@@ -4,12 +4,16 @@ import { db } from "~/server/db";
 import { agentAiChatbotVote } from "@launchstack/core/db/schema";
 import { eq, and } from "drizzle-orm";
 import { validateRequestBody, CreateVoteSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // POST /api/agent-ai-chatbot/votes - Vote on a message
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateVoteSchema);
     if (!validation.success) return validation.response;
@@ -76,6 +80,9 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/votes?messageId=xxx - Get vote for a message
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const messageId = searchParams.get("messageId");
@@ -110,4 +117,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

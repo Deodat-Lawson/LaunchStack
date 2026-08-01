@@ -9,6 +9,7 @@ import {
 } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -18,6 +19,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { chatId } = await params;
 
@@ -75,6 +79,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { chatId } = await params;
     const validation = await validateRequestBody(request, UpdateChatSchema);
@@ -120,6 +127,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { chatId } = await params;
 
@@ -139,4 +149,3 @@ export async function DELETE(
     );
   }
 }
-

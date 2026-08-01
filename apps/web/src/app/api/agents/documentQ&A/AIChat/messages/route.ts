@@ -5,12 +5,16 @@ import { agentAiChatbotMessage, agentAiChatbotChat } from "@launchstack/core/db/
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateMessageSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // POST /api/agent-ai-chatbot/messages - Send a message
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateMessageSchema);
     if (!validation.success) return validation.response;
@@ -53,6 +57,9 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/messages?chatId=xxx - Get messages for a chat
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const chatId = searchParams.get("chatId");
@@ -82,4 +89,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

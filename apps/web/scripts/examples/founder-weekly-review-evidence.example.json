@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "founder-weekly-review-evidence/v1",
+  "capturedAt": "2026-08-01T22:34:54.816Z",
+  "reportingPeriod": {
+    "start": "2026-07-20",
+    "end": "2026-07-26"
+  },
+  "workspaceTimezone": "America/New_York",
+  "items": [
+    {
+      "sourceType": "founder_context",
+      "sourceId": "founder_context:entry:cli:2:2026-07-20:2026-07-26",
+      "title": "Founder context",
+      "excerpt": "This week focused on pricing clarity and onboarding. Main blocker: choosing an SSO vendor before we can ship SAML.",
+      "metadata": {
+        "enteredBy": "demo-founder",
+        "provenance": "request_time_founder_input",
+        "excerptTruncated": false
+      }
+    },
+    {
+      "sourceType": "document_change",
+      "sourceId": "document_change:doc:2:version:2",
+      "title": "Pricing Page",
+      "sourceTimestamp": "2026-07-21T14:00:00.000Z",
+      "excerpt": "Reworked pricing tiers; added an annual billing option.",
+      "workspaceDeepLink": "/employer/documents/viewer?docId=2",
+      "metadata": {
+        "documentId": "2",
+        "documentVersionId": 2,
+        "versionNumber": 1,
+        "documentCategory": "Product",
+        "uploadedBy": "demo-user",
+        "hasChangelog": true,
+        "changelogTruncated": false
+      }
+    },
+    {
+      "sourceType": "document_change",
+      "sourceId": "document_change:doc:3:version:5",
+      "title": "Onboarding Guide",
+      "sourceTimestamp": "2026-07-22T09:15:00.000Z",
+      "excerpt": "Added an SSO / SAML setup walkthrough.",
+      "workspaceDeepLink": "/employer/documents/viewer?docId=3",
+      "metadata": {
+        "documentId": "3",
+        "documentVersionId": 5,
+        "versionNumber": 1,
+        "documentCategory": "Product",
+        "uploadedBy": "demo-user",
+        "hasChangelog": true,
+        "changelogTruncated": false
+      }
+    },
+    {
+      "sourceType": "customer_feedback",
+      "sourceId": "customer_feedback:doc:4:version:6:section:1",
+      "title": "Customer Feedback - July",
+      "sourceTimestamp": "2026-07-22T11:00:00.000Z",
+      "excerpt": "Several customers asked for annual billing instead of monthly-only.",
+      "workspaceDeepLink": "/employer/documents/viewer?docId=4",
+      "metadata": {
+        "documentId": "4",
+        "documentVersionId": 6,
+        "sectionId": 1,
+        "versionNumber": 1,
+        "documentCategory": "Customer Feedback",
+        "pageNumber": 1,
+        "excerptTruncated": false
+      }
+    },
+    {
+      "sourceType": "customer_feedback",
+      "sourceId": "customer_feedback:doc:4:version:6:section:2",
+      "title": "Customer Feedback - July",
+      "sourceTimestamp": "2026-07-22T11:00:00.000Z",
+      "excerpt": "A user said the enterprise tier pricing felt confusing to compare.",
+      "workspaceDeepLink": "/employer/documents/viewer?docId=4",
+      "metadata": {
+        "documentId": "4",
+        "documentVersionId": 6,
+        "sectionId": 2,
+        "versionNumber": 1,
+        "documentCategory": "Customer Feedback",
+        "pageNumber": 1,
+        "excerptTruncated": false
+      }
+    },
+    {
+      "sourceType": "customer_feedback",
+      "sourceId": "customer_feedback:doc:4:version:6:section:3",
+      "title": "Customer Feedback - July",
+      "sourceTimestamp": "2026-07-22T11:00:00.000Z",
+      "excerpt": "Multiple requests for SSO / SAML so larger teams can roll out access.",
+      "workspaceDeepLink": "/employer/documents/viewer?docId=4",
+      "metadata": {
+        "documentId": "4",
+        "documentVersionId": 6,
+        "sectionId": 3,
+        "versionNumber": 1,
+        "documentCategory": "Customer Feedback",
+        "pageNumber": 2,
+        "excerptTruncated": false
+      }
+    },
+    {
+      "sourceType": "document_change",
+      "sourceId": "document_change:doc:4:version:6",
+      "title": "Customer Feedback - July",
+      "sourceTimestamp": "2026-07-22T11:00:00.000Z",
+      "excerpt": "Version 1 uploaded",
+      "workspaceDeepLink": "/employer/documents/viewer?docId=4",
+      "metadata": {
+        "documentId": "4",
+        "documentVersionId": 6,
+        "versionNumber": 1,
+        "documentCategory": "Customer Feedback",
+        "uploadedBy": "demo-user",
+        "hasChangelog": false,
+        "changelogTruncated": false
+      }
+    },
+    {
+      "sourceType": "document_change",
+      "sourceId": "document_change:doc:2:version:3",
+      "title": "Pricing Page",
+      "sourceTimestamp": "2026-07-23T15:30:00.000Z",
+      "excerpt": "Clarified enterprise tier copy after customer confusion.",
+      "workspaceDeepLink": "/employer/documents/viewer?docId=2",
+      "metadata": {
+        "documentId": "2",
+        "documentVersionId": 3,
+        "versionNumber": 2,
+        "documentCategory": "Product",
+        "uploadedBy": "demo-user",
+        "hasChangelog": true,
+        "changelogTruncated": false
+      }
+    }
+  ],
+  "sourceWarnings": []
+}

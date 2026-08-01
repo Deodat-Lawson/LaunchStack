@@ -17,7 +17,6 @@ import {
   Eye,
   Search as SearchIcon,
   Play,
-  Video,
   ExternalLink,
   ShieldAlert,
 } from 'lucide-react';
@@ -333,12 +332,6 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
             title="Clerk setup"
             src="/deployment-demos/clerk-setup.mov"
             path="public/deployment-demos/clerk-setup.mov"
-          />
-          <DemoCard
-            icon={<Video size={14} />}
-            title="OpenAI API key"
-            src="/deployment-demos/openai-api-key-setup.mov"
-            path="public/deployment-demos/openai-api-key-setup.mov"
           />
         </div>
       </Section>

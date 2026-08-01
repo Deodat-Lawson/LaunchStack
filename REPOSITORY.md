@@ -34,6 +34,7 @@ two places the boundary currently runs the wrong way — see
 | `services/ocr-router` | Node / Express | `SERVICE` | Routes OCR jobs by document complexity. |
 | `services/ocr-worker` | Python | `SERVICE` | Docling-based OCR worker. |
 | `sidecar` | Python / FastAPI | `SERVICE` | Whisper transcription and the ADEU document routines. |
+| `api/adeu` | Python | `QUARANTINE` | A 503-line serverless function that duplicates `sidecar/app/routes/adeu.py` and imports `sidecar/` through `sys.path` manipulation. Nothing in the TypeScript codebase references it, and the owner has confirmed it is not deployed on Vercel. Retained pending a decision from its authors — see [Open questions](#open-questions). |
 | `docker/` | config | `INFRA` | SeaweedFS, Caddy, and database bootstrap configuration. |
 | `scripts/` | mixed | `INFRA` | See [Scripts](#scripts). |
 | `docs/` | Markdown | — | Deployment, architecture, and feature notes. |
@@ -165,3 +166,9 @@ These need an owner decision, not a code change.
    config, and the root changelog was last updated 2026-01-31 and documents
    files under a root `src/` directory that no longer exists. The real
    changelog for the published package is `packages/core/CHANGELOG.md`.
+5. **`api/adeu` has no owner decision yet.** It is unreferenced and undeployed,
+   but it was authored and tested by contributors other than the repository
+   owner (created 2026-03-30, fixed and verified against preservation tests
+   2026-04-09). "Not deployed" is not the same as "not wanted" — retiring it
+   should be an explicit call by its authors, not an inference. Until then it
+   stays.

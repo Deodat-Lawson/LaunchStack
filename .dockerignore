@@ -63,10 +63,10 @@ sidecar
 
 # Docker files (don't copy into context recursively)
 docker-compose*.yml
-Dockerfile
-Dockerfile.*
+apps/web/Dockerfile
+apps/web/Dockerfile.*
 .dockerignore
-start-database.sh
+scripts/ops/start-database.sh
 
 # Workspace package build outputs (rebuilt inside container)
 packages/*/dist

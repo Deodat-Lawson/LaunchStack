@@ -110,8 +110,8 @@ git clone https://github.com/launchstack/launchstack.git
 cd launchstack
 pnpm install
 cp .env.example .env          # fill in required keys
-pnpm db:push                  # sync Drizzle schema
-pnpm dev                      # Next.js + Inngest on :3000 and :8288
+pnpm --filter @launchstack/web db:push                  # sync Drizzle schema
+pnpm --filter @launchstack/web dev                      # Next.js + Inngest on :3000 and :8288
 ```
 
 Or spin the full stack (Postgres + SeaweedFS + sidecars) with Docker:

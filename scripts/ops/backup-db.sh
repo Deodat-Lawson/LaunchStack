@@ -3,8 +3,8 @@
 # Database backup script for Launchstack
 #
 # Usage:
-#   ./scripts/backup-db.sh                    # Uses DATABASE_URL from .env
-#   DATABASE_URL="postgres://..." ./scripts/backup-db.sh
+#   ./scripts/ops/backup-db.sh                    # Uses DATABASE_URL from .env
+#   DATABASE_URL="postgres://..." ./scripts/ops/backup-db.sh
 #
 # Options (via env vars):
 #   BACKUP_DIR     - Directory to store backups (default: ./backups)
@@ -12,7 +12,7 @@
 #   BACKUP_COMPRESS - Set to "0" to skip gzip compression (default: compressed)
 #
 # Cron example (daily at 2 AM):
-#   0 2 * * * cd /path/to/project && ./scripts/backup-db.sh >> /var/log/launchstack-backup.log 2>&1
+#   0 2 * * * cd /path/to/project && ./scripts/ops/backup-db.sh >> /var/log/launchstack-backup.log 2>&1
 # ============================================================================
 
 set -euo pipefail

@@ -38,8 +38,8 @@ git clone https://github.com/launchstack/launchstack.git
 cd launchstack
 pnpm install
 cp .env.example .env                  # fill in DATABASE_URL + CLERK + OPENAI keys
-pnpm db:push                          # sync Drizzle schema
-pnpm dev                              # Next.js + Inngest dev server (concurrently)
+pnpm --filter @launchstack/web db:push                          # sync Drizzle schema
+pnpm --filter @launchstack/web dev                              # Next.js + Inngest dev server (concurrently)
 ```
 
 ### Full local stack (Postgres + SeaweedFS + sidecars)
@@ -60,7 +60,7 @@ Run before opening a PR:
 
 ```bash
 pnpm check         # eslint + pnpm -r typecheck
-pnpm test          # Jest (apps/web)
+pnpm --filter @launchstack/web test          # Jest (apps/web)
 ```
 
 All three must pass in CI. Boundary rules (no `process.env` in core, no `~/*` in features) are checked by ESLint — don't try to work around them with `/* eslint-disable */`; talk to us if the rule seems wrong.
@@ -85,7 +85,7 @@ Before requesting review:
 
 - [ ] Commits are focused and have meaningful messages
 - [ ] `pnpm check` passes
-- [ ] `pnpm test` passes
+- [ ] `pnpm --filter @launchstack/web test` passes
 - [ ] Changeset added if `packages/core/` changed
 - [ ] New env vars documented in [`.env.example`](.env.example) and [`apps/web/src/env.ts`](apps/web/src/env.ts)
 - [ ] If the change touches UI, you've exercised the flow in a browser (not just a successful build)

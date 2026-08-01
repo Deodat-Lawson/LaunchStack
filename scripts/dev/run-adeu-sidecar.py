@@ -3,7 +3,7 @@ Lightweight sidecar that only mounts the Adeu routes.
 No ML dependencies (torch, sentence-transformers) required.
 
 Usage:
-    /tmp/sidecar-test-venv/bin/python scripts/run-adeu-sidecar.py
+    /tmp/sidecar-test-venv/bin/python scripts/dev/run-adeu-sidecar.py
 """
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "sidecar"))

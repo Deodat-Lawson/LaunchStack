@@ -43,10 +43,10 @@ sidecar
 
 # Docker orchestration files are not image inputs
 docker-compose*.yml
-Dockerfile
-Dockerfile.*
+apps/web/Dockerfile
+apps/web/Dockerfile.*
 .dockerignore
-start-database.sh
+scripts/ops/start-database.sh
 
 # Keep these rules last so broad node_modules/build/dist exclusions do not
 # remove traced runtime dependencies nested inside the standalone bundle.

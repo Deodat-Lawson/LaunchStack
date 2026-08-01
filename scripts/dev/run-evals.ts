@@ -5,7 +5,7 @@
  * deterministic extractors. Outputs a summary report to stdout.
  *
  * Usage:
- *   npx tsx scripts/run-evals.ts
+ *   npx tsx scripts/dev/run-evals.ts
  */
 
 import { EVAL_SCENARIOS, runEvals } from '~/lib/agents/evals';

@@ -70,14 +70,9 @@ export const company = pgTable("company", {
     reindexStartedAt: timestamp("reindex_started_at", { withTimezone: true }),
     reindexCompletedAt: timestamp("reindex_completed_at", { withTimezone: true }),
     reindexError: text("reindex_error"),
-    // Legacy plaintext credential columns. Read-only during migration;
-    // writes go through src/lib/ai/company-credentials.ts into the
-    // encrypted `company_embedding_credentials` table. Dropped by
-    // drizzle/0011 once backfill has run.
-    embeddingOpenAIApiKey: text("embedding_openai_api_key"),
-    embeddingHuggingFaceApiKey: text("embedding_huggingface_api_key"),
-    embeddingOllamaBaseUrl: varchar("embedding_ollama_base_url", { length: 1024 }),
-    embeddingOllamaModel: varchar("embedding_ollama_model", { length: 256 }),
+    // Embedding provider credentials live in `company_embedding_credentials`
+    // (encrypted). The legacy plaintext columns on this table were dropped by
+    // drizzle/0011_drop_plaintext_embedding_credentials.sql.
     employerpasskey: varchar("employerPasskey", { length: 256 }).notNull().default(""),
     employeepasskey: varchar("employeePasskey", { length: 256 }).notNull().default(""),
     numberOfEmployees: varchar("numberOfEmployees", { length: 256 }).notNull(),

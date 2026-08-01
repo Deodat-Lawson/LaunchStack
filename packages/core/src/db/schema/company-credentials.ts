@@ -19,9 +19,8 @@ import { pgTable } from "./helpers";
  * two real secrets (OpenAI, Hugging Face) are stored as base64 ciphertext
  * plus a 4-char suffix for UI feedback (`…ab12`).
  *
- * Populated by `src/lib/ai/company-credentials.ts`. The legacy plaintext
- * `company.embedding*` columns remain until backfill runs, then get dropped
- * in a follow-up migration.
+ * Populated by `packages/core/src/embeddings/company-credentials.ts`.
+ * Legacy plaintext `company.embedding*` columns were dropped by migration 0011.
  */
 export const companyEmbeddingCredentials = pgTable(
   "company_embedding_credentials",

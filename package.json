@@ -23,6 +23,7 @@
     "db:migrate": "pnpm --filter @launchstack/web db:migrate",
     "db:studio": "pnpm --filter @launchstack/web db:studio",
     "db:backfill:versions": "pnpm --filter @launchstack/web db:backfill:versions",
+    "db:backfill:embedding-credentials": "pnpm --filter @launchstack/web db:backfill:embedding-credentials",
     "inngest:dev": "pnpm --filter @launchstack/web inngest:dev",
     "changeset": "changeset",
     "version": "changeset version",

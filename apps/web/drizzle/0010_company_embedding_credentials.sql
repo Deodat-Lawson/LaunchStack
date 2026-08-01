@@ -10,9 +10,9 @@
 -- Rollout plan:
 --   1. Apply this migration (the new table is created empty).
 --   2. Deploy application code that reads/writes via the new table.
---   3. Run `pnpm tsx scripts/backfill-embedding-credentials.ts` to encrypt
---      existing plaintext values from `company` into this table and null
---      out the old columns.
+--   3. Run `pnpm --filter @launchstack/web db:backfill:embedding-credentials`
+--      to encrypt existing plaintext values from `company` into this table and
+--      null out the old columns.
 --   4. Once verified, apply 0011_drop_plaintext_embedding_credentials.sql
 --      to remove the legacy columns.
 

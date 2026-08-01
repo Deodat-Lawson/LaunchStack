@@ -492,7 +492,6 @@ function Composer({
       attachments,
       webSearch,
       thinking: thinking && thinkingAllowed,
-      model: model.id,
       provider: model.provider,
     });
     setText("");

@@ -144,7 +144,7 @@ export interface ThreadMessage {
 
 /**
  * Full payload a Composer send produces, so per-turn toggles (web search,
- * thinking, attachments, model) can flow to the API without growing the
+ * thinking, attachments, provider) can flow to the API without growing the
  * argument list to sendMessage further.
  */
 export interface ComposerSend {
@@ -153,7 +153,6 @@ export interface ComposerSend {
   attachments: EphemeralAttachment[];
   webSearch: boolean;
   thinking: boolean;
-  model: AIModelType;
   provider: LLMProvider;
 }
 

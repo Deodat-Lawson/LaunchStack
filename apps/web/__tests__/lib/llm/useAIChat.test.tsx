@@ -15,6 +15,31 @@ describe("useAIChat", () => {
     global.fetch = fetchMock as unknown as typeof fetch;
   });
 
+  it("omits aiModel so the server can apply the configured provider default", async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: true, summarizedAnswer: "Done" }),
+    });
+
+    const { result } = renderHook(() => useAIChat());
+
+    await act(async () => {
+      await result.current.sendQuery({
+        question: "Use the configured model",
+        searchScope: "company",
+        provider: "openrouter",
+      });
+    });
+
+    const [, request] = fetchMock.mock.calls[0] as unknown as [
+      string,
+      RequestInit,
+    ];
+    const body = JSON.parse(request.body as string) as Record<string, unknown>;
+    expect(body).not.toHaveProperty("aiModel");
+    expect(body.provider).toBe("openrouter");
+  });
+
   it("returns the provider error so the workspace can display it", async () => {
     fetchMock.mockResolvedValue({
       ok: false,

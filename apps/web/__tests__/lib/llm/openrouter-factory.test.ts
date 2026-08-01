@@ -1,6 +1,3 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
-
 import {
   configureChatModels,
   describeProviderError,
@@ -11,6 +8,7 @@ import {
   supportsVision,
 } from "@launchstack/core/llm";
 import { QuestionSchema } from "~/lib/validation";
+import { hasConfiguredAiCredential } from "~/server/ai-credentials";
 import { configureAppChatModels } from "~/server/chat-models";
 
 describe("OpenRouter chat-model configuration", () => {
@@ -55,14 +53,15 @@ describe("OpenRouter chat-model configuration", () => {
   });
 
   it("accepts an OpenRouter-only server configuration", () => {
-    const envSource = readFileSync(
-      path.resolve(process.cwd(), "src/env.ts"),
-      "utf8",
-    );
+    expect(
+      hasConfiguredAiCredential({
+        OPENROUTER_API_KEY: "sk-or-v1-test-credential",
+      }),
+    ).toBe(true);
+  });
 
-    expect(envSource).toMatch(
-      /!data\.OPENAI_API_KEY\s*&&\s*!data\.AI_API_KEY\s*&&\s*!data\.OPENROUTER_API_KEY/,
-    );
+  it("rejects a server configuration without an AI credential", () => {
+    expect(hasConfiguredAiCredential({})).toBe(false);
   });
 
   it("fails closed instead of falling back to OPENAI_API_KEY", () => {

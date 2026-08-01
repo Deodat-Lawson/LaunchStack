@@ -2,6 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config as loadDotenv } from "dotenv";
 import { z } from "zod";
+import { hasConfiguredAiCredential } from "./server/ai-credentials";
 
 // `.env` lives at the monorepo root, but Next.js (running from apps/web/) only
 // auto-loads `.env` from its own cwd. Load the root file here so this module
@@ -177,7 +178,7 @@ const serverSchema = z.object({
 
 const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
   // At least one AI API key must be set
-  if (!data.OPENAI_API_KEY && !data.AI_API_KEY && !data.OPENROUTER_API_KEY) {
+  if (!hasConfiguredAiCredential(data)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["AI_API_KEY"],

@@ -316,7 +316,7 @@ function sniffTextContent(buffer: Buffer): boolean {
 // ---------------------------------------------------------------------------
 // Inngest Function
 // ---------------------------------------------------------------------------
-
+import { handleProcessDocumentFailure } from "./processDocumentFailure";
 export const uploadDocument = inngest.createFunction(
   {
     id: "process-document",
@@ -325,46 +325,7 @@ export const uploadDocument = inngest.createFunction(
     concurrency: [{ limit: 3 }],
     throttle: { limit: 30, period: "1m" },
     timeouts: { finish: "120m" },
-    onFailure: async ({ error, event }) => {
-      console.error(`[ProcessDocument] Pipeline failed for job ${JSON.stringify(event.data)}:`, error);
-      const data = event.data?.event?.data as ProcessDocumentEventData | undefined;
-      const errorMessage = error instanceof Error ? error.message : String(error);
-
-      if (data?.documentId) {
-        try {
-          await db
-            .update(document)
-            .set({
-              ocrProcessed: false,
-              ocrMetadata: {
-                error: "processing_failed",
-                errorMessage,
-                failedAt: new Date().toISOString(),
-              },
-            })
-            .where(eq(document.id, data.documentId));
-          console.log(`[ProcessDocument] Marked document ${data.documentId} as failed`);
-        } catch (dbError) {
-          console.error("[ProcessDocument] Could not mark document as failed:", dbError);
-        }
-      }
-
-      if (data?.jobId) {
-          try {
-            await db
-              .update(ocrJobs)
-              .set({
-                status: "failed",
-                errorMessage,
-                completedAt: new Date(),
-              })
-              .where(eq(ocrJobs.id, data.jobId));
-            console.log(`[ProcessDocument] Marked ocr_jobs ${data.jobId} as failed`);
-          } catch (dbError) {
-            console.error("[ProcessDocument] Could not mark job as failed:", dbError);
-          }
-        }
-      },
+    onFailure: handleProcessDocumentFailure,
     },
   { event: "document/process.requested" },
   async ({ event, step }) => {

@@ -6,7 +6,7 @@
 #   docker compose --env-file .env --profile local-storage up db seaweedfs
 #
 # Usage:
-#   bash scripts/test-seaweedfs-infra.sh
+#   bash scripts/dev/test-seaweedfs-infra.sh
 #
 # Requires: aws cli (brew install awscli)
 # =============================================================================

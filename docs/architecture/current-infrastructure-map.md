@@ -216,7 +216,7 @@ flowchart LR
 | `crawl-website`              | `website/crawl.requested`              |
 | `rehydrate-note-anchors`     | `notes-anchors/rehydrate.requested`    |
 
-In development, the root `pnpm dev` starts Next.js and an Inngest dev process.
+In development, `pnpm --filter @launchstack/web dev` starts Next.js and an Inngest dev process.
 In Docker, a separate Inngest container calls the same API route. In production,
 Inngest Cloud is expected to call the Vercel deployment.
 

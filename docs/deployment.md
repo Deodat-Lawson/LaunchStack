@@ -39,7 +39,7 @@ docker compose --env-file .env up --build
 
 - **default** — all services (db, migrate, app, sidecar)
 - `--profile dev` — adds Inngest dev server (dashboard at `http://localhost:8288`)
-- `--profile minimal` — db only (for local `pnpm dev`)
+- `--profile minimal` — db only (for local `pnpm --filter @launchstack/web dev`)
 
 Example with Inngest dev server:
 
@@ -85,7 +85,7 @@ Trend search calls external search APIs. Configure `EXA_API_KEY` and/or `SERPER_
 6. Apply schema:
 
 ```bash
-pnpm db:migrate
+pnpm --filter @launchstack/web db:migrate
 ```
 
 Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
@@ -124,7 +124,7 @@ modes, and migration from the pre-PR variables.
 - [ ] Environment variables set for all enabled features
 - [ ] `DATABASE_URL` points to production DB
 - [ ] `vector` extension enabled on PostgreSQL
-- [ ] Schema applied (`pnpm db:migrate` locally, or automatic on Vercel production builds)
+- [ ] Schema applied (`pnpm --filter @launchstack/web db:migrate` locally, or automatic on Vercel production builds)
 - [ ] Clerk and the selected chat provider/model validated
 - [ ] OpenAI/global/per-capability integrations validated when enabled
 - [ ] OCR providers validated if OCR is enabled

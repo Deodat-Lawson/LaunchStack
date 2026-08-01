@@ -1,3 +1,7 @@
+# services/* is deliberately excluded. Those are standalone containers with
+# their own deps (including @huggingface/transformers); pulling them into this
+# workspace would add them to every Vercel install. Trade-off: they are not
+# covered by `pnpm -r typecheck`. See REPOSITORY.md.
 packages:
   - apps/*
   - packages/*

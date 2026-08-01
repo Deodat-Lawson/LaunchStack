@@ -144,7 +144,7 @@ The Launchstack Python sidecars (`services/sidecar`, `services/ocr-router`, `ser
 ## 6. First deploy
 
 1. Push to `main` (or click **Deploy** in Vercel).
-2. Vercel runs: `pnpm install` → `pnpm db:migrate` (production only) → `pnpm build`.
+2. Vercel runs: `pnpm install` → `pnpm --filter @launchstack/web db:migrate` (production only) → `pnpm --filter @launchstack/web build`.
 3. Deploy completes; note the production URL.
 
 ### Verify
@@ -185,7 +185,7 @@ Migrations are **forward-only** ([`apps/web/scripts/migrate.mjs`](../../apps/web
 
 ## 9. Troubleshooting
 
-### Build fails at `pnpm db:migrate`
+### Build fails at `pnpm --filter @launchstack/web db:migrate`
 
 - Confirm `DATABASE_URL` is set for the Production environment in Vercel.
 - Check the migrate log output in the build — the script prints which file failed.

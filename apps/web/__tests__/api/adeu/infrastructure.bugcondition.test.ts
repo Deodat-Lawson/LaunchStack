@@ -21,9 +21,10 @@ describe("Fix 1.8: Secret removed from Docker build args — OPENAI_API_KEY not 
 
         // FIX: OPENAI_API_KEY should NOT be in the build args anchor as an actual key-value pair.
         // It should only be a runtime env var, never baked into image layers.
-        const buildArgsSection = content.match(
-            /x-app-build-args:.*?&app-build-args\n([\s\S]*?)(?=\nservices:|\n\S)/,
-        );
+        const buildArgsSection =
+            /x-app-build-args:.*?&app-build-args\n([\s\S]*?)(?=\nservices:|\n\S)/.exec(
+                content,
+            );
         expect(buildArgsSection).not.toBeNull();
 
         const buildArgs = buildArgsSection![1]!;
@@ -33,6 +34,24 @@ describe("Fix 1.8: Secret removed from Docker build args — OPENAI_API_KEY not 
             .filter((line) => !line.trim().startsWith("#"))
             .join("\n");
         expect(nonCommentLines).not.toContain("OPENAI_API_KEY");
+    });
+});
+
+describe("OpenRouter runtime configuration", () => {
+    it("forwards the OpenRouter key and model to the app container", () => {
+        const composePath = path.join(ROOT, "docker-compose.yml");
+        const content = fs.readFileSync(composePath, "utf-8");
+        const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(
+            content,
+        );
+
+        expect(appService).not.toBeNull();
+        expect(appService![1]).toContain(
+            "OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}",
+        );
+        expect(appService![1]).toContain(
+            "OPENROUTER_MODEL: ${OPENROUTER_MODEL:-moonshotai/kimi-k3}",
+        );
     });
 });
 
@@ -54,7 +73,7 @@ describe("Fix 1.11: Non-root container — sidecar Dockerfile has USER directive
         const content = fs.readFileSync(dockerfilePath, "utf-8");
 
         // FIX: The USER should be a non-root user (not "root" or "0")
-        const userMatch = content.match(/^USER\s+(\S+)/m);
+        const userMatch = /^USER\s+(\S+)/m.exec(content);
         expect(userMatch).not.toBeNull();
         expect(userMatch![1]).not.toBe("root");
         expect(userMatch![1]).not.toBe("0");

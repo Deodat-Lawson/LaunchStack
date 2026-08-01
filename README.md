@@ -122,6 +122,9 @@ the supporting capabilities you enable, such as embeddings or transcription.
 
 Or spin the full stack (Postgres + SeaweedFS + sidecars) with Docker:
 
+Docker Compose forwards `OPENROUTER_API_KEY` and the optional
+`OPENROUTER_MODEL` override from `.env` to the reference app container.
+
 ```bash
 # macOS / Linux
 make up          # lite (~400MB RAM)

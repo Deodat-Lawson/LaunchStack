@@ -75,7 +75,8 @@ export type CreateRunWithDispatchInput = {
     actor: FounderWeeklyReviewUserActor;
     requestKey: string;
     reportingPeriod: ReportingPeriod;
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
+    evidenceSnapshot?: FounderWeeklyReviewEvidenceSnapshot;
+    collectionInput?: import("@launchstack/features/founder-weekly-review").FounderWeeklyReviewCollectionInput;
 };
 export type RetryRunWithDispatchInput = { actor: FounderWeeklyReviewUserActor; runId: string; requestKey: string };
 export type CreateRunWithDispatchResult = { run: FounderWeeklyReviewRunRecord; dispatch: FounderWeeklyReviewDispatch; created: boolean };

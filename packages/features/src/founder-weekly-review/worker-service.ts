@@ -2,6 +2,8 @@ import { ZodError } from "zod";
 
 import {
     type FounderWeeklyReviewClaimInput,
+    type FounderWeeklyReviewCollectionClaimInput,
+    type FounderWeeklyReviewEvidenceSnapshot,
     type FounderWeeklyReviewGenerationFailure,
     type FounderWeeklyReviewModelMetadata,
     type FounderWeeklyReviewPayload,
@@ -19,11 +21,18 @@ import {
 import { FounderWeeklyReviewRepository } from "./repository";
 
 export interface FounderWeeklyReviewWorkerContext extends FounderWeeklyReviewClaimInput {}
+export interface FounderWeeklyReviewCollectionContext extends FounderWeeklyReviewCollectionClaimInput {}
 
 export class FounderWeeklyReviewWorkerService {
     constructor(
         private readonly repository = new FounderWeeklyReviewRepository()
     ) {}
+
+    async getRun(companyId: bigint, runId: string): Promise<FounderWeeklyReviewRunRecord> {
+        const run = await this.repository.getByCompanyAndRunId(companyId, runId);
+        if (!run) throw new FounderWeeklyReviewNotFoundError(runId);
+        return run;
+    }
 
     async claimQueuedRun(
         context: FounderWeeklyReviewWorkerContext
@@ -45,6 +54,29 @@ export class FounderWeeklyReviewWorkerService {
         throw new FounderWeeklyReviewConflictError(
             `Founder weekly review run "${context.runId}" is already owned by another generation claim or moved out of queue.`
         );
+    }
+
+    async claimEvidenceCollection(context: FounderWeeklyReviewCollectionContext): Promise<FounderWeeklyReviewRunRecord> {
+        const result = await this.repository.claimEvidenceCollection(context);
+        if (!result.run) throw new FounderWeeklyReviewNotFoundError(context.runId);
+        if (result.updated) return result.run;
+        if (result.run.status === "collecting" && result.run.collectionClaimId === context.collectionClaimId) return result.run;
+        if (result.run.evidenceSnapshot) return result.run;
+        throw new FounderWeeklyReviewConflictError(`Founder weekly review run "${context.runId}" is already owned by another collection claim.`);
+    }
+
+    async attachEvidenceSnapshotIfAbsent(context: FounderWeeklyReviewCollectionContext, snapshot: FounderWeeklyReviewEvidenceSnapshot): Promise<FounderWeeklyReviewRunRecord> {
+        const result = await this.repository.attachEvidenceSnapshotIfAbsent(context, snapshot);
+        if (!result.run) throw new FounderWeeklyReviewNotFoundError(context.runId);
+        if (result.updated || result.run.evidenceSnapshot) return result.run;
+        throw new FounderWeeklyReviewClaimOwnershipMismatchError(context.runId);
+    }
+
+    async markCollectionFailed(context: FounderWeeklyReviewCollectionContext, failure: FounderWeeklyReviewGenerationFailure): Promise<FounderWeeklyReviewRunRecord> {
+        const result = await this.repository.markCollectionFailed(context, failure);
+        if (!result.run) throw new FounderWeeklyReviewNotFoundError(context.runId);
+        if (result.updated || (result.run.status === "failed" && result.run.collectionClaimId === context.collectionClaimId)) return result.run;
+        throw new FounderWeeklyReviewClaimOwnershipMismatchError(context.runId);
     }
 
     async saveGeneratedDraft(

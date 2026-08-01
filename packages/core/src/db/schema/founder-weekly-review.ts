@@ -16,6 +16,7 @@ import { pgTable } from "./helpers";
 
 export const founderWeeklyReviewRunStatusEnum = [
     "queued",
+    "collecting",
     "generating",
     "draft",
     "published",
@@ -47,9 +48,12 @@ export const founderWeeklyReviewRuns = pgTable(
         reviewPayload: jsonb("review_payload").$type<Record<string, unknown> | null>(),
         reviewSchemaVersion: varchar("review_schema_version", { length: 64 }).notNull(),
         evidenceSnapshot: jsonb("evidence_snapshot")
-            .$type<Record<string, unknown>>()
-            .notNull(),
+            .$type<Record<string, unknown> | null>(),
         evidenceSchemaVersion: varchar("evidence_schema_version", { length: 64 }).notNull(),
+        collectionInput: jsonb("collection_input").$type<Record<string, unknown>>().notNull(),
+        collectionClaimId: varchar("collection_claim_id", { length: 128 }),
+        collectionStartedAt: timestamp("collection_started_at", { withTimezone: true }),
+        evidenceCollectedAt: timestamp("evidence_collected_at", { withTimezone: true }),
         modelMetadata: jsonb("model_metadata").$type<Record<string, unknown> | null>(),
         createdByActorId: varchar("created_by_actor_id", { length: 256 }).notNull(),
         retryCount: integer("retry_count").notNull().default(0),
@@ -94,6 +98,9 @@ export const founderWeeklyReviewRuns = pgTable(
             table.id,
             table.status,
             table.generationClaimId
+        ),
+        collectionClaimIdx: index("founder_weekly_review_runs_collection_claim_idx").on(
+            table.companyId, table.id, table.status, table.collectionClaimId
         ),
     })
 );

@@ -4,10 +4,20 @@ import type {
 } from "./contracts";
 
 export class FounderWeeklyReviewGenerationValidationError extends Error {
-    constructor(message: string) {
+    constructor(
+        message: string,
+        public readonly details: ReadonlyArray<FounderWeeklyReviewValidationDetail> = []
+    ) {
         super(message);
         this.name = "FounderWeeklyReviewGenerationValidationError";
     }
+}
+
+export interface FounderWeeklyReviewValidationDetail {
+    code: string;
+    section?: string;
+    itemIndex?: number;
+    sourceId?: string;
 }
 
 export function assertUniqueSnapshotSourceIds(
@@ -38,7 +48,7 @@ export function validateFounderWeeklyReviewV2Citations(
     for (const sectionName of factualSections) {
         const section = payload.sections[sectionName];
         if (section.state === "no_evidence") continue;
-        for (const item of section.items) {
+        for (const [itemIndex, item] of section.items.entries()) {
             assertCitations(item.sourceIds, evidenceBySourceId, item.kind);
             if (item.kind === "contradictory_evidence" && item.sourceIds.length < 2) {
                 throw new FounderWeeklyReviewGenerationValidationError(
@@ -50,12 +60,14 @@ export function validateFounderWeeklyReviewV2Citations(
                     const source = evidenceBySourceId.get(sourceId);
                     if (source?.sourceType === "founder_context") {
                         throw new FounderWeeklyReviewGenerationValidationError(
-                            "founder_context must never be presented as customer feedback."
+                            "founder_context must never be presented as customer feedback.",
+                            [{ code: "founder_context_used_as_customer_feedback", section: sectionName, itemIndex, sourceId }]
                         );
                     }
                     if (source?.sourceType !== "customer_feedback") {
                         throw new FounderWeeklyReviewGenerationValidationError(
-                            `whatCustomersSaid may cite only customer_feedback evidence; received "${sourceId}".`
+                            `whatCustomersSaid may cite only customer_feedback evidence; received "${sourceId}".`,
+                            [{ code: "customer_signals_requires_customer_feedback", section: sectionName, itemIndex, sourceId }]
                         );
                     }
                 }

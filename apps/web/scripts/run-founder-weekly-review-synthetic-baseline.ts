@@ -9,6 +9,7 @@ import { eq } from "drizzle-orm";
 import { company, founderWeeklyReviewDispatches, founderWeeklyReviewRuns } from "@launchstack/core/db/schema";
 import { FounderWeeklyReviewRepository, FounderWeeklyReviewWorkerService, FounderWeeklyReviewV2PayloadSchema, generateFounderWeeklyReview } from "@launchstack/features/founder-weekly-review";
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
+import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";
 import { syntheticFounderWeeklyReviewFixtures } from "./founder-weekly-review-synthetic-fixtures";
 
 const require = createRequire(import.meta.url);
@@ -88,7 +89,7 @@ async function generateWithKimi<TSchema extends import("zod").ZodType>(input: { 
   const base = (process.env.MOONSHOT_BASE_URL ?? "https://api.moonshot.ai/v1").replace(/\/$/, "");
   const schemaGuide = JSON.stringify(zodSchema(input.schema).jsonSchema);
   console.log(JSON.stringify({ stage: "kimi_request_constructed", result: "pass" }));
-  const response = await fetch(`${base}/chat/completions`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${process.env.MOONSHOT_API_KEY}` }, body: JSON.stringify({ model: process.env.SYNTHETIC_FWR_MODEL ?? "kimi-k2.6", messages: [{ role: "system", content: `${input.system ?? ""}\nReturn one JSON object only. Its complete required structural schema is: ${schemaGuide}` }, { role: "user", content: input.prompt }], stream: false, thinking: { type: "disabled" }, response_format: { type: "json_object" } }), signal: AbortSignal.timeout(45_000) });
+  const response = await fetch(`${base}/chat/completions`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${process.env.MOONSHOT_API_KEY}` }, body: JSON.stringify({ model: process.env.SYNTHETIC_FWR_MODEL ?? "kimi-k2.6", max_tokens: 1800, messages: [{ role: "system", content: `${input.system ?? ""}\nReturn one JSON object only. Its complete required structural schema is: ${schemaGuide}` }, { role: "user", content: input.prompt }], stream: false, thinking: { type: "disabled" }, response_format: { type: "json_object" } }), signal: AbortSignal.timeout(90_000) });
   console.log(JSON.stringify({ stage: "kimi_http_response", result: response.ok ? "pass" : "fail", httpStatus: response.status }));
   if (!response.ok) throw new Error(`kimi_http_error:${response.status}`);
   const body = await response.json() as { model?: string; usage?: Record<string, string | number | boolean | null>; choices?: Array<{ message?: { content?: string }; finish_reason?: string }> };
@@ -123,6 +124,7 @@ try {
     const payload = structuredClone(validPayload);
     if (isNegativeUnknownCitation || isRetrySnapshotImmutability) payload.sections.whatChanged = { state: "evidence", items: [{ kind: "observed_fact", text: "Release evidence.", sourceIds: ["synthetic:missing:unknown-citation"], confidence: 0.8 }] };
     if (isNegativeFounderContextCustomer) payload.sections.whatCustomersSaid = { state: "evidence", items: [{ kind: "observed_fact", text: "Customer signal.", sourceIds: ["synthetic:context:priority"], confidence: 0.8 }] };
+    if (!claimed.evidenceSnapshot) throw new Error("Synthetic baseline requires a persisted evidence snapshot.");
     generated = await generateFounderWeeklyReview({ evidenceSnapshot: claimed.evidenceSnapshot, generate: (isDeterministicNegative || isRetrySnapshotImmutability) ? async () => ({ object: payload, metadata: { provider: "synthetic", model: "deterministic", capability: "founderWeeklyReview", temperature: 0 } }) : syntheticProvider === "kimi" ? generateWithKimi : generateWithLocalOllama });
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown_generation_failure";
@@ -178,14 +180,25 @@ try {
   const customerSection = saved.reviewPayload!.sections.whatCustomersSaid;
   const readBack = await new FounderWeeklyReviewRepository(testDb.db).getByCompanyAndRunId(3n, saved.id);
   if (!readBack?.reviewPayload || readBack.status !== "draft") throw new Error("Validated draft read-back failed.");
-  if (process.env.SYNTHETIC_FWR_EXPORT_REPORT === "1") {
+  const shouldExport = process.env.SYNTHETIC_FWR_EXPORT_REPORT === "1";
+  const shouldPrint = process.env.FWR_PRINT_REPORT === "1";
+  if (shouldExport || shouldPrint) {
+    if (!readBack.evidenceSnapshot) throw new Error("Validated draft has no evidence snapshot.");
+    const renderedMarkdown = renderFounderWeeklyReviewMarkdown(readBack as typeof readBack & { evidenceSnapshot: NonNullable<typeof readBack.evidenceSnapshot> });
+    if (shouldPrint) {
+      console.log("===== FOUNDER WEEKLY REVIEW =====");
+      console.log(renderedMarkdown);
+      console.log("===== END FOUNDER WEEKLY REVIEW =====");
+    }
+    if (shouldExport) {
     const directory = resolve(process.cwd(), process.env.SYNTHETIC_FWR_EXPORT_DIR ?? ".artifacts/founder-weekly-review");
     await mkdir(directory, { recursive: true });
     const fileId = saved.id.replace(/[^A-Za-z0-9_-]/g, "_");
-    const envelope = { runId: readBack.id, status: readBack.status, provider: readBack.modelMetadata?.provider, model: readBack.modelMetadata?.model, periodStart: readBack.reportingPeriod.start, periodEnd: readBack.reportingPeriod.end, generatedAt: readBack.generatedAt?.toISOString() ?? null, review: readBack.reviewPayload };
+    const envelope = { runId: readBack.id, status: readBack.status, provider: readBack.modelMetadata?.provider, model: readBack.modelMetadata?.model, periodStart: readBack.reportingPeriod.start, periodEnd: readBack.reportingPeriod.end, review: readBack.reviewPayload };
     const markdownPath = resolve(directory, `${fileId}.md`); const jsonPath = resolve(directory, `${fileId}.json`);
-    await writeAtomically(markdownPath, markdownFor(readBack)); await writeAtomically(jsonPath, JSON.stringify(envelope, null, 2));
+    await writeAtomically(markdownPath, renderedMarkdown); await writeAtomically(jsonPath, JSON.stringify(envelope, null, 2));
     console.log(JSON.stringify({ runId: readBack.id, status: readBack.status, markdownPath, jsonPath, filesWritten: true }));
+    }
   }
   console.log(JSON.stringify({ label: "Synthetic-evidence integration baseline", fixture: fixtureName, runId: saved.id, lifecycle: [run.status, claimed.status, saved.status], event, provider: generated!.modelMetadata.provider, model: generated!.modelMetadata.model, snapshotUnchanged: digestJson(persisted.evidenceSnapshot) === digestJson(snapshot), outbox: { status: persistedDispatch.status, hasEvidence: false }, customerSection: "state" in customerSection ? customerSection.state : "legacy", draftReturnedByRepository: saved.status === "draft" }));
   }

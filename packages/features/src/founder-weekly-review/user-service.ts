@@ -4,6 +4,7 @@ import { ZodError } from "zod";
 import {
     buildFounderWeeklyReviewActorId,
     type FounderWeeklyReviewEvidenceSnapshot,
+    type FounderWeeklyReviewCollectionInput,
     type FounderWeeklyReviewPayload,
     type FounderWeeklyReviewRunRecord,
     type FounderWeeklyReviewUserActor,
@@ -27,7 +28,8 @@ export interface CreateFounderWeeklyReviewRunRequest {
         start: string;
         end: string;
     };
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
+    evidenceSnapshot?: FounderWeeklyReviewEvidenceSnapshot;
+    collectionInput?: FounderWeeklyReviewCollectionInput;
 }
 export interface CreateFounderWeeklyReviewRunResult {
     run: FounderWeeklyReviewRunRecord;
@@ -68,16 +70,10 @@ export class FounderWeeklyReviewUserService {
         input: CreateFounderWeeklyReviewRunRequest
     ): Promise<FounderWeeklyReviewRunRecord> {
         assertWorkspaceMutationRole(actor.role);
-        let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
-        try {
-            evidenceSnapshot = parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot);
-        } catch (error) {
-            if (error instanceof ZodError) {
-                throw new FounderWeeklyReviewInvalidPayloadError(error.message);
-            }
-            throw error;
-        }
-        assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
+        let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | undefined;
+        try { evidenceSnapshot = input.evidenceSnapshot ? parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot) : undefined; }
+        catch (error) { if (error instanceof ZodError) throw new FounderWeeklyReviewInvalidPayloadError(error.message); throw error; }
+        if (evidenceSnapshot) assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
 
         return (await this.repository.createOrGetByRequestKeyWithResult({
             id: `fwr_${randomUUID()}`,
@@ -85,17 +81,18 @@ export class FounderWeeklyReviewUserService {
             requestKey: input.requestKey,
             reportingPeriod: input.reportingPeriod,
             evidenceSnapshot,
+            collectionInput: input.collectionInput ?? { workspaceTimezone: evidenceSnapshot?.workspaceTimezone ?? "UTC", actorExternalUserId: actor.externalUserId },
             createdByActorId: buildFounderWeeklyReviewActorId(actor),
         })).run;
     }
 
     async createOrGetRunWithMetadata(actor: FounderWeeklyReviewUserActor, input: CreateFounderWeeklyReviewRunRequest): Promise<CreateFounderWeeklyReviewRunResult> {
         assertWorkspaceMutationRole(actor.role);
-        let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
-        try { evidenceSnapshot = parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot); }
+        let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | undefined;
+        try { evidenceSnapshot = input.evidenceSnapshot ? parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot) : undefined; }
         catch (error) { if (error instanceof ZodError) throw new FounderWeeklyReviewInvalidPayloadError(error.message); throw error; }
-        assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
-        return this.repository.createOrGetByRequestKeyWithResult({ id: `fwr_${randomUUID()}`, companyId: actor.companyId, requestKey: input.requestKey, reportingPeriod: input.reportingPeriod, evidenceSnapshot, createdByActorId: buildFounderWeeklyReviewActorId(actor) });
+        if (evidenceSnapshot) assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
+        return this.repository.createOrGetByRequestKeyWithResult({ id: `fwr_${randomUUID()}`, companyId: actor.companyId, requestKey: input.requestKey, reportingPeriod: input.reportingPeriod, evidenceSnapshot, collectionInput: input.collectionInput ?? { workspaceTimezone: evidenceSnapshot?.workspaceTimezone ?? "UTC", actorExternalUserId: actor.externalUserId }, createdByActorId: buildFounderWeeklyReviewActorId(actor) });
     }
 
     async getRun(

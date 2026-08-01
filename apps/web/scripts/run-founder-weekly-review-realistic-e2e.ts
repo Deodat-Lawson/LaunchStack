@@ -1,0 +1,49 @@
+import "dotenv/config";
+import { createHash, randomUUID } from "node:crypto";
+import { createRequire } from "node:module";
+import { readFile, mkdir, rename, writeFile, access } from "node:fs/promises";
+import { resolve } from "node:path";
+import { eq } from "drizzle-orm";
+import { company, document, documentContextChunks, documentVersions, founderWeeklyReviewDispatches, founderWeeklyReviewRuns } from "@launchstack/core/db/schema";
+import { FounderWeeklyReviewEvidenceService, FounderWeeklyReviewRepository, FounderWeeklyReviewWorkerService, generateFounderWeeklyReview } from "@launchstack/features/founder-weekly-review";
+import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
+import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
+import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";
+
+const require = createRequire(import.meta.url);
+const { createFounderWeeklyReviewTestDatabase } = require("../__tests__/founderWeeklyReview/testDb") as typeof import("../__tests__/founderWeeklyReview/testDb");
+const fixturePath = resolve(process.cwd(), "test-fixtures/founder-weekly-review/realistic-company/seed.json");
+
+type Fixture = { reportingPeriod: { start: string; end: string }; workspaceTimezone: string; founderContext: string; documents: Array<{ title: string; category: string; changelog: string; timestamp: string; chunks?: string[] }> };
+function canonicalize(value: unknown): unknown { if (value === null || ["string", "boolean"].includes(typeof value)) return value; if (typeof value === "number" && Number.isFinite(value)) return value; if (Array.isArray(value)) return value.map(canonicalize); if (typeof value === "object") return Object.fromEntries(Object.keys(value as Record<string, unknown>).sort().map((key) => [key, canonicalize((value as Record<string, unknown>)[key])])); throw new Error("Cannot canonicalize snapshot."); }
+function digest(value: unknown) { return createHash("sha256").update(JSON.stringify(canonicalize(value)), "utf8").digest("hex"); }
+async function writeAtomic(path: string, body: string) { try { await access(path); throw new Error("Refusing to overwrite export."); } catch (error) { if (error instanceof Error && error.message.includes("overwrite")) throw error; } const temp = `${path}.${randomUUID()}.tmp`; await writeFile(temp, body, "utf8"); await rename(temp, path); }
+if (process.env.SYNTHETIC_FWR_LOCAL !== "1" || process.env.NODE_ENV === "production") throw new Error("Refusing realistic E2E outside explicit local mode.");
+const localUrl = process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL ?? "";
+if (!/^postgres(?:ql)?:\/\/(?:[^@]+@)?(?:127\.0\.0\.1|localhost)(?::\d+)?\//i.test(localUrl)) throw new Error("Refusing non-local database.");
+
+const fixture = JSON.parse(await readFile(fixturePath, "utf8")) as Fixture;
+const testDb = await createFounderWeeklyReviewTestDatabase();
+try {
+  const [target] = await testDb.db.insert(company).values({ name: "Northstar Analytics", numberOfEmployees: "24" }).returning();
+  const [other] = await testDb.db.insert(company).values({ name: "Other Company", numberOfEmployees: "4" }).returning();
+  for (const entry of fixture.documents) { const [doc] = await testDb.db.insert(document).values({ companyId: BigInt(target!.id), url: `local://${entry.title}`, category: entry.category, title: entry.title }).returning(); const [version] = await testDb.db.insert(documentVersions).values({ documentId: BigInt(doc!.id), versionNumber: 1, url: `local://${entry.title}/v1`, mimeType: "text/plain", uploadedBy: "seed", changelog: entry.changelog, createdAt: new Date(entry.timestamp) }).returning(); for (const [index, content] of (entry.chunks ?? []).entries()) await testDb.db.insert(documentContextChunks).values({ documentId: BigInt(doc!.id), versionId: BigInt(version!.id), content, tokenCount: content.split(/\s+/).length, charCount: content.length, pageNumber: index + 1 }); }
+  const [outsideDoc] = await testDb.db.insert(document).values({ companyId: BigInt(target!.id), url: "local://outside", category: "Product", title: "Outside period" }).returning(); await testDb.db.insert(documentVersions).values({ documentId: BigInt(outsideDoc!.id), versionNumber: 1, url: "local://outside/v1", mimeType: "text/plain", uploadedBy: "seed", changelog: "Outside-period control.", createdAt: new Date("2026-03-01T00:00:00.000Z") });
+  const [otherDoc] = await testDb.db.insert(document).values({ companyId: BigInt(other!.id), url: "local://other", category: "Product", title: "Other company control" }).returning(); await testDb.db.insert(documentVersions).values({ documentId: BigInt(otherDoc!.id), versionNumber: 1, url: "local://other/v1", mimeType: "text/plain", uploadedBy: "seed", changelog: "Cross-company control.", createdAt: new Date("2026-02-21T00:00:00.000Z") });
+  const actor = { externalUserId: "realistic-owner", internalUserId: 1n, companyId: BigInt(target!.id), role: "owner" };
+  const dispatchService = createFounderWeeklyReviewDispatchService(testDb.db);
+  const created = await dispatchService.createRunWithDispatch({ actor, requestKey: `realistic-${randomUUID()}`, reportingPeriod: fixture.reportingPeriod, collectionInput: { workspaceTimezone: fixture.workspaceTimezone, founderContext: fixture.founderContext, actorExternalUserId: actor.externalUserId } });
+  if (created.run.evidenceSnapshot) throw new Error("Workflow run unexpectedly has an initial snapshot.");
+  const worker = new FounderWeeklyReviewWorkerService(new FounderWeeklyReviewRepository(testDb.db)); const collectionContext = { companyId: actor.companyId, runId: created.run.id, collectionClaimId: created.dispatch.generationClaimId };
+  const collecting = await worker.claimEvidenceCollection(collectionContext);
+  const collector = new FounderWeeklyReviewEvidenceService(testDb.db, () => new Date("2026-03-01T00:00:00.000Z"));
+  const snapshot = await collector.collectFounderWeeklyReviewEvidence({ companyId: actor.companyId, reportingPeriod: fixture.reportingPeriod, workspaceTimezone: fixture.workspaceTimezone, founderContext: fixture.founderContext, actor: { externalUserId: actor.externalUserId }, requestKey: created.run.requestKey });
+  const beforeDigest = digest(snapshot); const attached = await worker.attachEvidenceSnapshotIfAbsent(collectionContext, snapshot); const afterDigest = digest(attached.evidenceSnapshot);
+  const counts = Object.fromEntries(["document_change", "customer_feedback", "founder_context"].map((type) => [type, attached.evidenceSnapshot!.items.filter((item) => item.sourceType === type).length]));
+  if (attached.status !== "queued" || !attached.evidenceSnapshot || beforeDigest !== afterDigest || !counts.document_change || !counts.customer_feedback || counts.founder_context !== 1 || attached.evidenceSnapshot.items.some((item) => item.title === "Outside period" || item.title === "Other company control") || new Set(attached.evidenceSnapshot.items.map((item) => item.sourceId)).size !== attached.evidenceSnapshot.items.length) throw new Error("Realistic collector assertions failed.");
+  const generationContext = { companyId: actor.companyId, runId: attached.id, generationJobId: created.dispatch.generationJobId, generationClaimId: created.dispatch.generationClaimId }; const generating = await worker.claimQueuedRun(generationContext); if (!generating.evidenceSnapshot) throw new Error("Generation began without snapshot.");
+  const generated = await generateFounderWeeklyReview({ evidenceSnapshot: generating.evidenceSnapshot, generate: generateFounderWeeklyReviewStructured }); const saved = await worker.saveGeneratedDraft(generationContext, generated.reviewPayload, generated.modelMetadata); const readBack = await new FounderWeeklyReviewRepository(testDb.db).getByCompanyAndRunId(actor.companyId, saved.id); if (!readBack?.reviewPayload || readBack.status !== "draft" || !readBack.evidenceSnapshot) throw new Error("Validated draft read-back failed.");
+  const rendered = renderFounderWeeklyReviewMarkdown(readBack); let markdownPath: string | null = null; let jsonPath: string | null = null; if (process.env.SYNTHETIC_FWR_EXPORT_REPORT === "1") { const directory = resolve(process.cwd(), process.env.SYNTHETIC_FWR_EXPORT_DIR ?? ".artifacts/founder-weekly-review"); await mkdir(directory, { recursive: true }); markdownPath = resolve(directory, `${saved.id}.md`); jsonPath = resolve(directory, `${saved.id}.json`); await writeAtomic(markdownPath, rendered); await writeAtomic(jsonPath, JSON.stringify({ runId: readBack.id, status: readBack.status, provider: readBack.modelMetadata?.provider, model: readBack.modelMetadata?.model, periodStart: readBack.reportingPeriod.start, periodEnd: readBack.reportingPeriod.end, review: readBack.reviewPayload }, null, 2)); }
+  if (process.env.FWR_PRINT_REPORT === "1") { console.log("===== FOUNDER WEEKLY REVIEW ====="); console.log(rendered); console.log("===== END FOUNDER WEEKLY REVIEW ====="); }
+  const dispatchRows = await testDb.db.select().from(founderWeeklyReviewDispatches).where(eq(founderWeeklyReviewDispatches.runId, saved.id)); const runRows = await testDb.db.select().from(founderWeeklyReviewRuns).where(eq(founderWeeklyReviewRuns.id, saved.id)); console.log(JSON.stringify({ runId: saved.id, lifecycle: [created.run.status, collecting.status, attached.status, generating.status, saved.status], evidenceCounts: counts, warningCodes: attached.evidenceSnapshot.sourceWarnings.map((warning) => warning.code), snapshotDigestUnchanged: beforeDigest === digest(readBack.evidenceSnapshot), validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, provider: generated.modelMetadata.provider, model: generated.modelMetadata.model, dispatchCount: dispatchRows.length, runRowCount: runRows.length, markdownPath, jsonPath }));
+} finally { await testDb.close(); }

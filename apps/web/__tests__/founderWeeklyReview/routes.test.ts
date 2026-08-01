@@ -39,14 +39,15 @@ describe("Founder Weekly Review create route", () => {
         const response = await handler(new Request("http://test", { method: "POST", body: JSON.stringify(body) }));
         expect(response.status).toBe(202); expect((await response.json()).run.id).toBe("existing"); expect(collector.collectFounderWeeklyReviewEvidence).not.toHaveBeenCalled(); expect(createRunWithDispatch).not.toHaveBeenCalled(); expect(deps.recordRunCreated).not.toHaveBeenCalled();
     });
-    it("forwards canonical collector inputs, creates a queued run, and records exactly one creation", async () => {
+    it("persists durable collection inputs, creates a queued run, and records exactly one creation", async () => {
         const { handler, collector, createRunWithDispatch, deps } = setup();
         expect((await handler(new Request("http://test", { method: "POST", body: JSON.stringify(body) }))).status).toBe(202);
-        expect(collector.collectFounderWeeklyReviewEvidence).toHaveBeenCalledWith(expect.objectContaining({ companyId: 1n, reportingPeriod: body.reportingPeriod, workspaceTimezone: "UTC", founderContext: "Context", actor: { externalUserId: "u" }, requestKey: "key" }));
+        expect(collector.collectFounderWeeklyReviewEvidence).not.toHaveBeenCalled();
+        expect(createRunWithDispatch).toHaveBeenCalledWith(expect.objectContaining({ requestKey: "key", reportingPeriod: body.reportingPeriod, collectionInput: { workspaceTimezone: "UTC", founderContext: "Context", actorExternalUserId: "u" } }));
         expect(createRunWithDispatch).toHaveBeenCalledTimes(1); expect(deps.recordRunCreated).toHaveBeenCalledTimes(1);
     });
-    it("does not create or record when collection fails", async () => {
+    it("does not synchronously collect evidence", async () => {
         const { handler, createRunWithDispatch, deps } = setup({ evidenceCollector: { collectFounderWeeklyReviewEvidence: jest.fn().mockRejectedValue(new Error("nope")) } });
-        expect((await handler(new Request("http://test", { method: "POST", body: JSON.stringify(body) }))).status).toBe(500); expect(createRunWithDispatch).not.toHaveBeenCalled(); expect(deps.recordRunCreated).not.toHaveBeenCalled();
+        expect((await handler(new Request("http://test", { method: "POST", body: JSON.stringify(body) }))).status).toBe(202); expect(createRunWithDispatch).toHaveBeenCalledTimes(1); expect(deps.recordRunCreated).toHaveBeenCalledTimes(1);
     });
 });

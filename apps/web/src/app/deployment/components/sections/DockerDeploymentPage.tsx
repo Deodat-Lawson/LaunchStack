@@ -81,7 +81,7 @@ export const DockerDeploymentPage: React.FC<DeploymentProps> = ({
   const darkMode = false;
   const fullStackCmd = 'docker compose --env-file .env --profile dev up --build';
   const detachedCmd = 'docker compose --env-file .env --profile dev up -d';
-  const appOnlyCmd = `docker build -t pdr-ai-app .
+  const appOnlyCmd = `docker build -f apps/web/Dockerfile -t pdr-ai-app .
 docker run --rm -p 3000:3000 \\
   -e DATABASE_URL="$DATABASE_URL" \\
   -e CLERK_SECRET_KEY="$CLERK_SECRET_KEY" \\
@@ -117,7 +117,7 @@ docker run --rm -p 3000:3000 \\
             PostgreSQL 16 with pgvector pre-installed. Data is persisted in a named volume.
           </StepCard>
           <StepCard icon={<RefreshCw className="w-5 h-5" />} title="migrate">
-            Runs <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>pnpm db:push</code> once after the database is healthy, then exits.
+            Runs <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>pnpm --filter @launchstack/web db:push</code> once after the database is healthy, then exits.
           </StepCard>
           <StepCard icon={<Server className="w-5 h-5" />} title="app">
             Production Next.js server on port 3000. Connects to the same Compose network as the database.
@@ -229,7 +229,7 @@ curl http://localhost:3000`}
                   <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded text-xs`}>--profile minimal</code>
                 </td>
                 <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>db only</td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Run Next.js locally with <code className="text-xs">pnpm dev</code></td>
+                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Run Next.js locally with <code className="text-xs">pnpm --filter @launchstack/web dev</code></td>
               </tr>
             </tbody>
           </table>

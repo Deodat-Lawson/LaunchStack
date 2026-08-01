@@ -284,15 +284,15 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
           <Step
             number={4}
             title="Push the schema"
-            code="pnpm db:push"
-            onCopy={() => copyToClipboard('pnpm db:push', 'qs-4')}
+            code="pnpm --filter @launchstack/web db:push"
+            onCopy={() => copyToClipboard('pnpm --filter @launchstack/web db:push', 'qs-4')}
             copied={copiedCode === 'qs-4'}
           />
           <Step
             number={5}
             title="Start the dev server"
-            code="pnpm dev"
-            onCopy={() => copyToClipboard('pnpm dev', 'qs-5')}
+            code="pnpm --filter @launchstack/web dev"
+            onCopy={() => copyToClipboard('pnpm --filter @launchstack/web dev', 'qs-5')}
             copied={copiedCode === 'qs-5'}
           />
         </div>

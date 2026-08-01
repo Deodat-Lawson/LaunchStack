@@ -6,7 +6,7 @@
  * for Mac, Linux, and Windows — no C++ compiler required.
  *
  * Model files must be downloaded to /models/sherpa-onnx-whisper-base.en/
- * Run: scripts/download-whisper-model.sh
+ * Run: scripts/ops/download-whisper-model.sh
  */
 
 import { execFile } from "node:child_process";

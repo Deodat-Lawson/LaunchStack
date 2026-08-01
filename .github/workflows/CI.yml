@@ -60,7 +60,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Push schema to test database
-        run: pnpm db:push
+        run: pnpm --filter @launchstack/web db:push
 
       # The repository predates the current type-aware ESLint rules and still
       # has a sizeable legacy baseline. Keep the report visible without
@@ -125,7 +125,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build web app
-        run: pnpm build
+        run: pnpm --filter @launchstack/web build
 
       - name: Build @launchstack/core
         run: pnpm --filter @launchstack/core build

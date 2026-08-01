@@ -3,10 +3,11 @@ Lightweight sidecar that only mounts the Adeu routes.
 No ML dependencies (torch, sentence-transformers) required.
 
 Usage:
-    /tmp/sidecar-test-venv/bin/python scripts/run-adeu-sidecar.py
+    /tmp/sidecar-test-venv/bin/python scripts/dev/run-adeu-sidecar.py
 """
 import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "sidecar"))
+# This script lives at scripts/dev/, so the repository root is two levels up.
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "sidecar"))
 
 from fastapi import FastAPI
 from app.routes.adeu import router as adeu_router

@@ -36,7 +36,7 @@ services:
   migrate:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/web/Dockerfile
       target: migrate
       args:
         <<: *app-build-args
@@ -144,7 +144,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/web/Dockerfile
       target: runner
       args:
         <<: *app-build-args

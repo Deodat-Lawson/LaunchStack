@@ -266,7 +266,7 @@ deploy correctness depends on the separate CI workflow being required.
 | Web contains legacy and new implementations          | Callers can choose multiple DB, RAG, LLM, OCR, and job access paths                                                          |
 | Sidecar implementation and callers disagree          | Configuring sidecar reranking, embeddings, or NER can call endpoints that do not exist                                       |
 | Two Adeu runtimes exist                              | Ownership, behavior parity, authentication, and deployment target are unclear                                                |
-| Vercel root is ambiguous                             | Config moved to `apps/web/vercel.json`, while deployment docs still require repo root `./` and link to a removed root config |
+| Existing Vercel project settings are not verified    | Repository config and docs require root `apps/web`, but an older project can retain `./` and miss the app-local config       |
 | Database schema ownership is split                   | Core declares schema; web owns migration files; Docker and Vercel apply schema differently                                   |
 | “Optional” services are mandatory in default Compose | Local startup cost and failure modes are larger than the documentation implies                                               |
 | Floating container/dependency versions               | `latest` images and broadly ranged Python packages reduce reproducibility                                                    |

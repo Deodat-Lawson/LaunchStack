@@ -33,7 +33,6 @@ import {
     getEmbeddings,
     buildReferences,
     extractRecommendedPages,
-    type AIModelType,
 } from "../../services";
 import { supportsVision } from "@launchstack/core/llm/types";
 import type { AttachmentPayload } from "~/lib/validation";
@@ -591,7 +590,7 @@ export async function POST(request: Request) {
 
             // Get AI model and generate comprehensive response
             const resolvedProvider = provider ?? "openrouter";
-            const selectedAiModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
+            const selectedAiModel = aiModel ?? getProviderDefaultModel(resolvedProvider);
 
             // Ephemeral attachment handling. Images require a vision-capable
             // model; fail fast with a clear error before the LLM call.

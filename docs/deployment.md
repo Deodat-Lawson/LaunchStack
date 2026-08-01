@@ -53,10 +53,10 @@ docker compose --env-file .env --profile dev up
 
 Short version:
 
-1. Import the repository into Vercel — framework auto-detects as Next.js, root directory stays `./`.
+1. Import the repository into Vercel and set the project root directory to `apps/web`.
 2. Provision Postgres with pgvector (Vercel Postgres, Neon, Supabase, etc.).
 3. Set env vars per the [Vercel deployment guide](./deployment/vercel.md#3-configure-environment-variables).
-4. Deploy. Migrations run automatically on production builds via [`vercel.json`](../vercel.json).
+4. Deploy. Migrations run automatically on production builds via [`apps/web/vercel.json`](../apps/web/vercel.json).
 5. Register `https://<app>.vercel.app/api/inngest` in Inngest Cloud.
 
 Optional integrations:
@@ -97,7 +97,9 @@ Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Clerk publishable key |
 | `CLERK_SECRET_KEY` | Yes | Clerk secret key |
-| `OPENAI_API_KEY` | Yes | OpenAI API key |
+| `OPENROUTER_API_KEY` | Yes | Dedicated OpenRouter key for workspace chat and document generation |
+| `OPENROUTER_MODEL` | Optional | Provider-qualified OpenRouter model ID; defaults to `moonshotai/kimi-k3` |
+| `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting OpenAI-compatible capabilities when no per-capability provider is configured |
 | `INNGEST_EVENT_KEY` | Yes (prod) | Inngest event key for background jobs |
 | `BLOB_READ_WRITE_TOKEN` | Yes (Vercel) | Required for Vercel Blob uploads |
 | `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
@@ -116,7 +118,8 @@ Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
 - [ ] `DATABASE_URL` points to production DB
 - [ ] `vector` extension enabled on PostgreSQL
 - [ ] Schema applied (`pnpm db:migrate` locally, or automatic on Vercel production builds)
-- [ ] Clerk, UploadThing, and OpenAI integrations validated
+- [ ] Clerk and OpenRouter integrations validated
+- [ ] OpenAI/global/per-capability integrations validated when enabled
 - [ ] OCR providers validated if OCR is enabled
 - [ ] Inngest validated if background processing is used
 - [ ] Sidecar validated if `SIDECAR_URL` is set

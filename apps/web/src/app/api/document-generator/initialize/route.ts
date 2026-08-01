@@ -9,8 +9,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
+import {
+    getDefaultChatModel,
+    normalizeModelContent,
+} from "~/app/api/agents/documentQ&A/services";
 
 export const runtime = "nodejs";
 export const maxDuration = 120; // Allow more time for research + generation
@@ -299,8 +301,7 @@ export async function POST(request: Request) {
         }
 
         // Get the AI model
-        const modelId = "moonshotai/kimi-k3" as AIModelType;
-        const chat = getChatModel(modelId);
+        const { chat } = getDefaultChatModel("openrouter");
 
         // Build system prompt
         let systemPrompt = getTemplateSystemPrompt(templateId);

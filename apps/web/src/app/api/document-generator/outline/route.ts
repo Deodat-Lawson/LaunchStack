@@ -10,9 +10,13 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { AIModelTypes } from "@launchstack/core/llm";
 import { z } from "zod";
-import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
+import {
+    getChatModel,
+    getDefaultChatModel,
+    normalizeModelContent,
+} from "~/app/api/agents/documentQ&A/services";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -38,7 +42,7 @@ const OutlineSchema = z.object({
         sections: z.number().min(2).max(20).optional(), // Target number of sections
         audience: z.string().optional(),
         tone: z.string().optional(),
-        model: z.string().optional(),
+        model: z.enum(AIModelTypes).optional(),
     }).optional(),
 });
 
@@ -190,8 +194,9 @@ export async function POST(request: Request) {
         const startTime = Date.now();
 
         // Get the AI model
-        const modelId = (options?.model ?? "moonshotai/kimi-k3") as AIModelType;
-        const chat = getChatModel(modelId);
+        const { model: modelId, chat } = options?.model
+            ? { model: options.model, chat: getChatModel(options.model) }
+            : getDefaultChatModel("openrouter");
 
         let systemPrompt: string;
         let userPrompt: string;

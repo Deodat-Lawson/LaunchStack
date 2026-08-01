@@ -13,8 +13,13 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { AIModelTypes } from "@launchstack/core/llm";
 import { z } from "zod";
-import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
+import {
+    getChatModel,
+    getDefaultChatModel,
+    normalizeModelContent,
+} from "~/app/api/agents/documentQ&A/services";
 
 /** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
 function stripRewriteQuotes(text: string): string {
@@ -28,8 +33,6 @@ function stripRewriteQuotes(text: string): string {
     }
     return s;
 }
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
-
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
@@ -58,7 +61,7 @@ const GenerateSchema = z.object({
         tone: z.enum(["professional", "casual", "formal", "technical", "creative", "persuasive"]).optional(),
         length: z.enum(["brief", "medium", "detailed", "comprehensive"]).optional(),
         audience: z.enum(["general", "technical", "executives", "students", "customers", "team"]).optional(),
-        model: z.string().optional(),
+        model: z.enum(AIModelTypes).optional(),
     }).optional(),
 });
 
@@ -175,8 +178,9 @@ export async function POST(request: Request) {
         const containsEditableHtml = (content?.includes("<mark") ?? false) || (prompt?.includes("<mark") ?? false);
 
         // Resolve the requested model, defaulting to the app's OpenRouter model.
-        const modelId = (options?.model ?? "moonshotai/kimi-k3") as AIModelType;
-        const chat = getChatModel(modelId);
+        const { model: modelId, chat } = options?.model
+            ? { model: options.model, chat: getChatModel(options.model) }
+            : getDefaultChatModel("openrouter");
 
         // Build the system prompt
         let systemPrompt = ACTION_PROMPTS[action];

@@ -1,11 +1,17 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
 import {
   configureChatModels,
   describeProviderError,
   getChatModelForProvider,
+  getProviderDefaultModel,
   inferProviderFromModel,
   supportsThinking,
   supportsVision,
 } from "@launchstack/core/llm";
+import { QuestionSchema } from "~/lib/validation";
+import { configureAppChatModels } from "~/server/chat-models";
 
 describe("OpenRouter chat-model configuration", () => {
   beforeEach(() => {
@@ -16,6 +22,47 @@ describe("OpenRouter chat-model configuration", () => {
     expect(inferProviderFromModel("moonshotai/kimi-k3")).toBe("openrouter");
     expect(supportsThinking("moonshotai/kimi-k3")).toBe(true);
     expect(supportsVision("moonshotai/kimi-k3")).toBe(true);
+  });
+
+  it("configures direct model calls before the app engine initializes", () => {
+    configureAppChatModels({
+      OPENROUTER_API_KEY: "sk-or-v1-test-credential",
+    });
+
+    expect(() =>
+      getChatModelForProvider({ provider: "openrouter" }),
+    ).not.toThrow();
+  });
+
+  it("honors arbitrary configured OpenRouter model IDs", () => {
+    configureAppChatModels({
+      OPENROUTER_API_KEY: "sk-or-v1-test-credential",
+      OPENROUTER_MODEL: "anthropic/claude-sonnet-4",
+    });
+
+    expect(getProviderDefaultModel("openrouter")).toBe(
+      "anthropic/claude-sonnet-4",
+    );
+    expect(() =>
+      getChatModelForProvider({ provider: "openrouter" }),
+    ).not.toThrow();
+  });
+
+  it("defaults omitted workspace providers to OpenRouter", () => {
+    expect(QuestionSchema.parse({ question: "Summarize this" }).provider).toBe(
+      "openrouter",
+    );
+  });
+
+  it("accepts an OpenRouter-only server configuration", () => {
+    const envSource = readFileSync(
+      path.resolve(process.cwd(), "src/env.ts"),
+      "utf8",
+    );
+
+    expect(envSource).toMatch(
+      /!data\.OPENAI_API_KEY\s*&&\s*!data\.AI_API_KEY\s*&&\s*!data\.OPENROUTER_API_KEY/,
+    );
   });
 
   it("fails closed instead of falling back to OPENAI_API_KEY", () => {

@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { describeProviderError } from "@launchstack/core/llm";
-import { getChatModel } from "~/lib/models";
+import { getDefaultChatModel } from "~/lib/models";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
@@ -249,7 +249,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const chat = getChatModel("moonshotai/kimi-k3");
+    const { chat } = getDefaultChatModel("openrouter");
     const response = await chat.invoke(langchainMessages);
     const content =
       typeof response.content === "string"

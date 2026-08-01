@@ -12,7 +12,6 @@ import { createEngine, type CoreConfig, type Engine } from "@launchstack/core";
 
 import { env } from "~/env";
 import { configureProviders } from "@launchstack/core/providers/registry";
-import { configureChatModels } from "@launchstack/core/llm";
 import { configureSecretBox } from "@launchstack/core/crypto";
 import { configureOcr } from "@launchstack/core/ocr/config";
 import { configureEmbeddingIndexRegistry } from "@launchstack/core/embeddings";
@@ -22,6 +21,7 @@ import { createAppStoragePort } from "./storage/port";
 import { createAppJobDispatcherPort } from "./jobs/port";
 import { createAppCreditsPort } from "./credits/port";
 import { createAppRagPort } from "./rag/port";
+import { configureAppChatModels } from "./chat-models";
 
 type EngineHolder = { engine: Engine };
 
@@ -175,26 +175,7 @@ export function getEngine(): Engine {
 
   // Register chat-model config so chat-model-factory sees the same
   // provider credentials as core does.
-  configureChatModels({
-    aiBaseUrl: config.llm.aiBaseUrl,
-    aiApiKey: config.llm.aiApiKey,
-    openai: config.llm.openai
-      ? {
-          apiKey: config.llm.openai.apiKey,
-          model: env.server.OPENAI_MODEL,
-          chatModel: env.server.CHAT_MODEL,
-        }
-      : undefined,
-    anthropic: config.llm.anthropic,
-    google: config.llm.google,
-    ollama: config.llm.ollama,
-    openrouter: env.server.OPENROUTER_API_KEY
-      ? {
-          apiKey: env.server.OPENROUTER_API_KEY,
-          model: env.server.OPENROUTER_MODEL,
-        }
-      : undefined,
-  });
+  configureAppChatModels(env.server);
 
   // Register embedding-related defaults so the index registry, the
   // embedding factory, and the company-override resolver all read from

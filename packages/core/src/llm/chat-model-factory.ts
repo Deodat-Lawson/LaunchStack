@@ -81,7 +81,7 @@ function getServerModelOverride(provider: LLMProvider): string | undefined {
 
 function coerceModel(
   provider: LLMProvider,
-  requested?: AIModelType,
+  requested?: string,
 ): string {
   // When using a custom OpenAI-compatible provider (AI_BASE_URL),
   // accept any model string — don't validate against the allowlist
@@ -90,6 +90,17 @@ function coerceModel(
     const envValue = getServerModelOverride(provider);
     if (envValue) return envValue;
     return ProviderDefaultModels[provider];
+  }
+
+  // OpenRouter accepts provider-qualified model IDs that are not practical to
+  // maintain in a static allowlist. Keep explicit, known request models
+  // provider-safe, but allow the host-configured default to be any OpenRouter
+  // model ID (for example, "anthropic/claude-sonnet-4").
+  if (provider === "openrouter") {
+    if (requested && isModelAllowedForProvider(provider, requested)) {
+      return requested;
+    }
+    return getServerModelOverride(provider) ?? ProviderDefaultModels[provider];
   }
 
   if (requested && isModelAllowedForProvider(provider, requested)) {
@@ -129,7 +140,7 @@ const EXTENDED_THINKING_BUDGET = 8000;
 
 export function getChatModelForProvider(opts: {
   provider: LLMProvider;
-  model?: AIModelType;
+  model?: string;
   temperature?: number;
   timeoutMs?: number;
   /**
@@ -145,7 +156,10 @@ export function getChatModelForProvider(opts: {
   const c = getConfig();
 
   // Skip allowlist validation when using a custom provider (AI_BASE_URL)
-  if (!(isCustomProvider() && provider === "openai")) {
+  if (
+    provider !== "openrouter" &&
+    !(isCustomProvider() && provider === "openai")
+  ) {
     if (!(ProviderModelMap[provider] as readonly string[]).includes(modelName)) {
       throw new Error(
         `Model \"${String(modelName)}\" is not supported for provider \"${String(provider)}\"`,
@@ -153,7 +167,7 @@ export function getChatModelForProvider(opts: {
     }
   }
 
-  const thinkingEnabled = Boolean(thinking) && supportsThinking(modelName as AIModelType);
+  const thinkingEnabled = Boolean(thinking) && supportsThinking(modelName);
 
   switch (provider) {
     case "openrouter": {

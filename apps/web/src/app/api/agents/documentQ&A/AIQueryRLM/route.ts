@@ -253,7 +253,7 @@ export async function POST(request: Request) {
 
             // Get AI model and generate response
             const resolvedProvider = provider;
-            const selectedAiModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
+            const selectedAiModel = aiModel ?? getProviderDefaultModel(resolvedProvider);
             const chat = getChatModelForProvider({
                 provider: resolvedProvider,
                 model: selectedAiModel,

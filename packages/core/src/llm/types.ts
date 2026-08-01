@@ -100,8 +100,8 @@ export const THINKING_CAPABLE_MODELS: ReadonlySet<AIModelType> = new Set([
   "moonshotai/kimi-k3",
 ]);
 
-export function supportsThinking(model: AIModelType | undefined): boolean {
-  return model ? THINKING_CAPABLE_MODELS.has(model) : false;
+export function supportsThinking(model: string | undefined): boolean {
+  return model ? THINKING_CAPABLE_MODELS.has(model as AIModelType) : false;
 }
 
 /**
@@ -122,6 +122,6 @@ export const VISION_CAPABLE_MODELS: ReadonlySet<AIModelType> = new Set([
   "moonshotai/kimi-k3",
 ]);
 
-export function supportsVision(model: AIModelType | undefined): boolean {
-  return model ? VISION_CAPABLE_MODELS.has(model) : false;
+export function supportsVision(model: string | undefined): boolean {
+  return model ? VISION_CAPABLE_MODELS.has(model as AIModelType) : false;
 }

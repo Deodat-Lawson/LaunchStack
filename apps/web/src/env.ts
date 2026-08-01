@@ -177,11 +177,12 @@ const serverSchema = z.object({
 
 const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
   // At least one AI API key must be set
-  if (!data.OPENAI_API_KEY && !data.AI_API_KEY) {
+  if (!data.OPENAI_API_KEY && !data.AI_API_KEY && !data.OPENROUTER_API_KEY) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["AI_API_KEY"],
-      message: "Either AI_API_KEY or OPENAI_API_KEY must be set",
+      message:
+        "At least one of AI_API_KEY, OPENAI_API_KEY, or OPENROUTER_API_KEY must be set",
     });
   }
 

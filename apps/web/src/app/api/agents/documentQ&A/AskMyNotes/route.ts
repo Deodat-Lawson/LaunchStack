@@ -12,7 +12,7 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { auth } from "@clerk/nextjs/server";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { getChatModel } from "~/lib/models";
+import { getDefaultChatModel } from "~/lib/models";
 import { createUserNotesRetriever } from "~/lib/tools/rag/retrievers/notes-retriever";
 import {
   EMBEDDING_DIM,
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
         })
         .join("\n\n---\n\n");
 
-      const llm = getChatModel("moonshotai/kimi-k3");
+      const { chat: llm } = getDefaultChatModel("openrouter");
       const reply = await llm.invoke([
         new SystemMessage(SYSTEM_PROMPT),
         new HumanMessage(

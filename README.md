@@ -114,6 +114,12 @@ pnpm db:push                  # sync Drizzle schema
 pnpm dev                      # Next.js + Inngest on :3000 and :8288
 ```
 
+The reference app requires `OPENROUTER_API_KEY` for workspace chat and
+document generation. It defaults to `moonshotai/kimi-k3`; set
+`OPENROUTER_MODEL` to any provider-qualified OpenRouter model ID to change the
+deployment-wide default. Configure OpenAI or per-capability providers only for
+the supporting capabilities you enable, such as embeddings or transcription.
+
 Or spin the full stack (Postgres + SeaweedFS + sidecars) with Docker:
 
 ```bash

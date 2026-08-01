@@ -29,7 +29,6 @@ import {
     getEmbeddings,
     extractRecommendedPages,
     filterPagesByAICitation,
-    type AIModelType,
 } from "../services";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
@@ -256,7 +255,7 @@ export async function POST(request: Request) {
 
             // Get AI model and generate response
             const resolvedProvider = provider ?? "openrouter";
-            const resolvedModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
+            const resolvedModel = aiModel ?? getProviderDefaultModel(resolvedProvider);
             const chat = getChatModelForProvider({
                 provider: resolvedProvider,
                 model: resolvedModel,

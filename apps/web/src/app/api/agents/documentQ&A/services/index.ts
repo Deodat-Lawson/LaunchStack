@@ -16,7 +16,7 @@ export { buildReferences, extractRecommendedPages, filterPagesByAICitation } fro
 export { performExaSearch } from "./exaSearch";
 export { executeWebSearchAgent } from "./webSearchAgent";
 export { SYSTEM_PROMPTS, getSystemPrompt, getWebSearchInstruction } from "./prompts";
-export { getChatModel, getEmbeddings } from "./models";
+export { getChatModel, getDefaultChatModel, getEmbeddings } from "./models";
 export { getChatModelForProvider, getProviderDefaultModel, describeOllamaError, describeProviderError } from "@launchstack/core/llm";
 export { ProviderModelMap, ProviderDefaultModels } from "./types";
 
@@ -65,4 +65,3 @@ export {
 
 // Additional types from specific modules
 export type { PerformWebSearchResult } from "./webSearch";
-

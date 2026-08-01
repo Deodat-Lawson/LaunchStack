@@ -126,7 +126,7 @@ export const QuestionSchema = z
     enableWebSearch: z.boolean().optional().default(false),
     aiPersona: z.enum(aiPersonaOptions).optional(),
     aiModel: z.enum(aiModelOptions).optional(),
-    provider: z.enum(providerOptions).default("openai"),
+    provider: z.enum(providerOptions).default("openrouter"),
     conversationHistory: z.string().optional(),
     embeddingIndexKey: z.string().min(1).optional(),
     thinkingMode: z.boolean().optional().default(false),
@@ -397,9 +397,12 @@ export const CreateNoteSchema = z
   })
   .refine(
     (data) =>
-      Boolean(
-        data.title || data.content || data.contentMarkdown || data.contentRich,
-      ),
+      [
+        data.title,
+        data.content,
+        data.contentMarkdown,
+        data.contentRich,
+      ].some((value) => Boolean(value)),
     {
       message:
         "At least one of title, content, contentMarkdown, or contentRich is required",
@@ -446,9 +449,12 @@ export const PresignUploadSchema = z.object({
   filename: z.string().optional(),
   fileName: z.string().optional(),
   contentType: z.string().min(1, "contentType is required"),
-}).refine((data) => data.filename || data.fileName, {
-  message: "filename or fileName is required",
-});
+}).refine(
+  (data) => [data.filename, data.fileName].some((value) => Boolean(value)),
+  {
+    message: "filename or fileName is required",
+  },
+);
 
 // ============================================================================
 // Voice Schemas

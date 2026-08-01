@@ -39,7 +39,7 @@ Before the first pass:
 
 4. **Run dev server**
    ```bash
-   pnpm run dev
+   pnpm --filter @launchstack/web dev
    ```
    Open **http://localhost:3000**.
 

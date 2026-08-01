@@ -81,7 +81,7 @@ export const DockerDeploymentPage: React.FC<DeploymentProps> = ({
   const darkMode = false;
   const fullStackCmd = 'docker compose --env-file .env --profile dev up --build';
   const detachedCmd = 'docker compose --env-file .env --profile dev up -d';
-  const appOnlyCmd = `docker build -t pdr-ai-app .
+  const appOnlyCmd = `docker build -f apps/web/Dockerfile -t pdr-ai-app .
 docker run --rm -p 3000:3000 \\
   -e DATABASE_URL="$DATABASE_URL" \\
   -e CLERK_SECRET_KEY="$CLERK_SECRET_KEY" \\

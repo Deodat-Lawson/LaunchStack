@@ -1,0 +1,447 @@
+{
+  "summary": {
+    "totalCases": 19,
+    "passed": 19,
+    "failed": 0,
+    "hardFailures": 9,
+    "passRate": 1,
+    "overallScore": 0.48157894736842105
+  },
+  "metrics": {
+    "citationValidity": 0.8823529411764706,
+    "citationCoverage": 1,
+    "unsupportedClaimRate": 0.058823529411764705,
+    "unsupportedShippedClaimRate": 0.11764705882352941,
+    "sourceTypeViolationRate": 0.11764705882352941,
+    "evidenceCoverage": 0.7156862745098039,
+    "emptySectionCorrectness": 1,
+    "duplicateClaimRate": 0.058823529411764705
+  },
+  "weakestCases": [
+    {
+      "case": "invalid_citation_report",
+      "score": 0,
+      "failures": [
+        "invalid_citation"
+      ]
+    },
+    {
+      "case": "invalid_missing_source_citation",
+      "score": 0,
+      "failures": [
+        "invalid_citation"
+      ]
+    },
+    {
+      "case": "founder_context_as_customer_feedback",
+      "score": 0,
+      "failures": [
+        "invalid_source_type"
+      ]
+    }
+  ],
+  "commonFailures": {
+    "invalid_citation": 2,
+    "invalid_source_type": 3,
+    "duplicate_claim": 1,
+    "malformed_payload": 2,
+    "unsupported_shipped_claim": 2,
+    "unsupported_claim": 1,
+    "conflicting_evidence": 1
+  },
+  "cases": [
+    {
+      "case": "valid_customer_feedback_report",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    },
+    {
+      "case": "invalid_citation_report",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 0,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "invalid_citation",
+          "section": "whatCustomersSaid",
+          "explanation": "Unknown sourceId: fake_feedback_999"
+        }
+      ]
+    },
+    {
+      "case": "empty_workspace",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    },
+    {
+      "case": "complete_workspace",
+      "passed": true,
+      "score": 0.8999999999999999,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 0.6666666666666666,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    },
+    {
+      "case": "partial_workspace",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    },
+    {
+      "case": "invalid_missing_source_citation",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 0,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "invalid_citation",
+          "section": "whatCustomersSaid",
+          "explanation": "Unknown sourceId: missing_source"
+        }
+      ]
+    },
+    {
+      "case": "founder_context_as_customer_feedback",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 1,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "invalid_source_type",
+          "section": "whatCustomersSaid",
+          "explanation": "Source type \"founder_context\" is not valid for section \"whatCustomersSaid\""
+        }
+      ]
+    },
+    {
+      "case": "founder_context_only_valid",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    },
+    {
+      "case": "multi_source_customer_feedback",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    },
+    {
+      "case": "duplicate_customer_claims",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0.5,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 1,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "duplicate_claim",
+          "section": "whatChanged",
+          "claim": "customer requested csv export",
+          "explanation": "Same factual claim appears multiple times."
+        },
+        {
+          "category": "invalid_source_type",
+          "section": "whatChanged",
+          "explanation": "Source type \"customer_feedback\" is not valid for section \"whatChanged\""
+        }
+      ]
+    },
+    {
+      "case": "duplicate_source_ids_schema_validation",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "failures": [
+        {
+          "category": "malformed_payload",
+          "explanation": "Report failed schema validation."
+        }
+      ]
+    },
+    {
+      "case": "unsupported_shipped_claim",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 1,
+        "sourceTypeViolationRate": 0.5,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "invalid_source_type",
+          "section": "whatShipped",
+          "explanation": "Source type \"customer_feedback\" is not valid for section \"whatShipped\""
+        },
+        {
+          "category": "unsupported_shipped_claim",
+          "section": "whatShipped",
+          "claim": "CSV export was shipped.",
+          "explanation": "Evidence does not contain a shipping signal."
+        }
+      ]
+    },
+    {
+      "case": "malformed_payload",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "failures": [
+        {
+          "category": "malformed_payload",
+          "explanation": "Report failed schema validation."
+        }
+      ]
+    },
+    {
+      "case": "evidence_omitted",
+      "passed": true,
+      "score": 0.8500000000000001,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 0.5,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    },
+    {
+      "case": "exaggerated_claim",
+      "passed": true,
+      "score": 0.7,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 1,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 0,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "unsupported_claim",
+          "section": "whatCustomersSaid",
+          "claim": "Customers cannot use the product without CSV export.",
+          "explanation": "Claim is not directly supported by cited evidence."
+        }
+      ]
+    },
+    {
+      "case": "conflicting_evidence",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 0,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "conflicting_evidence",
+          "section": "whatCustomersSaid",
+          "claim": "All customers want CSV export.",
+          "explanation": "Claim ignores conflicting cited evidence."
+        }
+      ]
+    },
+    {
+      "case": "document_change_as_shipped",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 1,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 0,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "unsupported_shipped_claim",
+          "section": "whatShipped",
+          "claim": "CSV export was shipped.",
+          "explanation": "Evidence does not contain a shipping signal."
+        }
+      ]
+    },
+    {
+      "case": "unavailable_source_warning",
+      "passed": true,
+      "score": 0.7,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 0,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    },
+    {
+      "case": "valid_contradictory_evidence",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": []
+    }
+  ]
+}

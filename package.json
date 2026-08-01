@@ -26,7 +26,8 @@
     "inngest:dev": "pnpm --filter @launchstack/web inngest:dev",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm --filter @launchstack/core build && changeset publish"
+    "release": "pnpm --filter @launchstack/core build && changeset publish",
+    "eval:founder-weekly-review": "tsx packages/features/src/founder-weekly-review/benchmarks/runner.ts"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
@@ -38,6 +39,7 @@
     "@typescript-eslint/parser": "^8.42.0",
     "eslint": "^9.34.0",
     "prettier": "^3.6.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.2"
   },
   "packageManager": "pnpm@10.15.1",

@@ -84,12 +84,20 @@ root directory looks crowded.
 | GHCR container images | `apps/web/Dockerfile`, `apps/web/Dockerfile.prebuilt` | `.github/workflows/docker.yml` |
 | npm package | `packages/core` | `.github/workflows/release.yml` via Changesets |
 
-> **The npm release path is currently broken in two ways.** `.changeset/` does
-> not exist, although the root `package.json` defines `changeset` / `version` /
-> `release` scripts and `.github/workflows/release.yml` expects it. Separately,
-> `packages/core/package.json` resolves its `exports` to `./src/*.ts` while
-> `files` ships only `dist`, so a published tarball would contain no importable
-> entry point.
+> **The npm release path cannot run.** `.changeset/` does not exist, although
+> the root `package.json` defines `changeset` / `version` / `release` scripts
+> and `.github/workflows/release.yml` expects it. Separately, the release job
+> is gated on `if: github.repository == 'launchstack/launchstack'`
+> (`release.yml:20`) while this repository is `Deodat-Lawson/LaunchStack`, so
+> it is skipped on every push.
+>
+> The **package itself is publish-ready**, contrary to what an earlier revision
+> of this file claimed. `packages/core/package.json` carries a `publishConfig`
+> block that redirects `main`, `types` and the entire `exports` map to
+> `./dist/*`; npm and pnpm apply those overrides at publish time, and
+> `release.yml` runs `publint` and `@arethetypeswrong/cli` against the packed
+> tarball. The top-level `exports` pointing at `./src/*.ts` is what makes the
+> workspace build work in development, not what would ship.
 
 ### Local development
 

@@ -16,6 +16,8 @@ export const config = {
   // so jest doesn't have to hit the built dist/.
   moduleNameMapper: {
     '^~/(.*)$': '<rootDir>/src/$1',
+    // Campaign eval-suite contract lives at the repo root, outside apps/web.
+    '^@schema$': '<rootDir>/../../schema/index.ts',
     '^@launchstack/core$': '<rootDir>/../../packages/core/src/index.ts',
     '^@launchstack/core/(.*)$': '<rootDir>/../../packages/core/src/$1',
     '^@launchstack/features$': '<rootDir>/../../packages/features/src/index.ts',

@@ -38,6 +38,45 @@ export function isChatRoute(value: string): value is ChatRoute {
 export const ChatCapabilities = ["vision", "reasoning"] as const;
 export type ChatCapability = (typeof ChatCapabilities)[number];
 
+/**
+ * The endpoint used when configuration names none.
+ *
+ * Google's OpenAI-compatibility surface for the Gemini API. It implements the
+ * `/chat/completions` protocol, so every route, preset and adapter in this
+ * package reaches it the same way it reaches any other endpoint — nothing here
+ * is Gemini-specific beyond the URL and the model ids.
+ *
+ * This is a built-in vendor default, which the previous release deliberately
+ * removed. It is back by explicit operator decision: an out-of-the-box
+ * deployment should answer prompts rather than refuse to boot. The trade-off
+ * is the one that default carries — a deployment that sets no endpoint sends
+ * its prompts, and whatever credential it holds, to Google. Set
+ * `CHAT_BASE_URL` (and the matching `CHAT_API_KEY`) to send them anywhere
+ * else; every resolution path still prefers explicit configuration over this.
+ *
+ * Written without the trailing slash Google's docs show. Most consumers strip
+ * it (`embeddings.ts`, `providers/registry.ts`) or normalize it (the OpenAI
+ * SDK), but `services/ocr-router/src/complexity.ts` concatenates the value
+ * raw, and would produce `…/openai//chat/completions`.
+ *
+ * @see https://ai.google.dev/gemini-api/docs/openai
+ */
+export const GEMINI_BASE_URL =
+  "https://generativelanguage.googleapis.com/v1beta/openai";
+
+/** Default chat model — Gemini's general-purpose tier. */
+export const GEMINI_DEFAULT_MODEL = "gemini-2.5-flash";
+
+/** Default model for cheap, high-volume work (table summaries, classification). */
+export const GEMINI_FAST_MODEL = "gemini-2.5-flash-lite";
+
+/**
+ * Default embeddings model. Supports Matryoshka truncation, so it can serve
+ * the same 1536-wide vector column the previous OpenAI default wrote — see
+ * `embeddings/index-registry.ts`.
+ */
+export const GEMINI_EMBEDDING_MODEL = "gemini-embedding-001";
+
 /** The one endpoint every route talks to. */
 export interface ChatEndpointConfig {
   /** Base URL of an OpenAI-compatible `/chat/completions` implementation. */

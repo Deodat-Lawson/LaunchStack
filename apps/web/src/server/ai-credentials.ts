@@ -32,9 +32,9 @@ function configured(value: string | undefined): boolean {
  * Reported so setup surfaces can nudge operators onto CHAT_BASE_URL.
  *
  * Only variables carrying an explicit URL qualify. A bare credential
- * (OPENROUTER_API_KEY, OPENAI_API_KEY) no longer names an endpoint, so
- * reporting it here would tell a health check that chat is configured when
- * resolveChatEndpoint is about to refuse to boot.
+ * (OPENROUTER_API_KEY, OPENAI_API_KEY) names no endpoint and is not forwarded
+ * to the Gemini default either, so reporting it here would credit the operator
+ * with configuration that has no effect on where chat goes.
  */
 export function getDeprecatedChatEndpointSources(
   environment: AiCredentialEnvironment,
@@ -44,7 +44,13 @@ export function getDeprecatedChatEndpointSources(
   ].filter((source): source is string => Boolean(source));
 }
 
-/** Whether a chat endpoint is configured, by any supported variable. */
+/**
+ * Whether the operator NAMED a chat endpoint, by any supported variable.
+ *
+ * Not "whether chat will work" — chat always resolves now, falling back to
+ * Gemini. This answers the narrower question a setup surface needs: is the
+ * deployment running on a deliberate endpoint, or on the default?
+ */
 export function hasConfiguredAiCredential(
   environment: AiCredentialEnvironment,
 ): boolean {

@@ -1,6 +1,8 @@
 /**
  * Embeddings Service
- * Handles batch generation of embeddings using OpenAI's text-embedding-3-small model
+ * Batch embedding generation against any OpenAI-compatible /embeddings
+ * endpoint. Defaults to the text-embedding-3-large model (see DEFAULT_CONFIG)
+ * but never to a default *endpoint* — see the note there.
  * Includes batching, rate limiting, and error handling
  */
 
@@ -27,9 +29,16 @@ export interface EmbeddingConfig {
  * Library defaults. The caller is expected to pass apiKey and baseUrl (and
  * optionally override model / dimensions) on every call; the default apiKey
  * is empty so a missing config throws a clear "API key not configured" error
- * rather than silently swallowing. There is deliberately no default baseUrl:
- * a built-in vendor URL would decide on the operator's behalf where their
- * documents and their key are sent.
+ * rather than silently swallowing.
+ *
+ * There is deliberately no default baseUrl, and embeddings are the ONLY
+ * capability without one — chat, OCR/VLM and NER all fall back to Gemini.
+ * The difference is persistence. Those three make a request and discard it, so
+ * a default merely picks who answers. An embedding is *stored*, and vectors are
+ * only comparable to others from the same model, so defaulting the endpoint
+ * would silently start writing incomparable vectors into an existing corpus
+ * and degrade every future search against it. Switching embedding providers
+ * has to be a deliberate act paired with a re-index.
  */
 const DEFAULT_CONFIG: Omit<Required<EmbeddingConfig>, "baseUrl"> = {
   apiKey: "",
@@ -87,8 +96,12 @@ export async function generateEmbeddings(
   const { baseUrl } = merged;
   if (!baseUrl) {
     throw new Error(
-      "Embeddings base URL not configured. Pass EmbeddingConfig.baseUrl — " +
-        "there is no built-in default endpoint.",
+      "Embeddings base URL not configured. Set EMBEDDING_API_BASE_URL (with " +
+        "EMBEDDING_API_KEY) or AI_BASE_URL, or pass EmbeddingConfig.baseUrl. " +
+        "Embeddings deliberately have no default endpoint, unlike chat and " +
+        "OCR: vectors are persisted and only comparable within one model, so " +
+        "the provider must be chosen explicitly and changed only with a " +
+        "full re-index.",
     );
   }
 

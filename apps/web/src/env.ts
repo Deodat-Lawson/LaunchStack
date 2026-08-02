@@ -107,7 +107,7 @@ const serverSchema = z.object({
   OCR_WORKER_URL: optionalString(),
   // OCR router sidecar — vision classification + PDF rendering for document routing
   OCR_ROUTER_URL: optionalString(),
-  // Model for OCR vision classification (default: gpt-4o-mini). Any OpenAI-compatible vision model.
+  // Model for OCR vision classification (default: gemini-2.5-flash). Any OpenAI-compatible vision model.
   OCR_VISION_MODEL: optionalString(),
   OCR_DEFAULT_PROVIDER: z.enum(["MARKER", "DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"]).optional(),
   // Publicly-reachable origin of this Next.js app. Required when OCR_WORKER_URL
@@ -148,7 +148,7 @@ const serverSchema = z.object({
   RERANK_MODEL: optionalString(),          // e.g. jina-reranker-v2-base-multilingual or BAAI/bge-reranker-v2-m3
   NER_API_BASE_URL: optionalString(),      // e.g. https://api.siliconflow.cn/v1 (Qwen3.5-4B free)
   NER_API_KEY: optionalString(),
-  NER_MODEL: optionalString(),             // e.g. gpt-4o-mini or Qwen/Qwen3.5-4B
+  NER_MODEL: optionalString(),             // default gemini-2.5-flash-lite; e.g. Qwen/Qwen3.5-4B
   TRANSCRIPTION_API_BASE_URL: optionalString(), // e.g. https://api.groq.com/openai/v1
   TRANSCRIPTION_API_KEY: optionalString(),
   TRANSCRIPTION_MODEL: optionalString(),   // e.g. whisper-large-v3-turbo

@@ -15,13 +15,14 @@
 import OpenAI from "openai";
 
 import { createSlot } from "../internal/slot";
+import { GEMINI_BASE_URL } from "./types";
 
 export interface AuxiliaryOpenAIConfig {
   apiKey?: string;
   /**
-   * OpenAI-compatible base URL. Required — omitting it used to fall through to
-   * the SDK's built-in api.openai.com default, which decided on the operator's
-   * behalf where their documents and their key were sent.
+   * OpenAI-compatible base URL. Defaults to {@link GEMINI_BASE_URL} when
+   * omitted — never to the SDK's own `api.openai.com`, which would send
+   * documents to a vendor no part of this configuration names.
    */
   baseUrl?: string;
 }
@@ -42,22 +43,17 @@ export function getAuxiliaryOpenAIConfig(): AuxiliaryOpenAIConfig {
 
 /**
  * Returns a client for the auxiliary OpenAI-compatible endpoint, or null when
- * it is not fully configured — callers must check before making a request.
+ * no credential is configured — callers must check before making a request.
  *
- * Both a credential and a base URL are required. Passing only a key would let
- * the SDK fall back to its built-in api.openai.com default, which is the one
- * thing this module must not do: the endpoint is the operator's choice.
+ * A missing base URL falls back to Gemini rather than to the SDK's implicit
+ * `api.openai.com`. The endpoint is still the operator's choice; this just
+ * makes the unconfigured case land somewhere the rest of the deployment
+ * already defaults to, instead of a vendor nothing else mentions.
  */
 export function getOpenAIClient(): OpenAI | null {
-  const { apiKey, baseUrl } = getAuxiliaryOpenAIConfig();
+  const { apiKey, baseUrl: configuredBaseUrl } = getAuxiliaryOpenAIConfig();
   if (!apiKey) return null;
-  if (!baseUrl) {
-    console.warn(
-      "[llm] Auxiliary OpenAI-compatible endpoint has a credential but no " +
-        "baseUrl. Set it explicitly — there is no built-in default endpoint.",
-    );
-    return null;
-  }
+  const baseUrl = configuredBaseUrl ?? GEMINI_BASE_URL;
 
   const cacheKey = `${apiKey}:${baseUrl}`;
   const cached = clientSlot.get();

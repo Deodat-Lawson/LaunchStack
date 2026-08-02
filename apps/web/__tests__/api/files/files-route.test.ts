@@ -1,6 +1,9 @@
 import { GET } from "~/app/api/files/[id]/route";
 import { signFileAccessToken } from "@launchstack/core/crypto";
-import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
+import type {
+  WorkspaceContext,
+  WorkspaceContextResult,
+} from "~/lib/require-workspace-context";
 
 const SECRET = "route-file-access-secret";
 
@@ -49,19 +52,21 @@ const DB_FILE_LEGACY = {
   companyId: null,
 };
 
-const VERIFIED_CTX: WorkspaceContextResult = {
-  success: true,
-  data: {
-    clerkUserId: "clerk_abc",
-    userPk: BigInt(7),
-    companyId: BigInt(5),
-    role: "employer",
-    status: "verified",
-  },
+const VERIFIED_DATA: WorkspaceContext = {
+  clerkUserId: "clerk_abc",
+  userPk: BigInt(7),
+  companyId: BigInt(5),
+  role: "employer",
+  status: "verified",
 };
 
-function mockAuthenticated(overrides?: Partial<(typeof VERIFIED_CTX)["data"]>) {
-  const data = { ...VERIFIED_CTX.data, ...overrides };
+const VERIFIED_CTX = {
+  success: true as const,
+  data: VERIFIED_DATA,
+};
+
+function mockAuthenticated(overrides?: Partial<WorkspaceContext>) {
+  const data = { ...VERIFIED_DATA, ...overrides };
   mockRequireWorkspaceContext.mockResolvedValue({ success: true, data });
 }
 

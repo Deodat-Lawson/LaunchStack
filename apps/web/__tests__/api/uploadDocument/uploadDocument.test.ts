@@ -3,7 +3,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db";
 import { triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
+import type { WorkspaceContext } from "~/lib/require-workspace-context";
 
 jest.mock("~/lib/require-workspace-context", () => ({
   requireWorkspaceContext: jest.fn(),
@@ -76,19 +76,16 @@ configureDatabase({
 // Helpers
 // ---------------------------------------------------------------------------
 
-const VERIFIED_CTX: WorkspaceContextResult = {
-  success: true,
-  data: {
-    clerkUserId: "user-1",
-    userPk: BigInt(7),
-    companyId: BigInt(5),
-    role: "employer",
-    status: "verified",
-  },
+const VERIFIED_DATA: WorkspaceContext = {
+  clerkUserId: "user-1",
+  userPk: BigInt(7),
+  companyId: BigInt(5),
+  role: "employer",
+  status: "verified",
 };
 
-function mockAuthenticatedContext(overrides?: Partial<typeof VERIFIED_CTX.data>) {
-  const data = { ...(VERIFIED_CTX as { success: true; data: typeof VERIFIED_CTX extends { success: true; data: infer D } ? D : never }).data, ...overrides };
+function mockAuthenticatedContext(overrides?: Partial<WorkspaceContext>) {
+  const data = { ...VERIFIED_DATA, ...overrides };
   (requireWorkspaceContext as jest.Mock).mockResolvedValue({ success: true, data });
 }
 

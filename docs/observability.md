@@ -17,7 +17,7 @@ All metrics use the `pdr_` prefix alongside `prom-client` default process metric
 
 ## Scraping the Endpoint
 
-1. Run the application (`pnpm dev` or Docker).
+1. Run the application (`pnpm --filter @launchstack/web dev` or Docker).
 2. Scrape `http://localhost:3000/api/metrics`:
 
 ```bash

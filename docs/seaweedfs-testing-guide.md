@@ -43,7 +43,7 @@ Both `pdr_ai_v2-postgres` and `pdr_ai_v2-seaweedfs` should show `Up`.
 ## 3. Start the App
 
 ```bash
-pnpm dev
+pnpm --filter @launchstack/web dev
 ```
 
 No manual bucket creation needed — the app auto-creates the S3 bucket on the first upload request.
@@ -116,7 +116,7 @@ Restart the dev server and do a test upload. The file should be stored as base64
 Run the automated 17-check infrastructure test:
 
 ```bash
-bash scripts/test-seaweedfs-infra.sh
+bash scripts/dev/test-seaweedfs-infra.sh
 ```
 
 This validates containers, PostgreSQL databases, S3 operations (upload, download, list, delete, presigned URLs), and volume persistence. Requires AWS CLI.

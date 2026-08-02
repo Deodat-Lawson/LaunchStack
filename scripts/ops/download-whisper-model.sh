@@ -1,6 +1,6 @@
 #!/bin/bash
 # Download the Whisper model for sherpa-onnx local transcription
-# Run this once: bash scripts/download-whisper-model.sh
+# Run this once: bash scripts/ops/download-whisper-model.sh
 
 set -e
 

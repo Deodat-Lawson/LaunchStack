@@ -115,7 +115,7 @@ export const InngestPage: React.FC<DeploymentProps> = ({
 
         >
           <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-            Running <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-emerald-300' : 'bg-gray-100 text-emerald-700'}`}>pnpm dev</code> automatically
+            Running <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-emerald-300' : 'bg-gray-100 text-emerald-700'}`}>pnpm --filter @launchstack/web dev</code> automatically
             starts both Next.js and the Inngest dev server using <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-emerald-300' : 'bg-gray-100 text-emerald-700'}`}>concurrently</code>.
             No additional setup is needed to get background jobs working locally.
           </p>
@@ -132,8 +132,8 @@ export const InngestPage: React.FC<DeploymentProps> = ({
               Start the dev server (Next.js + Inngest together)
             </h3>
             <CodeBlock
-              code="pnpm dev"
-              onCopy={() => copyToClipboard('pnpm dev', 'inngest-dev')}
+              code="pnpm --filter @launchstack/web dev"
+              onCopy={() => copyToClipboard('pnpm --filter @launchstack/web dev', 'inngest-dev')}
               copied={copiedCode === 'inngest-dev'}
 
             />
@@ -267,7 +267,7 @@ INNGEST_SIGNING_KEY=signkey-prod-xxxxx`}
       {/* Verify */}
       <Section title="Verify Setup">
         <div className="space-y-4">
-          <VerificationStep text="Run pnpm dev — both Next.js and Inngest dev server start" />
+          <VerificationStep text="Run pnpm --filter @launchstack/web dev — both Next.js and Inngest dev server start" />
           <VerificationStep text="Open http://localhost:8288 — Inngest dashboard shows 'pdr-ai' app" />
           <VerificationStep text="Upload a document — 'process-document' function appears in the dashboard" />
           <VerificationStep text="View step-by-step execution and logs in the Inngest timeline" />
@@ -293,7 +293,7 @@ INNGEST_SIGNING_KEY=signkey-prod-xxxxx`}
             </h4>
             <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Make sure Next.js is running and the Inngest dev server can reach <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>http://localhost:3000/api/inngest</code>.
-              If you started them separately, use <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm dev</code> instead so they start together.
+              If you started them separately, use <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm --filter @launchstack/web dev</code> instead so they start together.
             </p>
           </div>
           <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
@@ -302,8 +302,8 @@ INNGEST_SIGNING_KEY=signkey-prod-xxxxx`}
             </h4>
             <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               If you prefer to run them in separate terminals, start Next.js
-              with <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm dev:next</code> and
-              Inngest with <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm inngest:dev</code>.
+              with <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm --filter @launchstack/web dev:next</code> and
+              Inngest with <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm --filter @launchstack/web inngest:dev</code>.
             </p>
           </div>
         </div>

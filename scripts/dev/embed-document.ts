@@ -3,7 +3,7 @@
 async function main() {
   const docArg = process.argv.find((arg) => arg.startsWith("--documentId="));
   if (!docArg) {
-    console.error("Usage: pnpm tsx scripts/experimental/embed-document.ts --documentId=123");
+    console.error("Usage: pnpm tsx scripts/dev/embed-document.ts --documentId=123");
     process.exit(1);
   }
   const documentId = Number(docArg.split("=")[1]);

@@ -75,7 +75,7 @@ async function main() {
         if (results.length === 0) {
             console.log("No company metadata found in the database.");
             console.log("\nTo generate metadata:");
-            console.log("  1. Start the dev server: pnpm dev");
+            console.log("  1. Start the dev server: pnpm --filter @launchstack/web dev");
             console.log("  2. Upload documents through the employer flow");
             console.log("  3. Call the extraction API: POST /api/company/metadata/extract");
             process.exit(0);

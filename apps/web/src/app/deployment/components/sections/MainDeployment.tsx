@@ -17,7 +17,6 @@ import {
   Eye,
   Search as SearchIcon,
   Play,
-  Video,
   ExternalLink,
   ShieldAlert,
 } from 'lucide-react';
@@ -285,15 +284,15 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
           <Step
             number={4}
             title="Push the schema"
-            code="pnpm db:push"
-            onCopy={() => copyToClipboard('pnpm db:push', 'qs-4')}
+            code="pnpm --filter @launchstack/web db:push"
+            onCopy={() => copyToClipboard('pnpm --filter @launchstack/web db:push', 'qs-4')}
             copied={copiedCode === 'qs-4'}
           />
           <Step
             number={5}
             title="Start the dev server"
-            code="pnpm dev"
-            onCopy={() => copyToClipboard('pnpm dev', 'qs-5')}
+            code="pnpm --filter @launchstack/web dev"
+            onCopy={() => copyToClipboard('pnpm --filter @launchstack/web dev', 'qs-5')}
             copied={copiedCode === 'qs-5'}
           />
         </div>
@@ -333,12 +332,6 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
             title="Clerk setup"
             src="/deployment-demos/clerk-setup.mov"
             path="public/deployment-demos/clerk-setup.mov"
-          />
-          <DemoCard
-            icon={<Video size={14} />}
-            title="OpenAI API key"
-            src="/deployment-demos/openai-api-key-setup.mov"
-            path="public/deployment-demos/openai-api-key-setup.mov"
           />
         </div>
       </Section>

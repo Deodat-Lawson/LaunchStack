@@ -59,8 +59,10 @@ export async function triggerDocumentProcessing(
   documentId: number,
   category: string,
   options?: TriggerOptions,
+  /** Optional override job id for correlation (caller-generated) */
+  overrideJobId?: string,
 ): Promise<{ jobId: string; eventIds: string[] }> {
-  const jobId = generateJobId();
+  const jobId = overrideJobId ?? generateJobId();
 
   const eventData: ProcessDocumentEventData = {
     jobId,
@@ -112,6 +114,15 @@ export async function triggerDocumentProcessing(
  * Generate a unique job ID
  */
 function generateJobId(): string {
+  // Prefer platform cryptographic UUID when available for stronger uniqueness
+  try {
+    if (typeof globalThis !== 'undefined' && (globalThis as any).crypto && typeof (globalThis as any).crypto.randomUUID === 'function') {
+      return (globalThis as any).crypto.randomUUID();
+    }
+  } catch (e) {
+    // fall through to legacy generator
+  }
+
   const timestamp = Date.now().toString(36);
   const randomPart = Math.random().toString(36).substring(2, 10);
   return `ocr-${timestamp}-${randomPart}`;

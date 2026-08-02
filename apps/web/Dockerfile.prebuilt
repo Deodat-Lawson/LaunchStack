@@ -54,6 +54,8 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --chown=nextjs:nodejs apps/web/.next/standalone ./
 COPY --chown=nextjs:nodejs apps/web/.next/static ./apps/web/.next/static
 COPY --chown=nextjs:nodejs apps/web/public ./apps/web/public
+# Read at runtime, not bundled by the standalone build — see apps/web/Dockerfile.
+COPY --chown=nextjs:nodejs apps/web/config ./apps/web/config
 
 USER nextjs
 

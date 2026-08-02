@@ -166,7 +166,7 @@ await engine.close();   // graceful shutdown
 
 `jobs.dispatcher` is a **port, not a vendor SDK** — `apps/web` wraps its Inngest client in `createAppJobDispatcherPort()` rather than passing the client directly. Read `engine.ts` rather than this excerpt when wiring your own host.
 
-`createEngine` and the registration functions both store state on `globalThis` (18 `createSlot` call sites across core). That is a deliberate defence against Next.js HMR re-evaluation and bundler dual-copies, but it means **one engine per process**.
+`createEngine` and the registration functions both store state on `globalThis` (17 slots across core). That is a deliberate defence against Next.js HMR re-evaluation and bundler dual-copies, but it means **one engine per process**.
 
 ---
 

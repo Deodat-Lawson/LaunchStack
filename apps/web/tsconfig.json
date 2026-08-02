@@ -8,7 +8,8 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@schema": ["../../schema/index.ts"]
     }
   },
   "include": [

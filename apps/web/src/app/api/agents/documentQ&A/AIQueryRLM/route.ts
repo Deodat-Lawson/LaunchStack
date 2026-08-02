@@ -31,7 +31,10 @@ import {
     describeChatError,
 } from "../services";
 import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
-import { resolveConfiguredChatModel } from "~/lib/models";
+import {
+    describeChatResolutionFailure,
+    resolveConfiguredChatModel,
+} from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/core/db/schema";
@@ -164,9 +167,32 @@ export async function POST(request: Request) {
                 pageRange,
             } = validation.data;
 
-            // Resolve before the hierarchical search runs: an unavailable
-            // route is a 400, and RLM retrieval is the expensive part.
-            const resolved = resolveConfiguredChatModel();
+            // Authenticate first. Chat resolution reports what this
+            // deployment can and cannot do, which is not something an
+            // anonymous caller should be able to probe — and a request that
+            // is going to 401 should 401, not 400.
+            const { userId } = await auth();
+            if (!userId) {
+                return NextResponse.json(
+                    { success: false, message: "Unauthorized" },
+                    { status: 401 }
+                );
+            }
+
+            // Then resolve, still before the hierarchical search runs: an
+            // unavailable route is a 400, and RLM retrieval is the expensive
+            // part.
+            let resolved;
+            try {
+                resolved = resolveConfiguredChatModel();
+            } catch (modelError) {
+                const failure = describeChatResolutionFailure(modelError);
+                return NextResponse.json(
+                    { success: false, message: failure.message },
+                    { status: failure.status },
+                );
+            }
+
             const compatibility = validateDeprecatedChatSelection(
                 { provider, model: aiModel },
                 resolved,
@@ -178,15 +204,6 @@ export async function POST(request: Request) {
                 );
             }
             const { modelId: selectedAiModel, chat } = resolved;
-
-            // Authenticate user
-            const { userId } = await auth();
-            if (!userId) {
-                return NextResponse.json(
-                    { success: false, message: "Unauthorized" },
-                    { status: 401 }
-                );
-            }
 
             // Verify user and document access
             const [requestingUser] = await db

@@ -35,6 +35,10 @@ const migrationsDir = join(__dirname, "..", "drizzle");
 
 const sql = postgres(url, { max: 1 });
 
+function normalizeSqlMigrationBody(body) {
+  return body.replace(/^\uFEFF/, "");
+}
+
 async function ensureMigrationsTable() {
   await sql`
     CREATE TABLE IF NOT EXISTS _launchstack_migrations (
@@ -59,7 +63,9 @@ async function listMigrationFiles() {
 }
 
 async function applyMigration(name) {
-  const body = await readFile(join(migrationsDir, name), "utf8");
+  const body = normalizeSqlMigrationBody(
+    await readFile(join(migrationsDir, name), "utf8"),
+  );
   const checksum = createHash("sha256").update(body).digest("hex");
 
   console.log(`[migrate] applying ${name}`);
@@ -83,7 +89,9 @@ async function main() {
   let drift = 0;
 
   for (const name of files) {
-    const body = await readFile(join(migrationsDir, name), "utf8");
+    const body = normalizeSqlMigrationBody(
+      await readFile(join(migrationsDir, name), "utf8"),
+    );
     const checksum = createHash("sha256").update(body).digest("hex");
     const recorded = applied.get(name);
 

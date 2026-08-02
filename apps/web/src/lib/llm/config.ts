@@ -75,6 +75,12 @@ const HARDCODED_DEFAULTS: LlmConfig = {
       google: { model: "gemini-2.0-flash", temperature: 0 },
       ollama: { model: "llama3.2:3b", temperature: 0 },
     },
+    founderWeeklyReview: {
+      openai: { model: "gpt-4o-mini", temperature: 0 },
+      anthropic: { model: "claude-3-5-haiku-latest", temperature: 0 },
+      google: { model: "gemini-2.0-flash", temperature: 0 },
+      ollama: { model: "llama3.2:3b", temperature: 0 },
+    },
   },
 };
 

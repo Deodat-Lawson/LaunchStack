@@ -89,6 +89,10 @@
       "types": "./src/client-prospector/db.ts",
       "default": "./src/client-prospector/db.ts"
     },
+    "./founder-weekly-review": {
+      "types": "./src/founder-weekly-review/index.ts",
+      "default": "./src/founder-weekly-review/index.ts"
+    },
     "./doc-ingestion": {
       "types": "./src/doc-ingestion/index.ts",
       "default": "./src/doc-ingestion/index.ts"

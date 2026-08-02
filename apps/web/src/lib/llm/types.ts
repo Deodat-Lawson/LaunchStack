@@ -22,7 +22,7 @@
  *     Must support JSON schema output. Does NOT need vision, long context,
  *     or high-quality free-form generation.
  */
-export const CAPABILITIES = ["smallExtraction"] as const;
+export const CAPABILITIES = ["smallExtraction", "founderWeeklyReview"] as const;
 
 export type Capability = (typeof CAPABILITIES)[number];
 
@@ -104,4 +104,20 @@ export interface GenerateStructuredInput<TSchema> {
    * / tool name. Purely cosmetic but helps with provider-side logging.
    */
   schemaName?: string;
+}
+
+/** Resolved model and provider response details that are safe to persist for replay. */
+export interface StructuredGenerationMetadata {
+  provider: Provider;
+  model: string;
+  capability: Capability;
+  temperature: number;
+  finishReason?: string;
+  usage?: Record<string, string | number | boolean | null>;
+  providerRequestId?: string;
+}
+
+export interface StructuredGenerationResult<T> {
+  object: T;
+  metadata: StructuredGenerationMetadata;
 }

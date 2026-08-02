@@ -11,7 +11,7 @@
  */
 
 import {
-  ChatConfigurationError,
+  GEMINI_BASE_URL,
   type ChatEndpointConfig,
 } from "@launchstack/core/llm/types";
 
@@ -32,9 +32,22 @@ export interface AppChatModelEnvironment {
   /** @deprecated Pre-PR name for CHAT_API_KEY. */
   AI_API_KEY?: string;
   /**
-   * Read only to explain a failure. A bare credential no longer selects an
-   * endpoint: there are no built-in vendor URLs, so a key on its own says
-   * nothing about where to send the request. See {@link BARE_CREDENTIALS}.
+   * The credential for the default Gemini endpoint. Paired with
+   * {@link GEMINI_BASE_URL} — never with an operator-supplied CHAT_BASE_URL,
+   * which takes its key from CHAT_API_KEY.
+   *
+   * Deliberately the only spelling. Google AI Studio calls it a "Gemini API
+   * key", but adding a GEMINI_API_KEY alias would mean declaring it in
+   * `env.ts` too, and a second name for one credential is a second thing to
+   * get wrong.
+   */
+  GOOGLE_AI_API_KEY?: string;
+  /**
+   * Read only to explain where a key did *not* go. These name a vendor other
+   * than the default one, so they select nothing: a key on its own says
+   * nothing about where to send the request, and pairing it with the Gemini
+   * URL would post an OpenAI or OpenRouter credential to Google. See
+   * {@link MISPAIRED_CREDENTIALS}.
    */
   OPENROUTER_API_KEY?: string;
   OPENAI_API_KEY?: string;
@@ -59,13 +72,35 @@ export function trimmed(value: string | undefined): string | undefined {
 }
 
 /**
- * Credentials that used to imply a vendor's URL. They no longer do — the
- * mapping key-to-endpoint is exactly the vendor lock-in this module exists to
- * avoid, and a built-in default silently decides on the operator's behalf
- * where their prompts and their key are sent. Listed here only so
- * {@link resolveChatEndpoint} can say why a key alone was not enough.
+ * Credentials belonging to a vendor other than the default one.
+ *
+ * Chat falls back to Gemini, so a key for a *different* service cannot be
+ * carried along: sending an `sk-…` to `generativelanguage.googleapis.com`
+ * would hand an OpenAI credential to Google. Each of these still names no
+ * endpoint. They are listed only so {@link resolveChatEndpoint} can explain
+ * that the request went to the default endpoint *without* them, and which
+ * variable to set to change that.
  */
-const BARE_CREDENTIALS = ["OPENROUTER_API_KEY", "OPENAI_API_KEY"] as const;
+const MISPAIRED_CREDENTIALS = ["OPENROUTER_API_KEY", "OPENAI_API_KEY"] as const;
+
+/**
+ * Messages already emitted. `next build` evaluates this module in every render
+ * worker and every route that imports `~/env`, which turned one misconfigured
+ * deployment into a dozen identical lines in the build log. Deduplicating keeps
+ * the warning legible without weakening it — a distinct message still prints.
+ */
+const warnedMessages = new Set<string>();
+
+function warnOnce(message: string): void {
+  if (warnedMessages.has(message)) return;
+  warnedMessages.add(message);
+  console.warn(message);
+}
+
+/** Test seam: forget which warnings have been emitted. */
+export function resetChatEndpointWarnings(): void {
+  warnedMessages.clear();
+}
 
 /**
  * Map the one surviving pre-PR alias onto the endpoint.
@@ -99,7 +134,17 @@ export function translateLegacyEndpoint(
   };
 }
 
-/** The endpoint every route talks to, from the environment alone. */
+/**
+ * The endpoint every route talks to, from the environment alone.
+ *
+ * Order: CHAT_BASE_URL, then the AI_BASE_URL alias, then the built-in Gemini
+ * default. Explicit configuration always wins; the default exists so a
+ * deployment that names no endpoint still boots and still answers.
+ *
+ * This never throws. Chat resolution used to be able to fail startup — that
+ * is what made a missing CHAT_BASE_URL a build-time error — and with a default
+ * in place there is no longer a state it can fail in.
+ */
 export function resolveChatEndpoint(
   server: AppChatModelEnvironment,
 ): ChatEndpointConfig {
@@ -109,20 +154,31 @@ export function resolveChatEndpoint(
   }
 
   const legacy = translateLegacyEndpoint(server);
-  if (!legacy) {
-    const bare = BARE_CREDENTIALS.filter((name) => trimmed(server[name]));
-    throw new ChatConfigurationError(
-      "CHAT_BASE_URL is not set. Point it at an OpenAI-compatible chat endpoint " +
-        "(and set CHAT_API_KEY when that endpoint requires a credential)." +
-        (bare.length
-          ? ` ${bare.join(" and ")} ${bare.length > 1 ? "are" : "is"} set, but a credential ` +
-            "no longer selects an endpoint — there is no built-in default URL. " +
-            "Set CHAT_BASE_URL explicitly."
-          : ""),
+  if (legacy) {
+    if (legacy.deprecation) warnOnce(legacy.deprecation);
+    return legacy.endpoint;
+  }
+
+  // Nothing named an endpoint. Fall back to Gemini, paired only with a Google
+  // credential — a key for another vendor is reported, never forwarded.
+  const geminiKey = trimmed(server.GOOGLE_AI_API_KEY);
+  const mispaired = MISPAIRED_CREDENTIALS.filter((name) => trimmed(server[name]));
+
+  if (!geminiKey) {
+    warnOnce(
+      "[chat] No CHAT_BASE_URL set, so chat defaults to Gemini " +
+        `(${GEMINI_BASE_URL}) — but GOOGLE_AI_API_KEY is not set either, so ` +
+        "requests will be rejected as unauthenticated." +
+        (mispaired.length
+          ? ` ${mispaired.join(" and ")} ${mispaired.length > 1 ? "are" : "is"} set, ` +
+            `but ${mispaired.length > 1 ? "they belong" : "it belongs"} to another ` +
+            "service and will not be sent to Google. Set CHAT_BASE_URL and " +
+            "CHAT_API_KEY to use that service instead."
+          : " Set GOOGLE_AI_API_KEY, or point CHAT_BASE_URL elsewhere."),
     );
   }
-  if (legacy.deprecation) console.warn(legacy.deprecation);
-  return legacy.endpoint;
+
+  return { baseUrl: GEMINI_BASE_URL, apiKey: geminiKey };
 }
 
 /**

@@ -30,6 +30,19 @@ type Endpoint = {
  */
 const ENDPOINTS: Endpoint[] = [
   {
+    id: 'gemini',
+    name: 'Google Gemini',
+    summary: 'The default — used when nothing is configured',
+    link: 'https://aistudio.google.com/apikey',
+    bullets: [
+      'Reached when CHAT_BASE_URL is unset; set GOOGLE_AI_API_KEY alone to authenticate',
+      'Bundled presets cover the gemini-2.5 flash, flash-lite and pro tiers',
+      'The shipped chat-models.yaml already names these model ids',
+    ],
+    envKey:
+      'CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=AIza-your_key_here',
+  },
+  {
     id: 'openrouter',
     name: 'OpenRouter',
     summary: 'One key, many vendors',
@@ -49,7 +62,7 @@ const ENDPOINTS: Endpoint[] = [
     bullets: [
       'Direct vendor API without an aggregation layer',
       'Bundled presets cover the gpt-4o and gpt-5 families',
-      'Most thoroughly tested path end-to-end',
+      'Replace the model ids in chat-models.yaml — it ships with Gemini ids',
     ],
     envKey: 'CHAT_BASE_URL=https://api.openai.com/v1\nCHAT_API_KEY=sk-proj-your_key_here',
   },
@@ -275,15 +288,16 @@ const InlineRow: React.FC<{ title: string; badge: string; body: string }> = ({ t
 const MODELS_YAML = `version: 1
 
 models:
-  # Behavior from a bundled, source-dated preset.
+  # Behavior from a bundled, source-dated preset. On Google's endpoint the id
+  # is bare; the google/ prefix belongs only to the preset name.
   workhorse:
-    id: openai/gpt-4o
-    preset: openai/gpt-4o
+    id: gemini-2.5-flash
+    preset: google/gemini-2.5-flash
 
   # Cheaper model for extraction and query planning.
   cheap:
-    id: openai/gpt-4o-mini
-    preset: openai/gpt-4o-mini
+    id: gemini-2.5-flash-lite
+    preset: google/gemini-2.5-flash-lite
 
   # No preset? Declare the behavior yourself — nothing is guessed.
   thirdparty:

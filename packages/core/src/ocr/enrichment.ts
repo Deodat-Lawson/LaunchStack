@@ -1,4 +1,5 @@
 import { getAuxiliaryOpenAIConfig, getOpenAIClient } from "../llm";
+import { GEMINI_DEFAULT_MODEL } from "../llm/types";
 
 /**
  * Visual Layout Model (VLM) Enrichment Service
@@ -14,7 +15,7 @@ import { getAuxiliaryOpenAIConfig, getOpenAIClient } from "../llm";
  *   1. Ollama — if a VLM Ollama base URL is configured. Defaults to
  *      "llava:13b"; callers can override via options.model. Self-hosted.
  *   2. OpenAI-compatible — if an auxiliary API key is configured. Uses
- *      gpt-5-mini by default; callers can override via options.model.
+ *      gemini-2.5-flash by default; callers can override via options.model.
  *   3. Skip — return empty string.
  */
 
@@ -128,7 +129,7 @@ async function enrichWithOpenAI(
     console.warn("[VLM] getOpenAIClient() returned null — skipping OpenAI enrichment");
     return "";
   }
-  const model = options?.model ?? "gpt-5-mini";
+  const model = options?.model ?? GEMINI_DEFAULT_MODEL;
   const detail = options?.detail ?? "auto";
   const maxTokens = options?.maxTokens ?? 500;
 

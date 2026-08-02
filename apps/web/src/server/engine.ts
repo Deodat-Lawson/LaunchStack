@@ -214,8 +214,13 @@ export function getEngine(): Engine {
   // Endpoint and credential are chosen as a PAIR, most specific first: the
   // embeddings-only endpoint, then the shared non-chat one. Never one source's
   // key with another's URL — that posts a credential to a service it does not
-  // belong to. There is no built-in default behind either: the operator names
-  // where embeddings are sent.
+  // belong to.
+  //
+  // Unlike chat, OCR/VLM and NER, embeddings have NO built-in default behind
+  // either: the operator names where they are sent. Embedding vectors are
+  // persisted and only comparable within one model, so silently defaulting the
+  // endpoint would change the model under an existing corpus and degrade every
+  // stored vector rather than merely routing a request somewhere new.
   const embeddingEndpoint = config.embeddings.override?.baseUrl
     ? config.embeddings.override
     : config.llm.auxiliaryOpenAI;

@@ -32,7 +32,7 @@ pnpm install
 cp .env.example .env
 ```
 
-`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL`, `CLERK_SECRET_KEY`, and one OpenAI-compatible chat endpoint — set `CHAT_BASE_URL` (plus `CHAT_API_KEY` when that endpoint needs a credential). There is no built-in default endpoint and no per-vendor variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY` or `OLLAMA_BASE_URL` will *not* configure chat. A key names who you are, not where the request goes — and every one of those providers speaks the same OpenAI chat-completions protocol, so each is reached through `CHAT_BASE_URL` like any other. Only `AI_BASE_URL`/`AI_API_KEY`, a straight rename of the canonical pair, is still translated for a release with a deprecation warning. See [Chat models](#chat-models).
+`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL` and `CLERK_SECRET_KEY`. Chat needs no variable at all: with `CHAT_BASE_URL` unset it defaults to Google Gemini's OpenAI-compatible endpoint, authenticated with `GOOGLE_AI_API_KEY`. Set `CHAT_BASE_URL` (plus `CHAT_API_KEY`) to reach anything else. There is still no *per-vendor* variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY` or `OLLAMA_BASE_URL` will *not* configure chat, and none of them is forwarded to the Gemini default — a key names who you are, not where the request goes, and every one of those providers speaks the same OpenAI chat-completions protocol, so each is reached through `CHAT_BASE_URL` like any other. Only `AI_BASE_URL`/`AI_API_KEY`, a straight rename of the canonical pair, is still translated for a release with a deprecation warning. See [Chat models](#chat-models).
 
 ### With Docker (recommended)
 
@@ -204,9 +204,12 @@ Studio, Ollama's `/v1` surface, and most gateways all qualify. Point
 `CHAT_BASE_URL` at it and give it a credential if it needs one:
 
 ```dotenv
-CHAT_BASE_URL=https://openrouter.ai/api/v1
-CHAT_API_KEY=sk-or-v1-...
+CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+CHAT_API_KEY=AIza...
 ```
+
+Gemini is the default: leave `CHAT_BASE_URL` unset and set `GOOGLE_AI_API_KEY`
+instead, and chat reaches the same endpoint.
 
 That endpoint can serve **many models**. Which model handles general chat,
 cheap extraction, reasoning, and images is written in
@@ -217,8 +220,8 @@ bundled preset or declares its own behavior:
 version: 1
 models:
   primary:
-    id: openai/gpt-4o-mini
-    preset: openai/gpt-4o-mini
+    id: gemini-2.5-flash
+    preset: google/gemini-2.5-flash
 routes:
   default: primary
 ```

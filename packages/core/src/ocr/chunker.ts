@@ -6,6 +6,7 @@ import type {
 } from "./types";
 import { hasMarkdownHeadings, splitByHeadings } from "../ingestion/heading-chunker";
 import { getOpenAIClient } from "../llm/openai-client";
+import { GEMINI_FAST_MODEL } from "../llm/types";
 
 /**
  * The OpenAI client is shared across subsystems — configured once by the
@@ -258,7 +259,7 @@ async function generateTableDescription(
   try {
     const tablePreview = table.markdown.substring(0, 1000); // Limit context
     const response = await openai.chat.completions.create({
-      model: "gpt-5-nano",
+      model: GEMINI_FAST_MODEL,
       messages: [
         {
           role: "system",

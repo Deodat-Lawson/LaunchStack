@@ -46,20 +46,8 @@ describe("one-release legacy translation", () => {
       { baseUrl: "https://api.siliconflow.cn/v1", apiKey: "sf-key" },
     ],
     [
-      { OPENROUTER_API_KEY: "sk-or-v1-x" },
-      { baseUrl: "https://openrouter.ai/api/v1", apiKey: "sk-or-v1-x" },
-    ],
-    [
-      { OPENAI_API_KEY: "sk-x" },
-      { baseUrl: "https://api.openai.com/v1", apiKey: "sk-x" },
-    ],
-    [
-      { OLLAMA_BASE_URL: "http://localhost:11434" },
-      { baseUrl: "http://localhost:11434/v1" },
-    ],
-    [
-      { OLLAMA_BASE_URL: "http://localhost:11434/v1/" },
-      { baseUrl: "http://localhost:11434/v1" },
+      { AI_BASE_URL: "  http://localhost:11434/v1  " },
+      { baseUrl: "http://localhost:11434/v1", apiKey: undefined },
     ],
   ])("translates %p to a single endpoint", (environment, expected) => {
     const translated = translateLegacyEndpoint(environment);
@@ -67,50 +55,33 @@ describe("one-release legacy translation", () => {
     expect(translated?.deprecation).toMatch(/deprecated/);
   });
 
-  it("never pairs one service's credential with another's URL", () => {
-    const translated = translateLegacyEndpoint({ OPENROUTER_API_KEY: "sk-or-v1-x" });
-    expect(translated?.endpoint.baseUrl).toBe("https://openrouter.ai/api/v1");
-    expect(translated?.endpoint.apiKey).toBe("sk-or-v1-x");
-
-    const openai = translateLegacyEndpoint({ OPENAI_API_KEY: "sk-x" });
-    expect(openai?.endpoint.baseUrl).toBe("https://api.openai.com/v1");
-    expect(openai?.endpoint.apiKey).toBe("sk-x");
+  it.each([
+    [{ OPENROUTER_API_KEY: "sk-or-v1-x" }],
+    [{ OPENAI_API_KEY: "sk-x" }],
+    [{ OPENROUTER_API_KEY: "sk-or-v1-x", OPENAI_API_KEY: "sk-x" }],
+  ])("refuses to infer an endpoint from the bare credential %p", (environment) => {
+    // There are no built-in vendor URLs. A key says who you are, not where to
+    // send the request — inferring one would pick a vendor on the operator's
+    // behalf and ship their prompts there.
+    expect(translateLegacyEndpoint(environment)).toBeUndefined();
   });
 
-  it("refuses to guess when several chat variables describe different endpoints", () => {
-    expect(() =>
-      translateLegacyEndpoint({
-        OPENROUTER_API_KEY: "sk-or-v1-x",
-        AI_BASE_URL: "https://api.siliconflow.cn/v1",
-      }),
-    ).toThrow(/describe more than one endpoint/);
+  it("no longer treats OLLAMA_BASE_URL as a chat endpoint", () => {
+    // Ollama serves the same OpenAI-compatible protocol as everything else, so
+    // it is configured through CHAT_BASE_URL rather than a variable of its own.
+    // OLLAMA_BASE_URL still configures the Ollama *embeddings* provider.
+    expect(
+      translateLegacyEndpoint({ OLLAMA_BASE_URL: "http://localhost:11434" }),
+    ).toBeUndefined();
 
     expect(() =>
-      translateLegacyEndpoint({
-        OLLAMA_BASE_URL: "http://localhost:11434",
-        AI_BASE_URL: "https://api.siliconflow.cn/v1",
-      }),
-    ).toThrow(/describe more than one endpoint/);
+      resolveChatEndpoint({ OLLAMA_BASE_URL: "http://localhost:11434" }),
+    ).toThrow(/CHAT_BASE_URL is not set/);
   });
 
-  it("treats OPENAI_API_KEY as the embeddings credential, not a rival chat endpoint", () => {
-    // "OpenRouter for chat, OpenAI for embeddings" is a recommended pairing.
-    // Reading OPENAI_API_KEY as a competing chat endpoint would refuse to boot
-    // the single most common configuration.
-    expect(
-      translateLegacyEndpoint({
-        OPENROUTER_API_KEY: "sk-or-v1-x",
-        OPENAI_API_KEY: "sk-x",
-      })?.endpoint,
-    ).toEqual({ baseUrl: "https://openrouter.ai/api/v1", apiKey: "sk-or-v1-x" });
-
-    expect(
-      translateLegacyEndpoint({
-        OLLAMA_BASE_URL: "http://localhost:11434",
-        OPENAI_API_KEY: "sk-x",
-      })?.endpoint,
-    ).toEqual({ baseUrl: "http://localhost:11434/v1" });
-
+  it("ignores OPENAI_API_KEY entirely — it is the embeddings credential", () => {
+    // "Some other endpoint for chat, OpenAI-compatible for embeddings" is a
+    // normal pairing, so its presence must not disturb chat resolution.
     expect(
       translateLegacyEndpoint({
         AI_BASE_URL: "https://api.siliconflow.cn/v1",
@@ -120,18 +91,10 @@ describe("one-release legacy translation", () => {
     ).toEqual({ baseUrl: "https://api.siliconflow.cn/v1", apiKey: "sf" });
   });
 
-  it("still uses OPENAI_API_KEY when it is the only signal", () => {
-    expect(translateLegacyEndpoint({ OPENAI_API_KEY: "sk-x" })?.endpoint).toEqual({
-      baseUrl: "https://api.openai.com/v1",
-      apiKey: "sk-x",
-    });
-  });
-
-  it("leaves Ollama keyless rather than borrowing a key", () => {
-    const translated = translateLegacyEndpoint({
-      OLLAMA_BASE_URL: "http://localhost:11434",
-    });
-    expect(translated?.endpoint.apiKey).toBeUndefined();
+  it("names the bare credential when it explains the failure", () => {
+    expect(() => resolveChatEndpoint({ OPENAI_API_KEY: "sk-x" })).toThrow(
+      /OPENAI_API_KEY is set, but a credential no longer selects an endpoint/,
+    );
   });
 });
 
@@ -140,8 +103,15 @@ describe("credential presence checks", () => {
     expect(hasConfiguredAiCredential({})).toBe(false);
     expect(hasConfiguredAiCredential({ CHAT_BASE_URL: "  " })).toBe(false);
     expect(hasConfiguredAiCredential({ CHAT_BASE_URL: "https://x/v1" })).toBe(true);
-    expect(hasConfiguredAiCredential({ OPENROUTER_API_KEY: "k" })).toBe(true);
     expect(hasConfiguredAiCredential({ AI_BASE_URL: "https://x/v1" })).toBe(true);
+  });
+
+  it("reports only what resolveChatEndpoint would actually accept", () => {
+    // Reporting true here would tell a health check chat is ready moments
+    // before resolveChatEndpoint refuses to boot on the same environment.
+    expect(hasConfiguredAiCredential({ OPENROUTER_API_KEY: "k" })).toBe(false);
+    expect(hasConfiguredAiCredential({ OPENAI_API_KEY: "sk-x" })).toBe(false);
+    expect(hasConfiguredAiCredential({ OLLAMA_BASE_URL: "http://x:11434" })).toBe(false);
   });
 });
 

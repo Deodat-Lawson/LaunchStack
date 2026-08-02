@@ -378,14 +378,22 @@ automatically and logs a deprecation notice:
 | Old | Translated endpoint |
 | --- | --- |
 | `AI_BASE_URL` / `AI_API_KEY` | that URL and key |
-| `OPENROUTER_API_KEY` | `https://openrouter.ai/api/v1` |
-| `OLLAMA_BASE_URL` | that URL with `/v1` appended |
-| `OPENAI_API_KEY` | `https://api.openai.com/v1` |
 
-Two or more at once is an error, not a guess: under a single endpoint
-"configure both and pick at runtime" has no meaning. A credential is only ever
-paired with its own service's URL — one service's key is never sent to
-another's endpoint.
+That is the only one left, because it is the only one that infers nothing —
+it is a straight rename of `CHAT_BASE_URL` / `CHAT_API_KEY`.
+
+**No variable names a provider any more.** `OPENROUTER_API_KEY`,
+`OPENAI_API_KEY` and `OLLAMA_BASE_URL` no longer configure chat:
+
+- A bare credential says who you are, not where the request goes. There are no
+  built-in vendor URLs anywhere in the codebase, so inferring a destination
+  from a key would pick a vendor on your behalf and send your prompts there.
+- Ollama, OpenRouter and OpenAI all serve the OpenAI chat-completions
+  protocol. A variable per provider bought nothing over pointing
+  `CHAT_BASE_URL` at the same URL — Ollama's is `http://localhost:11434/v1`.
+
+Set `CHAT_BASE_URL` explicitly. `OLLAMA_BASE_URL` still configures the Ollama
+**embeddings** provider; it just no longer has a second job in chat.
 
 The removed `CHAT_PROVIDER`, `CHAT_MODEL`, `CHAT_CAPABILITIES`, and the
 `CHAT_{FAST,REASONING,VISION,STRUCTURED}_*` matrix have no replacement in the

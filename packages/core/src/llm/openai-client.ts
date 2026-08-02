@@ -18,7 +18,11 @@ import { createSlot } from "../internal/slot";
 
 export interface AuxiliaryOpenAIConfig {
   apiKey?: string;
-  /** OpenAI-compatible base URL. Omit for api.openai.com. */
+  /**
+   * OpenAI-compatible base URL. Required — omitting it used to fall through to
+   * the SDK's built-in api.openai.com default, which decided on the operator's
+   * behalf where their documents and their key were sent.
+   */
   baseUrl?: string;
 }
 
@@ -38,17 +42,28 @@ export function getAuxiliaryOpenAIConfig(): AuxiliaryOpenAIConfig {
 
 /**
  * Returns a client for the auxiliary OpenAI-compatible endpoint, or null when
- * no credential is configured — callers must check before making a request.
+ * it is not fully configured — callers must check before making a request.
+ *
+ * Both a credential and a base URL are required. Passing only a key would let
+ * the SDK fall back to its built-in api.openai.com default, which is the one
+ * thing this module must not do: the endpoint is the operator's choice.
  */
 export function getOpenAIClient(): OpenAI | null {
   const { apiKey, baseUrl } = getAuxiliaryOpenAIConfig();
   if (!apiKey) return null;
+  if (!baseUrl) {
+    console.warn(
+      "[llm] Auxiliary OpenAI-compatible endpoint has a credential but no " +
+        "baseUrl. Set it explicitly — there is no built-in default endpoint.",
+    );
+    return null;
+  }
 
-  const cacheKey = `${apiKey}:${baseUrl ?? ""}`;
+  const cacheKey = `${apiKey}:${baseUrl}`;
   const cached = clientSlot.get();
   if (cached && cached.key === cacheKey) return cached.client;
 
-  const client = new OpenAI({ apiKey, ...(baseUrl ? { baseURL: baseUrl } : {}) });
+  const client = new OpenAI({ apiKey, baseURL: baseUrl });
   clientSlot.set({ client, key: cacheKey });
   return client;
 }

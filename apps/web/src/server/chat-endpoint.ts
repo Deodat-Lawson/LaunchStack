@@ -31,11 +31,19 @@ export interface AppChatModelEnvironment {
   AI_BASE_URL?: string;
   /** @deprecated Pre-PR name for CHAT_API_KEY. */
   AI_API_KEY?: string;
-  /** @deprecated Pre-PR OpenRouter selection. */
+  /**
+   * Read only to explain a failure. A bare credential no longer selects an
+   * endpoint: there are no built-in vendor URLs, so a key on its own says
+   * nothing about where to send the request. See {@link BARE_CREDENTIALS}.
+   */
   OPENROUTER_API_KEY?: string;
-  /** @deprecated Pre-PR OpenAI selection. */
   OPENAI_API_KEY?: string;
-  /** @deprecated Pre-PR Ollama selection. */
+  /**
+   * Declared because the environment still carries it — it configures the
+   * Ollama *embeddings* provider — but deliberately ignored for chat. Ollama
+   * speaks the OpenAI chat-completions protocol, so it is reached through
+   * CHAT_BASE_URL like every other endpoint.
+   */
   OLLAMA_BASE_URL?: string;
   /** @deprecated Model selection moved to the configuration file. */
   OPENROUTER_MODEL?: string;
@@ -44,8 +52,6 @@ export interface AppChatModelEnvironment {
 }
 
 export const DEFAULT_CHAT_CONFIG_PATH = "config/chat-models.yaml";
-const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
-const OPENAI_BASE_URL = "https://api.openai.com/v1";
 
 export function trimmed(value: string | undefined): string | undefined {
   const text = value?.trim();
@@ -53,79 +59,43 @@ export function trimmed(value: string | undefined): string | undefined {
 }
 
 /**
- * Map documented pre-PR variables onto the single endpoint — but only when
- * they unambiguously describe one.
+ * Credentials that used to imply a vendor's URL. They no longer do — the
+ * mapping key-to-endpoint is exactly the vendor lock-in this module exists to
+ * avoid, and a built-in default silently decides on the operator's behalf
+ * where their prompts and their key are sent. Listed here only so
+ * {@link resolveChatEndpoint} can say why a key alone was not enough.
+ */
+const BARE_CREDENTIALS = ["OPENROUTER_API_KEY", "OPENAI_API_KEY"] as const;
+
+/**
+ * Map the one surviving pre-PR alias onto the endpoint.
  *
- * Two *chat* endpoints configured at once used to mean "pick one at runtime";
- * under a single endpoint it has no meaning, so it is an error rather than a
- * guess. A credential is only ever paired with its own service's URL:
- * borrowing, say, OPENAI_API_KEY for an OpenRouter base URL would ship
- * someone's key to the wrong company.
+ * `AI_BASE_URL`/`AI_API_KEY` are a straight rename of `CHAT_BASE_URL`/
+ * `CHAT_API_KEY`: the operator writes the URL either way, so translating them
+ * infers nothing.
  *
- * OPENAI_API_KEY is deliberately the lowest-priority signal, because unlike
- * the others it has a documented second job: it is the credential for
- * embeddings, OCR/VLM enrichment, and chunking. "OpenRouter for chat, OpenAI
- * for embeddings" is a recommended pairing, so its presence alongside a real
- * chat variable is not a conflict — it is that other job. It names the chat
- * endpoint only when nothing else does.
+ * No variable names a *provider*. Ollama, OpenRouter and OpenAI all serve the
+ * OpenAI chat-completions protocol, so each is reached through CHAT_BASE_URL
+ * like any other endpoint. A per-vendor variable bought only a vendor to
+ * maintain — and, for the two that mapped a bare key to a URL, a destination
+ * chosen on the operator's behalf.
  */
 export function translateLegacyEndpoint(
   server: AppChatModelEnvironment,
 ): { endpoint: ChatEndpointConfig; deprecation?: string } | undefined {
-  const candidates: { endpoint: ChatEndpointConfig; source: string }[] = [];
+  const baseUrl = trimmed(server.AI_BASE_URL);
+  if (!baseUrl) return undefined;
 
-  const aiBaseUrl = trimmed(server.AI_BASE_URL);
-  if (aiBaseUrl) {
-    candidates.push({
-      endpoint: { baseUrl: aiBaseUrl, apiKey: trimmed(server.AI_API_KEY) },
-      source: "AI_BASE_URL/AI_API_KEY",
-    });
-  }
-
-  const openRouterKey = trimmed(server.OPENROUTER_API_KEY);
-  if (openRouterKey) {
-    candidates.push({
-      endpoint: { baseUrl: OPENROUTER_BASE_URL, apiKey: openRouterKey },
-      source: "OPENROUTER_API_KEY",
-    });
-  }
-
-  const ollamaBaseUrl = trimmed(server.OLLAMA_BASE_URL);
-  if (ollamaBaseUrl) {
-    candidates.push({
-      // Ollama's OpenAI-compatible surface lives under /v1 and needs no key.
-      endpoint: {
-        baseUrl: ollamaBaseUrl.replace(/\/+$/, "").endsWith("/v1")
-          ? ollamaBaseUrl.replace(/\/+$/, "")
-          : `${ollamaBaseUrl.replace(/\/+$/, "")}/v1`,
-      },
-      source: "OLLAMA_BASE_URL",
-    });
-  }
-
-  if (candidates.length > 1) {
-    throw new ChatConfigurationError(
-      `Deprecated chat variables describe more than one endpoint (${candidates.map((c) => c.source).join(", ")}). ` +
-        `This release serves one endpoint: set CHAT_BASE_URL (and CHAT_API_KEY if required) and remove the others.`,
-    );
-  }
-
-  // Fallback only — see the note above on OPENAI_API_KEY's second job.
-  const openAiKey = trimmed(server.OPENAI_API_KEY);
-  if (candidates.length === 0 && openAiKey) {
-    candidates.push({
-      endpoint: { baseUrl: OPENAI_BASE_URL, apiKey: openAiKey },
-      source: "OPENAI_API_KEY",
-    });
-  }
-
-  const only = candidates[0];
-  if (!only) return undefined;
+  const endpoint: ChatEndpointConfig = {
+    baseUrl,
+    apiKey: trimmed(server.AI_API_KEY),
+  };
   return {
-    endpoint: only.endpoint,
+    endpoint,
     deprecation:
-      `[chat] ${only.source} is deprecated and will be removed next release. ` +
-      `Set CHAT_BASE_URL=${only.endpoint.baseUrl}${only.endpoint.apiKey ? " and CHAT_API_KEY" : ""} instead.`,
+      "[chat] AI_BASE_URL/AI_API_KEY are deprecated and will be removed next " +
+      `release. Set CHAT_BASE_URL=${baseUrl}` +
+      `${endpoint.apiKey ? " and CHAT_API_KEY" : ""} instead.`,
   };
 }
 
@@ -140,9 +110,15 @@ export function resolveChatEndpoint(
 
   const legacy = translateLegacyEndpoint(server);
   if (!legacy) {
+    const bare = BARE_CREDENTIALS.filter((name) => trimmed(server[name]));
     throw new ChatConfigurationError(
       "CHAT_BASE_URL is not set. Point it at an OpenAI-compatible chat endpoint " +
-        "(and set CHAT_API_KEY when that endpoint requires a credential).",
+        "(and set CHAT_API_KEY when that endpoint requires a credential)." +
+        (bare.length
+          ? ` ${bare.join(" and ")} ${bare.length > 1 ? "are" : "is"} set, but a credential ` +
+            "no longer selects an endpoint — there is no built-in default URL. " +
+            "Set CHAT_BASE_URL explicitly."
+          : ""),
     );
   }
   if (legacy.deprecation) console.warn(legacy.deprecation);

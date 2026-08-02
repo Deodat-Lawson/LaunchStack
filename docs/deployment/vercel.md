@@ -84,7 +84,8 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `S3_*` + `NEXT_PUBLIC_S3_*` | If `NEXT_PUBLIC_STORAGE_PROVIDER=s3` |
 | `NEO4J_URI` + `NEO4J_USERNAME` + `NEO4J_PASSWORD` | If using Graph RAG |
 | `ADEU_SERVICE_URL` | If using DOCX redlining (Adeu sidecar) |
-| `OPENAI_API_KEY`, `AI_API_KEY`, or per-capability keys | If enabled embeddings, reranking, NER, or transcription do not use a local provider |
+| `AI_BASE_URL`, or a per-capability `*_API_BASE_URL` | If enabled embeddings, reranking, or NER do not use a local provider. **Required** — there is no built-in default endpoint, so a key on its own is a hard error, not a fall-back to OpenAI |
+| `AI_API_KEY`, `OPENAI_API_KEY`, or per-capability keys | The credential for the base URL above, when that endpoint requires one |
 
 OpenRouter is a convenient quick start, not a requirement — any endpoint
 implementing the OpenAI chat-completions protocol works. Vercel cannot host a

@@ -32,10 +32,9 @@ export class LLMNERProvider implements NERProvider {
     private model: string;
 
     constructor() {
-        const baseURL = resolveBaseUrl(
-            process.env.NER_API_BASE_URL,
-            "https://api.openai.com/v1",
-        );
+        // No default: this provider works against any OpenAI-compatible
+        // endpoint, so the operator names it.
+        const baseURL = resolveBaseUrl(process.env.NER_API_BASE_URL);
         const apiKey = resolveApiKey(
             process.env.NER_API_KEY,
             process.env.OPENAI_API_KEY,

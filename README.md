@@ -32,7 +32,7 @@ pnpm install
 cp .env.example .env
 ```
 
-`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL`, `CLERK_SECRET_KEY`, and one OpenAI-compatible chat endpoint — set `CHAT_BASE_URL` (plus `CHAT_API_KEY` when that endpoint needs a credential). The pre-existing `AI_BASE_URL`, `OPENROUTER_API_KEY`, `OLLAMA_BASE_URL` and `OPENAI_API_KEY` are still translated into that one endpoint for a release, with a deprecation warning; setting two of them at once is an error. See [Chat models](#chat-models).
+`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL`, `CLERK_SECRET_KEY`, and one OpenAI-compatible chat endpoint — set `CHAT_BASE_URL` (plus `CHAT_API_KEY` when that endpoint needs a credential). There is no built-in default endpoint and no per-vendor variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY` or `OLLAMA_BASE_URL` will *not* configure chat. A key names who you are, not where the request goes — and every one of those providers speaks the same OpenAI chat-completions protocol, so each is reached through `CHAT_BASE_URL` like any other. Only `AI_BASE_URL`/`AI_API_KEY`, a straight rename of the canonical pair, is still translated for a release with a deprecation warning. See [Chat models](#chat-models).
 
 ### With Docker (recommended)
 

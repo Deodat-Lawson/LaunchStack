@@ -14,6 +14,7 @@ import {
   Copy,
   ExternalLink,
   FileText,
+  Gauge,
   Hash,
   Loader2,
   Megaphone,
@@ -1078,6 +1079,54 @@ export function MarketingPipelineWorkspace({
 
   const hasSessions = sessions.length > 0;
 
+  // ── Quality evaluation (LLM-as-judge; raw scores, no rewrite) ──
+  interface EvalScore {
+    criterion: string;
+    score: number;
+    rationale: string;
+  }
+  interface EvalResult {
+    overall: number;
+    summary: string;
+    scores: EvalScore[];
+    judgeModel: string;
+    rubricVersion: string;
+  }
+  const [evaluating, setEvaluating] = useState(false);
+  const [evalResult, setEvalResult] = useState<EvalResult | null>(null);
+  const [evalError, setEvalError] = useState<string | null>(null);
+
+  const evaluatePost = async () => {
+    if (!editableMessage.trim() || !result) return;
+    setEvaluating(true);
+    setEvalError(null);
+    setEvalResult(null);
+    try {
+      const res = await fetch("/api/marketing-pipeline/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: editableMessage,
+          platform: result.platform,
+        }),
+      });
+      const json = (await res.json()) as {
+        success?: boolean;
+        data?: EvalResult;
+        message?: string;
+        error?: string;
+      };
+      if (!res.ok || !json.success || !json.data) {
+        throw new Error(json.error ?? json.message ?? "Evaluation failed");
+      }
+      setEvalResult(json.data);
+    } catch (err) {
+      setEvalError(err instanceof Error ? err.message : "Evaluation failed");
+    } finally {
+      setEvaluating(false);
+    }
+  };
+
   const handleNewCampaignClick = () => {
     if (result) {
       setConfirmNewCampaign(true);
@@ -1444,6 +1493,20 @@ export function MarketingPipelineWorkspace({
                           </button>
                           <button
                             type="button"
+                            className={styles.actionSecondary}
+                            onClick={() => void evaluatePost()}
+                            disabled={!editableMessage.trim() || evaluating}
+                            title="Score this post's quality with the evaluation pipeline"
+                          >
+                            {evaluating ? (
+                              <Loader2 size={14} className={styles.spinIcon} />
+                            ) : (
+                              <Gauge size={14} />
+                            )}
+                            {evaluating ? "Scoring…" : "Evaluate quality"}
+                          </button>
+                          <button
+                            type="button"
                             className={styles.actionPrimary}
                             onClick={() => void publishPost()}
                             disabled={!editableMessage.trim() || publishing}
@@ -1459,6 +1522,134 @@ export function MarketingPipelineWorkspace({
                               : `Publish to ${PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? "platform"}`}
                           </button>
                         </div>
+
+                        {evalError && (
+                          <div
+                            role="status"
+                            style={{
+                              marginTop: 10,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              fontSize: 13,
+                              color: "#b91c1c",
+                            }}
+                          >
+                            <AlertCircle size={15} />
+                            <span>{evalError}</span>
+                          </div>
+                        )}
+
+                        {evalResult && (
+                          <div
+                            style={{
+                              marginTop: 12,
+                              padding: 14,
+                              borderRadius: 10,
+                              border: "1px solid var(--border-color, #e5e7eb)",
+                              background: "var(--bg-secondary, #f9fafb)",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "baseline",
+                                justifyContent: "space-between",
+                                marginBottom: 10,
+                              }}
+                            >
+                              <span
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 8,
+                                  fontSize: 14,
+                                  fontWeight: 700,
+                                }}
+                              >
+                                <Gauge size={16} />
+                                Quality score
+                              </span>
+                              <span style={{ fontSize: 22, fontWeight: 800, color: "#000" }}>
+                                {Math.round(evalResult.overall)}
+                                <span
+                                  style={{
+                                    fontSize: 13,
+                                    fontWeight: 600,
+                                    color: "var(--text-muted, #6b7280)",
+                                  }}
+                                >
+                                  /100
+                                </span>
+                              </span>
+                            </div>
+                            <div style={{ display: "grid", gap: 6, marginBottom: 10 }}>
+                              {evalResult.scores.map((s) => (
+                                <div
+                                  key={s.criterion}
+                                  title={s.rationale}
+                                  style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "150px 1fr 34px",
+                                    alignItems: "center",
+                                    gap: 8,
+                                    fontSize: 12,
+                                  }}
+                                >
+                                  <span style={{ color: "var(--text-muted, #6b7280)" }}>
+                                    {s.criterion.replace(/_/g, " ")}
+                                  </span>
+                                  <span
+                                    style={{
+                                      height: 6,
+                                      borderRadius: 3,
+                                      background: "var(--border-color, #e5e7eb)",
+                                      position: "relative",
+                                      overflow: "hidden",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        width: `${Math.max(0, Math.min(100, s.score))}%`,
+                                        background: "var(--accent-color, #6366f1)",
+                                        borderRadius: 3,
+                                      }}
+                                    />
+                                  </span>
+                                  <span
+                                    className="mono"
+                                    style={{ textAlign: "right", fontSize: 11, color: "#000" }}
+                                  >
+                                    {Math.round(s.score)}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                            {evalResult.summary && (
+                              <div
+                                style={{
+                                  fontSize: 12.5,
+                                  color: "var(--text-muted, #6b7280)",
+                                  lineHeight: 1.5,
+                                  marginBottom: 6,
+                                }}
+                              >
+                                {evalResult.summary}
+                              </div>
+                            )}
+                            <div
+                              style={{
+                                fontSize: 11,
+                                color: "var(--text-muted, #6b7280)",
+                              }}
+                            >
+                              judge {evalResult.judgeModel} · rubric{" "}
+                              {evalResult.rubricVersion}
+                            </div>
+                          </div>
+                        )}
 
                         {publishResult && (
                           <div

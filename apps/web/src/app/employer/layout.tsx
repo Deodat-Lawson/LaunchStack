@@ -3,6 +3,7 @@ import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
 import { DriftShell } from "./_chrome/DriftShell";
 import { EmployerWorkspaceSwitcherProvider } from "./_chrome/EmployerWorkspaceSwitcherContext";
 import { getWorkspaceSwitcherPayload } from "./_chrome/getWorkspaceSwitcherPayload";
+import { Toaster } from "./documents/components/ui/sonner";
 
 export default async function EmployerLayout({ children }: { children: ReactNode }) {
   const workspaceSwitcher = await getWorkspaceSwitcherPayload();
@@ -19,6 +20,7 @@ export default async function EmployerLayout({ children }: { children: ReactNode
       <EmployerWorkspaceSwitcherProvider value={workspaceSwitcher}>
         <DriftShell>{children}</DriftShell>
       </EmployerWorkspaceSwitcherProvider>
+      <Toaster richColors position="top-right" />
     </div>
   );
 }

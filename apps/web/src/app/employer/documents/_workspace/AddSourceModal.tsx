@@ -56,40 +56,56 @@ export interface AddSourceModalProps {
 }
 
 interface UploadResult {
-  objectKey: string;
-  bucket: string;
   url: string;
+  provider: "s3" | "database";
+  pathname?: string;
 }
 
+// Uses the provider-agnostic /api/upload-local route so uploads work whether the
+// app is configured for S3 or database storage (NEXT_PUBLIC_STORAGE_PROVIDER).
+// The old /api/storage/upload path 400s whenever storage isn't S3.
 async function uploadFileToStorage(file: File): Promise<UploadResult> {
   const form = new FormData();
   form.append("file", file);
-  const res = await fetch("/api/storage/upload", { method: "POST", body: form });
+  const res = await fetch("/api/upload-local", { method: "POST", body: form });
   if (!res.ok) {
     const body = (await res.json().catch(() => ({}))) as { error?: string };
     throw new Error(body.error ?? `Upload failed (HTTP ${res.status})`);
   }
-  return (await res.json()) as UploadResult;
+  const data = (await res.json()) as {
+    url: string;
+    provider?: "s3" | "database";
+    pathname?: string;
+  };
+  return {
+    url: data.url,
+    provider: data.provider === "s3" ? "s3" : "database",
+    pathname: data.pathname,
+  };
 }
 
 async function registerDocument(params: {
   userId: string;
   file: File;
   url: string;
-  objectKey: string;
+  provider: "s3" | "database";
+  pathname?: string;
   category: string;
 }): Promise<void> {
-  const body = {
+  const body: Record<string, unknown> = {
     userId: params.userId,
     documentName: params.file.name,
     category: params.category,
     documentUrl: params.url,
-    storageType: "s3" as const,
+    storageType: params.provider,
     mimeType: params.file.type || "application/octet-stream",
     originalFilename: params.file.name,
-    storageProvider: "s3",
-    storagePathname: params.objectKey,
   };
+  // S3 registrations also carry the object key so /api/files can resolve them.
+  if (params.provider === "s3" && params.pathname) {
+    body.storageProvider = "s3";
+    body.storagePathname = params.pathname;
+  }
   const res = await fetch("/api/uploadDocument", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -117,7 +133,8 @@ async function uploadAndRegisterAll(params: {
         userId: params.userId,
         file,
         url: up.url,
-        objectKey: up.objectKey,
+        provider: up.provider,
+        pathname: up.pathname,
         category: params.category,
       });
       successes++;
@@ -1226,7 +1243,8 @@ function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
         userId,
         file,
         url: up.url,
-        objectKey: up.objectKey,
+        provider: up.provider,
+        pathname: up.pathname,
         category,
       });
       toast.success(`"${safeTitle}" added to "${category}"`);

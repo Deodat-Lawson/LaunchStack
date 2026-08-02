@@ -74,6 +74,11 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
+# The chat model configuration is read at runtime, not bundled by the
+# standalone build. docker-compose bind-mounts it read-only over this path so
+# it stays editable without a rebuild; shipping it as well is what lets the
+# image run on its own, which is the point of having a default endpoint at all.
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/config ./apps/web/config
 
 USER nextjs
 

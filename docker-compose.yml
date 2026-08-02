@@ -106,11 +106,15 @@ services:
     container_name: pdr_ai_v2-ocr-router
     restart: unless-stopped
     environment:
-      # AI vision — used for OpenAI-based document classification (optional)
+      # AI vision for document classification (optional — falls back to local
+      # SigLIP when no credential is set). The endpoint defaults to Gemini, so
+      # GOOGLE_AI_API_KEY is the credential that pairs with it; the other two
+      # are used only when AI_BASE_URL names a different endpoint.
+      GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       AI_API_KEY: ${AI_API_KEY:-}
       AI_BASE_URL: ${AI_BASE_URL:-}
-      OCR_VISION_MODEL: ${OCR_VISION_MODEL:-gpt-4o-mini}
+      OCR_VISION_MODEL: ${OCR_VISION_MODEL:-}
     ports:
       - "8002:8002"
     healthcheck:

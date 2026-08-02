@@ -96,6 +96,10 @@
     "./marketing-pipeline": {
       "types": "./src/marketing-pipeline/index.ts",
       "default": "./src/marketing-pipeline/index.ts"
+    },
+    "./marketing-pipeline/benchmark": {
+      "types": "./src/marketing-pipeline/benchmark/index.ts",
+      "default": "./src/marketing-pipeline/benchmark/index.ts"
     }
   },
   "scripts": {

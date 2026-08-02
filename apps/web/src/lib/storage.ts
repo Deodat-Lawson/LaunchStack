@@ -129,7 +129,12 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
 
 async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
   try {
-    const { db } = await import("~/server/db");
+    // Use getEngine().db (hoisted fn) rather than the ~/server/db Proxy const:
+    // lib/storage sits inside the server/db → engine → storage/port → lib/storage
+    // cycle, so a dynamic import of the un-hoisted `db` const can resolve to
+    // undefined mid-init. getEngine() is immune (function declaration).
+    const { getEngine } = await import("~/server/engine");
+    const db = getEngine().db;
     const { fileUploads } = await import("@launchstack/core/db/schema");
 
     const body = toBuffer(input.data);
@@ -226,7 +231,12 @@ export async function deleteFile(
     if (!match?.[1]) return;
     const id = parseInt(match[1], 10);
     if (isNaN(id)) return;
-    const { db } = await import("~/server/db");
+    // Use getEngine().db (hoisted fn) rather than the ~/server/db Proxy const:
+    // lib/storage sits inside the server/db → engine → storage/port → lib/storage
+    // cycle, so a dynamic import of the un-hoisted `db` const can resolve to
+    // undefined mid-init. getEngine() is immune (function declaration).
+    const { getEngine } = await import("~/server/engine");
+    const db = getEngine().db;
     const { fileUploads } = await import("@launchstack/core/db/schema");
     const { eq } = await import("drizzle-orm");
     await db.delete(fileUploads).where(eq(fileUploads.id, id));

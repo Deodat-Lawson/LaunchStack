@@ -199,7 +199,7 @@ await engine.close();   // graceful shutdown
 ### Chat models
 
 Chat reaches **one endpoint** that implements the OpenAI chat-completions
-protocol — OpenAI, OpenRouter, MiniMax, Together, Groq, vLLM, llama.cpp, LM
+protocol — Google Gemini (the default), OpenRouter, MiniMax, vLLM, llama.cpp, LM
 Studio, Ollama's `/v1` surface, and most gateways all qualify. Point
 `CHAT_BASE_URL` at it and give it a credential if it needs one:
 

@@ -59,8 +59,6 @@ export interface AppChatModelEnvironment {
    */
   OLLAMA_BASE_URL?: string;
   /** @deprecated Model selection moved to the configuration file. */
-  OPENROUTER_MODEL?: string;
-  /** @deprecated Model selection moved to the configuration file. */
   CHAT_MODEL?: string;
 }
 
@@ -185,7 +183,7 @@ export function resolveChatEndpoint(
  * Pre-PR variables that used to choose a *model*. Model ids now live in the
  * configuration file, so these are inert — and an inert variable that used to
  * work is worth a warning, not silence: an operator who set
- * `OPENROUTER_MODEL=vendor/x` and still sees a different model answering
+ * `CHAT_MODEL=some-model` and still sees a different model answering
  * deserves to be told why rather than left to guess.
  */
 const IGNORED_MODEL_VARIABLES = [
@@ -196,8 +194,6 @@ const IGNORED_MODEL_VARIABLES = [
   "CHAT_REASONING_MODEL",
   "CHAT_VISION_MODEL",
   "CHAT_STRUCTURED_MODEL",
-  "OPENROUTER_MODEL",
-  "ANTHROPIC_MODEL",
   "GOOGLE_MODEL",
 ] as const;
 

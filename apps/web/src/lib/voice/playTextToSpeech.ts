@@ -15,16 +15,6 @@ interface PlayTextToSpeechParams {
   ttsStartedAtRef: MutableRefObject<number>;
 }
 
-const canUseMediaSourceStreaming = (): boolean => {
-  if (typeof window === "undefined") return false;
-  const ua = navigator.userAgent;
-  const isFirefox = ua.includes("Firefox");
-  const isMac = ua.includes("Mac OS");
-  if (isFirefox && isMac) return false;
-  if (typeof MediaSource !== "undefined" && MediaSource.isTypeSupported("audio/mpeg")) return true;
-  return false;
-};
-
 export async function playTextToSpeech({
   text,
   audioRef,
@@ -91,59 +81,19 @@ export async function playTextToSpeech({
       };
     };
 
-    if (canUseMediaSourceStreaming()) {
-      const mediaSource = new MediaSource();
-      const audio = new Audio();
-      audioRef.current = audio;
+    // One buffered response, not a stream. Speech generation returns the whole
+    // clip in a single reply, so there is nothing to feed a MediaSource
+    // incrementally — and the previous streaming path hardcoded `audio/mpeg`,
+    // which no longer describes what this endpoint sends.
+    const audioBlob = await response.blob();
+    const audioUrl = URL.createObjectURL(audioBlob);
 
-      const mediaSourceUrl = URL.createObjectURL(mediaSource);
-      audio.src = mediaSourceUrl;
-      setupAudioHandlers(audio, mediaSourceUrl);
+    const audio = new Audio(audioUrl);
+    audioRef.current = audio;
+    setupAudioHandlers(audio, audioUrl);
 
-      mediaSource.addEventListener("sourceopen", () => {
-        void (async () => {
-          try {
-            const sourceBuffer = mediaSource.addSourceBuffer("audio/mpeg");
-            const reader = response.body!.getReader();
-
-            const pump = async (): Promise<void> => {
-              const { done, value } = await reader.read();
-              if (done) {
-                if (mediaSource.readyState === "open") mediaSource.endOfStream();
-                return;
-              }
-              if (sourceBuffer.updating) {
-                await new Promise<void>((resolve) => {
-                  sourceBuffer.addEventListener("updateend", () => resolve(), { once: true });
-                });
-              }
-              sourceBuffer.appendBuffer(value);
-              await new Promise<void>((resolve) => {
-                sourceBuffer.addEventListener("updateend", () => resolve(), { once: true });
-              });
-              return pump();
-            };
-
-            await pump();
-          } catch (err) {
-            console.error("❌ [Voice] Error streaming audio:", err);
-            if (mediaSource.readyState === "open") mediaSource.endOfStream("decode");
-          }
-        })();
-      });
-
-      ttsStartedAtRef.current = performance.now();
-      await audio.play();
-    } else {
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-
-      const audio = new Audio(audioUrl);
-      audioRef.current = audio;
-      setupAudioHandlers(audio, audioUrl);
-
-      await audio.play();
-    }
+    ttsStartedAtRef.current = performance.now();
+    await audio.play();
   } catch (error) {
     console.error("Error playing audio:", error);
     setIsPlayingAudio(false);

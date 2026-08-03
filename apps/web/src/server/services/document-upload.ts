@@ -207,7 +207,7 @@ export async function processDocumentUpload({
       });
 
       const transcriptionMetadata = {
-        source: "whisper",
+        source: "transcription",
         audioFilename: originalFilename || documentName,
         audioDocumentId: audioDocument.id,
         audioUrl: resolvedDocumentUrl,
@@ -361,7 +361,7 @@ export async function processVideoUrlUpload({
 
   console.log(`[DocumentUpload] Video URL detected: ${videoUrl}, downloading & transcribing...`);
 
-  // 1. Transcribe via sidecar (downloads audio with yt-dlp, then runs Whisper)
+  // 1. Transcribe via the self-hosted sidecar (downloads audio with yt-dlp)
   const transcriptionResult = await transcribeVideoFromUrl(videoUrl);
 
   const documentName = title || transcriptionResult.title || "Video Transcription";
@@ -374,7 +374,7 @@ export async function processVideoUrlUpload({
   });
 
   const transcriptionMetadata = {
-    source: "whisper-ytdlp",
+    source: "sidecar-ytdlp",
     videoTitle: transcriptionResult.title,
     videoDuration: transcriptionResult.duration,
     videoUrl,

@@ -140,7 +140,7 @@ The Launchstack Python sidecars (`services/sidecar`, `services/ocr-router`, `ser
 | `OCR_ROUTER_URL` | PDF-rendering + vision classifier (`services/ocr-router`) |
 | `OCR_WORKER_URL` | Docling/Marker worker (optional) |
 
-**Or** skip sidecars entirely and use cloud providers: OpenAI embeddings, Azure Document Intelligence for OCR, Groq for transcription. Set the per-capability env vars instead.
+**Or** skip sidecars entirely and use hosted providers. Transcription, reranking, NER and OCR/VLM all default to Gemini on `GOOGLE_AI_API_KEY`; Azure Document Intelligence remains available for scanned-layout OCR. Embeddings are the exception — set `EMBEDDING_API_BASE_URL`/`EMBEDDING_API_KEY` explicitly, since the model is tied to stored vectors.
 
 ## 6. First deploy
 

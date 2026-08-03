@@ -67,14 +67,16 @@ export async function searchNotes(
   const trimmed = query.trim();
   if (!trimmed) return [];
 
+  // Both halves or neither — an endpoint without a key, or a key without an
+  // endpoint, would let the SDK fall back to its own vendor default.
   const { apiKey, baseURL } = resolveEmbeddingConfig();
-  if (!apiKey) return [];
+  if (!apiKey || !baseURL) return [];
 
   const client = new OpenAIEmbeddings({
     openAIApiKey: apiKey,
     modelName: EMBEDDING_MODEL,
     dimensions: EMBEDDING_DIM,
-    ...(baseURL ? { configuration: { baseURL } } : {}),
+    configuration: { baseURL },
   });
 
   const embedding = await client.embedQuery(trimmed);

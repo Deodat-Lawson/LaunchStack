@@ -77,6 +77,46 @@ export const GEMINI_FAST_MODEL = "gemini-2.5-flash-lite";
  */
 export const GEMINI_EMBEDDING_MODEL = "gemini-embedding-001";
 
+/**
+ * The *native* Gemini API root, for capabilities the OpenAI-compatibility
+ * layer does not expose.
+ *
+ * That layer serves `/chat/completions`, `/embeddings`, `/images/generations`,
+ * `/videos` and `/models` — and nothing else. Speech generation has no
+ * OpenAI-shaped equivalent anywhere in Google's stack, so it is reached here
+ * instead. Everything else should keep going through {@link GEMINI_BASE_URL};
+ * reach for this only when the compatibility layer genuinely cannot serve the
+ * capability.
+ */
+export const GEMINI_NATIVE_BASE_URL =
+  "https://generativelanguage.googleapis.com/v1beta";
+
+/**
+ * Speech generation model.
+ *
+ * Preview, not GA — Google labels every Gemini TTS model on the Developer API
+ * that way. The GA alternative is Cloud Text-to-Speech (`gemini-2.5-flash-tts`),
+ * which would trade this deployment's single API key for GCP service-account
+ * auth. Preview is the deliberate choice: one credential for the whole stack.
+ */
+export const GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts";
+
+/** One of the 30 prebuilt voices. "Kore" is the neutral, firm default. */
+export const GEMINI_TTS_DEFAULT_VOICE = "Kore";
+
+/**
+ * Speech generation returns raw little-endian signed 16-bit PCM at this rate,
+ * mono. There is no mp3/opus option on this API, so a caller that needs a
+ * container has to add one itself.
+ */
+export const GEMINI_TTS_SAMPLE_RATE = 24_000;
+
+/**
+ * Hard input ceiling for one speech-generation request. Google truncates
+ * silently past this, so callers must refuse rather than emit half a sentence.
+ */
+export const GEMINI_TTS_MAX_INPUT_BYTES = 4_000;
+
 /** The one endpoint every route talks to. */
 export interface ChatEndpointConfig {
   /** Base URL of an OpenAI-compatible `/chat/completions` implementation. */

@@ -4,12 +4,12 @@
  * Resolution order for base URL / API key / model:
  *   1. Per-capability env: RERANK_API_BASE_URL, RERANK_API_KEY, RERANK_MODEL
  *   2. Global fallback:    AI_BASE_URL, AI_API_KEY
- *   3. Legacy keys:        JINA_API_KEY, GROQ_API_KEY, OPENAI_API_KEY
- *   4. Built-in default:   the provider's single host where it has one (Jina,
- *                          Groq); otherwise Gemini's OpenAI-compatible
- *                          endpoint. Reranking and transcription keep their
- *                          own hosts because Google's compat surface serves
- *                          neither /rerank nor /audio/transcriptions.
+ *   3. Built-in default:   Gemini's OpenAI-compatible endpoint.
+ *
+ * Every capability now resolves to one vendor unless the operator names
+ * another, including the two that used to have hosts of their own: reranking
+ * runs on the chat endpoint (Google serves no /rerank) and transcription
+ * passes audio into chat completions (Google serves no /audio/transcriptions).
  *
  * This means a user can set AI_BASE_URL + AI_API_KEY once to route
  * ALL capabilities to one provider (e.g. SiliconFlow), then override
@@ -63,12 +63,12 @@ function getConfig(): ProvidersRegistryConfig {
 // ── Resolve helpers ─────────────────────────────────────────────────
 
 /**
- * `defaultUrl` names the one host a provider can only ever talk to (Jina,
- * Groq). A capability reachable at any OpenAI-compatible endpoint passes
- * nothing and lands on {@link GEMINI_BASE_URL}.
+ * Resolve a capability's endpoint, defaulting to {@link GEMINI_BASE_URL}.
  *
- * That last step is a built-in vendor default. It means a capability the
- * operator never configured still runs — against Google, with whatever key
+ * `defaultUrl` remains for a provider that can only ever talk to one host;
+ * nothing passes it today, because every capability is now reachable at an
+ * arbitrary OpenAI-compatible endpoint. The Gemini fallback means a capability
+ * the operator never configured still runs — against Google, with whatever key
  * `resolveApiKey` found. Set the capability's `*_API_BASE_URL`, or
  * `providers.aiBaseUrl` on the host, to send it elsewhere.
  */

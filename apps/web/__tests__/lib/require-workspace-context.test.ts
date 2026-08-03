@@ -142,7 +142,7 @@ describe("requireWorkspaceContext", () => {
     }
   });
 
-  it("falls back to default company when cookie points to non-member company", async () => {
+  it("returns 403 when the resolved default company has no membership", async () => {
     mockAuth.mockResolvedValue({ userId: "clerk_abc" });
     setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
     mockResolveActiveCompanyForUser.mockResolvedValue(BigInt(10));
@@ -150,10 +150,11 @@ describe("requireWorkspaceContext", () => {
 
     const result = await requireWorkspaceContext();
 
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.companyId).toBe(BigInt(10));
-      expect(result.data.role).toBe("employer");
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const { body, status } = await getJsonAndStatus(result);
+      expect(status).toBe(403);
+      expect(body.error).toBe("Forbidden");
     }
   });
 
@@ -171,17 +172,18 @@ describe("requireWorkspaceContext", () => {
     }
   });
 
-  it("uses users.role when no membership row exists", async () => {
+  it("never falls back to the legacy users.role", async () => {
     mockAuth.mockResolvedValue({ userId: "clerk_abc" });
-    setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employee", status: "verified" }]);
+    setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
     mockResolveActiveCompanyForUser.mockResolvedValue(BigInt(10));
-    setupMembershipQuery([]);
+    setupMembershipQuery([{ role: "editor" }]);
 
     const result = await requireWorkspaceContext();
 
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.data.role).toBe("employee");
+      expect(result.data.role).toBe("editor");
+      expect(result.data.role).not.toBe("employer");
     }
   });
 

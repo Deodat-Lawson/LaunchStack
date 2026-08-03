@@ -16,6 +16,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { UploadAuthorizationError } from "~/server/services/internal-file-ref";
 
 const UploadDocumentSchema = z.object({
   documentUrl: z.string().min(1, "Document URL or path is required"),
@@ -80,6 +81,12 @@ export async function POST(request: Request) {
         { status: 202 },
       );
     } catch (error) {
+      if (error instanceof UploadAuthorizationError) {
+        return NextResponse.json(
+          { error: error.message },
+          { status: error.status },
+        );
+      }
       console.error("[UploadDocument] Error triggering document processing:", error);
       return NextResponse.json(
         { error: "Failed to start document processing" },

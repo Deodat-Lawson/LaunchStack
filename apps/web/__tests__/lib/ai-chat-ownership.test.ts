@@ -1,6 +1,9 @@
 import {
   assertChatOwnedByUser,
   assertTaskOwnedByUser,
+  assertMessageInChat,
+  assertToolCallOwnedByUser,
+  assertToolCallParentsOwnedByUser,
 } from "~/lib/ai-chat-ownership";
 
 const mockLimit = jest.fn();
@@ -82,5 +85,89 @@ describe("ai-chat-ownership", () => {
     if (!result.success) {
       expect(result.response.status).toBe(404);
     }
+  });
+
+  it("assertMessageInChat rejects a message from another chat", async () => {
+    mockLimit.mockResolvedValue([{ id: "m1", chatId: "other-chat" }]);
+
+    const result = await assertMessageInChat("m1", "c1", "user-a");
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.response.status).toBe(404);
+    }
+  });
+
+  it("assertMessageInChat accepts a message from the same chat", async () => {
+    mockLimit.mockResolvedValue([{ id: "m1", chatId: "c1" }]);
+
+    const result = await assertMessageInChat("m1", "c1", "user-a");
+
+    expect(result.success).toBe(true);
+  });
+
+  describe("dual-parent tool calls", () => {
+    it("rejects an owned task paired with a message from another chat", async () => {
+      mockLimit
+        .mockResolvedValueOnce([{ id: "m1", chatId: "chat-foreign" }])
+        .mockResolvedValueOnce([{ id: "t1", chatId: "chat-owned" }]);
+
+      const result = await assertToolCallParentsOwnedByUser(
+        "m1",
+        "t1",
+        "user-a",
+      );
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.response.status).toBe(404);
+      }
+    });
+
+    it("accepts parents that name the same chat", async () => {
+      mockLimit
+        .mockResolvedValueOnce([{ id: "m1", chatId: "chat-owned" }])
+        .mockResolvedValueOnce([{ id: "t1", chatId: "chat-owned" }]);
+
+      const result = await assertToolCallParentsOwnedByUser(
+        "m1",
+        "t1",
+        "user-a",
+      );
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.chatId).toBe("chat-owned");
+      }
+    });
+
+    it("rejects a message the caller does not own even when the task is owned", async () => {
+      mockLimit.mockResolvedValueOnce([]);
+
+      const result = await assertToolCallParentsOwnedByUser(
+        "m1",
+        "t1",
+        "user-a",
+      );
+
+      expect(result.success).toBe(false);
+    });
+
+    it("assertToolCallOwnedByUser rejects a historical mixed-parent row", async () => {
+      mockLimit
+        // the tool call row itself
+        .mockResolvedValueOnce([
+          { id: "tc1", messageId: "m1", taskId: "t1" },
+        ])
+        .mockResolvedValueOnce([{ id: "m1", chatId: "chat-foreign" }])
+        .mockResolvedValueOnce([{ id: "t1", chatId: "chat-owned" }]);
+
+      const result = await assertToolCallOwnedByUser("tc1", "user-a");
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.response.status).toBe(404);
+      }
+    });
   });
 });

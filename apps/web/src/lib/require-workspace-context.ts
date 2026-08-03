@@ -86,7 +86,8 @@ function internalError(): WorkspaceFailure {
  * an error response. Every product API route should call this once at the
  * top of its handler.
  *
- * Only succeeds for **verified** users with a resolvable active company.
+ * Only succeeds for **verified** users who hold a membership in the
+ * resolved company. The role always comes from that membership.
  */
 export async function requireWorkspaceContext(): Promise<WorkspaceContextResult> {
   const { userId: clerkUserId } = await auth();
@@ -141,16 +142,50 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
       ),
     );
 
+  // No membership means no workspace, even when the company came from
+  // `users.companyId`. Falling back to the legacy global `users.role` here
+  // would turn a membership miss into a working context with a role nobody
+  // granted for this tenant.
+  if (!membership) {
+    return forbidden();
+  }
+
   return {
     success: true,
     data: {
       clerkUserId,
       userPk,
       companyId,
-      role: membership?.role ?? user.role,
+      role: membership.role,
       status: user.status,
     },
   };
+}
+
+// ---------------------------------------------------------------------------
+// Role gates
+// ---------------------------------------------------------------------------
+
+/**
+ * Membership roles allowed to manage workspace-wide configuration. Uses the
+ * membership vocabulary (`owner` | `admin` | `editor`), not the legacy global
+ * `users.role` values — editors work on documents, not workspace settings.
+ */
+const MANAGEMENT_ROLES = new Set(["owner", "admin"]);
+
+export function isManagementRole(role: string): boolean {
+  return MANAGEMENT_ROLES.has(role);
+}
+
+/**
+ * 403 response for a caller whose membership role is too low. Returned by
+ * handlers that mutate workspace-wide state.
+ */
+export function forbiddenForRole(): NextResponse {
+  return NextResponse.json(
+    { error: "Forbidden" },
+    { status: 403 },
+  );
 }
 
 // ---------------------------------------------------------------------------

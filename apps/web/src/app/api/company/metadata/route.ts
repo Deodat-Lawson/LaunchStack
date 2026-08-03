@@ -11,7 +11,11 @@ import { z } from "zod";
 import { db } from "~/server/db";
 import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
 import type { MetadataFact, Visibility, Usage } from "@launchstack/features/company-metadata";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    forbiddenForRole,
+    isManagementRole,
+    requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
@@ -73,6 +77,9 @@ export async function PATCH(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+
+        // Canonical metadata and its history are workspace-wide state.
+        if (!isManagementRole(ctx.data.role)) return forbiddenForRole();
 
         const body = await request.json() as unknown;
         const parsed = PatchSchema.safeParse(body);

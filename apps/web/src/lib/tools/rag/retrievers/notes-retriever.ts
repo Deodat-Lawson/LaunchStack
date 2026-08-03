@@ -51,6 +51,8 @@ interface MultiDocConfig extends NotesRetrieverConfig {
 }
 interface UserConfig extends NotesRetrieverConfig {
   userId: string;
+  /** Active workspace — keeps the user's notes from other workspaces out. */
+  companyId: number | string;
   searchScope: "user";
 }
 
@@ -93,7 +95,10 @@ export class NotesRetriever extends BaseRetriever {
     else if (fields.searchScope === "company") this.companyId = fields.companyId;
     else if (fields.searchScope === "multi-document")
       this.documentIds = fields.documentIds;
-    else if (fields.searchScope === "user") this.userId = fields.userId;
+    else if (fields.searchScope === "user") {
+      this.userId = fields.userId;
+      this.companyId = fields.companyId;
+    }
   }
 
   async _getRelevantDocuments(
@@ -178,7 +183,10 @@ export class NotesRetriever extends BaseRetriever {
       return sql`ne.document_id = ANY(${list})`;
     }
     if (this.searchScope === "user" && this.userId) {
-      return sql`ne.user_id = ${this.userId}`;
+      // Legacy rows predate the company stamp and stay visible to their owner,
+      // matching how the notes list and semantic search treat them.
+      const asText = String(this.companyId ?? "");
+      return sql`ne.user_id = ${this.userId} AND (ne.company_id = ${asText} OR ne.company_id IS NULL)`;
     }
     return null;
   }
@@ -224,17 +232,20 @@ export function createMultiDocNotesRetriever(
 }
 
 /**
- * Retrieve notes scoped to a single user — used by Notebook semantic search
- * and Ask My Notes. Pulls freeform (no `documentId`) and anchored notes
- * alike, since both share the same `user_id` filter.
+ * Retrieve notes scoped to a single user within their active workspace —
+ * used by Notebook semantic search and Ask My Notes. Pulls freeform (no
+ * `documentId`) and anchored notes alike, since both share the same
+ * `user_id` filter.
  */
 export function createUserNotesRetriever(
   userId: string,
+  companyId: number | string,
   embeddings: EmbeddingsProvider,
   topK = 5,
 ): NotesRetriever {
   return new NotesRetriever({
     userId,
+    companyId,
     embeddings,
     topK,
     searchScope: "user",

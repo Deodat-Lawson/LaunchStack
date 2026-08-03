@@ -339,6 +339,103 @@ describe("POST /api/uploadDocument", () => {
     expect(triggerDocumentProcessing).not.toHaveBeenCalled();
   });
 
+  // Declaring s3 storage used to keep a foreign /api/files path intact all the
+  // way to the OCR token signer, handing the worker a capability for another
+  // tenant's file.
+  it("rejects an internal file id owned by another workspace", async () => {
+    mockAuthenticatedContext({ companyId: BigInt(5) });
+
+    (validateRequestBody as jest.Mock).mockResolvedValue({
+      success: true,
+      data: {
+        documentName: "Someone else's file",
+        documentUrl: "/api/files/123",
+        storageType: "s3",
+      },
+    });
+
+    const where = jest.fn().mockResolvedValue([{ companyId: BigInt(999) }]);
+    const from = jest.fn().mockReturnValue({ where });
+    (db.select as jest.Mock).mockReturnValueOnce({ from });
+
+    const request = new Request("http://localhost/api/uploadDocument", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        documentName: "Someone else's file",
+        documentUrl: "/api/files/123",
+        storageType: "s3",
+      }),
+    });
+
+    const response = await POST(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(json.error).toBe("File not found in this workspace");
+    expect(db.insert).not.toHaveBeenCalled();
+    expect(triggerDocumentProcessing).not.toHaveBeenCalled();
+  });
+
+  it("accepts an internal file id the workspace owns", async () => {
+    mockAuthenticatedContext({ companyId: BigInt(5) });
+
+    (validateRequestBody as jest.Mock).mockResolvedValue({
+      success: true,
+      data: {
+        documentName: "Our file",
+        documentUrl: "/api/files/123",
+      },
+    });
+
+    const where = jest.fn().mockResolvedValue([{ companyId: BigInt(5) }]);
+    const from = jest.fn().mockReturnValue({ where });
+    (db.select as jest.Mock).mockReturnValueOnce({ from });
+
+    const mockDocument = {
+      id: 5,
+      url: "/api/files/123",
+      title: "Our file",
+      category: "Uncategorized",
+    };
+    (db.insert as jest.Mock)
+      .mockReturnValueOnce({
+        values: jest.fn().mockReturnValue({
+          returning: jest.fn().mockResolvedValue([mockDocument]),
+        }),
+      })
+      .mockReturnValueOnce({
+        values: jest.fn().mockResolvedValue(undefined),
+      });
+    (triggerDocumentProcessing as jest.Mock).mockResolvedValue({
+      jobId: "job-1",
+      eventIds: [],
+    });
+
+    const request = new Request("http://localhost/api/uploadDocument", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        documentName: "Our file",
+        documentUrl: "/api/files/123",
+      }),
+    });
+
+    const response = await POST(request);
+
+    expect(response.status).toBe(202);
+    // Resolved against the request origin so the worker can reach it.
+    expect(triggerDocumentProcessing).toHaveBeenCalledWith(
+      "http://localhost/api/files/123",
+      "Our file",
+      "5",
+      "user-1",
+      mockDocument.id,
+      "Uncategorized",
+      expect.anything(),
+    );
+  });
+
   it("returns validation response when request body is invalid", async () => {
     mockAuthenticatedContext();
 

@@ -22,6 +22,7 @@ import {
 import { embedNoteAsync } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
+import { validateNoteTarget } from "~/server/notes/validate-note-target";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -69,6 +70,15 @@ export async function POST(request: Request) {
       }
 
       const sourceCtx = body.sourceContext ?? {};
+
+      // Validate before spending an LLM call on a source the caller cannot see.
+      const target = await validateNoteTarget({
+        documentId: sourceCtx.documentId,
+        versionId: sourceCtx.versionId,
+        companyId: ctx.data.companyId,
+      });
+      if (!target.ok) return target.response;
+
       const { markdown, suggestedTitle } = await captureFromSelection({
         selection,
         intent,

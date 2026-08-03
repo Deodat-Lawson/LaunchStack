@@ -116,13 +116,17 @@ export async function resolveActiveCompanyForUser(
 /**
  * Same as getActiveCompanyId but also returns the role for the active
  * workspace. Used by routes that gate writes on workspace role.
+ *
+ * Throws when the user holds no membership in the resolved company — the
+ * legacy `users.role` is a global column and says nothing about what the
+ * user may do inside this tenant.
  */
 export async function getActiveCompanyContext(
     clerkUserId: string
 ): Promise<{ companyId: bigint; role: string; userId: bigint }> {
     const companyId = await getActiveCompanyId(clerkUserId);
     const [user] = await db
-        .select({ id: users.id, role: users.role })
+        .select({ id: users.id })
         .from(users)
         .where(eq(users.userId, clerkUserId));
 
@@ -139,9 +143,15 @@ export async function getActiveCompanyContext(
             )
         );
 
+    if (!membership) {
+        throw new Error(
+            `User ${clerkUserId} has no membership in company ${companyId}`
+        );
+    }
+
     return {
         companyId,
-        role: membership?.role ?? user.role,
+        role: membership.role,
         userId: userPkBig,
     };
 }

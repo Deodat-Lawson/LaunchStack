@@ -6,7 +6,10 @@ import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateMessageSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
+import {
+  assertChatOwnedByUser,
+  assertMessageInChat,
+} from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -23,6 +26,15 @@ export async function POST(request: NextRequest) {
 
     const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
     if (!owned.success) return owned.response;
+
+    if (parentMessageId) {
+      const parent = await assertMessageInChat(
+        parentMessageId,
+        chatId,
+        ctx.data.clerkUserId,
+      );
+      if (!parent.success) return parent.response;
+    }
 
     const messageId = randomUUID();
 

@@ -8,6 +8,7 @@ import { embedNoteAsync } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { searchNotes } from "~/server/notes/search";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
+import { validateNoteTarget } from "~/server/notes/validate-note-target";
 import type { JSONContent } from "@tiptap/react";
 
 export async function GET(request: Request) {
@@ -107,6 +108,13 @@ export async function POST(request: Request) {
     const validation = await validateRequestBody(request, CreateNoteSchema);
     if (!validation.success) return validation.response;
     const body = validation.data;
+
+    const target = await validateNoteTarget({
+      documentId: body.documentId,
+      versionId: body.versionId,
+      companyId: ctx.data.companyId,
+    });
+    if (!target.ok) return target.response;
 
     const versionIdBigint =
       body.versionId !== undefined && body.versionId !== null

@@ -24,12 +24,19 @@ import { mergeCompanyMetadata } from "@launchstack/features/company-metadata";
 import { createEmptyMetadata } from "@launchstack/features/company-metadata";
 import type { CompanyMetadataJSON, MetadataDiff } from "@launchstack/features/company-metadata";
 import { generateStructured } from "~/lib/llm";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    forbiddenForRole,
+    isManagementRole,
+    requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+
+        // Extraction rewrites canonical metadata and appends history.
+        if (!isManagementRole(ctx.data.role)) return forbiddenForRole();
 
         const companyIdBigint = ctx.data.companyId;
         const companyId = String(companyIdBigint);

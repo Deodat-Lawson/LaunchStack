@@ -224,6 +224,10 @@ services:
       # Lets the OCR worker read database-backed /api/files URLs, which
       # otherwise require a Clerk session it does not have.
       FILE_ACCESS_TOKEN_SECRET: ${FILE_ACCESS_TOKEN_SECRET:-}
+      # Bearer token for /api/metrics. This environment block is an explicit
+      # allowlist, so without the passthrough the route fails closed at 503
+      # even when the host .env sets it.
+      METRICS_SCRAPE_TOKEN: ${METRICS_SCRAPE_TOKEN:-}
     ports:
       - "3000:3000"
 

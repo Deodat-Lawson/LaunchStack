@@ -22,8 +22,8 @@ const UNSUPPORTED_TYPE_MESSAGE =
 export async function POST(request: Request) {
   const uploadStart = Date.now();
   try {
-    // Workspace session required. file_uploads has no companyId column yet —
-    // ownership on read is enforced via uploader membership in /api/files/[id].
+    // Workspace session required: the active company is stamped onto the
+    // file_uploads row, and /api/files/[id] reads it back to enforce ownership.
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const userId = ctx.data.clerkUserId;

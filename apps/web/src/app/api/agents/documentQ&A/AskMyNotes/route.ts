@@ -76,6 +76,7 @@ export async function POST(request: Request) {
 
       const retriever = createUserNotesRetriever(
         ctx.data.clerkUserId,
+        String(ctx.data.companyId),
         embeddings,
         topK,
       );

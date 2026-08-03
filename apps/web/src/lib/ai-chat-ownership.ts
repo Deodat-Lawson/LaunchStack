@@ -96,6 +96,58 @@ export async function assertMessageOwnedByUser(
   return { success: true, data: row };
 }
 
+/**
+ * A tool call hangs off a message and optionally off a task. Both are
+ * independent FKs, so each has to be authorized and both have to name the
+ * same chat — otherwise an owned task can be paired with a foreign message,
+ * making that message visible (and later mutable) through the owned parent.
+ */
+export async function assertToolCallParentsOwnedByUser(
+  messageId: string | null | undefined,
+  taskId: string | null | undefined,
+  clerkUserId: string,
+): Promise<OwnedResult<{ chatId: string }>> {
+  if (!messageId && !taskId) return notFound("Tool call");
+
+  let chatId: string | null = null;
+
+  if (messageId) {
+    const owned = await assertMessageOwnedByUser(messageId, clerkUserId);
+    if (!owned.success) return owned;
+    chatId = owned.data.chatId;
+  }
+
+  if (taskId) {
+    const owned = await assertTaskOwnedByUser(taskId, clerkUserId);
+    if (!owned.success) return owned;
+    if (chatId !== null && chatId !== owned.data.chatId) {
+      return notFound("Tool call");
+    }
+    chatId = owned.data.chatId;
+  }
+
+  return { success: true, data: { chatId: chatId! } };
+}
+
+/**
+ * Ownership plus containment: the message must belong to the caller *and*
+ * live in the chat the handler already authorized. Callers that accept a
+ * chatId and a messageId separately need this — checking the chat alone lets
+ * a foreign message ride along on an owned chat.
+ */
+export async function assertMessageInChat(
+  messageId: string,
+  chatId: string,
+  clerkUserId: string,
+): Promise<OwnedResult<{ id: string; chatId: string }>> {
+  const owned = await assertMessageOwnedByUser(messageId, clerkUserId);
+  if (!owned.success) return owned;
+
+  if (owned.data.chatId !== chatId) return notFound("Message");
+
+  return owned;
+}
+
 export async function assertToolCallOwnedByUser(
   toolCallId: string,
   clerkUserId: string,
@@ -112,19 +164,16 @@ export async function assertToolCallOwnedByUser(
 
   if (!toolCall) return notFound("Tool call");
 
-  if (toolCall.taskId) {
-    const owned = await assertTaskOwnedByUser(toolCall.taskId, clerkUserId);
-    if (!owned.success) return owned;
-    return { success: true, data: { id: toolCall.id } };
-  }
+  // Rows written before the dual-parent rule may be malformed; requiring both
+  // parents here keeps them from being mutated through the owned one.
+  const owned = await assertToolCallParentsOwnedByUser(
+    toolCall.messageId,
+    toolCall.taskId,
+    clerkUserId,
+  );
+  if (!owned.success) return owned;
 
-  if (toolCall.messageId) {
-    const owned = await assertMessageOwnedByUser(toolCall.messageId, clerkUserId);
-    if (!owned.success) return owned;
-    return { success: true, data: { id: toolCall.id } };
-  }
-
-  return notFound("Tool call");
+  return { success: true, data: { id: toolCall.id } };
 }
 
 export async function assertStepOwnedByUser(

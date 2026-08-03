@@ -86,14 +86,6 @@ function setupFileQuery(rows: Record<string, unknown>[]) {
   mockDbSelect.mockReturnValueOnce({ from });
 }
 
-function setupOwnershipQuery(owned: boolean) {
-  const limit = jest.fn().mockResolvedValue(owned ? [{ id: BigInt(7) }] : []);
-  const where = jest.fn().mockReturnValue({ limit });
-  const innerJoin = jest.fn().mockReturnValue({ where });
-  const from = jest.fn().mockReturnValue({ innerJoin });
-  mockDbSelect.mockReturnValueOnce({ from });
-}
-
 function request(path: string) {
   return new Request(`http://localhost${path}`);
 }
@@ -132,14 +124,14 @@ describe("GET /api/files/[id]", () => {
     expect(response.status).toBe(404);
   });
 
-  it("falls back to uploader membership for legacy rows without companyId", async () => {
+  it("returns 404 for a row with no company stamp", async () => {
     mockAuthenticated();
     setupFileQuery([DB_FILE_LEGACY]);
-    setupOwnershipQuery(true);
 
     const response = await GET(request("/api/files/123"), params("123"));
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(404);
+    expect(mockDbSelect).toHaveBeenCalledTimes(1);
   });
 
   it("serves the file to a caller holding a valid token (skips ownership)", async () => {

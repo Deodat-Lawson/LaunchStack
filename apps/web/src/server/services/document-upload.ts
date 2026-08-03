@@ -17,6 +17,7 @@ import {
   toAbsoluteUrl,
   type StorageType,
 } from "./detect-storage-type";
+import { authorizeInternalFileRef } from "./internal-file-ref";
 import { createDocumentRecord } from "./create-document";
 import { triggerJob } from "./trigger-job";
 import { hasTokens } from "~/lib/credits";
@@ -133,7 +134,18 @@ export async function processDocumentUpload({
   isWebsite,
   embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
-  const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
+  // Throws before anything is created when the URL names a file this
+  // workspace does not own. An internal reference is always database-backed
+  // regardless of what the caller declared — otherwise `storageType: "s3"`
+  // would keep the path unresolved and hand it straight to the token signer.
+  const internalFileId = await authorizeInternalFileRef(
+    rawDocumentUrl,
+    user.companyId,
+  );
+  const storageType: StorageType =
+    internalFileId !== null
+      ? "database"
+      : (explicitStorageType ?? detectStorageType(rawDocumentUrl));
   const resolvedDocumentUrl =
     storageType === "database" ? toAbsoluteUrl(rawDocumentUrl, requestUrl) : rawDocumentUrl;
 

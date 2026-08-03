@@ -4,19 +4,15 @@
  *
  * Auth: accepts a signed file-access token (OCR worker) OR a full workspace
  * session. Token-based requests skip the ownership check; session-based
- * requests verify the file belongs to the caller's company via
- * `file_uploads.company_id` when present, falling back to uploader membership
- * for legacy rows without a company stamp.
+ * requests require `file_uploads.company_id` to match the caller's company.
+ * Rows with no company stamp belong to no known tenant and are denied — see
+ * migration 0016, which backfills every row it can attribute authoritatively.
  */
 
 import { NextResponse } from "next/server";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import {
-  fileUploads,
-  users,
-  userCompanyMemberships,
-} from "@launchstack/core/db/schema";
+import { fileUploads } from "@launchstack/core/db/schema";
 import {
   FILE_ACCESS_TOKEN_PARAM,
   verifyFileAccessToken,
@@ -59,30 +55,6 @@ interface RouteParams {
   params: Promise<{
     id: string;
   }>;
-}
-
-/**
- * Legacy fallback: uploader is a member of the requesting company.
- * Used only when `file_uploads.company_id` is null.
- */
-async function isUploaderInCompany(
-  uploaderClerkId: string,
-  companyId: bigint,
-): Promise<boolean> {
-  const [match] = await db
-    .select({ id: users.id })
-    .from(users)
-    .innerJoin(
-      userCompanyMemberships,
-      and(
-        eq(userCompanyMemberships.userId, users.id),
-        eq(userCompanyMemberships.companyId, companyId),
-      ),
-    )
-    .where(eq(users.userId, uploaderClerkId))
-    .limit(1);
-
-  return Boolean(match);
 }
 
 export async function GET(
@@ -132,11 +104,7 @@ export async function GET(
 
     // Company ownership check for session-based requests.
     if (sessionCompanyId !== null) {
-      const owned =
-        file.companyId != null
-          ? file.companyId === sessionCompanyId
-          : await isUploaderInCompany(file.userId, sessionCompanyId);
-      if (!owned) {
+      if (file.companyId == null || file.companyId !== sessionCompanyId) {
         return NextResponse.json(
           { error: "File not found" },
           { status: 404 },

@@ -151,7 +151,7 @@ describe("OSS OCR Adapters", () => {
       expect(verifyFileAccessToken(token, "124", "worker-secret")).toBe(false);
     });
 
-    it("does not sign URLs that are already absolute", async () => {
+    it("does not sign external absolute URLs", async () => {
       configureOcr({
         workerUrl: WORKER_URL,
         fileAccessTokenSecret: "worker-secret",
@@ -161,6 +161,55 @@ describe("OSS OCR Adapters", () => {
       await createMarkerAdapter().uploadDocument("https://cdn.example.com/doc.pdf");
 
       expect(workerRequestUrl()).toBe("https://cdn.example.com/doc.pdf");
+    });
+
+    // The upload pipeline resolves database-backed URLs to absolute form
+    // before dispatch, so recognizing internal files only in relative URLs
+    // sent every legitimate worker fetch into a 401.
+    it("signs internal file URLs that were already made absolute", async () => {
+      configureOcr({
+        workerUrl: WORKER_URL,
+        appPublicUrl: "http://app:3000",
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      await createMarkerAdapter().uploadDocument("http://app:3000/api/files/123");
+
+      const url = new URL(workerRequestUrl());
+      expect(url.pathname).toBe("/api/files/123");
+      const token = url.searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+      expect(verifyFileAccessToken(token, "123", "worker-secret")).toBe(true);
+    });
+
+    it("mints a fresh token for every fetch", async () => {
+      configureOcr({
+        workerUrl: WORKER_URL,
+        appPublicUrl: "http://app:3000",
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      const adapter = createMarkerAdapter();
+      const realNow = Date.now;
+      let now = realNow();
+      Date.now = () => now;
+      try {
+        await adapter.uploadDocument("/api/files/123");
+        now += 60_000;
+        await adapter.uploadDocument("/api/files/123");
+      } finally {
+        Date.now = realNow;
+      }
+
+      const tokenFor = (call: number) => {
+        const [, init] = (global.fetch as jest.Mock).mock.calls[call];
+        return new URL(JSON.parse(init.body).url).searchParams.get(
+          FILE_ACCESS_TOKEN_PARAM,
+        );
+      };
+
+      expect(tokenFor(0)).not.toBe(tokenFor(1));
     });
   });
 });

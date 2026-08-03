@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull, or } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { documentNotes, noteLinks } from "@launchstack/core/db/schema";
@@ -7,9 +7,9 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /**
  * Incoming references for a note. Returns the source note's id + title +
- * snippet so the Backlinks panel can render compact cards. Filtered by the
- * requester's `userId` on the *source* note to avoid surfacing other users'
- * notes that happen to have linked here.
+ * snippet so the Backlinks panel can render compact cards. Both ends are
+ * scoped to the requester and the active workspace: the target note must be
+ * theirs to read, and source notes from another workspace stay hidden.
  */
 export async function GET(
   _request: Request,
@@ -23,6 +23,27 @@ export async function GET(
     const id = parseInt(noteId, 10);
     if (Number.isNaN(id)) {
       return NextResponse.json({ error: "Invalid note id" }, { status: 400 });
+    }
+
+    const companyIdStr = String(ctx.data.companyId);
+    const inWorkspace = or(
+      eq(documentNotes.companyId, companyIdStr),
+      isNull(documentNotes.companyId),
+    )!;
+
+    const [target] = await db
+      .select({ id: documentNotes.id })
+      .from(documentNotes)
+      .where(
+        and(
+          eq(documentNotes.id, id),
+          eq(documentNotes.userId, ctx.data.clerkUserId),
+          inWorkspace,
+        ),
+      );
+
+    if (!target) {
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
     }
 
     const rows = await db
@@ -43,6 +64,7 @@ export async function GET(
         and(
           eq(noteLinks.targetNoteId, id),
           eq(documentNotes.userId, ctx.data.clerkUserId),
+          inWorkspace,
         ),
       )
       .orderBy(desc(noteLinks.createdAt));

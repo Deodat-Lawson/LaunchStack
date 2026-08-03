@@ -40,6 +40,10 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  authorizeInternalFileRef,
+  UploadAuthorizationError,
+} from "~/server/services/internal-file-ref";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -169,6 +173,21 @@ export async function POST(
         preferredProvider,
         fileSize,
       } = validation.data;
+
+      // A new version can point at an internal file row, which the OCR worker
+      // will later fetch with a signed token. Prove the workspace owns it
+      // before the version exists.
+      try {
+        await authorizeInternalFileRef(documentUrl, doc.companyId);
+      } catch (error) {
+        if (error instanceof UploadAuthorizationError) {
+          return NextResponse.json(
+            { error: error.message },
+            { status: error.status }
+          );
+        }
+        throw error;
+      }
 
       // File type enforcement: exact MIME match against the canonical file_type
       // locked in when the document was first created. Case-insensitive to

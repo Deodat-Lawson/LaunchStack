@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { users, documentViews, document } from "@launchstack/core/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { validateRequestBody, TrackDocumentViewSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
@@ -14,23 +14,22 @@ export async function POST(request: Request) {
         if (!validation.success) return validation.response;
         const { documentId } = validation.data;
 
-        // Verify document exists and belongs to the same company
+        // Scoped in the WHERE clause on purpose: a separate 403 for documents
+        // that exist in another tenant would confirm their ids.
         const [doc] = await db
-            .select()
+            .select({ id: document.id })
             .from(document)
-            .where(eq(document.id, documentId));
+            .where(
+                and(
+                    eq(document.id, documentId),
+                    eq(document.companyId, ctx.data.companyId),
+                )
+            );
 
         if (!doc) {
             return NextResponse.json(
                 { success: false, error: "Document not found" },
                 { status: 404 }
-            );
-        }
-
-        if (doc.companyId !== ctx.data.companyId) {
-            return NextResponse.json(
-                { success: false, error: "Unauthorized to view this document" },
-                { status: 403 }
             );
         }
 

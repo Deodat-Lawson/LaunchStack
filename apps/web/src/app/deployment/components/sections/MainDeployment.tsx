@@ -541,7 +541,7 @@ const QUICKSTART_ENV = `DATABASE_URL="postgresql://user:password@host:5432/db?ss
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_your_key_here
 CLERK_SECRET_KEY=sk_live_your_key_here
 
-# One OpenAI-compatible endpoint — OpenRouter shown, see Chat Models for others.
+# One OpenAI-compatible endpoint — Gemini shown, see Chat Models for others.
 # Model ids and route assignments live in apps/web/config/chat-models.yaml.
 CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
 CHAT_API_KEY=AIza-your_key_here

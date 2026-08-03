@@ -20,7 +20,10 @@ import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
 import { document, ChatHistory } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    isManagementRole,
+    requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 import {
     normalizeModelContent,
     performWebSearch,
@@ -48,8 +51,6 @@ const qaAnnOptimizer = new ANNOptimizer({
     strategy: 'hnsw',
     efSearch: 200
 });
-
-const COMPANY_SCOPE_ROLES = new Set(["employer", "owner"]);
 
 /**
  * Cap on total plaintext pulled from text attachments across a single turn.
@@ -263,12 +264,13 @@ export async function POST(request: Request) {
 
             // Validate company/archive search permissions — company scope
             // always uses the caller's active workspace (ignore body companyId).
+            // Membership roles: owner/admin may search company-wide; editors may not.
             if (searchScope === "company" || searchScope === "archive") {
-                if (!COMPANY_SCOPE_ROLES.has(ctx.data.role)) {
+                if (!isManagementRole(ctx.data.role)) {
                     recordResult("error");
                     return NextResponse.json({
                         success: false,
-                        message: "Only employer accounts can run company-wide searches."
+                        message: "Only workspace owners and admins can run company-wide searches."
                     }, { status: 403 });
                 }
             }

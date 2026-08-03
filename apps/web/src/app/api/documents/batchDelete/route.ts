@@ -6,7 +6,7 @@
  *
  * Deletes N documents and all their related data in a single transaction.
  * Atomic across the entire batch — if any doc fails to delete, nothing is
- * removed. Enforces the same employer/owner authorization as the single-doc
+ * removed. Enforces the same owner/admin authorization as the single-doc
  * delete, and rejects the request if any docId isn't in the caller's company.
  */
 
@@ -20,9 +20,12 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { deleteDocumentCore } from "~/server/services/document-delete";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 const BatchDeleteSchema = z.object({
   docIds: z
@@ -40,7 +43,7 @@ export async function DELETE(request: Request) {
       const ctx = await requireWorkspaceContext();
       if (!ctx.success) return ctx.response;
 
-      if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
+      if (!isManagementRole(ctx.data.role)) {
         return NextResponse.json(
           { success: false, error: "Forbidden" },
           { status: 403 }

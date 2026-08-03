@@ -5,6 +5,7 @@ import { db } from "~/server/db/index";
 const mockRequireWorkspaceContext = jest.fn();
 
 jest.mock("~/lib/require-workspace-context", () => ({
+  ...jest.requireActual("~/lib/require-workspace-context"),
   requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
@@ -43,12 +44,12 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
     jest.clearAllMocks();
   });
 
-  it("should allow an authenticated employer to delete a category", async () => {
+  it("should allow an authenticated owner to delete a category", async () => {
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: { id: 123 },
     });
-    mockCtx("employer");
+    mockCtx("owner");
     const { where } = mockDeleteReturning([{ id: 123 }]);
 
     const request = new Request(
@@ -68,12 +69,12 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
     expect(where).toHaveBeenCalled();
   });
 
-  it("should allow an authenticated owner to delete a category", async () => {
+  it("should allow an authenticated admin to delete a category", async () => {
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: { id: 456 },
     });
-    mockCtx("owner", BigInt(2));
+    mockCtx("admin", BigInt(2));
     mockDeleteReturning([{ id: 456 }]);
 
     const request = new Request(
@@ -121,12 +122,12 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
     expect(json.error).toBe("Unauthorized");
   });
 
-  it("should return 400 if user has invalid role (employee)", async () => {
+  it("should return 403 if user has an editor role", async () => {
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: { id: 123 },
     });
-    mockCtx("employee");
+    mockCtx("editor");
 
     const request = new Request(
       "http://localhost/api/Categories/DeleteCategory",
@@ -140,7 +141,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
     const response = await DELETE(request);
     const json = await response.json();
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(403);
     expect(json.error).toBe("Invalid user role.");
   });
 
@@ -149,7 +150,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
       success: true,
       data: { id: 999 },
     });
-    mockCtx("employer");
+    mockCtx("owner");
     mockDeleteReturning([]);
 
     const request = new Request(
@@ -203,7 +204,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
         success: true,
         data: { id: 123 },
       });
-      mockCtx("employer");
+      mockCtx("owner");
 
       const returning = jest
         .fn()

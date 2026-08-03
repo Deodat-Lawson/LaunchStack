@@ -3,7 +3,10 @@ import { db } from "~/server/db/index";
 import { category } from "@launchstack/core/db/schema";
 import { z } from "zod";
 import { validateRequestBody } from "~/lib/validation";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 const AddCategorySchema = z.object({
     CategoryName: z.string().min(1, "Category name is required").max(256, "Category name is too long"),
@@ -20,10 +23,10 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
+        if (!isManagementRole(ctx.data.role)) {
             return NextResponse.json(
                 { error: "Invalid user role." },
-                { status: 400 }
+                { status: 403 }
             );
         }
 

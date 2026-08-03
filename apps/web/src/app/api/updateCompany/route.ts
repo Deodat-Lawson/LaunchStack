@@ -14,9 +14,12 @@ import {
   getCompanyReindexState,
 } from "@launchstack/core/embeddings";
 import { inngest } from "~/server/inngest/client";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 async function readCurrentIndexKey(companyId: number): Promise<string | null> {
   const [row] = await db
@@ -51,7 +54,7 @@ export async function POST(request: Request) {
       useUploadThing,
     } = validation.data;
 
-    if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
+    if (!isManagementRole(ctx.data.role)) {
       return NextResponse.json(
         {
           success: false,

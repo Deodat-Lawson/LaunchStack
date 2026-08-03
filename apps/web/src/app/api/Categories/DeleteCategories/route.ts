@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { db } from "../../../../server/db/index";
+import { db } from "~/server/db/index";
 import { category } from "@launchstack/core/db/schema";
 import { validateRequestBody } from "~/lib/validation";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 const DeleteCategorySchema = z.object({
   id: z.number().int().positive("Category ID must be a positive integer"),
@@ -21,10 +24,10 @@ export async function DELETE(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
+    if (!isManagementRole(ctx.data.role)) {
       return NextResponse.json(
         { error: "Invalid user role." },
-        { status: 400 },
+        { status: 403 },
       );
     }
 

@@ -1,19 +1,22 @@
 import { NextResponse } from "next/server";
-import { db } from "../../../../server/db";
+import { db } from "~/server/db";
 import { category } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import * as console from "console";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+    isManagementRole,
+    requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function GET(_request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
+        if (!isManagementRole(ctx.data.role)) {
             return NextResponse.json(
                 { error: "Invalid user role." },
-                { status: 400 }
+                { status: 403 }
             );
         }
 

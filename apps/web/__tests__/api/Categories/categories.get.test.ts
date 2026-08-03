@@ -1,284 +1,127 @@
 import { GET } from "~/app/api/Categories/GetCategories/route";
-import { auth } from "@clerk/nextjs/server";
-import { db } from "~/server/db/index";
+import { db } from "~/server/db";
 
-jest.mock("@clerk/nextjs/server", () => ({
-  auth: jest.fn(),
+const mockRequireWorkspaceContext = jest.fn();
+
+jest.mock("~/lib/require-workspace-context", () => ({
+  ...jest.requireActual("~/lib/require-workspace-context"),
+  requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
-jest.mock("~/server/db/index", () => ({
+jest.mock("~/server/db", () => ({
   db: {
     select: jest.fn(),
   },
 }));
+
+function mockCtx(role: string, companyId = BigInt(1)) {
+  mockRequireWorkspaceContext.mockResolvedValue({
+    success: true,
+    data: {
+      clerkUserId: "user-123",
+      userPk: BigInt(7),
+      companyId,
+      role,
+      status: "verified",
+    },
+  });
+}
+
+function mockCategories(rows: { id: number; name: string; companyId: number }[]) {
+  (db.select as jest.Mock).mockReturnValue({
+    from: jest.fn().mockReturnValue({
+      where: jest.fn().mockResolvedValue(rows),
+    }),
+  });
+}
 
 describe("GET /api/Categories/GetCategories", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should allow an authenticated employer to get categories", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
-
-    const mockCategories = [
+  it("allows an owner to get categories", async () => {
+    mockCtx("owner");
+    const rows = [
       { id: 1, name: "Category 1", companyId: 1 },
       { id: 2, name: "Category 2", companyId: 1 },
-      { id: 3, name: "Category 3", companyId: 1 },
     ];
+    mockCategories(rows);
 
-    // First call: user lookup
-    // Second call: categories lookup
-    const mockSelect = jest.fn()
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
-            { userId: "employer-user-123", role: "employer", companyId: 1 }
-          ]),
-        }),
-      })
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue(mockCategories),
-        }),
-      });
-
-    (db.select as jest.Mock) = mockSelect;
-
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
-
-    const response = await GET(request);
+    const response = await GET(
+      new Request("http://localhost/api/Categories/GetCategories"),
+    );
     const json = await response.json();
 
     expect(response.status).toBe(200);
-    expect(json).toEqual(mockCategories);
-    expect(json).toHaveLength(3);
+    expect(json).toEqual(rows);
   });
 
-  it("should allow an authenticated owner to get categories", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "owner-user-456" });
+  it("allows an admin to get categories", async () => {
+    mockCtx("admin", BigInt(2));
+    const rows = [{ id: 10, name: "Owner Category", companyId: 2 }];
+    mockCategories(rows);
 
-    const mockCategories = [
-      { id: 10, name: "Owner Category 1", companyId: 2 },
-      { id: 11, name: "Owner Category 2", companyId: 2 },
-    ];
-
-    const mockSelect = jest.fn()
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
-            { userId: "owner-user-456", role: "owner", companyId: 2 }
-          ]),
-        }),
-      })
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue(mockCategories),
-        }),
-      });
-
-    (db.select as jest.Mock) = mockSelect;
-
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
-
-    const response = await GET(request);
-    const json = await response.json();
+    const response = await GET(
+      new Request("http://localhost/api/Categories/GetCategories"),
+    );
 
     expect(response.status).toBe(200);
-    expect(json).toEqual(mockCategories);
-    expect(json).toHaveLength(2);
+    expect(await response.json()).toEqual(rows);
   });
 
-  it("should return empty array if no categories exist for company", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-789" });
+  it("returns an empty array when the company has no categories", async () => {
+    mockCtx("owner");
+    mockCategories([]);
 
-    const mockSelect = jest.fn()
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
-            { userId: "employer-user-789", role: "employer", companyId: 3 }
-          ]),
-        }),
-      })
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]), // No categories
-        }),
-      });
-
-    (db.select as jest.Mock) = mockSelect;
-
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
-
-    const response = await GET(request);
-    const json = await response.json();
+    const response = await GET(
+      new Request("http://localhost/api/Categories/GetCategories"),
+    );
 
     expect(response.status).toBe(200);
-    expect(json).toEqual([]);
-    expect(json).toHaveLength(0);
+    expect(await response.json()).toEqual([]);
   });
 
-  it("should return 400 if user is not found", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "invalid-user-999" });
-
-    // Mock user lookup - return empty array (user not found)
-    const mockSelect = jest.fn().mockReturnValue({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+  it("returns 401 when workspace context fails", async () => {
+    mockRequireWorkspaceContext.mockResolvedValue({
+      success: false,
+      response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
       }),
     });
-    (db.select as jest.Mock) = mockSelect;
 
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
+    const response = await GET(
+      new Request("http://localhost/api/Categories/GetCategories"),
+    );
 
-    const response = await GET(request);
-    const json = await response.json();
-
-    expect(response.status).toBe(400);
-    expect(json.error).toBe("Invalid user.");
+    expect(response.status).toBe(401);
   });
 
-  it("should return 400 if user has invalid role (employee)", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employee-user-111" });
+  it("returns 403 for an editor", async () => {
+    mockCtx("editor");
 
-    // Mock user lookup - return employee (invalid role)
-    const mockSelect = jest.fn().mockReturnValue({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([
-          { userId: "employee-user-111", role: "employee", companyId: 4 }
-        ]),
-      }),
-    });
-    (db.select as jest.Mock) = mockSelect;
-
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
-
-    const response = await GET(request);
+    const response = await GET(
+      new Request("http://localhost/api/Categories/GetCategories"),
+    );
     const json = await response.json();
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(403);
     expect(json.error).toBe("Invalid user role.");
+    expect(db.select).not.toHaveBeenCalled();
   });
 
-  it("should return 500 on database error during user lookup", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
-
-    // Mock database error on user lookup
-    const mockSelect = jest.fn().mockReturnValue({
+  it("returns 500 on database error", async () => {
+    mockCtx("owner");
+    (db.select as jest.Mock).mockReturnValue({
       from: jest.fn().mockReturnValue({
-        where: jest.fn().mockRejectedValue(new Error("Database connection failed")),
+        where: jest.fn().mockRejectedValue(new Error("db down")),
       }),
     });
-    (db.select as jest.Mock) = mockSelect;
 
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
-
-    const response = await GET(request);
-    const json = await response.json();
+    const response = await GET(
+      new Request("http://localhost/api/Categories/GetCategories"),
+    );
 
     expect(response.status).toBe(500);
-    expect(json.error).toBe("Unable to fetch documents");
-  });
-
-  it("should return 500 on database error during categories fetch", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
-
-    // First call succeeds (user lookup), second call fails (categories fetch)
-    const mockSelect = jest.fn()
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
-            { userId: "employer-user-123", role: "employer", companyId: 1 }
-          ]),
-        }),
-      })
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockRejectedValue(new Error("Failed to fetch categories")),
-        }),
-      });
-
-    (db.select as jest.Mock) = mockSelect;
-
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
-
-    const response = await GET(request);
-    const json = await response.json();
-
-    expect(response.status).toBe(500);
-    expect(json.error).toBe("Unable to fetch documents");
-  });
-
-  it("should return 400 if auth returns null userId", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: null });
-
-    const mockSelect = jest.fn().mockReturnValue({
-      from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
-      }),
-    });
-    (db.select as jest.Mock) = mockSelect;
-
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
-
-    const response = await GET(request);
-    const json = await response.json();
-
-    expect(response.status).toBe(400);
-    expect(json.error).toBe("Invalid user.");
-  });
-
-  it("should only return categories for the user's company", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employer-user-123" });
-
-    // Categories for company 1 only
-    const mockCategories = [
-      { id: 1, name: "Company 1 Category", companyId: 1 },
-      { id: 2, name: "Another Company 1 Category", companyId: 1 },
-    ];
-
-    const mockSelect = jest.fn()
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([
-            { userId: "employer-user-123", role: "employer", companyId: 1 }
-          ]),
-        }),
-      })
-      .mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue(mockCategories),
-        }),
-      });
-
-    (db.select as jest.Mock) = mockSelect;
-
-    const request = new Request("http://localhost/api/Categories/GetCategories", {
-      method: "GET",
-    });
-
-    const response = await GET(request);
-    const json = await response.json();
-
-    expect(response.status).toBe(200);
-    // Verify all categories belong to companyId 1
-    json.forEach((category: any) => {
-      expect(category.companyId).toBe(1);
-    });
   });
 });

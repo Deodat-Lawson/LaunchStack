@@ -226,6 +226,39 @@ describe("POST /api/agents/documentQ&A/AIChat/query history logging", () => {
     expect(mockInsertValues).not.toHaveBeenCalled();
   });
 
+  it("allows an admin to run a company-scope search", async () => {
+    (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+      success: true,
+      data: { ...CTX, role: "admin" },
+    });
+
+    const response = await POST(
+      queryRequest({
+        question: "what is this?",
+        searchScope: "company",
+      }),
+    );
+
+    expect(response.status).toBe(200);
+  });
+
+  it("rejects an editor from company-scope search", async () => {
+    (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+      success: true,
+      data: { ...CTX, role: "editor" },
+    });
+
+    const response = await POST(
+      queryRequest({
+        question: "what is this?",
+        searchScope: "company",
+      }),
+    );
+
+    expect(response.status).toBe(403);
+    expect(companyEnsembleSearch).not.toHaveBeenCalled();
+  });
+
   it("refuses a document-scope query for another company's document", async () => {
     mockQueuedRows = [
       [{ id: 42, title: "Foreign Report", companyId: BigInt(9) }],

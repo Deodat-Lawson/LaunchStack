@@ -4,7 +4,10 @@ import { eq, and } from "drizzle-orm";
 import { db } from "~/server/db";
 import { inviteCodes } from "@launchstack/core/db/schema";
 import { validateRequestBody, DeactivateInviteCodeSchema } from "~/lib/validation";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
@@ -15,7 +18,7 @@ export async function POST(request: Request) {
         if (!validation.success) return validation.response;
         const { codeId } = validation.data;
 
-        if (ctx.data.role !== "owner" && ctx.data.role !== "employer") {
+        if (!isManagementRole(ctx.data.role)) {
             return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
         }
 

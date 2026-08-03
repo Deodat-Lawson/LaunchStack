@@ -10,7 +10,10 @@ import {
   type RepoExplanationRequest,
 } from "@launchstack/features/repo-explainer";
 import { validateRequestBody } from "~/lib/validation";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 import {
   createSuccessResponse,
   createForbiddenError,
@@ -75,8 +78,8 @@ export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
-      return createForbiddenError("Insufficient permissions. Only employers and owners can use the repo explainer.");
+    if (!isManagementRole(ctx.data.role)) {
+      return createForbiddenError("Insufficient permissions. Only workspace owners and admins can use the repo explainer.");
     }
 
     const validation = await validateRequestBody(request, RepoExplainerRequestSchema);

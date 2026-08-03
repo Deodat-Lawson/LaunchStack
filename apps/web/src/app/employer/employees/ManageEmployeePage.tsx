@@ -20,6 +20,7 @@ import {
   Section,
   SelectInput,
 } from "~/app/employer/_components/primitives";
+import { isManagementRole } from "~/lib/membership-roles";
 
 interface InviteCode {
   id: number;
@@ -90,7 +91,7 @@ export default function ManageEmployeesPage() {
         }
         const data = (await response.json()) as { role?: string };
         const roleFromServer = data?.role;
-        if (roleFromServer === "employer" || roleFromServer === "owner") {
+        if (typeof roleFromServer === "string" && isManagementRole(roleFromServer)) {
           setUserRole(roleFromServer);
           await Promise.all([loadEmployees(), loadInviteCodes()]);
         } else {

@@ -3,7 +3,10 @@ import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { category, company } from "@launchstack/core/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 type BootstrapCategory = {
   id: string;
@@ -35,9 +38,9 @@ export async function GET() {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
+    if (!isManagementRole(ctx.data.role)) {
       return NextResponse.json(
-        { error: "Employer access required." },
+        { error: "Owner or admin access required." },
         { status: 403 }
       );
     }

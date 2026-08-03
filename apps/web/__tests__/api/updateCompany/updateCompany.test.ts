@@ -1,10 +1,12 @@
 import { POST } from "~/app/api/updateCompany/route";
-import { auth } from "@clerk/nextjs/server";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db/index";
 
-jest.mock("@clerk/nextjs/server", () => ({
-  auth: jest.fn(),
+const mockRequireWorkspaceContext = jest.fn();
+
+jest.mock("~/lib/require-workspace-context", () => ({
+  ...jest.requireActual("~/lib/require-workspace-context"),
+  requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
 jest.mock("~/lib/validation", () => {
@@ -22,6 +24,34 @@ jest.mock("~/server/db/index", () => ({
   },
 }));
 
+jest.mock("@launchstack/core/embeddings", () => ({
+  getCompanyCredentialsPlaintext: jest.fn(),
+  upsertCompanyCredentials: jest.fn(),
+  beginReindex: jest.fn(),
+  getCompanyReindexState: jest.fn().mockResolvedValue({ active: null }),
+}));
+
+jest.mock("~/lib/ai/validate-credentials", () => ({
+  validateEmbeddingCredentials: jest.fn(),
+}));
+
+jest.mock("~/server/inngest/client", () => ({
+  inngest: { send: jest.fn() },
+}));
+
+function mockCtx(role: string, companyId = BigInt(7)) {
+  mockRequireWorkspaceContext.mockResolvedValue({
+    success: true,
+    data: {
+      clerkUserId: "user-123",
+      userPk: BigInt(1),
+      companyId,
+      role,
+      status: "verified",
+    },
+  });
+}
+
 describe("POST /api/updateCompany", () => {
   const makeRequest = (body: unknown) =>
     new Request("http://localhost/api/updateCompany", {
@@ -34,8 +64,8 @@ describe("POST /api/updateCompany", () => {
     jest.clearAllMocks();
   });
 
-  it("updates company settings for authorized employer", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "user-123" });
+  it("updates company settings for an owner", async () => {
+    mockCtx("owner");
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: {
@@ -45,12 +75,6 @@ describe("POST /api/updateCompany", () => {
         numberOfEmployees: "25",
       },
     });
-
-    const mockWhereSelect = jest.fn().mockResolvedValue([
-      { id: 1, companyId: "7", role: "employer" },
-    ]);
-    const mockFrom = jest.fn().mockReturnValue({ where: mockWhereSelect });
-    (db.select as jest.Mock).mockReturnValue({ from: mockFrom });
 
     const mockReturning = jest.fn().mockResolvedValue([{ id: 7 }]);
     const mockWhereUpdate = jest.fn().mockReturnValue({ returning: mockReturning });
@@ -71,40 +95,45 @@ describe("POST /api/updateCompany", () => {
       employeepasskey: "EMP456",
       numberOfEmployees: "25",
     });
-    expect(mockWhereUpdate).toHaveBeenCalled();
   });
 
-  it("returns 401 when user is not authenticated", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: null });
+  it("updates company settings for an admin", async () => {
+    mockCtx("admin");
+    (validateRequestBody as jest.Mock).mockResolvedValue({
+      success: true,
+      data: { name: "Acme Corp" },
+    });
+
+    const mockReturning = jest.fn().mockResolvedValue([{ id: 7 }]);
+    const mockWhereUpdate = jest.fn().mockReturnValue({ returning: mockReturning });
+    const mockSet = jest.fn().mockReturnValue({ where: mockWhereUpdate });
+    (db.update as jest.Mock).mockReturnValue({ set: mockSet });
 
     const response = await POST(makeRequest({}));
-    const json = await response.json();
+
+    expect(response.status).toBe(200);
+  });
+
+  it("returns 401 when workspace context fails", async () => {
+    mockRequireWorkspaceContext.mockResolvedValue({
+      success: false,
+      response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+      }),
+    });
+
+    const response = await POST(makeRequest({}));
 
     expect(response.status).toBe(401);
-    expect(json).toEqual({
-      success: false,
-      message: "Unauthorized",
-    });
     expect(validateRequestBody).not.toHaveBeenCalled();
   });
 
-  it("returns 403 when user lacks employer privileges", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "user-123" });
+  it("returns 403 when the membership role is editor", async () => {
+    mockCtx("editor");
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
-      data: {
-        name: "Acme Corp",
-        employerPasskey: "EMP123",
-        employeePasskey: "EMP456",
-        numberOfEmployees: "10",
-      },
+      data: { name: "Acme Corp" },
     });
-
-    const mockWhereSelect = jest.fn().mockResolvedValue([
-      { id: 1, companyId: "7", role: "employee" },
-    ]);
-    const mockFrom = jest.fn().mockReturnValue({ where: mockWhereSelect });
-    (db.select as jest.Mock).mockReturnValue({ from: mockFrom });
 
     const response = await POST(makeRequest({}));
     const json = await response.json();
@@ -118,11 +147,11 @@ describe("POST /api/updateCompany", () => {
   });
 
   it("bubbles validation failure response", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "user-123" });
+    mockCtx("owner");
 
     const validationResponse = new Response(
       JSON.stringify({ success: false, message: "Invalid payload" }),
-      { status: 400 }
+      { status: 400 },
     );
 
     (validateRequestBody as jest.Mock).mockResolvedValue({
@@ -135,11 +164,10 @@ describe("POST /api/updateCompany", () => {
 
     expect(response.status).toBe(400);
     expect(json).toEqual({ success: false, message: "Invalid payload" });
-    expect(db.select).not.toHaveBeenCalled();
   });
 
   it("returns 404 when company record is missing", async () => {
-    (auth as unknown as jest.Mock).mockResolvedValue({ userId: "user-123" });
+    mockCtx("owner");
     (validateRequestBody as jest.Mock).mockResolvedValue({
       success: true,
       data: {
@@ -149,12 +177,6 @@ describe("POST /api/updateCompany", () => {
         numberOfEmployees: "15",
       },
     });
-
-    const mockWhereSelect = jest.fn().mockResolvedValue([
-      { id: 1, companyId: "7", role: "owner" },
-    ]);
-    const mockFrom = jest.fn().mockReturnValue({ where: mockWhereSelect });
-    (db.select as jest.Mock).mockReturnValue({ from: mockFrom });
 
     const mockReturning = jest.fn().mockResolvedValue([]);
     const mockWhereUpdate = jest.fn().mockReturnValue({ returning: mockReturning });

@@ -9,16 +9,19 @@ import {
   createNotFoundError,
 } from "~/lib/api-utils";
 import { validateRequestBody, ApproveEmployeeByIdSchema } from "~/lib/validation";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
   try {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
+    if (!isManagementRole(ctx.data.role)) {
       return createForbiddenError(
-        "Insufficient permissions. Only employers and owners can approve employees.",
+        "Insufficient permissions. Only workspace owners and admins can approve employees.",
       );
     }
 

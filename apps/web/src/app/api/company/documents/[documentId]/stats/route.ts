@@ -3,7 +3,10 @@ import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { users, document, documentViews } from "@launchstack/core/db/schema";
 import { eq, and, sql, gte, desc, count } from "drizzle-orm";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 interface Viewer {
     name: string;
@@ -42,7 +45,7 @@ export async function GET(
 
         const documentId = (await params).documentId;
 
-        if (ctx.data.role !== "employer" && ctx.data.role !== "owner") {
+        if (!isManagementRole(ctx.data.role)) {
             return NextResponse.json(
                 { success: false, error: "Unauthorized" },
                 { status: 403 }

@@ -9,9 +9,12 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { validateRequestBody, UpdateUploadPreferenceSchema } from "~/lib/validation";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +28,7 @@ export async function POST(request: Request) {
 
     const { useUploadThing } = validation.data;
 
-    if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
+    if (!isManagementRole(ctx.data.role)) {
       return NextResponse.json(
         { success: false, message: "Forbidden" },
         { status: 403 }

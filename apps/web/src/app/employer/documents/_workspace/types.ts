@@ -273,7 +273,7 @@ export interface StudioFeature {
   href?: string;
   /** When true, renders a "coming soon" pane instead of an interactive one. */
   comingSoon?: boolean;
-  /** When true, only visible to employer/owner roles — company-level management. */
+  /** When true, only visible to owner/admin membership roles — company-level management. */
   companyOnly?: boolean;
 }
 

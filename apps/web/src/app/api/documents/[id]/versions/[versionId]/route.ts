@@ -30,9 +30,12 @@ import { document, documentVersions } from "@launchstack/core/db/schema";
 import { deleteFileByUrl } from "~/lib/storage";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 export async function DELETE(
   request: Request,
@@ -60,9 +63,9 @@ export async function DELETE(
       const ctx = await requireWorkspaceContext();
       if (!ctx.success) return ctx.response;
 
-      if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
+      if (!isManagementRole(ctx.data.role)) {
         return NextResponse.json(
-          { error: "Forbidden: employer or owner role required" },
+          { error: "Forbidden: owner or admin role required" },
           { status: 403 }
         );
       }

@@ -166,16 +166,10 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
 // Role gates
 // ---------------------------------------------------------------------------
 
-/**
- * Membership roles allowed to manage workspace-wide configuration. Uses the
- * membership vocabulary (`owner` | `admin` | `editor`), not the legacy global
- * `users.role` values — editors work on documents, not workspace settings.
- */
-const MANAGEMENT_ROLES = new Set(["owner", "admin"]);
-
-export function isManagementRole(role: string): boolean {
-  return MANAGEMENT_ROLES.has(role);
-}
+export {
+  MANAGEMENT_ROLES,
+  isManagementRole,
+} from "~/lib/membership-roles";
 
 /**
  * 403 response for a caller whose membership role is too low. Returned by

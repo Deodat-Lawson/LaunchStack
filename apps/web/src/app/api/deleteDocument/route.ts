@@ -5,9 +5,12 @@ import { db } from "../../../server/db/index";
 import { document } from "@launchstack/core/db/schema";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
 import { deleteDocumentCore } from "~/server/services/document-delete";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 export async function DELETE(request: Request) {
   try {
@@ -19,7 +22,7 @@ export async function DELETE(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
+    if (!isManagementRole(ctx.data.role)) {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
         { status: 403 },

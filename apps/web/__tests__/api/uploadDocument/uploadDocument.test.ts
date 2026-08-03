@@ -80,7 +80,7 @@ const VERIFIED_DATA: WorkspaceContext = {
   clerkUserId: "user-1",
   userPk: BigInt(7),
   companyId: BigInt(5),
-  role: "employer",
+  role: "owner",
   status: "verified",
 };
 

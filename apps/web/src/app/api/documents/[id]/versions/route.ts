@@ -7,7 +7,7 @@
  *   initial upload flow) and then handing this endpoint the resulting URL.
  *
  *   Enforces:
- *     - Auth (employer/owner of the document's company)
+ *     - Auth (owner/admin membership for the document's company)
  *     - Exact MIME match against the document's `file_type` (locked in on v1)
  *     - Sequential version numbering (max + 1, atomically)
  *
@@ -39,13 +39,16 @@ import { getEngine } from "~/server/engine";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 import {
   authorizeInternalFileRef,
   UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 const CreateVersionSchema = z.object({
   /** URL of the already-uploaded replacement file in blob storage */
@@ -83,7 +86,7 @@ function parseDocumentId(rawId: string):
 }
 
 /**
- * Load the authenticated user and verify they have employer/owner access
+ * Load the authenticated user and verify they have owner/admin membership
  * to the target document's company. Returns the user + document on success,
  * or a NextResponse error on any failure.
  */
@@ -101,11 +104,11 @@ async function authorizeDocumentAccess(documentId: number): Promise<
     return { ok: false, response: ctx.response };
   }
 
-  if (!AUTHORIZED_ROLES.has(ctx.data.role)) {
+  if (!isManagementRole(ctx.data.role)) {
     return {
       ok: false,
       response: NextResponse.json(
-        { error: "Forbidden: employer or owner role required" },
+        { error: "Forbidden: owner or admin role required" },
         { status: 403 }
       ),
     };

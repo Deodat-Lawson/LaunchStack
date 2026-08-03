@@ -149,6 +149,7 @@ const serverSchema = z.object({
   TRANSCRIPTION_API_BASE_URL: optionalString(), // defaults to the Gemini endpoint
   TRANSCRIPTION_API_KEY: optionalString(),
   TRANSCRIPTION_MODEL: optionalString(),   // defaults to gemini-2.5-flash
+  GEMINI_TTS_VOICE: optionalString(),      // one of 30 prebuilt voices; defaults to Kore
   // Legacy provider API keys (fallback when per-capability keys not set)
   // Provider overrides (cloud vs sidecar)
   RERANK_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
@@ -305,6 +306,7 @@ function parseServerEnv() {
     TRANSCRIPTION_API_BASE_URL: process.env.TRANSCRIPTION_API_BASE_URL,
     TRANSCRIPTION_API_KEY: process.env.TRANSCRIPTION_API_KEY,
     TRANSCRIPTION_MODEL: process.env.TRANSCRIPTION_MODEL,
+    GEMINI_TTS_VOICE: process.env.GEMINI_TTS_VOICE,
     RERANK_PROVIDER: process.env.RERANK_PROVIDER as "cloud" | "sidecar" | undefined,
     NER_PROVIDER: process.env.NER_PROVIDER as "cloud" | "sidecar" | undefined,
     TRANSCRIPTION_PROVIDER: process.env.TRANSCRIPTION_PROVIDER as "cloud" | "sidecar" | undefined,

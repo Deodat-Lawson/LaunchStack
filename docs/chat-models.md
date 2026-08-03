@@ -29,7 +29,7 @@ paths resolve from the working directory.
 
 ```bash
 CHAT_BASE_URL="https://openrouter.ai/api/v1"
-CHAT_API_KEY="sk-or-v1-..."
+CHAT_API_KEY="replace-with-your-chat-api-key"
 # CHAT_MODELS_CONFIG="config/chat-models.production.yaml"
 ```
 

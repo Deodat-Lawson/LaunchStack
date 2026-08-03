@@ -112,21 +112,40 @@ jest.mock("~/app/api/agents/documentQ&A/services", () => ({
     .mockResolvedValue({ content: "", results: [], refinedQuery: "", reasoning: "" }),
   getSystemPrompt: () => "system",
   getWebSearchInstruction: () => "",
-  getChatModelForProvider: () => ({
-    call: jest.fn().mockResolvedValue({ content: "answer", response_metadata: {} }),
-  }),
-  getProviderDefaultModel: () => "gpt-4o-mini",
-  describeProviderError: () => null,
+  describeChatError: () => null,
   getEmbeddings: () => ({ embedQuery: jest.fn() }),
   buildReferences: () => [],
   extractRecommendedPages: () => [1],
 }));
 
-// Only `supportsVision` is stubbed; the model/provider tables are still needed
-// by the real request schema.
+jest.mock("~/lib/models", () => ({
+  selectChatRoute: () => ({
+    route: "default",
+    requiredCapabilities: [],
+  }),
+  resolveConfiguredChatModel: () => ({
+    modelId: "gpt-4o-mini",
+    chat: {
+      invoke: jest.fn().mockResolvedValue({ content: "answer", response_metadata: {} }),
+      call: jest.fn().mockResolvedValue({ content: "answer", response_metadata: {} }),
+    },
+    behavior: {},
+    prepareMessages: (messages: unknown) => messages,
+  }),
+}));
+
+jest.mock("~/server/chat-request-compat", () => ({
+  validateDeprecatedChatSelection: () => ({ ok: true }),
+}));
+
+jest.mock("@launchstack/core/llm", () => ({
+  isChatRequestError: () => false,
+  normalizeTokenUsage: () => ({ inputTokens: 0, outputTokens: 0, totalTokens: 0 }),
+}));
+
+// Model/provider tables are still needed by the real request schema.
 jest.mock("@launchstack/core/llm/types", () => ({
   ...jest.requireActual("@launchstack/core/llm/types"),
-  supportsVision: () => true,
 }));
 
 jest.mock("~/lib/credits", () => ({

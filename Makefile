@@ -16,7 +16,7 @@ up-ocr:
 
 # Build Next.js on host (fast, full RAM) then package into Docker
 up-fast:
-	SKIP_ENV_VALIDATION=1 pnpm build
+	SKIP_ENV_VALIDATION=1 pnpm --filter @launchstack/web build
 	$(COMPOSE_FAST) build app migrate
 	$(COMPOSE_FAST) up -d
 

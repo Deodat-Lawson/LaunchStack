@@ -9,7 +9,10 @@
  */
 export interface EmbeddingConfig {
   apiKey?: string;
-  /** Base URL for the OpenAI-compatible endpoint. Defaults to api.openai.com/v1. */
+  /**
+   * Required. Base URL for the OpenAI-compatible endpoint. There is no
+   * built-in default — see the note on DEFAULT_CONFIG.
+   */
   baseUrl?: string;
   model?: string;
   batchSize?: number;
@@ -21,14 +24,15 @@ export interface EmbeddingConfig {
 }
 
 /**
- * Library defaults. The caller is expected to pass apiKey (and optionally
- * override model / dimensions / baseUrl) on every call; the default apiKey
- * is empty so a missing config throws a clear "OpenAI API key not
- * configured" error rather than silently swallowing.
+ * Library defaults. The caller is expected to pass apiKey and baseUrl (and
+ * optionally override model / dimensions) on every call; the default apiKey
+ * is empty so a missing config throws a clear "API key not configured" error
+ * rather than silently swallowing. There is deliberately no default baseUrl:
+ * a built-in vendor URL would decide on the operator's behalf where their
+ * documents and their key are sent.
  */
-const DEFAULT_CONFIG: Required<EmbeddingConfig> = {
+const DEFAULT_CONFIG: Omit<Required<EmbeddingConfig>, "baseUrl"> = {
   apiKey: "",
-  baseUrl: "https://api.openai.com/v1",
   model: "text-embedding-3-large",
   batchSize: 100,
   maxRetries: 5,
@@ -73,12 +77,22 @@ export async function generateEmbeddings(
   chunks: string[],
   config?: EmbeddingConfig
 ): Promise<EmbeddingResult> {
-  const cfg = { ...DEFAULT_CONFIG, ...config };
+  const merged = { ...DEFAULT_CONFIG, ...config };
   const startTime = Date.now();
 
-  if (!cfg.apiKey) {
-    throw new Error("OpenAI API key not configured for embeddings");
+  if (!merged.apiKey) {
+    throw new Error("API key not configured for embeddings");
   }
+
+  const { baseUrl } = merged;
+  if (!baseUrl) {
+    throw new Error(
+      "Embeddings base URL not configured. Pass EmbeddingConfig.baseUrl — " +
+        "there is no built-in default endpoint.",
+    );
+  }
+
+  const cfg: Required<EmbeddingConfig> = { ...merged, baseUrl };
 
   if (chunks.length === 0) {
     return {

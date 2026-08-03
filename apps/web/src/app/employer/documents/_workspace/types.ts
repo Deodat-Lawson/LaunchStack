@@ -143,7 +143,7 @@ export interface ThreadMessage {
 
 /**
  * Full payload a Composer send produces, so per-turn toggles (web search,
- * thinking, attachments, model) can flow to the API without growing the
+ * thinking, and attachments) can flow to the API without growing the
  * argument list to sendMessage further.
  */
 export interface ComposerSend {
@@ -152,77 +152,6 @@ export interface ComposerSend {
   attachments: EphemeralAttachment[];
   webSearch: boolean;
   thinking: boolean;
-  model: string;
-  provider: string;
-}
-
-export type ComposerProviderId = "openai" | "anthropic" | "google" | "ollama";
-
-export interface ComposerModelOption {
-  /** Wire value — matches AIModelType in @launchstack/core/llm/types. */
-  id: string;
-  /** Provider the model is routed through. */
-  provider: ComposerProviderId;
-  /** Display name shown in the dropdown. */
-  label: string;
-  /** One-line tagline rendered under the label in the picker. */
-  description: string;
-  /** True when the model accepts extended-thinking / reasoning-effort. */
-  supportsThinking: boolean;
-  /** True when the model accepts image inputs. */
-  supportsVision: boolean;
-  /** Older models surface in a collapsible "Legacy" section. */
-  legacy?: boolean;
-}
-
-export interface ComposerProviderMeta {
-  id: ComposerProviderId;
-  label: string;
-  /** Single character mark rendered in the provider rail. */
-  mark: string;
-  /** Brand-ish accent used for the active state in the rail. */
-  color: string;
-}
-
-export const COMPOSER_PROVIDERS: readonly ComposerProviderMeta[] = [
-  { id: "openai",    label: "OpenAI",        mark: "O", color: "oklch(0.55 0.13 165)" },
-  { id: "anthropic", label: "Anthropic",     mark: "A", color: "oklch(0.6 0.15 40)"   },
-  { id: "google",    label: "Google",        mark: "G", color: "oklch(0.55 0.17 255)" },
-  { id: "ollama",    label: "Local (Ollama)",mark: "L", color: "oklch(0.55 0.05 280)" },
-] as const;
-
-/**
- * Canonical list of models surfaced in the composer dropdown. Must stay in
- * sync with ProviderModelMap in @launchstack/core/llm/types; the capability
- * flags mirror THINKING_CAPABLE_MODELS / VISION_CAPABLE_MODELS there.
- */
-export const COMPOSER_MODELS: readonly ComposerModelOption[] = [
-  // OpenAI
-  { id: "gpt-5.2",       provider: "openai",    label: "GPT-5.2",          description: "OpenAI's flagship — best for hard reasoning",   supportsThinking: true,  supportsVision: true  },
-  { id: "gpt-5.1",       provider: "openai",    label: "GPT-5.1",          description: "Faster GPT-5 with the same toolbox",            supportsThinking: true,  supportsVision: true  },
-  { id: "gpt-5-mini",    provider: "openai",    label: "GPT-5 Mini",       description: "Cheap + quick for everyday turns",              supportsThinking: true,  supportsVision: true  },
-  { id: "gpt-5-nano",    provider: "openai",    label: "GPT-5 Nano",       description: "Tiniest GPT-5 — best for classification",       supportsThinking: true,  supportsVision: true  },
-  { id: "gpt-4o",        provider: "openai",    label: "GPT-4o",           description: "Last-gen multimodal — kept for compatibility",  supportsThinking: false, supportsVision: true,  legacy: true },
-  // Anthropic
-  { id: "claude-opus-4.5",   provider: "anthropic", label: "Claude Opus 4.5",     description: "Anthropic's smartest — long answers, deep reasoning", supportsThinking: true,  supportsVision: true  },
-  { id: "claude-sonnet-4",   provider: "anthropic", label: "Claude Sonnet 4",     description: "Balanced default — fast and grounded",                supportsThinking: true,  supportsVision: true  },
-  // Google
-  { id: "gemini-3-pro",    provider: "google",    label: "Gemini 3 Pro",      description: "Google's flagship with reasoning",            supportsThinking: true,  supportsVision: true  },
-  { id: "gemini-3-flash",  provider: "google",    label: "Gemini 3 Flash",    description: "Fast Gemini 3 — great for streaming",         supportsThinking: true,  supportsVision: true  },
-  { id: "gemini-2.5-flash",provider: "google",    label: "Gemini 2.5 Flash",  description: "Older Flash — cheap multimodal",              supportsThinking: false, supportsVision: true,  legacy: true },
-  // Ollama (local)
-  { id: "llama3.1:8b",   provider: "ollama",    label: "Llama 3.1 8B",    description: "Meta's open weights, runs offline",      supportsThinking: false, supportsVision: false },
-  { id: "llama3.2:3b",   provider: "ollama",    label: "Llama 3.2 3B",    description: "Tiny Llama for laptops",                 supportsThinking: false, supportsVision: false },
-  { id: "mistral:7b",    provider: "ollama",    label: "Mistral 7B",      description: "Fast French open model",                 supportsThinking: false, supportsVision: false },
-  { id: "qwen2.5:7b",    provider: "ollama",    label: "Qwen 2.5 7B",     description: "Strong open Chinese-led model",          supportsThinking: false, supportsVision: false },
-] as const;
-
-export const DEFAULT_COMPOSER_MODEL: ComposerModelOption = COMPOSER_MODELS.find(
-  (m) => m.id === "claude-sonnet-4",
-)!;
-
-export function findComposerModel(id: string | undefined): ComposerModelOption {
-  return COMPOSER_MODELS.find((m) => m.id === id) ?? DEFAULT_COMPOSER_MODEL;
 }
 
 export interface DemotedFeature {

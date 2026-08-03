@@ -1,11 +1,8 @@
 import { useState, useCallback } from 'react';
-import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 
 export interface AIQueryRequest {
   documentId: number;
   question: string;
-  aiModel?: AIModelType;
-  provider?: LLMProvider;
   style?: 'concise' | 'detailed' | 'academic' | 'bullet-points';
   enableWebSearch?: boolean;
   conversationHistory?: string;
@@ -57,8 +54,6 @@ export function useAIQuery() {
         body: JSON.stringify({
           documentId: params.documentId,
           question: params.question,
-          aiModel: params.aiModel,
-          provider: params.provider,
           style: params.style,
           enableWebSearch: params.enableWebSearch,
           conversationHistory: params.conversationHistory,
@@ -94,4 +89,3 @@ export function useAIQuery() {
     sendQuery,
   };
 }
-

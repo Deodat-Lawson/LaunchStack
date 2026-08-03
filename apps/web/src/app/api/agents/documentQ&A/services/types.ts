@@ -11,20 +11,17 @@
  */
 
 // ============================================================================
-// AI Model / LLM Provider Types — canonical definitions live in
+// Chat routing types — canonical definitions live in
 // @launchstack/core/llm/types. Re-exported here so existing feature-side
-// consumers keep their import paths.
+// consumers keep their import paths. There is no model allowlist: operators
+// assign models to routes, and clients never name a model or provider.
 // ============================================================================
 
 export {
-  AIModelTypes,
-  isAIModelType,
-  LLMProviders,
-  ProviderModelMap,
-  ProviderDefaultModels,
-  isModelAllowedForProvider,
-  type AIModelType,
-  type LLMProvider,
+  ChatRoutes,
+  isChatRoute,
+  type ChatRoute,
+  type ChatCapability,
 } from "@launchstack/core/llm/types";
 
 // ============================================================================

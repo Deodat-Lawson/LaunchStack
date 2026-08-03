@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": false,
   "type": "module",
-  "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. Framework-agnostic — runs under Next, Node, or any host that supplies a StoragePort, JobDispatcherPort, and CreditsPort.",
+  "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. Framework-agnostic \u2014 runs under Next, Node, or any host that supplies a StoragePort, JobDispatcherPort, and CreditsPort.",
   "license": "Apache-2.0",
   "author": "Launchstack",
   "homepage": "https://github.com/launchstack/launchstack",
@@ -348,9 +348,7 @@
     "@types/turndown": "^5.0.6"
   },
   "dependencies": {
-    "@langchain/anthropic": "^1.3.3",
     "@langchain/core": "^0.3.74",
-    "@langchain/google-genai": "^2.1.3",
     "@langchain/ollama": "^0.1.6",
     "@langchain/openai": "^0.6.11",
     "@mozilla/readability": "^0.6.0",
@@ -365,14 +363,21 @@
     "postgres": "^3.4.7",
     "string-similarity-js": "^2.1.4",
     "turndown": "^7.2.2",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "yaml": "^2.8.1",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.25.1"
   },
   "peerDependencies": {
     "neo4j-driver": "^6.0.0",
     "tesseract.js": "^7.0.0"
   },
   "peerDependenciesMeta": {
-    "neo4j-driver": { "optional": true },
-    "tesseract.js": { "optional": true }
+    "neo4j-driver": {
+      "optional": true
+    },
+    "tesseract.js": {
+      "optional": true
+    }
   }
 }

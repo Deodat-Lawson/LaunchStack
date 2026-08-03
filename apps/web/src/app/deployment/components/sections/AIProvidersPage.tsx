@@ -14,75 +14,80 @@ import type { DeploymentProps } from '../../types';
 import { Section, CodeBlock } from '../ui';
 import styles from '~/styles/deployment.module.css';
 
-type Provider = {
+type Endpoint = {
   id: string;
   name: string;
-  defaultModel: string;
+  summary: string;
   link: string;
   bullets: string[];
   envKey: string;
 };
 
-const PROVIDERS: Provider[] = [
+/**
+ * Every entry below is the *same* integration — one OpenAI-compatible
+ * endpoint — differing only in URL and credential. There is no provider
+ * switch to flip, because there are no providers.
+ */
+const ENDPOINTS: Endpoint[] = [
+  {
+    id: 'openrouter',
+    name: 'OpenRouter',
+    summary: 'One key, many vendors',
+    link: 'https://openrouter.ai/keys',
+    bullets: [
+      'Convenient quick start for open-source deployments',
+      'One credential can address models from many vendors',
+      'Vendor-qualified model ids like vendor/model-name',
+    ],
+    envKey: 'CHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=sk-or-v1-your_key_here',
+  },
   {
     id: 'openai',
     name: 'OpenAI',
-    defaultModel: 'gpt-5-mini',
+    summary: 'Direct vendor API',
     link: 'https://platform.openai.com/api-keys',
     bullets: [
-      'Default chat model out of the box',
-      'text-embedding-3-large used for embeddings',
+      'Direct vendor API without an aggregation layer',
+      'Bundled presets cover the gpt-4o and gpt-5 families',
       'Most thoroughly tested path end-to-end',
     ],
-    envKey: 'OPENAI_API_KEY=sk-proj-your_key_here',
+    envKey: 'CHAT_BASE_URL=https://api.openai.com/v1\nCHAT_API_KEY=sk-proj-your_key_here',
   },
   {
-    id: 'anthropic',
-    name: 'Anthropic',
-    defaultModel: 'claude-sonnet-4-6',
-    link: 'https://console.anthropic.com',
+    id: 'minimax',
+    name: 'MiniMax',
+    summary: 'Third-party compatible API',
+    link: 'https://www.minimax.io',
     bullets: [
-      'Drop-in Claude Sonnet / Opus / Haiku',
-      'Longer-context reasoning for legal and analysis flows',
-      'Works with the same orchestration layer as OpenAI',
+      'Example of an endpoint with no bundled preset',
+      'Declare the model behavior once in chat-models.yaml',
+      'Start conservative and enable capabilities as you verify them',
     ],
-    envKey: 'ANTHROPIC_API_KEY=sk-ant-your_key_here',
-  },
-  {
-    id: 'google',
-    name: 'Google AI',
-    defaultModel: 'gemini-2.5-pro',
-    link: 'https://aistudio.google.com/app/apikey',
-    bullets: [
-      'Gemini 2.5 family for multimodal inputs',
-      'Cost-efficient embeddings via text-embedding-004',
-      'Useful for image-heavy documents',
-    ],
-    envKey: 'GOOGLE_API_KEY=your_google_ai_key_here',
+    envKey: 'CHAT_BASE_URL=https://api.minimax.io/v1\nCHAT_API_KEY=your_key_here',
   },
   {
     id: 'ollama',
     name: 'Ollama (self-hosted)',
-    defaultModel: 'llama3.1:70b',
+    summary: 'Keyless local endpoint',
     link: 'https://ollama.com',
     bullets: [
       'Run models on your own hardware — no per-token cost',
-      'Pair with the bundled Docker compose for an air-gapped stack',
-      'Supports embedding models (nomic-embed-text, bge-m3)',
+      'Use the OpenAI-compatible /v1 surface, not the native API',
+      'Leave CHAT_API_KEY unset; a placeholder is sent instead',
     ],
-    envKey: 'OLLAMA_BASE_URL=http://localhost:11434',
+    envKey: 'CHAT_BASE_URL=http://localhost:11434/v1\n# CHAT_API_KEY intentionally unset',
   },
   {
-    id: 'siliconflow',
-    name: 'SiliconFlow',
-    defaultModel: 'Qwen/Qwen2.5-72B-Instruct',
-    link: 'https://siliconflow.cn',
+    id: 'local-server',
+    name: 'vLLM / llama.cpp / LM Studio',
+    summary: 'Self-hosted inference server',
+    link: 'https://github.com/launchstack/launchstack/blob/main/docs/chat-models.md',
     bullets: [
-      'OpenAI-compatible API with open-weight models',
-      'Cheaper token pricing for high-volume routes',
-      'Good fallback for regions where OpenAI is restricted',
+      'Any server implementing POST /chat/completions',
+      'Works air-gapped alongside the bundled Docker stack',
+      'CHAT_API_KEY optional, depending on how you fronted it',
     ],
-    envKey: 'SILICONFLOW_API_KEY=your_siliconflow_key_here',
+    envKey: 'CHAT_BASE_URL=http://localhost:8080/v1\n# CHAT_API_KEY=optional',
   },
 ];
 
@@ -98,15 +103,18 @@ export const AIProvidersPage: React.FC<DeploymentProps> = ({ copyToClipboard, co
         <div className={styles.pill} style={{ marginBottom: 18 }}>
           <BrainCircuit size={12} /> Core
         </div>
-        <h1 className={styles.heroTitle}>AI model providers</h1>
+        <h1 className={styles.heroTitle}>Chat models</h1>
         <p className={styles.heroSub}>
-          Launchstack is <span className={styles.serif}>provider-agnostic</span>. Pick one from the
-          list below, swap it for another whenever you want — the orchestration, RAG, and analysis
-          layers stay the same.
+          Launchstack talks to <span className={styles.serif}>one chat endpoint</span> that speaks
+          the OpenAI chat-completions protocol — and that endpoint can serve many models. Point it
+          anywhere; the orchestration, RAG, and analysis layers stay the same.
         </p>
       </motion.div>
 
-      <Section title="Pick a chat model" subtitle="Any one of these is enough to boot the app.">
+      <Section
+        title="Point at an endpoint"
+        subtitle="Two variables. Every option below is the same integration with a different URL."
+      >
         <div
           style={{
             display: 'grid',
@@ -114,32 +122,53 @@ export const AIProvidersPage: React.FC<DeploymentProps> = ({ copyToClipboard, co
             gap: 14,
           }}
         >
-          {PROVIDERS.map((p) => (
-            <ProviderCard
-              key={p.id}
-              provider={p}
-              copied={copiedCode === `provider-${p.id}`}
-              onCopy={() => copyToClipboard(p.envKey, `provider-${p.id}`)}
+          {ENDPOINTS.map((e) => (
+            <EndpointCard
+              key={e.id}
+              endpoint={e}
+              copied={copiedCode === `endpoint-${e.id}`}
+              onCopy={() => copyToClipboard(e.envKey, `endpoint-${e.id}`)}
             />
           ))}
         </div>
       </Section>
 
       <Section
-        title="Switch providers with one flag"
-        subtitle="The orchestrator reads these env vars to route chat, embeddings, and reranking."
+        title="Assign models to routes"
+        subtitle="apps/web/config/chat-models.yaml — non-secret, version-controlled, reviewed like code."
       >
         <CodeBlock
-          code={SWITCH_ENV}
-          onCopy={() => copyToClipboard(SWITCH_ENV, 'switch-env')}
-          copied={copiedCode === 'switch-env'}
+          code={MODELS_YAML}
+          onCopy={() => copyToClipboard(MODELS_YAML, 'models-yaml')}
+          copied={copiedCode === 'models-yaml'}
         />
-        <div style={{ marginTop: 14 }}>
+        <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 14 }}>
           <div className={styles.calloutInfo}>
             <Lightbulb size={18} className={styles.calloutInfoIcon} style={{ marginTop: 1 }} />
             <div>
-              <strong>Mix and match.</strong> Chat and embeddings are independent — e.g. Claude for
-              chat with OpenAI embeddings is a common pairing.
+              <strong>A route is a job, not a model.</strong> Features ask for{' '}
+              <code className={styles.mono}>default</code>, <code className={styles.mono}>fast</code>,{' '}
+              <code className={styles.mono}>reasoning</code>, or <code className={styles.mono}>vision</code>;
+              you decide which model serves each. Unassigned routes inherit{' '}
+              <code className={styles.mono}>default</code> — but only when that model actually has
+              the capability.
+            </div>
+          </div>
+          <div className={styles.calloutWarn}>
+            <ShieldAlert size={18} className={styles.calloutWarnIcon} style={{ marginTop: 1 }} />
+            <div>
+              <strong>Behavior is declared, never guessed.</strong> A model either references a
+              bundled preset or declares its own behavior in full — nothing is inferred from the
+              model id. Specialized routes fail closed: with no vision-capable model configured, the
+              image control disables itself rather than sending an image to a model that will ignore
+              it.
+            </div>
+          </div>
+          <div className={styles.calloutInfo}>
+            <Sparkles size={18} className={styles.calloutInfoIcon} style={{ marginTop: 1 }} />
+            <div>
+              <strong>Mix and match.</strong> Chat, embeddings, and OCR are independently
+              configured, and none of them borrows another&apos;s credential.
             </div>
           </div>
         </div>
@@ -188,8 +217,8 @@ export const AIProvidersPage: React.FC<DeploymentProps> = ({ copyToClipboard, co
   );
 };
 
-const ProviderCard: React.FC<{ provider: Provider; copied: boolean; onCopy: () => void }> = ({
-  provider,
+const EndpointCard: React.FC<{ endpoint: Endpoint; copied: boolean; onCopy: () => void }> = ({
+  endpoint: provider,
   copied,
   onCopy,
 }) => (
@@ -198,7 +227,7 @@ const ProviderCard: React.FC<{ provider: Provider; copied: boolean; onCopy: () =
       <div>
         <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: 'var(--ink)' }}>{provider.name}</h3>
         <code className={styles.mono} style={{ fontSize: 11, color: 'var(--ink-3)' }}>
-          {provider.defaultModel}
+          {provider.summary}
         </code>
       </div>
       <a
@@ -243,21 +272,35 @@ const InlineRow: React.FC<{ title: string; badge: string; body: string }> = ({ t
   </div>
 );
 
-const SWITCH_ENV = `# Primary chat model — set ONE of:
-OPENAI_API_KEY=sk-proj-...
-ANTHROPIC_API_KEY=sk-ant-...
-GOOGLE_API_KEY=...
-SILICONFLOW_API_KEY=...
-OLLAMA_BASE_URL=http://localhost:11434
+const MODELS_YAML = `version: 1
 
-# Route selection (falls back to whichever key is present)
-CHAT_PROVIDER=openai       # openai | anthropic | google | siliconflow | ollama
-CHAT_MODEL=gpt-5-mini      # provider-specific model id
+models:
+  # Behavior from a bundled, source-dated preset.
+  workhorse:
+    id: openai/gpt-4o
+    preset: openai/gpt-4o
 
-# Embeddings
-EMBEDDING_PROVIDER=openai
-EMBEDDING_MODEL=text-embedding-3-large
+  # Cheaper model for extraction and query planning.
+  cheap:
+    id: openai/gpt-4o-mini
+    preset: openai/gpt-4o-mini
 
-# Reranker (optional)
-RERANKER_PROVIDER=jina
-JINA_API_KEY=jina_your_key`;
+  # No preset? Declare the behavior yourself — nothing is guessed.
+  thirdparty:
+    id: MiniMax-M2
+    behavior:
+      input: [text]
+      reasoning:
+        mode: none
+      nativeStructuredOutput: []
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported
+
+routes:
+  default: workhorse      # required
+  fast: cheap             # inherits default when omitted
+  vision: workhorse       # needs a model declaring image input
+  # reasoning:            # omit and it inherits default, if capable`;

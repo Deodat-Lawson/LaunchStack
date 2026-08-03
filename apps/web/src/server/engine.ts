@@ -12,7 +12,6 @@ import { createEngine, type CoreConfig, type Engine } from "@launchstack/core";
 
 import { env } from "~/env";
 import { configureProviders } from "@launchstack/core/providers/registry";
-import { configureChatModels } from "@launchstack/core/llm";
 import { configureSecretBox } from "@launchstack/core/crypto";
 import { configureOcr } from "@launchstack/core/ocr/config";
 import { configureEmbeddingIndexRegistry } from "@launchstack/core/embeddings";
@@ -22,6 +21,7 @@ import { createAppStoragePort } from "./storage/port";
 import { createAppJobDispatcherPort } from "./jobs/port";
 import { createAppCreditsPort } from "./credits/port";
 import { createAppRagPort } from "./rag/port";
+import { configureAppChatModels, getAppChatModelsConfig } from "./chat-models";
 
 type EngineHolder = { engine: Engine };
 
@@ -59,16 +59,22 @@ function buildConfig(): CoreConfig {
     db: { url: server.DATABASE_URL },
 
     llm: {
+      // Chat: one OpenAI-compatible endpoint plus the validated model file.
+      chat: getAppChatModelsConfig(server),
+      // Non-chat OpenAI-compatible work (OCR chunking, VLM enrichment,
+      // embeddings fallback) keeps its own credentials — it must never
+      // borrow the chat endpoint's key.
+      auxiliaryOpenAI: {
+        apiKey: server.AI_API_KEY ?? server.OPENAI_API_KEY,
+        baseUrl: server.AI_BASE_URL,
+      },
       openai: server.OPENAI_API_KEY
         ? { apiKey: server.OPENAI_API_KEY, model: server.OPENAI_MODEL }
         : undefined,
-      anthropic: server.ANTHROPIC_API_KEY
-        ? { apiKey: server.ANTHROPIC_API_KEY, model: server.ANTHROPIC_MODEL }
-        : undefined,
-      google: server.GOOGLE_AI_API_KEY
-        ? { apiKey: server.GOOGLE_AI_API_KEY, model: server.GOOGLE_MODEL }
-        : undefined,
       ollama,
+      openaiCompatible: server.AI_BASE_URL
+        ? { baseUrl: server.AI_BASE_URL, apiKey: server.AI_API_KEY }
+        : undefined,
       huggingface,
       aiBaseUrl: server.AI_BASE_URL,
       aiApiKey: server.AI_API_KEY,
@@ -176,20 +182,7 @@ export function getEngine(): Engine {
 
   // Register chat-model config so chat-model-factory sees the same
   // provider credentials as core does.
-  configureChatModels({
-    aiBaseUrl: config.llm.aiBaseUrl,
-    aiApiKey: config.llm.aiApiKey,
-    openai: config.llm.openai
-      ? {
-          apiKey: config.llm.openai.apiKey,
-          model: env.server.OPENAI_MODEL,
-          chatModel: env.server.CHAT_MODEL,
-        }
-      : undefined,
-    anthropic: config.llm.anthropic,
-    google: config.llm.google,
-    ollama: config.llm.ollama,
-  });
+  configureAppChatModels(env.server);
 
   // Register embedding-related defaults so the index registry, the
   // embedding factory, and the company-override resolver all read from
@@ -219,9 +212,19 @@ export function getEngine(): Engine {
     sidecarUrl: config.embeddings.sidecar?.url,
   });
 
+  // Endpoint and credential are chosen as a PAIR, most specific first: the
+  // embeddings-only endpoint, then the shared non-chat one. Never one source's
+  // key with another's URL — that posts a credential to a service it does not
+  // belong to. There is no built-in default behind either: the operator names
+  // where embeddings are sent.
+  const embeddingEndpoint = config.embeddings.override?.baseUrl
+    ? config.embeddings.override
+    : config.llm.auxiliaryOpenAI;
+
   configureCompanyEmbeddingDefaults({
     embeddingIndexKey: config.embeddings.indexName,
-    openAIApiKey: config.llm.openai?.apiKey,
+    openAIApiKey: embeddingEndpoint?.apiKey,
+    openAIBaseUrl: embeddingEndpoint?.baseUrl,
     huggingFaceApiKey: config.llm.huggingface?.apiKey,
     ollamaBaseUrl: config.llm.ollama?.baseUrl,
     ollamaEmbeddingModel: config.llm.ollama?.embeddingModel,

@@ -36,7 +36,7 @@ services:
   migrate:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/web/Dockerfile
       target: migrate
       args:
         <<: *app-build-args
@@ -144,7 +144,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/web/Dockerfile
       target: runner
       args:
         <<: *app-build-args
@@ -159,13 +159,21 @@ services:
         condition: service_healthy
       ocr-router:
         condition: service_healthy
+    volumes:
+      # Chat model configuration is non-secret and edited far more often than
+      # the image is rebuilt — mount it read-only rather than baking it in.
+      - ./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
-      # AI providers — global + per-capability
+      # Chat: one OpenAI-compatible endpoint. Model ids and route assignments
+      # live in the mounted chat-models.yaml, not in environment variables.
+      CHAT_BASE_URL: ${CHAT_BASE_URL:-}
+      CHAT_API_KEY: ${CHAT_API_KEY:-}
+      CHAT_MODELS_CONFIG: ${CHAT_MODELS_CONFIG:-config/chat-models.yaml}
+      # Non-chat providers — global + per-capability. Never used for chat.
       AI_BASE_URL: ${AI_BASE_URL:-}
       AI_API_KEY: ${AI_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      CHAT_MODEL: ${CHAT_MODEL:-}
       EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
       RERANK_MODEL: ${RERANK_MODEL:-}
       NER_MODEL: ${NER_MODEL:-}

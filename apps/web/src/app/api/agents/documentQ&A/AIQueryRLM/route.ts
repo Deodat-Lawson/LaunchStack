@@ -27,13 +27,11 @@ import {
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModelForProvider,
-    getProviderDefaultModel,
-    describeProviderError,
+    describeChatError,
 } from "../services";
 import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
-import type { AIModelType, LLMProvider } from "../services";
-import { LLMProviders, isModelAllowedForProvider } from "../services/types";
+import { resolveConfiguredChatModel } from "~/lib/models";
+import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/core/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -49,8 +47,8 @@ interface RLMQueryRequest {
     question: string;
     // Standard options
     style?: keyof typeof SYSTEM_PROMPTS;
-    aiModel?: AIModelType;
-    provider: LLMProvider;
+    aiModel?: string;
+    provider?: string;
     enableWebSearch?: boolean;
     aiPersona?: string;
     conversationHistory?: string | undefined;
@@ -81,17 +79,8 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
         return { success: false, error: "question is required and must be a non-empty string" };
     }
 
-    // Normalize provider
-    const providerInput = typeof req.provider === "string" ? (req.provider.trim() || undefined) : undefined;
-    const providerCandidate = (providerInput ?? "openai") as string;
-    if (!LLMProviders.includes(providerCandidate as LLMProvider)) {
-        return { success: false, error: `provider must be one of: ${LLMProviders.join(", ")}` };
-    }
-    const providerValue = providerCandidate as LLMProvider;
-
-    if (req.aiModel && !isModelAllowedForProvider(providerValue, req.aiModel as string)) {
-        return { success: false, error: `Model ${req.aiModel as string} is not available for provider ${providerValue}` };
-    }
+    const providerValue = typeof req.provider === "string" ? (req.provider.trim() || undefined) : undefined;
+    const modelValue = typeof req.aiModel === "string" ? (req.aiModel.trim() || undefined) : undefined;
 
     // Validate maxTokens if provided
     if (req.maxTokens !== undefined) {
@@ -121,7 +110,7 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
             documentId: req.documentId,
             question: req.question,
             style: req.style as keyof typeof SYSTEM_PROMPTS | undefined,
-            aiModel: req.aiModel as AIModelType | undefined,
+            aiModel: modelValue,
             provider: providerValue,
             enableWebSearch: req.enableWebSearch as boolean | undefined,
             aiPersona: req.aiPersona as string | undefined,
@@ -177,6 +166,21 @@ export async function POST(request: Request) {
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
 
+            // Resolve before the hierarchical search runs: an unavailable
+            // route is a 400, and RLM retrieval is the expensive part.
+            const resolved = resolveConfiguredChatModel();
+            const compatibility = validateDeprecatedChatSelection(
+                { provider, model: aiModel },
+                resolved,
+            );
+            if (!compatibility.ok) {
+                return NextResponse.json(
+                    { success: false, message: compatibility.message },
+                    { status: compatibility.status },
+                );
+            }
+            const { modelId: selectedAiModel, chat } = resolved;
+
             const [targetDocument] = await db
                 .select({
                     id: document.id,
@@ -230,13 +234,6 @@ export async function POST(request: Request) {
                 5
             );
 
-            // Get AI model and generate response
-            const resolvedProvider = provider;
-            const selectedAiModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
-            const chat = getChatModelForProvider({
-                provider: resolvedProvider,
-                model: selectedAiModel,
-            });
             const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
 
             // Build conversation context
@@ -272,12 +269,14 @@ Provide a comprehensive answer based on the provided content. When referencing s
 
             let response;
             try {
-                response = await chat.call([
-                    new SystemMessage(systemPrompt),
-                    new HumanMessage(userPrompt),
-                ]);
+                response = await chat.invoke(
+                    resolved.prepareMessages([
+                        new SystemMessage(systemPrompt),
+                        new HumanMessage(userPrompt),
+                    ]),
+                );
             } catch (modelError) {
-                const friendly = describeProviderError(resolvedProvider, modelError, selectedAiModel);
+                const friendly = describeChatError(modelError, selectedAiModel);
                 if (friendly) {
                     return NextResponse.json(
                         {

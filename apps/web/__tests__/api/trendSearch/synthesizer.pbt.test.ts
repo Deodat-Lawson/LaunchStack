@@ -7,15 +7,37 @@
  * Validates: Requirements 4.1, 4.2, 4.3, 4.5
  */
 
-const mockInvoke = jest.fn();
+import type * as CoreLlm from "@launchstack/core/llm";
 
-jest.mock("@langchain/openai", () => {
-    const MockChatOpenAI = class {
-        withStructuredOutput() {
-            return { invoke: mockInvoke };
-        }
+const mockInvoke = jest.fn<Promise<unknown>, []>();
+
+jest.mock("@launchstack/core/llm", () => {
+    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
+    return {
+        __esModule: true,
+        ...actual,
+        resolveChatModel: jest.fn(() => ({
+            route: "fast",
+            name: "primary",
+            modelId: "test-model",
+            behavior: {
+                input: ["text"],
+                reasoning: { mode: "none" },
+                nativeStructuredOutput: ["json-schema"],
+                parameters: {
+                    temperature: "supported",
+                    systemMessages: "supported",
+                    streaming: "supported",
+                    maxOutputTokens: "supported",
+                },
+            },
+            inheritsDefault: true,
+            reasoning: { mode: "none", enabled: false, requestPatch: {} },
+            chat: {},
+            prepareMessages: (messages: unknown[]) => messages,
+        })),
+        invokeStructured: jest.fn(() => mockInvoke()),
     };
-    return { __esModule: true, ChatOpenAI: MockChatOpenAI };
 });
 
 import * as fc from "fast-check";

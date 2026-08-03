@@ -29,15 +29,14 @@ import {
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModelForProvider,
-    getProviderDefaultModel,
-    describeProviderError,
+    describeChatError,
     getEmbeddings,
     buildReferences,
     extractRecommendedPages,
-    type AIModelType,
 } from "../../services";
-import { supportsVision } from "@launchstack/core/llm/types";
+import { resolveConfiguredChatModel, selectChatRoute } from "~/lib/models";
+import { isChatRequestError, normalizeTokenUsage } from "@launchstack/core/llm";
+import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
@@ -236,6 +235,69 @@ export async function POST(request: Request) {
 
             const userCompanyId = ctx.data.companyId;
             const numericCompanyId = Number(userCompanyId);
+
+            // Resolve the chat route before any retrieval, web search, or
+            // embedding work: an unavailable route is a 400, and paying for
+            // context we are about to discard helps nobody.
+            const imageAttachments = (attachments ?? []).filter(
+                (a) => a.kind === "image",
+            );
+            const textAttachments = (attachments ?? []).filter(
+                (a) => a.kind === "text",
+            );
+            const { route, requiredCapabilities } = selectChatRoute({
+                vision: imageAttachments.length > 0,
+                reasoning: Boolean(thinkingMode),
+            });
+
+            let resolved;
+            try {
+                resolved = resolveConfiguredChatModel({
+                    route,
+                    requiredCapabilities,
+                    reasoningControl: { enabled: Boolean(thinkingMode) },
+                });
+            } catch (modelError) {
+                recordResult("error");
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message:
+                            modelError instanceof Error
+                                ? modelError.message
+                                : "The configured chat models cannot serve this request",
+                    },
+                    { status: isChatRequestError(modelError) ? modelError.status : 500 },
+                );
+            }
+
+            const compatibility = validateDeprecatedChatSelection(
+                { provider, model: aiModel },
+                resolved,
+            );
+            if (!compatibility.ok) {
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, message: compatibility.message },
+                    { status: compatibility.status },
+                );
+            }
+            const { modelId: selectedAiModel, chat } = resolved;
+
+            if (
+                imageAttachments.length > 0 &&
+                resolved.behavior.image?.maxImages !== undefined &&
+                imageAttachments.length > resolved.behavior.image.maxImages
+            ) {
+                recordResult("error");
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: `The configured vision model accepts at most ${resolved.behavior.image.maxImages} image(s) per request.`,
+                    },
+                    { status: 400 },
+                );
+            }
 
             // Validate search scope requirements
             if (searchScope === "document" && !documentId) {
@@ -555,36 +617,8 @@ export async function POST(request: Request) {
                 5
             );
 
-            // Get AI model and generate comprehensive response
-            const resolvedProvider = provider ?? "openai";
-            const selectedAiModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
-
-            // Ephemeral attachment handling. Images require a vision-capable
-            // model; fail fast with a clear error before the LLM call.
-            const imageAttachments = (attachments ?? []).filter(
-                (a) => a.kind === "image",
-            );
-            const textAttachments = (attachments ?? []).filter(
-                (a) => a.kind === "text",
-            );
-            if (imageAttachments.length > 0 && !supportsVision(selectedAiModel)) {
-                recordResult("error");
-                return NextResponse.json(
-                    {
-                        success: false,
-                        message: `Image attachments require a vision-capable model. "${selectedAiModel}" cannot read images — pick GPT-5, Claude Sonnet 4, or Gemini.`,
-                    },
-                    { status: 400 },
-                );
-            }
-
             const attachmentTextBlock = await buildAttachmentTextBlock(textAttachments);
 
-            const chat = getChatModelForProvider({
-                provider: resolvedProvider,
-                model: selectedAiModel,
-                thinking: thinkingMode,
-            });
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
             // Build conversation context
@@ -623,12 +657,14 @@ export async function POST(request: Request) {
 
             let response;
             try {
-                response = await chat.call([
-                    new SystemMessage(systemPrompt),
-                    humanMessage,
-                ]);
+                response = await chat.invoke(
+                    resolved.prepareMessages([
+                        new SystemMessage(systemPrompt),
+                        humanMessage,
+                    ]),
+                );
             } catch (modelError) {
-                const friendly = describeProviderError(resolvedProvider, modelError, selectedAiModel);
+                const friendly = describeChatError(modelError, selectedAiModel);
                 if (friendly) {
                     recordResult("error");
                     return NextResponse.json(
@@ -645,33 +681,23 @@ export async function POST(request: Request) {
             let summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;
 
-            // Log + meter LLM token usage
-            {
-                const usage = response.response_metadata?.tokenUsage as
-                    | { promptTokens?: number; completionTokens?: number }
-                    | undefined;
-                const promptTokens = usage?.promptTokens ?? 0;
-                const completionTokens = usage?.completionTokens ?? 0;
-                console.log(
-                    `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
-                );
-            }
-            if (isCloudMode()) {
-                const usage = response.response_metadata?.tokenUsage as
-                    | { promptTokens?: number; completionTokens?: number }
-                    | undefined;
-                const promptTokens = usage?.promptTokens ?? 0;
-                const completionTokens = usage?.completionTokens ?? 0;
-                if (promptTokens + completionTokens > 0) {
-                    const tokenCost = llmChatTokens(promptTokens, completionTokens);
-                    debitTokens({
-                        companyId: userCompanyId,
-                        amount: tokenCost,
-                        service: "llm_chat",
-                        description: `Chat query via ${resolvedProvider}/${selectedAiModel}`,
-                        metadata: { promptTokens, completionTokens, provider: resolvedProvider, model: selectedAiModel },
-                    }).catch((err) => console.warn("[AIChat] Token debit failed:", err));
-                }
+            // Log + meter LLM token usage. Normalized at the chat boundary so
+            // credits are debited the same way whichever endpoint answered.
+            const usage = normalizeTokenUsage(response);
+            const promptTokens = usage.inputTokens ?? 0;
+            const completionTokens = usage.outputTokens ?? 0;
+            console.log(
+                `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${usage.totalTokens ?? promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
+            );
+            if (isCloudMode() && userCompanyId && promptTokens + completionTokens > 0) {
+                const tokenCost = llmChatTokens(promptTokens, completionTokens);
+                debitTokens({
+                    companyId: userCompanyId,
+                    amount: tokenCost,
+                    service: "llm_chat",
+                    description: `Chat query via ${selectedAiModel}`,
+                    metadata: { promptTokens, completionTokens, model: selectedAiModel, route },
+                }).catch((err) => console.warn("[AIChat] Token debit failed:", err));
             }
 
             const sourceTexts = documents.map(d => d.pageContent);
@@ -739,4 +765,3 @@ export async function POST(request: Request) {
         }
     });
 }
-

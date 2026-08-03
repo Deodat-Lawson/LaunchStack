@@ -17,6 +17,7 @@ import { routeDocument, normalizeDocument } from "@launchstack/core/ocr/processo
 import { ingestDocument } from "@launchstack/core/ingestion/router";
 
 export const runtime = "nodejs";
+// Keep benchmarks within the 300s default shared by current Vercel plans.
 export const maxDuration = 300;
 
 export async function POST(request: Request) {

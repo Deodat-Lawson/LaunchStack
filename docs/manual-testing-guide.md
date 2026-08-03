@@ -26,20 +26,20 @@ Before the first pass:
 
 2. **Database**
    ```bash
-   pnpm db:push
+   pnpm --filter @launchstack/web db:push
    ```
 
 3. **Enable Inngest** (required for background document processing)
    - Set `INNGEST_EVENT_KEY=placeholder` in `.env`.
    - In a **separate terminal**, run the Inngest dev server:
    ```bash
-   pnpm inngest:dev
+   pnpm --filter @launchstack/web inngest:dev
    ```
    Dashboard: **http://localhost:8288**. Keep this running while testing.
 
 4. **Run dev server**
    ```bash
-   pnpm run dev
+   pnpm --filter @launchstack/web dev
    ```
    Open **http://localhost:3000**.
 

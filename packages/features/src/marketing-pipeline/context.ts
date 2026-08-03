@@ -7,8 +7,7 @@ import {
     type CompanySearchOptions,
     type RagSearchResult as SearchResult,
 } from "@launchstack/core/rag";
-import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
-import { MARKETING_MODELS } from "./models";
+import { invokeMarketingStructured } from "./models";
 import type { CompanyDNA, DNADebugInfo } from "./types";
 import { CompanyDNASchema } from "./types";
 import type { CompanyMetadataJSON, MetadataFact } from "@launchstack/features/company-metadata";
@@ -136,7 +135,7 @@ async function buildMetadataContext(companyId: number): Promise<string | null> {
     const description = readFact(md.company.description);
     const industry = readFact(md.company.industry);
     const size = readFact(md.company.size);
-    const founded = readFact(md.company.founded_year as MetadataFact<number> | undefined);
+    const founded = readFact(md.company.founded_year);
     const hq = readFact(md.company.headquarters);
 
     parts.push("=== Company ===");
@@ -294,12 +293,13 @@ Rules:
 Return valid JSON matching the schema.`;
 
 async function synthesizeDNA(context: string, userPrompt: string): Promise<CompanyDNA> {
-    const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
-    const model = chat.withStructuredOutput(CompanyDNASchema, { name: "company_dna" });
-    const response = await model.invoke([
-        new SystemMessage(DNA_SYSTEM_PROMPT),
-        new HumanMessage(`Company information:\n\n${context}\n\nUser focus: ${userPrompt}`),
-    ]);
+    const response = await invokeMarketingStructured(
+        CompanyDNASchema,
+        [
+            new SystemMessage(DNA_SYSTEM_PROMPT),
+            new HumanMessage(`Company information:\n\n${context}\n\nUser focus: ${userPrompt}`),
+        ],
+        "company_dna",
+    );
     return CompanyDNASchema.parse(response);
 }
-

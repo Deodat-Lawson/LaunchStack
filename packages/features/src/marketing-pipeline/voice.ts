@@ -3,8 +3,7 @@ import {
     getRag,
     type CompanySearchOptions,
 } from "@launchstack/core/rag";
-import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
-import { MARKETING_MODELS } from "./models";
+import { invokeMarketingStructured } from "./models";
 import type { BrandVoice, FormalityLevel } from "./types";
 import { BrandVoiceSchema } from "./types";
 
@@ -33,11 +32,9 @@ export async function extractBrandVoice(args: {
         ? `\n\nThe user has requested a ${toneOverride} tone. Set formalityLevel to "${toneOverride}" and adapt the other fields accordingly.`
         : "";
 
-    const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
-    const model = chat.withStructuredOutput(BrandVoiceSchema, { name: "brand_voice" });
-
-    const response = await model.invoke([
-        new SystemMessage(
+    const response = await invokeMarketingStructured(
+        BrandVoiceSchema,
+        [new SystemMessage(
             `You are a brand voice analyst. Given text samples from a company's documents, synthesize a BrandVoice profile that captures how this company communicates.
 
 Rules:
@@ -48,8 +45,9 @@ Rules:
 
 Use ONLY patterns visible in the provided text. Return valid JSON.${toneHint}`,
         ),
-        new HumanMessage(`Company text samples:\n\n${contextBlock}`),
-    ]);
+        new HumanMessage(`Company text samples:\n\n${contextBlock}`)],
+        "brand_voice",
+    );
 
     return BrandVoiceSchema.parse(response);
 }

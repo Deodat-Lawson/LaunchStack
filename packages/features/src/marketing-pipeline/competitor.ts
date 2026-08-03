@@ -2,8 +2,7 @@ import { createHash } from "node:crypto";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { executeSearch } from "@launchstack/features/trend-search/web-search";
 import type { PlannedQuery } from "@launchstack/features/trend-search";
-import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
-import { MARKETING_MODELS } from "./models";
+import { invokeMarketingStructured } from "./models";
 import type { CompetitorAnalysis } from "./types";
 import { CompetitorAnalysisSchema } from "./types";
 
@@ -136,14 +135,11 @@ Rules:
 
 Return valid JSON matching the schema.`;
 
-  const chat = getChatModel(MARKETING_MODELS.competitorAnalysis);
-  const model = chat.withStructuredOutput(CompetitorAnalysisSchema, {
-    name: "competitor_analysis",
-  });
-  const response = await model.invoke([
-    new SystemMessage(systemPrompt),
-    new HumanMessage(rawContext),
-  ]);
+  const response = await invokeMarketingStructured(
+    CompetitorAnalysisSchema,
+    [new SystemMessage(systemPrompt), new HumanMessage(rawContext)],
+    "competitor_analysis",
+  );
 
   const result = CompetitorAnalysisSchema.parse(response);
   setCache(companyName, categories, result);

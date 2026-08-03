@@ -20,7 +20,7 @@ import {
   Section,
   SelectInput,
 } from "~/app/employer/_components/primitives";
-import { isManagementRole } from "~/lib/membership-roles";
+import { isManagementRole, type ManagementRole } from "~/lib/membership-roles";
 
 interface InviteCode {
   id: number;
@@ -33,7 +33,7 @@ interface InviteCode {
 export default function ManageEmployeesPage() {
   const { isLoaded, userId } = useAuth();
   const router = useRouter();
-  const [userRole, setUserRole] = useState<"owner" | "employer">("employer");
+  const [userRole, setUserRole] = useState<ManagementRole>("admin");
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [pendingEmployees, setPendingEmployees] = useState<Employee[]>([]);
@@ -188,7 +188,7 @@ export default function ManageEmployeesPage() {
       <EmployerChrome pageLabel="Launchstack" pageTitle="Workspace" />
       <PageShell wide>
         <PageHeader
-          eyebrow={userRole === "owner" ? "Owner · workspace" : "Employer · workspace"}
+          eyebrow={userRole === "owner" ? "Owner · workspace" : "Admin · workspace"}
           title="Manage your team"
           description="Invite teammates, approve pending signups, and manage active employees. Invite codes give one-click access — anyone with the code can join as the role you assigned."
           actions={

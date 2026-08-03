@@ -81,7 +81,7 @@ function inferMimeFromName(name: string): string | undefined {
     return EXTENSION_TO_MIME[match[1].toLowerCase()];
 }
 
-export async function POST(_request?: Request) {
+export async function POST(_request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;

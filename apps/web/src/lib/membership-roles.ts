@@ -9,13 +9,18 @@
  * same gate without pulling in Clerk/DB.
  */
 
-export const MANAGEMENT_ROLES = new Set(["owner", "admin"]);
+export type ManagementRole = "owner" | "admin";
+
+export const MANAGEMENT_ROLES = new Set<string>(["owner", "admin"]);
 
 /**
  * True when the membership role may manage workspace-wide configuration
  * (settings, invites, company-wide search, destructive document ops, etc.).
  * Editors work on documents; they do not pass this gate.
+ *
+ * Narrows so callers holding a raw `role` string can use the result directly
+ * where a management role is required.
  */
-export function isManagementRole(role: string): boolean {
+export function isManagementRole(role: string): role is ManagementRole {
   return MANAGEMENT_ROLES.has(role);
 }

@@ -273,11 +273,16 @@ export async function POST(request: Request) {
                 }
             }
 
-            // Validate document access
+            // Validate document access. The verified row is kept so history
+            // logging below can reuse it instead of re-reading whatever
+            // `documentId` the caller sent — on company/archive/selected
+            // searches that id is extraneous and was never authorized.
+            let authorizedDocument: { id: number; title: string } | null = null;
             if (searchScope === "document" && documentId) {
                 const [targetDocument] = await db
                     .select({
                         id: document.id,
+                        title: document.title,
                         companyId: document.companyId
                     })
                     .from(document)
@@ -299,6 +304,11 @@ export async function POST(request: Request) {
                         message: "You do not have access to this document."
                     }, { status: 403 });
                 }
+
+                authorizedDocument = {
+                    id: targetDocument.id,
+                    title: targetDocument.title,
+                };
             }
 
             const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
@@ -668,25 +678,21 @@ export async function POST(request: Request) {
                 summarizedAnswer = supervision.adjustedOutput;
             }
 
-            // Log query to ChatHistory for analytics
+            // Log query to ChatHistory for analytics. Only document-scope
+            // searches produce a history row, and only against the document
+            // authorized above — a company/archive/selected search carrying a
+            // stray documentId must not attach the caller's history to it.
             try {
-                if (documentId) {
-                    const [doc] = await db
-                        .select({ title: document.title })
-                        .from(document)
-                        .where(eq(document.id, documentId));
-
-                    if (doc) {
-                        await db.insert(ChatHistory).values({
-                            UserId: ctx.data.clerkUserId,
-                            documentId: BigInt(documentId),
-                            documentTitle: doc.title,
-                            question: question,
-                            response: summarizedAnswer,
-                            pages: extractRecommendedPages(documents),
-                            queryType: "simple"
-                        });
-                    }
+                if (searchScope === "document" && authorizedDocument) {
+                    await db.insert(ChatHistory).values({
+                        UserId: ctx.data.clerkUserId,
+                        documentId: BigInt(authorizedDocument.id),
+                        documentTitle: authorizedDocument.title,
+                        question: question,
+                        response: summarizedAnswer,
+                        pages: extractRecommendedPages(documents),
+                        queryType: "simple"
+                    });
                 }
             } catch (logError) {
                 console.error("Failed to log chat history:", logError);

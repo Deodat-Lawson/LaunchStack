@@ -158,6 +158,19 @@ describe("GET /api/company/analysis-dashboard", () => {
     expect(response.status).toBe(403);
   });
 
+  it("allows an admin member", async () => {
+    (requireWorkspaceContext as jest.Mock).mockResolvedValue({
+      success: true,
+      data: { ...OWNER_CTX, role: "admin" },
+    });
+
+    mockQueuedResults = [[], [{ count: 0 }], [], [], []];
+
+    const response = await GET();
+
+    expect(response.status).toBe(200);
+  });
+
   it("sources the roster from memberships and scopes chat history to company documents", async () => {
     (requireWorkspaceContext as jest.Mock).mockResolvedValue({
       success: true,
@@ -190,9 +203,18 @@ describe("GET /api/company/analysis-dashboard", () => {
 
     expect(response.status).toBe(200);
     expect(json.data.employees[0].queryCount).toBe(3);
+    // The displayed role is the one granted in this workspace.
     expect(json.data.employees[0].role).toBe("owner");
+    // Totals and the trend are the membership roster, not a global user list.
+    expect(json.data.totalEmployees).toBe(1);
+    expect(json.data.employeeTrend).toHaveLength(30);
+    expect(json.data.employeeTrend.at(-1).count).toBe(1);
 
     const calls = serialized();
+    // The joining trend is keyed on when the membership was created.
+    expect(calls).toContain("membership.created_at");
+    // Document totals and view trends stay filtered by the active company.
+    expect(calls).toContain("views.company_id");
     // Roster and trend read memberships, not the legacy users.companyId.
     expect(calls).toContain("membership.company_id");
     expect(calls).not.toContain('"company_id"');

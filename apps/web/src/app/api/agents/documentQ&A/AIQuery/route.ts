@@ -23,14 +23,13 @@ import {
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModelForProvider,
-    getProviderDefaultModel,
-    describeProviderError,
+    describeChatError,
     getEmbeddings,
     extractRecommendedPages,
     filterPagesByAICitation,
-    type AIModelType,
 } from "../services";
+import { resolveConfiguredChatModel } from "~/lib/models";
+import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
@@ -90,6 +89,22 @@ export async function POST(request: Request) {
                 conversationHistory,
                 embeddingIndexKey,
             } = validation.data;
+
+            // Resolve before retrieval and web search: a misconfigured route
+            // should fail before the request pays for context it will discard.
+            const resolved = resolveConfiguredChatModel();
+            const compatibility = validateDeprecatedChatSelection(
+                { provider, model: aiModel },
+                resolved,
+            );
+            if (!compatibility.ok) {
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, message: compatibility.message },
+                    { status: compatibility.status },
+                );
+            }
+            const { modelId: resolvedModel, chat } = resolved;
 
             // AIQuery only supports document-level search
             if (!documentId) {
@@ -254,13 +269,6 @@ export async function POST(request: Request) {
                 5
             );
 
-            // Get AI model and generate response
-            const resolvedProvider = provider ?? "openai";
-            const resolvedModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
-            const chat = getChatModelForProvider({
-                provider: resolvedProvider,
-                model: resolvedModel,
-            });
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
             // Build conversation context
@@ -282,12 +290,14 @@ export async function POST(request: Request) {
             
             let response;
             try {
-                response = await chat.call([
-                    new SystemMessage(systemPrompt),
-                    new HumanMessage(userPrompt),
-                ]);
+                response = await chat.invoke(
+                    resolved.prepareMessages([
+                        new SystemMessage(systemPrompt),
+                        new HumanMessage(userPrompt),
+                    ]),
+                );
             } catch (modelError) {
-                const friendly = describeProviderError(resolvedProvider, modelError, resolvedModel);
+                const friendly = describeChatError(modelError, resolvedModel);
                 if (friendly) {
                     recordResult("error");
                     return NextResponse.json(

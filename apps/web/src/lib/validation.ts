@@ -1,12 +1,5 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
-import {
-  AIModelTypes,
-  LLMProviders,
-  isModelAllowedForProvider,
-  type AIModelType,
-  type LLMProvider,
-} from "~/app/api/agents/documentQ&A/services/types";
 
 export const createErrorResponse = (message: string, status = 400) => {
   return NextResponse.json(
@@ -87,23 +80,6 @@ export const PredictiveAnalysisSchema = z.object({
 }));
 
 const aiPersonaOptions = ["general", "learning-coach", "financial-expert", "legal-expert", "math-reasoning"] as const;
-const aiModelOptions = AIModelTypes;
-const providerOptions = LLMProviders;
-
-function assertProviderModelCombination(
-  provider: LLMProvider,
-  model: AIModelType | undefined,
-  ctx: z.RefinementCtx,
-) {
-  if (model && !isModelAllowedForProvider(provider, model)) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["aiModel"],
-      message: `Model \"${String(model)}\" is not available for provider \"${String(provider)}\"`,
-    });
-  }
-}
-
 const AttachmentPayloadSchema = z.object({
   url: z.string().url("Attachment url must be a valid URL"),
   name: z.string().min(1).max(512),
@@ -125,8 +101,8 @@ export const QuestionSchema = z
     selectedDocumentIds: z.array(z.number().int().positive()).optional(),
     enableWebSearch: z.boolean().optional().default(false),
     aiPersona: z.enum(aiPersonaOptions).optional(),
-    aiModel: z.enum(aiModelOptions).optional(),
-    provider: z.enum(providerOptions).default("openai"),
+    aiModel: z.string().min(1).optional(),
+    provider: z.string().min(1).optional(),
     conversationHistory: z.string().optional(),
     embeddingIndexKey: z.string().min(1).optional(),
     thinkingMode: z.boolean().optional().default(false),
@@ -134,9 +110,6 @@ export const QuestionSchema = z
     // as multimodal content blocks on vision-capable models; text files are
     // inlined into the prompt. Capped at 5 to bound context growth.
     attachments: z.array(AttachmentPayloadSchema).max(5).optional(),
-  })
-  .superRefine((data, ctx) => {
-    assertProviderModelCombination(data.provider, data.aiModel, ctx);
   })
   .transform((data) => {
     return {
@@ -397,9 +370,12 @@ export const CreateNoteSchema = z
   })
   .refine(
     (data) =>
-      Boolean(
-        data.title || data.content || data.contentMarkdown || data.contentRich,
-      ),
+      [
+        data.title,
+        data.content,
+        data.contentMarkdown,
+        data.contentRich,
+      ].some((value) => Boolean(value)),
     {
       message:
         "At least one of title, content, contentMarkdown, or contentRich is required",
@@ -446,9 +422,12 @@ export const PresignUploadSchema = z.object({
   filename: z.string().optional(),
   fileName: z.string().optional(),
   contentType: z.string().min(1, "contentType is required"),
-}).refine((data) => data.filename || data.fileName, {
-  message: "filename or fileName is required",
-});
+}).refine(
+  (data) => [data.filename, data.fileName].some((value) => Boolean(value)),
+  {
+    message: "filename or fileName is required",
+  },
+);
 
 // ============================================================================
 // Voice Schemas
@@ -569,8 +548,8 @@ export const RLMQuestionSchema = z
     style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
     enableWebSearch: z.boolean().optional().default(false),
     aiPersona: z.enum(aiPersonaOptions).optional(),
-    aiModel: z.enum(aiModelOptions).optional(),
-    provider: z.enum(providerOptions).default("openai"),
+    aiModel: z.string().min(1).optional(),
+    provider: z.string().min(1).optional(),
     conversationHistory: z.string().optional(),
     embeddingIndexKey: z.string().min(1).optional(),
     // RLM-specific options
@@ -588,9 +567,6 @@ export const RLMQuestionSchema = z
         message: "pageRange.end must be >= pageRange.start",
       })
       .optional(),
-  })
-  .superRefine((data, ctx) => {
-    assertProviderModelCombination(data.provider, data.aiModel, ctx);
   })
   .transform((data) => {
     return {

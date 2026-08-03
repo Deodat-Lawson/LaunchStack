@@ -2,6 +2,8 @@ import type { StoragePort } from "../storage/types";
 import type { JobDispatcherPort } from "../jobs/types";
 import type { CreditsPort } from "../credits/types";
 import type { RagPort } from "../rag/types";
+import type { ChatModelsConfig } from "../llm/chat-config";
+import type { AuxiliaryOpenAIConfig } from "../llm/openai-client";
 
 /**
  * CoreConfig is the single parameter to createEngine. The app constructs one
@@ -48,17 +50,34 @@ export interface DbConfig {
 }
 
 export interface LlmConfig {
+  /**
+   * Chat: one OpenAI-compatible endpoint plus the model definitions and route
+   * assignments validated from the chat model configuration file.
+   */
+  chat?: ChatModelsConfig;
+  /**
+   * Credentials for the **non-chat** OpenAI-compatible subsystems (OCR
+   * chunking, VLM enrichment, embeddings fallback). Kept separate so those
+   * capabilities never borrow the chat endpoint's key.
+   */
+  auxiliaryOpenAI?: AuxiliaryOpenAIConfig;
   openai?: ProviderCredentials;
-  anthropic?: ProviderCredentials;
-  google?: ProviderCredentials;
   ollama?: OllamaConfig;
+  openaiCompatible?: OpenAICompatibleConfig;
   huggingface?: HuggingfaceConfig;
   /**
-   * Global AI-provider fallback. If set, any capability without per-provider
-   * credentials resolves through this OpenAI-compatible endpoint.
+   * Global AI-provider fallback for non-chat capabilities. If set, any
+   * capability without its own credentials resolves through this
+   * OpenAI-compatible endpoint.
    */
   aiBaseUrl?: string;
   aiApiKey?: string;
+}
+
+export interface OpenAICompatibleConfig {
+  baseUrl: string;
+  apiKey?: string;
+  model?: string;
 }
 
 export interface ProviderCredentials {

@@ -1,4 +1,4 @@
-import { ChatOpenAI } from "@langchain/openai";
+import { invokeStructured, resolveChatModel } from "@launchstack/core/llm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import type { PlannedQuery, SearchCategory } from "./types";
@@ -71,26 +71,18 @@ export async function planQueries(
     categories?: SearchCategory[],
 ): Promise<PlannedQuery[]> {
 
-    // Initialize the OpenAI chat model
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        modelName: "gpt-5-nano",
-        temperature: 1, // gpt-5-nano only supports default (1), not 0.2
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-    });
-
-    const structuredModel = chat.withStructuredOutput(QueryPlannerOutputSchema, {
-        name: "query_plan",
-    });
+    const resolved = resolveChatModel({ route: "fast" });
 
     // Build the human prompt
     const humanPrompt = buildHumanPrompt(query, companyContext, categories);
 
     // Invoke the structured model
-    const response = await structuredModel.invoke([
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(humanPrompt),
-    ]);
+    const response = await invokeStructured(
+        resolved,
+        QueryPlannerOutputSchema,
+        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
+        { name: "query_plan" },
+    );
 
     return response.plannedQueries as PlannedQuery[];
 }

@@ -285,6 +285,9 @@ const KP_EMBED_CENTER: KpPt = { x: KP_HUB_X, y: KP_HUB_Y_EMBED };
 const kpPctX = (px: number) => `${(px / KP_STAGE_W) * 100}%`;
 const kpPctY = (py: number) => `${(py / KP_STAGE_H) * 100}%`;
 const kpClamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+// Math.sin/Math.cos are not bit-identical across JS engines; round so SSR and
+// client hydration serialize the same value.
+const kpRound = (v: number) => Math.round(v * 1000) / 1000;
 
 function kpCurvePath(a: KpPt, b: KpPt) {
   const dx = (b.x - a.x) * 0.55;
@@ -317,8 +320,8 @@ const KP_GRAPH_NODES: KpNode[] = (() => {
       const a = ((i + ring.offset) / ring.count) * Math.PI * 2;
       const rp = ring.r + Math.sin(i * 2.3 + ri) * 8;
       nodes.push({
-        x: cx + Math.cos(a) * rp,
-        y: cy + Math.sin(a) * rp * 0.72,
+        x: kpRound(cx + Math.cos(a) * rp),
+        y: kpRound(cy + Math.sin(a) * rp * 0.72),
         r: ri === 2 ? 2.5 : ri === 1 ? 3.5 : 4.5,
       });
     }
@@ -472,7 +475,7 @@ function KnowledgePipelineStage() {
   }
 
   const nodeActivity: number[] = KP_GRAPH_NODES.map((_, i) =>
-    i === 0 ? 0 : kpClamp(Math.sin(time * 0.8 + i * 1.3) * 0.5 + 0.4, 0, 1)
+    i === 0 ? 0 : kpRound(kpClamp(Math.sin(time * 0.8 + i * 1.3) * 0.5 + 0.4, 0, 1))
   );
 
   return (
@@ -685,7 +688,7 @@ function KpEmbeddings({ activity, time }: { activity: number; time: number }) {
   for (let i = 0; i < 24; i++) {
     const base = 0.35 + 0.55 * Math.abs(Math.sin(i * 1.7 + 2.1));
     const wave = 0.15 * Math.sin(time * 2.2 - i * 0.45);
-    const h = kpClamp((base + wave) * (0.65 + 0.35 * activity), 0.08, 1);
+    const h = kpRound(kpClamp((base + wave) * (0.65 + 0.35 * activity), 0.08, 1));
     bars.push(
       <div
         key={i}

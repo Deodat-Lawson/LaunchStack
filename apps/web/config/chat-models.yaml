@@ -1,0 +1,69 @@
+# Chat model configuration.
+#
+# Non-secret only. The endpoint URL lives in CHAT_BASE_URL and its credential
+# in CHAT_API_KEY; point CHAT_MODELS_CONFIG at another file to use one instead
+# of this. Every model here is served by that single OpenAI-compatible
+# endpoint — "compatible" meaning it implements the OpenAI
+# /chat/completions protocol, not that it is any HTTP API at all.
+#
+# A model must either reference a bundled preset or declare its behavior in
+# full. Nothing is inferred from the model id: a name that merely resembles a
+# known model gets no capabilities. Anything you write under `behavior` is
+# authoritative and overrides the preset in both directions, so
+# `nativeStructuredOutput: []` genuinely turns that off.
+#
+# See docs/chat-models.md for the full reference.
+
+version: 1
+
+models:
+  # Default quick start: OpenRouter (CHAT_BASE_URL=https://openrouter.ai/api/v1).
+  #
+  # Declared in full rather than by preset because there is no bundled preset
+  # for this model. The values below are a faithful translation of what this
+  # deployment already sent before the chat layer was reworked — the reasoning
+  # patch is the same `reasoning: { effort: ... }` field the previous
+  # OpenRouter adapter emitted — so behavior is unchanged, not newly asserted.
+  #
+  # Verify against your endpoint before relying on any of it, and prefer
+  # understating: an unclaimed capability just goes unused, while an
+  # over-claimed one surfaces as a confusing runtime error.
+  primary:
+    id: moonshotai/kimi-k3
+    behavior:
+      input: [text, image]
+      reasoning:
+        mode: effort
+        levels:
+          low: { reasoning: { effort: low } }
+          medium: { reasoning: { effort: medium } }
+          high: { reasoning: { effort: high } }
+        # Matches the previous adapter, which sent effort "high" whenever the
+        # user enabled thinking.
+        default: high
+        # Send nothing at all when the user has not asked for reasoning.
+        off: {}
+      nativeStructuredOutput: [json-schema, tool-calling]
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported
+
+  # Talking to OpenAI directly instead? Drop the vendor prefix OpenRouter
+  # needs, and let a source-dated preset supply the behavior:
+  #
+  #   openai_mini:
+  #     id: gpt-4o-mini
+  #     preset: openai/gpt-4o-mini
+
+routes:
+  # `default` is required. `fast` inherits it unless assigned.
+  default: primary
+  # `reasoning` and `vision` inherit `default` only when that model declares
+  # the capability. The model above declares both, so both routes work. Point
+  # them elsewhere to split work across models:
+  #
+  #   fast: openai_mini
+  #   reasoning: primary
+  #   vision: primary

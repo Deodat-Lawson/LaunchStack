@@ -26,6 +26,8 @@
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^8.42.0",
     "eslint": "^9.34.0",
+    "eslint-config-next": "^15.5.2",
+    "eslint-plugin-drizzle": "^0.2.3",
     "prettier": "^3.6.2",
     "typescript": "^5.9.2"
   },

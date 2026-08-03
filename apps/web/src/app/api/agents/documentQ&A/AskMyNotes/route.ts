@@ -12,7 +12,7 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { auth } from "@clerk/nextjs/server";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { getChatModel } from "~/lib/models";
+import { resolveConfiguredChatModel } from "~/lib/models";
 import { createUserNotesRetriever } from "~/lib/tools/rag/retrievers/notes-retriever";
 import {
   EMBEDDING_DIM,
@@ -101,13 +101,15 @@ export async function POST(request: Request) {
         })
         .join("\n\n---\n\n");
 
-      const llm = getChatModel("gpt-4o");
-      const reply = await llm.invoke([
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(
-          `Notes:\n\n${numbered}\n\n---\n\nQuestion: ${question}`,
-        ),
-      ]);
+      const resolved = resolveConfiguredChatModel();
+      const reply = await resolved.chat.invoke(
+        resolved.prepareMessages([
+          new SystemMessage(SYSTEM_PROMPT),
+          new HumanMessage(
+            `Notes:\n\n${numbered}\n\n---\n\nQuestion: ${question}`,
+          ),
+        ]),
+      );
 
       const answer = normalizeModelContent(reply.content);
 

@@ -8,6 +8,11 @@ import { createSlot } from "../internal/slot";
 export interface CompanyEmbeddingConfig {
   embeddingIndexKey?: string | null;
   openAIApiKey?: string | null;
+  /**
+   * Endpoint for the OpenAI-compatible embeddings provider. Required to use
+   * that provider — there is no built-in default URL.
+   */
+  openAIBaseUrl?: string | null;
   huggingFaceApiKey?: string | null;
   ollamaBaseUrl?: string | null;
   ollamaModel?: string | null;
@@ -16,6 +21,7 @@ export interface CompanyEmbeddingConfig {
 export interface EffectiveEmbeddingConfig {
   embeddingIndexKey?: string;
   openAIApiKey?: string;
+  openAIBaseUrl?: string;
   huggingFaceApiKey?: string;
   ollamaBaseUrl?: string;
   ollamaModel?: string;
@@ -30,6 +36,7 @@ export interface EffectiveEmbeddingConfig {
 export interface CompanyEmbeddingDefaults {
   embeddingIndexKey?: string;
   openAIApiKey?: string;
+  openAIBaseUrl?: string;
   huggingFaceApiKey?: string;
   ollamaBaseUrl?: string;
   ollamaEmbeddingModel?: string;
@@ -49,9 +56,22 @@ export function configureCompanyEmbeddingDefaults(
 function getDefaults(): CompanyEmbeddingDefaults {
   const registered = defaultsSlot.get();
   if (registered) return registered;
+  // Endpoint and credential are read as a PAIR, most specific first, so a key
+  // never reaches a service it does not belong to.
+  const embedding = process.env.EMBEDDING_API_BASE_URL
+    ? {
+        baseUrl: process.env.EMBEDDING_API_BASE_URL,
+        apiKey: process.env.EMBEDDING_API_KEY,
+      }
+    : {
+        baseUrl: process.env.AI_BASE_URL,
+        apiKey: process.env.AI_API_KEY ?? process.env.OPENAI_API_KEY,
+      };
+
   return {
     embeddingIndexKey: process.env.EMBEDDING_INDEX,
-    openAIApiKey: process.env.OPENAI_API_KEY,
+    openAIApiKey: embedding.apiKey,
+    openAIBaseUrl: embedding.baseUrl,
     huggingFaceApiKey: process.env.HUGGINGFACE_API_KEY,
     ollamaBaseUrl: process.env.OLLAMA_BASE_URL,
     ollamaEmbeddingModel: process.env.OLLAMA_EMBEDDING_MODEL,
@@ -69,15 +89,29 @@ export function resolveEffectiveEmbeddingConfig(
   config?: CompanyEmbeddingConfig,
 ): EffectiveEmbeddingConfig {
   const defaults = getDefaults();
+
+  // A credential and the endpoint it is sent to must come from the SAME
+  // source. Resolving them independently would let a company's key fall
+  // through to the deployment's URL and ship that key to whatever vendor the
+  // operator configured globally — `.env.example` suggests SiliconFlow, so an
+  // `sk-…` pasted into the field labelled "OpenAI API key" would go there.
+  // Now that no built-in default endpoint backstops the pairing, they are
+  // resolved together or not at all.
+  const companyOpenAIApiKey = normalizeOptional(config?.openAIApiKey);
+  const openAI = companyOpenAIApiKey
+    ? {
+        apiKey: companyOpenAIApiKey,
+        baseUrl: normalizeOptional(config?.openAIBaseUrl),
+      }
+    : { apiKey: defaults.openAIApiKey, baseUrl: defaults.openAIBaseUrl };
+
   return {
     embeddingIndexKey:
       normalizeOptional(config?.embeddingIndexKey) ??
       defaults.embeddingIndexKey ??
       undefined,
-    openAIApiKey:
-      normalizeOptional(config?.openAIApiKey) ??
-      defaults.openAIApiKey ??
-      undefined,
+    openAIApiKey: openAI.apiKey ?? undefined,
+    openAIBaseUrl: openAI.baseUrl ?? undefined,
     huggingFaceApiKey:
       normalizeOptional(config?.huggingFaceApiKey) ??
       defaults.huggingFaceApiKey ??

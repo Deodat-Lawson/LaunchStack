@@ -155,7 +155,7 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
           <Step
             number={2}
             title="Create a new Vercel project"
-            description="Select your forked repo and keep the Next.js framework defaults."
+            description="Select your fork, choose Next.js, and set Root Directory to apps/web so Vercel uses apps/web/vercel.json."
             onCopy={() => copyToClipboard('https://vercel.com/new', 'v-1b')}
             copied={copiedCode === 'v-1b'}
 
@@ -178,10 +178,11 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
             code={`DATABASE_URL=postgresql://<neon-connection-string>
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx
 CLERK_SECRET_KEY=sk_live_xxx
-OPENAI_API_KEY=sk-proj-xxx
+CHAT_BASE_URL=https://openrouter.ai/api/v1
+CHAT_API_KEY=sk-or-v1-xxx
 INNGEST_EVENT_KEY=evt_xxx
 BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
-            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nOPENAI_API_KEY=sk-proj-xxx\nINNGEST_EVENT_KEY=evt_xxx\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`, 'v-2')}
+            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nCHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=sk-or-v1-xxx\nINNGEST_EVENT_KEY=evt_xxx\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`, 'v-2')}
             copied={copiedCode === 'v-2'}
 
           />

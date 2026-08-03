@@ -12,7 +12,7 @@
  */
 
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModel } from "~/lib/models";
+import { resolveConfiguredChatModel } from "~/lib/models";
 import { normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
 
 export type AiCaptureIntent = "summary" | "action" | "decision";
@@ -77,11 +77,13 @@ export async function captureFromSelection(
           .join(", ")}\n\n`
       : "";
 
-  const llm = getChatModel("gpt-4o");
-  const reply = await llm.invoke([
-    new SystemMessage(SYSTEM_PROMPT_BY_INTENT[intent]),
-    new HumanMessage(`${contextLine}Passage:\n\n"""\n${trimmed}\n"""`),
-  ]);
+  const resolved = resolveConfiguredChatModel({ route: "fast" });
+  const reply = await resolved.chat.invoke(
+    resolved.prepareMessages([
+      new SystemMessage(SYSTEM_PROMPT_BY_INTENT[intent]),
+      new HumanMessage(`${contextLine}Passage:\n\n"""\n${trimmed}\n"""`),
+    ]),
+  );
   const markdown = normalizeModelContent(reply.content).trim();
 
   return {

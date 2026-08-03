@@ -14,8 +14,7 @@ import {
   type RagSearchResult as SearchResult,
 } from "@launchstack/core/rag";
 
-import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
-import { MARKETING_MODELS } from "./models";
+import { invokeMarketingStructured } from "./models";
 
 import type {
   CompanyDNA,
@@ -184,15 +183,10 @@ Return valid JSON exactly matching the schema.`;
     evidenceBlock,
   ].join("\n");
 
-  const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
-  const model = chat.withStructuredOutput(NormalizedCompanyKnowledgeSchema, {
-    name: "normalized_company_knowledge",
-  });
-
-  const response = await model.invoke([
+  const response = await invokeMarketingStructured(NormalizedCompanyKnowledgeSchema, [
     new SystemMessage(systemPrompt),
     new HumanMessage(humanPrompt),
-  ]);
+  ], "normalized_company_knowledge");
 
   return NormalizedCompanyKnowledgeSchema.parse(response);
 }
@@ -231,15 +225,10 @@ Return valid JSON exactly matching the schema.`;
     evidenceBlock,
   ].join("\n");
 
-  const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
-  const model = chat.withStructuredOutput(KnowledgeValidationReportSchema, {
-    name: "knowledge_validation_report",
-  });
-
-  const response = await model.invoke([
+  const response = await invokeMarketingStructured(KnowledgeValidationReportSchema, [
     new SystemMessage(systemPrompt),
     new HumanMessage(humanPrompt),
-  ]);
+  ], "knowledge_validation_report");
 
   return KnowledgeValidationReportSchema.parse(response);
 }
@@ -283,15 +272,10 @@ Return valid JSON exactly matching the schema.`;
     evidenceBlock,
   ].join("\n");
 
-  const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
-  const model = chat.withStructuredOutput(NormalizedCompanyKnowledgeSchema, {
-    name: "revised_normalized_company_knowledge",
-  });
-
-  const response = await model.invoke([
+  const response = await invokeMarketingStructured(NormalizedCompanyKnowledgeSchema, [
     new SystemMessage(systemPrompt),
     new HumanMessage(humanPrompt),
-  ]);
+  ], "revised_normalized_company_knowledge");
 
   return NormalizedCompanyKnowledgeSchema.parse(response);
 }

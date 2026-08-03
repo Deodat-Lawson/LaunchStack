@@ -3,7 +3,11 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModel } from "~/lib/models";
+import { describeChatError } from "@launchstack/core/llm";
+import {
+  resolveConfiguredChatModel,
+  resolveConfiguredChatRoute,
+} from "~/lib/models";
 import { db } from "~/server/db";
 import { users } from "@launchstack/core/db/schema";
 import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
@@ -248,8 +252,10 @@ export async function POST(request: Request) {
       }
     }
 
-    const chat = getChatModel("gpt-4o");
-    const response = await chat.invoke(langchainMessages);
+    const resolved = resolveConfiguredChatModel();
+    const response = await resolved.chat.invoke(
+      resolved.prepareMessages(langchainMessages),
+    );
     const content =
       typeof response.content === "string"
         ? response.content
@@ -306,23 +312,16 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const errMessage =
-      error instanceof Error ? error.message : String(error);
     console.error("[legal-chat] POST error:", error);
-
-    const hint =
-      !process.env.OPENAI_API_KEY &&
-      errMessage.toLowerCase().includes("openai")
-        ? " (Ensure OPENAI_API_KEY is set in .env)"
-        : "";
+    const selected = resolveConfiguredChatRoute();
+    const friendly = describeChatError(error, selected.definition.id);
 
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to process legal chat",
-        error: errMessage + hint,
+        message: friendly?.message ?? "Failed to process legal chat",
       },
-      { status: 500 }
+      { status: friendly?.status ?? 500 }
     );
   }
 }

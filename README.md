@@ -6,7 +6,7 @@
 [![CI](https://github.com/Deodat-Lawson/LaunchStack/actions/workflows/CI.yml/badge.svg)](https://github.com/Deodat-Lawson/LaunchStack/actions/workflows/CI.yml)
 [![types](https://img.shields.io/badge/types-TypeScript-blue.svg)](https://www.typescriptlang.org/)
 
-[Run it](#run-it-locally) · [Repository layout](#repository-layout) · [Packages](#whats-in-the-box) · [Architecture](#architecture) · [Contributing](CONTRIBUTING.md)
+[Run it](#run-it-locally) · [Repository layout](#repository-layout) · [Packages](#whats-in-the-box) · [Architecture](#architecture) · [Chat models](docs/chat-models.md) · [Contributing](CONTRIBUTING.md)
 
 ---
 
@@ -32,7 +32,7 @@ pnpm install
 cp .env.example .env
 ```
 
-`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL`, `CLERK_SECRET_KEY`, and either `OPENAI_API_KEY` or `AI_API_KEY`.
+`apps/web/src/env.ts` will refuse to boot without `DATABASE_URL`, `CLERK_SECRET_KEY`, and one OpenAI-compatible chat endpoint — set `CHAT_BASE_URL` (plus `CHAT_API_KEY` when that endpoint needs a credential). There is no built-in default endpoint and no per-vendor variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY` or `OLLAMA_BASE_URL` will *not* configure chat. A key names who you are, not where the request goes — and every one of those providers speaks the same OpenAI chat-completions protocol, so each is reached through `CHAT_BASE_URL` like any other. Only `AI_BASE_URL`/`AI_API_KEY`, a straight rename of the canonical pair, is still translated for a release with a deprecation warning. See [Chat models](#chat-models).
 
 ### With Docker (recommended)
 
@@ -141,18 +141,31 @@ Core exposes ports that the host wires up. Features depend only on these ports; 
 
 ### Wiring the engine
 
-`createEngine(config)` opens the database pool and registers the storage, jobs, credits, RAG, database and Neo4j slots. Several subsystems are configured through **separate** registration calls — [`apps/web/src/server/engine.ts`](apps/web/src/server/engine.ts) makes seven of them: `configureChatModels`, `configureEmbeddingIndexRegistry`, `configureEmbeddingFactory`, `configureCompanyEmbeddingDefaults`, `configureProviders`, `configureSecretBox`, and `configureOcr`. Slots are read lazily, so what matters is that they are set before a subsystem is first *used*.
+`createEngine(config)` opens the database pool and registers the storage, jobs, credits, RAG, database and Neo4j slots. Several subsystems are configured through **separate** registration calls — [`apps/web/src/server/engine.ts`](apps/web/src/server/engine.ts) makes seven of them: `configureAppChatModels`, `configureEmbeddingIndexRegistry`, `configureEmbeddingFactory`, `configureCompanyEmbeddingDefaults`, `configureProviders`, `configureSecretBox`, and `configureOcr`. Chat is the odd one out: `createEngine` already applies `config.llm.chat` itself, so `configureAppChatModels` only re-registers the same configuration and your own host needs no separate chat call. Slots are read lazily, so what matters is that they are set before a subsystem is first *used*.
 
 ```ts
+import { readFileSync } from "node:fs";
 import { createEngine } from "@launchstack/core";
-import { configureChatModels } from "@launchstack/core/llm";
+import { createChatModelsConfig } from "@launchstack/core/llm";
 import { configureOcr } from "@launchstack/core/ocr/config";
 import { configureSecretBox } from "@launchstack/core/crypto";
 // …plus the embeddings and provider registrations listed above
 
 const engine = createEngine({
   db: { url: process.env.DATABASE_URL! },
-  llm: { openai: { apiKey: process.env.OPENAI_API_KEY! } },
+  llm: {
+    // Chat: one OpenAI-compatible endpoint; models and routes come from YAML.
+    chat: createChatModelsConfig({
+      yaml: readFileSync("apps/web/config/chat-models.yaml", "utf8"),
+      endpoint: {
+        baseUrl: process.env.CHAT_BASE_URL!,
+        apiKey: process.env.CHAT_API_KEY, // omit for keyless endpoints
+      },
+    }),
+    // Non-chat OpenAI-compatible work keeps its own credential — it must
+    // never borrow the chat endpoint's key.
+    openai: { apiKey: process.env.OPENAI_API_KEY! },
+  },
   embeddings: { indexName: "legacy-openai-1536" },
   ocr: { defaultProvider: "NATIVE_PDF" },
   providers: {},
@@ -182,6 +195,47 @@ await engine.close();   // graceful shutdown
 - Marketing pipeline for Reddit, X, LinkedIn, Bluesky
 - Inngest-backed background jobs
 - Optional LangSmith tracing
+
+### Chat models
+
+Chat reaches **one endpoint** that implements the OpenAI chat-completions
+protocol — OpenAI, OpenRouter, MiniMax, Together, Groq, vLLM, llama.cpp, LM
+Studio, Ollama's `/v1` surface, and most gateways all qualify. Point
+`CHAT_BASE_URL` at it and give it a credential if it needs one:
+
+```dotenv
+CHAT_BASE_URL=https://openrouter.ai/api/v1
+CHAT_API_KEY=sk-or-v1-...
+```
+
+That endpoint can serve **many models**. Which model handles general chat,
+cheap extraction, reasoning, and images is written in
+`apps/web/config/chat-models.yaml`, where each model either references a
+bundled preset or declares its own behavior:
+
+```yaml
+version: 1
+models:
+  primary:
+    id: openai/gpt-4o-mini
+    preset: openai/gpt-4o-mini
+routes:
+  default: primary
+```
+
+Behavior is never inferred from a model id, and specialized routes fail
+closed: if no vision-capable model is configured, the image control is
+disabled rather than an image being sent to a model that will ignore it.
+See [docs/chat-models.md](docs/chat-models.md) for presets, route inheritance,
+the five reasoning modes, and how to add a preset.
+
+Chat configuration is independent from embeddings, OCR, transcription,
+reranking, and text-to-speech; configure only the supporting capabilities you
+enable. Those never borrow the chat credential.
+
+Docker Compose forwards `CHAT_BASE_URL`, `CHAT_API_KEY`, and
+`CHAT_MODELS_CONFIG` from `.env` to the reference app container, and mounts
+`apps/web/config/chat-models.yaml` so you can edit it without rebuilding.
 
 ### Supported document sources
 

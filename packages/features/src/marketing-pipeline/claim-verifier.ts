@@ -4,8 +4,7 @@ import {
     getRag,
     type CompanySearchOptions,
 } from "@launchstack/core/rag";
-import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
-import { MARKETING_MODELS } from "./models";
+import { invokeMarketingStructured } from "./models";
 import type { ClaimSource } from "./types";
 
 const ClaimListSchema = z.object({
@@ -18,15 +17,14 @@ export async function verifyClaimSources(args: {
 }): Promise<ClaimSource[]> {
     const { companyId, message } = args;
 
-    const chat = getChatModel(MARKETING_MODELS.claimVerification);
-    const extractModel = chat.withStructuredOutput(ClaimListSchema, { name: "claim_list" });
-
-    const extractResponse = await extractModel.invoke([
-        new SystemMessage(
+    const extractResponse = await invokeMarketingStructured(
+        ClaimListSchema,
+        [new SystemMessage(
             `Extract all factual claims from this marketing message. A "claim" is any specific statement about the company, product, capability, metric, or outcome. Return a JSON object with a "claims" array of strings. If no factual claims, return an empty array.`,
         ),
-        new HumanMessage(message),
-    ]);
+        new HumanMessage(message)],
+        "claim_list",
+    );
 
     const { claims } = ClaimListSchema.parse(extractResponse);
     if (claims.length === 0) return [];

@@ -5,7 +5,10 @@
  *   1. Per-capability env: RERANK_API_BASE_URL, RERANK_API_KEY, RERANK_MODEL
  *   2. Global fallback:    AI_BASE_URL, AI_API_KEY
  *   3. Legacy keys:        JINA_API_KEY, GROQ_API_KEY, OPENAI_API_KEY
- *   4. Built-in defaults:  (provider-specific, e.g. api.openai.com)
+ *   4. Built-in default:   only for providers that exist at exactly one host
+ *                          (Jina, Groq). Any capability reachable at an
+ *                          arbitrary OpenAI-compatible endpoint has none, and
+ *                          resolveBaseUrl throws rather than picking a vendor.
  *
  * This means a user can set AI_BASE_URL + AI_API_KEY once to route
  * ALL capabilities to one provider (e.g. SiliconFlow), then override
@@ -57,11 +60,25 @@ function getConfig(): ProvidersRegistryConfig {
 
 // ── Resolve helpers ─────────────────────────────────────────────────
 
+/**
+ * `defaultUrl` is optional on purpose. A provider that only ever talks to its
+ * own service (Jina, Groq) may name it; a provider reachable at any
+ * OpenAI-compatible endpoint must not, because a built-in vendor URL silently
+ * decides on the operator's behalf where the request and the key are sent.
+ * When nothing resolves, fail loudly rather than picking one.
+ */
 export function resolveBaseUrl(
     capabilityEnv: string | undefined,
-    defaultUrl: string,
+    defaultUrl?: string,
 ): string {
     const url = capabilityEnv ?? getConfig().aiBaseUrl ?? defaultUrl;
+    if (!url) {
+        throw new Error(
+            "No base URL configured for this capability. Set its *_API_BASE_URL " +
+            "variable, or configure providers.aiBaseUrl on the host — there is " +
+            "no built-in default endpoint.",
+        );
+    }
     return url.replace(/\/$/, "");
 }
 

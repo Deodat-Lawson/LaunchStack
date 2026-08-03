@@ -3,6 +3,7 @@ export type {
   DbConfig,
   LlmConfig,
   ProviderCredentials,
+  OpenAICompatibleConfig,
   OllamaConfig,
   HuggingfaceConfig,
   EmbeddingsConfig,

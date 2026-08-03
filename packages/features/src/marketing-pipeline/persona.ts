@@ -3,8 +3,7 @@ import {
     getRag,
     type CompanySearchOptions,
 } from "@launchstack/core/rag";
-import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
-import { MARKETING_MODELS } from "./models";
+import { invokeMarketingStructured } from "./models";
 import type { TargetPersona } from "./types";
 import { TargetPersonaSchema } from "./types";
 
@@ -29,11 +28,9 @@ export async function extractTargetPersona(args: {
         ? snippets.map((s, i) => `${i + 1}. ${s}`).join("\n\n")
         : "No persona-relevant data found in KB.";
 
-    const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
-    const model = chat.withStructuredOutput(TargetPersonaSchema, { name: "target_persona" });
-
-    const response = await model.invoke([
-        new SystemMessage(
+    const response = await invokeMarketingStructured(
+        TargetPersonaSchema,
+        [new SystemMessage(
             `You are an audience research analyst. Given a target audience description and company knowledge, synthesize a TargetPersona profile.
 
 Rules:
@@ -46,8 +43,9 @@ Ground everything in the provided context. Return valid JSON.`,
         ),
         new HumanMessage(
             `Target audience: ${targetAudience}\n\nCompany knowledge:\n\n${contextBlock}`,
-        ),
-    ]);
+        )],
+        "target_persona",
+    );
 
     return TargetPersonaSchema.parse(response);
 }

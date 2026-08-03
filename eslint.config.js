@@ -138,6 +138,49 @@ const eslintConfig = [
             }],
         },
     },
+    // Every chat request goes through one OpenAI-compatible transport, which
+    // is the only module allowed to construct a chat client. A feature that
+    // builds its own skips route resolution, declared-behavior filtering, and
+    // usage normalization — and can silently borrow an unrelated API key.
+    {
+        files: ["packages/**/src/**/*.{ts,tsx}", "apps/web/src/**/*.{ts,tsx}"],
+        ignores: ["packages/core/src/llm/openai-compatible-transport.ts"],
+        rules: {
+            "no-restricted-imports": ["error", {
+                paths: [
+                    {
+                        name: "@langchain/openai",
+                        importNames: ["ChatOpenAI"],
+                        message:
+                            "Resolve a route with @launchstack/core/llm instead. " +
+                            "ChatOpenAI belongs to openai-compatible-transport.ts alone. " +
+                            "(OpenAIEmbeddings is fine — embeddings are configured separately.)",
+                    },
+                    {
+                        name: "@langchain/anthropic",
+                        importNames: ["ChatAnthropic"],
+                        message:
+                            "Chat reaches one OpenAI-compatible endpoint; native provider " +
+                            "transports are tracked in the multi-endpoint follow-up issue.",
+                    },
+                    {
+                        name: "@langchain/google-genai",
+                        importNames: ["ChatGoogleGenerativeAI"],
+                        message:
+                            "Chat reaches one OpenAI-compatible endpoint; native provider " +
+                            "transports are tracked in the multi-endpoint follow-up issue.",
+                    },
+                    {
+                        name: "@langchain/ollama",
+                        importNames: ["ChatOllama"],
+                        message:
+                            "Point CHAT_BASE_URL at Ollama's OpenAI-compatible /v1 surface " +
+                            "instead. (OllamaEmbeddings is fine — embeddings are separate.)",
+                    },
+                ],
+            }],
+        },
+    },
 ];
 
-export default eslintConfig; 
+export default eslintConfig;

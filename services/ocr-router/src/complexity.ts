@@ -94,10 +94,18 @@ async function runVisionCheckOpenAI(
 ): Promise<VisionClassification> {
   const apiKey =
     process.env.OPENAI_API_KEY || process.env.AI_API_KEY || "";
-  const baseUrl = process.env.AI_BASE_URL || "https://api.openai.com/v1";
+  // No default endpoint: any OpenAI-compatible vision endpoint works, so the
+  // operator names it rather than the code silently choosing a vendor.
+  const baseUrl = process.env.AI_BASE_URL;
+  if (!baseUrl) {
+    throw new Error(
+      "AI_BASE_URL is not set. Point it at an OpenAI-compatible vision " +
+        "endpoint — there is no built-in default endpoint.",
+    );
+  }
   const model = process.env.OCR_VISION_MODEL || "gpt-4o-mini";
 
-  console.log(`[OCR Router] Using OpenAI vision (${model}) for classification`);
+  console.log(`[OCR Router] Using vision model ${model} for classification`);
 
   let maxComplexityScore = 0;
   let dominantLabel = "digital text document";

@@ -1,25 +1,15 @@
 /**
- * Public entry points for LLM generation.
- *
- * This is the ONLY file call sites should import from (via the barrel in
- * `index.ts`). It resolves a capability to a concrete model via `providers.ts`
- * and then delegates to Vercel AI SDK's `generateObject` (or similar) for
- * the actual call.
- *
- * For this first PR we expose just one function: `generateStructured`.
- * `generateText` / `streamText` / vision variants get added in follow-up PRs
- * as call sites need them.
+ * Compatibility entry point for schema-producing application pipelines.
+ * Route resolution and the structured-output mechanism live in core.
  */
 
-import { generateObject } from "ai";
-import type { ZodType } from "zod";
-
-import { resolveModel } from "./providers";
+import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { invokeStructured } from "@launchstack/core/llm";
+import { resolveConfiguredChatModel } from "~/lib/models";
 import type { GenerateStructuredInput } from "./types";
 
 /**
- * Run a structured JSON-output LLM call against whichever provider is
- * currently active for the given capability.
+ * Run a structured JSON-output LLM call on the operator's `fast` route.
  *
  * The return type is inferred from the passed-in Zod schema, so the call
  * site gets full type safety without an explicit type argument:
@@ -32,57 +22,52 @@ import type { GenerateStructuredInput } from "./types";
  *   });
  *   // result is inferred as z.infer<typeof MySchema>
  *
- * On provider error (network, rate limit, bad JSON) this throws. Call sites
- * that want graceful degradation should wrap in try/catch — matching the
- * existing pattern in metadata extraction where a failed batch is logged
- * and the overall pipeline continues with the successful batches.
+ * Whether the model has native structured output or falls back to strict
+ * JSON prompting is decided by its declared behavior, not by this call site.
+ *
+ * On endpoint error (network, rate limit, unrepairable JSON) this throws.
+ * Call sites that want graceful degradation should wrap in try/catch —
+ * matching the existing pattern in metadata extraction where a failed batch
+ * is logged and the overall pipeline continues with the successful batches.
  */
-export async function generateStructured<TSchema extends ZodType>(
-  input: GenerateStructuredInput<TSchema>,
-): Promise<ReturnType<TSchema["parse"]>> {
-  const resolved = resolveModel(input.capability, input.forceProvider);
+export async function generateStructured<TOutput>(
+  input: GenerateStructuredInput<TOutput>,
+): Promise<TOutput> {
+  const resolved = resolveConfiguredChatModel({ route: "fast" });
 
-  // Diagnostic logging: capture the chosen provider/model, prompt size, and
+  // Diagnostic logging: capture the chosen model, prompt size, and
   // wall-clock duration for every call. This is intentionally verbose in
   // dev so slowness in any specific capability surfaces in the console.
   // If this becomes noisy in production, gate it behind an env flag.
-  const promptChars =
-    (input.system?.length ?? 0) + input.prompt.length;
+  const promptChars = (input.system?.length ?? 0) + input.prompt.length;
   const startedAt = Date.now();
   console.log(
     `[llm] generateStructured start capability=${input.capability} ` +
-      `provider=${resolved.provider} model=${resolved.modelId} ` +
+      `route=${resolved.route} model=${resolved.modelId} ` +
       `prompt=${promptChars} chars`,
   );
 
   try {
-    const result = await generateObject({
-      model: resolved.model,
-      temperature: resolved.temperature,
-      schema: input.schema,
-      schemaName: input.schemaName,
-      system: input.system,
-      prompt: input.prompt,
+    const messages = [
+      ...(input.system ? [new SystemMessage(input.system)] : []),
+      new HumanMessage(input.prompt),
+    ];
+    const result = await invokeStructured(resolved, input.schema, messages, {
+      name: input.schemaName ?? "structured_response",
     });
 
-    const elapsed = Date.now() - startedAt;
     console.log(
       `[llm] generateStructured ok  capability=${input.capability} ` +
-        `provider=${resolved.provider} model=${resolved.modelId} ` +
-        `${elapsed}ms`,
+        `route=${resolved.route} model=${resolved.modelId} ` +
+        `${Date.now() - startedAt}ms`,
     );
 
-    // Cast is safe: `generateObject` returns `{ object: z.infer<TSchema> }`
-    // when given a Zod schema. The `ZodType` generic constraint is a
-    // pragmatic choice — it trades a small amount of type precision for
-    // simpler call-site ergonomics.
-    return result.object as ReturnType<TSchema["parse"]>;
+    return result;
   } catch (err) {
-    const elapsed = Date.now() - startedAt;
     console.error(
       `[llm] generateStructured FAIL capability=${input.capability} ` +
-        `provider=${resolved.provider} model=${resolved.modelId} ` +
-        `${elapsed}ms err=${err instanceof Error ? err.message : String(err)}`,
+        `route=${resolved.route} model=${resolved.modelId} ` +
+        `${Date.now() - startedAt}ms err=${err instanceof Error ? err.message : String(err)}`,
     );
     throw err;
   }

@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import type { SourceReference } from '~/app/api/agents/documentQ&A/services';
-import type { AIModelType, LLMProvider } from '~/app/api/agents/documentQ&A/services/types';
 
 export type { SourceReference };
 
@@ -23,8 +22,6 @@ export interface AIChatRequest {
   selectedDocumentIds?: number[];
   question: string;
   searchScope: 'document' | 'company' | 'archive' | 'selected';
-  aiModel?: AIModelType;
-  provider?: LLMProvider;
   style?: string;
   enableWebSearch?: boolean;
   conversationHistory?: string;
@@ -63,33 +60,15 @@ export interface AIChatResponse {
   details?: string;
 }
 
-/**
- * Maps legacy model names to new model names for backward compatibility
- */
-function mapLegacyModelName(model?: string): string | undefined {
-  if (!model) return undefined;
-  
-  const legacyMap: Record<string, string> = {
-    'gpt4': 'gpt-5-mini',
-    'claude': 'claude-sonnet-4',
-    'gemini': 'gemini-2.5-flash',
-  };
-  
-  return legacyMap[model] ?? model;
-}
-
 export function useAIChat() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Send an AI chat query (supports both document and company-wide search)
-  const sendQuery = useCallback(async (params: AIChatRequest): Promise<AIChatResponse | null> => {
+  const sendQuery = useCallback(async (params: AIChatRequest): Promise<AIChatResponse> => {
     setLoading(true);
     setError(null);
     try {
-      // Map legacy model names to new format
-      const mappedModel = mapLegacyModelName(params.aiModel);
-      
       const response = await fetch('/api/agents/documentQ&A/AIChat/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -100,8 +79,6 @@ export function useAIChat() {
           selectedDocumentIds: params.selectedDocumentIds,
           question: params.question,
           searchScope: params.searchScope,
-          aiModel: mappedModel,
-          provider: params.provider,
           style: params.style,
           enableWebSearch: params.enableWebSearch,
           conversationHistory: params.conversationHistory,
@@ -127,7 +104,10 @@ export function useAIChat() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to send query';
       setError(errorMessage);
-      return null;
+      return {
+        success: false,
+        message: errorMessage,
+      };
     } finally {
       setLoading(false);
     }
@@ -139,4 +119,3 @@ export function useAIChat() {
     sendQuery,
   };
 }
-

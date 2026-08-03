@@ -10,7 +10,7 @@ import styles from '~/styles/deployment.module.css';
 export const VoicePage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCode }) => {
   const bullets = [
     'Convert summaries and answers into audio',
-    'Multiple voices and languages out of the box',
+    '30 prebuilt voices across roughly 90 languages',
     'Pairs with the voice-note ingestion pipeline',
     'Accessibility wins for visually-impaired users',
   ];
@@ -28,12 +28,13 @@ export const VoicePage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCo
         </div>
         <h1 className={styles.heroTitle}>Voice &amp; audio</h1>
         <p className={styles.heroSub}>
-          Text-to-speech via ElevenLabs. Audio ingestion transcription is handled
-          automatically through the Groq Whisper route.
+          Speech generation and transcription both run on Gemini, using the same
+          GOOGLE_AI_API_KEY as the rest of the deployment. No separate voice
+          vendor to sign up for.
         </p>
       </motion.div>
 
-      <Section title="What ElevenLabs adds">
+      <Section title="What voice adds">
         <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
           {bullets.map((b) => (
             <li key={b} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', color: 'var(--ink-2)', lineHeight: 1.55 }}>
@@ -47,43 +48,35 @@ export const VoicePage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCo
       <Section title="Setup instructions">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
           <div>
-            <h3 style={h3}>Step 1: Create ElevenLabs account</h3>
+            <h3 style={h3}>Step 1: Get a Google AI Studio key</h3>
             <p style={p}>
               Visit{' '}
-              <a href="https://elevenlabs.io" target="_blank" rel="noopener noreferrer" style={link}>
-                elevenlabs.io <ExternalLink size={12} />
+              <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" style={link}>
+                aistudio.google.com/apikey <ExternalLink size={12} />
               </a>{' '}
-              and create an account.
+              and create a key. The same key serves chat, transcription and speech.
             </p>
           </div>
           <div>
-            <h3 style={h3}>Step 2: Get API key</h3>
-            <p style={p}>Profile → API Keys → generate a new key.</p>
-          </div>
-          <div>
-            <h3 style={h3}>Step 3: Choose a voice</h3>
-            <p style={p}>Browse the Voice Lab and copy the Voice ID you want to use.</p>
-          </div>
-          <div>
-            <h3 style={h3}>Step 4: Add to environment variables</h3>
+            <h3 style={h3}>Step 2: Add to environment variables</h3>
             <CodeBlock
-              code={`ELEVENLABS_API_KEY=sk_your_key_here
-ELEVENLABS_VOICE_ID=your_chosen_voice_id`}
+              code={`GOOGLE_AI_API_KEY=AIza_your_key_here
+GEMINI_TTS_VOICE=Kore`}
               onCopy={() =>
                 copyToClipboard(
-                  'ELEVENLABS_API_KEY=sk_your_key_here\nELEVENLABS_VOICE_ID=your_chosen_voice_id',
-                  'elevenlabs-env',
+                  'GOOGLE_AI_API_KEY=AIza_your_key_here\nGEMINI_TTS_VOICE=Kore',
+                  'gemini-voice-env',
                 )
               }
-              copied={copiedCode === 'elevenlabs-env'}
+              copied={copiedCode === 'gemini-voice-env'}
             />
           </div>
-          <InfoBox title="Popular voice IDs" icon={<Mic size={18} />}>
+          <InfoBox title="Voices" icon={<Mic size={18} />}>
             <ul style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <li>Rachel (female, American)</li>
-              <li>Adam (male, American)</li>
-              <li>Antoni (male, British)</li>
-              <li>Browse more in the ElevenLabs Voice Lab</li>
+              <li>Kore — firm, the default</li>
+              <li>Puck — upbeat</li>
+              <li>Charon — informative</li>
+              <li>Aoede — breezy; 30 prebuilt voices in total</li>
             </ul>
           </InfoBox>
         </div>

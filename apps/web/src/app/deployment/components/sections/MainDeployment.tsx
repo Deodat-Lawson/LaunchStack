@@ -37,7 +37,7 @@ const CAPABILITY_FEATURES: FeatureItem[] = [
     icon: <FileSearch size={18} />,
     title: 'RAG over everything',
     description:
-      'PDFs, Office docs, transcripts, repos, and exports — chunked, embedded, and retrieved with pgvector plus optional Jina reranking.',
+      'PDFs, Office docs, transcripts, repos, and exports — chunked, embedded, and retrieved with pgvector plus optional reranking.',
   },
   {
     icon: <BrainCircuit size={18} />,
@@ -55,7 +55,7 @@ const CAPABILITY_FEATURES: FeatureItem[] = [
     icon: <Mic size={18} />,
     title: 'Voice & transcription',
     description:
-      'Groq Whisper turns audio and video uploads into searchable documents. ElevenLabs ships answers back as speech.',
+      'Gemini turns audio and video uploads into searchable documents, and speaks answers back — one key for both.',
   },
   {
     icon: <Zap size={18} />,
@@ -101,7 +101,7 @@ const REQUIRED_INTEGRATIONS: StoreCard[] = [
     icon: <BrainCircuit size={16} />,
     title: 'AI providers',
     description:
-      'Any endpoint speaking the OpenAI chat-completions protocol works: OpenRouter, OpenAI, MiniMax, a local vLLM or Ollama server.',
+      'Google Gemini out of the box. Any endpoint speaking the OpenAI chat-completions protocol also works, including a local vLLM or Ollama server.',
     cta: 'Pick a provider',
   },
   {
@@ -143,7 +143,7 @@ const OPTIONAL_INTEGRATIONS: StoreCard[] = [
   {
     icon: <Mic size={16} />,
     title: 'Voice & audio',
-    description: 'ElevenLabs voices for TTS answers. Whisper transcription is built-in.',
+    description: 'Gemini voices for spoken answers. Transcription is built in on the same key.',
     cta: 'Configure voice',
   },
 ];
@@ -221,7 +221,7 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
             title="An AI provider"
             body={
               <>
-                Any one of OpenRouter, OpenAI, Anthropic, Google, an OpenAI-compatible endpoint, or a local Ollama box. Details on the{' '}
+                Google Gemini by default — or any endpoint speaking the OpenAI chat-completions protocol. Details on the{' '}
                 <strong>AI Model Providers</strong> page.
               </>
             }

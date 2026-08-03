@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub — real sources land in later migration steps.)",
+  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub \u2014 real sources land in later migration steps.)",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=20"
@@ -111,13 +111,7 @@
     "pizzip": "^3.2.0",
     "zod": "^3.23.8"
   },
-  "peerDependencies": {
-    "sherpa-onnx-node": "^1.12.38"
-  },
-  "peerDependenciesMeta": {
-    "sherpa-onnx-node": { "optional": true }
-  },
-  "devDependencies": {
-    "sherpa-onnx-node": "^1.12.38"
-  }
+  "peerDependencies": {},
+  "peerDependenciesMeta": {},
+  "devDependencies": {}
 }

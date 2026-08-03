@@ -1,4 +1,30 @@
 import { OpenAIEmbeddings } from "@langchain/openai";
+
+/**
+ * Endpoint and credential, resolved as a PAIR.
+ *
+ * `@langchain/openai` silently falls back to `api.openai.com` when
+ * `configuration.baseURL` is undefined, so a key without an endpoint used to
+ * ship document text to a vendor nothing here names. Both halves come from the
+ * same source or the call fails.
+ */
+function resolveEmbeddingEndpoint(): { apiKey: string; baseURL: string } {
+    const baseURL =
+        process.env.EMBEDDING_API_BASE_URL ?? process.env.AI_BASE_URL;
+    const apiKey = process.env.EMBEDDING_API_BASE_URL
+        ? process.env.EMBEDDING_API_KEY
+        : (process.env.AI_API_KEY ?? process.env.OPENAI_API_KEY);
+
+    if (!baseURL || !apiKey) {
+        throw new Error(
+            "Embeddings are not configured. Set EMBEDDING_API_BASE_URL and " +
+                "EMBEDDING_API_KEY (or AI_BASE_URL and AI_API_KEY). There is no " +
+                "default endpoint: embeddings are persisted, so the provider " +
+                "must be named explicitly.",
+        );
+    }
+    return { apiKey, baseURL };
+}
 import { LRUCache } from "lru-cache";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 
@@ -16,13 +42,12 @@ export async function getEmbeddings(text: string): Promise<number[]> {
     }
     
     try {
-        const apiKey = process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
-        const baseURL = process.env.EMBEDDING_API_BASE_URL || process.env.AI_BASE_URL;
+        const { apiKey, baseURL } = resolveEmbeddingEndpoint();
         const embeddings = new OpenAIEmbeddings({
             openAIApiKey: apiKey,
             modelName: EMBEDDING_MODEL,
             dimensions: 1536,
-            ...(baseURL ? { configuration: { baseURL } } : {}),
+            configuration: { baseURL },
         });
 
         const [embedding] = await embeddings.embedDocuments([text]);
@@ -40,13 +65,12 @@ export async function batchGetEmbeddings(texts: string[]): Promise<number[][]> {
     const uniqueTexts = [...new Set(texts)];
     
     try {
-        const apiKey = process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
-        const baseURL = process.env.EMBEDDING_API_BASE_URL || process.env.AI_BASE_URL;
+        const { apiKey, baseURL } = resolveEmbeddingEndpoint();
         const embeddings = new OpenAIEmbeddings({
             openAIApiKey: apiKey,
             modelName: EMBEDDING_MODEL,
             dimensions: 1536,
-            ...(baseURL ? { configuration: { baseURL } } : {}),
+            configuration: { baseURL },
         });
 
         const results = await embeddings.embedDocuments(uniqueTexts);

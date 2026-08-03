@@ -1,96 +1,160 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import {
+  GEMINI_NATIVE_BASE_URL,
+  GEMINI_TTS_DEFAULT_VOICE,
+  GEMINI_TTS_MAX_INPUT_BYTES,
+  GEMINI_TTS_MODEL,
+  GEMINI_TTS_SAMPLE_RATE,
+} from "@launchstack/core/llm/types";
 import { validateRequestBody, TextToSpeechSchema } from "~/lib/validation";
+
+/**
+ * Speech generation, via Gemini.
+ *
+ * This is the one capability that cannot go through the OpenAI-compatible
+ * endpoint the rest of the deployment uses: that layer exposes
+ * `/chat/completions`, `/embeddings`, `/images/generations`, `/videos` and
+ * `/models`, and no speech route at all. So this calls the native Gemini API
+ * directly with `fetch` — deliberately not through `@google/genai`, which would
+ * pull `google-auth-library`, `protobufjs` and `ws` into the route bundle to
+ * save one HTTP call.
+ */
 
 interface TextToSpeechRequest {
   text: string;
   voiceId?: string;
   modelId?: string;
-  stability?: number;
-  similarityBoost?: number;
-  style?: number;
-  useSpeakerBoost?: boolean;
 }
 
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-const DEFAULT_VOICE_ID = process.env.ELEVENLABS_VOICE_ID ?? "qyFhaJEAwHR0eYLCmlUT";
+const DEFAULT_VOICE = process.env.GEMINI_TTS_VOICE ?? GEMINI_TTS_DEFAULT_VOICE;
 
-async function streamElevenLabs(body: TextToSpeechRequest): Promise<NextResponse> {
-  const { ElevenLabsClient } = await import("@elevenlabs/elevenlabs-js");
-  const client = new ElevenLabsClient({ apiKey: ELEVENLABS_API_KEY });
+/**
+ * Wrap raw PCM in a WAV container.
+ *
+ * Gemini returns headerless little-endian signed 16-bit PCM, which no browser
+ * will play. A 44-byte RIFF header is the whole difference between that and an
+ * `audio/wav` a plain `<audio>` element accepts, so we add one rather than
+ * pulling in a transcoder to produce mp3.
+ */
+function pcmToWav(pcm: Buffer, sampleRate: number): Buffer {
+  const numChannels = 1;
+  const bitsPerSample = 16;
+  const byteRate = (sampleRate * numChannels * bitsPerSample) / 8;
+  const blockAlign = (numChannels * bitsPerSample) / 8;
 
+  const header = Buffer.alloc(44);
+  header.write("RIFF", 0);
+  header.writeUInt32LE(36 + pcm.length, 4); // file size minus the first 8 bytes
+  header.write("WAVE", 8);
+  header.write("fmt ", 12);
+  header.writeUInt32LE(16, 16); // PCM fmt chunk size
+  header.writeUInt16LE(1, 20); // audio format 1 = PCM
+  header.writeUInt16LE(numChannels, 22);
+  header.writeUInt32LE(sampleRate, 24);
+  header.writeUInt32LE(byteRate, 28);
+  header.writeUInt16LE(blockAlign, 32);
+  header.writeUInt16LE(bitsPerSample, 34);
+  header.write("data", 36);
+  header.writeUInt32LE(pcm.length, 40);
+
+  return Buffer.concat([header, pcm]);
+}
+
+interface GeminiTtsResponse {
+  candidates?: Array<{
+    content?: { parts?: Array<{ inlineData?: { data?: string } }> };
+  }>;
+  error?: { message?: string };
+}
+
+async function synthesizeGemini(
+  body: TextToSpeechRequest,
+  apiKey: string,
+): Promise<NextResponse> {
+  // A leading [tag] is a style instruction, not something to read aloud.
+  // Gemini takes direction as ordinary prose rather than inline markup, so the
+  // tag becomes a prefix sentence and never reaches the spoken output.
   const emotionTagMatch = /^\[(\w+)\]\s*(.+)$/.exec(body.text);
+  const emotion = emotionTagMatch?.[1];
   const cleanText = emotionTagMatch?.[2] ?? body.text;
+  const prompt = emotion
+    ? `Say the following in a ${emotion} tone: ${cleanText}`
+    : cleanText;
 
-  const voiceId = body.voiceId ?? DEFAULT_VOICE_ID;
-  const modelId = body.modelId ?? "eleven_v3";
+  // Google truncates silently past its ceiling, which would ship a
+  // half-finished sentence as a success. Refuse instead.
+  const promptBytes = Buffer.byteLength(prompt, "utf8");
+  if (promptBytes > GEMINI_TTS_MAX_INPUT_BYTES) {
+    return NextResponse.json(
+      {
+        error:
+          `Text too long for speech generation (${promptBytes} bytes, limit ` +
+          `${GEMINI_TTS_MAX_INPUT_BYTES}). Split it into shorter turns.`,
+      },
+      { status: 413 },
+    );
+  }
 
-  console.log("🔊 [TTS/ElevenLabs] Streaming:", cleanText.length, "chars, voice:", voiceId);
+  const model = body.modelId ?? GEMINI_TTS_MODEL;
+  const voiceName = body.voiceId ?? DEFAULT_VOICE;
 
-  const audioStream = await client.textToSpeech.stream(voiceId, {
-    text: body.text,
-    modelId,
-    voiceSettings: {
-      stability: body.stability ?? 0.5,
-      similarityBoost: body.similarityBoost ?? 0.75,
-      style: body.style ?? 0.0,
-      useSpeakerBoost: body.useSpeakerBoost ?? true,
+  console.log(
+    "🔊 [TTS/Gemini] Synthesizing:",
+    cleanText.length,
+    "chars, voice:",
+    voiceName,
+  );
+
+  const response = await fetch(
+    `${GEMINI_NATIVE_BASE_URL}/models/${model}:generateContent`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey,
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: { prebuiltVoiceConfig: { voiceName } },
+          },
+        },
+      }),
     },
-  });
+  );
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        for await (const chunk of audioStream as unknown as AsyncIterable<Uint8Array | Buffer | ArrayBuffer>) {
-          let data: Uint8Array;
-          if (chunk instanceof Uint8Array) data = chunk;
-          else if (Buffer.isBuffer(chunk)) data = new Uint8Array(chunk);
-          else data = new Uint8Array(chunk as ArrayBuffer);
-          controller.enqueue(data);
-        }
-        controller.close();
-      } catch (error) {
-        console.error("❌ [TTS/ElevenLabs] Streaming error:", error);
-        controller.error(error);
-      }
-    },
-  });
+  const payload = (await response.json()) as GeminiTtsResponse;
 
-  return new NextResponse(stream, {
+  if (!response.ok) {
+    console.error("❌ [TTS/Gemini] Request failed:", response.status, payload.error);
+    return NextResponse.json(
+      {
+        error:
+          payload.error?.message ??
+          `Speech generation failed (${response.status})`,
+      },
+      { status: response.status === 429 ? 429 : 502 },
+    );
+  }
+
+  const base64 = payload.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+  if (!base64) {
+    console.error("❌ [TTS/Gemini] Response carried no audio payload");
+    return NextResponse.json(
+      { error: "Speech generation returned no audio" },
+      { status: 502 },
+    );
+  }
+
+  const wav = pcmToWav(Buffer.from(base64, "base64"), GEMINI_TTS_SAMPLE_RATE);
+
+  return new NextResponse(new Uint8Array(wav), {
     status: 200,
     headers: {
-      "Content-Type": "audio/mpeg",
-      "Cache-Control": "no-cache",
-      "Transfer-Encoding": "chunked",
-      "X-Content-Type-Options": "nosniff",
-    },
-  });
-}
-
-async function streamOpenAI(body: TextToSpeechRequest): Promise<NextResponse> {
-  const OpenAI = (await import("openai")).default;
-  const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-    ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
-  });
-
-  const voice = (body.voiceId as "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer") ?? "nova";
-
-  console.log("🔊 [TTS/OpenAI] Streaming:", body.text.length, "chars, voice:", voice);
-
-  const response = await client.audio.speech.create({
-    model: "tts-1",
-    voice,
-    input: body.text,
-    response_format: "mp3",
-  });
-
-  const arrayBuffer = await response.arrayBuffer();
-
-  return new NextResponse(arrayBuffer, {
-    status: 200,
-    headers: {
-      "Content-Type": "audio/mpeg",
+      "Content-Type": "audio/wav",
       "Cache-Control": "no-cache",
       "X-Content-Type-Options": "nosniff",
     },
@@ -108,23 +172,20 @@ export async function POST(request: Request) {
     if (!validation.success) return validation.response;
     const body = validation.data as TextToSpeechRequest;
 
-    if (ELEVENLABS_API_KEY) {
-      return await streamElevenLabs(body);
+    const apiKey = process.env.GOOGLE_AI_API_KEY?.trim();
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "Speech generation is not configured. Set GOOGLE_AI_API_KEY." },
+        { status: 500 },
+      );
     }
 
-    if (process.env.OPENAI_API_KEY) {
-      return await streamOpenAI(body);
-    }
-
-    return NextResponse.json(
-      { error: "No TTS provider configured. Set ELEVENLABS_API_KEY or OPENAI_API_KEY." },
-      { status: 500 }
-    );
+    return await synthesizeGemini(body, apiKey);
   } catch (error) {
     console.error("Error in text-to-speech:", error);
     return NextResponse.json(
       { error: "Failed to generate speech" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

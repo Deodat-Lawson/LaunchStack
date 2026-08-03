@@ -194,13 +194,13 @@ export const AIProvidersPage: React.FC<DeploymentProps> = ({ copyToClipboard, co
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <InlineRow
             title="Embeddings"
-            badge="Default: OpenAI text-embedding-3-large"
-            body="Swap for Hugging Face BGE-M3, Ollama nomic-embed-text, or Google text-embedding-004. Re-run pnpm db:reindex after switching so existing chunks get re-embedded with the new model."
+            badge="Default: text-embedding-3-large (legacy-openai-1536)"
+            body="The one capability still on its original model, because vectors are persisted and only comparable within one model. New deployments should set EMBEDDING_INDEX=gemini-embedding-768 and point EMBEDDING_API_* at Gemini. Existing corpora need a full re-index before switching."
           />
           <InlineRow
             title="Reranker"
-            badge="Default: Jina jina-reranker-v2-base-multilingual"
-            body="Optional but recommended for high-precision retrieval. Set JINA_API_KEY or disable via ENABLE_RERANKER=false."
+            badge="Default: gemini-2.5-flash-lite"
+            body="Google serves no /rerank endpoint, so relevance is scored on a fast chat model using the same key as everything else. Point RERANK_API_BASE_URL at a dedicated /v1/rerank service for lower latency, or disable via ENABLE_RERANKER=false."
           />
         </div>
       </Section>

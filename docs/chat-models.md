@@ -10,8 +10,8 @@ model id.
 An endpoint qualifies if it implements the **OpenAI chat-completions
 protocol** — `POST {CHAT_BASE_URL}/chat/completions`, OpenAI-shaped request
 and response bodies, bearer authentication (or none). That covers OpenAI,
-OpenRouter, MiniMax, SiliconFlow, Together, Groq, vLLM, llama.cpp, LM Studio,
-Ollama's `/v1` surface, and most hosted gateways.
+Google Gemini's compatibility endpoint (the default), OpenRouter, MiniMax,
+vLLM, llama.cpp, LM Studio, Ollama's `/v1` surface, and most hosted gateways.
 
 It does **not** mean an arbitrary HTTP API. A service with its own request
 shape needs a transport, which is
@@ -395,7 +395,7 @@ it is a straight rename of `CHAT_BASE_URL` / `CHAT_API_KEY`.
 - A bare credential says who you are, not where the request goes. There are no
   built-in vendor URLs anywhere in the codebase, so inferring a destination
   from a key would pick a vendor on your behalf and send your prompts there.
-- Ollama, OpenRouter and OpenAI all serve the OpenAI chat-completions
+- Gemini, Ollama and OpenRouter all serve the OpenAI chat-completions
   protocol. A variable per provider bought nothing over pointing
   `CHAT_BASE_URL` at the same URL — Ollama's is `http://localhost:11434/v1`.
 

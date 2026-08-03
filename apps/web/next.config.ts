@@ -130,7 +130,6 @@ const config: NextConfig = {
     "neo4j-driver",
     // Transitive deps via @langchain/community — not available on Alpine (musl)
     "onnxruntime-node",
-    "sherpa-onnx-node",
     // Structured logging
     "pino",
     "pino-pretty",

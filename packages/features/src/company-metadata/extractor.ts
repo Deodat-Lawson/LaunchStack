@@ -413,7 +413,7 @@ async function runWithConcurrency<T>(
 /**
  * Per-batch extraction call. Routes through the unified LLM library rather
  * than instantiating a specific provider, so the same call works against
- * OpenAI, Anthropic, Gemini, or local Ollama depending on which credentials
+ * Gemini by default, or any OpenAI-compatible endpoint, depending on which credentials
  * are available. See `src/lib/llm/` for the resolution logic.
  *
  * On any failure (network, rate limit, schema validation) this returns

@@ -1,10 +1,10 @@
-import { bigint, index, integer, jsonb, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { bigint, bigserial, index, integer, jsonb, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { pgTable } from "./helpers";
 
 export const marketingContentHistory = pgTable(
     "marketing_content_history",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" }).notNull(),
         platform: varchar("platform", { length: 20 }).notNull(),
         message: text("message").notNull(),

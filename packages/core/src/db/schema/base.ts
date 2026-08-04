@@ -5,16 +5,16 @@ import {
     index,
     integer,
     jsonb,
-    serial,
     text,
     timestamp,
     varchar,
     bigint,
+    vector,
+    bigserial,
 } from "drizzle-orm/pg-core";
 
 import { uniqueIndex } from "drizzle-orm/pg-core";
 
-import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
 
 // ============================================================================
@@ -24,7 +24,7 @@ import { pgTable } from "./helpers";
 export const users = pgTable(
     "users",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         name: varchar("name", { length: 256 }).notNull(),
         email: varchar("email", { length: 256 }).notNull(),
         userId: varchar("userId", { length: 256 }).notNull().unique(),
@@ -52,7 +52,7 @@ export const users = pgTable(
 // ============================================================================
 
 export const company = pgTable("company", {
-    id: serial("id").primaryKey(),
+    id: bigserial("id", { mode: "number" }).primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
     slug: varchar("slug", { length: 64 }),
     description: text("description"),
@@ -70,14 +70,8 @@ export const company = pgTable("company", {
     reindexStartedAt: timestamp("reindex_started_at", { withTimezone: true }),
     reindexCompletedAt: timestamp("reindex_completed_at", { withTimezone: true }),
     reindexError: text("reindex_error"),
-    // Legacy plaintext credential columns. Read-only during migration;
-    // writes go through src/lib/ai/company-credentials.ts into the
-    // encrypted `company_embedding_credentials` table. Dropped by
-    // drizzle/0011 once backfill has run.
-    embeddingOpenAIApiKey: text("embedding_openai_api_key"),
-    embeddingHuggingFaceApiKey: text("embedding_huggingface_api_key"),
-    embeddingOllamaBaseUrl: varchar("embedding_ollama_base_url", { length: 1024 }),
-    embeddingOllamaModel: varchar("embedding_ollama_model", { length: 256 }),
+    // Embedding provider credentials live in `company_embedding_credentials`,
+    // encrypted. See src/embeddings/company-credentials.ts.
     employerpasskey: varchar("employerPasskey", { length: 256 }).notNull().default(""),
     employeepasskey: varchar("employeePasskey", { length: 256 }).notNull().default(""),
     numberOfEmployees: varchar("numberOfEmployees", { length: 256 }).notNull(),
@@ -97,7 +91,7 @@ export const company = pgTable("company", {
 export const inviteCodes = pgTable(
     "invite_codes",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         code: varchar("code", { length: 12 }).notNull().unique(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
@@ -125,7 +119,7 @@ export const inviteCodes = pgTable(
 export const userCompanyMemberships = pgTable(
     "user_company_memberships",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         userId: bigint("user_id", { mode: "bigint" })
             .notNull()
             .references(() => users.id, { onDelete: "cascade" }),
@@ -157,7 +151,7 @@ export const userCompanyMemberships = pgTable(
 export const document = pgTable(
     "document",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         url: varchar("url", { length: 256 }).notNull(),
         category: varchar("category", { length: 256 }).notNull(),
         title: varchar("title", { length: 256 }).notNull(),
@@ -203,7 +197,7 @@ export const document = pgTable(
 export const documentVersions = pgTable(
     "document_versions",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
@@ -237,7 +231,7 @@ export const documentVersions = pgTable(
 export const category = pgTable(
     "category",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         name: varchar("name", { length: 256 }).notNull(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
@@ -272,14 +266,14 @@ export const category = pgTable(
 export const pdfChunks = pgTable(
     "pdf_chunks",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
         page: integer("page").notNull(),
         chunkIndex: integer("chunk_index").notNull().default(0), // deterministic ordering within a page
         content: text("content").notNull(),
-        embedding: pgVector({ dimension: 1536 })("embedding"),
+        embedding: vector("embedding", { dimensions: 1536 }),
     },
     (table) => ({
         documentIdIdx: index("pdf_chunks_document_id_idx").on(table.documentId),
@@ -302,7 +296,7 @@ export const pdfChunks = pgTable(
 export const ChatHistory = pgTable(
     "chat_history",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         UserId: varchar("user_id", { length: 256 }).notNull(), // Clerk user ID
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
@@ -340,7 +334,7 @@ export const ChatHistory = pgTable(
 export const predictiveDocumentAnalysisResults = pgTable(
     "predictive_document_analysis_results",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
@@ -363,12 +357,12 @@ export const predictiveDocumentAnalysisResults = pgTable(
 export const documentReferenceResolution = pgTable(
     "document_reference_resolutions",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
         referenceName: varchar("reference_name", { length: 256 }).notNull(),
-        resolvedInDocumentId: integer("resolved_in_document_id"),
+        resolvedInDocumentId: bigint("resolved_in_document_id", { mode: "number" }),
         resolutionDetails: jsonb("resolution_details"),
         createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     },
@@ -386,7 +380,7 @@ export const documentReferenceResolution = pgTable(
 export const fileUploads = pgTable(
     "file_uploads",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         userId: varchar("user_id", { length: 256 }).notNull(),
         filename: varchar("filename", { length: 256 }).notNull(),
         mimeType: varchar("mime_type", { length: 128 }).notNull(),
@@ -525,7 +519,7 @@ export const ocrProcessingSteps = pgTable(
 export const ocrCostTracking = pgTable(
     "ocr_cost_tracking",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -596,7 +590,7 @@ export const uploadBatches = pgTable(
 export const uploadBatchFiles = pgTable(
     "upload_batch_files",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         batchId: varchar("batch_id", { length: 64 })
             .notNull()
             .references(() => uploadBatches.id, { onDelete: "cascade" }),
@@ -671,7 +665,7 @@ export const uploadBatchFilesRelations = relations(uploadBatchFiles, ({ one }) =
 export const documentViews = pgTable(
     "document_views",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
@@ -830,7 +824,7 @@ export const documentViewsRelations = relations(documentViews, ({ one }) => ({
 export const generatedDocuments = pgTable(
     "generated_documents",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         userId: varchar("user_id", { length: 256 }).notNull(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()

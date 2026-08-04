@@ -182,7 +182,9 @@ Previews share the production database unless you configure Neon branch database
 1. `git revert <bad-commit>` and push to `main`.
 2. New deploy rolls the app forward with the revert.
 
-Migrations are **forward-only** ([`apps/web/scripts/migrate.mjs`](../../apps/web/scripts/migrate.mjs)). Rolling back code does **not** roll back schema. Plan breaking schema changes as additive-then-cleanup sequences.
+Migrations are **forward-only** ([`packages/core/scripts/migrate.mjs`](../../packages/core/scripts/migrate.mjs)). Rolling back code does **not** roll back schema. Plan breaking schema changes as additive-then-cleanup sequences.
+
+If you roll back to a build older than the applied migrations, `db:migrate` exits **4** ("database is ahead of this build") rather than running old code against a newer schema. Preview builds run `db:verify`, which reports pending migrations without failing the build.
 
 ## 9. Troubleshooting
 

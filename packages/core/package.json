@@ -27,6 +27,8 @@
   "sideEffects": false,
   "files": [
     "dist",
+    "drizzle",
+    "scripts",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -73,6 +75,10 @@
     "./db": {
       "types": "./src/db/index.ts",
       "default": "./src/db/index.ts"
+    },
+    "./db/backfills": {
+      "types": "./src/db/backfills/index.ts",
+      "default": "./src/db/backfills/index.ts"
     },
     "./db/schema": {
       "types": "./src/db/schema.ts",
@@ -349,11 +355,20 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist .tsbuildinfo",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:check": "drizzle-kit check && node ./scripts/check-journal.mjs",
+    "db:migrate": "node ./scripts/migrate.mjs",
+    "db:verify": "node ./scripts/migrate.mjs --check",
+    "db:baseline": "node ./scripts/migrate.mjs --baseline",
+    "db:seed": "node ./scripts/seed.mjs",
+    "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
     "@types/jsdom": "^28.0.1",
-    "@types/turndown": "^5.0.6"
+    "@types/turndown": "^5.0.6",
+    "dotenv": "^17.3.1",
+    "drizzle-kit": "0.31.10"
   },
   "dependencies": {
     "@langchain/core": "^0.3.74",

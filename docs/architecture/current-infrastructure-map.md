@@ -223,8 +223,8 @@ Inngest Cloud is expected to call the Vercel deployment.
 ## Data and tenancy
 
 - Drizzle table declarations live under `packages/core/src/db/schema`.
-- SQL migration files and migration scripts live under `apps/web/drizzle` and
-  `apps/web/scripts`.
+- SQL migrations and the migration runner live under `packages/core/drizzle`
+  and `packages/core/scripts`, beside the schema they are generated from.
 - The primary database is PostgreSQL with pgvector.
 - Tenant ownership is mostly represented by `companyId`; current workspace
   selection also uses `userCompanyMemberships`.
@@ -257,9 +257,11 @@ Inngest Cloud is expected to call the Vercel deployment.
 | Vercel               | Next.js functions + managed PostgreSQL/storage + Inngest Cloud; sidecars external | Project Root Directory is `apps/web`, where the authoritative `vercel.json` lives                           |
 | Core package release | `@launchstack/core` built and published to npm                                    | Handled by Changesets on `main`                                                                            |
 
-The Docker `migrate` target runs `db:push` plus a backfill; the Vercel production
-build runs the forward SQL migration script. Those are two different schema
-application strategies.
+Every environment — local dev, CI, the Docker `migrate` target and the Vercel
+production build — applies schema with the same forward migration command
+(`db:migrate`). `drizzle-kit push` is banned on all deploy paths and enforced by
+`scripts/ci/check-no-push.mjs`. Data backfills are separate, resumable, and never
+run on container boot.
 
 ## CI/CD coverage
 
@@ -282,7 +284,7 @@ deploy correctness depends on the separate CI workflow being required.
 | Sidecar implementation and callers disagree          | Configuring sidecar reranking, embeddings, or NER can call endpoints that do not exist                                       |
 | Two Adeu runtimes exist                              | Ownership, behavior parity, authentication, and deployment target are unclear                                                |
 | Existing Vercel dashboard settings are external state | Repository config and docs require root `apps/web`; older projects must be checked for a retained `./` root                 |
-| Database schema ownership is split                   | Core declares schema; web owns migration files; Docker and Vercel apply schema differently                                   |
+| ~~Database schema ownership is split~~ *(resolved)*   | Core owns schema **and** migrations; every environment applies them with the same `db:migrate`                               |
 | “Optional” services are mandatory in default Compose | Local startup cost and failure modes are larger than the documentation implies                                               |
 | Floating container/dependency versions               | `latest` images and broadly ranged Python packages reduce reproducibility                                                    |
 | API surface is concentrated in one directory         | 119 handlers make ownership, authorization consistency, and testing harder to see                                            |

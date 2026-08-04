@@ -21,7 +21,10 @@ const eslintConfig = [
             ".next/**",
             "node_modules/**",
             "dist/**",
-            "drizzle/**",
+            // Generated migration SQL + drizzle journal/snapshots. Moved from
+            // apps/web/drizzle to packages/core/drizzle; the `**/` prefix keeps
+            // this working regardless of which package owns them.
+            "**/drizzle/**",
             "next-env.d.ts",
             "eslint.config.js",
             "__tests__/**",

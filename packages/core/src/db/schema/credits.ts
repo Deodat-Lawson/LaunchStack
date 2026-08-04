@@ -5,11 +5,11 @@ import {
     index,
     integer,
     jsonb,
-    serial,
     timestamp,
     varchar,
     bigint,
     uniqueIndex,
+    bigserial,
 } from "drizzle-orm/pg-core";
 
 import { pgTable } from "./helpers";
@@ -22,7 +22,7 @@ import { company } from "./base";
 export const tokenAccounts = pgTable(
     "token_accounts",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -49,7 +49,7 @@ export const tokenAccounts = pgTable(
 export const tokenTransactions = pgTable(
     "token_transactions",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -84,7 +84,7 @@ export const tokenTransactions = pgTable(
 export const tokenUsageDaily = pgTable(
     "token_usage_daily",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -112,7 +112,7 @@ export const tokenUsageDaily = pgTable(
 export const tokenGrants = pgTable(
     "token_grants",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),

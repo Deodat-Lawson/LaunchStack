@@ -17,3 +17,4 @@ export * from "./schema/company-metadata";
 export * from "./schema/marketing-history";
 export * from "./schema/credits";
 export * from "./schema/collab";
+export * from "./schema/ops";

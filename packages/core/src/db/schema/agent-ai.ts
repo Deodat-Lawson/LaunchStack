@@ -11,9 +11,9 @@ import {
     timestamp,
     unique,
     varchar,
+    vector,
 } from "drizzle-orm/pg-core";
 
-import { pgVector } from "../pgVector";
 import { users } from "./base";
 import { pgTable } from "./helpers";
 
@@ -167,7 +167,7 @@ export const agentAiChatbotMemory = pgTable(
         key: varchar("key", { length: 256 }).notNull(),
         value: jsonb("value").notNull(),
         importance: integer("importance").notNull().default(5),
-        embedding: pgVector({ dimension: 1536 })("embedding"),
+        embedding: vector("embedding", { dimensions: 1536 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),

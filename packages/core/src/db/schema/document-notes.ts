@@ -5,12 +5,12 @@ import {
     index,
     integer,
     jsonb,
-    serial,
     text,
     timestamp,
     varchar,
+    vector,
+    bigserial,
 } from "drizzle-orm/pg-core";
-import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
 
 /**
@@ -27,7 +27,7 @@ import { pgTable } from "./helpers";
 export const documentNotes = pgTable(
     "document_notes",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         userId: varchar("user_id", { length: 256 }).notNull(),
         companyId: varchar("company_id", { length: 256 }),
         documentId: varchar("document_id", { length: 256 }),
@@ -86,8 +86,8 @@ export const documentNotes = pgTable(
 export const documentNoteEmbeddings = pgTable(
     "document_note_embeddings",
     {
-        id: serial("id").primaryKey(),
-        noteId: integer("note_id").notNull(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        noteId: bigint("note_id", { mode: "number" }).notNull(),
         /**
          * Denormalized owner — JOIN-free filtering for "Ask My Notes" / Notebook
          * search. Backfilled from `documentNotes.userId` and kept in sync on
@@ -102,8 +102,8 @@ export const documentNoteEmbeddings = pgTable(
         content: text("content").notNull(),
         tokenCount: integer("token_count").notNull().default(0),
 
-        embedding: pgVector({ dimension: 1536 })("embedding"),
-        embeddingShort: pgVector({ dimension: 512 })("embedding_short"),
+        embedding: vector("embedding", { dimensions: 1536 }),
+        embeddingShort: vector("embedding_short", { dimensions: 512 }),
 
         modelVersion: varchar("model_version", { length: 64 }),
 
@@ -116,10 +116,9 @@ export const documentNoteEmbeddings = pgTable(
         userIdIdx: index("doc_note_emb_user_id_idx").on(table.userId),
         documentIdIdx: index("doc_note_emb_document_id_idx").on(table.documentId),
         companyIdIdx: index("doc_note_emb_company_id_idx").on(table.companyId),
-        embeddingShortIdx: index("doc_note_emb_embedding_short_idx").using(
-            "hnsw",
-            table.embeddingShort.op("vector_cosine_ops")
-        ),
+        embeddingShortIdx: index("doc_note_emb_embedding_short_idx")
+            .using("hnsw", table.embeddingShort.op("vector_cosine_ops"))
+            .with({ m: 16, ef_construction: 64 }),
     })
 );
 
@@ -135,10 +134,10 @@ export const documentNoteEmbeddings = pgTable(
 export const noteLinks = pgTable(
     "note_links",
     {
-        id: serial("id").primaryKey(),
-        sourceNoteId: integer("source_note_id").notNull(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        sourceNoteId: bigint("source_note_id", { mode: "number" }).notNull(),
         targetType: varchar("target_type", { length: 8 }).notNull(),
-        targetNoteId: integer("target_note_id"),
+        targetNoteId: bigint("target_note_id", { mode: "number" }),
         targetDocumentId: varchar("target_document_id", { length: 256 }),
         targetTitle: text("target_title").notNull(),
         resolvedAt: timestamp("resolved_at", { withTimezone: true }),

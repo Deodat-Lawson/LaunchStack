@@ -32,7 +32,7 @@ async function main() {
   console.log(
     JSON.stringify(
       {
-        table: "pdr_ai_v2_trend_search_cache",
+        table: getTableName(trendSearchCache),
         rowCount,
       },
       null,

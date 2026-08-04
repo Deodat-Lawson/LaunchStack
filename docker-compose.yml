@@ -43,20 +43,32 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      # `db:backfill:versions` runs after the schema push and builds the full
-      # engine, which resolves the chat endpoint — so this container needs the
-      # model configuration even though it never asks a model anything.
-      - ./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
       SKIP_ENV_VALIDATION: "1"
-      # SKIP_ENV_VALIDATION does not help here: the failure comes from building
-      # the engine, not from validating env. Without these the container exits
-      # 1 and `app` never starts, because it waits on migrate completing.
-      CHAT_BASE_URL: ${CHAT_BASE_URL:-}
-      CHAT_API_KEY: ${CHAT_API_KEY:-}
-      CHAT_MODELS_CONFIG: ${CHAT_MODELS_CONFIG:-config/chat-models.yaml}
+    restart: "no"
+
+  # Data backfills, on demand only — never on boot. Running one automatically
+  # meant an unbounded rescan on every container restart.
+  #
+  #   docker compose --profile backfill run --rm backfill --list
+  #   docker compose --profile backfill run --rm backfill --all
+  backfill:
+    profiles: ["backfill"]
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: builder
+      args:
+        <<: *app-build-args
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
+      SKIP_ENV_VALIDATION: "1"
+    working_dir: /app/apps/web
+    entrypoint: ["pnpm", "db:backfill"]
     restart: "no"
 
   seaweedfs:
@@ -231,14 +243,6 @@ services:
       S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
       S3_SECRET_KEY: ${S3_SECRET_KEY:-pdr_local_secret}
       S3_BUCKET_NAME: ${S3_BUCKET_NAME:-launchstack}
-      # Meetings: Slack mirroring and remote agent nodes. All optional — unset
-      # means no Slack bridge and every agent runs in this process, which is
-      # the right default for a single-container stack.
-      COLLAB_HUB_SECRET: ${COLLAB_HUB_SECRET:-}
-      COLLAB_HUB_ID: ${COLLAB_HUB_ID:-}
-      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN:-}
-      SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET:-}
-      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL:-}
       # Sidecar (ML compute — embeddings, reranking, transcription)
       SIDECAR_URL: http://sidecar:8000
       # Adeu DOCX redlining service

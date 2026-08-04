@@ -30,6 +30,12 @@ const optionalString = () =>
 const serverSchema = z.object({
   // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
   DATABASE_URL: requiredString(),
+  // Optional override used only by the migration runner and drizzle-kit.
+  // Must be a DIRECT (session) connection: the runner takes a session-level
+  // advisory lock, which does not survive a transaction-mode pooler such as
+  // pgbouncer, Supabase :6543, or a Neon pooled endpoint. Falls back to
+  // DATABASE_URL when unset.
+  MIGRATE_DATABASE_URL: optionalString(),
   // OPENAI_API_KEY is optional when AI_API_KEY is set (validated in superRefine)
   OPENAI_API_KEY: optionalString(),
   OPENAI_MODEL: optionalString(),
@@ -252,6 +258,7 @@ const parseEnv = <T extends z.AnyZodObject>(
 function parseServerEnv() {
   const rawValues = {
     DATABASE_URL: process.env.DATABASE_URL,
+    MIGRATE_DATABASE_URL: process.env.MIGRATE_DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
     CHAT_BASE_URL: process.env.CHAT_BASE_URL,

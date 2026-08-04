@@ -13,11 +13,11 @@ import type { InferSelectModel } from "drizzle-orm";
 import {
     index,
     jsonb,
-    serial,
     timestamp,
     varchar,
     bigint,
     uniqueIndex,
+    bigserial,
 } from "drizzle-orm/pg-core";
 
 import { pgTable } from "./helpers";
@@ -169,7 +169,7 @@ export interface MetadataDiff {
 export const companyMetadata = pgTable(
     "company_metadata",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -203,7 +203,7 @@ export const companyMetadata = pgTable(
 export const companyMetadataHistory = pgTable(
     "company_metadata_history",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),

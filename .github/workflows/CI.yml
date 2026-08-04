@@ -63,8 +63,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Push schema to test database
-        run: pnpm --filter @launchstack/web db:push
+      # The same forward migration command local dev, Docker and the Vercel
+      # production build run. CI used to `drizzle-kit push` here, which meant
+      # the test suite exercised a schema no deploy ever produced.
+      - name: Apply migrations to test database
+        run: pnpm --filter @launchstack/core db:migrate
 
       # The repository predates the current type-aware ESLint rules and still
       # has a sizeable legacy baseline. Keep the report visible without
@@ -102,6 +105,224 @@ jobs:
           __tests__/api/Questions/chatHistory.routes.test.ts
           __tests__/api/predictiveDocumentAnalysis/analyzeDocumentChunks.test.ts
           __tests__/api/fetchDocument/fetchDocument.test.ts
+
+  # ── Migration gates ──────────────────────────────────────────────────────
+  # Needs no database and no secrets, so it is safe on fork PRs. Proves the
+  # TypeScript schema and the committed migrations agree, without connecting
+  # to anything: `drizzle-kit generate` diffs TS against the snapshot chain.
+  schema-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Journal and snapshot integrity
+        run: pnpm --filter @launchstack/core db:check
+
+      - name: Regenerate and assert no diff
+        run: |
+          pnpm --filter @launchstack/core exec drizzle-kit generate --name=ci_drift_probe
+          # --porcelain, not `git diff`: drift shows up as an UNTRACKED .sql
+          # file, which `git diff` would not report.
+          if [ -n "$(git status --porcelain -- packages/core/drizzle)" ]; then
+            echo "::error::The TypeScript schema and the committed migrations disagree."
+            echo "Run: pnpm --filter @launchstack/core db:generate --name=<describe-your-change>"
+            git status --porcelain -- packages/core/drizzle
+            git --no-pager diff -- packages/core/drizzle
+            exit 1
+          fi
+
+      # Migrations may contain DDL only. Data changes belong in a resumable,
+      # separately-invoked backfill with its own ledger — not in a file that is
+      # replayed as part of every clean-database build.
+      - name: Migrations are DDL-only
+        run: |
+          base="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
+          changed=$(git diff --name-only "$base"...HEAD -- 'packages/core/drizzle/*.sql' || true)
+          status=0
+          for f in $changed; do
+            [ -f "$f" ] || continue
+            if ! grep -q 'launchstack:allow-dml' "$f" \
+               && grep -qEi '^[[:space:]]*(UPDATE|INSERT INTO|DELETE FROM|DO \$\$)' "$f"; then
+              echo "::error file=$f::Migration contains DML. Move it to a backfill."
+              status=1
+            fi
+            if ! grep -q 'launchstack:destructive-ok' "$f" \
+               && grep -qEi '^[[:space:]]*(DROP TABLE|ALTER TABLE .* DROP COLUMN)' "$f"; then
+              echo "::error file=$f::Destructive DDL needs '-- launchstack:destructive-ok'."
+              status=1
+            fi
+          done
+          exit $status
+
+      # `drizzle-kit push` is banned everywhere a real database could be hit.
+      # The check lives in a script so it cannot match its own source, and so
+      # you can run it locally: node scripts/ci/check-no-push.mjs
+      - name: Ban drizzle-kit push on deploy paths
+        run: node scripts/ci/check-no-push.mjs
+
+  # Proves a database can be built from nothing but the committed migrations —
+  # which was impossible before the squash — and that doing it twice is a no-op.
+  migrations-apply:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          # Ephemeral, localhost-only container that lives for one job. Trust
+          # auth avoids committing a password literal for it.
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGURL: postgresql://postgres@localhost:5432
+      SKIP_ENV_VALIDATION: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Create databases
+        run: |
+          for db in ls_clean ls_push; do
+            psql -h localhost -U postgres -d postgres -c "CREATE DATABASE $db"
+          done
+
+      - name: Apply migrations to an empty database
+        run: DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/core db:migrate
+
+      - name: Assert no migrations pending
+        run: DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/core db:verify
+
+      - name: Assert re-running is a no-op
+        run: |
+          out=$(DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/core db:migrate)
+          echo "$out"
+          echo "$out" | grep -q "database is up to date" || {
+            echo "::error::second db:migrate run was not a no-op"; exit 1; }
+
+      # The strong gate. `generate` proves TS <-> SQL agree on paper; this
+      # proves the SQL actually materialises the right physical schema. push
+      # runs into a deliberately EMPTY database, so there is nothing to
+      # introspect and nothing it could drop.
+      - name: Build the same schema from TypeScript
+        run: |
+          psql -h localhost -U postgres -d ls_push -c 'CREATE EXTENSION IF NOT EXISTS vector'
+          DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
+            pnpm --filter @launchstack/core exec drizzle-kit push --force
+
+      - name: Assert the two schemas are identical
+        run: |
+          dump() {
+            docker run --rm --network host pgvector/pgvector:pg16 \
+              pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \
+                      --no-comments -T '_launchstack_migrations' -d "$1" \
+              | grep -vE '^(SET |SELECT pg_catalog\.set_config|--|\\restrict |\\unrestrict |$)' \
+              | sed -E 's/[[:space:]]+$//'
+          }
+          dump ls_clean > /tmp/from_migrations.sql
+          dump ls_push  > /tmp/from_typescript.sql
+          if ! diff -u /tmp/from_migrations.sql /tmp/from_typescript.sql > /tmp/drift.diff; then
+            echo "::error::Migrations do not reproduce the TypeScript schema."
+            echo "  left  = built from packages/core/drizzle"
+            echo "  right = built from packages/core/src/db/schema.ts"
+            cat /tmp/drift.diff
+            exit 1
+          fi
+          echo "identical ($(wc -l < /tmp/from_migrations.sql) lines compared)"
+
+  # Catches the class of bug the old `0001` embodied: a migration that works on
+  # an empty database but not on one that already has the previous release's
+  # schema. Self-skips until the first tag cut under the new system.
+  upgrade-from-release:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          # Ephemeral, localhost-only container that lives for one job. Trust
+          # auth avoids committing a password literal for it.
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGURL: postgresql://postgres@localhost:5432
+      SKIP_ENV_VALIDATION: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Apply the previous release's migrations, then HEAD's on top
+        run: |
+          TAG=$(git tag --list 'v*' --sort=-v:refname | head -n1)
+          if [ -z "$TAG" ] || ! git cat-file -e "$TAG:packages/core/drizzle" 2>/dev/null; then
+            echo "No prior tag carrying packages/core/drizzle — skipping."
+            echo "This job becomes meaningful once a release is tagged after the squash."
+            exit 0
+          fi
+          echo "upgrading from $TAG"
+          psql -h localhost -U postgres -d postgres -c "CREATE DATABASE ls_upgrade"
+          rm -rf /tmp/prev && mkdir -p /tmp/prev
+          git archive "$TAG" packages/core/drizzle packages/core/scripts | tar -x -C /tmp/prev
+
+          DATABASE_URL="$PGURL/ls_upgrade" node /tmp/prev/packages/core/scripts/migrate.mjs
+          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/core db:migrate
+          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/core db:verify
+
+          # An upgraded database must end up structurally identical to one
+          # built from scratch — otherwise the migrations are order-dependent.
+          psql -h localhost -U postgres -d postgres -c "CREATE DATABASE ls_fresh"
+          DATABASE_URL="$PGURL/ls_fresh" pnpm --filter @launchstack/core db:migrate
+          dump() {
+            docker run --rm --network host pgvector/pgvector:pg16 \
+              pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \
+                      --no-comments -T '_launchstack_migrations' -d "$1" \
+              | grep -vE '^(SET |SELECT pg_catalog\.set_config|--|\\restrict |\\unrestrict |$)' \
+              | sed -E 's/[[:space:]]+$//'
+          }
+          dump ls_upgrade > /tmp/upgraded.sql
+          dump ls_fresh   > /tmp/fresh.sql
+          if ! diff -u /tmp/fresh.sql /tmp/upgraded.sql; then
+            echo "::error::An upgraded database differs from a freshly-built one."
+            exit 1
+          fi
+          echo "upgrade path matches a clean build"
 
   build:
     runs-on: ubuntu-latest

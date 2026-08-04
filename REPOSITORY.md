@@ -129,21 +129,39 @@ Three separate script locations exist, and they are not interchangeable.
 
 | Location | Purpose |
 | --- | --- |
-| `apps/web/scripts/` | Wired into `apps/web/package.json`. The migration runner lives here. |
+| `packages/core/scripts/` | Migration runner, journal check, push guard, seed. |
+| `apps/web/scripts/` | Wired into `apps/web/package.json`. Backfill CLI, workers. |
 | `scripts/ops/` | Operational tasks: database backup, model download. |
 | `scripts/dev/` | Manual developer probes. Not tests, not run by CI. |
-| `scripts/backfill-embedding-credentials.ts` | Deliberately **not** moved. Migrations `0010` and `0011` reference this exact path, and those files are immutable — see below. |
+| `scripts/ci/` | Checks CI runs that are useful to run locally too. |
+
+### One way to change the database
+
+Schema is declared in `packages/core/src/db/schema/`, migrations are generated
+from it into `packages/core/drizzle/`, and **every environment applies them with
+the same command**: local dev, CI, the Docker `migrate` service, and the Vercel
+production build all run `db:migrate`.
+
+`drizzle-kit push` is banned anywhere it can reach a real database
+(`scripts/ci/check-no-push.mjs` enforces it). Previously push was the de-facto
+schema source for dev/CI/Docker while Vercel production ran SQL migrations —
+two strategies that produced provably different databases.
+
+See [Changing the database](CONTRIBUTING.md#changing-the-database) for the
+workflow.
 
 ### Migrations are immutable
 
-`apps/web/scripts/migrate.mjs` records a SHA-256 checksum per migration file and
-**exits non-zero on any drift**. Because `vercel.json` runs `db:migrate` during
-production builds, editing an already-applied migration — *including its
-comments* — will fail production deploys. Always add a new migration instead.
+`packages/core/scripts/migrate.mjs` records a SHA-256 checksum per migration and
+**refuses to apply anything** if a previously-applied file has changed —
+including its comments. Because `vercel.json` runs `db:migrate` during
+production builds, editing history fails the deploy. Always add a new forward
+migration; there are no down migrations by design.
 
-> The `0010` → `0011` chain is currently frozen: `0010` requires an application
-> deploy and a credential backfill before `0011` drops the plaintext columns,
-> but the runner applies all pending files consecutively.
+The runner also takes a session advisory lock before reading its ledger, so two
+concurrent production builds cannot both decide the same migration is pending,
+and `db:verify` exits `2` for pending, `3` for checksum drift and `4` when the
+database is *ahead* of the build being deployed.
 
 ## Where to start reading
 

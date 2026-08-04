@@ -142,6 +142,12 @@ export async function processDocumentUpload({
   // ------------------------------------------------------------------
   // Credit pre-check (cloud mode only)
   // ------------------------------------------------------------------
+  // isCloudMode() reads the provider registry, which only getEngine()
+  // populates. Called first on a cold invocation it saw an empty registry,
+  // read no SIDECAR_URL, and concluded "cloud" — billing credits to
+  // deployments that run everything locally. Idempotent and cached.
+  getEngine();
+
   if (isCloudMode()) {
     // Rough estimate: 20 credits covers a typical document (OCR + embeddings)
     const estimatedCredits = shouldTranscribeFile(mimeType, originalFilename) ? 30 : 20;

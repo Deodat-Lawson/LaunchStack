@@ -92,6 +92,27 @@ describe("resolveEndpoint pairs the credential with the endpoint", () => {
     });
   });
 
+  it("uses the Google key when a capability names Gemini explicitly", () => {
+    // Naming the Gemini URL by hand should behave like falling back to it.
+    // Previously this sent an empty bearer token to an endpoint the operator
+    // had configured deliberately.
+    configureProviders({ googleApiKey: GOOGLE_KEY });
+
+    expect(resolveEndpoint(`${GEMINI_BASE_URL}/`, undefined)).toEqual({
+      baseUrl: GEMINI_BASE_URL,
+      apiKey: GOOGLE_KEY,
+    });
+  });
+
+  it("still keeps the Google key away from a non-Google capability URL", () => {
+    configureProviders({ googleApiKey: GOOGLE_KEY });
+
+    expect(resolveEndpoint("https://elsewhere.example/v1", undefined)).toEqual({
+      baseUrl: "https://elsewhere.example/v1",
+      apiKey: "",
+    });
+  });
+
   it("does not send an empty bearer token to a named global endpoint", () => {
     // engine.ts falls AI_API_KEY back to OPENAI_API_KEY when AI_BASE_URL names
     // the endpoint, so the registry must receive a usable key. Previously the

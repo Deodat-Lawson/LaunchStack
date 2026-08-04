@@ -99,18 +99,29 @@ export function resolveEndpoint(
     const c = getConfig();
     const strip = (url: string) => url.replace(/\/$/, "");
 
+    /**
+     * Which credential belongs to this URL.
+     *
+     * The Google key is only ever offered to Google's own endpoint — but it is
+     * offered there however that URL was chosen. An operator who points
+     * RERANK_API_BASE_URL at Gemini explicitly, rather than relying on the
+     * fallback, still means the Google credential; without this they would send
+     * an empty bearer token to an endpoint they named on purpose.
+     */
+    const keyFor = (baseUrl: string): string => {
+        if (capabilityApiKey) return capabilityApiKey;
+        if (baseUrl === GEMINI_BASE_URL) return c.googleApiKey ?? c.aiApiKey ?? "";
+        return c.aiApiKey ?? "";
+    };
+
     if (capabilityBaseUrl) {
-        return {
-            baseUrl: strip(capabilityBaseUrl),
-            apiKey: capabilityApiKey ?? c.aiApiKey ?? "",
-        };
+        const baseUrl = strip(capabilityBaseUrl);
+        return { baseUrl, apiKey: keyFor(baseUrl) };
     }
 
     if (c.aiBaseUrl) {
-        return {
-            baseUrl: strip(c.aiBaseUrl),
-            apiKey: capabilityApiKey ?? c.aiApiKey ?? "",
-        };
+        const baseUrl = strip(c.aiBaseUrl);
+        return { baseUrl, apiKey: keyFor(baseUrl) };
     }
 
     if (!c.googleApiKey && (capabilityApiKey ?? c.aiApiKey)) {

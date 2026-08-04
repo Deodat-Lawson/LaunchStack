@@ -28,9 +28,10 @@ export const VoicePage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCo
         </div>
         <h1 className={styles.heroTitle}>Voice &amp; audio</h1>
         <p className={styles.heroSub}>
-          Speech generation and transcription both run on Gemini, using the same
-          GOOGLE_AI_API_KEY as the rest of the deployment. No separate voice
-          vendor to sign up for.
+          Transcription runs on Gemini; speech generation on Google Cloud
+          Text-to-Speech. Both use the same GOOGLE_AI_API_KEY as the rest of the
+          deployment — no separate voice vendor, and no service account. The
+          key&apos;s project needs the Cloud Text-to-Speech API enabled.
         </p>
       </motion.div>
 
@@ -61,10 +62,10 @@ export const VoicePage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCo
             <h3 style={h3}>Step 2: Add to environment variables</h3>
             <CodeBlock
               code={`GOOGLE_AI_API_KEY=AIza_your_key_here
-GEMINI_TTS_VOICE=Kore`}
+GEMINI_TTS_VOICE=en-US-Chirp3-HD-Kore`}
               onCopy={() =>
                 copyToClipboard(
-                  'GOOGLE_AI_API_KEY=AIza_your_key_here\nGEMINI_TTS_VOICE=Kore',
+                  'GOOGLE_AI_API_KEY=AIza_your_key_here\nGEMINI_TTS_VOICE=en-US-Chirp3-HD-Kore',
                   'gemini-voice-env',
                 )
               }
@@ -73,10 +74,10 @@ GEMINI_TTS_VOICE=Kore`}
           </div>
           <InfoBox title="Voices" icon={<Mic size={18} />}>
             <ul style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <li>Kore — firm, the default</li>
-              <li>Puck — upbeat</li>
-              <li>Charon — informative</li>
-              <li>Aoede — breezy; 30 prebuilt voices in total</li>
+              <li>en-US-Chirp3-HD-Kore — the default</li>
+              <li>en-US-Chirp3-HD-Puck</li>
+              <li>en-US-Chirp3-HD-Charon</li>
+              <li>28 Chirp 3: HD voices across 50+ locales</li>
             </ul>
           </InfoBox>
         </div>

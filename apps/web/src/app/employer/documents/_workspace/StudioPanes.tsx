@@ -62,12 +62,6 @@ const KnowledgePane = dynamic(
   { loading: () => <LoadingPage /> },
 );
 
-const StatisticsView = dynamic(
-  () =>
-    import("~/app/employer/statistics/StatisticsView").then((m) => m.StatisticsView),
-  { loading: () => <LoadingPage /> },
-);
-
 const MarketingPipelineWorkspace = dynamic(
   () =>
     import(
@@ -501,14 +495,6 @@ export function KnowledgeStudioPane({
   );
 }
 
-export function AnalyticsPane(_: PaneProps) {
-  return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-      <StatisticsView embedded />
-    </div>
-  );
-}
-
 export function PredictiveGapsPane({ onClose }: PaneProps) {
   const router = useRouter();
   return (
@@ -796,14 +782,14 @@ export function renderStudioPane(
       return <AudioGenPane onClose={onClose} />;
     case "marketing":
       return <MarketingPipelinePane onClose={onClose} />;
+    // Company metadata and analytics are sections of Settings now. Their ids
+    // survive so old deep links open the right section rather than 404ing.
     case "metadata":
-      // Company metadata is a section of Settings now; the standalone id is
-      // kept so old deep links land on the right section rather than 404ing.
       return <CompanySettingsPane onClose={onClose} initialSection="company" />;
+    case "analytics":
+      return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
     case "settings":
       return <CompanySettingsPane onClose={onClose} />;
-    case "analytics":
-      return <AnalyticsPane onClose={onClose} />;
     default:
       if (feature.comingSoon) {
         return (

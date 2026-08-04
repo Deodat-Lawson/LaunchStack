@@ -182,8 +182,8 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
     href: "/employer/documents?feature=notes" },
   { id: "audit",     label: "Predictive gaps",   Icon: IconShield,              desc: "Missing exhibits, schedules, and compliance gaps",
     href: "/employer/documents?feature=audit" },
-  { id: "analytics", label: "Analytics",         Icon: IconChart,               desc: "Queries, accuracy, gap trends",
-    href: "/employer/statistics" },
+  { id: "analytics", label: "Analytics",         Icon: IconChart,               desc: "Documents, queries, and activity",
+    href: "/employer/settings#analytics" },
   { id: "team",      label: "Workspace",         Icon: IconUsers,               desc: "Invite codes, roles, approvals",
     href: "/employer/employees" },
   { id: "profile",   label: "Company profile",   Icon: IconBuilding,            desc: "AI-extracted company intel",
@@ -246,14 +246,12 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
     id: "management",
     label: "Management",
     features: [
-      // Company metadata, processing settings, the agent roster, and the
-      // integrations all live behind one Settings surface now — see
-      // `SettingsHub`. `metadata` stays as a deep link into its section.
-      { id: "settings",   label: "Settings",          Icon: IconSettings,   desc: "Processing, agents and nodes, integrations, company profile",
+      // Processing, agents and nodes, integrations, company profile, and
+      // analytics are all sections of one Settings surface — see `SettingsHub`.
+      // `metadata` and `analytics` remain as ids so existing deep links open
+      // the right section instead of 404ing.
+      { id: "settings",   label: "Settings",          Icon: IconSettings,   desc: "Processing, agents and nodes, integrations, company profile, analytics",
         companyOnly: true },
-      { id: "metadata",   label: "Company Metadata",  Icon: IconBuilding,   desc: "AI-extracted company profile, industry, people, markets",
-        companyOnly: true },
-      { id: "analytics",  label: "Analytics",         Icon: IconChart,      desc: "Queries, accuracy, gap trends" },
     ],
   },
 ];

@@ -1,17 +1,32 @@
 "use client";
 
 /**
- * The agent roster and the machines that serve it.
+ * Agents & nodes — the roster that meets, and the machines that run it.
  *
- * This lives inside Settings rather than as its own top-level destination:
- * defining an agent is configuration, and it belongs next to the models,
- * keys, and integrations it depends on. Running the agents is a different
- * act, and that lives in Meetings.
+ * Body only. The header and the "New agent" button live in the settings
+ * chrome, and everything here is built from the shared `_components/primitives`
+ * so it reads as the same screen as Processing and Integrations rather than as
+ * a bolted-on panel.
  */
 
 import React, { useCallback, useState } from "react";
 
-import { IconBroadcast, IconCopy, IconPlus, IconServer, IconTrash, IconX } from "../icons";
+import {
+  Badge,
+  Button,
+  Card,
+  Field,
+  Section,
+  SelectInput,
+  TextArea,
+  TextInput,
+} from "~/app/employer/_components/primitives";
+import {
+  usePublishedActions,
+  type SettingsSectionProps,
+} from "../settings/contract";
+import { Code, CommandBlock, StatusNote } from "../settings/ui";
+import { IconTrash, IconX } from "../icons";
 import { useAgents } from "./useMeetings";
 import { initialsOf, personaColor, type AgentPersonaRecord, type WorkerNode } from "./types";
 
@@ -22,12 +37,18 @@ const ROUTES = [
   { value: "vision", label: "Vision" },
 ];
 
-export function AgentsPanel() {
+export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
   const { data, loading, error, refresh } = useAgents();
   const [editing, setEditing] = useState<AgentPersonaRecord | "new" | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
   const personas = data?.personas.filter((p) => !p.archived) ?? [];
+
+  usePublishedActions(
+    onActions,
+    { primaryLabel: "New agent", onPrimary: () => setEditing("new"), disabled: loading && !data },
+    [loading, data],
+  );
 
   const archive = useCallback(
     async (persona: AgentPersonaRecord) => {
@@ -44,43 +65,22 @@ export function AgentsPanel() {
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-      <section>
-        <SectionHead
-          title="Agents"
-          description="Each agent is a seat in a meeting: a name, a role, and standing instructions. Agents are copied into a meeting when it starts, so editing one never rewrites a transcript."
-          action={
-            <button onClick={() => setEditing("new")} style={primaryButtonStyle}>
-              <IconPlus size={13} /> New agent
-            </button>
-          }
-        />
+    <>
+      {notice && <StatusNote tone="ok">{notice}</StatusNote>}
+      {error && <StatusNote tone="danger">{error}</StatusNote>}
 
-        {notice && (
-          <div
-            style={{
-              marginBottom: 12,
-              padding: "9px 12px",
-              borderRadius: 8,
-              fontSize: 12.5,
-              background: "var(--accent-soft)",
-              color: "var(--accent-ink)",
-              border: "1px solid var(--accent-glow)",
-            }}
-          >
-            {notice}
-          </div>
-        )}
-        {error && <ErrorNote message={error} />}
-
+      <Section
+        title="Roster"
+        description="Agents are copied into a meeting when it starts, so editing one changes who shows up next time — never what was said last time."
+      >
         {loading && personas.length === 0 ? (
-          <div style={{ fontSize: 13, color: "var(--ink-3)" }}>Loading agents…</div>
+          <StatusNote tone="muted">Loading agents…</StatusNote>
         ) : (
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(272px, 1fr))",
-              gap: 12,
+              gap: 14,
             }}
           >
             {personas.map((persona) => (
@@ -94,9 +94,9 @@ export function AgentsPanel() {
             ))}
           </div>
         )}
-      </section>
+      </Section>
 
-      <NetworkSection
+      <NodesSection
         nodes={data?.nodes ?? []}
         network={data?.network ?? { enabled: false, hubId: null, hubPath: "/api/collab/hub" }}
         personas={personas}
@@ -113,7 +113,7 @@ export function AgentsPanel() {
           }}
         />
       )}
-    </div>
+    </>
   );
 }
 
@@ -134,23 +134,13 @@ function AgentCard({
 }) {
   const color = personaColor(persona);
   return (
-    <div
-      style={{
-        border: "1px solid var(--line)",
-        borderRadius: 11,
-        background: "var(--panel-2)",
-        padding: "13px 14px",
-        display: "flex",
-        flexDirection: "column",
-        gap: 9,
-      }}
-    >
+    <Card padding={16} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
         <span
           style={{
-            width: 30,
-            height: 30,
-            borderRadius: 8,
+            width: 32,
+            height: 32,
+            borderRadius: 9,
             background: color,
             color: "white",
             fontSize: 11,
@@ -164,10 +154,12 @@ function AgentCard({
           {initialsOf(persona.displayName)}
         </span>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>{persona.displayName}</div>
-          <div style={{ fontSize: 11.5, color: "var(--ink-3)" }}>{persona.role}</div>
+          <div style={{ fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>
+            {persona.displayName}
+          </div>
+          <div style={{ fontSize: 12, color: "var(--ink-3)" }}>{persona.role}</div>
         </div>
-        <span className="mono" style={{ fontSize: 10.5, color: "var(--ink-3)" }}>
+        <span className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
           @{persona.id}
         </span>
       </div>
@@ -175,7 +167,7 @@ function AgentCard({
       <p
         style={{
           margin: 0,
-          fontSize: 12,
+          fontSize: 12.5,
           lineHeight: 1.55,
           color: "var(--ink-2)",
           display: "-webkit-box",
@@ -188,7 +180,7 @@ function AgentCard({
       </p>
 
       <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-        {persona.route && <MetaTag>{persona.route}</MetaTag>}
+        {persona.route && <Badge tone="neutral">{persona.route}</Badge>}
         {persona.nodeId ? (
           <span
             title={
@@ -196,58 +188,37 @@ function AgentCard({
                 ? `Node "${persona.nodeId}" is connected`
                 : `Node "${persona.nodeId}" is not connected — turns for this agent will fail until it registers`
             }
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              fontSize: 10.5,
-              padding: "1px 7px",
-              borderRadius: 5,
-              border: `1px solid ${node?.connected ? "oklch(0.58 0.15 165)" : "oklch(0.7 0.14 50)"}`,
-              color: node?.connected ? "oklch(0.45 0.14 165)" : "oklch(0.45 0.13 55)",
-            }}
           >
-            <IconServer size={9} />
-            {persona.nodeId}
-            {node?.connected ? " · online" : " · offline"}
+            <Badge tone={node?.connected ? "ok" : "warn"}>
+              {persona.nodeId} · {node?.connected ? "online" : "offline"}
+            </Badge>
           </span>
         ) : (
-          <MetaTag>runs here</MetaTag>
+          <Badge tone="neutral">runs here</Badge>
         )}
         <div style={{ flex: 1 }} />
-        <button onClick={onEdit} style={subtleButtonStyle}>
+        <Button variant="ghost" onClick={onEdit} style={{ padding: "5px 10px", fontSize: 12 }}>
           Edit
-        </button>
-        <button onClick={onArchive} title="Retire agent" style={{ ...subtleButtonStyle, padding: "4px 6px" }}>
-          <IconTrash size={12} />
-        </button>
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={onArchive}
+          title="Retire agent"
+          aria-label={`Retire ${persona.displayName}`}
+          style={{ padding: "5px 8px" }}
+        >
+          <IconTrash size={13} />
+        </Button>
       </div>
-    </div>
-  );
-}
-
-function MetaTag({ children }: { children: React.ReactNode }) {
-  return (
-    <span
-      className="mono"
-      style={{
-        fontSize: 10,
-        padding: "1px 6px",
-        borderRadius: 5,
-        border: "1px solid var(--line)",
-        color: "var(--ink-3)",
-      }}
-    >
-      {children}
-    </span>
+    </Card>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Network
+// Nodes
 // ---------------------------------------------------------------------------
 
-function NetworkSection({
+function NodesSection({
   nodes,
   network,
   personas,
@@ -256,9 +227,8 @@ function NetworkSection({
   network: { enabled: boolean; hubId: string | null; hubPath: string };
   personas: AgentPersonaRecord[];
 }) {
-  const [copied, setCopied] = useState(false);
   const origin = typeof window === "undefined" ? "https://your-app" : window.location.origin;
-  const example = [
+  const command = [
     `COLLAB_HUB_URL=${origin}${network.hubPath} \\`,
     `COLLAB_NODE_ID=gpu-box-1 \\`,
     `COLLAB_SECRET=<the value of COLLAB_HUB_SECRET> \\`,
@@ -268,47 +238,32 @@ function NetworkSection({
   ].join("\n");
 
   return (
-    <section>
-      <SectionHead
-        title="Agent nodes"
-        description="An agent can run on a different machine from this app. The worker dials in, registers the agents it serves, and answers turn requests — all outbound, so it needs no public address of its own."
-      />
-
+    <Section
+      title="Machines"
+      description="An agent can run on a different machine from this app. The worker dials in and answers turn requests — all outbound, so it needs no public address of its own."
+    >
       {!network.enabled ? (
-        <Callout tone="warn">
-          Remote agents are disabled. Set <code style={codeStyle}>COLLAB_HUB_SECRET</code> on this
-          deployment to accept worker nodes — until then, every agent runs in this process.
-        </Callout>
+        <StatusNote tone="warn">
+          Remote agents are off. Set <Code>COLLAB_HUB_SECRET</Code> on this deployment to accept
+          worker machines — until then every agent runs in this process.
+        </StatusNote>
       ) : (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 12,
-            color: "var(--ink-2)",
-            marginBottom: 12,
-          }}
-        >
-          <IconBroadcast size={14} style={{ color: "oklch(0.55 0.14 165)" }} />
-          Hub <span className="mono">{network.hubId}</span> is accepting nodes at{" "}
-          <span className="mono">{network.hubPath}</span>.
-        </div>
+        <StatusNote tone="ok">
+          Hub <Code>{network.hubId}</Code> is accepting nodes at <Code>{network.hubPath}</Code>.
+        </StatusNote>
       )}
 
       {nodes.length > 0 && (
-        <div style={{ display: "grid", gap: 8, marginBottom: 14 }}>
-          {nodes.map((node) => (
+        <Card padding={0} style={{ marginBottom: 14 }}>
+          {nodes.map((node, index) => (
             <div
               key={node.nodeId}
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 10,
-                padding: "10px 12px",
-                border: "1px solid var(--line)",
-                borderRadius: 9,
-                background: "var(--panel-2)",
+                gap: 11,
+                padding: "12px 20px",
+                borderTop: index === 0 ? "none" : "1px solid var(--line)",
               }}
             >
               <span
@@ -316,97 +271,45 @@ function NetworkSection({
                   width: 7,
                   height: 7,
                   borderRadius: "50%",
-                  background: node.connected ? "oklch(0.58 0.15 165)" : "var(--ink-4, var(--ink-3))",
+                  background: node.connected ? "oklch(0.58 0.15 165)" : "var(--ink-3)",
+                  opacity: node.connected ? 1 : 0.5,
                   flexShrink: 0,
                 }}
               />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--ink)" }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
                   {node.label ?? node.nodeId}
                 </div>
-                <div className="mono" style={{ fontSize: 10.5, color: "var(--ink-3)" }}>
-                  {node.nodeId} · serves {node.personaIds.length > 0 ? node.personaIds.join(", ") : "any agent"}
+                <div className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
+                  {node.nodeId} · serves{" "}
+                  {node.personaIds.length > 0 ? node.personaIds.join(", ") : "any agent"}
                 </div>
               </div>
-              <span style={{ fontSize: 11, color: "var(--ink-3)" }}>
-                {node.connected ? "connected" : "last seen " + relativeTime(node.lastSeenAt)}
+              <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
+                {node.connected ? "connected" : `last seen ${relativeTime(node.lastSeenAt)}`}
               </span>
             </div>
           ))}
-        </div>
+        </Card>
       )}
 
-      <div
-        style={{
-          border: "1px solid var(--line)",
-          borderRadius: 10,
-          background: "var(--panel-2)",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "8px 12px",
-            borderBottom: "1px solid var(--line)",
-          }}
-        >
-          <span
-            className="mono"
-            style={{
-              flex: 1,
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: "var(--ink-3)",
-            }}
-          >
-            Connect a machine
-          </span>
-          <button
-            onClick={() => {
-              void navigator.clipboard?.writeText(example).then(() => {
-                setCopied(true);
-                setTimeout(() => setCopied(false), 1600);
-              });
-            }}
-            style={{ ...subtleButtonStyle, display: "inline-flex", alignItems: "center", gap: 5 }}
-          >
-            <IconCopy size={11} /> {copied ? "Copied" : "Copy"}
-          </button>
-        </div>
-        <pre
-          className="mono"
-          style={{
-            margin: 0,
-            padding: "12px 14px",
-            fontSize: 11.5,
-            lineHeight: 1.7,
-            color: "var(--ink-2)",
-            overflowX: "auto",
-            whiteSpace: "pre",
-          }}
-        >
-          {example}
-        </pre>
+      <CommandBlock title="Connect a machine" command={command} />
+      <div style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 10, lineHeight: 1.6 }}>
+        Set an agent&apos;s node id to that <Code>COLLAB_NODE_ID</Code> and its turns are produced
+        on that machine, against that machine&apos;s model. Each message records the node that
+        served it, so a transcript shows where every turn came from.
       </div>
-      <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: 8, lineHeight: 1.6 }}>
-        Set an agent&apos;s node id to that <span className="mono">COLLAB_NODE_ID</span> and its turns
-        are produced on that machine, against that machine&apos;s model. Turns carry the node that
-        served them, so the transcript shows where each message came from.
-      </div>
-    </section>
+    </Section>
   );
 }
 
 function relativeTime(epochMs: number): string {
+  if (!epochMs) return "never";
   const seconds = Math.max(0, Math.round((Date.now() - epochMs) / 1000));
   if (seconds < 60) return `${seconds}s ago`;
   if (seconds < 3600) return `${Math.round(seconds / 60)}m ago`;
-  return `${Math.round(seconds / 3600)}h ago`;
+  if (seconds < 86_400) return `${Math.round(seconds / 3600)}h ago`;
+  return `${Math.round(seconds / 86_400)}d ago`;
 }
 
 // ---------------------------------------------------------------------------
@@ -434,27 +337,26 @@ function AgentEditor({
   const [error, setError] = useState<string | null>(null);
 
   const isNew = persona === null;
-  const canSave = key.trim() && displayName.trim() && role.trim() && systemPrompt.trim();
+  const canSave = Boolean(key.trim() && displayName.trim() && role.trim() && systemPrompt.trim());
 
   const save = async () => {
     if (!canSave) return;
     setSaving(true);
     setError(null);
     try {
-      const body = {
-        key: key.trim(),
-        displayName: displayName.trim(),
-        role: role.trim(),
-        systemPrompt: systemPrompt.trim(),
-        nodeId: nodeId.trim() || null,
-        route: (route || null) as "fast" | "reasoning" | "vision" | null,
-      };
       const response = await fetch(
         isNew ? "/api/collab/agents" : `/api/collab/agents/${persona.dbId}`,
         {
           method: isNew ? "POST" : "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+          body: JSON.stringify({
+            key: key.trim(),
+            displayName: displayName.trim(),
+            role: role.trim(),
+            systemPrompt: systemPrompt.trim(),
+            nodeId: nodeId.trim() || null,
+            route: route || null,
+          }),
         },
       );
       if (!response.ok) {
@@ -489,7 +391,7 @@ function AgentEditor({
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: "min(600px, 100%)",
+          width: "min(620px, 100%)",
           maxHeight: "88vh",
           background: "var(--panel)",
           border: "1px solid var(--line)",
@@ -502,94 +404,89 @@ function AgentEditor({
       >
         <div
           style={{
-            padding: "15px 18px",
+            padding: "16px 20px",
             borderBottom: "1px solid var(--line)",
             display: "flex",
             alignItems: "center",
             gap: 10,
           }}
         >
-          <h3 className="serif" style={{ flex: 1, fontSize: 19, margin: 0, color: "var(--ink)" }}>
+          <h2 className="serif" style={{ flex: 1, fontSize: 20, margin: 0, color: "var(--ink)" }}>
             {isNew ? "New agent" : `Edit ${persona.displayName}`}
-          </h3>
-          <button onClick={onClose} aria-label="Close" style={{ color: "var(--ink-3)" }}>
+          </h2>
+          <Button variant="ghost" onClick={onClose} aria-label="Close" style={{ padding: 6 }}>
             <IconX size={16} />
-          </button>
+          </Button>
         </div>
 
-        <div style={{ flex: 1, overflowY: "auto", padding: "16px 18px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <Labeled label="Display name">
-              <input
+        <div style={{ flex: 1, overflowY: "auto", padding: "20px 20px 8px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <Field label="Display name">
+              <TextInput
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Dana"
-                style={editorInputStyle}
               />
-            </Labeled>
-            <Labeled label="Handle" hint="Used as @handle in transcripts.">
-              <input
+            </Field>
+            <Field label="Handle" hint="Written as @handle in transcripts.">
+              <TextInput
                 value={key}
                 onChange={(e) => setKey(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""))}
                 placeholder="finance"
-                style={editorInputStyle}
               />
-            </Labeled>
+            </Field>
           </div>
 
-          <Labeled label="Role" hint="One line. Shown in the room and injected into the prompt.">
-            <input
+          <Field label="Role" hint="One line. Shown in the room and injected into the prompt.">
+            <TextInput
               value={role}
               onChange={(e) => setRole(e.target.value)}
               placeholder="Finance partner"
-              style={editorInputStyle}
             />
-          </Labeled>
+          </Field>
 
-          <Labeled
+          <Field
             label="Standing instructions"
-            hint="How this agent should behave in every meeting. Be specific about what it owns and what it should refuse to answer."
+            hint="How this agent behaves in every meeting. Be specific about what it owns and what it should refuse to answer."
           >
-            <textarea
+            <TextArea
               value={systemPrompt}
               onChange={(e) => setSystemPrompt(e.target.value)}
               rows={6}
-              style={{ ...editorInputStyle, resize: "vertical", fontFamily: "inherit", lineHeight: 1.55 }}
             />
-          </Labeled>
+          </Field>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <Labeled label="Model route" hint="Which configured route serves this agent's turns.">
-              <select value={route ?? ""} onChange={(e) => setRoute(e.target.value)} style={editorInputStyle}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <Field label="Model route" hint="Which configured route serves this agent's turns.">
+              <SelectInput value={route ?? ""} onChange={(e) => setRoute(e.target.value)}>
                 {ROUTES.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </select>
-            </Labeled>
-            <Labeled label="Runs on node" hint="Leave blank to run in this app process.">
-              <input
+              </SelectInput>
+            </Field>
+            <Field label="Runs on node" hint="Leave blank to run in this app process.">
+              <TextInput
                 value={nodeId ?? ""}
                 onChange={(e) => setNodeId(e.target.value)}
                 list="collab-node-ids"
                 placeholder="gpu-box-1"
-                style={editorInputStyle}
               />
               <datalist id="collab-node-ids">
                 {nodes.map((node) => (
                   <option key={node.nodeId} value={node.nodeId} />
                 ))}
               </datalist>
-            </Labeled>
+            </Field>
           </div>
 
-          {error && <ErrorNote message={error} />}
+          {error && <StatusNote tone="danger">{error}</StatusNote>}
         </div>
 
         <div
           style={{
-            padding: "12px 18px",
+            padding: "14px 20px",
             borderTop: "1px solid var(--line)",
             background: "var(--line-2)",
             display: "flex",
@@ -597,154 +494,14 @@ function AgentEditor({
             gap: 10,
           }}
         >
-          <button onClick={onClose} style={{ fontSize: 12.5, color: "var(--ink-2)", fontWeight: 500 }}>
+          <Button variant="ghost" onClick={onClose}>
             Cancel
-          </button>
-          <button
-            onClick={() => void save()}
-            disabled={!canSave || saving}
-            style={{
-              ...primaryButtonStyle,
-              background: canSave ? "var(--accent)" : "var(--line)",
-              color: canSave ? "white" : "var(--ink-3)",
-              cursor: canSave && !saving ? "pointer" : "not-allowed",
-            }}
-          >
+          </Button>
+          <Button onClick={() => void save()} disabled={!canSave || saving}>
             {saving ? "Saving…" : isNew ? "Create agent" : "Save changes"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Shared bits
-// ---------------------------------------------------------------------------
-
-export function SectionHead({
-  title,
-  description,
-  action,
-}: {
-  title: string;
-  description?: string;
-  action?: React.ReactNode;
-}) {
-  return (
-    <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 14 }}>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <h3 className="serif" style={{ fontSize: 19, margin: 0, color: "var(--ink)" }}>
-          {title}
-        </h3>
-        {description && (
-          <p style={{ margin: "5px 0 0", fontSize: 12.5, lineHeight: 1.6, color: "var(--ink-3)", maxWidth: 640 }}>
-            {description}
-          </p>
-        )}
-      </div>
-      {action}
-    </div>
-  );
-}
-
-function Labeled({
-  label,
-  hint,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ marginBottom: 14 }}>
-      <label style={{ display: "block", fontSize: 11.5, fontWeight: 600, color: "var(--ink-2)", marginBottom: 5 }}>
-        {label}
-      </label>
-      {children}
-      {hint && <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4, lineHeight: 1.5 }}>{hint}</div>}
-    </div>
-  );
-}
-
-function ErrorNote({ message }: { message: string }) {
-  return (
-    <div
-      style={{
-        marginTop: 10,
-        padding: "9px 12px",
-        borderRadius: 8,
-        fontSize: 12.5,
-        color: "var(--danger)",
-        background: "oklch(0.97 0.03 25)",
-        border: "1px solid oklch(0.9 0.06 25)",
-      }}
-    >
-      {message}
-    </div>
-  );
-}
-
-export function Callout({ tone, children }: { tone: "warn" | "info"; children: React.ReactNode }) {
-  const warn = tone === "warn";
-  return (
-    <div
-      style={{
-        padding: "10px 13px",
-        borderRadius: 9,
-        fontSize: 12.5,
-        lineHeight: 1.6,
-        marginBottom: 12,
-        background: warn ? "oklch(0.97 0.04 75)" : "var(--panel-2)",
-        border: `1px solid ${warn ? "oklch(0.88 0.1 75)" : "var(--line)"}`,
-        color: warn ? "oklch(0.42 0.12 60)" : "var(--ink-2)",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-const primaryButtonStyle: React.CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 6,
-  padding: "8px 14px",
-  borderRadius: 8,
-  background: "var(--accent)",
-  color: "white",
-  fontSize: 12.5,
-  fontWeight: 600,
-  whiteSpace: "nowrap",
-};
-
-const subtleButtonStyle: React.CSSProperties = {
-  padding: "4px 9px",
-  borderRadius: 6,
-  border: "1px solid var(--line)",
-  background: "var(--panel)",
-  color: "var(--ink-2)",
-  fontSize: 11.5,
-  fontWeight: 500,
-};
-
-const editorInputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "8px 10px",
-  border: "1px solid var(--line)",
-  borderRadius: 8,
-  background: "var(--panel-2)",
-  color: "var(--ink)",
-  fontSize: 13,
-  outline: "none",
-};
-
-export const codeStyle: React.CSSProperties = {
-  fontFamily: "var(--font-mono, ui-monospace, monospace)",
-  fontSize: 11.5,
-  padding: "1px 5px",
-  borderRadius: 4,
-  background: "var(--line-2)",
-  border: "1px solid var(--line)",
-};

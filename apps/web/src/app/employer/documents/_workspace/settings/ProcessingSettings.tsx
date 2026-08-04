@@ -1,21 +1,28 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useAuth, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+/**
+ * Processing — the embedding index, the credentials behind it, and the
+ * self-hosted endpoints.
+ *
+ * Body only. The page header and the Save button live in the settings chrome,
+ * which is what makes this read as the same screen as Agents, Integrations,
+ * Company, and Analytics rather than as its own page that happens to be
+ * reachable from a rail.
+ */
 
-import LoadingPage from "~/app/_components/loading";
+import React, { useCallback, useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+
 import {
   Badge,
-  Button,
   Card,
   Field,
-  PageHeader,
-  PageShell,
   Section,
   SelectInput,
   TextInput,
 } from "~/app/employer/_components/primitives";
+import { StatusNote, type StatusTone } from "./ui";
+import { usePublishedActions, type SettingsSectionProps } from "./contract";
 
 interface RedactedKey {
   hasKey: boolean;
@@ -53,26 +60,12 @@ const INDEX_OPTIONS: { value: string; label: string; desc: string }[] = [
   },
 ];
 
-export interface SettingsViewProps {
-  /**
-   * Set when rendering inside the Studio drawer (or any bounded container) so
-   * the shell uses `height: 100%` instead of `minHeight: 100vh`. The loading
-   * state also inlines a spinner rather than short-circuiting to a full-page
-   * loader.
-   */
-  embedded?: boolean;
-}
-
-export function SettingsView({ embedded = false }: SettingsViewProps) {
-  const router = useRouter();
-  const { isLoaded, isSignedIn, userId } = useAuth();
+export function ProcessingSettings({ onActions }: SettingsSectionProps) {
   const { user } = useUser();
 
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-
-  const [displayName, setDisplayName] = useState(user?.fullName ?? "");
-  const [email, setEmail] = useState(user?.emailAddresses[0]?.emailAddress ?? "");
+  const [dirty, setDirty] = useState(false);
 
   const [embeddingIndexKey, setEmbeddingIndexKey] = useState("legacy-openai-1536");
   const [embeddingOpenAIApiKey, setEmbeddingOpenAIApiKey] = useState("");
@@ -83,21 +76,16 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
   const [openAIKeyStored, setOpenAIKeyStored] = useState<RedactedKey | null>(null);
   const [huggingFaceKeyStored, setHuggingFaceKeyStored] = useState<RedactedKey | null>(null);
 
-  const [toast, setToast] = useState<{ message: string; tone: "ok" | "warn" | "danger" } | null>(
-    null,
-  );
+  const [status, setStatus] = useState<{ message: string; tone: StatusTone } | null>(null);
 
   useEffect(() => {
-    if (!isLoaded) return;
-    if (!isSignedIn || !userId) {
-      if (!embedded) router.push("/");
-      return;
-    }
+    let cancelled = false;
     (async () => {
       try {
-        const companyResponse = await fetch("/api/fetchCompany", { method: "GET" });
-        if (!companyResponse.ok) throw new Error("Failed to fetch company info");
-        const data = (await companyResponse.json()) as Company;
+        const response = await fetch("/api/fetchCompany", { method: "GET" });
+        if (!response.ok) throw new Error("Failed to fetch company info");
+        const data = (await response.json()) as Company;
+        if (cancelled) return;
 
         setEmbeddingIndexKey(data.embeddingIndexKey ?? "legacy-openai-1536");
         setOpenAIKeyStored(data.embeddingOpenAIApiKey);
@@ -106,23 +94,26 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
         setEmbeddingHuggingFaceApiKey("");
         setEmbeddingOllamaBaseUrl(data.embeddingOllamaBaseUrl ?? "");
         setEmbeddingOllamaModel(data.embeddingOllamaModel ?? "");
-
-        setDisplayName(user?.fullName ?? "");
-        setEmail(user?.emailAddresses[0]?.emailAddress ?? "");
+        setDirty(false);
       } catch (error) {
         console.error(error);
-        setToast({ message: "Something went wrong loading settings.", tone: "danger" });
+        if (!cancelled) {
+          setStatus({ message: "Something went wrong loading settings.", tone: "danger" });
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })().catch(() => {
-      setLoading(false);
+      if (!cancelled) setLoading(false);
     });
-  }, [isLoaded, isSignedIn, userId, user, router, embedded]);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     setIsSaving(true);
-    setToast(null);
+    setStatus(null);
     try {
       const body: Record<string, unknown> = {
         embeddingIndexKey,
@@ -149,16 +140,16 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
 
       if (response.status === 409 && result?.code === "REINDEX_IN_PROGRESS") {
         throw new Error(
-          result.message ??
-            "A reindex is already running. Please wait for it to finish.",
+          result.message ?? "A reindex is already running. Please wait for it to finish.",
         );
       }
       if (!response.ok || result?.success !== true) {
         throw new Error(result?.message ?? "Error updating settings");
       }
 
+      setDirty(false);
       if (response.status === 202 && result?.code === "REINDEX_SCHEDULED") {
-        setToast({
+        setStatus({
           tone: "warn",
           message:
             result.message ??
@@ -166,114 +157,81 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
         });
         return;
       }
-      setToast({ tone: "ok", message: result?.message ?? "Company settings saved." });
+      setStatus({ tone: "ok", message: result?.message ?? "Company settings saved." });
       setEmbeddingOpenAIApiKey("");
       setEmbeddingHuggingFaceApiKey("");
     } catch (error) {
-      setToast({
+      setStatus({
         tone: "danger",
         message:
-          error instanceof Error
-            ? error.message
-            : "Failed to update settings. Please try again.",
+          error instanceof Error ? error.message : "Failed to update settings. Please try again.",
       });
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [
+    embeddingIndexKey,
+    embeddingOllamaBaseUrl,
+    embeddingOllamaModel,
+    embeddingOpenAIApiKey,
+    embeddingHuggingFaceApiKey,
+  ]);
 
-  if (loading) {
-    return embedded ? (
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "var(--ink-3)",
-          fontSize: 13,
-        }}
-      >
-        Loading settings…
-      </div>
-    ) : (
-      <LoadingPage />
-    );
-  }
+  usePublishedActions(
+    onActions,
+    {
+      primaryLabel: "Save changes",
+      primaryBusyLabel: "Saving…",
+      onPrimary: handleSave,
+      busy: isSaving,
+      // Nothing to save until something is edited — a permanently-enabled Save
+      // button teaches people to ignore it.
+      disabled: loading || !dirty,
+    },
+    [handleSave, isSaving, loading, dirty],
+  );
+
+  /** Every edit marks the form dirty; the chrome reads that to enable Save. */
+  const edit = <T,>(setter: (value: T) => void) => (value: T) => {
+    setter(value);
+    setDirty(true);
+  };
 
   const storedLabel = (k: RedactedKey | null) =>
     k?.hasKey ? `Stored · ending ${k.last4 ?? "****"}` : "Not set";
 
+  if (loading) {
+    return <StatusNote tone="muted">Loading settings…</StatusNote>;
+  }
+
   return (
-    <PageShell embedded={embedded}>
-      <PageHeader
-        eyebrow="Processing"
-        title="Settings"
-        description="Processing configuration — which embedding index powers semantic search, which API keys to use, and self-hosted endpoints. Changes to the embedding index schedule a reindex of your document corpus. Looking for company name / industry / people? Those live in Company metadata."
-        actions={
-          <Button
-            onClick={() => void handleSave()}
-            disabled={isSaving}
-            style={{ padding: "9px 16px" }}
-          >
-            {isSaving ? "Saving…" : "Save changes"}
-          </Button>
-        }
-      />
+    <>
+      {status && <StatusNote tone={status.tone}>{status.message}</StatusNote>}
 
-      {toast && (
-        <div
-          style={{
-            marginBottom: 20,
-            padding: "10px 14px",
-            borderRadius: 10,
-            fontSize: 13,
-            lineHeight: 1.5,
-            background:
-              toast.tone === "ok"
-                ? "var(--accent-soft)"
-                : toast.tone === "warn"
-                ? "oklch(0.96 0.07 70)"
-                : "oklch(0.96 0.05 25)",
-            color:
-              toast.tone === "ok"
-                ? "var(--accent-ink)"
-                : toast.tone === "warn"
-                ? "oklch(0.4 0.13 55)"
-                : "var(--danger)",
-            border:
-              "1px solid " +
-              (toast.tone === "ok"
-                ? "var(--accent-glow)"
-                : toast.tone === "warn"
-                ? "oklch(0.85 0.12 70)"
-                : "oklch(0.85 0.09 25)"),
-          }}
-        >
-          {toast.message}
-        </div>
-      )}
-
-      <Section title="Identity" description="Your Clerk profile. Update via your account page.">
+      <Section title="Identity" description="Your Clerk profile. Update it from your account page.">
         <Card>
           <Field label="Full name">
-            <TextInput value={displayName} disabled readOnly />
+            <TextInput value={user?.fullName ?? ""} disabled readOnly />
           </Field>
           <Field label="Email">
-            <TextInput value={email} disabled readOnly />
+            <TextInput
+              value={user?.emailAddresses[0]?.emailAddress ?? ""}
+              disabled
+              readOnly
+            />
           </Field>
         </Card>
       </Section>
 
       <Section
         title="Embedding index"
-        description="The vector index that powers semantic search across your documents. Changing this will schedule a reindex."
+        description="The vector index behind semantic search. Changing it schedules a reindex of the whole corpus; existing searches keep using the previous index until that finishes."
       >
         <Card>
           <Field label="Index">
             <SelectInput
               value={embeddingIndexKey}
-              onChange={(e) => setEmbeddingIndexKey(e.target.value)}
+              onChange={(e) => edit(setEmbeddingIndexKey)(e.target.value)}
             >
               {INDEX_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -281,14 +239,7 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
                 </option>
               ))}
             </SelectInput>
-            <div
-              style={{
-                fontSize: 11,
-                color: "var(--ink-3)",
-                marginTop: 4,
-                lineHeight: 1.5,
-              }}
-            >
+            <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4, lineHeight: 1.5 }}>
               {INDEX_OPTIONS.find((o) => o.value === embeddingIndexKey)?.desc}
             </div>
           </Field>
@@ -301,7 +252,7 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
               <TextInput
                 type="password"
                 value={embeddingOpenAIApiKey}
-                onChange={(e) => setEmbeddingOpenAIApiKey(e.target.value)}
+                onChange={(e) => edit(setEmbeddingOpenAIApiKey)(e.target.value)}
                 placeholder="sk-…"
                 autoComplete="off"
               />
@@ -311,14 +262,12 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
           {embeddingIndexKey === "huggingface-minilm-384" && (
             <Field
               label="HuggingFace API key"
-              hint={`Leave blank to keep the existing key. ${storedLabel(
-                huggingFaceKeyStored,
-              )}.`}
+              hint={`Leave blank to keep the existing key. ${storedLabel(huggingFaceKeyStored)}.`}
             >
               <TextInput
                 type="password"
                 value={embeddingHuggingFaceApiKey}
-                onChange={(e) => setEmbeddingHuggingFaceApiKey(e.target.value)}
+                onChange={(e) => edit(setEmbeddingHuggingFaceApiKey)(e.target.value)}
                 placeholder="hf_…"
                 autoComplete="off"
               />
@@ -330,14 +279,14 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
               <Field label="Ollama base URL" hint="e.g. http://localhost:11434">
                 <TextInput
                   value={embeddingOllamaBaseUrl}
-                  onChange={(e) => setEmbeddingOllamaBaseUrl(e.target.value)}
+                  onChange={(e) => edit(setEmbeddingOllamaBaseUrl)(e.target.value)}
                   placeholder="http://localhost:11434"
                 />
               </Field>
               <Field label="Ollama model" hint="e.g. nomic-embed-text">
                 <TextInput
                   value={embeddingOllamaModel}
-                  onChange={(e) => setEmbeddingOllamaModel(e.target.value)}
+                  onChange={(e) => edit(setEmbeddingOllamaModel)(e.target.value)}
                   placeholder="nomic-embed-text"
                 />
               </Field>
@@ -347,8 +296,8 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
       </Section>
 
       <Section
-        title="Self-host / BYOK"
-        description="Bring-your-own-keys status. Update the keys above to change them."
+        title="Bring your own keys"
+        description="What this workspace has stored. Update the fields above to change them."
       >
         <Card>
           <div
@@ -368,7 +317,7 @@ export function SettingsView({ embedded = false }: SettingsViewProps) {
           </div>
         </Card>
       </Section>
-    </PageShell>
+    </>
   );
 }
 
@@ -381,7 +330,7 @@ function KeyStatus({
   stored: RedactedKey | null;
   detail?: string;
 }) {
-  const has = !!stored?.hasKey;
+  const has = Boolean(stored?.hasKey);
   return (
     <div
       style={{

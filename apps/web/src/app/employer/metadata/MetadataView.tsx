@@ -21,6 +21,11 @@ import {
   LegalGeneratorTheme,
   legalTheme as s,
 } from "~/app/employer/documents/components/LegalGeneratorTheme";
+import { Button } from "~/app/employer/_components/primitives";
+import {
+  usePublishedActions,
+  type RegisterSectionActions,
+} from "~/app/employer/documents/_workspace/settings/contract";
 import m from "./components/metadata.module.css";
 import { CompanyInfoCard } from "./components/CompanyInfoCard";
 import { PeopleSection } from "./components/PeopleSection";
@@ -49,6 +54,14 @@ export interface MetadataViewProps {
    * and the sticky table-of-contents so the view fits its bounded flex parent.
    */
   embedded?: boolean;
+  /**
+   * Body only: no theme wrapper, no page grid, no header of its own. Used by
+   * the settings hub, which supplies the column and the header so this reads
+   * as one section of Settings rather than a page inside a page.
+   */
+  bare?: boolean;
+  /** Publishes Re-extract / Refresh into the settings chrome when `bare`. */
+  onActions?: RegisterSectionActions;
 }
 
 const EXPECTED_COMPANY_FIELDS: Array<{
@@ -72,7 +85,7 @@ type SectionId =
   | "legal"
   | "provenance";
 
-export function MetadataView({ embedded = false }: MetadataViewProps) {
+export function MetadataView({ embedded = false, bare = false, onActions }: MetadataViewProps) {
   const [data, setData] = useState<MetadataResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -129,6 +142,38 @@ export function MetadataView({ embedded = false }: MetadataViewProps) {
   useEffect(() => {
     void fetchMetadata();
   }, [fetchMetadata]);
+
+  const metadata = data?.metadata ? normalizeMetadata(data.metadata) : null;
+  const hasMetadata = !!(
+    metadata &&
+    (Object.keys(metadata.company).length > 0 ||
+      metadata.people.length > 0 ||
+      metadata.services.length > 0)
+  );
+
+  // In the hub, this section's actions belong in the chrome's action area —
+  // the same place Processing's Save and Analytics' Refresh appear.
+  usePublishedActions(
+    bare ? onActions : undefined,
+    {
+      primaryLabel: hasMetadata ? "Re-extract" : "Extract now",
+      primaryBusyLabel: "Extracting…",
+      onPrimary: () => void runExtraction(),
+      busy: extracting,
+      secondary: (
+        <Button
+          variant="secondary"
+          onClick={() => void fetchMetadata()}
+          disabled={loading}
+          style={{ padding: "9px 14px" }}
+        >
+          {loading ? "Refreshing…" : "Refresh"}
+        </Button>
+      ),
+    },
+    [hasMetadata, extracting, loading, runExtraction, fetchMetadata],
+  );
+
 
   if (loading && !data) {
     return (
@@ -216,13 +261,28 @@ export function MetadataView({ embedded = false }: MetadataViewProps) {
     );
   }
 
-  const metadata = data?.metadata ? normalizeMetadata(data.metadata) : null;
-  const hasMetadata = !!(
-    metadata &&
-    (Object.keys(metadata.company).length > 0 ||
-      metadata.people.length > 0 ||
-      metadata.services.length > 0)
+  const main = (
+    <Main
+      metadata={metadata ?? null}
+      updatedAt={data?.updatedAt}
+      hasMetadata={hasMetadata}
+      embedded={embedded}
+      bare={bare}
+      loading={loading}
+      extracting={extracting}
+      bannerDismissed={bannerDismissed}
+      onDismissBanner={() => setBannerDismissed(true)}
+      onRefresh={fetchMetadata}
+      onExtract={runExtraction}
+      onFieldSave={handleFieldSave}
+      onSectionChange={setActiveSection}
+    />
   );
+
+  // The settings hub already provides the theme, the scroll container, the
+  // column, and the header. Re-adding them here is what made this screen look
+  // like a different product from the rest of Settings.
+  if (bare) return main;
 
   return (
     <LegalGeneratorTheme ambient={!embedded}>
@@ -235,21 +295,7 @@ export function MetadataView({ embedded = false }: MetadataViewProps) {
               onChange={setActiveSection}
             />
           )}
-
-          <Main
-            metadata={metadata ?? null}
-            updatedAt={data?.updatedAt}
-            hasMetadata={hasMetadata}
-            embedded={embedded}
-            loading={loading}
-            extracting={extracting}
-            bannerDismissed={bannerDismissed}
-            onDismissBanner={() => setBannerDismissed(true)}
-            onRefresh={fetchMetadata}
-            onExtract={runExtraction}
-            onFieldSave={handleFieldSave}
-            onSectionChange={setActiveSection}
-          />
+          {main}
         </div>
       </div>
     </LegalGeneratorTheme>
@@ -340,6 +386,7 @@ interface MainProps {
   updatedAt?: string;
   hasMetadata: boolean;
   embedded: boolean;
+  bare: boolean;
   loading: boolean;
   extracting: boolean;
   bannerDismissed: boolean;
@@ -355,6 +402,7 @@ function Main({
   updatedAt,
   hasMetadata,
   embedded,
+  bare,
   loading,
   extracting,
   bannerDismissed,
@@ -412,15 +460,17 @@ function Main({
 
   return (
     <main style={{ minWidth: 0 }}>
-      <PageHeader
-        embedded={embedded}
-        hasMetadata={hasMetadata}
-        loading={loading}
-        extracting={extracting}
-        onRefresh={onRefresh}
-        onExtract={onExtract}
-        onExportJson={handleExportJson}
-      />
+      {!bare && (
+        <PageHeader
+          embedded={embedded}
+          hasMetadata={hasMetadata}
+          loading={loading}
+          extracting={extracting}
+          onRefresh={onRefresh}
+          onExtract={onExtract}
+          onExportJson={handleExportJson}
+        />
+      )}
 
       {!hasMetadata || !metadata ? (
         <EmptyState onExtract={onExtract} extracting={extracting} />

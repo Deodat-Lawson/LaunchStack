@@ -1,13 +1,10 @@
-"use client";
+/**
+ * Analytics is a section of Settings now, not a page of its own. The route
+ * survives as a redirect so existing links and bookmarks keep working.
+ */
 
-import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
-import { StatisticsView } from "./StatisticsView";
+import { redirect } from "next/navigation";
 
 export default function StatisticsPage() {
-  return (
-    <>
-      <EmployerChrome pageLabel="Launchstack" pageTitle="Analytics" />
-      <StatisticsView />
-    </>
-  );
+  redirect("/employer/settings#analytics");
 }

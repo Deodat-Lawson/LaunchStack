@@ -264,7 +264,8 @@ jobs:
           dump() {
             docker run --rm --network host pgvector/pgvector:pg16 \
               pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \
-                      --no-comments -T '_launchstack_migrations' -d "$1" \
+                      --no-comments -T '_launchstack_migrations' \
+                      -T '_launchstack_web_migrations' -d "$1" \
               | grep -vE '^(SET |SELECT pg_catalog\.set_config|--|\\restrict |\\unrestrict |$)' \
               | sed -E 's/[[:space:]]+$//'
           }
@@ -340,7 +341,8 @@ jobs:
           dump() {
             docker run --rm --network host pgvector/pgvector:pg16 \
               pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \
-                      --no-comments -T '_launchstack_migrations' -d "$1" \
+                      --no-comments -T '_launchstack_migrations' \
+                      -T '_launchstack_web_migrations' -d "$1" \
               | grep -vE '^(SET |SELECT pg_catalog\.set_config|--|\\restrict |\\unrestrict |$)' \
               | sed -E 's/[[:space:]]+$//'
           }

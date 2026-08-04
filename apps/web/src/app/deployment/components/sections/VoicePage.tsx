@@ -61,11 +61,11 @@ export const VoicePage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCo
           <div>
             <h3 style={h3}>Step 2: Add to environment variables</h3>
             <CodeBlock
-              code={`GOOGLE_AI_API_KEY=AIza_your_key_here
+              code={`GOOGLE_AI_API_KEY=<your-google-ai-key>
 GEMINI_TTS_VOICE=en-US-Chirp3-HD-Kore`}
               onCopy={() =>
                 copyToClipboard(
-                  'GOOGLE_AI_API_KEY=AIza_your_key_here\nGEMINI_TTS_VOICE=en-US-Chirp3-HD-Kore',
+                  'GOOGLE_AI_API_KEY=<your-google-ai-key>\nGEMINI_TTS_VOICE=en-US-Chirp3-HD-Kore',
                   'gemini-voice-env',
                 )
               }

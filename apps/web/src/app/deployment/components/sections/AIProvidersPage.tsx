@@ -40,7 +40,7 @@ const ENDPOINTS: Endpoint[] = [
       'The shipped chat-models.yaml already names these model ids',
     ],
     envKey:
-      'CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=AIza-your_key_here',
+      'CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>',
   },
   {
     id: 'openrouter',
@@ -52,7 +52,7 @@ const ENDPOINTS: Endpoint[] = [
       'One credential can address models from many vendors',
       'Vendor-qualified model ids like vendor/model-name',
     ],
-    envKey: 'CHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=sk-or-v1-your_key_here',
+    envKey: 'CHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=<your-openrouter-key>',
   },
   {
     id: 'openai',
@@ -64,7 +64,7 @@ const ENDPOINTS: Endpoint[] = [
       'Bundled presets cover the gpt-4o and gpt-5 families',
       'Replace the model ids in chat-models.yaml — it ships with Gemini ids',
     ],
-    envKey: 'CHAT_BASE_URL=https://api.openai.com/v1\nCHAT_API_KEY=sk-proj-your_key_here',
+    envKey: 'CHAT_BASE_URL=https://api.openai.com/v1\nCHAT_API_KEY=<your-openai-key>',
   },
   {
     id: 'minimax',

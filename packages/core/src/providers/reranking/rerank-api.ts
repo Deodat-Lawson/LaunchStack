@@ -1,6 +1,6 @@
 import type { ProviderResult } from "../types";
 import type { RerankProvider, RerankResult } from "./index";
-import { resolveBaseUrl, resolveApiKey } from "../registry";
+import { resolveEndpoint } from "../registry";
 
 /**
  * Token cost per rerank query. This is the provider's billing rate (rerank
@@ -30,8 +30,12 @@ export class DedicatedRerankProvider implements RerankProvider {
     private model: string;
 
     constructor() {
-        this.baseUrl = resolveBaseUrl(process.env.RERANK_API_BASE_URL);
-        this.apiKey = resolveApiKey(process.env.RERANK_API_KEY);
+        const endpoint = resolveEndpoint(
+            process.env.RERANK_API_BASE_URL,
+            process.env.RERANK_API_KEY,
+        );
+        this.baseUrl = endpoint.baseUrl;
+        this.apiKey = endpoint.apiKey;
         const model = process.env.RERANK_MODEL;
         if (!model) {
             throw new Error(

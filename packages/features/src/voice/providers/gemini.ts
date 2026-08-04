@@ -1,8 +1,7 @@
 import type { ProviderResult } from "@launchstack/core/providers";
 import type { TranscriptionProvider, TranscriptionResult } from "./index";
 import {
-    resolveBaseUrl,
-    resolveApiKey,
+    resolveEndpoint,
     resolveModel,
 } from "@launchstack/core/providers/registry";
 import { GEMINI_DEFAULT_MODEL } from "@launchstack/core/llm/types";
@@ -28,7 +27,22 @@ const SUPPORTED_EXTENSIONS: Record<string, string> = {
     aac: "aac",
     ogg: "ogg",
     flac: "flac",
+    // MPEG-4 containers carrying AAC. The ingestion pipeline accepts these —
+    // `isAudioFileName` lists .mp4 and .m4a, and `isAudioMimeType` accepts
+    // video/mp4 — so rejecting them here would fail an upload the app had
+    // already promised to transcribe. Declared as "aac", the codec inside.
+    m4a: "aac",
+    mp4: "aac",
 };
+
+/**
+ * Accepted for ingestion but not transcribable here.
+ *
+ * `isAudioFileName` lets .wma through and Gemini has no format for it, so the
+ * error names the sidecar rather than leaving the operator to guess: the
+ * self-hosted path decodes with ffmpeg and handles anything.
+ */
+const NEEDS_SIDECAR = new Set(["wma"]);
 
 const PROMPT =
     "Transcribe this audio verbatim. Reply with the transcript text only — " +
@@ -55,11 +69,12 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
     private model: string;
 
     constructor() {
-        this.baseUrl = resolveBaseUrl(process.env.TRANSCRIPTION_API_BASE_URL);
-        this.apiKey = resolveApiKey(
+        const endpoint = resolveEndpoint(
+            process.env.TRANSCRIPTION_API_BASE_URL,
             process.env.TRANSCRIPTION_API_KEY,
-            process.env.GOOGLE_AI_API_KEY,
         );
+        this.baseUrl = endpoint.baseUrl;
+        this.apiKey = endpoint.apiKey;
         this.model = resolveModel(
             process.env.TRANSCRIPTION_MODEL,
             GEMINI_DEFAULT_MODEL,
@@ -83,9 +98,13 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
         const format = SUPPORTED_EXTENSIONS[extension];
         if (!format) {
             throw new Error(
-                `Unsupported audio format ".${extension}" for transcription. ` +
-                `Gemini accepts ${Object.keys(SUPPORTED_EXTENSIONS).join(", ")} — ` +
-                "convert before uploading.",
+                NEEDS_SIDECAR.has(extension)
+                    ? `".${extension}" cannot be transcribed by the cloud provider — ` +
+                      "Gemini has no format for it. Run the transcription sidecar " +
+                      "(SIDECAR_URL), which decodes any container, or convert the " +
+                      "file to wav or mp3 first."
+                    : `Unsupported audio format ".${extension}" for transcription. ` +
+                      `Accepted: ${Object.keys(SUPPORTED_EXTENSIONS).join(", ")}.`,
             );
         }
 

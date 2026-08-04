@@ -1,6 +1,6 @@
 import type { ProviderResult } from "../types";
 import type { RerankProvider, RerankResult } from "./index";
-import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
+import { resolveEndpoint, resolveModel } from "../registry";
 import { GEMINI_FAST_MODEL } from "../../llm/types";
 
 /**
@@ -50,11 +50,12 @@ export class GeminiRerankProvider implements RerankProvider {
     private model: string;
 
     constructor() {
-        this.baseUrl = resolveBaseUrl(process.env.RERANK_API_BASE_URL);
-        this.apiKey = resolveApiKey(
+        const endpoint = resolveEndpoint(
+            process.env.RERANK_API_BASE_URL,
             process.env.RERANK_API_KEY,
-            process.env.GOOGLE_AI_API_KEY,
         );
+        this.baseUrl = endpoint.baseUrl;
+        this.apiKey = endpoint.apiKey;
         this.model = resolveModel(process.env.RERANK_MODEL, GEMINI_FAST_MODEL);
         this.name = `rerank:${this.model}`;
 

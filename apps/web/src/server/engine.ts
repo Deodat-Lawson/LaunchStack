@@ -64,9 +64,16 @@ function buildConfig(): CoreConfig {
       // Non-chat OpenAI-compatible work (OCR chunking, VLM enrichment,
       // embeddings fallback) keeps its own credentials — it must never
       // borrow the chat endpoint's key.
+      // apiKey belongs to AI_BASE_URL; googleApiKey belongs to the Gemini
+      // fallback. Kept apart so an OPENAI_API_KEY can never be paired with
+      // Google's endpoint, and so a Gemini-only deployment still has a
+      // credential for VLM enrichment and table summaries.
       auxiliaryOpenAI: {
-        apiKey: server.AI_API_KEY ?? server.OPENAI_API_KEY,
+        apiKey: server.AI_BASE_URL
+          ? (server.AI_API_KEY ?? server.OPENAI_API_KEY)
+          : undefined,
         baseUrl: server.AI_BASE_URL,
+        googleApiKey: server.GOOGLE_AI_API_KEY,
       },
       openai: server.OPENAI_API_KEY
         ? { apiKey: server.OPENAI_API_KEY, model: server.OPENAI_MODEL }
@@ -240,6 +247,9 @@ export function getEngine(): Engine {
   configureProviders({
     aiBaseUrl: config.llm.aiBaseUrl,
     aiApiKey: config.llm.aiApiKey,
+    // Separate from aiApiKey so a capability falling back to Gemini
+    // authenticates with a Google credential and never with another vendor's.
+    googleApiKey: env.server.GOOGLE_AI_API_KEY,
     sidecarUrl: config.embeddings.sidecar?.url,
     rerankProviderMode: config.providers.rerank?.provider,
     nerProviderMode: config.providers.ner?.provider,

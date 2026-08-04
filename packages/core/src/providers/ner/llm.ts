@@ -1,6 +1,6 @@
 import type { ProviderResult } from "../types";
 import type { NERProvider, NERResult, ChunkEntities } from "./index";
-import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
+import { resolveEndpoint, resolveModel } from "../registry";
 import { GEMINI_FAST_MODEL } from "../../llm/types";
 import OpenAI from "openai";
 
@@ -34,16 +34,12 @@ export class LLMNERProvider implements NERProvider {
     private model: string;
 
     constructor() {
-        // Works against any OpenAI-compatible endpoint; resolveBaseUrl falls
-        // back to Gemini when the operator names none.
-        const baseURL = resolveBaseUrl(process.env.NER_API_BASE_URL);
-        // The legacy-key fallback is GOOGLE_AI_API_KEY, not OPENAI_API_KEY:
-        // it has to match the endpoint resolved above, whose default is now
-        // Gemini. An operator pointing NER_API_BASE_URL elsewhere supplies
-        // NER_API_KEY (or the host's aiApiKey) for that service.
-        const apiKey = resolveApiKey(
+        // Endpoint and credential come back as a pair, so a key is never sent
+        // to a service it does not belong to. Defaults to Gemini when the
+        // operator names no endpoint.
+        const { baseUrl: baseURL, apiKey } = resolveEndpoint(
+            process.env.NER_API_BASE_URL,
             process.env.NER_API_KEY,
-            process.env.GOOGLE_AI_API_KEY,
         );
         this.model = resolveModel(
             process.env.NER_MODEL,

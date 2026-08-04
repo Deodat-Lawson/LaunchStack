@@ -18,13 +18,22 @@ import { createSlot } from "../internal/slot";
 import { GEMINI_BASE_URL } from "./types";
 
 export interface AuxiliaryOpenAIConfig {
-  apiKey?: string;
   /**
-   * OpenAI-compatible base URL. Defaults to {@link GEMINI_BASE_URL} when
-   * omitted — never to the SDK's own `api.openai.com`, which would send
-   * documents to a vendor no part of this configuration names.
+   * Credential for {@link baseUrl}. Belongs to whatever service that URL names,
+   * and is only ever sent there.
    */
+  apiKey?: string;
+  /** OpenAI-compatible base URL the operator named, if any. */
   baseUrl?: string;
+  /**
+   * Credential for the Gemini fallback, kept separate on purpose.
+   *
+   * {@link apiKey} may hold an OpenAI or other vendor's key. Defaulting the URL
+   * to Gemini while reusing that key would post it to Google — the precise
+   * failure this split exists to prevent. The fallback only fires when a Google
+   * credential is present to pair with it.
+   */
+  googleApiKey?: string;
 }
 
 const configSlot = createSlot<AuxiliaryOpenAIConfig>("llm/auxiliaryOpenAI");
@@ -43,23 +52,50 @@ export function getAuxiliaryOpenAIConfig(): AuxiliaryOpenAIConfig {
 
 /**
  * Returns a client for the auxiliary OpenAI-compatible endpoint, or null when
- * no credential is configured — callers must check before making a request.
+ * nothing usable is configured — callers must check before making a request.
  *
- * A missing base URL falls back to Gemini rather than to the SDK's implicit
- * `api.openai.com`. The endpoint is still the operator's choice; this just
- * makes the unconfigured case land somewhere the rest of the deployment
- * already defaults to, instead of a vendor nothing else mentions.
+ * Endpoint and credential are resolved as a PAIR, never independently:
+ *
+ *   1. The operator named a URL — use it with its own key.
+ *   2. Nothing named a URL — fall back to Gemini, but only with the Google
+ *      credential. A key belonging to another vendor is never carried along.
+ *
+ * A key with no URL and no Google credential is unusable rather than a licence
+ * to pick a host for it. That is the whole point: the SDK's implicit
+ * `api.openai.com` and a naive Gemini default are the same mistake pointed at
+ * different companies.
  */
 export function getOpenAIClient(): OpenAI | null {
-  const { apiKey, baseUrl: configuredBaseUrl } = getAuxiliaryOpenAIConfig();
-  if (!apiKey) return null;
-  const baseUrl = configuredBaseUrl ?? GEMINI_BASE_URL;
+  const { apiKey, baseUrl, googleApiKey } = getAuxiliaryOpenAIConfig();
 
-  const cacheKey = `${apiKey}:${baseUrl}`;
+  const resolved = baseUrl
+    ? apiKey
+      ? { apiKey, baseUrl }
+      : null
+    : googleApiKey
+      ? { apiKey: googleApiKey, baseUrl: GEMINI_BASE_URL }
+      : null;
+
+  if (!resolved) {
+    if (apiKey && !baseUrl) {
+      console.warn(
+        "[llm] An auxiliary credential is set but no endpoint names where it " +
+          "belongs, and no GOOGLE_AI_API_KEY is available for the Gemini " +
+          "default. Set AI_BASE_URL to pair it, or GOOGLE_AI_API_KEY to use " +
+          "Gemini. The key will not be sent anywhere.",
+      );
+    }
+    return null;
+  }
+
+  const cacheKey = `${resolved.apiKey}:${resolved.baseUrl}`;
   const cached = clientSlot.get();
   if (cached && cached.key === cacheKey) return cached.client;
 
-  const client = new OpenAI({ apiKey, baseURL: baseUrl });
+  const client = new OpenAI({
+    apiKey: resolved.apiKey,
+    baseURL: resolved.baseUrl,
+  });
   clientSlot.set({ client, key: cacheKey });
   return client;
 }

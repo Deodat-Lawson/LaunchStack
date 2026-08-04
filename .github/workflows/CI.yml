@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    # `feat/**` so a PR stacked on another feature branch still gets CI.
+    # Without it a stacked PR shows no checks at all until its base merges.
+    branches: [main, "feat/**"]
 
 env:
   NODE_VERSION: "20"

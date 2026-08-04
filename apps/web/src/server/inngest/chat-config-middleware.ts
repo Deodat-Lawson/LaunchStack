@@ -1,5 +1,5 @@
 /**
- * Install this deployment's chat configuration before every background run.
+ * Install this deployment's AI configuration before every background run.
  *
  * API routes reach chat through `~/lib/models`, whose helpers configure core
  * on the way in. Background functions do not use those helpers: they call
@@ -10,9 +10,15 @@
  * had to preserve. On a cold `/api/inngest` invocation that lost the coin flip,
  * the planning or scoring step failed with "Chat models are not configured."
  *
+ * The same reasoning applies to the *provider* registry, which NER, reranking
+ * and transcription read: `configureProviders` runs inside `getEngine()`, so a
+ * cold `/api/inngest` invocation that never touched the engine left the
+ * registry empty and every capability resolved to the default endpoint with a
+ * blank credential. Both are installed here for the same reason.
+ *
  * Inngest re-enters the handler once per step, so this runs per step rather
- * than once per job. The parsed file is cached, so the repeat cost is a map
- * lookup.
+ * than once per job. The parsed file is cached and `getEngine()` memoizes on
+ * globalThis, so the repeat cost is a map lookup.
  */
 
 import { InngestMiddleware } from "inngest";
@@ -25,12 +31,16 @@ let warnedAboutFailure = false;
  * imports; a static import would pull `@launchstack/core/llm`, the OpenAI SDK,
  * and `yaml` into all of them for a client they never construct.
  */
-async function installChatConfiguration(): Promise<void> {
-  const [{ env }, { configureAppChatModels }] = await Promise.all([
+async function installAiConfiguration(): Promise<void> {
+  const [{ env }, { configureAppChatModels }, { getEngine }] = await Promise.all([
     import("~/env"),
     import("~/server/chat-models"),
+    import("~/server/engine"),
   ]);
   configureAppChatModels(env.server);
+  // Registers the provider registry, embedding defaults and secret box. Cached
+  // on globalThis, so this is a lookup after the first step.
+  getEngine();
 }
 
 export const chatConfigMiddleware = new InngestMiddleware({
@@ -41,17 +51,17 @@ export const chatConfigMiddleware = new InngestMiddleware({
         return {
           async transformInput() {
             try {
-              await installChatConfiguration();
+              await installAiConfiguration();
             } catch (error) {
               // Deliberately not fatal. Most background functions never touch
-              // chat, and failing them all because the model file is wrong
-              // would turn a chat misconfiguration into a document-processing
-              // outage. The steps that do need chat still fail — with the
-              // resolver's own typed error — and this log is what explains why.
+              // chat or a provider, and failing them all because the model file
+              // is wrong would turn a misconfiguration into a
+              // document-processing outage. The steps that do need one still
+              // fail — with their own typed error — and this log explains why.
               if (!warnedAboutFailure) {
                 warnedAboutFailure = true;
                 console.warn(
-                  "[inngest] chat configuration unavailable; steps that need a chat model will fail:",
+                  "[inngest] AI configuration unavailable; steps that need a chat model or a provider will fail:",
                   error instanceof Error ? error.message : error,
                 );
               }

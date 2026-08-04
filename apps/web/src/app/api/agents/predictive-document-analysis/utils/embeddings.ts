@@ -1,6 +1,16 @@
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 /**
+ * Thrown when embeddings are not configured at all. Distinct from a transient
+ * API failure: the callers below degrade to an empty vector on those, but a
+ * misconfiguration must surface rather than masquerade as "nothing similar" —
+ * an empty vector silently makes every similarity score meaningless.
+ */
+export class EmbeddingConfigurationError extends Error {
+    override readonly name = "EmbeddingConfigurationError";
+}
+
+/**
  * Endpoint and credential, resolved as a PAIR.
  *
  * `@langchain/openai` silently falls back to `api.openai.com` when
@@ -16,7 +26,7 @@ function resolveEmbeddingEndpoint(): { apiKey: string; baseURL: string } {
         : (process.env.AI_API_KEY ?? process.env.OPENAI_API_KEY);
 
     if (!baseURL || !apiKey) {
-        throw new Error(
+        throw new EmbeddingConfigurationError(
             "Embeddings are not configured. Set EMBEDDING_API_BASE_URL and " +
                 "EMBEDDING_API_KEY (or AI_BASE_URL and AI_API_KEY). There is no " +
                 "default endpoint: embeddings are persisted, so the provider " +
@@ -56,6 +66,10 @@ export async function getEmbeddings(text: string): Promise<number[]> {
         embeddingCache.set(text, result);
         return result;
     } catch (error) {
+        // A missing endpoint is not a transient failure — returning [] here
+        // would let predictive analysis run on meaningless similarity scores
+        // and report success.
+        if (error instanceof EmbeddingConfigurationError) throw error;
         console.error("Error getting embeddings:", sanitizeErrorMessage(error));
         return [];
     }
@@ -82,6 +96,9 @@ export async function batchGetEmbeddings(texts: string[]): Promise<number[][]> {
         
         return texts.map(text => embeddingMap.get(text) ?? []);
     } catch (error) {
+        // See getEmbeddings: a misconfiguration must not degrade into a batch
+        // of empty vectors that analysis then treats as real scores.
+        if (error instanceof EmbeddingConfigurationError) throw error;
         console.error("Error getting batch embeddings:", sanitizeErrorMessage(error));
         return texts.map(() => []);
     }

@@ -6,9 +6,14 @@
  * configuration. Before this middleware, whether the configuration was present
  * depended on whether some earlier step in the same serverless invocation had
  * touched `getEngine()`.
+ *
+ * The provider registry has the same exposure — NER, reranking and
+ * transcription read it, and `configureProviders` runs inside `getEngine()` —
+ * so the middleware installs both.
  */
 
 const mockConfigureAppChatModels = jest.fn();
+const mockGetEngine = jest.fn();
 const mockServerEnv = { CHAT_BASE_URL: "https://endpoint.test/v1" };
 
 jest.mock("~/env", () => ({
@@ -20,6 +25,10 @@ jest.mock("~/env", () => ({
 jest.mock("~/server/chat-models", () => ({
   configureAppChatModels: (...args: unknown[]) =>
     mockConfigureAppChatModels(...args),
+}));
+
+jest.mock("~/server/engine", () => ({
+  getEngine: () => mockGetEngine(),
 }));
 
 import {
@@ -37,6 +46,7 @@ async function runOneStep(): Promise<void> {
 describe("Inngest chat configuration middleware", () => {
   beforeEach(() => {
     mockConfigureAppChatModels.mockReset();
+    mockGetEngine.mockReset();
     resetChatConfigMiddlewareWarning();
     jest.restoreAllMocks();
   });
@@ -46,6 +56,16 @@ describe("Inngest chat configuration middleware", () => {
 
     expect(mockConfigureAppChatModels).toHaveBeenCalledTimes(1);
     expect(mockConfigureAppChatModels).toHaveBeenCalledWith(mockServerEnv);
+  });
+
+  it("installs the provider registry too, not just chat", () => {
+    // NER, reranking and transcription resolve through the provider registry,
+    // which only gets populated by getEngine(). Without this a cold
+    // /api/inngest invocation resolved every capability to the default
+    // endpoint with a blank credential.
+    return runOneStep().then(() => {
+      expect(mockGetEngine).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("runs on every step, since Inngest re-enters the handler per step", async () => {
@@ -64,7 +84,7 @@ describe("Inngest chat configuration middleware", () => {
 
     await expect(runOneStep()).resolves.toBeUndefined();
     expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining("chat configuration unavailable"),
+      expect.stringContaining("AI configuration unavailable"),
       expect.stringContaining("/nope.yaml"),
     );
   });

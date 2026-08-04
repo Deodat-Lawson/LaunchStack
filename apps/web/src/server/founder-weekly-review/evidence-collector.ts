@@ -4,6 +4,8 @@ import {
     type FounderWeeklyReviewEvidenceSnapshot,
     type ReportingPeriod,
 } from "@launchstack/features/founder-weekly-review";
+import { FounderWeeklyReviewDocumentVersionStore } from "./document-version-chunks";
+import { StrictCurrentWorkspaceDocumentStore } from "./workspace-document-store";
 
 export interface FounderWeeklyReviewEvidenceCollector {
     collectFounderWeeklyReviewEvidence(input: {
@@ -50,7 +52,7 @@ export class CanonicalFounderWeeklyReviewEvidenceCollector implements FounderWee
         actor: { externalUserId: string };
         requestKey: string;
     }): Promise<FounderWeeklyReviewEvidenceSnapshot> {
-        const snapshot = await (this.service ??= new FounderWeeklyReviewEvidenceService()).collectFounderWeeklyReviewEvidence({
+        const snapshot = await (this.service ??= new FounderWeeklyReviewEvidenceService(undefined, undefined, { kind: "computed", store: new FounderWeeklyReviewDocumentVersionStore() }, new StrictCurrentWorkspaceDocumentStore())).collectFounderWeeklyReviewEvidence({
             companyId: input.companyId,
             reportingPeriod: input.reportingPeriod,
             workspaceTimezone: input.workspaceTimezone,

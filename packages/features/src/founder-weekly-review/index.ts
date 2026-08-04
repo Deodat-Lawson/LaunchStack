@@ -8,3 +8,5 @@ export * from "./worker-service";
 export * from "./generator";
 export * from "./generation-validation";
 export * from "./prompts";
+export * from "./document-change";
+export * from "./workspace-document";

@@ -160,6 +160,25 @@ describe("Founder Weekly Review generation", () => {
         await expect(generateFounderWeeklyReview({ evidenceSnapshot: completeSnapshot(), generate: fake(payload) })).rejects.toBeInstanceOf(Error);
     });
 
+    it.each(["whatChanged", "whatShipped"] as const)("rejects workspace_document-only %s claims", async (sectionName) => {
+        const payload = validPayload();
+        payload.sections[sectionName] = { state: "evidence", items: [{ kind: "observed_fact", text: "Current document implies a weekly event.", sourceIds: ["workspace-1"], confidence: 0.5 }] };
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot: snapshot([source("workspace-1", "workspace_document")]), generate: fake(payload) })).rejects.toBeInstanceOf(FounderWeeklyReviewGenerationValidationError);
+    });
+
+    it.each(["whatChanged", "whatShipped"] as const)("allows document_change plus workspace_document in %s", async (sectionName) => {
+        const payload = validPayload();
+        payload.sections[sectionName] = { state: "evidence", items: [{ kind: "observed_fact", text: "A dated change has current context.", sourceIds: ["doc-1", "workspace-1"], confidence: 0.5 }] };
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot: snapshot([...completeSnapshot().items, source("workspace-1", "workspace_document")]), generate: fake(payload) })).resolves.toBeDefined();
+    });
+
+    it("allows workspace_document for blockers and priorities while customer-only enforcement remains", async () => {
+        const payload = validPayload();
+        payload.sections.currentBlockers = { state: "evidence", items: [{ kind: "observed_fact", text: "Current context", sourceIds: ["workspace-1"], confidence: 0.5 }] };
+        payload.sections.nextPriorities = { state: "evidence", items: [{ kind: "recommendation", label: "Recommendation", text: "Act on current context", sourceIds: ["workspace-1"], confidence: 0.5 }] };
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot: snapshot([...completeSnapshot().items, source("workspace-1", "workspace_document")]), generate: fake(payload) })).resolves.toBeDefined();
+    });
+
     it("rejects duplicate input source IDs before calling the model", async () => {
         const generate = fake(validPayload());
         await expect(generateFounderWeeklyReview({ evidenceSnapshot: snapshot([source("same", "manual_note"), source("same", "document_change")]), generate })).rejects.toBeInstanceOf(FounderWeeklyReviewGenerationValidationError);

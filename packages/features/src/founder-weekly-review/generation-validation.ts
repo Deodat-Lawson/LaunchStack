@@ -20,6 +20,11 @@ export interface FounderWeeklyReviewValidationDetail {
     sourceId?: string;
 }
 
+/** Sources in the current model that can establish a reporting-period event. */
+const TEMPORAL_EVIDENCE_SOURCE_TYPES = new Set(["document_change"]);
+const isTemporalEvidenceSource = (source: { sourceType?: string } | undefined) =>
+    source !== undefined && TEMPORAL_EVIDENCE_SOURCE_TYPES.has(source.sourceType ?? "");
+
 export function assertUniqueSnapshotSourceIds(
     evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot
 ): void {
@@ -70,6 +75,20 @@ export function validateFounderWeeklyReviewV2Citations(
                             [{ code: "customer_signals_requires_customer_feedback", section: sectionName, itemIndex, sourceId }]
                         );
                     }
+                }
+            }
+            if (sectionName === "whatChanged" || sectionName === "whatShipped") {
+                const sources = item.sourceIds.map((sourceId) => evidenceBySourceId.get(sourceId) as { sourceType?: string } | undefined);
+                const workspaceOnly = sources.length > 0 && sources.every((source) => source?.sourceType === "workspace_document");
+                const workspaceWithoutTemporalEvidence = sources.some((source) => source?.sourceType === "workspace_document")
+                    && !sources.some(isTemporalEvidenceSource);
+                if (workspaceOnly || workspaceWithoutTemporalEvidence) {
+                    throw new FounderWeeklyReviewGenerationValidationError(
+                        `${sectionName} requires temporal evidence in addition to workspace_document context.`,
+                        item.sourceIds.map((sourceId) => ({
+                            code: workspaceOnly ? "workspace_document_only_temporal_claim" : `${sectionName === "whatChanged" ? "what_changed" : "what_shipped"}_requires_temporal_evidence`, section: sectionName, itemIndex, sourceId,
+                        }))
+                    );
                 }
             }
         }

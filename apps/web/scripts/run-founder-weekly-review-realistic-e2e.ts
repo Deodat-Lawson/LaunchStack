@@ -36,7 +36,7 @@ try {
   if (created.run.evidenceSnapshot) throw new Error("Workflow run unexpectedly has an initial snapshot.");
   const worker = new FounderWeeklyReviewWorkerService(new FounderWeeklyReviewRepository(testDb.db)); const collectionContext = { companyId: actor.companyId, runId: created.run.id, collectionClaimId: created.dispatch.generationClaimId };
   const collecting = await worker.claimEvidenceCollection(collectionContext);
-  const collector = new FounderWeeklyReviewEvidenceService(testDb.db, () => new Date("2026-03-01T00:00:00.000Z"));
+  const collector = new FounderWeeklyReviewEvidenceService(testDb.db, () => new Date("2026-03-01T00:00:00.000Z"), { kind: "legacy" });
   const snapshot = await collector.collectFounderWeeklyReviewEvidence({ companyId: actor.companyId, reportingPeriod: fixture.reportingPeriod, workspaceTimezone: fixture.workspaceTimezone, founderContext: fixture.founderContext, actor: { externalUserId: actor.externalUserId }, requestKey: created.run.requestKey });
   const beforeDigest = digest(snapshot); const attached = await worker.attachEvidenceSnapshotIfAbsent(collectionContext, snapshot); const afterDigest = digest(attached.evidenceSnapshot);
   const counts = Object.fromEntries(["document_change", "customer_feedback", "founder_context"].map((type) => [type, attached.evidenceSnapshot!.items.filter((item) => item.sourceType === type).length]));

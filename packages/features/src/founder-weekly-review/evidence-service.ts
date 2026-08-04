@@ -14,6 +14,19 @@ import {
     documentContextChunks,
     documentVersions,
 } from "@launchstack/core/db/schema";
+import {
+    alignVersionChunks,
+    buildDocumentChangeEvidence,
+    selectVersionPairsForReportingPeriod,
+    type DocumentVersionForComparison,
+    type VersionChunk,
+} from "./document-change";
+import {
+    buildWorkspaceDocumentEvidence,
+    normalizeFounderContextRetrievalQuery,
+    type WorkspaceDocumentRetrievalInput,
+    type WorkspaceDocumentRetrievalResult,
+} from "./workspace-document";
 
 /** Approved, stored category value. Do not fuzzy-match or seed this category. */
 export const CUSTOMER_FEEDBACK_CATEGORY = "Customer Feedback";
@@ -130,14 +143,70 @@ export interface FounderWeeklyReviewEvidenceSourceResult {
     warnings: FounderWeeklyReviewEvidenceWarning[];
 }
 
+/** Implemented in apps/web so pure feature logic never depends on Drizzle. */
+export interface FounderWeeklyReviewDocumentChangeStore {
+    listVersionsBeforePeriodEnd(companyId: bigint, endExclusive: Date): Promise<DocumentVersionForComparison[]>;
+    getDocumentChunksForVersion(input: { companyId: bigint; documentId: bigint; versionId: number }): Promise<
+        { state: "complete" | "partial" | "missing"; chunks: VersionChunk[]; warnings: string[] }
+    >;
+}
+
+export type FounderWeeklyReviewDocumentChangeSource =
+    | { kind: "computed"; store: FounderWeeklyReviewDocumentChangeStore }
+    | { kind: "legacy" }
+    | { kind: "unconfigured" };
+
+export interface FounderWeeklyReviewWorkspaceDocumentStore {
+    retrieveRelevantCurrentDocumentChunks(input: WorkspaceDocumentRetrievalInput): Promise<WorkspaceDocumentRetrievalResult>;
+}
+
 export class FounderWeeklyReviewEvidenceService {
-    constructor(private readonly db: DbClient = getDb(), private readonly now: () => Date = () => new Date()) {}
+    constructor(
+        private readonly db: DbClient = getDb(),
+        private readonly now: () => Date = () => new Date(),
+        private readonly documentChangeSource: FounderWeeklyReviewDocumentChangeSource = { kind: "unconfigured" },
+        private readonly workspaceDocumentStore?: FounderWeeklyReviewWorkspaceDocumentStore,
+    ) {}
 
     async collectDocumentChangeEvidence(companyId: bigint, startInclusive: Date, endExclusive: Date): Promise<FounderWeeklyReviewEvidenceItem[]> {
         return (await this.collectDocumentChangeEvidenceResult(companyId, startInclusive, endExclusive)).items;
     }
 
     private async collectDocumentChangeEvidenceResult(companyId: bigint, startInclusive: Date, endExclusive: Date): Promise<FounderWeeklyReviewEvidenceSourceResult> {
+        if (this.documentChangeSource.kind === "computed") {
+            const store = this.documentChangeSource.store;
+            const versions = await store.listVersionsBeforePeriodEnd(companyId, endExclusive);
+            const pairs = selectVersionPairsForReportingPeriod(versions, startInclusive, endExclusive);
+            const items: FounderWeeklyReviewEvidenceItem[] = [];
+            const warnings: FounderWeeklyReviewEvidenceWarning[] = [];
+            for (const pair of pairs) {
+                const [previous, current] = await Promise.all([
+                    store.getDocumentChunksForVersion({ companyId, documentId: pair.documentId, versionId: pair.previousVersionId }),
+                    store.getDocumentChunksForVersion({ companyId, documentId: pair.documentId, versionId: pair.currentVersionId }),
+                ]);
+                if (previous.state === "missing" || current.state === "missing") {
+                    warnings.push(warning("document_change_chunks_missing", "A version pair could not be compared because processed historical chunks are missing.", "document_change"));
+                    continue;
+                }
+                if (previous.state === "partial" || current.state === "partial") {
+                    warnings.push(warning("document_change_chunks_partial", "A version pair was compared with partial chunk provenance.", "document_change"));
+                }
+                items.push(...buildDocumentChangeEvidence(pair, alignVersionChunks(previous.chunks, current.chunks)));
+            }
+            const pairedCurrentVersionIds = new Set(pairs.map((pair) => pair.currentVersionId));
+            const inPeriodWithNoPair = versions.some((version) =>
+                version.createdAt >= startInclusive
+                && version.createdAt < endExclusive
+                && !pairedCurrentVersionIds.has(version.versionId)
+            );
+            if (inPeriodWithNoPair) warnings.push(warning("document_change_baseline_missing", "An in-period document version has no predecessor, so no content diff was generated.", "document_change"));
+            const ordered = orderEvidenceItems(dedupeEvidenceItems(items));
+            if (ordered.length > MAX_ITEMS_PER_SOURCE) warnings.push(warning("document_change_truncated", "Document change evidence was truncated to the per-source limit.", "document_change"));
+            return { items: ordered.slice(0, MAX_ITEMS_PER_SOURCE), warnings };
+        }
+        if (this.documentChangeSource.kind !== "legacy") {
+            return { items: [], warnings: [warning("document_change_source_unconfigured", "Document-change collection requires the explicit computed-diff source.", "document_change")] };
+        }
         const rows = await this.db.select({
             documentId: documentVersions.documentId, documentTitle: document.title,
             documentCategory: document.category, versionId: documentVersions.id,
@@ -189,6 +258,15 @@ export class FounderWeeklyReviewEvidenceService {
             metadata: { enteredBy: input.actor.externalUserId, provenance: "request_time_founder_input", excerptTruncated: bounded.truncated } }], warnings: [] };
     }
 
+    async collectWorkspaceDocumentEvidence(companyId: bigint, founderContext: string | undefined): Promise<FounderWeeklyReviewEvidenceSourceResult> {
+        const query = normalizeFounderContextRetrievalQuery(founderContext);
+        if (!query || !this.workspaceDocumentStore) return { items: [], warnings: [] };
+        const result = await this.workspaceDocumentStore.retrieveRelevantCurrentDocumentChunks({ companyId, founderContext: query });
+        if (result.state === "success") return { items: buildWorkspaceDocumentEvidence(result.hits), warnings: [] };
+        if (result.state === "empty") return { items: [], warnings: [] };
+        return { items: [], warnings: result.warnings.slice(0, MAX_WARNINGS).map((code) => warning(code, "Founder Context workspace retrieval was unavailable.", "workspace_document")) };
+    }
+
     async collectFounderWeeklyReviewEvidence(input: BuildFounderWeeklyReviewEvidenceSnapshotInput): Promise<FounderWeeklyReviewEvidenceSnapshot> {
         return this.buildEvidenceSnapshot(input);
     }
@@ -198,7 +276,8 @@ export class FounderWeeklyReviewEvidenceService {
         const documentChanges = await this.collectDocumentChangeEvidenceResult(input.companyId, startInclusive, endExclusive);
         const feedback = await this.collectCustomerFeedbackEvidence(input.companyId, startInclusive, endExclusive);
         const founderContext = this.collectFounderContextEvidence(input);
-        const sourceResults: FounderWeeklyReviewEvidenceSourceResult[] = [documentChanges, feedback, founderContext];
+        const workspaceDocuments = await this.collectWorkspaceDocumentEvidence(input.companyId, input.founderContext);
+        const sourceResults: FounderWeeklyReviewEvidenceSourceResult[] = [documentChanges, feedback, founderContext, workspaceDocuments];
         const items = orderEvidenceItems(dedupeEvidenceItems(sourceResults.flatMap((result) => result.items)));
         const requestedMax = input.maxItems ?? MAX_SNAPSHOT_ITEMS;
         const maxItems = Math.max(0, Math.min(MAX_SNAPSHOT_ITEMS, requestedMax));

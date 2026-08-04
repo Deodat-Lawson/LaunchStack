@@ -326,18 +326,25 @@ jobs:
             exit 0
           fi
           echo "upgrading from $TAG"
-          psql -h localhost -U postgres -d postgres -c "CREATE DATABASE ls_upgrade"
+          psql "$PGURL/postgres" -c "CREATE DATABASE ls_upgrade"
           rm -rf /tmp/prev && mkdir -p /tmp/prev
-          git archive "$TAG" packages/core/drizzle packages/core/scripts | tar -x -C /tmp/prev
+          git archive "$TAG" packages/core/drizzle packages/core/scripts apps/web/drizzle \
+            | tar -x -C /tmp/prev
 
+          # Previous release, both sets — engine first.
           DATABASE_URL="$PGURL/ls_upgrade" node /tmp/prev/packages/core/scripts/migrate.mjs
-          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/core db:migrate
-          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/core db:verify
+          if [ -d /tmp/prev/apps/web/drizzle ]; then
+            DATABASE_URL="$PGURL/ls_upgrade" \
+              node /tmp/prev/packages/core/scripts/migrate.mjs --set=product
+          fi
+          # Then HEAD's, both sets.
+          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/web db:migrate
+          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/web db:verify
 
           # An upgraded database must end up structurally identical to one
           # built from scratch — otherwise the migrations are order-dependent.
-          psql -h localhost -U postgres -d postgres -c "CREATE DATABASE ls_fresh"
-          DATABASE_URL="$PGURL/ls_fresh" pnpm --filter @launchstack/core db:migrate
+          psql "$PGURL/postgres" -c "CREATE DATABASE ls_fresh"
+          DATABASE_URL="$PGURL/ls_fresh" pnpm --filter @launchstack/web db:migrate
           dump() {
             docker run --rm --network host pgvector/pgvector:pg16 \
               pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \

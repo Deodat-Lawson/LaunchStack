@@ -125,34 +125,6 @@ export function resolveEndpoint(
     return { baseUrl: GEMINI_BASE_URL, apiKey: c.googleApiKey ?? "" };
 }
 
-/**
- * Endpoint only, for a provider that supplies its own credential separately.
- *
- * Prefer {@link resolveEndpoint}: this cannot enforce the pairing rule on its
- * own, and exists for the single-host providers that pass `defaultUrl`.
- */
-export function resolveBaseUrl(
-    capabilityEnv: string | undefined,
-    defaultUrl?: string,
-): string {
-    const url =
-        capabilityEnv ?? getConfig().aiBaseUrl ?? defaultUrl ?? GEMINI_BASE_URL;
-    return url.replace(/\/$/, "");
-}
-
-export function resolveApiKey(
-    capabilityEnv: string | undefined,
-    ...legacyFallbacks: (string | undefined)[]
-): string {
-    if (capabilityEnv) return capabilityEnv;
-    const aiKey = getConfig().aiApiKey;
-    if (aiKey) return aiKey;
-    for (const key of legacyFallbacks) {
-        if (key) return key;
-    }
-    return "";
-}
-
 export function resolveModel(
     capabilityEnv: string | undefined,
     defaultModel: string,

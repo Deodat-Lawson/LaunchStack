@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { getTranscriptionProvider } from "@launchstack/features/voice";
+import { getEngine } from "~/server/engine";
 
 /**
  * Speech-to-Text.
@@ -52,6 +53,15 @@ export async function POST(request: Request) {
       "name" in audioFile && typeof audioFile.name === "string" && audioFile.name
         ? audioFile.name
         : "recording.wav";
+
+    // Install provider configuration before the registry is read. On a cold
+    // invocation nothing else here touches core, so without this the registry
+    // is empty: TRANSCRIPTION_PROVIDER=sidecar, SIDECAR_URL and AI_BASE_URL are
+    // all ignored, and the cloud provider is chosen with no credential. Worse,
+    // getTranscriptionProvider() memoizes per process, so that wrong choice
+    // would persist for every later transcription in the same instance.
+    // getEngine() is idempotent and cached.
+    getEngine();
 
     const provider = await getTranscriptionProvider();
     const result = await provider.transcribe(buffer, filename);

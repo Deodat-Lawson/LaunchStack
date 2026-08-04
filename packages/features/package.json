@@ -29,10 +29,6 @@
       "types": "./src/voice/index.ts",
       "default": "./src/voice/index.ts"
     },
-    "./voice/whisper-js": {
-      "types": "./src/voice/whisper-js.ts",
-      "default": "./src/voice/whisper-js.ts"
-    },
     "./repo-explainer": {
       "types": "./src/repo-explainer/index.ts",
       "default": "./src/repo-explainer/index.ts"

@@ -242,11 +242,18 @@ export function getEngine(): Engine {
     ollamaModel: config.llm.ollama?.model,
   });
 
-  // Register provider config so resolveBaseUrl / resolveApiKey / etc. in
-  // ~/lib/providers/registry see the same values as core does.
+  // Register provider config so resolveEndpoint / resolveModel / etc. in
+  // core's provider registry see the same values as core does.
   configureProviders({
     aiBaseUrl: config.llm.aiBaseUrl,
-    aiApiKey: config.llm.aiApiKey,
+    // Same fallback the auxiliary client uses, so both halves of the
+    // deployment agree on which credential belongs to AI_BASE_URL. Without it,
+    // a deployment naming AI_BASE_URL but holding only OPENAI_API_KEY sent an
+    // empty bearer token from NER, reranking and transcription while OCR/VLM
+    // authenticated fine against the very same URL.
+    aiApiKey: config.llm.aiBaseUrl
+      ? (config.llm.aiApiKey ?? env.server.OPENAI_API_KEY)
+      : config.llm.aiApiKey,
     // Separate from aiApiKey so a capability falling back to Gemini
     // authenticates with a Google credential and never with another vendor's.
     googleApiKey: env.server.GOOGLE_AI_API_KEY,

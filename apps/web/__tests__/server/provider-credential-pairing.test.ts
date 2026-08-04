@@ -91,6 +91,32 @@ describe("resolveEndpoint pairs the credential with the endpoint", () => {
       apiKey: "global-key",
     });
   });
+
+  it("does not send an empty bearer token to a named global endpoint", () => {
+    // engine.ts falls AI_API_KEY back to OPENAI_API_KEY when AI_BASE_URL names
+    // the endpoint, so the registry must receive a usable key. Previously the
+    // auxiliary client authenticated against this URL while NER, reranking and
+    // transcription sent nothing.
+    configureProviders({
+      aiBaseUrl: "https://global.example/v1",
+      aiApiKey: OPENAI_KEY,
+    });
+
+    expect(resolveEndpoint(undefined, undefined).apiKey).toBe(OPENAI_KEY);
+  });
+});
+
+describe("the unpaired resolvers are gone", () => {
+  it("exports no resolver that can pick a URL without its credential", async () => {
+    // resolveBaseUrl/resolveApiKey resolved independently, which is exactly how
+    // a key reached a service it did not belong to. Deleted rather than fixed,
+    // so no future caller can reintroduce the split.
+    const registry = await import("@launchstack/core/providers/registry");
+
+    expect("resolveBaseUrl" in registry).toBe(false);
+    expect("resolveApiKey" in registry).toBe(false);
+    expect(typeof registry.resolveEndpoint).toBe("function");
+  });
 });
 
 describe("getOpenAIClient pairs the auxiliary credential with its endpoint", () => {

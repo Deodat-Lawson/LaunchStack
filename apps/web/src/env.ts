@@ -161,6 +161,18 @@ const serverSchema = z.object({
   TRANSCRIPTION_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
   // Token system
   TOKEN_SIGNUP_BONUS: optionalString(),
+  // Collaboration: meetings held in channels, with agents that may run on
+  // other machines. COLLAB_HUB_SECRET is the shared secret every remote agent
+  // worker signs its requests with — without it the hub refuses to accept any
+  // node, which is the safe default for a deployment that does not use them.
+  COLLAB_HUB_SECRET: optionalString(),
+  COLLAB_HUB_ID: optionalString(),
+  // Slack: `SLACK_BOT_TOKEN` posts meeting turns into a channel;
+  // `SLACK_SIGNING_SECRET` verifies inbound Events API deliveries so a human
+  // can steer a meeting from Slack. Both are required for two-way mirroring.
+  SLACK_BOT_TOKEN: optionalString(),
+  SLACK_SIGNING_SECRET: optionalString(),
+  SLACK_WEBHOOK_URL: optionalString(),
   // CORS
   CORS_ALLOWED_ORIGINS: optionalString(),
   // Logging
@@ -319,6 +331,11 @@ function parseServerEnv() {
     NER_PROVIDER: process.env.NER_PROVIDER as "cloud" | "sidecar" | undefined,
     TRANSCRIPTION_PROVIDER: process.env.TRANSCRIPTION_PROVIDER as "cloud" | "sidecar" | undefined,
     TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
+    COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
+    COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
+    SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
+    SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
+    SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
     NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
       | "s3"
       | "database"

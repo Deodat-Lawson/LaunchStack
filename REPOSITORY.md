@@ -37,7 +37,7 @@ two places the boundary currently runs the wrong way — see
 | `api/adeu` | Python | `QUARANTINE` | A 503-line serverless function that duplicates `sidecar/app/routes/adeu.py` and imports `sidecar/` through `sys.path` manipulation. Nothing in the TypeScript codebase references it, and the owner has confirmed it is not deployed on Vercel. Retained pending a decision from its authors — see [Open questions](#open-questions). |
 | `docker/` | config | `INFRA` | SeaweedFS, Caddy, and database bootstrap configuration. |
 | `scripts/` | mixed | `INFRA` | See [Scripts](#scripts). |
-| `docs/` | Markdown | — | Deployment, architecture, and feature notes. |
+| `docs/` | Markdown | — | Deployment, architecture, and feature notes. See `docs/collaboration.md` for meetings, the Slack bridge, and distributed agents. |
 | `patches/` | patch files | `INFRA` | One pnpm patch for `drizzle-kit`. |
 
 > **`services/*` is not part of the pnpm workspace.** `pnpm-workspace.yaml`
@@ -150,6 +150,7 @@ comments* — will fail production deploys. Always add a new migration instead.
 | If you want to understand… | Read |
 | --- | --- |
 | The retrieval pipeline | `apps/web/src/lib/tools/rag/search/ensemble-search.ts` |
+| Meetings, Slack, and agents on other machines | `docs/collaboration.md`, then `packages/core/src/collab/` |
 | The engine's public surface | `packages/core/src/index.ts` |
 | What the engine promises hosts | `packages/core/src/config/types.ts` |
 | The data model | `packages/core/src/db/schema/` |

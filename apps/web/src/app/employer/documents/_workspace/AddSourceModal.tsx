@@ -47,6 +47,12 @@ export interface AddSourceModalProps {
   onUploaded: () => void;
   /** Optional: persist a new folder name the user typed in the picker. */
   onCreateFolder?: (name: string) => void;
+  /**
+   * Tab to open on. Set when the caller already knows what the user picked —
+   * the Knowledge pane's connector strip opens straight onto Slack or Drive
+   * rather than dropping them on Files first.
+   */
+  initialTab?: string;
 }
 
 interface UploadResult {
@@ -163,15 +169,16 @@ export function AddSourceModal({
   folders,
   onUploaded,
   onCreateFolder,
+  initialTab,
 }: AddSourceModalProps) {
-  const [tab, setTab] = useState<string>("files");
+  const [tab, setTab] = useState<string>(initialTab ?? "files");
   const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
 
   useEffect(() => {
     if (!open) return;
     setFolder(defaultCategory || "Unfiled");
-    setTab("files");
-  }, [open, defaultCategory]);
+    setTab(initialTab ?? "files");
+  }, [open, defaultCategory, initialTab]);
 
   useEffect(() => {
     if (!open) return;

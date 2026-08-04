@@ -223,8 +223,13 @@ Inngest Cloud is expected to call the Vercel deployment.
 ## Data and tenancy
 
 - Drizzle table declarations live under `packages/core/src/db/schema`.
-- SQL migrations and the migration runner live under `packages/core/drizzle`
-  and `packages/core/scripts`, beside the schema they are generated from.
+- Two migration sets against one database: the engine set
+  (`packages/core/drizzle`, 25 published tables) and the product set
+  (`apps/web/drizzle`, 36 tables owned by the app and the feature verticals).
+  Product tables reference engine tables; never the reverse, so
+  `@launchstack/core` can be applied standalone by an embedding consumer.
+- The runner and journal check live in `packages/core/scripts` and take
+  `--set=engine|product`.
 - The primary database is PostgreSQL with pgvector.
 - Tenant ownership is mostly represented by `companyId`; current workspace
   selection also uses `userCompanyMemberships`.

@@ -1,14 +1,15 @@
 import { type Backfill } from "@launchstack/core/db/backfills";
 import { getTableName, sql } from "drizzle-orm";
+// Engine tables: the RLM rows that hang off a document.
 import {
   documentContextChunks,
   documentMetadata,
-  documentNoteEmbeddings,
-  documentNotes,
   documentPreviews,
   documentRetrievalChunks,
   documentStructure,
 } from "@launchstack/core/db/schema";
+// Product tables: notes live on the application side of the boundary.
+import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
 
 import { embedNote } from "../notes/embed-note";
 

@@ -14,7 +14,19 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const DIR = join(HERE, "..", "drizzle");
+
+// Mirrors the sets in migrate.mjs so both migration directories get the same
+// integrity guarantees.
+const SETS = {
+  engine: join(HERE, "..", "drizzle"),
+  product: join(HERE, "..", "..", "..", "apps", "web", "drizzle"),
+};
+const setArg = process.argv.find((a) => a.startsWith("--set="))?.split("=")[1] ?? "engine";
+const DIR = SETS[setArg];
+if (!DIR) {
+  console.error(`[check-journal] unknown --set=${setArg}`);
+  process.exit(1);
+}
 const META = join(DIR, "meta");
 
 const problems = [];
@@ -64,7 +76,7 @@ for (const tag of tagged) {
 }
 
 if (problems.length > 0) {
-  console.error("[check-journal] migration directory is inconsistent:\n");
+  console.error(`[check-journal:${setArg}] migration directory is inconsistent:\n`);
   problems.forEach((p) => console.error(`  - ${p}`));
   console.error(
     "\nNever hand-merge _journal.json. Delete your .sql and its snapshot, take\n" +
@@ -73,4 +85,4 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log(`[check-journal] ok — ${entries.length} migration(s), journal and disk agree`);
+console.log(`[check-journal:${setArg}] ok — ${entries.length} migration(s), journal and disk agree`);

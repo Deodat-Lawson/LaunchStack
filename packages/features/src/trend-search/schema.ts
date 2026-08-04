@@ -18,8 +18,8 @@ export interface SearchResult {
     summary: string;
     description: string;
 }
-import { company } from "./base";
-import { pgTable } from "./helpers";
+import { company } from "@launchstack/core/db/schema";
+import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 export const trendSearchJobStatusEnum = [
     "queued",

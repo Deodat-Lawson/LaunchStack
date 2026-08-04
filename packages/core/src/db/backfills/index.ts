@@ -65,10 +65,10 @@ export interface Backfill {
   estimate?(ctx: Omit<BackfillContext, "batchSize">): Promise<number>;
 }
 
-// A different key from the migration lock (4919/1) so a long backfill can
-// never block a deploy.
+// Distinct from BOTH migration locks — engine (4919/1) and product (4919/2) —
+// so a long backfill can never block a deploy.
 const LOCK_CLASS = 4919;
-const LOCK_BACKFILLS = 2;
+const LOCK_BACKFILLS = 3;
 
 export const DEFAULT_BATCH_SIZE = 500;
 

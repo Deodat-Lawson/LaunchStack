@@ -20,8 +20,8 @@ import {
     bigserial,
 } from "drizzle-orm/pg-core";
 
-import { pgTable } from "./helpers";
-import { company, document } from "./base";
+import { pgTable } from "@launchstack/core/db/schema/helpers";
+import { company, document } from "@launchstack/core/db/schema";
 
 // ============================================================================
 // Canonical JSON shapes for the company_metadata + company_metadata_history

@@ -57,22 +57,43 @@ Once the stack is up: app at `localhost:3000`, Inngest dashboard at `localhost:8
 
 ## Changing the database
 
-Schema lives in `packages/core/src/db/schema/*.ts`. Migrations are generated
-from it into `packages/core/drizzle/` and applied by one command in every
-environment — local, CI, Docker and Vercel production.
+There are **two migration sets** against one database. Which one you touch
+depends on whether the table is part of the published engine.
+
+| Set | Schema | Migrations | Owns |
+| --- | --- | --- | --- |
+| **engine** | `packages/core/src/db/schema/` | `packages/core/drizzle/` | company, documents, OCR, retrieval/embeddings, knowledge graph — the 25 tables `@launchstack/core` publishes |
+| **product** | `apps/web/src/server/db/schema/` and `packages/features/src/*/schema.ts` | `apps/web/drizzle/` | identity, chatbot, collab, credits, notes, and the feature verticals — 36 tables |
+
+The dependency is **one-way**: product tables may reference engine tables, never
+the reverse. That is what lets someone embed `@launchstack/core` and apply
+`packages/core/drizzle` alone to get a working database. ESLint blocks core from
+importing `~/*` or `@launchstack/features` (which a foreign key would need), and
+`scripts/ci/check-schema-boundary.mjs` re-checks it against the generated SQL.
+
+Feature-vertical tables live in `packages/features` rather than `apps/web`
+because a package cannot import from an app — but they are on the product side
+of the boundary and ship in the product migration set.
 
 ```bash
-# 1. edit the schema, then generate a migration
-pnpm --filter @launchstack/core db:generate --name=add_meeting_transcripts
+# engine change
+pnpm --filter @launchstack/core db:generate --name=add_document_language
 
-# 2. read the generated SQL. It is not reviewed by anyone else if you don't.
-# 3. apply it
+# product change
+pnpm --filter @launchstack/web db:generate --name=add_meeting_transcripts
+
+# read the generated SQL. Nobody else will if you don't.
+
+# apply BOTH sets, engine first (the order is load-bearing)
+pnpm --filter @launchstack/web db:migrate
+
+# engine only — what an embedding consumer runs
 pnpm --filter @launchstack/core db:migrate
 
 # useful
-pnpm --filter @launchstack/core db:verify    # anything pending? (deploy preflight)
+pnpm --filter @launchstack/web db:verify     # anything pending? (deploy preflight)
 pnpm --filter @launchstack/core db:check     # journal/snapshot integrity
-pnpm --filter @launchstack/core db:migrate --dry-run
+node packages/core/scripts/migrate.mjs --set=product --dry-run
 ```
 
 **Rules**

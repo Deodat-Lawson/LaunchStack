@@ -12,8 +12,8 @@ import {
     bigserial,
 } from "drizzle-orm/pg-core";
 
-import { pgTable } from "./helpers";
-import { company } from "./base";
+import { pgTable } from "@launchstack/core/db/schema/helpers";
+import { company } from "@launchstack/core/db/schema";
 
 // ============================================================================
 // Token Accounts — one per company

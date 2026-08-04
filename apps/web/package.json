@@ -8,9 +8,9 @@
   "scripts": {
     "build": "next build",
     "check": "eslint . && tsc --noEmit",
-    "db:migrate": "pnpm --filter @launchstack/core db:migrate",
-    "db:verify": "pnpm --filter @launchstack/core db:verify",
-    "db:generate": "pnpm --filter @launchstack/core db:generate",
+    "db:migrate": "pnpm --filter @launchstack/core db:migrate && node ../../packages/core/scripts/migrate.mjs --set=product",
+    "db:verify": "pnpm --filter @launchstack/core db:verify && node ../../packages/core/scripts/migrate.mjs --set=product --check",
+    "db:generate": "drizzle-kit generate",
     "db:backfill": "tsx ./scripts/backfill.ts",
     "db:push:danger": "node ../../packages/core/scripts/guard-push.mjs",
     "db:studio": "pnpm --filter @launchstack/core db:studio",

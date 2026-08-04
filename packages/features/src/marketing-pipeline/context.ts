@@ -1,7 +1,8 @@
 import { eq } from "drizzle-orm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { getDb } from "@launchstack/core/db";
-import { category, company, companyMetadata } from "@launchstack/core/db/schema";
+import { category, company } from "@launchstack/core/db/schema";
+import { companyMetadata } from "../schema";
 import {
     getRag,
     type CompanySearchOptions,

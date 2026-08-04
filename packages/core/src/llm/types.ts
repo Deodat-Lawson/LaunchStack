@@ -78,44 +78,48 @@ export const GEMINI_FAST_MODEL = "gemini-2.5-flash-lite";
 export const GEMINI_EMBEDDING_MODEL = "gemini-embedding-001";
 
 /**
- * The *native* Gemini API root, for capabilities the OpenAI-compatibility
- * layer does not expose.
+ * Cloud Text-to-Speech.
  *
- * That layer serves `/chat/completions`, `/embeddings`, `/images/generations`,
- * `/videos` and `/models` — and nothing else. Speech generation has no
- * OpenAI-shaped equivalent anywhere in Google's stack, so it is reached here
- * instead. Everything else should keep going through {@link GEMINI_BASE_URL};
- * reach for this only when the compatibility layer genuinely cannot serve the
- * capability.
- */
-export const GEMINI_NATIVE_BASE_URL =
-  "https://generativelanguage.googleapis.com/v1beta";
-
-/**
- * Speech generation model.
+ * Speech is the one capability with no OpenAI-shaped equivalent anywhere in
+ * Google's stack — the compatibility layer serves `/chat/completions`,
+ * `/embeddings`, `/images/generations`, `/videos` and `/models`, and no audio
+ * route at all. So it is reached here instead.
  *
- * Preview, not GA — Google labels every Gemini TTS model on the Developer API
- * that way. The GA alternative is Cloud Text-to-Speech (`gemini-2.5-flash-tts`),
- * which would trade this deployment's single API key for GCP service-account
- * auth. Preview is the deliberate choice: one credential for the whole stack.
+ * Cloud TTS rather than the Gemini Developer API, for two reasons that both
+ * favour it: the voices below are **GA**, where every Gemini Developer API TTS
+ * model is Preview; and it emits MP3, where the Developer API returns
+ * headerless PCM that a caller has to wrap itself.
+ *
+ * It authenticates with the same `GOOGLE_AI_API_KEY` as everything else —
+ * verified against the live service, which answers an unauthenticated request
+ * with "Please use API Key or other form of API consumer identity" and a bad
+ * one with `API_KEY_INVALID`. No service account, no OAuth. The key's project
+ * must have the Cloud Text-to-Speech API enabled.
  */
-export const GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts";
-
-/** One of the 30 prebuilt voices. "Kore" is the neutral, firm default. */
-export const GEMINI_TTS_DEFAULT_VOICE = "Kore";
-
-/**
- * Speech generation returns raw little-endian signed 16-bit PCM at this rate,
- * mono. There is no mp3/opus option on this API, so a caller that needs a
- * container has to add one itself.
- */
-export const GEMINI_TTS_SAMPLE_RATE = 24_000;
+export const CLOUD_TTS_ENDPOINT =
+  "https://texttospeech.googleapis.com/v1/text:synthesize";
 
 /**
- * Hard input ceiling for one speech-generation request. Google truncates
- * silently past this, so callers must refuse rather than emit half a sentence.
+ * Chirp 3: HD voice, named `<locale>-Chirp3-HD-<voice>`.
+ *
+ * Deliberately not one of the `gemini-2.5-flash-tts` voices, which are also GA
+ * but require the `aiplatform.endpoints.predict` IAM permission — i.e. OAuth
+ * and a service account, which is the cost this whole choice exists to avoid.
+ *
+ * The trade-off: Chirp 3: HD has no style/`prompt` field, so speech cannot be
+ * steered by natural-language direction the way the Developer API allows.
  */
-export const GEMINI_TTS_MAX_INPUT_BYTES = 4_000;
+export const CLOUD_TTS_DEFAULT_VOICE = "en-US-Chirp3-HD-Kore";
+
+/** Cloud TTS needs an explicit locale — it does not detect one from the text. */
+export const CLOUD_TTS_DEFAULT_LANGUAGE = "en-US";
+
+/**
+ * Hard input ceiling for one synthesis request. Cloud TTS rejects past this
+ * rather than truncating, but callers should refuse first so the failure names
+ * the real problem instead of surfacing a 400.
+ */
+export const CLOUD_TTS_MAX_INPUT_BYTES = 5_000;
 
 /** The one endpoint every route talks to. */
 export interface ChatEndpointConfig {

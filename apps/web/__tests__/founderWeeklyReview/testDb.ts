@@ -128,9 +128,18 @@ async function bootstrapIsolatedSchema(
             "id" serial PRIMARY KEY,
             "document_id" bigint NOT NULL REFERENCES "pdr_ai_v2_document"("id") ON DELETE CASCADE,
             "version_id" bigint,
+            "parent_id" bigint,
+            "level" integer NOT NULL DEFAULT 0,
             "ordering" integer NOT NULL DEFAULT 0,
             "title" text,
-            "path" varchar(256)
+            "content_type" varchar(50) NOT NULL DEFAULT 'section',
+            "path" varchar(256),
+            "start_page" integer,
+            "end_page" integer,
+            "child_count" integer NOT NULL DEFAULT 0,
+            "token_count" integer DEFAULT 0,
+            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            "updated_at" timestamptz
         );
 
         CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document_retrieval_chunks" (

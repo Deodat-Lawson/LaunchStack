@@ -11,15 +11,13 @@ export interface AiCredentialEnvironment {
   CHAT_BASE_URL?: string;
   /** @deprecated Pre-PR name for CHAT_BASE_URL. */
   AI_BASE_URL?: string;
+  /** Pre-PR OpenAI credential accepted as a one-release deployment fallback. */
+  OPENAI_API_KEY?: string;
   /**
-   * Declared because real environments carry them, and deliberately *not*
-   * treated as endpoint sources. A bare credential names no URL, and
-   * OLLAMA_BASE_URL names a provider whose OpenAI-compatible endpoint is
-   * reached through CHAT_BASE_URL like any other. See
-   * {@link getDeprecatedChatEndpointSources}.
+   * Declared because real environments carry these, but not treated as chat
+   * endpoint sources.
    */
   OPENROUTER_API_KEY?: string;
-  OPENAI_API_KEY?: string;
   OLLAMA_BASE_URL?: string;
 }
 
@@ -30,17 +28,13 @@ function configured(value: string | undefined): boolean {
 /**
  * Deprecated variables that still resolve to an endpoint this release.
  * Reported so setup surfaces can nudge operators onto CHAT_BASE_URL.
- *
- * Only variables carrying an explicit URL qualify. A bare credential
- * (OPENROUTER_API_KEY, OPENAI_API_KEY) no longer names an endpoint, so
- * reporting it here would tell a health check that chat is configured when
- * resolveChatEndpoint is about to refuse to boot.
  */
 export function getDeprecatedChatEndpointSources(
   environment: AiCredentialEnvironment,
 ): string[] {
   return [
     configured(environment.AI_BASE_URL) ? "AI_BASE_URL" : undefined,
+    configured(environment.OPENAI_API_KEY) ? "OPENAI_API_KEY" : undefined,
   ].filter((source): source is string => Boolean(source));
 }
 

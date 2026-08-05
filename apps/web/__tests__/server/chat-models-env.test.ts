@@ -49,21 +49,20 @@ describe("one-release legacy translation", () => {
       { AI_BASE_URL: "  http://localhost:11434/v1  " },
       { baseUrl: "http://localhost:11434/v1", apiKey: undefined },
     ],
+    [
+      { OPENAI_API_KEY: "sk-legacy" },
+      { baseUrl: "https://api.openai.com/v1", apiKey: "sk-legacy" },
+    ],
   ])("translates %p to a single endpoint", (environment, expected) => {
     const translated = translateLegacyEndpoint(environment);
     expect(translated?.endpoint).toEqual(expected);
     expect(translated?.deprecation).toMatch(/deprecated/);
   });
 
-  it.each([
-    [{ OPENROUTER_API_KEY: "sk-or-v1-x" }],
-    [{ OPENAI_API_KEY: "sk-x" }],
-    [{ OPENROUTER_API_KEY: "sk-or-v1-x", OPENAI_API_KEY: "sk-x" }],
-  ])("refuses to infer an endpoint from the bare credential %p", (environment) => {
-    // There are no built-in vendor URLs. A key says who you are, not where to
-    // send the request — inferring one would pick a vendor on the operator's
-    // behalf and ship their prompts there.
-    expect(translateLegacyEndpoint(environment)).toBeUndefined();
+  it("does not infer an endpoint from a bare OpenRouter credential", () => {
+    expect(
+      translateLegacyEndpoint({ OPENROUTER_API_KEY: "sk-or-v1-x" }),
+    ).toBeUndefined();
   });
 
   it("no longer treats OLLAMA_BASE_URL as a chat endpoint", () => {
@@ -79,7 +78,7 @@ describe("one-release legacy translation", () => {
     ).toThrow(/CHAT_BASE_URL is not set/);
   });
 
-  it("ignores OPENAI_API_KEY entirely — it is the embeddings credential", () => {
+  it("lets an explicit AI endpoint override OPENAI_API_KEY", () => {
     // "Some other endpoint for chat, OpenAI-compatible for embeddings" is a
     // normal pairing, so its presence must not disturb chat resolution.
     expect(
@@ -91,9 +90,11 @@ describe("one-release legacy translation", () => {
     ).toEqual({ baseUrl: "https://api.siliconflow.cn/v1", apiKey: "sf" });
   });
 
-  it("names the bare credential when it explains the failure", () => {
-    expect(() => resolveChatEndpoint({ OPENAI_API_KEY: "sk-x" })).toThrow(
-      /OPENAI_API_KEY is set, but a credential no longer selects an endpoint/,
+  it("names an unsupported bare credential when it explains the failure", () => {
+    expect(() =>
+      resolveChatEndpoint({ OPENROUTER_API_KEY: "sk-or-v1-x" }),
+    ).toThrow(
+      /OPENROUTER_API_KEY is set, but a credential no longer selects an endpoint/,
     );
   });
 });
@@ -104,13 +105,13 @@ describe("credential presence checks", () => {
     expect(hasConfiguredAiCredential({ CHAT_BASE_URL: "  " })).toBe(false);
     expect(hasConfiguredAiCredential({ CHAT_BASE_URL: "https://x/v1" })).toBe(true);
     expect(hasConfiguredAiCredential({ AI_BASE_URL: "https://x/v1" })).toBe(true);
+    expect(hasConfiguredAiCredential({ OPENAI_API_KEY: "sk-x" })).toBe(true);
   });
 
   it("reports only what resolveChatEndpoint would actually accept", () => {
     // Reporting true here would tell a health check chat is ready moments
     // before resolveChatEndpoint refuses to boot on the same environment.
     expect(hasConfiguredAiCredential({ OPENROUTER_API_KEY: "k" })).toBe(false);
-    expect(hasConfiguredAiCredential({ OPENAI_API_KEY: "sk-x" })).toBe(false);
     expect(hasConfiguredAiCredential({ OLLAMA_BASE_URL: "http://x:11434" })).toBe(false);
   });
 });

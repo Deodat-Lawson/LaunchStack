@@ -10,6 +10,7 @@ import {
 } from "./contracts";
 import {
     assertUniqueSnapshotSourceIds,
+    FounderWeeklyReviewGenerationValidationError,
     validateFounderWeeklyReviewV2Citations,
 } from "./generation-validation";
 import {
@@ -22,7 +23,7 @@ export interface FounderWeeklyReviewResolvedGenerationMetadata {
     provider: string;
     model: string;
     capability: string;
-    temperature: number;
+    temperature?: number;
     finishReason?: string;
     usage?: Record<string, string | number | boolean | null>;
     providerRequestId?: string;
@@ -33,6 +34,7 @@ export type FounderWeeklyReviewStructuredGenerator = <TSchema extends ZodType>(i
     prompt: string;
     schema: TSchema;
     schemaName?: string;
+    generationPhase?: "initial" | "semantic-repair";
 }) => Promise<{
     object: ReturnType<TSchema["parse"]>;
     metadata: FounderWeeklyReviewResolvedGenerationMetadata;
@@ -71,18 +73,75 @@ export async function generateFounderWeeklyReview(
         };
     }
 
-    const result = await generate({
+    const initial = await generate({
         system: FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT,
         prompt,
         schema: FounderWeeklyReviewV2PayloadSchema,
         schemaName: "founder_weekly_review_v2",
+        generationPhase: "initial",
     });
-    const reviewPayload = validateFounderWeeklyReviewV2Citations(
-        FounderWeeklyReviewV2PayloadSchema.parse(result.object),
-        evidenceSnapshot
-    );
+    let result = initial;
+    let reviewPayload: FounderWeeklyReviewV2Payload;
+    try {
+        reviewPayload = validateFounderWeeklyReviewV2Citations(
+            FounderWeeklyReviewV2PayloadSchema.parse(initial.object),
+            evidenceSnapshot
+        );
+        logGenerationValidation("initial", initial.metadata, "passed");
+    } catch (error) {
+        if (!(error instanceof FounderWeeklyReviewGenerationValidationError)) throw error;
+        logGenerationValidation("initial", initial.metadata, "failed");
+        const repaired = await generate({
+            system: FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT,
+            prompt: buildSemanticRepairPrompt(initial.object, evidenceSnapshot, error),
+            schema: FounderWeeklyReviewV2PayloadSchema,
+            schemaName: "founder_weekly_review_v2",
+            generationPhase: "semantic-repair",
+        });
+        result = repaired;
+        try {
+            reviewPayload = validateFounderWeeklyReviewV2Citations(
+                FounderWeeklyReviewV2PayloadSchema.parse(repaired.object),
+                evidenceSnapshot
+            );
+            logGenerationValidation("semantic-repair", repaired.metadata, "passed");
+        } catch (repairError) {
+            logGenerationValidation("semantic-repair", repaired.metadata, "failed");
+            throw repairError;
+        }
+    }
 
     return { reviewPayload, modelMetadata: buildMetadata(result.metadata, promptHash, false) };
+}
+
+function buildSemanticRepairPrompt(
+    candidate: FounderWeeklyReviewV2Payload,
+    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot,
+    error: FounderWeeklyReviewGenerationValidationError
+): string {
+    const errors = error.details.length > 0
+        ? error.details
+        : [{ code: "report_validation_failed" }];
+    const sources = evidenceSnapshot.items.map(({ sourceId, sourceType }) => ({ sourceId, sourceType }));
+    return [
+        "Correct the complete canonical Founder Weekly Review JSON candidate below.",
+        "Customer Signals may cite only customer_feedback sources.",
+        "founder_context is founder-provided direction, not customer testimony.",
+        "Remove a customer claim if it lacks customer_feedback support.",
+        "Do not invent or substitute a source ID.",
+        "Return the complete corrected canonical JSON object only.",
+        `Validation errors: ${JSON.stringify(errors)}`,
+        `Source IDs and source types: ${JSON.stringify(sources)}`,
+        `Previous canonical candidate: ${JSON.stringify(candidate)}`,
+    ].join("\n");
+}
+
+function logGenerationValidation(
+    phase: "initial" | "semantic-repair",
+    metadata: FounderWeeklyReviewResolvedGenerationMetadata,
+    result: "passed" | "failed"
+): void {
+    console.info(`[fwr] generation phase=${phase} provider=${metadata.provider} model=${metadata.model} validation=${result}`);
 }
 
 function buildMetadata(
@@ -94,7 +153,7 @@ function buildMetadata(
         provider: metadata.provider,
         model: metadata.model,
         capability: metadata.capability,
-        temperature: metadata.temperature,
+        ...(metadata.temperature === undefined ? {} : { temperature: metadata.temperature }),
         promptVersion: FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION,
         promptHash,
         evidenceSchemaVersion: "founder-weekly-review-evidence/v1",

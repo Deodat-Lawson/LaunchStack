@@ -9,12 +9,21 @@ export const FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION =
 
 export const FounderWeeklyReviewStatusSchema = z.enum([
     "queued",
+    "collecting",
     "generating",
     "draft",
     "published",
     "failed",
 ]);
 export type FounderWeeklyReviewStatus = z.infer<typeof FounderWeeklyReviewStatusSchema>;
+
+/** Durable, request-derived inputs needed to collect evidence after the HTTP response. */
+export const FounderWeeklyReviewCollectionInputSchema = z.object({
+    workspaceTimezone: z.string().min(1).max(128),
+    founderContext: z.string().min(1).max(4000).optional(),
+    actorExternalUserId: z.string().min(1).max(256),
+}).strict();
+export type FounderWeeklyReviewCollectionInput = z.infer<typeof FounderWeeklyReviewCollectionInputSchema>;
 
 export const FounderWeeklyReviewOperationTypeSchema = z.enum(["retry"]);
 export type FounderWeeklyReviewOperationType = z.infer<
@@ -253,8 +262,12 @@ export interface FounderWeeklyReviewRunRecord {
     status: FounderWeeklyReviewStatus;
     reviewPayload: FounderWeeklyReviewPayload | null;
     reviewSchemaVersion: FounderWeeklyReviewPayloadSchemaVersion;
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
+    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | null;
     evidenceSchemaVersion: typeof FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION;
+    collectionInput?: FounderWeeklyReviewCollectionInput;
+    collectionClaimId?: string | null;
+    collectionStartedAt?: Date | null;
+    evidenceCollectedAt?: Date | null;
     modelMetadata: FounderWeeklyReviewModelMetadata | null;
     createdByActorId: string;
     retryCount: number;
@@ -289,7 +302,9 @@ export interface CreateFounderWeeklyReviewRunInput {
     companyId: bigint;
     requestKey: string;
     reportingPeriod: ReportingPeriod;
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
+    /** Existing callers may provide a snapshot; workflow callers intentionally do not. */
+    evidenceSnapshot?: FounderWeeklyReviewEvidenceSnapshot;
+    collectionInput?: FounderWeeklyReviewCollectionInput;
     createdByActorId: string;
 }
 
@@ -306,6 +321,12 @@ export interface FounderWeeklyReviewClaimInput {
     runId: string;
     generationClaimId: string;
     generationJobId?: string;
+}
+
+export interface FounderWeeklyReviewCollectionClaimInput {
+    companyId: bigint;
+    runId: string;
+    collectionClaimId: string;
 }
 
 export interface FounderWeeklyReviewGenerationFailure {
@@ -336,6 +357,10 @@ export function parseFounderWeeklyReviewEvidenceSnapshot(
     value: unknown
 ): FounderWeeklyReviewEvidenceSnapshot {
     return FounderWeeklyReviewEvidenceSnapshotSchema.parse(value);
+}
+
+export function parseFounderWeeklyReviewCollectionInput(value: unknown): FounderWeeklyReviewCollectionInput {
+    return FounderWeeklyReviewCollectionInputSchema.parse(value);
 }
 
 export function parseFounderWeeklyReviewModelMetadata(

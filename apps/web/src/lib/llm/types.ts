@@ -35,7 +35,7 @@ export type Capability = (typeof CAPABILITIES)[number];
  * - `ollama`: local inference via Ollama's OpenAI-compatible endpoint.
  *   Requires `OLLAMA_BASE_URL` to be set. Free but quality varies by model.
  */
-export const PROVIDERS = ["openai", "anthropic", "google", "ollama"] as const;
+export const PROVIDERS = ["openai", "kimi", "anthropic", "google", "ollama"] as const;
 
 export type Provider = (typeof PROVIDERS)[number];
 
@@ -104,6 +104,8 @@ export interface GenerateStructuredInput<TSchema> {
    * / tool name. Purely cosmetic but helps with provider-side logging.
    */
   schemaName?: string;
+  /** Bounded FWR-only attempt label for safe operational logging. */
+  generationPhase?: "initial" | "semantic-repair";
 }
 
 /** Resolved model and provider response details that are safe to persist for replay. */
@@ -111,7 +113,7 @@ export interface StructuredGenerationMetadata {
   provider: Provider;
   model: string;
   capability: Capability;
-  temperature: number;
+  temperature?: number;
   finishReason?: string;
   usage?: Record<string, string | number | boolean | null>;
   providerRequestId?: string;

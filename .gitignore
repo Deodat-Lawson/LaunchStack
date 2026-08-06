@@ -62,6 +62,7 @@ packages/*/dist/
 .kiro
 backups/
 /models/
+/apps/web/.artifacts/
 
 
 .claude

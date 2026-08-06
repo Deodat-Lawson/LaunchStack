@@ -55,6 +55,16 @@ export const qaRequestCounter = new Counter({
     registers: [metricsRegistry]
 });
 
+export const founderWeeklyReviewJobsEnqueued = new Counter({ name: "pdr_founder_weekly_review_jobs_enqueued_total", help: "Founder review jobs enqueued", labelNames: ["operation"], registers: [metricsRegistry] });
+export const founderWeeklyReviewGenerationTotal = new Counter({ name: "pdr_founder_weekly_review_generation_total", help: "Founder review generations by result", labelNames: ["result", "error_class"], registers: [metricsRegistry] });
+export const founderWeeklyReviewRetries = new Counter({ name: "pdr_founder_weekly_review_retries_total", help: "Founder review retries", registers: [metricsRegistry] });
+export const founderWeeklyReviewCitationFailures = new Counter({ name: "pdr_founder_weekly_review_citation_validation_failures_total", help: "Founder review citation validation failures", registers: [metricsRegistry] });
+export const founderWeeklyReviewRunsCreated = new Counter({ name: "pdr_founder_weekly_review_runs_created_total", help: "Founder review runs created", registers: [metricsRegistry] });
+export const founderWeeklyReviewRunsCompleted = new Counter({ name: "pdr_founder_weekly_review_runs_completed_total", help: "Founder review runs completed", registers: [metricsRegistry] });
+export const founderWeeklyReviewRunsFailed = new Counter({ name: "pdr_founder_weekly_review_runs_failed_total", help: "Founder review runs failed", labelNames: ["error_class"], registers: [metricsRegistry] });
+export const founderWeeklyReviewDispatchFailures = new Counter({ name: "pdr_founder_weekly_review_dispatch_failures_total", help: "Founder review outbox dispatch failures", registers: [metricsRegistry] });
+export const founderWeeklyReviewStageDuration = new Histogram({ name: "pdr_founder_weekly_review_stage_duration_seconds", help: "Founder review stage duration", labelNames: ["stage", "result"], buckets: [0.1, 0.5, 1, 5, 15, 60, 300], registers: [metricsRegistry] });
+
 export async function getMetricsSnapshot(): Promise<string> {
     return metricsRegistry.metrics();
 }

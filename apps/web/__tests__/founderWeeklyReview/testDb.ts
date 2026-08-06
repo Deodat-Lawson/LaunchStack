@@ -74,6 +74,70 @@ async function bootstrapIsolatedSchema(
             "url" varchar(256),
             "category" varchar(256),
             "title" varchar(256),
+            "ocr_enabled" boolean DEFAULT false,
+            "ocr_processed" boolean DEFAULT false,
+            "ocr_metadata" jsonb,
+            "ocr_job_id" varchar(256),
+            "ocr_provider" varchar(50),
+            "ocr_confidence_score" integer,
+            "ocr_cost_cents" integer,
+            "mime_type" varchar(128),
+            "source_archive_name" varchar(256),
+            "file_type" varchar(128),
+            "current_version_id" bigint,
+            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            "updated_at" timestamptz
+        );
+
+        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document_versions" (
+            "id" serial PRIMARY KEY,
+            "document_id" bigint NOT NULL REFERENCES "pdr_ai_v2_document"("id") ON DELETE CASCADE,
+            "version_number" integer NOT NULL,
+            "url" varchar(512) NOT NULL,
+            "mime_type" varchar(128) NOT NULL,
+            "file_size" bigint,
+            "uploaded_by" varchar(256),
+            "changelog" text,
+            "ocr_job_id" varchar(256),
+            "ocr_provider" varchar(50),
+            "ocr_processed" boolean DEFAULT false,
+            "ocr_metadata" jsonb,
+            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE ("document_id", "version_number")
+        );
+
+        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document_context_chunks" (
+            "id" serial PRIMARY KEY,
+            "document_id" bigint NOT NULL REFERENCES "pdr_ai_v2_document"("id") ON DELETE CASCADE,
+            "version_id" bigint REFERENCES "pdr_ai_v2_document_versions"("id") ON DELETE CASCADE,
+            "structure_id" bigint,
+            "content" text NOT NULL,
+            "token_count" integer NOT NULL DEFAULT 0,
+            "char_count" integer NOT NULL DEFAULT 0,
+            "embedding" vector(1536),
+            "content_hash" varchar(64),
+            "semantic_type" varchar(50),
+            "page_number" integer,
+            "line_start" integer,
+            "line_end" integer,
+            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            "updated_at" timestamptz
+        );
+
+        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document_structure" (
+            "id" serial PRIMARY KEY,
+            "document_id" bigint NOT NULL REFERENCES "pdr_ai_v2_document"("id") ON DELETE CASCADE,
+            "version_id" bigint,
+            "parent_id" bigint,
+            "level" integer NOT NULL DEFAULT 0,
+            "ordering" integer NOT NULL DEFAULT 0,
+            "title" text,
+            "content_type" varchar(50) NOT NULL DEFAULT 'section',
+            "path" varchar(256),
+            "start_page" integer,
+            "end_page" integer,
+            "child_count" integer NOT NULL DEFAULT 0,
+            "token_count" integer DEFAULT 0,
             "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
             "updated_at" timestamptz
         );

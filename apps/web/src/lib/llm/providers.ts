@@ -105,6 +105,11 @@ export function getAvailableProviders(): ProviderAvailability[] {
 /** Reset cached availability. Test-only. */
 export function __resetProviderCacheForTests(): void {
   cachedAvailability = null;
+  openaiInstance = null;
+  anthropicInstance = null;
+  googleInstance = null;
+  ollamaInstance = null;
+  kimiInstance = null;
 }
 
 /**
@@ -123,6 +128,10 @@ function checkCredentials(
       return process.env.OPENAI_API_KEY
         ? { ok: true }
         : { ok: false, reason: "OPENAI_API_KEY not set" };
+    case "kimi":
+      return process.env.MOONSHOT_API_KEY
+        ? { ok: true }
+        : { ok: false, reason: "MOONSHOT_API_KEY not set" };
     case "anthropic":
       return process.env.ANTHROPIC_API_KEY
         ? { ok: true }
@@ -149,12 +158,43 @@ let openaiInstance: OpenAIProvider | null = null;
 let anthropicInstance: AnthropicProvider | null = null;
 let googleInstance: GoogleGenerativeAIProvider | null = null;
 let ollamaInstance: OpenAIProvider | null = null;
+let kimiInstance: OpenAIProvider | null = null;
 
 function getOpenAIProvider(): OpenAIProvider {
   openaiInstance ??= createOpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
   return openaiInstance;
+}
+
+/**
+ * Moonshot's OpenAI-compatible API accepts a top-level `thinking` field that
+ * the OpenAI adapter's typed provider options intentionally do not expose.
+ * Keep this narrow to Kimi Chat Completions; OpenAI requests never use it.
+ */
+async function fetchKimiChatCompletions(
+  input: Parameters<typeof fetch>[0],
+  init?: Parameters<typeof fetch>[1],
+): Promise<Response> {
+  const url = input instanceof Request ? input.url : String(input);
+  if (!url.endsWith("/chat/completions") || typeof init?.body !== "string") {
+    return fetch(input, init);
+  }
+
+  const body = JSON.parse(init.body) as Record<string, unknown>;
+  return fetch(input, {
+    ...init,
+    body: JSON.stringify({ ...body, thinking: { type: "disabled" } }),
+  });
+}
+
+function getKimiProvider(): OpenAIProvider {
+  kimiInstance ??= createOpenAI({
+    apiKey: process.env.MOONSHOT_API_KEY,
+    baseURL: (process.env.MOONSHOT_BASE_URL ?? "https://api.moonshot.ai/v1").replace(/\/+$/, ""),
+    fetch: fetchKimiChatCompletions,
+  });
+  return kimiInstance;
 }
 
 function getAnthropicProvider(): AnthropicProvider {
@@ -238,8 +278,32 @@ export interface ResolvedModel {
   provider: Provider;
   modelId: string;
   model: LanguageModel;
-  /** Carries through the temperature from config so `generate.ts` can pass it. */
-  temperature: number;
+  /**
+   * Provider-supported sampling option. Undefined means the request must omit
+   * temperature rather than applying a cross-provider default.
+   * TODO: add provider-specific request capabilities as more providers need them.
+   */
+  temperature?: number;
+  structuredOutputMode?: "json_object";
+}
+
+export type FounderWeeklyReviewGenerationProvider = "openai" | "kimi";
+
+function resolveFounderWeeklyReviewModel(): ResolvedModel {
+  const selected = process.env.FWR_GENERATION_PROVIDER ?? "openai";
+  if (selected !== "openai" && selected !== "kimi") {
+    throw new Error(`FWR_GENERATION_PROVIDER must be "openai" or "kimi"; received "${selected}".`);
+  }
+  const config = getLlmConfig();
+  if (selected === "openai") {
+    if (!process.env.OPENAI_API_KEY) throw new Error("FWR_GENERATION_PROVIDER=openai requires OPENAI_API_KEY.");
+    const modelId = process.env.OPENAI_MODEL_ID ?? config.capabilities.founderWeeklyReview.openai?.model;
+    if (!modelId) throw new Error("FWR_GENERATION_PROVIDER=openai requires OPENAI_MODEL_ID or a configured founderWeeklyReview OpenAI model.");
+    return { provider: "openai", modelId, model: getOpenAIProvider()(modelId), temperature: config.capabilities.founderWeeklyReview.openai?.temperature ?? 0 };
+  }
+  if (!process.env.MOONSHOT_API_KEY) throw new Error("FWR_GENERATION_PROVIDER=kimi requires MOONSHOT_API_KEY.");
+  const modelId = process.env.KIMI_MODEL_ID ?? "kimi-k2.6";
+  return { provider: "kimi", modelId, model: getKimiProvider().chat(modelId), structuredOutputMode: "json_object" };
 }
 
 /**
@@ -258,6 +322,7 @@ export function resolveModel(
   capability: Capability,
   forceProvider?: Provider,
 ): ResolvedModel {
+  if (capability === "founderWeeklyReview" && !forceProvider) return resolveFounderWeeklyReviewModel();
   const config = getLlmConfig();
   const availability = getAvailableProviders();
   const availabilityByProvider = new Map(
@@ -324,6 +389,8 @@ function instantiate(
         model: getOpenAIProvider()(modelConfig.model),
         temperature,
       };
+    case "kimi":
+      return { provider, modelId: modelConfig.model, model: getKimiProvider().chat(modelConfig.model), structuredOutputMode: "json_object" };
     case "anthropic":
       return {
         provider,

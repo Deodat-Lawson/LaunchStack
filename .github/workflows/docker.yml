@@ -6,19 +6,30 @@ on:
     paths:
       - Dockerfile
       - Dockerfile.prebuilt
+      - Dockerfile.prebuilt.dockerignore
+      - .dockerignore
       - docker-compose*.yml
       - apps/web/**
       - packages/**
+      - patches/**
       - pnpm-lock.yaml
+      - pnpm-workspace.yaml
       - package.json
+      - .pnpmfile.cjs
+      - tsconfig.base.json
       - .github/workflows/docker.yml
   push:
     branches: [main]
-    tags: ['v*.*.*']
+    tags: ["v*.*.*"]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-web
+  NODE_VERSION: "20"
+  PNPM_VERSION: "10.15.1"
+  # Syntactically valid non-secret Clerk key for forked PR smoke builds.
+  # Production pushes use the repository secret when it is available.
+  CI_CLERK_PUBLISHABLE_KEY: "pk_test_Y2kuY2xlcmsuYWNjb3VudHMuZGV2JA=="
 
 jobs:
   build:
@@ -54,16 +65,82 @@ jobs:
             type=sha,format=short
             type=raw,value=latest,enable={{is_default_branch}}
 
+      - name: Build migration target (smoke only)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          target: migrate
+          push: false
+          cache-from: type=gha,scope=source
+          build-args: |
+            NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || env.CI_CLERK_PUBLISHABLE_KEY }}
+
       - name: Build ${{ github.event_name == 'push' && 'and push' || '(smoke only)' }}
         uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
+          target: runner
           push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=source
+          cache-to: type=gha,scope=source,mode=max
           build-args: |
-            SKIP_ENV_VALIDATION=1
-            NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_ci_placeholder
+            NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || env.CI_CLERK_PUBLISHABLE_KEY }}
+
+  prebuilt:
+    name: Build prebuilt runner
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build standalone web app
+        env:
+          SKIP_ENV_VALIDATION: "1"
+          STANDALONE_BUILD: "1"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || env.CI_CLERK_PUBLISHABLE_KEY }}
+        run: pnpm build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build prebuilt migration target (smoke only)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.prebuilt
+          target: migrate
+          push: false
+          cache-from: type=gha,scope=prebuilt
+
+      - name: Build prebuilt image (smoke only)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.prebuilt
+          target: runner
+          push: false
+          tags: launchstack-prebuilt:${{ github.sha }}
+          cache-from: type=gha,scope=prebuilt
+          cache-to: type=gha,scope=prebuilt,mode=max

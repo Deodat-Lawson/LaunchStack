@@ -83,6 +83,14 @@ export type RehydrateNoteAnchorsEvent = {
     versionId: number;
   };
 };
+export type FounderWeeklyReviewDispatchEvent = {
+  name: "founder-weekly-review/dispatch.requested";
+  data: { dispatchId?: string };
+};
+export type FounderWeeklyReviewGenerationEvent = {
+  name: "founder-weekly-review/generation.requested";
+  data: { runId: string; companyId: string; generationJobId: string; generationClaimId: string };
+};
 
 export type Events =
   | ProcessDocumentEvent
@@ -93,7 +101,9 @@ export type Events =
   | ReindexCompanyEmbeddingsEvent
   | DocumentModifyEvent
   | WebsiteCrawlEvent
-  | RehydrateNoteAnchorsEvent;
+  | RehydrateNoteAnchorsEvent
+  | FounderWeeklyReviewDispatchEvent
+  | FounderWeeklyReviewGenerationEvent;
 
 /**
  * Create the Inngest client.

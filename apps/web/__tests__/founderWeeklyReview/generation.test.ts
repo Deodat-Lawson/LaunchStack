@@ -65,10 +65,57 @@ const completeSnapshot = () => snapshot([
 
 describe("Founder Weekly Review generation", () => {
     it("generates complete evidence with numeric lower and upper confidence bounds", async () => {
-        const result = await generateFounderWeeklyReview({ evidenceSnapshot: completeSnapshot(), generate: fake(validPayload()) });
+        const generate = fake(validPayload());
+        const result = await generateFounderWeeklyReview({ evidenceSnapshot: completeSnapshot(), generate });
         expect(result.reviewPayload).toEqual(validPayload());
         expect(result.modelMetadata).toMatchObject({ provider: "openai", temperature: 0, capability: "founderWeeklyReview" });
         expect(result.modelMetadata.promptHash).toMatch(/^[a-f0-9]{64}$/);
+        expect(generate).toHaveBeenCalledTimes(1);
+        expect(generate.mock.calls[0][0]).toMatchObject({ generationPhase: "initial" });
+    });
+
+    it("performs exactly one semantic repair against the same immutable snapshot", async () => {
+        const invalid = validPayload();
+        invalid.sections.whatCustomersSaid = {
+            state: "evidence",
+            items: [{ kind: "observed_fact", text: "Founder direction was presented as customer feedback.", sourceIds: ["context-1"], confidence: 0.5 }],
+        };
+        const repaired = validPayload();
+        const generate = jest.fn()
+            .mockResolvedValueOnce({ object: invalid, metadata: { provider: "kimi", model: "kimi-k2.6", capability: "founderWeeklyReview" } })
+            .mockResolvedValueOnce({ object: repaired, metadata: { provider: "kimi", model: "kimi-k2.6", capability: "founderWeeklyReview" } });
+        const evidenceSnapshot = completeSnapshot();
+
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot, generate })).resolves.toMatchObject({ reviewPayload: repaired });
+
+        expect(generate).toHaveBeenCalledTimes(2);
+        expect(generate.mock.calls[0][0]).toMatchObject({ generationPhase: "initial" });
+        expect(generate.mock.calls[1][0]).toMatchObject({ generationPhase: "semantic-repair" });
+        expect(generate.mock.calls[1][0].prompt).toContain("founder_context is founder-provided direction, not customer testimony.");
+        expect(generate.mock.calls[1][0].prompt).toContain("context-1");
+        expect(evidenceSnapshot).toEqual(completeSnapshot());
+    });
+
+    it("fails normally after one invalid semantic repair and never makes a third call", async () => {
+        const invalid = validPayload();
+        invalid.sections.whatCustomersSaid = {
+            state: "evidence",
+            items: [{ kind: "observed_fact", text: "Invalid customer claim.", sourceIds: ["context-1"], confidence: 0.5 }],
+        };
+        const generate = jest.fn()
+            .mockResolvedValueOnce({ object: invalid, metadata: { provider: "kimi", model: "kimi-k2.6", capability: "founderWeeklyReview" } })
+            .mockResolvedValueOnce({ object: invalid, metadata: { provider: "kimi", model: "kimi-k2.6", capability: "founderWeeklyReview" } });
+
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot: completeSnapshot(), generate })).rejects.toMatchObject({
+            name: "FounderWeeklyReviewGenerationValidationError",
+        });
+        expect(generate).toHaveBeenCalledTimes(2);
+    });
+
+    it("does not semantic-repair provider failures", async () => {
+        const generate = jest.fn().mockRejectedValue(new Error("provider unavailable"));
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot: completeSnapshot(), generate })).rejects.toThrow("provider unavailable");
+        expect(generate).toHaveBeenCalledTimes(1);
     });
 
     it("allows partial reviews with typed no-evidence sections", async () => {
@@ -111,6 +158,25 @@ describe("Founder Weekly Review generation", () => {
         const payload = validPayload();
         mutate(payload);
         await expect(generateFounderWeeklyReview({ evidenceSnapshot: completeSnapshot(), generate: fake(payload) })).rejects.toBeInstanceOf(Error);
+    });
+
+    it.each(["whatChanged", "whatShipped"] as const)("rejects workspace_document-only %s claims", async (sectionName) => {
+        const payload = validPayload();
+        payload.sections[sectionName] = { state: "evidence", items: [{ kind: "observed_fact", text: "Current document implies a weekly event.", sourceIds: ["workspace-1"], confidence: 0.5 }] };
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot: snapshot([source("workspace-1", "workspace_document")]), generate: fake(payload) })).rejects.toBeInstanceOf(FounderWeeklyReviewGenerationValidationError);
+    });
+
+    it.each(["whatChanged", "whatShipped"] as const)("allows document_change plus workspace_document in %s", async (sectionName) => {
+        const payload = validPayload();
+        payload.sections[sectionName] = { state: "evidence", items: [{ kind: "observed_fact", text: "A dated change has current context.", sourceIds: ["doc-1", "workspace-1"], confidence: 0.5 }] };
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot: snapshot([...completeSnapshot().items, source("workspace-1", "workspace_document")]), generate: fake(payload) })).resolves.toBeDefined();
+    });
+
+    it("allows workspace_document for blockers and priorities while customer-only enforcement remains", async () => {
+        const payload = validPayload();
+        payload.sections.currentBlockers = { state: "evidence", items: [{ kind: "observed_fact", text: "Current context", sourceIds: ["workspace-1"], confidence: 0.5 }] };
+        payload.sections.nextPriorities = { state: "evidence", items: [{ kind: "recommendation", label: "Recommendation", text: "Act on current context", sourceIds: ["workspace-1"], confidence: 0.5 }] };
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot: snapshot([...completeSnapshot().items, source("workspace-1", "workspace_document")]), generate: fake(payload) })).resolves.toBeDefined();
     });
 
     it("rejects duplicate input source IDs before calling the model", async () => {

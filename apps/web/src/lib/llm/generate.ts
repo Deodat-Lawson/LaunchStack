@@ -11,7 +11,7 @@
  * as call sites need them.
  */
 
-import { generateObject } from "ai";
+import { generateObject, zodSchema } from "ai";
 import type { ZodType } from "zod";
 
 import { resolveModel } from "./providers";
@@ -69,22 +69,39 @@ export async function generateStructuredWithMetadata<TSchema extends ZodType>(
       `provider=${resolved.provider} model=${resolved.modelId} ` +
       `prompt=${promptChars} chars`,
   );
+  if (input.capability === "founderWeeklyReview") {
+    console.log(`[llm] FWR generation phase=${input.generationPhase ?? "initial"} provider=${resolved.provider} model=${resolved.modelId} protocol=${resolved.structuredOutputMode === "json_object" ? "chat-completions" : "responses"}`);
+  }
 
   try {
-    const result = await generateObject({
+    const common = {
       model: resolved.model,
-      temperature: resolved.temperature,
-      schema: input.schema,
-      schemaName: input.schemaName,
-      system: input.system,
+      ...(resolved.temperature === undefined ? {} : { temperature: resolved.temperature }),
+      ...(input.capability === "founderWeeklyReview" ? { maxOutputTokens: 1800 } : {}),
+      ...(resolved.structuredOutputMode === "json_object" ? { abortSignal: AbortSignal.timeout(90_000) } : {}),
       prompt: input.prompt,
-    });
+    };
+    // Moonshot/Kimi supports Chat Completions JSON-object mode, not the
+    // Responses API JSON-schema protocol. Keep schema validation local and
+    // deterministic after parsing the provider's JSON object.
+    const result = resolved.structuredOutputMode === "json_object"
+      ? await generateObject({
+          ...common,
+          output: "no-schema",
+          system: `${input.system ?? ""}\nReturn one JSON object only. Required structural schema: ${JSON.stringify(zodSchema(input.schema).jsonSchema)}`,
+        })
+      : await generateObject({
+          ...common,
+          schema: input.schema,
+          schemaName: input.schemaName,
+          system: input.system,
+        });
 
     const elapsed = Date.now() - startedAt;
     console.log(
       `[llm] generateStructured ok  capability=${input.capability} ` +
-        `provider=${resolved.provider} model=${resolved.modelId} ` +
-        `${elapsed}ms`,
+      `provider=${resolved.provider} model=${resolved.modelId} ` +
+        `phase=${input.generationPhase ?? "initial"} ${elapsed}ms`,
     );
 
     // Cast is safe: `generateObject` returns `{ object: z.infer<TSchema> }`
@@ -97,12 +114,14 @@ export async function generateStructuredWithMetadata<TSchema extends ZodType>(
       response?: { id?: string };
     };
     return {
-      object: result.object as ReturnType<TSchema["parse"]>,
+      object: resolved.structuredOutputMode === "json_object"
+        ? input.schema.parse(result.object) as ReturnType<TSchema["parse"]>
+        : result.object as ReturnType<TSchema["parse"]>,
       metadata: {
         provider: resolved.provider,
         model: resolved.modelId,
         capability: input.capability,
-        temperature: resolved.temperature,
+        ...(resolved.temperature === undefined ? {} : { temperature: resolved.temperature }),
         ...(responseResult.finishReason ? { finishReason: responseResult.finishReason } : {}),
         ...(responseResult.usage ? { usage: responseResult.usage } : {}),
         ...(responseResult.response?.id
@@ -114,8 +133,8 @@ export async function generateStructuredWithMetadata<TSchema extends ZodType>(
     const elapsed = Date.now() - startedAt;
     console.error(
       `[llm] generateStructured FAIL capability=${input.capability} ` +
-        `provider=${resolved.provider} model=${resolved.modelId} ` +
-        `${elapsed}ms err=${err instanceof Error ? err.message : String(err)}`,
+      `provider=${resolved.provider} model=${resolved.modelId} ` +
+        `phase=${input.generationPhase ?? "initial"} ${elapsed}ms err=${err instanceof Error ? err.message : String(err)}`,
     );
     throw err;
   }

@@ -300,7 +300,7 @@ describe("POST /api/legal/apply-edits", () => {
         expect(Buffer.isBuffer(buffer)).toBe(true);
         expect(params.author_name).toBe("Custom Author");
         expect(params.edits).toHaveLength(1);
-        expect(params.edits[0]).toEqual(edits[i]);
+        expect(params.edits?.[0]).toEqual(edits[i]);
       }
     });
 

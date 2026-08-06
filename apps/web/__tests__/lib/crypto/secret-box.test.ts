@@ -23,7 +23,7 @@ describe("secret-box", () => {
 
   it("round-trips a typical API key", () => {
     setKey();
-    const plaintext = "sk-test-" + "a".repeat(40);
+    const plaintext = "test-secret-" + "a".repeat(40);
     const { ciphertext, keyVersion } = encryptSecret(plaintext);
     expect(keyVersion).toBe(1);
     expect(ciphertext).not.toContain(plaintext);

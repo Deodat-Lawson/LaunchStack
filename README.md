@@ -205,7 +205,7 @@ Studio, Ollama's `/v1` surface, and most gateways all qualify. Point
 
 ```dotenv
 CHAT_BASE_URL=https://openrouter.ai/api/v1
-CHAT_API_KEY=sk-or-v1-...
+CHAT_API_KEY=<your-chat-api-key>
 ```
 
 That endpoint can serve **many models**. Which model handles general chat,

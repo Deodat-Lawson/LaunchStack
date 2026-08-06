@@ -40,7 +40,10 @@ describe("parseInternalFileId", () => {
 describe("authorizeInternalFileRef", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    configureOcr({ fileAccessTokenSecret: "secret" });
+    configureOcr({
+      appPublicUrl: "http://app:3000",
+      fileAccessTokenSecret: "secret",
+    });
   });
 
   afterEach(() => {
@@ -97,12 +100,42 @@ describe("authorizeInternalFileRef", () => {
     ).rejects.toBeInstanceOf(UploadAuthorizationError);
   });
 
+  it("accepts a same-origin absolute URL with a trailing slash", async () => {
+    setupFileQuery([{ companyId: COMPANY }]);
+
+    await expect(
+      authorizeInternalFileRef("http://app:3000/api/files/123/", COMPANY),
+    ).resolves.toBe(123);
+  });
+
+  it("does not classify a foreign-host file path as internal", async () => {
+    await expect(
+      authorizeInternalFileRef("https://evil.example/api/files/123", COMPANY),
+    ).resolves.toBeNull();
+    expect(mockDbSelect).not.toHaveBeenCalled();
+  });
+
   it("fails at ingress when the OSS worker has no signing secret", async () => {
-    configureOcr({ workerUrl: "http://ocr-worker:8001" });
+    configureOcr({
+      appPublicUrl: "http://app:3000",
+      workerUrl: "http://ocr-worker:8001",
+    });
     setupFileQuery([{ companyId: COMPANY }]);
 
     await expect(
       authorizeInternalFileRef("/api/files/123", COMPANY),
+    ).rejects.toMatchObject({ status: 503 });
+  });
+
+  it("fails before enqueue when the request overrides to an OSS provider", async () => {
+    configureOcr({
+      appPublicUrl: "http://app:3000",
+      defaultProvider: "AZURE",
+    });
+    setupFileQuery([{ companyId: COMPANY }]);
+
+    await expect(
+      authorizeInternalFileRef("/api/files/123", COMPANY, "DOCLING"),
     ).rejects.toMatchObject({ status: 503 });
   });
 });

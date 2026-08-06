@@ -2,6 +2,7 @@ import { POST } from "~/app/api/uploadDocument/route";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db";
 import { triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
+import { configureOcr } from "@launchstack/core/ocr/config";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 
@@ -106,6 +107,11 @@ function mockUnauthenticated() {
 describe("POST /api/uploadDocument", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    configureOcr({});
+  });
+
+  afterEach(() => {
+    configureOcr({});
   });
 
   it("uploads and processes a document successfully", async () => {
@@ -434,6 +440,104 @@ describe("POST /api/uploadDocument", () => {
       "Uncategorized",
       expect.anything(),
     );
+  });
+
+  it("rebuilds an authorized absolute internal URL from APP_PUBLIC_URL", async () => {
+    configureOcr({ appPublicUrl: "https://app.example" });
+    mockAuthenticatedContext({ companyId: BigInt(5) });
+
+    (validateRequestBody as jest.Mock).mockResolvedValue({
+      success: true,
+      data: {
+        documentName: "Our absolute file",
+        documentUrl: "https://app.example/api/files/123/",
+      },
+    });
+
+    const where = jest.fn().mockResolvedValue([{ companyId: BigInt(5) }]);
+    const from = jest.fn().mockReturnValue({ where });
+    (db.select as jest.Mock).mockReturnValueOnce({ from });
+
+    const mockDocument = {
+      id: 6,
+      url: "https://app.example/api/files/123/",
+      title: "Our absolute file",
+      category: "Uncategorized",
+    };
+    (db.insert as jest.Mock)
+      .mockReturnValueOnce({
+        values: jest.fn().mockReturnValue({
+          returning: jest.fn().mockResolvedValue([mockDocument]),
+        }),
+      })
+      .mockReturnValueOnce({
+        values: jest.fn().mockResolvedValue(undefined),
+      });
+    (triggerDocumentProcessing as jest.Mock).mockResolvedValue({
+      jobId: "job-absolute",
+      eventIds: [],
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/uploadDocument", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          documentName: "Our absolute file",
+          documentUrl: "https://app.example/api/files/123/",
+        }),
+      }),
+    );
+
+    expect(response.status).toBe(202);
+    expect(triggerDocumentProcessing).toHaveBeenCalledWith(
+      "https://app.example/api/files/123",
+      "Our absolute file",
+      "5",
+      "user-1",
+      mockDocument.id,
+      "Uncategorized",
+      expect.anything(),
+    );
+  });
+
+  it("returns 503 before insertion when an OSS override lacks a signing secret", async () => {
+    configureOcr({
+      appPublicUrl: "https://app.example",
+      defaultProvider: "AZURE",
+    });
+    mockAuthenticatedContext({ companyId: BigInt(5) });
+
+    (validateRequestBody as jest.Mock).mockResolvedValue({
+      success: true,
+      data: {
+        documentName: "Needs OSS signing",
+        documentUrl: "/api/files/123",
+        preferredProvider: "DOCLING",
+      },
+    });
+
+    const where = jest.fn().mockResolvedValue([{ companyId: BigInt(5) }]);
+    const from = jest.fn().mockReturnValue({ where });
+    (db.select as jest.Mock).mockReturnValueOnce({ from });
+
+    const response = await POST(
+      new Request("http://localhost/api/uploadDocument", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          documentName: "Needs OSS signing",
+          documentUrl: "/api/files/123",
+          preferredProvider: "DOCLING",
+        }),
+      }),
+    );
+    const json = await response.json();
+
+    expect(response.status).toBe(503);
+    expect(json.error).toMatch(/FILE_ACCESS_TOKEN_SECRET/);
+    expect(db.insert).not.toHaveBeenCalled();
+    expect(triggerDocumentProcessing).not.toHaveBeenCalled();
   });
 
   it("returns validation response when request body is invalid", async () => {

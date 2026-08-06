@@ -76,6 +76,12 @@ export async function GET() {
             .orderBy(desc(userCompanyMemberships.lastOpenedAt));
 
         const activeCompanyId = await getActiveCompanyId(clerkUserId);
+        if (activeCompanyId === null) {
+            return NextResponse.json(
+                { error: "No active workspace" },
+                { status: 403 },
+            );
+        }
 
         return NextResponse.json({
             activeCompanyId: activeCompanyId.toString(),

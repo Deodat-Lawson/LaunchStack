@@ -18,10 +18,13 @@ import {
   FILE_ACCESS_TOKEN_PARAM,
   signFileAccessToken,
 } from "../../crypto/file-access-token";
+import {
+  buildInternalFileUrl,
+  isInternalFileUrl,
+  parseInternalFileId,
+} from "../../crypto/internal-file-url";
 
 type OssProvider = Extract<OCRProvider, "MARKER" | "DOCLING">;
-
-const FILE_ROUTE_ID_PATTERN = /^\/api\/files\/(\d+)$/;
 
 interface WorkerParseResponse {
   pages: PageContent[];
@@ -116,32 +119,32 @@ class OssOCRAdapter implements OCRAdapter {
    * can fetch them via the app's public origin.
    *
    * /api/files/{id} additionally requires auth, and the worker has no Clerk
-   * session, so we attach a short-lived token scoped to that one file. The
-   * reference is recognized by pathname, so a URL that was already made
-   * absolute upstream still gets signed — otherwise the worker would fetch
-   * it without a token and receive a 401.
+   * session, so we attach a short-lived token scoped to that one file. Same-
+   * origin absolute and relative references are rebuilt from appPublicUrl
+   * before signing; a foreign-host path is treated as external and is never
+   * signed.
    */
   private toWorkerReachableUrl(url: string): string {
     const cfg = getOcrConfig();
-    const isAbsolute = /^https?:\/\//i.test(url);
-    const absolute = new URL(
-      url,
-      isAbsolute ? undefined : (cfg.appPublicUrl ?? "http://app:3000")
+    const fileId = parseInternalFileId(url);
+    const isInternal = isInternalFileUrl(url, cfg.appPublicUrl);
+    const absolute = new URL(url, cfg.appPublicUrl ?? "http://app:3000");
+    if (fileId === null || !isInternal) return absolute.toString();
+
+    const canonical = new URL(
+      buildInternalFileUrl(cfg.appPublicUrl ?? "http://app:3000", fileId),
     );
 
-    const fileId = FILE_ROUTE_ID_PATTERN.exec(absolute.pathname)?.[1];
-    if (!fileId) return absolute.toString();
-
-    const token = signFileAccessToken(fileId, cfg.fileAccessTokenSecret);
+    const token = signFileAccessToken(String(fileId), cfg.fileAccessTokenSecret);
     if (token) {
-      absolute.searchParams.set(FILE_ACCESS_TOKEN_PARAM, token);
+      canonical.searchParams.set(FILE_ACCESS_TOKEN_PARAM, token);
     } else {
       console.warn(
         "[OssOCRAdapter] FILE_ACCESS_TOKEN_SECRET is not configured; the OCR worker cannot read database-backed documents."
       );
     }
 
-    return absolute.toString();
+    return canonical.toString();
   }
 }
 

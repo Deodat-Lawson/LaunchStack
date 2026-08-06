@@ -124,7 +124,14 @@ export function parseProvider(provider?: string): OCRProvider | undefined {
   if (!provider) return undefined;
 
   const normalized = provider.toUpperCase();
-  const validProviders: OCRProvider[] = ["AZURE", "LANDING_AI", "NATIVE_PDF", "DATALAB"];
+  const validProviders: OCRProvider[] = [
+    "AZURE",
+    "LANDING_AI",
+    "NATIVE_PDF",
+    "DATALAB",
+    "MARKER",
+    "DOCLING",
+  ];
 
   if (validProviders.includes(normalized as OCRProvider)) {
     return normalized as OCRProvider;

@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { agentAiChatbotToolCall } from "@launchstack/core/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateToolCallSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -79,21 +79,35 @@ export async function GET(request: NextRequest) {
     );
     if (!owned.success) return owned.response;
 
-    const toolCalls = taskId
-      ? await db
-          .select()
-          .from(agentAiChatbotToolCall)
-          .where(eq(agentAiChatbotToolCall.taskId, taskId))
-          .orderBy(agentAiChatbotToolCall.createdAt)
-      : await db
-          .select()
-          .from(agentAiChatbotToolCall)
-          .where(eq(agentAiChatbotToolCall.messageId, messageId!))
-          .orderBy(agentAiChatbotToolCall.createdAt);
+    const filter =
+      taskId && messageId
+        ? and(
+            eq(agentAiChatbotToolCall.taskId, taskId),
+            eq(agentAiChatbotToolCall.messageId, messageId),
+          )
+        : taskId
+          ? eq(agentAiChatbotToolCall.taskId, taskId)
+          : eq(agentAiChatbotToolCall.messageId, messageId!);
+
+    const toolCalls = await db
+      .select()
+      .from(agentAiChatbotToolCall)
+      .where(filter)
+      .orderBy(agentAiChatbotToolCall.createdAt);
+
+    const authorizedToolCalls = [];
+    for (const toolCall of toolCalls) {
+      const rowOwned = await assertToolCallParentsOwnedByUser(
+        toolCall.messageId,
+        toolCall.taskId,
+        ctx.data.clerkUserId,
+      );
+      if (rowOwned.success) authorizedToolCalls.push(toolCall);
+    }
 
     return NextResponse.json({
       success: true,
-      toolCalls,
+      toolCalls: authorizedToolCalls,
     });
   } catch (error) {
     console.error("Error fetching tool calls:", error);

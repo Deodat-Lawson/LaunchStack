@@ -248,12 +248,13 @@ export async function searchWikiLinkCandidates(
     .from(documentNotes)
     .where(
       and(
-        or(
-          ctx.companyId
-            ? eq(documentNotes.companyId, ctx.companyId)
-            : undefined,
-          eq(documentNotes.userId, ctx.userId),
-        ),
+        eq(documentNotes.userId, ctx.userId),
+        ctx.companyId
+          ? or(
+              eq(documentNotes.companyId, ctx.companyId),
+              isNull(documentNotes.companyId),
+            )
+          : isNull(documentNotes.companyId),
         sql<boolean>`${documentNotes.title} ILIKE ${pattern}`,
       ),
     )

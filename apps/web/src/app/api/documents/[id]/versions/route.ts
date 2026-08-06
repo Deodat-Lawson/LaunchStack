@@ -35,6 +35,8 @@ import {
   ocrJobs,
 } from "@launchstack/core/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
+import { buildInternalFileUrl } from "@launchstack/core/crypto";
+import { getOcrConfig } from "@launchstack/core/ocr/config";
 import { getEngine } from "~/server/engine";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
@@ -176,12 +178,25 @@ export async function POST(
         preferredProvider,
         fileSize,
       } = validation.data;
+      const effectiveProvider =
+        parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
 
       // A new version can point at an internal file row, which the OCR worker
       // will later fetch with a signed token. Prove the workspace owns it
       // before the version exists.
+      let resolvedDocumentUrl = documentUrl;
       try {
-        await authorizeInternalFileRef(documentUrl, doc.companyId);
+        const internalFileId = await authorizeInternalFileRef(
+          documentUrl,
+          doc.companyId,
+          effectiveProvider,
+        );
+        if (internalFileId !== null) {
+          resolvedDocumentUrl = buildInternalFileUrl(
+            getOcrConfig().appPublicUrl ?? new URL(request.url).origin,
+            internalFileId,
+          );
+        }
       } catch (error) {
         if (error instanceof UploadAuthorizationError) {
           return NextResponse.json(
@@ -242,7 +257,7 @@ export async function POST(
           .values({
             documentId: BigInt(parsed.documentId),
             versionNumber: nextVersionNumber,
-            url: documentUrl,
+            url: resolvedDocumentUrl,
             mimeType,
             fileSize:
               typeof fileSize === "number" ? BigInt(fileSize) : null,
@@ -276,7 +291,7 @@ export async function POST(
           .update(document)
           .set({
             currentVersionId: BigInt(inserted.id),
-            url: documentUrl,
+            url: resolvedDocumentUrl,
             mimeType,
           })
           .where(eq(document.id, parsed.documentId));
@@ -292,14 +307,14 @@ export async function POST(
       // hidden from RAG results by the version filter in the retrievers.
       getEngine();
       const { jobId, eventIds } = await triggerDocumentProcessing(
-        documentUrl,
+        resolvedDocumentUrl,
         doc.title,
         companyIdString,
         userId,
         parsed.documentId,
         doc.category,
         {
-          preferredProvider: parseProvider(preferredProvider),
+          preferredProvider: effectiveProvider,
           mimeType,
           originalFilename,
           versionId: createdVersion.id,
@@ -311,8 +326,9 @@ export async function POST(
         companyId: doc.companyId,
         userId,
         status: "queued",
-        documentUrl,
+        documentUrl: resolvedDocumentUrl,
         documentName: doc.title,
+        primaryProvider: effectiveProvider,
       });
 
       console.log(

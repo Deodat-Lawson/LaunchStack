@@ -134,19 +134,19 @@ docker run --rm -p 3000:3000 \\
             title="Create .env"
             description="Set the required variables at the project root."
             code={`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx
-CLERK_SECRET_KEY=sk_live_xxx
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+CLERK_SECRET_KEY=<your-clerk-secret-key>
 CHAT_BASE_URL=https://openrouter.ai/api/v1
-CHAT_API_KEY=sk-or-v1-xxx
+CHAT_API_KEY=<your-chat-api-key>
 # Models and routes live in apps/web/config/chat-models.yaml,
 # which Compose mounts read-only into the container.
 
 # Vercel Blob — required for document uploads
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx
+BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>
 
 # Inngest — use a placeholder for local dev
 INNGEST_EVENT_KEY=dev-placeholder`}
-            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nCHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=sk-or-v1-xxx\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
+            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=<your-chat-api-key>\n\nBLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
             copied={copiedCode === 'docker-1'}
 
           />

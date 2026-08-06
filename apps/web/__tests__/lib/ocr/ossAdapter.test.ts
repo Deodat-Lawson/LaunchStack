@@ -16,17 +16,20 @@ const WORKER_URL = "http://test-worker:8001";
 describe("OSS OCR Adapters", () => {
   const originalFetch = global.fetch;
   const originalEnv = process.env;
+  let consoleWarnSpy: jest.SpyInstance;
 
   beforeEach(() => {
     process.env = { ...originalEnv, OCR_WORKER_URL: WORKER_URL };
     configureOcr({ workerUrl: WORKER_URL });
     global.fetch = jest.fn() as unknown as typeof fetch;
+    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
   });
 
   afterEach(() => {
     process.env = originalEnv;
     configureOcr({});
     global.fetch = originalFetch;
+    consoleWarnSpy.mockRestore();
   });
 
   function mockWorkerResponse(body: unknown, status = 200) {
@@ -163,10 +166,7 @@ describe("OSS OCR Adapters", () => {
       expect(workerRequestUrl()).toBe("https://cdn.example.com/doc.pdf");
     });
 
-    // The upload pipeline resolves database-backed URLs to absolute form
-    // before dispatch, so recognizing internal files only in relative URLs
-    // sent every legitimate worker fetch into a 401.
-    it("signs internal file URLs that were already made absolute", async () => {
+    it("does not sign a foreign-host URL that only resembles an internal file", async () => {
       configureOcr({
         workerUrl: WORKER_URL,
         appPublicUrl: "http://app:3000",
@@ -174,9 +174,27 @@ describe("OSS OCR Adapters", () => {
       });
       mockEmptyDocument();
 
-      await createMarkerAdapter().uploadDocument("http://app:3000/api/files/123");
+      await createMarkerAdapter().uploadDocument("https://evil.example/api/files/123");
+
+      expect(workerRequestUrl()).toBe("https://evil.example/api/files/123");
+      expect(new URL(workerRequestUrl()).search).toBe("");
+    });
+
+    // The upload pipeline resolves database-backed URLs to absolute form
+    // before dispatch, so recognizing internal files only in relative URLs
+    // sent every legitimate worker fetch into a 401.
+    it("canonicalizes and signs same-origin internal file URLs", async () => {
+      configureOcr({
+        workerUrl: WORKER_URL,
+        appPublicUrl: "http://app:3000",
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      await createMarkerAdapter().uploadDocument("http://app:3000/api/files/123/");
 
       const url = new URL(workerRequestUrl());
+      expect(url.origin).toBe("http://app:3000");
       expect(url.pathname).toBe("/api/files/123");
       const token = url.searchParams.get(FILE_ACCESS_TOKEN_PARAM);
       expect(verifyFileAccessToken(token, "123", "worker-secret")).toBe(true);

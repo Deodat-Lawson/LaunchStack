@@ -67,11 +67,11 @@ export const VoicePage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCo
           <div>
             <h3 style={h3}>Step 4: Add to environment variables</h3>
             <CodeBlock
-              code={`ELEVENLABS_API_KEY=sk_your_key_here
+              code={`ELEVENLABS_API_KEY=<your-elevenlabs-api-key>
 ELEVENLABS_VOICE_ID=your_chosen_voice_id`}
               onCopy={() =>
                 copyToClipboard(
-                  'ELEVENLABS_API_KEY=sk_your_key_here\nELEVENLABS_VOICE_ID=your_chosen_voice_id',
+                  'ELEVENLABS_API_KEY=<your-elevenlabs-api-key>\nELEVENLABS_VOICE_ID=your_chosen_voice_id',
                   'elevenlabs-env',
                 )
               }

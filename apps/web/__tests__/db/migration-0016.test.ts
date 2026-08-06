@@ -23,7 +23,7 @@ describe("migration 0016", () => {
     expect(files.indexOf(FILENAME)).toBeGreaterThan(
       files.indexOf("0015_user_company_memberships.sql"),
     );
-    expect(files[files.length - 1]).toBe(FILENAME);
+    expect(files.indexOf(FILENAME)).toBeLessThan(files.length - 1);
   });
 
   it("adds a nullable company_id with an ON DELETE SET NULL foreign key", () => {

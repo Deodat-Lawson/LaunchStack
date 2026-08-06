@@ -1029,7 +1029,7 @@ function TeamCard({
                         type="password"
                         value={openaiKey}
                         onChange={(e) => setOpenaiKey(e.target.value)}
-                        placeholder="sk-…"
+                        placeholder="<your-api-key>"
                         autoComplete="off"
                         style={{ ...inputStyle, marginBottom: 10 }}
                     />

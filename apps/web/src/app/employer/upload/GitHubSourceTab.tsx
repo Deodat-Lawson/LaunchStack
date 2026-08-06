@@ -194,7 +194,7 @@ export function GitHubSourceTab({
             <div style={{ marginTop: 8 }}>
               <input
                 type="password"
-                placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                placeholder="<your-github-access-token>"
                 value={accessToken}
                 onChange={(e) => setAccessToken(e.target.value)}
                 disabled={isSubmitting}

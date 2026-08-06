@@ -113,9 +113,13 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
     return forbidden();
   }
 
-  let companyId: bigint;
+  let companyId: bigint | null;
   try {
-    companyId = await resolveActiveCompanyForUser(user.id, user.companyId);
+    companyId = await resolveActiveCompanyForUser(
+      user.id,
+      user.companyId,
+      user.status,
+    );
   } catch {
     console.error(
       `[requireWorkspaceContext] Failed to resolve company for user ${clerkUserId}`,
@@ -127,7 +131,7 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
     console.error(
       `[requireWorkspaceContext] Null company for user ${clerkUserId}`,
     );
-    return internalError();
+    return forbidden();
   }
 
   const userPk = BigInt(user.id);

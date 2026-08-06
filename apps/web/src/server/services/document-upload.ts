@@ -12,6 +12,7 @@ import {
 import { getEngine } from "~/server/engine";
 import { uploadFile } from "~/lib/storage";
 import { putFile } from "~/server/storage/vercel-blob";
+import { parseProvider } from "@launchstack/core/ocr/trigger";
 import {
   detectStorageType,
   toAbsoluteUrl,
@@ -22,6 +23,8 @@ import { createDocumentRecord } from "./create-document";
 import { triggerJob } from "./trigger-job";
 import { hasTokens } from "~/lib/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
+import { buildInternalFileUrl } from "@launchstack/core/crypto";
+import { getOcrConfig } from "@launchstack/core/ocr/config";
 
 export type { StorageType } from "./detect-storage-type";
 export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
@@ -134,6 +137,9 @@ export async function processDocumentUpload({
   isWebsite,
   embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
+  const effectiveProvider =
+    parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
+
   // Throws before anything is created when the URL names a file this
   // workspace does not own. An internal reference is always database-backed
   // regardless of what the caller declared — otherwise `storageType: "s3"`
@@ -141,13 +147,21 @@ export async function processDocumentUpload({
   const internalFileId = await authorizeInternalFileRef(
     rawDocumentUrl,
     user.companyId,
+    effectiveProvider,
   );
   const storageType: StorageType =
     internalFileId !== null
       ? "database"
       : (explicitStorageType ?? detectStorageType(rawDocumentUrl));
   const resolvedDocumentUrl =
-    storageType === "database" ? toAbsoluteUrl(rawDocumentUrl, requestUrl) : rawDocumentUrl;
+    internalFileId !== null
+      ? buildInternalFileUrl(
+          getOcrConfig().appPublicUrl ?? new URL(requestUrl).origin,
+          internalFileId,
+        )
+      : storageType === "database"
+        ? toAbsoluteUrl(rawDocumentUrl, requestUrl)
+        : rawDocumentUrl;
 
   const documentCategory = category ?? "Uncategorized";
 

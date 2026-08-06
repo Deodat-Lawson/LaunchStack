@@ -450,7 +450,7 @@ export const CreateMessageSchema = z.object({
   role: z.enum(["user", "assistant", "system", "tool"]),
   content: z.unknown(),
   messageType: z.enum(["text", "tool_call", "tool_result", "thinking"]).optional().default("text"),
-  parentMessageId: z.string().optional(),
+  parentMessageId: z.string().min(1).optional(),
 });
 
 export const CreateVoteSchema = z.object({
@@ -477,7 +477,7 @@ export const UpdateTaskSchema = z.object({
 
 export const CreateToolCallSchema = z.object({
   messageId: z.string().min(1, "messageId is required"),
-  taskId: z.string().optional(),
+  taskId: z.string().min(1).optional(),
   toolName: z.string().min(1, "toolName is required"),
   toolInput: z.unknown(),
 });

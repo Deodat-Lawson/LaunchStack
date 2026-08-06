@@ -27,14 +27,15 @@ jest.mock("~/server/db", () => ({
 
 const mockResolveActiveCompanyForUser = jest.fn<
   Promise<bigint>,
-  [number | bigint, number | bigint]
+  [number | bigint, number | bigint, string]
 >();
 
 jest.mock("~/lib/active-workspace", () => ({
   resolveActiveCompanyForUser: (
     userPk: number | bigint,
     defaultCompanyId: number | bigint,
-  ) => mockResolveActiveCompanyForUser(userPk, defaultCompanyId),
+    status: string,
+  ) => mockResolveActiveCompanyForUser(userPk, defaultCompanyId, status),
 }));
 
 // ---------------------------------------------------------------------------
@@ -206,7 +207,7 @@ describe("requireWorkspaceContext", () => {
     consoleSpy.mockRestore();
   });
 
-  it("returns 500 when resolveActiveCompanyForUser returns null", async () => {
+  it("returns 403 when resolveActiveCompanyForUser returns null", async () => {
     mockAuth.mockResolvedValue({ userId: "clerk_abc" });
     setupUserQuery([{ id: 7, companyId: BigInt(10), role: "employer", status: "verified" }]);
     mockResolveActiveCompanyForUser.mockResolvedValue(null as unknown as bigint);
@@ -218,8 +219,8 @@ describe("requireWorkspaceContext", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const { body, status } = await getJsonAndStatus(result);
-      expect(status).toBe(500);
-      expect(body.error).toBe("Internal server error");
+      expect(status).toBe(403);
+      expect(body.error).toBe("Forbidden");
     }
 
     consoleSpy.mockRestore();

@@ -39,7 +39,7 @@ const ENDPOINTS: Endpoint[] = [
       'One credential can address models from many vendors',
       'Vendor-qualified model ids like vendor/model-name',
     ],
-    envKey: 'CHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=sk-or-v1-your_key_here',
+    envKey: 'CHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=<your-openrouter-api-key>',
   },
   {
     id: 'openai',
@@ -51,7 +51,7 @@ const ENDPOINTS: Endpoint[] = [
       'Bundled presets cover the gpt-4o and gpt-5 families',
       'Most thoroughly tested path end-to-end',
     ],
-    envKey: 'CHAT_BASE_URL=https://api.openai.com/v1\nCHAT_API_KEY=sk-proj-your_key_here',
+    envKey: 'CHAT_BASE_URL=https://api.openai.com/v1\nCHAT_API_KEY=<your-openai-api-key>',
   },
   {
     id: 'minimax',

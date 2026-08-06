@@ -14,12 +14,14 @@ import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { fileUploads } from "@launchstack/core/db/schema";
+import {
+  isInternalFileUrl,
+  parseInternalFileId as parseFileId,
+} from "@launchstack/core/crypto";
 import { getOcrConfig } from "@launchstack/core/ocr/config";
+import type { OCRProvider } from "@launchstack/core/ocr/types";
 
-const INTERNAL_FILE_PATH = /^\/api\/files\/(\d+)\/?$/;
-
-/** Origin used only to give relative URLs a parseable base. */
-const PARSE_BASE = "http://internal.invalid";
+export { parseInternalFileId } from "@launchstack/core/crypto";
 
 /**
  * Thrown when an upload references a file the workspace may not read, or an
@@ -37,26 +39,6 @@ export class UploadAuthorizationError extends Error {
 }
 
 /**
- * Returns the file id when `url` addresses `/api/files/{id}`, whether it was
- * given as a relative path or an absolute URL on any origin. Storage type
- * declared by the caller is irrelevant here — the path is what matters.
- */
-export function parseInternalFileId(url: string): number | null {
-  let pathname: string;
-  try {
-    pathname = new URL(url, PARSE_BASE).pathname;
-  } catch {
-    return null;
-  }
-
-  const id = INTERNAL_FILE_PATH.exec(pathname)?.[1];
-  if (!id) return null;
-
-  const parsed = Number(id);
-  return Number.isSafeInteger(parsed) ? parsed : null;
-}
-
-/**
  * Authorize an upload's `documentUrl` against the active workspace.
  *
  * Returns the file id for an internal reference the company owns, or null
@@ -67,8 +49,12 @@ export function parseInternalFileId(url: string): number | null {
 export async function authorizeInternalFileRef(
   url: string,
   companyId: bigint,
+  effectiveProvider?: OCRProvider,
 ): Promise<number | null> {
-  const fileId = parseInternalFileId(url);
+  const cfg = getOcrConfig();
+  if (!isInternalFileUrl(url, cfg.appPublicUrl)) return null;
+
+  const fileId = parseFileId(url);
   if (fileId === null) return null;
 
   const [file] = await db
@@ -83,7 +69,7 @@ export async function authorizeInternalFileRef(
   // The OSS worker fetches internal URLs over HTTP with no Clerk session, so
   // it needs a signed token. Failing here keeps the client from receiving a
   // 202 for a job that can only end in a 401 at fetch time.
-  if (isOssWorkerConfigured() && !getOcrConfig().fileAccessTokenSecret) {
+  if (requiresFileAccessToken(effectiveProvider, cfg) && !cfg.fileAccessTokenSecret) {
     throw new UploadAuthorizationError(
       "FILE_ACCESS_TOKEN_SECRET is not configured; the OCR worker cannot read database-backed documents.",
       503,
@@ -93,11 +79,14 @@ export async function authorizeInternalFileRef(
   return fileId;
 }
 
-function isOssWorkerConfigured(): boolean {
-  const cfg = getOcrConfig();
+function requiresFileAccessToken(
+  effectiveProvider: OCRProvider | undefined,
+  cfg: ReturnType<typeof getOcrConfig>,
+): boolean {
+  const provider = effectiveProvider ?? cfg.defaultProvider;
   return Boolean(
     cfg.workerUrl ||
-      cfg.defaultProvider === "MARKER" ||
-      cfg.defaultProvider === "DOCLING",
+      provider === "MARKER" ||
+      provider === "DOCLING",
   );
 }

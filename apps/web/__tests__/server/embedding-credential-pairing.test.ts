@@ -9,7 +9,7 @@ import {
  * These used to be backstopped by a hardcoded `https://api.openai.com/v1`
  * default, so a key that arrived without a URL still reached its own vendor.
  * That default is gone, which makes independent resolution unsafe: a company's
- * key falling through to the deployment's URL would post an `sk-…` to whatever
+ * key falling through to the deployment's URL would post a credential to whatever
  * provider the operator configured globally.
  */
 describe("embedding credential/endpoint pairing", () => {
@@ -29,10 +29,10 @@ describe("embedding credential/endpoint pairing", () => {
 
   it("never sends a company key to the deployment's endpoint", () => {
     const effective = resolveEffectiveEmbeddingConfig({
-      openAIApiKey: "sk-tenant-openai-key",
+      openAIApiKey: "tenant-openai-key",
     });
 
-    expect(effective.openAIApiKey).toBe("sk-tenant-openai-key");
+    expect(effective.openAIApiKey).toBe("tenant-openai-key");
     // The deployment URL must NOT be borrowed. Absent a URL of its own the
     // request fails in generateEmbeddings, which is the safe outcome: the key
     // is never transmitted anywhere.
@@ -41,11 +41,11 @@ describe("embedding credential/endpoint pairing", () => {
 
   it("keeps a company pair together when the company supplies both", () => {
     const effective = resolveEffectiveEmbeddingConfig({
-      openAIApiKey: "sk-tenant-openai-key",
+      openAIApiKey: "tenant-openai-key",
       openAIBaseUrl: "https://api.openai.com/v1",
     });
 
-    expect(effective.openAIApiKey).toBe("sk-tenant-openai-key");
+    expect(effective.openAIApiKey).toBe("tenant-openai-key");
     expect(effective.openAIBaseUrl).toBe("https://api.openai.com/v1");
   });
 

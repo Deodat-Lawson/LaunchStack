@@ -11,9 +11,9 @@ import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
  * context) so pending pages can load name/company/submission date.
  *
  * The company reported here is the *active* workspace, matching what the
- * product APIs scope to. Callers with no valid selection fall back to their
- * default workspace, and pending users with no membership keep the legacy
- * global role so the approval pages still render.
+ * product APIs scope to. Pending users with no membership keep the legacy
+ * default company and global role so the approval pages still render;
+ * verified users require a current membership.
  */
 export async function POST() {
     try {
@@ -32,7 +32,15 @@ export async function POST() {
         const companyId = await resolveActiveCompanyForUser(
             userInfo.id,
             userInfo.companyId,
+            userInfo.status,
         );
+
+        if (companyId === null) {
+            return NextResponse.json(
+                { error: "No active workspace" },
+                { status: 403 },
+            );
+        }
 
         const [membership] = await dbCore
             .select({ role: userCompanyMemberships.role })
@@ -43,6 +51,13 @@ export async function POST() {
                     eq(userCompanyMemberships.companyId, companyId),
                 ),
             );
+
+        if (!membership && userInfo.status === "verified") {
+            return NextResponse.json(
+                { error: "No active workspace membership" },
+                { status: 403 },
+            );
+        }
 
         const [companyRecord] = await dbCore
             .select()
@@ -64,7 +79,9 @@ export async function POST() {
         const serializedUserInfo = {
             ...userInfo,
             companyId: Number(companyId),
-            role: membership?.role ?? userInfo.role,
+            role: membership?.role ?? (
+                userInfo.status === "pending" ? userInfo.role : ""
+            ),
         };
 
         return NextResponse.json(

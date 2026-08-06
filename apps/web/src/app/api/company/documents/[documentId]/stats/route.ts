@@ -80,13 +80,23 @@ export async function GET(
         const [viewsCount] = await db
             .select({ count: count() })
             .from(documentViews)
-            .where(eq(documentViews.documentId, BigInt(docId)));
+            .where(
+                and(
+                    eq(documentViews.documentId, BigInt(docId)),
+                    eq(documentViews.companyId, ctx.data.companyId),
+                )
+            );
 
         // Get unique viewers
         const [uniqueViewers] = await db
             .select({ count: count(sql`DISTINCT ${documentViews.userId}`) })
             .from(documentViews)
-            .where(eq(documentViews.documentId, BigInt(docId)));
+            .where(
+                and(
+                    eq(documentViews.documentId, BigInt(docId)),
+                    eq(documentViews.companyId, ctx.data.companyId),
+                )
+            );
 
         // Get recent viewers
         const recentViewersData = await db
@@ -98,7 +108,12 @@ export async function GET(
             })
             .from(documentViews)
             .leftJoin(users, eq(documentViews.userId, users.userId))
-            .where(eq(documentViews.documentId, BigInt(docId)))
+            .where(
+                and(
+                    eq(documentViews.documentId, BigInt(docId)),
+                    eq(documentViews.companyId, ctx.data.companyId),
+                )
+            )
             .orderBy(desc(documentViews.viewedAt))
             .limit(10);
 
@@ -115,6 +130,7 @@ export async function GET(
             .where(
                 and(
                     eq(documentViews.documentId, BigInt(docId)),
+                    eq(documentViews.companyId, ctx.data.companyId),
                     gte(documentViews.viewedAt, thirtyDaysAgo)
                 )
             )

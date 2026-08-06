@@ -71,7 +71,9 @@ export default async function WorkspacesPage({
         role: r.role,
         memberCount: Number(r.memberCount ?? 1),
         lastOpenedAt: r.lastOpenedAt.toISOString(),
-        isActive: BigInt(r.id) === activeCompanyId,
+        // A null active id is a safe recovery state: the user can choose one
+        // of their live memberships instead of inheriting a stale default.
+        isActive: activeCompanyId !== null && BigInt(r.id) === activeCompanyId,
     }));
 
     const accountName =

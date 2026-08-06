@@ -130,13 +130,18 @@ describe("downloadGitHubRepoZip", () => {
     it("includes Authorization header when token is provided", async () => {
         mockFetch(200, Buffer.alloc(200));
 
-        await downloadGitHubRepoZip("owner", "repo", undefined, "ghp_token123");
+        await downloadGitHubRepoZip(
+            "owner",
+            "repo",
+            undefined,
+            "github-token-placeholder",
+        );
 
         expect(global.fetch).toHaveBeenCalledWith(
             expect.any(String),
             expect.objectContaining({
                 headers: expect.objectContaining({
-                    Authorization: "Bearer ghp_token123",
+                    Authorization: "Bearer github-token-placeholder",
                 }),
             }),
         );
@@ -168,11 +173,21 @@ describe("downloadGitHubRepoZip", () => {
         mockFetch(403);
 
         await expect(
-            downloadGitHubRepoZip("owner", "repo", undefined, "ghp_expired"),
+            downloadGitHubRepoZip(
+                "owner",
+                "repo",
+                undefined,
+                "github-expired-token-placeholder",
+            ),
         ).rejects.toThrow(GitHubAuthError);
 
         try {
-            await downloadGitHubRepoZip("owner", "repo", undefined, "ghp_expired");
+            await downloadGitHubRepoZip(
+                "owner",
+                "repo",
+                undefined,
+                "github-expired-token-placeholder",
+            );
         } catch (e) {
             expect((e as Error).message).toContain("lack permissions");
         }

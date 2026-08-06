@@ -119,7 +119,13 @@ export async function GET() {
                     lastViewedAt: max(documentViews.viewedAt),
                 })
                 .from(document)
-                .leftJoin(documentViews, eq(document.id, documentViews.documentId))
+                .leftJoin(
+                    documentViews,
+                    and(
+                        eq(document.id, documentViews.documentId),
+                        eq(documentViews.companyId, companyId),
+                    ),
+                )
                 .where(eq(document.companyId, companyId))
                 .groupBy(document.id, document.title, document.category, document.createdAt)
                 .orderBy(desc(count(documentViews.id))),

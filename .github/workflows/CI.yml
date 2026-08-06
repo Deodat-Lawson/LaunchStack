@@ -41,8 +41,8 @@ jobs:
       # translation, so CI exercises the canonical variables.
       CHAT_BASE_URL: https://ci.invalid/v1
       CHAT_API_KEY: chat-ci-placeholder
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'sk-ci-placeholder' }}
-      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY || 'sk_test_ci_placeholder' }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'ci-placeholder' }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY || 'ci-clerk-secret-placeholder' }}
       INNGEST_EVENT_KEY: ci-placeholder
 
     steps:

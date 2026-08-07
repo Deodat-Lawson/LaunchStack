@@ -146,7 +146,7 @@ BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>
 
 # Inngest — use a placeholder for local dev
 INNGEST_EVENT_KEY=dev-placeholder`}
-            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>\n\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
+            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>\n\nBLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
             copied={copiedCode === 'docker-1'}
 
           />

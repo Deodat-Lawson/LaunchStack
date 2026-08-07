@@ -53,6 +53,10 @@ const isPublicApiRoute = createRouteMatcher([
     // Serves database-backed files to both the browser and the OCR worker;
     // the route accepts a Clerk session or a signed per-file token.
     '/api/files(.*)',
+    // Machine auth via COLLAB_HUB_SECRET HMAC, not a Clerk session.
+    '/api/collab/hub(.*)',
+    // Slack Events API verifies the signing secret on the raw body.
+    '/api/collab/slack/events',
 ]);
 
 // Routes where authenticated users should be redirected to their dashboard

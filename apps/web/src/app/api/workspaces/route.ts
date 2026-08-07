@@ -75,16 +75,12 @@ export async function GET() {
             .where(eq(userCompanyMemberships.userId, BigInt(user.id)))
             .orderBy(desc(userCompanyMemberships.lastOpenedAt));
 
+        // Null activeCompanyId is a recoverable stale-cookie state: still list
+        // memberships so the client can pick a workspace (same as the page).
         const activeCompanyId = await getActiveCompanyId(clerkUserId);
-        if (activeCompanyId === null) {
-            return NextResponse.json(
-                { error: "No active workspace" },
-                { status: 403 },
-            );
-        }
 
         return NextResponse.json({
-            activeCompanyId: activeCompanyId.toString(),
+            activeCompanyId: activeCompanyId?.toString() ?? null,
             workspaces: rows.map((r) => ({
                 id: r.id,
                 name: r.name,
@@ -94,7 +90,7 @@ export async function GET() {
                 role: r.role,
                 memberCount: Number(r.memberCount ?? 1),
                 lastOpenedAt: r.lastOpenedAt,
-                isActive: BigInt(r.id) === activeCompanyId,
+                isActive: activeCompanyId !== null && BigInt(r.id) === activeCompanyId,
             })),
         });
     } catch (err) {

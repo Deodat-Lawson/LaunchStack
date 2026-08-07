@@ -180,9 +180,9 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
 CLERK_SECRET_KEY=<your-clerk-secret-key>
 CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
 CHAT_API_KEY=<your-google-ai-key>
-INNGEST_EVENT_KEY=evt_xxx
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
-            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>\nINNGEST_EVENT_KEY=evt_xxx\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`, 'v-2')}
+INNGEST_EVENT_KEY=<your-inngest-event-key>
+BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>`}
+            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>\nINNGEST_EVENT_KEY=<your-inngest-event-key>\nBLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>`, 'v-2')}
             copied={copiedCode === 'v-2'}
 
           />

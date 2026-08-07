@@ -47,6 +47,8 @@ const PUBLIC_API_PATHS = [
   "/api/metrics",
   "/api/uploadthing",
   "/api/files/123",
+  "/api/collab/hub/v1/nodes",
+  "/api/collab/slack/events",
 ];
 
 const PROTECTED_API_PATHS = [
@@ -57,6 +59,8 @@ const PROTECTED_API_PATHS = [
   "/api/upload-local",
   "/api/documents/1",
   "/api/invite-codes/generate",
+  "/api/collab/agents",
+  "/api/collab/meetings",
 ];
 
 describe("middleware /api default-deny", () => {

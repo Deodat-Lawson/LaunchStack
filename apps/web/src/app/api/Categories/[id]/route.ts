@@ -4,7 +4,8 @@ import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { category, document, users } from "@launchstack/core/db/schema";
+import { category, document } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 

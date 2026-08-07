@@ -64,7 +64,7 @@ export interface RawPlaceResult {
 // the JSONB column). Re-exported here so feature code can keep its existing
 // import path.
 
-import type { ProspectResult } from "@launchstack/core/db/schema";
+import type { ProspectResult } from "../schema";
 export type { ProspectResult };
 
 // ─── Output ──────────────────────────────────────────────────────────────────

@@ -13,6 +13,10 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./schema": {
+      "types": "./src/schema.ts",
+      "default": "./src/schema.ts"
+    },
     "./adeu": {
       "types": "./src/adeu/index.ts",
       "default": "./src/adeu/index.ts"

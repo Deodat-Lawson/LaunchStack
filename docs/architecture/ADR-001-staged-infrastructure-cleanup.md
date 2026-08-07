@@ -220,6 +220,16 @@ measured usage, and each shim has a removal issue/date.
 **Exit criteria:** no environment uses `db:push` as a substitute for production
 migrations, and rollback guidance explicitly uses forward corrective migrations.
 
+**Status: done.** Migrations live in `packages/core/drizzle`, generated from the
+schema beside them. Local dev, CI, Docker and Vercel production all run
+`db:migrate`; `drizzle-kit push` is blocked on every deploy path by
+`scripts/ci/check-no-push.mjs` and by a runtime guard that refuses to push into
+a migration-managed database. The 17 hand-written files in `apps/web/drizzle`
+(which could not build a database from empty) were squashed into one reviewed
+baseline. Backfills moved to a separate resumable subsystem with its own ledger
+and are no longer run on container boot. CI has clean-database, idempotence,
+schema-parity and upgrade-from-last-release jobs.
+
 ### Phase 5: Organize the host by product domain
 
 **Change size:** incremental internal moves with stable URLs

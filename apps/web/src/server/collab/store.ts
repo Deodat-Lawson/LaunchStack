@@ -12,7 +12,7 @@
 import { and, asc, eq, gt, sql } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 
-import { collabChannel, collabMessage } from "@launchstack/core/db/schema";
+import { collabChannel, collabMessage } from "~/server/db/schema";
 import type {
   Channel,
   ChannelMessage,

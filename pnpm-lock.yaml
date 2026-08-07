@@ -574,6 +574,12 @@ importers:
       '@types/turndown':
         specifier: ^5.0.6
         version: 5.0.6
+      dotenv:
+        specifier: ^17.3.1
+        version: 17.3.1
+      drizzle-kit:
+        specifier: 0.31.10
+        version: 0.31.10(patch_hash=df26b575e4cc281617eb7bfa9d8515ddd9045212f8a2e40b13ae3e75170b5f95)
 
   packages/features:
     dependencies:

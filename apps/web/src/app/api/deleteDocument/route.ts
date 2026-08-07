@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from "../../../server/db/index";
-import { document, ChatHistory, documentReferenceResolution, documentSections, documentRetrievalChunks, documentStructure, documentMetadata, documentPreviews, documentViews, predictiveDocumentAnalysisResults, workspaceResults, users, kgEntityMentions } from "@launchstack/core/db/schema";
+import { document, documentSections, documentRetrievalChunks, documentStructure, documentMetadata, documentPreviews, workspaceResults, kgEntityMentions } from "@launchstack/core/db/schema";
+import { ChatHistory, documentReferenceResolution, documentViews, predictiveDocumentAnalysisResults, users } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";

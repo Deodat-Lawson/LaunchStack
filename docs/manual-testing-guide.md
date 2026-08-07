@@ -20,13 +20,11 @@ Before the first pass:
 1. **Environment**
    - Copy `.env.example` to `.env` and fill required keys (see [README](../README.md) Quick Start).
    - Set `DATABASE_URL` for a local PostgreSQL (e.g. `localhost:5433` if using Docker for DB only).
-   ```bash
-   pnpm db:install
-   ```
 
 2. **Database**
    ```bash
-   pnpm --filter @launchstack/web db:push
+   pnpm --filter @launchstack/core db:migrate   # apply schema
+   pnpm --filter @launchstack/core db:seed      # optional sample data
    ```
 
 3. **Enable Inngest** (required for background document processing)

@@ -118,7 +118,7 @@ docker run --rm -p 3000:3000 \\
             PostgreSQL 16 with pgvector pre-installed. Data is persisted in a named volume.
           </StepCard>
           <StepCard icon={<RefreshCw className="w-5 h-5" />} title="migrate">
-            Runs <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>pnpm --filter @launchstack/web db:push</code> once after the database is healthy, then exits.
+            Runs <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>pnpm db:migrate</code> once after the database is healthy, then exits.
           </StepCard>
           <StepCard icon={<Server className="w-5 h-5" />} title="app">
             Production Next.js server on port 3000. Connects to the same Compose network as the database.

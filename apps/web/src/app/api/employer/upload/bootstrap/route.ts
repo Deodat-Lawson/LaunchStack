@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { category, company, users } from "@launchstack/core/db/schema";
+import { category, company } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 

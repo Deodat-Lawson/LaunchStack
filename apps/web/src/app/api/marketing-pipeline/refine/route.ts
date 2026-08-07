@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { refineContent } from "@launchstack/features/marketing-pipeline";
 import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
 import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/features/marketing-pipeline";

@@ -10,7 +10,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { getJobById } from "@launchstack/features/client-prospector/db";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 

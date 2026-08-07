@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
-import { documentNotes } from "@launchstack/core/db/schema";
+import { documentNotes } from "~/server/db/schema";
 import { eq, and, desc, ilike, arrayContains, isNull, inArray } from "drizzle-orm";
 import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
 import { embedNoteAsync } from "~/server/notes/embed-note";

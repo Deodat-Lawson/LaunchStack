@@ -65,6 +65,107 @@ const OPENAI_IMAGE_MIME_TYPES = [
 
 const PRESETS: readonly ChatModelPreset[] = [
   {
+    name: "google/gemini-2.5-flash",
+    source: GOOGLE_OPENAI_COMPAT_DOC,
+    verifiedOn: "2026-05-01",
+    notes:
+      "Behavior via Google's OpenAI-compatibility endpoint " +
+      "(https://generativelanguage.googleapis.com/v1beta/openai/), not the " +
+      "native Gemini API.",
+    behavior: {
+      input: ["text", "image"],
+      image: {
+        mimeTypes: ["image/png", "image/jpeg", "image/webp", "image/heic"],
+      },
+      reasoning: {
+        mode: "effort",
+        levels: {
+          none: { reasoning_effort: "none" },
+          low: { reasoning_effort: "low" },
+          medium: { reasoning_effort: "medium" },
+          high: { reasoning_effort: "high" },
+        },
+        default: "medium",
+      },
+      nativeStructuredOutput: ["json-object", "json-schema", "tool-calling"],
+      parameters: {
+        temperature: "supported",
+        systemMessages: "supported",
+        streaming: "supported",
+        maxOutputTokens: "supported",
+      },
+    },
+  },
+  {
+    name: "google/gemini-2.5-flash-lite",
+    source: GOOGLE_OPENAI_COMPAT_DOC,
+    verifiedOn: "2026-05-01",
+    notes:
+      "The cheap tier, for the `fast` route. Behavior is asserted from the " +
+      "2.5 family's shared OpenAI-compatibility surface — it was NOT " +
+      "independently re-verified against a per-model reference on the date " +
+      "above. Confirm against your endpoint before relying on the reasoning " +
+      "levels in particular; an over-claimed capability surfaces as a " +
+      "confusing runtime error, so prefer overriding `behavior` in your " +
+      "configuration file if a request is rejected.",
+    behavior: {
+      input: ["text", "image"],
+      image: {
+        mimeTypes: ["image/png", "image/jpeg", "image/webp", "image/heic"],
+      },
+      reasoning: {
+        mode: "effort",
+        levels: {
+          none: { reasoning_effort: "none" },
+          low: { reasoning_effort: "low" },
+          medium: { reasoning_effort: "medium" },
+          high: { reasoning_effort: "high" },
+        },
+        default: "none",
+      },
+      nativeStructuredOutput: ["json-object", "json-schema", "tool-calling"],
+      parameters: {
+        temperature: "supported",
+        systemMessages: "supported",
+        streaming: "supported",
+        maxOutputTokens: "supported",
+      },
+    },
+  },
+  {
+    name: "google/gemini-2.5-pro",
+    source: GOOGLE_OPENAI_COMPAT_DOC,
+    verifiedOn: "2026-05-01",
+    notes:
+      "The reasoning tier, for the `reasoning` route. Same caveat as " +
+      "google/gemini-2.5-flash-lite: behavior is asserted from the 2.5 " +
+      "family's shared compatibility surface, not independently re-verified " +
+      "per model. Note `none` is deliberately absent — 2.5 Pro always " +
+      "reasons and rejects an attempt to disable it.",
+    behavior: {
+      input: ["text", "image"],
+      image: {
+        mimeTypes: ["image/png", "image/jpeg", "image/webp", "image/heic"],
+      },
+      reasoning: {
+        mode: "effort",
+        levels: {
+          low: { reasoning_effort: "low" },
+          medium: { reasoning_effort: "medium" },
+          high: { reasoning_effort: "high" },
+        },
+        default: "medium",
+      },
+      nativeStructuredOutput: ["json-object", "json-schema", "tool-calling"],
+      parameters: {
+        temperature: "supported",
+        systemMessages: "supported",
+        streaming: "supported",
+        maxOutputTokens: "supported",
+      },
+    },
+  },
+  {
     name: "openai/gpt-4o",
     source: OPENAI_MODELS_DOC,
     verifiedOn: "2026-05-01",
@@ -160,38 +261,6 @@ const PRESETS: readonly ChatModelPreset[] = [
         streaming: "supported",
         maxOutputTokens: "supported",
         maxOutputTokensField: "max_completion_tokens",
-      },
-    },
-  },
-  {
-    name: "google/gemini-2.5-flash",
-    source: GOOGLE_OPENAI_COMPAT_DOC,
-    verifiedOn: "2026-05-01",
-    notes:
-      "Behavior via Google's OpenAI-compatibility endpoint " +
-      "(https://generativelanguage.googleapis.com/v1beta/openai/), not the " +
-      "native Gemini API.",
-    behavior: {
-      input: ["text", "image"],
-      image: {
-        mimeTypes: ["image/png", "image/jpeg", "image/webp", "image/heic"],
-      },
-      reasoning: {
-        mode: "effort",
-        levels: {
-          none: { reasoning_effort: "none" },
-          low: { reasoning_effort: "low" },
-          medium: { reasoning_effort: "medium" },
-          high: { reasoning_effort: "high" },
-        },
-        default: "medium",
-      },
-      nativeStructuredOutput: ["json-object", "json-schema", "tool-calling"],
-      parameters: {
-        temperature: "supported",
-        systemMessages: "supported",
-        streaming: "supported",
-        maxOutputTokens: "supported",
       },
     },
   },

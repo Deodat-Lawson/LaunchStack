@@ -1,6 +1,6 @@
 import type { ProviderResult } from "../types";
 import type { RerankProvider, RerankResult } from "./index";
-import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
+import { resolveEndpoint } from "../registry";
 
 /**
  * Token cost per rerank query. This is the provider's billing rate (rerank
@@ -12,35 +12,43 @@ import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
 const RERANK_TOKENS_PER_QUERY = 200;
 
 /**
- * OpenAI-compatible reranking provider.
- * Works with Jina AI, SiliconFlow, and any provider that supports
+ * Dedicated reranking service, for any endpoint implementing
  * POST /v1/rerank with {model, query, documents, top_n}.
  *
- * Resolution: RERANK_API_* → AI_BASE_URL/AI_API_KEY → JINA_API_KEY → defaults
+ * Opt-in only: it is selected when RERANK_API_BASE_URL names an endpoint.
+ * There is no built-in vendor here — reranking has no default host because
+ * the default reranker is {@link ../reranking/gemini}, which runs on the chat
+ * endpoint the deployment already has. Set RERANK_API_BASE_URL, RERANK_API_KEY
+ * and RERANK_MODEL together to use a purpose-built cross-encoder instead.
+ *
+ * Resolution: RERANK_API_* → AI_BASE_URL/AI_API_KEY
  */
-export class OpenAICompatibleRerankProvider implements RerankProvider {
+export class DedicatedRerankProvider implements RerankProvider {
     name: string;
     private baseUrl: string;
     private apiKey: string;
     private model: string;
 
     constructor() {
-        this.baseUrl = resolveBaseUrl(
+        const endpoint = resolveEndpoint(
             process.env.RERANK_API_BASE_URL,
-            "https://api.jina.ai/v1",
-        );
-        this.apiKey = resolveApiKey(
             process.env.RERANK_API_KEY,
-            process.env.JINA_API_KEY,
         );
-        this.model = resolveModel(
-            process.env.RERANK_MODEL,
-            "jina-reranker-v2-base-multilingual",
-        );
+        this.baseUrl = endpoint.baseUrl;
+        this.apiKey = endpoint.apiKey;
+        const model = process.env.RERANK_MODEL;
+        if (!model) {
+            throw new Error(
+                "RERANK_MODEL is required when RERANK_API_BASE_URL is set: a " +
+                "dedicated rerank endpoint names its own model, and there is no " +
+                "default to fall back on.",
+            );
+        }
+        this.model = model;
         this.name = `rerank:${this.model}`;
 
         if (!this.apiKey) {
-            console.warn("[Rerank] No API key found (RERANK_API_KEY / AI_API_KEY / JINA_API_KEY)");
+            console.warn("[Rerank] No API key found (RERANK_API_KEY / AI_API_KEY)");
         }
     }
 

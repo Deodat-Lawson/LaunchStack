@@ -73,9 +73,13 @@ export async function embedNote(noteId: number): Promise<void> {
       return;
     }
 
+    // Both halves or neither — see resolveEmbeddingConfig.
     const { apiKey, baseURL } = resolveEmbeddingConfig();
-    if (!apiKey) {
-      console.warn("[embedNote] no embedding API key configured — skipping");
+    if (!apiKey || !baseURL) {
+      console.warn(
+        "[embedNote] no embedding endpoint configured (EMBEDDING_API_BASE_URL " +
+          "+ EMBEDDING_API_KEY, or AI_BASE_URL + AI_API_KEY) — skipping",
+      );
       return;
     }
 
@@ -83,7 +87,7 @@ export async function embedNote(noteId: number): Promise<void> {
       openAIApiKey: apiKey,
       modelName: EMBEDDING_MODEL,
       dimensions: EMBEDDING_DIM,
-      ...(baseURL ? { configuration: { baseURL } } : {}),
+      configuration: { baseURL },
     });
 
     const [embedding] = await client.embedDocuments([embeddingText]);

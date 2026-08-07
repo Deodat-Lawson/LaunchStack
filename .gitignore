@@ -70,3 +70,6 @@ backups/
 
 # test output
 test-output/
+
+# Personal working notes — never committed
+notes/

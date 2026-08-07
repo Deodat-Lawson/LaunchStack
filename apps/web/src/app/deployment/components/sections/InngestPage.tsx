@@ -101,7 +101,7 @@ export const InngestPage: React.FC<DeploymentProps> = ({
             <PipelineStep step="A" title="Router" description="Analyzes PDF to determine: native text extraction or OCR needed? Which provider (Azure, Landing.AI)?" />
             <PipelineStep step="B" title="Normalize" description="Extracts content using the selected provider. Outputs standardized PageContent[] structure." />
             <PipelineStep step="C" title="Chunking" description="Splits pages into semantic chunks (500 tokens, 50 overlap). Separates tables from text." />
-            <PipelineStep step="D" title="Vectorize" description="Generates embeddings via OpenAI text-embedding-3-large (1536 dimensions)." />
+            <PipelineStep step="D" title="Vectorize" description="Generates embeddings via the configured embedding index — text-embedding-3-large at 1536 dimensions by default." />
             <PipelineStep step="E" title="Storage" description="Persists chunks with vectors to PostgreSQL. Updates document and job status." />
           </div>
         </div>

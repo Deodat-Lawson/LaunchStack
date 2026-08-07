@@ -27,6 +27,7 @@ import {
 
 export {
   findIgnoredModelVariables,
+  resetChatEndpointWarnings,
   resolveChatEndpoint,
   translateLegacyEndpoint,
   type AppChatModelEnvironment,

@@ -5,7 +5,7 @@ import {
     founderWeeklyReviewRuns,
     type FounderWeeklyReviewOperationRow,
     type FounderWeeklyReviewRunRow,
-} from "@launchstack/core/db/schema";
+} from "./schema";
 
 import {
     FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,

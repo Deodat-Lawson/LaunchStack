@@ -13,8 +13,9 @@ import { document, documentVersions } from "@launchstack/core/db/schema";
 const CUSTOMER_FEEDBACK_CATEGORY_NAME = "customer feedback"
 
 function normalizeText(value: string | null | undefined): string | null {
+    // Empty-after-trim normalizes to null too, so this cannot be `?? null`.
     const trimmed = value?.trim();
-    return trimmed ? trimmed : null;
+    return trimmed === undefined || trimmed === "" ? null : trimmed;
 }
 
 export interface DocumentVersionRow {

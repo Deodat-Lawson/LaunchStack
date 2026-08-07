@@ -1,7 +1,4 @@
-import { randomUUID } from "node:crypto";
-
 import { sql } from "drizzle-orm";
-import { company } from "@launchstack/core/db/schema";
 import {
     FounderWeeklyReviewConflictError,
     FounderWeeklyReviewEvidenceSnapshotSchema,

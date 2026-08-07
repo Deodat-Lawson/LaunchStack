@@ -1,122 +1,50 @@
 import { randomUUID } from "node:crypto";
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import postgres, { type Sql } from "postgres";
+import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 
 import * as coreSchema from "@launchstack/core/db/schema";
+import * as featuresSchema from "@launchstack/features/schema";
 import type { DbClient } from "@launchstack/core/db";
 
-const rootDir = join(__dirname, "..", "..");
-const migrationsDir = join(rootDir, "drizzle");
+const webDir = join(__dirname, "..", "..");
+const repoRoot = join(webDir, "..", "..");
 
-function buildSearchPathSql(schemaName: string): string {
-    return `SET search_path TO "${schemaName}", public`;
+/**
+ * The two migration sets, in the order `db:migrate` applies them: engine first,
+ * then product. The product set has foreign keys into engine tables, so
+ * applying apps/web/drizzle alone fails on the first one.
+ */
+const MIGRATION_SETS = [
+    join(repoRoot, "packages", "core", "drizzle"),
+    join(webDir, "drizzle"),
+];
+
+interface JournalEntry {
+    idx: number;
+    tag: string;
 }
 
-async function listMigrationFiles(): Promise<string[]> {
-    const entries = await readdir(migrationsDir, { withFileTypes: true });
-    return entries
-        .filter((entry) => entry.isFile() && entry.name.endsWith(".sql"))
-        .map((entry) => entry.name)
-        .sort();
+/**
+ * Migration files in journal order, not filename order — the journal is what
+ * the real runner (packages/core/scripts/migrate.mjs) reads, so these tests
+ * apply exactly the SQL, in exactly the order, that a deploy applies.
+ */
+async function listMigrationFiles(dir: string): Promise<string[]> {
+    const journal = JSON.parse(
+        await readFile(join(dir, "meta", "_journal.json"), "utf8")
+    ) as { entries?: JournalEntry[] };
+    return [...(journal.entries ?? [])]
+        .sort((a, b) => a.idx - b.idx)
+        .map((entry) => join(dir, `${entry.tag}.sql`));
 }
 
-function normalizeSqlMigrationBody(body: string): string {
-    return body.replace(/^\uFEFF/, "");
-}
-
-async function bootstrapIsolatedSchema(
-    client: Sql,
-    schemaName: string
-): Promise<void> {
-    await client.unsafe(buildSearchPathSql(schemaName));
-    await client.unsafe(`
-        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_company" (
-            "id" serial PRIMARY KEY,
-            "name" varchar(256) NOT NULL,
-            "slug" varchar(64),
-            "description" text,
-            "industry" varchar(256),
-            "swatch" integer NOT NULL DEFAULT 1,
-            "embedding_index_key" varchar(128),
-            "active_embedding_index_key" varchar(128),
-            "pending_embedding_index_key" varchar(128),
-            "reindex_status" varchar(16) NOT NULL DEFAULT 'STABLE',
-            "reindex_job_id" text,
-            "reindex_started_at" timestamptz,
-            "reindex_completed_at" timestamptz,
-            "reindex_error" text,
-            "embedding_openai_api_key" text,
-            "embedding_huggingface_api_key" text,
-            "embedding_ollama_base_url" varchar(1024),
-            "embedding_ollama_model" varchar(256),
-            "employerPasskey" varchar(256) NOT NULL DEFAULT '',
-            "employeePasskey" varchar(256) NOT NULL DEFAULT '',
-            "numberOfEmployees" varchar(256) NOT NULL,
-            "use_uploadthing" boolean NOT NULL DEFAULT true,
-            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            "updated_at" timestamptz
-        );
-
-        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_users" (
-            "id" serial PRIMARY KEY,
-            "company_id" bigint NOT NULL REFERENCES "pdr_ai_v2_company"("id") ON DELETE CASCADE,
-            "role" varchar(256) NOT NULL,
-            "last_active_at" timestamptz,
-            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );
-
-        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document" (
-            "id" serial PRIMARY KEY,
-            "company_id" bigint REFERENCES "pdr_ai_v2_company"("id") ON DELETE CASCADE,
-            "url" varchar(256),
-            "category" varchar(256),
-            "title" varchar(256),
-            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            "updated_at" timestamptz
-        );
-
-        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document_versions" (
-            "id" serial PRIMARY KEY,
-            "document_id" bigint NOT NULL REFERENCES "pdr_ai_v2_document"("id") ON DELETE CASCADE,
-            "version_number" integer NOT NULL,
-            "url" varchar(512) NOT NULL,
-            "mime_type" varchar(128) NOT NULL,
-            "file_size" bigint,
-            "uploaded_by" varchar(256),
-            "changelog" text,
-            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );
-
-        CREATE TABLE IF NOT EXISTS "pdr_ai_v2_document_retrieval_chunks" (
-            "id" bigint PRIMARY KEY
-        );
-
-        CREATE TABLE IF NOT EXISTS "company" (
-            "id" serial PRIMARY KEY,
-            "name" varchar(256) NOT NULL
-        );
-
-        CREATE TABLE IF NOT EXISTS "document" (
-            "id" serial PRIMARY KEY
-        );
-
-        CREATE TABLE IF NOT EXISTS "ocr_jobs" (
-            "id" varchar(256) PRIMARY KEY
-        );
-
-        CREATE TABLE IF NOT EXISTS "file_uploads" (
-            "id" serial PRIMARY KEY,
-            "user_id" varchar(256) NOT NULL,
-            "filename" varchar(256) NOT NULL,
-            "mime_type" varchar(128) NOT NULL,
-            "file_data" text NOT NULL,
-            "file_size" integer NOT NULL,
-            "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );
-    `);
+function withDatabase(connectionString: string, databaseName: string): string {
+    const url = new URL(connectionString);
+    url.pathname = `/${databaseName}`;
+    return url.toString();
 }
 
 export interface FounderWeeklyReviewTestSession {
@@ -125,24 +53,30 @@ export interface FounderWeeklyReviewTestSession {
 }
 
 export interface FounderWeeklyReviewTestDatabase {
-    schemaName: string;
+    databaseName: string;
     db: DbClient;
     createSession(): Promise<FounderWeeklyReviewTestSession>;
     close(): Promise<void>;
 }
 
 async function createSession(
-    connectionString: string,
-    schemaName: string
+    connectionString: string
 ): Promise<FounderWeeklyReviewTestSession> {
     const client = postgres(connectionString, { max: 1 });
-    await client.unsafe(buildSearchPathSql(schemaName));
     return {
-        db: drizzle(client, { schema: coreSchema }),
+        db: drizzle(client, { schema: { ...coreSchema, ...featuresSchema } }),
         close: () => client.end({ timeout: 5 }),
     };
 }
 
+/**
+ * Spins up a throwaway database and migrates it with both sets.
+ *
+ * A database rather than a `search_path` schema: generated migrations qualify
+ * every foreign key as `"public"."…"`, so a per-schema sandbox would resolve
+ * those references to the wrong (empty) schema. Isolating at the database level
+ * is what lets these suites run the real migration SQL unmodified.
+ */
 export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWeeklyReviewTestDatabase> {
     const connectionString =
         process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL;
@@ -153,34 +87,57 @@ export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWe
         );
     }
 
-    const adminClient = postgres(connectionString, { max: 1 });
-    const schemaName = `lau5_${randomUUID().replace(/-/g, "")}`;
-    await adminClient.unsafe(`CREATE SCHEMA "${schemaName}"`);
-    await adminClient.unsafe(`CREATE EXTENSION IF NOT EXISTS vector`);
-    await adminClient.unsafe(buildSearchPathSql(schemaName));
-    await bootstrapIsolatedSchema(adminClient, schemaName);
+    const databaseName = `lau6_${randomUUID().replace(/-/g, "")}`;
+    const maintenance = postgres(connectionString, { max: 1 });
 
-    const migrationFiles = await listMigrationFiles();
-    for (const fileName of migrationFiles) {
-        const body = normalizeSqlMigrationBody(
-            await readFile(join(migrationsDir, fileName), "utf8")
+    try {
+        // CREATE DATABASE cannot run inside a transaction block, hence `unsafe`
+        // on a plain connection rather than `begin`.
+        await maintenance.unsafe(`CREATE DATABASE "${databaseName}"`);
+    } catch (error) {
+        await maintenance.end({ timeout: 5 });
+        throw new Error(
+            `could not create the throwaway test database "${databaseName}": ` +
+                `${(error as Error).message}\n` +
+                `These suites need a role with CREATEDB on the server behind ` +
+                `LAUNCHSTACK_TEST_DATABASE_URL / DATABASE_URL.`
         );
-        await adminClient.begin(async (tx) => {
-            await tx.unsafe(buildSearchPathSql(schemaName));
-            await tx.unsafe(body);
-        });
     }
 
-    const primary = await createSession(connectionString, schemaName);
+    const testUrl = withDatabase(connectionString, databaseName);
+    const admin = postgres(testUrl, { max: 1 });
+
+    try {
+        for (const dir of MIGRATION_SETS) {
+            for (const file of await listMigrationFiles(dir)) {
+                const body = await readFile(file, "utf8");
+                await admin.begin(async (tx) => {
+                    await tx.unsafe(body);
+                });
+            }
+        }
+    } catch (error) {
+        await admin.end({ timeout: 5 });
+        await maintenance.unsafe(`DROP DATABASE IF EXISTS "${databaseName}"`);
+        await maintenance.end({ timeout: 5 });
+        throw error;
+    }
+
+    const primary = await createSession(testUrl);
 
     return {
-        schemaName,
+        databaseName,
         db: primary.db,
-        createSession: () => createSession(connectionString, schemaName),
+        createSession: () => createSession(testUrl),
         async close() {
             await primary.close();
-            await adminClient.unsafe(`DROP SCHEMA IF EXISTS "${schemaName}" CASCADE`);
-            await adminClient.end({ timeout: 5 });
+            await admin.end({ timeout: 5 });
+            // WITH (FORCE) so a session a test forgot to close cannot wedge the
+            // drop and leak a database into the next run.
+            await maintenance.unsafe(
+                `DROP DATABASE IF EXISTS "${databaseName}" WITH (FORCE)`
+            );
+            await maintenance.end({ timeout: 5 });
         },
     };
 }

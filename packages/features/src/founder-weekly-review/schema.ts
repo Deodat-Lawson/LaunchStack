@@ -1,3 +1,12 @@
+/**
+ * Drizzle schema for the Founder Weekly Review feature.
+ *
+ * Product-side tables: they reference the engine `company` table, never the
+ * reverse. They live here rather than in apps/web because a package cannot
+ * import from an app, and the vertical that queries them owns them. Applied by
+ * the product migration set (apps/web/drizzle).
+ */
+
 import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import {
@@ -11,8 +20,8 @@ import {
     timestamp,
 } from "drizzle-orm/pg-core";
 
-import { company } from "./base";
-import { pgTable } from "./helpers";
+import { company } from "@launchstack/core/db/schema";
+import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 export const founderWeeklyReviewRunStatusEnum = [
     "queued",

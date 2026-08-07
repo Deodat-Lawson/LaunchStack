@@ -18,7 +18,7 @@ import {
 } from "./errors";
 import { FounderWeeklyReviewRepository } from "./repository";
 
-export interface FounderWeeklyReviewWorkerContext extends FounderWeeklyReviewClaimInput {}
+export type FounderWeeklyReviewWorkerContext = FounderWeeklyReviewClaimInput;
 
 export class FounderWeeklyReviewWorkerService {
     constructor(

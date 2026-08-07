@@ -1,0 +1,32 @@
+{
+    "name": "single-version-change",
+    "description": "One under-review company whose Onboarding Plan gains a single in-window version.",
+    "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+    "workspaceTimezone": "America/New_York",
+    "founderContext": "Focus on onboarding reliability.",
+    "companies": [
+        {
+            "name": "Northstar Analytics",
+            "underReview": true,
+            "documents": [
+                {
+                    "title": "Onboarding Plan",
+                    "category": "Planning",
+                    "versions": [
+                        {
+                            "versionNumber": 1,
+                            "timestamp": "2026-07-24T10:00:00.000Z",
+                            "changelog": "Documented retry telemetry ownership and recovery monitoring.",
+                            "chunks": [
+                                {
+                                    "section": "Ownership",
+                                    "content": "Platform owns retry telemetry and recovery monitoring."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

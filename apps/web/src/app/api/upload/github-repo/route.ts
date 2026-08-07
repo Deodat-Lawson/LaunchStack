@@ -109,6 +109,9 @@ export async function POST(request: Request) {
                 },
                 documentName: `${owner}/${repo}`,
                 rawDocumentUrl: blob.url,
+                creationKey: owner && repo
+                    ? `github:${owner}/${repo}@${branch ?? "default"}`
+                    : `upload:${blob.url}`,
                 requestUrl: request.url,
                 category,
                 explicitStorageType: "s3",

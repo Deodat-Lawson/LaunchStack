@@ -157,6 +157,8 @@ export async function POST(request: Request) {
           { status: 400 },
         );
       }
+      const normalizedSourceUrl = new URL(parsedUrl);
+      normalizedSourceUrl.hash = "";
 
       const [userInfo] = await db
         .select()
@@ -258,6 +260,7 @@ export async function POST(request: Request) {
         },
         documentName: resolvedTitle,
         rawDocumentUrl: uploaded.url,
+        creationKey: `website:${normalizedSourceUrl.href}`,
         requestUrl: request.url,
         category,
         explicitStorageType: uploaded.provider,

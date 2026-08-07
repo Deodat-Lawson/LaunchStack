@@ -294,6 +294,7 @@ export const crawlWebsite = inngest.createFunction(
             user: { userId, companyId: BigInt(companyId) },
             documentName: page.title,
             rawDocumentUrl: uploaded.url,
+            creationKey: `crawl:${crawlGroupId}:${page.url}`,
             requestUrl,
             category,
             explicitStorageType: uploaded.provider,

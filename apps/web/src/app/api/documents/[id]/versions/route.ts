@@ -26,18 +26,17 @@
 
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
 import {
   document,
   documentVersions,
-  ocrJobs,
   users,
 } from "@launchstack/core/db/schema";
-import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 import { getEngine } from "~/server/engine";
+import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -212,116 +211,42 @@ export async function POST(
         );
       }
 
-      // Insert the new version + flip currentVersionId atomically. Any concurrent
-      // new-version uploads on the same document would race on version_number,
-      // but the unique index (document_id, version_number) in the schema
-      // guarantees one of them rejects at the DB level — we retry once on that
-      // specific violation below.
-      const createdVersion = await db.transaction(async (tx) => {
-        const [maxRow] = await tx
-          .select({
-            maxVersion: sql<number>`COALESCE(MAX(${documentVersions.versionNumber}), 0)`,
-          })
-          .from(documentVersions)
-          .where(eq(documentVersions.documentId, BigInt(parsed.documentId)));
-
-        const nextVersionNumber = (maxRow?.maxVersion ?? 0) + 1;
-
-        const [inserted] = await tx
-          .insert(documentVersions)
-          .values({
-            documentId: BigInt(parsed.documentId),
-            versionNumber: nextVersionNumber,
-            url: documentUrl,
-            mimeType,
-            fileSize:
-              typeof fileSize === "number" ? BigInt(fileSize) : null,
-            uploadedBy: userId,
-            changelog: changelog ?? null,
-            ocrProcessed: false,
-          })
-          .returning({
-            id: documentVersions.id,
-            versionNumber: documentVersions.versionNumber,
-          });
-
-        if (!inserted) {
-          throw new Error("Failed to insert document_versions row");
-        }
-
-        // Flip currentVersionId to the new row so RAG starts returning the
-        // new version's chunks as soon as embeddings land. The brief window
-        // between flip and embedding completion is acceptable — search will
-        // return zero results for this document during that window, which
-        // matches the behavior of a brand new upload.
-        //
-        // We ALSO update `document.url` and `document.mimeType` to match the
-        // new current version. These two columns predate versioning and are
-        // treated by every legacy read path (fetchDocument, DocumentViewer,
-        // etc.) as "the document's blob." Leaving them frozen on v1 means
-        // the main viewer keeps showing v1's content even after v2 becomes
-        // current — which is exactly the bug we hit in production. Keep
-        // them denormalized in lockstep with `currentVersionId`.
-        await tx
-          .update(document)
-          .set({
-            currentVersionId: BigInt(inserted.id),
-            url: documentUrl,
-            mimeType,
-          })
-          .where(eq(document.id, parsed.documentId));
-
-        return inserted;
-      });
-
-      const companyIdString = doc.companyId.toString();
-
-      // Dispatch the OCR-to-Vector pipeline with the new versionId so every
-      // chunk/structure/metadata row gets tagged with this specific version.
-      // Old version chunks stay indexed under their own versionId and are
-      // hidden from RAG results by the version filter in the retrievers.
+      // Persistence and dispatch share one idempotent lifecycle. The key is
+      // stable for retries of the same uploaded object.
       getEngine();
-      const { jobId, eventIds } = await triggerDocumentProcessing(
-        documentUrl,
-        doc.title,
-        companyIdString,
-        userId,
-        parsed.documentId,
-        doc.category,
-        {
-          preferredProvider: parseProvider(preferredProvider),
-          mimeType,
-          originalFilename,
-          versionId: createdVersion.id,
-        }
-      );
-
-      await db.insert(ocrJobs).values({
-        id: jobId,
+      const lifecycle = await createDocumentVersionLifecycle({
+        documentId: parsed.documentId,
         companyId: doc.companyId,
         userId,
-        status: "queued",
-        documentUrl,
-        documentName: doc.title,
+        title: doc.title,
+        category: doc.category,
+        url: documentUrl,
+        creationKey: `version:${parsed.documentId}:${documentUrl}`,
+        mimeType,
+        fileSize,
+        changelog,
+        preferredProvider,
+        originalFilename,
       });
 
       console.log(
-        `[Versions] Created v${createdVersion.versionNumber} for doc=${parsed.documentId} ` +
-          `versionId=${createdVersion.id} jobId=${jobId}`
+        `[Versions] Created v${lifecycle.version.versionNumber} for doc=${parsed.documentId} ` +
+          `versionId=${lifecycle.version.id} jobId=${lifecycle.job.id}`,
       );
 
       return NextResponse.json(
         {
           success: true,
-          versionId: createdVersion.id,
-          versionNumber: createdVersion.versionNumber,
+          versionId: lifecycle.version.id,
+          versionNumber: lifecycle.version.versionNumber,
           documentId: parsed.documentId,
-          jobId,
-          eventIds,
+          jobId: lifecycle.job.id,
+          eventIds: lifecycle.eventIds,
           message: "New version uploaded, processing started",
         },
-        { status: 202 }
+        { status: 202 },
       );
+
     } catch (error) {
       console.error("[Versions] POST failed:", error);
 

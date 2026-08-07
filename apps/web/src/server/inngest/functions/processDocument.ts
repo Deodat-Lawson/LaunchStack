@@ -7,10 +7,13 @@
  * receives a separate ingestion event. The original ZIP document is deleted.
  */
 
+import path from "node:path";
+
 import { eq } from "drizzle-orm";
 import { inngest } from "../client";
 import { runDocIngestionTool } from "~/lib/tools";
 import { db } from "~/server/db";
+import { createDocumentLifecycle } from "~/server/services/document-creation";
 import { document, ocrJobs } from "@launchstack/core/db/schema";
 import { putFile } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
@@ -254,7 +257,6 @@ interface ExtractedFileInfo {
   documentName: string;
   originalFilename: string;
   mimeType: string | undefined;
-  jobId: string;
 }
 
 interface ZipExtractionResult {
@@ -389,6 +391,9 @@ export const uploadDocument = inngest.createFunction(
           const results: ExtractedFileInfo[] = [];
 
           for (const entryPath of cappedEntries) {
+            const normalizedEntryPath = path.posix
+              .normalize(`/${entryPath.replaceAll("\\", "/")}`)
+              .slice(1);
             const ext = extractExtension(entryPath);
             const baseName = entryPath.split("/").pop() ?? entryPath;
             const titleName = baseName;
@@ -436,52 +441,36 @@ export const uploadDocument = inngest.createFunction(
                 data: fileBuffer,
                 contentType: fileMime,
               });
-              const [newDoc] = await db
-                .insert(document)
-                .values({
-                  url: blob.url,
-                  title: titleName,
-                  mimeType: fileMime ?? null,
-                  category: eventData.category,
-                  companyId: BigInt(eventData.companyId),
-                  ocrEnabled: true,
-                  ocrProcessed: false,
-                  sourceArchiveName: archiveName,
-                })
-                .returning({
-                  id: document.id,
-                  url: document.url,
-                  title: document.title,
-                });
-
-              if (newDoc) {
-                const childJobId = `ocr-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 10)}`;
-
-                await db.insert(ocrJobs).values({
-                  id: childJobId,
-                  companyId: BigInt(eventData.companyId),
-                  userId: eventData.userId,
-                  status: "queued",
-                  documentUrl: blob.url,
-                  documentName: titleName,
-                });
-
-                results.push({
-                  documentId: newDoc.id,
-                  documentUrl: blob.url,
-                  documentName: titleName,
+              const lifecycle = await createDocumentLifecycle({
+                companyId: BigInt(eventData.companyId),
+                userId: eventData.userId,
+                title: titleName,
+                category: eventData.category,
+                url: blob.url,
+                creationKey: `archive:${eventData.documentId}:entry:${normalizedEntryPath}`,
+                processingUrl: blob.url,
+                mimeType: fileMime ?? null,
+                sourceArchiveName: archiveName,
+                sourceArchiveEntry: normalizedEntryPath,
+                processing: {
                   originalFilename: baseName,
-                  mimeType: fileMime,
-                  jobId: childJobId,
-                });
-              }
+                  embeddingIndexKey: eventData.options?.embeddingIndexKey,
+                },
+              });
+
+              results.push({
+                documentId: lifecycle.documentId,
+                documentUrl: blob.url,
+                documentName: titleName,
+                originalFilename: baseName,
+                mimeType: fileMime,
+              });
             } catch (err) {
               console.warn(
                 `[ProcessDocument] Failed to extract ${entryPath}: ${err instanceof Error ? err.message : String(err)}`,
               );
             }
           }
-
           console.log(
             `[ProcessDocument] Extracted ${results.length} files from ${archiveName}`,
           );
@@ -529,78 +518,36 @@ export const uploadDocument = inngest.createFunction(
             contentType: "text/markdown",
           });
 
-          const summaryJobId = `ocr-${Date.now().toString(36)}-summary`;
-
-          const [summaryDoc] = await db
-            .insert(document)
-            .values({
-              url: summaryBlob.url,
-              title: `_project_summary.md`,
-              mimeType: "text/markdown",
-              category: eventData.category,
-              companyId: BigInt(eventData.companyId),
-              ocrEnabled: true,
-              ocrProcessed: false,
-              sourceArchiveName: archiveName,
-            })
-            .returning({ id: document.id });
-
-          if (summaryDoc) {
-            await db.insert(ocrJobs).values({
-              id: summaryJobId,
-              companyId: BigInt(eventData.companyId),
-              userId: eventData.userId,
-              status: "queued",
-              documentUrl: summaryBlob.url,
-              documentName: `_project_summary.md`,
-            });
-
-            extractedFiles.push({
-              documentId: summaryDoc.id,
-              documentUrl: summaryBlob.url,
-              documentName: `_project_summary.md`,
+          const summaryLifecycle = await createDocumentLifecycle({
+            companyId: BigInt(eventData.companyId),
+            userId: eventData.userId,
+            title: `_project_summary.md`,
+            category: eventData.category,
+            url: summaryBlob.url,
+            creationKey: `archive:${eventData.documentId}:summary`,
+            processingUrl: summaryBlob.url,
+            mimeType: "text/markdown",
+            sourceArchiveName: archiveName,
+            sourceArchiveEntry: null,
+            processing: {
               originalFilename: `_project_summary.md`,
-              mimeType: "text/markdown",
-              jobId: summaryJobId,
-            });
+              embeddingIndexKey: eventData.options?.embeddingIndexKey,
+            },
+          });
 
-            console.log(
-              `[ProcessDocument] Generated project summary for ${archiveName} (${summaryText.length} chars)`,
-            );
-          }
+          extractedFiles.push({
+            documentId: summaryLifecycle.documentId,
+            documentUrl: summaryBlob.url,
+            documentName: `_project_summary.md`,
+            originalFilename: `_project_summary.md`,
+            mimeType: "text/markdown",
+          });
+
+          console.log(
+            `[ProcessDocument] Generated project summary for ${archiveName} (${summaryText.length} chars)`,
+          );
         });
       }
-
-      const FAN_OUT_BATCH_SIZE = 10;
-      if (extractedFiles.length > 0) {
-        for (let i = 0; i < extractedFiles.length; i += FAN_OUT_BATCH_SIZE) {
-          const batch = extractedFiles.slice(i, i + FAN_OUT_BATCH_SIZE);
-          await step.sendEvent(
-            `fan-out-batch-${i}`,
-            batch.map((f) => ({
-              name: "document/process.requested" as const,
-              data: {
-                jobId: f.jobId,
-                documentUrl: f.documentUrl,
-                documentName: f.documentName,
-                originalFilename: f.originalFilename,
-                companyId: eventData.companyId,
-                userId: eventData.userId,
-                documentId: f.documentId,
-                category: eventData.category,
-                mimeType: f.mimeType,
-                options: {
-                  embeddingIndexKey: eventData.options?.embeddingIndexKey,
-                },
-              },
-            })),
-          );
-          if (i + FAN_OUT_BATCH_SIZE < extractedFiles.length) {
-            await step.sleep(`fan-out-delay-${i}`, "2s");
-          }
-        }
-      }
-
       await step.run("delete-zip-document", async () => {
         await db
           .delete(ocrJobs)

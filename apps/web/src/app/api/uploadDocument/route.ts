@@ -79,6 +79,7 @@ export async function POST(request: Request) {
         },
         documentName,
         rawDocumentUrl,
+        creationKey: `upload:${rawDocumentUrl}`,
         category,
         preferredProvider,
         explicitStorageType,

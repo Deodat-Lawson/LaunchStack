@@ -97,6 +97,7 @@ export async function POST(
               user: { userId, companyId: batch.companyId },
               documentName: file.filename,
               rawDocumentUrl: file.storageUrl,
+              creationKey: `batch:${batchId}:file:${file.id}`,
               requestUrl: request.url,
               category: resolveCategory(file.metadata, batch.metadata, category),
               preferredProvider,

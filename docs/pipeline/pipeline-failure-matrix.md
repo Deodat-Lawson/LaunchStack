@@ -3,7 +3,7 @@
 > Companion to `[pipeline-architecture.md](./pipeline-architecture.md)`.
 > Stage names match that doc. Cite failures by stable ID (e.g. `U7`) in tickets/PRs.
 
-**How to use:** skim the [Index](#index) for backlog (filter **Needs fix**). Open a detail card for mechanics and left-behind state.
+**How to use:** skim the [Index](#index) for unresolved backlog (filter **Needs fix**). Resolved lifecycle invariants are retained below as regression contracts; remaining operational limitations stay explicitly labeled.
 
 ---
 
@@ -32,10 +32,10 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 | [U3](#u3) | Upload / dispatch | Postgres                  | `userId` not found / active-company resolve errors        | Working as intended |
 | [U4](#u4) | Upload / dispatch | Postgres (credits)        | Insufficient credits masked as generic 500                | Needs fix (Low)     |
 | [U5](#u5) | Upload / dispatch | Object storage + Postgres | `document` insert fails; upstream blob orphaned           | Needs discussion    |
-| [U6](#u6) | Upload / dispatch | Postgres                  | `createInitialVersion` fails after `document` committed   | Needs fix (Mid)     |
-| [U7](#u7) | Upload / dispatch | Inngest                   | Dispatch throws after `document`+version committed        | Needs fix (High)    |
-| [U8](#u8) | Upload / dispatch | Inngest + Postgres        | Event dispatched before / without durable `ocr_jobs` row  | Needs fix (High)    |
-| [U9](#u9) | Upload / dispatch | Postgres + Inngest        | Client retry or concurrent upload creates duplicate trees | Needs discussion    |
+| [U6](#u6) | Upload / dispatch | Postgres                  | Initial lifecycle write fails inside the Document Creation Module | Working as intended |
+| [U7](#u7) | Upload / dispatch | Job dispatcher            | Dispatch fails after the lifecycle transaction commits           | Working as intended |
+| [U8](#u8) | Upload / dispatch | Inngest + Postgres        | Dispatch could run before a durable, version-linked job exists   | Working as intended |
+| [U9](#u9) | Upload / dispatch | Postgres + Inngest        | Retry or concurrent request repeats the same logical upload      | Working as intended |
 
 
 | ID        | Stage | Dependency                | Failure mode                                                    | Status                   |
@@ -89,9 +89,9 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 
 ## Upload / dispatch
 
-> Scope: `POST /api/uploadDocument` → validation → `document` / `document_versions` / `ocr_jobs` → Inngest event. Stops at handoff to Step A.
+> Scope: `POST /api/uploadDocument` → validation → Document Creation Module → committed lifecycle → post-commit job dispatch. Stops at handoff to Step A.
 >
-> **Structural note:** all three DB writes run in the HTTP handler **before** `process-document`, so they are **not** in `step.run` (no Inngest memoization). No transaction spans the three tables: `document` insert (`[create-document.ts:29](../../apps/web/src/server/services/create-document.ts#L29)`), then `document_versions` + `currentVersionId` (`[document-upload.ts:88](../../apps/web/src/server/services/document-upload.ts#L88)`), then `ocr_jobs` (`[trigger-job.ts:50](../../apps/web/src/server/services/trigger-job.ts#L50)`). The event is dispatched **before** the `ocr_jobs` insert (`[trigger.ts:92](../../packages/core/src/ocr/trigger.ts#L92)`).
+> **Structural note:** the Module is the lifecycle seam for active intake, including ZIP children and the generated archive summary. One transaction writes `document`, the v1 `document_versions` row and `currentVersionId`, and its linked `ocr_jobs` row. A stable `creationKey` converges retries and concurrency; dispatch runs only after commit with the same stable `jobId` and required `versionId` (`[document-creation.ts:93](../../apps/web/src/server/services/document-creation.ts#L93)`, `[trigger.ts:55](../../packages/core/src/ocr/trigger.ts#L55)`). The dispatcher is not an outbox: if remote acceptance is ambiguous, retry with the stable event ID and rely on runner dedupe.
 
 ### U1
 
@@ -135,35 +135,35 @@ Detail cards also record **What happens**, **Left behind** (state + how you’d 
 
 ### U6
 
-`**createInitialVersion` fails after `document` insert committed** · Postgres · Needs fix (Mid)
+**Initial lifecycle write fails inside the Document Creation Module** · Postgres · Working as intended
 
-- **What happens:** Version insert + `currentVersionId` update share a transaction and roll back together; the earlier `document` insert does not (`[document-upload.ts:88](../../apps/web/src/server/services/document-upload.ts#L88)`). Route catch → 500.
-- **Left behind:** Orphan `document` with `currentVersionId=NULL`, `ocrProcessed=false`; no version, no `ocr_jobs`, no event. Never processes. 500 to caller; orphan only findable via `currentVersionId IS NULL` and no job.
-- **Notes:** Low probability (same DB, back-to-back) but structural. Wrap `document` + v1 version in one transaction.
+- **What happens:** `createDocumentLifecycle` wraps the `document`, v1 `document_versions`/`currentVersionId`, and linked `ocr_jobs` writes in one transaction. A failure rolls back the complete lifecycle before the caller receives the error.
+- **Left behind:** No partial document/version/job tree from this path. An already-uploaded blob can still be orphaned as described in [U5](#u5).
+- **Notes:** Resolved by the transactional Module. The legacy repair script remains for rows created before this invariant existed.
 
 ### U7
 
-`**dispatcher.dispatch` throws after `document`+version committed** · Inngest · Needs fix (High)
+**Dispatch fails after the lifecycle transaction commits** · Job dispatcher · Working as intended
 
-- **What happens:** `triggerDocumentProcessing` wraps + rethrows (`[trigger.ts:103](../../packages/core/src/ocr/trigger.ts#L103)`); `ocr_jobs` insert never reached; route catch → 500.
-- **Left behind:** `document` + `document_versions` committed; **no** `ocr_jobs`, **no** event. Looks pending (`ocrProcessed=false`) forever. Loud at request time; stranded doc silent afterward.
-- **Notes:** Classic dispatch-after-commit gap. No outbox/retry. Client retry of the 500 can also produce [U9](#u9) duplicates.
+- **What happens:** Dispatch runs after the transaction commits. A dispatcher error is returned to the caller and the linked job is marked `failed` with the error, so the same lifecycle can be retried.
+- **Left behind:** The document, current version, and job remain linked; there is no stranded document or missing job. The remote event may or may not have been accepted.
+- **Notes:** The persistence invariant is fixed, but this is not atomic network delivery: dispatch is not an outbox. When acceptance is ambiguous, retry the same stable event ID and rely on runner dedupe.
 
 ### U8
 
-**Event dispatched before / without a durable `ocr_jobs` row** · Inngest + Postgres · Needs fix (High)
+**Dispatch could run before a durable, version-linked job exists** · Inngest + Postgres · Working as intended
 
-- **What happens:** Event is sent first; then `db.insert(ocrJobs)` may throw → 500 with event already in flight (`[trigger-job.ts:50](../../apps/web/src/server/services/trigger-job.ts#L50)`). Same ordering also creates a success-path race (worker starts before the insert commits).
-- **Left behind:** `document` + version committed; often **no** `ocr_jobs`. Worker still runs: `savePipelineState` SELECT-then-UPDATE is a silent no-op on a missing row; `loadPipelineState` later throws. Permanent insert failure → retries keep failing. Transient race → Inngest retries usually recover once the row exists (worst case: wasted OCR on attempt 1).
-- **Notes:** Insert `ocr_jobs` **before** dispatch, or use an outbox after commit.
+- **What happens:** The Module commits the linked `ocr_jobs` row before post-commit dispatch. The event carries the stable `jobId` and required `versionId`; the worker cannot start from this path without a durable job and explicit version.
+- **Left behind:** A dispatch failure has the explicit retryable-job state described in [U7](#u7), not an event racing a missing row. An ambiguously accepted event is handled by stable event-ID retry/dedupe.
+- **Notes:** Job-before-dispatch and strict version propagation close the prior race and version-mixing gaps. This does not add an outbox.
 
 ### U9
 
-**Client retries the POST, or concurrent uploads of the same file** · Postgres + Inngest · Needs discussion
+**Retry or concurrent request repeats the same logical upload** · Postgres + Inngest · Working as intended
 
-- **What happens:** No idempotency key and no unique constraint on `(companyId, url)`. Each request creates a new `document` + v1 version + `ocr_jobs` + event. Writes are pre-Inngest, so memoization does not apply.
-- **Left behind:** Duplicate document trees; file processed 2× (double work/credits). Silent — no constraint violation.
-- **Notes:** Re-upload may be intended product behavior. Sharp case: [U7](#u7) 500 after commit → client retry → duplicates. Concurrent same-file uploads don’t collide on `versionNumber=1` because each gets a distinct `documentId`.
+- **What happens:** Active intake supplies a stable `creationKey`; the Module's unique key and transaction converge retries/concurrency on one document, version, and job. Dispatch reuses the stable job/event identity rather than creating a second tree.
+- **Left behind:** No duplicate lifecycle tree or duplicate processing for the same logical request. A caller that intentionally supplies a different logical key still creates a new upload.
+- **Notes:** This also resolves archive lifecycle gaps: ZIP children use normalized-entry keys and the generated summary uses its own stable key, and both go through the Module with strict `versionId` propagation.
 
 ### A1
 Sidecar unreachable/non-200 → silent fallback provider, `pageCount` forced to `0` · ocr-router sidecar (external) · Needs fix (Medium-High)

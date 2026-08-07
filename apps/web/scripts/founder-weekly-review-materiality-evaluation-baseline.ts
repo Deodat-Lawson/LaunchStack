@@ -35,3 +35,41 @@ export const FOUNDER_WEEKLY_REVIEW_MATERIALITY_DETERMINISTIC_BASELINE = Object.f
         reductionRatio: "bounded raw audit excerpt characters divided by structurally selected condensed evidence characters",
     },
 } as const);
+
+/** Historical analyzer reference points; these are not regenerated or tuned by v2 evaluation. */
+export const FOUNDER_WEEKLY_REVIEW_MATERIALITY_ANALYZER_V1_BASELINES = Object.freeze({
+    offline: {
+        strategy: "materiality-analyzer-offline-v1",
+        materialRecall: 0.9677,
+        materialPrecision: 0.7692,
+        falseMaterialRate: 0.6429,
+        uncertainRate: 0.2381,
+        missedMaterialRate: 0.0323,
+    },
+    openAiLive: {
+        strategy: "materiality-analyzer-live-v1",
+        provider: "openai",
+        model: "gpt-4o-mini",
+        semanticQualityMeasured: false,
+        calls: 18,
+        successfulCalls: 0,
+        timeouts: 18,
+    },
+    kimiLive: {
+        strategy: "materiality-analyzer-kimi-live-v1",
+        provider: "kimi",
+        model: "kimi-k2.6",
+        promptVersion: "document-change-materiality/v1",
+        categoryAccuracy: 0.9355,
+        materialRecall: 1,
+        materialPrecision: 0.7949,
+        falseMaterialRate: 0.5714,
+        uncertainRate: 0.1667,
+        missedMaterialRate: 0,
+        uncertainMaterialRate: 0,
+        uncertainNonMaterialRate: 0.2143,
+        validAnalyzerCalls: 15,
+        invalidAnalyzerResponses: 3,
+        timeouts: 0,
+    },
+} as const);

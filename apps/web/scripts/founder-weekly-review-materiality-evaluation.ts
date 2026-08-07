@@ -26,6 +26,7 @@ import { OfflineFixtureDocumentChangeMaterialityAnalyzer } from "./founder-weekl
 
 export const MATERIALITY_EVALUATION_RUN_ID = "deterministic-v1" as const;
 export const MATERIALITY_ANALYZER_EVALUATION_RUN_ID = "materiality-analyzer-v1" as const;
+export const MATERIALITY_ANALYZER_KIMI_LIVE_V2_RUN_ID = "materiality-analyzer-kimi-live-v2" as const;
 export const MATERIALITY_EVALUATION_ARTIFACT_ROOT =
     ".artifacts/founder-weekly-review/materiality-evaluation" as const;
 
@@ -679,7 +680,10 @@ function percentage(value: number): string {
     return `${(value * 100).toFixed(1)}%`;
 }
 
-export function renderMaterialityEvaluationArtifacts(result: MaterialityEvaluationResult): {
+export function renderMaterialityEvaluationArtifacts(
+    result: MaterialityEvaluationResult,
+    options: { providerInvoked?: boolean } = {},
+): {
     summaryJson: string;
     failuresJson: string;
     evaluationMarkdown: string;
@@ -734,7 +738,9 @@ export function renderMaterialityEvaluationArtifacts(result: MaterialityEvaluati
         "- Alignment miss rate is unrecovered intended modified/unchanged/split/merge relations divided by all such intended relations.",
         "- Reduction ratio is bounded raw audit excerpt characters divided by structurally selected condensed evidence characters.",
         "",
-        "Generated artifacts contain synthetic fixture text only; no provider was invoked.",
+        options.providerInvoked
+            ? "Generated artifacts contain synthetic fixture text only; the explicitly enabled materiality analyzer provider was invoked."
+            : "Generated artifacts contain synthetic fixture text only; no provider was invoked.",
         "",
     ].join("\n");
     return {
@@ -746,10 +752,11 @@ export function renderMaterialityEvaluationArtifacts(result: MaterialityEvaluati
 
 export async function writeMaterialityEvaluationArtifacts(
     result: MaterialityEvaluationResult,
-    runId: string = MATERIALITY_EVALUATION_RUN_ID
+    runId: string = MATERIALITY_EVALUATION_RUN_ID,
+    options: { providerInvoked?: boolean } = {},
 ): Promise<{ directory: string; summary: string; failures: string; evaluation: string }> {
     const directory = evaluationArtifactDirectory(runId);
-    const artifacts = renderMaterialityEvaluationArtifacts(result);
+    const artifacts = renderMaterialityEvaluationArtifacts(result, options);
     await mkdir(directory, { recursive: true });
     const paths = {
         directory,
@@ -769,6 +776,14 @@ async function main(): Promise<void> {
     const mode = process.env.FWR_MATERIALITY_EVAL_MODE ?? "offline";
     let result: MaterialityEvaluationResult;
     let defaultRunId: string;
+    let liveCallRecords: Array<{
+        durationMs: number;
+        status: "success" | "failure";
+        provider?: string;
+        model?: string;
+        promptVersion?: string;
+        errorCode?: string;
+    }> | undefined;
     if (mode === "deterministic") {
         result = runMaterialityEvaluation();
         defaultRunId = MATERIALITY_EVALUATION_RUN_ID;
@@ -776,27 +791,75 @@ async function main(): Promise<void> {
         result = await runMaterialityAnalyzerEvaluation();
         defaultRunId = MATERIALITY_ANALYZER_EVALUATION_RUN_ID;
     } else if (mode === "live") {
+        const { config: loadDotenv } = await import("dotenv");
+        loadDotenv({ path: resolve(process.cwd(), "../../.env"), quiet: true });
         const { createConfiguredDocumentChangeMaterialityAnalyzer } = await import("../src/server/founder-weekly-review/document-change-materiality-analyzer");
         const maximumCalls = Math.max(1, Math.min(64, Number(process.env.FWR_MATERIALITY_EVAL_MAX_CALLS ?? 64) || 64));
         const live = createConfiguredDocumentChangeMaterialityAnalyzer();
         if (!live) throw new Error("Live materiality evaluation requires FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED=true.");
         let calls = 0;
+        liveCallRecords = [];
         const bounded: DocumentChangeMaterialityAnalyzer = {
-            analyze(input) {
+            async analyze(input) {
                 if (calls >= maximumCalls) throw new Error("Live materiality evaluation reached its explicit global call limit.");
                 calls++;
-                return live.analyze(input);
+                const startedAt = Date.now();
+                try {
+                    const response = await live.analyze(input);
+                    liveCallRecords!.push({
+                        durationMs: Date.now() - startedAt,
+                        status: "success",
+                        ...(response.metadata?.provider ? { provider: response.metadata.provider } : {}),
+                        ...(response.metadata?.model ? { model: response.metadata.model } : {}),
+                        ...(response.metadata?.promptVersion ? { promptVersion: response.metadata.promptVersion } : {}),
+                    });
+                    return response;
+                } catch (error) {
+                    const errorCode = error && typeof error === "object" && "code" in error && typeof error.code === "string"
+                        ? error.code : "unknown";
+                    liveCallRecords!.push({ durationMs: Date.now() - startedAt, status: "failure", errorCode });
+                    throw error;
+                }
             },
         };
         result = await runMaterialityAnalyzerEvaluation(bounded);
-        defaultRunId = "materiality-analyzer-live-v1";
+        defaultRunId = MATERIALITY_ANALYZER_KIMI_LIVE_V2_RUN_ID;
     } else {
         throw new Error("FWR_MATERIALITY_EVAL_MODE must be deterministic, offline, or live.");
     }
     const artifacts = await writeMaterialityEvaluationArtifacts(
         result,
         process.env.FWR_MATERIALITY_EVALUATION_RUN_ID ?? defaultRunId,
+        { providerInvoked: mode === "live" },
     );
+    if (liveCallRecords) {
+        const durations = liveCallRecords.map(record => record.durationMs).sort((a, b) => a - b);
+        const percentile = (fraction: number) => durations.length === 0 ? 0 : durations[Math.min(durations.length - 1, Math.ceil(durations.length * fraction) - 1)]!;
+        const firstSuccess = liveCallRecords.find(record => record.status === "success");
+        await writeFile(resolve(artifacts.directory, "call-summary.json"), `${JSON.stringify({
+            strategy: defaultRunId,
+            provider: firstSuccess?.provider ?? null,
+            model: firstSuccess?.model ?? null,
+            promptVersion: firstSuccess?.promptVersion ?? null,
+            totalCalls: liveCallRecords.length,
+            successfulCalls: liveCallRecords.filter(record => record.status === "success").length,
+            failedCalls: liveCallRecords.filter(record => record.status === "failure").length,
+            failuresByCode: Object.fromEntries([...new Set(liveCallRecords.flatMap(record => record.errorCode ? [record.errorCode] : []))]
+                .sort().map(code => [code, liveCallRecords!.filter(record => record.errorCode === code).length])),
+            latencyMs: {
+                minimum: durations[0] ?? 0,
+                median: percentile(0.5),
+                p95: percentile(0.95),
+                maximum: durations.at(-1) ?? 0,
+                under5Seconds: durations.filter(value => value < 5_000).length,
+                from5To10Seconds: durations.filter(value => value >= 5_000 && value < 10_000).length,
+                from10To15Seconds: durations.filter(value => value >= 10_000 && value < 15_000).length,
+                atLeast15Seconds: durations.filter(value => value >= 15_000).length,
+                total: durations.reduce((total, value) => total + value, 0),
+            },
+            providerTokenUsageAvailable: false,
+        }, null, 2)}\n`, "utf8");
+    }
     console.log(JSON.stringify({ ...result.summary, artifactDirectory: artifacts.directory }));
 }
 

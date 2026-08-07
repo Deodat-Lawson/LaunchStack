@@ -41,10 +41,11 @@ export class OfflineFixtureDocumentChangeMaterialityAnalyzer implements Document
         ) / combined.length;
         const replacement = input.changes.some(change => change.changeType === "added")
             && input.changes.some(change => change.changeType === "removed");
-        const result = input.deterministicCategory !== "uncertain" && input.deterministicCategory !== "editorial_rewrite"
+        const deterministicCategory = input.deterministicAssessment.category;
+        const result = deterministicCategory !== "uncertain" && deterministicCategory !== "editorial_rewrite"
             ? {
                 disposition: "material" as const,
-                category: input.deterministicCategory,
+                category: deterministicCategory,
                 summary: "The supplied fragments contain a deterministic factual change.",
                 confidence: 0.86,
             }

@@ -7,7 +7,10 @@ import {
     runMaterialityAnalyzerEvaluation,
     runMaterialityEvaluation,
 } from "../../scripts/founder-weekly-review-materiality-evaluation";
-import { FOUNDER_WEEKLY_REVIEW_MATERIALITY_DETERMINISTIC_BASELINE } from "../../scripts/founder-weekly-review-materiality-evaluation-baseline";
+import {
+    FOUNDER_WEEKLY_REVIEW_MATERIALITY_ANALYZER_V1_BASELINES,
+    FOUNDER_WEEKLY_REVIEW_MATERIALITY_DETERMINISTIC_BASELINE,
+} from "../../scripts/founder-weekly-review-materiality-evaluation-baseline";
 import {
     MATERIALITY_EVALUATION_SCENARIOS,
 } from "../../scripts/founder-weekly-review-materiality-evaluation-fixtures";
@@ -28,6 +31,20 @@ describe("Founder Weekly Review realistic materiality evaluation harness", () =>
                 ...scenario.expected.expectedAlignmentRelations,
             ]) expect(expectation.id.startsWith(`${scenario.id}:`)).toBe(true);
         }
+    });
+
+    it("freezes prior offline, failed OpenAI, and canonical Kimi-v1 analyzer reference points", () => {
+        expect(FOUNDER_WEEKLY_REVIEW_MATERIALITY_ANALYZER_V1_BASELINES).toEqual(expect.objectContaining({
+            offline: expect.objectContaining({ materialRecall: 0.9677, falseMaterialRate: 0.6429 }),
+            openAiLive: expect.objectContaining({ semanticQualityMeasured: false, timeouts: 18 }),
+            kimiLive: expect.objectContaining({
+                promptVersion: "document-change-materiality/v1",
+                materialRecall: 1,
+                materialPrecision: 0.7949,
+                falseMaterialRate: 0.5714,
+                invalidAnalyzerResponses: 3,
+            }),
+        }));
     });
 
     it("calculates explicit confusion, alignment, condensation, and budget metrics", () => {

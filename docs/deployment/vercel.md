@@ -140,6 +140,8 @@ The Launchstack Python sidecars (`services/sidecar`, `services/ocr-router`, `ser
 | `OCR_ROUTER_URL` | PDF-rendering + vision classifier (`services/ocr-router`) |
 | `OCR_WORKER_URL` | Docling/Marker worker (optional) |
 
+The app forwards its own OCR credentials — `GOOGLE_AI_API_KEY` included — to `OCR_ROUTER_URL` with each routing request, so a separately hosted router needs no copy of them in its own environment. Set them once on the Vercel app.
+
 **Or** skip sidecars entirely and use hosted providers. Transcription, reranking, NER and OCR/VLM all default to Gemini on `GOOGLE_AI_API_KEY`; Azure Document Intelligence remains available for scanned-layout OCR. Embeddings are the exception — set `EMBEDDING_API_BASE_URL`/`EMBEDDING_API_KEY` explicitly, since the model is tied to stored vectors.
 
 ## 6. First deploy

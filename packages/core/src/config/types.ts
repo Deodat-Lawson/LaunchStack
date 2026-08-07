@@ -138,8 +138,15 @@ export interface OcrConfig {
    * Credentials forwarded to the OCR router so it can call an OpenAI-compatible
    * vision endpoint for classification. Kept alongside the router URL because
    * it's the only caller that needs them.
+   *
+   * googleApiKey pairs with the router's default endpoint: with no aiBaseUrl
+   * named, the router falls back to Gemini, and only a Google credential
+   * travels there. A router deployed apart from the app (the Vercel topology)
+   * has no environment of its own to read it from, so it must arrive here or
+   * classification silently drops to local SigLIP.
    */
   vision?: {
+    googleApiKey?: string;
     openaiApiKey?: string;
     aiApiKey?: string;
     aiBaseUrl?: string;

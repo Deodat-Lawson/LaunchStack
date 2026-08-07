@@ -4,6 +4,7 @@
  * Falls back to configured heuristics if the sidecar is unavailable.
  */
 
+import type { OcrConfig } from "../config/types";
 import { getOcrConfig } from "./config";
 import type { OCRProvider } from "./types";
 
@@ -89,6 +90,39 @@ function getDefaultOCRProvider(): OCRProvider {
 }
 
 /**
+ * Builds the configuration map the router needs to reach the same providers
+ * this app is configured for.
+ *
+ * Absent values are omitted, never sent as "": the router writes this map
+ * straight into its own process.env, so a blank would erase a credential the
+ * router container supplies for itself (GOOGLE_AI_API_KEY in docker-compose).
+ * Silence means "I have no opinion", not "forget what you have".
+ */
+function buildRouterEnv(cfg: OcrConfig): Record<string, string> {
+  const env: Record<string, string> = {};
+  const put = (key: string, value: string | undefined) => {
+    if (value) env[key] = value;
+  };
+
+  put("OCR_DEFAULT_PROVIDER", cfg.defaultProvider);
+  put("OCR_WORKER_URL", cfg.workerUrl);
+  put("AZURE_DOC_INTELLIGENCE_KEY", cfg.azure?.key);
+  put("AZURE_DOC_INTELLIGENCE_ENDPOINT", cfg.azure?.endpoint);
+  put("LANDING_AI_API_KEY", cfg.landingAi?.apiKey);
+  put("DATALAB_API_KEY", cfg.datalabApiKey);
+  // The router's vision endpoint defaults to Gemini, so the Google key is the
+  // one that pairs with the default. Omitting it leaves a remotely hosted
+  // router with no hosted credential at all, and it drops to local SigLIP.
+  put("GOOGLE_AI_API_KEY", cfg.vision?.googleApiKey);
+  put("OPENAI_API_KEY", cfg.vision?.openaiApiKey);
+  put("AI_API_KEY", cfg.vision?.aiApiKey);
+  put("AI_BASE_URL", cfg.vision?.aiBaseUrl);
+  put("OCR_VISION_MODEL", cfg.visionModel);
+
+  return env;
+}
+
+/**
  * Determines the optimal OCR provider for a document by delegating to the
  * ocr-router sidecar (which runs the vision model and PDF analysis).
  * Falls back to a simple env-based default if the sidecar is unavailable.
@@ -103,18 +137,7 @@ export async function determineDocumentRouting(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         documentUrl,
-        env: {
-          OCR_DEFAULT_PROVIDER: cfg.defaultProvider ?? "",
-          OCR_WORKER_URL: cfg.workerUrl ?? "",
-          AZURE_DOC_INTELLIGENCE_KEY: cfg.azure?.key ?? "",
-          AZURE_DOC_INTELLIGENCE_ENDPOINT: cfg.azure?.endpoint ?? "",
-          LANDING_AI_API_KEY: cfg.landingAi?.apiKey ?? "",
-          DATALAB_API_KEY: cfg.datalabApiKey ?? "",
-          OPENAI_API_KEY: cfg.vision?.openaiApiKey ?? "",
-          AI_API_KEY: cfg.vision?.aiApiKey ?? "",
-          AI_BASE_URL: cfg.vision?.aiBaseUrl ?? "",
-          OCR_VISION_MODEL: cfg.visionModel ?? "",
-        },
+        env: buildRouterEnv(cfg),
       }),
     });
 

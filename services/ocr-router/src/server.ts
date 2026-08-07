@@ -1,5 +1,6 @@
 import express from "express";
 import { determineDocumentRouting, renderPagesToImages } from "./complexity.js";
+import { applyRequestEnv } from "./request-env.js";
 
 const app = express();
 
@@ -27,12 +28,10 @@ app.post("/route", async (req, res) => {
       return;
     }
 
-    // Inject env vars so the routing logic can check provider availability
-    if (env) {
-      for (const [key, value] of Object.entries(env)) {
-        process.env[key] = value;
-      }
-    }
+    // Inject env vars so the routing logic can check provider availability.
+    // Resets to the container's own configuration first, so a caller that omits
+    // a variable leaves the router's value intact instead of blanking it.
+    applyRequestEnv(env);
 
     const decision = await determineDocumentRouting(documentUrl);
     res.json(decision);

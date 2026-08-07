@@ -128,6 +128,7 @@ function buildConfig(): CoreConfig {
       workerUrl: server.OCR_WORKER_URL,
       routerUrl: server.OCR_ROUTER_URL,
       vision: {
+        googleApiKey: server.GOOGLE_AI_API_KEY,
         openaiApiKey: server.OPENAI_API_KEY,
         aiApiKey: server.AI_API_KEY,
         aiBaseUrl: server.AI_BASE_URL,

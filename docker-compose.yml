@@ -110,6 +110,8 @@ services:
       # SigLIP when no credential is set). The endpoint defaults to Gemini, so
       # GOOGLE_AI_API_KEY is the credential that pairs with it; the other two
       # are used only when AI_BASE_URL names a different endpoint.
+      # The app also forwards its own copies per request, which take precedence
+      # when set. These stay so the router works when called by anything else.
       GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       AI_API_KEY: ${AI_API_KEY:-}

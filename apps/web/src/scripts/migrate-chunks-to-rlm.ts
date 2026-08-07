@@ -177,9 +177,11 @@ function extractKeywords(content: string): string[] {
         .map(([word]) => word);
 }
 
+
 interface MigrationStats {
     documentsProcessed: number;
     documentsSkipped: number;
+    documentsMissingVersion: number;
     structureNodesCreated: number;
     sectionsCreated: number;
     previewsCreated: number;
@@ -187,10 +189,24 @@ interface MigrationStats {
 }
 
 async function migrateDocument(
-    doc: { id: number; title: string; companyId: bigint },
+    doc: {
+        id: number;
+        title: string;
+        companyId: bigint;
+        currentVersionId: bigint | null;
+    },
     stats: MigrationStats
 ): Promise<void> {
     const docId = BigInt(doc.id);
+    const versionId = doc.currentVersionId;
+
+    if (versionId === null) {
+        stats.documentsSkipped++;
+        stats.documentsMissingVersion++;
+        throw new Error(
+            `Document ${doc.id} has no current version; refusing to create NULL-versioned RLM rows`
+        );
+    }
 
     // Check if already migrated (has documentMetadata entry)
     const existingMetadata = await db
@@ -242,6 +258,7 @@ async function migrateDocument(
     const [rootStructure] = await db
         .insert(documentStructure)
         .values({
+            versionId,
             documentId: docId,
             parentId: null,
             level: 0,
@@ -268,6 +285,7 @@ async function migrateDocument(
         const [pageStructure] = await db
             .insert(documentStructure)
             .values({
+                versionId,
                 documentId: docId,
                 parentId: BigInt(rootStructure!.id),
                 level: 1,
@@ -289,6 +307,7 @@ async function migrateDocument(
             const chunkTokens = estimateTokens(chunk.content);
 
             await db.insert(documentSections).values({
+                versionId,
                 documentId: docId,
                 structureId: BigInt(pageStructure!.id),
                 content: chunk.content,
@@ -309,6 +328,7 @@ async function migrateDocument(
     const summary = generatePreview(fullContent, 1000);
 
     await db.insert(documentMetadata).values({
+        versionId,
         documentId: docId,
         totalTokens,
         totalSections: chunks.length,
@@ -336,12 +356,14 @@ async function migrateDocument(
     // Create document-level previews
     await db.insert(documentPreviews).values([
         {
+            versionId,
             documentId: docId,
             previewType: "summary",
             content: summary,
             tokenCount: estimateTokens(summary),
         },
         {
+            versionId,
             documentId: docId,
             previewType: "keywords",
             content: keywords.join(", "),
@@ -349,6 +371,7 @@ async function migrateDocument(
         },
         {
             documentId: docId,
+            versionId,
             previewType: "first_paragraph",
             content: generatePreview(fullContent, 300),
             tokenCount: estimateTokens(generatePreview(fullContent, 300)),
@@ -366,6 +389,7 @@ async function main(): Promise<void> {
     const stats: MigrationStats = {
         documentsProcessed: 0,
         documentsSkipped: 0,
+        documentsMissingVersion: 0,
         structureNodesCreated: 0,
         sectionsCreated: 0,
         previewsCreated: 0,
@@ -378,6 +402,7 @@ async function main(): Promise<void> {
             id: document.id,
             title: document.title,
             companyId: document.companyId,
+            currentVersionId: document.currentVersionId,
         })
         .from(document)
         .orderBy(asc(document.id));
@@ -405,6 +430,7 @@ async function main(): Promise<void> {
     console.log("\n✅ Migration complete!");
     console.log(`   Documents processed: ${stats.documentsProcessed}`);
     console.log(`   Documents skipped: ${stats.documentsSkipped}`);
+    console.log(`   Missing current versions: ${stats.documentsMissingVersion}`);
     console.log(`   Structure nodes created: ${stats.structureNodesCreated}`);
     console.log(`   Sections created: ${stats.sectionsCreated}`);
     console.log(`   Previews created: ${stats.previewsCreated}`);

@@ -21,11 +21,16 @@ import {
 import { Document } from "@langchain/core/documents";
 import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 import { db } from "~/server/db/index";
-import { documentSections } from "@launchstack/core/db/schema";
-import { inArray, and } from "drizzle-orm";
+import { document, documentSections } from "@launchstack/core/db/schema";
+import { inArray, and, eq, sql, type SQLWrapper } from "drizzle-orm";
 import { isNeo4jConfigured, getNeo4jSession } from "@launchstack/core/graph";
 import neo4j, { type Session } from "neo4j-driver";
 import { getEngine } from "~/server/engine";
+
+const currentVersionPredicate = (
+  versionColumn: SQLWrapper,
+  documentVersionColumn: SQLWrapper = document.currentVersionId,
+) => sql`${versionColumn} = ${documentVersionColumn}`;
 
 interface Neo4jGraphRetrieverConfig extends BaseRetrieverInput {
   companyId: number;
@@ -196,7 +201,14 @@ export class Neo4jGraphRetriever extends BaseRetriever {
         documentId: documentSections.documentId,
       })
       .from(documentSections)
-      .where(whereClause)
+      .innerJoin(document, eq(documentSections.documentId, document.id))
+      .where(
+        and(
+          whereClause,
+          eq(document.companyId, BigInt(this.companyId)),
+          currentVersionPredicate(documentSections.versionId),
+        ),
+      )
       .limit(this.topK);
 
     return rows.map(

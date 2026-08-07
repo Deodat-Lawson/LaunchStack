@@ -1,6 +1,6 @@
 import { db } from "~/server/db/index";
 import { and, eq, inArray, sql } from "drizzle-orm";
-import { documentSections, pdfChunks, documentRetrievalChunks } from "@launchstack/core/db/schema";
+import { document, documentSections, documentRetrievalChunks } from "@launchstack/core/db/schema";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 
 interface ANNConfig {
@@ -87,7 +87,11 @@ export class ANNOptimizer {
                 distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
             })
             .from(documentSections)
-            .where(inArray(documentSections.documentId, documentIds.map(id => BigInt(id))))
+            .innerJoin(document, eq(documentSections.documentId, document.id))
+            .where(and(
+                inArray(documentSections.documentId, documentIds.map(id => BigInt(id))),
+                eq(documentSections.versionId, document.currentVersionId),
+            ))
             .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
             .limit(approximateLimit);
 
@@ -99,28 +103,6 @@ export class ANNOptimizer {
                 distance: Number(r.distance ?? 1),
             }));
 
-            // Fallback to legacy table
-            if (rows.length === 0 && documentIds.length === 1) {
-                const legacyResults = await db.select({
-                    id: pdfChunks.id,
-                    content: pdfChunks.content,
-                    page: pdfChunks.page,
-                    documentId: pdfChunks.documentId,
-                    distance: sql<number>`${pdfChunks.embedding} <=> ${embeddingStr}::vector`,
-                })
-                .from(pdfChunks)
-                .where(eq(pdfChunks.documentId, BigInt(documentIds[0]!)))
-                .orderBy(sql`${pdfChunks.embedding} <=> ${embeddingStr}::vector`)
-                .limit(approximateLimit);
-
-                rows = legacyResults.map(r => ({
-                    id: r.id,
-                    content: r.content,
-                    page: r.page,
-                    documentId: Number(r.documentId),
-                    distance: Number(r.distance ?? 1),
-                }));
-            }
 
             const refinedResults = rows
                 .map(row => ({
@@ -171,8 +153,10 @@ export class ANNOptimizer {
                 distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
             })
             .from(documentSections)
+            .innerJoin(document, eq(documentSections.documentId, document.id))
             .where(and(
                 inArray(documentSections.id, clusterChunkIds),
+                eq(documentSections.versionId, document.currentVersionId),
                 sql`${documentSections.embedding} <=> ${embeddingStr}::vector <= ${threshold}`,
             ))
             .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
@@ -226,8 +210,10 @@ export class ANNOptimizer {
                     distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
                 })
                 .from(documentSections)
+                .innerJoin(document, eq(documentSections.documentId, document.id))
                 .where(and(
                     eq(documentSections.documentId, BigInt(docId)),
+                    eq(documentSections.versionId, document.currentVersionId),
                     sql`${documentSections.embedding} <=> ${embeddingStr}::vector <= ${threshold}`,
                 ))
                 .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
@@ -279,7 +265,11 @@ export class ANNOptimizer {
                 shortDistance: sql<number>`${documentRetrievalChunks.embeddingShort} <=> ${shortStr}::vector`,
             })
             .from(documentRetrievalChunks)
-            .where(inArray(documentRetrievalChunks.documentId, documentIds.map(id => BigInt(id))))
+            .innerJoin(document, eq(documentRetrievalChunks.documentId, document.id))
+            .where(and(
+                inArray(documentRetrievalChunks.documentId, documentIds.map(id => BigInt(id))),
+                eq(documentRetrievalChunks.versionId, document.currentVersionId),
+            ))
             .orderBy(sql`${documentRetrievalChunks.embeddingShort} <=> ${shortStr}::vector`)
             .limit(coarseCandidateCount);
 
@@ -297,7 +287,11 @@ export class ANNOptimizer {
                 distance: sql<number>`${documentRetrievalChunks.embedding} <=> ${fullStr}::vector`,
             })
             .from(documentRetrievalChunks)
-            .where(inArray(documentRetrievalChunks.id, candidateIds))
+            .innerJoin(document, eq(documentRetrievalChunks.documentId, document.id))
+            .where(and(
+                inArray(documentRetrievalChunks.id, candidateIds),
+                eq(documentRetrievalChunks.versionId, document.currentVersionId),
+            ))
             .orderBy(sql`${documentRetrievalChunks.embedding} <=> ${fullStr}::vector`)
             .limit(limit);
 
@@ -312,7 +306,11 @@ export class ANNOptimizer {
                     page: documentSections.pageNumber,
                 })
                 .from(documentSections)
-                .where(inArray(documentSections.id, contextChunkIds));
+                .innerJoin(document, eq(documentSections.documentId, document.id))
+                .where(and(
+                    inArray(documentSections.id, contextChunkIds),
+                    eq(documentSections.versionId, document.currentVersionId),
+                ));
 
                 for (const p of pages) {
                     pageMap.set(p.id, p.page ?? 1);
@@ -386,7 +384,12 @@ export class ANNOptimizer {
         const chunks = await db.select({
             id: documentSections.id,
             embedding: documentSections.embedding
-        }).from(documentSections).where(eq(documentSections.documentId, BigInt(documentId)));
+        }).from(documentSections)
+            .innerJoin(document, eq(documentSections.documentId, document.id))
+            .where(and(
+                eq(documentSections.documentId, BigInt(documentId)),
+                eq(documentSections.versionId, document.currentVersionId),
+            ));
 
         if (chunks.length === 0) {
             return {

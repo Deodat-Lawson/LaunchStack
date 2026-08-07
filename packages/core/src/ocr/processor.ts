@@ -426,22 +426,21 @@ export async function ensureDocumentExists(documentId: number): Promise<void> {
 /**
  * Create the root document structure node. Must be called once before storeBatch.
  *
- * When `versionId` is provided, the root structure node is tagged with it so
- * deleting that version cascades and removes this node (and everything under
- * it) automatically.
+ * The root structure node is tagged with the processing version so deleting
+ * that version cascades and removes this node (and everything under it).
  */
 export async function createRootStructure(
   documentId: number,
   totalPages: number,
   estimatedTokens: number,
-  versionId?: number,
+  versionId: number,
 ): Promise<number> {
   await ensureDocumentExists(documentId);
 
   return withDbRetry(async () => {
     const rootStructure = await getDb().insert(documentStructure).values({
       documentId: BigInt(documentId),
-      versionId: versionId !== undefined ? BigInt(versionId) : null,
+      versionId: BigInt(versionId),
       parentId: null,
       contentType: "section",
       path: "/",
@@ -472,13 +471,11 @@ export async function storeBatch(
   rootStructureId: number,
   vectorizedChunks: VectorizedChunk[],
   embeddingIndex: EmbeddingIndexConfig,
-  versionId?: number,
+  versionId: number,
 ): Promise<StoredSection[]> {
   if (vectorizedChunks.length === 0) return [];
 
-  const versionBigInt =
-    versionId !== undefined ? BigInt(versionId) : null;
-
+  const versionBigInt = BigInt(versionId);
   return withDbRetry(async () => {
     const result = await getDb().transaction(async (tx) => {
       const parentValues = vectorizedChunks.map((chunk) => {
@@ -520,7 +517,7 @@ export async function storeBatch(
       const childValues: Array<{
         contextChunkId: bigint;
         documentId: bigint;
-        versionId: bigint | null;
+        versionId: bigint;
         content: string;
         tokenCount: number;
         embedding: ReturnType<typeof sql> | null;
@@ -603,14 +600,14 @@ export async function finalizeStorage(
     embeddingIndexKey?: string;
   },
   pipelineStartTime: number,
-  versionId?: number,
+  versionId: number,
 ): Promise<void> {
   return withDbRetry(async () => {
     const summaryPreview = summaryText.substring(0, 500) + (summaryText.length > 500 ? "..." : "");
 
     await getDb().insert(documentMetadata).values({
       documentId: BigInt(documentId),
-      versionId: versionId !== undefined ? BigInt(versionId) : null,
+      versionId: BigInt(versionId),
       summary: summaryPreview,
       outline: Array.from({ length: meta.totalPages }, (_, i) => ({
         id: i + 1,
@@ -648,17 +645,15 @@ export async function finalizeStorage(
     // Mirror OCR completion onto the per-version row so each version carries
     // its own processing provenance. Important when different versions of the
     // same document were run through different OCR providers.
-    if (versionId !== undefined) {
-      await getDb()
-        .update(documentVersions)
-        .set({
-          ocrProcessed: true,
-          ocrJobId: jobId,
-          ocrProvider: meta.provider,
-          ocrMetadata: ocrMetadataPayload,
-        })
-        .where(eq(documentVersions.id, versionId));
-    }
+    await getDb()
+      .update(documentVersions)
+      .set({
+        ocrProcessed: true,
+        ocrJobId: jobId,
+        ocrProvider: meta.provider,
+        ocrMetadata: ocrMetadataPayload,
+      })
+      .where(eq(documentVersions.id, versionId));
 
     await getDb()
       .update(ocrJobs)
@@ -689,12 +684,15 @@ export async function storeDocument(
   jobId: string,
   vectorizedChunks: VectorizedChunk[],
   normalizationResult: NormalizationResult,
-  pipelineStartTime: number
+  pipelineStartTime: number,
+  versionId: number,
 ): Promise<StoredSection[]> {
   if (vectorizedChunks.length === 0) {
     console.log("[Storage] No chunks to store, skipping");
     return [];
   }
+
+  const versionBigInt = BigInt(versionId);
 
   const storeStart = Date.now();
   console.log(
@@ -722,12 +720,10 @@ export async function storeDocument(
     );
   }
 
-  // 1. Create root document structure
-  console.log("[Storage] 1/5 Creating root document structure...");
   const rootStructure = await getDb().insert(documentStructure).values({
     documentId: BigInt(documentId),
+    versionId: versionBigInt,
     parentId: null,
-    contentType: "section",
     path: "/",
     title: "Document Root",
     level: 0,
@@ -751,9 +747,9 @@ export async function storeDocument(
     const contentHash = crypto.createHash("sha256").update(chunk.content).digest("hex");
     const isTable = chunk.metadata.isTable;
 
-    // Insert Parent (Context Chunk)
     const [row] = await getDb().insert(documentContextChunks).values({
       documentId: BigInt(documentId),
+      versionId: versionBigInt,
       structureId: BigInt(rootId),
       content: chunk.content,
       tokenCount: Math.ceil(chunk.content.length / 4),
@@ -773,18 +769,19 @@ export async function storeDocument(
 
       // Insert Children (Retrieval Chunks)
       if (chunk.children && chunk.children.length > 0) {
-          for (const child of chunk.children) {
-              await getDb().insert(documentRetrievalChunks).values({
-                  contextChunkId: BigInt(row.id),
-                  documentId: BigInt(documentId),
-                  content: child.content,
-                  tokenCount: Math.ceil(child.content.length / 4),
-                  embedding: sql`${JSON.stringify(child.vector)}::vector(1536)`,
-                  embeddingShort: child.vectorShort 
-                      ? sql`${JSON.stringify(child.vectorShort)}::vector(512)` 
-                      : null,
-              });
-          }
+        for (const child of chunk.children) {
+          await getDb().insert(documentRetrievalChunks).values({
+            contextChunkId: BigInt(row.id),
+            documentId: BigInt(documentId),
+            versionId: versionBigInt,
+            content: child.content,
+            tokenCount: Math.ceil(child.content.length / 4),
+            embedding: sql`${JSON.stringify(child.vector)}::vector(1536)`,
+            embeddingShort: child.vectorShort
+              ? sql`${JSON.stringify(child.vectorShort)}::vector(512)`
+              : null,
+          });
+        }
       }
     }
   }
@@ -798,6 +795,7 @@ export async function storeDocument(
 
   await getDb().insert(documentMetadata).values({
     documentId: BigInt(documentId),
+    versionId: versionBigInt,
     summary: summaryPreview,
     outline: normalizationResult.pages.map((_, i) => ({
       id: i + 1,

@@ -14,7 +14,7 @@
  */
 
 import { db } from "~/server/db/index";
-import { eq, inArray, and, or, ilike } from "drizzle-orm";
+import { eq, inArray, and, or, ilike, sql, type SQLWrapper } from "drizzle-orm";
 import {
   BaseRetriever,
   type BaseRetrieverInput,
@@ -22,11 +22,17 @@ import {
 import { Document } from "@langchain/core/documents";
 import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 import {
+  document,
   kgEntities,
   kgEntityMentions,
   kgRelationships,
   documentSections,
 } from "@launchstack/core/db/schema";
+
+const currentVersionPredicate = (
+  versionColumn: SQLWrapper,
+  documentVersionColumn: SQLWrapper = document.currentVersionId,
+) => sql`${versionColumn} = ${documentVersionColumn}`;
 
 // ============================================================================
 // Config
@@ -237,7 +243,14 @@ export class GraphRetriever extends BaseRetriever {
         documentId: documentSections.documentId,
       })
       .from(documentSections)
-      .where(whereClause)
+      .innerJoin(document, eq(documentSections.documentId, document.id))
+      .where(
+        and(
+          whereClause,
+          eq(document.companyId, BigInt(this.companyId)),
+          currentVersionPredicate(documentSections.versionId),
+        ),
+      )
       .limit(this.topK);
 
     return rows.map(

@@ -18,10 +18,20 @@ jest.mock("@launchstack/core/ocr/trigger", () => ({
   triggerDocumentProcessing: jest.fn(),
 }));
 
-import { company as companyTable, document, documentVersions, ocrJobs } from "@launchstack/core/db/schema";
+import {
+  company as companyTable,
+  document,
+  documentSections,
+  documentVersions,
+  ocrJobs,
+} from "@launchstack/core/db/schema";
 import { triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 import { db } from "~/server/db";
-import { createDocumentLifecycle } from "~/server/services/document-creation";
+import { getDocumentChunks, RLMRetriever } from "~/lib/tools/rag/retrievers";
+import {
+  createDocumentLifecycle,
+  createDocumentVersionLifecycle,
+} from "~/server/services/document-creation";
 
 type LifecycleParams = Parameters<typeof createDocumentLifecycle>[0];
 type Processing = NonNullable<LifecycleParams["processing"]>;
@@ -120,6 +130,23 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
           .from(ocrJobs)
           .where(eq(ocrJobs.documentId, BigInt(documents[0].id)))
       : [];
+
+    return { documents, versions, jobs };
+  }
+
+  async function loadDocumentLifecycle(documentId: number) {
+    const documents = await db
+      .select()
+      .from(document)
+      .where(eq(document.id, documentId));
+    const versions = await db
+      .select()
+      .from(documentVersions)
+      .where(eq(documentVersions.documentId, BigInt(documentId)));
+    const jobs = await db
+      .select()
+      .from(ocrJobs)
+      .where(eq(ocrJobs.documentId, BigInt(documentId)));
 
     return { documents, versions, jobs };
   }
@@ -237,6 +264,125 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
       .where(eq(ocrJobs.id, firstJob.id));
     await createDocumentLifecycle(input);
     expect(dispatchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("creates and retries a later version with one linked job and the current pointer on v2", async () => {
+    if (companyId === undefined) throw new Error("Test company is not initialized");
+
+    const initialInput = makeParams({ processing: processing() });
+    const initial = await createDocumentLifecycle(initialInput);
+    const versionInput = {
+      documentId: initial.document.id,
+      companyId,
+      userId,
+      title: "Integration document v2",
+      category: "integration",
+      url: "https://example.test/document-v2.pdf",
+      creationKey: `version-${randomUUID()}`,
+      mimeType: "application/pdf",
+      fileSize: 2048,
+      changelog: "Second integration version",
+      preferredProvider: "NATIVE_PDF",
+      originalFilename: "document-v2.pdf",
+      embeddingIndexKey: "integration-test-index",
+    };
+
+    const created = await createDocumentVersionLifecycle(versionInput);
+    const retried = await createDocumentVersionLifecycle(versionInput);
+    const lifecycle = await loadDocumentLifecycle(initial.document.id);
+    const [doc] = lifecycle.documents;
+    const versions = [...lifecycle.versions].sort(
+      (left, right) => left.versionNumber - right.versionNumber,
+    );
+    const [v1, v2] = versions;
+    const v2Jobs = lifecycle.jobs.filter((job) => job.versionId === BigInt(v2!.id));
+
+    expect(lifecycle.documents).toHaveLength(1);
+    expect(versions).toHaveLength(2);
+    expect(lifecycle.jobs).toHaveLength(2);
+    expect(v1?.versionNumber).toBe(1);
+    expect(v2?.versionNumber).toBe(2);
+    expect(v2?.creationKey).toBe(versionInput.creationKey);
+    expect(doc?.currentVersionId).toBe(BigInt(v2!.id));
+    expect(doc?.ocrJobId).toBe(created.jobId);
+    expect(v2?.ocrJobId).toBe(created.jobId);
+    expect(v2Jobs).toHaveLength(1);
+    expect(v2Jobs[0]?.documentId).toBe(BigInt(initial.document.id));
+    expect(v2Jobs[0]?.versionId).toBe(BigInt(v2!.id));
+    expect(created.document.id).toBe(initial.document.id);
+    expect(created.version.id).toBe(v2!.id);
+    expect(created.jobId).toBe(v2Jobs[0]!.id);
+    expect(retried.document.id).toBe(initial.document.id);
+    expect(retried.version.id).toBe(v2!.id);
+    expect(retried.jobId).toBe(v2Jobs[0]!.id);
+
+    expect(dispatchMock).toHaveBeenCalledTimes(3);
+    for (const call of dispatchMock.mock.calls.slice(1)) {
+      const options = call[6] as DispatchOptions;
+      expect(options).toEqual(
+        expect.objectContaining({ jobId: v2Jobs[0]!.id, versionId: v2!.id }),
+      );
+    }
+
+    await db
+      .update(ocrJobs)
+      .set({ status: "completed" })
+      .where(eq(ocrJobs.id, v2Jobs[0]!.id));
+    await createDocumentVersionLifecycle(versionInput);
+    const completedRetry = await loadDocumentLifecycle(initial.document.id);
+
+    expect(completedRetry.versions).toHaveLength(2);
+    expect(completedRetry.jobs).toHaveLength(2);
+    expect(dispatchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it("retrieves only chunks from the current version after creating v2", async () => {
+    if (companyId === undefined) throw new Error("Test company is not initialized");
+
+    const initial = await createDocumentLifecycle(
+      makeParams({ processing: processing() }),
+    );
+    const later = await createDocumentVersionLifecycle({
+      documentId: initial.document.id,
+      companyId,
+      userId,
+      title: "Integration document v2",
+      category: "integration",
+      url: "https://example.test/document-v2.pdf",
+      creationKey: `retrieval-version-${randomUUID()}`,
+      mimeType: "application/pdf",
+      originalFilename: "document-v2.pdf",
+    });
+
+    await db.insert(documentSections).values([
+      {
+        documentId: BigInt(initial.document.id),
+        versionId: BigInt(initial.version.id),
+        content: "legacy v1 retrieval marker",
+        tokenCount: 4,
+        charCount: 27,
+        pageNumber: 1,
+      },
+      {
+        documentId: BigInt(initial.document.id),
+        versionId: BigInt(later.version.id),
+        content: "current v2 retrieval marker",
+        tokenCount: 4,
+        charCount: 27,
+        pageNumber: 1,
+      },
+    ]);
+
+    const chunks = await getDocumentChunks(initial.document.id);
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0]?.content).toBe("current v2 retrieval marker");
+
+    const sections = await new RLMRetriever().getSectionsWithinBudget(
+      initial.document.id,
+      { maxTokens: 100 },
+    );
+    expect(sections).toHaveLength(1);
+    expect(sections[0]?.content).toBe("current v2 retrieval marker");
   });
 
   it("collapses concurrent duplicate requests into one document, v1, and job", async () => {

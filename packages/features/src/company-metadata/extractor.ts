@@ -17,7 +17,7 @@
  */
 
 import { z, type ZodType } from "zod";
-import { and, eq, isNull, or, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { getDb } from "@launchstack/core/db";
 import { documentContextChunks, document as documentTable } from "@launchstack/core/db/schema";
@@ -266,9 +266,9 @@ export async function extractCompanyFacts(
     // historical claim. Reverting to an old version will cause the next run
     // to re-extract from that version's chunks, which is the correct behavior.
     //
-    // The IS NULL branches preserve Phase-1 rollout safety: if the document
-    // or its chunks predate the versioning backfill, we fall through to
-    // returning all chunks rather than hiding them.
+    // Chunks are included only when their version matches the document's
+    // current version. Documents without a current version have no
+    // authoritative chunks to extract from.
     const chunks = await db
         .select({
             content: documentContextChunks.content,
@@ -283,11 +283,7 @@ export async function extractCompanyFacts(
         .where(
             and(
                 eq(documentContextChunks.documentId, BigInt(documentId)),
-                or(
-                    isNull(documentTable.currentVersionId),
-                    isNull(documentContextChunks.versionId),
-                    sql`${documentContextChunks.versionId} = ${documentTable.currentVersionId}`,
-                ),
+                eq(documentContextChunks.versionId, documentTable.currentVersionId),
             ),
         );
 

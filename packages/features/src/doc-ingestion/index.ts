@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import {
   chunkPages,
@@ -165,7 +165,7 @@ async function vectorizeWithIndex(
   batchSize: number,
   documentId: number,
   rootStructureId: number,
-  versionId: number | undefined,
+  versionId: number,
   runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
   if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
@@ -219,10 +219,14 @@ async function vectorizeWithIndex(
     totalStored += result.stored;
   }
 
+  const versionBigInt = BigInt(versionId);
   const rows = await getDb()
     .select({ id: documentContextChunks.id, content: documentContextChunks.content })
     .from(documentContextChunks)
-    .where(eq(documentContextChunks.documentId, BigInt(documentId)));
+    .where(and(
+      eq(documentContextChunks.documentId, BigInt(documentId)),
+      eq(documentContextChunks.versionId, versionBigInt),
+    ));
 
   return {
     totalStored,

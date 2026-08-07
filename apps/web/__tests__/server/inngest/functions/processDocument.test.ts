@@ -10,6 +10,7 @@ import { createDocumentLifecycle } from "~/server/services/document-creation";
 import { fetchFile } from "~/lib/storage";
 import { putFile } from "~/server/storage/vercel-blob";
 import { db } from "~/server/db";
+import { runDocIngestionTool } from "~/lib/tools";
 import type { ProcessDocumentEventData } from "@launchstack/core/ocr/types";
 
 jest.mock("~/server/inngest/client", () => ({
@@ -41,6 +42,7 @@ const mockDb = db as unknown as { update: jest.Mock; delete: jest.Mock };
 
 const mockCreateDocumentLifecycle = createDocumentLifecycle as jest.Mock;
 const mockFetchFile = fetchFile as jest.Mock;
+const mockRunDocIngestionTool = runDocIngestionTool as jest.Mock;
 const mockPutFile = putFile as jest.Mock;
 
 function makeChain() {
@@ -134,6 +136,41 @@ describe("handleProcessDocumentFailure", () => {
   });
 });
 
+describe("process document event validation", () => {
+  it("rejects a missing versionId before processing begins", async () => {
+    const step = {
+      run: jest.fn(
+        async (_name: string, operation: () => Promise<unknown>) => operation(),
+      ),
+      sendEvent: jest.fn(),
+    };
+    const handler = (
+      uploadDocument as unknown as {
+        fn: (context: {
+          event: { data: ProcessDocumentEventData };
+          step: typeof step;
+        }) => Promise<unknown>;
+      }
+    ).fn;
+    const malformedEvent = {
+      jobId: "job-1",
+      documentUrl: "https://blob.test/document.pdf",
+      documentName: "document.pdf",
+      companyId: "7",
+      userId: "user-1",
+      documentId: 100,
+      category: "documents",
+      mimeType: "application/pdf",
+    } as unknown as ProcessDocumentEventData;
+
+    await expect(
+      handler({ event: { data: malformedEvent }, step }),
+    ).rejects.toThrow("Invalid versionId");
+    expect(mockRunDocIngestionTool).not.toHaveBeenCalled();
+    expect(step.run).not.toHaveBeenCalled();
+  });
+});
+
 describe("archive document lifecycle", () => {
   it("records normalized archive provenance and dispatch options for child and summary", async () => {
     const zip = new JSZip();
@@ -185,6 +222,7 @@ describe("archive document lifecycle", () => {
           companyId: "7",
           userId: "user-1",
           documentId: 100,
+          versionId: 43,
           category: "documents",
           mimeType: "application/zip",
           options: { embeddingIndexKey: "company-index" },

@@ -332,6 +332,11 @@ export const uploadDocument = inngest.createFunction(
   { event: "document/process.requested" },
   async ({ event, step }) => {
     const eventData = event.data;
+    if (!Number.isInteger(eventData.versionId) || eventData.versionId <= 0) {
+      throw new Error(
+        `[ProcessDocument] Invalid versionId: ${String(eventData.versionId)}`,
+      );
+    }
     const routingName = eventData.originalFilename ?? eventData.documentName;
 
     // ------------------------------------------------------------------

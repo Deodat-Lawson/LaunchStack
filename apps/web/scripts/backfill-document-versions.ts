@@ -1,21 +1,12 @@
 /**
- * Backfill script for the document versioning feature (Phase 1).
+ * Repair legacy document lifecycle rows in place.
  *
- * For every existing document row, this creates a v1 entry in
- * `pdr_ai_v2_document_versions` and backfills:
- *   - document.current_version_id -> the new v1 row
- *   - document.file_type           -> copied from document.mime_type
- *   - RLM chunk/structure/metadata/preview tables .version_id -> the new v1 row
- *
- * The script is IDEMPOTENT: re-running it is a no-op for any document that
- * already has a current_version_id. Safe to run on every container boot,
- * locally and in CI.
+ * The repair is intentionally idempotent. It never redispatches work or
+ * touches storage: it only makes the document/version/job graph and RLM
+ * version links complete enough for the version-aware readers.
  *
  * Run with:
  *   pnpm tsx scripts/backfill-document-versions.ts
- *
- * Typically wired into the migrate container after `pnpm db:push` so that
- * `docker compose up` on this branch leaves the DB in a consistent state.
  */
 
 import "dotenv/config";
@@ -23,90 +14,268 @@ import { sql } from "drizzle-orm";
 
 import { db } from "../src/server/db";
 
+type QueryResult = {
+    count?: number;
+    rowCount?: number;
+    rows?: Array<Record<string, unknown>>;
+};
+
+function resultCount(result: unknown): number {
+    const queryResult = result as QueryResult;
+    const rows = Array.isArray(result)
+        ? (result as Array<Record<string, unknown>>)
+        : queryResult.rows;
+    const count = rows?.[0]?.count;
+    return count === undefined
+        ? Number(queryResult.count ?? queryResult.rowCount ?? 0)
+        : Number(count);
+}
+
 async function backfill() {
     console.log("[backfill-document-versions] Starting...");
 
-    // 1. Insert a v1 row for every document that doesn't have one yet.
-    //    Uses INSERT ... SELECT with a NOT EXISTS guard so re-running is safe.
-    //    mime_type falls back to 'application/octet-stream' if the document row
-    //    has none — the upload flow will prefer doc.file_type over this, and
-    //    this only affects the backfilled v1 record.
-    const insertResult = await db.execute(sql`
-        INSERT INTO pdr_ai_v2_document_versions (
-            document_id,
-            version_number,
-            url,
-            mime_type,
-            uploaded_by,
-            ocr_processed,
-            created_at
-        )
-        SELECT
-            d.id,
-            1,
-            d.url,
-            COALESCE(d.mime_type, 'application/octet-stream'),
-            NULL,
-            COALESCE(d.ocr_processed, FALSE),
-            d.created_at
-        FROM pdr_ai_v2_document d
-        WHERE NOT EXISTS (
-            SELECT 1
-            FROM pdr_ai_v2_document_versions v
-            WHERE v.document_id = d.id AND v.version_number = 1
-        )
-    `);
-    console.log(
-        `[backfill-document-versions] Inserted v1 rows for ${
-            (insertResult as { rowCount?: number }).rowCount ?? "?"
-        } documents`
-    );
-
-    // 2. Point each document at its v1 row and copy mime_type -> file_type.
-    //    Only touches rows where current_version_id is NULL, so this is idempotent.
-    const updateDocResult = await db.execute(sql`
-        UPDATE pdr_ai_v2_document AS d
-        SET
-            current_version_id = v.id,
-            file_type = COALESCE(d.file_type, d.mime_type)
-        FROM pdr_ai_v2_document_versions AS v
-        WHERE v.document_id = d.id
-          AND v.version_number = 1
-          AND d.current_version_id IS NULL
-    `);
-    console.log(
-        `[backfill-document-versions] Set current_version_id on ${
-            (updateDocResult as { rowCount?: number }).rowCount ?? "?"
-        } documents`
-    );
-
-    // 3. Backfill version_id on all RLM tables. Each UPDATE only touches rows
-    //    where version_id IS NULL, so the script is safe to re-run.
-    const rlmTables = [
-        "pdr_ai_v2_document_structure",
-        "pdr_ai_v2_document_context_chunks",
-        "pdr_ai_v2_document_retrieval_chunks",
-        "pdr_ai_v2_document_metadata",
-        "pdr_ai_v2_document_previews",
-    ] as const;
-
-    for (const table of rlmTables) {
-        const result = await db.execute(
-            sql`
-                UPDATE ${sql.raw(table)} AS t
-                SET version_id = v.id
+    await db.transaction(async (tx) => {
+        // Create v1 for every document that does not have one. Existing
+        // versions are never replaced; their highest MIME is only used to
+        // seed the synthetic v1 when the document has no MIME metadata.
+        const insertResult = await tx.execute(sql`
+            INSERT INTO pdr_ai_v2_document_versions (
+                document_id,
+                version_number,
+                url,
+                mime_type,
+                uploaded_by,
+                ocr_job_id,
+                ocr_processed,
+                ocr_metadata,
+                created_at
+            )
+            SELECT
+                d.id,
+                1,
+                d.url,
+                COALESCE(
+                    NULLIF(BTRIM(d.mime_type), ''),
+                    NULLIF(BTRIM(d.file_type), ''),
+                    (
+                        SELECT NULLIF(BTRIM(v.mime_type), '')
+                        FROM pdr_ai_v2_document_versions AS v
+                        WHERE v.document_id = d.id
+                        ORDER BY v.version_number DESC, v.id DESC
+                        LIMIT 1
+                    ),
+                    'application/octet-stream'
+                ),
+                NULL,
+                NULL,
+                COALESCE(d.ocr_processed, FALSE),
+                d.ocr_metadata,
+                d.created_at
+            FROM pdr_ai_v2_document AS d
+            WHERE NOT EXISTS (
+                SELECT 1
                 FROM pdr_ai_v2_document_versions AS v
-                WHERE v.document_id = t.document_id
+                WHERE v.document_id = d.id
                   AND v.version_number = 1
-                  AND t.version_id IS NULL
-            `
-        );
+            )
+            ON CONFLICT (document_id, version_number) DO NOTHING
+        `);
         console.log(
-            `[backfill-document-versions] ${table}: updated ${
-                (result as { rowCount?: number }).rowCount ?? "?"
-            } rows`
+            `[backfill-document-versions] Created v1 rows: ${resultCount(insertResult)}`
         );
-    }
+
+        // Keep a valid current pointer. A pointer to another document is not
+        // valid and is repaired just like a NULL pointer. The highest version
+        // is the deterministic fallback; v1 above guarantees a final choice.
+        const pointerResult = await tx.execute(sql`
+            WITH selected_versions AS (
+                SELECT
+                    d.id AS document_id,
+                    COALESCE(current_version.id, highest_version.id) AS version_id
+                FROM pdr_ai_v2_document AS d
+                LEFT JOIN pdr_ai_v2_document_versions AS current_version
+                    ON current_version.id = d.current_version_id
+                   AND current_version.document_id = d.id
+                LEFT JOIN LATERAL (
+                    SELECT v.id
+                    FROM pdr_ai_v2_document_versions AS v
+                    WHERE v.document_id = d.id
+                    ORDER BY v.version_number DESC, v.id DESC
+                    LIMIT 1
+                ) AS highest_version ON TRUE
+            )
+            UPDATE pdr_ai_v2_document AS d
+            SET current_version_id = selected.version_id,
+                mime_type = COALESCE(
+                    NULLIF(BTRIM(d.mime_type), ''),
+                    NULLIF(BTRIM(d.file_type), ''),
+                    NULLIF(BTRIM(selected_version.mime_type), ''),
+                    'application/octet-stream'
+                ),
+                file_type = COALESCE(
+                    NULLIF(BTRIM(d.file_type), ''),
+                    NULLIF(BTRIM(d.mime_type), ''),
+                    NULLIF(BTRIM(selected_version.mime_type), ''),
+                    'application/octet-stream'
+                )
+            FROM selected_versions AS selected
+            LEFT JOIN pdr_ai_v2_document_versions AS selected_version
+                ON selected_version.id = selected.version_id
+               AND selected_version.document_id = selected.document_id
+            WHERE d.id = selected.document_id
+              AND (
+                  d.current_version_id IS DISTINCT FROM selected.version_id
+                  OR NULLIF(BTRIM(d.mime_type), '') IS NULL
+                  OR NULLIF(BTRIM(d.file_type), '') IS NULL
+              )
+        `);
+        console.log(
+            `[backfill-document-versions] Repaired document pointers/metadata: ${resultCount(pointerResult)}`
+        );
+
+        // Version MIME is required by the lifecycle contract. Preserve a
+        // non-empty value and only fill missing legacy values.
+        const versionMimeResult = await tx.execute(sql`
+            UPDATE pdr_ai_v2_document_versions AS v
+            SET mime_type = COALESCE(
+                NULLIF(BTRIM(v.mime_type), ''),
+                NULLIF(BTRIM(d.mime_type), ''),
+                NULLIF(BTRIM(d.file_type), ''),
+                'application/octet-stream'
+            )
+            FROM pdr_ai_v2_document AS d
+            WHERE d.id = v.document_id
+              AND NULLIF(BTRIM(v.mime_type), '') IS NULL
+        `);
+        console.log(
+            `[backfill-document-versions] Normalized version MIME: ${resultCount(versionMimeResult)}`
+        );
+
+        const unresolvedDocuments = await tx.execute(sql`
+            SELECT COUNT(*)::int AS count
+            FROM pdr_ai_v2_document AS d
+            LEFT JOIN pdr_ai_v2_document_versions AS v
+                ON v.id = d.current_version_id
+               AND v.document_id = d.id
+            WHERE v.id IS NULL
+        `);
+        const unresolvedDocumentCount = resultCount(unresolvedDocuments);
+        if (unresolvedDocumentCount > 0) {
+            console.warn(
+                `[backfill-document-versions] Unresolved current document versions: ${unresolvedDocumentCount}`
+            );
+        }
+
+        const rlmTables = [
+            "pdr_ai_v2_document_structure",
+            "pdr_ai_v2_document_context_chunks",
+            "pdr_ai_v2_document_retrieval_chunks",
+            "pdr_ai_v2_document_metadata",
+            "pdr_ai_v2_document_previews",
+        ] as const;
+
+        for (const table of rlmTables) {
+            const result = await tx.execute(sql`
+                UPDATE ${sql.raw(table)} AS t
+                SET version_id = d.current_version_id
+                FROM pdr_ai_v2_document AS d
+                WHERE t.document_id = d.id
+                  AND t.version_id IS NULL
+                  AND d.current_version_id IS NOT NULL
+                  AND EXISTS (
+                      SELECT 1
+                      FROM pdr_ai_v2_document_versions AS v
+                      WHERE v.id = d.current_version_id
+                        AND v.document_id = d.id
+                  )
+            `);
+            const unresolved = await tx.execute(sql`
+                SELECT COUNT(*)::int AS count
+                FROM ${sql.raw(table)} AS t
+                WHERE t.version_id IS NULL
+                   OR NOT EXISTS (
+                       SELECT 1
+                       FROM pdr_ai_v2_document_versions AS v
+                       WHERE v.id = t.version_id
+                         AND v.document_id = t.document_id
+                   )
+            `);
+            const unresolvedCount = resultCount(unresolved);
+            console.log(
+                `[backfill-document-versions] ${table}: updated ${resultCount(result)} rows; unresolved ${unresolvedCount}`
+            );
+            if (unresolvedCount > 0) {
+                console.warn(
+                    `[backfill-document-versions] ${table} has ${unresolvedCount} rows without a derivable version`
+                );
+            }
+        }
+
+        // The document-level OCR job is the only reliable current-job signal.
+        // Use the repaired current pointer for its version link. Duplicate
+        // legacy job IDs are left untouched and reported rather than guessed.
+        const documentJobResult = await tx.execute(sql`
+            WITH document_matches AS (
+                SELECT
+                    d.ocr_job_id AS job_id,
+                    MIN(d.id) AS document_id,
+                    MIN(d.current_version_id) AS version_id
+                FROM pdr_ai_v2_document AS d
+                LEFT JOIN pdr_ai_v2_document_versions AS v
+                    ON v.id = d.current_version_id
+                   AND v.document_id = d.id
+                WHERE d.ocr_job_id IS NOT NULL
+                GROUP BY d.ocr_job_id
+                HAVING COUNT(*) = 1
+                   AND COUNT(v.id) = 1
+            )
+            UPDATE pdr_ai_v2_ocr_jobs AS j
+            SET document_id = matches.document_id,
+                version_id = matches.version_id
+            FROM document_matches AS matches
+            WHERE j.id = matches.job_id
+              AND (
+                  j.document_id IS DISTINCT FROM matches.document_id
+                  OR j.version_id IS DISTINCT FROM matches.version_id
+              )
+        `);
+        console.log(
+            `[backfill-document-versions] Linked OCR jobs from document signals: ${resultCount(documentJobResult)}`
+        );
+
+        const ambiguousDocumentJobs = await tx.execute(sql`
+            SELECT COUNT(*)::int AS count
+            FROM (
+                SELECT d.ocr_job_id
+                FROM pdr_ai_v2_document AS d
+                WHERE d.ocr_job_id IS NOT NULL
+                GROUP BY d.ocr_job_id
+                HAVING COUNT(*) > 1
+            ) AS ambiguous
+        `);
+        const unresolvedJobDocuments = await tx.execute(sql`
+            SELECT COUNT(*)::int AS count
+            FROM pdr_ai_v2_ocr_jobs
+            WHERE document_id IS NULL
+        `);
+        const unresolvedJobVersions = await tx.execute(sql`
+            SELECT COUNT(*)::int AS count
+            FROM pdr_ai_v2_ocr_jobs
+            WHERE version_id IS NULL
+        `);
+        const ambiguousDocumentJobCount = resultCount(ambiguousDocumentJobs);
+        const unresolvedJobDocumentCount = resultCount(unresolvedJobDocuments);
+        const unresolvedJobVersionCount = resultCount(unresolvedJobVersions);
+        if (
+            ambiguousDocumentJobCount > 0 ||
+            unresolvedJobDocumentCount > 0 ||
+            unresolvedJobVersionCount > 0
+        ) {
+            console.warn(
+                `[backfill-document-versions] OCR jobs without a unique derivable link: ambiguous_document_jobs=${ambiguousDocumentJobCount}, document_id=${unresolvedJobDocumentCount}, version_id=${unresolvedJobVersionCount}`
+            );
+        }
+    });
 
     console.log("[backfill-document-versions] Done.");
 }

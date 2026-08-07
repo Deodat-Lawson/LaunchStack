@@ -1,6 +1,7 @@
 ﻿import { and, eq, sql } from "drizzle-orm";
 import { db } from "~/server/db";
 import {
+  document,
   documentContextChunks,
   documentRetrievalChunks,
   experimentalDocumentEmbeddings,
@@ -48,13 +49,19 @@ export async function experimentalDocumentSearch(
         documentRetrievalChunks.id,
       ),
     )
+    .innerJoin(document, eq(documentRetrievalChunks.documentId, document.id))
     .innerJoin(
       documentContextChunks,
-      eq(documentRetrievalChunks.contextChunkId, documentContextChunks.id),
+      and(
+        eq(documentRetrievalChunks.contextChunkId, documentContextChunks.id),
+        eq(documentContextChunks.documentId, document.id),
+      ),
     )
     .where(
       and(
         eq(documentRetrievalChunks.documentId, BigInt(options.documentId)),
+        eq(documentRetrievalChunks.versionId, document.currentVersionId),
+        eq(documentContextChunks.versionId, document.currentVersionId),
         eq(experimentalDocumentEmbeddings.provider, metadata.provider),
         eq(experimentalDocumentEmbeddings.model, metadata.model),
         eq(experimentalDocumentEmbeddings.version, metadata.version),

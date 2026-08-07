@@ -20,8 +20,8 @@ export const DOCUMENT_PROCESS_EVENT = "document/process.requested";
  * Options for triggering the document processing pipeline
  */
 export interface TriggerOptions {
-  /** Stable job ID for idempotent dispatch; generated when omitted */
-  jobId?: string;
+  /** Stable job ID for idempotent dispatch */
+  jobId: string;
   /** Force OCR even for native PDFs */
   forceOCR?: boolean;
   /** Preferred OCR provider */
@@ -33,11 +33,10 @@ export interface TriggerOptions {
   /** True when the document originated from a website upload */
   isWebsite?: boolean;
   /**
-   * `document_versions.id` for this processing run. When set, every chunk
-   * written to the RLM tables is tagged with this version_id so RAG can
-   * filter to the current version of each document.
+   * Every chunk written to the RLM tables is tagged with this version_id so
+   * RAG can filter to the current version of each document.
    */
-  versionId?: number;
+  versionId: number;
   /**
    * Opaque transcription provenance metadata, set only for documents that
    * were produced by audio transcription. Carried through so the pipeline
@@ -60,9 +59,9 @@ export async function triggerDocumentProcessing(
   userId: string,
   documentId: number,
   category: string,
-  options?: TriggerOptions,
+  options: TriggerOptions,
 ): Promise<{ jobId: string; eventIds: string[] }> {
-  const jobId = options?.jobId ?? generateJobId();
+  const jobId = options.jobId;
   const eventData: ProcessDocumentEventData = {
     jobId,
     documentUrl,
@@ -71,22 +70,22 @@ export async function triggerDocumentProcessing(
     userId,
     documentId,
     category,
-    mimeType: options?.mimeType,
-    originalFilename: options?.originalFilename,
-    isWebsite: options?.isWebsite,
-    versionId: options?.versionId,
-    transcriptionMetadata: options?.transcriptionMetadata,
+    mimeType: options.mimeType,
+    originalFilename: options.originalFilename,
+    isWebsite: options.isWebsite,
+    versionId: options.versionId,
+    transcriptionMetadata: options.transcriptionMetadata,
     options: {
-      forceOCR: options?.forceOCR,
-      preferredProvider: options?.preferredProvider,
-      embeddingIndexKey: options?.embeddingIndexKey,
+      forceOCR: options.forceOCR,
+      preferredProvider: options.preferredProvider,
+      embeddingIndexKey: options.embeddingIndexKey,
     },
   };
 
   const dispatcher = getJobDispatcher();
   console.log(
     `[Trigger] Dispatching job=${jobId}, doc="${documentName}", docId=${documentId}, ` +
-      `mime=${options?.mimeType ?? "none"}, provider=${options?.preferredProvider ?? "auto"}, ` +
+      `mime=${options.mimeType ?? "none"}, provider=${options.preferredProvider ?? "auto"}, ` +
       `runner=${dispatcher.name}`,
   );
 
@@ -107,15 +106,6 @@ export async function triggerDocumentProcessing(
       `Job dispatch failed for job=${jobId}: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
-}
-
-/**
- * Generate a unique job ID
- */
-function generateJobId(): string {
-  const timestamp = Date.now().toString(36);
-  const randomPart = Math.random().toString(36).substring(2, 10);
-  return `ocr-${timestamp}-${randomPart}`;
 }
 
 /**

@@ -96,13 +96,11 @@ function getDimensionTableName(index: EmbeddingIndexConfig): string {
   );
 }
 
-// Version filter: only return chunks from the current version of each
-// document. Chunks from older versions stay indexed (so revert is O(1)) but
-// must be hidden from RAG results. The `IS NULL` branches keep this safe
-// during rollout — documents/chunks not yet backfilled return unfiltered,
-// and once backfill is complete this degenerates to strict equality.
-const rcVersionFilter = sql` AND (d.current_version_id IS NULL OR rc.version_id IS NULL OR rc.version_id = d.current_version_id)`;
-const sVersionFilter = sql` AND (d.current_version_id IS NULL OR s.version_id IS NULL OR s.version_id = d.current_version_id)`;
+// Only return chunks whose version matches the document's current version.
+// Historical chunks remain indexed for efficient reverts but are hidden from
+// retrieval.
+const rcVersionFilter = sql` AND rc.version_id = d.current_version_id`;
+const sVersionFilter = sql` AND s.version_id = d.current_version_id`;
 
 async function searchLegacyIndex(args: {
   embeddingIndex: EmbeddingIndexConfig;

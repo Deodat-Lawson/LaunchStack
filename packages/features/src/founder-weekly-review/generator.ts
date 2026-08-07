@@ -18,6 +18,11 @@ import {
     FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION,
     FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT,
 } from "./prompts";
+import {
+    buildGenerationEvidenceEnvelope,
+    type FounderWeeklyReviewPromptEvidenceItem,
+    type GenerationEvidenceEnvelopeDiagnostics,
+} from "./generation-evidence-envelope";
 
 export interface FounderWeeklyReviewResolvedGenerationMetadata {
     provider: string;
@@ -56,19 +61,21 @@ export async function generateFounderWeeklyReview(
     const { evidenceSnapshot, generate } = input;
     assertUniqueSnapshotSourceIds(evidenceSnapshot);
 
-    const prompt = buildFounderWeeklyReviewPrompt(evidenceSnapshot);
+    const evidenceEnvelope = buildGenerationEvidenceEnvelope(evidenceSnapshot);
+    const prompt = buildFounderWeeklyReviewPrompt(evidenceSnapshot, evidenceEnvelope);
     const promptHash = createHash("sha256")
         .update(FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT)
         .update(prompt)
         .digest("hex");
 
-    if (evidenceSnapshot.items.length === 0) {
+    if (evidenceEnvelope.items.length === 0) {
         return {
             reviewPayload: buildEmptyReview(),
             modelMetadata: buildMetadata(
                 { provider: "skipped", model: "none", capability: "founderWeeklyReview", temperature: 0 },
                 promptHash,
-                true
+                true,
+                evidenceEnvelope.diagnostics,
             ),
         };
     }
@@ -93,7 +100,7 @@ export async function generateFounderWeeklyReview(
         logGenerationValidation("initial", initial.metadata, "failed");
         const repaired = await generate({
             system: FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT,
-            prompt: buildSemanticRepairPrompt(initial.object, evidenceSnapshot, error),
+            prompt: buildSemanticRepairPrompt(initial.object, evidenceEnvelope.items, error),
             schema: FounderWeeklyReviewV2PayloadSchema,
             schemaName: "founder_weekly_review_v2",
             generationPhase: "semantic-repair",
@@ -111,18 +118,18 @@ export async function generateFounderWeeklyReview(
         }
     }
 
-    return { reviewPayload, modelMetadata: buildMetadata(result.metadata, promptHash, false) };
+    return { reviewPayload, modelMetadata: buildMetadata(result.metadata, promptHash, false, evidenceEnvelope.diagnostics) };
 }
 
 function buildSemanticRepairPrompt(
     candidate: FounderWeeklyReviewV2Payload,
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot,
+    evidenceItems: readonly FounderWeeklyReviewPromptEvidenceItem[],
     error: FounderWeeklyReviewGenerationValidationError
 ): string {
     const errors = error.details.length > 0
         ? error.details
         : [{ code: "report_validation_failed" }];
-    const sources = evidenceSnapshot.items.map(({ sourceId, sourceType }) => ({ sourceId, sourceType }));
+    const sources = evidenceItems.map(({ sourceId, sourceType }) => ({ sourceId, sourceType }));
     return [
         "Correct the complete canonical Founder Weekly Review JSON candidate below.",
         "Customer Signals may cite only customer_feedback sources.",
@@ -147,7 +154,8 @@ function logGenerationValidation(
 function buildMetadata(
     metadata: FounderWeeklyReviewResolvedGenerationMetadata,
     promptHash: string,
-    skipped: boolean
+    skipped: boolean,
+    diagnostics: GenerationEvidenceEnvelopeDiagnostics,
 ): FounderWeeklyReviewModelMetadata {
     return {
         provider: metadata.provider,
@@ -163,6 +171,14 @@ function buildMetadata(
             ...(skipped ? { generationSkipped: true } : {}),
             ...(metadata.finishReason ? { finishReason: metadata.finishReason } : {}),
             ...(metadata.usage ? { usage: JSON.stringify(metadata.usage) } : {}),
+            evidenceEnvelopeOriginalItems: diagnostics.originalItemCount,
+            evidenceEnvelopeSelectedItems: diagnostics.selectedItemCount,
+            evidenceEnvelopeExcludedItems: diagnostics.excludedItemCount,
+            evidenceEnvelopeCharacters: diagnostics.serializedCharacterCount,
+            evidenceEnvelopeEstimatedTokens: diagnostics.estimatedTokenCount,
+            evidenceEnvelopeTruncated: diagnostics.truncated,
+            evidenceEnvelopeSelectedByType: JSON.stringify(diagnostics.selectedBySourceType),
+            evidenceEnvelopeExcludedByType: JSON.stringify(diagnostics.excludedBySourceType),
         },
     };
 }

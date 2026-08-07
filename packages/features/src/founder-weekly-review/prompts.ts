@@ -1,4 +1,10 @@
 import type { FounderWeeklyReviewEvidenceSnapshot } from "./contracts";
+import {
+    FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET,
+    assertGenerationEvidenceEnvelopeWithinBudget,
+    buildGenerationEvidenceEnvelope,
+    type GenerationEvidenceEnvelope,
+} from "./generation-evidence-envelope";
 
 export const FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION =
     "founder-weekly-review-generation/v1" as const;
@@ -21,24 +27,21 @@ When evidence conflicts, return contradictory_evidence with the conflicting sour
 
 nextPriorities contains recommendations only. Every recommendation must have label "Recommendation" and be grounded in supplied evidence. If a section lacks relevant evidence, return its typed no_evidence state with a concrete CTA. sourceWarnings may inform the CTA but are not factual evidence and cannot be cited.`;
 
-/** Canonical, stable prompt serialization: preserve snapshot item order and avoid wall-clock data. */
+/** Canonical, stable prompt serialization over the bounded evidence envelope. */
 export function buildFounderWeeklyReviewPrompt(
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot
+    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot,
+    suppliedEnvelope?: GenerationEvidenceEnvelope,
 ): string {
+    const envelope = suppliedEnvelope ?? buildGenerationEvidenceEnvelope(evidenceSnapshot);
+    assertGenerationEvidenceEnvelopeWithinBudget(envelope);
     return JSON.stringify(sortObjectKeysRecursively({
         promptVersion: FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION,
+        evidenceEnvelopeVersion: envelope.version,
+        evidenceEnvelopeBudget: FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET,
+        evidenceEnvelopeDiagnostics: envelope.diagnostics,
         reportingPeriod: evidenceSnapshot.reportingPeriod,
         workspaceTimezone: evidenceSnapshot.workspaceTimezone,
-        evidence: evidenceSnapshot.items.map((item) => ({
-            sourceId: item.sourceId,
-            sourceType: item.sourceType,
-            title: item.title,
-            sourceTimestamp: item.sourceTimestamp ?? null,
-            excerpt: item.excerpt,
-            canonicalUrl: item.canonicalUrl ?? null,
-            workspaceDeepLink: item.workspaceDeepLink ?? null,
-            metadata: item.metadata,
-        })),
+        evidence: envelope.items,
         sourceWarnings: evidenceSnapshot.sourceWarnings,
         requiredSections: [
             "whatChanged",

@@ -6,6 +6,7 @@ import {
     FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION,
     FounderWeeklyReviewV2PayloadSchema,
     buildFounderWeeklyReviewPrompt,
+    buildGenerationEvidenceEnvelope,
     generateFounderWeeklyReview,
     parseFounderWeeklyReviewPayload,
     type FounderWeeklyReviewEvidenceSnapshot,
@@ -242,14 +243,70 @@ describe("Founder Weekly Review generation", () => {
 
     it("canonicalizes metadata key order before building the prompt and hash", async () => {
         const firstSnapshot = completeSnapshot();
-        firstSnapshot.items[0]!.metadata = { alpha: "a", beta: "b" };
+        firstSnapshot.items[0]!.metadata = { changeType: "modified", alignmentMethod: "structure_path" };
         const secondSnapshot = completeSnapshot();
-        secondSnapshot.items[0]!.metadata = { beta: "b", alpha: "a" };
+        secondSnapshot.items[0]!.metadata = { alignmentMethod: "structure_path", changeType: "modified" };
         expect(buildFounderWeeklyReviewPrompt(firstSnapshot)).toBe(buildFounderWeeklyReviewPrompt(secondSnapshot));
 
         const first = await generateFounderWeeklyReview({ evidenceSnapshot: firstSnapshot, generate: fake(validPayload()) });
         const second = await generateFounderWeeklyReview({ evidenceSnapshot: secondSnapshot, generate: fake(validPayload()) });
         expect(first.modelMetadata.promptHash).toBe(second.modelMetadata.promptHash);
+    });
+
+    it("changes the prompt hash when selected evidence changes", async () => {
+        const firstSnapshot = completeSnapshot();
+        const secondSnapshot = completeSnapshot();
+        secondSnapshot.items[0]!.excerpt = "A different release shipped.";
+        const first = await generateFounderWeeklyReview({ evidenceSnapshot: firstSnapshot, generate: fake(validPayload()) });
+        const second = await generateFounderWeeklyReview({ evidenceSnapshot: secondSnapshot, generate: fake(validPayload()) });
+        expect(first.modelMetadata.promptHash).not.toBe(second.modelMetadata.promptHash);
+    });
+
+    it("normally truncates large evidence before generation and persists aggregate diagnostics", async () => {
+        const items = Array.from({ length: 250 }, (_, index) => ({
+            ...source(`document_change:doc:${(index % 3) + 1}:v1:v2:chunk:${index}:${index}`, "document_change", "x".repeat(200)),
+            sourceTimestamp: `2026-07-${String((index % 7) + 7).padStart(2, "0")}T10:00:00.000Z`,
+            metadata: { documentId: String((index % 3) + 1), previousVersionId: 1, currentVersionId: 2, changeType: "modified" },
+        }));
+        const payload: FounderWeeklyReviewV2Payload = {
+            schemaVersion: FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION,
+            sections: {
+                whatChanged: noEvidence(), whatShipped: noEvidence(), whatCustomersSaid: noEvidence(),
+                currentBlockers: noEvidence(), nextPriorities: noEvidence(),
+            },
+        };
+        const generate = fake(payload);
+        const result = await generateFounderWeeklyReview({ evidenceSnapshot: snapshot(items), generate });
+
+        expect(generate).toHaveBeenCalledTimes(1);
+        const prompt = JSON.parse(generate.mock.calls[0][0].prompt);
+        expect(prompt.evidence).toHaveLength(24);
+        expect(result.modelMetadata.attributes).toEqual(expect.objectContaining({
+            evidenceEnvelopeOriginalItems: 250,
+            evidenceEnvelopeSelectedItems: 24,
+            evidenceEnvelopeExcludedItems: 226,
+            evidenceEnvelopeTruncated: true,
+        }));
+    });
+
+    it("continues to validate citations against the complete immutable snapshot", async () => {
+        const items = Array.from({ length: 30 }, (_, index) => ({
+            ...source(`document_change:doc:1:v1:v2:chunk:${index}:${index}`, "document_change", "x".repeat(200)),
+            metadata: { documentId: "1", previousVersionId: 1, currentVersionId: 2, changeType: "modified" },
+        }));
+        const evidenceSnapshot = snapshot(items);
+        const selectedIds = new Set(buildGenerationEvidenceEnvelope(evidenceSnapshot).items.map((item) => item.sourceId));
+        const excludedId = evidenceSnapshot.items.find((item) => !selectedIds.has(item.sourceId))!.sourceId;
+        const payload: FounderWeeklyReviewV2Payload = {
+            schemaVersion: FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION,
+            sections: {
+                whatChanged: { state: "evidence", items: [{ kind: "observed_fact", text: "A source-backed change.", sourceIds: [excludedId], confidence: 0.5 }] },
+                whatShipped: noEvidence(), whatCustomersSaid: noEvidence(), currentBlockers: noEvidence(), nextPriorities: noEvidence(),
+            },
+        };
+
+        await expect(generateFounderWeeklyReview({ evidenceSnapshot, generate: fake(payload) })).resolves.toMatchObject({ reviewPayload: payload });
+        expect(evidenceSnapshot.items).toHaveLength(30);
     });
 
     it("adapts the configured web abstraction and returns its metadata", async () => {

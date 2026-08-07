@@ -13,6 +13,7 @@ import {
   IconCheck,
   IconChevronLeft,
   IconChevronRight,
+  IconGrid,
   IconMore,
   IconPlus,
   IconSearch,
@@ -376,6 +377,11 @@ export interface SourceRailProps {
   logoLabel?: string;
   /** When provided, a collapse button appears in the header. */
   onClose?: () => void;
+  /**
+   * Opens the full Knowledge surface. The rail is a picker for scoping a
+   * question; browsing and auditing the corpus happens there.
+   */
+  onOpenKnowledge?: () => void;
 }
 
 interface GroupEntry {
@@ -401,6 +407,7 @@ export function SourceRail({
   setActiveTag,
   logoLabel = "Launchstack",
   onClose,
+  onOpenKnowledge,
 }: SourceRailProps) {
   const [search, setSearch] = useState("");
   const [searchFocus, setSearchFocus] = useState(false);
@@ -471,9 +478,37 @@ export function SourceRail({
         <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "-0.01em", flex: 1 }}>
           {logoLabel}
         </div>
+        {onOpenKnowledge && (
+          <button
+            onClick={onOpenKnowledge}
+            title="Open Knowledge"
+            aria-label="Open Knowledge"
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: 6,
+              background: "transparent",
+              color: "var(--ink-3)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "background 120ms, color 120ms",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--line-2)";
+              e.currentTarget.style.color = "var(--ink)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--ink-3)";
+            }}
+          >
+            <IconGrid size={13} />
+          </button>
+        )}
         <button
           onClick={onOpenAdd}
-          title="Add source  ⌘U"
+          title="Add knowledge  ⌘U"
           style={{
             width: 26,
             height: 26,
@@ -546,7 +581,7 @@ export function SourceRail({
             onChange={(e) => setSearch(e.target.value)}
             onFocus={() => setSearchFocus(true)}
             onBlur={() => setSearchFocus(false)}
-            placeholder="Search your sources"
+            placeholder="Search your knowledge"
             style={{
               flex: 1,
               background: "transparent",

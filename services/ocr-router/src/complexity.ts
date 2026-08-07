@@ -3,11 +3,21 @@
  * Standalone version for the ocr-router sidecar — no Next.js dependencies.
  *
  * Vision backend priority:
- *   1. OpenAI-compatible API (if OPENAI_API_KEY or AI_API_KEY is set)
+ *   1. OpenAI-compatible API (if GOOGLE_AI_API_KEY, AI_API_KEY or
+ *      OPENAI_API_KEY is set). Defaults to Gemini; AI_BASE_URL retargets it.
  *   2. Local SigLIP via @huggingface/transformers (WASM fallback)
  */
 
 import { PDFDocument } from "pdf-lib";
+
+/**
+ * Duplicated from `@launchstack/core/llm/types` rather than imported: this
+ * service is deliberately outside the pnpm workspace (see `pnpm-workspace.yaml`)
+ * and depends on no workspace package. Keep in sync with that module.
+ */
+const GEMINI_BASE_URL =
+  "https://generativelanguage.googleapis.com/v1beta/openai";
+const GEMINI_DEFAULT_MODEL = "gemini-2.5-flash";
 
 type OCRProvider =
   | "AZURE"
@@ -92,18 +102,23 @@ Respond with ONLY a JSON object: {"label": "<category>", "score": <confidence 0-
 async function runVisionCheckOpenAI(
   images: Uint8Array[]
 ): Promise<VisionClassification> {
-  const apiKey =
-    process.env.OPENAI_API_KEY || process.env.AI_API_KEY || "";
-  // No default endpoint: any OpenAI-compatible vision endpoint works, so the
-  // operator names it rather than the code silently choosing a vendor.
-  const baseUrl = process.env.AI_BASE_URL;
-  if (!baseUrl) {
-    throw new Error(
-      "AI_BASE_URL is not set. Point it at an OpenAI-compatible vision " +
-        "endpoint — there is no built-in default endpoint.",
-    );
-  }
-  const model = process.env.OCR_VISION_MODEL || "gpt-4o-mini";
+  // Endpoint and credential are chosen as a PAIR. An operator who names an
+  // endpoint supplies its key; when nobody names one we fall back to Gemini,
+  // and only a Google credential travels there — forwarding an `sk-…` would
+  // hand an OpenAI key to a service it does not belong to.
+  const configuredBaseUrl = process.env.AI_BASE_URL;
+  const { baseUrl: rawBaseUrl, apiKey } = configuredBaseUrl
+    ? {
+        baseUrl: configuredBaseUrl,
+        apiKey: process.env.AI_API_KEY || process.env.OPENAI_API_KEY || "",
+      }
+    : {
+        baseUrl: GEMINI_BASE_URL,
+        apiKey: process.env.GOOGLE_AI_API_KEY || "",
+      };
+  // Stripped because the value is concatenated raw below.
+  const baseUrl = rawBaseUrl.replace(/\/$/, "");
+  const model = process.env.OCR_VISION_MODEL || GEMINI_DEFAULT_MODEL;
 
   console.log(`[OCR Router] Using vision model ${model} for classification`);
 
@@ -221,15 +236,20 @@ async function runVisionCheckSigLIP(
 
 /**
  * Run vision classification using the best available backend.
- * Prefers OpenAI (fast, accurate) over local SigLIP (free, slower).
+ * Prefers a hosted endpoint (fast, accurate) over local SigLIP (free, slower).
  */
 async function runVisionCheck(
   images: Uint8Array[]
 ): Promise<VisionClassification> {
-  const hasOpenAI =
-    process.env.OPENAI_API_KEY || process.env.AI_API_KEY;
+  // Must list every credential runVisionCheckOpenAI can actually use, or a
+  // deployment holding only that key silently drops to SigLIP. GOOGLE_AI_API_KEY
+  // is here because the endpoint now defaults to Gemini.
+  const hasHostedCredential =
+    process.env.GOOGLE_AI_API_KEY ||
+    process.env.AI_API_KEY ||
+    process.env.OPENAI_API_KEY;
 
-  if (hasOpenAI) {
+  if (hasHostedCredential) {
     try {
       return await runVisionCheckOpenAI(images);
     } catch (err) {

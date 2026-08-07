@@ -63,6 +63,75 @@ describe("Single-endpoint chat runtime configuration", () => {
         );
     });
 
+    /**
+     * `CHAT_MODELS_CONFIG` defaults to a *relative* path, so where the
+     * container starts decides whether the file is found at all. Three places
+     * have to agree and none of them mention the other two: the Dockerfile's
+     * final WORKDIR, the directory the config is copied into, and the path
+     * compose mounts over. Asserted here because getting it wrong produces a
+     * container that builds, boots, serves pages, and then fails the first
+     * chat request with a missing-file error.
+     */
+    describe.each([
+        ["apps/web/Dockerfile", path.join("apps", "web", "Dockerfile")],
+        [
+            "apps/web/Dockerfile.prebuilt",
+            path.join("apps", "web", "Dockerfile.prebuilt"),
+        ],
+    ])("%s runner", (_label, relativePath) => {
+        const dockerfile = fs.readFileSync(
+            path.join(ROOT, relativePath),
+            "utf-8",
+        );
+        const runner = dockerfile.slice(dockerfile.indexOf("AS runner"));
+
+        // DEFAULT_CHAT_CONFIG_PATH in apps/web/src/server/chat-endpoint.ts.
+        const DEFAULT_CHAT_CONFIG_PATH = "config/chat-models.yaml";
+        const MOUNT_TARGET = "/app/apps/web/config/chat-models.yaml";
+
+        it("starts in the directory the default config path resolves against", () => {
+            const workdirs = [...runner.matchAll(/^WORKDIR\s+(\S+)/gm)].map(
+                (match) => match[1]!,
+            );
+            const finalWorkdir = workdirs[workdirs.length - 1];
+
+            expect(finalWorkdir).toBeDefined();
+            expect(
+                path.posix.join(finalWorkdir!, DEFAULT_CHAT_CONFIG_PATH),
+            ).toBe(MOUNT_TARGET);
+        });
+
+        it("copies the config to that same resolved path", () => {
+            // The source is `apps/web/config` in the prebuilt runner and
+            // `/app/apps/web/config` in the builder-fed one.
+            const copy = /^COPY[^\n]*\s\/?(?:app\/)?apps\/web\/config\s+(\S+)\s*$/m.exec(
+                runner,
+            );
+            expect(copy).not.toBeNull();
+
+            // COPY destinations are relative to the WORKDIR in force at that
+            // line, which is /app in both runner stages.
+            const destination = path.posix.resolve("/app", copy![1]!);
+            expect(path.posix.join(destination, "chat-models.yaml")).toBe(
+                MOUNT_TARGET,
+            );
+        });
+
+        it("starts the server entrypoint from that working directory", () => {
+            const cmd = /^CMD\s+(\[[^\]]*\])/m.exec(runner);
+            expect(cmd).not.toBeNull();
+
+            const argv = JSON.parse(cmd![1]!) as string[];
+            const workdirs = [...runner.matchAll(/^WORKDIR\s+(\S+)/gm)].map(
+                (match) => match[1]!,
+            );
+            const entry = argv[argv.length - 1]!;
+            expect(
+                path.posix.resolve(workdirs[workdirs.length - 1]!, entry),
+            ).toBe("/app/apps/web/server.js");
+        });
+    });
+
     it("no longer forwards removed per-provider chat variables", () => {
         const composePath = path.join(ROOT, "docker-compose.yml");
         const content = fs.readFileSync(composePath, "utf-8");

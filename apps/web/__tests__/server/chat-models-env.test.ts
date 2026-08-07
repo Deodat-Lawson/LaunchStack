@@ -3,9 +3,11 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { ChatConfigurationError } from "@launchstack/core/llm";
+import { GEMINI_BASE_URL } from "@launchstack/core/llm/types";
 import {
   getAppChatModelsConfig,
   resetAppChatModelsCache,
+  resetChatEndpointWarnings,
   resolveChatEndpoint,
   resolveChatModelsConfigPath,
   translateLegacyEndpoint,
@@ -30,8 +32,35 @@ describe("chat endpoint resolution", () => {
     ).toEqual({ baseUrl: "http://localhost:8080/v1", apiKey: undefined });
   });
 
-  it("fails with an actionable message when nothing is configured", () => {
-    expect(() => resolveChatEndpoint({})).toThrow(/CHAT_BASE_URL is not set/);
+  it("falls back to Gemini when nothing is configured", () => {
+    expect(resolveChatEndpoint({})).toEqual({
+      baseUrl: GEMINI_BASE_URL,
+      apiKey: undefined,
+    });
+  });
+
+  it("pairs the Gemini fallback with a Google credential", () => {
+    expect(resolveChatEndpoint({ GOOGLE_AI_API_KEY: "AIza-x" })).toEqual({
+      baseUrl: GEMINI_BASE_URL,
+      apiKey: "AIza-x",
+    });
+    // GOOGLE_AI_API_KEY is the only accepted spelling — there is deliberately
+    // no GEMINI_API_KEY alias, so it must not be picked up.
+    expect(
+      resolveChatEndpoint({
+        GOOGLE_AI_API_KEY: "  ",
+      } as Parameters<typeof resolveChatEndpoint>[0]),
+    ).toEqual({ baseUrl: GEMINI_BASE_URL, apiKey: undefined });
+  });
+
+  it("prefers an explicit CHAT_BASE_URL over the Gemini fallback", () => {
+    expect(
+      resolveChatEndpoint({
+        CHAT_BASE_URL: "https://api.minimax.io/v1",
+        CHAT_API_KEY: "mm",
+        GOOGLE_AI_API_KEY: "AIza-x",
+      }),
+    ).toEqual({ baseUrl: "https://api.minimax.io/v1", apiKey: "mm" });
   });
 });
 
@@ -60,9 +89,9 @@ describe("one-release legacy translation", () => {
     [{ OPENAI_API_KEY: "legacy-openai-key" }],
     [{ OPENROUTER_API_KEY: "legacy-openrouter-key", OPENAI_API_KEY: "legacy-openai-key" }],
   ])("refuses to infer an endpoint from the bare credential %p", (environment) => {
-    // There are no built-in vendor URLs. A key says who you are, not where to
-    // send the request — inferring one would pick a vendor on the operator's
-    // behalf and ship their prompts there.
+    // A key says who you are, not where to send the request. The only
+    // built-in URL is the Gemini fallback in resolveChatEndpoint, and these
+    // credentials do not reach it — see the pairing test below.
     expect(translateLegacyEndpoint(environment)).toBeUndefined();
   });
 
@@ -74,9 +103,9 @@ describe("one-release legacy translation", () => {
       translateLegacyEndpoint({ OLLAMA_BASE_URL: "http://localhost:11434" }),
     ).toBeUndefined();
 
-    expect(() =>
+    expect(
       resolveChatEndpoint({ OLLAMA_BASE_URL: "http://localhost:11434" }),
-    ).toThrow(/CHAT_BASE_URL is not set/);
+    ).toEqual({ baseUrl: GEMINI_BASE_URL, apiKey: undefined });
   });
 
   it("ignores OPENAI_API_KEY entirely — it is the embeddings credential", () => {
@@ -91,10 +120,23 @@ describe("one-release legacy translation", () => {
     ).toEqual({ baseUrl: "https://api.siliconflow.cn/v1", apiKey: "sf" });
   });
 
-  it("names the bare credential when it explains the failure", () => {
-    expect(() => resolveChatEndpoint({ OPENAI_API_KEY: "legacy-openai-key" })).toThrow(
-      /OPENAI_API_KEY is set, but a credential no longer selects an endpoint/,
-    );
+  it("never forwards another vendor's credential to the Gemini fallback", () => {
+    // The whole point of pairing: falling back to Google must not put an
+    // `sk-…` in an Authorization header addressed to Google.
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+    resetChatEndpointWarnings(); // warnings dedupe per process
+    try {
+      expect(
+        resolveChatEndpoint({ OPENAI_API_KEY: "sk-x", OPENROUTER_API_KEY: "sk-or-v1-x" }),
+      ).toEqual({ baseUrl: GEMINI_BASE_URL, apiKey: undefined });
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringMatching(
+          /OPENROUTER_API_KEY and OPENAI_API_KEY are set, but they belong to another service/,
+        ),
+      );
+    } finally {
+      warn.mockRestore();
+    }
   });
 });
 
@@ -106,9 +148,9 @@ describe("credential presence checks", () => {
     expect(hasConfiguredAiCredential({ AI_BASE_URL: "https://x/v1" })).toBe(true);
   });
 
-  it("reports only what resolveChatEndpoint would actually accept", () => {
-    // Reporting true here would tell a health check chat is ready moments
-    // before resolveChatEndpoint refuses to boot on the same environment.
+  it("reports only variables that actually direct chat somewhere", () => {
+    // None of these changes where chat goes — it would still fall back to
+    // Gemini — so reporting true would credit configuration that has no effect.
     expect(hasConfiguredAiCredential({ OPENROUTER_API_KEY: "k" })).toBe(false);
     expect(hasConfiguredAiCredential({ OPENAI_API_KEY: "legacy-openai-key" })).toBe(false);
     expect(hasConfiguredAiCredential({ OLLAMA_BASE_URL: "http://x:11434" })).toBe(false);

@@ -1,4 +1,5 @@
 import { EventSchemas, Inngest } from "inngest";
+import { chatConfigMiddleware } from "./chat-config-middleware";
 import type { ProcessDocumentEventData } from "@launchstack/core/ocr/types";
 import type { TrendSearchEventData } from "@launchstack/features/trend-search";
 import type { ProspectorEventData } from "@launchstack/features/client-prospector";
@@ -106,6 +107,10 @@ function createInngestClient() {
     id: "pdr-ai",
     name: "Launchstack",
     schemas: new EventSchemas().fromUnion<Events>(),
+    // Background functions call feature pipelines, which resolve chat models
+    // through core directly rather than through `~/lib/models`. Nothing else
+    // in a cold Inngest invocation installs that configuration.
+    middleware: [chatConfigMiddleware],
     ...(eventKey && { eventKey }),
   });
 }

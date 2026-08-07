@@ -1,82 +1,75 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
-import { File } from "formdata-node";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { getTranscriptionProvider } from "@launchstack/features/voice";
+import { getEngine } from "~/server/engine";
 
 /**
- * Speech-to-Text API using OpenAI Whisper.
- * OpenAI client is lazy-initialized at runtime to avoid build failures
- * when OPENAI_API_KEY is not available during Next.js build.
+ * Speech-to-Text.
+ *
+ * Delegates to the configured transcription provider rather than holding its
+ * own client, so the sidecar and cloud paths stay interchangeable and this
+ * route does not need to know which one is active. The cloud provider defaults
+ * to Gemini, reached on the same OpenAI-compatible endpoint as everything else.
+ *
+ * Callers must upload a format Gemini accepts — wav, mp3, aiff, aac, ogg or
+ * flac. `MediaRecorder` produces WebM/Opus, which is not one of them, so the
+ * browser converts to WAV before uploading (see `lib/voice/encodeWav.ts`).
  */
+
+const MIN_AUDIO_BYTES = 45;
 
 export async function POST(request: Request) {
   try {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json(
-        { error: "OpenAI API key not configured" },
-        { status: 500 }
-      );
-    }
-
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-      ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
-    });
-
     const formData = await request.formData();
-    const audioFile = formData.get("audio") as File | Blob;
+    const audioFile = formData.get("audio");
 
-    if (!audioFile) {
+    if (!audioFile || typeof audioFile === "string") {
       return NextResponse.json(
         { error: "Audio file is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const audioBuffer = await audioFile.arrayBuffer();
-    const buffer = Buffer.from(audioBuffer);
+    const buffer = Buffer.from(await audioFile.arrayBuffer());
 
-    const MIN_AUDIO_BYTES = 45;
-    if (!buffer.length || buffer.length < MIN_AUDIO_BYTES) {
+    if (buffer.length < MIN_AUDIO_BYTES) {
       return NextResponse.json(
-        { error: "Audio too short. Please record at least 0.1 seconds before sending." },
-        { status: 400 }
+        {
+          error:
+            "Audio too short. Please record at least 0.1 seconds before sending.",
+        },
+        { status: 400 },
       );
     }
 
-    const mimeType = audioFile.type || "audio/webm";
-    let extension = "webm";
-    if (mimeType.includes("wav")) extension = "wav";
-    else if (mimeType.includes("mp3")) extension = "mp3";
-    else if (mimeType.includes("m4a")) extension = "m4a";
-    else if (mimeType.includes("ogg")) extension = "ogg";
-    else if (mimeType.includes("flac")) extension = "flac";
-    
-    const audioFileForOpenAI = new File([buffer], `audio.${extension}`, {
-      type: mimeType,
-      lastModified: Date.now(),
-    });
+    // The provider validates the extension against what the endpoint accepts,
+    // so pass through what the client actually sent rather than guessing.
+    const filename =
+      "name" in audioFile && typeof audioFile.name === "string" && audioFile.name
+        ? audioFile.name
+        : "recording.wav";
 
-    const transcription = await openai.audio.transcriptions.create({
-      file: audioFileForOpenAI as unknown as globalThis.File,
-      model: "gpt-4o-transcribe",
-      response_format: "text",
-    });
+    // Install provider configuration before the registry is read. On a cold
+    // invocation nothing else here touches core, so without this the registry
+    // is empty: TRANSCRIPTION_PROVIDER=sidecar, SIDECAR_URL and AI_BASE_URL are
+    // all ignored, and the cloud provider is chosen with no credential. Worse,
+    // getTranscriptionProvider() memoizes per process, so that wrong choice
+    // would persist for every later transcription in the same instance.
+    // getEngine() is idempotent and cached.
+    getEngine();
 
-    const transcribedText = String(transcription);
+    const provider = await getTranscriptionProvider();
+    const result = await provider.transcribe(buffer, filename);
 
-    return NextResponse.json(
-      { text: transcribedText },
-      { status: 200 }
-    );
+    return NextResponse.json({ text: result.data.text }, { status: 200 });
   } catch (error) {
     console.error("Error in speech-to-text:", error);
     return NextResponse.json(
       { error: "Failed to transcribe audio" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

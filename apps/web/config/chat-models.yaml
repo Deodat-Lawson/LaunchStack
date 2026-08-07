@@ -17,53 +17,48 @@
 version: 1
 
 models:
-  # Default quick start: OpenRouter (CHAT_BASE_URL=https://openrouter.ai/api/v1).
+  # Default: Google Gemini. Reached at
+  # CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai,
+  # which is also where chat falls back when CHAT_BASE_URL is unset.
   #
-  # Declared in full rather than by preset because there is no bundled preset
-  # for this model. The values below are a faithful translation of what this
-  # deployment already sent before the chat layer was reworked — the reasoning
-  # patch is the same `reasoning: { effort: ... }` field the previous
-  # OpenRouter adapter emitted — so behavior is unchanged, not newly asserted.
-  #
-  # Verify against your endpoint before relying on any of it, and prefer
-  # understating: an unclaimed capability just goes unused, while an
-  # over-claimed one surfaces as a confusing runtime error.
+  # Model ids here are the BARE ids Google's endpoint expects. The `google/`
+  # prefix belongs only to the `preset:` field, which names a bundled behavior
+  # entry — see packages/core/src/llm/presets.ts.
   primary:
-    id: moonshotai/kimi-k3
-    behavior:
-      input: [text, image]
-      reasoning:
-        mode: effort
-        levels:
-          low: { reasoning: { effort: low } }
-          medium: { reasoning: { effort: medium } }
-          high: { reasoning: { effort: high } }
-        # Matches the previous adapter, which sent effort "high" whenever the
-        # user enabled thinking.
-        default: high
-        # Send nothing at all when the user has not asked for reasoning.
-        off: {}
-      nativeStructuredOutput: [json-schema, tool-calling]
-      parameters:
-        temperature: supported
-        systemMessages: supported
-        streaming: supported
-        maxOutputTokens: supported
+    id: gemini-2.5-flash
+    preset: google/gemini-2.5-flash
 
-  # Talking to OpenAI directly instead? Drop the vendor prefix OpenRouter
-  # needs, and let a source-dated preset supply the behavior:
+  # The cheap tier. Its preset sets reasoning `default: none`, so routine work
+  # does not pay for thinking tokens.
+  fast:
+    id: gemini-2.5-flash-lite
+    preset: google/gemini-2.5-flash-lite
+
+  # The reasoning tier. 2.5 Pro always reasons, so its preset omits the `none`
+  # level rather than claiming a capability the endpoint would reject.
+  deep:
+    id: gemini-2.5-pro
+    preset: google/gemini-2.5-pro
+
+  # Talking to something else instead? Any OpenAI-compatible endpoint works —
+  # set CHAT_BASE_URL and replace the models above. With OpenRouter the ids
+  # carry a vendor prefix and a bundled preset may not exist, in which case
+  # declare `behavior` in full instead of referencing one:
   #
-  #   openai_mini:
-  #     id: gpt-4o-mini
-  #     preset: openai/gpt-4o-mini
+  #   primary:
+  #     id: moonshotai/kimi-k3
+  #     behavior:
+  #       input: [text, image]
+  #       nativeStructuredOutput: [json-schema, tool-calling]
+  #       parameters: { temperature: supported, streaming: supported }
 
 routes:
   # `default` is required. `fast` inherits it unless assigned.
-  default: primary
-  # `reasoning` and `vision` inherit `default` only when that model declares
-  # the capability. The model above declares both, so both routes work. Point
-  # them elsewhere to split work across models:
   #
-  #   fast: openai_mini
-  #   reasoning: primary
-  #   vision: primary
+  # `reasoning` and `vision` inherit `default` only when that model declares
+  # the capability. gemini-2.5-flash declares both, so both would work
+  # unassigned; `reasoning` is pointed at the Pro tier deliberately.
+  default: primary
+  fast: fast
+  reasoning: deep
+  vision: primary

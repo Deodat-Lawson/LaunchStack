@@ -26,10 +26,11 @@ export async function getTranscriptionProvider(): Promise<TranscriptionProvider>
         const { SidecarTranscriptionProvider } = await import("./sidecar");
         _provider = new SidecarTranscriptionProvider();
     } else {
-        // All cloud providers use the OpenAI-compatible endpoint
-        // Configured via TRANSCRIPTION_API_BASE_URL, TRANSCRIPTION_API_KEY, TRANSCRIPTION_MODEL
-        const { OpenAICompatibleTranscriptionProvider } = await import("./groq");
-        _provider = new OpenAICompatibleTranscriptionProvider();
+        // Cloud transcription runs on the same OpenAI-compatible endpoint as
+        // the rest of the deployment, defaulting to Gemini. Override with
+        // TRANSCRIPTION_API_BASE_URL / TRANSCRIPTION_API_KEY / TRANSCRIPTION_MODEL.
+        const { GeminiTranscriptionProvider } = await import("./gemini");
+        _provider = new GeminiTranscriptionProvider();
     }
 
     return _provider;

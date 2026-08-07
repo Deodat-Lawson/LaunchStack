@@ -86,6 +86,10 @@
       "types": "./src/guardrails/index.ts",
       "default": "./src/guardrails/index.ts"
     },
+    "./collab": {
+      "types": "./src/collab/index.ts",
+      "default": "./src/collab/index.ts"
+    },
     "./graph": {
       "types": "./src/graph/index.ts",
       "default": "./src/graph/index.ts"
@@ -239,6 +243,10 @@
       "./guardrails": {
         "types": "./dist/guardrails/index.d.ts",
         "default": "./dist/guardrails/index.js"
+      },
+      "./collab": {
+        "types": "./dist/collab/index.d.ts",
+        "default": "./dist/collab/index.js"
       },
       "./graph": {
         "types": "./dist/graph/index.d.ts",

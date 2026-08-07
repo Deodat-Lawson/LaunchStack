@@ -43,9 +43,20 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      # `db:backfill:versions` runs after the schema push and builds the full
+      # engine, which resolves the chat endpoint — so this container needs the
+      # model configuration even though it never asks a model anything.
+      - ./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
       SKIP_ENV_VALIDATION: "1"
+      # SKIP_ENV_VALIDATION does not help here: the failure comes from building
+      # the engine, not from validating env. Without these the container exits
+      # 1 and `app` never starts, because it waits on migrate completing.
+      CHAT_BASE_URL: ${CHAT_BASE_URL:-}
+      CHAT_API_KEY: ${CHAT_API_KEY:-}
+      CHAT_MODELS_CONFIG: ${CHAT_MODELS_CONFIG:-config/chat-models.yaml}
     restart: "no"
 
   seaweedfs:
@@ -106,11 +117,17 @@ services:
     container_name: pdr_ai_v2-ocr-router
     restart: unless-stopped
     environment:
-      # AI vision — used for OpenAI-based document classification (optional)
+      # AI vision for document classification (optional — falls back to local
+      # SigLIP when no credential is set). The endpoint defaults to Gemini, so
+      # GOOGLE_AI_API_KEY is the credential that pairs with it; the other two
+      # are used only when AI_BASE_URL names a different endpoint.
+      # The app also forwards its own copies per request, which take precedence
+      # when set. These stay so the router works when called by anything else.
+      GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       AI_API_KEY: ${AI_API_KEY:-}
       AI_BASE_URL: ${AI_BASE_URL:-}
-      OCR_VISION_MODEL: ${OCR_VISION_MODEL:-gpt-4o-mini}
+      OCR_VISION_MODEL: ${OCR_VISION_MODEL:-}
     ports:
       - "8002:8002"
     healthcheck:
@@ -193,9 +210,8 @@ services:
       AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
       AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
       LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-}
       GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
+      GEMINI_TTS_VOICE: ${GEMINI_TTS_VOICE:-}
       GOOGLE_MODEL: ${GOOGLE_MODEL:-}
       EMBEDDING_INDEX: ${EMBEDDING_INDEX:-legacy-openai-1536}
       EMBEDDING_SECRETS_KEY: ${EMBEDDING_SECRETS_KEY:-}
@@ -220,6 +236,14 @@ services:
       S3_ACCESS_KEY: ${S3_ACCESS_KEY:-pdr_local_key}
       S3_SECRET_KEY: ${S3_SECRET_KEY:-pdr_local_secret}
       S3_BUCKET_NAME: ${S3_BUCKET_NAME:-launchstack}
+      # Meetings: Slack mirroring and remote agent nodes. All optional — unset
+      # means no Slack bridge and every agent runs in this process, which is
+      # the right default for a single-container stack.
+      COLLAB_HUB_SECRET: ${COLLAB_HUB_SECRET:-}
+      COLLAB_HUB_ID: ${COLLAB_HUB_ID:-}
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN:-}
+      SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET:-}
+      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL:-}
       # Sidecar (ML compute — embeddings, reranking, transcription)
       SIDECAR_URL: http://sidecar:8000
       # Adeu DOCX redlining service

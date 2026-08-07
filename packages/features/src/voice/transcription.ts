@@ -2,7 +2,7 @@
  * Audio Transcription Service
  *
  * Handles transcription of MP3/MP4 audio files using the configured provider
- * (Groq Whisper, OpenAI Whisper, or sidecar).
+ * (Gemini audio understanding, or the self-hosted sidecar).
  * Converts audio files to text for processing through the standard document pipeline.
  */
 
@@ -199,7 +199,7 @@ export function isVideoUrl(url: string): boolean {
 
 /**
  * Transcribe audio from a video platform URL via the sidecar's
- * /download-and-transcribe endpoint (yt-dlp + Whisper).
+ * /download-and-transcribe endpoint (yt-dlp, then local transcription).
  */
 export async function transcribeVideoFromUrl(
   videoUrl: string,

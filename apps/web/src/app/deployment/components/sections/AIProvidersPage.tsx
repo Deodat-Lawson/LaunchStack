@@ -30,6 +30,19 @@ type Endpoint = {
  */
 const ENDPOINTS: Endpoint[] = [
   {
+    id: 'gemini',
+    name: 'Google Gemini',
+    summary: 'The default — used when nothing is configured',
+    link: 'https://aistudio.google.com/apikey',
+    bullets: [
+      'Reached when CHAT_BASE_URL is unset; set GOOGLE_AI_API_KEY alone to authenticate',
+      'Bundled presets cover the gemini-2.5 flash, flash-lite and pro tiers',
+      'The shipped chat-models.yaml already names these model ids',
+    ],
+    envKey:
+      'CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>',
+  },
+  {
     id: 'openrouter',
     name: 'OpenRouter',
     summary: 'One key, many vendors',
@@ -39,7 +52,7 @@ const ENDPOINTS: Endpoint[] = [
       'One credential can address models from many vendors',
       'Vendor-qualified model ids like vendor/model-name',
     ],
-    envKey: 'CHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=<your-openrouter-api-key>',
+    envKey: 'CHAT_BASE_URL=https://openrouter.ai/api/v1\nCHAT_API_KEY=<your-openrouter-key>',
   },
   {
     id: 'openai',
@@ -49,9 +62,9 @@ const ENDPOINTS: Endpoint[] = [
     bullets: [
       'Direct vendor API without an aggregation layer',
       'Bundled presets cover the gpt-4o and gpt-5 families',
-      'Most thoroughly tested path end-to-end',
+      'Replace the model ids in chat-models.yaml — it ships with Gemini ids',
     ],
-    envKey: 'CHAT_BASE_URL=https://api.openai.com/v1\nCHAT_API_KEY=<your-openai-api-key>',
+    envKey: 'CHAT_BASE_URL=https://api.openai.com/v1\nCHAT_API_KEY=<your-openai-key>',
   },
   {
     id: 'minimax',
@@ -181,13 +194,13 @@ export const AIProvidersPage: React.FC<DeploymentProps> = ({ copyToClipboard, co
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <InlineRow
             title="Embeddings"
-            badge="Default: OpenAI text-embedding-3-large"
-            body="Swap for Hugging Face BGE-M3, Ollama nomic-embed-text, or Google text-embedding-004. Re-run pnpm db:reindex after switching so existing chunks get re-embedded with the new model."
+            badge="Default: text-embedding-3-large (legacy-openai-1536)"
+            body="The one capability still on its original model, because vectors are persisted and only comparable within one model. New deployments should set EMBEDDING_INDEX=gemini-embedding-768 and point EMBEDDING_API_* at Gemini. Existing corpora need a full re-index before switching."
           />
           <InlineRow
             title="Reranker"
-            badge="Default: Jina jina-reranker-v2-base-multilingual"
-            body="Optional but recommended for high-precision retrieval. Set JINA_API_KEY or disable via ENABLE_RERANKER=false."
+            badge="Default: gemini-2.5-flash-lite"
+            body="Google serves no /rerank endpoint, so relevance is scored on a fast chat model using the same key as everything else. Point RERANK_API_BASE_URL at a dedicated /v1/rerank service for lower latency, or disable via ENABLE_RERANKER=false."
           />
         </div>
       </Section>
@@ -275,15 +288,16 @@ const InlineRow: React.FC<{ title: string; badge: string; body: string }> = ({ t
 const MODELS_YAML = `version: 1
 
 models:
-  # Behavior from a bundled, source-dated preset.
+  # Behavior from a bundled, source-dated preset. On Google's endpoint the id
+  # is bare; the google/ prefix belongs only to the preset name.
   workhorse:
-    id: openai/gpt-4o
-    preset: openai/gpt-4o
+    id: gemini-2.5-flash
+    preset: google/gemini-2.5-flash
 
   # Cheaper model for extraction and query planning.
   cheap:
-    id: openai/gpt-4o-mini
-    preset: openai/gpt-4o-mini
+    id: gemini-2.5-flash-lite
+    preset: google/gemini-2.5-flash-lite
 
   # No preset? Declare the behavior yourself — nothing is guessed.
   thirdparty:

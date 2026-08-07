@@ -14,12 +14,31 @@ export interface EmbeddingProviderConfig {
   baseURL: string | undefined;
 }
 
+/**
+ * Endpoint and credential are resolved as a PAIR, most specific first.
+ *
+ * Neither half is ever taken from a different source than the other. The
+ * `baseURL` also has no default on purpose: `@langchain/openai` falls back to
+ * `api.openai.com` whenever it is undefined, which would send note text to a
+ * vendor nothing in this configuration names. Callers must treat a missing
+ * `baseURL` as "not configured" rather than passing it through — see
+ * `assertEmbeddingConfigured`.
+ */
 export function resolveEmbeddingConfig(): EmbeddingProviderConfig {
-  return {
-    apiKey:
-      process.env.EMBEDDING_API_KEY ??
-      process.env.AI_API_KEY ??
-      process.env.OPENAI_API_KEY,
-    baseURL: process.env.EMBEDDING_API_BASE_URL ?? process.env.AI_BASE_URL,
-  };
+  if (process.env.EMBEDDING_API_BASE_URL) {
+    return {
+      apiKey: process.env.EMBEDDING_API_KEY,
+      baseURL: process.env.EMBEDDING_API_BASE_URL,
+    };
+  }
+
+  if (process.env.AI_BASE_URL) {
+    return {
+      apiKey: process.env.AI_API_KEY ?? process.env.OPENAI_API_KEY,
+      baseURL: process.env.AI_BASE_URL,
+    };
+  }
+
+  return { apiKey: undefined, baseURL: undefined };
 }
+

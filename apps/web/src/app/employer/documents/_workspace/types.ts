@@ -168,6 +168,10 @@ export interface DemotedFeature {
  * Each links to a real employer route.
  */
 export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
+  { id: "knowledge", label: "Knowledge",         Icon: IconFolder,               desc: "Browse and grow everything the workspace can cite",
+    href: "/employer/documents?feature=knowledge" },
+  { id: "meetings",  label: "Meetings",          Icon: IconUsers,                desc: "Agents work an objective in a channel you can join",
+    href: "/employer/documents?feature=meetings" },
   { id: "draft",     label: "Draft",             Icon: IconPen,       kbd: "⌘D", desc: "Generate a new document with AI",
     href: "/employer/documents?feature=draft" },
   { id: "rewrite",   label: "Rewrite",           Icon: IconSparkle,   kbd: "⌘R", desc: "Improve existing content",
@@ -178,12 +182,14 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
     href: "/employer/documents?feature=notes" },
   { id: "audit",     label: "Predictive gaps",   Icon: IconShield,              desc: "Missing exhibits, schedules, and compliance gaps",
     href: "/employer/documents?feature=audit" },
-  { id: "analytics", label: "Analytics",         Icon: IconChart,               desc: "Queries, accuracy, gap trends",
-    href: "/employer/statistics" },
+  { id: "analytics", label: "Analytics",         Icon: IconChart,               desc: "Documents, queries, and activity",
+    href: "/employer/settings#analytics" },
   { id: "team",      label: "Workspace",         Icon: IconUsers,               desc: "Invite codes, roles, approvals",
     href: "/employer/employees" },
   { id: "profile",   label: "Company profile",   Icon: IconBuilding,            desc: "AI-extracted company intel",
-    href: "/employer/settings" },
+    href: "/employer/settings#company" },
+  { id: "agents",    label: "Agents & nodes",    Icon: IconUsers,               desc: "The meeting roster, and the machines that run it",
+    href: "/employer/settings#agents" },
   { id: "deploy",    label: "Self-host / BYOK",  Icon: IconBolt,                desc: "Vercel, Docker, your own keys",
     href: "/employer/settings#byok" },
 ] as const;
@@ -217,7 +223,9 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
     id: "workspace",
     label: "Workspace",
     features: [
-      { id: "chat", label: "Chat", Icon: IconBolt, desc: "Ask grounded questions over your sources" },
+      { id: "chat", label: "Chat", Icon: IconBolt, desc: "Ask grounded questions over your knowledge" },
+      { id: "knowledge", label: "Knowledge", Icon: IconFolder, desc: "Browse, filter, and grow everything the workspace can cite" },
+      { id: "meetings", label: "Meetings", Icon: IconUsers, desc: "Agents work an objective in a channel — step in whenever you want" },
     ],
   },
   {
@@ -238,11 +246,12 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
     id: "management",
     label: "Management",
     features: [
-      { id: "metadata",   label: "Company Metadata",  Icon: IconBuilding,   desc: "AI-extracted company profile, industry, people, markets",
+      // Processing, agents and nodes, integrations, company profile, and
+      // analytics are all sections of one Settings surface — see `SettingsHub`.
+      // `metadata` and `analytics` remain as ids so existing deep links open
+      // the right section instead of 404ing.
+      { id: "settings",   label: "Settings",          Icon: IconSettings,   desc: "Processing, agents and nodes, integrations, company profile, analytics",
         companyOnly: true },
-      { id: "settings",   label: "Company Settings",  Icon: IconSettings,   desc: "Embedding model, API keys, workspace preferences",
-        companyOnly: true },
-      { id: "analytics",  label: "Analytics",         Icon: IconChart,      desc: "Queries, accuracy, gap trends" },
     ],
   },
 ];

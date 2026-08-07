@@ -64,9 +64,16 @@ function buildConfig(): CoreConfig {
       // Non-chat OpenAI-compatible work (OCR chunking, VLM enrichment,
       // embeddings fallback) keeps its own credentials — it must never
       // borrow the chat endpoint's key.
+      // apiKey belongs to AI_BASE_URL; googleApiKey belongs to the Gemini
+      // fallback. Kept apart so an OPENAI_API_KEY can never be paired with
+      // Google's endpoint, and so a Gemini-only deployment still has a
+      // credential for VLM enrichment and table summaries.
       auxiliaryOpenAI: {
-        apiKey: server.AI_API_KEY ?? server.OPENAI_API_KEY,
+        apiKey: server.AI_BASE_URL
+          ? (server.AI_API_KEY ?? server.OPENAI_API_KEY)
+          : undefined,
         baseUrl: server.AI_BASE_URL,
+        googleApiKey: server.GOOGLE_AI_API_KEY,
       },
       openai: server.OPENAI_API_KEY
         ? { apiKey: server.OPENAI_API_KEY, model: server.OPENAI_MODEL }
@@ -122,6 +129,7 @@ function buildConfig(): CoreConfig {
       workerUrl: server.OCR_WORKER_URL,
       routerUrl: server.OCR_ROUTER_URL,
       vision: {
+        googleApiKey: server.GOOGLE_AI_API_KEY,
         openaiApiKey: server.OPENAI_API_KEY,
         aiApiKey: server.AI_API_KEY,
         aiBaseUrl: server.AI_BASE_URL,
@@ -215,8 +223,13 @@ export function getEngine(): Engine {
   // Endpoint and credential are chosen as a PAIR, most specific first: the
   // embeddings-only endpoint, then the shared non-chat one. Never one source's
   // key with another's URL — that posts a credential to a service it does not
-  // belong to. There is no built-in default behind either: the operator names
-  // where embeddings are sent.
+  // belong to.
+  //
+  // Unlike chat, OCR/VLM and NER, embeddings have NO built-in default behind
+  // either: the operator names where they are sent. Embedding vectors are
+  // persisted and only comparable within one model, so silently defaulting the
+  // endpoint would change the model under an existing corpus and degrade every
+  // stored vector rather than merely routing a request somewhere new.
   const embeddingEndpoint = config.embeddings.override?.baseUrl
     ? config.embeddings.override
     : config.llm.auxiliaryOpenAI;
@@ -231,11 +244,21 @@ export function getEngine(): Engine {
     ollamaModel: config.llm.ollama?.model,
   });
 
-  // Register provider config so resolveBaseUrl / resolveApiKey / etc. in
-  // ~/lib/providers/registry see the same values as core does.
+  // Register provider config so resolveEndpoint / resolveModel / etc. in
+  // core's provider registry see the same values as core does.
   configureProviders({
     aiBaseUrl: config.llm.aiBaseUrl,
-    aiApiKey: config.llm.aiApiKey,
+    // Same fallback the auxiliary client uses, so both halves of the
+    // deployment agree on which credential belongs to AI_BASE_URL. Without it,
+    // a deployment naming AI_BASE_URL but holding only OPENAI_API_KEY sent an
+    // empty bearer token from NER, reranking and transcription while OCR/VLM
+    // authenticated fine against the very same URL.
+    aiApiKey: config.llm.aiBaseUrl
+      ? (config.llm.aiApiKey ?? env.server.OPENAI_API_KEY)
+      : config.llm.aiApiKey,
+    // Separate from aiApiKey so a capability falling back to Gemini
+    // authenticates with a Google credential and never with another vendor's.
+    googleApiKey: env.server.GOOGLE_AI_API_KEY,
     sidecarUrl: config.embeddings.sidecar?.url,
     rerankProviderMode: config.providers.rerank?.provider,
     nerProviderMode: config.providers.ner?.provider,

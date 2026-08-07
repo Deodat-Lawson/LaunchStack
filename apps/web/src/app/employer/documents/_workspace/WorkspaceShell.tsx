@@ -20,7 +20,7 @@ import { RenameFolderDialog } from "./RenameFolderDialog";
 import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioMenu } from "./StudioMenu";
-import { renderStudioPane } from "./StudioPanes";
+import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
 import { STUDIO_FEATURES_BY_ID } from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
@@ -47,14 +47,16 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
   rewrite: "/employer/documents?feature=rewrite",
   upload: "/employer/documents?add=1",
   dashboard: "/employer/home",
-  analytics: "/employer/statistics",
+  analytics: "/employer/documents?feature=analytics",
   employees: "/employer/employees",
   settings: "/employer/settings",
-  metadata: "/employer/metadata",
+  metadata: "/employer/documents?feature=metadata",
   "marketing-pipeline": "/employer/tools/marketing-pipeline",
   "repo-explainer": "/employer/tools/repo-explainer",
   notes: "/employer/documents?feature=notes",
   workflows: "/employer/documents?feature=workflows",
+  knowledge: "/employer/documents?feature=knowledge",
+  meetings: "/employer/documents?feature=meetings",
 };
 
 /** Extra horizontal inset for AskPanel / expanded feature headers when rail is hidden (clears overlay “show sidebar” at 12+28px + ~8px gap minus default 20px padding). */
@@ -74,6 +76,8 @@ const FEATURE_IDS = new Set([
   "image-gen",
   "audio-gen",
   "marketing",
+  "knowledge",
+  "meetings",
   "metadata",
   "settings",
   "analytics",
@@ -125,6 +129,8 @@ export function WorkspaceShell() {
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
+  const [addTab, setAddTab] = useState<string | undefined>(undefined);
   const [palOpen, setPalOpen] = useState(false);
   const [newFolderOpen, setNewFolderOpen] = useState(false);
   const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
@@ -337,6 +343,11 @@ export function WorkspaceShell() {
     setViewerSource(null);
   }, []);
 
+  const openAdd = useCallback((tabId?: string) => {
+    setAddTab(tabId);
+    setAddOpen(true);
+  }, []);
+
   const handleMoveToFolder = useCallback(
     async (sourceId: string, folderName: string) => {
       const src = sources.find((s) => s.id === sourceId);
@@ -456,7 +467,8 @@ export function WorkspaceShell() {
           folders={folders}
           selected={selected}
           setSelected={setSelected}
-          onOpenAdd={() => setAddOpen(true)}
+          onOpenAdd={() => openAdd()}
+          onOpenKnowledge={() => expandFeature("knowledge")}
           onOpenSource={handleOpenSource}
           onNewFolder={() => setNewFolderOpen(true)}
           onRenameFolder={(folder) => setRenameFolder(folder)}
@@ -545,8 +557,23 @@ export function WorkspaceShell() {
           userInitials={initials}
           userName={userName}
           userEmail={userEmail}
-          onOpenSettings={() => router.push("/employer/settings")}
+          // Settings is a workspace surface now, not a separate destination.
+          onOpenSettings={() => expandFeature("settings")}
           onSignOut={() => signOut({ redirectUrl: "/" })}
+          paneContext={{
+            knowledge: {
+              sources,
+              folders,
+              selected,
+              setSelected,
+              onOpenSource: handleOpenSource,
+              onOpenAdd: openAdd,
+              onAskAbout: (ids) => {
+                setSelected(ids);
+                setActiveFeatureId("chat");
+              },
+            },
+          }}
         />
       )}
 
@@ -567,7 +594,11 @@ export function WorkspaceShell() {
 
       <AddSourceModal
         open={addOpen}
-        onClose={() => setAddOpen(false)}
+        initialTab={addTab}
+        onClose={() => {
+          setAddOpen(false);
+          setAddTab(undefined);
+        }}
         userId={userId ?? null}
         defaultCategory={activeFolder ?? folders[0]?.name ?? "Unfiled"}
         folders={folders.map((f) => f.name)}
@@ -646,6 +677,8 @@ interface ExpandedFeatureViewProps {
   userEmail?: string;
   onOpenSettings: () => void;
   onSignOut?: () => void;
+  /** Workspace-owned data some panes need (Knowledge in particular). */
+  paneContext?: StudioPaneContext;
 }
 
 /**
@@ -664,6 +697,7 @@ function ExpandedFeatureView({
   userEmail,
   onOpenSettings,
   onSignOut,
+  paneContext,
 }: ExpandedFeatureViewProps) {
   const feature = STUDIO_FEATURES_BY_ID[featureId];
 
@@ -703,7 +737,7 @@ function ExpandedFeatureView({
       </div>
       <div style={{ flex: 1, overflow: "hidden" }}>
         {feature ? (
-          renderStudioPane(feature, onPaneExit)
+          renderStudioPane(feature, onPaneExit, paneContext)
         ) : (
           <div
             style={{

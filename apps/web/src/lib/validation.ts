@@ -413,14 +413,24 @@ export const PresignUploadSchema = z.object({
 // Voice Schemas
 // ============================================================================
 
+/**
+ * Matches CLOUD_TTS_MAX_INPUT_BYTES. Measured in BYTES, not characters: the
+ * synthesis API counts UTF-8, so a 5,000-character limit would let non-ASCII
+ * text pass validation and then fail at the provider. Duplicated as a literal
+ * rather than imported because this module is on the client bundle's path.
+ */
+const TTS_MAX_INPUT_BYTES = 5000;
+
 export const TextToSpeechSchema = z.object({
-  text: z.string().min(1, "Text is required").max(10000),
+  text: z
+    .string()
+    .min(1, "Text is required")
+    .refine(
+      (value) => new TextEncoder().encode(value).length <= TTS_MAX_INPUT_BYTES,
+      `Text must be at most ${TTS_MAX_INPUT_BYTES} bytes when UTF-8 encoded`,
+    ),
   voiceId: z.string().optional(),
-  modelId: z.string().optional(),
-  stability: z.number().min(0).max(1).optional(),
-  similarityBoost: z.number().min(0).max(1).optional(),
-  style: z.number().min(0).max(1).optional(),
-  useSpeakerBoost: z.boolean().optional(),
+  languageCode: z.string().optional(),
 });
 
 // ============================================================================

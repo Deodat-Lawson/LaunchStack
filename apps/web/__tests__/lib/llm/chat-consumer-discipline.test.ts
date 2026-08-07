@@ -153,6 +153,56 @@ describe("route resolution precedes expensive work", () => {
   });
 });
 
+describe("authentication precedes chat resolution", () => {
+  /**
+   * Resolution reports what this deployment can and cannot do, and answers
+   * with a 400 when a route is unavailable. Reaching it before `auth()` lets
+   * an anonymous caller probe the configuration and turns a request that
+   * should be a flat 401 into a 400 about capabilities.
+   */
+  const handlers = [
+    "apps/web/src/app/api/agents/documentQ&A/AIChat/query/route.ts",
+    "apps/web/src/app/api/agents/documentQ&A/AIQuery/route.ts",
+    "apps/web/src/app/api/agents/documentQ&A/AIQueryRLM/route.ts",
+  ];
+
+  it.each(handlers)("%s authenticates first", (file) => {
+    const source = read(file);
+    const authAt = source.indexOf("await auth()");
+    const resolveAt = source.indexOf("resolveConfiguredChatModel(");
+
+    expect(authAt).toBeGreaterThan(-1);
+    expect(resolveAt).toBeGreaterThan(-1);
+    expect(authAt).toBeLessThan(resolveAt);
+  });
+});
+
+describe("error handlers do not re-enter chat configuration", () => {
+  /**
+   * A catch block that resolves again to name the model is fine right up until
+   * the thing it is catching *is* a configuration fault — then the second
+   * attempt throws the same error out of the handler meant to report it, and
+   * the caller gets an opaque 500 instead of the explanation.
+   */
+  const handlers = [
+    ...sourceFiles("apps/web/src/app/api"),
+  ].filter((file) => /describeChatError\(/.test(read(file)));
+
+  it("finds the handlers that describe chat errors", () => {
+    expect(handlers.length).toBeGreaterThan(0);
+  });
+
+  it.each(handlers)("%s resolves the model id before the catch", (file) => {
+    const source = read(file);
+    for (const match of source.matchAll(/catch\s*\([^)]*\)\s*\{/g)) {
+      const block = source.slice(match.index!, match.index! + 1200);
+      const nextCatch = block.indexOf("} catch", 1);
+      const body = nextCatch === -1 ? block : block.slice(0, nextCatch);
+      expect(body).not.toMatch(/resolveConfiguredChatRoute\(|resolveConfiguredChatModel\(/);
+    }
+  });
+});
+
 describe("env.ts stays a light import", () => {
   /**
    * `~/env` is imported by nearly every server module and by next.config.ts at

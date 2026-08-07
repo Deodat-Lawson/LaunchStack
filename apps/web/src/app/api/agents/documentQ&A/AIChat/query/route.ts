@@ -34,8 +34,12 @@ import {
     buildReferences,
     extractRecommendedPages,
 } from "../../services";
-import { resolveConfiguredChatModel, selectChatRoute } from "~/lib/models";
-import { isChatRequestError, normalizeTokenUsage } from "@launchstack/core/llm";
+import {
+    describeChatResolutionFailure,
+    resolveConfiguredChatModel,
+    selectChatRoute,
+} from "~/lib/models";
+import { normalizeTokenUsage } from "@launchstack/core/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
@@ -259,15 +263,10 @@ export async function POST(request: Request) {
                 });
             } catch (modelError) {
                 recordResult("error");
+                const failure = describeChatResolutionFailure(modelError);
                 return NextResponse.json(
-                    {
-                        success: false,
-                        message:
-                            modelError instanceof Error
-                                ? modelError.message
-                                : "The configured chat models cannot serve this request",
-                    },
-                    { status: isChatRequestError(modelError) ? modelError.status : 500 },
+                    { success: false, message: failure.message },
+                    { status: failure.status },
                 );
             }
 

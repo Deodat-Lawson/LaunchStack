@@ -30,7 +30,10 @@ import {
     describeChatError,
 } from "../services";
 import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
-import { resolveConfiguredChatModel } from "~/lib/models";
+import {
+    describeChatResolutionFailure,
+    resolveConfiguredChatModel,
+} from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/core/db/schema";
@@ -135,6 +138,13 @@ export async function POST(request: Request) {
         const startTime = Date.now();
 
         try {
+            // Authenticate first. Chat resolution reports what this
+            // deployment can and cannot do, which is not something an
+            // anonymous caller should be able to probe — and a request that
+            // is going to 401 should 401, not 400.
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) return ctx.response;
+
             // Parse and validate request
             const body = await request.json() as RLMQueryRequest;
             const validation = validateRequest(body);
@@ -163,12 +173,20 @@ export async function POST(request: Request) {
                 pageRange,
             } = validation.data;
 
-            const ctx = await requireWorkspaceContext();
-            if (!ctx.success) return ctx.response;
+            // Then resolve, still before the hierarchical search runs: an
+            // unavailable route is a 400, and RLM retrieval is the expensive
+            // part.
+            let resolved;
+            try {
+                resolved = resolveConfiguredChatModel();
+            } catch (modelError) {
+                const failure = describeChatResolutionFailure(modelError);
+                return NextResponse.json(
+                    { success: false, message: failure.message },
+                    { status: failure.status },
+                );
+            }
 
-            // Resolve before the hierarchical search runs: an unavailable
-            // route is a 400, and RLM retrieval is the expensive part.
-            const resolved = resolveConfiguredChatModel();
             const compatibility = validateDeprecatedChatSelection(
                 { provider, model: aiModel },
                 resolved,

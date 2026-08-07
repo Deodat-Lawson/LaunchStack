@@ -34,7 +34,7 @@ function resultCount(result: unknown): number {
 async function backfill() {
     console.log("[backfill-document-versions] Starting...");
 
-    await db.transaction(async (tx) => {
+    await db.transaction(async tx => {
         // Create v1 for every document that does not have one. Existing
         // versions are never replaced; their highest MIME is only used to
         // seed the synthetic v1 when the document has no MIME metadata.
@@ -80,9 +80,7 @@ async function backfill() {
             )
             ON CONFLICT (document_id, version_number) DO NOTHING
         `);
-        console.log(
-            `[backfill-document-versions] Created v1 rows: ${resultCount(insertResult)}`
-        );
+        console.log(`[backfill-document-versions] Created v1 rows: ${resultCount(insertResult)}`);
 
         // Keep a valid current pointer. A pointer to another document is not
         // valid and is repaired just like a NULL pointer. The highest version
@@ -284,7 +282,7 @@ backfill()
     .then(() => {
         process.exit(0);
     })
-    .catch((error) => {
+    .catch(error => {
         console.error("[backfill-document-versions] Failed:", error);
         process.exit(1);
     });

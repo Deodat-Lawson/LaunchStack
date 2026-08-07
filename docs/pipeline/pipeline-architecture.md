@@ -20,7 +20,6 @@ event ID(s). A dispatch or fail-hard pipeline failure marks that same linked job
 `failed`; the job remains retryable, and a retry reuses the document/version/job
 identity.
 
-
 One durable function (`process-document`) runs stages **A → G** inline as
 memoized steps: route → OCR → chunk → embed/store → finalize → GraphRAG
 extract (Postgres) → Neo4j mirror. On success it chains
@@ -94,18 +93,18 @@ flowchart TD
 Orchestrator: [`runDocIngestionTool`](../../packages/features/src/doc-ingestion/index.ts).
 Each `runStep` becomes an Inngest `step.run` (memoized on retry).
 
-| Step | What | Writes |
-|------|------|--------|
-| Upload / lifecycle | Intake Adapter + Document Creation Module | `document`, `document_versions` (v1 or next), `currentVersionId`, linked `ocr_jobs` |
-| Dispatch | Post-commit Job Dispatcher Interface | `document/process.requested` with stable `jobId`, event ID(s), and required `versionId` |
-| **A** Route | Pick OCR path (SigLIP optional) | — |
-| **B** Normalize / OCR | Azure / Landing.AI / Datalab / OSS / pdfjs; VLM enrichment | pages → `ocr_jobs.ocrResult` |
-| **C** Chunk | Parent/child text units | chunks → `ocr_jobs.ocrResult` |
-| **D** Embed / store | OpenAI 1536-dim **or** sidecar `/embed` | `document_structure`, `document_context_chunks`, `document_retrieval_chunks` |
-| **E** Finalize | Mark success | `document_metadata`; `ocrProcessed=true`; `ocr_jobs.status=completed` |
-| **F** GraphRAG | Entities + relationships (one step) | Postgres `kg_*` |
-| **G** Neo4j sync | Mirror from `kg_*` | `:Entity` / `:Section` + edges |
-| Downstream | Separate Inngest fns | `company_metadata`; version-scoped note-anchor rehydrate |
+| Step                  | What                                                       | Writes                                                                                  |
+| --------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Upload / lifecycle    | Intake Adapter + Document Creation Module                  | `document`, `document_versions` (v1 or next), `currentVersionId`, linked `ocr_jobs`     |
+| Dispatch              | Post-commit Job Dispatcher Interface                       | `document/process.requested` with stable `jobId`, event ID(s), and required `versionId` |
+| **A** Route           | Pick OCR path (SigLIP optional)                            | —                                                                                       |
+| **B** Normalize / OCR | Azure / Landing.AI / Datalab / OSS / pdfjs; VLM enrichment | pages → `ocr_jobs.ocrResult`                                                            |
+| **C** Chunk           | Parent/child text units                                    | chunks → `ocr_jobs.ocrResult`                                                           |
+| **D** Embed / store   | OpenAI 1536-dim **or** sidecar `/embed`                    | `document_structure`, `document_context_chunks`, `document_retrieval_chunks`            |
+| **E** Finalize        | Mark success                                               | `document_metadata`; `ocrProcessed=true`; `ocr_jobs.status=completed`                   |
+| **F** GraphRAG        | Entities + relationships (one step)                        | Postgres `kg_*`                                                                         |
+| **G** Neo4j sync      | Mirror from `kg_*`                                         | `:Entity` / `:Section` + edges                                                          |
+| Downstream            | Separate Inngest fns                                       | `company_metadata`; version-scoped note-anchor rehydrate                                |
 
 Every processing event and `runDocIngestionTool` call supplies a required
 `versionId`. Stage C/D writes carry that version; downstream document work
@@ -133,11 +132,11 @@ together.
 
 ## 4. What gets written
 
-| Store | Pipeline tables / artifacts |
-|-------|-----------------------------|
-| **Postgres** | `document` (including `currentVersionId`), `document_versions`, `ocr_jobs` (version-linked job + scratch state in `ocrResult`), `document_structure`, `document_context_chunks`, `document_retrieval_chunks` (`vector(1536)` + short `vector(512)`), `document_metadata`, `kg_entities` / `kg_entity_mentions` / `kg_relationships` |
-| **Neo4j** | Mirror only — `:Entity`, `:Section`, `:MENTIONED_IN`, dynamic rel types. Full text stays in Postgres. |
-| **Object storage** | Raw bytes through the existing Storage Adapter. No outbox or AWS migration is implied. |
+| Store              | Pipeline tables / artifacts                                                                                                                                                                                                                                                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Postgres**       | `document` (including `currentVersionId`), `document_versions`, `ocr_jobs` (version-linked job + scratch state in `ocrResult`), `document_structure`, `document_context_chunks`, `document_retrieval_chunks` (`vector(1536)` + short `vector(512)`), `document_metadata`, `kg_entities` / `kg_entity_mentions` / `kg_relationships` |
+| **Neo4j**          | Mirror only — `:Entity`, `:Section`, `:MENTIONED_IN`, dynamic rel types. Full text stays in Postgres.                                                                                                                                                                                                                               |
+| **Object storage** | Raw bytes through the existing Storage Adapter. No outbox or AWS migration is implied.                                                                                                                                                                                                                                              |
 
 Schema sources: [`packages/core/src/db/schema/`](../../packages/core/src/db/schema/),
 [`neo4j-sync.ts`](../../packages/core/src/graph/neo4j-sync.ts).
@@ -148,11 +147,11 @@ Postgres `kg_*` is the graph source of truth; Neo4j is the mirror.
 
 ## 5. What “done” means
 
-| Milestone | Meaning |
-|-----------|---------|
-| After **E** | The current version is searchable (version-tagged chunks + embeddings). UI treats `ocrProcessed=true` as ready. Job is `completed`. |
-| After **F/G** | Graph enrichment — **optional**. Fail-soft: a `completed` doc may have zero `kg_*` / Neo4j nodes. |
-| Downstream | Company metadata refresh; note-anchor rehydrate receives the processed `versionId` (especially useful for later versions). |
+| Milestone     | Meaning                                                                                                                             |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| After **E**   | The current version is searchable (version-tagged chunks + embeddings). UI treats `ocrProcessed=true` as ready. Job is `completed`. |
+| After **F/G** | Graph enrichment — **optional**. Fail-soft: a `completed` doc may have zero `kg_*` / Neo4j nodes.                                   |
+| Downstream    | Company metadata refresh; note-anchor rehydrate receives the processed `versionId` (especially useful for later versions).          |
 
 `completed` ≠ “fully enriched.” It means fail-hard stages (OCR, embed, DB store) succeeded.
 
@@ -195,10 +194,10 @@ path for non-text files.
 **Optional:** Neo4j, ML sidecar NER, cloud OCR providers (local can use pdfjs / OSS), VLM
 enrichment.
 
-| Kind | Stages | Effect |
-|------|--------|--------|
-| **Fail-hard** | OCR, embedding, DB storage | Runner retries 5× → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
-| **Fail-soft** | VLM enrichment, Step F, Step G | Doc still marked `completed` |
+| Kind          | Stages                         | Effect                                                                                                            |
+| ------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| **Fail-hard** | OCR, embedding, DB storage     | Runner retries 5× → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
+| **Fail-soft** | VLM enrichment, Step F, Step G | Doc still marked `completed`                                                                                      |
 
 **“Sidecar” naming trap:** `SIDECAR_URL` points at an **external** ML worker (`/embed`,
 `/extract-entities`, `/rerank`). This repo’s [`sidecar/`](../../sidecar/app/main.py) is a

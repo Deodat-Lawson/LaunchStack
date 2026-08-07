@@ -49,10 +49,7 @@ function detectSemanticType(
     const lowerContent = content.toLowerCase();
 
     // Check for tabular content (lots of | or consistent spacing patterns)
-    if (
-        (content.match(/\|/g)?.length ?? 0) > 5 ||
-        (content.match(/\t/g)?.length ?? 0) > 10
-    ) {
+    if ((content.match(/\|/g)?.length ?? 0) > 5 || (content.match(/\t/g)?.length ?? 0) > 10) {
         return "tabular";
     }
 
@@ -95,11 +92,7 @@ function detectSemanticType(
     }
 
     // Check for reference content (glossary, index, bibliography)
-    if (
-        /\b(see also|refer to|definition:|glossary|appendix|reference)\b/i.test(
-            lowerContent
-        )
-    ) {
+    if (/\b(see also|refer to|definition:|glossary|appendix|reference)\b/i.test(lowerContent)) {
         return "reference";
     }
 
@@ -112,10 +105,7 @@ function detectContentType(content: string, title?: string): ContentType {
     const lowerTitle = title?.toLowerCase() ?? "";
 
     // Check for table patterns
-    if (
-        (content.match(/\|/g)?.length ?? 0) > 5 ||
-        /table \d|table:/i.test(lowerTitle)
-    ) {
+    if ((content.match(/\|/g)?.length ?? 0) > 5 || /table \d|table:/i.test(lowerTitle)) {
         return "table";
     }
 
@@ -176,7 +166,6 @@ function extractKeywords(content: string): string[] {
         .slice(0, 10)
         .map(([word]) => word);
 }
-
 
 interface MigrationStats {
     documentsProcessed: number;
@@ -278,7 +267,7 @@ async function migrateDocument(
     // Create page-level structure nodes and sections
     let pageOrdering = 0;
     for (const [pageNum, pageChunks] of pageGroups) {
-        const pageContent = pageChunks.map((c) => c.content).join("\n\n");
+        const pageContent = pageChunks.map(c => c.content).join("\n\n");
         const pageTokens = estimateTokens(pageContent);
 
         // Create page structure node

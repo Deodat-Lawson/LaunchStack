@@ -21,10 +21,7 @@ import { and, eq } from "drizzle-orm";
 
 import { getDb } from "@launchstack/core/db";
 import { documentContextChunks, document as documentTable } from "@launchstack/core/db/schema";
-import {
-    EXTRACTION_SYSTEM_PROMPT,
-    buildChunkExtractionPrompt,
-} from "./prompts";
+import { EXTRACTION_SYSTEM_PROMPT, buildChunkExtractionPrompt } from "./prompts";
 import type {
     ExtractedCompanyFacts,
     MetadataFact,
@@ -83,8 +80,8 @@ const BOILERPLATE_PATTERNS = [
     /^\s*disclaimer\s*$/i,
     /this document is confidential/i,
     /do not distribute/i,
-    /^\s*\d+\s*$/,                            // just a page number
-    /^(\.{2,}\s*\d+\s*\n?)+$/,               // TOC dotted lines: "Section...12"
+    /^\s*\d+\s*$/, // just a page number
+    /^(\.{2,}\s*\d+\s*\n?)+$/, // TOC dotted lines: "Section...12"
 ];
 
 /**
@@ -103,9 +100,9 @@ function isBoilerplate(content: string): boolean {
     }
 
     // TOC heuristic: many lines that end with page numbers (e.g., "Introduction ... 3")
-    const lines = trimmed.split("\n").filter((l) => l.trim().length > 0);
+    const lines = trimmed.split("\n").filter(l => l.trim().length > 0);
     if (lines.length >= 3) {
-        const tocLines = lines.filter((l) => /\.{2,}\s*\d+\s*$/.test(l) || /\s{3,}\d+\s*$/.test(l));
+        const tocLines = lines.filter(l => /\.{2,}\s*\d+\s*$/.test(l) || /\s{3,}\d+\s*$/.test(l));
         if (tocLines.length / lines.length > 0.6) return true;
     }
 
@@ -187,12 +184,14 @@ const ExtractionOutputSchema = z.object({
             z.object({
                 key: z.string().describe("Policy identifier, e.g. 'SOC2', 'GDPR', 'HIPAA'"),
                 fact: MetadataFactSchema,
-            }),
+            })
         )
         .describe("Company policies, certifications, or compliance facts"),
     legal: z
         .array(LegalSchema)
-        .describe("Legal documents, contracts, NDAs, terms of service, privacy policies, or regulatory references"),
+        .describe(
+            "Legal documents, contracts, NDAs, terms of service, privacy policies, or regulatory references"
+        ),
 });
 
 type ExtractionOutput = z.infer<typeof ExtractionOutputSchema>;
@@ -208,14 +207,12 @@ type RawFact = z.infer<typeof MetadataFactSchema>;
  * existing LLM layer with a thin wrapper. Callers pass a concrete function
  * — apps/web passes its `generateStructured` from ~/lib/llm.
  */
-export type GenerateStructuredFn = <TSchema extends ZodType>(
-    input: {
-        system?: string;
-        prompt: string;
-        schema: TSchema;
-        schemaName?: string;
-    },
-) => Promise<z.infer<TSchema>>;
+export type GenerateStructuredFn = <TSchema extends ZodType>(input: {
+    system?: string;
+    prompt: string;
+    schema: TSchema;
+    schemaName?: string;
+}) => Promise<z.infer<TSchema>>;
 
 export interface ExtractorInput {
     documentId: number;
@@ -235,7 +232,7 @@ export interface ExtractorInput {
  * Returns `null` if the document has no chunks or no facts were found.
  */
 export async function extractCompanyFacts(
-    input: ExtractorInput,
+    input: ExtractorInput
 ): Promise<ExtractedCompanyFacts | null> {
     const { documentId, generate } = input;
     const db = getDb();
@@ -276,30 +273,23 @@ export async function extractCompanyFacts(
             semanticType: documentContextChunks.semanticType,
         })
         .from(documentContextChunks)
-        .innerJoin(
-            documentTable,
-            eq(documentContextChunks.documentId, documentTable.id),
-        )
+        .innerJoin(documentTable, eq(documentContextChunks.documentId, documentTable.id))
         .where(
             and(
                 eq(documentContextChunks.documentId, BigInt(documentId)),
-                eq(documentContextChunks.versionId, documentTable.currentVersionId),
-            ),
+                eq(documentContextChunks.versionId, documentTable.currentVersionId)
+            )
         );
 
     if (chunks.length === 0) {
-        console.warn(
-            `[CompanyMetadataExtractor] No chunks for document ${documentId}`,
-        );
+        console.warn(`[CompanyMetadataExtractor] No chunks for document ${documentId}`);
         return null;
     }
 
-    const sortedChunks = chunks.sort(
-        (a, b) => (a.pageNumber ?? 0) - (b.pageNumber ?? 0),
-    );
+    const sortedChunks = chunks.sort((a, b) => (a.pageNumber ?? 0) - (b.pageNumber ?? 0));
 
     // 2b. Filter out low-value chunks to reduce LLM tokens
-    const filteredChunks = sortedChunks.filter((c) => {
+    const filteredChunks = sortedChunks.filter(c => {
         // Skip chunks tagged as reference (TOCs, disclaimers)
         if (c.semanticType === "reference") {
             return false;
@@ -313,41 +303,42 @@ export async function extractCompanyFacts(
 
     if (filteredChunks.length === 0) {
         console.warn(
-            `[CompanyMetadataExtractor] All ${chunks.length} chunks filtered as boilerplate for document ${documentId}`,
+            `[CompanyMetadataExtractor] All ${chunks.length} chunks filtered as boilerplate for document ${documentId}`
         );
         return null;
     }
 
     // 3. Split into batches
     const batches = splitIntoBatches(
-        filteredChunks.map((c) => c.content),
-        CHUNKS_PER_BATCH,
+        filteredChunks.map(c => c.content),
+        CHUNKS_PER_BATCH
     );
 
     console.log(
-        `[CompanyMetadataExtractor] Document ${documentId}: ${chunks.length} chunks → ${filteredChunks.length} after filtering → ${batches.length} batches`,
+        `[CompanyMetadataExtractor] Document ${documentId}: ${chunks.length} chunks → ${filteredChunks.length} after filtering → ${batches.length} batches`
     );
 
     // 4. Extract from each batch in parallel (capped concurrency)
     const batchResults = await runWithConcurrency(
-        batches.map((batch, idx) => () => callLLM(generate, doc.title, batch.join("\n\n"), idx, batches.length)),
-        MAX_CONCURRENCY,
+        batches.map(
+            (batch, idx) => () =>
+                callLLM(generate, doc.title, batch.join("\n\n"), idx, batches.length)
+        ),
+        MAX_CONCURRENCY
     );
 
     // Filter out failed/empty batches
-    const successfulResults = batchResults.filter(
-        (r): r is ExtractionOutput => r !== null,
-    );
+    const successfulResults = batchResults.filter((r): r is ExtractionOutput => r !== null);
 
     if (successfulResults.length === 0) {
         console.warn(
-            `[CompanyMetadataExtractor] All ${batches.length} batch extractions returned empty for document ${documentId}`,
+            `[CompanyMetadataExtractor] All ${batches.length} batch extractions returned empty for document ${documentId}`
         );
         return null;
     }
 
     console.log(
-        `[CompanyMetadataExtractor] ${successfulResults.length}/${batches.length} batches returned facts`,
+        `[CompanyMetadataExtractor] ${successfulResults.length}/${batches.length} batches returned facts`
     );
 
     // 5. Aggregate across all batch results
@@ -377,10 +368,7 @@ function splitIntoBatches<T>(items: T[], batchSize: number): T[][] {
  * Run async tasks with a concurrency limit.
  * Returns results in the same order as the input tasks.
  */
-async function runWithConcurrency<T>(
-    tasks: Array<() => Promise<T>>,
-    limit: number,
-): Promise<T[]> {
+async function runWithConcurrency<T>(tasks: Array<() => Promise<T>>, limit: number): Promise<T[]> {
     const results = Array.from<T>({ length: tasks.length });
     let nextIndex = 0;
 
@@ -394,10 +382,7 @@ async function runWithConcurrency<T>(
         }
     }
 
-    const workers = Array.from(
-        { length: Math.min(limit, tasks.length) },
-        () => worker(),
-    );
+    const workers = Array.from({ length: Math.min(limit, tasks.length) }, () => worker());
     await Promise.all(workers);
     return results;
 }
@@ -422,7 +407,7 @@ async function callLLM(
     documentName: string,
     batchContent: string,
     batchIndex: number,
-    totalBatches: number,
+    totalBatches: number
 ): Promise<ExtractionOutput | null> {
     try {
         return await generate({
@@ -431,7 +416,7 @@ async function callLLM(
                 documentName,
                 batchContent,
                 batchIndex,
-                totalBatches,
+                totalBatches
             ),
             schema: ExtractionOutputSchema,
             schemaName: "company_metadata_extraction",
@@ -439,7 +424,7 @@ async function callLLM(
     } catch (error) {
         console.error(
             `[CompanyMetadataExtractor] Batch ${batchIndex + 1}/${totalBatches} failed:`,
-            error,
+            error
         );
         return null;
     }
@@ -454,7 +439,7 @@ function aggregateResults(
     documentId: number,
     documentName: string,
     extractedAt: string,
-    source: MetadataSource,
+    source: MetadataSource
 ): ExtractedCompanyFacts {
     // ---- Company fields: take highest confidence per field ----
     const company: CompanyInfo = {};
@@ -470,7 +455,7 @@ function aggregateResults(
 
     for (const field of companyFields) {
         const candidates = batchResults
-            .map((r) => r.company[field])
+            .map(r => r.company[field])
             .filter((f): f is RawFact => f != null);
 
         if (candidates.length > 0) {
@@ -480,33 +465,33 @@ function aggregateResults(
                 best,
                 boosted,
                 extractedAt,
-                source,
+                source
             );
         }
     }
 
     // ---- People: merge by normalised name ----
     const people = mergeNamedEntries(
-        batchResults.flatMap((r) => r.people),
+        batchResults.flatMap(r => r.people),
         extractedAt,
         source,
-        hydratePersonEntry,
+        hydratePersonEntry
     );
 
     // ---- Services: merge by normalised name ----
     const services = mergeNamedEntries(
-        batchResults.flatMap((r) => r.services),
+        batchResults.flatMap(r => r.services),
         extractedAt,
         source,
-        hydrateServiceEntry,
+        hydrateServiceEntry
     );
 
     // ---- Projects: merge by normalised name ----
     const projects = mergeNamedEntries(
-        batchResults.flatMap((r) => r.projects),
+        batchResults.flatMap(r => r.projects),
         extractedAt,
         source,
-        hydrateProjectEntry,
+        hydrateProjectEntry
     );
 
     // ---- Markets: union unique values per category ----
@@ -514,12 +499,11 @@ function aggregateResults(
     const marketCategories = ["primary", "verticals", "geographies"] as const;
 
     for (const cat of marketCategories) {
-        const allFacts = batchResults
-            .flatMap((r) => r.markets[cat] ?? []);
+        const allFacts = batchResults.flatMap(r => r.markets[cat] ?? []);
         const unique = deduplicateByValue(allFacts);
         if (unique.length > 0) {
-            markets[cat] = unique.map((u) =>
-                hydrate(u.best, boostConfidence(u.best.confidence, u.count), extractedAt, source),
+            markets[cat] = unique.map(u =>
+                hydrate(u.best, boostConfidence(u.best.confidence, u.count), extractedAt, source)
             );
         }
     }
@@ -538,10 +522,10 @@ function aggregateResults(
 
     // ---- Legal: merge by normalised name ----
     const legal = mergeNamedEntries(
-        batchResults.flatMap((r) => r.legal),
+        batchResults.flatMap(r => r.legal),
         extractedAt,
         source,
-        hydrateLegalEntry,
+        hydrateLegalEntry
     );
 
     // ---- Assemble ----
@@ -569,7 +553,7 @@ function hydrate<T = string>(
     fact: RawFact,
     confidence: number,
     extractedAt: string,
-    source: MetadataSource,
+    source: MetadataSource
 ): MetadataFact<T> {
     return {
         value: fact.value as T,
@@ -594,9 +578,7 @@ function normaliseName(raw: string | number): string {
 
 /** From a list of raw facts for the same field, pick the one with highest confidence. */
 function pickHighestConfidence(candidates: RawFact[]): RawFact {
-    return candidates.reduce((best, c) =>
-        c.confidence > best.confidence ? c : best,
-    );
+    return candidates.reduce((best, c) => (c.confidence > best.confidence ? c : best));
 }
 
 /** Boost confidence when a fact is confirmed by multiple batches. */
@@ -606,9 +588,7 @@ function boostConfidence(base: number, mentionCount: number): number {
 }
 
 /** Deduplicate an array of raw facts by normalised value, tracking mention count. */
-function deduplicateByValue(
-    facts: RawFact[],
-): Array<{ best: RawFact; count: number }> {
+function deduplicateByValue(facts: RawFact[]): Array<{ best: RawFact; count: number }> {
     const map = new Map<string, { best: RawFact; count: number }>();
 
     for (const fact of facts) {
@@ -635,11 +615,7 @@ function mergeNamedEntries<TRaw extends { name: RawFact }, TOut>(
     entries: TRaw[],
     extractedAt: string,
     source: MetadataSource,
-    hydrateEntry: (
-        grouped: TRaw[],
-        extractedAt: string,
-        source: MetadataSource,
-    ) => TOut,
+    hydrateEntry: (grouped: TRaw[], extractedAt: string, source: MetadataSource) => TOut
 ): TOut[] {
     const groups = new Map<string, TRaw[]>();
 
@@ -653,9 +629,7 @@ function mergeNamedEntries<TRaw extends { name: RawFact }, TOut>(
         }
     }
 
-    return Array.from(groups.values()).map((group) =>
-        hydrateEntry(group, extractedAt, source),
-    );
+    return Array.from(groups.values()).map(group => hydrateEntry(group, extractedAt, source));
 }
 
 // ============================================================================
@@ -671,10 +645,10 @@ type RawLegal = z.infer<typeof LegalSchema>;
 function hydratePersonEntry(
     group: RawPerson[],
     extractedAt: string,
-    source: MetadataSource,
+    source: MetadataSource
 ): PersonEntry {
     const count = group.length;
-    const bestName = pickHighestConfidence(group.map((g) => g.name));
+    const bestName = pickHighestConfidence(group.map(g => g.name));
 
     const entry: PersonEntry = {
         name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
@@ -682,12 +656,15 @@ function hydratePersonEntry(
 
     const optionalFields = ["role", "email", "phone", "department"] as const;
     for (const field of optionalFields) {
-        const candidates = group
-            .map((g) => g[field])
-            .filter((f): f is RawFact => f != null);
+        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
 
@@ -697,10 +674,10 @@ function hydratePersonEntry(
 function hydrateServiceEntry(
     group: RawService[],
     extractedAt: string,
-    source: MetadataSource,
+    source: MetadataSource
 ): ServiceEntry {
     const count = group.length;
-    const bestName = pickHighestConfidence(group.map((g) => g.name));
+    const bestName = pickHighestConfidence(group.map(g => g.name));
 
     const entry: ServiceEntry = {
         name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
@@ -708,12 +685,15 @@ function hydrateServiceEntry(
 
     const optionalFields = ["description", "status"] as const;
     for (const field of optionalFields) {
-        const candidates = group
-            .map((g) => g[field])
-            .filter((f): f is RawFact => f != null);
+        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
 
@@ -723,10 +703,10 @@ function hydrateServiceEntry(
 function hydrateProjectEntry(
     group: RawProject[],
     extractedAt: string,
-    source: MetadataSource,
+    source: MetadataSource
 ): ProjectEntry {
     const count = group.length;
-    const bestName = pickHighestConfidence(group.map((g) => g.name));
+    const bestName = pickHighestConfidence(group.map(g => g.name));
 
     const entry: ProjectEntry = {
         name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
@@ -734,23 +714,26 @@ function hydrateProjectEntry(
 
     const optionalFields = ["description", "status"] as const;
     for (const field of optionalFields) {
-        const candidates = group
-            .map((g) => g[field])
-            .filter((f): f is RawFact => f != null);
+        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
 
     // Merge subprojects across all mentions of this project
-    const allSubprojects = group.flatMap((g) => g.subprojects ?? []);
+    const allSubprojects = group.flatMap(g => g.subprojects ?? []);
     if (allSubprojects.length > 0) {
         entry.subprojects = mergeNamedEntries(
             allSubprojects,
             extractedAt,
             source,
-            hydrateSubprojectEntry,
+            hydrateSubprojectEntry
         );
     }
 
@@ -760,10 +743,10 @@ function hydrateProjectEntry(
 function hydrateSubprojectEntry(
     group: RawSubproject[],
     extractedAt: string,
-    source: MetadataSource,
+    source: MetadataSource
 ): SubprojectEntry {
     const count = group.length;
-    const bestName = pickHighestConfidence(group.map((g) => g.name));
+    const bestName = pickHighestConfidence(group.map(g => g.name));
 
     const entry: SubprojectEntry = {
         name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
@@ -771,12 +754,15 @@ function hydrateSubprojectEntry(
 
     const optionalFields = ["description", "status"] as const;
     for (const field of optionalFields) {
-        const candidates = group
-            .map((g) => g[field])
-            .filter((f): f is RawFact => f != null);
+        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
 
@@ -786,23 +772,33 @@ function hydrateSubprojectEntry(
 function hydrateLegalEntry(
     group: RawLegal[],
     extractedAt: string,
-    source: MetadataSource,
+    source: MetadataSource
 ): LegalEntry {
     const count = group.length;
-    const bestName = pickHighestConfidence(group.map((g) => g.name));
+    const bestName = pickHighestConfidence(group.map(g => g.name));
 
     const entry: LegalEntry = {
         name: hydrate(bestName, boostConfidence(bestName.confidence, count), extractedAt, source),
     };
 
-    const optionalFields = ["type", "summary", "effective_date", "expiry_date", "parties", "status"] as const;
+    const optionalFields = [
+        "type",
+        "summary",
+        "effective_date",
+        "expiry_date",
+        "parties",
+        "status",
+    ] as const;
     for (const field of optionalFields) {
-        const candidates = group
-            .map((g) => g[field])
-            .filter((f): f is RawFact => f != null);
+        const candidates = group.map(g => g[field]).filter((f): f is RawFact => f != null);
         if (candidates.length > 0) {
             const best = pickHighestConfidence(candidates);
-            entry[field] = hydrate(best, boostConfidence(best.confidence, candidates.length), extractedAt, source);
+            entry[field] = hydrate(
+                best,
+                boostConfidence(best.confidence, candidates.length),
+                extractedAt,
+                source
+            );
         }
     }
 

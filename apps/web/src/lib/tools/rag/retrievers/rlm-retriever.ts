@@ -32,15 +32,12 @@ import {
     type PreviewType,
     type ResultType,
 } from "@launchstack/core/db/schema";
-import {
-    isLegacyEmbeddingIndex,
-    type EmbeddingIndexConfig,
-} from "@launchstack/core/embeddings";
+import { isLegacyEmbeddingIndex, type EmbeddingIndexConfig } from "@launchstack/core/embeddings";
 import type { EmbeddingsProvider } from "../types";
 
 const currentVersionPredicate = (
     versionColumn: SQLWrapper,
-    documentVersionColumn: SQLWrapper = document.currentVersionId,
+    documentVersionColumn: SQLWrapper = document.currentVersionId
 ) => sql`${versionColumn} = ${documentVersionColumn}`;
 
 // ============================================================================
@@ -169,7 +166,7 @@ export class RLMRetriever {
             .where(
                 and(
                     eq(documentMetadata.documentId, BigInt(documentId)),
-                    currentVersionPredicate(documentMetadata.versionId),
+                    currentVersionPredicate(documentMetadata.versionId)
                 )
             )
             .limit(1);
@@ -217,13 +214,13 @@ export class RLMRetriever {
                 and(
                     inArray(
                         documentMetadata.documentId,
-                        documentIds.map((id) => BigInt(id))
+                        documentIds.map(id => BigInt(id))
                     ),
-                    currentVersionPredicate(documentMetadata.versionId),
+                    currentVersionPredicate(documentMetadata.versionId)
                 )
             );
 
-        return metas.map((meta) => ({
+        return metas.map(meta => ({
             documentId: Number(meta.documentId),
             title: meta.title,
             totalTokens: meta.totalTokens ?? 0,
@@ -246,10 +243,7 @@ export class RLMRetriever {
      * Get document structure tree up to specified depth.
      * Enables recursive decomposition of document.
      */
-    async getDocumentTree(
-        documentId: number,
-        maxDepth = 2
-    ): Promise<StructureNode[]> {
+    async getDocumentTree(documentId: number, maxDepth = 2): Promise<StructureNode[]> {
         const nodes = await db
             .select({
                 id: documentStructure.id,
@@ -336,12 +330,12 @@ export class RLMRetriever {
             .where(
                 and(
                     eq(documentStructure.parentId, BigInt(structureId)),
-                    currentVersionPredicate(documentStructure.versionId),
+                    currentVersionPredicate(documentStructure.versionId)
                 )
             )
             .orderBy(asc(documentStructure.ordering));
 
-        return nodes.map((node) => ({
+        return nodes.map(node => ({
             id: node.id,
             parentId: node.parentId ? Number(node.parentId) : null,
             level: node.level,
@@ -359,10 +353,7 @@ export class RLMRetriever {
     /**
      * Get structure node by path (e.g., "1.2.3").
      */
-    async getStructureByPath(
-        documentId: number,
-        path: string
-    ): Promise<StructureNode | null> {
+    async getStructureByPath(documentId: number, path: string): Promise<StructureNode | null> {
         const [node] = await db
             .select({
                 id: documentStructure.id,
@@ -383,7 +374,7 @@ export class RLMRetriever {
                 and(
                     eq(documentStructure.documentId, BigInt(documentId)),
                     eq(documentStructure.path, path),
-                    currentVersionPredicate(documentStructure.versionId),
+                    currentVersionPredicate(documentStructure.versionId)
                 )
             )
             .limit(1);
@@ -426,23 +417,15 @@ export class RLMRetriever {
         ];
 
         if (semanticTypes?.length) {
-            conditions.push(
-                inArray(documentSections.semanticType, semanticTypes)
-            );
+            conditions.push(inArray(documentSections.semanticType, semanticTypes));
         }
 
         // Order based on priority
         let orderClause;
         if (prioritize === "start") {
-            orderClause = [
-                asc(documentSections.pageNumber),
-                asc(documentSections.id),
-            ];
+            orderClause = [asc(documentSections.pageNumber), asc(documentSections.id)];
         } else if (prioritize === "end") {
-            orderClause = [
-                desc(documentSections.pageNumber),
-                desc(documentSections.id),
-            ];
+            orderClause = [desc(documentSections.pageNumber), desc(documentSections.id)];
         } else {
             // Relevance-based would require embedding search
             orderClause = [asc(documentSections.id)];
@@ -466,7 +449,7 @@ export class RLMRetriever {
         let filtered = allSections;
         if (pageRange) {
             filtered = allSections.filter(
-                (s) =>
+                s =>
                     s.pageNumber !== null &&
                     s.pageNumber >= pageRange.start &&
                     s.pageNumber <= pageRange.end
@@ -495,7 +478,7 @@ export class RLMRetriever {
                     .where(
                         and(
                             eq(documentStructure.id, Number(section.structureId)),
-                            currentVersionPredicate(documentStructure.versionId),
+                            currentVersionPredicate(documentStructure.versionId)
                         )
                     )
                     .limit(1);
@@ -535,20 +518,20 @@ export class RLMRetriever {
                 documentStructure,
                 and(
                     eq(documentSections.structureId, documentStructure.id),
-                    currentVersionPredicate(documentStructure.versionId),
+                    currentVersionPredicate(documentStructure.versionId)
                 )
             )
             .where(
                 and(
                     eq(documentSections.structureId, BigInt(structureId)),
                     eq(documentSections.documentId, document.id),
-                    currentVersionPredicate(documentSections.versionId),
+                    currentVersionPredicate(documentSections.versionId)
                 )
             )
             .orderBy(asc(documentSections.id));
 
         let cumulative = 0;
-        return sections.map((s) => {
+        return sections.map(s => {
             cumulative += s.tokenCount;
             return {
                 id: s.id,
@@ -585,7 +568,7 @@ export class RLMRetriever {
                 documentStructure,
                 and(
                     eq(documentSections.structureId, documentStructure.id),
-                    currentVersionPredicate(documentStructure.versionId),
+                    currentVersionPredicate(documentStructure.versionId)
                 )
             )
             .where(
@@ -599,7 +582,7 @@ export class RLMRetriever {
             .orderBy(asc(documentSections.pageNumber), asc(documentSections.id));
 
         let cumulative = 0;
-        return sections.map((s) => {
+        return sections.map(s => {
             cumulative += s.tokenCount;
             return {
                 id: s.id,
@@ -647,7 +630,7 @@ export class RLMRetriever {
             .innerJoin(document, eq(documentPreviews.documentId, document.id))
             .where(and(...conditions));
 
-        return previews.map((p) => ({
+        return previews.map(p => ({
             id: p.id,
             previewType: p.previewType,
             content: p.content,
@@ -676,14 +659,14 @@ export class RLMRetriever {
                 documentSections,
                 and(
                     eq(documentPreviews.sectionId, documentSections.id),
-                    eq(documentSections.documentId, document.id),
+                    eq(documentSections.documentId, document.id)
                 )
             )
             .where(
                 and(
                     eq(documentPreviews.sectionId, BigInt(sectionId)),
                     currentVersionPredicate(documentPreviews.versionId),
-                    currentVersionPredicate(documentSections.versionId),
+                    currentVersionPredicate(documentSections.versionId)
                 )
             )
             .limit(1);
@@ -705,7 +688,14 @@ export class RLMRetriever {
      */
     async probeSections(
         sectionIds: number[]
-    ): Promise<Array<{ id: number; tokenCount: number; semanticType: string | null; pageNumber: number | null }>> {
+    ): Promise<
+        Array<{
+            id: number;
+            tokenCount: number;
+            semanticType: string | null;
+            pageNumber: number | null;
+        }>
+    > {
         if (sectionIds.length === 0) return [];
 
         const sections = await db
@@ -720,7 +710,7 @@ export class RLMRetriever {
             .where(
                 and(
                     inArray(documentSections.id, sectionIds),
-                    currentVersionPredicate(documentSections.versionId),
+                    currentVersionPredicate(documentSections.versionId)
                 )
             );
 
@@ -751,9 +741,7 @@ export class RLMRetriever {
                 documentId: options.documentId ? BigInt(options.documentId) : null,
                 sectionId: options.sectionId ? BigInt(options.sectionId) : null,
                 structureId: options.structureId ? BigInt(options.structureId) : null,
-                parentResultId: options.parentResultId
-                    ? BigInt(options.parentResultId)
-                    : null,
+                parentResultId: options.parentResultId ? BigInt(options.parentResultId) : null,
                 metadata: options.metadata ?? null,
                 status: "completed",
                 expiresAt,
@@ -782,7 +770,7 @@ export class RLMRetriever {
             .where(and(...conditions))
             .orderBy(asc(workspaceResults.createdAt));
 
-        return results.map((r) => ({
+        return results.map(r => ({
             id: r.id,
             sessionId: r.sessionId,
             resultType: r.resultType,
@@ -830,7 +818,7 @@ export class RLMRetriever {
             .where(eq(workspaceResults.parentResultId, BigInt(parentResultId)))
             .orderBy(asc(workspaceResults.createdAt));
 
-        return results.map((r) => ({
+        return results.map(r => ({
             id: r.id,
             sessionId: r.sessionId,
             resultType: r.resultType,
@@ -882,41 +870,43 @@ export class RLMRetriever {
             : null;
 
         const results = useLegacyPath
-            ? await db.select({
-                id: documentSections.id,
-                content: documentSections.content,
-                tokenCount: documentSections.tokenCount,
-                pageNumber: documentSections.pageNumber,
-                semanticType: documentSections.semanticType,
-                structurePath: documentStructure.path,
-                distance: sql<number>`${documentSections.embedding} <-> ${legacyVectorLiteral}`,
-            })
-            .from(documentSections)
-            .innerJoin(document, eq(documentSections.documentId, document.id))
-            .leftJoin(
-                documentStructure,
-                and(
-                    eq(documentSections.structureId, documentStructure.id),
-                    currentVersionPredicate(documentStructure.versionId),
-                )
-            )
-            .where(
-                and(
-                    eq(documentSections.documentId, BigInt(documentId)),
-                    currentVersionPredicate(documentSections.versionId),
-                )
-            )
-            .orderBy(sql`${documentSections.embedding} <-> ${legacyVectorLiteral}`)
-            .limit(topK)
+            ? await db
+                  .select({
+                      id: documentSections.id,
+                      content: documentSections.content,
+                      tokenCount: documentSections.tokenCount,
+                      pageNumber: documentSections.pageNumber,
+                      semanticType: documentSections.semanticType,
+                      structurePath: documentStructure.path,
+                      distance: sql<number>`${documentSections.embedding} <-> ${legacyVectorLiteral}`,
+                  })
+                  .from(documentSections)
+                  .innerJoin(document, eq(documentSections.documentId, document.id))
+                  .leftJoin(
+                      documentStructure,
+                      and(
+                          eq(documentSections.structureId, documentStructure.id),
+                          currentVersionPredicate(documentStructure.versionId)
+                      )
+                  )
+                  .where(
+                      and(
+                          eq(documentSections.documentId, BigInt(documentId)),
+                          currentVersionPredicate(documentSections.versionId)
+                      )
+                  )
+                  .orderBy(sql`${documentSections.embedding} <-> ${legacyVectorLiteral}`)
+                  .limit(topK)
             : toRows<{
-                id: number;
-                content: string;
-                tokenCount: number;
-                pageNumber: number | null;
-                semanticType: SemanticType | null;
-                structurePath: string | null;
-                distance: number;
-            }>(await db.execute(sql`
+                  id: number;
+                  content: string;
+                  tokenCount: number;
+                  pageNumber: number | null;
+                  semanticType: SemanticType | null;
+                  structurePath: string | null;
+                  distance: number;
+              }>(
+                  await db.execute(sql`
                 SELECT
                     cc.id,
                     cc.content,
@@ -939,7 +929,8 @@ export class RLMRetriever {
                 AND de.index_key = ${activeEmbeddingIndex!.indexKey}
                 ORDER BY de.embedding <-> ${dimensionTableVectorLiteral}
                 LIMIT ${topK}
-            `));
+            `)
+              );
 
         // Apply token budget if specified
         let cumulative = 0;
@@ -975,7 +966,7 @@ export class RLMRetriever {
  */
 export function createRLMRetriever(
     embeddings?: EmbeddingsProvider,
-    embeddingIndex?: EmbeddingIndexConfig,
+    embeddingIndex?: EmbeddingIndexConfig
 ): RLMRetriever {
     return new RLMRetriever(embeddings, embeddingIndex);
 }

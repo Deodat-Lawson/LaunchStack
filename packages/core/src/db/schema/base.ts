@@ -37,11 +37,9 @@ export const users = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("users_company_id_idx").on(table.companyId),
         userIdIdx: index("users_user_id_idx").on(table.userId),
     })
@@ -85,9 +83,7 @@ export const company = pgTable("company", {
     createdAt: timestamp("created_at", { withTimezone: true })
         .default(sql`CURRENT_TIMESTAMP`)
         .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-        () => new Date()
-    ),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
 });
 
 // ============================================================================
@@ -109,7 +105,7 @@ export const inviteCodes = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         codeIdx: index("invite_codes_code_idx").on(table.code),
         companyIdIdx: index("invite_codes_company_id_idx").on(table.companyId),
     })
@@ -140,7 +136,7 @@ export const userCompanyMemberships = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         uniqUserCompany: uniqueIndex("user_company_memberships_user_company_unique").on(
             table.userId,
             table.companyId
@@ -181,11 +177,9 @@ export const document = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("document_company_id_idx").on(table.companyId),
         companyIdIdIdx: index("document_company_id_id_idx").on(table.companyId, table.id),
         companyIdCategoryIdx: index("document_company_id_category_idx").on(
@@ -196,9 +190,7 @@ export const document = pgTable(
             table.companyId,
             table.creationKey
         ),
-        currentVersionIdIdx: index("document_current_version_id_idx").on(
-            table.currentVersionId
-        ),
+        currentVersionIdIdx: index("document_current_version_id_idx").on(table.currentVersionId),
     })
 );
 
@@ -228,7 +220,7 @@ export const documentVersions = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
         documentCreationKeyUnique: uniqueIndex("doc_versions_document_creation_key_unique").on(
             table.documentId,
@@ -256,11 +248,9 @@ export const category = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("category_company_id_idx").on(table.companyId),
     })
 );
@@ -292,7 +282,7 @@ export const pdfChunks = pgTable(
         content: text("content").notNull(),
         embedding: pgVector({ dimension: 1536 })("embedding"),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("pdf_chunks_document_id_idx").on(table.documentId),
         documentIdPageIdx: index("pdf_chunks_document_id_page_idx").on(
             table.documentId,
@@ -330,11 +320,9 @@ export const ChatHistory = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         userIdIdx: index("chat_history_user_id_idx").on(table.UserId),
         userIdCreatedAtIdx: index("chat_history_user_id_created_at_idx").on(
             table.UserId,
@@ -362,7 +350,7 @@ export const predictiveDocumentAnalysisResults = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("predictive_analysis_document_id_idx").on(table.documentId),
     })
 );
@@ -383,10 +371,8 @@ export const documentReferenceResolution = pgTable(
         resolutionDetails: jsonb("resolution_details"),
         createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     },
-    (table) => ({
-        companyRefIdx: index("document_reference_resolutions_company_ref_idx").on(
-            table.companyId
-        ),
+    table => ({
+        companyRefIdx: index("document_reference_resolutions_company_ref_idx").on(table.companyId),
     })
 );
 
@@ -411,7 +397,7 @@ export const fileUploads = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         userIdIdx: index("file_uploads_user_id_idx").on(table.userId),
     })
 );
@@ -424,7 +410,9 @@ export const ocrJobs = pgTable(
     "ocr_jobs",
     {
         id: varchar("id", { length: 256 }).primaryKey(),
-        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, { onDelete: "set null" }),
+        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, {
+            onDelete: "set null",
+        }),
         versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
             onDelete: "set null",
         }),
@@ -436,8 +424,10 @@ export const ocrJobs = pgTable(
         // Status
         status: varchar("status", {
             length: 50,
-            enum: ["queued", "processing", "completed", "failed", "needs_review"]
-        }).notNull().default("queued"),
+            enum: ["queued", "processing", "completed", "failed", "needs_review"],
+        })
+            .notNull()
+            .default("queued"),
 
         // Document info
         documentUrl: varchar("document_url", { length: 1024 }).notNull(),
@@ -449,7 +439,7 @@ export const ocrJobs = pgTable(
         complexityScore: integer("complexity_score"),
         documentType: varchar("document_type", {
             length: 50,
-            enum: ["contract", "financial", "scanned", "general", "other"]
+            enum: ["contract", "financial", "scanned", "general", "other"],
         }),
 
         // Provider selection
@@ -479,17 +469,15 @@ export const ocrJobs = pgTable(
         webhookUrl: varchar("webhook_url", { length: 1024 }),
         webhookStatus: varchar("webhook_status", {
             length: 20,
-            enum: ["pending", "sent", "failed"]
+            enum: ["pending", "sent", "failed"],
         }),
 
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),
         userIdIdx: index("ocr_jobs_user_id_idx").on(table.userId),
         documentIdIdx: index("ocr_jobs_document_id_idx").on(table.documentId),
@@ -514,12 +502,21 @@ export const ocrProcessingSteps = pgTable(
         stepNumber: integer("step_number").notNull(),
         stepType: varchar("step_type", {
             length: 50,
-            enum: ["pre_assessment", "ocr_execution", "validation", "embedding", "storage", "webhook"]
+            enum: [
+                "pre_assessment",
+                "ocr_execution",
+                "validation",
+                "embedding",
+                "storage",
+                "webhook",
+            ],
         }).notNull(),
         status: varchar("status", {
             length: 20,
-            enum: ["pending", "in_progress", "completed", "failed"]
-        }).notNull().default("pending"),
+            enum: ["pending", "in_progress", "completed", "failed"],
+        })
+            .notNull()
+            .default("pending"),
         input: jsonb("input"),
         output: jsonb("output"),
         errorMessage: text("error_message"),
@@ -528,9 +525,12 @@ export const ocrProcessingSteps = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         jobIdIdx: index("ocr_processing_steps_job_id_idx").on(table.jobId),
-        jobIdStepIdx: index("ocr_processing_steps_job_id_step_idx").on(table.jobId, table.stepNumber),
+        jobIdStepIdx: index("ocr_processing_steps_job_id_step_idx").on(
+            table.jobId,
+            table.stepNumber
+        ),
     })
 );
 
@@ -554,11 +554,9 @@ export const ocrCostTracking = pgTable(
         averageCostPerPage: integer("average_cost_per_page").default(0).notNull(),
         averageConfidenceScore: integer("average_confidence_score").default(0).notNull(),
 
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyProviderMonthIdx: index("ocr_cost_tracking_company_provider_month_idx").on(
             table.companyId,
             table.provider,
@@ -598,11 +596,9 @@ export const uploadBatches = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdx: index("upload_batches_company_idx").on(table.companyId),
         creatorIdx: index("upload_batches_creator_idx").on(table.createdByUserId),
         statusIdx: index("upload_batches_status_idx").on(table.status),
@@ -645,11 +641,9 @@ export const uploadBatchFiles = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         batchIdx: index("upload_batch_files_batch_idx").on(table.batchId),
         statusIdx: index("upload_batch_files_status_idx").on(table.status),
         jobIdx: index("upload_batch_files_job_idx").on(table.jobId),
@@ -699,7 +693,7 @@ export const documentViews = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("document_views_document_id_idx").on(table.documentId),
         companyIdIdx: index("document_views_company_id_idx").on(table.companyId),
         userIdIdx: index("document_views_user_id_idx").on(table.userId),
@@ -722,19 +716,16 @@ export const companyRelations = relations(company, ({ many }) => ({
     memberships: many(userCompanyMemberships),
 }));
 
-export const userCompanyMembershipsRelations = relations(
-    userCompanyMemberships,
-    ({ one }) => ({
-        user: one(users, {
-            fields: [userCompanyMemberships.userId],
-            references: [users.id],
-        }),
-        company: one(company, {
-            fields: [userCompanyMemberships.companyId],
-            references: [company.id],
-        }),
-    })
-);
+export const userCompanyMembershipsRelations = relations(userCompanyMemberships, ({ one }) => ({
+    user: one(users, {
+        fields: [userCompanyMemberships.userId],
+        references: [users.id],
+    }),
+    company: one(company, {
+        fields: [userCompanyMemberships.companyId],
+        references: [company.id],
+    }),
+}));
 
 export const inviteCodesRelations = relations(inviteCodes, ({ one }) => ({
     company: one(company, {
@@ -795,12 +786,15 @@ export const chatHistoryRelations = relations(ChatHistory, ({ one }) => ({
     }),
 }));
 
-export const predictiveAnalysisRelations = relations(predictiveDocumentAnalysisResults, ({ one }) => ({
-    document: one(document, {
-        fields: [predictiveDocumentAnalysisResults.documentId],
-        references: [document.id],
-    }),
-}));
+export const predictiveAnalysisRelations = relations(
+    predictiveDocumentAnalysisResults,
+    ({ one }) => ({
+        document: one(document, {
+            fields: [predictiveDocumentAnalysisResults.documentId],
+            references: [document.id],
+        }),
+    })
+);
 
 export const ocrJobsRelations = relations(ocrJobs, ({ one, many }) => ({
     company: one(company, {
@@ -870,22 +864,22 @@ export const generatedDocuments = pgTable(
                 editable?: boolean;
             }>;
         }>(),
-        citations: jsonb("citations").$type<Array<{
-            id: string;
-            text: string;
-            sourceUrl?: string;
-            sourceTitle?: string;
-            format: string;
-            createdAt: string;
-        }>>(),
+        citations: jsonb("citations").$type<
+            Array<{
+                id: string;
+                text: string;
+                sourceUrl?: string;
+                sourceTitle?: string;
+                format: string;
+                createdAt: string;
+            }>
+        >(),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         userIdIdx: index("generated_documents_user_id_idx").on(table.userId),
         companyIdIdx: index("generated_documents_company_id_idx").on(table.companyId),
         companyUserIdx: index("generated_documents_company_user_idx").on(
@@ -913,7 +907,9 @@ export type DocumentVersion = InferSelectModel<typeof documentVersions>;
 export type Category = InferSelectModel<typeof category>;
 export type PdfChunk = InferSelectModel<typeof pdfChunks>;
 export type ChatHistoryEntry = InferSelectModel<typeof ChatHistory>;
-export type PredictiveDocumentAnalysisResult = InferSelectModel<typeof predictiveDocumentAnalysisResults>;
+export type PredictiveDocumentAnalysisResult = InferSelectModel<
+    typeof predictiveDocumentAnalysisResults
+>;
 export type DocumentReferenceResolution = InferSelectModel<typeof documentReferenceResolution>;
 export type FileUpload = InferSelectModel<typeof fileUploads>;
 export type OcrJob = InferSelectModel<typeof ocrJobs>;

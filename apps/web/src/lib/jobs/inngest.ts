@@ -10,29 +10,27 @@ import type { JobDispatcher, DispatchResult } from "./types";
 import type { ProcessDocumentEventData } from "@launchstack/core/ocr/types";
 
 export class InngestDispatcher implements JobDispatcher {
-  readonly name = "Inngest";
+    readonly name = "Inngest";
 
-  async dispatch(data: ProcessDocumentEventData): Promise<DispatchResult> {
-    if (!env.server.INNGEST_EVENT_KEY || env.server.INNGEST_EVENT_KEY === "") {
-      throw new Error(
-        "INNGEST_EVENT_KEY is required when using Inngest (JOB_RUNNER=inngest). Add it to .env or switch job runners."
-      );
+    async dispatch(data: ProcessDocumentEventData): Promise<DispatchResult> {
+        if (!env.server.INNGEST_EVENT_KEY || env.server.INNGEST_EVENT_KEY === "") {
+            throw new Error(
+                "INNGEST_EVENT_KEY is required when using Inngest (JOB_RUNNER=inngest). Add it to .env or switch job runners."
+            );
+        }
+        const { inngest } = await import("~/server/inngest/client");
+
+        const result = await inngest.send({
+            id: data.jobId,
+            name: "document/process.requested",
+            data,
+        });
+
+        console.log(`[InngestDispatcher] Queued job=${data.jobId}, eventIds=${result.ids.length}`);
+
+        return {
+            jobId: data.jobId,
+            eventIds: result.ids,
+        };
     }
-    const { inngest } = await import("~/server/inngest/client");
-
-    const result = await inngest.send({
-      id: data.jobId,
-      name: "document/process.requested",
-      data,
-    });
-
-    console.log(
-      `[InngestDispatcher] Queued job=${data.jobId}, eventIds=${result.ids.length}`,
-    );
-
-    return {
-      jobId: data.jobId,
-      eventIds: result.ids,
-    };
-  }
 }

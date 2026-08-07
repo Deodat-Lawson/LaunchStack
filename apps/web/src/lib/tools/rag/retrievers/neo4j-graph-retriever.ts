@@ -14,10 +14,7 @@
  * 6. Return as LangChain Documents
  */
 
-import {
-  BaseRetriever,
-  type BaseRetrieverInput,
-} from "@langchain/core/retrievers";
+import { BaseRetriever, type BaseRetrieverInput } from "@langchain/core/retrievers";
 import { Document } from "@langchain/core/documents";
 import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 import { db } from "~/server/db/index";
@@ -28,115 +25,107 @@ import neo4j, { type Session } from "neo4j-driver";
 import { getEngine } from "~/server/engine";
 
 const currentVersionPredicate = (
-  versionColumn: SQLWrapper,
-  documentVersionColumn: SQLWrapper = document.currentVersionId,
+    versionColumn: SQLWrapper,
+    documentVersionColumn: SQLWrapper = document.currentVersionId
 ) => sql`${versionColumn} = ${documentVersionColumn}`;
 
 interface Neo4jGraphRetrieverConfig extends BaseRetrieverInput {
-  companyId: number;
-  maxHops?: number;
-  topK?: number;
-  documentIds?: number[];
+    companyId: number;
+    maxHops?: number;
+    topK?: number;
+    documentIds?: number[];
 }
 
 export class Neo4jGraphRetriever extends BaseRetriever {
-  lc_namespace = ["rag", "retrievers", "neo4j-graph"];
+    lc_namespace = ["rag", "retrievers", "neo4j-graph"];
 
-  private companyId: number;
-  private maxHops: number;
-  private topK: number;
-  private documentIds?: number[];
+    private companyId: number;
+    private maxHops: number;
+    private topK: number;
+    private documentIds?: number[];
 
-  constructor(config: Neo4jGraphRetrieverConfig) {
-    super(config);
-    this.companyId = config.companyId;
-    this.maxHops = config.maxHops ?? 1;
-    this.topK = config.topK ?? 10;
-    this.documentIds = config.documentIds;
-  }
-
-  async _getRelevantDocuments(
-    query: string,
-    _runManager?: CallbackManagerForRetrieverRun,
-  ): Promise<Document[]> {
-    const startTime = Date.now();
-    console.log(
-      `[Neo4jGraphRetriever] Query: "${query.substring(0, 80)}...", ` +
-        `companyId=${this.companyId}, maxHops=${this.maxHops}, topK=${this.topK}`,
-    );
-
-    const queryTerms = this.extractQueryTerms(query);
-    console.log(
-      `[Neo4jGraphRetriever] Extracted ${queryTerms.length} query terms: [${queryTerms.slice(0, 10).join(", ")}]`,
-    );
-
-    if (queryTerms.length === 0) {
-      console.log("[Neo4jGraphRetriever] No query terms, returning empty");
-      return [];
+    constructor(config: Neo4jGraphRetrieverConfig) {
+        super(config);
+        this.companyId = config.companyId;
+        this.maxHops = config.maxHops ?? 1;
+        this.topK = config.topK ?? 10;
+        this.documentIds = config.documentIds;
     }
 
-    let session: Session | null = null;
-    try {
-      getEngine(); // ensures configureNeo4j has run
-      session = getNeo4jSession();
+    async _getRelevantDocuments(
+        query: string,
+        _runManager?: CallbackManagerForRetrieverRun
+    ): Promise<Document[]> {
+        const startTime = Date.now();
+        console.log(
+            `[Neo4jGraphRetriever] Query: "${query.substring(0, 80)}...", ` +
+                `companyId=${this.companyId}, maxHops=${this.maxHops}, topK=${this.topK}`
+        );
 
-      const sectionIds = await this.findSectionsViaCypher(
-        session,
-        queryTerms,
-      );
+        const queryTerms = this.extractQueryTerms(query);
+        console.log(
+            `[Neo4jGraphRetriever] Extracted ${queryTerms.length} query terms: [${queryTerms.slice(0, 10).join(", ")}]`
+        );
 
-      console.log(
-        `[Neo4jGraphRetriever] Cypher returned ${sectionIds.length} section IDs`,
-      );
+        if (queryTerms.length === 0) {
+            console.log("[Neo4jGraphRetriever] No query terms, returning empty");
+            return [];
+        }
 
-      if (sectionIds.length === 0) {
-        console.log("[Neo4jGraphRetriever] No sections found, returning empty");
-        return [];
-      }
+        let session: Session | null = null;
+        try {
+            getEngine(); // ensures configureNeo4j has run
+            session = getNeo4jSession();
 
-      const docs = await this.fetchSectionsFromPostgres(sectionIds);
+            const sectionIds = await this.findSectionsViaCypher(session, queryTerms);
 
-      const elapsed = Date.now() - startTime;
-      console.log(
-        `[Neo4jGraphRetriever] Done (${elapsed}ms): ${queryTerms.length} terms -> ` +
-          `${sectionIds.length} section IDs -> ${docs.length} documents returned`,
-      );
+            console.log(`[Neo4jGraphRetriever] Cypher returned ${sectionIds.length} section IDs`);
 
-      return docs;
-    } catch (error) {
-      console.error(
-        "[Neo4jGraphRetriever] Cypher query failed:",
-        error instanceof Error ? error.message : error,
-      );
-      return [];
-    } finally {
-      await session?.close();
+            if (sectionIds.length === 0) {
+                console.log("[Neo4jGraphRetriever] No sections found, returning empty");
+                return [];
+            }
+
+            const docs = await this.fetchSectionsFromPostgres(sectionIds);
+
+            const elapsed = Date.now() - startTime;
+            console.log(
+                `[Neo4jGraphRetriever] Done (${elapsed}ms): ${queryTerms.length} terms -> ` +
+                    `${sectionIds.length} section IDs -> ${docs.length} documents returned`
+            );
+
+            return docs;
+        } catch (error) {
+            console.error(
+                "[Neo4jGraphRetriever] Cypher query failed:",
+                error instanceof Error ? error.message : error
+            );
+            return [];
+        } finally {
+            await session?.close();
+        }
     }
-  }
 
-  private extractQueryTerms(query: string): string[] {
-    const words = query
-      .replace(/[?!.,;:'"()[\]{}]/g, " ")
-      .split(/\s+/)
-      .filter((w) => w.length >= 3)
-      .map((w) => w.toLowerCase());
+    private extractQueryTerms(query: string): string[] {
+        const words = query
+            .replace(/[?!.,;:'"()[\]{}]/g, " ")
+            .split(/\s+/)
+            .filter(w => w.length >= 3)
+            .map(w => w.toLowerCase());
 
-    return [...new Set(words)];
-  }
+        return [...new Set(words)];
+    }
 
-  private async findSectionsViaCypher(
-    session: Session,
-    terms: string[],
-  ): Promise<number[]> {
-    const companyId = this.companyId.toString();
-    const hops = this.maxHops;
-    const limit = this.topK * 2;
+    private async findSectionsViaCypher(session: Session, terms: string[]): Promise<number[]> {
+        const companyId = this.companyId.toString();
+        const hops = this.maxHops;
+        const limit = this.topK * 2;
 
-    // Step 1: Find entities matching query terms
-    // Step 2: Traverse CO_OCCURS up to maxHops
-    // Step 3: Collect section IDs via MENTIONED_IN
-    const result = await session.run(
-      `
+        // Step 1: Find entities matching query terms
+        // Step 2: Traverse CO_OCCURS up to maxHops
+        // Step 3: Collect section IDs via MENTIONED_IN
+        const result = await session.run(
+            `
       UNWIND $terms AS term
       MATCH (e:Entity {companyId: $companyId})
       WHERE toLower(e.name) CONTAINS term
@@ -158,100 +147,91 @@ export class Neo4jGraphRetriever extends BaseRetriever {
       RETURN DISTINCT s.id AS sectionId
       LIMIT $limit
       `,
-      {
-        terms,
-        companyId,
-        limit: neo4j.int(limit),
-        ...(this.documentIds && this.documentIds.length > 0
-          ? { documentIds: this.documentIds }
-          : {}),
-      },
-    );
+            {
+                terms,
+                companyId,
+                limit: neo4j.int(limit),
+                ...(this.documentIds && this.documentIds.length > 0
+                    ? { documentIds: this.documentIds }
+                    : {}),
+            }
+        );
 
-    return result.records.map((r) => {
-      const val = r.get("sectionId") as
-        | number
-        | { toNumber: () => number };
-      return typeof val === "object" && "toNumber" in val
-        ? val.toNumber()
-        : Number(val);
-    });
-  }
-
-  private async fetchSectionsFromPostgres(
-    sectionIds: number[],
-  ): Promise<Document[]> {
-    if (sectionIds.length === 0) return [];
-
-    let whereClause = inArray(documentSections.id, sectionIds);
-
-    if (this.documentIds && this.documentIds.length > 0) {
-      const docBigInts = this.documentIds.map((id) => BigInt(id));
-      whereClause = and(
-        whereClause,
-        inArray(documentSections.documentId, docBigInts),
-      )!;
+        return result.records.map(r => {
+            const val = r.get("sectionId") as number | { toNumber: () => number };
+            return typeof val === "object" && "toNumber" in val ? val.toNumber() : Number(val);
+        });
     }
 
-    const rows = await db
-      .select({
-        id: documentSections.id,
-        content: documentSections.content,
-        pageNumber: documentSections.pageNumber,
-        documentId: documentSections.documentId,
-      })
-      .from(documentSections)
-      .innerJoin(document, eq(documentSections.documentId, document.id))
-      .where(
-        and(
-          whereClause,
-          eq(document.companyId, BigInt(this.companyId)),
-          currentVersionPredicate(documentSections.versionId),
-        ),
-      )
-      .limit(this.topK);
+    private async fetchSectionsFromPostgres(sectionIds: number[]): Promise<Document[]> {
+        if (sectionIds.length === 0) return [];
 
-    return rows.map(
-      (row) =>
-        new Document({
-          pageContent: row.content,
-          metadata: {
-            chunkId: row.id,
-            page: row.pageNumber,
-            documentId: Number(row.documentId),
-            source: "neo4j_graph_retriever",
-            searchScope: "multi-document",
-            retrievalMethod: "graph_traversal",
-          },
-        }),
-    );
-  }
+        let whereClause = inArray(documentSections.id, sectionIds);
+
+        if (this.documentIds && this.documentIds.length > 0) {
+            const docBigInts = this.documentIds.map(id => BigInt(id));
+            whereClause = and(whereClause, inArray(documentSections.documentId, docBigInts))!;
+        }
+
+        const rows = await db
+            .select({
+                id: documentSections.id,
+                content: documentSections.content,
+                pageNumber: documentSections.pageNumber,
+                documentId: documentSections.documentId,
+            })
+            .from(documentSections)
+            .innerJoin(document, eq(documentSections.documentId, document.id))
+            .where(
+                and(
+                    whereClause,
+                    eq(document.companyId, BigInt(this.companyId)),
+                    currentVersionPredicate(documentSections.versionId)
+                )
+            )
+            .limit(this.topK);
+
+        return rows.map(
+            row =>
+                new Document({
+                    pageContent: row.content,
+                    metadata: {
+                        chunkId: row.id,
+                        page: row.pageNumber,
+                        documentId: Number(row.documentId),
+                        source: "neo4j_graph_retriever",
+                        searchScope: "multi-document",
+                        retrievalMethod: "graph_traversal",
+                    },
+                })
+        );
+    }
 }
 
 export function createNeo4jGraphRetriever(
-  companyId: number,
-  options?: {
-    documentIds?: number[];
-    maxHops?: number;
-    topK?: number;
-  },
+    companyId: number,
+    options?: {
+        documentIds?: number[];
+        maxHops?: number;
+        topK?: number;
+    }
 ): Neo4jGraphRetriever {
-  return new Neo4jGraphRetriever({
-    companyId,
-    documentIds: options?.documentIds,
-    maxHops: options?.maxHops,
-    topK: options?.topK,
-  });
+    return new Neo4jGraphRetriever({
+        companyId,
+        documentIds: options?.documentIds,
+        maxHops: options?.maxHops,
+        topK: options?.topK,
+    });
 }
 
 /**
  * Returns true if Neo4j graph retrieval should be used.
  */
 export function shouldUseNeo4jRetriever(): boolean {
-  getEngine(); // ensures configureNeo4j has run
-  return (
-    isNeo4jConfigured() &&
-    (process.env.ENABLE_GRAPH_RETRIEVER === "true" ||
-      process.env.ENABLE_GRAPH_RETRIEVER === "1")
-  );
+    getEngine(); // ensures configureNeo4j has run
+    return (
+        isNeo4jConfigured() &&
+        (process.env.ENABLE_GRAPH_RETRIEVER === "true" ||
+            process.env.ENABLE_GRAPH_RETRIEVER === "1")
+    );
 }

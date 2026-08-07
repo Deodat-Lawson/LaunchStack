@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - **OCR Processing Feature** - Advanced optical character recognition for scanned documents
   - New OCR service module (`src/app/api/services/ocrService.ts`) with Datalab Marker API integration
   - Asynchronous submission and polling architecture for OCR processing
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Missing environment variables in `.env.example` file with proper documentation
 
 ### Enhanced
+
 - **Document Upload API** (`src/app/api/uploadDocument/route.ts`):
   - Dual-path processing architecture: OCR path for scanned documents, standard path for digital PDFs
   - Unified chunking and embedding pipeline for both processing methods
@@ -45,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Better semantic HTML structure
 
 ### Improved
+
 - Code organization with centralized constants and utilities
 - Type safety across API endpoints and components
 - Error handling consistency throughout the application
@@ -52,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation and code maintainability
 
 ### Fixed
+
 - **Document lifecycle correctness:** Uploads, new versions, ZIP children, and archive summaries now atomically persist their document/version/job state, converge retries through stable idempotency keys, dispatch only after job creation, and propagate strict version IDs. Users no longer get stranded or duplicate document trees when a request or dispatch is retried; dispatch remains non-outbox and ambiguous remote acceptance relies on stable event-ID dedupe/retry.
 - **TypeScript/ESLint Compliance**:
   - Replaced all `any` types with proper TypeScript types in `ocrService.ts`
@@ -62,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All linter errors resolved (38 errors fixed)
 
 ### Technical Improvements
+
 - Centralized configuration management
 - Standardized API response patterns
 - Enhanced error categorization and handling
@@ -69,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved code reusability and maintainability
 
 ### Environment & Configuration
+
 - Added comprehensive environment variable validation
 - Updated `.env.example` with all required variables and documentation
 - Better configuration management with centralized constants
@@ -76,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `DATALAB_API_KEY` for optional OCR functionality
 
 ### Documentation
+
 - **README.md** - Comprehensive OCR feature documentation:
   - Added OCR processing section with detailed usage guide
   - When to use OCR (scanned documents, image-based PDFs, handwritten content)
@@ -92,4 +99,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CHANGELOG.md** - Documented all OCR feature additions and linter fixes
 
 ## [Previous Versions]
+
 This changelog starts from the current state of the codebase. Previous version history can be found in the git commit history.

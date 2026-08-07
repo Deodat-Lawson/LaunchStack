@@ -70,6 +70,7 @@ const HARDCODED_DEFAULTS: LlmConfig = {
     // whose whole point is "cheap and fast." The original project hardcoded
     // gpt-5-nano in company-metadata/extractor.ts; do not restore it here.
     smallExtraction: {
+      kimi: { model: "kimi-k2.6", temperature: 0 },
       openai: { model: "gpt-4o-mini", temperature: 0 },
       anthropic: { model: "claude-3-5-haiku-latest", temperature: 0 },
       google: { model: "gemini-2.0-flash", temperature: 0 },

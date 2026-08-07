@@ -8,6 +8,7 @@ import {
 
 import {
     LlmCapabilityUnavailableError,
+    PROVIDERS,
     generateStructuredWithMetadata,
     type Provider,
 } from "~/lib/llm";
@@ -72,7 +73,11 @@ export class ProviderDocumentChangeMaterialityAnalyzer implements DocumentChange
 
 /** Production collection opts in explicitly; credentials alone never trigger analyzer calls. */
 export function createConfiguredDocumentChangeMaterialityAnalyzer(): DocumentChangeMaterialityAnalyzer | undefined {
-    return process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED === "true"
-        ? new ProviderDocumentChangeMaterialityAnalyzer()
-        : undefined;
+    if (process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED !== "true") return undefined;
+    const configured = process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROVIDER;
+    if (!configured) return new ProviderDocumentChangeMaterialityAnalyzer();
+    if (!(PROVIDERS as readonly string[]).includes(configured)) {
+        throw new Error(`FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROVIDER must be one of: ${PROVIDERS.join(", ")}.`);
+    }
+    return new ProviderDocumentChangeMaterialityAnalyzer(configured as Provider);
 }

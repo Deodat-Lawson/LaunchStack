@@ -95,6 +95,16 @@ describe("Founder Weekly Review Kimi transport", () => {
         expect(resolved.structuredOutputMode).toBeUndefined();
     });
 
+    it("allows an explicit Kimi smallExtraction request without changing default priority", () => {
+        process.env.OPENAI_API_KEY = "openai-test-key";
+        __resetLlmConfigForTests();
+        __resetProviderCacheForTests();
+        const defaultExtraction = resolveModel("smallExtraction");
+        const kimiExtraction = resolveModel("smallExtraction", "kimi");
+        expect(defaultExtraction).toMatchObject({ provider: "openai", modelId: "gpt-4o-mini" });
+        expect(kimiExtraction).toMatchObject({ provider: "kimi", modelId: "kimi-k2.6", structuredOutputMode: "json_object" });
+    });
+
     it("fails before any request for invalid or missing selected-provider configuration", () => {
         process.env.FWR_GENERATION_PROVIDER = "other";
         __resetLlmConfigForTests();

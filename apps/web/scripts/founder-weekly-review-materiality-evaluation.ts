@@ -776,9 +776,10 @@ async function main(): Promise<void> {
         result = await runMaterialityAnalyzerEvaluation();
         defaultRunId = MATERIALITY_ANALYZER_EVALUATION_RUN_ID;
     } else if (mode === "live") {
-        const { ProviderDocumentChangeMaterialityAnalyzer } = await import("../src/server/founder-weekly-review/document-change-materiality-analyzer");
+        const { createConfiguredDocumentChangeMaterialityAnalyzer } = await import("../src/server/founder-weekly-review/document-change-materiality-analyzer");
         const maximumCalls = Math.max(1, Math.min(64, Number(process.env.FWR_MATERIALITY_EVAL_MAX_CALLS ?? 64) || 64));
-        const live = new ProviderDocumentChangeMaterialityAnalyzer();
+        const live = createConfiguredDocumentChangeMaterialityAnalyzer();
+        if (!live) throw new Error("Live materiality evaluation requires FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED=true.");
         let calls = 0;
         const bounded: DocumentChangeMaterialityAnalyzer = {
             analyze(input) {

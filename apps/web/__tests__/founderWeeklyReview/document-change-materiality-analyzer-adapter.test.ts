@@ -3,6 +3,7 @@ jest.mock("~/lib/llm", () => {
     return {
         generateStructuredWithMetadata: jest.fn(),
         LlmCapabilityUnavailableError,
+        PROVIDERS: ["openai", "kimi", "anthropic", "google", "ollama"],
     };
 });
 
@@ -37,11 +38,14 @@ const input: DocumentChangeMaterialityAnalysisInput = {
 
 describe("document-change materiality provider adapter", () => {
     const originalEnabled = process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED;
+    const originalProvider = process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROVIDER;
 
     afterEach(() => {
         mockGenerateStructuredWithMetadata.mockReset();
         if (originalEnabled === undefined) delete process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED;
         else process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED = originalEnabled;
+        if (originalProvider === undefined) delete process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROVIDER;
+        else process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROVIDER = originalProvider;
     });
 
     it("requires explicit production opt-in instead of treating credentials as consent", () => {
@@ -67,6 +71,28 @@ describe("document-change materiality provider adapter", () => {
         expect(mockGenerateStructuredWithMetadata.mock.calls[0]![0].prompt).toContain("Product owns telemetry.");
         expect(result.metadata).toEqual({ provider: "openai", model: "fixture-model", promptVersion: "document-change-materiality/v1" });
         expect(result.metadata).not.toHaveProperty("providerRequestId");
+    });
+
+    it("routes only this analyzer to its explicitly configured provider", async () => {
+        process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED = "true";
+        process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROVIDER = "kimi";
+        mockGenerateStructuredWithMetadata.mockResolvedValue({
+            object: { disposition: "non_material", category: "editorial_rewrite", summary: "Meaning is unchanged.", confidence: 0.94 },
+            metadata: { provider: "kimi", model: "kimi-k2.6", capability: "smallExtraction" },
+        });
+        const analyzer = createConfiguredDocumentChangeMaterialityAnalyzer();
+        await analyzer!.analyze(input);
+        expect(mockGenerateStructuredWithMetadata).toHaveBeenCalledWith(expect.objectContaining({
+            capability: "smallExtraction",
+            forceProvider: "kimi",
+        }));
+    });
+
+    it("rejects an invalid analyzer-specific provider before any request", () => {
+        process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_ENABLED = "true";
+        process.env.FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROVIDER = "other";
+        expect(() => createConfiguredDocumentChangeMaterialityAnalyzer()).toThrow("FWR_DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROVIDER");
+        expect(mockGenerateStructuredWithMetadata).not.toHaveBeenCalled();
     });
 
     it("maps provider failures to optional-unavailable fallback errors", async () => {

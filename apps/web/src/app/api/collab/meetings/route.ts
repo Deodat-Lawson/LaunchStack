@@ -3,11 +3,10 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 
 import type { AgentPersona } from "@launchstack/core/collab";
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { createMeetingForCompany, listMeetingsForCompany } from "~/server/collab/runtime";
 import { ensureStarterPersonas, listPersonas } from "~/server/collab/personas";
 import { getChannelStore } from "~/server/collab/store";
@@ -33,10 +32,10 @@ const CreateMeetingSchema = z.object({
 });
 
 export async function GET() {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
-  const companyId = await getActiveCompanyId(userId);
+  const { companyId } = ctx.data;
   const [rows, channels] = await Promise.all([
     listMeetingsForCompany(companyId),
     getChannelStore().listChannels(String(companyId)),
@@ -71,8 +70,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
   const parsed = CreateMeetingSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
@@ -83,7 +82,7 @@ export async function POST(request: Request) {
   }
   const input = parsed.data;
 
-  const companyId = await getActiveCompanyId(userId);
+  const { companyId, clerkUserId } = ctx.data;
   // A workspace that has never opened the Agents pane still gets a usable
   // roster, so "start a meeting" never dead-ends on an empty picker.
   const roster = await ensureStarterPersonas(companyId).catch(() => listPersonas(companyId));
@@ -114,7 +113,7 @@ export async function POST(request: Request) {
 
   const { row, orchestrator } = await createMeetingForCompany({
     companyId,
-    createdByUserId: userId,
+    createdByUserId: clerkUserId,
     title: input.title,
     objective: input.objective,
     agenda: input.agenda,

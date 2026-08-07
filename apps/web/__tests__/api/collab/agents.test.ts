@@ -36,12 +36,25 @@ const mockCtx: {
   slack: { canPost: true, canReceive: true, missing: [] },
 };
 
-jest.mock("@clerk/nextjs/server", () => ({
-  auth: () => Promise.resolve({ userId: mockCtx.userId }),
-}));
-
-jest.mock("~/lib/active-workspace", () => ({
-  getActiveCompanyId: () => Promise.resolve(7n),
+jest.mock("~/lib/require-workspace-context", () => ({
+  requireWorkspaceContext: () =>
+    mockCtx.userId
+      ? Promise.resolve({
+          success: true,
+          data: {
+            clerkUserId: mockCtx.userId,
+            userPk: 1n,
+            companyId: 7n,
+            role: "owner",
+            status: "verified",
+          },
+        })
+      : Promise.resolve({
+          success: false,
+          response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+          }),
+        }),
 }));
 
 jest.mock("~/server/collab/slack", () => ({

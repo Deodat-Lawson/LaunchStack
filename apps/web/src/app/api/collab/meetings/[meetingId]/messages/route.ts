@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getMeetingRuntime } from "~/server/collab/runtime";
 
 export const dynamic = "force-dynamic";
@@ -26,8 +26,8 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ meetingId: string }> },
 ) {
-  const { userId, sessionClaims } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
   const parsed = PostMessageSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
@@ -35,10 +35,10 @@ export async function POST(
   }
 
   const { meetingId } = await params;
-  const companyId = await getActiveCompanyId(userId);
-  const runtime = await getMeetingRuntime(meetingId, companyId);
+  const runtime = await getMeetingRuntime(meetingId, ctx.data.companyId);
   if (!runtime) return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
 
+  const { sessionClaims } = await auth();
   const displayName =
     (sessionClaims?.name as string | undefined) ??
     (sessionClaims?.email as string | undefined) ??
@@ -46,7 +46,7 @@ export async function POST(
 
   try {
     const message = await runtime.orchestrator.postHumanMessage({
-      humanId: userId,
+      humanId: ctx.data.clerkUserId,
       displayName,
       text: parsed.data.text,
       asPersonaId: parsed.data.asPersonaId,

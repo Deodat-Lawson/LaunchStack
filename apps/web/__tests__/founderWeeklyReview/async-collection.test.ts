@@ -6,6 +6,7 @@ import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeDb = process.env.LAUNCHSTACK_TEST_DATABASE_URL || process.env.DATABASE_URL ? describe : describe.skip;
 const snapshot = FounderWeeklyReviewEvidenceSnapshotSchema.parse({ schemaVersion: "founder-weekly-review-evidence/v1", capturedAt: "2026-07-13T00:00:00.000Z", reportingPeriod: { start: "2026-07-06", end: "2026-07-12" }, workspaceTimezone: "UTC", items: [], sourceWarnings: [] });
+const snapshotV2 = FounderWeeklyReviewEvidenceSnapshotSchema.parse({ ...snapshot, schemaVersion: "founder-weekly-review-evidence/v2", documentChangeAudit: { schemaVersion: "document-change-audit/v1", rawChanges: [], groups: [] } });
 
 describeDb("Founder Weekly Review async evidence workflow", () => {
   it("creates without a snapshot, attaches it once, and then permits generation claim", async () => {
@@ -44,6 +45,29 @@ describeDb("Founder Weekly Review async evidence workflow", () => {
       const retried = await service.retryRunWithDispatch({ actor, runId: created.run.id, requestKey: "collection-retry" });
       expect(retried.run.id).toBe(created.run.id); expect(retried.run.retryCount).toBe(1); expect(retried.run.evidenceSnapshot).toBeNull();
       await expect(worker.claimEvidenceCollection({ companyId: actor.companyId, runId: created.run.id, collectionClaimId: retried.dispatch.generationClaimId })).resolves.toMatchObject({ status: "collecting" });
+    } finally { await test.close(); }
+  });
+
+  it("reuses an attached v2 audit snapshot unchanged on generation retry", async () => {
+    const test = await createFounderWeeklyReviewTestDatabase();
+    try {
+      const [companyRow] = await test.db.insert(company).values({ name: "V2 Retry", numberOfEmployees: "1" }).returning();
+      const actor = { externalUserId: "u", internalUserId: 1n, companyId: BigInt(companyRow!.id), role: "owner" };
+      const service = createFounderWeeklyReviewDispatchService(test.db);
+      const created = await service.createRunWithDispatch({ actor, requestKey: "v2-retry", reportingPeriod: snapshotV2.reportingPeriod, collectionInput: { workspaceTimezone: "UTC", actorExternalUserId: "u" } });
+      const worker = new FounderWeeklyReviewWorkerService(new FounderWeeklyReviewRepository(test.db));
+      const collection = { companyId: actor.companyId, runId: created.run.id, collectionClaimId: "v2-collection" };
+      await worker.claimEvidenceCollection(collection);
+      const attached = await worker.attachEvidenceSnapshotIfAbsent(collection, snapshotV2);
+      const generation = { companyId: actor.companyId, runId: created.run.id, generationClaimId: "v2-generation", generationJobId: "v2-job" };
+      await worker.claimQueuedRun(generation);
+      await worker.markGenerationFailed(generation, { errorCode: "provider_unavailable" });
+      const retried = await service.retryRunWithDispatch({ actor, runId: created.run.id, requestKey: "v2-generation-retry" });
+
+      expect(attached.evidenceSnapshot).toEqual(snapshotV2);
+      expect(retried.run.evidenceSnapshot).toEqual(snapshotV2);
+      expect(retried.run.evidenceSchemaVersion).toBe("founder-weekly-review-evidence/v2");
+      expect(retried.run.status).toBe("queued");
     } finally { await test.close(); }
   });
 });

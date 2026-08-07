@@ -56,7 +56,7 @@ Every repository method accepts `companyId` explicitly and includes it in SQL pr
 
 ## Contract versions
 
-- Evidence snapshot: `founder-weekly-review-evidence/v1`
+- Evidence snapshots: existing `founder-weekly-review-evidence/v1` and current `founder-weekly-review-evidence/v2` with deterministic document-change audit provenance
 - Review payload: `founder-weekly-review/v1`
 
 ## Evidence collection (LAU-6)

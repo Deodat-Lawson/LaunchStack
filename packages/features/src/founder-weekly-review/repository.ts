@@ -11,6 +11,7 @@ import {
     FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
     FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
     type FounderWeeklyReviewPayloadSchemaVersion,
+    type FounderWeeklyReviewEvidenceSchemaVersion,
     type CreateFounderWeeklyReviewRunInput,
     type FounderWeeklyReviewClaimInput,
     type FounderWeeklyReviewCollectionClaimInput,
@@ -51,6 +52,14 @@ function mapRunRow(row: FounderWeeklyReviewRunRow): FounderWeeklyReviewRunRecord
             `Founder weekly review run "${row.id}" has mismatched review payload and review schema versions.`
         );
     }
+    const evidenceSnapshot = row.evidenceSnapshot
+        ? parseFounderWeeklyReviewEvidenceSnapshot(row.evidenceSnapshot)
+        : null;
+    if (evidenceSnapshot && evidenceSnapshot.schemaVersion !== row.evidenceSchemaVersion) {
+        throw new FounderWeeklyReviewInvalidPayloadError(
+            `Founder weekly review run "${row.id}" has mismatched evidence snapshot and evidence schema versions.`
+        );
+    }
     return {
         id: row.id,
         companyId: row.companyId,
@@ -62,11 +71,9 @@ function mapRunRow(row: FounderWeeklyReviewRunRow): FounderWeeklyReviewRunRecord
         status: row.status,
         reviewPayload,
         reviewSchemaVersion: row.reviewSchemaVersion as FounderWeeklyReviewPayloadSchemaVersion,
-        evidenceSnapshot: row.evidenceSnapshot
-            ? parseFounderWeeklyReviewEvidenceSnapshot(row.evidenceSnapshot)
-            : null,
+        evidenceSnapshot,
         evidenceSchemaVersion:
-            row.evidenceSchemaVersion as typeof FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
+            row.evidenceSchemaVersion as FounderWeeklyReviewEvidenceSchemaVersion,
         collectionInput: parseFounderWeeklyReviewCollectionInput(row.collectionInput),
         collectionClaimId: row.collectionClaimId ?? null,
         collectionStartedAt: row.collectionStartedAt ?? null,
@@ -136,7 +143,7 @@ export class FounderWeeklyReviewRepository {
                 reviewPayload: null,
                 reviewSchemaVersion: FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION,
                 evidenceSnapshot: input.evidenceSnapshot ?? null,
-                evidenceSchemaVersion: FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
+                evidenceSchemaVersion: input.evidenceSnapshot?.schemaVersion ?? FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
                 collectionInput: input.collectionInput ?? {
                     workspaceTimezone: input.evidenceSnapshot?.workspaceTimezone ?? "UTC",
                     actorExternalUserId: input.createdByActorId.replace(/^user:/, ""),

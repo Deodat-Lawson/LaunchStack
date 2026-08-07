@@ -66,8 +66,16 @@ describeDb("strict current workspace document store", () => {
             const input = { companyId: BigInt(owner!.id), reportingPeriod: { start: "2026-02-01", end: "2026-02-07" }, workspaceTimezone: "UTC", founderContext: "blocker", actor: { externalUserId: "u" }, requestKey: "computed-integration" };
             const first = await service.collectFounderWeeklyReviewEvidence(input);
             const second = await service.collectFounderWeeklyReviewEvidence(input);
+            expect(first.schemaVersion).toBe("founder-weekly-review-evidence/v2");
             expect(first.items.filter((item) => item.sourceType === "document_change")).toHaveLength(1);
             expect(first.items).toEqual(second.items);
+            expect(first.schemaVersion === "founder-weekly-review-evidence/v2" && first.documentChangeAudit).toEqual(
+                second.schemaVersion === "founder-weekly-review-evidence/v2" ? second.documentChangeAudit : undefined
+            );
+            if (first.schemaVersion !== "founder-weekly-review-evidence/v2") throw new Error("Expected computed v2 evidence");
+            expect(first.documentChangeAudit.rawChanges).toHaveLength(1);
+            expect(first.documentChangeAudit.groups).toHaveLength(1);
+            expect(first.documentChangeAudit.groups[0]!.evidenceSourceId).toBe(first.items.find((item) => item.sourceType === "document_change")!.sourceId);
             expect(first.items).toEqual(expect.arrayContaining([
                 expect.objectContaining({ sourceType: "document_change", metadata: expect.objectContaining({ previousVersionId: a1!.id, currentVersionId: a2!.id }) }),
             ]));

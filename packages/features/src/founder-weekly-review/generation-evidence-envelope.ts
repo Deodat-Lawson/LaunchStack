@@ -74,6 +74,12 @@ const PROMPT_METADATA_ALLOWLIST: Record<SourceType, readonly string[]> = {
         "structurePath",
         "alignmentMethod",
         "userChangelog",
+        "category",
+        "materialityMethod",
+        "materialityConfidence",
+        "materialityVersion",
+        "structureTitle",
+        "rawChangeCount",
     ],
     customer_feedback: ["versionNumber", "documentCategory", "pageNumber"],
     workspace_document: ["retrievalReason", "similarityScore"],
@@ -94,6 +100,14 @@ function similarityScore(item: FounderWeeklyReviewEvidenceItem): number {
     const value = item.metadata.similarityScore;
     return typeof value === "number" && Number.isFinite(value) ? value : Number.NEGATIVE_INFINITY;
 }
+function compareIntegerMetadata(a: FounderWeeklyReviewEvidenceItem, b: FounderWeeklyReviewEvidenceItem, key: string): number {
+    const left = metadataText(a, key); const right = metadataText(b, key);
+    if (/^-?\d+$/.test(left) && /^-?\d+$/.test(right)) {
+        const leftInteger = BigInt(left); const rightInteger = BigInt(right);
+        return leftInteger < rightInteger ? -1 : leftInteger > rightInteger ? 1 : 0;
+    }
+    return compareOrdinal(left, right);
+}
 
 /** Stable source-specific ordering that does not depend on snapshot input order. */
 function compareEvidenceItems(
@@ -109,15 +123,12 @@ function compareEvidenceItems(
         if (Number.isFinite(similarity) && similarity !== 0) return similarity;
     }
     if (a.sourceType === "document_change" && b.sourceType === "document_change") {
-        for (const key of [
-            "documentId",
-            "previousVersionId",
-            "currentVersionId",
-            "structurePath",
-        ] as const) {
-            const compared = compareOrdinal(metadataText(a, key), metadataText(b, key));
+        for (const key of ["documentId", "previousVersionId", "currentVersionId", "structureOrdering", "pageNumber", "lineStart"] as const) {
+            const compared = compareIntegerMetadata(a, b, key);
             if (compared !== 0) return compared;
         }
+        const structurePath = compareOrdinal(metadataText(a, "structurePath"), metadataText(b, "structurePath"));
+        if (structurePath !== 0) return structurePath;
     }
     return compareOrdinal(a.sourceId, b.sourceId);
 }

@@ -10,4 +10,6 @@ export * from "./generation-validation";
 export * from "./generation-evidence-envelope";
 export * from "./prompts";
 export * from "./document-change";
+export * from "./document-change-materiality";
+export * from "./evidence-digest";
 export * from "./workspace-document";

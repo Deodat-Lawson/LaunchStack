@@ -79,7 +79,14 @@ export type DocumentChangeGroup = {
 };
 
 export type DocumentChangeProcessingWarning = {
-    code: "materiality_group_too_large" | "document_change_budget_truncated";
+    code:
+        | "materiality_group_too_large"
+        | "document_change_budget_truncated"
+        | "materiality_analyzer_unavailable"
+        | "materiality_analysis_partial"
+        | "materiality_result_invalid"
+        | "materiality_analysis_timeout"
+        | "materiality_analysis_budget_truncated";
     message: string;
 };
 

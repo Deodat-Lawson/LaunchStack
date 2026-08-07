@@ -11,5 +11,6 @@ export * from "./generation-evidence-envelope";
 export * from "./prompts";
 export * from "./document-change";
 export * from "./document-change-materiality";
+export * from "./document-change-materiality-analyzer";
 export * from "./evidence-digest";
 export * from "./workspace-document";

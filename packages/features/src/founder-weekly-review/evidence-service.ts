@@ -22,7 +22,10 @@ import {
     type DocumentVersionForComparison,
     type VersionChunk,
 } from "./document-change";
-import { materializeDocumentChanges } from "./document-change-materiality";
+import {
+    materializeDocumentChangesWithAnalyzer,
+    type DocumentChangeMaterialityAnalyzer,
+} from "./document-change-materiality-analyzer";
 import {
     buildWorkspaceDocumentEvidence,
     normalizeFounderContextRetrievalQuery,
@@ -169,6 +172,7 @@ export class FounderWeeklyReviewEvidenceService {
         private readonly now: () => Date = () => new Date(),
         private readonly documentChangeSource: FounderWeeklyReviewDocumentChangeSource = { kind: "unconfigured" },
         private readonly workspaceDocumentStore?: FounderWeeklyReviewWorkspaceDocumentStore,
+        private readonly documentChangeMaterialityAnalyzer?: DocumentChangeMaterialityAnalyzer,
     ) {}
 
     async collectDocumentChangeEvidence(companyId: bigint, startInclusive: Date, endExclusive: Date): Promise<FounderWeeklyReviewEvidenceItem[]> {
@@ -196,7 +200,10 @@ export class FounderWeeklyReviewEvidenceService {
                 }
                 pairInputs.push({ pair, alignments: alignVersionChunks(previous.chunks, current.chunks) });
             }
-            const materialized = materializeDocumentChanges(pairInputs);
+            const materialized = await materializeDocumentChangesWithAnalyzer(
+                pairInputs,
+                this.documentChangeMaterialityAnalyzer,
+            );
             const items = [...materialized.items];
             warnings.push(...materialized.warnings.map((item) => warning(item.code, item.message, "document_change")));
             const pairedCurrentVersionIds = new Set(pairs.map((pair) => pair.currentVersionId));

@@ -88,6 +88,10 @@ const CATEGORY_PRIORITY: Record<DocumentChangeCategory, number> = Object.fromEnt
     DOCUMENT_CHANGE_CATEGORIES.map((category, index) => [category, index + 1])
 ) as Record<DocumentChangeCategory, number>;
 
+export function documentChangeCategoryPriority(category: DocumentChangeCategory): number {
+    return CATEGORY_PRIORITY[category];
+}
+
 const CATEGORY_LABEL: Record<DocumentChangeCategory, string> = {
     ownership_change: "Ownership changed.",
     status_change: "Status changed.",

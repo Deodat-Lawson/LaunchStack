@@ -113,6 +113,37 @@ export const DocumentChangeCategorySchema = z.enum([
 ]);
 export const DeterministicMaterialityConfidenceSchema = z.enum(["strong", "moderate", "uncertain"]);
 
+export const DocumentChangeMaterialityDispositionSchema = z.enum([
+    "material",
+    "non_material",
+    "uncertain",
+]);
+
+export const DocumentChangeMaterialityAnalysisSnapshotSchema = z.object({
+    disposition: DocumentChangeMaterialityDispositionSchema,
+    category: DocumentChangeCategorySchema,
+    confidence: z.number().min(0).max(1),
+    summary: z.string().min(1).max(320),
+    beforeKeyPoint: z.string().min(1).max(240).optional(),
+    afterKeyPoint: z.string().min(1).max(240).optional(),
+    analysisMethod: z.literal("llm"),
+    analysisPromptVersion: z.string().min(1).max(128),
+    analysisProvider: z.string().min(1).max(128).optional(),
+    analysisModel: z.string().min(1).max(256).optional(),
+    analysisInputDigest: z.string().regex(/^[a-f0-9]{64}$/),
+    analysisResultSchemaVersion: z.string().min(1).max(128),
+}).strict().superRefine((result, context) => {
+    if (result.disposition === "uncertain" && result.category !== "uncertain") {
+        context.addIssue({ code: z.ZodIssueCode.custom, message: "Uncertain analysis requires uncertain category.", path: ["category"] });
+    }
+    if (result.disposition === "material" && result.category === "editorial_rewrite") {
+        context.addIssue({ code: z.ZodIssueCode.custom, message: "Material analysis cannot use editorial_rewrite.", path: ["category"] });
+    }
+});
+export type DocumentChangeMaterialityAnalysisSnapshot = z.infer<
+    typeof DocumentChangeMaterialityAnalysisSnapshotSchema
+>;
+
 export const RawDocumentChangeSnapshotSchema = z.object({
     rawChangeId: z.string().min(1).max(128),
     changeType: z.enum(["added", "removed", "modified"]),
@@ -157,6 +188,7 @@ export const DocumentChangeGroupSnapshotSchema = z.object({
     signals: z.array(z.string().min(1).max(64)).max(20),
     materialityMethod: z.literal("deterministic"),
     materialityVersion: z.string().min(1).max(128),
+    analysis: DocumentChangeMaterialityAnalysisSnapshotSchema.optional(),
 }).strict();
 export type DocumentChangeGroupSnapshot = z.infer<typeof DocumentChangeGroupSnapshotSchema>;
 

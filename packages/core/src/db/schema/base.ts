@@ -432,6 +432,7 @@ export const ocrJobs = pgTable(
         // Document info
         documentUrl: varchar("document_url", { length: 1024 }).notNull(),
         documentName: varchar("document_name", { length: 256 }).notNull(),
+        dispatchOptions: jsonb("dispatch_options").$type<Record<string, unknown>>(),
         pageCount: integer("page_count"),
         fileSizeBytes: bigint("file_size_bytes", { mode: "bigint" }),
 

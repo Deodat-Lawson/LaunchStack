@@ -238,6 +238,25 @@ function isZipFile(mimeType?: string, filename?: string): boolean {
     return false;
 }
 
+function canonicalizeZipEntry(entryPath: string): string {
+    const forwardSlashPath = entryPath.replaceAll("\\", "/");
+
+    if (path.posix.isAbsolute(forwardSlashPath) || path.win32.isAbsolute(forwardSlashPath)) {
+        throw new Error(`[ProcessDocument] Invalid ZIP entry path (absolute): ${entryPath}`);
+    }
+
+    if (forwardSlashPath.split("/").some(segment => segment === "..")) {
+        throw new Error(`[ProcessDocument] Invalid ZIP entry path (traversal): ${entryPath}`);
+    }
+    const normalizedPath = path.posix.normalize(forwardSlashPath);
+    const canonicalPath = normalizedPath.replace(/\/+$/, "");
+    if (canonicalPath === "." || canonicalPath === "") {
+        throw new Error(`[ProcessDocument] Invalid ZIP entry path (empty): ${entryPath}`);
+    }
+
+    return canonicalPath;
+}
+
 function shouldSkipEntry(path: string): boolean {
     return ZIP_SKIP_PATTERNS.some(re => re.test(path));
 }
@@ -411,13 +430,52 @@ export const uploadDocument = inngest.createFunction(
                         );
                     }
                     const zipBuffer = Buffer.from(await res.arrayBuffer());
-                    const zip = await JSZip.loadAsync(zipBuffer);
-
-                    const allPaths = Object.keys(zip.files);
-                    const entries = allPaths
-                        .filter(p => !zip.files[p]!.dir && !shouldSkipEntry(p))
+                    const zip = new JSZip();
+                    const interceptedZip = zip as unknown as {
+                        file: (...args: unknown[]) => unknown;
+                    };
+                    const originalFile = interceptedZip.file.bind(zip);
+                    const seenLoadedPaths = new Set<string>();
+                    interceptedZip.file = (...args: unknown[]) => {
+                        const [zipPath] = args;
+                        if (args.length > 1 && typeof zipPath === "string") {
+                            const canonicalPath = canonicalizeZipEntry(zipPath);
+                            if (seenLoadedPaths.has(canonicalPath)) {
+                                throw new Error(
+                                    `[ProcessDocument] Duplicate ZIP entry path after canonicalization: ${canonicalPath}`
+                                );
+                            }
+                            seenLoadedPaths.add(canonicalPath);
+                        }
+                        return originalFile(...args);
+                    };
+                    await zip.loadAsync(zipBuffer);
+                    const seenCanonicalPaths = new Set<string>();
+                    const canonicalEntries = Object.entries(zip.files).map(([zipPath, entry]) => {
+                        const canonicalPath = canonicalizeZipEntry(
+                            entry.unsafeOriginalName ?? zipPath
+                        );
+                        if (seenCanonicalPaths.has(canonicalPath)) {
+                            throw new Error(
+                                `[ProcessDocument] Duplicate ZIP entry path after canonicalization: ${canonicalPath}`
+                            );
+                        }
+                        seenCanonicalPaths.add(canonicalPath);
+                        return { canonicalPath, entry };
+                    });
+                    const zipEntriesByPath = new Map(
+                        canonicalEntries.map(
+                            ({ canonicalPath, entry }) => [canonicalPath, entry] as const
+                        )
+                    );
+                    const allPaths = canonicalEntries.map(({ canonicalPath }) => canonicalPath);
+                    const entries = canonicalEntries
+                        .filter(
+                            ({ canonicalPath, entry }) =>
+                                !entry.dir && !shouldSkipEntry(canonicalPath)
+                        )
+                        .map(({ canonicalPath }) => canonicalPath)
                         .sort();
-
                     // Smart relevance filter: skip low-value files, prioritize high-value ones
                     const {
                         selected: cappedEntries,
@@ -435,7 +493,7 @@ export const uploadDocument = inngest.createFunction(
                     const fileTree = entries.map(p => `  ${p}`).join("\n");
                     let readmeContent = "";
                     const readmePath = entries.find(p => {
-                        const name = p.split("/").pop()?.toLowerCase() ?? "";
+                        const name = path.posix.basename(p).toLowerCase();
                         return (
                             name === "readme.md" ||
                             name === "readme" ||
@@ -443,12 +501,10 @@ export const uploadDocument = inngest.createFunction(
                             name === "readme.rst"
                         );
                     });
-                    if (readmePath) {
+                    const readmeEntry = readmePath ? zipEntriesByPath.get(readmePath) : undefined;
+                    if (readmeEntry) {
                         try {
-                            readmeContent = (await zip.files[readmePath]!.async("string")).slice(
-                                0,
-                                8000
-                            );
+                            readmeContent = (await readmeEntry.async("string")).slice(0, 8000);
                         } catch {
                             /* ignore read errors */
                         }
@@ -458,11 +514,9 @@ export const uploadDocument = inngest.createFunction(
                     const results: ExtractedFileInfo[] = [];
 
                     for (const entryPath of cappedEntries) {
-                        const normalizedEntryPath = path.posix
-                            .normalize(`/${entryPath.replaceAll("\\", "/")}`)
-                            .slice(1);
+                        const entry = zipEntriesByPath.get(entryPath)!;
                         const ext = extractExtension(entryPath);
-                        const baseName = entryPath.split("/").pop() ?? entryPath;
+                        const baseName = path.posix.basename(entryPath);
                         const titleName = baseName;
 
                         if (ext === ".zip") {
@@ -470,76 +524,69 @@ export const uploadDocument = inngest.createFunction(
                             continue;
                         }
 
-                        try {
-                            const entry = zip.files[entryPath]!;
-                            const compressedSize =
-                                (entry as unknown as { _data?: { compressedSize?: number } })._data
-                                    ?.compressedSize ?? 0;
-                            if (compressedSize > MAX_FILE_SIZE_BYTES) {
-                                console.warn(
-                                    `[ProcessDocument] Skipping oversized file: ${entryPath} (${(compressedSize / 1024 / 1024).toFixed(1)}MB)`
-                                );
-                                continue;
-                            }
-
-                            const fileBuffer = Buffer.from(await entry.async("arraybuffer"));
-
-                            if (fileBuffer.length > MAX_FILE_SIZE_BYTES) {
-                                console.warn(
-                                    `[ProcessDocument] Skipping oversized extracted file: ${entryPath} (${(fileBuffer.length / 1024 / 1024).toFixed(1)}MB)`
-                                );
-                                continue;
-                            }
-
-                            let fileMime = mimeFromExtension(ext);
-                            if (!fileMime && !ext) {
-                                const lowerBase = baseName.toLowerCase();
-                                if (
-                                    EXTENSIONLESS_TEXT_FILENAMES.has(lowerBase) ||
-                                    sniffTextContent(fileBuffer)
-                                ) {
-                                    fileMime = "text/plain";
-                                }
-                            }
-
-                            console.log(
-                                `[ProcessDocument] Storing extracted file: ${entryPath} (${(fileBuffer.length / 1024).toFixed(1)}KB, mime=${fileMime ?? "unknown"})`
-                            );
-
-                            const blob = await putFile({
-                                filename: baseName,
-                                data: fileBuffer,
-                                contentType: fileMime,
-                            });
-                            const lifecycle = await createDocumentLifecycle({
-                                companyId: BigInt(eventData.companyId),
-                                userId: eventData.userId,
-                                title: titleName,
-                                category: eventData.category,
-                                url: blob.url,
-                                creationKey: `archive:${eventData.documentId}:entry:${normalizedEntryPath}`,
-                                processingUrl: blob.url,
-                                mimeType: fileMime ?? null,
-                                sourceArchiveName: archiveName,
-                                sourceArchiveEntry: normalizedEntryPath,
-                                processing: {
-                                    originalFilename: baseName,
-                                    embeddingIndexKey: eventData.options?.embeddingIndexKey,
-                                },
-                            });
-
-                            results.push({
-                                documentId: lifecycle.documentId,
-                                documentUrl: blob.url,
-                                documentName: titleName,
-                                originalFilename: baseName,
-                                mimeType: fileMime,
-                            });
-                        } catch (err) {
+                        const compressedSize =
+                            (entry as unknown as { _data?: { compressedSize?: number } })._data
+                                ?.compressedSize ?? 0;
+                        if (compressedSize > MAX_FILE_SIZE_BYTES) {
                             console.warn(
-                                `[ProcessDocument] Failed to extract ${entryPath}: ${err instanceof Error ? err.message : String(err)}`
+                                `[ProcessDocument] Skipping oversized file: ${entryPath} (${(compressedSize / 1024 / 1024).toFixed(1)}MB)`
                             );
+                            continue;
                         }
+
+                        const fileBuffer = Buffer.from(await entry.async("arraybuffer"));
+
+                        if (fileBuffer.length > MAX_FILE_SIZE_BYTES) {
+                            console.warn(
+                                `[ProcessDocument] Skipping oversized extracted file: ${entryPath} (${(fileBuffer.length / 1024 / 1024).toFixed(1)}MB)`
+                            );
+                            continue;
+                        }
+
+                        let fileMime = mimeFromExtension(ext);
+                        if (!fileMime && !ext) {
+                            const lowerBase = baseName.toLowerCase();
+                            if (
+                                EXTENSIONLESS_TEXT_FILENAMES.has(lowerBase) ||
+                                sniffTextContent(fileBuffer)
+                            ) {
+                                fileMime = "text/plain";
+                            }
+                        }
+
+                        console.log(
+                            `[ProcessDocument] Storing extracted file: ${entryPath} (${(fileBuffer.length / 1024).toFixed(1)}KB, mime=${fileMime ?? "unknown"})`
+                        );
+
+                        const blob = await putFile({
+                            filename: baseName,
+                            data: fileBuffer,
+                            contentType: fileMime,
+                        });
+                        const lifecycle = await createDocumentLifecycle({
+                            companyId: BigInt(eventData.companyId),
+                            userId: eventData.userId,
+                            title: titleName,
+                            category: eventData.category,
+                            url: blob.url,
+                            creationKey: `archive:${eventData.documentId}:entry:${entryPath}`,
+                            processingUrl: blob.url,
+                            mimeType: fileMime ?? null,
+                            sourceArchiveName: archiveName,
+                            sourceArchiveEntry: entryPath,
+                            processing: {
+                                originalFilename: baseName,
+                                embeddingIndexKey: eventData.options?.embeddingIndexKey,
+                            },
+                        });
+
+                        results.push({
+                            documentId: lifecycle.documentId,
+                            documentUrl: blob.url,
+                            documentName: titleName,
+                            originalFilename: baseName,
+                            mimeType: fileMime,
+                        });
                     }
                     console.log(
                         `[ProcessDocument] Extracted ${results.length} files from ${archiveName}`

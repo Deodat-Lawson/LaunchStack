@@ -55,6 +55,58 @@ function makeEvent(data: Partial<ProcessDocumentEventData>) {
     return { data: { event: { data: data as ProcessDocumentEventData } } } as any;
 }
 
+function makeDuplicateEntryZip(): Buffer {
+    const fileName = Buffer.from("duplicate.txt", "utf8");
+    const localHeader = Buffer.alloc(30);
+    localHeader.writeUInt32LE(0x04034b50, 0);
+    localHeader.writeUInt16LE(20, 4);
+    localHeader.writeUInt16LE(0, 6);
+    localHeader.writeUInt16LE(0, 8);
+    localHeader.writeUInt16LE(0, 10);
+    localHeader.writeUInt16LE(0, 12);
+    localHeader.writeUInt32LE(0, 14);
+    localHeader.writeUInt32LE(0, 18);
+    localHeader.writeUInt32LE(0, 22);
+    localHeader.writeUInt16LE(fileName.length, 26);
+    localHeader.writeUInt16LE(0, 28);
+    const localEntry = Buffer.concat([localHeader, fileName]);
+
+    const makeCentralEntry = (localOffset: number) => {
+        const centralHeader = Buffer.alloc(46);
+        centralHeader.writeUInt32LE(0x02014b50, 0);
+        centralHeader.writeUInt16LE(20, 4);
+        centralHeader.writeUInt16LE(20, 6);
+        centralHeader.writeUInt16LE(0, 8);
+        centralHeader.writeUInt16LE(0, 10);
+        centralHeader.writeUInt16LE(0, 12);
+        centralHeader.writeUInt16LE(0, 14);
+        centralHeader.writeUInt32LE(0, 16);
+        centralHeader.writeUInt32LE(0, 20);
+        centralHeader.writeUInt32LE(0, 24);
+        centralHeader.writeUInt16LE(fileName.length, 28);
+        centralHeader.writeUInt16LE(0, 30);
+        centralHeader.writeUInt16LE(0, 32);
+        centralHeader.writeUInt16LE(0, 34);
+        centralHeader.writeUInt16LE(0, 36);
+        centralHeader.writeUInt32LE(0, 38);
+        centralHeader.writeUInt32LE(localOffset, 42);
+        return Buffer.concat([centralHeader, fileName]);
+    };
+
+    const centralEntries = Buffer.concat([
+        makeCentralEntry(0),
+        makeCentralEntry(localEntry.length),
+    ]);
+    const endOfCentralDirectory = Buffer.alloc(22);
+    endOfCentralDirectory.writeUInt32LE(0x06054b50, 0);
+    endOfCentralDirectory.writeUInt16LE(2, 8);
+    endOfCentralDirectory.writeUInt16LE(2, 10);
+    endOfCentralDirectory.writeUInt32LE(centralEntries.length, 12);
+    endOfCentralDirectory.writeUInt32LE(localEntry.length * 2, 16);
+
+    return Buffer.concat([localEntry, localEntry, centralEntries, endOfCentralDirectory]);
+}
+
 beforeEach(() => {
     jest.clearAllMocks();
 });
@@ -250,5 +302,196 @@ describe("archive document lifecycle", () => {
         );
         expect(step.sendEvent).not.toHaveBeenCalled();
         expect(result).toEqual(expect.objectContaining({ success: true, extracted: 2 }));
+    });
+
+    it("rejects traversal entries before any upload or lifecycle call", async () => {
+        const zip = new JSZip();
+        zip.file("../escape.txt", "escape");
+        const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
+
+        mockFetchFile.mockResolvedValue({
+            ok: true,
+            arrayBuffer: async () => zipBuffer,
+        });
+
+        const step = {
+            run: jest.fn(async (_name: string, operation: () => Promise<unknown>) => operation()),
+            sendEvent: jest.fn(),
+        };
+        const handler = (
+            uploadDocument as unknown as {
+                fn: (context: {
+                    event: { data: ProcessDocumentEventData };
+                    step: typeof step;
+                }) => Promise<unknown>;
+            }
+        ).fn;
+
+        await expect(
+            handler({
+                event: {
+                    data: {
+                        jobId: "archive-job",
+                        documentUrl: "https://blob.test/archive.zip",
+                        documentName: "archive.zip",
+                        originalFilename: "archive.zip",
+                        companyId: "7",
+                        userId: "user-1",
+                        documentId: 100,
+                        versionId: 43,
+                        category: "documents",
+                        mimeType: "application/zip",
+                    },
+                },
+                step,
+            })
+        ).rejects.toThrow("Invalid ZIP entry path");
+
+        expect(mockPutFile).not.toHaveBeenCalled();
+        expect(mockCreateDocumentLifecycle).not.toHaveBeenCalled();
+        expect(mockDb.delete).not.toHaveBeenCalled();
+    });
+
+    it("rejects duplicate canonical entry paths before any upload", async () => {
+        const zip = new JSZip();
+        zip.file("nested/report.txt", "first");
+        zip.file("nested/report.txt/", "duplicate");
+        const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
+
+        mockFetchFile.mockResolvedValue({
+            ok: true,
+            arrayBuffer: async () => zipBuffer,
+        });
+
+        const step = {
+            run: jest.fn(async (_name: string, operation: () => Promise<unknown>) => operation()),
+            sendEvent: jest.fn(),
+        };
+        const handler = (
+            uploadDocument as unknown as {
+                fn: (context: {
+                    event: { data: ProcessDocumentEventData };
+                    step: typeof step;
+                }) => Promise<unknown>;
+            }
+        ).fn;
+
+        await expect(
+            handler({
+                event: {
+                    data: {
+                        jobId: "archive-job",
+                        documentUrl: "https://blob.test/archive.zip",
+                        documentName: "archive.zip",
+                        originalFilename: "archive.zip",
+                        companyId: "7",
+                        userId: "user-1",
+                        documentId: 100,
+                        versionId: 43,
+                        category: "documents",
+                        mimeType: "application/zip",
+                    },
+                },
+                step,
+            })
+        ).rejects.toThrow("Duplicate ZIP entry path");
+
+        expect(mockPutFile).not.toHaveBeenCalled();
+        expect(mockCreateDocumentLifecycle).not.toHaveBeenCalled();
+        expect(mockDb.delete).not.toHaveBeenCalled();
+    });
+
+    it("rejects exact duplicate central-directory entries before any upload", async () => {
+        mockFetchFile.mockResolvedValue({
+            ok: true,
+            arrayBuffer: async () => makeDuplicateEntryZip(),
+        });
+
+        const step = {
+            run: jest.fn(async (_name: string, operation: () => Promise<unknown>) => operation()),
+            sendEvent: jest.fn(),
+        };
+        const handler = (
+            uploadDocument as unknown as {
+                fn: (context: {
+                    event: { data: ProcessDocumentEventData };
+                    step: typeof step;
+                }) => Promise<unknown>;
+            }
+        ).fn;
+
+        await expect(
+            handler({
+                event: {
+                    data: {
+                        jobId: "archive-job",
+                        documentUrl: "https://blob.test/archive.zip",
+                        documentName: "archive.zip",
+                        originalFilename: "archive.zip",
+                        companyId: "7",
+                        userId: "user-1",
+                        documentId: 100,
+                        versionId: 43,
+                        category: "documents",
+                        mimeType: "application/zip",
+                    },
+                },
+                step,
+            })
+        ).rejects.toThrow("Duplicate ZIP entry path");
+
+        expect(mockPutFile).not.toHaveBeenCalled();
+        expect(mockCreateDocumentLifecycle).not.toHaveBeenCalled();
+        expect(mockDb.delete).not.toHaveBeenCalled();
+    });
+
+    it("propagates lifecycle failures and preserves the source ZIP for retry", async () => {
+        const zip = new JSZip();
+        zip.file("nested/report.txt", "report");
+        const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
+
+        mockFetchFile.mockResolvedValue({
+            ok: true,
+            arrayBuffer: async () => zipBuffer,
+        });
+        mockPutFile.mockResolvedValueOnce({ url: "https://blob.test/report.txt" });
+        mockCreateDocumentLifecycle.mockRejectedValueOnce(new Error("lifecycle dispatch failed"));
+
+        const step = {
+            run: jest.fn(async (_name: string, operation: () => Promise<unknown>) => operation()),
+            sendEvent: jest.fn(),
+        };
+        const handler = (
+            uploadDocument as unknown as {
+                fn: (context: {
+                    event: { data: ProcessDocumentEventData };
+                    step: typeof step;
+                }) => Promise<unknown>;
+            }
+        ).fn;
+
+        await expect(
+            handler({
+                event: {
+                    data: {
+                        jobId: "archive-job",
+                        documentUrl: "https://blob.test/archive.zip",
+                        documentName: "archive.zip",
+                        originalFilename: "archive.zip",
+                        companyId: "7",
+                        userId: "user-1",
+                        documentId: 100,
+                        versionId: 43,
+                        category: "documents",
+                        mimeType: "application/zip",
+                    },
+                },
+                step,
+            })
+        ).rejects.toThrow("lifecycle dispatch failed");
+
+        expect(mockPutFile).toHaveBeenCalledTimes(1);
+        expect(mockCreateDocumentLifecycle).toHaveBeenCalledTimes(1);
+        expect(mockDb.delete).not.toHaveBeenCalled();
     });
 });

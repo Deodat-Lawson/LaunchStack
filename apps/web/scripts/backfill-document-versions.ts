@@ -163,6 +163,8 @@ async function backfill() {
                 `[backfill-document-versions] Unresolved current document versions: ${unresolvedDocumentCount}`
             );
         }
+        const rlmUnresolvedCounts: Record<string, number> = {};
+        let unresolvedRlmCount = 0;
 
         const rlmTables = [
             "pdr_ai_v2_document_structure",
@@ -171,21 +173,19 @@ async function backfill() {
             "pdr_ai_v2_document_metadata",
             "pdr_ai_v2_document_previews",
         ] as const;
+        // Legacy RLM rows without a version belong to document v1. Never use
+        // current_version_id here: a current v2 must not relabel legacy data.
 
         for (const table of rlmTables) {
             const result = await tx.execute(sql`
                 UPDATE ${sql.raw(table)} AS t
-                SET version_id = d.current_version_id
+                SET version_id = v.id
                 FROM pdr_ai_v2_document AS d
+                INNER JOIN pdr_ai_v2_document_versions AS v
+                    ON v.document_id = d.id
+                   AND v.version_number = 1
                 WHERE t.document_id = d.id
                   AND t.version_id IS NULL
-                  AND d.current_version_id IS NOT NULL
-                  AND EXISTS (
-                      SELECT 1
-                      FROM pdr_ai_v2_document_versions AS v
-                      WHERE v.id = d.current_version_id
-                        AND v.document_id = d.id
-                  )
             `);
             const unresolved = await tx.execute(sql`
                 SELECT COUNT(*)::int AS count
@@ -199,6 +199,9 @@ async function backfill() {
                    )
             `);
             const unresolvedCount = resultCount(unresolved);
+            rlmUnresolvedCounts[table] = unresolvedCount;
+            unresolvedRlmCount += unresolvedCount;
+
             console.log(
                 `[backfill-document-versions] ${table}: updated ${resultCount(result)} rows; unresolved ${unresolvedCount}`
             );
@@ -271,6 +274,14 @@ async function backfill() {
         ) {
             console.warn(
                 `[backfill-document-versions] OCR jobs without a unique derivable link: ambiguous_document_jobs=${ambiguousDocumentJobCount}, document_id=${unresolvedJobDocumentCount}, version_id=${unresolvedJobVersionCount}`
+            );
+        }
+        if (unresolvedDocumentCount > 0 || unresolvedRlmCount > 0) {
+            const rlmCountDetails = rlmTables
+                .map(table => `${table}=${rlmUnresolvedCounts[table] ?? 0}`)
+                .join(", ");
+            throw new Error(
+                `[backfill-document-versions] document version repair incomplete: unresolved_documents=${unresolvedDocumentCount}, unresolved_rlm=${unresolvedRlmCount}; ${rlmCountDetails}`
             );
         }
     });

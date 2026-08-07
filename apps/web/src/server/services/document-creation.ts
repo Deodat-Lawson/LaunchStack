@@ -1,5 +1,5 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 import {
     document,
@@ -9,8 +9,18 @@ import {
     type DocumentVersion,
     type OcrJob,
 } from "@launchstack/core/db/schema";
+import type { OCRProvider } from "@launchstack/core/ocr/types";
 import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 import { db } from "~/server/db";
+
+const CREATION_KEY_NAMESPACE = "launchstack:document-creation:v1:";
+
+function hashCreationKey(rawCreationKey: string): string {
+    return createHash("sha256")
+        .update(CREATION_KEY_NAMESPACE, "utf8")
+        .update(rawCreationKey, "utf8")
+        .digest("hex");
+}
 
 export interface DocumentCreationProcessing {
     preferredProvider?: string;
@@ -18,6 +28,33 @@ export interface DocumentCreationProcessing {
     isWebsite?: boolean;
     transcriptionMetadata?: Record<string, unknown>;
     embeddingIndexKey?: string;
+}
+
+type DispatchRoutingOptions = {
+    preferredProvider?: OCRProvider;
+    originalFilename?: string;
+    isWebsite?: boolean;
+    transcriptionMetadata?: Record<string, unknown>;
+    embeddingIndexKey?: string;
+    mimeType?: string;
+};
+
+function createDispatchRoutingOptions(params: {
+    preferredProvider?: string;
+    originalFilename?: string;
+    isWebsite?: boolean;
+    transcriptionMetadata?: Record<string, unknown>;
+    embeddingIndexKey?: string;
+    mimeType: string;
+}): DispatchRoutingOptions {
+    return {
+        preferredProvider: parseProvider(params.preferredProvider),
+        originalFilename: params.originalFilename,
+        isWebsite: params.isWebsite,
+        transcriptionMetadata: params.transcriptionMetadata,
+        embeddingIndexKey: params.embeddingIndexKey,
+        mimeType: params.mimeType,
+    };
 }
 
 export interface CreateDocumentLifecycleParams {
@@ -64,6 +101,8 @@ export interface CreateDocumentVersionLifecycleParams {
     changelog?: string | null;
     preferredProvider?: string;
     originalFilename?: string;
+    isWebsite?: boolean;
+    transcriptionMetadata?: Record<string, unknown>;
     embeddingIndexKey?: string;
 }
 
@@ -87,9 +126,20 @@ type TransactionLifecycle = {
 export async function createDocumentLifecycle(
     params: CreateDocumentLifecycleParams
 ): Promise<CreatedDocumentLifecycle> {
+    const creationKey = hashCreationKey(params.creationKey);
     const processing = params.processing;
     const candidateJobId = processing ? randomUUID() : null;
     const resolvedMimeType = params.mimeType ?? "application/octet-stream";
+    const initialDispatchOptions = processing
+        ? createDispatchRoutingOptions({
+              preferredProvider: processing.preferredProvider,
+              originalFilename: processing.originalFilename,
+              isWebsite: processing.isWebsite,
+              transcriptionMetadata: processing.transcriptionMetadata,
+              embeddingIndexKey: processing.embeddingIndexKey,
+              mimeType: resolvedMimeType,
+          })
+        : null;
 
     const lifecycle = await db.transaction(async (tx): Promise<TransactionLifecycle> => {
         const [insertedDocument] = await tx
@@ -107,7 +157,7 @@ export async function createDocumentLifecycle(
                 sourceArchiveName: params.sourceArchiveName ?? null,
                 sourceArchiveEntry: params.sourceArchiveEntry ?? null,
                 fileType: resolvedMimeType,
-                creationKey: params.creationKey,
+                creationKey,
             })
             .onConflictDoNothing({
                 target: [document.companyId, document.creationKey],
@@ -124,7 +174,7 @@ export async function createDocumentLifecycle(
                 .where(
                     and(
                         eq(document.companyId, params.companyId),
-                        eq(document.creationKey, params.creationKey)
+                        eq(document.creationKey, creationKey)
                     )
                 )
                 .limit(1);
@@ -150,7 +200,7 @@ export async function createDocumentLifecycle(
                     ocrJobId: candidateJobId,
                     ocrProcessed: params.ocrProcessed ?? false,
                     ocrMetadata: params.ocrMetadata ?? null,
-                    creationKey: params.creationKey,
+                    creationKey,
                 })
                 .onConflictDoNothing({
                     target: [documentVersions.documentId, documentVersions.creationKey],
@@ -166,7 +216,7 @@ export async function createDocumentLifecycle(
                 .where(
                     and(
                         eq(documentVersions.documentId, BigInt(lifecycleDocument.id)),
-                        eq(documentVersions.creationKey, params.creationKey)
+                        eq(documentVersions.creationKey, creationKey)
                     )
                 )
                 .limit(1);
@@ -212,7 +262,7 @@ export async function createDocumentLifecycle(
         }
 
         let lifecycleJob: OcrJob | undefined;
-        const linkedJobId = lifecycleDocument.ocrJobId ?? lifecycleVersion.ocrJobId;
+        const linkedJobId = lifecycleVersion.ocrJobId ?? lifecycleDocument.ocrJobId;
         if (linkedJobId) {
             const [linkedJob] = await tx
                 .select()
@@ -259,6 +309,7 @@ export async function createDocumentLifecycle(
                     status: "queued",
                     documentUrl: params.processingUrl ?? params.url,
                     documentName: params.title,
+                    dispatchOptions: initialDispatchOptions,
                 })
                 .returning();
             lifecycleJob = insertedJob;
@@ -273,7 +324,7 @@ export async function createDocumentLifecycle(
             version: lifecycleVersion,
             job: lifecycleJob ?? null,
             shouldDispatch:
-                Boolean(processing && lifecycleJob) &&
+                Boolean(lifecycleJob) &&
                 (inserted ||
                     lifecycleJob?.status === "queued" ||
                     lifecycleJob?.status === "failed"),
@@ -294,33 +345,69 @@ export async function createDocumentLifecycle(
     }
 
     if (job.status === "failed") {
-        const [queuedJob] = await db
-            .update(ocrJobs)
-            .set({ status: "queued", errorMessage: null })
-            .where(eq(ocrJobs.id, job.id))
-            .returning();
-        if (queuedJob) {
-            job = { ...queuedJob, eventIds: [] };
+        while (true) {
+            const [queuedJob] = await db
+                .update(ocrJobs)
+                .set({ status: "queued", errorMessage: null })
+                .where(and(eq(ocrJobs.id, job.id), eq(ocrJobs.status, "failed")))
+                .returning();
+            if (queuedJob) {
+                job = { ...queuedJob, eventIds: [] };
+                break;
+            }
+
+            const [currentJob] = await db
+                .select()
+                .from(ocrJobs)
+                .where(eq(ocrJobs.id, job.id))
+                .limit(1);
+            if (!currentJob) {
+                throw new Error(`OCR job ${job.id} disappeared during retry claim`);
+            }
+            if (
+                currentJob.status === "processing" ||
+                currentJob.status === "completed" ||
+                currentJob.status === "needs_review"
+            ) {
+                return {
+                    document: lifecycle.document,
+                    version: lifecycle.version,
+                    job: { ...currentJob, eventIds: [] },
+                    documentId: lifecycle.document.id,
+                    versionId: lifecycle.version.id,
+                    jobId: currentJob.id,
+                    eventIds: [],
+                };
+            }
+            job = { ...currentJob, eventIds: [] };
+            if (job.status === "queued") break;
         }
     }
 
+    const routingOptions =
+        job.dispatchOptions === null
+            ? createDispatchRoutingOptions({
+                  preferredProvider: processing?.preferredProvider,
+                  originalFilename: processing?.originalFilename,
+                  isWebsite: processing?.isWebsite,
+                  transcriptionMetadata: processing?.transcriptionMetadata,
+                  embeddingIndexKey: processing?.embeddingIndexKey,
+                  mimeType: lifecycle.version.mimeType,
+              })
+            : (job.dispatchOptions as DispatchRoutingOptions);
+
     try {
         const dispatch = await triggerDocumentProcessing(
-            params.processingUrl ?? params.url,
-            params.title,
-            params.companyId.toString(),
-            params.userId,
+            job.documentUrl,
+            job.documentName,
+            lifecycle.document.companyId.toString(),
+            job.userId,
             lifecycle.document.id,
-            params.category,
+            lifecycle.document.category,
             {
+                ...routingOptions,
                 jobId: job.id,
-                preferredProvider: parseProvider(processing?.preferredProvider),
-                mimeType: params.mimeType ?? undefined,
-                originalFilename: processing?.originalFilename,
-                isWebsite: processing?.isWebsite,
                 versionId: lifecycle.version.id,
-                transcriptionMetadata: processing?.transcriptionMetadata,
-                embeddingIndexKey: processing?.embeddingIndexKey,
             }
         );
 
@@ -370,6 +457,15 @@ function isVersionNumberConflict(error: unknown): boolean {
 export async function createDocumentVersionLifecycle(
     params: CreateDocumentVersionLifecycleParams
 ): Promise<CreatedDocumentVersionLifecycle> {
+    const creationKey = hashCreationKey(params.creationKey);
+    const versionDispatchOptions = createDispatchRoutingOptions({
+        preferredProvider: params.preferredProvider,
+        originalFilename: params.originalFilename,
+        isWebsite: params.isWebsite,
+        transcriptionMetadata: params.transcriptionMetadata,
+        embeddingIndexKey: params.embeddingIndexKey,
+        mimeType: params.mimeType,
+    });
     let lifecycle: VersionTransactionLifecycle | undefined;
 
     for (let attempt = 0; attempt < 2; attempt += 1) {
@@ -399,7 +495,7 @@ export async function createDocumentVersionLifecycle(
                     .where(
                         and(
                             eq(documentVersions.documentId, BigInt(params.documentId)),
-                            eq(documentVersions.creationKey, params.creationKey)
+                            eq(documentVersions.creationKey, creationKey)
                         )
                     )
                     .limit(1);
@@ -429,7 +525,7 @@ export async function createDocumentVersionLifecycle(
                             changelog: params.changelog ?? null,
                             ocrJobId: candidateJobId,
                             ocrProcessed: false,
-                            creationKey: params.creationKey,
+                            creationKey,
                         })
                         .onConflictDoNothing({
                             target: [documentVersions.documentId, documentVersions.creationKey],
@@ -446,7 +542,7 @@ export async function createDocumentVersionLifecycle(
                             .where(
                                 and(
                                     eq(documentVersions.documentId, BigInt(params.documentId)),
-                                    eq(documentVersions.creationKey, params.creationKey)
+                                    eq(documentVersions.creationKey, creationKey)
                                 )
                             )
                             .limit(1);
@@ -497,6 +593,7 @@ export async function createDocumentVersionLifecycle(
                             status: "queued",
                             documentUrl: params.url,
                             documentName: params.title,
+                            dispatchOptions: versionDispatchOptions,
                         })
                         .returning();
 
@@ -584,33 +681,70 @@ export async function createDocumentVersionLifecycle(
             eventIds: [],
         };
     }
-
     if (job.status === "failed") {
-        const [queuedJob] = await db
-            .update(ocrJobs)
-            .set({ status: "queued", errorMessage: null })
-            .where(eq(ocrJobs.id, job.id))
-            .returning();
-        if (queuedJob) {
-            job = { ...queuedJob, eventIds: [] };
+        while (true) {
+            const [queuedJob] = await db
+                .update(ocrJobs)
+                .set({ status: "queued", errorMessage: null })
+                .where(and(eq(ocrJobs.id, job.id), eq(ocrJobs.status, "failed")))
+                .returning();
+            if (queuedJob) {
+                job = { ...queuedJob, eventIds: [] };
+                break;
+            }
+
+            const [currentJob] = await db
+                .select()
+                .from(ocrJobs)
+                .where(eq(ocrJobs.id, job.id))
+                .limit(1);
+            if (!currentJob) {
+                throw new Error(`OCR job ${job.id} disappeared during retry claim`);
+            }
+            if (
+                currentJob.status === "processing" ||
+                currentJob.status === "completed" ||
+                currentJob.status === "needs_review"
+            ) {
+                return {
+                    document: lifecycle.document,
+                    version: lifecycle.version,
+                    job: { ...currentJob, eventIds: [] },
+                    documentId: lifecycle.document.id,
+                    versionId: lifecycle.version.id,
+                    jobId: currentJob.id,
+                    eventIds: [],
+                };
+            }
+            job = { ...currentJob, eventIds: [] };
+            if (job.status === "queued") break;
         }
     }
 
+    const routingOptions =
+        job.dispatchOptions === null
+            ? createDispatchRoutingOptions({
+                  preferredProvider: params.preferredProvider,
+                  originalFilename: params.originalFilename,
+                  isWebsite: params.isWebsite,
+                  transcriptionMetadata: params.transcriptionMetadata,
+                  embeddingIndexKey: params.embeddingIndexKey,
+                  mimeType: lifecycle.version.mimeType,
+              })
+            : (job.dispatchOptions as DispatchRoutingOptions);
+
     try {
         const dispatch = await triggerDocumentProcessing(
-            params.url,
-            params.title,
-            params.companyId.toString(),
-            params.userId,
-            params.documentId,
-            params.category,
+            job.documentUrl,
+            job.documentName,
+            lifecycle.document.companyId.toString(),
+            job.userId,
+            lifecycle.document.id,
+            lifecycle.document.category,
             {
+                ...routingOptions,
                 jobId: job.id,
-                preferredProvider: parseProvider(params.preferredProvider),
-                mimeType: params.mimeType,
-                originalFilename: params.originalFilename,
                 versionId: lifecycle.version.id,
-                embeddingIndexKey: params.embeddingIndexKey,
             }
         );
 

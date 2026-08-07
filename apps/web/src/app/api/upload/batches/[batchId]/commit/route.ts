@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import pLimit from "p-limit";
 import { z } from "zod";
 
@@ -67,10 +67,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
             );
         }
 
-        const filesToProcess = batch.files.filter(file => file.status === "uploaded");
+        const filesToProcess = batch.files.filter(
+            file => file.status === "uploaded" || file.status === "failed"
+        );
         if (filesToProcess.length === 0) {
             return NextResponse.json(
-                { error: "No uploaded files are ready to commit" },
+                { error: "No uploaded or failed files are ready to commit" },
                 { status: 400 }
             );
         }
@@ -85,10 +87,16 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
         const limit = pLimit(MAX_CONCURRENCY);
         type FileProcessResult =
             | { fileId: number; status: "complete"; documentId: number; jobId: string }
-            | { fileId: number; status: "failed"; error: string };
+            | { fileId: number; status: "failed"; error: string }
+            | { fileId: number; status: "skipped" };
 
         const processFile = (file: UploadBatchFileRecord): Promise<FileProcessResult> =>
             limit(async () => {
+                const claimed = await claimFileForProcessing(batchId, file.id);
+                if (!claimed) {
+                    return { fileId: file.id, status: "skipped" as const };
+                }
+
                 if (!file.storageUrl) {
                     await markFileFailed(batchId, file.id, "Missing storage URL");
                     return {
@@ -97,8 +105,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
                         error: "Missing storage URL",
                     };
                 }
-
-                await markFileStatus(batchId, file.id);
 
                 try {
                     const uploadResult = await processDocumentUpload({
@@ -152,17 +158,31 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
             (result): result is Extract<FileProcessResult, { status: "failed" }> =>
                 result.status === "failed"
         );
-        const now = new Date();
-        if (failures.length > 0) {
-            await updateBatchStatus(batchId, "failed", {
-                failedAt: now,
-                errorMessage: failures[0]?.error ?? "One or more files failed",
-            });
-        } else {
-            await updateBatchStatus(batchId, "complete", {
-                completedAt: now,
-                errorMessage: null,
-            });
+        const currentBatch = await findBatchOwnedByUser(batchId, userId, true);
+        const activeFiles =
+            currentBatch?.files.some(
+                file =>
+                    file.status === "queued" ||
+                    file.status === "uploaded" ||
+                    file.status === "processing"
+            ) ?? false;
+        const failedFiles = currentBatch?.files.filter(file => file.status === "failed") ?? [];
+        if (currentBatch && !activeFiles) {
+            const now = new Date();
+            if (failedFiles.length > 0) {
+                await updateBatchStatus(batchId, "failed", {
+                    failedAt: now,
+                    errorMessage:
+                        failures[0]?.error ??
+                        failedFiles[0]?.errorMessage ??
+                        "One or more files failed",
+                });
+            } else {
+                await updateBatchStatus(batchId, "complete", {
+                    completedAt: now,
+                    errorMessage: null,
+                });
+            }
         }
 
         const refreshedBatch = await findBatchOwnedByUser(batchId, userId, true);
@@ -172,7 +192,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         return NextResponse.json(
             {
-                success: failures.length === 0,
+                success: refreshedBatch.status === "complete",
                 batch: serializeBatch(refreshedBatch),
                 results,
             },
@@ -181,11 +201,20 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
     });
 }
 
-async function markFileStatus(batchId: string, fileId: number) {
-    await db
+async function claimFileForProcessing(batchId: string, fileId: number): Promise<boolean> {
+    const [claimed] = await db
         .update(uploadBatchFiles)
         .set({ status: "processing", errorMessage: null })
-        .where(and(eq(uploadBatchFiles.id, fileId), eq(uploadBatchFiles.batchId, batchId)));
+        .where(
+            and(
+                eq(uploadBatchFiles.id, fileId),
+                eq(uploadBatchFiles.batchId, batchId),
+                inArray(uploadBatchFiles.status, ["uploaded", "failed"])
+            )
+        )
+        .returning({ id: uploadBatchFiles.id });
+
+    return claimed !== undefined;
 }
 
 async function markFileFailed(batchId: string, fileId: number, message: string) {

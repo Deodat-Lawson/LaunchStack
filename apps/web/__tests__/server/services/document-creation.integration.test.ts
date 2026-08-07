@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 import { and, eq } from "drizzle-orm";
 
@@ -35,9 +35,27 @@ import {
 
 type LifecycleParams = Parameters<typeof createDocumentLifecycle>[0];
 type Processing = NonNullable<LifecycleParams["processing"]>;
-type DispatchOptions = { jobId?: string; versionId?: number };
+type DispatchOptions = {
+    jobId?: string;
+    versionId?: number;
+    preferredProvider?: string;
+    originalFilename?: string;
+    isWebsite?: boolean;
+    transcriptionMetadata?: Record<string, unknown>;
+    embeddingIndexKey?: string;
+    mimeType?: string;
+};
 
 const dispatchMock = triggerDocumentProcessing as unknown as jest.Mock;
+
+const CREATION_KEY_NAMESPACE = "launchstack:document-creation:v1:";
+
+function persistedCreationKey(rawCreationKey: string): string {
+    return createHash("sha256")
+        .update(CREATION_KEY_NAMESPACE, "utf8")
+        .update(rawCreationKey, "utf8")
+        .digest("hex");
+}
 const integrationDescribe = process.env.DATABASE_URL ? describe : describe.skip;
 
 integrationDescribe("createDocumentLifecycle (database)", () => {
@@ -119,7 +137,12 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
         const documents = await db
             .select()
             .from(document)
-            .where(and(eq(document.companyId, companyId), eq(document.creationKey, creationKey)));
+            .where(
+                and(
+                    eq(document.companyId, companyId),
+                    eq(document.creationKey, persistedCreationKey(creationKey))
+                )
+            );
         const versions = documents[0]
             ? await db
                   .select()
@@ -166,8 +189,8 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
         expect(doc?.currentVersionId).toBe(BigInt(version!.id));
         expect(job?.documentId).toBe(BigInt(doc!.id));
         expect(job?.versionId).toBe(BigInt(version!.id));
-        expect(doc?.creationKey).toBe(input.creationKey);
-        expect(version?.creationKey).toBe(input.creationKey);
+        expect(doc?.creationKey).toBe(persistedCreationKey(input.creationKey));
+        expect(version?.creationKey).toBe(persistedCreationKey(input.creationKey));
 
         expect(result.document.id).toBe(doc!.id);
         expect(result.version.id).toBe(version!.id);
@@ -199,7 +222,7 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
         expect(doc?.currentVersionId).toBe(BigInt(version!.id));
         expect(doc?.sourceArchiveName).toBe(input.sourceArchiveName);
         expect(doc?.sourceArchiveEntry).toBe(input.sourceArchiveEntry);
-        expect(version?.creationKey).toBe(input.creationKey);
+        expect(version?.creationKey).toBe(persistedCreationKey(input.creationKey));
         expect(result.document.id).toBe(doc!.id);
         expect(result.version.id).toBe(version!.id);
         expect(result.job).toBeFalsy();
@@ -224,6 +247,68 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
         expect(job?.documentId).toBe(BigInt(doc!.id));
         expect(job?.versionId).toBe(BigInt(version!.id));
         expect(job?.status).toBe("failed");
+    });
+
+    it("retries with persisted URL, name, category, user, and MIME", async () => {
+        const input = makeParams({
+            title: "Persisted document title",
+            category: "persisted-category",
+            url: "https://example.test/persisted-source.pdf",
+            processingUrl: "https://storage.example.test/persisted-source.pdf",
+            processing: processing(),
+        });
+        dispatchMock.mockRejectedValueOnce(new Error("dispatch unavailable"));
+
+        await expect(createDocumentLifecycle(input)).rejects.toThrow("dispatch unavailable");
+        const first = await loadLifecycle(input.creationKey);
+        const firstDocument = first.documents[0]!;
+        const firstVersion = first.versions[0]!;
+        const firstJob = first.jobs[0]!;
+
+        expect(firstJob.dispatchOptions).toEqual({
+            preferredProvider: "NATIVE_PDF",
+            originalFilename: "document.pdf",
+            isWebsite: false,
+            transcriptionMetadata: { source: "integration-test" },
+            embeddingIndexKey: "integration-test-index",
+            mimeType: firstVersion.mimeType,
+        });
+
+        const retried = await createDocumentLifecycle({
+            ...input,
+            title: "Retry-only title",
+            category: "retry-only-category",
+            url: "https://example.test/retry-source.pdf",
+            processingUrl: "https://storage.example.test/retry-source.pdf",
+            userId: "retry-only-user",
+            mimeType: "text/plain",
+            processing: {
+                preferredProvider: "AZURE",
+                originalFilename: "retry.txt",
+                isWebsite: true,
+                transcriptionMetadata: { source: "retry" },
+                embeddingIndexKey: "retry-index",
+            },
+        });
+
+        expect(retried.document.id).toBe(firstDocument.id);
+        expect(retried.version.id).toBe(firstVersion.id);
+        expect(dispatchMock).toHaveBeenCalledTimes(2);
+
+        const retryCall = dispatchMock.mock.calls[1] as unknown[];
+        expect(retryCall.slice(0, 6)).toEqual([
+            input.processingUrl,
+            input.title,
+            input.companyId.toString(),
+            input.userId,
+            firstDocument.id,
+            input.category,
+        ]);
+        expect(retryCall[6]).toEqual({
+            ...(firstJob.dispatchOptions ?? {}),
+            jobId: firstJob.id,
+            versionId: firstVersion.id,
+        });
     });
 
     it("retries a duplicate creation key with the same job and version, but not completed work", async () => {
@@ -280,11 +365,25 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
             changelog: "Second integration version",
             preferredProvider: "NATIVE_PDF",
             originalFilename: "document-v2.pdf",
+            isWebsite: true,
+            transcriptionMetadata: { source: "integration-v2" },
             embeddingIndexKey: "integration-test-index",
         };
 
         const created = await createDocumentVersionLifecycle(versionInput);
-        const retried = await createDocumentVersionLifecycle(versionInput);
+        const retried = await createDocumentVersionLifecycle({
+            ...versionInput,
+            title: "Retry-only title",
+            category: "retry-only-category",
+            url: "https://example.test/retry-only-v2.pdf",
+            userId: "retry-only-user",
+            mimeType: "text/plain",
+            preferredProvider: "AZURE",
+            originalFilename: "retry-only-v2.txt",
+            isWebsite: false,
+            transcriptionMetadata: { source: "retry-v2" },
+            embeddingIndexKey: "retry-only-index",
+        });
         const lifecycle = await loadDocumentLifecycle(initial.document.id);
         const [doc] = lifecycle.documents;
         const versions = [...lifecycle.versions].sort(
@@ -294,11 +393,19 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
         const v2Jobs = lifecycle.jobs.filter(job => job.versionId === BigInt(v2!.id));
 
         expect(lifecycle.documents).toHaveLength(1);
-        expect(versions).toHaveLength(2);
         expect(lifecycle.jobs).toHaveLength(2);
         expect(v1?.versionNumber).toBe(1);
         expect(v2?.versionNumber).toBe(2);
-        expect(v2?.creationKey).toBe(versionInput.creationKey);
+
+        expect(v2Jobs[0]?.dispatchOptions).toEqual({
+            preferredProvider: "NATIVE_PDF",
+            originalFilename: "document-v2.pdf",
+            isWebsite: true,
+            transcriptionMetadata: { source: "integration-v2" },
+            embeddingIndexKey: "integration-test-index",
+            mimeType: v2!.mimeType,
+        });
+        expect(v2?.creationKey).toBe(persistedCreationKey(versionInput.creationKey));
         expect(doc?.currentVersionId).toBe(BigInt(v2!.id));
         expect(doc?.ocrJobId).toBe(created.jobId);
         expect(v2?.ocrJobId).toBe(created.jobId);
@@ -320,6 +427,21 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
             );
         }
 
+        const retriedCall = dispatchMock.mock.calls[2] as unknown[];
+        expect(retriedCall.slice(0, 6)).toEqual([
+            versionInput.url,
+            versionInput.title,
+            versionInput.companyId.toString(),
+            versionInput.userId,
+            initial.document.id,
+            versionInput.category,
+        ]);
+        expect(retriedCall[6]).toEqual({
+            ...(v2Jobs[0]!.dispatchOptions ?? {}),
+            jobId: v2Jobs[0]!.id,
+            versionId: v2!.id,
+        });
+
         await db.update(ocrJobs).set({ status: "completed" }).where(eq(ocrJobs.id, v2Jobs[0]!.id));
         await createDocumentVersionLifecycle(versionInput);
         const completedRetry = await loadDocumentLifecycle(initial.document.id);
@@ -327,6 +449,108 @@ integrationDescribe("createDocumentLifecycle (database)", () => {
         expect(completedRetry.versions).toHaveLength(2);
         expect(completedRetry.jobs).toHaveLength(2);
         expect(dispatchMock).toHaveBeenCalledTimes(3);
+    });
+
+    it("retries the original creation against v1 after a later version advances the document", async () => {
+        if (companyId === undefined) throw new Error("Test company is not initialized");
+
+        const initialInput = makeParams({ processing: processing() });
+        const initial = await createDocumentLifecycle(initialInput);
+        const later = await createDocumentVersionLifecycle({
+            documentId: initial.document.id,
+            companyId,
+            userId,
+            title: "Integration document v2",
+            category: "integration",
+            url: "https://example.test/document-v2.pdf",
+            creationKey: `version-${randomUUID()}`,
+            mimeType: "application/pdf",
+            originalFilename: "document-v2.pdf",
+        });
+        const lifecycle = await loadDocumentLifecycle(initial.document.id);
+        const v1Job = lifecycle.jobs.find(job => job.versionId === BigInt(initial.version.id));
+
+        if (!v1Job) throw new Error("Initial version job is missing");
+        expect(lifecycle.documents[0]?.ocrJobId).toBe(later.jobId);
+
+        await db.update(ocrJobs).set({ status: "failed" }).where(eq(ocrJobs.id, v1Job.id));
+        const callsBeforeRetry = dispatchMock.mock.calls.length;
+        const retried = await createDocumentLifecycle({
+            ...initialInput,
+            title: "Retry-only title",
+            category: "retry-only-category",
+            url: "https://example.test/retry-only.pdf",
+            processingUrl: "https://storage.example.test/retry-only.pdf",
+            userId: "retry-only-user",
+            mimeType: "text/plain",
+        });
+
+        expect(retried.document.id).toBe(initial.document.id);
+        expect(retried.version.id).toBe(initial.version.id);
+        expect(retried.jobId).toBe(v1Job.id);
+        expect(dispatchMock).toHaveBeenCalledTimes(callsBeforeRetry + 1);
+
+        const retryCall = dispatchMock.mock.calls[callsBeforeRetry] as unknown[];
+        expect(retryCall.slice(0, 6)).toEqual([
+            initialInput.url,
+            initialInput.title,
+            initialInput.companyId.toString(),
+            initialInput.userId,
+            initial.document.id,
+            initialInput.category,
+        ]);
+        expect(retryCall[6]).toEqual(
+            expect.objectContaining({ jobId: v1Job.id, versionId: initial.version.id })
+        );
+    });
+
+    it("dispatches a failed retry CAS loser after reloading a queued job", async () => {
+        const input = makeParams({ processing: processing() });
+        await createDocumentLifecycle(input);
+        const lifecycle = await loadLifecycle(input.creationKey);
+        const job = lifecycle.jobs[0]!;
+
+        await db.update(ocrJobs).set({ status: "failed" }).where(eq(ocrJobs.id, job.id));
+        const callsBeforeRetry = dispatchMock.mock.calls.length;
+        dispatchMock.mockImplementation(async (...args: unknown[]) => {
+            const options = args[6] as DispatchOptions | undefined;
+            if (!options?.jobId) throw new Error("Retry dispatch did not receive a job ID");
+            return { jobId: options.jobId, eventIds: [`event-${options.jobId}`] };
+        });
+
+        const [firstRetry, secondRetry] = await Promise.all([
+            createDocumentLifecycle(input),
+            createDocumentLifecycle(input),
+        ]);
+        const afterRetry = await loadLifecycle(input.creationKey);
+
+        expect(dispatchMock).toHaveBeenCalledTimes(callsBeforeRetry + 2);
+        expect(firstRetry.jobId).toBe(job.id);
+        expect(secondRetry.jobId).toBe(job.id);
+        expect(afterRetry.jobs[0]?.status).toBe("queued");
+    });
+
+    it("converges a long creation key to one fixed-length persisted key", async () => {
+        const creationKey = `long-${"creation-key/".repeat(1024)}`;
+        const input = makeParams({ creationKey, processing: processing() });
+
+        const first = await createDocumentLifecycle(input);
+        const second = await createDocumentLifecycle(input);
+        const lifecycle = await loadLifecycle(creationKey);
+        const [doc] = lifecycle.documents;
+        const [version] = lifecycle.versions;
+        const [job] = lifecycle.jobs;
+
+        expect(lifecycle.documents).toHaveLength(1);
+        expect(lifecycle.versions).toHaveLength(1);
+        expect(lifecycle.jobs).toHaveLength(1);
+        expect(doc?.creationKey).toBe(persistedCreationKey(creationKey));
+        expect(version?.creationKey).toBe(persistedCreationKey(creationKey));
+        expect(doc?.creationKey).toHaveLength(64);
+        expect(first.document.id).toBe(second.document.id);
+        expect(first.version.id).toBe(second.version.id);
+        expect(first.jobId).toBe(job?.id);
+        expect(second.jobId).toBe(job?.id);
     });
 
     it("retrieves only chunks from the current version after creating v2", async () => {

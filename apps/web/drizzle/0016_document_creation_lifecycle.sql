@@ -10,7 +10,8 @@ ALTER TABLE "pdr_ai_v2_document_versions"
 
 ALTER TABLE "pdr_ai_v2_ocr_jobs"
     ADD COLUMN IF NOT EXISTS "version_id" bigint
-        REFERENCES "pdr_ai_v2_document_versions"("id") ON DELETE SET NULL;
+        REFERENCES "pdr_ai_v2_document_versions"("id") ON DELETE SET NULL,
+    ADD COLUMN IF NOT EXISTS "dispatch_options" jsonb;
 
 CREATE UNIQUE INDEX IF NOT EXISTS "document_company_creation_key_unique"
     ON "pdr_ai_v2_document" ("company_id", "creation_key");

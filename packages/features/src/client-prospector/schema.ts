@@ -43,11 +43,11 @@ export interface ProspectResult {
 }
 
 // company is the parent table — every job belongs to a company.
-import { company } from "./base";
+import { company } from "@launchstack/core/db/schema";
 
 // pgTable is a helper that prefixes all table names with "pdr_ai_v2_"
 // so the actual SQL table name becomes "pdr_ai_v2_client_prospector_jobs".
-import { pgTable } from "./helpers";
+import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 // ─── Status Enum ─────────────────────────────────────────────────────────────
 // These are the possible states a prospector job can be in.

@@ -10,8 +10,8 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
-import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
+import { users } from "~/server/db/schema";
+import { companyMetadata, companyMetadataHistory } from "~/server/db/schema";
 import type { MetadataFact, Visibility, Usage } from "@launchstack/features/company-metadata";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 

@@ -21,7 +21,7 @@ import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 
 import { verifySlackRequest, type SlackEventEnvelope } from "@launchstack/core/collab";
-import { collabMeeting } from "@launchstack/core/db/schema";
+import { collabMeeting } from "~/server/db/schema";
 import { db } from "~/server/db";
 import { getMeetingBridge, getMeetingRuntime } from "~/server/collab/runtime";
 import { getSlackSigningSecret } from "~/server/collab/slack";

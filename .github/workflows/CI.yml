@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    # `feat/**` so a PR stacked on another feature branch still gets CI.
+    # Without it a stacked PR shows no checks at all until its base merges.
+    branches: [main, "feat/**"]
 
 env:
   NODE_VERSION: "20"
@@ -66,8 +68,10 @@ jobs:
       # The same forward migration command local dev, Docker and the Vercel
       # production build run. CI used to `drizzle-kit push` here, which meant
       # the test suite exercised a schema no deploy ever produced.
+      # Both sets, engine first — the same ordered command Docker and the
+      # Vercel production build run.
       - name: Apply migrations to test database
-        run: pnpm --filter @launchstack/core db:migrate
+        run: pnpm --filter @launchstack/web db:migrate
 
       # The repository predates the current type-aware ESLint rules and still
       # has a sizeable legacy baseline. Keep the report visible without
@@ -124,18 +128,22 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Journal and snapshot integrity
-        run: pnpm --filter @launchstack/core db:check
+        run: |
+          pnpm --filter @launchstack/core db:check
+          pnpm --filter @launchstack/web exec drizzle-kit check
+          node packages/core/scripts/check-journal.mjs --set=product
 
       - name: Regenerate and assert no diff
         run: |
           pnpm --filter @launchstack/core exec drizzle-kit generate --name=ci_drift_probe
+          pnpm --filter @launchstack/web exec drizzle-kit generate --name=ci_drift_probe
           # --porcelain, not `git diff`: drift shows up as an UNTRACKED .sql
           # file, which `git diff` would not report.
-          if [ -n "$(git status --porcelain -- packages/core/drizzle)" ]; then
+          if [ -n "$(git status --porcelain -- packages/core/drizzle apps/web/drizzle)" ]; then
             echo "::error::The TypeScript schema and the committed migrations disagree."
             echo "Run: pnpm --filter @launchstack/core db:generate --name=<describe-your-change>"
-            git status --porcelain -- packages/core/drizzle
-            git --no-pager diff -- packages/core/drizzle
+            git status --porcelain -- packages/core/drizzle apps/web/drizzle
+            git --no-pager diff -- packages/core/drizzle apps/web/drizzle
             exit 1
           fi
 
@@ -145,7 +153,7 @@ jobs:
       - name: Migrations are DDL-only
         run: |
           base="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
-          changed=$(git diff --name-only "$base"...HEAD -- 'packages/core/drizzle/*.sql' || true)
+          changed=$(git diff --name-only "$base"...HEAD -- 'packages/core/drizzle/*.sql' 'apps/web/drizzle/*.sql' || true)
           status=0
           for f in $changed; do
             [ -f "$f" ] || continue
@@ -167,6 +175,12 @@ jobs:
       # you can run it locally: node scripts/ci/check-no-push.mjs
       - name: Ban drizzle-kit push on deploy paths
         run: node scripts/ci/check-no-push.mjs
+
+      # @launchstack/core is published: `packages/core/drizzle` must build a
+      # working database on its own, which holds only while no engine table
+      # references a product table.
+      - name: Engine/product schema boundary
+        run: node scripts/ci/check-schema-boundary.mjs
 
   # Proves a database can be built from nothing but the committed migrations —
   # which was impossible before the squash — and that doing it twice is a no-op.
@@ -208,18 +222,28 @@ jobs:
             psql -h localhost -U postgres -d postgres -c "CREATE DATABASE $db"
           done
 
-      - name: Apply migrations to an empty database
-        run: DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/core db:migrate
+      # The engine set must stand alone: that is what an open-source consumer
+      # embedding @launchstack/core applies, without any product tables.
+      - name: Engine migrations alone build a usable database
+        run: |
+          psql "$PGURL/postgres" -c "CREATE DATABASE ls_engine_only"
+          DATABASE_URL="$PGURL/ls_engine_only" pnpm --filter @launchstack/core db:migrate
+          DATABASE_URL="$PGURL/ls_engine_only" pnpm --filter @launchstack/core db:verify
+          dangling=$(psql "$PGURL/ls_engine_only" -tAc "SELECT count(*) FROM pg_constraint c WHERE c.contype='f' AND NOT EXISTS (SELECT 1 FROM pg_class t WHERE t.oid=c.confrelid)")
+          [ "$dangling" = "0" ] || { echo "::error::engine schema has $dangling dangling FK(s)"; exit 1; }
+
+      - name: Apply both migration sets to an empty database
+        run: DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/web db:migrate
 
       - name: Assert no migrations pending
-        run: DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/core db:verify
+        run: DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/web db:verify
 
       - name: Assert re-running is a no-op
         run: |
-          out=$(DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/core db:migrate)
+          out=$(DATABASE_URL="$PGURL/ls_clean" pnpm --filter @launchstack/web db:migrate)
           echo "$out"
-          echo "$out" | grep -q "database is up to date" || {
-            echo "::error::second db:migrate run was not a no-op"; exit 1; }
+          [ "$(echo "$out" | grep -c 'database is up to date')" = "2" ] || {
+            echo "::error::second db:migrate run was not a no-op for both sets"; exit 1; }
 
       # The strong gate. `generate` proves TS <-> SQL agree on paper; this
       # proves the SQL actually materialises the right physical schema. push
@@ -227,16 +251,21 @@ jobs:
       # introspect and nothing it could drop.
       - name: Build the same schema from TypeScript
         run: |
-          psql -h localhost -U postgres -d ls_push -c 'CREATE EXTENSION IF NOT EXISTS vector'
+          psql "$PGURL/ls_push" -c 'CREATE EXTENSION IF NOT EXISTS vector'
+          # Both configs push into the same empty database: engine tables first
+          # so the product config's foreign keys resolve.
           DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
             pnpm --filter @launchstack/core exec drizzle-kit push --force
+          DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
+            pnpm --filter @launchstack/web exec drizzle-kit push --force
 
       - name: Assert the two schemas are identical
         run: |
           dump() {
             docker run --rm --network host pgvector/pgvector:pg16 \
               pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \
-                      --no-comments -T '_launchstack_migrations' -d "$1" \
+                      --no-comments -T '_launchstack_migrations' \
+                      -T '_launchstack_web_migrations' -d "$1" \
               | grep -vE '^(SET |SELECT pg_catalog\.set_config|--|\\restrict |\\unrestrict |$)' \
               | sed -E 's/[[:space:]]+$//'
           }
@@ -297,22 +326,30 @@ jobs:
             exit 0
           fi
           echo "upgrading from $TAG"
-          psql -h localhost -U postgres -d postgres -c "CREATE DATABASE ls_upgrade"
+          psql "$PGURL/postgres" -c "CREATE DATABASE ls_upgrade"
           rm -rf /tmp/prev && mkdir -p /tmp/prev
-          git archive "$TAG" packages/core/drizzle packages/core/scripts | tar -x -C /tmp/prev
+          git archive "$TAG" packages/core/drizzle packages/core/scripts apps/web/drizzle \
+            | tar -x -C /tmp/prev
 
+          # Previous release, both sets — engine first.
           DATABASE_URL="$PGURL/ls_upgrade" node /tmp/prev/packages/core/scripts/migrate.mjs
-          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/core db:migrate
-          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/core db:verify
+          if [ -d /tmp/prev/apps/web/drizzle ]; then
+            DATABASE_URL="$PGURL/ls_upgrade" \
+              node /tmp/prev/packages/core/scripts/migrate.mjs --set=product
+          fi
+          # Then HEAD's, both sets.
+          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/web db:migrate
+          DATABASE_URL="$PGURL/ls_upgrade" pnpm --filter @launchstack/web db:verify
 
           # An upgraded database must end up structurally identical to one
           # built from scratch — otherwise the migrations are order-dependent.
-          psql -h localhost -U postgres -d postgres -c "CREATE DATABASE ls_fresh"
-          DATABASE_URL="$PGURL/ls_fresh" pnpm --filter @launchstack/core db:migrate
+          psql "$PGURL/postgres" -c "CREATE DATABASE ls_fresh"
+          DATABASE_URL="$PGURL/ls_fresh" pnpm --filter @launchstack/web db:migrate
           dump() {
             docker run --rm --network host pgvector/pgvector:pg16 \
               pg_dump -h localhost -U postgres --schema-only --no-owner --no-privileges \
-                      --no-comments -T '_launchstack_migrations' -d "$1" \
+                      --no-comments -T '_launchstack_migrations' \
+                      -T '_launchstack_web_migrations' -d "$1" \
               | grep -vE '^(SET |SELECT pg_catalog\.set_config|--|\\restrict |\\unrestrict |$)' \
               | sed -E 's/[[:space:]]+$//'
           }

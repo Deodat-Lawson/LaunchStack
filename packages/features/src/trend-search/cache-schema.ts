@@ -6,7 +6,7 @@
 import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import { jsonb, timestamp, varchar } from "drizzle-orm/pg-core";
-import { pgTable } from "./helpers";
+import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 export const trendSearchCache = pgTable("trend_search_cache", {
   cacheKey: varchar("cache_key", { length: 64 }).primaryKey(),

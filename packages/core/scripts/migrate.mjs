@@ -35,15 +35,37 @@ import dotenv from "dotenv";
 import postgres from "postgres";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const MIGRATIONS_DIR = join(HERE, "..", "drizzle");
-const JOURNAL = join(MIGRATIONS_DIR, "meta", "_journal.json");
 
 dotenv.config({ path: join(HERE, "..", "..", "..", ".env") });
 
+/**
+ * Which migration set to apply. The engine set and the product set are applied
+ * by this same runner, against the same database, each with its own directory,
+ * ledger and lock — so a product migration can never be applied before the
+ * engine tables it references exist.
+ *
+ *   --set=engine   packages/core/drizzle      (default)
+ *   --set=product  apps/web/drizzle
+ */
+const SETS = {
+  engine: {
+    dir: join(HERE, "..", "drizzle"),
+    ledger: "_launchstack_migrations",
+    lockId: 1,
+    label: "engine",
+  },
+  product: {
+    dir: join(HERE, "..", "..", "..", "apps", "web", "drizzle"),
+    ledger: "_launchstack_web_migrations",
+    lockId: 2,
+    label: "product",
+  },
+};
+
 // Session-level advisory lock. Two-int form so the class is recognisable in
 // pg_locks. Must never change: it is what makes concurrent deploys safe.
+// Backfills use (4919, 3) so they can never block a deploy.
 const LOCK_CLASS = 4919; // 0x1337
-const LOCK_MIGRATIONS = 1;
 
 const LOCK_WAIT_MS = Number(process.env.MIGRATE_LOCK_WAIT_MS ?? 120_000);
 const LOCK_TIMEOUT = process.env.MIGRATE_LOCK_TIMEOUT ?? "10s";
@@ -56,6 +78,16 @@ const EXIT_DRIFT = 3;
 const EXIT_AHEAD = 4;
 
 const argv = new Set(process.argv.slice(2));
+const setArg = process.argv.find((a) => a.startsWith("--set="))?.split("=")[1] ?? "engine";
+const SET = SETS[setArg];
+if (!SET) {
+  console.error(`[migrate] unknown --set=${setArg}. Expected one of: ${Object.keys(SETS).join(", ")}`);
+  process.exit(1);
+}
+const MIGRATIONS_DIR = SET.dir;
+const JOURNAL = join(MIGRATIONS_DIR, "meta", "_journal.json");
+const LEDGER = SET.ledger;
+const LOCK_MIGRATIONS = SET.lockId;
 const MODE = argv.has("--check")
   ? "check"
   : argv.has("--baseline")
@@ -64,8 +96,8 @@ const MODE = argv.has("--check")
       ? "dry-run"
       : "apply";
 
-const log = (msg) => console.log(`[migrate] ${msg}`);
-const err = (msg) => console.error(`[migrate] ${msg}`);
+const log = (msg) => console.log(`[migrate:${setArg}] ${msg}`);
+const err = (msg) => console.error(`[migrate:${setArg}] ${msg}`);
 
 /** Reads the journal and returns the ordered, validated migration plan. */
 async function loadPlan() {
@@ -138,8 +170,8 @@ async function loadPlan() {
 async function ensureLedger(cx) {
   // Name deliberately starts with `_`: it does not match the drizzle-kit
   // tablesFilter (`pdr_ai_v2_*`), so push/pull can never see or drop it.
-  await cx`
-    CREATE TABLE IF NOT EXISTS _launchstack_migrations (
+  await cx.unsafe(`
+    CREATE TABLE IF NOT EXISTS ${LEDGER} (
       tag          text PRIMARY KEY,
       checksum     text        NOT NULL,
       state        text        NOT NULL DEFAULT 'applied',
@@ -148,11 +180,11 @@ async function ensureLedger(cx) {
       duration_ms  integer,
       applied_by   text
     )
-  `;
+  `);
 }
 
 async function readLedger(cx) {
-  const rows = await cx`SELECT tag, checksum, state, started_at FROM _launchstack_migrations`;
+  const rows = await cx`SELECT tag, checksum, state, started_at FROM ${cx(LEDGER)}`;
   return new Map(rows.map((r) => [r.tag, r]));
 }
 
@@ -247,11 +279,11 @@ async function applyOne(cx, m) {
   if (m.noTransaction) {
     // Record intent first so a crash is detectable rather than silently retried.
     await cx`
-      INSERT INTO _launchstack_migrations (tag, checksum, state, applied_by)
+      INSERT INTO ${cx(LEDGER)} (tag, checksum, state, applied_by)
       VALUES (${m.tag}, ${m.checksum}, 'running', ${by})`;
     await runStatements();
     await cx`
-      UPDATE _launchstack_migrations
+      UPDATE ${cx(LEDGER)}
          SET state = 'applied', applied_at = now(), duration_ms = ${Date.now() - t0}
        WHERE tag = ${m.tag}`;
     return;
@@ -267,7 +299,7 @@ async function applyOne(cx, m) {
     await cx.unsafe(`SET LOCAL statement_timeout = '${STATEMENT_TIMEOUT}'`);
     await runStatements();
     await cx`
-      INSERT INTO _launchstack_migrations
+      INSERT INTO ${cx(LEDGER)}
         (tag, checksum, state, applied_at, duration_ms, applied_by)
       VALUES (${m.tag}, ${m.checksum}, 'applied', now(), ${Date.now() - t0}, ${by})`;
     await cx.unsafe("COMMIT");
@@ -362,7 +394,7 @@ async function main() {
       log("This asserts the database ALREADY matches the schema. Verify first.");
       for (const m of state.pending) {
         await cx`
-          INSERT INTO _launchstack_migrations
+          INSERT INTO ${cx(LEDGER)}
             (tag, checksum, state, applied_at, applied_by)
           VALUES (${m.tag}, ${m.checksum}, 'applied', now(), 'baseline')`;
         log(`  stamped ${m.tag}`);

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { TrendSearchInputSchema } from "@launchstack/features/trend-search";
 import { createJob, getJobsByCompanyId } from "@launchstack/features/trend-search/db";

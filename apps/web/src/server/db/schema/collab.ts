@@ -12,8 +12,8 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 
-import { company } from "./base";
-import { pgTable } from "./helpers";
+import { company } from "@launchstack/core/db/schema";
+import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 /**
  * Collaboration: Slack-shaped channels, the meetings that run inside them, the

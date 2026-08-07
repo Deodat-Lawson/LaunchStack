@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { ocrJobs, users } from "@launchstack/core/db/schema";
+import { ocrJobs } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { eq, and, inArray, gte } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";

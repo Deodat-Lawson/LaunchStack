@@ -2,11 +2,8 @@ import { auth } from "@clerk/nextjs/server";
 import { eq, count } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import {
-  company,
-  userCompanyMemberships,
-  users,
-} from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { userCompanyMemberships, users } from "~/server/db/schema";
 import { getActiveCompanyId } from "~/lib/active-workspace";
 
 import type { WorkspaceSwitcherPayload } from "./workspaceSwitcherTypes";

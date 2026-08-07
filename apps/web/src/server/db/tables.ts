@@ -1,16 +1,6 @@
 import { getTableName, sql } from "drizzle-orm";
-import {
-  document,
-  documentContextChunks,
-  documentEmbeddings768,
-  documentEmbeddings1024,
-  documentMetadata,
-  documentNoteEmbeddings,
-  documentNotes,
-  documentRetrievalChunks,
-  documentStructure,
-  trendSearchCache,
-} from "@launchstack/core/db/schema";
+import { document, documentContextChunks, documentEmbeddings768, documentEmbeddings1024, documentMetadata, documentRetrievalChunks, documentStructure } from "@launchstack/core/db/schema";
+import { documentNoteEmbeddings, documentNotes, trendSearchCache } from "~/server/db/schema";
 
 /**
  * Physical table identifiers for hand-written SQL.

@@ -14,8 +14,8 @@ import {
     vector,
 } from "drizzle-orm/pg-core";
 
-import { users } from "./base";
-import { pgTable } from "./helpers";
+import { users } from "./identity";
+import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 export const agentAiChatbotChat = pgTable("agent_ai_chatbot_chat", {
     id: varchar("id", { length: 256 }).primaryKey().notNull(),

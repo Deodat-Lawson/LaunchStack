@@ -15,7 +15,7 @@ import { auth } from "@clerk/nextjs/server";
 import type { JSONContent } from "@tiptap/react";
 
 import { db } from "~/server/db";
-import { documentNotes } from "@launchstack/core/db/schema";
+import { documentNotes } from "~/server/db/schema";
 import {
   captureFromSelection,
   type AiCaptureIntent,

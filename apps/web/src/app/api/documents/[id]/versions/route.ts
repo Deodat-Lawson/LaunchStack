@@ -30,12 +30,8 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import {
-  document,
-  documentVersions,
-  ocrJobs,
-  users,
-} from "@launchstack/core/db/schema";
+import { document, documentVersions, ocrJobs } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 import { getEngine } from "~/server/engine";
 import { validateRequestBody } from "~/lib/validation";

@@ -57,9 +57,12 @@ RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
 FROM deps AS migrate
 COPY packages/core/drizzle ./packages/core/drizzle
 COPY packages/core/scripts ./packages/core/scripts
+COPY apps/web/drizzle ./apps/web/drizzle
 
 WORKDIR /app/packages/core
-CMD ["pnpm", "db:migrate"]
+# Engine set first, then product: product migrations carry foreign keys into
+# engine tables, so the order is load-bearing, not cosmetic.
+CMD ["sh", "-c", "node scripts/migrate.mjs && node scripts/migrate.mjs --set=product"]
 
 # ── Runner ───────────────────────────────────────────────────────────
 # Next's standalone output for a pnpm workspace places the server entry

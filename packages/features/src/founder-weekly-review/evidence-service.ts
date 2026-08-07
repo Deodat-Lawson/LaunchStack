@@ -16,8 +16,10 @@ import {
 } from "@launchstack/core/db/schema";
 import {
     alignVersionChunks,
-    buildDocumentChangeEvidence,
+    buildDocumentChangeGroupEvidence,
+    condenseDocumentChanges,
     selectVersionPairsForReportingPeriod,
+    type DocumentChangePairInput,
     type DocumentVersionForComparison,
     type VersionChunk,
 } from "./document-change";
@@ -177,7 +179,7 @@ export class FounderWeeklyReviewEvidenceService {
             const store = this.documentChangeSource.store;
             const versions = await store.listVersionsBeforePeriodEnd(companyId, endExclusive);
             const pairs = selectVersionPairsForReportingPeriod(versions, startInclusive, endExclusive);
-            const items: FounderWeeklyReviewEvidenceItem[] = [];
+            const pairInputs: DocumentChangePairInput[] = [];
             const warnings: FounderWeeklyReviewEvidenceWarning[] = [];
             for (const pair of pairs) {
                 const [previous, current] = await Promise.all([
@@ -191,8 +193,19 @@ export class FounderWeeklyReviewEvidenceService {
                 if (previous.state === "partial" || current.state === "partial") {
                     warnings.push(warning("document_change_chunks_partial", "A version pair was compared with partial chunk provenance.", "document_change"));
                 }
-                items.push(...buildDocumentChangeEvidence(pair, alignVersionChunks(previous.chunks, current.chunks)));
+                pairInputs.push({ pair, alignments: alignVersionChunks(previous.chunks, current.chunks) });
             }
+            const condensed = condenseDocumentChanges(pairInputs);
+            const pairByKey = new Map(pairInputs.map(({ pair }) => [
+                `${pair.documentId}:${pair.previousVersionId}:${pair.currentVersionId}`,
+                pair,
+            ]));
+            const items = condensed.selectedGroups.map((group) => {
+                const pair = pairByKey.get(`${group.documentId}:${group.previousVersionId}:${group.currentVersionId}`);
+                if (!pair) throw new Error("Selected document-change group has no source version pair.");
+                return buildDocumentChangeGroupEvidence(pair, group);
+            });
+            warnings.push(...condensed.warnings.map((item) => warning(item.code, item.message, "document_change")));
             const pairedCurrentVersionIds = new Set(pairs.map((pair) => pair.currentVersionId));
             const inPeriodWithNoPair = versions.some((version) =>
                 version.createdAt >= startInclusive

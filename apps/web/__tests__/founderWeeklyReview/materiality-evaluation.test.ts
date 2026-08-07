@@ -4,8 +4,10 @@ import { resolve } from "node:path";
 import {
     evaluationArtifactDirectory,
     renderMaterialityEvaluationArtifacts,
+    runMaterialityAnalyzerEvaluation,
     runMaterialityEvaluation,
 } from "../../scripts/founder-weekly-review-materiality-evaluation";
+import { FOUNDER_WEEKLY_REVIEW_MATERIALITY_DETERMINISTIC_BASELINE } from "../../scripts/founder-weekly-review-materiality-evaluation-baseline";
 import {
     MATERIALITY_EVALUATION_SCENARIOS,
 } from "../../scripts/founder-weekly-review-materiality-evaluation-fixtures";
@@ -44,6 +46,42 @@ describe("Founder Weekly Review realistic materiality evaluation harness", () =>
         );
         expect(result.summary.budget.groupBudgetTruncated).toBe(true);
         expect(result.summary.budget.documentDiversityPreserved).toBe(true);
+    });
+
+    it("freezes the deterministic-v1 commit, fixture shape, formulas, and exact metrics", () => {
+        const result = runMaterialityEvaluation();
+        const baseline = FOUNDER_WEEKLY_REVIEW_MATERIALITY_DETERMINISTIC_BASELINE;
+        expect(baseline.baselineCommit).toBe("630660fc861e77c464eaffc26ed6f04a7e38e7c7");
+        expect(result.summary).toMatchObject({
+            fixtureVersion: baseline.fixtureVersion,
+            scenarioCount: baseline.scenarioCount,
+            multiChunkScenarioCount: baseline.multiChunkScenarioCount,
+            largeDocumentScenarioCount: baseline.largeDocumentScenarioCount,
+            materiality: {
+                categoryAccuracy: baseline.metrics.categoryAccuracy,
+                materialRecall: baseline.metrics.materialRecall,
+                materialPrecision: baseline.metrics.materialPrecision,
+                uncertainRate: baseline.metrics.uncertainRate,
+                falseMaterialRate: baseline.metrics.falseMaterialRate,
+                missedMaterialRate: baseline.metrics.missedMaterialRate,
+                uncertainMaterialRate: baseline.metrics.uncertainMaterialRate,
+                uncertainNonMaterialRate: baseline.metrics.uncertainNonMaterialRate,
+            },
+            alignment: {
+                alignmentMissRate: baseline.metrics.alignmentMissRate,
+                falseMatchRate: baseline.metrics.alignmentFalseMatchRate,
+            },
+            condensation: {
+                rawChangedRecords: baseline.counts.rawChangedRecords,
+                groups: baseline.counts.groups,
+                condensedEvidenceItems: baseline.counts.structurallySelectedEvidenceItems,
+                rawCopiedCharacters: baseline.counts.rawCopiedCharacters,
+                condensedEvidenceCharacters: baseline.counts.condensedCharacters,
+                serializedPromptCharacters: baseline.counts.serializedPromptEvidenceCharacters,
+                reductionRatio: baseline.counts.reductionRatio,
+            },
+            budget: { generationEnvelopeSelectedItems: baseline.counts.generationEnvelopeItems },
+        });
     });
 
     it("records all four critical materiality buckets separately", () => {
@@ -98,6 +136,23 @@ describe("Founder Weekly Review realistic materiality evaluation harness", () =>
         });
         try {
             expect(() => runMaterialityEvaluation()).not.toThrow();
+            expect(fetchSpy).not.toHaveBeenCalled();
+        } finally {
+            fetchSpy.mockRestore();
+        }
+    });
+
+    it("evaluates the analyzer strategy offline against the identical frozen fixtures", async () => {
+        const fetchSpy = jest.spyOn(global, "fetch").mockImplementation(() => {
+            throw new Error("provider/network invocation is forbidden");
+        });
+        try {
+            const forward = await runMaterialityAnalyzerEvaluation(undefined, MATERIALITY_EVALUATION_SCENARIOS);
+            const reversed = await runMaterialityAnalyzerEvaluation(undefined, [...MATERIALITY_EVALUATION_SCENARIOS].reverse());
+            expect(forward.summary.scenarioCount).toBe(FOUNDER_WEEKLY_REVIEW_MATERIALITY_DETERMINISTIC_BASELINE.scenarioCount);
+            expect(forward.summary.groundTruthCategoryDistribution).toEqual(runMaterialityEvaluation().summary.groundTruthCategoryDistribution);
+            expect(forward.summary.alignment).toEqual(runMaterialityEvaluation().summary.alignment);
+            expect(renderMaterialityEvaluationArtifacts(reversed)).toEqual(renderMaterialityEvaluationArtifacts(forward));
             expect(fetchSpy).not.toHaveBeenCalled();
         } finally {
             fetchSpy.mockRestore();

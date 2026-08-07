@@ -6,10 +6,12 @@ import {
     alignVersionChunks,
     buildGenerationEvidenceEnvelope,
     materializeDocumentChanges,
+    materializeDocumentChangesWithAnalyzer,
     type AnalyzedDocumentChangeGroup,
     type ChunkAlignment,
     type DocumentChangeCategory,
     type DocumentChangePairInput,
+    type DocumentChangeMaterialityAnalyzer,
     type VersionPair,
 } from "@launchstack/features/founder-weekly-review";
 
@@ -20,8 +22,10 @@ import {
     type ExpectedChange,
     type MaterialityEvaluationScenario,
 } from "./founder-weekly-review-materiality-evaluation-fixtures";
+import { OfflineFixtureDocumentChangeMaterialityAnalyzer } from "./founder-weekly-review-materiality-evaluation-analyzers";
 
 export const MATERIALITY_EVALUATION_RUN_ID = "deterministic-v1" as const;
+export const MATERIALITY_ANALYZER_EVALUATION_RUN_ID = "materiality-analyzer-v1" as const;
 export const MATERIALITY_EVALUATION_ARTIFACT_ROOT =
     ".artifacts/founder-weekly-review/materiality-evaluation" as const;
 
@@ -472,6 +476,200 @@ export function runMaterialityEvaluation(
     };
 }
 
+/** Same frozen fixtures and metric formulas, with only the materiality strategy replaced. */
+export async function runMaterialityAnalyzerEvaluation(
+    analyzer: DocumentChangeMaterialityAnalyzer = new OfflineFixtureDocumentChangeMaterialityAnalyzer(),
+    inputScenarios: readonly MaterialityEvaluationScenario[] = MATERIALITY_EVALUATION_SCENARIOS
+): Promise<MaterialityEvaluationResult> {
+    const scenarios = [...inputScenarios].sort((a, b) => a.id.localeCompare(b.id));
+    const deterministicBaseline = runMaterialityEvaluation(scenarios);
+    const failures: MaterialityEvaluationFailure[] = deterministicBaseline.failures.filter(item =>
+        item.kind === "alignment_miss" || item.kind === "alignment_false_match" || item.kind === "budget_issue");
+    const scenarioResults: MaterialityEvaluationResult["scenarioResults"][number][] = [];
+    const inputs: DocumentChangePairInput[] = [];
+    const groundTruthCategoryDistribution: Record<string, number> = {};
+    const observedCategoryDistribution: Record<string, number> = {};
+    let groundTruthMaterialChanges = 0;
+    let groundTruthNonMaterialChanges = 0;
+    let categoryCorrect = 0;
+    let surfacedTrueMaterial = 0;
+    let falseMaterialCount = 0;
+    let missedMaterialCount = 0;
+    let uncertainMaterialCount = 0;
+    let uncertainNonMaterialCount = 0;
+
+    for (const [ordinal, scenario] of scenarios.entries()) {
+        const pair = pairFor(scenario, ordinal);
+        const alignments = alignVersionChunks(scenario.previousChunks, scenario.currentChunks);
+        const pairInput = { pair, alignments };
+        inputs.push(pairInput);
+        const materialized = await materializeDocumentChangesWithAnalyzer([pairInput], analyzer);
+        const auditByGroup = new Map(materialized.audit.groups.map(group => [group.groupId, group]));
+        const assignedGroupIds = new Set<string>();
+        const effectiveCategory = (group: AnalyzedDocumentChangeGroup): DocumentChangeCategory => {
+            const analysis = auditByGroup.get(group.group.groupId)?.analysis;
+            if (analysis?.disposition === "uncertain") return "uncertain";
+            if (analysis?.disposition === "material") return analysis.category;
+            return group.materiality.category;
+        };
+        const isSurfaced = (group: AnalyzedDocumentChangeGroup): boolean =>
+            auditByGroup.get(group.group.groupId)?.evidenceSourceId !== null
+            && auditByGroup.get(group.group.groupId)?.analysis?.disposition !== "non_material";
+        for (const group of materialized.analyzedGroups) increment(observedCategoryDistribution, effectiveCategory(group));
+
+        for (const expected of scenario.expected.meaningfulChanges) {
+            groundTruthMaterialChanges++;
+            increment(groundTruthCategoryDistribution, expected.category ?? "material_unspecified");
+            const group = bestGroup(expected, materialized.analyzedGroups);
+            if (group) assignedGroupIds.add(group.group.groupId);
+            const category = group ? effectiveCategory(group) : undefined;
+            if (!group || !isSurfaced(group) || category === "editorial_rewrite") {
+                missedMaterialCount++;
+                failures.push(failure(scenario, "materiality_false_negative", expected.id,
+                    group ? "Semantic analysis removed or editorialized a material source." : "No retained group represented the material source.",
+                    group ? "future_llm_materiality_analyzer" : "future_embedding_alignment"));
+                continue;
+            }
+            surfacedTrueMaterial++;
+            if (category === expected.category) categoryCorrect++;
+            if (category === "uncertain") {
+                uncertainMaterialCount++;
+                failures.push(failure(scenario, "uncertain_material", expected.id,
+                    "Material source was retained but semantic analysis remained uncertain.", "future_llm_materiality_analyzer"));
+            }
+        }
+
+        for (const expected of scenario.expected.nonMaterialChanges) {
+            groundTruthNonMaterialChanges++;
+            const group = bestGroup(expected, materialized.analyzedGroups);
+            if (!group) continue;
+            assignedGroupIds.add(group.group.groupId);
+            if (!isSurfaced(group)) continue;
+            falseMaterialCount++;
+            const category = effectiveCategory(group);
+            failures.push(failure(scenario, "materiality_false_positive", expected.id,
+                `Non-material source remained prompt-facing ${category} evidence.`, "future_llm_materiality_analyzer"));
+            if (category === "uncertain") {
+                uncertainNonMaterialCount++;
+                failures.push(failure(scenario, "uncertain_non_material", expected.id,
+                    "Non-material rewrite remained uncertain.", "future_llm_materiality_analyzer"));
+            }
+        }
+
+        for (const noOp of scenario.expected.expectedNoOps) {
+            groundTruthNonMaterialChanges++;
+            const group = materialized.analyzedGroups.find(candidate => {
+                const ids = chunkIds(candidate);
+                return ids.previous.has(noOp.previousChunkId) || ids.current.has(noOp.currentChunkId);
+            });
+            if (group && isSurfaced(group)) {
+                assignedGroupIds.add(group.group.groupId);
+                falseMaterialCount++;
+                failures.push(failure(scenario, "materiality_false_positive", noOp.id,
+                    `Expected no-op remained prompt-facing ${effectiveCategory(group)} evidence.`, "deterministic_improvement"));
+            }
+        }
+
+        for (const group of materialized.analyzedGroups) {
+            if (assignedGroupIds.has(group.group.groupId) || !isSurfaced(group)) continue;
+            falseMaterialCount++;
+            failures.push(failure(scenario, "materiality_false_positive", group.group.groupId,
+                `An unexpected ${effectiveCategory(group)} group remained prompt-facing evidence.`, "future_llm_materiality_analyzer"));
+            failures.push(failure(scenario, "grouping_issue", group.group.groupId,
+                `An extra ${effectiveCategory(group)} group did not map to an expected semantic change.`, "deterministic_improvement"));
+        }
+        const scenarioFailures = failures.filter(item => item.scenarioId === scenario.id);
+        scenarioResults.push({
+            id: scenario.id,
+            alignmentCount: alignments.length,
+            rawChangeCount: materialized.rawChanges.length,
+            groupCount: materialized.analyzedGroups.length,
+            categories: materialized.analyzedGroups.map(effectiveCategory),
+            failureKinds: [...new Set(scenarioFailures.map(item => item.kind))].sort(),
+        });
+    }
+
+    const aggregate = await materializeDocumentChangesWithAnalyzer(inputs, analyzer);
+    const snapshot = FounderWeeklyReviewEvidenceSnapshotSchema.parse({
+        schemaVersion: "founder-weekly-review-evidence/v2",
+        capturedAt: "2026-03-31T00:00:00.000Z",
+        reportingPeriod: { start: "2026-02-01", end: "2026-03-31" },
+        workspaceTimezone: "UTC",
+        items: aggregate.items,
+        sourceWarnings: aggregate.warnings.map(warning => ({ ...warning, sourceType: "document_change" as const })),
+        documentChangeAudit: aggregate.audit,
+    });
+    const envelope = buildGenerationEvidenceEnvelope(snapshot);
+    const observedGroups = Object.values(observedCategoryDistribution).reduce((total, count) => total + count, 0);
+    const uncertainRate = ratio(observedCategoryDistribution.uncertain ?? 0, observedGroups);
+    const falseMaterialRate = ratio(falseMaterialCount, groundTruthNonMaterialChanges);
+    const failuresByKind = Object.fromEntries(FAILURE_KINDS.map(kind => [kind, failures.filter(item => item.kind === kind).length])) as Record<FailureKind, number>;
+    const materialityFailureCount = failuresByKind.materiality_false_positive + failuresByKind.materiality_false_negative
+        + failuresByKind.uncertain_material + failuresByKind.uncertain_non_material;
+    const alignmentFailureCount = failuresByKind.alignment_miss + failuresByKind.alignment_false_match;
+    const recommendation = recommendationFor(
+        uncertainRate,
+        falseMaterialRate,
+        uncertainMaterialCount,
+        deterministicBaseline.summary.alignment.alignmentMissRate,
+        materialityFailureCount,
+        alignmentFailureCount,
+    );
+    const selectedDocumentCount = new Set(aggregate.selectedGroups.map(group => group.group.documentId.toString())).size;
+    const availableDocumentCount = new Set(aggregate.analyzedGroups.map(group => group.group.documentId.toString())).size;
+    const condensedEvidenceCharacters = aggregate.diagnostics.condensedPromptFacingCharacters;
+    return {
+        summary: {
+            fixtureVersion: MATERIALITY_EVALUATION_FIXTURE_VERSION,
+            scenarioCount: scenarios.length,
+            multiChunkScenarioCount: scenarios.filter(scenario => scenario.multiChunk).length,
+            largeDocumentScenarioCount: scenarios.filter(scenario => scenario.largeDocument).length,
+            groundTruthCategoryDistribution: Object.fromEntries(Object.entries(groundTruthCategoryDistribution).sort()),
+            observedCategoryDistribution: Object.fromEntries(Object.entries(observedCategoryDistribution).sort()),
+            materiality: {
+                groundTruthMaterialChanges,
+                groundTruthNonMaterialChanges,
+                categoryCorrect,
+                categoryAccuracy: ratio(categoryCorrect, groundTruthMaterialChanges),
+                materialRecall: ratio(surfacedTrueMaterial, groundTruthMaterialChanges),
+                materialPrecision: ratio(surfacedTrueMaterial, surfacedTrueMaterial + falseMaterialCount),
+                uncertainRate,
+                falseMaterialCount,
+                falseMaterialRate,
+                missedMaterialCount,
+                missedMaterialRate: ratio(missedMaterialCount, groundTruthMaterialChanges),
+                uncertainMaterialCount,
+                uncertainMaterialRate: ratio(uncertainMaterialCount, groundTruthMaterialChanges),
+                uncertainNonMaterialCount,
+                uncertainNonMaterialRate: ratio(uncertainNonMaterialCount, groundTruthNonMaterialChanges),
+            },
+            alignment: deterministicBaseline.summary.alignment,
+            condensation: {
+                rawChangedRecords: aggregate.rawChanges.length,
+                groups: aggregate.analyzedGroups.length,
+                condensedEvidenceItems: aggregate.items.length,
+                rawCopiedCharacters: aggregate.diagnostics.rawExcerptCharacters,
+                condensedEvidenceCharacters,
+                serializedPromptCharacters: envelope.diagnostics.serializedCharacterCount,
+                reductionRatio: ratio(aggregate.diagnostics.rawExcerptCharacters, Math.max(1, condensedEvidenceCharacters)),
+            },
+            budget: {
+                groupBudgetTruncated: aggregate.diagnostics.truncatedGroupCount > 0,
+                truncatedGroupCount: aggregate.diagnostics.truncatedGroupCount,
+                generationEnvelopeTruncated: envelope.diagnostics.truncated,
+                generationEnvelopeSelectedItems: envelope.diagnostics.selectedItemCount,
+                generationEnvelopeExcludedItems: envelope.diagnostics.excludedItemCount,
+                documentDiversityPreserved: selectedDocumentCount === Math.min(aggregate.selectedGroups.length, availableDocumentCount),
+                selectedDocumentCount,
+            },
+            failuresByKind,
+            ...recommendation,
+        },
+        failures: failures.sort((a, b) => a.kind.localeCompare(b.kind) || a.scenarioId.localeCompare(b.scenarioId) || a.expectationId.localeCompare(b.expectationId)),
+        scenarioResults: scenarioResults.sort((a, b) => a.id.localeCompare(b.id)),
+    };
+}
+
 export function evaluationArtifactDirectory(runId: string = MATERIALITY_EVALUATION_RUN_ID): string {
     if (!/^[a-z0-9][a-z0-9._-]*$/i.test(runId)) throw new Error("Evaluation run ID must be filesystem-safe.");
     return resolve(process.cwd(), MATERIALITY_EVALUATION_ARTIFACT_ROOT, runId);
@@ -568,8 +766,36 @@ export async function writeMaterialityEvaluationArtifacts(
 }
 
 async function main(): Promise<void> {
-    const result = runMaterialityEvaluation();
-    const artifacts = await writeMaterialityEvaluationArtifacts(result, process.env.FWR_MATERIALITY_EVALUATION_RUN_ID);
+    const mode = process.env.FWR_MATERIALITY_EVAL_MODE ?? "offline";
+    let result: MaterialityEvaluationResult;
+    let defaultRunId: string;
+    if (mode === "deterministic") {
+        result = runMaterialityEvaluation();
+        defaultRunId = MATERIALITY_EVALUATION_RUN_ID;
+    } else if (mode === "offline") {
+        result = await runMaterialityAnalyzerEvaluation();
+        defaultRunId = MATERIALITY_ANALYZER_EVALUATION_RUN_ID;
+    } else if (mode === "live") {
+        const { ProviderDocumentChangeMaterialityAnalyzer } = await import("../src/server/founder-weekly-review/document-change-materiality-analyzer");
+        const maximumCalls = Math.max(1, Math.min(64, Number(process.env.FWR_MATERIALITY_EVAL_MAX_CALLS ?? 64) || 64));
+        const live = new ProviderDocumentChangeMaterialityAnalyzer();
+        let calls = 0;
+        const bounded: DocumentChangeMaterialityAnalyzer = {
+            analyze(input) {
+                if (calls >= maximumCalls) throw new Error("Live materiality evaluation reached its explicit global call limit.");
+                calls++;
+                return live.analyze(input);
+            },
+        };
+        result = await runMaterialityAnalyzerEvaluation(bounded);
+        defaultRunId = "materiality-analyzer-live-v1";
+    } else {
+        throw new Error("FWR_MATERIALITY_EVAL_MODE must be deterministic, offline, or live.");
+    }
+    const artifacts = await writeMaterialityEvaluationArtifacts(
+        result,
+        process.env.FWR_MATERIALITY_EVALUATION_RUN_ID ?? defaultRunId,
+    );
     console.log(JSON.stringify({ ...result.summary, artifactDirectory: artifacts.directory }));
 }
 

@@ -2,6 +2,8 @@ import { createHash } from "node:crypto";
 
 import {
     DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS,
+    DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROMPT_VERSION,
+    DocumentChangeMaterialityAnalysisResultSchema,
     DocumentChangeMaterialityAnalyzerError,
     FounderWeeklyReviewEvidenceSnapshotSchema,
     buildDocumentChangeMaterialityAnalysisInput,
@@ -71,7 +73,7 @@ class FakeAnalyzer implements DocumentChangeMaterialityAnalyzer {
         this.calls.push(value);
         return {
             result: await this.implementation(value),
-            metadata: { provider: "fixture", model: "fixture-v1", promptVersion: "document-change-materiality/v1" },
+            metadata: { provider: "fixture", model: "fixture-v1", promptVersion: DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROMPT_VERSION },
         };
     }
 }
@@ -106,8 +108,20 @@ describe("optional document-change materiality analyzer", () => {
             ["Product owns telemetry.", "Platform owns telemetry."],
             ["Launch is planned for Q3.", "Launch is planned for Q4."],
             ["Conversion is 10%.", "Conversion is 25%."],
+            ["Admins may enable SSO.", "Admins must enable SSO."],
+            ["The migration is planned.", "The migration is launched."],
+            ["The plan supports SSO.", "The plan does not support SSO."],
+            ["Migration priority: P2", "Migration priority: P0"],
         ]) {
             expect(shouldAnalyzeDocumentChangeGroup(analyzed(9n, [modified(1, 9n, before!, after!)]))).toMatchObject({ eligible: false });
+        }
+        for (const [before, after] of [
+            ["The launch remains planned for Q3.", "We still expect the launch during the third quarter."],
+            ["Product owns telemetry.", "Telemetry is owned by Product."],
+            ["ARR target is $1M.", "ARR target is one million dollars."],
+            ["The migration is planned.", "The migration is still planned."],
+        ]) {
+            expect(shouldAnalyzeDocumentChangeGroup(analyzed(10n, [modified(1, 10n, before!, after!)]))).toMatchObject({ eligible: true });
         }
     });
 
@@ -131,6 +145,12 @@ describe("optional document-change materiality analyzer", () => {
         expect(built.canonicalCharacterCount).toBeLessThanOrEqual(8_000);
         expect(built.truncated).toBe(true);
         expect(built.input.changes).toHaveLength(1);
+        expect(built.input.deterministicAssessment).toEqual(expect.objectContaining({
+            groupShape: "modified",
+            semanticRisk: expect.any(String),
+            confirmedFactualDeltas: expect.any(Array),
+            possibleSignals: expect.any(Array),
+        }));
         expect(JSON.stringify(built.input)).not.toContain("customer_feedback");
         expect(built.inputDigest).toMatch(/^[a-f0-9]{64}$/);
     });
@@ -209,6 +229,17 @@ describe("optional document-change materiality analyzer", () => {
         const result = await materializeDocumentChangesWithAnalyzer([pairInput], analyzer);
         expect(result.items).toEqual(deterministic.items);
         expect(result.warnings.map(warning => warning.code)).toEqual(expect.arrayContaining([warningCode, "materiality_analysis_partial"]));
+    });
+
+    it("keeps the strict concise-output boundary at the documented limits", () => {
+        expect(DocumentChangeMaterialityAnalysisResultSchema.safeParse(materialResult("x".repeat(320))).success).toBe(true);
+        expect(DocumentChangeMaterialityAnalysisResultSchema.safeParse(materialResult("x".repeat(321))).success).toBe(false);
+        expect(DocumentChangeMaterialityAnalysisResultSchema.safeParse({
+            ...materialResult(), beforeKeyPoint: "b".repeat(240), afterKeyPoint: "a".repeat(240),
+        }).success).toBe(true);
+        expect(DocumentChangeMaterialityAnalysisResultSchema.safeParse({
+            ...materialResult(), beforeKeyPoint: "b".repeat(241),
+        }).success).toBe(false);
     });
 
     it("isolates partial failures and never exceeds concurrency or call budgets", async () => {

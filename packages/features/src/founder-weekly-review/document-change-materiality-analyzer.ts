@@ -16,6 +16,7 @@ import type {
 import {
     DOCUMENT_CHANGE_CATEGORIES,
     DOCUMENT_CHANGE_MATERIALITY_VERSION,
+    analyzeDocumentChangeFactualDeltas,
     buildCondensedDocumentChangeEvidence,
     documentChangeCategoryPriority,
     documentChangeGroupSourceId,
@@ -25,10 +26,13 @@ import {
     type DeterministicMaterialChangeResult,
     type DeterministicMaterialityConfidence,
     type DocumentChangeCategory,
+    type DocumentChangeFactualDelta,
+    type DocumentChangeFactualDeltaAssessment,
+    type DocumentChangeFactualDeltaKind,
 } from "./document-change-materiality";
 
 export const DOCUMENT_CHANGE_MATERIALITY_ANALYZER_PROMPT_VERSION =
-    "document-change-materiality/v1" as const;
+    "document-change-materiality/v2" as const;
 export const DOCUMENT_CHANGE_MATERIALITY_ANALYSIS_RESULT_VERSION =
     "document-change-materiality-result/v1" as const;
 export const DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS = Object.freeze({
@@ -42,12 +46,15 @@ export const DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS = Object.freeze({
 });
 
 export const DocumentChangeMaterialityAnalysisResultSchema = z.object({
-    disposition: z.enum(["material", "non_material", "uncertain"]),
-    category: z.enum(DOCUMENT_CHANGE_CATEGORIES),
-    summary: z.string().trim().min(1).max(DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS.summaryCharacters),
-    beforeKeyPoint: z.string().trim().min(1).max(DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS.keyPointCharacters).optional(),
-    afterKeyPoint: z.string().trim().min(1).max(DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS.keyPointCharacters).optional(),
-    confidence: z.number().min(0).max(1),
+    disposition: z.enum(["material", "non_material", "uncertain"]).describe("Whether the underlying business state materially changed."),
+    category: z.enum(DOCUMENT_CHANGE_CATEGORIES).describe("The primary changed business-state dimension, editorial_rewrite, or uncertain."),
+    summary: z.string().trim().min(1).max(DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS.summaryCharacters)
+        .describe("One concise sentence of at most 320 characters. Do not include reasoning or repeat the full source."),
+    beforeKeyPoint: z.string().trim().min(1).max(DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS.keyPointCharacters)
+        .describe("Optional verbatim copied before span of at most 240 characters.").optional(),
+    afterKeyPoint: z.string().trim().min(1).max(DOCUMENT_CHANGE_MATERIALITY_ANALYZER_LIMITS.keyPointCharacters)
+        .describe("Optional verbatim copied after span of at most 240 characters.").optional(),
+    confidence: z.number().min(0).max(1).describe("Judgment confidence from 0 through 1."),
 }).strict().superRefine((result, context) => {
     if (result.disposition === "uncertain" && result.category !== "uncertain") {
         context.addIssue({ code: z.ZodIssueCode.custom, message: "Uncertain disposition requires uncertain category.", path: ["category"] });
@@ -61,14 +68,29 @@ export type DocumentChangeMaterialityAnalysisResult = z.infer<
     typeof DocumentChangeMaterialityAnalysisResultSchema
 >;
 
+export type DocumentChangeGroupShape = "modified" | "added" | "removed" | "replacement" | "mixed";
+export type DocumentChangeSemanticRisk =
+    | "confirmed_factual_delta"
+    | "paraphrase_possible"
+    | "structural_rewrite"
+    | "split_merge_possible"
+    | "ambiguous_business_signal";
+
 export type DocumentChangeMaterialityAnalysisInput = {
     groupId: string;
     documentTitle?: string;
     structurePath?: string | null;
     structureTitle?: string | null;
-    deterministicCategory: DocumentChangeCategory;
-    deterministicConfidence: DeterministicMaterialityConfidence;
-    deterministicSignals: readonly string[];
+    deterministicAssessment: {
+        category: DocumentChangeCategory;
+        confidence: DeterministicMaterialityConfidence;
+        detectedSignals: readonly string[];
+        confirmedFactualDeltas: readonly DocumentChangeFactualDelta[];
+        equivalentFactualValues: readonly DocumentChangeFactualDelta[];
+        possibleSignals: readonly DocumentChangeFactualDeltaKind[];
+        groupShape: DocumentChangeGroupShape;
+        semanticRisk: DocumentChangeSemanticRisk;
+    };
     changes: readonly {
         changeType: RawDocumentChange["changeType"];
         previousExcerpt?: string;
@@ -107,6 +129,7 @@ export type DocumentChangeMaterialityEligibilityReason =
     | "complex_multi_change"
     | "large_rewrite"
     | "moderate_signal"
+    | "unconfirmed_business_signal"
     | "paraphrase_risk";
 
 export type DocumentChangeMaterialityEligibility = {
@@ -145,16 +168,6 @@ type SuccessfulAnalysis = {
     metadata: DocumentChangeMaterialityAnalyzerMetadata;
 };
 
-const SIMPLE_BYPASS_SIGNALS = new Set([
-    "ownership_subject_changed",
-    "status_term_changed",
-    "date_or_deadline_changed",
-    "numeric_metric_changed",
-    "requirement_or_modality_changed",
-    "negation_changed",
-    "priority_marker_changed",
-]);
-
 function compareOrdinal(a: string, b: string): number {
     return a < b ? -1 : a > b ? 1 : 0;
 }
@@ -178,20 +191,42 @@ function lexicalSimilarity(change: RawDocumentChange): number {
     return union === 0 ? 1 : intersection / union;
 }
 
-function isStrongDeterministicBypass(analyzed: AnalyzedDocumentChangeGroup): boolean {
+function groupShape(group: DocumentChangeGroup): DocumentChangeGroupShape {
+    const types = new Set(group.rawChanges.map(change => change.changeType));
+    if (types.has("added") && types.has("removed")) return "replacement";
+    if (types.size > 1) return "mixed";
+    return group.rawChanges[0]?.changeType ?? "mixed";
+}
+
+function semanticRisk(
+    analyzed: AnalyzedDocumentChangeGroup,
+    assessment: DocumentChangeFactualDeltaAssessment,
+): DocumentChangeSemanticRisk {
+    const shape = groupShape(analyzed.group);
+    if (shape === "replacement") return "split_merge_possible";
+    if (analyzed.group.rawChanges.length > 1 || shape === "mixed") return "structural_rewrite";
+    if (assessment.confirmedFactualDeltas.length > 0 && assessment.possibleSignals.length === 0) return "confirmed_factual_delta";
+    if (assessment.possibleSignals.length > 0) return "ambiguous_business_signal";
+    return "paraphrase_possible";
+}
+
+export function hasStrongConfirmedFactualDeltaBypass(analyzed: AnalyzedDocumentChangeGroup): boolean {
     const { group, materiality } = analyzed;
     if (group.rawChanges.length !== 1 || group.rawChanges[0]!.changeType !== "modified") return false;
     if (changedCharacters(group) > 700 || materiality.category === "uncertain" || materiality.category === "editorial_rewrite") return false;
-    return materiality.signals.length > 0
-        && materiality.signals.every(signal => SIMPLE_BYPASS_SIGNALS.has(signal));
+    const assessment = analyzeDocumentChangeFactualDeltas(group, materiality.signals);
+    return assessment.confirmedFactualDeltas.length > 0
+        && assessment.confirmedFactualDeltas.every(delta => delta.confidence === "strong")
+        && assessment.possibleSignals.length === 0;
 }
 
 /** Pure semantic-risk gate. It intentionally does not use embeddings or changelog text. */
 export function shouldAnalyzeDocumentChangeGroup(
     analyzed: AnalyzedDocumentChangeGroup,
 ): DocumentChangeMaterialityEligibility {
-    if (isStrongDeterministicBypass(analyzed)) return { eligible: false, priority: Number.MAX_SAFE_INTEGER };
+    if (hasStrongConfirmedFactualDeltaBypass(analyzed)) return { eligible: false, priority: Number.MAX_SAFE_INTEGER };
     const { group, materiality } = analyzed;
+    const factualAssessment = analyzeDocumentChangeFactualDeltas(group, materiality.signals);
     if (materiality.category === "uncertain" && group.rawChanges.length > 1) {
         return { eligible: true, reason: "uncertain_multi_change", priority: 1 };
     }
@@ -204,6 +239,9 @@ export function shouldAnalyzeDocumentChangeGroup(
     }
     if (group.rawChanges.length > 1) {
         return { eligible: true, reason: "complex_multi_change", priority: 4 };
+    }
+    if (factualAssessment.possibleSignals.length > 0 && factualAssessment.confirmedFactualDeltas.length === 0) {
+        return { eligible: true, reason: "unconfirmed_business_signal", priority: 4 };
     }
     if (changedCharacters(group) >= 1_200) {
         return { eligible: true, reason: "large_rewrite", priority: 4 };
@@ -297,14 +335,22 @@ export function buildDocumentChangeMaterialityAnalysisInput(analyzed: AnalyzedDo
             ...(compactExcerpt(change.currentChunk?.content) ? { currentExcerpt: compactExcerpt(change.currentChunk?.content) } : {}),
             alignmentMethod: change.alignmentMethod,
         }));
+    const factualAssessment = analyzeDocumentChangeFactualDeltas(analyzed.group, analyzed.materiality.signals);
     const input: DocumentChangeMaterialityAnalysisInput = {
         groupId: analyzed.group.groupId,
         documentTitle: analyzed.pair.documentTitle.slice(0, 256),
         structurePath: analyzed.group.structurePath?.slice(0, 256) ?? null,
         structureTitle: analyzed.group.structureTitle?.slice(0, 256) ?? null,
-        deterministicCategory: analyzed.materiality.category,
-        deterministicConfidence: analyzed.materiality.confidence,
-        deterministicSignals: analyzed.materiality.signals.slice(0, 20),
+        deterministicAssessment: {
+            category: analyzed.materiality.category,
+            confidence: analyzed.materiality.confidence,
+            detectedSignals: analyzed.materiality.signals.slice(0, 20),
+            confirmedFactualDeltas: factualAssessment.confirmedFactualDeltas.slice(0, 16),
+            equivalentFactualValues: factualAssessment.equivalentFactualValues.slice(0, 16),
+            possibleSignals: factualAssessment.possibleSignals,
+            groupShape: groupShape(analyzed.group),
+            semanticRisk: semanticRisk(analyzed, factualAssessment),
+        },
         changes,
     };
     const canonical = JSON.stringify(canonicalize(input));

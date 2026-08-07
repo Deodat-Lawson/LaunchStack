@@ -45,6 +45,37 @@ export type DeterministicMaterialityResult = {
     signals: readonly string[];
 };
 
+export const DOCUMENT_CHANGE_FACTUAL_DELTA_VERSION = "document-change-factual-delta/v2" as const;
+
+export const DOCUMENT_CHANGE_FACTUAL_DELTA_KINDS = [
+    "ownership",
+    "status",
+    "deadline",
+    "metric",
+    "requirement",
+    "negation",
+    "risk_or_blocker",
+    "scope",
+    "priority",
+] as const;
+
+export type DocumentChangeFactualDeltaKind = typeof DOCUMENT_CHANGE_FACTUAL_DELTA_KINDS[number];
+export type DocumentChangeFactualDelta = {
+    kind: DocumentChangeFactualDeltaKind;
+    previousValue?: string;
+    currentValue?: string;
+    relation: "changed" | "equivalent" | "unknown";
+    confidence: "strong" | "moderate";
+};
+
+export type DocumentChangeFactualDeltaAssessment = {
+    version: typeof DOCUMENT_CHANGE_FACTUAL_DELTA_VERSION;
+    factualComparisons: readonly DocumentChangeFactualDelta[];
+    confirmedFactualDeltas: readonly DocumentChangeFactualDelta[];
+    equivalentFactualValues: readonly DocumentChangeFactualDelta[];
+    possibleSignals: readonly DocumentChangeFactualDeltaKind[];
+};
+
 export type AnalyzedDocumentChangeGroup = {
     pair: VersionPair;
     group: DocumentChangeGroup;
@@ -170,6 +201,202 @@ function metricValues(value: string): string[] {
         /(\d+(?:\.\d+)?\s*%)/gu,
         /\b(\d+(?:\.\d+)?\s*(?:customers?|users?|accounts?|employees?|days?|weeks?|months?|revenue|arr|mrr))\b/giu,
     ]);
+}
+
+function uniqueSorted(values: readonly string[]): string[] {
+    return [...new Set(values)].sort(compareOrdinal);
+}
+
+function canonicalDeadlineValues(value: string): string[] {
+    const quarterAliases: Record<string, string> = {
+        "q1": "q1", "first": "q1",
+        "q2": "q2", "second": "q2",
+        "q3": "q3", "third": "q3",
+        "q4": "q4", "fourth": "q4",
+    };
+    const quarters = [
+        ...value.matchAll(/\b(q[1-4])\b/giu),
+        ...value.matchAll(/\b(first|second|third|fourth)[ -]quarter\b/giu),
+    ].map(match => quarterAliases[match[1]!.toLocaleLowerCase()]!);
+    return uniqueSorted([
+        ...quarters,
+        ...valuesMatching(value, [
+            /\b(20\d{2})\b/gu,
+            /\b((?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2}(?:,\s*20\d{2})?)\b/giu,
+            /\b(20\d{2}-\d{2}-\d{2})\b/gu,
+        ]),
+    ]);
+}
+
+const NUMBER_WORD_VALUES: Record<string, number> = {
+    zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+    ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16,
+    seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50,
+    sixty: 60, seventy: 70, eighty: 80, ninety: 90,
+};
+
+function parseNumberWords(value: string): number | null {
+    const tokens = value.toLocaleLowerCase().split(/[\s-]+/).filter(Boolean);
+    if (tokens.length === 0 || tokens.some(token => !(token in NUMBER_WORD_VALUES) && !["hundred", "thousand", "million", "billion", "and"].includes(token))) {
+        return null;
+    }
+    let total = 0;
+    let current = 0;
+    for (const token of tokens) {
+        if (token === "and") continue;
+        if (token in NUMBER_WORD_VALUES) current += NUMBER_WORD_VALUES[token]!;
+        else if (token === "hundred") current = Math.max(1, current) * 100;
+        else {
+            const scale = token === "thousand" ? 1_000 : token === "million" ? 1_000_000 : 1_000_000_000;
+            total += Math.max(1, current) * scale;
+            current = 0;
+        }
+    }
+    return total + current;
+}
+
+function canonicalMetricValues(value: string): string[] {
+    const result: string[] = [];
+    const currencyCodes: Record<string, string> = { "$": "usd", "€": "eur", "£": "gbp" };
+    for (const match of value.matchAll(/([$€£])\s*(\d+(?:\.\d+)?)\s*([kmb])?\b/giu)) {
+        const multiplier = match[3]?.toLocaleLowerCase() === "k" ? 1_000
+            : match[3]?.toLocaleLowerCase() === "m" ? 1_000_000
+                : match[3]?.toLocaleLowerCase() === "b" ? 1_000_000_000 : 1;
+        result.push(`${currencyCodes[match[1]!]!}:${Number(match[2]) * multiplier}`);
+    }
+    const numberWords = "zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|billion|and";
+    const wordCurrency = new RegExp(`\\b((?:(?:${numberWords})[\\s-]+){1,8})(dollars?|euros?|pounds?)\\b`, "giu");
+    for (const match of value.matchAll(wordCurrency)) {
+        const amount = parseNumberWords(match[1]!);
+        const unit = match[2]!.toLocaleLowerCase().startsWith("dollar") ? "usd"
+            : match[2]!.toLocaleLowerCase().startsWith("euro") ? "eur" : "gbp";
+        if (amount !== null) result.push(`${unit}:${amount}`);
+    }
+    for (const match of value.matchAll(/(\d+(?:\.\d+)?)\s*%/gu)) result.push(`percent:${Number(match[1])}`);
+    for (const match of value.matchAll(/\b(\d+(?:\.\d+)?)\s*(customers?|users?|accounts?|employees?|days?|weeks?|months?|revenue|arr|mrr)\b/giu)) {
+        result.push(`${match[2]!.toLocaleLowerCase().replace(/s$/, "")}:${Number(match[1])}`);
+    }
+    return uniqueSorted(result);
+}
+
+function canonicalPhraseValues(value: string, phrases: readonly string[], aliases: Record<string, string> = {}): string[] {
+    return uniqueSorted(phraseValues(value, phrases).map(phrase => aliases[phrase] ?? phrase));
+}
+
+type FactualValueExtractor = (value: string) => readonly string[];
+
+const FACTUAL_EXTRACTORS: ReadonlyArray<{
+    kind: Exclude<DocumentChangeFactualDeltaKind, "negation">;
+    extract: FactualValueExtractor;
+}> = [
+    { kind: "ownership", extract: ownershipValues },
+    { kind: "status", extract: value => canonicalPhraseValues(value, STATUS_TERMS, { canceled: "cancelled" }) },
+    { kind: "deadline", extract: canonicalDeadlineValues },
+    { kind: "metric", extract: canonicalMetricValues },
+    { kind: "requirement", extract: value => canonicalPhraseValues(value, REQUIREMENT_TERMS) },
+    { kind: "risk_or_blocker", extract: value => canonicalPhraseValues(value, RISK_TERMS, { risks: "risk", blockers: "blocker" }) },
+    { kind: "scope", extract: value => canonicalPhraseValues(value, SCOPE_TERMS, { "company wide": "company-wide" }) },
+    { kind: "priority", extract: value => canonicalPhraseValues(value, PRIORITY_TERMS) },
+];
+
+const SIGNAL_KIND: Record<string, DocumentChangeFactualDeltaKind> = {
+    ownership_subject_changed: "ownership",
+    status_term_changed: "status",
+    date_or_deadline_changed: "deadline",
+    numeric_metric_changed: "metric",
+    requirement_or_modality_changed: "requirement",
+    negation_changed: "negation",
+    risk_or_blocker_term_changed: "risk_or_blocker",
+    scope_marker_changed: "scope",
+    priority_marker_changed: "priority",
+};
+
+function comparison(
+    change: RawDocumentChange,
+    kind: DocumentChangeFactualDeltaKind,
+    previous: readonly string[],
+    current: readonly string[],
+): DocumentChangeFactualDelta | null {
+    if (previous.length === 0 && current.length === 0) return null;
+    const previousValue = previous.join(" | ") || undefined;
+    const currentValue = current.join(" | ") || undefined;
+    if (change.changeType !== "modified" || !change.previousChunk || !change.currentChunk || !previousValue || !currentValue) {
+        return { kind, ...(previousValue ? { previousValue } : {}), ...(currentValue ? { currentValue } : {}), relation: "unknown", confidence: "moderate" };
+    }
+    return {
+        kind,
+        previousValue,
+        currentValue,
+        relation: previousValue === currentValue ? "equivalent" : "changed",
+        confidence: "strong",
+    };
+}
+
+/**
+ * Separates business-token presence from a confirmed two-sided factual delta.
+ * It is intentionally narrow: unknown values remain analyzer candidates rather than being normalized away.
+ */
+export function analyzeDocumentChangeFactualDeltas(
+    group: DocumentChangeGroup,
+    deterministicSignals: readonly string[] = [],
+): DocumentChangeFactualDeltaAssessment {
+    const factualComparisons: DocumentChangeFactualDelta[] = [];
+    for (const change of group.rawChanges) {
+        const before = change.previousNormalizedContent ?? "";
+        const after = change.currentNormalizedContent ?? "";
+        for (const extractor of FACTUAL_EXTRACTORS) {
+            const result = comparison(change, extractor.kind, extractor.extract(before), extractor.extract(after));
+            if (result) factualComparisons.push(result);
+        }
+        if (change.changeType === "modified" && change.previousChunk && change.currentChunk) {
+            const negations = (value: string) => phraseValues(value, ["not", "no", "never", "unavailable"]);
+            const beforeNegated = negations(before).length > 0;
+            const afterNegated = negations(after).length > 0;
+            if (beforeNegated || afterNegated) {
+                factualComparisons.push({
+                    kind: "negation",
+                    previousValue: beforeNegated ? "negated" : "affirmed",
+                    currentValue: afterNegated ? "negated" : "affirmed",
+                    relation: beforeNegated === afterNegated ? "equivalent" : "changed",
+                    confidence: "strong",
+                });
+            }
+        } else {
+            const negations = phraseValues(`${before} ${after}`, ["not", "no", "never", "unavailable"]);
+            if (negations.length > 0) {
+                factualComparisons.push({
+                    kind: "negation",
+                    ...(before ? { previousValue: negations.join(" | ") } : {}),
+                    ...(after ? { currentValue: negations.join(" | ") } : {}),
+                    relation: "unknown",
+                    confidence: "moderate",
+                });
+            }
+        }
+    }
+    const deduplicated = [...new Map(factualComparisons.map(value => [
+        [value.kind, value.previousValue ?? "", value.currentValue ?? "", value.relation].join(":"), value,
+    ])).values()].sort((a, b) => compareOrdinal(a.kind, b.kind)
+        || compareOrdinal(a.previousValue ?? "", b.previousValue ?? "")
+        || compareOrdinal(a.currentValue ?? "", b.currentValue ?? "")
+        || compareOrdinal(a.relation, b.relation));
+    const confirmedFactualDeltas = deduplicated.filter(value => value.relation === "changed");
+    const equivalentFactualValues = deduplicated.filter(value => value.relation === "equivalent");
+    const confirmedKinds = new Set(confirmedFactualDeltas.map(value => value.kind));
+    const possibleSignals = uniqueSorted([
+        ...deduplicated.filter(value => value.relation === "unknown").map(value => value.kind),
+        ...deterministicSignals.flatMap(signal => {
+            const kind = SIGNAL_KIND[signal];
+            return kind && !confirmedKinds.has(kind) ? [kind] : [];
+        }),
+    ]) as DocumentChangeFactualDeltaKind[];
+    return {
+        version: DOCUMENT_CHANGE_FACTUAL_DELTA_VERSION,
+        factualComparisons: deduplicated,
+        confirmedFactualDeltas,
+        equivalentFactualValues,
+        possibleSignals,
+    };
 }
 
 function punctuationOnlyEditorial(before: string, after: string): boolean {

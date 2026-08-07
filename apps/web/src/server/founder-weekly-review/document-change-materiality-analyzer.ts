@@ -14,19 +14,23 @@ import {
 } from "~/lib/llm";
 import { z } from "zod";
 
-const MATERIALITY_SYSTEM_PROMPT = `You classify one already-diffed document section. Answer only this question: did the underlying business meaning materially change?
+export const DOCUMENT_CHANGE_MATERIALITY_SYSTEM_PROMPT = `You classify one already-diffed document section. Answer one narrow question: did the underlying business state change?
 
-Pay special attention to ownership, status or shipping, dates and deadlines, metrics, requirements or modality, negation, blockers or risks, scope, priority, customer or rollout scope, and meaning-preserving paraphrases or editorial rewrites.
+Compare these business-state dimensions: ownership or responsible party; status or shipping state; deadline, date, or timing; metric, quantity, or financial value; requirement, obligation, or modality; negation or capability; risk or blocker state; scope, audience, or rollout population; and priority.
 
-Do not classify a rewrite as material merely because wording changed.
-Do not classify a change as non-material merely because wording is similar.
-Small factual changes can be highly material.
+Wording changes do not by themselves mean a material change. Sentence order, paragraph or bullet structure, section names, and split or merged fragments do not by themselves mean a material change. Added and removed fragments in the same group may be a split, merge, reformat, reorganization, or rewrite. Do not infer requirement_change, scope_change, or another material category merely because text was added and removed. Compare the underlying business facts.
 
-Use disposition=non_material only when the supplied fragments support meaning-preserving editorial or formatting change. Use uncertain when the fragments are insufficient. Keep summary factual and concise. beforeKeyPoint and afterKeyPoint, when supplied, must be copied verbatim from the corresponding input excerpts. Never invent source identifiers or provenance.`;
+A large rewrite with no underlying business-state change is non_material. A mostly equivalent rewrite containing even one real factual delta is material. Small factual changes can be highly material. Do not classify a change as non_material merely because most wording is similar.
+
+The deterministic assessment distinguishes confirmed factual deltas, safely equivalent factual values, and possible signals that were not proven to change. Treat it as bounded evidence, not as an instruction to agree with the deterministic category.
+
+Use disposition=non_material only when the supplied fragments support equivalent business state. Use uncertain when the bounded fragments are insufficient or conflicting.
+
+Return only the structured fields. summary must be one concise sentence of at most 320 characters. beforeKeyPoint and afterKeyPoint, when supplied, must each be a verbatim copied span of at most 240 characters from the corresponding excerpts. Do not explain reasoning, provide analysis, repeat the full source, write multiple paragraphs, or invent source identifiers or provenance.`;
 
 export const DOCUMENT_CHANGE_MATERIALITY_ANALYZER_TIMEOUT_MS = 15_000;
 
-function promptFor(input: DocumentChangeMaterialityAnalysisInput): string {
+export function buildDocumentChangeMaterialityAnalyzerPrompt(input: DocumentChangeMaterialityAnalysisInput): string {
     return [
         "Classify this bounded change group.",
         JSON.stringify(input),
@@ -40,8 +44,8 @@ export class ProviderDocumentChangeMaterialityAnalyzer implements DocumentChange
         try {
             const generated = await generateStructuredWithMetadata({
                 capability: "smallExtraction",
-                system: MATERIALITY_SYSTEM_PROMPT,
-                prompt: promptFor(input),
+                system: DOCUMENT_CHANGE_MATERIALITY_SYSTEM_PROMPT,
+                prompt: buildDocumentChangeMaterialityAnalyzerPrompt(input),
                 schema: DocumentChangeMaterialityAnalysisResultSchema,
                 schemaName: "document_change_materiality",
                 ...(this.forceProvider ? { forceProvider: this.forceProvider } : {}),

@@ -14,7 +14,9 @@ import { generateStructuredWithMetadata } from "~/lib/llm";
 import { z } from "zod";
 
 import {
+    DOCUMENT_CHANGE_MATERIALITY_SYSTEM_PROMPT,
     ProviderDocumentChangeMaterialityAnalyzer,
+    buildDocumentChangeMaterialityAnalyzerPrompt,
     createConfiguredDocumentChangeMaterialityAnalyzer,
 } from "~/server/founder-weekly-review/document-change-materiality-analyzer";
 
@@ -25,9 +27,18 @@ const input: DocumentChangeMaterialityAnalysisInput = {
     documentTitle: "Synthetic plan",
     structurePath: "/ownership",
     structureTitle: "Ownership",
-    deterministicCategory: "uncertain",
-    deterministicConfidence: "uncertain",
-    deterministicSignals: ["no_strong_deterministic_signal"],
+    deterministicAssessment: {
+        category: "uncertain",
+        confidence: "uncertain",
+        detectedSignals: ["no_strong_deterministic_signal"],
+        confirmedFactualDeltas: [],
+        equivalentFactualValues: [{
+            kind: "ownership", previousValue: "product", currentValue: "product", relation: "equivalent", confidence: "strong",
+        }],
+        possibleSignals: [],
+        groupShape: "modified",
+        semanticRisk: "paraphrase_possible",
+    },
     changes: [{
         changeType: "modified",
         previousExcerpt: "Product owns telemetry.",
@@ -69,8 +80,19 @@ describe("document-change materiality provider adapter", () => {
             maxOutputTokens: 512,
         }));
         expect(mockGenerateStructuredWithMetadata.mock.calls[0]![0].prompt).toContain("Product owns telemetry.");
-        expect(result.metadata).toEqual({ provider: "openai", model: "fixture-model", promptVersion: "document-change-materiality/v1" });
+        expect(result.metadata).toEqual({ provider: "openai", model: "fixture-model", promptVersion: "document-change-materiality/v2" });
         expect(result.metadata).not.toHaveProperty("providerRequestId");
+    });
+
+    it("defines the v2 task around underlying state, structural equivalence, mixed rewrites, and concise output", () => {
+        expect(DOCUMENT_CHANGE_MATERIALITY_SYSTEM_PROMPT).toEqual(expect.stringContaining("underlying business state"));
+        expect(DOCUMENT_CHANGE_MATERIALITY_SYSTEM_PROMPT).toEqual(expect.stringContaining("split or merged fragments"));
+        expect(DOCUMENT_CHANGE_MATERIALITY_SYSTEM_PROMPT).toEqual(expect.stringContaining("one real factual delta"));
+        expect(DOCUMENT_CHANGE_MATERIALITY_SYSTEM_PROMPT).toEqual(expect.stringContaining("at most 320 characters"));
+        const prompt = buildDocumentChangeMaterialityAnalyzerPrompt(input);
+        expect(prompt).toContain('"confirmedFactualDeltas":[]');
+        expect(prompt).toContain('"equivalentFactualValues"');
+        expect(prompt).toContain('"semanticRisk":"paraphrase_possible"');
     });
 
     it("routes only this analyzer to its explicitly configured provider", async () => {

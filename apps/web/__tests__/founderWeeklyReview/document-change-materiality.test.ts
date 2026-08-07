@@ -1,5 +1,6 @@
 import {
     FounderWeeklyReviewEvidenceSnapshotSchema,
+    analyzeDocumentChangeFactualDeltas,
     analyzeDocumentChangeGroup,
     buildCondensedDocumentChangeEvidence,
     buildFounderWeeklyReviewEvidenceDigest,
@@ -104,6 +105,41 @@ describe("deterministic document-change materiality", () => {
             category: "requirement_change",
             signals: expect.arrayContaining(["negation_changed"]),
         });
+    });
+
+    it.each([
+        ["Q3", "Q4", "deadline", "changed"],
+        ["Q3", "third quarter", "deadline", "equivalent"],
+        ["Product owns telemetry.", "Platform owns telemetry.", "ownership", "changed"],
+        ["Product owns telemetry.", "Telemetry is owned by Product.", "ownership", "equivalent"],
+        ["10% conversion", "25% conversion", "metric", "changed"],
+        ["ARR target is $1M.", "ARR target is one million dollars.", "metric", "equivalent"],
+        ["The migration is planned.", "The migration is launched.", "status", "changed"],
+        ["The migration is planned.", "The migration is still planned.", "status", "equivalent"],
+    ] as const)("compares factual state in %s -> %s as %s %s", (before, after, kind, relation) => {
+        const group = groupFor(before, after);
+        const deterministic = analyzeDocumentChangeGroup(group);
+        const assessment = analyzeDocumentChangeFactualDeltas(group, deterministic.signals);
+        expect(assessment.factualComparisons).toEqual(expect.arrayContaining([
+            expect.objectContaining({ kind, relation }),
+        ]));
+    });
+
+    it("keeps one-sided business signals unconfirmed rather than manufacturing a delta", () => {
+        const versionPair = pair();
+        const raw = buildRawDocumentChanges(versionPair, [{
+            changeType: "added",
+            currentChunk: chunk(2, 2n, "Admins must enable SSO."),
+            alignmentMethod: "unmatched",
+        }]).rawChanges;
+        const group = groupRawDocumentChanges(versionPair, raw).groups[0]!;
+        const deterministic = analyzeDocumentChangeGroup(group);
+        const assessment = analyzeDocumentChangeFactualDeltas(group, deterministic.signals);
+        expect(assessment.confirmedFactualDeltas).toHaveLength(0);
+        expect(assessment.possibleSignals).toContain("requirement");
+        expect(assessment.factualComparisons).toEqual(expect.arrayContaining([
+            expect.objectContaining({ kind: "requirement", relation: "unknown" }),
+        ]));
     });
 
     it("assigns editorial only to a narrow deterministic formatting rewrite", () => {

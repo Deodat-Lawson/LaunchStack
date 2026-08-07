@@ -2,7 +2,6 @@ import { inngest } from "~/server/inngest/client";
 import { db } from "~/server/db";
 import {
     document,
-    pdfChunks,
     documentContextChunks,
     documentStructure,
     predictiveDocumentAnalysisResults,
@@ -35,6 +34,7 @@ export const predictiveAnalysisJob = inngest.createFunction(
                     title: document.title,
                     category: document.category,
                     companyId: document.companyId,
+                    currentVersionId: document.currentVersionId,
                 })
                 .from(document)
                 .where(eq(document.id, documentId))
@@ -42,11 +42,14 @@ export const predictiveAnalysisJob = inngest.createFunction(
 
             return results[0] ?? null;
         });
-
         if (!docDetails) {
             throw new Error(`Document ${documentId} not found`);
         }
 
+        const currentVersionId = docDetails.currentVersionId;
+        if (currentVersionId === null) {
+            throw new Error(`Document ${documentId} has no current version`);
+        }
         const chunks = await step.run("load-chunks", async () => {
             const rlmChunks = await db
                 .select({
@@ -56,35 +59,27 @@ export const predictiveAnalysisJob = inngest.createFunction(
                     sectionHeading: documentStructure.title,
                 })
                 .from(documentContextChunks)
+                .innerJoin(document, eq(documentContextChunks.documentId, document.id))
                 .leftJoin(
                     documentStructure,
                     eq(documentContextChunks.structureId, documentStructure.id)
                 )
-                .where(eq(documentContextChunks.documentId, BigInt(documentId)))
-                .orderBy(documentContextChunks.id);
+                .where(
+                    and(
+                        eq(documentContextChunks.documentId, BigInt(documentId)),
+                        eq(document.id, documentId),
+                        eq(document.currentVersionId, currentVersionId),
+                        eq(documentContextChunks.versionId, currentVersionId)
+                    )
+                );
 
-            if (rlmChunks.length > 0) {
-                return rlmChunks.map(c => ({
-                    id: c.id,
-                    content: c.content,
-                    page: c.page ?? 1,
-                    sectionHeading: c.sectionHeading,
-                }));
-            }
-
-            const legacyChunks = await db
-                .select({
-                    id: pdfChunks.id,
-                    content: pdfChunks.content,
-                    page: pdfChunks.page,
-                })
-                .from(pdfChunks)
-                .where(eq(pdfChunks.documentId, BigInt(documentId)))
-                .orderBy(pdfChunks.id);
-
-            return legacyChunks as PdfChunk[];
+            return rlmChunks.map(c => ({
+                id: c.id,
+                content: c.content,
+                page: c.page ?? 1,
+                sectionHeading: c.sectionHeading,
+            })) as PdfChunk[];
         });
-
         if (chunks.length === 0) {
             throw new Error(`No chunks found for document ${documentId}`);
         }
@@ -109,7 +104,12 @@ export const predictiveAnalysisJob = inngest.createFunction(
             return analyzeDocumentChunks(
                 chunks as PdfChunk[],
                 {
-                    type: analysisType as "contract" | "financial" | "technical" | "compliance" | "general",
+                    type: analysisType as
+                        | "contract"
+                        | "financial"
+                        | "technical"
+                        | "compliance"
+                        | "general",
                     includeRelatedDocs,
                     existingDocuments,
                     title: docDetails.title,
@@ -118,7 +118,7 @@ export const predictiveAnalysisJob = inngest.createFunction(
                     documentId,
                 },
                 timeoutMs ?? 60000,
-                ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY,
+                ANALYSIS_BATCH_CONFIG.MAX_CONCURRENCY
             );
         });
 
@@ -127,7 +127,9 @@ export const predictiveAnalysisJob = inngest.createFunction(
             analysisType,
             summary: {
                 totalMissingDocuments: analysisResult.missingDocuments.length,
-                highPriorityItems: analysisResult.missingDocuments.filter(d => d.priority === "high").length,
+                highPriorityItems: analysisResult.missingDocuments.filter(
+                    d => d.priority === "high"
+                ).length,
                 totalRecommendations: analysisResult.recommendations.length,
                 totalSuggestedRelated: analysisResult.suggestedRelatedDocuments?.length ?? 0,
                 analysisTimestamp: new Date().toISOString(),
@@ -144,6 +146,7 @@ export const predictiveAnalysisJob = inngest.createFunction(
         await step.run("persist-result", async () => {
             await db.insert(predictiveDocumentAnalysisResults).values({
                 documentId: BigInt(documentId),
+                versionId: currentVersionId,
                 analysisType,
                 includeRelatedDocs,
                 resultJson: fullResult,

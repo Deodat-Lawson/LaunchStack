@@ -204,6 +204,8 @@ export interface ProcessDocumentEventData {
     companyId: string;
     userId: string;
     documentId: number;
+    /** Stable logical identity used for archive keys across retries */
+    archiveIdentity?: string;
     category: string;
     /** MIME type of the uploaded file (used by the ingestion router) */
     mimeType?: string;

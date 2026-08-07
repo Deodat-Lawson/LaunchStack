@@ -29,7 +29,7 @@ import {
     document as documentTable,
     ocrJobs,
 } from "../db/schema";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import crypto from "crypto";
 import { getStoragePort } from "../storage/slot";
 
@@ -679,7 +679,12 @@ export async function finalizeStorage(
                 ocrConfidenceScore: meta.confidenceScore,
                 ocrMetadata: ocrMetadataPayload,
             })
-            .where(eq(documentTable.id, documentId));
+            .where(
+                and(
+                    eq(documentTable.id, documentId),
+                    eq(documentTable.currentVersionId, BigInt(versionId))
+                )
+            );
 
         // Mirror OCR completion onto the per-version row so each version carries
         // its own processing provenance. Important when different versions of the
@@ -692,7 +697,12 @@ export async function finalizeStorage(
                 ocrProvider: meta.provider,
                 ocrMetadata: ocrMetadataPayload,
             })
-            .where(eq(documentVersions.id, versionId));
+            .where(
+                and(
+                    eq(documentVersions.id, versionId),
+                    eq(documentVersions.documentId, BigInt(documentId))
+                )
+            );
 
         await getDb()
             .update(ocrJobs)
@@ -880,7 +890,12 @@ export async function storeDocument(
                 processedAt: new Date().toISOString(),
             },
         })
-        .where(eq(documentTable.id, documentId));
+        .where(
+            and(
+                eq(documentTable.id, documentId),
+                eq(documentTable.currentVersionId, BigInt(versionId))
+            )
+        );
 
     // 5. Update OCR job status
     console.log("[Storage] 5/5 Updating OCR job status...");

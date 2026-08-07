@@ -343,6 +343,9 @@ export const predictiveDocumentAnalysisResults = pgTable(
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "cascade",
+        }),
         analysisType: varchar("analysis_type", { length: 256 }).notNull(),
         includeRelatedDocs: boolean("include_related_docs").default(false),
         resultJson: jsonb("result_json").notNull(),
@@ -352,6 +355,10 @@ export const predictiveDocumentAnalysisResults = pgTable(
     },
     table => ({
         documentIdIdx: index("predictive_analysis_document_id_idx").on(table.documentId),
+        documentVersionIdx: index("predictive_analysis_document_version_idx").on(
+            table.documentId,
+            table.versionId
+        ),
     })
 );
 

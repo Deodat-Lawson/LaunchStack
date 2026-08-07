@@ -124,12 +124,15 @@ async function searchLegacyIndex(args: {
         SELECT
           rc.id,
           rc.context_chunk_id,
+          rc.document_id,
           rc.content as child_content,
           rc.embedding,
           (rc.embedding_short <-> ${shortVectorLiteral}) as rough_distance
         FROM pdr_ai_v2_document_retrieval_chunks rc
         JOIN pdr_ai_v2_document d ON rc.document_id = d.id
-        LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
+        LEFT JOIN pdr_ai_v2_document_metadata dm
+          ON d.id = dm.document_id
+         AND dm.version_id = d.current_version_id
         WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}
         AND rc.embedding IS NOT NULL
         AND rc.embedding_short IS NOT NULL
@@ -145,8 +148,11 @@ async function searchLegacyIndex(args: {
         d.title as document_title,
         (c.embedding <-> ${fullVectorLiteral}) as distance
       FROM candidates c
-      JOIN pdr_ai_v2_document_context_chunks cc ON c.context_chunk_id = cc.id
-      JOIN pdr_ai_v2_document d ON cc.document_id = d.id
+      JOIN pdr_ai_v2_document d ON c.document_id = d.id
+      JOIN pdr_ai_v2_document_context_chunks cc
+        ON c.context_chunk_id = cc.id
+       AND cc.document_id = d.id
+       AND cc.version_id = d.current_version_id
       ORDER BY distance ASC
       LIMIT ${topK}
     `;
@@ -167,9 +173,14 @@ async function searchLegacyIndex(args: {
       d.title as document_title,
       (rc.embedding <-> ${fullVectorLiteral}) as distance
     FROM pdr_ai_v2_document_retrieval_chunks rc
-    JOIN pdr_ai_v2_document_context_chunks cc ON rc.context_chunk_id = cc.id
     JOIN pdr_ai_v2_document d ON rc.document_id = d.id
-    LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
+    JOIN pdr_ai_v2_document_context_chunks cc
+      ON rc.context_chunk_id = cc.id
+     AND cc.document_id = d.id
+     AND cc.version_id = d.current_version_id
+    LEFT JOIN pdr_ai_v2_document_metadata dm
+      ON d.id = dm.document_id
+     AND dm.version_id = d.current_version_id
     WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}
     AND rc.embedding IS NOT NULL
     ORDER BY rc.embedding <-> ${fullVectorLiteral}
@@ -192,7 +203,9 @@ async function searchLegacyIndex(args: {
       s.embedding <-> ${fullVectorLiteral} AS distance
     FROM pdr_ai_v2_document_context_chunks s
     JOIN pdr_ai_v2_document d ON s.document_id = d.id
-    LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
+    LEFT JOIN pdr_ai_v2_document_metadata dm
+      ON d.id = dm.document_id
+     AND dm.version_id = d.current_version_id
     WHERE ${fallbackScopeWhere}${sVersionFilter} ${filterWhere}
     AND s.embedding IS NOT NULL
     ORDER BY s.embedding <-> ${fullVectorLiteral}
@@ -225,9 +238,14 @@ async function searchDimensionTableIndex(args: {
       (de.embedding <-> ${fullVectorLiteral}) as distance
     FROM ${sql.raw(tableName)} de
     JOIN pdr_ai_v2_document_retrieval_chunks rc ON de.retrieval_chunk_id = rc.id
-    JOIN pdr_ai_v2_document_context_chunks cc ON rc.context_chunk_id = cc.id
     JOIN pdr_ai_v2_document d ON rc.document_id = d.id
-    LEFT JOIN pdr_ai_v2_document_metadata dm ON d.id = dm.document_id
+    JOIN pdr_ai_v2_document_context_chunks cc
+      ON rc.context_chunk_id = cc.id
+     AND cc.document_id = d.id
+     AND cc.version_id = d.current_version_id
+    LEFT JOIN pdr_ai_v2_document_metadata dm
+      ON d.id = dm.document_id
+     AND dm.version_id = d.current_version_id
     WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}
     AND de.index_key = ${embeddingIndex.indexKey}
     ORDER BY de.embedding <-> ${fullVectorLiteral}

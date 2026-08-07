@@ -201,7 +201,7 @@ export async function processDocumentUpload({
                 `[DocumentUpload] Audio transcription failed for ${documentName}:`,
                 error
             );
-            return toDocumentUploadResult(audioLifecycle, storageType, resolvedDocumentUrl);
+            throw error;
         }
     }
 

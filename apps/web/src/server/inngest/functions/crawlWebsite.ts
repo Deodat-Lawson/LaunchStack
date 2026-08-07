@@ -291,6 +291,7 @@ export const crawlWebsite = inngest.createFunction(
                 documentId: number;
                 jobId: string;
             }[] = [];
+            const failures: { url: string; error: string }[] = [];
 
             for (const page of crawlResult.pages) {
                 try {
@@ -338,8 +339,17 @@ export const crawlWebsite = inngest.createFunction(
                         `[CrawlWebsite] Stored page: "${page.title}" (depth=${page.depth}, docId=${uploadResult.document.id})`
                     );
                 } catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    failures.push({ url: page.url, error: errorMessage });
                     console.error(`[CrawlWebsite] Failed to store page ${page.url}:`, error);
                 }
+            }
+
+            if (failures.length > 0) {
+                throw new Error(
+                    `[CrawlWebsite] Failed to store ${failures.length} page(s): ` +
+                        failures.map(failure => `${failure.url}: ${failure.error}`).join("; ")
+                );
             }
 
             return results;

@@ -22,6 +22,8 @@ export const DOCUMENT_PROCESS_EVENT = "document/process.requested";
 export interface TriggerOptions {
     /** Stable job ID for idempotent dispatch */
     jobId: string;
+    /** Stable logical identity used for archive keys across retries */
+    archiveIdentity?: string;
     /** Force OCR even for native PDFs */
     forceOCR?: boolean;
     /** Preferred OCR provider */
@@ -69,6 +71,7 @@ export async function triggerDocumentProcessing(
         companyId,
         userId,
         documentId,
+        archiveIdentity: options.archiveIdentity,
         category,
         mimeType: options.mimeType,
         originalFilename: options.originalFilename,

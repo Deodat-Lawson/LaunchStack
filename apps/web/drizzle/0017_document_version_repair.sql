@@ -1,6 +1,80 @@
 -- Repair legacy document/version/RLM links before strict version-aware readers run.
 -- Safe to re-run: data writes are deterministic and all inserts are conflict-safe.
 
+-- The RLM tables predate document versioning in some production databases.
+-- Add the nullable link before any repair statement can read or write it.
+ALTER TABLE "pdr_ai_v2_document_structure"
+    ADD COLUMN IF NOT EXISTS "version_id" bigint;
+ALTER TABLE "pdr_ai_v2_document_context_chunks"
+    ADD COLUMN IF NOT EXISTS "version_id" bigint;
+ALTER TABLE "pdr_ai_v2_document_retrieval_chunks"
+    ADD COLUMN IF NOT EXISTS "version_id" bigint;
+ALTER TABLE "pdr_ai_v2_document_metadata"
+    ADD COLUMN IF NOT EXISTS "version_id" bigint;
+ALTER TABLE "pdr_ai_v2_document_previews"
+    ADD COLUMN IF NOT EXISTS "version_id" bigint;
+
+-- ADD CONSTRAINT has no IF NOT EXISTS variant. Reuse an equivalent existing
+-- FK when a prior schema push supplied one; otherwise add the canonical
+-- cascading reference.
+DO $$
+DECLARE
+    r record;
+BEGIN
+    FOR r IN
+        SELECT *
+        FROM (
+            VALUES
+                ('pdr_ai_v2_document_structure', 'document_structure_version_id_fkey'),
+                ('pdr_ai_v2_document_context_chunks', 'document_context_chunks_version_id_fkey'),
+                ('pdr_ai_v2_document_retrieval_chunks', 'document_retrieval_chunks_version_id_fkey'),
+                ('pdr_ai_v2_document_metadata', 'document_metadata_version_id_fkey'),
+                ('pdr_ai_v2_document_previews', 'document_previews_version_id_fkey')
+        ) AS tables(table_name, constraint_name)
+    LOOP
+        IF NOT EXISTS (
+            SELECT 1
+            FROM pg_constraint AS c
+            WHERE c.conrelid = to_regclass(format('%I', r.table_name))
+              AND c.contype = 'f'
+              AND c.confrelid = to_regclass('"pdr_ai_v2_document_versions"')
+              AND c.conkey = ARRAY[
+                  (
+                      SELECT a.attnum
+                      FROM pg_attribute AS a
+                      WHERE a.attrelid = c.conrelid
+                        AND a.attname = 'version_id'
+                  )
+              ]::smallint[]
+              AND c.confkey = ARRAY[
+                  (
+                      SELECT a.attnum
+                      FROM pg_attribute AS a
+                      WHERE a.attrelid = c.confrelid
+                        AND a.attname = 'id'
+                  )
+              ]::smallint[]
+        ) THEN
+            EXECUTE format(
+                'ALTER TABLE %I ADD CONSTRAINT %I FOREIGN KEY ("version_id") REFERENCES "pdr_ai_v2_document_versions"("id") ON DELETE CASCADE',
+                r.table_name,
+                r.constraint_name
+            );
+        END IF;
+    END LOOP;
+END $$;
+
+CREATE INDEX IF NOT EXISTS "doc_structure_version_id_idx"
+    ON "pdr_ai_v2_document_structure" ("version_id");
+CREATE INDEX IF NOT EXISTS "doc_ctx_chunks_version_id_idx"
+    ON "pdr_ai_v2_document_context_chunks" ("version_id");
+CREATE INDEX IF NOT EXISTS "doc_ret_chunks_version_id_idx"
+    ON "pdr_ai_v2_document_retrieval_chunks" ("version_id");
+CREATE INDEX IF NOT EXISTS "doc_metadata_version_id_idx"
+    ON "pdr_ai_v2_document_metadata" ("version_id");
+CREATE INDEX IF NOT EXISTS "doc_previews_version_id_idx"
+    ON "pdr_ai_v2_document_previews" ("version_id");
+
 -- Every document needs a stable v1 row. A synthesized v1 never inherits an OCR
 -- job: legacy document-level jobs are linked below only when ownership is unique.
 INSERT INTO "pdr_ai_v2_document_versions" (
@@ -50,6 +124,7 @@ ON CONFLICT ("document_id", "version_number") DO NOTHING;
 WITH selected_versions AS (
     SELECT
         d."id" AS "document_id",
+        d."current_version_id" AS "observed_current_version_id",
         COALESCE(current_version."id", highest_version."id") AS "version_id"
     FROM "pdr_ai_v2_document" AS d
     LEFT JOIN "pdr_ai_v2_document_versions" AS current_version
@@ -83,6 +158,7 @@ LEFT JOIN "pdr_ai_v2_document_versions" AS selected_version
     ON selected_version."id" = selected."version_id"
    AND selected_version."document_id" = selected."document_id"
 WHERE d."id" = selected."document_id"
+  AND d."current_version_id" IS NOT DISTINCT FROM selected."observed_current_version_id"
   AND (
       d."current_version_id" IS DISTINCT FROM selected."version_id"
       OR NULLIF(BTRIM(d."mime_type"), '') IS NULL

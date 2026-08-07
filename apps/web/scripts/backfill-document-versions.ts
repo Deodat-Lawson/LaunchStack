@@ -31,7 +31,7 @@ function resultCount(result: unknown): number {
         : Number(count);
 }
 
-async function backfill() {
+export async function backfill() {
     console.log("[backfill-document-versions] Starting...");
 
     await db.transaction(async tx => {
@@ -89,6 +89,7 @@ async function backfill() {
             WITH selected_versions AS (
                 SELECT
                     d.id AS document_id,
+                    d.current_version_id AS observed_current_version_id,
                     COALESCE(current_version.id, highest_version.id) AS version_id
                 FROM pdr_ai_v2_document AS d
                 LEFT JOIN pdr_ai_v2_document_versions AS current_version
@@ -121,6 +122,7 @@ async function backfill() {
                 ON selected_version.id = selected.version_id
                AND selected_version.document_id = selected.document_id
             WHERE d.id = selected.document_id
+              AND d.current_version_id IS NOT DISTINCT FROM selected.observed_current_version_id
               AND (
                   d.current_version_id IS DISTINCT FROM selected.version_id
                   OR NULLIF(BTRIM(d.mime_type), '') IS NULL
@@ -289,11 +291,13 @@ async function backfill() {
     console.log("[backfill-document-versions] Done.");
 }
 
-backfill()
-    .then(() => {
-        process.exit(0);
-    })
-    .catch(error => {
-        console.error("[backfill-document-versions] Failed:", error);
-        process.exit(1);
-    });
+if (/backfill-document-versions\.(?:ts|js)$/.test(process.argv[1] ?? "")) {
+    backfill()
+        .then(() => {
+            process.exit(0);
+        })
+        .catch(error => {
+            console.error("[backfill-document-versions] Failed:", error);
+            process.exit(1);
+        });
+}

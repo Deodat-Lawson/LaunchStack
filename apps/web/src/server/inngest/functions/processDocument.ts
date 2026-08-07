@@ -413,6 +413,16 @@ export const uploadDocument = inngest.createFunction(
         // ZIP self-extraction: detect ZIP, extract files, fan out
         // ------------------------------------------------------------------
         if (isZipFile(eventData.mimeType, routingName)) {
+            const rawArchiveIdentity =
+                typeof eventData.archiveIdentity === "string"
+                    ? eventData.archiveIdentity
+                    : undefined;
+            if (rawArchiveIdentity !== undefined && !rawArchiveIdentity.trim()) {
+                throw new Error("[ProcessDocument] ZIP processing requires archiveIdentity");
+            }
+            const archiveIdentity = rawArchiveIdentity ?? `archive:${eventData.documentId}`;
+            const useLegacyArchiveKeys = rawArchiveIdentity === undefined;
+
             console.log(`[ProcessDocument] ZIP detected: "${routingName}", extracting files...`);
 
             const MAX_EXTRACTED_FILES = 500;
@@ -569,7 +579,9 @@ export const uploadDocument = inngest.createFunction(
                             title: titleName,
                             category: eventData.category,
                             url: blob.url,
-                            creationKey: `archive:${eventData.documentId}:entry:${entryPath}`,
+                            creationKey: useLegacyArchiveKeys
+                                ? `${archiveIdentity}:entry:${entryPath}`
+                                : JSON.stringify(["archive", archiveIdentity, "entry", entryPath]),
                             processingUrl: blob.url,
                             mimeType: fileMime ?? null,
                             sourceArchiveName: archiveName,
@@ -639,7 +651,9 @@ export const uploadDocument = inngest.createFunction(
                         title: `_project_summary.md`,
                         category: eventData.category,
                         url: summaryBlob.url,
-                        creationKey: `archive:${eventData.documentId}:summary`,
+                        creationKey: useLegacyArchiveKeys
+                            ? `${archiveIdentity}:summary`
+                            : JSON.stringify(["archive", archiveIdentity, "summary"]),
                         processingUrl: summaryBlob.url,
                         mimeType: "text/markdown",
                         sourceArchiveName: archiveName,

@@ -1,4 +1,4 @@
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 import { createHash, randomUUID } from "node:crypto";
 
 import {
@@ -31,6 +31,7 @@ export interface DocumentCreationProcessing {
 }
 
 type DispatchRoutingOptions = {
+    archiveIdentity?: string;
     preferredProvider?: OCRProvider;
     originalFilename?: string;
     isWebsite?: boolean;
@@ -40,6 +41,7 @@ type DispatchRoutingOptions = {
 };
 
 function createDispatchRoutingOptions(params: {
+    archiveIdentity?: string;
     preferredProvider?: string;
     originalFilename?: string;
     isWebsite?: boolean;
@@ -48,6 +50,7 @@ function createDispatchRoutingOptions(params: {
     mimeType: string;
 }): DispatchRoutingOptions {
     return {
+        archiveIdentity: params.archiveIdentity,
         preferredProvider: parseProvider(params.preferredProvider),
         originalFilename: params.originalFilename,
         isWebsite: params.isWebsite,
@@ -126,12 +129,14 @@ type TransactionLifecycle = {
 export async function createDocumentLifecycle(
     params: CreateDocumentLifecycleParams
 ): Promise<CreatedDocumentLifecycle> {
-    const creationKey = hashCreationKey(params.creationKey);
+    const rawCreationKey = params.creationKey;
+    const creationKey = hashCreationKey(rawCreationKey);
     const processing = params.processing;
     const candidateJobId = processing ? randomUUID() : null;
     const resolvedMimeType = params.mimeType ?? "application/octet-stream";
     const initialDispatchOptions = processing
         ? createDispatchRoutingOptions({
+              archiveIdentity: rawCreationKey,
               preferredProvider: processing.preferredProvider,
               originalFilename: processing.originalFilename,
               isWebsite: processing.isWebsite,
@@ -186,6 +191,19 @@ export async function createDocumentLifecycle(
                 `Document creation conflict did not produce a row for key ${params.creationKey}`
             );
         }
+        const [lockedDocument] = await tx
+            .select()
+            .from(document)
+            .where(
+                and(eq(document.id, lifecycleDocument.id), eq(document.companyId, params.companyId))
+            )
+            .for("update")
+            .limit(1);
+
+        if (!lockedDocument) {
+            throw new Error(`Document ${lifecycleDocument.id} was not found`);
+        }
+        lifecycleDocument = lockedDocument;
 
         let lifecycleVersion: DocumentVersion | undefined;
         if (inserted) {
@@ -227,7 +245,12 @@ export async function createDocumentLifecycle(
             const [currentVersion] = await tx
                 .select()
                 .from(documentVersions)
-                .where(eq(documentVersions.id, Number(lifecycleDocument.currentVersionId)))
+                .where(
+                    and(
+                        eq(documentVersions.id, Number(lifecycleDocument.currentVersionId)),
+                        eq(documentVersions.documentId, BigInt(lifecycleDocument.id))
+                    )
+                )
                 .limit(1);
             lifecycleVersion = currentVersion;
         }
@@ -261,15 +284,31 @@ export async function createDocumentLifecycle(
             lifecycleDocument = updatedDocument ?? lifecycleDocument;
         }
 
+        const expectedDocumentId = BigInt(lifecycleDocument.id);
+        const expectedVersionId = BigInt(lifecycleVersion.id);
+        const lifecycleVersionIsCurrent = lifecycleDocument.currentVersionId === expectedVersionId;
         let lifecycleJob: OcrJob | undefined;
-        const linkedJobId = lifecycleVersion.ocrJobId ?? lifecycleDocument.ocrJobId;
-        if (linkedJobId) {
+        const linkedJobIds = [
+            lifecycleVersion.ocrJobId,
+            lifecycleVersionIsCurrent ? lifecycleDocument.ocrJobId : null,
+        ];
+        for (const linkedJobId of linkedJobIds) {
+            if (!linkedJobId) continue;
             const [linkedJob] = await tx
                 .select()
                 .from(ocrJobs)
-                .where(eq(ocrJobs.id, linkedJobId))
+                .where(
+                    and(
+                        eq(ocrJobs.id, linkedJobId),
+                        eq(ocrJobs.documentId, expectedDocumentId),
+                        eq(ocrJobs.versionId, expectedVersionId)
+                    )
+                )
                 .limit(1);
-            lifecycleJob = linkedJob;
+            if (linkedJob) {
+                lifecycleJob = linkedJob;
+                break;
+            }
         }
 
         if (!lifecycleJob) {
@@ -278,8 +317,8 @@ export async function createDocumentLifecycle(
                 .from(ocrJobs)
                 .where(
                     and(
-                        eq(ocrJobs.documentId, BigInt(lifecycleDocument.id)),
-                        eq(ocrJobs.versionId, BigInt(lifecycleVersion.id))
+                        eq(ocrJobs.documentId, expectedDocumentId),
+                        eq(ocrJobs.versionId, expectedVersionId)
                     )
                 )
                 .limit(1);
@@ -287,8 +326,6 @@ export async function createDocumentLifecycle(
         }
 
         if (lifecycleJob) {
-            const expectedDocumentId = BigInt(lifecycleDocument.id);
-            const expectedVersionId = BigInt(lifecycleVersion.id);
             if (
                 lifecycleJob.documentId !== expectedDocumentId ||
                 lifecycleJob.versionId !== expectedVersionId
@@ -296,6 +333,42 @@ export async function createDocumentLifecycle(
                 throw new Error(
                     `OCR job ${lifecycleJob.id} is not linked to document ${lifecycleDocument.id} version ${lifecycleVersion.id}`
                 );
+            }
+
+            const observedVersionJobId = lifecycleVersion.ocrJobId;
+            if (observedVersionJobId !== lifecycleJob.id) {
+                const [updatedVersion] = await tx
+                    .update(documentVersions)
+                    .set({ ocrJobId: lifecycleJob.id })
+                    .where(
+                        and(
+                            eq(documentVersions.id, lifecycleVersion.id),
+                            eq(documentVersions.documentId, expectedDocumentId),
+                            observedVersionJobId === null
+                                ? isNull(documentVersions.ocrJobId)
+                                : eq(documentVersions.ocrJobId, observedVersionJobId)
+                        )
+                    )
+                    .returning();
+                lifecycleVersion = updatedVersion ?? lifecycleVersion;
+            }
+
+            const observedDocumentJobId = lifecycleDocument.ocrJobId;
+            if (lifecycleVersionIsCurrent && observedDocumentJobId !== lifecycleJob.id) {
+                const [updatedDocument] = await tx
+                    .update(document)
+                    .set({ ocrJobId: lifecycleJob.id })
+                    .where(
+                        and(
+                            eq(document.id, lifecycleDocument.id),
+                            eq(document.currentVersionId, expectedVersionId),
+                            observedDocumentJobId === null
+                                ? isNull(document.ocrJobId)
+                                : eq(document.ocrJobId, observedDocumentJobId)
+                        )
+                    )
+                    .returning();
+                lifecycleDocument = updatedDocument ?? lifecycleDocument;
             }
         } else if (inserted && processing && candidateJobId) {
             const [insertedJob] = await tx
@@ -387,6 +460,7 @@ export async function createDocumentLifecycle(
     const routingOptions =
         job.dispatchOptions === null
             ? createDispatchRoutingOptions({
+                  archiveIdentity: rawCreationKey,
                   preferredProvider: processing?.preferredProvider,
                   originalFilename: processing?.originalFilename,
                   isWebsite: processing?.isWebsite,
@@ -394,7 +468,12 @@ export async function createDocumentLifecycle(
                   embeddingIndexKey: processing?.embeddingIndexKey,
                   mimeType: lifecycle.version.mimeType,
               })
-            : (job.dispatchOptions as DispatchRoutingOptions);
+            : {
+                  ...(job.dispatchOptions as DispatchRoutingOptions),
+                  archiveIdentity:
+                      (job.dispatchOptions as DispatchRoutingOptions).archiveIdentity ??
+                      rawCreationKey,
+              };
 
     try {
         const dispatch = await triggerDocumentProcessing(
@@ -457,8 +536,10 @@ function isVersionNumberConflict(error: unknown): boolean {
 export async function createDocumentVersionLifecycle(
     params: CreateDocumentVersionLifecycleParams
 ): Promise<CreatedDocumentVersionLifecycle> {
-    const creationKey = hashCreationKey(params.creationKey);
+    const rawCreationKey = params.creationKey;
+    const creationKey = hashCreationKey(rawCreationKey);
     const versionDispatchOptions = createDispatchRoutingOptions({
+        archiveIdentity: rawCreationKey,
         preferredProvider: params.preferredProvider,
         originalFilename: params.originalFilename,
         isWebsite: params.isWebsite,
@@ -480,6 +561,7 @@ export async function createDocumentVersionLifecycle(
                             eq(document.companyId, params.companyId)
                         )
                     )
+                    .for("update")
                     .limit(1);
 
                 if (!lifecycleDocument) {
@@ -724,6 +806,7 @@ export async function createDocumentVersionLifecycle(
     const routingOptions =
         job.dispatchOptions === null
             ? createDispatchRoutingOptions({
+                  archiveIdentity: rawCreationKey,
                   preferredProvider: params.preferredProvider,
                   originalFilename: params.originalFilename,
                   isWebsite: params.isWebsite,
@@ -731,7 +814,12 @@ export async function createDocumentVersionLifecycle(
                   embeddingIndexKey: params.embeddingIndexKey,
                   mimeType: lifecycle.version.mimeType,
               })
-            : (job.dispatchOptions as DispatchRoutingOptions);
+            : {
+                  ...(job.dispatchOptions as DispatchRoutingOptions),
+                  archiveIdentity:
+                      (job.dispatchOptions as DispatchRoutingOptions).archiveIdentity ??
+                      rawCreationKey,
+              };
 
     try {
         const dispatch = await triggerDocumentProcessing(

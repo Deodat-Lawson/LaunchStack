@@ -29,7 +29,10 @@ import {
     extractRecommendedPages,
     filterPagesByAICitation,
 } from "../services";
-import { resolveConfiguredChatModel } from "~/lib/models";
+import {
+    describeChatResolutionFailure,
+    resolveConfiguredChatModel,
+} from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
@@ -93,7 +96,20 @@ export async function POST(request: Request) {
 
             // Resolve before retrieval and web search: a misconfigured route
             // should fail before the request pays for context it will discard.
-            const resolved = resolveConfiguredChatModel();
+            // Handled here rather than in the outer catch so an unavailable
+            // route stays the actionable 400 it is, instead of a generic 500.
+            let resolved;
+            try {
+                resolved = resolveConfiguredChatModel();
+            } catch (modelError) {
+                recordResult("error");
+                const failure = describeChatResolutionFailure(modelError);
+                return NextResponse.json(
+                    { success: false, message: failure.message },
+                    { status: failure.status },
+                );
+            }
+
             const compatibility = validateDeprecatedChatSelection(
                 { provider, model: aiModel },
                 resolved,

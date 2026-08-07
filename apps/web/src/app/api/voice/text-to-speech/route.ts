@@ -1,93 +1,108 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import {
+  CLOUD_TTS_DEFAULT_LANGUAGE,
+  CLOUD_TTS_DEFAULT_VOICE,
+  CLOUD_TTS_ENDPOINT,
+  CLOUD_TTS_MAX_INPUT_BYTES,
+} from "@launchstack/core/llm/types";
 import { validateRequestBody, TextToSpeechSchema } from "~/lib/validation";
+
+/**
+ * Speech generation, via Google Cloud Text-to-Speech.
+ *
+ * The one capability that cannot go through the OpenAI-compatible endpoint the
+ * rest of the deployment uses: that layer exposes `/chat/completions`,
+ * `/embeddings`, `/images/generations`, `/videos` and `/models`, and no audio
+ * route at all. So this calls the REST API directly with `fetch` — no client
+ * library, and the same `GOOGLE_AI_API_KEY` as everything else rather than a
+ * service account.
+ */
 
 interface TextToSpeechRequest {
   text: string;
   voiceId?: string;
-  modelId?: string;
-  stability?: number;
-  similarityBoost?: number;
-  style?: number;
-  useSpeakerBoost?: boolean;
+  languageCode?: string;
 }
 
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-const DEFAULT_VOICE_ID = process.env.ELEVENLABS_VOICE_ID ?? "qyFhaJEAwHR0eYLCmlUT";
+const DEFAULT_VOICE = process.env.GEMINI_TTS_VOICE ?? CLOUD_TTS_DEFAULT_VOICE;
 
-async function streamElevenLabs(body: TextToSpeechRequest): Promise<NextResponse> {
-  const { ElevenLabsClient } = await import("@elevenlabs/elevenlabs-js");
-  const client = new ElevenLabsClient({ apiKey: ELEVENLABS_API_KEY });
+interface CloudTtsResponse {
+  audioContent?: string;
+  error?: { message?: string; status?: string };
+}
 
+async function synthesize(
+  body: TextToSpeechRequest,
+  apiKey: string,
+): Promise<NextResponse> {
+  // A leading [tag] used to steer delivery on the previous provider. Chirp 3: HD
+  // exposes no style field, so the tag is stripped rather than spoken — leaving
+  // it in would have the voice read the word "excited" aloud.
   const emotionTagMatch = /^\[(\w+)\]\s*(.+)$/.exec(body.text);
-  const cleanText = emotionTagMatch?.[2] ?? body.text;
+  const text = emotionTagMatch?.[2] ?? body.text;
 
-  const voiceId = body.voiceId ?? DEFAULT_VOICE_ID;
-  const modelId = body.modelId ?? "eleven_v3";
+  const bytes = Buffer.byteLength(text, "utf8");
+  if (bytes > CLOUD_TTS_MAX_INPUT_BYTES) {
+    return NextResponse.json(
+      {
+        error:
+          `Text too long for speech generation (${bytes} bytes, limit ` +
+          `${CLOUD_TTS_MAX_INPUT_BYTES}). Split it into shorter turns.`,
+      },
+      { status: 413 },
+    );
+  }
 
-  console.log("🔊 [TTS/ElevenLabs] Streaming:", cleanText.length, "chars, voice:", voiceId);
+  const name = body.voiceId ?? DEFAULT_VOICE;
+  // The locale must agree with the voice, which embeds one: sending
+  // "en-US-Chirp3-HD-Kore" with languageCode "de-DE" is rejected. Derive it
+  // from the voice name unless the caller is explicit.
+  const languageCode =
+    body.languageCode ??
+    /^([a-z]{2}-[A-Z]{2})-/.exec(name)?.[1] ??
+    CLOUD_TTS_DEFAULT_LANGUAGE;
 
-  const audioStream = await client.textToSpeech.stream(voiceId, {
-    text: body.text,
-    modelId,
-    voiceSettings: {
-      stability: body.stability ?? 0.5,
-      similarityBoost: body.similarityBoost ?? 0.75,
-      style: body.style ?? 0.0,
-      useSpeakerBoost: body.useSpeakerBoost ?? true,
-    },
-  });
+  console.log("🔊 [TTS] Synthesizing:", text.length, "chars, voice:", name);
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        for await (const chunk of audioStream as unknown as AsyncIterable<Uint8Array | Buffer | ArrayBuffer>) {
-          let data: Uint8Array;
-          if (chunk instanceof Uint8Array) data = chunk;
-          else if (Buffer.isBuffer(chunk)) data = new Uint8Array(chunk);
-          else data = new Uint8Array(chunk as ArrayBuffer);
-          controller.enqueue(data);
-        }
-        controller.close();
-      } catch (error) {
-        console.error("❌ [TTS/ElevenLabs] Streaming error:", error);
-        controller.error(error);
-      }
-    },
-  });
-
-  return new NextResponse(stream, {
-    status: 200,
+  const response = await fetch(CLOUD_TTS_ENDPOINT, {
+    method: "POST",
     headers: {
-      "Content-Type": "audio/mpeg",
-      "Cache-Control": "no-cache",
-      "Transfer-Encoding": "chunked",
-      "X-Content-Type-Options": "nosniff",
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey,
     },
-  });
-}
-
-async function streamOpenAI(body: TextToSpeechRequest): Promise<NextResponse> {
-  const OpenAI = (await import("openai")).default;
-  const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-    ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
+    body: JSON.stringify({
+      input: { text },
+      voice: { languageCode, name },
+      audioConfig: { audioEncoding: "MP3" },
+    }),
   });
 
-  const voice = (body.voiceId as "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer") ?? "nova";
+  const payload = (await response.json()) as CloudTtsResponse;
 
-  console.log("🔊 [TTS/OpenAI] Streaming:", body.text.length, "chars, voice:", voice);
+  if (!response.ok) {
+    console.error("❌ [TTS] Request failed:", response.status, payload.error);
+    return NextResponse.json(
+      {
+        error:
+          payload.error?.message ??
+          `Speech generation failed (${response.status})`,
+      },
+      { status: response.status === 429 ? 429 : 502 },
+    );
+  }
 
-  const response = await client.audio.speech.create({
-    model: "tts-1",
-    voice,
-    input: body.text,
-    response_format: "mp3",
-  });
+  if (!payload.audioContent) {
+    console.error("❌ [TTS] Response carried no audio payload");
+    return NextResponse.json(
+      { error: "Speech generation returned no audio" },
+      { status: 502 },
+    );
+  }
 
-  const arrayBuffer = await response.arrayBuffer();
+  const mp3 = Buffer.from(payload.audioContent, "base64");
 
-  return new NextResponse(arrayBuffer, {
+  return new NextResponse(new Uint8Array(mp3), {
     status: 200,
     headers: {
       "Content-Type": "audio/mpeg",
@@ -108,23 +123,20 @@ export async function POST(request: Request) {
     if (!validation.success) return validation.response;
     const body = validation.data as TextToSpeechRequest;
 
-    if (ELEVENLABS_API_KEY) {
-      return await streamElevenLabs(body);
+    const apiKey = process.env.GOOGLE_AI_API_KEY?.trim();
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "Speech generation is not configured. Set GOOGLE_AI_API_KEY." },
+        { status: 500 },
+      );
     }
 
-    if (process.env.OPENAI_API_KEY) {
-      return await streamOpenAI(body);
-    }
-
-    return NextResponse.json(
-      { error: "No TTS provider configured. Set ELEVENLABS_API_KEY or OPENAI_API_KEY." },
-      { status: 500 }
-    );
+    return await synthesize(body, apiKey);
   } catch (error) {
     console.error("Error in text-to-speech:", error);
     return NextResponse.json(
       { error: "Failed to generate speech" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

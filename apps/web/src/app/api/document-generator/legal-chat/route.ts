@@ -5,8 +5,8 @@ import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { describeChatError } from "@launchstack/core/llm";
 import {
+  describeChatResolutionFailure,
   resolveConfiguredChatModel,
-  resolveConfiguredChatRoute,
 } from "~/lib/models";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
@@ -136,6 +136,13 @@ RULES:
 // ─── POST handler ──────────────────────────────────────────────────────────────
 
 export async function POST(request: Request) {
+  // Recorded as soon as the model resolves, so the catch below can describe a
+  // transport failure without resolving a second time. Resolving there would
+  // re-read the configuration, and on a configuration fault that throws out of
+  // the very handler whose job is to turn the fault into a response — the
+  // caller gets an opaque 500 instead of the message explaining what is wrong.
+  let selectedModelId: string | undefined;
+
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -252,7 +259,19 @@ export async function POST(request: Request) {
       }
     }
 
-    const resolved = resolveConfiguredChatModel();
+    let resolved;
+    try {
+      resolved = resolveConfiguredChatModel();
+    } catch (modelError) {
+      console.error("[legal-chat] chat resolution failed:", modelError);
+      const failure = describeChatResolutionFailure(modelError);
+      return NextResponse.json(
+        { success: false, message: failure.message },
+        { status: failure.status }
+      );
+    }
+    selectedModelId = resolved.modelId;
+
     const response = await resolved.chat.invoke(
       resolved.prepareMessages(langchainMessages),
     );
@@ -313,8 +332,11 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("[legal-chat] POST error:", error);
-    const selected = resolveConfiguredChatRoute();
-    const friendly = describeChatError(error, selected.definition.id);
+    // No model id means the failure happened before or during resolution, so
+    // there is nothing to describe a transport error against.
+    const friendly = selectedModelId
+      ? describeChatError(error, selectedModelId)
+      : null;
 
     return NextResponse.json(
       {

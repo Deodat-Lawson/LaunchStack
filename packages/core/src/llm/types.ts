@@ -38,6 +38,89 @@ export function isChatRoute(value: string): value is ChatRoute {
 export const ChatCapabilities = ["vision", "reasoning"] as const;
 export type ChatCapability = (typeof ChatCapabilities)[number];
 
+/**
+ * The endpoint used when configuration names none.
+ *
+ * Google's OpenAI-compatibility surface for the Gemini API. It implements the
+ * `/chat/completions` protocol, so every route, preset and adapter in this
+ * package reaches it the same way it reaches any other endpoint — nothing here
+ * is Gemini-specific beyond the URL and the model ids.
+ *
+ * This is a built-in vendor default, which the previous release deliberately
+ * removed. It is back by explicit operator decision: an out-of-the-box
+ * deployment should answer prompts rather than refuse to boot. The trade-off
+ * is the one that default carries — a deployment that sets no endpoint sends
+ * its prompts, and whatever credential it holds, to Google. Set
+ * `CHAT_BASE_URL` (and the matching `CHAT_API_KEY`) to send them anywhere
+ * else; every resolution path still prefers explicit configuration over this.
+ *
+ * Written without the trailing slash Google's docs show. Most consumers strip
+ * it (`embeddings.ts`, `providers/registry.ts`) or normalize it (the OpenAI
+ * SDK), but `services/ocr-router/src/complexity.ts` concatenates the value
+ * raw, and would produce `…/openai//chat/completions`.
+ *
+ * @see https://ai.google.dev/gemini-api/docs/openai
+ */
+export const GEMINI_BASE_URL =
+  "https://generativelanguage.googleapis.com/v1beta/openai";
+
+/** Default chat model — Gemini's general-purpose tier. */
+export const GEMINI_DEFAULT_MODEL = "gemini-2.5-flash";
+
+/** Default model for cheap, high-volume work (table summaries, classification). */
+export const GEMINI_FAST_MODEL = "gemini-2.5-flash-lite";
+
+/**
+ * Default embeddings model. Supports Matryoshka truncation, so it can serve
+ * the same 1536-wide vector column the previous OpenAI default wrote — see
+ * `embeddings/index-registry.ts`.
+ */
+export const GEMINI_EMBEDDING_MODEL = "gemini-embedding-001";
+
+/**
+ * Cloud Text-to-Speech.
+ *
+ * Speech is the one capability with no OpenAI-shaped equivalent anywhere in
+ * Google's stack — the compatibility layer serves `/chat/completions`,
+ * `/embeddings`, `/images/generations`, `/videos` and `/models`, and no audio
+ * route at all. So it is reached here instead.
+ *
+ * Cloud TTS rather than the Gemini Developer API, for two reasons that both
+ * favour it: the voices below are **GA**, where every Gemini Developer API TTS
+ * model is Preview; and it emits MP3, where the Developer API returns
+ * headerless PCM that a caller has to wrap itself.
+ *
+ * It authenticates with the same `GOOGLE_AI_API_KEY` as everything else —
+ * verified against the live service, which answers an unauthenticated request
+ * with "Please use API Key or other form of API consumer identity" and a bad
+ * one with `API_KEY_INVALID`. No service account, no OAuth. The key's project
+ * must have the Cloud Text-to-Speech API enabled.
+ */
+export const CLOUD_TTS_ENDPOINT =
+  "https://texttospeech.googleapis.com/v1/text:synthesize";
+
+/**
+ * Chirp 3: HD voice, named `<locale>-Chirp3-HD-<voice>`.
+ *
+ * Deliberately not one of the `gemini-2.5-flash-tts` voices, which are also GA
+ * but require the `aiplatform.endpoints.predict` IAM permission — i.e. OAuth
+ * and a service account, which is the cost this whole choice exists to avoid.
+ *
+ * The trade-off: Chirp 3: HD has no style/`prompt` field, so speech cannot be
+ * steered by natural-language direction the way the Developer API allows.
+ */
+export const CLOUD_TTS_DEFAULT_VOICE = "en-US-Chirp3-HD-Kore";
+
+/** Cloud TTS needs an explicit locale — it does not detect one from the text. */
+export const CLOUD_TTS_DEFAULT_LANGUAGE = "en-US";
+
+/**
+ * Hard input ceiling for one synthesis request. Cloud TTS rejects past this
+ * rather than truncating, but callers should refuse first so the failure names
+ * the real problem instead of surfacing a 400.
+ */
+export const CLOUD_TTS_MAX_INPUT_BYTES = 5_000;
+
 /** The one endpoint every route talks to. */
 export interface ChatEndpointConfig {
   /** Base URL of an OpenAI-compatible `/chat/completions` implementation. */

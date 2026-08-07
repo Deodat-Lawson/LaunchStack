@@ -10,8 +10,8 @@ model id.
 An endpoint qualifies if it implements the **OpenAI chat-completions
 protocol** — `POST {CHAT_BASE_URL}/chat/completions`, OpenAI-shaped request
 and response bodies, bearer authentication (or none). That covers OpenAI,
-OpenRouter, MiniMax, SiliconFlow, Together, Groq, vLLM, llama.cpp, LM Studio,
-Ollama's `/v1` surface, and most hosted gateways.
+Google Gemini's compatibility endpoint (the default), OpenRouter, MiniMax,
+vLLM, llama.cpp, LM Studio, Ollama's `/v1` surface, and most hosted gateways.
 
 It does **not** mean an arbitrary HTTP API. A service with its own request
 shape needs a transport, which is
@@ -28,10 +28,17 @@ Point `CHAT_MODELS_CONFIG` at another path to use a different file. Relative
 paths resolve from the working directory.
 
 ```bash
-CHAT_BASE_URL="https://openrouter.ai/api/v1"
-CHAT_API_KEY="sk-or-v1-..."
+CHAT_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai"
+CHAT_API_KEY="AIza..."
 # CHAT_MODELS_CONFIG="config/chat-models.production.yaml"
 ```
+
+Both are optional. With neither set, chat falls back to the same Gemini
+endpoint and authenticates with `GOOGLE_AI_API_KEY`. That fallback is the one
+built-in vendor default in the system: it is what an unconfigured deployment
+talks to, so set `CHAT_BASE_URL` explicitly to send prompts anywhere else.
+A credential belonging to another vendor (`OPENAI_API_KEY`,
+`OPENROUTER_API_KEY`) is never forwarded to it.
 
 `CHAT_API_KEY` is optional. Leave it unset for a keyless local endpoint — a
 placeholder credential is sent so the OpenAI SDK cannot fall back to an
@@ -93,8 +100,8 @@ version: 1
 
 models:
   primary:
-    id: openai/gpt-4o-mini      # id your endpoint serves
-    preset: openai/gpt-4o-mini  # catalog entry to inherit behavior from
+    id: gemini-2.5-flash             # id your endpoint serves
+    preset: google/gemini-2.5-flash  # catalog entry to inherit behavior from
 
 routes:
   default: primary
@@ -329,14 +336,14 @@ version: 1
 
 models:
   workhorse:
-    id: openai/gpt-4o
-    preset: openai/gpt-4o
+    id: gemini-2.5-flash
+    preset: google/gemini-2.5-flash
   thinker:
-    id: openai/gpt-5.1
-    preset: openai/gpt-5.1
+    id: gemini-2.5-pro
+    preset: google/gemini-2.5-pro
   cheap:
-    id: openai/gpt-4o-mini
-    preset: openai/gpt-4o-mini
+    id: gemini-2.5-flash-lite
+    preset: google/gemini-2.5-flash-lite
 
 routes:
   default: workhorse
@@ -388,7 +395,7 @@ it is a straight rename of `CHAT_BASE_URL` / `CHAT_API_KEY`.
 - A bare credential says who you are, not where the request goes. There are no
   built-in vendor URLs anywhere in the codebase, so inferring a destination
   from a key would pick a vendor on your behalf and send your prompts there.
-- Ollama, OpenRouter and OpenAI all serve the OpenAI chat-completions
+- Gemini, Ollama and OpenRouter all serve the OpenAI chat-completions
   protocol. A variable per provider bought nothing over pointing
   `CHAT_BASE_URL` at the same URL — Ollama's is `http://localhost:11434/v1`.
 

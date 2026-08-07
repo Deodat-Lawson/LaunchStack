@@ -70,7 +70,7 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `DATABASE_URL` | Postgres connection string with SSL if remote |
 | `CLERK_SECRET_KEY` | From Clerk dashboard |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | From Clerk dashboard |
-| `CHAT_BASE_URL` | The OpenAI-compatible chat endpoint, e.g. `https://openrouter.ai/api/v1` |
+| `CHAT_BASE_URL` | The OpenAI-compatible chat endpoint, e.g. `https://generativelanguage.googleapis.com/v1beta/openai`. Optional — unset falls back to that same Gemini endpoint, authenticated with `GOOGLE_AI_API_KEY` |
 | `CHAT_API_KEY` | Bearer credential for that endpoint (omit only for keyless endpoints, which are rare on Vercel) |
 | `EMBEDDING_SECRETS_KEY` | 32-byte base64. Generate once: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`. **Keep constant across deploys** — rotating it invalidates stored per-company credentials |
 | `INNGEST_EVENT_KEY` | From Inngest Cloud (step 4) |
@@ -84,11 +84,11 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `S3_*` + `NEXT_PUBLIC_S3_*` | If `NEXT_PUBLIC_STORAGE_PROVIDER=s3` |
 | `NEO4J_URI` + `NEO4J_USERNAME` + `NEO4J_PASSWORD` | If using Graph RAG |
 | `ADEU_SERVICE_URL` | If using DOCX redlining (Adeu sidecar) |
-| `AI_BASE_URL`, or a per-capability `*_API_BASE_URL` | If enabled embeddings, reranking, or NER do not use a local provider. **Required** — there is no built-in default endpoint, so a key on its own is a hard error, not a fall-back to OpenAI |
+| `AI_BASE_URL`, or a per-capability `*_API_BASE_URL` | If enabled OCR/VLM or NER should not use the default Gemini endpoint. Optional for those; **required** for embeddings, which have no fallback because switching model invalidates every stored vector |
 | `AI_API_KEY`, `OPENAI_API_KEY`, or per-capability keys | The credential for the base URL above, when that endpoint requires one |
 
-OpenRouter is a convenient quick start, not a requirement — any endpoint
-implementing the OpenAI chat-completions protocol works. Vercel cannot host a
+Gemini is the default, not a requirement — any endpoint implementing the
+OpenAI chat-completions protocol works. Vercel cannot host a
 local model itself, but it can call an externally hosted compatible endpoint.
 
 Which model serves each route lives in `apps/web/config/chat-models.yaml`,
@@ -140,7 +140,9 @@ The Launchstack Python sidecars (`services/sidecar`, `services/ocr-router`, `ser
 | `OCR_ROUTER_URL` | PDF-rendering + vision classifier (`services/ocr-router`) |
 | `OCR_WORKER_URL` | Docling/Marker worker (optional) |
 
-**Or** skip sidecars entirely and use cloud providers: OpenAI embeddings, Azure Document Intelligence for OCR, Groq for transcription. Set the per-capability env vars instead.
+The app forwards its own OCR credentials — `GOOGLE_AI_API_KEY` included — to `OCR_ROUTER_URL` with each routing request, so a separately hosted router needs no copy of them in its own environment. Set them once on the Vercel app.
+
+**Or** skip sidecars entirely and use hosted providers. Transcription, reranking, NER and OCR/VLM all default to Gemini on `GOOGLE_AI_API_KEY`; Azure Document Intelligence remains available for scanned-layout OCR. Embeddings are the exception — set `EMBEDDING_API_BASE_URL`/`EMBEDDING_API_KEY` explicitly, since the model is tied to stored vectors.
 
 ## 6. First deploy
 

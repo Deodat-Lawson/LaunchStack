@@ -33,10 +33,6 @@
       "types": "./src/voice/index.ts",
       "default": "./src/voice/index.ts"
     },
-    "./voice/whisper-js": {
-      "types": "./src/voice/whisper-js.ts",
-      "default": "./src/voice/whisper-js.ts"
-    },
     "./repo-explainer": {
       "types": "./src/repo-explainer/index.ts",
       "default": "./src/repo-explainer/index.ts"
@@ -115,15 +111,7 @@
     "pizzip": "^3.2.0",
     "zod": "^3.23.8"
   },
-  "peerDependencies": {
-    "sherpa-onnx-node": "^1.12.38"
-  },
-  "peerDependenciesMeta": {
-    "sherpa-onnx-node": {
-      "optional": true
-    }
-  },
-  "devDependencies": {
-    "sherpa-onnx-node": "^1.12.38"
-  }
+  "peerDependencies": {},
+  "peerDependenciesMeta": {},
+  "devDependencies": {}
 }

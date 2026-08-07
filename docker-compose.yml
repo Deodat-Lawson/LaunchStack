@@ -129,11 +129,17 @@ services:
     container_name: pdr_ai_v2-ocr-router
     restart: unless-stopped
     environment:
-      # AI vision — used for OpenAI-based document classification (optional)
+      # AI vision for document classification (optional — falls back to local
+      # SigLIP when no credential is set). The endpoint defaults to Gemini, so
+      # GOOGLE_AI_API_KEY is the credential that pairs with it; the other two
+      # are used only when AI_BASE_URL names a different endpoint.
+      # The app also forwards its own copies per request, which take precedence
+      # when set. These stay so the router works when called by anything else.
+      GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       AI_API_KEY: ${AI_API_KEY:-}
       AI_BASE_URL: ${AI_BASE_URL:-}
-      OCR_VISION_MODEL: ${OCR_VISION_MODEL:-gpt-4o-mini}
+      OCR_VISION_MODEL: ${OCR_VISION_MODEL:-}
     ports:
       - "8002:8002"
     healthcheck:
@@ -216,9 +222,8 @@ services:
       AZURE_DOC_INTELLIGENCE_ENDPOINT: ${AZURE_DOC_INTELLIGENCE_ENDPOINT:-}
       AZURE_DOC_INTELLIGENCE_KEY: ${AZURE_DOC_INTELLIGENCE_KEY:-}
       LANDING_AI_API_KEY: ${LANDING_AI_API_KEY:-}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-}
       GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
+      GEMINI_TTS_VOICE: ${GEMINI_TTS_VOICE:-}
       GOOGLE_MODEL: ${GOOGLE_MODEL:-}
       EMBEDDING_INDEX: ${EMBEDDING_INDEX:-legacy-openai-1536}
       EMBEDDING_SECRETS_KEY: ${EMBEDDING_SECRETS_KEY:-}

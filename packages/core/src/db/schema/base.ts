@@ -174,7 +174,9 @@ export const document = pgTable(
         ocrCostCents: integer("ocr_cost_cents"),
         mimeType: varchar("mime_type", { length: 128 }),
         sourceArchiveName: varchar("source_archive_name", { length: 256 }),
+        sourceArchiveEntry: varchar("source_archive_entry", { length: 1024 }),
         fileType: varchar("file_type", { length: 128 }),
+        creationKey: varchar("creation_key", { length: 512 }),
         currentVersionId: bigint("current_version_id", { mode: "bigint" }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
@@ -189,6 +191,10 @@ export const document = pgTable(
         companyIdCategoryIdx: index("document_company_id_category_idx").on(
             table.companyId,
             table.category
+        ),
+        companyCreationKeyUnique: uniqueIndex("document_company_creation_key_unique").on(
+            table.companyId,
+            table.creationKey
         ),
         currentVersionIdIdx: index("document_current_version_id_idx").on(
             table.currentVersionId
@@ -217,12 +223,17 @@ export const documentVersions = pgTable(
         ocrProvider: varchar("ocr_provider", { length: 50 }),
         ocrProcessed: boolean("ocr_processed").default(false),
         ocrMetadata: jsonb("ocr_metadata"),
+        creationKey: varchar("creation_key", { length: 512 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
     (table) => ({
         documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
+        documentCreationKeyUnique: uniqueIndex("doc_versions_document_creation_key_unique").on(
+            table.documentId,
+            table.creationKey
+        ),
         documentVersionUnique: uniqueIndex("doc_versions_document_version_unique").on(
             table.documentId,
             table.versionNumber
@@ -414,6 +425,9 @@ export const ocrJobs = pgTable(
     {
         id: varchar("id", { length: 256 }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, { onDelete: "set null" }),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "set null",
+        }),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -478,6 +492,8 @@ export const ocrJobs = pgTable(
     (table) => ({
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),
         userIdIdx: index("ocr_jobs_user_id_idx").on(table.userId),
+        documentIdIdx: index("ocr_jobs_document_id_idx").on(table.documentId),
+        versionIdIdx: index("ocr_jobs_version_id_idx").on(table.versionId),
         statusIdx: index("ocr_jobs_status_idx").on(table.status),
         createdAtIdx: index("ocr_jobs_created_at_idx").on(table.createdAt),
         companyStatusIdx: index("ocr_jobs_company_status_idx").on(table.companyId, table.status),

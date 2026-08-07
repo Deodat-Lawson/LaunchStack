@@ -20,6 +20,8 @@ export const DOCUMENT_PROCESS_EVENT = "document/process.requested";
  * Options for triggering the document processing pipeline
  */
 export interface TriggerOptions {
+  /** Stable job ID for idempotent dispatch; generated when omitted */
+  jobId?: string;
   /** Force OCR even for native PDFs */
   forceOCR?: boolean;
   /** Preferred OCR provider */
@@ -60,8 +62,7 @@ export async function triggerDocumentProcessing(
   category: string,
   options?: TriggerOptions,
 ): Promise<{ jobId: string; eventIds: string[] }> {
-  const jobId = generateJobId();
-
+  const jobId = options?.jobId ?? generateJobId();
   const eventData: ProcessDocumentEventData = {
     jobId,
     documentUrl,

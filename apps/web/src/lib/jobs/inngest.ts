@@ -21,6 +21,7 @@ export class InngestDispatcher implements JobDispatcher {
     const { inngest } = await import("~/server/inngest/client");
 
     const result = await inngest.send({
+      id: data.jobId,
       name: "document/process.requested",
       data,
     });

@@ -316,7 +316,7 @@ function sniffTextContent(buffer: Buffer): boolean {
 // ---------------------------------------------------------------------------
 // Inngest Function
 // ---------------------------------------------------------------------------
-
+import { handleProcessDocumentFailure } from "./processDocumentFailure";
 export const uploadDocument = inngest.createFunction(
   {
     id: "process-document",
@@ -325,32 +325,8 @@ export const uploadDocument = inngest.createFunction(
     concurrency: [{ limit: 3 }],
     throttle: { limit: 30, period: "1m" },
     timeouts: { finish: "120m" },
-    onFailure: async ({ error, event }) => {
-      console.error(`[ProcessDocument] Pipeline failed for job ${JSON.stringify(event.data)}:`, error);
-
-      const data = event.data?.event?.data as ProcessDocumentEventData | undefined;
-      if (data?.documentId) {
-        try {
-          await db
-            .update(document)
-            .set({
-              ocrProcessed: true,
-              ocrMetadata: {
-                error: "processing_failed",
-                errorMessage: error instanceof Error ? error.message : String(error),
-                failedAt: new Date().toISOString(),
-              },
-            })
-            .where(eq(document.id, data.documentId));
-          console.log(
-            `[ProcessDocument] Marked document ${data.documentId} as failed`,
-          );
-        } catch (dbError) {
-          console.error("[ProcessDocument] Could not mark document as failed:", dbError);
-        }
-      }
+    onFailure: handleProcessDocumentFailure,
     },
-  },
   { event: "document/process.requested" },
   async ({ event, step }) => {
     const eventData = event.data;

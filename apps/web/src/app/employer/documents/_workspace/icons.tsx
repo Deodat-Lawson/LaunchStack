@@ -92,3 +92,15 @@ export const IconStarFilled = (p: IconProps & { fill?: string }) => (
 );
 export const IconEye = (p: IconProps) => <Ic {...p}><path d="M2.5 10s2.5-5 7.5-5 7.5 5 7.5 5-2.5 5-7.5 5-7.5-5-7.5-5Z"/><circle cx="10" cy="10" r="2.2"/></Ic>;
 export const IconFilter = (p: IconProps) => <Ic {...p}><path d="M3 5h14l-5.5 6.5V16l-3-1.5v-3Z"/></Ic>;
+
+// Collaboration — channels, meeting transport controls, and worker nodes.
+export const IconHash = (p: IconProps) => <Ic {...p}><path d="M7 3.5 5.5 16.5M13 3.5 11.5 16.5M3.5 7.5h13M3 12.5h13"/></Ic>;
+export const IconPlay = (p: IconProps) => <Ic {...p}><path d="M6.5 4.5 15 10l-8.5 5.5z"/></Ic>;
+export const IconPause = (p: IconProps) => <Ic {...p}><path d="M7 4.5v11M13 4.5v11"/></Ic>;
+export const IconStop = (p: IconProps) => <Ic {...p}><rect x="5" y="5" width="10" height="10" rx="1.5"/></Ic>;
+export const IconHand = (p: IconProps) => <Ic {...p}><path d="M7 9V4.5a1.25 1.25 0 0 1 2.5 0V9m0-.5V3.75a1.25 1.25 0 0 1 2.5 0V9m0-1.25a1.25 1.25 0 0 1 2.5 0V12a5 5 0 0 1-5 5H9a4.5 4.5 0 0 1-4.5-4.5V8.75a1.25 1.25 0 0 1 2.5 0"/></Ic>;
+export const IconServer = (p: IconProps) => <Ic {...p}><rect x="3" y="3.5" width="14" height="5" rx="1.2"/><rect x="3" y="11.5" width="14" height="5" rx="1.2"/><path d="M6 6h.01M6 14h.01"/></Ic>;
+export const IconBroadcast = (p: IconProps) => <Ic {...p}><circle cx="10" cy="10" r="2"/><path d="M6.2 6.2a5.5 5.5 0 0 0 0 7.6M13.8 6.2a5.5 5.5 0 0 1 0 7.6M3.8 3.8a9 9 0 0 0 0 12.4M16.2 3.8a9 9 0 0 1 0 12.4"/></Ic>;
+export const IconClock = (p: IconProps) => <Ic {...p}><circle cx="10" cy="10" r="7"/><path d="M10 6v4.2l2.8 1.8"/></Ic>;
+export const IconRobot = (p: IconProps) => <Ic {...p}><rect x="3.5" y="6.5" width="13" height="9" rx="2"/><path d="M10 3.5v3M7 10.5h.01M13 10.5h.01M8 13h4"/></Ic>;
+export const IconGrid = (p: IconProps) => <Ic {...p}><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="11" y="3" width="6" height="6" rx="1"/><rect x="3" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></Ic>;

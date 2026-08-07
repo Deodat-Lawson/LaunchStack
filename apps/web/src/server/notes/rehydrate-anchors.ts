@@ -28,12 +28,9 @@ import { and, asc, eq, isNotNull, sql } from "drizzle-orm";
 import DiffMatchPatch from "diff-match-patch";
 
 import { db } from "~/server/db";
-import {
-    documentNotes,
-    documentContextChunks,
-    type NoteAnchor,
-    type AnchorStatus,
-} from "@launchstack/core/db/schema";
+import { documentContextChunks } from "@launchstack/core/db/schema";
+import { type NoteAnchor, type AnchorStatus } from "~/server/db/schema";
+import { documentNotes } from "~/server/db/schema";
 import { embedNoteAsync } from "./embed-note";
 
 // Fuzzy matcher knobs.

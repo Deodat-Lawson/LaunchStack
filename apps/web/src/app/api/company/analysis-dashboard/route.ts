@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { users, document, documentViews, ChatHistory, agentAiChatbotMessage, agentAiChatbotChat } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
+import { users, documentViews, ChatHistory, agentAiChatbotMessage, agentAiChatbotChat } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";

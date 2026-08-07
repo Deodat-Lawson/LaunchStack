@@ -10,7 +10,8 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { users, ocrJobs } from "@launchstack/core/db/schema";
+import { ocrJobs } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";

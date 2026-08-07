@@ -7,7 +7,7 @@
 // When categories are not provided, the LLM infers appropriate ones.
 // When categories are provided, the LLM constrains searches to those only.
 
-import { ChatOpenAI } from "@langchain/openai";
+import { invokeStructured, resolveChatModel } from "@launchstack/core/llm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 
@@ -119,23 +119,19 @@ export async function planSearches(
     companyContext: string,
     categories?: string[],
 ): Promise<PlannedSearch[]> {
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        modelName: "gpt-4o-mini",
+    const resolved = resolveChatModel({
+        route: "fast",
         temperature: 0.2,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-    });
-
-    const structuredModel = chat.withStructuredOutput(QueryPlannerOutputSchema, {
-        name: "search_plan",
     });
 
     const humanPrompt = buildHumanPrompt(query, companyContext, categories);
 
-    const response = await structuredModel.invoke([
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(humanPrompt),
-    ]);
+    const response = await invokeStructured(
+        resolved,
+        QueryPlannerOutputSchema,
+        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
+        { name: "search_plan" },
+    );
 
     return response.plannedSearches as PlannedSearch[];
 }

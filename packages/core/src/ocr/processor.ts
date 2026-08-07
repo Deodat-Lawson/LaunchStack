@@ -6,7 +6,7 @@
 
 import type { RoutingDecision } from "./complexity";
 import { renderPagesToImages } from "./complexity";
-import { enrichPageWithVlm } from "./enrichment";
+import { enrichPageWithVlm, isVlmEnrichmentConfigured } from "./enrichment";
 import { createAzureAdapter } from "./adapters/azureAdapter";
 import { createLandingAIAdapter } from "./adapters/landingAdapter";
 import { createDatalabAdapter } from "./adapters/datalabAdapter";
@@ -32,7 +32,6 @@ import {
 import { eq, sql } from "drizzle-orm";
 import crypto from "crypto";
 import { getStoragePort } from "../storage/slot";
-import { getChatModelsConfig } from "../llm/chat-model-factory";
 
 import type {
   ProcessDocumentEventData,
@@ -258,8 +257,7 @@ export async function normalizeDocument(
   const isPdf = documentUrl.toLowerCase().endsWith(".pdf") || 
                 (await getStoragePort().download(documentUrl, { method: "HEAD" }).then(r => r.headers.get("content-type") === "application/pdf").catch(() => false));
 
-  const llmConfig = getChatModelsConfig();
-  const vlmAvailable = !!(llmConfig.ollama?.baseUrl ?? llmConfig.openai?.apiKey ?? llmConfig.aiApiKey);
+  const vlmAvailable = isVlmEnrichmentConfigured();
   if (isPdf && vlmAvailable) {
     const isComplex = routerDecision.visionLabel 
       ? ["complex", "handwritten", "messy", "figure", "diagram"].some(l => routerDecision.visionLabel?.toLowerCase().includes(l))

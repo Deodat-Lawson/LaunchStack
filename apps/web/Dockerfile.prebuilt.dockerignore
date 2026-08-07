@@ -1,0 +1,57 @@
+# Dockerfile.prebuilt packages a host-built Next.js standalone bundle. Keep
+# the normal source/build exclusions, but explicitly include that bundle.
+
+# Dependencies (installed in the migrate target; bundled in standalone runner)
+**/node_modules
+.pnp
+.pnp.js
+
+# Build output other than the required web standalone bundle
+**/.next
+**/out
+**/build
+**/dist
+
+# Generated and heavy static assets
+apps/web/public/vad
+apps/web/public/deployment-demos
+
+# Git and local configuration
+.git
+.gitignore
+.env
+.env.*
+.DS_Store
+.idea
+.vscode
+*.swp
+*.swo
+
+# Test and developer-only output
+coverage
+**/__tests__
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+playwright-report
+*.tsbuildinfo
+
+# Unrelated service build contexts
+services
+sidecar
+
+# Docker orchestration files are not image inputs
+docker-compose*.yml
+apps/web/Dockerfile
+apps/web/Dockerfile.*
+.dockerignore
+scripts/ops/start-database.sh
+
+# Keep these rules last so broad node_modules/build/dist exclusions do not
+# remove traced runtime dependencies nested inside the standalone bundle.
+!apps/web/.next
+!apps/web/.next/standalone
+!apps/web/.next/standalone/**
+!apps/web/.next/static
+!apps/web/.next/static/**

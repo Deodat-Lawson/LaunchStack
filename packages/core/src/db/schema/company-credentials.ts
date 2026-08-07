@@ -5,6 +5,7 @@ import {
   text,
   timestamp,
   varchar,
+    bigint,
 } from "drizzle-orm/pg-core";
 
 import { company } from "./base";
@@ -26,7 +27,7 @@ import { pgTable } from "./helpers";
 export const companyEmbeddingCredentials = pgTable(
   "company_embedding_credentials",
   {
-    companyId: integer("company_id")
+    companyId: bigint("company_id", { mode: "number" })
       .primaryKey()
       .references(() => company.id, { onDelete: "cascade" }),
     openAIApiKeyCiphertext: text("openai_api_key_ciphertext"),

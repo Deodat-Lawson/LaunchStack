@@ -37,6 +37,8 @@ export interface StudioDrawerProps {
 
 /** Feature ids that render an interactive pane (not just a link-out). */
 const CUSTOM_PANE_IDS = new Set([
+  "knowledge",
+  "meetings",
   "draft",
   "rewrite",
   "notes",

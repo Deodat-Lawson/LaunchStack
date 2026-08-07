@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
-import { MARKETING_MODELS } from "./models";
+import { invokeMarketingStructured } from "./models";
 import type {
   MarketingPlatform,
   MarketingResearchResult,
@@ -306,10 +305,7 @@ async function validatePostQuality(
   post: string,
   platform: MarketingPlatform,
 ): Promise<{ score: number; issues: string[]; rewrite: string | null }> {
-  const chat = getChatModel(MARKETING_MODELS.dnaExtraction);
-  const model = chat.withStructuredOutput(QualityScoreSchema, { name: "quality_check" });
-
-  const response = await model.invoke([
+  const response = await invokeMarketingStructured(QualityScoreSchema, [
     new SystemMessage(
       `You are a social media copy editor. Score this ${platform} post 1-10 on these criteria:
 1. Hook strength (does the first line stop the scroll?)
@@ -322,7 +318,7 @@ If score < ${QUALITY_THRESHOLD}, provide a "rewrite" field with an improved vers
 Flag specific issues in "issues" array.`,
     ),
     new HumanMessage(post),
-  ]);
+  ], "quality_check");
 
   return QualityScoreSchema.parse(response);
 }
@@ -350,12 +346,7 @@ export async function generateCampaignOutput(args: {
     ? SYSTEM_PROMPT_BASE + STRATEGY_RULES
     : SYSTEM_PROMPT_BASE;
 
-  const chat = getChatModel(MARKETING_MODELS.contentGeneration);
-  const model = chat.withStructuredOutput(MarketingPipelineOutputSchema, {
-    name: "marketing_pipeline_output",
-  });
-
-  const response = await model.invoke([
+  const response = await invokeMarketingStructured(MarketingPipelineOutputSchema, [
     new SystemMessage(systemPrompt),
     new HumanMessage(buildPrompt({
       platform: args.platform,
@@ -365,7 +356,7 @@ export async function generateCampaignOutput(args: {
       strategy: args.strategy,
       platformMeta: args.platformMeta,
     })),
-  ]);
+  ], "marketing_pipeline_output");
 
   let parsed = MarketingPipelineOutputSchema.parse(response);
 
@@ -474,12 +465,7 @@ export async function generateVariants(args: {
       if (args.targetPersona) systemPrompt += buildPersonaDirective(args.targetPersona);
       systemPrompt += contentTypeTemplate(args.contentType);
 
-      const chat = getChatModel(MARKETING_MODELS.contentGeneration);
-      const model = chat.withStructuredOutput(MarketingPipelineOutputSchema, {
-        name: "marketing_pipeline_output",
-      });
-
-      const response = await model.invoke([
+      const response = await invokeMarketingStructured(MarketingPipelineOutputSchema, [
         new SystemMessage(systemPrompt),
         new HumanMessage(buildPrompt({
           platform: args.platform,
@@ -489,7 +475,7 @@ export async function generateVariants(args: {
           strategy: strategyAsMessaging,
           platformMeta: args.platformMeta,
         })),
-      ]);
+      ], "marketing_pipeline_output");
 
       let parsed = MarketingPipelineOutputSchema.parse(response);
 
@@ -544,10 +530,7 @@ Rules:
 
   if (args.brandVoice) systemPrompt += buildVoiceDirective(args.brandVoice);
 
-  const chat = getChatModel(MARKETING_MODELS.refinement);
-  const model = chat.withStructuredOutput(RefinementSchema, { name: "refined_content" });
-
-  const response = await model.invoke([
+  const response = await invokeMarketingStructured(RefinementSchema, [
     new SystemMessage(systemPrompt),
     new HumanMessage([
       `Platform: ${args.platform}`,
@@ -555,7 +538,7 @@ Rules:
       `\nUser feedback: ${args.feedback}`,
       `\nCompany context:\n${args.companyContext}`,
     ].join("\n")),
-  ]);
+  ], "refined_content");
 
   const parsed = RefinementSchema.parse(response);
   return {
@@ -565,4 +548,3 @@ Rules:
     feedbackApplied: parsed.feedbackApplied,
   };
 }
-

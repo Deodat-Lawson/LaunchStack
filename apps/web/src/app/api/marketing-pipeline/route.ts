@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { MarketingPipelineInputSchema, runMarketingPipeline } from "@launchstack/features/marketing-pipeline";
 import type { PipelineSSEEvent } from "@launchstack/features/marketing-pipeline";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
@@ -85,10 +85,14 @@ export async function POST(request: Request) {
                     const errMessage = error instanceof Error ? error.message : String(error);
                     console.error("[marketing-pipeline] POST error:", error);
 
+                    const normalizedError = errMessage.toLowerCase();
                     const hint =
-                        !process.env.OPENAI_API_KEY && errMessage.toLowerCase().includes("openai")
-                            ? " Ensure OPENAI_API_KEY is set in .env."
-                            : errMessage.toLowerCase().includes("company")
+                        normalizedError.includes("chat_base_url") ||
+                        normalizedError.includes("chat model") ||
+                        normalizedError.includes("route") ||
+                        normalizedError.includes("api_key")
+                            ? " Ensure CHAT_BASE_URL (and CHAT_API_KEY if required) are set and the chat model configuration file is valid."
+                            : normalizedError.includes("company")
                               ? " Ensure your user has a valid company profile."
                               : "";
 

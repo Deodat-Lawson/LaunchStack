@@ -19,3 +19,6 @@ public/vad/*.wasm.map
 # Build artifacts
 .next/cache
 .turbo
+
+# Vercel CLI default-ignores ".pnp*" (Yarn PnP), which wrongly matches .pnpmfile.cjs — re-include it
+!.pnpmfile.cjs

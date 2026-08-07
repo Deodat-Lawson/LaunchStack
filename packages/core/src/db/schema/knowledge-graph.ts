@@ -14,12 +14,12 @@ import type { InferSelectModel } from "drizzle-orm";
 import {
   index,
   integer,
-  serial,
   timestamp,
   varchar,
   bigint,
   uniqueIndex,
   real,
+    bigserial,
 } from "drizzle-orm/pg-core";
 
 import { pgTable } from "./helpers";
@@ -68,7 +68,7 @@ export type RelationshipType = (typeof relationshipTypeEnum)[number];
 export const kgEntities = pgTable(
   "kg_entities",
   {
-    id: serial("id").primaryKey(),
+    id: bigserial("id", { mode: "number" }).primaryKey(),
     /** Normalized lowercase name (for dedup) */
     name: varchar("name", { length: 512 }).notNull(),
     /** Original casing as extracted */
@@ -106,11 +106,11 @@ export const kgEntities = pgTable(
 export const kgEntityMentions = pgTable(
   "kg_entity_mentions",
   {
-    id: serial("id").primaryKey(),
-    entityId: integer("entity_id")
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    entityId: bigint("entity_id", { mode: "number" })
       .notNull()
       .references(() => kgEntities.id, { onDelete: "cascade" }),
-    sectionId: integer("section_id")
+    sectionId: bigint("section_id", { mode: "number" })
       .notNull()
       .references(() => documentSections.id, { onDelete: "cascade" }),
     documentId: bigint("document_id", { mode: "bigint" })
@@ -140,11 +140,11 @@ export const kgEntityMentions = pgTable(
 export const kgRelationships = pgTable(
   "kg_relationships",
   {
-    id: serial("id").primaryKey(),
-    sourceEntityId: integer("source_entity_id")
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    sourceEntityId: bigint("source_entity_id", { mode: "number" })
       .notNull()
       .references(() => kgEntities.id, { onDelete: "cascade" }),
-    targetEntityId: integer("target_entity_id")
+    targetEntityId: bigint("target_entity_id", { mode: "number" })
       .notNull()
       .references(() => kgEntities.id, { onDelete: "cascade" }),
     relationshipType: varchar("relationship_type", {

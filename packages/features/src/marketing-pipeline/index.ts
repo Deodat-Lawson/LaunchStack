@@ -15,7 +15,6 @@ export {
 export { buildMultiStrategy } from "./positioning";
 export { analyzeCompetitors } from "./competitor";
 export { buildCompanyKnowledgeContext, extractCompanyDNA } from "./context";
-export { MARKETING_MODELS } from "./models";
 
 // Re-export the full types surface so the @launchstack/features/marketing-pipeline
 // barrel is the single import path callers need.

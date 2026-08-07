@@ -1,6 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
 import { getDb } from "@launchstack/core/db";
-import { marketingContentHistory } from "@launchstack/core/db/schema/marketing-history";
+import { marketingContentHistory } from "../schema";
 import type { MarketingPlatform } from "./types";
 
 interface HistoryRow {

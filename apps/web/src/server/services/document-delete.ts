@@ -10,20 +10,8 @@
  */
 
 import { eq } from "drizzle-orm";
-import {
-  ChatHistory,
-  document,
-  documentMetadata,
-  documentPreviews,
-  documentReferenceResolution,
-  documentRetrievalChunks,
-  documentSections,
-  documentStructure,
-  documentViews,
-  kgEntityMentions,
-  predictiveDocumentAnalysisResults,
-  workspaceResults,
-} from "@launchstack/core/db/schema";
+import { document, documentMetadata, documentPreviews, documentRetrievalChunks, documentSections, documentStructure, kgEntityMentions, workspaceResults } from "@launchstack/core/db/schema";
+import { ChatHistory, documentReferenceResolution, documentViews, predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import type { db as DbType } from "~/server/db";
 
 type Tx = Parameters<Parameters<(typeof DbType)["transaction"]>[0]>[0];

@@ -1,6 +1,5 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModelByType as getChatModel } from "@launchstack/core/llm";
-import { MARKETING_MODELS } from "./models";
+import { invokeMarketingStructured } from "./models";
 import type {
   CompanyDNA,
   CompetitorAnalysis,
@@ -63,14 +62,11 @@ Rules:
 
 Use ONLY information from the provided context. If context is sparse, keep claims honest and general. Return valid JSON matching the schema.`;
 
-  const chat = getChatModel(MARKETING_MODELS.strategyBuilding);
-  const model = chat.withStructuredOutput(MessagingStrategySchema, {
-    name: "messaging_strategy",
-  });
-  const response = await model.invoke([
-    new SystemMessage(systemPrompt),
-    new HumanMessage(contextParts.join("\n")),
-  ]);
+  const response = await invokeMarketingStructured(
+    MessagingStrategySchema,
+    [new SystemMessage(systemPrompt), new HumanMessage(contextParts.join("\n"))],
+    "messaging_strategy",
+  );
 
   return MessagingStrategySchema.parse(response);
 }
@@ -168,12 +164,11 @@ CRITICAL: Use ONLY information from the provided company DNA and context. Never 
 
 Return valid JSON with a "variants" array of exactly 3 objects.`;
 
-  const chat = getChatModel(MARKETING_MODELS.strategyBuilding);
-  const model = chat.withStructuredOutput(MultiStrategySchema, { name: "multi_strategy" });
-  const response = await model.invoke([
-    new SystemMessage(systemPrompt),
-    new HumanMessage(buildContextBlock(args)),
-  ]);
+  const response = await invokeMarketingStructured(
+    MultiStrategySchema,
+    [new SystemMessage(systemPrompt), new HumanMessage(buildContextBlock(args))],
+    "multi_strategy",
+  );
 
   const parsed = MultiStrategySchema.parse(response);
   return parsed.variants;

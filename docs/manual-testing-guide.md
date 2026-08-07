@@ -20,26 +20,24 @@ Before the first pass:
 1. **Environment**
    - Copy `.env.example` to `.env` and fill required keys (see [README](../README.md) Quick Start).
    - Set `DATABASE_URL` for a local PostgreSQL (e.g. `localhost:5433` if using Docker for DB only).
-   ```bash
-   pnpm db:install
-   ```
 
 2. **Database**
    ```bash
-   pnpm db:push
+   pnpm --filter @launchstack/core db:migrate   # apply schema
+   pnpm --filter @launchstack/core db:seed      # optional sample data
    ```
 
 3. **Enable Inngest** (required for background document processing)
    - Set `INNGEST_EVENT_KEY=placeholder` in `.env`.
    - In a **separate terminal**, run the Inngest dev server:
    ```bash
-   pnpm inngest:dev
+   pnpm --filter @launchstack/web inngest:dev
    ```
    Dashboard: **http://localhost:8288**. Keep this running while testing.
 
 4. **Run dev server**
    ```bash
-   pnpm run dev
+   pnpm --filter @launchstack/web dev
    ```
    Open **http://localhost:3000**.
 

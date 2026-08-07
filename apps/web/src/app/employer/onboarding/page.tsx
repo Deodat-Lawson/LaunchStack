@@ -388,7 +388,7 @@ function QuickStartStep({
       Icon: Building2,
       title: "View your company metadata",
       text: "See AI-extracted facts about your people, services, and markets",
-      href: "/employer/metadata",
+      href: "/employer/settings#company",
     },
   ];
 

@@ -15,6 +15,7 @@
  */
 
 import { and, eq, gt, inArray, sql } from "drizzle-orm";
+import { T } from "~/server/db/tables";
 
 import { inngest } from "../client";
 import { db } from "~/server/db";
@@ -90,7 +91,7 @@ async function writeLegacyEmbeddings(
     const fullLiteral = `[${vector.join(",")}]`;
     const shortLiteral = shortVec ? `[${shortVec.join(",")}]` : null;
     await db.execute(sql`
-      UPDATE pdr_ai_v2_document_retrieval_chunks
+      UPDATE ${T.retrievalChunks}
       SET embedding = ${sql.raw(`'${fullLiteral}'::vector(${index.dimension})`)},
           embedding_short = ${shortLiteral ? sql.raw(`'${shortLiteral}'::vector(${shortDim})`) : sql`NULL`}
       WHERE id = ${Number(chunkId)}

@@ -1,6 +1,6 @@
-import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
+import { invokeStructured } from "@launchstack/core/llm";
 import { DuckDuckGoSearch } from "@langchain/community/tools/duckduckgo_search";
 import type { 
     PdfChunk, 
@@ -24,6 +24,7 @@ import { document } from "@launchstack/core/db/schema";
 import { and, eq, ne } from "drizzle-orm";
 import stringSimilarity from 'string-similarity-js';
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";
+import { resolveConfiguredChatModel } from "~/lib/models";
 
 async function withRetry<T>(
     operation: () => Promise<T>,
@@ -204,16 +205,7 @@ export async function callAIAnalysis(
     const content = groupContentFromChunks(chunks);
     const prompt = createAnalysisPrompt(content, specification);
 
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-        modelName: "gpt-5.2",
-        temperature: 0.3,
-    });
-
-    const structuredModel = chat.withStructuredOutput(AnalysisResultSchema, {
-        name: "analysis_result"
-    });
+    const resolved = resolveConfiguredChatModel({ route: "fast" });
 
     let timeoutHandle: ReturnType<typeof setTimeout> | null = null;
     const timeoutPromise = new Promise<never>((_, reject) => {
@@ -222,10 +214,10 @@ export async function callAIAnalysis(
         }, timeoutMs);
     });
 
-    const aiCallPromise = structuredModel.invoke([
+    const aiCallPromise = invokeStructured(resolved, AnalysisResultSchema, [
         new SystemMessage(ANALYSIS_TYPES[specification.type]),
         new HumanMessage(prompt)
-    ]);
+    ], { name: "analysis_result" });
 
     try {
         const response = await Promise.race([aiCallPromise, timeoutPromise]);
@@ -269,16 +261,7 @@ async function verifyPredictions(
     const fullContent = groupContentFromChunks(allChunks);
     const contentWindow = fullContent.slice(0, 30000);
 
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-        modelName: "gpt-5.2",
-        temperature: 0.0,
-    });
-
-    const structuredModel = chat.withStructuredOutput(VerificationResultSchema, {
-        name: "verification_result"
-    });
+    const resolved = resolveConfiguredChatModel({ route: "fast" });
 
     const limit = pLimit(5);
     const verifiedSet = new Set<string>();
@@ -307,10 +290,10 @@ ${contentWindow}`;
                     });
 
                     const result = await Promise.race([
-                        structuredModel.invoke([
+                        invokeStructured(resolved, VerificationResultSchema, [
                             new SystemMessage("Verify document references with exact quotes. Be strict: only mark verified if you find a clear reference."),
                             new HumanMessage(verificationPrompt)
-                        ]),
+                        ], { name: "verification_result" }),
                         timeoutPromise,
                     ]);
 

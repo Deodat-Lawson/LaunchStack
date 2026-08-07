@@ -21,8 +21,9 @@ import {
   documentNotes,
   noteLinks,
   type NoteLinkTargetType,
-} from "@launchstack/core/db/schema/document-notes";
-import { document, users } from "@launchstack/core/db/schema/base";
+} from "~/server/db/schema";
+import { document } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 
 /**
  * Match the GitHub/Notion-flavored `[[Wiki Link]]` syntax. Permits any

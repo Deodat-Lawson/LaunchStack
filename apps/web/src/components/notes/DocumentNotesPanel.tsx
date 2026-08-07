@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { JSONContent } from "@tiptap/react";
 import { FileText, Plus } from "lucide-react";
-import type { DocumentNote } from "@launchstack/core/db/schema/document-notes";
+import type { DocumentNote } from "~/server/db/schema";
 import {
   buildAnchorFromDraft,
   type DraftState,

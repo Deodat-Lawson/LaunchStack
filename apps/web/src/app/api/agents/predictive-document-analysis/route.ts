@@ -3,7 +3,8 @@ import { db } from "~/server/db/index";
 import { eq, sql, and, gt, desc, ne } from "drizzle-orm";
 import { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-analysis/agent";
 import type { PredictiveAnalysisResult } from "~/app/api/agents/predictive-document-analysis/agent";
-import { predictiveDocumentAnalysisResults, document, pdfChunks, documentContextChunks, documentStructure } from "@launchstack/core/db/schema";
+import { document, pdfChunks, documentContextChunks, documentStructure } from "@launchstack/core/db/schema";
+import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 import {
     ANALYSIS_BATCH_CONFIG,

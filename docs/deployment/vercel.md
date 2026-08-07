@@ -21,7 +21,7 @@ For self-hosted (Docker) deploys, see [`../deployment.md`](../deployment.md).
 1. Sign in to [vercel.com](https://vercel.com) and click **Add New → Project**.
 2. Import the GitHub repo.
 3. **Framework preset**: Next.js (auto-detected).
-4. **Root directory**: leave as `./` — [`vercel.json`](../../vercel.json) at the repo root controls install + build.
+4. **Root directory**: set it to `apps/web` — [`apps/web/vercel.json`](../../apps/web/vercel.json) controls install + build.
 5. **Node.js version**: 20.x (Project Settings → General).
 6. Don't deploy yet — set env vars first (step 3).
 
@@ -29,9 +29,9 @@ For self-hosted (Docker) deploys, see [`../deployment.md`](../deployment.md).
 
 ```json
 {
-  "installCommand": "pnpm install --frozen-lockfile --ignore-scripts",
-  "buildCommand": "if [ \"$VERCEL_ENV\" = \"production\" ]; then pnpm db:migrate; fi && pnpm build",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD . ':(exclude)docs/**' ':(exclude)*.md' ':(exclude).github/**'"
+  "installCommand": "npx -y pnpm@10.15.1 install --frozen-lockfile --ignore-scripts",
+  "buildCommand": "if [ \"$VERCEL_ENV\" = \"production\" ]; then npx -y pnpm@10.15.1 db:migrate; fi && npx -y pnpm@10.15.1 build",
+  "ignoreCommand": "git -C \"$(git rev-parse --show-toplevel)\" diff --quiet HEAD^ HEAD . ':(exclude)docs/**' ':(exclude)*.md' ':(exclude).github/**'"
 }
 ```
 
@@ -70,7 +70,8 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `DATABASE_URL` | Postgres connection string with SSL if remote |
 | `CLERK_SECRET_KEY` | From Clerk dashboard |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | From Clerk dashboard |
-| `OPENAI_API_KEY` *or* `AI_API_KEY` | At least one of the two — validated in [`env.ts`](../../apps/web/src/env.ts) |
+| `CHAT_BASE_URL` | The OpenAI-compatible chat endpoint, e.g. `https://generativelanguage.googleapis.com/v1beta/openai`. Optional — unset falls back to that same Gemini endpoint, authenticated with `GOOGLE_AI_API_KEY` |
+| `CHAT_API_KEY` | Bearer credential for that endpoint (omit only for keyless endpoints, which are rare on Vercel) |
 | `EMBEDDING_SECRETS_KEY` | 32-byte base64. Generate once: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`. **Keep constant across deploys** — rotating it invalidates stored per-company credentials |
 | `INNGEST_EVENT_KEY` | From Inngest Cloud (step 4) |
 | `INNGEST_SIGNING_KEY` | From Inngest Cloud (step 4) |
@@ -83,6 +84,25 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `S3_*` + `NEXT_PUBLIC_S3_*` | If `NEXT_PUBLIC_STORAGE_PROVIDER=s3` |
 | `NEO4J_URI` + `NEO4J_USERNAME` + `NEO4J_PASSWORD` | If using Graph RAG |
 | `ADEU_SERVICE_URL` | If using DOCX redlining (Adeu sidecar) |
+| `AI_BASE_URL`, or a per-capability `*_API_BASE_URL` | If enabled OCR/VLM or NER should not use the default Gemini endpoint. Optional for those; **required** for embeddings, which have no fallback because switching model invalidates every stored vector |
+| `AI_API_KEY`, `OPENAI_API_KEY`, or per-capability keys | The credential for the base URL above, when that endpoint requires one |
+
+Gemini is the default, not a requirement — any endpoint implementing the
+OpenAI chat-completions protocol works. Vercel cannot host a
+local model itself, but it can call an externally hosted compatible endpoint.
+
+Which model serves each route lives in `apps/web/config/chat-models.yaml`,
+which is deployed with the repository, so changing a model is a commit rather
+than a dashboard edit. To keep separate model sets per environment, commit a
+second file and set `CHAT_MODELS_CONFIG` per Vercel environment:
+
+```
+CHAT_MODELS_CONFIG=config/chat-models.production.yaml
+```
+
+Routes that need a capability the configured model lacks report themselves
+unavailable rather than falling back, so verify the file before promoting a
+deployment. See [Chat Models](../chat-models.md) for the full reference.
 
 ### Optional (feature flags / overrides)
 
@@ -120,12 +140,14 @@ The Launchstack Python sidecars (`services/sidecar`, `services/ocr-router`, `ser
 | `OCR_ROUTER_URL` | PDF-rendering + vision classifier (`services/ocr-router`) |
 | `OCR_WORKER_URL` | Docling/Marker worker (optional) |
 
-**Or** skip sidecars entirely and use cloud providers: OpenAI embeddings, Azure Document Intelligence for OCR, Groq for transcription. Set the per-capability env vars instead.
+The app forwards its own OCR credentials — `GOOGLE_AI_API_KEY` included — to `OCR_ROUTER_URL` with each routing request, so a separately hosted router needs no copy of them in its own environment. Set them once on the Vercel app.
+
+**Or** skip sidecars entirely and use hosted providers. Transcription, reranking, NER and OCR/VLM all default to Gemini on `GOOGLE_AI_API_KEY`; Azure Document Intelligence remains available for scanned-layout OCR. Embeddings are the exception — set `EMBEDDING_API_BASE_URL`/`EMBEDDING_API_KEY` explicitly, since the model is tied to stored vectors.
 
 ## 6. First deploy
 
 1. Push to `main` (or click **Deploy** in Vercel).
-2. Vercel runs: `pnpm install` → `pnpm db:migrate` (production only) → `pnpm build`.
+2. Vercel runs: `pnpm install` → `pnpm --filter @launchstack/web db:migrate` (production only) → `pnpm --filter @launchstack/web build`.
 3. Deploy completes; note the production URL.
 
 ### Verify
@@ -162,11 +184,13 @@ Previews share the production database unless you configure Neon branch database
 1. `git revert <bad-commit>` and push to `main`.
 2. New deploy rolls the app forward with the revert.
 
-Migrations are **forward-only** ([`apps/web/scripts/migrate.mjs`](../../apps/web/scripts/migrate.mjs)). Rolling back code does **not** roll back schema. Plan breaking schema changes as additive-then-cleanup sequences.
+Migrations are **forward-only** ([`packages/core/scripts/migrate.mjs`](../../packages/core/scripts/migrate.mjs)). Rolling back code does **not** roll back schema. Plan breaking schema changes as additive-then-cleanup sequences.
+
+If you roll back to a build older than the applied migrations, `db:migrate` exits **4** ("database is ahead of this build") rather than running old code against a newer schema. Preview builds run `db:verify`, which reports pending migrations without failing the build.
 
 ## 9. Troubleshooting
 
-### Build fails at `pnpm db:migrate`
+### Build fails at `pnpm --filter @launchstack/web db:migrate`
 
 - Confirm `DATABASE_URL` is set for the Production environment in Vercel.
 - Check the migrate log output in the build — the script prints which file failed.

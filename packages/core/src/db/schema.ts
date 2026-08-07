@@ -1,19 +1,14 @@
 /**
- * Central export for all database tables and relations. The schema is now
- * split across multiple modules so that each domain can evolve independently
- * while consumers continue importing from "~/server/db/schema".
+ * Engine schema — every table @launchstack/core owns and publishes.
+ *
+ * The product schema lives in apps/web/src/server/db/schema and packages/features
+ * and may reference these tables. Nothing here may reference it: that one-way
+ * rule is what makes `packages/core/drizzle` applicable on its own by an
+ * embedding consumer. ESLint enforces the import direction.
  */
 export { pgTable } from "./schema/helpers";
 export * from "./schema/base";
 export * from "./schema/company-credentials";
-export * from "./schema/agent-ai";
 export * from "./schema/rlm-knowledge-base";
 export * from "./schema/knowledge-graph";
-export * from "./schema/document-notes";
-export * from "./schema/trend-search";
-export * from "./schema/trend-search-cache";
-export * from "./schema/client-prospector";
-export * from "./schema/company-metadata";
-export * from "./schema/marketing-history";
-export * from "./schema/credits";
-export * from "./schema/founder-weekly-review";
+export * from "./schema/ops";

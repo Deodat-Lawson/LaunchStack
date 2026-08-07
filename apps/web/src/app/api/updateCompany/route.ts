@@ -3,7 +3,8 @@ import { and, eq, sql } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 
 import { db } from "../../../server/db/index";
-import { company, document, users } from "@launchstack/core/db/schema";
+import { company, document } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { validateRequestBody, UpdateCompanySchema } from "~/lib/validation";
 import {
   getCompanyCredentialsPlaintext,

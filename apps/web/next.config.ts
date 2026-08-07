@@ -103,8 +103,6 @@ const config: NextConfig = {
     // LangChain ecosystem — skip webpack tracing, load from node_modules at runtime
     "@langchain/core",
     "@langchain/openai",
-    "@langchain/anthropic",
-    "@langchain/google-genai",
     "@langchain/ollama",
     "@langchain/community",
     "@langchain/langgraph",
@@ -132,7 +130,6 @@ const config: NextConfig = {
     "neo4j-driver",
     // Transitive deps via @langchain/community — not available on Alpine (musl)
     "onnxruntime-node",
-    "sherpa-onnx-node",
     // Structured logging
     "pino",
     "pino-pretty",

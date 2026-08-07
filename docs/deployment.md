@@ -25,7 +25,7 @@ docker compose --env-file .env up
 **Services:**
 
 - `db` — PostgreSQL + pgvector
-- `migrate` — schema setup via `db:push`
+- `migrate` — applies the ordered SQL migrations (`db:migrate`), then exits
 - `app` — Next.js runtime
 - `sidecar` — FastAPI ML service (embeddings, reranking, entity extraction)
 
@@ -39,7 +39,7 @@ docker compose --env-file .env up --build
 
 - **default** — all services (db, migrate, app, sidecar)
 - `--profile dev` — adds Inngest dev server (dashboard at `http://localhost:8288`)
-- `--profile minimal` — db only (for local `pnpm dev`)
+- `--profile minimal` — db only (for local `pnpm --filter @launchstack/web dev`)
 
 Example with Inngest dev server:
 
@@ -53,10 +53,10 @@ docker compose --env-file .env --profile dev up
 
 Short version:
 
-1. Import the repository into Vercel — framework auto-detects as Next.js, root directory stays `./`.
+1. Import the repository into Vercel and set the project root directory to `apps/web`.
 2. Provision Postgres with pgvector (Vercel Postgres, Neon, Supabase, etc.).
 3. Set env vars per the [Vercel deployment guide](./deployment/vercel.md#3-configure-environment-variables).
-4. Deploy. Migrations run automatically on production builds via [`vercel.json`](../vercel.json).
+4. Deploy. Migrations run automatically on production builds via [`apps/web/vercel.json`](../apps/web/vercel.json).
 5. Register `https://<app>.vercel.app/api/inngest` in Inngest Cloud.
 
 Optional integrations:
@@ -85,19 +85,28 @@ Trend search calls external search APIs. Configure `EXA_API_KEY` and/or `SERPER_
 6. Apply schema:
 
 ```bash
-pnpm db:migrate
+pnpm --filter @launchstack/web db:migrate
 ```
 
 Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
 
 ## Environment Variables Summary
 
+Chat reaches one endpoint implementing the OpenAI chat-completions protocol.
+Model ids, per-model behavior, and route assignments live in
+`apps/web/config/chat-models.yaml` — not in environment variables. See
+[Chat Models](./chat-models.md) for presets, route inheritance, reasoning
+modes, and migration from the pre-PR variables.
+
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Clerk publishable key |
 | `CLERK_SECRET_KEY` | Yes | Clerk secret key |
-| `OPENAI_API_KEY` | Yes | OpenAI API key |
+| `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
+| `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
+| `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
+| `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
 | `INNGEST_EVENT_KEY` | Yes (prod) | Inngest event key for background jobs |
 | `BLOB_READ_WRITE_TOKEN` | Yes (Vercel) | Required for Vercel Blob uploads |
 | `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
@@ -115,8 +124,9 @@ Optional: Run the sidecar separately and point `SIDECAR_URL` to it.
 - [ ] Environment variables set for all enabled features
 - [ ] `DATABASE_URL` points to production DB
 - [ ] `vector` extension enabled on PostgreSQL
-- [ ] Schema applied (`pnpm db:migrate` locally, or automatic on Vercel production builds)
-- [ ] Clerk, UploadThing, and OpenAI integrations validated
+- [ ] Schema applied (`pnpm --filter @launchstack/web db:migrate` locally, or automatic on Vercel production builds)
+- [ ] Clerk and the selected chat provider/model validated
+- [ ] OpenAI/global/per-capability integrations validated when enabled
 - [ ] OCR providers validated if OCR is enabled
 - [ ] Inngest validated if background processing is used
 - [ ] Sidecar validated if `SIDECAR_URL` is set

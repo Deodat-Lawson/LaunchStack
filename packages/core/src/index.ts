@@ -13,6 +13,9 @@ import { configureStorage } from "./storage/slot";
 import { configureJobDispatcher } from "./jobs/slot";
 import { configureCredits } from "./credits/slot";
 import { configureRag } from "./rag/slot";
+import { configureChatModels } from "./llm/chat-model-factory";
+import { configureAuxiliaryOpenAI } from "./llm/openai-client";
+import { configureVlmEnrichment } from "./ocr/enrichment";
 import type { CoreConfig } from "./config/types";
 
 export * from "./config";
@@ -54,6 +57,13 @@ export interface Engine {
  * pattern that caches on globalThis to survive HMR).
  */
 export function createEngine(config: CoreConfig): Engine {
+  if (config.llm.chat) {
+    configureChatModels(config.llm.chat);
+  }
+  if (config.llm.auxiliaryOpenAI) {
+    configureAuxiliaryOpenAI(config.llm.auxiliaryOpenAI);
+  }
+  configureVlmEnrichment({ ollamaBaseUrl: config.llm.ollama?.baseUrl });
   const dbHandle = createDb(config.db);
   configureDatabase(dbHandle.db);
   configureStorage(config.storage);

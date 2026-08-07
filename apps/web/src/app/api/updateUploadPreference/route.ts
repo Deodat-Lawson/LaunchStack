@@ -8,7 +8,8 @@ import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 
 import { db } from "~/server/db";
-import { company, users } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { validateRequestBody, UpdateUploadPreferenceSchema } from "~/lib/validation";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 

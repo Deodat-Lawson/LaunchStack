@@ -30,12 +30,8 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import {
-  document,
-  documentVersions,
-  ocrJobs,
-  users,
-} from "@launchstack/core/db/schema";
+import { document, documentVersions, ocrJobs } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 import { getEngine } from "~/server/engine";
 import { validateRequestBody } from "~/lib/validation";
@@ -187,14 +183,15 @@ export async function POST(
       // tolerate header casing differences ("Image/PNG" vs "image/png").
       const expectedFileType = doc.fileType;
       if (!expectedFileType) {
-        // A document created before Step 2 rolled out may not have its
-        // file_type populated yet. The backfill script fixes this; if it
-        // hasn't run, refuse to create a new version rather than locking in
-        // the wrong type here.
+        // A document created before versioning rolled out may not have its
+        // file_type populated. New uploads set it inline (see
+        // server/services/document-upload.ts), so this only affects legacy
+        // rows. Refuse rather than locking in the wrong type here.
         return NextResponse.json(
           {
             error:
-              "Document file type not yet initialized. Run the versioning backfill before uploading new versions.",
+              "Document file type not yet initialized. Run the versioning backfill first: " +
+              "pnpm --filter @launchstack/web db:backfill --only=2026-08-document-versions",
           },
           { status: 409 }
         );

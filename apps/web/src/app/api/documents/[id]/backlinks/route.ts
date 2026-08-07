@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { documentNotes, noteLinks } from "@launchstack/core/db/schema";
+import { documentNotes, noteLinks } from "~/server/db/schema";
 
 /**
  * Notes that reference this document via `[[Document Title]]`. Filtered by

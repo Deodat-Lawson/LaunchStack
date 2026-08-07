@@ -10,9 +10,10 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { invokeStructured } from "@launchstack/core/llm";
 import { z } from "zod";
-import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
+import { resolveConfiguredChatModel } from "~/lib/models";
+import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -26,6 +27,25 @@ interface OutlineItem {
     children?: OutlineItem[];
 }
 
+const OutlineItemSchema: z.ZodType<OutlineItem> = z.lazy(() => z.object({
+    id: z.string(),
+    title: z.string(),
+    level: z.number(),
+    description: z.string().optional(),
+    children: z.array(OutlineItemSchema).optional(),
+}));
+
+const OutlineResponseSchema = z.object({
+    outline: z.array(OutlineItemSchema).optional(),
+    suggestedStructure: z.array(OutlineItemSchema).optional(),
+    currentStructure: z.array(OutlineItemSchema).optional(),
+    improvements: z.array(z.string()).optional(),
+    gaps: z.array(z.string()).optional(),
+    wordCount: z.number().optional(),
+    sectionCount: z.number().optional(),
+    summary: z.string().optional(),
+});
+
 // Validation schema
 const OutlineSchema = z.object({
     action: z.enum(["generate", "restructure", "extract"]),
@@ -38,7 +58,7 @@ const OutlineSchema = z.object({
         sections: z.number().min(2).max(20).optional(), // Target number of sections
         audience: z.string().optional(),
         tone: z.string().optional(),
-        model: z.string().optional(),
+        model: z.string().min(1).optional(),
     }).optional(),
 });
 
@@ -128,44 +148,6 @@ const TEMPLATE_HINTS: Record<string, string> = {
     sop: "Include: Purpose, Scope, Responsibilities, Procedure Steps, Safety, Quality Standards, Documentation",
 };
 
-function parseOutlineResponse(content: string): { outline: OutlineItem[]; extras?: Record<string, unknown> } {
-    try {
-        // Try to extract JSON from the response
-        const jsonRegex = /\{[\s\S]*\}/;
-        const jsonMatch = jsonRegex.exec(content);
-        if (jsonMatch) {
-            const parsed = JSON.parse(jsonMatch[0]) as { outline?: OutlineItem[]; suggestedStructure?: OutlineItem[]; [key: string]: unknown };
-            return {
-                outline: parsed.outline ?? parsed.suggestedStructure ?? [],
-                extras: parsed,
-            };
-        }
-    } catch {
-        console.warn("Failed to parse outline JSON, creating fallback structure");
-    }
-
-    // Fallback: Parse markdown-style headings
-    const lines = content.split('\n');
-    const outline: OutlineItem[] = [];
-    let idCounter = 0;
-    const headingRegex = /^(#{1,4})\s+(.+)/;
-
-    for (const line of lines) {
-        const headingMatch = headingRegex.exec(line);
-        if (headingMatch?.[1] && headingMatch[2]) {
-            idCounter++;
-            const level = headingMatch[1].length;
-            outline.push({
-                id: idCounter.toString(),
-                title: headingMatch[2].trim(),
-                level,
-            });
-        }
-    }
-
-    return { outline };
-}
-
 export async function POST(request: Request) {
     try {
         const { userId } = await auth();
@@ -189,9 +171,18 @@ export async function POST(request: Request) {
         const { action, topic, description, content, templateId, options } = validation.data;
         const startTime = Date.now();
 
-        // Get the AI model
-        const modelId = (options?.model ?? "gpt-5-mini") as AIModelType;
-        const chat = getChatModel(modelId);
+        const resolved = resolveConfiguredChatModel({ route: "fast" });
+        const modelId = resolved.modelId;
+        const compatibility = validateDeprecatedChatSelection(
+            { model: options?.model },
+            resolved,
+        );
+        if (!compatibility.ok) {
+            return NextResponse.json(
+                { success: false, message: compatibility.message },
+                { status: compatibility.status },
+            );
+        }
 
         let systemPrompt: string;
         let userPrompt: string;
@@ -243,14 +234,11 @@ export async function POST(request: Request) {
                 );
         }
 
-        // Call the AI model
-        const response = await chat.call([
+        const extras = await invokeStructured(resolved, OutlineResponseSchema, [
             new SystemMessage(systemPrompt),
             new HumanMessage(userPrompt),
-        ]);
-
-        const responseContent = normalizeModelContent(response.content);
-        const { outline, extras } = parseOutlineResponse(responseContent);
+        ], { name: "outline_response" });
+        const outline = extras.outline ?? extras.suggestedStructure ?? [];
         const processingTimeMs = Date.now() - startTime;
 
         console.log(`✅ [Document Generator] Outline ${action} completed in ${processingTimeMs}ms`);
@@ -259,16 +247,16 @@ export async function POST(request: Request) {
             success: true,
             action,
             outline,
-            ...(action === "restructure" && extras ? {
+            ...(action === "restructure" ? {
                 currentStructure: extras.currentStructure,
                 improvements: extras.improvements,
                 gaps: extras.gaps,
             } : {}),
-            ...(action === "extract" && extras ? {
+            ...(action === "extract" ? {
                 wordCount: extras.wordCount,
                 sectionCount: extras.sectionCount,
             } : {}),
-            summary: extras?.summary,
+            summary: extras.summary,
             processingTimeMs,
             model: modelId,
         });

@@ -1,4 +1,5 @@
-import { getChatModelsConfig, getOpenAIClient } from "../llm";
+import { getAuxiliaryOpenAIConfig, getOpenAIClient } from "../llm";
+import { GEMINI_DEFAULT_MODEL } from "../llm/types";
 
 /**
  * Visual Layout Model (VLM) Enrichment Service
@@ -6,13 +7,38 @@ import { getChatModelsConfig, getOpenAIClient } from "../llm";
  * Analyzes document pages visually to extract semantic meaning from charts,
  * diagrams, and complex layouts that plain OCR may miss.
  *
+ * This is an OCR capability, not a chat one: it is configured through
+ * `configureAuxiliaryOpenAI` / `configureVlmEnrichment` and never borrows the
+ * chat endpoint's credential.
+ *
  * Provider preference (first available wins):
- *   1. Ollama — if config.llm.ollama.baseUrl is set. Defaults to "llava:13b";
- *      callers can override via options.model. Zero cost, self-hosted.
- *   2. OpenAI — if config.llm.openai.apiKey (or aiApiKey) is set. Uses
- *      gpt-5-mini by default; callers can override via options.model.
+ *   1. Ollama — if a VLM Ollama base URL is configured. Defaults to
+ *      "llava:13b"; callers can override via options.model. Self-hosted.
+ *   2. OpenAI-compatible — if an auxiliary API key is configured. Uses
+ *      gemini-2.5-flash by default; callers can override via options.model.
  *   3. Skip — return empty string.
  */
+
+import { createSlot } from "../internal/slot";
+
+export interface VlmEnrichmentConfig {
+  /** Ollama base URL for local VLM enrichment. */
+  ollamaBaseUrl?: string;
+}
+
+const vlmConfigSlot = createSlot<VlmEnrichmentConfig>("ocr/vlmEnrichment");
+
+/** Install the OCR-side VLM settings. Separate from the chat endpoint. */
+export function configureVlmEnrichment(config: VlmEnrichmentConfig): void {
+  vlmConfigSlot.set(config);
+}
+
+/** Whether any VLM provider is reachable, without rendering a page first. */
+export function isVlmEnrichmentConfigured(): boolean {
+  return Boolean(
+    vlmConfigSlot.get()?.ollamaBaseUrl ?? getAuxiliaryOpenAIConfig().apiKey,
+  );
+}
 
 const SYSTEM_PROMPT = `You are a document analysis assistant. Your job is to analyze the visual layout of a document page and describe its key components, especially those that OCR might miss.
 
@@ -39,14 +65,16 @@ export async function enrichPageWithVlm(
   imageBuffer: Buffer,
   options?: VlmEnrichmentOptions
 ): Promise<string> {
-  const config = getChatModelsConfig();
-  if (config.ollama?.baseUrl) {
-    return enrichWithOllama(imageBuffer, config.ollama.baseUrl, options);
+  const ollamaBaseUrl = vlmConfigSlot.get()?.ollamaBaseUrl;
+  if (ollamaBaseUrl) {
+    return enrichWithOllama(imageBuffer, ollamaBaseUrl, options);
   }
-  if (config.openai?.apiKey || config.aiApiKey) {
+  if (getAuxiliaryOpenAIConfig().apiKey) {
     return enrichWithOpenAI(imageBuffer, options);
   }
-  console.warn("[VLM] No VLM provider configured (register Ollama or OpenAI via configureChatModels), skipping enrichment");
+  console.warn(
+    "[VLM] No VLM provider configured (call configureVlmEnrichment or configureAuxiliaryOpenAI), skipping enrichment",
+  );
   return "";
 }
 
@@ -101,7 +129,7 @@ async function enrichWithOpenAI(
     console.warn("[VLM] getOpenAIClient() returned null — skipping OpenAI enrichment");
     return "";
   }
-  const model = options?.model ?? "gpt-5-mini";
+  const model = options?.model ?? GEMINI_DEFAULT_MODEL;
   const detail = options?.detail ?? "auto";
   const maxTokens = options?.maxTokens ?? 500;
 

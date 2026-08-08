@@ -100,6 +100,10 @@
     "./marketing-pipeline/benchmark": {
       "types": "./src/marketing-pipeline/benchmark/index.ts",
       "default": "./src/marketing-pipeline/benchmark/index.ts"
+    },
+    "./email-pipeline": {
+      "types": "./src/email-pipeline/index.ts",
+      "default": "./src/email-pipeline/index.ts"
     }
   },
   "scripts": {

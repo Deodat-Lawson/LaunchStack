@@ -1108,6 +1108,12 @@ export function MarketingPipelineWorkspace({
         body: JSON.stringify({
           message: editableMessage,
           platform: result.platform,
+          // Score against the exact context generation used (not a re-derivation).
+          companyContext: result.pipelineStages?.companyContext,
+          prompt: result.normalizedInput?.prompt,
+          dna: result.pipelineStages?.dna,
+          brandVoice: result.pipelineStages?.brandVoice,
+          targetPersona: result.pipelineStages?.targetPersona,
         }),
       });
       const json = (await res.json()) as {

@@ -42,6 +42,26 @@ function loadReferenceMarkdown(platform: string): string {
   return "";
 }
 
+/**
+ * Compose the same context surface the generator saw: the knowledge context
+ * plus DNA, brand voice, and persona. Groundedness/brand-voice/audience
+ * criteria are then judged against exactly what the post was written from.
+ */
+function composeEvalContext(
+  base: string,
+  extras: { dna?: unknown; brandVoice?: unknown; targetPersona?: unknown },
+): string {
+  const parts: string[] = [base.trim()];
+  const add = (label: string, value: unknown) => {
+    if (value == null) return;
+    parts.push(`=== ${label} ===\n${JSON.stringify(value, null, 2)}`);
+  };
+  add("Company DNA", extras.dna);
+  add("Brand Voice", extras.brandVoice);
+  add("Target Persona", extras.targetPersona);
+  return parts.filter(Boolean).join("\n\n");
+}
+
 export async function POST(request: Request) {
   try {
     const { userId } = await auth();
@@ -52,9 +72,19 @@ export async function POST(request: Request) {
       );
     }
 
-    let body: { message?: string; platform?: string };
+    let body: {
+      message?: string;
+      platform?: string;
+      // Context the generator actually used (from the pipeline result). When
+      // present we score against these exact facts instead of re-deriving.
+      companyContext?: string;
+      prompt?: string;
+      dna?: unknown;
+      brandVoice?: unknown;
+      targetPersona?: unknown;
+    };
     try {
-      body = (await request.json()) as { message?: string; platform?: string };
+      body = (await request.json()) as typeof body;
     } catch {
       return NextResponse.json(
         { success: false, message: "Invalid JSON body" },
@@ -101,17 +131,27 @@ export async function POST(request: Request) {
       );
     }
 
-    // Rebuild the same company-context window generation used, so groundedness
-    // is judged against the same facts the post was written from.
-    const companyContext = await buildCompanyKnowledgeContext({
-      companyId,
-      prompt: message,
+    // Prefer the exact knowledge context the generator used (passed from the
+    // pipeline result). Fall back to rebuilding it with the ORIGINAL campaign
+    // prompt (not the post text) so the RAG query matches generation.
+    const baseContext =
+      body.companyContext?.trim() ||
+      (await buildCompanyKnowledgeContext({
+        companyId,
+        prompt: body.prompt?.trim() || message,
+      }));
+
+    const companyContext = composeEvalContext(baseContext, {
+      dna: body.dna,
+      brandVoice: body.brandVoice,
+      targetPersona: body.targetPersona,
     });
 
     const scored = await scorePost({
       platform: judgePlatform,
       companyContext,
       post: message,
+      // Read the reference md for the SAME platform the post was generated for.
       referenceMarkdown: loadReferenceMarkdown(platform),
     });
 

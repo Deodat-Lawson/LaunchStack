@@ -1,4 +1,4 @@
-# Campaign Planner Eval Suite — Team Lead Implementation Plan
+# Campaign Planner Eval Suite — Implementation Plan
 
 **Your charter:** own everything that must be *trusted and stable* — the judge,
 the runner, the reproducibility manifest, and the CI regression gate. You build

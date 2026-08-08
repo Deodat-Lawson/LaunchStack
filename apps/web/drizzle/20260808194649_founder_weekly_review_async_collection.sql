@@ -1,3 +1,11 @@
+-- launchstack:allow-dml
+-- Reason: collection_input is NOT NULL with no default, and the UPDATE below is
+-- what makes the SET NOT NULL valid. A backfill script runs after migrations,
+-- which is too late to satisfy a constraint applied during them, so this data
+-- change cannot move out of the migration. It is bounded and one-shot: it
+-- touches only rows that predate the column, and re-running it matches nothing
+-- because the column is NOT NULL afterwards.
+
 CREATE TABLE "pdr_ai_v2_founder_weekly_review_dispatches" (
 	"id" varchar(64) PRIMARY KEY NOT NULL,
 	"company_id" bigint NOT NULL,

@@ -1,6 +1,8 @@
 import { randomUUID } from "node:crypto";
+import type { DeleteResult, ObjectRef } from "@launchstack/core/storage";
 
 import { env } from "~/env";
+import { resolveStorageLocationId } from "~/lib/storage-location-id";
 
 // ---------------------------------------------------------------------------
 // StorageError — wraps provider errors with provider name context
@@ -68,6 +70,7 @@ export interface UploadInput {
 export interface UploadResult {
   url: string;
   pathname: string;
+  ref: ObjectRef;
   contentType?: string;
   provider: StorageBackend;
 }
@@ -114,6 +117,11 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
     return {
       url: getObjectUrl(key),
       pathname: key,
+      ref: {
+        adapter: "s3",
+        storageLocationId: resolveStorageLocationId("s3"),
+        key,
+      },
       contentType: input.contentType,
       provider: "s3",
     };
@@ -157,6 +165,11 @@ async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
     return {
       url: `/api/files/${row.id}`,
       pathname,
+      ref: {
+        adapter: "database",
+        storageLocationId: resolveStorageLocationId("database"),
+        key: String(row.id),
+      },
       contentType: input.contentType,
       provider: "database",
     };
@@ -222,10 +235,25 @@ export async function deleteFile(
 
   // database: remove the fileUploads row matching this /api/files/<id> URL
   try {
-    const match = /\/api\/files\/(\d+)/.exec(keyOrUrl);
-    if (!match?.[1]) return;
-    const id = parseInt(match[1], 10);
-    if (isNaN(id)) return;
+    const idFromApiUrl = /^(?:https?:\/\/[^/]+)?\/api\/files\/(\d+)$/.exec(keyOrUrl)?.[1];
+    const idFromOpaqueKey = /^(\d+)$/.exec(keyOrUrl)?.[1];
+    const rawId = idFromApiUrl ?? idFromOpaqueKey;
+
+    if (!rawId) {
+      throw new StorageError(
+        `Invalid database file reference: ${keyOrUrl}`,
+        "database",
+      );
+    }
+
+    const id = parseInt(rawId, 10);
+    if (isNaN(id)) {
+      throw new StorageError(
+        `Invalid database file id: ${rawId}`,
+        "database",
+      );
+    }
+
     const { db } = await import("~/server/db");
     const { fileUploads } = await import("@launchstack/core/db/schema");
     const { eq } = await import("drizzle-orm");
@@ -240,38 +268,368 @@ export async function deleteFile(
   }
 }
 
+function mapDeleteError(ref: ObjectRef, err: unknown): DeleteResult {
+  const message = err instanceof Error ? err.message : String(err);
+  const name =
+    typeof err === "object" &&
+    err &&
+    "name" in err &&
+    typeof (err as { name?: unknown }).name === "string"
+      ? (err as { name: string }).name
+      : "delete_failed";
+
+  const providerCode =
+    typeof err === "object" &&
+    err &&
+    "code" in err &&
+    typeof (err as { code?: unknown }).code === "string"
+      ? (err as { code: string }).code
+      : typeof err === "object" &&
+          err &&
+          "Code" in err &&
+          typeof (err as { Code?: unknown }).Code === "string"
+        ? (err as { Code: string }).Code
+        : undefined;
+
+  const statusCode =
+    typeof err === "object" &&
+    err &&
+    "$metadata" in err &&
+    typeof (err as { $metadata?: { httpStatusCode?: unknown } }).$metadata
+      ?.httpStatusCode === "number"
+      ? (err as { $metadata: { httpStatusCode: number } }).$metadata.httpStatusCode
+      : typeof err === "object" &&
+          err &&
+          "statusCode" in err &&
+          typeof (err as { statusCode?: unknown }).statusCode === "number"
+        ? (err as { statusCode: number }).statusCode
+        : undefined;
+
+  const code = providerCode ?? name;
+
+  if (
+    statusCode === 404 ||
+    /NoSuchKey|NotFound|BlobNotFound|404/i.test(message) ||
+    /NoSuchKey|NotFound|BlobNotFound/i.test(code)
+  ) {
+    return { ref, outcome: "not_found" };
+  }
+
+  if (
+    statusCode === 401 ||
+    statusCode === 403 ||
+    /AccessDenied|Unauthorized|Forbidden|InvalidAccessKeyId|SignatureDoesNotMatch|InvalidToken|AuthFailed|Credentials|Credential|permission/i.test(
+      `${code} ${message}`,
+    ) ||
+    /not configured|unparseable|misconfigured|configuration/i.test(message)
+  ) {
+    return {
+      ref,
+      outcome: "blocked",
+      errorCode: code,
+      message,
+    };
+  }
+
+  return {
+    ref,
+    outcome: "retryable",
+    errorCode: code,
+    message,
+  };
+}
+
+export async function deleteFileByRef(ref: ObjectRef): Promise<DeleteResult> {
+  const adapter = ref.adapter;
+  if (
+    adapter !== "s3" &&
+    adapter !== "database" &&
+    adapter !== "vercel-blob" &&
+    adapter !== "uploadthing"
+  ) {
+    return {
+      ref,
+      outcome: "rejected",
+      errorCode: "unsupported_adapter",
+      message: `Unsupported storage adapter: ${String(adapter)}`,
+    };
+  }
+
+  try {
+    const expectedLocationId = resolveStorageLocationId(adapter);
+    if (ref.storageLocationId !== expectedLocationId) {
+      return {
+        ref,
+        outcome: "blocked",
+        errorCode: "storage_location_mismatch",
+        message: `Ref storageLocationId (${ref.storageLocationId}) does not match active adapter location (${expectedLocationId}).`,
+      };
+    }
+  } catch (err) {
+    return {
+      ref,
+      outcome: "blocked",
+      errorCode: "location_resolution_failed",
+      message: err instanceof Error ? err.message : String(err),
+    };
+  }
+
+  try {
+    if (adapter === "s3" || adapter === "database") {
+      await deleteFile(ref.key, adapter);
+    } else if (adapter === "vercel-blob") {
+      const { deleteFile: deleteBlobFile } = await import("~/server/storage/vercel-blob");
+      await deleteBlobFile(ref.key);
+    } else if (adapter === "uploadthing") {
+      const { deleteUploadThingFileByKey } = await import("~/server/storage/uploadthing");
+      const outcome = await deleteUploadThingFileByKey(ref.key);
+      if (outcome.outcome === "retryable") {
+        return {
+          ref,
+          outcome: "retryable",
+          errorCode: outcome.errorCode,
+          message: outcome.message,
+        };
+      }
+      if (outcome.outcome === "blocked") {
+        return {
+          ref,
+          outcome: "blocked",
+          errorCode: outcome.errorCode,
+          message: outcome.message,
+        };
+      }
+      if (outcome.outcome === "not_found") {
+        return { ref, outcome: "not_found" };
+      }
+    } else {
+      return {
+        ref,
+        outcome: "rejected",
+        errorCode: "unsupported_adapter",
+        message: `Unsupported storage adapter: ${adapter}`,
+      };
+    }
+
+    return { ref, outcome: "deleted" };
+  } catch (err) {
+    return mapDeleteError(ref, err);
+  }
+}
+
+/**
+ * Batch delete canonical storage refs with stable per-item outcomes.
+ *
+ * Refs are grouped by (adapter, storageLocationId) to preserve location
+ * isolation and to allow adapter-level batching where available.
+ */
+export async function deleteManyByRef(refs: readonly ObjectRef[]): Promise<DeleteResult[]> {
+  if (refs.length === 0) {
+    return [];
+  }
+
+  const grouped = new Map<string, ObjectRef[]>();
+  for (const ref of refs) {
+    const groupKey = `${ref.adapter}::${ref.storageLocationId}`;
+    const current = grouped.get(groupKey);
+    if (current) {
+      current.push(ref);
+    } else {
+      grouped.set(groupKey, [ref]);
+    }
+  }
+
+  const results: DeleteResult[] = [];
+  for (const groupRefs of grouped.values()) {
+    const first = groupRefs[0];
+    if (!first) continue;
+
+    if (first.adapter === "s3") {
+      let expectedLocationId: string;
+      try {
+        expectedLocationId = resolveStorageLocationId("s3");
+      } catch (err) {
+        for (const ref of groupRefs) {
+          results.push({
+            ref,
+            outcome: "blocked",
+            errorCode: "location_resolution_failed",
+            message: err instanceof Error ? err.message : String(err),
+          });
+        }
+        continue;
+      }
+
+      if (first.storageLocationId !== expectedLocationId) {
+        for (const ref of groupRefs) {
+          results.push({
+            ref,
+            outcome: "blocked",
+            errorCode: "storage_location_mismatch",
+            message: `Ref storageLocationId (${ref.storageLocationId}) does not match active adapter location (${expectedLocationId}).`,
+          });
+        }
+        continue;
+      }
+
+      const { deleteObjects: deleteObjectsInS3 } = await import("~/server/storage/s3-client");
+      const outcomes = await deleteObjectsInS3(groupRefs.map((ref) => ref.key));
+      const outcomeByKey = new Map(outcomes.map((outcome) => [outcome.key, outcome] as const));
+
+      for (const ref of groupRefs) {
+        const outcome = outcomeByKey.get(ref.key);
+        if (!outcome) {
+          results.push({
+            ref,
+            outcome: "retryable",
+            errorCode: "missing_delete_outcome",
+            message: `No delete outcome returned for key "${ref.key}".`,
+          });
+          continue;
+        }
+
+        results.push({
+          ref,
+          outcome: outcome.outcome,
+          errorCode: outcome.errorCode,
+          message: outcome.message,
+        });
+      }
+      continue;
+    }
+
+    for (const ref of groupRefs) {
+      results.push(await deleteFileByRef(ref));
+    }
+  }
+
+  return results;
+}
+
+function recoverS3KeyFromUrl(url: string): string | null {
+  const endpoint =
+    env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
+  const bucket = env.server.S3_BUCKET_NAME;
+  if (!endpoint || !bucket) return null;
+
+  try {
+    const target = new URL(url);
+    const endpointUrl = new URL(endpoint);
+    if (target.origin !== endpointUrl.origin) return null;
+
+    const endpointPath = endpointUrl.pathname.replace(/\/+$/, "");
+    let objectPath = target.pathname;
+
+    if (endpointPath) {
+      if (!objectPath.startsWith(endpointPath)) {
+        return null;
+      }
+      objectPath = objectPath.slice(endpointPath.length);
+    }
+
+    objectPath = objectPath.replace(/^\/+/, "");
+    const bucketPrefix = `${bucket}/`;
+    if (!objectPath.startsWith(bucketPrefix)) {
+      return null;
+    }
+
+    const key = objectPath.slice(bucketPrefix.length);
+    return key || null;
+  } catch {
+    return null;
+  }
+}
+
+function recoverBlobPathnameFromUrl(url: string): string | null {
+  try {
+    const target = new URL(url);
+    if (!target.hostname.includes(".blob.vercel-storage.com")) {
+      return null;
+    }
+
+    const pathname = target.pathname.replace(/^\/+/, "");
+    return pathname.length > 0 ? pathname : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteObjects(keys: string[]): Promise<DeleteResult[]> {
+  if (keys.length === 0) return [];
+
+  const storageLocationId = resolveStorageLocationId("s3");
+  const { deleteObjects: deleteObjectsInS3 } = await import(
+    "~/server/storage/s3-client"
+  );
+  const outcomes = await deleteObjectsInS3(keys);
+
+  return outcomes.map((outcome) => ({
+    ref: {
+      adapter: "s3",
+      storageLocationId,
+      key: outcome.key,
+    },
+    outcome: outcome.outcome,
+    errorCode: outcome.errorCode,
+    message: outcome.message,
+  }));
+}
+
 /**
  * Delete a stored file by its URL, regardless of provider.
  *
- * This is the friendlier counterpart to `deleteFile(key, provider)` — most
- * callers only have the URL stored in the DB (e.g. `document_versions.url`)
- * and don't know which provider put it there. This helper inspects the URL,
- * strips the SeaweedFS endpoint prefix to recover the object key when needed,
- * and dispatches to `deleteFile` with the correct provider.
- *
- * Database-backed URLs (`/api/files/{id}`) are silently ignored because there
- * is nothing to delete from a blob provider — the row itself is the storage.
+ * Legacy URL parsing is delegated exclusively to the promotion helper
+ * (`promoteLegacyUrlToRef`). Callers should migrate to `deleteFileByRef`.
  */
 export async function deleteFileByUrl(url: string): Promise<void> {
   if (!url) return;
 
-  // Database-backed storage: nothing to delete at the blob layer.
-  if (url.startsWith("/api/files/")) return;
-
-  const s3Endpoint =
-    env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
-
-  if (s3Endpoint && url.startsWith(s3Endpoint)) {
-    // SeaweedFS is S3-compatible; recover the object key from the endpoint prefix.
-    // e.g. "http://localhost:8333/pdr-documents/documents/abc-file.pdf"
-    //   -> "pdr-documents/documents/abc-file.pdf"
-    const key = url.slice(s3Endpoint.replace(/\/+$/, "").length + 1);
-    return deleteFile(key, "s3");
+  // Canonical database URL path — route through database delete branch.
+  if (/^\/api\/files\/\d+$/.test(url)) {
+    await deleteFile(url, "database");
+    return;
   }
 
-  // Vercel Blob has no delete handler wired up; fall through as a no-op via
-  // the database branch (the regex won't match a blob URL).
-  return deleteFile(url, "database");
+  const blobPathname = recoverBlobPathnameFromUrl(url);
+  if (blobPathname) {
+    const result = await deleteFileByRef({
+      adapter: "vercel-blob",
+      storageLocationId: resolveStorageLocationId("vercel-blob"),
+      key: blobPathname,
+    });
+
+    if (result.outcome === "retryable" || result.outcome === "blocked" || result.outcome === "rejected") {
+      throw new StorageError(result.message ?? `Delete failed with outcome=${result.outcome}`, "vercel-blob");
+    }
+    return;
+  }
+
+  const s3Key = recoverS3KeyFromUrl(url);
+  if (s3Key) {
+    const result = await deleteFileByRef({
+      adapter: "s3",
+      storageLocationId: resolveStorageLocationId("s3"),
+      key: s3Key,
+    });
+    if (result.outcome === "retryable" || result.outcome === "blocked" || result.outcome === "rejected") {
+      throw new StorageError(result.message ?? `Delete failed with outcome=${result.outcome}`, "s3");
+    }
+    return;
+  }
+
+  const { promoteLegacyUrlToRef } = await import("~/server/storage/legacy-promote");
+  const promoted = promoteLegacyUrlToRef({ value: url });
+  if (!promoted.ok) {
+    throw new StorageError(
+      `Ref promotion failed (${promoted.reason})`,
+      resolveStorageBackend(),
+    );
+  }
+
+  const result = await deleteFileByRef(promoted.ref);
+  if (result.outcome === "retryable" || result.outcome === "blocked" || result.outcome === "rejected") {
+    throw new StorageError(result.message ?? `Delete failed with outcome=${result.outcome}`, promoted.ref.adapter);
+  }
 }
 
 // ---------------------------------------------------------------------------

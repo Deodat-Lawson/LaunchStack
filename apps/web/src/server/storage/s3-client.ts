@@ -3,6 +3,7 @@ import {
   PutObjectCommand,
   GetObjectCommand,
   DeleteObjectCommand,
+  DeleteObjectsCommand,
   CreateBucketCommand,
   HeadBucketCommand,
 } from "@aws-sdk/client-s3";
@@ -111,6 +112,87 @@ export async function deleteObject(key: string): Promise<void> {
     throw new Error(
       `Failed to delete object "${key}" from S3 at ${env.server.NEXT_PUBLIC_S3_ENDPOINT}: ${err instanceof Error ? err.message : String(err)}`,
     );
+  }
+}
+
+export interface DeleteObjectOutcome {
+  key: string;
+  outcome: "deleted" | "not_found" | "retryable" | "blocked";
+  errorCode?: string;
+  message?: string;
+}
+
+function isS3BlockedDeleteError(code: string, message?: string): boolean {
+  const haystack = `${code} ${message ?? ""}`;
+  return /AccessDenied|Unauthorized|Forbidden|InvalidAccessKeyId|SignatureDoesNotMatch|InvalidToken|ExpiredToken|Credentials|Credential|permission|AuthFailed/i.test(
+    haystack,
+  );
+}
+
+export async function deleteObjects(keys: string[]): Promise<DeleteObjectOutcome[]> {
+  if (keys.length === 0) {
+    return [];
+  }
+
+  const client = getS3Client();
+  const bucket = getS3BucketName();
+
+  try {
+    const response = await client.send(
+      new DeleteObjectsCommand({
+        Bucket: bucket,
+        Delete: {
+          Objects: keys.map((key) => ({ Key: key })),
+          Quiet: false,
+        },
+      }),
+    );
+
+    const outcomeByKey = new Map<string, DeleteObjectOutcome>();
+
+    for (const deleted of response.Deleted ?? []) {
+      if (!deleted.Key) continue;
+      outcomeByKey.set(deleted.Key, {
+        key: deleted.Key,
+        outcome: "deleted",
+      });
+    }
+
+    for (const error of response.Errors ?? []) {
+      if (!error.Key) continue;
+      const code = error.Code ?? "DeleteError";
+      const isNotFound = /NoSuchKey|NotFound|404/i.test(code);
+      const isBlocked = !isNotFound && isS3BlockedDeleteError(code, error.Message);
+      outcomeByKey.set(error.Key, {
+        key: error.Key,
+        outcome: isNotFound ? "not_found" : isBlocked ? "blocked" : "retryable",
+        errorCode: code,
+        message: error.Message,
+      });
+    }
+
+    return keys.map((key) => {
+      return outcomeByKey.get(key) ?? {
+        key,
+        outcome: "deleted",
+      };
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    const name =
+      typeof err === "object" &&
+      err &&
+      "name" in err &&
+      typeof (err as { name?: unknown }).name === "string"
+        ? (err as { name: string }).name
+        : "DeleteObjectsFailed";
+    const blocked = isS3BlockedDeleteError(name, message);
+    return keys.map((key) => ({
+      key,
+      outcome: blocked ? "blocked" : "retryable",
+      errorCode: blocked ? name : "DeleteObjectsFailed",
+      message: `Failed to batch delete object "${key}" from S3 at ${env.server.NEXT_PUBLIC_S3_ENDPOINT}: ${message}`,
+    }));
   }
 }
 

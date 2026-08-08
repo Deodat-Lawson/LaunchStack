@@ -10,6 +10,14 @@ import * as fc from "fast-check";
 const TEST_ENDPOINT = "http://localhost:8333";
 const TEST_BUCKET = "pdr-documents";
 
+function makeUploadThingToken(appId: string, region?: string): string {
+  const header = Buffer.from(JSON.stringify({ alg: "HS256", typ: "JWT" }), "utf8").toString("base64url");
+  const payload = Buffer.from(JSON.stringify({ appId, region }), "utf8").toString("base64url");
+  return `${header}.${payload}.sig`;
+}
+
+const TEST_UPLOADTHING_TOKEN = makeUploadThingToken("app_test", "us-east-1");
+
 // ─── Mock env ────────────────────────────────────────────────────────────────
 
 const mockEnvData = {
@@ -20,7 +28,8 @@ const mockEnvData = {
     S3_ACCESS_KEY: "test-key",
     S3_SECRET_KEY: "test-secret",
     S3_BUCKET_NAME: TEST_BUCKET,
-    BLOB_READ_WRITE_TOKEN: "fake-blob-token",
+    BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_store-alpha_token-v1",
+    UPLOADTHING_TOKEN: TEST_UPLOADTHING_TOKEN,
   },
   client: {
     NEXT_PUBLIC_STORAGE_PROVIDER: "s3" as "s3" | "database" | undefined,
@@ -46,12 +55,16 @@ jest.mock("~/env", () => ({
 const mockPutObject = jest.fn().mockResolvedValue(undefined);
 const mockGetObjectUrl = jest.fn((key: string) => `${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`);
 const mockDeleteObject = jest.fn().mockResolvedValue(undefined);
+const mockDeleteObjects = jest.fn().mockImplementation(async (keys: string[]) =>
+  keys.map((key) => ({ key, outcome: "deleted" as const })),
+);
 const mockEnsureBucketExists = jest.fn().mockResolvedValue(undefined);
 
 jest.mock("~/server/storage/s3-client", () => ({
   putObject: (...args: unknown[]) => (mockPutObject as (...a: unknown[]) => unknown)(...args),
   getObjectUrl: (key: string) => mockGetObjectUrl(key),
   deleteObject: (...args: unknown[]) => (mockDeleteObject as (...a: unknown[]) => unknown)(...args),
+  deleteObjects: (...args: unknown[]) => (mockDeleteObjects as (...a: unknown[]) => unknown)(...args),
   ensureBucketExists: () => mockEnsureBucketExists(),
 }));
 
@@ -85,10 +98,26 @@ jest.mock("drizzle-orm", () => ({
 
 const mockFetchBlob = jest.fn().mockResolvedValue(new Response("blob-content"));
 const mockIsPrivateBlobUrl = jest.fn((url: string) => url.includes(".private.blob."));
+const mockDeleteBlobFile = jest.fn().mockResolvedValue(undefined);
 
 jest.mock("~/server/storage/vercel-blob", () => ({
   fetchBlob: (...args: unknown[]) => mockFetchBlob(...args),
   isPrivateBlobUrl: (...args: unknown[]) => mockIsPrivateBlobUrl(...(args as [string])),
+  deleteFile: (...args: unknown[]) => mockDeleteBlobFile(...args),
+}));
+
+// ─── Mock UploadThing server SDK ────────────────────────────────────────────
+
+const mockUploadThingDeleteFiles = jest.fn().mockResolvedValue({ success: true, deletedCount: 1 });
+const mockUploadThingCtor = jest.fn();
+
+jest.mock("uploadthing/server", () => ({
+  UTApi: jest.fn().mockImplementation((config: unknown) => {
+    mockUploadThingCtor(config);
+    return {
+      deleteFiles: (...args: unknown[]) => mockUploadThingDeleteFiles(...args),
+    };
+  }),
 }));
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
@@ -122,20 +151,33 @@ beforeEach(() => {
   mockPutObject.mockClear().mockResolvedValue(undefined);
   mockGetObjectUrl.mockClear().mockImplementation((key: string) => `${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`);
   mockDeleteObject.mockClear().mockResolvedValue(undefined);
+  mockDeleteObjects.mockClear().mockImplementation(async (keys: string[]) =>
+    keys.map((key) => ({ key, outcome: "deleted" as const })),
+  );
   mockEnsureBucketExists.mockClear().mockResolvedValue(undefined);
   mockInsertReturning.mockClear().mockImplementation(() => Promise.resolve([{ id: 42 }]));
   mockFetchBlob.mockClear().mockResolvedValue(new Response("blob-content"));
+  mockDeleteBlobFile.mockClear().mockResolvedValue(undefined);
+  mockUploadThingDeleteFiles.mockClear().mockResolvedValue({ success: true, deletedCount: 1 });
+  mockUploadThingCtor.mockClear();
+  mockDelete.mockClear().mockResolvedValue(undefined);
+  mockEnvData.server.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_store-alpha_token-v1";
+  mockEnvData.server.UPLOADTHING_TOKEN = TEST_UPLOADTHING_TOKEN;
   setProvider("s3");
 });
 
 import {
   uploadFile,
+  deleteFileByUrl,
+  deleteFileByRef,
+  deleteManyByRef,
   getFileUrl,
   fetchFile,
   StorageError,
   resolveStorageBackend,
   isS3Storage,
 } from "~/lib/storage";
+import { resolveStorageLocationId } from "~/lib/storage-location-id";
 
 // ─── Property 5: Upload result shape and persistence consistency ─────────────
 
@@ -367,3 +409,269 @@ describe(
     });
   },
 );
+
+// ─── Property 12: S3 put/delete key identity ────────────────────────────────
+
+describe(
+  "Feature: storage unification, Property 12: S3 put/delete key identity",
+  () => {
+    it("deleteFileByUrl strips endpoint and bucket, never sending duplicated bucket in DeleteObject Key", async () => {
+      setProvider("s3");
+
+      await fc.assert(
+        fc.asyncProperty(
+          fc.string({ minLength: 1, maxLength: 80, unit: "grapheme" }).map(
+            (s) => `documents/${s.replace(/[^a-zA-Z0-9._-]/g, "x") || "file"}`,
+          ),
+          async (key) => {
+            const url = `${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`;
+            await deleteFileByUrl(url);
+
+            expect(mockDeleteObject).toHaveBeenCalled();
+            const calledKey = mockDeleteObject.mock.calls.at(-1)?.[0] as string;
+            const expectedFromUrl = new URL(url).pathname.replace(`/${TEST_BUCKET}/`, "").replace(/^\/+/, "");
+            expect(calledKey).toBe(expectedFromUrl);
+            expect(calledKey.startsWith(`${TEST_BUCKET}/`)).toBe(false);
+            expect(calledKey.includes(`${TEST_BUCKET}/${TEST_BUCKET}/`)).toBe(false);
+          },
+        ),
+        { numRuns: 50 },
+      );
+    });
+
+    it("upload/delete round-trip uses the exact same S3 object key", async () => {
+      setProvider("s3");
+
+      await fc.assert(
+        fc.asyncProperty(
+          filenameArb,
+          dataArb,
+          contentTypeArb,
+          userIdArb,
+          async (filename, data, contentType, userId) => {
+            const uploaded = await uploadFile({ filename, data, contentType, userId });
+
+            const putKey = mockPutObject.mock.calls.at(-1)?.[0] as string;
+            expect(putKey).toBeTruthy();
+
+            await deleteFileByUrl(uploaded.url);
+
+            const deleteKey = mockDeleteObject.mock.calls.at(-1)?.[0] as string;
+            expect(deleteKey).toBe(putKey);
+          },
+        ),
+        { numRuns: 50 },
+      );
+    });
+  },
+);
+
+describe("Feature: blob deletion routing and identity", () => {
+  it("deleteFileByUrl routes Blob URLs to vercel-blob adapter and never falls through to /api/files database path", async () => {
+    const blobUrl = "https://store.public.blob.vercel-storage.com/api/files/4242";
+
+    await deleteFileByUrl(blobUrl);
+
+    expect(mockDeleteBlobFile).toHaveBeenCalledTimes(1);
+    expect(mockDeleteBlobFile).toHaveBeenCalledWith("api/files/4242");
+    expect(mockDelete).not.toHaveBeenCalled();
+  });
+
+  it("token rotation within the same Blob store keeps the same storageLocationId", () => {
+    mockEnvData.server.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_store-stable_token-v1";
+    const first = resolveStorageLocationId("vercel-blob");
+
+    mockEnvData.server.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_store-stable_token-v2";
+    const second = resolveStorageLocationId("vercel-blob");
+
+    expect(first).toBe("vercel-blob:store-stable");
+    expect(second).toBe(first);
+  });
+
+  it("token for a different Blob store mints a new location id and blocks deletes for old refs", async () => {
+    mockEnvData.server.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_store-old_token-v1";
+    const oldLocationId = resolveStorageLocationId("vercel-blob");
+
+    const oldRef = {
+      adapter: "vercel-blob" as const,
+      storageLocationId: oldLocationId,
+      key: "documents/legacy-file.pdf",
+    };
+
+    mockEnvData.server.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_store-new_token-v2";
+    const newLocationId = resolveStorageLocationId("vercel-blob");
+    expect(newLocationId).toBe("vercel-blob:store-new");
+    expect(newLocationId).not.toBe(oldLocationId);
+
+    const result = await deleteFileByRef(oldRef);
+    expect(result.outcome).toBe("blocked");
+    expect(result.errorCode).toBe("storage_location_mismatch");
+    expect(mockDeleteBlobFile).not.toHaveBeenCalled();
+  });
+});
+
+describe("Feature: database deletion by canonical URL", () => {
+  it("deleteFileByUrl('/api/files/{id}') deletes the matching fileUploads row only", async () => {
+    await deleteFileByUrl("/api/files/4242");
+
+    expect(mockDelete).toHaveBeenCalledTimes(1);
+    expect(mockDelete).toHaveBeenCalledWith(["id", 4242]);
+    expect(mockDelete).not.toHaveBeenCalledWith(["id", 9999]);
+
+    expect(mockDeleteBlobFile).not.toHaveBeenCalled();
+    expect(mockDeleteObject).not.toHaveBeenCalled();
+  });
+
+  it("unknown/non-matching URLs are rejected (no silent fallthrough)", async () => {
+    await expect(deleteFileByUrl("/api/files/not-a-number")).rejects.toBeInstanceOf(StorageError);
+
+    expect(mockDelete).not.toHaveBeenCalled();
+    expect(mockDeleteBlobFile).not.toHaveBeenCalled();
+    expect(mockDeleteObject).not.toHaveBeenCalled();
+  });
+});
+
+describe("Feature: UploadThing adapter routing", () => {
+  it("UTFS URL delete routes to uploadthing adapter only (no S3/blob/database fallthrough)", async () => {
+    const key = "doc_UTFS_key_123";
+    const utfsUrl = `https://utfs.io/f/${key}`;
+
+    await deleteFileByUrl(utfsUrl);
+
+    expect(mockUploadThingCtor).toHaveBeenCalledWith({ token: TEST_UPLOADTHING_TOKEN });
+    expect(mockUploadThingDeleteFiles).toHaveBeenCalledWith(key);
+    expect(mockDeleteObject).not.toHaveBeenCalled();
+    expect(mockDeleteBlobFile).not.toHaveBeenCalled();
+    expect(mockDelete).not.toHaveBeenCalled();
+  });
+
+  it("uploadthing delete round-trip by ref returns deleted outcome", async () => {
+    const ref = {
+      adapter: "uploadthing" as const,
+      storageLocationId: "uploadthing:app_test@us-east-1",
+      key: "ut_key_roundtrip_1",
+    };
+
+    const result = await deleteFileByRef(ref);
+
+    expect(result).toEqual({ ref, outcome: "deleted" });
+    expect(mockUploadThingDeleteFiles).toHaveBeenCalledWith(ref.key);
+    expect(mockDeleteObject).not.toHaveBeenCalled();
+    expect(mockDeleteBlobFile).not.toHaveBeenCalled();
+    expect(mockDelete).not.toHaveBeenCalled();
+  });
+});
+
+describe("Feature: adapter acceptance failure matrix (provider slice)", () => {
+  it("transient adapter errors return retryable (no false success)", async () => {
+    const ref = {
+      adapter: "vercel-blob" as const,
+      storageLocationId: "vercel-blob:store-alpha",
+      key: "documents/transient.pdf",
+    };
+
+    mockDeleteBlobFile.mockRejectedValueOnce(new Error("ECONNRESET: upstream transient network failure"));
+
+    const result = await deleteFileByRef(ref);
+
+    expect(result.outcome).toBe("retryable");
+    expect(result.outcome).not.toBe("deleted");
+  });
+
+  it("permanent auth/config errors return blocked (distinct from retryable)", async () => {
+    const ref = {
+      adapter: "uploadthing" as const,
+      storageLocationId: "uploadthing:app_test@us-east-1",
+      key: "ut_blocked_1",
+    };
+
+    mockUploadThingDeleteFiles.mockResolvedValueOnce({
+      success: false,
+      deletedCount: 0,
+      message: "Unauthorized: token is invalid",
+    });
+
+    const result = await deleteFileByRef(ref);
+
+    expect(result.outcome).toBe("blocked");
+    expect(result.errorCode).toBe("uploadthing_auth_or_config_error");
+    expect(result.outcome).not.toBe("retryable");
+  });
+
+  it("missing object is reported as not_found under adapter contract", async () => {
+    const ref = {
+      adapter: "uploadthing" as const,
+      storageLocationId: "uploadthing:app_test@us-east-1",
+      key: "ut_missing_1",
+    };
+
+    mockUploadThingDeleteFiles.mockResolvedValueOnce({
+      success: true,
+      deletedCount: 0,
+    });
+
+    const result = await deleteFileByRef(ref);
+    expect(result).toEqual({ ref, outcome: "not_found" });
+  });
+
+  it("deleteMany preserves per-item outcomes on partial failures", async () => {
+    const refs = [
+      {
+        adapter: "s3" as const,
+        storageLocationId: "s3:http://localhost:8333@pdr-documents",
+        key: "documents/a.pdf",
+      },
+      {
+        adapter: "s3" as const,
+        storageLocationId: "s3:http://localhost:8333@pdr-documents",
+        key: "documents/b.pdf",
+      },
+      {
+        adapter: "s3" as const,
+        storageLocationId: "s3:http://localhost:8333@pdr-documents",
+        key: "documents/c.pdf",
+      },
+    ];
+
+    mockDeleteObjects.mockResolvedValueOnce([
+      { key: "documents/a.pdf", outcome: "deleted" },
+      { key: "documents/b.pdf", outcome: "not_found" },
+      {
+        key: "documents/c.pdf",
+        outcome: "retryable",
+        errorCode: "SlowDown",
+        message: "Please reduce your request rate.",
+      },
+    ]);
+
+    const results = await deleteManyByRef(refs);
+
+    expect(results).toEqual([
+      { ref: refs[0], outcome: "deleted", errorCode: undefined, message: undefined },
+      { ref: refs[1], outcome: "not_found", errorCode: undefined, message: undefined },
+      {
+        ref: refs[2],
+        outcome: "retryable",
+        errorCode: "SlowDown",
+        message: "Please reduce your request rate.",
+      },
+    ]);
+  });
+
+  it("rejected outcomes are preserved and never remapped to another adapter", async () => {
+    const legacyRef = {
+      adapter: "legacy" as unknown as "s3",
+      storageLocationId: "legacy:v1",
+      key: "legacy://opaque",
+    } as unknown as Parameters<typeof deleteFileByRef>[0];
+
+    const result = await deleteFileByRef(legacyRef);
+
+    expect(result.outcome).toBe("rejected");
+    expect(result.errorCode).toBe("unsupported_adapter");
+    expect(mockDeleteObject).not.toHaveBeenCalled();
+    expect(mockDeleteBlobFile).not.toHaveBeenCalled();
+    expect(mockUploadThingDeleteFiles).not.toHaveBeenCalled();
+    expect(mockDelete).not.toHaveBeenCalled();
+  });
+});

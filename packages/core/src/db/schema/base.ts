@@ -57,9 +57,7 @@ export const company = pgTable("company", {
     createdAt: timestamp("created_at", { withTimezone: true })
         .default(sql`CURRENT_TIMESTAMP`)
         .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-        () => new Date()
-    ),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
 });
 
 // ============================================================================
@@ -86,25 +84,27 @@ export const document = pgTable(
         ocrCostCents: integer("ocr_cost_cents"),
         mimeType: varchar("mime_type", { length: 128 }),
         sourceArchiveName: varchar("source_archive_name", { length: 256 }),
+        sourceArchiveEntry: varchar("source_archive_entry", { length: 1024 }),
         fileType: varchar("file_type", { length: 128 }),
+        creationKey: varchar("creation_key", { length: 512 }),
         currentVersionId: bigint("current_version_id", { mode: "bigint" }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("document_company_id_idx").on(table.companyId),
         companyIdIdIdx: index("document_company_id_id_idx").on(table.companyId, table.id),
         companyIdCategoryIdx: index("document_company_id_category_idx").on(
             table.companyId,
             table.category
         ),
-        currentVersionIdIdx: index("document_current_version_id_idx").on(
-            table.currentVersionId
+        companyCreationKeyUnique: uniqueIndex("document_company_creation_key_unique").on(
+            table.companyId,
+            table.creationKey
         ),
+        currentVersionIdIdx: index("document_current_version_id_idx").on(table.currentVersionId),
     })
 );
 
@@ -129,12 +129,17 @@ export const documentVersions = pgTable(
         ocrProvider: varchar("ocr_provider", { length: 50 }),
         ocrProcessed: boolean("ocr_processed").default(false),
         ocrMetadata: jsonb("ocr_metadata"),
+        creationKey: varchar("creation_key", { length: 512 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
+        documentCreationKeyUnique: uniqueIndex("doc_versions_document_creation_key_unique").on(
+            table.documentId,
+            table.creationKey
+        ),
         documentVersionUnique: uniqueIndex("doc_versions_document_version_unique").on(
             table.documentId,
             table.versionNumber
@@ -157,11 +162,9 @@ export const category = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("category_company_id_idx").on(table.companyId),
     })
 );
@@ -194,7 +197,7 @@ export const pdfChunks = pgTable(
         content: text("content").notNull(),
         embedding: vector("embedding", { dimensions: 1536 }),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("pdf_chunks_document_id_idx").on(table.documentId),
         documentIdPageIdx: index("pdf_chunks_document_id_page_idx").on(
             table.documentId,
@@ -229,7 +232,7 @@ export const fileUploads = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         userIdIdx: index("file_uploads_user_id_idx").on(table.userId),
     })
 );
@@ -242,7 +245,12 @@ export const ocrJobs = pgTable(
     "ocr_jobs",
     {
         id: varchar("id", { length: 256 }).primaryKey(),
-        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, { onDelete: "set null" }),
+        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, {
+            onDelete: "set null",
+        }),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "set null",
+        }),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -251,12 +259,15 @@ export const ocrJobs = pgTable(
         // Status
         status: varchar("status", {
             length: 50,
-            enum: ["queued", "processing", "completed", "failed", "needs_review"]
-        }).notNull().default("queued"),
+            enum: ["queued", "processing", "completed", "failed", "needs_review"],
+        })
+            .notNull()
+            .default("queued"),
 
         // Document info
         documentUrl: varchar("document_url", { length: 1024 }).notNull(),
         documentName: varchar("document_name", { length: 256 }).notNull(),
+        dispatchOptions: jsonb("dispatch_options").$type<Record<string, unknown>>(),
         pageCount: integer("page_count"),
         fileSizeBytes: bigint("file_size_bytes", { mode: "bigint" }),
 
@@ -264,7 +275,7 @@ export const ocrJobs = pgTable(
         complexityScore: integer("complexity_score"),
         documentType: varchar("document_type", {
             length: 50,
-            enum: ["contract", "financial", "scanned", "general", "other"]
+            enum: ["contract", "financial", "scanned", "general", "other"],
         }),
 
         // Provider selection
@@ -294,19 +305,19 @@ export const ocrJobs = pgTable(
         webhookUrl: varchar("webhook_url", { length: 1024 }),
         webhookStatus: varchar("webhook_status", {
             length: 20,
-            enum: ["pending", "sent", "failed"]
+            enum: ["pending", "sent", "failed"],
         }),
 
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),
         userIdIdx: index("ocr_jobs_user_id_idx").on(table.userId),
+        documentIdIdx: index("ocr_jobs_document_id_idx").on(table.documentId),
+        versionIdIdx: index("ocr_jobs_version_id_idx").on(table.versionId),
         statusIdx: index("ocr_jobs_status_idx").on(table.status),
         createdAtIdx: index("ocr_jobs_created_at_idx").on(table.createdAt),
         companyStatusIdx: index("ocr_jobs_company_status_idx").on(table.companyId, table.status),
@@ -327,12 +338,21 @@ export const ocrProcessingSteps = pgTable(
         stepNumber: integer("step_number").notNull(),
         stepType: varchar("step_type", {
             length: 50,
-            enum: ["pre_assessment", "ocr_execution", "validation", "embedding", "storage", "webhook"]
+            enum: [
+                "pre_assessment",
+                "ocr_execution",
+                "validation",
+                "embedding",
+                "storage",
+                "webhook",
+            ],
         }).notNull(),
         status: varchar("status", {
             length: 20,
-            enum: ["pending", "in_progress", "completed", "failed"]
-        }).notNull().default("pending"),
+            enum: ["pending", "in_progress", "completed", "failed"],
+        })
+            .notNull()
+            .default("pending"),
         input: jsonb("input"),
         output: jsonb("output"),
         errorMessage: text("error_message"),
@@ -341,9 +361,12 @@ export const ocrProcessingSteps = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         jobIdIdx: index("ocr_processing_steps_job_id_idx").on(table.jobId),
-        jobIdStepIdx: index("ocr_processing_steps_job_id_step_idx").on(table.jobId, table.stepNumber),
+        jobIdStepIdx: index("ocr_processing_steps_job_id_step_idx").on(
+            table.jobId,
+            table.stepNumber
+        ),
     })
 );
 
@@ -367,11 +390,9 @@ export const ocrCostTracking = pgTable(
         averageCostPerPage: integer("average_cost_per_page").default(0).notNull(),
         averageConfidenceScore: integer("average_confidence_score").default(0).notNull(),
 
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyProviderMonthIdx: index("ocr_cost_tracking_company_provider_month_idx").on(
             table.companyId,
             table.provider,
@@ -411,11 +432,9 @@ export const uploadBatches = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdx: index("upload_batches_company_idx").on(table.companyId),
         creatorIdx: index("upload_batches_creator_idx").on(table.createdByUserId),
         statusIdx: index("upload_batches_status_idx").on(table.status),
@@ -458,11 +477,9 @@ export const uploadBatchFiles = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         batchIdx: index("upload_batch_files_batch_idx").on(table.batchId),
         statusIdx: index("upload_batch_files_status_idx").on(table.status),
         jobIdx: index("upload_batch_files_job_idx").on(table.jobId),

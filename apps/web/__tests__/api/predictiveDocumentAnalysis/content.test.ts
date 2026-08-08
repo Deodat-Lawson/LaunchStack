@@ -8,6 +8,151 @@ import {
     hasSpecificIdentifier,
 } from "~/app/api/agents/predictive-document-analysis/utils/content";
 import type { PdfChunk } from "~/app/api/agents/predictive-document-analysis/types";
+import { db } from "~/server/db/index";
+import { document, documentSections } from "@launchstack/core/db/schema";
+import { hybridSearchWithRRF } from "~/app/api/agents/predictive-document-analysis/services/hybridSearch";
+import { findSuggestedCompanyDocuments } from "~/app/api/agents/predictive-document-analysis/services/documentMatcher";
+
+jest.mock("~/server/db/index", () => ({
+    db: {
+        select: jest.fn(),
+    },
+}));
+
+jest.mock("~/app/api/agents/predictive-document-analysis/utils/embeddings", () => ({
+    getEmbeddings: jest.fn().mockResolvedValue([]),
+}));
+
+type ChunkQueryRow = {
+    id: number;
+    content: string;
+    page: number;
+    documentId: bigint;
+    versionId: bigint;
+    distance: number;
+};
+
+const historicalChunk: ChunkQueryRow = {
+    id: 10,
+    content: '"schedule a" appears in the historical version',
+    page: 1,
+    documentId: 2n,
+    versionId: 1n,
+    distance: 0.1,
+};
+
+const currentChunk: ChunkQueryRow = {
+    id: 11,
+    content: "schedule a appears in the current version",
+    page: 2,
+    documentId: 2n,
+    versionId: 2n,
+    distance: 0.2,
+};
+
+function containsColumn(value: unknown, column: object, seen = new Set<object>()): boolean {
+    if (value === column) return true;
+    if (!value || typeof value !== "object") return false;
+    if (seen.has(value)) return false;
+    seen.add(value);
+
+    if (Array.isArray(value)) {
+        return value.some(item => containsColumn(item, column, seen));
+    }
+
+    return Object.values(value).some(item => containsColumn(item, column, seen));
+}
+
+function rowsForQuery(source: unknown, condition: unknown): unknown[] {
+    if (source === document) {
+        return [{ id: 2, title: "Unrelated report" }];
+    }
+
+    const hasCurrentVersionPredicate =
+        containsColumn(condition, documentSections.versionId) &&
+        containsColumn(condition, document.currentVersionId);
+
+    return hasCurrentVersionPredicate ? [currentChunk] : [historicalChunk, currentChunk];
+}
+
+type QueryChain = {
+    from(table: unknown): QueryChain;
+    innerJoin(...args: unknown[]): QueryChain;
+    where(condition: unknown): QueryChain;
+    orderBy(...args: unknown[]): QueryChain;
+    limit(limit: number): Promise<unknown[]>;
+    then<TResult1 = unknown[], TResult2 = never>(
+        onFulfilled?: ((value: unknown[]) => TResult1 | PromiseLike<TResult1>) | null,
+        onRejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null
+    ): PromiseLike<TResult1 | TResult2>;
+};
+
+function mockPredictiveSelects(): void {
+    (db.select as jest.Mock).mockImplementation(() => {
+        let source: unknown;
+        let condition: unknown;
+        const query: QueryChain = {
+            from(table) {
+                source = table;
+                return query;
+            },
+            innerJoin() {
+                return query;
+            },
+            where(nextCondition) {
+                condition = nextCondition;
+                return query;
+            },
+            orderBy() {
+                return query;
+            },
+            limit() {
+                return Promise.resolve(rowsForQuery(source, condition));
+            },
+            then(onFulfilled, onRejected) {
+                return Promise.resolve(rowsForQuery(source, condition)).then(
+                    onFulfilled,
+                    onRejected
+                );
+            },
+        };
+        return query;
+    });
+}
+
+describe("predictive current-version retrieval", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockPredictiveSelects();
+    });
+
+    it("excludes historical chunks from hybrid results", async () => {
+        const results = await hybridSearchWithRRF("schedule a", [2], 8);
+
+        expect(results).toHaveLength(1);
+        expect(results[0]?.content).toBe(currentChunk.content);
+        expect(results.map(result => result.content)).not.toContain(historicalChunk.content);
+    });
+
+    it("excludes historical chunks from matcher exact-reference results", async () => {
+        const results = await findSuggestedCompanyDocuments(
+            {
+                documentType: "agreement",
+                documentName: "Schedule A",
+                reason: "referenced",
+                page: 1,
+                priority: "high",
+            },
+            1,
+            1,
+            new Map([[2, "Unrelated report"]])
+        );
+
+        expect(results).toHaveLength(1);
+        expect(results[0]?.snippet).toContain(currentChunk.content);
+        expect(results[0]?.snippet).not.toContain(historicalChunk.content);
+    });
+});
 
 describe("groupContentFromChunks", () => {
     it("formats each chunk with its page header", () => {
@@ -99,7 +244,12 @@ describe("extractKeywords", () => {
 
 describe("hasReferencePattern", () => {
     it("detects 'see <documentName>' pattern", () => {
-        expect(hasReferencePattern("Please see employment contract for details.", "employment contract")).toBe(true);
+        expect(
+            hasReferencePattern(
+                "Please see employment contract for details.",
+                "employment contract"
+            )
+        ).toBe(true);
     });
 
     it("detects 'refer to <documentName>' pattern", () => {
@@ -107,11 +257,18 @@ describe("hasReferencePattern", () => {
     });
 
     it("detects 'as per <documentName>' pattern", () => {
-        expect(hasReferencePattern("As per service agreement, payment is due.", "service agreement")).toBe(true);
+        expect(
+            hasReferencePattern("As per service agreement, payment is due.", "service agreement")
+        ).toBe(true);
     });
 
     it("detects 'according to <documentName>' pattern", () => {
-        expect(hasReferencePattern("According to compliance report, standards are met.", "compliance report")).toBe(true);
+        expect(
+            hasReferencePattern(
+                "According to compliance report, standards are met.",
+                "compliance report"
+            )
+        ).toBe(true);
     });
 
     it("detects '<documentName> attached' pattern", () => {
@@ -123,7 +280,9 @@ describe("hasReferencePattern", () => {
     });
 
     it("is case-insensitive", () => {
-        expect(hasReferencePattern("In MASTER AGREEMENT terms apply.", "master agreement")).toBe(true);
+        expect(hasReferencePattern("In MASTER AGREEMENT terms apply.", "master agreement")).toBe(
+            true
+        );
     });
 });
 

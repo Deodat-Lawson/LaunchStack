@@ -1,17 +1,10 @@
 import { type Backfill } from "@launchstack/core/db/backfills";
 import { getTableName, sql } from "drizzle-orm";
-// Engine tables: the RLM rows that hang off a document.
-import {
-  documentContextChunks,
-  documentMetadata,
-  documentPreviews,
-  documentRetrievalChunks,
-  documentStructure,
-} from "@launchstack/core/db/schema";
 // Product tables: notes live on the application side of the boundary.
 import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
 
 import { embedNote } from "../notes/embed-note";
+import { countUnrepairedDocuments, repairDocumentVersions } from "./document-version-repair";
 
 /**
  * The backfill registry.
@@ -91,100 +84,33 @@ const noteEmbeddings: Backfill = {
 };
 
 /**
- * Give pre-versioning documents a v1 `document_versions` row.
+ * Repair the document/version/job graph for pre-versioning rows.
  *
- * New uploads create this inline (server/services/document-upload.ts), so on a
+ * New uploads build this inline (server/services/document-creation.ts), so on a
  * database built from the current migrations there is nothing to do. It stays
  * registered because `api/documents/[id]/versions` still refuses to accept a
  * new version for a document with no `file_type` and points operators here.
  *
- * Three things per document, in one transaction: create the v1 row, point the
- * document at it, and stamp `version_id` on the RLM rows that hang off it.
- * Skipping that last part would leave retrieval rows unversioned, which the
- * version-filtered retrievers treat as "belongs to no version".
+ * The work is deliberately NOT chunked: the repair runs as one transaction and
+ * fails closed if any RLM row is left without a derivable version. A batched
+ * run would commit a half-versioned graph, which the version-filtered
+ * retrievers read as "these rows belong to no version" — worse than not having
+ * run at all. See ./document-version-repair.ts, and its SQL twin
+ * drizzle/0017_document_version_repair.sql.
  */
-/** RLM tables carrying a nullable `version_id` that points at document_versions. */
-const RLM_VERSIONED = [
-  getTableName(documentStructure),
-  getTableName(documentContextChunks),
-  getTableName(documentRetrievalChunks),
-  getTableName(documentMetadata),
-  getTableName(documentPreviews),
-];
-
 const documentVersionsBackfill: Backfill = {
   id: "2026-08-document-versions",
-  description: "Create a v1 version row for documents that predate versioning",
+  description: "Repair v1 rows, current-version pointers and RLM version links",
   // Pure SQL — no embeddings, no LLM. Runnable with only DATABASE_URL.
   requiresEngine: false,
 
-  async estimate({ db }) {
-    const rows = rowsOf<{ n: number }>(
-      await db.execute(sql`
-        SELECT count(*)::int AS n FROM pdr_ai_v2_document WHERE current_version_id IS NULL`),
-    );
-    return rows[0]?.n ?? 0;
-  },
+  estimate: ({ db }) => countUnrepairedDocuments(db),
 
-  async step({ db, cursor, batchSize }) {
-    const after = typeof cursor === "number" ? cursor : 0;
-    const rows = rowsOf<{ id: number }>(
-      await db.execute(sql`
-        SELECT id FROM pdr_ai_v2_document
-         WHERE current_version_id IS NULL AND id > ${after}
-         ORDER BY id ASC LIMIT ${batchSize}`),
-    );
-    if (rows.length === 0) return { cursor: null, processed: 0 };
-
-    let processed = 0;
-    let lastGood = after;
-    for (const row of rows) {
-      try {
-        // One transaction per document, so a partial failure never leaves a
-        // document pointing at a version row that does not exist.
-        await db.transaction(async (tx) => {
-          const inserted = rowsOf<{ id: number }>(
-            await tx.execute(sql`
-              INSERT INTO pdr_ai_v2_document_versions
-                (document_id, version_number, url, mime_type, uploaded_by)
-              SELECT id, 1, url,
-                     COALESCE(mime_type, 'application/octet-stream'), 'backfill'
-                FROM pdr_ai_v2_document WHERE id = ${row.id}
-              RETURNING id`),
-          );
-          const versionId = inserted[0]?.id;
-          if (versionId === undefined) {
-            throw new Error(`no version row created for document ${row.id}`);
-          }
-          await tx.execute(sql`
-            UPDATE pdr_ai_v2_document
-               SET current_version_id = ${versionId},
-                   file_type = COALESCE(file_type, mime_type, 'application/octet-stream')
-             WHERE id = ${row.id}`);
-
-          // Stamp version_id on everything derived from this document. Only
-          // rows where it IS NULL, so re-running cannot reassign a row that a
-          // later version already owns.
-          for (const table of RLM_VERSIONED) {
-            await tx.execute(sql`
-              UPDATE ${sql.identifier(table)}
-                 SET version_id = ${versionId}
-               WHERE document_id = ${row.id} AND version_id IS NULL`);
-          }
-        });
-      } catch (err) {
-        throw new Error(
-          `document ${row.id} failed after ${processed} row(s) in this batch; ` +
-            `cursor stays at ${lastGood} so a re-run retries from there. ` +
-            `Cause: ${err instanceof Error ? err.message : String(err)}`,
-          { cause: err },
-        );
-      }
-      processed += 1;
-      lastGood = row.id;
-    }
-
-    return { cursor: lastGood, processed };
+  async step({ db }) {
+    const remaining = await countUnrepairedDocuments(db);
+    await repairDocumentVersions(db);
+    // One pass handles every row, so there is never a resume point.
+    return { cursor: null, processed: remaining };
   },
 };
 

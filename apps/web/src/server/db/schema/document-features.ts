@@ -10,7 +10,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import { bigint, bigserial, boolean, index, integer, jsonb, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 import { pgTable } from "@launchstack/core/db/schema/helpers";
-import { company, document } from "@launchstack/core/db/schema";
+import { company, document, documentVersions } from "@launchstack/core/db/schema";
 
 export const ChatHistory = pgTable(
     "chat_history",
@@ -57,6 +57,9 @@ export const predictiveDocumentAnalysisResults = pgTable(
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "cascade",
+        }),
         analysisType: varchar("analysis_type", { length: 256 }).notNull(),
         includeRelatedDocs: boolean("include_related_docs").default(false),
         resultJson: jsonb("result_json").notNull(),
@@ -66,6 +69,10 @@ export const predictiveDocumentAnalysisResults = pgTable(
     },
     (table) => ({
         documentIdIdx: index("predictive_analysis_document_id_idx").on(table.documentId),
+        documentVersionIdx: index("predictive_analysis_document_version_idx").on(
+            table.documentId,
+            table.versionId
+        ),
     })
 );
 

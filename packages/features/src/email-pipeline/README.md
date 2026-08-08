@@ -123,17 +123,19 @@ network, no DB — the whole member.md surface is pure by construction.
 
 ## Contract gaps found in Phase 0
 
-Reviewing the `lead.md` schema and `types.ts` surfaced three mismatches. None
-blocked the build; all are worth a decision.
+Reviewing the `lead.md` schema and `types.ts` surfaced three mismatches.
+Gaps 1 and 2 are now **fixed**; gap 3 is inherent and handled by design.
 
-1. **`Recipient.vars` has nowhere to live.** The type carries arbitrary
-   per-recipient merge variables, but `email_recipients` has no column for them.
-   Extra CSV columns work in-memory and are lost on persist. A `vars jsonb`
-   column would close it.
-2. **`email_sends.subject` is never written.** The column exists, but
-   `SendResult` has no subject field and `saveSends()` does not populate it — so
-   the audit trail records _that_ something was sent, not _what_. Adding
-   `subject` to `SendResult` would fix it.
+1. ~~**`Recipient.vars` has nowhere to live.**~~ **Fixed.** `email_recipients`
+   now has a `vars jsonb` column (migration `0017_email_recipient_vars.sql`), and
+   `saveRecipients()` / `loadRecipients()` round-trip it. `runEmailCampaign`
+   persists the list alongside the campaign. An empty `vars` is stored as `NULL`
+   rather than `{}`, so "no extra variables" has one representation.
+2. ~~**`email_sends.subject` is never written.**~~ **Fixed.** `SendResult` now
+   carries `subject`, `sendCampaign()` sets it on every post-render result
+   (dry-run, sent, and both failure paths), and `saveSends()` writes it. It stays
+   `NULL` for `suppressed` / `skipped`, which are decided before the template is
+   merged and so never produce a subject.
 3. **`ProspectResult` has no email**, so the recipient source named in
    `member.md` Phase 1 cannot produce a sendable recipient unaided. Handled via
    `needsEmail` rather than by guessing addresses, but it means "prospector →

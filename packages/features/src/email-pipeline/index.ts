@@ -7,7 +7,7 @@ export * from "./generator";
 export * from "./reviewer";
 export * from "./send";
 export * from "./run";
-export { addSuppression, isSuppressed } from "./db";
+export { addSuppression, isSuppressed, loadRecipients, saveRecipients } from "./db";
 
 /* member.md — recipients, validation, company field mapping, seed templates. */
 export * from "./recipients";

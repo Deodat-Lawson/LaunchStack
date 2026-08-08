@@ -96,7 +96,7 @@ const noteEmbeddings: Backfill = {
  * run would commit a half-versioned graph, which the version-filtered
  * retrievers read as "these rows belong to no version" — worse than not having
  * run at all. See ./document-version-repair.ts, and its SQL twin
- * drizzle/0017_document_version_repair.sql.
+ * src/server/backfills/sql/document-version-repair.sql.
  */
 const documentVersionsBackfill: Backfill = {
   id: "2026-08-document-versions",

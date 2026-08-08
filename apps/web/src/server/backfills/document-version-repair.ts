@@ -7,7 +7,7 @@
  *
  * It runs as ONE transaction and fails closed: if any RLM row is left without
  * a derivable version, the whole pass rolls back rather than leaving readers
- * with a half-versioned graph. `drizzle/0017_document_version_repair.sql` is
+ * with a half-versioned graph. `src/server/backfills/sql/document-version-repair.sql` is
  * the SQL twin of this function, and the integration test asserts the two
  * behave identically.
  *

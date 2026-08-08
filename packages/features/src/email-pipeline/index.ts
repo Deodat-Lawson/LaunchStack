@@ -8,3 +8,9 @@ export * from "./reviewer";
 export * from "./send";
 export * from "./run";
 export { addSuppression, isSuppressed } from "./db";
+
+/* member.md — recipients, validation, company field mapping, seed templates. */
+export * from "./recipients";
+export * from "./validators";
+export * from "./company-fields";
+export * from "./templates";

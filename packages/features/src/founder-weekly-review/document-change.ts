@@ -61,6 +61,11 @@ const compareChunks = (a: VersionChunk, b: VersionChunk) =>
     (a.lineStart ?? -1) - (b.lineStart ?? -1) ||
     (a.structureOrdering ?? -1) - (b.structureOrdering ?? -1) || a.chunkId - b.chunkId;
 
+export type EvidenceStatus =
+    | "changed"
+    | "shipped"
+    | "planned";
+
 /** Select only adjacent pairs whose current version is in the reporting period. */
 export function selectVersionPairsForReportingPeriod(
     versions: readonly DocumentVersionForComparison[], startInclusive: Date, endExclusive: Date
@@ -146,6 +151,30 @@ export function alignVersionChunks(previousChunks: readonly VersionChunk[], curr
 function bound(value: string, max = MAX_EXCERPT) { return value.length <= max ? value : `${value.slice(0, max - 1)}…`; }
 function preview(value: string) { return bound(value.replace(/\s+/g, " ").trim(), 900); }
 
+function classifyDocumentChangeStatus(
+    alignment: ChunkAlignment,
+    changelog: string | null
+): EvidenceStatus {
+    const text = `${changelog ?? ""} ${
+        alignment.currentChunk?.content ?? 
+        alignment.previousChunk?.content ?? ""
+    }`.toLowerCase();
+
+    if (
+        /\b(released|launched|shipped|rolled out|available now)\b/i.test(text)
+    ) {
+        return "shipped";
+    }
+
+    if (
+        /\b(planned|upcoming|will|next|roadmap)\b/i.test(text)
+    ) {
+        return "planned";
+    }
+
+    return "changed";
+}
+
 export function buildDocumentChangeEvidence(pair: VersionPair, alignments: readonly ChunkAlignment[]): FounderWeeklyReviewEvidenceItem[] {
     return alignments.filter((alignment) => alignment.changeType !== "unchanged").map((alignment) => {
         const previous = alignment.previousChunk; const current = alignment.currentChunk;
@@ -154,9 +183,10 @@ export function buildDocumentChangeEvidence(pair: VersionPair, alignments: reado
         const excerpt = alignment.changeType === "modified"
             ? `Section modified. Before: ${preview(previous!.content)} After: ${preview(current!.content)}`
             : alignment.changeType === "added" ? `Section added: ${preview(current!.content)}` : `Section removed: ${preview(previous!.content)}`;
+        const status = classifyDocumentChangeStatus(alignment, pair.currentChangelog);
         return { sourceType: "document_change", sourceId, title: pair.documentTitle,
             sourceTimestamp: pair.currentCreatedAt.toISOString(), excerpt: bound(excerpt), workspaceDeepLink: `/employer/documents/viewer?docId=${pair.documentId}`,
-            metadata: { documentId: pair.documentId.toString(), previousVersionId: pair.previousVersionId, currentVersionId: pair.currentVersionId, previousVersionNumber: pair.previousVersionNumber, currentVersionNumber: pair.currentVersionNumber,
+            metadata: { evidenceStatus: status, documentId: pair.documentId.toString(), previousVersionId: pair.previousVersionId, currentVersionId: pair.currentVersionId, previousVersionNumber: pair.previousVersionNumber, currentVersionNumber: pair.currentVersionNumber,
                 previousChunkId: previous?.chunkId ?? null, currentChunkId: current?.chunkId ?? null, changeType: alignment.changeType, alignmentMethod: alignment.alignmentMethod,
                 previousContentHash: previous?.contentHash ?? null, currentContentHash: current?.contentHash ?? null, structurePath: current?.structurePath ?? previous?.structurePath ?? null,
                 userChangelog: pair.currentChangelog ? bound(pair.currentChangelog.replace(/\s+/g, " ").trim(), MAX_METADATA_TEXT) : null } };

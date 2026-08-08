@@ -181,7 +181,7 @@ export const FounderWeeklyReviewV2RecommendationSchema = z.object({
     kind: z.literal("recommendation"),
     label: z.literal("Recommendation"),
     text: z.string().min(1).max(2000),
-    rationale: z.string().min(1).max(2000).optional(),
+    rationale: z.string().min(1).max(2000).nullable(),
     sourceIds: v2SourceIdsSchema(1),
     confidence: V2ConfidenceSchema,
 }).strict();

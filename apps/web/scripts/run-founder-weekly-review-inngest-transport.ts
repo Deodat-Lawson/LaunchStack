@@ -19,6 +19,9 @@ import { FounderWeeklyReviewRepository } from "@launchstack/features/founder-wee
 
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
 import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";
+import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
+import { renderFounderWeeklyReviewEvaluationMarkdown } from "~/server/founder-weekly-review/evaluation-markdown";
+import { evaluateGeneratedFounderWeeklyReview } from "@launchstack/features/founder-weekly-review/benchmarks";
 
 const require = createRequire(import.meta.url);
 const { createFounderWeeklyReviewTestDatabase } = require("../__tests__/founderWeeklyReview/testDb") as typeof import("../__tests__/founderWeeklyReview/testDb");
@@ -373,8 +376,8 @@ async function main(): Promise<void> {
     if (!/^postgres(?:ql)?:\/\/(?:[^@]+@)?(?:127\.0\.0\.1|localhost)(?::\d+)?\//i.test(localUrl)) {
         throw new Error("Refusing non-local database.");
     }
-    if (!STARTUP_SMOKE_ONLY && !process.env.MOONSHOT_API_KEY?.trim()) {
-        throw new Error("MOONSHOT_API_KEY is required for the real callback generation.");
+    if (!STARTUP_SMOKE_ONLY && !process.env.OPENAI_API_KEY?.trim()) {
+        throw new Error("OPENAI_API_KEY is required for the real callback generation.");
     }
 
     const testDb = await createFounderWeeklyReviewTestDatabase();
@@ -550,12 +553,50 @@ async function main(): Promise<void> {
             await sleep(500);
         }
         if (!final?.reviewPayload || !final.evidenceSnapshot) throw new Error("Timed out before persisted draft read-back.");
+        const evaluation = await evaluateGeneratedFounderWeeklyReview(
+            final.evidenceSnapshot,
+            final.reviewPayload as any,
+            generateFounderWeeklyReviewStructured
+        );
         const dispatch = (await testDb.db.select().from(founderWeeklyReviewDispatches).where(eq(founderWeeklyReviewDispatches.id, created.dispatch.id)))[0];
         const rendered = renderFounderWeeklyReviewMarkdown(final);
-        const directory = resolve(process.cwd(), ".artifacts/founder-weekly-review");
+        const directory = resolve(process.cwd(), `.artifacts/founder-weekly-review/transport/${final.id}`);
         await mkdir(directory, { recursive: true });
-        const markdownPath = resolve(directory, `${final.id}-transport.md`);
+        const reportPath = resolve(directory, "report.json");
+        const markdownPath = resolve(directory, "report.md");
+        const evaluationJsonPath = resolve(directory, "evaluation.json");
+        const evaluationMarkdownPath = resolve(directory, "evaluation.md");
+        
+        await writeFile(
+            reportPath,
+            JSON.stringify(
+                {
+                    runId: final.id,
+                    status: final.status,
+                    provider: final.modelMetadata?.provider,
+                    model: final.modelMetadata?.model,
+                    reportingPeriod: final.reportingPeriod,
+                    review: final.reviewPayload,
+                },
+                null,
+                2
+            ),
+            "utf8"
+        );
+
         await writeFile(markdownPath, rendered, "utf8");
+
+        await writeFile(
+            evaluationJsonPath,
+            JSON.stringify(evaluation, null, 2),
+            "utf8"
+        );
+
+        await writeFile(
+            evaluationMarkdownPath,
+            renderFounderWeeklyReviewEvaluationMarkdown(evaluation),
+            "utf8"
+        );
         if (process.env.FWR_PRINT_REPORT === "1") {
             console.log("===== FOUNDER WEEKLY REVIEW =====");
             console.log(rendered);
@@ -563,7 +604,17 @@ async function main(): Promise<void> {
         }
         const generationEventKeys = ["runId", "companyId", "generationJobId", "generationClaimId"];
         const forbiddenEventKeys = ["evidenceSnapshot", "founderContext", "documentContent", "customerFeedback", "prompt", "reviewPayload", "providerResponse", "databaseUrl", "credentials", "token"];
-        console.log(JSON.stringify({ runId: final.id, lifecycle: seen, dispatch: { initialStatus: initialDispatches[0]!.status, finalStatus: dispatch?.status, attempts: dispatch?.attemptCount }, ingressEventIds: requested.ids, callbackUrl, functionId: "founder-weekly-review-generation", transportEvent: { name: "founder-weekly-review/generation.requested", keys: generationEventKeys, companyIdSerializedAsString: true, forbiddenKeysAbsent: forbiddenEventKeys.every((key) => !generationEventKeys.includes(key)) }, steps: ["claim-evidence", "collect-evidence", "persist-evidence", "claim", "generate", "persist"], evidenceCounts: Object.fromEntries(["document_change", "customer_feedback", "founder_context"].map((type) => [type, final!.evidenceSnapshot!.items.filter((item) => item.sourceType === type).length])), snapshotDigest: digest(final.evidenceSnapshot), retryCount: final.retryCount, generationAttempt: final.generationAttempt, provider: final.modelMetadata?.provider, model: final.modelMetadata?.model, validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, markdownPath, terminalEqualsExport: (await readFile(markdownPath, "utf8")) === rendered, devLogsMentionFunction: inngestLogs.join("").includes("founder-weekly-review-generation") }));
+        console.log(JSON.stringify({ runId: final.id, lifecycle: seen, dispatch: { initialStatus: initialDispatches[0]!.status, finalStatus: dispatch?.status, attempts: dispatch?.attemptCount }, ingressEventIds: requested.ids, callbackUrl, functionId: "founder-weekly-review-generation", transportEvent: { name: "founder-weekly-review/generation.requested", keys: generationEventKeys, companyIdSerializedAsString: true, forbiddenKeysAbsent: forbiddenEventKeys.every((key) => !generationEventKeys.includes(key)) }, steps: ["claim-evidence", "collect-evidence", "persist-evidence", "claim", "generate", "persist"], evidenceCounts: Object.fromEntries(["document_change", "customer_feedback", "founder_context"].map((type) => [type, final!.evidenceSnapshot!.items.filter((item) => item.sourceType === type).length])), snapshotDigest: digest(final.evidenceSnapshot), retryCount: final.retryCount, generationAttempt: final.generationAttempt, provider: final.modelMetadata?.provider, model: final.modelMetadata?.model, validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, evaluation: {
+            deterministicScore: evaluation.deterministic?.overallScore ?? null,
+            llmScore: evaluation.llmGrader?.overallScore ?? null,
+            failures: evaluation.failures,
+        },
+        evaluationPaths: {
+            report: reportPath,
+            markdown: markdownPath,
+            evaluation: evaluationJsonPath,
+            evaluationMarkdown: evaluationMarkdownPath,
+        }, terminalEqualsExport: (await readFile(markdownPath, "utf8")) === rendered, devLogsMentionFunction: inngestLogs.join("").includes("founder-weekly-review-generation") }));
         shutdownDrain.finalDiagnosticsCaptured = true;
     } catch (error) {
         printRecentDiagnostics("next", nextLogs);

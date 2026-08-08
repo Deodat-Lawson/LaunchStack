@@ -10,3 +10,4 @@ export * from "./generation-validation";
 export * from "./prompts";
 export * from "./document-change";
 export * from "./workspace-document";
+export * from "./grader";

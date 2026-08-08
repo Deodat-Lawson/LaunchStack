@@ -155,7 +155,20 @@ const weakEvidence = {
   ],
 } satisfies FounderWeeklyReviewEvidenceSnapshot;
 
-const conflictingEvidence = {
+const weakCustomerSignalEvidence = {
+  ...validEvidence,
+  items: [
+    {
+      sourceType: "customer_feedback",
+      sourceId: "feedback_weak",
+      title: "Customer feedback",
+      excerpt: "Customer asked if CSV export could be added.",
+      metadata: {},
+    },
+  ],
+} satisfies FounderWeeklyReviewEvidenceSnapshot;
+
+const conflictingCustomerFeedbackEvidence = {
   ...validEvidence,
   items:[
     {
@@ -208,6 +221,19 @@ const documentChangeEvidence = {
  ],
 } satisfies FounderWeeklyReviewEvidenceSnapshot;
 
+const workspaceDocumentEvidence = {
+  ...validEvidence,
+  items: [
+    {
+      sourceType: "workspace_document",
+      sourceId: "workspace_doc_1",
+      title: "Onboarding Plan",
+      excerpt: "Platform owns retry telemetry.",
+      metadata: {},
+    },
+  ],
+} satisfies FounderWeeklyReviewEvidenceSnapshot;
+
 const unavailableSourceEvidence = {
  ...validEvidence,
  items:[
@@ -226,6 +252,87 @@ const unavailableSourceEvidence = {
    sourceType:"customer_feedback",
   },
  ],
+} satisfies FounderWeeklyReviewEvidenceSnapshot;
+
+const plannedWorkEvidence = {
+  ...validEvidence,
+  items: [
+    {
+      sourceType: "document_change",
+      sourceId: "plan_doc_1",
+      title: "Launch Plan",
+      excerpt: "CSV export is planned for next sprint. Implementation has not started yet.",
+      metadata: {
+        changeType: "modified",
+      },
+    },
+  ],
+} satisfies FounderWeeklyReviewEvidenceSnapshot;
+
+
+const validDocumentChangeEvidence = {
+  ...validEvidence,
+  items: [
+    {
+      sourceType: "document_change",
+      sourceId: "document_change_1",
+      title: "Onboarding Plan",
+      excerpt: "Ownership changed from Product to Platform.",
+      metadata: {
+        previousVersionId: "v1",
+        currentVersionId: "v2",
+        previousChunkId: "chunk_101",
+        currentChunkId: "chunk_202",
+        changeType: "modified",
+      },
+    },
+  ],
+} satisfies FounderWeeklyReviewEvidenceSnapshot;
+
+
+const multipleVersionChangeEvidence = {
+  ...validEvidence,
+  items: [
+    {
+      sourceType: "document_change",
+      sourceId: "document_change_v1_v2",
+      title: "Reliability Plan",
+      excerpt: "Retry ownership moved to Platform.",
+      metadata: {
+        previousVersionId: "v1",
+        currentVersionId: "v2",
+        previousChunkId: "chunk_101",
+        currentChunkId: "chunk_202",
+        changeType: "modified",
+      },
+    },
+    {
+      sourceType: "document_change",
+      sourceId: "document_change_v2_v3",
+      title: "Reliability Plan",
+      excerpt: "Monitoring requirements were added.",
+      metadata: {
+        previousVersionId: "v2",
+        currentVersionId: "v3",
+        previousChunkId: "chunk_202",
+        currentChunkId: "chunk_303",
+        changeType: "modified",
+      },
+    },
+  ],
+} satisfies FounderWeeklyReviewEvidenceSnapshot;
+
+const meaningfulChangeEvidence = {
+  ...validEvidence,
+  items: [
+    {
+      sourceType: "document_change",
+      sourceId: "change_1",
+      title: "Retry ownership update",
+      excerpt: "Ownership moved from Product to Platform.",
+      metadata: {},
+    },
+  ],
 } satisfies FounderWeeklyReviewEvidenceSnapshot;
 
 const validReport = {
@@ -360,6 +467,7 @@ const founderContextOnlyReport = {
           sourceIds: ["context_1"],
           confidence: 0.9,
           label: "Recommendation",
+          rationale: null,
         },
       ],
     },
@@ -425,6 +533,7 @@ const completeReport = {
           sourceIds: ["context_1"],
           confidence: 0.9,
           label: "Recommendation",
+          rationale: null,
         },
       ],
     },
@@ -558,6 +667,24 @@ const exaggeratedClaimReport = {
   },
 } satisfies FounderWeeklyReviewV2Payload;
 
+const weakSynthesisReport = {
+  ...validReport,
+  sections: {
+    ...validReport.sections,
+    whatCustomersSaid: {
+      state: "evidence",
+      items: [
+        {
+          kind: "observed_fact",
+          text: "CSV export is a major customer pain point affecting adoption.",
+          sourceIds: ["feedback_weak"],
+          confidence: 0.9,
+        },
+      ],
+    },
+  },
+} satisfies FounderWeeklyReviewV2Payload;
+
 const conflictingEvidenceReport = {
  ...validReport,
  sections:{
@@ -618,8 +745,129 @@ const documentChangeShippedReport = {
  },
 } satisfies FounderWeeklyReviewV2Payload;
 
+const documentChangeCustomerReport = {
+  ...validReport,
+  sections:{
+    ...validReport.sections,
+    whatCustomersSaid:{
+      state:"evidence",
+      items:[
+        {
+          kind:"observed_fact",
+          text:"Customers requested export.",
+          sourceIds:["docs_1"],
+          confidence:0.9,
+        }
+      ]
+    }
+  }
+} satisfies FounderWeeklyReviewV2Payload;
+
+const workspaceDocumentAsCustomerReport = {
+  ...validReport,
+  sections: {
+    ...validReport.sections,
+    whatCustomersSaid: {
+      state: "evidence",
+      items: [
+        {
+          kind: "observed_fact",
+          text: "Customers requested better onboarding.",
+          sourceIds: ["workspace_doc_1"],
+          confidence: 0.9,
+        },
+      ],
+    },
+  },
+} satisfies FounderWeeklyReviewV2Payload;
+
 const unavailableSourceSafeReport = {
  ...emptyReport,
+} satisfies FounderWeeklyReviewV2Payload;
+
+const plannedWorkMarkedShippedReport = {
+  ...emptyReport,
+  sections: {
+    ...emptyReport.sections,
+    whatShipped: {
+      state: "evidence",
+      items: [
+        {
+          kind: "observed_fact",
+          text: "CSV export shipped.",
+          sourceIds: ["plan_doc_1"],
+          confidence: 0.9,
+        },
+      ],
+    },
+  },
+} satisfies FounderWeeklyReviewV2Payload;
+
+
+const validDocumentChangeReport = {
+  ...emptyReport,
+  sections: {
+    ...emptyReport.sections,
+    whatChanged: {
+      state: "evidence",
+      items: [
+        {
+          kind: "observed_fact",
+          text: "Ownership changed from Product to Platform.",
+          sourceIds: ["document_change_1"],
+          confidence: 0.9,
+        },
+      ],
+    },
+  },
+} satisfies FounderWeeklyReviewV2Payload;
+
+
+const multipleVersionChangeReport = {
+  ...emptyReport,
+  sections: {
+    ...emptyReport.sections,
+    whatChanged: {
+      state: "evidence",
+      items: [
+        {
+          kind: "observed_fact",
+          text: "Retry ownership moved to Platform and monitoring requirements were added.",
+          sourceIds: [
+            "document_change_v1_v2",
+            "document_change_v2_v3",
+          ],
+          confidence: 0.9,
+        },
+      ],
+    },
+  },
+} satisfies FounderWeeklyReviewV2Payload;
+
+const vagueSummaryReport = {
+  ...validReport,
+  sections: {
+    ...validReport.sections,
+    whatCustomersSaid: {
+      state: "no_evidence",
+      noEvidence: {
+        code: "no_customer_feedback",
+        message: "No customer feedback was reported.",
+        cta: "Collect customer feedback.",
+      },
+    },
+    whatChanged: {
+      state: "evidence",
+      items: [
+        {
+          kind: "observed_fact",
+          text: "There was a change related to retry ownership.",
+          sourceIds: ["change_1"],
+          confidence: 0.8,
+        },
+      ],
+    },
+  },
 } satisfies FounderWeeklyReviewV2Payload;
 
 export const benchmarkCases: BenchmarkCase[] = [
@@ -768,7 +1016,7 @@ export const benchmarkCases: BenchmarkCase[] = [
     expectations: {
       shouldPass: false,
       expectedFailureCategories: [
-        "unsupported_shipped_claim",
+        "invalid_source_type",
       ],
     },
   },
@@ -813,10 +1061,22 @@ export const benchmarkCases: BenchmarkCase[] = [
   },
 
   {
+    id: "weak_customer_signal_overstated",
+    runThroughGeneration: false,
+    description:
+      "Report overstates a small customer signal into a major business conclusion.",
+    evidenceSnapshot: weakCustomerSignalEvidence,
+    generatedReport: weakSynthesisReport,
+    expectations: {
+      shouldPass: true,
+    },
+  },
+
+  {
     id:"conflicting_evidence",
     runThroughGeneration: false,
     description:"Report ignores conflicting evidence.",
-    evidenceSnapshot:conflictingEvidence,
+    evidenceSnapshot:conflictingCustomerFeedbackEvidence,
     generatedReport:conflictingEvidenceReport,
     expectations:{
       shouldPass:false,
@@ -841,6 +1101,34 @@ export const benchmarkCases: BenchmarkCase[] = [
   },
 
   {
+    id:"document_change_as_customer_feedback",
+    runThroughGeneration:false,
+    description:"Document changes cannot represent customer feedback.",
+    evidenceSnapshot:documentChangeEvidence,
+    generatedReport:documentChangeCustomerReport,
+    expectations:{
+      shouldPass:false,
+      expectedFailureCategories:[
+        "invalid_source_type"
+      ]
+    }
+  },
+
+  {
+    id: "workspace_document_as_customer_feedback",
+    runThroughGeneration: false,
+    description: "Workspace documents cannot be used as customer feedback.",
+    evidenceSnapshot: workspaceDocumentEvidence,
+    generatedReport: workspaceDocumentAsCustomerReport,
+    expectations: {
+      shouldPass: false,
+      expectedFailureCategories: [
+        "invalid_source_type",
+      ],
+    },
+  },
+
+  {
     id:"unavailable_source_warning",
     runThroughGeneration: true,
     description:"Unavailable evidence should not force hallucination.",
@@ -857,6 +1145,57 @@ export const benchmarkCases: BenchmarkCase[] = [
     description: "Report correctly represents conflicting evidence.",
     evidenceSnapshot: validContradictoryEvidence,
     generatedReport: validContradictoryEvidenceReport,
+    expectations: {
+      shouldPass: true,
+    },
+  },
+
+  {
+    id: "planned_work_marked_as_shipped",
+    runThroughGeneration: false,
+    description: "Planned document work cannot be represented as shipped work.",
+    evidenceSnapshot: plannedWorkEvidence,
+    generatedReport: plannedWorkMarkedShippedReport,
+    expectations: {
+      shouldPass: false,
+      forbiddenClaims: [
+        "CSV export shipped",
+      ],
+      expectedFailureCategories: [
+        "unsupported_shipped_claim",
+      ],
+    },
+  },
+
+  {
+    id: "valid_document_change_evidence",
+    runThroughGeneration: false,
+    description: "Document changes can support what changed when properly cited.",
+    evidenceSnapshot: validDocumentChangeEvidence,
+    generatedReport: validDocumentChangeReport,
+    expectations: {
+      shouldPass: true,
+    },
+  },
+
+  {
+    id: "multiple_adjacent_version_changes",
+    runThroughGeneration: false,
+    description: "Multiple document versions in a reporting period should preserve adjacent changes.",
+    evidenceSnapshot: multipleVersionChangeEvidence,
+    generatedReport: multipleVersionChangeReport,
+    expectations: {
+      shouldPass: true,
+    },
+  },
+
+  {
+    id: "low_materiality_summary",
+    runThroughGeneration: false,
+    description:
+      "Report cites evidence but provides a vague low-value summary.",
+    evidenceSnapshot: meaningfulChangeEvidence,
+    generatedReport: vagueSummaryReport,
     expectations: {
       shouldPass: true,
     },

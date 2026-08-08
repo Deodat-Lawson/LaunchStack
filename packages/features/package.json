@@ -13,6 +13,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./founder-weekly-review/benchmarks": "./src/founder-weekly-review/benchmarks/index.ts",
+    "./founder-weekly-review/benchmarks/run": "./src/founder-weekly-review/benchmarks/run.ts",
     "./adeu": {
       "types": "./src/adeu/index.ts",
       "default": "./src/adeu/index.ts"

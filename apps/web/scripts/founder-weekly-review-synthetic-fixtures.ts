@@ -12,11 +12,11 @@ const make = (items: unknown[]) => FounderWeeklyReviewEvidenceSnapshotSchema.par
 
 export const syntheticFounderWeeklyReviewFixtures = {
   partial: make([
-    { sourceType: "document_change", sourceId: "synthetic:doc:release", title: "Release notes", sourceTimestamp: "2026-02-20T12:00:00.000Z", excerpt: "Export filtering was released.", metadata: { fixture: "synthetic-v1" } },
+    { sourceType: "document_change", sourceId: "synthetic:doc:release", title: "Release notes", sourceTimestamp: "2026-02-20T12:00:00.000Z", excerpt: "Export filtering was released.", metadata: { fixture: "synthetic-v1", evidenceStatus: "shipped" } },
     { sourceType: "founder_context", sourceId: "synthetic:context:priority", title: "Founder context", excerpt: "Prioritize onboarding reliability.", metadata: { fixture: "synthetic-v1" } },
   ]),
   full: make([
-    { sourceType: "document_change", sourceId: "synthetic:doc:release", title: "Release notes", sourceTimestamp: "2026-02-20T12:00:00.000Z", excerpt: "Export filtering was released.", metadata: { fixture: "synthetic-v1" } },
+    { sourceType: "document_change", sourceId: "synthetic:doc:release", title: "Release notes", sourceTimestamp: "2026-02-20T12:00:00.000Z", excerpt: "Export filtering was released.", metadata: { fixture: "synthetic-v1", evidenceStatus: "shipped" } },
     { sourceType: "customer_feedback", sourceId: "synthetic:feedback:export", title: "Customer feedback", sourceTimestamp: "2026-02-21T12:00:00.000Z", excerpt: "A customer requested saved export filters.", metadata: { fixture: "synthetic-v1" } },
     { sourceType: "founder_context", sourceId: "synthetic:context:priority", title: "Founder context", excerpt: "Prioritize onboarding reliability.", metadata: { fixture: "synthetic-v1" } },
   ]),

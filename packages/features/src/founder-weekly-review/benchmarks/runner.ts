@@ -4,16 +4,16 @@ import {
 } from "../evaluation";
 import { benchmarkCases } from "./cases";
 import { 
-  FounderWeeklyReviewV2PayloadSchema,
   type FounderWeeklyReviewV2Payload,
 } from "../contracts";
-import { generateFounderWeeklyReview } from "@launchstack/features/founder-weekly-review";
+import { 
+  generateFounderWeeklyReview,
+  type FounderWeeklyReviewGenerateFn,
+} from "@launchstack/features/founder-weekly-review";
 import { writeFileSync } from "fs";
-
-let passedCount = 0;
-let failedCount = 0;
-
-let hardFailureCount = 0;
+import type { LLMGraderResult } from "../llm-grader";
+import path from "path";
+import { evaluateGeneratedFounderWeeklyReview } from "./evaluate-generated-review";
 
 type BenchmarkMetrics = {
   citationValidity: number;
@@ -33,200 +33,225 @@ type BenchmarkResult = {
   hasHardFailure: boolean;
   metrics?: BenchmarkMetrics;
   failures: EvaluationFailure[];
+  llmGrader?: LLMGraderResult;
 };
 
-const results: BenchmarkResult[] = [];
+type BenchmarkState = {
+  passedCount: number;
+  failedCount: number;
+  hardFailureCount: number;
+};
 
-for (const testCase of benchmarkCases) {
+export async function runBenchmarks(
+  generate: FounderWeeklyReviewGenerateFn,
+  results: BenchmarkResult[],
+  state: BenchmarkState
+): Promise<void> {
+  for (const testCase of benchmarkCases) {
 
-  if (!testCase.generatedReport) {
-    continue;
-  }
+    if (!testCase.generatedReport) {
+      continue;
+    }
 
-  let generatedReport: FounderWeeklyReviewV2Payload;
+    let generatedReport: FounderWeeklyReviewV2Payload;
 
-  if(testCase.runThroughGeneration) {
-    const generated = await generateFounderWeeklyReview({
-      evidenceSnapshot: testCase.evidenceSnapshot,
-      generate: async ({schema}) => ({
-        object: schema.parse(testCase.generatedReport),
-        metadata: {
-          provider: "benchmark",
-          model: "fixture",
-          capability: "founderWeeklyReview",
-          temperature: 0,
-        },
-      }),
-    });
-    
-    generatedReport = generated.reviewPayload;
+    if(testCase.runThroughGeneration) {
+      const generated = await generateFounderWeeklyReview({
+        evidenceSnapshot: testCase.evidenceSnapshot,
+        generate: async ({schema}) => ({
+          object: schema.parse(testCase.generatedReport),
+          metadata: {
+            provider: "benchmark",
+            model: "fixture",
+            capability: "founderWeeklyReview",
+            temperature: 0,
+          },
+        }),
+      });
+      
+      generatedReport = generated.reviewPayload;
 
-  } else {
-    generatedReport = testCase.generatedReport;
-  }
+    } else {
+      generatedReport = testCase.generatedReport;
+    }
 
-  const schemaResult = FounderWeeklyReviewV2PayloadSchema.safeParse(
-    generatedReport
-  );
-
-  if (!schemaResult.success) {
-    
-    const passed =
-      testCase.expectations.expectedFailureCategories?.includes(
-        "malformed_payload"
-      ) ?? false;
-
-    console.log(
-      `${passed ? "✅" : "❌"} ${testCase.id} (schema validation failure)`
+    const evaluation = await evaluateGeneratedFounderWeeklyReview(
+      testCase.evidenceSnapshot,
+      generatedReport,
+      generate
     );
 
-    if (!passed) {
-      console.log(JSON.stringify({
+    if (evaluation.deterministic === null) {
+      const passed =
+        testCase.expectations.expectedFailureCategories?.includes(
+          "malformed_payload"
+        ) ?? false;
+
+      results.push({
         case: testCase.id,
-        expected: testCase.expectations.expectedFailureCategories,
-        actual: "malformed_payload",
-        zodErrors: schemaResult.error.issues,
-      }, null, 2));
+        passed,
+        score: 0,
+        hasHardFailure: true,
+        failures: evaluation.failures,
+      });
+
+      state.hardFailureCount++;
+
+      if (passed) {
+        state.passedCount++;
+      } else {
+        state.failedCount++;
+      }
+
+      console.log(
+        `${passed ? "✅" : "❌"} ${testCase.id} (schema validation failure)`
+      );
+
+      continue;
+    }
+
+    const result = evaluation.deterministic;
+    const llmGrade = evaluation.llmGrader ?? undefined;
+
+    const actualFailures = result.failures.map(f => f.category);
+
+    const passed =
+      testCase.expectations.shouldPass
+        ? actualFailures.length === 0
+        : testCase.expectations.expectedFailureCategories?.every(
+          category => actualFailures.includes(category)
+        ) ?? false;
+
+    if (result.hasHardFailure) {
+      state.hardFailureCount++;
+    }
+
+    if (passed) {
+      state.passedCount++;
+    } else {
+      state.failedCount++;
     }
 
     results.push({
       case: testCase.id,
       passed,
-      score: 0,
-      hasHardFailure: true,
-      failures: [
-        {
-          category: "malformed_payload",
-          explanation: "Report failed schema validation.",
-        },
-      ],
+      score: result.overallScore,
+      hasHardFailure: result.hasHardFailure,
+      metrics: result.deterministic,
+      failures: result.failures,
+      llmGrader: llmGrade,
     });
 
-    // Malformed payload cases are expected failures, but still count as hard failures.
-    hardFailureCount++;
+    console.log(
+      `${passed ? "✅" : "❌"} ${testCase.id}`
+    );
 
-    if (passed) {
-      passedCount++;
-    } else {
-      failedCount++;
+    if (!passed) {
+      console.log(JSON.stringify({
+        case: testCase.id,
+        deterministicFailures: result.failures,
+        llmGrader: llmGrade,
+      }, null, 2));
     }
-
-    continue;
-  }
-
-  const result = evaluateFounderWeeklyReview(
-    testCase.evidenceSnapshot,
-    generatedReport
-  );
-
-  const actualFailures = result.failures.map(f => f.category);
-
-  const passed =
-    testCase.expectations.shouldPass
-      ? actualFailures.length === 0
-      : testCase.expectations.expectedFailureCategories?.every(
-        category => actualFailures.includes(category)
-      ) ?? false;
-
-  if (result.hasHardFailure) {
-    hardFailureCount++;
-  }
-
-  if (passed) {
-    passedCount++;
-  } else {
-    failedCount++;
-  }
-
-  results.push({
-    case: testCase.id,
-    passed,
-    score: result.overallScore,
-    hasHardFailure: result.hasHardFailure,
-    metrics: result.deterministic,
-    failures: result.failures,
-  });
-
-  console.log(
-    `${passed ? "✅" : "❌"} ${testCase.id}`
-  );
-
-  if (!passed) {
-    console.log(JSON.stringify({
-      case:testCase.id,
-      passed: passed,
-      score:result.overallScore,
-      failures:result.failures
-    },null,2));
   }
 }
 
-const averageScore =
-  results.length === 0
-    ? 0
-    : results.reduce(
-        (sum, result) => sum + result.score,
-        0
-      ) / results.length;
+export async function main(generate: FounderWeeklyReviewGenerateFn) {
+  const results: BenchmarkResult[] = [];
 
-const averageMetric = (key: keyof BenchmarkMetrics) => {
-  const values = results
-    .map(result => result.metrics?.[key])
-    .filter((value): value is number => value !== undefined);
+  const state: BenchmarkState = {
+    passedCount: 0,
+    failedCount: 0,
+    hardFailureCount: 0
+  };
 
-  return values.length === 0
-    ? 0
-    : values.reduce((sum, value) => sum + value, 0) / values.length;
-};
+  await runBenchmarks(generate, results, state);
 
-const weakestCases = [...results]
-  .sort((a,b) => a.score - b.score)
-  .slice(0,3)
-  .map(result => ({
-    case: result.case,
-    score: result.score,
-    failures: result.failures.map(f => f.category),
-  }));
-
-const failureCounts = results
-  .flatMap(result => result.failures)
-  .reduce<Record<string, number>>((acc, failure) => {
-    acc[failure.category] =
-      (acc[failure.category] ?? 0) + 1;
-
-    return acc;
-  }, {});
-
-const benchmarkOutput = {
-  summary: {
-    totalCases: benchmarkCases.length,
-    passed: passedCount,
-    failed: failedCount,
-    hardFailures: hardFailureCount,
-    passRate: benchmarkCases.length === 0
+  const averageScore =
+    results.length === 0
       ? 0
-      : passedCount / benchmarkCases.length,
-    overallScore: averageScore,
-  },
-  metrics: {
-    citationValidity: averageMetric("citationValidity"),
-    citationCoverage: averageMetric("citationCoverage"),
-    unsupportedClaimRate: averageMetric("unsupportedClaimRate"),
-    unsupportedShippedClaimRate: averageMetric("unsupportedShippedClaimRate"),
-    sourceTypeViolationRate: averageMetric("sourceTypeViolationRate"),
-    evidenceCoverage: averageMetric("evidenceCoverage"),
-    emptySectionCorrectness: averageMetric("emptySectionCorrectness"),
-    duplicateClaimRate: averageMetric("duplicateClaimRate"),
-  },
-  weakestCases,
-  commonFailures: failureCounts,
-  cases: results,
-};
+      : results.reduce(
+          (sum, result) => sum + result.score,
+          0
+        ) / results.length;
 
-console.log("\n===== Benchmark Summary =====");
+  const llmScores = results
+    .map(r => r.llmGrader?.overallScore)
+    .filter((v): v is number => v !== undefined);
 
-console.log(JSON.stringify(benchmarkOutput, null, 2));
+  const averageLLMScore =
+    llmScores.length === 0
+      ? 0
+      : llmScores.reduce((sum, v) => sum + v, 0) / llmScores.length;
 
-writeFileSync("packages/features/src/founder-weekly-review/benchmarks/baseline-output.json", JSON.stringify(benchmarkOutput, null, 2));
+  const averageMetric = (key: keyof BenchmarkMetrics) => {
+    const values = results
+      .map(result => result.metrics?.[key])
+      .filter((value): value is number => value !== undefined);
 
-process.exitCode = failedCount > 0 ? 1 : 0;
+    return values.length === 0
+      ? 0
+      : values.reduce((sum, value) => sum + value, 0) / values.length;
+  };
+
+  const weakestCases = [...results]
+    .sort((a,b) => a.score - b.score)
+    .slice(0,3)
+    .map(result => ({
+      case: result.case,
+      score: result.score,
+      failures: result.failures.map(f => f.category),
+    }));
+
+  const failureCounts = results
+    .flatMap(result => result.failures)
+    .reduce<Record<string, number>>((acc, failure) => {
+      acc[failure.category] =
+        (acc[failure.category] ?? 0) + 1;
+
+      return acc;
+    }, {});
+
+  const benchmarkOutput = {
+    summary: {
+      totalCases: benchmarkCases.length,
+      passed: state.passedCount,
+      failed: state.failedCount,
+      hardFailures: state.hardFailureCount,
+      passRate: benchmarkCases.length === 0
+        ? 0
+        : state.passedCount / benchmarkCases.length,
+      deterministicScore: averageScore,
+      llmScore: averageLLMScore,
+    },
+    metrics: {
+      citationValidity: averageMetric("citationValidity"),
+      citationCoverage: averageMetric("citationCoverage"),
+      unsupportedClaimRate: averageMetric("unsupportedClaimRate"),
+      unsupportedShippedClaimRate: averageMetric("unsupportedShippedClaimRate"),
+      sourceTypeViolationRate: averageMetric("sourceTypeViolationRate"),
+      evidenceCoverage: averageMetric("evidenceCoverage"),
+      emptySectionCorrectness: averageMetric("emptySectionCorrectness"),
+      duplicateClaimRate: averageMetric("duplicateClaimRate"),
+    },
+    weakestCases,
+    commonFailures: failureCounts,
+    cases: results,
+  };
+
+  console.log("\n===== Benchmark Summary =====");
+
+  console.log(JSON.stringify(benchmarkOutput, null, 2));
+
+  const outputPath = path.resolve(
+    import.meta.dirname,
+    "./baseline-output.json"
+  );
+
+  writeFileSync(
+    outputPath,
+    JSON.stringify(benchmarkOutput, null, 2)
+  );
+
+  process.exitCode = state.failedCount > 0 ? 1 : 0;
+}

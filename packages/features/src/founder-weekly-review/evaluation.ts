@@ -17,6 +17,7 @@ export interface EvaluationResult {
     unsupportedShippedClaimRate: number;
     sourceTypeViolationRate: number;
     evidenceCoverage: number;
+    materialityScore: number;
     duplicateClaimRate: number;
     emptySectionCorrectness: number;
   };
@@ -39,18 +40,21 @@ const SECTION_SOURCE_RULES: Record<string, string[]> = {
     "document_change",
     "workspace_document",
     "github_activity",
+    "founder_context",
   ],
   whatShipped: [
     "github_activity",
     "document_change",
+    "workspace_document",
   ],
   currentBlockers: [
     "founder_context",
-    "manual_note",
+    "workspace_document",
+    "github_activity",
   ],
   nextPriorities: [
     "founder_context",
-    "manual_note",
+    "workspace_document",
   ],
 };
 
@@ -255,8 +259,9 @@ export function evaluateFounderWeeklyReview(
         citationCoverage: 0,
         unsupportedShippedClaimRate: 0,
         unsupportedClaimRate: 0,
-        sourceTypeViolationRate: 1,
+        sourceTypeViolationRate: 0,
         evidenceCoverage: 0,
+        materialityScore: 0,
         duplicateClaimRate: 0,
         emptySectionCorrectness,
       },
@@ -272,6 +277,8 @@ export function evaluateFounderWeeklyReview(
   );
 
   const reportClaims = new Set<string>();
+
+  const citedEvidenceIds = new Set<string>();
 
   for (const [sectionName, section] of Object.entries(report.sections)) {
     for (const item of getSectionItems(section)) {
@@ -325,7 +332,7 @@ export function evaluateFounderWeeklyReview(
       ) {
 
         for (const sourceId of item.sourceIds) {
-          
+          citedEvidenceIds.add(sourceId);
           const evidence = evidenceById.get(sourceId);
 
           if (evidence) {
@@ -350,7 +357,10 @@ export function evaluateFounderWeeklyReview(
             ) {
               shippedClaimChecks++;
 
-              if (!evidenceIndicatesShipped(evidence)) {
+              if (
+                ["github_activity", "document_change", "workspace_document"].includes(evidence.sourceType) &&
+                !evidenceIndicatesShipped(evidence)
+              ) {
                 unsupportedShippedClaims++;
 
                 failures.push({
@@ -461,25 +471,44 @@ export function evaluateFounderWeeklyReview(
   );
 
   const coveredEvidence =
-    evidenceSnapshot.items.filter((evidence) => {
-      const evidenceText = normalizeClaim(
-        `${evidence.title} ${evidence.excerpt}`);
-
-      return [...reportClaims].some((claim) =>
-        claimSupportedByEvidence(claim, evidenceText)
-      );
-    }).length;
+    evidenceSnapshot.items.filter((evidence) =>
+      citedEvidenceIds.has(evidence.sourceId)
+    ).length;
 
   const evidenceCoverage =
     evidenceSnapshot.items.length === 0
       ? 1
       : coveredEvidence / evidenceSnapshot.items.length;
 
+  const materialEvidence = evidenceSnapshot.items.filter(
+    (evidence) =>
+      [
+        "github_activity",
+        "document_change",
+        "founder_context",
+        "workspace_document",
+      ].includes(evidence.sourceType)
+  );
+
+
+  const materialEvidenceCovered =
+    materialEvidence.filter((evidence) =>
+      citedEvidenceIds.has(evidence.sourceId)
+    ).length;
+
+
+  const materialityScore =
+    materialEvidence.length === 0
+      ? 1
+      : materialEvidenceCovered / materialEvidence.length;
+      
+
   const overallScore = hasHardFailure 
     ? 0 
-    : citationValidity * 0.30 +
-      citationCoverage * 0.20 +
-      evidenceCoverage * 0.30 +
+    : citationValidity * 0.25 +
+      citationCoverage * 0.15 +
+      evidenceCoverage * 0.25 +
+      materialityScore * 0.15 +
       (1 - sourceTypeViolationRate) * 0.20;
 
   return {
@@ -502,6 +531,7 @@ export function evaluateFounderWeeklyReview(
           : unsupportedShippedClaims / shippedClaimChecks,
       sourceTypeViolationRate,
       evidenceCoverage,
+      materialityScore,
       duplicateClaimRate:
         claims.size === 0
           ? 0

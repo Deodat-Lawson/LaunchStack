@@ -25,6 +25,58 @@ const TEMPORAL_EVIDENCE_SOURCE_TYPES = new Set(["document_change"]);
 const isTemporalEvidenceSource = (source: { sourceType?: string } | undefined) =>
     source !== undefined && TEMPORAL_EVIDENCE_SOURCE_TYPES.has(source.sourceType ?? "");
 
+type EvidenceStatus =
+    | "planned"
+    | "changed"
+    | "shipped";
+
+function getEvidenceStatus(
+    source: { metadata?: Record<string, unknown> } | undefined
+): EvidenceStatus | null {
+    const status = source?.metadata?.evidenceStatus;
+
+    if (
+        status === "planned" ||
+        status === "changed" ||
+        status === "shipped"
+    ) {
+        return status;
+    }
+
+    return null;
+}
+
+function assertClaimDoesNotOverstateEvidence(
+    text: string,
+    sources: Array<{ metadata?: Record<string, unknown> } | undefined>,
+    section: string,
+    itemIndex: number,
+    sourceIds: readonly string[]
+): void {
+    const claim = text.toLowerCase();
+
+    for (const source of sources) {
+        const status = getEvidenceStatus(source);
+
+        if (!status) continue;
+
+        if (
+            status === "planned" &&
+            /\b(shipped|released|launched|completed|delivered)\b/i.test(claim)
+        ) {
+            throw new FounderWeeklyReviewGenerationValidationError(
+                "Claim describes planned work as completed.",
+                [{
+                    code: "claim_overstates_planned_evidence",
+                    section,
+                    itemIndex,
+                    sourceId: sourceIds[0],
+                }]
+            );
+        }
+    }
+}
+
 export function assertUniqueSnapshotSourceIds(
     evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot
 ): void {
@@ -55,6 +107,17 @@ export function validateFounderWeeklyReviewV2Citations(
         if (section.state === "no_evidence") continue;
         for (const [itemIndex, item] of section.items.entries()) {
             assertCitations(item.sourceIds, evidenceBySourceId, item.kind);
+
+            const citedSources = item.sourceIds.map((sourceId) => evidenceBySourceId.get(sourceId));
+            
+            assertClaimDoesNotOverstateEvidence(
+                item.text,
+                citedSources,
+                sectionName,
+                itemIndex,
+                item.sourceIds
+            );
+
             if (item.kind === "contradictory_evidence" && item.sourceIds.length < 2) {
                 throw new FounderWeeklyReviewGenerationValidationError(
                     `${sectionName} contradictory_evidence must cite at least two sources.`

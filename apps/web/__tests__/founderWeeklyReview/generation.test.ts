@@ -28,12 +28,12 @@ function snapshot(items: FounderWeeklyReviewEvidenceSnapshot["items"]): FounderW
     };
 }
 
-const source = (sourceId: string, sourceType: FounderWeeklyReviewEvidenceSnapshot["items"][number]["sourceType"], excerpt = "Evidence excerpt") => ({
+const source = (sourceId: string, sourceType: FounderWeeklyReviewEvidenceSnapshot["items"][number]["sourceType"], excerpt = "Evidence excerpt", metadata: Record<string, string | number | boolean | (string | number | boolean | null)[] | null> = {}) => ({
     sourceId,
     sourceType,
     title: `${sourceType} title`,
     excerpt,
-    metadata: {},
+    metadata,
 });
 
 function noEvidence(message = "No evidence", cta = "Add evidence") {
@@ -48,7 +48,7 @@ function validPayload(): FounderWeeklyReviewV2Payload {
             whatShipped: { state: "evidence", items: [{ kind: "observed_fact", text: "A release shipped.", sourceIds: ["doc-1"], confidence: 1 }] },
             whatCustomersSaid: { state: "evidence", items: [{ kind: "observed_fact", text: "A customer requested audit logs.", sourceIds: ["feedback-1"], confidence: 0.5 }] },
             currentBlockers: { state: "evidence", items: [{ kind: "observed_fact", text: "SSO remains blocked.", sourceIds: ["context-1"], confidence: 0.8 }] },
-            nextPriorities: { state: "evidence", items: [{ kind: "recommendation", label: "Recommendation", text: "Prioritize SSO.", sourceIds: ["context-1"], confidence: 0.8 }] },
+            nextPriorities: { state: "evidence", items: [{ kind: "recommendation", label: "Recommendation", text: "Prioritize SSO.", sourceIds: ["context-1"], confidence: 0.8, rationale: null }] },
         },
     };
 }
@@ -175,7 +175,7 @@ describe("Founder Weekly Review generation", () => {
     it("allows workspace_document for blockers and priorities while customer-only enforcement remains", async () => {
         const payload = validPayload();
         payload.sections.currentBlockers = { state: "evidence", items: [{ kind: "observed_fact", text: "Current context", sourceIds: ["workspace-1"], confidence: 0.5 }] };
-        payload.sections.nextPriorities = { state: "evidence", items: [{ kind: "recommendation", label: "Recommendation", text: "Act on current context", sourceIds: ["workspace-1"], confidence: 0.5 }] };
+        payload.sections.nextPriorities = { state: "evidence", items: [{ kind: "recommendation", label: "Recommendation", text: "Act on current context", sourceIds: ["workspace-1"], confidence: 0.5, rationale: null }] };
         await expect(generateFounderWeeklyReview({ evidenceSnapshot: snapshot([...completeSnapshot().items, source("workspace-1", "workspace_document")]), generate: fake(payload) })).resolves.toBeDefined();
     });
 
@@ -264,5 +264,120 @@ describe("Founder Weekly Review generation", () => {
             schemaVersion: "founder-weekly-review/v1",
             sections: Object.fromEntries(["whatChanged", "whatShipped", "whatCustomersSaid", "currentBlockers", "nextPriorities"].map((key) => [key, { heading: key, items: [{ kind: "no_evidence", code: "not_assessed" }] }])),
         }).schemaVersion).toBe("founder-weekly-review/v1");
+    });
+
+    it("allows planned evidence to describe future shipment", async () => {
+        const payload = validPayload();
+
+        payload.sections.whatChanged = {
+            state: "evidence",
+            items: [{
+                kind: "observed_fact",
+                text: "Feature will ship next week.",
+                sourceIds: ["doc-1"],
+                confidence: 0.8,
+            }],
+        };
+
+        payload.sections.whatShipped = {
+            state: "no_evidence",
+            noEvidence: {
+                code: "no_relevant_evidence",
+                message: "No shipped work yet.",
+                cta: "Add shipped evidence",
+            },
+        };
+
+        await expect(
+            generateFounderWeeklyReview({
+                evidenceSnapshot: snapshot([
+                    source("doc-1", "document_change", "Feature roadmap item.", {
+                        evidenceStatus: "planned",
+                    }),
+                    source("feedback-1", "customer_feedback"),
+                    source("context-1", "founder_context"),
+                ]),
+                generate: fake(payload),
+            })
+        ).resolves.toBeDefined();
+    });
+
+
+    it("rejects planned evidence described as already shipped", async () => {
+        const payload = validPayload();
+        payload.sections.whatChanged = {
+            state: "evidence",
+            items: [{
+                kind: "observed_fact",
+                text: "Feature shipped yesterday.",
+                sourceIds: ["doc-1"],
+                confidence: 0.8,
+            }],
+        };
+
+        await expect(
+            generateFounderWeeklyReview({
+                evidenceSnapshot: snapshot([
+                    source("doc-1", "document_change", "Feature roadmap item.", {
+                        evidenceStatus: "planned",
+                    }),
+                ]),
+                generate: fake(payload),
+            })
+        ).rejects.toThrow("Claim describes planned work as completed.");
+    });
+
+
+    it("allows shipped evidence to describe shipped work", async () => {
+        const payload = validPayload();
+        payload.sections.whatShipped = {
+            state: "evidence",
+            items: [{
+                kind: "observed_fact",
+                text: "Feature shipped yesterday.",
+                sourceIds: ["doc-1"],
+                confidence: 1,
+            }],
+        };
+
+        await expect(
+            generateFounderWeeklyReview({
+                evidenceSnapshot: snapshot([
+                    source("doc-1", "document_change", "Feature shipped yesterday.", {
+                        evidenceStatus: "shipped",
+                    }),
+                    source("feedback-1", "customer_feedback"),
+                    source("context-1", "founder_context"),
+                ]),
+                generate: fake(payload),
+            })
+        ).resolves.toBeDefined();
+    });
+
+
+    it("allows changed evidence to describe updates without implying shipment", async () => {
+        const payload = validPayload();
+        payload.sections.whatChanged = {
+            state: "evidence",
+            items: [{
+                kind: "observed_fact",
+                text: "Documentation was updated.",
+                sourceIds: ["doc-1"],
+                confidence: 0.8,
+            }],
+        };
+
+        await expect(
+            generateFounderWeeklyReview({
+                evidenceSnapshot: snapshot([
+                    source("doc-1", "document_change", "Documentation updated.", {
+                        evidenceStatus: "changed",
+                    }),
+                    source("feedback-1", "customer_feedback"),
+                    source("context-1", "founder_context"),
+                ]),
+                generate: fake(payload),
+            })
+        ).resolves.toBeDefined();
     });
 });

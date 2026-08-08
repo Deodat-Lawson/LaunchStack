@@ -122,7 +122,7 @@ function buildSemanticRepairPrompt(
     const errors = error.details.length > 0
         ? error.details
         : [{ code: "report_validation_failed" }];
-    const sources = evidenceSnapshot.items.map(({ sourceId, sourceType }) => ({ sourceId, sourceType }));
+    const sources = evidenceSnapshot.items.map(({ sourceId, sourceType, metadata }) => ({ sourceId, sourceType, evidenceStatus: metadata.evidenceStatus ?? null }));
     return [
         "Correct the complete canonical Founder Weekly Review JSON candidate below.",
         "Customer Signals may cite only customer_feedback sources.",

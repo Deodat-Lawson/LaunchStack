@@ -1,21 +1,22 @@
 {
   "summary": {
-    "totalCases": 19,
-    "passed": 19,
+    "totalCases": 26,
+    "passed": 26,
     "failed": 0,
-    "hardFailures": 9,
+    "hardFailures": 12,
     "passRate": 1,
-    "overallScore": 0.48157894736842105
+    "deterministicScore": 0.5240384615384616,
+    "llmScore": 0.9291666666666667
   },
   "metrics": {
-    "citationValidity": 0.8823529411764706,
+    "citationValidity": 0.9166666666666666,
     "citationCoverage": 1,
-    "unsupportedClaimRate": 0.058823529411764705,
-    "unsupportedShippedClaimRate": 0.11764705882352941,
-    "sourceTypeViolationRate": 0.11764705882352941,
-    "evidenceCoverage": 0.7156862745098039,
+    "unsupportedClaimRate": 0.125,
+    "unsupportedShippedClaimRate": 0.08333333333333333,
+    "sourceTypeViolationRate": 0.16666666666666666,
+    "evidenceCoverage": 0.8541666666666666,
     "emptySectionCorrectness": 1,
-    "duplicateClaimRate": 0.058823529411764705
+    "duplicateClaimRate": 0.041666666666666664
   },
   "weakestCases": [
     {
@@ -42,12 +43,12 @@
   ],
   "commonFailures": {
     "invalid_citation": 2,
-    "invalid_source_type": 3,
+    "invalid_source_type": 5,
     "duplicate_claim": 1,
     "malformed_payload": 2,
-    "unsupported_shipped_claim": 2,
-    "unsupported_claim": 1,
-    "conflicting_evidence": 1
+    "unsupported_claim": 3,
+    "conflicting_evidence": 1,
+    "unsupported_shipped_claim": 2
   },
   "cases": [
     {
@@ -63,10 +64,55 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states no changes were reported, which may overlook potential internal changes that could be relevant."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report indicates no shipped work, which may not reflect actual progress if there were minor updates."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "low",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The customer feedback is well-supported by the cited evidence, but it lacks broader context."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The absence of next priorities limits actionable insights for the founder."
+          }
+        ],
+        "summary": "The report provides some grounded customer feedback but lacks material updates and actionable next steps. It correctly identifies no changes or shipped work but misses potential internal developments and future priorities.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "invalid_citation_report",
@@ -80,7 +126,8 @@
         "unsupportedClaimRate": 0,
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
-        "evidenceCoverage": 1,
+        "evidenceCoverage": 0,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
@@ -90,7 +137,57 @@
           "section": "whatCustomersSaid",
           "explanation": "Unknown sourceId: fake_feedback_999"
         }
-      ]
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0,
+          "actionability": 0
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [
+              "fake_feedback_999"
+            ],
+            "explanation": "The claim about customer feedback is unsupported as the cited sourceId does not match any valid evidence."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report fails to identify any changes during the reporting period, which may overlook important updates."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states that nothing was shipped, but it does not provide context or evidence for this claim."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The absence of next priorities limits actionable insights for the founder."
+          },
+          {
+            "section": "synthesisQuality",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report lacks synthesis of evidence and merely states that no changes or priorities exist without connecting to broader themes."
+          }
+        ],
+        "summary": "The report has significant issues with groundedness due to unsupported claims about customer feedback. It also lacks material updates and actionable insights, making it difficult for the founder to make informed decisions. The synthesis quality is poor, as it fails to connect evidence or summarize key themes.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "empty_workspace",
@@ -105,15 +202,64 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 0,
+        "dimensions": {
+          "groundedness": 0,
+          "materiality": 0,
+          "temporalAccuracy": 0,
+          "synthesisQuality": 0,
+          "actionability": 0
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for changes during the reporting period, leading to unsupported claims."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence of shipments, making it impossible to assess what was delivered."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "Lack of customer feedback evidence results in unsupported claims about customer insights."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence of blockers, leaving the report without context on potential issues."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence to ground priorities, making it unclear what the next steps should be."
+          }
+        ],
+        "summary": "The report lacks any evidence across all sections, resulting in a complete failure to provide grounded, actionable insights for the reporting period.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "complete_workspace",
       "passed": true,
-      "score": 0.8999999999999999,
+      "score": 1,
       "hasHardFailure": false,
       "metrics": {
         "canonicalSchemaValid": true,
@@ -122,11 +268,60 @@
         "unsupportedClaimRate": 0,
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
-        "evidenceCoverage": 0.6666666666666666,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 0.7,
+        "dimensions": {
+          "groundedness": 0.8,
+          "materiality": 0.6,
+          "temporalAccuracy": 0.9,
+          "synthesisQuality": 0.5,
+          "actionability": 0.7
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states 'No changes were reported for this period,' which may overlook minor internal changes that could be relevant."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [
+              "context_1"
+            ],
+            "explanation": "The recommendation to improve onboarding lacks a clear rationale or connection to evidence, making it less actionable."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "low",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The customer feedback is appropriately cited and relevant."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "low",
+            "sourceIds": [
+              "github_1"
+            ],
+            "explanation": "The shipping of the CSV export feature is well-supported by evidence."
+          }
+        ],
+        "summary": "The report effectively documents the shipping of the CSV export feature and customer feedback but fails to capture any internal changes and lacks depth in the rationale for recommendations. Overall, it provides a solid foundation but needs improvement in materiality and synthesis quality.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "partial_workspace",
@@ -141,10 +336,55 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states no changes were reported, which may overlook potential internal changes that could be relevant."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report indicates no shipped work, which may not reflect actual progress if there were minor updates."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "low",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The customer feedback is well-supported by the cited evidence, but it lacks broader context."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The absence of next priorities limits actionable insights for the founder."
+          }
+        ],
+        "summary": "The report provides some grounded customer feedback but lacks material updates and actionable priorities. It correctly identifies no changes or shipped work, but this may not fully represent the team's activities.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "invalid_missing_source_citation",
@@ -158,7 +398,8 @@
         "unsupportedClaimRate": 0,
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
-        "evidenceCoverage": 1,
+        "evidenceCoverage": 0,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
@@ -168,7 +409,57 @@
           "section": "whatCustomersSaid",
           "explanation": "Unknown sourceId: missing_source"
         }
-      ]
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0,
+          "actionability": 0
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [
+              "missing_source"
+            ],
+            "explanation": "The claim about customer feedback lacks a valid source ID, making it unsupported."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states no changes were reported, which may overlook important updates."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report indicates no shipped work, which could miss significant developments."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The absence of reported blockers may not reflect the actual situation."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "Not specifying next priorities may lead to a lack of direction."
+          }
+        ],
+        "summary": "The report has significant issues with groundedness due to unsupported claims, lacks material updates, and fails to provide actionable insights or synthesis of evidence. It needs improvement in identifying key changes and providing clear next steps for decision-making.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "founder_context_as_customer_feedback",
@@ -183,6 +474,7 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 1,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
@@ -192,7 +484,51 @@
           "section": "whatCustomersSaid",
           "explanation": "Source type \"founder_context\" is not valid for section \"whatCustomersSaid\""
         }
-      ]
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.8,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "medium",
+            "sourceIds": [
+              "context_1"
+            ],
+            "explanation": "The claim about customer requests for export is supported by the founder's notes, but the report lacks a broader context or additional evidence to strengthen the claim."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report states that no changes were reported, which may overlook important internal updates that could be relevant."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report indicates no shipped work, which could be misleading if there were minor updates or deployments that were not documented."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The absence of next priorities limits the report's usefulness for decision-making."
+          }
+        ],
+        "summary": "The report provides some grounded evidence regarding customer feedback but lacks material updates and actionable priorities. It effectively maintains temporal accuracy but fails to synthesize information or provide clear next steps for the founder.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "founder_context_only_valid",
@@ -207,10 +543,61 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.5,
+          "materiality": 0,
+          "temporalAccuracy": 0,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for changes during the reporting period."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for shipped items during the reporting period."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for customer feedback."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for current blockers."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [
+              "context_1"
+            ],
+            "explanation": "Recommendation to improve onboarding is grounded in founder context but lacks detailed rationale."
+          }
+        ],
+        "summary": "The report lacks evidence across all sections except for a single recommendation. It fails to provide any information on changes, shipped items, customer feedback, or blockers, significantly impacting its overall quality.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "multi_source_customer_feedback",
@@ -225,10 +612,56 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states 'No changes were reported for this period,' which may not accurately reflect the customer feedback indicating a request for a CSV export feature."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states 'No shipped work was reported this period,' which is accurate but does not acknowledge the customer feedback that could inform future shipping priorities."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "low",
+            "sourceIds": [
+              "feedback_1",
+              "feedback_2"
+            ],
+            "explanation": "The report correctly cites customer feedback regarding the CSV export request, but it lacks depth in synthesizing this information into actionable insights."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report fails to identify any next priorities or actions based on customer feedback, which is critical for guiding future work."
+          }
+        ],
+        "summary": "The report effectively captures customer feedback but fails to translate this into actionable priorities or changes. It lacks depth in synthesizing the feedback into a strategic direction for the team.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "duplicate_customer_claims",
@@ -243,6 +676,7 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0.5,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 1,
         "emptySectionCorrectness": 1
       },
@@ -258,7 +692,53 @@
           "section": "whatChanged",
           "explanation": "Source type \"customer_feedback\" is not valid for section \"whatChanged\""
         }
-      ]
+      ],
+      "llmGrader": {
+        "overallScore": 0.6,
+        "dimensions": {
+          "groundedness": 0.8,
+          "materiality": 0.5,
+          "temporalAccuracy": 0.9,
+          "synthesisQuality": 0.6,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "low",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The claim about customer feedback is supported by the cited evidence, but the report could benefit from more diverse feedback."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The report repeats the same customer feedback without additional context or changes, limiting its materiality."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report states that no work was shipped, which is accurate but lacks any context or follow-up on future shipping plans."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The absence of next priorities is a significant gap, as it leaves the report without actionable next steps."
+          }
+        ],
+        "summary": "The report provides some grounded customer feedback but lacks material updates and actionable next steps. It needs to better synthesize information and clarify future priorities.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "duplicate_source_ids_schema_validation",
@@ -282,9 +762,10 @@
         "citationValidity": 1,
         "citationCoverage": 1,
         "unsupportedClaimRate": 0,
-        "unsupportedShippedClaimRate": 1,
+        "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0.5,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
@@ -293,14 +774,54 @@
           "category": "invalid_source_type",
           "section": "whatShipped",
           "explanation": "Source type \"customer_feedback\" is not valid for section \"whatShipped\""
-        },
-        {
-          "category": "unsupported_shipped_claim",
-          "section": "whatShipped",
-          "claim": "CSV export was shipped.",
-          "explanation": "Evidence does not contain a shipping signal."
         }
-      ]
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.5,
+          "materiality": 0.5,
+          "temporalAccuracy": 0.5,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "medium",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The claim about the customer requesting a CSV export is supported by the cited evidence, but the report lacks a clear distinction between customer feedback and shipped features."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The report incorrectly states that the CSV export was shipped based solely on customer feedback, without evidence of actual shipping."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report states no changes were reported, which is misleading as it does not acknowledge the customer request as a significant change."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The lack of specified next priorities limits actionable insights for the founder."
+          }
+        ],
+        "summary": "The report has significant issues with groundedness and temporal accuracy, particularly in misrepresenting customer feedback as shipped work. It fails to highlight important changes and lacks actionable recommendations for the founder.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "malformed_payload",
@@ -317,7 +838,7 @@
     {
       "case": "evidence_omitted",
       "passed": true,
-      "score": 0.8500000000000001,
+      "score": 0.875,
       "hasHardFailure": false,
       "metrics": {
         "canonicalSchemaValid": true,
@@ -327,15 +848,60 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
         "evidenceCoverage": 0.5,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "low",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The claim about customer feedback is supported by the cited evidence."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states no changes were reported, which may overlook important updates."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report indicates no shipped work, which could miss significant releases."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The absence of next priorities limits actionable insights for the founder."
+          }
+        ],
+        "summary": "The report provides some grounded customer feedback but lacks material updates and actionable next steps, limiting its overall effectiveness.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "exaggerated_claim",
       "passed": true,
-      "score": 0.7,
+      "score": 1,
       "hasHardFailure": false,
       "metrics": {
         "canonicalSchemaValid": true,
@@ -344,7 +910,8 @@
         "unsupportedClaimRate": 1,
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
-        "evidenceCoverage": 0,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
@@ -355,7 +922,114 @@
           "claim": "Customers cannot use the product without CSV export.",
           "explanation": "Claim is not directly supported by cited evidence."
         }
-      ]
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "medium",
+            "sourceIds": [
+              "feedback_1"
+            ],
+            "explanation": "The claim that customers cannot use the product without CSV export is supported by customer feedback, but it lacks a broader context or additional evidence to strengthen the assertion."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report states that no changes were reported, which may overlook important internal changes that could have been relevant."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report indicates no shipped work, which may not accurately reflect the team's activities or progress."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The absence of specified next priorities limits the report's actionability and clarity on future directions."
+          }
+        ],
+        "summary": "The report demonstrates strong groundedness and temporal accuracy but falls short in materiality, synthesis quality, and actionability. It effectively cites customer feedback but lacks depth in reporting changes, shipped work, and future priorities, which diminishes its overall utility for decision-making.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
+    },
+    {
+      "case": "weak_customer_signal_overstated",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.5,
+          "materiality": 0,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "medium",
+            "sourceIds": [
+              "feedback_weak"
+            ],
+            "explanation": "The claim that 'CSV export is a major customer pain point affecting adoption' is not fully supported by the cited customer feedback, which only mentions a request for CSV export without indicating it as a major pain point."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report fails to identify any changes during the reporting period, which is a critical oversight."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report states that no work was shipped, but it does not provide any context or evidence to support this claim."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The absence of specified next priorities limits the report's usefulness for decision-making."
+          }
+        ],
+        "summary": "The report has significant issues with groundedness and materiality, particularly in how customer feedback is interpreted and the lack of reported changes or priorities. While it accurately reflects temporal aspects, it fails to provide actionable insights for the founder.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "conflicting_evidence",
@@ -369,7 +1043,8 @@
         "unsupportedClaimRate": 0,
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
-        "evidenceCoverage": 0,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
@@ -380,7 +1055,52 @@
           "claim": "All customers want CSV export.",
           "explanation": "Claim ignores conflicting cited evidence."
         }
-      ]
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.5,
+          "materiality": 0,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [
+              "feedback_1",
+              "feedback_2"
+            ],
+            "explanation": "The claim 'All customers want CSV export' is unsupported as it contradicts the second piece of feedback stating that a customer does not need the export."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states no changes were reported, which may overlook important updates that should have been included."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report indicates no shipped work, which is accurate but lacks context on any planned work or expectations."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The absence of next priorities limits actionable insights for the founder."
+          }
+        ],
+        "summary": "The report contains significant groundedness issues due to unsupported claims about customer feedback. It lacks material updates and actionable priorities, which diminishes its overall utility for decision-making.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "document_change_as_shipped",
@@ -394,7 +1114,8 @@
         "unsupportedClaimRate": 0,
         "unsupportedShippedClaimRate": 1,
         "sourceTypeViolationRate": 0,
-        "evidenceCoverage": 0,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
@@ -405,12 +1126,212 @@
           "claim": "CSV export was shipped.",
           "explanation": "Evidence does not contain a shipping signal."
         }
-      ]
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.5,
+          "materiality": 0,
+          "temporalAccuracy": 0.5,
+          "synthesisQuality": 0,
+          "actionability": 0
+        },
+        "findings": [
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [
+              "docs_1"
+            ],
+            "explanation": "The claim that 'CSV export was shipped' is not supported by the evidence provided, as the document change only mentions an update to the README with export instructions, not the actual shipping of the feature."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report fails to identify any changes during the reporting period, which is critical for understanding progress."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No priorities or actionable next steps are provided, leaving the founder without guidance on what to focus on next."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The absence of customer feedback is a significant gap, as it is essential for understanding user needs and reactions."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report does not address any current blockers, which is important for transparency and problem-solving."
+          }
+        ],
+        "summary": "The report lacks critical evidence and insights, failing to provide a clear picture of progress, customer feedback, or actionable next steps. It misrepresents the shipping status of the CSV export feature, leading to confusion about what has actually been accomplished.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
+    },
+    {
+      "case": "document_change_as_customer_feedback",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 1,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 1,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "invalid_source_type",
+          "section": "whatCustomersSaid",
+          "explanation": "Source type \"document_change\" is not valid for section \"whatCustomersSaid\""
+        },
+        {
+          "category": "unsupported_claim",
+          "section": "whatCustomersSaid",
+          "claim": "Customers requested export.",
+          "explanation": "Claim is not directly supported by cited evidence."
+        }
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "medium",
+            "sourceIds": [
+              "docs_1"
+            ],
+            "explanation": "The claim about customer requests is supported by the cited document, but the confidence level suggests some uncertainty."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report states no changes were reported, which is misleading given the updated README."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report claims nothing was shipped, ignoring the update to the README."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The lack of specified priorities limits actionable insights for the founder."
+          }
+        ],
+        "summary": "The report has strong groundedness and temporal accuracy but fails significantly in materiality and synthesis quality. It overlooks important changes, such as the README update, and lacks actionable next steps.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
+    },
+    {
+      "case": "workspace_document_as_customer_feedback",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 1,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 1,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "invalid_source_type",
+          "section": "whatCustomersSaid",
+          "explanation": "Source type \"workspace_document\" is not valid for section \"whatCustomersSaid\""
+        },
+        {
+          "category": "unsupported_claim",
+          "section": "whatCustomersSaid",
+          "claim": "Customers requested better onboarding.",
+          "explanation": "Claim is not directly supported by cited evidence."
+        }
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatCustomersSaid",
+            "severity": "medium",
+            "sourceIds": [
+              "workspace_doc_1"
+            ],
+            "explanation": "The claim about customer feedback is based on a workspace document, but the excerpt does not directly support the specific request for better onboarding."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report states that no changes were reported, which may overlook important internal updates that could have been included."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report indicates no shipped work, which may not accurately reflect any minor updates or deployments that occurred."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The lack of specified next priorities limits the report's usefulness for decision-making."
+          }
+        ],
+        "summary": "The report demonstrates strong temporal accuracy and groundedness in some areas, but it lacks materiality and synthesis quality. Key changes and priorities are missing, which diminishes its actionability for founders.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "unavailable_source_warning",
       "passed": true,
-      "score": 0.7,
+      "score": 0.75,
       "hasHardFailure": false,
       "metrics": {
         "canonicalSchemaValid": true,
@@ -420,10 +1341,61 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
         "evidenceCoverage": 0,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0,
+          "materiality": 0,
+          "temporalAccuracy": 0,
+          "synthesisQuality": 0,
+          "actionability": 0
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for any changes, leading to unsupported claims."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for any shipped work, leading to unsupported claims."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [
+              "feedback_missing"
+            ],
+            "explanation": "Customer feedback is marked as unavailable, which undermines the credibility of any claims made."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for current blockers, leading to unsupported claims."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence provided for next priorities, leading to unsupported claims."
+          }
+        ],
+        "summary": "The report lacks any evidence across all sections, resulting in a complete failure to provide grounded, actionable insights. All claims are unsupported, and there is no material information to guide decision-making.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     },
     {
       "case": "valid_contradictory_evidence",
@@ -438,10 +1410,340 @@
         "unsupportedShippedClaimRate": 0,
         "sourceTypeViolationRate": 0,
         "evidenceCoverage": 1,
+        "materialityScore": 1,
         "duplicateClaimRate": 0,
         "emptySectionCorrectness": 1
       },
-      "failures": []
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The report states no changes were reported, which may overlook minor updates that could be relevant."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "low",
+            "sourceIds": [
+              "feedback_1",
+              "feedback_2"
+            ],
+            "explanation": "While the report captures contradictory customer feedback, it does not synthesize this information into actionable insights."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "The absence of specified next priorities limits the report's usefulness for decision-making."
+          }
+        ],
+        "summary": "The report effectively captures customer feedback but lacks material updates and actionable next steps, limiting its overall effectiveness for founders.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
+    },
+    {
+      "case": "planned_work_marked_as_shipped",
+      "passed": true,
+      "score": 0,
+      "hasHardFailure": true,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 1,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [
+        {
+          "category": "unsupported_shipped_claim",
+          "section": "whatShipped",
+          "claim": "CSV export shipped.",
+          "explanation": "Evidence does not contain a shipping signal."
+        }
+      ],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 1,
+          "materiality": 0,
+          "temporalAccuracy": 0,
+          "synthesisQuality": 0,
+          "actionability": 0
+        },
+        "findings": [
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [
+              "plan_doc_1"
+            ],
+            "explanation": "The report claims that 'CSV export shipped' based on the plan document, which states that implementation has not started yet. This is a groundedness failure as the claim is unsupported."
+          },
+          {
+            "section": "whatChanged",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report does not identify any changes during the reporting period, which is a materiality failure as it ignores important updates."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report incorrectly presents planned work (CSV export) as shipped, which is a temporal accuracy failure."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report lacks any evidence or insights from customers, which is a materiality failure."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report does not mention any current blockers, which is a materiality failure."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The report does not outline any next priorities, which is a materiality failure."
+          }
+        ],
+        "summary": "The report contains significant failures in groundedness, materiality, and temporal accuracy. It inaccurately claims that a planned feature has shipped, lacks evidence of customer feedback, changes, blockers, and next priorities, leading to a lack of actionable insights for the founder.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
+    },
+    {
+      "case": "valid_document_change_evidence",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.8,
+          "materiality": 0.5,
+          "temporalAccuracy": 0.9,
+          "synthesisQuality": 0.6,
+          "actionability": 0.4
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [
+              "document_change_1"
+            ],
+            "explanation": "The claim about ownership change is supported by the cited document change, but lacks additional context or evidence to fully substantiate its significance."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence of customer feedback is provided, which is critical for understanding customer sentiment."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence of shipped work is included, which is essential for tracking progress."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence of current blockers is provided, which is necessary for identifying challenges."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence of next priorities is included, which is important for future planning."
+          }
+        ],
+        "summary": "The report provides limited evidence regarding changes but lacks comprehensive insights into customer feedback, shipped work, blockers, and future priorities. This limits its overall effectiveness for decision-making.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
+    },
+    {
+      "case": "multiple_adjacent_version_changes",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.8,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.6,
+          "actionability": 0.4
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [
+              "document_change_v1_v2",
+              "document_change_v2_v3"
+            ],
+            "explanation": "The report combines two changes into one statement without clearly distinguishing them, which could lead to confusion about the timeline of changes."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The section lacks any evidence or customer feedback, which is critical for understanding customer sentiment."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No evidence of shipped work is provided, which is essential for tracking progress."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "The absence of any blockers reported limits the understanding of potential issues affecting progress."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No priorities are outlined, which is necessary for guiding future actions."
+          }
+        ],
+        "summary": "The report has significant gaps in customer feedback, shipped work, blockers, and next priorities, which undermines its overall effectiveness. While it does provide some evidence of changes, the synthesis of these changes lacks clarity and could confuse readers.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
+    },
+    {
+      "case": "low_materiality_summary",
+      "passed": true,
+      "score": 1,
+      "hasHardFailure": false,
+      "metrics": {
+        "canonicalSchemaValid": true,
+        "citationValidity": 1,
+        "citationCoverage": 1,
+        "unsupportedClaimRate": 0,
+        "unsupportedShippedClaimRate": 0,
+        "sourceTypeViolationRate": 0,
+        "evidenceCoverage": 1,
+        "materialityScore": 1,
+        "duplicateClaimRate": 0,
+        "emptySectionCorrectness": 1
+      },
+      "failures": [],
+      "llmGrader": {
+        "overallScore": 1,
+        "dimensions": {
+          "groundedness": 0.8,
+          "materiality": 0.5,
+          "temporalAccuracy": 1,
+          "synthesisQuality": 0.5,
+          "actionability": 0.5
+        },
+        "findings": [
+          {
+            "section": "whatChanged",
+            "severity": "medium",
+            "sourceIds": [
+              "change_1"
+            ],
+            "explanation": "The report mentions a change in ownership but lacks detail on its significance or implications."
+          },
+          {
+            "section": "whatCustomersSaid",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No customer feedback was reported, which is critical for understanding user needs."
+          },
+          {
+            "section": "nextPriorities",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No next priorities were specified, leaving a gap in actionable insights."
+          },
+          {
+            "section": "whatShipped",
+            "severity": "high",
+            "sourceIds": [],
+            "explanation": "No shipped work was reported, which is essential for tracking progress."
+          },
+          {
+            "section": "currentBlockers",
+            "severity": "medium",
+            "sourceIds": [],
+            "explanation": "While no blockers were reported, this section could benefit from context on potential challenges."
+          }
+        ],
+        "summary": "The report provides some evidence of a change in ownership but lacks critical customer feedback, shipped work, and next priorities, which diminishes its overall effectiveness. It needs to focus on actionable insights and material changes.",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o-mini",
+          "promptVersion": "founder_weekly_review_grader_v1"
+        }
+      }
     }
   ]
 }

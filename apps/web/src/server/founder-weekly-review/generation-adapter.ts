@@ -15,6 +15,7 @@ export function generateFounderWeeklyReviewStructured<TSchema extends ZodType>(i
     schema: TSchema;
     schemaName?: string;
     generationPhase?: "initial" | "semantic-repair";
+    temperature?: number;
 }): Promise<{
     object: ReturnType<TSchema["parse"]>;
     metadata: StructuredGenerationMetadata;

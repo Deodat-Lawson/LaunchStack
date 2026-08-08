@@ -11,7 +11,9 @@ import { StrictCurrentWorkspaceDocumentStore } from "~/server/founder-weekly-rev
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
 import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
 import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";
+import { renderFounderWeeklyReviewEvaluationMarkdown } from "~/server/founder-weekly-review/evaluation-markdown";
 import { founderWeeklyReviewRealisticExportRoot, parseFounderWeeklyReviewRealisticEvidenceMode } from "~/server/founder-weekly-review/realistic-e2e-mode";
+import { evaluateGeneratedFounderWeeklyReview } from "@launchstack/features/founder-weekly-review/benchmarks";
 
 const require = createRequire(import.meta.url);
 const { createFounderWeeklyReviewTestDatabase } = require("../__tests__/founderWeeklyReview/testDb") as typeof import("../__tests__/founderWeeklyReview/testDb");
@@ -19,7 +21,7 @@ const fixturePath = resolve(process.cwd(), "test-fixtures/founder-weekly-review/
 type Fixture = { reportingPeriod: { start: string; end: string }; workspaceTimezone: string; founderContext: string; documents: Array<{ title: string; category: string; changelog: string; timestamp: string; chunks?: string[] }> };
 type EvidenceMode = ReturnType<typeof parseFounderWeeklyReviewRealisticEvidenceMode>;
 type ComputedTexts = { before: string; after: string; v3: string; bHistorical: string; nullVersion: string; foreign: string; unrelated: string };
-type ArtifactPaths = { evidence: string; report: string; markdown: string; summary: string };
+type ArtifactPaths = { evidence: string; report: string; markdown: string; evaluation: string; evaluationMarkdown: string; summary: string };
 
 function canonicalize(value: unknown): unknown { if (value === null || ["string", "boolean"].includes(typeof value)) return value; if (typeof value === "number" && Number.isFinite(value)) return value; if (Array.isArray(value)) return value.map(canonicalize); if (typeof value === "object") return Object.fromEntries(Object.keys(value as Record<string, unknown>).sort().map((key) => [key, canonicalize((value as Record<string, unknown>)[key])])); throw new Error("Cannot canonicalize snapshot."); }
 function digest(value: unknown) { return createHash("sha256").update(JSON.stringify(canonicalize(value)), "utf8").digest("hex"); }
@@ -126,11 +128,26 @@ try {
   const generated = await generateFounderWeeklyReview({ evidenceSnapshot: generating.evidenceSnapshot, generate: async (request) => { generationCalls++; return generateFounderWeeklyReviewStructured(request); } });
   validateFounderWeeklyReviewV2Citations(generated.reviewPayload as never, generating.evidenceSnapshot);
   const saved = await worker.saveGeneratedDraft(generationContext, generated.reviewPayload, generated.modelMetadata); const readBack = await new FounderWeeklyReviewRepository(testDb.db).getByCompanyAndRunId(actor.companyId, saved.id); if (!readBack?.reviewPayload || readBack.status !== "draft" || !readBack.evidenceSnapshot || digest(readBack.evidenceSnapshot) !== beforeDigest) throw new Error("Validated draft read-back or snapshot immutability failed.");
+
+  const evaluation = await evaluateGeneratedFounderWeeklyReview(
+    readBack.evidenceSnapshot,
+    readBack.reviewPayload as unknown as Parameters<typeof evaluateGeneratedFounderWeeklyReview>[1],
+    generateFounderWeeklyReviewStructured
+  );
+
+  console.log(JSON.stringify({
+    evaluation: {
+      deterministicScore: evaluation.deterministic?.overallScore,
+      failures: evaluation.failures,
+      llmScore: evaluation.llmGrader?.overallScore,
+    }
+  }));
+
   if (mode === "computed") assertComputedReport(readBack.reviewPayload, readBack.evidenceSnapshot);
   const rendered = renderFounderWeeklyReviewMarkdown(readBack);
   const dispatchRows = await testDb.db.select().from(founderWeeklyReviewDispatches).where(eq(founderWeeklyReviewDispatches.runId, saved.id)); const runRows = await testDb.db.select().from(founderWeeklyReviewRuns).where(eq(founderWeeklyReviewRuns.id, saved.id));
   let artifactPaths: ArtifactPaths | null = null;
-  if (process.env.SYNTHETIC_FWR_EXPORT_REPORT === "1") { const exportRoot = founderWeeklyReviewRealisticExportRoot(mode, process.env.SYNTHETIC_FWR_EXPORT_DIR); const directory = resolve(process.cwd(), exportRoot, saved.id); await mkdir(directory, { recursive: true }); artifactPaths = { evidence: resolve(directory, "evidence.json"), report: resolve(directory, "report.json"), markdown: resolve(directory, "report.md"), summary: resolve(directory, "run-summary.json") }; await writeAtomic(artifactPaths.evidence, JSON.stringify(readBack.evidenceSnapshot, null, 2)); await writeAtomic(artifactPaths.report, JSON.stringify({ runId: readBack.id, status: readBack.status, provider: readBack.modelMetadata?.provider, model: readBack.modelMetadata?.model, reportingPeriod: readBack.reportingPeriod, review: readBack.reviewPayload }, null, 2)); await writeAtomic(artifactPaths.markdown, rendered); await writeAtomic(artifactPaths.summary, JSON.stringify({ runId: saved.id, scenario: "realistic-company", mode, provider: generated.modelMetadata.provider, model: generated.modelMetadata.model, lifecycle: [created.run.status, collecting.status, attached.status, generating.status, saved.status], evidenceCounts: checked.counts, warningCodes: readBack.evidenceSnapshot.sourceWarnings.map((warning) => warning.code), repairCount: generationCalls - 1, retryCount: saved.retryCount, validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, snapshotDigestBefore: beforeDigest, snapshotDigestAfter: digest(readBack.evidenceSnapshot), artifactPaths }, null, 2)); }
+  if (process.env.SYNTHETIC_FWR_EXPORT_REPORT === "1") { const exportRoot = founderWeeklyReviewRealisticExportRoot(mode, process.env.SYNTHETIC_FWR_EXPORT_DIR); const directory = resolve(process.cwd(), exportRoot, saved.id); await mkdir(directory, { recursive: true }); artifactPaths = { evidence: resolve(directory, "evidence.json"), report: resolve(directory, "report.json"), markdown: resolve(directory, "report.md"), evaluation: resolve(directory, "evaluation.json"), evaluationMarkdown: resolve(directory, "evaluation.md"), summary: resolve(directory, "run-summary.json") }; await writeAtomic(artifactPaths.evidence, JSON.stringify(readBack.evidenceSnapshot, null, 2)); await writeAtomic(artifactPaths.report, JSON.stringify({ runId: readBack.id, status: readBack.status, provider: readBack.modelMetadata?.provider, model: readBack.modelMetadata?.model, reportingPeriod: readBack.reportingPeriod, review: readBack.reviewPayload }, null, 2)); await writeAtomic(artifactPaths.markdown, rendered); await writeAtomic(artifactPaths.evaluation, JSON.stringify(evaluation, null, 2)); await writeAtomic (artifactPaths.evaluationMarkdown, renderFounderWeeklyReviewEvaluationMarkdown(evaluation)); await writeAtomic(artifactPaths.summary, JSON.stringify({ runId: saved.id, scenario: "realistic-company", mode, provider: generated.modelMetadata.provider, model: generated.modelMetadata.model, lifecycle: [created.run.status, collecting.status, attached.status, generating.status, saved.status], evidenceCounts: checked.counts, warningCodes: readBack.evidenceSnapshot.sourceWarnings.map((warning) => warning.code), repairCount: generationCalls - 1, retryCount: saved.retryCount, validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, snapshotDigestBefore: beforeDigest, snapshotDigestAfter: digest(readBack.evidenceSnapshot), artifactPaths }, null, 2)); }
   if (process.env.FWR_PRINT_REPORT === "1") { console.log("===== FOUNDER WEEKLY REVIEW ====="); console.log(rendered); console.log("===== END FOUNDER WEEKLY REVIEW ====="); }
   console.log(JSON.stringify({ runId: saved.id, mode, lifecycle: [created.run.status, collecting.status, attached.status, generating.status, saved.status], evidenceCounts: checked.counts, warningCodes: readBack.evidenceSnapshot.sourceWarnings.map((warning) => warning.code), snapshotDigestUnchanged: beforeDigest === digest(readBack.evidenceSnapshot), validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, provider: generated.modelMetadata.provider, model: generated.modelMetadata.model, repairCount: generationCalls - 1, dispatchCount: dispatchRows.length, runRowCount: runRows.length, artifactPaths }));
 } finally { await testDb.close(); }

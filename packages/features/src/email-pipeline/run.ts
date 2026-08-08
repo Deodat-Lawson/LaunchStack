@@ -1,8 +1,10 @@
+import { randomUUID } from "node:crypto";
+
 import { generateTemplate } from "./generator";
 import { reviewTemplate } from "./reviewer";
 import { sendCampaign } from "./send";
-import { createCampaign, isSuppressed, saveSends, sentEmails } from "./db";
-import { EMAIL_MODELS, EMAIL_PROMPT_VERSION } from "./models";
+import { runAutomatedEmailCampaign } from "./automation";
+import { isSuppressed } from "./db";
 import type {
   EmailTemplate,
   Recipient,
@@ -12,9 +14,19 @@ import type {
 } from "./types";
 
 /**
- * Orchestrates the pipeline: generate a grounded template → review it with an
- * LLM → (persist) → render + send each recipient through the safety wrapper.
- * Defaults to dry-run; suppression + idempotency are DB-backed.
+ * One-shot pipeline: generate → review → persist → send.
+ *
+ * Kept for the existing `POST /api/email-pipeline/send` endpoint and for
+ * unattended automation. Its contract is unchanged, but it no longer owns the
+ * orchestration — it delegates to {@link runAutomatedEmailCampaign}, so a
+ * one-call run produces the same persisted template version, approval record
+ * and send attempt that the staged lifecycle does.
+ *
+ * Prefer the staged endpoints when a human is in the loop:
+ * `prepareEmailCampaign` → `approveEmailCampaign` → `dispatchEmailCampaign`.
+ * Only that path guarantees the bytes a reviewer saw are the bytes that ship;
+ * here, generation and delivery still share one request, so a client retry
+ * generates a fresh template and a fresh campaign.
  */
 export async function runEmailCampaign(args: {
   companyId: number;
@@ -34,25 +46,62 @@ export async function runEmailCampaign(args: {
 }> {
   const persist = args.persist ?? true;
 
+  if (!persist) return runWithoutPersistence(args);
+
+  const run = await runAutomatedEmailCampaign({
+    companyId: args.companyId,
+    name: args.name,
+    ...(args.goal !== undefined ? { goal: args.goal } : {}),
+    recipients: args.recipients,
+    ...(args.mode ? { mode: args.mode } : {}),
+    senderIdentity: args.senderIdentity,
+    unsubscribeBaseUrl: args.unsubscribeBaseUrl,
+    // Each call is its own campaign, so a fresh key per call preserves the
+    // historical behaviour of this endpoint exactly.
+    idempotencyKey: randomUUID(),
+    policy: {
+      // This entry point has always sent regardless of the review verdict;
+      // the staged endpoints and `/api/email-campaign-runs` are where the
+      // stricter default lives.
+      requireReviewPass: false,
+      overrideReason: "One-shot pipeline run (runEmailCampaign).",
+    },
+  });
+
+  if (!run.review) throw new Error("Template review did not run");
+
+  return {
+    campaignId: run.campaign.id,
+    template: run.version.template,
+    review: run.review,
+    results: run.results,
+  };
+}
+
+/**
+ * `persist: false` — generate, review and render without writing a campaign.
+ * No version and no audit trail, so it cannot go through the lifecycle stages
+ * and per-campaign idempotency is unavailable. The company suppression list is
+ * still honoured; that check is never optional.
+ */
+async function runWithoutPersistence(args: {
+  companyId: number;
+  goal?: string;
+  recipients: Recipient[];
+  mode?: SendMode;
+  senderIdentity: string;
+  unsubscribeBaseUrl: string;
+}): Promise<{
+  campaignId: null;
+  template: EmailTemplate;
+  review: TemplateReview;
+  results: SendResult[];
+}> {
   const { template, companyContext } = await generateTemplate({
     companyId: args.companyId,
-    goal: args.goal,
+    ...(args.goal !== undefined ? { goal: args.goal } : {}),
   });
   const review = await reviewTemplate({ template, companyContext });
-
-  let campaignId: number | null = null;
-  if (persist) {
-    campaignId = await createCampaign({
-      companyId: args.companyId,
-      name: args.name,
-      template,
-      model: EMAIL_MODELS.templateGeneration,
-      promptVersion: EMAIL_PROMPT_VERSION,
-      templateVersion: EMAIL_PROMPT_VERSION,
-    });
-  }
-
-  const already = campaignId ? await sentEmails(campaignId) : new Set<string>();
 
   const results = await sendCampaign({
     template,
@@ -61,10 +110,7 @@ export async function runEmailCampaign(args: {
     senderIdentity: args.senderIdentity,
     unsubscribeBaseUrl: args.unsubscribeBaseUrl,
     isSuppressed: (email) => isSuppressed(args.companyId, email),
-    alreadySent: (email) => already.has(email),
   });
 
-  if (campaignId) await saveSends(campaignId, results);
-
-  return { campaignId, template, review, results };
+  return { campaignId: null, template, review, results };
 }

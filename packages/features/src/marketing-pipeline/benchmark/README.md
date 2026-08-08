@@ -30,6 +30,27 @@ benchmark/
 2. `scorePost()` feeds that reference + the candidate's company context + the
    candidate post to the judge (`gpt-4o`, temp 0) and returns raw per-criterion
    scores, an overall score, and a rationale — **no rewrite**.
+   evaluation criteria:
+    groundedness
+
+    specificity
+
+    brand voice
+
+    audience relevance
+
+    goal alignment
+
+    platform structure
+
+    hook strength
+
+    cta quality
+
+    cliche generic
+
+    citation coverage
+
 3. The runner aggregates scores and writes `results.json` under
    `docs/pipeline/benchmarks/<runId>/`.
 
@@ -50,7 +71,7 @@ the suite is skipped, so normal CI never pays for API calls.
 
 ## Next steps (not in this slice)
 
-- Fill `references/*.md` (member) and add real candidates / wire Mode-A generation.
-- Judge stability: N-sample median + recorded variance (lead, TODO-lead Phase 1).
+- Fill `references/*.md`  and add real candidates / wire Mode-A generation.
+- Judge stability: N-sample median + recorded variance ( TODO-l Phase 1).
 - Cost/token axis + Score-vs-cost frontier chart (deferred for now).
-- Baseline + regression CI gate (lead, TODO-lead Phase 3).
+- Baseline + regression CI gate (lead, TODO-l Phase 3).

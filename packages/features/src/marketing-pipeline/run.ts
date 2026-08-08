@@ -467,6 +467,9 @@ export async function runMarketingPipeline(args: {
       brandVoice,
       targetPersona,
       performanceInsights,
+      // The exact knowledge context the generator used, so evaluation scores
+      // groundedness against the same facts (not a re-derived context).
+      companyContext: companyContextBase,
     },
     claimSources,
   };

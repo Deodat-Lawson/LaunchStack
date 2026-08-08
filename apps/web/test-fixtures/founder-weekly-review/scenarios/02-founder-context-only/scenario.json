@@ -1,0 +1,12 @@
+{
+  "name": "founder-context-only",
+  "description": "Founder Context is the only collected source.",
+  "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+  "workspaceTimezone": "America/New_York",
+  "founderContext": "Focus on onboarding reliability and the billing revamp decision.",
+  "companies": [{ "name": "Northstar Analytics", "underReview": true, "documents": [] }],
+  "expect": {
+    "evidence": { "sourceTypeCounts": { "founder_context": { "exact": 1 }, "document_change": { "exact": 0 }, "workspace_document": { "exact": 0 }, "customer_feedback": { "exact": 0 } } },
+    "sourceSemantics": { "customerFeedbackOnly": true, "temporalEvidenceRequired": true }
+  }
+}

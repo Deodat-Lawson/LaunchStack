@@ -22,7 +22,8 @@
     "start": "next start",
     "test": "jest --passWithNoTests",
     "typecheck": "tsc --noEmit",
-    "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
+    "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest",
+    "founder-weekly-review:demo": "tsx scripts/run-founder-weekly-review-realistic-e2e.ts --demo"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.69",

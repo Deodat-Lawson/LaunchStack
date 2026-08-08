@@ -106,6 +106,10 @@ export interface GenerateStructuredInput<TSchema> {
   schemaName?: string;
   /** Bounded FWR-only attempt label for safe operational logging. */
   generationPhase?: "initial" | "semantic-repair";
+  /** Optional caller-owned local timeout. Provider defaults remain unchanged when omitted. */
+  timeoutMs?: number;
+  /** Optional caller-owned output ceiling. Provider defaults remain unchanged when omitted. */
+  maxOutputTokens?: number;
 }
 
 /** Resolved model and provider response details that are safe to persist for replay. */

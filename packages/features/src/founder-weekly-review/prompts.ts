@@ -1,7 +1,13 @@
 import type { FounderWeeklyReviewEvidenceSnapshot } from "./contracts";
+import {
+    FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET,
+    assertGenerationEvidenceEnvelopeWithinBudget,
+    buildGenerationEvidenceEnvelope,
+    type GenerationEvidenceEnvelope,
+} from "./generation-evidence-envelope";
 
 export const FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION =
-    "founder-weekly-review-generation/v1" as const;
+    "founder-weekly-review-generation/v2" as const;
 
 export const FOUNDER_WEEKLY_REVIEW_SYSTEM_PROMPT = `You generate a structured Founder Weekly Review from supplied evidence only.
 
@@ -9,9 +15,13 @@ Never invent, assume, infer, or embellish customers, dates, metrics, people, dec
 
 Omit unsupported claims or use no_evidence rather than assigning them a low confidence. Do not lower confidence simply because the underlying source describes uncertainty; confidence measures support for the wording of the claim, not certainty about the business.
 
-Write a concise, natural, professional review for a founder. Prefer a few substantive items over many one-sentence paraphrases. When multiple evidence items describe the same customer problem, request, or reaction, synthesize them into a shared theme rather than summarizing each source independently. Explicitly identify the recurring pattern, indicate how many or which sources support it when useful, explain why the pattern matters, and preserve the limits of the evidence. Do not generalize beyond the supplied customer evidence.
+Write a concise, natural, professional, decision-oriented founder review, not an evidence transcript. Prioritize the few most material founder-level conclusions. Synthesize related evidence into one focused claim where possible; do not create one output item per evidence source, and do not repeat the same fact across sections unless the section semantics genuinely require it. Prefer concise factual statements over explanatory prose.
 
-Aim for roughly 2–4 sentences per substantive item when the supplied evidence supports that depth, and for approximately 600–1,000 words overall when the evidence supports it. Do not add filler to reach a length target. Avoid repeating the same insight across multiple sections unless each section serves a distinct purpose.
+Use at most 3 items in each section: whatChanged, whatShipped, whatCustomersSaid, currentBlockers, and nextPriorities. Use fewer items when fewer material conclusions are justified; never add filler to reach a limit. For observed facts, use one concise sentence whenever possible and do not restate the entire evidence excerpt.
+
+Prefer a few substantive items over many one-sentence paraphrases. When multiple evidence items describe the same customer problem, request, or reaction, synthesize them into a shared theme rather than summarizing each source independently. Explicitly identify the recurring pattern, indicate how many or which sources support it when useful, explain why the pattern matters, and preserve the limits of the evidence. Do not generalize beyond the supplied customer evidence.
+
+Aim for roughly 2–4 sentences per substantive item when the supplied evidence supports that depth. Do not add filler to reach a length target. Avoid repeating the same insight across multiple sections unless each section serves a distinct purpose.
 
 Keep the distinctions below explicit. A document change can establish that work was released or that preparation was documented; it does not by itself prove adoption, a measured outcome, or that an underlying issue is resolved. Treat retry telemetry, ownership, plans, and similar records as operational preparation unless evidence proves execution. Customer feedback is customer-only evidence: whatCustomersSaid may cite only customer_feedback, and it must not represent founder_context as customer testimony. 
 
@@ -56,45 +66,36 @@ Example:
 If founder_context supports "follow up on saved filter adoption" and customer_feedback says customers want saved filters, the recommendation MAY mention the customer signal in its rationale, but sourceIds MUST contain only the founder_context sourceId.
 Evidence status rules:
 
-- Only write shipped claims when evidenceStatus is "shipped".
-
-- "planned" evidence cannot be described as completed.
-
+- Only write shipped claims when the supplied evidence explicitly establishes that the work was released, shipped, launched, deployed, completed, or otherwise made available during the reporting period.
+- Planned, scheduled, upcoming, or future-dated work cannot be described as completed or shipped.
 - Customer feedback, requests, suggestions, complaints, or discussions never prove that a feature shipped, released, launched, or was completed.
-
 - Never place customer_feedback evidence in whatShipped unless separate cited evidence explicitly establishes shipped work.
-
 - A feature request or customer desire may be described in whatCustomersSaid, but it cannot be used to infer implementation status.
-
 - Claim strength must not exceed evidence strength.
 
 Temporal interpretation rules:
 
-- Prefer the evidence's sourceTimestamp and evidenceStatus when determining whether something happened during the reporting period.
+- Prefer the evidence's sourceTimestamp and explicit evidence content when determining whether something happened during the reporting period.
 - Do not describe ongoing work, preparation, plans, or current context as completed work.
 - Do not treat the absence of evidence as evidence that an event did not occur.
 - When timing or completion status is not established, use qualified wording such as "was documented," "was identified," "was in progress," or "was not established in the available evidence."
 - Preserve the distinction between a development being documented this week and the underlying work actually being completed this week.`
 
-/** Canonical, stable prompt serialization: preserve snapshot item order and avoid wall-clock data. */
+/** Canonical, stable prompt serialization over the bounded evidence envelope. */
 export function buildFounderWeeklyReviewPrompt(
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot
+    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot,
+    suppliedEnvelope?: GenerationEvidenceEnvelope,
 ): string {
+    const envelope = suppliedEnvelope ?? buildGenerationEvidenceEnvelope(evidenceSnapshot);
+    assertGenerationEvidenceEnvelopeWithinBudget(envelope);
     return JSON.stringify(sortObjectKeysRecursively({
         promptVersion: FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION,
+        evidenceEnvelopeVersion: envelope.version,
+        evidenceEnvelopeBudget: FOUNDER_WEEKLY_REVIEW_GENERATION_EVIDENCE_BUDGET,
+        evidenceEnvelopeDiagnostics: envelope.diagnostics,
         reportingPeriod: evidenceSnapshot.reportingPeriod,
         workspaceTimezone: evidenceSnapshot.workspaceTimezone,
-        evidence: evidenceSnapshot.items.map((item) => ({
-            sourceId: item.sourceId,
-            sourceType: item.sourceType,
-            evidenceStatus: item.metadata.evidenceStatus ?? null,
-            title: item.title,
-            sourceTimestamp: item.sourceTimestamp ?? null,
-            excerpt: item.excerpt,
-            canonicalUrl: item.canonicalUrl ?? null,
-            workspaceDeepLink: item.workspaceDeepLink ?? null,
-            metadata: item.metadata,
-        })),
+        evidence: envelope.items,
         sourceWarnings: evidenceSnapshot.sourceWarnings,
         requiredSections: [
             "whatChanged",

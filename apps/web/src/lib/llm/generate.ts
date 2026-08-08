@@ -77,8 +77,12 @@ export async function generateStructuredWithMetadata<TSchema extends ZodType>(
     const common = {
       model: resolved.model,
       ...(resolved.temperature === undefined ? {} : { temperature: resolved.temperature }),
-      ...(input.capability === "founderWeeklyReview" ? { maxOutputTokens: 1800 } : {}),
-      ...(resolved.structuredOutputMode === "json_object" ? { abortSignal: AbortSignal.timeout(90_000) } : {}),
+      ...(input.maxOutputTokens !== undefined
+        ? { maxOutputTokens: input.maxOutputTokens }
+        : input.capability === "founderWeeklyReview" ? { maxOutputTokens: 2400 } : {}),
+      ...((input.timeoutMs !== undefined || resolved.structuredOutputMode === "json_object")
+        ? { abortSignal: AbortSignal.timeout(input.timeoutMs ?? 90_000) }
+        : {}),
       prompt: input.prompt,
     };
     // Moonshot/Kimi supports Chat Completions JSON-object mode, not the

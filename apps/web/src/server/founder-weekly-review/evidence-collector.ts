@@ -6,6 +6,7 @@ import {
 } from "@launchstack/features/founder-weekly-review";
 import { FounderWeeklyReviewDocumentVersionStore } from "./document-version-chunks";
 import { StrictCurrentWorkspaceDocumentStore } from "./workspace-document-store";
+import { createConfiguredDocumentChangeMaterialityAnalyzer } from "./document-change-materiality-analyzer";
 
 export interface FounderWeeklyReviewEvidenceCollector {
     collectFounderWeeklyReviewEvidence(input: {
@@ -52,7 +53,13 @@ export class CanonicalFounderWeeklyReviewEvidenceCollector implements FounderWee
         actor: { externalUserId: string };
         requestKey: string;
     }): Promise<FounderWeeklyReviewEvidenceSnapshot> {
-        const snapshot = await (this.service ??= new FounderWeeklyReviewEvidenceService(undefined, undefined, { kind: "computed", store: new FounderWeeklyReviewDocumentVersionStore() }, new StrictCurrentWorkspaceDocumentStore())).collectFounderWeeklyReviewEvidence({
+        const snapshot = await (this.service ??= new FounderWeeklyReviewEvidenceService(
+            undefined,
+            undefined,
+            { kind: "computed", store: new FounderWeeklyReviewDocumentVersionStore() },
+            new StrictCurrentWorkspaceDocumentStore(),
+            createConfiguredDocumentChangeMaterialityAnalyzer(),
+        )).collectFounderWeeklyReviewEvidence({
             companyId: input.companyId,
             reportingPeriod: input.reportingPeriod,
             workspaceTimezone: input.workspaceTimezone,

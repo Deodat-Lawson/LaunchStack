@@ -3,6 +3,10 @@
   "providerPriority": ["openai", "anthropic", "google", "ollama"],
   "capabilities": {
     "smallExtraction": {
+      "kimi": {
+        "model": "kimi-k2.6",
+        "temperature": 0
+      },
       "openai": {
         "model": "gpt-4o-mini",
         "temperature": 0

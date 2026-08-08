@@ -62,6 +62,13 @@ describe("orderEvidenceItems", () => {
         expect(result.map((i) => i.sourceId)).toEqual(["a", "z"]);
     });
 
+    it("returns selected document changes to numeric structural order", () => {
+        const ts = "2026-01-01T00:00:00.000Z";
+        const tenth = { ...makeItem("group-10", ts), metadata: { documentId: "1", previousVersionId: 1, currentVersionId: 2, structureOrdering: 10 } };
+        const second = { ...makeItem("group-2", ts), metadata: { documentId: "1", previousVersionId: 1, currentVersionId: 2, structureOrdering: 2 } };
+        expect(orderEvidenceItems([tenth, second]).map(item => item.sourceId)).toEqual(["group-2", "group-10"]);
+    });
+
     it("orders source-type ties with ordinal comparison, not locale collation", () => {
         const ts = "2026-01-01T00:00:00.000Z";
         const result = orderEvidenceItems([

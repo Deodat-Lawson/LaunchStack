@@ -83,7 +83,7 @@ describe("Week 3 document change domain logic", () => {
             .mockResolvedValueOnce({ state: "complete", chunks: [chunk(20, 2n, "After", { structurePath: "/plan" })], warnings: [] }) };
         const service = new FounderWeeklyReviewEvidenceService({} as never, undefined, { kind: "computed", store });
         await expect(service.collectDocumentChangeEvidence(1n, new Date("2026-02-01T00:00:00.000Z"), new Date("2026-02-03T00:00:00.000Z"))).resolves.toEqual([
-            expect.objectContaining({ sourceTimestamp: "2026-02-02T00:00:00.000Z", metadata: expect.objectContaining({ previousVersionId: 1, currentVersionId: 2, changeType: "modified" }) }),
+            expect.objectContaining({ sourceType: "document_change", sourceTimestamp: "2026-02-02T00:00:00.000Z", sourceId: expect.stringMatching(/^document_change:group:/), metadata: expect.objectContaining({ previousVersionId: 1, currentVersionId: 2, category: "uncertain", rawChangeCount: 1 }) }),
         ]);
     });
 });

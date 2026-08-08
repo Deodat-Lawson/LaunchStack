@@ -38,7 +38,7 @@ describe("Founder Weekly Review Kimi transport", () => {
             expect(String(url)).not.toContain("/responses");
             const body = JSON.parse(String(init?.body)) as Record<string, unknown>;
             expect(body.model).toBe("kimi-k2.6");
-            expect(body.max_tokens).toBe(1800);
+            expect(body.max_tokens).toBe(2400);
             expect(body.messages).toEqual(expect.any(Array));
             expect(body).not.toHaveProperty("temperature");
             expect(body.response_format).toEqual({ type: "json_object" });
@@ -81,6 +81,52 @@ describe("Founder Weekly Review Kimi transport", () => {
         expect(resolved).not.toHaveProperty("thinking");
     });
 
+    it("keeps an explicit Founder Weekly Review output override", async () => {
+        const fetchMock = jest.fn(async (_url: string | URL, init?: RequestInit) => {
+            const body = JSON.parse(String(init?.body)) as Record<string, unknown>;
+            expect(body.max_tokens).toBe(777);
+            return new Response(JSON.stringify({
+                id: "chatcmpl-override",
+                object: "chat.completion",
+                created: 0,
+                model: "kimi-k2.6",
+                choices: [{ index: 0, message: { role: "assistant", content: "{\"ok\":true}" }, finish_reason: "stop", logprobs: null }],
+                usage: { prompt_tokens: 10, completion_tokens: 2, total_tokens: 12 },
+            }), { status: 200, headers: { "content-type": "application/json" } });
+        });
+        global.fetch = fetchMock as typeof fetch;
+        await expect(generateStructuredWithMetadata({
+            capability: "founderWeeklyReview",
+            maxOutputTokens: 777,
+            system: "Return valid JSON.",
+            prompt: "Generate the object.",
+            schema: z.object({ ok: z.boolean() }),
+        })).resolves.toMatchObject({ object: { ok: true } });
+    });
+
+    it("does not apply the Founder Weekly Review default to small extraction", async () => {
+        const fetchMock = jest.fn(async (_url: string | URL, init?: RequestInit) => {
+            const body = JSON.parse(String(init?.body)) as Record<string, unknown>;
+            expect(body).not.toHaveProperty("max_tokens");
+            return new Response(JSON.stringify({
+                id: "chatcmpl-extraction",
+                object: "chat.completion",
+                created: 0,
+                model: "kimi-k2.6",
+                choices: [{ index: 0, message: { role: "assistant", content: "{\"ok\":true}" }, finish_reason: "stop", logprobs: null }],
+                usage: { prompt_tokens: 10, completion_tokens: 2, total_tokens: 12 },
+            }), { status: 200, headers: { "content-type": "application/json" } });
+        });
+        global.fetch = fetchMock as typeof fetch;
+        await expect(generateStructuredWithMetadata({
+            capability: "smallExtraction",
+            forceProvider: "kimi",
+            system: "Return valid JSON.",
+            prompt: "Extract the object.",
+            schema: z.object({ ok: z.boolean() }),
+        })).resolves.toMatchObject({ object: { ok: true } });
+    });
+
     it("uses explicit OpenAI without requiring Moonshot configuration", () => {
         process.env.FWR_GENERATION_PROVIDER = "openai";
         process.env.OPENAI_API_KEY = "openai-test-key";
@@ -93,6 +139,16 @@ describe("Founder Weekly Review Kimi transport", () => {
         const resolved = resolveModel("founderWeeklyReview");
         expect(resolved).toMatchObject({ provider: "openai", modelId: "gpt-openai" });
         expect(resolved.structuredOutputMode).toBeUndefined();
+    });
+
+    it("allows an explicit Kimi smallExtraction request without changing default priority", () => {
+        process.env.OPENAI_API_KEY = "openai-test-key";
+        __resetLlmConfigForTests();
+        __resetProviderCacheForTests();
+        const defaultExtraction = resolveModel("smallExtraction");
+        const kimiExtraction = resolveModel("smallExtraction", "kimi");
+        expect(defaultExtraction).toMatchObject({ provider: "openai", modelId: "gpt-4o-mini" });
+        expect(kimiExtraction).toMatchObject({ provider: "kimi", modelId: "kimi-k2.6", structuredOutputMode: "json_object" });
     });
 
     it("fails before any request for invalid or missing selected-provider configuration", () => {

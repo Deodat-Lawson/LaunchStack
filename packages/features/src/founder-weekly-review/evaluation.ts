@@ -34,6 +34,35 @@ export type EvaluationFailure = {
   explanation: string;
 };
 
+const monthNumbers: Record<string, number> = { 
+  january: 1, 
+  february: 2, 
+  march: 3, 
+  april: 4, 
+  may: 5, 
+  june: 6, 
+  july: 7, 
+  august: 8, 
+  september: 9, 
+  october: 10, 
+  november: 11, 
+  december: 12 
+};
+
+function futureReleaseMentioned(text: string, periodEnd: string): boolean {
+    const lower = text.toLowerCase();
+    if (!/(planned|scheduled|expected|launch|ship|release|deploy)/i.test(lower)) return false;
+    const end = new Date(`${periodEnd}T23:59:59.999Z`);
+    const year = end.getUTCFullYear();
+    for (const [month, number] of Object.entries(monthNumbers)) {
+        if (!new RegExp(`\\b${month}\\b`, "i").test(lower)) continue;
+        const candidate = new Date(Date.UTC(year, number - 1, 1));
+        if (candidate > end) return true;
+    }
+    const yearMention = lower.match(/\b(20\d{2})\b/);
+    return yearMention ? Number(yearMention[1]) > year : false;
+}
+
 const SECTION_SOURCE_RULES: Record<string, string[]> = {
   whatCustomersSaid: ["customer_feedback"],
   whatChanged: [
@@ -358,6 +387,22 @@ export function evaluateFounderWeeklyReview(
               shippedClaimChecks++;
 
               if (
+                evidence.sourceType === "document_change" &&
+                futureReleaseMentioned(
+                  `${item.text} ${evidence.title} ${evidence.excerpt}`,
+                  evidenceSnapshot.reportingPeriod.end
+                )
+              ) {
+                failures.push({
+                  category: "future_release_claim",
+                  section: sectionName,
+                  claim: item.text,
+                  explanation:
+                    "A planned or launched release is dated after the reporting period and cannot establish shipped-this-period.",
+                });
+              }
+              
+              if (
                 ["github_activity", "document_change", "workspace_document"].includes(evidence.sourceType) &&
                 !evidenceIndicatesShipped(evidence)
               ) {
@@ -465,6 +510,7 @@ export function evaluateFounderWeeklyReview(
       "invalid_citation", 
       "invalid_source_type",
       "unsupported_shipped_claim",
+      "future_release_claim",
       "invalid_empty_section",
       "conflicting_evidence"
     ].includes(f.category)

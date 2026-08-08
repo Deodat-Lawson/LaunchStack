@@ -28,7 +28,7 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm --filter @launchstack/core build && changeset publish",
-    "eval:founder-weekly-review": "tsx packages/features/src/founder-weekly-review/benchmarks/runner.ts"
+    "test:fwr:realistic": "cross-env SYNTHETIC_FWR_LOCAL=1 pnpm --filter @launchstack/web exec tsx scripts/run-founder-weekly-review-realistic-e2e.ts"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
@@ -38,6 +38,7 @@
     "@types/node": "^24.3.1",
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^8.42.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9.34.0",
     "prettier": "^3.6.2",
     "tsx": "^4.21.0",

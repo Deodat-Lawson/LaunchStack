@@ -3,6 +3,7 @@ import {
   FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION,
   FounderWeeklyReviewV2Payload,
   type FounderWeeklyReviewEvidenceSnapshot,
+  type DocumentChangeAuditSnapshot,
 } from "../contracts";
 
 export type BenchmarkCase = {
@@ -19,6 +20,12 @@ export type BenchmarkCase = {
     expectedEmptySections?: string[];
     expectedFailureCategories?: string[];
   };
+};
+
+const emptyDocumentChangeAudit: DocumentChangeAuditSnapshot = {
+  schemaVersion: "document-change-audit/v1",
+  rawChanges: [],
+  groups: [],
 };
 
 const noEvidenceSection = {
@@ -48,6 +55,7 @@ const validEvidence = {
     },
   ],
   sourceWarnings: [],
+  documentChangeAudit: emptyDocumentChangeAudit,
 } satisfies FounderWeeklyReviewEvidenceSnapshot;
 
 const emptyEvidence = {

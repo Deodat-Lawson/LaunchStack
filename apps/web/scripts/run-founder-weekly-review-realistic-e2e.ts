@@ -14,7 +14,6 @@ import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-r
 import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";
 import { createConfiguredDocumentChangeMaterialityAnalyzer } from "~/server/founder-weekly-review/document-change-materiality-analyzer";
 import { generateStructuredWithMetadata } from "~/lib/llm";
-import { renderFounderWeeklyReviewEvaluationMarkdown } from "~/server/founder-weekly-review/evaluation-markdown";
 import { founderWeeklyReviewRealisticExportRoot, parseFounderWeeklyReviewRealisticEvidenceMode } from "~/server/founder-weekly-review/realistic-e2e-mode";
 import { formatFounderWeeklyReviewDemo } from "./founder-weekly-review-demo";
 import { evaluateGeneratedFounderWeeklyReview } from "@launchstack/features/founder-weekly-review/benchmarks";
@@ -23,9 +22,8 @@ const require = createRequire(import.meta.url);
 const { createFounderWeeklyReviewTestDatabase } = require("../__tests__/founderWeeklyReview/testDb") as typeof import("../__tests__/founderWeeklyReview/testDb");
 const fixturePath = resolve(process.cwd(), "test-fixtures/founder-weekly-review/realistic-company/seed.json");
 type Fixture = { reportingPeriod: { start: string; end: string }; workspaceTimezone: string; founderContext: string; documents: Array<{ title: string; category: string; changelog: string; timestamp: string; chunks?: string[] }> };
-type EvidenceMode = ReturnType<typeof parseFounderWeeklyReviewRealisticEvidenceMode>;
 type ComputedTexts = { before: string; after: string; v3: string; bHistorical: string; nullVersion: string; foreign: string; unrelated: string };
-type ArtifactPaths = { evidence: string; report: string; markdown: string; evaluation: string; evaluationMarkdown: string; summary: string; envelope: string; validation: string; e2eReport: string; analyzerCalls: string; evaluation: string; evaluationMarkdown: string };
+type ArtifactPaths = { evidence: string; report: string; markdown: string; evaluation: string; evaluationMarkdown: string; summary: string; envelope: string; validation: string; e2eReport: string; analyzerCalls: string };
 
 const SemanticEvaluationSchema = z.object({
   overallScore: z.number().min(0).max(1),
@@ -72,7 +70,7 @@ function assertComputedReport(payload: any, snapshot: ReturnType<typeof FounderW
 }
 
 if (process.env.SYNTHETIC_FWR_LOCAL !== "1" || process.env.NODE_ENV === "production") throw new Error("Refusing realistic E2E outside explicit local mode.");
-const localUrl = process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL ?? "";
+const localUrl = process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? "postgresql://postgres:password@localhost:5433/pdr_ai_v2";
 if (!/^postgres(?:ql)?:\/\/(?:[^@]+@)?(?:127\.0\.0\.1|localhost)(?::\d+)?\//i.test(localUrl)) throw new Error("Refusing non-local database.");
 
 const fixture = JSON.parse(await readFile(fixturePath, "utf8")) as Fixture;
@@ -184,7 +182,7 @@ try {
   validateFounderWeeklyReviewV2Citations(generated.reviewPayload as never, generating.evidenceSnapshot);
   const saved = await worker.saveGeneratedDraft(generationContext, generated.reviewPayload, generated.modelMetadata); const readBack = await new FounderWeeklyReviewRepository(testDb.db).getByCompanyAndRunId(actor.companyId, saved.id); if (!readBack?.reviewPayload || readBack.status !== "draft" || !readBack.evidenceSnapshot || digest(readBack.evidenceSnapshot) !== beforeDigest) throw new Error("Validated draft read-back or snapshot immutability failed.");
 
-  const evaluation = await evaluateGeneratedFounderWeeklyReview(
+  const benchmarkEvaluation = await evaluateGeneratedFounderWeeklyReview(
     readBack.evidenceSnapshot,
     readBack.reviewPayload as unknown as Parameters<typeof evaluateGeneratedFounderWeeklyReview>[1],
     generateFounderWeeklyReviewStructured
@@ -192,9 +190,9 @@ try {
 
   console.log(JSON.stringify({
     evaluation: {
-      deterministicScore: evaluation.deterministic?.overallScore,
-      failures: evaluation.failures,
-      llmScore: evaluation.llmGrader?.overallScore,
+      deterministicScore: benchmarkEvaluation.deterministic?.overallScore,
+      failures: benchmarkEvaluation.failures,
+      llmScore: benchmarkEvaluation.llmGrader?.overallScore,
     }
   }));
 

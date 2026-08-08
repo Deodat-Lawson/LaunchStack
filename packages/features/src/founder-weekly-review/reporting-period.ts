@@ -20,13 +20,19 @@ export function resolveReportingPeriodBounds(
 ): ReportingPeriodBounds {
     assertValidTimeZone(workspaceTimezone);
 
+    const startInclusive = dayjs.tz(
+        `${period.start}T00:00:00`,
+        workspaceTimezone
+    );
+
+    const endExclusive = dayjs.tz(
+        `${period.end}T00:00:00`,
+        workspaceTimezone
+    ).add(1, "day");
+
     return {
-        startInclusive: dayjs.tz(period.start, workspaceTimezone).startOf("day").toDate(),
-        endExclusive: dayjs
-            .tz(period.end, workspaceTimezone)
-            .add(1, "day")
-            .startOf("day")
-            .toDate(),
+        startInclusive: startInclusive.toDate(),
+        endExclusive: endExclusive.toDate(),
     };
 }
 

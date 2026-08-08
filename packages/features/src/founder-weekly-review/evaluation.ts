@@ -232,6 +232,20 @@ function evidenceConflicts(
   return supporting && opposing;
 }
 
+function isTemporalChangeClaim(text: string): boolean {
+  const lower = text.toLowerCase();
+
+  const changeLanguage =
+    /\b(changed|updated|modified|added|removed|introduced)\b/.test(lower);
+
+  const temporalLanguage =
+    /\b(this week|this period|during the reporting period|during this period|recently)\b/.test(
+      lower
+    );
+
+  return changeLanguage && temporalLanguage;
+}
+
 export function evaluateFounderWeeklyReview(
   evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot,
   report: FounderWeeklyReviewPayload,
@@ -367,7 +381,25 @@ export function evaluateFounderWeeklyReview(
           if (evidence) {
             totalSourceTypeChecks++;
           
-            if(!isValidSourceForSection(sectionName, evidence.sourceType)) {
+            if (
+              sectionName === "whatChanged" &&
+              typeof item === "object" &&
+              item !== null &&
+              "text" in item &&
+              typeof item.text === "string" &&
+              isTemporalChangeClaim(item.text) &&
+              evidence.sourceType === "workspace_document"
+            ) {
+              sourceTypeViolations++;
+
+              failures.push({
+                category: "invalid_source_type",
+                section: sectionName,
+                claim: item.text,
+                explanation:
+                  "A workspace document can establish current document context, but cannot by itself establish that a change occurred during the reporting period.",
+              });
+            } else if (!isValidSourceForSection(sectionName, evidence.sourceType)) {
               sourceTypeViolations++;
 
               failures.push({

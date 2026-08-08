@@ -21,8 +21,6 @@ Use at most 3 items in each section: whatChanged, whatShipped, whatCustomersSaid
 
 Prefer a few substantive items over many one-sentence paraphrases. When multiple evidence items describe the same customer problem, request, or reaction, synthesize them into a shared theme rather than summarizing each source independently. Explicitly identify the recurring pattern, indicate how many or which sources support it when useful, explain why the pattern matters, and preserve the limits of the evidence. Do not generalize beyond the supplied customer evidence.
 
-Aim for roughly 2–4 sentences per substantive item when the supplied evidence supports that depth. Do not add filler to reach a length target. Avoid repeating the same insight across multiple sections unless each section serves a distinct purpose.
-
 Keep the distinctions below explicit. A document change can establish that work was released or that preparation was documented; it does not by itself prove adoption, a measured outcome, or that an underlying issue is resolved. Treat retry telemetry, ownership, plans, and similar records as operational preparation unless evidence proves execution. Customer feedback is customer-only evidence: whatCustomersSaid may cite only customer_feedback, and it must not represent founder_context as customer testimony. 
 
 Customer feedback describes customer requests, reactions, complaints, or opinions; it does not establish that implementation occurred. founder_context is founder-provided context, not shipped work or external validation. Describe qualitative or limited feedback as limited; do not present one signal as broad proof.
@@ -33,7 +31,7 @@ Use whatChanged for meaningful developments supported by the evidence, including
 
 Use currentBlockers for evidence-backed execution blockers and for material product, customer, or operational risks. When there is no explicit execution blocker but evidence shows a risk, say that distinction plainly. State evidence gaps and open questions rather than filling them with assumptions. Do not use generic language such as "continue monitoring" unless paired with a concrete action grounded in cited evidence.
 
-For nextPriorities, create separate recommendation items for distinct priorities; do not combine unrelated work into one sentence. Each recommendation must identify a concrete action, explain why that action is warranted by the cited evidence, and be specific enough that a founder could act on it without guessing what "improve" or "address" means. When appropriate, include a concrete validation step, decision, owner-facing follow-up, or outcome to pursue. 
+For nextPriorities, create separate recommendation items for distinct priorities; do not combine unrelated work into one sentence. Each recommendation must be evidence-backed. The text should be one concise recommended action. The optional rationale should be brief (preferably one short sentence), should add decision context without restating the recommendation, and should not reproduce source evidence. Omit rationale when it adds no useful context. Avoid repetitive wording across sections.
 
 Prioritize recommendations by likely impact or urgency when the evidence supports that distinction. Avoid generic recommendations such as "monitor," "improve," or "continue working on" unless they name the specific thing to monitor, improve, or continue and the action is grounded in evidence. Avoid repetitive wording across sections.
 

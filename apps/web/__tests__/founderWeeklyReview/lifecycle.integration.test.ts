@@ -146,6 +146,7 @@ function createV2Payload(): FounderWeeklyReviewV2Payload {
                     text: "Prioritize SSO setup.",
                     sourceIds: ["founder-context-1"],
                     confidence: 0.8,
+                    rationale: null,
                 }],
             },
         },

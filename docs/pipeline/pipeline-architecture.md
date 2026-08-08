@@ -218,8 +218,9 @@ historical version rows stay available for version operations but are excluded
 from current retrieval. A missing or invalid current pointer therefore yields
 no authoritative current-version result until repaired.
 
-Legacy state is repaired by
-[`apps/web/scripts/backfill-document-versions.ts`](../../apps/web/scripts/backfill-document-versions.ts).
-The idempotent script backfills v1, repairs the current pointer and version
+Legacy state is repaired by the `2026-08-document-versions` backfill
+([`apps/web/src/server/backfills/document-version-repair.ts`](../../apps/web/src/server/backfills/document-version-repair.ts)),
+run with `pnpm --filter @launchstack/web db:backfill --only=2026-08-document-versions`.
+The idempotent repair backfills v1, repairs the current pointer and version
 links, and completes legacy RLM/job linkage; it does not redispatch work or
 touch storage.

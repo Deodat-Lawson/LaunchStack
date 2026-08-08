@@ -30,7 +30,7 @@ import {
   type SlackClient,
   type TurnPolicy,
 } from "@launchstack/core/collab";
-import { collabChannel, collabMeeting, collabNode } from "@launchstack/core/db/schema";
+import { collabChannel, collabMeeting, collabNode } from "~/server/db/schema";
 import { db } from "~/server/db";
 import { env } from "~/env";
 import { createCollabChatFn } from "./chat";

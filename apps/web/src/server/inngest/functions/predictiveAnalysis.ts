@@ -1,11 +1,7 @@
 import { inngest } from "~/server/inngest/client";
 import { db } from "~/server/db";
-import {
-    document,
-    documentContextChunks,
-    documentStructure,
-    predictiveDocumentAnalysisResults,
-} from "@launchstack/core/db/schema";
+import { document, documentContextChunks, documentStructure } from "@launchstack/core/db/schema";
+import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { eq, and, ne } from "drizzle-orm";
 import { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";

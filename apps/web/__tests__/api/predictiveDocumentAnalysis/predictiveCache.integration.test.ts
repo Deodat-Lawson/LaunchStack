@@ -102,8 +102,8 @@ import {
     document,
     documentContextChunks,
     documentVersions,
-    predictiveDocumentAnalysisResults,
 } from "@launchstack/core/db/schema";
+import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { POST as postPredictiveAnalysis } from "~/app/api/agents/predictive-document-analysis/route";
 import { POST as postPredictiveAnalysisStream } from "~/app/api/agents/predictive-document-analysis/stream/route";
 

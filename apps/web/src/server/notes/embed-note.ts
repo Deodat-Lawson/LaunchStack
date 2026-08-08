@@ -13,11 +13,8 @@ import { eq } from "drizzle-orm";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { db } from "~/server/db";
-import {
-  documentNotes,
-  documentNoteEmbeddings,
-  type NoteAnchor,
-} from "@launchstack/core/db/schema";
+import { type NoteAnchor } from "~/server/db/schema";
+import { documentNotes, documentNoteEmbeddings } from "~/server/db/schema";
 import {
   EMBEDDING_DIM,
   EMBEDDING_MODEL,

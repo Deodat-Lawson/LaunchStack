@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { dbCore } from "../../../server/db/core";
-import { company, users } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { auth } from '@clerk/nextjs/server'
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";

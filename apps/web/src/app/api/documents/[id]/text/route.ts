@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { and, asc, eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
-import { document, documentContextChunks, users } from "@launchstack/core/db/schema";
+import { document, documentContextChunks } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 interface RouteParams {

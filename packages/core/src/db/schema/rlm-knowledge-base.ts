@@ -4,15 +4,15 @@ import {
     index,
     integer,
     jsonb,
-    serial,
     text,
     timestamp,
     varchar,
     bigint,
     uniqueIndex,
+    vector,
+    bigserial,
 } from "drizzle-orm/pg-core";
 
-import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
 import { document, company, documentVersions } from "./base";
 
@@ -89,7 +89,7 @@ export const workspaceStatusEnum = [
 export const documentStructure = pgTable(
     "document_structure",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
@@ -147,7 +147,7 @@ export const documentStructure = pgTable(
 export const documentContextChunks = pgTable(
     "document_context_chunks",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
@@ -165,7 +165,7 @@ export const documentContextChunks = pgTable(
         tokenCount: integer("token_count").notNull().default(0), // For cost estimation
         charCount: integer("char_count").notNull().default(0),
         // Optional embedding for the parent chunk (can be used for coarse retrieval)
-        embedding: pgVector({ dimension: 1536 })("embedding"),
+        embedding: vector("embedding", { dimensions: 1536 }),
         contentHash: varchar("content_hash", { length: 64 }), // SHA-256 for deduplication
         semanticType: varchar("semantic_type", {
             length: 50,
@@ -201,7 +201,7 @@ export const documentContextChunks = pgTable(
 export const documentRetrievalChunks = pgTable(
   "document_retrieval_chunks",
   {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         contextChunkId: bigint("context_chunk_id", { mode: "bigint" })
             .notNull()
             .references(() => documentContextChunks.id, { onDelete: "cascade" }),
@@ -218,10 +218,10 @@ export const documentRetrievalChunks = pgTable(
         tokenCount: integer("token_count").notNull().default(0),
 
         // Full dimension embedding (storage)
-        embedding: pgVector({ dimension: 1536 })("embedding"),
+        embedding: vector("embedding", { dimensions: 1536 }),
         
         // Matryoshka optimization: Index only the first 512 dimensions for speed
-        embeddingShort: pgVector({ dimension: 512 })("embedding_short"),
+        embeddingShort: vector("embedding_short", { dimensions: 512 }),
         
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -230,11 +230,12 @@ export const documentRetrievalChunks = pgTable(
   (table) => ({
         contextChunkIdIdx: index("doc_ret_chunks_context_chunk_id_idx").on(table.contextChunkId),
         documentIdIdx: index("doc_ret_chunks_document_id_idx").on(table.documentId),
-        // Index on the short embedding for fast ANN search
-        embeddingShortIdx: index("doc_ret_chunks_embedding_short_idx").using(
-            "hnsw",
-            table.embeddingShort.op("vector_cosine_ops")
-        ),
+        // Index on the short embedding for fast ANN search.
+        // m/ef_construction are pgvector's defaults, stated explicitly so the
+        // generated DDL is stable rather than depending on server defaults.
+        embeddingShortIdx: index("doc_ret_chunks_embedding_short_idx")
+            .using("hnsw", table.embeddingShort.op("vector_cosine_ops"))
+            .with({ m: 16, ef_construction: 64 }),
         versionIdIdx: index("doc_ret_chunks_version_id_idx").on(table.versionId),
     })
 );
@@ -242,7 +243,7 @@ export const documentRetrievalChunks = pgTable(
 export const experimentalDocumentEmbeddings = pgTable(
   "document_embeddings_exp",
   {
-    id: serial("id").primaryKey(),
+    id: bigserial("id", { mode: "number" }).primaryKey(),
     documentId: bigint("document_id", { mode: "bigint" })
       .notNull()
       .references(() => document.id, { onDelete: "cascade" }),
@@ -253,7 +254,7 @@ export const experimentalDocumentEmbeddings = pgTable(
     model: text("model").notNull(),
     version: text("version").notNull(),
     dimension: integer("dimension").notNull().default(1024),
-    embedding: pgVector({ dimension: 1024 })("embedding").notNull(),
+    embedding: vector("embedding", { dimensions: 1024 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -277,7 +278,7 @@ export const experimentalDocumentEmbeddings = pgTable(
 export const documentEmbeddings768 = pgTable(
   "document_embeddings_768",
   {
-    id: serial("id").primaryKey(),
+    id: bigserial("id", { mode: "number" }).primaryKey(),
     documentId: bigint("document_id", { mode: "bigint" })
       .notNull()
       .references(() => document.id, { onDelete: "cascade" }),
@@ -288,7 +289,7 @@ export const documentEmbeddings768 = pgTable(
     provider: text("provider").notNull(),
     model: text("model").notNull(),
     version: text("version").notNull(),
-    embedding: pgVector({ dimension: 768 })("embedding").notNull(),
+    embedding: vector("embedding", { dimensions: 768 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -305,13 +306,16 @@ export const documentEmbeddings768 = pgTable(
       table.retrievalChunkId,
       table.indexKey,
     ),
+    embeddingHnswIdx: index("document_embeddings_768_embedding_hnsw_idx")
+      .using("hnsw", table.embedding.op("vector_cosine_ops"))
+      .with({ m: 16, ef_construction: 64 }),
   }),
 );
 
 export const documentEmbeddings1024 = pgTable(
   "document_embeddings_1024",
   {
-    id: serial("id").primaryKey(),
+    id: bigserial("id", { mode: "number" }).primaryKey(),
     documentId: bigint("document_id", { mode: "bigint" })
       .notNull()
       .references(() => document.id, { onDelete: "cascade" }),
@@ -322,7 +326,7 @@ export const documentEmbeddings1024 = pgTable(
     provider: text("provider").notNull(),
     model: text("model").notNull(),
     version: text("version").notNull(),
-    embedding: pgVector({ dimension: 1024 })("embedding").notNull(),
+    embedding: vector("embedding", { dimensions: 1024 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -339,13 +343,16 @@ export const documentEmbeddings1024 = pgTable(
       table.retrievalChunkId,
       table.indexKey,
     ),
+    embeddingHnswIdx: index("document_embeddings_1024_embedding_hnsw_idx")
+      .using("hnsw", table.embedding.op("vector_cosine_ops"))
+      .with({ m: 16, ef_construction: 64 }),
   }),
 );
 
 export const documentMetadata = pgTable(
     "document_metadata",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
@@ -375,7 +382,7 @@ export const documentMetadata = pgTable(
         // Extracted entities for quick filtering
         entities: jsonb("entities").$type<ExtractedEntities>(),
         // Document-level embedding for similarity
-        summaryEmbedding: pgVector({ dimension: 1536 })("summary_embedding"),
+        summaryEmbedding: vector("summary_embedding", { dimensions: 1536 }),
         // Date range covered in document (for temporal queries)
         dateRangeStart: timestamp("date_range_start", { withTimezone: true }),
         dateRangeEnd: timestamp("date_range_end", { withTimezone: true }),
@@ -419,7 +426,7 @@ export const documentMetadata = pgTable(
 export const documentPreviews = pgTable(
     "document_previews",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
@@ -443,7 +450,7 @@ export const documentPreviews = pgTable(
         }).notNull(),
         content: text("content").notNull(),
         tokenCount: integer("token_count").notNull().default(0),
-        embedding: pgVector({ dimension: 1536 })("embedding"),
+        embedding: vector("embedding", { dimensions: 1536 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
@@ -468,7 +475,7 @@ export const documentPreviews = pgTable(
 export const workspaceResults = pgTable(
     "workspace_results",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         sessionId: varchar("session_id", { length: 256 }).notNull(), // Groups related work
         userId: varchar("user_id", { length: 256 }).notNull(),
         companyId: bigint("company_id", { mode: "bigint" })

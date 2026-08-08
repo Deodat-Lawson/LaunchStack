@@ -20,7 +20,8 @@ import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
-import { users, document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {

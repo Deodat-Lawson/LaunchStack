@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { eq, and, gt, desc, sql } from "drizzle-orm";
-import {
-    predictiveDocumentAnalysisResults,
-    document,
-    documentContextChunks,
-} from "@launchstack/core/db/schema";
+import { document, documentContextChunks } from "@launchstack/core/db/schema";
+import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation";
 import { CACHE_CONFIG, ERROR_TYPES, HTTP_STATUS, type AnalysisType } from "~/lib/constants";

@@ -17,6 +17,7 @@
  */
 
 import { db, toRows } from "~/server/db/index";
+import { T } from "~/server/db/tables";
 import { eq, and, sql, asc, desc, lte, inArray, isNull, type SQLWrapper } from "drizzle-orm";
 import {
     documentStructure,
@@ -915,11 +916,11 @@ export class RLMRetriever {
                     cc.semantic_type as "semanticType",
                     ds.path as "structurePath",
                     de.embedding <-> ${dimensionTableVectorLiteral} as distance
-                FROM ${sql.raw(activeEmbeddingIndex!.dimension === 768 ? "pdr_ai_v2_document_embeddings_768" : "pdr_ai_v2_document_embeddings_1024")} de
-                JOIN pdr_ai_v2_document_retrieval_chunks rc ON de.retrieval_chunk_id = rc.id
-                JOIN pdr_ai_v2_document_context_chunks cc ON rc.context_chunk_id = cc.id
-                JOIN pdr_ai_v2_document d ON rc.document_id = d.id
-                LEFT JOIN pdr_ai_v2_document_structure ds
+                FROM ${activeEmbeddingIndex!.dimension === 768 ? T.embeddings768 : T.embeddings1024} de
+                JOIN ${T.retrievalChunks} rc ON de.retrieval_chunk_id = rc.id
+                JOIN ${T.contextChunks} cc ON rc.context_chunk_id = cc.id
+                JOIN ${T.document} d ON rc.document_id = d.id
+                LEFT JOIN ${T.structure} ds
                     ON cc.structure_id = ds.id
                     AND ${currentVersionPredicate(sql.raw("ds.version_id"), sql.raw("d.current_version_id"))}
                 WHERE cc.document_id = ${documentId}

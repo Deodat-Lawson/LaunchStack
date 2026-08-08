@@ -18,8 +18,9 @@ import { auth } from "@clerk/nextjs/server";
 import { eq, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, document as documentTable, documentContextChunks } from "@launchstack/core/db/schema";
-import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
+import { document as documentTable, documentContextChunks } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
+import { companyMetadata, companyMetadataHistory } from "~/server/db/schema";
 import { extractCompanyFacts } from "@launchstack/features/company-metadata";
 import { mergeCompanyMetadata } from "@launchstack/features/company-metadata";
 import { createEmptyMetadata } from "@launchstack/features/company-metadata";

@@ -42,21 +42,27 @@ RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
     pnpm --filter @launchstack/web build
 
 # ── Schema sync (migrate) ────────────────────────────────────────────
-# Runs drizzle-kit push from apps/web against the core schema via the
-# relative path in drizzle.config.ts. ensure-pgvector.mjs +
-# backfill-document-versions.ts both live under apps/web/scripts/ so
-# they resolve postgres + dotenv from apps/web's isolated node_modules.
+# Applies the ordered SQL migrations in packages/core/drizzle — the same
+# command local dev, CI and the Vercel production build run. The runner is
+# plain ESM depending only on postgres + dotenv, so this stage needs neither
+# the app source nor drizzle-kit nor tsx.
+#
+# No backfill here: data backfills are separate, resumable, and explicitly
+# invoked (see the `backfill` compose profile). Running one on every container
+# boot meant an unbounded scan on every restart.
+# Copied straight from the build context, not from `builder`: migrations are
+# static SQL and the runner is plain ESM, so this stage no longer depends on
+# the app compiling at all. `docker compose up migrate` is now fast and cannot
+# be broken by a TypeScript error in the web app.
 FROM deps AS migrate
-COPY --from=builder /app/packages/core/src ./packages/core/src
-COPY --from=builder /app/packages/features/src ./packages/features/src
-COPY --from=builder /app/apps/web/drizzle.config.ts ./apps/web/drizzle.config.ts
-COPY --from=builder /app/apps/web/scripts ./apps/web/scripts
-COPY --from=builder /app/apps/web/src ./apps/web/src
-COPY --from=builder /app/apps/web/tsconfig.json ./apps/web/tsconfig.json
-COPY --from=builder /app/tsconfig.base.json ./tsconfig.base.json
+COPY packages/core/drizzle ./packages/core/drizzle
+COPY packages/core/scripts ./packages/core/scripts
+COPY apps/web/drizzle ./apps/web/drizzle
 
-WORKDIR /app/apps/web
-CMD ["sh", "-c", "pnpm db:push && pnpm db:backfill:versions"]
+WORKDIR /app/packages/core
+# Engine set first, then product: product migrations carry foreign keys into
+# engine tables, so the order is load-bearing, not cosmetic.
+CMD ["sh", "-c", "node scripts/migrate.mjs && node scripts/migrate.mjs --set=product"]
 
 # ── Runner ───────────────────────────────────────────────────────────
 # Next's standalone output for a pnpm workspace places the server entry

@@ -48,12 +48,19 @@ make down-clean  # stop + wipe volumes (fresh DB on next up)
 
 ### Without Docker
 
-You need a Postgres with the **pgvector** extension available — `db:push` runs `ensure-pgvector.mjs`, which exits non-zero on stock Postgres.
+You need a Postgres with the **pgvector** extension available — the migration
+runner enables it and exits non-zero on stock Postgres.
 
 ```bash
-pnpm --filter @launchstack/web db:push    # sync Drizzle schema
-pnpm --filter @launchstack/web dev        # Next.js + Inngest on :3000 and :8288
+pnpm --filter @launchstack/web  db:migrate   # apply BOTH migration sets (engine, then product)
+pnpm --filter @launchstack/core db:seed      # optional: one company/user/document
+pnpm --filter @launchstack/web  dev          # Next.js + Inngest on :3000 and :8288
 ```
+
+`db:migrate` is the same command CI, Docker and the Vercel production build run.
+Running it from `@launchstack/core` applies only the engine set — that is what a
+consumer embedding the engine uses, not what a full app needs.
+Nothing else creates schema — see [Changing the database](CONTRIBUTING.md#changing-the-database).
 
 > **If you ran `make up` first**, note that Compose publishes Postgres on host port **5433** with database `pdr_ai_v2`, while `.env.example` ships `localhost:5432/pdr_ai`. Point `DATABASE_URL` at `localhost:5433/pdr_ai_v2` to reuse the container's database.
 

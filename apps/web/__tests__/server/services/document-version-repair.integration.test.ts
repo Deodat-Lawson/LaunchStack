@@ -31,7 +31,7 @@ import {
     documentVersions,
 } from "@launchstack/core/db/schema";
 import { db } from "~/server/db";
-import { backfill } from "../../../scripts/backfill-document-versions";
+import { repairDocumentVersions } from "~/server/backfills/document-version-repair";
 
 const integrationDescribe = process.env.DATABASE_URL ? describe : describe.skip;
 type TestDb = Db;
@@ -257,7 +257,7 @@ async function waitForRepairLock(observerDb: TestDb, lockHolderPid: number): Pro
 type RepairRunner = readonly [string, (repairDb: TestDb) => Promise<void>];
 
 const repairRunners: readonly RepairRunner[] = [
-    ["TypeScript backfill", async () => backfill()],
+    ["TypeScript backfill", async () => repairDocumentVersions(db)],
     [
         "0017 SQL migration",
         async repairDb => {

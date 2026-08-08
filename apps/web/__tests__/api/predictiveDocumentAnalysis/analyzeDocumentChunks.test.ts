@@ -89,12 +89,8 @@ jest.mock("~/server/inngest/client", () => ({
 import { POST } from "~/app/api/agents/predictive-document-analysis/route";
 import { POST as streamPOST } from "~/app/api/agents/predictive-document-analysis/stream/route";
 import { predictiveAnalysisJob } from "~/server/inngest/functions/predictiveAnalysis";
-import {
-    document,
-    documentContextChunks,
-    pdfChunks,
-    predictiveDocumentAnalysisResults,
-} from "@launchstack/core/db/schema";
+import { document, documentContextChunks, pdfChunks } from "@launchstack/core/db/schema";
+import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 
 import * as AnalysisEngine from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";
 import { createChunkBatches } from "~/app/api/agents/predictive-document-analysis/utils/batching";

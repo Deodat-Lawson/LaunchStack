@@ -1,4 +1,5 @@
 import { db, toRows } from "~/server/db/index";
+import { NAME, T } from "~/server/db/tables";
 import { sql } from "drizzle-orm";
 import { BaseRetriever, type BaseRetrieverInput } from "@langchain/core/retrievers";
 import { Document } from "@langchain/core/documents";
@@ -86,8 +87,8 @@ function buildFilterWhere(filters?: SearchFilters): ReturnType<typeof sql> {
 }
 
 function getDimensionTableName(index: EmbeddingIndexConfig): string {
-    if (index.dimension === 768) return "pdr_ai_v2_document_embeddings_768";
-    if (index.dimension === 1024) return "pdr_ai_v2_document_embeddings_1024";
+    if (index.dimension === 768) return NAME.embeddings768;
+    if (index.dimension === 1024) return NAME.embeddings1024;
     throw new Error(
         `No dimension table is configured for index "${index.indexKey}" (${index.dimension} dims)`
     );
@@ -128,9 +129,9 @@ async function searchLegacyIndex(args: {
           rc.content as child_content,
           rc.embedding,
           (rc.embedding_short <-> ${shortVectorLiteral}) as rough_distance
-        FROM pdr_ai_v2_document_retrieval_chunks rc
-        JOIN pdr_ai_v2_document d ON rc.document_id = d.id
-        LEFT JOIN pdr_ai_v2_document_metadata dm
+        FROM ${T.retrievalChunks} rc
+        JOIN ${T.document} d ON rc.document_id = d.id
+        LEFT JOIN ${T.metadata} dm
           ON d.id = dm.document_id
          AND dm.version_id = d.current_version_id
         WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}
@@ -148,8 +149,8 @@ async function searchLegacyIndex(args: {
         d.title as document_title,
         (c.embedding <-> ${fullVectorLiteral}) as distance
       FROM candidates c
-      JOIN pdr_ai_v2_document d ON c.document_id = d.id
-      JOIN pdr_ai_v2_document_context_chunks cc
+      JOIN ${T.document} d ON c.document_id = d.id
+      JOIN ${T.contextChunks} cc
         ON c.context_chunk_id = cc.id
        AND cc.document_id = d.id
        AND cc.version_id = d.current_version_id
@@ -172,13 +173,13 @@ async function searchLegacyIndex(args: {
       cc.document_id,
       d.title as document_title,
       (rc.embedding <-> ${fullVectorLiteral}) as distance
-    FROM pdr_ai_v2_document_retrieval_chunks rc
-    JOIN pdr_ai_v2_document d ON rc.document_id = d.id
-    JOIN pdr_ai_v2_document_context_chunks cc
+    FROM ${T.retrievalChunks} rc
+    JOIN ${T.document} d ON rc.document_id = d.id
+    JOIN ${T.contextChunks} cc
       ON rc.context_chunk_id = cc.id
      AND cc.document_id = d.id
      AND cc.version_id = d.current_version_id
-    LEFT JOIN pdr_ai_v2_document_metadata dm
+    LEFT JOIN ${T.metadata} dm
       ON d.id = dm.document_id
      AND dm.version_id = d.current_version_id
     WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}
@@ -201,9 +202,9 @@ async function searchLegacyIndex(args: {
       s.document_id,
       d.title as document_title,
       s.embedding <-> ${fullVectorLiteral} AS distance
-    FROM pdr_ai_v2_document_context_chunks s
-    JOIN pdr_ai_v2_document d ON s.document_id = d.id
-    LEFT JOIN pdr_ai_v2_document_metadata dm
+    FROM ${T.contextChunks} s
+    JOIN ${T.document} d ON s.document_id = d.id
+    LEFT JOIN ${T.metadata} dm
       ON d.id = dm.document_id
      AND dm.version_id = d.current_version_id
     WHERE ${fallbackScopeWhere}${sVersionFilter} ${filterWhere}
@@ -237,13 +238,13 @@ async function searchDimensionTableIndex(args: {
       d.title as document_title,
       (de.embedding <-> ${fullVectorLiteral}) as distance
     FROM ${sql.raw(tableName)} de
-    JOIN pdr_ai_v2_document_retrieval_chunks rc ON de.retrieval_chunk_id = rc.id
-    JOIN pdr_ai_v2_document d ON rc.document_id = d.id
-    JOIN pdr_ai_v2_document_context_chunks cc
+    JOIN ${T.retrievalChunks} rc ON de.retrieval_chunk_id = rc.id
+    JOIN ${T.document} d ON rc.document_id = d.id
+    JOIN ${T.contextChunks} cc
       ON rc.context_chunk_id = cc.id
      AND cc.document_id = d.id
      AND cc.version_id = d.current_version_id
-    LEFT JOIN pdr_ai_v2_document_metadata dm
+    LEFT JOIN ${T.metadata} dm
       ON d.id = dm.document_id
      AND dm.version_id = d.current_version_id
     WHERE ${scopeWhere}${rcVersionFilter} ${filterWhere}

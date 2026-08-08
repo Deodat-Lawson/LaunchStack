@@ -25,12 +25,8 @@ import { auth } from "@clerk/nextjs/server";
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import {
-  kgEntities,
-  kgEntityMentions,
-  kgRelationships,
-  users,
-} from "@launchstack/core/db/schema";
+import { kgEntities, kgEntityMentions, kgRelationships } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import {
   getNeo4jSession,
   isNeo4jConfigured,

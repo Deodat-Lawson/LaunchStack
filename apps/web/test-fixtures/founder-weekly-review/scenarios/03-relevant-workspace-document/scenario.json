@@ -1,0 +1,30 @@
+{
+    "name": "relevant-workspace-document",
+    "description": "PENDING (needs Junkun's Founder-Context retrieval + seeder embeddings): an unchanged document — all versions dated before the reporting window — whose current content is highly relevant to the founder context. Once workspace_document retrieval exists, this should surface as workspace_document evidence citing the current version's chunks, WITHOUT being reported as a change this week. Produces no evidence for this document today; it is authored as the target/spec for that work.",
+    "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+    "workspaceTimezone": "America/New_York",
+    "founderContext": "Focus on onboarding reliability and who owns retry telemetry.",
+    "companies": [
+        {
+            "name": "Northstar Analytics",
+            "underReview": true,
+            "documents": [
+                {
+                    "title": "Onboarding Reliability Plan",
+                    "category": "Planning",
+                    "versions": [
+                        {
+                            "versionNumber": 1,
+                            "timestamp": "2026-06-15T10:00:00.000Z",
+                            "changelog": "Last updated before the reporting window; unchanged this week.",
+                            "chunks": [
+                                { "section": "Ownership", "content": "Platform owns retry telemetry and recovery monitoring for onboarding." },
+                                { "section": "Runbook", "content": "On failure, onboarding retries with backoff and pages the platform on-call." }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

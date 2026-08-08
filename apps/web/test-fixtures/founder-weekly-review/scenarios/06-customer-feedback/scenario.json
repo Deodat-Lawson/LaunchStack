@@ -1,0 +1,43 @@
+{
+    "name": "customer-feedback",
+    "description": "A Customer Feedback document with three chunks (one customer_feedback item per chunk) alongside a Product document change. Exercises the chunk-based customer_feedback path plus document_change in the same run.",
+    "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+    "workspaceTimezone": "America/New_York",
+    "founderContext": "Summarize what customers said about billing, onboarding, and SSO this week.",
+    "companies": [
+        {
+            "name": "Northstar Analytics",
+            "underReview": true,
+            "documents": [
+                {
+                    "title": "Pricing Page",
+                    "category": "Product",
+                    "versions": [
+                        {
+                            "versionNumber": 1,
+                            "timestamp": "2026-07-22T10:00:00.000Z",
+                            "changelog": "Reworked pricing tiers and added an annual billing option.",
+                            "chunks": []
+                        }
+                    ]
+                },
+                {
+                    "title": "Customer Interviews - July 2026",
+                    "category": "Customer Feedback",
+                    "versions": [
+                        {
+                            "versionNumber": 1,
+                            "timestamp": "2026-07-23T10:00:00.000Z",
+                            "changelog": "Processed July customer interviews.",
+                            "chunks": [
+                                { "section": "Billing", "content": "Several customers asked for annual billing instead of monthly-only." },
+                                { "section": "Onboarding", "content": "Onboarding occasionally retries before completing and needs clearer recovery feedback." },
+                                { "section": "Access", "content": "Multiple requests for SSO / SAML so larger teams can roll out access." }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

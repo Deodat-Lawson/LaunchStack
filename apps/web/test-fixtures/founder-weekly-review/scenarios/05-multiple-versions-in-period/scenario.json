@@ -1,0 +1,45 @@
+{
+    "name": "multiple-versions-in-period",
+    "description": "One document with a pre-window baseline (v1) and three in-window versions (v2, v3, v4), forming an adjacent version chain for change detection. Today the collector emits one document_change per in-window version (v2, v3, v4); the baseline is the comparison point, not a change.",
+    "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+    "workspaceTimezone": "America/New_York",
+    "founderContext": "Track how ownership of retry telemetry changed across the onboarding reliability plan this week.",
+    "companies": [
+        {
+            "name": "Northstar Analytics",
+            "underReview": true,
+            "documents": [
+                {
+                    "title": "Onboarding Reliability Plan",
+                    "category": "Planning",
+                    "versions": [
+                        {
+                            "versionNumber": 1,
+                            "timestamp": "2026-07-10T10:00:00.000Z",
+                            "changelog": "Baseline before the reporting window.",
+                            "chunks": [{ "section": "Ownership", "content": "Product owns retry telemetry." }]
+                        },
+                        {
+                            "versionNumber": 2,
+                            "timestamp": "2026-07-21T10:00:00.000Z",
+                            "changelog": "Moved retry telemetry ownership from Product to Platform.",
+                            "chunks": [{ "section": "Ownership", "content": "Platform owns retry telemetry." }]
+                        },
+                        {
+                            "versionNumber": 3,
+                            "timestamp": "2026-07-23T10:00:00.000Z",
+                            "changelog": "Added recovery monitoring to Platform's ownership.",
+                            "chunks": [{ "section": "Ownership", "content": "Platform owns retry telemetry and recovery monitoring." }]
+                        },
+                        {
+                            "versionNumber": 4,
+                            "timestamp": "2026-07-25T10:00:00.000Z",
+                            "changelog": "Clarified on-call paging on failure.",
+                            "chunks": [{ "section": "Runbook", "content": "On failure, page the platform on-call." }]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

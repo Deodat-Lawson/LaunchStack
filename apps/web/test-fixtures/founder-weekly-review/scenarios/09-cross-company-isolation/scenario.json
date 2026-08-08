@@ -1,0 +1,45 @@
+{
+    "name": "cross-company-isolation",
+    "description": "A subject company under review plus a separate control company. Only the subject company's evidence may appear in the snapshot; the control company's documents must never leak in, even though they are seeded in the same database.",
+    "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+    "workspaceTimezone": "America/New_York",
+    "founderContext": "Review Northstar's onboarding work this week.",
+    "companies": [
+        {
+            "name": "Northstar Analytics",
+            "underReview": true,
+            "documents": [
+                {
+                    "title": "Onboarding Plan",
+                    "category": "Planning",
+                    "versions": [
+                        {
+                            "versionNumber": 1,
+                            "timestamp": "2026-07-22T10:00:00.000Z",
+                            "changelog": "Documented retry telemetry ownership.",
+                            "chunks": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Rival Corp",
+            "underReview": false,
+            "documents": [
+                {
+                    "title": "Rival roadmap",
+                    "category": "Product",
+                    "versions": [
+                        {
+                            "versionNumber": 1,
+                            "timestamp": "2026-07-22T10:00:00.000Z",
+                            "changelog": "Belongs to a different company; must never appear in Northstar's review.",
+                            "chunks": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

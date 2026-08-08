@@ -1,0 +1,14 @@
+{
+    "name": "founder-context-only",
+    "description": "Founder context is the only evidence; the under-review company has no documents. The snapshot should contain exactly one founder_context item and nothing else.",
+    "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+    "workspaceTimezone": "America/New_York",
+    "founderContext": "This week is about stabilizing onboarding reliability and deciding whether to delay the billing revamp.",
+    "companies": [
+        {
+            "name": "Northstar Analytics",
+            "underReview": true,
+            "documents": []
+        }
+    ]
+}

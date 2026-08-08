@@ -1,0 +1,26 @@
+{
+    "name": "empty-evidence",
+    "description": "Under-review company whose only document has a version well before the reporting window, and no founder context. Exercises the empty-snapshot path (generation short-circuits to an empty review without calling a model).",
+    "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+    "workspaceTimezone": "America/New_York",
+    "companies": [
+        {
+            "name": "Northstar Analytics",
+            "underReview": true,
+            "documents": [
+                {
+                    "title": "Legacy Handbook",
+                    "category": "Reference",
+                    "versions": [
+                        {
+                            "versionNumber": 1,
+                            "timestamp": "2026-05-01T10:00:00.000Z",
+                            "changelog": "Last touched well before the window; must not appear.",
+                            "chunks": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

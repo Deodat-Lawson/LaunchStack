@@ -41,8 +41,7 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
-            const { userId, repoUrl, branch, accessToken, category } =
-                validation.data;
+            const { userId, repoUrl, branch, accessToken, category } = validation.data;
 
             // Parse and validate the GitHub URL
             let parsed;
@@ -52,10 +51,9 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         error: "Invalid GitHub URL",
-                        details:
-                            err instanceof Error ? err.message : "Unknown error",
+                        details: err instanceof Error ? err.message : "Unknown error",
                     },
-                    { status: 400 },
+                    { status: 400 }
                 );
             }
 
@@ -63,35 +61,24 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Request: ${owner}/${repo}` +
-                    `${branch ? `@${branch}` : ""}, user=${userId}`,
+                    `${branch ? `@${branch}` : ""}, user=${userId}`
             );
 
             // Look up user
-            const [userInfo] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId));
+            const [userInfo] = await db.select().from(users).where(eq(users.userId, userId));
 
             if (!userInfo) {
-                return NextResponse.json(
-                    { error: "Invalid user" },
-                    { status: 400 },
-                );
+                return NextResponse.json({ error: "Invalid user" }, { status: 400 });
             }
 
             // Download the repository as a ZIP
-            const zipBuffer = await downloadGitHubRepoZip(
-                owner,
-                repo,
-                branch,
-                accessToken,
-            );
+            const zipBuffer = await downloadGitHubRepoZip(owner, repo, branch, accessToken);
 
             const filename = `${owner}-${repo}.zip`;
 
             console.log(
                 `[GitHubRepoUpload] Downloaded ${(zipBuffer.length / 1024 / 1024).toFixed(1)}MB, ` +
-                    `storing as ${filename}`,
+                    `storing as ${filename}`
             );
 
             // Store the ZIP in blob storage
@@ -105,10 +92,14 @@ export async function POST(request: Request) {
             const uploadResult = await processDocumentUpload({
                 user: {
                     userId,
-                    companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
+                    companyId: await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId),
                 },
                 documentName: `${owner}/${repo}`,
                 rawDocumentUrl: blob.url,
+                creationKey:
+                    owner && repo
+                        ? `github:${owner}/${repo}@${branch ?? "default"}`
+                        : `upload:${blob.url}`,
                 requestUrl: request.url,
                 category,
                 explicitStorageType: "s3",
@@ -118,7 +109,7 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Pipeline triggered: jobId=${uploadResult.jobId}, ` +
-                    `docId=${uploadResult.document.id}`,
+                    `docId=${uploadResult.document.id}`
             );
 
             return NextResponse.json(
@@ -130,38 +121,28 @@ export async function POST(request: Request) {
                     document: uploadResult.document,
                     repo: { owner, repo, branch: branch ?? "default" },
                 },
-                { status: 202 },
+                { status: 202 }
             );
         } catch (error) {
             if (error instanceof GitHubRepoNotFoundError) {
-                return NextResponse.json(
-                    { error: error.message },
-                    { status: 404 },
-                );
+                return NextResponse.json({ error: error.message }, { status: 404 });
             }
 
             if (error instanceof GitHubAuthError) {
-                return NextResponse.json(
-                    { error: error.message },
-                    { status: 403 },
-                );
+                return NextResponse.json({ error: error.message }, { status: 403 });
             }
 
             if (error instanceof GitHubRateLimitError) {
-                return NextResponse.json(
-                    { error: error.message },
-                    { status: 429 },
-                );
+                return NextResponse.json({ error: error.message }, { status: 429 });
             }
 
             console.error("[GitHubRepoUpload] Error:", error);
             return NextResponse.json(
                 {
                     error: "Failed to index GitHub repository",
-                    details:
-                        error instanceof Error ? error.message : "Unknown error",
+                    details: error instanceof Error ? error.message : "Unknown error",
                 },
-                { status: 500 },
+                { status: 500 }
             );
         }
     });

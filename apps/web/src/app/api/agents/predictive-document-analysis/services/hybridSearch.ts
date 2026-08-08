@@ -1,6 +1,6 @@
 import { db } from "~/server/db/index";
-import { and, inArray, sql } from "drizzle-orm";
-import { documentSections } from "@launchstack/core/db/schema";
+import { and, inArray, sql, eq } from "drizzle-orm";
+import { document, documentSections } from "@launchstack/core/db/schema";
 import { getEmbeddings } from "~/app/api/agents/predictive-document-analysis/utils/embeddings";
 import { truncateText } from "~/app/api/agents/predictive-document-analysis/utils/content";
 import type { DocumentMatch } from "~/app/api/agents/predictive-document-analysis/types";
@@ -16,36 +16,42 @@ interface RankedResult {
  * Full-text search using PostgreSQL's built-in ts_vector/ts_query.
  * Returns results ranked by ts_rank.
  */
-async function bm25Search(
-    query: string,
-    docIds: number[],
-    limit = 10,
-): Promise<RankedResult[]> {
+async function bm25Search(query: string, docIds: number[], limit = 10): Promise<RankedResult[]> {
     if (docIds.length === 0) return [];
 
     const tsQuery = query
         .split(/\s+/)
         .filter(w => w.length > 1)
-        .map(w => w.replace(/[^a-zA-Z0-9]/g, ''))
+        .map(w => w.replace(/[^a-zA-Z0-9]/g, ""))
         .filter(Boolean)
-        .join(' | ');
+        .join(" | ");
 
     if (!tsQuery) return [];
 
-    const results = await db.select({
-        id: documentSections.id,
-        content: documentSections.content,
-        page: documentSections.pageNumber,
-        documentId: documentSections.documentId,
-        rank: sql<number>`ts_rank(to_tsvector('english', ${documentSections.content}), to_tsquery('english', ${tsQuery}))`,
-    })
-    .from(documentSections)
-    .where(and(
-        inArray(documentSections.documentId, docIds.map(id => BigInt(id))),
-        sql`to_tsvector('english', ${documentSections.content}) @@ to_tsquery('english', ${tsQuery})`,
-    ))
-    .orderBy(sql`ts_rank(to_tsvector('english', ${documentSections.content}), to_tsquery('english', ${tsQuery})) DESC`)
-    .limit(limit);
+    const results = await db
+        .select({
+            id: documentSections.id,
+            content: documentSections.content,
+            page: documentSections.pageNumber,
+            documentId: documentSections.documentId,
+            rank: sql<number>`ts_rank(to_tsvector('english', ${documentSections.content}), to_tsquery('english', ${tsQuery}))`,
+        })
+        .from(documentSections)
+        .innerJoin(document, eq(documentSections.documentId, document.id))
+        .where(
+            and(
+                inArray(
+                    documentSections.documentId,
+                    docIds.map(id => BigInt(id))
+                ),
+                eq(documentSections.versionId, document.currentVersionId),
+                sql`to_tsvector('english', ${documentSections.content}) @@ to_tsquery('english', ${tsQuery})`
+            )
+        )
+        .orderBy(
+            sql`ts_rank(to_tsvector('english', ${documentSections.content}), to_tsquery('english', ${tsQuery})) DESC`
+        )
+        .limit(limit);
 
     return results.map((r, idx) => ({
         documentId: Number(r.documentId),
@@ -62,29 +68,37 @@ async function vectorSearch(
     query: string,
     docIds: number[],
     limit = 10,
-    threshold = 0.4,
+    threshold = 0.4
 ): Promise<RankedResult[]> {
     if (docIds.length === 0) return [];
 
     const queryEmbedding = await getEmbeddings(query);
     if (queryEmbedding.length === 0) return [];
 
-    const embeddingStr = `[${queryEmbedding.join(',')}]`;
+    const embeddingStr = `[${queryEmbedding.join(",")}]`;
 
-    const results = await db.select({
-        id: documentSections.id,
-        content: documentSections.content,
-        page: documentSections.pageNumber,
-        documentId: documentSections.documentId,
-        distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
-    })
-    .from(documentSections)
-    .where(and(
-        inArray(documentSections.documentId, docIds.map(id => BigInt(id))),
-        sql`${documentSections.embedding} <=> ${embeddingStr}::vector < ${threshold}`,
-    ))
-    .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
-    .limit(limit);
+    const results = await db
+        .select({
+            id: documentSections.id,
+            content: documentSections.content,
+            page: documentSections.pageNumber,
+            documentId: documentSections.documentId,
+            distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
+        })
+        .from(documentSections)
+        .innerJoin(document, eq(documentSections.documentId, document.id))
+        .where(
+            and(
+                inArray(
+                    documentSections.documentId,
+                    docIds.map(id => BigInt(id))
+                ),
+                eq(documentSections.versionId, document.currentVersionId),
+                sql`${documentSections.embedding} <=> ${embeddingStr}::vector < ${threshold}`
+            )
+        )
+        .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
+        .limit(limit);
 
     return results.map((r, idx) => ({
         documentId: Number(r.documentId),
@@ -101,9 +115,12 @@ async function vectorSearch(
  */
 function reciprocalRankFusion(
     lists: RankedResult[][],
-    k = 60,
+    k = 60
 ): Map<string, { score: number; documentId: number; page: number; content: string }> {
-    const fused = new Map<string, { score: number; documentId: number; page: number; content: string }>();
+    const fused = new Map<
+        string,
+        { score: number; documentId: number; page: number; content: string }
+    >();
 
     for (const list of lists) {
         for (const item of list) {
@@ -136,7 +153,7 @@ function reciprocalRankFusion(
 export async function hybridSearchWithRRF(
     query: string,
     docIds: number[],
-    limit = 8,
+    limit = 8
 ): Promise<DocumentMatch[]> {
     if (docIds.length === 0) return [];
 

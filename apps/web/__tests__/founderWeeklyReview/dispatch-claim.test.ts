@@ -155,8 +155,15 @@ describeIfDatabase("founder weekly review dispatch claiming", () => {
             `);
         });
 
+        /**
+         * Due a minute ago, not "now". The claim compares available_at against
+         * a timestamp taken in the Node process, while `now()` here is the
+         * database's clock — in CI those are different containers, and a few
+         * milliseconds of skew is enough to make a row that should be due read
+         * as not-yet-due. Backdating removes the race from the fixture.
+         */
         async function freshRow(id: string, attemptCount = 0): Promise<void> {
-            await insertDispatch(id, new Date().toISOString());
+            await insertDispatch(id, new Date(Date.now() - 60_000).toISOString());
             await testDb.db.execute(sql`
                 UPDATE "pdr_ai_v2_founder_weekly_review_dispatches"
                 SET "attempt_count" = ${attemptCount}
@@ -195,7 +202,9 @@ describeIfDatabase("founder weekly review dispatch claiming", () => {
                 `);
                 await testDb.db.execute(sql`
                     UPDATE "pdr_ai_v2_founder_weekly_review_dispatches"
-                    SET "status" = 'pending', "available_at" = now(), "updated_at" = now()
+                    SET "status" = 'pending',
+                        "available_at" = now() - interval '1 minute',
+                        "updated_at" = now()
                     WHERE "id" = 'd_growing'
                 `);
                 const claimed = await claimPendingDispatches(10);

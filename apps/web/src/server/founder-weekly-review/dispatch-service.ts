@@ -164,6 +164,31 @@ export const DISPATCH_CLAIM_BATCH_SIZE = 20;
 const STALE_DISPATCHING_MS = 5 * 60 * 1000;
 
 /**
+ * Retry policy for a dispatch whose send failed.
+ *
+ * The statuses mean:
+ *   pending     due at `available_at`; the only state a claim picks up
+ *   dispatching in flight, reclaimable once stale
+ *   dispatched  delivered, terminal
+ *   failed      attempts exhausted, terminal — never reclaimed
+ *
+ * `failed` used to be reclaimable and a failure reset `available_at` to now,
+ * so an Inngest outage span became a hot loop: claim the batch, fail every
+ * send, make all twenty immediately due again, chain another drain, repeat
+ * without pause. Backoff plus a terminal state is what bounds that.
+ */
+export const MAX_DISPATCH_ATTEMPTS = 8;
+const DISPATCH_BACKOFF_BASE_MS = 5_000;
+/** Cap the delay so a recovered endpoint is retried promptly, not hours later. */
+const DISPATCH_BACKOFF_MAX_MS = 15 * 60 * 1000;
+
+/** Delay before the nth attempt becomes due again: 5s, 10s, 20s … 15m. */
+export function dispatchBackoffMs(attemptCount: number): number {
+    const exponent = Math.max(0, attemptCount - 1);
+    return Math.min(DISPATCH_BACKOFF_BASE_MS * 2 ** exponent, DISPATCH_BACKOFF_MAX_MS);
+}
+
+/**
  * Claim a batch of due dispatches, atomically.
  *
  * One statement, `FOR UPDATE SKIP LOCKED`: concurrent dispatchers step over
@@ -192,7 +217,7 @@ export async function claimPendingDispatches(
             SELECT "id"
             FROM ${founderWeeklyReviewDispatches}
             WHERE (
-                ("status" IN ('pending', 'failed') AND "available_at" <= ${now}::timestamptz)
+                ("status" = 'pending' AND "available_at" <= ${now}::timestamptz)
                 OR ("status" = 'dispatching' AND "updated_at" <= ${staleDispatchingBefore}::timestamptz)
             )
             ORDER BY "available_at" ASC, "created_at" ASC
@@ -217,9 +242,55 @@ export async function markDispatchDispatched(dispatchId: string): Promise<void> 
     }).where(eq(founderWeeklyReviewDispatches.id, dispatchId));
 }
 
-export async function returnDispatchToPending(dispatchId: string, errorCode: string): Promise<void> {
-    await db.update(founderWeeklyReviewDispatches).set({
-        status: "pending", lastErrorCode: errorCode.slice(0, 128), availableAt: new Date(),
-        updatedAt: new Date(),
-    }).where(eq(founderWeeklyReviewDispatches.id, dispatchId));
+export interface DispatchFailureOutcome {
+    /** `pending` means it will be retried after the backoff; `failed` is terminal. */
+    status: "pending" | "failed";
+    attemptCount: number;
+    availableAt: Date;
+}
+
+/**
+ * Record a failed send: back the row off, or retire it once attempts run out.
+ *
+ * The backoff is computed in SQL from the row's own `attempt_count` so the
+ * decision is a single atomic statement — reading the count and then writing
+ * would race a concurrent reclaim of the same row and could reset the delay.
+ */
+export async function recordDispatchFailure(
+    dispatchId: string,
+    errorCode: string,
+): Promise<DispatchFailureOutcome | null> {
+    const now = new Date().toISOString();
+    const rows = await db.execute<{
+        status: "pending" | "failed";
+        attempt_count: number | string;
+        available_at: Date | string;
+    }>(sql`
+        UPDATE ${founderWeeklyReviewDispatches}
+        SET "status" = CASE
+                WHEN "attempt_count" >= ${MAX_DISPATCH_ATTEMPTS} THEN 'failed'
+                ELSE 'pending'
+            END,
+            "last_error_code" = ${errorCode.slice(0, 128)},
+            "available_at" = ${now}::timestamptz + (
+                LEAST(
+                    ${DISPATCH_BACKOFF_BASE_MS} * POWER(2, GREATEST("attempt_count" - 1, 0)),
+                    ${DISPATCH_BACKOFF_MAX_MS}
+                ) * interval '1 millisecond'
+            ),
+            "updated_at" = ${now}::timestamptz
+        WHERE "id" = ${dispatchId}
+        RETURNING "status", "attempt_count", "available_at"
+    `);
+
+    const row = [...rows][0];
+    if (!row) return null;
+    return {
+        status: row.status,
+        attemptCount: Number(row.attempt_count),
+        availableAt:
+            row.available_at instanceof Date
+                ? row.available_at
+                : new Date(row.available_at),
+    };
 }

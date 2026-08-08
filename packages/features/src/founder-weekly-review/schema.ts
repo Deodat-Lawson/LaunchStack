@@ -69,17 +69,6 @@ export const founderWeeklyReviewRuns = pgTable(
         // to snapshot.
         evidenceSnapshot: jsonb("evidence_snapshot").$type<Record<string, unknown> | null>(),
         evidenceSchemaVersion: varchar("evidence_schema_version", { length: 64 }).notNull(),
-        // What the collector needs to rebuild the evidence pack: the workspace
-        // timezone and the requesting actor. Deliberately has no database
-        // default — every read parses this through a strict contract, so a
-        // placeholder `{}` would satisfy the column and then fail on the way
-        // out. The migration backfills existing rows instead.
-        collectionInput: jsonb("collection_input")
-            .$type<Record<string, unknown>>()
-            .notNull(),
-        collectionClaimId: varchar("collection_claim_id", { length: 128 }),
-        collectionStartedAt: timestamp("collection_started_at", { withTimezone: true }),
-        evidenceCollectedAt: timestamp("evidence_collected_at", { withTimezone: true }),
         modelMetadata: jsonb("model_metadata").$type<Record<string, unknown> | null>(),
         createdByActorId: varchar("created_by_actor_id", { length: 256 }).notNull(),
         retryCount: integer("retry_count").notNull().default(0),
@@ -102,6 +91,25 @@ export const founderWeeklyReviewRuns = pgTable(
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
             () => new Date()
         ),
+
+        // ── Added after the table shipped ───────────────────────────────────
+        // Declared last on purpose. `ALTER TABLE ADD COLUMN` appends
+        // physically, so a column added mid-definition makes a migrated
+        // database and a freshly-pushed one differ in column order — which the
+        // migrations-apply job compares via pg_dump and rejects. New columns go
+        // at the end, whatever their logical grouping.
+
+        // What the collector needs to rebuild the evidence pack: the workspace
+        // timezone and the requesting actor. Deliberately has no database
+        // default — every read parses this through a strict contract, so a
+        // placeholder `{}` would satisfy the column and then fail on the way
+        // out. The migration backfills existing rows instead.
+        collectionInput: jsonb("collection_input")
+            .$type<Record<string, unknown>>()
+            .notNull(),
+        collectionClaimId: varchar("collection_claim_id", { length: 128 }),
+        collectionStartedAt: timestamp("collection_started_at", { withTimezone: true }),
+        evidenceCollectedAt: timestamp("evidence_collected_at", { withTimezone: true }),
     },
     (table) => ({
         requestKeyUnique: uniqueIndex(

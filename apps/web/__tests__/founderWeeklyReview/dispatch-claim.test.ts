@@ -18,13 +18,15 @@ type TestDatabase = Awaited<ReturnType<typeof createFounderWeeklyReviewTestDatab
 describeIfDatabase("founder weekly review dispatch claiming", () => {
     let testDb: TestDatabase;
     let claimPendingDispatches: typeof import("~/server/founder-weekly-review/dispatch-service").claimPendingDispatches;
+    let recordDispatchFailure: typeof import("~/server/founder-weekly-review/dispatch-service").recordDispatchFailure;
+    let MAX_DISPATCH_ATTEMPTS: number;
 
     beforeAll(async () => {
         testDb = await createFounderWeeklyReviewTestDatabase();
         // The service binds `db` at import time, so the test database has to be
         // installed before the module is first required.
         jest.doMock("~/server/db", () => ({ db: testDb.db }));
-        ({ claimPendingDispatches } = await import(
+        ({ claimPendingDispatches, recordDispatchFailure, MAX_DISPATCH_ATTEMPTS } = await import(
             "~/server/founder-weekly-review/dispatch-service"
         ));
 
@@ -120,5 +122,109 @@ describeIfDatabase("founder weekly review dispatch claiming", () => {
 
         const claimed = await claimPendingDispatches(1);
         expect(claimed).toHaveLength(1);
+    });
+
+    describe("when every send in a batch fails", () => {
+        async function statusOf(id: string) {
+            const rows = await testDb.db.execute<{
+                status: string;
+                attempt_count: number | string;
+                available_at: Date | string;
+            }>(sql`
+                SELECT "status", "attempt_count", "available_at"
+                FROM "pdr_ai_v2_founder_weekly_review_dispatches"
+                WHERE "id" = ${id}
+            `);
+            const row = [...rows][0]!;
+            return {
+                status: row.status,
+                attemptCount: Number(row.attempt_count),
+                availableAt: new Date(row.available_at as string),
+            };
+        }
+
+        /**
+         * These cases own their rows. Everything else in this file is parked
+         * with `available_at` far in the future so a claim here can only ever
+         * return the row under test.
+         */
+        beforeAll(async () => {
+            await testDb.db.execute(sql`
+                UPDATE "pdr_ai_v2_founder_weekly_review_dispatches"
+                SET "status" = 'dispatched', "available_at" = now() + interval '10 years'
+            `);
+        });
+
+        async function freshRow(id: string, attemptCount = 0): Promise<void> {
+            await insertDispatch(id, new Date().toISOString());
+            await testDb.db.execute(sql`
+                UPDATE "pdr_ai_v2_founder_weekly_review_dispatches"
+                SET "attempt_count" = ${attemptCount}
+                WHERE "id" = ${id}
+            `);
+        }
+
+        it("backs the row off instead of making it immediately due again", async () => {
+            await freshRow("d_backoff");
+
+            const [claimed] = await claimPendingDispatches(10);
+            expect(claimed?.id).toBe("d_backoff");
+
+            const before = new Date();
+            const outcome = await recordDispatchFailure("d_backoff", "dispatch_failed");
+            expect(outcome).toMatchObject({ status: "pending", attemptCount: 1 });
+
+            // The storm was this: a failure reset available_at to now, so the
+            // very next drain re-claimed the same row with no pause at all.
+            const after = await statusOf("d_backoff");
+            expect(after.availableAt.getTime()).toBeGreaterThan(before.getTime() + 1_000);
+            expect(await claimPendingDispatches(10)).toEqual([]);
+        });
+
+        it("lengthens the delay with each successive failure", async () => {
+            await freshRow("d_growing");
+            const delays: number[] = [];
+            for (let attempt = 0; attempt < 3; attempt++) {
+                // Park everything else out of reach each round. A row backed
+                // off by an earlier case comes due while this loop runs, and
+                // with an earlier available_at it would sort ahead of this one.
+                await testDb.db.execute(sql`
+                    UPDATE "pdr_ai_v2_founder_weekly_review_dispatches"
+                    SET "available_at" = now() + interval '10 years'
+                    WHERE "id" <> 'd_growing'
+                `);
+                await testDb.db.execute(sql`
+                    UPDATE "pdr_ai_v2_founder_weekly_review_dispatches"
+                    SET "status" = 'pending', "available_at" = now(), "updated_at" = now()
+                    WHERE "id" = 'd_growing'
+                `);
+                const claimed = await claimPendingDispatches(10);
+                expect(claimed.map((d) => d.id)).toEqual(["d_growing"]);
+                const at = Date.now();
+                await recordDispatchFailure("d_growing", "dispatch_failed");
+                delays.push((await statusOf("d_growing")).availableAt.getTime() - at);
+            }
+            expect(delays[1]).toBeGreaterThan(delays[0]!);
+            expect(delays[2]).toBeGreaterThan(delays[1]!);
+        });
+
+        it("retires a row once attempts are exhausted and never claims it again", async () => {
+            await freshRow("d_exhausted", MAX_DISPATCH_ATTEMPTS);
+
+            const outcome = await recordDispatchFailure("d_exhausted", "dispatch_failed");
+            expect(outcome?.status).toBe("failed");
+            expect((await statusOf("d_exhausted")).status).toBe("failed");
+
+            // Terminal means terminal: even with available_at in the past, a
+            // claim must not pick it back up. `failed` used to be reclaimable,
+            // which is what let an exhausted row cycle forever.
+            await testDb.db.execute(sql`
+                UPDATE "pdr_ai_v2_founder_weekly_review_dispatches"
+                SET "available_at" = now() - interval '1 hour'
+                WHERE "id" = 'd_exhausted'
+            `);
+            const claimed = await claimPendingDispatches(10);
+            expect(claimed.map((d) => d.id)).not.toContain("d_exhausted");
+        });
     });
 });

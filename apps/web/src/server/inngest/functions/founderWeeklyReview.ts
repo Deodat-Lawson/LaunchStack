@@ -6,44 +6,92 @@ import { generateFounderWeeklyReview } from "@launchstack/features/founder-weekl
 import { FounderWeeklyReviewGenerationValidationError } from "@launchstack/features/founder-weekly-review";
 import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
 import { canonicalFounderWeeklyReviewEvidenceCollector } from "~/server/founder-weekly-review/evidence-collector";
-import { claimPendingDispatches, DISPATCH_CLAIM_BATCH_SIZE, markDispatchDispatched, returnDispatchToPending } from "~/server/founder-weekly-review/dispatch-service";
+import { claimPendingDispatches, DISPATCH_CLAIM_BATCH_SIZE, markDispatchDispatched, recordDispatchFailure } from "~/server/founder-weekly-review/dispatch-service";
 import { founderWeeklyReviewCitationFailures, founderWeeklyReviewDispatchFailures, founderWeeklyReviewGenerationTotal, founderWeeklyReviewJobsEnqueued, founderWeeklyReviewRunsCompleted, founderWeeklyReviewRunsFailed, founderWeeklyReviewStageDuration, logFounderWeeklyReview } from "~/server/founder-weekly-review/observability";
 
 const GenerationEventSchema = z.object({ runId: z.string().min(1), companyId: z.string().min(1), generationJobId: z.string().min(1), generationClaimId: z.string().min(1) });
+
+export interface DispatchBatchResult {
+  claimed: number;
+  succeeded: number;
+  /** Rows that exhausted their attempts and were retired this pass. */
+  retired: number;
+}
+
+/** Send one claimed batch. Exported so the outcome accounting is testable. */
+export async function runFounderWeeklyReviewDispatchBatch(
+  deps: {
+    claim: typeof claimPendingDispatches;
+    send: (typeof inngest)["send"];
+    markDispatched: typeof markDispatchDispatched;
+    recordFailure: typeof recordDispatchFailure;
+  } = {
+    claim: claimPendingDispatches,
+    send: (...args) => inngest.send(...args),
+    markDispatched: markDispatchDispatched,
+    recordFailure: recordDispatchFailure,
+  },
+): Promise<DispatchBatchResult> {
+  const dispatches = await deps.claim(DISPATCH_CLAIM_BATCH_SIZE);
+  let succeeded = 0;
+  let retired = 0;
+  for (const dispatch of dispatches) {
+    try {
+      await deps.send({ id: dispatch.eventId, name: "founder-weekly-review/generation.requested", data: {
+        runId: dispatch.runId, companyId: dispatch.companyId.toString(), generationJobId: dispatch.generationJobId, generationClaimId: dispatch.generationClaimId,
+      }});
+      await deps.markDispatched(dispatch.id);
+      succeeded += 1;
+      founderWeeklyReviewJobsEnqueued.inc({ operation: dispatch.operationType });
+      logFounderWeeklyReview({ runId: dispatch.runId, companyId: dispatch.companyId.toString(), stage: "dispatch_sent", status: "dispatched" });
+    } catch {
+      const outcome = await deps.recordFailure(dispatch.id, "dispatch_failed");
+      founderWeeklyReviewDispatchFailures.inc();
+      if (outcome?.status === "failed") {
+        retired += 1;
+        logFounderWeeklyReview({
+          runId: dispatch.runId,
+          companyId: dispatch.companyId.toString(),
+          stage: "dispatch_abandoned",
+          status: "failed",
+          retryCount: outcome.attemptCount,
+          errorClass: "dispatch",
+        });
+      }
+    }
+  }
+  return { claimed: dispatches.length, succeeded, retired };
+}
+
+/**
+ * Chain another drain only when a FULL batch went out cleanly — the one case
+ * where more work is probably waiting AND the endpoint is demonstrably healthy.
+ *
+ * Chaining on the claimed count alone turned an outage into a hot loop: twenty
+ * sends fail, twenty rows come due again immediately, the chain re-enqueues
+ * itself, repeat. When anything failed, the per-row backoff and the five-minute
+ * reconciler set the pace instead.
+ */
+export function shouldChainAnotherDrain(result: DispatchBatchResult): boolean {
+  return result.succeeded === DISPATCH_CLAIM_BATCH_SIZE;
+}
 
 export const founderWeeklyReviewDispatcher = inngest.createFunction(
   { id: "founder-weekly-review-dispatcher", retries: 3 },
   { event: "founder-weekly-review/dispatch.requested" },
   async ({ step }) => {
-    const dispatched = await step.run("dispatch-pending", async () => {
-      const dispatches = await claimPendingDispatches(DISPATCH_CLAIM_BATCH_SIZE);
-      for (const dispatch of dispatches) {
-        try {
-          await inngest.send({ id: dispatch.eventId, name: "founder-weekly-review/generation.requested", data: {
-            runId: dispatch.runId, companyId: dispatch.companyId.toString(), generationJobId: dispatch.generationJobId, generationClaimId: dispatch.generationClaimId,
-          }});
-          await markDispatchDispatched(dispatch.id);
-          founderWeeklyReviewJobsEnqueued.inc({ operation: dispatch.operationType });
-          logFounderWeeklyReview({ runId: dispatch.runId, companyId: dispatch.companyId.toString(), stage: "dispatch_sent", status: "dispatched" });
-        } catch {
-          await returnDispatchToPending(dispatch.id, "dispatch_failed");
-          founderWeeklyReviewDispatchFailures.inc();
-        }
-      }
-      return dispatches.length;
-    });
+    const result = await step.run("dispatch-pending", () =>
+      runFounderWeeklyReviewDispatchBatch(),
+    );
 
-    // A full batch means there is probably more waiting. Chain another drain
-    // immediately rather than leaving the remainder to the five-minute
-    // reconciler, which is a backstop for lost events, not a queue pump.
-    if (dispatched === DISPATCH_CLAIM_BATCH_SIZE) {
+    if (shouldChainAnotherDrain(result)) {
       await step.sendEvent("drain-remaining", {
         name: "founder-weekly-review/dispatch.requested",
         data: {},
       });
     }
 
-    return { dispatched };
+    return result;
   }
 );
 

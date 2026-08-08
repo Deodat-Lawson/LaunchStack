@@ -2,6 +2,13 @@ import { put, type PutBlobResult } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
 
 import { env } from "~/env";
+import { parseVercelBlobStoreIdFromToken, storageLocationIdForVercelBlob } from "~/lib/storage-location-id";
+
+type ObjectRef = {
+  adapter: "s3" | "vercel-blob" | "database" | "uploadthing";
+  storageLocationId: string;
+  key: string;
+};
 
 export interface PutFileInput {
   filename: string;
@@ -12,6 +19,7 @@ export interface PutFileInput {
 export interface StoredBlobMetadata {
   url: string;
   pathname: string;
+  ref: ObjectRef;
   contentType?: string;
   size?: number;
   checksum?: string | null;
@@ -24,6 +32,13 @@ class MissingBlobTokenError extends Error {
   }
 }
 
+class UnparseableBlobTokenError extends Error {
+  constructor() {
+    super("BLOB_READ_WRITE_TOKEN is unparseable (expected token.split(\"_\")[3]).");
+    this.name = "UnparseableBlobTokenError";
+  }
+}
+
 function getBlobToken(): string {
   const token = env.server.BLOB_READ_WRITE_TOKEN ?? process.env.BLOB_READ_WRITE_TOKEN;
   if (!token) {
@@ -32,10 +47,19 @@ function getBlobToken(): string {
   return token;
 }
 
+function getBlobStoreId(token: string): string {
+  const storeId = parseVercelBlobStoreIdFromToken(token);
+  if (!storeId) {
+    throw new UnparseableBlobTokenError();
+  }
+  return storeId;
+}
+
 let detectedAccess: "public" | "private" | null = null;
 
 export async function putFile({ filename, data, contentType }: PutFileInput): Promise<StoredBlobMetadata> {
   const token = getBlobToken();
+  const storeId = getBlobStoreId(token);
   const safeName = sanitizeFilename(filename);
   const key = `documents/${randomUUID()}-${safeName.length > 0 ? safeName : "upload"}`;
 
@@ -66,9 +90,30 @@ export async function putFile({ filename, data, contentType }: PutFileInput): Pr
   return {
     url: blob.url,
     pathname: blob.pathname,
+    ref: {
+      adapter: "vercel-blob",
+      storageLocationId: storageLocationIdForVercelBlob(storeId),
+      key: blob.pathname,
+    },
     contentType: blob.contentType,
     checksum: extended.contentHash ?? null,
   };
+}
+
+export async function deleteFile(pathname: string): Promise<void> {
+  const token = getBlobToken();
+  const { del } = await import("@vercel/blob");
+  await del(pathname, { token });
+}
+
+export async function deleteFiles(pathnames: readonly string[]): Promise<void> {
+  if (pathnames.length === 0) {
+    return;
+  }
+
+  const token = getBlobToken();
+  const { del } = await import("@vercel/blob");
+  await del([...pathnames], { token });
 }
 
 export function isPrivateBlobUrl(url: string): boolean {

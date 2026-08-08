@@ -262,7 +262,7 @@ const repairRunners: readonly RepairRunner[] = [
         "0017 SQL migration",
         async repairDb => {
             const migrationSql = await readFile(
-                resolve(__dirname, "../../../drizzle/0017_document_version_repair.sql"),
+                resolve(__dirname, "../../../src/server/backfills/sql/document-version-repair.sql"),
                 "utf8"
             );
             await repairDb.client.begin(async tx => {
@@ -372,7 +372,7 @@ integrationDescribe("document version repair (database)", () => {
 
         const cloneCompanyId = companyId;
         const migrationSql = await readFile(
-            resolve(__dirname, "../../../drizzle/0017_document_version_repair.sql"),
+            resolve(__dirname, "../../../src/server/backfills/sql/document-version-repair.sql"),
             "utf8"
         );
 

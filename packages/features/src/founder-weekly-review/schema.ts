@@ -25,6 +25,7 @@ import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 export const founderWeeklyReviewRunStatusEnum = [
     "queued",
+    "collecting",
     "generating",
     "draft",
     "published",
@@ -32,6 +33,18 @@ export const founderWeeklyReviewRunStatusEnum = [
 ] as const;
 
 export const founderWeeklyReviewOperationTypeEnum = ["retry"] as const;
+
+export const founderWeeklyReviewDispatchOperationTypeEnum = [
+    "create",
+    "retry",
+] as const;
+
+export const founderWeeklyReviewDispatchStatusEnum = [
+    "pending",
+    "dispatching",
+    "dispatched",
+    "failed",
+] as const;
 
 export const founderWeeklyReviewRuns = pgTable(
     "founder_weekly_review_runs",
@@ -51,10 +64,22 @@ export const founderWeeklyReviewRuns = pgTable(
             .default("queued"),
         reviewPayload: jsonb("review_payload").$type<Record<string, unknown> | null>(),
         reviewSchemaVersion: varchar("review_schema_version", { length: 64 }).notNull(),
-        evidenceSnapshot: jsonb("evidence_snapshot")
-            .$type<Record<string, unknown>>()
-            .notNull(),
+        // Nullable since evidence collection became a separate async step: a
+        // run exists from the moment it is requested, before there is anything
+        // to snapshot.
+        evidenceSnapshot: jsonb("evidence_snapshot").$type<Record<string, unknown> | null>(),
         evidenceSchemaVersion: varchar("evidence_schema_version", { length: 64 }).notNull(),
+        // What the collector needs to rebuild the evidence pack: the workspace
+        // timezone and the requesting actor. Defaulted at the database level so
+        // adding it cannot rewrite a populated table; the application always
+        // supplies a real value on insert.
+        collectionInput: jsonb("collection_input")
+            .$type<Record<string, unknown>>()
+            .notNull()
+            .default(sql`'{}'::jsonb`),
+        collectionClaimId: varchar("collection_claim_id", { length: 128 }),
+        collectionStartedAt: timestamp("collection_started_at", { withTimezone: true }),
+        evidenceCollectedAt: timestamp("evidence_collected_at", { withTimezone: true }),
         modelMetadata: jsonb("model_metadata").$type<Record<string, unknown> | null>(),
         createdByActorId: varchar("created_by_actor_id", { length: 256 }).notNull(),
         retryCount: integer("retry_count").notNull().default(0),
@@ -100,6 +125,12 @@ export const founderWeeklyReviewRuns = pgTable(
             table.status,
             table.generationClaimId
         ),
+        collectionClaimIdx: index("founder_weekly_review_runs_collection_claim_idx").on(
+            table.companyId,
+            table.id,
+            table.status,
+            table.collectionClaimId
+        ),
     })
 );
 
@@ -139,7 +170,76 @@ export const founderWeeklyReviewOperations = pgTable(
     })
 );
 
+/**
+ * Transactional outbox for the Inngest handoff.
+ *
+ * A lifecycle write and its "go run this" event must succeed or fail together.
+ * Emitting the event inline would drop it whenever the transaction rolled back
+ * after the call; writing a row here in the same transaction and dispatching it
+ * afterwards makes the handoff durable and replayable.
+ */
+export const founderWeeklyReviewDispatches = pgTable(
+    "founder_weekly_review_dispatches",
+    {
+        id: varchar("id", { length: 64 }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        runId: varchar("run_id", { length: 64 })
+            .notNull()
+            .references(() => founderWeeklyReviewRuns.id, { onDelete: "cascade" }),
+        operationType: varchar("operation_type", {
+            length: 16,
+            enum: founderWeeklyReviewDispatchOperationTypeEnum,
+        }).notNull(),
+        operationKey: varchar("operation_key", { length: 128 }).notNull(),
+        eventId: varchar("event_id", { length: 128 }).notNull(),
+        generationJobId: varchar("generation_job_id", { length: 128 }).notNull(),
+        generationClaimId: varchar("generation_claim_id", { length: 128 }).notNull(),
+        status: varchar("status", {
+            length: 16,
+            enum: founderWeeklyReviewDispatchStatusEnum,
+        })
+            .notNull()
+            .default("pending"),
+        attemptCount: integer("attempt_count").notNull().default(0),
+        availableAt: timestamp("available_at", { withTimezone: true })
+            .notNull()
+            .default(sql`CURRENT_TIMESTAMP`),
+        dispatchedAt: timestamp("dispatched_at", { withTimezone: true }),
+        lastErrorCode: varchar("last_error_code", { length: 128 }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .notNull()
+            .default(sql`CURRENT_TIMESTAMP`),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+            () => new Date()
+        ),
+    },
+    (table) => ({
+        operationUnique: uniqueIndex(
+            "founder_weekly_review_dispatches_run_operation_key_unique"
+        ).on(table.runId, table.operationType, table.operationKey),
+        // The event id is the Inngest idempotency key, so it must be unique
+        // across the whole table, not just within a run.
+        eventUnique: uniqueIndex(
+            "founder_weekly_review_dispatches_event_id_unique"
+        ).on(table.eventId),
+        pendingIdx: index("founder_weekly_review_dispatches_pending_idx").on(
+            table.status,
+            table.availableAt,
+            table.createdAt
+        ),
+        companyRunIdx: index("founder_weekly_review_dispatches_company_run_idx").on(
+            table.companyId,
+            table.runId
+        ),
+    })
+);
+
 export type FounderWeeklyReviewRunRow = InferSelectModel<typeof founderWeeklyReviewRuns>;
 export type FounderWeeklyReviewOperationRow = InferSelectModel<
     typeof founderWeeklyReviewOperations
+>;
+export type FounderWeeklyReviewDispatchRow = InferSelectModel<
+    typeof founderWeeklyReviewDispatches
 >;

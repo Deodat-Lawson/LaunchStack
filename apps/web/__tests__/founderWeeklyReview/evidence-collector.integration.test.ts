@@ -51,12 +51,33 @@ async function insertVersion(
     versionNumber: number,
     createdAtIso: string,
     changelog: string | null = null
-): Promise<void> {
-    await db.execute(sql`
+): Promise<bigint> {
+    const rows = await db.execute(sql`
         INSERT INTO "pdr_ai_v2_document_versions"
             ("document_id", "version_number", "url", "mime_type", "changelog", "created_at")
         VALUES (${documentId}, ${versionNumber}, ${"/api/files/1"}, ${"application/pdf"}, ${changelog}, ${createdAtIso})
+        RETURNING "id"
     `);
+    return firstInsertedId(rows);
+}
+
+/**
+ * Customer-feedback evidence cites a processed section, not a whole version, so
+ * a feedback document only produces evidence once its context chunks exist.
+ */
+async function insertContextChunk(
+    db: TestDb,
+    documentId: bigint,
+    versionId: bigint,
+    content: string
+): Promise<bigint> {
+    const rows = await db.execute(sql`
+        INSERT INTO "pdr_ai_v2_document_context_chunks"
+            ("document_id", "version_id", "content", "token_count", "char_count")
+        VALUES (${documentId}, ${versionId}, ${content}, ${8}, ${content.length})
+        RETURNING "id"
+    `);
+    return firstInsertedId(rows);
 }
 
 const REPORTING_PERIOD = { start: "2026-02-16", end: "2026-02-22" } as const;
@@ -72,12 +93,24 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
     let docA: bigint;
     let docB: bigint;
     let companyC: bigint;
+    let docAVersion1: bigint;
+    let docAVersion2: bigint;
+    let docBVersion1: bigint;
     let docCProduct: bigint;
+    let docCProductVersion: bigint;
     let docCFeedback: bigint;
+    let docCFeedbackVersion: bigint;
+    let docCFeedbackChunk: bigint;
 
     beforeAll(async () => {
         testDb = await createFounderWeeklyReviewTestDatabase();
-        service = new FounderWeeklyReviewEvidenceService(testDb.db);
+        // The document-change source must be named explicitly — an
+        // unconfigured service fails closed rather than guessing. `legacy` is
+        // the version-row collector these cases cover; computed diffs have
+        // their own unit coverage in document-change.test.ts.
+        service = new FounderWeeklyReviewEvidenceService(testDb.db, undefined, {
+            kind: "legacy",
+        });
 
         companyA = await insertCompany(testDb.db, "Alpha");
         companyB = await insertCompany(testDb.db, "Beta");
@@ -87,25 +120,38 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
         docB = await insertDocument(testDb.db, companyB, "Product", "Beta Doc");
 
         // Company A: two versions inside the window, two outside it.
-        await insertVersion(testDb.db, docA, 1, "2026-02-17T10:00:00.000Z");
-        await insertVersion(testDb.db, docA, 2, "2026-02-20T10:00:00.000Z", "Updated pricing");
+        docAVersion1 = await insertVersion(testDb.db, docA, 1, "2026-02-17T10:00:00.000Z");
+        docAVersion2 = await insertVersion(testDb.db, docA, 2, "2026-02-20T10:00:00.000Z", "Updated pricing");
         await insertVersion(testDb.db, docA, 3, "2026-02-25T10:00:00.000Z"); // after end
         await insertVersion(testDb.db, docA, 4, "2026-02-10T10:00:00.000Z"); // before start
 
         // Company B: one version inside the window — must never leak into Company A.
-        await insertVersion(testDb.db, docB, 1, "2026-02-18T10:00:00.000Z");
+        docBVersion1 = await insertVersion(testDb.db, docB, 1, "2026-02-18T10:00:00.000Z");
 
         // Company C: one normal doc and one customer feedback doc, used to prove document_change / customer_feedback split
         companyC = await insertCompany(testDb.db, "Gamma");
         docCProduct = await insertDocument(testDb.db, companyC, "Product", "Gamma Product");
+        // Exactly CUSTOMER_FEEDBACK_CATEGORY — the collector matches the
+        // category verbatim, so casing is part of the contract.
         docCFeedback = await insertDocument(
             testDb.db,
             companyC,
-            "customer feedback",
+            "Customer Feedback",
             "Gamma Feedback"
         );
-        await insertVersion(testDb.db, docCProduct, 1, "2026-02-17T12:00:00.000Z");
-        await insertVersion(testDb.db, docCFeedback, 1, "2026-02-18T12:00:00.000Z");
+        docCProductVersion = await insertVersion(testDb.db, docCProduct, 1, "2026-02-17T12:00:00.000Z");
+        docCFeedbackVersion = await insertVersion(
+            testDb.db,
+            docCFeedback,
+            1,
+            "2026-02-18T12:00:00.000Z"
+        );
+        docCFeedbackChunk = await insertContextChunk(
+            testDb.db,
+            docCFeedback,
+            docCFeedbackVersion,
+            "Export is too slow for our weekly reporting."
+        );
     });
 
     afterAll(async () => {
@@ -120,8 +166,8 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
         );
 
         expect(items.map((i) => i.sourceId)).toEqual([
-            `document-version:${docA}:1`,
-            `document-version:${docA}:2`,
+            `document_change:doc:${docA}:version:${docAVersion1}`,
+            `document_change:doc:${docA}:version:${docAVersion2}`,
         ]);
     });
 
@@ -135,8 +181,8 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
         expect(snapshot.schemaVersion).toBe("founder-weekly-review-evidence/v1");
         expect(snapshot.workspaceTimezone).toBe("UTC");
         expect(snapshot.items.map((i) => i.sourceId)).toEqual([
-            `document-version:${docA}:1`,
-            `document-version:${docA}:2`,
+            `document_change:doc:${docA}:version:${docAVersion1}`,
+            `document_change:doc:${docA}:version:${docAVersion2}`,
         ]);
     });
 
@@ -158,38 +204,54 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
         });
 
         expect(snapshot.items).toHaveLength(1);
-        expect(snapshot.items[0]?.sourceId).toBe(`document-version:${docB}:1`);
+        expect(snapshot.items[0]?.sourceId).toBe(
+            `document_change:doc:${docB}:version:${docBVersion1}`
+        );
+        // Nothing from any other company, by document rather than by exact id.
+        for (const item of snapshot.items) {
+            expect(item.metadata.documentId).toBe(docB.toString());
+        }
     });
 
-    it("classifies a normal document as document_change and excludes customer feedback", async () => {
+    it("reports every changed document as document_change, feedback documents included", async () => {
         const items = await service.collectDocumentChangeEvidence(
             companyC,
             START_BOUND,
             END_BOUND
         );
 
-        expect(items).toHaveLength(1);
-        expect(items[0]?.sourceId).toBe(`document-version:${docCProduct}:1`);
-        expect(items[0]?.sourceType).toBe("document_change");
-        // the customer-feedback doc must not show up here
-        expect(
-            items.some((i) => i.sourceId === `document-version:${docCFeedback}:1`)
-        ).toBe(false);
+        // A Customer Feedback document still *changes*, and that change is a
+        // document change. Classification into customer_feedback happens in the
+        // dedicated collector, at section granularity — the two are not
+        // mutually exclusive views of the same version.
+        expect(items.map((i) => i.sourceId).sort()).toEqual(
+            [
+                `document_change:doc:${docCProduct}:version:${docCProductVersion}`,
+                `document_change:doc:${docCFeedback}:version:${docCFeedbackVersion}`,
+            ].sort()
+        );
+        expect(items.every((i) => i.sourceType === "document_change")).toBe(true);
     });
 
     it("classifies a customer-feedback document as customer_feedback and excludes normal docs", async () => {
-        const items = await service.collectCustomerFeedbackEvidence(
+        // This collector reports warnings alongside its items, so it returns a
+        // result object rather than a bare array.
+        const { items } = await service.collectCustomerFeedbackEvidence(
             companyC,
             START_BOUND,
             END_BOUND
         );
 
         expect(items).toHaveLength(1);
-        expect(items[0]?.sourceId).toBe(`document-version:${docCFeedback}:1`);
+        // Feedback is cited at section granularity so a quote can be traced to
+        // the exact processed chunk it came from.
+        expect(items[0]?.sourceId).toBe(
+            `customer_feedback:doc:${docCFeedback}:version:${docCFeedbackVersion}:section:${docCFeedbackChunk}`
+        );
         expect(items[0]?.sourceType).toBe("customer_feedback");
         // the normal doc must not show up here
         expect(
-            items.some((i) => i.sourceId === `document-version:${docCProduct}:1`)
+            items.some((i) => i.sourceId.includes(`doc:${docCProduct}:`))
         ).toBe(false);
     });
 
@@ -200,11 +262,19 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
             workspaceTimezone: "UTC",
         });
 
-        expect(snapshot.items).toHaveLength(2);
-        const sourceIdByType = Object.fromEntries(
-            snapshot.items.map((i) => [i.sourceType, i.sourceId])
+        // Both changed documents plus the one cited feedback section. Deduping
+        // is by source id, and a version-level change and a section-level quote
+        // are genuinely different citations, so nothing collapses here.
+        expect(snapshot.items.map((i) => i.sourceId).sort()).toEqual(
+            [
+                `document_change:doc:${docCProduct}:version:${docCProductVersion}`,
+                `document_change:doc:${docCFeedback}:version:${docCFeedbackVersion}`,
+                `customer_feedback:doc:${docCFeedback}:version:${docCFeedbackVersion}:section:${docCFeedbackChunk}`,
+            ].sort()
         );
-        expect(sourceIdByType.document_change).toBe(`document-version:${docCProduct}:1`);
-        expect(sourceIdByType.customer_feedback).toBe(`document-version:${docCFeedback}:1`);
+        // No source id appears twice.
+        expect(new Set(snapshot.items.map((i) => i.sourceId)).size).toBe(
+            snapshot.items.length
+        );
     });
 });

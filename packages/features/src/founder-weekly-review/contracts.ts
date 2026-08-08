@@ -4,15 +4,26 @@ export const FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION =
     "founder-weekly-review-evidence/v1" as const;
 export const FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION =
     "founder-weekly-review/v1" as const;
+export const FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION =
+    "founder-weekly-review/v2" as const;
 
 export const FounderWeeklyReviewStatusSchema = z.enum([
     "queued",
+    "collecting",
     "generating",
     "draft",
     "published",
     "failed",
 ]);
 export type FounderWeeklyReviewStatus = z.infer<typeof FounderWeeklyReviewStatusSchema>;
+
+/** Durable, request-derived inputs needed to collect evidence after the HTTP response. */
+export const FounderWeeklyReviewCollectionInputSchema = z.object({
+    workspaceTimezone: z.string().min(1).max(128),
+    founderContext: z.string().min(1).max(4000).optional(),
+    actorExternalUserId: z.string().min(1).max(256),
+}).strict();
+export type FounderWeeklyReviewCollectionInput = z.infer<typeof FounderWeeklyReviewCollectionInputSchema>;
 
 export const FounderWeeklyReviewOperationTypeSchema = z.enum(["retry"]);
 export type FounderWeeklyReviewOperationType = z.infer<
@@ -125,7 +136,11 @@ const FounderWeeklyReviewSectionSchema = z.object({
     items: z.array(FounderWeeklyReviewSectionItemSchema).max(100),
 });
 
-export const FounderWeeklyReviewPayloadSchema = z.object({
+/**
+ * LAU-5 payload. Keep this schema byte-for-byte compatible with persisted v1
+ * drafts; LAU-7 generation emits the separate v2 schema below.
+ */
+export const FounderWeeklyReviewV1PayloadSchema = z.object({
     schemaVersion: z.literal(FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION),
     sections: z.object({
         whatChanged: FounderWeeklyReviewSectionSchema,
@@ -135,13 +150,102 @@ export const FounderWeeklyReviewPayloadSchema = z.object({
         nextPriorities: FounderWeeklyReviewSectionSchema,
     }),
 });
+export type FounderWeeklyReviewV1Payload = z.infer<typeof FounderWeeklyReviewV1PayloadSchema>;
+
+const V2ConfidenceSchema = z.number().min(0).max(1);
+function v2SourceIdsSchema(minimum: number) {
+    return z.array(z.string().min(1).max(256)).min(minimum).max(20).superRefine(
+        (sourceIds, context) => {
+        if (new Set(sourceIds).size !== sourceIds.length) {
+            context.addIssue({ code: z.ZodIssueCode.custom, message: "sourceIds must be unique" });
+        }
+        }
+    );
+}
+
+export const FounderWeeklyReviewV2ObservedFactSchema = z.object({
+    kind: z.literal("observed_fact"),
+    text: z.string().min(1).max(2000),
+    sourceIds: v2SourceIdsSchema(1),
+    confidence: V2ConfidenceSchema,
+}).strict();
+
+export const FounderWeeklyReviewV2ContradictoryEvidenceSchema = z.object({
+    kind: z.literal("contradictory_evidence"),
+    text: z.string().min(1).max(2000),
+    sourceIds: v2SourceIdsSchema(2),
+    confidence: V2ConfidenceSchema,
+}).strict();
+
+export const FounderWeeklyReviewV2RecommendationSchema = z.object({
+    kind: z.literal("recommendation"),
+    label: z.literal("Recommendation"),
+    text: z.string().min(1).max(2000),
+    rationale: z.string().min(1).max(2000).optional(),
+    sourceIds: v2SourceIdsSchema(1),
+    confidence: V2ConfidenceSchema,
+}).strict();
+
+export const FounderWeeklyReviewV2NoEvidenceSchema = z.object({
+    code: z.string().min(1).max(64),
+    message: z.string().min(1).max(512),
+    cta: z.string().min(1).max(512),
+}).strict();
+
+const FounderWeeklyReviewV2NoEvidenceSectionSchema = z.object({
+    state: z.literal("no_evidence"),
+    noEvidence: FounderWeeklyReviewV2NoEvidenceSchema,
+}).strict();
+
+const FounderWeeklyReviewV2FactualItemSchema = z.union([
+    FounderWeeklyReviewV2ObservedFactSchema,
+    FounderWeeklyReviewV2ContradictoryEvidenceSchema,
+]);
+const FounderWeeklyReviewV2FactualSectionSchema = z.union([
+    z.object({
+        state: z.literal("evidence"),
+        items: z.array(FounderWeeklyReviewV2FactualItemSchema).min(1).max(100),
+    }).strict(),
+    FounderWeeklyReviewV2NoEvidenceSectionSchema,
+]);
+const FounderWeeklyReviewV2PrioritySectionSchema = z.union([
+    z.object({
+        state: z.literal("evidence"),
+        items: z.array(FounderWeeklyReviewV2RecommendationSchema).min(1).max(100),
+    }).strict(),
+    FounderWeeklyReviewV2NoEvidenceSectionSchema,
+]);
+
+export const FounderWeeklyReviewV2PayloadSchema = z.object({
+    schemaVersion: z.literal(FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION),
+    sections: z.object({
+        whatChanged: FounderWeeklyReviewV2FactualSectionSchema,
+        whatShipped: FounderWeeklyReviewV2FactualSectionSchema,
+        whatCustomersSaid: FounderWeeklyReviewV2FactualSectionSchema,
+        currentBlockers: FounderWeeklyReviewV2FactualSectionSchema,
+        nextPriorities: FounderWeeklyReviewV2PrioritySectionSchema,
+    }).strict(),
+}).strict();
+export type FounderWeeklyReviewV2Payload = z.infer<typeof FounderWeeklyReviewV2PayloadSchema>;
+
+export const FounderWeeklyReviewPayloadSchema = z.union([
+    FounderWeeklyReviewV1PayloadSchema,
+    FounderWeeklyReviewV2PayloadSchema,
+]);
 export type FounderWeeklyReviewPayload = z.infer<typeof FounderWeeklyReviewPayloadSchema>;
+export type FounderWeeklyReviewPayloadSchemaVersion =
+    | typeof FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION
+    | typeof FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION;
 
 export const FounderWeeklyReviewModelMetadataSchema = z.object({
     provider: z.string().min(1).max(128).optional(),
     model: z.string().min(1).max(256).optional(),
     promptVersion: z.string().min(1).max(128).optional(),
     temperature: z.number().finite().optional(),
+    capability: z.string().min(1).max(128).optional(),
+    promptHash: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+    evidenceSchemaVersion: z.string().min(1).max(128).optional(),
+    reviewPayloadSchemaVersion: z.string().min(1).max(128).optional(),
     completionId: z.string().min(1).max(256).optional(),
     notes: z.string().min(1).max(1024).optional(),
     attributes: z.record(z.string().max(64), SerializableMetadataValueSchema).default({}),
@@ -157,9 +261,13 @@ export interface FounderWeeklyReviewRunRecord {
     reportingPeriod: ReportingPeriod;
     status: FounderWeeklyReviewStatus;
     reviewPayload: FounderWeeklyReviewPayload | null;
-    reviewSchemaVersion: typeof FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION;
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
+    reviewSchemaVersion: FounderWeeklyReviewPayloadSchemaVersion;
+    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | null;
     evidenceSchemaVersion: typeof FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION;
+    collectionInput?: FounderWeeklyReviewCollectionInput;
+    collectionClaimId?: string | null;
+    collectionStartedAt?: Date | null;
+    evidenceCollectedAt?: Date | null;
     modelMetadata: FounderWeeklyReviewModelMetadata | null;
     createdByActorId: string;
     retryCount: number;
@@ -194,7 +302,9 @@ export interface CreateFounderWeeklyReviewRunInput {
     companyId: bigint;
     requestKey: string;
     reportingPeriod: ReportingPeriod;
-    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot;
+    /** Existing callers may provide a snapshot; workflow callers intentionally do not. */
+    evidenceSnapshot?: FounderWeeklyReviewEvidenceSnapshot;
+    collectionInput?: FounderWeeklyReviewCollectionInput;
     createdByActorId: string;
 }
 
@@ -211,6 +321,12 @@ export interface FounderWeeklyReviewClaimInput {
     runId: string;
     generationClaimId: string;
     generationJobId?: string;
+}
+
+export interface FounderWeeklyReviewCollectionClaimInput {
+    companyId: bigint;
+    runId: string;
+    collectionClaimId: string;
 }
 
 export interface FounderWeeklyReviewGenerationFailure {
@@ -241,6 +357,10 @@ export function parseFounderWeeklyReviewEvidenceSnapshot(
     value: unknown
 ): FounderWeeklyReviewEvidenceSnapshot {
     return FounderWeeklyReviewEvidenceSnapshotSchema.parse(value);
+}
+
+export function parseFounderWeeklyReviewCollectionInput(value: unknown): FounderWeeklyReviewCollectionInput {
+    return FounderWeeklyReviewCollectionInputSchema.parse(value);
 }
 
 export function parseFounderWeeklyReviewModelMetadata(

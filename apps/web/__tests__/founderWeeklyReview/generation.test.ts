@@ -241,6 +241,20 @@ describe("Founder Weekly Review generation", () => {
         expect(first.modelMetadata.promptHash).toBe(second.modelMetadata.promptHash);
     });
 
+    it("uses the concise founder-review generation contract", async () => {
+        const generate = fake(validPayload());
+        await generateFounderWeeklyReview({ evidenceSnapshot: completeSnapshot(), generate });
+        const system = generate.mock.calls[0][0].system as string;
+        expect(system).toContain("decision-oriented founder review, not an evidence transcript");
+        expect(system).toContain("at most 3 items in each section");
+        expect(system).toContain("one concise sentence whenever possible");
+        expect(system).toContain("Synthesize related evidence into one focused claim");
+        expect(system).toContain("do not create one output item per evidence source");
+        expect(system).toContain("optional rationale should be brief");
+        expect(system).not.toContain("2–4 sentences per substantive item");
+        expect(system).not.toContain("600–1,000 words overall");
+    });
+
     it("canonicalizes metadata key order before building the prompt and hash", async () => {
         const firstSnapshot = completeSnapshot();
         firstSnapshot.items[0]!.metadata = { changeType: "modified", alignmentMethod: "structure_path" };

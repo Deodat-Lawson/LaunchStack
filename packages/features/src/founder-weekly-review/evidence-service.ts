@@ -26,6 +26,7 @@ import {
     materializeDocumentChangesWithAnalyzer,
     type DocumentChangeMaterialityAnalyzer,
 } from "./document-change-materiality-analyzer";
+import type { DeterministicMaterialChangeDiagnostics } from "./document-change-materiality";
 import {
     buildWorkspaceDocumentEvidence,
     normalizeFounderContextRetrievalQuery,
@@ -173,6 +174,7 @@ export class FounderWeeklyReviewEvidenceService {
         private readonly documentChangeSource: FounderWeeklyReviewDocumentChangeSource = { kind: "unconfigured" },
         private readonly workspaceDocumentStore?: FounderWeeklyReviewWorkspaceDocumentStore,
         private readonly documentChangeMaterialityAnalyzer?: DocumentChangeMaterialityAnalyzer,
+        private readonly onDocumentChangeDiagnostics?: (diagnostics: DeterministicMaterialChangeDiagnostics) => void,
     ) {}
 
     async collectDocumentChangeEvidence(companyId: bigint, startInclusive: Date, endExclusive: Date): Promise<FounderWeeklyReviewEvidenceItem[]> {
@@ -204,6 +206,7 @@ export class FounderWeeklyReviewEvidenceService {
                 pairInputs,
                 this.documentChangeMaterialityAnalyzer,
             );
+            this.onDocumentChangeDiagnostics?.(materialized.diagnostics);
             const items = [...materialized.items];
             warnings.push(...materialized.warnings.map((item) => warning(item.code, item.message, "document_change")));
             const pairedCurrentVersionIds = new Set(pairs.map((pair) => pair.currentVersionId));

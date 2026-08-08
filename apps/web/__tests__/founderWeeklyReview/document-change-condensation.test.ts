@@ -284,6 +284,13 @@ describe("deterministic document-change condensation", () => {
         expect(FounderWeeklyReviewEvidenceItemSchema.safeParse(evidence[0]).success).toBe(true);
     });
 
+    it("reports the actual deterministic no-op count used by the collector", () => {
+        const result = condenseDocumentChanges([{ pair: pair(), alignments: [modified(7, "  same\r\nvalue\u00a0 ", "same\nvalue ")] }]);
+        expect(result.diagnostics.deterministicNoOpCount).toBe(1);
+        expect(result.rawChanges).toHaveLength(0);
+        expect(result.selectedGroups).toHaveLength(0);
+    });
+
     it("condenses a deterministic 20-page, 40-chunk enterprise fixture before the prompt envelope", () => {
         const versionPair = pair(44n);
         const alignments: ChunkAlignment[] = [];

@@ -79,7 +79,7 @@ export async function generateStructuredWithMetadata<TSchema extends ZodType>(
       ...(resolved.temperature === undefined ? {} : { temperature: resolved.temperature }),
       ...(input.maxOutputTokens !== undefined
         ? { maxOutputTokens: input.maxOutputTokens }
-        : input.capability === "founderWeeklyReview" ? { maxOutputTokens: 1800 } : {}),
+        : input.capability === "founderWeeklyReview" ? { maxOutputTokens: 2400 } : {}),
       ...((input.timeoutMs !== undefined || resolved.structuredOutputMode === "json_object")
         ? { abortSignal: AbortSignal.timeout(input.timeoutMs ?? 90_000) }
         : {}),

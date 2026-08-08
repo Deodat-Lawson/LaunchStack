@@ -1,0 +1,26 @@
+{
+  "name": "multiple-versions-in-period",
+  "description": "A pre-window baseline and three adjacent in-window versions exercise pair chaining, alignment, grouping, and audit provenance.",
+  "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+  "workspaceTimezone": "America/New_York",
+  "founderContext": "Track how ownership of retry telemetry changed this week.",
+  "companies": [{
+    "name": "Northstar Analytics",
+    "underReview": true,
+    "documents": [{
+      "title": "Onboarding Reliability Plan",
+      "category": "Planning",
+      "versions": [
+        { "versionNumber": 1, "timestamp": "2026-07-10T10:00:00.000Z", "changelog": "Baseline before the reporting window.", "chunks": [{ "section": "Ownership", "content": "Product owns retry telemetry." }] },
+        { "versionNumber": 2, "timestamp": "2026-07-21T10:00:00.000Z", "changelog": "Moved retry telemetry ownership to Platform.", "chunks": [{ "section": "Ownership", "content": "Platform owns retry telemetry." }] },
+        { "versionNumber": 3, "timestamp": "2026-07-23T10:00:00.000Z", "changelog": "Added recovery monitoring to Platform ownership.", "chunks": [{ "section": "Ownership", "content": "Platform owns retry telemetry and recovery monitoring." }] },
+        { "versionNumber": 4, "timestamp": "2026-07-25T10:00:00.000Z", "changelog": "Clarified on-call paging.", "chunks": [{ "section": "Runbook", "content": "On failure, page the Platform on-call." }] }
+      ]
+    }]
+  }],
+  "expect": {
+    "evidence": { "sourceTypeCounts": { "document_change": { "min": 1 } } },
+    "documentChanges": { "minGroups": 1, "maxGroups": 8 },
+    "sourceSemantics": { "temporalEvidenceRequired": true }
+  }
+}

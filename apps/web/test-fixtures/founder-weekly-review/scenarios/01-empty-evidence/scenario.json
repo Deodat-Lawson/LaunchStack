@@ -1,0 +1,18 @@
+{
+  "name": "empty-evidence",
+  "description": "No in-window versions and no founder context produce an empty evidence snapshot.",
+  "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+  "workspaceTimezone": "America/New_York",
+  "companies": [{
+    "name": "Northstar Analytics",
+    "underReview": true,
+    "documents": [{
+      "title": "Legacy Handbook",
+      "category": "Reference",
+      "versions": [{ "versionNumber": 1, "timestamp": "2026-05-01T10:00:00.000Z", "changelog": "Outside the reporting period.", "chunks": [] }]
+    }]
+  }],
+  "expect": {
+    "evidence": { "sourceTypeCounts": { "document_change": { "exact": 0 }, "workspace_document": { "exact": 0 }, "customer_feedback": { "exact": 0 }, "founder_context": { "exact": 0 } } }
+  }
+}

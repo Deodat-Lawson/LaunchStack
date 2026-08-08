@@ -592,6 +592,9 @@ importers:
       '@launchstack/core':
         specifier: workspace:*
         version: link:../core
+      dayjs:
+        specifier: ^1.11.18
+        version: 1.11.19
       docxtemplater:
         specifier: ^3.68.3
         version: 3.68.3

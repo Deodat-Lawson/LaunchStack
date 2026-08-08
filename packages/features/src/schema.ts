@@ -14,3 +14,4 @@ export * from "./trend-search/cache-schema";
 export * from "./client-prospector/schema";
 export * from "./company-metadata/schema";
 export * from "./marketing-pipeline/schema";
+export * from "./founder-weekly-review/schema";

@@ -17,9 +17,49 @@ export const FounderWeeklyReviewStatusSchema = z.enum([
 ]);
 export type FounderWeeklyReviewStatus = z.infer<typeof FounderWeeklyReviewStatusSchema>;
 
+/**
+ * A date the calendar actually has. The shape regex alone accepts 2026-02-31,
+ * which then silently rolls forward into March when it reaches a Date.
+ */
+function isRealCalendarDate(value: string): boolean {
+    const [year, month, day] = value.split("-").map(Number) as [number, number, number];
+    const date = new Date(Date.UTC(year, month - 1, day));
+    return (
+        date.getUTCFullYear() === year &&
+        date.getUTCMonth() === month - 1 &&
+        date.getUTCDate() === day
+    );
+}
+
+const CalendarDateSchema = z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Expected a YYYY-MM-DD date")
+    .refine(isRealCalendarDate, "Not a real calendar date");
+
+/**
+ * An IANA zone the host's ICU data recognizes. Rejecting it at the edge matters
+ * because an unknown zone is a permanent user-input error: accepted here, it
+ * would be persisted and then fail inside the worker, where Inngest treats it
+ * as transient and retries it to exhaustion.
+ */
+export function isValidTimeZone(timeZone: string): boolean {
+    try {
+        new Intl.DateTimeFormat("en-US", { timeZone });
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+export const WorkspaceTimezoneSchema = z
+    .string()
+    .min(1)
+    .max(128)
+    .refine(isValidTimeZone, "Not a recognized IANA time zone");
+
 /** Durable, request-derived inputs needed to collect evidence after the HTTP response. */
 export const FounderWeeklyReviewCollectionInputSchema = z.object({
-    workspaceTimezone: z.string().min(1).max(128),
+    workspaceTimezone: WorkspaceTimezoneSchema,
     founderContext: z.string().min(1).max(4000).optional(),
     actorExternalUserId: z.string().min(1).max(256),
 }).strict();
@@ -32,8 +72,8 @@ export type FounderWeeklyReviewOperationType = z.infer<
 
 export const ReportingPeriodSchema = z
     .object({
-        start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-        end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+        start: CalendarDateSchema,
+        end: CalendarDateSchema,
     })
     .refine((value) => value.start <= value.end, {
         message: "Reporting period start must be on or before end",

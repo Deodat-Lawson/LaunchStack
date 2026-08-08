@@ -6,7 +6,7 @@ import { generateFounderWeeklyReview } from "@launchstack/features/founder-weekl
 import { FounderWeeklyReviewGenerationValidationError } from "@launchstack/features/founder-weekly-review";
 import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
 import { canonicalFounderWeeklyReviewEvidenceCollector } from "~/server/founder-weekly-review/evidence-collector";
-import { claimPendingDispatches, markDispatchDispatched, returnDispatchToPending } from "~/server/founder-weekly-review/dispatch-service";
+import { claimPendingDispatches, DISPATCH_CLAIM_BATCH_SIZE, markDispatchDispatched, returnDispatchToPending } from "~/server/founder-weekly-review/dispatch-service";
 import { founderWeeklyReviewCitationFailures, founderWeeklyReviewDispatchFailures, founderWeeklyReviewGenerationTotal, founderWeeklyReviewJobsEnqueued, founderWeeklyReviewRunsCompleted, founderWeeklyReviewRunsFailed, founderWeeklyReviewStageDuration, logFounderWeeklyReview } from "~/server/founder-weekly-review/observability";
 
 const GenerationEventSchema = z.object({ runId: z.string().min(1), companyId: z.string().min(1), generationJobId: z.string().min(1), generationClaimId: z.string().min(1) });
@@ -14,23 +14,37 @@ const GenerationEventSchema = z.object({ runId: z.string().min(1), companyId: z.
 export const founderWeeklyReviewDispatcher = inngest.createFunction(
   { id: "founder-weekly-review-dispatcher", retries: 3 },
   { event: "founder-weekly-review/dispatch.requested" },
-  async ({ step }) => step.run("dispatch-pending", async () => {
-    const dispatches = await claimPendingDispatches();
-    for (const dispatch of dispatches) {
-      try {
-        await inngest.send({ id: dispatch.eventId, name: "founder-weekly-review/generation.requested", data: {
-          runId: dispatch.runId, companyId: dispatch.companyId.toString(), generationJobId: dispatch.generationJobId, generationClaimId: dispatch.generationClaimId,
-        }});
-        await markDispatchDispatched(dispatch.id);
-        founderWeeklyReviewJobsEnqueued.inc({ operation: dispatch.operationType });
-        logFounderWeeklyReview({ runId: dispatch.runId, companyId: dispatch.companyId.toString(), stage: "dispatch_sent", status: "dispatched" });
-      } catch {
-        await returnDispatchToPending(dispatch.id, "dispatch_failed");
-        founderWeeklyReviewDispatchFailures.inc();
+  async ({ step }) => {
+    const dispatched = await step.run("dispatch-pending", async () => {
+      const dispatches = await claimPendingDispatches(DISPATCH_CLAIM_BATCH_SIZE);
+      for (const dispatch of dispatches) {
+        try {
+          await inngest.send({ id: dispatch.eventId, name: "founder-weekly-review/generation.requested", data: {
+            runId: dispatch.runId, companyId: dispatch.companyId.toString(), generationJobId: dispatch.generationJobId, generationClaimId: dispatch.generationClaimId,
+          }});
+          await markDispatchDispatched(dispatch.id);
+          founderWeeklyReviewJobsEnqueued.inc({ operation: dispatch.operationType });
+          logFounderWeeklyReview({ runId: dispatch.runId, companyId: dispatch.companyId.toString(), stage: "dispatch_sent", status: "dispatched" });
+        } catch {
+          await returnDispatchToPending(dispatch.id, "dispatch_failed");
+          founderWeeklyReviewDispatchFailures.inc();
+        }
       }
+      return dispatches.length;
+    });
+
+    // A full batch means there is probably more waiting. Chain another drain
+    // immediately rather than leaving the remainder to the five-minute
+    // reconciler, which is a backstop for lost events, not a queue pump.
+    if (dispatched === DISPATCH_CLAIM_BATCH_SIZE) {
+      await step.sendEvent("drain-remaining", {
+        name: "founder-weekly-review/dispatch.requested",
+        data: {},
+      });
     }
-    return { dispatched: dispatches.length };
-  })
+
+    return { dispatched };
+  }
 );
 
 /** Periodic reconciliation covers a process failure after the DB outbox commit. */
@@ -43,26 +57,76 @@ export const founderWeeklyReviewDispatchReconciler = inngest.createFunction(
   }
 );
 
+/**
+ * Terminal transition once Inngest has exhausted its retries.
+ *
+ * Exported so the routing can be tested directly: the interesting logic is
+ * which mutation a given status needs, and reaching that through a real
+ * function invocation is not practical.
+ *
+ * Every status needs its own mutation, because each one is guarded on the
+ * status it transitions FROM. Routing everything that is not `collecting` to
+ * the generating-mutation left a run whose claim never landed sitting in
+ * `queued` forever — the row the dispatcher had already given up on.
+ */
+export async function handleFounderWeeklyReviewGenerationFailure(
+  event: unknown,
+  worker: FounderWeeklyReviewWorkerService = new FounderWeeklyReviewWorkerService(),
+): Promise<void> {
+  // `onFailure` fires on Inngest's `inngest/function.failed` envelope, whose
+  // data is `{ error, event }` — the original trigger sits one level down.
+  // Parsing `event.data` directly never matches, so every exhausted run was
+  // silently left with no terminal status at all.
+  const original = (event as { data?: { event?: { data?: unknown } } }).data
+    ?.event?.data;
+  const parsed = GenerationEventSchema.safeParse(original);
+  if (!parsed.success) return;
+
+  const { runId, generationJobId, generationClaimId } = parsed.data;
+  const companyId = BigInt(parsed.data.companyId);
+  const current = await worker.getRun(companyId, runId).catch(() => null);
+  if (!current) return;
+
+  const failure = (errorCode: string, errorMessage: string) => ({ errorCode, errorMessage });
+
+  switch (current.status) {
+    case "collecting":
+      await worker
+        .markCollectionFailed(
+          { companyId, runId, collectionClaimId: generationClaimId },
+          failure("evidence_collection_failed", "Evidence collection failed after retries."),
+        )
+        .catch(() => undefined);
+      return;
+    case "generating":
+      await worker
+        .markGenerationFailed(
+          { companyId, runId, generationJobId, generationClaimId },
+          failure("generation_failed", "Generation failed after retries."),
+        )
+        .catch(() => undefined);
+      return;
+    case "queued":
+      // Retries ran out before either claim transition succeeded.
+      await worker
+        .markQueuedRunFailed(
+          companyId,
+          runId,
+          failure("generation_failed", "Generation failed before the run could be claimed."),
+        )
+        .catch(() => undefined);
+      return;
+    case "draft":
+    case "published":
+    case "failed":
+      // Already terminal — a late failure callback must not overwrite it.
+      return;
+  }
+}
+
 export const founderWeeklyReviewGenerationJob = inngest.createFunction(
   { id: "founder-weekly-review-generation", retries: 3, concurrency: { key: "event.data.runId", limit: 1 },
-    onFailure: async ({ event }) => {
-      // `onFailure` fires on Inngest's `inngest/function.failed` envelope, whose
-      // data is `{ error, event }` — the original trigger sits one level down.
-      // Parsing `event.data` directly never matches, so every exhausted run was
-      // silently left in `collecting`/`generating` with no terminal status.
-      const original = (event as { data?: { event?: { data?: unknown } } }).data
-        ?.event?.data;
-      const parsed = GenerationEventSchema.safeParse(original);
-      if (!parsed.success) return;
-      const worker = new FounderWeeklyReviewWorkerService();
-      const companyId = BigInt(parsed.data.companyId);
-      const current = await worker.getRun(companyId, parsed.data.runId).catch(() => null);
-      if (current?.status === "collecting" && !current.evidenceSnapshot) {
-        await worker.markCollectionFailed({ companyId, runId: parsed.data.runId, collectionClaimId: parsed.data.generationClaimId }, { errorCode: "evidence_collection_failed", errorMessage: "Evidence collection failed after retries." }).catch(() => undefined);
-      } else {
-        await worker.markGenerationFailed({ companyId, runId: parsed.data.runId, generationJobId: parsed.data.generationJobId, generationClaimId: parsed.data.generationClaimId }, { errorCode: "generation_failed", errorMessage: "Generation failed after retries." }).catch(() => undefined);
-      }
-    } },
+    onFailure: ({ event }) => handleFounderWeeklyReviewGenerationFailure(event) },
   { event: "founder-weekly-review/generation.requested" },
   async ({ event, step }) => {
     const data = GenerationEventSchema.parse(event.data);

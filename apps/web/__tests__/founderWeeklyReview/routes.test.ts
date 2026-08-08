@@ -50,4 +50,30 @@ describe("Founder Weekly Review create route", () => {
         const { handler, createRunWithDispatch, deps } = setup({ evidenceCollector: { collectFounderWeeklyReviewEvidence: jest.fn().mockRejectedValue(new Error("nope")) } });
         expect((await handler(new Request("http://test", { method: "POST", body: JSON.stringify(body) }))).status).toBe(202); expect(createRunWithDispatch).toHaveBeenCalledTimes(1); expect(deps.recordRunCreated).toHaveBeenCalledTimes(1);
     });
+
+    // Each of these is a permanent user-input error. Persisting one would hand
+    // the worker an input it can never succeed on, and Inngest would retry it
+    // to exhaustion before anyone saw a message.
+    it.each([
+        ["an impossible calendar date", { reportingPeriod: { start: "2026-02-31", end: "2026-02-31" } }],
+        ["an inverted reporting period", { reportingPeriod: { start: "2026-07-12", end: "2026-07-06" } }],
+        ["an unknown time zone", { workspaceTimezone: "Mars/Olympus_Mons" }],
+    ])("rejects %s with 400 and never creates a run", async (_label, override) => {
+        const { handler, createRunWithDispatch } = setup();
+        const response = await handler(
+            new Request("http://test", { method: "POST", body: JSON.stringify({ ...body, ...override }) })
+        );
+        expect(response.status).toBe(400);
+        expect(createRunWithDispatch).not.toHaveBeenCalled();
+    });
+
+    it("normalizes a whitespace-only founder context to absent", async () => {
+        const { handler, createRunWithDispatch } = setup();
+        await handler(new Request("http://test", { method: "POST", body: JSON.stringify({ ...body, founderContext: "   " }) }));
+        expect(createRunWithDispatch).toHaveBeenCalledWith(
+            expect.objectContaining({
+                collectionInput: { workspaceTimezone: "UTC", founderContext: undefined, actorExternalUserId: "u" },
+            })
+        );
+    });
 });

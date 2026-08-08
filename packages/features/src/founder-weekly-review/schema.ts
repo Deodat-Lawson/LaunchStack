@@ -70,13 +70,13 @@ export const founderWeeklyReviewRuns = pgTable(
         evidenceSnapshot: jsonb("evidence_snapshot").$type<Record<string, unknown> | null>(),
         evidenceSchemaVersion: varchar("evidence_schema_version", { length: 64 }).notNull(),
         // What the collector needs to rebuild the evidence pack: the workspace
-        // timezone and the requesting actor. Defaulted at the database level so
-        // adding it cannot rewrite a populated table; the application always
-        // supplies a real value on insert.
+        // timezone and the requesting actor. Deliberately has no database
+        // default — every read parses this through a strict contract, so a
+        // placeholder `{}` would satisfy the column and then fail on the way
+        // out. The migration backfills existing rows instead.
         collectionInput: jsonb("collection_input")
             .$type<Record<string, unknown>>()
-            .notNull()
-            .default(sql`'{}'::jsonb`),
+            .notNull(),
         collectionClaimId: varchar("collection_claim_id", { length: 128 }),
         collectionStartedAt: timestamp("collection_started_at", { withTimezone: true }),
         evidenceCollectedAt: timestamp("evidence_collected_at", { withTimezone: true }),

@@ -144,12 +144,33 @@ export interface FounderWeeklyReviewEvidenceSourceResult {
     warnings: FounderWeeklyReviewEvidenceWarning[];
 }
 
+export interface VersionChunkLoadResult {
+    state: "complete" | "partial" | "missing";
+    chunks: VersionChunk[];
+    warnings: string[];
+}
+
 /** Implemented in apps/web so pure feature logic never depends on Drizzle. */
 export interface FounderWeeklyReviewDocumentChangeStore {
-    listVersionsBeforePeriodEnd(companyId: bigint, endExclusive: Date): Promise<DocumentVersionForComparison[]>;
-    getDocumentChunksForVersion(input: { companyId: bigint; documentId: bigint; versionId: number }): Promise<
-        { state: "complete" | "partial" | "missing"; chunks: VersionChunk[]; warnings: string[] }
-    >;
+    /**
+     * Only what the period can diff: in-window versions plus one predecessor
+     * per touched document. Asking for all history before the period end made
+     * the cost scale with the workspace rather than with the reporting period.
+     */
+    listVersionsForReportingPeriod(
+        companyId: bigint,
+        startInclusive: Date,
+        endExclusive: Date,
+    ): Promise<DocumentVersionForComparison[]>;
+    /** Keyed `${documentId}:${versionId}`; a missing entry means inaccessible. */
+    getDocumentChunksForVersions(input: {
+        companyId: bigint;
+        versions: readonly { documentId: bigint; versionId: number }[];
+    }): Promise<Map<string, VersionChunkLoadResult>>;
+}
+
+export function versionChunkKey(documentId: bigint, versionId: number): string {
+    return `${documentId.toString()}:${versionId}`;
 }
 
 export type FounderWeeklyReviewDocumentChangeSource =
@@ -176,15 +197,30 @@ export class FounderWeeklyReviewEvidenceService {
     private async collectDocumentChangeEvidenceResult(companyId: bigint, startInclusive: Date, endExclusive: Date): Promise<FounderWeeklyReviewEvidenceSourceResult> {
         if (this.documentChangeSource.kind === "computed") {
             const store = this.documentChangeSource.store;
-            const versions = await store.listVersionsBeforePeriodEnd(companyId, endExclusive);
-            const pairs = selectVersionPairsForReportingPeriod(versions, startInclusive, endExclusive);
+            const versions = await store.listVersionsForReportingPeriod(companyId, startInclusive, endExclusive);
+            const allPairs = selectVersionPairsForReportingPeriod(versions, startInclusive, endExclusive);
             const items: FounderWeeklyReviewEvidenceItem[] = [];
             const warnings: FounderWeeklyReviewEvidenceWarning[] = [];
+            // Cap the pairs BEFORE loading chunks and aligning them. Capping
+            // only the finished items meant a workspace with thousands of
+            // changed documents paid for every comparison and then discarded
+            // almost all of it. Pairs are already ordered oldest-first, so the
+            // retained window is the stable one.
+            const pairs = allPairs.slice(0, MAX_ITEMS_PER_SOURCE);
+            if (allPairs.length > pairs.length) {
+                warnings.push(warning("document_change_truncated", "Document change evidence was truncated to the per-source limit.", "document_change"));
+            }
+            const chunkLoads = await store.getDocumentChunksForVersions({
+                companyId,
+                versions: pairs.flatMap((pair) => [
+                    { documentId: pair.documentId, versionId: pair.previousVersionId },
+                    { documentId: pair.documentId, versionId: pair.currentVersionId },
+                ]),
+            });
+            const inaccessible: VersionChunkLoadResult = { state: "missing", chunks: [], warnings: ["document_version_not_accessible"] };
             for (const pair of pairs) {
-                const [previous, current] = await Promise.all([
-                    store.getDocumentChunksForVersion({ companyId, documentId: pair.documentId, versionId: pair.previousVersionId }),
-                    store.getDocumentChunksForVersion({ companyId, documentId: pair.documentId, versionId: pair.currentVersionId }),
-                ]);
+                const previous = chunkLoads.get(versionChunkKey(pair.documentId, pair.previousVersionId)) ?? inaccessible;
+                const current = chunkLoads.get(versionChunkKey(pair.documentId, pair.currentVersionId)) ?? inaccessible;
                 if (previous.state === "missing" || current.state === "missing") {
                     warnings.push(warning("document_change_chunks_missing", "A version pair could not be compared because processed historical chunks are missing.", "document_change"));
                     continue;
@@ -194,7 +230,10 @@ export class FounderWeeklyReviewEvidenceService {
                 }
                 items.push(...buildDocumentChangeEvidence(pair, alignVersionChunks(previous.chunks, current.chunks)));
             }
-            const pairedCurrentVersionIds = new Set(pairs.map((pair) => pair.currentVersionId));
+            // Against every pair the period produced, not the capped subset —
+            // a version dropped by the cap was truncated, not un-paired, and
+            // reporting it as a missing baseline would be a false alarm.
+            const pairedCurrentVersionIds = new Set(allPairs.map((pair) => pair.currentVersionId));
             const inPeriodWithNoPair = versions.some((version) =>
                 version.createdAt >= startInclusive
                 && version.createdAt < endExclusive
@@ -202,7 +241,11 @@ export class FounderWeeklyReviewEvidenceService {
             );
             if (inPeriodWithNoPair) warnings.push(warning("document_change_baseline_missing", "An in-period document version has no predecessor, so no content diff was generated.", "document_change"));
             const ordered = orderEvidenceItems(dedupeEvidenceItems(items));
-            if (ordered.length > MAX_ITEMS_PER_SOURCE) warnings.push(warning("document_change_truncated", "Document change evidence was truncated to the per-source limit.", "document_change"));
+            // The pair cap may already have reported truncation; one warning is
+            // enough to tell the reader the pack is not exhaustive.
+            if (ordered.length > MAX_ITEMS_PER_SOURCE && allPairs.length === pairs.length) {
+                warnings.push(warning("document_change_truncated", "Document change evidence was truncated to the per-source limit.", "document_change"));
+            }
             return { items: ordered.slice(0, MAX_ITEMS_PER_SOURCE), warnings };
         }
         if (this.documentChangeSource.kind !== "legacy") {

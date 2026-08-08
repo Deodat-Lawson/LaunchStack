@@ -1,5 +1,5 @@
 {
-  "id": "1668bfb8-e9be-4526-8b8d-6bf8f6285f11",
+  "id": "ce975614-cf76-45c9-8efc-6d73d8dbcef6",
   "prevId": "8eb40f38-8f42-4abb-8847-c5c9668c1081",
   "version": "7",
   "dialect": "postgresql",
@@ -4714,8 +4714,7 @@
           "name": "collection_input",
           "type": "jsonb",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::jsonb"
+          "notNull": true
         },
         "collection_claim_id": {
           "name": "collection_claim_id",

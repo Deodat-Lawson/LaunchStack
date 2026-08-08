@@ -78,9 +78,15 @@ describe("Week 3 document change domain logic", () => {
 
     it("collects one computed change for the controlled v1-to-v2 case", async () => {
         const versions = [version(1n, 1, 1, "2026-01-01T00:00:00.000Z"), version(1n, 2, 2, "2026-02-02T00:00:00.000Z")];
-        const store = { listVersionsBeforePeriodEnd: jest.fn().mockResolvedValue(versions), getDocumentChunksForVersion: jest.fn()
-            .mockResolvedValueOnce({ state: "complete", chunks: [chunk(10, 1n, "Before", { structurePath: "/plan" })], warnings: [] })
-            .mockResolvedValueOnce({ state: "complete", chunks: [chunk(20, 2n, "After", { structurePath: "/plan" })], warnings: [] }) };
+        const store = {
+            listVersionsForReportingPeriod: jest.fn().mockResolvedValue(versions),
+            getDocumentChunksForVersions: jest.fn().mockResolvedValue(
+                new Map([
+                    ["1:1", { state: "complete", chunks: [chunk(10, 1n, "Before", { structurePath: "/plan" })], warnings: [] }],
+                    ["1:2", { state: "complete", chunks: [chunk(20, 2n, "After", { structurePath: "/plan" })], warnings: [] }],
+                ])
+            ),
+        };
         const service = new FounderWeeklyReviewEvidenceService({} as never, undefined, { kind: "computed", store });
         await expect(service.collectDocumentChangeEvidence(1n, new Date("2026-02-01T00:00:00.000Z"), new Date("2026-02-03T00:00:00.000Z"))).resolves.toEqual([
             expect.objectContaining({ sourceTimestamp: "2026-02-02T00:00:00.000Z", metadata: expect.objectContaining({ previousVersionId: 1, currentVersionId: 2, changeType: "modified" }) }),

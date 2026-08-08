@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { FounderWeeklyReviewRepository } from "@launchstack/features/founder-weekly-review";
+import {
+  FounderWeeklyReviewRepository,
+  ReportingPeriodSchema,
+  WorkspaceTimezoneSchema,
+} from "@launchstack/features/founder-weekly-review";
 import type { FounderWeeklyReviewEvidenceCollector } from "~/server/founder-weekly-review/evidence-collector";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
 import { productionFounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
@@ -12,8 +16,13 @@ import { founderWeeklyReviewRunsCreated, logFounderWeeklyReview } from "~/server
 
 const CreateSchema = z.object({
   requestKey: z.string().min(1).max(128),
-  reportingPeriod: z.object({ start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }),
-  workspaceTimezone: z.string().min(1).max(128),
+  // The shared contract, not a local copy of it: it rejects impossible dates
+  // and an inverted period, which a bare shape regex accepts. An invalid
+  // reporting period or time zone is a permanent user error, so it has to fail
+  // as a 400 here rather than be persisted and retried to exhaustion by the
+  // worker that eventually reads it.
+  reportingPeriod: ReportingPeriodSchema,
+  workspaceTimezone: WorkspaceTimezoneSchema,
   // An empty (or whitespace-only) box means "no founder context", not a
   // zero-length one. The collection contract requires min(1), so passing `""`
   // straight through was accepted here and then rejected on persistence, which

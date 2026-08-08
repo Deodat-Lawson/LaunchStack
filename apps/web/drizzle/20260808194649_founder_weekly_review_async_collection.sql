@@ -17,7 +17,23 @@ CREATE TABLE "pdr_ai_v2_founder_weekly_review_dispatches" (
 );
 --> statement-breakpoint
 ALTER TABLE "pdr_ai_v2_founder_weekly_review_runs" ALTER COLUMN "evidence_snapshot" DROP NOT NULL;--> statement-breakpoint
-ALTER TABLE "pdr_ai_v2_founder_weekly_review_runs" ADD COLUMN "collection_input" jsonb DEFAULT '{}'::jsonb NOT NULL;--> statement-breakpoint
+-- collection_input is NOT NULL with no default, so the generated single-
+-- statement ADD COLUMN would fail on any table that already holds rows.
+-- Split into the safe three-step form: add nullable, backfill, then constrain.
+--
+-- Every read parses this column through a strict contract requiring both
+-- workspaceTimezone and actorExternalUserId, so a placeholder value would
+-- satisfy the database and fail the application on the way out. Existing rows
+-- carry both facts already: the timezone in the evidence snapshot they were
+-- built with, and the actor in created_by_actor_id.
+ALTER TABLE "pdr_ai_v2_founder_weekly_review_runs" ADD COLUMN "collection_input" jsonb;--> statement-breakpoint
+UPDATE "pdr_ai_v2_founder_weekly_review_runs"
+SET "collection_input" = jsonb_build_object(
+    'workspaceTimezone', COALESCE("evidence_snapshot"->>'workspaceTimezone', 'UTC'),
+    'actorExternalUserId', regexp_replace("created_by_actor_id", '^user:', '')
+)
+WHERE "collection_input" IS NULL;--> statement-breakpoint
+ALTER TABLE "pdr_ai_v2_founder_weekly_review_runs" ALTER COLUMN "collection_input" SET NOT NULL;--> statement-breakpoint
 ALTER TABLE "pdr_ai_v2_founder_weekly_review_runs" ADD COLUMN "collection_claim_id" varchar(128);--> statement-breakpoint
 ALTER TABLE "pdr_ai_v2_founder_weekly_review_runs" ADD COLUMN "collection_started_at" timestamp with time zone;--> statement-breakpoint
 ALTER TABLE "pdr_ai_v2_founder_weekly_review_runs" ADD COLUMN "evidence_collected_at" timestamp with time zone;--> statement-breakpoint

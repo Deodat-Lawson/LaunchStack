@@ -5,7 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
 import {
   scorePost,

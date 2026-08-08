@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { CampaignLifecycleError } from "@launchstack/features/email-pipeline";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
@@ -80,9 +80,12 @@ export async function readJson(request: Request): Promise<unknown> {
   }
 }
 
-export function unsubscribeBaseUrl(request: Request, companyId: number) {
-  const origin = new URL(request.url).origin;
-  return `${origin}/api/email-pipeline/unsubscribe/${companyId}`;
+/**
+ * Base for unsubscribe links. The company and address travel inside the signed
+ * token the feature layer appends, never as guessable path segments.
+ */
+export function unsubscribeBaseUrl(request: Request) {
+  return `${new URL(request.url).origin}/api/email-pipeline/unsubscribe`;
 }
 
 export function fail(message: string, status: number, extra?: object) {

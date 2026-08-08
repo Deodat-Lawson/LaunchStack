@@ -92,6 +92,8 @@ export interface CampaignRecord {
   goal: string | null;
   status: CampaignStatus;
   approvedVersionId: number | null;
+  /** Set only for campaigns created by an unattended run. */
+  automationKey: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -116,7 +118,8 @@ export interface SendAttemptRecord {
   templateVersionId: number;
   idempotencyKey: string;
   mode: SendMode;
-  status: "running" | "completed" | "failed";
+  /** `abandoned` — the process died mid-delivery and recovery reclaimed it. */
+  status: "running" | "completed" | "failed" | "abandoned";
   recipientCount: number;
   sentCount: number;
   failedCount: number;
@@ -149,12 +152,24 @@ export interface RenderedEmail {
   body: string;
 }
 
+/**
+ * `queued` is the in-flight claim: written before the provider call, so a
+ * process that dies mid-delivery leaves evidence that the address may already
+ * have been emailed. It is never a final state in a completed attempt.
+ */
 export type SendStatus =
+  | "queued"
   | "dry_run"
   | "sent"
   | "failed"
   | "suppressed"
   | "skipped";
+
+/** Statuses that must block any future delivery to the same address. */
+export const DELIVERED_OR_IN_FLIGHT: ReadonlySet<SendStatus> = new Set<SendStatus>([
+  "sent",
+  "queued",
+]);
 
 export interface SendResult {
   recipientEmail: string;

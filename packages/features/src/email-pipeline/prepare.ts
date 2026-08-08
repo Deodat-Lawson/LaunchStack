@@ -7,7 +7,7 @@ import {
   setCampaignStatus,
   upsertRecipients,
 } from "./db";
-import { EMAIL_MODELS, EMAIL_PROMPT_VERSION } from "./models";
+import { EMAIL_PROMPT_VERSION, EMAIL_ROUTES, routeLabel } from "./models";
 import {
   CampaignLifecycleError,
   EmailTemplateSchema,
@@ -100,7 +100,7 @@ export async function prepareEmailCampaign(
     template,
     source: args.template ? "human_edited" : "ai_generated",
     goal: goal ?? null,
-    model: args.template ? null : EMAIL_MODELS.templateGeneration,
+    model: args.template ? null : routeLabel(EMAIL_ROUTES.templateGeneration),
     promptVersion: args.template ? null : EMAIL_PROMPT_VERSION,
     review,
     createdBy: args.actorUserId ?? null,

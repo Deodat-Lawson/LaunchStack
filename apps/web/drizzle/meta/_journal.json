@@ -15,6 +15,13 @@
       "when": 1786146482828,
       "tag": "20260807234802_founder_weekly_review",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786227047705,
+      "tag": "20260808221047_email_campaign_lifecycle",
+      "breakpoints": true
     }
   ]
 }

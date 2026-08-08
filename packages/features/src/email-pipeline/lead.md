@@ -12,7 +12,7 @@ Feature lives in `packages/features/src/email-pipeline/` (mirror
 `packages/features/src/marketing-pipeline/`). Reuse company context from
 [`marketing-pipeline/context.ts`](../marketing-pipeline/context.ts)
 (`buildCompanyKnowledgeContext`, `extractCompanyDNA`) and the LLM pattern
-(`getChatModelByType` + `withStructuredOutput`, per-stage models in a `models.ts`).
+(`resolveChatModel` + `invokeStructured`, per-stage routes in a `models.ts`).
 
 ## Phase 0 — Frozen contract (do first; unblocks member.md)
 - [ ] DB schema in `packages/core/src/db/schema/` (`pgTable`, `pdr_ai_v2_` prefix) + a Drizzle migration:

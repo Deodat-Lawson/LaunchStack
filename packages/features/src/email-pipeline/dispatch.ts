@@ -1,21 +1,29 @@
+import { createHash } from "node:crypto";
+
+import { createUnsubscribeToken } from "./unsubscribe-token";
+
 import type { MergeFn, SendAdapter } from "./contracts";
 import { sendCampaign } from "./send";
 import {
   applyRecipientStatuses,
   attemptResults,
+  claimRecipientSend,
   claimSendAttempt,
   completeSendAttempt,
   freezeRecipients,
   getTemplateVersion,
   isSuppressed,
+  reclaimAbandonedAttempts,
+  recordSendOutcome,
   requireCampaign,
-  saveSends,
   sentEmails,
   setCampaignStatus,
+  touchSendAttempt,
 } from "./db";
 import {
   CampaignLifecycleError,
   type CampaignRecord,
+  type CampaignStatus,
   type Recipient,
   type SendAttemptRecord,
   type SendMode,
@@ -36,6 +44,18 @@ import {
  * not re-send at all.
  */
 
+/**
+ * How long a `running` attempt may go without a heartbeat before recovery
+ * treats it as dead. Generous, because the cost of reclaiming a live attempt
+ * is higher than the cost of waiting.
+ */
+const STALE_ATTEMPT_MS = 15 * 60 * 1000;
+
+/** Statuses from which delivery has not yet been cleared by a human. */
+const PRE_APPROVAL_STATUSES: ReadonlySet<CampaignStatus> = new Set<CampaignStatus>(
+  ["draft", "needs_revision", "pending_approval"],
+);
+
 export interface DispatchEmailCampaignArgs {
   companyId: number;
   campaignId: number;
@@ -49,6 +69,7 @@ export interface DispatchEmailCampaignArgs {
   /** Audience for the FIRST dispatch. Ignored once the list is frozen. */
   recipients?: Recipient[];
   senderIdentity: string;
+  /** Origin-qualified base for unsubscribe links; the signed token is appended. */
   unsubscribeBaseUrl: string;
   requestedBy?: number | null;
   adapter?: SendAdapter;
@@ -82,10 +103,18 @@ export async function dispatchEmailCampaign(
     );
   }
 
-  // 1) Refuse unless a version was explicitly approved.
-  if (!campaign.approvedVersionId) {
+  // 0) Free up attempts whose process died, so one crash cannot wedge the
+  // campaign behind a permanent "already in progress".
+  await reclaimAbandonedAttempts(campaign.id, STALE_ATTEMPT_MS);
+
+  // 1) Refuse unless a version is currently approved. Appending a version
+  // clears this pointer, so an edited campaign lands here, not at the
+  // provider — the approval a reviewer gave does not carry to new content.
+  if (!campaign.approvedVersionId || PRE_APPROVAL_STATUSES.has(campaign.status)) {
     throw new CampaignLifecycleError(
-      "This campaign has no approved template version. Approve one before sending.",
+      campaign.approvedVersionId
+        ? `This campaign is ${campaign.status}; approve the current template version before sending.`
+        : "This campaign has no approved template version. Approve one before sending.",
       "campaign_not_approved",
       409,
     );
@@ -147,8 +176,8 @@ export async function dispatchEmailCampaign(
 
   await setCampaignStatus(campaign.id, "sending");
 
-  // 5) Cross-attempt guard: an address already delivered to in an earlier
-  // attempt is skipped even under a fresh idempotency key.
+  // 5) Cross-attempt guard: an address already delivered to — or left
+  // in-flight by a crashed attempt — is skipped even under a fresh key.
   const already = await sentEmails(campaign.id);
 
   let results: SendResult[];
@@ -158,9 +187,27 @@ export async function dispatchEmailCampaign(
       recipients,
       mode,
       senderIdentity: args.senderIdentity,
-      unsubscribeBaseUrl: args.unsubscribeBaseUrl,
+      unsubscribeUrl: (email) =>
+        `${args.unsubscribeBaseUrl.replace(/\/+$/, "")}/${createUnsubscribeToken({ companyId: args.companyId, email })}`,
       isSuppressed: (email) => isSuppressed(args.companyId, email),
       alreadySent: (email) => already.has(email),
+      claim: (email) =>
+        claimRecipientSend({
+          campaignId: campaign.id,
+          attemptId: attempt.id,
+          recipientEmail: email,
+          subject: version.template.subject,
+          providerIdempotencyKey: providerKey(attempt.id, email),
+        }),
+      record: (result) =>
+        recordSendOutcome({
+          campaignId: campaign.id,
+          attemptId: attempt.id,
+          subject: version.template.subject,
+          result,
+        }),
+      providerIdempotencyKey: (email) => providerKey(attempt.id, email),
+      heartbeat: () => touchSendAttempt(attempt.id),
       ...(args.adapter ? { adapter: args.adapter } : {}),
       ...(args.merge ? { merge: args.merge } : {}),
       ...(args.ratePerMinute ? { ratePerMinute: args.ratePerMinute } : {}),
@@ -176,13 +223,7 @@ export async function dispatchEmailCampaign(
     throw err;
   }
 
-  // 6) Record what the provider actually did.
-  await saveSends({
-    campaignId: campaign.id,
-    attemptId: attempt.id,
-    subject: version.template.subject,
-    results,
-  });
+  // 6) Outcomes were persisted as they happened; close the attempt out.
   await applyRecipientStatuses(campaign.id, results);
   await completeSendAttempt({
     attemptId: attempt.id,
@@ -215,4 +256,16 @@ export async function dispatchEmailCampaign(
     replayed: false,
     recipientsFrozen: alreadyFrozen,
   };
+}
+
+/**
+ * Deterministic per-(attempt, recipient) key. Stable across retries of the
+ * same attempt, distinct across attempts, and short enough for provider
+ * headers that cap key length.
+ */
+function providerKey(attemptId: number, email: string): string {
+  return createHash("sha256")
+    .update(`${attemptId}:${email.toLowerCase()}`)
+    .digest("hex")
+    .slice(0, 48);
 }

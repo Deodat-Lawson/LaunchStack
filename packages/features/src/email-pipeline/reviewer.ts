@@ -1,7 +1,6 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModelByType } from "@launchstack/core/llm";
 
-import { EMAIL_MODELS } from "./models";
+import { EMAIL_ROUTES, invokeEmailStructured } from "./models";
 import {
   TemplateReviewSchema,
   type EmailTemplate,
@@ -30,20 +29,18 @@ export async function reviewTemplate(args: {
   template: EmailTemplate;
   companyContext: string;
 }): Promise<TemplateReview> {
-  const chat = getChatModelByType(EMAIL_MODELS.templateReview, {
-    temperature: 0,
-  });
-  const model = chat.withStructuredOutput(TemplateReviewSchema, {
-    name: "template_review",
-  });
-
-  const raw = await model.invoke([
-    new SystemMessage(SYSTEM_PROMPT),
-    new HumanMessage(
-      `Company context (the facts the email may use):\n${args.companyContext}\n\n` +
-        `Template to review:\nSubject: ${args.template.subject}\n\n${args.template.body}`,
-    ),
-  ]);
+  const raw = await invokeEmailStructured(
+    EMAIL_ROUTES.templateReview,
+    TemplateReviewSchema,
+    [
+      new SystemMessage(SYSTEM_PROMPT),
+      new HumanMessage(
+        `Company context (the facts the email may use):\n${args.companyContext}\n\n` +
+          `Template to review:\nSubject: ${args.template.subject}\n\n${args.template.body}`,
+      ),
+    ],
+    "template_review",
+  );
 
   return TemplateReviewSchema.parse(raw);
 }

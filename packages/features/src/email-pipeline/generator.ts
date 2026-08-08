@@ -1,11 +1,10 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModelByType } from "@launchstack/core/llm";
 
 import {
   buildCompanyKnowledgeContext,
   extractCompanyDNA,
 } from "../marketing-pipeline/context";
-import { EMAIL_MODELS } from "./models";
+import { EMAIL_ROUTES, invokeEmailStructured } from "./models";
 import { EmailTemplateSchema, type EmailTemplate } from "./types";
 
 /**
@@ -29,9 +28,13 @@ export async function generateTemplate(args: {
   companyId: number;
   goal?: string;
 }): Promise<{ template: EmailTemplate; companyContext: string }> {
+  // A blank goal falls back too, not just a missing one — `??` would send an
+  // empty string straight into the prompt.
+  const trimmedGoal = args.goal?.trim() ?? "";
   const goal =
-    args.goal?.trim() ||
-    "Introduce our company to a relevant prospect and offer to help.";
+    trimmedGoal.length > 0
+      ? trimmedGoal
+      : "Introduce our company to a relevant prospect and offer to help.";
 
   const [context, dna] = await Promise.all([
     buildCompanyKnowledgeContext({ companyId: args.companyId, prompt: goal }),
@@ -44,19 +47,17 @@ export async function generateTemplate(args: {
     ? `${context}\n\n=== Company DNA ===\n${JSON.stringify(dna, null, 2)}`
     : context;
 
-  const chat = getChatModelByType(EMAIL_MODELS.templateGeneration, {
-    temperature: 0.4,
-  });
-  const model = chat.withStructuredOutput(EmailTemplateSchema, {
-    name: "email_template",
-  });
-
-  const raw = await model.invoke([
-    new SystemMessage(SYSTEM_PROMPT),
-    new HumanMessage(
-      `Campaign goal: ${goal}\n\nSender company context (single source of truth):\n${companyContext}`,
-    ),
-  ]);
+  const raw = await invokeEmailStructured(
+    EMAIL_ROUTES.templateGeneration,
+    EmailTemplateSchema,
+    [
+      new SystemMessage(SYSTEM_PROMPT),
+      new HumanMessage(
+        `Campaign goal: ${goal}\n\nSender company context (single source of truth):\n${companyContext}`,
+      ),
+    ],
+    "email_template",
+  );
 
   return { template: EmailTemplateSchema.parse(raw), companyContext };
 }

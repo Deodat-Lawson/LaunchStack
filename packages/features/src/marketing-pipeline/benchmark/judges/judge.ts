@@ -1,6 +1,9 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModelByType } from "@launchstack/core/llm";
-import type { AIModelType } from "@launchstack/core/llm";
+import {
+  invokeStructured,
+  resolveChatModel,
+  type ChatRoute,
+} from "@launchstack/core/llm";
 
 import {
   JudgeResultSchema,
@@ -16,8 +19,12 @@ import {
  * `configureChatModels` (see ../setup.ts) before calling.
  */
 
-/** Judge model, version-pinned for reproducibility. */
-export const JUDGE_MODEL: AIModelType = "gpt-4o";
+/**
+ * Judge route. A route names the job, not the model — which model serves
+ * `reasoning` is the operator's call, recorded per run below so a score can
+ * still be traced to what produced it.
+ */
+export const JUDGE_ROUTE: ChatRoute = "reasoning";
 
 export type ReferencePlatform = "x" | "linkedin" | "reddit";
 
@@ -38,30 +45,34 @@ export interface ScoredPost extends JudgeResult {
 }
 
 export async function scorePost(input: JudgePostInput): Promise<ScoredPost> {
-  // temperature 0 for repeatability; single sample for now (N-sample median is
-  // a later stability upgrade — see TODO-l.md Phase 1).
-  const chat = getChatModelByType(JUDGE_MODEL, { temperature: 0 });
-  const model = chat.withStructuredOutput(JudgeResultSchema, {
-    name: "post_evaluation",
-  });
+  // Single sample for now (N-sample median is a later stability upgrade —
+  // see TODO-l.md Phase 1).
+  const resolved = resolveChatModel({ route: JUDGE_ROUTE });
 
-  const raw = await model.invoke([
-    new SystemMessage(JUDGE_SYSTEM_PROMPT),
-    new HumanMessage(
-      buildJudgeHumanPrompt({
-        platform: input.platform,
-        referenceMarkdown: input.referenceMarkdown,
-        companyContext: input.companyContext,
-        post: input.post,
-      }),
-    ),
-  ]);
+  const raw = await invokeStructured(
+    resolved,
+    JudgeResultSchema,
+    [
+      new SystemMessage(JUDGE_SYSTEM_PROMPT),
+      new HumanMessage(
+        buildJudgeHumanPrompt({
+          platform: input.platform,
+          referenceMarkdown: input.referenceMarkdown,
+          companyContext: input.companyContext,
+          post: input.post,
+        }),
+      ),
+    ],
+    { name: "post_evaluation" },
+  );
 
   const result = JudgeResultSchema.parse(raw);
   return {
     ...result,
     platform: input.platform,
-    judgeModel: JUDGE_MODEL,
+    // The concrete model the route resolved to, so a stored score stays
+    // interpretable after the operator repoints the route.
+    judgeModel: resolved.modelId,
     rubricVersion: JUDGE_RUBRIC_VERSION,
   };
 }

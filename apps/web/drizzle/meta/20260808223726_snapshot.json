@@ -1,5 +1,5 @@
 {
-  "id": "ce975614-cf76-45c9-8efc-6d73d8dbcef6",
+  "id": "dc53c01e-c8a6-476c-a9af-4298cdf0b5e2",
   "prevId": "8eb40f38-8f42-4abb-8847-c5c9668c1081",
   "version": "7",
   "dialect": "postgresql",
@@ -2638,6 +2638,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
+        },
+        "version_id": {
+          "name": "version_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -2646,6 +2652,27 @@
           "columns": [
             {
               "expression": "document_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "predictive_analysis_document_version_idx": {
+          "name": "predictive_analysis_document_version_idx",
+          "columns": [
+            {
+              "expression": "document_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "version_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -2664,6 +2691,19 @@
           "tableTo": "pdr_ai_v2_document",
           "columnsFrom": [
             "document_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pdr_ai_v2_predictive_document_analysis_results_version_id_pdr_ai_v2_document_versions_id_fk": {
+          "name": "pdr_ai_v2_predictive_document_analysis_results_version_id_pdr_ai_v2_document_versions_id_fk",
+          "tableFrom": "pdr_ai_v2_predictive_document_analysis_results",
+          "tableTo": "pdr_ai_v2_document_versions",
+          "columnsFrom": [
+            "version_id"
           ],
           "columnsTo": [
             "id"
@@ -4249,231 +4289,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.pdr_ai_v2_founder_weekly_review_dispatches": {
-      "name": "pdr_ai_v2_founder_weekly_review_dispatches",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(64)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "run_id": {
-          "name": "run_id",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "operation_type": {
-          "name": "operation_type",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "operation_key": {
-          "name": "operation_key",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "generation_job_id": {
-          "name": "generation_job_id",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "generation_claim_id": {
-          "name": "generation_claim_id",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'pending'"
-        },
-        "attempt_count": {
-          "name": "attempt_count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "available_at": {
-          "name": "available_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "dispatched_at": {
-          "name": "dispatched_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last_error_code": {
-          "name": "last_error_code",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "founder_weekly_review_dispatches_run_operation_key_unique": {
-          "name": "founder_weekly_review_dispatches_run_operation_key_unique",
-          "columns": [
-            {
-              "expression": "run_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "operation_type",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "operation_key",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "founder_weekly_review_dispatches_event_id_unique": {
-          "name": "founder_weekly_review_dispatches_event_id_unique",
-          "columns": [
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "founder_weekly_review_dispatches_pending_idx": {
-          "name": "founder_weekly_review_dispatches_pending_idx",
-          "columns": [
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "available_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "founder_weekly_review_dispatches_company_run_idx": {
-          "name": "founder_weekly_review_dispatches_company_run_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "run_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pdr_ai_v2_founder_weekly_review_dispatches_company_id_pdr_ai_v2_company_id_fk": {
-          "name": "pdr_ai_v2_founder_weekly_review_dispatches_company_id_pdr_ai_v2_company_id_fk",
-          "tableFrom": "pdr_ai_v2_founder_weekly_review_dispatches",
-          "tableTo": "pdr_ai_v2_company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "pdr_ai_v2_founder_weekly_review_dispatches_run_id_pdr_ai_v2_founder_weekly_review_runs_id_fk": {
-          "name": "pdr_ai_v2_founder_weekly_review_dispatches_run_id_pdr_ai_v2_founder_weekly_review_runs_id_fk",
-          "tableFrom": "pdr_ai_v2_founder_weekly_review_dispatches",
-          "tableTo": "pdr_ai_v2_founder_weekly_review_runs",
-          "columnsFrom": [
-            "run_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.pdr_ai_v2_founder_weekly_review_operations": {
       "name": "pdr_ai_v2_founder_weekly_review_operations",
       "schema": "",
@@ -4702,37 +4517,13 @@
           "name": "evidence_snapshot",
           "type": "jsonb",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "evidence_schema_version": {
           "name": "evidence_schema_version",
           "type": "varchar(64)",
           "primaryKey": false,
           "notNull": true
-        },
-        "collection_input": {
-          "name": "collection_input",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "collection_claim_id": {
-          "name": "collection_claim_id",
-          "type": "varchar(128)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "collection_started_at": {
-          "name": "collection_started_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "evidence_collected_at": {
-          "name": "evidence_collected_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         },
         "model_metadata": {
           "name": "model_metadata",
@@ -4956,39 +4747,6 @@
             },
             {
               "expression": "generation_claim_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "founder_weekly_review_runs_collection_claim_idx": {
-          "name": "founder_weekly_review_runs_collection_claim_idx",
-          "columns": [
-            {
-              "expression": "company_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "collection_claim_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

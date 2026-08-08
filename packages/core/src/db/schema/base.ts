@@ -84,14 +84,18 @@ export const document = pgTable(
         ocrCostCents: integer("ocr_cost_cents"),
         mimeType: varchar("mime_type", { length: 128 }),
         sourceArchiveName: varchar("source_archive_name", { length: 256 }),
-        sourceArchiveEntry: varchar("source_archive_entry", { length: 1024 }),
         fileType: varchar("file_type", { length: 128 }),
-        creationKey: varchar("creation_key", { length: 512 }),
         currentVersionId: bigint("current_version_id", { mode: "bigint" }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+
+        // Added after the table shipped, so declared last: ALTER TABLE ADD
+        // COLUMN appends physically, and the migrations-apply job compares a
+        // migrated database against a freshly-pushed one column by column.
+        sourceArchiveEntry: varchar("source_archive_entry", { length: 1024 }),
+        creationKey: varchar("creation_key", { length: 512 }),
     },
     table => ({
         companyIdIdx: index("document_company_id_idx").on(table.companyId),
@@ -129,10 +133,12 @@ export const documentVersions = pgTable(
         ocrProvider: varchar("ocr_provider", { length: 50 }),
         ocrProcessed: boolean("ocr_processed").default(false),
         ocrMetadata: jsonb("ocr_metadata"),
-        creationKey: varchar("creation_key", { length: 512 }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+
+        // Added after the table shipped — see the note on `document` above.
+        creationKey: varchar("creation_key", { length: 512 }),
     },
     table => ({
         documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
@@ -248,9 +254,6 @@ export const ocrJobs = pgTable(
         documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, {
             onDelete: "set null",
         }),
-        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
-            onDelete: "set null",
-        }),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -267,7 +270,6 @@ export const ocrJobs = pgTable(
         // Document info
         documentUrl: varchar("document_url", { length: 1024 }).notNull(),
         documentName: varchar("document_name", { length: 256 }).notNull(),
-        dispatchOptions: jsonb("dispatch_options").$type<Record<string, unknown>>(),
         pageCount: integer("page_count"),
         fileSizeBytes: bigint("file_size_bytes", { mode: "bigint" }),
 
@@ -312,6 +314,12 @@ export const ocrJobs = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+
+        // Added after the table shipped — see the note on `document` above.
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "set null",
+        }),
+        dispatchOptions: jsonb("dispatch_options").$type<Record<string, unknown>>(),
     },
     table => ({
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),

@@ -1,19 +1,16 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-const MIGRATIONS_DIR = join(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "..",
-  "packages",
-  "core",
-  "drizzle",
+const ROOT = join(__dirname, "..", "..");
+const SQL_PATH = join(
+  ROOT,
+  "src",
+  "server",
+  "backfills",
+  "sql",
+  "file-uploads-company-id.sql",
 );
-const TAG = "20260809142658_reconcile_file_uploads_company_id";
-const FILENAME = `${TAG}.sql`;
-const FILE_UPLOADS_MIGRATION = "20260809142627_file_uploads_company_id.sql";
+const REGISTRY_PATH = join(ROOT, "src", "server", "backfills", "index.ts");
 
 const anchoredFileUrlPattern =
   /^(https?:\/\/[^/?#]+)?\/api\/files\/([0-9]+)\/?(\?.*)?$/;
@@ -22,30 +19,16 @@ function extractFileId(url: string): string | null {
   return anchoredFileUrlPattern.exec(url)?.[2] ?? null;
 }
 
-describe("migration reconcile_file_uploads_company_id", () => {
-  const sql = readFileSync(join(MIGRATIONS_DIR, FILENAME), "utf8");
+describe("backfill file-uploads-company-id", () => {
+  const sql = readFileSync(SQL_PATH, "utf8");
+  const registry = readFileSync(REGISTRY_PATH, "utf8");
 
-  it("runs after the file_uploads company_id migration in the engine set", () => {
-    const files = readdirSync(MIGRATIONS_DIR)
-      .filter((file) => file.endsWith(".sql"))
-      .sort();
-
-    expect(files.indexOf(FILE_UPLOADS_MIGRATION)).toBeGreaterThanOrEqual(0);
-    expect(files.indexOf(FILENAME)).toBeGreaterThan(
-      files.indexOf(FILE_UPLOADS_MIGRATION),
+  it("is registered and depends on the company_id DDL migration", () => {
+    expect(registry).toMatch(/id:\s*"2026-08-file-uploads-company-id"/);
+    expect(registry).toMatch(
+      /requiresMigration:\s*"20260809142627_file_uploads_company_id"/,
     );
-    expect(files[files.length - 1]).toBe(FILENAME);
-  });
-
-  it("is listed in the engine journal after file_uploads_company_id", () => {
-    const journal = JSON.parse(
-      readFileSync(join(MIGRATIONS_DIR, "meta", "_journal.json"), "utf8"),
-    ) as { entries: Array<{ idx: number; tag: string }> };
-
-    const tags = journal.entries.map((e) => e.tag);
-    expect(tags.indexOf(TAG)).toBeGreaterThan(
-      tags.indexOf("20260809142627_file_uploads_company_id"),
-    );
+    expect(registry).toMatch(/requiresEngine:\s*false/);
   });
 
   it.each([

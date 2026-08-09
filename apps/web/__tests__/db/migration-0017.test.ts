@@ -1,11 +1,6 @@
 /**
- * The schema gained `file_uploads.company_id` and the app both reads and
- * writes it, but the migration runner is forward-only: without a SQL file the
- * column never exists on a deployed database. This guards the file's presence
- * and the properties that make it safe to apply.
- *
- * Engine table — lives in packages/core's timestamped journal set, generated
- * via `pnpm --filter @launchstack/core db:generate`.
+ * Engine DDL for `file_uploads.company_id`. Data rewrites live in the
+ * `2026-08-file-uploads-company-id` backfill — migrations must stay DML-free.
  */
 
 import { readFileSync, readdirSync } from "node:fs";
@@ -47,6 +42,7 @@ describe("migration file_uploads_company_id", () => {
     expect(tags.indexOf(TAG)).toBeGreaterThan(
       tags.indexOf("20260808223719_document_creation_lifecycle"),
     );
+    expect(tags[tags.length - 1]).toBe(TAG);
   });
 
   it("adds a nullable company_id with an ON DELETE SET NULL foreign key", () => {
@@ -61,8 +57,7 @@ describe("migration file_uploads_company_id", () => {
     expect(sql).toMatch(/CREATE INDEX "file_uploads_company_id_idx"/);
   });
 
-  it("only backfills rows it can attribute to exactly one company", () => {
-    expect(sql).toMatch(/company_count = 1/);
-    expect(sql).toMatch(/f\."company_id" IS NULL/);
+  it("contains no DML", () => {
+    expect(sql).not.toMatch(/^\s*(UPDATE|INSERT INTO|DELETE FROM|DO \$\$)/im);
   });
 });

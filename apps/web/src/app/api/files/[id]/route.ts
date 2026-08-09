@@ -6,7 +6,9 @@
  * session. Token-based requests skip the ownership check; session-based
  * requests require `file_uploads.company_id` to match the caller's company.
  * Rows with no company stamp belong to no known tenant and are denied — see
- * migration 0016, which backfills every row it can attribute authoritatively.
+ * Legacy rows get `company_id` from the
+ * `2026-08-file-uploads-company-id` backfill, which stamps every row it can
+ * attribute authoritatively.
  */
 
 import { NextResponse } from "next/server";

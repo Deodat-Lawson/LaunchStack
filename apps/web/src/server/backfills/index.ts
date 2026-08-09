@@ -5,6 +5,10 @@ import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
 
 import { embedNote } from "../notes/embed-note";
 import { countUnrepairedDocuments, repairDocumentVersions } from "./document-version-repair";
+import {
+  countUnstampedFileUploads,
+  stampFileUploadsCompanyId,
+} from "./file-uploads-company-id";
 
 /**
  * The backfill registry.
@@ -114,4 +118,31 @@ const documentVersionsBackfill: Backfill = {
   },
 };
 
-export const BACKFILLS: Backfill[] = [noteEmbeddings, documentVersionsBackfill];
+/**
+ * Stamp legacy file_uploads.company_id from document ownership URLs.
+ *
+ * New uploads set company_id inline. This rewrites rows created before the
+ * column existed. DDL only lives in the engine migration; the data rewrite is
+ * here so clean-database migrates stay DML-free.
+ */
+const fileUploadsCompanyId: Backfill = {
+  id: "2026-08-file-uploads-company-id",
+  description:
+    "Stamp and reconcile file_uploads.company_id from canonical document URLs",
+  requiresEngine: false,
+  requiresMigration: "20260809142627_file_uploads_company_id",
+
+  estimate: ({ db }) => countUnstampedFileUploads(db),
+
+  async step({ db }) {
+    const remaining = await countUnstampedFileUploads(db);
+    await stampFileUploadsCompanyId(db);
+    return { cursor: null, processed: remaining };
+  },
+};
+
+export const BACKFILLS: Backfill[] = [
+  noteEmbeddings,
+  documentVersionsBackfill,
+  fileUploadsCompanyId,
+];

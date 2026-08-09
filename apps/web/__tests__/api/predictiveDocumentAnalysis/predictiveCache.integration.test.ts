@@ -96,6 +96,12 @@ jest.mock(
     })
 );
 
+const mockRequireWorkspaceContext = jest.fn();
+
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+}));
+
 import { createDb, type Db } from "@launchstack/core/db";
 import {
     company,
@@ -204,6 +210,7 @@ integrationDescribe("predictive analysis cache versioning (database)", () => {
         mockAnalyzeDocumentChunks.mockReset();
         mockInngestSend.mockReset().mockResolvedValue({ ids: ["predictive-cache-test-event"] });
         mockNotifyOnCriticalFindings.mockReset().mockResolvedValue(false);
+        mockRequireWorkspaceContext.mockReset();
 
         if (!process.env.DATABASE_URL) return;
 
@@ -221,6 +228,17 @@ integrationDescribe("predictive analysis cache versioning (database)", () => {
             .returning({ id: company.id });
         if (!companyRow) throw new Error("Failed to create predictive cache test company");
         companyId = companyRow.id;
+
+        mockRequireWorkspaceContext.mockResolvedValue({
+            success: true,
+            data: {
+                clerkUserId: "clerk_predictive_cache_test",
+                userPk: BigInt(1),
+                companyId: BigInt(companyId),
+                role: "owner",
+                status: "verified",
+            },
+        });
 
         const [documentRow] = await integrationDb.db
             .insert(document)

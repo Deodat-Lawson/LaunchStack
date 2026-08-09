@@ -1,9 +1,32 @@
--- Reconcile the legacy file ownership backfill from the company_id migration.
+-- Stamp and reconcile pdr_ai_v2_file_uploads.company_id from document URLs.
 --
--- That migration only wrote a company when every weak URL match for a file
--- agreed on exactly one company. This migration preserves independently
--- stamped rows, clears stamps that can be attributed to the weak matcher but
--- not the canonical matcher, and then backfills only from canonical matches.
+-- 1. Backfill NULL rows where every weak /api/files/{id} document match agrees
+--    on exactly one company.
+-- 2. Clear stamps that come from the weak matcher but not the canonical path
+--    matcher (or that sit on files with ambiguous weak matches).
+-- 3. Re-backfill NULL rows from unique canonical matches only.
+--
+-- Host is intentionally unchecked for id extraction; the runtime origin gate
+-- handles capability/authz host trust. Tenant attribution comes only from
+-- document.company_id.
+--
+-- Twin of apps/web/src/server/backfills/file-uploads-company-id.ts
+
+WITH file_owner AS (
+    SELECT
+        (regexp_match(d."url", '/api/files/([0-9]+)'))[1]::bigint AS file_id,
+        MIN(d."company_id") AS company_id,
+        COUNT(DISTINCT d."company_id") AS company_count
+    FROM "pdr_ai_v2_document" d
+    WHERE d."url" ~ '/api/files/[0-9]+'
+    GROUP BY 1
+)
+UPDATE "pdr_ai_v2_file_uploads" f
+SET "company_id" = o.company_id
+FROM file_owner o
+WHERE f."id" = o.file_id
+  AND o.company_count = 1
+  AND f."company_id" IS NULL;
 
 WITH weak_matches AS (
     SELECT
@@ -65,7 +88,7 @@ UPDATE "pdr_ai_v2_file_uploads" f
 SET "company_id" = NULL
 FROM disputed_files d
 WHERE f."id" = d."id";
---> statement-breakpoint
+
 WITH anchored_matches AS (
     SELECT
         (regexp_match(

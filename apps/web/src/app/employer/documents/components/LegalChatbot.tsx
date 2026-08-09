@@ -798,7 +798,7 @@ function PreviewDocument({
       : isCurrent
         ? `${s.assistSlot} ${s.assistSlotCurrent}`
         : s.assistSlot;
-    return <span className={cls}>{value || `{${(f?.label ?? k).toLowerCase()}}`}</span>;
+    return <span className={cls}>{(value ?? "") || `{${(f?.label ?? k).toLowerCase()}}`}</span>;
   };
 
   // Effective date if present, else first date-like field
@@ -830,7 +830,7 @@ function PreviewDocument({
         This {template.name} is entered into by and between
         {partyA ? <> <Slot k={partyA} /></> : null}
         {partyB ? <>, and <Slot k={partyB} /></> : null}
-        , each a "Party" and collectively the "Parties".
+        , each a &quot;Party&quot; and collectively the &quot;Parties&quot;.
       </p>
       {purposeField && (
         <>
@@ -899,7 +899,7 @@ function FieldSummary({
                 value ? s.assistFieldValue : s.assistFieldValueEmpty
               }
             >
-              {value || (isCurrent ? "asking now…" : "awaiting")}
+              {(value ?? "") || (isCurrent ? "asking now…" : "awaiting")}
             </div>
             <div
               className={`${s.assistFieldSrc} ${tag.ai ? s.assistFieldSrcAi : ""}`}

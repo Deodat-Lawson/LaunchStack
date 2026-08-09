@@ -13,11 +13,15 @@ env:
 
 jobs:
   release:
-    name: Publish @launchstack/core
+    name: Publish engine packages
     runs-on: ubuntu-latest
-    # Only run when the repo owns the NPM_TOKEN secret.
-    # On forks, this skips gracefully.
-    if: github.repository == 'launchstack/launchstack'
+    # Skip on forks, which do not have the NPM_TOKEN secret.
+    #
+    # This was previously pinned to a hardcoded repository name that no longer
+    # matched the remote, so the job was silently skipped on every push and the
+    # package was never released. Gating on fork status expresses the actual
+    # intent and survives the repo rename/transfer that open-sourcing involves.
+    if: github.event.repository.fork == false
 
     permissions:
       contents: write   # to create the version PR + tags
@@ -45,8 +49,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build @launchstack/core
-        run: pnpm --filter @launchstack/core build
+      # All five publishable engine packages (ADR-002): core's facade
+      # re-exports resolve against the other four on npm, so they release
+      # together through one changesets flow.
+      - name: Build engine packages
+        run: >-
+          pnpm --filter @launchstack/protocol
+          --filter @launchstack/evidence
+          --filter @launchstack/application
+          --filter @launchstack/adapters
+          --filter @launchstack/core build
+
+      # publint validates the exports map against the tarball, but does NOT
+      # follow relative specifiers inside the emitted JS. A tarball once passed
+      # publint while every import() failed with ERR_MODULE_NOT_FOUND, so this
+      # runs first and is not allowed to fail.
+      - name: Verify every export is loadable under Node ESM
+        run: node scripts/ci/check-package-exports.mjs
 
       - name: Validate packed tarball
         run: |

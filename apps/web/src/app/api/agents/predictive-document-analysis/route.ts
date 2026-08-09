@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db/index";
 import { eq, sql, and, gt, desc, ne } from "drizzle-orm";
 import { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-analysis/agent";
 import type { PredictiveAnalysisResult } from "~/app/api/agents/predictive-document-analysis/agent";
 import { document, documentContextChunks, documentStructure } from "@launchstack/core/db/schema";
-import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
+import { predictiveDocumentAnalysisResults, users } from "~/server/db/schema";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 import {
     ANALYSIS_BATCH_CONFIG,
@@ -148,6 +150,35 @@ export async function POST(request: Request) {
             const { documentId, analysisType, includeRelatedDocs, timeoutMs, forceRefresh } =
                 validation.data;
 
+            // Require a Clerk session and resolve the caller's active company
+            // so cross-tenant documents come back as 404 (never analyzed).
+            const { userId } = await auth();
+            if (!userId) {
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, message: "Unauthorized" },
+                    { status: HTTP_STATUS.UNAUTHORIZED }
+                );
+            }
+
+            const [userInfo] = await db
+                .select({ id: users.id, companyId: users.companyId })
+                .from(users)
+                .where(eq(users.userId, userId));
+
+            if (!userInfo) {
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, message: "Unauthorized" },
+                    { status: HTTP_STATUS.UNAUTHORIZED }
+                );
+            }
+
+            const activeCompanyId = await resolveActiveCompanyForUser(
+                userInfo.id,
+                userInfo.companyId
+            );
+
             const typedAnalysisType: AnalysisType = analysisType ?? "general";
             const typedIncludeRelatedDocs: boolean = includeRelatedDocs ?? false;
 
@@ -192,7 +223,9 @@ export async function POST(request: Request) {
             }
 
             const docDetails = await getDocumentDetails(documentId);
-            if (!docDetails) {
+            // Cross-tenant documents 404 like missing ones so existence never
+            // leaks (same convention as /api/documents/[id]).
+            if (!docDetails || BigInt(docDetails.companyId) !== activeCompanyId) {
                 recordResult("error");
                 return NextResponse.json(
                     {

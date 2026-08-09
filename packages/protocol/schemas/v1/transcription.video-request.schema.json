@@ -1,0 +1,24 @@
+{
+  "$ref": "#/definitions/transcription.video-request",
+  "definitions": {
+    "transcription.video-request": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "max_duration": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 7200
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

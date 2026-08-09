@@ -8,7 +8,7 @@ import "@testing-library/jest-dom";
 jest.mock("react-markdown", () => {
   return function ReactMarkdown({ children }: { children: string }) {
     const processMarkdown = (text: string) => {
-      let processed = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      const processed = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       return processed;
     };
     return <div dangerouslySetInnerHTML={{ __html: processMarkdown(children) }} />;

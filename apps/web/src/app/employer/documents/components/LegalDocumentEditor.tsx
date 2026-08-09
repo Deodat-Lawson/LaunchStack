@@ -255,9 +255,7 @@ function ensureCaretInsideMarkAfterRepair(
       }
     }
   }
-  if (!target) {
-    target = el.querySelector("mark[data-field-key]");
-  }
+  target ??= el.querySelector<HTMLElement>("mark[data-field-key]");
   if (target) placeCaretInsideMark(target);
 }
 
@@ -292,7 +290,7 @@ function interceptDeleteThatEmptiesMark(
   if (it === "deleteContentBackward") {
     if (off <= 0) return false;
     const before = tn.slice(0, off).replace(/​/g, "");
-    if (before.length === 1 && before[0] === onlyChar) {
+    if (before.length === 1 && before.startsWith(onlyChar)) {
       e.preventDefault();
       mark.textContent = "​";
       placeCaretInsideMark(mark);
@@ -305,7 +303,7 @@ function interceptDeleteThatEmptiesMark(
   if (off >= tn.length) return false;
   if (tn[off] === "​") return false;
   const fromOff = tn.slice(off).replace(/​/g, "");
-  if (fromOff.length >= 1 && fromOff[0] === onlyChar) {
+  if (fromOff.length >= 1 && fromOff.startsWith(onlyChar)) {
     e.preventDefault();
     mark.textContent = "​";
     placeCaretInsideMark(mark);
@@ -322,9 +320,9 @@ function findTargetMarkForStrayInsertion(
 ): HTMLElement | null {
   if (preferredKey) {
     try {
-      const m = el.querySelector(
+      const m = el.querySelector<HTMLElement>(
         `mark[data-field-key="${CSS.escape(preferredKey)}"]`,
-      ) as HTMLElement | null;
+      );
       if (m) return m;
     } catch {
       /* ignore */
@@ -336,7 +334,7 @@ function findTargetMarkForStrayInsertion(
 
   const markFromElement = (n: HTMLElement): HTMLElement | null => {
     if (n.tagName === "MARK" && n.hasAttribute("data-field-key")) return n;
-    return n.querySelector("mark[data-field-key]") as HTMLElement | null;
+    return n.querySelector("mark[data-field-key]");
   };
 
   if (node.nodeType === Node.TEXT_NODE) {
@@ -476,7 +474,7 @@ function interceptInsertIntoLastFocusedEmptyMark(
   try {
     mark = el.querySelector(
       `mark[data-field-key="${CSS.escape(preferredKey)}"]`,
-    ) as HTMLElement | null;
+    );
   } catch {
     return false;
   }
@@ -704,7 +702,9 @@ function EditableSection({
       const m = findParentMarkInElement(el, sel.anchorNode);
       preferredKey = m?.getAttribute("data-field-key") ?? null;
     }
-    if (!preferredKey) preferredKey = lastFocusedFieldKeyRef.current;
+    // `?? ""` first so the fallback (which must also cover an empty key)
+    // operates on a plain string.
+    preferredKey = (preferredKey ?? "") || lastFocusedFieldKeyRef.current;
 
     repairFieldMarksInDom();
     ensureCaretInsideMarkAfterRepair(el, preferredKey);
@@ -797,7 +797,7 @@ function EditableSection({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "a" && (e.ctrlKey || e.metaKey)) {
         const sel = window.getSelection();
-        if (!sel || !sel.anchorNode) return;
+        if (!sel?.anchorNode) return;
         const mark = findParentMarkInElement(el, sel.anchorNode);
         if (mark) {
           e.preventDefault();
@@ -1174,7 +1174,7 @@ export function LegalDocumentEditor({
       };
 
       if (!json.success || !json.docxBase64) {
-        throw new Error(json.error || "Failed to generate DOCX");
+        throw new Error((json.error ?? "") || "Failed to generate DOCX");
       }
 
       const byteChars = atob(json.docxBase64);
@@ -1260,7 +1260,7 @@ export function LegalDocumentEditor({
           error?: string;
         } | null;
         throw new Error(
-          errBody?.error || `Document generation failed: HTTP ${res.status}`,
+          (errBody?.error ?? "") || `Document generation failed: HTTP ${res.status}`,
         );
       }
 
@@ -1271,7 +1271,7 @@ export function LegalDocumentEditor({
       };
 
       if (!json.success || !json.docxBase64) {
-        throw new Error(json.error || "Failed to generate DOCX");
+        throw new Error((json.error ?? "") || "Failed to generate DOCX");
       }
 
       const edits: Array<{ target_text: string; new_text: string; comment?: string }> = [];
@@ -1322,7 +1322,7 @@ export function LegalDocumentEditor({
 
       if (!applyRes.ok || !applyJson.success || !applyJson.modifiedDocxBase64) {
         const err = new Error(
-          applyJson.message || applyJson.error || "Failed to apply edits",
+          (applyJson.message ?? "") || (applyJson.error ?? "") || "Failed to apply edits",
         );
         (err as Error & { serverError?: string }).serverError = applyJson.error;
         throw err;
@@ -1342,7 +1342,7 @@ export function LegalDocumentEditor({
       a.click();
       URL.revokeObjectURL(url);
 
-      const { applied_edits = 0, skipped_edits = 0 } = applyJson.summary || {};
+      const { applied_edits = 0, skipped_edits = 0 } = applyJson.summary ?? {};
       toast.success("Document ready with track changes!", {
         description: `${applied_edits} edit${applied_edits > 1 ? "s" : ""} applied${skipped_edits > 0 ? `, ${skipped_edits} skipped` : ""}. Download started.`,
         id: loadingToast,
@@ -2082,8 +2082,8 @@ export function LegalDocumentEditor({
                     <span className={lt.rdAiCardTitle}>Tip</span>
                   </div>
                   <div className={lt.rdAiCardBody}>
-                    Drift only edits highlighted fields — it won't rewrite contract clauses.
-                    Reference fields by their exact label (e.g. "Effective Date") for the
+                    Drift only edits highlighted fields — it won&apos;t rewrite contract clauses.
+                    Reference fields by their exact label (e.g. &quot;Effective Date&quot;) for the
                     cleanest results.
                   </div>
                 </div>

@@ -405,7 +405,8 @@ export function DocumentGeneratorEditor({
       const rawText = await response.text();
       let data: { success: boolean; generatedContent?: string; message?: string; error?: string };
       try {
-        data = JSON.parse(rawText);
+        // Known response shape of our AI generation route.
+        data = JSON.parse(rawText) as typeof data;
       } catch {
         setAiError(rawText?.slice(0, 120) || "Server returned an invalid response. Please try again.");
         return;
@@ -525,7 +526,8 @@ export function DocumentGeneratorEditor({
       const rawText = await response.text();
       let data: { success: boolean; generatedContent?: string };
       try {
-        data = JSON.parse(rawText);
+        // Known response shape of our AI generation route.
+        data = JSON.parse(rawText) as typeof data;
       } catch {
         setAiError(rawText?.slice(0, 120) || "Server returned an invalid response. Please try again.");
         return;

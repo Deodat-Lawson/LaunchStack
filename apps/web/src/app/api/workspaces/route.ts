@@ -102,7 +102,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const json = await request.json().catch(() => ({}));
+        const json: unknown = await request.json().catch(() => ({}));
         const parsed = CreateWorkspaceSchema.safeParse(json);
         if (!parsed.success) {
             return NextResponse.json(
@@ -131,7 +131,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        const teamSizeForCompany = teamSize?.trim() || "1";
+        const teamSizeForCompany = (teamSize?.trim() ?? "") || "1";
 
         const [newCompany] = await db
             .insert(company)

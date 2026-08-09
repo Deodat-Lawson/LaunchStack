@@ -15,6 +15,16 @@ jest.mock("~/server/db/index", () => ({
     },
 }));
 
+// The routes resolve the active workspace (cookie-based multi-company
+// switching) via ~/lib/active-workspace. Default to the user's own
+// companyId, which mirrors the "no cookie set" production behavior.
+jest.mock("~/lib/active-workspace", () => ({
+    resolveActiveCompanyForUser: jest.fn(
+        async (_userPk: number | bigint, defaultCompanyId: number | bigint) =>
+            BigInt(defaultCompanyId),
+    ),
+}));
+
 const createLimitedSelect = (rows: unknown[]) => ({
     from: () => ({
         where: () => ({
@@ -62,10 +72,10 @@ describe("Chat history routes", () => {
             mockAuth.mockResolvedValue({ userId: "user-1" });
             mockSelect
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
+                    createLimitedSelect([{ id: 1, userId: "user-1", companyId: 10n }]),
                 )
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 5, companyId: "20", title: "Doc" }]),
+                    createLimitedSelect([{ id: 5, companyId: 20n, title: "Doc" }]),
                 );
 
             const response = await addChatHistory(
@@ -84,10 +94,10 @@ describe("Chat history routes", () => {
             mockAuth.mockResolvedValue({ userId: "user-1" });
             mockSelect
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
+                    createLimitedSelect([{ id: 1, userId: "user-1", companyId: 10n }]),
                 )
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 7, companyId: "10", title: "Actual Title" }]),
+                    createLimitedSelect([{ id: 7, companyId: 10n, title: "Actual Title" }]),
                 );
 
             const insertValues = jest.fn().mockResolvedValue(undefined);
@@ -139,10 +149,10 @@ describe("Chat history routes", () => {
             mockAuth.mockResolvedValue({ userId: "user-1" });
             mockSelect
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
+                    createLimitedSelect([{ id: 1, userId: "user-1", companyId: 10n }]),
                 )
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 9, companyId: "10" }]),
+                    createLimitedSelect([{ id: 9, companyId: 10n }]),
                 )
                 .mockImplementationOnce(() =>
                     createWhereSelect([{ id: 1, question: "Q?", response: "A" }]),

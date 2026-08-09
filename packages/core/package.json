@@ -64,6 +64,14 @@
       "types": "./src/rag/index.ts",
       "default": "./src/rag/index.ts"
     },
+    "./rag/retrievers": {
+      "types": "./src/rag/retrievers/index.ts",
+      "default": "./src/rag/retrievers/index.ts"
+    },
+    "./rag/search-types": {
+      "types": "./src/rag/search-types.ts",
+      "default": "./src/rag/search-types.ts"
+    },
     "./ingestion/entity-extraction": {
       "types": "./src/ingestion/entity-extraction.ts",
       "default": "./src/ingestion/entity-extraction.ts"
@@ -226,6 +234,14 @@
         "types": "./dist/rag/index.d.ts",
         "default": "./dist/rag/index.js"
       },
+      "./rag/retrievers": {
+        "types": "./dist/rag/retrievers/index.d.ts",
+        "default": "./dist/rag/retrievers/index.js"
+      },
+      "./rag/search-types": {
+        "types": "./dist/rag/search-types.d.ts",
+        "default": "./dist/rag/search-types.js"
+      },
       "./ingestion/entity-extraction": {
         "types": "./dist/ingestion/entity-extraction.d.ts",
         "default": "./dist/ingestion/entity-extraction.js"
@@ -353,7 +369,7 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
     "clean": "rm -rf dist .tsbuildinfo",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "db:generate": "drizzle-kit generate",
@@ -365,37 +381,30 @@
     "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
-    "@types/jsdom": "^28.0.1",
-    "@types/turndown": "^5.0.6",
     "dotenv": "^17.3.1",
-    "drizzle-kit": "0.31.10"
+    "drizzle-kit": "0.31.10",
+    "drizzle-orm": "^0.45.1"
   },
   "dependencies": {
-    "@langchain/core": "^0.3.74",
-    "@langchain/ollama": "^0.1.6",
-    "@langchain/openai": "^0.6.11",
-    "@mozilla/readability": "^0.6.0",
-    "cheerio": "^1.2.0",
-    "drizzle-orm": "^0.45.1",
-    "jsdom": "^29.0.2",
-    "jszip": "^3.10.1",
-    "mammoth": "^1.11.0",
-    "openai": "^4.62.1",
-    "pdf-lib": "^1.17.1",
-    "pdfjs-serverless": "^1.1.0",
-    "postgres": "^3.4.7",
-    "string-similarity-js": "^2.1.4",
-    "turndown": "^7.2.2",
-    "xlsx": "^0.18.5",
-    "yaml": "^2.8.1",
-    "zod": "^3.23.8",
-    "zod-to-json-schema": "^3.25.1"
+    "@launchstack/adapters": "workspace:^",
+    "@launchstack/application": "workspace:^",
+    "@launchstack/evidence": "workspace:^",
+    "@launchstack/protocol": "workspace:^",
+    "postgres": "^3.4.7"
   },
   "peerDependencies": {
+    "@langchain/community": "^0.3.54",
+    "langchain": "^0.3.33",
     "neo4j-driver": "^6.0.0",
     "tesseract.js": "^7.0.0"
   },
   "peerDependenciesMeta": {
+    "@langchain/community": {
+      "optional": true
+    },
+    "langchain": {
+      "optional": true
+    },
     "neo4j-driver": {
       "optional": true
     },

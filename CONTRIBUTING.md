@@ -11,17 +11,26 @@ Thanks for your interest in contributing! This document covers how to set up a d
 ## Repo layout
 
 ```
-packages/core        @launchstack/core — framework-agnostic engine (published to npm)
-packages/features    vertical features that sit on top of core (private, not published)
-apps/web             Next.js reference app that wires the engine
-services/            Python/ML sidecars (sidecar, ocr-router, ocr-worker)
+packages/protocol    cross-language contracts (zod + generated JSON Schema) — published
+packages/evidence    pure company-state logic (anchors, supersession, freshness) — published
+packages/application use cases + ports (outbox tick, citations) — published
+packages/adapters    Postgres/storage/provider implementations + engine schema — published
+packages/core        @launchstack/core — compatibility facade over the above — published
+packages/features    vertical features on top of the engine (private, not published)
+apps/web             Next.js app: UI, auth, command acceptance, synchronous reads
+apps/worker          the durable workflow coordinator (outbox consumer + Inngest host)
+services/            Compute services (document-converter, transcription, document-editor)
 ```
 
-The **core/features/host boundary is enforced by ESLint** (see [`eslint.config.js`](eslint.config.js)):
+The **layer boundaries are enforced by ESLint** (see [`eslint.config.js`](eslint.config.js))
+with the strict direction `protocol ← evidence ← application ← adapters ← core ← apps`:
 
-- `@launchstack/core` must not import Next.js, Clerk, React, or `process.env`. It's Node-only and framework-agnostic.
+- `protocol`/`evidence` import nothing but zod (and protocol, respectively); no Node built-ins, no env.
+- `application` may not touch databases or frameworks; `adapters` may not import features/web/Next/Clerk/React.
+- None of the engine packages may read `process.env` — configuration flows through `CoreConfig`/ports.
+- `@launchstack/core` must stay re-exports only (`node scripts/ci/check-core-facade.mjs`).
 - `@launchstack/features` must not import from the host app (`~/*`) or pull in Next/Clerk/React. Features can read `process.env`.
-- Violations fail lint.
+- Violations fail lint (blocking in CI — ADR-006).
 
 ## Local dev
 
@@ -29,7 +38,7 @@ The **core/features/host boundary is enforced by ESLint** (see [`eslint.config.j
 
 - Node.js **20+**
 - pnpm **10+** (matches the `packageManager` field in [`package.json`](package.json); use `corepack enable` if you don't have it)
-- Docker & Docker Compose (for the full local stack with Postgres + sidecars)
+- Docker & Docker Compose (for the full local stack with Postgres + the compute services)
 
 ### Minimal setup (hosted Postgres)
 
@@ -43,7 +52,7 @@ pnpm --filter @launchstack/core db:seed                         # optional sampl
 pnpm --filter @launchstack/web dev                              # Next.js + Inngest dev server (concurrently)
 ```
 
-### Full local stack (Postgres + SeaweedFS + sidecars)
+### Full local stack (Postgres + SeaweedFS + worker + compute services)
 
 ```bash
 make up            # lite stack (~400MB RAM, native OCR only)
@@ -53,7 +62,7 @@ make down          # tear down
 make down-clean    # tear down + wipe volumes
 ```
 
-Once the stack is up: app at `localhost:3000`, Inngest dashboard at `localhost:8288`, sidecar API at `localhost:8000/docs`.
+Once the stack is up: app at `localhost:3000`, worker health at `localhost:8020/healthz`, Inngest dashboard at `localhost:8288`, transcription API at `localhost:8000/docs`, document-editor at `localhost:8003/docs`, document-converter at `localhost:8002/health`.
 
 ## Changing the database
 

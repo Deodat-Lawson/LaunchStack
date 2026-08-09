@@ -65,6 +65,29 @@ jest.mock("~/server/inngest/client", () => ({
     },
 }));
 
+// The routes resolve the active workspace (cookie-based multi-company
+// switching) via ~/lib/active-workspace. Default to the user's own
+// companyId, which mirrors the "no cookie set" production behavior.
+jest.mock("~/lib/active-workspace", () => ({
+    resolveActiveCompanyForUser: jest.fn(
+        async (_userPk: number | bigint, defaultCompanyId: number | bigint) =>
+            BigInt(defaultCompanyId),
+    ),
+}));
+
+// Pass rate limiting through — these tests exercise the handlers, not the
+// limiter. Mocking the middleware also keeps the real in-memory store's
+// cleanup setInterval from holding the Jest process open after the run.
+jest.mock("~/lib/rate-limit-middleware", () => ({
+    withRateLimit: jest.fn(
+        async (
+            _request: Request,
+            _config: unknown,
+            handler: () => Promise<unknown>,
+        ) => handler(),
+    ),
+}));
+
 // Mock uuid so we get predictable job IDs.
 jest.mock("uuid", () => ({
     v4: () => "test-job-id-1234",
@@ -93,9 +116,11 @@ async function parseResponse(response: Response) {
 }
 
 // Set up mocks so the user is authenticated and has a company.
+// `id` is the users-table serial PK the routes pass to
+// resolveActiveCompanyForUser alongside the default companyId.
 function mockAuthenticatedUser(userId = "user-123", companyId = 1001n) {
     mockAuth.mockResolvedValue({ userId });
-    mockDbSelect.mockResolvedValue([{ userId, companyId }]);
+    mockDbSelect.mockResolvedValue([{ id: 1, userId, companyId }]);
 }
 
 // A valid request body with all required fields.

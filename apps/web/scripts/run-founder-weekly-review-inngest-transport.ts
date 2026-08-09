@@ -45,7 +45,8 @@ type Fixture = {
 };
 
 interface ManagedChild {
-    name: "next" | "inngest" | string;
+    /** Well-known values: "next", "inngest". */
+    name: string;
     process: ChildProcess;
 }
 
@@ -567,7 +568,7 @@ async function main(): Promise<void> {
         }
         const generationEventKeys = ["runId", "companyId", "generationJobId", "generationClaimId"];
         const forbiddenEventKeys = ["evidenceSnapshot", "founderContext", "documentContent", "customerFeedback", "prompt", "reviewPayload", "providerResponse", "databaseUrl", "credentials", "token"];
-        console.log(JSON.stringify({ runId: final.id, lifecycle: seen, dispatch: { initialStatus: initialDispatches[0]!.status, finalStatus: dispatch?.status, attempts: dispatch?.attemptCount }, ingressEventIds: requested.ids, callbackUrl, functionId: "founder-weekly-review-generation", transportEvent: { name: "founder-weekly-review/generation.requested", keys: generationEventKeys, companyIdSerializedAsString: true, forbiddenKeysAbsent: forbiddenEventKeys.every((key) => !generationEventKeys.includes(key)) }, steps: ["claim-evidence", "collect-evidence", "persist-evidence", "claim", "generate", "persist"], evidenceCounts: Object.fromEntries(["document_change", "customer_feedback", "founder_context"].map((type) => [type, final!.evidenceSnapshot!.items.filter((item) => item.sourceType === type).length])), snapshotDigest: digest(final.evidenceSnapshot), retryCount: final.retryCount, generationAttempt: final.generationAttempt, provider: final.modelMetadata?.provider, model: final.modelMetadata?.model, validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, markdownPath, terminalEqualsExport: (await readFile(markdownPath, "utf8")) === rendered, devLogsMentionFunction: inngestLogs.join("").includes("founder-weekly-review-generation") }));
+        console.log(JSON.stringify({ runId: final.id, lifecycle: seen, dispatch: { initialStatus: initialDispatches[0]!.status, finalStatus: dispatch?.status, attempts: dispatch?.attemptCount }, ingressEventIds: requested.ids, callbackUrl, functionId: "founder-weekly-review-generation", transportEvent: { name: "founder-weekly-review/generation.requested", keys: generationEventKeys, companyIdSerializedAsString: true, forbiddenKeysAbsent: forbiddenEventKeys.every((key) => !generationEventKeys.includes(key)) }, steps: ["claim-evidence", "collect-evidence", "persist-evidence", "claim", "generate", "persist"], evidenceCounts: Object.fromEntries(["document_change", "customer_feedback", "founder_context"].map((type) => [type, final.evidenceSnapshot!.items.filter((item) => item.sourceType === type).length])), snapshotDigest: digest(final.evidenceSnapshot), retryCount: final.retryCount, generationAttempt: final.generationAttempt, provider: final.modelMetadata?.provider, model: final.modelMetadata?.model, validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, markdownPath, terminalEqualsExport: (await readFile(markdownPath, "utf8")) === rendered, devLogsMentionFunction: inngestLogs.join("").includes("founder-weekly-review-generation") }));
         shutdownDrain.finalDiagnosticsCaptured = true;
     } catch (error) {
         printRecentDiagnostics("next", nextLogs);

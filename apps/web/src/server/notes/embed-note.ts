@@ -113,14 +113,52 @@ export async function embedNote(noteId: number): Promise<void> {
       modelVersion: EMBEDDING_MODEL,
     });
   } catch (err) {
+    // Rethrow so the outbox handler records the failure and retries with
+    // backoff (ADR-003). The old fire-and-forget path swallowed this, which
+    // silently left notes unsearchable.
     console.error("[embedNote] failed:", err);
+    throw err;
   }
 }
 
 /**
- * Fire-and-forget wrapper for the common case where a route wants to update
- * a note and return immediately without blocking on embedding latency.
+ * Durable replacement for the old fire-and-forget `embedNoteAsync`:
+ * enqueues a `note.embedding.requested` outbox event that apps/worker
+ * consumes with retries. The event id is stable per note, so rapid
+ * successive edits collapse into one pending embed of the latest content.
  */
-export function embedNoteAsync(noteId: number): void {
-  void embedNote(noteId);
+export async function requestNoteEmbedding(
+  noteId: number,
+  reason: "created" | "updated",
+): Promise<void> {
+  const [note] = await db
+    .select({ companyId: documentNotes.companyId })
+    .from(documentNotes)
+    .where(eq(documentNotes.id, noteId))
+    .limit(1);
+  if (!note) return;
+  const companyId = Number(note.companyId);
+  if (!Number.isInteger(companyId) || companyId <= 0) {
+    console.error(
+      `[requestNoteEmbedding] note ${noteId} has non-numeric companyId "${note.companyId}"`,
+    );
+    return;
+  }
+
+  const { DrizzleOutboxStore } = await import("@launchstack/adapters");
+  const { eventIds, PROTOCOL_VERSION } = await import("@launchstack/protocol");
+  const { getEngine } = await import("~/server/engine");
+  const engine = getEngine();
+  const store = new DrizzleOutboxStore(engine.db, console);
+  await store.enqueue([
+    {
+      eventId: eventIds.noteEmbeddingRequested(noteId),
+      eventType: "note.embedding.requested",
+      schemaVersion: PROTOCOL_VERSION,
+      occurredAt: new Date().toISOString(),
+      traceId: `note:${noteId}:${reason}`,
+      companyId,
+      payload: { noteId, reason },
+    },
+  ]);
 }

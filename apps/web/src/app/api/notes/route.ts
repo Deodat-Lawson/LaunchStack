@@ -4,7 +4,7 @@ import { db } from "~/server/db";
 import { documentNotes } from "~/server/db/schema";
 import { eq, and, desc, ilike, arrayContains, isNull, inArray } from "drizzle-orm";
 import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
-import { embedNoteAsync } from "~/server/notes/embed-note";
+import { requestNoteEmbedding } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { searchNotes } from "~/server/notes/search";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
@@ -125,8 +125,8 @@ export async function POST(request: Request) {
       .returning();
 
     if (note) {
-      embedNoteAsync(note.id);
-      void syncNoteLinks({
+      await requestNoteEmbedding(note.id, "created");
+      await syncNoteLinks({
         noteId: note.id,
         rich: (note.contentRich as JSONContent | null) ?? null,
         companyId: note.companyId,

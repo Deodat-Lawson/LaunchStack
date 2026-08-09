@@ -11,7 +11,9 @@ export interface EditorSection {
 type SectionBuilder = (data: Record<string, string>) => EditorSection[];
 
 function m(data: Record<string, string>, key: string): string {
-  const val = data[key] || `[${key}]`;
+  // `?? ""` first so the placeholder (which must also cover empty values)
+  // falls back from a plain string.
+  const val = (data[key] ?? "") || `[${key}]`;
   return `<mark data-field-key="${key}">${val}</mark>`;
 }
 

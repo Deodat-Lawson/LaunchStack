@@ -1,8 +1,6 @@
-export * from "./types";
-export * from "./embeddings";
-export * from "./company-credentials";
-export * from "./company-config";
-export * from "./index-registry";
-export * from "./factory";
-export * from "./reindex-state";
-export * from "./dimension-table-store";
+/**
+ * @launchstack/core compatibility facade (ADR-002): this subpath's
+ * implementation moved to @launchstack/adapters. Re-export only — no logic
+ * may be added here (enforced by scripts/ci/check-core-facade.mjs).
+ */
+export * from "@launchstack/adapters/embeddings/index";

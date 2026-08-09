@@ -4,7 +4,7 @@ import { db } from "~/server/db";
 import { documentNotes, documentNoteEmbeddings, noteLinks } from "~/server/db/schema";
 import { eq, and } from "drizzle-orm";
 import { validateRequestBody, UpdateNoteSchema } from "~/lib/validation";
-import { embedNoteAsync } from "~/server/notes/embed-note";
+import { requestNoteEmbedding } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
 import type { JSONContent } from "@tiptap/react";
@@ -92,7 +92,7 @@ export async function PUT(
       body.contentRich !== undefined ||
       body.anchor !== undefined
     ) {
-      embedNoteAsync(updated.id);
+      await requestNoteEmbedding(updated.id, "updated");
     }
 
     // Re-sync wiki-link references when the rich content changes. A title
@@ -101,7 +101,7 @@ export async function PUT(
     // get re-resolved on their own next save. Recomputing them eagerly here
     // would be a much bigger sweep and isn't required for correctness.
     if (body.contentRich !== undefined) {
-      void syncNoteLinks({
+      await syncNoteLinks({
         noteId: updated.id,
         rich: (body.contentRich as JSONContent | null) ?? null,
         companyId: updated.companyId,

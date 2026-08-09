@@ -1,14 +1,15 @@
 import { EventSchemas, Inngest } from "inngest";
 import { chatConfigMiddleware } from "./chat-config-middleware";
-import type { ProcessDocumentEventData } from "@launchstack/core/ocr/types";
 import type { TrendSearchEventData } from "@launchstack/features/trend-search";
 import type { ProspectorEventData } from "@launchstack/features/client-prospector";
 import type { DocumentEdit, ReviewAction } from "@launchstack/features/adeu";
 
-export type ProcessDocumentEvent = {
-  name: "document/process.requested";
-  data: ProcessDocumentEventData;
-};
+// Retired event types (ADR-003): document/process.requested,
+// company-metadata/extract.requested and notes-anchors/rehydrate.requested
+// became transactional-outbox events consumed by apps/worker
+// (source.version.created → … → company.state.projected). The remaining
+// events here are the non-ingestion verticals; web sends them, the worker's
+// Inngest endpoint executes them.
 
 export type TrendSearchEvent = {
   name: "trend-search/run.requested";
@@ -18,11 +19,6 @@ export type TrendSearchEvent = {
 export type ClientProspectorEvent = {
   name: "client-prospector/run.requested";
   data: ProspectorEventData;
-};
-
-export type CompanyMetadataExtractEvent = {
-  name: "company-metadata/extract.requested";
-  data: { documentId: number; companyId: string };
 };
 
 export type PredictiveAnalysisEvent = {
@@ -75,16 +71,6 @@ export type WebsiteCrawlEvent = {
   };
 };
 
-export type RehydrateNoteAnchorsEvent = {
-  name: "notes-anchors/rehydrate.requested";
-  data: {
-    /** Document whose notes should be re-anchored. */
-    documentId: number;
-    /** `document_versions.id` of the freshly-indexed version. */
-    versionId: number;
-  };
-};
-
 /** Drains the founder-weekly-review outbox. Carries no run-specific payload. */
 export type FounderWeeklyReviewDispatchEvent = {
   name: "founder-weekly-review/dispatch.requested";
@@ -103,15 +89,12 @@ export type FounderWeeklyReviewGenerationEvent = {
 };
 
 export type Events =
-  | ProcessDocumentEvent
   | TrendSearchEvent
   | ClientProspectorEvent
-  | CompanyMetadataExtractEvent
   | PredictiveAnalysisEvent
   | ReindexCompanyEmbeddingsEvent
   | DocumentModifyEvent
   | WebsiteCrawlEvent
-  | RehydrateNoteAnchorsEvent
   | FounderWeeklyReviewDispatchEvent
   | FounderWeeklyReviewGenerationEvent;
 

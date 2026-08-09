@@ -90,6 +90,31 @@ jobs:
           build-args: |
             NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || env.CI_CLERK_PUBLISHABLE_KEY }}
 
+      # The worker is a required deployment component (ADR-003): a stack
+      # without it accepts uploads but never processes them.
+      - name: Derive worker tags
+        id: worker-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-worker
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build worker ${{ github.event_name == 'push' && 'and push' || '(smoke only)' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/worker/Dockerfile
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.worker-meta.outputs.tags }}
+          labels: ${{ steps.worker-meta.outputs.labels }}
+          cache-from: type=gha,scope=worker
+          cache-to: type=gha,scope=worker,mode=max
+
   prebuilt:
     name: Build prebuilt runner
     if: github.event_name == 'pull_request'

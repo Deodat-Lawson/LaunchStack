@@ -124,7 +124,7 @@ describe("Founder Weekly Review generation evidence envelope", () => {
         ];
         // This intentionally models the pre-snapshot aggregate (509 items)
         // that the 500-item snapshot cap subsequently trims.
-        const evidenceSnapshot = snapshot(items) as FounderWeeklyReviewEvidenceSnapshot;
+        const evidenceSnapshot = snapshot(items);
         const envelope = buildGenerationEvidenceEnvelope(evidenceSnapshot);
 
         expect(envelope.diagnostics.selectedBySourceType.founder_context).toBe(1);

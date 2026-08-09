@@ -137,7 +137,7 @@ export function BacklinksPanel({
             }}
           >
             <div style={{ fontWeight: 600 }}>
-              {r.title || "Untitled note"}
+              {(r.title ?? "") || "Untitled note"}
             </div>
             {r.snippet && (
               <div

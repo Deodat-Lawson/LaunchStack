@@ -4,7 +4,12 @@ jest.mock("~/server/storage/vercel-blob", () => ({
   isPrivateBlobUrl: jest.fn(() => false),
 }));
 
-import { selectSamplePages } from "@launchstack/core/ocr/complexity";
+import {
+  determineDocumentRouting,
+  renderPagesToImages,
+  selectSamplePages,
+} from "@launchstack/core/ocr/complexity";
+import { configureOcr } from "@launchstack/core/ocr/config";
 
 describe("OCR Complexity Module", () => {
   describe("selectSamplePages", () => {
@@ -294,6 +299,165 @@ describe("OCR Complexity Module", () => {
           expect(Array.isArray(result)).toBe(true);
         });
       });
+    });
+  });
+
+  describe("determineDocumentRouting (document-converter /route contract)", () => {
+    const CONVERTER_URL = "http://test-converter:8002";
+    const API_KEY = "test-converter-key";
+    const DOCUMENT_URL = "https://example.com/doc.pdf";
+    const originalFetch = global.fetch;
+    let warnSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      configureOcr({ converter: { url: CONVERTER_URL, apiKey: API_KEY } });
+      global.fetch = jest.fn() as unknown as typeof fetch;
+      warnSpy = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+    });
+
+    afterEach(() => {
+      configureOcr({});
+      global.fetch = originalFetch;
+      warnSpy.mockRestore();
+    });
+
+    it("POSTs the RouteRequest wire shape with schemaVersion and X-API-Key", async () => {
+      (global.fetch as jest.Mock).mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          schemaVersion: 1,
+          provider: "NATIVE_PDF",
+          reason: "native-text-layer",
+          pageCount: 4,
+          signals: { hasInteractiveForm: false, textSampleChars: 180 },
+        }),
+        text: async () => "",
+      } as Response);
+
+      const decision = await determineDocumentRouting(DOCUMENT_URL);
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      const [url, init] = (global.fetch as jest.Mock).mock.calls[0] as [
+        string,
+        RequestInit,
+      ];
+      expect(url).toBe(`${CONVERTER_URL}/route`);
+      expect(init.method).toBe("POST");
+      expect((init.headers as Record<string, string>)["X-API-Key"]).toBe(API_KEY);
+      const body = JSON.parse(init.body as string);
+      expect(body).toEqual({ schemaVersion: 1, documentUrl: DOCUMENT_URL });
+      // The removed per-request env/credential map must never come back.
+      expect(body).not.toHaveProperty("env");
+
+      expect(decision).toEqual({
+        provider: "NATIVE_PDF",
+        reason: "native-text-layer",
+        pageCount: 4,
+        signals: { hasInteractiveForm: false, textSampleChars: 180 },
+      });
+      // No fabricated confidence in the decision.
+      expect(decision).not.toHaveProperty("confidence");
+    });
+
+    it("exposes vision signals from the converter response", async () => {
+      (global.fetch as jest.Mock).mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          schemaVersion: 1,
+          provider: "LANDING_AI",
+          reason: "vision-complex",
+          pageCount: 2,
+          signals: { visionLabel: "handwritten document", visionScore: 0.81 },
+        }),
+        text: async () => "",
+      } as Response);
+
+      const decision = await determineDocumentRouting(DOCUMENT_URL);
+      expect(decision.signals.visionLabel).toBe("handwritten document");
+      expect(decision.signals.visionScore).toBe(0.81);
+      expect(decision.reason).toBe("vision-complex");
+    });
+
+    it("falls back locally with reason vision-unavailable and no confidence when unreachable", async () => {
+      (global.fetch as jest.Mock).mockRejectedValue(
+        new Error("connect ECONNREFUSED")
+      );
+
+      const decision = await determineDocumentRouting(DOCUMENT_URL);
+
+      // converter.url is configured, so the local default is DOCLING.
+      expect(decision.provider).toBe("DOCLING");
+      expect(decision.reason).toBe("vision-unavailable");
+      expect(decision.pageCount).toBe(0);
+      expect(decision.signals).toEqual({});
+      expect(decision).not.toHaveProperty("confidence");
+    });
+
+    it("falls back without any fetch when no converter is configured", async () => {
+      configureOcr({});
+
+      const decision = await determineDocumentRouting(DOCUMENT_URL);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+      expect(decision.reason).toBe("vision-unavailable");
+      expect(decision).not.toHaveProperty("confidence");
+    });
+  });
+
+  describe("renderPagesToImages (document-converter /render-pages contract)", () => {
+    const CONVERTER_URL = "http://test-converter:8002";
+    const API_KEY = "test-converter-key";
+    const originalFetch = global.fetch;
+    let warnSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      configureOcr({ converter: { url: CONVERTER_URL, apiKey: API_KEY } });
+      global.fetch = jest.fn() as unknown as typeof fetch;
+      warnSpy = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+    });
+
+    afterEach(() => {
+      configureOcr({});
+      global.fetch = originalFetch;
+      warnSpy.mockRestore();
+    });
+
+    it("sends schemaVersion, auth header, and 0-based pageIndices", async () => {
+      const png = Buffer.from("png-bytes").toString("base64");
+      (global.fetch as jest.Mock).mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ schemaVersion: 1, images: [png, png] }),
+        text: async () => "",
+      } as Response);
+
+      const pdf = new TextEncoder().encode("%PDF-1.7").buffer;
+      // Callers pass 1-based page numbers; the wire contract is 0-based.
+      const images = await renderPagesToImages(pdf, [1, 3]);
+
+      const [url, init] = (global.fetch as jest.Mock).mock.calls[0] as [
+        string,
+        RequestInit,
+      ];
+      expect(url).toBe(`${CONVERTER_URL}/render-pages`);
+      expect((init.headers as Record<string, string>)["X-API-Key"]).toBe(API_KEY);
+      const body = JSON.parse(init.body as string);
+      expect(body.schemaVersion).toBe(1);
+      expect(body.pageIndices).toEqual([0, 2]);
+      expect(typeof body.buffer).toBe("string");
+
+      expect(images).toHaveLength(2);
+      expect(Buffer.from(images[0]!).toString()).toBe("png-bytes");
+    });
+
+    it("returns [] when the converter is unreachable", async () => {
+      (global.fetch as jest.Mock).mockRejectedValue(new Error("boom"));
+      const pdf = new TextEncoder().encode("%PDF-1.7").buffer;
+      await expect(
+        renderPagesToImages(pdf, [1])
+      ).resolves.toEqual([]);
     });
   });
 });

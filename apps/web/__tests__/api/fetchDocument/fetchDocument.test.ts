@@ -4,6 +4,12 @@ jest.mock("~/server/storage/vercel-blob", () => ({
   putFile: jest.fn(),
 }));
 
+// Keep the storage backend deterministic regardless of local/CI env vars —
+// with S3 configured the route would rewrite http urls to the proxy path.
+jest.mock("~/lib/storage", () => ({
+  isS3Storage: jest.fn(() => false),
+}));
+
 jest.mock("@clerk/nextjs/server", () => ({
   auth: jest.fn(),
 }));
@@ -12,16 +18,29 @@ jest.mock("~/lib/validation", () => ({
   validateRequestBody: jest.fn(),
 }));
 
-jest.mock("~/server/db/core", () => ({
-  dbCore: {
+// The dedicated second pool (~/server/db/core, `dbCore`) was deleted — the
+// route now uses the engine's shared Drizzle client from ~/server/db, so the
+// mock moves there.
+jest.mock("~/server/db", () => ({
+  db: {
     select: jest.fn(),
   },
+}));
+
+// The route resolves the active workspace (cookie-based multi-company
+// switching) via ~/lib/active-workspace. Default to the user's own
+// companyId, which mirrors the "no cookie set" production behavior.
+jest.mock("~/lib/active-workspace", () => ({
+  resolveActiveCompanyForUser: jest.fn(
+    async (_userPk: number | bigint, defaultCompanyId: number | bigint) =>
+      BigInt(defaultCompanyId),
+  ),
 }));
 
 import { POST } from "~/app/api/fetchDocument/route";
 import { auth } from "@clerk/nextjs/server";
 import { validateRequestBody } from "~/lib/validation";
-import { dbCore } from "~/server/db/core";
+import { db } from "~/server/db";
 
 describe("POST /api/fetchDocument", () => {
   beforeEach(() => {
@@ -38,9 +57,9 @@ describe("POST /api/fetchDocument", () => {
     (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-123" });
 
     const mockDocuments = [
-      { id: 1, name: "Document 1", companyId: 1, content: "Content 1", currentVersionId: null },
-      { id: 2, name: "Document 2", companyId: 1, content: "Content 2", currentVersionId: null },
-      { id: 3, name: "Document 3", companyId: 1, content: "Content 3", currentVersionId: null },
+      { id: 1, title: "Document 1.pdf", url: "https://example.com/files/document-1.pdf", companyId: 1, content: "Content 1", currentVersionId: null },
+      { id: 2, title: "Document 2", url: "https://example.com/files/document-2", companyId: 1, content: "Content 2", currentVersionId: null },
+      { id: 3, title: "Document 3", url: "https://example.com/files/document-3", companyId: 1, content: "Content 3", currentVersionId: null },
     ];
 
     // First call: user lookup
@@ -49,7 +68,7 @@ describe("POST /api/fetchDocument", () => {
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "test-user-123", role: "employer", companyId: 1 }
+            { id: 1, userId: "test-user-123", role: "employer", companyId: 1 }
           ]),
         }),
       })
@@ -59,7 +78,7 @@ describe("POST /api/fetchDocument", () => {
         }),
       });
 
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const request = new Request("http://localhost/api/fetchDocument", {
       method: "POST",
@@ -71,7 +90,13 @@ describe("POST /api/fetchDocument", () => {
     const json = await response.json();
 
     expect(response.status).toBe(200);
-    expect(json).toEqual(mockDocuments);
+    // The route enriches each document with a mimeType inferred from the
+    // title/url extension when one is recognizable.
+    expect(json).toEqual([
+      { ...mockDocuments[0], mimeType: "application/pdf" },
+      mockDocuments[1],
+      mockDocuments[2],
+    ]);
     expect(json).toHaveLength(3);
   });
 
@@ -87,7 +112,7 @@ describe("POST /api/fetchDocument", () => {
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "test-user-456", role: "employer", companyId: 2 }
+            { id: 1, userId: "test-user-456", role: "employer", companyId: 2 }
           ]),
         }),
       })
@@ -97,7 +122,7 @@ describe("POST /api/fetchDocument", () => {
         }),
       });
 
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const request = new Request("http://localhost/api/fetchDocument", {
       method: "POST",
@@ -127,7 +152,7 @@ describe("POST /api/fetchDocument", () => {
         where: jest.fn().mockResolvedValue([]),
       }),
     });
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const request = new Request("http://localhost/api/fetchDocument", {
       method: "POST",
@@ -205,7 +230,7 @@ describe("POST /api/fetchDocument", () => {
           where: jest.fn().mockRejectedValue(new Error("Database connection failed")),
         }),
       });
-      (dbCore.select as jest.Mock) = mockSelect;
+      (db.select as jest.Mock) = mockSelect;
 
       const request = new Request("http://localhost/api/fetchDocument", {
         method: "POST",
@@ -241,7 +266,7 @@ describe("POST /api/fetchDocument", () => {
         .mockReturnValueOnce({
           from: jest.fn().mockReturnValue({
             where: jest.fn().mockResolvedValue([
-              { userId: "test-user-123", role: "employer", companyId: 1 }
+              { id: 1, userId: "test-user-123", role: "employer", companyId: 1 }
             ]),
           }),
         })
@@ -251,7 +276,7 @@ describe("POST /api/fetchDocument", () => {
           }),
         });
 
-      (dbCore.select as jest.Mock) = mockSelect;
+      (db.select as jest.Mock) = mockSelect;
 
       const request = new Request("http://localhost/api/fetchDocument", {
         method: "POST",
@@ -283,7 +308,7 @@ describe("POST /api/fetchDocument", () => {
         where: jest.fn().mockResolvedValue([]),
       }),
     });
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const request = new Request("http://localhost/api/fetchDocument", {
       method: "POST",
@@ -308,15 +333,15 @@ describe("POST /api/fetchDocument", () => {
 
     // Documents for company 1 only
     const mockDocuments = [
-      { id: 1, name: "Company 1 Doc", companyId: 1 },
-      { id: 2, name: "Another Company 1 Doc", companyId: 1 },
+      { id: 1, title: "Company 1 Doc", url: "https://example.com/files/doc-1", companyId: 1, currentVersionId: null },
+      { id: 2, title: "Another Company 1 Doc", url: "https://example.com/files/doc-2", companyId: 1, currentVersionId: null },
     ];
 
     const mockSelect = jest.fn()
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "test-user-123", role: "employer", companyId: 1 }
+            { id: 1, userId: "test-user-123", role: "employer", companyId: 1 }
           ]),
         }),
       })
@@ -326,7 +351,7 @@ describe("POST /api/fetchDocument", () => {
         }),
       });
 
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const request = new Request("http://localhost/api/fetchDocument", {
       method: "POST",
@@ -353,15 +378,15 @@ describe("POST /api/fetchDocument", () => {
     (auth as unknown as jest.Mock).mockResolvedValue({ userId: "test-user-789" });
 
     const mockDocuments = [
-      { id: 10, name: "Company 5 Doc", companyId: 5 },
-      { id: 11, name: "Another Company 5 Doc", companyId: 5 },
+      { id: 10, title: "Company 5 Doc", url: "https://example.com/files/doc-10", companyId: 5, currentVersionId: null },
+      { id: 11, title: "Another Company 5 Doc", url: "https://example.com/files/doc-11", companyId: 5, currentVersionId: null },
     ];
 
     const mockSelect = jest.fn()
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "test-user-789", role: "employee", companyId: 5 }
+            { id: 1, userId: "test-user-789", role: "employee", companyId: 5 }
           ]),
         }),
       })
@@ -371,7 +396,7 @@ describe("POST /api/fetchDocument", () => {
         }),
       });
 
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const request = new Request("http://localhost/api/fetchDocument", {
       method: "POST",
@@ -398,14 +423,14 @@ describe("POST /api/fetchDocument", () => {
     (auth as unknown as jest.Mock).mockResolvedValue({ userId: "employee-user-111" });
 
     const mockDocuments = [
-      { id: 20, name: "Employee Doc", companyId: 3, currentVersionId: null },
+      { id: 20, title: "Employee Doc", url: "https://example.com/files/doc-20", companyId: 3, currentVersionId: null },
     ];
 
     const mockSelect = jest.fn()
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "employee-user-111", role: "employee", companyId: 3 }
+            { id: 1, userId: "employee-user-111", role: "employee", companyId: 3 }
           ]),
         }),
       })
@@ -415,7 +440,7 @@ describe("POST /api/fetchDocument", () => {
         }),
       });
 
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const request = new Request("http://localhost/api/fetchDocument", {
       method: "POST",

@@ -209,10 +209,15 @@ export async function getMeetingRuntime(
     initialState: rowToState(row),
   });
 
+  // Chain persists per meeting so states land in event order — concurrent
+  // fire-and-forget writes could interleave and persist a stale state last.
+  let persistChain: Promise<void> = Promise.resolve();
   const dispose = orchestrator.on((event) => {
-    void persistState(meetingId, event.state).catch((err: unknown) => {
-      console.error(`[collab] failed to persist meeting ${meetingId}:`, err);
-    });
+    persistChain = persistChain
+      .then(() => persistState(meetingId, event.state))
+      .catch((err: unknown) => {
+        console.error(`[collab] failed to persist meeting ${meetingId}:`, err);
+      });
   });
 
   const bridge = await buildBridge(config, orchestrator, store);

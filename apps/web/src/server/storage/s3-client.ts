@@ -18,17 +18,15 @@ let _client: S3Client | null = null;
 let _bucketEnsured = false;
 
 export function getS3Client(): S3Client {
-  if (!_client) {
-    _client = new S3Client({
-      endpoint: env.server.NEXT_PUBLIC_S3_ENDPOINT,
-      region: env.server.S3_REGION ?? "us-east-1",
-      credentials: {
-        accessKeyId: env.server.S3_ACCESS_KEY!,
-        secretAccessKey: env.server.S3_SECRET_KEY!,
-      },
-      forcePathStyle: true,
-    });
-  }
+  _client ??= new S3Client({
+    endpoint: env.server.NEXT_PUBLIC_S3_ENDPOINT,
+    region: env.server.S3_REGION ?? "us-east-1",
+    credentials: {
+      accessKeyId: env.server.S3_ACCESS_KEY!,
+      secretAccessKey: env.server.S3_SECRET_KEY!,
+    },
+    forcePathStyle: true,
+  });
   return _client;
 }
 

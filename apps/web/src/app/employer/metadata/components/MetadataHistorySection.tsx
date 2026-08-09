@@ -20,6 +20,24 @@ interface HistoryResponse {
     error?: string;
 }
 
+/**
+ * Render a diff entry's recorded `.value` for display. Objects are
+ * JSON-encoded so they never fall back to "[object Object]".
+ */
+function formatEntryValue(node: unknown): string {
+    const value = (node as { value?: unknown }).value;
+    if (value == null) return "";
+    if (typeof value === "string") return value;
+    if (
+        typeof value === "number" ||
+        typeof value === "boolean" ||
+        typeof value === "bigint"
+    ) {
+        return String(value);
+    }
+    return JSON.stringify(value);
+}
+
 const changeTypeConfig: Record<ChangeType, { label: string; className: string }> = {
     extraction: {
         label: "AI Extraction",
@@ -74,7 +92,7 @@ function DiffSummary({ diff, expanded }: { diff: MetadataDiff; expanded: boolean
                             + {entry.path}
                             {entry.new && (
                                 <span className="text-muted-foreground ml-2">
-                                    → {String((entry.new as { value?: unknown }).value ?? "").slice(0, 60)}
+                                    → {formatEntryValue(entry.new).slice(0, 60)}
                                 </span>
                             )}
                         </div>
@@ -84,9 +102,9 @@ function DiffSummary({ diff, expanded }: { diff: MetadataDiff; expanded: boolean
                             ~ {entry.path}
                             {entry.old && entry.new && (
                                 <span className="text-muted-foreground ml-2">
-                                    {String((entry.old as { value?: unknown }).value ?? "").slice(0, 30)}
+                                    {formatEntryValue(entry.old).slice(0, 30)}
                                     {" → "}
-                                    {String((entry.new as { value?: unknown }).value ?? "").slice(0, 30)}
+                                    {formatEntryValue(entry.new).slice(0, 30)}
                                 </span>
                             )}
                         </div>

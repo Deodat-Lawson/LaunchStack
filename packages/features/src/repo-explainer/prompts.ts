@@ -48,7 +48,7 @@ export function buildFilesToExploreUserPrompt(tree: string): string {
 }
 
 export function parsePathsFromResponse(text: string | null | undefined): string[] {
-  if (!text || !text.trim()) return [];
+  if (!text?.trim()) return [];
   let raw = text.trim();
 
   // Strip code fences if the model wrapped the output
@@ -168,13 +168,11 @@ Repository context:
 
 /** Extract the summary from the response (before the mermaid block). */
 export function extractSummary(text: string | null | undefined): string | null {
-  if (!text || !text.trim()) return null;
+  if (!text?.trim()) return null;
   const trimmed = text.trim().replace(/\\n/g, "\n");
 
   // Try "## Summary" ... "## Diagram" or "## Summary" ... ```mermaid
-  const sectionMatch = trimmed.match(
-    /(?:##\s*Summary|Summary)\s*:?\s*\n+([\s\S]*?)(?=\n##\s*Diagram|\n```mermaid|```mermaid|$)/i,
-  );
+  const sectionMatch = /(?:##\s*Summary|Summary)\s*:?\s*\n+([\s\S]*?)(?=\n##\s*Diagram|\n```mermaid|```mermaid|$)/i.exec(trimmed);
   if (sectionMatch?.[1]) {
     const s = sectionMatch[1].trim();
     if (s.length > 20) return s;
@@ -194,9 +192,9 @@ export function extractSummary(text: string | null | undefined): string | null {
 
 /** Extract mermaid code from response (handles ```mermaid ... ``` or raw mermaid). */
 export function extractMermaidCode(text: string | null | undefined): string | null {
-  if (!text || !text.trim()) return null;
+  if (!text?.trim()) return null;
   const trimmed = text.trim();
-  const match = trimmed.match(/```mermaid\s*\n?([\s\S]*?)```/i);
+  const match = /```mermaid\s*\n?([\s\S]*?)```/i.exec(trimmed);
   if (match?.[1]) return match[1].trim();
   if (/^\s*(graph|flowchart|classDiagram|sequenceDiagram|stateDiagram|erDiagram)\s/i.test(trimmed)) {
     return trimmed;

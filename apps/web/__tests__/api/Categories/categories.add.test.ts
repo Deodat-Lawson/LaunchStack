@@ -18,6 +18,16 @@ jest.mock("~/server/db/index", () => ({
   },
 }));
 
+// The route resolves the active workspace (cookie-based multi-company
+// switching) via ~/lib/active-workspace. Default to the user's own
+// companyId, which mirrors the "no cookie set" production behavior.
+jest.mock("~/lib/active-workspace", () => ({
+  resolveActiveCompanyForUser: jest.fn(
+    async (_userPk: number | bigint, defaultCompanyId: number | bigint) =>
+      BigInt(defaultCompanyId),
+  ),
+}));
+
 describe("POST /api/Categories/AddCategories", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -37,7 +47,7 @@ describe("POST /api/Categories/AddCategories", () => {
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({
         where: jest.fn().mockResolvedValue([
-          { userId: "test-user-123", role: "employer", companyId: 1 }
+          { id: 1, userId: "test-user-123", role: "employer", companyId: 1 }
         ]),
       }),
     });
@@ -78,7 +88,7 @@ describe("POST /api/Categories/AddCategories", () => {
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({
         where: jest.fn().mockResolvedValue([
-          { userId: "owner-user-456", role: "owner", companyId: 2 }
+          { id: 1, userId: "owner-user-456", role: "owner", companyId: 2 }
         ]),
       }),
     });
@@ -144,7 +154,7 @@ describe("POST /api/Categories/AddCategories", () => {
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({
         where: jest.fn().mockResolvedValue([
-          { userId: "employee-user-789", role: "employee", companyId: 3 }
+          { id: 1, userId: "employee-user-789", role: "employee", companyId: 3 }
         ]),
       }),
     });

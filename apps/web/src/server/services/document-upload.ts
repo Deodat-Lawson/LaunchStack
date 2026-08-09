@@ -97,10 +97,10 @@ export async function processDocumentUpload({
     // ------------------------------------------------------------------
     // Credit pre-check (cloud mode only)
     // ------------------------------------------------------------------
-    // isCloudMode() reads the provider registry, which only getEngine()
-    // populates. Called first on a cold invocation it saw an empty registry,
-    // read no SIDECAR_URL, and concluded "cloud" — billing credits to
-    // deployments that run everything locally. Idempotent and cached.
+    // isCloudMode() is always true since ADR-004 §5 removed the sidecar
+    // deployment mode, but getEngine() still must run first so the provider
+    // registry and credits port are populated before the pre-check below.
+    // Idempotent and cached.
     getEngine();
 
     if (isCloudMode()) {

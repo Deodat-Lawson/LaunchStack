@@ -41,7 +41,7 @@ function statusFor(value: string | undefined): StatusKey {
 }
 
 function statusLabel(key: StatusKey, original?: string) {
-  if (original && original.trim()) {
+  if (original?.trim()) {
     const trimmed = original.trim();
     return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
   }

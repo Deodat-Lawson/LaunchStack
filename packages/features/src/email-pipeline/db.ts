@@ -1,6 +1,7 @@
-import { and, asc, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, lt, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/core/db";
+
 import {
   emailCampaignApprovals,
   emailCampaigns,
@@ -13,6 +14,7 @@ import {
 
 import {
   CampaignLifecycleError,
+  DELIVERED_OR_IN_FLIGHT,
   TemplateReviewSchema,
   type ApprovalRecord,
   type CampaignRecord,
@@ -22,6 +24,7 @@ import {
   type SendAttemptRecord,
   type SendMode,
   type SendResult,
+  type SendStatus,
   type TemplateReview,
   type TemplateSource,
   type TemplateVersion,
@@ -90,6 +93,7 @@ function toCampaign(row: CampaignRow): CampaignRecord {
     goal: row.goal,
     status: row.status as CampaignStatus,
     approvedVersionId: row.approvedVersionId,
+    automationKey: row.automationKey,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -114,6 +118,54 @@ export async function createCampaign(args: {
     .returning();
   if (!row) throw new Error("Failed to create email campaign");
   return toCampaign(row);
+}
+
+/**
+ * Claim a company-scoped automation key BEFORE any generation happens.
+ *
+ * The per-campaign send key cannot make an unattended run retry-safe, because
+ * a retry that creates its own campaign never collides with the first one.
+ * This does: the unique (company_id, automation_key) index means the second
+ * request loses the insert, reads back the original campaign, and resumes it
+ * instead of generating and sending a second time.
+ */
+export async function claimAutomationCampaign(args: {
+  companyId: number;
+  name: string;
+  goal?: string | null;
+  automationKey: string;
+  createdBy?: number | null;
+}): Promise<{ campaign: CampaignRecord; created: boolean }> {
+  const db = getDb();
+  const [inserted] = await db
+    .insert(emailCampaigns)
+    .values({
+      companyId: BigInt(args.companyId),
+      name: args.name,
+      goal: args.goal ?? null,
+      status: "draft",
+      automationKey: args.automationKey,
+      createdBy: args.createdBy ?? null,
+    })
+    .onConflictDoNothing({
+      target: [emailCampaigns.companyId, emailCampaigns.automationKey],
+    })
+    .returning();
+
+  if (inserted) return { campaign: toCampaign(inserted), created: true };
+
+  const [existing] = await db
+    .select()
+    .from(emailCampaigns)
+    .where(
+      and(
+        eq(emailCampaigns.companyId, BigInt(args.companyId)),
+        eq(emailCampaigns.automationKey, args.automationKey),
+      ),
+    )
+    .limit(1);
+  if (!existing) throw new Error("Failed to claim an automation run key");
+  return { campaign: toCampaign(existing), created: false };
 }
 
 /**
@@ -208,8 +260,16 @@ function toVersion(row: VersionRow): TemplateVersion {
 }
 
 /**
- * Append a new immutable version and refresh the campaign's denormalized
- * snapshot. Version numbers are allocated inside the write, and the unique
+ * Append a new immutable version and INVALIDATE any standing approval.
+ *
+ * The invalidation is the point. An approval clears one exact version; once
+ * the campaign has different content on offer, that decision no longer
+ * describes anything a human agreed to send. Leaving `approvedVersionId` in
+ * place would let a later dispatch quietly ship the older approved version
+ * while the UI shows the new draft — so the pointer is cleared and the live
+ * approval revoked in the same transaction that adds the version.
+ *
+ * Version numbers are allocated inside the write, and the unique
  * (campaign, version) index is the arbiter if two generations race — the
  * loser retries with the next number rather than overwriting.
  */
@@ -226,46 +286,51 @@ export async function appendTemplateVersion(args: {
   const db = getDb();
 
   for (let attempt = 0; attempt < 3; attempt++) {
-    const [{ next } = { next: 1 }] = await db
-      .select({
-        next: sql<number>`coalesce(max(${emailTemplateVersions.version}), 0) + 1`,
-      })
-      .from(emailTemplateVersions)
-      .where(eq(emailTemplateVersions.campaignId, args.campaignId));
-
     try {
-      const [row] = await db
-        .insert(emailTemplateVersions)
-        .values({
-          campaignId: args.campaignId,
-          version: Number(next),
-          subject: args.template.subject,
-          body: args.template.body,
-          variables: args.template.variables,
-          source: args.source,
-          goal: args.goal ?? null,
-          model: args.model ?? null,
-          promptVersion: args.promptVersion ?? null,
-          reviewVerdict: args.review?.verdict ?? null,
-          review: args.review ?? null,
-          createdBy: args.createdBy ?? null,
-        })
-        .returning();
-      if (!row) throw new Error("Failed to persist template version");
+      const row = await db.transaction(async (tx) => {
+        const [{ next } = { next: 1 }] = await tx
+          .select({
+            next: sql<number>`coalesce(max(${emailTemplateVersions.version}), 0) + 1`,
+          })
+          .from(emailTemplateVersions)
+          .where(eq(emailTemplateVersions.campaignId, args.campaignId));
 
-      // Snapshot the latest version onto the campaign for pre-lifecycle
-      // readers. The version row above stays the source of truth.
-      await db
-        .update(emailCampaigns)
-        .set({
-          subject: args.template.subject,
-          body: args.template.body,
-          model: args.model ?? null,
-          promptVersion: args.promptVersion ?? null,
-          templateVersion: String(row.version),
-          updatedAt: new Date(),
-        })
-        .where(eq(emailCampaigns.id, args.campaignId));
+        const [inserted] = await tx
+          .insert(emailTemplateVersions)
+          .values({
+            campaignId: args.campaignId,
+            version: Number(next),
+            subject: args.template.subject,
+            body: args.template.body,
+            variables: args.template.variables,
+            source: args.source,
+            goal: args.goal ?? null,
+            model: args.model ?? null,
+            promptVersion: args.promptVersion ?? null,
+            reviewVerdict: args.review?.verdict ?? null,
+            review: args.review ?? null,
+            createdBy: args.createdBy ?? null,
+          })
+          .returning();
+        if (!inserted) throw new Error("Failed to persist template version");
+
+        // New content on the table ⇒ nothing is cleared for delivery.
+        await tx
+          .update(emailCampaignApprovals)
+          .set({ revokedAt: new Date() })
+          .where(
+            and(
+              eq(emailCampaignApprovals.campaignId, args.campaignId),
+              isNull(emailCampaignApprovals.revokedAt),
+            ),
+          );
+        await tx
+          .update(emailCampaigns)
+          .set({ approvedVersionId: null, updatedAt: new Date() })
+          .where(eq(emailCampaigns.id, args.campaignId));
+
+        return inserted;
+      });
 
       return toVersion(row);
     } catch (err) {
@@ -541,7 +606,7 @@ function toAttempt(row: AttemptRow): SendAttemptRecord {
     templateVersionId: row.templateVersionId,
     idempotencyKey: row.idempotencyKey,
     mode: row.mode as SendMode,
-    status: row.status as "running" | "completed" | "failed",
+    status: row.status as SendAttemptRecord["status"],
     recipientCount: row.recipientCount,
     sentCount: row.sentCount,
     failedCount: row.failedCount,
@@ -624,29 +689,114 @@ export async function completeSendAttempt(args: {
     .where(eq(emailSendAttempts.id, args.attemptId));
 }
 
-export async function saveSends(args: {
+/**
+ * Reserve one recipient of one attempt BEFORE the provider is called.
+ *
+ * Returns false when a row already exists, which means some earlier pass over
+ * this attempt already reached this address — possibly delivering to it. The
+ * caller must then skip rather than retry: a lost duplicate is recoverable,
+ * a duplicate delivery is not.
+ */
+export async function claimRecipientSend(args: {
   campaignId: number;
-  attemptId: number | null;
+  attemptId: number;
+  recipientEmail: string;
   subject?: string | null;
-  results: SendResult[];
+  providerIdempotencyKey?: string | null;
+}): Promise<boolean> {
+  const db = getDb();
+  const [row] = await db
+    .insert(emailSends)
+    .values({
+      campaignId: args.campaignId,
+      attemptId: args.attemptId,
+      recipientEmail: args.recipientEmail,
+      subject: args.subject ?? null,
+      status: "queued",
+      providerIdempotencyKey: args.providerIdempotencyKey ?? null,
+    })
+    .onConflictDoNothing({
+      target: [emailSends.attemptId, emailSends.recipientEmail],
+    })
+    .returning({ id: emailSends.id });
+  return Boolean(row);
+}
+
+/**
+ * Write one outcome. Upserts because only real deliveries are claimed first —
+ * a suppressed, skipped or dry-run recipient has no reservation to update, but
+ * still belongs in the audit trail.
+ */
+export async function recordSendOutcome(args: {
+  campaignId: number;
+  attemptId: number;
+  subject?: string | null;
+  result: SendResult;
 }): Promise<void> {
-  if (args.results.length === 0) return;
   const db = getDb();
   await db
     .insert(emailSends)
-    .values(
-      args.results.map((r) => ({
-        campaignId: args.campaignId,
-        attemptId: args.attemptId,
-        recipientEmail: r.recipientEmail,
-        subject: args.subject ?? null,
-        status: r.status,
-        providerMessageId: r.providerMessageId ?? null,
-        error: r.error ?? null,
-        sentAt: r.status === "sent" ? new Date() : null,
-      })),
+    .values({
+      campaignId: args.campaignId,
+      attemptId: args.attemptId,
+      recipientEmail: args.result.recipientEmail,
+      subject: args.subject ?? null,
+      status: args.result.status,
+      providerMessageId: args.result.providerMessageId ?? null,
+      error: args.result.error ?? null,
+      sentAt: args.result.status === "sent" ? new Date() : null,
+    })
+    .onConflictDoUpdate({
+      target: [emailSends.attemptId, emailSends.recipientEmail],
+      set: {
+        status: args.result.status,
+        providerMessageId: args.result.providerMessageId ?? null,
+        error: args.result.error ?? null,
+        sentAt: args.result.status === "sent" ? new Date() : null,
+      },
+    });
+}
+
+/** Keep a long-running attempt visibly alive so recovery leaves it alone. */
+export async function touchSendAttempt(attemptId: number): Promise<void> {
+  const db = getDb();
+  await db
+    .update(emailSendAttempts)
+    .set({ heartbeatAt: new Date() })
+    .where(eq(emailSendAttempts.id, attemptId));
+}
+
+/**
+ * Reclaim attempts whose process died mid-delivery.
+ *
+ * Without this a crashed attempt stays `running` forever and its idempotency
+ * key answers every retry with "already in progress" — the campaign is wedged.
+ * Reclaiming marks it `abandoned` and leaves its `queued` rows exactly as they
+ * are, so those addresses stay blocked from re-delivery while the rest of the
+ * audience can still be sent to under a new key.
+ */
+export async function reclaimAbandonedAttempts(
+  campaignId: number,
+  staleAfterMs: number,
+): Promise<number> {
+  const db = getDb();
+  const cutoff = new Date(Date.now() - staleAfterMs);
+  const rows = await db
+    .update(emailSendAttempts)
+    .set({
+      status: "abandoned",
+      error: "Attempt was interrupted; recipients left in-flight are not retried.",
+      completedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(emailSendAttempts.campaignId, campaignId),
+        eq(emailSendAttempts.status, "running"),
+        lt(emailSendAttempts.heartbeatAt, cutoff),
+      ),
     )
-    .onConflictDoNothing();
+    .returning({ id: emailSendAttempts.id });
+  return rows.length;
 }
 
 /** Replay a completed attempt's per-recipient outcomes. */
@@ -685,7 +835,14 @@ export async function listSendAttempts(
   return rows.map(toAttempt);
 }
 
-/** Emails already delivered for a campaign — feeds cross-attempt idempotency. */
+/**
+ * Addresses this campaign must never deliver to again — feeds cross-attempt
+ * idempotency.
+ *
+ * Includes `queued` as well as `sent`: a claim row with no outcome is one the
+ * provider may or may not have accepted before the process died, and the only
+ * safe reading of "may have been sent" is "do not send again".
+ */
 export async function sentEmails(campaignId: number): Promise<Set<string>> {
   const db = getDb();
   const rows = await db
@@ -695,5 +852,9 @@ export async function sentEmails(campaignId: number): Promise<Set<string>> {
     })
     .from(emailSends)
     .where(eq(emailSends.campaignId, campaignId));
-  return new Set(rows.filter((r) => r.status === "sent").map((r) => r.email));
+  return new Set(
+    rows
+      .filter((r) => DELIVERED_OR_IN_FLIGHT.has(r.status as SendStatus))
+      .map((r) => r.email),
+  );
 }

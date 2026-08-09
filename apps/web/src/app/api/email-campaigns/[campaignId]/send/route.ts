@@ -84,7 +84,7 @@ export async function POST(
         ? { recipients: parsed.data.recipients }
         : {}),
       senderIdentity: actor.actor.senderIdentity,
-      unsubscribeBaseUrl: unsubscribeBaseUrl(request, actor.actor.companyId),
+      unsubscribeBaseUrl: unsubscribeBaseUrl(request),
       requestedBy: actor.actor.userId,
     });
 

@@ -60,17 +60,26 @@ jest.mock("~/server/storage/s3-client", () => ({
 const mockInsertReturning = jest.fn(() => Promise.resolve([{ id: 42 }]));
 const mockDelete = jest.fn().mockResolvedValue(undefined);
 
-jest.mock("~/server/db", () => ({
-  db: {
-    insert: jest.fn(() => ({
-      values: jest.fn(() => ({
-        returning: mockInsertReturning,
-      })),
+const mockDb = {
+  insert: jest.fn(() => ({
+    values: jest.fn(() => ({
+      returning: mockInsertReturning,
     })),
-    delete: jest.fn(() => ({
-      where: mockDelete,
-    })),
-  },
+  })),
+  delete: jest.fn(() => ({
+    where: mockDelete,
+  })),
+};
+
+jest.mock("~/server/db", () => ({ db: mockDb }));
+
+// lib/storage reaches the database through getEngine().db rather than the
+// ~/server/db proxy — it sits inside the server/db → engine → storage/port →
+// lib/storage cycle, where the un-hoisted const can still be undefined.
+// Mocking the engine too keeps this suite off the real one, which would need
+// full configuration (and drags the credits + schema graph in with it).
+jest.mock("~/server/engine", () => ({
+  getEngine: () => ({ db: mockDb }),
 }));
 
 jest.mock("@launchstack/core/db/schema", () => ({

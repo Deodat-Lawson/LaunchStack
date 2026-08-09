@@ -6,6 +6,7 @@ export * from "./merge";
 export * from "./generator";
 export * from "./reviewer";
 export * from "./send";
+export * from "./unsubscribe-token";
 
 /** Campaign lifecycle: generate → approve → deliver, as separate transitions. */
 export * from "./prepare";
@@ -18,6 +19,11 @@ export * from "./run";
 
 export {
   addSuppression,
+  appendTemplateVersion,
+  claimAutomationCampaign,
+  createCampaign,
+  freezeRecipients,
+  reclaimAbandonedAttempts,
   isSuppressed,
   getCampaign,
   listCampaigns,

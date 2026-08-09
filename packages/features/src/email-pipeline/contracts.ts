@@ -38,5 +38,11 @@ export interface SendAdapter {
     subject: string;
     body: string;
     headers?: Record<string, string>;
+    /**
+     * Stable per-recipient key. Providers that support it (Resend, SendGrid)
+     * should pass it through so their own dedup catches a duplicate we failed
+     * to catch — the last line of defence before a second email is delivered.
+     */
+    idempotencyKey?: string;
   }): Promise<{ messageId: string }>;
 }

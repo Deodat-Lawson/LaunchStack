@@ -1,9 +1,9 @@
-import { z } from "zod";
-
 import {
-  RecipientSchema,
+  resolveAutomationPolicy,
   runAutomatedEmailCampaign,
 } from "@launchstack/features/email-pipeline";
+
+import { AutomatedRunSchema } from "../email-campaigns/_lib/schemas";
 
 import {
   fail,
@@ -17,34 +17,19 @@ import {
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
-const RunSchema = z.object({
-  name: z.string().min(1).max(256),
-  goal: z.string().max(2000).optional(),
-  recipients: z.array(RecipientSchema).min(1).max(500),
-  mode: z.enum(["dry_run", "send"]).optional(),
-  idempotencyKey: z.string().min(1).max(200).optional(),
-  policy: z
-    .object({
-      /**
-       * Defaults to true here, unlike the legacy one-shot endpoint: an
-       * unattended run should not talk its way past its own reviewer.
-       */
-      requireReviewPass: z.boolean().optional(),
-      maxRecipients: z.number().int().positive().optional(),
-      overrideReason: z.string().min(1).max(1000).optional(),
-    })
-    .optional(),
-});
-
 /**
  * POST /api/email-campaign-runs
- * Unattended automation: prepare → policy → auto-approve → dispatch.
+ * Unattended automation: claim → prepare → policy → auto-approve → dispatch.
  *
  * Distinct from `/api/email-campaigns/{id}/send` on purpose. This is the only
  * endpoint allowed to approve on a human's behalf, and it still persists and
  * locks the exact template version first — the approval row records
  * `automation` as the approver, so the audit trail never claims a person
  * looked at it.
+ *
+ * Requires `Idempotency-Key` (or `idempotencyKey` in the body). The key is
+ * claimed against the company BEFORE generation, so a retry after a timeout
+ * resumes the original campaign instead of generating and sending a second.
  *
  * When the policy blocks the run, the campaign and its reviewed template are
  * still persisted; it stops before delivery and returns `blockedReason`, so a
@@ -55,9 +40,20 @@ export async function POST(request: Request) {
     const actor = await resolveActor();
     if (!actor.ok) return actor.response;
 
-    const parsed = RunSchema.safeParse(await readJson(request));
+    const parsed = AutomatedRunSchema.safeParse(await readJson(request));
     if (!parsed.success) {
       return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+    }
+
+    const idempotencyKey =
+      request.headers.get("Idempotency-Key")?.trim() ??
+      parsed.data.idempotencyKey;
+    if (!idempotencyKey) {
+      return fail(
+        "An Idempotency-Key header is required to start an automated run.",
+        400,
+        { code: "idempotency_key_required" },
+      );
     }
 
     const mode =
@@ -73,13 +69,11 @@ export async function POST(request: Request) {
       recipients: parsed.data.recipients,
       mode,
       senderIdentity: actor.actor.senderIdentity,
-      unsubscribeBaseUrl: unsubscribeBaseUrl(request, actor.actor.companyId),
-      ...(parsed.data.idempotencyKey
-        ? { idempotencyKey: parsed.data.idempotencyKey }
-        : {}),
+      unsubscribeBaseUrl: unsubscribeBaseUrl(request),
+      idempotencyKey,
       actorUserId: actor.actor.userId,
       actorEmail: actor.actor.email,
-      ...(parsed.data.policy ? { policy: parsed.data.policy } : {}),
+      policy: resolveAutomationPolicy(),
     });
 
     return ok(
@@ -87,6 +81,7 @@ export async function POST(request: Request) {
         campaignId: run.campaign.id,
         status: run.campaign.status,
         mode,
+        resumed: run.resumed,
         templateVersionId: run.version.id,
         version: run.version.version,
         template: run.version.template,

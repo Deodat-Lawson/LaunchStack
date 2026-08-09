@@ -117,7 +117,11 @@ jobs:
   schema-drift:
     runs-on: ubuntu-latest
     steps:
+      # Full history: the DDL-only gate below diffs against the PR base commit,
+      # which a shallow clone does not contain.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
@@ -152,8 +156,21 @@ jobs:
       # replayed as part of every clean-database build.
       - name: Migrations are DDL-only
         run: |
-          base="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
-          changed=$(git diff --name-only "$base"...HEAD -- 'packages/core/drizzle/*.sql' 'apps/web/drizzle/*.sql' || true)
+          base="${{ github.event.pull_request.base.sha || '' }}"
+          if [ -z "$base" ]; then
+            # Push builds have no PR base; compare against the previous commit,
+            # or against the empty tree for a root commit.
+            base=$(git rev-parse --verify --quiet HEAD~1 \
+                   || git hash-object -t tree /dev/null)
+          fi
+          # No `|| true` here. This step used to swallow git's failure: the
+          # checkout was shallow, the base commit was absent, `git diff` died,
+          # and the empty result meant the loop inspected nothing while the step
+          # reported success. Both gates below were silently vacuous.
+          if ! changed=$(git diff --name-only "$base"...HEAD -- 'packages/core/drizzle/*.sql' 'apps/web/drizzle/*.sql'); then
+            echo "::error::Could not diff migrations against $base. The gate cannot run, so it fails."
+            exit 1
+          fi
           status=0
           for f in $changed; do
             [ -f "$f" ] || continue

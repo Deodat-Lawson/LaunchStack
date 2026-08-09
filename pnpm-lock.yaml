@@ -501,6 +501,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.14
         version: 3.4.17
+      zod-to-json-schema:
+        specifier: ^3.25.1
+        version: 3.25.2(zod@3.25.76)
 
   packages/core:
     dependencies:
@@ -10399,11 +10402,6 @@ packages:
   zlibjs@0.3.1:
     resolution: {integrity: sha512-+J9RrgTKOmlxFSDHo0pI1xM6BLVUv+o0ZT9ANtCxGkjIVCCUdx9alUF8Gm+dGLKbkkkidWIHFDZHDMpfITt4+w==}
 
-  zod-to-json-schema@3.25.1:
-    resolution: {integrity: sha512-pM/SU9d3YAggzi6MtR4h7ruuQlqKtad8e9S0fmxcMi+ueAK5Korys/aWcV9LIIHTVbj01NdzxcnXSN+O74ZIVA==}
-    peerDependencies:
-      zod: ^3.25 || ^4
-
   zod-to-json-schema@3.25.2:
     resolution: {integrity: sha512-O/PgfnpT1xKSDeQYSCfRI5Gy3hPf91mKVDuYLUHZJMiDFptvP41MSnWofm8dnCm0256ZNfZIM7DSzuSMAFnjHA==}
     peerDependencies:
@@ -12946,7 +12944,7 @@ snapshots:
       p-retry: 4.6.2
       uuid: 10.0.0
       zod: 3.25.76
-      zod-to-json-schema: 3.25.1(zod@3.25.76)
+      zod-to-json-schema: 3.25.2(zod@3.25.76)
     transitivePeerDependencies:
       - '@opentelemetry/api'
       - '@opentelemetry/exporter-trace-otlp-proto'
@@ -17827,7 +17825,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.3
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.7.4(debug@4.4.3))
+      retry-axios: 2.6.0(axios@1.7.4)
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -20415,7 +20413,7 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  retry-axios@2.6.0(axios@1.7.4(debug@4.4.3)):
+  retry-axios@2.6.0(axios@1.7.4):
     dependencies:
       axios: 1.7.4(debug@4.4.3)
 
@@ -21576,10 +21574,6 @@ snapshots:
   yocto-queue@1.2.1: {}
 
   zlibjs@0.3.1: {}
-
-  zod-to-json-schema@3.25.1(zod@3.25.76):
-    dependencies:
-      zod: 3.25.76
 
   zod-to-json-schema@3.25.2(zod@3.25.76):
     dependencies:

@@ -22,6 +22,13 @@
       "when": 1786228646563,
       "tag": "20260808223726_document_creation_lifecycle",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786229348295,
+      "tag": "20260808224908_founder_weekly_review_async_collection",
+      "breakpoints": true
     }
   ]
 }

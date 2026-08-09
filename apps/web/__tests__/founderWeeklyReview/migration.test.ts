@@ -55,6 +55,7 @@ describeIfDatabase("Founder Weekly Review migrations", () => {
                         "review_schema_version",
                         "evidence_snapshot",
                         "evidence_schema_version",
+                        "collection_input",
                         "created_by_actor_id"
                     )
                 VALUES
@@ -68,6 +69,7 @@ describeIfDatabase("Founder Weekly Review migrations", () => {
                         'founder-weekly-review/v1',
                         '{"schemaVersion":"founder-weekly-review-evidence/v1","capturedAt":"2026-07-18T00:00:00.000Z","reportingPeriod":{"start":"2026-07-07","end":"2026-07-13"},"workspaceTimezone":"UTC","items":[],"sourceWarnings":[]}'::jsonb,
                         'founder-weekly-review-evidence/v1',
+                        '{"workspaceTimezone":"UTC","actorExternalUserId":"test"}'::jsonb,
                         'user:test'
                     )
             `);

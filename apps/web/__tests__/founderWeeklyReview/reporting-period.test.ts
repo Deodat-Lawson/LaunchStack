@@ -24,6 +24,15 @@ describe("resolveReportingPeriodBounds", () => {
         expect(bounds.endExclusive.toISOString()).toBe("2026-07-13T07:00:00.000Z");
     });
 
+    it("uses the following local midnight across the DST spring transition", () => {
+        const bounds = resolveReportingPeriodBounds(
+            { start: "2026-03-08", end: "2026-03-08" },
+            "America/Los_Angeles"
+        );
+        expect(bounds.startInclusive.toISOString()).toBe("2026-03-08T08:00:00.000Z");
+        expect(bounds.endExclusive.toISOString()).toBe("2026-03-09T07:00:00.000Z");
+    });
+
     it("treats UTC boundaries as literal midnight", () => {
         const bounds = resolveReportingPeriodBounds(
             { start: "2026-02-16", end: "2026-02-22" },

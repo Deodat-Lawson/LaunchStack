@@ -85,6 +85,23 @@ export type RehydrateNoteAnchorsEvent = {
   };
 };
 
+/** Drains the founder-weekly-review outbox. Carries no run-specific payload. */
+export type FounderWeeklyReviewDispatchEvent = {
+  name: "founder-weekly-review/dispatch.requested";
+  data: { dispatchId?: string };
+};
+
+export type FounderWeeklyReviewGenerationEvent = {
+  name: "founder-weekly-review/generation.requested";
+  data: {
+    runId: string;
+    /** Serialized bigint — event payloads must be JSON. */
+    companyId: string;
+    generationJobId: string;
+    generationClaimId: string;
+  };
+};
+
 export type Events =
   | ProcessDocumentEvent
   | TrendSearchEvent
@@ -94,7 +111,9 @@ export type Events =
   | ReindexCompanyEmbeddingsEvent
   | DocumentModifyEvent
   | WebsiteCrawlEvent
-  | RehydrateNoteAnchorsEvent;
+  | RehydrateNoteAnchorsEvent
+  | FounderWeeklyReviewDispatchEvent
+  | FounderWeeklyReviewGenerationEvent;
 
 /**
  * Create the Inngest client.

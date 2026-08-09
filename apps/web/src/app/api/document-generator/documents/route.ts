@@ -11,7 +11,7 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { eq, and, desc } from "drizzle-orm";
-import { generatedDocuments } from "@launchstack/core/db/schema";
+import { generatedDocuments } from "~/server/db/schema";
 import { z } from "zod";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 

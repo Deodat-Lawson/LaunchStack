@@ -21,7 +21,7 @@ import { eq, and } from "drizzle-orm";
 import type { NextResponse } from "next/server";
 
 import { db } from "~/server/db";
-import { users, userCompanyMemberships } from "@launchstack/core/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 
 export const ACTIVE_WORKSPACE_COOKIE = "pdr_active_company";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days

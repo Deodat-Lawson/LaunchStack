@@ -3,11 +3,8 @@ import { eq, desc, count } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import {
-    users,
-    company,
-    userCompanyMemberships,
-} from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
 import {
     setActiveWorkspaceCookie,

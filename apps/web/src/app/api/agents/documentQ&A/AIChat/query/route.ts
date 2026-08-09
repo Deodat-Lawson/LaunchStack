@@ -17,7 +17,8 @@ import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core
 import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { document, ChatHistory } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
+import { ChatHistory } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {

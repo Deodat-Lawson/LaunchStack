@@ -2,10 +2,7 @@ import { NextResponse } from "next/server";
 import { eq, and, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import {
-    users,
-    userCompanyMemberships,
-} from "@launchstack/core/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 import { setActiveWorkspaceCookie } from "~/lib/active-workspace";
 import { requireClerkIdentity } from "~/lib/require-workspace-context";
 

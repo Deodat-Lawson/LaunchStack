@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { users, documentViews, document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
+import { users, documentViews } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { validateRequestBody, TrackDocumentViewSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";

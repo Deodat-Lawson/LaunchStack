@@ -19,7 +19,7 @@ import { db } from "~/server/db";
 import {
     companyMetadata,
     companyMetadataHistory,
-} from "@launchstack/core/db/schema/company-metadata";
+} from "~/server/db/schema";
 import { runCompanyMetadataTool } from "@launchstack/features/company-metadata";
 import { generateStructured } from "~/lib/llm";
 

@@ -29,7 +29,7 @@ two places the boundary currently runs the wrong way — see
 | Path | Runtime | Label | What it is |
 | --- | --- | --- | --- |
 | `apps/web` | Next.js 15 | `CLOUD` | The only Next.js app. Marketing site, product UI, and every API route. **Also contains the real RAG engine** (`src/lib/tools/rag/`), which belongs in `packages/core`. |
-| `packages/core` | TypeScript library | `ENGINE` | Published as `@launchstack/core`. Engine ports, ingestion, embeddings, graph, OCR. **Also contains the SaaS database schema** (`src/db/schema/`), which belongs in `apps/web`. |
+| `packages/core` | TypeScript library | `ENGINE` | Published as `@launchstack/core`. Engine ports, ingestion, embeddings, graph, OCR, and the 25 engine tables (`src/db/schema/`). |
 | `packages/features` | TypeScript library | `CLOUD` | 14 vertical products: client prospector, marketing pipeline, legal templates, trend search, voice, connectors, MCP, and others. |
 | `services/ocr-router` | Node / Express | `SERVICE` | Routes OCR jobs by document complexity. |
 | `services/ocr-worker` | Python | `SERVICE` | Docling-based OCR worker. |
@@ -49,22 +49,27 @@ two places the boundary currently runs the wrong way — see
 
 ## The boundary today
 
-The separation is **inverted in two places**. Both are known and tracked; do not
-"fix" them incidentally in an unrelated change.
+One inversion remains.
 
-1. **`packages/core` owns SaaS data.** `src/db/schema/` holds users, companies,
-   memberships, invite codes, credit ledgers, marketing history, and company
-   credentials. These are product concerns living in the package we publish.
-   The engine's public search contract is also keyed on `companyId`, which
-   forces every consumer to adopt our tenancy model.
+1. ~~**`packages/core` owns SaaS data.**~~ **Resolved.** The schema is split into
+   an engine set (`packages/core`, 25 tables) and a product set (`apps/web` +
+   `packages/features`, 36 tables) — see
+   [Two migration sets](#two-migration-sets-one-database). Users, memberships,
+   invite codes, credit ledgers, chatbot, collab, notes, company metadata and
+   the vertical tables all moved to the product side.
+
+   `company` and `companyEmbeddingCredentials` stay in the engine **by design**:
+   the engine's search contract is keyed on `companyId`, so the tenant table is
+   part of the engine's own model. A consumer still adopts that tenancy model —
+   they just no longer inherit our auth, billing or product tables with it.
 
 2. **`apps/web` owns the engine.** The retrieval pipeline — BM25, vector, graph,
    and RLM retrievers plus ensemble fusion — lives in
    `apps/web/src/lib/tools/rag/`. `packages/core/src/rag/` is only a port; its
    own doc comment says the implementation lives in the app.
 
-Until those are inverted, treat "is it in `packages/core`?" as an unreliable
-signal for "is it open source?".
+Until that is inverted too, treat "is it in `packages/core`?" as a reliable
+signal for the **schema** but not yet for the **retrieval code**.
 
 ### Enforcement
 
@@ -72,6 +77,12 @@ signal for "is it open source?".
 React, `apps/web` (`~/*`), or `@launchstack/features`, and forbids reading
 `process.env`. These rules are correct but currently report errors rather than
 blocking merges.
+
+For the schema boundary specifically, that import rule is the real enforcement —
+a foreign key requires importing the target table, so core structurally cannot
+reference a product table. `scripts/ci/check-schema-boundary.mjs` re-checks the
+generated SQL as a backstop against a hand-edited migration, and **does** block
+merges.
 
 ## Deploy targets
 
@@ -129,21 +140,53 @@ Three separate script locations exist, and they are not interchangeable.
 
 | Location | Purpose |
 | --- | --- |
-| `apps/web/scripts/` | Wired into `apps/web/package.json`. The migration runner lives here. |
+| `packages/core/scripts/` | Migration runner, journal check, push guard, seed. |
+| `apps/web/scripts/` | Wired into `apps/web/package.json`. Backfill CLI, workers. |
 | `scripts/ops/` | Operational tasks: database backup, model download. |
 | `scripts/dev/` | Manual developer probes. Not tests, not run by CI. |
-| `scripts/backfill-embedding-credentials.ts` | Deliberately **not** moved. Migrations `0010` and `0011` reference this exact path, and those files are immutable — see below. |
+| `scripts/ci/` | Checks CI runs that are useful to run locally too. |
+
+### Two migration sets, one database
+
+Schema ownership follows the open-source boundary:
+
+| Set | Schema | Migrations | Ledger |
+| --- | --- | --- | --- |
+| **engine** | `packages/core/src/db/schema/` | `packages/core/drizzle/` | `_launchstack_migrations` |
+| **product** | `apps/web/src/server/db/schema/` + `packages/features/src/*/schema.ts` | `apps/web/drizzle/` | `_launchstack_web_migrations` |
+
+`@launchstack/core` is published, so its 25 tables must stand alone: applying
+`packages/core/drizzle` by itself yields a working engine database. The
+remaining 36 product tables may reference engine tables — never the reverse.
+ESLint blocks core from importing `~/*` or `@launchstack/features` (which a
+foreign key needs), and `scripts/ci/check-schema-boundary.mjs` re-checks the
+generated SQL.
+
+**Every environment applies both sets with the same ordered command** — local
+dev, CI, the Docker `migrate` service and the Vercel production build all run
+`db:migrate`, engine first. The order is load-bearing: product foreign keys
+point at engine tables.
+
+`drizzle-kit push` is banned anywhere it can reach a real database
+(`scripts/ci/check-no-push.mjs` enforces it). Previously push was the de-facto
+schema source for dev/CI/Docker while Vercel production ran SQL migrations —
+two strategies that produced provably different databases.
+
+See [Changing the database](CONTRIBUTING.md#changing-the-database) for the
+workflow.
 
 ### Migrations are immutable
 
-`apps/web/scripts/migrate.mjs` records a SHA-256 checksum per migration file and
-**exits non-zero on any drift**. Because `vercel.json` runs `db:migrate` during
-production builds, editing an already-applied migration — *including its
-comments* — will fail production deploys. Always add a new migration instead.
+`packages/core/scripts/migrate.mjs` records a SHA-256 checksum per migration and
+**refuses to apply anything** if a previously-applied file has changed —
+including its comments. Because `vercel.json` runs `db:migrate` during
+production builds, editing history fails the deploy. Always add a new forward
+migration; there are no down migrations by design.
 
-> The `0010` → `0011` chain is currently frozen: `0010` requires an application
-> deploy and a credential backfill before `0011` drops the plaintext columns,
-> but the runner applies all pending files consecutively.
+The runner also takes a session advisory lock before reading its ledger, so two
+concurrent production builds cannot both decide the same migration is pending,
+and `db:verify` exits `2` for pending, `3` for checksum drift and `4` when the
+database is *ahead* of the build being deployed.
 
 ## Where to start reading
 

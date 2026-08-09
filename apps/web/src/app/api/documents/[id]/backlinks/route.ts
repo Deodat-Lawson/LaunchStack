@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { documentNotes, noteLinks } from "@launchstack/core/db/schema";
+import { documentNotes, noteLinks } from "~/server/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /**

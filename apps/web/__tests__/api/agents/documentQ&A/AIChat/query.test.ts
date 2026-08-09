@@ -52,6 +52,9 @@ jest.mock("@launchstack/core/db/schema", () => ({
     companyId: "document.companyId",
     sourceArchiveName: "document.sourceArchiveName",
   },
+}));
+
+jest.mock("~/server/db/schema", () => ({
   ChatHistory: { UserId: "history.userId" },
 }));
 

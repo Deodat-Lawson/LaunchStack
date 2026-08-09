@@ -26,17 +26,17 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
 # ── Schema sync (migrate) ────────────────────────────────────────────
+# Same forward migration command as every other environment. See the notes on
+# this stage in apps/web/Dockerfile.
 FROM deps AS migrate
-COPY packages/core/src ./packages/core/src
-COPY packages/features/src ./packages/features/src
-COPY apps/web/drizzle.config.ts ./apps/web/drizzle.config.ts
-COPY apps/web/scripts ./apps/web/scripts
-COPY apps/web/src ./apps/web/src
-COPY apps/web/tsconfig.json ./apps/web/tsconfig.json
-COPY tsconfig.base.json ./tsconfig.base.json
+COPY packages/core/drizzle ./packages/core/drizzle
+COPY packages/core/scripts ./packages/core/scripts
+COPY apps/web/drizzle ./apps/web/drizzle
 
-WORKDIR /app/apps/web
-CMD ["sh", "-c", "pnpm db:push && pnpm db:backfill:versions"]
+WORKDIR /app/packages/core
+# Engine set first, then product: product migrations carry foreign keys into
+# engine tables, so the order is load-bearing, not cosmetic.
+CMD ["sh", "-c", "node scripts/migrate.mjs && node scripts/migrate.mjs --set=product"]
 
 # ── Runner (uses pre-built .next from host) ──────────────────────────
 # Reads the host's build output rather than rebuilding in Docker. The

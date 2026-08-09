@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 
 import { db } from "~/server/db";
-import { inviteCodes } from "@launchstack/core/db/schema";
+import { inviteCodes } from "~/server/db/schema";
 import { validateRequestBody, GenerateInviteCodeSchema } from "~/lib/validation";
 import {
   isManagementRole,

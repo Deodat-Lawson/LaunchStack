@@ -8,7 +8,7 @@ import {
   resolveConfiguredChatModel,
 } from "~/lib/models";
 import { db } from "~/server/db";
-import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
+import { companyMetadata } from "~/server/db/schema";
 import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
 import type { CompanyMetadataJSON } from "@launchstack/features/company-metadata";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";

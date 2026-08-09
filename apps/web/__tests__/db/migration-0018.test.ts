@@ -1,9 +1,19 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
-const MIGRATIONS_DIR = join(__dirname, "..", "..", "drizzle");
-const FILENAME = "0018_reconcile_file_uploads_company_id.sql";
-const FILE_UPLOADS_MIGRATION = "0017_file_uploads_company_id.sql";
+const MIGRATIONS_DIR = join(
+  __dirname,
+  "..",
+  "..",
+  "..",
+  "..",
+  "packages",
+  "core",
+  "drizzle",
+);
+const TAG = "20260809140100_reconcile_file_uploads_company_id";
+const FILENAME = `${TAG}.sql`;
+const FILE_UPLOADS_MIGRATION = "20260809140000_file_uploads_company_id.sql";
 
 const anchoredFileUrlPattern =
   /^(https?:\/\/[^/?#]+)?\/api\/files\/([0-9]+)\/?(\?.*)?$/;
@@ -12,10 +22,10 @@ function extractFileId(url: string): string | null {
   return anchoredFileUrlPattern.exec(url)?.[2] ?? null;
 }
 
-describe("migration 0018", () => {
+describe("migration reconcile_file_uploads_company_id", () => {
   const sql = readFileSync(join(MIGRATIONS_DIR, FILENAME), "utf8");
 
-  it("runs last, after the file_uploads company_id migration", () => {
+  it("runs after the file_uploads company_id migration in the engine set", () => {
     const files = readdirSync(MIGRATIONS_DIR)
       .filter((file) => file.endsWith(".sql"))
       .sort();
@@ -25,6 +35,17 @@ describe("migration 0018", () => {
       files.indexOf(FILE_UPLOADS_MIGRATION),
     );
     expect(files[files.length - 1]).toBe(FILENAME);
+  });
+
+  it("is listed in the engine journal after file_uploads_company_id", () => {
+    const journal = JSON.parse(
+      readFileSync(join(MIGRATIONS_DIR, "meta", "_journal.json"), "utf8"),
+    ) as { entries: Array<{ idx: number; tag: string }> };
+
+    const tags = journal.entries.map((e) => e.tag);
+    expect(tags.indexOf(TAG)).toBeGreaterThan(
+      tags.indexOf("20260809140000_file_uploads_company_id"),
+    );
   });
 
   it.each([

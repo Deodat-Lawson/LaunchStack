@@ -18,7 +18,7 @@ import { eq, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document as documentTable, documentContextChunks } from "@launchstack/core/db/schema";
-import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
+import { companyMetadata, companyMetadataHistory } from "~/server/db/schema";
 import { extractCompanyFacts } from "@launchstack/features/company-metadata";
 import { mergeCompanyMetadata } from "@launchstack/features/company-metadata";
 import { createEmptyMetadata } from "@launchstack/features/company-metadata";

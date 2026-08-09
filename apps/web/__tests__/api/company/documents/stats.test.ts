@@ -24,6 +24,9 @@ jest.mock("@launchstack/core/db/schema", () => ({
     id: "document.id",
     companyId: "document.companyId",
   },
+}));
+
+jest.mock("~/server/db/schema", () => ({
   documentViews: {
     documentId: "views.documentId",
     companyId: "views.companyId",

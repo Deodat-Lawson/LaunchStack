@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { eq, and } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { inviteCodes } from "@launchstack/core/db/schema";
+import { inviteCodes } from "~/server/db/schema";
 import {
   isManagementRole,
   requireWorkspaceContext,

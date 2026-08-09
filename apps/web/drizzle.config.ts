@@ -1,31 +1,46 @@
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import dotenv from "dotenv";
+import { getTableName, is } from "drizzle-orm";
+import { PgTable } from "drizzle-orm/pg-core";
 import { type Config } from "drizzle-kit";
 
-// drizzle-kit bundles this config and may execute it in a context where
-// `import.meta.url` is unreliable, so resolve from cwd. db:push always runs
-// from apps/web/, putting the repo-root .env two levels up.
-dotenv.config({ path: resolve(process.cwd(), "../../.env") });
+import * as productSchema from "./src/server/db/schema";
+
+const HERE = fileURLToPath(new URL(".", import.meta.url));
+dotenv.config({ path: resolve(HERE, "../../.env") });
+
+/**
+ * Product migration set — every table the application and its feature
+ * verticals own.
+ *
+ * Engine tables are deliberately outside this glob: drizzle-kit reads only what
+ * it is given, so it emits the foreign keys pointing at engine tables without
+ * trying to create them. `tablesFilter` is derived from the product schema for
+ * the same reason it is on the engine side — both sets live in one database
+ * behind one prefix, and a `pdr_ai_v2_*` glob would make each set offer to drop
+ * the other's tables.
+ *
+ * Applied AFTER the engine set; see `db:migrate` in package.json.
+ */
+const productTables: string[] = [];
+for (const value of Object.values(productSchema)) {
+  // drizzle's `is` narrows, so no hand-written type predicate is needed.
+  if (is(value, PgTable)) productTables.push(getTableName(value));
+}
 
 export default {
-  schema: "../../packages/core/src/db/schema.ts",
-  dialect: "postgresql",
+  schema: [
+    "./src/server/db/schema/*.ts",
+    "../../packages/features/src/*/schema.ts",
+    "../../packages/features/src/*/cache-schema.ts",
+  ],
   out: "./drizzle",
+  dialect: "postgresql",
+  migrations: { prefix: "timestamp" },
   dbCredentials: {
-    url:
-      process.env.DRIZZLE_DATABASE_URL ??
-      process.env.DIRECT_URL ??
-      process.env.DATABASE_URL,
+    url: process.env.MIGRATE_DATABASE_URL ?? process.env.DATABASE_URL!,
   },
-  // Scope drizzle-kit to tables this project owns. Historically all project
-  // tables used the `pdr_ai_v2_` prefix, but `marketing_content_history` was
-  // added without the prefix (see `src/server/db/schema/marketing-history.ts`)
-  // and is listed explicitly here so drizzle-kit sees it during schema pulls.
-  // Without this, the filter hides the existing table from the "current DB
-  // state" view while the TS schema still declares it, causing every push
-  // to generate a spurious `CREATE TABLE` that fails with "already exists".
-  tablesFilter: ["pdr_ai_v2_*", "marketing_content_history"],
-  migrations: {
-    schema: "public",
-  },
-} as Config;
+  tablesFilter: productTables,
+} satisfies Config;

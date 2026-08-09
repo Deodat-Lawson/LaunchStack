@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { Edit2, Quote as QuoteIcon, Trash2 } from "lucide-react";
-import type { DocumentNote } from "@launchstack/core/db/schema/document-notes";
+import type { DocumentNote } from "~/server/db/schema";
 import {
   type NoteAnchorLite,
   primaryPageOfAnchor,

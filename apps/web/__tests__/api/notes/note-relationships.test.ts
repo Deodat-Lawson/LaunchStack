@@ -43,6 +43,11 @@ jest.mock("~/server/db", () => ({
 }));
 
 jest.mock("@launchstack/core/db/schema", () => ({
+  document: { id: "document.id", companyId: "document.companyId" },
+  documentVersions: { id: "versions.id", documentId: "versions.documentId" },
+}));
+
+jest.mock("~/server/db/schema", () => ({
   documentNotes: {
     id: "notes.id",
     userId: "notes.userId",
@@ -53,8 +58,6 @@ jest.mock("@launchstack/core/db/schema", () => ({
     anchorStatus: "notes.anchorStatus",
     createdAt: "notes.createdAt",
   },
-  document: { id: "document.id", companyId: "document.companyId" },
-  documentVersions: { id: "versions.id", documentId: "versions.documentId" },
 }));
 
 jest.mock("drizzle-orm", () => {

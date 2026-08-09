@@ -1,3 +1,11 @@
+/**
+ * Engine schema: the tables @launchstack/core owns and publishes.
+ *
+ * Nothing here may reference a product table in apps/web or
+ * @launchstack/features. That one-way rule is what lets a consumer embed the
+ * engine and apply `packages/core/drizzle` on its own; ESLint enforces the
+ * import direction (eslint.config.js), which is what a foreign key needs.
+ */
 import { relations, sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import {
@@ -5,54 +13,24 @@ import {
     index,
     integer,
     jsonb,
-    serial,
     text,
     timestamp,
     varchar,
     bigint,
+    vector,
+    bigserial,
 } from "drizzle-orm/pg-core";
 
 import { uniqueIndex } from "drizzle-orm/pg-core";
 
-import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
 
 // ============================================================================
 // Users
 // ============================================================================
 
-export const users = pgTable(
-    "users",
-    {
-        id: serial("id").primaryKey(),
-        name: varchar("name", { length: 256 }).notNull(),
-        email: varchar("email", { length: 256 }).notNull(),
-        userId: varchar("userId", { length: 256 }).notNull().unique(),
-        companyId: bigint("company_id", { mode: "bigint" })
-            .notNull()
-            .references(() => company.id, { onDelete: "cascade" }),
-        role: varchar("role", { length: 256 }).notNull(),
-        status: varchar("status", { length: 256 }).notNull(),
-        lastActiveAt: timestamp("last_active_at", { withTimezone: true }),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
-    },
-    (table) => ({
-        companyIdIdx: index("users_company_id_idx").on(table.companyId),
-        userIdIdx: index("users_user_id_idx").on(table.userId),
-    })
-);
-
-// ============================================================================
-// Company
-// ============================================================================
-
 export const company = pgTable("company", {
-    id: serial("id").primaryKey(),
+    id: bigserial("id", { mode: "number" }).primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
     slug: varchar("slug", { length: 64 }),
     description: text("description"),
@@ -70,14 +48,8 @@ export const company = pgTable("company", {
     reindexStartedAt: timestamp("reindex_started_at", { withTimezone: true }),
     reindexCompletedAt: timestamp("reindex_completed_at", { withTimezone: true }),
     reindexError: text("reindex_error"),
-    // Legacy plaintext credential columns. Read-only during migration;
-    // writes go through src/lib/ai/company-credentials.ts into the
-    // encrypted `company_embedding_credentials` table. Dropped by
-    // drizzle/0011 once backfill has run.
-    embeddingOpenAIApiKey: text("embedding_openai_api_key"),
-    embeddingHuggingFaceApiKey: text("embedding_huggingface_api_key"),
-    embeddingOllamaBaseUrl: varchar("embedding_ollama_base_url", { length: 1024 }),
-    embeddingOllamaModel: varchar("embedding_ollama_model", { length: 256 }),
+    // Embedding provider credentials live in `company_embedding_credentials`,
+    // encrypted. See src/embeddings/company-credentials.ts.
     employerpasskey: varchar("employerPasskey", { length: 256 }).notNull().default(""),
     employeepasskey: varchar("employeePasskey", { length: 256 }).notNull().default(""),
     numberOfEmployees: varchar("numberOfEmployees", { length: 256 }).notNull(),
@@ -85,79 +57,17 @@ export const company = pgTable("company", {
     createdAt: timestamp("created_at", { withTimezone: true })
         .default(sql`CURRENT_TIMESTAMP`)
         .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-        () => new Date()
-    ),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
 });
 
 // ============================================================================
 // Invite Codes
 // ============================================================================
 
-export const inviteCodes = pgTable(
-    "invite_codes",
-    {
-        id: serial("id").primaryKey(),
-        code: varchar("code", { length: 12 }).notNull().unique(),
-        companyId: bigint("company_id", { mode: "bigint" })
-            .notNull()
-            .references(() => company.id, { onDelete: "cascade" }),
-        role: varchar("role", { length: 256 }).notNull(), // "employer" or "employee"
-        isActive: boolean("is_active").default(true).notNull(),
-        createdBy: varchar("created_by", { length: 256 }).notNull(),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-    },
-    (table) => ({
-        codeIdx: index("invite_codes_code_idx").on(table.code),
-        companyIdIdx: index("invite_codes_company_id_idx").on(table.companyId),
-    })
-);
-
-// ============================================================================
-// User <-> Company Memberships
-// ============================================================================
-// Lets a user belong to multiple workspaces. `users.companyId` remains the
-// user's *default* workspace; the active workspace per request is selected
-// from this table via the active-workspace cookie.
-
-export const userCompanyMemberships = pgTable(
-    "user_company_memberships",
-    {
-        id: serial("id").primaryKey(),
-        userId: bigint("user_id", { mode: "bigint" })
-            .notNull()
-            .references(() => users.id, { onDelete: "cascade" }),
-        companyId: bigint("company_id", { mode: "bigint" })
-            .notNull()
-            .references(() => company.id, { onDelete: "cascade" }),
-        role: varchar("role", { length: 16 }).notNull(), // 'owner' | 'admin' | 'editor'
-        lastOpenedAt: timestamp("last_opened_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-    },
-    (table) => ({
-        uniqUserCompany: uniqueIndex("user_company_memberships_user_company_unique").on(
-            table.userId,
-            table.companyId
-        ),
-        userIdIdx: index("user_company_memberships_user_id_idx").on(table.userId),
-        companyIdIdx: index("user_company_memberships_company_id_idx").on(table.companyId),
-    })
-);
-
-// ============================================================================
-// Document
-// ============================================================================
-
 export const document = pgTable(
     "document",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         url: varchar("url", { length: 256 }).notNull(),
         category: varchar("category", { length: 256 }).notNull(),
         title: varchar("title", { length: 256 }).notNull(),
@@ -179,20 +89,26 @@ export const document = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+
+        // Added after the table shipped, so declared last: ALTER TABLE ADD
+        // COLUMN appends physically, and the migrations-apply job compares a
+        // migrated database against a freshly-pushed one column by column.
+        sourceArchiveEntry: varchar("source_archive_entry", { length: 1024 }),
+        creationKey: varchar("creation_key", { length: 512 }),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("document_company_id_idx").on(table.companyId),
         companyIdIdIdx: index("document_company_id_id_idx").on(table.companyId, table.id),
         companyIdCategoryIdx: index("document_company_id_category_idx").on(
             table.companyId,
             table.category
         ),
-        currentVersionIdIdx: index("document_current_version_id_idx").on(
-            table.currentVersionId
+        companyCreationKeyUnique: uniqueIndex("document_company_creation_key_unique").on(
+            table.companyId,
+            table.creationKey
         ),
+        currentVersionIdIdx: index("document_current_version_id_idx").on(table.currentVersionId),
     })
 );
 
@@ -203,7 +119,7 @@ export const document = pgTable(
 export const documentVersions = pgTable(
     "document_versions",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
@@ -220,9 +136,16 @@ export const documentVersions = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+
+        // Added after the table shipped — see the note on `document` above.
+        creationKey: varchar("creation_key", { length: 512 }),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
+        documentCreationKeyUnique: uniqueIndex("doc_versions_document_creation_key_unique").on(
+            table.documentId,
+            table.creationKey
+        ),
         documentVersionUnique: uniqueIndex("doc_versions_document_version_unique").on(
             table.documentId,
             table.versionNumber
@@ -237,7 +160,7 @@ export const documentVersions = pgTable(
 export const category = pgTable(
     "category",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         name: varchar("name", { length: 256 }).notNull(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
@@ -245,11 +168,9 @@ export const category = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("category_company_id_idx").on(table.companyId),
     })
 );
@@ -269,19 +190,20 @@ export const category = pgTable(
  *
  * @see documentSections in rlm-knowledge-base.ts for the replacement table
  */
+
 export const pdfChunks = pgTable(
     "pdf_chunks",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         documentId: bigint("document_id", { mode: "bigint" })
             .notNull()
             .references(() => document.id, { onDelete: "cascade" }),
         page: integer("page").notNull(),
         chunkIndex: integer("chunk_index").notNull().default(0), // deterministic ordering within a page
         content: text("content").notNull(),
-        embedding: pgVector({ dimension: 1536 })("embedding"),
+        embedding: vector("embedding", { dimensions: 1536 }),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("pdf_chunks_document_id_idx").on(table.documentId),
         documentIdPageIdx: index("pdf_chunks_document_id_page_idx").on(
             table.documentId,
@@ -299,94 +221,10 @@ export const pdfChunks = pgTable(
 // Chat History
 // ============================================================================
 
-export const ChatHistory = pgTable(
-    "chat_history",
-    {
-        id: serial("id").primaryKey(),
-        UserId: varchar("user_id", { length: 256 }).notNull(), // Clerk user ID
-        documentId: bigint("document_id", { mode: "bigint" })
-            .notNull()
-            .references(() => document.id, { onDelete: "cascade" }),
-        documentTitle: varchar("document_title", { length: 256 }).notNull(),
-        question: text("question").notNull(),
-        response: text("response").notNull(),
-        chatId: varchar("chat_id", { length: 256 }),
-        queryType: varchar("query_type", {
-            length: 20,
-            enum: ["simple", "advanced"],
-        }).default("simple"),
-        pages: integer("pages").array().notNull(),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
-    },
-    (table) => ({
-        userIdIdx: index("chat_history_user_id_idx").on(table.UserId),
-        userIdCreatedAtIdx: index("chat_history_user_id_created_at_idx").on(
-            table.UserId,
-            table.createdAt
-        ),
-        documentIdIdx: index("chat_history_document_id_idx").on(table.documentId),
-    })
-);
-
-// ============================================================================
-// Predictive Document Analysis Results
-// ============================================================================
-
-export const predictiveDocumentAnalysisResults = pgTable(
-    "predictive_document_analysis_results",
-    {
-        id: serial("id").primaryKey(),
-        documentId: bigint("document_id", { mode: "bigint" })
-            .notNull()
-            .references(() => document.id, { onDelete: "cascade" }),
-        analysisType: varchar("analysis_type", { length: 256 }).notNull(),
-        includeRelatedDocs: boolean("include_related_docs").default(false),
-        resultJson: jsonb("result_json").notNull(),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-    },
-    (table) => ({
-        documentIdIdx: index("predictive_analysis_document_id_idx").on(table.documentId),
-    })
-);
-
-// ============================================================================
-// Document Reference Resolution
-// ============================================================================
-
-export const documentReferenceResolution = pgTable(
-    "document_reference_resolutions",
-    {
-        id: serial("id").primaryKey(),
-        companyId: bigint("company_id", { mode: "bigint" })
-            .notNull()
-            .references(() => company.id, { onDelete: "cascade" }),
-        referenceName: varchar("reference_name", { length: 256 }).notNull(),
-        resolvedInDocumentId: integer("resolved_in_document_id"),
-        resolutionDetails: jsonb("resolution_details"),
-        createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-    },
-    (table) => ({
-        companyRefIdx: index("document_reference_resolutions_company_ref_idx").on(
-            table.companyId
-        ),
-    })
-);
-
-// ============================================================================
-// File Uploads (for local storage when UploadThing is disabled)
-// ============================================================================
-
 export const fileUploads = pgTable(
     "file_uploads",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         userId: varchar("user_id", { length: 256 }).notNull(),
         // Active company at upload time. Nullable for legacy rows; new uploads
         // always stamp this so /api/files can enforce tenant ownership directly.
@@ -406,7 +244,7 @@ export const fileUploads = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         userIdIdx: index("file_uploads_user_id_idx").on(table.userId),
         companyIdIdx: index("file_uploads_company_id_idx").on(table.companyId),
     })
@@ -420,7 +258,9 @@ export const ocrJobs = pgTable(
     "ocr_jobs",
     {
         id: varchar("id", { length: 256 }).primaryKey(),
-        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, { onDelete: "set null" }),
+        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, {
+            onDelete: "set null",
+        }),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -429,8 +269,10 @@ export const ocrJobs = pgTable(
         // Status
         status: varchar("status", {
             length: 50,
-            enum: ["queued", "processing", "completed", "failed", "needs_review"]
-        }).notNull().default("queued"),
+            enum: ["queued", "processing", "completed", "failed", "needs_review"],
+        })
+            .notNull()
+            .default("queued"),
 
         // Document info
         documentUrl: varchar("document_url", { length: 1024 }).notNull(),
@@ -442,7 +284,7 @@ export const ocrJobs = pgTable(
         complexityScore: integer("complexity_score"),
         documentType: varchar("document_type", {
             length: 50,
-            enum: ["contract", "financial", "scanned", "general", "other"]
+            enum: ["contract", "financial", "scanned", "general", "other"],
         }),
 
         // Provider selection
@@ -472,19 +314,25 @@ export const ocrJobs = pgTable(
         webhookUrl: varchar("webhook_url", { length: 1024 }),
         webhookStatus: varchar("webhook_status", {
             length: 20,
-            enum: ["pending", "sent", "failed"]
+            enum: ["pending", "sent", "failed"],
         }),
 
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+
+        // Added after the table shipped — see the note on `document` above.
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "set null",
+        }),
+        dispatchOptions: jsonb("dispatch_options").$type<Record<string, unknown>>(),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),
         userIdIdx: index("ocr_jobs_user_id_idx").on(table.userId),
+        documentIdIdx: index("ocr_jobs_document_id_idx").on(table.documentId),
+        versionIdIdx: index("ocr_jobs_version_id_idx").on(table.versionId),
         statusIdx: index("ocr_jobs_status_idx").on(table.status),
         createdAtIdx: index("ocr_jobs_created_at_idx").on(table.createdAt),
         companyStatusIdx: index("ocr_jobs_company_status_idx").on(table.companyId, table.status),
@@ -505,12 +353,21 @@ export const ocrProcessingSteps = pgTable(
         stepNumber: integer("step_number").notNull(),
         stepType: varchar("step_type", {
             length: 50,
-            enum: ["pre_assessment", "ocr_execution", "validation", "embedding", "storage", "webhook"]
+            enum: [
+                "pre_assessment",
+                "ocr_execution",
+                "validation",
+                "embedding",
+                "storage",
+                "webhook",
+            ],
         }).notNull(),
         status: varchar("status", {
             length: 20,
-            enum: ["pending", "in_progress", "completed", "failed"]
-        }).notNull().default("pending"),
+            enum: ["pending", "in_progress", "completed", "failed"],
+        })
+            .notNull()
+            .default("pending"),
         input: jsonb("input"),
         output: jsonb("output"),
         errorMessage: text("error_message"),
@@ -519,9 +376,12 @@ export const ocrProcessingSteps = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         jobIdIdx: index("ocr_processing_steps_job_id_idx").on(table.jobId),
-        jobIdStepIdx: index("ocr_processing_steps_job_id_step_idx").on(table.jobId, table.stepNumber),
+        jobIdStepIdx: index("ocr_processing_steps_job_id_step_idx").on(
+            table.jobId,
+            table.stepNumber
+        ),
     })
 );
 
@@ -532,7 +392,7 @@ export const ocrProcessingSteps = pgTable(
 export const ocrCostTracking = pgTable(
     "ocr_cost_tracking",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
@@ -545,11 +405,9 @@ export const ocrCostTracking = pgTable(
         averageCostPerPage: integer("average_cost_per_page").default(0).notNull(),
         averageConfidenceScore: integer("average_confidence_score").default(0).notNull(),
 
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyProviderMonthIdx: index("ocr_cost_tracking_company_provider_month_idx").on(
             table.companyId,
             table.provider,
@@ -589,11 +447,9 @@ export const uploadBatches = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdx: index("upload_batches_company_idx").on(table.companyId),
         creatorIdx: index("upload_batches_creator_idx").on(table.createdByUserId),
         statusIdx: index("upload_batches_status_idx").on(table.status),
@@ -603,7 +459,7 @@ export const uploadBatches = pgTable(
 export const uploadBatchFiles = pgTable(
     "upload_batch_files",
     {
-        id: serial("id").primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         batchId: varchar("batch_id", { length: 64 })
             .notNull()
             .references(() => uploadBatches.id, { onDelete: "cascade" }),
@@ -636,11 +492,9 @@ export const uploadBatchFiles = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         batchIdx: index("upload_batch_files_batch_idx").on(table.batchId),
         statusIdx: index("upload_batch_files_status_idx").on(table.status),
         jobIdx: index("upload_batch_files_job_idx").on(table.jobId),
@@ -675,70 +529,9 @@ export const uploadBatchFilesRelations = relations(uploadBatchFiles, ({ one }) =
 // Document Views (for tracking document click/view events)
 // ============================================================================
 
-export const documentViews = pgTable(
-    "document_views",
-    {
-        id: serial("id").primaryKey(),
-        documentId: bigint("document_id", { mode: "bigint" })
-            .notNull()
-            .references(() => document.id, { onDelete: "cascade" }),
-        userId: varchar("user_id", { length: 256 }).notNull(),
-        companyId: bigint("company_id", { mode: "bigint" })
-            .notNull()
-            .references(() => company.id, { onDelete: "cascade" }),
-        viewedAt: timestamp("viewed_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-    },
-    (table) => ({
-        documentIdIdx: index("document_views_document_id_idx").on(table.documentId),
-        companyIdIdx: index("document_views_company_id_idx").on(table.companyId),
-        userIdIdx: index("document_views_user_id_idx").on(table.userId),
-        companyIdViewedAtIdx: index("document_views_company_id_viewed_at_idx").on(
-            table.companyId,
-            table.viewedAt
-        ),
-    })
-);
-
-// ============================================================================
-// Relations
-// ============================================================================
-
 export const companyRelations = relations(company, ({ many }) => ({
-    users: many(users),
     documents: many(document),
     categories: many(category),
-    inviteCodes: many(inviteCodes),
-    memberships: many(userCompanyMemberships),
-}));
-
-export const userCompanyMembershipsRelations = relations(
-    userCompanyMemberships,
-    ({ one }) => ({
-        user: one(users, {
-            fields: [userCompanyMemberships.userId],
-            references: [users.id],
-        }),
-        company: one(company, {
-            fields: [userCompanyMemberships.companyId],
-            references: [company.id],
-        }),
-    })
-);
-
-export const inviteCodesRelations = relations(inviteCodes, ({ one }) => ({
-    company: one(company, {
-        fields: [inviteCodes.companyId],
-        references: [company.id],
-    }),
-}));
-
-export const usersRelations = relations(users, ({ one }) => ({
-    company: one(company, {
-        fields: [users.companyId],
-        references: [company.id],
-    }),
 }));
 
 export const documentsRelations = relations(document, ({ one, many }) => ({
@@ -747,9 +540,6 @@ export const documentsRelations = relations(document, ({ one, many }) => ({
         references: [company.id],
     }),
     pdfChunks: many(pdfChunks),
-    chatHistory: many(ChatHistory),
-    predictiveAnalysisResults: many(predictiveDocumentAnalysisResults),
-    views: many(documentViews),
     versions: many(documentVersions),
     currentVersion: one(documentVersions, {
         fields: [document.currentVersionId],
@@ -775,20 +565,6 @@ export const categoryRelations = relations(category, ({ one }) => ({
 export const pdfChunksRelations = relations(pdfChunks, ({ one }) => ({
     document: one(document, {
         fields: [pdfChunks.documentId],
-        references: [document.id],
-    }),
-}));
-
-export const chatHistoryRelations = relations(ChatHistory, ({ one }) => ({
-    document: one(document, {
-        fields: [ChatHistory.documentId],
-        references: [document.id],
-    }),
-}));
-
-export const predictiveAnalysisRelations = relations(predictiveDocumentAnalysisResults, ({ one }) => ({
-    document: one(document, {
-        fields: [predictiveDocumentAnalysisResults.documentId],
         references: [document.id],
     }),
 }));
@@ -819,98 +595,20 @@ export const ocrCostTrackingRelations = relations(ocrCostTracking, ({ one }) => 
     }),
 }));
 
-export const documentViewsRelations = relations(documentViews, ({ one }) => ({
-    document: one(document, {
-        fields: [documentViews.documentId],
-        references: [document.id],
-    }),
-    company: one(company, {
-        fields: [documentViews.companyId],
-        references: [company.id],
-    }),
-}));
-
-// ============================================================================
-// Generated Documents (Document Generator feature)
-// ============================================================================
-
-export const generatedDocuments = pgTable(
-    "generated_documents",
-    {
-        id: serial("id").primaryKey(),
-        userId: varchar("user_id", { length: 256 }).notNull(),
-        companyId: bigint("company_id", { mode: "bigint" })
-            .notNull()
-            .references(() => company.id, { onDelete: "cascade" }),
-        title: varchar("title", { length: 512 }).notNull(),
-        content: text("content").notNull(),
-        templateId: varchar("template_id", { length: 64 }),
-        metadata: jsonb("metadata").$type<{
-            tone?: string;
-            audience?: string;
-            length?: string;
-            description?: string;
-            templateType?: "general" | "legal";
-            legalData?: Record<string, string>;
-            /** Full section list from LegalDocumentEditor (labels + structure) */
-            legalSections?: Array<{
-                id: string;
-                type: "title" | "heading" | "paragraph";
-                label?: string;
-                content: string;
-                editable?: boolean;
-            }>;
-        }>(),
-        citations: jsonb("citations").$type<Array<{
-            id: string;
-            text: string;
-            sourceUrl?: string;
-            sourceTitle?: string;
-            format: string;
-            createdAt: string;
-        }>>(),
-        createdAt: timestamp("created_at", { withTimezone: true })
-            .default(sql`CURRENT_TIMESTAMP`)
-            .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
-    },
-    (table) => ({
-        userIdIdx: index("generated_documents_user_id_idx").on(table.userId),
-        companyIdIdx: index("generated_documents_company_id_idx").on(table.companyId),
-        companyUserIdx: index("generated_documents_company_user_idx").on(
-            table.companyId,
-            table.userId
-        ),
-    })
-);
-
-export const generatedDocumentsRelations = relations(generatedDocuments, ({ one }) => ({
-    company: one(company, {
-        fields: [generatedDocuments.companyId],
-        references: [company.id],
-    }),
-}));
-
-// ============================================================================
-// Type exports
-// ============================================================================
-
-export type User = InferSelectModel<typeof users>;
 export type Company = InferSelectModel<typeof company>;
+
 export type Document = InferSelectModel<typeof document>;
+
 export type DocumentVersion = InferSelectModel<typeof documentVersions>;
+
 export type Category = InferSelectModel<typeof category>;
+
 export type PdfChunk = InferSelectModel<typeof pdfChunks>;
-export type ChatHistoryEntry = InferSelectModel<typeof ChatHistory>;
-export type PredictiveDocumentAnalysisResult = InferSelectModel<typeof predictiveDocumentAnalysisResults>;
-export type DocumentReferenceResolution = InferSelectModel<typeof documentReferenceResolution>;
+
 export type FileUpload = InferSelectModel<typeof fileUploads>;
+
 export type OcrJob = InferSelectModel<typeof ocrJobs>;
+
 export type OcrProcessingStep = InferSelectModel<typeof ocrProcessingSteps>;
+
 export type OcrCostTracking = InferSelectModel<typeof ocrCostTracking>;
-export type DocumentView = InferSelectModel<typeof documentViews>;
-export type GeneratedDocument = InferSelectModel<typeof generatedDocuments>;
-export type InviteCode = InferSelectModel<typeof inviteCodes>;
-export type UserCompanyMembership = InferSelectModel<typeof userCompanyMemberships>;

@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db/index";
-import { ChatHistory, document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
+import { ChatHistory } from "~/server/db/schema";
 import { validateRequestBody, ChatHistoryFetchSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 

@@ -20,7 +20,11 @@ export async function GET(_request: Request, { params }: RouteParams) {
     }
 
     const [doc] = await db
-      .select({ id: document.id, title: document.title })
+      .select({
+        id: document.id,
+        title: document.title,
+        currentVersionId: document.currentVersionId,
+      })
       .from(document)
       .where(
         and(
@@ -33,17 +37,27 @@ export async function GET(_request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
     }
 
-    const chunks = await db
-      .select({
-        content: documentContextChunks.content,
-        pageNumber: documentContextChunks.pageNumber,
-      })
-      .from(documentContextChunks)
-      .where(eq(documentContextChunks.documentId, BigInt(docId)))
-      .orderBy(
-        asc(documentContextChunks.pageNumber),
-        asc(documentContextChunks.id),
-      );
+    // A document without a current pointer has no current text. Never fall
+    // back to historical or legacy unversioned chunks.
+    const chunks =
+      doc.currentVersionId === null
+        ? []
+        : await db
+            .select({
+              content: documentContextChunks.content,
+              pageNumber: documentContextChunks.pageNumber,
+            })
+            .from(documentContextChunks)
+            .where(
+              and(
+                eq(documentContextChunks.documentId, BigInt(docId)),
+                eq(documentContextChunks.versionId, doc.currentVersionId),
+              ),
+            )
+            .orderBy(
+              asc(documentContextChunks.pageNumber),
+              asc(documentContextChunks.id),
+            );
 
     if (chunks.length === 0) {
       return NextResponse.json({

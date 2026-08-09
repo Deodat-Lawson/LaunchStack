@@ -19,7 +19,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq, and } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, userCompanyMemberships } from "@launchstack/core/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 // ---------------------------------------------------------------------------

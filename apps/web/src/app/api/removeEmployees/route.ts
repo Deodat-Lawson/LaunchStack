@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { db } from "../../../server/db/index";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import {
   handleApiError,
   createSuccessResponse,

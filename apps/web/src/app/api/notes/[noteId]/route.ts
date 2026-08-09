@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { documentNotes, documentNoteEmbeddings, noteLinks } from "@launchstack/core/db/schema";
+import { documentNotes, documentNoteEmbeddings, noteLinks } from "~/server/db/schema";
 import { eq, and, or, isNull } from "drizzle-orm";
 
 function noteOwnershipFilter(noteId: number, clerkUserId: string, companyId: bigint) {

@@ -14,7 +14,11 @@ jest.mock("~/server/db", () => ({
   },
 }));
 
-jest.mock("@launchstack/core/db/schema", () => ({
+jest.mock("~/server/db/schema", () => ({
+  users: {
+    id: "users.id",
+    companyId: "users.companyId",
+  },
   userCompanyMemberships: {
     userId: "membership.userId",
     companyId: "membership.companyId",

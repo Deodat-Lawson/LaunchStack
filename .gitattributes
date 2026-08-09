@@ -1,0 +1,17 @@
+# Migration artifacts must never be auto-merged.
+#
+# Two PRs that each add a migration will both append an entry to _journal.json.
+# A textual or union merge "succeeds" and produces duplicate `idx` values —
+# silently broken. `-merge` forces git to raise a conflict instead, so the
+# author notices and regenerates (see CONTRIBUTING.md).
+packages/core/drizzle/meta/_journal.json    -merge
+packages/core/drizzle/meta/*_snapshot.json  -merge
+packages/core/drizzle/*.sql                 -merge
+
+# The snapshots are drizzle-kit's internal diff state — thousands of lines of
+# machine-generated JSON, never hand-edited, and reviewing them line by line
+# tells you nothing. Collapse them in diffs and keep them out of language
+# stats so a one-table migration doesn't look like a 9,000-line PR. The
+# reviewable artifact is the .sql file next to them.
+packages/core/drizzle/meta/*_snapshot.json  linguist-generated=true
+packages/core/drizzle/meta/_journal.json    linguist-generated=true

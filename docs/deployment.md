@@ -25,7 +25,7 @@ docker compose --env-file .env up
 **Services:**
 
 - `db` — PostgreSQL + pgvector
-- `migrate` — schema setup via `db:push`
+- `migrate` — applies the ordered SQL migrations (`db:migrate`), then exits
 - `app` — Next.js runtime
 - `sidecar` — FastAPI ML service (embeddings, reranking, entity extraction)
 

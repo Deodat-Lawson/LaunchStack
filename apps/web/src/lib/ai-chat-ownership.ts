@@ -16,7 +16,7 @@ import {
   agentAiChatbotTask,
   agentAiChatbotToolCall,
   agentAiChatbotExecutionStep,
-} from "@launchstack/core/db/schema";
+} from "~/server/db/schema";
 
 type OwnedSuccess<T> = { success: true; data: T };
 type OwnedFailure = { success: false; response: NextResponse };

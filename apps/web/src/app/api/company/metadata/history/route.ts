@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import { eq, desc } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
+import { companyMetadataHistory } from "~/server/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET() {

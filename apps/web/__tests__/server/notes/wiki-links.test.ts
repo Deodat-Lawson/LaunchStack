@@ -15,7 +15,7 @@ jest.mock("~/server/db", () => ({
   },
 }));
 
-jest.mock("@launchstack/core/db/schema/document-notes", () => ({
+jest.mock("~/server/db/schema", () => ({
   documentNotes: {
     id: "notes.id",
     title: "notes.title",
@@ -25,17 +25,17 @@ jest.mock("@launchstack/core/db/schema/document-notes", () => ({
   noteLinks: {
     sourceNoteId: "links.sourceNoteId",
   },
+  users: {
+    companyId: "users.companyId",
+    userId: "users.userId",
+  },
 }));
 
-jest.mock("@launchstack/core/db/schema/base", () => ({
+jest.mock("@launchstack/core/db/schema", () => ({
   document: {
     id: "document.id",
     title: "document.title",
     companyId: "document.companyId",
-  },
-  users: {
-    companyId: "users.companyId",
-    userId: "users.userId",
   },
 }));
 

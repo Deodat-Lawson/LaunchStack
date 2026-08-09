@@ -12,12 +12,11 @@
  *     - Sequential version numbering (max + 1, atomically)
  *
  *   Side effects:
- *     - Inserts a new row in `document_versions`
+ *     - Inserts a new row in `document_versions` via the document-creation lifecycle
  *     - Updates `document.current_version_id` to point at it
  *     - Triggers the OCR-to-Vector pipeline with the new versionId so fresh
  *       embeddings get tagged with this version. Old version embeddings are
  *       intentionally retained (per-version storage) to make revert O(1).
- *     - Inserts an `ocr_jobs` row for tracking
  *
  * GET /api/documents/[id]/versions
  *   List all versions of a document, newest first, with an `isCurrent` flag.
@@ -25,19 +24,16 @@
  */
 
 import { NextResponse } from "next/server";
-import { desc, eq, sql } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import {
-  document,
-  documentVersions,
-  ocrJobs,
-} from "@launchstack/core/db/schema";
-import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
+import { document, documentVersions } from "@launchstack/core/db/schema";
+import { parseProvider } from "@launchstack/core/ocr/trigger";
 import { buildInternalFileUrl } from "@launchstack/core/crypto";
 import { getOcrConfig } from "@launchstack/core/ocr/config";
 import { getEngine } from "~/server/engine";
+import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -49,8 +45,6 @@ import {
   authorizeInternalFileRef,
   UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
-
-
 
 const CreateVersionSchema = z.object({
   /** URL of the already-uploaded replacement file in blob storage */
@@ -71,16 +65,16 @@ const CreateVersionSchema = z.object({
  * Parse and validate the `[id]` route parameter.
  * Returns the numeric document id or an error response.
  */
-function parseDocumentId(rawId: string):
-  | { ok: true; documentId: number }
-  | { ok: false; response: NextResponse } {
+function parseDocumentId(
+  rawId: string,
+): { ok: true; documentId: number } | { ok: false; response: NextResponse } {
   const documentId = Number(rawId);
   if (!Number.isInteger(documentId) || documentId <= 0) {
     return {
       ok: false,
       response: NextResponse.json(
         { error: "Invalid document id" },
-        { status: 400 }
+        { status: 400 },
       ),
     };
   }
@@ -111,7 +105,7 @@ async function authorizeDocumentAccess(documentId: number): Promise<
       ok: false,
       response: NextResponse.json(
         { error: "Forbidden: owner or admin role required" },
-        { status: 403 }
+        { status: 403 },
       ),
     };
   }
@@ -126,7 +120,7 @@ async function authorizeDocumentAccess(documentId: number): Promise<
       ok: false,
       response: NextResponse.json(
         { error: "Document not found" },
-        { status: 404 }
+        { status: 404 },
       ),
     };
   }
@@ -137,7 +131,7 @@ async function authorizeDocumentAccess(documentId: number): Promise<
       ok: false,
       response: NextResponse.json(
         { error: "Document not found" },
-        { status: 404 }
+        { status: 404 },
       ),
     };
   }
@@ -152,7 +146,7 @@ async function authorizeDocumentAccess(documentId: number): Promise<
 
 export async function POST(
   request: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   return withRateLimit(request, RateLimitPresets.strict, async () => {
     try {
@@ -206,7 +200,7 @@ export async function POST(
         if (error instanceof UploadAuthorizationError) {
           return NextResponse.json(
             { error: error.message },
-            { status: error.status }
+            { status: error.status },
           );
         }
         throw error;
@@ -217,16 +211,17 @@ export async function POST(
       // tolerate header casing differences ("Image/PNG" vs "image/png").
       const expectedFileType = doc.fileType;
       if (!expectedFileType) {
-        // A document created before Step 2 rolled out may not have its
-        // file_type populated yet. The backfill script fixes this; if it
-        // hasn't run, refuse to create a new version rather than locking in
-        // the wrong type here.
+        // A document created before versioning rolled out may not have its
+        // file_type populated. New uploads set it inline (see
+        // server/services/document-upload.ts), so this only affects legacy
+        // rows. Refuse rather than locking in the wrong type here.
         return NextResponse.json(
           {
             error:
-              "Document file type not yet initialized. Run the versioning backfill before uploading new versions.",
+              "Document file type not yet initialized. Run the versioning backfill first: " +
+              "pnpm --filter @launchstack/web db:backfill --only=2026-08-document-versions",
           },
-          { status: 409 }
+          { status: 409 },
         );
       }
 
@@ -238,119 +233,43 @@ export async function POST(
             expected: expectedFileType,
             received: mimeType,
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
-      // Insert the new version + flip currentVersionId atomically. Any concurrent
-      // new-version uploads on the same document would race on version_number,
-      // but the unique index (document_id, version_number) in the schema
-      // guarantees one of them rejects at the DB level — we retry once on that
-      // specific violation below.
-      const createdVersion = await db.transaction(async (tx) => {
-        const [maxRow] = await tx
-          .select({
-            maxVersion: sql<number>`COALESCE(MAX(${documentVersions.versionNumber}), 0)`,
-          })
-          .from(documentVersions)
-          .where(eq(documentVersions.documentId, BigInt(parsed.documentId)));
-
-        const nextVersionNumber = (maxRow?.maxVersion ?? 0) + 1;
-
-        const [inserted] = await tx
-          .insert(documentVersions)
-          .values({
-            documentId: BigInt(parsed.documentId),
-            versionNumber: nextVersionNumber,
-            url: resolvedDocumentUrl,
-            mimeType,
-            fileSize:
-              typeof fileSize === "number" ? BigInt(fileSize) : null,
-            uploadedBy: userId,
-            changelog: changelog ?? null,
-            ocrProcessed: false,
-          })
-          .returning({
-            id: documentVersions.id,
-            versionNumber: documentVersions.versionNumber,
-          });
-
-        if (!inserted) {
-          throw new Error("Failed to insert document_versions row");
-        }
-
-        // Flip currentVersionId to the new row so RAG starts returning the
-        // new version's chunks as soon as embeddings land. The brief window
-        // between flip and embedding completion is acceptable — search will
-        // return zero results for this document during that window, which
-        // matches the behavior of a brand new upload.
-        //
-        // We ALSO update `document.url` and `document.mimeType` to match the
-        // new current version. These two columns predate versioning and are
-        // treated by every legacy read path (fetchDocument, DocumentViewer,
-        // etc.) as "the document's blob." Leaving them frozen on v1 means
-        // the main viewer keeps showing v1's content even after v2 becomes
-        // current — which is exactly the bug we hit in production. Keep
-        // them denormalized in lockstep with `currentVersionId`.
-        await tx
-          .update(document)
-          .set({
-            currentVersionId: BigInt(inserted.id),
-            url: resolvedDocumentUrl,
-            mimeType,
-          })
-          .where(eq(document.id, parsed.documentId));
-
-        return inserted;
-      });
-
-      const companyIdString = doc.companyId.toString();
-
-      // Dispatch the OCR-to-Vector pipeline with the new versionId so every
-      // chunk/structure/metadata row gets tagged with this specific version.
-      // Old version chunks stay indexed under their own versionId and are
-      // hidden from RAG results by the version filter in the retrievers.
-      const { jobId, eventIds } = await triggerDocumentProcessing(
-        resolvedDocumentUrl,
-        doc.title,
-        companyIdString,
-        userId,
-        parsed.documentId,
-        doc.category,
-        {
-          preferredProvider: effectiveProvider,
-          mimeType,
-          originalFilename,
-          versionId: createdVersion.id,
-        }
-      );
-
-      await db.insert(ocrJobs).values({
-        id: jobId,
+      // Persistence and dispatch share one idempotent lifecycle. The key is
+      // stable for retries of the same uploaded object.
+      const lifecycle = await createDocumentVersionLifecycle({
+        documentId: parsed.documentId,
         companyId: doc.companyId,
         userId,
-        status: "queued",
-        documentUrl: resolvedDocumentUrl,
-        documentName: doc.title,
-        primaryProvider: effectiveProvider,
+        title: doc.title,
+        category: doc.category,
+        url: resolvedDocumentUrl,
+        creationKey: `version:${parsed.documentId}:${resolvedDocumentUrl}`,
+        mimeType,
+        fileSize,
+        changelog,
+        preferredProvider: effectiveProvider,
+        originalFilename,
       });
 
       console.log(
-        `[Versions] Created v${createdVersion.versionNumber} for doc=${parsed.documentId} ` +
-          `versionId=${createdVersion.id} jobId=${jobId}`
+        `[Versions] Created v${lifecycle.version.versionNumber} for doc=${parsed.documentId} ` +
+          `versionId=${lifecycle.version.id} jobId=${lifecycle.job.id}`,
       );
 
       return NextResponse.json(
         {
           success: true,
-          versionId: createdVersion.id,
-          versionNumber: createdVersion.versionNumber,
+          versionId: lifecycle.version.id,
+          versionNumber: lifecycle.version.versionNumber,
           documentId: parsed.documentId,
-          jobId,
-          eventIds,
+          jobId: lifecycle.job.id,
+          eventIds: lifecycle.eventIds,
           message: "New version uploaded, processing started",
         },
-        { status: 202 }
+        { status: 202 },
       );
     } catch (error) {
       console.error("[Versions] POST failed:", error);
@@ -358,8 +277,7 @@ export async function POST(
       // The unique (document_id, version_number) constraint violation maps
       // cleanly to a 409 Conflict: another concurrent request won the race.
       // The client should retry; the next attempt will see the bumped max.
-      const message =
-        error instanceof Error ? error.message : String(error);
+      const message = error instanceof Error ? error.message : String(error);
       if (message.includes("doc_versions_document_version_unique")) {
         return NextResponse.json(
           {
@@ -367,7 +285,7 @@ export async function POST(
             details:
               "Another version upload completed first. Please retry this request.",
           },
-          { status: 409 }
+          { status: 409 },
         );
       }
 
@@ -376,7 +294,7 @@ export async function POST(
           error: "Failed to create new document version",
           details: message,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   });
@@ -384,7 +302,7 @@ export async function POST(
 
 export async function GET(
   request: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id: rawId } = await context.params;
@@ -437,7 +355,7 @@ export async function GET(
         currentVersionId,
         versions: serialized,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("[Versions] GET failed:", error);
@@ -446,7 +364,7 @@ export async function GET(
         error: "Failed to list document versions",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,5 +1,6 @@
 import {db} from "~/server/db";
-import {company, users, userCompanyMemberships} from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
 import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";

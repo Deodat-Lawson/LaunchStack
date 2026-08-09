@@ -1,12 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import {
-  agentAiChatbotChat,
-  agentAiChatbotMessage,
-  agentAiChatbotTask,
-  agentAiChatbotDocument
-} from "@launchstack/core/db/schema";
+import { agentAiChatbotChat, agentAiChatbotMessage, agentAiChatbotTask, agentAiChatbotDocument } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";

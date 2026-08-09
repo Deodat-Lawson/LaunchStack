@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { users, document, documentViews, ChatHistory, userCompanyMemberships } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
+import { users, documentViews, ChatHistory, userCompanyMemberships } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
 import {
     isManagementRole,

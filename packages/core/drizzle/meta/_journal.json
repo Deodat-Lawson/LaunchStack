@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1785814103828,
+      "tag": "20260804032823_engine_baseline",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786228639855,
+      "tag": "20260808223719_document_creation_lifecycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786252800000,
+      "tag": "20260809140000_file_uploads_company_id",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786252860000,
+      "tag": "20260809140100_reconcile_file_uploads_company_id",
+      "breakpoints": true
+    }
+  ]
+}

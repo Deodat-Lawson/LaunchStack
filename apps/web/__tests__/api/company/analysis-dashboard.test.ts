@@ -66,6 +66,16 @@ jest.mock("~/server/db/index", () => ({
 }));
 
 jest.mock("@launchstack/core/db/schema", () => ({
+  document: {
+    id: { name: "document.id" },
+    title: { name: "title" },
+    category: { name: "category" },
+    createdAt: { name: "document.created_at" },
+    companyId: { name: "document.company_id" },
+  },
+}));
+
+jest.mock("~/server/db/schema", () => ({
   users: {
     id: { name: "id" },
     name: { name: "name" },
@@ -76,13 +86,6 @@ jest.mock("@launchstack/core/db/schema", () => ({
     createdAt: { name: "created_at" },
     userId: { name: "user_id" },
     companyId: { name: "company_id" },
-  },
-  document: {
-    id: { name: "document.id" },
-    title: { name: "title" },
-    category: { name: "category" },
-    createdAt: { name: "document.created_at" },
-    companyId: { name: "document.company_id" },
   },
   documentViews: {
     id: { name: "views.id" },

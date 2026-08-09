@@ -6,6 +6,7 @@
  */
 
 import { sql } from "drizzle-orm";
+import { T } from "~/server/db/tables";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { db, toRows } from "~/server/db/index";
@@ -113,8 +114,8 @@ export async function searchNotes(
         n.anchor,
         n.anchor_status,
         (ne.embedding <-> ${fullLiteral}) AS distance
-      FROM pdr_ai_v2_document_note_embeddings ne
-      JOIN pdr_ai_v2_document_notes n ON n.id = ne.note_id
+      FROM ${T.noteEmbeddings} ne
+      JOIN ${T.notes} n ON n.id = ne.note_id
       WHERE ne.user_id = ${userId}
         AND ${companyFilter}
         AND ${scopeFilter}

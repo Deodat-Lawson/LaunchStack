@@ -1,9 +1,9 @@
--- Reconcile the legacy file ownership backfill from migration 0016.
+-- Reconcile the legacy file ownership backfill from the company_id migration.
 --
--- 0016 only wrote a company when every weak URL match for a file agreed on
--- exactly one company. This migration preserves independently stamped rows,
--- clears stamps that can be attributed to the weak matcher but not the
--- canonical matcher, and then backfills only from canonical matches.
+-- That migration only wrote a company when every weak URL match for a file
+-- agreed on exactly one company. This migration preserves independently
+-- stamped rows, clears stamps that can be attributed to the weak matcher but
+-- not the canonical matcher, and then backfills only from canonical matches.
 
 WITH weak_matches AS (
     SELECT
@@ -65,7 +65,7 @@ UPDATE "pdr_ai_v2_file_uploads" f
 SET "company_id" = NULL
 FROM disputed_files d
 WHERE f."id" = d."id";
-
+--> statement-breakpoint
 WITH anchored_matches AS (
     SELECT
         (regexp_match(

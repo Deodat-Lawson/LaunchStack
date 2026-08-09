@@ -226,12 +226,6 @@ export const fileUploads = pgTable(
     {
         id: bigserial("id", { mode: "number" }).primaryKey(),
         userId: varchar("user_id", { length: 256 }).notNull(),
-        // Active company at upload time. Nullable for legacy rows; new uploads
-        // always stamp this so /api/files can enforce tenant ownership directly.
-        companyId: bigint("company_id", { mode: "bigint" }).references(
-            () => company.id,
-            { onDelete: "set null" },
-        ),
         filename: varchar("filename", { length: 256 }).notNull(),
         mimeType: varchar("mime_type", { length: 128 }).notNull(),
         fileData: text("file_data"),
@@ -243,6 +237,13 @@ export const fileUploads = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+        // After createdAt so ADD COLUMN migrations match the TypeScript dump
+        // (Postgres appends new columns). Nullable for legacy rows; new uploads
+        // always stamp this so /api/files can enforce tenant ownership directly.
+        companyId: bigint("company_id", { mode: "bigint" }).references(
+            () => company.id,
+            { onDelete: "set null" },
+        ),
     },
     table => ({
         userIdIdx: index("file_uploads_user_id_idx").on(table.userId),

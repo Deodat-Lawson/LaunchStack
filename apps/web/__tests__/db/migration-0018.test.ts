@@ -11,9 +11,9 @@ const MIGRATIONS_DIR = join(
   "core",
   "drizzle",
 );
-const TAG = "20260809140100_reconcile_file_uploads_company_id";
+const TAG = "20260809142658_reconcile_file_uploads_company_id";
 const FILENAME = `${TAG}.sql`;
-const FILE_UPLOADS_MIGRATION = "20260809140000_file_uploads_company_id.sql";
+const FILE_UPLOADS_MIGRATION = "20260809142627_file_uploads_company_id.sql";
 
 const anchoredFileUrlPattern =
   /^(https?:\/\/[^/?#]+)?\/api\/files\/([0-9]+)\/?(\?.*)?$/;
@@ -44,7 +44,7 @@ describe("migration reconcile_file_uploads_company_id", () => {
 
     const tags = journal.entries.map((e) => e.tag);
     expect(tags.indexOf(TAG)).toBeGreaterThan(
-      tags.indexOf("20260809140000_file_uploads_company_id"),
+      tags.indexOf("20260809142627_file_uploads_company_id"),
     );
   });
 

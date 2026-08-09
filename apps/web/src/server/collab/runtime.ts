@@ -209,15 +209,30 @@ export async function getMeetingRuntime(
     initialState: rowToState(row),
   });
 
-  // Chain persists per meeting so states land in event order — concurrent
-  // fire-and-forget writes could interleave and persist a stale state last.
-  let persistChain: Promise<void> = Promise.resolve();
-  const dispose = orchestrator.on((event) => {
-    persistChain = persistChain
-      .then(() => persistState(meetingId, event.state))
+  // Coalescing persist: only the LATEST state matters (each write is the
+  // full row), so instead of chaining one write per event — which lets a
+  // chatty meeting on a slow DB build an unbounded backlog — keep exactly
+  // one write in flight and remember the newest pending state. Ordering is
+  // preserved (a single writer), intermediate states are skipped.
+  let persistInFlight = false;
+  let pendingState: MeetingState | null = null;
+  const drainPersist = (): void => {
+    if (persistInFlight || pendingState === null) return;
+    const state = pendingState;
+    pendingState = null;
+    persistInFlight = true;
+    void persistState(meetingId, state)
       .catch((err: unknown) => {
         console.error(`[collab] failed to persist meeting ${meetingId}:`, err);
+      })
+      .finally(() => {
+        persistInFlight = false;
+        drainPersist();
       });
+  };
+  const dispose = orchestrator.on((event) => {
+    pendingState = event.state;
+    drainPersist();
   });
 
   const bridge = await buildBridge(config, orchestrator, store);

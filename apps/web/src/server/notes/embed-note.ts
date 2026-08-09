@@ -11,6 +11,7 @@
 
 import { eq } from "drizzle-orm";
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { document } from "@launchstack/core/db/schema";
 
 import { db } from "~/server/db";
 import { type NoteAnchor } from "~/server/db/schema";
@@ -121,26 +122,77 @@ export async function embedNote(noteId: number): Promise<void> {
   }
 }
 
+/** Parse a positive-integer id out of a string/number/bigint column value. */
+function parsePositiveInt(
+  value: string | number | bigint | null | undefined,
+): number | null {
+  if (value === null || value === undefined) return null;
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 ? n : null;
+}
+
 /**
  * Durable replacement for the old fire-and-forget `embedNoteAsync`:
  * enqueues a `note.embedding.requested` outbox event that apps/worker
- * consumes with retries. The event id is stable per note, so rapid
- * successive edits collapse into one pending embed of the latest content.
+ * consumes with retries. The event id carries a per-edit fingerprint (the
+ * note's `updatedAt` epoch-ms, falling back to `createdAt` for a fresh
+ * note), so an edit that lands while a previous request is mid-handler
+ * (`processing`) gets its OWN event instead of being absorbed — and lost —
+ * by the in-flight row. The handler embeds the CURRENT note content, so
+ * redelivery of any fingerprint converges; re-enqueueing an already
+ * processed/dead fingerprint revives it via the store's upsert.
  */
 export async function requestNoteEmbedding(
   noteId: number,
   reason: "created" | "updated",
+  /**
+   * Company to attribute the event to when neither the note row nor its
+   * document yields one. The UI note-create paths write null `companyId`,
+   * so routes pass the acting user's active company as this hint.
+   */
+  companyIdHint?: string | number | bigint | null,
 ): Promise<void> {
   const [note] = await db
-    .select({ companyId: documentNotes.companyId })
+    .select({
+      companyId: documentNotes.companyId,
+      documentId: documentNotes.documentId,
+      createdAt: documentNotes.createdAt,
+      updatedAt: documentNotes.updatedAt,
+    })
     .from(documentNotes)
     .where(eq(documentNotes.id, noteId))
     .limit(1);
   if (!note) return;
-  const companyId = Number(note.companyId);
-  if (!Number.isInteger(companyId) || companyId <= 0) {
+
+  // Per-edit fingerprint: `updatedAt` is stamped on every update
+  // ($onUpdate); a freshly created note only has `createdAt`. Epoch-ms
+  // keeps the event id deterministic for a given edit, so producer retries
+  // of the SAME edit converge while each new edit gets a new event.
+  const fingerprint = String((note.updatedAt ?? note.createdAt).getTime());
+
+  // Resolve the owning company: the note row first, then the anchored
+  // document's row, then the caller-supplied hint. Without the fallbacks,
+  // every UI-created note (null companyId) would silently never be embedded.
+  let companyId = parsePositiveInt(note.companyId);
+  if (companyId === null) {
+    const documentId = parsePositiveInt(note.documentId);
+    if (documentId !== null) {
+      const [doc] = await db
+        .select({ companyId: document.companyId })
+        .from(document)
+        .where(eq(document.id, documentId))
+        .limit(1);
+      companyId = parsePositiveInt(doc?.companyId);
+    }
+  }
+  companyId ??= parsePositiveInt(companyIdHint);
+  if (companyId === null) {
+    // Never drop the event silently — this note will not be searchable until
+    // a later edit manages to resolve a company.
     console.error(
-      `[requestNoteEmbedding] note ${noteId} has non-numeric companyId "${note.companyId}"`,
+      `[requestNoteEmbedding] could not resolve a company for note ${noteId} ` +
+        `(row companyId "${note.companyId}", documentId "${note.documentId}", ` +
+        `hint "${companyIdHint}") — embedding NOT enqueued`,
     );
     return;
   }
@@ -152,7 +204,7 @@ export async function requestNoteEmbedding(
   const store = new DrizzleOutboxStore(engine.db, console);
   await store.enqueue([
     {
-      eventId: eventIds.noteEmbeddingRequested(noteId),
+      eventId: eventIds.noteEmbeddingRequested(noteId, fingerprint),
       eventType: "note.embedding.requested",
       schemaVersion: PROTOCOL_VERSION,
       occurredAt: new Date().toISOString(),

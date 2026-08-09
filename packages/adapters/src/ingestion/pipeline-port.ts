@@ -7,7 +7,29 @@ import { eq } from "drizzle-orm";
 
 import { getDb } from "../db";
 import { document, ocrJobs } from "../db/schema";
-import { parseProvider } from "../ocr/trigger";
+import type { OCRProvider } from "../ocr/types";
+
+/**
+ * Providers the processor honors as an explicit pin. The event payload is
+ * already protocol-validated; this only excludes INGESTION (the text
+ * adapter's pseudo-provider, never a routing pin). The legacy
+ * `parseProvider` whitelist must NOT be used here — it predates DOCLING
+ * pins and silently degraded them to auto-routing.
+ */
+const PINNABLE_PROVIDERS: ReadonlySet<string> = new Set([
+    "AZURE",
+    "LANDING_AI",
+    "NATIVE_PDF",
+    "DATALAB",
+    "DOCLING",
+]);
+
+function acceptPreferredProvider(provider?: string): OCRProvider | undefined {
+    if (provider && PINNABLE_PROVIDERS.has(provider)) {
+        return provider as OCRProvider;
+    }
+    return undefined;
+}
 import { getStoragePort } from "../storage";
 import type {
     ExtractionJob,
@@ -98,7 +120,7 @@ export class DocIngestionPipeline implements ExtractionPipelinePort {
             transcriptionMetadata: job.options.transcriptionMetadata,
             options: {
                 forceOCR: job.options.forceOCR,
-                preferredProvider: parseProvider(job.options.preferredProvider),
+                preferredProvider: acceptPreferredProvider(job.options.preferredProvider),
                 embeddingIndexKey: job.options.embeddingIndexKey,
             },
             runtime: {

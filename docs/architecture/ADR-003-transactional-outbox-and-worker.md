@@ -32,7 +32,8 @@ inventing a second one.
    (additive migration in the engine set): unique `event_id` (deterministic
    idempotency key), `event_type`, `schema_version`, `company_id`, `payload`
    (validated against `packages/protocol`), `trace_id`, `status`
-   (`pending → processing → processed | failed → dead`), `attempt_count`,
+   (`pending → processing → processed | dead`; a failed attempt returns the
+   row to `pending` with backoff until attempts are exhausted), `attempt_count`,
    `available_at`, `claimed_at`, `processed_at`, `last_error`.
 2. **Write commands and events in one transaction.** The upload/import
    lifecycle inserts its `source.version.created` outbox row inside the same

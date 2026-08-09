@@ -6,8 +6,8 @@
  */
 export {
   DrizzleOutboxStore,
-  enqueueOutboxEvents,
   enqueueOutboxEventsWithRevive,
+  type DrizzleOutboxStoreOptions,
 } from "./outbox/drizzle-outbox-store";
 
 export {

@@ -7,7 +7,7 @@ import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
 import { requestNoteEmbedding } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { searchNotes } from "~/server/notes/search";
-import { syncNoteLinks } from "~/server/notes/wiki-links";
+import { syncNoteLinks, getCompanyIdForUser } from "~/server/notes/wiki-links";
 import type { JSONContent } from "@tiptap/react";
 
 export async function GET(request: Request) {
@@ -125,7 +125,24 @@ export async function POST(request: Request) {
       .returning();
 
     if (note) {
-      await requestNoteEmbedding(note.id, "created");
+      // Post-commit side effects: the note row is already persisted, so a
+      // failed outbox enqueue (or link sync) must log loudly but never fail
+      // the save — parity with the old fire-and-forget path. Tradeoff: the
+      // embedding may lag until the next edit re-enqueues it.
+      try {
+        // UI creates write null companyId; pass the acting user's active
+        // company as a hint so the embedding event isn't dropped.
+        await requestNoteEmbedding(
+          note.id,
+          "created",
+          note.companyId ?? (await getCompanyIdForUser(userId)),
+        );
+      } catch (err) {
+        console.error(
+          `[notes] requestNoteEmbedding failed for note ${note.id} (note saved; embedding deferred to next edit):`,
+          err,
+        );
+      }
       await syncNoteLinks({
         noteId: note.id,
         rich: (note.contentRich as JSONContent | null) ?? null,

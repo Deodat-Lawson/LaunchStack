@@ -7,7 +7,7 @@
  * `evidence.version.indexed` outbox handler, so every projection is
  * traceable to the evidence version that triggered it.
  */
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import type {
   CompanyProjectionPort,
@@ -25,11 +25,48 @@ export function createCompanyProjectionPort(
   return {
     async projectCompanyState({ companyId, sourceId, traceId }) {
       const rows = await db
-        .select({ metadata: companyMetadata.metadata })
+        .select({
+          metadata: companyMetadata.metadata,
+          lastExtractionDocumentId: companyMetadata.lastExtractionDocumentId,
+        })
         .from(companyMetadata)
         .where(eq(companyMetadata.companyId, BigInt(companyId)))
         .limit(1);
       const existingMetadata = rows[0]?.metadata ?? null;
+
+      // Idempotency contract: outbox redelivery/replay of the same
+      // projection request must not append duplicate audit-history rows.
+      // A completed projection leaves two marks — the canonical row points
+      // at this source AND an 'extraction' history row exists for
+      // (companyId, sourceId). When both are present this exact projection
+      // already ran to completion: report success without new writes (and
+      // without re-running the LLM extraction). A crash between the upsert
+      // and the history insert leaves the second mark missing, so the
+      // redelivery falls through and converges by re-running.
+      if (
+        rows[0]?.lastExtractionDocumentId !== null &&
+        rows[0]?.lastExtractionDocumentId !== undefined &&
+        Number(rows[0].lastExtractionDocumentId) === sourceId
+      ) {
+        const [priorExtraction] = await db
+          .select({ id: companyMetadataHistory.id })
+          .from(companyMetadataHistory)
+          .where(
+            and(
+              eq(companyMetadataHistory.companyId, BigInt(companyId)),
+              eq(companyMetadataHistory.documentId, BigInt(sourceId)),
+              eq(companyMetadataHistory.changeType, "extraction"),
+            ),
+          )
+          .limit(1);
+        if (priorExtraction) {
+          logger.info(
+            { traceId, companyId, sourceId },
+            "projection already recorded for this source; redelivery is a no-op",
+          );
+          return { projected: true };
+        }
+      }
 
       const result = await runCompanyMetadataTool({
         documentId: sourceId,

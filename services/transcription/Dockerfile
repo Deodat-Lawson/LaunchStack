@@ -11,6 +11,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt .
 
+# Install torch from the CPU wheel index FIRST: the default PyPI resolution of
+# torch>=2.5.0 pulls the CUDA build on linux (~7GB installed), which this
+# CPU-inference-by-default service never uses. The requirements install below
+# then sees torch already satisfied and skips it. requirements.txt stays the
+# source of truth for the version floor; GPU deployments should build with
+# their own torch instead of this layer.
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/

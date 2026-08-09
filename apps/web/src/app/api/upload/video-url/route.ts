@@ -41,7 +41,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // SSRF guard: the video URL is fetched/transcribed server-side.
+    // SSRF guard: best-effort pre-check only. This route never fetches the
+    // URL itself — it hands the string to the transcription sidecar, which
+    // downloads in its own process — so `fetchPublicUrl` (per-redirect-hop
+    // re-validation) does not apply here. Redirect hardening for downloads
+    // the sidecar performs has to live in the sidecar.
     try {
       await assertPublicHttpUrl(videoUrl);
     } catch (err) {

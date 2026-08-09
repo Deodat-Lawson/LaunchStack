@@ -20,6 +20,13 @@ import type {
 export const NO_PAGE_BOUNDARIES_WARNING =
   "provider returned no page boundaries; page anchors are document-level";
 
+/**
+ * The exact marker docling-serve is asked to emit between pages
+ * (`md_page_break_placeholder` in docling.ts). PAGE_BREAK below must always
+ * match it — that round trip is what turns docling output into real pages.
+ */
+export const PAGE_BREAK_PLACEHOLDER = "<!-- page break -->";
+
 /** Explicit page-break markers ONLY — never `---`. */
 const PAGE_BREAK = /\f|<!--\s*page\s*break\s*-->/gi;
 

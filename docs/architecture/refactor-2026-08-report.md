@@ -140,8 +140,12 @@ letting one slow LLM-bound handler starve the batch.
 
 ## File-by-file summary
 
-See `git status`/`git diff` on this branch for the full ~250-file change
-set. High-level map:
+See `git status`/`git diff` on this branch for the full change set —
+668 files against `origin/main` at the time of writing
+(`git diff --stat origin/main...HEAD`). Roughly double the ~250 files the
+refactor first touched, because the facade evacuation counts every moved
+module twice: its implementation in `packages/adapters` plus the re-export
+stub left behind in `packages/core`. High-level map:
 
 - `packages/protocol/**`, `packages/evidence/**`,
   `packages/application/**`, `packages/adapters/**` — new packages.

@@ -25,38 +25,16 @@ import type {
 type OutboxTx = Pick<DbClient, "insert" | "execute">;
 
 /**
- * Insert events inside the caller's transaction. This is THE way producers
- * that change pipeline state enqueue events — the state change and its
- * event commit or roll back together. Conflicts on event_id are skipped:
- * retried producer transactions converge, and a replayed handler's
- * follow-ups never re-open an already-processed downstream stage.
- */
-export async function enqueueOutboxEvents(
-  tx: OutboxTx,
-  events: PipelineEvent[],
-): Promise<void> {
-  if (events.length === 0) return;
-  const rows = events.map((event) => {
-    const parsed = pipelineEventSchema.parse(event);
-    return {
-      eventId: parsed.eventId,
-      eventType: parsed.eventType,
-      schemaVersion: parsed.schemaVersion,
-      companyId: parsed.companyId,
-      payload: parsed as unknown as Record<string, unknown>,
-      traceId: parsed.traceId,
-    };
-  });
-  await tx.insert(eventOutbox).values(rows).onConflictDoNothing({
-    target: eventOutbox.eventId,
-  });
-}
-
-/**
- * Insert-or-revive for stable-id request events (e.g. note embedding): a
- * live pending/processing row absorbs the request (the handler reads current
- * state anyway); a processed/dead row returns to `pending` with a fresh
- * attempt budget so the request runs again.
+ * Insert-or-revive: THE enqueue semantics of the outbox. A live
+ * `pending`/`processing` row absorbs the request (the handler reads current
+ * state anyway); a `processed` or `dead` row returns to `pending` with a
+ * fresh attempt budget so the event runs again.
+ *
+ * Reviving processed rows is what gives the pipeline clean cascade-replay
+ * semantics (docs/runbooks/outbox.md): replaying stage N re-enqueues its
+ * follow-ups through this path on completion, so stages N+1..end re-run even
+ * when their rows had already been processed — or had dead-lettered — before
+ * the replay. All handlers are idempotent, so the cascade converges.
  */
 export async function enqueueOutboxEventsWithRevive(
   tx: OutboxTx,
@@ -91,10 +69,25 @@ export async function enqueueOutboxEventsWithRevive(
   }
 }
 
+export interface DrizzleOutboxStoreOptions {
+  /**
+   * Failure-visibility hook for rows dead-lettered at claim time because
+   * their payload failed protocol validation. Those rows never become a
+   * `ClaimedEvent`, so the tick-level `onDead` hook cannot see them — this
+   * callback is the only signal the worker gets. Hook errors are logged,
+   * never thrown.
+   */
+  onValidationDead?: (
+    outboxId: number,
+    eventId: string,
+  ) => void | Promise<void>;
+}
+
 export class DrizzleOutboxStore implements OutboxStorePort {
   constructor(
     private readonly db: DbClient,
     private readonly logger: LoggerPort,
+    private readonly opts: DrizzleOutboxStoreOptions = {},
   ) {}
 
   async enqueue(events: PipelineEvent[]): Promise<void> {
@@ -115,12 +108,13 @@ export class DrizzleOutboxStore implements OutboxStorePort {
         LIMIT ${batchSize}
         FOR UPDATE SKIP LOCKED
       )
-      RETURNING id, payload, attempt_count
+      RETURNING id, event_id, payload, attempt_count
     `);
 
     const claimed: ClaimedEvent[] = [];
     for (const row of rows as unknown as Array<{
       id: number;
+      event_id: string;
       payload: unknown;
       attempt_count: number;
     }>) {
@@ -128,9 +122,27 @@ export class DrizzleOutboxStore implements OutboxStorePort {
       if (!parsed.success) {
         // A row that fails contract validation can never succeed; dead-letter
         // it immediately with the validation error for operator inspection.
+        // No ClaimedEvent exists for it, so the tick-level onDead hook never
+        // fires — visibility runs through the onValidationDead callback.
         const message = `outbox payload failed protocol validation: ${parsed.error.message}`;
-        this.logger.error({ outboxId: row.id }, message);
+        this.logger.error(
+          { outboxId: row.id, eventId: row.event_id },
+          `${message} (dead-lettered at claim; tick-level onDead does not fire for this row)`,
+        );
         await this.markFailed(Number(row.id), message, { retryAt: null });
+        if (this.opts.onValidationDead) {
+          try {
+            await this.opts.onValidationDead(
+              Number(row.id),
+              String(row.event_id),
+            );
+          } catch (hookError) {
+            this.logger.error(
+              { outboxId: row.id, error: String(hookError) },
+              "onValidationDead hook failed",
+            );
+          }
+        }
         continue;
       }
       claimed.push({
@@ -142,23 +154,48 @@ export class DrizzleOutboxStore implements OutboxStorePort {
     return claimed;
   }
 
+  /**
+   * Mark a claimed row processed and enqueue its follow-ups in the same
+   * transaction. Follow-ups go through the revive path: an already-processed
+   * or dead downstream row returns to `pending`, which is what makes
+   * operator replay of stage N cascade through stages N+1..end.
+   *
+   * Guarded on `status = 'processing'`: if the row was reclaimed while this
+   * claimant was working (stale claim), its late outcome is discarded and
+   * follow-ups are NOT enqueued — the re-processing claimant will enqueue
+   * them when it finishes.
+   */
   async markProcessed(
     outboxId: number,
     followUps: PipelineEvent[] = [],
   ): Promise<void> {
     await this.db.transaction(async (tx) => {
-      await tx.execute(sql`
+      const rows = await tx.execute(sql`
         UPDATE ${eventOutbox}
         SET status = 'processed',
             processed_at = CURRENT_TIMESTAMP,
             updated_at = CURRENT_TIMESTAMP,
             last_error = NULL
         WHERE id = ${outboxId}
+          AND status = 'processing'
+        RETURNING id
       `);
-      await enqueueOutboxEvents(tx, followUps);
+      if ((rows as unknown as unknown[]).length === 0) {
+        this.logger.warn(
+          { outboxId },
+          "stale claimant outcome discarded; row was reclaimed",
+        );
+        return;
+      }
+      await enqueueOutboxEventsWithRevive(tx, followUps);
     });
   }
 
+  /**
+   * Record a handler failure. Guarded on `status = 'processing'` like
+   * markProcessed: a stale claimant that lost its claim to the reclaimer
+   * must not dead-letter or reschedule a row it no longer owns.
+   */
   async markFailed(
     outboxId: number,
     error: string,
@@ -166,43 +203,70 @@ export class DrizzleOutboxStore implements OutboxStorePort {
   ): Promise<void> {
     // Truncate so a pathological error message cannot bloat the row.
     const message = error.slice(0, 4000);
-    if (opts.retryAt === null) {
-      await this.db.execute(sql`
-        UPDATE ${eventOutbox}
-        SET status = 'dead',
-            attempt_count = attempt_count + 1,
-            last_error = ${message},
-            updated_at = CURRENT_TIMESTAMP
-        WHERE id = ${outboxId}
-      `);
-      return;
+    const rows =
+      opts.retryAt === null
+        ? await this.db.execute(sql`
+            UPDATE ${eventOutbox}
+            SET status = 'dead',
+                attempt_count = attempt_count + 1,
+                last_error = ${message},
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ${outboxId}
+              AND status = 'processing'
+            RETURNING id
+          `)
+        : await this.db.execute(sql`
+            UPDATE ${eventOutbox}
+            SET status = 'pending',
+                attempt_count = attempt_count + 1,
+                available_at = ${opts.retryAt.toISOString()},
+                claimed_at = NULL,
+                last_error = ${message},
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ${outboxId}
+              AND status = 'processing'
+            RETURNING id
+          `);
+    if ((rows as unknown as unknown[]).length === 0) {
+      this.logger.warn(
+        { outboxId },
+        "stale claimant outcome discarded; row was reclaimed",
+      );
     }
-    await this.db.execute(sql`
-      UPDATE ${eventOutbox}
-      SET status = 'pending',
-          attempt_count = attempt_count + 1,
-          available_at = ${opts.retryAt.toISOString()},
-          claimed_at = NULL,
-          last_error = ${message},
-          updated_at = CURRENT_TIMESTAMP
-      WHERE id = ${outboxId}
-    `);
   }
 
-  async reclaimStale(claimedBefore: Date): Promise<number> {
+  /**
+   * Return stale `processing` rows (worker died mid-handler) to `pending`.
+   * Every reclaim counts as one consumed attempt — a crash-poison event
+   * (one that kills its worker before markFailed can run) must not loop
+   * forever. Rows whose incremented count reaches `maxAttempts` go `dead`
+   * with an explanatory last_error instead.
+   */
+  async reclaimStale(claimedBefore: Date, maxAttempts: number): Promise<number> {
     const rows = await this.db.execute(sql`
       UPDATE ${eventOutbox}
-      SET status = 'pending',
+      SET attempt_count = attempt_count + 1,
+          status = CASE
+            WHEN attempt_count + 1 >= ${maxAttempts} THEN 'dead'
+            ELSE 'pending'
+          END,
+          last_error = CASE
+            WHEN attempt_count + 1 >= ${maxAttempts}
+            THEN 'reclaimed after stale claim; attempts exhausted'
+            ELSE last_error
+          END,
           claimed_at = NULL,
           updated_at = CURRENT_TIMESTAMP
       WHERE status = 'processing'
         AND claimed_at < ${claimedBefore.toISOString()}
-      RETURNING id
+      RETURNING id, status
     `);
-    const count = (rows as unknown as unknown[]).length;
+    const reclaimed = rows as unknown as Array<{ id: number; status: string }>;
+    const count = reclaimed.length;
     if (count > 0) {
+      const dead = reclaimed.filter((r) => r.status === "dead").length;
       this.logger.warn(
-        { count, claimedBefore: claimedBefore.toISOString() },
+        { count, dead, claimedBefore: claimedBefore.toISOString() },
         "reclaimed stale outbox claims (worker died mid-handler?)",
       );
     }
@@ -219,7 +283,9 @@ export class DrizzleOutboxStore implements OutboxStorePort {
 
   /**
    * Operator replay (docs/runbooks/outbox.md): return a dead or processed
-   * event to `pending`. Handlers are idempotent, so replay converges.
+   * event to `pending`. Handlers are idempotent, so replay converges — and
+   * because markProcessed enqueues follow-ups through the revive path, the
+   * replay cascades through every downstream stage.
    */
   async replay(eventId: string): Promise<boolean> {
     const rows = await this.db.execute(sql`

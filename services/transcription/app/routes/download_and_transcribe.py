@@ -16,8 +16,10 @@ from pathlib import Path
 import yt_dlp
 from fastapi import APIRouter, Depends, Request, HTTPException
 from pydantic import BaseModel
+from starlette.concurrency import run_in_threadpool
 
 from app.auth import verify_api_key
+from app.url_policy import validate_download_url
 
 logger = logging.getLogger(__name__)
 # Authenticated at the router level. This endpoint takes an arbitrary URL and
@@ -106,16 +108,24 @@ async def download_and_transcribe(
     Download audio from a video URL, transcribe it with Whisper,
     and return the transcript with metadata.
 
-    Supported platforms: YouTube, Vimeo, Twitter/X, TikTok, and
-    1000+ sites supported by yt-dlp.
+    Supported platforms: YouTube, Vimeo, Twitter/X, TikTok — subject to the
+    TRANSCRIPTION_ALLOWED_HOSTS allowlist (ADR-004 §6).
     """
     url = body.url
+    # Policy check BEFORE yt-dlp sees the URL: http(s) only, no IP literals,
+    # no localhost, host must match the configured allowlist (403 otherwise).
+    validate_download_url(url, request.app.state.config.allowed_hosts)
     logger.info(f"[DownloadTranscribe] Starting: {url}")
 
     with tempfile.TemporaryDirectory(prefix="ytdl_") as tmp_dir:
-        # 1. Download audio
+        # 1. Download audio. yt-dlp is blocking (network + ffmpeg) — run it in
+        # the threadpool so the event loop (and /health) stays responsive.
         try:
-            dl_result = _download_audio(url, tmp_dir, body.max_duration)
+            dl_result = await run_in_threadpool(
+                _download_audio, url, tmp_dir, body.max_duration
+            )
+        except HTTPException:
+            raise
         except yt_dlp.utils.DownloadError as e:
             logger.error(f"[DownloadTranscribe] Download failed: {e}")
             raise HTTPException(
@@ -133,10 +143,14 @@ async def download_and_transcribe(
             f"({dl_result['duration']}s) → {dl_result['filepath']}"
         )
 
-        # 2. Transcribe
+        # 2. Transcribe (also blocking — same threadpool treatment).
         try:
             transcriber = request.app.state.transcriber
-            result = transcriber.transcribe(dl_result["filepath"])
+            result = await run_in_threadpool(
+                transcriber.transcribe, dl_result["filepath"]
+            )
+        except HTTPException:
+            raise
         except Exception as e:
             logger.error(f"[DownloadTranscribe] Transcription error: {e}")
             raise HTTPException(

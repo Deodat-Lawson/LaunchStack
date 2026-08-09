@@ -7,6 +7,7 @@
 import type { Config } from "./config.js";
 import type { ConvertRequest } from "./contracts.js";
 import { ServiceError, errorMessage } from "./errors.js";
+import { PAGE_BREAK_PLACEHOLDER } from "./evidence.js";
 
 export type DoclingConvert = (
   config: Config,
@@ -36,6 +37,12 @@ export const doclingConvertFile: DoclingConvert = async (
   form.append("do_ocr", "true");
   form.append("do_table_structure", "true");
   form.append("image_export_mode", "placeholder");
+  // Ask docling-serve to emit an explicit marker between pages — the exact
+  // marker evidence.ts splits on. Without it every multi-page PDF collapses
+  // to one "page". Servers that predate / ignore this option simply return
+  // markdown with no markers, and evidence.ts falls back to a single page
+  // plus NO_PAGE_BOUNDARIES_WARNING (unchanged behaviour).
+  form.append("md_page_break_placeholder", PAGE_BREAK_PLACEHOLDER);
 
   let response: Response;
   try {

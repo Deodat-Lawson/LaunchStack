@@ -47,10 +47,17 @@ git clone https://github.com/launchstack/launchstack.git
 cd launchstack
 pnpm install
 cp .env.example .env                  # fill in DATABASE_URL + CLERK + OPENAI keys
-pnpm --filter @launchstack/core db:migrate                      # apply schema migrations
-pnpm --filter @launchstack/core db:seed                         # optional sample data
-pnpm --filter @launchstack/web dev                              # Next.js + Inngest dev server (concurrently)
+pnpm --filter @launchstack/web db:migrate      # apply BOTH migration sets (engine, then product)
+pnpm --filter @launchstack/core db:seed        # optional sample data
+pnpm --filter @launchstack/web dev             # Next.js app on :3000 (plain `next dev` — no background work)
+pnpm --filter @launchstack/worker dev          # the durable worker on :8020 — required for ingestion
 ```
+
+The web app only *accepts* uploads; the worker consumes the outbox and runs
+the pipeline, so an ingestion-capable setup needs both processes. Add
+`pnpm --filter @launchstack/web inngest:dev` (Inngest dev UI on :8288,
+pointed at the worker's `:8020/api/inngest`) if you are working on the
+Inngest-hosted background verticals.
 
 ### Full local stack (Postgres + SeaweedFS + worker + compute services)
 
@@ -71,8 +78,8 @@ depends on whether the table is part of the published engine.
 
 | Set | Schema | Migrations | Owns |
 | --- | --- | --- | --- |
-| **engine** | `packages/core/src/db/schema/` | `packages/core/drizzle/` | company, documents, OCR, retrieval/embeddings, knowledge graph — the 25 tables `@launchstack/core` publishes |
-| **product** | `apps/web/src/server/db/schema/` and `packages/features/src/*/schema.ts` | `apps/web/drizzle/` | identity, chatbot, collab, credits, notes, and the feature verticals — 36 tables |
+| **engine** | `packages/adapters/src/db/schema/` (re-exported by `@launchstack/core/db/schema`) | `packages/core/drizzle/` | company, documents, OCR, retrieval/embeddings, knowledge graph — the 26 tables `@launchstack/core` publishes |
+| **product** | `apps/web/src/server/db/schema/` and `packages/features/src/*/schema.ts` | `apps/web/drizzle/` | identity, chatbot, collab, credits, notes, and the feature verticals — 39 tables |
 
 The dependency is **one-way**: product tables may reference engine tables, never
 the reverse. That is what lets someone embed `@launchstack/core` and apply

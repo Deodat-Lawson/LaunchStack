@@ -3,7 +3,7 @@ import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import type { BaseRetriever } from "@langchain/core/retrievers";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
-import { getRerankProvider } from "@launchstack/core/providers/reranking";
+import { getRerankProvider, isRerankConfigured } from "@launchstack/core/providers/reranking";
 import { env } from "~/env";
 import {
   createDocumentVectorRetriever,
@@ -366,6 +366,13 @@ async function rerankResults(
   results: SearchResult[],
 ): Promise<SearchResult[]> {
   if (results.length === 0) {
+    return results;
+  }
+
+  // Reranking is opt-in (RERANK_API_BASE_URL). Unconfigured deployments keep
+  // the RRF order without spending a chat-model call per search — the
+  // pre-refactor production behavior (the sidecar rerank never existed).
+  if (!isRerankConfigured()) {
     return results;
   }
 

@@ -213,9 +213,17 @@ async function dispatchInTx(tx: Tx, decision: DispatchDecision): Promise<OcrJob>
     }
 
     const persisted = job.dispatchOptions as DispatchRoutingOptions | null;
+    // Legacy jobs (rows predating persisted dispatch options) must route by
+    // the STORED version's mimeType — the version row is what a replay
+    // re-extracts — not whatever mime the current caller happened to pass:
+    // the fallback options carry the caller's resolved mime (e.g.
+    // `application/octet-stream` when a converging re-upload omitted it),
+    // which can differ from the adopted version's. Matches the original
+    // post-commit dispatcher, which built the legacy fallback from
+    // `lifecycle.version.mimeType`.
     const routingOptions: DispatchRoutingOptions =
         persisted === null
-            ? decision.fallbackOptions
+            ? { ...decision.fallbackOptions, mimeType: decision.version.mimeType }
             : {
                   ...persisted,
                   archiveIdentity: persisted.archiveIdentity ?? decision.rawCreationKey,

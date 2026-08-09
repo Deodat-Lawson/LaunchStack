@@ -7,8 +7,9 @@ describes the repository as it actually is today.
 
 Launchstack is a **cited company-memory system**: sources go in through one
 ingestion path, immutable evidence comes out, and answers cite that evidence
-with stable anchors. The repository holds two applications, five publishable
-engine packages, two product packages, and three compute services.
+with stable anchors. The repository holds two private applications (web and
+worker), five publishable engine packages, one private product package
+(`packages/features`), and three compute services.
 
 The 2026-08 refactor (ADR-002 … ADR-006) replaced the previous
 mid-transition layout: the engine now lives in layered packages with an
@@ -27,7 +28,7 @@ single owners.
 | `packages/application` | TS library (published) | Use cases and ports: command acceptance, the outbox tick with bounded retries, the pipeline event dispatch table, citation building. |
 | `packages/adapters` | TS library (published) | Implementations: Postgres repositories (incl. the outbox), the ingestion pipeline stages, storage/provider/LLM adapters, HTTP clients for the compute services, the engine schema source. |
 | `packages/core` | TS library (published) | **Compatibility facade**: every historical `@launchstack/core` subpath re-exports from the packages above. No business logic — `scripts/ci/check-core-facade.mjs` enforces it. Owns the engine migrations dir (`packages/core/drizzle`, immutable history). |
-| `packages/features` | TS library (private) | Product verticals: founder weekly review, trend search, client prospector, company metadata, voice, adeu client, MCP, and others. |
+| `packages/features` | TS library (private) | Product verticals: founder weekly review, trend search, client prospector, company metadata, voice, adeu client, and others. (`mcp`, `workflow-generation`, `rules-extraction`, `connectors` are roadmap stubs — each a README plus `export {}`, not shipped code.) |
 | `services/document-converter` | Node/Express | Routing decisions, vision classification, PDF page rendering, docling-backed parsing → typed `EvidenceDocument`. Replaced `ocr-router` + `ocr-worker` (ADR-004). |
 | `services/transcription` | Python/FastAPI | Whisper + yt-dlp → timestamped transcripts. |
 | `services/document-editor` | Python/FastAPI | The authoritative Adeu DOCX-redlining service. |

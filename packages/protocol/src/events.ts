@@ -237,10 +237,15 @@ export const eventIds = {
       ? `company.state.projected:${companyId}`
       : `company.state.projected:${companyId}:v${sourceVersionId}`,
   /**
-   * Stable per-note id. A pending row absorbs rapid successive updates (the
-   * handler embeds the CURRENT note content); a processed/dead row is
-   * revived to pending by the producer's upsert, re-running the embed.
+   * Per-note id disambiguated by an edit fingerprint (the producer uses the
+   * note's `updatedAt` epoch-ms). Each edit therefore gets its OWN
+   * idempotent event: an edit that lands while a previous request is
+   * mid-handler (`processing`) enqueues a new row instead of being absorbed
+   * — and silently lost — by the in-flight one. The handler embeds the
+   * CURRENT note content, so redelivery of any fingerprint converges; a
+   * processed/dead row for the same fingerprint is revived to pending by
+   * the producer's enqueue.
    */
-  noteEmbeddingRequested: (noteId: number) =>
-    `note.embedding.requested:${noteId}`,
+  noteEmbeddingRequested: (noteId: number, fingerprint: string) =>
+    `note.embedding.requested:${noteId}:${fingerprint}`,
 } as const;

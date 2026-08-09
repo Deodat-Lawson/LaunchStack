@@ -6,7 +6,7 @@
   "linked": [],
   "access": "public",
   "baseBranch": "main",
-  "updateInternalDependents": "patch",
+  "updateInternalDependencies": "patch",
   "ignore": [
     "@launchstack/web",
     "@launchstack/worker",

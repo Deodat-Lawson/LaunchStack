@@ -15,7 +15,9 @@ services:
     ports:
       - "8000:8000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      # python:3.12-slim images ship no curl; use the same urllib probe as the
+      # main compose file.
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -30,7 +32,9 @@ services:
     ports:
       - "8003:8000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      # python:3.12-slim images ship no curl; use the same urllib probe as the
+      # main compose file.
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
       interval: 5s
       timeout: 5s
       retries: 5

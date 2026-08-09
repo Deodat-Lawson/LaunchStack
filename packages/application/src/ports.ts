@@ -56,14 +56,20 @@ export interface OutboxStorePort {
   /**
    * Mark a claimed event processed and atomically enqueue its follow-up
    * events in the same transaction — the pipeline's event chaining is
-   * itself transactional. Follow-ups conflicting on eventId are skipped
-   * (idempotent replay).
+   * itself transactional. Follow-ups use insert-or-revive semantics: a live
+   * `pending`/`processing` row is left untouched, while a `processed` or
+   * `dead` row returns to `pending` — replaying stage N therefore re-runs
+   * stages N+1..end (cascade replay; all handlers are idempotent). A stale
+   * claimant whose row was reclaimed mid-handler has its outcome discarded
+   * and enqueues nothing.
    */
   markProcessed(outboxId: number, followUps?: PipelineEvent[]): Promise<void>;
   /**
    * Record a handler failure. Attempts below `maxAttempts` return the row to
    * `pending` with the given not-before time; at the limit the row goes
    * `dead` and stays visible for operator replay (docs/runbooks/outbox.md).
+   * A stale claimant whose row was reclaimed mid-handler has its outcome
+   * discarded.
    */
   markFailed(
     outboxId: number,
@@ -72,9 +78,12 @@ export interface OutboxStorePort {
   ): Promise<void>;
   /**
    * Return stale `processing` rows (claimed before `claimedBefore`, i.e. the
-   * worker died mid-handler) to `pending`. Returns the number reclaimed.
+   * worker died mid-handler) to `pending`, counting each reclaim as one
+   * consumed attempt so a crash-poison event cannot loop forever: a row
+   * whose incremented count reaches `maxAttempts` goes `dead` instead.
+   * Returns the number of rows reclaimed (including newly dead ones).
    */
-  reclaimStale(claimedBefore: Date): Promise<number>;
+  reclaimStale(claimedBefore: Date, maxAttempts: number): Promise<number>;
   /** Failure visibility: dead-row count for health/metrics surfaces. */
   countDead(): Promise<number>;
 }

@@ -39,6 +39,14 @@ async def verify_api_key(api_key: str | None = Security(_api_key_header)) -> Non
     """Validate X-API-Key against the configured service key."""
     expected = expected_api_key()
     # compare_digest over `!=` so a wrong key cannot be recovered by timing the
-    # response. It requires both operands to be non-empty str, hence the guards.
-    if not expected or not api_key or not hmac.compare_digest(api_key, expected):
+    # response. Both sides are encoded to bytes first: compare_digest raises
+    # TypeError on non-ASCII str (turning a garbage header into a 500), whereas
+    # on bytes malformed input simply compares unequal -> 401.
+    if (
+        not expected
+        or not api_key
+        or not hmac.compare_digest(
+            api_key.encode("utf-8"), expected.encode("utf-8")
+        )
+    ):
         raise HTTPException(status_code=401, detail="Unauthorized")

@@ -275,6 +275,11 @@ services:
       - ./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro
     environment:
       <<: *shared-env
+      # The shared-env default (`config/chat-models.yaml`) is RELATIVE and
+      # resolves against this container's WORKDIR /app/apps/worker, where the
+      # file does not exist (it is mounted under /app/apps/web) — the worker
+      # would crash-loop at boot. Pin the absolute path of the mounted copy.
+      CHAT_MODELS_CONFIG: /app/apps/web/config/chat-models.yaml
       WORKER_PORT: "8020"
     ports:
       - "8020:8020"

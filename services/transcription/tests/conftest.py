@@ -11,6 +11,7 @@ keeps ``import app.main`` cheap. A fake transcriber is injected on
 import pytest
 from fastapi.testclient import TestClient
 
+from app.config import load_config
 from app.main import app
 
 # Test API key used for all authenticated requests
@@ -51,6 +52,18 @@ def set_api_key_env(monkeypatch):
     SIDECAR_API_KEY is cleared so tests exercise the primary variable."""
     monkeypatch.delenv("SIDECAR_API_KEY", raising=False)
     monkeypatch.setenv("TRANSCRIPTION_API_KEY", TEST_API_KEY)
+
+
+@pytest.fixture(autouse=True)
+def app_config(set_api_key_env, monkeypatch):
+    """Install the typed config the lifespan would have set — the routes read
+    the upload cap and download-host allowlist from ``app.state.config``.
+    Policy env vars are cleared first so every test starts from the defaults;
+    tests that need different values setenv and re-run ``load_config()``."""
+    monkeypatch.delenv("TRANSCRIPTION_ALLOWED_HOSTS", raising=False)
+    monkeypatch.delenv("TRANSCRIPTION_MAX_UPLOAD_BYTES", raising=False)
+    app.state.config = load_config()
+    return app.state.config
 
 
 @pytest.fixture

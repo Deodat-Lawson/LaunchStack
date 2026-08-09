@@ -29,7 +29,7 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
     "clean": "rm -rf dist .tsbuildinfo",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",

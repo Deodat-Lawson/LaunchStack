@@ -46,7 +46,9 @@ const engine = createEngine({
       ? { apiKey: process.env.OPENAI_API_KEY }
       : undefined,
   },
-  embeddings: { indexName: "openai-3-small" },
+  // A key from the embedding index registry: "legacy-openai-1536" (the
+  // default) or "gemini-embedding-768" out of the box.
+  embeddings: { indexName: "legacy-openai-1536" },
   ocr: {
     defaultProvider: "NATIVE_PDF",
     // The document-converter service (routing/vision/parsing):

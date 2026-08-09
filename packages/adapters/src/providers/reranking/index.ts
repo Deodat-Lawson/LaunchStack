@@ -14,6 +14,18 @@ export interface RerankProvider {
 const providerSlot = createSlot<RerankProvider>("providers/reranking");
 
 /**
+ * Whether the operator explicitly configured reranking
+ * (RERANK_API_BASE_URL). Retrieval callers gate on this so an
+ * unconfigured deployment keeps the historical behavior — RRF order with
+ * NO extra LLM call per search. (Before ADR-004 the rerank hop only ran
+ * when SIDECAR_URL was set; defaulting to the Gemini scorer would add a
+ * chat-model invocation and its cost/latency to every ensemble search.)
+ */
+export function isRerankConfigured(): boolean {
+    return Boolean(getCapabilityConfig("rerank").baseUrl);
+}
+
+/**
  * Returns the rerank provider. Cloud only: the sidecar provider called
  * ${SIDECAR_URL}/rerank, a route no service ever implemented, and was
  * removed (ADR-004 §5). Callers that can live without reranking should

@@ -114,7 +114,20 @@ export async function POST(request: Request) {
         .returning();
 
       if (note) {
-        await requestNoteEmbedding(note.id, "created");
+        // Post-commit side effects: the note row is already persisted, so a
+        // failed outbox enqueue (or link sync) must log loudly but never
+        // fail the response — parity with the old fire-and-forget path.
+        // Tradeoff: the embedding may lag until the next edit re-enqueues it.
+        try {
+          // `companyId` (the acting user's company, resolved above) doubles
+          // as the hint for rows where it came back null.
+          await requestNoteEmbedding(note.id, "created", note.companyId ?? companyId);
+        } catch (err) {
+          console.error(
+            `[notes] requestNoteEmbedding failed for note ${note.id} (note saved; embedding deferred to next edit):`,
+            err,
+          );
+        }
         await syncNoteLinks({
           noteId: note.id,
           rich: (note.contentRich as JSONContent | null) ?? null,

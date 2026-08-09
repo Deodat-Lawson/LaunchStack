@@ -1,19 +1,29 @@
 # Changesets
 
-This folder drives the npm release of **`@launchstack/core`** — the open-source
-engine. It is the only publishable package in the repository; `@launchstack/web`
-and `@launchstack/features` are `private: true` and are listed in `ignore` in
-`config.json`, so the closed-source product can never be published by accident.
+This folder drives the npm release of the five publishable engine packages
+(ADR-002):
+
+- **`@launchstack/protocol`** — cross-language contracts and schemas
+- **`@launchstack/evidence`** — pure company-state logic
+- **`@launchstack/application`** — use cases and ports
+- **`@launchstack/adapters`** — port implementations and engine subsystems
+- **`@launchstack/core`** — the facade that re-exports the other four
+
+They release together: core's facade re-exports resolve against the other four
+on npm. `@launchstack/web`, `@launchstack/worker` and `@launchstack/features`
+are `private: true` and listed in `ignore` in `config.json`, so the
+closed-source product can never be published by accident.
 
 ## Adding a changeset
 
-Any PR that changes `packages/core` in a way a consumer would notice needs one:
+Any PR that changes one of the publishable packages in a way a consumer would
+notice needs one:
 
 ```bash
 pnpm changeset
 ```
 
-Pick `@launchstack/core`, pick the bump, and write the entry for **someone
+Pick the affected package(s), pick the bump, and write the entry for **someone
 installing the package from npm** — not for a teammate reading the diff.
 
 | Bump | Use for |
@@ -32,9 +42,10 @@ need one. CI does not fail for a missing changeset; nothing releases without one
 
 `.github/workflows/release.yml` runs on push to `main`:
 
-1. builds `packages/core` to `dist/`
-2. packs the tarball and validates it with `publint` + `@arethetypeswrong/cli`
-3. verifies the built package is importable by plain Node ESM
+1. builds all five engine packages to `dist/`
+2. verifies the built packages are importable by plain Node ESM
+3. packs the core tarball and validates it with `publint` +
+   `@arethetypeswrong/cli`
 4. hands off to `changesets/action` — which opens a **version PR** if changesets
    are pending, or publishes to npm when that PR merges
 
@@ -43,10 +54,12 @@ So merging a changeset does not publish. Merging the version PR does.
 ## Local check before pushing
 
 ```bash
-pnpm --filter @launchstack/core build
+pnpm --filter @launchstack/protocol --filter @launchstack/evidence \
+  --filter @launchstack/application --filter @launchstack/adapters \
+  --filter @launchstack/core build
 node scripts/ci/check-package-exports.mjs
 ```
 
-Step 3 above exists because `publint` alone does **not** catch extensionless
+Step 2 above exists because `publint` alone does **not** catch extensionless
 relative imports in emitted ESM — we shipped-tested a tarball that passed
 publint and still failed `import()` with `ERR_MODULE_NOT_FOUND`.

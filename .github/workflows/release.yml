@@ -86,4 +86,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # setup-node's `registry-url` writes an .npmrc whose auth line is
+          # `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}` — the token is
+          # read from the environment at publish time, NOT baked into the file.
+          # `pnpm release` (pnpm publish) authenticates through that .npmrc, so
+          # without NODE_AUTH_TOKEN set here the publish leg fails with E401.
+          # NPM_TOKEN alone is not enough: only changesets/action's own npm
+          # paths read it. Keep both.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

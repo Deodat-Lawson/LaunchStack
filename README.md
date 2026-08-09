@@ -49,10 +49,17 @@ You need a Postgres with the **pgvector** extension available — the migration
 runner enables it and exits non-zero on stock Postgres.
 
 ```bash
-pnpm --filter @launchstack/web  db:migrate   # apply BOTH migration sets (engine, then product)
-pnpm --filter @launchstack/core db:seed      # optional: one company/user/document
-pnpm --filter @launchstack/web  dev          # Next.js + Inngest on :3000 and :8288
+pnpm --filter @launchstack/web    db:migrate   # apply BOTH migration sets (engine, then product)
+pnpm --filter @launchstack/core   db:seed      # optional: one company/user/document
+pnpm --filter @launchstack/web    dev          # Next.js on :3000
+pnpm --filter @launchstack/worker dev          # the durable worker on :8020 — ingestion runs here, not in web
+pnpm --filter @launchstack/web    inngest:dev  # optional: Inngest dev UI on :8288, pointed at the worker's :8020/api/inngest
 ```
+
+`web dev` is plain `next dev` — it accepts uploads but processes nothing.
+Run the worker alongside it or documents will sit queued forever; the
+Inngest dev server is only needed for the Inngest-hosted background
+verticals (trend search, prospector, …), not for ingestion.
 
 `db:migrate` is the same command CI, Docker and the Vercel production build run.
 Running it from `@launchstack/core` applies only the engine set — that is what a
@@ -65,8 +72,8 @@ Nothing else creates schema — see [Changing the database](CONTRIBUTING.md#chan
 <summary>Windows (no <code>make</code>)</summary>
 
 ```powershell
-docker compose --env-file .env up --build -d                                                                # lite
-docker compose --env-file .env --profile ocr -f docker-compose.yml -f docker-compose.ocr.yml up --build -d   # with Docling
+docker compose --env-file .env up --build -d                 # lite
+docker compose --env-file .env --profile ocr up --build -d   # with Docling
 
 docker compose --env-file .env down --remove-orphans      # stop (keeps volumes)
 docker compose --env-file .env down -v --remove-orphans   # stop + wipe volumes
@@ -138,10 +145,10 @@ Core exposes ports that the host wires up. Features depend only on these ports; 
           └───────────────────────────────────────┘
 ```
 
-- **Core** knows no framework. Config is meant to arrive through `CoreConfig`.
+- **Core** knows no framework. Config arrives through `CoreConfig`.
 - **Features** can read `process.env`, but cannot import from the host app.
 - **Host** owns env, auth, routing, and implements the ports.
-- [`eslint.config.js`](eslint.config.js) *declares* these boundaries, but the CI lint step is `continue-on-error: true` against a legacy baseline, so violations do not block merges today — and six files in core currently violate the no-`process.env` rule.
+- [`eslint.config.js`](eslint.config.js) declares these boundaries and CI enforces them: the lint step is blocking (ADR-006) and the tree lints clean. The engine packages read no `process.env` — the no-env rule is lint-enforced, not aspirational.
 
 ### Wiring the engine
 
@@ -283,7 +290,7 @@ We welcome PRs — start with [CONTRIBUTING.md](CONTRIBUTING.md). A few things t
 
 - One issue per PR
 - Changes to the published engine packages should come with a [Changeset](https://github.com/changesets/changesets) (`pnpm changeset`)
-- ESLint declares the core/features/host import boundaries; don't work around them, even though CI does not yet enforce them
+- ESLint declares the core/features/host import boundaries and CI enforces them (lint is blocking); don't work around them
 
 ## License
 

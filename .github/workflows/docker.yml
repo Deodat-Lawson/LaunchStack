@@ -10,6 +10,7 @@ on:
       - .dockerignore
       - docker-compose*.yml
       - apps/web/**
+      - apps/worker/**
       - packages/**
       - patches/**
       - pnpm-lock.yaml

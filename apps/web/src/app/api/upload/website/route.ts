@@ -17,7 +17,7 @@ import { z } from "zod";
 
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
-import { assertPublicHttpUrl, UrlGuardError } from "~/server/security/url-guard";
+import { assertPublicHttpUrl, fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";
@@ -65,13 +65,17 @@ function deriveTitle(html: string, url: string): string {
 
 /**
  * Fetch a page with timeout and validation. Returns null on failure.
+ *
+ * Uses `fetchPublicUrl` so the SSRF guard is re-run on every redirect hop —
+ * a public page 302ing into the metadata service or an internal host is
+ * rejected mid-chain. Guard rejections are rethrown (not swallowed) so the
+ * route can answer 400 instead of a generic fetch failure.
  */
 async function fetchPage(url: string): Promise<{ html: string; finalUrl: string } | null> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
-        const response = await fetch(url, {
-            redirect: "follow",
+        const response = await fetchPublicUrl(url, {
             signal: controller.signal,
             headers: {
                 "User-Agent": "Mozilla/5.0 (compatible; PDR-AI-WebIndexer/1.0; +https://pdr.ai)",
@@ -92,8 +96,9 @@ async function fetchPage(url: string): Promise<{ html: string; finalUrl: string 
             html: Buffer.from(arrayBuf).toString("utf-8"),
             finalUrl: response.url,
         };
-    } catch {
+    } catch (err) {
         clearTimeout(timeout);
+        if (err instanceof UrlGuardError) throw err;
         return null;
     }
 }
@@ -278,6 +283,12 @@ export async function POST(request: Request) {
                 { status: 202 }
             );
         } catch (error) {
+            // A redirect chain that lands on a private/internal address (or any
+            // other guard rejection surfaced mid-fetch) is a client-input
+            // problem, not a server error.
+            if (error instanceof UrlGuardError) {
+                return NextResponse.json({ error: error.message }, { status: 400 });
+            }
             console.error("[WebsiteUpload] Error:", error);
             return NextResponse.json(
                 {

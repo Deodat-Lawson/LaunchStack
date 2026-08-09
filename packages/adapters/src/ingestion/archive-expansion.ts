@@ -354,11 +354,13 @@ export interface ExpandArchiveInput {
 }
 
 export interface ExpandArchiveResult {
+    /** Total documents created: indexed archive entries + project summary. */
     extracted: number;
     stats: {
         totalEntries: number;
         afterBasicFilter: number;
         skippedLowValue: number;
+        /** Archive entries turned into documents (excludes the summary). */
         indexed: number;
     };
 }
@@ -375,9 +377,18 @@ const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB per file
  */
 export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandArchiveResult> {
     const routingName = input.documentName;
-    const rawArchiveIdentity = input.archiveIdentity?.trim() ? input.archiveIdentity : undefined;
-    const archiveIdentity = rawArchiveIdentity ?? `archive:${input.sourceId}`;
-    const useLegacyArchiveKeys = rawArchiveIdentity === undefined;
+    // A present-but-blank identity is a producer bug: silently falling back
+    // to the legacy key path would fork the idempotency keyspace across
+    // retries (entries created under `archive:{sourceId}:...` keys would not
+    // converge with a later replay carrying the real identity). Fail loudly;
+    // only a genuinely absent identity takes the legacy path.
+    if (input.archiveIdentity !== undefined && input.archiveIdentity.trim() === "") {
+        throw new Error(
+            `[ArchiveExpansion] archiveIdentity must not be blank (job ${input.ocrJobId})`
+        );
+    }
+    const archiveIdentity = input.archiveIdentity ?? `archive:${input.sourceId}`;
+    const useLegacyArchiveKeys = input.archiveIdentity === undefined;
     const storage = getStoragePort();
 
     const JSZip = (await import("jszip")).default;
@@ -521,6 +532,10 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
         indexed += 1;
     }
 
+    // `indexed` counts archive entries only; `extracted` additionally counts
+    // the project-summary document so callers see every document created.
+    let extracted = indexed;
+
     if (indexed > 0) {
         const summaryText = [
             `# Project Summary: ${routingName}`,
@@ -560,7 +575,7 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
                 embeddingIndexKey: input.embeddingIndexKey,
             },
         });
-        indexed += 1;
+        extracted += 1;
     }
 
     const db = getDb();
@@ -569,7 +584,7 @@ export async function expandArchive(input: ExpandArchiveInput): Promise<ExpandAr
     console.log(`[ArchiveExpansion] Deleted original ZIP document id=${input.sourceId}`);
 
     return {
-        extracted: indexed,
+        extracted,
         stats: {
             totalEntries: allPaths.length,
             afterBasicFilter: totalBefore,

@@ -488,6 +488,9 @@ export interface IndexingStageCounts {
     contextChunkCount: number;
     retrievalChunkCount: number;
     graphSynced: boolean;
+    /** Parent-chunk composition stats for PipelineResult reporting. */
+    textChunks: number;
+    tableChunks: number;
 }
 
 /**
@@ -661,11 +664,14 @@ export async function runIndexingStage(
     const graphSynced = await maybeSyncToNeo4j(documentId, companyId, runStep);
 
     const childCount = chunks.reduce((sum, c) => sum + (c.children?.length ?? 1), 0);
+    const chunkStats = getTotalChunkSize(chunks);
     return {
         embeddingIndexKey: embeddingIndex.indexKey,
         contextChunkCount: totalStored,
         retrievalChunkCount: childCount,
         graphSynced,
+        textChunks: chunkStats.textChunks,
+        tableChunks: chunkStats.tableChunks,
     };
 }
 
@@ -688,10 +694,6 @@ export async function runDocIngestionTool(
         const extraction = await runExtractionStage(input);
         const indexing = await runIndexingStage(input);
 
-        const chunks = await loadPipelineState<DocumentChunk[]>(jobId, "chunks").catch(
-            () => [] as DocumentChunk[]
-        );
-        const stats = getTotalChunkSize(chunks);
         const totalProcessingTime = Date.now() - pipelineStartTime;
 
         return {
@@ -701,8 +703,12 @@ export async function runDocIngestionTool(
             chunks: [],
             metadata: {
                 totalChunks: indexing.contextChunkCount,
-                textChunks: stats.textChunks,
-                tableChunks: stats.tableChunks,
+                // Reported by the indexing stage from the chunks it actually
+                // embedded — non-Inngest runs only persist the "chunks"
+                // pipeline-state key inside Inngest step mode, so reading it
+                // back here would report 0 for every synchronous caller.
+                textChunks: indexing.textChunks,
+                tableChunks: indexing.tableChunks,
                 totalPages: extraction.pageCount,
                 provider: extraction.provider,
                 processingTimeMs: extraction.processingTimeMs,

@@ -242,7 +242,7 @@ describe("pipeline processor", () => {
     const d = deps();
     const processor = createPipelineProcessor(d);
     const noteEvent: PipelineEvent = {
-      eventId: eventIds.noteEmbeddingRequested(5),
+      eventId: eventIds.noteEmbeddingRequested(5, "1754680000000"),
       eventType: "note.embedding.requested",
       schemaVersion: PROTOCOL_VERSION,
       occurredAt: NOW.toISOString(),

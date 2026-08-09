@@ -110,3 +110,12 @@ def test_verify_api_key_rejects_key_of_different_length():
     with pytest.raises(HTTPException) as exc:
         asyncio.run(verify_api_key(TEST_API_KEY + "-extra"))
     assert exc.value.status_code == 401
+
+
+@pytest.mark.parametrize("bad_key", ["ключ-секрет", "clé-secrète", "🔑"])
+def test_verify_api_key_rejects_non_ascii_key_with_401(bad_key):
+    """hmac.compare_digest raises TypeError on non-ASCII str — malformed
+    input must compare unequal (401), never crash the dependency (500)."""
+    with pytest.raises(HTTPException) as exc:
+        asyncio.run(verify_api_key(bad_key))
+    assert exc.value.status_code == 401

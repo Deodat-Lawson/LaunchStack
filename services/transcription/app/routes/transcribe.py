@@ -7,6 +7,7 @@ Wire format frozen: packages/protocol/schemas/v1/transcription.transcribe-respon
 
 from fastapi import APIRouter, Depends, File, Request, UploadFile, HTTPException
 from pydantic import BaseModel
+from starlette.concurrency import run_in_threadpool
 import logging
 
 from app.auth import verify_api_key
@@ -17,6 +18,9 @@ logger = logging.getLogger(__name__)
 # this port is published to the host, so an unauthenticated /transcribe is free
 # compute for anything that can reach it.
 router = APIRouter(dependencies=[Depends(verify_api_key)])
+
+# Stream-read granularity for the upload size cap.
+_READ_CHUNK_BYTES = 1024 * 1024
 
 
 class TranscriptSegment(BaseModel):
@@ -54,16 +58,33 @@ async def transcribe(file: UploadFile, request: Request):
 
     try:
         transcriber = request.app.state.transcriber
+        max_upload_bytes = request.app.state.config.max_upload_bytes
 
-        # Read the uploaded file into bytes
-        content = await file.read()
+        # Stream-read the upload with a running count (mirrors the converter's
+        # MAX_FETCH_BYTES enforcement) — an unbounded `await file.read()`
+        # buffered arbitrarily large uploads wholesale.
+        buffer = bytearray()
+        while chunk := await file.read(_READ_CHUNK_BYTES):
+            buffer.extend(chunk)
+            if len(buffer) > max_upload_bytes:
+                raise HTTPException(
+                    status_code=413,
+                    detail=(
+                        "Upload exceeds TRANSCRIPTION_MAX_UPLOAD_BYTES "
+                        f"({max_upload_bytes} bytes)"
+                    ),
+                )
+        content = bytes(buffer)
         if not content:
             raise HTTPException(status_code=400, detail="File is empty")
 
         logger.info(f"[Transcribe] Processing: {file.filename} ({len(content)} bytes)")
 
-        # Transcribe using the transcriber
-        result = transcriber.transcribe_bytes(content, file.filename)
+        # Whisper inference is CPU-bound and synchronous — run it in the
+        # threadpool so the event loop (and /health) stays responsive.
+        result = await run_in_threadpool(
+            transcriber.transcribe_bytes, content, file.filename
+        )
 
         logger.info(f"[Transcribe] Complete: {file.filename} → {len(result['text'])} chars, lang={result['language']}")
 
@@ -78,6 +99,10 @@ async def transcribe(file: UploadFile, request: Request):
             ],
         )
 
+    except HTTPException:
+        # The route's own 400/413s must reach the client as-is, not be
+        # swallowed by the broad handler below and re-raised as 500s.
+        raise
     except Exception as e:
         logger.error(f"[Transcribe] Error transcribing {file.filename}: {e}")
         raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")

@@ -5,7 +5,7 @@
  *   DATABASE_URL=... node packages/core/scripts/migrate.mjs
  *   DATABASE_URL=... node packages/core/scripts/migrate.mjs --set=product
  */
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { sql } from "drizzle-orm";
 
 import { createDb, type Db } from "../src/db";
@@ -23,9 +23,16 @@ const silentLogger = {
   error: () => {},
 };
 
-function noteEvent(noteId: number, companyId: number): PipelineEvent {
+// A fixed fingerprint stands in for the producer's updatedAt epoch-ms: the
+// tests below exercise retries/replays of the SAME logical edit, which
+// share one deterministic event id.
+function noteEvent(
+  noteId: number,
+  companyId: number,
+  fingerprint = "fp1",
+): PipelineEvent {
   return {
-    eventId: eventIds.noteEmbeddingRequested(noteId),
+    eventId: eventIds.noteEmbeddingRequested(noteId, fingerprint),
     eventType: "note.embedding.requested",
     schemaVersion: PROTOCOL_VERSION,
     occurredAt: new Date().toISOString(),
@@ -154,7 +161,7 @@ describe.skipIf(!url)("DrizzleOutboxStore (integration)", () => {
     expect(notClaimable.filter((c) => c.event.companyId === companyId)).toHaveLength(0);
 
     // Operator replay (docs/runbooks/outbox.md): dead → pending → claimable.
-    const replayed = await store.replay(eventIds.noteEmbeddingRequested(7));
+    const replayed = await store.replay(eventIds.noteEmbeddingRequested(7, "fp1"));
     expect(replayed).toBe(true);
     const again = await store.claimBatch(10);
     expect(again.filter((c) => c.event.companyId === companyId)).toHaveLength(1);
@@ -173,11 +180,145 @@ describe.skipIf(!url)("DrizzleOutboxStore (integration)", () => {
       SET claimed_at = CURRENT_TIMESTAMP - INTERVAL '2 hours'
       WHERE id = ${claimed!.outboxId}
     `;
-    const reclaimed = await store.reclaimStale(new Date(Date.now() - 60 * 60_000));
+    const reclaimed = await store.reclaimStale(
+      new Date(Date.now() - 60 * 60_000),
+      8,
+    );
     expect(reclaimed).toBeGreaterThanOrEqual(1);
+
+    // Each reclaim consumes one attempt.
+    const rows = await handle.client`
+      SELECT attempt_count FROM pdr_ai_v2_event_outbox WHERE id = ${claimed!.outboxId}
+    `;
+    expect(rows[0]!.attempt_count).toBe(1);
 
     const again = await store.claimBatch(10);
     expect(again.filter((c) => c.event.companyId === companyId)).toHaveLength(1);
+  });
+
+  it("dead-letters a stale claim whose attempts are exhausted by the reclaim", async () => {
+    // A crash-poison event: the handler kills its worker before markFailed
+    // can ever record the failure, so only reclaims consume its attempts.
+    await store.enqueue([noteEvent(20, companyId)]);
+    const [claimed] = (await store.claimBatch(10)).filter(
+      (c) => c.event.companyId === companyId,
+    );
+    await handle.client`
+      UPDATE pdr_ai_v2_event_outbox
+      SET attempt_count = 7,
+          claimed_at = CURRENT_TIMESTAMP - INTERVAL '2 hours'
+      WHERE id = ${claimed!.outboxId}
+    `;
+
+    const reclaimed = await store.reclaimStale(
+      new Date(Date.now() - 60 * 60_000),
+      8,
+    );
+    expect(reclaimed).toBeGreaterThanOrEqual(1);
+
+    const rows = await handle.client`
+      SELECT status, attempt_count, last_error
+      FROM pdr_ai_v2_event_outbox WHERE id = ${claimed!.outboxId}
+    `;
+    expect(rows[0]!.status).toBe("dead");
+    expect(rows[0]!.attempt_count).toBe(8);
+    expect(rows[0]!.last_error).toBe(
+      "reclaimed after stale claim; attempts exhausted",
+    );
+  });
+
+  it("returns a stale claim with remaining attempts to pending, counting the attempt", async () => {
+    await store.enqueue([noteEvent(21, companyId)]);
+    const [claimed] = (await store.claimBatch(10)).filter(
+      (c) => c.event.companyId === companyId,
+    );
+    await handle.client`
+      UPDATE pdr_ai_v2_event_outbox
+      SET attempt_count = 2,
+          claimed_at = CURRENT_TIMESTAMP - INTERVAL '2 hours'
+      WHERE id = ${claimed!.outboxId}
+    `;
+
+    await store.reclaimStale(new Date(Date.now() - 60 * 60_000), 8);
+
+    const rows = await handle.client`
+      SELECT status, attempt_count FROM pdr_ai_v2_event_outbox
+      WHERE id = ${claimed!.outboxId}
+    `;
+    expect(rows[0]!.status).toBe("pending");
+    expect(rows[0]!.attempt_count).toBe(3);
+  });
+
+  it("discards a stale claimant's late outcome after its claim was reclaimed", async () => {
+    await store.enqueue([noteEvent(22, companyId)]);
+    const [firstClaim] = (await store.claimBatch(10)).filter(
+      (c) => c.event.companyId === companyId,
+    );
+
+    // The reclaimer decides the first claimant is dead and takes the claim
+    // back (force-reclaim simulation: backdate, then reclaim).
+    await handle.client`
+      UPDATE pdr_ai_v2_event_outbox
+      SET claimed_at = CURRENT_TIMESTAMP - INTERVAL '2 hours'
+      WHERE id = ${firstClaim!.outboxId}
+    `;
+    await store.reclaimStale(new Date(Date.now() - 60 * 60_000), 8);
+
+    // The first claimant was actually alive and now reports a terminal
+    // failure — it must NOT dead-letter a row it no longer owns.
+    await store.markFailed(firstClaim!.outboxId, "late terminal failure", {
+      retryAt: null,
+    });
+    // Nor may its late success clobber the row or enqueue follow-ups.
+    await store.markProcessed(firstClaim!.outboxId, [noteEvent(23, companyId)]);
+
+    const rows = await handle.client`
+      SELECT event_id, status, last_error FROM pdr_ai_v2_event_outbox
+      WHERE company_id = ${companyId} ORDER BY id
+    `;
+    expect(rows).toHaveLength(1); // no follow-up row for note 23
+    expect(rows[0]!.status).toBe("pending");
+    expect(rows[0]!.last_error).not.toBe("late terminal failure");
+
+    // The row is still claimable by the re-processing worker.
+    const again = await store.claimBatch(10);
+    expect(again.filter((c) => c.event.companyId === companyId)).toHaveLength(1);
+  });
+
+  it("cascade replay: replaying an upstream row revives its dead downstream row", async () => {
+    // Chain A → B: A processed with follow-up B; B dead-letters.
+    await store.enqueue([noteEvent(30, companyId)]);
+    const [a] = (await store.claimBatch(10)).filter(
+      (c) => c.event.companyId === companyId,
+    );
+    await store.markProcessed(a!.outboxId, [noteEvent(31, companyId)]);
+    const [b] = (await store.claimBatch(10)).filter(
+      (c) => c.event.companyId === companyId,
+    );
+    expect(b!.event.eventId).toBe(eventIds.noteEmbeddingRequested(31, "fp1"));
+    await store.markFailed(b!.outboxId, "terminal", { retryAt: null });
+
+    // Operator replays A (docs/runbooks/outbox.md). The dead B row must not
+    // block the chain: when A completes, its follow-up enqueue revives B.
+    const replayed = await store.replay(
+      eventIds.noteEmbeddingRequested(30, "fp1"),
+    );
+    expect(replayed).toBe(true);
+
+    const [aAgain] = (await store.claimBatch(10)).filter(
+      (c) => c.event.companyId === companyId,
+    );
+    expect(aAgain!.event.eventId).toBe(
+      eventIds.noteEmbeddingRequested(30, "fp1"),
+    );
+    await store.markProcessed(aAgain!.outboxId, [noteEvent(31, companyId)]);
+
+    const rows = await handle.client`
+      SELECT status, attempt_count FROM pdr_ai_v2_event_outbox
+      WHERE event_id = ${eventIds.noteEmbeddingRequested(31, "fp1")}
+    `;
+    expect(rows[0]!.status).toBe("pending");
+    expect(rows[0]!.attempt_count).toBe(0);
   });
 
   it("dead-letters rows whose payload fails contract validation", async () => {
@@ -195,5 +336,30 @@ describe.skipIf(!url)("DrizzleOutboxStore (integration)", () => {
       SELECT status FROM pdr_ai_v2_event_outbox WHERE event_id = 'corrupt:1'
     `;
     expect(rows[0]!.status).toBe("dead");
+  });
+
+  it("notifies onValidationDead when a malformed payload is dead-lettered", async () => {
+    // Validation-dead rows never become a ClaimedEvent, so the tick-level
+    // onDead hook cannot see them — the constructor callback is the
+    // worker's failure-visibility channel for them.
+    const onValidationDead = vi.fn();
+    const observingStore = new DrizzleOutboxStore(handle.db, silentLogger, {
+      onValidationDead,
+    });
+    await handle.db.execute(sql`
+      INSERT INTO pdr_ai_v2_event_outbox
+        (event_id, event_type, schema_version, company_id, payload, trace_id)
+      VALUES
+        ('corrupt:2', 'note.embedding.requested', 1, ${companyId}, '{"garbage": true}'::jsonb, 'test')
+    `);
+
+    const claimed = await observingStore.claimBatch(10);
+    expect(claimed.filter((c) => c.event.eventId === "corrupt:2")).toHaveLength(0);
+
+    const rows = await handle.client`
+      SELECT id, status FROM pdr_ai_v2_event_outbox WHERE event_id = 'corrupt:2'
+    `;
+    expect(rows[0]!.status).toBe("dead");
+    expect(onValidationDead).toHaveBeenCalledWith(Number(rows[0]!.id), "corrupt:2");
   });
 });

@@ -6,12 +6,17 @@ app.state (see conftest.py).
 """
 
 import math
+import threading
+from contextlib import asynccontextmanager
 
 import pytest
+from fastapi.testclient import TestClient
 
+from app.config import load_config
+from app.main import app
 from app.models.transcriber import confidence_from_segments
 
-from .conftest import FAKE_RESULT
+from .conftest import FAKE_RESULT, TEST_API_KEY, FakeTranscriber
 
 
 # ── /transcribe ─────────────────────────────────────────────────────────────
@@ -51,6 +56,94 @@ class TestTranscribe:
 
     def test_missing_file_field_returns_422(self, client):
         assert client.post("/transcribe").status_code == 422
+
+    def test_empty_file_returns_400_not_500(self, client, fake_transcriber):
+        """The route's own HTTPException(400) must not be swallowed by the
+        broad except and re-raised as a 500."""
+        resp = client.post("/transcribe", files={"file": ("clip.mp3", b"")})
+        assert resp.status_code == 400
+        assert resp.json()["detail"] == "File is empty"
+        assert fake_transcriber.calls == []
+
+    def test_upload_over_cap_returns_413(self, client, fake_transcriber, monkeypatch):
+        """TRANSCRIPTION_MAX_UPLOAD_BYTES caps the streamed upload size."""
+        monkeypatch.setenv("TRANSCRIPTION_MAX_UPLOAD_BYTES", "8")
+        app.state.config = load_config()
+
+        resp = client.post(
+            "/transcribe", files={"file": ("clip.mp3", b"123456789")}
+        )
+        assert resp.status_code == 413
+        assert "TRANSCRIPTION_MAX_UPLOAD_BYTES" in resp.json()["detail"]
+        assert fake_transcriber.calls == []
+
+        # A payload at the cap still transcribes.
+        resp = client.post("/transcribe", files={"file": ("clip.mp3", b"12345678")})
+        assert resp.status_code == 200
+
+
+# ── Event-loop liveness (blocking work must run in the threadpool) ──────────
+
+class TestEventLoopNotBlocked:
+    def test_health_answers_while_transcription_is_in_flight(self, monkeypatch):
+        """Proof by construction that Whisper no longer starves the loop.
+
+        A shared-portal TestClient (context manager) drives BOTH requests
+        through ONE event loop. The fake transcriber blocks until the main
+        thread releases it — and the main thread only releases it AFTER
+        /health has answered. If transcribe_bytes ran on the event loop
+        (pre-fix), /health could never be served while it blocks, the release
+        would never fire, and the wait below would time out. With
+        run_in_threadpool the loop stays free and everything completes.
+        """
+        entered = threading.Event()
+        release = threading.Event()
+
+        class SlowTranscriber(FakeTranscriber):
+            def transcribe_bytes(self, audio_bytes, filename="audio"):
+                entered.set()
+                assert release.wait(timeout=10), (
+                    "never released — /health was starved, so the blocking "
+                    "call is still on the event loop"
+                )
+                return super().transcribe_bytes(audio_bytes, filename)
+
+        app.state.transcriber = SlowTranscriber()
+
+        # The context-managed client shares one portal/event loop across
+        # requests, but would run the real lifespan (loading Whisper) — swap
+        # in a no-op lifespan; app.state is already primed by the fixtures.
+        @asynccontextmanager
+        async def no_op_lifespan(_app):
+            yield
+
+        monkeypatch.setattr(app.router, "lifespan_context", no_op_lifespan)
+
+        with TestClient(app) as shared_client:
+            shared_client.headers.update({"X-API-Key": TEST_API_KEY})
+
+            results: dict[str, object] = {}
+
+            def do_transcribe():
+                results["resp"] = shared_client.post(
+                    "/transcribe", files={"file": ("clip.mp3", b"bytes")}
+                )
+
+            worker = threading.Thread(target=do_transcribe)
+            worker.start()
+            try:
+                assert entered.wait(timeout=10), "transcription never started"
+                # The transcription is blocked RIGHT NOW — /health must answer.
+                health = shared_client.get("/health")
+                assert health.status_code == 200
+                assert health.json()["status"] == "ok"
+            finally:
+                release.set()
+                worker.join(timeout=10)
+
+            assert not worker.is_alive()
+            resp = results["resp"]
+            assert resp.status_code == 200  # type: ignore[union-attr]
 
 
 # ── /health ─────────────────────────────────────────────────────────────────

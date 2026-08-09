@@ -4,8 +4,12 @@
  * Resolution order for base URL / API key / model:
  *   1. Per-capability env: RERANK_API_BASE_URL, RERANK_API_KEY, RERANK_MODEL
  *   2. Global fallback:    AI_BASE_URL, AI_API_KEY
- *   3. Legacy keys:        JINA_API_KEY, GROQ_API_KEY, OPENAI_API_KEY
- *   4. Built-in defaults:  (provider-specific, e.g. api.openai.com)
+ *   3. Built-in default:   Gemini's OpenAI-compatible endpoint.
+ *
+ * Every capability now resolves to one vendor unless the operator names
+ * another, including the two that used to have hosts of their own: reranking
+ * runs on the chat endpoint (Google serves no /rerank) and transcription
+ * passes audio into chat completions (Google serves no /audio/transcriptions).
  *
  * This means a user can set AI_BASE_URL + AI_API_KEY once to route
  * ALL capabilities to one provider (e.g. SiliconFlow), then override
@@ -23,8 +27,14 @@ export type ProviderMode = "cloud" | "sidecar";
 export interface ProvidersRegistryConfig {
     /** Global OpenAI-compatible base URL (AI_BASE_URL). */
     aiBaseUrl?: string;
-    /** Global OpenAI-compatible key (AI_API_KEY). */
+    /** Global OpenAI-compatible key (AI_API_KEY). Belongs to aiBaseUrl. */
     aiApiKey?: string;
+    /**
+     * Credential for the Gemini fallback (GOOGLE_AI_API_KEY), kept separate
+     * from {@link aiApiKey} so the two are never mixed. A capability that falls
+     * back to Gemini authenticates with this and nothing else.
+     */
+    googleApiKey?: string;
     /** Sidecar service URL — presence enables sidecar auto-selection. */
     sidecarUrl?: string;
     /** Explicit per-capability provider mode override (from *_PROVIDER env). */
@@ -38,6 +48,7 @@ export interface ProvidersRegistryConfig {
 }
 
 import { createSlot } from "../internal/slot";
+import { GEMINI_BASE_URL } from "../llm/types";
 
 const configSlot = createSlot<ProvidersRegistryConfig>("providers/registry");
 
@@ -57,25 +68,72 @@ function getConfig(): ProvidersRegistryConfig {
 
 // ── Resolve helpers ─────────────────────────────────────────────────
 
-export function resolveBaseUrl(
-    capabilityEnv: string | undefined,
-    defaultUrl: string,
-): string {
-    const url = capabilityEnv ?? getConfig().aiBaseUrl ?? defaultUrl;
-    return url.replace(/\/$/, "");
+export interface ResolvedEndpoint {
+    baseUrl: string;
+    apiKey: string;
 }
 
-export function resolveApiKey(
-    capabilityEnv: string | undefined,
-    ...legacyFallbacks: (string | undefined)[]
-): string {
-    if (capabilityEnv) return capabilityEnv;
-    const aiKey = getConfig().aiApiKey;
-    if (aiKey) return aiKey;
-    for (const key of legacyFallbacks) {
-        if (key) return key;
+/**
+ * Resolve a capability's endpoint and credential together.
+ *
+ * They must be resolved as a PAIR. Picking them independently is how a key
+ * ends up at a service it does not belong to: with `AI_API_KEY` set but no
+ * `AI_BASE_URL`, an independent URL resolver would choose Gemini while an
+ * independent key resolver chose that unrelated global key, and the two would
+ * meet in an Authorization header addressed to Google.
+ *
+ *   1. The capability names a URL — use it, keyed by the capability's own key
+ *      or the global one.
+ *   2. The host names a global URL — same, keyed by the global key.
+ *   3. Nothing names a URL — Gemini, authenticated *only* by the Google
+ *      credential.
+ *
+ * A non-Google key with no URL therefore stays unusable until its matching URL
+ * is supplied, which is the correct outcome: it names who you are, not where
+ * the request goes.
+ */
+export function resolveEndpoint(
+    capabilityBaseUrl: string | undefined,
+    capabilityApiKey: string | undefined,
+): ResolvedEndpoint {
+    const c = getConfig();
+    const strip = (url: string) => url.replace(/\/$/, "");
+
+    /**
+     * Which credential belongs to this URL.
+     *
+     * The Google key is only ever offered to Google's own endpoint — but it is
+     * offered there however that URL was chosen. An operator who points
+     * RERANK_API_BASE_URL at Gemini explicitly, rather than relying on the
+     * fallback, still means the Google credential; without this they would send
+     * an empty bearer token to an endpoint they named on purpose.
+     */
+    const keyFor = (baseUrl: string): string => {
+        if (capabilityApiKey) return capabilityApiKey;
+        if (baseUrl === GEMINI_BASE_URL) return c.googleApiKey ?? c.aiApiKey ?? "";
+        return c.aiApiKey ?? "";
+    };
+
+    if (capabilityBaseUrl) {
+        const baseUrl = strip(capabilityBaseUrl);
+        return { baseUrl, apiKey: keyFor(baseUrl) };
     }
-    return "";
+
+    if (c.aiBaseUrl) {
+        const baseUrl = strip(c.aiBaseUrl);
+        return { baseUrl, apiKey: keyFor(baseUrl) };
+    }
+
+    if (!c.googleApiKey && (capabilityApiKey ?? c.aiApiKey)) {
+        console.warn(
+            "[providers] A credential is configured but no endpoint names where " +
+            "it belongs. Falling back to Gemini, which that key is not for — so " +
+            "it will not be sent. Set the capability's *_API_BASE_URL (or " +
+            "AI_BASE_URL) to pair it, or GOOGLE_AI_API_KEY to use Gemini.",
+        );
+    }
+
+    return { baseUrl: GEMINI_BASE_URL, apiKey: c.googleApiKey ?? "" };
 }
 
 export function resolveModel(

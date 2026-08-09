@@ -2,6 +2,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config as loadDotenv } from "dotenv";
 import { z } from "zod";
+// Leaf module by design: importing ./server/chat-models here would pull the
+// core LLM barrel (ChatOpenAI, openai SDK, yaml) into everything that imports
+// ~/env, including next.config.ts at build time.
+import { resolveChatEndpoint } from "./server/chat-endpoint";
 
 // `.env` lives at the monorepo root, but Next.js (running from apps/web/) only
 // auto-loads `.env` from its own cwd. Load the root file here so this module
@@ -26,18 +30,28 @@ const optionalString = () =>
 const serverSchema = z.object({
   // Non-empty string only — avoid z.string().url(): many valid Prisma/Postgres URLs fail strict URL parsing (password encoding, sslmode params, etc.).
   DATABASE_URL: requiredString(),
+  // Optional override used only by the migration runner and drizzle-kit.
+  // Must be a DIRECT (session) connection: the runner takes a session-level
+  // advisory lock, which does not survive a transaction-mode pooler such as
+  // pgbouncer, Supabase :6543, or a Neon pooled endpoint. Falls back to
+  // DATABASE_URL when unset.
+  MIGRATE_DATABASE_URL: optionalString(),
   // OPENAI_API_KEY is optional when AI_API_KEY is set (validated in superRefine)
   OPENAI_API_KEY: optionalString(),
   OPENAI_MODEL: optionalString(),
-  CHAT_MODEL: optionalString(),         // provider-agnostic chat model (e.g. deepseek-ai/DeepSeek-V3)
+  // Chat: one OpenAI-compatible endpoint, its credential, and the file
+  // describing which models it serves. Model ids and per-model behavior live
+  // in that file, never here.
+  CHAT_BASE_URL: optionalString(),
+  CHAT_API_KEY: optionalString(),
+  CHAT_MODELS_CONFIG: optionalString(),
   EMBEDDING_INDEX: optionalString(),
   // 32 raw bytes encoded as base64 (44 chars). Used to encrypt per-company
   // embedding provider credentials at rest. Required whenever a company sets
   // its own API key through the settings UI. Generate with:
   //   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
   EMBEDDING_SECRETS_KEY: optionalString(),
-  ANTHROPIC_API_KEY: optionalString(),
-  ANTHROPIC_MODEL: optionalString(),
+  OPENROUTER_API_KEY: optionalString(),
   GOOGLE_AI_API_KEY: optionalString(),
   GOOGLE_MODEL: optionalString(),
   OLLAMA_BASE_URL: optionalString(),
@@ -96,7 +110,7 @@ const serverSchema = z.object({
   OCR_WORKER_URL: optionalString(),
   // OCR router sidecar — vision classification + PDF rendering for document routing
   OCR_ROUTER_URL: optionalString(),
-  // Model for OCR vision classification (default: gpt-4o-mini). Any OpenAI-compatible vision model.
+  // Model for OCR vision classification (default: gemini-2.5-flash). Any OpenAI-compatible vision model.
   OCR_VISION_MODEL: optionalString(),
   OCR_DEFAULT_PROVIDER: z.enum(["MARKER", "DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"]).optional(),
   // Publicly-reachable origin of this Next.js app. Required when OCR_WORKER_URL
@@ -123,7 +137,6 @@ const serverSchema = z.object({
   S3_SECRET_KEY: optionalString(),
   S3_BUCKET_NAME: optionalString(),
   // Repo Explainer
-  REPO_EXPLAINER_MODEL: optionalString(),
   GITHUB_TOKEN: optionalString(),
   // Global AI provider fallback — set once to route ALL capabilities to one provider
   // Per-capability env vars override these when set
@@ -135,22 +148,33 @@ const serverSchema = z.object({
   EMBEDDING_MODEL: optionalString(),
   RERANK_API_BASE_URL: optionalString(),
   RERANK_API_KEY: optionalString(),
-  RERANK_MODEL: optionalString(),          // e.g. jina-reranker-v2-base-multilingual or BAAI/bge-reranker-v2-m3
+  RERANK_MODEL: optionalString(),          // required when RERANK_API_BASE_URL is set; else defaults to gemini-2.5-flash-lite
   NER_API_BASE_URL: optionalString(),      // e.g. https://api.siliconflow.cn/v1 (Qwen3.5-4B free)
   NER_API_KEY: optionalString(),
-  NER_MODEL: optionalString(),             // e.g. gpt-4o-mini or Qwen/Qwen3.5-4B
-  TRANSCRIPTION_API_BASE_URL: optionalString(), // e.g. https://api.groq.com/openai/v1
+  NER_MODEL: optionalString(),             // default gemini-2.5-flash-lite; e.g. Qwen/Qwen3.5-4B
+  TRANSCRIPTION_API_BASE_URL: optionalString(), // defaults to the Gemini endpoint
   TRANSCRIPTION_API_KEY: optionalString(),
-  TRANSCRIPTION_MODEL: optionalString(),   // e.g. whisper-large-v3-turbo
+  TRANSCRIPTION_MODEL: optionalString(),   // defaults to gemini-2.5-flash
+  GEMINI_TTS_VOICE: optionalString(),      // Chirp 3: HD voice; defaults to en-US-Chirp3-HD-Kore
   // Legacy provider API keys (fallback when per-capability keys not set)
-  JINA_API_KEY: optionalString(),
-  GROQ_API_KEY: optionalString(),
   // Provider overrides (cloud vs sidecar)
   RERANK_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
   NER_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
   TRANSCRIPTION_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
   // Token system
   TOKEN_SIGNUP_BONUS: optionalString(),
+  // Collaboration: meetings held in channels, with agents that may run on
+  // other machines. COLLAB_HUB_SECRET is the shared secret every remote agent
+  // worker signs its requests with — without it the hub refuses to accept any
+  // node, which is the safe default for a deployment that does not use them.
+  COLLAB_HUB_SECRET: optionalString(),
+  COLLAB_HUB_ID: optionalString(),
+  // Slack: `SLACK_BOT_TOKEN` posts meeting turns into a channel;
+  // `SLACK_SIGNING_SECRET` verifies inbound Events API deliveries so a human
+  // can steer a meeting from Slack. Both are required for two-way mirroring.
+  SLACK_BOT_TOKEN: optionalString(),
+  SLACK_SIGNING_SECRET: optionalString(),
+  SLACK_WEBHOOK_URL: optionalString(),
   // CORS
   CORS_ALLOWED_ORIGINS: optionalString(),
   // Logging
@@ -158,14 +182,24 @@ const serverSchema = z.object({
 });
 
 const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
-  // At least one AI API key must be set
-  if (!data.OPENAI_API_KEY && !data.AI_API_KEY) {
+  // Chat reaches exactly one OpenAI-compatible endpoint. CHAT_BASE_URL names
+  // it; the deprecated single-provider variables are translated for one
+  // release when they unambiguously describe one endpoint. Which models that
+  // endpoint serves is validated when the configuration file is parsed, not
+  // here — env only has to establish that an endpoint exists.
+  try {
+    resolveChatEndpoint(data);
+  } catch (error) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ["AI_API_KEY"],
-      message: "Either AI_API_KEY or OPENAI_API_KEY must be set",
+      path: ["CHAT_BASE_URL"],
+      message:
+        error instanceof Error
+          ? error.message
+          : "Configure an OpenAI-compatible chat endpoint",
     });
   }
+
 
   if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "s3") {
     const required = [
@@ -220,13 +254,15 @@ const parseEnv = <T extends z.AnyZodObject>(
 function parseServerEnv() {
   const rawValues = {
     DATABASE_URL: process.env.DATABASE_URL,
+    MIGRATE_DATABASE_URL: process.env.MIGRATE_DATABASE_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
-    CHAT_MODEL: process.env.CHAT_MODEL,
+    CHAT_BASE_URL: process.env.CHAT_BASE_URL,
+    CHAT_API_KEY: process.env.CHAT_API_KEY,
+    CHAT_MODELS_CONFIG: process.env.CHAT_MODELS_CONFIG,
     EMBEDDING_INDEX: process.env.EMBEDDING_INDEX,
     EMBEDDING_SECRETS_KEY: process.env.EMBEDDING_SECRETS_KEY,
-    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
-    ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL,
+    OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
     GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
     GOOGLE_MODEL: process.env.GOOGLE_MODEL,
     OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
@@ -274,7 +310,6 @@ function parseServerEnv() {
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
-    REPO_EXPLAINER_MODEL: process.env.REPO_EXPLAINER_MODEL,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
     AI_BASE_URL: process.env.AI_BASE_URL,
     AI_API_KEY: process.env.AI_API_KEY,
@@ -290,12 +325,16 @@ function parseServerEnv() {
     TRANSCRIPTION_API_BASE_URL: process.env.TRANSCRIPTION_API_BASE_URL,
     TRANSCRIPTION_API_KEY: process.env.TRANSCRIPTION_API_KEY,
     TRANSCRIPTION_MODEL: process.env.TRANSCRIPTION_MODEL,
-    JINA_API_KEY: process.env.JINA_API_KEY,
-    GROQ_API_KEY: process.env.GROQ_API_KEY,
+    GEMINI_TTS_VOICE: process.env.GEMINI_TTS_VOICE,
     RERANK_PROVIDER: process.env.RERANK_PROVIDER as "cloud" | "sidecar" | undefined,
     NER_PROVIDER: process.env.NER_PROVIDER as "cloud" | "sidecar" | undefined,
     TRANSCRIPTION_PROVIDER: process.env.TRANSCRIPTION_PROVIDER as "cloud" | "sidecar" | undefined,
     TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
+    COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
+    COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
+    SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
+    SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
+    SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
     NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
       | "s3"
       | "database"
@@ -339,4 +378,3 @@ export const env = {
     NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
   }),
 };
-

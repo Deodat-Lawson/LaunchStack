@@ -3,7 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, company } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { validateRequestBody, CompanyOnboardingSchema } from "~/lib/validation";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 

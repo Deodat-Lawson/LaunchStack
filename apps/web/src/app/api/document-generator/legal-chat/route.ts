@@ -3,10 +3,14 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { getChatModel } from "~/lib/models";
+import { describeChatError } from "@launchstack/core/llm";
+import {
+  describeChatResolutionFailure,
+  resolveConfiguredChatModel,
+} from "~/lib/models";
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
-import { companyMetadata } from "@launchstack/core/db/schema/company-metadata";
+import { users } from "~/server/db/schema";
+import { companyMetadata } from "~/server/db/schema";
 import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
 import type { CompanyMetadataJSON } from "@launchstack/features/company-metadata";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
@@ -132,6 +136,13 @@ RULES:
 // ─── POST handler ──────────────────────────────────────────────────────────────
 
 export async function POST(request: Request) {
+  // Recorded as soon as the model resolves, so the catch below can describe a
+  // transport failure without resolving a second time. Resolving there would
+  // re-read the configuration, and on a configuration fault that throws out of
+  // the very handler whose job is to turn the fault into a response — the
+  // caller gets an opaque 500 instead of the message explaining what is wrong.
+  let selectedModelId: string | undefined;
+
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -248,8 +259,22 @@ export async function POST(request: Request) {
       }
     }
 
-    const chat = getChatModel("gpt-4o");
-    const response = await chat.invoke(langchainMessages);
+    let resolved;
+    try {
+      resolved = resolveConfiguredChatModel();
+    } catch (modelError) {
+      console.error("[legal-chat] chat resolution failed:", modelError);
+      const failure = describeChatResolutionFailure(modelError);
+      return NextResponse.json(
+        { success: false, message: failure.message },
+        { status: failure.status }
+      );
+    }
+    selectedModelId = resolved.modelId;
+
+    const response = await resolved.chat.invoke(
+      resolved.prepareMessages(langchainMessages),
+    );
     const content =
       typeof response.content === "string"
         ? response.content
@@ -306,23 +331,19 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const errMessage =
-      error instanceof Error ? error.message : String(error);
     console.error("[legal-chat] POST error:", error);
-
-    const hint =
-      !process.env.OPENAI_API_KEY &&
-      errMessage.toLowerCase().includes("openai")
-        ? " (Ensure OPENAI_API_KEY is set in .env)"
-        : "";
+    // No model id means the failure happened before or during resolution, so
+    // there is nothing to describe a transport error against.
+    const friendly = selectedModelId
+      ? describeChatError(error, selectedModelId)
+      : null;
 
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to process legal chat",
-        error: errMessage + hint,
+        message: friendly?.message ?? "Failed to process legal chat",
       },
-      { status: 500 }
+      { status: friendly?.status ?? 500 }
     );
   }
 }

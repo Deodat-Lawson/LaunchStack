@@ -1,6 +1,18 @@
+# services/* is deliberately excluded. Those are standalone containers with
+# their own deps (including @huggingface/transformers); pulling them into this
+# workspace would add them to every Vercel install. Trade-off: they are not
+# covered by `pnpm -r typecheck`. See REPOSITORY.md.
 packages:
   - apps/*
   - packages/*
 
 patchedDependencies:
   drizzle-kit@0.31.10: patches/drizzle-kit@0.31.10.patch
+
+# eslint-plugin-drizzle 0.2.3 imports this package at runtime but only declares
+# it as a devDependency. Supply it explicitly so strict pnpm installs can load
+# the shared root ESLint config.
+packageExtensions:
+  eslint-plugin-drizzle@0.2.3:
+    dependencies:
+      "@typescript-eslint/utils": ^6.10.0

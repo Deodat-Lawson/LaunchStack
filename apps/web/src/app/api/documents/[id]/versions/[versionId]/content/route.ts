@@ -16,7 +16,8 @@ import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document, documentVersions, users } from "@launchstack/core/db/schema";
+import { document, documentVersions } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isLocalStorage } from "~/lib/storage";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";

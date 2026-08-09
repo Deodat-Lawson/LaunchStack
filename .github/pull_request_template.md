@@ -9,7 +9,7 @@
 ## Checklist
 
 - [ ] `pnpm check` passes (lint + typecheck)
-- [ ] `pnpm test` passes
+- [ ] `pnpm --filter @launchstack/web test` passes
 - [ ] Changeset added (if `packages/core/` changed — `pnpm changeset`)
 - [ ] New env vars documented in `.env.example` and `apps/web/src/env.ts`
 - [ ] UI changes exercised in a browser (not just a green build)

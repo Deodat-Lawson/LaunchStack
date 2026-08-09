@@ -40,6 +40,8 @@ yarn-error.log*
 # local .env files
 # do not commit any ..env files to git, except for the ..env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
 .env
+.env.bak*
+.env.backup*
 .env*.lo
 
 # vercel
@@ -68,3 +70,6 @@ backups/
 
 # test output
 test-output/
+
+# Personal working notes — never committed
+notes/

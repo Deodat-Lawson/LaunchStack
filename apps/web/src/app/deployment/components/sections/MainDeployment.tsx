@@ -17,7 +17,6 @@ import {
   Eye,
   Search as SearchIcon,
   Play,
-  Video,
   ExternalLink,
   ShieldAlert,
 } from 'lucide-react';
@@ -38,7 +37,7 @@ const CAPABILITY_FEATURES: FeatureItem[] = [
     icon: <FileSearch size={18} />,
     title: 'RAG over everything',
     description:
-      'PDFs, Office docs, transcripts, repos, and exports — chunked, embedded, and retrieved with pgvector plus optional Jina reranking.',
+      'PDFs, Office docs, transcripts, repos, and exports — chunked, embedded, and retrieved with pgvector plus optional reranking.',
   },
   {
     icon: <BrainCircuit size={18} />,
@@ -56,7 +55,7 @@ const CAPABILITY_FEATURES: FeatureItem[] = [
     icon: <Mic size={18} />,
     title: 'Voice & transcription',
     description:
-      'Groq Whisper turns audio and video uploads into searchable documents. ElevenLabs ships answers back as speech.',
+      'Gemini turns audio and video uploads into searchable documents, and speaks answers back — one key for both.',
   },
   {
     icon: <Zap size={18} />,
@@ -102,7 +101,7 @@ const REQUIRED_INTEGRATIONS: StoreCard[] = [
     icon: <BrainCircuit size={16} />,
     title: 'AI providers',
     description:
-      'OpenAI by default. Anthropic, Google, SiliconFlow, or local Ollama swap in with a single env flip.',
+      'Google Gemini out of the box. Any endpoint speaking the OpenAI chat-completions protocol also works, including a local vLLM or Ollama server.',
     cta: 'Pick a provider',
   },
   {
@@ -144,7 +143,7 @@ const OPTIONAL_INTEGRATIONS: StoreCard[] = [
   {
     icon: <Mic size={16} />,
     title: 'Voice & audio',
-    description: 'ElevenLabs voices for TTS answers. Whisper transcription is built-in.',
+    description: 'Gemini voices for spoken answers. Transcription is built in on the same key.',
     cta: 'Configure voice',
   },
 ];
@@ -222,7 +221,7 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
             title="An AI provider"
             body={
               <>
-                Any one of OpenAI, Anthropic, Google, SiliconFlow, or a local Ollama box. Details on the{' '}
+                Google Gemini by default — or any endpoint speaking the OpenAI chat-completions protocol. Details on the{' '}
                 <strong>AI Model Providers</strong> page.
               </>
             }
@@ -284,16 +283,16 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
           />
           <Step
             number={4}
-            title="Push the schema"
-            code="pnpm db:push"
-            onCopy={() => copyToClipboard('pnpm db:push', 'qs-4')}
+            title="Apply the schema migrations"
+            code="pnpm --filter @launchstack/core db:migrate"
+            onCopy={() => copyToClipboard('pnpm --filter @launchstack/core db:migrate', 'qs-4')}
             copied={copiedCode === 'qs-4'}
           />
           <Step
             number={5}
             title="Start the dev server"
-            code="pnpm dev"
-            onCopy={() => copyToClipboard('pnpm dev', 'qs-5')}
+            code="pnpm --filter @launchstack/web dev"
+            onCopy={() => copyToClipboard('pnpm --filter @launchstack/web dev', 'qs-5')}
             copied={copiedCode === 'qs-5'}
           />
         </div>
@@ -333,12 +332,6 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
             title="Clerk setup"
             src="/deployment-demos/clerk-setup.mov"
             path="public/deployment-demos/clerk-setup.mov"
-          />
-          <DemoCard
-            icon={<Video size={14} />}
-            title="OpenAI API key"
-            src="/deployment-demos/openai-api-key-setup.mov"
-            path="public/deployment-demos/openai-api-key-setup.mov"
           />
         </div>
       </Section>
@@ -545,11 +538,13 @@ const gridCols = (n: number): React.CSSProperties => ({
 
 const QUICKSTART_ENV = `DATABASE_URL="postgresql://user:password@host:5432/db?sslmode=require"
 
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_your_key_here
-CLERK_SECRET_KEY=sk_live_your_key_here
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+CLERK_SECRET_KEY=<your-clerk-secret-key>
 
-# Pick one provider — OpenAI shown, see AI Model Providers for others
-OPENAI_API_KEY=sk-proj-your_key_here
+# One OpenAI-compatible endpoint — Gemini shown, see Chat Models for others.
+# Model ids and route assignments live in apps/web/config/chat-models.yaml.
+CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+CHAT_API_KEY=<your-google-ai-key>
 
 # Vercel Blob — required for document uploads
 BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx

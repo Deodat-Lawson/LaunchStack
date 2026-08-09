@@ -66,7 +66,7 @@ const FAQS = [
   },
   {
     q: 'Do I need my own API keys?',
-    a: `Yes — self-hosted Launchstack uses your own OpenAI, Anthropic, or Google AI keys. You are not locked into our pricing and you maintain full control over your AI usage and costs.`,
+    a: `Yes — self-hosted Launchstack runs on your own Google AI key, or any endpoint speaking the OpenAI chat-completions protocol. You are not locked into our pricing and you maintain full control over your AI usage and costs.`,
   },
   {
     q: 'Can I edit sources inside Launchstack?',
@@ -240,7 +240,7 @@ function HeroStage() {
 // ── Knowledge Pipeline section ──────────────────────────────────────────────
 // Drift "knowledge-pipeline" animation: sources (Gmail, Notion, PDF, Audio,
 // GitHub) flow into a knowledge graph + embeddings, then out to consumers
-// (OpenAI, Anthropic, Claude Code, n8n). 14s loop driven by rAF; particles
+// (Gemini, Claude Code, n8n). 14s loop driven by rAF; particles
 // sample bezier paths each frame and synchronously trigger card pulses on
 // delivery.
 
@@ -273,8 +273,8 @@ const KP_SOURCES: KpCard[] = [
 ];
 
 const KP_CONSUMERS: KpCard[] = [
-  { id: 'openai',    label: 'OpenAI',      meta: 'gpt-5 · embed-3',      y: 260, Icon: IconOpenAI     },
-  { id: 'anthropic', label: 'Anthropic',   meta: 'claude-sonnet-4.5',    y: 400, Icon: IconAnthropic  },
+  { id: 'gemini',    label: 'Gemini',      meta: 'gemini-2.5-flash',     y: 260, Icon: IconGemini     },
+  { id: 'gemini-embed', label: 'Gemini',   meta: 'gemini-embedding-001', y: 400, Icon: IconGemini     },
   { id: 'claude',    label: 'Claude Code', meta: 'agent · long-running', y: 540, Icon: IconClaudeCode },
   { id: 'n8n',       label: 'n8n',         meta: 'workflow · 14 nodes',  y: 680, Icon: IconN8n        },
 ];
@@ -285,6 +285,9 @@ const KP_EMBED_CENTER: KpPt = { x: KP_HUB_X, y: KP_HUB_Y_EMBED };
 const kpPctX = (px: number) => `${(px / KP_STAGE_W) * 100}%`;
 const kpPctY = (py: number) => `${(py / KP_STAGE_H) * 100}%`;
 const kpClamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+// Math.sin/Math.cos are not bit-identical across JS engines; round so SSR and
+// client hydration serialize the same value.
+const kpRound = (v: number) => Math.round(v * 1000) / 1000;
 
 function kpCurvePath(a: KpPt, b: KpPt) {
   const dx = (b.x - a.x) * 0.55;
@@ -317,8 +320,8 @@ const KP_GRAPH_NODES: KpNode[] = (() => {
       const a = ((i + ring.offset) / ring.count) * Math.PI * 2;
       const rp = ring.r + Math.sin(i * 2.3 + ri) * 8;
       nodes.push({
-        x: cx + Math.cos(a) * rp,
-        y: cy + Math.sin(a) * rp * 0.72,
+        x: kpRound(cx + Math.cos(a) * rp),
+        y: kpRound(cy + Math.sin(a) * rp * 0.72),
         r: ri === 2 ? 2.5 : ri === 1 ? 3.5 : 4.5,
       });
     }
@@ -472,7 +475,7 @@ function KnowledgePipelineStage() {
   }
 
   const nodeActivity: number[] = KP_GRAPH_NODES.map((_, i) =>
-    i === 0 ? 0 : kpClamp(Math.sin(time * 0.8 + i * 1.3) * 0.5 + 0.4, 0, 1)
+    i === 0 ? 0 : kpRound(kpClamp(Math.sin(time * 0.8 + i * 1.3) * 0.5 + 0.4, 0, 1))
   );
 
   return (
@@ -685,7 +688,7 @@ function KpEmbeddings({ activity, time }: { activity: number; time: number }) {
   for (let i = 0; i < 24; i++) {
     const base = 0.35 + 0.55 * Math.abs(Math.sin(i * 1.7 + 2.1));
     const wave = 0.15 * Math.sin(time * 2.2 - i * 0.45);
-    const h = kpClamp((base + wave) * (0.65 + 0.35 * activity), 0.08, 1);
+    const h = kpRound(kpClamp((base + wave) * (0.65 + 0.35 * activity), 0.08, 1));
     bars.push(
       <div
         key={i}
@@ -758,25 +761,14 @@ function IconGithub() {
     </svg>
   );
 }
-function IconOpenAI() {
+function IconGemini() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="11" fill="#0D0D0D" />
+      <rect x="2" y="2" width="20" height="20" rx="4" fill="#1A73E8" />
       <path
-        d="M16.5 9.5l-4.5 -2.6 -4.5 2.6v5.2l4.5 2.6 4.5 -2.6zM12 9.8l3 1.7 -3 1.7 -3 -1.7z"
-        stroke="#fff"
-        strokeWidth={0.8}
-        fill="none"
-        strokeLinejoin="round"
+        d="M12 6c.4 2.9 2.7 5.2 5.6 5.6 -2.9 .4 -5.2 2.7 -5.6 5.6 -.4 -2.9 -2.7 -5.2 -5.6 -5.6 2.9 -.4 5.2 -2.7 5.6 -5.6z"
+        fill="#fff"
       />
-    </svg>
-  );
-}
-function IconAnthropic() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="2" y="2" width="20" height="20" rx="4" fill="#D97757" />
-      <path d="M9 17L12 7l3 10M10.2 13.5h3.6" stroke="#fff" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" fill="none" />
     </svg>
   );
 }

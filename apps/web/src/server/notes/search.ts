@@ -6,6 +6,7 @@
  */
 
 import { sql } from "drizzle-orm";
+import { T } from "~/server/db/tables";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { db, toRows } from "~/server/db/index";
@@ -67,14 +68,16 @@ export async function searchNotes(
   const trimmed = query.trim();
   if (!trimmed) return [];
 
+  // Both halves or neither — an endpoint without a key, or a key without an
+  // endpoint, would let the SDK fall back to its own vendor default.
   const { apiKey, baseURL } = resolveEmbeddingConfig();
-  if (!apiKey) return [];
+  if (!apiKey || !baseURL) return [];
 
   const client = new OpenAIEmbeddings({
     openAIApiKey: apiKey,
     modelName: EMBEDDING_MODEL,
     dimensions: EMBEDDING_DIM,
-    ...(baseURL ? { configuration: { baseURL } } : {}),
+    configuration: { baseURL },
   });
 
   const embedding = await client.embedQuery(trimmed);
@@ -104,8 +107,8 @@ export async function searchNotes(
         n.anchor,
         n.anchor_status,
         (ne.embedding <-> ${fullLiteral}) AS distance
-      FROM pdr_ai_v2_document_note_embeddings ne
-      JOIN pdr_ai_v2_document_notes n ON n.id = ne.note_id
+      FROM ${T.noteEmbeddings} ne
+      JOIN ${T.notes} n ON n.id = ne.note_id
       WHERE ne.user_id = ${userId}
         AND ${scopeFilter}
         AND ne.embedding IS NOT NULL

@@ -174,6 +174,7 @@ export function createEmbeddingModel(
       embedQuery: async (query: string) => {
         const result = await generateEmbeddings([query], {
           apiKey: effectiveConfig.openAIApiKey,
+          baseUrl: effectiveConfig.openAIBaseUrl,
           model: index.model,
           dimensions: index.dimension,
         });
@@ -182,6 +183,7 @@ export function createEmbeddingModel(
       embedDocuments: async (documents: string[]) => {
         const result = await generateEmbeddings(documents, {
           apiKey: effectiveConfig.openAIApiKey,
+          baseUrl: effectiveConfig.openAIBaseUrl,
           model: index.model,
           dimensions: index.dimension,
         });

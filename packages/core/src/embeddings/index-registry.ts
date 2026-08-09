@@ -2,6 +2,7 @@ import {
   resolveEffectiveEmbeddingConfig,
   type CompanyEmbeddingConfig,
 } from "./company-config";
+import { GEMINI_EMBEDDING_MODEL } from "../llm/types";
 import { createSlot } from "../internal/slot";
 
 export type EmbeddingProvider =
@@ -51,6 +52,16 @@ function getRegistryConfig(): EmbeddingIndexRegistryConfig {
   return registryConfigSlot.get() ?? {};
 }
 
+/**
+ * The original index, and still the fallback.
+ *
+ * It stays the default deliberately. Every other AI capability in this
+ * deployment now runs on Gemini, but embeddings are *persisted*: a vector is
+ * only comparable to others from the same model, so changing this key on an
+ * existing corpus does not re-route a request — it strands every vector
+ * already written. Deployments migrate on purpose, by setting EMBEDDING_INDEX
+ * to {@link GEMINI_EMBEDDING_INDEX} and re-embedding, never by upgrading.
+ */
 const LEGACY_OPENAI_INDEX: EmbeddingIndexConfig = {
   indexKey: "legacy-openai-1536",
   provider: "openai",
@@ -60,6 +71,29 @@ const LEGACY_OPENAI_INDEX: EmbeddingIndexConfig = {
   supportsMatryoshka: true,
   enabled: true,
   storageKind: "legacy",
+  version: "v1",
+};
+
+/**
+ * Gemini embeddings — the recommended index for a new deployment.
+ *
+ * `provider: "openai"` names the *wire protocol*, not the vendor: Gemini
+ * serves an OpenAI-shaped `/embeddings`, so it reuses that branch in
+ * `factory.ts` unchanged.
+ *
+ * 768 dimensions because that is what `dimension_table` storage admits, and
+ * `gemini-embedding-001` supports Matryoshka truncation down to it. That also
+ * keeps these vectors in their own table rather than sharing the legacy
+ * 1536-wide column, so the two indexes cannot contaminate each other.
+ */
+const GEMINI_EMBEDDING_INDEX: EmbeddingIndexConfig = {
+  indexKey: "gemini-embedding-768",
+  provider: "openai",
+  model: GEMINI_EMBEDDING_MODEL,
+  dimension: 768,
+  supportsMatryoshka: true,
+  enabled: true,
+  storageKind: "dimension_table",
   version: "v1",
 };
 
@@ -120,7 +154,11 @@ function buildDynamicIndexes(config?: CompanyEmbeddingConfig): EmbeddingIndexCon
 }
 
 export function getEmbeddingIndexRegistry(config?: CompanyEmbeddingConfig): EmbeddingIndexConfig[] {
-  return [LEGACY_OPENAI_INDEX, ...buildDynamicIndexes(config)];
+  return [
+    LEGACY_OPENAI_INDEX,
+    GEMINI_EMBEDDING_INDEX,
+    ...buildDynamicIndexes(config),
+  ];
 }
 
 // Validate EMBEDDING_INDEX once per process so a typo in `.env` surfaces in

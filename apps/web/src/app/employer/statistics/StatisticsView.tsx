@@ -17,6 +17,10 @@ import {
   PageShell,
   Section,
 } from "~/app/employer/_components/primitives";
+import {
+  usePublishedActions,
+  type RegisterSectionActions,
+} from "~/app/employer/documents/_workspace/settings/contract";
 import { ChartsSection } from "./components/ChartsSection";
 import { DocumentStatsTable } from "./components/DocumentStatsTable";
 import { EmployeeActivityTable } from "./components/EmployeeActivityTable";
@@ -75,9 +79,17 @@ export interface StatisticsViewProps {
    * full-viewport PageShell for a scrollable `height: 100%` one.
    */
   embedded?: boolean;
+  /**
+   * Body only: no page shell, no header, no Refresh button of its own. Used by
+   * the settings hub, which supplies all three so every section shares one
+   * header treatment and one action area.
+   */
+  bare?: boolean;
+  /** Publishes Refresh into the settings chrome when `bare`. */
+  onActions?: RegisterSectionActions;
 }
 
-export function StatisticsView({ embedded = false }: StatisticsViewProps) {
+export function StatisticsView({ embedded = false, bare = false, onActions }: StatisticsViewProps) {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -107,9 +119,21 @@ export function StatisticsView({ embedded = false }: StatisticsViewProps) {
     void fetchDashboardData();
   }, [fetchDashboardData]);
 
-  return (
-    <PageShell wide embedded={embedded}>
-      <PageHeader
+  usePublishedActions(
+    bare ? onActions : undefined,
+    {
+      primaryLabel: "Refresh data",
+      primaryBusyLabel: "Refreshing…",
+      onPrimary: () => void fetchDashboardData(),
+      busy: loading,
+    },
+    [fetchDashboardData, loading],
+  );
+
+  const body = (
+    <>
+      {!bare && (
+        <PageHeader
         eyebrow="Analytics"
         title="Analytics dashboard"
         description="Company-wide view of documents, employee activity, and query trends. Refresh to pull the latest."
@@ -129,7 +153,8 @@ export function StatisticsView({ embedded = false }: StatisticsViewProps) {
             {loading ? "Refreshing…" : "Refresh data"}
           </Button>
         }
-      />
+        />
+      )}
 
       {error && (
         <Card
@@ -248,6 +273,16 @@ export function StatisticsView({ embedded = false }: StatisticsViewProps) {
           </Section>
         </>
       )}
+    </>
+  );
+
+  // In the settings hub the surrounding column, padding, and header already
+  // exist; wrapping again would double them.
+  if (bare) return body;
+
+  return (
+    <PageShell wide embedded={embedded}>
+      {body}
     </PageShell>
   );
 }

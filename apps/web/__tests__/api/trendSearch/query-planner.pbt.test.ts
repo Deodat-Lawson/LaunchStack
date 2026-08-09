@@ -4,21 +4,43 @@
  * Validates: Requirements 1.2, 1.3, 2.1
  */
 
-const mockInvoke = jest.fn();
+import type * as CoreLlm from "@launchstack/core/llm";
 
-jest.mock("@langchain/openai", () => {
-    const MockChatOpenAI = class {
-        withStructuredOutput() {
-            return { invoke: mockInvoke };
-        }
+const mockInvoke = jest.fn<Promise<unknown>, []>();
+
+jest.mock("@launchstack/core/llm", () => {
+    const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
+    return {
+        __esModule: true,
+        ...actual,
+        resolveChatModel: jest.fn(() => ({
+            route: "fast",
+            name: "primary",
+            modelId: "test-model",
+            behavior: {
+                input: ["text"],
+                reasoning: { mode: "none" },
+                nativeStructuredOutput: ["json-schema"],
+                parameters: {
+                    temperature: "supported",
+                    systemMessages: "supported",
+                    streaming: "supported",
+                    maxOutputTokens: "supported",
+                },
+            },
+            inheritsDefault: true,
+            reasoning: { mode: "none", enabled: false, requestPatch: {} },
+            chat: {},
+            prepareMessages: (messages: unknown[]) => messages,
+        })),
+        invokeStructured: jest.fn(() => mockInvoke()),
     };
-    return { __esModule: true, ChatOpenAI: MockChatOpenAI };
 });
 
 import * as fc from "fast-check";
 import { planQueries } from "@launchstack/features/trend-search/query-planner";
 import { SearchCategoryEnum } from "@launchstack/features/trend-search";
-import type { PlannedQuery, SearchCategory } from "@launchstack/features/trend-search";
+import type { SearchCategory } from "@launchstack/features/trend-search";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
@@ -149,11 +171,9 @@ describe("Property 5: Query planner always produces sub-queries", () => {
                     expect(result.length).toBeGreaterThanOrEqual(3);
                     expect(result.length).toBeLessThanOrEqual(5);
                     for (const pq of result) {
-                        expect(pq).toMatchObject({
-                            searchQuery: expect.any(String),
-                            category: expect.any(String),
-                            rationale: expect.any(String),
-                        });
+                        expect(typeof pq.searchQuery).toBe("string");
+                        expect(typeof pq.category).toBe("string");
+                        expect(typeof pq.rationale).toBe("string");
                         expect(validCategories).toContain(pq.category);
                     }
                 }

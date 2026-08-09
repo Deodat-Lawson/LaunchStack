@@ -5,7 +5,18 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { IconChevronRight } from "./icons";
 import LoadingPage from "~/app/_components/loading";
+import type { KnowledgePaneProps } from "./KnowledgePane";
+import type { SettingsSectionId } from "./SettingsHub";
 import type { StudioFeature } from "./types";
+
+/**
+ * Data the workspace shell owns but some panes need. Passed explicitly rather
+ * than through context so a pane rendered from the drawer — which has no
+ * workspace state — fails visibly instead of silently rendering empty.
+ */
+export interface StudioPaneContext {
+  knowledge?: KnowledgePaneProps;
+}
 
 const DocumentGenerator = dynamic(
   () =>
@@ -36,21 +47,18 @@ const NotebookPane = dynamic(
   { loading: () => <LoadingPage /> },
 );
 
-const SettingsView = dynamic(
-  () =>
-    import("~/app/employer/settings/SettingsView").then((m) => m.SettingsView),
+const SettingsHub = dynamic(
+  () => import("./SettingsHub").then((m) => m.SettingsHub),
   { loading: () => <LoadingPage /> },
 );
 
-const StatisticsView = dynamic(
-  () =>
-    import("~/app/employer/statistics/StatisticsView").then((m) => m.StatisticsView),
+const MeetingsPane = dynamic(
+  () => import("./collab/MeetingsPane").then((m) => m.MeetingsPane),
   { loading: () => <LoadingPage /> },
 );
 
-const MetadataView = dynamic(
-  () =>
-    import("~/app/employer/metadata/MetadataView").then((m) => m.MetadataView),
+const KnowledgePane = dynamic(
+  () => import("./KnowledgePane").then((m) => m.KnowledgePane),
   { loading: () => <LoadingPage /> },
 );
 
@@ -434,26 +442,61 @@ export function NotesPane(_: PaneProps) {
   );
 }
 
-export function CompanyMetadataPane(_: PaneProps) {
+export function CompanySettingsPane({ initialSection }: PaneProps & { initialSection?: SettingsSectionId }) {
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-      <MetadataView embedded />
+      <SettingsHub embedded initialSection={initialSection} />
     </div>
   );
 }
 
-export function CompanySettingsPane(_: PaneProps) {
+export function MeetingsStudioPane(_: PaneProps) {
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-      <SettingsView embedded />
+      <MeetingsPane embedded />
     </div>
   );
 }
 
-export function AnalyticsPane(_: PaneProps) {
+/**
+ * Knowledge needs the workspace's own source list, so the shell passes it
+ * through `renderStudioPane`'s context. Opened from the drawer — where there
+ * is no such context — it explains where to find the full surface rather than
+ * rendering an empty corpus.
+ */
+export function KnowledgeStudioPane({
+  context,
+  onClose,
+}: PaneProps & { context?: StudioPaneContext }) {
+  if (!context?.knowledge) {
+    return (
+      <InlineFeatureShell eyebrow="Knowledge" title="Your corpus">
+        <div style={{ padding: "20px 24px", fontSize: 13, lineHeight: 1.6, color: "var(--ink-2)" }}>
+          <p style={{ margin: 0 }}>
+            Everything the workspace can cite — uploads, pasted notes, and connected tools — with
+            filters, collections, and indexing status.
+          </p>
+          <button
+            onClick={onClose}
+            style={{
+              marginTop: 14,
+              padding: "8px 14px",
+              borderRadius: 8,
+              background: "var(--accent)",
+              color: "white",
+              fontSize: 12.5,
+              fontWeight: 600,
+            }}
+          >
+            Open Knowledge
+          </button>
+        </div>
+      </InlineFeatureShell>
+    );
+  }
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
-      <StatisticsView embedded />
+      <KnowledgePane {...context.knowledge} />
     </div>
   );
 }
@@ -728,10 +771,15 @@ export function DefaultLinkPane({
 export function renderStudioPane(
   feature: StudioFeature,
   onClose: () => void,
+  context?: StudioPaneContext,
 ): React.ReactNode {
   switch (feature.id) {
     case "chat":
       return <ChatPane onClose={onClose} />;
+    case "knowledge":
+      return <KnowledgeStudioPane onClose={onClose} context={context} />;
+    case "meetings":
+      return <MeetingsStudioPane onClose={onClose} />;
     case "draft":
       return <DraftPane onClose={onClose} />;
     case "rewrite":
@@ -748,12 +796,14 @@ export function renderStudioPane(
       return <AudioGenPane onClose={onClose} />;
     case "marketing":
       return <MarketingPipelinePane onClose={onClose} />;
+    // Company metadata and analytics are sections of Settings now. Their ids
+    // survive so old deep links open the right section rather than 404ing.
     case "metadata":
-      return <CompanyMetadataPane onClose={onClose} />;
+      return <CompanySettingsPane onClose={onClose} initialSection="company" />;
+    case "analytics":
+      return <CompanySettingsPane onClose={onClose} initialSection="analytics" />;
     case "settings":
       return <CompanySettingsPane onClose={onClose} />;
-    case "analytics":
-      return <AnalyticsPane onClose={onClose} />;
     case "review":
       return <FounderWeeklyReviewPane onClose={onClose} />;
     default:

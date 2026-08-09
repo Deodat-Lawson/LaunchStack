@@ -1,9 +1,7 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import {
-  getChatModelByType,
   normalizeModelContent,
-  isAIModelType,
-  type AIModelType,
+  resolveChatModel,
 } from "@launchstack/core/llm";
 import type { DiagramType, RepoInfo } from "./types";
 import {
@@ -34,12 +32,6 @@ function normalizeLlmpath(path: string, repoPrefix: string): string {
   return segments.join("/");
 }
 
-function getDefaultModel(): AIModelType {
-  const envValue = process.env.REPO_EXPLAINER_MODEL;
-  if (envValue && isAIModelType(envValue)) return envValue;
-  return "gpt-4o";
-}
-
 export async function getFilesToExplore(
   tree: string,
   repoPrefix: string,
@@ -47,15 +39,17 @@ export async function getFilesToExplore(
 ): Promise<string[]> {
   try {
     const user = buildFilesToExploreUserPrompt(tree);
-    const model = getChatModelByType(getDefaultModel());
+    const resolved = resolveChatModel({ route: "fast" });
     const systemPrompt = diagramType
       ? getFilesToExploreSystem(diagramType)
       : FILES_TO_EXPLORE_SYSTEM;
-    const response = await model.invoke([
-      new SystemMessage(systemPrompt),
-      new HumanMessage(user),
-    ]);
-    const text = normalizeModelContent(response);
+    const response = await resolved.chat.invoke(
+      resolved.prepareMessages([
+        new SystemMessage(systemPrompt),
+        new HumanMessage(user),
+      ]),
+    );
+    const text = normalizeModelContent(response.content);
     const rawPaths = parsePathsFromResponse(text);
 
     const cleaned: string[] = [];
@@ -81,15 +75,17 @@ export async function explainRepoWithLlm(
 ): Promise<{ explanation: string; success: boolean; error?: string }> {
   try {
     const prompt = buildUserPrompt(repo, repoContext, instructions);
-    const model = getChatModelByType(getDefaultModel());
+    const resolved = resolveChatModel();
     const systemPrompt = diagramType
       ? getSystemPrompt(diagramType)
       : SYSTEM_PROMPT;
-    const response = await model.invoke([
-      new SystemMessage(systemPrompt),
-      new HumanMessage(prompt),
-    ]);
-    const text = normalizeModelContent(response);
+    const response = await resolved.chat.invoke(
+      resolved.prepareMessages([
+        new SystemMessage(systemPrompt),
+        new HumanMessage(prompt),
+      ]),
+    );
+    const text = normalizeModelContent(response.content);
     return { explanation: text, success: true };
   } catch (error) {
     const message =
@@ -98,4 +94,3 @@ export async function explainRepoWithLlm(
     return { explanation: message, success: false, error: message };
   }
 }
-

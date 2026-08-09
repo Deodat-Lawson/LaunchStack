@@ -11,8 +11,8 @@ export const ClerkSetupPage: React.FC<DeploymentProps> = ({
   copyToClipboard,
   copiedCode,
 }) => {
-  const envSnippet = `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx
-CLERK_SECRET_KEY=sk_live_xxx`;
+  const envSnippet = `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+CLERK_SECRET_KEY=<your-clerk-secret-key>`;
 
   return (
     <>

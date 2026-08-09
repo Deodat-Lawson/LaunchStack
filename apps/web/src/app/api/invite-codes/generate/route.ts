@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import crypto from "crypto";
 
 import { db } from "~/server/db";
-import { users, inviteCodes } from "@launchstack/core/db/schema";
+import { users, inviteCodes } from "~/server/db/schema";
 import { validateRequestBody, GenerateInviteCodeSchema } from "~/lib/validation";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 

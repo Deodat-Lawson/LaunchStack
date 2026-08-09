@@ -38,8 +38,9 @@ git clone https://github.com/launchstack/launchstack.git
 cd launchstack
 pnpm install
 cp .env.example .env                  # fill in DATABASE_URL + CLERK + OPENAI keys
-pnpm db:push                          # sync Drizzle schema
-pnpm dev                              # Next.js + Inngest dev server (concurrently)
+pnpm --filter @launchstack/core db:migrate                      # apply schema migrations
+pnpm --filter @launchstack/core db:seed                         # optional sample data
+pnpm --filter @launchstack/web dev                              # Next.js + Inngest dev server (concurrently)
 ```
 
 ### Full local stack (Postgres + SeaweedFS + sidecars)
@@ -54,13 +55,119 @@ make down-clean    # tear down + wipe volumes
 
 Once the stack is up: app at `localhost:3000`, Inngest dashboard at `localhost:8288`, sidecar API at `localhost:8000/docs`.
 
+## Changing the database
+
+There are **two migration sets** against one database. Which one you touch
+depends on whether the table is part of the published engine.
+
+| Set | Schema | Migrations | Owns |
+| --- | --- | --- | --- |
+| **engine** | `packages/core/src/db/schema/` | `packages/core/drizzle/` | company, documents, OCR, retrieval/embeddings, knowledge graph — the 25 tables `@launchstack/core` publishes |
+| **product** | `apps/web/src/server/db/schema/` and `packages/features/src/*/schema.ts` | `apps/web/drizzle/` | identity, chatbot, collab, credits, notes, and the feature verticals — 36 tables |
+
+The dependency is **one-way**: product tables may reference engine tables, never
+the reverse. That is what lets someone embed `@launchstack/core` and apply
+`packages/core/drizzle` alone to get a working database. ESLint blocks core from
+importing `~/*` or `@launchstack/features` (which a foreign key would need), and
+`scripts/ci/check-schema-boundary.mjs` re-checks it against the generated SQL.
+
+Feature-vertical tables live in `packages/features` rather than `apps/web`
+because a package cannot import from an app — but they are on the product side
+of the boundary and ship in the product migration set.
+
+```bash
+# engine change
+pnpm --filter @launchstack/core db:generate --name=add_document_language
+
+# product change
+pnpm --filter @launchstack/web db:generate --name=add_meeting_transcripts
+
+# read the generated SQL. Nobody else will if you don't.
+
+# apply BOTH sets, engine first (the order is load-bearing)
+pnpm --filter @launchstack/web db:migrate
+
+# engine only — what an embedding consumer runs
+pnpm --filter @launchstack/core db:migrate
+
+# useful
+pnpm --filter @launchstack/web db:verify     # anything pending? (deploy preflight)
+pnpm --filter @launchstack/core db:check     # journal/snapshot integrity
+node packages/core/scripts/migrate.mjs --set=product --dry-run
+```
+
+**Rules**
+
+- **`drizzle-kit push` is banned** anywhere it can reach a real database. It
+  rewrites a live schema to match your code, unreviewed and unrecorded, and
+  will DROP columns to do it. `db:push:danger` exists for scratch databases and
+  refuses to run against a migration-managed one. CI enforces this
+  (`node scripts/ci/check-no-push.mjs`).
+- **Migrations are immutable.** The runner stores a SHA-256 per file and
+  refuses to apply *anything* if a previously-applied migration has changed —
+  including its comments. Fix mistakes with a new forward migration. There are
+  no down migrations by design.
+- **DDL only.** No `UPDATE`/`INSERT`/`DELETE`/`DO $$` in a migration; data
+  changes go in a backfill (below). Override with `-- launchstack:allow-dml`
+  when genuinely unavoidable.
+- **Destructive DDL needs a marker.** `DROP TABLE` / `DROP COLUMN` requires
+  `-- launchstack:destructive-ok` on the file, so it gets a second look.
+- **`CREATE INDEX CONCURRENTLY`** cannot run in a transaction. Put it in its own
+  file starting with `-- launchstack:no-transaction` plus a `-- Reason:` line.
+
+### If `_journal.json` conflicts
+
+Two PRs that each add a migration will both append an entry. **Never hand-merge
+it** — a textual merge produces duplicate `idx` values and silently breaks the
+ordering. `.gitattributes` marks these files unmergeable so you get a conflict
+instead. To resolve:
+
+```bash
+git rebase origin/main
+# delete YOUR .sql and its meta/*_snapshot.json, take main's _journal.json
+git checkout --theirs packages/core/drizzle/meta/_journal.json
+pnpm --filter @launchstack/core db:generate --name=<your-change>
+pnpm --filter @launchstack/core db:check
+```
+
+Regenerating is always cheaper and always correct.
+
+### Data backfills
+
+Rewriting existing rows is *not* a migration: it is unbounded, restartable, and
+meaningless on a fresh database. Add an entry to
+`apps/web/src/server/backfills/index.ts` instead — it gets a ledger row, a
+resume cursor, and its own advisory lock so it can never block a deploy.
+
+```bash
+pnpm --filter @launchstack/web db:backfill --list
+pnpm --filter @launchstack/web db:backfill --only=<id> [--batch=500] [--dry-run]
+```
+
+Backfills are never run automatically on container boot.
+
+Contract for a `step()`:
+
+- **Advance the cursor only to the last _successful_ row, then throw.** Catching
+  an error and moving past it lets the run finish and mark itself `done` while
+  that row stays unprocessed forever — a re-run will never revisit it.
+- **`--dry-run` never calls `step()`**, because steps write. Implement the
+  optional read-only `estimate()` if you want a dry run to report how much work
+  remains.
+- Set `requiresEngine: false` for a pure-SQL backfill so it runs with nothing
+  but `DATABASE_URL`. Needing chat-endpoint config to repair legacy rows is
+  exactly the wrong dependency in an incident.
+- Backfills take a session advisory lock on a **pinned** connection (key
+  `4919/2`, separate from the migration lock `4919/1`), so a long backfill can
+  never block a deploy.
+
 ## Quality checks
 
 Run before opening a PR:
 
 ```bash
 pnpm check         # eslint + pnpm -r typecheck
-pnpm test          # Jest (apps/web)
+pnpm --filter @launchstack/web test          # Jest (apps/web)
 ```
 
 All three must pass in CI. Boundary rules (no `process.env` in core, no `~/*` in features) are checked by ESLint — don't try to work around them with `/* eslint-disable */`; talk to us if the rule seems wrong.
@@ -85,7 +192,7 @@ Before requesting review:
 
 - [ ] Commits are focused and have meaningful messages
 - [ ] `pnpm check` passes
-- [ ] `pnpm test` passes
+- [ ] `pnpm --filter @launchstack/web test` passes
 - [ ] Changeset added if `packages/core/` changed
 - [ ] New env vars documented in [`.env.example`](.env.example) and [`apps/web/src/env.ts`](apps/web/src/env.ts)
 - [ ] If the change touches UI, you've exercised the flow in a browser (not just a successful build)

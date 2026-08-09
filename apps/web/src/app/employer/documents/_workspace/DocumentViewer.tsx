@@ -13,7 +13,7 @@ import {
 import type { DocumentType } from "../types/document";
 import { SOURCE_META, type WorkspaceSource } from "./types";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
-import type { DocumentNote } from "@launchstack/core/db/schema/document-notes";
+import type { DocumentNote } from "~/server/db/schema";
 import { getDocumentDisplayType } from "../types/document";
 import type { PdfNoteLite } from "~/components/notes/PdfViewerWithNotes";
 

@@ -1,6 +1,7 @@
 import type { ProviderResult } from "../types";
 import type { NERProvider, NERResult, ChunkEntities } from "./index";
-import { resolveBaseUrl, resolveApiKey, resolveModel } from "../registry";
+import { resolveEndpoint, resolveModel } from "../registry";
+import { GEMINI_FAST_MODEL } from "../../llm/types";
 import OpenAI from "openai";
 
 /**
@@ -24,7 +25,8 @@ const BATCH_SIZE = 5;
 
 /**
  * LLM-based NER provider using OpenAI-compatible chat completions.
- * Works with OpenAI, SiliconFlow (Qwen3.5-4B free), DeepSeek, etc.
+ * Defaults to Gemini; works equally against SiliconFlow, DeepSeek, OpenAI or
+ * anything else implementing the protocol, via NER_API_BASE_URL.
  */
 export class LLMNERProvider implements NERProvider {
     name: string;
@@ -32,17 +34,16 @@ export class LLMNERProvider implements NERProvider {
     private model: string;
 
     constructor() {
-        const baseURL = resolveBaseUrl(
+        // Endpoint and credential come back as a pair, so a key is never sent
+        // to a service it does not belong to. Defaults to Gemini when the
+        // operator names no endpoint.
+        const { baseUrl: baseURL, apiKey } = resolveEndpoint(
             process.env.NER_API_BASE_URL,
-            "https://api.openai.com/v1",
-        );
-        const apiKey = resolveApiKey(
             process.env.NER_API_KEY,
-            process.env.OPENAI_API_KEY,
         );
         this.model = resolveModel(
             process.env.NER_MODEL,
-            "gpt-4o-mini",
+            GEMINI_FAST_MODEL,
         );
         this.name = `ner:${this.model}`;
 

@@ -1,44 +1,34 @@
 import { NextResponse } from "next/server";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services/types";
+import { getConfiguredPublicChatConfig } from "~/lib/models";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
-type ProviderKey = "openai" | "anthropic" | "google" | "ollama";
-
-const MODEL_PROVIDER_MAP: Record<AIModelType, ProviderKey> = {
-  "gpt-4o": "openai",
-  "gpt-5.2": "openai",
-  "gpt-5.1": "openai",
-  "gpt-5-nano": "openai",
-  "gpt-5-mini": "openai",
-  "claude-sonnet-4": "anthropic",
-  "claude-opus-4.5": "anthropic",
-  "gemini-2.5-flash": "google",
-  "gemini-3-flash": "google",
-  "gemini-3-pro": "google",
-  "llama3.1:8b": "ollama",
-  "llama3.2:3b": "ollama",
-  "mistral:7b": "ollama",
-  "codellama:7b": "ollama",
-  "gemma2:9b": "ollama",
-  "phi3:mini": "ollama",
-  "qwen2.5:7b": "ollama",
-};
-
+/**
+ * Sanitized chat configuration for the browser.
+ *
+ * The UI drives its vision and reasoning controls from this: a route reported
+ * unavailable disables the matching control, and the reasoning levels here
+ * are the only ones the server will accept. Endpoint URLs, credentials,
+ * reasoning request patches, and internal context/output limits never appear.
+ */
 export async function GET() {
-  const providers = {
-    openai: Boolean(process.env.OPENAI_API_KEY),
-    anthropic: Boolean(process.env.ANTHROPIC_API_KEY),
-    google: Boolean(process.env.GOOGLE_AI_API_KEY),
-    ollama: Boolean(process.env.OLLAMA_BASE_URL),
-  } as const;
-
-  const models = Object.fromEntries(
-    Object.entries(MODEL_PROVIDER_MAP).map(([model, provider]) => [
-      model,
-      providers[provider],
-    ])
-  ) as Record<AIModelType, boolean>;
-
-  return NextResponse.json({ providers, models });
+  try {
+    return NextResponse.json(getConfiguredPublicChatConfig());
+  } catch (error) {
+    // A broken configuration must not take the whole UI down — report every
+    // route unavailable so controls disable themselves cleanly.
+    const message =
+      error instanceof Error ? error.message : "Chat models are not configured";
+    return NextResponse.json(
+      {
+        routes: {
+          default: { available: false, unavailableReason: message },
+          fast: { available: false, unavailableReason: message },
+          reasoning: { available: false, unavailableReason: message },
+          vision: { available: false, unavailableReason: message },
+        },
+      },
+      { status: 200 },
+    );
+  }
 }

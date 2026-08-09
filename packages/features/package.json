@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub — real sources land in later migration steps.)",
+  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub \u2014 real sources land in later migration steps.)",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=20"
@@ -13,6 +13,10 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./schema": {
+      "types": "./src/schema.ts",
+      "default": "./src/schema.ts"
+    },
     "./adeu": {
       "types": "./src/adeu/index.ts",
       "default": "./src/adeu/index.ts"
@@ -28,10 +32,6 @@
     "./voice": {
       "types": "./src/voice/index.ts",
       "default": "./src/voice/index.ts"
-    },
-    "./voice/whisper-js": {
-      "types": "./src/voice/whisper-js.ts",
-      "default": "./src/voice/whisper-js.ts"
     },
     "./repo-explainer": {
       "types": "./src/repo-explainer/index.ts",
@@ -109,19 +109,14 @@
     "@langchain/core": "^0.3.74",
     "@langchain/openai": "^0.6.11",
     "@launchstack/core": "workspace:*",
+    "dayjs": "^1.11.18",
     "docxtemplater": "^3.68.3",
     "drizzle-orm": "^0.45.1",
     "openai": "^4.62.1",
     "pizzip": "^3.2.0",
     "zod": "^3.23.8"
   },
-  "peerDependencies": {
-    "sherpa-onnx-node": "^1.12.38"
-  },
-  "peerDependenciesMeta": {
-    "sherpa-onnx-node": { "optional": true }
-  },
-  "devDependencies": {
-    "sherpa-onnx-node": "^1.12.38"
-  }
+  "peerDependencies": {},
+  "peerDependenciesMeta": {},
+  "devDependencies": {}
 }

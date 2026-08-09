@@ -69,6 +69,45 @@ async function createSession(
     };
 }
 
+const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]", "0.0.0.0", "postgres", "db"]);
+
+/** Escape hatch for a sandboxed non-local runner. Opt-in, never inferred. */
+const ALLOW_NON_LOCAL = "LAUNCHSTACK_ALLOW_NON_LOCAL_TEST_DATABASE";
+
+/**
+ * Refuse to run against anything but a local server.
+ *
+ * This helper issues `CREATE DATABASE` and, on the way out, `DROP DATABASE …
+ * WITH (FORCE)`. Pointed at a shared or production host by a stray
+ * `DATABASE_URL` — the variable a developer most likely already has exported —
+ * that is a destructive operation against real data, and nothing downstream
+ * would stop it. Checking merely that *a* URL exists is not a safety check.
+ *
+ * CI is unaffected: its Postgres service is reached over localhost.
+ */
+export function assertLocalTestServer(connectionString: string): void {
+    if (process.env[ALLOW_NON_LOCAL] === "1") return;
+
+    let host: string;
+    try {
+        host = new URL(connectionString).hostname;
+    } catch {
+        throw new Error(
+            `Could not parse the test database URL, so its host cannot be confirmed local. ` +
+                `Set ${ALLOW_NON_LOCAL}=1 only if you are certain the target is disposable.`
+        );
+    }
+
+    if (!LOCAL_HOSTS.has(host)) {
+        throw new Error(
+            `Refusing to run founder weekly review integration tests against non-local host "${host}". ` +
+                `These suites CREATE and DROP databases on the target server. ` +
+                `Point LAUNCHSTACK_TEST_DATABASE_URL at a local Postgres, or set ${ALLOW_NON_LOCAL}=1 ` +
+                `if the target is a disposable sandbox.`
+        );
+    }
+}
+
 /**
  * Spins up a throwaway database and migrates it with both sets.
  *
@@ -86,6 +125,8 @@ export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWe
             "LAUNCHSTACK_TEST_DATABASE_URL or DATABASE_URL is required for founder weekly review integration tests."
         );
     }
+
+    assertLocalTestServer(connectionString);
 
     const databaseName = `lau6_${randomUUID().replace(/-/g, "")}`;
     const maintenance = postgres(connectionString, { max: 1 });

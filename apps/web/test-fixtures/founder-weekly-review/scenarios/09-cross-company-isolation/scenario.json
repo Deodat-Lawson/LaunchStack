@@ -1,0 +1,91 @@
+{
+  "name": "cross-company-isolation",
+  "description": "A subject company under review plus a separate control company. Only the subject's evidence may appear, even though the control's documents sit in the same database inside the same reporting period. The control owns the only Customer Feedback document, so the expected customer_feedback_unavailable warning is itself an isolation signal: the subject genuinely has none, and a leak would both raise the count and silence the warning.",
+  "reportingPeriod": { "start": "2026-07-20", "end": "2026-07-26" },
+  "workspaceTimezone": "America/New_York",
+  "founderContext": "Review Northstar's onboarding work this week.",
+  "companies": [
+    {
+      "name": "Northstar Analytics",
+      "underReview": true,
+      "documents": [
+        {
+          "title": "Onboarding Plan",
+          "category": "Planning",
+          "versions": [
+            {
+              "versionNumber": 1,
+              "timestamp": "2026-07-21T10:00:00.000Z",
+              "changelog": "Baseline before the in-window revision.",
+              "chunks": [{ "section": "Ownership", "content": "Product owns retry telemetry." }]
+            },
+            {
+              "versionNumber": 2,
+              "timestamp": "2026-07-22T10:00:00.000Z",
+              "changelog": "Documented retry telemetry ownership.",
+              "chunks": [{ "section": "Ownership", "content": "Platform owns retry telemetry." }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Rival Corp",
+      "underReview": false,
+      "documents": [
+        {
+          "title": "Rival roadmap",
+          "category": "Product",
+          "versions": [
+            {
+              "versionNumber": 1,
+              "timestamp": "2026-07-21T10:00:00.000Z",
+              "changelog": "Rival baseline.",
+              "chunks": [{ "section": "Plan", "content": "Rival Corp plans a billing rewrite." }]
+            },
+            {
+              "versionNumber": 2,
+              "timestamp": "2026-07-22T10:00:00.000Z",
+              "changelog": "Belongs to a different company; must never appear in Northstar's review.",
+              "chunks": [
+                { "section": "Plan", "content": "Rival Corp shipped the billing rewrite." }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Rival Customer Calls",
+          "category": "Customer Feedback",
+          "versions": [
+            {
+              "versionNumber": 1,
+              "timestamp": "2026-07-23T10:00:00.000Z",
+              "changelog": "Rival's processed customer calls.",
+              "chunks": [
+                {
+                  "section": "Billing",
+                  "content": "Rival Corp customers asked for usage-based billing."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "expect": {
+    "evidence": {
+      "sourceTypeCounts": {
+        "document_change": { "exact": 1 },
+        "customer_feedback": { "exact": 0 },
+        "founder_context": { "exact": 1 }
+      },
+      "warningCodes": ["customer_feedback_unavailable"]
+    },
+    "sourceSemantics": {
+      "noCrossCompanyLeakage": true,
+      "customerFeedbackOnly": true,
+      "temporalEvidenceRequired": true
+    }
+  }
+}

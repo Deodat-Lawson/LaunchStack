@@ -6,8 +6,35 @@ export * from "./merge";
 export * from "./generator";
 export * from "./reviewer";
 export * from "./send";
+export * from "./unsubscribe-token";
+
+/** Campaign lifecycle: generate → approve → deliver, as separate transitions. */
+export * from "./prepare";
+export * from "./approve";
+export * from "./dispatch";
+export * from "./automation";
+
+/** One-shot orchestration (legacy `/api/email-pipeline/send`). */
 export * from "./run";
-export { addSuppression, isSuppressed, loadRecipients, saveRecipients } from "./db";
+
+export {
+  addSuppression,
+  appendTemplateVersion,
+  claimAutomationCampaign,
+  createCampaign,
+  freezeRecipients,
+  reclaimAbandonedAttempts,
+  isSuppressed,
+  getCampaign,
+  listCampaigns,
+  listTemplateVersions,
+  getTemplateVersion,
+  getLatestTemplateVersion,
+  listApprovals,
+  listRecipients,
+  upsertRecipients,
+  listSendAttempts,
+} from "./db";
 
 /* member.md — recipients, validation, company field mapping, seed templates. */
 export * from "./recipients";

@@ -126,16 +126,16 @@ network, no DB — the whole member.md surface is pure by construction.
 Reviewing the `lead.md` schema and `types.ts` surfaced three mismatches.
 Gaps 1 and 2 are now **fixed**; gap 3 is inherent and handled by design.
 
-1. ~~**`Recipient.vars` has nowhere to live.**~~ **Fixed.** `email_recipients`
-   now has a `vars jsonb` column (migration `0017_email_recipient_vars.sql`), and
-   `saveRecipients()` / `loadRecipients()` round-trip it. `runEmailCampaign`
-   persists the list alongside the campaign. An empty `vars` is stored as `NULL`
-   rather than `{}`, so "no extra variables" has one representation.
-2. ~~**`email_sends.subject` is never written.**~~ **Fixed.** `SendResult` now
-   carries `subject`, `sendCampaign()` sets it on every post-render result
-   (dry-run, sent, and both failure paths), and `saveSends()` writes it. It stays
-   `NULL` for `suppressed` / `skipped`, which are decided before the template is
-   merged and so never produce a subject.
+1. ~~**`Recipient.vars` has nowhere to live.**~~ **Fixed upstream.** The campaign
+   lifecycle added the `vars jsonb` column (in migration `0016`), and
+   `upsertRecipients()` / `listRecipients()` round-trip it.
+2. ~~**`email_sends.subject` is never written.**~~ **Fixed.** The lifecycle began
+   writing a subject, but passed `version.template.subject` — the template's raw
+   form, so every row read back `Hello {{firstName}}`. `SendResult` now carries
+   the _merged_ subject, `sendCampaign()` sets it on every post-render result
+   (dry-run, sent, and both failure paths), and `dispatch.ts` records
+   `result.subject ?? version.template.subject` — the template only as a fallback
+   for rows settled before rendering.
 3. **`ProspectResult` has no email**, so the recipient source named in
    `member.md` Phase 1 cannot produce a sendable recipient unaided. Handled via
    `needsEmail` rather than by guessing addresses, but it means "prospector →

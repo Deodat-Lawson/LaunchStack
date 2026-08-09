@@ -29,9 +29,13 @@ export async function generateTemplate(args: {
   companyId: number;
   goal?: string;
 }): Promise<{ template: EmailTemplate; companyContext: string }> {
+  // A blank goal falls back too, not just a missing one — `??` would send an
+  // empty string straight into the prompt.
+  const trimmedGoal = args.goal?.trim() ?? "";
   const goal =
-    args.goal?.trim() ||
-    "Introduce our company to a relevant prospect and offer to help.";
+    trimmedGoal.length > 0
+      ? trimmedGoal
+      : "Introduce our company to a relevant prospect and offer to help.";
 
   const [context, dna] = await Promise.all([
     buildCompanyKnowledgeContext({ companyId: args.companyId, prompt: goal }),

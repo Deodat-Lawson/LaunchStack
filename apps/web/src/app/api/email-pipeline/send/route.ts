@@ -22,10 +22,19 @@ const BodySchema = z.object({
 });
 
 /**
- * POST /api/email-pipeline/send
- * Generates + reviews a template, then renders per recipient and (by default)
- * DRY-RUNS. A real send requires mode:"send" AND server-side EMAIL_SENDING_ENABLED;
- * even then the default adapter only logs until a real provider is wired in.
+ * POST /api/email-pipeline/send — DEPRECATED, preview only.
+ *
+ * Generates + reviews a template and renders every recipient as a dry run.
+ * It no longer delivers: mode:"send" returns 410 and points at the staged API.
+ *
+ * The reason is retry safety, not tidiness. Generating and sending in one
+ * request means a client that retries after a timeout generates a *different*
+ * template and a *new* campaign, so no per-campaign idempotency key can catch
+ * the duplicate. Delivery now requires an approved, immutable template version:
+ *
+ *   POST /api/email-campaigns              (generate + review)
+ *   POST /api/email-campaigns/{id}/approve (name the exact version)
+ *   POST /api/email-campaigns/{id}/send    (Idempotency-Key; no LLM)
  */
 export async function POST(request: Request) {
   try {
@@ -83,12 +92,22 @@ export async function POST(request: Request) {
       );
     }
 
-    // Real sends require an explicit mode AND a server-side kill-switch.
-    const mode =
-      parsed.data.mode === "send" &&
-      process.env.EMAIL_SENDING_ENABLED === "true"
-        ? "send"
-        : "dry_run";
+    // Delivery is no longer reachable from here, regardless of the kill-switch.
+    if (parsed.data.mode === "send") {
+      return NextResponse.json(
+        {
+          success: false,
+          code: "one_shot_send_removed",
+          message:
+            "Real sending has moved to the staged campaign API, which cannot " +
+            "regenerate content on a retry. Create a campaign with POST " +
+            "/api/email-campaigns, approve a template version with POST " +
+            "/api/email-campaigns/{id}/approve, then deliver with POST " +
+            "/api/email-campaigns/{id}/send and an Idempotency-Key header.",
+        },
+        { status: 410 },
+      );
+    }
 
     const origin = new URL(request.url).origin;
     const result = await runEmailCampaign({
@@ -96,13 +115,17 @@ export async function POST(request: Request) {
       name: parsed.data.name,
       goal: parsed.data.goal,
       recipients: parsed.data.recipients,
-      mode,
+      mode: "dry_run",
       senderIdentity: requestingUser.email ?? requestingUser.name ?? "the sender",
-      unsubscribeBaseUrl: `${origin}/api/email-pipeline/unsubscribe/${companyId}`,
+      unsubscribeBaseUrl: `${origin}/api/email-pipeline/unsubscribe`,
       persist: true,
+      actorUserId: requestingUser.id,
     });
 
-    return NextResponse.json({ success: true, data: { ...result, mode } });
+    return NextResponse.json({
+      success: true,
+      data: { ...result, mode: "dry_run" },
+    });
   } catch (error) {
     console.error("[email-pipeline/send] failed:", error);
     return NextResponse.json(

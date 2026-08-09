@@ -22,6 +22,25 @@ jest.mock("~/server/db/index", () => ({
   },
 }));
 
+// The route resolves the active workspace (cookie-based multi-company
+// switching) via ~/lib/active-workspace. Default to the user's own
+// companyId, which mirrors the "no cookie set" production behavior.
+jest.mock("~/lib/active-workspace", () => ({
+  resolveActiveCompanyForUser: jest.fn(
+    async (_userPk: number | bigint, defaultCompanyId: number | bigint) =>
+      BigInt(defaultCompanyId),
+  ),
+}));
+
+// The route sends a company/reindex-embeddings Inngest event when the
+// embedding index key changes; mock the client so no event is dispatched
+// and so importing it never requires real credentials.
+jest.mock("~/server/inngest/client", () => ({
+  inngest: {
+    send: jest.fn().mockResolvedValue(undefined),
+  },
+}));
+
 describe("POST /api/updateCompany", () => {
   const makeRequest = (body: unknown) =>
     new Request("http://localhost/api/updateCompany", {

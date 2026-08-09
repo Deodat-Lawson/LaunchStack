@@ -1,9 +1,11 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotToolCall } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateToolCallSchema } from "~/lib/validation";
+import { userOwnsToolCall } from "~/server/security/aichat-authz";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -14,7 +16,18 @@ export async function PATCH(
   { params }: { params: Promise<{ toolCallId: string }> }
 ) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { toolCallId } = await params;
+
+    // Ownership walks tool call -> message -> chat; foreign rows read as 404.
+    if (!(await userOwnsToolCall(toolCallId, userId))) {
+      return NextResponse.json({ error: "Tool call not found" }, { status: 404 });
+    }
+
     const validation = await validateRequestBody(request, UpdateToolCallSchema);
     if (!validation.success) return validation.response;
     const { toolOutput, status, errorMessage, executionTimeMs } = validation.data;
@@ -53,4 +66,3 @@ export async function PATCH(
     );
   }
 }
-

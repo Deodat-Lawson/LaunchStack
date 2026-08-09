@@ -48,6 +48,15 @@ import { processDocumentBatch } from "@launchstack/features/adeu";
 // Helpers
 // ---------------------------------------------------------------------------
 
+/** Shape of the Inngest handler extracted from the function object in tests. */
+type ModifyDocumentHandler = (ctx: { event: unknown; step: unknown }) => Promise<{
+    success: boolean;
+    documentId?: number;
+    url?: string;
+    summary?: unknown;
+    error?: string;
+}>;
+
 function createMockStep(): {
     run: jest.Mock;
     stepOutputs: Record<string, unknown>;
@@ -125,7 +134,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         await handler({
             event: {
@@ -154,7 +163,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         const { summary } = setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const result = await handler({
             event: {
@@ -182,7 +191,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         await handler({
             event: {
@@ -205,7 +214,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const edits = [
             { target_text: "old text", new_text: "new text", comment: "fix" },
@@ -238,7 +247,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         const { mockSet } = setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         await handler({
             event: {
@@ -285,7 +294,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         setupSuccessfulPipeline(docBuffer);
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const result = await handler({
             event: {
@@ -338,7 +347,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         (db.update as jest.Mock).mockReturnValue({ set: mockSet });
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const result = await handler({
             event: {
@@ -385,7 +394,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         (db.update as jest.Mock).mockReturnValue({ set: mockSet });
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         const result = await handler({
             event: {
@@ -427,7 +436,7 @@ describe("Preservation: Single-user document edit completes correctly", () => {
         );
 
         const step = createMockStep();
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (modifyDocument as unknown as { fn: ModifyDocumentHandler }).fn;
 
         await expect(
             handler({

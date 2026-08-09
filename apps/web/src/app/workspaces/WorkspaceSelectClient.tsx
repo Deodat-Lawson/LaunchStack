@@ -222,21 +222,23 @@ export function WorkspaceSelectClient({
             return;
         }
         const ctrl = new AbortController();
-        const t = setTimeout(async () => {
-            try {
-                const res = await fetch(
-                    `/api/workspaces/slug-available?slug=${encodeURIComponent(s)}`,
-                    { signal: ctrl.signal }
-                );
-                if (!res.ok) {
-                    setSlugAvailable(null);
-                    return;
+        const t = setTimeout(() => {
+            void (async () => {
+                try {
+                    const res = await fetch(
+                        `/api/workspaces/slug-available?slug=${encodeURIComponent(s)}`,
+                        { signal: ctrl.signal }
+                    );
+                    if (!res.ok) {
+                        setSlugAvailable(null);
+                        return;
+                    }
+                    const data = (await res.json()) as { available?: boolean };
+                    setSlugAvailable(data.available ?? null);
+                } catch {
+                    /* aborted */
                 }
-                const data = (await res.json()) as { available?: boolean };
-                setSlugAvailable(data.available ?? null);
-            } catch {
-                /* aborted */
-            }
+            })();
         }, 250);
         return () => {
             clearTimeout(t);

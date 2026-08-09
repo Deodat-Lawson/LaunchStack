@@ -17,20 +17,29 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
     {
+        // Flat-config patterns are anchored: without a `**/` prefix they only
+        // match at the repository root. Build output and generated artifacts
+        // need the prefix or every `pnpm build` floods lint with dist errors.
         ignores: [
-            ".next/**",
-            "node_modules/**",
-            "dist/**",
-            // Generated migration SQL + drizzle journal/snapshots. Moved from
-            // apps/web/drizzle to packages/core/drizzle; the `**/` prefix keeps
-            // this working regardless of which package owns them.
+            "**/.next/**",
+            "**/node_modules/**",
+            "**/dist/**",
+            // Generated migration SQL + drizzle journal/snapshots.
             "**/drizzle/**",
-            "next-env.d.ts",
+            "**/next-env.d.ts",
             "eslint.config.js",
-            "__tests__/**",
-            "jest.config.mjs",
-            "public/vad/**",
+            "**/jest.config.mjs",
+            "**/jest.config.js",
+            "apps/web/public/vad/**",
+            // Untyped operational scripts (repo-root scripts/, package .mjs
+            // scripts): plain files run directly by node, outside every
+            // tsconfig project — the type-aware parser cannot load them.
             "scripts/**",
+            "**/scripts/**/*.mjs",
+            ".pnpmfile.cjs",
+            "prettier.config.js",
+            "**/drizzle.config.ts",
+            "**/vitest.config.ts",
         ],
     },
     ...compat.extends(
@@ -82,11 +91,11 @@ const eslintConfig = [
             }],
         },
     },
-    // @launchstack/core is the publishable engine — it must stay free of
-    // Next, Clerk, React, apps/web env.ts, and raw process.env reads. Any
-    // runtime config must come through CoreConfig. These guards enforce the
-    // boundary so regressions show up at lint time, not when someone tries
-    // to consume the package from a non-Next host.
+    // @launchstack/core is the published compatibility facade (ADR-002):
+    // every file under its src is a re-export stub over @launchstack/adapters
+    // and friends (scripts/ci/check-core-facade.mjs enforces the stub shape).
+    // The import bans stay so a stub can never quietly grow a framework
+    // dependency, and the process ban stays — stubs read no env.
     {
         files: ["packages/core/src/**/*.{ts,tsx}"],
         rules: {
@@ -112,6 +121,134 @@ const eslintConfig = [
                 message:
                     "@launchstack/core must not read process.env. " +
                     "Accept runtime config through CoreConfig / configure* hooks.",
+            }],
+        },
+    },
+    // Tests and dev-harness scripts interact with jest/vitest mocks and
+    // ad-hoc JSON, where the type-aware `no-unsafe-*` family is ~all noise.
+    // This is a scoped RULE policy, not a bypass: every other rule (including
+    // correctness rules and the boundary restrictions) still applies to
+    // tests, and production code keeps the full ruleset (ADR-006).
+    {
+        files: [
+            "**/__tests__/**/*.{ts,tsx}",
+            "**/*.test.{ts,tsx}",
+            "apps/web/scripts/**/*.{ts,tsx}",
+            "apps/web/jest.setup.ts",
+        ],
+        rules: {
+            "@typescript-eslint/no-unsafe-assignment": "off",
+            "@typescript-eslint/no-unsafe-member-access": "off",
+            "@typescript-eslint/no-unsafe-argument": "off",
+            "@typescript-eslint/no-unsafe-call": "off",
+            "@typescript-eslint/no-unsafe-return": "off",
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/unbound-method": "off",
+            "@typescript-eslint/require-await": "off",
+            "@typescript-eslint/no-empty-function": "off",
+            "@typescript-eslint/no-non-null-assertion": "off",
+        },
+    },
+    // Layered engine packages (ADR-002). Dependency direction is strict:
+    //   protocol ← evidence ← application ← adapters ← core/apps/services.
+    // Each layer may import only the layers to its left; nothing below the
+    // app boundary may import Next, Clerk, React, apps/web (~/*), or
+    // @launchstack/features.
+    {
+        files: ["packages/protocol/src/**/*.ts"],
+        rules: {
+            "no-restricted-imports": ["error", {
+                patterns: [
+                    {
+                        group: ["@launchstack/*", "~/*", "next", "next/*", "@clerk/*", "react", "node:*"],
+                        message:
+                            "@launchstack/protocol is contracts only: zod and " +
+                            "nothing else — no other workspace package, no " +
+                            "Node built-ins, no frameworks.",
+                    },
+                ],
+            }],
+            "no-restricted-globals": ["error", {
+                name: "process",
+                message: "@launchstack/protocol must not read the environment.",
+            }],
+        },
+    },
+    {
+        files: ["packages/evidence/src/**/*.ts"],
+        rules: {
+            "no-restricted-imports": ["error", {
+                patterns: [
+                    {
+                        group: [
+                            "@launchstack/core", "@launchstack/core/*",
+                            "@launchstack/application", "@launchstack/application/*",
+                            "@launchstack/adapters", "@launchstack/adapters/*",
+                            "@launchstack/features", "@launchstack/features/*",
+                            "~/*", "next", "next/*", "@clerk/*", "react", "node:*",
+                        ],
+                        message:
+                            "@launchstack/evidence is pure domain logic: it may " +
+                            "import @launchstack/protocol and nothing else.",
+                    },
+                ],
+            }],
+            "no-restricted-globals": ["error", {
+                name: "process",
+                message: "@launchstack/evidence must not read the environment.",
+            }],
+        },
+    },
+    {
+        files: ["packages/application/src/**/*.ts"],
+        rules: {
+            "no-restricted-imports": ["error", {
+                patterns: [
+                    {
+                        group: [
+                            "@launchstack/core", "@launchstack/core/*",
+                            "@launchstack/adapters", "@launchstack/adapters/*",
+                            "@launchstack/features", "@launchstack/features/*",
+                            "~/*", "next", "next/*", "@clerk/*", "react",
+                            "drizzle-orm", "drizzle-orm/*", "postgres",
+                        ],
+                        message:
+                            "@launchstack/application holds use cases and ports " +
+                            "only. It may import protocol + evidence; database " +
+                            "and framework code belongs in adapters/apps.",
+                    },
+                ],
+            }],
+            "no-restricted-globals": ["error", {
+                name: "process",
+                message:
+                    "@launchstack/application must not read the environment — " +
+                    "configuration arrives through injected ports.",
+            }],
+        },
+    },
+    {
+        files: ["packages/adapters/src/**/*.ts"],
+        rules: {
+            "no-restricted-imports": ["error", {
+                patterns: [
+                    {
+                        group: [
+                            "@launchstack/features", "@launchstack/features/*",
+                            "~/*", "next", "next/*", "@clerk/*", "react", "react-dom",
+                        ],
+                        message:
+                            "@launchstack/adapters implements ports over " +
+                            "infrastructure. It must stay host-agnostic: no " +
+                            "Next/Clerk/React, no apps/web, no features.",
+                    },
+                ],
+            }],
+            "no-restricted-globals": ["error", {
+                name: "process",
+                message:
+                    "@launchstack/adapters must not read process.env — " +
+                    "configuration is injected by the composition roots.",
             }],
         },
     },
@@ -147,7 +284,7 @@ const eslintConfig = [
     // usage normalization — and can silently borrow an unrelated API key.
     {
         files: ["packages/**/src/**/*.{ts,tsx}", "apps/web/src/**/*.{ts,tsx}"],
-        ignores: ["packages/core/src/llm/openai-compatible-transport.ts"],
+        ignores: ["packages/adapters/src/llm/openai-compatible-transport.ts"],
         rules: {
             "no-restricted-imports": ["error", {
                 paths: [

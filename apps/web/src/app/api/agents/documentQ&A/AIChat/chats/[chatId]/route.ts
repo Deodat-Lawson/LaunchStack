@@ -1,12 +1,16 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotChat, agentAiChatbotMessage, agentAiChatbotTask, agentAiChatbotDocument } from "~/server/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
+
+// All handlers scope the chat to the Clerk session user; a chat owned by
+// someone else is indistinguishable from a missing one (404).
 
 // GET /api/agent-ai-chatbot/chats/[chatId] - Get a specific chat with its messages
 export async function GET(
@@ -14,13 +18,18 @@ export async function GET(
   { params }: { params: Promise<{ chatId: string }> }
 ) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { chatId } = await params;
 
-    // Get chat details
+    // Get chat details (scoped to the session user)
     const [chat] = await db
       .select()
       .from(agentAiChatbotChat)
-      .where(eq(agentAiChatbotChat.id, chatId));
+      .where(and(eq(agentAiChatbotChat.id, chatId), eq(agentAiChatbotChat.userId, userId)));
 
     if (!chat) {
       return NextResponse.json(
@@ -71,6 +80,11 @@ export async function PATCH(
   { params }: { params: Promise<{ chatId: string }> }
 ) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { chatId } = await params;
     const validation = await validateRequestBody(request, UpdateChatSchema);
     if (!validation.success) return validation.response;
@@ -87,7 +101,7 @@ export async function PATCH(
     const [updatedChat] = await db
       .update(agentAiChatbotChat)
       .set(updateData)
-      .where(eq(agentAiChatbotChat.id, chatId))
+      .where(and(eq(agentAiChatbotChat.id, chatId), eq(agentAiChatbotChat.userId, userId)))
       .returning();
 
     if (!updatedChat) {
@@ -116,11 +130,16 @@ export async function DELETE(
   { params }: { params: Promise<{ chatId: string }> }
 ) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { chatId } = await params;
 
     await db
       .delete(agentAiChatbotChat)
-      .where(eq(agentAiChatbotChat.id, chatId));
+      .where(and(eq(agentAiChatbotChat.id, chatId), eq(agentAiChatbotChat.userId, userId)));
 
     return NextResponse.json({
       success: true,
@@ -134,4 +153,3 @@ export async function DELETE(
     );
   }
 }
-

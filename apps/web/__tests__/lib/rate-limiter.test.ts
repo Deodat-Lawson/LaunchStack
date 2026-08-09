@@ -8,7 +8,7 @@ import {
 
 describe("Rate Limiter", () => {
   // Helper to create mock requests
-  const createMockRequest = (ip: string = "192.168.1.1"): Request => {
+  const createMockRequest = (ip = "192.168.1.1"): Request => {
     return {
       headers: {
         get: (name: string) => {

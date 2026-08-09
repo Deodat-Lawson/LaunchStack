@@ -1,6 +1,7 @@
 import { GET } from "~/app/api/Categories/GetCategories/route";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db/index";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 jest.mock("@clerk/nextjs/server", () => ({
   auth: jest.fn(),
@@ -10,6 +11,16 @@ jest.mock("~/server/db/index", () => ({
   db: {
     select: jest.fn(),
   },
+}));
+
+// The route resolves the active workspace (cookie-based multi-company
+// switching) via ~/lib/active-workspace. Default to the user's own
+// companyId, which mirrors the "no cookie set" production behavior.
+jest.mock("~/lib/active-workspace", () => ({
+  resolveActiveCompanyForUser: jest.fn(
+    async (_userPk: number | bigint, defaultCompanyId: number | bigint) =>
+      BigInt(defaultCompanyId),
+  ),
 }));
 
 describe("GET /api/Categories/GetCategories", () => {
@@ -32,7 +43,7 @@ describe("GET /api/Categories/GetCategories", () => {
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "employer-user-123", role: "employer", companyId: 1 }
+            { id: 1, userId: "employer-user-123", role: "employer", companyId: 1 }
           ]),
         }),
       })
@@ -68,7 +79,7 @@ describe("GET /api/Categories/GetCategories", () => {
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "owner-user-456", role: "owner", companyId: 2 }
+            { id: 1, userId: "owner-user-456", role: "owner", companyId: 2 }
           ]),
         }),
       })
@@ -99,7 +110,7 @@ describe("GET /api/Categories/GetCategories", () => {
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "employer-user-789", role: "employer", companyId: 3 }
+            { id: 1, userId: "employer-user-789", role: "employer", companyId: 3 }
           ]),
         }),
       })
@@ -152,7 +163,7 @@ describe("GET /api/Categories/GetCategories", () => {
     const mockSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({
         where: jest.fn().mockResolvedValue([
-          { userId: "employee-user-111", role: "employee", companyId: 4 }
+          { id: 1, userId: "employee-user-111", role: "employee", companyId: 4 }
         ]),
       }),
     });
@@ -199,7 +210,7 @@ describe("GET /api/Categories/GetCategories", () => {
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "employer-user-123", role: "employer", companyId: 1 }
+            { id: 1, userId: "employer-user-123", role: "employer", companyId: 1 }
           ]),
         }),
       })
@@ -256,7 +267,7 @@ describe("GET /api/Categories/GetCategories", () => {
       .mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([
-            { userId: "employer-user-123", role: "employer", companyId: 1 }
+            { id: 1, userId: "employer-user-123", role: "employer", companyId: 1 }
           ]),
         }),
       })

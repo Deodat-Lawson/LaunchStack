@@ -11,15 +11,39 @@ jest.mock("@clerk/nextjs/server", () => ({
   auth: jest.fn().mockResolvedValue({ userId: "test-user-123" }),
 }));
 
+// The route reads validated env (~/env) for availableProviders.docling; the
+// real module runs zod validation + import.meta at load time, so mock it.
+jest.mock("~/env", () => ({
+  env: {
+    server: {
+      DOCUMENT_CONVERTER_URL: process.env.DOCUMENT_CONVERTER_URL,
+    },
+  },
+}));
+
 jest.mock("drizzle-orm", () => ({
   and: jest.fn((...args: unknown[]) => args),
   eq: jest.fn((...args: unknown[]) => args),
+  // Tagged-template helper used by the real ~/server/db/schema at load time.
+  sql: jest.fn(() => "sql"),
 }));
 
 jest.mock("@launchstack/core/db/schema", () => ({
   category: { id: "id", name: "name", companyId: "companyId" },
   company: { id: "id", name: "name", useUploadThing: "useUploadThing" },
   users: { userId: "userId", role: "role", companyId: "companyId" },
+}));
+
+// The route imports `users` from the app-local schema barrel, whose real
+// modules run drizzle table builders at load time — stub it out.
+jest.mock("~/server/db/schema", () => ({
+  users: { userId: "userId", role: "role", companyId: "companyId" },
+}));
+
+// Active-workspace resolution runs its own queries; stub it so the
+// call-count-based db mock below only sees the route's three selects.
+jest.mock("~/lib/active-workspace", () => ({
+  resolveActiveCompanyForUser: jest.fn().mockResolvedValue(1),
 }));
 
 jest.mock("~/lib/storage", () => ({

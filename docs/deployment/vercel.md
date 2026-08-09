@@ -8,13 +8,19 @@ For self-hosted (Docker) deploys, see [`../deployment.md`](../deployment.md).
 
 | Concern | Where it lives |
 |---|---|
-| Next.js app | Vercel (this guide) |
+| Next.js app (commands + reads) | Vercel (this guide) |
+| Worker (`apps/worker` — outbox consumer + Inngest serve endpoint) | Fly.io / Railway / Cloud Run (separate deploy, **required for ingestion**) |
 | PostgreSQL + pgvector | Vercel Postgres, Neon, Supabase, or RDS |
 | Object storage | Vercel Blob, S3-compatible (SeaweedFS, R2, AWS S3) |
-| Background jobs | Inngest Cloud |
-| Python ML sidecars | Fly.io / Railway / Cloud Run (separate deploy) |
+| Background jobs | Inngest Cloud (functions served by the worker) |
+| Compute services (`services/transcription`, `services/document-editor`, `services/document-converter`) | Fly.io / Railway / Cloud Run (separate deploy) |
 | Auth | Clerk |
 | DB migrations | Run automatically on production builds |
+
+> **Topology note (ADR-003):** Vercel hosts only the Next.js app. Document
+> ingestion is executed by `apps/worker`, which consumes the transactional
+> outbox and hosts the `/api/inngest` endpoint. A Vercel-only deployment
+> accepts uploads but never processes them — deploy the worker alongside.
 
 ## 1. Create the Vercel project
 
@@ -83,7 +89,7 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `BLOB_READ_WRITE_TOKEN` | If using Vercel Blob for file storage |
 | `S3_*` + `NEXT_PUBLIC_S3_*` | If `NEXT_PUBLIC_STORAGE_PROVIDER=s3` |
 | `NEO4J_URI` + `NEO4J_USERNAME` + `NEO4J_PASSWORD` | If using Graph RAG |
-| `ADEU_SERVICE_URL` | If using DOCX redlining (Adeu sidecar) |
+| `DOCUMENT_EDITOR_URL` | If using DOCX redlining (`services/document-editor`); the legacy `ADEU_SERVICE_URL` is being phased out per ADR-004 — set both while the migration completes |
 | `AI_BASE_URL`, or a per-capability `*_API_BASE_URL` | If enabled OCR/VLM or NER should not use the default Gemini endpoint. Optional for those; **required** for embeddings, which have no fallback because switching model invalidates every stored vector |
 | `AI_API_KEY`, `OPENAI_API_KEY`, or per-capability keys | The credential for the base URL above, when that endpoint requires one |
 
@@ -116,33 +122,54 @@ See [`.env.example`](../../.env.example) — every variable there is either requ
 
 ## 4. Connect Inngest Cloud
 
-Inngest Cloud runs the background jobs and calls your Vercel function to execute each step.
+Inngest Cloud schedules the background jobs. Since ADR-003 the functions are
+**served by the worker** (`apps/worker`), not by the Vercel app — the app only
+sends events.
 
 1. Sign up at [inngest.com](https://www.inngest.com) and create an app.
-2. Copy the **Event Key** → Vercel env as `INNGEST_EVENT_KEY`.
-3. Copy the **Signing Key** → Vercel env as `INNGEST_SIGNING_KEY`.
-4. Deploy the app to Vercel (step 6).
-5. In the Inngest dashboard, register the app endpoint: `https://<your-app>.vercel.app/api/inngest`. Inngest will GET that URL to sync the function registry.
+2. Copy the **Event Key** → set as `INNGEST_EVENT_KEY` on **both** the Vercel
+   app and the worker deployment.
+3. Copy the **Signing Key** → set as `INNGEST_SIGNING_KEY` on the worker
+   deployment (and the Vercel app if it sends signed events).
+4. Deploy the worker (step 5) and the app (step 6).
+5. In the Inngest dashboard, register the **worker's** endpoint:
+   `https://<your-worker-host>/api/inngest`. Inngest will GET that URL to sync
+   the function registry. The Vercel app has no `/api/inngest` route.
 
 ### Long-running steps
 
-The Inngest route declares `export const maxDuration = 300;` (5 minutes). This requires **Vercel Pro** — Hobby plans cap at 60s.
+The worker is a long-running container, so durable steps are not subject to
+Vercel function duration limits. Vercel plan limits still apply to the app's
+own API routes.
 
-Hobby workaround: break each Inngest step into sub-steps under 60s, or move long-running work into a sidecar.
+## 5. Deploy the worker and compute services
 
-## 5. Provision sidecars (optional)
+The worker (`apps/worker`) and the compute services
+(`services/transcription`, `services/document-editor`,
+`services/document-converter`) don't run on Vercel — they're long-running
+container services (ADR-003/ADR-004). Deploy them to Fly.io, Railway, Cloud
+Run, or anywhere else that runs containers, then point the app and worker at
+the services:
 
-The Launchstack Python sidecars (`services/sidecar`, `services/ocr-router`, `services/ocr-worker`) don't run on Vercel — they're long-running container services. Deploy them to Fly.io, Railway, Cloud Run, or anywhere else that runs containers, then point the Next.js app at them:
-
-| Env var | Sidecar |
+| Env var | Service |
 |---|---|
-| `SIDECAR_URL` | Embeddings + reranking + transcription (`services/sidecar`) |
-| `OCR_ROUTER_URL` | PDF-rendering + vision classifier (`services/ocr-router`) |
-| `OCR_WORKER_URL` | Docling/Marker worker (optional) |
+| `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Whisper transcription + yt-dlp (`services/transcription`) |
+| `DOCUMENT_EDITOR_URL` + `DOCUMENT_EDITOR_API_KEY` | Adeu DOCX redlining (`services/document-editor`) |
+| `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | OCR routing, vision classification, PDF rendering, docling-backed parsing (`services/document-converter`) |
 
-The app forwards its own OCR credentials — `GOOGLE_AI_API_KEY` included — to `OCR_ROUTER_URL` with each routing request, so a separately hosted router needs no copy of them in its own environment. Set them once on the Vercel app.
+These are the variables the Docker Compose stack uses. The legacy names
+(`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`, `OCR_WORKER_URL`) are
+being phased out per ADR-004 — while the migration completes, set both the
+new and the legacy name if a service isn't being picked up. Each service
+reads its own provider credentials at startup — the app never forwards
+secrets — and authenticates callers with a fail-closed per-service API key.
 
-**Or** skip sidecars entirely and use hosted providers. Transcription, reranking, NER and OCR/VLM all default to Gemini on `GOOGLE_AI_API_KEY`; Azure Document Intelligence remains available for scanned-layout OCR. Embeddings are the exception — set `EMBEDDING_API_BASE_URL`/`EMBEDDING_API_KEY` explicitly, since the model is tied to stored vectors.
+**Or** skip the optional services and use hosted providers. Transcription,
+reranking, NER and OCR/VLM all default to Gemini on `GOOGLE_AI_API_KEY`;
+Azure Document Intelligence remains available for scanned-layout OCR.
+Embeddings are the exception — set `EMBEDDING_API_BASE_URL`/`EMBEDDING_API_KEY`
+explicitly, since the model is tied to stored vectors. The worker itself is
+**not** optional: without it, uploads are never processed.
 
 ## 6. First deploy
 
@@ -157,8 +184,11 @@ The app forwards its own OCR credentials — `GOOGLE_AI_API_KEY` included — to
 curl https://<your-app>.vercel.app/api/health
 # Expect HTTP 200 with { "status": "ok", "checks": { "database": { "status": "ok" } } }
 
-# Inngest sync (registers functions with Inngest Cloud)
-curl https://<your-app>.vercel.app/api/inngest
+# Worker health (ingestion depends on this)
+curl https://<your-worker-host>/healthz
+
+# Inngest sync (registers functions with Inngest Cloud — served by the worker)
+curl https://<your-worker-host>/api/inngest
 # Should return function list
 
 # App loads
@@ -198,13 +228,13 @@ If you roll back to a build older than the applied migrations, `db:migrate` exit
 
 ### Inngest endpoint returns 404 or 401
 
-- Endpoint path is `/api/inngest` (exactly — no trailing slash).
-- Confirm `INNGEST_SIGNING_KEY` matches the one Inngest shows in the dashboard.
-- Check that the app has deployed at least once; Inngest sync only works against a live URL.
+- The endpoint is on the **worker**, not the Vercel app: `https://<your-worker-host>/api/inngest` (exactly — no trailing slash). Registering the Vercel URL will 404.
+- Confirm `INNGEST_SIGNING_KEY` on the worker matches the one Inngest shows in the dashboard.
+- Check that the worker has deployed and is reachable; Inngest sync only works against a live URL.
 
-### Functions time out at 60s
+### Uploads accepted but never processed
 
-- You're on the Hobby plan. Upgrade to Pro, or rewrite long steps as smaller Inngest sub-steps.
+- The worker isn't running or can't reach the database. Check `https://<your-worker-host>/healthz` and see [`../runbooks/outbox.md`](../runbooks/outbox.md) for inspecting and replaying outbox rows.
 
 ### Bundle too large
 

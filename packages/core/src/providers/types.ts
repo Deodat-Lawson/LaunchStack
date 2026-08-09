@@ -1,13 +1,6 @@
 /**
- * Shared types for the provider abstraction layer.
+ * @launchstack/core compatibility facade (ADR-002): this subpath's
+ * implementation moved to @launchstack/adapters. Re-export only — no logic
+ * may be added here (enforced by scripts/ci/check-core-facade.mjs).
  */
-
-export interface ProviderUsage {
-    tokensUsed: number;
-    details: Record<string, number>; // e.g. { tokens: 1500, pages: 3 }
-}
-
-export interface ProviderResult<T> {
-    data: T;
-    usage: ProviderUsage;
-}
+export * from "@launchstack/adapters/providers/types";

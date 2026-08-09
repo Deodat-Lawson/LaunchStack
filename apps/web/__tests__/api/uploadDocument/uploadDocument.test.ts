@@ -7,6 +7,12 @@ import {
     type DocumentUploadResult,
 } from "~/server/services/document-upload";
 
+const mockClerk: { userId: string | null } = { userId: "user-1" };
+
+jest.mock("@clerk/nextjs/server", () => ({
+    auth: () => Promise.resolve({ userId: mockClerk.userId }),
+}));
+
 jest.mock("~/lib/validation", () => {
     const actual = jest.requireActual("~/lib/validation");
     return {
@@ -14,6 +20,27 @@ jest.mock("~/lib/validation", () => {
         validateRequestBody: jest.fn(),
     };
 });
+
+// Pass rate limiting through — these tests exercise the handler, not the
+// limiter. Mocking ~/lib/rate-limiter also keeps its in-memory store's
+// cleanup setInterval from holding the Jest process open after the run.
+jest.mock("~/lib/rate-limit-middleware", () => ({
+    withRateLimit: jest.fn(
+        async (
+            _request: Request,
+            _config: unknown,
+            handler: () => Promise<unknown>,
+        ) => handler(),
+    ),
+}));
+jest.mock("~/lib/rate-limiter", () => ({
+    RateLimitPresets: {
+        standard: { maxRequests: 100, windowMs: 15 * 60 * 1000 },
+        strict: { maxRequests: 20, windowMs: 15 * 60 * 1000 },
+        permissive: { maxRequests: 300, windowMs: 15 * 60 * 1000 },
+        burst: { maxRequests: 10, windowMs: 60 * 1000 },
+    },
+}));
 
 jest.mock("~/server/db", () => ({
     db: {
@@ -78,6 +105,7 @@ function mockUploadResult(overrides: Partial<UploadResult> = {}): UploadResult {
 describe("POST /api/uploadDocument", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        mockClerk.userId = "user-1";
     });
 
     it("uploads and processes a document successfully", async () => {
@@ -87,8 +115,7 @@ describe("POST /api/uploadDocument", () => {
             documentUrl: "https://example.com/doc.pdf",
             category: "contracts",
         };
-        mockValidRequest(body);
-        mockUserLookup({ id: 101, userId: body.userId, companyId: 5n });
+        mockValidRequest(body);        mockUserLookup({ id: 101, userId: body.userId, companyId: 5n });
         resolveActiveCompanyForUserMock.mockResolvedValue(8n);
 
         const uploadResult = mockUploadResult({
@@ -136,8 +163,7 @@ describe("POST /api/uploadDocument", () => {
             category: "policies",
             preferredProvider: "azure",
         };
-        mockValidRequest(body);
-        mockUserLookup({ id: 102, userId: body.userId, companyId: 9n });
+        mockValidRequest(body);        mockUserLookup({ id: 102, userId: body.userId, companyId: 9n });
         resolveActiveCompanyForUserMock.mockResolvedValue(14n);
         processDocumentUploadMock.mockResolvedValue(
             mockUploadResult({
@@ -182,6 +208,7 @@ describe("POST /api/uploadDocument", () => {
         const processingError = new Error("Inngest API Error: 401 Event key not found");
 
         try {
+            mockClerk.userId = "user-2";
             mockValidRequest(body);
             mockUserLookup({ id: 103, userId: body.userId, companyId: 7n });
             resolveActiveCompanyForUserMock.mockResolvedValue(11n);
@@ -213,6 +240,7 @@ describe("POST /api/uploadDocument", () => {
             documentName: "Example Document",
             documentUrl: "https://example.com/doc.pdf",
         };
+        mockClerk.userId = "invalid-user";
         mockValidRequest(body);
         mockUserLookup(null);
 
@@ -223,6 +251,54 @@ describe("POST /api/uploadDocument", () => {
         expect(json.error).toBe("Invalid user");
         expect(resolveActiveCompanyForUserMock).not.toHaveBeenCalled();
         expect(processDocumentUploadMock).not.toHaveBeenCalled();
+    });
+
+    it("returns 401 when there is no Clerk session", async () => {
+        const body = {
+            userId: "user-1",
+            documentName: "Example Document",
+            documentUrl: "https://example.com/doc.pdf",
+        };
+        mockClerk.userId = null;
+        mockValidRequest(body);
+
+        const response = await POST(requestFor(body));
+        const json = await response.json();
+
+        expect(response.status).toBe(401);
+        expect(json.error).toBe("Unauthorized");
+        expect(db.select).not.toHaveBeenCalled();
+        expect(processDocumentUploadMock).not.toHaveBeenCalled();
+    });
+
+    it("ignores a body userId that differs from the session and logs the mismatch", async () => {
+        const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+        try {
+            const body = {
+                userId: "someone-else",
+                documentName: "Example Document",
+                documentUrl: "https://example.com/doc.pdf",
+            };
+            mockClerk.userId = "user-1";
+            mockValidRequest(body);
+            mockUserLookup({ id: 101, userId: "user-1", companyId: 5n });
+            resolveActiveCompanyForUserMock.mockResolvedValue(5n);
+            processDocumentUploadMock.mockResolvedValue(mockUploadResult());
+
+            const response = await POST(requestFor(body));
+
+            expect(response.status).toBe(202);
+            expect(processDocumentUploadMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    user: { userId: "user-1", companyId: 5n },
+                })
+            );
+            expect(consoleWarnSpy).toHaveBeenCalledWith(
+                expect.stringContaining("Ignoring body userId=someone-else")
+            );
+        } finally {
+            consoleWarnSpy.mockRestore();
+        }
     });
 
     it("returns validation response when request body is invalid", async () => {

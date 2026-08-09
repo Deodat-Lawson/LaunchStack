@@ -310,7 +310,7 @@ export function AddSourceModal({
               <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 {g.items.map((item) => {
                   const isActive = tab === item.id;
-                  const Icon = item.Icon as ComponentType<IconProps>;
+                  const Icon = item.Icon;
                   return (
                     <button
                       key={item.id}
@@ -1409,7 +1409,7 @@ function UrlPanel({ userId, category, onUploaded }: TextPanelProps) {
       >
         Tip: add{" "}
         <span className="mono" style={{ color: "var(--ink-2)" }}>
-          /**
+          {"/**"}
         </span>{" "}
         to a URL to recursively crawl a subtree.
       </div>
@@ -1557,7 +1557,7 @@ const PROVIDER_PERKS: Record<string, string[]> = {
 
 function ConnectPanel({ tab }: ConnectPanelProps) {
   const meta = SOURCE_META[tab.id as keyof typeof SOURCE_META];
-  const Icon = (meta?.Icon ?? tab.Icon) as ComponentType<IconProps>;
+  const Icon = (meta?.Icon ?? tab.Icon);
   const color = meta?.color ?? "var(--accent)";
   const perks = PROVIDER_PERKS[tab.id] ?? [];
   return (

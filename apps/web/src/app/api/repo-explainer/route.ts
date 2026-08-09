@@ -109,9 +109,11 @@ export async function POST(request: Request) {
     }
 
     const { owner, repo } = parsedUrl;
+    // `?? ""` first so the `||` fallthrough (which must also skip empty
+    // strings, e.g. an empty header or env var) operates on plain strings.
     const githubToken =
-      request.headers.get("X-GitHub-Token") ||
-      env.server.GITHUB_TOKEN ||
+      (request.headers.get("X-GitHub-Token") ?? "") ||
+      (env.server.GITHUB_TOKEN ?? "") ||
       null;
 
     const validationError = await validateRepoAccess(owner, repo, githubToken);

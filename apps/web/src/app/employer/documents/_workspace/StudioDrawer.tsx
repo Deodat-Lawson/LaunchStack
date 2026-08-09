@@ -296,7 +296,7 @@ export function StudioDrawer({
           {canExpand && (
             <button
               type="button"
-              onClick={() => onExpand!(active.id)}
+              onClick={() => onExpand(active.id)}
               title={`Expand ${active.label} to main view`}
               style={{
                 display: "inline-flex",

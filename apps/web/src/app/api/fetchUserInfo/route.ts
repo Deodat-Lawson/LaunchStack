@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { dbCore } from "../../../server/db/core";
+// The second postgres pool (~/server/db/core) was removed — hot routes use
+// the engine's shared Drizzle client like everything else.
+import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { users } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
@@ -13,7 +15,7 @@ export async function POST() {
             return NextResponse.json({ error: "Invalid user." }, { status: 400 });
         }
 
-        const [userInfo] = await dbCore
+        const [userInfo] = await db
             .select()
             .from(users)
             .where(eq(users.userId, userId));
@@ -24,7 +26,7 @@ export async function POST() {
 
         const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
 
-        const [companyRecord] = await dbCore
+        const [companyRecord] = await db
             .select()
             .from(company)
             .where(and(eq(company.id, Number(companyId))));

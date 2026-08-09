@@ -100,7 +100,9 @@ async function getDefaultBranch(
 ): Promise<string> {
   const url = `https://api.github.com/repos/${repo.owner}/${repo.repoName}`;
   const data = await githubJsonFetch<{ default_branch?: string }>(url, githubToken);
-  return data.default_branch || "main";
+  // `?? ""` first so the fallback (which must also cover an empty branch
+  // name) operates on a plain string.
+  return (data.default_branch ?? "") || "main";
 }
 
 function buildHierarchicalTree(flat: GitHubTreeItem[]): Record<string, TreeNode> {
@@ -114,13 +116,9 @@ function buildHierarchicalTree(flat: GitHubTreeItem[]): Record<string, TreeNode>
       if (isLast) {
         current[segment] = { _type: item.type };
       } else {
-        if (!current[segment]) {
-          current[segment] = { _type: "tree", children: {} };
-        }
-        if (!current[segment].children) {
-          current[segment].children = {};
-        }
-        current = current[segment].children!;
+        current[segment] ??= { _type: "tree", children: {} };
+        current[segment].children ??= {};
+        current = current[segment].children;
       }
     });
   }
@@ -163,7 +161,7 @@ async function fetchDirectoryTreeWithDepth(
   githubToken?: string | null,
   ref?: string | null,
 ): Promise<string> {
-  const branch = ref || (await getDefaultBranch(repo, githubToken));
+  const branch = (ref ?? "") || (await getDefaultBranch(repo, githubToken));
   const treeUrl = `https://api.github.com/repos/${repo.owner}/${repo.repoName}/git/trees/${branch}?recursive=1`;
 
   const data = await githubJsonFetch<{ tree?: GitHubTreeItem[]; truncated?: boolean }>(
@@ -198,7 +196,11 @@ async function listDirectoryFiles(
   );
   if (ref) url.searchParams.set("ref", ref);
 
-  const data = await githubJsonFetch<any[]>(url.toString(), githubToken);
+  // The GitHub contents API returns an array of entries for directories.
+  const data = await githubJsonFetch<Array<{ type?: unknown; path?: unknown }>>(
+    url.toString(),
+    githubToken,
+  );
   if (!Array.isArray(data)) return [];
   const files: string[] = [];
   for (const entry of data) {

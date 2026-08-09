@@ -1,3 +1,14 @@
+# =============================================================================
+# DEPRECATED — do not extend this file.
+#
+# The authoritative DOCX-editing (Adeu) service is `services/document-editor`
+# (ADR-004 §4: docs/architecture/ADR-004-compute-service-consolidation.md).
+# This Vercel-style serverless duplicate is retained only because its authors
+# have not signed off on removal; it is not referenced by any caller in the
+# repository, is not deployed, and — unlike services/document-editor — has NO
+# authentication. New functionality belongs in services/document-editor.
+# See api/adeu/README.md.
+# =============================================================================
 import base64
 import io
 import json
@@ -15,21 +26,22 @@ MAX_UPLOAD_SIZE = 50 * 1024 * 1024  # 50 MB
 
 
 # ---------------------------------------------------------------------------
-# Shared imports (from sidecar schemas)
+# Shared imports (from the document-editor service schemas)
 # ---------------------------------------------------------------------------
 #
-# Vercel runs this file in isolation; ensure the sidecar folder is on sys.path
-# so `app.schemas.adeu` and/or `sidecar.app.schemas.adeu` can be imported.
+# Vercel runs this file in isolation; ensure the document-editor service
+# folder is on sys.path so `app.schemas.adeu` can be imported. The former
+# `sidecar/` was split per ADR-004; the schemas now live in
+# services/document-editor/app/schemas/adeu.py (the directory name contains a
+# hyphen, so it cannot be imported as a dotted package — hence the sys.path
+# entry and the `app.*` import style the service itself uses).
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-SIDE_CAR_DIR = os.path.join(ROOT_DIR, "sidecar")
-if SIDE_CAR_DIR not in sys.path:
-    sys.path.insert(0, SIDE_CAR_DIR)
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
+DOCUMENT_EDITOR_DIR = os.path.join(ROOT_DIR, "services", "document-editor")
+if DOCUMENT_EDITOR_DIR not in sys.path:
+    sys.path.insert(0, DOCUMENT_EDITOR_DIR)
 
 try:
-    # Preferred by requirements: explicit sidecar namespace.
-    from sidecar.app.schemas.adeu import (  # type: ignore
+    from app.schemas.adeu import (  # type: ignore
         ApplyEditsMarkdownRequest,
         ApplyEditsMarkdownResponse,
         BatchSummary,
@@ -38,26 +50,13 @@ try:
         ReadDocxResponse,
         ErrorResponse,
     )
-except ImportError:
-    # Sidecar uses an `app.*` import style; mirror sidecar runtime imports.
-    try:
-        from app.schemas.adeu import (  # type: ignore
-            ApplyEditsMarkdownRequest,
-            ApplyEditsMarkdownResponse,
-            BatchSummary,
-            DiffResponse,
-            ProcessBatchRequest,
-            ReadDocxResponse,
-            ErrorResponse,
-        )
-    except ImportError as e:
-        logger.warning(f"Optional sidecar schema import failed: {e}")
-        raise
-    except Exception as e:
-        logger.error(f"Unexpected error importing sidecar schemas: {e}", exc_info=True)
-        raise
+except ImportError as e:
+    logger.warning(f"document-editor schema import failed: {e}")
+    raise
 except Exception as e:
-    logger.error(f"Unexpected error importing sidecar schemas: {e}", exc_info=True)
+    logger.error(
+        f"Unexpected error importing document-editor schemas: {e}", exc_info=True
+    )
     raise
 
 

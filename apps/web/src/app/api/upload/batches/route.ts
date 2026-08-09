@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -30,7 +31,19 @@ export async function POST(request: Request) {
       return validation.response;
     }
 
-    const { userId, metadata, files } = validation.data;
+    const { userId: bodyUserId, metadata, files } = validation.data;
+
+    // Identity comes from the Clerk session, never the request body.
+    // `userId` stays in the schema for wire-compat but is overridden.
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (bodyUserId && bodyUserId !== userId) {
+      console.warn(
+        `[UploadBatches] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
+      );
+    }
 
     const [user] = await db.select().from(users).where(eq(users.userId, userId));
     if (!user) {

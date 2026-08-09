@@ -6,6 +6,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
             }
 
             const {
-                userId,
+                userId: bodyUserId,
                 documentUrl: rawDocumentUrl,
                 documentName,
                 category,
@@ -59,6 +60,19 @@ export async function POST(request: Request) {
                 originalFilename,
                 embeddingIndexKey,
             } = validation.data;
+
+            // Identity comes from the Clerk session, never the request body.
+            // `userId` stays in the schema for wire-compat but is overridden;
+            // a mismatch is logged as a probable impersonation attempt.
+            const { userId } = await auth();
+            if (!userId) {
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            }
+            if (bodyUserId && bodyUserId !== userId) {
+                console.warn(
+                    `[UploadDocument] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
+                );
+            }
 
             const [userInfo] = await db.select().from(users).where(eq(users.userId, userId));
 

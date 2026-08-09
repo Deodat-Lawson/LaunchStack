@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     description: 'The page you are looking for does not exist. Head back to Launchstack to explore document analysis, deployment guides, and more.',
 };
 
-const GITHUB_REPO = "https://github.com/Deodat-Lawson/pdr_ai_v2";
+const GITHUB_REPO = "https://github.com/Deodat-Lawson/LaunchStack";
 
 export default function NotFound() {
     return (

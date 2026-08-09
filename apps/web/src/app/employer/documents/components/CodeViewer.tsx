@@ -70,7 +70,7 @@ const EXTENSION_TO_HLJS: Record<string, string> = {
 
 function detectLanguage(title: string, url: string): string {
   const combined = `${title} ${url}`;
-  const match = combined.match(/\.([a-z0-9]+)(?:\?|#|$)/i);
+  const match = /\.([a-z0-9]+)(?:\?|#|$)/i.exec(combined);
   if (match?.[1]) {
     return EXTENSION_TO_HLJS[match[1].toLowerCase()] ?? "plaintext";
   }
@@ -79,7 +79,7 @@ function detectLanguage(title: string, url: string): string {
 
 function detectExtension(title: string, url: string): string {
   const combined = `${title} ${url}`;
-  const match = combined.match(/\.([a-z0-9]+)(?:\?|#|$)/i);
+  const match = /\.([a-z0-9]+)(?:\?|#|$)/i.exec(combined);
   return match?.[1]?.toLowerCase() ?? "";
 }
 

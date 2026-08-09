@@ -116,7 +116,7 @@ async function generateWithConfiguredEndpoint<TSchema extends import("zod").ZodT
       },
     };
   }
-  catch (error) { const issues = error instanceof ZodError ? error.issues.map((issue) => ({ path: issue.path, code: issue.code, ...("expected" in issue ? { expected: issue.expected } : {}), ...("received" in issue ? { received: issue.received } : {}) })) : []; console.log(JSON.stringify({ stage: "review_schema_valid", result: "fail", topLevelKeys: parsed && typeof parsed === "object" && !Array.isArray(parsed) ? Object.keys(parsed as object) : [], issues })); throw new Error("review_schema_invalid"); }
+  catch (error) { const issues = error instanceof ZodError ? error.issues.map((issue) => ({ path: issue.path, code: issue.code, ...("expected" in issue ? { expected: issue.expected } : {}), ...("received" in issue ? { received: issue.received } : {}) })) : []; console.log(JSON.stringify({ stage: "review_schema_valid", result: "fail", topLevelKeys: parsed && typeof parsed === "object" && !Array.isArray(parsed) ? Object.keys(parsed) : [], issues })); throw new Error("review_schema_invalid"); }
 }
 
 const fixtureName = process.argv[2] ?? "partial";

@@ -98,7 +98,7 @@ describe("OutlinePanel", () => {
         renderPanel(makeOutline());
 
         // Find the expand button for "Introduction" (the first treeitem with children)
-        const introItem = screen.getByText("Introduction").closest('[role="treeitem"]') as HTMLElement;
+        const introItem = screen.getByText("Introduction").closest<HTMLElement>('[role="treeitem"]')!;
         const expandBtn = within(introItem).getAllByRole("button")[0]!;
 
         await user.click(expandBtn);
@@ -132,12 +132,12 @@ describe("OutlinePanel", () => {
         const { props } = renderPanel(outline);
 
         // Expand "Introduction" first so we can see children
-        const introItem = screen.getByText("Introduction").closest('[role="treeitem"]') as HTMLElement;
+        const introItem = screen.getByText("Introduction").closest<HTMLElement>('[role="treeitem"]')!;
         const expandBtn = within(introItem).getAllByRole("button")[0]!;
         await user.click(expandBtn);
 
         // Find and click delete on "Background"
-        const bgItem = screen.getByText("Background").closest('[role="treeitem"]') as HTMLElement;
+        const bgItem = screen.getByText("Background").closest<HTMLElement>('[role="treeitem"]')!;
         const deleteBtn = within(bgItem).getByRole("button", { name: /Delete/i });
         await user.click(deleteBtn);
 
@@ -181,9 +181,9 @@ describe("OutlinePanel", () => {
 
     it("has the topic textarea pre-filled with the document title", () => {
         renderPanel([], { documentTitle: "My Document" });
-        const textarea = screen.getByPlaceholderText(
+        const textarea = screen.getByPlaceholderText<HTMLTextAreaElement>(
             "Document topic or description...",
-        ) as HTMLTextAreaElement;
+        );
         expect(textarea.value).toBe("My Document");
     });
 });

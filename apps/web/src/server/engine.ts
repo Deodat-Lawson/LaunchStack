@@ -15,10 +15,8 @@ import { configureProviders } from "@launchstack/core/providers/registry";
 import { configureSecretBox } from "@launchstack/core/crypto";
 import { configureOcr } from "@launchstack/core/ocr/config";
 import { configureEmbeddingIndexRegistry } from "@launchstack/core/embeddings";
-import { configureEmbeddingFactory } from "@launchstack/core/embeddings";
 import { configureCompanyEmbeddingDefaults } from "@launchstack/core/embeddings";
 import { createAppStoragePort } from "./storage/port";
-import { createAppJobDispatcherPort } from "./jobs/port";
 import { createAppCreditsPort } from "./credits/port";
 import { createAppRagPort } from "./rag/port";
 import { configureAppChatModels, getAppChatModelsConfig } from "./chat-models";
@@ -54,6 +52,28 @@ function buildConfig(): CoreConfig {
         embeddingVersion: server.HUGGINGFACE_EMBEDDING_VERSION,
       }
     : undefined;
+
+  // services/document-converter (ADR-004). The legacy OCR_ROUTER_URL is
+  // honored as a URL fallback so existing deployments keep routing, but the
+  // API key deliberately has NO fallback: the converter authenticates every
+  // call and fails closed, so a missing DOCUMENT_CONVERTER_API_KEY surfaces
+  // as 401s instead of an unauthenticated service.
+  const documentConverterUrl =
+    server.DOCUMENT_CONVERTER_URL ?? server.OCR_ROUTER_URL;
+  if (!server.DOCUMENT_CONVERTER_URL && server.OCR_ROUTER_URL) {
+    console.warn(
+      "[env] OCR_ROUTER_URL is deprecated (ADR-004): the ocr-router service was replaced by " +
+        "services/document-converter. Using its value as DOCUMENT_CONVERTER_URL for now — " +
+        "set DOCUMENT_CONVERTER_URL (and DOCUMENT_CONVERTER_API_KEY, which has no legacy fallback)."
+    );
+  }
+  if (server.OCR_WORKER_URL) {
+    console.warn(
+      "[env] OCR_WORKER_URL is deprecated and ignored (ADR-004): the ocr-worker service was " +
+        "consolidated into services/document-converter — set DOCUMENT_CONVERTER_URL / " +
+        "DOCUMENT_CONVERTER_API_KEY instead."
+    );
+  }
 
   return {
     db: { url: server.DATABASE_URL },
@@ -95,18 +115,8 @@ function buildConfig(): CoreConfig {
         apiKey: server.EMBEDDING_API_KEY,
         model: server.EMBEDDING_MODEL,
       },
-      sidecar:
-        server.SIDECAR_URL &&
-        server.SIDECAR_EMBEDDING_MODEL &&
-        server.SIDECAR_EMBEDDING_DIMENSION &&
-        server.SIDECAR_EMBEDDING_VERSION
-          ? {
-              url: server.SIDECAR_URL,
-              model: server.SIDECAR_EMBEDDING_MODEL,
-              dimension: Number(server.SIDECAR_EMBEDDING_DIMENSION),
-              version: server.SIDECAR_EMBEDDING_VERSION,
-            }
-          : undefined,
+      // The sidecar embedding surface (SIDECAR_EMBEDDING_*) was removed by
+      // ADR-004 §5 — no service ever implemented ${SIDECAR_URL}/embed.
     },
 
     ocr: {
@@ -125,14 +135,14 @@ function buildConfig(): CoreConfig {
       landingAi: server.LANDING_AI_API_KEY
         ? { apiKey: server.LANDING_AI_API_KEY }
         : undefined,
-      workerUrl: server.OCR_WORKER_URL,
-      routerUrl: server.OCR_ROUTER_URL,
-      vision: {
-        googleApiKey: server.GOOGLE_AI_API_KEY,
-        openaiApiKey: server.OPENAI_API_KEY,
-        aiApiKey: server.AI_API_KEY,
-        aiBaseUrl: server.AI_BASE_URL,
-      },
+      // No vision credential forwarding: the converter owns its own vision
+      // configuration (the old per-request env map is gone, ADR-004).
+      converter: documentConverterUrl
+        ? {
+            url: documentConverterUrl,
+            apiKey: server.DOCUMENT_CONVERTER_API_KEY ?? "",
+          }
+        : undefined,
     },
 
     neo4j: server.NEO4J_URI
@@ -145,17 +155,17 @@ function buildConfig(): CoreConfig {
       : undefined,
 
     providers: {
+      // Rerank and NER are cloud-only (ADR-004 §5) — their *_PROVIDER
+      // selectors pointed at sidecar routes no service ever implemented.
       rerank: {
         baseUrl: server.RERANK_API_BASE_URL,
         apiKey: server.RERANK_API_KEY,
         model: server.RERANK_MODEL,
-        provider: server.RERANK_PROVIDER,
       },
       ner: {
         baseUrl: server.NER_API_BASE_URL,
         apiKey: server.NER_API_KEY,
         model: server.NER_MODEL,
-        provider: server.NER_PROVIDER,
       },
       transcription: {
         baseUrl: server.TRANSCRIPTION_API_BASE_URL,
@@ -167,9 +177,9 @@ function buildConfig(): CoreConfig {
 
     storage: createAppStoragePort(),
 
-    jobs: {
-      dispatcher: createAppJobDispatcherPort(),
-    },
+    // No `jobs` port: document ingestion is driven by the transactional
+    // outbox consumed by apps/worker (ADR-003). The InngestDispatcher path
+    // it replaced has been deleted.
 
     credits: {
       port: createAppCreditsPort(),
@@ -195,14 +205,6 @@ export function getEngine(): Engine {
   // embedding factory, and the company-override resolver all read from
   // the same config tree instead of env.ts at runtime.
   configureEmbeddingIndexRegistry({
-    sidecar: config.embeddings.sidecar
-      ? {
-          url: config.embeddings.sidecar.url,
-          model: config.embeddings.sidecar.model,
-          dimension: config.embeddings.sidecar.dimension,
-          version: config.embeddings.sidecar.version,
-        }
-      : undefined,
     ollama: {
       embeddingDimension: config.llm.ollama?.embeddingDimension,
       embeddingVersion: config.llm.ollama?.embeddingVersion,
@@ -213,10 +215,6 @@ export function getEngine(): Engine {
       embeddingVersion: config.llm.huggingface?.embeddingVersion,
     },
     defaultIndexKey: config.embeddings.indexName,
-  });
-
-  configureEmbeddingFactory({
-    sidecarUrl: config.embeddings.sidecar?.url,
   });
 
   // Endpoint and credential are chosen as a PAIR, most specific first: the
@@ -258,20 +256,22 @@ export function getEngine(): Engine {
     // Separate from aiApiKey so a capability falling back to Gemini
     // authenticates with a Google credential and never with another vendor's.
     googleApiKey: env.server.GOOGLE_AI_API_KEY,
-    sidecarUrl: config.embeddings.sidecar?.url,
-    rerankProviderMode: config.providers.rerank?.provider,
-    nerProviderMode: config.providers.ner?.provider,
+    // Only transcription keeps a provider mode: "sidecar" names the real
+    // services/transcription deployment and must be chosen explicitly.
+    // SIDECAR_URL never selects a provider (ADR-004 §5).
     transcriptionProviderMode: config.providers.transcription?.provider,
-    rerankBaseUrl: config.providers.rerank?.baseUrl,
-    nerBaseUrl: config.providers.ner?.baseUrl,
-    transcriptionBaseUrl: config.providers.transcription?.baseUrl,
+    // Per-capability overrides (RERANK_API_* / NER_API_*). The provider
+    // constructors read these from the registry slot instead of process.env
+    // (ADR-002) — this registration is what makes those values reach them.
+    rerank: config.providers.rerank,
+    ner: config.providers.ner,
   });
 
   // Register the encryption key used by company-credentials secret-box.
   configureSecretBox({ key: config.embeddings.secretsKey });
 
-  // Register the full OcrConfig so the complexity router, worker adapters,
-  // and vision-credential forwarding all read from the same source.
+  // Register the full OcrConfig so the complexity router and the
+  // document-converter adapters all read from the same source.
   configureOcr(config.ocr);
 
   const engine = createEngine(config);

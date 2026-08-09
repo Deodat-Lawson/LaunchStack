@@ -6,7 +6,10 @@ import { getTableName, is } from "drizzle-orm";
 import { PgTable } from "drizzle-orm/pg-core";
 import { type Config } from "drizzle-kit";
 
-import * as engineSchema from "./src/db/schema";
+// ADR-002: the engine schema source moved to @launchstack/adapters; this
+// package remains the home of the immutable migration history under
+// ./drizzle, so the config points across the workspace at the moved source.
+import * as engineSchema from "../adapters/src/db/schema";
 
 dotenv.config({
   path: resolve(fileURLToPath(new URL(".", import.meta.url)), "../../.env"),
@@ -28,7 +31,7 @@ for (const value of Object.values(engineSchema)) {
 }
 
 export default {
-  schema: "./src/db/schema.ts",
+  schema: "../adapters/src/db/schema.ts",
   out: "./drizzle",
   dialect: "postgresql",
 

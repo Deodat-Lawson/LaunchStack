@@ -58,7 +58,7 @@ if (!allow) {
       die(
         `this database is migration-managed (it has a _launchstack_migrations ledger).\n` +
           `Pushing would rewrite it out from under the migration history.\n\n` +
-          `  To change the schema:  edit packages/core/src/db/schema/*.ts, then\n` +
+          `  To change the schema:  edit packages/adapters/src/db/schema/*.ts, then\n` +
           `                         pnpm --filter @launchstack/core db:generate --name=<change>\n` +
           `  To apply migrations:   pnpm --filter @launchstack/core db:migrate\n` +
           `  To use a scratch DB:   point DATABASE_URL at a fresh database\n` +

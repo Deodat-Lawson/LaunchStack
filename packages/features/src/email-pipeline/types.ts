@@ -174,6 +174,12 @@ export const DELIVERED_OR_IN_FLIGHT: ReadonlySet<SendStatus> = new Set<SendStatu
 export interface SendResult {
   recipientEmail: string;
   status: SendStatus;
+  /**
+   * The subject this recipient actually received, after merge — not the
+   * template's raw `{{token}}` form. Absent for `skipped` / `suppressed`,
+   * which are settled before the template is rendered.
+   */
+  subject?: string;
   providerMessageId?: string;
   error?: string;
 }

@@ -203,7 +203,11 @@ export async function dispatchEmailCampaign(
         recordSendOutcome({
           campaignId: campaign.id,
           attemptId: attempt.id,
-          subject: version.template.subject,
+          // Prefer the subject this recipient actually received. The template's
+          // own subject still holds unrendered {{tokens}}, so recording it would
+          // make every audit row read "Hello {{firstName}}". Falls back to the
+          // template for rows settled before rendering.
+          subject: result.subject ?? version.template.subject,
           result,
         }),
       providerIdempotencyKey: (email) => providerKey(attempt.id, email),

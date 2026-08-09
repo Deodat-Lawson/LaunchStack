@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub — real sources land in later migration steps.)",
+  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub \u2014 real sources land in later migration steps.)",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=20"
@@ -104,6 +104,30 @@
     "./email-pipeline": {
       "types": "./src/email-pipeline/index.ts",
       "default": "./src/email-pipeline/index.ts"
+    },
+    "./email-pipeline/types": {
+      "types": "./src/email-pipeline/types.ts",
+      "default": "./src/email-pipeline/types.ts"
+    },
+    "./email-pipeline/merge": {
+      "types": "./src/email-pipeline/merge.ts",
+      "default": "./src/email-pipeline/merge.ts"
+    },
+    "./email-pipeline/recipients": {
+      "types": "./src/email-pipeline/recipients.ts",
+      "default": "./src/email-pipeline/recipients.ts"
+    },
+    "./email-pipeline/validators": {
+      "types": "./src/email-pipeline/validators.ts",
+      "default": "./src/email-pipeline/validators.ts"
+    },
+    "./email-pipeline/templates": {
+      "types": "./src/email-pipeline/templates.ts",
+      "default": "./src/email-pipeline/templates.ts"
+    },
+    "./email-pipeline/company-fields": {
+      "types": "./src/email-pipeline/company-fields.ts",
+      "default": "./src/email-pipeline/company-fields.ts"
     }
   },
   "scripts": {
@@ -123,7 +147,9 @@
     "sherpa-onnx-node": "^1.12.38"
   },
   "peerDependenciesMeta": {
-    "sherpa-onnx-node": { "optional": true }
+    "sherpa-onnx-node": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "sherpa-onnx-node": "^1.12.38"

@@ -121,6 +121,7 @@ export async function sendCampaign(
       await settle({
         recipientEmail: email,
         status: "failed",
+        subject: rendered.subject,
         error: `Unresolved tokens: ${[...new Set(leftover)].join(", ")}`,
       });
       continue;
@@ -128,7 +129,11 @@ export async function sendCampaign(
 
     // 5) dry-run stops here — rendered and recorded, but not delivered
     if (mode === "dry_run") {
-      await settle({ recipientEmail: email, status: "dry_run" });
+      await settle({
+        recipientEmail: email,
+        status: "dry_run",
+        subject: rendered.subject,
+      });
       continue;
     }
 
@@ -160,12 +165,14 @@ export async function sendCampaign(
       await settle({
         recipientEmail: email,
         status: "sent",
+        subject: rendered.subject,
         providerMessageId: messageId,
       });
     } catch (err) {
       await settle({
         recipientEmail: email,
         status: "failed",
+        subject: rendered.subject,
         error: err instanceof Error ? err.message : "send failed",
       });
     }

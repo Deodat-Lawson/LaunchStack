@@ -66,10 +66,18 @@ export async function authorizeInternalFileRef(
     throw new UploadAuthorizationError("File not found in this workspace", 404);
   }
 
+  // Re-read after the ownership query: the real `db` proxy may call
+  // getEngine() → configureOcr mid-flight. A cfg snapshot from the top of
+  // this function would still be empty on a cold process and skip the check.
+  const configured = getOcrConfig();
+
   // The OSS worker fetches internal URLs over HTTP with no Clerk session, so
   // it needs a signed token. Failing here keeps the client from receiving a
   // 202 for a job that can only end in a 401 at fetch time.
-  if (requiresFileAccessToken(effectiveProvider, cfg) && !cfg.fileAccessTokenSecret) {
+  if (
+    requiresFileAccessToken(effectiveProvider, configured) &&
+    !configured.fileAccessTokenSecret
+  ) {
     throw new UploadAuthorizationError(
       "FILE_ACCESS_TOKEN_SECRET is not configured; the OCR worker cannot read database-backed documents.",
       503,

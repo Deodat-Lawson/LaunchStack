@@ -137,6 +137,13 @@ export async function processDocumentUpload({
   isWebsite,
   embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
+  // Populate OCR (and provider) config before reading getOcrConfig() or
+  // authorizing internal file refs. On a cold process, an empty slot makes
+  // effectiveProvider / workerUrl / FILE_ACCESS_TOKEN_SECRET look unset and
+  // skips the ingress rejection for unsigned OSS fetches. Idempotent/cached.
+  // Also required before isCloudMode() below (empty registry → false "cloud").
+  getEngine();
+
   const effectiveProvider =
     parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
 
@@ -168,12 +175,6 @@ export async function processDocumentUpload({
   // ------------------------------------------------------------------
   // Credit pre-check (cloud mode only)
   // ------------------------------------------------------------------
-  // isCloudMode() reads the provider registry, which only getEngine()
-  // populates. Called first on a cold invocation it saw an empty registry,
-  // read no SIDECAR_URL, and concluded "cloud" — billing credits to
-  // deployments that run everything locally. Idempotent and cached.
-  getEngine();
-
   if (isCloudMode()) {
     // Rough estimate: 20 credits covers a typical document (OCR + embeddings)
     const estimatedCredits = shouldTranscribeFile(mimeType, originalFilename) ? 30 : 20;

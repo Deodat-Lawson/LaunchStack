@@ -178,6 +178,11 @@ export async function POST(
         preferredProvider,
         fileSize,
       } = validation.data;
+
+      // Same cold-start ordering as processDocumentUpload: configure OCR
+      // before defaultProvider / authorizeInternalFileRef.
+      getEngine();
+
       const effectiveProvider =
         parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
 
@@ -305,7 +310,6 @@ export async function POST(
       // chunk/structure/metadata row gets tagged with this specific version.
       // Old version chunks stay indexed under their own versionId and are
       // hidden from RAG results by the version filter in the retrievers.
-      getEngine();
       const { jobId, eventIds } = await triggerDocumentProcessing(
         resolvedDocumentUrl,
         doc.title,

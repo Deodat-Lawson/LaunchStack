@@ -252,7 +252,7 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
               <TextInput
                 type="password"
                 value={embeddingOpenAIApiKey}
-                onChange={(e) => setEmbeddingOpenAIApiKey(e.target.value)}
+                onChange={(e) => edit(setEmbeddingOpenAIApiKey)(e.target.value)}
                 placeholder="<your-api-key>"
                 autoComplete="off"
               />

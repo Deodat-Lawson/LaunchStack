@@ -127,6 +127,26 @@ describe("authorizeInternalFileRef", () => {
     ).rejects.toMatchObject({ status: 503 });
   });
 
+  it("enforces the signing secret when OCR config is registered during the ownership query", async () => {
+    // Cold process: authorize starts with an empty slot. The real `db` proxy
+    // calls getEngine() → configureOcr mid-query; a stale cfg snapshot would
+    // skip the missing-FILE_ACCESS_TOKEN_SECRET rejection.
+    configureOcr({});
+    const where = jest.fn().mockImplementation(async () => {
+      configureOcr({
+        appPublicUrl: "http://app:3000",
+        workerUrl: "http://ocr-worker:8001",
+      });
+      return [{ companyId: COMPANY }];
+    });
+    const from = jest.fn().mockReturnValue({ where });
+    mockDbSelect.mockReturnValueOnce({ from });
+
+    await expect(
+      authorizeInternalFileRef("/api/files/123", COMPANY),
+    ).rejects.toMatchObject({ status: 503 });
+  });
+
   it("fails before enqueue when the request overrides to an OSS provider", async () => {
     configureOcr({
       appPublicUrl: "http://app:3000",

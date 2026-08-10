@@ -31,7 +31,7 @@ function ConfBar({ confidence }: { confidence: number }) {
 
 function inferJurisdiction(name: string): string | null {
   const upper = name.toUpperCase();
-  const match = upper.match(/\b(US-[A-Z]{2}|UK|US|EU|CA|SG|DE|FR|JP|IN|AU)\b/);
+  const match = /\b(US-[A-Z]{2}|UK|US|EU|CA|SG|DE|FR|JP|IN|AU)\b/.exec(upper);
   return match ? match[0] : null;
 }
 

@@ -41,14 +41,24 @@ describe("Single-endpoint chat runtime configuration", () => {
     it("forwards the chat endpoint and its config file to the app container", () => {
         const composePath = path.join(ROOT, "docker-compose.yml");
         const content = fs.readFileSync(composePath, "utf-8");
+
+        // The app and worker share one env authority via the x-shared-env
+        // anchor (ADR-003: two processes must never disagree about
+        // providers); the chat variables live there, and the app service
+        // must merge the anchor in.
+        const sharedEnv = /x-shared-env:.*?&shared-env\n([\s\S]*?)(?=\nservices:)/.exec(
+            content,
+        );
+        expect(sharedEnv).not.toBeNull();
+        expect(sharedEnv![1]).toContain("CHAT_BASE_URL: ${CHAT_BASE_URL:-}");
+        expect(sharedEnv![1]).toContain("CHAT_API_KEY: ${CHAT_API_KEY:-}");
+        expect(sharedEnv![1]).toContain("CHAT_MODELS_CONFIG:");
+
         const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(
             content,
         );
-
         expect(appService).not.toBeNull();
-        expect(appService![1]).toContain("CHAT_BASE_URL: ${CHAT_BASE_URL:-}");
-        expect(appService![1]).toContain("CHAT_API_KEY: ${CHAT_API_KEY:-}");
-        expect(appService![1]).toContain("CHAT_MODELS_CONFIG:");
+        expect(appService![1]).toContain("<<: *shared-env");
     });
 
     it("mounts the chat model configuration so it is editable without a rebuild", () => {
@@ -149,11 +159,16 @@ describe("Single-endpoint chat runtime configuration", () => {
 });
 
 // ===========================================================================
-// Fix 1.11 — sidecar Dockerfile has USER directive
+// Fix 1.11 — service Dockerfiles have USER directives
+// The sidecar split into services/transcription + services/document-editor
+// (ADR-004); the non-root contract carries over to both successors.
 // ===========================================================================
-describe("Fix 1.11: Non-root container — sidecar Dockerfile has USER directive", () => {
-    it("sidecar/Dockerfile has a USER directive", () => {
-        const dockerfilePath = path.join(ROOT, "sidecar", "Dockerfile");
+describe.each([
+    ["services/transcription", path.join("services", "transcription")],
+    ["services/document-editor", path.join("services", "document-editor")],
+])("Fix 1.11: Non-root container — %s Dockerfile has USER directive", (_label, serviceDir) => {
+    it("Dockerfile has a USER directive", () => {
+        const dockerfilePath = path.join(ROOT, serviceDir, "Dockerfile");
         const content = fs.readFileSync(dockerfilePath, "utf-8");
 
         // FIX: A USER directive is present so the container runs as non-root.
@@ -161,8 +176,8 @@ describe("Fix 1.11: Non-root container — sidecar Dockerfile has USER directive
         expect(hasUserDirective).toBe(true);
     });
 
-    it("sidecar/Dockerfile USER is not root", () => {
-        const dockerfilePath = path.join(ROOT, "sidecar", "Dockerfile");
+    it("Dockerfile USER is not root", () => {
+        const dockerfilePath = path.join(ROOT, serviceDir, "Dockerfile");
         const content = fs.readFileSync(dockerfilePath, "utf-8");
 
         // FIX: The USER should be a non-root user (not "root" or "0")
@@ -190,10 +205,11 @@ describe("Fix 1.12: Log files excluded — *.log in .gitignore", () => {
 
 // ===========================================================================
 // Fix 1.18 — adeu installed only once (via requirements.txt, not duplicated)
+// The adeu authority is now services/document-editor (ADR-004).
 // ===========================================================================
 describe("Fix 1.18: Single adeu install — adeu not duplicated in Dockerfile", () => {
-    it("sidecar/Dockerfile does NOT have explicit standalone pip install adeu", () => {
-        const dockerfilePath = path.join(ROOT, "sidecar", "Dockerfile");
+    it("document-editor Dockerfile does NOT have explicit standalone pip install adeu", () => {
+        const dockerfilePath = path.join(ROOT, "services", "document-editor", "Dockerfile");
         const content = fs.readFileSync(dockerfilePath, "utf-8");
 
         // FIX: adeu should NOT be installed via a standalone pip install line.
@@ -208,16 +224,16 @@ describe("Fix 1.18: Single adeu install — adeu not duplicated in Dockerfile", 
         expect(hasStandalonePipInstallAdeu).toBe(false);
     });
 
-    it("sidecar/requirements.txt contains adeu as single source of truth", () => {
-        const reqPath = path.join(ROOT, "sidecar", "requirements.txt");
+    it("document-editor requirements.txt contains adeu as single source of truth", () => {
+        const reqPath = path.join(ROOT, "services", "document-editor", "requirements.txt");
         const content = fs.readFileSync(reqPath, "utf-8");
 
         // FIX: adeu is in requirements.txt as the single source of truth
         expect(content).toMatch(/adeu/);
     });
 
-    it("sidecar/Dockerfile installs dependencies via requirements.txt", () => {
-        const dockerfilePath = path.join(ROOT, "sidecar", "Dockerfile");
+    it("document-editor Dockerfile installs dependencies via requirements.txt", () => {
+        const dockerfilePath = path.join(ROOT, "services", "document-editor", "Dockerfile");
         const content = fs.readFileSync(dockerfilePath, "utf-8");
 
         // FIX: Dockerfile uses pip install -r requirements.txt (which includes adeu)

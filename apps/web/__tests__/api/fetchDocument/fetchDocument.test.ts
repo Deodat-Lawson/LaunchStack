@@ -15,14 +15,16 @@ jest.mock("~/lib/storage", () => ({
   fetchFile: jest.fn(),
 }));
 
-jest.mock("~/server/db/core", () => ({
-  dbCore: {
+// The dedicated second pool (~/server/db/core, `dbCore`) was deleted — the
+// route now uses the engine's shared Drizzle client from ~/server/db.
+jest.mock("~/server/db", () => ({
+  db: {
     select: jest.fn(),
   },
 }));
 
 import { POST } from "~/app/api/fetchDocument/route";
-import { dbCore } from "~/server/db/core";
+import { db } from "~/server/db";
 
 function mockAuthenticated(companyId = BigInt(1)) {
   mockRequireWorkspaceContext.mockResolvedValue({
@@ -79,7 +81,7 @@ describe("POST /api/fetchDocument", () => {
         where: jest.fn().mockResolvedValue(mockDocuments),
       }),
     });
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const response = await POST(
       new Request("http://localhost/api/fetchDocument", { method: "POST" }),
@@ -102,7 +104,7 @@ describe("POST /api/fetchDocument", () => {
 
     expect(response.status).toBe(401);
     expect(json.error).toBe("Unauthorized");
-    expect(dbCore.select).not.toHaveBeenCalled();
+    expect(db.select).not.toHaveBeenCalled();
   });
 
   it("should return empty array if no documents exist for company", async () => {
@@ -113,7 +115,7 @@ describe("POST /api/fetchDocument", () => {
         where: jest.fn().mockResolvedValue([]),
       }),
     });
-    (dbCore.select as jest.Mock) = mockSelect;
+    (db.select as jest.Mock) = mockSelect;
 
     const response = await POST(
       new Request("http://localhost/api/fetchDocument", { method: "POST" }),

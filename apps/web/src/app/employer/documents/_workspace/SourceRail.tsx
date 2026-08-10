@@ -183,7 +183,7 @@ function SourceRow({ source, selected, toggleSelected, onOpen }: SourceRowProps)
           >
             {source.title}
           </div>
-          {(visibleTags.length > 0 || source.syncing || (source.gaps?.length ?? 0) > 0) && (
+          {(visibleTags.length > 0 || (source.syncing ?? false) || (source.gaps?.length ?? 0) > 0) && (
             <div
               style={{
                 fontSize: 11,
@@ -594,7 +594,7 @@ export function SourceRail({
         </div>
       </div>
 
-      {(activeFolder || activeTag) && (
+      {(Boolean(activeFolder) || Boolean(activeTag)) && (
         <div style={{ padding: "0 14px 8px" }}>
           <button
             onClick={() => {

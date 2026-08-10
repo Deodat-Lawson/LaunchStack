@@ -13,12 +13,17 @@ export function TokenBalance() {
     const [balance, setBalance] = useState<number | null>(null);
 
     useEffect(() => {
-        fetch("/api/credits")
-            .then((r) => (r.ok ? r.json() : null))
-            .then((data) => {
-                if (data?.balanceTokens != null) setBalance(data.balanceTokens);
-            })
-            .catch(() => {});
+        void (async () => {
+            try {
+                const res = await fetch("/api/credits");
+                if (!res.ok) return;
+                // Known response shape of our /api/credits route.
+                const data = (await res.json()) as { balanceTokens?: number | null };
+                if (data.balanceTokens != null) setBalance(data.balanceTokens);
+            } catch {
+                // Network errors just leave the balance chip hidden.
+            }
+        })();
     }, []);
 
     if (balance === null) return null;

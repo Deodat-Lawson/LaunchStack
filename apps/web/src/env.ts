@@ -99,23 +99,62 @@ const serverSchema = z.object({
   JOB_RUNNER: z.enum(["inngest"]).default("inngest"),
   // Inngest event key — required in production; optional in development
   INNGEST_EVENT_KEY: optionalString(),
-  // Sidecar configuration (optional, for local ML compute)
-  // When set, Graph RAG entity extraction is automatically enabled
+  // services/transcription (ADR-004) — Whisper transcription + yt-dlp
+  // download. Used by the voice features when TRANSCRIPTION_PROVIDER=sidecar
+  // or when transcribing video-platform URLs.
+  TRANSCRIPTION_SERVICE_URL: optionalString(),
+  // Shared secret sent as X-API-Key on every transcription-service call.
+  // The service fails closed: unset means every call returns 401 rather than
+  // running unauthenticated.
+  TRANSCRIPTION_SERVICE_API_KEY: optionalString(),
+  // services/document-editor (ADR-004) — the authoritative Adeu DOCX
+  // redlining service, plus its fail-closed X-API-Key secret.
+  DOCUMENT_EDITOR_URL: optionalString(),
+  DOCUMENT_EDITOR_API_KEY: optionalString(),
+  // Legacy (deprecated by ADR-004): the sidecar was split into
+  // services/transcription and services/document-editor. SIDECAR_URL and
+  // SIDECAR_API_KEY are still read as fallbacks for TRANSCRIPTION_SERVICE_*
+  // (with a warning); the sidecar embed/rerank/NER inference surface they
+  // used to enable was removed entirely — no service ever implemented it.
   SIDECAR_URL: optionalString(),
-  SIDECAR_EMBEDDING_MODEL: optionalString(),
-  SIDECAR_EMBEDDING_DIMENSION: optionalString(),
-  SIDECAR_EMBEDDING_VERSION: optionalString(),
-  // OSS OCR worker (Marker + Docling). When set, MARKER becomes the default
-  // OCR provider and DoclingIngestionAdapter takes over Office formats.
-  OCR_WORKER_URL: optionalString(),
-  // OCR router sidecar — vision classification + PDF rendering for document routing
+  SIDECAR_API_KEY: optionalString(),
+  // Legacy (deprecated by ADR-004): fallback for DOCUMENT_EDITOR_URL.
+  ADEU_SERVICE_URL: optionalString(),
+  // services/document-converter (ADR-004) — the consolidated OCR routing,
+  // vision classification, PDF page rendering, and Docling parsing service.
+  // When set, DOCLING becomes available and DoclingIngestionAdapter takes
+  // over Office formats.
+  DOCUMENT_CONVERTER_URL: optionalString(),
+  // Shared secret sent as X-API-Key on every converter call. The converter
+  // fails closed: there is deliberately NO legacy fallback for this value —
+  // when it is unset, every routing/parsing call returns 401 rather than
+  // silently running unauthenticated. Set the same value in the converter's
+  // own environment (CONVERTER_API_KEY).
+  DOCUMENT_CONVERTER_API_KEY: optionalString(),
+  // Legacy (deprecated by ADR-004): read only as a URL fallback for
+  // DOCUMENT_CONVERTER_URL so existing deployments keep routing.
   OCR_ROUTER_URL: optionalString(),
+  // Legacy (deprecated by ADR-004): the ocr-worker service was removed;
+  // this variable is ignored with a startup warning.
+  OCR_WORKER_URL: optionalString(),
   // Model for OCR vision classification (default: gemini-2.5-flash). Any OpenAI-compatible vision model.
   OCR_VISION_MODEL: optionalString(),
-  OCR_DEFAULT_PROVIDER: z.enum(["MARKER", "DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"]).optional(),
-  // Publicly-reachable origin of this Next.js app. Required when OCR_WORKER_URL
-  // is set and documents live behind relative /api/files URLs — the worker
-  // needs an absolute URL to fetch them.
+  // The Marker provider was removed by ADR-004 (it always aliased Docling),
+  // so it is deliberately absent here and rejected with an actionable error.
+  OCR_DEFAULT_PROVIDER: z
+    .enum(["DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"], {
+      errorMap: () => ({
+        message:
+          "OCR_DEFAULT_PROVIDER must be one of DOCLING, NATIVE_PDF, AZURE, LANDING_AI, DATALAB. " +
+          "The Marker provider was removed (ADR-004): it never had a real implementation and " +
+          "silently aliased Docling — set OCR_DEFAULT_PROVIDER=DOCLING instead.",
+      }),
+    })
+    .optional(),
+  // Publicly-reachable origin of this Next.js app. Required when the
+  // document-converter is configured and documents live behind relative
+  // /api/files URLs — the converter needs an absolute URL to fetch them
+  // (and this origin must be in its ALLOWED_FETCH_ORIGINS).
   APP_PUBLIC_URL: optionalString(),
   // Signs short-lived tokens that let the OCR worker read /api/files URLs
   // without a Clerk session. Required alongside OCR_WORKER_URL when documents
@@ -128,6 +167,12 @@ const serverSchema = z.object({
   METRICS_SCRAPE_TOKEN: optionalString(),
   // Enable Graph RAG retrieval
   ENABLE_GRAPH_RETRIEVER: z.preprocess(
+    (val) => val === "true" || val === "1",
+    z.boolean().optional()
+  ),
+  // Enable retrieval over user-authored notes in the ensemble search.
+  // Off by default: empty-notes deployments would just run extra SQL.
+  ENABLE_NOTES_RETRIEVER: z.preprocess(
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
@@ -165,10 +210,11 @@ const serverSchema = z.object({
   TRANSCRIPTION_API_KEY: optionalString(),
   TRANSCRIPTION_MODEL: optionalString(),   // defaults to gemini-2.5-flash
   GEMINI_TTS_VOICE: optionalString(),      // Chirp 3: HD voice; defaults to en-US-Chirp3-HD-Kore
-  // Legacy provider API keys (fallback when per-capability keys not set)
-  // Provider overrides (cloud vs sidecar)
-  RERANK_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
-  NER_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
+  // Transcription mode: "sidecar" routes uploads to the self-hosted
+  // services/transcription deployment (TRANSCRIPTION_SERVICE_URL). It is the
+  // only capability that still has a self-hosted mode — the sidecar rerank
+  // and NER providers were phantoms and were removed with their
+  // RERANK_PROVIDER / NER_PROVIDER selectors (ADR-004 §5).
   TRANSCRIPTION_PROVIDER: z.enum(["cloud", "sidecar"]).optional(),
   // Token system
   TOKEN_SIGNUP_BONUS: optionalString(),
@@ -306,18 +352,24 @@ function parseServerEnv() {
     LANGCHAIN_PROJECT: process.env.LANGCHAIN_PROJECT,
     JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
+    TRANSCRIPTION_SERVICE_URL: process.env.TRANSCRIPTION_SERVICE_URL,
+    TRANSCRIPTION_SERVICE_API_KEY: process.env.TRANSCRIPTION_SERVICE_API_KEY,
+    DOCUMENT_EDITOR_URL: process.env.DOCUMENT_EDITOR_URL,
+    DOCUMENT_EDITOR_API_KEY: process.env.DOCUMENT_EDITOR_API_KEY,
     SIDECAR_URL: process.env.SIDECAR_URL,
-    SIDECAR_EMBEDDING_MODEL: process.env.SIDECAR_EMBEDDING_MODEL,
-    SIDECAR_EMBEDDING_DIMENSION: process.env.SIDECAR_EMBEDDING_DIMENSION,
-    SIDECAR_EMBEDDING_VERSION: process.env.SIDECAR_EMBEDDING_VERSION,
+    SIDECAR_API_KEY: process.env.SIDECAR_API_KEY,
+    ADEU_SERVICE_URL: process.env.ADEU_SERVICE_URL,
+    DOCUMENT_CONVERTER_URL: process.env.DOCUMENT_CONVERTER_URL,
+    DOCUMENT_CONVERTER_API_KEY: process.env.DOCUMENT_CONVERTER_API_KEY,
     OCR_WORKER_URL: process.env.OCR_WORKER_URL,
     OCR_ROUTER_URL: process.env.OCR_ROUTER_URL,
     OCR_VISION_MODEL: process.env.OCR_VISION_MODEL,
-    OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER as "MARKER" | "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB" | undefined,
+    OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER as "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB" | undefined,
     APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
     FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
     METRICS_SCRAPE_TOKEN: process.env.METRICS_SCRAPE_TOKEN,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
+    ENABLE_NOTES_RETRIEVER: process.env.ENABLE_NOTES_RETRIEVER,
     NEO4J_URI: process.env.NEO4J_URI,
     NEO4J_USERNAME: process.env.NEO4J_USERNAME,
     NEO4J_PASSWORD: process.env.NEO4J_PASSWORD,
@@ -337,8 +389,6 @@ function parseServerEnv() {
     TRANSCRIPTION_API_KEY: process.env.TRANSCRIPTION_API_KEY,
     TRANSCRIPTION_MODEL: process.env.TRANSCRIPTION_MODEL,
     GEMINI_TTS_VOICE: process.env.GEMINI_TTS_VOICE,
-    RERANK_PROVIDER: process.env.RERANK_PROVIDER as "cloud" | "sidecar" | undefined,
-    NER_PROVIDER: process.env.NER_PROVIDER as "cloud" | "sidecar" | undefined,
     TRANSCRIPTION_PROVIDER: process.env.TRANSCRIPTION_PROVIDER as "cloud" | "sidecar" | undefined,
     TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
     COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,

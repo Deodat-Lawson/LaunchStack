@@ -43,7 +43,10 @@ export async function POST(request: Request) {
             const { repoUrl, branch, accessToken, category } =
                 validation.data;
 
-            // Parse and validate the GitHub URL
+            // Parse and validate the GitHub URL. SSRF note: parseGitHubUrl
+            // rejects any hostname other than (www.)github.com, and the
+            // download itself is pinned to https://api.github.com — the
+            // user-supplied URL only contributes owner/repo path segments.
             let parsed;
             try {
                 parsed = parseGitHubUrl(repoUrl);

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
+import { env } from "~/env";
 import { db } from "~/server/db";
 import { category, company } from "@launchstack/core/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
@@ -85,11 +86,12 @@ export async function GET() {
           Boolean(process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT),
         datalab: Boolean(process.env.DATALAB_API_KEY),
         landingAI: Boolean(process.env.LANDING_AI_API_KEY),
-        docling: Boolean(process.env.OCR_WORKER_URL),
+        // Docling is reached through services/document-converter (ADR-004).
+        docling: Boolean(env.server.DOCUMENT_CONVERTER_URL),
       },
       storageProvider: resolveStorageBackend(),
       ...(resolveStorageBackend() === "s3" && process.env.NEXT_PUBLIC_S3_ENDPOINT
-        ? { s3Endpoint: process.env.S3_PUBLIC_ENDPOINT || process.env.NEXT_PUBLIC_S3_ENDPOINT }
+        ? { s3Endpoint: (process.env.S3_PUBLIC_ENDPOINT ?? "") || process.env.NEXT_PUBLIC_S3_ENDPOINT }
         : {}),
     };
 

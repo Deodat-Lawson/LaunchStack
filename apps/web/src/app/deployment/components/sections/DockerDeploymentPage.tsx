@@ -79,8 +79,8 @@ export const DockerDeploymentPage: React.FC<DeploymentProps> = ({
   copiedCode,
 }) => {
   const darkMode = false;
-  const fullStackCmd = 'docker compose --env-file .env --profile dev up --build';
-  const detachedCmd = 'docker compose --env-file .env --profile dev up -d';
+  const fullStackCmd = 'docker compose --env-file .env up --build';
+  const detachedCmd = 'docker compose --env-file .env up -d';
   const appOnlyCmd = `docker build -f apps/web/Dockerfile -t pdr-ai-app .
 docker run --rm -p 3000:3000 \\
   -e DATABASE_URL="$DATABASE_URL" \\
@@ -105,23 +105,35 @@ docker run --rm -p 3000:3000 \\
           Docker Deployment
         </h1>
         <p className={`text-xl leading-relaxed max-w-2xl ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          Self-host Launchstack with Docker Compose. The stack includes PostgreSQL with pgvector, automatic schema migrations, and the Next.js runtime.
+          Self-host Launchstack with Docker Compose. The stack includes PostgreSQL with pgvector, automatic schema migrations, S3-compatible object storage, the Next.js app, the background worker, and the compute services.
         </p>
       </motion.div>
 
       <Divider />
 
       {/* ── What&apos;s in the stack ── */}
-      <Section title="What runs" subtitle="Docker Compose starts three coordinated services.">
+      <Section title="What runs" subtitle="The default profile starts everything Local mode requires.">
         <div className="space-y-3">
           <StepCard icon={<Database className="w-5 h-5" />} title="db">
-            PostgreSQL 16 with pgvector pre-installed. Data is persisted in a named volume.
+            PostgreSQL 16 with pgvector pre-installed (host port 5433). Data is persisted in a named volume.
           </StepCard>
           <StepCard icon={<RefreshCw className="w-5 h-5" />} title="migrate">
             Runs <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>pnpm db:migrate</code> once after the database is healthy, then exits.
           </StepCard>
+          <StepCard icon={<Database className="w-5 h-5" />} title="seaweedfs">
+            S3-compatible object storage for uploaded files — no Vercel Blob token needed when self-hosting.
+          </StepCard>
+          <StepCard icon={<Server className="w-5 h-5" />} title="transcription / document-editor / document-converter">
+            The compute services: Whisper transcription and yt-dlp download (port 8000), Adeu DOCX redlining (port 8003), and OCR routing, vision classification, and docling-backed parsing (port 8002). Each authenticates with a fail-closed API key.
+          </StepCard>
+          <StepCard icon={<RefreshCw className="w-5 h-5" />} title="worker">
+            The sole durable workflow coordinator (port 8020): consumes the transactional outbox, runs the ingestion pipeline, and hosts the Inngest serve endpoint at <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>/api/inngest</code>. Health at <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>/healthz</code>.
+          </StepCard>
           <StepCard icon={<Server className="w-5 h-5" />} title="app">
-            Production Next.js server on port 3000. Connects to the same Compose network as the database.
+            Production Next.js server on port 3000 — command acceptance and reads. Durable work happens in the worker.
+          </StepCard>
+          <StepCard icon={<Server className="w-5 h-5" />} title="inngest-dev">
+            Inngest dev server (dashboard at port 8288), polling the worker&apos;s <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1 py-0.5 rounded text-xs`}>/api/inngest</code> endpoint — not the app.
           </StepCard>
         </div>
       </Section>
@@ -132,21 +144,18 @@ docker run --rm -p 3000:3000 \\
           <Step
             number={1}
             title="Create .env"
-            description="Set the required variables at the project root."
-            code={`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+            description="Set the required variables at the project root. Compose wires DATABASE_URL, object storage (SeaweedFS), and the compute-service URLs itself."
+            code={`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
 CLERK_SECRET_KEY=<your-clerk-secret-key>
 CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
 CHAT_API_KEY=<your-google-ai-key>
 # Models and routes live in apps/web/config/chat-models.yaml,
 # which Compose mounts read-only into the container.
 
-# Vercel Blob — required for document uploads
-BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>
-
-# Inngest — use a placeholder for local dev
-INNGEST_EVENT_KEY=dev-placeholder`}
-            onCopy={() => copyToClipboard(`DATABASE_URL="postgresql://postgres:password@db:5432/pdr_ai_v2"\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>\n\nBLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>\n\nINNGEST_EVENT_KEY=dev-placeholder`, 'docker-1')}
+# Optional — defaults shown; override in production
+# POSTGRES_PASSWORD=password
+# INNGEST_EVENT_KEY=dev-placeholder`}
+            onCopy={() => copyToClipboard(`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>`, 'docker-1')}
             copied={copiedCode === 'docker-1'}
 
           />
@@ -172,10 +181,12 @@ INNGEST_EVENT_KEY=dev-placeholder`}
           <Step
             number={4}
             title="Verify"
-            description="Check that the app and services are healthy."
+            description="Check that the app, the worker, and the Inngest dashboard are healthy."
             code={`docker compose ps
-curl http://localhost:3000`}
-            onCopy={() => copyToClipboard('docker compose ps\ncurl http://localhost:3000', 'docker-4')}
+curl http://localhost:3000
+curl http://localhost:8020/healthz
+open http://localhost:8288`}
+            onCopy={() => copyToClipboard('docker compose ps\ncurl http://localhost:3000\ncurl http://localhost:8020/healthz\nopen http://localhost:8288', 'docker-4')}
             copied={copiedCode === 'docker-4'}
 
           />
@@ -187,7 +198,7 @@ curl http://localhost:3000`}
       {/* ── App-only alternative ── */}
       <Section
         title="App container only"
-        subtitle="Use this when your PostgreSQL is managed externally (Neon, Supabase, RDS, etc.)."
+        subtitle="Use this when your PostgreSQL is managed externally (Neon, Supabase, RDS, etc.). Note: the app alone accepts uploads but does not process them — a worker process must run alongside it (see ADR-003)."
 
       >
         <Step
@@ -218,22 +229,22 @@ curl http://localhost:3000`}
                 <td className={`px-4 py-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                   <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded text-xs`}>default</code>
                 </td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>db + migrate + app</td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Production-like</td>
+                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>db, migrate, seaweedfs, transcription, document-editor, document-converter, worker, app, inngest-dev</td>
+                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Everything Local mode requires</td>
               </tr>
               <tr className={darkMode ? 'bg-gray-800/40' : 'bg-white'}>
                 <td className={`px-4 py-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded text-xs`}>--profile dev</code>
+                  <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded text-xs`}>--profile ocr</code>
                 </td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>+ Inngest dev server</td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Local development with background jobs</td>
+                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>+ docling-serve</td>
+                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>PDF/Office parsing engine (~800MB RAM). Without it, /convert returns a typed 503 and text-file ingestion still works</td>
               </tr>
               <tr className={darkMode ? 'bg-gray-800/40' : 'bg-white'}>
                 <td className={`px-4 py-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded text-xs`}>--profile minimal</code>
+                  <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded text-xs`}>--profile backfill</code>
                 </td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>db only</td>
-                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Run Next.js locally with <code className="text-xs">pnpm --filter @launchstack/web dev</code></td>
+                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>backfill (on demand)</td>
+                <td className={`px-4 py-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Data backfills via <code className="text-xs">docker compose --profile backfill run --rm backfill --list</code></td>
               </tr>
             </tbody>
           </table>
@@ -243,7 +254,7 @@ curl http://localhost:3000`}
       {/* ── Callouts ── */}
       <div className="space-y-4 mb-16">
         <Callout icon={<CheckCircle2 className="w-5 h-5" />}>
-          <strong>Health check:</strong> Run <code className={`${darkMode ? 'bg-gray-800' : 'bg-purple-100'} px-1.5 py-0.5 rounded text-xs`}>docker compose ps</code> to confirm <em>db</em> is running, <em>migrate</em> exited successfully, and <em>app</em> is healthy.
+          <strong>Health check:</strong> Run <code className={`${darkMode ? 'bg-gray-800' : 'bg-purple-100'} px-1.5 py-0.5 rounded text-xs`}>docker compose ps</code> to confirm <em>migrate</em> exited successfully and <em>db</em>, <em>app</em>, <em>worker</em>, and the compute services are healthy.
         </Callout>
 
         <Callout icon={<ShieldAlert className="w-5 h-5" />} variant="warning">

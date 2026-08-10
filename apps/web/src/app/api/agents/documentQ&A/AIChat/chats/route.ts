@@ -57,11 +57,13 @@ export async function POST(request: NextRequest) {
       id: chatId,
       userId: ctx.data.clerkUserId,
       title,
-      agentMode: agentMode as "autonomous" | "interactive" | "assisted",
-      visibility: visibility as "public" | "private",
+      // CreateChatSchema already narrows these to their literal unions; the
+      // non-null assertions cover the schema's optional-with-default fields.
+      agentMode: agentMode!,
+      visibility: visibility!,
       status: "active" as const,
-      aiStyle: aiStyle as "concise" | "detailed" | "academic" | "bullet-points" | undefined,
-      aiPersona: aiPersona as "general" | "learning-coach" | "financial-expert" | "legal-expert" | "math-reasoning" | undefined,
+      aiStyle,
+      aiPersona,
     };
 
     const [newChat] = await db

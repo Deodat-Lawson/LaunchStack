@@ -7,11 +7,12 @@ import {
 } from "@launchstack/core/embeddings";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
+// "sidecar" is gone from EmbeddingProvider (ADR-004 §5 removed the phantom
+// sidecar embedding provider), so it has no label here either.
 const PROVIDER_LABELS: Record<EmbeddingProvider, string> = {
   openai: "OpenAI",
   ollama: "Ollama",
   huggingface: "Hugging Face",
-  sidecar: "Sidecar",
 };
 
 function humanLabel(index: EmbeddingIndexConfig): string {

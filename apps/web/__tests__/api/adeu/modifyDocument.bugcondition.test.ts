@@ -112,7 +112,11 @@ describe("Fix 1.1: Step output uses blob storage — large DOCX stored as blob U
             }),
         };
 
-        const handler = (modifyDocument as unknown as { fn: Function }).fn;
+        const handler = (
+            modifyDocument as unknown as {
+                fn: (ctx: { event: unknown; step: unknown }) => Promise<unknown>;
+            }
+        ).fn;
         expect(handler).toBeDefined();
 
         await handler({

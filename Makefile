@@ -10,9 +10,12 @@ up:
 up-prod:
 	$(COMPOSE) up --build -d
 
-# Full stack (~1.2GB RAM) — includes Docling OCR for Office docs (DOCX, PPTX, XLSX)
+# Full stack (~1.2GB RAM) — includes docling-serve, the converter's parse
+# engine for PDFs/Office docs (DOCX, PPTX, XLSX). No overlay file needed:
+# the document-converter always points at docling-serve; the profile just
+# starts it.
 up-ocr:
-	$(COMPOSE) --profile ocr -f docker-compose.yml -f docker-compose.ocr.yml up --build -d
+	$(COMPOSE) --profile ocr up --build -d
 
 # Build Next.js on host (fast, full RAM) then package into Docker
 up-fast:

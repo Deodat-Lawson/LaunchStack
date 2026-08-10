@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const insertValues = {
       id: memoryId,
       chatId,
-      memoryType: memoryType as "short_term" | "long_term" | "working" | "episodic",
+      memoryType,
       key,
       value,
       importance,

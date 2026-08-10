@@ -413,7 +413,8 @@ export function GraphView({ documentId }: GraphViewProps) {
               const isNeighbor = neighbors.has(n.id);
               const isQueryMatch = filteredNodeIds.has(n.id);
               const dim =
-                (hoverNode && !isNeighbor) || (query.trim() && !isQueryMatch);
+                Boolean(hoverNode && !isNeighbor) ||
+                Boolean(query.trim() && !isQueryMatch);
               const r = 6 + Math.min(Math.sqrt(n.mentionCount) * 2, 12) + (isSelected ? 4 : 0);
               return (
                 <g
@@ -463,7 +464,7 @@ export function GraphView({ documentId }: GraphViewProps) {
 
             {/* Hover tooltip */}
             {hoverNode && layout.byId[hoverNode] && (() => {
-              const n = layout.byId[hoverNode]!;
+              const n = layout.byId[hoverNode];
               const edgesForNode = data!.edges.filter(
                 (e) => e.source === n.id || e.target === n.id,
               );

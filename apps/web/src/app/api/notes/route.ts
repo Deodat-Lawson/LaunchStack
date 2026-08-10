@@ -4,7 +4,7 @@ import { documentNotes } from "~/server/db/schema";
 import { eq, and, desc, ilike, arrayContains, isNull, inArray, or } from "drizzle-orm";
 import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { embedNoteAsync } from "~/server/notes/embed-note";
+import { requestNoteEmbedding } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { searchNotes } from "~/server/notes/search";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
@@ -139,8 +139,25 @@ export async function POST(request: Request) {
       .returning();
 
     if (note) {
-      embedNoteAsync(note.id);
-      void syncNoteLinks({
+      // Post-commit side effects: the note row is already persisted, so a
+      // failed outbox enqueue (or link sync) must log loudly but never fail
+      // the save — parity with the old fire-and-forget path. Tradeoff: the
+      // embedding may lag until the next edit re-enqueues it.
+      try {
+        // The insert above always stamps the active workspace, so the hint is
+        // only a guard for legacy rows that came back with a null companyId.
+        await requestNoteEmbedding(
+          note.id,
+          "created",
+          note.companyId ?? String(ctx.data.companyId),
+        );
+      } catch (err) {
+        console.error(
+          `[notes] requestNoteEmbedding failed for note ${note.id} (note saved; embedding deferred to next edit):`,
+          err,
+        );
+      }
+      await syncNoteLinks({
         noteId: note.id,
         rich: (note.contentRich as JSONContent | null) ?? null,
         companyId: note.companyId,

@@ -3,6 +3,16 @@
 > Companion to `[pipeline-architecture.md](./pipeline-architecture.md)`.
 > Stage names match that doc. Cite failures by stable ID (e.g. `U7`) in tickets/PRs.
 
+> **⚠️ Historical snapshot — partially superseded.** Rows below that say
+> "dispatch is not an outbox" or reference sidecar `/embed`//`SIDECAR_URL`
+> describe the pre-ADR-003/ADR-004 system. A transactional outbox
+> (`pdr_ai_v2_event_outbox`, consumed by `apps/worker`) now closes the
+> stuck-`queued` dispatch failure class — see
+> [ADR-003](../architecture/ADR-003-transactional-outbox-and-worker.md) and
+> the [outbox runbook](../runbooks/outbox.md). The sidecar inference endpoints
+> never existed and were removed per
+> [ADR-004](../architecture/ADR-004-compute-service-consolidation.md).
+
 **How to use:** skim the [Index](#index) for unresolved backlog (filter **Needs fix**). Resolved lifecycle invariants are retained below as regression contracts; remaining operational limitations stay explicitly labeled.
 
 ---

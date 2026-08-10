@@ -1,16 +1,6 @@
-export type { CreditsPort, DebitInput, TokenService } from "./types";
-export {
-  configureCredits,
-  getCredits,
-  getCreditsOrNull,
-  creditsDebitSafe,
-} from "./slot";
-export {
-  TOKEN_COSTS,
-  embeddingTokens,
-  llmChatTokens,
-  transcriptionTokens,
-  estimateTranscriptionTokens,
-  ocrTokens,
-  ocrProviderToTokenKey,
-} from "./costs";
+/**
+ * @launchstack/core compatibility facade (ADR-002): this subpath's
+ * implementation moved to @launchstack/adapters. Re-export only — no logic
+ * may be added here (enforced by scripts/ci/check-core-facade.mjs).
+ */
+export * from "@launchstack/adapters/credits/index";

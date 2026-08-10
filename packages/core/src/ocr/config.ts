@@ -1,18 +1,6 @@
 /**
- * Shared OCR configuration. Captures the OcrConfig slice that adapters,
- * the complexity router, and the VLM enrichment path all need. Registered
- * by the hosting app via configureOcr(config.ocr).
+ * @launchstack/core compatibility facade (ADR-002): this subpath's
+ * implementation moved to @launchstack/adapters. Re-export only — no logic
+ * may be added here (enforced by scripts/ci/check-core-facade.mjs).
  */
-
-import type { OcrConfig } from "../config/types";
-import { createSlot } from "../internal/slot";
-
-const configSlot = createSlot<OcrConfig>("ocr/config");
-
-export function configureOcr(config: OcrConfig): void {
-  configSlot.set(config);
-}
-
-export function getOcrConfig(): OcrConfig {
-  return configSlot.get() ?? {};
-}
+export * from "@launchstack/adapters/ocr/config";

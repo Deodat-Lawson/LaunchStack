@@ -48,8 +48,10 @@ export async function POST(request: Request) {
             .values({
                 name: companyName,
                 slug,
-                numberOfEmployees: numberOfEmployees || "0",
-                embeddingIndexKey: embeddingIndexKey?.trim() || null,
+                // `?? ""` first so the `||` default (which must also catch
+                // empty strings) operates on a plain string.
+                numberOfEmployees: (numberOfEmployees ?? "") || "0",
+                embeddingIndexKey: (embeddingIndexKey?.trim() ?? "") || null,
             })
             .returning({ id: company.id });
 

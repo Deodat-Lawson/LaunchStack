@@ -112,7 +112,8 @@ export function AudioViewer({ document }: AudioViewerProps) {
     const audio = audioRef.current;
     if (!audio) return;
     audio.currentTime = time;
-    void audio.play().catch(() => {});
+    // Autoplay rejections (e.g. no user gesture yet) are intentionally ignored.
+    void audio.play().catch(() => undefined);
   }, []);
 
   // For a raw audio file (not a transcription), just show the player
@@ -164,7 +165,7 @@ export function AudioViewer({ document }: AudioViewerProps) {
           <h3 className="text-sm font-semibold text-foreground">Transcript</h3>
           {metadata?.language && (
             <span className="px-2 py-0.5 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-[10px] rounded font-medium uppercase">
-              {metadata.language as string}
+              {metadata.language}
             </span>
           )}
         </div>

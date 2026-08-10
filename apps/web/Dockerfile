@@ -16,6 +16,10 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml .pnpmfile.cjs ./
 COPY patches ./patches/
 COPY packages/core/package.json ./packages/core/
 COPY packages/features/package.json ./packages/features/
+COPY packages/protocol/package.json ./packages/protocol/
+COPY packages/evidence/package.json ./packages/evidence/
+COPY packages/application/package.json ./packages/application/
+COPY packages/adapters/package.json ./packages/adapters/
 COPY apps/web/package.json ./apps/web/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile

@@ -8,7 +8,7 @@ import { RateLimitPresets, clearRateLimitStore } from "~/lib/rate-limiter";
 import type { RateLimitInfo } from "~/lib/rate-limiter";
 
 describe("Rate Limit Middleware", () => {
-  const createMockRequest = (ip: string = "192.168.1.1"): Request => {
+  const createMockRequest = (ip = "192.168.1.1"): Request => {
     return {
       headers: {
         get: (name: string) => {

@@ -92,9 +92,8 @@ function requiresFileAccessToken(
   cfg: ReturnType<typeof getOcrConfig>,
 ): boolean {
   const provider = effectiveProvider ?? cfg.defaultProvider;
-  return Boolean(
-    cfg.workerUrl ||
-      provider === "MARKER" ||
-      provider === "DOCLING",
-  );
+  // ADR-004 replaced the ocr-worker with services/document-converter, so the
+  // out-of-process fetcher is now `converter` (`workerUrl` is deprecated and
+  // ignored at runtime). MARKER is gone with it — DOCLING is the OSS provider.
+  return Boolean(cfg.converter?.url) || provider === "DOCLING";
 }

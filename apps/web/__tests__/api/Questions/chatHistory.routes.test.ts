@@ -1,9 +1,9 @@
 import { POST as addChatHistory } from "~/app/api/Questions/add/route";
 import { POST as fetchChatHistory } from "~/app/api/Questions/fetch/route";
 
-const mockAuth = jest.fn();
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: (...args: unknown[]) => mockAuth(...args),
+const mockRequireWorkspaceContext = jest.fn();
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
 const mockSelect = jest.fn();
@@ -14,6 +14,32 @@ jest.mock("~/server/db/index", () => ({
         insert: (...args: unknown[]) => mockInsert(...args),
     },
 }));
+
+// Identity and tenant now come from requireWorkspaceContext, so the routes no
+// longer look the user up themselves — the first db.select() a handler makes
+// is the document lookup.
+function mockAuthenticated(companyId = BigInt(10)) {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: {
+            clerkUserId: "user-1",
+            userPk: BigInt(1),
+            companyId,
+            role: "owner",
+            status: "verified",
+        },
+    });
+}
+
+function mockUnauthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        }),
+    });
+}
 
 const createLimitedSelect = (rows: unknown[]) => ({
     from: () => ({
@@ -43,7 +69,7 @@ describe("Chat history routes", () => {
             });
 
         it("rejects unauthenticated requests", async () => {
-            mockAuth.mockResolvedValue({ userId: null });
+            mockUnauthenticated();
 
             const response = await addChatHistory(
                 buildRequest({
@@ -59,14 +85,10 @@ describe("Chat history routes", () => {
         });
 
         it("prevents writing to documents outside the user's company", async () => {
-            mockAuth.mockResolvedValue({ userId: "user-1" });
-            mockSelect
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
-                )
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 5, companyId: "20", title: "Doc" }]),
-                );
+            mockAuthenticated();
+            mockSelect.mockImplementationOnce(() =>
+                createLimitedSelect([{ id: 5, companyId: 20n, title: "Doc" }]),
+            );
 
             const response = await addChatHistory(
                 buildRequest({
@@ -81,14 +103,10 @@ describe("Chat history routes", () => {
         });
 
         it("stores chat history when user and document are valid", async () => {
-            mockAuth.mockResolvedValue({ userId: "user-1" });
-            mockSelect
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
-                )
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 7, companyId: "10", title: "Actual Title" }]),
-                );
+            mockAuthenticated();
+            mockSelect.mockImplementationOnce(() =>
+                createLimitedSelect([{ id: 7, companyId: 10n, title: "Actual Title" }]),
+            );
 
             const insertValues = jest.fn().mockResolvedValue(undefined);
             mockInsert.mockReturnValueOnce({ values: insertValues });
@@ -124,7 +142,7 @@ describe("Chat history routes", () => {
             });
 
         it("rejects unauthenticated requests", async () => {
-            mockAuth.mockResolvedValue({ userId: null });
+            mockUnauthenticated();
 
             const response = await fetchChatHistory(
                 buildRequest({
@@ -136,13 +154,10 @@ describe("Chat history routes", () => {
         });
 
         it("returns chat history for valid users and documents", async () => {
-            mockAuth.mockResolvedValue({ userId: "user-1" });
+            mockAuthenticated();
             mockSelect
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ userId: "user-1", companyId: "10" }]),
-                )
-                .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 9, companyId: "10" }]),
+                    createLimitedSelect([{ id: 9, companyId: 10n }]),
                 )
                 .mockImplementationOnce(() =>
                     createWhereSelect([{ id: 1, question: "Q?", response: "A" }]),

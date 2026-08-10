@@ -24,7 +24,7 @@ import type { DeploymentProps } from '../../types';
 import { Section, Step } from '../ui';
 import styles from '~/styles/deployment.module.css';
 
-const GITHUB_REPO = 'https://github.com/Deodat-Lawson/pdr_ai_v2';
+const GITHUB_REPO = 'https://github.com/Deodat-Lawson/LaunchStack';
 
 type FeatureItem = {
   icon: React.ReactNode;
@@ -91,7 +91,7 @@ const DEPLOY_PATHS: StoreCard[] = [
     icon: <Container size={16} />,
     title: 'Docker',
     description:
-      'Self-host the full stack with Docker Compose: Postgres + pgvector, migrate, app, and optional OCR sidecars.',
+      'Self-host the full stack with Docker Compose: Postgres + pgvector, the app, the worker, and the compute services (transcription, document conversion, DOCX editing).',
     cta: 'Open Docker guide',
   },
 ];
@@ -260,9 +260,9 @@ export const MainDeployment: React.FC<DeploymentProps> = ({ copyToClipboard, cop
           <Step
             number={1}
             title="Clone the repository"
-            code={`git clone ${GITHUB_REPO}.git\ncd pdr_ai_v2`}
+            code={`git clone ${GITHUB_REPO}.git\ncd LaunchStack`}
             onCopy={() =>
-              copyToClipboard(`git clone ${GITHUB_REPO}.git\ncd pdr_ai_v2`, 'qs-1')
+              copyToClipboard(`git clone ${GITHUB_REPO}.git\ncd LaunchStack`, 'qs-1')
             }
             copied={copiedCode === 'qs-1'}
           />

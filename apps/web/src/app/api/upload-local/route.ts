@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     // resolve this upload. For database backend, uploadFile already inserted
     // the row and the URL is /api/files/<id>.
     let fileId: number | null = null;
-    let fileUrl = uploaded.url;
+    const fileUrl = uploaded.url;
 
     if (uploaded.provider === "s3") {
       const [row] = await db

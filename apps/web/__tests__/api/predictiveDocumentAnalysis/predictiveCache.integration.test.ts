@@ -54,6 +54,10 @@ jest.mock("~/server/engine", () => ({
     getEngine: jest.fn(() => mockEngine),
 }));
 
+// The predictive-analysis routes resolve identity and tenant through
+// requireWorkspaceContext (mocked below to the seeded test company), so no
+// Clerk session or active-workspace resolution is exercised here.
+
 jest.mock(
     "~/app/api/agents/predictive-document-analysis/agent",
     (): AnalyzeDocumentChunksModule => ({
@@ -70,6 +74,18 @@ jest.mock("~/lib/rate-limit-middleware", () => ({
             handler: () => Promise<unknown>
         ): Promise<unknown> => handler()
     ),
+}));
+
+// The route imports RateLimitPresets from ~/lib/rate-limiter; loading the
+// real module starts an un-unref'd cleanup setInterval that keeps the Jest
+// process alive after the run, so mock the presets instead.
+jest.mock("~/lib/rate-limiter", () => ({
+    RateLimitPresets: {
+        standard: { maxRequests: 100, windowMs: 15 * 60 * 1000 },
+        strict: { maxRequests: 20, windowMs: 15 * 60 * 1000 },
+        permissive: { maxRequests: 300, windowMs: 15 * 60 * 1000 },
+        burst: { maxRequests: 10, windowMs: 60 * 1000 },
+    },
 }));
 
 jest.mock("~/server/metrics/registry", () => ({

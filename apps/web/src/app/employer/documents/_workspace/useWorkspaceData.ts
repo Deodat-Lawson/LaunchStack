@@ -34,8 +34,13 @@ function mapDocType(doc: DocumentType): SourceTypeId {
 
 function humanDate(raw: unknown): string {
   if (!raw) return "";
-  const d = new Date(String(raw));
-  if (Number.isNaN(d.getTime())) return "";
+  const d =
+    raw instanceof Date
+      ? raw
+      : typeof raw === "string" || typeof raw === "number"
+        ? new Date(raw)
+        : null;
+  if (!d || Number.isNaN(d.getTime())) return "";
   const diffMs = Date.now() - d.getTime();
   const diffHr = Math.floor(diffMs / 3_600_000);
   if (diffHr < 1) return "just now";

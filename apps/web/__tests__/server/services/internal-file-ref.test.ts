@@ -115,10 +115,13 @@ describe("authorizeInternalFileRef", () => {
     expect(mockDbSelect).not.toHaveBeenCalled();
   });
 
-  it("fails at ingress when the OSS worker has no signing secret", async () => {
+  it("fails at ingress when the document converter has no signing secret", async () => {
+    // ADR-004 replaced the ocr-worker with services/document-converter, so a
+    // configured `converter` is what makes an out-of-process fetch (and thus
+    // a signed token) mandatory.
     configureOcr({
       appPublicUrl: "http://app:3000",
-      workerUrl: "http://ocr-worker:8001",
+      converter: { url: "http://document-converter:8002", apiKey: "k" },
     });
     setupFileQuery([{ companyId: COMPANY }]);
 
@@ -135,7 +138,7 @@ describe("authorizeInternalFileRef", () => {
     const where = jest.fn().mockImplementation(async () => {
       configureOcr({
         appPublicUrl: "http://app:3000",
-        workerUrl: "http://ocr-worker:8001",
+        converter: { url: "http://document-converter:8002", apiKey: "k" },
       });
       return [{ companyId: COMPANY }];
     });

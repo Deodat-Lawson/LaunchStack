@@ -56,13 +56,13 @@ Before the second pass:
 1. **Environment**
    - Use the same `.env` (or a copy) with keys valid for the Docker run (e.g. `DATABASE_URL` for the Compose `db` service).
 
-2. **Start full stack (with Inngest)**
+2. **Start full stack**
    - Ensure `INNGEST_EVENT_KEY` (and optionally `INNGEST_SIGNING_KEY`) is set in `.env`.
-   - Use the `dev` profile so the Inngest dev server runs (required for document upload/processing):
+   - The default profile already includes the worker (which processes uploads via the transactional outbox) and the Inngest dev server:
    ```bash
-   docker compose --env-file .env --profile dev up
+   docker compose --env-file .env up
    ```
-   Wait until the app and Inngest are ready (migrate completes, app listens). Open **http://localhost:3000**; Inngest dashboard at **http://localhost:8288**.
+   Wait until the stack is ready (migrate completes, app listens, worker healthy at **http://localhost:8020/healthz**). Open **http://localhost:3000**; Inngest dashboard at **http://localhost:8288**.
 
 3. **Test accounts**
    - Reuse the same Employer/Employee accounts (Clerk and DB are shared if you point to the same DB) or create fresh ones.

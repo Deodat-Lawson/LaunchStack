@@ -39,8 +39,8 @@ const SUPPORTED_EXTENSIONS: Record<string, string> = {
  * Accepted for ingestion but not transcribable here.
  *
  * `isAudioFileName` lets .wma through and Gemini has no format for it, so the
- * error names the sidecar rather than leaving the operator to guess: the
- * self-hosted path decodes with ffmpeg and handles anything.
+ * error names the self-hosted transcription service rather than leaving the
+ * operator to guess: that path decodes with ffmpeg and handles anything.
  */
 const NEEDS_SIDECAR = new Set(["wma"]);
 
@@ -100,9 +100,9 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
             throw new Error(
                 NEEDS_SIDECAR.has(extension)
                     ? `".${extension}" cannot be transcribed by the cloud provider — ` +
-                      "Gemini has no format for it. Run the transcription sidecar " +
-                      "(SIDECAR_URL), which decodes any container, or convert the " +
-                      "file to wav or mp3 first."
+                      "Gemini has no format for it. Run the self-hosted transcription " +
+                      "service (TRANSCRIPTION_SERVICE_URL, TRANSCRIPTION_PROVIDER=sidecar), " +
+                      "which decodes any container, or convert the file to wav or mp3 first."
                     : `Unsupported audio format ".${extension}" for transcription. ` +
                       `Accepted: ${Object.keys(SUPPORTED_EXTENSIONS).join(", ")}.`,
             );

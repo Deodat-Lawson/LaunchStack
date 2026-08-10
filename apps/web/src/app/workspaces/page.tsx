@@ -73,10 +73,12 @@ export default async function WorkspacesPage({
         isActive: activeCompanyId !== null && BigInt(r.id) === activeCompanyId,
     }));
 
+    // `?? ""` first so the `||` fallthrough (which must also skip empty
+    // strings, e.g. a blank fullName) operates on non-nullable strings.
     const accountName =
-        clerkUser?.fullName ||
+        (clerkUser?.fullName ?? "") ||
         [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ") ||
-        clerkUser?.username ||
+        (clerkUser?.username ?? "") ||
         "You";
     const accountEmail =
         clerkUser?.primaryEmailAddress?.emailAddress ?? "";

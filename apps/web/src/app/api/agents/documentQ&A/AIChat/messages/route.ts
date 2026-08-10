@@ -41,9 +41,9 @@ export async function POST(request: NextRequest) {
     const insertValues = {
       id: messageId,
       chatId,
-      role: role as "user" | "assistant" | "system" | "tool",
+      role,
       content,
-      messageType: messageType as "text" | "tool_call" | "tool_result" | "thinking",
+      messageType: messageType!,
       parentMessageId,
     };
 

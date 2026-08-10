@@ -393,8 +393,8 @@ export function DocumentViewer({
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                documentUrl: storage!.url,
-                mimeType: file.type || expectedMime || "application/octet-stream",
+                documentUrl: storage.url,
+                mimeType: file.type || (expectedMime ?? "") || "application/octet-stream",
                 originalFilename: file.name,
                 fileSize: file.size,
               }),

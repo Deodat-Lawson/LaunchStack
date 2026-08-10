@@ -23,23 +23,11 @@ import { NextRequest } from "next/server";
 // These must be set up BEFORE importing the route handlers, because
 // Jest hoists jest.mock() calls to the top of the file.
 
-// Mock Clerk auth — we control what userId is returned per test.
-const mockAuth = jest.fn();
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: () => mockAuth(),
-}));
-
-// Mock the database — we don't want to hit PostgreSQL in tests.
-// The users table lookup is the only direct DB call in the routes.
-const mockDbSelect = jest.fn();
-jest.mock("~/server/db", () => ({
-    db: {
-        select: () => ({
-            from: () => ({
-                where: () => mockDbSelect(),
-            }),
-        }),
-    },
+// Mock the centralized auth+tenant resolver — we control the workspace
+// context (or the failure response) per test.
+const mockRequireWorkspaceContext = jest.fn();
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
 // Mock the schema export so drizzle-orm's eq() doesn't fail.
@@ -63,6 +51,19 @@ jest.mock("~/server/inngest/client", () => ({
     inngest: {
         send: (...args: unknown[]) => mockInngestSend(...args),
     },
+}));
+
+// Pass rate limiting through — these tests exercise the handlers, not the
+// limiter. Mocking the middleware also keeps the real in-memory store's
+// cleanup setInterval from holding the Jest process open after the run.
+jest.mock("~/lib/rate-limit-middleware", () => ({
+    withRateLimit: jest.fn(
+        async (
+            _request: Request,
+            _config: unknown,
+            handler: () => Promise<unknown>,
+        ) => handler(),
+    ),
 }));
 
 // Mock uuid so we get predictable job IDs.
@@ -92,10 +93,30 @@ async function parseResponse(response: Response) {
     return { status: response.status, body: json };
 }
 
-// Set up mocks so the user is authenticated and has a company.
+// Set up mocks so the user is authenticated and has an active workspace.
+// requireWorkspaceContext owns the users lookup and workspace resolution, so
+// the routes make no direct db calls of their own.
 function mockAuthenticatedUser(userId = "user-123", companyId = 1001n) {
-    mockAuth.mockResolvedValue({ userId });
-    mockDbSelect.mockResolvedValue([{ userId, companyId }]);
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: {
+            clerkUserId: userId,
+            userPk: BigInt(1),
+            companyId,
+            role: "owner",
+            status: "verified",
+        },
+    });
+}
+
+function mockUnauthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        }),
+    });
 }
 
 // A valid request body with all required fields.
@@ -194,7 +215,7 @@ describe("POST /api/client-prospector", () => {
     });
 
     it("returns 401 when not authenticated", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+        mockUnauthenticated();
 
         const response = await POST(makePostRequest(VALID_BODY));
         const { status, body } = await parseResponse(response);
@@ -282,7 +303,7 @@ describe("GET /api/client-prospector/[jobId]", () => {
     });
 
     it("returns 401 when not authenticated", async () => {
-        mockAuth.mockResolvedValue({ userId: null });
+        mockUnauthenticated();
 
         const response = await GET_JOB(
             new Request("http://localhost:3000/api/client-prospector/some-job"),

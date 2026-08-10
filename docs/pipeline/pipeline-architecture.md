@@ -2,6 +2,27 @@
 
 > Grounded in `main` as of 2026-07-19.
 
+> **⚠️ Historical snapshot — partially superseded.** This document describes
+> the pre-outbox pipeline. Since then:
+>
+> - **The outbox now exists.** "The dispatcher is not an outbox" no longer
+>   holds: ingestion writes a `source.version.created` row into the
+>   transactional outbox (`pdr_ai_v2_event_outbox`) in the same transaction as
+>   the source version, and `apps/worker` — the sole durable coordinator —
+>   consumes it. See
+>   [ADR-003](../architecture/ADR-003-transactional-outbox-and-worker.md) and
+>   the [outbox runbook](../runbooks/outbox.md).
+> - **The sidecar inference endpoints referenced below (`/embed`,
+>   `/extract-entities`, `/rerank`) never existed in this repository** and the
+>   dangling providers were removed per
+>   [ADR-004](../architecture/ADR-004-compute-service-consolidation.md). The
+>   former `sidecar/` and `ocr-router`/`ocr-worker` runtimes are now
+>   `services/transcription`, `services/document-editor`, and
+>   `services/document-converter`.
+>
+> Read the rest of this document as the historical baseline those ADRs
+> changed, not as the current flow.
+
 ---
 
 ## 1. Summary

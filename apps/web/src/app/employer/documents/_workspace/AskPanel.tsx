@@ -1024,7 +1024,7 @@ function EmptyState({ onOpenAdd, sourceCount }: EmptyStateProps) {
 }
 
 /** Public README — same destination as MarketingShell footer "Documentation". */
-const EMPLOYER_DOCS_URL = "https://github.com/Deodat-Lawson/pdr_ai_v2#readme";
+const EMPLOYER_DOCS_URL = "https://github.com/Deodat-Lawson/LaunchStack#readme";
 
 export interface AvatarMenuProps {
   userInitials: string;

@@ -102,7 +102,7 @@ export async function POST(request: Request) {
         if (!identity.success) return identity.response;
         const clerkUserId = identity.data.clerkUserId;
 
-        const json = await request.json().catch(() => ({}));
+        const json: unknown = await request.json().catch(() => ({}));
         const parsed = CreateWorkspaceSchema.safeParse(json);
         if (!parsed.success) {
             return NextResponse.json(
@@ -137,7 +137,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const teamSizeForCompany = teamSize?.trim() || "1";
+        const teamSizeForCompany = (teamSize?.trim() ?? "") || "1";
 
         const [newCompany] = await db
             .insert(company)

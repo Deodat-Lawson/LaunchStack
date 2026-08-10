@@ -12,6 +12,26 @@ jest.mock("p-limit", () => ({
     default: () => (fn: () => Promise<unknown>) => fn(),
 }));
 
+// The routes require a workspace context and scope the document to the
+// caller's active company (cross-tenant documents read as 404). Company 7 is
+// the company the fixture document below belongs to.
+const mockRequireWorkspaceContext = jest.fn();
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+}));
+
+// The route imports RateLimitPresets from ~/lib/rate-limiter; loading the
+// real module starts an un-unref'd cleanup setInterval that keeps the Jest
+// process alive after the run, so mock the presets instead.
+jest.mock("~/lib/rate-limiter", () => ({
+    RateLimitPresets: {
+        standard: { maxRequests: 100, windowMs: 15 * 60 * 1000 },
+        strict: { maxRequests: 20, windowMs: 15 * 60 * 1000 },
+        permissive: { maxRequests: 300, windowMs: 15 * 60 * 1000 },
+        burst: { maxRequests: 10, windowMs: 60 * 1000 },
+    },
+}));
+
 jest.mock("@launchstack/core/llm", () => {
     const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
     return {
@@ -294,6 +314,16 @@ function makePredictiveSelectQuery(): PredictiveQueryChain {
 }
 
 function resetPredictiveFixtures() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: {
+            clerkUserId: "user-1",
+            userPk: BigInt(1),
+            companyId: BigInt(7),
+            role: "owner",
+            status: "verified",
+        },
+    });
     currentVersionId = 2n;
     contextChunkRows = [
         {

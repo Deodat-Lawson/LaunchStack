@@ -54,8 +54,8 @@ export async function POST(request: Request) {
 
     // Install provider configuration before the registry is read. On a cold
     // invocation nothing else here touches core, so without this the registry
-    // is empty: TRANSCRIPTION_PROVIDER=sidecar, SIDECAR_URL and AI_BASE_URL are
-    // all ignored, and the cloud provider is chosen with no credential. Worse,
+    // is empty: TRANSCRIPTION_PROVIDER=sidecar and AI_BASE_URL are both
+    // ignored, and the cloud provider is chosen with no credential. Worse,
     // getTranscriptionProvider() memoizes per process, so that wrong choice
     // would persist for every later transcription in the same instance.
     // getEngine() is idempotent and cached.

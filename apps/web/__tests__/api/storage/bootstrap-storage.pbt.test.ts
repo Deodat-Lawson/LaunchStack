@@ -7,18 +7,48 @@ import * as fc from "fast-check";
 
 // ─── Mock dependencies ──────────────────────────────────────────────────────
 
-jest.mock("@clerk/nextjs/server", () => ({
-  auth: jest.fn().mockResolvedValue({ userId: "test-user-123" }),
+// The route takes identity, tenant, and role from requireWorkspaceContext.
+// A management role is required, so the stub reports "owner".
+jest.mock("~/lib/require-workspace-context", () => ({
+  requireWorkspaceContext: jest.fn().mockResolvedValue({
+    success: true,
+    data: {
+      clerkUserId: "test-user-123",
+      userPk: BigInt(1),
+      companyId: BigInt(1),
+      role: "owner",
+      status: "verified",
+    },
+  }),
+  isManagementRole: (role: string) => role === "owner" || role === "admin",
+}));
+
+// The route reads validated env (~/env) for availableProviders.docling; the
+// real module runs zod validation + import.meta at load time, so mock it.
+jest.mock("~/env", () => ({
+  env: {
+    server: {
+      DOCUMENT_CONVERTER_URL: process.env.DOCUMENT_CONVERTER_URL,
+    },
+  },
 }));
 
 jest.mock("drizzle-orm", () => ({
   and: jest.fn((...args: unknown[]) => args),
   eq: jest.fn((...args: unknown[]) => args),
+  // Tagged-template helper used by the real ~/server/db/schema at load time.
+  sql: jest.fn(() => "sql"),
 }));
 
 jest.mock("@launchstack/core/db/schema", () => ({
   category: { id: "id", name: "name", companyId: "companyId" },
   company: { id: "id", name: "name", useUploadThing: "useUploadThing" },
+  users: { userId: "userId", role: "role", companyId: "companyId" },
+}));
+
+// The route imports `users` from the app-local schema barrel, whose real
+// modules run drizzle table builders at load time — stub it out.
+jest.mock("~/server/db/schema", () => ({
   users: { userId: "userId", role: "role", companyId: "companyId" },
 }));
 
@@ -36,7 +66,6 @@ jest.mock("~/lib/storage", () => ({
   },
 }));
 
-const mockUser = [{ role: "employer", companyId: 1 }];
 const mockCategories = [{ id: 1, name: "General" }];
 const mockCompany = [{ id: 1, name: "TestCo", useUploadThing: false }];
 
@@ -45,7 +74,8 @@ const mockCompany = [{ id: 1, name: "TestCo", useUploadThing: false }];
  * The bootstrap route uses Promise.all with two queries:
  *   1. categories: select().from(category).where(...)
  *   2. company:    select().from(company).where(...).limit(1)
- * Plus the initial user query: select().from(users).where(...)
+ * The user lookup now lives inside requireWorkspaceContext, which is mocked
+ * out entirely, so it never reaches this db stub.
  */
 function mockCreateDb() {
   let callCount = 0;
@@ -54,11 +84,7 @@ function mockCreateDb() {
       select: jest.fn().mockImplementation(() => {
         callCount++;
         const currentCall = callCount;
-        const terminal = (() => {
-          if (currentCall === 1) return mockUser;
-          if (currentCall === 2) return mockCategories;
-          return mockCompany;
-        })();
+        const terminal = currentCall === 1 ? mockCategories : mockCompany;
 
         // Object that is both a promise (thenable) and has .limit()
         const whereResult = {

@@ -17,7 +17,7 @@
     "postinstall": "echo 'postinstall: no-op'",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm --filter @launchstack/core build && changeset publish"
+    "release": "pnpm --filter @launchstack/protocol --filter @launchstack/evidence --filter @launchstack/application --filter @launchstack/adapters --filter @launchstack/core build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
@@ -31,6 +31,7 @@
     "eslint-config-next": "^15.5.2",
     "eslint-plugin-drizzle": "^0.2.3",
     "prettier": "^3.6.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.2"
   },
   "packageManager": "pnpm@10.15.1",

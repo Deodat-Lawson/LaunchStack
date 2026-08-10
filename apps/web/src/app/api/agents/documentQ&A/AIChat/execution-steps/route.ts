@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       id: stepId,
       taskId,
       stepNumber,
-      stepType: stepType as "reasoning" | "planning" | "execution" | "evaluation" | "decision",
+      stepType,
       description,
       reasoning,
       input,

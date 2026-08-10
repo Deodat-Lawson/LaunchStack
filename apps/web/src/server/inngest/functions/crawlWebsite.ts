@@ -13,6 +13,7 @@
 import { inngest } from "../client";
 import { uploadFile } from "~/lib/storage";
 import { processDocumentUpload } from "~/server/services/document-upload";
+import { fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
 
 const FETCH_TIMEOUT_MS = 30_000;
 const MAX_HTML_BYTES = 10 * 1024 * 1024;
@@ -90,12 +91,20 @@ function deriveTitle(html: string, url: string): string {
     }
 }
 
+/**
+ * Fetch a page with timeout and validation. Returns null on failure.
+ *
+ * Uses `fetchPublicUrl` so the SSRF guard runs on the URL itself AND on
+ * every redirect hop. The route only validated the crawl seed; discovered
+ * links (and any hop's redirect target) can point anywhere, so each fetch
+ * here re-checks. A guard rejection just skips the page — one hostile link
+ * must not fail the whole crawl.
+ */
 async function fetchPage(url: string): Promise<{ html: string; finalUrl: string } | null> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
-        const response = await fetch(url, {
-            redirect: "follow",
+        const response = await fetchPublicUrl(url, {
             signal: controller.signal,
             headers: {
                 "User-Agent": "Mozilla/5.0 (compatible; PDR-AI-WebIndexer/1.0; +https://pdr.ai)",
@@ -116,8 +125,11 @@ async function fetchPage(url: string): Promise<{ html: string; finalUrl: string 
             html: Buffer.from(arrayBuf).toString("utf-8"),
             finalUrl: response.url,
         };
-    } catch {
+    } catch (err) {
         clearTimeout(timeout);
+        if (err instanceof UrlGuardError) {
+            console.warn(`[CrawlWebsite] SSRF guard rejected ${url}: ${err.message}`);
+        }
         return null;
     }
 }

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { dbCore } from "../../../server/db/core";
+// The second postgres pool (~/server/db/core) was removed — hot routes use
+// the engine's shared Drizzle client like everything else.
+import { db } from "~/server/db";
 import { document, fileUploads } from "@launchstack/core/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
@@ -88,7 +90,7 @@ export async function POST(_request: Request) {
 
         const companyId = ctx.data.companyId;
 
-        const docs = await dbCore
+        const docs = await db
             .select()
             .from(document)
             .where(eq(document.companyId, companyId));
@@ -105,7 +107,7 @@ export async function POST(_request: Request) {
 
         let mimeByFileId: Record<number, string> = {};
         if (uniqueFileIds.length > 0) {
-            const rows = await dbCore
+            const rows = await db
                 .select({ id: fileUploads.id, mimeType: fileUploads.mimeType })
                 .from(fileUploads)
                 .where(inArray(fileUploads.id, uniqueFileIds));

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { dbCore } from "../../../server/db/core";
+// The second postgres pool (~/server/db/core) was removed — hot routes use
+// the engine's shared Drizzle client like everything else.
+import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
@@ -21,7 +23,7 @@ export async function POST() {
         const identity = await requireClerkIdentity();
         if (!identity.success) return identity.response;
 
-        const [userInfo] = await dbCore
+        const [userInfo] = await db
             .select()
             .from(users)
             .where(eq(users.userId, identity.data.clerkUserId));
@@ -43,7 +45,7 @@ export async function POST() {
             );
         }
 
-        const [membership] = await dbCore
+        const [membership] = await db
             .select({ role: userCompanyMemberships.role })
             .from(userCompanyMemberships)
             .where(
@@ -60,7 +62,7 @@ export async function POST() {
             );
         }
 
-        const [companyRecord] = await dbCore
+        const [companyRecord] = await db
             .select()
             .from(company)
             .where(and(eq(company.id, Number(companyId))));

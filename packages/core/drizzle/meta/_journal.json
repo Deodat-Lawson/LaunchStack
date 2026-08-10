@@ -19,6 +19,13 @@
     {
       "idx": 2,
       "version": "7",
+      "when": 1786263443653,
+      "tag": "20260809081723_event_outbox",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
       "when": 1786285587140,
       "tag": "20260809142627_file_uploads_company_id",
       "breakpoints": true

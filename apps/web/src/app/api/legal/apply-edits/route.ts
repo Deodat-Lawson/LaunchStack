@@ -129,7 +129,7 @@ export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    const body = await request.json();
+    const body: unknown = await request.json();
     const parsed = ApplyEditsSchema.safeParse(body);
 
     if (!parsed.success) {

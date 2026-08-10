@@ -119,7 +119,7 @@ export const modifyDocument = inngest.createFunction(
             updatedAt: new Date(),
             ocrMetadata: {
               error: "editing_failed",
-              errorMessage: result.validationError!,
+              errorMessage: result.validationError,
               failedAt: new Date().toISOString(),
             },
           })

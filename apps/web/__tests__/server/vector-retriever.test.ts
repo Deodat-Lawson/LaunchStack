@@ -13,6 +13,9 @@ jest.mock("~/server/engine", () => {
               maxConnections: 10,
           }).db
         : undefined;
+    // Register the engine's getDb() slot exactly like createEngine would —
+    // the moved retrievers/lifecycle read it, not the ~/server/db proxy.
+    if (engineDb) coreDb.configureDatabase(engineDb);
 
     return {
         getEngine: jest.fn(() => ({ db: engineDb })),

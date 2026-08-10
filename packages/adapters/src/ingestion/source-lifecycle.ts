@@ -50,6 +50,31 @@ function hashCreationKey(rawCreationKey: string): string {
         .digest("hex");
 }
 
+/**
+ * Resolve the document a creation key has already produced, if any.
+ *
+ * Callers that re-import the same logical source repeatedly (connectors) need
+ * to tell "never seen", "unchanged" and "changed" apart *before* uploading a
+ * payload to blob storage. Exposing this lookup keeps the key-hashing scheme
+ * private to this module.
+ */
+export async function findDocumentByCreationKey(
+    companyId: bigint,
+    rawCreationKey: string
+): Promise<Document | null> {
+    const [row] = await getDb()
+        .select()
+        .from(document)
+        .where(
+            and(
+                eq(document.companyId, companyId),
+                eq(document.creationKey, hashCreationKey(rawCreationKey))
+            )
+        )
+        .limit(1);
+    return row ?? null;
+}
+
 export interface DocumentCreationProcessing {
     preferredProvider?: string;
     originalFilename?: string;
@@ -129,6 +154,14 @@ export interface CreateDocumentVersionLifecycleParams {
     title: string;
     category: string;
     url: string;
+    /**
+     * URL handed to the extraction stage, when it differs from the one stored
+     * on the row. The database storage backend yields relative URLs that the
+     * UI resolves per request but a worker in another process cannot fetch.
+     * Mirrors `processingUrl` on {@link CreateDocumentLifecycleParams};
+     * defaults to `url`.
+     */
+    processingUrl?: string;
     creationKey: string;
     mimeType: string;
     fileSize?: number | bigint | null;
@@ -735,7 +768,7 @@ export async function createDocumentVersionLifecycle(
                             companyId: params.companyId,
                             userId: params.userId,
                             status: "queued",
-                            documentUrl: params.url,
+                            documentUrl: params.processingUrl ?? params.url,
                             documentName: params.title,
                             dispatchOptions: versionDispatchOptions,
                         })

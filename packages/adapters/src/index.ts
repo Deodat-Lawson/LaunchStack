@@ -13,6 +13,7 @@ export {
 export {
   createDocumentLifecycle,
   createDocumentVersionLifecycle,
+  findDocumentByCreationKey,
   type CreateDocumentLifecycleParams,
   type CreateDocumentVersionLifecycleParams,
   type CreatedDocumentLifecycle,

@@ -36,6 +36,14 @@ const eslintConfig = [
             // tsconfig project — the type-aware parser cannot load them.
             "scripts/**",
             "**/scripts/**/*.mjs",
+            // Same reason, one level up: `services/*` is deliberately outside
+            // the pnpm workspace (see pnpm-workspace.yaml), so its
+            // dependencies are never installed here and the type-aware parser
+            // resolves every import to `error`, which turns the whole tree
+            // into thousands of no-unsafe-* violations. Each service is
+            // typechecked, tested and linted by its own CI job, in its own
+            // container, against its own lockfile.
+            "services/**",
             ".pnpmfile.cjs",
             "prettier.config.js",
             "**/drizzle.config.ts",

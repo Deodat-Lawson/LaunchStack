@@ -35,6 +35,10 @@ function mockCtx(role: string, companyId = BigInt(1)) {
 function mockDeleteReturning(rows: { id: number }[]) {
   const returning = jest.fn().mockResolvedValue(rows);
   const where = jest.fn().mockReturnValue({ returning });
+  // `db.delete` is a jest mock here, not a query builder — this line installs
+  // the stub whose `.where()` the route under test then calls. The rule reads
+  // it as an unbounded delete, which it structurally cannot be.
+  // eslint-disable-next-line drizzle/enforce-delete-with-where
   (db.delete as jest.Mock).mockReturnValue({ where });
   return { where, returning };
 }
@@ -210,6 +214,8 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
         .fn()
         .mockRejectedValue(new Error("Delete failed"));
       const where = jest.fn().mockReturnValue({ returning });
+      // Mock installation, not a query — see `mockDeleteReturning`.
+      // eslint-disable-next-line drizzle/enforce-delete-with-where
       (db.delete as jest.Mock).mockReturnValue({ where });
 
       const request = new Request(

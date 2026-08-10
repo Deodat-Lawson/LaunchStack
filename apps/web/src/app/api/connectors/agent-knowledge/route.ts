@@ -68,7 +68,12 @@ async function resolveCaller(): Promise<CallerResult> {
     }
 
     const [userInfo] = await db
-        .select({ id: users.id, role: users.role, companyId: users.companyId })
+        .select({
+            id: users.id,
+            role: users.role,
+            companyId: users.companyId,
+            status: users.status,
+        })
         .from(users)
         .where(eq(users.userId, userId));
 
@@ -81,13 +86,24 @@ async function resolveCaller(): Promise<CallerResult> {
         return { ok: false, response: createForbiddenError("Employer access required.") };
     }
 
-    return {
-        ok: true,
-        caller: {
-            userId,
-            companyId: await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId),
-        },
-    };
+    const companyId = await resolveActiveCompanyForUser(
+        userInfo.id,
+        userInfo.companyId,
+        userInfo.status,
+    );
+
+    // Null means the user holds no membership in the resolved workspace.
+    // There is no tenant to import into, so this is a refusal rather than a
+    // fallback — importing into a company the caller has left would leak the
+    // contents of their local agent folders into someone else's knowledge base.
+    if (companyId === null) {
+        return {
+            ok: false,
+            response: createForbiddenError("No active workspace for this user."),
+        };
+    }
+
+    return { ok: true, caller: { userId, companyId } };
 }
 
 function disabledResponse(): NextResponse {

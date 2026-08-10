@@ -12,12 +12,13 @@ export async function getWorkspaceSwitcherPayload(): Promise<WorkspaceSwitcherPa
   const { userId } = await auth();
   if (!userId) return null;
 
-  let activeCompanyId: bigint;
+  let activeCompanyId: bigint | null;
   try {
     activeCompanyId = await getActiveCompanyId(userId);
   } catch {
     return null;
   }
+  if (activeCompanyId === null) return null;
 
   const [user] = await db
     .select({ id: users.id })

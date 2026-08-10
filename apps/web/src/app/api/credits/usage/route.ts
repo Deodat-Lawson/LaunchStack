@@ -1,25 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
 import { getUsageHistory, getTransactionHistory, getBalance } from "~/lib/credits";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [user] = await db
-            .select({ id: users.id, companyId: users.companyId })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
-        }
+        const companyId = ctx.data.companyId;
 
         const url = new URL(request.url);
         const startDate = url.searchParams.get("startDate") ?? undefined;
@@ -27,14 +15,14 @@ export async function GET(request: Request) {
         const type = url.searchParams.get("type") ?? "daily";
 
         if (type === "transactions") {
-            const transactions = await getTransactionHistory(user.companyId, 50);
+            const transactions = await getTransactionHistory(companyId, 50);
             return NextResponse.json({ transactions });
         }
 
         const [balanceTokens, usage] = await Promise.all([
-            getBalance(user.companyId),
+            getBalance(companyId),
             getUsageHistory({
-                companyId: user.companyId,
+                companyId,
                 startDate,
                 endDate,
             }),

@@ -7,13 +7,16 @@ import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
 import { generateUniqueSlug } from "~/lib/workspace-slug";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
+
         const validation = await validateRequestBody(request, EmployerCompanySignupSchema);
         if (!validation.success) return validation.response;
         const {
-            userId,
             name,
             email,
             companyName,
@@ -24,6 +27,7 @@ export async function POST(request: Request) {
             embeddingOllamaBaseUrl,
             embeddingOllamaModel,
         } = validation.data;
+        const userId = identity.data.clerkUserId;
 
         // Check if company already exists
         const [existingCompany] = await db

@@ -8,6 +8,10 @@
 
 import { createDoclingAdapter, parseMarkdownTable } from "@launchstack/core/ocr/adapters/ossAdapter";
 import { configureOcr } from "@launchstack/core/ocr/config";
+import {
+  FILE_ACCESS_TOKEN_PARAM,
+  verifyFileAccessToken,
+} from "@launchstack/core/crypto";
 
 const CONVERTER_URL = "http://test-converter:8002";
 const API_KEY = "test-converter-key";
@@ -44,15 +48,18 @@ function evidenceFixture(overrides: Record<string, unknown> = {}) {
 
 describe("OSS OCR Adapter (document-converter /convert)", () => {
   const originalFetch = global.fetch;
+  let consoleWarnSpy: jest.SpyInstance;
 
   beforeEach(() => {
     configureOcr({ converter: { url: CONVERTER_URL, apiKey: API_KEY } });
     global.fetch = jest.fn() as unknown as typeof fetch;
+    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
   });
 
   afterEach(() => {
     configureOcr({});
     global.fetch = originalFetch;
+    consoleWarnSpy.mockRestore();
   });
 
   function mockConverterResponse(body: unknown, status = 200) {
@@ -175,23 +182,125 @@ describe("OSS OCR Adapter (document-converter /convert)", () => {
     ).rejects.toThrow();
   });
 
-  describe("relative URL resolution", () => {
+  describe("relative URL resolution and file-access signing", () => {
+    function mockEmptyDocument() {
+      mockConverterResponse(evidenceFixture({ pages: [], source: {} }));
+    }
+
+    function converterRequestUrl(): string {
+      const [, init] = (global.fetch as jest.Mock).mock.calls[0] as [
+        string,
+        RequestInit,
+      ];
+      return JSON.parse(init.body as string).url as string;
+    }
+
     it("rewrites /api/files/... using the configured appPublicUrl", async () => {
       configureOcr({
         converter: { url: CONVERTER_URL, apiKey: API_KEY },
         appPublicUrl: "http://app:3000",
       });
-      mockConverterResponse(evidenceFixture({ pages: [], source: {} }));
+      mockEmptyDocument();
 
       await createDoclingAdapter().uploadDocument("/api/files/123");
 
-      const [, init] = (global.fetch as jest.Mock).mock.calls[0] as [
-        string,
-        RequestInit,
-      ];
-      expect(JSON.parse(init.body as string).url).toBe(
-        "http://app:3000/api/files/123"
-      );
+      expect(converterRequestUrl()).toBe("http://app:3000/api/files/123");
+    });
+
+    it("signs /api/files/... URLs when a file access token secret is set", async () => {
+      configureOcr({
+        converter: { url: CONVERTER_URL, apiKey: API_KEY },
+        appPublicUrl: "http://app:3000",
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      await createDoclingAdapter().uploadDocument("/api/files/123");
+
+      const url = new URL(converterRequestUrl());
+      expect(url.pathname).toBe("/api/files/123");
+      const token = url.searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+      expect(verifyFileAccessToken(token, "123", "worker-secret")).toBe(true);
+      expect(verifyFileAccessToken(token, "124", "worker-secret")).toBe(false);
+    });
+
+    it("does not sign external absolute URLs", async () => {
+      configureOcr({
+        converter: { url: CONVERTER_URL, apiKey: API_KEY },
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      await createDoclingAdapter().uploadDocument("https://cdn.example.com/doc.pdf");
+
+      expect(converterRequestUrl()).toBe("https://cdn.example.com/doc.pdf");
+    });
+
+    it("does not sign a foreign-host URL that only resembles an internal file", async () => {
+      configureOcr({
+        converter: { url: CONVERTER_URL, apiKey: API_KEY },
+        appPublicUrl: "http://app:3000",
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      await createDoclingAdapter().uploadDocument("https://evil.example/api/files/123");
+
+      expect(converterRequestUrl()).toBe("https://evil.example/api/files/123");
+      expect(new URL(converterRequestUrl()).search).toBe("");
+    });
+
+    // The upload pipeline resolves database-backed URLs to absolute form
+    // before dispatch, so recognizing internal files only in relative URLs
+    // sent every legitimate converter fetch into a 401.
+    it("canonicalizes and signs same-origin internal file URLs", async () => {
+      configureOcr({
+        converter: { url: CONVERTER_URL, apiKey: API_KEY },
+        appPublicUrl: "http://app:3000",
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      await createDoclingAdapter().uploadDocument("http://app:3000/api/files/123/");
+
+      const url = new URL(converterRequestUrl());
+      expect(url.origin).toBe("http://app:3000");
+      expect(url.pathname).toBe("/api/files/123");
+      const token = url.searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+      expect(verifyFileAccessToken(token, "123", "worker-secret")).toBe(true);
+    });
+
+    it("mints a fresh token for every fetch", async () => {
+      configureOcr({
+        converter: { url: CONVERTER_URL, apiKey: API_KEY },
+        appPublicUrl: "http://app:3000",
+        fileAccessTokenSecret: "worker-secret",
+      });
+      mockEmptyDocument();
+
+      const adapter = createDoclingAdapter();
+      const realNow = Date.now;
+      let now = realNow();
+      Date.now = () => now;
+      try {
+        await adapter.uploadDocument("/api/files/123");
+        now += 60_000;
+        await adapter.uploadDocument("/api/files/123");
+      } finally {
+        Date.now = realNow;
+      }
+
+      const tokenFor = (call: number) => {
+        const [, init] = (global.fetch as jest.Mock).mock.calls[call] as [
+          string,
+          RequestInit,
+        ];
+        return new URL(JSON.parse(init.body as string).url).searchParams.get(
+          FILE_ACCESS_TOKEN_PARAM,
+        );
+      };
+
+      expect(tokenFor(0)).not.toBe(tokenFor(1));
     });
   });
 

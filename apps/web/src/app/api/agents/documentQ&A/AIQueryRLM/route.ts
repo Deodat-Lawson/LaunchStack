@@ -19,9 +19,7 @@ import { NextResponse } from "next/server";
 import { SystemMessage, HumanMessage } from "@langchain/core/messages";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
 import { document } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -39,7 +37,7 @@ import {
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/core/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -140,6 +138,13 @@ export async function POST(request: Request) {
         const startTime = Date.now();
 
         try {
+            // Authenticate first. Chat resolution reports what this
+            // deployment can and cannot do, which is not something an
+            // anonymous caller should be able to probe — and a request that
+            // is going to 401 should 401, not 400.
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) return ctx.response;
+
             // Parse and validate request
             const body = await request.json() as RLMQueryRequest;
             const validation = validateRequest(body);
@@ -168,18 +173,6 @@ export async function POST(request: Request) {
                 pageRange,
             } = validation.data;
 
-            // Authenticate first. Chat resolution reports what this
-            // deployment can and cannot do, which is not something an
-            // anonymous caller should be able to probe — and a request that
-            // is going to 401 should 401, not 400.
-            const { userId } = await auth();
-            if (!userId) {
-                return NextResponse.json(
-                    { success: false, message: "Unauthorized" },
-                    { status: 401 }
-                );
-            }
-
             // Then resolve, still before the hierarchical search runs: an
             // unavailable route is a 400, and RLM retrieval is the expensive
             // part.
@@ -206,20 +199,6 @@ export async function POST(request: Request) {
             }
             const { modelId: selectedAiModel, chat } = resolved;
 
-            // Verify user and document access
-            const [requestingUser] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId))
-                .limit(1);
-
-            if (!requestingUser) {
-                return NextResponse.json(
-                    { success: false, message: "Invalid user." },
-                    { status: 401 }
-                );
-            }
-
             const [targetDocument] = await db
                 .select({
                     id: document.id,
@@ -237,7 +216,7 @@ export async function POST(request: Request) {
                 );
             }
 
-            if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
+            if (targetDocument.companyId !== ctx.data.companyId) {
                 return NextResponse.json(
                     { success: false, message: "You do not have access to this document." },
                     { status: 403 }

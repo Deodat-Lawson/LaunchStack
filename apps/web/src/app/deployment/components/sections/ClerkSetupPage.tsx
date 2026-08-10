@@ -92,7 +92,7 @@ https://your-app-domain.com/sign-up`}
           <InfoBox title="Use live keys in production" icon={<Settings size={18} />}>
             <p style={{ margin: 0 }}>
               Test keys can produce inconsistent auth behavior for real users.
-              Make sure production uses <code className={styles.mono}>pk_live_*</code> and <code className={styles.mono}>sk_live_*</code>.
+              Make sure production uses your Clerk publishable key and Clerk secret key.
             </p>
           </InfoBox>
           <WarningBox

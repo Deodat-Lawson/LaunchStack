@@ -12,12 +12,8 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
-import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import {
@@ -25,24 +21,19 @@ import {
     DEFAULT_SEARCH_RADIUS,
 } from "@launchstack/features/client-prospector";
 import { createJob, getJobsByCompanyId } from "@launchstack/features/client-prospector/db";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 // ─── POST /api/client-prospector ─────────────────────────────────────────────
 export async function POST(request: NextRequest) {
-    const { userId } = await auth();
-    if (!userId) {
-        return NextResponse.json(
-            { error: "Unauthorized" },
-            { status: 401 },
-        );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     return withRateLimit(
         request,
         {
             maxRequests: 10,
             windowMs: 15 * 60 * 1000,
-            keyGenerator: () => `client-prospector:${userId}`,
+            keyGenerator: () => `client-prospector:${ctx.data.clerkUserId}`,
         },
         async () => {
             try {
@@ -58,21 +49,8 @@ export async function POST(request: NextRequest) {
 
                 const input = parsed.data;
 
-                // Step 4: Look up the user's company.
-                // Every job is scoped to a company for data isolation.
-                const [userInfo] = await db
-                    .select()
-                    .from(users)
-                    .where(eq(users.userId, userId));
-
-                if (!userInfo) {
-                    return NextResponse.json(
-                        { error: "User not found" },
-                        { status: 400 },
-                    );
-                }
-
-                const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+                const companyId = ctx.data.companyId;
+                const userId = ctx.data.clerkUserId;
                 const jobId = uuidv4();
                 const radius = input.radius ?? DEFAULT_SEARCH_RADIUS;
                 const queuedLocation =
@@ -133,25 +111,8 @@ export async function POST(request: NextRequest) {
 // Returns a summary for each job (id, status, query, location, createdAt).
 export async function GET(request: NextRequest) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
-
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const limitParam = request.nextUrl.searchParams.get("limit");
         const offsetParam = request.nextUrl.searchParams.get("offset");
@@ -172,7 +133,7 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        const jobs = await getJobsByCompanyId((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)), { limit, offset });
+        const jobs = await getJobsByCompanyId(ctx.data.companyId, { limit, offset });
 
         const results = jobs.map((job) => ({
             id: job.id,

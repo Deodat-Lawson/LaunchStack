@@ -11,7 +11,6 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import type { JSONContent } from "@tiptap/react";
 
 import { db } from "~/server/db";
@@ -22,9 +21,11 @@ import {
 } from "~/server/notes/ai-capture";
 import { requestNoteEmbedding } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
-import { syncNoteLinks, getCompanyIdForUser } from "~/server/notes/wiki-links";
+import { syncNoteLinks } from "~/server/notes/wiki-links";
+import { validateNoteTarget } from "~/server/notes/validate-note-target";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -49,10 +50,8 @@ const VALID_INTENTS: ReadonlySet<AiCaptureIntent> = new Set([
 export async function POST(request: Request) {
   return withRateLimit(request, RateLimitPresets.strict, async () => {
     try {
-      const { userId } = await auth();
-      if (!userId) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
+      const ctx = await requireWorkspaceContext();
+      if (!ctx.success) return ctx.response;
 
       const body = (await request.json().catch(() => ({}))) as Body;
       const selection = (body.selection ?? "").trim();
@@ -70,39 +69,48 @@ export async function POST(request: Request) {
         );
       }
 
-      const ctx = body.sourceContext ?? {};
+      const sourceCtx = body.sourceContext ?? {};
+
+      // Validate before spending an LLM call on a source the caller cannot see.
+      const target = await validateNoteTarget({
+        documentId: sourceCtx.documentId,
+        versionId: sourceCtx.versionId,
+        companyId: ctx.data.companyId,
+      });
+      if (!target.ok) return target.response;
+
       const { markdown, suggestedTitle } = await captureFromSelection({
         selection,
         intent,
-        documentTitle: ctx.documentTitle ?? null,
-        page: ctx.page ?? null,
+        documentTitle: sourceCtx.documentTitle ?? null,
+        page: sourceCtx.page ?? null,
       });
 
       // Anchor by quote (durable across re-OCR) + page when known.
       const anchor =
-        ctx.documentId && selection
+        sourceCtx.documentId && selection
           ? {
-              type: ctx.page ? "pdf" : "text",
-              ...(ctx.page
-                ? { primary: { kind: "pdf", page: ctx.page, quads: [] } }
+              type: sourceCtx.page ? "pdf" : "text",
+              ...(sourceCtx.page
+                ? { primary: { kind: "pdf", page: sourceCtx.page, quads: [] } }
                 : {}),
               quote: { exact: selection },
             }
           : null;
 
       const versionIdBigint =
-        ctx.versionId !== undefined && ctx.versionId !== null
-          ? BigInt(ctx.versionId)
+        sourceCtx.versionId !== undefined && sourceCtx.versionId !== null
+          ? BigInt(sourceCtx.versionId)
           : null;
 
-      const companyId = await getCompanyIdForUser(userId);
+      const companyId = String(ctx.data.companyId);
 
       const [note] = await db
         .insert(documentNotes)
         .values({
-          userId,
+          userId: ctx.data.clerkUserId,
           companyId,
-          documentId: ctx.documentId ?? null,
+          documentId: sourceCtx.documentId ?? null,
           versionId: versionIdBigint,
           title: suggestedTitle,
           contentMarkdown: markdown,

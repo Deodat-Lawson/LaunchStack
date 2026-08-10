@@ -11,23 +11,19 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
 import { assertPublicHttpUrl, fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { inngest } from "~/server/inngest/client";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const WebsiteUploadSchema = z.object({
-    userId: z.string().min(1, "User ID is required"),
     url: z.string().url("A valid URL is required"),
     title: z.string().optional(),
     category: z.string().optional(),
@@ -121,6 +117,9 @@ async function fetchPageWithJsRender(
 }
 
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const validation = await validateRequestBody(request, WebsiteUploadSchema);
@@ -128,20 +127,8 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
-            const { userId: bodyUserId, url, title, category, crawl, maxDepth, maxPages, jsRender } =
+            const { url, title, category, crawl, maxDepth, maxPages, jsRender } =
                 validation.data;
-
-            // Identity comes from the Clerk session, never the request body.
-            // `userId` stays in the schema for wire-compat but is overridden.
-            const { userId } = await auth();
-            if (!userId) {
-                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-            }
-            if (bodyUserId && bodyUserId !== userId) {
-                console.warn(
-                    `[WebsiteUpload] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
-                );
-            }
 
             // SSRF guard: http(s) only, and the host must resolve to a public
             // address. Guards both single-page fetch and the crawl seed (the
@@ -158,12 +145,6 @@ export async function POST(request: Request) {
             const normalizedSourceUrl = new URL(parsedUrl);
             normalizedSourceUrl.hash = "";
 
-            const [userInfo] = await db.select().from(users).where(eq(users.userId, userId));
-
-            if (!userInfo) {
-                return NextResponse.json({ error: "Invalid user" }, { status: 400 });
-            }
-
             // ------------------------------------------------------------------
             // Crawl mode: dispatch to Inngest and return immediately
             // ------------------------------------------------------------------
@@ -179,10 +160,8 @@ export async function POST(request: Request) {
                     name: "website/crawl.requested",
                     data: {
                         url,
-                        userId,
-                        companyId: (
-                            await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)
-                        ).toString(),
+                        userId: ctx.data.clerkUserId,
+                        companyId: ctx.data.companyId.toString(),
                         category,
                         maxDepth: maxDepth ?? DEFAULT_MAX_DEPTH,
                         maxPages: maxPages ?? DEFAULT_MAX_PAGES,
@@ -207,7 +186,7 @@ export async function POST(request: Request) {
             // Single-page mode
             // ------------------------------------------------------------------
             console.log(
-                `[WebsiteUpload] Fetching: ${url}, user=${userId}, jsRender=${jsRender ?? false}`
+                `[WebsiteUpload] Fetching: ${url}, user=${ctx.data.clerkUserId}, jsRender=${jsRender ?? false}`
             );
 
             let page: { html: string; finalUrl: string } | null = null;
@@ -243,7 +222,8 @@ export async function POST(request: Request) {
                 filename,
                 data: htmlBuffer,
                 contentType: "text/html",
-                userId,
+                userId: ctx.data.clerkUserId,
+                companyId: ctx.data.companyId,
             });
 
             console.log(
@@ -252,8 +232,8 @@ export async function POST(request: Request) {
 
             const uploadResult = await processDocumentUpload({
                 user: {
-                    userId,
-                    companyId: await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId),
+                    userId: ctx.data.clerkUserId,
+                    companyId: ctx.data.companyId,
                 },
                 documentName: resolvedTitle,
                 rawDocumentUrl: uploaded.url,
@@ -288,6 +268,16 @@ export async function POST(request: Request) {
             // problem, not a server error.
             if (error instanceof UrlGuardError) {
                 return NextResponse.json({ error: error.message }, { status: 400 });
+            }
+            // processDocumentUpload authorizes the internal file reference and
+            // throws with its own status (404 foreign file / 503 unconfigured).
+            // Collapsing that into a 500 hides an actionable, operator-fixable
+            // condition behind "something went wrong".
+            if (error instanceof UploadAuthorizationError) {
+                return NextResponse.json(
+                    { error: error.message },
+                    { status: error.status },
+                );
             }
             console.error("[WebsiteUpload] Error:", error);
             return NextResponse.json(

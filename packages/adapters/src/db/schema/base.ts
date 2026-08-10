@@ -237,9 +237,17 @@ export const fileUploads = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+        // After createdAt so ADD COLUMN migrations match the TypeScript dump
+        // (Postgres appends new columns). Nullable for legacy rows; new uploads
+        // always stamp this so /api/files can enforce tenant ownership directly.
+        companyId: bigint("company_id", { mode: "bigint" }).references(
+            () => company.id,
+            { onDelete: "set null" },
+        ),
     },
     table => ({
         userIdIdx: index("file_uploads_user_id_idx").on(table.userId),
+        companyIdIdx: index("file_uploads_company_id_idx").on(table.companyId),
     })
 );
 

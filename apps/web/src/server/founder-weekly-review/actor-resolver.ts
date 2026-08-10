@@ -25,6 +25,7 @@ export interface FounderWeeklyReviewActor {
 export class FounderWeeklyReviewActorResolver {
     async resolve(externalUserId: string): Promise<FounderWeeklyReviewActor> {
         const companyId = await getActiveCompanyId(externalUserId);
+        if (companyId == null) throw new FounderWeeklyReviewAuthorizationError();
         const [user] = await db.select({ id: users.id }).from(users)
             .where(eq(users.userId, externalUserId)).limit(1);
         if (!user) throw new FounderWeeklyReviewAuthorizationError();

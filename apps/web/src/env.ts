@@ -166,6 +166,15 @@ const serverSchema = z.object({
   // /api/files URLs — the converter needs an absolute URL to fetch them
   // (and this origin must be in its ALLOWED_FETCH_ORIGINS).
   APP_PUBLIC_URL: optionalString(),
+  // Signs short-lived tokens that let the OCR worker read /api/files URLs
+  // without a Clerk session. Required alongside OCR_WORKER_URL when documents
+  // are stored in the database; without it those fetches get a 401.
+  // Generate with:
+  //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+  FILE_ACCESS_TOKEN_SECRET: optionalString(),
+  // Bearer token required by GET /api/metrics (Prometheus scrapers).
+  // In production the endpoint returns 503 if this is unset.
+  METRICS_SCRAPE_TOKEN: optionalString(),
   // Enable Graph RAG retrieval
   ENABLE_GRAPH_RETRIEVER: z.preprocess(
     (val) => val === "true" || val === "1",
@@ -369,6 +378,8 @@ function parseServerEnv() {
     OCR_VISION_MODEL: process.env.OCR_VISION_MODEL,
     OCR_DEFAULT_PROVIDER: process.env.OCR_DEFAULT_PROVIDER as "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB" | undefined,
     APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
+    FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
+    METRICS_SCRAPE_TOKEN: process.env.METRICS_SCRAPE_TOKEN,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
     ENABLE_NOTES_RETRIEVER: process.env.ENABLE_NOTES_RETRIEVER,
     NEO4J_URI: process.env.NEO4J_URI,

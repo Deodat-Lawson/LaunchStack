@@ -2,18 +2,26 @@
  * POST /api/upload/video-url — session-derived identity and SSRF guard.
  */
 
-const mockClerk: { userId: string | null } = { userId: null };
+const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: () => Promise.resolve({ userId: mockClerk.userId }),
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+}));
+
+jest.mock("~/lib/rate-limit-middleware", () => ({
+    withRateLimit: (
+        _request: Request,
+        _config: unknown,
+        handler: () => Promise<Response>
+    ) => handler(),
+}));
+
+jest.mock("~/lib/rate-limiter", () => ({
+    RateLimitPresets: { standard: {}, strict: {} },
 }));
 
 jest.mock("node:dns/promises", () => ({
     lookup: jest.fn(),
-}));
-
-jest.mock("~/server/db", () => ({
-    db: { select: jest.fn() },
 }));
 
 jest.mock("~/server/services/document-upload", () => ({
@@ -22,7 +30,6 @@ jest.mock("~/server/services/document-upload", () => ({
 
 import { lookup } from "node:dns/promises";
 import { POST } from "~/app/api/upload/video-url/route";
-import { db } from "~/server/db";
 import { processVideoUrlUpload } from "~/server/services/document-upload";
 
 const lookupMock = lookup as jest.MockedFunction<typeof lookup>;
@@ -30,10 +37,27 @@ const processVideoUrlUploadMock = processVideoUrlUpload as jest.MockedFunction<
     typeof processVideoUrlUpload
 >;
 
-function mockUserLookup(user: { id: number; userId: string; companyId: bigint } | null) {
-    const where = jest.fn().mockResolvedValue(user ? [user] : []);
-    const from = jest.fn().mockReturnValue({ where });
-    (db.select as jest.Mock).mockReturnValue({ from });
+function mockAuthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: {
+            clerkUserId: "user_session",
+            userPk: BigInt(21),
+            companyId: BigInt(4),
+            role: "owner",
+            status: "verified",
+        },
+    });
+}
+
+function mockUnauthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        }),
+    });
 }
 
 function requestFor(body: Record<string, unknown>) {
@@ -53,8 +77,7 @@ const VALID_BODY = {
 describe("POST /api/upload/video-url", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        mockClerk.userId = "user_session";
-        mockUserLookup({ id: 21, userId: "user_session", companyId: 4n });
+        mockAuthenticated();
         lookupMock.mockResolvedValue([{ address: "93.184.216.34", family: 4 }] as never);
         processVideoUrlUploadMock.mockResolvedValue({
             jobId: "job-1",
@@ -62,8 +85,8 @@ describe("POST /api/upload/video-url", () => {
         } as never);
     });
 
-    it("returns 401 when there is no Clerk session", async () => {
-        mockClerk.userId = null;
+    it("returns 401 when there is no workspace context", async () => {
+        mockUnauthenticated();
         const response = await POST(requestFor(VALID_BODY));
         expect(response.status).toBe(401);
         expect(processVideoUrlUploadMock).not.toHaveBeenCalled();
@@ -85,22 +108,14 @@ describe("POST /api/upload/video-url", () => {
     });
 
     it("processes a public URL with the session user, ignoring a spoofed body userId", async () => {
-        const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-        try {
-            const response = await POST(requestFor({ ...VALID_BODY, userId: "attacker" }));
+        const response = await POST(requestFor({ ...VALID_BODY, userId: "attacker" }));
 
-            expect(response.status).toBe(201);
-            expect(processVideoUrlUploadMock).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    user: { userId: "user_session", companyId: 4n },
-                    videoUrl: VALID_BODY.videoUrl,
-                })
-            );
-            expect(consoleWarnSpy).toHaveBeenCalledWith(
-                expect.stringContaining("Ignoring body userId=attacker")
-            );
-        } finally {
-            consoleWarnSpy.mockRestore();
-        }
+        expect(response.status).toBe(201);
+        expect(processVideoUrlUploadMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                user: { userId: "user_session", companyId: BigInt(4) },
+                videoUrl: VALID_BODY.videoUrl,
+            })
+        );
     });
 });

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { and, eq, inArray } from "drizzle-orm";
 import pLimit from "p-limit";
 import { z } from "zod";
@@ -8,6 +7,7 @@ import { db } from "~/server/db";
 import { uploadBatchFiles } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { validateRequestBody } from "~/lib/validation";
 import {
     findBatchOwnedByUser,
@@ -19,7 +19,6 @@ import {
 import { processDocumentUpload } from "~/server/services/document-upload";
 
 const CommitSchema = z.object({
-    userId: z.string().min(1, "User ID is required"),
     preferredProvider: z.string().optional(),
     category: z.string().optional(),
     embeddingIndexKey: z.string().min(1).optional(),
@@ -28,6 +27,9 @@ const CommitSchema = z.object({
 const MAX_CONCURRENCY = 3;
 
 export async function POST(request: Request, { params }: { params: Promise<{ batchId: string }> }) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         const { batchId } = await params;
         if (!batchId) {
@@ -39,22 +41,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
             return validation.response;
         }
 
-        const { userId: bodyUserId, preferredProvider, category, embeddingIndexKey } =
-            validation.data;
+        const { preferredProvider, category, embeddingIndexKey } = validation.data;
 
-        // Identity comes from the Clerk session, never the request body.
-        // `userId` stays in the schema for wire-compat but is overridden.
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        if (bodyUserId && bodyUserId !== userId) {
-            console.warn(
-                `[UploadBatches] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
-            );
-        }
-
-        const batch = await findBatchOwnedByUser(batchId, userId, true);
+        const batch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
         if (!batch) {
             return NextResponse.json({ error: "Batch not found" }, { status: 404 });
         }
@@ -122,7 +111,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
                 try {
                     const uploadResult = await processDocumentUpload({
-                        user: { userId, companyId: batch.companyId },
+                        user: { userId: ctx.data.clerkUserId, companyId: batch.companyId },
                         documentName: file.filename,
                         rawDocumentUrl: file.storageUrl,
                         creationKey: `batch:${batchId}:file:${file.id}`,
@@ -172,7 +161,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
             (result): result is Extract<FileProcessResult, { status: "failed" }> =>
                 result.status === "failed"
         );
-        const currentBatch = await findBatchOwnedByUser(batchId, userId, true);
+        const currentBatch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
         const activeFiles =
             currentBatch?.files.some(
                 file =>
@@ -199,7 +188,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
             }
         }
 
-        const refreshedBatch = await findBatchOwnedByUser(batchId, userId, true);
+        const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
         if (!refreshedBatch) {
             return NextResponse.json({ error: "Batch not found after commit" }, { status: 404 });
         }

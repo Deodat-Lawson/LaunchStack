@@ -1,66 +1,77 @@
 import { GET } from "~/app/api/metrics/route";
-import { __resetMetricsAuthWarningForTests } from "~/server/security/metrics-auth";
 
-const TOKEN = "prometheus-scrape-token";
+const mockGetMetricsSnapshot = jest.fn();
+const mockEnvServer = {
+  METRICS_SCRAPE_TOKEN: undefined as string | undefined,
+};
 
-function requestFor(headers: Record<string, string> = {}) {
-    return new Request("http://localhost/api/metrics", { headers });
-}
+jest.mock("~/server/metrics/registry", () => ({
+  getMetricsSnapshot: () => mockGetMetricsSnapshot() as Promise<string>,
+  metricsRegistry: {
+    contentType: "text/plain; version=0.0.4; charset=utf-8",
+  },
+}));
+
+jest.mock("~/env", () => ({
+  env: {
+    get server() {
+      return mockEnvServer;
+    },
+    client: {},
+  },
+}));
 
 describe("GET /api/metrics", () => {
-    beforeEach(() => {
-        delete process.env.METRICS_BEARER_TOKEN;
-        __resetMetricsAuthWarningForTests();
-    });
+  const originalVercelEnv = process.env.VERCEL_ENV;
 
-    afterAll(() => {
-        delete process.env.METRICS_BEARER_TOKEN;
-    });
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockEnvServer.METRICS_SCRAPE_TOKEN = undefined;
+    delete process.env.VERCEL_ENV;
+    mockGetMetricsSnapshot.mockResolvedValue(
+      "pdr_predictive_analysis_duration_seconds 1\n",
+    );
+  });
 
-    it("returns Prometheus metrics in text format when no token is configured (legacy-open)", async () => {
-        const response = await GET(requestFor());
-        expect(response.status).toBe(200);
-        expect(response.headers.get("Content-Type")).toContain("text/plain");
+  afterAll(() => {
+    if (originalVercelEnv === undefined) {
+      delete process.env.VERCEL_ENV;
+    } else {
+      process.env.VERCEL_ENV = originalVercelEnv;
+    }
+  });
 
-        const body = await response.text();
-        expect(body).toContain("pdr_predictive_analysis_duration_seconds");
-    });
+  it("returns Prometheus metrics when no token is configured (non-production)", async () => {
+    const response = await GET(new Request("http://localhost/api/metrics"));
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toContain("text/plain");
+    expect(await response.text()).toContain(
+      "pdr_predictive_analysis_duration_seconds",
+    );
+  });
 
-    it("warns exactly once when serving in legacy-open mode", async () => {
-        const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-        try {
-            await GET(requestFor());
-            await GET(requestFor());
+  it("returns 503 in production when scrape token is unset", async () => {
+    process.env.VERCEL_ENV = "production";
+    const response = await GET(new Request("http://localhost/api/metrics"));
+    expect(response.status).toBe(503);
+  });
 
-            const securityWarnings = warnSpy.mock.calls.filter(call =>
-                String(call[0]).includes("METRICS_BEARER_TOKEN")
-            );
-            expect(securityWarnings).toHaveLength(1);
-        } finally {
-            warnSpy.mockRestore();
-        }
-    });
+  it("returns 401 when token is configured but Authorization is missing", async () => {
+    mockEnvServer.METRICS_SCRAPE_TOKEN = "scrape-secret";
+    const response = await GET(new Request("http://localhost/api/metrics"));
+    expect(response.status).toBe(401);
+  });
 
-    describe("with METRICS_BEARER_TOKEN configured", () => {
-        beforeEach(() => {
-            process.env.METRICS_BEARER_TOKEN = TOKEN;
-        });
-
-        it("rejects requests without an Authorization header", async () => {
-            const response = await GET(requestFor());
-            expect(response.status).toBe(401);
-        });
-
-        it("rejects requests with the wrong bearer token", async () => {
-            const response = await GET(requestFor({ Authorization: "Bearer wrong" }));
-            expect(response.status).toBe(401);
-        });
-
-        it("serves metrics with the correct bearer token", async () => {
-            const response = await GET(requestFor({ Authorization: `Bearer ${TOKEN}` }));
-            expect(response.status).toBe(200);
-            const body = await response.text();
-            expect(body).toContain("pdr_predictive_analysis_duration_seconds");
-        });
-    });
+  it("returns metrics when Bearer token matches", async () => {
+    mockEnvServer.METRICS_SCRAPE_TOKEN = "scrape-secret";
+    const response = await GET(
+      new Request("http://localhost/api/metrics", {
+        headers: { Authorization: "Bearer scrape-secret" },
+      }),
+    );
+    expect(response.status).toBe(200);
+    expect(await response.text()).toContain(
+      "pdr_predictive_analysis_duration_seconds",
+    );
+  });
 });

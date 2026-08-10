@@ -3,13 +3,10 @@ import { NextResponse } from "next/server";
 // the engine's shared Drizzle client like everything else.
 import { db } from "~/server/db";
 import { document, fileUploads } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
 import { eq, inArray } from "drizzle-orm";
-import { validateRequestBody, UserIdSchema } from "~/lib/validation";
-import { auth } from '@clerk/nextjs/server';
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -86,34 +83,12 @@ function inferMimeFromName(name: string): string | undefined {
     return EXTENSION_TO_MIME[match[1].toLowerCase()];
 }
 
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
     try {
-        const validation = await validateRequestBody(request, UserIdSchema);
-        if (!validation.success) {
-            return validation.response;
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const { userId } = await auth()
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        }
-
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        }
-
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
 
         const docs = await db
             .select()

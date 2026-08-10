@@ -8,10 +8,14 @@ import { resolveIngestIndexKey } from "@launchstack/core/embeddings";
 import { getEngine } from "~/server/engine";
 import { uploadFile } from "~/lib/storage";
 import { putFile } from "~/server/storage/vercel-blob";
+import { parseProvider } from "@launchstack/core/ocr/trigger";
 import { detectStorageType, toAbsoluteUrl, type StorageType } from "./detect-storage-type";
+import { authorizeInternalFileRef } from "./internal-file-ref";
 import { createDocumentLifecycle, type CreatedDocumentLifecycle } from "./document-creation";
 import { hasTokens } from "~/lib/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
+import { buildInternalFileUrl } from "@launchstack/core/crypto";
+import { getOcrConfig } from "@launchstack/core/ocr/config";
 
 export type { StorageType } from "./detect-storage-type";
 export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
@@ -88,21 +92,44 @@ export async function processDocumentUpload({
     creationKey,
     embeddingIndexKey,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
-    const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
+    // Populate OCR (and provider) config before reading getOcrConfig() or
+    // authorizing internal file refs. On a cold process, an empty slot makes
+    // effectiveProvider / workerUrl / FILE_ACCESS_TOKEN_SECRET look unset and
+    // skips the ingress rejection for unsigned OSS fetches. Idempotent/cached.
+    // Also required before isCloudMode() below (empty registry → false "cloud").
+    getEngine();
+
+    const effectiveProvider =
+        parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
+
+    // Throws before anything is created when the URL names a file this
+    // workspace does not own. An internal reference is always database-backed
+    // regardless of what the caller declared — otherwise `storageType: "s3"`
+    // would keep the path unresolved and hand it straight to the token signer.
+    const internalFileId = await authorizeInternalFileRef(
+        rawDocumentUrl,
+        user.companyId,
+        effectiveProvider
+    );
+    const storageType: StorageType =
+        internalFileId !== null
+            ? "database"
+            : (explicitStorageType ?? detectStorageType(rawDocumentUrl));
     const resolvedDocumentUrl =
-        storageType === "database" ? toAbsoluteUrl(rawDocumentUrl, requestUrl) : rawDocumentUrl;
+        internalFileId !== null
+            ? buildInternalFileUrl(
+                  getOcrConfig().appPublicUrl ?? new URL(requestUrl).origin,
+                  internalFileId
+              )
+            : storageType === "database"
+              ? toAbsoluteUrl(rawDocumentUrl, requestUrl)
+              : rawDocumentUrl;
 
     const documentCategory = category ?? "Uncategorized";
 
     // ------------------------------------------------------------------
     // Credit pre-check (cloud mode only)
     // ------------------------------------------------------------------
-    // isCloudMode() is always true since ADR-004 §5 removed the sidecar
-    // deployment mode, but getEngine() still must run first so the provider
-    // registry and credits port are populated before the pre-check below.
-    // Idempotent and cached.
-    getEngine();
-
     if (isCloudMode()) {
         // Rough estimate: 20 credits covers a typical document (OCR + embeddings)
         const estimatedCredits = shouldTranscribeFile(mimeType, originalFilename) ? 30 : 20;
@@ -156,6 +183,7 @@ export async function processDocumentUpload({
                 data: Buffer.from(transcriptionResult.text, "utf-8"),
                 contentType: "text/plain",
                 userId: user.userId,
+                companyId: user.companyId,
             });
 
             const transcriptionMetadata = {

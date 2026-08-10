@@ -5,26 +5,21 @@
 
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
 
 import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
 import { validateRequestBody, UpdateUploadPreferenceSchema } from "~/lib/validation";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const validation = await validateRequestBody(request, UpdateUploadPreferenceSchema);
     if (!validation.success) {
@@ -33,22 +28,7 @@ export async function POST(request: Request) {
 
     const { useUploadThing } = validation.data;
 
-    const [userRecord] = await db
-      .select({ id: users.id,
-        companyId: users.companyId,
-        role: users.role,
-      })
-      .from(users)
-      .where(eq(users.userId, userId));
-
-    if (!userRecord) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
-    }
-
-    if (!AUTHORIZED_ROLES.has(userRecord.role)) {
+    if (!isManagementRole(ctx.data.role)) {
       return NextResponse.json(
         { success: false, message: "Forbidden" },
         { status: 403 }
@@ -58,7 +38,7 @@ export async function POST(request: Request) {
     const updateResult = await db
       .update(company)
       .set({ useUploadThing })
-      .where(eq(company.id, Number((await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)))))
+      .where(eq(company.id, Number(ctx.data.companyId)))
       .returning({ id: company.id, useUploadThing: company.useUploadThing });
 
     if (!updateResult || updateResult.length === 0) {
@@ -80,4 +60,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

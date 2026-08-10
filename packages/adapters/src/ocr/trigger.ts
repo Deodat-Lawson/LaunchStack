@@ -130,7 +130,15 @@ export function parseProvider(provider?: string): OCRProvider | undefined {
     if (!provider) return undefined;
 
     const normalized = provider.toUpperCase();
-    const validProviders: OCRProvider[] = ["AZURE", "LANDING_AI", "NATIVE_PDF", "DATALAB"];
+    // "MARKER" is deliberately absent — ADR-004 removed it as an alias that
+    // never had an implementation. "DOCLING" is the supported OSS provider.
+    const validProviders: OCRProvider[] = [
+        "AZURE",
+        "LANDING_AI",
+        "NATIVE_PDF",
+        "DATALAB",
+        "DOCLING",
+    ];
 
     if (validProviders.includes(normalized as OCRProvider)) {
         return normalized as OCRProvider;

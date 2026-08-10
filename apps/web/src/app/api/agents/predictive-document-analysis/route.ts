@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db/index";
 import { eq, sql, and, gt, desc, ne } from "drizzle-orm";
 import { analyzeDocumentChunks } from "~/app/api/agents/predictive-document-analysis/agent";
 import type { PredictiveAnalysisResult } from "~/app/api/agents/predictive-document-analysis/agent";
 import { document, documentContextChunks, documentStructure } from "@launchstack/core/db/schema";
-import { predictiveDocumentAnalysisResults, users } from "~/server/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 import {
     ANALYSIS_BATCH_CONFIG,
@@ -28,6 +26,7 @@ import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation"
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { notifyOnCriticalFindings } from "~/lib/integrations/slack";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -109,7 +108,10 @@ async function storeAnalysisResult(
     return result;
 }
 
-async function getDocumentDetails(documentId: number): Promise<DocumentDetails | null> {
+async function getDocumentDetails(
+    documentId: number,
+    companyId: bigint,
+): Promise<DocumentDetails | null> {
     const results = await db
         .select({
             title: document.title,
@@ -118,7 +120,7 @@ async function getDocumentDetails(documentId: number): Promise<DocumentDetails |
             currentVersionId: document.currentVersionId,
         })
         .from(document)
-        .where(eq(document.id, documentId))
+        .where(and(eq(document.id, documentId), eq(document.companyId, companyId)))
         .limit(1);
 
     return results[0]
@@ -130,6 +132,9 @@ async function getDocumentDetails(documentId: number): Promise<DocumentDetails |
 }
 
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     // Apply rate limiting: 20 requests per 15 minutes for predictive analysis
     // This is a compute-intensive AI operation
     return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -149,35 +154,6 @@ export async function POST(request: Request) {
 
             const { documentId, analysisType, includeRelatedDocs, timeoutMs, forceRefresh } =
                 validation.data;
-
-            // Require a Clerk session and resolve the caller's active company
-            // so cross-tenant documents come back as 404 (never analyzed).
-            const { userId } = await auth();
-            if (!userId) {
-                recordResult("error");
-                return NextResponse.json(
-                    { success: false, message: "Unauthorized" },
-                    { status: HTTP_STATUS.UNAUTHORIZED }
-                );
-            }
-
-            const [userInfo] = await db
-                .select({ id: users.id, companyId: users.companyId })
-                .from(users)
-                .where(eq(users.userId, userId));
-
-            if (!userInfo) {
-                recordResult("error");
-                return NextResponse.json(
-                    { success: false, message: "Unauthorized" },
-                    { status: HTTP_STATUS.UNAUTHORIZED }
-                );
-            }
-
-            const activeCompanyId = await resolveActiveCompanyForUser(
-                userInfo.id,
-                userInfo.companyId
-            );
 
             const typedAnalysisType: AnalysisType = analysisType ?? "general";
             const typedIncludeRelatedDocs: boolean = includeRelatedDocs ?? false;
@@ -222,10 +198,9 @@ export async function POST(request: Request) {
                 );
             }
 
-            const docDetails = await getDocumentDetails(documentId);
-            // Cross-tenant documents 404 like missing ones so existence never
-            // leaks (same convention as /api/documents/[id]).
-            if (!docDetails || BigInt(docDetails.companyId) !== activeCompanyId) {
+            // Ownership before cache: never return another tenant's analysis.
+            const docDetails = await getDocumentDetails(documentId, ctx.data.companyId);
+            if (!docDetails) {
                 recordResult("error");
                 return NextResponse.json(
                     {
@@ -315,27 +290,17 @@ export async function POST(request: Request) {
 
             let existingDocuments: string[] = [];
             if (includeRelatedDocs) {
-                const currentDoc = await db
-                    .select({ companyId: document.companyId })
+                const existingDocs = await db
+                    .selectDistinct({ title: document.title, url: document.url })
                     .from(document)
-                    .where(eq(document.id, documentId))
-                    .limit(1);
+                    .where(
+                        and(
+                            eq(document.companyId, ctx.data.companyId),
+                            ne(document.id, documentId)
+                        )
+                    );
 
-                const currentCompanyId = currentDoc[0]?.companyId;
-
-                if (currentCompanyId) {
-                    const existingDocs = await db
-                        .selectDistinct({ title: document.title, url: document.url }) //getting title and document url
-                        .from(document)
-                        .where(
-                            and(
-                                eq(document.companyId, currentCompanyId),
-                                ne(document.id, documentId)
-                            )
-                        );
-
-                    existingDocuments = existingDocs.map(row => `${row.title || row.url}`);
-                }
+                existingDocuments = existingDocs.map(row => `${row.title || row.url}`);
             }
 
             const specification = {

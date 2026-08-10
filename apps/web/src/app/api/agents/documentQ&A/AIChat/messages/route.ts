@@ -1,33 +1,39 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotMessage, agentAiChatbotChat } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateMessageSchema } from "~/lib/validation";
-import { userOwnsChat } from "~/server/security/aichat-authz";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  assertChatOwnedByUser,
+  assertMessageInChat,
+} from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
-// Handlers require a Clerk session and verify the target chat belongs to the
-// session user; foreign chats read as 404.
-
 // POST /api/agent-ai-chatbot/messages - Send a message
 export async function POST(request: NextRequest) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const validation = await validateRequestBody(request, CreateMessageSchema);
     if (!validation.success) return validation.response;
     const { chatId, role, content, messageType, parentMessageId } = validation.data;
 
-    if (!(await userOwnsChat(chatId, userId))) {
-      return NextResponse.json({ error: "Chat not found" }, { status: 404 });
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
+    if (parentMessageId) {
+      const parent = await assertMessageInChat(
+        parentMessageId,
+        chatId,
+        ctx.data.clerkUserId,
+      );
+      if (!parent.success) return parent.response;
     }
 
     const messageId = randomUUID();
@@ -35,7 +41,7 @@ export async function POST(request: NextRequest) {
     const insertValues = {
       id: messageId,
       chatId,
-      role: role,
+      role,
       content,
       messageType: messageType!,
       parentMessageId,
@@ -67,12 +73,10 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/messages?chatId=xxx - Get messages for a chat
 export async function GET(request: NextRequest) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const { searchParams } = new URL(request.url);
     const chatId = searchParams.get("chatId");
 
@@ -83,9 +87,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!(await userOwnsChat(chatId, userId))) {
-      return NextResponse.json({ error: "Chat not found" }, { status: 404 });
-    }
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const messages = await db
       .select()

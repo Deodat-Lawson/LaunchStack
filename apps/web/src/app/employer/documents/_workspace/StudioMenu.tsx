@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconBolt } from "./icons";
+import { isManagementRole } from "~/lib/membership-roles";
 import { STUDIO_GROUPS } from "./types";
 
 export interface StudioMenuProps {
@@ -13,8 +14,6 @@ export interface StudioMenuProps {
   /** Role of the current user — filters company-only Management entries. */
   role?: string | null;
 }
-
-const COMPANY_ROLES = new Set(["employer", "owner"]);
 
 /**
  * Studio "header" button + hover mega-menu — lives in the AskPanel / expanded
@@ -35,7 +34,7 @@ export function StudioMenu({ onPickFeature, onOpenStudio, role }: StudioMenuProp
     closeTimer.current = setTimeout(() => setMenuOpen(false), 120);
   };
 
-  const canSeeCompany = role ? COMPANY_ROLES.has(role) : true;
+  const canSeeCompany = role ? isManagementRole(role) : true;
   const groups = STUDIO_GROUPS.map((g) => ({
     ...g,
     features: g.features.filter((f) => canSeeCompany || !f.companyOnly),

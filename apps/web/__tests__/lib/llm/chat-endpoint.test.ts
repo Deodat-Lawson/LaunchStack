@@ -130,13 +130,13 @@ describe("endpoint and authentication", () => {
 
   it("sends a placeholder rather than borrowing OPENAI_API_KEY when keyless", async () => {
     const previous = process.env.OPENAI_API_KEY;
-    process.env.OPENAI_API_KEY = "sk-someone-elses-key";
+    process.env.OPENAI_API_KEY = "someone-elses-key";
     try {
       const resolved = resolveChatModel({
         config: deployment(FULL_SUPPORT, { apiKey: undefined }),
       });
       await resolved.chat.invoke([new HumanMessage("hi")]);
-      expect(captured[0]!.authorization).not.toContain("sk-someone-elses-key");
+      expect(captured[0]!.authorization).not.toContain("someone-elses-key");
       expect(captured[0]!.authorization).toBe("Bearer launchstack-no-key");
     } finally {
       if (previous === undefined) delete process.env.OPENAI_API_KEY;

@@ -5,6 +5,14 @@ import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
 
 import { embedNote } from "../notes/embed-note";
 import { countUnrepairedDocuments, repairDocumentVersions } from "./document-version-repair";
+import {
+  countUnstampedFileUploads,
+  stampFileUploadsCompanyId,
+} from "./file-uploads-company-id";
+import {
+  countUsersMissingMembership,
+  provisionMissingMemberships,
+} from "./user-company-memberships";
 
 /**
  * The backfill registry.
@@ -114,4 +122,58 @@ const documentVersionsBackfill: Backfill = {
   },
 };
 
-export const BACKFILLS: Backfill[] = [noteEmbeddings, documentVersionsBackfill];
+/**
+ * Stamp legacy file_uploads.company_id from document ownership URLs.
+ *
+ * New uploads set company_id inline. This rewrites rows created before the
+ * column existed. DDL only lives in the engine migration; the data rewrite is
+ * here so clean-database migrates stay DML-free.
+ */
+const fileUploadsCompanyId: Backfill = {
+  id: "2026-08-file-uploads-company-id",
+  description:
+    "Stamp and reconcile file_uploads.company_id from canonical document URLs",
+  requiresEngine: false,
+  requiresMigration: "20260809142627_file_uploads_company_id",
+
+  estimate: ({ db }) => countUnstampedFileUploads(db),
+
+  async step({ db }) {
+    const remaining = await countUnstampedFileUploads(db);
+    await stampFileUploadsCompanyId(db);
+    return { cursor: null, processed: remaining };
+  },
+};
+
+/**
+ * Give pre-memberships accounts the membership row the new workspace
+ * resolution requires.
+ *
+ * `requireWorkspaceContext` refuses a context with no membership on purpose —
+ * falling back to the legacy global `users.role` would grant a role nobody
+ * granted for that tenant. That leaves accounts created before the memberships
+ * table existed with no workspace at all, so they must be provisioned once
+ * from the legacy default-workspace pointer.
+ */
+const userCompanyMembershipsBackfill: Backfill = {
+  id: "2026-08-user-company-memberships",
+  description:
+    "Provision user_company_memberships for verified users that predate the table",
+  requiresEngine: false,
+
+  estimate: ({ db }) => countUsersMissingMembership(db),
+
+  async step({ db }) {
+    const remaining = await countUsersMissingMembership(db);
+    await provisionMissingMemberships(db);
+    // One statement covers every row, so there is never a resume point.
+    return { cursor: null, processed: remaining };
+  },
+};
+
+export const BACKFILLS: Backfill[] = [
+  noteEmbeddings,
+  documentVersionsBackfill,
+  fileUploadsCompanyId,
+  userCompanyMembershipsBackfill,
+];

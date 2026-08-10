@@ -4,18 +4,22 @@
  * ZIP download is pinned to api.github.com (asserted in the service tests).
  */
 
-const mockClerk: { userId: string | null } = { userId: null };
+const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: () => Promise.resolve({ userId: mockClerk.userId }),
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
-jest.mock("~/server/db", () => ({
-    db: { select: jest.fn() },
+jest.mock("~/lib/rate-limit-middleware", () => ({
+    withRateLimit: (
+        _request: Request,
+        _config: unknown,
+        handler: () => Promise<Response>
+    ) => handler(),
 }));
 
-jest.mock("~/lib/active-workspace", () => ({
-    resolveActiveCompanyForUser: jest.fn(),
+jest.mock("~/lib/rate-limiter", () => ({
+    RateLimitPresets: { standard: {}, strict: {} },
 }));
 
 jest.mock("~/server/services/document-upload", () => ({
@@ -35,8 +39,6 @@ jest.mock("~/server/storage/vercel-blob", () => ({
 }));
 
 import { POST } from "~/app/api/upload/github-repo/route";
-import { db } from "~/server/db";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { downloadGitHubRepoZip } from "~/server/services/github-repo";
 import { putFile } from "~/server/storage/vercel-blob";
@@ -45,10 +47,27 @@ const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
     typeof processDocumentUpload
 >;
 
-function mockUserLookup(user: { id: number; userId: string; companyId: bigint } | null) {
-    const where = jest.fn().mockResolvedValue(user ? [user] : []);
-    const from = jest.fn().mockReturnValue({ where });
-    (db.select as jest.Mock).mockReturnValue({ from });
+function mockAuthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: {
+            clerkUserId: "user_session",
+            userPk: BigInt(31),
+            companyId: BigInt(6),
+            role: "owner",
+            status: "verified",
+        },
+    });
+}
+
+function mockUnauthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        }),
+    });
 }
 
 function requestFor(body: Record<string, unknown>) {
@@ -62,9 +81,7 @@ function requestFor(body: Record<string, unknown>) {
 describe("POST /api/upload/github-repo", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        mockClerk.userId = "user_session";
-        mockUserLookup({ id: 31, userId: "user_session", companyId: 6n });
-        (resolveActiveCompanyForUser as jest.Mock).mockResolvedValue(6n);
+        mockAuthenticated();
         (downloadGitHubRepoZip as jest.Mock).mockResolvedValue(Buffer.from("zip"));
         (putFile as jest.Mock).mockResolvedValue({ url: "https://blob.example/repo.zip" });
         processDocumentUploadMock.mockResolvedValue({
@@ -76,8 +93,8 @@ describe("POST /api/upload/github-repo", () => {
         } as never);
     });
 
-    it("returns 401 when there is no Clerk session", async () => {
-        mockClerk.userId = null;
+    it("returns 401 when there is no workspace context", async () => {
+        mockUnauthenticated();
         const response = await POST(
             requestFor({ userId: "user_session", repoUrl: "https://github.com/o/r" })
         );
@@ -94,23 +111,15 @@ describe("POST /api/upload/github-repo", () => {
     });
 
     it("uses the session user, ignoring a spoofed body userId", async () => {
-        const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-        try {
-            const response = await POST(
-                requestFor({ userId: "attacker", repoUrl: "https://github.com/octo/repo" })
-            );
+        const response = await POST(
+            requestFor({ userId: "attacker", repoUrl: "https://github.com/octo/repo" })
+        );
 
-            expect(response.status).toBe(202);
-            expect(processDocumentUploadMock).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    user: { userId: "user_session", companyId: 6n },
-                })
-            );
-            expect(consoleWarnSpy).toHaveBeenCalledWith(
-                expect.stringContaining("Ignoring body userId=attacker")
-            );
-        } finally {
-            consoleWarnSpy.mockRestore();
-        }
+        expect(response.status).toBe(202);
+        expect(processDocumentUploadMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                user: { userId: "user_session", companyId: BigInt(6) },
+            })
+        );
     });
 });

@@ -1,34 +1,28 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotTask, agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateTaskSchema } from "~/lib/validation";
-import { userOwnsTask } from "~/server/security/aichat-authz";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertTaskOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
-
-// Handlers require a Clerk session and verify the task's chat belongs to the
-// session user; foreign tasks read as 404.
 
 // GET /api/agent-ai-chatbot/tasks/[taskId] - Get a specific task with execution steps
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const { taskId } = await params;
 
-    if (!(await userOwnsTask(taskId, userId))) {
-      return NextResponse.json({ error: "Task not found" }, { status: 404 });
-    }
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const [task] = await db
       .select()
@@ -68,17 +62,14 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const { taskId } = await params;
 
-    if (!(await userOwnsTask(taskId, userId))) {
-      return NextResponse.json({ error: "Task not found" }, { status: 404 });
-    }
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const validation = await validateRequestBody(request, UpdateTaskSchema);
     if (!validation.success) return validation.response;

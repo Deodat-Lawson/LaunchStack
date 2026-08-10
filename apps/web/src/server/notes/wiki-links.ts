@@ -244,17 +244,24 @@ export async function searchWikiLinkCandidates(
         .limit(limit)
     : [];
 
+  // Scope must match `resolveRefs` above: that function resolves note targets
+  // workspace-wide, so an author-only picker would hide exactly the notes a
+  // typed link still resolves to — the reference lands in the database while
+  // the autocomplete claims the note does not exist. Legacy rows with no
+  // company belong to no workspace, so those stay scoped to their author.
+  const ownedLegacyNote = and(
+    isNull(documentNotes.companyId),
+    eq(documentNotes.userId, ctx.userId),
+  );
+
   const notes = await db
     .select({ id: documentNotes.id, title: documentNotes.title })
     .from(documentNotes)
     .where(
       and(
-        or(
-          ctx.companyId
-            ? eq(documentNotes.companyId, ctx.companyId)
-            : undefined,
-          eq(documentNotes.userId, ctx.userId),
-        ),
+        ctx.companyId
+          ? or(eq(documentNotes.companyId, ctx.companyId), ownedLegacyNote)
+          : ownedLegacyNote,
         sql<boolean>`${documentNotes.title} ILIKE ${pattern}`,
       ),
     )

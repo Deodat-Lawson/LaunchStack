@@ -1,12 +1,24 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { documentNotes, documentNoteEmbeddings, noteLinks } from "~/server/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, or, isNull } from "drizzle-orm";
+
+function noteOwnershipFilter(noteId: number, clerkUserId: string, companyId: bigint) {
+  const companyIdStr = String(companyId);
+  return and(
+    eq(documentNotes.id, noteId),
+    eq(documentNotes.userId, clerkUserId),
+    or(
+      eq(documentNotes.companyId, companyIdStr),
+      isNull(documentNotes.companyId),
+    ),
+  );
+}
 import { validateRequestBody, UpdateNoteSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { requestNoteEmbedding } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
-import { syncNoteLinks, getCompanyIdForUser } from "~/server/notes/wiki-links";
+import { syncNoteLinks } from "~/server/notes/wiki-links";
 import type { JSONContent } from "@tiptap/react";
 
 export async function GET(
@@ -14,10 +26,8 @@ export async function GET(
   { params }: { params: Promise<{ noteId: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { noteId } = await params;
     const id = parseInt(noteId, 10);
@@ -28,7 +38,9 @@ export async function GET(
     const [note] = await db
       .select()
       .from(documentNotes)
-      .where(and(eq(documentNotes.id, id), eq(documentNotes.userId, userId)));
+      .where(
+        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
+      );
 
     if (!note) {
       return NextResponse.json({ error: "Note not found" }, { status: 404 });
@@ -49,10 +61,8 @@ export async function PUT(
   { params }: { params: Promise<{ noteId: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { noteId } = await params;
     const id = parseInt(noteId, 10);
@@ -77,7 +87,9 @@ export async function PUT(
         ...(body.anchorStatus !== undefined && { anchorStatus: body.anchorStatus }),
         ...(body.tags !== undefined && { tags: body.tags }),
       })
-      .where(and(eq(documentNotes.id, id), eq(documentNotes.userId, userId)))
+      .where(
+        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
+      )
       .returning();
 
     if (!updated) {
@@ -97,12 +109,12 @@ export async function PUT(
       body.anchor !== undefined
     ) {
       try {
-        // Rows created by the UI carry null companyId; pass the acting
-        // user's active company as a hint so the event isn't dropped.
+        // Legacy rows created by the UI carry null companyId; pass the acting
+        // user's active workspace as a hint so the event isn't dropped.
         await requestNoteEmbedding(
           updated.id,
           "updated",
-          updated.companyId ?? (await getCompanyIdForUser(userId)),
+          updated.companyId ?? String(ctx.data.companyId),
         );
       } catch (err) {
         console.error(
@@ -140,10 +152,8 @@ export async function DELETE(
   { params }: { params: Promise<{ noteId: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { noteId } = await params;
     const id = parseInt(noteId, 10);
@@ -153,7 +163,9 @@ export async function DELETE(
 
     const [deleted] = await db
       .delete(documentNotes)
-      .where(and(eq(documentNotes.id, id), eq(documentNotes.userId, userId)))
+      .where(
+        noteOwnershipFilter(id, ctx.data.clerkUserId, ctx.data.companyId),
+      )
       .returning();
 
     if (!deleted) {

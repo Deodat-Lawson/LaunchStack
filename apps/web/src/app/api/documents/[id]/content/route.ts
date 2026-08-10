@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isS3Storage } from "~/lib/storage";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -36,10 +36,8 @@ interface RouteParams {
 
 export async function GET(_request: Request, { params }: RouteParams) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { id } = await params;
     const docId = parseInt(id, 10);
@@ -50,7 +48,12 @@ export async function GET(_request: Request, { params }: RouteParams) {
     const [doc] = await db
       .select({ url: document.url, title: document.title })
       .from(document)
-      .where(eq(document.id, docId));
+      .where(
+        and(
+          eq(document.id, docId),
+          eq(document.companyId, ctx.data.companyId),
+        ),
+      );
 
     if (!doc) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });

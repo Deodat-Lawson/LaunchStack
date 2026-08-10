@@ -10,9 +10,12 @@
  * - The crawl tracks visited URLs to avoid duplicates
  */
 
+import { NonRetriableError } from "inngest";
+
 import { inngest } from "../client";
 import { uploadFile } from "~/lib/storage";
 import { processDocumentUpload } from "~/server/services/document-upload";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 import { fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
 
 const FETCH_TIMEOUT_MS = 30_000;
@@ -303,7 +306,7 @@ export const crawlWebsite = inngest.createFunction(
                 documentId: number;
                 jobId: string;
             }[] = [];
-            const failures: { url: string; error: string }[] = [];
+            const failures: { url: string; error: string; retriable: boolean }[] = [];
 
             for (const page of crawlResult.pages) {
                 try {
@@ -322,6 +325,7 @@ export const crawlWebsite = inngest.createFunction(
                         data: htmlBuffer,
                         contentType: "text/html",
                         userId,
+                        companyId: BigInt(companyId),
                     });
 
                     const uploadResult = await processDocumentUpload({
@@ -352,16 +356,30 @@ export const crawlWebsite = inngest.createFunction(
                     );
                 } catch (error) {
                     const errorMessage = error instanceof Error ? error.message : String(error);
-                    failures.push({ url: page.url, error: errorMessage });
+                    failures.push({
+                        url: page.url,
+                        error: errorMessage,
+                        retriable: !(error instanceof UploadAuthorizationError),
+                    });
                     console.error(`[CrawlWebsite] Failed to store page ${page.url}:`, error);
                 }
             }
 
             if (failures.length > 0) {
-                throw new Error(
+                const message =
                     `[CrawlWebsite] Failed to store ${failures.length} page(s): ` +
-                        failures.map(failure => `${failure.url}: ${failure.error}`).join("; ")
-                );
+                    failures.map(failure => `${failure.url}: ${failure.error}`).join("; ");
+
+                // An upload-authorization failure is a tenancy or configuration
+                // problem (foreign file, or no FILE_ACCESS_TOKEN_SECRET). It
+                // resolves identically on every attempt, so retrying it once per
+                // crawled page just burns the retry budget and delays the
+                // operator-visible failure.
+                if (failures.every(failure => !failure.retriable)) {
+                    throw new NonRetriableError(message);
+                }
+
+                throw new Error(message);
             }
 
             return results;

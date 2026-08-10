@@ -3,28 +3,64 @@ import { NextResponse } from "next/server";
 // the engine's shared Drizzle client like everything else.
 import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { auth } from '@clerk/nextjs/server'
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
+/**
+ * Profile lookup for the signed-in Clerk user — including unverified /
+ * pending-approval accounts. Uses requireClerkIdentity (not workspace
+ * context) so pending pages can load name/company/submission date.
+ *
+ * The company reported here is the *active* workspace, matching what the
+ * product APIs scope to. Pending users with no membership keep the legacy
+ * default company and global role so the approval pages still render;
+ * verified users require a current membership.
+ */
 export async function POST() {
     try {
-        const { userId } = await auth()
-        if (!userId) {
-            return NextResponse.json({ error: "Invalid user." }, { status: 400 });
-        }
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
 
         const [userInfo] = await db
             .select()
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, identity.data.clerkUserId));
 
         if (!userInfo) {
-            return NextResponse.json({ error: "Invalid user." }, { status: 400 });
+            return NextResponse.json({ error: "Invalid user." }, { status: 401 });
         }
 
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = await resolveActiveCompanyForUser(
+            userInfo.id,
+            userInfo.companyId,
+            userInfo.status,
+        );
+
+        if (companyId === null) {
+            return NextResponse.json(
+                { error: "No active workspace" },
+                { status: 403 },
+            );
+        }
+
+        const [membership] = await db
+            .select({ role: userCompanyMemberships.role })
+            .from(userCompanyMemberships)
+            .where(
+                and(
+                    eq(userCompanyMemberships.userId, BigInt(userInfo.id)),
+                    eq(userCompanyMemberships.companyId, companyId),
+                ),
+            );
+
+        if (!membership && userInfo.status === "verified") {
+            return NextResponse.json(
+                { error: "No active workspace membership" },
+                { status: 403 },
+            );
+        }
 
         const [companyRecord] = await db
             .select()
@@ -43,10 +79,12 @@ export async function POST() {
             timeStyle: "short",
         });
 
-        // Convert BigInt fields to numbers for JSON serialization
         const serializedUserInfo = {
             ...userInfo,
-            companyId: Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))),
+            companyId: Number(companyId),
+            role: membership?.role ?? (
+                userInfo.status === "pending" ? userInfo.role : ""
+            ),
         };
 
         return NextResponse.json(

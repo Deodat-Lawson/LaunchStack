@@ -11,15 +11,13 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { invokeStructured } from "@launchstack/core/llm";
 import { z } from "zod";
-import {
-    normalizeModelContent,
-} from "~/app/api/agents/documentQ&A/services";
+import { normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
 function stripRewriteQuotes(text: string): string {
@@ -149,13 +147,8 @@ const FieldUpdateSchema = z.record(z.string());
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         let body: unknown;
         try {

@@ -21,7 +21,7 @@ describe("chat endpoint resolution", () => {
         CHAT_BASE_URL: "  https://endpoint.example/v1  ",
         CHAT_API_KEY: " key ",
         // Present but ignored — the canonical variables win outright.
-        OPENROUTER_API_KEY: "sk-or-v1-legacy",
+        OPENROUTER_API_KEY: "legacy-openrouter-key",
       }),
     ).toEqual({ baseUrl: "https://endpoint.example/v1", apiKey: "key" });
   });
@@ -85,9 +85,9 @@ describe("one-release legacy translation", () => {
   });
 
   it.each([
-    [{ OPENROUTER_API_KEY: "sk-or-v1-x" }],
-    [{ OPENAI_API_KEY: "sk-x" }],
-    [{ OPENROUTER_API_KEY: "sk-or-v1-x", OPENAI_API_KEY: "sk-x" }],
+    [{ OPENROUTER_API_KEY: "legacy-openrouter-key" }],
+    [{ OPENAI_API_KEY: "legacy-openai-key" }],
+    [{ OPENROUTER_API_KEY: "legacy-openrouter-key", OPENAI_API_KEY: "legacy-openai-key" }],
   ])("refuses to infer an endpoint from the bare credential %p", (environment) => {
     // A key says who you are, not where to send the request. The only
     // built-in URL is the Gemini fallback in resolveChatEndpoint, and these
@@ -115,7 +115,7 @@ describe("one-release legacy translation", () => {
       translateLegacyEndpoint({
         AI_BASE_URL: "https://api.siliconflow.cn/v1",
         AI_API_KEY: "sf",
-        OPENAI_API_KEY: "sk-x",
+        OPENAI_API_KEY: "legacy-openai-key",
       })?.endpoint,
     ).toEqual({ baseUrl: "https://api.siliconflow.cn/v1", apiKey: "sf" });
   });
@@ -152,7 +152,7 @@ describe("credential presence checks", () => {
     // None of these changes where chat goes — it would still fall back to
     // Gemini — so reporting true would credit configuration that has no effect.
     expect(hasConfiguredAiCredential({ OPENROUTER_API_KEY: "k" })).toBe(false);
-    expect(hasConfiguredAiCredential({ OPENAI_API_KEY: "sk-x" })).toBe(false);
+    expect(hasConfiguredAiCredential({ OPENAI_API_KEY: "legacy-openai-key" })).toBe(false);
     expect(hasConfiguredAiCredential({ OLLAMA_BASE_URL: "http://x:11434" })).toBe(false);
   });
 });

@@ -2,9 +2,9 @@
  * Active workspace selection.
  *
  * A user can belong to multiple companies via `userCompanyMemberships`. Per
- * request we resolve the active workspace from a signed cookie, falling back
- * to `users.companyId` (the user's "default" workspace) when the cookie is
- * missing or points at a workspace the user is no longer a member of.
+ * request we resolve the active workspace from a signed cookie. Pending
+ * accounts may fall back to `users.companyId` before membership provisioning;
+ * verified accounts may use that pointer only when a live membership exists.
  *
  * Server code that previously did:
  *
@@ -53,16 +53,15 @@ const parseCompanyId = (raw: string | undefined): bigint | null => {
 };
 
 /**
- * Resolve the active companyId for a Clerk user. Always returns the user's
- * default workspace when the cookie is missing or stale, never throws on a
- * missing membership — this is the load-bearing scoping check, so it has to
- * always return something safe.
+ * Resolve the active companyId for a Clerk user. Pending accounts may use the
+ * legacy default without membership; verified accounts receive null unless
+ * the cookie or default points to a current membership.
  */
 export async function getActiveCompanyId(
     clerkUserId: string
-): Promise<bigint> {
+): Promise<bigint | null> {
     const [user] = await db
-        .select({ id: users.id, companyId: users.companyId })
+        .select({ id: users.id, companyId: users.companyId, status: users.status })
         .from(users)
         .where(eq(users.userId, clerkUserId));
 
@@ -70,7 +69,11 @@ export async function getActiveCompanyId(
         throw new Error("User not found in database");
     }
 
-    return resolveActiveCompanyForUser(BigInt(user.id), user.companyId);
+    return resolveActiveCompanyForUser(
+        BigInt(user.id),
+        user.companyId,
+        user.status,
+    );
 }
 
 /**
@@ -82,8 +85,9 @@ export async function getActiveCompanyId(
  */
 export async function resolveActiveCompanyForUser(
     userPk: number | bigint,
-    defaultCompanyId: number | bigint
-): Promise<bigint> {
+    defaultCompanyId: number | bigint,
+    status: string,
+): Promise<bigint | null> {
     const userPkBig = typeof userPk === "bigint" ? userPk : BigInt(userPk);
     const defaultBig =
         typeof defaultCompanyId === "bigint"
@@ -110,19 +114,40 @@ export async function resolveActiveCompanyForUser(
         // cookie points at a workspace the user no longer belongs to; fall through
     }
 
-    return defaultBig;
+    if (status === "pending") {
+        return defaultBig;
+    }
+
+    const [defaultMembership] = await db
+        .select({ companyId: userCompanyMemberships.companyId })
+        .from(userCompanyMemberships)
+        .where(
+            and(
+                eq(userCompanyMemberships.userId, userPkBig),
+                eq(userCompanyMemberships.companyId, defaultBig),
+            ),
+        );
+
+    return defaultMembership?.companyId ?? null;
 }
 
 /**
  * Same as getActiveCompanyId but also returns the role for the active
  * workspace. Used by routes that gate writes on workspace role.
+ *
+ * Throws when the user holds no membership in the resolved company — the
+ * legacy `users.role` is a global column and says nothing about what the
+ * user may do inside this tenant.
  */
 export async function getActiveCompanyContext(
     clerkUserId: string
 ): Promise<{ companyId: bigint; role: string; userId: bigint }> {
     const companyId = await getActiveCompanyId(clerkUserId);
+    if (companyId === null) {
+        throw new Error(`User ${clerkUserId} has no active workspace`);
+    }
     const [user] = await db
-        .select({ id: users.id, role: users.role })
+        .select({ id: users.id })
         .from(users)
         .where(eq(users.userId, clerkUserId));
 
@@ -139,9 +164,15 @@ export async function getActiveCompanyContext(
             )
         );
 
+    if (!membership) {
+        throw new Error(
+            `User ${clerkUserId} has no membership in company ${companyId}`
+        );
+    }
+
     return {
         companyId,
-        role: membership?.role ?? user.role,
+        role: membership.role,
         userId: userPkBig,
     };
 }

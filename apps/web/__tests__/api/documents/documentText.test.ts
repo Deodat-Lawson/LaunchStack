@@ -1,5 +1,5 @@
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: jest.fn(),
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: jest.fn(),
 }));
 
 jest.mock("~/server/db", () => ({
@@ -8,26 +8,15 @@ jest.mock("~/server/db", () => ({
     },
 }));
 
-jest.mock("~/lib/active-workspace", () => ({
-    resolveActiveCompanyForUser: jest.fn(),
-}));
-
+import { NextResponse } from "next/server";
 import { GET } from "~/app/api/documents/[id]/text/route";
-import { auth } from "@clerk/nextjs/server";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
-
-type UserRow = {
-    id: number;
-    userId: string;
-    companyId: bigint;
-    role: string;
-};
+import type { WorkspaceContext } from "~/lib/require-workspace-context";
 
 type DocumentRow = {
     id: number;
     title: string;
-    companyId: bigint;
     currentVersionId: bigint | null;
 };
 
@@ -37,7 +26,7 @@ type ChunkRow = {
     pageNumber: number | null;
 };
 
-type SelectRow = UserRow | DocumentRow | ChunkRow;
+type SelectRow = DocumentRow | ChunkRow;
 
 type SelectBatch = {
     rows: readonly SelectRow[];
@@ -64,10 +53,6 @@ type SelectQuery = {
 };
 
 type SelectMock = jest.MockedFunction<() => SelectQuery>;
-type AuthMockValue = {
-    userId: string | null;
-};
-type AuthMock = jest.MockedFunction<() => Promise<AuthMockValue>>;
 
 type DocumentTextPayload = {
     error?: string;
@@ -76,15 +61,18 @@ type DocumentTextPayload = {
     documentId?: number;
 };
 
-const authMock = auth as unknown as AuthMock;
-const selectMock = jest.spyOn(db, "select") as unknown as SelectMock;
-const resolveActiveCompanyForUserMock = resolveActiveCompanyForUser as jest.MockedFunction<
-    typeof resolveActiveCompanyForUser
+const requireWorkspaceContextMock = requireWorkspaceContext as jest.MockedFunction<
+    typeof requireWorkspaceContext
 >;
+const selectMock = jest.spyOn(db, "select") as unknown as SelectMock;
 
-function mockAuthValue(userId: string | null): AuthMockValue {
-    return { userId };
-}
+const CTX: WorkspaceContext = {
+    clerkUserId: "user-1",
+    userPk: 7n,
+    companyId: 10n,
+    role: "employer",
+    status: "verified",
+};
 
 function inspectPredicate(
     value: unknown,
@@ -164,18 +152,10 @@ async function responsePayload(response: Response): Promise<DocumentTextPayload>
     return payload as DocumentTextPayload;
 }
 
-const user: UserRow = {
-    id: 7,
-    userId: "user-1",
-    companyId: 10n,
-    role: "employer",
-};
-
 function documentRow(overrides: Partial<DocumentRow> = {}): DocumentRow {
     return {
         id: 42,
         title: "Document",
-        companyId: 10n,
         currentVersionId: 2n,
         ...overrides,
     };
@@ -184,12 +164,17 @@ function documentRow(overrides: Partial<DocumentRow> = {}): DocumentRow {
 describe("GET /api/documents/[id]/text", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        authMock.mockResolvedValue(mockAuthValue(user.userId));
-        resolveActiveCompanyForUserMock.mockResolvedValue(user.companyId);
+        requireWorkspaceContextMock.mockResolvedValue({
+            success: true,
+            data: CTX,
+        });
     });
 
     it("preserves the unauthorized response", async () => {
-        authMock.mockResolvedValue(mockAuthValue(null));
+        requireWorkspaceContextMock.mockResolvedValue({
+            success: false,
+            response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+        });
 
         const response = await requestFor();
 
@@ -200,7 +185,6 @@ describe("GET /api/documents/[id]/text", () => {
 
     it("returns only chunks for the document current version", async () => {
         queueSelectBatches(
-            { rows: [user] },
             { rows: [documentRow()] },
             {
                 ordered: true,
@@ -223,16 +207,13 @@ describe("GET /api/documents/[id]/text", () => {
     });
 
     it("returns the empty response when the current pointer is null", async () => {
-        queueSelectBatches(
-            { rows: [user] },
-            {
-                rows: [
-                    documentRow({
-                        currentVersionId: null,
-                    }),
-                ],
-            }
-        );
+        queueSelectBatches({
+            rows: [
+                documentRow({
+                    currentVersionId: null,
+                }),
+            ],
+        });
 
         const response = await requestFor();
         const payload = await responsePayload(response);
@@ -243,12 +224,11 @@ describe("GET /api/documents/[id]/text", () => {
             chunkCount: 0,
             documentId: 42,
         });
-        expect(selectMock).toHaveBeenCalledTimes(2);
+        expect(selectMock).toHaveBeenCalledTimes(1);
     });
 
     it("does not fall back when only historical or unversioned chunks exist", async () => {
         queueSelectBatches(
-            { rows: [user] },
             { rows: [documentRow()] },
             {
                 ordered: true,
@@ -270,7 +250,8 @@ describe("GET /api/documents/[id]/text", () => {
     });
 
     it("hides documents from another active company", async () => {
-        queueSelectBatches({ rows: [user] }, { rows: [documentRow({ companyId: 99n })] });
+        // Route company-scopes in SQL; a missing row means wrong tenant / missing doc.
+        queueSelectBatches({ rows: [] });
 
         const response = await requestFor();
 
@@ -278,7 +259,6 @@ describe("GET /api/documents/[id]/text", () => {
         await expect(responsePayload(response)).resolves.toEqual({
             error: "Document not found",
         });
-        expect(resolveActiveCompanyForUserMock).toHaveBeenCalledWith(user.id, user.companyId);
-        expect(selectMock).toHaveBeenCalledTimes(2);
+        expect(selectMock).toHaveBeenCalledTimes(1);
     });
 });

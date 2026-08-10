@@ -118,6 +118,12 @@ export interface OcrConfig {
   defaultProvider?: OcrProviderName;
   /** Absolute origin of the app — needed by the converter to fetch /api/files/ URLs. */
   appPublicUrl?: string;
+  /**
+   * Secret used to sign short-lived tokens on worker-bound /api/files/ URLs.
+   * Without it the worker cannot read database-backed documents, because that
+   * route requires a Clerk session and the worker has none.
+   */
+  fileAccessTokenSecret?: string;
   /** Model identifier for the vision classifier (converter reads its own copy). */
   visionModel?: string;
   /** Adapter-specific credentials. Each is optional; adapters no-op if missing. */

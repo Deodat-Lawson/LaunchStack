@@ -1,35 +1,34 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotChat, agentAiChatbotMessage, agentAiChatbotTask, agentAiChatbotDocument } from "~/server/db/schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
-
-// All handlers scope the chat to the Clerk session user; a chat owned by
-// someone else is indistinguishable from a missing one (404).
 
 // GET /api/agent-ai-chatbot/chats/[chatId] - Get a specific chat with its messages
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const { chatId } = await params;
 
-    // Get chat details (scoped to the session user)
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
+    // Get chat details
     const [chat] = await db
       .select()
       .from(agentAiChatbotChat)
-      .where(and(eq(agentAiChatbotChat.id, chatId), eq(agentAiChatbotChat.userId, userId)));
+      .where(eq(agentAiChatbotChat.id, chatId));
 
     if (!chat) {
       return NextResponse.json(
@@ -79,13 +78,15 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const { chatId } = await params;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const validation = await validateRequestBody(request, UpdateChatSchema);
     if (!validation.success) return validation.response;
     const { title, status, agentMode, visibility, aiStyle, aiPersona } = validation.data;
@@ -101,7 +102,7 @@ export async function PATCH(
     const [updatedChat] = await db
       .update(agentAiChatbotChat)
       .set(updateData)
-      .where(and(eq(agentAiChatbotChat.id, chatId), eq(agentAiChatbotChat.userId, userId)))
+      .where(eq(agentAiChatbotChat.id, chatId))
       .returning();
 
     if (!updatedChat) {
@@ -129,17 +130,18 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const { chatId } = await params;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     await db
       .delete(agentAiChatbotChat)
-      .where(and(eq(agentAiChatbotChat.id, chatId), eq(agentAiChatbotChat.userId, userId)));
+      .where(eq(agentAiChatbotChat.id, chatId));
 
     return NextResponse.json({
       success: true,

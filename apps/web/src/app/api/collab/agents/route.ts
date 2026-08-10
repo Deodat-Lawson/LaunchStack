@@ -6,10 +6,9 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { createPersona, ensureStarterPersonas } from "~/server/collab/personas";
 import { getHub, listKnownNodes } from "~/server/collab/runtime";
 import { getSlackStatus } from "~/server/collab/slack";
@@ -36,10 +35,10 @@ const CreatePersonaSchema = z.object({
 });
 
 export async function GET() {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
-  const companyId = await getActiveCompanyId(userId);
+  const { companyId } = ctx.data;
   const personas = await ensureStarterPersonas(companyId);
   const hub = getHub();
   // Node bookkeeping must never take the roster down with it — a persona whose
@@ -63,17 +62,16 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
   const parsed = CreatePersonaSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid request", details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const companyId = await getActiveCompanyId(userId);
   try {
-    const persona = await createPersona(companyId, parsed.data);
+    const persona = await createPersona(ctx.data.companyId, parsed.data);
     return NextResponse.json({ persona }, { status: 201 });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Could not create agent";

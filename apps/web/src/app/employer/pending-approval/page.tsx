@@ -29,7 +29,7 @@ export default function PendingApproval() {
       const response = await fetch("/api/fetchUserInfo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
+        body: "{}",
       });
       const data = (await response.json()) as EmployerData;
       setCurrentEmployeeData({
@@ -42,7 +42,7 @@ export default function PendingApproval() {
       console.error(error);
       router.push("/");
     }
-  }, [userId, router]);
+  }, [router]);
 
   useEffect(() => {
     if (userId) void checkEmployerRole();

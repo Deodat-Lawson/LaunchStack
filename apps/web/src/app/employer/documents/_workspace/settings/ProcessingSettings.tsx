@@ -253,7 +253,7 @@ export function ProcessingSettings({ onActions }: SettingsSectionProps) {
                 type="password"
                 value={embeddingOpenAIApiKey}
                 onChange={(e) => edit(setEmbeddingOpenAIApiKey)(e.target.value)}
-                placeholder="sk-…"
+                placeholder="<your-api-key>"
                 autoComplete="off"
               />
             </Field>

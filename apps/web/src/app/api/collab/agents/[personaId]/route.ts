@@ -6,10 +6,9 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { archivePersona, updatePersona } from "~/server/collab/personas";
 
 export const dynamic = "force-dynamic";
@@ -35,17 +34,16 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ personaId: string }> },
 ) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
   const parsed = UpdatePersonaSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid request", details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const companyId = await getActiveCompanyId(userId);
   const { personaId } = await params;
-  const persona = await updatePersona(companyId, personaId, parsed.data);
+  const persona = await updatePersona(ctx.data.companyId, personaId, parsed.data);
   if (!persona) return NextResponse.json({ error: "Agent not found" }, { status: 404 });
   return NextResponse.json({ persona });
 }
@@ -54,12 +52,11 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ personaId: string }> },
 ) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
-  const companyId = await getActiveCompanyId(userId);
   const { personaId } = await params;
-  const persona = await archivePersona(companyId, personaId);
+  const persona = await archivePersona(ctx.data.companyId, personaId);
   if (!persona) return NextResponse.json({ error: "Agent not found" }, { status: 404 });
   return NextResponse.json({ persona, archived: true });
 }

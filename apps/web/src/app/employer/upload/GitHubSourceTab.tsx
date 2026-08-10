@@ -99,7 +99,6 @@ export function GitHubSourceTab({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
           repoUrl: repoUrl.trim(),
           branch: branch.trim() || undefined,
           accessToken: accessToken.trim() || undefined,
@@ -195,7 +194,7 @@ export function GitHubSourceTab({
             <div style={{ marginTop: 8 }}>
               <input
                 type="password"
-                placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                placeholder="<your-github-access-token>"
                 value={accessToken}
                 onChange={(e) => setAccessToken(e.target.value)}
                 disabled={isSubmitting}

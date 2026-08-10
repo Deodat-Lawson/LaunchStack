@@ -1,45 +1,29 @@
 import { NextResponse } from "next/server";
-import { db } from "../../../../server/db";
+import { db } from "~/server/db";
 import { category } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import * as console from "console";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import {
+    isManagementRole,
+    requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function GET(_request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "Invalid user." },
-                { status: 400 }
-            );
-        } else if (userInfo.role !== "employer" && userInfo.role !== "owner") {
+        if (!isManagementRole(ctx.data.role)) {
             return NextResponse.json(
                 { error: "Invalid user role." },
-                { status: 400 }
+                { status: 403 }
             );
         }
-
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
 
         const categories = await db
             .select()
             .from(category)
-            .where(eq(category.companyId, companyId));
+            .where(eq(category.companyId, ctx.data.companyId));
             
         // Convert BigInt fields to numbers for JSON serialization
         const serializedCategories = categories.map((category) => ({

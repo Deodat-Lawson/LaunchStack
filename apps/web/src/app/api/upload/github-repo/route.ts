@@ -6,12 +6,8 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import {
     parseGitHubUrl,
@@ -24,10 +20,10 @@ import { putFile } from "~/server/storage/vercel-blob";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 const GitHubRepoSchema = z.object({
-    userId: z.string().min(1, "User ID is required"),
     repoUrl: z.string().url("A valid URL is required"),
     branch: z.string().optional(),
     accessToken: z.string().optional(),
@@ -35,6 +31,9 @@ const GitHubRepoSchema = z.object({
 });
 
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const validation = await validateRequestBody(request, GitHubRepoSchema);
@@ -42,19 +41,8 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
-            const { userId: bodyUserId, repoUrl, branch, accessToken, category } = validation.data;
-
-            // Identity comes from the Clerk session, never the request body.
-            // `userId` stays in the schema for wire-compat but is overridden.
-            const { userId } = await auth();
-            if (!userId) {
-                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-            }
-            if (bodyUserId && bodyUserId !== userId) {
-                console.warn(
-                    `[GitHubRepoUpload] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
-                );
-            }
+            const { repoUrl, branch, accessToken, category } =
+                validation.data;
 
             // Parse and validate the GitHub URL. SSRF note: parseGitHubUrl
             // rejects any hostname other than (www.)github.com, and the
@@ -77,15 +65,8 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Request: ${owner}/${repo}` +
-                    `${branch ? `@${branch}` : ""}, user=${userId}`
+                    `${branch ? `@${branch}` : ""}, user=${ctx.data.clerkUserId}`,
             );
-
-            // Look up user
-            const [userInfo] = await db.select().from(users).where(eq(users.userId, userId));
-
-            if (!userInfo) {
-                return NextResponse.json({ error: "Invalid user" }, { status: 400 });
-            }
 
             // Download the repository as a ZIP
             const zipBuffer = await downloadGitHubRepoZip(owner, repo, branch, accessToken);
@@ -107,8 +88,8 @@ export async function POST(request: Request) {
             // Trigger the document processing pipeline
             const uploadResult = await processDocumentUpload({
                 user: {
-                    userId,
-                    companyId: await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId),
+                    userId: ctx.data.clerkUserId,
+                    companyId: ctx.data.companyId,
                 },
                 documentName: `${owner}/${repo}`,
                 rawDocumentUrl: blob.url,
@@ -150,6 +131,16 @@ export async function POST(request: Request) {
 
             if (error instanceof GitHubRateLimitError) {
                 return NextResponse.json({ error: error.message }, { status: 429 });
+            }
+
+            // processDocumentUpload authorizes the internal file reference and
+            // throws with its own status (404 foreign file / 503 unconfigured);
+            // a generic 500 would hide an operator-fixable condition.
+            if (error instanceof UploadAuthorizationError) {
+                return NextResponse.json(
+                    { error: error.message },
+                    { status: error.status },
+                );
             }
 
             console.error("[GitHubRepoUpload] Error:", error);

@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { document } from "@launchstack/core/db/schema";
-import { users, documentViews, ChatHistory, agentAiChatbotMessage, agentAiChatbotChat } from "~/server/db/schema";
+import { users, documentViews, ChatHistory, userCompanyMemberships } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import {
+    isManagementRole,
+    requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -53,45 +55,27 @@ export async function GET() {
     let queryCountMs: number | null = null;
     let outcome = "ok";
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            outcome = "unauthorized";
-            return NextResponse.json(
-                { success: false, error: "Unauthorized" },
-                { status: 401 }
-            );
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) {
+            outcome = ctx.response.status === 401 ? "unauthorized" : ctx.response.status === 403 ? "forbidden" : "error";
+            return ctx.response;
         }
 
-        // Update activity + fetch current user in parallel.
-        const [, userRows] = await Promise.all([
-            db
-                .update(users)
-                .set({ lastActiveAt: new Date() })
-                .where(eq(users.userId, userId)),
-            db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId)),
-        ]);
-        const [userInfo] = userRows;
+        // Update last-active timestamp for the authenticated user.
+        await db
+            .update(users)
+            .set({ lastActiveAt: new Date() })
+            .where(eq(users.userId, ctx.data.clerkUserId));
 
-        if (!userInfo) {
-            outcome = "not_found";
-            return NextResponse.json(
-                { success: false, error: "User not found" },
-                { status: 404 }
-            );
-        }
-
-        if (userInfo.role !== "employer" && userInfo.role !== "owner") {
+        if (!isManagementRole(ctx.data.role)) {
             outcome = "forbidden";
             return NextResponse.json(
-                { success: false, error: "Unauthorized. Only employers and owners can access this data." },
+                { success: false, error: "Unauthorized. Only workspace owners and admins can access this data." },
                 { status: 403 }
             );
         }
 
-        const companyId = (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId));
+        const companyId = ctx.data.companyId;
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -104,19 +88,23 @@ export async function GET() {
             employeeTrendData,
             documentViewsTrendData,
         ] = await Promise.all([
+            // Roster is the membership list for this workspace, with the role
+            // granted here — `users.companyId` is only a default workspace and
+            // `users.role` is global.
             db
                 .select({
                     id: users.id,
                     name: users.name,
                     email: users.email,
-                    role: users.role,
+                    role: userCompanyMemberships.role,
                     status: users.status,
                     lastActiveAt: users.lastActiveAt,
-                    createdAt: users.createdAt,
+                    createdAt: userCompanyMemberships.createdAt,
                     userId: users.userId,
                 })
-                .from(users)
-                .where(eq(users.companyId, companyId))
+                .from(userCompanyMemberships)
+                .innerJoin(users, eq(users.id, userCompanyMemberships.userId))
+                .where(eq(userCompanyMemberships.companyId, companyId))
                 .orderBy(desc(users.lastActiveAt)),
             db
                 .select({ count: count() })
@@ -132,24 +120,30 @@ export async function GET() {
                     lastViewedAt: max(documentViews.viewedAt),
                 })
                 .from(document)
-                .leftJoin(documentViews, eq(document.id, documentViews.documentId))
+                .leftJoin(
+                    documentViews,
+                    and(
+                        eq(document.id, documentViews.documentId),
+                        eq(documentViews.companyId, companyId),
+                    ),
+                )
                 .where(eq(document.companyId, companyId))
                 .groupBy(document.id, document.title, document.category, document.createdAt)
                 .orderBy(desc(count(documentViews.id))),
             db
                 .select({
-                    date: sql<string>`DATE(${users.createdAt})`.as("date"),
+                    date: sql<string>`DATE(${userCompanyMemberships.createdAt})`.as("date"),
                     count: count(),
                 })
-                .from(users)
+                .from(userCompanyMemberships)
                 .where(
                     and(
-                        eq(users.companyId, companyId),
-                        gte(users.createdAt, thirtyDaysAgo)
+                        eq(userCompanyMemberships.companyId, companyId),
+                        gte(userCompanyMemberships.createdAt, thirtyDaysAgo)
                     )
                 )
-                .groupBy(sql`DATE(${users.createdAt})`)
-                .orderBy(sql`DATE(${users.createdAt})`),
+                .groupBy(sql`DATE(${userCompanyMemberships.createdAt})`)
+                .orderBy(sql`DATE(${userCompanyMemberships.createdAt})`),
             db
                 .select({
                     date: sql<string>`DATE(${documentViews.viewedAt})`.as("date"),
@@ -168,57 +162,37 @@ export async function GET() {
         aggregateMs = Date.now() - aggregateStart;
         const [documentCount] = documentCountRows;
 
-        // Get employee query counts from BOTH simple queries (ChatHistory) AND AI chat (agentAiChatbotMessage)
+        // Query counts come from ChatHistory joined to this company's documents.
+        // Members can belong to several workspaces, so filtering by user id
+        // alone would count questions they asked somewhere else. The AI chat
+        // aggregate that used to be merged in here is gone: `agent_ai_chatbot_chat`
+        // carries no company or document, so there is nothing to scope it by.
         const employeeUserIds = employeesData.map(e => e.userId);
-        
+
         let queryCountsData: { userId: string; count: number }[] = [];
-        
+
         if (employeeUserIds.length > 0) {
             const queryCountStart = Date.now();
-            const [simpleQueryCounts, aiChatCounts] = await Promise.all([
-                db
+            queryCountsData = (
+                await db
                     .select({
                         userId: ChatHistory.UserId,
                         count: count(),
                     })
                     .from(ChatHistory)
-                    .where(inArray(ChatHistory.UserId, employeeUserIds))
-                    .groupBy(ChatHistory.UserId),
-                // Join with chat table to get userId since message table doesn't have it directly.
-                db
-                    .select({
-                        userId: agentAiChatbotChat.userId,
-                        count: count(),
-                    })
-                    .from(agentAiChatbotMessage)
-                    .innerJoin(agentAiChatbotChat, eq(agentAiChatbotMessage.chatId, agentAiChatbotChat.id))
+                    .innerJoin(document, eq(document.id, ChatHistory.documentId))
                     .where(
                         and(
-                            eq(agentAiChatbotMessage.role, "user"),
-                            inArray(agentAiChatbotChat.userId, employeeUserIds)
+                            inArray(ChatHistory.UserId, employeeUserIds),
+                            eq(document.companyId, companyId)
                         )
                     )
-                    .groupBy(agentAiChatbotChat.userId),
-            ]);
+                    .groupBy(ChatHistory.UserId)
+            ).map(row => ({ userId: row.userId, count: Number(row.count) }));
             queryCountMs = Date.now() - queryCountStart;
-
-            // 3. Merge counts
-            const countsMap = new Map<string, number>();
-            
-            simpleQueryCounts.forEach(c => {
-                countsMap.set(c.userId, (countsMap.get(c.userId) ?? 0) + Number(c.count));
-            });
-            
-            aiChatCounts.forEach(c => {
-                countsMap.set(c.userId, (countsMap.get(c.userId) ?? 0) + Number(c.count));
-            });
-
-            queryCountsData = Array.from(countsMap.entries()).map(([userId, count]) => ({
-                userId,
-                count
-            }));
         }
-            
+
+
         const queryCountsMap = new Map(
             queryCountsData.map(q => [q.userId, q.count])
         );

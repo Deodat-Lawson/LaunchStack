@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { randomUUID } from "node:crypto";
 
 import { putObject, getS3BucketName, ensureBucketExists, getObjectUrl } from "~/server/storage/s3-client";
 import { isS3Storage } from "~/lib/storage";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 function sanitizeFilename(filename: string): string {
     return filename.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
@@ -11,13 +11,8 @@ function sanitizeFilename(filename: string): string {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Authentication required" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         if (!isS3Storage()) {
             return NextResponse.json(

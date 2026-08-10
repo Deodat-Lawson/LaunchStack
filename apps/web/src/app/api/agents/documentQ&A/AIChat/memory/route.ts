@@ -1,27 +1,22 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotMemory } from "~/server/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateMemorySchema } from "~/lib/validation";
-import { userOwnsChat } from "~/server/security/aichat-authz";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
-// Handlers require a Clerk session and verify the target chat belongs to the
-// session user; foreign chats read as 404.
-
 // POST /api/agent-ai-chatbot/memory - Store memory
 export async function POST(request: NextRequest) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const validation = await validateRequestBody(request, CreateMemorySchema);
     if (!validation.success) return validation.response;
     const {
@@ -34,16 +29,15 @@ export async function POST(request: NextRequest) {
       expiresAt
     } = validation.data;
 
-    if (!(await userOwnsChat(chatId, userId))) {
-      return NextResponse.json({ error: "Chat not found" }, { status: 404 });
-    }
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const memoryId = randomUUID();
 
     const insertValues = {
       id: memoryId,
       chatId,
-      memoryType: memoryType,
+      memoryType,
       key,
       value,
       importance,
@@ -71,12 +65,10 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/memory?chatId=xxx - Get memories for a chat
 export async function GET(request: NextRequest) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const { searchParams } = new URL(request.url);
     const chatId = searchParams.get("chatId");
     const memoryType = searchParams.get("memoryType");
@@ -88,9 +80,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!(await userOwnsChat(chatId, userId))) {
-      return NextResponse.json({ error: "Chat not found" }, { status: 404 });
-    }
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const whereConditions = memoryType
       ? and(
@@ -107,7 +98,6 @@ export async function GET(request: NextRequest) {
         desc(agentAiChatbotMemory.importance),
         desc(agentAiChatbotMemory.accessedAt)
       );
-
 
     // Update accessedAt for retrieved memories
     const memoryIds = memories.map((m) => m.id);

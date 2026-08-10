@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getTranscriptionProvider } from "@launchstack/features/voice";
 import { getEngine } from "~/server/engine";
 
@@ -20,10 +20,8 @@ const MIN_AUDIO_BYTES = 45;
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const formData = await request.formData();
     const audioFile = formData.get("audio");

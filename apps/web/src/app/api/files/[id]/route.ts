@@ -2,31 +2,27 @@
  * File Serving API Route
  * Retrieves and serves files stored in the database.
  *
- * Access control (see ~/server/security/file-access.ts):
- *  - Valid signed reference (`?exp=<unix>&sig=<hmac>`) → allowed (time-limited
- *    storage reference for services / links).
- *  - `X-Service-Key` header equal to FILE_ACCESS_HMAC_KEY → allowed
- *    (server-to-server fetches from compute services like document-converter).
- *  - Otherwise a Clerk session is required and the caller must be authorized
- *    for the file (see userMayAccessFile below).
- *  - Compatibility: when FILE_ACCESS_HMAC_KEY is unset the route behaves as it
- *    always did (no auth) but logs one loud warning per process.
+ * Auth: accepts a signed file-access token (OCR worker) OR a full workspace
+ * session. Token-based requests skip the ownership check; session-based
+ * requests require `file_uploads.company_id` to match the caller's company.
+ * Rows with no company stamp belong to no known tenant and are denied — see
+ * Legacy rows get `company_id` from the
+ * `2026-08-file-uploads-company-id` backfill, which stamps every row it can
+ * attribute authoritatively.
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq, like } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { document, fileUploads } from "@launchstack/core/db/schema";
-import { users, userCompanyMemberships } from "~/server/db/schema";
+import { fileUploads } from "@launchstack/core/db/schema";
+import {
+  FILE_ACCESS_TOKEN_PARAM,
+  verifyFileAccessToken,
+} from "@launchstack/core/crypto";
+import { env } from "~/env";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
-import {
-  getFileAccessKey,
-  isValidServiceKey,
-  verifySignedFileReference,
-  warnLegacyOpenFileAccessOnce,
-} from "~/server/security/file-access";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const MIME_BY_EXTENSION: Record<string, string> = {
   pdf: "application/pdf",
@@ -63,69 +59,6 @@ interface RouteParams {
   }>;
 }
 
-/**
- * Ownership check for session-authenticated access.
- *
- * The strongest check the data supports today:
- *  1. `file_uploads.user_id` (a Clerk user id) — the uploader always has
- *     access.
- *  2. Otherwise, if any `document` row references this file via a
- *     `/api/files/{id}` URL, users belonging to that document's company
- *     (default workspace or any `user_company_memberships` row) have access.
- *
- * Limits: `file_uploads` carries no company id of its own, so a file that no
- * document references yet (e.g. mid-ingestion or orphaned) is only served to
- * its uploader. Document-level sharing/permission flags, if added later,
- * are not consulted here.
- */
-async function userMayAccessFile(
-  sessionUserId: string,
-  fileId: number,
-  fileUserId: string
-): Promise<boolean> {
-  if (fileUserId === sessionUserId) {
-    return true;
-  }
-
-  const [userInfo] = await db
-    .select({ id: users.id, companyId: users.companyId })
-    .from(users)
-    .where(eq(users.userId, sessionUserId));
-
-  if (!userInfo) {
-    return false;
-  }
-
-  // Documents referencing this file. LIKE narrows the scan; the regex below
-  // confirms the exact id so /api/files/12 never matches /api/files/123.
-  const candidateDocs = await db
-    .select({ companyId: document.companyId, url: document.url })
-    .from(document)
-    .where(like(document.url, `%/api/files/${fileId}%`));
-
-  const exactRef = new RegExp(`/api/files/${fileId}(?:[?#]|$)`);
-  const owningCompanies = new Set(
-    candidateDocs
-      .filter(doc => exactRef.test(doc.url))
-      .map(doc => BigInt(doc.companyId).toString())
-  );
-
-  if (owningCompanies.size === 0) {
-    return false;
-  }
-
-  if (owningCompanies.has(BigInt(userInfo.companyId).toString())) {
-    return true;
-  }
-
-  const memberships = await db
-    .select({ companyId: userCompanyMemberships.companyId })
-    .from(userCompanyMemberships)
-    .where(eq(userCompanyMemberships.userId, BigInt(userInfo.id)));
-
-  return memberships.some(m => owningCompanies.has(BigInt(m.companyId).toString()));
-}
-
 export async function GET(
   request: Request,
   { params }: RouteParams
@@ -141,31 +74,21 @@ export async function GET(
       );
     }
 
-    // ------------------------------------------------------------------
-    // Access control
-    // ------------------------------------------------------------------
-    let sessionUserId: string | null = null;
+    // Token path: the OCR worker has no Clerk session but carries a
+    // short-lived HMAC token scoped to this file id.
+    const token = new URL(request.url).searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+    const hasValidToken = verifyFileAccessToken(
+      token,
+      String(fileId),
+      env.server.FILE_ACCESS_TOKEN_SECRET,
+    );
 
-    if (getFileAccessKey()) {
-      const { searchParams } = new URL(request.url);
-      const signedOk = verifySignedFileReference(
-        fileId,
-        searchParams.get("exp"),
-        searchParams.get("sig")
-      );
-      const serviceOk =
-        !signedOk && isValidServiceKey(request.headers.get("x-service-key"));
-
-      if (!signedOk && !serviceOk) {
-        const { userId } = await auth();
-        if (!userId) {
-          return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        sessionUserId = userId;
-      }
-    } else {
-      // Legacy compatibility: no key configured — keep serving openly, loudly.
-      warnLegacyOpenFileAccessOnce();
+    // Session path: full workspace context + company ownership check.
+    let sessionCompanyId: bigint | null = null;
+    if (!hasValidToken) {
+      const ctx = await requireWorkspaceContext();
+      if (!ctx.success) return ctx.response;
+      sessionCompanyId = ctx.data.companyId;
     }
 
     // Fetch file from database
@@ -181,12 +104,13 @@ export async function GET(
       );
     }
 
-    // Session-authenticated caller (no signed reference / service key):
-    // enforce ownership before serving a single byte.
-    if (sessionUserId !== null) {
-      const authorized = await userMayAccessFile(sessionUserId, fileId, file.userId);
-      if (!authorized) {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    // Company ownership check for session-based requests.
+    if (sessionCompanyId !== null) {
+      if (file.companyId == null || file.companyId !== sessionCompanyId) {
+        return NextResponse.json(
+          { error: "File not found" },
+          { status: 404 },
+        );
       }
     }
 

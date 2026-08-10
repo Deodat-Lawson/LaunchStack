@@ -1,37 +1,25 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotChat, agentAiChatbotDocument } from "~/server/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateChatSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
-// GET /api/agent-ai-chatbot/chats - Get all chats for the session user
+// GET /api/agent-ai-chatbot/chats - Get all chats for a user
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
-    // Identity comes from the Clerk session; the legacy `userId` query
-    // parameter is still accepted for wire-compat but ignored.
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { searchParams } = new URL(request.url);
-    const queryUserId = searchParams.get("userId");
-    if (queryUserId && queryUserId !== userId) {
-      console.warn(
-        `[AIChat] Ignoring query userId=${queryUserId}; using session userId=${userId}`
-      );
-    }
-
     const chats = await db
       .select()
       .from(agentAiChatbotChat)
-      .where(eq(agentAiChatbotChat.userId, userId))
+      .where(eq(agentAiChatbotChat.userId, ctx.data.clerkUserId))
       .orderBy(desc(agentAiChatbotChat.updatedAt));
 
     return NextResponse.json({
@@ -49,18 +37,13 @@ export async function GET(request: NextRequest) {
 
 // POST /api/agent-ai-chatbot/chats - Create a new chat
 export async function POST(request: NextRequest) {
-  try {
-    // Identity comes from the Clerk session, never the request body.
-    // `userId` stays in the schema for wire-compat but is overridden.
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const validation = await validateRequestBody(request, CreateChatSchema);
     if (!validation.success) return validation.response;
     const {
-      userId: bodyUserId,
       title,
       agentMode,
       visibility,
@@ -69,22 +52,18 @@ export async function POST(request: NextRequest) {
       documentId
     } = validation.data;
 
-    if (bodyUserId && bodyUserId !== userId) {
-      console.warn(
-        `[AIChat] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
-      );
-    }
-
     const chatId = randomUUID();
     const insertValues = {
       id: chatId,
-      userId,
+      userId: ctx.data.clerkUserId,
       title,
+      // CreateChatSchema already narrows these to their literal unions; the
+      // non-null assertions cover the schema's optional-with-default fields.
       agentMode: agentMode!,
       visibility: visibility!,
       status: "active" as const,
-      aiStyle: aiStyle,
-      aiPersona: aiPersona,
+      aiStyle,
+      aiPersona,
     };
 
     const [newChat] = await db
@@ -97,8 +76,8 @@ export async function POST(request: NextRequest) {
       await db.insert(agentAiChatbotDocument).values({
         id: documentId.toString(),
         chatId: chatId,
-        userId: userId,
-        title: title, // Use chat title as doc ref title for now
+        userId: ctx.data.clerkUserId,
+        title: title,
         kind: "text",
       });
     }

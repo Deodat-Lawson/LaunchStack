@@ -74,7 +74,7 @@ export function resolveEffectiveEmbeddingConfig(
   // source. Resolving them independently would let a company's key fall
   // through to the deployment's URL and ship that key to whatever vendor the
   // operator configured globally — `.env.example` suggests SiliconFlow, so an
-  // `sk-…` pasted into the field labelled "OpenAI API key" would go there.
+  // A provider key pasted into the field labelled "OpenAI API key" would go there.
   // Now that no built-in default endpoint backstops the pairing, they are
   // resolved together or not at all.
   const companyOpenAIApiKey = normalizeOptional(config?.openAIApiKey);

@@ -158,9 +158,9 @@ describe("route resolution precedes expensive work", () => {
 describe("authentication precedes chat resolution", () => {
   /**
    * Resolution reports what this deployment can and cannot do, and answers
-   * with a 400 when a route is unavailable. Reaching it before `auth()` lets
-   * an anonymous caller probe the configuration and turns a request that
-   * should be a flat 401 into a 400 about capabilities.
+   * with a 400 when a route is unavailable. Reaching it before workspace
+   * auth lets an anonymous caller probe the configuration and turns a
+   * request that should be a flat 401/403 into a 400 about capabilities.
    */
   const handlers = [
     "apps/web/src/app/api/agents/documentQ&A/AIChat/query/route.ts",
@@ -170,7 +170,7 @@ describe("authentication precedes chat resolution", () => {
 
   it.each(handlers)("%s authenticates first", (file) => {
     const source = read(file);
-    const authAt = source.indexOf("await auth()");
+    const authAt = source.indexOf("await requireWorkspaceContext()");
     const resolveAt = source.indexOf("resolveConfiguredChatModel(");
 
     expect(authAt).toBeGreaterThan(-1);

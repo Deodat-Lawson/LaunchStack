@@ -72,8 +72,25 @@ jest.mock("@clerk/nextjs/server", () => ({
     }),
 }));
 
-jest.mock("~/lib/active-workspace", () => ({
-  getActiveCompanyId: () => Promise.resolve(mockCtx.companyId),
+jest.mock("~/lib/require-workspace-context", () => ({
+  requireWorkspaceContext: () =>
+    mockCtx.userId
+      ? Promise.resolve({
+          success: true,
+          data: {
+            clerkUserId: mockCtx.userId,
+            userPk: 1n,
+            companyId: mockCtx.companyId,
+            role: "owner",
+            status: "verified",
+          },
+        })
+      : Promise.resolve({
+          success: false,
+          response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+          }),
+        }),
 }));
 
 jest.mock("~/server/collab/store", () => ({

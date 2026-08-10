@@ -11,17 +11,18 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 export async function POST(
   request: Request,
@@ -46,22 +47,12 @@ export async function POST(
         );
       }
 
-      const { userId } = await auth();
-      if (!userId) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
+      const ctx = await requireWorkspaceContext();
+      if (!ctx.success) return ctx.response;
 
-      const [userInfo] = await db
-        .select()
-        .from(users)
-        .where(eq(users.userId, userId));
-
-      if (!userInfo) {
-        return NextResponse.json({ error: "Unknown user" }, { status: 401 });
-      }
-      if (!AUTHORIZED_ROLES.has(userInfo.role)) {
+      if (!isManagementRole(ctx.data.role)) {
         return NextResponse.json(
-          { error: "Forbidden: employer or owner role required" },
+          { error: "Forbidden: owner or admin role required" },
           { status: 403 }
         );
       }
@@ -71,7 +62,7 @@ export async function POST(
         .from(document)
         .where(eq(document.id, documentId));
 
-      if (!doc || doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
+      if (!doc || doc.companyId !== ctx.data.companyId) {
         return NextResponse.json(
           { error: "Document not found" },
           { status: 404 }
@@ -142,7 +133,7 @@ export async function POST(
 
       console.log(
         `[Versions] Reverted doc=${documentId} to v${targetVersion.versionNumber} ` +
-          `(versionId=${targetVersion.id}) by user=${userId}`
+          `(versionId=${targetVersion.id}) by user=${ctx.data.clerkUserId}`
       );
 
       return NextResponse.json(

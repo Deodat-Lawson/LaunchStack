@@ -37,7 +37,7 @@ interface SearchArgs {
   scope: NoteSearchScope;
   /** Required for `scope === "document"`. */
   documentId?: string;
-  /** Required for `scope === "company"`. */
+  /** Active workspace. Applied to every scope, not just `"company"`. */
   companyId?: string;
   topK?: number;
 }
@@ -55,8 +55,9 @@ type Row = {
 
 /**
  * Returns the top-K notes ranked by cosine distance against `query`. Always
- * scoped by `userId` — even `scope: "company"` AND-filters by the requester
- * to prevent reading another user's private notes.
+ * scoped by `userId` and, when supplied, by the active `companyId` — even
+ * `scope: "company"` AND-filters by the requester to prevent reading another
+ * user's private notes.
  *
  * Returns an empty array (not an error) when no embedding key is configured —
  * callers should fall back to title ILIKE.
@@ -87,13 +88,19 @@ export async function searchNotes(
   const shortLiteral = sql.raw(`'[${short.join(",")}]'::vector(${EMBEDDING_SHORT_DIM})`);
   const fullLiteral = sql.raw(`'[${embedding.join(",")}]'::vector(${EMBEDDING_DIM})`);
 
-  // Build scope predicate. `userId` is always part of the filter so we never
-  // leak across owners, even when the broader scope is company-wide.
+  // `userId` is always part of the filter so we never leak across owners.
+  // The active workspace is part of the *base* predicate rather than the
+  // company scope alone: `user` and `document` scopes would otherwise return
+  // the requester's own notes from workspaces they are not currently in.
+  // Legacy rows with no company stamp stay visible to their owner, matching
+  // how `GET /api/notes` lists them.
+  const companyFilter = args.companyId
+    ? sql`(ne.company_id = ${args.companyId} OR ne.company_id IS NULL)`
+    : sql`TRUE`;
+
   const scopeFilter =
     scope === "document"
       ? sql`ne.document_id = ${args.documentId ?? ""}`
-      : scope === "company"
-      ? sql`ne.company_id = ${args.companyId ?? ""}`
       : sql`TRUE`;
 
   const rows = toRows<Row>(
@@ -110,6 +117,7 @@ export async function searchNotes(
       FROM ${T.noteEmbeddings} ne
       JOIN ${T.notes} n ON n.id = ne.note_id
       WHERE ne.user_id = ${userId}
+        AND ${companyFilter}
         AND ${scopeFilter}
         AND ne.embedding IS NOT NULL
         AND ne.embedding_short IS NOT NULL

@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db/index";
 import { eq, and, gt, desc, sql } from "drizzle-orm";
 import { document, documentContextChunks } from "@launchstack/core/db/schema";
-import { predictiveDocumentAnalysisResults, users } from "~/server/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation";
 import { CACHE_CONFIG, ERROR_TYPES, HTTP_STATUS, type AnalysisType } from "~/lib/constants";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -23,6 +22,9 @@ export const maxDuration = 300;
  *   - an "error" event if the job fails
  */
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     const validation = await validateRequestBody(request, PredictiveAnalysisSchema);
     if (!validation.success) {
         return validation.response;
@@ -34,44 +36,19 @@ export async function POST(request: Request) {
     const typedAnalysisType: AnalysisType = analysisType ?? "general";
     const typedIncludeRelatedDocs = includeRelatedDocs ?? false;
 
-    // Require a Clerk session and resolve the caller's active company so
-    // cross-tenant documents come back as 404 (same convention as the
-    // non-streaming route).
-    const { userId } = await auth();
-    if (!userId) {
-        return NextResponse.json(
-            { success: false, message: "Unauthorized" },
-            { status: HTTP_STATUS.UNAUTHORIZED }
-        );
-    }
-
-    const [userInfo] = await db
-        .select({ id: users.id, companyId: users.companyId })
-        .from(users)
-        .where(eq(users.userId, userId));
-
-    if (!userInfo) {
-        return NextResponse.json(
-            { success: false, message: "Unauthorized" },
-            { status: HTTP_STATUS.UNAUTHORIZED }
-        );
-    }
-
-    const activeCompanyId = await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId);
-
-    // Verify document exists and belongs to the caller's company before
-    // reading a cache entry.
+    // Ownership before cache: never stream another tenant's analysis.
     const docCheck = await db
-        .select({
-            id: document.id,
-            companyId: document.companyId,
-            currentVersionId: document.currentVersionId,
-        })
+        .select({ id: document.id, currentVersionId: document.currentVersionId })
         .from(document)
-        .where(eq(document.id, documentId))
+        .where(
+            and(
+                eq(document.id, documentId),
+                eq(document.companyId, ctx.data.companyId),
+            ),
+        )
         .limit(1);
 
-    if (docCheck.length === 0 || BigInt(docCheck[0]!.companyId) !== activeCompanyId) {
+    if (docCheck.length === 0) {
         return NextResponse.json(
             { success: false, message: "Document not found.", errorType: ERROR_TYPES.VALIDATION },
             { status: HTTP_STATUS.NOT_FOUND }

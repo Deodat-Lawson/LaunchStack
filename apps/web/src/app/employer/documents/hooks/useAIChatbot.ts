@@ -34,7 +34,6 @@ export interface Message {
 }
 
 interface CreateChatParams {
-  userId: string;
   title: string;
   agentMode?: 'autonomous' | 'interactive' | 'assisted';
   visibility?: 'public' | 'private';
@@ -83,12 +82,12 @@ export function useAIChatbot() {
     }
   }, []);
 
-  // Get all chats for a user
-  const getChats = useCallback(async (userId: string): Promise<Chat[]> => {
+  // Get all chats for the authenticated user
+  const getChats = useCallback(async (): Promise<Chat[]> => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/agents/documentQ&A/AIChat/chats?userId=${userId}`);
+      const response = await fetch('/api/agents/documentQ&A/AIChat/chats');
 
       if (!response.ok) {
         throw new Error('Failed to fetch chats');

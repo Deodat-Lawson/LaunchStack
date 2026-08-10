@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 
 import {
   getEmbeddingIndexRegistry,
   type EmbeddingIndexConfig,
   type EmbeddingProvider,
 } from "@launchstack/core/embeddings";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 // "sidecar" is gone from EmbeddingProvider (ADR-004 §5 removed the phantom
 // sidecar embedding provider), so it has no label here either.
@@ -21,13 +21,8 @@ function humanLabel(index: EmbeddingIndexConfig): string {
 }
 
 export async function GET() {
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json(
-      { success: false, message: "Unauthorized" },
-      { status: 401 },
-    );
-  }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
   const indexes = getEmbeddingIndexRegistry()
     .filter((idx) => idx.enabled)

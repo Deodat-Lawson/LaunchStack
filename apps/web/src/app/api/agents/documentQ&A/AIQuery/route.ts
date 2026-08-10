@@ -13,10 +13,8 @@ import {
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
 import { document } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -36,7 +34,7 @@ import {
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -67,19 +65,16 @@ export async function POST(request: Request) {
         };
 
         try {
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) {
+                recordResult("error");
+                return ctx.response;
+            }
+
             const validation = await validateRequestBody(request, QuestionSchema);
             if (!validation.success) {
                 recordResult("error");
                 return validation.response;
-            }
-
-            const { userId } = await auth();
-            if (!userId) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Unauthorized"
-                }, { status: 401 });
             }
 
             const {
@@ -132,21 +127,6 @@ export async function POST(request: Request) {
                 }, { status: 400 });
             }
 
-            // Verify user and document access
-            const [requestingUser] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId))
-                .limit(1);
-
-            if (!requestingUser) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Invalid user."
-                }, { status: 401 });
-            }
-
             const [targetDocument] = await db
                 .select({
                     id: document.id,
@@ -164,7 +144,7 @@ export async function POST(request: Request) {
                 }, { status: 404 });
             }
 
-            if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
+            if (targetDocument.companyId !== ctx.data.companyId) {
                 recordResult("error");
                 return NextResponse.json({
                     success: false,
@@ -173,7 +153,7 @@ export async function POST(request: Request) {
             }
 
             const companyConfig =
-                await getCompanyEmbeddingConfig((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
+                await getCompanyEmbeddingConfig(ctx.data.companyId);
 
             // Perform document search
             const resolvedEmbeddingIndex = resolveEmbeddingIndex(
@@ -191,7 +171,7 @@ export async function POST(request: Request) {
                 const documentOptions: DocumentSearchOptions = {
                     topK: 5,
                     documentId,
-                    companyId: Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))),
+                    companyId: Number(ctx.data.companyId),
                     embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                 };
                 

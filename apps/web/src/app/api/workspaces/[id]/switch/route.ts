@@ -1,20 +1,19 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq, and, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { setActiveWorkspaceCookie } from "~/lib/active-workspace";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 export async function POST(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
+        const clerkUserId = identity.data.clerkUserId;
 
         const { id: rawId } = await params;
         let companyId: bigint;
@@ -30,7 +29,7 @@ export async function POST(
         const [user] = await db
             .select({ id: users.id })
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, clerkUserId));
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }

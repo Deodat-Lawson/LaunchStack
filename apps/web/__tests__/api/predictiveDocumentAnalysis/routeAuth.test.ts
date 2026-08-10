@@ -1,17 +1,17 @@
 /**
- * /api/agents/predictive-document-analysis (+ /stream): requires a Clerk
- * session and scopes the document to the caller's active company — foreign
+ * /api/agents/predictive-document-analysis (+ /stream): requires a workspace
+ * context and scopes the document to the caller's active company — foreign
  * documents read as 404, never analyzed.
+ *
+ * Scoping is enforced in SQL (`document.companyId = ctx.companyId`), so a
+ * foreign document is indistinguishable from a missing one: the query simply
+ * returns no rows.
  */
 
-const mockClerk: { userId: string | null } = { userId: null };
+const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: () => Promise.resolve({ userId: mockClerk.userId }),
-}));
-
-jest.mock("~/lib/active-workspace", () => ({
-    resolveActiveCompanyForUser: jest.fn(),
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
 }));
 
 jest.mock("~/lib/rate-limit-middleware", () => ({
@@ -77,11 +77,29 @@ jest.mock("~/server/db/index", () => ({
 
 import { POST } from "~/app/api/agents/predictive-document-analysis/route";
 import { POST as streamPOST } from "~/app/api/agents/predictive-document-analysis/stream/route";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
-const resolveActiveCompanyForUserMock = resolveActiveCompanyForUser as jest.MockedFunction<
-    typeof resolveActiveCompanyForUser
->;
+function mockAuthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: {
+            clerkUserId: "user_session",
+            userPk: BigInt(1),
+            companyId: BigInt(5),
+            role: "owner",
+            status: "verified",
+        },
+    });
+}
+
+function mockUnauthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        }),
+    });
+}
 
 function requestFor(body: Record<string, unknown>, path = "/api/agents/predictive-document-analysis") {
     return new Request(`http://localhost${path}`, {
@@ -91,34 +109,22 @@ function requestFor(body: Record<string, unknown>, path = "/api/agents/predictiv
     });
 }
 
-const USER_ROW = { id: 1, companyId: 5n };
-
 describe("POST /api/agents/predictive-document-analysis", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockSelectQueue.length = 0;
-        mockClerk.userId = "user_session";
-        resolveActiveCompanyForUserMock.mockResolvedValue(5n);
+        mockAuthenticated();
     });
 
-    it("returns 401 when there is no Clerk session", async () => {
-        mockClerk.userId = null;
+    it("returns 401 when there is no workspace context", async () => {
+        mockUnauthenticated();
         const response = await POST(requestFor({ documentId: 1 }));
         expect(response.status).toBe(401);
     });
 
     it("returns 404 for a document owned by another company", async () => {
-        mockSelectQueue.push(
-            [USER_ROW], // users lookup
-            [
-                {
-                    title: "Foreign doc",
-                    category: "x",
-                    companyId: 9n,
-                    currentVersionId: 2n,
-                },
-            ] // document details
-        );
+        // The company-scoped query matches nothing for a foreign document.
+        mockSelectQueue.push([]); // document details
 
         const response = await POST(requestFor({ documentId: 1 }));
         const json = await response.json();
@@ -130,7 +136,6 @@ describe("POST /api/agents/predictive-document-analysis", () => {
     it("serves the cached analysis for a same-company document", async () => {
         const cached = { documentId: 1, analysisType: "general", marker: "cached" };
         mockSelectQueue.push(
-            [USER_ROW], // users lookup
             [
                 {
                     title: "My doc",
@@ -154,12 +159,11 @@ describe("POST /api/agents/predictive-document-analysis/stream", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockSelectQueue.length = 0;
-        mockClerk.userId = "user_session";
-        resolveActiveCompanyForUserMock.mockResolvedValue(5n);
+        mockAuthenticated();
     });
 
-    it("returns 401 when there is no Clerk session", async () => {
-        mockClerk.userId = null;
+    it("returns 401 when there is no workspace context", async () => {
+        mockUnauthenticated();
         const response = await streamPOST(
             requestFor({ documentId: 1 }, "/api/agents/predictive-document-analysis/stream")
         );
@@ -167,10 +171,8 @@ describe("POST /api/agents/predictive-document-analysis/stream", () => {
     });
 
     it("returns 404 for a document owned by another company", async () => {
-        mockSelectQueue.push(
-            [USER_ROW], // users lookup
-            [{ id: 1, companyId: 9n, currentVersionId: 2n }] // doc check
-        );
+        // The company-scoped query matches nothing for a foreign document.
+        mockSelectQueue.push([]); // doc check
 
         const response = await streamPOST(
             requestFor({ documentId: 1 }, "/api/agents/predictive-document-analysis/stream")
@@ -181,7 +183,6 @@ describe("POST /api/agents/predictive-document-analysis/stream", () => {
     it("streams the cached result for a same-company document", async () => {
         const cached = { documentId: 1, marker: "cached-sse" };
         mockSelectQueue.push(
-            [USER_ROW], // users lookup
             [{ id: 1, companyId: 5n, currentVersionId: 2n }], // doc check
             [{ resultJson: cached }] // cache hit
         );

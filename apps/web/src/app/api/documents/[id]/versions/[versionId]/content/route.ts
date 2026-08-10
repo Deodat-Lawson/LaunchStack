@@ -12,15 +12,13 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isLocalStorage } from "~/lib/storage";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -57,10 +55,8 @@ export async function GET(
   context: { params: Promise<{ id: string; versionId: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { id: rawDocId, versionId: rawVersionId } = await context.params;
     const documentId = Number(rawDocId);
@@ -80,20 +76,12 @@ export async function GET(
 
     // Company-scoped auth: verify the caller shares a company with the target
     // document. Mirrors the check used in every other document-scoped route.
-    const [userInfo] = await db
-      .select()
-      .from(users)
-      .where(eq(users.userId, userId));
-    if (!userInfo) {
-      return NextResponse.json({ error: "Unknown user" }, { status: 401 });
-    }
-
     const [doc] = await db
       .select({ companyId: document.companyId, title: document.title })
       .from(document)
       .where(eq(document.id, documentId));
 
-    if (!doc || doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
+    if (!doc || doc.companyId !== ctx.data.companyId) {
       return NextResponse.json(
         { error: "Document not found" },
         { status: 404 }

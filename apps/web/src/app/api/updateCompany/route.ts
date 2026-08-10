@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import { and, eq, sql } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
 
 import { db } from "../../../server/db/index";
 import { company, document } from "@launchstack/core/db/schema";
-import { users } from "~/server/db/schema";
 import { validateRequestBody, UpdateCompanySchema } from "~/lib/validation";
 import {
   getCompanyCredentialsPlaintext,
@@ -16,9 +14,12 @@ import {
   getCompanyReindexState,
 } from "@launchstack/core/embeddings";
 import { inngest } from "~/server/inngest/client";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
-const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
 
 async function readCurrentIndexKey(companyId: number): Promise<string | null> {
   const [row] = await db
@@ -31,17 +32,8 @@ async function readCurrentIndexKey(companyId: number): Promise<string | null> {
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized",
-        },
-        { status: 401 }
-      );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const validation = await validateRequestBody(request, UpdateCompanySchema);
     if (!validation.success) {
@@ -62,26 +54,7 @@ export async function POST(request: Request) {
       useUploadThing,
     } = validation.data;
 
-    const [userRecord] = await db
-      .select({
-        id: users.id,
-        companyId: users.companyId,
-        role: users.role,
-      })
-      .from(users)
-      .where(eq(users.userId, userId));
-
-    if (!userRecord) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized",
-        },
-        { status: 401 }
-      );
-    }
-
-    if (!AUTHORIZED_ROLES.has(userRecord.role)) {
+    if (!isManagementRole(ctx.data.role)) {
       return NextResponse.json(
         {
           success: false,
@@ -90,6 +63,8 @@ export async function POST(request: Request) {
         { status: 403 }
       );
     }
+
+    const companyIdNum = Number(ctx.data.companyId);
 
     // Embedding index key change handling. Three outcomes:
     //   1. No change (current === requested) → apply normally.
@@ -106,8 +81,7 @@ export async function POST(request: Request) {
     } | null = null;
 
     if (embeddingIndexKey !== undefined) {
-      const companyIdForCheck = Number((await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)));
-      const state = await getCompanyReindexState(companyIdForCheck);
+      const state = await getCompanyReindexState(companyIdNum);
 
       if (state && state.status === "REINDEXING") {
         return NextResponse.json(
@@ -132,7 +106,7 @@ export async function POST(request: Request) {
           .select({ count: sql<number>`count(*)::int` })
           .from(document)
           .where(
-            and(eq(document.companyId, BigInt(companyIdForCheck))),
+            and(eq(document.companyId, BigInt(companyIdNum))),
           );
 
         if (docCount > 0 && !force && embeddingIndexKey) {
@@ -141,9 +115,9 @@ export async function POST(request: Request) {
           // into `embeddingIndexKey`/`activeEmbeddingIndexKey` here —
           // only the reindex job flips `active` once the rewrite
           // completes. `beginReindex` sets `pendingEmbeddingIndexKey`.
-          const jobEventId = `reindex-${companyIdForCheck}-${Date.now()}`;
+          const jobEventId = `reindex-${companyIdNum}-${Date.now()}`;
           const acquired = await beginReindex({
-            companyId: companyIdForCheck,
+            companyId: companyIdNum,
             pendingIndexKey: embeddingIndexKey,
             jobId: jobEventId,
           });
@@ -163,9 +137,9 @@ export async function POST(request: Request) {
               id: jobEventId,
               name: "company/reindex-embeddings.requested",
               data: {
-                companyId: companyIdForCheck,
+                companyId: companyIdNum,
                 pendingIndexKey: embeddingIndexKey,
-                triggeredByUserId: userId,
+                triggeredByUserId: ctx.data.clerkUserId,
               },
             });
           } catch (sendErr) {
@@ -234,8 +208,6 @@ export async function POST(request: Request) {
     if (useUploadThing !== undefined) {
       updateData.useUploadThing = useUploadThing;
     }
-
-    const companyIdNum = Number((await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId)));
 
     // Credentials live in a separate encrypted table. Only write the fields
     // the caller actually included — `undefined` means "leave alone".

@@ -547,7 +547,7 @@ CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
 CHAT_API_KEY=<your-google-ai-key>
 
 # Vercel Blob — required for document uploads
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx
+BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>
 
 # Inngest — placeholder is fine for local dev
 INNGEST_EVENT_KEY=dev-placeholder`;

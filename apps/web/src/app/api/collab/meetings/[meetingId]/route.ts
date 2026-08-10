@@ -6,10 +6,9 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 
 import { buildMinutes } from "@launchstack/core/collab";
-import { getActiveCompanyId } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getMeetingRuntime } from "~/server/collab/runtime";
 import { getChannelStore } from "~/server/collab/store";
 
@@ -19,12 +18,11 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ meetingId: string }> },
 ) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
   const { meetingId } = await params;
-  const companyId = await getActiveCompanyId(userId);
-  const runtime = await getMeetingRuntime(meetingId, companyId);
+  const runtime = await getMeetingRuntime(meetingId, ctx.data.companyId);
   if (!runtime) return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
 
   const { searchParams } = new URL(request.url);

@@ -1,33 +1,37 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotVote } from "~/server/db/schema";
 import { eq, and } from "drizzle-orm";
 import { validateRequestBody, CreateVoteSchema } from "~/lib/validation";
-import { userOwnsChat } from "~/server/security/aichat-authz";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  assertChatOwnedByUser,
+  assertMessageInChat,
+} from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
-// Handlers require a Clerk session and verify the target chat belongs to the
-// session user; foreign chats read as 404.
-
 // POST /api/agent-ai-chatbot/votes - Vote on a message
 export async function POST(request: NextRequest) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const validation = await validateRequestBody(request, CreateVoteSchema);
     if (!validation.success) return validation.response;
     const { chatId, messageId, isUpvoted, feedback } = validation.data;
 
-    if (!(await userOwnsChat(chatId, userId))) {
-      return NextResponse.json({ error: "Chat not found" }, { status: 404 });
-    }
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
+    const message = await assertMessageInChat(
+      messageId,
+      chatId,
+      ctx.data.clerkUserId,
+    );
+    if (!message.success) return message.response;
 
     // Check if vote already exists
     const [existingVote] = await db
@@ -90,12 +94,10 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/votes?messageId=xxx - Get vote for a message
 export async function GET(request: NextRequest) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
 
+  try {
     const { searchParams } = new URL(request.url);
     const messageId = searchParams.get("messageId");
     const chatId = searchParams.get("chatId");
@@ -107,9 +109,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!(await userOwnsChat(chatId, userId))) {
-      return NextResponse.json({ error: "Chat not found" }, { status: 404 });
-    }
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
+    const message = await assertMessageInChat(
+      messageId,
+      chatId,
+      ctx.data.clerkUserId,
+    );
+    if (!message.success) return message.response;
 
     const [vote] = await db
       .select()

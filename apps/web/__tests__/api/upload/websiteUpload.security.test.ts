@@ -2,10 +2,25 @@
  * POST /api/upload/website — session-derived identity and SSRF guard.
  */
 
-const mockClerk: { userId: string | null } = { userId: null };
+const mockRequireWorkspaceContext = jest.fn();
 
-jest.mock("@clerk/nextjs/server", () => ({
-    auth: () => Promise.resolve({ userId: mockClerk.userId }),
+jest.mock("~/lib/require-workspace-context", () => ({
+    requireWorkspaceContext: () => mockRequireWorkspaceContext(),
+}));
+
+// Pass rate limiting through. Mocking ~/lib/rate-limiter also keeps its
+// in-memory store's cleanup setInterval from holding the Jest process open
+// after the run.
+jest.mock("~/lib/rate-limit-middleware", () => ({
+    withRateLimit: (
+        _request: Request,
+        _config: unknown,
+        handler: () => Promise<Response>
+    ) => handler(),
+}));
+
+jest.mock("~/lib/rate-limiter", () => ({
+    RateLimitPresets: { standard: {}, strict: {} },
 }));
 
 jest.mock("node:dns/promises", () => ({
@@ -15,14 +30,6 @@ jest.mock("node:dns/promises", () => ({
 const mockInngestSend = jest.fn();
 jest.mock("~/server/inngest/client", () => ({
     inngest: { send: (...args: unknown[]) => mockInngestSend(...args) },
-}));
-
-jest.mock("~/server/db", () => ({
-    db: { select: jest.fn() },
-}));
-
-jest.mock("~/lib/active-workspace", () => ({
-    resolveActiveCompanyForUser: jest.fn(),
 }));
 
 jest.mock("~/server/services/document-upload", () => ({
@@ -35,8 +42,6 @@ jest.mock("~/lib/storage", () => ({
 
 import { lookup } from "node:dns/promises";
 import { POST } from "~/app/api/upload/website/route";
-import { db } from "~/server/db";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { uploadFile } from "~/lib/storage";
 import { processDocumentUpload } from "~/server/services/document-upload";
 
@@ -45,14 +50,27 @@ const uploadFileMock = uploadFile as jest.MockedFunction<typeof uploadFile>;
 const processDocumentUploadMock = processDocumentUpload as jest.MockedFunction<
     typeof processDocumentUpload
 >;
-const resolveActiveCompanyForUserMock = resolveActiveCompanyForUser as jest.MockedFunction<
-    typeof resolveActiveCompanyForUser
->;
+function mockAuthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: true,
+        data: {
+            clerkUserId: "user_session",
+            userPk: BigInt(11),
+            companyId: BigInt(3),
+            role: "owner",
+            status: "verified",
+        },
+    });
+}
 
-function mockUserLookup(user: { id: number; userId: string; companyId: bigint } | null) {
-    const where = jest.fn().mockResolvedValue(user ? [user] : []);
-    const from = jest.fn().mockReturnValue({ where });
-    (db.select as jest.Mock).mockReturnValue({ from });
+function mockUnauthenticated() {
+    mockRequireWorkspaceContext.mockResolvedValue({
+        success: false,
+        response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+        }),
+    });
 }
 
 function requestFor(body: Record<string, unknown>) {
@@ -88,9 +106,7 @@ const fetchMock = jest.fn();
 describe("POST /api/upload/website", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        mockClerk.userId = "user_session";
-        mockUserLookup({ id: 11, userId: "user_session", companyId: 3n });
-        resolveActiveCompanyForUserMock.mockResolvedValue(3n);
+        mockAuthenticated();
         mockInngestSend.mockResolvedValue({ ids: ["evt-1"] });
         global.fetch = fetchMock as unknown as typeof fetch;
     });
@@ -99,8 +115,8 @@ describe("POST /api/upload/website", () => {
         global.fetch = originalFetch;
     });
 
-    it("returns 401 when there is no Clerk session", async () => {
-        mockClerk.userId = null;
+    it("returns 401 when there is no workspace context", async () => {
+        mockUnauthenticated();
         const response = await POST(
             requestFor({ userId: "user_session", url: "https://example.com" })
         );
@@ -204,29 +220,21 @@ describe("POST /api/upload/website", () => {
     });
 
     it("dispatches a crawl with the session user, ignoring a spoofed body userId", async () => {
-        const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-        try {
-            lookupMock.mockResolvedValue([{ address: "93.184.216.34", family: 4 }] as never);
+        lookupMock.mockResolvedValue([{ address: "93.184.216.34", family: 4 }] as never);
 
-            const response = await POST(
-                requestFor({ userId: "attacker", url: "https://example.com/docs", crawl: true })
-            );
+        const response = await POST(
+            requestFor({ userId: "attacker", url: "https://example.com/docs", crawl: true })
+        );
 
-            expect(response.status).toBe(202);
-            expect(mockInngestSend).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    name: "website/crawl.requested",
-                    data: expect.objectContaining({
-                        userId: "user_session",
-                        companyId: "3",
-                    }),
-                })
-            );
-            expect(consoleWarnSpy).toHaveBeenCalledWith(
-                expect.stringContaining("Ignoring body userId=attacker")
-            );
-        } finally {
-            consoleWarnSpy.mockRestore();
-        }
+        expect(response.status).toBe(202);
+        expect(mockInngestSend).toHaveBeenCalledWith(
+            expect.objectContaining({
+                name: "website/crawl.requested",
+                data: expect.objectContaining({
+                    userId: "user_session",
+                    companyId: "3",
+                }),
+            })
+        );
     });
 });

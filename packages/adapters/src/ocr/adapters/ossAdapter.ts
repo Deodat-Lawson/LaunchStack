@@ -19,6 +19,15 @@ import type {
   OCRProvider,
 } from "../types";
 import { getOcrConfig } from "../config";
+import {
+  FILE_ACCESS_TOKEN_PARAM,
+  signFileAccessToken,
+} from "../../crypto/file-access-token";
+import {
+  buildInternalFileUrl,
+  isInternalFileUrl,
+  parseInternalFileId,
+} from "../../crypto/internal-file-url";
 
 /** Wire schemaVersion of the frozen converter contract (packages/protocol). */
 const SCHEMA_VERSION = 1;
@@ -174,6 +183,9 @@ class OssOCRAdapter implements OCRAdapter {
     }
 
     const startTime = Date.now();
+    // Minted here rather than by the caller: the token is short-lived, so it
+    // has to be created on the way into this fetch and not reused by a later
+    // retry or a second pass over the same document.
     const absoluteUrl = this.toConverterReachableUrl(documentUrl);
     const filename = documentUrl.split("/").pop()?.split("?")[0];
 
@@ -230,11 +242,37 @@ class OssOCRAdapter implements OCRAdapter {
    * internal routes like /api/files/123. Rewrite relative URLs so it can
    * fetch them via the app's public origin (which must be present in the
    * converter's own ALLOWED_FETCH_ORIGINS).
+   *
+   * /api/files/{id} additionally requires auth, and the converter has no Clerk
+   * session, so we attach a short-lived token scoped to that one file. Same-
+   * origin absolute and relative references are rebuilt from appPublicUrl
+   * before signing; a foreign-host path is treated as external and is never
+   * signed.
    */
   private toConverterReachableUrl(url: string): string {
-    if (/^https?:\/\//i.test(url)) return url;
-    const base = getOcrConfig().appPublicUrl ?? "http://app:3000";
-    return new URL(url, base).toString();
+    const cfg = getOcrConfig();
+    // One origin for all three steps. Resolving `isInternalFileUrl` against
+    // the raw (possibly undefined) config while the rebuild uses the fallback
+    // made every absolute same-origin URL look foreign whenever
+    // APP_PUBLIC_URL was unset, so nothing got signed and the converter 401'd.
+    const origin = cfg.appPublicUrl ?? "http://app:3000";
+    const fileId = parseInternalFileId(url);
+    const isInternal = isInternalFileUrl(url, origin);
+    const absolute = new URL(url, origin);
+    if (fileId === null || !isInternal) return absolute.toString();
+
+    const canonical = new URL(buildInternalFileUrl(origin, fileId));
+
+    const token = signFileAccessToken(String(fileId), cfg.fileAccessTokenSecret);
+    if (token) {
+      canonical.searchParams.set(FILE_ACCESS_TOKEN_PARAM, token);
+    } else {
+      console.warn(
+        "[OssOCRAdapter] FILE_ACCESS_TOKEN_SECRET is not configured; the document converter cannot read database-backed documents."
+      );
+    }
+
+    return canonical.toString();
   }
 }
 

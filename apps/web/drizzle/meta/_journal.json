@@ -29,6 +29,13 @@
       "when": 1786229348295,
       "tag": "20260808224908_founder_weekly_review_async_collection",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786327736728,
+      "tag": "20260810020856_notion_workspace",
+      "breakpoints": true
     }
   ]
 }

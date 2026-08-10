@@ -225,6 +225,10 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
     features: [
       { id: "chat", label: "Chat", Icon: IconBolt, desc: "Ask grounded questions over your knowledge" },
       { id: "knowledge", label: "Knowledge", Icon: IconFolder, desc: "Browse, filter, and grow everything the workspace can cite" },
+      // Pages is the write side of the product — everything else here reads
+      // sources, this one authors them. It owns its own full-screen route.
+      { id: "pages", label: "Pages", Icon: IconPen, desc: "Write documents in a nested, block-based editor",
+        href: "/employer/workspace" },
       { id: "meetings", label: "Meetings", Icon: IconUsers, desc: "Agents work an objective in a channel — step in whenever you want" },
     ],
   },

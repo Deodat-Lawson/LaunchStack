@@ -16,6 +16,22 @@ function bearerMatches(header: string | null, token: string): boolean {
   }
 }
 
+/**
+ * This endpoint used to be unauthenticated, so an upgrade that does not also
+ * set METRICS_SCRAPE_TOKEN turns every existing scrape into a 503 — and the
+ * only party that sees the failure is the scraper. Say it once on the server
+ * too, so the cause is visible in logs rather than only as blank dashboards.
+ */
+let warnedMissingScrapeToken = false;
+function warnMissingScrapeTokenOnce(): void {
+  if (warnedMissingScrapeToken) return;
+  warnedMissingScrapeToken = true;
+  console.error(
+    "[metrics] METRICS_SCRAPE_TOKEN is not set — GET /api/metrics is returning 503 in production. " +
+      "Set it (and send `Authorization: Bearer <token>` from your scraper) to restore metrics collection.",
+  );
+}
+
 export async function GET(request: Request) {
   const scrapeToken = env.server.METRICS_SCRAPE_TOKEN;
   // Prefer VERCEL_ENV so tests can flip production without fighting Jest's
@@ -27,6 +43,7 @@ export async function GET(request: Request) {
   // Fail closed in production when no scrape token is configured.
   if (!scrapeToken) {
     if (isProd) {
+      warnMissingScrapeTokenOnce();
       return NextResponse.json(
         { message: "Metrics scrape token not configured" },
         { status: 503 },

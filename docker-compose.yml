@@ -91,10 +91,12 @@ x-shared-env: &shared-env
   DOCUMENT_CONVERTER_URL: http://document-converter:8002
   DOCUMENT_CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
   OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
-  # Lets the document converter read database-backed /api/files URLs, which
-  # otherwise require a Clerk session it does not have. Signed by whichever
-  # process mints the URL, so app and worker must share the same value.
-  FILE_ACCESS_TOKEN_SECRET: ${FILE_ACCESS_TOKEN_SECRET:-}
+  # Lets the document converter (and the app's own server-side fetches) read
+  # database-backed /api/files URLs, which otherwise require a Clerk session
+  # they do not have. Signed by whichever process mints the URL, so app and
+  # worker must share the same value. Database-backed ingestion fails closed
+  # without it, so a local default is provided — override in production.
+  FILE_ACCESS_TOKEN_SECRET: ${FILE_ACCESS_TOKEN_SECRET:-pdr_local_file_access_secret}
   # Bearer token for /api/metrics. This environment block is an explicit
   # allowlist, so without the passthrough the route fails closed at 503
   # even when the host .env sets it.

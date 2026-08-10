@@ -9,6 +9,10 @@ import {
   countUnstampedFileUploads,
   stampFileUploadsCompanyId,
 } from "./file-uploads-company-id";
+import {
+  countUsersMissingMembership,
+  provisionMissingMemberships,
+} from "./user-company-memberships";
 
 /**
  * The backfill registry.
@@ -141,8 +145,35 @@ const fileUploadsCompanyId: Backfill = {
   },
 };
 
+/**
+ * Give pre-memberships accounts the membership row the new workspace
+ * resolution requires.
+ *
+ * `requireWorkspaceContext` refuses a context with no membership on purpose —
+ * falling back to the legacy global `users.role` would grant a role nobody
+ * granted for that tenant. That leaves accounts created before the memberships
+ * table existed with no workspace at all, so they must be provisioned once
+ * from the legacy default-workspace pointer.
+ */
+const userCompanyMembershipsBackfill: Backfill = {
+  id: "2026-08-user-company-memberships",
+  description:
+    "Provision user_company_memberships for verified users that predate the table",
+  requiresEngine: false,
+
+  estimate: ({ db }) => countUsersMissingMembership(db),
+
+  async step({ db }) {
+    const remaining = await countUsersMissingMembership(db);
+    await provisionMissingMemberships(db);
+    // One statement covers every row, so there is never a resume point.
+    return { cursor: null, processed: remaining };
+  },
+};
+
 export const BACKFILLS: Backfill[] = [
   noteEmbeddings,
   documentVersionsBackfill,
   fileUploadsCompanyId,
+  userCompanyMembershipsBackfill,
 ];

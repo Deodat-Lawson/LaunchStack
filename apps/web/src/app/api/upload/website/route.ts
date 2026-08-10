@@ -14,6 +14,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { assertPublicHttpUrl, fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";
@@ -267,6 +268,16 @@ export async function POST(request: Request) {
             // problem, not a server error.
             if (error instanceof UrlGuardError) {
                 return NextResponse.json({ error: error.message }, { status: 400 });
+            }
+            // processDocumentUpload authorizes the internal file reference and
+            // throws with its own status (404 foreign file / 503 unconfigured).
+            // Collapsing that into a 500 hides an actionable, operator-fixable
+            // condition behind "something went wrong".
+            if (error instanceof UploadAuthorizationError) {
+                return NextResponse.json(
+                    { error: error.message },
+                    { status: error.status },
+                );
             }
             console.error("[WebsiteUpload] Error:", error);
             return NextResponse.json(

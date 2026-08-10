@@ -1,5 +1,13 @@
 import { randomUUID } from "node:crypto";
 
+import {
+  FILE_ACCESS_TOKEN_PARAM,
+  buildInternalFileUrl,
+  isInternalFileUrl,
+  parseInternalFileId,
+  signFileAccessToken,
+} from "@launchstack/core/crypto";
+
 import { env } from "~/env";
 
 // ---------------------------------------------------------------------------
@@ -281,10 +289,65 @@ export async function deleteFileByUrl(url: string): Promise<void> {
 // fetchFile — unified retrieval for any storage URL
 // ---------------------------------------------------------------------------
 
+/**
+ * Origin used to address our own `/api/files/{id}` route from server-side
+ * code. Mirrors the OCR config fallback so a deployment that never set
+ * APP_PUBLIC_URL still resolves to the in-cluster app service.
+ */
+function internalFileOrigin(): string {
+  return env.server.APP_PUBLIC_URL ?? "http://app:3000";
+}
+
+/**
+ * `/api/files/{id}` requires a Clerk session or a signed token. Server-side
+ * callers (OCR adapters, page counting, VLM enrichment, archive expansion)
+ * have no session, so every internal file reference is rebuilt canonically
+ * and signed here — one place, rather than at each of the ~6 call sites that
+ * would otherwise 401.
+ *
+ * Returns null when the URL is not an internal file reference, so external
+ * URLs stay untouched and are never handed a capability token.
+ */
+function signedInternalFileUrl(url: string): string | null {
+  const origin = internalFileOrigin();
+  const fileId = parseInternalFileId(url);
+  if (fileId === null || !isInternalFileUrl(url, origin)) return null;
+
+  const canonical = new URL(buildInternalFileUrl(origin, fileId));
+  const token = signFileAccessToken(
+    String(fileId),
+    env.server.FILE_ACCESS_TOKEN_SECRET,
+  );
+  if (!token) {
+    // No secret configured: fall through unsigned rather than inventing a
+    // capability. The route still accepts a session, and the ingress check in
+    // internal-file-ref rejects the upload before it can reach this path.
+    return null;
+  }
+
+  canonical.searchParams.set(FILE_ACCESS_TOKEN_PARAM, token);
+  return canonical.toString();
+}
+
 export async function fetchFile(
   url: string,
   init?: RequestInit,
 ): Promise<Response> {
+  // Internal /api/files/{id} references: sign before anything else, so the
+  // token is minted fresh per fetch and never cached on a stored URL.
+  const signed = signedInternalFileUrl(url);
+  if (signed) {
+    try {
+      return await fetch(signed, init);
+    } catch (err) {
+      throw new StorageError(
+        err instanceof Error ? err.message : String(err),
+        "database",
+        err instanceof Error ? err : undefined,
+      );
+    }
+  }
+
   const s3Endpoint =
     env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
 

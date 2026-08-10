@@ -21,6 +21,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 const GitHubRepoSchema = z.object({
     repoUrl: z.string().url("A valid URL is required"),
@@ -130,6 +131,16 @@ export async function POST(request: Request) {
 
             if (error instanceof GitHubRateLimitError) {
                 return NextResponse.json({ error: error.message }, { status: 429 });
+            }
+
+            // processDocumentUpload authorizes the internal file reference and
+            // throws with its own status (404 foreign file / 503 unconfigured);
+            // a generic 500 would hide an operator-fixable condition.
+            if (error instanceof UploadAuthorizationError) {
+                return NextResponse.json(
+                    { error: error.message },
+                    { status: error.status },
+                );
             }
 
             console.error("[GitHubRepoUpload] Error:", error);

@@ -71,7 +71,11 @@ describe("searchWikiLinkCandidates", () => {
     wherePredicates.length = 0;
   });
 
-  it("scopes note typeahead to the user and active workspace", async () => {
+  // The typeahead must offer what `resolveRefs` will actually link to, and
+  // that resolves note targets workspace-wide. An author-only picker hid
+  // exactly the teammate notes a typed link still resolved to: the reference
+  // landed in the database while the UI claimed the note did not exist.
+  it("scopes note typeahead to the active workspace, not just the author", async () => {
     setupRows([], [{ id: 1, title: "Quarterly plan" }]);
 
     await searchWikiLinkCandidates("plan", {
@@ -86,12 +90,44 @@ describe("searchWikiLinkCandidates", () => {
     expect(notesPredicate.op).toBe("and");
     expect(notesPredicate.conditions).toEqual(
       expect.arrayContaining([
-        { op: "eq", args: ["notes.userId", "user-a"] },
         {
           op: "or",
           conditions: [
             { op: "eq", args: ["notes.companyId", "5"] },
+            // Legacy rows carry no company, so they belong to no workspace
+            // and stay scoped to their author.
+            {
+              op: "and",
+              conditions: [
+                { op: "isNull", column: "notes.companyId" },
+                { op: "eq", args: ["notes.userId", "user-a"] },
+              ],
+            },
+          ],
+        },
+      ]),
+    );
+  });
+
+  it("falls back to the caller's own uncompanied notes with no workspace", async () => {
+    setupRows([], [{ id: 1, title: "Quarterly plan" }]);
+
+    await searchWikiLinkCandidates("plan", {
+      companyId: null,
+      userId: "user-a",
+    });
+
+    const notesPredicate = wherePredicates[0] as {
+      op: string;
+      conditions: Array<unknown>;
+    };
+    expect(notesPredicate.conditions).toEqual(
+      expect.arrayContaining([
+        {
+          op: "and",
+          conditions: [
             { op: "isNull", column: "notes.companyId" },
+            { op: "eq", args: ["notes.userId", "user-a"] },
           ],
         },
       ]),

@@ -9,7 +9,8 @@
  * Invoked through the backfill registry:
  *   pnpm --filter @launchstack/web db:backfill --only=2026-08-file-uploads-company-id
  *
- * `sql/file-uploads-company-id.sql` is the SQL twin of this function.
+ * `sql/file-uploads-company-id.sql` is the SQL twin of this function — keep
+ * the two in step; the tests below assert the shared regexes match.
  */
 
 import { sql } from "drizzle-orm";
@@ -33,17 +34,49 @@ function resultCount(result: unknown): number {
     : Number(count);
 }
 
+/**
+ * Patterns are declared as plain constants rather than inline in the tagged
+ * templates: `sql` cooks its literal, so an inline `\?` collapses to a bare
+ * `?` and Postgres rejects the pattern ("quantifier operand invalid"), which
+ * aborted the whole transaction and left every legacy row unstamped.
+ *
+ * The weak matcher requires a delimiter after the id so an unrelated path such
+ * as `/api/files/5-report.pdf` is not read as a reference to file 5.
+ */
+const WEAK_CAPTURE = String.raw`/api/files/([0-9]+)([/?#]|$)`;
+const WEAK_MATCH = String.raw`/api/files/[0-9]+([/?#]|$)`;
+const ANCHORED_CAPTURE = String.raw`^(https?://[^/?#]+)?/api/files/([0-9]+)/?(\?.*)?$`;
+const ANCHORED_MATCH = String.raw`^(https?://[^/?#]+)?/api/files/[0-9]+/?(\?.*)?$`;
+
+/**
+ * Every URL that can name a file, with the company it belongs to.
+ *
+ * Versions matter: a document version uploaded before the `company_id` column
+ * existed stores its file id only in `document_versions.url`, so a
+ * document-only scan leaves it NULL and the hardened `/api/files` route denies
+ * it forever.
+ */
+const fileRefs = sql`
+  SELECT d.url AS url, d.company_id AS company_id
+  FROM pdr_ai_v2_document d
+  UNION ALL
+  SELECT v.url AS url, d.company_id AS company_id
+  FROM pdr_ai_v2_document_versions v
+  INNER JOIN pdr_ai_v2_document d ON d.id = v.document_id
+`;
+
 /** Rows still missing a company stamp that a unique document URL can own. */
 export async function countUnstampedFileUploads(db: DbClient): Promise<number> {
   return resultCount(
     await db.execute(sql`
-      WITH file_owner AS (
+      WITH file_refs AS (${fileRefs}),
+      file_owner AS (
           SELECT
-              (regexp_match(d.url, '/api/files/([0-9]+)'))[1]::bigint AS file_id,
-              MIN(d.company_id) AS company_id,
-              COUNT(DISTINCT d.company_id) AS company_count
-          FROM pdr_ai_v2_document d
-          WHERE d.url ~ '/api/files/[0-9]+'
+              (regexp_match(r.url, ${WEAK_CAPTURE}))[1]::bigint AS file_id,
+              MIN(r.company_id) AS company_id,
+              COUNT(DISTINCT r.company_id) AS company_count
+          FROM file_refs r
+          WHERE r.url ~ ${WEAK_MATCH}
           GROUP BY 1
       )
       SELECT COUNT(*)::int AS count
@@ -64,13 +97,14 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
 
   await db.transaction(async (tx) => {
     await tx.execute(sql`
-      WITH file_owner AS (
+      WITH file_refs AS (${fileRefs}),
+      file_owner AS (
           SELECT
-              (regexp_match(d.url, '/api/files/([0-9]+)'))[1]::bigint AS file_id,
-              MIN(d.company_id) AS company_id,
-              COUNT(DISTINCT d.company_id) AS company_count
-          FROM pdr_ai_v2_document d
-          WHERE d.url ~ '/api/files/[0-9]+'
+              (regexp_match(r.url, ${WEAK_CAPTURE}))[1]::bigint AS file_id,
+              MIN(r.company_id) AS company_id,
+              COUNT(DISTINCT r.company_id) AS company_count
+          FROM file_refs r
+          WHERE r.url ~ ${WEAK_MATCH}
           GROUP BY 1
       )
       UPDATE pdr_ai_v2_file_uploads f
@@ -82,13 +116,14 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
     `);
 
     await tx.execute(sql`
-      WITH weak_matches AS (
+      WITH file_refs AS (${fileRefs}),
+      weak_matches AS (
           SELECT
-              (regexp_match(d.url, '/api/files/([0-9]+)'))[1]::bigint AS file_id,
-              MIN(d.company_id) AS company_id,
-              COUNT(DISTINCT d.company_id) AS company_count
-          FROM pdr_ai_v2_document d
-          WHERE d.url ~ '/api/files/[0-9]+'
+              (regexp_match(r.url, ${WEAK_CAPTURE}))[1]::bigint AS file_id,
+              MIN(r.company_id) AS company_id,
+              COUNT(DISTINCT r.company_id) AS company_count
+          FROM file_refs r
+          WHERE r.url ~ ${WEAK_MATCH}
           GROUP BY 1
       ),
       weak_owner AS (
@@ -98,14 +133,11 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
       ),
       anchored_matches AS (
           SELECT
-              (regexp_match(
-                  d.url,
-                  '^(https?://[^/?#]+)?/api/files/([0-9]+)/?(\?.*)?$'
-              ))[2]::bigint AS file_id,
-              MIN(d.company_id) AS company_id,
-              COUNT(DISTINCT d.company_id) AS company_count
-          FROM pdr_ai_v2_document d
-          WHERE d.url ~ '^(https?://[^/?#]+)?/api/files/[0-9]+/?(\?.*)?$'
+              (regexp_match(r.url, ${ANCHORED_CAPTURE}))[2]::bigint AS file_id,
+              MIN(r.company_id) AS company_id,
+              COUNT(DISTINCT r.company_id) AS company_count
+          FROM file_refs r
+          WHERE r.url ~ ${ANCHORED_MATCH}
           GROUP BY 1
       ),
       anchored_owner AS (
@@ -131,11 +163,13 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
               )
           )
              OR (
-                 -- Intentionally conservative: an ambiguous weak match can
-                 -- represent a fail-open stamp even when its current stamp does
-                 -- not equal any one weak-owner value.
+                 -- Only clear an ambiguous file when the canonical matcher has
+                 -- no opinion either. A stamp the runtime wrote inline is
+                 -- authoritative and must survive an unrelated URL that merely
+                 -- mentions the id.
                  ambiguous.file_id IS NOT NULL
                  AND f.company_id IS NOT NULL
+                 AND a.file_id IS NULL
              )
       )
       UPDATE pdr_ai_v2_file_uploads f
@@ -145,19 +179,17 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
     `);
 
     await tx.execute(sql`
-      WITH anchored_matches AS (
+      WITH file_refs AS (${fileRefs}),
+      anchored_matches AS (
           SELECT
-              (regexp_match(
-                  d.url,
-                  '^(https?://[^/?#]+)?/api/files/([0-9]+)/?(\?.*)?$'
-              ))[2]::bigint AS file_id,
-              MIN(d.company_id) AS company_id,
-              COUNT(DISTINCT d.company_id) AS company_count
-          FROM pdr_ai_v2_document d
+              (regexp_match(r.url, ${ANCHORED_CAPTURE}))[2]::bigint AS file_id,
+              MIN(r.company_id) AS company_id,
+              COUNT(DISTINCT r.company_id) AS company_count
+          FROM file_refs r
           -- Host is intentionally unchecked for id extraction; the runtime origin
           -- gate handles capability/authz host trust. Tenant attribution comes only
           -- from document.company_id.
-          WHERE d.url ~ '^(https?://[^/?#]+)?/api/files/[0-9]+/?(\?.*)?$'
+          WHERE r.url ~ ${ANCHORED_MATCH}
           GROUP BY 1
       ),
       anchored_owner AS (
@@ -178,3 +210,11 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
 
   console.log("[backfill-file-uploads-company-id] Done.");
 }
+
+/** Exported for the twin-parity test. */
+export const FILE_REF_PATTERNS = {
+  WEAK_CAPTURE,
+  WEAK_MATCH,
+  ANCHORED_CAPTURE,
+  ANCHORED_MATCH,
+};

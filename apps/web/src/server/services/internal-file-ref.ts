@@ -23,20 +23,14 @@ import type { OCRProvider } from "@launchstack/core/ocr/types";
 
 export { parseInternalFileId } from "@launchstack/core/crypto";
 
-/**
- * Thrown when an upload references a file the workspace may not read, or an
- * internal file that cannot be processed in the current configuration.
- * Callers map this onto an HTTP response instead of a generic 500.
- */
-export class UploadAuthorizationError extends Error {
-  readonly status: number;
+/** Fallback origin when APP_PUBLIC_URL is unset — the in-cluster app service. */
+const DEFAULT_APP_ORIGIN = "http://app:3000";
 
-  constructor(message: string, status = 403) {
-    super(message);
-    this.name = "UploadAuthorizationError";
-    this.status = status;
-  }
-}
+// Lives in its own module so routes can catch it without importing the db
+// client transitively; re-exported here for existing callers.
+import { UploadAuthorizationError } from "./upload-authorization-error";
+
+export { UploadAuthorizationError };
 
 /**
  * Authorize an upload's `documentUrl` against the active workspace.
@@ -49,10 +43,20 @@ export class UploadAuthorizationError extends Error {
 export async function authorizeInternalFileRef(
   url: string,
   companyId: bigint,
-  effectiveProvider?: OCRProvider,
+  /**
+   * Accepted for call-site symmetry with the upload paths. The token
+   * requirement no longer varies by provider — every out-of-session reader of
+   * `/api/files/{id}` signs — so it does not affect the outcome.
+   */
+  _effectiveProvider?: OCRProvider,
 ): Promise<number | null> {
   const cfg = getOcrConfig();
-  if (!isInternalFileUrl(url, cfg.appPublicUrl)) return null;
+  // Same fallback the URL builders use. Comparing against a bare undefined
+  // `appPublicUrl` made every absolute same-origin reference look external,
+  // so an unset APP_PUBLIC_URL silently skipped the whole ownership check.
+  if (!isInternalFileUrl(url, cfg.appPublicUrl ?? DEFAULT_APP_ORIGIN)) {
+    return null;
+  }
 
   const fileId = parseFileId(url);
   if (fileId === null) return null;
@@ -62,7 +66,7 @@ export async function authorizeInternalFileRef(
     .from(fileUploads)
     .where(eq(fileUploads.id, fileId));
 
-  if (!file || file.companyId == null || file.companyId !== companyId) {
+  if (file?.companyId == null || file.companyId !== companyId) {
     throw new UploadAuthorizationError("File not found in this workspace", 404);
   }
 
@@ -71,29 +75,18 @@ export async function authorizeInternalFileRef(
   // this function would still be empty on a cold process and skip the check.
   const configured = getOcrConfig();
 
-  // The OSS worker fetches internal URLs over HTTP with no Clerk session, so
-  // it needs a signed token. Failing here keeps the client from receiving a
-  // 202 for a job that can only end in a 401 at fetch time.
-  if (
-    requiresFileAccessToken(effectiveProvider, configured) &&
-    !configured.fileAccessTokenSecret
-  ) {
+  // Every server-side reader of /api/files/{id} — the document converter, and
+  // in-process paths (native PDF, page counting, VLM enrichment, archive
+  // expansion) that go through `fetchFile` — signs a short-lived token,
+  // because the route has no session to offer. Without a secret none of them
+  // can read the file, so fail here rather than hand the client a 202 for a
+  // job that can only end in a 401 at fetch time.
+  if (!configured.fileAccessTokenSecret) {
     throw new UploadAuthorizationError(
-      "FILE_ACCESS_TOKEN_SECRET is not configured; the OCR worker cannot read database-backed documents.",
+      "FILE_ACCESS_TOKEN_SECRET is not configured; database-backed documents cannot be read by the ingestion pipeline.",
       503,
     );
   }
 
   return fileId;
-}
-
-function requiresFileAccessToken(
-  effectiveProvider: OCRProvider | undefined,
-  cfg: ReturnType<typeof getOcrConfig>,
-): boolean {
-  const provider = effectiveProvider ?? cfg.defaultProvider;
-  // ADR-004 replaced the ocr-worker with services/document-converter, so the
-  // out-of-process fetcher is now `converter` (`workerUrl` is deprecated and
-  // ignored at runtime). MARKER is gone with it — DOCLING is the OSS provider.
-  return Boolean(cfg.converter?.url) || provider === "DOCLING";
 }

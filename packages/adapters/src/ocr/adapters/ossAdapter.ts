@@ -251,14 +251,17 @@ class OssOCRAdapter implements OCRAdapter {
    */
   private toConverterReachableUrl(url: string): string {
     const cfg = getOcrConfig();
+    // One origin for all three steps. Resolving `isInternalFileUrl` against
+    // the raw (possibly undefined) config while the rebuild uses the fallback
+    // made every absolute same-origin URL look foreign whenever
+    // APP_PUBLIC_URL was unset, so nothing got signed and the converter 401'd.
+    const origin = cfg.appPublicUrl ?? "http://app:3000";
     const fileId = parseInternalFileId(url);
-    const isInternal = isInternalFileUrl(url, cfg.appPublicUrl);
-    const absolute = new URL(url, cfg.appPublicUrl ?? "http://app:3000");
+    const isInternal = isInternalFileUrl(url, origin);
+    const absolute = new URL(url, origin);
     if (fileId === null || !isInternal) return absolute.toString();
 
-    const canonical = new URL(
-      buildInternalFileUrl(cfg.appPublicUrl ?? "http://app:3000", fileId),
-    );
+    const canonical = new URL(buildInternalFileUrl(origin, fileId));
 
     const token = signFileAccessToken(String(fileId), cfg.fileAccessTokenSecret);
     if (token) {

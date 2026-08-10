@@ -99,6 +99,16 @@ const serverSchema = z.object({
   JOB_RUNNER: z.enum(["inngest"]).default("inngest"),
   // Inngest event key — required in production; optional in development
   INNGEST_EVENT_KEY: optionalString(),
+  // Agent-knowledge connector. Reads Claude Code / Codex knowledge from the
+  // filesystem of the machine running this server, so it stays off unless a
+  // deployment explicitly opts in — on a shared host the server's disk is not
+  // the user's disk.
+  AGENT_KNOWLEDGE_CONNECTOR_ENABLED: optionalString(),
+  // Path-separator-delimited allowlist of project directories the connector
+  // may scan (`:` on POSIX, `;` on Windows). Global `~/.claude` and `~/.codex`
+  // are always in scope when the connector is enabled; this governs
+  // project-scoped roots only.
+  AGENT_KNOWLEDGE_PROJECT_ROOTS: optionalString(),
   // services/transcription (ADR-004) — Whisper transcription + yt-dlp
   // download. Used by the voice features when TRANSCRIPTION_PROVIDER=sidecar
   // or when transcribing video-platform URLs.
@@ -347,6 +357,8 @@ function parseServerEnv() {
     TRANSCRIPTION_SERVICE_API_KEY: process.env.TRANSCRIPTION_SERVICE_API_KEY,
     DOCUMENT_EDITOR_URL: process.env.DOCUMENT_EDITOR_URL,
     DOCUMENT_EDITOR_API_KEY: process.env.DOCUMENT_EDITOR_API_KEY,
+    AGENT_KNOWLEDGE_CONNECTOR_ENABLED: process.env.AGENT_KNOWLEDGE_CONNECTOR_ENABLED,
+    AGENT_KNOWLEDGE_PROJECT_ROOTS: process.env.AGENT_KNOWLEDGE_PROJECT_ROOTS,
     SIDECAR_URL: process.env.SIDECAR_URL,
     SIDECAR_API_KEY: process.env.SIDECAR_API_KEY,
     ADEU_SERVICE_URL: process.env.ADEU_SERVICE_URL,

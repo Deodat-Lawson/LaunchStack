@@ -21,6 +21,14 @@
       "types": "./src/adeu/index.ts",
       "default": "./src/adeu/index.ts"
     },
+    "./connectors": {
+      "types": "./src/connectors/index.ts",
+      "default": "./src/connectors/index.ts"
+    },
+    "./connectors/agent-knowledge": {
+      "types": "./src/connectors/agent-knowledge/index.ts",
+      "default": "./src/connectors/agent-knowledge/index.ts"
+    },
     "./legal-templates": {
       "types": "./src/legal-templates/index.ts",
       "default": "./src/legal-templates/index.ts"

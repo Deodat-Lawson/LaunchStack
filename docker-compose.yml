@@ -38,9 +38,18 @@ x-shared-env: &shared-env
   AI_BASE_URL: ${AI_BASE_URL:-}
   AI_API_KEY: ${AI_API_KEY:-}
   OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  # Base URL and key are read as a PAIR at every level, so forwarding a model
+  # or a lone key is not enough — without its base URL a capability falls
+  # through to "API key not configured" at call time.
   EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+  EMBEDDING_API_BASE_URL: ${EMBEDDING_API_BASE_URL:-}
+  EMBEDDING_API_KEY: ${EMBEDDING_API_KEY:-}
   RERANK_MODEL: ${RERANK_MODEL:-}
+  RERANK_API_BASE_URL: ${RERANK_API_BASE_URL:-}
+  RERANK_API_KEY: ${RERANK_API_KEY:-}
   NER_MODEL: ${NER_MODEL:-}
+  NER_API_BASE_URL: ${NER_API_BASE_URL:-}
+  NER_API_KEY: ${NER_API_KEY:-}
   TRANSCRIPTION_MODEL: ${TRANSCRIPTION_MODEL:-}
   TRANSCRIPTION_API_BASE_URL: ${TRANSCRIPTION_API_BASE_URL:-}
   TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}

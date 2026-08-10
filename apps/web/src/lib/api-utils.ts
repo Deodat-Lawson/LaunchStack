@@ -26,7 +26,9 @@ export interface ErrorResponse {
 export function createSuccessResponse<T>(
   data?: T,
   message?: string,
-  status = HTTP_STATUS.OK
+  // Annotated rather than inferred: `HTTP_STATUS` is `as const`, so an
+  // inferred default would pin every caller to exactly 200.
+  status: number = HTTP_STATUS.OK
 ): NextResponse<SuccessResponse<T>> {
   return NextResponse.json(
     {

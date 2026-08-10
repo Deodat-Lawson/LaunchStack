@@ -11,11 +11,13 @@
  */
 
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
+import { assertPublicHttpUrl, fetchPublicUrl, UrlGuardError } from "~/server/security/url-guard";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";
@@ -63,13 +65,17 @@ function deriveTitle(html: string, url: string): string {
 
 /**
  * Fetch a page with timeout and validation. Returns null on failure.
+ *
+ * Uses `fetchPublicUrl` so the SSRF guard is re-run on every redirect hop —
+ * a public page 302ing into the metadata service or an internal host is
+ * rejected mid-chain. Guard rejections are rethrown (not swallowed) so the
+ * route can answer 400 instead of a generic fetch failure.
  */
 async function fetchPage(url: string): Promise<{ html: string; finalUrl: string } | null> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
-        const response = await fetch(url, {
-            redirect: "follow",
+        const response = await fetchPublicUrl(url, {
             signal: controller.signal,
             headers: {
                 "User-Agent": "Mozilla/5.0 (compatible; PDR-AI-WebIndexer/1.0; +https://pdr.ai)",
@@ -90,45 +96,27 @@ async function fetchPage(url: string): Promise<{ html: string; finalUrl: string 
             html: Buffer.from(arrayBuf).toString("utf-8"),
             finalUrl: response.url,
         };
-    } catch {
+    } catch (err) {
         clearTimeout(timeout);
+        if (err instanceof UrlGuardError) throw err;
         return null;
     }
 }
 
 /**
- * Fetch a page using the sidecar's Crawl4AI endpoint for JS rendering.
- * Returns null if the sidecar is not configured or fails.
+ * JS-rendered fetching is currently unavailable. The old implementation
+ * posted to ${SIDECAR_URL}/crawl — a route no service in this repository ever
+ * implemented, so it could only fail and fall back (ADR-004 §5 removed the
+ * phantom sidecar endpoints). Callers already treat null as "render without
+ * JS"; a future crawling service can reintroduce this behind a real endpoint.
  */
 async function fetchPageWithJsRender(
-    url: string
+    _url: string
 ): Promise<{ html: string; finalUrl: string } | null> {
-    const sidecarUrl = process.env.SIDECAR_URL;
-    if (!sidecarUrl) {
-        console.log("[WebsiteUpload] No SIDECAR_URL configured, skipping JS render");
-        return null;
-    }
-
-    try {
-        const response = await fetch(`${sidecarUrl}/crawl`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url, max_pages: 1, js_render: true }),
-            signal: AbortSignal.timeout(60_000),
-        });
-        if (response.ok) {
-            const data = (await response.json()) as {
-                pages?: { url: string; markdown: string }[];
-            };
-            const page = data.pages?.[0];
-            if (page?.markdown) {
-                return { html: page.markdown, finalUrl: page.url };
-            }
-        }
-    } catch (error) {
-        console.warn("[WebsiteUpload] Sidecar /crawl failed:", error);
-    }
-
+    console.log(
+        "[WebsiteUpload] JS rendering skipped: no crawl service is implemented " +
+            "(the sidecar /crawl endpoint never existed; ADR-004 §5)."
+    );
     return null;
 }
 
@@ -140,21 +128,32 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
-            const { userId, url, title, category, crawl, maxDepth, maxPages, jsRender } =
+            const { userId: bodyUserId, url, title, category, crawl, maxDepth, maxPages, jsRender } =
                 validation.data;
 
-            let parsedUrl: URL;
-            try {
-                parsedUrl = new URL(url);
-            } catch {
-                return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
+            // Identity comes from the Clerk session, never the request body.
+            // `userId` stays in the schema for wire-compat but is overridden.
+            const { userId } = await auth();
+            if (!userId) {
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            }
+            if (bodyUserId && bodyUserId !== userId) {
+                console.warn(
+                    `[WebsiteUpload] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
+                );
             }
 
-            if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
-                return NextResponse.json(
-                    { error: "Only http(s) URLs are supported" },
-                    { status: 400 }
-                );
+            // SSRF guard: http(s) only, and the host must resolve to a public
+            // address. Guards both single-page fetch and the crawl seed (the
+            // Inngest crawl job then only follows links from fetched pages).
+            let parsedUrl: URL;
+            try {
+                parsedUrl = await assertPublicHttpUrl(url);
+            } catch (err) {
+                if (err instanceof UrlGuardError) {
+                    return NextResponse.json({ error: err.message }, { status: 400 });
+                }
+                throw err;
             }
             const normalizedSourceUrl = new URL(parsedUrl);
             normalizedSourceUrl.hash = "";
@@ -284,6 +283,12 @@ export async function POST(request: Request) {
                 { status: 202 }
             );
         } catch (error) {
+            // A redirect chain that lands on a private/internal address (or any
+            // other guard rejection surfaced mid-fetch) is a client-input
+            // problem, not a server error.
+            if (error instanceof UrlGuardError) {
+                return NextResponse.json({ error: error.message }, { status: 400 });
+            }
             console.error("[WebsiteUpload] Error:", error);
             return NextResponse.json(
                 {

@@ -6,6 +6,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -41,9 +42,24 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
-            const { userId, repoUrl, branch, accessToken, category } = validation.data;
+            const { userId: bodyUserId, repoUrl, branch, accessToken, category } = validation.data;
 
-            // Parse and validate the GitHub URL
+            // Identity comes from the Clerk session, never the request body.
+            // `userId` stays in the schema for wire-compat but is overridden.
+            const { userId } = await auth();
+            if (!userId) {
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            }
+            if (bodyUserId && bodyUserId !== userId) {
+                console.warn(
+                    `[GitHubRepoUpload] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
+                );
+            }
+
+            // Parse and validate the GitHub URL. SSRF note: parseGitHubUrl
+            // rejects any hostname other than (www.)github.com, and the
+            // download itself is pinned to https://api.github.com — the
+            // user-supplied URL only contributes owner/repo path segments.
             let parsed;
             try {
                 parsed = parseGitHubUrl(repoUrl);

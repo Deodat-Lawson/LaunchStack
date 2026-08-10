@@ -174,7 +174,7 @@ export function runHeroDemo(
     await sleep(3800);
   }
 
-  (async function loop() {
+  void (async function loop() {
     let i = 0;
     while (!cancelled) {
       await runBeat(SCRIPT[i % SCRIPT.length]!);

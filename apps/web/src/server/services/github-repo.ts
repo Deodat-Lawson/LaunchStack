@@ -124,7 +124,7 @@ export async function downloadGitHubRepoZip(
     };
 
     if (accessToken) {
-        headers["Authorization"] = `Bearer ${accessToken}`;
+        headers.Authorization = `Bearer ${accessToken}`;
     }
 
     console.log(

@@ -12,12 +12,9 @@
 
 ## Status
 
-`@launchstack/core` is **not published to npm** — the registry returns 404, so `pnpm add @launchstack/core` will not resolve. The package itself is publish-ready (`publishConfig` redirects `main`, `types` and the whole `exports` map to `./dist`, and the release workflow runs `publint` and `attw` against the packed tarball). Two mechanical things block an actual release:
+The engine packages (`@launchstack/protocol`, `evidence`, `application`, `adapters`, and the `core` facade) are **not yet on npm** — the first release will publish them together through the Changesets flow in [`release.yml`](.github/workflows/release.yml) (the old hardcoded-repo gate and missing `.changeset/` that blocked releases are fixed; the workflow validates the packed tarball with `publint` and a Node-ESM loadability check for every subpath). Until that first release lands, consume the engine by running this repository.
 
-- `.changeset/` does not exist, so Changesets cannot version or publish.
-- [`release.yml:20`](.github/workflows/release.yml) is gated on `github.repository == 'launchstack/launchstack'`, but this repository is `Deodat-Lawson/LaunchStack`, so the release job is skipped on every push.
-
-To try Launchstack today, run the reference app below.
+To try Launchstack today, run the app below.
 
 ---
 
@@ -52,10 +49,17 @@ You need a Postgres with the **pgvector** extension available — the migration
 runner enables it and exits non-zero on stock Postgres.
 
 ```bash
-pnpm --filter @launchstack/web  db:migrate   # apply BOTH migration sets (engine, then product)
-pnpm --filter @launchstack/core db:seed      # optional: one company/user/document
-pnpm --filter @launchstack/web  dev          # Next.js + Inngest on :3000 and :8288
+pnpm --filter @launchstack/web    db:migrate   # apply BOTH migration sets (engine, then product)
+pnpm --filter @launchstack/core   db:seed      # optional: one company/user/document
+pnpm --filter @launchstack/web    dev          # Next.js on :3000
+pnpm --filter @launchstack/worker dev          # the durable worker on :8020 — ingestion runs here, not in web
+pnpm --filter @launchstack/web    inngest:dev  # optional: Inngest dev UI on :8288, pointed at the worker's :8020/api/inngest
 ```
+
+`web dev` is plain `next dev` — it accepts uploads but processes nothing.
+Run the worker alongside it or documents will sit queued forever; the
+Inngest dev server is only needed for the Inngest-hosted background
+verticals (trend search, prospector, …), not for ingestion.
 
 `db:migrate` is the same command CI, Docker and the Vercel production build run.
 Running it from `@launchstack/core` applies only the engine set — that is what a
@@ -68,8 +72,8 @@ Nothing else creates schema — see [Changing the database](CONTRIBUTING.md#chan
 <summary>Windows (no <code>make</code>)</summary>
 
 ```powershell
-docker compose --env-file .env up --build -d                                                                # lite
-docker compose --env-file .env --profile ocr -f docker-compose.yml -f docker-compose.ocr.yml up --build -d   # with Docling
+docker compose --env-file .env up --build -d                 # lite
+docker compose --env-file .env --profile ocr up --build -d   # with Docling
 
 docker compose --env-file .env down --remove-orphans      # stop (keeps volumes)
 docker compose --env-file .env down -v --remove-orphans   # stop + wipe volumes
@@ -91,13 +95,13 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full dev guide.
 
 | Path | What it is |
 |---|---|
-| [`apps/web`](apps/web) | The Next.js reference app. Its Dockerfiles live beside it, not at the root. |
-| [`packages/core`](packages/core) | The engine. |
-| [`packages/features`](packages/features) | Vertical features built on core. |
-| [`services/`](services), [`sidecar/`](sidecar) | Standalone containers — two Python, one Node. Not part of the pnpm workspace; each manages its own dependencies. |
-| [`scripts/`](scripts) | `ops/` for operational tasks, `dev/` for manual developer probes. |
-
-Two boundary caveats worth knowing up front, both tracked in `REPOSITORY.md`: `packages/core` currently contains the SaaS database schema, and the RAG pipeline implementation still lives under `apps/web`. Directory names are not yet a reliable guide to what is engine and what is product.
+| [`apps/web`](apps/web) | The Next.js app: UI, auth, command acceptance, synchronous reads. |
+| [`apps/worker`](apps/worker) | The durable workflow coordinator — consumes the ingestion outbox and hosts the background jobs (ADR-003). |
+| [`packages/protocol`](packages/protocol), [`packages/evidence`](packages/evidence), [`packages/application`](packages/application), [`packages/adapters`](packages/adapters) | The layered engine (ADR-002): contracts → pure company-state logic → use cases/ports → implementations. |
+| [`packages/core`](packages/core) | The published compatibility facade over the engine packages. |
+| [`packages/features`](packages/features) | Vertical features built on the engine. |
+| [`services/`](services) | Compute services — document-converter (Node), transcription and document-editor (Python). Not part of the pnpm workspace; each manages its own dependencies. |
+| [`scripts/`](scripts) | `ci/` for gates, `ops/` for operational tasks, `dev/` for manual developer probes. |
 
 ---
 
@@ -141,10 +145,10 @@ Core exposes ports that the host wires up. Features depend only on these ports; 
           └───────────────────────────────────────┘
 ```
 
-- **Core** knows no framework. Config is meant to arrive through `CoreConfig`.
+- **Core** knows no framework. Config arrives through `CoreConfig`.
 - **Features** can read `process.env`, but cannot import from the host app.
 - **Host** owns env, auth, routing, and implements the ports.
-- [`eslint.config.js`](eslint.config.js) *declares* these boundaries, but the CI lint step is `continue-on-error: true` against a legacy baseline, so violations do not block merges today — and six files in core currently violate the no-`process.env` rule.
+- [`eslint.config.js`](eslint.config.js) declares these boundaries and CI enforces them: the lint step is blocking (ADR-006) and the tree lints clean. The engine packages read no `process.env` — the no-env rule is lint-enforced, not aspirational.
 
 ### Wiring the engine
 
@@ -195,7 +199,7 @@ await engine.close();   // graceful shutdown
 [`apps/web`](apps/web) is a Next.js app built on the engine. It demonstrates:
 
 - Clerk employer/employee auth with role-aware middleware
-- Document upload + optional OCR (`NATIVE_PDF`, Marker, Docling, Azure, Landing.AI, Datalab)
+- Document upload + optional OCR (`NATIVE_PDF`, Docling, Azure, Landing.AI, Datalab)
 - PostgreSQL + pgvector semantic retrieval for RAG
 - AI chat with agent guardrails (PII filter, grounding, confidence gate)
 - Predictive document analysis — eight document types are defined, though the request validator currently accepts only `contract`, `financial`, `technical`, `compliance` and `general`
@@ -267,14 +271,9 @@ Plus first-class PDF, DOCX, PPTX, XLSX, MD, HTML, TXT, and image adapters.
 
 ## Using core standalone
 
-The goal is for `@launchstack/core` to be a plain TypeScript library you can drop into any Node 20+ project with a Postgres database. Beyond the release plumbing in [Status](#status), two things still leak:
+`@launchstack/core` is the published compatibility facade over the layered engine packages (`@launchstack/protocol` / `evidence` / `application` / `adapters` — ADR-002): every historical subpath keeps working and re-exports from those packages, and CI proves each one loads under plain Node ESM (`scripts/ci/check-package-exports.mjs`). The engine packages read no `process.env` (lint-enforced) — configuration arrives through `CoreConfig` and typed ports; `apps/web/src/server/engine.ts` is the reference composition root.
 
-1. **It is not environment-independent.** Six files under `packages/core/src` read `process.env`: `crypto/secret-box.ts` and `embeddings/company-config.ts` document theirs as transitional fallbacks, but `providers/ner/llm.ts`, `providers/ner/sidecar.ts`, `providers/reranking/jina.ts` and `providers/reranking/sidecar.ts` do not. The two `sidecar.ts` files read `SIDECAR_URL` at module load with a hardcoded `http://localhost:8000` default that **cannot** be set through `CoreConfig`.
-2. **It still owns product concerns.** The SaaS database schema lives in core, and `RagPort.companyEnsembleSearch` is keyed on a required `companyId: number`, so consumers would inherit our tenancy model.
-
-See [`REPOSITORY.md`](REPOSITORY.md) for the tracked list of boundary issues.
-
-> [`packages/core/README.md`](packages/core/README.md) is **out of date** — it still advertises an `engine.rag` API that does not exist, claims core reads zero environment variables, and tells you to `pnpm add` an unpublished package. Treat `apps/web/src/server/engine.ts` as the reference until it is rewritten.
+One tenancy caveat remains by design: the engine's search contract is keyed on `companyId`, so a consumer adopts that workspace model (without inheriting auth, billing, or product tables). See [`REPOSITORY.md`](REPOSITORY.md).
 
 ---
 
@@ -290,8 +289,8 @@ See [`REPOSITORY.md`](REPOSITORY.md) for the tracked list of boundary issues.
 We welcome PRs — start with [CONTRIBUTING.md](CONTRIBUTING.md). A few things to know up front:
 
 - One issue per PR
-- Changes to `packages/core/` should come with a [Changeset](https://github.com/changesets/changesets) — note that `pnpm changeset` currently fails because `.changeset/` has not been initialised
-- ESLint declares the core/features/host import boundaries; don't work around them, even though CI does not yet enforce them
+- Changes to the published engine packages should come with a [Changeset](https://github.com/changesets/changesets) (`pnpm changeset`)
+- ESLint declares the core/features/host import boundaries and CI enforces them (lint is blocking); don't work around them
 
 ## License
 

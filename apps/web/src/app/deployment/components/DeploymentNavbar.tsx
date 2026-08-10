@@ -157,7 +157,7 @@ export const DeploymentNavbar: React.FC<DeploymentNavbarProps> = ({
           <span className={styles.navLinkLabel}>Home</span>
         </Link>
         <a
-          href="https://github.com/Deodat-Lawson/pdr_ai_v2"
+          href="https://github.com/Deodat-Lawson/LaunchStack"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.navLink}

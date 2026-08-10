@@ -1,3 +1,4 @@
+import { buildCitations, type RetrievedEvidence } from "@launchstack/application";
 import type { SearchResult } from "~/lib/tools/rag";
 import type { SourceReference } from "./types";
 
@@ -27,16 +28,21 @@ function getPageValue(value: unknown): number | undefined {
         : undefined;
 }
 
+/**
+ * Locates a query-aware snippet in the chunk text. Purely presentational —
+ * it carries no score: the 0.25/0.8 "confidence" constants this function
+ * used to fabricate were removed by ADR-005 §3 (no model ever produced
+ * them). Relevance now comes only from real retrieval scores.
+ */
 function extractSnippet(text: string, question: string): {
     snippet: string;
     matchText?: string;
     matchStart?: number;
     matchEnd?: number;
-    confidence: number;
 } {
     const normalizedText = normalizeWhitespace(text);
     if (!normalizedText) {
-        return { snippet: "", confidence: 0 };
+        return { snippet: "" };
     }
 
     const maxSnippetLength = 240;
@@ -54,7 +60,7 @@ function extractSnippet(text: string, question: string): {
 
     if (bestIndex < 0) {
         const snippet = normalizedText.slice(0, maxSnippetLength).trimEnd();
-        return { snippet, confidence: 0.25 };
+        return { snippet };
     }
 
     const left = Math.max(0, bestIndex - 110);
@@ -69,7 +75,6 @@ function extractSnippet(text: string, question: string): {
         matchText: bestKeyword,
         matchStart: bestIndex,
         matchEnd: bestKeyword ? bestIndex + bestKeyword.length : undefined,
-        confidence: 0.8,
     };
 }
 
@@ -131,11 +136,41 @@ export function filterPagesByAICitation(
     return filtered.length > 0 ? filtered : candidatePages;
 }
 
+function asPositiveInt(value: unknown): number | undefined {
+    const n = typeof value === "number" ? value : typeof value === "string" ? Number(value) : NaN;
+    return Number.isInteger(n) && n > 0 ? n : undefined;
+}
+
+/**
+ * Real retrieval relevance for a row, or nothing. Only the rerank score
+ * qualifies: it is a model-produced [0,1] relevance judgement. Raw vector
+ * distance is not converted into a pseudo-score — a reference with no real
+ * score simply carries no value (ADR-005 §3).
+ */
+function getRelevance(metadata: Record<string, unknown>): number | undefined {
+    const score = metadata.rerankScore;
+    return typeof score === "number" && Number.isFinite(score) ? score : undefined;
+}
+
+/**
+ * Build the cited references for an answer.
+ *
+ * ADR-005 §3 change, documented for API consumers: references used to carry a
+ * `confidence` of 0.25 or 0.8 — constants fabricated by the snippet finder,
+ * never produced by any model. The field is retained for response-shape
+ * compatibility but is now populated from the REAL retrieval relevance
+ * (`relevance`, the reranker's score) and omitted entirely when no such score
+ * exists. Rows that carry full identity (documentId + versionId) are also
+ * anchored via @launchstack/application's `buildCitations`, yielding a stable
+ * `anchorKey`. The frontend reads `snippet`/`documentId`/`page`, which are
+ * unchanged.
+ */
 export function buildReferences(
     question: string,
     documents: SearchResult[],
     maxReferences = 5
 ): SourceReference[] {
+    const now = new Date().toISOString();
     const dedup = new Set<string>();
     const references: SourceReference[] = [];
 
@@ -146,22 +181,53 @@ export function buildReferences(
 
         const metadata = (doc.metadata ?? {}) as unknown as Record<string, unknown>;
         const childContent = typeof metadata.childContent === "string" ? metadata.childContent : "";
-        const snippetResult = extractSnippet(childContent || doc.pageContent, question);
+        const content = childContent || doc.pageContent;
+        const snippetResult = extractSnippet(content, question);
         if (!snippetResult.snippet) {
             continue;
         }
 
         const page = getPageValue(metadata.page);
+        const relevance = getRelevance(metadata);
+        const documentId = typeof metadata.documentId === "number" ? metadata.documentId : undefined;
+        const chunkId = typeof metadata.chunkId === "number" ? metadata.chunkId : undefined;
+
+        // Anchor through the shared citation builder when the row carries a
+        // real (sourceId, sourceVersionId) identity; per-row invocation keeps
+        // this module's ordering/dedup semantics while reusing the library's
+        // anchor and relevance mapping.
+        let anchorKey: string | undefined;
+        const sourceId = asPositiveInt(documentId);
+        const sourceVersionId = asPositiveInt(metadata.versionId);
+        if (sourceId !== undefined && sourceVersionId !== undefined) {
+            const hit: RetrievedEvidence = {
+                sourceId,
+                sourceVersionId,
+                chunkId,
+                page,
+                content,
+                documentTitle:
+                    typeof metadata.documentTitle === "string" ? metadata.documentTitle : undefined,
+                relevance,
+            };
+            const [citation] = buildCitations([hit], [], { now });
+            anchorKey = citation?.anchorKey;
+        }
+
         const reference: SourceReference = {
             page,
             snippet: snippetResult.snippet,
             matchText: snippetResult.matchText,
             matchStart: snippetResult.matchStart,
             matchEnd: snippetResult.matchEnd,
-            confidence: snippetResult.confidence,
-            documentId: typeof metadata.documentId === "number" ? metadata.documentId : undefined,
+            relevance,
+            // Back-compat mirror of `relevance` — real score or absent, never
+            // a fabricated constant.
+            confidence: relevance,
+            anchorKey,
+            documentId,
             documentTitle: typeof metadata.documentTitle === "string" ? metadata.documentTitle : undefined,
-            chunkId: typeof metadata.chunkId === "number" ? metadata.chunkId : undefined,
+            chunkId,
             source: typeof metadata.source === "string" ? metadata.source : undefined,
         };
 

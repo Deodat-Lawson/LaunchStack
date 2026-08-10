@@ -15,6 +15,13 @@
       "when": 1786228639855,
       "tag": "20260808223719_document_creation_lifecycle",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786263443653,
+      "tag": "20260809081723_event_outbox",
+      "breakpoints": true
     }
   ]
 }

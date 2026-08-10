@@ -26,20 +26,48 @@ export class AdeuServiceError extends Error {
     }
 }
 
+let warnedDeprecatedNames = false;
+
+function warnDeprecatedNamesOnce(): void {
+    if (warnedDeprecatedNames) return;
+    warnedDeprecatedNames = true;
+    console.warn(
+        "[adeu/client] ADEU_SERVICE_URL / SIDECAR_API_KEY are deprecated (ADR-004): the " +
+            "Adeu routes moved to services/document-editor. Set DOCUMENT_EDITOR_URL and " +
+            "DOCUMENT_EDITOR_API_KEY instead.",
+    );
+}
+
+/**
+ * Base URL of the document-editor service (ADR-004). DOCUMENT_EDITOR_URL is
+ * canonical; the pre-split ADEU_SERVICE_URL is honored as a deprecated
+ * fallback with a single warning.
+ */
 export function getBaseUrl(): string {
-    const url = process.env.ADEU_SERVICE_URL;
-    if (!url) {
-        throw new AdeuConfigError(
-            "ADEU_SERVICE_URL environment variable is not set"
-        );
+    const url = process.env.DOCUMENT_EDITOR_URL;
+    if (url) return url;
+    const legacy = process.env.ADEU_SERVICE_URL;
+    if (legacy) {
+        warnDeprecatedNamesOnce();
+        return legacy;
     }
-    return url;
+    throw new AdeuConfigError(
+        "DOCUMENT_EDITOR_URL environment variable is not set"
+    );
 }
 
 const ADEU_TIMEOUT_MS = Number(process.env.ADEU_TIMEOUT_MS) || 30_000;
 
 function getAuthHeaders(): Record<string, string> {
-    return { "X-API-Key": process.env.SIDECAR_API_KEY ?? "" };
+    const key = process.env.DOCUMENT_EDITOR_API_KEY;
+    if (key) return { "X-API-Key": key };
+    if (process.env.SIDECAR_API_KEY) {
+        warnDeprecatedNamesOnce();
+        return { "X-API-Key": process.env.SIDECAR_API_KEY };
+    }
+    // The service fails closed — an empty key yields 401s, never
+    // unauthenticated access.
+    return { "X-API-Key": "" };
 }
 
 async function fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
@@ -115,12 +143,13 @@ export async function processDocumentBatch(
 
     if (!res.ok) return handleErrorResponse(res);
 
-    // The sidecar returns the modified DOCX binary with a X-Batch-Summary JSON header
+    // The service returns the modified DOCX binary with a X-Batch-Summary JSON header
     const summaryHeader = res.headers.get("x-batch-summary");
     let summary: BatchSummary = { applied_edits: 0, skipped_edits: 0, applied_actions: 0, skipped_actions: 0 };
     if (summaryHeader) {
         try {
-            summary = JSON.parse(summaryHeader);
+            // The service emits this header as a JSON-encoded BatchSummary.
+            summary = JSON.parse(summaryHeader) as BatchSummary;
         } catch {
             console.warn("[adeu/client] Failed to parse x-batch-summary header, using default");
         }

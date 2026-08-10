@@ -12,6 +12,34 @@ jest.mock("p-limit", () => ({
     default: () => (fn: () => Promise<unknown>) => fn(),
 }));
 
+// The routes now require a Clerk session and scope the document to the
+// caller's active company (cross-tenant documents read as 404).
+const mockClerk: { userId: string | null } = { userId: "user-1" };
+jest.mock("@clerk/nextjs/server", () => ({
+    auth: () => Promise.resolve({ userId: mockClerk.userId }),
+}));
+
+// Resolve the active workspace to the user's own companyId, mirroring the
+// "no cookie set" production behavior.
+jest.mock("~/lib/active-workspace", () => ({
+    resolveActiveCompanyForUser: jest.fn(
+        async (_userPk: number | bigint, defaultCompanyId: number | bigint) =>
+            BigInt(defaultCompanyId),
+    ),
+}));
+
+// The route imports RateLimitPresets from ~/lib/rate-limiter; loading the
+// real module starts an un-unref'd cleanup setInterval that keeps the Jest
+// process alive after the run, so mock the presets instead.
+jest.mock("~/lib/rate-limiter", () => ({
+    RateLimitPresets: {
+        standard: { maxRequests: 100, windowMs: 15 * 60 * 1000 },
+        strict: { maxRequests: 20, windowMs: 15 * 60 * 1000 },
+        permissive: { maxRequests: 300, windowMs: 15 * 60 * 1000 },
+        burst: { maxRequests: 10, windowMs: 60 * 1000 },
+    },
+}));
+
 jest.mock("@launchstack/core/llm", () => {
     const actual = jest.requireActual<typeof CoreLlm>("@launchstack/core/llm");
     return {
@@ -90,7 +118,7 @@ import { POST } from "~/app/api/agents/predictive-document-analysis/route";
 import { POST as streamPOST } from "~/app/api/agents/predictive-document-analysis/stream/route";
 import { predictiveAnalysisJob } from "~/server/inngest/functions/predictiveAnalysis";
 import { document, documentContextChunks, pdfChunks } from "@launchstack/core/db/schema";
-import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
+import { predictiveDocumentAnalysisResults, users } from "~/server/db/schema";
 
 import * as AnalysisEngine from "~/app/api/agents/predictive-document-analysis/services/analysisEngine";
 import { createChunkBatches } from "~/app/api/agents/predictive-document-analysis/utils/batching";
@@ -226,6 +254,12 @@ function hasCurrentVersionPredicate(values: unknown[]): boolean {
 }
 
 function resolvePredictiveQuery(query: PredictiveQueryState): unknown[] {
+    if (query.source === users) {
+        // The signed-in caller; their default workspace is company 7, the
+        // company the fixture document belongs to.
+        return [{ id: 1, companyId: 7n }];
+    }
+
     if (query.source === document) {
         return [
             {
@@ -294,6 +328,7 @@ function makePredictiveSelectQuery(): PredictiveQueryChain {
 }
 
 function resetPredictiveFixtures() {
+    mockClerk.userId = "user-1";
     currentVersionId = 2n;
     contextChunkRows = [
         {

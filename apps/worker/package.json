@@ -1,0 +1,30 @@
+{
+  "name": "@launchstack/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The sole durable workflow coordinator (ADR-003): consumes the transactional outbox for the ingestion pipeline and hosts the Inngest serve endpoint for the remaining background verticals. apps/web only accepts commands; this process executes them.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@launchstack/adapters": "workspace:^",
+    "@launchstack/application": "workspace:^",
+    "@launchstack/core": "workspace:^",
+    "@launchstack/features": "workspace:^",
+    "@launchstack/protocol": "workspace:^",
+    "drizzle-orm": "^0.45.1",
+    "inngest": "^3.54.2",
+    "tsx": "^4.20.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "typescript": "^5.9.2",
+    "vitest": "^3.0.5"
+  }
+}

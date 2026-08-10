@@ -81,7 +81,7 @@ function MarketBlock({ title, icon: Icon, items, isGeo }: MarketBlockProps) {
           return (
             <span key={idx} className={m.tagWrap}>
               <span className={tagClass}>{value}</span>
-              {(source || isManual) && (
+              {(Boolean(source) || isManual) && (
                 <span className={m.tagTooltip}>
                   {isManual ? "Edited by you" : `Source: ${source}`}
                 </span>

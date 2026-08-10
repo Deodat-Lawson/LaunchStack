@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { agentAiChatbotChat, agentAiChatbotDocument } from "~/server/db/schema";
 import { eq, desc } from "drizzle-orm";
@@ -9,16 +10,21 @@ import { validateRequestBody, CreateChatSchema } from "~/lib/validation";
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
-// GET /api/agent-ai-chatbot/chats - Get all chats for a user
+// GET /api/agent-ai-chatbot/chats - Get all chats for the session user
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-
+    // Identity comes from the Clerk session; the legacy `userId` query
+    // parameter is still accepted for wire-compat but ignored.
+    const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json(
-        { error: "userId is required" },
-        { status: 400 }
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const queryUserId = searchParams.get("userId");
+    if (queryUserId && queryUserId !== userId) {
+      console.warn(
+        `[AIChat] Ignoring query userId=${queryUserId}; using session userId=${userId}`
       );
     }
 
@@ -44,10 +50,17 @@ export async function GET(request: NextRequest) {
 // POST /api/agent-ai-chatbot/chats - Create a new chat
 export async function POST(request: NextRequest) {
   try {
+    // Identity comes from the Clerk session, never the request body.
+    // `userId` stays in the schema for wire-compat but is overridden.
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const validation = await validateRequestBody(request, CreateChatSchema);
     if (!validation.success) return validation.response;
     const {
-      userId,
+      userId: bodyUserId,
       title,
       agentMode,
       visibility,
@@ -56,16 +69,22 @@ export async function POST(request: NextRequest) {
       documentId
     } = validation.data;
 
+    if (bodyUserId && bodyUserId !== userId) {
+      console.warn(
+        `[AIChat] Ignoring body userId=${bodyUserId}; using session userId=${userId}`
+      );
+    }
+
     const chatId = randomUUID();
     const insertValues = {
       id: chatId,
       userId,
       title,
-      agentMode: agentMode as "autonomous" | "interactive" | "assisted",
-      visibility: visibility as "public" | "private",
+      agentMode: agentMode!,
+      visibility: visibility!,
       status: "active" as const,
-      aiStyle: aiStyle as "concise" | "detailed" | "academic" | "bullet-points" | undefined,
-      aiPersona: aiPersona as "general" | "learning-coach" | "financial-expert" | "legal-expert" | "math-reasoning" | undefined,
+      aiStyle: aiStyle,
+      aiPersona: aiPersona,
     };
 
     const [newChat] = await db
@@ -96,4 +115,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

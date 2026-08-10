@@ -59,9 +59,11 @@ const CHAT_MODEL_IMPORT =
   /^\s*import\s+[^;]*\b(ChatOpenAI|ChatAnthropic|ChatGoogleGenerativeAI|ChatOllama)\b[^;]*from\s+["']@langchain\//m;
 
 describe("chat SDK imports", () => {
+  // ADR-002: the transport implementation lives in @launchstack/adapters;
+  // @launchstack/core's llm subpath is a re-export stub over it.
   const TRANSPORT = join(
     "packages",
-    "core",
+    "adapters",
     "src",
     "llm",
     "openai-compatible-transport.ts",
@@ -186,7 +188,7 @@ describe("error handlers do not re-enter chat configuration", () => {
    */
   const handlers = [
     ...sourceFiles("apps/web/src/app/api"),
-  ].filter((file) => /describeChatError\(/.test(read(file)));
+  ].filter((file) => read(file).includes('describeChatError('));
 
   it("finds the handlers that describe chat errors", () => {
     expect(handlers.length).toBeGreaterThan(0);
@@ -195,7 +197,7 @@ describe("error handlers do not re-enter chat configuration", () => {
   it.each(handlers)("%s resolves the model id before the catch", (file) => {
     const source = read(file);
     for (const match of source.matchAll(/catch\s*\([^)]*\)\s*\{/g)) {
-      const block = source.slice(match.index!, match.index! + 1200);
+      const block = source.slice(match.index, match.index + 1200);
       const nextCatch = block.indexOf("} catch", 1);
       const body = nextCatch === -1 ? block : block.slice(0, nextCatch);
       expect(body).not.toMatch(/resolveConfiguredChatRoute\(|resolveConfiguredChatModel\(/);
@@ -211,6 +213,7 @@ describe("env.ts stays a light import", () => {
    */
   const WEB_SRC = "apps/web/src";
   const CORE_SRC = "packages/core/src";
+  const ADAPTERS_SRC = "packages/adapters/src";
 
   function resolveSpec(spec: string, from: string): string | null {
     let base: string;
@@ -218,6 +221,12 @@ describe("env.ts stays a light import", () => {
     else if (spec === "@launchstack/core") base = join(CORE_SRC, "index");
     else if (spec.startsWith("@launchstack/core/"))
       base = join(CORE_SRC, spec.slice("@launchstack/core/".length));
+    // ADR-002: core subpaths are stubs re-exporting @launchstack/adapters —
+    // follow the facade into the implementation or the walk stops at a stub
+    // and this guard passes vacuously.
+    else if (spec === "@launchstack/adapters") base = join(ADAPTERS_SRC, "index");
+    else if (spec.startsWith("@launchstack/adapters/"))
+      base = join(ADAPTERS_SRC, spec.slice("@launchstack/adapters/".length));
     else if (spec.startsWith(".")) base = join(from, "..", spec);
     else return null;
 

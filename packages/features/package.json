@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub \u2014 real sources land in later migration steps.)",
+  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub — real sources land in later migration steps.)",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=20"
@@ -20,6 +20,14 @@
     "./adeu": {
       "types": "./src/adeu/index.ts",
       "default": "./src/adeu/index.ts"
+    },
+    "./connectors": {
+      "types": "./src/connectors/index.ts",
+      "default": "./src/connectors/index.ts"
+    },
+    "./connectors/agent-knowledge": {
+      "types": "./src/connectors/agent-knowledge/index.ts",
+      "default": "./src/connectors/agent-knowledge/index.ts"
     },
     "./legal-templates": {
       "types": "./src/legal-templates/index.ts",
@@ -108,6 +116,7 @@
   "dependencies": {
     "@langchain/core": "^0.3.74",
     "@langchain/openai": "^0.6.11",
+    "@launchstack/adapters": "workspace:^",
     "@launchstack/core": "workspace:*",
     "dayjs": "^1.11.18",
     "docxtemplater": "^3.68.3",

@@ -6,7 +6,7 @@ jest.mock("~/server/founder-weekly-review/dispatch-service", () => ({
     createRunWithDispatch: jest.fn(),
 }));
 
-import { createFounderWeeklyReviewPostHandler } from "~/app/api/founder-weekly-reviews/route";
+import { createFounderWeeklyReviewPostHandler } from "~/app/api/founder-weekly-reviews/create-handler";
 import type { FounderWeeklyReviewRunRecord } from "@launchstack/features/founder-weekly-review";
 import { auth } from "@clerk/nextjs/server";
 const mockAuth = auth as unknown as jest.Mock;

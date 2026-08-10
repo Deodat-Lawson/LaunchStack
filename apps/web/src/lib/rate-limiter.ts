@@ -79,6 +79,10 @@ class RateLimitStore {
     this.cleanupInterval = setInterval(() => {
       this.cleanup();
     }, 5 * 60 * 1000);
+    // Housekeeping only — it must never be the reason a process stays alive.
+    // Without this, merely importing a rate-limited route hangs a Jest worker
+    // (and any short-lived script) until the runner is force-exited.
+    this.cleanupInterval.unref?.();
   }
 
   /**

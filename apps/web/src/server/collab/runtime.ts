@@ -209,10 +209,30 @@ export async function getMeetingRuntime(
     initialState: rowToState(row),
   });
 
+  // Coalescing persist: only the LATEST state matters (each write is the
+  // full row), so instead of chaining one write per event — which lets a
+  // chatty meeting on a slow DB build an unbounded backlog — keep exactly
+  // one write in flight and remember the newest pending state. Ordering is
+  // preserved (a single writer), intermediate states are skipped.
+  let persistInFlight = false;
+  let pendingState: MeetingState | null = null;
+  const drainPersist = (): void => {
+    if (persistInFlight || pendingState === null) return;
+    const state = pendingState;
+    pendingState = null;
+    persistInFlight = true;
+    void persistState(meetingId, state)
+      .catch((err: unknown) => {
+        console.error(`[collab] failed to persist meeting ${meetingId}:`, err);
+      })
+      .finally(() => {
+        persistInFlight = false;
+        drainPersist();
+      });
+  };
   const dispose = orchestrator.on((event) => {
-    void persistState(meetingId, event.state).catch((err: unknown) => {
-      console.error(`[collab] failed to persist meeting ${meetingId}:`, err);
-    });
+    pendingState = event.state;
+    drainPersist();
   });
 
   const bridge = await buildBridge(config, orchestrator, store);

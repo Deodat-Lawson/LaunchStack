@@ -38,8 +38,9 @@ import {
 
 /** Drive the middleware the way the SDK does before executing a step. */
 async function runOneStep(): Promise<void> {
-  const registered = await chatConfigMiddleware.init();
-  const hooks = await registered.onFunctionRun();
+  // init() and onFunctionRun() are synchronous in this middleware.
+  const registered = chatConfigMiddleware.init();
+  const hooks = registered.onFunctionRun();
   await hooks.transformInput();
 }
 

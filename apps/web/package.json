@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack Next.js application \u2014 hosts the engine (via @launchstack/core) and all vertical features behind Clerk auth.",
+  "description": "Launchstack Next.js application — hosts the engine (via @launchstack/core) and all vertical features behind Clerk auth.",
   "license": "Apache-2.0",
   "scripts": {
     "build": "next build",
@@ -17,7 +17,7 @@
     "collab:hub": "tsx ./scripts/collab-hub.ts",
     "collab:worker": "tsx ./scripts/collab-worker.ts",
     "evals:meetings": "tsx --tsconfig ./tsconfig.json ./scripts/run-meeting-evals.ts",
-    "dev": "concurrently --names next,inngest --prefix-colors blue,magenta \"next dev --turbo\" \"pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest\"",
+    "dev": "next dev --turbo",
     "dev:next": "next dev --turbo",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -25,7 +25,7 @@
     "start": "next start",
     "test": "jest --passWithNoTests",
     "typecheck": "tsc --noEmit",
-    "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
+    "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
@@ -42,8 +42,11 @@
     "@langchain/langgraph": "^0.4.9",
     "@langchain/openai": "^0.6.11",
     "@langchain/textsplitters": "^0.1.0",
+    "@launchstack/adapters": "workspace:^",
+    "@launchstack/application": "workspace:^",
     "@launchstack/core": "workspace:*",
     "@launchstack/features": "workspace:*",
+    "@launchstack/protocol": "workspace:^",
     "@mozilla/readability": "^0.6.0",
     "@neondatabase/serverless": "^1.0.1",
     "@radix-ui/react-accordion": "^1.2.3",

@@ -54,6 +54,25 @@ jest.mock("~/server/engine", () => ({
     getEngine: jest.fn(() => mockEngine),
 }));
 
+// The predictive-analysis routes now require a Clerk session and scope the
+// document to the caller's active company. Simulate a signed-in user whose
+// default workspace is the seeded test company.
+const mockClerk: { userId: string | null } = { userId: null };
+
+jest.mock("@clerk/nextjs/server", () => ({
+    auth: () => Promise.resolve({ userId: mockClerk.userId }),
+}));
+
+jest.mock("~/lib/active-workspace", () => ({
+    resolveActiveCompanyForUser: (
+        _userPk: number | bigint,
+        defaultCompanyId: number | bigint
+    ): Promise<bigint> =>
+        Promise.resolve(
+            typeof defaultCompanyId === "bigint" ? defaultCompanyId : BigInt(defaultCompanyId)
+        ),
+}));
+
 jest.mock(
     "~/app/api/agents/predictive-document-analysis/agent",
     (): AnalyzeDocumentChunksModule => ({
@@ -70,6 +89,18 @@ jest.mock("~/lib/rate-limit-middleware", () => ({
             handler: () => Promise<unknown>
         ): Promise<unknown> => handler()
     ),
+}));
+
+// The route imports RateLimitPresets from ~/lib/rate-limiter; loading the
+// real module starts an un-unref'd cleanup setInterval that keeps the Jest
+// process alive after the run, so mock the presets instead.
+jest.mock("~/lib/rate-limiter", () => ({
+    RateLimitPresets: {
+        standard: { maxRequests: 100, windowMs: 15 * 60 * 1000 },
+        strict: { maxRequests: 20, windowMs: 15 * 60 * 1000 },
+        permissive: { maxRequests: 300, windowMs: 15 * 60 * 1000 },
+        burst: { maxRequests: 10, windowMs: 60 * 1000 },
+    },
 }));
 
 jest.mock("~/server/metrics/registry", () => ({
@@ -103,7 +134,7 @@ import {
     documentContextChunks,
     documentVersions,
 } from "@launchstack/core/db/schema";
-import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
+import { predictiveDocumentAnalysisResults, users } from "~/server/db/schema";
 import { POST as postPredictiveAnalysis } from "~/app/api/agents/predictive-document-analysis/route";
 import { POST as postPredictiveAnalysisStream } from "~/app/api/agents/predictive-document-analysis/stream/route";
 
@@ -199,6 +230,7 @@ integrationDescribe("predictive analysis cache versioning (database)", () => {
     let documentId: number | undefined;
     let version1Id: bigint | undefined;
     let version2Id: bigint | undefined;
+    let testUserPk: number | undefined;
 
     beforeEach(async () => {
         mockAnalyzeDocumentChunks.mockReset();
@@ -221,6 +253,22 @@ integrationDescribe("predictive analysis cache versioning (database)", () => {
             .returning({ id: company.id });
         if (!companyRow) throw new Error("Failed to create predictive cache test company");
         companyId = companyRow.id;
+
+        // Seed a session user for the auth check on the routes under test.
+        mockClerk.userId = `predictive-cache-user-${suffix}`;
+        const [userRow] = await integrationDb.db
+            .insert(users)
+            .values({
+                name: "Predictive Cache Tester",
+                email: `predictive-cache-${suffix}@example.test`,
+                userId: mockClerk.userId,
+                companyId: BigInt(companyId),
+                role: "employer",
+                status: "approved",
+            })
+            .returning({ id: users.id });
+        if (!userRow) throw new Error("Failed to create predictive cache test user");
+        testUserPk = userRow.id;
 
         const [documentRow] = await integrationDb.db
             .insert(document)
@@ -320,16 +368,22 @@ integrationDescribe("predictive analysis cache versioning (database)", () => {
         const database = integrationDb;
         const cleanupDocumentId = documentId;
         const cleanupCompanyId = companyId;
+        const cleanupUserPk = testUserPk;
         integrationDb = undefined;
         mockEngine.db = undefined;
         documentId = undefined;
         companyId = undefined;
         version1Id = undefined;
         version2Id = undefined;
+        testUserPk = undefined;
+        mockClerk.userId = null;
 
         if (!database) return;
 
         try {
+            if (cleanupUserPk !== undefined) {
+                await database.db.delete(users).where(eq(users.id, cleanupUserPk));
+            }
             if (cleanupDocumentId !== undefined) {
                 await database.db
                     .delete(predictiveDocumentAnalysisResults)

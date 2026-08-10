@@ -68,47 +68,160 @@ jobs:
       # The same forward migration command local dev, Docker and the Vercel
       # production build run. CI used to `drizzle-kit push` here, which meant
       # the test suite exercised a schema no deploy ever produced.
-      # Both sets, engine first — the same ordered command Docker and the
-      # Vercel production build run.
       - name: Apply migrations to test database
         run: pnpm --filter @launchstack/web db:migrate
 
-      # The repository predates the current type-aware ESLint rules and still
-      # has a sizeable legacy baseline. Keep the report visible without
-      # preventing typecheck, tests, and builds from running.
-      - name: Lint (legacy baseline, non-blocking)
-        continue-on-error: true
+      # Blocking (ADR-006). The legacy `continue-on-error` here hid a fully
+      # red lint state on main for months.
+      - name: Lint
         run: pnpm lint
 
-      - name: Typecheck
+      - name: Typecheck (all workspace packages, worker included)
         run: pnpm typecheck
 
-      # Keep the currently-green suite blocking while the nine legacy suites
-      # below are brought up to date with active-workspace resolution and the
-      # ESM env loader.
-      - name: Test
-        run: >-
-          pnpm --filter @launchstack/web exec jest
-          --runInBand
-          --forceExit
-          --testPathIgnorePatterns='uploadDocument/uploadDocument\.test\.ts|clientProspector/routes\.test\.ts|storage/bootstrap-storage\.pbt\.test\.ts|updateCompany/updateCompany\.test\.ts|Categories/categories\.(add|get)\.test\.ts|Questions/chatHistory\.routes\.test\.ts|predictiveDocumentAnalysis/analyzeDocumentChunks\.test\.ts|fetchDocument/fetchDocument\.test\.ts'
+      # @launchstack/core is a compatibility facade (ADR-002): its src may
+      # contain nothing but re-exports of the layered engine packages.
+      - name: Core facade check
+        run: node scripts/ci/check-core-facade.mjs
 
-      - name: Test legacy baseline (non-blocking)
-        continue-on-error: true
+      - name: Generated protocol schemas match the zod source
+        run: pnpm --filter @launchstack/protocol schemas:check
+
+      - name: Engine package unit + contract tests
         run: >-
-          pnpm --filter @launchstack/web exec jest
-          --runInBand
-          --forceExit
-          --runTestsByPath
-          __tests__/api/uploadDocument/uploadDocument.test.ts
-          __tests__/api/clientProspector/routes.test.ts
-          __tests__/api/storage/bootstrap-storage.pbt.test.ts
-          __tests__/api/updateCompany/updateCompany.test.ts
-          __tests__/api/Categories/categories.add.test.ts
-          __tests__/api/Categories/categories.get.test.ts
-          __tests__/api/Questions/chatHistory.routes.test.ts
-          __tests__/api/predictiveDocumentAnalysis/analyzeDocumentChunks.test.ts
-          __tests__/api/fetchDocument/fetchDocument.test.ts
+          pnpm --filter @launchstack/protocol
+          --filter @launchstack/evidence
+          --filter @launchstack/application
+          --filter @launchstack/worker test
+
+      # Includes the outbox + lifecycle integration tests against the real
+      # migrated database above (replay, retry/backoff, dead-letter,
+      # supersession, stale-claim reclaim).
+      - name: Adapter tests (integration, real Postgres)
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchstack_test
+        run: pnpm --filter @launchstack/adapters test
+
+      # Blocking and complete (ADR-006): the nine formerly-excluded legacy
+      # suites are fixed and run with everything else.
+      - name: Web tests
+        run: pnpm --filter @launchstack/web exec jest --runInBand --forceExit
+
+  python-services:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # Torch/whisper are deliberately NOT installed: the transcription tests
+      # fake the transcriber (the service lazy-imports whisper), which also
+      # proves the lazy-import guard keeps working.
+      - name: Install transcription test deps
+        run: |
+          python -m pip install fastapi 'uvicorn[standard]' pydantic \
+            python-multipart yt-dlp numpy
+          python -m pip install -r services/transcription/requirements-dev.txt
+
+      - name: Transcription service tests (incl. protocol contract tests)
+        run: python -m pytest services/transcription/tests -q
+
+      - name: Install document-editor deps
+        run: |
+          python -m pip install -r services/document-editor/requirements.txt
+          python -m pip install -r services/document-editor/requirements-dev.txt
+
+      - name: Document-editor service tests (incl. protocol contract tests)
+        run: python -m pytest services/document-editor/tests -q
+
+      # api/adeu is deprecated but retained pending an owner decision
+      # (ADR-004 §4); its preservation suite keeps the compatibility path
+      # honest until that decision is made.
+      - name: api/adeu preservation tests
+        run: python -m pytest api/adeu/tests -q
+
+  document-converter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/document-converter
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install (locked)
+        run: npm ci
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Tests (incl. EvidenceDocument schema validation via ajv)
+        run: npm test
+
+  # Boots the required Local services from the committed compose files and
+  # drives one document through the single ingestion path end-to-end:
+  # lifecycle tx (source version + outbox) → worker → extract → index →
+  # cited, permission-scoped query. The app image itself is built by
+  # docker.yml; its routes are covered by jest — this job gates the pipeline.
+  compose-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Start deterministic embeddings stub
+        run: |
+          node scripts/ci/fake-embeddings-server.mjs 8099 &
+          sleep 1
+          curl -fsS -X POST localhost:8099/v1/embeddings \
+            -H 'Content-Type: application/json' -d '{"input":"probe"}' > /dev/null
+
+      - name: Build service images
+        run: >-
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml build
+          migrate worker document-converter transcription document-editor
+
+      - name: Boot the stack
+        env:
+          CLERK_SECRET_KEY: sk_test_ci_placeholder
+        run: >-
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+          db migrate worker document-converter transcription document-editor
+
+      - name: Wait for service health
+        run: |
+          wait_healthy() {
+            for i in $(seq 1 60); do
+              if curl -fsS "$1" > /dev/null 2>&1; then echo "healthy: $1"; return 0; fi
+              sleep 5
+            done
+            echo "::error::$1 never became healthy"; return 1
+          }
+          wait_healthy http://localhost:8020/healthz   # worker
+          wait_healthy http://localhost:8002/health    # document-converter
+          wait_healthy http://localhost:8000/health    # transcription
+          wait_healthy http://localhost:8003/health    # document-editor
+          curl -fsS http://localhost:8020/readyz
+
+      - name: End-to-end ingestion + cited query
+        env:
+          DATABASE_URL: postgresql://postgres:password@localhost:5433/pdr_ai_v2
+          # Document URLs must be fetchable by the worker CONTAINER, which
+          # reaches the runner-hosted stub via host-gateway.
+          E2E_DOC_BASE: http://host.docker.internal:8099
+        run: pnpm exec tsx scripts/ci/e2e-ingest.mjs
+
+      - name: Dump logs on failure
+        if: failure()
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml logs --tail 200
 
   # ── Migration gates ──────────────────────────────────────────────────────
   # Needs no database and no secrets, so it is safe on fork PRs. Proves the
@@ -403,8 +516,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # `ignoreBuildErrors`/`ignoreDuringBuilds` are gone from next.config
+      # (ADR-006): this build fails on type or lint errors.
       - name: Build web app
         run: pnpm --filter @launchstack/web build
 
-      - name: Build @launchstack/core
-        run: pnpm --filter @launchstack/core build
+      - name: Build publishable engine packages
+        run: >-
+          pnpm --filter @launchstack/protocol
+          --filter @launchstack/evidence
+          --filter @launchstack/application
+          --filter @launchstack/adapters
+          --filter @launchstack/core build

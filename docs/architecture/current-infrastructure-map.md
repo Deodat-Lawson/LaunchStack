@@ -1,8 +1,20 @@
 # Current Infrastructure Code Map
 
-**Status:** Current-state inventory  
+**Status:** Historical inventory (superseded in part — see note below)  
 **Snapshot:** `3dcb60e` (`codex/infrastructure-code-map`)  
 **Reviewed:** 2026-07-24
+
+> **⚠️ Snapshot note.** This map predates ADR-003 and ADR-004. Since it was
+> written: the transactional outbox (`pdr_ai_v2_event_outbox`) and
+> `apps/worker` now exist
+> ([ADR-003](./ADR-003-transactional-outbox-and-worker.md)); `sidecar/`,
+> `services/ocr-router`, and `services/ocr-worker` were consolidated into
+> `services/transcription`, `services/document-editor`, and
+> `services/document-converter`
+> ([ADR-004](./ADR-004-compute-service-consolidation.md)); and the sidecar
+> `/embed`//`/rerank`//`/extract-entities` contracts described below were
+> confirmed to have **never been implemented** and were removed. Treat the
+> rest of this document as the historical baseline those ADRs changed.
 
 This document maps what is in the repository today. It distinguishes observed
 runtime wiring from the intended architecture described elsewhere in the repo.

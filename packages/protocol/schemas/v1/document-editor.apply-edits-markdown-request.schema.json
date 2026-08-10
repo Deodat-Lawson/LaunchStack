@@ -1,0 +1,48 @@
+{
+  "$ref": "#/definitions/document-editor.apply-edits-markdown-request",
+  "definitions": {
+    "document-editor.apply-edits-markdown-request": {
+      "type": "object",
+      "properties": {
+        "edits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "target_text": {
+                "type": "string"
+              },
+              "new_text": {
+                "type": "string"
+              },
+              "comment": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "target_text",
+              "new_text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "highlight_only": {
+          "type": "boolean",
+          "default": false
+        },
+        "include_index": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "edits"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

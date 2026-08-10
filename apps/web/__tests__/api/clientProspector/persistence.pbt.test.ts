@@ -64,19 +64,19 @@ function createInMemoryClientProspectorStore() {
             const now = new Date();
 
             const row: StoredRow = {
-                id: values.id as string,
-                companyId: values.companyId as bigint,
-                userId: values.userId as string,
-                status: (values.status as ProspectorJobStatus | undefined) ?? "queued",
-                query: values.query as string,
-                companyContext: values.companyContext as string,
-                locationLat: values.locationLat as number,
-                locationLng: values.locationLng as number,
-                radius: (values.radius as number | undefined) ?? 5000,
+                id: values.id!,
+                companyId: values.companyId!,
+                userId: values.userId!,
+                status: (values.status) ?? "queued",
+                query: values.query!,
+                companyContext: values.companyContext!,
+                locationLat: values.locationLat!,
+                locationLng: values.locationLng!,
+                radius: (values.radius) ?? 5000,
                 categories: (values.categories as string[] | undefined) ?? null,
                 results: (values.results as ProspectResult[] | undefined) ?? null,
                 errorMessage: (values.errorMessage as string | undefined) ?? null,
-                createdAt: (values.createdAt as Date | undefined) ?? now,
+                createdAt: (values.createdAt) ?? now,
                 completedAt: (values.completedAt as Date | undefined) ?? null,
                 updatedAt: (values.updatedAt as Date | undefined) ?? null,
             };
@@ -96,11 +96,11 @@ function createInMemoryClientProspectorStore() {
                 ...patch,
                 categories:
                     patch.categories !== undefined
-                        ? ((patch.categories as string[] | null) ?? null)
+                        ? ((patch.categories) ?? null)
                         : current.categories,
                 results:
                     patch.results !== undefined
-                        ? ((patch.results as ProspectResult[] | null) ?? null)
+                        ? ((patch.results) ?? null)
                         : current.results,
                 updatedAt: patch.updatedAt ?? new Date(),
             };

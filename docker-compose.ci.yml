@@ -1,0 +1,25 @@
+# CI overlay for the Compose smoke test (.github/workflows/CI.yml).
+# Points the worker's embeddings at the runner-hosted deterministic stub
+# (scripts/ci/fake-embeddings-server.mjs) and supplies placeholder secrets —
+# nothing here is a production configuration.
+#
+# Usage (CI):
+#   docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d \
+#     db migrate worker document-converter transcription document-editor
+
+services:
+  worker:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      # Non-chat capability fallback endpoint → the CI embeddings stub.
+      AI_BASE_URL: http://host.docker.internal:8099/v1
+      AI_API_KEY: ci-fake-embeddings
+      # Satisfies env validation; never called in the smoke.
+      CHAT_BASE_URL: https://ci.invalid/v1
+      CHAT_API_KEY: chat-ci-placeholder
+      CLERK_SECRET_KEY: sk_test_ci_placeholder
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2kuY2xlcmsuYWNjb3VudHMuZGV2JA==
+      INNGEST_EVENT_KEY: ci-placeholder
+      # The smoke ingests data: URLs — no object storage involved.
+      NEXT_PUBLIC_STORAGE_PROVIDER: database

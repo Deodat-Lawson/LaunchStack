@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db/index";
 import { eq, and, gt, desc, sql } from "drizzle-orm";
 import { document, documentContextChunks } from "@launchstack/core/db/schema";
-import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
+import { predictiveDocumentAnalysisResults, users } from "~/server/db/schema";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { inngest } from "~/server/inngest/client";
 import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation";
 import { CACHE_CONFIG, ERROR_TYPES, HTTP_STATUS, type AnalysisType } from "~/lib/constants";
@@ -32,14 +34,44 @@ export async function POST(request: Request) {
     const typedAnalysisType: AnalysisType = analysisType ?? "general";
     const typedIncludeRelatedDocs = includeRelatedDocs ?? false;
 
-    // Verify document exists before reading a cache entry.
+    // Require a Clerk session and resolve the caller's active company so
+    // cross-tenant documents come back as 404 (same convention as the
+    // non-streaming route).
+    const { userId } = await auth();
+    if (!userId) {
+        return NextResponse.json(
+            { success: false, message: "Unauthorized" },
+            { status: HTTP_STATUS.UNAUTHORIZED }
+        );
+    }
+
+    const [userInfo] = await db
+        .select({ id: users.id, companyId: users.companyId })
+        .from(users)
+        .where(eq(users.userId, userId));
+
+    if (!userInfo) {
+        return NextResponse.json(
+            { success: false, message: "Unauthorized" },
+            { status: HTTP_STATUS.UNAUTHORIZED }
+        );
+    }
+
+    const activeCompanyId = await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId);
+
+    // Verify document exists and belongs to the caller's company before
+    // reading a cache entry.
     const docCheck = await db
-        .select({ id: document.id, currentVersionId: document.currentVersionId })
+        .select({
+            id: document.id,
+            companyId: document.companyId,
+            currentVersionId: document.currentVersionId,
+        })
         .from(document)
         .where(eq(document.id, documentId))
         .limit(1);
 
-    if (docCheck.length === 0) {
+    if (docCheck.length === 0 || BigInt(docCheck[0]!.companyId) !== activeCompanyId) {
         return NextResponse.json(
             { success: false, message: "Document not found.", errorType: ERROR_TYPES.VALIDATION },
             { status: HTTP_STATUS.NOT_FOUND }

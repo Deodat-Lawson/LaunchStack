@@ -47,8 +47,8 @@ function encodeWavFromChannel(samples: Float32Array, sampleRate: number): Blob {
   // Float [-1, 1] to signed 16-bit. Clamping first matters: samples can exceed
   // the nominal range after resampling, and wrapping would sound like clicks.
   let offset = 44;
-  for (let i = 0; i < samples.length; i++) {
-    const clamped = Math.max(-1, Math.min(1, samples[i]!));
+  for (const sample of samples) {
+    const clamped = Math.max(-1, Math.min(1, sample));
     view.setInt16(offset, clamped < 0 ? clamped * 0x8000 : clamped * 0x7fff, true);
     offset += bytesPerSample;
   }

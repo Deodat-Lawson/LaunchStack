@@ -71,16 +71,16 @@ function createInMemoryTrendSearchStore() {
             const now = new Date();
 
             const row: StoredRow = {
-                id: values.id as string,
-                companyId: values.companyId as bigint,
-                userId: values.userId as string,
-                status: (values.status as TrendSearchJobStatus | undefined) ?? "queued",
-                query: values.query as string,
-                companyContext: values.companyContext as string,
+                id: values.id!,
+                companyId: values.companyId!,
+                userId: values.userId!,
+                status: (values.status) ?? "queued",
+                query: values.query!,
+                companyContext: values.companyContext!,
                 categories: (values.categories as SearchCategory[] | undefined) ?? null,
                 results: (values.results as SearchResult[] | undefined) ?? null,
                 errorMessage: (values.errorMessage as string | undefined) ?? null,
-                createdAt: (values.createdAt as Date | undefined) ?? now,
+                createdAt: (values.createdAt) ?? now,
                 completedAt: (values.completedAt as Date | undefined) ?? null,
                 updatedAt: (values.updatedAt as Date | undefined) ?? null,
             };
@@ -100,11 +100,11 @@ function createInMemoryTrendSearchStore() {
                 ...patch,
                 categories:
                     patch.categories !== undefined
-                        ? ((patch.categories as SearchCategory[] | null) ?? null)
+                        ? ((patch.categories) ?? null)
                         : current.categories,
                 results:
                     patch.results !== undefined
-                        ? ((patch.results as SearchResult[] | null) ?? null)
+                        ? ((patch.results) ?? null)
                         : current.results,
                 updatedAt: patch.updatedAt ?? new Date(),
             };

@@ -106,10 +106,10 @@ export function DocumentNotesPanel({
       title: note.title ?? "",
       rich: (note.contentRich as JSONContent | null) ?? null,
       text: note.contentMarkdown ?? note.content ?? "",
-      tags: (note.tags as string[] | null) ?? [],
+      tags: (note.tags) ?? [],
       anchorQuote: anchor?.quote?.exact ?? "",
       anchorPage: primaryPageOfAnchor(anchor)?.toString() ?? "",
-      anchorQuads: Array.isArray(primary?.quads) ? primary!.quads! : [],
+      anchorQuads: Array.isArray(primary?.quads) ? primary.quads : [],
     });
     setError(null);
   };

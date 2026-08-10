@@ -8,7 +8,7 @@
  * - owner/repo
  */
 export function parseGitHubUrl(url: string): { owner: string; repo: string } | null {
-  let value = url.trim();
+  const value = url.trim();
 
   const patterns = [
     /^https?:\/\/(?:www\.)?github\.com\/([^/]+)\/([^/]+?)(?:\/|$|\.git$)/i,

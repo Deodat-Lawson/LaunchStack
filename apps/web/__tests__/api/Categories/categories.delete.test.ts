@@ -18,6 +18,10 @@ jest.mock("~/server/db/index", () => ({
   },
 }));
 
+// Typed handle for swapping the mocked query-builder methods. No real drizzle
+// query is built here — `delete` is a jest.fn the route under test calls.
+const dbMock = db as unknown as { select: jest.Mock; delete: jest.Mock };
+
 describe("DELETE /api/Categories/DeleteCategory", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -45,7 +49,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
     const mockDelete = jest.fn().mockReturnValue({
       where: jest.fn().mockResolvedValue(undefined),
     });
-    (db.delete as jest.Mock) = mockDelete;
+    dbMock.delete = mockDelete;
 
     const request = new Request("http://localhost/api/Categories/DeleteCategory", {
       method: "DELETE",
@@ -82,7 +86,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
     const mockDelete = jest.fn().mockReturnValue({
       where: jest.fn().mockResolvedValue(undefined),
     });
-    (db.delete as jest.Mock) = mockDelete;
+    dbMock.delete = mockDelete;
 
     const request = new Request("http://localhost/api/Categories/DeleteCategory", {
       method: "DELETE",
@@ -262,7 +266,7 @@ describe("DELETE /api/Categories/DeleteCategory", () => {
       const mockDelete = jest.fn().mockReturnValue({
         where: jest.fn().mockRejectedValue(new Error("Delete failed")),
       });
-      (db.delete as jest.Mock) = mockDelete;
+      dbMock.delete = mockDelete;
 
       const request = new Request("http://localhost/api/Categories/DeleteCategory", {
         method: "DELETE",

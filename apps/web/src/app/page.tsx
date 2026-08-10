@@ -3,15 +3,17 @@ import React from 'react';
 import { LandingClient } from './_components/LandingClient';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://launchstack.app';
-const GITHUB_REPO = 'https://github.com/Deodat-Lawson/pdr_ai_v2';
+const GITHUB_REPO = 'https://github.com/Deodat-Lawson/LaunchStack';
 
 export const metadata: Metadata = {
   title: 'Launchstack — The Open-Source Launch Stack for Tech Founders',
   description:
-    'Launchstack is the open-source second brain for founders. Turn scattered user calls, investor notes, product specs, and Gmail threads into a living knowledge graph — ask anything, get cited answers.',
+    'Launchstack is the open-source second brain for founders. Turn uploaded docs, recordings, and repository imports into a living knowledge graph — ask anything, get cited answers.',
   alternates: { canonical: '/' },
 };
 
+// Truthful SoftwareApplication facts only — no ratings, review counts, or
+// aggregate metrics (ADR-006 §4).
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -20,7 +22,7 @@ const jsonLd = {
   applicationSubCategory: 'DeveloperApplication',
   operatingSystem: 'Web',
   description:
-    'Launchstack is a free, open-source AI platform that turns scattered docs, recordings, and messages into a cited knowledge graph. Self-host with your own API keys.',
+    'Launchstack is a free, open-source AI platform that turns uploaded documents, recordings, and repository imports into a cited knowledge graph. Self-host with your own API keys.',
   url: SITE_URL,
   downloadUrl: GITHUB_REPO,
   offers: {
@@ -31,9 +33,8 @@ const jsonLd = {
   },
   creator: { '@type': 'Organization', name: 'Launchstack', url: SITE_URL },
   featureList:
-    'Document RAG, Predictive Analysis, Contract Review, AI Q&A, Employee Management, Analytics Dashboard, Marketing Pipeline, Self-Hosting',
+    'Document RAG with cited answers, Audio/video transcription, OCR document conversion, Predictive document analysis, DOCX redlining, Marketing pipeline, Self-hosting',
   screenshot: `${SITE_URL}/og-image.png`,
-  softwareVersion: '2.0',
   license: 'https://www.apache.org/licenses/LICENSE-2.0',
 };
 
@@ -57,7 +58,7 @@ const faqLd = {
       name: 'What is Launchstack?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Launchstack is a free, open-source AI platform for tech founders. It turns scattered documents, recordings, and messages into a cited knowledge graph you can query in plain English.',
+        text: 'Launchstack is a free, open-source AI platform for tech founders. It turns uploaded documents, recordings, and repository imports into a cited knowledge graph you can query in plain English.',
       },
     },
     {
@@ -73,7 +74,7 @@ const faqLd = {
       name: 'Can I self-host Launchstack?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely. Deploy Launchstack on Vercel, Docker, or any server you control. Bring your own API keys and maintain full control over your data.',
+        text: 'Absolutely. Run the full stack with Docker Compose on any server you control, or deploy the web app to Vercel with a separately hosted worker for ingestion. Bring your own API keys and maintain full control over your data.',
       },
     },
   ],

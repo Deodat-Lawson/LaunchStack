@@ -1059,6 +1059,10 @@ export function MarketingPipelineWorkspace({
     publishing,
     publishResult,
     publishPost,
+    evaluating,
+    evalResult,
+    evalError,
+    evaluatePost,
     pipelineSteps,
     thinkingLog,
     generationStartTime,
@@ -1076,60 +1080,6 @@ export function MarketingPipelineWorkspace({
   } = useMarketingPipelineController({ debug });
 
   const hasSessions = sessions.length > 0;
-
-  // ── Quality evaluation (LLM-as-judge; raw scores, no rewrite) ──
-  interface EvalScore {
-    criterion: string;
-    score: number;
-    rationale: string;
-  }
-  interface EvalResult {
-    overall: number;
-    summary: string;
-    scores: EvalScore[];
-    judgeModel: string;
-    rubricVersion: string;
-  }
-  const [evaluating, setEvaluating] = useState(false);
-  const [evalResult, setEvalResult] = useState<EvalResult | null>(null);
-  const [evalError, setEvalError] = useState<string | null>(null);
-
-  const evaluatePost = async () => {
-    if (!editableMessage.trim() || !result) return;
-    setEvaluating(true);
-    setEvalError(null);
-    setEvalResult(null);
-    try {
-      const res = await fetch("/api/marketing-pipeline/evaluate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: editableMessage,
-          platform: result.platform,
-          // Score against the exact context generation used (not a re-derivation).
-          companyContext: result.pipelineStages?.companyContext,
-          prompt: result.normalizedInput?.prompt,
-          dna: result.pipelineStages?.dna,
-          brandVoice: result.pipelineStages?.brandVoice,
-          targetPersona: result.pipelineStages?.targetPersona,
-        }),
-      });
-      const json = (await res.json()) as {
-        success?: boolean;
-        data?: EvalResult;
-        message?: string;
-        error?: string;
-      };
-      if (!res.ok || !json.success || !json.data) {
-        throw new Error(json.error ?? json.message ?? "Evaluation failed");
-      }
-      setEvalResult(json.data);
-    } catch (err) {
-      setEvalError(err instanceof Error ? err.message : "Evaluation failed");
-    } finally {
-      setEvaluating(false);
-    }
-  };
 
   const handleNewCampaignClick = () => {
     if (result) {
@@ -1536,7 +1486,7 @@ export function MarketingPipelineWorkspace({
                               alignItems: "center",
                               gap: 8,
                               fontSize: 13,
-                              color: "#b91c1c",
+                              color: "var(--text-error, #b91c1c)",
                             }}
                           >
                             <AlertCircle size={15} />
@@ -1574,7 +1524,7 @@ export function MarketingPipelineWorkspace({
                                 <Gauge size={16} />
                                 Quality score
                               </span>
-                              <span style={{ fontSize: 22, fontWeight: 800, color: "#000" }}>
+                              <span style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary, #111)" }}>
                                 {Math.round(evalResult.overall)}
                                 <span
                                   style={{
@@ -1624,7 +1574,7 @@ export function MarketingPipelineWorkspace({
                                   </span>
                                   <span
                                     className="mono"
-                                    style={{ textAlign: "right", fontSize: 11, color: "#000" }}
+                                    style={{ textAlign: "right", fontSize: 11, color: "var(--text-primary, #111)" }}
                                   >
                                     {Math.round(s.score)}
                                   </span>
@@ -1664,7 +1614,9 @@ export function MarketingPipelineWorkspace({
                               alignItems: "center",
                               gap: 8,
                               fontSize: 13,
-                              color: publishResult.success ? "#15803d" : "#b91c1c",
+                              color: publishResult.success
+                                ? "var(--text-success, #15803d)"
+                                : "var(--text-error, #b91c1c)",
                             }}
                           >
                             {publishResult.success ? (

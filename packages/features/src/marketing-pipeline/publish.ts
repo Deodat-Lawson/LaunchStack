@@ -110,6 +110,11 @@ async function publishToReddit(message: string, title?: string): Promise<Publish
     }
 
     try {
+        // NOTE: a client_credentials (app-only) token cannot submit posts —
+        // Reddit requires user-context OAuth for /api/submit. Operators must
+        // supply a user-context token via the existing env vars; with an
+        // app-only token Reddit responds 200 with a USER_REQUIRED error in the
+        // JSON body, which the error handling below surfaces.
         const authString = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
         const tokenRes = await fetch('https://www.reddit.com/api/v1/access_token', {
             method: 'POST',
@@ -146,7 +151,27 @@ async function publishToReddit(message: string, title?: string): Promise<Publish
             return { success: false, platform: 'reddit', error: `Reddit submit failed: ${submitRes.status}` };
         }
 
-        return { success: true, platform: 'reddit' };
+        // Reddit's /api/submit returns HTTP 200 even for failed submissions,
+        // reporting problems in the body's `json.errors` array — so a 200 must
+        // be inspected before it can be treated as success.
+        const submitData = await submitRes.json().catch(() => null) as {
+            json?: {
+                errors?: unknown[];
+                data?: { url?: string };
+            };
+        } | null;
+        const submitErrors = submitData?.json?.errors ?? [];
+        if (submitErrors.length > 0) {
+            const first = submitErrors[0];
+            const detail = Array.isArray(first) ? first.join(': ') : String(first);
+            return { success: false, platform: 'reddit', error: `Reddit submit failed: ${detail}` };
+        }
+
+        return {
+            success: true,
+            platform: 'reddit',
+            postUrl: submitData?.json?.data?.url,
+        };
     } catch (err) {
         return { success: false, platform: 'reddit', error: err instanceof Error ? err.message : 'Unknown error' };
     }
@@ -197,7 +222,9 @@ async function publishToLinkedIn(message: string): Promise<PublishResult> {
 
     // The versioned Posts API requires a `LinkedIn-Version` header in YYYYMM
     // form. Override via env when LinkedIn rolls its supported window.
-    const apiVersion = process.env.LINKEDIN_API_VERSION ?? '202405';
+    // LinkedIn only supports each version for ~12 months, so this default
+    // must be rotated within that window as new versions ship.
+    const apiVersion = process.env.LINKEDIN_API_VERSION ?? '202506';
 
     try {
         const personId = await resolveLinkedInPersonId(token);
@@ -235,6 +262,16 @@ async function publishToLinkedIn(message: string): Promise<PublishResult> {
 
         if (!postRes.ok) {
             const errText = await postRes.text();
+            // 426 (or an explicit version complaint) means the requested
+            // `LinkedIn-Version` fell out of LinkedIn's ~12-month support
+            // window — point operators at the env override.
+            if (postRes.status === 426 || /version/i.test(errText)) {
+                return {
+                    success: false,
+                    platform: 'linkedin',
+                    error: `LinkedIn rejected API version ${apiVersion} (HTTP ${postRes.status}). Set LINKEDIN_API_VERSION to a currently supported YYYYMM version (LinkedIn supports each version for ~12 months). Details: ${errText}`,
+                };
+            }
             return { success: false, platform: 'linkedin', error: `LinkedIn post failed: ${postRes.status} ${errText}` };
         }
 

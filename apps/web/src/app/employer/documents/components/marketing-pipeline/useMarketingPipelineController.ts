@@ -31,6 +31,34 @@ function buildInitialSteps(): PipelineStepState[] {
   }));
 }
 
+/**
+ * Reddit renders Markdown natively; every other platform gets plain text.
+ * Used by both the copy flow and publishPost so what we publish matches what
+ * the user would have pasted.
+ */
+function toPlatformText(
+  platform: MarketingSession["platform"] | undefined,
+  text: string,
+): string {
+  return platform === "reddit" ? text : markdownToPlainText(text);
+}
+
+/* ── Quality evaluation (LLM-as-judge; raw scores, no rewrite) ── */
+
+export interface EvalScore {
+  criterion: string;
+  score: number;
+  rationale: string;
+}
+
+export interface EvalResult {
+  overall: number;
+  summary: string;
+  scores: EvalScore[];
+  judgeModel: string;
+  rubricVersion: string;
+}
+
 export function useMarketingPipelineController(options: { debug: boolean }) {
   const { debug } = options;
   const router = useRouter();
@@ -60,9 +88,26 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     postUrl?: string;
     error?: string;
   } | null>(null);
+  const [evaluating, setEvaluating] = useState(false);
+  const [evalResult, setEvalResult] = useState<EvalResult | null>(null);
+  const [evalError, setEvalError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  // Bumped whenever the displayed post changes (variant selection, session
+  // switch, pipeline rerun, message edit). In-flight evaluate/publish
+  // responses check it so they never paint feedback for a previous post.
+  const postFeedbackEpochRef = useRef(0);
 
   const selectedPlatform = PLATFORM_OPTIONS.find((option) => option.id === platform) ?? null;
+
+  /** Clear per-post feedback (eval scores + publish status) on post change. */
+  const resetPostFeedback = useCallback(() => {
+    postFeedbackEpochRef.current += 1;
+    setEvaluating(false);
+    setEvalResult(null);
+    setEvalError(null);
+    setPublishing(false);
+    setPublishResult(null);
+  }, []);
 
   const applySession = useCallback((session: MarketingSession) => {
     setPlatform(session.platform);
@@ -78,7 +123,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     setContentType(session.contentType);
     setError(null);
     setShowRewriteSheet(false);
-  }, []);
+    resetPostFeedback();
+  }, [resetPostFeedback]);
 
   useEffect(() => {
     try {
@@ -182,8 +228,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     setToneOverride(undefined);
     setTargetAudience("");
     setContentType(undefined);
-    setPublishResult(null);
-  }, []);
+    resetPostFeedback();
+  }, [resetPostFeedback]);
 
   const handleRewriteComplete = useCallback(
     (rewrittenText: string) => {
@@ -204,6 +250,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
       setActiveVariantId(variantId);
       setEditableMessage(rewrittenText);
       setShowRewriteSheet(false);
+      resetPostFeedback();
 
       if (activeSessionId) {
         setSessions((prev) =>
@@ -215,12 +262,12 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         );
       }
     },
-    [activeSessionId],
+    [activeSessionId, resetPostFeedback],
   );
 
   const selectVariant = useCallback(
     (variantId: string) => {
-      setPublishResult(null);
+      resetPostFeedback();
       setActiveVariantId(variantId);
       setMessageVariants((prev) => {
         const variant = prev.find((v) => v.id === variantId);
@@ -228,7 +275,19 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         return prev;
       });
     },
-    [],
+    [resetPostFeedback],
+  );
+
+  /**
+   * Message edits go through this wrapper (instead of the raw setter) so any
+   * eval scores or publish status from the previous text are cleared.
+   */
+  const handleEditableMessageChange = useCallback(
+    (next: string) => {
+      resetPostFeedback();
+      setEditableMessage(next);
+    },
+    [resetPostFeedback],
   );
 
   const handleRewriteWorkflowStateChange = useCallback(
@@ -266,9 +325,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
   const handleCopy = useCallback(async () => {
     if (!editableMessage.trim()) return;
     try {
-      const targetPlatform = result?.platform;
-      const plainText =
-        targetPlatform === "reddit" ? editableMessage : markdownToPlainText(editableMessage);
+      const plainText = toPlatformText(result?.platform, editableMessage);
       const html = markdownToHtml(editableMessage);
 
       if (typeof navigator.clipboard.write === "function") {
@@ -332,7 +389,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
   const runPipeline = useCallback(async () => {
     setError(null);
     setResult(null);
-    setPublishResult(null);
+    resetPostFeedback();
 
     if (!platform) {
       setError("Choose a platform to continue.");
@@ -505,7 +562,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
       // Pipeline steps are intentionally NOT cleared here so the stepper
       // remains visible after generation completes (transparency).
     }
-  }, [activeSessionId, contentType, debug, handleSSEEvent, platform, platformMeta, prompt, targetAudience, toneOverride]);
+  }, [activeSessionId, contentType, debug, handleSSEEvent, platform, platformMeta, prompt, resetPostFeedback, targetAudience, toneOverride]);
 
   const cancelPipeline = useCallback(() => {
     abortRef.current?.abort();
@@ -519,10 +576,13 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     // Publish the currently-visible/edited post to its platform. Reddit posts
     // default to the user's own profile (`u_me`) server-side; no subreddit is
     // required here. Uses the existing /api/marketing-pipeline/publish route.
+    // Non-Reddit platforms don't render Markdown, so publish the same
+    // plain-text conversion the copy flow produces.
     const targetPlatform = result?.platform ?? platform;
-    const message = editableMessage.trim();
+    const message = toPlatformText(targetPlatform, editableMessage).trim();
     if (!targetPlatform || !message) return;
 
+    const epoch = postFeedbackEpochRef.current;
     setPublishing(true);
     setPublishResult(null);
     try {
@@ -537,6 +597,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         message?: string;
         error?: string;
       };
+      if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
       if (response.ok && payload.success) {
         setPublishResult({ success: true, postUrl: payload.postUrl });
       } else {
@@ -546,14 +607,58 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         });
       }
     } catch (err) {
+      if (epoch !== postFeedbackEpochRef.current) return;
       setPublishResult({
         success: false,
         error: err instanceof Error ? err.message : "Network error while publishing.",
       });
     } finally {
-      setPublishing(false);
+      if (epoch === postFeedbackEpochRef.current) setPublishing(false);
     }
   }, [editableMessage, platform, result?.platform]);
+
+  const evaluatePost = useCallback(async () => {
+    // Score the currently-visible/edited post with the LLM-as-judge pipeline
+    // (raw scores, no rewrite), against the exact context generation used.
+    if (!editableMessage.trim() || !result) return;
+
+    const epoch = postFeedbackEpochRef.current;
+    setEvaluating(true);
+    setEvalError(null);
+    setEvalResult(null);
+    try {
+      const res = await fetch("/api/marketing-pipeline/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: editableMessage,
+          platform: result.platform,
+          // Score against the exact context generation used (not a re-derivation).
+          companyContext: result.pipelineStages?.companyContext,
+          prompt: result.normalizedInput?.prompt,
+          dna: result.pipelineStages?.dna,
+          brandVoice: result.pipelineStages?.brandVoice,
+          targetPersona: result.pipelineStages?.targetPersona,
+        }),
+      });
+      const json = (await res.json()) as {
+        success?: boolean;
+        data?: EvalResult;
+        message?: string;
+        error?: string;
+      };
+      if (!res.ok || !json.success || !json.data) {
+        throw new Error(json.error ?? json.message ?? "Evaluation failed");
+      }
+      if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
+      setEvalResult(json.data);
+    } catch (err) {
+      if (epoch !== postFeedbackEpochRef.current) return;
+      setEvalError(err instanceof Error ? err.message : "Evaluation failed");
+    } finally {
+      if (epoch === postFeedbackEpochRef.current) setEvaluating(false);
+    }
+  }, [editableMessage, result]);
 
   const activeSession = sessions.find((session) => session.id === activeSessionId) ?? null;
 
@@ -568,7 +673,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     result,
     setResult,
     editableMessage,
-    setEditableMessage,
+    // Message edits must clear stale eval/publish feedback — expose the
+    // wrapping handler under the setter's name so callers stay unchanged.
+    setEditableMessage: handleEditableMessageChange,
     showRewriteSheet,
     setShowRewriteSheet,
     copySuccess,
@@ -604,5 +711,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     publishing,
     publishResult,
     publishPost,
+    evaluating,
+    evalResult,
+    evalError,
+    evaluatePost,
   };
 }

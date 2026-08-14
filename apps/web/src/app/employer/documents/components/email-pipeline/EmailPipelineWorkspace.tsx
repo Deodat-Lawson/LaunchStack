@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // Import from submodules, never the package barrel: the barrel re-exports
 // db.ts / generator.ts, which pull `getDb` and the LLM client into the client
@@ -36,11 +36,35 @@ import type {
  * Deterministic validation runs locally on every keystroke, so a user sees a
  * bad address or an unresolved token before spending an LLM call — and a real
  * send stays behind an explicit, separate confirmation.
+ *
+ * Dry runs use the legacy /api/email-pipeline/send endpoint. A real send goes
+ * through the staged campaign lifecycle instead:
+ *   1. POST /api/email-campaigns             — create + generate + review
+ *   2. (confirm) the SERVER-generated template is shown for review
+ *   3. POST /api/email-campaigns/{id}/approve — clear that exact version
+ *   4. POST /api/email-campaigns/{id}/send    — deliver, idempotency-keyed
  */
 
-type Stage = "idle" | "generating" | "dry-running" | "sending";
+type Stage = "idle" | "generating" | "dry-running" | "preparing" | "sending";
 
 const SENDER_PLACEHOLDER = "Your Company, 1 Example St, City";
+
+/**
+ * A campaign staged for real delivery: the server-side ids to approve/send,
+ * the template exactly as the server generated it (which is what will be
+ * delivered — not the local seed/preview), and one idempotency key per user
+ * action, reused on retry so a repeat can never double-send.
+ */
+interface PendingSend {
+    campaignId: number;
+    templateVersionId: number;
+    template: EmailTemplate;
+    review: TemplateReview | null;
+    recipientCount: number;
+    /** Fingerprint of the recipient list the campaign was created with. */
+    recipientsKey: string;
+    idempotencyKey: string;
+}
 
 function IssueList({ issues }: { issues: ValidationIssue[] }) {
     if (issues.length === 0) return null;
@@ -101,6 +125,7 @@ export function EmailPipelineWorkspace() {
     const [error, setError] = useState<string | null>(null);
     const [previewIndex, setPreviewIndex] = useState(0);
     const [confirmSend, setConfirmSend] = useState(false);
+    const [pendingSend, setPendingSend] = useState<PendingSend | null>(null);
 
     /* ── recipients: parsed and validated locally, no server round-trip ── */
 
@@ -148,12 +173,25 @@ export function EmailPipelineWorkspace() {
         hasErrors(templateIssues) ||
         (preview ? hasErrors(preview.issues) : true);
 
+    // A staged campaign froze its audience at creation; if the recipient list
+    // changes before the user confirms, drop the staged send so they re-stage
+    // with the current list instead of silently mailing the old one.
+    const recipientsKey = useMemo(
+        () => recipients.map(r => r.email).join("\n"),
+        [recipients]
+    );
+    useEffect(() => {
+        setPendingSend(prev =>
+            prev && prev.recipientsKey !== recipientsKey ? null : prev
+        );
+    }, [recipientsKey]);
+
     /* ── server calls ── */
 
-    async function post(path: string, body: unknown) {
-        const res = await fetch(`/api/email-pipeline/${path}`, {
+    async function postJson(path: string, body: unknown, headers?: Record<string, string>) {
+        const res = await fetch(path, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", ...headers },
             body: JSON.stringify(body),
         });
         const payload = (await res.json()) as {
@@ -165,6 +203,10 @@ export function EmailPipelineWorkspace() {
             throw new Error(payload.message ?? `Request failed (${res.status})`);
         }
         return payload.data;
+    }
+
+    async function post(path: string, body: unknown) {
+        return postJson(`/api/email-pipeline/${path}`, body);
     }
 
     async function handleGenerate() {
@@ -185,21 +227,113 @@ export function EmailPipelineWorkspace() {
         }
     }
 
-    async function handleRun(mode: "dry_run" | "send") {
-        setStage(mode === "send" ? "sending" : "dry-running");
+    async function handleDryRun() {
+        setStage("dry-running");
         setError(null);
         try {
             const data = (await post("send", {
                 name: campaignName.trim() || "Outreach",
                 goal: goal.trim() || undefined,
                 recipients,
-                mode,
+                mode: "dry_run",
             })) as { results: SendResult[]; mode: string };
             setResults(data.results);
             setSentMode(data.mode);
+        } catch (e) {
+            setError(e instanceof Error ? e.message : "The dry run failed.");
+        } finally {
+            setStage("idle");
+        }
+    }
+
+    /**
+     * Stage 1 of a real send: create the campaign server-side (which generates
+     * and reviews template version 1) and hold its ids. Nothing is delivered
+     * until the user confirms the server's template in the panel below.
+     */
+    async function handlePrepareSend() {
+        setStage("preparing");
+        setError(null);
+        setResults(null);
+        try {
+            const data = (await postJson("/api/email-campaigns", {
+                name: campaignName.trim() || "Outreach",
+                goal: goal.trim() || undefined,
+                recipients,
+            })) as {
+                campaignId: number;
+                templateVersionId: number;
+                template: EmailTemplate;
+                review: TemplateReview | null;
+            };
+            setPendingSend({
+                campaignId: data.campaignId,
+                templateVersionId: data.templateVersionId,
+                template: data.template,
+                review: data.review ?? null,
+                recipientCount: recipients.length,
+                recipientsKey,
+                // Generated once per user action; retries of the confirm step
+                // reuse it so the server replays instead of re-delivering.
+                idempotencyKey: crypto.randomUUID(),
+            });
+        } catch (e) {
+            setError(
+                `Creating the campaign failed: ${e instanceof Error ? e.message : "unknown error"}`
+            );
+        } finally {
+            setStage("idle");
+        }
+    }
+
+    /** Stages 2 + 3 of a real send: approve the previewed version, then deliver. */
+    async function handleConfirmSend() {
+        if (!pendingSend) return;
+        setStage("sending");
+        setError(null);
+        try {
+            try {
+                await postJson(
+                    `/api/email-campaigns/${pendingSend.campaignId}/approve`,
+                    {
+                        templateVersionId: pendingSend.templateVersionId,
+                        // A non-passing review may still be sent, but only on the
+                        // record — the verdict is shown in the confirm panel.
+                        ...(pendingSend.review && pendingSend.review.verdict !== "pass"
+                            ? {
+                                  overrideReason:
+                                      "Confirmed from the outreach workspace despite the review verdict.",
+                              }
+                            : {}),
+                    }
+                );
+            } catch (e) {
+                throw new Error(
+                    `Approving the template failed: ${e instanceof Error ? e.message : "unknown error"}`
+                );
+            }
+
+            let data: { results: SendResult[]; mode: string };
+            try {
+                data = (await postJson(
+                    `/api/email-campaigns/${pendingSend.campaignId}/send`,
+                    { mode: "send" },
+                    { "Idempotency-Key": pendingSend.idempotencyKey }
+                )) as { results: SendResult[]; mode: string };
+            } catch (e) {
+                throw new Error(
+                    `Sending failed: ${e instanceof Error ? e.message : "unknown error"}. Retrying will not double-send.`
+                );
+            }
+
+            setResults(data.results);
+            setSentMode(data.mode);
+            setPendingSend(null);
             setConfirmSend(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "The run failed.");
+            // Keep pendingSend so a retry reuses the same campaign and
+            // idempotency key.
+            setError(e instanceof Error ? e.message : "The send failed.");
         } finally {
             setStage("idle");
         }
@@ -434,7 +568,7 @@ export function EmailPipelineWorkspace() {
                 <div className="flex flex-wrap items-center gap-3">
                     <button
                         type="button"
-                        onClick={() => handleRun("dry_run")}
+                        onClick={handleDryRun}
                         disabled={busy || blocked}
                         className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
                     >
@@ -453,11 +587,13 @@ export function EmailPipelineWorkspace() {
 
                     <button
                         type="button"
-                        onClick={() => handleRun("send")}
-                        disabled={busy || blocked || !confirmSend}
+                        onClick={handlePrepareSend}
+                        disabled={busy || blocked || !confirmSend || pendingSend !== null}
                         className="rounded-md bg-red-700 px-3 py-2 text-sm font-medium text-white disabled:opacity-40"
                     >
-                        {stage === "sending" ? "Sending…" : `Send to ${recipients.length}`}
+                        {stage === "preparing"
+                            ? "Preparing…"
+                            : `Send to ${recipients.length}`}
                     </button>
                 </div>
 
@@ -466,6 +602,58 @@ export function EmailPipelineWorkspace() {
                         Sending is disabled until there is a valid template, at least one valid
                         recipient, and a preview with no errors.
                     </p>
+                )}
+
+                {pendingSend && (
+                    <div className="mt-4 rounded-md border border-amber-300 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950">
+                        <p className="text-sm font-medium">
+                            Confirm send — this is the template the server generated and will
+                            deliver (it may differ from the local preview above)
+                        </p>
+                        <p className="mt-2 text-sm">
+                            <span className="text-neutral-500">Subject:</span>{" "}
+                            {pendingSend.template.subject}
+                        </p>
+                        <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap rounded-md bg-white p-3 text-sm dark:bg-neutral-950">
+                            {pendingSend.template.body}
+                        </pre>
+                        {pendingSend.review && (
+                            <p className="mt-2 text-sm">
+                                Review verdict:{" "}
+                                <span
+                                    className={
+                                        pendingSend.review.verdict === "pass"
+                                            ? "text-green-700 dark:text-green-400"
+                                            : "text-amber-700 dark:text-amber-400"
+                                    }
+                                >
+                                    {pendingSend.review.verdict}
+                                </span>
+                                {pendingSend.review.verdict !== "pass" &&
+                                    " — confirming records an override"}
+                            </p>
+                        )}
+                        <div className="mt-3 flex flex-wrap items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={handleConfirmSend}
+                                disabled={busy}
+                                className="rounded-md bg-red-700 px-3 py-2 text-sm font-medium text-white disabled:opacity-40"
+                            >
+                                {stage === "sending"
+                                    ? "Sending…"
+                                    : `Confirm send to ${pendingSend.recipientCount}`}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setPendingSend(null)}
+                                disabled={busy}
+                                className="rounded-md border border-neutral-300 px-3 py-2 text-sm disabled:opacity-50 dark:border-neutral-700"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
                 )}
 
                 {results && (

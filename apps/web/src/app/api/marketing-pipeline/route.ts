@@ -6,6 +6,20 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
+/**
+ * Thrown from the onProgress callback when the client has disconnected.
+ * `runMarketingPipeline` does not take an AbortSignal, but progress events are
+ * emitted throughout the run, so throwing here stops the pipeline at the next
+ * emission instead of letting it run (and bill LLM calls) to completion for
+ * nobody.
+ */
+class ClientDisconnectedError extends Error {
+    constructor() {
+        super("Client disconnected — marketing pipeline aborted");
+        this.name = "ClientDisconnectedError";
+    }
+}
+
 export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
@@ -73,11 +87,27 @@ export async function POST(request: Request) {
                         companyId,
                         input: validation.data,
                         debug,
-                        onProgress: (progressEvent) => send(progressEvent),
+                        onProgress: (progressEvent) => {
+                            if (request.signal.aborted) {
+                                throw new ClientDisconnectedError();
+                            }
+                            send(progressEvent);
+                        },
                     });
 
                     send({ type: "result", success: true, data: result });
                 } catch (error) {
+                    // A disconnect abort is an expected outcome, not a pipeline
+                    // failure: skip the error event (muted anyway) and the
+                    // error-level log, and let `finally` close the stream.
+                    if (
+                        error instanceof ClientDisconnectedError ||
+                        request.signal.aborted
+                    ) {
+                        console.log("[marketing-pipeline] client disconnected — pipeline stopped early");
+                        return;
+                    }
+
                     const errMessage = error instanceof Error ? error.message : String(error);
                     console.error("[marketing-pipeline] POST error:", error);
 

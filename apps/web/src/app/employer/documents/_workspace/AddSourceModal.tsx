@@ -56,7 +56,6 @@ export interface AddSourceModalProps {
 interface UploadResult {
   url: string;
   provider: "s3" | "database";
-  pathname?: string;
 }
 
 // Uses the provider-agnostic /api/upload-local route so uploads work whether the
@@ -73,12 +72,10 @@ async function uploadFileToStorage(file: File): Promise<UploadResult> {
   const data = (await res.json()) as {
     url: string;
     provider?: "s3" | "database";
-    pathname?: string;
   };
   return {
     url: data.url,
     provider: data.provider === "s3" ? "s3" : "database",
-    pathname: data.pathname,
   };
 }
 
@@ -86,7 +83,6 @@ async function registerDocument(params: {
   file: File;
   url: string;
   provider: "s3" | "database";
-  pathname?: string;
   category: string;
 }): Promise<void> {
   const body: Record<string, unknown> = {
@@ -97,11 +93,6 @@ async function registerDocument(params: {
     mimeType: params.file.type || "application/octet-stream",
     originalFilename: params.file.name,
   };
-  // S3 registrations also carry the object key so /api/files can resolve them.
-  if (params.provider === "s3" && params.pathname) {
-    body.storageProvider = "s3";
-    body.storagePathname = params.pathname;
-  }
   const res = await fetch("/api/uploadDocument", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -128,7 +119,6 @@ async function uploadAndRegisterAll(params: {
         file,
         url: up.url,
         provider: up.provider,
-        pathname: up.pathname,
         category: params.category,
       });
       successes++;
@@ -584,7 +574,8 @@ interface FilesPanelProps {
 const FILE_ACCEPT: Record<FilesPanelProps["kind"], string> = {
   files: "",
   audio: "audio/*",
-  video: "video/*",
+  // Ingestion only accepts MP4 — don't let the picker offer formats that fail.
+  video: "video/mp4,.mp4",
 };
 
 const KIND_COPY: Record<
@@ -605,7 +596,7 @@ const KIND_COPY: Record<
   },
   video: {
     title: "Drop video files",
-    hint: "MP4, MOV, WEBM — transcribed automatically",
+    hint: "MP4 only — transcribed automatically",
     browse: "Browse video",
     IconEl: SOURCE_META.video.Icon,
   },
@@ -642,18 +633,21 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
         category,
         onProgress: (done, total) => setProgress({ done, total }),
       });
-      if (result.successes > 0) {
-        toast.success(
-          `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${category}"`,
-        );
-      }
       if (result.errors.length > 0) {
         toast.error(`${result.errors.length} file${result.errors.length !== 1 ? "s" : ""} failed`, {
           description: result.errors.slice(0, 2).join(" · "),
         });
       }
-      setStaged([]);
-      onUploaded();
+      // Only clear the staged list (and close via onUploaded) when something
+      // actually made it up — if every file failed, keep the list so the user
+      // can retry without re-picking.
+      if (result.successes > 0) {
+        toast.success(
+          `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${category}"`,
+        );
+        setStaged([]);
+        onUploaded();
+      }
     } finally {
       setProgress(null);
     }
@@ -932,19 +926,21 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
         category: destName.trim(),
         onProgress: (done, total) => setProgress({ done, total }),
       });
-      if (result.successes > 0) {
-        toast.success(
-          `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${destName.trim()}"`,
-        );
-      }
       if (result.errors.length > 0) {
         toast.error(
           `${result.errors.length} file${result.errors.length !== 1 ? "s" : ""} failed`,
           { description: result.errors.slice(0, 2).join(" · ") },
         );
       }
-      setPicked(null);
-      onUploaded();
+      // Same retry affordance as FilesPanel: keep the picked folder staged
+      // when nothing uploaded so the user can retry.
+      if (result.successes > 0) {
+        toast.success(
+          `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${destName.trim()}"`,
+        );
+        setPicked(null);
+        onUploaded();
+      }
     } finally {
       setBusy(false);
       setProgress(null);
@@ -1235,7 +1231,6 @@ function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
         file,
         url: up.url,
         provider: up.provider,
-        pathname: up.pathname,
         category,
       });
       toast.success(`"${safeTitle}" added to "${category}"`);

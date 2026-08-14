@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "node:fs";
 import path from "node:path";
+import { z } from "zod";
 
 import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
 import {
@@ -20,6 +21,21 @@ export const maxDuration = 60;
 
 const REFERENCE_PLATFORMS = new Set(["x", "linkedin", "reddit"]);
 
+const EvaluateBodySchema = z.object({
+  message: z.string().min(1).max(5000),
+  platform: z.string().max(40).optional(),
+  // Context the generator actually used (from the pipeline result). When
+  // present we score against these exact facts instead of re-deriving.
+  companyContext: z.string().max(20000).optional(),
+  prompt: z.string().max(2000).optional(),
+  dna: z.unknown().optional(),
+  brandVoice: z.unknown().optional(),
+  targetPersona: z.unknown().optional(),
+});
+
+/** Platforms we already warned about — one missing-reference warning each. */
+const warnedMissingReferences = new Set<string>();
+
 /** Load the platform reference md (blank until curated) — empty if not found. */
 function loadReferenceMarkdown(platform: string): string {
   if (!REFERENCE_PLATFORMS.has(platform)) return "";
@@ -34,6 +50,12 @@ function loadReferenceMarkdown(platform: string): string {
     } catch {
       /* try next candidate */
     }
+  }
+  if (!warnedMissingReferences.has(platform)) {
+    warnedMissingReferences.add(platform);
+    console.warn(
+      `[marketing-pipeline/evaluate] reference markdown for "${platform}" not found (looked in ${candidates.join(", ")}); scoring without a reference. In standalone builds this requires the outputFileTracingIncludes entry in next.config.ts.`,
+    );
   }
   return "";
 }
@@ -63,19 +85,9 @@ export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    let body: {
-      message?: string;
-      platform?: string;
-      // Context the generator actually used (from the pipeline result). When
-      // present we score against these exact facts instead of re-deriving.
-      companyContext?: string;
-      prompt?: string;
-      dna?: unknown;
-      brandVoice?: unknown;
-      targetPersona?: unknown;
-    };
+    let raw: unknown;
     try {
-      body = (await request.json()) as typeof body;
+      raw = (await request.json()) as unknown;
     } catch {
       return NextResponse.json(
         { success: false, message: "Invalid JSON body" },
@@ -83,7 +95,20 @@ export async function POST(request: Request) {
       );
     }
 
-    const message = (body.message ?? "").trim();
+    const parsed = EvaluateBodySchema.safeParse(raw);
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid input",
+          errors: parsed.error.flatten(),
+        },
+        { status: 400 },
+      );
+    }
+    const body = parsed.data;
+
+    const message = body.message.trim();
     const platform = body.platform ?? "";
     if (!message) {
       return NextResponse.json(
@@ -98,6 +123,12 @@ export async function POST(request: Request) {
       platform === "linkedin" || platform === "reddit" ? platform : "x";
 
     const companyId = Number(ctx.data.companyId);
+    if (Number.isNaN(companyId)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid company ID" },
+        { status: 400 },
+      );
+    }
 
     // Prefer the exact knowledge context the generator used (passed from the
     // pipeline result). Fall back to rebuilding it with the ORIGINAL campaign

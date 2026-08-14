@@ -48,13 +48,50 @@ function findRepoRoot(start: string): string {
     );
 }
 
-/** Repository root, resolved from this file's location. */
-export const REPO_ROOT = findRepoRoot(__dirname);
-export const COMPANIES_DIR = join(REPO_ROOT, "fixtures", "companies");
-export const EVALUATIONS_DIR = join(REPO_ROOT, "fixtures", "evaluations");
+/**
+ * Directory to start the repo-root walk from.
+ *
+ * Under CJS (jest via babel, tsc CJS output) `__dirname` is defined and gives
+ * the compiled module's directory. Under ESM it is not defined, and
+ * `import.meta` cannot appear here because babel's CJS transform fails to
+ * parse it — so fall back to `process.cwd()`, which sits inside the repo in
+ * every supported invocation (tests, scripts) and from which `findRepoRoot`
+ * walks up to the same root.
+ */
+function moduleDir(): string {
+    return typeof __dirname !== "undefined" ? __dirname : process.cwd();
+}
+
+let cachedRepoRoot: string | null = null;
+
+/**
+ * Repository root, resolved lazily on first use (no filesystem work at import
+ * time) and memoized.
+ */
+export function getRepoRoot(): string {
+    cachedRepoRoot ??= findRepoRoot(moduleDir());
+    return cachedRepoRoot;
+}
+
+export function getCompaniesDir(): string {
+    return join(getRepoRoot(), "fixtures", "companies");
+}
+
+export function getEvaluationsDir(): string {
+    return join(getRepoRoot(), "fixtures", "evaluations");
+}
 
 function readJson(path: string): unknown {
-    return JSON.parse(readFileSync(path, "utf8")) as unknown;
+    const raw = readFileSync(path, "utf8");
+    try {
+        return JSON.parse(raw) as unknown;
+    } catch (err) {
+        throw new Error(
+            `[eval-loader] failed to parse JSON at ${path}: ${
+                err instanceof Error ? err.message : String(err)
+            }`
+        );
+    }
 }
 
 function listDirs(dir: string): string[] {
@@ -75,7 +112,7 @@ function walkFiles(dir: string, ext: string): string[] {
 
 /** Company ids present on disk. */
 export function listCompanyIds(): string[] {
-    return listDirs(COMPANIES_DIR).sort();
+    return listDirs(getCompaniesDir()).sort();
 }
 
 /**
@@ -83,7 +120,7 @@ export function listCompanyIds(): string[] {
  * message if validation fails, so test output identifies the offender.
  */
 export function loadCompanyFixture(companyId: string): CompanyFixture {
-    const path = join(COMPANIES_DIR, companyId, "company.json");
+    const path = join(getCompaniesDir(), companyId, "company.json");
     if (!existsSync(path)) {
         throw new Error(`[eval-loader] no company.json for "${companyId}" at ${path}`);
     }
@@ -107,7 +144,7 @@ export function loadAllCompanyFixtures(): CompanyFixture[] {
  * `company.json` provenance entries (POSIX-style, e.g. `docs/product-guide.md`).
  */
 export function loadCompanyDocuments(companyId: string): Record<string, string> {
-    const base = join(COMPANIES_DIR, companyId);
+    const base = join(getCompaniesDir(), companyId);
     const out: Record<string, string> = {};
     for (const full of walkFiles(base, ".md")) {
         const rel = relative(base, full).split(sep).join("/");
@@ -121,7 +158,7 @@ export function loadCompanyDocuments(companyId: string): Record<string, string> 
  * single fixture object or an array of them.
  */
 export function loadEvalFixtures(): Fixture[] {
-    const files = walkFiles(EVALUATIONS_DIR, ".json").sort();
+    const files = walkFiles(getEvaluationsDir(), ".json").sort();
     const out: Fixture[] = [];
     for (const path of files) {
         const raw = readJson(path);

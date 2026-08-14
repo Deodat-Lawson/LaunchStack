@@ -7,9 +7,10 @@
  * (scores only — never rewrites). Writes machine-readable results and prints a
  * per-post + per-criterion summary — the raw-score core of the benchmark.
  *
- * Run (calls the OpenAI API, so it's gated):
+ * Run (calls the LLM judge API, so it's gated):
  *   RUN_LLM_BENCHMARK=1 pnpm --filter @launchstack/web test -- campaign-benchmark
- * (OPENAI_API_KEY is read from the repo-root .env.)
+ * (CHAT_API_KEY / AI_API_KEY — or GOOGLE_AI_API_KEY for the default Gemini
+ * endpoint — is read from the repo-root .env; see benchmark/setup.ts.)
  */
 import fs from "node:fs";
 import path from "node:path";

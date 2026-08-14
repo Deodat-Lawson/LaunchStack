@@ -15,11 +15,10 @@ benchmark/
     judge.ts         scorePost() — LLM judge, no rewrite, version-pinned
   references/
     x.md             platform standard fed to the judge (good/bad examples)
-    linkedin.md      (fill these — see TODO-member.md)
+    linkedin.md
     reddit.md
-  setup.ts           configureJudgeFromEnv() — wires the judge to OPENAI_API_KEY
+  setup.ts           configureJudgeFromEnv() — wires the judge to the chat-model env vars
   candidates.sample.json   posts to score (replace with real outputs)
-  TODO-lead.md / TODO-member.md   work split
 ```
 
 ## How it works
@@ -56,7 +55,7 @@ benchmark/
 
 ## Run it
 
-The judge calls the OpenAI API, so it's gated behind `RUN_LLM_BENCHMARK`:
+The judge calls the LLM API, so it's gated behind `RUN_LLM_BENCHMARK`:
 
 ```bash
 # PowerShell
@@ -66,12 +65,13 @@ $env:RUN_LLM_BENCHMARK=1; pnpm --filter @launchstack/web test -- campaign-benchm
 RUN_LLM_BENCHMARK=1 pnpm --filter @launchstack/web test -- campaign-benchmark
 ```
 
-`OPENAI_API_KEY` is read from the repo-root `.env`. Without `RUN_LLM_BENCHMARK`
-the suite is skipped, so normal CI never pays for API calls.
+`CHAT_API_KEY` / `AI_API_KEY` (or `GOOGLE_AI_API_KEY` for the default Gemini
+endpoint) is read from the repo-root `.env` — see `setup.ts`. Without
+`RUN_LLM_BENCHMARK` the suite is skipped, so normal CI never pays for API calls.
 
 ## Next steps (not in this slice)
 
 - Fill `references/*.md`  and add real candidates / wire Mode-A generation.
-- Judge stability: N-sample median + recorded variance ( TODO-l Phase 1).
+- Judge stability: N-sample median + recorded variance.
 - Cost/token axis + Score-vs-cost frontier chart (deferred for now).
-- Baseline + regression CI gate (lead, TODO-l Phase 3).
+- Baseline + regression CI gate.

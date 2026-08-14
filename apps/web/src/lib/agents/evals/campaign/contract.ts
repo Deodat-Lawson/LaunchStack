@@ -1,35 +1,11 @@
 /**
  * Campaign Planner evaluation suite — contract types.
  *
- * ─────────────────────────────────────────────────────────────────────────────
- * PROVISIONAL CONTRACT — READ BEFORE DEPENDING ON THIS FILE
- * ─────────────────────────────────────────────────────────────────────────────
- * The task brief for this suite referred to `schema/index.ts` as a pre-existing
- * "frozen contract" owned by the lead. It does not exist in this repository and
- * never has: `git log --all -S` finds no commit in the entire history that
- * introduces `CriterionScore`, `CompanyFixtureSchema`, or any of the other five
- * named types, and no branch contains a top-level `schema/` directory.
- *
- * This file is therefore a RECONSTRUCTION, authored so the rest of the suite has
- * something to build against. It is deliberately modelled as a forward-compatible
- * evolution of the framework that DOES exist at `apps/web/src/lib/agents/evals/types.ts`:
- *
- *     EvalScenario  ≈ Fixture
- *     EvalExpected  ≈ ExpectedConstraints
- *     EvalMetric    ≈ CriterionScore
- *
- * `CompanyFixture`, `CriterionSpec`, `DeterministicAssertion` and `EvalContext`
- * have no counterpart in the existing framework and are new here.
- *
- * When the real contract surfaces, expect this to happen:
- *   - JSON fixtures under `fixtures/` port cleanly (they are plain data).
- *   - Reference posts under `references/` are unaffected (plain Markdown).
- *   - Assertion *implementations* port with light edits.
- *   - Assertion *type signatures* and this file are the churn surface.
- *
- * See `docs/issues/eval-suite-frozen-contract-missing.md` for the scoped gap
- * write-up and the exact reconciliation steps.
- * ─────────────────────────────────────────────────────────────────────────────
+ * This file is the contract the eval suite builds against, reconstructed as a
+ * forward-compatible evolution of `apps/web/src/lib/agents/evals/types.ts`
+ * (EvalScenario ≈ Fixture, EvalExpected ≈ ExpectedConstraints,
+ * EvalMetric ≈ CriterionScore). See
+ * `docs/issues/eval-suite-frozen-contract-missing.md` for background.
  */
 
 import { z } from "zod";
@@ -257,7 +233,7 @@ export type CompanyFixture = z.infer<typeof CompanyFixtureSchema>;
  * audience fit, campaign-goal alignment, platform-native tone) are
  * deliberately absent — those belong to the LLM judge, not this suite.
  */
-export const ExpectedConstraintsSchema = z.object({
+const ExpectedConstraintsBaseSchema = z.object({
     /* Length */
     minChars: z.number().int().positive().nullable().default(null),
     maxChars: z.number().int().positive().nullable().default(null),
@@ -306,6 +282,10 @@ export const ExpectedConstraintsSchema = z.object({
     /* Structure */
     forbidEmptyOutput: z.boolean().default(true),
 });
+export const ExpectedConstraintsSchema = ExpectedConstraintsBaseSchema.refine(
+    v => !(v.requireUrl && v.forbidUrl),
+    { message: "requireUrl and forbidUrl cannot both be true" }
+);
 export type ExpectedConstraints = z.infer<typeof ExpectedConstraintsSchema>;
 
 /* ──────────────────────────────────────────────────────────────
@@ -501,8 +481,9 @@ export function fail(
 }
 
 /**
- * Build a partially-credited CriterionScore. `passed` is derived from whether
- * the ratio cleared `threshold` (default: everything must pass).
+ * Build a partially-credited CriterionScore. `score` is `hits / total`
+ * (clamped to 0..1), and `passed` is true only when every sub-check passed
+ * (score reaches 1).
  */
 export function partial(
     assertion: DeterministicAssertion,

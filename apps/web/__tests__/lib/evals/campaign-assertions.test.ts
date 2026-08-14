@@ -108,6 +108,54 @@ describe("every assertion returns a valid CriterionScore", () => {
     });
 });
 
+describe("regression: the exemplar good post passes the full default run", () => {
+    const fixture = fixtureById("meridian-linkedin-interchange-proof");
+    const context = buildEvalContext(fixture);
+
+    it("GOOD_MERIDIAN_LINKEDIN passes every default assertion", () => {
+        const result = runFixture(fixture, out("linkedin", GOOD_MERIDIAN_LINKEDIN), context);
+        expect(result.errors).toEqual([]);
+        expect(
+            result.blocking.map(b => `${b.criterionId}: ${b.explanation}`)
+        ).toEqual([]);
+        expect(result.passed).toBe(true);
+    });
+
+    it("recognises customer names from proof points and documents", () => {
+        const score = getAssertion("no-hallucinated-product-names")!.run(
+            out("linkedin", "Cedar Ridge Terminal Railway runs Meridian Dispatch."),
+            context,
+            {}
+        );
+        expect(score.passed).toBe(true);
+    });
+});
+
+describe("platform-matches-fixture", () => {
+    const fixture = fixtureById("meridian-x-dwell-metric");
+    const context = buildEvalContext(fixture);
+
+    it("passes when output and fixture agree", () => {
+        const score = getAssertion("platform-matches-fixture")!.run(
+            out("x", "Anything."),
+            context,
+            {}
+        );
+        expect(score.passed).toBe(true);
+    });
+
+    it("fails when the output declares a different platform", () => {
+        const score = getAssertion("platform-matches-fixture")!.run(
+            out("linkedin", "Anything."),
+            context,
+            {}
+        );
+        expect(score.passed).toBe(false);
+        expect(score.explanation).toContain("linkedin");
+        expect(score.explanation).toContain("x");
+    });
+});
+
 describe("length assertions", () => {
     const fixture = fixtureById("meridian-x-dwell-metric");
     const context = buildEvalContext(fixture);
@@ -136,6 +184,49 @@ describe("length assertions", () => {
             maxChars: 3,
         });
         expect(score.passed).toBe(false);
+    });
+
+    it("uses the fixture platform's limit even when the output is mislabeled", () => {
+        // 500 chars is fine for LinkedIn but not for the fixture's platform (x).
+        const score = getAssertion("platform-char-limit")!.run(
+            out("linkedin", "a".repeat(500)),
+            context,
+            {}
+        );
+        expect(score.passed).toBe(false);
+        expect(score.explanation).toContain("280");
+    });
+
+    it("counts graphemes, not UTF-16 code units", () => {
+        // 200 astral emoji = 400 UTF-16 units but 200 user-perceived chars.
+        const bluesky = fixtureById("tilde-bluesky-sparse-degradation");
+        const blueskyCtx = buildEvalContext(bluesky);
+        const score = getAssertion("platform-char-limit")!.run(
+            out("bluesky", "😀".repeat(200)),
+            blueskyCtx,
+            {}
+        );
+        expect(score.passed).toBe(true);
+    });
+
+    it("weights each URL as 23 chars on X", () => {
+        const longUrl = `https://example.com/${"a".repeat(400)}`;
+        const score = getAssertion("platform-char-limit")!.run(
+            out("x", `Cedar Ridge results here: ${longUrl}`),
+            context,
+            {}
+        );
+        expect(score.passed).toBe(true);
+    });
+
+    it("enforces a minimum character count from the fixture", () => {
+        // meridian-linkedin-interchange-proof declares minChars: 200.
+        const li = fixtureById("meridian-linkedin-interchange-proof");
+        const liCtx = buildEvalContext(li);
+        const a = getAssertion("min-chars")!;
+        expect(a.run(out("linkedin", "Too short."), liCtx, {}).passed).toBe(false);
+        expect(a.run(out("linkedin", GOOD_MERIDIAN_LINKEDIN), liCtx, {}).passed).toBe(true);
+        expect(a.run(out("linkedin", "abcdef"), liCtx, { minChars: 5 }).passed).toBe(true);
     });
 });
 
@@ -252,6 +343,33 @@ describe("formatting assertions", () => {
         );
         expect(score.passed).toBe(false);
     });
+
+    it("uses the fixture platform's hashtag ceiling even when the output is mislabeled", () => {
+        // Force the platform path (no explicit maxHashtags) on a reddit fixture:
+        // reddit allows 0 hashtags, linkedin would allow 3.
+        const noExplicit: Fixture = {
+            ...fixture,
+            expected: { ...fixture.expected, maxHashtags: null },
+        };
+        const ctx = buildEvalContext(noExplicit);
+        const score = getAssertion("hashtag-limit")!.run(
+            out("linkedin", "Notes from the field. #fieldrecording"),
+            ctx,
+            {}
+        );
+        expect(score.passed).toBe(false);
+    });
+
+    it("skips the empty-output check when forbidEmptyOutput is false", () => {
+        const relaxed: Fixture = {
+            ...fixture,
+            expected: { ...fixture.expected, forbidEmptyOutput: false },
+        };
+        const ctx = buildEvalContext(relaxed);
+        const score = getAssertion("non-empty-output")!.run(out("reddit"), ctx, {});
+        expect(score.passed).toBe(true);
+        expect(score.explanation).toContain("skipped");
+    });
 });
 
 describe("content assertions", () => {
@@ -349,6 +467,39 @@ describe("grounding assertions", () => {
         );
         expect(score.passed).toBe(false);
         expect(score.evidence.length).toBeGreaterThan(0);
+    });
+
+    it("scores unsupported numerics over unique values, so repetition cannot raise the score", () => {
+        const score = getAssertion("no-unsupported-numerics")!.run(
+            out("linkedin", "900 railroads. Yes, 900 of them. Really: 900."),
+            context,
+            {}
+        );
+        expect(score.passed).toBe(false);
+        expect(score.score).toBe(0);
+    });
+
+    it("fails facts listed in mustNotUseFactIds when they are asserted", () => {
+        // msr-f-103 (crew headcount) is in this fixture's mustNotUseFactIds.
+        const score = getAssertion("must-not-use-facts")!.run(
+            out(
+                "linkedin",
+                "Cedar Ridge reduced crew headcount by 20% after deploying Meridian Dispatch."
+            ),
+            context,
+            {}
+        );
+        expect(score.passed).toBe(false);
+        expect(score.explanation).toContain("msr-f-103");
+    });
+
+    it("passes must-not-use-facts when no forbidden fact is asserted", () => {
+        const score = getAssertion("must-not-use-facts")!.run(
+            out("linkedin", GOOD_MERIDIAN_LINKEDIN),
+            context,
+            {}
+        );
+        expect(score.passed).toBe(true);
     });
 
     it("accepts numerics that appear in source documents", () => {

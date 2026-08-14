@@ -1,9 +1,9 @@
 export { ASSERTIONS, ASSERTION_REGISTRY, getAssertion } from "./assertions";
 export {
-    COMPANIES_DIR,
-    EVALUATIONS_DIR,
-    REPO_ROOT,
     buildEvalContext,
+    getCompaniesDir,
+    getEvaluationsDir,
+    getRepoRoot,
     indexFacts,
     listCompanyIds,
     loadAllCompanyFixtures,

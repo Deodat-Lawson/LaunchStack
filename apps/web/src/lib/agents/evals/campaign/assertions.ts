@@ -33,6 +33,7 @@ import {
     countHashtags,
     countQuestions,
     countUrls,
+    effectiveCharLength,
     extractNumerics,
     extractProductNameCandidates,
     findSuperlatives,
@@ -112,12 +113,38 @@ export const nonEmptyOutput: DeterministicAssertion = {
     id: "non-empty-output",
     description: "Output contains at least one variant with non-whitespace content.",
     category: "structure",
-    run(output, _context, _params): CriterionScore {
+    run(output, context, _params): CriterionScore {
+        if (context.fixture?.expected?.forbidEmptyOutput === false) {
+            return pass(this, this.id, "Empty-output check disabled; skipped.");
+        }
         const m = messages(output);
         if (m.length === 0) {
             return fail(this, this.id, "Output contained no non-empty variant messages.");
         }
         return pass(this, this.id, `${m.length} non-empty variant(s).`);
+    },
+};
+
+export const platformMatchesFixture: DeterministicAssertion = {
+    id: "platform-matches-fixture",
+    description: "The output's declared platform matches the fixture's platform.",
+    category: "structure",
+    run(output, context, _params): CriterionScore {
+        const fixturePlatform = context.fixture?.platform;
+        const outputPlatform = output?.platform;
+        if (!fixturePlatform) return pass(this, this.id, "Fixture declares no platform; skipped.");
+        if (!outputPlatform) {
+            return pass(this, this.id, "Output declares no platform; nothing to compare.");
+        }
+        if (outputPlatform !== fixturePlatform) {
+            return fail(
+                this,
+                this.id,
+                `Output platform "${outputPlatform}" differs from fixture platform "${fixturePlatform}".`,
+                { evidence: [`output=${outputPlatform}`, `fixture=${fixturePlatform}`] }
+            );
+        }
+        return pass(this, this.id, `Output platform matches fixture ("${fixturePlatform}").`);
     },
 };
 
@@ -132,9 +159,12 @@ export const maxChars: DeterministicAssertion = {
     run(output, context, params): CriterionScore {
         const limit = num(params, "maxChars") ?? context.fixture?.expected?.maxChars ?? null;
         if (limit === null) return pass(this, this.id, "No maxChars configured; skipped.");
+        const platform = context.fixture?.platform ?? output?.platform;
         const m = messages(output);
         if (m.length === 0) return fail(this, this.id, "No output to measure.");
-        const over = m.map((t, i) => ({ i, len: t.length })).filter(x => x.len > limit);
+        const over = m
+            .map((t, i) => ({ i, len: effectiveCharLength(t, platform) }))
+            .filter(x => x.len > limit);
         if (over.length === 0) {
             return pass(this, this.id, `All ${m.length} variant(s) within ${limit} chars.`);
         }
@@ -151,6 +181,35 @@ export const maxChars: DeterministicAssertion = {
     },
 };
 
+export const minChars: DeterministicAssertion = {
+    id: "min-chars",
+    description: "Every variant is at or above a minimum character count.",
+    category: "length",
+    run(output, context, params): CriterionScore {
+        const limit = num(params, "minChars") ?? context.fixture?.expected?.minChars ?? null;
+        if (limit === null) return pass(this, this.id, "No minChars configured; skipped.");
+        const platform = context.fixture?.platform ?? output?.platform;
+        const m = messages(output);
+        if (m.length === 0) return fail(this, this.id, "No output to measure.");
+        const under = m
+            .map((t, i) => ({ i, len: effectiveCharLength(t, platform) }))
+            .filter(x => x.len < limit);
+        if (under.length === 0) {
+            return pass(this, this.id, `All ${m.length} variant(s) at or above ${limit} chars.`);
+        }
+        return partial(
+            this,
+            this.id,
+            m.length - under.length,
+            m.length,
+            `${under.length}/${m.length} variant(s) shorter than ${limit} chars: ${under
+                .map(o => `#${o.i}=${o.len}`)
+                .join(", ")}.`,
+            { evidence: under.map(o => `variant ${o.i}: ${o.len} chars`) }
+        );
+    },
+};
+
 export const platformCharLimit: DeterministicAssertion = {
     id: "platform-char-limit",
     description: "Every variant respects the documented character limit for its platform.",
@@ -159,12 +218,15 @@ export const platformCharLimit: DeterministicAssertion = {
         if (context.fixture?.expected?.enforcePlatformCharLimit === false) {
             return pass(this, this.id, "Platform char-limit enforcement disabled; skipped.");
         }
-        const platform = output?.platform ?? context.fixture?.platform;
+        // Fixture-first: a mislabeled output must not switch the limit.
+        const platform = context.fixture?.platform ?? output?.platform;
         const limit = platform ? PLATFORM_CHAR_LIMITS[platform] : undefined;
         if (!limit) return pass(this, this.id, "Unknown platform; skipped.");
         const m = messages(output);
         if (m.length === 0) return fail(this, this.id, "No output to measure.");
-        const over = m.map((t, i) => ({ i, len: t.length })).filter(x => x.len > limit);
+        const over = m
+            .map((t, i) => ({ i, len: effectiveCharLength(t, platform) }))
+            .filter(x => x.len > limit);
         if (over.length === 0) {
             return pass(this, this.id, `All variant(s) within the ${platform} limit of ${limit}.`);
         }
@@ -332,7 +394,8 @@ export const hashtagLimit: DeterministicAssertion = {
     run(output, context, params): CriterionScore {
         const explicit =
             num(params, "maxHashtags") ?? context.fixture?.expected?.maxHashtags ?? null;
-        const platform = output?.platform ?? context.fixture?.platform;
+        // Fixture-first: a mislabeled output must not switch the limit.
+        const platform = context.fixture?.platform ?? output?.platform;
         const usePlatform =
             explicit === null && context.fixture?.expected?.enforcePlatformHashtagLimit === true;
         const limit =
@@ -594,6 +657,33 @@ export const mustUseSupportedFacts: DeterministicAssertion = {
     },
 };
 
+export const mustNotUseFacts: DeterministicAssertion = {
+    id: "must-not-use-facts",
+    description: "No fact listed in mustNotUseFactIds is asserted in the output.",
+    category: "grounding",
+    run(output, context, _params): CriterionScore {
+        const ids = context.fixture?.expected?.mustNotUseFactIds ?? [];
+        if (ids.length === 0) return pass(this, this.id, "No forbidden fact ids; skipped.");
+        const text = joined(output);
+        if (!text) return pass(this, this.id, "No output; no forbidden facts asserted.");
+        const asserted: SourceFact[] = [];
+        for (const id of ids) {
+            const f = context.factsById?.[id];
+            if (!f) continue; // unknown id cannot be asserted
+            if (factAsserted(text, f, 0.6)) asserted.push(f);
+        }
+        if (asserted.length === 0) {
+            return pass(this, this.id, `None of ${ids.length} forbidden fact(s) asserted.`);
+        }
+        return fail(
+            this,
+            this.id,
+            `Forbidden fact(s) asserted: ${asserted.map(f => f.id).join(", ")}.`,
+            { evidence: asserted.map(f => `${f.id}: ${f.statement}`) }
+        );
+    },
+};
+
 export const noContradictoryFacts: DeterministicAssertion = {
     id: "no-contradictory-facts",
     description: "Output asserts no fact that conflicts with the fixture documents.",
@@ -654,12 +744,18 @@ export const noUnsupportedNumerics: DeterministicAssertion = {
         }
         const text = joined(output);
         if (!text) return pass(this, this.id, "No output; no numeric claims.");
-        const used = extractNumerics(text);
+        // Score over UNIQUE numerics: repeating an unsupported number must not
+        // raise the score.
+        const used = [...new Set(extractNumerics(text))];
         if (used.length === 0) return pass(this, this.id, "No numeric claims present.");
         const allowed = supportedNumerics(context);
-        const unsupported = [...new Set(used)].filter(n => !allowed.has(n));
+        const unsupported = used.filter(n => !allowed.has(n));
         if (unsupported.length === 0) {
-            return pass(this, this.id, `All ${used.length} numeric claim(s) traceable to source.`);
+            return pass(
+                this,
+                this.id,
+                `All ${used.length} distinct numeric claim(s) traceable to source.`
+            );
         }
         return partial(
             this,
@@ -714,11 +810,31 @@ export const noHallucinatedProductNames: DeterministicAssertion = {
                 .map(s => normalize(s))
         );
 
+        // Names the fixture itself uses are recognised too: customer names in
+        // proof points ("Cedar Ridge Terminal Railway"), audiences, markets and
+        // anything appearing verbatim in the fixture documents.
+        const recognisedTexts = [
+            ...(context.company?.proofPoints ?? []),
+            ...(context.company?.audiences ?? []).flatMap(a => [a.label, a.role ?? ""]),
+            ...(context.company?.markets?.primary ?? []),
+            ...(context.company?.markets?.verticals ?? []),
+            ...(context.company?.markets?.geographies ?? []),
+            ...(context.company?.differentiators ?? []),
+            ...Object.values(context.documents ?? {}),
+        ]
+            .filter(Boolean)
+            .map(s => normalize(s));
+
         const candidates = extractProductNameCandidates(text);
         const suspicious = candidates.filter(c => {
             const n = normalize(c);
             for (const a of allowed) {
                 if (a.includes(n) || n.includes(a)) return false;
+            }
+            // Verbatim (case-insensitive) appearance in fixture text counts as
+            // recognised — it cannot be a hallucination if the source uses it.
+            for (const t of recognisedTexts) {
+                if (t.includes(n)) return false;
             }
             return true;
         });
@@ -770,6 +886,8 @@ export const noCopiedSourceRuns: DeterministicAssertion = {
 
 export const ASSERTIONS: readonly DeterministicAssertion[] = [
     nonEmptyOutput,
+    platformMatchesFixture,
+    minChars,
     maxChars,
     platformCharLimit,
     maxWords,
@@ -787,6 +905,7 @@ export const ASSERTIONS: readonly DeterministicAssertion[] = [
     requireDisclaimer,
     noProhibitedCompetitors,
     mustUseSupportedFacts,
+    mustNotUseFacts,
     noContradictoryFacts,
     noDistractorFacts,
     noUnsupportedNumerics,

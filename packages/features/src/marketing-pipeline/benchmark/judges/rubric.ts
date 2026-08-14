@@ -61,7 +61,28 @@ export const JudgeCriterionScoreSchema = z.object({
 });
 
 export const JudgeResultSchema = z.object({
-  scores: z.array(JudgeCriterionScoreSchema),
+  // Exactly one entry per criterion in JUDGE_CRITERIA: no missing, no
+  // duplicates. Unknown criterion ids are already rejected by CriterionEnum.
+  scores: z.array(JudgeCriterionScoreSchema).superRefine((scores, ctx) => {
+    const counts = new Map<string, number>();
+    for (const s of scores) {
+      counts.set(s.criterion, (counts.get(s.criterion) ?? 0) + 1);
+    }
+    for (const criterion of JUDGE_CRITERIA) {
+      const n = counts.get(criterion) ?? 0;
+      if (n === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `missing score for criterion "${criterion}"`,
+        });
+      } else if (n > 1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `duplicate scores (${n}) for criterion "${criterion}"`,
+        });
+      }
+    }
+  }),
   overall: z.number().min(0).max(100),
   summary: z.string(),
 });

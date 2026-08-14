@@ -45,7 +45,8 @@ export function configureJudgeFromEnv(): void {
         "version: 1",
         "models:",
         "  judge:",
-        `    id: ${modelId}`,
+        // JSON-quote the id so values containing ':' or '#' stay one YAML scalar.
+        `    id: ${JSON.stringify(modelId)}`,
         "    preset: google/gemini-2.5-flash",
         "routes:",
         "  default: judge",

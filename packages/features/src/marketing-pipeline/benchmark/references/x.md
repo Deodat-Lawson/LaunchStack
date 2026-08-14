@@ -5,7 +5,7 @@ the GOOD and BAD examples below — each with the company context it was written
 from — and uses them as the calibration bar when scoring a candidate post.
 The judge SCORES ONLY; it never rewrites.
 
-> **Curation rules** (see [../TODO-member.md](../TODO-member.md)): real, public
+> **Curation rules**: real, public
 > **marketing / advertisement** posts (a minor feature update promoted as an ad
 > counts) — **NOT** brand-new product-launch announcements. Target **10 good +
 > 3–5 bad** posts drawn from **>3 big companies** (AppLovin, Cursor, Perplexity,

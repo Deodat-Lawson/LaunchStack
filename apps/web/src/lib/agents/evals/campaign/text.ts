@@ -57,31 +57,130 @@ export function countHashtags(text: string): number {
     return (text.match(/(^|\s)#[\p{L}][\p{L}\p{N}_]*/gu) ?? []).length;
 }
 
-/** Count emoji-ish codepoints (pictographic + regional indicators). */
+const GRAPHEME_SEGMENTER: Intl.Segmenter | null =
+    typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
+        ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+        : null;
+
+/** Split into user-perceived characters (grapheme clusters). */
+export function graphemes(text: string): string[] {
+    if (typeof text !== "string" || text.length === 0) return [];
+    if (GRAPHEME_SEGMENTER) {
+        return [...GRAPHEME_SEGMENTER.segment(text)].map(s => s.segment);
+    }
+    // Fallback: code points (still better than UTF-16 units).
+    return [...text];
+}
+
+/** Length in grapheme clusters, not UTF-16 code units. "👨‍👩‍👧" counts as 1. */
+export function countGraphemes(text: string): number {
+    return graphemes(text).length;
+}
+
+/**
+ * Count emoji as user-perceived characters: grapheme clusters containing an
+ * Extended_Pictographic scalar or a regional-indicator flag pair. Text-default
+ * symbols (©, ™, ↔ …) only count when explicitly emoji-styled with VS16, so a
+ * plain "©" is not an emoji. A ZWJ family or a flag counts once.
+ */
 export function countEmojis(text: string): number {
-    return [...text].filter(ch => /\p{Extended_Pictographic}|\p{Regional_Indicator}/u.test(ch))
-        .length;
+    let count = 0;
+    for (const cluster of graphemes(text)) {
+        if (/\p{Regional_Indicator}/u.test(cluster)) {
+            count++;
+            continue;
+        }
+        // Emoji_Presentation = emoji-by-default scalars (🎉, 😀, …).
+        if (/\p{Emoji_Presentation}/u.test(cluster)) {
+            count++;
+            continue;
+        }
+        // Text-default pictographs need an explicit VS16 to render as emoji.
+        if (/\p{Extended_Pictographic}/u.test(cluster) && cluster.includes("\u{FE0F}")) {
+            count++;
+        }
+    }
+    return count;
 }
 
-/** Count URLs (bare domains and full links). */
+/**
+ * TLDs accepted for a bare domain with no path. Deliberately a short,
+ * conservative list so prose like "node.js" or "See fig.1" never counts;
+ * `.example` is included because all fixture companies use reserved
+ * `.example` domains.
+ */
+const BARE_DOMAIN_TLDS =
+    "com|org|net|io|co|dev|app|ai|me|us|uk|ca|au|de|fr|es|it|nl|se|example";
+
+const EXPLICIT_URL_RE = /https?:\/\/\S+/gi;
+const BARE_URL_WITH_PATH_RE = /(?<=^|\s)(?!https?:\/\/)[a-z0-9-]+(\.[a-z0-9-]+)+\/\S*/gi;
+const BARE_DOMAIN_RE = new RegExp(
+    // ≥2 dot-separated labels ending in a known-ish TLD at a word boundary,
+    // not followed by a path (those are matched by BARE_URL_WITH_PATH_RE).
+    `(?<=^|\\s)(?!https?:\\/\\/)[a-z0-9-]+(?:\\.[a-z0-9-]+)*\\.(?:${BARE_DOMAIN_TLDS})(?=$|[\\s.,;:!?)\\]"'])`,
+    "gi"
+);
+
+/** All URL-ish spans in `text`: explicit links, bare domains with or without a path. */
+export function extractUrls(text: string): string[] {
+    if (typeof text !== "string" || text.length === 0) return [];
+    const out: string[] = [];
+    const seenRanges: Array<[number, number]> = [];
+    const collect = (re: RegExp) => {
+        re.lastIndex = 0;
+        for (const m of text.matchAll(re)) {
+            const start = m.index ?? 0;
+            const end = start + m[0].length;
+            // Skip spans already covered by an earlier (higher-priority) pattern.
+            if (seenRanges.some(([s, e]) => start < e && end > s)) continue;
+            seenRanges.push([start, end]);
+            out.push(m[0]);
+        }
+    };
+    collect(EXPLICIT_URL_RE);
+    collect(BARE_URL_WITH_PATH_RE);
+    collect(BARE_DOMAIN_RE);
+    return out;
+}
+
+/** Count URLs: full links, bare domains with a path, and bare known-TLD domains. */
 export function countUrls(text: string): number {
-    const explicit = text.match(/https?:\/\/\S+/gi) ?? [];
-    const bare = text.match(/(^|\s)(?!https?:\/\/)[a-z0-9-]+(\.[a-z0-9-]+)+\/\S*/gi) ?? [];
-    return explicit.length + bare.length;
+    return extractUrls(text).length;
 }
 
-/** Count question marks. */
+/** Count question marks, ignoring any inside URLs (e.g. `?utm_source=`). */
 export function countQuestions(text: string): number {
-    return (text.match(/\?/g) ?? []).length;
+    let stripped = text;
+    for (const url of extractUrls(text)) {
+        stripped = stripped.replace(url, " ");
+    }
+    return (stripped.match(/\?/g) ?? []).length;
+}
+
+/**
+ * Effective character length for platform limits: grapheme clusters, with each
+ * detected URL weighted as 23 characters on X (t.co wrapping), per its
+ * documented counting rules.
+ */
+export function effectiveCharLength(text: string, platform?: string): number {
+    if (typeof text !== "string" || text.length === 0) return 0;
+    if (platform !== "x") return countGraphemes(text);
+    const urls = extractUrls(text);
+    let rest = text;
+    for (const url of urls) rest = rest.replace(url, "");
+    return countGraphemes(rest) + 23 * urls.length;
 }
 
 /**
  * Numeric claims in the text: integers, decimals, percentages, currency and
- * ranges. Returned normalised (digits and an optional `%`) for comparison.
+ * ranges. Returned normalised (digits and an optional `%`) for comparison —
+ * thousands separators are stripped so "4,000" and "4000" compare equal.
  */
 export function extractNumerics(text: string): string[] {
     const raw = text.match(/\d[\d,.]*\s?%?/g) ?? [];
-    return raw.map(n => n.replace(/\s/g, "").replace(/[.,]$/, "")).filter(n => /\d/.test(n));
+    return raw
+        .map(n => n.replace(/\s/g, "").replace(/[.,]$/, "").replace(/,/g, ""))
+        .filter(n => /\d/.test(n));
 }
 
 /** Does `haystack` contain `needle`, whitespace- and case-insensitively? */

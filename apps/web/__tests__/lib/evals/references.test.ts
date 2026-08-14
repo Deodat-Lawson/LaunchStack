@@ -13,9 +13,9 @@ import { join } from "node:path";
 // Reuse the loader's repo-root resolution rather than counting `..` segments:
 // this file sits at a different depth depending on repository layout
 // (`__tests__/...` flat vs `apps/web/__tests__/...` monorepo).
-import { REPO_ROOT } from "~/lib/agents/evals/campaign";
+import { getRepoRoot } from "~/lib/agents/evals/campaign";
 
-const REFERENCE_PATH = join(REPO_ROOT, "references", "evaluation.md");
+const REFERENCE_PATH = join(getRepoRoot(), "references", "evaluation.md");
 const RAW = readFileSync(REFERENCE_PATH, "utf8");
 
 type Entry = {

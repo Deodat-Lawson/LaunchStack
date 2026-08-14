@@ -40,7 +40,7 @@ export interface ScoredPost extends JudgeResult {
 
 export async function scorePost(input: JudgePostInput): Promise<ScoredPost> {
   // temperature 0 for repeatability; single sample for now (N-sample median is
-  // a later stability upgrade — see TODO-l.md Phase 1).
+  // a possible later stability upgrade).
   const resolved = resolveChatModel({ temperature: 0 });
   const result = await invokeStructured(
     resolved,

@@ -68,7 +68,7 @@ async function resolveCaller(): Promise<CallerResult> {
     }
 
     const [userInfo] = await db
-        .select({ id: users.id, role: users.role, companyId: users.companyId })
+        .select({ id: users.id, role: users.role, companyId: users.companyId, status: users.status })
         .from(users)
         .where(eq(users.userId, userId));
 
@@ -81,11 +81,20 @@ async function resolveCaller(): Promise<CallerResult> {
         return { ok: false, response: createForbiddenError("Employer access required.") };
     }
 
+    const companyId = await resolveActiveCompanyForUser(
+        userInfo.id,
+        userInfo.companyId,
+        userInfo.status,
+    );
+    if (companyId === null) {
+        return { ok: false, response: createForbiddenError("No active workspace membership.") };
+    }
+
     return {
         ok: true,
         caller: {
             userId,
-            companyId: await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId),
+            companyId,
         },
     };
 }

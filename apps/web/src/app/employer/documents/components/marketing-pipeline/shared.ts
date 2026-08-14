@@ -126,6 +126,8 @@ export interface PipelineStagesUI {
   brandVoice?: BrandVoiceUI;
   targetPersona?: TargetPersonaUI;
   performanceInsights?: string[];
+  /** Exact knowledge context the generator used (for evaluation). */
+  companyContext?: string;
 }
 
 /** Mirrors API success payload fields used by the marketing UI. */
@@ -133,6 +135,7 @@ export interface PipelineData {
   platform: MarketingPlatform;
   message: string;
   "image/video": "image" | "video";
+  normalizedInput?: { platform: MarketingPlatform; prompt: string };
   research: Array<{
     title: string;
     url: string;

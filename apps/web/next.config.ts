@@ -95,6 +95,15 @@ const config: NextConfig = {
     ];
   },
 
+  // The evaluate route reads benchmark reference markdown from the features
+  // package at runtime via fs; Next's tracer can't see those reads, so pull
+  // the files into the standalone output explicitly.
+  outputFileTracingIncludes: {
+    "/api/marketing-pipeline/evaluate": [
+      "../../packages/features/src/marketing-pipeline/benchmark/references/**",
+    ],
+  },
+
   outputFileTracingExcludes: {
     "/*": [
       // Exclude onnxruntime-node (transitive dep via @langchain/community → @huggingface/transformers)

@@ -29,6 +29,13 @@
       "when": 1786229348295,
       "tag": "20260808224908_founder_weekly_review_async_collection",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786683913812,
+      "tag": "20260814050513_email_pipeline",
+      "breakpoints": true
     }
   ]
 }

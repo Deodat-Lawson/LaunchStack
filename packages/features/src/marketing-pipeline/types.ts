@@ -239,6 +239,12 @@ export interface PipelineStages {
     brandVoice?: BrandVoice;
     targetPersona?: TargetPersona;
     performanceInsights?: string[];
+    /**
+     * The exact company knowledge-context window fed to the generator
+     * (buildCompanyKnowledgeContext output). Surfaced so evaluation can score
+     * against the same facts the post was written from, not a re-derived context.
+     */
+    companyContext?: string;
 }
 
 export interface RefinementResult {

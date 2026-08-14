@@ -18,6 +18,7 @@ import { reindexCompanyEmbeddingsJob } from "~/server/inngest/functions/reindexC
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { crawlWebsite } from "~/server/inngest/functions/crawlWebsite";
 import { rehydrateNoteAnchorsJob } from "~/server/inngest/functions/rehydrateNoteAnchors";
+import { storageDeletionWorker } from "~/server/inngest/functions/storageDeletionWorker";
 
 // Register all Inngest functions
 const handler = serve({
@@ -32,6 +33,7 @@ const handler = serve({
     modifyDocument,
     crawlWebsite,
     rehydrateNoteAnchorsJob,
+    storageDeletionWorker,
   ],
 });
 

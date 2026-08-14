@@ -41,7 +41,7 @@ async function run() {
       // 1. Fake company + document
       const [testCompany] = await tx
         .insert(company)
-        .values({ name: "B2 test company (rollback)", numberOfEmployees: 1 })
+        .values({ name: "B2 test company (rollback)", numberOfEmployees: "1" })
         .returning();
       if (!testCompany) throw new Error("failed to insert test company");
       console.log(`[test-b2] created company id=${testCompany.id}`);

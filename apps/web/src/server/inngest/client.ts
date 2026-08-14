@@ -84,6 +84,14 @@ export type RehydrateNoteAnchorsEvent = {
   };
 };
 
+export type StorageDeletionRequestCreatedEvent = {
+  name: "storage-deletion/request.created";
+  data: {
+    /** storage_deletion_requests.id */
+    requestId: number;
+  };
+};
+
 export type Events =
   | ProcessDocumentEvent
   | TrendSearchEvent
@@ -93,7 +101,8 @@ export type Events =
   | ReindexCompanyEmbeddingsEvent
   | DocumentModifyEvent
   | WebsiteCrawlEvent
-  | RehydrateNoteAnchorsEvent;
+  | RehydrateNoteAnchorsEvent
+  | StorageDeletionRequestCreatedEvent;
 
 /**
  * Create the Inngest client.

@@ -33,12 +33,13 @@ import {
   storageObjects,
 } from "@launchstack/core/db/schema";
 import type { StorageDeletionRequest } from "@launchstack/core/db/schema";
-import type { db as DbType } from "~/server/db";
+import { db } from "~/server/db";
+import { inngest } from "~/server/inngest/client";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 import { hasManifest, listOwnedRefs, type StorageAdapter } from "./storage-manifest";
 import { deleteDocumentCore } from "./document-delete";
 
-type Tx = Parameters<Parameters<(typeof DbType)["transaction"]>[0]>[0];
+type Tx = Parameters<Parameters<(typeof db)["transaction"]>[0]>[0];
 
 interface PendingItem {
   /** storage_objects.id — plain number (serial), not bigint. */
@@ -294,4 +295,48 @@ export async function requestVersionDeletion(
  */
 export async function purgeDocumentRelational(tx: Tx, docId: number): Promise<void> {
   await deleteDocumentCore(tx, docId);
+}
+
+/**
+ * Public entry point for routes (B4/B5): opens its own transaction, writes
+ * the deletion plan via requestDocumentDeletion, and — only once that
+ * transaction has actually committed — tells the B3 worker to start
+ * processing it. Matches the existing pattern elsewhere in this codebase
+ * (see api/trend-search/route.ts, api/updateCompany/route.ts): the
+ * transaction and the inngest.send are deliberately two separate steps, so
+ * we never fire an event for a request that got rolled back.
+ */
+export async function requestDocumentDeletionAndDispatch(params: {
+  docId: number;
+  companyId: number;
+  actorId: string;
+}): Promise<StorageDeletionRequest> {
+  const request = await db.transaction(async (tx) => {
+    return requestDocumentDeletion(tx, params);
+  });
+
+  await inngest.send({
+    name: "storage-deletion/request.created",
+    data: { requestId: request.id },
+  });
+
+  return request;
+}
+
+/** Same idea as requestDocumentDeletionAndDispatch, for a single version. */
+export async function requestVersionDeletionAndDispatch(params: {
+  versionId: number;
+  companyId: number;
+  actorId: string;
+}): Promise<StorageDeletionRequest> {
+  const request = await db.transaction(async (tx) => {
+    return requestVersionDeletion(tx, params);
+  });
+
+  await inngest.send({
+    name: "storage-deletion/request.created",
+    data: { requestId: request.id },
+  });
+
+  return request;
 }

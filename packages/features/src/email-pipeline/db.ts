@@ -24,7 +24,6 @@ import {
   type SendAttemptRecord,
   type SendMode,
   type SendResult,
-  type SendStatus,
   type TemplateReview,
   type TemplateSource,
   type TemplateVersion,

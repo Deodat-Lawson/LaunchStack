@@ -1,27 +1,17 @@
 /**
- * One-off manual test for B3 (storageDeletionWorker.ts).
+ * Manual test for B3 (storageDeletionWorker.ts) + the coordinator/admin
+ * additions built alongside it: the kill switch, the STORAGE_DELETING/
+ * CANCELLED object-state slice, cancellation, idempotent re-delete via
+ * tombstone, and the admin requeue/quarantine repair path.
  *
- * The "database" adapter's real delete call is Dev A's task (A3, per the
- * design doc) and isn't implemented yet — deleteByAdapter deliberately
- * returns BLOCKED for it rather than us building a duplicate. So this test
- * has two parts:
- *
- *   Part A — confirms that behavior is real: a database-adapter item goes
- *   through processPendingItems and ends up BLOCKED, and the request ends
- *   up "manual_review" (not silently marked deleted, not purged).
- *
- *   Part B — since Part A can't reach a DELETED state (nothing to call),
- *   this simulates a successful adapter delete by setting the item to
- *   DELETED directly, then calls finalizeRequestIfDone on its own — this is
- *   the part B3 actually owns and fixed (tombstone-before-purge). Confirms:
- *   file_uploads row is gone*, storage_deletion_requests/items cascade away
- *   with the document, and a tombstone survives with the right data.
- *   (*file_uploads is deleted directly by this script in Part B, standing
- *   in for the adapter call Dev A hasn't built yet.)
- *
- * Both parts run against a fresh company/document/file per part; cleanup
- * happens in a `finally` block deleting both test companies, whose
- * cascading FKs clean up everything else.
+ * The "database" adapter is still deliberately unimplemented (Dev A's A3),
+ * so every item in these tests reliably ends up BLOCKED rather than
+ * DELETED when processed — which is actually convenient here, since most
+ * of what we're testing (cancellation-before-start, cancellation-refused-
+ * after-start, admin repair) specifically needs a BLOCKED item to work
+ * with. Part D reuses the earlier "simulate success" trick (delete
+ * file_uploads directly, mark the item DELETED by hand) to reach the
+ * purge+tombstone path, standing in for Dev A's not-yet-built adapter call.
  *
  * Run with:
  *   pnpm tsx scripts/test-storage-deletion-worker.ts
@@ -33,6 +23,7 @@ import {
   company,
   document,
   fileUploads,
+  storageObjects,
   storageDeletionRequests,
   storageDeletionItems,
   storageDeletionTombstones,
@@ -40,8 +31,25 @@ import {
 
 import { db } from "../src/server/db";
 import { registerObject } from "../src/server/services/storage-manifest";
-import { requestDocumentDeletion } from "../src/server/services/storage-deletion-coordinator";
+import {
+  requestDocumentDeletion,
+  requestDocumentDeletionAndDispatch,
+  cancelDeletionRequest,
+  CancellationRefusedError,
+} from "../src/server/services/storage-deletion-coordinator";
+import {
+  requeueBlockedDeletionItem,
+  quarantineBlockedDeletionItem,
+  AdminActionRefusedError,
+} from "../src/server/services/storage-deletion-admin";
 import { processPendingItems, finalizeRequestIfDone } from "../src/server/inngest/functions/storageDeletionWorker";
+
+const failures: string[] = [];
+const companyIdsToCleanUp: number[] = [];
+
+function check(condition: boolean, label: string) {
+  if (!condition) failures.push(label);
+}
 
 async function setUpFakeDocument(label: string) {
   const [testCompany] = await db
@@ -49,6 +57,7 @@ async function setUpFakeDocument(label: string) {
     .values({ name: `B3 test company (${label})`, numberOfEmployees: "1" })
     .returning();
   if (!testCompany) throw new Error("failed to insert test company");
+  companyIdsToCleanUp.push(testCompany.id);
 
   const [testDoc] = await db
     .insert(document)
@@ -98,99 +107,175 @@ async function setUpFakeDocument(label: string) {
 }
 
 async function run() {
-  console.log("[test-b3] Starting (test companies will be deleted at the end)...");
-
-  const failures: string[] = [];
-  const companyIdsToCleanUp: number[] = [];
+  console.log("[test-b3] Starting (test companies will be deleted at the end)...\n");
 
   try {
-    // ---- Part A: database adapter is unimplemented -> item goes BLOCKED ----
-    console.log("\n[test-b3] Part A: unimplemented database adapter -> BLOCKED");
-    const a = await setUpFakeDocument("part-a");
-    companyIdsToCleanUp.push(a.testCompany.id);
-    console.log(`[test-b3][A] company=${a.testCompany.id} doc=${a.testDoc.id} request=${a.request.id}`);
+    // ---- Part A: kill switch off -> outbox intact ----
+    console.log("[test-b3] Part A: kill switch off -> processing skipped, nothing touched");
+    process.env.STORAGE_DELETION_WORKER_ENABLED = "false";
+    const a = await setUpFakeDocument("kill-switch");
 
-    await processPendingItems(a.request.id);
+    const resultA = await processPendingItems(a.request.id);
+    console.log("[test-b3][A] processPendingItems returned:", resultA);
 
     const [itemA] = await db
       .select()
       .from(storageDeletionItems)
       .where(eq(storageDeletionItems.requestId, BigInt(a.request.id)));
-    console.log("[test-b3][A] item after processing:", itemA);
+    const [objA] = await db.select().from(storageObjects).where(eq(storageObjects.id, a.obj.id));
 
-    const finalizeA = await finalizeRequestIfDone(a.request.id);
-    console.log("[test-b3][A] finalizeRequestIfDone returned:", finalizeA);
+    check(resultA.skipped === true, "[A] expected processPendingItems to report skipped=true");
+    check(itemA?.itemState === "PENDING", `[A] expected item untouched (PENDING), got "${itemA?.itemState}"`);
+    check(
+      objA?.lifecycleState === "DELETE_REQUESTED",
+      `[A] expected object untouched (DELETE_REQUESTED), got "${objA?.lifecycleState}"`,
+    );
 
-    const [requestA] = await db
+    // From here on, the worker is enabled for the rest of the parts.
+    process.env.STORAGE_DELETION_WORKER_ENABLED = "true";
+
+    // ---- Part B: cancel before anything starts -> allowed ----
+    console.log("\n[test-b3] Part B: cancel before processing starts -> allowed");
+    const b = await setUpFakeDocument("cancel-before");
+
+    await cancelDeletionRequest(b.request.id, "test-admin");
+    const [objBAfterCancel] = await db.select().from(storageObjects).where(eq(storageObjects.id, b.obj.id));
+    check(
+      objBAfterCancel?.lifecycleState === "CANCELLED",
+      `[B] expected object CANCELLED after cancel, got "${objBAfterCancel?.lifecycleState}"`,
+    );
+
+    // Worker should now skip this item entirely, leaving it PENDING.
+    await processPendingItems(b.request.id);
+    const [itemBAfterProcess] = await db
       .select()
-      .from(storageDeletionRequests)
-      .where(eq(storageDeletionRequests.id, a.request.id));
-    console.log("[test-b3][A] request after finalize:", requestA);
+      .from(storageDeletionItems)
+      .where(eq(storageDeletionItems.requestId, BigInt(b.request.id)));
+    check(
+      itemBAfterProcess?.itemState === "PENDING",
+      `[B] expected item still PENDING (worker should skip a CANCELLED object), got "${itemBAfterProcess?.itemState}"`,
+    );
 
-    if (!itemA || itemA.itemState !== "BLOCKED") {
-      failures.push(`[A] expected item.itemState "BLOCKED", got "${itemA?.itemState}"`);
-    }
-    if (finalizeA.allTerminal) {
-      failures.push("[A] expected finalizeResult.allTerminal to be false (item is BLOCKED, not terminal)");
-    }
-    if (finalizeA.purged) {
-      failures.push("[A] expected finalizeResult.purged to be false — must not purge with a BLOCKED item");
-    }
-    if (!requestA || requestA.status !== "manual_review") {
-      failures.push(`[A] expected request.status "manual_review", got "${requestA?.status}"`);
-    }
-    const [docStillThereA] = await db.select().from(document).where(eq(document.id, a.testDoc.id));
-    if (!docStillThereA) {
-      failures.push("[A] expected document row to still exist (nothing should be purged when blocked)");
-    }
+    // ---- Part C: cancel refused once deletion has actually started ----
+    console.log("\n[test-b3] Part C: cancel refused once item has already been touched");
+    const c = await setUpFakeDocument("cancel-after");
 
-    // ---- Part B: simulate a successful delete -> confirm purge + tombstone ----
-    console.log("\n[test-b3] Part B: simulated successful delete -> purge + tombstone");
-    const b = await setUpFakeDocument("part-b");
-    companyIdsToCleanUp.push(b.testCompany.id);
-    console.log(`[test-b3][B] company=${b.testCompany.id} doc=${b.testDoc.id} request=${b.request.id}`);
+    await processPendingItems(c.request.id); // database adapter -> BLOCKED, object -> BLOCKED
+    const [objCBeforeCancel] = await db.select().from(storageObjects).where(eq(storageObjects.id, c.obj.id));
+    console.log("[test-b3][C] object state after processing (expected BLOCKED):", objCBeforeCancel?.lifecycleState);
 
-    // Stand in for Dev A's not-yet-built adapter call: delete the
-    // file_uploads row directly and mark the item DELETED, exactly as a
-    // real adapter call would leave things.
-    await db.delete(fileUploads).where(eq(fileUploads.id, b.upload.id));
+    let cancelWasRefused = false;
+    try {
+      await cancelDeletionRequest(c.request.id, "test-admin");
+    } catch (err) {
+      cancelWasRefused = err instanceof CancellationRefusedError;
+    }
+    check(cancelWasRefused, "[C] expected cancelDeletionRequest to throw CancellationRefusedError");
+    const [objCAfterCancelAttempt] = await db.select().from(storageObjects).where(eq(storageObjects.id, c.obj.id));
+    check(
+      objCAfterCancelAttempt?.lifecycleState === "BLOCKED",
+      `[C] expected object to remain BLOCKED after refused cancel, got "${objCAfterCancelAttempt?.lifecycleState}"`,
+    );
+
+    // ---- Part D: simulate success -> purge + tombstone, then idempotent re-delete ----
+    console.log("\n[test-b3] Part D: purge + tombstone, then a second delete request is idempotent");
+    const d = await setUpFakeDocument("idempotent");
+
+    // Stand in for Dev A's not-yet-built adapter call.
+    await db.delete(fileUploads).where(eq(fileUploads.id, d.upload.id));
     await db
       .update(storageDeletionItems)
       .set({ itemState: "DELETED", lastError: null })
-      .where(eq(storageDeletionItems.requestId, BigInt(b.request.id)));
+      .where(eq(storageDeletionItems.requestId, BigInt(d.request.id)));
 
-    const finalizeB = await finalizeRequestIfDone(b.request.id);
-    console.log("[test-b3][B] finalizeRequestIfDone returned:", finalizeB);
+    const finalizeD = await finalizeRequestIfDone(d.request.id);
+    check(finalizeD.purged === true, "[D] expected the document to be purged");
 
-    const [tombstoneB] = await db
+    const [tombstoneD] = await db
       .select()
       .from(storageDeletionTombstones)
-      .where(eq(storageDeletionTombstones.documentId, BigInt(b.testDoc.id)));
-    console.log("[test-b3][B] tombstone after finalize:", tombstoneB);
+      .where(eq(storageDeletionTombstones.documentId, BigInt(d.testDoc.id)));
+    check(!!tombstoneD, "[D] expected a tombstone to exist after purge");
 
-    const [requestGoneB] = await db
+    const secondAttempt = await requestDocumentDeletionAndDispatch({
+      docId: d.testDoc.id,
+      companyId: d.testCompany.id,
+      actorId: "test-script",
+    });
+    console.log("[test-b3][D] second delete request on the same (already-purged) doc returned:", secondAttempt);
+    check(
+      secondAttempt.kind === "already-completed",
+      `[D] expected the second delete request to return "already-completed", got "${secondAttempt.kind}"`,
+    );
+
+    // ---- Part E: admin repair path (requeue, then quarantine) ----
+    console.log("\n[test-b3] Part E: admin requeue, then approved-exception quarantine");
+    const e = await setUpFakeDocument("admin-repair");
+
+    await processPendingItems(e.request.id); // -> BLOCKED
+    const [itemEBlocked] = await db
+      .select()
+      .from(storageDeletionItems)
+      .where(eq(storageDeletionItems.requestId, BigInt(e.request.id)));
+    if (!itemEBlocked) throw new Error("[E] expected a deletion item to exist");
+
+    await requeueBlockedDeletionItem(itemEBlocked.id, "test-admin");
+    const [itemEAfterRequeue] = await db
+      .select()
+      .from(storageDeletionItems)
+      .where(eq(storageDeletionItems.id, itemEBlocked.id));
+    const [objEAfterRequeue] = await db.select().from(storageObjects).where(eq(storageObjects.id, e.obj.id));
+    check(
+      itemEAfterRequeue?.itemState === "WAITING_RETRY" && itemEAfterRequeue?.attempts === 0,
+      `[E] expected item WAITING_RETRY with attempts reset to 0 after requeue, got state="${itemEAfterRequeue?.itemState}" attempts=${itemEAfterRequeue?.attempts}`,
+    );
+    check(
+      objEAfterRequeue?.lifecycleState === "STORAGE_DELETING",
+      `[E] expected object STORAGE_DELETING after requeue, got "${objEAfterRequeue?.lifecycleState}"`,
+    );
+
+    // Quarantine should refuse right now — the item isn't BLOCKED anymore.
+    let quarantineRefusedTooEarly = false;
+    try {
+      await quarantineBlockedDeletionItem(itemEBlocked.id, "test-admin", "should be refused");
+    } catch (err) {
+      quarantineRefusedTooEarly = err instanceof AdminActionRefusedError;
+    }
+    check(
+      quarantineRefusedTooEarly,
+      "[E] expected quarantineBlockedDeletionItem to refuse a non-BLOCKED item",
+    );
+
+    // Process again — adapter still unimplemented, so it goes BLOCKED again.
+    await processPendingItems(e.request.id);
+    await quarantineBlockedDeletionItem(itemEBlocked.id, "test-admin", "manual override, approved");
+    const [itemEQuarantined] = await db
+      .select()
+      .from(storageDeletionItems)
+      .where(eq(storageDeletionItems.id, itemEBlocked.id));
+    const [objEQuarantined] = await db.select().from(storageObjects).where(eq(storageObjects.id, e.obj.id));
+    check(
+      itemEQuarantined?.itemState === "QUARANTINED",
+      `[E] expected item QUARANTINED, got "${itemEQuarantined?.itemState}"`,
+    );
+    check(
+      objEQuarantined?.lifecycleState === "QUARANTINED",
+      `[E] expected object QUARANTINED, got "${objEQuarantined?.lifecycleState}"`,
+    );
+
+    const finalizeE = await finalizeRequestIfDone(e.request.id);
+    console.log("[test-b3][E] finalizeRequestIfDone after quarantine:", finalizeE);
+    check(finalizeE.purged === false, "[E] expected no purge with a QUARANTINED item");
+    const [requestE] = await db
       .select()
       .from(storageDeletionRequests)
-      .where(eq(storageDeletionRequests.id, b.request.id));
-    console.log("[test-b3][B] request row after finalize (expected: gone):", requestGoneB);
+      .where(eq(storageDeletionRequests.id, e.request.id));
+    check(
+      requestE?.status === "quarantined",
+      `[E] expected request.status "quarantined", got "${requestE?.status}"`,
+    );
 
-    const [remainingDocB] = await db.select().from(document).where(eq(document.id, b.testDoc.id));
-
-    if (!finalizeB.allTerminal) failures.push("[B] expected finalizeResult.allTerminal to be true");
-    if (!finalizeB.purged) failures.push("[B] expected finalizeResult.purged to be true");
-    if (!tombstoneB || tombstoneB.finalStatus !== "completed") {
-      failures.push(`[B] expected a tombstone with finalStatus "completed", got ${JSON.stringify(tombstoneB)}`);
-    }
-    if (tombstoneB && tombstoneB.objectCount !== 1) {
-      failures.push(`[B] expected tombstone.objectCount 1, got ${tombstoneB.objectCount}`);
-    }
-    if (requestGoneB) {
-      failures.push("[B] expected storage_deletion_requests row to be cascade-deleted along with the document, but it still exists");
-    }
-    if (remainingDocB) {
-      failures.push("[B] expected document row to be purged, but it still exists");
-    }
-
+    // ---- Report ----
     if (failures.length > 0) {
       console.error("\n[test-b3] FAILURES:");
       for (const f of failures) console.error(`  - ${f}`);

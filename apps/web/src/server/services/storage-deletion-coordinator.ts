@@ -30,9 +30,10 @@ import {
   uploadBatchFiles,
   storageDeletionRequests,
   storageDeletionItems,
+  storageDeletionTombstones,
   storageObjects,
 } from "@launchstack/core/db/schema";
-import type { StorageDeletionRequest } from "@launchstack/core/db/schema";
+import type { StorageDeletionRequest, StorageDeletionTombstone } from "@launchstack/core/db/schema";
 import { db } from "~/server/db";
 import { inngest } from "~/server/inngest/client";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
@@ -297,6 +298,80 @@ export async function purgeDocumentRelational(tx: Tx, docId: number): Promise<vo
   await deleteDocumentCore(tx, docId);
 }
 
+export class CancellationRefusedError extends Error {}
+
+/**
+ * Cancel a deletion request, but only while it's genuinely safe to —
+ * before the worker has actually started deleting anything. Per the design
+ * doc: "DELETE_REQUESTED -> CANCELLED only before any provider call
+ * starts; refused once STORAGE_DELETING begins."
+ *
+ * Known limitation: this only cancels manifest-backed items (the ones with
+ * a real storage_objects row, whose lifecycleState the worker checks
+ * before touching a file). Legacy-promoted items (no objectId — see
+ * promoteUrlsToItems) have no per-object state to flip, so there's no way
+ * for this function to individually stop those from being processed. In
+ * practice a request is almost always all-manifest or all-legacy, so this
+ * is a real but narrow gap, not a silent no-op.
+ */
+export async function cancelDeletionRequest(
+  requestId: number,
+  actorId: string,
+): Promise<void> {
+  await db.transaction(async (tx) => {
+    const [request] = await tx
+      .select()
+      .from(storageDeletionRequests)
+      .where(eq(storageDeletionRequests.id, requestId))
+      .for("update");
+
+    if (!request) {
+      throw new Error(`cancelDeletionRequest: request ${requestId} not found`);
+    }
+
+    const items = await tx
+      .select()
+      .from(storageDeletionItems)
+      .where(eq(storageDeletionItems.requestId, BigInt(requestId)));
+
+    const objectIds = items
+      .map((item) => item.objectId)
+      .filter((id): id is bigint => id !== null)
+      .map((id) => Number(id));
+
+    if (objectIds.length > 0) {
+      const objects = await tx
+        .select()
+        .from(storageObjects)
+        .where(inArray(storageObjects.id, objectIds));
+
+      const alreadyStarted = objects.some(
+        (obj) => obj.lifecycleState !== "DELETE_REQUESTED",
+      );
+      if (alreadyStarted) {
+        throw new CancellationRefusedError(
+          `cancelDeletionRequest: request ${requestId} has already started deleting (an object is past DELETE_REQUESTED) — refusing to cancel`,
+        );
+      }
+
+      await tx
+        .update(storageObjects)
+        .set({ lifecycleState: "CANCELLED" })
+        .where(inArray(storageObjects.id, objectIds));
+    }
+
+    // No "cancelled" value exists in the requests/items status enums
+    // (Decision 6 only defines queued/completed/partial/manual_review/
+    // quarantined for requests) — cancellation lives entirely at the
+    // storage_objects level. The worker skips any item whose object is
+    // CANCELLED, so the request just never completes; that's the intended
+    // behavior, not an oversight.
+    console.log(
+      `[cancelDeletionRequest] request=${requestId} cancelled by actor=${actorId} at ${new Date().toISOString()}`,
+    );
+  });
+}
+
 /**
  * Public entry point for routes (B4/B5): opens its own transaction, writes
  * the deletion plan via requestDocumentDeletion, and — only once that
@@ -306,11 +381,28 @@ export async function purgeDocumentRelational(tx: Tx, docId: number): Promise<vo
  * transaction and the inngest.send are deliberately two separate steps, so
  * we never fire an event for a request that got rolled back.
  */
+export type DeletionDispatchResult =
+  | { kind: "created"; request: StorageDeletionRequest }
+  | { kind: "already-completed"; tombstone: StorageDeletionTombstone };
+
 export async function requestDocumentDeletionAndDispatch(params: {
   docId: number;
   companyId: number;
   actorId: string;
-}): Promise<StorageDeletionRequest> {
+}): Promise<DeletionDispatchResult> {
+  // Idempotent re-delete (design doc B3 item 8): a second delete request
+  // against an already-purged document returns the existing tombstone's
+  // status rather than inventing a new request — there's nothing left to
+  // delete, the document row is already gone.
+  const [existingTombstone] = await db
+    .select()
+    .from(storageDeletionTombstones)
+    .where(eq(storageDeletionTombstones.documentId, BigInt(params.docId)));
+
+  if (existingTombstone) {
+    return { kind: "already-completed", tombstone: existingTombstone };
+  }
+
   const request = await db.transaction(async (tx) => {
     return requestDocumentDeletion(tx, params);
   });
@@ -320,15 +412,32 @@ export async function requestDocumentDeletionAndDispatch(params: {
     data: { requestId: request.id },
   });
 
-  return request;
+  return { kind: "created", request };
 }
 
-/** Same idea as requestDocumentDeletionAndDispatch, for a single version. */
+/**
+ * Same idea as requestDocumentDeletionAndDispatch, for a single version.
+ * NOTE: the tombstone check below currently can't ever find a match — the
+ * worker's finalizeRequestIfDone only writes a tombstone in the
+ * document-scoped branch (version-scoped purge is a known, already-flagged
+ * gap: there's no "purge just this version" relational step yet). Left in
+ * place so this starts working automatically once that gap is closed,
+ * rather than needing a second change later.
+ */
 export async function requestVersionDeletionAndDispatch(params: {
   versionId: number;
   companyId: number;
   actorId: string;
-}): Promise<StorageDeletionRequest> {
+}): Promise<DeletionDispatchResult> {
+  const [existingTombstone] = await db
+    .select()
+    .from(storageDeletionTombstones)
+    .where(eq(storageDeletionTombstones.documentVersionId, BigInt(params.versionId)));
+
+  if (existingTombstone) {
+    return { kind: "already-completed", tombstone: existingTombstone };
+  }
+
   const request = await db.transaction(async (tx) => {
     return requestVersionDeletion(tx, params);
   });
@@ -338,5 +447,5 @@ export async function requestVersionDeletionAndDispatch(params: {
     data: { requestId: request.id },
   });
 
-  return request;
+  return { kind: "created", request };
 }

@@ -22,7 +22,7 @@
  * Swap to the real import once it lands.
  */
 
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import {
   document,
   documentVersions,
@@ -41,6 +41,16 @@ import { hasManifest, listOwnedRefs, type StorageAdapter } from "./storage-manif
 import { deleteDocumentCore } from "./document-delete";
 
 type Tx = Parameters<Parameters<(typeof db)["transaction"]>[0]>[0];
+
+// Typed errors instead of generic Error + string-matching on the message —
+// matching on substrings of an error's text is fragile (an unrelated error
+// containing the words "not found" would be silently misclassified). API
+// callers (delete-document-api.ts) should check `instanceof`, not text.
+export class DocumentNotFoundError extends Error {}
+export class VersionNotFoundError extends Error {}
+export class TenantMismatchError extends Error {}
+/** Thrown when the plan was written but the worker couldn't be notified. */
+export class DispatchFailedError extends Error {}
 
 interface PendingItem {
   /** storage_objects.id — plain number (serial), not bigint. */
@@ -174,10 +184,10 @@ export async function requestDocumentDeletion(
     .for("update");
 
   if (!doc) {
-    throw new Error(`requestDocumentDeletion: document ${params.docId} not found`);
+    throw new DocumentNotFoundError(`requestDocumentDeletion: document ${params.docId} not found`);
   }
   if (doc.companyId !== BigInt(params.companyId)) {
-    throw new Error(
+    throw new TenantMismatchError(
       `requestDocumentDeletion: document ${params.docId} does not belong to company ${params.companyId}`,
     );
   }
@@ -242,7 +252,7 @@ export async function requestVersionDeletion(
     .for("update");
 
   if (!version) {
-    throw new Error(`requestVersionDeletion: version ${params.versionId} not found`);
+    throw new VersionNotFoundError(`requestVersionDeletion: version ${params.versionId} not found`);
   }
 
   // documentVersions has no companyId of its own — authorize via its parent
@@ -253,12 +263,12 @@ export async function requestVersionDeletion(
     .where(eq(document.id, Number(version.documentId)));
 
   if (!parentDoc) {
-    throw new Error(
+    throw new DocumentNotFoundError(
       `requestVersionDeletion: parent document for version ${params.versionId} not found`,
     );
   }
   if (parentDoc.companyId !== BigInt(params.companyId)) {
-    throw new Error(
+    throw new TenantMismatchError(
       `requestVersionDeletion: version ${params.versionId} does not belong to company ${params.companyId}`,
     );
   }
@@ -385,6 +395,44 @@ export type DeletionDispatchResult =
   | { kind: "created"; request: StorageDeletionRequest }
   | { kind: "already-completed"; tombstone: StorageDeletionTombstone };
 
+/**
+ * Used only when inngest.send fails right after a request was written:
+ * undoes both the request/items rows AND the storage_objects.lifecycleState
+ * flip to DELETE_REQUESTED that insertRequestAndItems already made — since
+ * nothing will ever process this request, leaving those objects stuck at
+ * DELETE_REQUESTED with no live request behind them would be its own bug.
+ * Only reverts objects still at DELETE_REQUESTED (a guard, not expected to
+ * matter in practice — nothing else touches an object before the worker is
+ * ever notified).
+ */
+async function rollbackFailedDispatch(requestId: number): Promise<void> {
+  await db.transaction(async (tx) => {
+    const items = await tx
+      .select()
+      .from(storageDeletionItems)
+      .where(eq(storageDeletionItems.requestId, BigInt(requestId)));
+
+    const objectIds = items
+      .map((item) => item.objectId)
+      .filter((id): id is bigint => id !== null)
+      .map((id) => Number(id));
+
+    if (objectIds.length > 0) {
+      await tx
+        .update(storageObjects)
+        .set({ lifecycleState: "ACTIVE" })
+        .where(
+          and(
+            inArray(storageObjects.id, objectIds),
+            eq(storageObjects.lifecycleState, "DELETE_REQUESTED"),
+          ),
+        );
+    }
+
+    await tx.delete(storageDeletionRequests).where(eq(storageDeletionRequests.id, requestId));
+  });
+}
+
 export async function requestDocumentDeletionAndDispatch(params: {
   docId: number;
   companyId: number;
@@ -407,10 +455,22 @@ export async function requestDocumentDeletionAndDispatch(params: {
     return requestDocumentDeletion(tx, params);
   });
 
-  await inngest.send({
-    name: "storage-deletion/request.created",
-    data: { requestId: request.id },
-  });
+  try {
+    await inngest.send({
+      name: "storage-deletion/request.created",
+      data: { requestId: request.id },
+    });
+  } catch (err) {
+    // Hard failure, by design: if we can't tell the worker to start, this
+    // whole operation did not succeed — we don't leave a "queued" request
+    // behind that nothing will ever process. Undo the write (request,
+    // items, and any DELETE_REQUESTED objects it touched) and surface a
+    // clear error rather than a misleading partial success.
+    await rollbackFailedDispatch(request.id);
+    throw new DispatchFailedError(
+      `requestDocumentDeletionAndDispatch: request ${request.id} was written but the worker could not be notified — rolled back. Underlying error: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
 
   return { kind: "created", request };
 }
@@ -442,10 +502,17 @@ export async function requestVersionDeletionAndDispatch(params: {
     return requestVersionDeletion(tx, params);
   });
 
-  await inngest.send({
-    name: "storage-deletion/request.created",
-    data: { requestId: request.id },
-  });
+  try {
+    await inngest.send({
+      name: "storage-deletion/request.created",
+      data: { requestId: request.id },
+    });
+  } catch (err) {
+    await rollbackFailedDispatch(request.id);
+    throw new DispatchFailedError(
+      `requestVersionDeletionAndDispatch: request ${request.id} was written but the worker could not be notified — rolled back. Underlying error: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
 
   return { kind: "created", request };
 }

@@ -1,18 +1,40 @@
-# Docker Compose override for integration testing: app → sidecar → Adeu
-# Usage: docker compose -f docker-compose.yml -f docker-compose.test.yml up sidecar --build
+# Docker Compose override for integration-testing the compute services.
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.test.yml up transcription document-editor --build
 #
-# Then run: ./scripts/test-sidecar-integration.sh
+# Then run: ./scripts/dev/test-sidecar-integration.sh
 
 services:
-  sidecar:
+  transcription:
     build:
-      context: ./sidecar
+      context: ./services/transcription
       dockerfile: Dockerfile
-    container_name: pdr_ai_v2-sidecar-test
+    container_name: pdr_ai_v2-transcription-test
+    environment:
+      TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_SERVICE_API_KEY:-pdr_local_sidecar_key}
     ports:
       - "8000:8000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      # python:3.12-slim images ship no curl; use the same urllib probe as the
+      # main compose file.
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  document-editor:
+    build:
+      context: ./services/document-editor
+      dockerfile: Dockerfile
+    container_name: pdr_ai_v2-document-editor-test
+    environment:
+      DOCUMENT_EDITOR_API_KEY: ${DOCUMENT_EDITOR_API_KEY:-pdr_local_sidecar_key}
+    ports:
+      - "8003:8000"
+    healthcheck:
+      # python:3.12-slim images ship no curl; use the same urllib probe as the
+      # main compose file.
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
       interval: 5s
       timeout: 5s
       retries: 5

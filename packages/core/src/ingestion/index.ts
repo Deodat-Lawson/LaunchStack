@@ -1,10 +1,6 @@
 /**
- * Ingestion Layer — Public API.
- * Re-exports types, router, heading-chunker, and adapter registry.
+ * @launchstack/core compatibility facade (ADR-002): this subpath's
+ * implementation moved to @launchstack/adapters. Re-export only — no logic
+ * may be added here (enforced by scripts/ci/check-core-facade.mjs).
  */
-
-export * from "./types";
-export * from "./heading-chunker";
-export { ingestDocument, ingestToNormalized, isSupported } from "./router";
-export type { IngestOptions } from "./router";
-export { findAdapter, getAllAdapters } from "./adapters";
+export * from "@launchstack/adapters/ingestion/index";

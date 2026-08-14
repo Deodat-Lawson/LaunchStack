@@ -1,16 +1,21 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { agentAiChatbotExecutionStep } from "@launchstack/core/db/schema";
+import { agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateExecutionStepSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertTaskOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // POST /api/agent-ai-chatbot/execution-steps - Create an execution step
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateExecutionStepSchema);
     if (!validation.success) return validation.response;
@@ -24,13 +29,16 @@ export async function POST(request: NextRequest) {
       output
     } = validation.data;
 
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const stepId = randomUUID();
 
     const insertValues = {
       id: stepId,
       taskId,
       stepNumber,
-      stepType: stepType as "reasoning" | "planning" | "execution" | "evaluation" | "decision",
+      stepType,
       description,
       reasoning,
       input,
@@ -58,6 +66,9 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/execution-steps?taskId=xxx - Get execution steps for a task
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const taskId = searchParams.get("taskId");
@@ -68,6 +79,9 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const steps = await db
       .select()
@@ -87,4 +101,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

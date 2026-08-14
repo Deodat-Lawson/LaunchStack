@@ -1,8 +1,9 @@
 import { eq } from "drizzle-orm";
 
 import { getDb } from "@launchstack/core/db";
-import { company, companyMetadata } from "@launchstack/core/db/schema";
-import type { CompanyMetadataJSON, MetadataFact } from "@launchstack/features/company-metadata";
+import { company } from "@launchstack/core/db/schema";
+import { companyMetadata } from "../schema";
+import type { CompanyMetadataJSON, MetadataFact } from "../company-metadata";
 
 /**
  * Owner-company data → template merge variables (member.md Phase 2).

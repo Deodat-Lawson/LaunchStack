@@ -4,11 +4,12 @@ import React from "react";
 import { Trash2 } from "lucide-react";
 import styles from "~/styles/Employer/EmployeeManagement.module.css";
 import { type Employee } from "./types";
+import { type ManagementRole } from "~/lib/membership-roles";
 
 interface EmployeeTableProps {
     employees: Employee[];
     onRemove: (employeeId: string) => void;
-    currentUserRole: "owner" | "employer" | "employee";
+    currentUserRole: ManagementRole;
 }
 
 const EmployeeTable: React.FC<EmployeeTableProps> = ({
@@ -20,17 +21,13 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
         return <p>No approved employees yet.</p>;
     }
 
-    // A small helper function to decide if the trash button should be shown
+    // Roster rows still carry the legacy `users.role` vocabulary
+    // (`employer` / `employee`); only the caller's role is a membership role.
     const shouldShowTrash = (employeeRole: string) => {
         if (currentUserRole === "owner") {
-            // owner can remove both employer and employee roles
             return employeeRole === "employer" || employeeRole === "employee";
         }
-        if (currentUserRole === "employer") {
-            // employer can remove only employee role
-            return employeeRole === "employee";
-        }
-        return false;
+        return employeeRole === "employee";
     };
 
     return (

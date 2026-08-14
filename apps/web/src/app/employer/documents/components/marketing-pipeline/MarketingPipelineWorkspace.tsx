@@ -31,7 +31,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/app/employer/doc
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 import {
-  PIPELINE_STEP_ORDER,
   PLATFORM_OPTIONS,
   REDDIT_SNOO_URL,
   type ClaimSourceUI,
@@ -589,7 +588,6 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
   if (claims.length === 0) return null;
 
   const verified = claims.filter((c) => c.confidence > 0.5);
-  const unverified = claims.filter((c) => c.confidence <= 0.5);
 
   return (
     <div className={styles.strategyCard}>

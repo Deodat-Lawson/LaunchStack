@@ -79,7 +79,7 @@ export function fillTemplate(
   return doc.getZip().generate({
     type: "nodebuffer",
     compression: "DEFLATE",
-  }) as Buffer;
+  });
 }
 
 export function generateDocument(

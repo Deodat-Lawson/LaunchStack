@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { isManagementRole } from "~/lib/membership-roles";
 import { IconBolt, IconX } from "./icons";
 import { renderStudioPane } from "./StudioPanes";
 import { STUDIO_GROUPS, type StudioFeature } from "./types";
@@ -16,8 +17,8 @@ export interface StudioDrawerProps {
    */
   inline?: boolean;
   /**
-   * Role of the current user. When not `employer`/`owner`, Management entries
-   * marked `companyOnly` are hidden.
+   * Membership role of the current user. When not owner/admin, Management
+   * entries marked `companyOnly` are hidden.
    */
   role?: string | null;
   /**
@@ -37,6 +38,8 @@ export interface StudioDrawerProps {
 
 /** Feature ids that render an interactive pane (not just a link-out). */
 const CUSTOM_PANE_IDS = new Set([
+  "knowledge",
+  "meetings",
   "draft",
   "rewrite",
   "notes",
@@ -50,8 +53,6 @@ const CUSTOM_PANE_IDS = new Set([
   "analytics",
 ]);
 
-const COMPANY_ROLES = new Set(["employer", "owner"]);
-
 export function StudioDrawer({
   open,
   initialFeatureId,
@@ -63,7 +64,7 @@ export function StudioDrawer({
   onOpenWorkspaceChat,
 }: StudioDrawerProps) {
   const visibleGroups = useMemo(() => {
-    const canSeeCompany = role ? COMPANY_ROLES.has(role) : true;
+    const canSeeCompany = role ? isManagementRole(role) : true;
     return STUDIO_GROUPS.map((g) => ({
       ...g,
       features: g.features.filter((f) => canSeeCompany || !f.companyOnly),
@@ -294,7 +295,7 @@ export function StudioDrawer({
           {canExpand && (
             <button
               type="button"
-              onClick={() => onExpand!(active.id)}
+              onClick={() => onExpand(active.id)}
               title={`Expand ${active.label} to main view`}
               style={{
                 display: "inline-flex",

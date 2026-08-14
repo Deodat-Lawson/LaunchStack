@@ -101,7 +101,7 @@ export const InngestPage: React.FC<DeploymentProps> = ({
             <PipelineStep step="A" title="Router" description="Analyzes PDF to determine: native text extraction or OCR needed? Which provider (Azure, Landing.AI)?" />
             <PipelineStep step="B" title="Normalize" description="Extracts content using the selected provider. Outputs standardized PageContent[] structure." />
             <PipelineStep step="C" title="Chunking" description="Splits pages into semantic chunks (500 tokens, 50 overlap). Separates tables from text." />
-            <PipelineStep step="D" title="Vectorize" description="Generates embeddings via OpenAI text-embedding-3-large (1536 dimensions)." />
+            <PipelineStep step="D" title="Vectorize" description="Generates embeddings via the configured embedding index — text-embedding-3-large at 1536 dimensions by default." />
             <PipelineStep step="E" title="Storage" description="Persists chunks with vectors to PostgreSQL. Updates document and job status." />
           </div>
         </div>
@@ -110,14 +110,17 @@ export const InngestPage: React.FC<DeploymentProps> = ({
       {/* Development Setup */}
       <Section title="Development Setup">
         <InfoBox
-          title="Inngest starts automatically"
+          title="The worker hosts the Inngest endpoint"
           icon={<Zap className="w-5 h-5" />}
 
         >
           <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-            Running <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-emerald-300' : 'bg-gray-100 text-emerald-700'}`}>pnpm dev</code> automatically
-            starts both Next.js and the Inngest dev server using <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-emerald-300' : 'bg-gray-100 text-emerald-700'}`}>concurrently</code>.
-            No additional setup is needed to get background jobs working locally.
+            Since ADR-003, durable functions are served by the background worker
+            at <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-emerald-300' : 'bg-gray-100 text-emerald-700'}`}>http://localhost:8020/api/inngest</code> —
+            not by the Next.js app. The Next.js app only sends events. The
+            Docker Compose stack starts the worker and an{' '}
+            <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-emerald-300' : 'bg-gray-100 text-emerald-700'}`}>inngest-dev</code>{' '}
+            server already pointed at it.
           </p>
           <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
             The Inngest dev server dashboard is available at{' '}
@@ -129,22 +132,21 @@ export const InngestPage: React.FC<DeploymentProps> = ({
         <div className="mt-8 space-y-6">
           <div>
             <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Start the dev server (Next.js + Inngest together)
+              Start the stack (worker + Inngest dev server included)
             </h3>
             <CodeBlock
-              code="pnpm dev"
-              onCopy={() => copyToClipboard('pnpm dev', 'inngest-dev')}
+              code="docker compose --env-file .env up"
+              onCopy={() => copyToClipboard('docker compose --env-file .env up', 'inngest-dev')}
               copied={copiedCode === 'inngest-dev'}
 
             />
             <p className={`text-sm mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              This runs the equivalent of:
+              Running outside Docker? Start the worker, then point the Inngest CLI at it:
             </p>
             <CodeBlock
-              code={`concurrently \\
-  "next dev --turbo" \\
-  "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"`}
-              onCopy={() => copyToClipboard('concurrently "next dev --turbo" "pnpm dlx inngest-cli@latest dev -u http://localhost:3000/api/inngest"', 'inngest-dev-full')}
+              code={`pnpm --filter @launchstack/worker dev
+pnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest`}
+              onCopy={() => copyToClipboard('pnpm --filter @launchstack/worker dev\npnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest', 'inngest-dev-full')}
               copied={copiedCode === 'inngest-dev-full'}
 
             />
@@ -178,7 +180,9 @@ INNGEST_EVENT_KEY=dev-placeholder`}
       <Section title="Production Setup">
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
           In production, Inngest Cloud handles job scheduling, retries, and monitoring.
-          You need a real event key and signing key from your Inngest account.
+          You need a real event key and signing key from your Inngest account. Register
+          the <strong>worker&apos;s</strong> public URL (<code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>https://&lt;worker-host&gt;/api/inngest</code>)
+          as the app endpoint — the Next.js app no longer serves one.
         </p>
 
         <div className="space-y-6">
@@ -251,7 +255,8 @@ INNGEST_SIGNING_KEY=signkey-prod-xxxxx`}
               │  Prod: Inngest Cloud        │
               └──────────────┬──────────────┘
                              │
-                             ▼
+                             ▼ (functions served by the worker
+                                at :8020/api/inngest — ADR-003)
 ┌─────────────────────────────────────────────────────────────┐
 │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌───────┐│
 │  │ Step A  │→│ Step B  │→│ Step C  │→│ Step D  │→│ Step E││
@@ -267,9 +272,9 @@ INNGEST_SIGNING_KEY=signkey-prod-xxxxx`}
       {/* Verify */}
       <Section title="Verify Setup">
         <div className="space-y-4">
-          <VerificationStep text="Run pnpm dev — both Next.js and Inngest dev server start" />
-          <VerificationStep text="Open http://localhost:8288 — Inngest dashboard shows 'pdr-ai' app" />
-          <VerificationStep text="Upload a document — 'process-document' function appears in the dashboard" />
+          <VerificationStep text="Run docker compose up — app, worker, and Inngest dev server start" />
+          <VerificationStep text="Open http://localhost:8288 — Inngest dashboard shows 'pdr-ai' app (synced from the worker)" />
+          <VerificationStep text="Upload a document — the ingestion pipeline appears in the dashboard" />
           <VerificationStep text="View step-by-step execution and logs in the Inngest timeline" />
         </div>
       </Section>
@@ -292,18 +297,19 @@ INNGEST_SIGNING_KEY=signkey-prod-xxxxx`}
               Inngest dashboard shows no functions
             </h4>
             <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Make sure Next.js is running and the Inngest dev server can reach <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>http://localhost:3000/api/inngest</code>.
-              If you started them separately, use <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm dev</code> instead so they start together.
+              Make sure the worker is running and the Inngest dev server can reach <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>http://localhost:8020/api/inngest</code> (inside
+              Compose: <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>http://worker:8020/api/inngest</code>).
+              The Next.js app does not serve Inngest functions.
             </p>
           </div>
           <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
             <h4 className={`font-semibold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Running Inngest dev server separately
+              Uploads stay queued and never process
             </h4>
             <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              If you prefer to run them in separate terminals, start Next.js
-              with <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm dev:next</code> and
-              Inngest with <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>pnpm inngest:dev</code>.
+              Ingestion is executed by the worker, which consumes the transactional
+              outbox. If the worker isn&apos;t running, uploads are accepted but never
+              processed — check <code className={`px-1 py-0.5 rounded text-xs ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>curl http://localhost:8020/healthz</code>.
             </p>
           </div>
         </div>

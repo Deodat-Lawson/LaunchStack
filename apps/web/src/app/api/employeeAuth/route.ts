@@ -1,29 +1,26 @@
 
 import { db } from "../../../server/db/index";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
 import {
     handleApiError,
     createSuccessResponse,
-    createUnauthorizedError,
     createForbiddenError,
     createNotFoundError
 } from "~/lib/api-utils";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 
 export async function GET() {
     try {
-        const { userId } = await auth();
-
-        if (!userId) {
-            return createUnauthorizedError("Authentication required. Please sign in to continue.");
-        }
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
+        const clerkUserId = identity.data.clerkUserId;
 
         const [userInfo] = await db
             .select()
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, clerkUserId));
 
         if (!userInfo) {
             return createNotFoundError("User account not found. Please contact support.");

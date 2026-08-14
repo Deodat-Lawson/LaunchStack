@@ -1,10 +1,10 @@
 import { db } from "~/server/db/index";
 import { and, eq, inArray, sql } from "drizzle-orm";
-import { documentSections, pdfChunks, documentRetrievalChunks } from "@launchstack/core/db/schema";
+import { document, documentSections, documentRetrievalChunks } from "@launchstack/core/db/schema";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 
 interface ANNConfig {
-    strategy: 'hnsw' | 'ivf' | 'hybrid' | 'prefiltered' | 'matryoshka';
+    strategy: "hnsw" | "ivf" | "hybrid" | "prefiltered" | "matryoshka";
     probeCount?: number;
     efSearch?: number;
     maxCandidates?: number;
@@ -34,8 +34,8 @@ interface DocumentCluster {
 
 export class ANNOptimizer {
     private config: ANNConfig;
-    
-    constructor(config: ANNConfig = { strategy: 'hybrid' }) {
+
+    constructor(config: ANNConfig = { strategy: "hybrid" }) {
         this.config = config;
     }
 
@@ -48,21 +48,26 @@ export class ANNOptimizer {
         if (!documentIds || documentIds.length === 0) {
             return [];
         }
-        
-        switch (this.config.strategy) {
-            case 'hnsw':
-                return this.hnswSearch(queryEmbedding, documentIds, limit, distanceThreshold);
-            
-            case 'ivf':
-                return this.ivfSearch(queryEmbedding, documentIds, limit, distanceThreshold);
-            
-            case 'prefiltered':
-                return this.prefilteredSearch(queryEmbedding, documentIds, limit, distanceThreshold);
 
-            case 'matryoshka':
+        switch (this.config.strategy) {
+            case "hnsw":
+                return this.hnswSearch(queryEmbedding, documentIds, limit, distanceThreshold);
+
+            case "ivf":
+                return this.ivfSearch(queryEmbedding, documentIds, limit, distanceThreshold);
+
+            case "prefiltered":
+                return this.prefilteredSearch(
+                    queryEmbedding,
+                    documentIds,
+                    limit,
+                    distanceThreshold
+                );
+
+            case "matryoshka":
                 return this.matryoshkaSearch(queryEmbedding, documentIds, limit, distanceThreshold);
-            
-            case 'hybrid':
+
+            case "hybrid":
             default:
                 return this.hybridSearch(queryEmbedding, documentIds, limit, distanceThreshold);
         }
@@ -75,23 +80,33 @@ export class ANNOptimizer {
         threshold: number
     ): Promise<ANNResult[]> {
         try {
-            const embeddingStr = `[${queryEmbedding.join(',')}]`;
-            
-            const approximateLimit = Math.min(limit * 5, 100);
-            
-            const results = await db.select({
-                id: documentSections.id,
-                content: documentSections.content,
-                page: documentSections.pageNumber,
-                documentId: documentSections.documentId,
-                distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
-            })
-            .from(documentSections)
-            .where(inArray(documentSections.documentId, documentIds.map(id => BigInt(id))))
-            .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
-            .limit(approximateLimit);
+            const embeddingStr = `[${queryEmbedding.join(",")}]`;
 
-            let rows: ANNRow[] = results.map(r => ({
+            const approximateLimit = Math.min(limit * 5, 100);
+
+            const results = await db
+                .select({
+                    id: documentSections.id,
+                    content: documentSections.content,
+                    page: documentSections.pageNumber,
+                    documentId: documentSections.documentId,
+                    distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
+                })
+                .from(documentSections)
+                .innerJoin(document, eq(documentSections.documentId, document.id))
+                .where(
+                    and(
+                        inArray(
+                            documentSections.documentId,
+                            documentIds.map(id => BigInt(id))
+                        ),
+                        eq(documentSections.versionId, document.currentVersionId)
+                    )
+                )
+                .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
+                .limit(approximateLimit);
+
+            const rows: ANNRow[] = results.map(r => ({
                 id: r.id,
                 content: r.content,
                 page: r.page ?? 0,
@@ -99,33 +114,10 @@ export class ANNOptimizer {
                 distance: Number(r.distance ?? 1),
             }));
 
-            // Fallback to legacy table
-            if (rows.length === 0 && documentIds.length === 1) {
-                const legacyResults = await db.select({
-                    id: pdfChunks.id,
-                    content: pdfChunks.content,
-                    page: pdfChunks.page,
-                    documentId: pdfChunks.documentId,
-                    distance: sql<number>`${pdfChunks.embedding} <=> ${embeddingStr}::vector`,
-                })
-                .from(pdfChunks)
-                .where(eq(pdfChunks.documentId, BigInt(documentIds[0]!)))
-                .orderBy(sql`${pdfChunks.embedding} <=> ${embeddingStr}::vector`)
-                .limit(approximateLimit);
-
-                rows = legacyResults.map(r => ({
-                    id: r.id,
-                    content: r.content,
-                    page: r.page,
-                    documentId: Number(r.documentId),
-                    distance: Number(r.distance ?? 1),
-                }));
-            }
-
             const refinedResults = rows
                 .map(row => ({
                     ...row,
-                    confidence: Math.max(0, 1 - row.distance)
+                    confidence: Math.max(0, 1 - row.distance),
                 }))
                 .filter(r => r.distance <= threshold)
                 .sort((a, b) => a.distance - b.distance)
@@ -146,8 +138,8 @@ export class ANNOptimizer {
     ): Promise<ANNResult[]> {
         try {
             const relevantClusters = await this.findRelevantDocumentClusters(
-                queryEmbedding, 
-                documentIds, 
+                queryEmbedding,
+                documentIds,
                 this.config.probeCount ?? 3
             );
 
@@ -156,27 +148,32 @@ export class ANNOptimizer {
             }
 
             const clusterChunkIds = relevantClusters.flatMap(c => c.chunkIds);
-            
+
             if (clusterChunkIds.length === 0) {
                 return [];
             }
-            
-            const embeddingStr = `[${queryEmbedding.join(',')}]`;
-            
-            const results = await db.select({
-                id: documentSections.id,
-                content: documentSections.content,
-                page: documentSections.pageNumber,
-                documentId: documentSections.documentId,
-                distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
-            })
-            .from(documentSections)
-            .where(and(
-                inArray(documentSections.id, clusterChunkIds),
-                sql`${documentSections.embedding} <=> ${embeddingStr}::vector <= ${threshold}`,
-            ))
-            .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
-            .limit(limit);
+
+            const embeddingStr = `[${queryEmbedding.join(",")}]`;
+
+            const results = await db
+                .select({
+                    id: documentSections.id,
+                    content: documentSections.content,
+                    page: documentSections.pageNumber,
+                    documentId: documentSections.documentId,
+                    distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
+                })
+                .from(documentSections)
+                .innerJoin(document, eq(documentSections.documentId, document.id))
+                .where(
+                    and(
+                        inArray(documentSections.id, clusterChunkIds),
+                        eq(documentSections.versionId, document.currentVersionId),
+                        sql`${documentSections.embedding} <=> ${embeddingStr}::vector <= ${threshold}`
+                    )
+                )
+                .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
+                .limit(limit);
 
             return results.map(row => ({
                 id: row.id,
@@ -192,7 +189,6 @@ export class ANNOptimizer {
         }
     }
 
-
     private async prefilteredSearch(
         queryEmbedding: number[],
         documentIds: number[],
@@ -200,8 +196,11 @@ export class ANNOptimizer {
         threshold: number
     ): Promise<ANNResult[]> {
         try {
-            const docScores = await this.calculateDocumentRelevanceScores(queryEmbedding, documentIds);
-            
+            const docScores = await this.calculateDocumentRelevanceScores(
+                queryEmbedding,
+                documentIds
+            );
+
             const sortedDocIds = docScores
                 .filter(d => d.score > (this.config.prefilterThreshold ?? 0.3))
                 .sort((a, b) => b.score - a.score)
@@ -212,26 +211,31 @@ export class ANNOptimizer {
             }
 
             const results: ANNResult[] = [];
-            const embeddingStr = `[${queryEmbedding.join(',')}]`;
+            const embeddingStr = `[${queryEmbedding.join(",")}]`;
 
             for (const docId of sortedDocIds) {
                 if (results.length >= limit) break;
 
                 const remaining = limit - results.length;
-                const docResults = await db.select({
-                    id: documentSections.id,
-                    content: documentSections.content,
-                    page: documentSections.pageNumber,
-                    documentId: documentSections.documentId,
-                    distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
-                })
-                .from(documentSections)
-                .where(and(
-                    eq(documentSections.documentId, BigInt(docId)),
-                    sql`${documentSections.embedding} <=> ${embeddingStr}::vector <= ${threshold}`,
-                ))
-                .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
-                .limit(remaining * 2);
+                const docResults = await db
+                    .select({
+                        id: documentSections.id,
+                        content: documentSections.content,
+                        page: documentSections.pageNumber,
+                        documentId: documentSections.documentId,
+                        distance: sql<number>`${documentSections.embedding} <=> ${embeddingStr}::vector`,
+                    })
+                    .from(documentSections)
+                    .innerJoin(document, eq(documentSections.documentId, document.id))
+                    .where(
+                        and(
+                            eq(documentSections.documentId, BigInt(docId)),
+                            eq(documentSections.versionId, document.currentVersionId),
+                            sql`${documentSections.embedding} <=> ${embeddingStr}::vector <= ${threshold}`
+                        )
+                    )
+                    .orderBy(sql`${documentSections.embedding} <=> ${embeddingStr}::vector`)
+                    .limit(remaining * 2);
 
                 const mappedResults: ANNResult[] = docResults.map(row => ({
                     id: row.id,
@@ -252,7 +256,6 @@ export class ANNOptimizer {
         }
     }
 
-
     /**
      * Matryoshka coarse-to-fine: use 512-dim short embeddings from
      * document_retrieval_chunks (HNSW-indexed) for fast candidate filtering,
@@ -267,39 +270,56 @@ export class ANNOptimizer {
         try {
             const shortDim = 512;
             const queryShort = queryEmbedding.slice(0, shortDim);
-            const shortStr = `[${queryShort.join(',')}]`;
+            const shortStr = `[${queryShort.join(",")}]`;
 
             const coarseCandidateCount = Math.min(limit * 6, 120);
 
-            const coarseResults = await db.select({
-                id: documentRetrievalChunks.id,
-                content: documentRetrievalChunks.content,
-                documentId: documentRetrievalChunks.documentId,
-                contextChunkId: documentRetrievalChunks.contextChunkId,
-                shortDistance: sql<number>`${documentRetrievalChunks.embeddingShort} <=> ${shortStr}::vector`,
-            })
-            .from(documentRetrievalChunks)
-            .where(inArray(documentRetrievalChunks.documentId, documentIds.map(id => BigInt(id))))
-            .orderBy(sql`${documentRetrievalChunks.embeddingShort} <=> ${shortStr}::vector`)
-            .limit(coarseCandidateCount);
+            const coarseResults = await db
+                .select({
+                    id: documentRetrievalChunks.id,
+                    content: documentRetrievalChunks.content,
+                    documentId: documentRetrievalChunks.documentId,
+                    contextChunkId: documentRetrievalChunks.contextChunkId,
+                    shortDistance: sql<number>`${documentRetrievalChunks.embeddingShort} <=> ${shortStr}::vector`,
+                })
+                .from(documentRetrievalChunks)
+                .innerJoin(document, eq(documentRetrievalChunks.documentId, document.id))
+                .where(
+                    and(
+                        inArray(
+                            documentRetrievalChunks.documentId,
+                            documentIds.map(id => BigInt(id))
+                        ),
+                        eq(documentRetrievalChunks.versionId, document.currentVersionId)
+                    )
+                )
+                .orderBy(sql`${documentRetrievalChunks.embeddingShort} <=> ${shortStr}::vector`)
+                .limit(coarseCandidateCount);
 
             if (coarseResults.length === 0) {
                 return this.hnswSearch(queryEmbedding, documentIds, limit, threshold);
             }
 
             const candidateIds = coarseResults.map(r => r.id);
-            const fullStr = `[${queryEmbedding.join(',')}]`;
+            const fullStr = `[${queryEmbedding.join(",")}]`;
 
-            const refinedResults = await db.select({
-                id: documentRetrievalChunks.id,
-                content: documentRetrievalChunks.content,
-                documentId: documentRetrievalChunks.documentId,
-                distance: sql<number>`${documentRetrievalChunks.embedding} <=> ${fullStr}::vector`,
-            })
-            .from(documentRetrievalChunks)
-            .where(inArray(documentRetrievalChunks.id, candidateIds))
-            .orderBy(sql`${documentRetrievalChunks.embedding} <=> ${fullStr}::vector`)
-            .limit(limit);
+            const refinedResults = await db
+                .select({
+                    id: documentRetrievalChunks.id,
+                    content: documentRetrievalChunks.content,
+                    documentId: documentRetrievalChunks.documentId,
+                    distance: sql<number>`${documentRetrievalChunks.embedding} <=> ${fullStr}::vector`,
+                })
+                .from(documentRetrievalChunks)
+                .innerJoin(document, eq(documentRetrievalChunks.documentId, document.id))
+                .where(
+                    and(
+                        inArray(documentRetrievalChunks.id, candidateIds),
+                        eq(documentRetrievalChunks.versionId, document.currentVersionId)
+                    )
+                )
+                .orderBy(sql`${documentRetrievalChunks.embedding} <=> ${fullStr}::vector`)
+                .limit(limit);
 
             const contextChunkIds = coarseResults
                 .map(r => Number(r.contextChunkId))
@@ -307,12 +327,19 @@ export class ANNOptimizer {
 
             const pageMap = new Map<number, number>();
             if (contextChunkIds.length > 0) {
-                const pages = await db.select({
-                    id: documentSections.id,
-                    page: documentSections.pageNumber,
-                })
-                .from(documentSections)
-                .where(inArray(documentSections.id, contextChunkIds));
+                const pages = await db
+                    .select({
+                        id: documentSections.id,
+                        page: documentSections.pageNumber,
+                    })
+                    .from(documentSections)
+                    .innerJoin(document, eq(documentSections.documentId, document.id))
+                    .where(
+                        and(
+                            inArray(documentSections.id, contextChunkIds),
+                            eq(documentSections.versionId, document.currentVersionId)
+                        )
+                    );
 
                 for (const p of pages) {
                     pageMap.set(p.id, p.page ?? 1);
@@ -347,7 +374,6 @@ export class ANNOptimizer {
         limit: number,
         threshold: number
     ): Promise<ANNResult[]> {
-        
         if (documentIds.length <= 5) {
             return this.hnswSearch(queryEmbedding, documentIds, limit, threshold);
         }
@@ -364,12 +390,11 @@ export class ANNOptimizer {
         queryEmbedding: number[],
         documentIds: number[]
     ): Promise<{ documentId: number; score: number }[]> {
-        
         const scores: { documentId: number; score: number }[] = [];
-        
+
         for (const docId of documentIds) {
             let cluster = documentClustersCache.get(docId);
-            
+
             if (!cluster || Date.now() - cluster.lastUpdated.getTime() > 3600000) {
                 cluster = await this.buildDocumentCluster(docId);
                 documentClustersCache.set(docId, cluster);
@@ -383,10 +408,19 @@ export class ANNOptimizer {
     }
 
     private async buildDocumentCluster(documentId: number): Promise<DocumentCluster> {
-        const chunks = await db.select({
-            id: documentSections.id,
-            embedding: documentSections.embedding
-        }).from(documentSections).where(eq(documentSections.documentId, BigInt(documentId)));
+        const chunks = await db
+            .select({
+                id: documentSections.id,
+                embedding: documentSections.embedding,
+            })
+            .from(documentSections)
+            .innerJoin(document, eq(documentSections.documentId, document.id))
+            .where(
+                and(
+                    eq(documentSections.documentId, BigInt(documentId)),
+                    eq(documentSections.versionId, document.currentVersionId)
+                )
+            );
 
         if (chunks.length === 0) {
             return {
@@ -394,13 +428,13 @@ export class ANNOptimizer {
                 centroid: [],
                 chunkIds: [],
                 avgDistance: 1,
-                lastUpdated: new Date()
+                lastUpdated: new Date(),
             };
         }
 
         const dimension = chunks[0]?.embedding?.length ?? 1536;
         const centroid = new Array(dimension).fill(0);
-        
+
         for (const chunk of chunks) {
             if (chunk.embedding) {
                 for (let i = 0; i < dimension; i++) {
@@ -408,18 +442,21 @@ export class ANNOptimizer {
                 }
             }
         }
-        
+
         for (let i = 0; i < dimension; i++) {
             centroid[i] /= chunks.length;
         }
 
         let totalDistance = 0;
         let comparisons = 0;
-        
+
         for (let i = 0; i < chunks.length && comparisons < 100; i++) {
             for (let j = i + 1; j < chunks.length && comparisons < 100; j++) {
                 if (chunks[i]?.embedding && chunks[j]?.embedding) {
-                    totalDistance += this.euclideanDistance(chunks[i]!.embedding!, chunks[j]!.embedding!);
+                    totalDistance += this.euclideanDistance(
+                        chunks[i]!.embedding!,
+                        chunks[j]!.embedding!
+                    );
                     comparisons++;
                 }
             }
@@ -432,7 +469,7 @@ export class ANNOptimizer {
             centroid: centroid as number[],
             chunkIds: chunks.map(c => c.id),
             avgDistance,
-            lastUpdated: new Date()
+            lastUpdated: new Date(),
         };
     }
 
@@ -441,12 +478,11 @@ export class ANNOptimizer {
         documentIds: number[],
         topK = 3
     ): Promise<DocumentCluster[]> {
-        
         const clusters: Array<{ cluster: DocumentCluster; similarity: number }> = [];
 
         for (const docId of documentIds) {
             let cluster = documentClustersCache.get(docId);
-            
+
             if (!cluster) {
                 cluster = await this.buildDocumentCluster(docId);
                 documentClustersCache.set(docId, cluster);
@@ -500,11 +536,12 @@ export class ANNOptimizer {
         const entries = Array.from(documentClustersCache.values());
         return {
             size: entries.length,
-            oldestEntry: entries.length > 0 
-                ? new Date(Math.min(...entries.map(e => e.lastUpdated.getTime())))
-                : null
+            oldestEntry:
+                entries.length > 0
+                    ? new Date(Math.min(...entries.map(e => e.lastUpdated.getTime())))
+                    : null,
         };
     }
 }
 
-export default ANNOptimizer; 
+export default ANNOptimizer;

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { JSONContent } from "@tiptap/react";
 import { FileText, Plus } from "lucide-react";
-import type { DocumentNote } from "@launchstack/core/db/schema/document-notes";
+import type { DocumentNote } from "~/server/db/schema";
 import {
   buildAnchorFromDraft,
   type DraftState,
@@ -106,10 +106,10 @@ export function DocumentNotesPanel({
       title: note.title ?? "",
       rich: (note.contentRich as JSONContent | null) ?? null,
       text: note.contentMarkdown ?? note.content ?? "",
-      tags: (note.tags as string[] | null) ?? [],
+      tags: (note.tags) ?? [],
       anchorQuote: anchor?.quote?.exact ?? "",
       anchorPage: primaryPageOfAnchor(anchor)?.toString() ?? "",
-      anchorQuads: Array.isArray(primary?.quads) ? primary!.quads! : [],
+      anchorQuads: Array.isArray(primary?.quads) ? primary.quads : [],
     });
     setError(null);
   };

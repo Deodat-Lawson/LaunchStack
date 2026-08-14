@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes';
 import { Github, Moon, Sun } from 'lucide-react';
 import styles from '../../styles/marketing.module.css';
 
-const GITHUB_REPO = 'https://github.com/Deodat-Lawson/pdr_ai_v2';
+const GITHUB_REPO = 'https://github.com/Deodat-Lawson/LaunchStack';
 
 interface MarketingShellProps {
   children: React.ReactNode;

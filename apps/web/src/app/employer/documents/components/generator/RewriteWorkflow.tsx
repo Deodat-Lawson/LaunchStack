@@ -237,7 +237,7 @@ function deriveDelta(original: string, proposed: string): string {
 }
 
 function deriveChangeCount(parts: DiffPart[]): number {
-  return parts.filter((p) => p.added || p.removed).length;
+  return parts.filter((p) => Boolean(p.added) || Boolean(p.removed)).length;
 }
 
 function summarizeSection(parts: DiffPart[]): string {
@@ -517,7 +517,8 @@ export function RewriteWorkflow({
         error?: string;
       };
       try {
-        data = JSON.parse(responseText);
+        // Known response shape of our AI generation route.
+        data = JSON.parse(responseText) as typeof data;
       } catch {
         setError(
           responseText.slice(0, 120) ||
@@ -639,7 +640,7 @@ export function RewriteWorkflow({
           />
 
           <main className={s.rwsPipe}>
-            {hasProposal && currentSection && currentSection.proposed.trim() ? (
+            {hasProposal && currentSection?.proposed.trim() ? (
               <DiffPipeline
                 section={currentSection}
                 index={currentIndex}

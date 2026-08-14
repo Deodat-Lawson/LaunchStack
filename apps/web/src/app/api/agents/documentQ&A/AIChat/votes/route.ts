@@ -1,19 +1,37 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { agentAiChatbotVote } from "@launchstack/core/db/schema";
+import { agentAiChatbotVote } from "~/server/db/schema";
 import { eq, and } from "drizzle-orm";
 import { validateRequestBody, CreateVoteSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  assertChatOwnedByUser,
+  assertMessageInChat,
+} from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // POST /api/agent-ai-chatbot/votes - Vote on a message
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateVoteSchema);
     if (!validation.success) return validation.response;
     const { chatId, messageId, isUpvoted, feedback } = validation.data;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
+    const message = await assertMessageInChat(
+      messageId,
+      chatId,
+      ctx.data.clerkUserId,
+    );
+    if (!message.success) return message.response;
 
     // Check if vote already exists
     const [existingVote] = await db
@@ -76,6 +94,9 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/votes?messageId=xxx - Get vote for a message
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const messageId = searchParams.get("messageId");
@@ -87,6 +108,16 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
+    const message = await assertMessageInChat(
+      messageId,
+      chatId,
+      ctx.data.clerkUserId,
+    );
+    if (!message.success) return message.response;
 
     const [vote] = await db
       .select()
@@ -110,4 +141,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

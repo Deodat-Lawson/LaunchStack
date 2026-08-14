@@ -16,26 +16,32 @@ import {
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { users, document, ChatHistory } from "@launchstack/core/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { document } from "@launchstack/core/db/schema";
+import { ChatHistory } from "~/server/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import {
+    isManagementRole,
+    requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 import {
     normalizeModelContent,
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModelForProvider,
-    getProviderDefaultModel,
-    describeProviderError,
+    describeChatError,
     getEmbeddings,
     buildReferences,
     extractRecommendedPages,
-    type AIModelType,
 } from "../../services";
-import { supportsVision } from "@launchstack/core/llm/types";
+import {
+    describeChatResolutionFailure,
+    resolveConfiguredChatModel,
+    selectChatRoute,
+} from "~/lib/models";
+import { normalizeTokenUsage } from "@launchstack/core/llm";
+import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
@@ -49,8 +55,6 @@ const qaAnnOptimizer = new ANNOptimizer({
     strategy: 'hnsw',
     efSearch: 200
 });
-
-const COMPANY_SCOPE_ROLES = new Set(["employer", "owner"]);
 
 /**
  * Cap on total plaintext pulled from text attachments across a single turn.
@@ -205,24 +209,20 @@ export async function POST(request: Request) {
         };
 
         try {
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) {
+                recordResult("error");
+                return ctx.response;
+            }
+
             const validation = await validateRequestBody(request, QuestionSchema);
             if (!validation.success) {
                 recordResult("error");
                 return validation.response;
             }
 
-            const { userId } = await auth();
-            if (!userId) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Unauthorized"
-                }, { status: 401 });
-            }
-
             const {
                 documentId,
-                companyId,
                 question,
                 style,
                 searchScope,
@@ -238,15 +238,68 @@ export async function POST(request: Request) {
                 attachments,
             } = validation.data;
 
-            // Validate search scope requirements
-            if (searchScope === "company" && !companyId) {
+            const userCompanyId = ctx.data.companyId;
+            const numericCompanyId = Number(userCompanyId);
+
+            // Resolve the chat route before any retrieval, web search, or
+            // embedding work: an unavailable route is a 400, and paying for
+            // context we are about to discard helps nobody.
+            const imageAttachments = (attachments ?? []).filter(
+                (a) => a.kind === "image",
+            );
+            const textAttachments = (attachments ?? []).filter(
+                (a) => a.kind === "text",
+            );
+            const { route, requiredCapabilities } = selectChatRoute({
+                vision: imageAttachments.length > 0,
+                reasoning: Boolean(thinkingMode),
+            });
+
+            let resolved;
+            try {
+                resolved = resolveConfiguredChatModel({
+                    route,
+                    requiredCapabilities,
+                    reasoningControl: { enabled: Boolean(thinkingMode) },
+                });
+            } catch (modelError) {
                 recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "companyId is required for company-wide search"
-                }, { status: 400 });
+                const failure = describeChatResolutionFailure(modelError);
+                return NextResponse.json(
+                    { success: false, message: failure.message },
+                    { status: failure.status },
+                );
             }
 
+            const compatibility = validateDeprecatedChatSelection(
+                { provider, model: aiModel },
+                resolved,
+            );
+            if (!compatibility.ok) {
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, message: compatibility.message },
+                    { status: compatibility.status },
+                );
+            }
+            const { modelId: selectedAiModel, chat } = resolved;
+
+            if (
+                imageAttachments.length > 0 &&
+                resolved.behavior.image?.maxImages !== undefined &&
+                imageAttachments.length > resolved.behavior.image.maxImages
+            ) {
+                recordResult("error");
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: `The configured vision model accepts at most ${resolved.behavior.image.maxImages} image(s) per request.`,
+                    },
+                    { status: 400 },
+                );
+            }
+
+            // Validate search scope requirements
             if (searchScope === "document" && !documentId) {
                 recordResult("error");
                 return NextResponse.json({
@@ -271,59 +324,29 @@ export async function POST(request: Request) {
                 }, { status: 400 });
             }
 
-            // Verify user and permissions
-            const [requestingUser] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId))
-                .limit(1);
-
-            if (!requestingUser) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Invalid user."
-                }, { status: 401 });
-            }
-
-            const userCompanyId = await resolveActiveCompanyForUser(
-                requestingUser.id,
-                requestingUser.companyId
-            );
-            const numericCompanyId = userCompanyId ? Number(userCompanyId) : null;
-
-            if (numericCompanyId === null || Number.isNaN(numericCompanyId)) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "User is not associated with a valid company."
-                }, { status: 403 });
-            }
-
-            // Validate company/archive search permissions
+            // Validate company/archive search permissions — company scope
+            // always uses the caller's active workspace (ignore body companyId).
+            // Membership roles: owner/admin may search company-wide; editors may not.
             if (searchScope === "company" || searchScope === "archive") {
-                if (!COMPANY_SCOPE_ROLES.has(requestingUser.role)) {
+                if (!isManagementRole(ctx.data.role)) {
                     recordResult("error");
                     return NextResponse.json({
                         success: false,
-                        message: "Only employer accounts can run company-wide searches."
-                    }, { status: 403 });
-                }
-
-                if (companyId !== undefined && companyId !== numericCompanyId) {
-                    recordResult("error");
-                    return NextResponse.json({
-                        success: false,
-                        message: "Company mismatch detected for the current user."
+                        message: "Only workspace owners and admins can run company-wide searches."
                     }, { status: 403 });
                 }
             }
 
-            // Validate document access
+            // Validate document access. The verified row is kept so history
+            // logging below can reuse it instead of re-reading whatever
+            // `documentId` the caller sent — on company/archive/selected
+            // searches that id is extraneous and was never authorized.
+            let authorizedDocument: { id: number; title: string } | null = null;
             if (searchScope === "document" && documentId) {
                 const [targetDocument] = await db
                     .select({
                         id: document.id,
+                        title: document.title,
                         companyId: document.companyId
                     })
                     .from(document)
@@ -345,6 +368,11 @@ export async function POST(request: Request) {
                         message: "You do not have access to this document."
                     }, { status: 403 });
                 }
+
+                authorizedDocument = {
+                    id: targetDocument.id,
+                    title: targetDocument.title,
+                };
             }
 
             const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
@@ -357,7 +385,7 @@ export async function POST(request: Request) {
                     .from(document)
                     .where(and(
                         eq(document.sourceArchiveName, archiveName),
-                        eq(document.companyId, BigInt(numericCompanyId))
+                        eq(document.companyId, userCompanyId)
                     ));
 
                 archiveDocumentIds = archiveDocs.map(d => d.id);
@@ -589,36 +617,8 @@ export async function POST(request: Request) {
                 5
             );
 
-            // Get AI model and generate comprehensive response
-            const resolvedProvider = provider ?? "openai";
-            const selectedAiModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
-
-            // Ephemeral attachment handling. Images require a vision-capable
-            // model; fail fast with a clear error before the LLM call.
-            const imageAttachments = (attachments ?? []).filter(
-                (a) => a.kind === "image",
-            );
-            const textAttachments = (attachments ?? []).filter(
-                (a) => a.kind === "text",
-            );
-            if (imageAttachments.length > 0 && !supportsVision(selectedAiModel)) {
-                recordResult("error");
-                return NextResponse.json(
-                    {
-                        success: false,
-                        message: `Image attachments require a vision-capable model. "${selectedAiModel}" cannot read images — pick GPT-5, Claude Sonnet 4, or Gemini.`,
-                    },
-                    { status: 400 },
-                );
-            }
-
             const attachmentTextBlock = await buildAttachmentTextBlock(textAttachments);
 
-            const chat = getChatModelForProvider({
-                provider: resolvedProvider,
-                model: selectedAiModel,
-                thinking: thinkingMode,
-            });
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
             // Build conversation context
@@ -657,12 +657,14 @@ export async function POST(request: Request) {
 
             let response;
             try {
-                response = await chat.call([
-                    new SystemMessage(systemPrompt),
-                    humanMessage,
-                ]);
+                response = await chat.invoke(
+                    resolved.prepareMessages([
+                        new SystemMessage(systemPrompt),
+                        humanMessage,
+                    ]),
+                );
             } catch (modelError) {
-                const friendly = describeProviderError(resolvedProvider, modelError, selectedAiModel);
+                const friendly = describeChatError(modelError, selectedAiModel);
                 if (friendly) {
                     recordResult("error");
                     return NextResponse.json(
@@ -679,33 +681,23 @@ export async function POST(request: Request) {
             let summarizedAnswer = normalizeModelContent(response.content);
             const totalTime = Date.now() - startTime;
 
-            // Log + meter LLM token usage
-            {
-                const usage = response.response_metadata?.tokenUsage as
-                    | { promptTokens?: number; completionTokens?: number }
-                    | undefined;
-                const promptTokens = usage?.promptTokens ?? 0;
-                const completionTokens = usage?.completionTokens ?? 0;
-                console.log(
-                    `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
-                );
-            }
-            if (isCloudMode() && userCompanyId) {
-                const usage = response.response_metadata?.tokenUsage as
-                    | { promptTokens?: number; completionTokens?: number }
-                    | undefined;
-                const promptTokens = usage?.promptTokens ?? 0;
-                const completionTokens = usage?.completionTokens ?? 0;
-                if (promptTokens + completionTokens > 0) {
-                    const tokenCost = llmChatTokens(promptTokens, completionTokens);
-                    debitTokens({
-                        companyId: userCompanyId,
-                        amount: tokenCost,
-                        service: "llm_chat",
-                        description: `Chat query via ${resolvedProvider}/${selectedAiModel}`,
-                        metadata: { promptTokens, completionTokens, provider: resolvedProvider, model: selectedAiModel },
-                    }).catch((err) => console.warn("[AIChat] Token debit failed:", err));
-                }
+            // Log + meter LLM token usage. Normalized at the chat boundary so
+            // credits are debited the same way whichever endpoint answered.
+            const usage = normalizeTokenUsage(response);
+            const promptTokens = usage.inputTokens ?? 0;
+            const completionTokens = usage.outputTokens ?? 0;
+            console.log(
+                `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${usage.totalTokens ?? promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
+            );
+            if (isCloudMode() && userCompanyId && promptTokens + completionTokens > 0) {
+                const tokenCost = llmChatTokens(promptTokens, completionTokens);
+                debitTokens({
+                    companyId: userCompanyId,
+                    amount: tokenCost,
+                    service: "llm_chat",
+                    description: `Chat query via ${selectedAiModel}`,
+                    metadata: { promptTokens, completionTokens, model: selectedAiModel, route },
+                }).catch((err) => console.warn("[AIChat] Token debit failed:", err));
             }
 
             const sourceTexts = documents.map(d => d.pageContent);
@@ -714,25 +706,21 @@ export async function POST(request: Request) {
                 summarizedAnswer = supervision.adjustedOutput;
             }
 
-            // Log query to ChatHistory for analytics
+            // Log query to ChatHistory for analytics. Only document-scope
+            // searches produce a history row, and only against the document
+            // authorized above — a company/archive/selected search carrying a
+            // stray documentId must not attach the caller's history to it.
             try {
-                if (documentId) {
-                    const [doc] = await db
-                        .select({ title: document.title })
-                        .from(document)
-                        .where(eq(document.id, documentId));
-
-                    if (doc) {
-                        await db.insert(ChatHistory).values({
-                            UserId: userId,
-                            documentId: BigInt(documentId),
-                            documentTitle: doc.title,
-                            question: question,
-                            response: summarizedAnswer,
-                            pages: extractRecommendedPages(documents),
-                            queryType: "simple"
-                        });
-                    }
+                if (searchScope === "document" && authorizedDocument) {
+                    await db.insert(ChatHistory).values({
+                        UserId: ctx.data.clerkUserId,
+                        documentId: BigInt(authorizedDocument.id),
+                        documentTitle: authorizedDocument.title,
+                        question: question,
+                        response: summarizedAnswer,
+                        pages: extractRecommendedPages(documents),
+                        queryType: "simple"
+                    });
                 }
             } catch (logError) {
                 console.error("Failed to log chat history:", logError);
@@ -777,4 +765,3 @@ export async function POST(request: Request) {
         }
     });
 }
-

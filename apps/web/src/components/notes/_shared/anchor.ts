@@ -3,7 +3,7 @@ import type { JSONContent } from "@tiptap/react";
 /**
  * Anchor shape the client cares about. Deliberately loose on `primary` so
  * format-specific overlays can extend without forcing a type bump on every
- * surface. See `NoteAnchor` in `@launchstack/core/db/schema/document-notes`
+ * surface. See `NoteAnchor` in `~/server/db/schema`
  * for the full server-side shape.
  */
 export type NoteAnchorLite = {

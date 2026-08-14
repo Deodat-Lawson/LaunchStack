@@ -2,7 +2,7 @@
  * Audio Transcription Service
  *
  * Handles transcription of MP3/MP4 audio files using the configured provider
- * (Groq Whisper, OpenAI Whisper, or sidecar).
+ * (Gemini audio understanding, or the self-hosted transcription service).
  * Converts audio files to text for processing through the standard document pipeline.
  */
 
@@ -10,8 +10,10 @@ import { getStoragePort } from "@launchstack/core/storage";
 import { getTranscriptionProvider } from "./providers";
 import { creditsDebitSafe } from "@launchstack/core/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
-
-const SIDECAR_URL = process.env.SIDECAR_URL ?? "http://localhost:8000";
+import {
+  getTranscriptionServiceApiKey,
+  getTranscriptionServiceUrl,
+} from "./service-config";
 
 export interface TranscriptSegment {
   start: number;
@@ -198,20 +200,26 @@ export function isVideoUrl(url: string): boolean {
 }
 
 /**
- * Transcribe audio from a video platform URL via the sidecar's
- * /download-and-transcribe endpoint (yt-dlp + Whisper).
+ * Transcribe audio from a video platform URL via the transcription service's
+ * /download-and-transcribe endpoint (yt-dlp, then local transcription).
  */
 export async function transcribeVideoFromUrl(
   videoUrl: string,
   maxDuration = 7200
 ): Promise<VideoTranscriptionResult> {
-  console.log(`[TranscribeVideo] Sending to sidecar: ${videoUrl}`);
+  console.log(`[TranscribeVideo] Sending to transcription service: ${videoUrl}`);
 
-  const response = await fetch(`${SIDECAR_URL}/download-and-transcribe`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url: videoUrl, max_duration: maxDuration }),
-  });
+  const response = await fetch(
+    `${getTranscriptionServiceUrl()}/download-and-transcribe`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": getTranscriptionServiceApiKey(),
+      },
+      body: JSON.stringify({ url: videoUrl, max_duration: maxDuration }),
+    }
+  );
 
   if (!response.ok) {
     const errorText = await response.text();

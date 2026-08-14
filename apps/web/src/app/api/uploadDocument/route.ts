@@ -6,41 +6,36 @@
  */
 
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { users, ocrJobs } from "@launchstack/core/db/schema";
+import { ocrJobs } from "@launchstack/core/db/schema";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { UploadAuthorizationError } from "~/server/services/internal-file-ref";
 
-/**
- * Request validation schema
- * Accepts either a full URL (cloud) or a relative path (database)
- */
 const UploadDocumentSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   documentUrl: z.string().min(1, "Document URL or path is required"),
   documentName: z.string().min(1, "Document name is required"),
   category: z.string().optional(),
   preferredProvider: z.string().optional(),
   storageType: z.enum(["s3", "database"]).optional(),
-  /** MIME type of the uploaded file — used to route non-PDF files to the correct adapter */
   mimeType: z.string().optional(),
-  /** Original filename with extension — used for adapter routing when documentName has been cleaned */
   originalFilename: z.string().optional(),
-  /** Storage provider identifier for local S3 uploads (e.g. "seaweedfs") */
   storageProvider: z.string().optional(),
-  /** S3 object key for local uploads */
   storagePathname: z.string().optional(),
   embeddingIndexKey: z.string().min(1).optional(),
 });
 
 export async function POST(request: Request) {
   return withRateLimit(request, RateLimitPresets.strict, async () => {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     try {
       const validation = await validateRequestBody(request, UploadDocumentSchema);
       if (!validation.success) {
@@ -48,7 +43,6 @@ export async function POST(request: Request) {
       }
 
       const {
-        userId,
         documentUrl: rawDocumentUrl,
         documentName,
         category,
@@ -59,26 +53,14 @@ export async function POST(request: Request) {
         embeddingIndexKey,
       } = validation.data;
 
-      const [userInfo] = await db
-        .select()
-        .from(users)
-        .where(eq(users.userId, userId));
-
-      if (!userInfo) {
-        console.warn(`[UploadDocument] Rejected: user not found userId=${userId}`);
-        return NextResponse.json(
-          { error: "Invalid user" },
-          { status: 400 }
-        );
-      }
-
       const uploadResult = await processDocumentUpload({
         user: {
-          userId,
-          companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
+          userId: ctx.data.clerkUserId,
+          companyId: ctx.data.companyId,
         },
         documentName,
         rawDocumentUrl,
+        creationKey: `upload:${rawDocumentUrl}`,
         category,
         preferredProvider,
         explicitStorageType,
@@ -97,21 +79,28 @@ export async function POST(request: Request) {
           storageType: uploadResult.storageType,
           document: uploadResult.document,
         },
-        { status: 202 }
+        { status: 202 },
       );
     } catch (error) {
+      if (error instanceof UploadAuthorizationError) {
+        return NextResponse.json(
+          { error: error.message },
+          { status: error.status },
+        );
+      }
       console.error("[UploadDocument] Error triggering document processing:", error);
       return NextResponse.json(
-        {
-          error: "Failed to start document processing",
-        },
-        { status: 500 }
+        { error: "Failed to start document processing" },
+        { status: 500 },
       );
     }
   });
 }
 
 export async function GET(request: Request) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const jobId = searchParams.get("jobId");
@@ -119,19 +108,21 @@ export async function GET(request: Request) {
     if (!jobId) {
       return NextResponse.json(
         { error: "Job ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const [job] = await db
       .select()
       .from(ocrJobs)
-      .where(eq(ocrJobs.id, jobId));
+      .where(
+        and(eq(ocrJobs.id, jobId), eq(ocrJobs.companyId, ctx.data.companyId)),
+      );
 
     if (!job) {
       return NextResponse.json(
         { error: "Job not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -151,8 +142,7 @@ export async function GET(request: Request) {
     console.error("Error fetching job status:", error);
     return NextResponse.json(
       { error: "Failed to fetch job status" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-

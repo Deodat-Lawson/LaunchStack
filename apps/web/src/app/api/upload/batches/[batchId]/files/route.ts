@@ -6,6 +6,7 @@ import { db } from "~/server/db";
 import { uploadBatchFiles } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { validateRequestBody } from "~/lib/validation";
 import {
   findBatchOwnedByUser,
@@ -16,7 +17,6 @@ import {
 } from "~/server/services/upload-batches";
 
 const RegisterFilesSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   files: z
     .array(
       z.object({
@@ -37,6 +37,9 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ batchId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   return withRateLimit(request, RateLimitPresets.standard, async () => {
     const { batchId } = await params;
     if (!batchId) {
@@ -48,9 +51,9 @@ export async function POST(
       return validation.response;
     }
 
-    const { userId, files } = validation.data;
+    const { files } = validation.data;
 
-    const batch = await findBatchOwnedByUser(batchId, userId);
+    const batch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId);
     if (!batch) {
       return NextResponse.json({ error: "Batch not found" }, { status: 404 });
     }
@@ -91,7 +94,7 @@ export async function POST(
         .where(
           and(
             eq(uploadBatchFiles.batchId, batchId),
-            eq(uploadBatchFiles.userId, userId),
+            eq(uploadBatchFiles.userId, ctx.data.clerkUserId),
             whereClause,
             inArray(uploadBatchFiles.status, ["queued", "uploaded", "failed"])
           )
@@ -119,7 +122,7 @@ export async function POST(
 
     await refreshBatchAggregates(batchId);
 
-    const refreshedBatch = await findBatchOwnedByUser(batchId, userId, true);
+    const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.clerkUserId, true);
     if (!refreshedBatch) {
       return NextResponse.json({ error: "Batch not found after update" }, { status: 404 });
     }

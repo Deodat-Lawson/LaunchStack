@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import { refineContent } from "@launchstack/features/marketing-pipeline";
 import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
 import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/features/marketing-pipeline";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -21,13 +17,8 @@ const RefineInputSchema = z.object({
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         let body: unknown;
         try {
@@ -47,20 +38,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json(
-                { success: false, message: "User not found" },
-                { status: 404 },
-            );
-        }
-
-        const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
+        const companyId = Number(ctx.data.companyId);
         if (Number.isNaN(companyId)) {
             return NextResponse.json(
                 { success: false, message: "Invalid company ID" },

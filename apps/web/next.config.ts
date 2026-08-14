@@ -30,10 +30,20 @@ const config: NextConfig = {
   },
 
   // Workspace packages ship raw TypeScript; Next's SWC transpiles on demand.
-  transpilePackages: ["@launchstack/core", "@launchstack/features"],
+  transpilePackages: [
+    "@launchstack/core",
+    "@launchstack/features",
+    "@launchstack/protocol",
+    "@launchstack/evidence",
+    "@launchstack/application",
+    "@launchstack/adapters",
+  ],
 
+  // Production builds fail on type errors (ADR-006). Lint runs as its own
+  // blocking CI step over the whole workspace with the repo's flat config;
+  // Next's per-build lint pass is redundant with it and uses a different
+  // config surface, so it stays off — `pnpm lint` is the authority.
   eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true },
 
   images: {
     remotePatterns: [
@@ -103,8 +113,6 @@ const config: NextConfig = {
     // LangChain ecosystem — skip webpack tracing, load from node_modules at runtime
     "@langchain/core",
     "@langchain/openai",
-    "@langchain/anthropic",
-    "@langchain/google-genai",
     "@langchain/ollama",
     "@langchain/community",
     "@langchain/langgraph",
@@ -132,7 +140,6 @@ const config: NextConfig = {
     "neo4j-driver",
     // Transitive deps via @langchain/community — not available on Alpine (musl)
     "onnxruntime-node",
-    "sherpa-onnx-node",
     // Structured logging
     "pino",
     "pino-pretty",

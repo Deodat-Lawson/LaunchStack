@@ -1,9 +1,10 @@
-import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
+import { invokeStructured } from "@launchstack/core/llm";
 import type { PdfChunk, DocumentReference } from "~/app/api/agents/predictive-document-analysis/types";
 import { groupContentFromChunks, isValidReference } from "~/app/api/agents/predictive-document-analysis/utils/content";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
+import { resolveConfiguredChatModel } from "~/lib/models";
 
 const ReferenceExtractionSchema = z.object({
     references: z.array(z.object({
@@ -49,16 +50,7 @@ export async function extractReferences(
     const content = groupContentFromChunks(chunks);
     const prompt = createReferenceExtractionPrompt(content);
     
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        modelName: "gpt-5.2",
-        temperature: 0.1,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-    });
-
-    const structuredModel = chat.withStructuredOutput(ReferenceExtractionSchema, {
-        name: "reference_extraction"
-    });
+    const resolved = resolveConfiguredChatModel({ route: "fast" });
 
     const timeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(() => {
@@ -66,10 +58,10 @@ export async function extractReferences(
         }, timeoutMs);
     });
 
-    const aiCallPromise = structuredModel.invoke([
+    const aiCallPromise = invokeStructured(resolved, ReferenceExtractionSchema, [
         new SystemMessage("Extract references step-by-step"),
         new HumanMessage(prompt)
-    ]);
+    ], { name: "reference_extraction" });
 
     try {
         const response = await Promise.race([aiCallPromise, timeoutPromise]);
@@ -96,4 +88,4 @@ export function deduplicateReferences(references: DocumentReference[]): Document
         seen.add(key);
         return true;
     });
-} 
+}

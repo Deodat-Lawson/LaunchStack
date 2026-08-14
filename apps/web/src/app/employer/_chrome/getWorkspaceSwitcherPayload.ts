@@ -2,11 +2,8 @@ import { auth } from "@clerk/nextjs/server";
 import { eq, count } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import {
-  company,
-  userCompanyMemberships,
-  users,
-} from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { userCompanyMemberships, users } from "~/server/db/schema";
 import { getActiveCompanyId } from "~/lib/active-workspace";
 
 import type { WorkspaceSwitcherPayload } from "./workspaceSwitcherTypes";
@@ -15,12 +12,13 @@ export async function getWorkspaceSwitcherPayload(): Promise<WorkspaceSwitcherPa
   const { userId } = await auth();
   if (!userId) return null;
 
-  let activeCompanyId: bigint;
+  let activeCompanyId: bigint | null;
   try {
     activeCompanyId = await getActiveCompanyId(userId);
   } catch {
     return null;
   }
+  if (activeCompanyId === null) return null;
 
   const [user] = await db
     .select({ id: users.id })

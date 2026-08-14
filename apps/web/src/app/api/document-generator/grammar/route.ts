@@ -9,11 +9,12 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { invokeStructured } from "@launchstack/core/llm";
 import { z } from "zod";
-import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
+import { resolveConfiguredChatModel } from "~/lib/models";
+import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -32,6 +33,21 @@ interface GrammarSuggestion {
     };
 }
 
+const GrammarResponseSchema = z.object({
+    suggestions: z.array(z.object({
+        id: z.union([z.string(), z.number()]).optional(),
+        type: z.enum(["grammar", "spelling", "punctuation", "style", "clarity", "formality", "consistency"]),
+        severity: z.enum(["error", "warning", "suggestion"]),
+        original: z.string(),
+        suggestion: z.string(),
+        explanation: z.string(),
+    })),
+    overallScore: z.number().optional(),
+    readabilityScore: z.number().optional(),
+    summary: z.string().optional(),
+    issues: z.record(z.array(z.string())).optional(),
+});
+
 // Validation schema
 const GrammarSchema = z.object({
     action: z.enum(["check", "improve_clarity", "adjust_formality", "consistency"]),
@@ -39,7 +55,7 @@ const GrammarSchema = z.object({
     options: z.object({
         formalityLevel: z.enum(["very_formal", "formal", "neutral", "casual", "very_casual"]).optional(),
         focus: z.array(z.enum(["grammar", "spelling", "punctuation", "style", "clarity"])).optional(),
-        model: z.string().optional(),
+        model: z.string().min(1).optional(),
     }).optional(),
 });
 
@@ -155,40 +171,10 @@ Check for:
 - Inconsistent number formatting (1 vs one)
 - Date/time format inconsistencies`;
 
-function parseGrammarResponse(content: string): { suggestions: GrammarSuggestion[]; extras?: Record<string, unknown> } {
-    try {
-        const jsonRegex = /\{[\s\S]*\}/;
-        const jsonMatch = jsonRegex.exec(content);
-        if (jsonMatch) {
-            const parsed = JSON.parse(jsonMatch[0]) as { suggestions?: Array<{ id?: string | number; type?: string; severity?: string; original?: string; suggestion?: string; explanation?: string }>; [key: string]: unknown };
-            return {
-                suggestions: (parsed.suggestions ?? []).map((s, index: number) => ({
-                    id: String(s.id ?? String(index + 1)),
-                    type: (s.type as GrammarSuggestion["type"]) ?? "grammar",
-                    severity: (s.severity as GrammarSuggestion["severity"]) ?? "suggestion",
-                    original: s.original ?? "",
-                    suggestion: s.suggestion ?? "",
-                    explanation: s.explanation ?? "",
-                })),
-                extras: parsed,
-            };
-        }
-    } catch {
-        console.warn("Failed to parse grammar JSON response");
-    }
-
-    return { suggestions: [] };
-}
-
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const body = await request.json() as unknown;
         const validation = GrammarSchema.safeParse(body);
@@ -203,9 +189,18 @@ export async function POST(request: Request) {
         const { action, content, options } = validation.data;
         const startTime = Date.now();
 
-        // Get the AI model
-        const modelId = (options?.model ?? "gpt-5-mini") as AIModelType;
-        const chat = getChatModel(modelId);
+        const resolved = resolveConfiguredChatModel({ route: "fast" });
+        const modelId = resolved.modelId;
+        const compatibility = validateDeprecatedChatSelection(
+            { model: options?.model },
+            resolved,
+        );
+        if (!compatibility.ok) {
+            return NextResponse.json(
+                { success: false, message: compatibility.message },
+                { status: compatibility.status },
+            );
+        }
 
         let systemPrompt: string;
         let userPrompt = `Analyze the following text:\n\n"${content}"`;
@@ -239,14 +234,14 @@ export async function POST(request: Request) {
                 );
         }
 
-        // Call the AI model
-        const response = await chat.call([
+        const extras = await invokeStructured(resolved, GrammarResponseSchema, [
             new SystemMessage(systemPrompt),
             new HumanMessage(userPrompt),
-        ]);
-
-        const responseContent = normalizeModelContent(response.content);
-        const { suggestions, extras } = parseGrammarResponse(responseContent);
+        ], { name: "grammar_response" });
+        const suggestions: GrammarSuggestion[] = extras.suggestions.map((suggestion, index) => ({
+            ...suggestion,
+            id: String(suggestion.id ?? index + 1),
+        }));
         const processingTimeMs = Date.now() - startTime;
 
         console.log(`✅ [Grammar] ${action} completed in ${processingTimeMs}ms with ${suggestions.length} suggestions`);
@@ -261,10 +256,10 @@ export async function POST(request: Request) {
                 warnings: suggestions.filter(s => s.severity === "warning").length,
                 suggestions: suggestions.filter(s => s.severity === "suggestion").length,
             },
-            ...(extras?.overallScore !== undefined ? { overallScore: extras.overallScore } : {}),
-            ...(extras?.readabilityScore !== undefined ? { readabilityScore: extras.readabilityScore } : {}),
-            ...(extras?.summary ? { summary: extras.summary } : {}),
-            ...(extras?.issues ? { issues: extras.issues } : {}),
+            ...(extras.overallScore !== undefined ? { overallScore: extras.overallScore } : {}),
+            ...(extras.readabilityScore !== undefined ? { readabilityScore: extras.readabilityScore } : {}),
+            ...(extras.summary ? { summary: extras.summary } : {}),
+            ...(extras.issues ? { issues: extras.issues } : {}),
             processingTimeMs,
             model: modelId,
         });

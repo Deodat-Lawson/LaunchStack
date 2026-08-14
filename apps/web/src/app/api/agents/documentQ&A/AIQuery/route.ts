@@ -13,9 +13,8 @@ import {
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
 import { validateRequestBody, QuestionSchema } from "~/lib/validation";
-import { auth } from "@clerk/nextjs/server";
 import { qaRequestCounter, qaRequestDuration } from "~/server/metrics/registry";
-import { users, document } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import {
@@ -23,17 +22,19 @@ import {
     performWebSearch,
     getSystemPrompt,
     getWebSearchInstruction,
-    getChatModelForProvider,
-    getProviderDefaultModel,
-    describeProviderError,
+    describeChatError,
     getEmbeddings,
     extractRecommendedPages,
     filterPagesByAICitation,
-    type AIModelType,
 } from "../services";
+import {
+    describeChatResolutionFailure,
+    resolveConfiguredChatModel,
+} from "~/lib/models";
+import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -64,19 +65,16 @@ export async function POST(request: Request) {
         };
 
         try {
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) {
+                recordResult("error");
+                return ctx.response;
+            }
+
             const validation = await validateRequestBody(request, QuestionSchema);
             if (!validation.success) {
                 recordResult("error");
                 return validation.response;
-            }
-
-            const { userId } = await auth();
-            if (!userId) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Unauthorized"
-                }, { status: 401 });
             }
 
             const {
@@ -91,6 +89,35 @@ export async function POST(request: Request) {
                 embeddingIndexKey,
             } = validation.data;
 
+            // Resolve before retrieval and web search: a misconfigured route
+            // should fail before the request pays for context it will discard.
+            // Handled here rather than in the outer catch so an unavailable
+            // route stays the actionable 400 it is, instead of a generic 500.
+            let resolved;
+            try {
+                resolved = resolveConfiguredChatModel();
+            } catch (modelError) {
+                recordResult("error");
+                const failure = describeChatResolutionFailure(modelError);
+                return NextResponse.json(
+                    { success: false, message: failure.message },
+                    { status: failure.status },
+                );
+            }
+
+            const compatibility = validateDeprecatedChatSelection(
+                { provider, model: aiModel },
+                resolved,
+            );
+            if (!compatibility.ok) {
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, message: compatibility.message },
+                    { status: compatibility.status },
+                );
+            }
+            const { modelId: resolvedModel, chat } = resolved;
+
             // AIQuery only supports document-level search
             if (!documentId) {
                 recordResult("error");
@@ -98,21 +125,6 @@ export async function POST(request: Request) {
                     success: false,
                     message: "documentId is required for AIQuery endpoint"
                 }, { status: 400 });
-            }
-
-            // Verify user and document access
-            const [requestingUser] = await db
-                .select()
-                .from(users)
-                .where(eq(users.userId, userId))
-                .limit(1);
-
-            if (!requestingUser) {
-                recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Invalid user."
-                }, { status: 401 });
             }
 
             const [targetDocument] = await db
@@ -132,7 +144,7 @@ export async function POST(request: Request) {
                 }, { status: 404 });
             }
 
-            if (targetDocument.companyId !== (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))) {
+            if (targetDocument.companyId !== ctx.data.companyId) {
                 recordResult("error");
                 return NextResponse.json({
                     success: false,
@@ -141,7 +153,7 @@ export async function POST(request: Request) {
             }
 
             const companyConfig =
-                await getCompanyEmbeddingConfig((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
+                await getCompanyEmbeddingConfig(ctx.data.companyId);
 
             // Perform document search
             const resolvedEmbeddingIndex = resolveEmbeddingIndex(
@@ -159,7 +171,7 @@ export async function POST(request: Request) {
                 const documentOptions: DocumentSearchOptions = {
                     topK: 5,
                     documentId,
-                    companyId: Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))),
+                    companyId: Number(ctx.data.companyId),
                     embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                 };
                 
@@ -254,13 +266,6 @@ export async function POST(request: Request) {
                 5
             );
 
-            // Get AI model and generate response
-            const resolvedProvider = provider ?? "openai";
-            const resolvedModel = (aiModel ?? getProviderDefaultModel(resolvedProvider)) as AIModelType;
-            const chat = getChatModelForProvider({
-                provider: resolvedProvider,
-                model: resolvedModel,
-            });
             const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
             
             // Build conversation context
@@ -282,12 +287,14 @@ export async function POST(request: Request) {
             
             let response;
             try {
-                response = await chat.call([
-                    new SystemMessage(systemPrompt),
-                    new HumanMessage(userPrompt),
-                ]);
+                response = await chat.invoke(
+                    resolved.prepareMessages([
+                        new SystemMessage(systemPrompt),
+                        new HumanMessage(userPrompt),
+                    ]),
+                );
             } catch (modelError) {
-                const friendly = describeProviderError(resolvedProvider, modelError, resolvedModel);
+                const friendly = describeChatError(modelError, resolvedModel);
                 if (friendly) {
                     recordResult("error");
                     return NextResponse.json(

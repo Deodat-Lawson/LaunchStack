@@ -1,24 +1,15 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
-import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import { MarketingPipelineInputSchema, runMarketingPipeline } from "@launchstack/features/marketing-pipeline";
 import type { PipelineSSEEvent } from "@launchstack/features/marketing-pipeline";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         let body: unknown;
         try {
@@ -41,20 +32,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json(
-                { success: false, message: "User not found" },
-                { status: 404 },
-            );
-        }
-
-        const companyId = Number((await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)));
+        const companyId = Number(ctx.data.companyId);
         if (Number.isNaN(companyId)) {
             return NextResponse.json(
                 { success: false, message: "Invalid company ID" },
@@ -103,10 +81,14 @@ export async function POST(request: Request) {
                     const errMessage = error instanceof Error ? error.message : String(error);
                     console.error("[marketing-pipeline] POST error:", error);
 
+                    const normalizedError = errMessage.toLowerCase();
                     const hint =
-                        !process.env.OPENAI_API_KEY && errMessage.toLowerCase().includes("openai")
-                            ? " Ensure OPENAI_API_KEY is set in .env."
-                            : errMessage.toLowerCase().includes("company")
+                        normalizedError.includes("chat_base_url") ||
+                        normalizedError.includes("chat model") ||
+                        normalizedError.includes("route") ||
+                        normalizedError.includes("api_key")
+                            ? " Ensure CHAT_BASE_URL (and CHAT_API_KEY if required) are set and the chat model configuration file is valid."
+                            : normalizedError.includes("company")
                               ? " Ensure your user has a valid company profile."
                               : "";
 

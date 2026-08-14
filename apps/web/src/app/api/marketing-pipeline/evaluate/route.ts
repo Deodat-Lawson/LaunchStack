@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import fs from "node:fs";
 import path from "node:path";
 
-import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import { buildCompanyKnowledgeContext } from "@launchstack/features/marketing-pipeline";
 import {
   scorePost,
   type ReferencePlatform,
 } from "@launchstack/features/marketing-pipeline/benchmark";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -64,13 +60,8 @@ function composeEvalContext(
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 },
-      );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     let body: {
       message?: string;
@@ -106,40 +97,23 @@ export async function POST(request: Request) {
     const judgePlatform: ReferencePlatform =
       platform === "linkedin" || platform === "reddit" ? platform : "x";
 
-    const [requestingUser] = await db
-      .select()
-      .from(users)
-      .where(eq(users.userId, userId))
-      .limit(1);
-    if (!requestingUser) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 },
-      );
-    }
-
-    const companyId = Number(
-      await resolveActiveCompanyForUser(
-        requestingUser.id,
-        requestingUser.companyId,
-      ),
-    );
-    if (Number.isNaN(companyId)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid company ID" },
-        { status: 400 },
-      );
-    }
+    const companyId = Number(ctx.data.companyId);
 
     // Prefer the exact knowledge context the generator used (passed from the
     // pipeline result). Fall back to rebuilding it with the ORIGINAL campaign
     // prompt (not the post text) so the RAG query matches generation.
+    const passedContext = body.companyContext?.trim();
+    const trimmedPrompt = body.prompt?.trim();
     const baseContext =
-      body.companyContext?.trim() ||
-      (await buildCompanyKnowledgeContext({
-        companyId,
-        prompt: body.prompt?.trim() || message,
-      }));
+      passedContext && passedContext.length > 0
+        ? passedContext
+        : await buildCompanyKnowledgeContext({
+            companyId,
+            prompt:
+              trimmedPrompt && trimmedPrompt.length > 0
+                ? trimmedPrompt
+                : message,
+          });
 
     const companyContext = composeEvalContext(baseContext, {
       dna: body.dna,

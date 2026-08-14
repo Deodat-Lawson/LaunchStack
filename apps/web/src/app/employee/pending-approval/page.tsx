@@ -25,7 +25,7 @@ const PendingApproval: React.FC = () => {
             const response = await fetch("/api/fetchUserInfo", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId }),
+                body: "{}",
             });
 
             const rawData: unknown = await response.json();
@@ -42,7 +42,7 @@ const PendingApproval: React.FC = () => {
             window.alert("Authentication failed! You are not an employee.");
             router.push("/");
         }
-    }, [userId, router]);
+    }, [router]);
 
     useEffect(() => {
         if (userId) {

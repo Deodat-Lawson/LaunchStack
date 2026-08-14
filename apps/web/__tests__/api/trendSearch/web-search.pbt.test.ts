@@ -149,7 +149,11 @@ describe("Unit: Exa fails, retries 2 times then marks sub-query failed", () => {
         ];
 
         fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((_input, init) => {
-            const body = JSON.parse(String(init?.body ?? "{}")) as { query?: string };
+            // The code under test always sends a JSON string body.
+            const rawBody = init?.body;
+            const body = JSON.parse(
+                typeof rawBody === "string" ? rawBody : "{}",
+            ) as { query?: string };
             if (body.query === "failing-query") {
                 return Promise.reject(new Error("Exa API error: 500"));
             }

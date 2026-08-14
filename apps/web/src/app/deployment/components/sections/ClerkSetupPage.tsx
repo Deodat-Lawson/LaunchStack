@@ -11,8 +11,8 @@ export const ClerkSetupPage: React.FC<DeploymentProps> = ({
   copyToClipboard,
   copiedCode,
 }) => {
-  const envSnippet = `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx
-CLERK_SECRET_KEY=sk_live_xxx`;
+  const envSnippet = `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+CLERK_SECRET_KEY=<your-clerk-secret-key>`;
 
   return (
     <>
@@ -92,7 +92,7 @@ https://your-app-domain.com/sign-up`}
           <InfoBox title="Use live keys in production" icon={<Settings size={18} />}>
             <p style={{ margin: 0 }}>
               Test keys can produce inconsistent auth behavior for real users.
-              Make sure production uses <code className={styles.mono}>pk_live_*</code> and <code className={styles.mono}>sk_live_*</code>.
+              Make sure production uses your Clerk publishable key and Clerk secret key.
             </p>
           </InfoBox>
           <WarningBox

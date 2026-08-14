@@ -5,39 +5,23 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
-import { companyMetadata, companyMetadataHistory } from "@launchstack/core/db/schema/company-metadata";
+import { companyMetadata, companyMetadataHistory } from "~/server/db/schema";
 import type { MetadataFact, Visibility, Usage } from "@launchstack/features/company-metadata";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import {
+    forbiddenForRole,
+    isManagementRole,
+    requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 },
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        const [userInfo] = await db
-            .select({ id: users.id, companyId: users.companyId })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 400 },
-            );
-        }
-
-        const activeCompanyId = await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId);
         const [result] = await db
             .select({
                 metadata: companyMetadata.metadata,
@@ -46,7 +30,7 @@ export async function GET() {
                 updatedAt: companyMetadata.updatedAt,
             })
             .from(companyMetadata)
-            .where(eq(companyMetadata.companyId, activeCompanyId));
+            .where(eq(companyMetadata.companyId, ctx.data.companyId));
 
         if (!result) {
             return NextResponse.json({
@@ -91,10 +75,11 @@ function buildManualFact(value: string | number, existing?: { visibility?: strin
 
 export async function PATCH(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
+
+        // Canonical metadata and its history are workspace-wide state.
+        if (!isManagementRole(ctx.data.role)) return forbiddenForRole();
 
         const body = await request.json() as unknown;
         const parsed = PatchSchema.safeParse(body);
@@ -103,19 +88,12 @@ export async function PATCH(request: Request) {
         }
         const { path, value } = parsed.data;
 
-        const [userInfo] = await db
-            .select({ id: users.id, companyId: users.companyId })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json({ error: "User not found" }, { status: 400 });
-        }
+        const companyId = ctx.data.companyId;
 
         const [existing] = await db
             .select({ metadata: companyMetadata.metadata })
             .from(companyMetadata)
-            .where(eq(companyMetadata.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
+            .where(eq(companyMetadata.companyId, companyId));
 
         if (!existing) {
             return NextResponse.json(
@@ -184,13 +162,13 @@ export async function PATCH(request: Request) {
         await db
             .update(companyMetadata)
             .set({ metadata: updatedMetadata })
-            .where(eq(companyMetadata.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))));
+            .where(eq(companyMetadata.companyId, companyId));
 
         await db.insert(companyMetadataHistory).values({
-            companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
+            companyId,
             changeType: "manual_override",
             diff,
-            changedBy: userId,
+            changedBy: ctx.data.clerkUserId,
         });
 
         return NextResponse.json({ success: true, path, fact: updatedFact });

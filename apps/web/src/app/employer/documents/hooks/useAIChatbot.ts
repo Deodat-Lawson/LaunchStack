@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import type { SourceReference } from '~/app/api/agents/documentQ&A/services';
-import type { AIModelType } from '~/app/api/agents/documentQ&A/services/types';
 
 interface Chat {
   id: string;
@@ -20,7 +19,7 @@ export interface MessageContent {
   pages?: number[];
   references?: SourceReference[];
   webSources?: Array<{ title: string; url: string; snippet: string }>;
-  aiModel?: AIModelType;
+  aiModel?: string;
 }
 
 export interface Message {
@@ -31,11 +30,10 @@ export interface Message {
   messageType: 'text' | 'tool_call' | 'tool_result' | 'thinking';
   parentMessageId?: string;
   createdAt: string;
-  aiModel?: AIModelType;
+  aiModel?: string;
 }
 
 interface CreateChatParams {
-  userId: string;
   title: string;
   agentMode?: 'autonomous' | 'interactive' | 'assisted';
   visibility?: 'public' | 'private';
@@ -84,12 +82,12 @@ export function useAIChatbot() {
     }
   }, []);
 
-  // Get all chats for a user
-  const getChats = useCallback(async (userId: string): Promise<Chat[]> => {
+  // Get all chats for the authenticated user
+  const getChats = useCallback(async (): Promise<Chat[]> => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/agents/documentQ&A/AIChat/chats?userId=${userId}`);
+      const response = await fetch('/api/agents/documentQ&A/AIChat/chats');
 
       if (!response.ok) {
         throw new Error('Failed to fetch chats');

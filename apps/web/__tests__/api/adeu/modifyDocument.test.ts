@@ -142,7 +142,11 @@ describe("modifyDocument Inngest function", () => {
 
       // Simulate calling the function handler
       // We need to extract and call the handler manually
-      const handler = (modifyDocument as unknown as { fn: Function }).fn;
+      const handler = (
+        modifyDocument as unknown as {
+          fn: (ctx: { event: unknown; step: unknown }) => Promise<unknown>;
+        }
+      ).fn;
       expect(handler).toBeDefined();
       await handler({ event, step });
 
@@ -161,8 +165,8 @@ describe("modifyDocument Inngest function", () => {
       await expect(
         step.run("fetch-document", async () => {
           const res = await fetchBlob("https://blob.store/missing.docx");
-          if (!(res as Response).ok) {
-            throw new Error(`Failed to fetch document: HTTP ${(res as Response).status}`);
+          if (!(res).ok) {
+            throw new Error(`Failed to fetch document: HTTP ${(res).status}`);
           }
         })
       ).rejects.toThrow("Failed to fetch document: HTTP 404");
@@ -234,7 +238,7 @@ describe("modifyDocument Inngest function", () => {
           return { summary: null, fileBase64: null };
         } catch (err: unknown) {
           if (err instanceof MockAdeuServiceError && (err as { statusCode: number }).statusCode === 422) {
-            await db.update({} as never).set({ updatedAt: new Date() });
+            await db.update({} as never).set({ updatedAt: new Date() }).where(undefined);
             return { summary: null, fileBase64: null, validationError: (err as { detail: string }).detail };
           }
           throw err;
@@ -323,7 +327,10 @@ describe("modifyDocument Inngest function", () => {
           contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         });
 
-        await db.update({} as never).set({ url: stored.url, updatedAt: new Date() });
+        await db
+          .update({} as never)
+          .set({ url: stored.url, updatedAt: new Date() })
+          .where(undefined);
 
         return stored.url;
       });

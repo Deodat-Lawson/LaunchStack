@@ -1,14 +1,20 @@
 import { db } from "~/server/db";
-import { users, inviteCodes, company, userCompanyMemberships } from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users, inviteCodes, userCompanyMemberships } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
 import { validateRequestBody, JoinWithInviteSchema } from "~/lib/validation";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
+
         const validation = await validateRequestBody(request, JoinWithInviteSchema);
         if (!validation.success) return validation.response;
-        const { userId, name, email, inviteCode } = validation.data;
+        const { name, email, inviteCode } = validation.data;
+        const userId = identity.data.clerkUserId;
 
         // Find the active invite code
         const [codeRecord] = await db

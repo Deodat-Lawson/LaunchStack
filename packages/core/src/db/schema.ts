@@ -1,19 +1,6 @@
 /**
- * Central export for all database tables and relations. The schema is now
- * split across multiple modules so that each domain can evolve independently
- * while consumers continue importing from "~/server/db/schema".
+ * @launchstack/core compatibility facade (ADR-002): this subpath's
+ * implementation moved to @launchstack/adapters. Re-export only — no logic
+ * may be added here (enforced by scripts/ci/check-core-facade.mjs).
  */
-export { pgTable } from "./schema/helpers";
-export * from "./schema/base";
-export * from "./schema/company-credentials";
-export * from "./schema/agent-ai";
-export * from "./schema/rlm-knowledge-base";
-export * from "./schema/knowledge-graph";
-export * from "./schema/document-notes";
-export * from "./schema/trend-search";
-export * from "./schema/trend-search-cache";
-export * from "./schema/client-prospector";
-export * from "./schema/company-metadata";
-export * from "./schema/marketing-history";
-export * from "./schema/credits";
-export * from "./schema/email-pipeline";
+export * from "@launchstack/adapters/db/schema";

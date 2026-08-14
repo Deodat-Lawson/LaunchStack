@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
+import { env } from "~/env";
 import { db } from "~/server/db";
-import { category, company, users } from "@launchstack/core/db/schema";
+import { category, company } from "@launchstack/core/db/schema";
 import { resolveStorageBackend } from "~/lib/storage";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 type BootstrapCategory = {
   id: string;
@@ -33,32 +36,17 @@ type UploadBootstrapResponse = {
 
 export async function GET() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
+    if (!isManagementRole(ctx.data.role)) {
       return NextResponse.json(
-        { error: "Authentication required." },
-        { status: 401 }
-      );
-    }
-
-    const [userInfo] = await db
-      .select({ id: users.id,
-        role: users.role,
-        companyId: users.companyId,
-      })
-      .from(users)
-      .where(eq(users.userId, userId));
-
-    if (!userInfo) {
-      return NextResponse.json({ error: "Invalid user." }, { status: 400 });
-    }
-
-    if (userInfo.role !== "employer" && userInfo.role !== "owner") {
-      return NextResponse.json(
-        { error: "Employer access required." },
+        { error: "Owner or admin access required." },
         { status: 403 }
       );
     }
+
+    const companyId = ctx.data.companyId;
 
     const [categoriesRaw, companyRaw] = await Promise.all([
       db
@@ -67,7 +55,7 @@ export async function GET() {
           name: category.name,
         })
         .from(category)
-        .where(eq(category.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))),
+        .where(eq(category.companyId, companyId)),
       db
         .select({
           id: company.id,
@@ -75,7 +63,7 @@ export async function GET() {
           useUploadThing: company.useUploadThing,
         })
         .from(company)
-        .where(and(eq(company.id, Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))))))
+        .where(and(eq(company.id, Number(companyId))))
         .limit(1),
     ]);
 
@@ -98,11 +86,12 @@ export async function GET() {
           Boolean(process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT),
         datalab: Boolean(process.env.DATALAB_API_KEY),
         landingAI: Boolean(process.env.LANDING_AI_API_KEY),
-        docling: Boolean(process.env.OCR_WORKER_URL),
+        // Docling is reached through services/document-converter (ADR-004).
+        docling: Boolean(env.server.DOCUMENT_CONVERTER_URL),
       },
       storageProvider: resolveStorageBackend(),
       ...(resolveStorageBackend() === "s3" && process.env.NEXT_PUBLIC_S3_ENDPOINT
-        ? { s3Endpoint: process.env.S3_PUBLIC_ENDPOINT || process.env.NEXT_PUBLIC_S3_ENDPOINT }
+        ? { s3Endpoint: (process.env.S3_PUBLIC_ENDPOINT ?? "") || process.env.NEXT_PUBLIC_S3_ENDPOINT }
         : {}),
     };
 

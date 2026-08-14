@@ -136,7 +136,7 @@ describe("Property 14: Fallback strategy invokes secondary when primary returns 
                 let serperCalls = 0;
                 let exaCalls = 0;
                 const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-                    const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                    const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                     if (url === SERPER_URL) {
                         serperCalls++;
                         return Promise.resolve({
@@ -203,7 +203,7 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
                     const expectedPairs = new Set([...byUrl.values()].map(pairKey));
 
                     const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-                        const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                        const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                         if (url === EXA_URL) {
                             return Promise.resolve({
                                 ok: true,
@@ -269,7 +269,7 @@ describe("Property 16: Default strategy matches Exa-only behavior", () => {
                 let exaCalls = 0;
                 let serperCalls = 0;
                 const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-                    const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                    const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                     if (url === EXA_URL) {
                         exaCalls++;
                         return Promise.resolve({
@@ -318,7 +318,7 @@ describe("Property 17: Missing Serper key downgrades Serper-dependent strategies
                 subQueriesArb,
                 async (strategy, subQueries) => {
                     const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-                        const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                        const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                         if (url === EXA_URL) {
                             return Promise.resolve({
                                 ok: true,

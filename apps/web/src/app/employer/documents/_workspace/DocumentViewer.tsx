@@ -13,7 +13,7 @@ import {
 import type { DocumentType } from "../types/document";
 import { SOURCE_META, type WorkspaceSource } from "./types";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
-import type { DocumentNote } from "@launchstack/core/db/schema/document-notes";
+import type { DocumentNote } from "~/server/db/schema";
 import { getDocumentDisplayType } from "../types/document";
 import type { PdfNoteLite } from "~/components/notes/PdfViewerWithNotes";
 
@@ -201,7 +201,7 @@ export function DocumentViewer({
         const res = await fetch("/api/fetchDocument", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
+          body: "{}",
         });
         if (!res.ok) throw new Error(`Failed (${res.status})`);
         const data = (await res.json()) as DocumentType[];
@@ -393,8 +393,8 @@ export function DocumentViewer({
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                documentUrl: storage!.url,
-                mimeType: file.type || expectedMime || "application/octet-stream",
+                documentUrl: storage.url,
+                mimeType: file.type || (expectedMime ?? "") || "application/octet-stream",
                 originalFilename: file.name,
                 fileSize: file.size,
               }),

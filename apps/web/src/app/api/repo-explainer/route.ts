@@ -1,8 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "~/server/db/index";
-import { users } from "@launchstack/core/db/schema";
 import { env } from "~/env";
 import {
   parseGitHubUrl,
@@ -15,8 +11,11 @@ import {
 } from "@launchstack/features/repo-explainer";
 import { validateRequestBody } from "~/lib/validation";
 import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
+import {
   createSuccessResponse,
-  createUnauthorizedError,
   createForbiddenError,
   createValidationError,
   handleApiError,
@@ -76,22 +75,11 @@ async function validateRepoAccess(
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return createUnauthorizedError("Authentication required. Please sign in to continue.");
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
-    const [userInfo] = await db
-      .select()
-      .from(users)
-      .where(eq(users.userId, userId));
-
-    if (!userInfo) {
-      return createUnauthorizedError("User account not found.");
-    }
-
-    if (userInfo.role !== "employer" && userInfo.role !== "owner") {
-      return createForbiddenError("Insufficient permissions. Only employers and owners can use the repo explainer.");
+    if (!isManagementRole(ctx.data.role)) {
+      return createForbiddenError("Insufficient permissions. Only workspace owners and admins can use the repo explainer.");
     }
 
     const validation = await validateRequestBody(request, RepoExplainerRequestSchema);
@@ -109,9 +97,11 @@ export async function POST(request: Request) {
     }
 
     const { owner, repo } = parsedUrl;
+    // `?? ""` first so the `||` fallthrough (which must also skip empty
+    // strings, e.g. an empty header or env var) operates on plain strings.
     const githubToken =
-      request.headers.get("X-GitHub-Token") ||
-      env.server.GITHUB_TOKEN ||
+      (request.headers.get("X-GitHub-Token") ?? "") ||
+      (env.server.GITHUB_TOKEN ?? "") ||
       null;
 
     const validationError = await validateRepoAccess(owner, repo, githubToken);

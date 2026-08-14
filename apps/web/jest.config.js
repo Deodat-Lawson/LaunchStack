@@ -16,12 +16,16 @@ export const config = {
   // so jest doesn't have to hit the built dist/.
   moduleNameMapper: {
     '^~/(.*)$': '<rootDir>/src/$1',
-    // Campaign eval-suite contract lives at the repo root, outside apps/web.
-    '^@schema$': '<rootDir>/../../schema/index.ts',
+    '^@schema$': '<rootDir>/src/lib/agents/evals/campaign/contract.ts',
     '^@launchstack/core$': '<rootDir>/../../packages/core/src/index.ts',
     '^@launchstack/core/(.*)$': '<rootDir>/../../packages/core/src/$1',
     '^@launchstack/features$': '<rootDir>/../../packages/features/src/index.ts',
     '^@launchstack/features/(.*)$': '<rootDir>/../../packages/features/src/$1',
+    '^@launchstack/protocol$': '<rootDir>/../../packages/protocol/src/index.ts',
+    '^@launchstack/evidence$': '<rootDir>/../../packages/evidence/src/index.ts',
+    '^@launchstack/application$': '<rootDir>/../../packages/application/src/index.ts',
+    '^@launchstack/adapters$': '<rootDir>/../../packages/adapters/src/index.ts',
+    '^@launchstack/adapters/(.*)$': '<rootDir>/../../packages/adapters/src/$1',
     '\\.(css|less|scss|sass)$': '<rootDir>/__mocks__/styleMock.js',
   },
   moduleDirectories: ['node_modules', 'src'],

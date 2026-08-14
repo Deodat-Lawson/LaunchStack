@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
 import { eq, and, gt, desc, sql } from "drizzle-orm";
-import {
-    predictiveDocumentAnalysisResults,
-    document,
-    documentContextChunks,
-} from "@launchstack/core/db/schema";
+import { document, documentContextChunks } from "@launchstack/core/db/schema";
+import { predictiveDocumentAnalysisResults } from "~/server/db/schema";
 import { inngest } from "~/server/inngest/client";
 import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation";
 import { CACHE_CONFIG, ERROR_TYPES, HTTP_STATUS, type AnalysisType } from "~/lib/constants";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -24,32 +22,55 @@ export const maxDuration = 300;
  *   - an "error" event if the job fails
  */
 export async function POST(request: Request) {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
+
     const validation = await validateRequestBody(request, PredictiveAnalysisSchema);
     if (!validation.success) {
         return validation.response;
     }
 
-    const {
-        documentId,
-        analysisType,
-        includeRelatedDocs,
-        timeoutMs,
-        forceRefresh,
-    } = validation.data;
+    const { documentId, analysisType, includeRelatedDocs, timeoutMs, forceRefresh } =
+        validation.data;
 
     const typedAnalysisType: AnalysisType = analysisType ?? "general";
     const typedIncludeRelatedDocs = includeRelatedDocs ?? false;
 
-    // Check cache first (unless forceRefresh)
+    // Ownership before cache: never stream another tenant's analysis.
+    const docCheck = await db
+        .select({ id: document.id, currentVersionId: document.currentVersionId })
+        .from(document)
+        .where(
+            and(
+                eq(document.id, documentId),
+                eq(document.companyId, ctx.data.companyId),
+            ),
+        )
+        .limit(1);
+
+    if (docCheck.length === 0) {
+        return NextResponse.json(
+            { success: false, message: "Document not found.", errorType: ERROR_TYPES.VALIDATION },
+            { status: HTTP_STATUS.NOT_FOUND }
+        );
+    }
+
+    // Check cache first (unless forceRefresh), but only for the current document version.
     if (!forceRefresh) {
         const cached = await db
             .select({ resultJson: predictiveDocumentAnalysisResults.resultJson })
             .from(predictiveDocumentAnalysisResults)
+            .innerJoin(document, eq(predictiveDocumentAnalysisResults.documentId, document.id))
             .where(
                 and(
                     eq(predictiveDocumentAnalysisResults.documentId, BigInt(documentId)),
+                    eq(document.id, documentId),
+                    eq(predictiveDocumentAnalysisResults.versionId, document.currentVersionId),
                     eq(predictiveDocumentAnalysisResults.analysisType, typedAnalysisType),
-                    eq(predictiveDocumentAnalysisResults.includeRelatedDocs, typedIncludeRelatedDocs),
+                    eq(
+                        predictiveDocumentAnalysisResults.includeRelatedDocs,
+                        typedIncludeRelatedDocs
+                    ),
                     gt(
                         predictiveDocumentAnalysisResults.createdAt,
                         sql`NOW() - INTERVAL '${sql.raw(`${CACHE_CONFIG.TTL_HOURS} hours`)}'`
@@ -63,7 +84,11 @@ export async function POST(request: Request) {
             const encoder = new TextEncoder();
             const stream = new ReadableStream({
                 start(controller) {
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: "result", data: cached[0]!.resultJson, fromCache: true })}\n\n`));
+                    controller.enqueue(
+                        encoder.encode(
+                            `data: ${JSON.stringify({ type: "result", data: cached[0]!.resultJson, fromCache: true })}\n\n`
+                        )
+                    );
                     controller.close();
                 },
             });
@@ -77,33 +102,45 @@ export async function POST(request: Request) {
         }
     }
 
-    // Verify document exists and has chunks
-    const docCheck = await db
-        .select({ id: document.id })
-        .from(document)
-        .where(eq(document.id, documentId))
-        .limit(1);
-
-    if (docCheck.length === 0) {
-        return NextResponse.json(
-            { success: false, message: "Document not found.", errorType: ERROR_TYPES.VALIDATION },
-            { status: HTTP_STATUS.NOT_FOUND }
-        );
-    }
-
     const chunkCount = await db
         .select({ count: sql<number>`count(*)` })
         .from(documentContextChunks)
-        .where(eq(documentContextChunks.documentId, BigInt(documentId)));
+        .innerJoin(document, eq(documentContextChunks.documentId, document.id))
+        .where(
+            and(
+                eq(documentContextChunks.documentId, BigInt(documentId)),
+                eq(document.id, documentId),
+                eq(documentContextChunks.versionId, document.currentVersionId)
+            )
+        );
 
     const totalChunks = Number(chunkCount[0]?.count ?? 0);
     if (totalChunks === 0) {
         return NextResponse.json(
-            { success: false, message: "No chunks found for document.", errorType: ERROR_TYPES.VALIDATION },
+            {
+                success: false,
+                message: "No chunks found for document.",
+                errorType: ERROR_TYPES.VALIDATION,
+            },
             { status: HTTP_STATUS.NOT_FOUND }
         );
     }
-
+    const [baseline] = await db
+        .select({ id: predictiveDocumentAnalysisResults.id })
+        .from(predictiveDocumentAnalysisResults)
+        .innerJoin(document, eq(predictiveDocumentAnalysisResults.documentId, document.id))
+        .where(
+            and(
+                eq(predictiveDocumentAnalysisResults.documentId, BigInt(documentId)),
+                eq(document.id, documentId),
+                eq(predictiveDocumentAnalysisResults.versionId, document.currentVersionId),
+                eq(predictiveDocumentAnalysisResults.analysisType, typedAnalysisType),
+                eq(predictiveDocumentAnalysisResults.includeRelatedDocs, typedIncludeRelatedDocs)
+            )
+        )
+        .orderBy(desc(predictiveDocumentAnalysisResults.id))
+        .limit(1);
+    const baselineId = baseline?.id ?? 0;
     // Dispatch to Inngest
     const jobId = `pda-${documentId}-${Date.now()}`;
     await inngest.send({
@@ -125,7 +162,9 @@ export async function POST(request: Request) {
     const stream = new ReadableStream({
         async start(controller) {
             const send = (event: string, data: unknown) => {
-                controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: event, data })}\n\n`));
+                controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ type: event, data })}\n\n`)
+                );
             };
 
             send("status", { phase: "queued", totalChunks, jobId });
@@ -134,15 +173,34 @@ export async function POST(request: Request) {
             let found = false;
 
             while (Date.now() - startTime < maxWaitMs) {
-                await new Promise(resolve => setTimeout(resolve, pollIntervalMs));
+                const remainingMs = maxWaitMs - (Date.now() - startTime);
+                if (remainingMs <= 0) break;
 
+                await new Promise<void>(resolve =>
+                    setTimeout(resolve, Math.min(pollIntervalMs, remainingMs))
+                );
+                if (Date.now() - startTime >= maxWaitMs) break;
                 const result = await db
                     .select({ resultJson: predictiveDocumentAnalysisResults.resultJson })
                     .from(predictiveDocumentAnalysisResults)
+                    .innerJoin(
+                        document,
+                        eq(predictiveDocumentAnalysisResults.documentId, document.id)
+                    )
                     .where(
                         and(
                             eq(predictiveDocumentAnalysisResults.documentId, BigInt(documentId)),
+                            eq(document.id, documentId),
+                            eq(
+                                predictiveDocumentAnalysisResults.versionId,
+                                document.currentVersionId
+                            ),
                             eq(predictiveDocumentAnalysisResults.analysisType, typedAnalysisType),
+                            eq(
+                                predictiveDocumentAnalysisResults.includeRelatedDocs,
+                                typedIncludeRelatedDocs
+                            ),
+                            gt(predictiveDocumentAnalysisResults.id, baselineId),
                             gt(
                                 predictiveDocumentAnalysisResults.createdAt,
                                 sql`NOW() - INTERVAL '5 minutes'`
@@ -163,7 +221,9 @@ export async function POST(request: Request) {
             }
 
             if (!found) {
-                send("error", { message: "Analysis timed out. Results will be cached when complete." });
+                send("error", {
+                    message: "Analysis timed out. Results will be cached when complete.",
+                });
             }
 
             controller.close();

@@ -2,6 +2,8 @@
 
 import { useRef, useState, useCallback } from "react";
 
+import { blobToWav } from "./encodeWav";
+
 interface UseVoiceRecorderOptions {
   onTranscription?: (text: string) => void;
   onError?: (error: string) => void;
@@ -75,8 +77,13 @@ export function useVoiceRecorder(options: UseVoiceRecorderOptions = {}) {
   const transcribe = async (audioBlob: Blob) => {
     setIsProcessing(true);
     try {
+      // MediaRecorder gives us WebM/Opus (or MP4/AAC on Safari); the
+      // transcription endpoint accepts neither reliably. Convert here so the
+      // server never has to carry a transcoder.
+      const wavBlob = await blobToWav(audioBlob);
+
       const formData = new FormData();
-      formData.append("audio", audioBlob, "recording.webm");
+      formData.append("audio", wavBlob, "recording.wav");
 
       const response = await fetch("/api/voice/speech-to-text", {
         method: "POST",

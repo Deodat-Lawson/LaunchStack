@@ -3,6 +3,8 @@ import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import type { BaseRetriever } from "@langchain/core/retrievers";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
+import { getRerankProvider, isRerankConfigured } from "@launchstack/core/providers/reranking";
+import { env } from "~/env";
 import {
   createDocumentVectorRetriever,
   createCompanyVectorRetriever,
@@ -47,13 +49,9 @@ const NOTES_DEFAULT_WEIGHT = 0.15;
 // Cap note candidates so we don't flood the ensemble when a doc has dozens
 // of notes. The reranker downstream trims to the final topK anyway.
 const NOTES_MAX_CANDIDATES = 8;
-const SIDECAR_URL = process.env.SIDECAR_URL;
 
 function isGraphRetrievalEnabled(): boolean {
-  return (
-    process.env.ENABLE_GRAPH_RETRIEVER === "true" ||
-    process.env.ENABLE_GRAPH_RETRIEVER === "1"
-  );
+  return env.server.ENABLE_GRAPH_RETRIEVER === true;
 }
 
 /**
@@ -62,10 +60,7 @@ function isGraphRetrievalEnabled(): boolean {
  * empty-notes paths run the SQL query anyway and just add noise.
  */
 function isNotesRetrievalEnabled(): boolean {
-  return (
-    process.env.ENABLE_NOTES_RETRIEVER === "true" ||
-    process.env.ENABLE_NOTES_RETRIEVER === "1"
-  );
+  return env.server.ENABLE_NOTES_RETRIEVER === true;
 }
 
 export function createOpenAIEmbeddings(): EmbeddingsProvider {
@@ -353,48 +348,47 @@ export async function multiDocEnsembleSearch(
 }
 
 // ============================================================================
-// Reranking via Sidecar (graceful fallback: skip if no sidecar)
+// Reranking via core's configured rerank provider (graceful pass-through)
 // ============================================================================
 
 /**
- * Rerank search results using the sidecar's cross-encoder model.
- * If the sidecar is not configured, results pass through unchanged.
+ * Rerank search results through @launchstack/core's configured rerank
+ * provider — the dedicated /v1/rerank client when RERANK_API_BASE_URL names
+ * one, otherwise the chat-model scorer on the deployment's endpoint. (The raw
+ * ${SIDECAR_URL}/rerank fetch that used to live here targeted a route no
+ * service ever implemented — removed by ADR-004 §5.)
+ *
+ * Unconfigured or failing reranking is not fatal: the candidates pass through
+ * in their existing RRF order.
  */
 async function rerankResults(
   query: string,
   results: SearchResult[],
 ): Promise<SearchResult[]> {
-  if (!SIDECAR_URL || results.length === 0) {
-    console.log(
-      `[Rerank] Skipping: sidecar=${SIDECAR_URL ? "configured" : "not configured"}, results=${results.length}`,
-    );
+  if (results.length === 0) {
+    return results;
+  }
+
+  // Reranking is opt-in (RERANK_API_BASE_URL). Unconfigured deployments keep
+  // the RRF order without spending a chat-model call per search — the
+  // pre-refactor production behavior (the sidecar rerank never existed).
+  if (!isRerankConfigured()) {
     return results;
   }
 
   const rerankStart = Date.now();
-  console.log(
-    `[Rerank] Calling sidecar at ${SIDECAR_URL}/rerank with ${results.length} results, ` +
-    `query="${query.substring(0, 60)}..."`,
-  );
 
   try {
-    const resp = await fetch(`${SIDECAR_URL}/rerank`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query,
-        documents: results.map((r) => r.pageContent),
-      }),
-    });
+    const provider = await getRerankProvider();
+    console.log(
+      `[Rerank] Scoring ${results.length} results via ${provider.name}, ` +
+      `query="${query.substring(0, 60)}..."`,
+    );
 
-    if (!resp.ok) {
-      console.warn(
-        `[Rerank] Sidecar returned ${resp.status}, skipping rerank (${Date.now() - rerankStart}ms)`,
-      );
-      return results;
-    }
-
-    const data = (await resp.json()) as { scores: number[] };
+    const { data } = await provider.rerank(
+      query,
+      results.map((r) => r.pageContent),
+    );
 
     const reranked: SearchResult[] = results
       .map((result, idx) => ({
@@ -411,7 +405,7 @@ async function rerankResults(
         },
       }));
 
-    const scores = data.scores.sort((a, b) => b - a);
+    const scores = [...data.scores].sort((a, b) => b - a);
     const elapsed = Date.now() - rerankStart;
     console.log(
       `[Rerank] Reranked ${reranked.length} results (${elapsed}ms): ` +
@@ -423,7 +417,7 @@ async function rerankResults(
   } catch (error) {
     const elapsed = Date.now() - rerankStart;
     console.warn(
-      `[Rerank] Sidecar reranking failed (${elapsed}ms), returning original order:`,
+      `[Rerank] Reranking failed or is unconfigured (${elapsed}ms), returning original order:`,
       error instanceof Error ? error.message : error,
     );
     return results;

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { JSONContent } from "@tiptap/react";
 import { FileText, Plus, Search, Sparkles } from "lucide-react";
-import type { DocumentNote } from "@launchstack/core/db/schema/document-notes";
+import type { DocumentNote } from "~/server/db/schema";
 import {
   type DraftState,
   EMPTY_DRAFT,
@@ -64,7 +64,7 @@ export function NotebookPane() {
     return notes.filter((n) => {
       const title = (n.title ?? "").toLowerCase();
       const body = (n.contentMarkdown ?? n.content ?? "").toLowerCase();
-      const tags = ((n.tags as string[] | null) ?? []).join(" ").toLowerCase();
+      const tags = ((n.tags) ?? []).join(" ").toLowerCase();
       return title.includes(q) || body.includes(q) || tags.includes(q);
     });
   }, [notes, query, semantic, semanticIds]);
@@ -82,28 +82,30 @@ export function NotebookPane() {
     }
     let cancelled = false;
     setSemanticBusy(true);
-    const handle = setTimeout(async () => {
-      try {
-        const res = await fetch("/api/notes/search", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: q, scope: "user", topK: 25 }),
-        });
-        if (!res.ok) throw new Error(`Search failed (${res.status})`);
-        const data = (await res.json()) as {
-          hits: Array<{ noteId: number }>;
-        };
-        if (!cancelled) {
-          setSemanticIds(data.hits.map((h) => h.noteId));
+    const handle = setTimeout(() => {
+      void (async () => {
+        try {
+          const res = await fetch("/api/notes/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: q, scope: "user", topK: 25 }),
+          });
+          if (!res.ok) throw new Error(`Search failed (${res.status})`);
+          const data = (await res.json()) as {
+            hits: Array<{ noteId: number }>;
+          };
+          if (!cancelled) {
+            setSemanticIds(data.hits.map((h) => h.noteId));
+          }
+        } catch (err) {
+          if (!cancelled) {
+            setError(err instanceof Error ? err.message : "Search failed");
+            setSemanticIds([]);
+          }
+        } finally {
+          if (!cancelled) setSemanticBusy(false);
         }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Search failed");
-          setSemanticIds([]);
-        }
-      } finally {
-        if (!cancelled) setSemanticBusy(false);
-      }
+      })();
     }, 250);
     return () => {
       cancelled = true;
@@ -122,7 +124,7 @@ export function NotebookPane() {
       title: note.title ?? "",
       rich: (note.contentRich as JSONContent | null) ?? null,
       text: note.contentMarkdown ?? note.content ?? "",
-      tags: (note.tags as string[] | null) ?? [],
+      tags: (note.tags) ?? [],
       anchorQuote: "",
       anchorPage: "",
       anchorQuads: [],

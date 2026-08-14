@@ -1,14 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 
-import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import {
   generateTemplate,
   reviewTemplate,
 } from "@launchstack/features/email-pipeline";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -20,13 +16,8 @@ export const maxDuration = 60;
  */
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 },
-      );
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     let body: { goal?: string };
     try {
@@ -35,30 +26,7 @@ export async function POST(request: Request) {
       body = {};
     }
 
-    const [requestingUser] = await db
-      .select()
-      .from(users)
-      .where(eq(users.userId, userId))
-      .limit(1);
-    if (!requestingUser) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 },
-      );
-    }
-
-    const companyId = Number(
-      await resolveActiveCompanyForUser(
-        requestingUser.id,
-        requestingUser.companyId,
-      ),
-    );
-    if (Number.isNaN(companyId)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid company ID" },
-        { status: 400 },
-      );
-    }
+    const companyId = Number(ctx.data.companyId);
 
     const { template, companyContext } = await generateTemplate({
       companyId,

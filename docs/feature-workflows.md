@@ -7,21 +7,38 @@ This document explains how major Launchstack features connect end to end.
 Launchstack follows this loop:
 
 1. Authenticate user with role context (Employer/Employee)
-2. Upload document (cloud or database storage)
-3. **Ingest** — unified ingestion layer extracts text from PDF, DOCX, XLSX, PPTX, images, etc.
-4. **OCR** (optional) — for scanned PDFs via Azure Document Intelligence, Datalab, or Landing.AI
+2. Upload document — the web app writes the source version **and** a
+   `source.version.created` row into the transactional outbox
+   (`pdr_ai_v2_event_outbox`) in one transaction ([ADR-003](./architecture/ADR-003-transactional-outbox-and-worker.md))
+3. **Worker** (`apps/worker`) claims the outbox event and drives every
+   subsequent stage
+4. **Convert / OCR** — `services/document-converter` routes and parses PDFs,
+   Office docs, and scans (docling-backed; Azure Document Intelligence,
+   Datalab, or Landing.AI as configured); audio/video goes through
+   `services/transcription`
 5. **Chunk** — split content into sections
-6. **Embed** — generate embeddings (OpenAI or sidecar)
-7. **Store** — vectors in PostgreSQL (pgvector), chunks for BM25, optional knowledge graph
-8. **Retrieve** — ensemble search (vector + BM25, optional graph retriever + reranking)
+6. **Embed** — generate embeddings via the configured embedding provider
+   (OpenAI-compatible endpoint, Ollama, or HuggingFace)
+7. **Store** — evidence persistence, then vectors in PostgreSQL (pgvector),
+   chunks for BM25, optional knowledge graph; finally the company-state
+   projection
+8. **Retrieve** — ensemble search (vector + BM25, optional graph retriever +
+   reranking via the configured `RERANK_*` provider)
 9. Use retrieval for AI chat and predictive analysis
 10. Persist chat/session context for continuity
 
 ## Knowledge base architecture
 
 ```text
-Upload -> Ingest (unified adapters) -> Chunk -> Embed -> Store (pgvector + optional graph) -> Retrieve (ensemble + optional rerank)
+Upload -> source version + outbox row (one transaction)
+       -> worker (outbox consumer) -> convert/transcribe (compute services)
+       -> chunk -> embed -> evidence persistence -> index (pgvector + BM25 + optional graph)
+       -> company-state projection
+Retrieve -> ensemble (vector + BM25, optional graph + rerank) -> cited answers
 ```
+
+Operational details for the outbox (monitoring, replay) live in
+[`docs/runbooks/outbox.md`](./runbooks/outbox.md).
 
 ### Core areas in codebase
 
@@ -42,39 +59,43 @@ Upload -> Ingest (unified adapters) -> Chunk -> Embed -> Store (pgvector + optio
 The ingestion layer (`src/lib/ingestion/`) provides a single API to convert documents into a standardized format:
 
 - **Supported types:** PDF, DOCX, XLSX, PPTX, images, CSV, text, HTML, Markdown
-- **Providers:** Native text/PDF, Mammoth (DOCX), SheetJS (XLSX/CSV), Cheerio (HTML), Azure OCR, Tesseract, sidecar
+- **Providers:** Native text/PDF, Mammoth (DOCX), SheetJS (XLSX/CSV), Cheerio (HTML), Azure OCR, Tesseract, `services/document-converter`
 - **Output:** `StandardizedDocument` with pages, text blocks, tables, and metadata
 
 ## Knowledge graph (Graph RAG)
 
-When `SIDECAR_URL` is set:
-
-1. **Entity extraction** — Sidecar `/extract-entities` runs NER on chunks
+1. **Entity extraction** — the configured LLM-based extractor runs NER on
+   chunks (or extraction is explicitly disabled with an actionable log —
+   [ADR-004](./architecture/ADR-004-compute-service-consolidation.md))
 2. **Graph storage** — Entities and relationships stored in `kg_entities`, `kg_entity_mentions`, `kg_relationships`
 3. **Graph retrieval** — `GraphRetriever` finds entities matching the query, traverses 1–2 hops, returns related sections
 4. **Ensemble use** — Graph retriever can be combined with vector and BM25 in ensemble search
 
 Relevant code:
 
-- `src/lib/ingestion/entity-extraction.ts` — calls sidecar and writes to graph tables
+- `src/lib/ingestion/entity-extraction.ts` — runs extraction and writes to graph tables
 - `src/server/rag/retrievers/graph-retriever.ts` — LangChain retriever for graph traversal
 - `src/server/db/schema/knowledge-graph.ts` — graph schema
 
-## Sidecar (optional ML compute)
+## Compute services
 
-The sidecar is a FastAPI service that provides:
+> **Historical note:** older revisions of this document described a single
+> "sidecar" exposing `/embed`, `/rerank`, and `/extract-entities`. **No service
+> in this repository ever implemented those routes**; the dangling providers
+> were removed per [ADR-004](./architecture/ADR-004-compute-service-consolidation.md).
+> Embeddings, reranking, and NER use the configured cloud/LLM providers
+> (`EMBEDDING_*`, `RERANK_*`, `NER_MODEL`).
 
-| Endpoint | Purpose |
-|----------|---------|
-| `/embed` | Local embeddings (sentence-transformers) |
-| `/rerank` | Cross-encoder reranking of search results |
-| `/extract-entities` | NER for knowledge graph entity extraction |
-| `/health` | Health check |
+The Python/Node compute services ([ADR-004](./architecture/ADR-004-compute-service-consolidation.md)) are:
 
-Configure via `SIDECAR_URL`. When set:
+| Service | Purpose | URL variable |
+|---------|---------|--------------|
+| `services/transcription` | Whisper transcription + yt-dlp download | `TRANSCRIPTION_SERVICE_URL` |
+| `services/document-editor` | Adeu DOCX redlining | `DOCUMENT_EDITOR_URL` |
+| `services/document-converter` | OCR routing, vision classification, PDF rendering, docling-backed parsing | `DOCUMENT_CONVERTER_URL` |
 
-- Ensemble search uses the sidecar for reranking (graceful fallback if unavailable)
-- Document processing can use the sidecar for entity extraction and graph population
+All three authenticate with per-service API keys (fail-closed), expose
+`/health`, never access the product database, and never call one another.
 
 ## Document viewers
 

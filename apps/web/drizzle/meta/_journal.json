@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1785814104505,
+      "tag": "20260804032824_product_baseline",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786146482828,
+      "tag": "20260807234802_founder_weekly_review",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786228646563,
+      "tag": "20260808223726_document_creation_lifecycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786229348295,
+      "tag": "20260808224908_founder_weekly_review_async_collection",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786682774148,
+      "tag": "20260814044614_email_pipeline",
+      "breakpoints": true
+    }
+  ]
+}

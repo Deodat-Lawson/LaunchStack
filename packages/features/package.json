@@ -13,9 +13,21 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./schema": {
+      "types": "./src/schema.ts",
+      "default": "./src/schema.ts"
+    },
     "./adeu": {
       "types": "./src/adeu/index.ts",
       "default": "./src/adeu/index.ts"
+    },
+    "./connectors": {
+      "types": "./src/connectors/index.ts",
+      "default": "./src/connectors/index.ts"
+    },
+    "./connectors/agent-knowledge": {
+      "types": "./src/connectors/agent-knowledge/index.ts",
+      "default": "./src/connectors/agent-knowledge/index.ts"
     },
     "./legal-templates": {
       "types": "./src/legal-templates/index.ts",
@@ -28,10 +40,6 @@
     "./voice": {
       "types": "./src/voice/index.ts",
       "default": "./src/voice/index.ts"
-    },
-    "./voice/whisper-js": {
-      "types": "./src/voice/whisper-js.ts",
-      "default": "./src/voice/whisper-js.ts"
     },
     "./repo-explainer": {
       "types": "./src/repo-explainer/index.ts",
@@ -89,6 +97,10 @@
       "types": "./src/client-prospector/db.ts",
       "default": "./src/client-prospector/db.ts"
     },
+    "./founder-weekly-review": {
+      "types": "./src/founder-weekly-review/index.ts",
+      "default": "./src/founder-weekly-review/index.ts"
+    },
     "./doc-ingestion": {
       "types": "./src/doc-ingestion/index.ts",
       "default": "./src/doc-ingestion/index.ts"
@@ -128,6 +140,10 @@
     "./email-pipeline/company-fields": {
       "types": "./src/email-pipeline/company-fields.ts",
       "default": "./src/email-pipeline/company-fields.ts"
+    },
+    "./email-pipeline/send": {
+      "types": "./src/email-pipeline/send.ts",
+      "default": "./src/email-pipeline/send.ts"
     }
   },
   "scripts": {
@@ -136,22 +152,16 @@
   "dependencies": {
     "@langchain/core": "^0.3.74",
     "@langchain/openai": "^0.6.11",
+    "@launchstack/adapters": "workspace:^",
     "@launchstack/core": "workspace:*",
+    "dayjs": "^1.11.18",
     "docxtemplater": "^3.68.3",
     "drizzle-orm": "^0.45.1",
     "openai": "^4.62.1",
     "pizzip": "^3.2.0",
     "zod": "^3.23.8"
   },
-  "peerDependencies": {
-    "sherpa-onnx-node": "^1.12.38"
-  },
-  "peerDependenciesMeta": {
-    "sherpa-onnx-node": {
-      "optional": true
-    }
-  },
-  "devDependencies": {
-    "sherpa-onnx-node": "^1.12.38"
-  }
+  "peerDependencies": {},
+  "peerDependenciesMeta": {},
+  "devDependencies": {}
 }

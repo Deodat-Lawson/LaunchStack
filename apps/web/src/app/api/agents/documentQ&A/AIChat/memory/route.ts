@@ -1,16 +1,21 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { agentAiChatbotMemory } from "@launchstack/core/db/schema";
+import { agentAiChatbotMemory } from "~/server/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateMemorySchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // POST /api/agent-ai-chatbot/memory - Store memory
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateMemorySchema);
     if (!validation.success) return validation.response;
@@ -24,12 +29,15 @@ export async function POST(request: NextRequest) {
       expiresAt
     } = validation.data;
 
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const memoryId = randomUUID();
 
     const insertValues = {
       id: memoryId,
       chatId,
-      memoryType: memoryType as "short_term" | "long_term" | "working" | "episodic",
+      memoryType,
       key,
       value,
       importance,
@@ -57,6 +65,9 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/memory?chatId=xxx - Get memories for a chat
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const chatId = searchParams.get("chatId");
@@ -68,6 +79,9 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const whereConditions = memoryType
       ? and(
@@ -84,7 +98,6 @@ export async function GET(request: NextRequest) {
         desc(agentAiChatbotMemory.importance),
         desc(agentAiChatbotMemory.accessedAt)
       );
-
 
     // Update accessedAt for retrieved memories
     const memoryIds = memories.map((m) => m.id);
@@ -107,4 +120,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

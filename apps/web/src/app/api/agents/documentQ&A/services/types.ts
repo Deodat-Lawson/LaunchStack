@@ -11,20 +11,17 @@
  */
 
 // ============================================================================
-// AI Model / LLM Provider Types — canonical definitions live in
+// Chat routing types — canonical definitions live in
 // @launchstack/core/llm/types. Re-exported here so existing feature-side
-// consumers keep their import paths.
+// consumers keep their import paths. There is no model allowlist: operators
+// assign models to routes, and clients never name a model or provider.
 // ============================================================================
 
 export {
-  AIModelTypes,
-  isAIModelType,
-  LLMProviders,
-  ProviderModelMap,
-  ProviderDefaultModels,
-  isModelAllowedForProvider,
-  type AIModelType,
-  type LLMProvider,
+  ChatRoutes,
+  isChatRoute,
+  type ChatRoute,
+  type ChatCapability,
 } from "@launchstack/core/llm/types";
 
 // ============================================================================
@@ -160,8 +157,24 @@ export interface SourceReference {
   matchStart?: number;
   /** End index of match in snippet */
   matchEnd?: number;
-  /** Confidence score 0–1 */
+  /**
+   * Retrieval relevance in [0,1], present only when the retriever actually
+   * scored this chunk (rerank score). It is deliberately named relevance, not
+   * confidence: it is a property of the query, not of the evidence (ADR-005 §3).
+   */
+  relevance?: number;
+  /**
+   * @deprecated Kept for API backward compatibility. Historically this field
+   * carried hardcoded 0.25/0.8 constants that no model ever produced
+   * (ADR-005 §3). It now mirrors {@link relevance} — a real retrieval score —
+   * and is absent when no score exists. Read `relevance` instead.
+   */
   confidence?: number;
+  /**
+   * Stable citation anchor key ("src:<id>/ver:<id>/page:<n>", ADR-005 §1),
+   * present when the retrieval row carried enough identity to anchor.
+   */
+  anchorKey?: string;
   /** Document ID if from a stored document */
   documentId?: number;
   /** Document title for display */

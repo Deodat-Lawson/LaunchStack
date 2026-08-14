@@ -1,20 +1,28 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { agentAiChatbotTask } from "@launchstack/core/db/schema";
+import { agentAiChatbotTask } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateTaskSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 // POST /api/agent-ai-chatbot/tasks - Create a new task
 export async function POST(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const validation = await validateRequestBody(request, CreateTaskSchema);
     if (!validation.success) return validation.response;
     const { chatId, description, objective, priority, metadata } = validation.data;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const taskId = randomUUID();
 
@@ -46,6 +54,9 @@ export async function POST(request: NextRequest) {
 
 // GET /api/agent-ai-chatbot/tasks?chatId=xxx - Get tasks for a chat
 export async function GET(request: NextRequest) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const chatId = searchParams.get("chatId");
@@ -56,6 +67,9 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const tasks = await db
       .select()
@@ -75,4 +89,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

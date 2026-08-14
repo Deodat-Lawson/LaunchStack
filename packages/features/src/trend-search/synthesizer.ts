@@ -1,4 +1,4 @@
-import { ChatOpenAI } from "@langchain/openai";
+import { invokeStructured, resolveChatModel } from "@launchstack/core/llm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import type { RawSearchResult, SearchCategory, SearchResult } from "./types";
@@ -84,23 +84,16 @@ export async function synthesizeResults(
         return Array.from({ length: TARGET_COUNT }, () => ({ ...PLACEHOLDER_RESULT }));
     }
 
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        modelName: "gpt-5-nano",
-        temperature: 1, // gpt-5-nano only supports default (1), not 0.2
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
-    });
-
-    const structuredModel = chat.withStructuredOutput(SynthesizerOutputSchema, {
-        name: "synthesized_results",
-    });
+    const resolved = resolveChatModel({ route: "fast" });
 
     const humanPrompt = buildHumanPrompt(rawResults, query, companyContext, categories);
 
-    const response = await structuredModel.invoke([
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(humanPrompt),
-    ]);
+    const response = await invokeStructured(
+        resolved,
+        SynthesizerOutputSchema,
+        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
+        { name: "synthesized_results" },
+    );
 
     const parsed = SynthesizerOutputSchema.safeParse(response);
     if (!parsed.success) {

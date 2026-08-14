@@ -8,20 +8,26 @@ For self-hosted (Docker) deploys, see [`../deployment.md`](../deployment.md).
 
 | Concern | Where it lives |
 |---|---|
-| Next.js app | Vercel (this guide) |
+| Next.js app (commands + reads) | Vercel (this guide) |
+| Worker (`apps/worker` — outbox consumer + Inngest serve endpoint) | Fly.io / Railway / Cloud Run (separate deploy, **required for ingestion**) |
 | PostgreSQL + pgvector | Vercel Postgres, Neon, Supabase, or RDS |
 | Object storage | Vercel Blob, S3-compatible (SeaweedFS, R2, AWS S3) |
-| Background jobs | Inngest Cloud |
-| Python ML sidecars | Fly.io / Railway / Cloud Run (separate deploy) |
+| Background jobs | Inngest Cloud (functions served by the worker) |
+| Compute services (`services/transcription`, `services/document-editor`, `services/document-converter`) | Fly.io / Railway / Cloud Run (separate deploy) |
 | Auth | Clerk |
 | DB migrations | Run automatically on production builds |
+
+> **Topology note (ADR-003):** Vercel hosts only the Next.js app. Document
+> ingestion is executed by `apps/worker`, which consumes the transactional
+> outbox and hosts the `/api/inngest` endpoint. A Vercel-only deployment
+> accepts uploads but never processes them — deploy the worker alongside.
 
 ## 1. Create the Vercel project
 
 1. Sign in to [vercel.com](https://vercel.com) and click **Add New → Project**.
 2. Import the GitHub repo.
 3. **Framework preset**: Next.js (auto-detected).
-4. **Root directory**: leave as `./` — [`vercel.json`](../../vercel.json) at the repo root controls install + build.
+4. **Root directory**: set it to `apps/web` — [`apps/web/vercel.json`](../../apps/web/vercel.json) controls install + build.
 5. **Node.js version**: 20.x (Project Settings → General).
 6. Don't deploy yet — set env vars first (step 3).
 
@@ -29,9 +35,9 @@ For self-hosted (Docker) deploys, see [`../deployment.md`](../deployment.md).
 
 ```json
 {
-  "installCommand": "pnpm install --frozen-lockfile --ignore-scripts",
-  "buildCommand": "if [ \"$VERCEL_ENV\" = \"production\" ]; then pnpm db:migrate; fi && pnpm build",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD . ':(exclude)docs/**' ':(exclude)*.md' ':(exclude).github/**'"
+  "installCommand": "npx -y pnpm@10.15.1 install --frozen-lockfile --ignore-scripts",
+  "buildCommand": "if [ \"$VERCEL_ENV\" = \"production\" ]; then npx -y pnpm@10.15.1 db:migrate; fi && npx -y pnpm@10.15.1 build",
+  "ignoreCommand": "git -C \"$(git rev-parse --show-toplevel)\" diff --quiet HEAD^ HEAD . ':(exclude)docs/**' ':(exclude)*.md' ':(exclude).github/**'"
 }
 ```
 
@@ -70,7 +76,8 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `DATABASE_URL` | Postgres connection string with SSL if remote |
 | `CLERK_SECRET_KEY` | From Clerk dashboard |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | From Clerk dashboard |
-| `OPENAI_API_KEY` *or* `AI_API_KEY` | At least one of the two — validated in [`env.ts`](../../apps/web/src/env.ts) |
+| `CHAT_BASE_URL` | The OpenAI-compatible chat endpoint, e.g. `https://generativelanguage.googleapis.com/v1beta/openai`. Optional — unset falls back to that same Gemini endpoint, authenticated with `GOOGLE_AI_API_KEY` |
+| `CHAT_API_KEY` | Bearer credential for that endpoint (omit only for keyless endpoints, which are rare on Vercel) |
 | `EMBEDDING_SECRETS_KEY` | 32-byte base64. Generate once: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`. **Keep constant across deploys** — rotating it invalidates stored per-company credentials |
 | `INNGEST_EVENT_KEY` | From Inngest Cloud (step 4) |
 | `INNGEST_SIGNING_KEY` | From Inngest Cloud (step 4) |
@@ -82,7 +89,26 @@ In the Vercel project: **Settings → Environment Variables**. Add each as **Pro
 | `BLOB_READ_WRITE_TOKEN` | If using Vercel Blob for file storage |
 | `S3_*` + `NEXT_PUBLIC_S3_*` | If `NEXT_PUBLIC_STORAGE_PROVIDER=s3` |
 | `NEO4J_URI` + `NEO4J_USERNAME` + `NEO4J_PASSWORD` | If using Graph RAG |
-| `ADEU_SERVICE_URL` | If using DOCX redlining (Adeu sidecar) |
+| `DOCUMENT_EDITOR_URL` | If using DOCX redlining (`services/document-editor`); the legacy `ADEU_SERVICE_URL` is being phased out per ADR-004 — set both while the migration completes |
+| `AI_BASE_URL`, or a per-capability `*_API_BASE_URL` | If enabled OCR/VLM or NER should not use the default Gemini endpoint. Optional for those; **required** for embeddings, which have no fallback because switching model invalidates every stored vector |
+| `AI_API_KEY`, `OPENAI_API_KEY`, or per-capability keys | The credential for the base URL above, when that endpoint requires one |
+
+Gemini is the default, not a requirement — any endpoint implementing the
+OpenAI chat-completions protocol works. Vercel cannot host a
+local model itself, but it can call an externally hosted compatible endpoint.
+
+Which model serves each route lives in `apps/web/config/chat-models.yaml`,
+which is deployed with the repository, so changing a model is a commit rather
+than a dashboard edit. To keep separate model sets per environment, commit a
+second file and set `CHAT_MODELS_CONFIG` per Vercel environment:
+
+```
+CHAT_MODELS_CONFIG=config/chat-models.production.yaml
+```
+
+Routes that need a capability the configured model lacks report themselves
+unavailable rather than falling back, so verify the file before promoting a
+deployment. See [Chat Models](../chat-models.md) for the full reference.
 
 ### Optional (feature flags / overrides)
 
@@ -96,36 +122,59 @@ See [`.env.example`](../../.env.example) — every variable there is either requ
 
 ## 4. Connect Inngest Cloud
 
-Inngest Cloud runs the background jobs and calls your Vercel function to execute each step.
+Inngest Cloud schedules the background jobs. Since ADR-003 the functions are
+**served by the worker** (`apps/worker`), not by the Vercel app — the app only
+sends events.
 
 1. Sign up at [inngest.com](https://www.inngest.com) and create an app.
-2. Copy the **Event Key** → Vercel env as `INNGEST_EVENT_KEY`.
-3. Copy the **Signing Key** → Vercel env as `INNGEST_SIGNING_KEY`.
-4. Deploy the app to Vercel (step 6).
-5. In the Inngest dashboard, register the app endpoint: `https://<your-app>.vercel.app/api/inngest`. Inngest will GET that URL to sync the function registry.
+2. Copy the **Event Key** → set as `INNGEST_EVENT_KEY` on **both** the Vercel
+   app and the worker deployment.
+3. Copy the **Signing Key** → set as `INNGEST_SIGNING_KEY` on the worker
+   deployment (and the Vercel app if it sends signed events).
+4. Deploy the worker (step 5) and the app (step 6).
+5. In the Inngest dashboard, register the **worker's** endpoint:
+   `https://<your-worker-host>/api/inngest`. Inngest will GET that URL to sync
+   the function registry. The Vercel app has no `/api/inngest` route.
 
 ### Long-running steps
 
-The Inngest route declares `export const maxDuration = 300;` (5 minutes). This requires **Vercel Pro** — Hobby plans cap at 60s.
+The worker is a long-running container, so durable steps are not subject to
+Vercel function duration limits. Vercel plan limits still apply to the app's
+own API routes.
 
-Hobby workaround: break each Inngest step into sub-steps under 60s, or move long-running work into a sidecar.
+## 5. Deploy the worker and compute services
 
-## 5. Provision sidecars (optional)
+The worker (`apps/worker`) and the compute services
+(`services/transcription`, `services/document-editor`,
+`services/document-converter`) don't run on Vercel — they're long-running
+container services (ADR-003/ADR-004). Deploy them to Fly.io, Railway, Cloud
+Run, or anywhere else that runs containers, then point the app and worker at
+the services:
 
-The Launchstack Python sidecars (`services/sidecar`, `services/ocr-router`, `services/ocr-worker`) don't run on Vercel — they're long-running container services. Deploy them to Fly.io, Railway, Cloud Run, or anywhere else that runs containers, then point the Next.js app at them:
-
-| Env var | Sidecar |
+| Env var | Service |
 |---|---|
-| `SIDECAR_URL` | Embeddings + reranking + transcription (`services/sidecar`) |
-| `OCR_ROUTER_URL` | PDF-rendering + vision classifier (`services/ocr-router`) |
-| `OCR_WORKER_URL` | Docling/Marker worker (optional) |
+| `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Whisper transcription + yt-dlp (`services/transcription`) |
+| `DOCUMENT_EDITOR_URL` + `DOCUMENT_EDITOR_API_KEY` | Adeu DOCX redlining (`services/document-editor`) |
+| `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | OCR routing, vision classification, PDF rendering, docling-backed parsing (`services/document-converter`) |
 
-**Or** skip sidecars entirely and use cloud providers: OpenAI embeddings, Azure Document Intelligence for OCR, Groq for transcription. Set the per-capability env vars instead.
+These are the variables the Docker Compose stack uses. The legacy names
+(`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`, `OCR_WORKER_URL`) are
+being phased out per ADR-004 — while the migration completes, set both the
+new and the legacy name if a service isn't being picked up. Each service
+reads its own provider credentials at startup — the app never forwards
+secrets — and authenticates callers with a fail-closed per-service API key.
+
+**Or** skip the optional services and use hosted providers. Transcription,
+reranking, NER and OCR/VLM all default to Gemini on `GOOGLE_AI_API_KEY`;
+Azure Document Intelligence remains available for scanned-layout OCR.
+Embeddings are the exception — set `EMBEDDING_API_BASE_URL`/`EMBEDDING_API_KEY`
+explicitly, since the model is tied to stored vectors. The worker itself is
+**not** optional: without it, uploads are never processed.
 
 ## 6. First deploy
 
 1. Push to `main` (or click **Deploy** in Vercel).
-2. Vercel runs: `pnpm install` → `pnpm db:migrate` (production only) → `pnpm build`.
+2. Vercel runs: `pnpm install` → `pnpm --filter @launchstack/web db:migrate` (production only) → `pnpm --filter @launchstack/web build`.
 3. Deploy completes; note the production URL.
 
 ### Verify
@@ -135,8 +184,11 @@ The Launchstack Python sidecars (`services/sidecar`, `services/ocr-router`, `ser
 curl https://<your-app>.vercel.app/api/health
 # Expect HTTP 200 with { "status": "ok", "checks": { "database": { "status": "ok" } } }
 
-# Inngest sync (registers functions with Inngest Cloud)
-curl https://<your-app>.vercel.app/api/inngest
+# Worker health (ingestion depends on this)
+curl https://<your-worker-host>/healthz
+
+# Inngest sync (registers functions with Inngest Cloud — served by the worker)
+curl https://<your-worker-host>/api/inngest
 # Should return function list
 
 # App loads
@@ -162,11 +214,13 @@ Previews share the production database unless you configure Neon branch database
 1. `git revert <bad-commit>` and push to `main`.
 2. New deploy rolls the app forward with the revert.
 
-Migrations are **forward-only** ([`apps/web/scripts/migrate.mjs`](../../apps/web/scripts/migrate.mjs)). Rolling back code does **not** roll back schema. Plan breaking schema changes as additive-then-cleanup sequences.
+Migrations are **forward-only** ([`packages/core/scripts/migrate.mjs`](../../packages/core/scripts/migrate.mjs)). Rolling back code does **not** roll back schema. Plan breaking schema changes as additive-then-cleanup sequences.
+
+If you roll back to a build older than the applied migrations, `db:migrate` exits **4** ("database is ahead of this build") rather than running old code against a newer schema. Preview builds run `db:verify`, which reports pending migrations without failing the build.
 
 ## 9. Troubleshooting
 
-### Build fails at `pnpm db:migrate`
+### Build fails at `pnpm --filter @launchstack/web db:migrate`
 
 - Confirm `DATABASE_URL` is set for the Production environment in Vercel.
 - Check the migrate log output in the build — the script prints which file failed.
@@ -174,13 +228,13 @@ Migrations are **forward-only** ([`apps/web/scripts/migrate.mjs`](../../apps/web
 
 ### Inngest endpoint returns 404 or 401
 
-- Endpoint path is `/api/inngest` (exactly — no trailing slash).
-- Confirm `INNGEST_SIGNING_KEY` matches the one Inngest shows in the dashboard.
-- Check that the app has deployed at least once; Inngest sync only works against a live URL.
+- The endpoint is on the **worker**, not the Vercel app: `https://<your-worker-host>/api/inngest` (exactly — no trailing slash). Registering the Vercel URL will 404.
+- Confirm `INNGEST_SIGNING_KEY` on the worker matches the one Inngest shows in the dashboard.
+- Check that the worker has deployed and is reachable; Inngest sync only works against a live URL.
 
-### Functions time out at 60s
+### Uploads accepted but never processed
 
-- You're on the Hobby plan. Upgrade to Pro, or rewrite long steps as smaller Inngest sub-steps.
+- The worker isn't running or can't reach the database. Check `https://<your-worker-host>/healthz` and see [`../runbooks/outbox.md`](../runbooks/outbox.md) for inspecting and replaying outbox rows.
 
 ### Bundle too large
 

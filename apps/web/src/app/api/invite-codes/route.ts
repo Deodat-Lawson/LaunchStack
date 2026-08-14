@@ -1,29 +1,19 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq, and } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users, inviteCodes } from "@launchstack/core/db/schema";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { inviteCodes } from "~/server/db/schema";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-        // Get the caller's company
-        const [userRecord] = await db
-            .select({ id: users.id, companyId: users.companyId, role: users.role })
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userRecord) {
-            return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
-        }
-
-        if (userRecord.role !== "owner" && userRecord.role !== "employer") {
+        if (!isManagementRole(ctx.data.role)) {
             return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
         }
 
@@ -38,7 +28,7 @@ export async function GET() {
             .from(inviteCodes)
             .where(
                 and(
-                    eq(inviteCodes.companyId, (await resolveActiveCompanyForUser(userRecord.id, userRecord.companyId))),
+                    eq(inviteCodes.companyId, ctx.data.companyId),
                     eq(inviteCodes.isActive, true)
                 )
             );

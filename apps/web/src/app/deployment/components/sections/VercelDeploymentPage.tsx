@@ -108,8 +108,8 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
         <div className="space-y-3">
           <StepCard icon={<Rocket className="w-5 h-5" />} title="Fork and import">
             First, fork{' '}
-            <a href="https://github.com/Deodat-Lawson/pdr_ai_v2/fork" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline inline-flex items-center gap-1">
-              Deodat-Lawson/pdr_ai_v2 <ExternalLink className="w-3 h-3" />
+            <a href="https://github.com/Deodat-Lawson/LaunchStack/fork" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline inline-flex items-center gap-1">
+              Deodat-Lawson/LaunchStack <ExternalLink className="w-3 h-3" />
             </a>{' '}
             to your own GitHub account. Then create a new Vercel project at{' '}
             <a href="https://vercel.com/new" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline inline-flex items-center gap-1">
@@ -137,25 +137,25 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
             number={1}
             title="Fork the repository"
             description="Go to the Launchstack repo and click Fork to create a copy under your GitHub account."
-            onCopy={() => copyToClipboard('https://github.com/Deodat-Lawson/pdr_ai_v2/fork', 'v-1a')}
+            onCopy={() => copyToClipboard('https://github.com/Deodat-Lawson/LaunchStack/fork', 'v-1a')}
             copied={copiedCode === 'v-1a'}
 
           >
             <a
-              href="https://github.com/Deodat-Lawson/pdr_ai_v2/fork"
+              href="https://github.com/Deodat-Lawson/LaunchStack/fork"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-purple-500 hover:text-purple-400 hover:underline font-medium"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              github.com/Deodat-Lawson/pdr_ai_v2/fork
+              github.com/Deodat-Lawson/LaunchStack/fork
             </a>
           </Step>
 
           <Step
             number={2}
             title="Create a new Vercel project"
-            description="Select your forked repo and keep the Next.js framework defaults."
+            description="Select your fork, choose Next.js, and set Root Directory to apps/web so Vercel uses apps/web/vercel.json."
             onCopy={() => copyToClipboard('https://vercel.com/new', 'v-1b')}
             copied={copiedCode === 'v-1b'}
 
@@ -176,12 +176,13 @@ export const VercelDeploymentPage: React.FC<DeploymentProps> = ({
             title="Add environment variables"
             description="Paste these into Vercel's Environment Variables panel before the first deploy. BLOB_READ_WRITE_TOKEN is auto-injected when you connect a Blob store (see below)."
             code={`DATABASE_URL=postgresql://<neon-connection-string>
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx
-CLERK_SECRET_KEY=sk_live_xxx
-OPENAI_API_KEY=sk-proj-xxx
-INNGEST_EVENT_KEY=evt_xxx
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`}
-            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_xxx\nCLERK_SECRET_KEY=sk_live_xxx\nOPENAI_API_KEY=sk-proj-xxx\nINNGEST_EVENT_KEY=evt_xxx\nBLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx`, 'v-2')}
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+CLERK_SECRET_KEY=<your-clerk-secret-key>
+CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+CHAT_API_KEY=<your-google-ai-key>
+INNGEST_EVENT_KEY=<your-inngest-event-key>
+BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>`}
+            onCopy={() => copyToClipboard(`DATABASE_URL=postgresql://<neon-connection-string>\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>\nCLERK_SECRET_KEY=<your-clerk-secret-key>\nCHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\nCHAT_API_KEY=<your-google-ai-key>\nINNGEST_EVENT_KEY=<your-inngest-event-key>\nBLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>`, 'v-2')}
             copied={copiedCode === 'v-2'}
 
           />

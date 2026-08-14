@@ -72,7 +72,7 @@ describe("executeSearch strategy logic", () => {
             SEARCH_PROVIDER: undefined,
         });
         fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-            const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+            const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
             if (url === EXA_URL) {
                 return Promise.resolve(exaResponse([{ url: "https://exa.ai/1", title: "T", text: "C", score: 0.9 }]));
             }
@@ -125,7 +125,7 @@ describe("executeSearch strategy logic", () => {
         it("when Serper returns no results for all sub-queries, Exa is called and providerUsed is exa", async () => {
             setEnv({ SEARCH_PROVIDER: "fallback" });
             fetchSpy.mockImplementation((input: RequestInfo | URL) => {
-                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                 if (url === SERPER_URL) {
                     return Promise.resolve(serperResponse([])); // empty
                 }
@@ -150,7 +150,7 @@ describe("executeSearch strategy logic", () => {
         it("when Serper returns results, Exa is not called and providerUsed is serper", async () => {
             setEnv({ SEARCH_PROVIDER: "fallback" });
             fetchSpy.mockImplementation((input: RequestInfo | URL) => {
-                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                 if (url === SERPER_URL) {
                     return Promise.resolve(serperResponse([{ link: "https://serper.com/ok", title: "S", snippet: "S" }]));
                 }
@@ -175,7 +175,7 @@ describe("executeSearch strategy logic", () => {
         it("when strategy is parallel, both Serper and Exa are called and providerUsed is exa+serper", async () => {
             setEnv({ SEARCH_PROVIDER: "parallel" });
             fetchSpy.mockImplementation((input: RequestInfo | URL) => {
-                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                 if (url === SERPER_URL) {
                     return Promise.resolve(serperResponse([{ link: "https://serper.com/1", title: "S", snippet: "S" }]));
                 }
@@ -202,7 +202,7 @@ describe("executeSearch strategy logic", () => {
             setEnv({ SEARCH_PROVIDER: "parallel" });
             const sameUrl = "https://example.com/same";
             fetchSpy.mockImplementation((input: RequestInfo | URL) => {
-                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                 if (url === SERPER_URL) {
                     return Promise.resolve(
                         serperResponse([{ link: sameUrl, title: "From Serper", snippet: "S" }])
@@ -268,7 +268,7 @@ describe("executeSearch strategy logic", () => {
         it("uses providerUsed serper and only Serper fetch is made", async () => {
             setEnv({ SEARCH_PROVIDER: "parallel", SERPER_API_KEY: "test-serper-key", EXA_API_KEY: undefined });
             fetchSpy.mockImplementation((input: RequestInfo | URL) => {
-                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
+                const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
                 if (url === SERPER_URL) {
                     return Promise.resolve(serperResponse([{ link: "https://serper.com/1", title: "S", snippet: "S" }]));
                 }

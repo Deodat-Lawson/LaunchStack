@@ -1,0 +1,64 @@
+# Chat model configuration.
+#
+# Non-secret only. The endpoint URL lives in CHAT_BASE_URL and its credential
+# in CHAT_API_KEY; point CHAT_MODELS_CONFIG at another file to use one instead
+# of this. Every model here is served by that single OpenAI-compatible
+# endpoint — "compatible" meaning it implements the OpenAI
+# /chat/completions protocol, not that it is any HTTP API at all.
+#
+# A model must either reference a bundled preset or declare its behavior in
+# full. Nothing is inferred from the model id: a name that merely resembles a
+# known model gets no capabilities. Anything you write under `behavior` is
+# authoritative and overrides the preset in both directions, so
+# `nativeStructuredOutput: []` genuinely turns that off.
+#
+# See docs/chat-models.md for the full reference.
+
+version: 1
+
+models:
+  # Default: Google Gemini. Reached at
+  # CHAT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai,
+  # which is also where chat falls back when CHAT_BASE_URL is unset.
+  #
+  # Model ids here are the BARE ids Google's endpoint expects. The `google/`
+  # prefix belongs only to the `preset:` field, which names a bundled behavior
+  # entry — see packages/core/src/llm/presets.ts.
+  primary:
+    id: gemini-2.5-flash
+    preset: google/gemini-2.5-flash
+
+  # The cheap tier. Its preset sets reasoning `default: none`, so routine work
+  # does not pay for thinking tokens.
+  fast:
+    id: gemini-2.5-flash-lite
+    preset: google/gemini-2.5-flash-lite
+
+  # The reasoning tier. 2.5 Pro always reasons, so its preset omits the `none`
+  # level rather than claiming a capability the endpoint would reject.
+  deep:
+    id: gemini-2.5-pro
+    preset: google/gemini-2.5-pro
+
+  # Talking to something else instead? Any OpenAI-compatible endpoint works —
+  # set CHAT_BASE_URL and replace the models above. With OpenRouter the ids
+  # carry a vendor prefix and a bundled preset may not exist, in which case
+  # declare `behavior` in full instead of referencing one:
+  #
+  #   primary:
+  #     id: moonshotai/kimi-k3
+  #     behavior:
+  #       input: [text, image]
+  #       nativeStructuredOutput: [json-schema, tool-calling]
+  #       parameters: { temperature: supported, streaming: supported }
+
+routes:
+  # `default` is required. `fast` inherits it unless assigned.
+  #
+  # `reasoning` and `vision` inherit `default` only when that model declares
+  # the capability. gemini-2.5-flash declares both, so both would work
+  # unassigned; `reasoning` is pointed at the Pro tier deliberately.
+  default: primary
+  fast: fast
+  reasoning: deep
+  vision: primary

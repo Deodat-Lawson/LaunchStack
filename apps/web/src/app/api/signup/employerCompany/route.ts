@@ -1,18 +1,22 @@
 import {db} from "~/server/db";
-import {company, users, userCompanyMemberships} from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
 import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
 import { generateUniqueSlug } from "~/lib/workspace-slug";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
+
         const validation = await validateRequestBody(request, EmployerCompanySignupSchema);
         if (!validation.success) return validation.response;
         const {
-            userId,
             name,
             email,
             companyName,
@@ -23,6 +27,7 @@ export async function POST(request: Request) {
             embeddingOllamaBaseUrl,
             embeddingOllamaModel,
         } = validation.data;
+        const userId = identity.data.clerkUserId;
 
         // Check if company already exists
         const [existingCompany] = await db
@@ -43,8 +48,10 @@ export async function POST(request: Request) {
             .values({
                 name: companyName,
                 slug,
-                numberOfEmployees: numberOfEmployees || "0",
-                embeddingIndexKey: embeddingIndexKey?.trim() || null,
+                // `?? ""` first so the `||` default (which must also catch
+                // empty strings) operates on a plain string.
+                numberOfEmployees: (numberOfEmployees ?? "") || "0",
+                embeddingIndexKey: (embeddingIndexKey?.trim() ?? "") || null,
             })
             .returning({ id: company.id });
 

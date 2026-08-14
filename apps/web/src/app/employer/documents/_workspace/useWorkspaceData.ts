@@ -34,8 +34,13 @@ function mapDocType(doc: DocumentType): SourceTypeId {
 
 function humanDate(raw: unknown): string {
   if (!raw) return "";
-  const d = new Date(String(raw));
-  if (Number.isNaN(d.getTime())) return "";
+  const d =
+    raw instanceof Date
+      ? raw
+      : typeof raw === "string" || typeof raw === "number"
+        ? new Date(raw)
+        : null;
+  if (!d || Number.isNaN(d.getTime())) return "";
   const diffMs = Date.now() - d.getTime();
   const diffHr = Math.floor(diffMs / 3_600_000);
   if (diffHr < 1) return "just now";
@@ -99,7 +104,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         fetch("/api/fetchDocument", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
+          body: "{}",
         }),
         fetch("/api/Categories/GetCategories"),
       ]);
@@ -130,7 +135,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
       const response = await fetch("/api/fetchUserInfo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
+        body: "{}",
       });
       if (!response.ok) return;
       const data = (await response.json()) as {

@@ -10,7 +10,7 @@ import {
   emailSends,
   emailSuppressions,
   emailTemplateVersions,
-} from "@launchstack/core/db/schema";
+} from "./schema";
 
 import {
   CampaignLifecycleError,

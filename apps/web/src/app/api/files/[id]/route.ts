@@ -1,14 +1,28 @@
 /**
  * File Serving API Route
- * Retrieves and serves files stored in the database
+ * Retrieves and serves files stored in the database.
+ *
+ * Auth: accepts a signed file-access token (OCR worker) OR a full workspace
+ * session. Token-based requests skip the ownership check; session-based
+ * requests require `file_uploads.company_id` to match the caller's company.
+ * Rows with no company stamp belong to no known tenant and are denied — see
+ * Legacy rows get `company_id` from the
+ * `2026-08-file-uploads-company-id` backfill, which stamps every row it can
+ * attribute authoritatively.
  */
 
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { fileUploads } from "@launchstack/core/db/schema";
+import {
+  FILE_ACCESS_TOKEN_PARAM,
+  verifyFileAccessToken,
+} from "@launchstack/core/crypto";
+import { env } from "~/env";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const MIME_BY_EXTENSION: Record<string, string> = {
   pdf: "application/pdf",
@@ -60,6 +74,23 @@ export async function GET(
       );
     }
 
+    // Token path: the OCR worker has no Clerk session but carries a
+    // short-lived HMAC token scoped to this file id.
+    const token = new URL(request.url).searchParams.get(FILE_ACCESS_TOKEN_PARAM);
+    const hasValidToken = verifyFileAccessToken(
+      token,
+      String(fileId),
+      env.server.FILE_ACCESS_TOKEN_SECRET,
+    );
+
+    // Session path: full workspace context + company ownership check.
+    let sessionCompanyId: bigint | null = null;
+    if (!hasValidToken) {
+      const ctx = await requireWorkspaceContext();
+      if (!ctx.success) return ctx.response;
+      sessionCompanyId = ctx.data.companyId;
+    }
+
     // Fetch file from database
     const [file] = await db
       .select()
@@ -71,6 +102,16 @@ export async function GET(
         { error: "File not found" },
         { status: 404 }
       );
+    }
+
+    // Company ownership check for session-based requests.
+    if (sessionCompanyId !== null) {
+      if (file.companyId == null || file.companyId !== sessionCompanyId) {
+        return NextResponse.json(
+          { error: "File not found" },
+          { status: 404 },
+        );
+      }
     }
 
     // External storage (S3 or legacy Vercel Blob): proxy or redirect.
@@ -143,4 +184,3 @@ export async function GET(
     );
   }
 }
-

@@ -1,14 +1,11 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import {
-  agentAiChatbotChat,
-  agentAiChatbotMessage,
-  agentAiChatbotTask,
-  agentAiChatbotDocument
-} from "@launchstack/core/db/schema";
+import { agentAiChatbotChat, agentAiChatbotMessage, agentAiChatbotTask, agentAiChatbotDocument } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -18,8 +15,14 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { chatId } = await params;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     // Get chat details
     const [chat] = await db
@@ -75,8 +78,15 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { chatId } = await params;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const validation = await validateRequestBody(request, UpdateChatSchema);
     if (!validation.success) return validation.response;
     const { title, status, agentMode, visibility, aiStyle, aiPersona } = validation.data;
@@ -120,8 +130,14 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { chatId } = await params;
+
+    const owned = await assertChatOwnedByUser(chatId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     await db
       .delete(agentAiChatbotChat)
@@ -139,4 +155,3 @@ export async function DELETE(
     );
   }
 }
-

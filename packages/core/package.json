@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": false,
   "type": "module",
-  "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. Framework-agnostic — runs under Next, Node, or any host that supplies a StoragePort, JobDispatcherPort, and CreditsPort.",
+  "description": "Launchstack engine: document ingestion, RAG, knowledge graph, OCR, LLM abstractions. Framework-agnostic \u2014 runs under Next, Node, or any host that supplies a StoragePort, JobDispatcherPort, and CreditsPort.",
   "license": "Apache-2.0",
   "author": "Launchstack",
   "homepage": "https://github.com/launchstack/launchstack",
@@ -27,6 +27,8 @@
   "sideEffects": false,
   "files": [
     "dist",
+    "drizzle",
+    "scripts",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -62,6 +64,14 @@
       "types": "./src/rag/index.ts",
       "default": "./src/rag/index.ts"
     },
+    "./rag/retrievers": {
+      "types": "./src/rag/retrievers/index.ts",
+      "default": "./src/rag/retrievers/index.ts"
+    },
+    "./rag/search-types": {
+      "types": "./src/rag/search-types.ts",
+      "default": "./src/rag/search-types.ts"
+    },
     "./ingestion/entity-extraction": {
       "types": "./src/ingestion/entity-extraction.ts",
       "default": "./src/ingestion/entity-extraction.ts"
@@ -74,6 +84,10 @@
       "types": "./src/db/index.ts",
       "default": "./src/db/index.ts"
     },
+    "./db/backfills": {
+      "types": "./src/db/backfills/index.ts",
+      "default": "./src/db/backfills/index.ts"
+    },
     "./db/schema": {
       "types": "./src/db/schema.ts",
       "default": "./src/db/schema.ts"
@@ -85,6 +99,10 @@
     "./guardrails": {
       "types": "./src/guardrails/index.ts",
       "default": "./src/guardrails/index.ts"
+    },
+    "./collab": {
+      "types": "./src/collab/index.ts",
+      "default": "./src/collab/index.ts"
     },
     "./graph": {
       "types": "./src/graph/index.ts",
@@ -216,6 +234,14 @@
         "types": "./dist/rag/index.d.ts",
         "default": "./dist/rag/index.js"
       },
+      "./rag/retrievers": {
+        "types": "./dist/rag/retrievers/index.d.ts",
+        "default": "./dist/rag/retrievers/index.js"
+      },
+      "./rag/search-types": {
+        "types": "./dist/rag/search-types.d.ts",
+        "default": "./dist/rag/search-types.js"
+      },
       "./ingestion/entity-extraction": {
         "types": "./dist/ingestion/entity-extraction.d.ts",
         "default": "./dist/ingestion/entity-extraction.js"
@@ -239,6 +265,10 @@
       "./guardrails": {
         "types": "./dist/guardrails/index.d.ts",
         "default": "./dist/guardrails/index.js"
+      },
+      "./collab": {
+        "types": "./dist/collab/index.d.ts",
+        "default": "./dist/collab/index.js"
       },
       "./graph": {
         "types": "./dist/graph/index.d.ts",
@@ -339,40 +369,47 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
     "clean": "rm -rf dist .tsbuildinfo",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:check": "drizzle-kit check && node ./scripts/check-journal.mjs",
+    "db:migrate": "node ./scripts/migrate.mjs",
+    "db:verify": "node ./scripts/migrate.mjs --check",
+    "db:baseline": "node ./scripts/migrate.mjs --baseline",
+    "db:seed": "node ./scripts/seed.mjs",
+    "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
-    "@types/jsdom": "^28.0.1",
-    "@types/turndown": "^5.0.6"
+    "dotenv": "^17.3.1",
+    "drizzle-kit": "0.31.10",
+    "drizzle-orm": "^0.45.1"
   },
   "dependencies": {
-    "@langchain/anthropic": "^1.3.3",
-    "@langchain/core": "^0.3.74",
-    "@langchain/google-genai": "^2.1.3",
-    "@langchain/ollama": "^0.1.6",
-    "@langchain/openai": "^0.6.11",
-    "@mozilla/readability": "^0.6.0",
-    "cheerio": "^1.2.0",
-    "drizzle-orm": "^0.45.1",
-    "jsdom": "^29.0.2",
-    "jszip": "^3.10.1",
-    "mammoth": "^1.11.0",
-    "openai": "^4.62.1",
-    "pdf-lib": "^1.17.1",
-    "pdfjs-serverless": "^1.1.0",
-    "postgres": "^3.4.7",
-    "string-similarity-js": "^2.1.4",
-    "turndown": "^7.2.2",
-    "xlsx": "^0.18.5"
+    "@launchstack/adapters": "workspace:^",
+    "@launchstack/application": "workspace:^",
+    "@launchstack/evidence": "workspace:^",
+    "@launchstack/protocol": "workspace:^",
+    "postgres": "^3.4.7"
   },
   "peerDependencies": {
+    "@langchain/community": "^0.3.54",
+    "langchain": "^0.3.33",
     "neo4j-driver": "^6.0.0",
     "tesseract.js": "^7.0.0"
   },
   "peerDependenciesMeta": {
-    "neo4j-driver": { "optional": true },
-    "tesseract.js": { "optional": true }
+    "@langchain/community": {
+      "optional": true
+    },
+    "langchain": {
+      "optional": true
+    },
+    "neo4j-driver": {
+      "optional": true
+    },
+    "tesseract.js": {
+      "optional": true
+    }
   }
 }

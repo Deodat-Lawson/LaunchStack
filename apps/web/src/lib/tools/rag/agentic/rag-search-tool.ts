@@ -56,13 +56,16 @@ export async function executeRAGSearch(
 
     // Transform results to our format
     const results: RAGSearchResult[] = ragResults.map((result) => {
-      const docId = String(result.metadata?.documentId ?? "");
+      const numericDocId = Number(result.metadata?.documentId);
       const metadata = result.metadata as unknown as Record<string, unknown> | undefined;
       return {
         content: result.pageContent,
         page: typeof result.metadata?.page === "number" ? result.metadata.page : 0,
-        documentId: docId,
-        documentTitle: documentTitles.get(docId as unknown as number) ?? "Unknown",
+        documentId: Number.isFinite(numericDocId) ? String(numericDocId) : "",
+        // documentTitles is keyed by numeric document id — look it up with the
+        // number, not a string cast (the old `docId as unknown as number`
+        // never matched, so every title rendered as "Unknown").
+        documentTitle: documentTitles.get(numericDocId) ?? "Unknown",
         relevanceScore: typeof metadata?.score === "number" ? metadata.score : 0,
       };
     });

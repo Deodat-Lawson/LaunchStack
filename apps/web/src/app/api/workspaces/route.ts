@@ -1,19 +1,16 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq, desc, count } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import {
-    users,
-    company,
-    userCompanyMemberships,
-} from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
 import {
     setActiveWorkspaceCookie,
     getActiveCompanyId,
 } from "~/lib/active-workspace";
+import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
 
@@ -33,15 +30,14 @@ const CreateWorkspaceSchema = z.object({
 
 export async function GET() {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
+        const clerkUserId = identity.data.clerkUserId;
 
         const [user] = await db
             .select({ id: users.id, defaultCompanyId: users.companyId })
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, clerkUserId));
 
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -76,10 +72,12 @@ export async function GET() {
             .where(eq(userCompanyMemberships.userId, BigInt(user.id)))
             .orderBy(desc(userCompanyMemberships.lastOpenedAt));
 
-        const activeCompanyId = await getActiveCompanyId(userId);
+        // Null activeCompanyId is a recoverable stale-cookie state: still list
+        // memberships so the client can pick a workspace (same as the page).
+        const activeCompanyId = await getActiveCompanyId(clerkUserId);
 
         return NextResponse.json({
-            activeCompanyId: activeCompanyId.toString(),
+            activeCompanyId: activeCompanyId?.toString() ?? null,
             workspaces: rows.map((r) => ({
                 id: r.id,
                 name: r.name,
@@ -89,7 +87,7 @@ export async function GET() {
                 role: r.role,
                 memberCount: Number(r.memberCount ?? 1),
                 lastOpenedAt: r.lastOpenedAt,
-                isActive: BigInt(r.id) === activeCompanyId,
+                isActive: activeCompanyId !== null && BigInt(r.id) === activeCompanyId,
             })),
         });
     } catch (err) {
@@ -100,12 +98,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const identity = await requireClerkIdentity();
+        if (!identity.success) return identity.response;
+        const clerkUserId = identity.data.clerkUserId;
 
-        const json = await request.json().catch(() => ({}));
+        const json: unknown = await request.json().catch(() => ({}));
         const parsed = CreateWorkspaceSchema.safeParse(json);
         if (!parsed.success) {
             return NextResponse.json(
@@ -127,14 +124,20 @@ export async function POST(request: Request) {
         }
 
         const [user] = await db
-            .select({ id: users.id, name: users.name, email: users.email })
+            .select({ id: users.id, name: users.name, email: users.email, status: users.status })
             .from(users)
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, clerkUserId));
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
+        if (user.status !== "verified") {
+            return NextResponse.json(
+                { error: "Account not verified. Please wait for administrator approval." },
+                { status: 403 },
+            );
+        }
 
-        const teamSizeForCompany = teamSize?.trim() || "1";
+        const teamSizeForCompany = (teamSize?.trim() ?? "") || "1";
 
         const [newCompany] = await db
             .insert(company)

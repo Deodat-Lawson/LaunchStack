@@ -1,55 +1,58 @@
+import { and, eq } from "drizzle-orm";
+
 import { db } from "../../../server/db/index";
-import { users } from "@launchstack/core/db/schema";
-import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { users } from "~/server/db/schema";
 import {
-    handleApiError,
-    createSuccessResponse,
-    createUnauthorizedError,
-    createForbiddenError,
-    createNotFoundError
+  handleApiError,
+  createSuccessResponse,
+  createForbiddenError,
+  createNotFoundError,
 } from "~/lib/api-utils";
 import { validateRequestBody, ApproveEmployeeByIdSchema } from "~/lib/validation";
-
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
-    try {
-        const { userId } = await auth();
+  try {
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
-        if (!userId) {
-            return createUnauthorizedError("Authentication required. Please sign in to continue.");
-        }
-
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return createNotFoundError("User account not found. Please contact support.");
-        }
-
-        if (userInfo.role !== "employer" && userInfo.role !== "owner") {
-            return createForbiddenError("Insufficient permissions. Only employers and owners can approve employees.");
-        }
-
-        const validation = await validateRequestBody(request, ApproveEmployeeByIdSchema);
-        if (!validation.success) return validation.response;
-        const { employeeId } = validation.data;
-
-        await db
-            .update(users)
-            .set({
-                status: "verified"
-            })
-            .where(eq(users.id, Number(employeeId)));
-
-        return createSuccessResponse(
-            { employeeId },
-            "Employee approved successfully"
-        );
-    } catch (error: unknown) {
-        console.error("Error approving employee:", error);
-        return handleApiError(error);
+    if (!isManagementRole(ctx.data.role)) {
+      return createForbiddenError(
+        "Insufficient permissions. Only workspace owners and admins can approve employees.",
+      );
     }
+
+    const validation = await validateRequestBody(
+      request,
+      ApproveEmployeeByIdSchema,
+    );
+    if (!validation.success) return validation.response;
+    const { employeeId } = validation.data;
+
+    const updated = await db
+      .update(users)
+      .set({ status: "verified" })
+      .where(
+        and(
+          eq(users.id, Number(employeeId)),
+          eq(users.companyId, ctx.data.companyId),
+        ),
+      )
+      .returning({ id: users.id });
+
+    if (updated.length === 0) {
+      return createNotFoundError("Employee not found.");
+    }
+
+    return createSuccessResponse(
+      { employeeId },
+      "Employee approved successfully",
+    );
+  } catch (error: unknown) {
+    console.error("Error approving employee:", error);
+    return handleApiError(error);
+  }
 }

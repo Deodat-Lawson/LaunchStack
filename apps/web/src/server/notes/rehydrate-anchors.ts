@@ -28,13 +28,10 @@ import { and, asc, eq, isNotNull, sql } from "drizzle-orm";
 import DiffMatchPatch from "diff-match-patch";
 
 import { db } from "~/server/db";
-import {
-    documentNotes,
-    documentContextChunks,
-    type NoteAnchor,
-    type AnchorStatus,
-} from "@launchstack/core/db/schema";
-import { embedNoteAsync } from "./embed-note";
+import { documentContextChunks } from "@launchstack/core/db/schema";
+import { type NoteAnchor, type AnchorStatus } from "~/server/db/schema";
+import { documentNotes } from "~/server/db/schema";
+import { requestNoteEmbedding } from "./embed-note";
 
 // Fuzzy matcher knobs.
 //
@@ -148,9 +145,9 @@ export async function rehydrateNotesForDocument(
         else result.orphaned += 1;
 
         // Re-embed so the vector's versionId tag matches what the note now
-        // says. Fire-and-forget — embedding failure must not revert the
-        // anchor update.
-        embedNoteAsync(note.id);
+        // says. Durable via the outbox — the worker retries on failure
+        // without reverting the anchor update.
+        await requestNoteEmbedding(note.id, "updated");
     }
 
     return result;

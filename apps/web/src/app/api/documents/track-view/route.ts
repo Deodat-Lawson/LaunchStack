@@ -1,43 +1,31 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { users, documentViews, document } from "@launchstack/core/db/schema";
-import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { document } from "@launchstack/core/db/schema";
+import { users, documentViews } from "~/server/db/schema";
+import { and, eq } from "drizzle-orm";
 import { validateRequestBody, TrackDocumentViewSchema } from "~/lib/validation";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const validation = await validateRequestBody(request, TrackDocumentViewSchema);
         if (!validation.success) return validation.response;
         const { documentId } = validation.data;
 
-        // Get user info
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo) {
-            return NextResponse.json(
-                { success: false, error: "User not found" },
-                { status: 404 }
-            );
-        }
-
-        // Verify document exists and belongs to the same company
+        // Scoped in the WHERE clause on purpose: a separate 403 for documents
+        // that exist in another tenant would confirm their ids.
         const [doc] = await db
-            .select()
+            .select({ id: document.id })
             .from(document)
-            .where(eq(document.id, documentId));
+            .where(
+                and(
+                    eq(document.id, documentId),
+                    eq(document.companyId, ctx.data.companyId),
+                )
+            );
 
         if (!doc) {
             return NextResponse.json(
@@ -46,25 +34,18 @@ export async function POST(request: Request) {
             );
         }
 
-        if (doc.companyId !== (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))) {
-            return NextResponse.json(
-                { success: false, error: "Unauthorized to view this document" },
-                { status: 403 }
-            );
-        }
-
         // Record the document view
         await db.insert(documentViews).values({
             documentId: BigInt(documentId),
-            userId: userId,
-            companyId: (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)),
+            userId: ctx.data.clerkUserId,
+            companyId: ctx.data.companyId,
         });
 
         // Update user's last active time
         await db
             .update(users)
             .set({ lastActiveAt: new Date() })
-            .where(eq(users.userId, userId));
+            .where(eq(users.userId, ctx.data.clerkUserId));
 
         return NextResponse.json(
             { success: true, message: "View tracked successfully" },

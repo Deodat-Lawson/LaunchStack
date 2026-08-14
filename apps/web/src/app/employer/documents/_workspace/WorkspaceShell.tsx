@@ -20,15 +20,10 @@ import { RenameFolderDialog } from "./RenameFolderDialog";
 import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioMenu } from "./StudioMenu";
-import { renderStudioPane } from "./StudioPanes";
-import {
-  DEFAULT_COMPOSER_MODEL,
-  STUDIO_FEATURES_BY_ID,
-  findComposerModel,
-} from "./types";
+import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
+import { STUDIO_FEATURES_BY_ID } from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
-  ComposerModelOption,
   ComposerSend,
   ThreadMessage,
   WorkspaceFolder,
@@ -52,14 +47,16 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
   rewrite: "/employer/documents?feature=rewrite",
   upload: "/employer/documents?add=1",
   dashboard: "/employer/home",
-  analytics: "/employer/statistics",
+  analytics: "/employer/documents?feature=analytics",
   employees: "/employer/employees",
   settings: "/employer/settings",
-  metadata: "/employer/metadata",
+  metadata: "/employer/documents?feature=metadata",
   "marketing-pipeline": "/employer/tools/marketing-pipeline",
   "repo-explainer": "/employer/tools/repo-explainer",
   notes: "/employer/documents?feature=notes",
   workflows: "/employer/documents?feature=workflows",
+  knowledge: "/employer/documents?feature=knowledge",
+  meetings: "/employer/documents?feature=meetings",
 };
 
 /** Extra horizontal inset for AskPanel / expanded feature headers when rail is hidden (clears overlay “show sidebar” at 12+28px + ~8px gap minus default 20px padding). */
@@ -79,6 +76,8 @@ const FEATURE_IDS = new Set([
   "image-gen",
   "audio-gen",
   "marketing",
+  "knowledge",
+  "meetings",
   "metadata",
   "settings",
   "analytics",
@@ -130,6 +129,8 @@ export function WorkspaceShell() {
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
+  const [addTab, setAddTab] = useState<string | undefined>(undefined);
   const [palOpen, setPalOpen] = useState(false);
   const [newFolderOpen, setNewFolderOpen] = useState(false);
   const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
@@ -164,11 +165,9 @@ export function WorkspaceShell() {
     }
   }, [railHidden]);
 
-  // Composer preferences persisted across reloads so picking a model or
-  // toggling Web/Think doesn't reset on every refresh. Ephemeral attachments
-  // are NOT persisted — those are turn-scoped, owned by the Composer.
-  const [composerModel, setComposerModel] =
-    useState<ComposerModelOption>(DEFAULT_COMPOSER_MODEL);
+  // Composer preferences persisted across reloads so toggling Web/Think
+  // doesn't reset on every refresh. Ephemeral attachments are NOT persisted —
+  // those are turn-scoped, owned by the Composer.
   const [composerWebSearch, setComposerWebSearch] = useState(false);
   const [composerThinking, setComposerThinking] = useState(false);
   const composerPrefsReady = useRef(false);
@@ -178,11 +177,9 @@ export function WorkspaceShell() {
       const raw = localStorage.getItem("askPanel.composer.v1");
       if (raw) {
         const parsed = JSON.parse(raw) as {
-          model?: string;
           webSearch?: boolean;
           thinking?: boolean;
         };
-        if (parsed.model) setComposerModel(findComposerModel(parsed.model));
         if (typeof parsed.webSearch === "boolean")
           setComposerWebSearch(parsed.webSearch);
         if (typeof parsed.thinking === "boolean")
@@ -200,7 +197,6 @@ export function WorkspaceShell() {
       localStorage.setItem(
         "askPanel.composer.v1",
         JSON.stringify({
-          model: composerModel.id,
           webSearch: composerWebSearch,
           thinking: composerThinking,
         }),
@@ -208,7 +204,7 @@ export function WorkspaceShell() {
     } catch {
       // Quota / private mode — drop silently.
     }
-  }, [composerModel, composerWebSearch, composerThinking]);
+  }, [composerWebSearch, composerThinking]);
 
   const { sendQuery, loading: isSending } = useAIChat();
 
@@ -239,12 +235,10 @@ export function WorkspaceShell() {
 
       const data = await sendQuery({
         question: send.text,
-        searchScope: scope as "document" | "company" | "selected",
+        searchScope: scope,
         documentId: scope === "document" ? numericIds[0] : undefined,
         selectedDocumentIds: scope === "selected" ? numericIds : undefined,
         companyId: scope === "company" ? companyId ?? undefined : undefined,
-        aiModel: send.model as never,
-        provider: send.provider as never,
         enableWebSearch: send.webSearch,
         thinkingMode: send.thinking,
         attachments: send.attachments.map((a) => ({
@@ -255,7 +249,7 @@ export function WorkspaceShell() {
         })),
       });
 
-      if (data) {
+      if (data.success) {
         const citations = (data.references ?? [])
           .map((r) => {
             const src = sources.find((s) => s.documentId === Number(r.documentId));
@@ -284,7 +278,10 @@ export function WorkspaceShell() {
           ...prev,
           {
             role: "assistant",
-            text: "Couldn't reach the model. Try again in a moment.",
+            text:
+              data.message ??
+              data.error ??
+              "Couldn't reach the model. Try again in a moment.",
           },
         ]);
       }
@@ -344,6 +341,11 @@ export function WorkspaceShell() {
   const handleAskAbout = useCallback((source: WorkspaceSource) => {
     setSelected((prev) => (prev.includes(source.id) ? prev : [source.id, ...prev]));
     setViewerSource(null);
+  }, []);
+
+  const openAdd = useCallback((tabId?: string) => {
+    setAddTab(tabId);
+    setAddOpen(true);
   }, []);
 
   const handleMoveToFolder = useCallback(
@@ -465,7 +467,8 @@ export function WorkspaceShell() {
           folders={folders}
           selected={selected}
           setSelected={setSelected}
-          onOpenAdd={() => setAddOpen(true)}
+          onOpenAdd={() => openAdd()}
+          onOpenKnowledge={() => expandFeature("knowledge")}
           onOpenSource={handleOpenSource}
           onNewFolder={() => setNewFolderOpen(true)}
           onRenameFolder={(folder) => setRenameFolder(folder)}
@@ -530,8 +533,6 @@ export function WorkspaceShell() {
           userName={userName}
           userEmail={userEmail}
           onSignOut={() => signOut({ redirectUrl: "/" })}
-          model={composerModel}
-          onPickModel={setComposerModel}
           webSearch={composerWebSearch}
           onToggleWebSearch={() => setComposerWebSearch((v) => !v)}
           thinking={composerThinking}
@@ -556,8 +557,23 @@ export function WorkspaceShell() {
           userInitials={initials}
           userName={userName}
           userEmail={userEmail}
-          onOpenSettings={() => router.push("/employer/settings")}
+          // Settings is a workspace surface now, not a separate destination.
+          onOpenSettings={() => expandFeature("settings")}
           onSignOut={() => signOut({ redirectUrl: "/" })}
+          paneContext={{
+            knowledge: {
+              sources,
+              folders,
+              selected,
+              setSelected,
+              onOpenSource: handleOpenSource,
+              onOpenAdd: openAdd,
+              onAskAbout: (ids) => {
+                setSelected(ids);
+                setActiveFeatureId("chat");
+              },
+            },
+          }}
         />
       )}
 
@@ -578,7 +594,11 @@ export function WorkspaceShell() {
 
       <AddSourceModal
         open={addOpen}
-        onClose={() => setAddOpen(false)}
+        initialTab={addTab}
+        onClose={() => {
+          setAddOpen(false);
+          setAddTab(undefined);
+        }}
         userId={userId ?? null}
         defaultCategory={activeFolder ?? folders[0]?.name ?? "Unfiled"}
         folders={folders.map((f) => f.name)}
@@ -657,6 +677,8 @@ interface ExpandedFeatureViewProps {
   userEmail?: string;
   onOpenSettings: () => void;
   onSignOut?: () => void;
+  /** Workspace-owned data some panes need (Knowledge in particular). */
+  paneContext?: StudioPaneContext;
 }
 
 /**
@@ -675,6 +697,7 @@ function ExpandedFeatureView({
   userEmail,
   onOpenSettings,
   onSignOut,
+  paneContext,
 }: ExpandedFeatureViewProps) {
   const feature = STUDIO_FEATURES_BY_ID[featureId];
 
@@ -714,7 +737,7 @@ function ExpandedFeatureView({
       </div>
       <div style={{ flex: 1, overflow: "hidden" }}>
         {feature ? (
-          renderStudioPane(feature, onPaneExit)
+          renderStudioPane(feature, onPaneExit, paneContext)
         ) : (
           <div
             style={{

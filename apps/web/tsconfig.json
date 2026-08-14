@@ -9,8 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
-      "@schema": ["../../schema/index.ts"],
-      "zod": ["./node_modules/zod"]
+      "@schema": ["./src/lib/agents/evals/campaign/contract.ts"]
     }
   },
   "include": [

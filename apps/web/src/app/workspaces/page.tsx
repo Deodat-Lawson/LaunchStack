@@ -3,11 +3,8 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { eq, desc, count } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import {
-    users,
-    company,
-    userCompanyMemberships,
-} from "@launchstack/core/db/schema";
+import { company } from "@launchstack/core/db/schema";
+import { users, userCompanyMemberships } from "~/server/db/schema";
 import { getActiveCompanyId } from "~/lib/active-workspace";
 
 import { WorkspaceSelectClient } from "./WorkspaceSelectClient";
@@ -71,13 +68,17 @@ export default async function WorkspacesPage({
         role: r.role,
         memberCount: Number(r.memberCount ?? 1),
         lastOpenedAt: r.lastOpenedAt.toISOString(),
-        isActive: BigInt(r.id) === activeCompanyId,
+        // A null active id is a safe recovery state: the user can choose one
+        // of their live memberships instead of inheriting a stale default.
+        isActive: activeCompanyId !== null && BigInt(r.id) === activeCompanyId,
     }));
 
+    // `?? ""` first so the `||` fallthrough (which must also skip empty
+    // strings, e.g. a blank fullName) operates on non-nullable strings.
     const accountName =
-        clerkUser?.fullName ||
+        (clerkUser?.fullName ?? "") ||
         [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ") ||
-        clerkUser?.username ||
+        (clerkUser?.username ?? "") ||
         "You";
     const accountEmail =
         clerkUser?.primaryEmailAddress?.emailAddress ?? "";

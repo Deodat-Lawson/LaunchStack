@@ -19,17 +19,20 @@ import { createHeroGraph, type HeroGraphApi } from './heroGraph';
 import { runHeroDemo } from './heroDemo';
 import styles from '../../styles/marketing.module.css';
 
-const GITHUB_REPO = 'https://github.com/Deodat-Lawson/pdr_ai_v2';
+const GITHUB_REPO = 'https://github.com/Deodat-Lawson/LaunchStack';
 
+// App connectors are not implemented yet — every entry below is roadmap.
+// What IS live today: manual upload and import (files, ZIP archives,
+// recordings, GitHub repository import).
 const CONNECTORS = [
-  { name: 'Gmail', desc: 'Threads, labels, attachments. Scope by label.', tag: 'Live' },
-  { name: 'Notion', desc: 'Pages, databases, nested blocks — live sync.', tag: 'Live' },
-  { name: 'Google Drive', desc: 'Docs, Sheets, PDFs — folder-scoped.', tag: 'Live' },
-  { name: 'Slack', desc: 'Channels + DMs. Pick what\u2019s in scope.', tag: 'Live' },
-  { name: 'GitHub', desc: 'Issues, PRs, READMEs, your own gists.', tag: 'Live' },
-  { name: 'Dropbox', desc: 'Files + Paper docs, folder-scoped.', tag: 'Live' },
-  { name: 'Linear', desc: 'Issues, projects, cycles — searchable.', tag: 'Beta', soon: true },
-  { name: 'Calendar', desc: 'Events + attendees give calls context.', tag: 'Beta', soon: true },
+  { name: 'Gmail', desc: 'Threads, labels, attachments. Scope by label.', tag: 'Planned', soon: true },
+  { name: 'Notion', desc: 'Pages, databases, nested blocks.', tag: 'Planned', soon: true },
+  { name: 'Google Drive', desc: 'Docs, Sheets, PDFs — folder-scoped.', tag: 'Planned', soon: true },
+  { name: 'Slack', desc: 'Channels + DMs. Pick what\u2019s in scope.', tag: 'Planned', soon: true },
+  { name: 'GitHub', desc: 'Issues, PRs, READMEs, your own gists.', tag: 'Planned', soon: true },
+  { name: 'Dropbox', desc: 'Files + Paper docs, folder-scoped.', tag: 'Planned', soon: true },
+  { name: 'Linear', desc: 'Issues, projects, cycles — searchable.', tag: 'Planned', soon: true },
+  { name: 'Calendar', desc: 'Events + attendees give calls context.', tag: 'Planned', soon: true },
 ];
 
 const FORMATS: Array<{ ext: string; name: string; kind: 'doc' | 'audio' | 'video' | 'image' | 'code' | 'data' }> = [
@@ -54,23 +57,23 @@ const FORMATS: Array<{ ext: string; name: string; kind: 'doc' | 'audio' | 'video
 const FAQS = [
   {
     q: 'Is it really open source?',
-    a: `Yes — the retrieval core (chunking, embeddings, graph, cited synthesis) is Apache 2.0–licensed on GitHub. The hosted app adds the polished UI, connectors, and billing — you can skip all of that and run the engine yourself.`,
+    a: `Yes — the whole repository is Apache 2.0–licensed on GitHub: the Next.js app, the worker, the TypeScript retrieval engine, and the compute services (transcription, document conversion, DOCX editing). Clone it and run the full stack yourself with Docker Compose.`,
   },
   {
     q: 'Do you train on my data?',
-    a: `Never — we do not train on your data. Your sources stay in your workspace. For maximum control, self-host with your own API keys so only the LLM calls you explicitly enable leave your environment.`,
+    a: `Launchstack does not train models on your data. Retrieval and synthesis call the LLM providers you configure with your own API keys — those are the only calls that leave a self-hosted deployment.`,
   },
   {
-    q: 'What happens to my Gmail/Notion data?',
-    a: `We read via OAuth — scoped to the folders/labels you pick. Content is encrypted at rest. Revoke anytime; your index is deleted within 24 hours.`,
+    q: 'Where does my data live?',
+    a: `Self-hosted, everything stays in your own infrastructure: documents and derived data (chunks, embeddings, graph rows) in your Postgres + pgvector database, raw files in your S3-compatible object storage. Deleting a document removes its database rows; the files in your object storage remain under your control.`,
   },
   {
     q: 'Do I need my own API keys?',
-    a: `Yes — self-hosted Launchstack uses your own OpenAI, Anthropic, or Google AI keys. You are not locked into our pricing and you maintain full control over your AI usage and costs.`,
+    a: `Yes — self-hosted Launchstack runs on your own Google AI key, or any endpoint speaking the OpenAI chat-completions protocol. You are not locked into our pricing and you maintain full control over your AI usage and costs.`,
   },
   {
-    q: 'Can I edit sources inside Launchstack?',
-    a: `Yes — markdown docs and transcripts are fully editable with auto-snapshot version history. PDFs and media are annotation-only.`,
+    q: 'Are the app connectors (Gmail, Notion, Slack…) available?',
+    a: `Not yet — connectors are on the roadmap and none are implemented today. What ships now is manual upload and import: files, ZIP archives, audio/video recordings, and GitHub repository import.`,
   },
 ];
 
@@ -83,7 +86,7 @@ export function LandingClient() {
       <Problem />
       <Sources />
       <HowItWorks />
-      <Testimonials />
+      <ShippedToday />
       <Pricing />
       <FAQ />
       <OpenSource />
@@ -238,11 +241,12 @@ function HeroStage() {
 }
 
 // ── Knowledge Pipeline section ──────────────────────────────────────────────
-// Drift "knowledge-pipeline" animation: sources (Gmail, Notion, PDF, Audio,
-// GitHub) flow into a knowledge graph + embeddings, then out to consumers
-// (OpenAI, Anthropic, Claude Code, n8n). 14s loop driven by rAF; particles
-// sample bezier paths each frame and synchronously trigger card pulses on
-// delivery.
+// Drift "knowledge-pipeline" animation: real intake paths (uploads, audio and
+// video, images and scans, repos and archives) flow into a knowledge graph +
+// embeddings, then out to the product features that consume the index (cited
+// Q&A, predictive analysis, founder review, marketing pipeline). 14s loop
+// driven by rAF; particles sample bezier paths each frame and synchronously
+// trigger card pulses on delivery. Purely illustrative — no live data.
 
 const KP_STAGE_W = 1920;
 const KP_STAGE_H = 1080;
@@ -265,18 +269,18 @@ type KpCard = {
 };
 
 const KP_SOURCES: KpCard[] = [
-  { id: 'gmail',  label: 'Gmail',  meta: 'email · 14,204',      y: 220, Icon: IconGmail  },
-  { id: 'notion', label: 'Notion', meta: 'docs · 312 pages',    y: 360, Icon: IconNotion },
-  { id: 'pdf',    label: 'PDF',    meta: 'files · 87 uploaded', y: 500, Icon: IconPDF    },
-  { id: 'audio',  label: 'Audio',  meta: 'recordings · 42',     y: 640, Icon: IconAudio  },
-  { id: 'github', label: 'GitHub', meta: 'repos · 6 connected', y: 780, Icon: IconGithub },
+  { id: 'docs',   label: 'PDF & Office',    meta: 'pdf · docx · pptx · xlsx', y: 220, Icon: IconPDF    },
+  { id: 'text',   label: 'Text & Markdown', meta: 'md · txt · csv · json',    y: 360, Icon: IconDoc    },
+  { id: 'audio',  label: 'Audio & video',   meta: 'transcribed + timestamped', y: 500, Icon: IconAudio  },
+  { id: 'images', label: 'Images & scans',  meta: 'ocr on upload',            y: 640, Icon: IconImage  },
+  { id: 'github', label: 'Repos & ZIPs',    meta: 'github import · zip fan-out', y: 780, Icon: IconGithub },
 ];
 
 const KP_CONSUMERS: KpCard[] = [
-  { id: 'openai',    label: 'OpenAI',      meta: 'gpt-5 · embed-3',      y: 260, Icon: IconOpenAI     },
-  { id: 'anthropic', label: 'Anthropic',   meta: 'claude-sonnet-4.5',    y: 400, Icon: IconAnthropic  },
-  { id: 'claude',    label: 'Claude Code', meta: 'agent · long-running', y: 540, Icon: IconClaudeCode },
-  { id: 'n8n',       label: 'n8n',         meta: 'workflow · 14 nodes',  y: 680, Icon: IconN8n        },
+  { id: 'qa',        label: 'Cited Q&A',           meta: 'answers with citations', y: 260, Icon: IconChat     },
+  { id: 'predict',   label: 'Predictive analysis', meta: 'gap detection',          y: 400, Icon: IconInsight  },
+  { id: 'review',    label: 'Founder review',      meta: 'weekly digest',          y: 540, Icon: IconReview   },
+  { id: 'marketing', label: 'Marketing pipeline',  meta: 'source-grounded posts',  y: 680, Icon: IconMegaphone },
 ];
 
 const KP_GRAPH_CENTER: KpPt = { x: KP_HUB_X, y: KP_HUB_Y_GRAPH };
@@ -285,6 +289,9 @@ const KP_EMBED_CENTER: KpPt = { x: KP_HUB_X, y: KP_HUB_Y_EMBED };
 const kpPctX = (px: number) => `${(px / KP_STAGE_W) * 100}%`;
 const kpPctY = (py: number) => `${(py / KP_STAGE_H) * 100}%`;
 const kpClamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+// Math.sin/Math.cos are not bit-identical across JS engines; round so SSR and
+// client hydration serialize the same value.
+const kpRound = (v: number) => Math.round(v * 1000) / 1000;
 
 function kpCurvePath(a: KpPt, b: KpPt) {
   const dx = (b.x - a.x) * 0.55;
@@ -317,8 +324,8 @@ const KP_GRAPH_NODES: KpNode[] = (() => {
       const a = ((i + ring.offset) / ring.count) * Math.PI * 2;
       const rp = ring.r + Math.sin(i * 2.3 + ri) * 8;
       nodes.push({
-        x: cx + Math.cos(a) * rp,
-        y: cy + Math.sin(a) * rp * 0.72,
+        x: kpRound(cx + Math.cos(a) * rp),
+        y: kpRound(cy + Math.sin(a) * rp * 0.72),
         r: ri === 2 ? 2.5 : ri === 1 ? 3.5 : 4.5,
       });
     }
@@ -411,16 +418,16 @@ function KnowledgePipeline() {
       <div className={styles.container}>
         <div className={styles.eyebrow}>The pipeline</div>
         <p className={styles.lead}>
-          Gmail threads, Notion pages, PDFs, call recordings, and your GitHub
-          repos stream into one living knowledge graph. Embeddings index
-          meaning — not just keywords — so every LLM, agent, and workflow
-          queries the same brain, with citations, every time.
+          Uploads, recordings, images, and repository imports flow through one
+          ingestion pipeline — OCR, transcription, chunking, embeddings — into
+          Postgres + pgvector and a knowledge graph. Every feature that answers
+          a question queries the same index, with citations.
         </p>
 
         <div
           className="kp-stage"
           role="img"
-          aria-label="Sources flow into a knowledge graph and embeddings, then out to model consumers."
+          aria-label="Illustration: uploaded sources flow into a knowledge graph and embeddings, then out to product features."
         >
           <style>{KP_CSS}</style>
           <KnowledgePipelineStage />
@@ -472,7 +479,7 @@ function KnowledgePipelineStage() {
   }
 
   const nodeActivity: number[] = KP_GRAPH_NODES.map((_, i) =>
-    i === 0 ? 0 : kpClamp(Math.sin(time * 0.8 + i * 1.3) * 0.5 + 0.4, 0, 1)
+    i === 0 ? 0 : kpRound(kpClamp(Math.sin(time * 0.8 + i * 1.3) * 0.5 + 0.4, 0, 1))
   );
 
   return (
@@ -601,7 +608,7 @@ function KnowledgePipelineStage() {
           fontWeight={500}
           fill="oklch(0.42 0.02 285)"
         >
-          {Math.round(48 + coreActivity * 12)} entities · {KP_GRAPH_EDGES.length} relations
+          entities · relationships · citations
         </text>
 
         {particles}
@@ -637,7 +644,7 @@ function KnowledgePipelineStage() {
           Your data, <em>indexed</em>, queryable.
         </h3>
         <p className="kp-title__sub">
-          Sources · Knowledge graph · Embeddings · Any model, any workflow
+          Uploads · Knowledge graph · Embeddings · Cited answers
         </p>
       </div>
     </>
@@ -685,7 +692,7 @@ function KpEmbeddings({ activity, time }: { activity: number; time: number }) {
   for (let i = 0; i < 24; i++) {
     const base = 0.35 + 0.55 * Math.abs(Math.sin(i * 1.7 + 2.1));
     const wave = 0.15 * Math.sin(time * 2.2 - i * 0.45);
-    const h = kpClamp((base + wave) * (0.65 + 0.35 * activity), 0.08, 1);
+    const h = kpRound(kpClamp((base + wave) * (0.65 + 0.35 * activity), 0.08, 1));
     bars.push(
       <div
         key={i}
@@ -708,23 +715,25 @@ function KpEmbeddings({ activity, time }: { activity: number; time: number }) {
   );
 }
 
-// ── Brand glyphs (geometric homages, not traced logos). ───────────────────
-function IconGmail() {
+// ── Simple glyphs for real intake paths and product features. ─────────────
+function IconDoc() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="2" y="5" width="20" height="14" rx="2" fill="#fff" stroke="#e6e6e6" strokeWidth={1} />
-      <path d="M3 7l9 6 9-6" stroke="#EA4335" strokeWidth={1.6} fill="none" strokeLinejoin="round" />
-      <path d="M3 7v10h3V10L3 7z" fill="#C5221F" />
-      <path d="M21 7v10h-3V10l3-3z" fill="#4285F4" />
-      <path d="M6 10l6 4 6-4v7H6v-7z" fill="#FBBC04" opacity={0.25} />
+      <rect x="4" y="2.5" width="16" height="19" rx="2" fill="#fff" stroke="#d0d0d0" strokeWidth={1.2} />
+      <g stroke="oklch(0.55 0.18 255)" strokeWidth={1.6} strokeLinecap="round">
+        <line x1="8" y1="8" x2="16" y2="8" />
+        <line x1="8" y1="12" x2="16" y2="12" />
+        <line x1="8" y1="16" x2="13" y2="16" />
+      </g>
     </svg>
   );
 }
-function IconNotion() {
+function IconImage() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="3" y="3" width="18" height="18" rx="2" fill="#fff" stroke="#111" strokeWidth={1.2} />
-      <path d="M8 7v10M8 7l8 10M16 7v10" stroke="#111" strokeWidth={1.4} strokeLinecap="round" />
+      <rect x="3" y="4" width="18" height="16" rx="2" fill="#fff" stroke="#d0d0d0" strokeWidth={1.2} />
+      <circle cx="9" cy="10" r="2" fill="oklch(0.72 0.18 150)" />
+      <path d="M5 18l5-5 3 3 3-4 3 4" stroke="oklch(0.5 0.15 150)" strokeWidth={1.6} fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -758,44 +767,44 @@ function IconGithub() {
     </svg>
   );
 }
-function IconOpenAI() {
+function IconChat() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="11" fill="#0D0D0D" />
-      <path
-        d="M16.5 9.5l-4.5 -2.6 -4.5 2.6v5.2l4.5 2.6 4.5 -2.6zM12 9.8l3 1.7 -3 1.7 -3 -1.7z"
-        stroke="#fff"
-        strokeWidth={0.8}
-        fill="none"
-        strokeLinejoin="round"
-      />
+      <path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 3.5V17H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" fill="oklch(0.96 0.03 285)" stroke="oklch(0.54 0.24 285)" strokeWidth={1.3} strokeLinejoin="round" />
+      <g stroke="oklch(0.54 0.24 285)" strokeWidth={1.5} strokeLinecap="round">
+        <line x1="7.5" y1="9.5" x2="16.5" y2="9.5" />
+        <line x1="7.5" y1="13" x2="13.5" y2="13" />
+      </g>
     </svg>
   );
 }
-function IconAnthropic() {
+function IconInsight() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="2" y="2" width="20" height="20" rx="4" fill="#D97757" />
-      <path d="M9 17L12 7l3 10M10.2 13.5h3.6" stroke="#fff" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <g stroke="oklch(0.55 0.2 340)" strokeWidth={1.8} strokeLinecap="round">
+        <line x1="5" y1="19" x2="5" y2="12" />
+        <line x1="10" y1="19" x2="10" y2="8" />
+        <line x1="15" y1="19" x2="15" y2="14" />
+        <line x1="20" y1="19" x2="20" y2="5" />
+      </g>
+      <path d="M5 9l5-3 5 5 5-8" stroke="oklch(0.7 0.22 340)" strokeWidth={1.4} fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={0.7} />
     </svg>
   );
 }
-function IconClaudeCode() {
+function IconReview() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="2" y="2" width="20" height="20" rx="4" fill="#0D0D0D" />
-      <path d="M8 10l-2 2 2 2M16 10l2 2 -2 2M13.5 8l-3 8" stroke="#D97757" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <rect x="4" y="3" width="16" height="18" rx="2" fill="#fff" stroke="#d0d0d0" strokeWidth={1.2} />
+      <path d="M8 12.5l2.5 2.5L16.5 9" stroke="oklch(0.55 0.18 150)" strokeWidth={1.8} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <line x1="8" y1="18" x2="16" y2="18" stroke="#d0d0d0" strokeWidth={1.4} strokeLinecap="round" />
     </svg>
   );
 }
-function IconN8n() {
+function IconMegaphone() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="5" cy="12" r="2.2" fill="#EA4B71" />
-      <circle cx="12" cy="7" r="2.2" fill="#EA4B71" />
-      <circle cx="12" cy="17" r="2.2" fill="#EA4B71" />
-      <circle cx="19" cy="12" r="2.2" fill="#EA4B71" />
-      <path d="M7 12C8.5 8.5 10 7 12 7M7 12c1.5 3.5 3 5 5 5M14 7c1.8 1 4.2 4 5 5M14 17c1.8 -1 4.2 -4 5 -5" stroke="#EA4B71" strokeWidth={1.4} strokeLinecap="round" fill="none" opacity={0.7} />
+      <path d="M4 10v4a1 1 0 0 0 1 1h3l9 4V5L8 9H5a1 1 0 0 0-1 1z" fill="oklch(0.96 0.04 30)" stroke="oklch(0.55 0.2 30)" strokeWidth={1.4} strokeLinejoin="round" />
+      <path d="M19.5 9.5a4 4 0 0 1 0 5" stroke="oklch(0.55 0.2 30)" strokeWidth={1.5} strokeLinecap="round" fill="none" />
     </svg>
   );
 }
@@ -1061,11 +1070,12 @@ const KP_CSS = `
 `;
 
 function Stats() {
+  // Verifiable facts only — no invented metrics.
   const items = [
-    { num: '12+', label: 'Document types' },
-    { num: '<2s', label: 'Response time' },
-    { num: '99%', label: 'AI accuracy' },
-    { num: '5k+', label: 'Docs analyzed' },
+    { num: '16+', label: 'File formats ingested' },
+    { num: 'Apache 2.0', label: 'License' },
+    { num: 'Self-host', label: 'Your infra, your keys' },
+    { num: 'Cited', label: 'Answers link to sources' },
   ];
   return (
     <div className={styles.statsStrip}>
@@ -1114,9 +1124,9 @@ function Problem() {
           <div className={styles.pcard}>
             <h3>With Launchstack</h3>
             {[
-              'One place for files, recordings, docs, and inboxes',
+              'One place for files, recordings, transcripts, and notes',
               'Transcription + search across every mp3 and mp4',
-              'Gmail & Notion sync live — not a one-shot import',
+              'Import files, ZIP archives, and GitHub repos in one drop',
               'Cited answers — click the chip, see the exact paragraph',
             ].map((t) => (
               <div key={t} className={styles.prow}>
@@ -1142,9 +1152,9 @@ function Sources() {
           Launchstack reads it.
         </h2>
         <p className={styles.lead}>
-          Connect the apps where your thinking already lives. Drag in files of
-          almost any format — we handle transcription, OCR, and chunking
-          automatically.
+          Drag in files of almost any format — transcription, OCR, and chunking
+          are handled automatically. App connectors are on the roadmap; today
+          everything comes in through upload and import.
         </p>
 
         <div style={sourcesShellInline}>
@@ -1317,7 +1327,7 @@ const fmtExtStyle = (kind: keyof typeof KIND_COLORS): React.CSSProperties => ({
 
 function HowItWorks() {
   const steps = [
-    { n: '01', title: 'Drop everything in', desc: 'Drag a folder, paste a URL, upload a call recording, or click one button to connect Gmail and Notion. Launchstack handles transcription and indexing.' },
+    { n: '01', title: 'Drop everything in', desc: 'Drag in files, ZIP archives, call recordings, or a GitHub repo URL. Launchstack handles OCR, transcription, and indexing.' },
     { n: '02', title: 'Check what matters', desc: 'Your sources appear in a clean rail. Tick the ones you want in scope for this question. Leave the rest alone.' },
     { n: '03', title: 'Ask. Get cited answers.', desc: 'Type your question in plain English. Launchstack synthesizes across every checked source — and every claim links to the exact paragraph or timestamp.' },
   ];
@@ -1329,8 +1339,8 @@ function HowItWorks() {
           Three steps. <span className={styles.serif}>Zero setup.</span>
         </h2>
         <p className={styles.lead}>
-          Drop in, check what matters, ask. The hero above is the actual
-          product.
+          Drop in, check what matters, ask. The animation above is an
+          illustration of that flow.
         </p>
 
         <div className={styles.workflows}>
@@ -1347,49 +1357,38 @@ function HowItWorks() {
   );
 }
 
-function Testimonials() {
+function ShippedToday() {
+  // Factual capability strip \u2014 replaces the former testimonial section.
   const list = [
     {
-      quote:
-        'Launchstack replaced a stack of tools in an afternoon. Being able to see which PDFs go into the context is the feature I didn\u2019t know I needed.',
-      name: 'Anonymous',
-      role: 'Founder',
-      initials: 'AF',
+      title: 'One ingestion pipeline',
+      body:
+        'Upload \u2192 transactional outbox \u2192 worker \u2192 OCR / transcription \u2192 chunking \u2192 embeddings. Every document takes the same durable path into Postgres + pgvector.',
     },
     {
-      quote:
-        'I run dozens of user interviews a month. Transcription, batch Q&A, and timestamped quotes all in one place has been a huge time-saver.',
-      name: 'Anonymous',
-      role: 'Developer',
-      initials: 'AD',
+      title: 'Cited answers',
+      body:
+        'Ask across the sources you select. Retrieval combines vector and keyword search, and every claim in the answer links back to the passage it came from.',
     },
     {
-      quote:
-        'The graph view is what sold me. I didn\u2019t realize how much of my thinking lives in the connections between docs until I could see them.',
-      name: 'Anonymous',
-      role: 'Solo founder',
-      initials: 'SF',
+      title: 'Runs on your infrastructure',
+      body:
+        'A Docker Compose stack: Next.js app, worker, Postgres + pgvector, S3-compatible storage, and compute services for transcription, document conversion, and DOCX editing.',
     },
   ];
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <div className={styles.eyebrow}>Loved by builders</div>
+        <div className={styles.eyebrow}>What ships today</div>
         <h2 className={styles.h2}>
-          Used by <span className={styles.serif}>founders and developers.</span>
+          Built for <span className={styles.serif}>founders and developers.</span>
         </h2>
 
-        <div className={styles.testimonials}>
+        <div className={styles.workflows}>
           {list.map((t) => (
-            <div key={t.initials} className={styles.testi}>
-              <blockquote>{t.quote}</blockquote>
-              <div className={styles.testiWho}>
-                <div className={styles.testiAvatar}>{t.initials}</div>
-                <div>
-                  <div className={styles.testiName}>{t.name}</div>
-                  <div className={styles.testiRole}>{t.role}</div>
-                </div>
-              </div>
+            <div key={t.title} className={styles.workflow}>
+              <h4>{t.title}</h4>
+              <p>{t.body}</p>
             </div>
           ))}
         </div>
@@ -1404,59 +1403,44 @@ function Pricing() {
       <div className={styles.container}>
         <div className={styles.eyebrow}>Pricing</div>
         <h2 className={styles.h2}>
-          Open source. <span className={styles.serif}>Pay for models, not connectors.</span>
+          Open source. <span className={styles.serif}>Nothing is for sale today.</span>
         </h2>
         <p className={styles.lead}>
-          Fully open source — unlimited connectors and workspaces on every tier.
-          Hosted pricing covers LLM and API keys only; we don&apos;t charge per
-          source or seat. Your library stays yours — export anytime.
+          Launchstack is free, Apache 2.0–licensed software. Self-hosting is
+          the offering: run the whole stack on your own infrastructure with
+          your own API keys. A managed cloud version is on the roadmap — there
+          is no paid plan and no billing yet.
         </p>
 
         <div className={styles.pricingGrid}>
-          <PriceCard
-            name="Free"
-            amount="$0"
-            per="/mo"
-            tagline="For trying the hosted stack."
-            features={[
-              '1M tokens / month',
-              'Unlimited connectors',
-              'Unlimited workspaces',
-              'Cited answers',
-            ]}
-            cta="Start free"
-            href="/signup"
-            variant="outline"
-          />
-          <PriceCard
-            name="Plus"
-            amount="$4"
-            per="/mo"
-            tagline="More tokens for everyday use."
-            badge="HOSTED"
-            featured
-            features={[
-              '6M tokens / month',
-              'Unlimited connectors',
-              'Unlimited workspaces',
-              'Everything in Free',
-            ]}
-            cta="Get Plus"
-            href="/signup"
-            variant="accent"
-          />
           <PriceCard
             name="Self-hosted"
             amount="$0"
             per=" + your keys"
             tagline="Fork the repo and run your own stack."
+            badge="AVAILABLE NOW"
+            featured
             features={[
-              'Bring your own API keys — no token caps from us',
-              'Unlimited connectors & workspaces',
-              'You control infra and model spend',
+              'Full source under Apache 2.0',
+              'Bring your own API keys — you pay providers directly',
+              'Docker Compose stack: app, worker, Postgres + pgvector',
+              'Your data stays in your Postgres and object storage',
             ]}
             cta="Deployment guide"
             href="/deployment"
+            variant="accent"
+          />
+          <PriceCard
+            name="Cloud"
+            amount="Coming soon"
+            per=""
+            tagline="A managed version is planned. Nothing to buy yet."
+            features={[
+              'On the roadmap — not available today',
+              'Watch the repository for updates',
+            ]}
+            cta="Watch on GitHub"
+            href={GITHUB_REPO}
             variant="outline"
           />
         </div>
@@ -1556,11 +1540,10 @@ function OpenSource() {
               Read it. Fork it. Run it.
             </h3>
             <p>
-              The core retrieval pipeline — chunking, embedding, graph
-              construction, and cited synthesis — lives on GitHub under Apache 2.0.
-              Audit the prompts, swap the model, self-host the whole thing. We
-              keep the hosted app polished so you don&rsquo;t have to; but the
-              brain is yours either way.
+              The whole system lives on GitHub under Apache 2.0 — the Next.js
+              app, the worker that runs the pipeline, the TypeScript retrieval
+              engine, and the compute services. Audit the prompts, swap the
+              model, self-host the whole thing.
             </p>
             <div className={styles.ossCtas}>
               <a
@@ -1586,7 +1569,7 @@ function OpenSource() {
               </span>
               <span className="slash" style={{ color: 'var(--ink-4)' }}>/</span>
               <span className="repo" style={{ fontWeight: 600, color: 'var(--ink)' }}>
-                pdr_ai_v2
+                LaunchStack
               </span>
               <span
                 className="star"
@@ -1602,18 +1585,18 @@ function OpenSource() {
                   fontSize: 11,
                 }}
               >
-                ★ 1,412
+                Apache 2.0
               </span>
             </div>
             <div className={styles.ossTree}>
-              <TreeRow name="core/" comment="the brain" />
-              <TreeRow name="chunker.py" comment="semantic splits" nested />
-              <TreeRow name="embed.py" comment="pluggable models" nested />
-              <TreeRow name="graph.py" comment="link discovery" nested />
-              <TreeRow name="synthesize.py" comment="cited answers" nested />
-              <TreeRow name="connectors/" comment="12 adapters" />
+              <TreeRow name="apps/web/" comment="Next.js app — commands + reads" />
+              <TreeRow name="apps/worker/" comment="outbox consumer + durable jobs" />
+              <TreeRow name="packages/" comment="TypeScript retrieval engine" />
+              <TreeRow name="services/transcription/" comment="Whisper + yt-dlp" />
+              <TreeRow name="services/document-converter/" comment="OCR routing + parsing" />
+              <TreeRow name="services/document-editor/" comment="DOCX redlining" />
+              <TreeRow name="docker-compose.yml" comment="Postgres + pgvector stack" />
               <TreeRow name="LICENSE" comment="Apache 2.0" />
-              <TreeRow name="README.md" comment="start here" />
             </div>
           </div>
         </div>
@@ -1646,9 +1629,8 @@ function FinalCta() {
         difference.
       </h2>
       <p>
-        Drop in 10 sources, ask one question, watch it answer with citations.
-        If it doesn&rsquo;t click, close the tab — we&rsquo;ll delete your data
-        automatically.
+        Drop in a few sources, ask one question, watch it answer with
+        citations. Self-hosted, everything stays on your own infrastructure.
       </p>
       <div className={styles.heroCtas}>
         <Link href="/signup" className={`${styles.btn} ${styles.btnAccent} ${styles.btnLg}`}>

@@ -1,12 +1,5 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
-import {
-  AIModelTypes,
-  LLMProviders,
-  isModelAllowedForProvider,
-  type AIModelType,
-  type LLMProvider,
-} from "~/app/api/agents/documentQ&A/services/types";
 
 export const createErrorResponse = (message: string, status = 400) => {
   return NextResponse.json(
@@ -62,10 +55,6 @@ export const DocumentIdSchema = z.object({
   documentId: z.number().int().positive("Document ID must be a positive integer"),
 });
 
-export const UserIdSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
-});
-
 export const CompanyIdSchema = z.object({
   companyId: z.string().min(1, "Company ID is required"),
 });
@@ -87,23 +76,6 @@ export const PredictiveAnalysisSchema = z.object({
 }));
 
 const aiPersonaOptions = ["general", "learning-coach", "financial-expert", "legal-expert", "math-reasoning"] as const;
-const aiModelOptions = AIModelTypes;
-const providerOptions = LLMProviders;
-
-function assertProviderModelCombination(
-  provider: LLMProvider,
-  model: AIModelType | undefined,
-  ctx: z.RefinementCtx,
-) {
-  if (model && !isModelAllowedForProvider(provider, model)) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["aiModel"],
-      message: `Model \"${String(model)}\" is not available for provider \"${String(provider)}\"`,
-    });
-  }
-}
-
 const AttachmentPayloadSchema = z.object({
   url: z.string().url("Attachment url must be a valid URL"),
   name: z.string().min(1).max(512),
@@ -125,8 +97,8 @@ export const QuestionSchema = z
     selectedDocumentIds: z.array(z.number().int().positive()).optional(),
     enableWebSearch: z.boolean().optional().default(false),
     aiPersona: z.enum(aiPersonaOptions).optional(),
-    aiModel: z.enum(aiModelOptions).optional(),
-    provider: z.enum(providerOptions).default("openai"),
+    aiModel: z.string().min(1).optional(),
+    provider: z.string().min(1).optional(),
     conversationHistory: z.string().optional(),
     embeddingIndexKey: z.string().min(1).optional(),
     thinkingMode: z.boolean().optional().default(false),
@@ -134,9 +106,6 @@ export const QuestionSchema = z
     // as multimodal content blocks on vision-capable models; text files are
     // inlined into the prompt. Capped at 5 to bound context growth.
     attachments: z.array(AttachmentPayloadSchema).max(5).optional(),
-  })
-  .superRefine((data, ctx) => {
-    assertProviderModelCombination(data.provider, data.aiModel, ctx);
   })
   .transform((data) => {
     return {
@@ -187,7 +156,6 @@ export const ApproveEmployeeSchema = z.object({
 });
 
 export const UploadDocumentSchema = z.object({
-  userId: z.string().min(1, "User ID is required").max(256, "User ID is too long").trim(),
   documentName: z.string().min(1, "Document name is required").max(256, "Document name is too long").trim(),
   documentUrl: z.string().url("Document URL must be a valid URL").max(2048, "Document URL is too long").trim(),
   documentCategory: z.string().min(1, "Document category is required").max(256, "Document category is too long").trim(),
@@ -257,16 +225,6 @@ export const UpdateUploadPreferenceSchema = z.object({
   useUploadThing: z.boolean(),
 });
 
-export const EmployeeAuthSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
-  companyPasskey: z.string().min(1, "Company passkey is required"),
-});
-
-export const EmployerAuthSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
-  companyPasskey: z.string().min(1, "Company passkey is required"),
-});
-
 // ============================================================================
 // RLM (Recursive Language Model) Query Schema
 // ============================================================================
@@ -292,7 +250,6 @@ const prioritizeOptions = ["start", "end", "relevance"] as const;
 // ============================================================================
 
 export const EmployerCompanySignupSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   companyName: z.string().min(1, "Company name is required").max(256).trim(),
   name: z.string().min(1, "User name is required").max(256).trim(),
   email: z.string().email("Valid email is required"),
@@ -305,7 +262,6 @@ export const EmployerCompanySignupSchema = z.object({
 });
 
 export const EmployerSignupSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   name: z.string().min(1, "Name is required").max(256).trim(),
   email: z.string().email("Valid email is required"),
   employerPasskey: z.string().min(1, "Employer passkey is required"),
@@ -313,7 +269,6 @@ export const EmployerSignupSchema = z.object({
 });
 
 export const EmployeeSignupSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   name: z.string().min(1, "Name is required").max(256).trim(),
   email: z.string().email("Valid email is required"),
   employeePasskey: z.string().min(1, "Employee passkey is required"),
@@ -321,7 +276,6 @@ export const EmployeeSignupSchema = z.object({
 });
 
 export const JoinWithInviteSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
   name: z.string().min(1, "Name is required").max(256).trim(),
   email: z.string().email("Valid email is required"),
   inviteCode: z.string().min(1, "Invite code is required").trim(),
@@ -385,7 +339,6 @@ const AnchorSchema = z.object({
 export const CreateNoteSchema = z
   .object({
     documentId: z.string().optional(),
-    companyId: z.string().optional(),
     versionId: z.union([z.number().int().positive(), z.string()]).optional(),
     title: z.string().max(512).optional(),
     content: z.string().max(50_000).optional(),
@@ -397,9 +350,12 @@ export const CreateNoteSchema = z
   })
   .refine(
     (data) =>
-      Boolean(
-        data.title || data.content || data.contentMarkdown || data.contentRich,
-      ),
+      [
+        data.title,
+        data.content,
+        data.contentMarkdown,
+        data.contentRich,
+      ].some((value) => Boolean(value)),
     {
       message:
         "At least one of title, content, contentMarkdown, or contentRich is required",
@@ -446,22 +402,35 @@ export const PresignUploadSchema = z.object({
   filename: z.string().optional(),
   fileName: z.string().optional(),
   contentType: z.string().min(1, "contentType is required"),
-}).refine((data) => data.filename || data.fileName, {
-  message: "filename or fileName is required",
-});
+}).refine(
+  (data) => [data.filename, data.fileName].some((value) => Boolean(value)),
+  {
+    message: "filename or fileName is required",
+  },
+);
 
 // ============================================================================
 // Voice Schemas
 // ============================================================================
 
+/**
+ * Matches CLOUD_TTS_MAX_INPUT_BYTES. Measured in BYTES, not characters: the
+ * synthesis API counts UTF-8, so a 5,000-character limit would let non-ASCII
+ * text pass validation and then fail at the provider. Duplicated as a literal
+ * rather than imported because this module is on the client bundle's path.
+ */
+const TTS_MAX_INPUT_BYTES = 5000;
+
 export const TextToSpeechSchema = z.object({
-  text: z.string().min(1, "Text is required").max(10000),
+  text: z
+    .string()
+    .min(1, "Text is required")
+    .refine(
+      (value) => new TextEncoder().encode(value).length <= TTS_MAX_INPUT_BYTES,
+      `Text must be at most ${TTS_MAX_INPUT_BYTES} bytes when UTF-8 encoded`,
+    ),
   voiceId: z.string().optional(),
-  modelId: z.string().optional(),
-  stability: z.number().min(0).max(1).optional(),
-  similarityBoost: z.number().min(0).max(1).optional(),
-  style: z.number().min(0).max(1).optional(),
-  useSpeakerBoost: z.boolean().optional(),
+  languageCode: z.string().optional(),
 });
 
 // ============================================================================
@@ -469,7 +438,6 @@ export const TextToSpeechSchema = z.object({
 // ============================================================================
 
 export const CreateChatSchema = z.object({
-  userId: z.string().min(1, "userId is required"),
   title: z.string().min(1, "title is required").max(512),
   agentMode: z.enum(["autonomous", "interactive", "assisted"]).optional().default("interactive"),
   visibility: z.enum(["public", "private"]).optional().default("private"),
@@ -492,7 +460,7 @@ export const CreateMessageSchema = z.object({
   role: z.enum(["user", "assistant", "system", "tool"]),
   content: z.unknown(),
   messageType: z.enum(["text", "tool_call", "tool_result", "thinking"]).optional().default("text"),
-  parentMessageId: z.string().optional(),
+  parentMessageId: z.string().min(1).optional(),
 });
 
 export const CreateVoteSchema = z.object({
@@ -519,7 +487,7 @@ export const UpdateTaskSchema = z.object({
 
 export const CreateToolCallSchema = z.object({
   messageId: z.string().min(1, "messageId is required"),
-  taskId: z.string().optional(),
+  taskId: z.string().min(1).optional(),
   toolName: z.string().min(1, "toolName is required"),
   toolInput: z.unknown(),
 });
@@ -569,8 +537,8 @@ export const RLMQuestionSchema = z
     style: z.enum(["concise", "detailed", "academic", "bullet-points"]).optional(),
     enableWebSearch: z.boolean().optional().default(false),
     aiPersona: z.enum(aiPersonaOptions).optional(),
-    aiModel: z.enum(aiModelOptions).optional(),
-    provider: z.enum(providerOptions).default("openai"),
+    aiModel: z.string().min(1).optional(),
+    provider: z.string().min(1).optional(),
     conversationHistory: z.string().optional(),
     embeddingIndexKey: z.string().min(1).optional(),
     // RLM-specific options
@@ -588,9 +556,6 @@ export const RLMQuestionSchema = z
         message: "pageRange.end must be >= pageRange.start",
       })
       .optional(),
-  })
-  .superRefine((data, ctx) => {
-    assertProviderModelCombination(data.provider, data.aiModel, ctx);
   })
   .transform((data) => {
     return {

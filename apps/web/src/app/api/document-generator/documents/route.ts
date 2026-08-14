@@ -9,12 +9,11 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db/index";
 import { eq, and, desc } from "drizzle-orm";
-import { users, generatedDocuments } from "@launchstack/core/db/schema";
+import { generatedDocuments } from "~/server/db/schema";
 import { z } from "zod";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 
@@ -88,34 +87,15 @@ function transformCitations(citations: z.infer<typeof CitationSchema>[] | undefi
  */
 export async function GET(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        // Get user's company
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json(
-                { success: false, message: "User not found" },
-                { status: 404 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const { searchParams } = new URL(request.url);
         const templateId = searchParams.get("templateId");
 
         const conditions = [
-            eq(generatedDocuments.userId, userId),
-            eq(generatedDocuments.companyId, (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId))),
+            eq(generatedDocuments.userId, ctx.data.clerkUserId),
+            eq(generatedDocuments.companyId, ctx.data.companyId),
         ];
         if (templateId) {
             conditions.push(eq(generatedDocuments.templateId, templateId));
@@ -154,13 +134,8 @@ export async function GET(request: Request) {
  */
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const body = await request.json() as unknown;
         const validation = CreateDocumentSchema.safeParse(body);
@@ -172,28 +147,14 @@ export async function POST(request: Request) {
             );
         }
 
-        // Get user's company
-        const [requestingUser] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId))
-            .limit(1);
-
-        if (!requestingUser) {
-            return NextResponse.json(
-                { success: false, message: "User not found" },
-                { status: 404 }
-            );
-        }
-
         const { title, content, templateId, metadata, citations } = validation.data;
 
         // Create the document
         const [newDocument] = await db
             .insert(generatedDocuments)
             .values({
-                userId,
-                companyId: (await resolveActiveCompanyForUser(requestingUser.id, requestingUser.companyId)),
+                userId: ctx.data.clerkUserId,
+                companyId: ctx.data.companyId,
                 title,
                 content,
                 templateId,
@@ -229,13 +190,8 @@ export async function POST(request: Request) {
  */
 export async function PUT(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const body = await request.json() as unknown;
         const validation = UpdateDocumentSchema.safeParse(body);
@@ -256,7 +212,8 @@ export async function PUT(request: Request) {
             .where(
                 and(
                     eq(generatedDocuments.id, id),
-                    eq(generatedDocuments.userId, userId)
+                    eq(generatedDocuments.userId, ctx.data.clerkUserId),
+                    eq(generatedDocuments.companyId, ctx.data.companyId),
                 )
             )
             .limit(1);
@@ -309,13 +266,8 @@ export async function PUT(request: Request) {
  */
 export async function DELETE(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const body = await request.json() as unknown;
         const validation = DeleteDocumentSchema.safeParse(body);
@@ -336,7 +288,8 @@ export async function DELETE(request: Request) {
             .where(
                 and(
                     eq(generatedDocuments.id, id),
-                    eq(generatedDocuments.userId, userId)
+                    eq(generatedDocuments.userId, ctx.data.clerkUserId),
+                    eq(generatedDocuments.companyId, ctx.data.companyId),
                 )
             )
             .limit(1);

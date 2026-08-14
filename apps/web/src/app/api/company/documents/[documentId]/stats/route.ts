@@ -1,10 +1,13 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db/index";
-import { users, document, documentViews } from "@launchstack/core/db/schema";
+import { document } from "@launchstack/core/db/schema";
+import { users, documentViews } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 interface Viewer {
     name: string;
@@ -38,22 +41,12 @@ export async function GET(
     { params }: { params: Promise<{ documentId: string }> }
 ) {
     try {
-        const { userId } = await auth();
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
+
         const documentId = (await params).documentId;
 
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, userId));
-
-        if (!userInfo || (userInfo.role !== "employer" && userInfo.role !== "owner")) {
+        if (!isManagementRole(ctx.data.role)) {
             return NextResponse.json(
                 { success: false, error: "Unauthorized" },
                 { status: 403 }
@@ -74,7 +67,7 @@ export async function GET(
             .from(document)
             .where(and(
                 eq(document.id, docId),
-                eq(document.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))
+                eq(document.companyId, ctx.data.companyId)
             ));
 
         if (!doc) {
@@ -88,13 +81,23 @@ export async function GET(
         const [viewsCount] = await db
             .select({ count: count() })
             .from(documentViews)
-            .where(eq(documentViews.documentId, BigInt(docId)));
+            .where(
+                and(
+                    eq(documentViews.documentId, BigInt(docId)),
+                    eq(documentViews.companyId, ctx.data.companyId),
+                )
+            );
 
         // Get unique viewers
         const [uniqueViewers] = await db
             .select({ count: count(sql`DISTINCT ${documentViews.userId}`) })
             .from(documentViews)
-            .where(eq(documentViews.documentId, BigInt(docId)));
+            .where(
+                and(
+                    eq(documentViews.documentId, BigInt(docId)),
+                    eq(documentViews.companyId, ctx.data.companyId),
+                )
+            );
 
         // Get recent viewers
         const recentViewersData = await db
@@ -106,7 +109,12 @@ export async function GET(
             })
             .from(documentViews)
             .leftJoin(users, eq(documentViews.userId, users.userId))
-            .where(eq(documentViews.documentId, BigInt(docId)))
+            .where(
+                and(
+                    eq(documentViews.documentId, BigInt(docId)),
+                    eq(documentViews.companyId, ctx.data.companyId),
+                )
+            )
             .orderBy(desc(documentViews.viewedAt))
             .limit(10);
 
@@ -123,6 +131,7 @@ export async function GET(
             .where(
                 and(
                     eq(documentViews.documentId, BigInt(docId)),
+                    eq(documentViews.companyId, ctx.data.companyId),
                     gte(documentViews.viewedAt, thirtyDaysAgo)
                 )
             )

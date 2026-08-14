@@ -134,7 +134,6 @@ const SignupPage: React.FC = () => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        userId,
                         name: user.fullName ?? user.username,
                         email: user.emailAddresses[0]?.emailAddress,
                         inviteCode: code,
@@ -200,7 +199,6 @@ const SignupPage: React.FC = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userId,
                     name: user.fullName ?? user.username,
                     email: user.emailAddresses[0]?.emailAddress,
                     companyName: workspaceName,
@@ -243,7 +241,6 @@ const SignupPage: React.FC = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userId,
                     name: user.fullName ?? user.username,
                     email: user.emailAddresses[0]?.emailAddress,
                     companyName: teamName.trim(),
@@ -1032,7 +1029,7 @@ function TeamCard({
                         type="password"
                         value={openaiKey}
                         onChange={(e) => setOpenaiKey(e.target.value)}
-                        placeholder="sk-…"
+                        placeholder="<your-api-key>"
                         autoComplete="off"
                         style={{ ...inputStyle, marginBottom: 10 }}
                     />

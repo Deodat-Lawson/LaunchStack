@@ -1,0 +1,99 @@
+{
+  "name": "@launchstack/adapters",
+  "version": "0.0.0",
+  "description": "Implementations of the Launchstack application ports and the engine subsystems behind @launchstack/core's facade: Postgres repositories (including the transactional outbox), the Drizzle schema, ingestion/OCR/RAG/LLM/embeddings implementations, object-storage access, and HTTP clients for the compute services. Configuration is injected — nothing here reads process.env (ADR-002, ADR-003).",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ingestion/doc-ingestion": "./src/ingestion/doc-ingestion/index.ts",
+    "./package.json": "./package.json",
+    "./*": "./src/*.ts"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./ingestion/doc-ingestion": {
+        "types": "./dist/ingestion/doc-ingestion/index.d.ts",
+        "default": "./dist/ingestion/doc-ingestion/index.js"
+      },
+      "./package.json": "./package.json",
+      "./*": {
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node ./scripts/fix-esm-specifiers.mjs",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.74",
+    "@langchain/ollama": "^0.1.6",
+    "@langchain/openai": "^0.6.11",
+    "@launchstack/application": "workspace:^",
+    "@launchstack/evidence": "workspace:^",
+    "@launchstack/protocol": "workspace:^",
+    "@mozilla/readability": "^0.6.0",
+    "cheerio": "^1.2.0",
+    "drizzle-orm": "^0.45.1",
+    "jsdom": "^29.0.2",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.11.0",
+    "openai": "^4.62.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-serverless": "^1.1.0",
+    "postgres": "^3.4.7",
+    "string-similarity-js": "^2.1.4",
+    "turndown": "^7.2.2",
+    "xlsx": "^0.18.5",
+    "yaml": "^2.8.1",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.25.1"
+  },
+  "peerDependencies": {
+    "@langchain/community": "^0.3.54",
+    "langchain": "^0.3.33",
+    "neo4j-driver": "^6.0.0",
+    "tesseract.js": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@langchain/community": {
+      "optional": true
+    },
+    "langchain": {
+      "optional": true
+    },
+    "neo4j-driver": {
+      "optional": true
+    },
+    "tesseract.js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@langchain/community": "^0.3.54",
+    "@types/jsdom": "^28.0.1",
+    "@types/turndown": "^5.0.6",
+    "langchain": "^0.3.33",
+    "typescript": "^5.9.2",
+    "vitest": "^3.0.5"
+  }
+}

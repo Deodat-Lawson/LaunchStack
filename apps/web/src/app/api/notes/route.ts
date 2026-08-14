@@ -1,21 +1,20 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
-import { documentNotes } from "@launchstack/core/db/schema";
-import { eq, and, desc, ilike, arrayContains, isNull, inArray } from "drizzle-orm";
+import { documentNotes } from "~/server/db/schema";
+import { eq, and, desc, ilike, arrayContains, isNull, inArray, or } from "drizzle-orm";
 import { validateRequestBody, CreateNoteSchema } from "~/lib/validation";
-import { embedNoteAsync } from "~/server/notes/embed-note";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requestNoteEmbedding } from "~/server/notes/embed-note";
 import { serializeNote } from "~/server/notes/serialize";
 import { searchNotes } from "~/server/notes/search";
 import { syncNoteLinks } from "~/server/notes/wiki-links";
+import { validateNoteTarget } from "~/server/notes/validate-note-target";
 import type { JSONContent } from "@tiptap/react";
 
 export async function GET(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { searchParams } = new URL(request.url);
     const documentId = searchParams.get("documentId");
@@ -24,7 +23,16 @@ export async function GET(request: Request) {
     const anchorStatus = searchParams.get("anchorStatus");
     const surface = searchParams.get("surface");
 
-    const conditions = [eq(documentNotes.userId, userId)];
+    const companyIdStr = String(ctx.data.companyId);
+    // Scope to the active workspace. Legacy rows with null companyId still
+    // surface for the owning user so old notes are not silently dropped.
+    const conditions = [
+      eq(documentNotes.userId, ctx.data.clerkUserId),
+      or(
+        eq(documentNotes.companyId, companyIdStr),
+        isNull(documentNotes.companyId),
+      )!,
+    ];
 
     if (documentId) {
       conditions.push(eq(documentNotes.documentId, documentId));
@@ -40,10 +48,11 @@ export async function GET(request: Request) {
     let semanticIds: number[] | null = null;
     if (search) {
       const hits = await searchNotes({
-        userId,
+        userId: ctx.data.clerkUserId,
         query: search,
-        scope: documentId ? "document" : "user",
+        scope: documentId ? "document" : "company",
         documentId: documentId ?? undefined,
+        companyId: companyIdStr,
         topK: 25,
       });
       if (hits.length > 0) {
@@ -93,14 +102,19 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const validation = await validateRequestBody(request, CreateNoteSchema);
     if (!validation.success) return validation.response;
     const body = validation.data;
+
+    const target = await validateNoteTarget({
+      documentId: body.documentId,
+      versionId: body.versionId,
+      companyId: ctx.data.companyId,
+    });
+    if (!target.ok) return target.response;
 
     const versionIdBigint =
       body.versionId !== undefined && body.versionId !== null
@@ -110,9 +124,9 @@ export async function POST(request: Request) {
     const [note] = await db
       .insert(documentNotes)
       .values({
-        userId,
+        userId: ctx.data.clerkUserId,
         documentId: body.documentId ?? null,
-        companyId: body.companyId ?? null,
+        companyId: String(ctx.data.companyId),
         versionId: versionIdBigint,
         title: body.title ?? null,
         content: body.content ?? null,
@@ -125,8 +139,25 @@ export async function POST(request: Request) {
       .returning();
 
     if (note) {
-      embedNoteAsync(note.id);
-      void syncNoteLinks({
+      // Post-commit side effects: the note row is already persisted, so a
+      // failed outbox enqueue (or link sync) must log loudly but never fail
+      // the save — parity with the old fire-and-forget path. Tradeoff: the
+      // embedding may lag until the next edit re-enqueues it.
+      try {
+        // The insert above always stamps the active workspace, so the hint is
+        // only a guard for legacy rows that came back with a null companyId.
+        await requestNoteEmbedding(
+          note.id,
+          "created",
+          note.companyId ?? String(ctx.data.companyId),
+        );
+      } catch (err) {
+        console.error(
+          `[notes] requestNoteEmbedding failed for note ${note.id} (note saved; embedding deferred to next edit):`,
+          err,
+        );
+      }
+      await syncNoteLinks({
         noteId: note.id,
         rich: (note.contentRich as JSONContent | null) ?? null,
         companyId: note.companyId,

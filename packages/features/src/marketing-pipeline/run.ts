@@ -1,7 +1,7 @@
 import { buildCompanyKnowledgeContext, extractCompanyDNA } from "./context";
-import { generateCampaignOutput, generateVariants } from "./generator";
+import { generateVariants } from "./generator";
 import { analyzeCompetitors } from "./competitor";
-import { buildMessagingStrategy, buildMultiStrategy } from "./positioning";
+import { buildMultiStrategy } from "./positioning";
 import { extractBrandVoice } from "./voice";
 import { extractTargetPersona } from "./persona";
 import { verifyClaimSources } from "./claim-verifier";
@@ -14,7 +14,6 @@ import type {
   PipelineStepId,
   BrandVoice,
   TargetPersona,
-  StrategyVariant,
   ContentVariant,
   ClaimSource,
 } from "./types";

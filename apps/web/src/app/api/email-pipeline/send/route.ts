@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
 import {
   runEmailCampaign,
   RecipientSchema,
 } from "@launchstack/features/email-pipeline";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { resolveActor } from "../../email-campaigns/_lib/context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -38,13 +34,9 @@ const BodySchema = z.object({
  */
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 },
-      );
-    }
+    const actorResult = await resolveActor();
+    if (!actorResult.ok) return actorResult.response;
+    const { actor } = actorResult;
 
     let json: unknown;
     try {
@@ -63,31 +55,6 @@ export async function POST(request: Request) {
           message: "Invalid input",
           errors: parsed.error.flatten(),
         },
-        { status: 400 },
-      );
-    }
-
-    const [requestingUser] = await db
-      .select()
-      .from(users)
-      .where(eq(users.userId, userId))
-      .limit(1);
-    if (!requestingUser) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 },
-      );
-    }
-
-    const companyId = Number(
-      await resolveActiveCompanyForUser(
-        requestingUser.id,
-        requestingUser.companyId,
-      ),
-    );
-    if (Number.isNaN(companyId)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid company ID" },
         { status: 400 },
       );
     }
@@ -111,15 +78,15 @@ export async function POST(request: Request) {
 
     const origin = new URL(request.url).origin;
     const result = await runEmailCampaign({
-      companyId,
+      companyId: actor.companyId,
       name: parsed.data.name,
       goal: parsed.data.goal,
       recipients: parsed.data.recipients,
       mode: "dry_run",
-      senderIdentity: requestingUser.email ?? requestingUser.name ?? "the sender",
+      senderIdentity: actor.senderIdentity,
       unsubscribeBaseUrl: `${origin}/api/email-pipeline/unsubscribe`,
       persist: true,
-      actorUserId: requestingUser.id,
+      actorUserId: actor.userId,
     });
 
     return NextResponse.json({

@@ -1,9 +1,11 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { agentAiChatbotTask, agentAiChatbotExecutionStep } from "@launchstack/core/db/schema";
+import { agentAiChatbotTask, agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateTaskSchema } from "~/lib/validation";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { assertTaskOwnedByUser } from "~/lib/ai-chat-ownership";
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -13,8 +15,14 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { taskId } = await params;
+
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
 
     const [task] = await db
       .select()
@@ -54,8 +62,15 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) return ctx.response;
+
   try {
     const { taskId } = await params;
+
+    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+    if (!owned.success) return owned.response;
+
     const validation = await validateRequestBody(request, UpdateTaskSchema);
     if (!validation.success) return validation.response;
     const { status, result, metadata, completedAt } = validation.data;
@@ -91,4 +106,3 @@ export async function PATCH(
     );
   }
 }
-

@@ -17,7 +17,9 @@ const webDir = join(__dirname, "..", "..");
  * self-contained (company_id is a plain bigint, no cross-feature FK), so the
  * suites can run the exact SQL a deploy applies for this feature.
  */
-const MIGRATION_FILES = [join(webDir, "drizzle", "0016_email_pipeline.sql")];
+const MIGRATION_FILES = [
+  join(webDir, "drizzle", "20260814044614_email_pipeline.sql"),
+];
 
 function withDatabase(connectionString: string, databaseName: string): string {
   const url = new URL(connectionString);

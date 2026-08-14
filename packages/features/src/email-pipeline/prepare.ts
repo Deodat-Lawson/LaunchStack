@@ -7,7 +7,7 @@ import {
   setCampaignStatus,
   upsertRecipients,
 } from "./db";
-import { EMAIL_MODELS, EMAIL_PROMPT_VERSION } from "./models";
+import { EMAIL_PROMPT_VERSION } from "./models";
 import {
   CampaignLifecycleError,
   EmailTemplateSchema,
@@ -71,6 +71,7 @@ export async function prepareEmailCampaign(
   // approval gates on a verdict regardless of who wrote the words.
   let template: EmailTemplate;
   let companyContext: string | null = null;
+  let generationModelId: string | null = null;
   if (args.template) {
     template = EmailTemplateSchema.parse(args.template);
   } else {
@@ -80,6 +81,7 @@ export async function prepareEmailCampaign(
     });
     template = generated.template;
     companyContext = generated.companyContext;
+    generationModelId = generated.modelId;
   }
 
   let review: TemplateReview | null = null;
@@ -100,7 +102,7 @@ export async function prepareEmailCampaign(
     template,
     source: args.template ? "human_edited" : "ai_generated",
     goal: goal ?? null,
-    model: args.template ? null : EMAIL_MODELS.templateGeneration,
+    model: generationModelId,
     promptVersion: args.template ? null : EMAIL_PROMPT_VERSION,
     review,
     createdBy: args.actorUserId ?? null,

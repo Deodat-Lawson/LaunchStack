@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { users } from "@launchstack/core/db/schema";
+import { users } from "~/server/db/schema";
 import { CampaignLifecycleError } from "@launchstack/features/email-pipeline";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 /**
  * Shared plumbing for the campaign lifecycle routes: who is calling, which
@@ -30,36 +29,26 @@ type ActorResult =
   | { ok: false; response: NextResponse };
 
 export async function resolveActor(): Promise<ActorResult> {
-  const { userId } = await auth();
-  if (!userId) {
-    return { ok: false, response: fail("Unauthorized", 401) };
+  const ctx = await requireWorkspaceContext();
+  if (!ctx.success) {
+    return { ok: false, response: ctx.response };
   }
 
   const [requestingUser] = await db
-    .select()
+    .select({ email: users.email, name: users.name })
     .from(users)
-    .where(eq(users.userId, userId))
+    .where(eq(users.id, Number(ctx.data.userPk)))
     .limit(1);
   if (!requestingUser) {
     return { ok: false, response: fail("User not found", 404) };
   }
 
-  const companyId = Number(
-    await resolveActiveCompanyForUser(
-      requestingUser.id,
-      requestingUser.companyId,
-    ),
-  );
-  if (Number.isNaN(companyId)) {
-    return { ok: false, response: fail("Invalid company ID", 400) };
-  }
-
   return {
     ok: true,
     actor: {
-      userId: requestingUser.id,
+      userId: Number(ctx.data.userPk),
       email: requestingUser.email ?? null,
-      companyId,
+      companyId: Number(ctx.data.companyId),
       senderIdentity:
         requestingUser.email ?? requestingUser.name ?? "the sender",
     },

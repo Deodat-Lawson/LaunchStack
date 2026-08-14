@@ -102,7 +102,7 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
               , then navigate to <strong>Storage</strong> → <strong>Create Database</strong> → <strong>Blob</strong>.
             </p>
             <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-              Choose a name for your store (e.g. <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-purple-300' : 'bg-gray-100 text-purple-700'}`}>pdr-ai-documents</code>)
+              Choose a name for your store (e.g. <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-purple-300' : 'bg-gray-100 text-purple-700'}`}>launchstack-documents</code>)
               and select a region close to your deployment.
             </p>
           </div>
@@ -125,8 +125,8 @@ export const VercelBlobPage: React.FC<DeploymentProps> = ({
               Copy the token from your blob store&apos;s settings page and add it to your local <code className={`px-1.5 py-0.5 rounded text-sm ${darkMode ? 'bg-gray-800 text-purple-300' : 'bg-gray-100 text-purple-700'}`}>.env</code> file:
             </p>
             <CodeBlock
-              code={`BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx`}
-              onCopy={() => copyToClipboard('BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxxxxxxxxxxx', 'blob-env')}
+              code={`BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>`}
+              onCopy={() => copyToClipboard('BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>', 'blob-env')}
               copied={copiedCode === 'blob-env'}
 
             />

@@ -1,4 +1,5 @@
 import {
+  configureSecretBox,
   encryptSecret,
   decryptSecret,
   MissingSecretsKeyError,
@@ -6,24 +7,20 @@ import {
 } from "@launchstack/core/crypto";
 
 function setKey() {
-  // Deterministic 32-byte key for tests — never use in production.
-  process.env.EMBEDDING_SECRETS_KEY = Buffer.alloc(32, 7).toString("base64");
+  // Deterministic 32-byte key for tests — never use in production. The slot
+  // is authoritative (ADR-002): secret-box no longer falls back to
+  // process.env, so tests register the key the way the engine does.
+  configureSecretBox({ key: Buffer.alloc(32, 7).toString("base64") });
 }
 
 describe("secret-box", () => {
-  const originalKey = process.env.EMBEDDING_SECRETS_KEY;
-
   afterEach(() => {
-    if (originalKey === undefined) {
-      delete process.env.EMBEDDING_SECRETS_KEY;
-    } else {
-      process.env.EMBEDDING_SECRETS_KEY = originalKey;
-    }
+    configureSecretBox({ key: undefined });
   });
 
   it("round-trips a typical API key", () => {
     setKey();
-    const plaintext = "sk-test-" + "a".repeat(40);
+    const plaintext = "test-secret-" + "a".repeat(40);
     const { ciphertext, keyVersion } = encryptSecret(plaintext);
     expect(keyVersion).toBe(1);
     expect(ciphertext).not.toContain(plaintext);
@@ -45,8 +42,8 @@ describe("secret-box", () => {
     expect(() => encryptSecret("")).toThrow(/empty/i);
   });
 
-  it("throws MissingSecretsKeyError when env key is absent", () => {
-    delete process.env.EMBEDDING_SECRETS_KEY;
+  it("throws MissingSecretsKeyError when no key is configured", () => {
+    configureSecretBox({ key: undefined });
     expect(() => encryptSecret("anything")).toThrow(MissingSecretsKeyError);
   });
 

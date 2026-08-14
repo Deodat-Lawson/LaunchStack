@@ -1,4 +1,4 @@
-import type { DocumentNote } from "@launchstack/core/db/schema";
+import type { DocumentNote } from "~/server/db/schema";
 
 /**
  * `documentNotes.versionId` is a bigint column; JSON.stringify can't serialize

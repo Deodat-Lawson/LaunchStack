@@ -2,7 +2,6 @@
 
 import React, {
   type ComponentType,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -12,7 +11,6 @@ import {
   IconBolt,
   IconCheck,
   IconChevronDown,
-  IconFile,
   IconFolder,
   IconPlus,
   IconX,
@@ -47,6 +45,12 @@ export interface AddSourceModalProps {
   onUploaded: () => void;
   /** Optional: persist a new folder name the user typed in the picker. */
   onCreateFolder?: (name: string) => void;
+  /**
+   * Tab to open on. Set when the caller already knows what the user picked —
+   * the Knowledge pane's connector strip opens straight onto Slack or Drive
+   * rather than dropping them on Files first.
+   */
+  initialTab?: string;
 }
 
 interface UploadResult {
@@ -79,7 +83,6 @@ async function uploadFileToStorage(file: File): Promise<UploadResult> {
 }
 
 async function registerDocument(params: {
-  userId: string;
   file: File;
   url: string;
   provider: "s3" | "database";
@@ -87,7 +90,6 @@ async function registerDocument(params: {
   category: string;
 }): Promise<void> {
   const body: Record<string, unknown> = {
-    userId: params.userId,
     documentName: params.file.name,
     category: params.category,
     documentUrl: params.url,
@@ -112,7 +114,6 @@ async function registerDocument(params: {
 }
 
 async function uploadAndRegisterAll(params: {
-  userId: string;
   files: File[];
   category: string;
   onProgress?: (completed: number, total: number) => void;
@@ -124,7 +125,6 @@ async function uploadAndRegisterAll(params: {
     try {
       const up = await uploadFileToStorage(file);
       await registerDocument({
-        userId: params.userId,
         file,
         url: up.url,
         provider: up.provider,
@@ -180,15 +180,16 @@ export function AddSourceModal({
   folders,
   onUploaded,
   onCreateFolder,
+  initialTab,
 }: AddSourceModalProps) {
-  const [tab, setTab] = useState<string>("files");
+  const [tab, setTab] = useState<string>(initialTab ?? "files");
   const [folder, setFolder] = useState<string>(defaultCategory || "Unfiled");
 
   useEffect(() => {
     if (!open) return;
     setFolder(defaultCategory || "Unfiled");
-    setTab("files");
-  }, [open, defaultCategory]);
+    setTab(initialTab ?? "files");
+  }, [open, defaultCategory, initialTab]);
 
   useEffect(() => {
     if (!open) return;
@@ -320,7 +321,7 @@ export function AddSourceModal({
               <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 {g.items.map((item) => {
                   const isActive = tab === item.id;
-                  const Icon = item.Icon as ComponentType<IconProps>;
+                  const Icon = item.Icon;
                   return (
                     <button
                       key={item.id}
@@ -637,7 +638,6 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
     setProgress({ done: 0, total: staged.length });
     try {
       const result = await uploadAndRegisterAll({
-        userId,
         files: staged,
         category,
         onProgress: (done, total) => setProgress({ done, total }),
@@ -928,7 +928,6 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
     setProgress({ done: 0, total: included.length });
     try {
       const result = await uploadAndRegisterAll({
-        userId,
         files: included,
         category: destName.trim(),
         onProgress: (done, total) => setProgress({ done, total }),
@@ -1233,7 +1232,6 @@ function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
     try {
       const up = await uploadFileToStorage(file);
       await registerDocument({
-        userId,
         file,
         url: up.url,
         provider: up.provider,
@@ -1346,7 +1344,7 @@ function UrlPanel({ userId, category, onUploaded }: TextPanelProps) {
       const res = await fetch("/api/upload/website", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, url: trimmed, category }),
+        body: JSON.stringify({ url: trimmed, category }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         success?: boolean;
@@ -1420,7 +1418,7 @@ function UrlPanel({ userId, category, onUploaded }: TextPanelProps) {
       >
         Tip: add{" "}
         <span className="mono" style={{ color: "var(--ink-2)" }}>
-          /**
+          {"/**"}
         </span>{" "}
         to a URL to recursively crawl a subtree.
       </div>
@@ -1450,7 +1448,6 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
           videoUrl: trimmed,
           category,
           title: title.trim() || undefined,
@@ -1568,7 +1565,7 @@ const PROVIDER_PERKS: Record<string, string[]> = {
 
 function ConnectPanel({ tab }: ConnectPanelProps) {
   const meta = SOURCE_META[tab.id as keyof typeof SOURCE_META];
-  const Icon = (meta?.Icon ?? tab.Icon) as ComponentType<IconProps>;
+  const Icon = (meta?.Icon ?? tab.Icon);
   const color = meta?.color ?? "var(--accent)";
   const perks = PROVIDER_PERKS[tab.id] ?? [];
   return (

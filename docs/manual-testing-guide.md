@@ -20,26 +20,24 @@ Before the first pass:
 1. **Environment**
    - Copy `.env.example` to `.env` and fill required keys (see [README](../README.md) Quick Start).
    - Set `DATABASE_URL` for a local PostgreSQL (e.g. `localhost:5433` if using Docker for DB only).
-   ```bash
-   pnpm db:install
-   ```
 
 2. **Database**
    ```bash
-   pnpm db:push
+   pnpm --filter @launchstack/core db:migrate   # apply schema
+   pnpm --filter @launchstack/core db:seed      # optional sample data
    ```
 
 3. **Enable Inngest** (required for background document processing)
    - Set `INNGEST_EVENT_KEY=placeholder` in `.env`.
    - In a **separate terminal**, run the Inngest dev server:
    ```bash
-   pnpm inngest:dev
+   pnpm --filter @launchstack/web inngest:dev
    ```
    Dashboard: **http://localhost:8288**. Keep this running while testing.
 
 4. **Run dev server**
    ```bash
-   pnpm run dev
+   pnpm --filter @launchstack/web dev
    ```
    Open **http://localhost:3000**.
 
@@ -58,13 +56,13 @@ Before the second pass:
 1. **Environment**
    - Use the same `.env` (or a copy) with keys valid for the Docker run (e.g. `DATABASE_URL` for the Compose `db` service).
 
-2. **Start full stack (with Inngest)**
+2. **Start full stack**
    - Ensure `INNGEST_EVENT_KEY` (and optionally `INNGEST_SIGNING_KEY`) is set in `.env`.
-   - Use the `dev` profile so the Inngest dev server runs (required for document upload/processing):
+   - The default profile already includes the worker (which processes uploads via the transactional outbox) and the Inngest dev server:
    ```bash
-   docker compose --env-file .env --profile dev up
+   docker compose --env-file .env up
    ```
-   Wait until the app and Inngest are ready (migrate completes, app listens). Open **http://localhost:3000**; Inngest dashboard at **http://localhost:8288**.
+   Wait until the stack is ready (migrate completes, app listens, worker healthy at **http://localhost:8020/healthz**). Open **http://localhost:3000**; Inngest dashboard at **http://localhost:8288**.
 
 3. **Test accounts**
    - Reuse the same Employer/Employee accounts (Clerk and DB are shared if you point to the same DB) or create fresh ones.

@@ -36,7 +36,7 @@ function ViewerInner() {
       const res = await fetch("/api/fetchDocument", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
+        body: "{}",
       });
       if (!res.ok) throw new Error("Failed to fetch documents");
       const data = (await res.json()) as DocumentType[];

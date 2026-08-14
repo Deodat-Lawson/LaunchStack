@@ -32,7 +32,7 @@ async function loadResults(target: "launchstack" | "onyx"): Promise<Row[]> {
 }
 
 function avg(rows: Row[], key: "levenshtein" | "tableF1" | "coverage" | "latencyMs"): number {
-  const vals = rows.filter((r) => !r.error).map((r) => r[key] as number);
+  const vals = rows.filter((r) => !r.error).map((r) => r[key]);
   if (vals.length === 0) return 0;
   return vals.reduce((s, v) => s + v, 0) / vals.length;
 }

@@ -75,7 +75,6 @@ export function WebsiteSourceTab({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
           url: url.trim(),
           title: title.trim() || undefined,
           category: category || undefined,

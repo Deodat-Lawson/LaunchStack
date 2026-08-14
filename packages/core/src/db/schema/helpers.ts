@@ -1,7 +1,6 @@
-import { pgTableCreator } from "drizzle-orm/pg-core";
-
 /**
- * Ensures all tables share the same prefix so we can safely split the schema
- * across multiple modules while keeping consistent naming.
+ * @launchstack/core compatibility facade (ADR-002): this subpath's
+ * implementation moved to @launchstack/adapters. Re-export only — no logic
+ * may be added here (enforced by scripts/ci/check-core-facade.mjs).
  */
-export const pgTable = pgTableCreator((name) => `pdr_ai_v2_${name}`);
+export * from "@launchstack/adapters/db/schema/helpers";

@@ -6,11 +6,13 @@
  */
 
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
-import { getChatModel, normalizeModelContent } from "~/app/api/agents/documentQ&A/services";
-import type { AIModelType } from "~/app/api/agents/documentQ&A/services";
+import {
+    resolveConfiguredChatModel,
+    normalizeModelContent,
+} from "~/app/api/agents/documentQ&A/services";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 120; // Allow more time for research + generation
@@ -258,13 +260,8 @@ function getTemplateStructure(templateId: string): string {
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { success: false, message: "Unauthorized" },
-                { status: 401 }
-            );
-        }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
         const body = await request.json() as unknown;
         const validation = InitializeSchema.safeParse(body);
@@ -299,8 +296,8 @@ export async function POST(request: Request) {
         }
 
         // Get the AI model
-        const modelId = "gpt-5-mini" as AIModelType;
-        const chat = getChatModel(modelId);
+        const resolved = resolveConfiguredChatModel();
+        const { chat } = resolved;
 
         // Build system prompt
         let systemPrompt = getTemplateSystemPrompt(templateId);
@@ -355,10 +352,12 @@ export async function POST(request: Request) {
         console.log(`🤖 [Initialize] Generating document content...`);
 
         // Call the AI model
-        const response = await chat.call([
-            new SystemMessage(systemPrompt),
-            new HumanMessage(userPrompt),
-        ]);
+        const response = await chat.invoke(
+            resolved.prepareMessages([
+                new SystemMessage(systemPrompt),
+                new HumanMessage(userPrompt),
+            ]),
+        );
 
         let generatedContent = normalizeModelContent(response.content);
 

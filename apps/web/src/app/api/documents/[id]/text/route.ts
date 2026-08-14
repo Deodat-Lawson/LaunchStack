@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { eq, asc } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
+import { and, eq, asc } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document, documentContextChunks } from "@launchstack/core/db/schema";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -10,10 +10,8 @@ interface RouteParams {
 
 export async function GET(_request: Request, { params }: RouteParams) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
     const { id } = await params;
     const docId = parseInt(id, 10);
@@ -22,25 +20,44 @@ export async function GET(_request: Request, { params }: RouteParams) {
     }
 
     const [doc] = await db
-      .select({ id: document.id, title: document.title })
+      .select({
+        id: document.id,
+        title: document.title,
+        currentVersionId: document.currentVersionId,
+      })
       .from(document)
-      .where(eq(document.id, docId));
+      .where(
+        and(
+          eq(document.id, docId),
+          eq(document.companyId, ctx.data.companyId),
+        ),
+      );
 
     if (!doc) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
     }
 
-    const chunks = await db
-      .select({
-        content: documentContextChunks.content,
-        pageNumber: documentContextChunks.pageNumber,
-      })
-      .from(documentContextChunks)
-      .where(eq(documentContextChunks.documentId, BigInt(docId)))
-      .orderBy(
-        asc(documentContextChunks.pageNumber),
-        asc(documentContextChunks.id),
-      );
+    // A document without a current pointer has no current text. Never fall
+    // back to historical or legacy unversioned chunks.
+    const chunks =
+      doc.currentVersionId === null
+        ? []
+        : await db
+            .select({
+              content: documentContextChunks.content,
+              pageNumber: documentContextChunks.pageNumber,
+            })
+            .from(documentContextChunks)
+            .where(
+              and(
+                eq(documentContextChunks.documentId, BigInt(docId)),
+                eq(documentContextChunks.versionId, doc.currentVersionId),
+              ),
+            )
+            .orderBy(
+              asc(documentContextChunks.pageNumber),
+              asc(documentContextChunks.id),
+            );
 
     if (chunks.length === 0) {
       return NextResponse.json({

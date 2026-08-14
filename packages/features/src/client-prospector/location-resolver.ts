@@ -5,7 +5,7 @@
 // String inputs are geocoded via a lightweight OpenAI call — this avoids
 // needing a separate geocoding API key.
 
-import { ChatOpenAI } from "@langchain/openai";
+import { invokeStructured, resolveChatModel } from "@launchstack/core/llm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 
@@ -57,21 +57,19 @@ export async function resolveLocation(location: SearchLocation): Promise<LatLng>
         throw new Error("Invalid location: location string cannot be empty.");
     }
 
-    const chat = new ChatOpenAI({
-        apiKey: process.env.OPENAI_API_KEY || process.env.AI_API_KEY,
-        modelName: "gpt-4o-mini",
+    const resolved = resolveChatModel({
+        route: "fast",
         temperature: 0,
-        ...(process.env.AI_BASE_URL ? { configuration: { baseURL: process.env.AI_BASE_URL } } : {}),
     });
-
-    const structuredModel = chat.withStructuredOutput(GeocodingOutputSchema, {
-        name: "geocode_location",
-    });
-
-    const response = await structuredModel.invoke([
-        new SystemMessage(SYSTEM_PROMPT),
-        new HumanMessage(`Geocode this location: "${trimmed}"`),
-    ]);
+    const response = await invokeStructured(
+        resolved,
+        GeocodingOutputSchema,
+        [
+            new SystemMessage(SYSTEM_PROMPT),
+            new HumanMessage(`Geocode this location: "${trimmed}"`),
+        ],
+        { name: "geocode_location" },
+    );
 
     // Check for the "UNKNOWN" sentinel
     if (response.resolvedName === "UNKNOWN" || (response.lat === 0 && response.lng === 0)) {

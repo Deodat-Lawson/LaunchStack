@@ -117,6 +117,7 @@ CREATE INDEX "email_send_attempts_campaign_idx" ON "pdr_ai_v2_email_send_attempt
 CREATE UNIQUE INDEX "email_send_attempts_campaign_key_uq" ON "pdr_ai_v2_email_send_attempts" USING btree ("campaign_id","idempotency_key");--> statement-breakpoint
 CREATE INDEX "email_sends_campaign_idx" ON "pdr_ai_v2_email_sends" USING btree ("campaign_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "email_sends_attempt_recipient_uq" ON "pdr_ai_v2_email_sends" USING btree ("attempt_id","recipient_email");--> statement-breakpoint
+CREATE UNIQUE INDEX "email_sends_campaign_recipient_delivery_uq" ON "pdr_ai_v2_email_sends" USING btree ("campaign_id","recipient_email") WHERE status IN ('queued', 'sent');--> statement-breakpoint
 CREATE UNIQUE INDEX "email_suppressions_company_email_uq" ON "pdr_ai_v2_email_suppressions" USING btree ("company_id","email");--> statement-breakpoint
 CREATE INDEX "email_template_versions_campaign_idx" ON "pdr_ai_v2_email_template_versions" USING btree ("campaign_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "email_template_versions_campaign_version_uq" ON "pdr_ai_v2_email_template_versions" USING btree ("campaign_id","version");

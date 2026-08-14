@@ -8,10 +8,12 @@ import {
 import {
   fail,
   handleRouteError,
+  idempotencyKeyFrom,
   ok,
   parseCampaignId,
   readJson,
   resolveActor,
+  resolveManagementActor,
   unsubscribeBaseUrl,
 } from "../../_lib/context";
 
@@ -46,9 +48,6 @@ export async function POST(
   { params }: { params: Promise<{ campaignId: string }> },
 ) {
   try {
-    const actor = await resolveActor();
-    if (!actor.ok) return actor.response;
-
     const campaignId = parseCampaignId((await params).campaignId);
     if (campaignId === null) return fail("Invalid campaign ID", 400);
 
@@ -57,9 +56,18 @@ export async function POST(
       return fail("Invalid input", 400, { errors: parsed.error.flatten() });
     }
 
-    const idempotencyKey =
-      request.headers.get("Idempotency-Key")?.trim() ??
-      parsed.data.idempotencyKey;
+    // Real delivery is a workspace-management action; a dry-run preview
+    // stays open to any member so editors can iterate on drafts.
+    const actor =
+      parsed.data.mode === "send"
+        ? await resolveManagementActor()
+        : await resolveActor();
+    if (!actor.ok) return actor.response;
+
+    const idempotencyKey = idempotencyKeyFrom(
+      request,
+      parsed.data.idempotencyKey,
+    );
     if (!idempotencyKey) {
       return fail(
         "An Idempotency-Key header is required to send a campaign.",
@@ -91,7 +99,9 @@ export async function POST(
     return ok({
       campaignId: dispatched.campaign.id,
       status: dispatched.campaign.status,
-      mode,
+      // The attempt's stored mode, not this request's: a replayed dry-run
+      // attempt must not be reported as a real send.
+      mode: dispatched.attempt.mode,
       templateVersionId: dispatched.version.id,
       version: dispatched.version.version,
       attempt: dispatched.attempt,

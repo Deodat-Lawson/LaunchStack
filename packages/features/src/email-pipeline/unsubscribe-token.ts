@@ -26,9 +26,23 @@ export class UnsubscribeSecretMissingError extends Error {
   }
 }
 
+/**
+ * HMAC-SHA256 keys shorter than this add no meaningful security; a short
+ * secret is almost always a placeholder that leaked into production.
+ * Note: rotating the secret invalidates every unsubscribe link in
+ * already-delivered mail — there is no key id in the token (yet).
+ */
+const MIN_SECRET_LENGTH = 16;
+
 function secret(env: Record<string, string | undefined> = process.env): string {
   const value = env.EMAIL_UNSUBSCRIBE_SECRET?.trim();
   if (!value) throw new UnsubscribeSecretMissingError();
+  if (value.length < MIN_SECRET_LENGTH) {
+    throw new Error(
+      `EMAIL_UNSUBSCRIBE_SECRET must be at least ${MIN_SECRET_LENGTH} characters; ` +
+        "set it to a long random string.",
+    );
+  }
   return value;
 }
 

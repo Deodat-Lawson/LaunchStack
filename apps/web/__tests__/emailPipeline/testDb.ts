@@ -18,7 +18,7 @@ const webDir = join(__dirname, "..", "..");
  * suites can run the exact SQL a deploy applies for this feature.
  */
 const MIGRATION_FILES = [
-  join(webDir, "drizzle", "20260814044614_email_pipeline.sql"),
+  join(webDir, "drizzle", "20260814050513_email_pipeline.sql"),
 ];
 
 function withDatabase(connectionString: string, databaseName: string): string {

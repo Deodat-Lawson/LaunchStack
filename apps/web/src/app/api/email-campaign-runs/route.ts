@@ -8,9 +8,10 @@ import { AutomatedRunSchema } from "../email-campaigns/_lib/schemas";
 import {
   fail,
   handleRouteError,
+  idempotencyKeyFrom,
   ok,
   readJson,
-  resolveActor,
+  resolveManagementActor,
   unsubscribeBaseUrl,
 } from "../email-campaigns/_lib/context";
 
@@ -37,7 +38,10 @@ export const maxDuration = 300;
  */
 export async function POST(request: Request) {
   try {
-    const actor = await resolveActor();
+    // This endpoint approves on a human's behalf and can deliver — it is
+    // management-gated even for dry runs, since the approval row it creates
+    // is a workspace-wide accountability record.
+    const actor = await resolveManagementActor();
     if (!actor.ok) return actor.response;
 
     const parsed = AutomatedRunSchema.safeParse(await readJson(request));
@@ -45,9 +49,10 @@ export async function POST(request: Request) {
       return fail("Invalid input", 400, { errors: parsed.error.flatten() });
     }
 
-    const idempotencyKey =
-      request.headers.get("Idempotency-Key")?.trim() ??
-      parsed.data.idempotencyKey;
+    const idempotencyKey = idempotencyKeyFrom(
+      request,
+      parsed.data.idempotencyKey,
+    );
     if (!idempotencyKey) {
       return fail(
         "An Idempotency-Key header is required to start an automated run.",

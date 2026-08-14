@@ -96,11 +96,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("[email-pipeline/send] failed:", error);
     return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to run email campaign",
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
+      { success: false, message: "Failed to run email campaign" },
       { status: 500 },
     );
   }

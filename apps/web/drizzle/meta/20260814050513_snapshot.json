@@ -1,5 +1,5 @@
 {
-  "id": "d4b1ea4f-4f31-43d5-9794-8b2f346e0485",
+  "id": "e37a7839-78f6-4293-912a-dac5be3fca47",
   "prevId": "0aa637ba-a05c-4929-88e5-ffab5e940cae",
   "version": "7",
   "dialect": "postgresql",
@@ -5762,6 +5762,28 @@
             }
           ],
           "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "email_sends_campaign_recipient_delivery_uq": {
+          "name": "email_sends_campaign_recipient_delivery_uq",
+          "columns": [
+            {
+              "expression": "campaign_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "recipient_email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "status IN ('queued', 'sent')",
           "concurrently": false,
           "method": "btree",
           "with": {}

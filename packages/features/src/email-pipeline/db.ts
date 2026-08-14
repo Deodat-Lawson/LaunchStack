@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, isNull, lt, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNotNull, isNull, lt, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/core/db";
 
@@ -342,12 +342,14 @@ export async function appendTemplateVersion(args: {
 }
 
 function isUniqueViolation(err: unknown): boolean {
-  return (
-    typeof err === "object" &&
-    err !== null &&
-    "code" in err &&
-    (err as { code?: unknown }).code === "23505"
-  );
+  // drizzle-orm ≥0.45 wraps driver errors in DrizzleQueryError with the
+  // original error on `cause`, so check both levels.
+  let current: unknown = err;
+  for (let depth = 0; depth < 3 && typeof current === "object" && current !== null; depth++) {
+    if ((current as { code?: unknown }).code === "23505") return true;
+    current = (current as { cause?: unknown }).cause;
+  }
+  return false;
 }
 
 export async function getTemplateVersion(
@@ -517,6 +519,22 @@ export async function upsertRecipients(
   if (recipients.length === 0) return;
   const db = getDb();
 
+  // Once the audience is frozen, additions are ignored: the approved template
+  // and the audience it was approved for stay together. Retries re-sending
+  // the same list are unaffected (they conflict-no-op anyway); only NEW
+  // addresses smuggled in after the freeze are refused.
+  const [frozen] = await db
+    .select({ id: emailRecipients.id })
+    .from(emailRecipients)
+    .where(
+      and(
+        eq(emailRecipients.campaignId, campaignId),
+        isNotNull(emailRecipients.frozenAt),
+      ),
+    )
+    .limit(1);
+  if (frozen) return;
+
   // Dedup in-memory first: ON CONFLICT cannot resolve two conflicting rows
   // inside the same INSERT.
   const byEmail = new Map<string, Recipient>();
@@ -547,13 +565,20 @@ export async function freezeRecipients(
   candidates: Recipient[],
 ): Promise<{ recipients: Recipient[]; alreadyFrozen: boolean }> {
   const db = getDb();
-  const existing = await db
-    .select({ frozenAt: emailRecipients.frozenAt })
+  // Probe for a FROZEN row specifically — an arbitrary row could be an
+  // unfrozen straggler and would make the answer nondeterministic.
+  const [frozenRow] = await db
+    .select({ id: emailRecipients.id })
     .from(emailRecipients)
-    .where(eq(emailRecipients.campaignId, campaignId))
+    .where(
+      and(
+        eq(emailRecipients.campaignId, campaignId),
+        isNotNull(emailRecipients.frozenAt),
+      ),
+    )
     .limit(1);
 
-  const alreadyFrozen = existing.length > 0 && existing[0]?.frozenAt !== null;
+  const alreadyFrozen = Boolean(frozenRow);
 
   if (!alreadyFrozen) {
     await upsertRecipients(campaignId, candidates);
@@ -568,29 +593,56 @@ export async function freezeRecipients(
       );
   }
 
-  return { recipients: await listRecipients(campaignId), alreadyFrozen };
+  // Return only the frozen audience: rows added after the freeze (by any
+  // path) are never part of what an approved dispatch delivers to.
+  const rows = await db
+    .select()
+    .from(emailRecipients)
+    .where(
+      and(
+        eq(emailRecipients.campaignId, campaignId),
+        isNotNull(emailRecipients.frozenAt),
+      ),
+    )
+    .orderBy(asc(emailRecipients.id));
+  return { recipients: rows.map(toRecipient), alreadyFrozen };
 }
 
-/** Roll each delivery outcome back onto the recipient row. */
+/**
+ * Roll each delivery outcome back onto the recipient row.
+ *
+ * One UPDATE per status group (≤6 statuses) instead of one per recipient — a
+ * 500-recipient campaign previously fired 500 concurrent UPDATEs through the
+ * pool. A `sent` row is never downgraded: a later attempt legitimately reports
+ * `skipped`/`suppressed` for an address an earlier attempt delivered to, and
+ * the recipient's denormalized status should keep saying it was sent.
+ */
 export async function applyRecipientStatuses(
   campaignId: number,
   results: SendResult[],
 ): Promise<void> {
   if (results.length === 0) return;
   const db = getDb();
-  await Promise.all(
-    results.map((r) =>
-      db
-        .update(emailRecipients)
-        .set({ status: r.status })
-        .where(
-          and(
-            eq(emailRecipients.campaignId, campaignId),
-            eq(emailRecipients.email, r.recipientEmail.toLowerCase()),
-          ),
+
+  const byStatus = new Map<SendResult["status"], string[]>();
+  for (const r of results) {
+    const emails = byStatus.get(r.status) ?? [];
+    emails.push(r.recipientEmail.toLowerCase());
+    byStatus.set(r.status, emails);
+  }
+
+  for (const [status, emails] of byStatus) {
+    await db
+      .update(emailRecipients)
+      .set({ status })
+      .where(
+        and(
+          eq(emailRecipients.campaignId, campaignId),
+          inArray(emailRecipients.email, emails),
+          ...(status === "sent" ? [] : [sql`${emailRecipients.status} <> 'sent'`]),
         ),
-    ),
-  );
+      );
+  }
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -715,9 +767,12 @@ export async function claimRecipientSend(args: {
       status: "queued",
       providerIdempotencyKey: args.providerIdempotencyKey ?? null,
     })
-    .onConflictDoNothing({
-      target: [emailSends.attemptId, emailSends.recipientEmail],
-    })
+    // No conflict target: a clash with EITHER unique index refuses the claim —
+    // the per-attempt one (this attempt already claimed the address) or the
+    // campaign-level partial one (a concurrent attempt under a different
+    // idempotency key holds it in `queued`/`sent`). Both mean "may already
+    // have been delivered", so the caller must skip, never retry.
+    .onConflictDoNothing()
     .returning({ id: emailSends.id });
   return Boolean(row);
 }
@@ -755,6 +810,48 @@ export async function recordSendOutcome(args: {
         sentAt: args.result.status === "sent" ? new Date() : null,
       },
     });
+}
+
+/**
+ * Bulk variant of {@link recordSendOutcome} for outcomes with no delivery
+ * reservation to protect (dry runs): one multi-row upsert per chunk instead of
+ * one round-trip per recipient. Chunked so a 500-recipient campaign does not
+ * build a single statement with thousands of parameters.
+ */
+export async function recordSendOutcomes(args: {
+  campaignId: number;
+  attemptId: number;
+  outcomes: Array<{ subject?: string | null; result: SendResult }>;
+}): Promise<void> {
+  if (args.outcomes.length === 0) return;
+  const db = getDb();
+  const CHUNK = 100;
+  for (let i = 0; i < args.outcomes.length; i += CHUNK) {
+    const chunk = args.outcomes.slice(i, i + CHUNK);
+    await db
+      .insert(emailSends)
+      .values(
+        chunk.map(({ subject, result }) => ({
+          campaignId: args.campaignId,
+          attemptId: args.attemptId,
+          recipientEmail: result.recipientEmail,
+          subject: subject ?? null,
+          status: result.status,
+          providerMessageId: result.providerMessageId ?? null,
+          error: result.error ?? null,
+          sentAt: result.status === "sent" ? new Date() : null,
+        })),
+      )
+      .onConflictDoUpdate({
+        target: [emailSends.attemptId, emailSends.recipientEmail],
+        set: {
+          status: sql`excluded.status`,
+          providerMessageId: sql`excluded.provider_message_id`,
+          error: sql`excluded.error`,
+          sentAt: sql`excluded.sent_at`,
+        },
+      });
+  }
 }
 
 /** Keep a long-running attempt visibly alive so recovery leaves it alone. */
@@ -845,16 +942,41 @@ export async function listSendAttempts(
  */
 export async function sentEmails(campaignId: number): Promise<Set<string>> {
   const db = getDb();
+  // Filter in SQL: this table grows by recipients × attempts, and only the
+  // delivered-or-in-flight rows matter here.
   const rows = await db
-    .select({
-      email: emailSends.recipientEmail,
-      status: emailSends.status,
-    })
+    .selectDistinct({ email: emailSends.recipientEmail })
     .from(emailSends)
-    .where(eq(emailSends.campaignId, campaignId));
-  return new Set(
-    rows
-      .filter((r) => DELIVERED_OR_IN_FLIGHT.has(r.status as SendStatus))
-      .map((r) => r.email),
-  );
+    .where(
+      and(
+        eq(emailSends.campaignId, campaignId),
+        inArray(emailSends.status, [...DELIVERED_OR_IN_FLIGHT]),
+      ),
+    );
+  return new Set(rows.map((r) => r.email));
+}
+
+/**
+ * The subset of `emails` that is suppressed for this company, lower-cased —
+ * one query for the whole audience instead of one per recipient.
+ */
+export async function suppressedEmails(
+  companyId: number,
+  emails: string[],
+): Promise<Set<string>> {
+  if (emails.length === 0) return new Set();
+  const db = getDb();
+  const rows = await db
+    .select({ email: emailSuppressions.email })
+    .from(emailSuppressions)
+    .where(
+      and(
+        eq(emailSuppressions.companyId, BigInt(companyId)),
+        inArray(
+          emailSuppressions.email,
+          emails.map((e) => e.toLowerCase()),
+        ),
+      ),
+    );
+  return new Set(rows.map((r) => r.email));
 }

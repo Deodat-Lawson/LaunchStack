@@ -1,5 +1,6 @@
 import type { MergeFn, SendAdapter } from "./contracts";
-import { simpleMerge, unresolvedTokens } from "./merge";
+import { simpleMerge } from "./merge";
+import { hasErrors, validateRendered } from "./validators";
 import type { Recipient, SendMode, SendResult, EmailTemplate } from "./types";
 
 /**
@@ -66,7 +67,12 @@ export interface SendCampaignArgs {
   heartbeat?: () => void | Promise<void>;
 }
 
-const HEARTBEAT_EVERY = 25;
+/**
+ * Time-based, not count-based: a count-based cadence at a slow ratePerMinute
+ * could outlast the recovery window and get a LIVE attempt reclaimed — the
+ * exact double-delivery the heartbeat exists to prevent.
+ */
+const HEARTBEAT_INTERVAL_MS = 30_000;
 
 export async function sendCampaign(
   args: SendCampaignArgs,
@@ -78,7 +84,7 @@ export async function sendCampaign(
     mode === "send" ? Math.ceil(60000 / Math.max(1, args.ratePerMinute ?? 60)) : 0;
 
   const results: SendResult[] = [];
-  let processed = 0;
+  let lastHeartbeat = Date.now();
 
   const settle = async (result: SendResult) => {
     results.push(result);
@@ -88,7 +94,10 @@ export async function sendCampaign(
   for (const recipient of args.recipients) {
     const email = recipient.email;
 
-    if (++processed % HEARTBEAT_EVERY === 0) await args.heartbeat?.();
+    if (Date.now() - lastHeartbeat >= HEARTBEAT_INTERVAL_MS) {
+      lastHeartbeat = Date.now();
+      await args.heartbeat?.();
+    }
 
     // 1) idempotency — never re-send to someone already sent (or mid-flight)
     if (args.alreadySent && (await args.alreadySent(email))) {
@@ -112,17 +121,22 @@ export async function sendCampaign(
       },
     });
 
-    // 4) no-unresolved-token guard — never deliver a half-filled email
-    const leftover = [
-      ...unresolvedTokens(rendered.subject),
-      ...unresolvedTokens(rendered.body),
-    ];
-    if (leftover.length > 0) {
+    // 4) deterministic render guard — never deliver a half-filled email, a
+    // CRLF-bearing subject (header injection via recipient data), or a body
+    // missing its unsubscribe link / sender identity.
+    const renderIssues = validateRendered(rendered, {
+      unsubscribeUrl,
+      senderIdentity: args.senderIdentity,
+    });
+    if (hasErrors(renderIssues)) {
       await settle({
         recipientEmail: email,
         status: "failed",
         subject: rendered.subject,
-        error: `Unresolved tokens: ${[...new Set(leftover)].join(", ")}`,
+        error: renderIssues
+          .filter((i) => i.severity === "error")
+          .map((i) => i.message)
+          .join(" "),
       });
       continue;
     }

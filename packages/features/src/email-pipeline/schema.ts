@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import type { AnyPgColumn } from "drizzle-orm/pg-core";
 import {
   bigint,
@@ -263,6 +264,14 @@ export const emailSends = pgTable(
       t.attemptId,
       t.recipientEmail,
     ),
+    // Campaign-level delivery claim: at most one in-flight-or-delivered row per
+    // address per campaign, regardless of attempt. This is what stops two
+    // concurrent sends under *different* idempotency keys from both claiming
+    // the same recipient — the attempt-scoped index above cannot arbitrate
+    // across attempts.
+    uniqueIndex("email_sends_campaign_recipient_delivery_uq")
+      .on(t.campaignId, t.recipientEmail)
+      .where(sql`status IN ('queued', 'sent')`),
   ],
 );
 

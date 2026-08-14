@@ -12,12 +12,13 @@ import {
   completeSendAttempt,
   freezeRecipients,
   getTemplateVersion,
-  isSuppressed,
   reclaimAbandonedAttempts,
   recordSendOutcome,
+  recordSendOutcomes,
   requireCampaign,
   sentEmails,
   setCampaignStatus,
+  suppressedEmails,
   touchSendAttempt,
 } from "./db";
 import {
@@ -177,8 +178,28 @@ export async function dispatchEmailCampaign(
   await setCampaignStatus(campaign.id, "sending");
 
   // 5) Cross-attempt guard: an address already delivered to — or left
-  // in-flight by a crashed attempt — is skipped even under a fresh key.
-  const already = await sentEmails(campaign.id);
+  // in-flight by a crashed attempt — is skipped even under a fresh key. The
+  // suppression list is prefetched for the whole audience in one query; both
+  // sets are point-in-time snapshots, same as the per-recipient lookups were.
+  const [already, suppressed] = await Promise.all([
+    sentEmails(campaign.id),
+    suppressedEmails(
+      args.companyId,
+      recipients.map((r) => r.email),
+    ),
+  ]);
+
+  // A dry run delivers nothing, so its audit rows have no reservation to
+  // protect — buffer them and write in bulk instead of one INSERT per
+  // recipient. Real sends keep the write-as-it-happens bracket.
+  const dryRunOutcomes: Array<{ subject?: string | null; result: SendResult }> =
+    [];
+  const flushDryRunOutcomes = () =>
+    recordSendOutcomes({
+      campaignId: campaign.id,
+      attemptId: attempt.id,
+      outcomes: dryRunOutcomes.splice(0),
+    });
 
   let results: SendResult[];
   try {
@@ -189,7 +210,7 @@ export async function dispatchEmailCampaign(
       senderIdentity: args.senderIdentity,
       unsubscribeUrl: (email) =>
         `${args.unsubscribeBaseUrl.replace(/\/+$/, "")}/${createUnsubscribeToken({ companyId: args.companyId, email })}`,
-      isSuppressed: (email) => isSuppressed(args.companyId, email),
+      isSuppressed: (email) => suppressed.has(email.toLowerCase()),
       alreadySent: (email) => already.has(email),
       claim: (email) =>
         claimRecipientSend({
@@ -199,28 +220,44 @@ export async function dispatchEmailCampaign(
           subject: version.template.subject,
           providerIdempotencyKey: providerKey(attempt.id, email),
         }),
-      record: (result) =>
-        recordSendOutcome({
-          campaignId: campaign.id,
-          attemptId: attempt.id,
-          // Prefer the subject this recipient actually received. The template's
-          // own subject still holds unrendered {{tokens}}, so recording it would
-          // make every audit row read "Hello {{firstName}}". Falls back to the
-          // template for rows settled before rendering.
-          subject: result.subject ?? version.template.subject,
-          result,
-        }),
+      // Prefer the subject this recipient actually received. The template's
+      // own subject still holds unrendered {{tokens}}, so recording it would
+      // make every audit row read "Hello {{firstName}}". Falls back to the
+      // template for rows settled before rendering.
+      record:
+        mode === "dry_run"
+          ? (result) => {
+              dryRunOutcomes.push({
+                subject: result.subject ?? version.template.subject,
+                result,
+              });
+            }
+          : (result) =>
+              recordSendOutcome({
+                campaignId: campaign.id,
+                attemptId: attempt.id,
+                subject: result.subject ?? version.template.subject,
+                result,
+              }),
       providerIdempotencyKey: (email) => providerKey(attempt.id, email),
       heartbeat: () => touchSendAttempt(attempt.id),
       ...(args.adapter ? { adapter: args.adapter } : {}),
       ...(args.merge ? { merge: args.merge } : {}),
       ...(args.ratePerMinute ? { ratePerMinute: args.ratePerMinute } : {}),
     });
+    await flushDryRunOutcomes();
   } catch (err) {
+    // Best-effort: keep whatever dry-run audit rows were buffered, and close
+    // the attempt with the outcomes that WERE persisted rather than zeroed
+    // counters — per-recipient results recorded before the crash are real.
+    await flushDryRunOutcomes().catch(() => undefined);
+    const persisted = await attemptResults(attempt.id).catch(
+      () => [] as SendResult[],
+    );
     await completeSendAttempt({
       attemptId: attempt.id,
       status: "failed",
-      results: [],
+      results: persisted,
       error: err instanceof Error ? err.message : "send failed",
     });
     await setCampaignStatus(campaign.id, "failed");
@@ -237,9 +274,11 @@ export async function dispatchEmailCampaign(
 
   const failed = results.filter((r) => r.status === "failed").length;
   const sent = results.filter((r) => r.status === "sent").length;
-  const status =
+  const status: CampaignStatus =
     mode === "dry_run"
-      ? "approved" // a dry run leaves the campaign ready to actually send
+      ? campaign.status === "sent"
+        ? "sent" // a later dry run must not un-send a delivered campaign
+        : "approved" // a dry run leaves the campaign ready to actually send
       : failed > 0 && sent === 0
         ? "failed"
         : "sent";

@@ -4,7 +4,10 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { CampaignLifecycleError } from "@launchstack/features/email-pipeline";
-import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import {
+  isManagementRole,
+  requireWorkspaceContext,
+} from "~/lib/require-workspace-context";
 
 /**
  * Shared plumbing for the campaign lifecycle routes: who is calling, which
@@ -20,6 +23,8 @@ export interface CampaignActor {
   userId: number;
   email: string | null;
   companyId: number;
+  /** Workspace role in the active company (see membership-roles). */
+  role: string;
   /** Sender identity injected into every email for CAN-SPAM compliance. */
   senderIdentity: string;
 }
@@ -49,16 +54,52 @@ export async function resolveActor(): Promise<ActorResult> {
       userId: Number(ctx.data.userPk),
       email: requestingUser.email ?? null,
       companyId: Number(ctx.data.companyId),
+      role: ctx.data.role,
       senderIdentity:
         requestingUser.email ?? requestingUser.name ?? "the sender",
     },
   };
 }
 
-/** Parse a `[campaignId]` path segment. */
+/**
+ * Same as {@link resolveActor}, but additionally requires a management role.
+ *
+ * Approving a template and delivering outbound email are workspace-wide
+ * actions taken under the company's identity — the same tier as settings
+ * mutations, which the rest of the API gates on `isManagementRole`. Editors
+ * can still draft campaigns and run dry-run previews.
+ */
+export async function resolveManagementActor(): Promise<ActorResult> {
+  const resolved = await resolveActor();
+  if (!resolved.ok) return resolved;
+  if (!isManagementRole(resolved.actor.role)) {
+    return {
+      ok: false,
+      response: fail("Your workspace role does not allow this action.", 403),
+    };
+  }
+  return resolved;
+}
+
+/** Parse a `[campaignId]` path segment. Digits only — no `1e2`, hex, or floats. */
 export function parseCampaignId(raw: string): number | null {
-  const id = Number(raw);
-  return Number.isInteger(id) && id > 0 ? id : null;
+  if (!/^\d+$/.test(raw)) return null;
+  const id = Number.parseInt(raw, 10);
+  return Number.isSafeInteger(id) && id > 0 ? id : null;
+}
+
+/**
+ * The idempotency key for a send: the `Idempotency-Key` header, falling back
+ * to the request body's `idempotencyKey` when the header is absent OR blank —
+ * HTTP clients with templated headers often send an empty value.
+ */
+export function idempotencyKeyFrom(
+  request: Request,
+  bodyKey: string | undefined,
+): string | undefined {
+  const header = request.headers.get("Idempotency-Key")?.trim();
+  if (header) return header;
+  return bodyKey;
 }
 
 export async function readJson(request: Request): Promise<unknown> {
@@ -93,8 +134,8 @@ export function handleRouteError(tag: string, error: unknown) {
   if (error instanceof CampaignLifecycleError) {
     return fail(error.message, error.status, { code: error.code });
   }
+  // Log the full error server-side; never echo internal messages (driver/SQL/
+  // provider details) to the client.
   console.error(`[${tag}] failed:`, error);
-  return fail("Request failed", 500, {
-    error: error instanceof Error ? error.message : "Unknown error",
-  });
+  return fail("Request failed", 500);
 }

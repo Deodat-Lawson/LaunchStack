@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import {
   generateTemplate,
@@ -8,6 +9,10 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
+
+const BodySchema = z.object({
+  goal: z.string().max(2000).optional(),
+});
 
 /**
  * POST /api/email-pipeline/generate
@@ -19,18 +24,29 @@ export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
-    let body: { goal?: string };
+    let json: unknown;
     try {
-      body = (await request.json()) as { goal?: string };
+      json = await request.json();
     } catch {
-      body = {};
+      json = {};
+    }
+    const parsed = BodySchema.safeParse(json);
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid input",
+          errors: parsed.error.flatten(),
+        },
+        { status: 400 },
+      );
     }
 
     const companyId = Number(ctx.data.companyId);
 
     const { template, companyContext } = await generateTemplate({
       companyId,
-      goal: body.goal,
+      goal: parsed.data.goal,
     });
     const review = await reviewTemplate({ template, companyContext });
 
@@ -38,11 +54,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("[email-pipeline/generate] failed:", error);
     return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to generate email template",
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
+      { success: false, message: "Failed to generate email template" },
       { status: 500 },
     );
   }

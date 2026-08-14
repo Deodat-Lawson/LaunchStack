@@ -5,6 +5,7 @@ import {
   claimAutomationCampaign,
   getLatestTemplateVersion,
   getTemplateVersion,
+  listRecipients,
   upsertRecipients,
 } from "./db";
 import type { MergeFn, SendAdapter } from "./contracts";
@@ -125,11 +126,25 @@ export async function runAutomatedEmailCampaign(
     createdBy: args.actorUserId ?? null,
   });
 
-  // ── prepare (skipped entirely on a resumed run) ───────────────────────────
+  // ── prepare (skipped on a resumed run that already generated) ────────────
   let version: TemplateVersion;
   let review: TemplateReview | null;
 
-  if (created) {
+  // A resumed run reuses the first request's template rather than paying for —
+  // and risking — a second generation. When the original request died BEFORE
+  // generating, there is nothing to reuse and nothing was sent, so generating
+  // now is exactly what a retry should do (not a permanent 409).
+  const existing = created
+    ? null
+    : ((campaign.approvedVersionId
+        ? await getTemplateVersion(campaign.id, campaign.approvedVersionId)
+        : null) ?? (await getLatestTemplateVersion(campaign.id)));
+
+  if (existing) {
+    version = existing;
+    review = existing.review;
+    await upsertRecipients(campaign.id, args.recipients);
+  } else {
     const prepared = await prepareEmailCampaign({
       companyId: args.companyId,
       campaignId: campaign.id,
@@ -139,23 +154,6 @@ export async function runAutomatedEmailCampaign(
     });
     version = prepared.version;
     review = prepared.review;
-  } else {
-    // The first request already generated for this key. Reuse its template
-    // rather than paying for — and risking — a second generation.
-    const existing =
-      (campaign.approvedVersionId
-        ? await getTemplateVersion(campaign.id, campaign.approvedVersionId)
-        : null) ?? (await getLatestTemplateVersion(campaign.id));
-    if (!existing) {
-      throw new CampaignLifecycleError(
-        "This run key exists but its campaign has no template version; the original request failed before generating.",
-        "run_incomplete",
-        409,
-      );
-    }
-    version = existing;
-    review = existing.review;
-    await upsertRecipients(campaign.id, args.recipients);
   }
 
   const blocked = (reason: string): AutomatedEmailCampaignResult => ({
@@ -175,13 +173,16 @@ export async function runAutomatedEmailCampaign(
       `AI review verdict was "${version.reviewVerdict ?? "none"}" — automated sending requires a passing review.`,
     );
   }
-  if (
-    args.policy.maxRecipients !== null &&
-    args.recipients.length > args.policy.maxRecipients
-  ) {
-    return blocked(
-      `Recipient count ${args.recipients.length} exceeds the automation limit of ${args.policy.maxRecipients}.`,
-    );
+  if (args.policy.maxRecipients !== null) {
+    // Enforce against the STORED audience, not this request's batch: resumed
+    // runs accumulate recipients across retries, so checking only
+    // `args.recipients.length` would let successive batches step past the cap.
+    const audience = await listRecipients(campaign.id);
+    if (audience.length > args.policy.maxRecipients) {
+      return blocked(
+        `Stored recipient count ${audience.length} exceeds the automation limit of ${args.policy.maxRecipients}.`,
+      );
+    }
   }
 
   // ── approve (recorded as automation, never as a person) ───────────────────

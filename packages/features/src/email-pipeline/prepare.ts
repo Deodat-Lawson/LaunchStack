@@ -8,6 +8,7 @@ import {
   upsertRecipients,
 } from "./db";
 import { EMAIL_PROMPT_VERSION } from "./models";
+import { validateTemplate } from "./validators";
 import {
   CampaignLifecycleError,
   EmailTemplateSchema,
@@ -84,6 +85,20 @@ export async function prepareEmailCampaign(
     generationModelId = generated.modelId;
   }
 
+  // Deterministic gate, independent of the LLM review: no CRLF in the subject
+  // (header injection), a non-empty subject/body, and a structural
+  // {{unsubscribeUrl}} so compliance never rests on the reviewer's taste.
+  const templateIssues = validateTemplate(template).filter(
+    (i) => i.severity === "error",
+  );
+  if (templateIssues.length > 0) {
+    throw new CampaignLifecycleError(
+      `Template rejected: ${templateIssues.map((i) => i.message).join(" ")}`,
+      "template_invalid",
+      422,
+    );
+  }
+
   let review: TemplateReview | null = null;
   if (!args.skipReview) {
     review = await reviewTemplate({
@@ -112,9 +127,9 @@ export async function prepareEmailCampaign(
     await upsertRecipients(campaign.id, args.recipients);
   }
 
-  // A new version invalidates any earlier approval implicitly: the campaign
-  // moves back out of `approved`, and `approvedVersionId` still points at the
-  // old version, so a dispatch would send THAT one until someone approves this.
+  // A new version invalidates any earlier approval: appendTemplateVersion
+  // revoked open approvals and cleared `approvedVersionId` in the same
+  // transaction, so a dispatch now refuses until someone approves this one.
   const status =
     review?.verdict === "revise"
       ? "needs_revision"

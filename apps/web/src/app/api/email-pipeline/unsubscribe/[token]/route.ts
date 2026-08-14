@@ -83,13 +83,22 @@ export async function POST(
 }
 
 /**
- * A missing signing secret is a server misconfiguration, not a bad link —
- * surface it as an invalid token to the visitor but keep it out of the logs
- * as a 400. Verification never throws for attacker-controlled input.
+ * Verification never throws for attacker-controlled input. Two very different
+ * failures land here, logged at different levels: a malformed token (bad `%`
+ * escape, junk input — routine internet noise, `warn` so an attacker cannot
+ * spam the error log) versus a missing/short signing secret (server
+ * misconfiguration — `error`, it means every real link is broken too).
  */
 function safeVerify(token: string) {
+  let decoded: string;
   try {
-    return verifyUnsubscribeToken(decodeURIComponent(token));
+    decoded = decodeURIComponent(token);
+  } catch {
+    console.warn("[email-pipeline/unsubscribe] malformed token encoding");
+    return null;
+  }
+  try {
+    return verifyUnsubscribeToken(decoded);
   } catch (error) {
     console.error("[email-pipeline/unsubscribe] cannot verify token:", error);
     return null;

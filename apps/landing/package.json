@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@launchstack/design-tokens": "workspace:*",
     "@vercel/analytics": "^1.6.1",
     "dotenv": "^17.3.1",
     "lucide-react": "^0.487.0",

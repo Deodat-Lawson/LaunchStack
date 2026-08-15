@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npx -y pnpm@10.15.1 install --frozen-lockfile --ignore-scripts",
+  "buildCommand": "npx -y pnpm@10.15.1 build",
+  "ignoreCommand": "git -C \"$(git rev-parse --show-toplevel)\" diff --quiet HEAD^ HEAD -- apps/landing pnpm-lock.yaml pnpm-workspace.yaml .pnpmfile.cjs tsconfig.base.json patches"
+}

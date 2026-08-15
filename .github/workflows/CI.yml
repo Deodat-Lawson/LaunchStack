@@ -518,6 +518,13 @@ jobs:
 
       # `ignoreBuildErrors`/`ignoreDuringBuilds` are gone from next.config
       # (ADR-006): this build fails on type or lint errors.
+      # The public site (launchstack.app). It needs no database, no Clerk key,
+      # and no engine packages — if this build ever starts requiring one of
+      # them, something has leaked back across the split. Runs before the web
+      # build because it is the faster of the two to fail.
+      - name: Build landing site
+        run: pnpm --filter @launchstack/landing build
+
       - name: Build web app
         run: pnpm --filter @launchstack/web build
 

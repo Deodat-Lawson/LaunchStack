@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * `@tailwind base` (preflight) is load-bearing, not boilerplate. Both CSS
+ * modules on this origin were authored in apps/web with preflight active, so
+ * dropping it silently changes heading sizes, list markers and border defaults
+ * across the whole /deployment guide.
+ *
+ * The two rules below are lifted verbatim from apps/web/src/styles/globals.css
+ * for the same reason — they sat outside that file's @layer base and applied
+ * globally, so the moved markup depends on them.
+ */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

@@ -7,6 +7,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "pnpm --filter @launchstack/web build",
+    "build:landing": "pnpm --filter @launchstack/landing build",
     "db:migrate": "pnpm --filter @launchstack/web db:migrate",
     "check": "eslint . && pnpm -r typecheck",
     "lint": "eslint .",

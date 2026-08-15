@@ -42,9 +42,7 @@ export function OutlineTree({
             const visibleIds = getVisibleItems(items, expandedItems);
             if (visibleIds.length === 0) return;
 
-            const currentIndex = focusedId
-                ? visibleIds.indexOf(focusedId)
-                : -1;
+            const currentIndex = focusedId ? visibleIds.indexOf(focusedId) : -1;
 
             switch (e.key) {
                 case "ArrowDown": {
@@ -111,30 +109,17 @@ export function OutlineTree({
                         const idx = nextVisibleIds.indexOf(focusedId);
                         onDelete(focusedId);
                         // Move focus to neighbor
-                        const neighbor =
-                            nextVisibleIds[idx + 1] ?? nextVisibleIds[idx - 1] ?? null;
+                        const neighbor = nextVisibleIds[idx + 1] ?? nextVisibleIds[idx - 1] ?? null;
                         setFocusedId(neighbor);
                     }
                     break;
                 }
             }
         },
-        [
-            items,
-            expandedItems,
-            focusedId,
-            editingId,
-            onToggleExpand,
-            onStartEdit,
-            onDelete,
-        ],
+        [items, expandedItems, focusedId, editingId, onToggleExpand, onStartEdit, onDelete]
     );
 
-    const renderItem = (
-        item: OutlineItem,
-        depth: number,
-        isLast: boolean,
-    ) => {
+    const renderItem = (item: OutlineItem, depth: number, isLast: boolean) => {
         const hasChildren = (item.children?.length ?? 0) > 0;
         const isExpanded = expandedItems.has(item.id);
 
@@ -143,7 +128,7 @@ export function OutlineTree({
                 {/* Horizontal connector line (for non-root items) */}
                 {depth > 0 && (
                     <div
-                        className="absolute border-t border-border"
+                        className="border-border absolute border-t"
                         style={{
                             left: `${(depth - 1) * 20 + 12 + 10}px`,
                             top: "18px",
@@ -174,7 +159,7 @@ export function OutlineTree({
                     <div className="relative">
                         {/* Vertical connector line */}
                         <div
-                            className="absolute border-l border-border"
+                            className="border-border absolute border-l"
                             style={{
                                 left: `${depth * 20 + 12 + 10}px`,
                                 top: 0,
@@ -182,11 +167,7 @@ export function OutlineTree({
                             }}
                         />
                         {item.children!.map((child, index) =>
-                            renderItem(
-                                child,
-                                depth + 1,
-                                index === item.children!.length - 1,
-                            ),
+                            renderItem(child, depth + 1, index === item.children!.length - 1)
                         )}
                     </div>
                 )}
@@ -205,11 +186,9 @@ export function OutlineTree({
                     setFocusedId(items[0]!.id);
                 }
             }}
-            className="outline-none space-y-0.5"
+            className="space-y-0.5 outline-none"
         >
-            {items.map((item, index) =>
-                renderItem(item, 0, index === items.length - 1),
-            )}
+            {items.map((item, index) => renderItem(item, 0, index === items.length - 1))}
         </div>
     );
 }

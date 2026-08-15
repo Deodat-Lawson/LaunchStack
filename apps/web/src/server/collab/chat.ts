@@ -16,34 +16,37 @@ import { normalizeModelContent } from "@launchstack/core/llm";
 import { resolveConfiguredChatModel } from "~/lib/models";
 
 function toLangChain(message: CollabChatMessage): BaseMessage {
-  switch (message.role) {
-    case "system":
-      return new SystemMessage(message.content);
-    case "assistant":
-      return new AIMessage(message.content);
-    default:
-      return new HumanMessage(message.content);
-  }
+    switch (message.role) {
+        case "system":
+            return new SystemMessage(message.content);
+        case "assistant":
+            return new AIMessage(message.content);
+        default:
+            return new HumanMessage(message.content);
+    }
 }
 
 export interface CollabChatOptions {
-  /** Cap on a single turn. Meetings get long; runaway turns get expensive. */
-  maxOutputTokens?: number;
-  timeoutMs?: number;
+    /** Cap on a single turn. Meetings get long; runaway turns get expensive. */
+    maxOutputTokens?: number;
+    timeoutMs?: number;
 }
 
 export function createCollabChatFn(options: CollabChatOptions = {}): CollabChatFn {
-  return async ({ messages, route, temperature, maxTokens }) => {
-    const resolved = resolveConfiguredChatModel({
-      route: route === "fast" || route === "reasoning" || route === "vision" ? route : "default",
-      temperature,
-      maxOutputTokens: maxTokens ?? options.maxOutputTokens ?? 800,
-      timeoutMs: options.timeoutMs,
-    });
+    return async ({ messages, route, temperature, maxTokens }) => {
+        const resolved = resolveConfiguredChatModel({
+            route:
+                route === "fast" || route === "reasoning" || route === "vision" ? route : "default",
+            temperature,
+            maxOutputTokens: maxTokens ?? options.maxOutputTokens ?? 800,
+            timeoutMs: options.timeoutMs,
+        });
 
-    const reply = await resolved.chat.invoke(resolved.prepareMessages(messages.map(toLangChain)));
-    const text = normalizeModelContent(reply.content).trim();
-    if (!text) throw new Error(`Model "${resolved.modelId}" returned an empty turn`);
-    return text;
-  };
+        const reply = await resolved.chat.invoke(
+            resolved.prepareMessages(messages.map(toLangChain))
+        );
+        const text = normalizeModelContent(reply.content).trim();
+        if (!text) throw new Error(`Model "${resolved.modelId}" returned an empty turn`);
+        return text;
+    };
 }

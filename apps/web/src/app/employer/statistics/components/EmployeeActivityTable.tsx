@@ -38,52 +38,54 @@ function formatRelativeTime(dateString: string | null): string {
 
 export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps) {
     return (
-        <Card className="p-6 border-none shadow-sm">
-            <div className="flex items-center justify-between mb-6">
+        <Card className="border-none p-6 shadow-sm">
+            <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="p-1.5 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
-                        <Users className="w-4 h-4" />
+                    <div className="rounded-lg bg-green-100 p-1.5 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                        <Users className="h-4 w-4" />
                     </div>
-                    <h2 className="text-sm font-bold text-foreground uppercase tracking-widest">
+                    <h2 className="text-foreground text-sm font-bold uppercase tracking-widest">
                         Employee Activity
                     </h2>
                 </div>
                 <Badge
                     variant="outline"
-                    className="rounded-full px-3 py-1 border-green-200 dark:border-green-900/30 text-green-600 dark:text-green-400 font-bold"
+                    className="rounded-full border-green-200 px-3 py-1 font-bold text-green-600 dark:border-green-900/30 dark:text-green-400"
                 >
                     {employees.length} Total
                 </Badge>
             </div>
 
-            <div className="rounded-lg border border-border overflow-hidden">
+            <div className="border-border overflow-hidden rounded-lg border">
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-muted/50">
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest">
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest">
                                 Name
                             </TableHead>
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest">
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest">
                                 Role
                             </TableHead>
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest">
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest">
                                 Status
                             </TableHead>
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest">
+                            <TableHead className="text-[10px] font-bold uppercase tracking-widest">
                                 Queries Made
                             </TableHead>
-                            <TableHead className="font-bold text-[10px] uppercase tracking-widest text-right">
+                            <TableHead className="text-right text-[10px] font-bold uppercase tracking-widest">
                                 Last Online
                             </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {employees.map((employee) => (
+                        {employees.map(employee => (
                             <TableRow key={employee.id} className="hover:bg-muted/30">
                                 <TableCell className="font-medium">
                                     <div className="flex flex-col">
                                         <span>{employee.name}</span>
-                                        <span className="text-xs text-muted-foreground">{employee.email}</span>
+                                        <span className="text-muted-foreground text-xs">
+                                            {employee.email}
+                                        </span>
                                     </div>
                                 </TableCell>
                                 <TableCell>
@@ -94,8 +96,8 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                                             employee.role === "owner"
                                                 ? "border-purple-200 text-purple-600 dark:border-purple-900/30 dark:text-purple-400"
                                                 : employee.role === "employer"
-                                                ? "border-blue-200 text-blue-600 dark:border-blue-900/30 dark:text-blue-400"
-                                                : "border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400"
+                                                  ? "border-blue-200 text-blue-600 dark:border-blue-900/30 dark:text-blue-400"
+                                                  : "border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400"
                                         )}
                                     >
                                         {employee.role}
@@ -116,13 +118,13 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
-                                        <MessageSquare className="w-3 h-3 text-muted-foreground" />
+                                        <MessageSquare className="text-muted-foreground h-3 w-3" />
                                         <span className="font-mono">{employee.queryCount}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-muted-foreground text-sm text-right">
+                                <TableCell className="text-muted-foreground text-right text-sm">
                                     <div className="flex items-center justify-end gap-2">
-                                        <Clock className="w-3 h-3" />
+                                        <Clock className="h-3 w-3" />
                                         {formatRelativeTime(employee.lastActiveAt)}
                                     </div>
                                 </TableCell>

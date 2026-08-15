@@ -9,19 +9,19 @@ import { log } from "./logger.js";
 
 let config: Config;
 try {
-  config = loadConfig(process.env);
+    config = loadConfig(process.env);
 } catch (err) {
-  // Plain text on purpose: this is the message an operator reads at boot.
-  console.error(err instanceof Error ? err.message : String(err));
-  process.exit(1);
+    // Plain text on purpose: this is the message an operator reads at boot.
+    console.error(err instanceof Error ? err.message : String(err));
+    process.exit(1);
 }
 
 const app = createApp(config);
 
 app.listen(config.port, "0.0.0.0", () => {
-  log("info", "document-converter listening", {
-    port: config.port,
-    docling: config.doclingServeUrl ? "configured" : "not-configured",
-    allowedFetchOrigins: config.allowedFetchOrigins,
-  });
+    log("info", "document-converter listening", {
+        port: config.port,
+        docling: config.doclingServeUrl ? "configured" : "not-configured",
+        allowedFetchOrigins: config.allowedFetchOrigins,
+    });
 });

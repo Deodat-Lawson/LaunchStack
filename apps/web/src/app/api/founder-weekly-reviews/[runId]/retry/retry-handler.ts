@@ -14,21 +14,52 @@ import { logFounderWeeklyReview } from "~/server/founder-weekly-review/observabi
 const RetrySchema = z.object({ requestKey: z.string().min(1).max(128) });
 
 export interface FounderWeeklyReviewRetryRouteDependencies {
-  actorResolver: Pick<FounderWeeklyReviewActorResolver, "resolve">;
-  retryRunWithDispatch: typeof retryRunWithDispatch;
-  sendDispatchRequested: () => Promise<unknown>;
-  incrementRetry: () => void;
+    actorResolver: Pick<FounderWeeklyReviewActorResolver, "resolve">;
+    retryRunWithDispatch: typeof retryRunWithDispatch;
+    sendDispatchRequested: () => Promise<unknown>;
+    incrementRetry: () => void;
 }
 
-export function createFounderWeeklyReviewRetryPostHandler(deps: FounderWeeklyReviewRetryRouteDependencies) {
-  return async function POST(request: Request, { params }: { params: Promise<{ runId: string }> }) {
-    const { userId } = await auth(); if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const parsed = RetrySchema.safeParse(await request.json().catch(() => null)); if (!parsed.success) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
-    try { const actor = await deps.actorResolver.resolve(userId); const { runId } = await params;
-      logFounderWeeklyReview({ runId, companyId: actor.companyId.toString(), stage: "retry_requested", status: "failed" });
-      const { run, transitionApplied } = await deps.retryRunWithDispatch({ actor, runId, requestKey: parsed.data.requestKey });
-      if (transitionApplied) { deps.incrementRetry(); logFounderWeeklyReview({ runId: run.id, companyId: run.companyId.toString(), stage: "retry_queued", status: run.status, retryCount: run.retryCount }); }
-      await deps.sendDispatchRequested(); return NextResponse.json({ run: safeRun(run) }, { status: 202 });
-    } catch (error) { return safeFounderWeeklyReviewError(error); }
-  };
+export function createFounderWeeklyReviewRetryPostHandler(
+    deps: FounderWeeklyReviewRetryRouteDependencies
+) {
+    return async function POST(
+        request: Request,
+        { params }: { params: Promise<{ runId: string }> }
+    ) {
+        const { userId } = await auth();
+        if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        const parsed = RetrySchema.safeParse(await request.json().catch(() => null));
+        if (!parsed.success)
+            return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+        try {
+            const actor = await deps.actorResolver.resolve(userId);
+            const { runId } = await params;
+            logFounderWeeklyReview({
+                runId,
+                companyId: actor.companyId.toString(),
+                stage: "retry_requested",
+                status: "failed",
+            });
+            const { run, transitionApplied } = await deps.retryRunWithDispatch({
+                actor,
+                runId,
+                requestKey: parsed.data.requestKey,
+            });
+            if (transitionApplied) {
+                deps.incrementRetry();
+                logFounderWeeklyReview({
+                    runId: run.id,
+                    companyId: run.companyId.toString(),
+                    stage: "retry_queued",
+                    status: run.status,
+                    retryCount: run.retryCount,
+                });
+            }
+            await deps.sendDispatchRequested();
+            return NextResponse.json({ run: safeRun(run) }, { status: 202 });
+        } catch (error) {
+            return safeFounderWeeklyReviewError(error);
+        }
+    };
 }

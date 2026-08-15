@@ -7,8 +7,8 @@ import { type Config } from "tailwindcss";
 // shadcn token classes (bg-background, text-muted-foreground, …) appear in this
 // app, so apps/web's theme extension and globals.css are not needed.
 export default {
-  content: ["./src/**/*.{ts,tsx}"],
-  darkMode: ["class"],
-  theme: { extend: {} },
-  plugins: [],
+    content: ["./src/**/*.{ts,tsx}"],
+    darkMode: ["class"],
+    theme: { extend: {} },
+    plugins: [],
 } satisfies Config;

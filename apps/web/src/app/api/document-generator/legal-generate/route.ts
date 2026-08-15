@@ -1,102 +1,97 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import {
-  TEMPLATE_REGISTRY,
-  buildEditorSections,
-} from "@launchstack/features/legal-templates";
+import { TEMPLATE_REGISTRY, buildEditorSections } from "@launchstack/features/legal-templates";
 import { generateDocument } from "@launchstack/features/legal-templates/template-service";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
 
 const GenerateSchema = z.object({
-  templateId: z.string(),
-  data: z.record(z.string()),
-  format: z.enum(["docx", "json"]).default("json"),
+    templateId: z.string(),
+    data: z.record(z.string()),
+    format: z.enum(["docx", "json"]).default("json"),
 });
 
 export async function GET() {
-  const templates = Object.values(TEMPLATE_REGISTRY).map((t) => ({
-    id: t.id,
-    name: t.name,
-    description: t.description,
-    fields: t.fields,
-  }));
-  return NextResponse.json({ templates });
+    const templates = Object.values(TEMPLATE_REGISTRY).map(t => ({
+        id: t.id,
+        name: t.name,
+        description: t.description,
+        fields: t.fields,
+    }));
+    return NextResponse.json({ templates });
 }
 
 export async function POST(request: Request) {
-  try {
-    const ctx = await requireWorkspaceContext();
-    if (!ctx.success) return ctx.response;
+    try {
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-    const body: unknown = await request.json();
-    const parsed = GenerateSchema.safeParse(body);
+        const body: unknown = await request.json();
+        const parsed = GenerateSchema.safeParse(body);
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        { success: false, error: "Invalid request", details: parsed.error.errors },
-        { status: 400 }
-      );
+        if (!parsed.success) {
+            return NextResponse.json(
+                { success: false, error: "Invalid request", details: parsed.error.errors },
+                { status: 400 }
+            );
+        }
+
+        const { templateId, data, format } = parsed.data;
+
+        const template = TEMPLATE_REGISTRY[templateId];
+        if (!template) {
+            return NextResponse.json(
+                { success: false, error: `Unknown template: ${templateId}` },
+                { status: 400 }
+            );
+        }
+
+        const result = generateDocument(templateId, data);
+
+        if (!result.success) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "Validation failed",
+                    details: result.errors,
+                    fieldErrors: result.fieldErrors ?? {},
+                },
+                { status: 422 }
+            );
+        }
+
+        if (format === "docx") {
+            return new NextResponse(result.document ? new Uint8Array(result.document) : null, {
+                status: 200,
+                headers: {
+                    "Content-Type":
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "Content-Disposition": `attachment; filename="${result.filename}"`,
+                },
+            });
+        }
+
+        const sections = buildEditorSections(template, data);
+        const docxBase64 = result.document ? result.document.toString("base64") : null;
+
+        return NextResponse.json({
+            success: true,
+            templateId,
+            title: template.name,
+            sections,
+            docxBase64,
+            filename: result.filename,
+        });
+    } catch (error) {
+        console.error("Legal document generation error:", error);
+        return NextResponse.json(
+            {
+                success: false,
+                error: "Internal server error",
+                message: "Failed to generate legal document",
+            },
+            { status: 500 }
+        );
     }
-
-    const { templateId, data, format } = parsed.data;
-
-    const template = TEMPLATE_REGISTRY[templateId];
-    if (!template) {
-      return NextResponse.json(
-        { success: false, error: `Unknown template: ${templateId}` },
-        { status: 400 }
-      );
-    }
-
-    const result = generateDocument(templateId, data);
-
-    if (!result.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Validation failed",
-          details: result.errors,
-          fieldErrors: result.fieldErrors ?? {},
-        },
-        { status: 422 }
-      );
-    }
-
-    if (format === "docx") {
-      return new NextResponse(result.document ? new Uint8Array(result.document) : null, {
-        status: 200,
-        headers: {
-          "Content-Type":
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          "Content-Disposition": `attachment; filename="${result.filename}"`,
-        },
-      });
-    }
-
-    const sections = buildEditorSections(template, data);
-    const docxBase64 = result.document
-      ? result.document.toString("base64")
-      : null;
-
-    return NextResponse.json({
-      success: true,
-      templateId,
-      title: template.name,
-      sections,
-      docxBase64,
-      filename: result.filename,
-    });
-  } catch (error) {
-    console.error("Legal document generation error:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Internal server error",
-        message: "Failed to generate legal document",
-      },
-      { status: 500 }
-    );
-  }
 }

@@ -4,15 +4,15 @@ const EXA_SEARCH_URL = "https://api.exa.ai/search";
 const MAX_RESULTS_PER_QUERY = 10;
 
 interface ExaResultItem {
-  title?: string;
-  url?: string;
-  text?: string;
-  score?: number;
-  publishedDate?: string;
+    title?: string;
+    url?: string;
+    text?: string;
+    score?: number;
+    publishedDate?: string;
 }
 
 interface ExaSearchResponse {
-  results?: ExaResultItem[];
+    results?: ExaResultItem[];
 }
 
 /**
@@ -21,52 +21,48 @@ interface ExaSearchResponse {
  * are directly usable for grounding.
  */
 export async function callExa(query: string): Promise<RawSearchResult[]> {
-  const apiKey = process.env.EXA_API_KEY;
-  if (!apiKey) {
-    console.warn("[web-search] EXA_API_KEY not set; skipping Exa search.");
-    return [];
-  }
+    const apiKey = process.env.EXA_API_KEY;
+    if (!apiKey) {
+        console.warn("[web-search] EXA_API_KEY not set; skipping Exa search.");
+        return [];
+    }
 
-  const response = await fetch(EXA_SEARCH_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-    },
-    body: JSON.stringify({
-      query,
-      type: "auto",
-      category: "news",
-      numResults: MAX_RESULTS_PER_QUERY,
-      contents: {
-        text: true,
-      },
-    }),
-  });
+    const response = await fetch(EXA_SEARCH_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "x-api-key": apiKey,
+        },
+        body: JSON.stringify({
+            query,
+            type: "auto",
+            category: "news",
+            numResults: MAX_RESULTS_PER_QUERY,
+            contents: {
+                text: true,
+            },
+        }),
+    });
 
-  if (!response.ok) {
-    const text = await response.text().catch(() => "");
-    throw new Error(
-      `Exa API error: ${response.status} ${response.statusText}${
-        text ? ` - ${text}` : ""
-      }`,
-    );
-  }
+    if (!response.ok) {
+        const text = await response.text().catch(() => "");
+        throw new Error(
+            `Exa API error: ${response.status} ${response.statusText}${text ? ` - ${text}` : ""}`
+        );
+    }
 
-  const data = (await response.json()) as ExaSearchResponse;
-  if (!data.results || !Array.isArray(data.results)) {
-    return [];
-  }
+    const data = (await response.json()) as ExaSearchResponse;
+    if (!data.results || !Array.isArray(data.results)) {
+        return [];
+    }
 
-  return data.results
-    .filter(
-      (item): item is ExaResultItem & { url: string } => Boolean(item?.url),
-    )
-    .map((item) => ({
-      url: item.url,
-      title: item.title ?? "Untitled",
-      content: item.text ?? "",
-      score: typeof item.score === "number" ? item.score : 0,
-      ...(item.publishedDate != null && { publishedDate: item.publishedDate }),
-    }));
+    return data.results
+        .filter((item): item is ExaResultItem & { url: string } => Boolean(item?.url))
+        .map(item => ({
+            url: item.url,
+            title: item.title ?? "Untitled",
+            content: item.text ?? "",
+            score: typeof item.score === "number" ? item.score : 0,
+            ...(item.publishedDate != null && { publishedDate: item.publishedDate }),
+        }));
 }

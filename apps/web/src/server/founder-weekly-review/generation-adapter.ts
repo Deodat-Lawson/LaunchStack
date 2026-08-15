@@ -25,9 +25,7 @@ const FOUNDER_WEEKLY_REVIEW_ROUTE = "reasoning" as const;
 
 const CAPABILITY = "founderWeeklyReview";
 
-export async function generateFounderWeeklyReviewStructured<
-    TSchema extends ZodType,
->(input: {
+export async function generateFounderWeeklyReviewStructured<TSchema extends ZodType>(input: {
     system?: string;
     prompt: string;
     schema: TSchema;
@@ -49,7 +47,7 @@ export async function generateFounderWeeklyReviewStructured<
     const startedAt = Date.now();
     console.info(
         `[fwr] generation start phase=${input.generationPhase ?? "initial"} ` +
-            `route=${resolved.route} model=${resolved.modelId}`,
+            `route=${resolved.route} model=${resolved.modelId}`
     );
 
     try {
@@ -60,16 +58,13 @@ export async function generateFounderWeeklyReviewStructured<
         // divergent structured-output path, which is exactly what the shared
         // boundary exists to prevent. Usage is therefore not reported per call;
         // it is visible at the chat boundary.
-        const object = (await invokeStructured(
-            resolved,
-            input.schema,
-            messages,
-            { name: input.schemaName ?? "founder_weekly_review_v2" },
-        )) as ReturnType<TSchema["parse"]>;
+        const object = (await invokeStructured(resolved, input.schema, messages, {
+            name: input.schemaName ?? "founder_weekly_review_v2",
+        })) as ReturnType<TSchema["parse"]>;
 
         console.info(
             `[fwr] generation ok    phase=${input.generationPhase ?? "initial"} ` +
-                `route=${resolved.route} model=${resolved.modelId} ${Date.now() - startedAt}ms`,
+                `route=${resolved.route} model=${resolved.modelId} ${Date.now() - startedAt}ms`
         );
 
         return {
@@ -86,7 +81,7 @@ export async function generateFounderWeeklyReviewStructured<
                 `route=${resolved.route} model=${resolved.modelId} ` +
                 `${Date.now() - startedAt}ms err=${
                     error instanceof Error ? error.message : String(error)
-                }`,
+                }`
         );
         throw error;
     }

@@ -7,8 +7,8 @@
  */
 
 export {
-  VectorRetriever,
-  createDocumentVectorRetriever,
-  createCompanyVectorRetriever,
-  createMultiDocVectorRetriever,
+    VectorRetriever,
+    createDocumentVectorRetriever,
+    createCompanyVectorRetriever,
+    createMultiDocVectorRetriever,
 } from "@launchstack/core/rag/retrievers";

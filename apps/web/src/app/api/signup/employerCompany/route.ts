@@ -1,8 +1,8 @@
-import {db} from "~/server/db";
+import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
-import {eq} from "drizzle-orm";
-import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
+import { eq } from "drizzle-orm";
+import { handleApiError, createSuccessResponse, createValidationError } from "~/lib/api-utils";
 import { ensureTokenAccount } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
@@ -55,11 +55,9 @@ export async function POST(request: Request) {
             })
             .returning({ id: company.id });
 
-        if(!newCompany) {
+        if (!newCompany) {
             console.error("Company creation returned no data. Database insert failed.");
-            return createValidationError(
-                "Could not create company. Please try again later."
-            );
+            return createValidationError("Could not create company. Please try again later.");
         }
 
         const companyId = BigInt(newCompany.id);
@@ -127,8 +125,7 @@ export async function POST(request: Request) {
             { userId, role: "owner" },
             "Company and owner account created successfully."
         );
-    }
-    catch (error: unknown) {
+    } catch (error: unknown) {
         console.error("Error during employer company signup:", error);
         if (error instanceof Error) {
             console.error("Error message:", error.message);

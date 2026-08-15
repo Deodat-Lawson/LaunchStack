@@ -10,10 +10,7 @@ export interface TranscriptionResult {
 
 export interface TranscriptionProvider {
     name: string;
-    transcribe(
-        audioBuffer: Buffer,
-        filename: string
-    ): Promise<ProviderResult<TranscriptionResult>>;
+    transcribe(audioBuffer: Buffer, filename: string): Promise<ProviderResult<TranscriptionResult>>;
 }
 
 let _provider: TranscriptionProvider | null = null;

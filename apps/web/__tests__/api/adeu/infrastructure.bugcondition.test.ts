@@ -22,16 +22,14 @@ describe("Fix 1.8: Secret removed from Docker build args — OPENAI_API_KEY not 
         // FIX: OPENAI_API_KEY should NOT be in the build args anchor as an actual key-value pair.
         // It should only be a runtime env var, never baked into image layers.
         const buildArgsSection =
-            /x-app-build-args:.*?&app-build-args\n([\s\S]*?)(?=\nservices:|\n\S)/.exec(
-                content,
-            );
+            /x-app-build-args:.*?&app-build-args\n([\s\S]*?)(?=\nservices:|\n\S)/.exec(content);
         expect(buildArgsSection).not.toBeNull();
 
         const buildArgs = buildArgsSection![1]!;
         // Filter out comment lines (lines starting with #) before checking
         const nonCommentLines = buildArgs
             .split("\n")
-            .filter((line) => !line.trim().startsWith("#"))
+            .filter(line => !line.trim().startsWith("#"))
             .join("\n");
         expect(nonCommentLines).not.toContain("OPENAI_API_KEY");
     });
@@ -46,17 +44,13 @@ describe("Single-endpoint chat runtime configuration", () => {
         // anchor (ADR-003: two processes must never disagree about
         // providers); the chat variables live there, and the app service
         // must merge the anchor in.
-        const sharedEnv = /x-shared-env:.*?&shared-env\n([\s\S]*?)(?=\nservices:)/.exec(
-            content,
-        );
+        const sharedEnv = /x-shared-env:.*?&shared-env\n([\s\S]*?)(?=\nservices:)/.exec(content);
         expect(sharedEnv).not.toBeNull();
         expect(sharedEnv![1]).toContain("CHAT_BASE_URL: ${CHAT_BASE_URL:-}");
         expect(sharedEnv![1]).toContain("CHAT_API_KEY: ${CHAT_API_KEY:-}");
         expect(sharedEnv![1]).toContain("CHAT_MODELS_CONFIG:");
 
-        const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(
-            content,
-        );
+        const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(content);
         expect(appService).not.toBeNull();
         expect(appService![1]).toContain("<<: *shared-env");
     });
@@ -64,12 +58,10 @@ describe("Single-endpoint chat runtime configuration", () => {
     it("mounts the chat model configuration so it is editable without a rebuild", () => {
         const composePath = path.join(ROOT, "docker-compose.yml");
         const content = fs.readFileSync(composePath, "utf-8");
-        const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(
-            content,
-        );
+        const appService = /\n  app:\n([\s\S]*?)(?=\n  \S|\nvolumes:)/.exec(content);
 
         expect(appService![1]).toContain(
-            "./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro",
+            "./apps/web/config/chat-models.yaml:/app/apps/web/config/chat-models.yaml:ro"
         );
     });
 
@@ -84,15 +76,9 @@ describe("Single-endpoint chat runtime configuration", () => {
      */
     describe.each([
         ["apps/web/Dockerfile", path.join("apps", "web", "Dockerfile")],
-        [
-            "apps/web/Dockerfile.prebuilt",
-            path.join("apps", "web", "Dockerfile.prebuilt"),
-        ],
+        ["apps/web/Dockerfile.prebuilt", path.join("apps", "web", "Dockerfile.prebuilt")],
     ])("%s runner", (_label, relativePath) => {
-        const dockerfile = fs.readFileSync(
-            path.join(ROOT, relativePath),
-            "utf-8",
-        );
+        const dockerfile = fs.readFileSync(path.join(ROOT, relativePath), "utf-8");
         const runner = dockerfile.slice(dockerfile.indexOf("AS runner"));
 
         // DEFAULT_CHAT_CONFIG_PATH in apps/web/src/server/chat-endpoint.ts.
@@ -100,31 +86,23 @@ describe("Single-endpoint chat runtime configuration", () => {
         const MOUNT_TARGET = "/app/apps/web/config/chat-models.yaml";
 
         it("starts in the directory the default config path resolves against", () => {
-            const workdirs = [...runner.matchAll(/^WORKDIR\s+(\S+)/gm)].map(
-                (match) => match[1]!,
-            );
+            const workdirs = [...runner.matchAll(/^WORKDIR\s+(\S+)/gm)].map(match => match[1]!);
             const finalWorkdir = workdirs[workdirs.length - 1];
 
             expect(finalWorkdir).toBeDefined();
-            expect(
-                path.posix.join(finalWorkdir!, DEFAULT_CHAT_CONFIG_PATH),
-            ).toBe(MOUNT_TARGET);
+            expect(path.posix.join(finalWorkdir!, DEFAULT_CHAT_CONFIG_PATH)).toBe(MOUNT_TARGET);
         });
 
         it("copies the config to that same resolved path", () => {
             // The source is `apps/web/config` in the prebuilt runner and
             // `/app/apps/web/config` in the builder-fed one.
-            const copy = /^COPY[^\n]*\s\/?(?:app\/)?apps\/web\/config\s+(\S+)\s*$/m.exec(
-                runner,
-            );
+            const copy = /^COPY[^\n]*\s\/?(?:app\/)?apps\/web\/config\s+(\S+)\s*$/m.exec(runner);
             expect(copy).not.toBeNull();
 
             // COPY destinations are relative to the WORKDIR in force at that
             // line, which is /app in both runner stages.
             const destination = path.posix.resolve("/app", copy![1]!);
-            expect(path.posix.join(destination, "chat-models.yaml")).toBe(
-                MOUNT_TARGET,
-            );
+            expect(path.posix.join(destination, "chat-models.yaml")).toBe(MOUNT_TARGET);
         });
 
         it("starts the server entrypoint from that working directory", () => {
@@ -132,13 +110,11 @@ describe("Single-endpoint chat runtime configuration", () => {
             expect(cmd).not.toBeNull();
 
             const argv = JSON.parse(cmd![1]!) as string[];
-            const workdirs = [...runner.matchAll(/^WORKDIR\s+(\S+)/gm)].map(
-                (match) => match[1]!,
-            );
+            const workdirs = [...runner.matchAll(/^WORKDIR\s+(\S+)/gm)].map(match => match[1]!);
             const entry = argv[argv.length - 1]!;
-            expect(
-                path.posix.resolve(workdirs[workdirs.length - 1]!, entry),
-            ).toBe("/app/apps/web/server.js");
+            expect(path.posix.resolve(workdirs[workdirs.length - 1]!, entry)).toBe(
+                "/app/apps/web/server.js"
+            );
         });
     });
 
@@ -197,8 +173,8 @@ describe("Fix 1.12: Log files excluded — *.log in .gitignore", () => {
         const content = fs.readFileSync(gitignorePath, "utf-8");
 
         // FIX: *.log is in .gitignore so log files cannot be accidentally committed
-        const lines = content.split("\n").map((l) => l.trim());
-        const hasWildcardLog = lines.some((l) => l === "*.log");
+        const lines = content.split("\n").map(l => l.trim());
+        const hasWildcardLog = lines.some(l => l === "*.log");
         expect(hasWildcardLog).toBe(true);
     });
 });
@@ -216,7 +192,7 @@ describe("Fix 1.18: Single adeu install — adeu not duplicated in Dockerfile", 
         // It should only be installed via requirements.txt.
         // A standalone pip install adeu line (not part of -r requirements.txt) is the bug.
         const lines = content.split("\n");
-        const hasStandalonePipInstallAdeu = lines.some((line) => {
+        const hasStandalonePipInstallAdeu = lines.some(line => {
             const trimmed = line.trim();
             // Match lines like "pip install adeu==0.9.0" but NOT "pip install -r requirements.txt"
             return /pip install(?!.*-r).*adeu/.test(trimmed) && !trimmed.includes("-r");

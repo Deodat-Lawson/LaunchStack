@@ -101,9 +101,7 @@ describe("grapheme-aware length", () => {
 
     it("weights each URL as 23 characters on X", () => {
         const url = `https://example.com/${"a".repeat(100)}`;
-        expect(effectiveCharLength(`Read ${url} now`, "x")).toBe(
-            countGraphemes("Read  now") + 23
-        );
+        expect(effectiveCharLength(`Read ${url} now`, "x")).toBe(countGraphemes("Read  now") + 23);
     });
 
     it("uses plain grapheme counting on other platforms", () => {

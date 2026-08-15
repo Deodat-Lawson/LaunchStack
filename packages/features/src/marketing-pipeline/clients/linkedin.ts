@@ -1,4 +1,3 @@
-
 import type { MarketingResearchResult } from "../types";
 
 interface LinkedInPost {
@@ -44,7 +43,7 @@ class LinkedInClient {
     private async makeRequest<T>(url: string): Promise<T> {
         const response = await fetch(url, {
             headers: {
-                "Authorization": `Bearer ${this.accessToken}`,
+                Authorization: `Bearer ${this.accessToken}`,
                 "Content-Type": "application/json",
                 "X-Restli-Protocol-Version": "2.0.0",
             },
@@ -52,13 +51,18 @@ class LinkedInClient {
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`LinkedIn API error: ${response.status} ${response.statusText} - ${errorText}`);
+            throw new Error(
+                `LinkedIn API error: ${response.status} ${response.statusText} - ${errorText}`
+            );
         }
 
         return response.json() as Promise<T>;
     }
 
-    async searchTrendingPosts(query: string, maxResults: number): Promise<MarketingResearchResult[]> {
+    async searchTrendingPosts(
+        query: string,
+        maxResults: number
+    ): Promise<MarketingResearchResult[]> {
         try {
             // Note: LinkedIn's public content search is limited
             // We'll focus on UGC (User Generated Content) posts that are publicly available
@@ -75,14 +79,15 @@ class LinkedInClient {
 
             return data.elements
                 .filter(post => this.isRelevantPost(post, query))
-                .map((post): MarketingResearchResult => ({
-                    title: this.extractTitle(post),
-                    url: this.generatePostUrl(post.id),
-                    snippet: this.formatPostSnippet(post),
-                    source: "linkedin" as const,
-                }))
+                .map(
+                    (post): MarketingResearchResult => ({
+                        title: this.extractTitle(post),
+                        url: this.generatePostUrl(post.id),
+                        snippet: this.formatPostSnippet(post),
+                        source: "linkedin" as const,
+                    })
+                )
                 .slice(0, maxResults);
-
         } catch (error) {
             console.warn("LinkedIn search error:", error);
             // Return empty array instead of throwing to allow fallback to web search
@@ -92,7 +97,7 @@ class LinkedInClient {
 
     private isRelevantPost(post: LinkedInPost, query: string): boolean {
         const text = this.getPostText(post).toLowerCase();
-        const queryWords = query.toLowerCase().split(' ');
+        const queryWords = query.toLowerCase().split(" ");
         return queryWords.some(word => text.includes(word));
     }
 
@@ -102,7 +107,7 @@ class LinkedInClient {
 
     private extractTitle(post: LinkedInPost): string {
         const text = this.getPostText(post);
-        const firstLine = text.split('\n')[0] ?? text;
+        const firstLine = text.split("\n")[0] ?? text;
         return firstLine.slice(0, 120) + (firstLine.length > 120 ? "..." : "");
     }
 
@@ -114,7 +119,7 @@ class LinkedInClient {
     private formatPostSnippet(post: LinkedInPost): string {
         const text = this.getPostText(post);
         const social = post.socialDetail?.totalSocialActivityCounts;
-        
+
         if (social) {
             const engagement = `${social.numLikes} likes, ${social.numComments} comments, ${social.numShares} shares`;
             return `${text.slice(0, 250)}... [${engagement}]`;
@@ -124,14 +129,18 @@ class LinkedInClient {
     }
 
     // Alternative: Search LinkedIn articles/posts via web scraping approach
-    async searchLinkedInContent(_query: string, _maxResults: number): Promise<MarketingResearchResult[]> {
+    async searchLinkedInContent(
+        _query: string,
+        _maxResults: number
+    ): Promise<MarketingResearchResult[]> {
         try {
             // This is a fallback approach using LinkedIn's public search
             // Note: This requires careful rate limiting and may have restrictions
             // For now, we'll return an empty array and log that manual implementation is needed
-            console.warn("LinkedIn content search requires manual implementation due to API restrictions");
+            console.warn(
+                "LinkedIn content search requires manual implementation due to API restrictions"
+            );
             return [];
-
         } catch (error) {
             console.warn("LinkedIn content search error:", error);
             return [];

@@ -26,107 +26,104 @@ export const TEST_API_KEY = "test-api-key";
 export const ALLOWED_ORIGIN = "http://files.test";
 
 export function testConfig(overrides: Partial<Config> = {}): Config {
-  return {
-    port: 0,
-    apiKey: TEST_API_KEY,
-    doclingServeTimeoutMs: 5_000,
-    fetchTimeoutMs: 5_000,
-    maxFetchBytes: 10 * 1024 * 1024,
-    allowedFetchOrigins: [ALLOWED_ORIGIN],
-    ...overrides,
-  };
+    return {
+        port: 0,
+        apiKey: TEST_API_KEY,
+        doclingServeTimeoutMs: 5_000,
+        fetchTimeoutMs: 5_000,
+        maxFetchBytes: 10 * 1024 * 1024,
+        allowedFetchOrigins: [ALLOWED_ORIGIN],
+        ...overrides,
+    };
 }
 
 export interface TestServer {
-  url: string;
-  close: () => Promise<void>;
+    url: string;
+    close: () => Promise<void>;
 }
 
-export async function startApp(
-  config: Config,
-  deps: AppDeps = {},
-): Promise<TestServer> {
-  const app = createApp(config, deps);
-  const server = await new Promise<Server>((resolve) => {
-    const s = app.listen(0, "127.0.0.1", () => resolve(s));
-  });
-  const { port } = server.address() as AddressInfo;
-  return {
-    url: `http://127.0.0.1:${port}`,
-    close: () =>
-      new Promise<void>((resolve, reject) => {
-        server.close((err) => (err ? reject(err) : resolve()));
-      }),
-  };
+export async function startApp(config: Config, deps: AppDeps = {}): Promise<TestServer> {
+    const app = createApp(config, deps);
+    const server = await new Promise<Server>(resolve => {
+        const s = app.listen(0, "127.0.0.1", () => resolve(s));
+    });
+    const { port } = server.address() as AddressInfo;
+    return {
+        url: `http://127.0.0.1:${port}`,
+        close: () =>
+            new Promise<void>((resolve, reject) => {
+                server.close(err => (err ? reject(err) : resolve()));
+            }),
+    };
 }
 
 export function postJson(
-  base: string,
-  route: string,
-  body: unknown,
-  apiKey: string | null = TEST_API_KEY,
-  extraHeaders: Record<string, string> = {},
+    base: string,
+    route: string,
+    body: unknown,
+    apiKey: string | null = TEST_API_KEY,
+    extraHeaders: Record<string, string> = {}
 ): Promise<Response> {
-  return fetch(base + route, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(apiKey === null ? {} : { "X-API-Key": apiKey }),
-      ...extraHeaders,
-    },
-    body: JSON.stringify(body),
-  });
+    return fetch(base + route, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            ...(apiKey === null ? {} : { "X-API-Key": apiKey }),
+            ...extraHeaders,
+        },
+        body: JSON.stringify(body),
+    });
 }
 
 export function getJson(
-  base: string,
-  route: string,
-  apiKey: string | null = TEST_API_KEY,
+    base: string,
+    route: string,
+    apiKey: string | null = TEST_API_KEY
 ): Promise<Response> {
-  return fetch(base + route, {
-    headers: apiKey === null ? {} : { "X-API-Key": apiKey },
-  });
+    return fetch(base + route, {
+        headers: apiKey === null ? {} : { "X-API-Key": apiKey },
+    });
 }
 
 /** fetchImpl stub serving fixed bytes for any allow-listed document URL. */
 export function bytesFetch(
-  bytes: Uint8Array,
-  contentType = "application/pdf",
+    bytes: Uint8Array,
+    contentType = "application/pdf"
 ): (url: string, init?: RequestInit) => Promise<Response> {
-  return async () =>
-    new Response(new Uint8Array(bytes), {
-      status: 200,
-      headers: { "Content-Type": contentType },
-    });
+    return async () =>
+        new Response(new Uint8Array(bytes), {
+            status: 200,
+            headers: { "Content-Type": contentType },
+        });
 }
 
 /** fetchImpl that fails the test if the service tries any outbound fetch. */
 export function forbiddenFetch(
-  calls: string[] = [],
+    calls: string[] = []
 ): (url: string, init?: RequestInit) => Promise<Response> {
-  return async (url) => {
-    calls.push(url);
-    throw new Error(`unexpected outbound fetch: ${url}`);
-  };
+    return async url => {
+        calls.push(url);
+        throw new Error(`unexpected outbound fetch: ${url}`);
+    };
 }
 
 const schemaPath = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../../../packages/protocol/schemas/v1/evidence-document.schema.json",
+    path.dirname(fileURLToPath(import.meta.url)),
+    "../../../packages/protocol/schemas/v1/evidence-document.schema.json"
 );
 
 const ajv = new Ajv({ strict: false, allErrors: true });
 addFormats(ajv);
 
 export const validateEvidenceDocument: ValidateFunction = ajv.compile(
-  JSON.parse(readFileSync(schemaPath, "utf8")),
+    JSON.parse(readFileSync(schemaPath, "utf8"))
 );
 
 export function expectValidEvidenceDocument(doc: unknown): void {
-  const valid = validateEvidenceDocument(doc);
-  if (!valid) {
-    throw new Error(
-      `EvidenceDocument failed canonical schema validation: ${JSON.stringify(validateEvidenceDocument.errors, null, 2)}`,
-    );
-  }
+    const valid = validateEvidenceDocument(doc);
+    if (!valid) {
+        throw new Error(
+            `EvidenceDocument failed canonical schema validation: ${JSON.stringify(validateEvidenceDocument.errors, null, 2)}`
+        );
+    }
 }

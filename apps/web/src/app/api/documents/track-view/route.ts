@@ -20,12 +20,7 @@ export async function POST(request: Request) {
         const [doc] = await db
             .select({ id: document.id })
             .from(document)
-            .where(
-                and(
-                    eq(document.id, documentId),
-                    eq(document.companyId, ctx.data.companyId),
-                )
-            );
+            .where(and(eq(document.id, documentId), eq(document.companyId, ctx.data.companyId)));
 
         if (!doc) {
             return NextResponse.json(

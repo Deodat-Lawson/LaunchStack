@@ -23,7 +23,7 @@ const NavBar = () => {
                         className={styles.iconButton}
                         aria-label="Go to home"
                     >
-                        <Home className={styles.iconButtonIcon}/>
+                        <Home className={styles.iconButtonIcon} />
                     </button>
                 </div>
             </div>

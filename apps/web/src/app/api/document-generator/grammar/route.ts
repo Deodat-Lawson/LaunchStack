@@ -1,6 +1,6 @@
 /**
  * Document Generator - Grammar & Style Checking API
- * 
+ *
  * Actions:
  * - check: Check grammar and spelling
  * - improve_clarity: Improve readability and clarity
@@ -22,7 +22,14 @@ export const maxDuration = 60;
 // Suggestion types
 interface GrammarSuggestion {
     id: string;
-    type: "grammar" | "spelling" | "punctuation" | "style" | "clarity" | "formality" | "consistency";
+    type:
+        | "grammar"
+        | "spelling"
+        | "punctuation"
+        | "style"
+        | "clarity"
+        | "formality"
+        | "consistency";
     severity: "error" | "warning" | "suggestion";
     original: string;
     suggestion: string;
@@ -34,14 +41,24 @@ interface GrammarSuggestion {
 }
 
 const GrammarResponseSchema = z.object({
-    suggestions: z.array(z.object({
-        id: z.union([z.string(), z.number()]).optional(),
-        type: z.enum(["grammar", "spelling", "punctuation", "style", "clarity", "formality", "consistency"]),
-        severity: z.enum(["error", "warning", "suggestion"]),
-        original: z.string(),
-        suggestion: z.string(),
-        explanation: z.string(),
-    })),
+    suggestions: z.array(
+        z.object({
+            id: z.union([z.string(), z.number()]).optional(),
+            type: z.enum([
+                "grammar",
+                "spelling",
+                "punctuation",
+                "style",
+                "clarity",
+                "formality",
+                "consistency",
+            ]),
+            severity: z.enum(["error", "warning", "suggestion"]),
+            original: z.string(),
+            suggestion: z.string(),
+            explanation: z.string(),
+        })
+    ),
     overallScore: z.number().optional(),
     readabilityScore: z.number().optional(),
     summary: z.string().optional(),
@@ -52,11 +69,17 @@ const GrammarResponseSchema = z.object({
 const GrammarSchema = z.object({
     action: z.enum(["check", "improve_clarity", "adjust_formality", "consistency"]),
     content: z.string().min(1).max(50000),
-    options: z.object({
-        formalityLevel: z.enum(["very_formal", "formal", "neutral", "casual", "very_casual"]).optional(),
-        focus: z.array(z.enum(["grammar", "spelling", "punctuation", "style", "clarity"])).optional(),
-        model: z.string().min(1).optional(),
-    }).optional(),
+    options: z
+        .object({
+            formalityLevel: z
+                .enum(["very_formal", "formal", "neutral", "casual", "very_casual"])
+                .optional(),
+            focus: z
+                .array(z.enum(["grammar", "spelling", "punctuation", "style", "clarity"]))
+                .optional(),
+            model: z.string().min(1).optional(),
+        })
+        .optional(),
 });
 
 const GRAMMAR_CHECK_PROMPT = `You are an expert editor specializing in grammar, spelling, and punctuation. Analyze the text and identify all issues.
@@ -176,7 +199,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = GrammarSchema.safeParse(body);
 
         if (!validation.success) {
@@ -191,14 +214,11 @@ export async function POST(request: Request) {
 
         const resolved = resolveConfiguredChatModel({ route: "fast" });
         const modelId = resolved.modelId;
-        const compatibility = validateDeprecatedChatSelection(
-            { model: options?.model },
-            resolved,
-        );
+        const compatibility = validateDeprecatedChatSelection({ model: options?.model }, resolved);
         if (!compatibility.ok) {
             return NextResponse.json(
                 { success: false, message: compatibility.message },
-                { status: compatibility.status },
+                { status: compatibility.status }
             );
         }
 
@@ -219,7 +239,10 @@ export async function POST(request: Request) {
 
             case "adjust_formality":
                 const formalityLevel = options?.formalityLevel ?? "formal";
-                systemPrompt = FORMALITY_PROMPT.replace("{{FORMALITY_LEVEL}}", formalityLevel.replace("_", " "));
+                systemPrompt = FORMALITY_PROMPT.replace(
+                    "{{FORMALITY_LEVEL}}",
+                    formalityLevel.replace("_", " ")
+                );
                 userPrompt += `\n\nAdjust to: ${formalityLevel.replace("_", " ")} tone`;
                 break;
 
@@ -234,17 +257,21 @@ export async function POST(request: Request) {
                 );
         }
 
-        const extras = await invokeStructured(resolved, GrammarResponseSchema, [
-            new SystemMessage(systemPrompt),
-            new HumanMessage(userPrompt),
-        ], { name: "grammar_response" });
+        const extras = await invokeStructured(
+            resolved,
+            GrammarResponseSchema,
+            [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
+            { name: "grammar_response" }
+        );
         const suggestions: GrammarSuggestion[] = extras.suggestions.map((suggestion, index) => ({
             ...suggestion,
             id: String(suggestion.id ?? index + 1),
         }));
         const processingTimeMs = Date.now() - startTime;
 
-        console.log(`✅ [Grammar] ${action} completed in ${processingTimeMs}ms with ${suggestions.length} suggestions`);
+        console.log(
+            `✅ [Grammar] ${action} completed in ${processingTimeMs}ms with ${suggestions.length} suggestions`
+        );
 
         return NextResponse.json({
             success: true,
@@ -257,20 +284,21 @@ export async function POST(request: Request) {
                 suggestions: suggestions.filter(s => s.severity === "suggestion").length,
             },
             ...(extras.overallScore !== undefined ? { overallScore: extras.overallScore } : {}),
-            ...(extras.readabilityScore !== undefined ? { readabilityScore: extras.readabilityScore } : {}),
+            ...(extras.readabilityScore !== undefined
+                ? { readabilityScore: extras.readabilityScore }
+                : {}),
             ...(extras.summary ? { summary: extras.summary } : {}),
             ...(extras.issues ? { issues: extras.issues } : {}),
             processingTimeMs,
             model: modelId,
         });
-
     } catch (error) {
         console.error("❌ [Grammar] Error:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to check grammar",
-                error: "Failed to check grammar"
+                error: "Failed to check grammar",
             },
             { status: 500 }
         );

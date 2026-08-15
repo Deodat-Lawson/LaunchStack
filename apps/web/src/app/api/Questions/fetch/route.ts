@@ -26,17 +26,23 @@ export async function POST(request: Request) {
             .limit(1);
 
         if (!targetDocument) {
-            return NextResponse.json({
-                success: false,
-                message: "Document not found."
-            }, { status: 404 });
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Document not found.",
+                },
+                { status: 404 }
+            );
         }
 
         if (targetDocument.companyId !== ctx.data.companyId) {
-            return NextResponse.json({
-                success: false,
-                message: "You do not have access to this document."
-            }, { status: 403 });
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "You do not have access to this document.",
+                },
+                { status: 403 }
+            );
         }
 
         const userChatHistory = await db
@@ -55,9 +61,12 @@ export async function POST(request: Request) {
         });
     } catch (error: unknown) {
         console.error(error);
-        return NextResponse.json({
-            success: false,
-            error: "Failed to fetch questions"
-        }, { status: 500 });
+        return NextResponse.json(
+            {
+                success: false,
+                error: "Failed to fetch questions",
+            },
+            { status: 500 }
+        );
     }
 }

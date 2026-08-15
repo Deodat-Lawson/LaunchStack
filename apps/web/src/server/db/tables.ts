@@ -1,5 +1,13 @@
 import { getTableName, sql } from "drizzle-orm";
-import { document, documentContextChunks, documentEmbeddings768, documentEmbeddings1024, documentMetadata, documentRetrievalChunks, documentStructure } from "@launchstack/core/db/schema";
+import {
+    document,
+    documentContextChunks,
+    documentEmbeddings768,
+    documentEmbeddings1024,
+    documentMetadata,
+    documentRetrievalChunks,
+    documentStructure,
+} from "@launchstack/core/db/schema";
 import { documentNoteEmbeddings, documentNotes, trendSearchCache } from "~/server/db/schema";
 
 /**
@@ -19,31 +27,30 @@ import { documentNoteEmbeddings, documentNotes, trendSearchCache } from "~/serve
  * Use `T.*` inside sql`` templates; use `NAME.*` where a bare string is needed.
  */
 
-const ident = <T extends { _: unknown }>(table: T) =>
-  sql.identifier(getTableName(table as never));
+const ident = <T extends { _: unknown }>(table: T) => sql.identifier(getTableName(table as never));
 
 export const NAME = {
-  document: getTableName(document),
-  contextChunks: getTableName(documentContextChunks),
-  retrievalChunks: getTableName(documentRetrievalChunks),
-  structure: getTableName(documentStructure),
-  metadata: getTableName(documentMetadata),
-  notes: getTableName(documentNotes),
-  noteEmbeddings: getTableName(documentNoteEmbeddings),
-  embeddings768: getTableName(documentEmbeddings768),
-  embeddings1024: getTableName(documentEmbeddings1024),
-  trendSearchCache: getTableName(trendSearchCache),
+    document: getTableName(document),
+    contextChunks: getTableName(documentContextChunks),
+    retrievalChunks: getTableName(documentRetrievalChunks),
+    structure: getTableName(documentStructure),
+    metadata: getTableName(documentMetadata),
+    notes: getTableName(documentNotes),
+    noteEmbeddings: getTableName(documentNoteEmbeddings),
+    embeddings768: getTableName(documentEmbeddings768),
+    embeddings1024: getTableName(documentEmbeddings1024),
+    trendSearchCache: getTableName(trendSearchCache),
 } as const;
 
 export const T = {
-  document: ident(document),
-  contextChunks: ident(documentContextChunks),
-  retrievalChunks: ident(documentRetrievalChunks),
-  structure: ident(documentStructure),
-  metadata: ident(documentMetadata),
-  notes: ident(documentNotes),
-  noteEmbeddings: ident(documentNoteEmbeddings),
-  embeddings768: ident(documentEmbeddings768),
-  embeddings1024: ident(documentEmbeddings1024),
-  trendSearchCache: ident(trendSearchCache),
+    document: ident(document),
+    contextChunks: ident(documentContextChunks),
+    retrievalChunks: ident(documentRetrievalChunks),
+    structure: ident(documentStructure),
+    metadata: ident(documentMetadata),
+    notes: ident(documentNotes),
+    noteEmbeddings: ident(documentNoteEmbeddings),
+    embeddings768: ident(documentEmbeddings768),
+    embeddings1024: ident(documentEmbeddings1024),
+    trendSearchCache: ident(trendSearchCache),
 } as const;

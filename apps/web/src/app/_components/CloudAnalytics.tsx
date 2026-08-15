@@ -14,8 +14,7 @@ import { getDeploymentMode } from "~/server/deployment";
  * code and are useful to measure, and $VERCEL is only ever set on Vercel.
  */
 export function CloudAnalytics() {
-  const enabled =
-    getDeploymentMode() === "cloud" || process.env.VERCEL === "1";
-  if (!enabled) return null;
-  return <Analytics />;
+    const enabled = getDeploymentMode() === "cloud" || process.env.VERCEL === "1";
+    if (!enabled) return null;
+    return <Analytics />;
 }

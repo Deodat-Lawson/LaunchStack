@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         } catch {
             return NextResponse.json(
                 { success: false, message: "Invalid JSON body" },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         if (!validation.success) {
             return NextResponse.json(
                 { success: false, message: "Invalid input", errors: validation.error.flatten() },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         if (Number.isNaN(companyId)) {
             return NextResponse.json(
                 { success: false, message: "Invalid company ID" },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
@@ -62,9 +62,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, data: result });
     } catch (error) {
         console.error("[marketing-pipeline/refine] error:", error);
-        return NextResponse.json(
-            { success: false, message: "Refinement failed" },
-            { status: 500 },
-        );
+        return NextResponse.json({ success: false, message: "Refinement failed" }, { status: 500 });
     }
 }

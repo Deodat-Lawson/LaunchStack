@@ -22,11 +22,11 @@ export type DeploymentMode = "self-hosted" | "cloud";
  * schema-only default would silently be `undefined` in every test.
  */
 export function getDeploymentMode(): DeploymentMode {
-  return env.server.DEPLOYMENT_MODE ?? "self-hosted";
+    return env.server.DEPLOYMENT_MODE ?? "self-hosted";
 }
 
 export function isCloudDeployment(): boolean {
-  return getDeploymentMode() === "cloud";
+    return getDeploymentMode() === "cloud";
 }
 
 /**
@@ -40,7 +40,7 @@ export function isCloudDeployment(): boolean {
  * one-way door.
  */
 export function getMeteringMode(): MeteringMode {
-  return isCloudDeployment() ? "enforce" : "record";
+    return isCloudDeployment() ? "enforce" : "record";
 }
 
 /**
@@ -54,7 +54,7 @@ export function getMeteringMode(): MeteringMode {
  * packages/* the slot is correct and this module is unreachable by design.
  */
 export function isMeteringEnforced(): boolean {
-  return getMeteringMode() === "enforce";
+    return getMeteringMode() === "enforce";
 }
 
 let loggedMode = false;
@@ -69,13 +69,13 @@ let loggedMode = false;
  * warn-once pattern in ~/app/api/metrics/route.ts.
  */
 export function logDeploymentModeOnce(): void {
-  if (loggedMode) return;
-  loggedMode = true;
-  const mode = getDeploymentMode();
-  console.info(
-    `[deployment] mode=${mode} metering=${getMeteringMode()}` +
-      (mode === "self-hosted" && env.server.DEPLOYMENT_MODE == null
-        ? " (DEPLOYMENT_MODE unset — defaulting to self-hosted)"
-        : ""),
-  );
+    if (loggedMode) return;
+    loggedMode = true;
+    const mode = getDeploymentMode();
+    console.info(
+        `[deployment] mode=${mode} metering=${getMeteringMode()}` +
+            (mode === "self-hosted" && env.server.DEPLOYMENT_MODE == null
+                ? " (DEPLOYMENT_MODE unset — defaulting to self-hosted)"
+                : "")
+    );
 }

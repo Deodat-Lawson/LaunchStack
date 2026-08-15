@@ -46,7 +46,12 @@ import type { RawSearchResult, SearchCategory } from "@launchstack/features/tren
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
-const validCategories = ["fashion", "finance", "business", "tech"] as const satisfies readonly SearchCategory[];
+const validCategories = [
+    "fashion",
+    "finance",
+    "business",
+    "tech",
+] as const satisfies readonly SearchCategory[];
 
 const categoryArb = fc.constantFrom(...validCategories);
 
@@ -71,7 +76,7 @@ const rawResultsAtLeast5Arb = fc.array(rawResultArb, { minLength: 5, maxLength: 
 
 /** Build mock return so every sourceUrl is from the input raw results. */
 function buildMockResults(rawResults: RawSearchResult[], count: number) {
-    const urls = rawResults.map((r) => r.url);
+    const urls = rawResults.map(r => r.url);
     return Array.from({ length: Math.min(count, urls.length) }, (_, i) => ({
         sourceUrl: urls[i] ?? "",
         summary: `Summary for result ${i + 1}`,
@@ -148,7 +153,7 @@ describe("Property 8: Source URL traceability", () => {
                     companyContext: string,
                     categories: SearchCategory[]
                 ) => {
-                    const urlSet = new Set(rawResults.map((r) => r.url));
+                    const urlSet = new Set(rawResults.map(r => r.url));
                     const mockResults = buildMockResults(rawResults, 5);
                     mockInvoke.mockResolvedValue({ results: mockResults });
 
@@ -192,12 +197,9 @@ describe("Unit: fewer than 5 raw results triggers placeholder padding", () => {
             ],
         });
 
-        const output = await synthesizeResults(
-            rawResults,
-            "test query",
-            "test company context",
-            ["tech"]
-        );
+        const output = await synthesizeResults(rawResults, "test query", "test company context", [
+            "tech",
+        ]);
 
         expect(output).toHaveLength(5);
         expect(output[0]).toMatchObject({

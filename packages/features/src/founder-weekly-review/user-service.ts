@@ -61,9 +61,7 @@ function assertReportingPeriodMatchesSnapshot(
 }
 
 export class FounderWeeklyReviewUserService {
-    constructor(
-        private readonly repository = new FounderWeeklyReviewRepository()
-    ) {}
+    constructor(private readonly repository = new FounderWeeklyReviewRepository()) {}
 
     async createOrGetRun(
         actor: FounderWeeklyReviewUserActor,
@@ -71,28 +69,63 @@ export class FounderWeeklyReviewUserService {
     ): Promise<FounderWeeklyReviewRunRecord> {
         assertWorkspaceMutationRole(actor.role);
         let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | undefined;
-        try { evidenceSnapshot = input.evidenceSnapshot ? parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot) : undefined; }
-        catch (error) { if (error instanceof ZodError) throw new FounderWeeklyReviewInvalidPayloadError(error.message); throw error; }
-        if (evidenceSnapshot) assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
+        try {
+            evidenceSnapshot = input.evidenceSnapshot
+                ? parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot)
+                : undefined;
+        } catch (error) {
+            if (error instanceof ZodError)
+                throw new FounderWeeklyReviewInvalidPayloadError(error.message);
+            throw error;
+        }
+        if (evidenceSnapshot)
+            assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
 
-        return (await this.repository.createOrGetByRequestKeyWithResult({
+        return (
+            await this.repository.createOrGetByRequestKeyWithResult({
+                id: `fwr_${randomUUID()}`,
+                companyId: actor.companyId,
+                requestKey: input.requestKey,
+                reportingPeriod: input.reportingPeriod,
+                evidenceSnapshot,
+                collectionInput: input.collectionInput ?? {
+                    workspaceTimezone: evidenceSnapshot?.workspaceTimezone ?? "UTC",
+                    actorExternalUserId: actor.externalUserId,
+                },
+                createdByActorId: buildFounderWeeklyReviewActorId(actor),
+            })
+        ).run;
+    }
+
+    async createOrGetRunWithMetadata(
+        actor: FounderWeeklyReviewUserActor,
+        input: CreateFounderWeeklyReviewRunRequest
+    ): Promise<CreateFounderWeeklyReviewRunResult> {
+        assertWorkspaceMutationRole(actor.role);
+        let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | undefined;
+        try {
+            evidenceSnapshot = input.evidenceSnapshot
+                ? parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot)
+                : undefined;
+        } catch (error) {
+            if (error instanceof ZodError)
+                throw new FounderWeeklyReviewInvalidPayloadError(error.message);
+            throw error;
+        }
+        if (evidenceSnapshot)
+            assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
+        return this.repository.createOrGetByRequestKeyWithResult({
             id: `fwr_${randomUUID()}`,
             companyId: actor.companyId,
             requestKey: input.requestKey,
             reportingPeriod: input.reportingPeriod,
             evidenceSnapshot,
-            collectionInput: input.collectionInput ?? { workspaceTimezone: evidenceSnapshot?.workspaceTimezone ?? "UTC", actorExternalUserId: actor.externalUserId },
+            collectionInput: input.collectionInput ?? {
+                workspaceTimezone: evidenceSnapshot?.workspaceTimezone ?? "UTC",
+                actorExternalUserId: actor.externalUserId,
+            },
             createdByActorId: buildFounderWeeklyReviewActorId(actor),
-        })).run;
-    }
-
-    async createOrGetRunWithMetadata(actor: FounderWeeklyReviewUserActor, input: CreateFounderWeeklyReviewRunRequest): Promise<CreateFounderWeeklyReviewRunResult> {
-        assertWorkspaceMutationRole(actor.role);
-        let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | undefined;
-        try { evidenceSnapshot = input.evidenceSnapshot ? parseFounderWeeklyReviewEvidenceSnapshot(input.evidenceSnapshot) : undefined; }
-        catch (error) { if (error instanceof ZodError) throw new FounderWeeklyReviewInvalidPayloadError(error.message); throw error; }
-        if (evidenceSnapshot) assertReportingPeriodMatchesSnapshot(input.reportingPeriod, evidenceSnapshot);
-        return this.repository.createOrGetByRequestKeyWithResult({ id: `fwr_${randomUUID()}`, companyId: actor.companyId, requestKey: input.requestKey, reportingPeriod: input.reportingPeriod, evidenceSnapshot, collectionInput: input.collectionInput ?? { workspaceTimezone: evidenceSnapshot?.workspaceTimezone ?? "UTC", actorExternalUserId: actor.externalUserId }, createdByActorId: buildFounderWeeklyReviewActorId(actor) });
+        });
     }
 
     async getRun(
@@ -143,14 +176,32 @@ export class FounderWeeklyReviewUserService {
         );
     }
 
-    async retryFailedRunWithMetadata(actor: FounderWeeklyReviewUserActor, runId: string, requestKey: string): Promise<RetryFounderWeeklyReviewRunResult> {
+    async retryFailedRunWithMetadata(
+        actor: FounderWeeklyReviewUserActor,
+        runId: string,
+        requestKey: string
+    ): Promise<RetryFounderWeeklyReviewRunResult> {
         assertWorkspaceMutationRole(actor.role);
-        const result = await this.repository.retryFailedRun({ operationId: `fwrop_${randomUUID()}`, companyId: actor.companyId, runId, requestKey, actorId: buildFounderWeeklyReviewActorId(actor) });
-        if (result.outcome === "not_found" || !result.run) throw new FounderWeeklyReviewNotFoundError(runId);
+        const result = await this.repository.retryFailedRun({
+            operationId: `fwrop_${randomUUID()}`,
+            companyId: actor.companyId,
+            runId,
+            requestKey,
+            actorId: buildFounderWeeklyReviewActorId(actor),
+        });
+        if (result.outcome === "not_found" || !result.run)
+            throw new FounderWeeklyReviewNotFoundError(runId);
         if (result.outcome === "updated") return { run: result.run, transitionApplied: true };
-        if (result.outcome === "idempotent" && (result.run.status === "failed" || result.run.status === "queued")) return { run: result.run, transitionApplied: false };
-        if (result.run.status !== "failed") throw new FounderWeeklyReviewInvalidTransitionError(result.run.status, "retry");
-        throw new FounderWeeklyReviewConflictError(`Retry request key "${requestKey}" belongs to a different failure cycle for run "${runId}".`);
+        if (
+            result.outcome === "idempotent" &&
+            (result.run.status === "failed" || result.run.status === "queued")
+        )
+            return { run: result.run, transitionApplied: false };
+        if (result.run.status !== "failed")
+            throw new FounderWeeklyReviewInvalidTransitionError(result.run.status, "retry");
+        throw new FounderWeeklyReviewConflictError(
+            `Retry request key "${requestKey}" belongs to a different failure cycle for run "${runId}".`
+        );
     }
 
     async updateDraft(
@@ -181,10 +232,7 @@ export class FounderWeeklyReviewUserService {
             return result.run;
         }
         if (result.run.status === "published") {
-            throw new FounderWeeklyReviewInvalidTransitionError(
-                result.run.status,
-                "edit"
-            );
+            throw new FounderWeeklyReviewInvalidTransitionError(result.run.status, "edit");
         }
         throw new FounderWeeklyReviewInvalidTransitionError(result.run.status, "edit");
     }

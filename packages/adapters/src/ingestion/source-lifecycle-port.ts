@@ -10,10 +10,7 @@ import type {
     SourceLifecycleResult,
 } from "@launchstack/application";
 
-import {
-    createDocumentLifecycle,
-    createDocumentVersionLifecycle,
-} from "./source-lifecycle";
+import { createDocumentLifecycle, createDocumentVersionLifecycle } from "./source-lifecycle";
 
 function serializeCreationKey(key: string | string[]): string {
     return typeof key === "string" ? key : JSON.stringify(key);
@@ -48,9 +45,7 @@ export class DrizzleSourceLifecycle implements SourceLifecyclePort {
         };
     }
 
-    async createSourceVersion(
-        cmd: CreateSourceVersionCommand
-    ): Promise<SourceLifecycleResult> {
+    async createSourceVersion(cmd: CreateSourceVersionCommand): Promise<SourceLifecycleResult> {
         const result = await createDocumentVersionLifecycle({
             documentId: cmd.sourceId,
             companyId: BigInt(cmd.actor.companyId),

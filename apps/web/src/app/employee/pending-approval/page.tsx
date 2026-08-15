@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState, useCallback } from 'react';
-import { Clock, Building, Mail } from 'lucide-react';
-import { useRouter } from "next/navigation"
+import React, { useEffect, useState, useCallback } from "react";
+import { Clock, Building, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
-import styles from '~/styles/Employee/PendingApproval.module.css';
+import styles from "~/styles/Employee/PendingApproval.module.css";
 import NavBar from "~/app/employer/employees/NavBar";
 
 interface EmployeeData {
@@ -73,7 +73,9 @@ const PendingApproval: React.FC = () => {
                                 <Building className={styles.detailIcon} />
                                 <div className={styles.detailContent}>
                                     <span className={styles.detailLabel}>Company</span>
-                                    <span className={styles.detailValue}>{currentEmployeeData?.company ?? ""}</span>
+                                    <span className={styles.detailValue}>
+                                        {currentEmployeeData?.company ?? ""}
+                                    </span>
                                 </div>
                             </div>
 
@@ -81,7 +83,9 @@ const PendingApproval: React.FC = () => {
                                 <Mail className={styles.detailIcon} />
                                 <div className={styles.detailContent}>
                                     <span className={styles.detailLabel}>Email</span>
-                                    <span className={styles.detailValue}>{currentEmployeeData?.email ?? ""}</span>
+                                    <span className={styles.detailValue}>
+                                        {currentEmployeeData?.email ?? ""}
+                                    </span>
                                 </div>
                             </div>
 
@@ -89,7 +93,9 @@ const PendingApproval: React.FC = () => {
                                 <Clock className={styles.detailIcon} />
                                 <div className={styles.detailContent}>
                                     <span className={styles.detailLabel}>Submission Date</span>
-                                    <span className={styles.detailValue}>{currentEmployeeData?.submissionDate ?? ""}</span>
+                                    <span className={styles.detailValue}>
+                                        {currentEmployeeData?.submissionDate ?? ""}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +103,7 @@ const PendingApproval: React.FC = () => {
 
                     <div className={styles.supportSection}>
                         <p className={styles.supportText}>
-                            Need assistance? Contact support at{' '}
+                            Need assistance? Contact support at{" "}
                             <a href="mailto:pdraionline@gmail.com" className={styles.supportLink}>
                                 pdraionline@gmail.com
                             </a>

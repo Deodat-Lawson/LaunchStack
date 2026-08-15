@@ -15,15 +15,15 @@ import { createSlot } from "../internal/slot";
 const portSlot = createSlot<JobDispatcherPort>("jobs/port");
 
 export function configureJobDispatcher(port: JobDispatcherPort): void {
-  portSlot.set(port);
+    portSlot.set(port);
 }
 
 export function getJobDispatcher(): JobDispatcherPort {
-  const port = portSlot.get();
-  if (!port) {
-    throw new Error(
-      "[@launchstack/adapters/jobs] No JobDispatcherPort registered. The host must call createEngine(config) (or configureJobDispatcher(port) directly) before any subsystem that enqueues background work.",
-    );
-  }
-  return port;
+    const port = portSlot.get();
+    if (!port) {
+        throw new Error(
+            "[@launchstack/adapters/jobs] No JobDispatcherPort registered. The host must call createEngine(config) (or configureJobDispatcher(port) directly) before any subsystem that enqueues background work."
+        );
+    }
+    return port;
 }

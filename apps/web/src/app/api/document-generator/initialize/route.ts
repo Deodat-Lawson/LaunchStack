@@ -1,6 +1,6 @@
 /**
  * Document Generator - Initialize Document with Research API
- * 
+ *
  * Generates initial document content with AI, automatically integrating
  * research from arXiv (for research papers) and other sources.
  */
@@ -23,13 +23,19 @@ const InitializeSchema = z.object({
     title: z.string().min(1).max(500),
     description: z.string().optional(),
     keywords: z.array(z.string()).optional(),
-    options: z.object({
-        tone: z.enum(["professional", "casual", "formal", "technical", "creative", "persuasive"]).optional(),
-        length: z.enum(["brief", "medium", "detailed", "comprehensive"]).optional(),
-        audience: z.enum(["general", "technical", "executives", "students", "customers", "team"]).optional(),
-        includeResearch: z.boolean().optional(),
-        arxivCategory: z.string().optional(),
-    }).optional(),
+    options: z
+        .object({
+            tone: z
+                .enum(["professional", "casual", "formal", "technical", "creative", "persuasive"])
+                .optional(),
+            length: z.enum(["brief", "medium", "detailed", "comprehensive"]).optional(),
+            audience: z
+                .enum(["general", "technical", "executives", "students", "customers", "team"])
+                .optional(),
+            includeResearch: z.boolean().optional(),
+            arxivCategory: z.string().optional(),
+        })
+        .optional(),
 });
 
 // arXiv result type
@@ -58,7 +64,11 @@ interface Citation {
 /**
  * Search arXiv papers
  */
-async function searchArxiv(query: string, maxResults = 5, category?: string): Promise<ArxivPaper[]> {
+async function searchArxiv(
+    query: string,
+    maxResults = 5,
+    category?: string
+): Promise<ArxivPaper[]> {
     try {
         let searchQuery = encodeURIComponent(query);
         if (category) {
@@ -263,7 +273,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = InitializeSchema.safeParse(body);
 
         if (!validation.success) {
@@ -275,9 +285,10 @@ export async function POST(request: Request) {
 
         const { templateId, title, description, keywords, options } = validation.data;
         const startTime = Date.now();
-        
+
         // Determine if we should include research
-        const includeResearch = options?.includeResearch ??
+        const includeResearch =
+            options?.includeResearch ??
             ["research", "whitepaper", "technical"].includes(templateId);
 
         let arxivPapers: ArxivPaper[] = [];
@@ -286,11 +297,7 @@ export async function POST(request: Request) {
         // Fetch research from arXiv for research-oriented templates
         if (includeResearch) {
             const searchQuery = keywords?.join(" ") ?? description ?? title;
-            arxivPapers = await searchArxiv(
-                searchQuery, 
-                5, 
-                options?.arxivCategory
-            );
+            arxivPapers = await searchArxiv(searchQuery, 5, options?.arxivCategory);
             citations = buildCitations(arxivPapers);
             console.log(`📚 [Initialize] Found ${arxivPapers.length} arXiv papers`);
         }
@@ -336,7 +343,7 @@ export async function POST(request: Request) {
         // Include arXiv research in the prompt
         if (arxivPapers.length > 0) {
             userPrompt += `\n\n---\n\n**RESEARCH SOURCES TO INCORPORATE:**\n\nYou MUST incorporate insights from these research papers and cite them using [1], [2], etc.:\n`;
-            
+
             arxivPapers.forEach((paper, index) => {
                 userPrompt += `\n[${index + 1}] **${paper.title}**\n`;
                 userPrompt += `Authors: ${paper.authors.slice(0, 3).join(", ")}${paper.authors.length > 3 ? " et al." : ""}\n`;
@@ -356,7 +363,7 @@ export async function POST(request: Request) {
             resolved.prepareMessages([
                 new SystemMessage(systemPrompt),
                 new HumanMessage(userPrompt),
-            ]),
+            ])
         );
 
         let generatedContent = normalizeModelContent(response.content);
@@ -373,7 +380,9 @@ export async function POST(request: Request) {
 
         const processingTimeMs = Date.now() - startTime;
 
-        console.log(`✅ [Initialize] Document generated in ${processingTimeMs}ms with ${citations.length} citations`);
+        console.log(
+            `✅ [Initialize] Document generated in ${processingTimeMs}ms with ${citations.length} citations`
+        );
 
         return NextResponse.json({
             success: true,
@@ -387,14 +396,13 @@ export async function POST(request: Request) {
             })),
             processingTimeMs,
         });
-
     } catch (error) {
         console.error("❌ [Initialize] Error:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to initialize document",
-                error: "Failed to initialize document"
+                error: "Failed to initialize document",
             },
             { status: 500 }
         );

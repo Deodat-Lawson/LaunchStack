@@ -21,46 +21,46 @@ export const runtime = "nodejs";
 export const maxDuration = 300;
 
 export async function POST(request: Request) {
-  if (process.env.OCR_BENCHMARK_ENABLED !== "true") {
-    return NextResponse.json(
-      { error: "Benchmark endpoint disabled. Set OCR_BENCHMARK_ENABLED=true to enable." },
-      { status: 403 },
-    );
-  }
-
-  const form = await request.formData();
-  const file = form.get("file");
-  if (!(file instanceof File)) {
-    return NextResponse.json({ error: "missing file" }, { status: 400 });
-  }
-
-  const buf = Buffer.from(await file.arrayBuffer());
-  const tmpDir = await mkdtemp(join(tmpdir(), "ocr-bench-"));
-  const tmpPath = join(tmpDir, file.name);
-  await writeFile(tmpPath, buf);
-  const fileUrl = `file://${tmpPath}`;
-
-  try {
-    const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
-
-    if (isPdf) {
-      const decision = await routeDocument(fileUrl);
-      const result = await normalizeDocument(fileUrl, decision);
-      return NextResponse.json({
-        provider: decision.selectedProvider,
-        pages: result.pages,
-      });
+    if (process.env.OCR_BENCHMARK_ENABLED !== "true") {
+        return NextResponse.json(
+            { error: "Benchmark endpoint disabled. Set OCR_BENCHMARK_ENABLED=true to enable." },
+            { status: 403 }
+        );
     }
 
-    const doc = await ingestDocument(buf, { filename: file.name, mimeType: file.type });
-    return NextResponse.json({
-      provider: doc.metadata.provider,
-      pages: doc.pages,
-    });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: message }, { status: 500 });
-  } finally {
-    await rm(tmpDir, { recursive: true, force: true }).catch(() => undefined);
-  }
+    const form = await request.formData();
+    const file = form.get("file");
+    if (!(file instanceof File)) {
+        return NextResponse.json({ error: "missing file" }, { status: 400 });
+    }
+
+    const buf = Buffer.from(await file.arrayBuffer());
+    const tmpDir = await mkdtemp(join(tmpdir(), "ocr-bench-"));
+    const tmpPath = join(tmpDir, file.name);
+    await writeFile(tmpPath, buf);
+    const fileUrl = `file://${tmpPath}`;
+
+    try {
+        const isPdf = file.name.toLowerCase().endsWith(".pdf") || file.type === "application/pdf";
+
+        if (isPdf) {
+            const decision = await routeDocument(fileUrl);
+            const result = await normalizeDocument(fileUrl, decision);
+            return NextResponse.json({
+                provider: decision.selectedProvider,
+                pages: result.pages,
+            });
+        }
+
+        const doc = await ingestDocument(buf, { filename: file.name, mimeType: file.type });
+        return NextResponse.json({
+            provider: doc.metadata.provider,
+            pages: doc.pages,
+        });
+    } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        return NextResponse.json({ error: message }, { status: 500 });
+    } finally {
+        await rm(tmpDir, { recursive: true, force: true }).catch(() => undefined);
+    }
 }

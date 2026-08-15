@@ -35,11 +35,18 @@ import type { FounderWeeklyReviewScenario } from "../../test-fixtures/founder-we
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeIfDatabase =
-    process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL
+    (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
 
-const SCENARIO_DIR = join(__dirname, "..", "..", "test-fixtures", "founder-weekly-review", "scenarios");
+const SCENARIO_DIR = join(
+    __dirname,
+    "..",
+    "..",
+    "test-fixtures",
+    "founder-weekly-review",
+    "scenarios"
+);
 const CAPTURED_AT = new Date("2026-07-27T00:00:00.000Z");
 const CUSTOMER_FEEDBACK_CATEGORY = "Customer Feedback";
 
@@ -120,7 +127,7 @@ function assertEvidenceExpectations(
     if (!evidence) return;
 
     for (const [sourceType, bounds] of Object.entries(evidence.sourceTypeCounts ?? {})) {
-        const count = snapshot.items.filter((item) => item.sourceType === sourceType).length;
+        const count = snapshot.items.filter(item => item.sourceType === sourceType).length;
         if (bounds?.exact !== undefined) {
             expect({ sourceType, count }).toEqual({ sourceType, count: bounds.exact });
         }
@@ -128,7 +135,7 @@ function assertEvidenceExpectations(
         if (bounds?.max !== undefined) expect(count).toBeLessThanOrEqual(bounds.max);
     }
 
-    const reported = snapshot.sourceWarnings.map((warning) => warning.code);
+    const reported = snapshot.sourceWarnings.map(warning => warning.code);
     for (const code of evidence.warningCodes ?? []) expect(reported).toContain(code);
     for (const code of evidence.forbiddenWarningCodes ?? []) expect(reported).not.toContain(code);
 }
@@ -144,8 +151,11 @@ function assertSourceSemantics(
     if (semantics.temporalEvidenceRequired) {
         // A change without a timestamp cannot be placed in a reporting period,
         // so it cannot honestly be cited as something that happened this week.
-        for (const item of snapshot.items.filter((entry) => entry.sourceType === "document_change")) {
-            expect({ sourceId: item.sourceId, hasTimestamp: item.sourceTimestamp !== undefined }).toEqual({
+        for (const item of snapshot.items.filter(entry => entry.sourceType === "document_change")) {
+            expect({
+                sourceId: item.sourceId,
+                hasTimestamp: item.sourceTimestamp !== undefined,
+            }).toEqual({
                 sourceId: item.sourceId,
                 hasTimestamp: true,
             });
@@ -156,10 +166,10 @@ function assertSourceSemantics(
         // Retrieved current-state documents must not be re-reported as changes.
         const workspaceDocumentIds = new Set(
             snapshot.items
-                .filter((item) => item.sourceType === "workspace_document")
-                .map((item) => String(item.metadata.documentId))
+                .filter(item => item.sourceType === "workspace_document")
+                .map(item => String(item.metadata.documentId))
         );
-        for (const item of snapshot.items.filter((entry) => entry.sourceType === "document_change")) {
+        for (const item of snapshot.items.filter(entry => entry.sourceType === "document_change")) {
             expect(workspaceDocumentIds).not.toContain(String(item.metadata.documentId));
         }
     }
@@ -168,15 +178,18 @@ function assertSourceSemantics(
         // Only customer_feedback items may be sourced from a Customer Feedback
         // document. Founder context in particular is direction, not testimony.
         const feedbackTitles = new Set(
-            scenario.companies.flatMap((company) =>
+            scenario.companies.flatMap(company =>
                 company.documents
-                    .filter((doc) => doc.category === CUSTOMER_FEEDBACK_CATEGORY)
-                    .map((doc) => doc.title)
+                    .filter(doc => doc.category === CUSTOMER_FEEDBACK_CATEGORY)
+                    .map(doc => doc.title)
             )
         );
         for (const item of snapshot.items) {
             if (item.sourceType === "customer_feedback") continue;
-            expect({ sourceId: item.sourceId, fromFeedbackDoc: feedbackTitles.has(item.title) }).toEqual({
+            expect({
+                sourceId: item.sourceId,
+                fromFeedbackDoc: feedbackTitles.has(item.title),
+            }).toEqual({
                 sourceId: item.sourceId,
                 fromFeedbackDoc: false,
             });
@@ -184,11 +197,11 @@ function assertSourceSemantics(
     }
 
     if (semantics.noCrossCompanyLeakage) {
-        const underReviewName = scenario.companies.find((entry) => entry.underReview)!.name;
+        const underReviewName = scenario.companies.find(entry => entry.underReview)!.name;
         const foreignDocumentIds = new Set(
             [...seeded.documentIdsByCompanyName.entries()]
                 .filter(([name]) => name !== underReviewName)
-                .flatMap(([, ids]) => ids.map((id) => id.toString()))
+                .flatMap(([, ids]) => ids.map(id => id.toString()))
         );
         const foreignTitles = new Set(
             [...seeded.documentTitlesByCompanyName.entries()]
@@ -204,7 +217,10 @@ function assertSourceSemantics(
                 foreignDocument:
                     documentId !== undefined && foreignDocumentIds.has(String(documentId)),
             }).toEqual({ sourceId: item.sourceId, foreignDocument: false });
-            expect({ sourceId: item.sourceId, foreignTitle: foreignTitles.has(item.title) }).toEqual({
+            expect({
+                sourceId: item.sourceId,
+                foreignTitle: foreignTitles.has(item.title),
+            }).toEqual({
                 sourceId: item.sourceId,
                 foreignTitle: false,
             });
@@ -236,7 +252,9 @@ async function assertReviewExpectations(
 
     for (const [section, state] of Object.entries(sectionStates)) {
         const actual =
-            generated.reviewPayload.sections[section as keyof typeof generated.reviewPayload.sections];
+            generated.reviewPayload.sections[
+                section as keyof typeof generated.reviewPayload.sections
+            ];
         expect({ section, state: actual?.state }).toEqual({ section, state });
     }
 }
@@ -248,11 +266,14 @@ describeIfDatabase("founder weekly review scenarios (provider-free collection)",
         // Guards the it.each list below: a fixture added without being
         // registered here would otherwise never run.
         const entries = await readdir(SCENARIO_DIR, { withFileTypes: true });
-        const onDisk = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
+        const onDisk = entries
+            .filter(entry => entry.isDirectory())
+            .map(entry => entry.name)
+            .sort();
         expect(onDisk).toEqual([...SCENARIOS].sort());
     });
 
-    it.each(SCENARIOS)("%s satisfies its declared expectations", async (name) => {
+    it.each(SCENARIOS)("%s satisfies its declared expectations", async name => {
         const { scenario, snapshot, seeded } = await collect(name);
         expect(snapshot.schemaVersion).toBe("founder-weekly-review-evidence/v1");
         assertEvidenceExpectations(scenario, snapshot);

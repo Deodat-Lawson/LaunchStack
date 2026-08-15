@@ -28,18 +28,21 @@ export class FounderWeeklyReviewEvidenceCollectorUnavailableError extends Error 
     }
 }
 
-export const unavailableFounderWeeklyReviewEvidenceCollector: FounderWeeklyReviewEvidenceCollector = {
-    async collectFounderWeeklyReviewEvidence() {
-        throw new FounderWeeklyReviewEvidenceCollectorUnavailableError();
-    },
-};
+export const unavailableFounderWeeklyReviewEvidenceCollector: FounderWeeklyReviewEvidenceCollector =
+    {
+        async collectFounderWeeklyReviewEvidence() {
+            throw new FounderWeeklyReviewEvidenceCollectorUnavailableError();
+        },
+    };
 
 /**
  * App adapter over LAU-6's canonical workspace collector.  This is kept as an
  * interface boundary deliberately: LAU-8 can compose github_activity here
  * without changing routes, persistence, or the generation worker.
  */
-export class CanonicalFounderWeeklyReviewEvidenceCollector implements FounderWeeklyReviewEvidenceCollector {
+export class CanonicalFounderWeeklyReviewEvidenceCollector
+    implements FounderWeeklyReviewEvidenceCollector
+{
     // Lazy construction keeps route composition importable in tests and does
     // not open a DB dependency until production collection is actually used.
     constructor(private service?: FounderWeeklyReviewEvidenceService) {}
@@ -52,7 +55,12 @@ export class CanonicalFounderWeeklyReviewEvidenceCollector implements FounderWee
         actor: { externalUserId: string };
         requestKey: string;
     }): Promise<FounderWeeklyReviewEvidenceSnapshot> {
-        const snapshot = await (this.service ??= new FounderWeeklyReviewEvidenceService(undefined, undefined, { kind: "computed", store: new FounderWeeklyReviewDocumentVersionStore() }, new StrictCurrentWorkspaceDocumentStore())).collectFounderWeeklyReviewEvidence({
+        const snapshot = await (this.service ??= new FounderWeeklyReviewEvidenceService(
+            undefined,
+            undefined,
+            { kind: "computed", store: new FounderWeeklyReviewDocumentVersionStore() },
+            new StrictCurrentWorkspaceDocumentStore()
+        )).collectFounderWeeklyReviewEvidence({
             companyId: input.companyId,
             reportingPeriod: input.reportingPeriod,
             workspaceTimezone: input.workspaceTimezone,

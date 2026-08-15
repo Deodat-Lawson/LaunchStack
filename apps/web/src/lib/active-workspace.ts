@@ -57,9 +57,7 @@ const parseCompanyId = (raw: string | undefined): bigint | null => {
  * legacy default without membership; verified accounts receive null unless
  * the cookie or default points to a current membership.
  */
-export async function getActiveCompanyId(
-    clerkUserId: string
-): Promise<bigint | null> {
+export async function getActiveCompanyId(clerkUserId: string): Promise<bigint | null> {
     const [user] = await db
         .select({ id: users.id, companyId: users.companyId, status: users.status })
         .from(users)
@@ -69,11 +67,7 @@ export async function getActiveCompanyId(
         throw new Error("User not found in database");
     }
 
-    return resolveActiveCompanyForUser(
-        BigInt(user.id),
-        user.companyId,
-        user.status,
-    );
+    return resolveActiveCompanyForUser(BigInt(user.id), user.companyId, user.status);
 }
 
 /**
@@ -86,13 +80,11 @@ export async function getActiveCompanyId(
 export async function resolveActiveCompanyForUser(
     userPk: number | bigint,
     defaultCompanyId: number | bigint,
-    status: string,
+    status: string
 ): Promise<bigint | null> {
     const userPkBig = typeof userPk === "bigint" ? userPk : BigInt(userPk);
     const defaultBig =
-        typeof defaultCompanyId === "bigint"
-            ? defaultCompanyId
-            : BigInt(defaultCompanyId);
+        typeof defaultCompanyId === "bigint" ? defaultCompanyId : BigInt(defaultCompanyId);
 
     const cookieStore = await cookies();
     const cookieValue = cookieStore.get(ACTIVE_WORKSPACE_COOKIE)?.value;
@@ -124,8 +116,8 @@ export async function resolveActiveCompanyForUser(
         .where(
             and(
                 eq(userCompanyMemberships.userId, userPkBig),
-                eq(userCompanyMemberships.companyId, defaultBig),
-            ),
+                eq(userCompanyMemberships.companyId, defaultBig)
+            )
         );
 
     return defaultMembership?.companyId ?? null;
@@ -165,9 +157,7 @@ export async function getActiveCompanyContext(
         );
 
     if (!membership) {
-        throw new Error(
-            `User ${clerkUserId} has no membership in company ${companyId}`
-        );
+        throw new Error(`User ${clerkUserId} has no membership in company ${companyId}`);
     }
 
     return {
@@ -181,15 +171,8 @@ export async function getActiveCompanyContext(
  * Set the active workspace cookie on a NextResponse. Caller must verify
  * membership before calling this.
  */
-export function setActiveWorkspaceCookie(
-    response: NextResponse,
-    companyId: bigint
-): void {
-    response.cookies.set(
-        ACTIVE_WORKSPACE_COOKIE,
-        companyId.toString(),
-        cookieOptions()
-    );
+export function setActiveWorkspaceCookie(response: NextResponse, companyId: bigint): void {
+    response.cookies.set(ACTIVE_WORKSPACE_COOKIE, companyId.toString(), cookieOptions());
 }
 
 /**
@@ -197,13 +180,7 @@ export function setActiveWorkspaceCookie(
  * Server Actions; in route handlers prefer setActiveWorkspaceCookie on the
  * NextResponse so the cookie ships with that exact response.
  */
-export async function writeActiveWorkspaceCookie(
-    companyId: bigint
-): Promise<void> {
+export async function writeActiveWorkspaceCookie(companyId: bigint): Promise<void> {
     const cookieStore = await cookies();
-    cookieStore.set(
-        ACTIVE_WORKSPACE_COOKIE,
-        companyId.toString(),
-        cookieOptions()
-    );
+    cookieStore.set(ACTIVE_WORKSPACE_COOKIE, companyId.toString(), cookieOptions());
 }

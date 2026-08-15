@@ -1,14 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-    Download,
-    FileText,
-    File,
-    Code,
-    Loader2,
-    Check,
-} from "lucide-react";
+import { Download, FileText, File, Code, Loader2, Check } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Label } from "~/app/employer/documents/components/ui/label";
 import { Switch } from "~/app/employer/documents/components/ui/switch";
@@ -52,39 +45,33 @@ const formatOptions: FormatOption[] = [
         id: "pdf",
         name: "PDF",
         description: "Portable Document Format",
-        icon: <FileText className="w-5 h-5 text-red-500" />,
+        icon: <FileText className="h-5 w-5 text-red-500" />,
         extension: ".pdf",
     },
     {
         id: "markdown",
         name: "Markdown",
         description: "Plain text with formatting",
-        icon: <Code className="w-5 h-5 text-blue-500" />,
+        icon: <Code className="h-5 w-5 text-blue-500" />,
         extension: ".md",
     },
     {
         id: "html",
         name: "HTML",
         description: "Web page format",
-        icon: <Code className="w-5 h-5 text-orange-500" />,
+        icon: <Code className="h-5 w-5 text-orange-500" />,
         extension: ".html",
     },
     {
         id: "text",
         name: "Plain Text",
         description: "Unformatted text",
-        icon: <File className="w-5 h-5 text-gray-500" />,
+        icon: <File className="h-5 w-5 text-gray-500" />,
         extension: ".txt",
     },
 ];
 
-export function ExportDialog({
-    isOpen,
-    onClose,
-    title,
-    content,
-    bibliography,
-}: ExportDialogProps) {
+export function ExportDialog({ isOpen, onClose, title, content, bibliography }: ExportDialogProps) {
     const [selectedFormat, setSelectedFormat] = useState<ExportFormat>("pdf");
     const [includeCitations, setIncludeCitations] = useState(true);
     const [pageSize, setPageSize] = useState<PageSize>("letter");
@@ -126,7 +113,12 @@ export function ExportDialog({
                 URL.revokeObjectURL(url);
             } else {
                 // Other formats return JSON with content
-                const data = await response.json() as { success: boolean; content?: string; contentType?: string; filename?: string };
+                const data = (await response.json()) as {
+                    success: boolean;
+                    content?: string;
+                    contentType?: string;
+                    filename?: string;
+                };
                 if (data.success && data.content && data.contentType && data.filename) {
                     const blob = new Blob([data.content], { type: data.contentType });
                     const url = URL.createObjectURL(blob);
@@ -152,14 +144,14 @@ export function ExportDialog({
         }
     };
 
-    const selectedFormatOption = formatOptions.find((f) => f.id === selectedFormat);
+    const selectedFormatOption = formatOptions.find(f => f.id === selectedFormat);
 
     return (
-        <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
             <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
-                        <Download className="w-5 h-5" />
+                        <Download className="h-5 w-5" />
                         Export Document
                     </DialogTitle>
                     <DialogDescription>
@@ -172,12 +164,12 @@ export function ExportDialog({
                     <div className="space-y-3">
                         <Label>Format</Label>
                         <div className="grid grid-cols-2 gap-2">
-                            {formatOptions.map((format) => (
+                            {formatOptions.map(format => (
                                 <button
                                     key={format.id}
                                     onClick={() => setSelectedFormat(format.id)}
                                     className={cn(
-                                        "flex items-center gap-3 p-3 rounded-lg border-2 transition-all text-left",
+                                        "flex items-center gap-3 rounded-lg border-2 p-3 text-left transition-all",
                                         selectedFormat === format.id
                                             ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                                             : "border-border hover:border-purple-300"
@@ -185,8 +177,8 @@ export function ExportDialog({
                                 >
                                     {format.icon}
                                     <div>
-                                        <div className="font-medium text-sm">{format.name}</div>
-                                        <div className="text-xs text-muted-foreground">
+                                        <div className="text-sm font-medium">{format.name}</div>
+                                        <div className="text-muted-foreground text-xs">
                                             {format.extension}
                                         </div>
                                     </div>
@@ -197,10 +189,13 @@ export function ExportDialog({
 
                     {/* PDF-specific options */}
                     {selectedFormat === "pdf" && (
-                        <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
+                        <div className="bg-muted/50 space-y-4 rounded-lg p-4">
                             <div className="flex items-center justify-between">
                                 <Label htmlFor="pageSize">Page Size</Label>
-                                <Select value={pageSize} onValueChange={(v) => setPageSize(v as PageSize)}>
+                                <Select
+                                    value={pageSize}
+                                    onValueChange={v => setPageSize(v as PageSize)}
+                                >
                                     <SelectTrigger className="w-32">
                                         <SelectValue />
                                     </SelectTrigger>
@@ -215,7 +210,7 @@ export function ExportDialog({
                                 <Label htmlFor="fontSize">Font Size</Label>
                                 <Select
                                     value={fontSize.toString()}
-                                    onValueChange={(v) => setFontSize(parseInt(v))}
+                                    onValueChange={v => setFontSize(parseInt(v))}
                                 >
                                     <SelectTrigger className="w-32">
                                         <SelectValue />
@@ -233,10 +228,10 @@ export function ExportDialog({
 
                     {/* Citations option */}
                     {bibliography && (
-                        <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                        <div className="bg-muted/50 flex items-center justify-between rounded-lg p-4">
                             <div>
                                 <Label htmlFor="citations">Include Bibliography</Label>
-                                <p className="text-xs text-muted-foreground mt-0.5">
+                                <p className="text-muted-foreground mt-0.5 text-xs">
                                     Add references section at the end
                                 </p>
                             </div>
@@ -249,15 +244,16 @@ export function ExportDialog({
                     )}
 
                     {/* Preview info */}
-                    <div className="p-4 border border-border rounded-lg">
+                    <div className="border-border rounded-lg border p-4">
                         <div className="flex items-center gap-3">
                             {selectedFormatOption?.icon}
                             <div>
-                                <p className="font-medium text-sm">
-                                    {title.slice(0, 40)}{title.length > 40 ? "..." : ""}
+                                <p className="text-sm font-medium">
+                                    {title.slice(0, 40)}
+                                    {title.length > 40 ? "..." : ""}
                                     {selectedFormatOption?.extension}
                                 </p>
-                                <p className="text-xs text-muted-foreground">
+                                <p className="text-muted-foreground text-xs">
                                     ~{Math.ceil(content.length / 300)} page(s) •{" "}
                                     {selectedFormatOption?.description}
                                 </p>
@@ -283,17 +279,17 @@ export function ExportDialog({
                     >
                         {isExporting ? (
                             <>
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 Exporting...
                             </>
                         ) : exportSuccess ? (
                             <>
-                                <Check className="w-4 h-4 mr-2" />
+                                <Check className="mr-2 h-4 w-4" />
                                 Done!
                             </>
                         ) : (
                             <>
-                                <Download className="w-4 h-4 mr-2" />
+                                <Download className="mr-2 h-4 w-4" />
                                 Export
                             </>
                         )}

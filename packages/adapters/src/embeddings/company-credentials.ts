@@ -2,11 +2,7 @@ import { eq } from "drizzle-orm";
 
 import { getDb } from "../db";
 import { companyEmbeddingCredentials } from "../db/schema";
-import {
-  CiphertextDecodeError,
-  decryptSecret,
-  encryptSecret,
-} from "../crypto/secret-box";
+import { CiphertextDecodeError, decryptSecret, encryptSecret } from "../crypto/secret-box";
 
 /**
  * Per-company embedding provider credentials, separated from the rest of
@@ -21,35 +17,35 @@ import {
  */
 
 export interface CompanyCredentialsPlaintext {
-  openAIApiKey: string | null;
-  huggingFaceApiKey: string | null;
-  ollamaBaseUrl: string | null;
-  ollamaModel: string | null;
+    openAIApiKey: string | null;
+    huggingFaceApiKey: string | null;
+    ollamaBaseUrl: string | null;
+    ollamaModel: string | null;
 }
 
 export interface RedactedCredentials {
-  openAI: { hasKey: boolean; last4: string | null };
-  huggingFace: { hasKey: boolean; last4: string | null };
-  ollamaBaseUrl: string | null;
-  ollamaModel: string | null;
+    openAI: { hasKey: boolean; last4: string | null };
+    huggingFace: { hasKey: boolean; last4: string | null };
+    ollamaBaseUrl: string | null;
+    ollamaModel: string | null;
 }
 
 export interface CredentialUpsertInput {
-  /** `undefined` = leave unchanged. `null` or `""` = clear the stored value. */
-  openAIApiKey?: string | null;
-  huggingFaceApiKey?: string | null;
-  ollamaBaseUrl?: string | null;
-  ollamaModel?: string | null;
+    /** `undefined` = leave unchanged. `null` or `""` = clear the stored value. */
+    openAIApiKey?: string | null;
+    huggingFaceApiKey?: string | null;
+    ollamaBaseUrl?: string | null;
+    ollamaModel?: string | null;
 }
 
 function toNumericId(companyId: bigint | number | string): number | null {
-  const n = typeof companyId === "bigint" ? Number(companyId) : Number(companyId);
-  return Number.isFinite(n) ? n : null;
+    const n = typeof companyId === "bigint" ? Number(companyId) : Number(companyId);
+    return Number.isFinite(n) ? n : null;
 }
 
 function last4(value: string | null | undefined): string | null {
-  if (!value || value.length < 4) return null;
-  return value.slice(-4);
+    if (!value || value.length < 4) return null;
+    return value.slice(-4);
 }
 
 /**
@@ -61,40 +57,40 @@ function last4(value: string | null | undefined): string | null {
  * mask rotation bugs.
  */
 export async function getCompanyCredentialsPlaintext(
-  companyId: bigint | number | string,
+    companyId: bigint | number | string
 ): Promise<CompanyCredentialsPlaintext | null> {
-  const id = toNumericId(companyId);
-  if (id === null) return null;
+    const id = toNumericId(companyId);
+    if (id === null) return null;
 
-  const [encrypted] = await getDb()
-    .select()
-    .from(companyEmbeddingCredentials)
-    .where(eq(companyEmbeddingCredentials.companyId, id))
-    .limit(1);
+    const [encrypted] = await getDb()
+        .select()
+        .from(companyEmbeddingCredentials)
+        .where(eq(companyEmbeddingCredentials.companyId, id))
+        .limit(1);
 
-  if (!encrypted) return null;
+    if (!encrypted) return null;
 
-  const decryptOrNull = (ciphertext: string | null | undefined): string | null => {
-    if (!ciphertext) return null;
-    try {
-      return decryptSecret(ciphertext);
-    } catch (err) {
-      if (err instanceof CiphertextDecodeError) {
-        console.error(
-          `[company-credentials] Failed to decrypt credential for company ${id}: ${err.message}`,
-        );
-        return null;
-      }
-      throw err;
-    }
-  };
+    const decryptOrNull = (ciphertext: string | null | undefined): string | null => {
+        if (!ciphertext) return null;
+        try {
+            return decryptSecret(ciphertext);
+        } catch (err) {
+            if (err instanceof CiphertextDecodeError) {
+                console.error(
+                    `[company-credentials] Failed to decrypt credential for company ${id}: ${err.message}`
+                );
+                return null;
+            }
+            throw err;
+        }
+    };
 
-  return {
-    openAIApiKey: decryptOrNull(encrypted.openAIApiKeyCiphertext),
-    huggingFaceApiKey: decryptOrNull(encrypted.huggingFaceApiKeyCiphertext),
-    ollamaBaseUrl: encrypted.ollamaBaseUrl ?? null,
-    ollamaModel: encrypted.ollamaModel ?? null,
-  };
+    return {
+        openAIApiKey: decryptOrNull(encrypted.openAIApiKeyCiphertext),
+        huggingFaceApiKey: decryptOrNull(encrypted.huggingFaceApiKeyCiphertext),
+        ollamaBaseUrl: encrypted.ollamaBaseUrl ?? null,
+        ollamaModel: encrypted.ollamaModel ?? null,
+    };
 }
 
 /**
@@ -102,44 +98,43 @@ export async function getCompanyCredentialsPlaintext(
  * each secret is set and exposes only the last 4 characters.
  */
 export async function getRedactedCredentials(
-  companyId: bigint | number | string,
+    companyId: bigint | number | string
 ): Promise<RedactedCredentials> {
-  const id = toNumericId(companyId);
-  if (id === null) {
+    const id = toNumericId(companyId);
+    if (id === null) {
+        return {
+            openAI: { hasKey: false, last4: null },
+            huggingFace: { hasKey: false, last4: null },
+            ollamaBaseUrl: null,
+            ollamaModel: null,
+        };
+    }
+
+    const [encrypted] = await getDb()
+        .select({
+            openAIApiKeyCiphertext: companyEmbeddingCredentials.openAIApiKeyCiphertext,
+            openAIApiKeyLast4: companyEmbeddingCredentials.openAIApiKeyLast4,
+            huggingFaceApiKeyCiphertext: companyEmbeddingCredentials.huggingFaceApiKeyCiphertext,
+            huggingFaceApiKeyLast4: companyEmbeddingCredentials.huggingFaceApiKeyLast4,
+            ollamaBaseUrl: companyEmbeddingCredentials.ollamaBaseUrl,
+            ollamaModel: companyEmbeddingCredentials.ollamaModel,
+        })
+        .from(companyEmbeddingCredentials)
+        .where(eq(companyEmbeddingCredentials.companyId, id))
+        .limit(1);
+
     return {
-      openAI: { hasKey: false, last4: null },
-      huggingFace: { hasKey: false, last4: null },
-      ollamaBaseUrl: null,
-      ollamaModel: null,
+        openAI: {
+            hasKey: Boolean(encrypted?.openAIApiKeyCiphertext),
+            last4: encrypted?.openAIApiKeyLast4 ?? null,
+        },
+        huggingFace: {
+            hasKey: Boolean(encrypted?.huggingFaceApiKeyCiphertext),
+            last4: encrypted?.huggingFaceApiKeyLast4 ?? null,
+        },
+        ollamaBaseUrl: encrypted?.ollamaBaseUrl ?? null,
+        ollamaModel: encrypted?.ollamaModel ?? null,
     };
-  }
-
-  const [encrypted] = await getDb()
-    .select({
-      openAIApiKeyCiphertext: companyEmbeddingCredentials.openAIApiKeyCiphertext,
-      openAIApiKeyLast4: companyEmbeddingCredentials.openAIApiKeyLast4,
-      huggingFaceApiKeyCiphertext:
-        companyEmbeddingCredentials.huggingFaceApiKeyCiphertext,
-      huggingFaceApiKeyLast4: companyEmbeddingCredentials.huggingFaceApiKeyLast4,
-      ollamaBaseUrl: companyEmbeddingCredentials.ollamaBaseUrl,
-      ollamaModel: companyEmbeddingCredentials.ollamaModel,
-    })
-    .from(companyEmbeddingCredentials)
-    .where(eq(companyEmbeddingCredentials.companyId, id))
-    .limit(1);
-
-  return {
-    openAI: {
-      hasKey: Boolean(encrypted?.openAIApiKeyCiphertext),
-      last4: encrypted?.openAIApiKeyLast4 ?? null,
-    },
-    huggingFace: {
-      hasKey: Boolean(encrypted?.huggingFaceApiKeyCiphertext),
-      last4: encrypted?.huggingFaceApiKeyLast4 ?? null,
-    },
-    ollamaBaseUrl: encrypted?.ollamaBaseUrl ?? null,
-    ollamaModel: encrypted?.ollamaModel ?? null,
-  };
 }
 
 /**
@@ -147,67 +142,67 @@ export async function getRedactedCredentials(
  * alone; fields set to `null` or empty string are cleared.
  */
 export async function upsertCompanyCredentials(
-  companyId: bigint | number | string,
-  input: CredentialUpsertInput,
+    companyId: bigint | number | string,
+    input: CredentialUpsertInput
 ): Promise<void> {
-  const id = toNumericId(companyId);
-  if (id === null) {
-    throw new Error(`upsertCompanyCredentials: invalid companyId ${String(companyId)}`);
-  }
-
-  const patch: Partial<typeof companyEmbeddingCredentials.$inferInsert> = {};
-  let hasEncryptedChange = false;
-
-  if (input.openAIApiKey !== undefined) {
-    if (input.openAIApiKey === null || input.openAIApiKey === "") {
-      patch.openAIApiKeyCiphertext = null;
-      patch.openAIApiKeyLast4 = null;
-    } else {
-      const { ciphertext } = encryptSecret(input.openAIApiKey);
-      patch.openAIApiKeyCiphertext = ciphertext;
-      patch.openAIApiKeyLast4 = last4(input.openAIApiKey);
-      hasEncryptedChange = true;
+    const id = toNumericId(companyId);
+    if (id === null) {
+        throw new Error(`upsertCompanyCredentials: invalid companyId ${String(companyId)}`);
     }
-  }
 
-  if (input.huggingFaceApiKey !== undefined) {
-    if (input.huggingFaceApiKey === null || input.huggingFaceApiKey === "") {
-      patch.huggingFaceApiKeyCiphertext = null;
-      patch.huggingFaceApiKeyLast4 = null;
-    } else {
-      const { ciphertext } = encryptSecret(input.huggingFaceApiKey);
-      patch.huggingFaceApiKeyCiphertext = ciphertext;
-      patch.huggingFaceApiKeyLast4 = last4(input.huggingFaceApiKey);
-      hasEncryptedChange = true;
+    const patch: Partial<typeof companyEmbeddingCredentials.$inferInsert> = {};
+    let hasEncryptedChange = false;
+
+    if (input.openAIApiKey !== undefined) {
+        if (input.openAIApiKey === null || input.openAIApiKey === "") {
+            patch.openAIApiKeyCiphertext = null;
+            patch.openAIApiKeyLast4 = null;
+        } else {
+            const { ciphertext } = encryptSecret(input.openAIApiKey);
+            patch.openAIApiKeyCiphertext = ciphertext;
+            patch.openAIApiKeyLast4 = last4(input.openAIApiKey);
+            hasEncryptedChange = true;
+        }
     }
-  }
 
-  if (input.ollamaBaseUrl !== undefined) {
-    patch.ollamaBaseUrl =
-      input.ollamaBaseUrl && input.ollamaBaseUrl.trim().length > 0
-        ? input.ollamaBaseUrl.trim()
-        : null;
-  }
+    if (input.huggingFaceApiKey !== undefined) {
+        if (input.huggingFaceApiKey === null || input.huggingFaceApiKey === "") {
+            patch.huggingFaceApiKeyCiphertext = null;
+            patch.huggingFaceApiKeyLast4 = null;
+        } else {
+            const { ciphertext } = encryptSecret(input.huggingFaceApiKey);
+            patch.huggingFaceApiKeyCiphertext = ciphertext;
+            patch.huggingFaceApiKeyLast4 = last4(input.huggingFaceApiKey);
+            hasEncryptedChange = true;
+        }
+    }
 
-  if (input.ollamaModel !== undefined) {
-    patch.ollamaModel =
-      input.ollamaModel && input.ollamaModel.trim().length > 0
-        ? input.ollamaModel.trim()
-        : null;
-  }
+    if (input.ollamaBaseUrl !== undefined) {
+        patch.ollamaBaseUrl =
+            input.ollamaBaseUrl && input.ollamaBaseUrl.trim().length > 0
+                ? input.ollamaBaseUrl.trim()
+                : null;
+    }
 
-  if (Object.keys(patch).length === 0) {
-    return;
-  }
+    if (input.ollamaModel !== undefined) {
+        patch.ollamaModel =
+            input.ollamaModel && input.ollamaModel.trim().length > 0
+                ? input.ollamaModel.trim()
+                : null;
+    }
 
-  patch.updatedAt = new Date();
-  if (hasEncryptedChange) patch.encryptionKeyVersion = 1;
+    if (Object.keys(patch).length === 0) {
+        return;
+    }
 
-  await getDb()
-    .insert(companyEmbeddingCredentials)
-    .values({ companyId: id, ...patch })
-    .onConflictDoUpdate({
-      target: companyEmbeddingCredentials.companyId,
-      set: patch,
-    });
+    patch.updatedAt = new Date();
+    if (hasEncryptedChange) patch.encryptionKeyVersion = 1;
+
+    await getDb()
+        .insert(companyEmbeddingCredentials)
+        .values({ companyId: id, ...patch })
+        .onConflictDoUpdate({
+            target: companyEmbeddingCredentials.companyId,
+            set: patch,
+        });
 }

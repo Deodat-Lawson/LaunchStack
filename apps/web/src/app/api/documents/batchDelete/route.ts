@@ -20,80 +20,72 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { deleteDocumentCore } from "~/server/services/document-delete";
-import {
-  isManagementRole,
-  requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
-
-
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const BatchDeleteSchema = z.object({
-  docIds: z
-    .array(z.number().int().positive())
-    .min(1, "docIds cannot be empty")
-    .max(100, "Cannot delete more than 100 documents at a time"),
+    docIds: z
+        .array(z.number().int().positive())
+        .min(1, "docIds cannot be empty")
+        .max(100, "Cannot delete more than 100 documents at a time"),
 });
 
 export async function DELETE(request: Request) {
-  return withRateLimit(request, RateLimitPresets.strict, async () => {
-    try {
-      const validation = await validateRequestBody(request, BatchDeleteSchema);
-      if (!validation.success) return validation.response;
+    return withRateLimit(request, RateLimitPresets.strict, async () => {
+        try {
+            const validation = await validateRequestBody(request, BatchDeleteSchema);
+            if (!validation.success) return validation.response;
 
-      const ctx = await requireWorkspaceContext();
-      if (!ctx.success) return ctx.response;
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) return ctx.response;
 
-      if (!isManagementRole(ctx.data.role)) {
-        return NextResponse.json(
-          { success: false, error: "Forbidden" },
-          { status: 403 }
-        );
-      }
+            if (!isManagementRole(ctx.data.role)) {
+                return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+            }
 
-      const { docIds } = validation.data;
-      const uniqueIds = Array.from(new Set(docIds));
+            const { docIds } = validation.data;
+            const uniqueIds = Array.from(new Set(docIds));
 
-      // Verify every doc belongs to the caller's company. A mismatch means
-      // either a cross-company request or a stale client — reject the whole
-      // batch rather than silently partial-deleting.
-      const rows = await db
-        .select({ id: document.id, companyId: document.companyId })
-        .from(document)
-        .where(inArray(document.id, uniqueIds));
+            // Verify every doc belongs to the caller's company. A mismatch means
+            // either a cross-company request or a stale client — reject the whole
+            // batch rather than silently partial-deleting.
+            const rows = await db
+                .select({ id: document.id, companyId: document.companyId })
+                .from(document)
+                .where(inArray(document.id, uniqueIds));
 
-      if (rows.length !== uniqueIds.length) {
-        return NextResponse.json(
-          { success: false, error: "One or more documents not found" },
-          { status: 404 }
-        );
-      }
+            if (rows.length !== uniqueIds.length) {
+                return NextResponse.json(
+                    { success: false, error: "One or more documents not found" },
+                    { status: 404 }
+                );
+            }
 
-      for (const row of rows) {
-        if (row.companyId !== ctx.data.companyId) {
-          return NextResponse.json(
-            { success: false, error: "One or more documents not found" },
-            { status: 404 }
-          );
+            for (const row of rows) {
+                if (row.companyId !== ctx.data.companyId) {
+                    return NextResponse.json(
+                        { success: false, error: "One or more documents not found" },
+                        { status: 404 }
+                    );
+                }
+            }
+
+            await db.transaction(async tx => {
+                for (const id of uniqueIds) {
+                    await deleteDocumentCore(tx, id);
+                }
+            });
+
+            return NextResponse.json({
+                success: true,
+                deleted: uniqueIds.length,
+                message: `Deleted ${uniqueIds.length} document${uniqueIds.length === 1 ? "" : "s"}`,
+            });
+        } catch (error) {
+            console.error("[DELETE /api/documents/batchDelete] error:", error);
+            return NextResponse.json(
+                { success: false, error: "Failed to delete documents" },
+                { status: 500 }
+            );
         }
-      }
-
-      await db.transaction(async (tx) => {
-        for (const id of uniqueIds) {
-          await deleteDocumentCore(tx, id);
-        }
-      });
-
-      return NextResponse.json({
-        success: true,
-        deleted: uniqueIds.length,
-        message: `Deleted ${uniqueIds.length} document${uniqueIds.length === 1 ? "" : "s"}`,
-      });
-    } catch (error) {
-      console.error("[DELETE /api/documents/batchDelete] error:", error);
-      return NextResponse.json(
-        { success: false, error: "Failed to delete documents" },
-        { status: 500 }
-      );
-    }
-  });
+    });
 }

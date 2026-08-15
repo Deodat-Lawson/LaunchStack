@@ -1,13 +1,6 @@
 import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
-import {
-    bigint,
-    index,
-    jsonb,
-    text,
-    timestamp,
-    varchar,
-} from "drizzle-orm/pg-core";
+import { bigint, index, jsonb, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 // Canonical shapes for trend-search JSONB columns. The feature module
 // re-exports these so callers can keep importing from the feature's types.ts.
@@ -53,11 +46,9 @@ export const trendSearchJobs = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         completedAt: timestamp("completed_at", { withTimezone: true }),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("trend_search_jobs_company_id_idx").on(table.companyId),
         statusIdx: index("trend_search_jobs_status_idx").on(table.status),
         companyStatusIdx: index("trend_search_jobs_company_status_idx").on(

@@ -41,7 +41,7 @@ export function buildChunkExtractionPrompt(
     documentName: string,
     chunkContent: string,
     batchIndex: number,
-    totalBatches: number,
+    totalBatches: number
 ): string {
     return `Extract company metadata from this section of the document.
 

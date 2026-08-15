@@ -6,10 +6,7 @@ import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { ensureTokenAccount } from "~/lib/credits";
-import {
-    setActiveWorkspaceCookie,
-    getActiveCompanyId,
-} from "~/lib/active-workspace";
+import { setActiveWorkspaceCookie, getActiveCompanyId } from "~/lib/active-workspace";
 import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
@@ -78,7 +75,7 @@ export async function GET() {
 
         return NextResponse.json({
             activeCompanyId: activeCompanyId?.toString() ?? null,
-            workspaces: rows.map((r) => ({
+            workspaces: rows.map(r => ({
                 id: r.id,
                 name: r.name,
                 slug: r.slug,
@@ -117,10 +114,7 @@ export async function POST(request: Request) {
             .from(company)
             .where(eq(company.slug, slug));
         if (existingSlug) {
-            return NextResponse.json(
-                { error: "Slug already taken" },
-                { status: 409 }
-            );
+            return NextResponse.json({ error: "Slug already taken" }, { status: 409 });
         }
 
         const [user] = await db
@@ -133,7 +127,7 @@ export async function POST(request: Request) {
         if (user.status !== "verified") {
             return NextResponse.json(
                 { error: "Account not verified. Please wait for administrator approval." },
-                { status: 403 },
+                { status: 403 }
             );
         }
 
@@ -151,10 +145,7 @@ export async function POST(request: Request) {
             .returning({ id: company.id });
 
         if (!newCompany) {
-            return NextResponse.json(
-                { error: "Could not create workspace" },
-                { status: 500 }
-            );
+            return NextResponse.json({ error: "Could not create workspace" }, { status: 500 });
         }
 
         const newCompanyId = BigInt(newCompany.id);

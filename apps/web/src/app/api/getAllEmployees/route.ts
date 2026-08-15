@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../server/db/index";
 import { users } from "~/server/db/schema";
-import {eq, and } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import * as console from "console";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 export async function GET() {
@@ -14,14 +14,10 @@ export async function GET() {
         const docs = await db
             .select()
             .from(users)
-            .where(
-                and(
-                    eq(users.companyId, companyId),
-                )
-            );
+            .where(and(eq(users.companyId, companyId)));
 
         // Convert BigInt fields to numbers for JSON serialization
-        const serializedDocs = docs.map((doc) => ({
+        const serializedDocs = docs.map(doc => ({
             ...doc,
             id: Number(doc.id),
             companyId: Number(doc.companyId),
@@ -30,9 +26,6 @@ export async function GET() {
         return NextResponse.json(serializedDocs, { status: 200 });
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
-        return NextResponse.json(
-            { error: "Unable to fetch documents" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Unable to fetch documents" }, { status: 500 });
     }
 }

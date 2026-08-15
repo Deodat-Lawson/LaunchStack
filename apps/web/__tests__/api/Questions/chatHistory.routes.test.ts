@@ -78,7 +78,7 @@ describe("Chat history routes", () => {
                     documentTitle: "Doc",
                     response: "A",
                     pages: [1],
-                }),
+                })
             );
 
             expect(response.status).toBe(401);
@@ -87,7 +87,7 @@ describe("Chat history routes", () => {
         it("prevents writing to documents outside the user's company", async () => {
             mockAuthenticated();
             mockSelect.mockImplementationOnce(() =>
-                createLimitedSelect([{ id: 5, companyId: 20n, title: "Doc" }]),
+                createLimitedSelect([{ id: 5, companyId: 20n, title: "Doc" }])
             );
 
             const response = await addChatHistory(
@@ -96,7 +96,7 @@ describe("Chat history routes", () => {
                     question: "Q?",
                     documentTitle: "Doc",
                     response: "A",
-                }),
+                })
             );
 
             expect(response.status).toBe(403);
@@ -105,7 +105,7 @@ describe("Chat history routes", () => {
         it("stores chat history when user and document are valid", async () => {
             mockAuthenticated();
             mockSelect.mockImplementationOnce(() =>
-                createLimitedSelect([{ id: 7, companyId: 10n, title: "Actual Title" }]),
+                createLimitedSelect([{ id: 7, companyId: 10n, title: "Actual Title" }])
             );
 
             const insertValues = jest.fn().mockResolvedValue(undefined);
@@ -118,7 +118,7 @@ describe("Chat history routes", () => {
                     documentTitle: "Ignored",
                     response: "Answer",
                     pages: [2, 3],
-                }),
+                })
             );
 
             expect(response.status).toBe(201);
@@ -147,7 +147,7 @@ describe("Chat history routes", () => {
             const response = await fetchChatHistory(
                 buildRequest({
                     documentId: 9,
-                }),
+                })
             );
 
             expect(response.status).toBe(401);
@@ -156,17 +156,15 @@ describe("Chat history routes", () => {
         it("returns chat history for valid users and documents", async () => {
             mockAuthenticated();
             mockSelect
+                .mockImplementationOnce(() => createLimitedSelect([{ id: 9, companyId: 10n }]))
                 .mockImplementationOnce(() =>
-                    createLimitedSelect([{ id: 9, companyId: 10n }]),
-                )
-                .mockImplementationOnce(() =>
-                    createWhereSelect([{ id: 1, question: "Q?", response: "A" }]),
+                    createWhereSelect([{ id: 1, question: "Q?", response: "A" }])
                 );
 
             const response = await fetchChatHistory(
                 buildRequest({
                     documentId: 9,
-                }),
+                })
             );
 
             expect(response.status).toBe(200);

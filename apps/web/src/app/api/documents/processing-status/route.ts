@@ -53,19 +53,16 @@ export async function GET() {
         const allJobs = [...activeJobs, ...recentlyFinished];
 
         const summary = {
-            queued: allJobs.filter((j) => j.status === "queued").length,
-            processing: allJobs.filter((j) => j.status === "processing").length,
-            completed: allJobs.filter((j) => j.status === "completed").length,
-            failed: allJobs.filter((j) => j.status === "failed").length,
+            queued: allJobs.filter(j => j.status === "queued").length,
+            processing: allJobs.filter(j => j.status === "processing").length,
+            completed: allJobs.filter(j => j.status === "completed").length,
+            failed: allJobs.filter(j => j.status === "failed").length,
             total: allJobs.length,
         };
 
         return NextResponse.json({ jobs: allJobs, summary });
     } catch (error) {
         console.error("Error fetching processing status:", error);
-        return NextResponse.json(
-            { error: "Failed to fetch processing status" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Failed to fetch processing status" }, { status: 500 });
     }
 }

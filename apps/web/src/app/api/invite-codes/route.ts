@@ -3,10 +3,7 @@ import { eq, and } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { inviteCodes } from "~/server/db/schema";
-import {
-  isManagementRole,
-  requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET() {
     try {
@@ -27,10 +24,7 @@ export async function GET() {
             })
             .from(inviteCodes)
             .where(
-                and(
-                    eq(inviteCodes.companyId, ctx.data.companyId),
-                    eq(inviteCodes.isActive, true)
-                )
+                and(eq(inviteCodes.companyId, ctx.data.companyId), eq(inviteCodes.isActive, true))
             );
 
         return NextResponse.json({ success: true, data: codes });

@@ -3,7 +3,7 @@
  * to source chunks using keyword overlap and structural matching.
  */
 
-import stringSimilarity from 'string-similarity-js';
+import stringSimilarity from "string-similarity-js";
 
 export type GroundingCheckResult = {
     passed: boolean;
@@ -15,35 +15,37 @@ export type GroundingCheckResult = {
 const CLAIM_SPLITTER = /(?<=[.!?])\s+(?=[A-Z])/;
 
 const HEDGING_PHRASES = [
-    'it is possible',
-    'it appears',
-    'this may',
-    'this might',
-    'potentially',
-    'it seems',
-    'could be',
-    'likely',
+    "it is possible",
+    "it appears",
+    "this may",
+    "this might",
+    "potentially",
+    "it seems",
+    "could be",
+    "likely",
 ];
 
 const META_PHRASES = [
-    'based on the document',
-    'according to the provided',
-    'the document states',
-    'as mentioned in',
-    'the content indicates',
-    'from the source',
+    "based on the document",
+    "according to the provided",
+    "the document states",
+    "as mentioned in",
+    "the content indicates",
+    "from the source",
 ];
 
 function isMetaOrHedging(claim: string): boolean {
     const lower = claim.toLowerCase();
-    return META_PHRASES.some(p => lower.includes(p)) ||
-           HEDGING_PHRASES.some(p => lower.includes(p));
+    return (
+        META_PHRASES.some(p => lower.includes(p)) || HEDGING_PHRASES.some(p => lower.includes(p))
+    );
 }
 
 function extractKeyTerms(text: string): Set<string> {
     return new Set(
-        text.toLowerCase()
-            .replace(/[^\w\s]/g, ' ')
+        text
+            .toLowerCase()
+            .replace(/[^\w\s]/g, " ")
             .split(/\s+/)
             .filter(w => w.length > 3)
     );
@@ -56,13 +58,13 @@ function extractKeyTerms(text: string): Set<string> {
 export function checkGrounding(
     response: string,
     sourceChunks: string[],
-    threshold = 0.3,
+    threshold = 0.3
 ): GroundingCheckResult {
     if (!response || sourceChunks.length === 0) {
         return { passed: true, overallScore: 1, ungroundedClaims: [], totalClaimsChecked: 0 };
     }
 
-    const fullSource = sourceChunks.join(' ').toLowerCase();
+    const fullSource = sourceChunks.join(" ").toLowerCase();
     const sourceTerms = extractKeyTerms(fullSource);
     const claims = response.split(CLAIM_SPLITTER).filter(c => c.trim().length > 20);
 
@@ -88,7 +90,10 @@ export function checkGrounding(
 
         let bestSimilarity = 0;
         for (const chunk of sourceChunks) {
-            const sim = stringSimilarity(claim.toLowerCase().slice(0, 200), chunk.toLowerCase().slice(0, 500));
+            const sim = stringSimilarity(
+                claim.toLowerCase().slice(0, 200),
+                chunk.toLowerCase().slice(0, 500)
+            );
             if (sim > bestSimilarity) bestSimilarity = sim;
         }
 

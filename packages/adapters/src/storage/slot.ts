@@ -13,15 +13,15 @@ import { createSlot } from "../internal/slot";
 const portSlot = createSlot<StoragePort>("storage/port");
 
 export function configureStorage(port: StoragePort): void {
-  portSlot.set(port);
+    portSlot.set(port);
 }
 
 export function getStoragePort(): StoragePort {
-  const port = portSlot.get();
-  if (!port) {
-    throw new Error(
-      "[@launchstack/adapters/storage] No StoragePort registered. The host must call createEngine(config) (or configureStorage(port) directly) before any subsystem that uses getStoragePort().",
-    );
-  }
-  return port;
+    const port = portSlot.get();
+    if (!port) {
+        throw new Error(
+            "[@launchstack/adapters/storage] No StoragePort registered. The host must call createEngine(config) (or configureStorage(port) directly) before any subsystem that uses getStoragePort()."
+        );
+    }
+    return port;
 }

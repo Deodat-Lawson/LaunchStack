@@ -122,12 +122,7 @@ export const KNOWLEDGE_EXTENSIONS: ReadonlySet<string> = new Set([
 ]);
 
 /** Extensions only readable when `includeConfig` is on. */
-export const CONFIG_EXTENSIONS: ReadonlySet<string> = new Set([
-    ".json",
-    ".toml",
-    ".yaml",
-    ".yml",
-]);
+export const CONFIG_EXTENSIONS: ReadonlySet<string> = new Set([".json", ".toml", ".yaml", ".yml"]);
 
 /**
  * Names that must never be read, whatever the extension says. These sit

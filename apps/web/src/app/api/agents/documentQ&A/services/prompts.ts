@@ -17,10 +17,7 @@ export const SYSTEM_PROMPTS = {
 /**
  * Get system prompt with optional learning coach persona enhancement
  */
-export function getSystemPrompt(
-    style: string = DEFAULT_STYLE,
-    persona?: string
-): string {
+export function getSystemPrompt(style: string = DEFAULT_STYLE, persona?: string): string {
     // Handle legacy style names
     let styleId = style;
     if (style === "bullet-points") {
@@ -29,8 +26,8 @@ export function getSystemPrompt(
 
     const config = RESPONSE_STYLES[styleId as ResponseStyleId] ?? RESPONSE_STYLES[DEFAULT_STYLE];
     let prompt = config.systemPrompt;
-    
-    if (persona === 'legal-expert') {
+
+    if (persona === "legal-expert") {
         prompt = `${prompt}
 
 LEGAL EXPERT MODE:
@@ -42,7 +39,7 @@ You are assisting with legal document analysis. While you provide detailed and t
 5. When analyzing contracts, highlight potential issues but note they require professional review`;
     }
 
-    if (persona === 'financial-expert') {
+    if (persona === "financial-expert") {
         prompt = `${prompt}
 
 FINANCIAL EXPERT MODE:
@@ -53,7 +50,7 @@ You are assisting with financial document analysis. While you provide detailed a
 4. Never guarantee financial outcomes or returns`;
     }
 
-    if (persona === 'learning-coach') {
+    if (persona === "learning-coach") {
         prompt = `${prompt}
 
 LEARNING COACH MODE - Advanced Teaching Techniques:
@@ -101,7 +98,7 @@ You are an expert learning coach specializing in pedagogical methods. Apply thes
 
 Remember: Your goal is not just to provide information, but to facilitate deep understanding and independent learning.`;
     }
-    
+
     return prompt;
 }
 
@@ -110,12 +107,17 @@ Remember: Your goal is not just to provide information, but to facilitate deep u
  */
 export function getWebSearchInstruction(
     enableWebSearch: boolean,
-    webSearchResults: Array<{ title: string; url: string; snippet: string; relevanceScore?: number }>,
+    webSearchResults: Array<{
+        title: string;
+        url: string;
+        snippet: string;
+        relevanceScore?: number;
+    }>,
     refinedQuery?: string,
     reasoning?: string
 ): string {
     if (!enableWebSearch) {
-        return '';
+        return "";
     }
 
     if (webSearchResults.length > 0) {
@@ -135,8 +137,8 @@ Guidelines for using web search results:
 6. Transparency: If information conflicts between documents and web sources, acknowledge this and explain the difference
 7. Completeness: Use web sources to provide comprehensive answers when document content alone is insufficient
 
-The refined search query used was: "${refinedQuery ?? 'N/A'}"
-${reasoning ? `Agent reasoning: ${reasoning}` : ''}
+The refined search query used was: "${refinedQuery ?? "N/A"}"
+${reasoning ? `Agent reasoning: ${reasoning}` : ""}
 
 Remember: Your goal is to provide the most helpful, accurate, and comprehensive answer by intelligently combining document insights with relevant web information.`;
     } else {

@@ -5,11 +5,8 @@ import { CloudAnalytics } from "./_components/CloudAnalytics";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 import { inter, instrumentSerif, jetbrainsMono } from "./employer/fonts";
-
 
 // The marketing metadata that used to live here — keywords, OG card, Twitter
 // card, canonical, index:true — moved to apps/landing with the public site.
@@ -23,38 +20,39 @@ import { inter, instrumentSerif, jetbrainsMono } from "./employer/fonts";
 const APP_URL = process.env.APP_PUBLIC_URL ?? process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata: Metadata = {
-  title: {
-    default: 'Launchstack',
-    template: '%s | Launchstack',
-  },
-  description: 'Cited answers from your company documents.',
-  ...(APP_URL ? { metadataBase: new URL(APP_URL) } : {}),
-  // Every route on this origin is behind auth, and / redirects to /signin.
-  robots: {
-    index: false,
-    follow: false,
-  },
-  icons: [{ rel: "icon", url: "favicon.ico" }],
+    title: {
+        default: "Launchstack",
+        template: "%s | Launchstack",
+    },
+    description: "Cited answers from your company documents.",
+    ...(APP_URL ? { metadataBase: new URL(APP_URL) } : {}),
+    // Every route on this origin is behind auth, and / redirects to /signin.
+    robots: {
+        index: false,
+        follow: false,
+    },
+    icons: [{ rel: "icon", url: "favicon.ico" }],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <ClerkProvider>
-      <html
-        lang="en"
-        className={`${GeistSans.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
-        suppressHydrationWarning
-      >
-      <body suppressHydrationWarning>
-      <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="dark" enableSystem>
-        {children}
-        <CloudAnalytics />
-      </ThemeProvider>
-      </body>
-      </html>
-    </ClerkProvider>
-
-  );
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+    return (
+        <ClerkProvider>
+            <html
+                lang="en"
+                className={`${GeistSans.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+                suppressHydrationWarning
+            >
+                <body suppressHydrationWarning>
+                    <ThemeProvider
+                        attribute={["class", "data-theme"]}
+                        defaultTheme="dark"
+                        enableSystem
+                    >
+                        {children}
+                        <CloudAnalytics />
+                    </ThemeProvider>
+                </body>
+            </html>
+        </ClerkProvider>
+    );
 }

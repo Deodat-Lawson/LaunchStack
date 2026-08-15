@@ -1,4 +1,3 @@
-
 import type { MarketingResearchResult } from "../types";
 
 interface BlueskySession {
@@ -38,11 +37,11 @@ class BlueskyClient {
     private get credentials() {
         const handle = process.env.BLUESKY_HANDLE;
         const password = process.env.BLUESKY_APP_PASSWORD;
-        
+
         if (!handle || !password) {
             throw new Error("Bluesky credentials not configured");
         }
-        
+
         return { handle, password };
     }
 
@@ -62,10 +61,12 @@ class BlueskyClient {
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Bluesky auth failed: ${response.status} ${response.statusText} - ${errorText}`);
+            throw new Error(
+                `Bluesky auth failed: ${response.status} ${response.statusText} - ${errorText}`
+            );
         }
 
-        const session = await response.json() as BlueskySession;
+        const session = (await response.json()) as BlueskySession;
         this.session = session;
         this.sessionExpiry = Date.now() + 55 * 60 * 1000; // 55 minutes
 
@@ -80,9 +81,12 @@ class BlueskyClient {
         return this.createSession();
     }
 
-    private async makeAuthenticatedRequest<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
+    private async makeAuthenticatedRequest<T>(
+        endpoint: string,
+        params?: Record<string, string>
+    ): Promise<T> {
         const session = await this.getValidSession();
-        
+
         const url = new URL(`https://bsky.social/xrpc/${endpoint}`);
         if (params) {
             Object.entries(params).forEach(([key, value]) => {
@@ -92,20 +96,25 @@ class BlueskyClient {
 
         const response = await fetch(url.toString(), {
             headers: {
-                "Authorization": `Bearer ${session.accessJwt}`,
+                Authorization: `Bearer ${session.accessJwt}`,
                 "Content-Type": "application/json",
             },
         });
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Bluesky API error: ${response.status} ${response.statusText} - ${errorText}`);
+            throw new Error(
+                `Bluesky API error: ${response.status} ${response.statusText} - ${errorText}`
+            );
         }
 
         return response.json() as Promise<T>;
     }
 
-    async searchTrendingPosts(query: string, maxResults: number): Promise<MarketingResearchResult[]> {
+    async searchTrendingPosts(
+        query: string,
+        maxResults: number
+    ): Promise<MarketingResearchResult[]> {
         try {
             // Search posts using the AT Protocol search endpoint
             const searchData = await this.makeAuthenticatedRequest<BlueskySearchResponse>(
@@ -122,14 +131,15 @@ class BlueskyClient {
                     // Filter posts with some engagement (at least 2 likes or 1 repost)
                     return post.likeCount >= 2 || post.repostCount >= 1;
                 })
-                .map((post): MarketingResearchResult => ({
-                    title: this.extractTitle(post.record.text),
-                    url: this.generatePostUrl(post),
-                    snippet: this.formatPostSnippet(post),
-                    source: "bluesky" as const,
-                }))
+                .map(
+                    (post): MarketingResearchResult => ({
+                        title: this.extractTitle(post.record.text),
+                        url: this.generatePostUrl(post),
+                        snippet: this.formatPostSnippet(post),
+                        source: "bluesky" as const,
+                    })
+                )
                 .slice(0, maxResults);
-
         } catch (error) {
             console.warn("Bluesky search error:", error);
             return [];
@@ -139,25 +149,25 @@ class BlueskyClient {
     async getTrendingFeed(maxResults: number): Promise<MarketingResearchResult[]> {
         try {
             // Get trending posts from the "What's Hot" algorithm feed
-            const feedData = await this.makeAuthenticatedRequest<{feed: Array<{post: BlueskyPost}>}>(
-                "app.bsky.feed.getFeed",
-                {
-                    feed: "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot",
-                    limit: Math.min(maxResults, 50).toString(),
-                }
-            );
+            const feedData = await this.makeAuthenticatedRequest<{
+                feed: Array<{ post: BlueskyPost }>;
+            }>("app.bsky.feed.getFeed", {
+                feed: "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot",
+                limit: Math.min(maxResults, 50).toString(),
+            });
 
             return feedData.feed
                 .map(item => item.post)
                 .filter(post => post.likeCount >= 5) // Higher threshold for trending
-                .map((post): MarketingResearchResult => ({
-                    title: this.extractTitle(post.record.text),
-                    url: this.generatePostUrl(post),
-                    snippet: this.formatPostSnippet(post),
-                    source: "bluesky" as const,
-                }))
+                .map(
+                    (post): MarketingResearchResult => ({
+                        title: this.extractTitle(post.record.text),
+                        url: this.generatePostUrl(post),
+                        snippet: this.formatPostSnippet(post),
+                        source: "bluesky" as const,
+                    })
+                )
                 .slice(0, maxResults);
-
         } catch (error) {
             console.warn("Bluesky trending feed error:", error);
             return [];
@@ -165,13 +175,13 @@ class BlueskyClient {
     }
 
     private extractTitle(text: string): string {
-        const firstLine = text.split('\n')[0] ?? text;
+        const firstLine = text.split("\n")[0] ?? text;
         return firstLine.slice(0, 120) + (firstLine.length > 120 ? "..." : "");
     }
 
     private generatePostUrl(post: BlueskyPost): string {
         // Convert AT Protocol URI to web URL
-        const postId = post.uri.split('/').pop();
+        const postId = post.uri.split("/").pop();
         return `https://bsky.app/profile/${post.author.handle}/post/${postId}`;
     }
 
@@ -186,7 +196,7 @@ class BlueskyClient {
         const now = new Date();
         const diffMs = now.getTime() - date.getTime();
         const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-        
+
         if (diffHours < 1) return "< 1h ago";
         if (diffHours < 24) return `${diffHours}h ago`;
         const diffDays = Math.floor(diffHours / 24);

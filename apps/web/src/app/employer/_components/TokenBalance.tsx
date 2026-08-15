@@ -32,14 +32,14 @@ export function TokenBalance() {
 
     return (
         <div
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+            className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                 isLow
-                    ? "bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-400"
-                    : "bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-800/50 text-purple-600 dark:text-purple-400"
+                    ? "border-red-200 bg-red-50 text-red-600 dark:border-red-800/50 dark:bg-red-950/40 dark:text-red-400"
+                    : "border-purple-200 bg-purple-50 text-purple-600 dark:border-purple-800/50 dark:bg-purple-950/40 dark:text-purple-400"
             }`}
             title={`${balance.toLocaleString()} tokens remaining`}
         >
-            <Coins className="w-3.5 h-3.5" />
+            <Coins className="h-3.5 w-3.5" />
             {formatTokens(balance)}
         </div>
     );

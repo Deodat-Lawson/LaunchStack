@@ -27,7 +27,12 @@ const workspaceVector = () => Array.from({ length: 1536 }, (_, index) => (index 
 const contentHash = (content: string) => createHash("sha256").update(content, "utf8").digest("hex");
 
 const structurePath = (section: string, index: number) =>
-    `/${section.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "section"}-${index + 1}`;
+    `/${
+        section
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "") || "section"
+    }-${index + 1}`;
 
 /**
  * Storage URLs derived from a hash, not from the title.

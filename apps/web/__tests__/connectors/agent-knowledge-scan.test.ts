@@ -208,7 +208,10 @@ describe("scanAgentKnowledge — what it refuses to read", () => {
         const outside = path.join(root, "outside");
         await write(path.join(outside, "private.md"), "not yours");
         await mkdir(path.join(home, ".claude", "agents"), { recursive: true });
-        await symlink(path.join(outside, "private.md"), path.join(home, ".claude", "agents", "link.md"));
+        await symlink(
+            path.join(outside, "private.md"),
+            path.join(home, ".claude", "agents", "link.md")
+        );
         await symlink(outside, path.join(home, ".claude", "agents", "escape"));
 
         const scan = await scanAgentKnowledge({ homeDir: home, tools: ["claude-code"] });
@@ -230,7 +233,9 @@ describe("scanAgentKnowledge — what it refuses to read", () => {
             maxFileBytes: 1024,
         });
 
-        expect(sourceIds(scan.items)).toEqual(["agent-knowledge://claude-code/global/agents/ok.md"]);
+        expect(sourceIds(scan.items)).toEqual([
+            "agent-knowledge://claude-code/global/agents/ok.md",
+        ]);
         expect(scan.skipped).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({

@@ -9,10 +9,10 @@
 
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { 
+import {
     companyEnsembleSearch,
     type CompanySearchOptions,
-    type SearchResult
+    type SearchResult,
 } from "~/lib/tools/rag";
 import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
@@ -61,14 +61,19 @@ type ResearchResult = DocumentResult | WebResult | ArxivResult;
 // Validation schema
 const ResearchSchema = z.object({
     query: z.string().min(1).max(1000),
-    sources: z.array(z.enum(["documents", "web", "arxiv"])).min(1).default(["documents", "web"]),
-    options: z.object({
-        maxResults: z.number().min(1).max(20).optional(),
-        searchType: z.enum(["general", "academic", "news"]).optional(),
-        documentIds: z.array(z.number()).optional(), // Filter to specific documents
-        arxivCategory: z.string().optional(), // e.g., "cs.AI", "cs.LG", "physics"
-        sortBy: z.enum(["relevance", "lastUpdatedDate", "submittedDate"]).optional(),
-    }).optional(),
+    sources: z
+        .array(z.enum(["documents", "web", "arxiv"]))
+        .min(1)
+        .default(["documents", "web"]),
+    options: z
+        .object({
+            maxResults: z.number().min(1).max(20).optional(),
+            searchType: z.enum(["general", "academic", "news"]).optional(),
+            documentIds: z.array(z.number()).optional(), // Filter to specific documents
+            arxivCategory: z.string().optional(), // e.g., "cs.AI", "cs.LG", "physics"
+            sortBy: z.enum(["relevance", "lastUpdatedDate", "submittedDate"]).optional(),
+        })
+        .optional(),
 });
 
 /**
@@ -76,7 +81,7 @@ const ResearchSchema = z.object({
  * API Documentation: https://info.arxiv.org/help/api/basics.html
  */
 async function searchArxiv(
-    query: string, 
+    query: string,
     maxResults = 5,
     options?: { category?: string; sortBy?: string }
 ): Promise<ArxivResult[]> {
@@ -84,7 +89,7 @@ async function searchArxiv(
         // Build the arXiv API query
         // Encode the query properly for URL
         let searchQuery = encodeURIComponent(query);
-        
+
         // If a category is specified, add it to the query
         if (options?.category) {
             searchQuery = `all:${searchQuery}+AND+cat:${options.category}`;
@@ -94,8 +99,12 @@ async function searchArxiv(
 
         // Determine sort order
         const sortBy = options?.sortBy ?? "relevance";
-        const sortOrder = sortBy === "relevance" ? "relevance" : 
-                          sortBy === "lastUpdatedDate" ? "lastUpdatedDate" : "submittedDate";
+        const sortOrder =
+            sortBy === "relevance"
+                ? "relevance"
+                : sortBy === "lastUpdatedDate"
+                  ? "lastUpdatedDate"
+                  : "submittedDate";
 
         const arxivUrl = `https://export.arxiv.org/api/query?search_query=${searchQuery}&start=0&max_results=${maxResults}&sortBy=${sortOrder}&sortOrder=descending`;
 
@@ -113,13 +122,12 @@ async function searchArxiv(
         }
 
         const xmlText = await response.text();
-        
+
         // Parse the Atom XML response
         const results = parseArxivXml(xmlText);
-        
+
         console.log(`✅ [arXiv] Found ${results.length} papers`);
         return results;
-
     } catch (error) {
         console.error("❌ [arXiv] Search error:", error);
         return [];
@@ -131,7 +139,7 @@ async function searchArxiv(
  */
 function parseArxivXml(xml: string): ArxivResult[] {
     const results: ArxivResult[] = [];
-    
+
     // Extract entries using regex (simpler than full XML parsing)
     const entryRegex = /<entry>([\s\S]*?)<\/entry>/g;
     let entryMatch;
@@ -214,7 +222,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = ResearchSchema.safeParse(body);
 
         if (!validation.success) {
@@ -237,7 +245,7 @@ export async function POST(request: Request) {
                 try {
                     const embeddings = getEmbeddings();
                     const companyId = Number(ctx.data.companyId);
-                    
+
                     if (Number.isNaN(companyId)) {
                         console.warn("Invalid company ID for document search");
                         return;
@@ -258,9 +266,11 @@ export async function POST(request: Request) {
                     for (let i = 0; i < searchResults.length; i++) {
                         const result = searchResults[i];
                         if (!result) continue;
-                        
+
                         const distance = Number(result.metadata?.distance ?? 0);
-                        const metadata = result.metadata as unknown as Record<string, unknown> | undefined;
+                        const metadata = result.metadata as unknown as
+                            | Record<string, unknown>
+                            | undefined;
                         results.push({
                             id: `doc-${i}-${Date.now()}`,
                             content: result.pageContent,
@@ -287,7 +297,7 @@ export async function POST(request: Request) {
                     // Adjust query based on search type
                     let adjustedQuery = query;
                     const searchType = options?.searchType ?? "general";
-                    
+
                     if (searchType === "academic") {
                         adjustedQuery = `academic research: ${query}`;
                     } else if (searchType === "news") {
@@ -302,7 +312,7 @@ export async function POST(request: Request) {
                     for (let i = 0; i < webResults.length; i++) {
                         const result = webResults[i];
                         if (!result) continue;
-                        
+
                         results.push({
                             id: `web-${i}-${Date.now()}`,
                             title: result.title,
@@ -325,14 +335,10 @@ export async function POST(request: Request) {
         if (sources.includes("arxiv")) {
             const arxivSearchPromise = (async () => {
                 try {
-                    const arxivResults = await searchArxiv(
-                        query,
-                        Math.min(maxResults, 10),
-                        {
-                            category: options?.arxivCategory,
-                            sortBy: options?.sortBy,
-                        }
-                    );
+                    const arxivResults = await searchArxiv(query, Math.min(maxResults, 10), {
+                        category: options?.arxivCategory,
+                        sortBy: options?.sortBy,
+                    });
 
                     results.push(...arxivResults);
                     console.log(`📄 [Research] Found ${arxivResults.length} arXiv papers`);
@@ -347,14 +353,16 @@ export async function POST(request: Request) {
         await Promise.all(searchPromises);
 
         // Sort results by relevance score
-        results.sort((a, b) => (b.relevanceScore) - (a.relevanceScore));
+        results.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
         // Limit total results
         const limitedResults = results.slice(0, maxResults);
 
         const processingTimeMs = Date.now() - startTime;
 
-        console.log(`✅ [Research] Completed in ${processingTimeMs}ms with ${limitedResults.length} total results`);
+        console.log(
+            `✅ [Research] Completed in ${processingTimeMs}ms with ${limitedResults.length} total results`
+        );
 
         return NextResponse.json({
             success: true,
@@ -368,14 +376,13 @@ export async function POST(request: Request) {
             },
             processingTimeMs,
         });
-
     } catch (error) {
         console.error("❌ [Research] Error:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to perform research",
-                error: "Failed to perform research"
+                error: "Failed to perform research",
             },
             { status: 500 }
         );

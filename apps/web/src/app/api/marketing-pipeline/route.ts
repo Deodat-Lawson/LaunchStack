@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { MarketingPipelineInputSchema, runMarketingPipeline } from "@launchstack/features/marketing-pipeline";
+import {
+    MarketingPipelineInputSchema,
+    runMarketingPipeline,
+} from "@launchstack/features/marketing-pipeline";
 import type { PipelineSSEEvent } from "@launchstack/features/marketing-pipeline";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
@@ -30,8 +33,12 @@ export async function POST(request: Request) {
             body = (await request.json()) as unknown;
         } catch {
             return NextResponse.json(
-                { success: false, message: "Invalid JSON body", error: "Request body must be valid JSON" },
-                { status: 400 },
+                {
+                    success: false,
+                    message: "Invalid JSON body",
+                    error: "Request body must be valid JSON",
+                },
+                { status: 400 }
             );
         }
         const validation = MarketingPipelineInputSchema.safeParse(body);
@@ -42,7 +49,7 @@ export async function POST(request: Request) {
                     message: "Invalid input",
                     errors: validation.error.flatten(),
                 },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
@@ -50,7 +57,7 @@ export async function POST(request: Request) {
         if (Number.isNaN(companyId)) {
             return NextResponse.json(
                 { success: false, message: "Invalid company ID" },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
@@ -87,7 +94,7 @@ export async function POST(request: Request) {
                         companyId,
                         input: validation.data,
                         debug,
-                        onProgress: (progressEvent) => {
+                        onProgress: progressEvent => {
                             if (request.signal.aborted) {
                                 throw new ClientDisconnectedError();
                             }
@@ -100,11 +107,10 @@ export async function POST(request: Request) {
                     // A disconnect abort is an expected outcome, not a pipeline
                     // failure: skip the error event (muted anyway) and the
                     // error-level log, and let `finally` close the stream.
-                    if (
-                        error instanceof ClientDisconnectedError ||
-                        request.signal.aborted
-                    ) {
-                        console.log("[marketing-pipeline] client disconnected — pipeline stopped early");
+                    if (error instanceof ClientDisconnectedError || request.signal.aborted) {
+                        console.log(
+                            "[marketing-pipeline] client disconnected — pipeline stopped early"
+                        );
                         return;
                     }
 
@@ -149,7 +155,7 @@ export async function POST(request: Request) {
             headers: {
                 "Content-Type": "text/event-stream",
                 "Cache-Control": "no-cache, no-transform",
-                "Connection": "keep-alive",
+                Connection: "keep-alive",
                 "X-Accel-Buffering": "no",
             },
         });
@@ -161,7 +167,7 @@ export async function POST(request: Request) {
                 success: false,
                 message: "Failed to run marketing pipeline",
             },
-            { status: 500, headers: { "Content-Type": "application/json" } },
+            { status: 500, headers: { "Content-Type": "application/json" } }
         );
     }
 }

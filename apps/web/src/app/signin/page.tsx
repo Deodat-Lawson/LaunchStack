@@ -90,11 +90,7 @@ const SigninPage: React.FC = () => {
                         ) : isSignedIn ? (
                             <AlreadySignedIn />
                         ) : (
-                            <SignIn
-                                routing="hash"
-                                forceRedirectUrl="/"
-                                signUpUrl="/signup"
-                            />
+                            <SignIn routing="hash" forceRedirectUrl="/" signUpUrl="/signup" />
                         )}
 
                         <div
@@ -169,8 +165,8 @@ function AlreadySignedIn() {
                 You&rsquo;re already signed in.
             </div>
             <p style={{ fontSize: 13, color: "var(--ink-3)", lineHeight: 1.55, margin: 0 }}>
-                We couldn&rsquo;t work out which workspace to open for you. Continue
-                to pick one, or sign out and start again.
+                We couldn&rsquo;t work out which workspace to open for you. Continue to pick one, or
+                sign out and start again.
             </p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <Link

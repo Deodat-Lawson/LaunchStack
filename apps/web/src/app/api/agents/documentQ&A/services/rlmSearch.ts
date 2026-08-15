@@ -123,10 +123,7 @@ export async function performRLMSearch(
 
     // Create retriever with embeddings if we need semantic search
     const needsEmbeddings = prioritize === "relevance";
-    const embeddingIndex = resolveEmbeddingIndex(
-        embeddingIndexKey,
-        companyConfig ?? undefined,
-    );
+    const embeddingIndex = resolveEmbeddingIndex(embeddingIndexKey, companyConfig ?? undefined);
     const embeddings = needsEmbeddings
         ? getEmbeddings(embeddingIndex.indexKey, companyConfig ?? undefined)
         : undefined;
@@ -141,7 +138,9 @@ export async function performRLMSearch(
     ]);
 
     if (overview) {
-        console.log(`   Document: "${overview.title}" (${overview.totalTokens} tokens, ${overview.totalSections} sections)`);
+        console.log(
+            `   Document: "${overview.title}" (${overview.totalTokens} tokens, ${overview.totalSections} sections)`
+        );
     }
 
     // Retrieve sections based on prioritization strategy
@@ -168,11 +167,12 @@ export async function performRLMSearch(
     }
 
     // Calculate total tokens used
-    const totalTokensUsed = sections.length > 0
-        ? sections[sections.length - 1]!.cumulativeTokens
-        : 0;
+    const totalTokensUsed =
+        sections.length > 0 ? sections[sections.length - 1]!.cumulativeTokens : 0;
 
-    console.log(`✅ [RLM Search] Retrieved ${sections.length} sections (${totalTokensUsed} tokens)`);
+    console.log(
+        `✅ [RLM Search] Retrieved ${sections.length} sections (${totalTokensUsed} tokens)`
+    );
 
     // Build combined content string for LLM context
     const combinedContent = buildCombinedContent(sections, overview, previews);
@@ -235,7 +235,8 @@ function buildCombinedContent(
         parts.push("=== RELEVANT CONTENT ===");
 
         sections.forEach((section, idx) => {
-            const pageInfo = section.pageNumber !== null ? `Page ${section.pageNumber}` : "Unknown page";
+            const pageInfo =
+                section.pageNumber !== null ? `Page ${section.pageNumber}` : "Unknown page";
             const typeInfo = section.semanticType ? ` (${section.semanticType})` : "";
             const pathInfo = section.structurePath ? ` [${section.structurePath}]` : "";
 
@@ -272,10 +273,7 @@ export async function getDocumentOverviewsBatch(
  * Navigate document structure tree
  * Returns hierarchical structure for drilling down into specific sections
  */
-export async function getDocumentStructureTree(
-    documentId: number,
-    maxDepth = 2
-) {
+export async function getDocumentStructureTree(documentId: number, maxDepth = 2) {
     const retriever = createRLMRetriever();
     return retriever.getDocumentTree(documentId, maxDepth);
 }
@@ -284,11 +282,7 @@ export async function getDocumentStructureTree(
  * Get sections by structure path
  * Useful for drilling down into specific parts of a document
  */
-export async function getSectionsByPath(
-    documentId: number,
-    path: string,
-    maxTokens: number
-) {
+export async function getSectionsByPath(documentId: number, path: string, maxTokens: number) {
     const retriever = createRLMRetriever();
     const structure = await retriever.getStructureByPath(documentId, path);
 

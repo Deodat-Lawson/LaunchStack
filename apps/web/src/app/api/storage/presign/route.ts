@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 
-import { getPresignedUploadUrl, getS3BucketName, ensureBucketExists } from "~/server/storage/s3-client";
+import {
+    getPresignedUploadUrl,
+    getS3BucketName,
+    ensureBucketExists,
+} from "~/server/storage/s3-client";
 import { isS3Storage } from "~/lib/storage";
 import { validateRequestBody, PresignUploadSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -15,7 +19,7 @@ export async function POST(request: Request) {
         if (!isS3Storage()) {
             return NextResponse.json(
                 { error: "Presigned URLs are not applicable: no S3 endpoint configured" },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
@@ -30,11 +34,7 @@ export async function POST(request: Request) {
         const bucket = getS3BucketName();
 
         await ensureBucketExists();
-        const presignedUrl = await getPresignedUploadUrl(
-            objectKey,
-            body.contentType,
-            300,
-        );
+        const presignedUrl = await getPresignedUploadUrl(objectKey, body.contentType, 300);
 
         return NextResponse.json({ presignedUrl, objectKey, bucket });
     } catch (error) {
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
             {
                 error: "Failed to generate presigned URL",
             },
-            { status: 500 },
+            { status: 500 }
         );
     }
 }

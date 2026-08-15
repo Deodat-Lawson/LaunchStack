@@ -34,20 +34,20 @@ export function StatsCard({ title, value, icon: Icon, color, className }: StatsC
     const colors = colorMap[color];
 
     return (
-        <Card className={cn(
-            "p-5 border-none shadow-sm bg-card flex flex-col justify-between group hover:shadow-md transition-all border-l-4",
-            colors.border,
-            className
-        )}>
-            <div className="flex justify-between items-start mb-2">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+        <Card
+            className={cn(
+                "bg-card group flex flex-col justify-between border-l-4 border-none p-5 shadow-sm transition-all hover:shadow-md",
+                colors.border,
+                className
+            )}
+        >
+            <div className="mb-2 flex items-start justify-between">
+                <span className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest">
                     {title}
                 </span>
-                <Icon className={cn("w-4 h-4", colors.text)} />
+                <Icon className={cn("h-4 w-4", colors.text)} />
             </div>
-            <div className="text-3xl font-black text-foreground">
-                {value}
-            </div>
+            <div className="text-foreground text-3xl font-black">{value}</div>
         </Card>
     );
 }

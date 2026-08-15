@@ -148,10 +148,7 @@ export class FounderWeeklyReviewRepository {
                 updatedAt: new Date(),
             })
             .onConflictDoNothing({
-                target: [
-                    founderWeeklyReviewRuns.companyId,
-                    founderWeeklyReviewRuns.requestKey,
-                ],
+                target: [founderWeeklyReviewRuns.companyId, founderWeeklyReviewRuns.requestKey],
             })
             .returning();
 
@@ -159,10 +156,7 @@ export class FounderWeeklyReviewRepository {
             return { run: mapRunRow(inserted), created: true };
         }
 
-        const existing = await this.getByCompanyAndRequestKey(
-            input.companyId,
-            input.requestKey
-        );
+        const existing = await this.getByCompanyAndRequestKey(input.companyId, input.requestKey);
         if (!existing) {
             throw new Error("Failed to create or retrieve founder weekly review run");
         }
@@ -314,68 +308,100 @@ export class FounderWeeklyReviewRepository {
         };
     }
 
-    async claimEvidenceCollection(input: FounderWeeklyReviewCollectionClaimInput): Promise<ConditionalRunMutationResult> {
+    async claimEvidenceCollection(
+        input: FounderWeeklyReviewCollectionClaimInput
+    ): Promise<ConditionalRunMutationResult> {
         const now = new Date();
-        const [row] = await this.db.update(founderWeeklyReviewRuns).set({
-            status: "collecting",
-            collectionClaimId: input.collectionClaimId,
-            collectionStartedAt: now,
-            errorCode: null,
-            errorMessage: null,
-            updatedAt: now,
-        }).where(and(
-            eq(founderWeeklyReviewRuns.companyId, input.companyId),
-            eq(founderWeeklyReviewRuns.id, input.runId),
-            eq(founderWeeklyReviewRuns.status, "queued"),
-            sql`${founderWeeklyReviewRuns.evidenceSnapshot} IS NULL`,
-        )).returning();
-        return row ? { updated: true, run: mapRunRow(row) } : {
-            updated: false, run: await this.getByCompanyAndRunId(input.companyId, input.runId),
-        };
+        const [row] = await this.db
+            .update(founderWeeklyReviewRuns)
+            .set({
+                status: "collecting",
+                collectionClaimId: input.collectionClaimId,
+                collectionStartedAt: now,
+                errorCode: null,
+                errorMessage: null,
+                updatedAt: now,
+            })
+            .where(
+                and(
+                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
+                    eq(founderWeeklyReviewRuns.id, input.runId),
+                    eq(founderWeeklyReviewRuns.status, "queued"),
+                    sql`${founderWeeklyReviewRuns.evidenceSnapshot} IS NULL`
+                )
+            )
+            .returning();
+        return row
+            ? { updated: true, run: mapRunRow(row) }
+            : {
+                  updated: false,
+                  run: await this.getByCompanyAndRunId(input.companyId, input.runId),
+              };
     }
 
     async attachEvidenceSnapshotIfAbsent(
         input: FounderWeeklyReviewCollectionClaimInput,
-        evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot,
+        evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot
     ): Promise<ConditionalRunMutationResult> {
         const now = new Date();
-        const [row] = await this.db.update(founderWeeklyReviewRuns).set({
-            status: "queued",
-            evidenceSnapshot,
-            evidenceSchemaVersion: evidenceSnapshot.schemaVersion,
-            evidenceCollectedAt: now,
-            collectionClaimId: null,
-            queuedAt: now,
-            updatedAt: now,
-        }).where(and(
-            eq(founderWeeklyReviewRuns.companyId, input.companyId),
-            eq(founderWeeklyReviewRuns.id, input.runId),
-            eq(founderWeeklyReviewRuns.status, "collecting"),
-            eq(founderWeeklyReviewRuns.collectionClaimId, input.collectionClaimId),
-            sql`${founderWeeklyReviewRuns.evidenceSnapshot} IS NULL`,
-        )).returning();
-        return row ? { updated: true, run: mapRunRow(row) } : {
-            updated: false, run: await this.getByCompanyAndRunId(input.companyId, input.runId),
-        };
+        const [row] = await this.db
+            .update(founderWeeklyReviewRuns)
+            .set({
+                status: "queued",
+                evidenceSnapshot,
+                evidenceSchemaVersion: evidenceSnapshot.schemaVersion,
+                evidenceCollectedAt: now,
+                collectionClaimId: null,
+                queuedAt: now,
+                updatedAt: now,
+            })
+            .where(
+                and(
+                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
+                    eq(founderWeeklyReviewRuns.id, input.runId),
+                    eq(founderWeeklyReviewRuns.status, "collecting"),
+                    eq(founderWeeklyReviewRuns.collectionClaimId, input.collectionClaimId),
+                    sql`${founderWeeklyReviewRuns.evidenceSnapshot} IS NULL`
+                )
+            )
+            .returning();
+        return row
+            ? { updated: true, run: mapRunRow(row) }
+            : {
+                  updated: false,
+                  run: await this.getByCompanyAndRunId(input.companyId, input.runId),
+              };
     }
 
-    async markCollectionFailed(input: FounderWeeklyReviewCollectionClaimInput, failure: FounderWeeklyReviewGenerationFailure): Promise<ConditionalRunMutationResult> {
+    async markCollectionFailed(
+        input: FounderWeeklyReviewCollectionClaimInput,
+        failure: FounderWeeklyReviewGenerationFailure
+    ): Promise<ConditionalRunMutationResult> {
         const now = new Date();
-        const [row] = await this.db.update(founderWeeklyReviewRuns).set({
-            status: "failed",
-            failureSequence: sql`${founderWeeklyReviewRuns.failureSequence} + 1`,
-            errorCode: failure.errorCode,
-            errorMessage: truncateErrorMessage(failure.errorMessage),
-            updatedAt: now,
-        }).where(and(
-            eq(founderWeeklyReviewRuns.companyId, input.companyId),
-            eq(founderWeeklyReviewRuns.id, input.runId),
-            eq(founderWeeklyReviewRuns.status, "collecting"),
-            eq(founderWeeklyReviewRuns.collectionClaimId, input.collectionClaimId),
-        )).returning();
-        return row ? { updated: true, run: mapRunRow(row) } : {
-            updated: false, run: await this.getByCompanyAndRunId(input.companyId, input.runId),
-        };
+        const [row] = await this.db
+            .update(founderWeeklyReviewRuns)
+            .set({
+                status: "failed",
+                failureSequence: sql`${founderWeeklyReviewRuns.failureSequence} + 1`,
+                errorCode: failure.errorCode,
+                errorMessage: truncateErrorMessage(failure.errorMessage),
+                updatedAt: now,
+            })
+            .where(
+                and(
+                    eq(founderWeeklyReviewRuns.companyId, input.companyId),
+                    eq(founderWeeklyReviewRuns.id, input.runId),
+                    eq(founderWeeklyReviewRuns.status, "collecting"),
+                    eq(founderWeeklyReviewRuns.collectionClaimId, input.collectionClaimId)
+                )
+            )
+            .returning();
+        return row
+            ? { updated: true, run: mapRunRow(row) }
+            : {
+                  updated: false,
+                  run: await this.getByCompanyAndRunId(input.companyId, input.runId),
+              };
     }
 
     async saveGeneratedDraftWithClaim(
@@ -487,7 +513,7 @@ export class FounderWeeklyReviewRepository {
     async retryFailedRun(
         input: FounderWeeklyReviewRetryInput
     ): Promise<RetryFounderWeeklyReviewResult> {
-        return this.db.transaction(async (tx) => {
+        return this.db.transaction(async tx => {
             const [currentRow] = await tx
                 .select()
                 .from(founderWeeklyReviewRuns)
@@ -584,8 +610,7 @@ export class FounderWeeklyReviewRepository {
                 return {
                     outcome:
                         conflictingOperationRow &&
-                        conflictingOperationRow.sourceFailureSequence ===
-                            currentRun.failureSequence
+                        conflictingOperationRow.sourceFailureSequence === currentRun.failureSequence
                             ? "idempotent"
                             : "conflict",
                     run: await this.getRunInsideTransaction(tx, input.companyId, input.runId),
@@ -616,10 +641,7 @@ export class FounderWeeklyReviewRepository {
                         eq(founderWeeklyReviewRuns.companyId, input.companyId),
                         eq(founderWeeklyReviewRuns.id, input.runId),
                         eq(founderWeeklyReviewRuns.status, "failed"),
-                        eq(
-                            founderWeeklyReviewRuns.failureSequence,
-                            currentRun.failureSequence
-                        )
+                        eq(founderWeeklyReviewRuns.failureSequence, currentRun.failureSequence)
                     )
                 )
                 .returning();

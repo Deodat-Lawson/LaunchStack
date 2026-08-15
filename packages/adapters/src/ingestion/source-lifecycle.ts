@@ -34,10 +34,7 @@ import {
 import type { OCRProvider } from "../ocr/types";
 import { parseProvider } from "../ocr/trigger";
 import { getDb, type DbClient } from "../db";
-import {
-    pipelineEventSchema,
-    type SourceVersionCreatedEvent,
-} from "@launchstack/protocol";
+import { pipelineEventSchema, type SourceVersionCreatedEvent } from "@launchstack/protocol";
 
 import { buildSourceVersionCreatedEvent } from "./source-events";
 
@@ -189,10 +186,7 @@ type Tx = Parameters<Parameters<DbClient["transaction"]>[0]>[0];
  * budget, which is what makes "re-upload a failed document" re-run the
  * idempotent pipeline (the old failed→queued redispatch semantics).
  */
-async function enqueueSourceEventInTx(
-    tx: Tx,
-    event: SourceVersionCreatedEvent
-): Promise<void> {
+async function enqueueSourceEventInTx(tx: Tx, event: SourceVersionCreatedEvent): Promise<void> {
     const parsed = pipelineEventSchema.parse(event);
     await tx
         .insert(eventOutbox)
@@ -566,9 +560,7 @@ export async function createDocumentLifecycle(
 
         const shouldDispatch =
             Boolean(lifecycleJob) &&
-            (inserted ||
-                lifecycleJob?.status === "queued" ||
-                lifecycleJob?.status === "failed");
+            (inserted || lifecycleJob?.status === "queued" || lifecycleJob?.status === "failed");
 
         if (shouldDispatch && lifecycleJob) {
             lifecycleJob = await dispatchInTx(tx, {

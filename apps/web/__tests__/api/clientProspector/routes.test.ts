@@ -58,11 +58,7 @@ jest.mock("~/server/inngest/client", () => ({
 // cleanup setInterval from holding the Jest process open after the run.
 jest.mock("~/lib/rate-limit-middleware", () => ({
     withRateLimit: jest.fn(
-        async (
-            _request: Request,
-            _config: unknown,
-            handler: () => Promise<unknown>,
-        ) => handler(),
+        async (_request: Request, _config: unknown, handler: () => Promise<unknown>) => handler()
     ),
 }));
 
@@ -176,10 +172,12 @@ describe("POST /api/client-prospector", () => {
     it("returns 400 for empty query", async () => {
         mockAuthenticatedUser();
 
-        const response = await POST(makePostRequest({
-            ...VALID_BODY,
-            query: "",
-        }));
+        const response = await POST(
+            makePostRequest({
+                ...VALID_BODY,
+                query: "",
+            })
+        );
         const { status, body } = await parseResponse(response);
 
         expect(status).toBe(400);
@@ -191,10 +189,12 @@ describe("POST /api/client-prospector", () => {
     it("returns 400 for oversized companyContext", async () => {
         mockAuthenticatedUser();
 
-        const response = await POST(makePostRequest({
-            ...VALID_BODY,
-            companyContext: "x".repeat(2001),
-        }));
+        const response = await POST(
+            makePostRequest({
+                ...VALID_BODY,
+                companyContext: "x".repeat(2001),
+            })
+        );
         const { status, body } = await parseResponse(response);
 
         expect(status).toBe(400);

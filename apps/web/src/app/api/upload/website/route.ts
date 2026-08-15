@@ -127,8 +127,7 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
-            const { url, title, category, crawl, maxDepth, maxPages, jsRender } =
-                validation.data;
+            const { url, title, category, crawl, maxDepth, maxPages, jsRender } = validation.data;
 
             // SSRF guard: http(s) only, and the host must resolve to a public
             // address. Guards both single-page fetch and the crawl seed (the
@@ -274,10 +273,7 @@ export async function POST(request: Request) {
             // Collapsing that into a 500 hides an actionable, operator-fixable
             // condition behind "something went wrong".
             if (error instanceof UploadAuthorizationError) {
-                return NextResponse.json(
-                    { error: error.message },
-                    { status: error.status },
-                );
+                return NextResponse.json({ error: error.message }, { status: error.status });
             }
             console.error("[WebsiteUpload] Error:", error);
             return NextResponse.json(

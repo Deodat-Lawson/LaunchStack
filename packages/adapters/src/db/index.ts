@@ -21,12 +21,12 @@ export type DbClient = ReturnType<typeof drizzle<typeof schema>>;
 export type SqlClient = Sql;
 
 export interface Db {
-  /** Drizzle query builder + execute(). */
-  db: DbClient;
-  /** Underlying postgres.js client — use sparingly. */
-  client: SqlClient;
-  /** Closes the underlying connection pool. */
-  close: () => Promise<void>;
+    /** Drizzle query builder + execute(). */
+    db: DbClient;
+    /** Underlying postgres.js client — use sparingly. */
+    client: SqlClient;
+    /** Closes the underlying connection pool. */
+    close: () => Promise<void>;
 }
 
 /**
@@ -35,13 +35,13 @@ export interface Db {
  * createEngine + getEngine().
  */
 export function createDb(config: DbConfig): Db {
-  const client = postgres(config.url, { max: config.maxConnections ?? 10 });
-  const db = drizzle(client, { schema });
-  return {
-    db,
-    client,
-    close: () => client.end({ timeout: 5 }),
-  };
+    const client = postgres(config.url, { max: config.maxConnections ?? 10 });
+    const db = drizzle(client, { schema });
+    return {
+        db,
+        client,
+        close: () => client.end({ timeout: 5 }),
+    };
 }
 
 /**
@@ -49,7 +49,7 @@ export function createDb(config: DbConfig): Db {
  * Lifted from the former app-side helper so consumers get the same ergonomics.
  */
 export function toRows<T>(result: unknown): T[] {
-  return (Array.isArray(result) ? result : []) as T[];
+    return (Array.isArray(result) ? result : []) as T[];
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -63,15 +63,15 @@ export function toRows<T>(result: unknown): T[] {
 const dbSlot = createSlot<DbClient>("db/client");
 
 export function configureDatabase(db: DbClient): void {
-  dbSlot.set(db);
+    dbSlot.set(db);
 }
 
 export function getDb(): DbClient {
-  const db = dbSlot.get();
-  if (!db) {
-    throw new Error(
-      "[@launchstack/adapters/db] No DbClient registered. The host must call createEngine(config) (or configureDatabase(db) directly) before any subsystem that uses getDb().",
-    );
-  }
-  return db;
+    const db = dbSlot.get();
+    if (!db) {
+        throw new Error(
+            "[@launchstack/adapters/db] No DbClient registered. The host must call createEngine(config) (or configureDatabase(db) directly) before any subsystem that uses getDb()."
+        );
+    }
+    return db;
 }

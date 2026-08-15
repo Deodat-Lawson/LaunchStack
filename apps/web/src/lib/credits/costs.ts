@@ -17,7 +17,4 @@ export {
 } from "@launchstack/core/credits";
 
 /** Default signup bonus: 10 million tokens */
-export const TOKEN_SIGNUP_BONUS = parseInt(
-    process.env.TOKEN_SIGNUP_BONUS ?? "10000000",
-    10,
-);
+export const TOKEN_SIGNUP_BONUS = parseInt(process.env.TOKEN_SIGNUP_BONUS ?? "10000000", 10);

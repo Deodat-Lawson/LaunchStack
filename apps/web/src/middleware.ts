@@ -12,11 +12,7 @@ const middlewareUserCacheTtlMs = 10_000;
 const middlewareUserCacheMaxSize = 500;
 
 // Routes that require authentication
-const isProtectedRoute = createRouteMatcher([
-    '/employer(.*)',
-    '/employee(.*)',
-    '/workspaces(.*)',
-]);
+const isProtectedRoute = createRouteMatcher(["/employer(.*)", "/employee(.*)", "/workspaces(.*)"]);
 
 // Page routes that are always public. API routes are governed by
 // isPublicApiRoute below, not by this list.
@@ -30,52 +26,45 @@ const isProtectedRoute = createRouteMatcher([
 //
 // /pricing, /deployment, /contact and /about were removed here when the public
 // site moved to apps/landing; / was removed because it now redirects.
-const isPublicRoute = createRouteMatcher([
-    '/signup',
-    '/signin',
-]);
+const isPublicRoute = createRouteMatcher(["/signup", "/signin"]);
 
 // Everything under /api requires a Clerk session unless it is listed here.
 // Adding a route to this list means "no session required" — the route itself
 // is then responsible for whatever authentication it needs.
 const isPublicApiRoute = createRouteMatcher([
     // Uptime probes.
-    '/api/health',
+    "/api/health",
     // Authenticated by provider signature, not by a Clerk session.
-    '/api/webhooks(.*)',
+    "/api/webhooks(.*)",
     // Authenticated by the Inngest signing key.
-    '/api/inngest',
+    "/api/inngest",
     // Pre-auth signup UX: the code is validated before the user has an account.
-    '/api/invite-codes/validate',
+    "/api/invite-codes/validate",
     // CI-only extractor, refuses to run unless OCR_BENCHMARK_ENABLED=true.
-    '/api/ocr/benchmark',
+    "/api/ocr/benchmark",
     // Prometheus scrapes without a Clerk session; the route requires
     // Authorization: Bearer $METRICS_SCRAPE_TOKEN (fail-closed in production).
-    '/api/metrics',
+    "/api/metrics",
     // UploadThing posts its onUploadComplete callback here server-to-server
     // with no session. Every branch of the file router calls auth() itself.
-    '/api/uploadthing(.*)',
+    "/api/uploadthing(.*)",
     // Serves database-backed files to both the browser and the OCR worker;
     // the route accepts a Clerk session or a signed per-file token.
-    '/api/files(.*)',
+    "/api/files(.*)",
     // Machine auth via COLLAB_HUB_SECRET HMAC, not a Clerk session.
-    '/api/collab/hub(.*)',
+    "/api/collab/hub(.*)",
     // Slack Events API verifies the signing secret on the raw body.
-    '/api/collab/slack/events',
+    "/api/collab/slack/events",
     // Clicked from a mail client, which has no Clerk session — the route's own
     // docblock says so. Without this entry the /api/* default-deny below
     // answered every unsubscribe click with a JSON 401, which is also an
     // RFC 8058 one-click compliance problem. The token is an HMAC we issued
     // over (companyId, email), so the route authenticates the request itself.
-    '/api/email-pipeline/unsubscribe(.*)',
+    "/api/email-pipeline/unsubscribe(.*)",
 ]);
 
 // Routes where authenticated users should be redirected to their dashboard
-const isAuthRedirectRoute = createRouteMatcher([
-    '/',
-    '/signup',
-    '/signin',
-]);
+const isAuthRedirectRoute = createRouteMatcher(["/", "/signup", "/signin"]);
 
 const isEmployerPath = (pathname: string) => pathname.startsWith("/employer");
 const isEmployeePath = (pathname: string) => pathname.startsWith("/employee");
@@ -99,10 +88,13 @@ type CachedUserValue = {
     userPk: number;
 };
 
-const middlewareUserCache = new Map<string, {
-    value: CachedUserValue;
-    expiresAt: number;
-}>();
+const middlewareUserCache = new Map<
+    string,
+    {
+        value: CachedUserValue;
+        expiresAt: number;
+    }
+>();
 
 const getCachedMiddlewareUser = (userId: string): CachedUserValue | undefined => {
     const cached = middlewareUserCache.get(userId);
@@ -140,18 +132,15 @@ export default clerkMiddleware(async (auth, req) => {
         // with a 404 page (or a redirect to /signin), which is the wrong shape
         // for an API client. Resolution stops at "is there a session"; company
         // and role checks belong in the handlers, via requireWorkspaceContext.
-        if (pathname.startsWith('/api/')) {
+        if (pathname.startsWith("/api/")) {
             if (!userId && !isPublicApiRoute(req)) {
-                return NextResponse.json(
-                    { error: "Unauthorized" },
-                    { status: 401 },
-                );
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
             }
             return;
         }
 
         // Static assets: no redirect logic.
-        if (pathname.startsWith('/_next/')) {
+        if (pathname.startsWith("/_next/")) {
             return;
         }
 
@@ -163,18 +152,18 @@ export default clerkMiddleware(async (auth, req) => {
         // unreachable database falls through that lookup's catch, and if the
         // page component were the only redirect, / -> /signin -> (Clerk honours
         // forceRedirectUrl on an active session) -> / would loop forever.
-        if (!userId && pathname === '/') {
-            return NextResponse.redirect(new URL('/signin', req.url));
+        if (!userId && pathname === "/") {
+            return NextResponse.redirect(new URL("/signin", req.url));
         }
 
         // Protect routes that require authentication
         if (isProtectedRoute(req) && !isPublicRoute(req)) {
-            await auth.protect({ unauthenticatedUrl: new URL('/signin', req.url).toString() });
+            await auth.protect({ unauthenticatedUrl: new URL("/signin", req.url).toString() });
         }
 
         // Route authenticated users based on their DB role + status
         if (userId && (isAuthRedirectRoute(req) || isProtectedRoute(req))) {
-            const hasCodeParam = pathname === '/signup' && req.nextUrl.searchParams.has('code');
+            const hasCodeParam = pathname === "/signup" && req.nextUrl.searchParams.has("code");
 
             try {
                 const cachedUser = getCachedMiddlewareUser(userId);
@@ -211,17 +200,18 @@ export default clerkMiddleware(async (auth, req) => {
 
                 if (!existingUser) {
                     // User exists in Clerk but not in DB – send to signup to finish registration
-                    if (pathname !== '/signup') {
-                        return NextResponse.redirect(new URL('/signup?from=signin', req.url));
+                    if (pathname !== "/signup") {
+                        return NextResponse.redirect(new URL("/signup?from=signin", req.url));
                     }
                 } else if (hasCodeParam) {
                     // Let the signup page handle the "already registered" error
                     return;
                 } else if (existingUser.status !== "verified") {
                     // User is pending approval – redirect to the correct pending page
-                    const pendingPath = existingUser.role === "employee"
-                        ? '/employee/pending-approval'
-                        : '/employer/pending-approval';
+                    const pendingPath =
+                        existingUser.role === "employee"
+                            ? "/employee/pending-approval"
+                            : "/employer/pending-approval";
                     if (pathname !== pendingPath) {
                         return NextResponse.redirect(new URL(pendingPath, req.url));
                     }
@@ -232,24 +222,24 @@ export default clerkMiddleware(async (auth, req) => {
 
                     // Enforce role-specific protected route spaces.
                     if (isEmployerPath(pathname) && !isEmployerRole) {
-                        return NextResponse.redirect(new URL('/employee/documents', req.url));
+                        return NextResponse.redirect(new URL("/employee/documents", req.url));
                     }
                     if (isEmployeePath(pathname) && !isEmployeeRole) {
-                        return NextResponse.redirect(new URL('/employer/documents', req.url));
+                        return NextResponse.redirect(new URL("/employer/documents", req.url));
                     }
                 } else if (isAuthRedirectRoute(req)) {
                     // Verified user on / or /signup – send to their dashboard.
                     // Users with 2+ memberships pick a workspace first.
                     if (existingUser.role === "employer" || existingUser.role === "owner") {
                         if (existingUser.membershipCount >= 2) {
-                            return NextResponse.redirect(new URL('/workspaces', req.url));
+                            return NextResponse.redirect(new URL("/workspaces", req.url));
                         }
-                        return NextResponse.redirect(new URL('/employer/documents', req.url));
+                        return NextResponse.redirect(new URL("/employer/documents", req.url));
                     } else if (existingUser.role === "employee") {
                         if (existingUser.membershipCount >= 2) {
-                            return NextResponse.redirect(new URL('/workspaces', req.url));
+                            return NextResponse.redirect(new URL("/workspaces", req.url));
                         }
-                        return NextResponse.redirect(new URL('/employee/documents', req.url));
+                        return NextResponse.redirect(new URL("/employee/documents", req.url));
                     }
                 }
                 // Verified user on a protected route – let through
@@ -276,11 +266,11 @@ export default clerkMiddleware(async (auth, req) => {
 // the first pattern already matches any path without one of those static file
 // extensions, so both routes do run through this middleware.
 export const config = {
-    runtime: 'nodejs',
+    runtime: "nodejs",
     matcher: [
         // Skip Next.js internals and all static files, unless found in search params
-        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+        "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
         // Always run for API routes, but exclude file upload routes (body stream conflicts in standalone mode)
-        '/(api(?!/upload-local|/files)|trpc)(.*)',
+        "/(api(?!/upload-local|/files)|trpc)(.*)",
     ],
 };

@@ -11,9 +11,9 @@
  */
 
 export interface CreditsPort {
-  /** Debit a per-company service balance. Non-throwing implementations are
-   *  expected; credit bookkeeping failures should not break ingestion. */
-  debit(input: DebitInput): Promise<void>;
+    /** Debit a per-company service balance. Non-throwing implementations are
+     *  expected; credit bookkeeping failures should not break ingestion. */
+    debit(input: DebitInput): Promise<void>;
 }
 
 /**
@@ -34,24 +34,24 @@ export interface CreditsPort {
 export type MeteringMode = "off" | "record" | "enforce";
 
 export interface DebitInput {
-  companyId: bigint;
-  service: TokenService;
-  tokens: number;
-  /** Human-readable description for the transaction log. */
-  description?: string;
-  /** Caller-supplied reference (e.g. documentId) for correlating a debit. */
-  referenceId?: string;
-  /** Arbitrary metadata to attach to the transaction record. */
-  metadata?: Record<string, unknown>;
+    companyId: bigint;
+    service: TokenService;
+    tokens: number;
+    /** Human-readable description for the transaction log. */
+    description?: string;
+    /** Caller-supplied reference (e.g. documentId) for correlating a debit. */
+    referenceId?: string;
+    /** Arbitrary metadata to attach to the transaction record. */
+    metadata?: Record<string, unknown>;
 }
 
 export type TokenService =
-  | "embedding"
-  | "rerank"
-  | "ner"
-  | "transcription"
-  | "ocr_azure"
-  | "ocr_landingai"
-  | "ocr_datalab"
-  | "ocr_native"
-  | "llm_chat";
+    | "embedding"
+    | "rerank"
+    | "ner"
+    | "transcription"
+    | "ocr_azure"
+    | "ocr_landingai"
+    | "ocr_datalab"
+    | "ocr_native"
+    | "llm_chat";

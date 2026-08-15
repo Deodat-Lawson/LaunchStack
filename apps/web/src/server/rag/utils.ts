@@ -1,8 +1,8 @@
 export {
-  validateDocumentAccess,
-  getUserCompanyId,
-  formatResultsForPrompt,
-  truncateText,
-  cosineSimilarity,
-  euclideanDistance,
+    validateDocumentAccess,
+    getUserCompanyId,
+    formatResultsForPrompt,
+    truncateText,
+    cosineSimilarity,
+    euclideanDistance,
 } from "~/lib/tools/rag/utils";

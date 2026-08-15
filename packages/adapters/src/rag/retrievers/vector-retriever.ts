@@ -347,8 +347,7 @@ export class VectorRetriever extends BaseRetriever {
                             documentId: row.document_id,
                             // bigint columns can surface as strings; normalize
                             // so citation anchoring sees a number.
-                            versionId:
-                                row.version_id != null ? Number(row.version_id) : undefined,
+                            versionId: row.version_id != null ? Number(row.version_id) : undefined,
                             documentTitle: row.document_title,
                             distance: row.distance,
                             source: "vector_ann",

@@ -246,9 +246,7 @@ describe("fetchPublicUrl", () => {
     });
 
     it("rejects a redirect to the hex-mapped IPv6 loopback", async () => {
-        fetchMock.mockResolvedValueOnce(
-            response(302, { Location: "http://[::ffff:7f00:1]/" })
-        );
+        fetchMock.mockResolvedValueOnce(response(302, { Location: "http://[::ffff:7f00:1]/" }));
 
         await expect(fetchPublicUrl("http://93.184.216.34/start")).rejects.toThrow(
             "URL resolves to a private or internal address"
@@ -257,9 +255,7 @@ describe("fetchPublicUrl", () => {
     });
 
     it("refuses non-http(s) Location targets", async () => {
-        fetchMock.mockResolvedValueOnce(
-            response(303, { Location: "file:///etc/passwd" })
-        );
+        fetchMock.mockResolvedValueOnce(response(303, { Location: "file:///etc/passwd" }));
 
         await expect(fetchPublicUrl("http://93.184.216.34/start")).rejects.toThrow(
             "Redirect target uses an unsupported scheme"

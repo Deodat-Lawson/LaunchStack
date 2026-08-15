@@ -35,14 +35,11 @@ export async function POST() {
         const companyId = await resolveActiveCompanyForUser(
             userInfo.id,
             userInfo.companyId,
-            userInfo.status,
+            userInfo.status
         );
 
         if (companyId === null) {
-            return NextResponse.json(
-                { error: "No active workspace" },
-                { status: 403 },
-            );
+            return NextResponse.json({ error: "No active workspace" }, { status: 403 });
         }
 
         const [membership] = await db
@@ -51,15 +48,12 @@ export async function POST() {
             .where(
                 and(
                     eq(userCompanyMemberships.userId, BigInt(userInfo.id)),
-                    eq(userCompanyMemberships.companyId, companyId),
-                ),
+                    eq(userCompanyMemberships.companyId, companyId)
+                )
             );
 
         if (!membership && userInfo.status === "verified") {
-            return NextResponse.json(
-                { error: "No active workspace membership" },
-                { status: 403 },
-            );
+            return NextResponse.json({ error: "No active workspace membership" }, { status: 403 });
         }
 
         const [companyRecord] = await db
@@ -68,10 +62,7 @@ export async function POST() {
             .where(and(eq(company.id, Number(companyId))));
 
         if (!companyRecord) {
-            return NextResponse.json(
-                { error: "Company not found" },
-                { status: 404 }
-            );
+            return NextResponse.json({ error: "Company not found" }, { status: 404 });
         }
 
         const submissionDate = new Date(userInfo.createdAt).toLocaleString("en-US", {
@@ -82,9 +73,7 @@ export async function POST() {
         const serializedUserInfo = {
             ...userInfo,
             companyId: Number(companyId),
-            role: membership?.role ?? (
-                userInfo.status === "pending" ? userInfo.role : ""
-            ),
+            role: membership?.role ?? (userInfo.status === "pending" ? userInfo.role : ""),
         };
 
         return NextResponse.json(

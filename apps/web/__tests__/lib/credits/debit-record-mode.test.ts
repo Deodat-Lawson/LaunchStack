@@ -23,15 +23,15 @@ const mockInsertValues = jest.fn();
 const mockSelectWhere = jest.fn();
 
 jest.mock("~/server/db", () => ({
-  db: {
-    update: () => ({ set: () => ({ where: mockUpdateWhere }) }),
-    insert: () => ({ values: mockInsertValues }),
-    select: () => ({ from: () => ({ where: mockSelectWhere }) }),
-  },
+    db: {
+        update: () => ({ set: () => ({ where: mockUpdateWhere }) }),
+        insert: () => ({ values: mockInsertValues }),
+        select: () => ({ from: () => ({ where: mockSelectWhere }) }),
+    },
 }));
 
 jest.mock("~/server/deployment", () => ({
-  isMeteringEnforced: jest.fn(() => false),
+    isMeteringEnforced: jest.fn(() => false),
 }));
 
 import { debitTokens } from "~/lib/credits/service";
@@ -41,133 +41,133 @@ const mockIsMeteringEnforced = isMeteringEnforced as jest.Mock;
 
 /** Rows the UPDATE ... RETURNING resolves to, in call order. */
 function updateReturns(...batches: Array<Array<{ newBalance: number }>>) {
-  let call = 0;
-  mockUpdateWhere.mockImplementation(() => ({
-    returning: () => {
-      const batch = batches[Math.min(call, batches.length - 1)] ?? [];
-      call += 1;
-      return Promise.resolve(batch);
-    },
-  }));
+    let call = 0;
+    mockUpdateWhere.mockImplementation(() => ({
+        returning: () => {
+            const batch = batches[Math.min(call, batches.length - 1)] ?? [];
+            call += 1;
+            return Promise.resolve(batch);
+        },
+    }));
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
-  mockIsMeteringEnforced.mockReturnValue(false);
-  // Transaction + daily-usage inserts, and the account-creation insert.
-  mockInsertValues.mockReturnValue({
-    onConflictDoUpdate: () => Promise.resolve(),
-    onConflictDoNothing: () => Promise.resolve(),
-    then: (r: (v: unknown) => unknown) => Promise.resolve().then(r),
-  });
-  // ensureTokenAccount's balance lookup and existence check.
-  mockSelectWhere.mockResolvedValue([]);
-  mockUpdateReturning.mockResolvedValue([]);
+    jest.clearAllMocks();
+    mockIsMeteringEnforced.mockReturnValue(false);
+    // Transaction + daily-usage inserts, and the account-creation insert.
+    mockInsertValues.mockReturnValue({
+        onConflictDoUpdate: () => Promise.resolve(),
+        onConflictDoNothing: () => Promise.resolve(),
+        then: (r: (v: unknown) => unknown) => Promise.resolve().then(r),
+    });
+    // ensureTokenAccount's balance lookup and existence check.
+    mockSelectWhere.mockResolvedValue([]);
+    mockUpdateReturning.mockResolvedValue([]);
 });
 
 describe("debitTokens in record mode", () => {
-  // Which SQL branch runs is asserted indirectly, via the retry behaviour
-  // below — only the unguarded branch can ensure-and-retry, and only the
-  // guarded one returns null without retrying. Comparing the drizzle
-  // conditions directly would couple this test to library internals.
-  it("consults the deployment policy when the caller says nothing", async () => {
-    updateReturns([{ newBalance: -120 }]);
+    // Which SQL branch runs is asserted indirectly, via the retry behaviour
+    // below — only the unguarded branch can ensure-and-retry, and only the
+    // guarded one returns null without retrying. Comparing the drizzle
+    // conditions directly would couple this test to library internals.
+    it("consults the deployment policy when the caller says nothing", async () => {
+        updateReturns([{ newBalance: -120 }]);
 
-    const result = await debitTokens({
-      companyId: 7n,
-      amount: 120,
-      service: "llm_chat",
-      description: "Chat query",
+        const result = await debitTokens({
+            companyId: 7n,
+            amount: 120,
+            service: "llm_chat",
+            description: "Chat query",
+        });
+
+        // The regression: debitTokens used to take the guarded branch for every
+        // caller that did not opt out, so the chat route — which debits directly
+        // rather than through the credits port — recorded nothing on a
+        // zero-balance self-hosted account. A negative balance is the point here:
+        // it reads as net usage, and lifetimeTokensUsed climbs.
+        expect(mockIsMeteringEnforced).toHaveBeenCalled();
+        expect(result).toEqual({ newBalance: -120 });
+        expect(mockUpdateWhere).toHaveBeenCalledTimes(1);
     });
 
-    // The regression: debitTokens used to take the guarded branch for every
-    // caller that did not opt out, so the chat route — which debits directly
-    // rather than through the credits port — recorded nothing on a
-    // zero-balance self-hosted account. A negative balance is the point here:
-    // it reads as net usage, and lifetimeTokensUsed climbs.
-    expect(mockIsMeteringEnforced).toHaveBeenCalled();
-    expect(result).toEqual({ newBalance: -120 });
-    expect(mockUpdateWhere).toHaveBeenCalledTimes(1);
-  });
+    it("lets an explicit allowNegative skip the policy lookup", async () => {
+        updateReturns([{ newBalance: -1 }]);
 
-  it("lets an explicit allowNegative skip the policy lookup", async () => {
-    updateReturns([{ newBalance: -1 }]);
+        await debitTokens({
+            companyId: 7n,
+            amount: 1,
+            service: "llm_chat",
+            description: "Chat query",
+            allowNegative: false,
+        });
 
-    await debitTokens({
-      companyId: 7n,
-      amount: 1,
-      service: "llm_chat",
-      description: "Chat query",
-      allowNegative: false,
+        expect(mockIsMeteringEnforced).not.toHaveBeenCalled();
     });
 
-    expect(mockIsMeteringEnforced).not.toHaveBeenCalled();
-  });
+    it("creates a missing account row and retries rather than dropping usage", async () => {
+        // First UPDATE matches nothing (no row); the retry succeeds.
+        updateReturns([], [{ newBalance: -40 }]);
 
-  it("creates a missing account row and retries rather than dropping usage", async () => {
-    // First UPDATE matches nothing (no row); the retry succeeds.
-    updateReturns([], [{ newBalance: -40 }]);
+        const result = await debitTokens({
+            companyId: 9n,
+            amount: 40,
+            service: "embedding",
+            description: "Embedding batch",
+        });
 
-    const result = await debitTokens({
-      companyId: 9n,
-      amount: 40,
-      service: "embedding",
-      description: "Embedding batch",
+        expect(result).toEqual({ newBalance: -40 });
+        expect(mockUpdateWhere).toHaveBeenCalledTimes(2);
+        // The row was opened at zero, not granted a notional signup bonus.
+        expect(mockInsertValues).toHaveBeenCalledWith(
+            expect.objectContaining({ companyId: 9n, balanceTokens: 0 })
+        );
     });
 
-    expect(result).toEqual({ newBalance: -40 });
-    expect(mockUpdateWhere).toHaveBeenCalledTimes(2);
-    // The row was opened at zero, not granted a notional signup bonus.
-    expect(mockInsertValues).toHaveBeenCalledWith(
-      expect.objectContaining({ companyId: 9n, balanceTokens: 0 }),
-    );
-  });
+    it("gives up after one retry instead of looping", async () => {
+        updateReturns([]);
 
-  it("gives up after one retry instead of looping", async () => {
-    updateReturns([]);
+        const result = await debitTokens({
+            companyId: 11n,
+            amount: 10,
+            service: "ner",
+            description: "NER",
+        });
 
-    const result = await debitTokens({
-      companyId: 11n,
-      amount: 10,
-      service: "ner",
-      description: "NER",
+        expect(result).toBeNull();
+        expect(mockUpdateWhere).toHaveBeenCalledTimes(2);
     });
-
-    expect(result).toBeNull();
-    expect(mockUpdateWhere).toHaveBeenCalledTimes(2);
-  });
 });
 
 describe("debitTokens under enforcement", () => {
-  it("still refuses to overdraw", async () => {
-    mockIsMeteringEnforced.mockReturnValue(true);
-    updateReturns([]);
+    it("still refuses to overdraw", async () => {
+        mockIsMeteringEnforced.mockReturnValue(true);
+        updateReturns([]);
 
-    const result = await debitTokens({
-      companyId: 7n,
-      amount: 500,
-      service: "llm_chat",
-      description: "Chat query",
+        const result = await debitTokens({
+            companyId: 7n,
+            amount: 500,
+            service: "llm_chat",
+            description: "Chat query",
+        });
+
+        expect(result).toBeNull();
+        // No ensure-and-retry: the guarded UPDATE matching nothing means
+        // insufficient balance, and retrying would defeat the guard.
+        expect(mockUpdateWhere).toHaveBeenCalledTimes(1);
     });
 
-    expect(result).toBeNull();
-    // No ensure-and-retry: the guarded UPDATE matching nothing means
-    // insufficient balance, and retrying would defeat the guard.
-    expect(mockUpdateWhere).toHaveBeenCalledTimes(1);
-  });
+    it("honours an explicit allowNegative over the deployment default", async () => {
+        mockIsMeteringEnforced.mockReturnValue(true);
+        updateReturns([{ newBalance: -5 }]);
 
-  it("honours an explicit allowNegative over the deployment default", async () => {
-    mockIsMeteringEnforced.mockReturnValue(true);
-    updateReturns([{ newBalance: -5 }]);
+        const result = await debitTokens({
+            companyId: 7n,
+            amount: 5,
+            service: "llm_chat",
+            description: "Chat query",
+            allowNegative: true,
+        });
 
-    const result = await debitTokens({
-      companyId: 7n,
-      amount: 5,
-      service: "llm_chat",
-      description: "Chat query",
-      allowNegative: true,
+        expect(result).toEqual({ newBalance: -5 });
     });
-
-    expect(result).toEqual({ newBalance: -5 });
-  });
 });

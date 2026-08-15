@@ -11,11 +11,9 @@
  * values have production defaults, and a wrong one yields a visibly wrong link
  * rather than a runtime failure, so there is nothing worth gating a boot on.
  */
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://launchstack.app";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://launchstack.app";
 
-export const APP_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://app.launchstack.app";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.launchstack.app";
 
 export const GITHUB_REPO = "https://github.com/Deodat-Lawson/LaunchStack";
 

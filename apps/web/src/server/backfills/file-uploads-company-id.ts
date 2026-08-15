@@ -18,20 +18,20 @@ import { sql } from "drizzle-orm";
 import type { DbClient } from "@launchstack/core/db";
 
 type QueryResult = {
-  count?: number;
-  rowCount?: number;
-  rows?: Array<Record<string, unknown>>;
+    count?: number;
+    rowCount?: number;
+    rows?: Array<Record<string, unknown>>;
 };
 
 function resultCount(result: unknown): number {
-  const queryResult = result as QueryResult;
-  const rows = Array.isArray(result)
-    ? (result as Array<Record<string, unknown>>)
-    : queryResult.rows;
-  const count = rows?.[0]?.count;
-  return count === undefined
-    ? Number(queryResult.count ?? queryResult.rowCount ?? 0)
-    : Number(count);
+    const queryResult = result as QueryResult;
+    const rows = Array.isArray(result)
+        ? (result as Array<Record<string, unknown>>)
+        : queryResult.rows;
+    const count = rows?.[0]?.count;
+    return count === undefined
+        ? Number(queryResult.count ?? queryResult.rowCount ?? 0)
+        : Number(count);
 }
 
 /**
@@ -67,8 +67,8 @@ const fileRefs = sql`
 
 /** Rows still missing a company stamp that a unique document URL can own. */
 export async function countUnstampedFileUploads(db: DbClient): Promise<number> {
-  return resultCount(
-    await db.execute(sql`
+    return resultCount(
+        await db.execute(sql`
       WITH file_refs AS (${fileRefs}),
       file_owner AS (
           SELECT
@@ -84,8 +84,8 @@ export async function countUnstampedFileUploads(db: DbClient): Promise<number> {
       INNER JOIN file_owner o ON f.id = o.file_id
       WHERE o.company_count = 1
         AND f.company_id IS NULL
-    `),
-  );
+    `)
+    );
 }
 
 /**
@@ -93,10 +93,10 @@ export async function countUnstampedFileUploads(db: DbClient): Promise<number> {
  * an anchored owner are left alone; disputed weak stamps are cleared first.
  */
 export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
-  console.log("[backfill-file-uploads-company-id] Starting...");
+    console.log("[backfill-file-uploads-company-id] Starting...");
 
-  await db.transaction(async (tx) => {
-    await tx.execute(sql`
+    await db.transaction(async tx => {
+        await tx.execute(sql`
       WITH file_refs AS (${fileRefs}),
       file_owner AS (
           SELECT
@@ -115,7 +115,7 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
         AND f.company_id IS NULL
     `);
 
-    await tx.execute(sql`
+        await tx.execute(sql`
       WITH file_refs AS (${fileRefs}),
       weak_matches AS (
           SELECT
@@ -178,7 +178,7 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
       WHERE f.id = d.id
     `);
 
-    await tx.execute(sql`
+        await tx.execute(sql`
       WITH file_refs AS (${fileRefs}),
       anchored_matches AS (
           SELECT
@@ -206,15 +206,15 @@ export async function stampFileUploadsCompanyId(db: DbClient): Promise<void> {
       WHERE f.id = o.file_id
         AND f.company_id IS NULL
     `);
-  });
+    });
 
-  console.log("[backfill-file-uploads-company-id] Done.");
+    console.log("[backfill-file-uploads-company-id] Done.");
 }
 
 /** Exported for the twin-parity test. */
 export const FILE_REF_PATTERNS = {
-  WEAK_CAPTURE,
-  WEAK_MATCH,
-  ANCHORED_CAPTURE,
-  ANCHORED_MATCH,
+    WEAK_CAPTURE,
+    WEAK_MATCH,
+    ANCHORED_CAPTURE,
+    ANCHORED_MATCH,
 };

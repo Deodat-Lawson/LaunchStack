@@ -37,28 +37,25 @@ import { createDocumentVersionLifecycle } from "~/server/services/document-creat
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import {
-  isManagementRole,
-  requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
-import {
-  authorizeInternalFileRef,
-  UploadAuthorizationError,
+    authorizeInternalFileRef,
+    UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
 
 const CreateVersionSchema = z.object({
-  /** URL of the already-uploaded replacement file in blob storage */
-  documentUrl: z.string().min(1, "documentUrl is required"),
-  /** Exact MIME type — must match document.fileType */
-  mimeType: z.string().min(1, "mimeType is required"),
-  /** Original filename for adapter routing (used by OCR pipeline) */
-  originalFilename: z.string().optional(),
-  /** Optional user-supplied note describing what changed in this version */
-  changelog: z.string().max(2000).optional(),
-  /** Optional preferred OCR provider */
-  preferredProvider: z.string().optional(),
-  /** File size in bytes, for display in version history UI */
-  fileSize: z.number().int().nonnegative().optional(),
+    /** URL of the already-uploaded replacement file in blob storage */
+    documentUrl: z.string().min(1, "documentUrl is required"),
+    /** Exact MIME type — must match document.fileType */
+    mimeType: z.string().min(1, "mimeType is required"),
+    /** Original filename for adapter routing (used by OCR pipeline) */
+    originalFilename: z.string().optional(),
+    /** Optional user-supplied note describing what changed in this version */
+    changelog: z.string().max(2000).optional(),
+    /** Optional preferred OCR provider */
+    preferredProvider: z.string().optional(),
+    /** File size in bytes, for display in version history UI */
+    fileSize: z.number().int().nonnegative().optional(),
 });
 
 /**
@@ -66,19 +63,16 @@ const CreateVersionSchema = z.object({
  * Returns the numeric document id or an error response.
  */
 function parseDocumentId(
-  rawId: string,
+    rawId: string
 ): { ok: true; documentId: number } | { ok: false; response: NextResponse } {
-  const documentId = Number(rawId);
-  if (!Number.isInteger(documentId) || documentId <= 0) {
-    return {
-      ok: false,
-      response: NextResponse.json(
-        { error: "Invalid document id" },
-        { status: 400 },
-      ),
-    };
-  }
-  return { ok: true, documentId };
+    const documentId = Number(rawId);
+    if (!Number.isInteger(documentId) || documentId <= 0) {
+        return {
+            ok: false,
+            response: NextResponse.json({ error: "Invalid document id" }, { status: 400 }),
+        };
+    }
+    return { ok: true, documentId };
 }
 
 /**
@@ -87,284 +81,266 @@ function parseDocumentId(
  * or a NextResponse error on any failure.
  */
 async function authorizeDocumentAccess(documentId: number): Promise<
-  | {
-      ok: true;
-      userId: string;
-      companyId: bigint;
-      doc: typeof document.$inferSelect;
-    }
-  | { ok: false; response: NextResponse }
+    | {
+          ok: true;
+          userId: string;
+          companyId: bigint;
+          doc: typeof document.$inferSelect;
+      }
+    | { ok: false; response: NextResponse }
 > {
-  const ctx = await requireWorkspaceContext();
-  if (!ctx.success) {
-    return { ok: false, response: ctx.response };
-  }
-
-  if (!isManagementRole(ctx.data.role)) {
-    return {
-      ok: false,
-      response: NextResponse.json(
-        { error: "Forbidden: owner or admin role required" },
-        { status: 403 },
-      ),
-    };
-  }
-
-  const [doc] = await db
-    .select()
-    .from(document)
-    .where(eq(document.id, documentId));
-
-  if (!doc) {
-    return {
-      ok: false,
-      response: NextResponse.json(
-        { error: "Document not found" },
-        { status: 404 },
-      ),
-    };
-  }
-
-  if (doc.companyId !== ctx.data.companyId) {
-    // Don't leak existence to cross-company requests.
-    return {
-      ok: false,
-      response: NextResponse.json(
-        { error: "Document not found" },
-        { status: 404 },
-      ),
-    };
-  }
-
-  return {
-    ok: true,
-    userId: ctx.data.clerkUserId,
-    companyId: ctx.data.companyId,
-    doc,
-  };
-}
-
-export async function POST(
-  request: Request,
-  context: { params: Promise<{ id: string }> },
-) {
-  return withRateLimit(request, RateLimitPresets.strict, async () => {
-    try {
-      const { id: rawId } = await context.params;
-      const parsed = parseDocumentId(rawId);
-      if (!parsed.ok) return parsed.response;
-
-      const authResult = await authorizeDocumentAccess(parsed.documentId);
-      if (!authResult.ok) return authResult.response;
-
-      const { userId, doc } = authResult;
-
-      const validation = await validateRequestBody(request, CreateVersionSchema);
-      if (!validation.success) {
-        return validation.response;
-      }
-
-      const {
-        documentUrl,
-        mimeType,
-        originalFilename,
-        changelog,
-        preferredProvider,
-        fileSize,
-      } = validation.data;
-
-      // Same cold-start ordering as processDocumentUpload: configure OCR
-      // before defaultProvider / authorizeInternalFileRef.
-      getEngine();
-
-      const effectiveProvider =
-        parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
-
-      // A new version can point at an internal file row, which the OCR worker
-      // will later fetch with a signed token. Prove the workspace owns it
-      // before the version exists.
-      let resolvedDocumentUrl = documentUrl;
-      try {
-        const internalFileId = await authorizeInternalFileRef(
-          documentUrl,
-          doc.companyId,
-          effectiveProvider,
-        );
-        if (internalFileId !== null) {
-          resolvedDocumentUrl = buildInternalFileUrl(
-            getOcrConfig().appPublicUrl ?? new URL(request.url).origin,
-            internalFileId,
-          );
-        }
-      } catch (error) {
-        if (error instanceof UploadAuthorizationError) {
-          return NextResponse.json(
-            { error: error.message },
-            { status: error.status },
-          );
-        }
-        throw error;
-      }
-
-      // File type enforcement: exact MIME match against the canonical file_type
-      // locked in when the document was first created. Case-insensitive to
-      // tolerate header casing differences ("Image/PNG" vs "image/png").
-      const expectedFileType = doc.fileType;
-      if (!expectedFileType) {
-        // A document created before versioning rolled out may not have its
-        // file_type populated. New uploads set it inline (see
-        // server/services/document-upload.ts), so this only affects legacy
-        // rows. Refuse rather than locking in the wrong type here.
-        return NextResponse.json(
-          {
-            error:
-              "Document file type not yet initialized. Run the versioning backfill first: " +
-              "pnpm --filter @launchstack/web db:backfill --only=2026-08-document-versions",
-          },
-          { status: 409 },
-        );
-      }
-
-      if (mimeType.toLowerCase() !== expectedFileType.toLowerCase()) {
-        return NextResponse.json(
-          {
-            error: "File type mismatch",
-            details: `Document is locked to ${expectedFileType}; received ${mimeType}. New versions must be the same file type as the original.`,
-            expected: expectedFileType,
-            received: mimeType,
-          },
-          { status: 400 },
-        );
-      }
-
-      // Persistence and dispatch share one idempotent lifecycle. The key is
-      // stable for retries of the same uploaded object.
-      const lifecycle = await createDocumentVersionLifecycle({
-        documentId: parsed.documentId,
-        companyId: doc.companyId,
-        userId,
-        title: doc.title,
-        category: doc.category,
-        url: resolvedDocumentUrl,
-        creationKey: `version:${parsed.documentId}:${resolvedDocumentUrl}`,
-        mimeType,
-        fileSize,
-        changelog,
-        preferredProvider: effectiveProvider,
-        originalFilename,
-      });
-
-      console.log(
-        `[Versions] Created v${lifecycle.version.versionNumber} for doc=${parsed.documentId} ` +
-          `versionId=${lifecycle.version.id} jobId=${lifecycle.job.id}`,
-      );
-
-      return NextResponse.json(
-        {
-          success: true,
-          versionId: lifecycle.version.id,
-          versionNumber: lifecycle.version.versionNumber,
-          documentId: parsed.documentId,
-          jobId: lifecycle.job.id,
-          eventIds: lifecycle.eventIds,
-          message: "New version uploaded, processing started",
-        },
-        { status: 202 },
-      );
-    } catch (error) {
-      console.error("[Versions] POST failed:", error);
-
-      // The unique (document_id, version_number) constraint violation maps
-      // cleanly to a 409 Conflict: another concurrent request won the race.
-      // The client should retry; the next attempt will see the bumped max.
-      const message = error instanceof Error ? error.message : String(error);
-      if (message.includes("doc_versions_document_version_unique")) {
-        return NextResponse.json(
-          {
-            error: "Version number conflict",
-            details:
-              "Another version upload completed first. Please retry this request.",
-          },
-          { status: 409 },
-        );
-      }
-
-      return NextResponse.json(
-        {
-          error: "Failed to create new document version",
-          details: message,
-        },
-        { status: 500 },
-      );
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) {
+        return { ok: false, response: ctx.response };
     }
-  });
+
+    if (!isManagementRole(ctx.data.role)) {
+        return {
+            ok: false,
+            response: NextResponse.json(
+                { error: "Forbidden: owner or admin role required" },
+                { status: 403 }
+            ),
+        };
+    }
+
+    const [doc] = await db.select().from(document).where(eq(document.id, documentId));
+
+    if (!doc) {
+        return {
+            ok: false,
+            response: NextResponse.json({ error: "Document not found" }, { status: 404 }),
+        };
+    }
+
+    if (doc.companyId !== ctx.data.companyId) {
+        // Don't leak existence to cross-company requests.
+        return {
+            ok: false,
+            response: NextResponse.json({ error: "Document not found" }, { status: 404 }),
+        };
+    }
+
+    return {
+        ok: true,
+        userId: ctx.data.clerkUserId,
+        companyId: ctx.data.companyId,
+        doc,
+    };
 }
 
-export async function GET(
-  request: Request,
-  context: { params: Promise<{ id: string }> },
-) {
-  try {
-    const { id: rawId } = await context.params;
-    const parsed = parseDocumentId(rawId);
-    if (!parsed.ok) return parsed.response;
+export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+    return withRateLimit(request, RateLimitPresets.strict, async () => {
+        try {
+            const { id: rawId } = await context.params;
+            const parsed = parseDocumentId(rawId);
+            if (!parsed.ok) return parsed.response;
 
-    const authResult = await authorizeDocumentAccess(parsed.documentId);
-    if (!authResult.ok) return authResult.response;
+            const authResult = await authorizeDocumentAccess(parsed.documentId);
+            if (!authResult.ok) return authResult.response;
 
-    const { doc } = authResult;
+            const { userId, doc } = authResult;
 
-    const versions = await db
-      .select({
-        id: documentVersions.id,
-        versionNumber: documentVersions.versionNumber,
-        url: documentVersions.url,
-        mimeType: documentVersions.mimeType,
-        fileSize: documentVersions.fileSize,
-        uploadedBy: documentVersions.uploadedBy,
-        changelog: documentVersions.changelog,
-        ocrProcessed: documentVersions.ocrProcessed,
-        ocrProvider: documentVersions.ocrProvider,
-        createdAt: documentVersions.createdAt,
-      })
-      .from(documentVersions)
-      .where(eq(documentVersions.documentId, BigInt(parsed.documentId)))
-      .orderBy(desc(documentVersions.versionNumber));
+            const validation = await validateRequestBody(request, CreateVersionSchema);
+            if (!validation.success) {
+                return validation.response;
+            }
 
-    const currentVersionId =
-      doc.currentVersionId !== null ? Number(doc.currentVersionId) : null;
+            const {
+                documentUrl,
+                mimeType,
+                originalFilename,
+                changelog,
+                preferredProvider,
+                fileSize,
+            } = validation.data;
 
-    const serialized = versions.map((v) => ({
-      id: v.id,
-      versionNumber: v.versionNumber,
-      url: v.url,
-      mimeType: v.mimeType,
-      fileSize: v.fileSize !== null ? Number(v.fileSize) : null,
-      uploadedBy: v.uploadedBy,
-      changelog: v.changelog,
-      ocrProcessed: v.ocrProcessed,
-      ocrProvider: v.ocrProvider,
-      createdAt: v.createdAt,
-      isCurrent: v.id === currentVersionId,
-    }));
+            // Same cold-start ordering as processDocumentUpload: configure OCR
+            // before defaultProvider / authorizeInternalFileRef.
+            getEngine();
 
-    return NextResponse.json(
-      {
-        documentId: parsed.documentId,
-        fileType: doc.fileType,
-        currentVersionId,
-        versions: serialized,
-      },
-      { status: 200 },
-    );
-  } catch (error) {
-    console.error("[Versions] GET failed:", error);
-    return NextResponse.json(
-      {
-        error: "Failed to list document versions",
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 },
-    );
-  }
+            const effectiveProvider =
+                parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
+
+            // A new version can point at an internal file row, which the OCR worker
+            // will later fetch with a signed token. Prove the workspace owns it
+            // before the version exists.
+            let resolvedDocumentUrl = documentUrl;
+            try {
+                const internalFileId = await authorizeInternalFileRef(
+                    documentUrl,
+                    doc.companyId,
+                    effectiveProvider
+                );
+                if (internalFileId !== null) {
+                    resolvedDocumentUrl = buildInternalFileUrl(
+                        getOcrConfig().appPublicUrl ?? new URL(request.url).origin,
+                        internalFileId
+                    );
+                }
+            } catch (error) {
+                if (error instanceof UploadAuthorizationError) {
+                    return NextResponse.json({ error: error.message }, { status: error.status });
+                }
+                throw error;
+            }
+
+            // File type enforcement: exact MIME match against the canonical file_type
+            // locked in when the document was first created. Case-insensitive to
+            // tolerate header casing differences ("Image/PNG" vs "image/png").
+            const expectedFileType = doc.fileType;
+            if (!expectedFileType) {
+                // A document created before versioning rolled out may not have its
+                // file_type populated. New uploads set it inline (see
+                // server/services/document-upload.ts), so this only affects legacy
+                // rows. Refuse rather than locking in the wrong type here.
+                return NextResponse.json(
+                    {
+                        error:
+                            "Document file type not yet initialized. Run the versioning backfill first: " +
+                            "pnpm --filter @launchstack/web db:backfill --only=2026-08-document-versions",
+                    },
+                    { status: 409 }
+                );
+            }
+
+            if (mimeType.toLowerCase() !== expectedFileType.toLowerCase()) {
+                return NextResponse.json(
+                    {
+                        error: "File type mismatch",
+                        details: `Document is locked to ${expectedFileType}; received ${mimeType}. New versions must be the same file type as the original.`,
+                        expected: expectedFileType,
+                        received: mimeType,
+                    },
+                    { status: 400 }
+                );
+            }
+
+            // Persistence and dispatch share one idempotent lifecycle. The key is
+            // stable for retries of the same uploaded object.
+            const lifecycle = await createDocumentVersionLifecycle({
+                documentId: parsed.documentId,
+                companyId: doc.companyId,
+                userId,
+                title: doc.title,
+                category: doc.category,
+                url: resolvedDocumentUrl,
+                creationKey: `version:${parsed.documentId}:${resolvedDocumentUrl}`,
+                mimeType,
+                fileSize,
+                changelog,
+                preferredProvider: effectiveProvider,
+                originalFilename,
+            });
+
+            console.log(
+                `[Versions] Created v${lifecycle.version.versionNumber} for doc=${parsed.documentId} ` +
+                    `versionId=${lifecycle.version.id} jobId=${lifecycle.job.id}`
+            );
+
+            return NextResponse.json(
+                {
+                    success: true,
+                    versionId: lifecycle.version.id,
+                    versionNumber: lifecycle.version.versionNumber,
+                    documentId: parsed.documentId,
+                    jobId: lifecycle.job.id,
+                    eventIds: lifecycle.eventIds,
+                    message: "New version uploaded, processing started",
+                },
+                { status: 202 }
+            );
+        } catch (error) {
+            console.error("[Versions] POST failed:", error);
+
+            // The unique (document_id, version_number) constraint violation maps
+            // cleanly to a 409 Conflict: another concurrent request won the race.
+            // The client should retry; the next attempt will see the bumped max.
+            const message = error instanceof Error ? error.message : String(error);
+            if (message.includes("doc_versions_document_version_unique")) {
+                return NextResponse.json(
+                    {
+                        error: "Version number conflict",
+                        details:
+                            "Another version upload completed first. Please retry this request.",
+                    },
+                    { status: 409 }
+                );
+            }
+
+            return NextResponse.json(
+                {
+                    error: "Failed to create new document version",
+                    details: message,
+                },
+                { status: 500 }
+            );
+        }
+    });
+}
+
+export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
+    try {
+        const { id: rawId } = await context.params;
+        const parsed = parseDocumentId(rawId);
+        if (!parsed.ok) return parsed.response;
+
+        const authResult = await authorizeDocumentAccess(parsed.documentId);
+        if (!authResult.ok) return authResult.response;
+
+        const { doc } = authResult;
+
+        const versions = await db
+            .select({
+                id: documentVersions.id,
+                versionNumber: documentVersions.versionNumber,
+                url: documentVersions.url,
+                mimeType: documentVersions.mimeType,
+                fileSize: documentVersions.fileSize,
+                uploadedBy: documentVersions.uploadedBy,
+                changelog: documentVersions.changelog,
+                ocrProcessed: documentVersions.ocrProcessed,
+                ocrProvider: documentVersions.ocrProvider,
+                createdAt: documentVersions.createdAt,
+            })
+            .from(documentVersions)
+            .where(eq(documentVersions.documentId, BigInt(parsed.documentId)))
+            .orderBy(desc(documentVersions.versionNumber));
+
+        const currentVersionId =
+            doc.currentVersionId !== null ? Number(doc.currentVersionId) : null;
+
+        const serialized = versions.map(v => ({
+            id: v.id,
+            versionNumber: v.versionNumber,
+            url: v.url,
+            mimeType: v.mimeType,
+            fileSize: v.fileSize !== null ? Number(v.fileSize) : null,
+            uploadedBy: v.uploadedBy,
+            changelog: v.changelog,
+            ocrProcessed: v.ocrProcessed,
+            ocrProvider: v.ocrProvider,
+            createdAt: v.createdAt,
+            isCurrent: v.id === currentVersionId,
+        }));
+
+        return NextResponse.json(
+            {
+                documentId: parsed.documentId,
+                fileType: doc.fileType,
+                currentVersionId,
+                versions: serialized,
+            },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("[Versions] GET failed:", error);
+        return NextResponse.json(
+            {
+                error: "Failed to list document versions",
+                details: error instanceof Error ? error.message : String(error),
+            },
+            { status: 500 }
+        );
+    }
 }

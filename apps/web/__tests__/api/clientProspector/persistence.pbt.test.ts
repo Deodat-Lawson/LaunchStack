@@ -49,7 +49,7 @@ function cloneRow(row: StoredRow): StoredRow {
     return {
         ...row,
         categories: row.categories ? [...row.categories] : null,
-        results: row.results ? row.results.map((r) => ({ ...r })) : null,
+        results: row.results ? row.results.map(r => ({ ...r })) : null,
         createdAt: new Date(row.createdAt),
         completedAt: row.completedAt ? new Date(row.completedAt) : null,
         updatedAt: row.updatedAt ? new Date(row.updatedAt) : null,
@@ -67,16 +67,16 @@ function createInMemoryClientProspectorStore() {
                 id: values.id!,
                 companyId: values.companyId!,
                 userId: values.userId!,
-                status: (values.status) ?? "queued",
+                status: values.status ?? "queued",
                 query: values.query!,
                 companyContext: values.companyContext!,
                 locationLat: values.locationLat!,
                 locationLng: values.locationLng!,
-                radius: (values.radius) ?? 5000,
+                radius: values.radius ?? 5000,
                 categories: (values.categories as string[] | undefined) ?? null,
                 results: (values.results as ProspectResult[] | undefined) ?? null,
                 errorMessage: (values.errorMessage as string | undefined) ?? null,
-                createdAt: (values.createdAt) ?? now,
+                createdAt: values.createdAt ?? now,
                 completedAt: (values.completedAt as Date | undefined) ?? null,
                 updatedAt: (values.updatedAt as Date | undefined) ?? null,
             };
@@ -96,12 +96,9 @@ function createInMemoryClientProspectorStore() {
                 ...patch,
                 categories:
                     patch.categories !== undefined
-                        ? ((patch.categories) ?? null)
+                        ? (patch.categories ?? null)
                         : current.categories,
-                results:
-                    patch.results !== undefined
-                        ? ((patch.results) ?? null)
-                        : current.results,
+                results: patch.results !== undefined ? (patch.results ?? null) : current.results,
                 updatedAt: patch.updatedAt ?? new Date(),
             };
 
@@ -122,7 +119,7 @@ function createInMemoryClientProspectorStore() {
             const offset = options?.offset ?? 0;
 
             return [...rows.values()]
-                .filter((row) => row.companyId === companyId)
+                .filter(row => row.companyId === companyId)
                 .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
                 .slice(offset, offset + limit)
                 .map(cloneRow);
@@ -134,15 +131,13 @@ function createInMemoryClientProspectorStore() {
 
 const nonEmptyTextArb = fc
     .string({ minLength: 1, maxLength: 300 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
-const validQueryArb = fc
-    .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+const validQueryArb = fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
 const latLngArb: fc.Arbitrary<LatLng> = fc.record({
     lat: fc.double({ min: -90, max: 90, noNaN: true }),
@@ -161,7 +156,7 @@ const prospectResultArb: fc.Arbitrary<ProspectResult> = fc.record({
     categories: fc.array(nonEmptyTextArb, { minLength: 1, maxLength: 3 }),
     phone: fc.option(nonEmptyTextArb, { nil: undefined }),
     website: fc.option(
-        fc.uuid().map((id) => `https://example.com/${id}`),
+        fc.uuid().map(id => `https://example.com/${id}`),
         { nil: undefined }
     ),
     rating: fc.option(fc.double({ min: 0, max: 10, noNaN: true }), { nil: undefined }),
@@ -171,20 +166,22 @@ const prospectResultArb: fc.Arbitrary<ProspectResult> = fc.record({
 
 const prospectResultsArb = fc.array(prospectResultArb, { minLength: 0, maxLength: 10 });
 
-const isoDateArb = fc.integer({ min: 0, max: 4102444800000 }).map((ms) => new Date(ms).toISOString());
+const isoDateArb = fc.integer({ min: 0, max: 4102444800000 }).map(ms => new Date(ms).toISOString());
 
-const prospectorOutputArb = fc.tuple(
-    prospectResultsArb,
-    validQueryArb,
-    validCompanyContextArb,
-    latLngArb,
-    radiusArb,
-    categoriesArb,
-    isoDateArb
-).map(([results, query, companyContext, location, radius, categories, createdAt]) => ({
-    results,
-    metadata: { query, companyContext, location, radius, categories, createdAt },
-})) as fc.Arbitrary<ProspectorOutput>;
+const prospectorOutputArb = fc
+    .tuple(
+        prospectResultsArb,
+        validQueryArb,
+        validCompanyContextArb,
+        latLngArb,
+        radiusArb,
+        categoriesArb,
+        isoDateArb
+    )
+    .map(([results, query, companyContext, location, radius, categories, createdAt]) => ({
+        results,
+        metadata: { query, companyContext, location, radius, categories, createdAt },
+    })) as fc.Arbitrary<ProspectorOutput>;
 
 // ─── Property 9: Persistence round-trip ─────────────────────────────────────
 // Validates: Requirements 5.1, 5.2, 5.3
@@ -202,8 +199,20 @@ describe("Property 9: Persistence round-trip", () => {
                 radiusArb,
                 fc.option(categoriesArb, { nil: undefined }),
                 prospectorOutputArb,
-                async (jobId, companyId, userId, query, companyContext, location, radius, initialCategories, output) => {
-                    const helpers = createClientProspectorJobHelpers(createInMemoryClientProspectorStore());
+                async (
+                    jobId,
+                    companyId,
+                    userId,
+                    query,
+                    companyContext,
+                    location,
+                    radius,
+                    initialCategories,
+                    output
+                ) => {
+                    const helpers = createClientProspectorJobHelpers(
+                        createInMemoryClientProspectorStore()
+                    );
 
                     await helpers.createJob({
                         id: jobId,
@@ -242,7 +251,9 @@ describe("Property 9: Persistence round-trip", () => {
                     expect(persisted.output?.results).toEqual(output.results);
                     expect(persisted.output?.metadata.query).toBe(query);
                     expect(persisted.output?.metadata.companyContext).toBe(companyContext);
-                    expect(persisted.output?.metadata.categories).toEqual(output.metadata.categories);
+                    expect(persisted.output?.metadata.categories).toEqual(
+                        output.metadata.categories
+                    );
                     expect(persisted.output?.metadata.radius).toBe(radius);
                     expect(typeof persisted.output?.metadata.createdAt).toBe("string");
                 }
@@ -267,8 +278,19 @@ describe("Property 10: Company data isolation", () => {
                 validCompanyContextArb,
                 latLngArb,
                 radiusArb,
-                async (companyA, companyB, idsA, idsB, baseQuery, baseContext, location, radius) => {
-                    const helpers = createClientProspectorJobHelpers(createInMemoryClientProspectorStore());
+                async (
+                    companyA,
+                    companyB,
+                    idsA,
+                    idsB,
+                    baseQuery,
+                    baseContext,
+                    location,
+                    radius
+                ) => {
+                    const helpers = createClientProspectorJobHelpers(
+                        createInMemoryClientProspectorStore()
+                    );
 
                     for (const id of idsA) {
                         await helpers.createJob({
@@ -302,10 +324,10 @@ describe("Property 10: Company data isolation", () => {
                     });
 
                     expect(jobsForA).toHaveLength(idsA.length);
-                    expect(jobsForA.every((job) => job.companyId === companyA)).toBe(true);
-                    expect(
-                        jobsForA.some((job) => idsB.includes(job.id.replace(/^b-/, "")))
-                    ).toBe(false);
+                    expect(jobsForA.every(job => job.companyId === companyA)).toBe(true);
+                    expect(jobsForA.some(job => idsB.includes(job.id.replace(/^b-/, "")))).toBe(
+                        false
+                    );
                 }
             ),
             { numRuns: 100 }
@@ -323,8 +345,19 @@ describe("Property 10: Company data isolation", () => {
                 validCompanyContextArb,
                 latLngArb,
                 radiusArb,
-                async (jobId, companyA, companyB, userId, query, companyContext, location, radius) => {
-                    const helpers = createClientProspectorJobHelpers(createInMemoryClientProspectorStore());
+                async (
+                    jobId,
+                    companyA,
+                    companyB,
+                    userId,
+                    query,
+                    companyContext,
+                    location,
+                    radius
+                ) => {
+                    const helpers = createClientProspectorJobHelpers(
+                        createInMemoryClientProspectorStore()
+                    );
 
                     await helpers.createJob({
                         id: jobId,
@@ -366,7 +399,9 @@ describe("Property 11: Job completion status", () => {
                 latLngArb,
                 radiusArb,
                 async (jobId, companyId, userId, query, companyContext, location, radius) => {
-                    const helpers = createClientProspectorJobHelpers(createInMemoryClientProspectorStore());
+                    const helpers = createClientProspectorJobHelpers(
+                        createInMemoryClientProspectorStore()
+                    );
 
                     await helpers.createJob({
                         id: jobId,
@@ -406,8 +441,19 @@ describe("Property 11: Job completion status", () => {
                 latLngArb,
                 radiusArb,
                 nonEmptyTextArb,
-                async (jobId, companyId, userId, query, companyContext, location, radius, errorMsg) => {
-                    const helpers = createClientProspectorJobHelpers(createInMemoryClientProspectorStore());
+                async (
+                    jobId,
+                    companyId,
+                    userId,
+                    query,
+                    companyContext,
+                    location,
+                    radius,
+                    errorMsg
+                ) => {
+                    const helpers = createClientProspectorJobHelpers(
+                        createInMemoryClientProspectorStore()
+                    );
 
                     await helpers.createJob({
                         id: jobId,
@@ -419,7 +465,12 @@ describe("Property 11: Job completion status", () => {
                         radius,
                     });
 
-                    const updated = await helpers.updateJobStatus(jobId, companyId, "failed", errorMsg);
+                    const updated = await helpers.updateJobStatus(
+                        jobId,
+                        companyId,
+                        "failed",
+                        errorMsg
+                    );
 
                     expect(updated).not.toBeNull();
                     expect(updated!.status).toBe("failed");
@@ -442,8 +493,19 @@ describe("Property 11: Job completion status", () => {
                 latLngArb,
                 radiusArb,
                 fc.constantFrom("planning" as const, "searching" as const, "scoring" as const),
-                async (jobId, companyId, userId, query, companyContext, location, radius, status) => {
-                    const helpers = createClientProspectorJobHelpers(createInMemoryClientProspectorStore());
+                async (
+                    jobId,
+                    companyId,
+                    userId,
+                    query,
+                    companyContext,
+                    location,
+                    radius,
+                    status
+                ) => {
+                    const helpers = createClientProspectorJobHelpers(
+                        createInMemoryClientProspectorStore()
+                    );
 
                     await helpers.createJob({
                         id: jobId,

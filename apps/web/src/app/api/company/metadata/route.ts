@@ -47,10 +47,7 @@ export async function GET() {
         });
     } catch (error) {
         console.error("[company-metadata] GET error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
 
@@ -59,7 +56,10 @@ const PatchSchema = z.object({
     value: z.string(),
 });
 
-function buildManualFact(value: string | number, existing?: { visibility?: string; usage?: string }): MetadataFact<string | number> {
+function buildManualFact(
+    value: string | number,
+    existing?: { visibility?: string; usage?: string }
+): MetadataFact<string | number> {
     const now = new Date().toISOString();
     return {
         value,
@@ -81,7 +81,7 @@ export async function PATCH(request: Request) {
         // Canonical metadata and its history are workspace-wide state.
         if (!isManagementRole(ctx.data.role)) return forbiddenForRole();
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const parsed = PatchSchema.safeParse(body);
         if (!parsed.success) {
             return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
@@ -98,7 +98,7 @@ export async function PATCH(request: Request) {
         if (!existing) {
             return NextResponse.json(
                 { error: "No metadata found. Run extraction first." },
-                { status: 404 },
+                { status: 404 }
             );
         }
 
@@ -114,7 +114,7 @@ export async function PATCH(request: Request) {
             oldFact = existingFact;
             updatedFact = buildManualFact(
                 field === "founded_year" ? Number(value) : value,
-                existingFact,
+                existingFact
             );
             updatedMetadata.company[field] = updatedFact;
         } else if (segments[0] === "people" && segments[1] && segments[2]) {

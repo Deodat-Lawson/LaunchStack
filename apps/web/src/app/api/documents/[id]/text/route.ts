@@ -5,105 +5,99 @@ import { document, documentContextChunks } from "@launchstack/core/db/schema";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface RouteParams {
-  params: Promise<{ id: string }>;
+    params: Promise<{ id: string }>;
 }
 
 export async function GET(_request: Request, { params }: RouteParams) {
-  try {
-    const ctx = await requireWorkspaceContext();
-    if (!ctx.success) return ctx.response;
+    try {
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-    const { id } = await params;
-    const docId = parseInt(id, 10);
-    if (isNaN(docId)) {
-      return NextResponse.json({ error: "Invalid document ID" }, { status: 400 });
-    }
+        const { id } = await params;
+        const docId = parseInt(id, 10);
+        if (isNaN(docId)) {
+            return NextResponse.json({ error: "Invalid document ID" }, { status: 400 });
+        }
 
-    const [doc] = await db
-      .select({
-        id: document.id,
-        title: document.title,
-        currentVersionId: document.currentVersionId,
-      })
-      .from(document)
-      .where(
-        and(
-          eq(document.id, docId),
-          eq(document.companyId, ctx.data.companyId),
-        ),
-      );
-
-    if (!doc) {
-      return NextResponse.json({ error: "Document not found" }, { status: 404 });
-    }
-
-    // A document without a current pointer has no current text. Never fall
-    // back to historical or legacy unversioned chunks.
-    const chunks =
-      doc.currentVersionId === null
-        ? []
-        : await db
+        const [doc] = await db
             .select({
-              content: documentContextChunks.content,
-              pageNumber: documentContextChunks.pageNumber,
+                id: document.id,
+                title: document.title,
+                currentVersionId: document.currentVersionId,
             })
-            .from(documentContextChunks)
-            .where(
-              and(
-                eq(documentContextChunks.documentId, BigInt(docId)),
-                eq(documentContextChunks.versionId, doc.currentVersionId),
-              ),
-            )
-            .orderBy(
-              asc(documentContextChunks.pageNumber),
-              asc(documentContextChunks.id),
-            );
+            .from(document)
+            .where(and(eq(document.id, docId), eq(document.companyId, ctx.data.companyId)));
 
-    if (chunks.length === 0) {
-      return NextResponse.json({
-        html: "<p>No extracted text available for this document. It may still be processing.</p>",
-        chunkCount: 0,
-        documentId: docId,
-      });
+        if (!doc) {
+            return NextResponse.json({ error: "Document not found" }, { status: 404 });
+        }
+
+        // A document without a current pointer has no current text. Never fall
+        // back to historical or legacy unversioned chunks.
+        const chunks =
+            doc.currentVersionId === null
+                ? []
+                : await db
+                      .select({
+                          content: documentContextChunks.content,
+                          pageNumber: documentContextChunks.pageNumber,
+                      })
+                      .from(documentContextChunks)
+                      .where(
+                          and(
+                              eq(documentContextChunks.documentId, BigInt(docId)),
+                              eq(documentContextChunks.versionId, doc.currentVersionId)
+                          )
+                      )
+                      .orderBy(
+                          asc(documentContextChunks.pageNumber),
+                          asc(documentContextChunks.id)
+                      );
+
+        if (chunks.length === 0) {
+            return NextResponse.json({
+                html: "<p>No extracted text available for this document. It may still be processing.</p>",
+                chunkCount: 0,
+                documentId: docId,
+            });
+        }
+
+        const html = chunks
+            .map(c => {
+                const text = c.content
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;");
+
+                const lines = text.split("\n");
+                const formatted = lines
+                    .map(line => {
+                        if (line.startsWith("--- File:") && line.endsWith("---")) {
+                            const filename = line
+                                .replace(/^--- File:\s*/, "")
+                                .replace(/\s*---$/, "");
+                            return `<h3 class="file-header">${filename}</h3>`;
+                        }
+                        if (line.startsWith("## ")) return `<h2>${line.slice(3)}</h2>`;
+                        if (line.startsWith("# ")) return `<h1>${line.slice(2)}</h1>`;
+                        if (line.startsWith("### ")) return `<h3>${line.slice(4)}</h3>`;
+                        if (line.trim() === "") return "";
+                        return `<p>${line}</p>`;
+                    })
+                    .filter(Boolean)
+                    .join("\n");
+
+                return formatted;
+            })
+            .join('\n<hr class="chunk-divider" />\n');
+
+        return NextResponse.json({
+            html,
+            chunkCount: chunks.length,
+            documentId: docId,
+        });
+    } catch (error) {
+        console.error("[DocumentText] Error:", error);
+        return NextResponse.json({ error: "Failed to retrieve document text" }, { status: 500 });
     }
-
-    const html = chunks
-      .map((c) => {
-        const text = c.content
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
-
-        const lines = text.split("\n");
-        const formatted = lines
-          .map((line) => {
-            if (line.startsWith("--- File:") && line.endsWith("---")) {
-              const filename = line.replace(/^--- File:\s*/, "").replace(/\s*---$/, "");
-              return `<h3 class="file-header">${filename}</h3>`;
-            }
-            if (line.startsWith("## ")) return `<h2>${line.slice(3)}</h2>`;
-            if (line.startsWith("# ")) return `<h1>${line.slice(2)}</h1>`;
-            if (line.startsWith("### ")) return `<h3>${line.slice(4)}</h3>`;
-            if (line.trim() === "") return "";
-            return `<p>${line}</p>`;
-          })
-          .filter(Boolean)
-          .join("\n");
-
-        return formatted;
-      })
-      .join('\n<hr class="chunk-divider" />\n');
-
-    return NextResponse.json({
-      html,
-      chunkCount: chunks.length,
-      documentId: docId,
-    });
-  } catch (error) {
-    console.error("[DocumentText] Error:", error);
-    return NextResponse.json(
-      { error: "Failed to retrieve document text" },
-      { status: 500 },
-    );
-  }
 }

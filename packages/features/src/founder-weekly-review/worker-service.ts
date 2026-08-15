@@ -21,13 +21,10 @@ import {
 import { FounderWeeklyReviewRepository } from "./repository";
 
 export type FounderWeeklyReviewWorkerContext = FounderWeeklyReviewClaimInput;
-export type FounderWeeklyReviewCollectionContext =
-    FounderWeeklyReviewCollectionClaimInput;
+export type FounderWeeklyReviewCollectionContext = FounderWeeklyReviewCollectionClaimInput;
 
 export class FounderWeeklyReviewWorkerService {
-    constructor(
-        private readonly repository = new FounderWeeklyReviewRepository()
-    ) {}
+    constructor(private readonly repository = new FounderWeeklyReviewRepository()) {}
 
     async getRun(companyId: bigint, runId: string): Promise<FounderWeeklyReviewRunRecord> {
         const run = await this.repository.getByCompanyAndRunId(companyId, runId);
@@ -57,26 +54,45 @@ export class FounderWeeklyReviewWorkerService {
         );
     }
 
-    async claimEvidenceCollection(context: FounderWeeklyReviewCollectionContext): Promise<FounderWeeklyReviewRunRecord> {
+    async claimEvidenceCollection(
+        context: FounderWeeklyReviewCollectionContext
+    ): Promise<FounderWeeklyReviewRunRecord> {
         const result = await this.repository.claimEvidenceCollection(context);
         if (!result.run) throw new FounderWeeklyReviewNotFoundError(context.runId);
         if (result.updated) return result.run;
-        if (result.run.status === "collecting" && result.run.collectionClaimId === context.collectionClaimId) return result.run;
+        if (
+            result.run.status === "collecting" &&
+            result.run.collectionClaimId === context.collectionClaimId
+        )
+            return result.run;
         if (result.run.evidenceSnapshot) return result.run;
-        throw new FounderWeeklyReviewConflictError(`Founder weekly review run "${context.runId}" is already owned by another collection claim.`);
+        throw new FounderWeeklyReviewConflictError(
+            `Founder weekly review run "${context.runId}" is already owned by another collection claim.`
+        );
     }
 
-    async attachEvidenceSnapshotIfAbsent(context: FounderWeeklyReviewCollectionContext, snapshot: FounderWeeklyReviewEvidenceSnapshot): Promise<FounderWeeklyReviewRunRecord> {
+    async attachEvidenceSnapshotIfAbsent(
+        context: FounderWeeklyReviewCollectionContext,
+        snapshot: FounderWeeklyReviewEvidenceSnapshot
+    ): Promise<FounderWeeklyReviewRunRecord> {
         const result = await this.repository.attachEvidenceSnapshotIfAbsent(context, snapshot);
         if (!result.run) throw new FounderWeeklyReviewNotFoundError(context.runId);
         if (result.updated || result.run.evidenceSnapshot) return result.run;
         throw new FounderWeeklyReviewClaimOwnershipMismatchError(context.runId);
     }
 
-    async markCollectionFailed(context: FounderWeeklyReviewCollectionContext, failure: FounderWeeklyReviewGenerationFailure): Promise<FounderWeeklyReviewRunRecord> {
+    async markCollectionFailed(
+        context: FounderWeeklyReviewCollectionContext,
+        failure: FounderWeeklyReviewGenerationFailure
+    ): Promise<FounderWeeklyReviewRunRecord> {
         const result = await this.repository.markCollectionFailed(context, failure);
         if (!result.run) throw new FounderWeeklyReviewNotFoundError(context.runId);
-        if (result.updated || (result.run.status === "failed" && result.run.collectionClaimId === context.collectionClaimId)) return result.run;
+        if (
+            result.updated ||
+            (result.run.status === "failed" &&
+                result.run.collectionClaimId === context.collectionClaimId)
+        )
+            return result.run;
         throw new FounderWeeklyReviewClaimOwnershipMismatchError(context.runId);
     }
 
@@ -89,9 +105,7 @@ export class FounderWeeklyReviewWorkerService {
         let metadata: FounderWeeklyReviewModelMetadata | null;
         try {
             payload = parseFounderWeeklyReviewPayload(reviewPayload);
-            metadata = modelMetadata
-                ? parseFounderWeeklyReviewModelMetadata(modelMetadata)
-                : null;
+            metadata = modelMetadata ? parseFounderWeeklyReviewModelMetadata(modelMetadata) : null;
         } catch (error) {
             if (error instanceof ZodError) {
                 throw new FounderWeeklyReviewInvalidPayloadError(error.message);
@@ -120,10 +134,7 @@ export class FounderWeeklyReviewWorkerService {
         context: FounderWeeklyReviewWorkerContext,
         failure: FounderWeeklyReviewGenerationFailure
     ): Promise<FounderWeeklyReviewRunRecord> {
-        const result = await this.repository.markGenerationFailedWithClaim(
-            context,
-            failure
-        );
+        const result = await this.repository.markGenerationFailedWithClaim(context, failure);
 
         if (!result.run) {
             throw new FounderWeeklyReviewNotFoundError(context.runId);

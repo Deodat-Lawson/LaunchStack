@@ -27,7 +27,7 @@ export const SpecializedChatRoutes = ["fast", "reasoning", "vision"] as const;
 export type SpecializedChatRoute = (typeof SpecializedChatRoutes)[number];
 
 export function isChatRoute(value: string): value is ChatRoute {
-  return (ChatRoutes as readonly string[]).includes(value);
+    return (ChatRoutes as readonly string[]).includes(value);
 }
 
 /**
@@ -61,8 +61,7 @@ export type ChatCapability = (typeof ChatCapabilities)[number];
  *
  * @see https://ai.google.dev/gemini-api/docs/openai
  */
-export const GEMINI_BASE_URL =
-  "https://generativelanguage.googleapis.com/v1beta/openai";
+export const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai";
 
 /** Default chat model — Gemini's general-purpose tier. */
 export const GEMINI_DEFAULT_MODEL = "gemini-2.5-flash";
@@ -96,8 +95,7 @@ export const GEMINI_EMBEDDING_MODEL = "gemini-embedding-001";
  * one with `API_KEY_INVALID`. No service account, no OAuth. The key's project
  * must have the Cloud Text-to-Speech API enabled.
  */
-export const CLOUD_TTS_ENDPOINT =
-  "https://texttospeech.googleapis.com/v1/text:synthesize";
+export const CLOUD_TTS_ENDPOINT = "https://texttospeech.googleapis.com/v1/text:synthesize";
 
 /**
  * Chirp 3: HD voice, named `<locale>-Chirp3-HD-<voice>`.
@@ -123,13 +121,13 @@ export const CLOUD_TTS_MAX_INPUT_BYTES = 5_000;
 
 /** The one endpoint every route talks to. */
 export interface ChatEndpointConfig {
-  /** Base URL of an OpenAI-compatible `/chat/completions` implementation. */
-  baseUrl: string;
-  /**
-   * Bearer credential. Omitted for keyless local endpoints — never inherited
-   * from another service's environment variable.
-   */
-  apiKey?: string;
+    /** Base URL of an OpenAI-compatible `/chat/completions` implementation. */
+    baseUrl: string;
+    /**
+     * Bearer credential. Omitted for keyless local endpoints — never inherited
+     * from another service's environment variable.
+     */
+    apiKey?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -140,10 +138,10 @@ export const ChatInputModalities = ["text", "image"] as const;
 export type ChatInputModality = (typeof ChatInputModalities)[number];
 
 export interface ChatImageInputLimits {
-  /** Accepted image MIME types. Undefined means the model did not declare a list. */
-  mimeTypes?: readonly string[];
-  /** Maximum images per request. Undefined means undeclared, not unlimited. */
-  maxImages?: number;
+    /** Accepted image MIME types. Undefined means the model did not declare a list. */
+    mimeTypes?: readonly string[];
+    /** Maximum images per request. Undefined means undeclared, not unlimited. */
+    maxImages?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -159,13 +157,7 @@ export interface ChatImageInputLimits {
  * - `effort`  — named levels, each mapping to an exact request patch.
  * - `budget`  — a numeric token budget written to a declared request field.
  */
-export const ReasoningModes = [
-  "none",
-  "always",
-  "toggle",
-  "effort",
-  "budget",
-] as const;
+export const ReasoningModes = ["none", "always", "toggle", "effort", "budget"] as const;
 export type ReasoningMode = (typeof ReasoningModes)[number];
 
 /**
@@ -176,50 +168,50 @@ export type ReasoningMode = (typeof ReasoningModes)[number];
 export type ChatRequestPatch = Readonly<Record<string, unknown>>;
 
 export interface ReasoningNoneBehavior {
-  mode: "none";
+    mode: "none";
 }
 
 export interface ReasoningAlwaysBehavior {
-  mode: "always";
-  /** Optional fields the endpoint needs even though reasoning is not optional. */
-  request?: ChatRequestPatch;
+    mode: "always";
+    /** Optional fields the endpoint needs even though reasoning is not optional. */
+    request?: ChatRequestPatch;
 }
 
 export interface ReasoningToggleBehavior {
-  mode: "toggle";
-  /** Body patch applied when the caller asks for reasoning. */
-  on: ChatRequestPatch;
-  /** Body patch applied when the caller does not. Omitted means "send nothing". */
-  off?: ChatRequestPatch;
+    mode: "toggle";
+    /** Body patch applied when the caller asks for reasoning. */
+    on: ChatRequestPatch;
+    /** Body patch applied when the caller does not. Omitted means "send nothing". */
+    off?: ChatRequestPatch;
 }
 
 export interface ReasoningEffortBehavior {
-  mode: "effort";
-  /** Selectable level name → exact body patch. At least one entry. */
-  levels: Readonly<Record<string, ChatRequestPatch>>;
-  /** Level used when the caller enables reasoning without naming one. */
-  default: string;
-  /** Body patch applied when the caller does not ask for reasoning. */
-  off?: ChatRequestPatch;
+    mode: "effort";
+    /** Selectable level name → exact body patch. At least one entry. */
+    levels: Readonly<Record<string, ChatRequestPatch>>;
+    /** Level used when the caller enables reasoning without naming one. */
+    default: string;
+    /** Body patch applied when the caller does not ask for reasoning. */
+    off?: ChatRequestPatch;
 }
 
 export interface ReasoningBudgetBehavior {
-  mode: "budget";
-  /** Request-body field the token budget is written to. */
-  field: string;
-  default: number;
-  min: number;
-  max: number;
-  /** Body patch applied when the caller does not ask for reasoning. */
-  off?: ChatRequestPatch;
+    mode: "budget";
+    /** Request-body field the token budget is written to. */
+    field: string;
+    default: number;
+    min: number;
+    max: number;
+    /** Body patch applied when the caller does not ask for reasoning. */
+    off?: ChatRequestPatch;
 }
 
 export type ChatReasoningBehavior =
-  | ReasoningNoneBehavior
-  | ReasoningAlwaysBehavior
-  | ReasoningToggleBehavior
-  | ReasoningEffortBehavior
-  | ReasoningBudgetBehavior;
+    | ReasoningNoneBehavior
+    | ReasoningAlwaysBehavior
+    | ReasoningToggleBehavior
+    | ReasoningEffortBehavior
+    | ReasoningBudgetBehavior;
 
 // ---------------------------------------------------------------------------
 // Structured output
@@ -230,13 +222,8 @@ export type ChatReasoningBehavior =
  * meaningful and common: those models still produce validated objects through
  * the strict-JSON fallback.
  */
-export const NativeStructuredOutputModes = [
-  "json-object",
-  "json-schema",
-  "tool-calling",
-] as const;
-export type NativeStructuredOutputMode =
-  (typeof NativeStructuredOutputModes)[number];
+export const NativeStructuredOutputModes = ["json-object", "json-schema", "tool-calling"] as const;
+export type NativeStructuredOutputMode = (typeof NativeStructuredOutputModes)[number];
 
 // ---------------------------------------------------------------------------
 // Accepted request parameters
@@ -251,18 +238,18 @@ export type ParameterSupport = (typeof ParameterSupportValues)[number];
  * several endpoints reject the field's mere presence.
  */
 export interface ChatParameterBehavior {
-  temperature: ParameterSupport;
-  /** Whether a `role: "system"` message is accepted. */
-  systemMessages: ParameterSupport;
-  streaming: ParameterSupport;
-  /** Whether an output-token cap is accepted at all. */
-  maxOutputTokens: ParameterSupport;
-  /**
-   * Request field carrying that cap. Defaults to `max_tokens`; reasoning
-   * models on several endpoints require `max_completion_tokens` instead and
-   * reject the older field outright.
-   */
-  maxOutputTokensField?: string;
+    temperature: ParameterSupport;
+    /** Whether a `role: "system"` message is accepted. */
+    systemMessages: ParameterSupport;
+    streaming: ParameterSupport;
+    /** Whether an output-token cap is accepted at all. */
+    maxOutputTokens: ParameterSupport;
+    /**
+     * Request field carrying that cap. Defaults to `max_tokens`; reasoning
+     * models on several endpoints require `max_completion_tokens` instead and
+     * reject the older field outright.
+     */
+    maxOutputTokensField?: string;
 }
 
 /** Field an output-token cap is written to when the model accepts one. */
@@ -273,27 +260,27 @@ export const DEFAULT_MAX_OUTPUT_TOKENS_FIELD = "max_tokens";
  * guess, because an invented context window silently truncates real work.
  */
 export interface ChatModelLimits {
-  contextTokens?: number;
-  maxOutputTokens?: number;
+    contextTokens?: number;
+    maxOutputTokens?: number;
 }
 
 export interface ChatModelBehavior {
-  input: readonly ChatInputModality[];
-  /** Only meaningful when `input` includes "image". */
-  image?: ChatImageInputLimits;
-  reasoning: ChatReasoningBehavior;
-  nativeStructuredOutput: readonly NativeStructuredOutputMode[];
-  parameters: ChatParameterBehavior;
-  limits?: ChatModelLimits;
+    input: readonly ChatInputModality[];
+    /** Only meaningful when `input` includes "image". */
+    image?: ChatImageInputLimits;
+    reasoning: ChatReasoningBehavior;
+    nativeStructuredOutput: readonly NativeStructuredOutputMode[];
+    parameters: ChatParameterBehavior;
+    limits?: ChatModelLimits;
 }
 
 /** A named model in the operator's configuration. */
 export interface ChatModelDefinition {
-  /** Arbitrary model id, sent verbatim to the endpoint. */
-  id: string;
-  behavior: ChatModelBehavior;
-  /** Preset the behavior started from, when one was referenced. */
-  preset?: string;
+    /** Arbitrary model id, sent verbatim to the endpoint. */
+    id: string;
+    behavior: ChatModelBehavior;
+    /** Preset the behavior started from, when one was referenced. */
+    preset?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -301,29 +288,27 @@ export interface ChatModelDefinition {
 // ---------------------------------------------------------------------------
 
 export function behaviorSupportsVision(behavior: ChatModelBehavior): boolean {
-  return behavior.input.includes("image");
+    return behavior.input.includes("image");
 }
 
 export function behaviorSupportsReasoning(behavior: ChatModelBehavior): boolean {
-  return behavior.reasoning.mode !== "none";
+    return behavior.reasoning.mode !== "none";
 }
 
 export function behaviorHasCapability(
-  behavior: ChatModelBehavior,
-  capability: ChatCapability,
+    behavior: ChatModelBehavior,
+    capability: ChatCapability
 ): boolean {
-  return capability === "vision"
-    ? behaviorSupportsVision(behavior)
-    : behaviorSupportsReasoning(behavior);
+    return capability === "vision"
+        ? behaviorSupportsVision(behavior)
+        : behaviorSupportsReasoning(behavior);
 }
 
 export function missingCapabilities(
-  behavior: ChatModelBehavior,
-  required: readonly ChatCapability[],
+    behavior: ChatModelBehavior,
+    required: readonly ChatCapability[]
 ): ChatCapability[] {
-  return required.filter(
-    (capability) => !behaviorHasCapability(behavior, capability),
-  );
+    return required.filter(capability => !behaviorHasCapability(behavior, capability));
 }
 
 // ---------------------------------------------------------------------------
@@ -335,7 +320,7 @@ export function missingCapabilities(
  * parsing configuration so a bad file fails startup, not the first request.
  */
 export class ChatConfigurationError extends Error {
-  override readonly name = "ChatConfigurationError";
+    override readonly name = "ChatConfigurationError";
 }
 
 /**
@@ -343,13 +328,11 @@ export class ChatConfigurationError extends Error {
  * client-visible 400: the deployment is fine, this particular request is not.
  */
 export class ChatRequestError extends Error {
-  override readonly name: string = "ChatRequestError";
-  readonly status = 400 as const;
+    override readonly name: string = "ChatRequestError";
+    readonly status = 400 as const;
 }
 
-export type ChatRouteUnavailableReason =
-  | "route-not-configured"
-  | "missing-capability";
+export type ChatRouteUnavailableReason = "route-not-configured" | "missing-capability";
 
 /**
  * A route cannot serve this request. Specialized routes fail closed: the
@@ -357,37 +340,33 @@ export type ChatRouteUnavailableReason =
  * callers surface this as a typed HTTP 400 instead of silently degrading.
  */
 export class ChatRouteUnavailableError extends ChatRequestError {
-  override readonly name = "ChatRouteUnavailableError";
-  readonly route: ChatRoute;
-  readonly reason: ChatRouteUnavailableReason;
-  readonly missingCapabilities: readonly ChatCapability[];
+    override readonly name = "ChatRouteUnavailableError";
+    readonly route: ChatRoute;
+    readonly reason: ChatRouteUnavailableReason;
+    readonly missingCapabilities: readonly ChatCapability[];
 
-  constructor(options: {
-    route: ChatRoute;
-    reason: ChatRouteUnavailableReason;
-    missingCapabilities?: readonly ChatCapability[];
-    message: string;
-  }) {
-    super(options.message);
-    this.route = options.route;
-    this.reason = options.reason;
-    this.missingCapabilities = Object.freeze([
-      ...(options.missingCapabilities ?? []),
-    ]);
-  }
+    constructor(options: {
+        route: ChatRoute;
+        reason: ChatRouteUnavailableReason;
+        missingCapabilities?: readonly ChatCapability[];
+        message: string;
+    }) {
+        super(options.message);
+        this.route = options.route;
+        this.reason = options.reason;
+        this.missingCapabilities = Object.freeze([...(options.missingCapabilities ?? [])]);
+    }
 }
 
 /** A reasoning effort or budget outside what the selected model declares. */
 export class InvalidReasoningControlError extends ChatRequestError {
-  override readonly name = "InvalidReasoningControlError";
+    override readonly name = "InvalidReasoningControlError";
 }
 
 export function isChatRequestError(error: unknown): error is ChatRequestError {
-  return error instanceof ChatRequestError;
+    return error instanceof ChatRequestError;
 }
 
-export function isChatRouteUnavailableError(
-  error: unknown,
-): error is ChatRouteUnavailableError {
-  return error instanceof ChatRouteUnavailableError;
+export function isChatRouteUnavailableError(error: unknown): error is ChatRouteUnavailableError {
+    return error instanceof ChatRouteUnavailableError;
 }

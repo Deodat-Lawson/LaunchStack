@@ -10,19 +10,27 @@ import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-r
 import { safeFounderWeeklyReviewError, safeRun } from "~/server/founder-weekly-review/http";
 
 export interface FounderWeeklyReviewGetRouteDependencies {
-  actorResolver: Pick<FounderWeeklyReviewActorResolver, "resolve">;
-  getRun: (actor: Parameters<FounderWeeklyReviewUserService["getRun"]>[0], runId: string) => ReturnType<FounderWeeklyReviewUserService["getRun"]>;
+    actorResolver: Pick<FounderWeeklyReviewActorResolver, "resolve">;
+    getRun: (
+        actor: Parameters<FounderWeeklyReviewUserService["getRun"]>[0],
+        runId: string
+    ) => ReturnType<FounderWeeklyReviewUserService["getRun"]>;
 }
 
 export function createFounderWeeklyReviewGetHandler(deps: FounderWeeklyReviewGetRouteDependencies) {
-  return async function GET(_request: Request, { params }: { params: Promise<{ runId: string }> }) {
-    const { userId } = await auth();
-    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    try {
-      const actor = await deps.actorResolver.resolve(userId);
-      const { runId } = await params;
-      const run = await deps.getRun(actor, runId);
-      return NextResponse.json({ run: safeRun(run) });
-    } catch (error) { return safeFounderWeeklyReviewError(error); }
-  };
+    return async function GET(
+        _request: Request,
+        { params }: { params: Promise<{ runId: string }> }
+    ) {
+        const { userId } = await auth();
+        if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        try {
+            const actor = await deps.actorResolver.resolve(userId);
+            const { runId } = await params;
+            const run = await deps.getRun(actor, runId);
+            return NextResponse.json({ run: safeRun(run) });
+        } catch (error) {
+            return safeFounderWeeklyReviewError(error);
+        }
+    };
 }

@@ -12,58 +12,55 @@
  */
 
 export interface RagPort {
-  /**
-   * Run company-scoped ensemble search — BM25 + vector + optional rerank +
-   * optional graph retriever, all fused via RRF. Returns top-K chunks
-   * across the company's full corpus.
-   */
-  companyEnsembleSearch(
-    query: string,
-    options: CompanySearchOptions,
-  ): Promise<RagSearchResult[]>;
+    /**
+     * Run company-scoped ensemble search — BM25 + vector + optional rerank +
+     * optional graph retriever, all fused via RRF. Returns top-K chunks
+     * across the company's full corpus.
+     */
+    companyEnsembleSearch(query: string, options: CompanySearchOptions): Promise<RagSearchResult[]>;
 }
 
 export interface CompanySearchOptions {
-  companyId: number;
-  topK?: number;
-  /** Rank-fusion weights (length must match the number of retrievers). */
-  weights?: number[];
-  /** Minimum similarity score to keep (provider-dependent). */
-  minSimilarity?: number;
-  /** Optional per-document filters applied before fusion. */
-  filters?: RagSearchFilters;
-  /** Override the embedding index used for the vector retriever. */
-  embeddingIndexKey?: string;
+    companyId: number;
+    topK?: number;
+    /** Rank-fusion weights (length must match the number of retrievers). */
+    weights?: number[];
+    /** Minimum similarity score to keep (provider-dependent). */
+    minSimilarity?: number;
+    /** Optional per-document filters applied before fusion. */
+    filters?: RagSearchFilters;
+    /** Override the embedding index used for the vector retriever. */
+    embeddingIndexKey?: string;
 }
 
 export interface RagSearchFilters {
-  documentIds?: number[];
-  documentClass?: string;
-  dateRange?: { start?: Date; end?: Date };
-  topicTags?: string[];
+    documentIds?: number[];
+    documentClass?: string;
+    dateRange?: { start?: Date; end?: Date };
+    topicTags?: string[];
 }
 
 export interface RagSearchResult {
-  pageContent: string;
-  metadata: RagSearchMetadata;
-  /** Duplicated shortcuts some renderers expect. */
-  pageNumber?: number;
-  title?: string;
-  documentId?: string | number;
-  source?: string;
-  retrievalMethod?: string;
+    pageContent: string;
+    metadata: RagSearchMetadata;
+    /** Duplicated shortcuts some renderers expect. */
+    pageNumber?: number;
+    title?: string;
+    documentId?: string | number;
+    source?: string;
+    retrievalMethod?: string;
 }
 
 export interface RagSearchMetadata {
-  chunkId?: number;
-  page?: number;
-  documentId?: number;
-  documentTitle?: string;
-  distance?: number;
-  confidence?: number;
-  source?: string;
-  embeddingIndexKey?: string;
-  rerankScore?: number;
-  timestamp?: string;
-  [key: string]: unknown;
+    chunkId?: number;
+    page?: number;
+    documentId?: number;
+    documentTitle?: string;
+    distance?: number;
+    confidence?: number;
+    source?: string;
+    embeddingIndexKey?: string;
+    rerankScore?: number;
+    timestamp?: string;
+    [key: string]: unknown;
 }

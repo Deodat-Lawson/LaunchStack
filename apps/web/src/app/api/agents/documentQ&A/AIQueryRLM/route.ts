@@ -30,10 +30,7 @@ import {
     describeChatError,
 } from "../services";
 import { performRLMSearch, type RLMSearchOptions } from "../services/rlmSearch";
-import {
-    describeChatResolutionFailure,
-    resolveConfiguredChatModel,
-} from "~/lib/models";
+import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import type { SemanticType } from "@launchstack/core/db/schema";
@@ -67,7 +64,9 @@ interface RLMQueryRequest {
 /**
  * Validate request body
  */
-function validateRequest(body: unknown): { success: true; data: RLMQueryRequest } | { success: false; error: string } {
+function validateRequest(
+    body: unknown
+): { success: true; data: RLMQueryRequest } | { success: false; error: string } {
     if (!body || typeof body !== "object") {
         return { success: false, error: "Request body is required" };
     }
@@ -82,8 +81,10 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
         return { success: false, error: "question is required and must be a non-empty string" };
     }
 
-    const providerValue = typeof req.provider === "string" ? (req.provider.trim() || undefined) : undefined;
-    const modelValue = typeof req.aiModel === "string" ? (req.aiModel.trim() || undefined) : undefined;
+    const providerValue =
+        typeof req.provider === "string" ? req.provider.trim() || undefined : undefined;
+    const modelValue =
+        typeof req.aiModel === "string" ? req.aiModel.trim() || undefined : undefined;
 
     // Validate maxTokens if provided
     if (req.maxTokens !== undefined) {
@@ -102,7 +103,12 @@ function validateRequest(body: unknown): { success: true; data: RLMQueryRequest 
     // Validate pageRange if provided
     if (req.pageRange !== undefined) {
         const pr = req.pageRange as Record<string, unknown>;
-        if (typeof pr.start !== "number" || typeof pr.end !== "number" || pr.start < 0 || pr.end < pr.start) {
+        if (
+            typeof pr.start !== "number" ||
+            typeof pr.end !== "number" ||
+            pr.start < 0 ||
+            pr.end < pr.start
+        ) {
             return { success: false, error: "pageRange must have valid start and end numbers" };
         }
     }
@@ -146,7 +152,7 @@ export async function POST(request: Request) {
             if (!ctx.success) return ctx.response;
 
             // Parse and validate request
-            const body = await request.json() as RLMQueryRequest;
+            const body = (await request.json()) as RLMQueryRequest;
             const validation = validateRequest(body);
 
             if (!validation.success) {
@@ -183,18 +189,18 @@ export async function POST(request: Request) {
                 const failure = describeChatResolutionFailure(modelError);
                 return NextResponse.json(
                     { success: false, message: failure.message },
-                    { status: failure.status },
+                    { status: failure.status }
                 );
             }
 
             const compatibility = validateDeprecatedChatSelection(
                 { provider, model: aiModel },
-                resolved,
+                resolved
             );
             if (!compatibility.ok) {
                 return NextResponse.json(
                     { success: false, message: compatibility.message },
-                    { status: compatibility.status },
+                    { status: compatibility.status }
                 );
             }
             const { modelId: selectedAiModel, chat } = resolved;
@@ -240,7 +246,8 @@ export async function POST(request: Request) {
             if (searchResult.sections.length === 0) {
                 return NextResponse.json({
                     success: false,
-                    message: "No relevant content found. The document may not have been processed with RLM indexing yet.",
+                    message:
+                        "No relevant content found. The document may not have been processed with RLM indexing yet.",
                 });
             }
 
@@ -291,7 +298,7 @@ Provide a comprehensive answer based on the provided content. When referencing s
                     resolved.prepareMessages([
                         new SystemMessage(systemPrompt),
                         new HumanMessage(userPrompt),
-                    ]),
+                    ])
                 );
             } catch (modelError) {
                 const friendly = describeChatError(modelError, selectedAiModel);
@@ -301,7 +308,7 @@ Provide a comprehensive answer based on the provided content. When referencing s
                             success: false,
                             message: friendly.message,
                         },
-                        { status: friendly.status },
+                        { status: friendly.status }
                     );
                 }
                 throw modelError;
@@ -314,7 +321,7 @@ Provide a comprehensive answer based on the provided content. When referencing s
             const recommendedPages = [
                 ...new Set(
                     searchResult.sections
-                        .map((s) => s.pageNumber)
+                        .map(s => s.pageNumber)
                         .filter((p): p is number => p !== null)
                 ),
             ].sort((a, b) => a - b);

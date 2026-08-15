@@ -10,36 +10,50 @@
  */
 
 import { eq } from "drizzle-orm";
-import { document, documentMetadata, documentPreviews, documentRetrievalChunks, documentSections, documentStructure, kgEntityMentions, workspaceResults } from "@launchstack/core/db/schema";
-import { ChatHistory, documentReferenceResolution, documentViews, predictiveDocumentAnalysisResults } from "~/server/db/schema";
+import {
+    document,
+    documentMetadata,
+    documentPreviews,
+    documentRetrievalChunks,
+    documentSections,
+    documentStructure,
+    kgEntityMentions,
+    workspaceResults,
+} from "@launchstack/core/db/schema";
+import {
+    ChatHistory,
+    documentReferenceResolution,
+    documentViews,
+    predictiveDocumentAnalysisResults,
+} from "~/server/db/schema";
 import type { db as DbType } from "~/server/db";
 
 type Tx = Parameters<Parameters<(typeof DbType)["transaction"]>[0]>[0];
 
 export async function deleteDocumentCore(tx: Tx, docId: number): Promise<void> {
-  const docIdBig = BigInt(docId);
+    const docIdBig = BigInt(docId);
 
-  await tx.delete(ChatHistory).where(eq(ChatHistory.documentId, docIdBig));
-  await tx
-    .delete(documentReferenceResolution)
-    .where(eq(documentReferenceResolution.resolvedInDocumentId, docId));
-  await tx
-    .delete(predictiveDocumentAnalysisResults)
-    .where(eq(predictiveDocumentAnalysisResults.documentId, docIdBig));
-  await tx.delete(documentViews).where(eq(documentViews.documentId, docIdBig));
+    await tx.delete(ChatHistory).where(eq(ChatHistory.documentId, docIdBig));
+    await tx
+        .delete(documentReferenceResolution)
+        .where(eq(documentReferenceResolution.resolvedInDocumentId, docId));
+    await tx
+        .delete(predictiveDocumentAnalysisResults)
+        .where(eq(predictiveDocumentAnalysisResults.documentId, docIdBig));
+    await tx.delete(documentViews).where(eq(documentViews.documentId, docIdBig));
 
-  // RLM tables — order matters: leaf tables before the tables they reference.
-  // kgEntityMentions & workspaceResults & documentPreviews reference documentSections;
-  // documentRetrievalChunks references documentSections and document.
-  await tx.delete(kgEntityMentions).where(eq(kgEntityMentions.documentId, docIdBig));
-  await tx.delete(workspaceResults).where(eq(workspaceResults.documentId, docIdBig));
-  await tx.delete(documentPreviews).where(eq(documentPreviews.documentId, docIdBig));
-  await tx
-    .delete(documentRetrievalChunks)
-    .where(eq(documentRetrievalChunks.documentId, docIdBig));
-  await tx.delete(documentSections).where(eq(documentSections.documentId, docIdBig));
-  await tx.delete(documentStructure).where(eq(documentStructure.documentId, docIdBig));
-  await tx.delete(documentMetadata).where(eq(documentMetadata.documentId, docIdBig));
+    // RLM tables — order matters: leaf tables before the tables they reference.
+    // kgEntityMentions & workspaceResults & documentPreviews reference documentSections;
+    // documentRetrievalChunks references documentSections and document.
+    await tx.delete(kgEntityMentions).where(eq(kgEntityMentions.documentId, docIdBig));
+    await tx.delete(workspaceResults).where(eq(workspaceResults.documentId, docIdBig));
+    await tx.delete(documentPreviews).where(eq(documentPreviews.documentId, docIdBig));
+    await tx
+        .delete(documentRetrievalChunks)
+        .where(eq(documentRetrievalChunks.documentId, docIdBig));
+    await tx.delete(documentSections).where(eq(documentSections.documentId, docIdBig));
+    await tx.delete(documentStructure).where(eq(documentStructure.documentId, docIdBig));
+    await tx.delete(documentMetadata).where(eq(documentMetadata.documentId, docIdBig));
 
-  await tx.delete(document).where(eq(document.id, docId));
+    await tx.delete(document).where(eq(document.id, docId));
 }

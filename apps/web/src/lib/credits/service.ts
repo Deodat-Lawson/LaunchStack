@@ -5,12 +5,7 @@
 
 import { eq, sql, and, gte, lte, desc } from "drizzle-orm";
 import { db } from "~/server/db";
-import {
-    tokenAccounts,
-    tokenTransactions,
-    tokenUsageDaily,
-    tokenGrants,
-} from "~/server/db/schema";
+import { tokenAccounts, tokenTransactions, tokenUsageDaily, tokenGrants } from "~/server/db/schema";
 import type { TokenService } from "./costs";
 // The env-backed helper, not the engine-slot one in @launchstack/core/credits:
 // ensureTokenAccount can run before createEngine has populated that slot.
@@ -62,14 +57,13 @@ export async function ensureTokenAccount(companyId: bigint): Promise<number> {
 
     const { TOKEN_SIGNUP_BONUS } = await import("./costs");
     const { balance: newBalance } = await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
-    console.log(`[Tokens] Auto-provisioned ${TOKEN_SIGNUP_BONUS.toLocaleString()} tokens for company ${companyId}`);
+    console.log(
+        `[Tokens] Auto-provisioned ${TOKEN_SIGNUP_BONUS.toLocaleString()} tokens for company ${companyId}`
+    );
     return newBalance;
 }
 
-export async function hasTokens(
-    companyId: bigint,
-    amount: number
-): Promise<boolean> {
+export async function hasTokens(companyId: bigint, amount: number): Promise<boolean> {
     const balance = await ensureTokenAccount(companyId);
     return balance >= amount;
 }
@@ -103,9 +97,7 @@ export interface DebitOptions {
  * Atomically debit tokens from a company's account.
  * Returns the new balance, or null if insufficient tokens.
  */
-export async function debitTokens(
-    opts: DebitOptions
-): Promise<{ newBalance: number } | null> {
+export async function debitTokens(opts: DebitOptions): Promise<{ newBalance: number } | null> {
     if (opts.amount <= 0) return { newBalance: await getBalance(opts.companyId) };
 
     // Default to this deployment's policy. Every caller that merely wants to
@@ -125,20 +117,20 @@ export async function debitTokens(
     const runUpdate = () =>
         allowNegative
             ? db
-                .update(tokenAccounts)
-                .set(set)
-                .where(eq(tokenAccounts.companyId, opts.companyId))
-                .returning({ newBalance: tokenAccounts.balanceTokens })
+                  .update(tokenAccounts)
+                  .set(set)
+                  .where(eq(tokenAccounts.companyId, opts.companyId))
+                  .returning({ newBalance: tokenAccounts.balanceTokens })
             : db
-                .update(tokenAccounts)
-                .set(set)
-                .where(
-                    and(
-                        eq(tokenAccounts.companyId, opts.companyId),
-                        gte(tokenAccounts.balanceTokens, opts.amount)
-                    )
-                )
-                .returning({ newBalance: tokenAccounts.balanceTokens });
+                  .update(tokenAccounts)
+                  .set(set)
+                  .where(
+                      and(
+                          eq(tokenAccounts.companyId, opts.companyId),
+                          gte(tokenAccounts.balanceTokens, opts.amount)
+                      )
+                  )
+                  .returning({ newBalance: tokenAccounts.balanceTokens });
 
     let result = await runUpdate();
 
@@ -182,11 +174,7 @@ export async function debitTokens(
             tokensUsed: opts.amount,
         })
         .onConflictDoUpdate({
-            target: [
-                tokenUsageDaily.companyId,
-                tokenUsageDaily.date,
-                tokenUsageDaily.service,
-            ],
+            target: [tokenUsageDaily.companyId, tokenUsageDaily.date, tokenUsageDaily.service],
             set: {
                 operationCount: sql`${tokenUsageDaily.operationCount} + 1`,
                 tokensUsed: sql`${tokenUsageDaily.tokensUsed} + ${opts.amount}`,
@@ -209,9 +197,7 @@ export interface GrantOptions {
 /**
  * Grant tokens to a company. Creates the token account if it doesn't exist.
  */
-export async function grantTokens(
-    opts: GrantOptions
-): Promise<{ newBalance: number }> {
+export async function grantTokens(opts: GrantOptions): Promise<{ newBalance: number }> {
     // Upsert token account
     const result = await db
         .insert(tokenAccounts)
@@ -282,10 +268,7 @@ export async function getUsageHistory(opts: UsageHistoryOptions) {
         .limit(opts.limit ?? 90);
 }
 
-export async function getTransactionHistory(
-    companyId: bigint,
-    limit = 50
-) {
+export async function getTransactionHistory(companyId: bigint, limit = 50) {
     return db
         .select()
         .from(tokenTransactions)

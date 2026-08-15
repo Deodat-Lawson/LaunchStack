@@ -1,16 +1,16 @@
 import type { DiagramType, RepoInfo } from "./types";
 
 const FILE_SELECTION_FOCUS: Record<DiagramType, string> = {
-  architecture: `Prioritize: README/docs, config (package.json, requirements.txt, etc.), main entry points, routers, service files, and key source files that reveal the high-level structure.`,
-  sequence: `Prioritize: API route handlers, controller files, service/use-case files, middleware, and any files that show request/response flows or inter-service communication.`,
-  class: `Prioritize: model/entity definitions, class files, type definitions, interfaces, abstract classes, and inheritance hierarchies. Focus on OOP structure.`,
-  er: `Prioritize: database schema files, ORM models, migration files, type definitions for entities, and any files defining relationships between data models.`,
-  component: `Prioritize: main entry points, module definitions, package boundaries, service registrations, dependency injection configs, and files that define component interfaces.`,
+    architecture: `Prioritize: README/docs, config (package.json, requirements.txt, etc.), main entry points, routers, service files, and key source files that reveal the high-level structure.`,
+    sequence: `Prioritize: API route handlers, controller files, service/use-case files, middleware, and any files that show request/response flows or inter-service communication.`,
+    class: `Prioritize: model/entity definitions, class files, type definitions, interfaces, abstract classes, and inheritance hierarchies. Focus on OOP structure.`,
+    er: `Prioritize: database schema files, ORM models, migration files, type definitions for entities, and any files defining relationships between data models.`,
+    component: `Prioritize: main entry points, module definitions, package boundaries, service registrations, dependency injection configs, and files that define component interfaces.`,
 };
 
 export function getFilesToExploreSystem(diagramType: DiagramType = "architecture"): string {
-  const focus = FILE_SELECTION_FOCUS[diagramType];
-  return `You are a principal engineer. Given a repository's directory tree, you must choose which files are most valuable to read for generating a ${diagramType} diagram.
+    const focus = FILE_SELECTION_FOCUS[diagramType];
+    return `You are a principal engineer. Given a repository's directory tree, you must choose which files are most valuable to read for generating a ${diagramType} diagram.
 
 CRITICAL PATH RULES:
 - The tree below has a root label like \`└── owner/repo/\`. That label is for display ONLY and is NOT part of any file path. Paths start from the FIRST LEVEL INSIDE that root.
@@ -44,37 +44,37 @@ List the file paths to read (one per line, relative to repo root). No other text
 `;
 
 export function buildFilesToExploreUserPrompt(tree: string): string {
-  return FILES_TO_EXPLORE_USER_TEMPLATE.replace("{tree}", tree);
+    return FILES_TO_EXPLORE_USER_TEMPLATE.replace("{tree}", tree);
 }
 
 export function parsePathsFromResponse(text: string | null | undefined): string[] {
-  if (!text?.trim()) return [];
-  let raw = text.trim();
+    if (!text?.trim()) return [];
+    let raw = text.trim();
 
-  // Strip code fences if the model wrapped the output
-  if (raw.startsWith("```")) {
-    raw = raw.replace(/^```[\w-]*\n?/, "");
-    raw = raw.replace(/\n?```\s*$/, "");
-  }
+    // Strip code fences if the model wrapped the output
+    if (raw.startsWith("```")) {
+        raw = raw.replace(/^```[\w-]*\n?/, "");
+        raw = raw.replace(/\n?```\s*$/, "");
+    }
 
-  const paths: string[] = [];
-  for (const lineRaw of raw.split("\n")) {
-    let line = lineRaw.trim();
-    if (!line || line.startsWith("#") || line.startsWith("<")) continue;
+    const paths: string[] = [];
+    for (const lineRaw of raw.split("\n")) {
+        let line = lineRaw.trim();
+        if (!line || line.startsWith("#") || line.startsWith("<")) continue;
 
-    // Strip bullets like "- path"
-    line = line.replace(/^[\-\*]\s+/, "").trim();
+        // Strip bullets like "- path"
+        line = line.replace(/^[\-\*]\s+/, "").trim();
 
-    // Very simple guard: ignore lines that look like sentences
-    if (!line || line.includes(" ")) continue;
+        // Very simple guard: ignore lines that look like sentences
+        if (!line || line.includes(" ")) continue;
 
-    paths.push(line);
-  }
-  return paths;
+        paths.push(line);
+    }
+    return paths;
 }
 
 const DIAGRAM_TYPE_INSTRUCTIONS: Record<DiagramType, string> = {
-  architecture: `MERMAID RULES — readable, valid syntax:
+    architecture: `MERMAID RULES — readable, valid syntax:
 - Use flowchart TD (not "graph")
 - Include 8-15 nodes MAXIMUM. Each node = a logical MODULE or LAYER, not an individual file
   - Group related files into one node (e.g. "API Routes" not "route1.ts, route2.ts, route3.ts")
@@ -96,7 +96,7 @@ const DIAGRAM_TYPE_INSTRUCTIONS: Record<DiagramType, string> = {
 - Labels in quotes: A["Auth Service"]
 - One statement per line.
 - KEEP IT SIMPLE — a readable diagram with 10 clear nodes is better than a cluttered one with 30.`,
-  sequence: `MERMAID RULES — readable, valid syntax:
+    sequence: `MERMAID RULES — readable, valid syntax:
 - Use sequenceDiagram
 - Show 2-3 key request/response flows (not every endpoint)
 - Include participants: Client, API, key services, database
@@ -104,20 +104,20 @@ const DIAGRAM_TYPE_INSTRUCTIONS: Record<DiagramType, string> = {
 - Add activation bars with activate/deactivate for clarity
 - Include alt/opt/loop blocks where appropriate
 - Keep the diagram focused — one clear flow per section`,
-  class: `MERMAID RULES — readable, valid syntax:
+    class: `MERMAID RULES — readable, valid syntax:
 - Use classDiagram
 - Show 8-15 key classes (not every class in the repo)
 - Include only the 2-3 most important methods/properties per class
 - Use proper UML relationships: <|-- inheritance, *-- composition, o-- aggregation, --> association
 - Include interfaces with <<interface>> stereotype
 - Group related classes logically`,
-  er: `MERMAID RULES — readable, valid syntax:
+    er: `MERMAID RULES — readable, valid syntax:
 - Use erDiagram
 - Show the core domain entities (8-15 max)
 - Use proper cardinality: ||--o{ one-to-many, ||--|| one-to-one, }o--o{ many-to-many
 - Include 2-4 key attributes per entity (PK, FK, important fields)
 - Focus on the core domain model, skip internal/system tables`,
-  component: `MERMAID RULES — readable, valid syntax:
+    component: `MERMAID RULES — readable, valid syntax:
 - Use flowchart TD (not "graph")
 - Show 8-15 key components/modules
 - Use subgraphs to group related components. Nested subgraphs are allowed:
@@ -136,8 +136,9 @@ const DIAGRAM_TYPE_INSTRUCTIONS: Record<DiagramType, string> = {
 };
 
 export function getSystemPrompt(diagramType: DiagramType = "architecture"): string {
-  const diagramLabel = diagramType === "er" ? "ER" : diagramType.charAt(0).toUpperCase() + diagramType.slice(1);
-  return `You are a software architect. Produce a brief summary AND a Mermaid ${diagramLabel} diagram for the repository.
+    const diagramLabel =
+        diagramType === "er" ? "ER" : diagramType.charAt(0).toUpperCase() + diagramType.slice(1);
+    return `You are a software architect. Produce a brief summary AND a Mermaid ${diagramLabel} diagram for the repository.
 
 You MUST output BOTH sections in this exact order:
 
@@ -168,54 +169,58 @@ Repository context:
 
 /** Extract the summary from the response (before the mermaid block). */
 export function extractSummary(text: string | null | undefined): string | null {
-  if (!text?.trim()) return null;
-  const trimmed = text.trim().replace(/\\n/g, "\n");
+    if (!text?.trim()) return null;
+    const trimmed = text.trim().replace(/\\n/g, "\n");
 
-  // Try "## Summary" ... "## Diagram" or "## Summary" ... ```mermaid
-  const sectionMatch = /(?:##\s*Summary|Summary)\s*:?\s*\n+([\s\S]*?)(?=\n##\s*Diagram|\n```mermaid|```mermaid|$)/i.exec(trimmed);
-  if (sectionMatch?.[1]) {
-    const s = sectionMatch[1].trim();
-    if (s.length > 20) return s;
-  }
+    // Try "## Summary" ... "## Diagram" or "## Summary" ... ```mermaid
+    const sectionMatch =
+        /(?:##\s*Summary|Summary)\s*:?\s*\n+([\s\S]*?)(?=\n##\s*Diagram|\n```mermaid|```mermaid|$)/i.exec(
+            trimmed
+        );
+    if (sectionMatch?.[1]) {
+        const s = sectionMatch[1].trim();
+        if (s.length > 20) return s;
+    }
 
-  // Fallback: text before the first ```mermaid block
-  const mermaidIdx = trimmed.search(/```mermaid/i);
-  if (mermaidIdx > 10) {
-    const before = trimmed.slice(0, mermaidIdx).trim();
-    // Remove leading ## or headers, get clean intro
-    const cleaned = before.replace(/^#+\s*Summary\s*:?\s*\n?/i, "").trim();
-    if (cleaned.length > 20) return cleaned;
-  }
+    // Fallback: text before the first ```mermaid block
+    const mermaidIdx = trimmed.search(/```mermaid/i);
+    if (mermaidIdx > 10) {
+        const before = trimmed.slice(0, mermaidIdx).trim();
+        // Remove leading ## or headers, get clean intro
+        const cleaned = before.replace(/^#+\s*Summary\s*:?\s*\n?/i, "").trim();
+        if (cleaned.length > 20) return cleaned;
+    }
 
-  return null;
+    return null;
 }
 
 /** Extract mermaid code from response (handles ```mermaid ... ``` or raw mermaid). */
 export function extractMermaidCode(text: string | null | undefined): string | null {
-  if (!text?.trim()) return null;
-  const trimmed = text.trim();
-  const match = /```mermaid\s*\n?([\s\S]*?)```/i.exec(trimmed);
-  if (match?.[1]) return match[1].trim();
-  if (/^\s*(graph|flowchart|classDiagram|sequenceDiagram|stateDiagram|erDiagram)\s/i.test(trimmed)) {
-    return trimmed;
-  }
-  return null;
+    if (!text?.trim()) return null;
+    const trimmed = text.trim();
+    const match = /```mermaid\s*\n?([\s\S]*?)```/i.exec(trimmed);
+    if (match?.[1]) return match[1].trim();
+    if (
+        /^\s*(graph|flowchart|classDiagram|sequenceDiagram|stateDiagram|erDiagram)\s/i.test(trimmed)
+    ) {
+        return trimmed;
+    }
+    return null;
 }
 
 export function buildUserPrompt(
-  repo: RepoInfo,
-  repoContext: string,
-  userInstructions?: string | null,
+    repo: RepoInfo,
+    repoContext: string,
+    userInstructions?: string | null
 ): string {
-  const repoName = `${repo.owner}/${repo.repoName}`;
-  const trimmed = userInstructions?.trim();
+    const repoName = `${repo.owner}/${repo.repoName}`;
+    const trimmed = userInstructions?.trim();
 
-  const userInstructionsSection = trimmed
-    ? `USER REQUEST (answer this by tailoring the content inside sections 1–4 only; do NOT add a separate section or paragraph at the end for this):\n"${trimmed}"\n\n`
-    : "";
+    const userInstructionsSection = trimmed
+        ? `USER REQUEST (answer this by tailoring the content inside sections 1–4 only; do NOT add a separate section or paragraph at the end for this):\n"${trimmed}"\n\n`
+        : "";
 
-  return USER_PROMPT_TEMPLATE.replace("{user_instructions_section}", userInstructionsSection)
-    .replace("{repo_name}", repoName)
-    .replace("{repo_context}", repoContext);
+    return USER_PROMPT_TEMPLATE.replace("{user_instructions_section}", userInstructionsSection)
+        .replace("{repo_name}", repoName)
+        .replace("{repo_context}", repoContext);
 }
-

@@ -44,17 +44,20 @@ import type { SearchCategory } from "@launchstack/features/trend-search";
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
-const validCategories = ["fashion", "finance", "business", "tech"] as const satisfies readonly SearchCategory[];
+const validCategories = [
+    "fashion",
+    "finance",
+    "business",
+    "tech",
+] as const satisfies readonly SearchCategory[];
 
 const categoryArb = fc.constantFrom(...validCategories);
 
-const validQueryArb = fc
-    .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+const validQueryArb = fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
 /** Generates a single PlannedQuery-shaped object (for mock return value). */
 function plannedQueryArb(categoryArbitrary: fc.Arbitrary<SearchCategory>) {
@@ -120,7 +123,7 @@ describe("Property 4: Specified categories are preserved", () => {
 
     it("planned queries only reference the specified categories when categories are provided", async () => {
         const categoriesSubsetArb = fc.array(categoryArb, { minLength: 1, maxLength: 4 });
-        const categoriesAndPlannedQueriesArb = categoriesSubsetArb.chain((categories) =>
+        const categoriesAndPlannedQueriesArb = categoriesSubsetArb.chain(categories =>
             fc.tuple(fc.constant(categories), plannedQueriesForCategoriesArb(categories))
         );
 
@@ -160,12 +163,18 @@ describe("Property 5: Query planner always produces sub-queries", () => {
             fc.asyncProperty(
                 validQueryArb,
                 validCompanyContextArb,
-                fc.option(fc.array(categoryArb, { minLength: 1, maxLength: 4 }), { nil: undefined }),
+                fc.option(fc.array(categoryArb, { minLength: 1, maxLength: 4 }), {
+                    nil: undefined,
+                }),
                 plannedQueriesArb,
                 async (query, companyContext, categories, plannedQueries) => {
                     mockInvoke.mockResolvedValue({ plannedQueries });
 
-                    const result = await planQueries(query, companyContext, categories ?? undefined);
+                    const result = await planQueries(
+                        query,
+                        companyContext,
+                        categories ?? undefined
+                    );
 
                     expect(result.length).toBeGreaterThanOrEqual(1);
                     expect(result.length).toBeGreaterThanOrEqual(3);

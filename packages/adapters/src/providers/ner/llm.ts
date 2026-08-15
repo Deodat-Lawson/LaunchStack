@@ -39,10 +39,7 @@ export class LLMNERProvider implements NERProvider {
         // operator names no endpoint. The NER_API_* values arrive through
         // configureProviders() — this module reads no process.env (ADR-002).
         const ner = getCapabilityConfig("ner");
-        const { baseUrl: baseURL, apiKey } = resolveEndpoint(
-            ner.baseUrl,
-            ner.apiKey,
-        );
+        const { baseUrl: baseURL, apiKey } = resolveEndpoint(ner.baseUrl, ner.apiKey);
         this.model = resolveModel(ner.model, GEMINI_FAST_MODEL);
         this.name = `ner:${this.model}`;
 
@@ -57,10 +54,7 @@ export class LLMNERProvider implements NERProvider {
             const batch = chunks.slice(i, i + BATCH_SIZE);
             const batchResults = await this.extractBatch(batch);
             results.push(...batchResults);
-            totalEntities += batchResults.reduce(
-                (sum, r) => sum + r.entities.length,
-                0
-            );
+            totalEntities += batchResults.reduce((sum, r) => sum + r.entities.length, 0);
         }
 
         return {
@@ -104,7 +98,11 @@ export class LLMNERProvider implements NERProvider {
         try {
             const parsed = JSON.parse(content) as
                 | { entities: Array<{ text: string; label: string; score: number }> }
-                | { chunks: Array<{ entities: Array<{ text: string; label: string; score: number }> }> }
+                | {
+                      chunks: Array<{
+                          entities: Array<{ text: string; label: string; score: number }>;
+                      }>;
+                  }
                 | Array<{ text: string; label: string; score: number }>;
 
             if (chunks.length === 1) {
@@ -134,7 +132,7 @@ export class LLMNERProvider implements NERProvider {
             }));
         } catch {
             console.warn("[LLM-NER] Failed to parse response, returning empty entities");
-            return chunks.map((text) => ({ text, entities: [] }));
+            return chunks.map(text => ({ text, entities: [] }));
         }
     }
 }

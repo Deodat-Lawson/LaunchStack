@@ -96,10 +96,9 @@ export const documentStructure = pgTable(
         // Versioning: which version of the document this structure node belongs to.
         // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
         // Deleting a version cascades and removes its structure nodes.
-        versionId: bigint("version_id", { mode: "bigint" }).references(
-            () => documentVersions.id,
-            { onDelete: "cascade" }
-        ),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "cascade",
+        }),
         parentId: bigint("parent_id", { mode: "bigint" }), // Self-reference, null for root
         level: integer("level").notNull().default(0), // Depth: 0=root, 1=section, 2+=subsection
         ordering: integer("ordering").notNull().default(0), // Sibling order for traversal
@@ -119,21 +118,16 @@ export const documentStructure = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("doc_structure_document_id_idx").on(table.documentId),
         parentIdIdx: index("doc_structure_parent_id_idx").on(table.parentId),
         documentLevelIdx: index("doc_structure_document_level_idx").on(
             table.documentId,
             table.level
         ),
-        documentPathIdx: index("doc_structure_document_path_idx").on(
-            table.documentId,
-            table.path
-        ),
+        documentPathIdx: index("doc_structure_document_path_idx").on(table.documentId, table.path),
         documentOrderingIdx: index("doc_structure_document_ordering_idx").on(
             table.documentId,
             table.parentId,
@@ -142,7 +136,6 @@ export const documentStructure = pgTable(
         versionIdIdx: index("doc_structure_version_id_idx").on(table.versionId),
     })
 );
-
 
 export const documentContextChunks = pgTable(
     "document_context_chunks",
@@ -153,10 +146,9 @@ export const documentContextChunks = pgTable(
             .references(() => document.id, { onDelete: "cascade" }),
         // Versioning: which version of the document this chunk belongs to.
         // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
-        versionId: bigint("version_id", { mode: "bigint" }).references(
-            () => documentVersions.id,
-            { onDelete: "cascade" }
-        ),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "cascade",
+        }),
         structureId: bigint("structure_id", { mode: "bigint" }).references(
             () => documentStructure.id,
             { onDelete: "cascade" }
@@ -178,11 +170,9 @@ export const documentContextChunks = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("doc_ctx_chunks_document_id_idx").on(table.documentId),
         structureIdIdx: index("doc_ctx_chunks_structure_id_idx").on(table.structureId),
         documentPageIdx: index("doc_ctx_chunks_document_page_idx").on(
@@ -199,8 +189,8 @@ export const documentContextChunks = pgTable(
 );
 
 export const documentRetrievalChunks = pgTable(
-  "document_retrieval_chunks",
-  {
+    "document_retrieval_chunks",
+    {
         id: bigserial("id", { mode: "number" }).primaryKey(),
         contextChunkId: bigint("context_chunk_id", { mode: "bigint" })
             .notNull()
@@ -210,24 +200,23 @@ export const documentRetrievalChunks = pgTable(
             .references(() => document.id, { onDelete: "cascade" }),
         // Versioning: which version of the document this retrieval chunk belongs to.
         // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
-        versionId: bigint("version_id", { mode: "bigint" }).references(
-            () => documentVersions.id,
-            { onDelete: "cascade" }
-        ),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "cascade",
+        }),
         content: text("content").notNull(),
         tokenCount: integer("token_count").notNull().default(0),
 
         // Full dimension embedding (storage)
         embedding: vector("embedding", { dimensions: 1536 }),
-        
+
         // Matryoshka optimization: Index only the first 512 dimensions for speed
         embeddingShort: vector("embedding_short", { dimensions: 512 }),
-        
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-  },
-  (table) => ({
+
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
         contextChunkIdIdx: index("doc_ret_chunks_context_chunk_id_idx").on(table.contextChunkId),
         documentIdIdx: index("doc_ret_chunks_document_id_idx").on(table.documentId),
         // Index on the short embedding for fast ANN search.
@@ -249,112 +238,109 @@ export const documentRetrievalChunks = pgTable(
  * may repopulate it behind an explicit compose profile.
  */
 export const experimentalDocumentEmbeddings = pgTable(
-  "document_embeddings_exp",
-  {
-    id: bigserial("id", { mode: "number" }).primaryKey(),
-    documentId: bigint("document_id", { mode: "bigint" })
-      .notNull()
-      .references(() => document.id, { onDelete: "cascade" }),
-    retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
-      .notNull()
-      .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
-    provider: text("provider").notNull(),
-    model: text("model").notNull(),
-    version: text("version").notNull(),
-    dimension: integer("dimension").notNull().default(1024),
-    embedding: vector("embedding", { dimensions: 1024 }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-  },
-  (table) => ({
-    documentProviderIdx: index("document_embeddings_exp_doc_idx").on(
-      table.documentId,
-      table.provider,
-      table.model,
-      table.version
-    ),
-    chunkIdx: index("document_embeddings_exp_chunk_idx").on(
-      table.retrievalChunkId
-    ),
-    chunkProviderUnique: uniqueIndex(
-      "document_embeddings_exp_chunk_unique"
-    ).on(table.retrievalChunkId, table.provider, table.model, table.version),
-  })
+    "document_embeddings_exp",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        documentId: bigint("document_id", { mode: "bigint" })
+            .notNull()
+            .references(() => document.id, { onDelete: "cascade" }),
+        retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
+            .notNull()
+            .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
+        provider: text("provider").notNull(),
+        model: text("model").notNull(),
+        version: text("version").notNull(),
+        dimension: integer("dimension").notNull().default(1024),
+        embedding: vector("embedding", { dimensions: 1024 }).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        documentProviderIdx: index("document_embeddings_exp_doc_idx").on(
+            table.documentId,
+            table.provider,
+            table.model,
+            table.version
+        ),
+        chunkIdx: index("document_embeddings_exp_chunk_idx").on(table.retrievalChunkId),
+        chunkProviderUnique: uniqueIndex("document_embeddings_exp_chunk_unique").on(
+            table.retrievalChunkId,
+            table.provider,
+            table.model,
+            table.version
+        ),
+    })
 );
 
 export const documentEmbeddings768 = pgTable(
-  "document_embeddings_768",
-  {
-    id: bigserial("id", { mode: "number" }).primaryKey(),
-    documentId: bigint("document_id", { mode: "bigint" })
-      .notNull()
-      .references(() => document.id, { onDelete: "cascade" }),
-    retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
-      .notNull()
-      .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
-    indexKey: varchar("index_key", { length: 128 }).notNull(),
-    provider: text("provider").notNull(),
-    model: text("model").notNull(),
-    version: text("version").notNull(),
-    embedding: vector("embedding", { dimensions: 768 }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-  },
-  (table) => ({
-    documentIndexIdx: index("document_embeddings_768_doc_idx").on(
-      table.documentId,
-      table.indexKey,
-    ),
-    chunkIdx: index("document_embeddings_768_chunk_idx").on(
-      table.retrievalChunkId,
-    ),
-    chunkIndexUnique: uniqueIndex("document_embeddings_768_chunk_unique").on(
-      table.retrievalChunkId,
-      table.indexKey,
-    ),
-    embeddingHnswIdx: index("document_embeddings_768_embedding_hnsw_idx")
-      .using("hnsw", table.embedding.op("vector_cosine_ops"))
-      .with({ m: 16, ef_construction: 64 }),
-  }),
+    "document_embeddings_768",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        documentId: bigint("document_id", { mode: "bigint" })
+            .notNull()
+            .references(() => document.id, { onDelete: "cascade" }),
+        retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
+            .notNull()
+            .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
+        indexKey: varchar("index_key", { length: 128 }).notNull(),
+        provider: text("provider").notNull(),
+        model: text("model").notNull(),
+        version: text("version").notNull(),
+        embedding: vector("embedding", { dimensions: 768 }).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        documentIndexIdx: index("document_embeddings_768_doc_idx").on(
+            table.documentId,
+            table.indexKey
+        ),
+        chunkIdx: index("document_embeddings_768_chunk_idx").on(table.retrievalChunkId),
+        chunkIndexUnique: uniqueIndex("document_embeddings_768_chunk_unique").on(
+            table.retrievalChunkId,
+            table.indexKey
+        ),
+        embeddingHnswIdx: index("document_embeddings_768_embedding_hnsw_idx")
+            .using("hnsw", table.embedding.op("vector_cosine_ops"))
+            .with({ m: 16, ef_construction: 64 }),
+    })
 );
 
 export const documentEmbeddings1024 = pgTable(
-  "document_embeddings_1024",
-  {
-    id: bigserial("id", { mode: "number" }).primaryKey(),
-    documentId: bigint("document_id", { mode: "bigint" })
-      .notNull()
-      .references(() => document.id, { onDelete: "cascade" }),
-    retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
-      .notNull()
-      .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
-    indexKey: varchar("index_key", { length: 128 }).notNull(),
-    provider: text("provider").notNull(),
-    model: text("model").notNull(),
-    version: text("version").notNull(),
-    embedding: vector("embedding", { dimensions: 1024 }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-  },
-  (table) => ({
-    documentIndexIdx: index("document_embeddings_1024_doc_idx").on(
-      table.documentId,
-      table.indexKey,
-    ),
-    chunkIdx: index("document_embeddings_1024_chunk_idx").on(
-      table.retrievalChunkId,
-    ),
-    chunkIndexUnique: uniqueIndex("document_embeddings_1024_chunk_unique").on(
-      table.retrievalChunkId,
-      table.indexKey,
-    ),
-    embeddingHnswIdx: index("document_embeddings_1024_embedding_hnsw_idx")
-      .using("hnsw", table.embedding.op("vector_cosine_ops"))
-      .with({ m: 16, ef_construction: 64 }),
-  }),
+    "document_embeddings_1024",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        documentId: bigint("document_id", { mode: "bigint" })
+            .notNull()
+            .references(() => document.id, { onDelete: "cascade" }),
+        retrievalChunkId: bigint("retrieval_chunk_id", { mode: "bigint" })
+            .notNull()
+            .references(() => documentRetrievalChunks.id, { onDelete: "cascade" }),
+        indexKey: varchar("index_key", { length: 128 }).notNull(),
+        provider: text("provider").notNull(),
+        model: text("model").notNull(),
+        version: text("version").notNull(),
+        embedding: vector("embedding", { dimensions: 1024 }).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        documentIndexIdx: index("document_embeddings_1024_doc_idx").on(
+            table.documentId,
+            table.indexKey
+        ),
+        chunkIdx: index("document_embeddings_1024_chunk_idx").on(table.retrievalChunkId),
+        chunkIndexUnique: uniqueIndex("document_embeddings_1024_chunk_unique").on(
+            table.retrievalChunkId,
+            table.indexKey
+        ),
+        embeddingHnswIdx: index("document_embeddings_1024_embedding_hnsw_idx")
+            .using("hnsw", table.embedding.op("vector_cosine_ops"))
+            .with({ m: 16, ef_construction: 64 }),
+    })
 );
 
 export const documentMetadata = pgTable(
@@ -366,10 +352,9 @@ export const documentMetadata = pgTable(
             .references(() => document.id, { onDelete: "cascade" }),
         // Versioning: which version of the document this metadata belongs to.
         // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
-        versionId: bigint("version_id", { mode: "bigint" }).references(
-            () => documentVersions.id,
-            { onDelete: "cascade" }
-        ),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "cascade",
+        }),
         // Token/size metrics for cost-aware planning
         totalTokens: integer("total_tokens").default(0),
         totalSections: integer("total_sections").default(0),
@@ -399,11 +384,9 @@ export const documentMetadata = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         // Prior to versioning, metadata was a single row per document.
         // With versioning, each version of a document gets its own metadata
         // row (summary, token count, complexity, etc. are computed per-version
@@ -440,10 +423,9 @@ export const documentPreviews = pgTable(
             .references(() => document.id, { onDelete: "cascade" }),
         // Versioning: which version of the document this preview belongs to.
         // Nullable during Phase 1 rollout; backfilled to the v1 row for existing documents.
-        versionId: bigint("version_id", { mode: "bigint" }).references(
-            () => documentVersions.id,
-            { onDelete: "cascade" }
-        ),
+        versionId: bigint("version_id", { mode: "bigint" }).references(() => documentVersions.id, {
+            onDelete: "cascade",
+        }),
         sectionId: bigint("section_id", { mode: "bigint" }).references(
             () => documentContextChunks.id,
             { onDelete: "cascade" }
@@ -463,7 +445,7 @@ export const documentPreviews = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("doc_previews_document_id_idx").on(table.documentId),
         sectionIdIdx: index("doc_previews_section_id_idx").on(table.sectionId),
         documentTypeIdx: index("doc_previews_document_type_idx").on(
@@ -489,10 +471,9 @@ export const workspaceResults = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        documentId: bigint("document_id", { mode: "bigint" }).references(
-            () => document.id,
-            { onDelete: "cascade" }
-        ),
+        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, {
+            onDelete: "cascade",
+        }),
         sectionId: bigint("section_id", { mode: "bigint" }).references(
             () => documentContextChunks.id,
             { onDelete: "cascade" }
@@ -524,19 +505,14 @@ export const workspaceResults = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         sessionIdIdx: index("workspace_session_id_idx").on(table.sessionId),
         userIdIdx: index("workspace_user_id_idx").on(table.userId),
         companyIdIdx: index("workspace_company_id_idx").on(table.companyId),
         documentIdIdx: index("workspace_document_id_idx").on(table.documentId),
-        sessionTypeIdx: index("workspace_session_type_idx").on(
-            table.sessionId,
-            table.resultType
-        ),
+        sessionTypeIdx: index("workspace_session_type_idx").on(table.sessionId, table.resultType),
         statusIdx: index("workspace_status_idx").on(table.status),
         expiresAtIdx: index("workspace_expires_at_idx").on(table.expiresAt),
         parentResultIdx: index("workspace_parent_result_idx").on(table.parentResultId),
@@ -547,56 +523,47 @@ export const workspaceResults = pgTable(
 // Relations
 // ============================================================================
 
-export const documentStructureRelations = relations(
-    documentStructure,
-    ({ one, many }) => ({
-        document: one(document, {
-            fields: [documentStructure.documentId],
-            references: [document.id],
-        }),
-        parent: one(documentStructure, {
-            fields: [documentStructure.parentId],
-            references: [documentStructure.id],
-            relationName: "structure_parent_child",
-        }),
-        children: many(documentStructure, {
-            relationName: "structure_parent_child",
-        }),
-        sections: many(documentContextChunks),
-        previews: many(documentPreviews),
-    })
-);
+export const documentStructureRelations = relations(documentStructure, ({ one, many }) => ({
+    document: one(document, {
+        fields: [documentStructure.documentId],
+        references: [document.id],
+    }),
+    parent: one(documentStructure, {
+        fields: [documentStructure.parentId],
+        references: [documentStructure.id],
+        relationName: "structure_parent_child",
+    }),
+    children: many(documentStructure, {
+        relationName: "structure_parent_child",
+    }),
+    sections: many(documentContextChunks),
+    previews: many(documentPreviews),
+}));
 
-export const documentContextChunksRelations = relations(
-    documentContextChunks,
-    ({ one, many }) => ({
-        document: one(document, {
-            fields: [documentContextChunks.documentId],
-            references: [document.id],
-        }),
-        structure: one(documentStructure, {
-            fields: [documentContextChunks.structureId],
-            references: [documentStructure.id],
-        }),
-        retrievalChunks: many(documentRetrievalChunks),
-        previews: many(documentPreviews),
-        workspaceResults: many(workspaceResults),
-    })
-);
+export const documentContextChunksRelations = relations(documentContextChunks, ({ one, many }) => ({
+    document: one(document, {
+        fields: [documentContextChunks.documentId],
+        references: [document.id],
+    }),
+    structure: one(documentStructure, {
+        fields: [documentContextChunks.structureId],
+        references: [documentStructure.id],
+    }),
+    retrievalChunks: many(documentRetrievalChunks),
+    previews: many(documentPreviews),
+    workspaceResults: many(workspaceResults),
+}));
 
-export const documentRetrievalChunksRelations = relations(
-    documentRetrievalChunks,
-    ({ one }) => ({
-        contextChunk: one(documentContextChunks, {
-            fields: [documentRetrievalChunks.contextChunkId],
-            references: [documentContextChunks.id],
-        }),
-        document: one(document, {
-            fields: [documentRetrievalChunks.documentId],
-            references: [document.id],
-        }),
-    })
-);
+export const documentRetrievalChunksRelations = relations(documentRetrievalChunks, ({ one }) => ({
+    contextChunk: one(documentContextChunks, {
+        fields: [documentRetrievalChunks.contextChunkId],
+        references: [documentContextChunks.id],
+    }),
+    document: one(document, {
+        fields: [documentRetrievalChunks.documentId],
+        references: [document.id],
+    }),
+}));
 
 export const documentMetadataRelations = relations(documentMetadata, ({ one }) => ({
     document: one(document, {

@@ -3,5 +3,5 @@
 import ManageEmployeesPage from "./ManageEmployeePage";
 
 export default function Page() {
-  return <ManageEmployeesPage />;
+    return <ManageEmployeesPage />;
 }

@@ -17,21 +17,16 @@
 //   checkpointSaver: agentCheckpointer,
 // });
 
-
 // const fetchMenu = tool(
 //     async ({ restaurant, location }: { restaurant: string; location: string }) => {
 //       const retriever = new TavilySearchAPIRetriever({ k: 3 });
 //       // Exclude Yelp, TripAdvisor, Facebook
 //       const query = `menu page for ${restaurant} at ${location}`;
 
-  
 //       const docsWithMetadata = await retriever.getRelevantDocuments(query);
 //       if (!docsWithMetadata?.length) {
 //         throw new Error(`No valid menu page URL found for ${restaurant} in ${location}.`);
 //       }
-
-
-
 
 //       // Pick the first "clean" result, or fall back to the very first if none remain
 
@@ -40,19 +35,19 @@
 //       const officialWebsite = await findOfficialWebsite.invoke({ links: docsWithMetadata.map(doc => doc.metadata.source as string) });
 //       console.log("Official website:", officialWebsite);
 //       const menuUrl = officialWebsite;
-  
+
 //       // console.log("Using menu URL:", menuUrl);
 
-//       // // Export/Download the menuUrl to a pdf/image, and process it in Langchain. 
-  
+//       // // Export/Download the menuUrl to a pdf/image, and process it in Langchain.
+
 //       // const loader = new CheerioWebBaseLoader(menuUrl);
 //       // const loadedDocs = await loader.load();
-  
+
 //       // // Condense HTML and remove extra whitespace
 //       // const condensedMenu = loadedDocs
 //       //   .map(d => d.pageContent.replace(/\s{2,}/g, ' ').trim())
 //       //   .join('\n');
-  
+
 //       return menuUrl;
 //     },
 //     {
@@ -65,8 +60,6 @@
 //     }
 //   );
 
-
-
 // const findOfficialWebsite = tool(
 //     async ({ links }: { links: string[] }) => {
 //       const llm = new ChatOpenAI({ temperature: 0 });
@@ -76,55 +69,55 @@
 //       2. From the remaining URLs, select the one whose path clearly indicates it’s the menu or ordering page (e.g. contains “/menu”, “/order”, “/menu.html”, etc.).
 //       3. If no specific menu/order URL is found, return the restaurant’s homepage URL.
 //       Return exactly one URL—nothing else.
-      
+
 //       Example 1:
 //       Links:
-//       https://www.yelp.com/biz/chipotle-mexican-grill-baltimore-2  
-//       https://www.tripadvisor.com/Restaurant_Review-g34515-d148318-Reviews-Chipotle-Baltimore_Maryland.html  
-//       https://www.facebook.com/ChipotleTaco/  
-//       https://www.chipotle.com/menu  
-      
-//       Return the official menu/order URL:  
+//       https://www.yelp.com/biz/chipotle-mexican-grill-baltimore-2
+//       https://www.tripadvisor.com/Restaurant_Review-g34515-d148318-Reviews-Chipotle-Baltimore_Maryland.html
+//       https://www.facebook.com/ChipotleTaco/
 //       https://www.chipotle.com/menu
-      
+
+//       Return the official menu/order URL:
+//       https://www.chipotle.com/menu
+
 //       Example 2:
 //       Links:
-//       https://www.yelp.com/search?find_desc=Good+Fortune&find_loc=Baltimore%2C+MD  
-//       https://www.laoszechuanbaltimore.com/order 
-      
-//       Return the official URL (no menu/order path available):  
+//       https://www.yelp.com/search?find_desc=Good+Fortune&find_loc=Baltimore%2C+MD
 //       https://www.laoszechuanbaltimore.com/order
-      
+
+//       Return the official URL (no menu/order path available):
+//       https://www.laoszechuanbaltimore.com/order
+
 //       Example 3:
 //       Links:
-//       https://goodfood.com/  
-//       https://goodfood.com/order-online  
-//       https://goodfood.com/reservations  
-      
-//       Return the official menu/order URL:  
+//       https://goodfood.com/
 //       https://goodfood.com/order-online
-      
+//       https://goodfood.com/reservations
+
+//       Return the official menu/order URL:
+//       https://goodfood.com/order-online
+
 //       Example 4:
 //       Links:
-//       https://spicytacos.com/Menu  
-//       https://spicytacos.com/contact  
-      
-//       Return the official menu/order URL:  
 //       https://spicytacos.com/Menu
-      
+//       https://spicytacos.com/contact
+
+//       Return the official menu/order URL:
+//       https://spicytacos.com/Menu
+
 //       Example 5:
 //       Links:
-//       https://noodlehouse.example.org  
-//       https://yelp.com/biz/noodle-house-city  
-//       https://noodlehouse.example.org/menu.aspx?lang=en  
-      
-//       Return the official menu/order URL:  
+//       https://noodlehouse.example.org
+//       https://yelp.com/biz/noodle-house-city
 //       https://noodlehouse.example.org/menu.aspx?lang=en
-      
+
+//       Return the official menu/order URL:
+//       https://noodlehouse.example.org/menu.aspx?lang=en
+
 //       Here are the links:
 //       ${links}
 //       `.trim();
-      
+
 //       const output = await llm.invoke([{ role: 'user', content: prompt }]);
 //       return output.content;
 //     },
@@ -136,7 +129,6 @@
 //       }),
 //     }
 // )
-  
 
 // // Define Zod schema for the output of parseMenu
 // // Renamed from MenuItemsSchema to MenuItemsArraySchema
@@ -152,7 +144,7 @@
 //       // Use the new object schema for structured output
 //       const structuredLlm = llm.withStructuredOutput(StructuredMenuItemsOutputSchema);
 //       //use few shot examples
-//       const prompt = 
+//       const prompt =
 //         `You are a JSON‐extraction assistant. You'll be shown a restaurant menu and must return a JSON array of all menu item names.
 
 //         Example 1:
@@ -166,9 +158,9 @@
 //         ---
 
 //         Assistant's reasoning:
-//         1. Identify "Spring Rolls" (ignore "– Crispy vegetable…").  
-//         2. Identify "Edamame" (ignore description).  
-//         3. Identify "Pad Thai".  
+//         1. Identify "Spring Rolls" (ignore "– Crispy vegetable…").
+//         2. Identify "Edamame" (ignore description).
+//         3. Identify "Pad Thai".
 //         Final output:
 //         ["Spring Rolls","Edamame","Pad Thai"]
 
@@ -183,17 +175,17 @@
 //         ---
 
 //         Assistant's reasoning:
-//         1. "Garlic Bread" from "1. Garlic Bread: …".  
-//         2. "Bruschetta" from "2. Bruschetta: …".  
-//         3. "Margherita Pizza".  
+//         1. "Garlic Bread" from "1. Garlic Bread: …".
+//         2. "Bruschetta" from "2. Bruschetta: …".
+//         3. "Margherita Pizza".
 //         Final output:
 //         ["Garlic Bread","Bruschetta","Margherita Pizza"]
 
 //         Now it's your turn. Follow these steps:
 
-//         **1.** Read the menu text below.  
-//         **2.** Independently generate THREE separate chains of thought ("Chain 1","Chain 2","Chain 3"), each listing step‐by‐step how you extract items.  
-//         **3.** After each chain, give a "Result" array.  
+//         **1.** Read the menu text below.
+//         **2.** Independently generate THREE separate chains of thought ("Chain 1","Chain 2","Chain 3"), each listing step‐by‐step how you extract items.
+//         **3.** After each chain, give a "Result" array.
 //         **4.** Finally, compare the three Result arrays and output the most consistent JSON array (i.e. the list of items that appears in at least two of your three chains).
 
 //         Output _only_ that final JSON array of strings—nothing else.
@@ -215,8 +207,6 @@
 //       }),
 //     }
 //   );
-  
-
 
 // // Define Zod schema for the output of parseIngredients
 // // Renamed from IngredientsSchema to IngredientsArraySchema
@@ -277,7 +267,7 @@
 //         item: z.string().describe("The menu item name"),
 //       }),
 //     }
-//   );  
+//   );
 
 // const restaurant = "Chipotle";
 // const location = "3201 St Paul St, Baltimore, MD 21218";
@@ -288,7 +278,6 @@
 // const restaurant3 = "Lao Sze Chuan";
 // const location3 = "3224 St Paul St, Baltimore, MD 21218";
 
-
 // // Wrap execution in an async function to avoid top-level await
 // async function runAgent() {
 //   try {
@@ -296,7 +285,7 @@
 
 //     const rawMenu = await fetchMenu.invoke({ restaurant: restaurant, location: location });
 //     // console.log("Raw menu:", rawMenu);
-    
+
 //     // parseMenu now directly returns string[]
 //     const menuItems: string[] = await parseMenu.invoke({ menu: rawMenu });
 

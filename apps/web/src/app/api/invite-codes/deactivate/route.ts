@@ -4,10 +4,7 @@ import { eq, and } from "drizzle-orm";
 import { db } from "~/server/db";
 import { inviteCodes } from "~/server/db/schema";
 import { validateRequestBody, DeactivateInviteCodeSchema } from "~/lib/validation";
-import {
-  isManagementRole,
-  requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function POST(request: Request) {
     try {
@@ -26,12 +23,7 @@ export async function POST(request: Request) {
         const result = await db
             .update(inviteCodes)
             .set({ isActive: false })
-            .where(
-                and(
-                    eq(inviteCodes.id, codeId),
-                    eq(inviteCodes.companyId, ctx.data.companyId)
-                )
-            )
+            .where(and(eq(inviteCodes.id, codeId), eq(inviteCodes.companyId, ctx.data.companyId)))
             .returning({ id: inviteCodes.id });
 
         if (!result || result.length === 0) {

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useAuth, useUser, UserButton } from '@clerk/nextjs';
-import styles from '../../styles/navbar.module.css';
-import { ThemeToggle } from './ThemeToggle';
-import { LaunchstackMark } from './LaunchstackLogo';
-import { LANDING_URL } from '~/config/landing';
+import React from "react";
+import { useAuth, useUser, UserButton } from "@clerk/nextjs";
+import styles from "../../styles/navbar.module.css";
+import { ThemeToggle } from "./ThemeToggle";
+import { LaunchstackMark } from "./LaunchstackLogo";
+import { LANDING_URL } from "~/config/landing";
 
 export function SignupNavbar() {
     const { isLoaded, isSignedIn } = useAuth();
@@ -25,14 +25,17 @@ export function SignupNavbar() {
                         {isLoaded && isSignedIn && user && (
                             <div className={styles.userSection}>
                                 <span className={styles.userName}>
-                                    {user.fullName ?? user.primaryEmailAddress?.emailAddress ?? user.username ?? 'User'}
+                                    {user.fullName ??
+                                        user.primaryEmailAddress?.emailAddress ??
+                                        user.username ??
+                                        "User"}
                                 </span>
                                 <UserButton
                                     // A just-signed-out user is a public-site audience.
                                     afterSignOutUrl={LANDING_URL}
                                     appearance={{
                                         elements: {
-                                            avatarBox: 'w-8 h-8',
+                                            avatarBox: "w-8 h-8",
                                         },
                                     }}
                                 />
@@ -44,4 +47,3 @@ export function SignupNavbar() {
         </nav>
     );
 }
-

@@ -3,10 +3,7 @@ import { db } from "~/server/db/index";
 import { document } from "@launchstack/core/db/schema";
 import { users, documentViews, ChatHistory, userCompanyMemberships } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
-import {
-    isManagementRole,
-    requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -57,7 +54,12 @@ export async function GET() {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) {
-            outcome = ctx.response.status === 401 ? "unauthorized" : ctx.response.status === 403 ? "forbidden" : "error";
+            outcome =
+                ctx.response.status === 401
+                    ? "unauthorized"
+                    : ctx.response.status === 403
+                      ? "forbidden"
+                      : "error";
             return ctx.response;
         }
 
@@ -70,7 +72,10 @@ export async function GET() {
         if (!isManagementRole(ctx.data.role)) {
             outcome = "forbidden";
             return NextResponse.json(
-                { success: false, error: "Unauthorized. Only workspace owners and admins can access this data." },
+                {
+                    success: false,
+                    error: "Unauthorized. Only workspace owners and admins can access this data.",
+                },
                 { status: 403 }
             );
         }
@@ -106,10 +111,7 @@ export async function GET() {
                 .innerJoin(users, eq(users.id, userCompanyMemberships.userId))
                 .where(eq(userCompanyMemberships.companyId, companyId))
                 .orderBy(desc(users.lastActiveAt)),
-            db
-                .select({ count: count() })
-                .from(document)
-                .where(eq(document.companyId, companyId)),
+            db.select({ count: count() }).from(document).where(eq(document.companyId, companyId)),
             db
                 .select({
                     id: document.id,
@@ -124,8 +126,8 @@ export async function GET() {
                     documentViews,
                     and(
                         eq(document.id, documentViews.documentId),
-                        eq(documentViews.companyId, companyId),
-                    ),
+                        eq(documentViews.companyId, companyId)
+                    )
                 )
                 .where(eq(document.companyId, companyId))
                 .groupBy(document.id, document.title, document.category, document.createdAt)
@@ -192,20 +194,17 @@ export async function GET() {
             queryCountMs = Date.now() - queryCountStart;
         }
 
-
-        const queryCountsMap = new Map(
-            queryCountsData.map(q => [q.userId, q.count])
-        );
+        const queryCountsMap = new Map(queryCountsData.map(q => [q.userId, q.count]));
 
         // Fill in missing dates for trends (to show continuous line chart)
         const fillTrendDates = (data: { date: string; count: number }[]): TrendDataPoint[] => {
             const result: TrendDataPoint[] = [];
             const dataMap = new Map(data.map(d => [d.date, Number(d.count)]));
-            
+
             for (let i = 29; i >= 0; i--) {
                 const date = new Date();
                 date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0]!;
+                const dateStr = date.toISOString().split("T")[0]!;
                 result.push({
                     date: dateStr,
                     count: dataMap.get(dateStr) ?? 0,
@@ -217,21 +216,19 @@ export async function GET() {
         // Calculate cumulative employee count trend
         const calculateCumulativeEmployeeTrend = (): TrendDataPoint[] => {
             const result: TrendDataPoint[] = [];
-            const dailyJoins = new Map(
-                employeeTrendData.map(d => [d.date, Number(d.count)])
-            );
-            
+            const dailyJoins = new Map(employeeTrendData.map(d => [d.date, Number(d.count)]));
+
             // Count employees before 30 days ago
             const employeesBeforePeriod = employeesData.filter(
                 e => new Date(e.createdAt) < thirtyDaysAgo
             ).length;
-            
+
             let cumulative = employeesBeforePeriod;
-            
+
             for (let i = 29; i >= 0; i--) {
                 const date = new Date();
                 date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0]!;
+                const dateStr = date.toISOString().split("T")[0]!;
                 cumulative += dailyJoins.get(dateStr) ?? 0;
                 result.push({
                     date: dateStr,

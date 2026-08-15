@@ -8,7 +8,7 @@ import {
     createDocumentVectorRetriever,
     type RetrievalMethod,
     type DocumentSearchOptions,
-    type SearchResult
+    type SearchResult,
 } from "~/lib/tools/rag";
 import { resolveEmbeddingIndex, isLegacyEmbeddingIndex } from "@launchstack/core/embeddings";
 import { getCompanyEmbeddingConfig } from "@launchstack/core/embeddings";
@@ -27,26 +27,23 @@ import {
     extractRecommendedPages,
     filterPagesByAICitation,
 } from "../services";
-import {
-    describeChatResolutionFailure,
-    resolveConfiguredChatModel,
-} from "~/lib/models";
+import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { SYSTEM_PROMPTS } from "../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 export const maxDuration = 300;
 
-const qaAnnOptimizer = new ANNOptimizer({ 
-    strategy: 'hnsw',
-    efSearch: 200
+const qaAnnOptimizer = new ANNOptimizer({
+    strategy: "hnsw",
+    efSearch: 200,
 });
 
 /**
  * AIQuery - Fast, efficient query search on one document
- * 
+ *
  * This endpoint is optimized for quick single-document queries:
  * - Focuses on document-level search only (no company-wide search)
  * - Uses efficient retrieval methods with fallbacks
@@ -101,19 +98,19 @@ export async function POST(request: Request) {
                 const failure = describeChatResolutionFailure(modelError);
                 return NextResponse.json(
                     { success: false, message: failure.message },
-                    { status: failure.status },
+                    { status: failure.status }
                 );
             }
 
             const compatibility = validateDeprecatedChatSelection(
                 { provider, model: aiModel },
-                resolved,
+                resolved
             );
             if (!compatibility.ok) {
                 recordResult("error");
                 return NextResponse.json(
                     { success: false, message: compatibility.message },
-                    { status: compatibility.status },
+                    { status: compatibility.status }
                 );
             }
             const { modelId: resolvedModel, chat } = resolved;
@@ -121,16 +118,19 @@ export async function POST(request: Request) {
             // AIQuery only supports document-level search
             if (!documentId) {
                 recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "documentId is required for AIQuery endpoint"
-                }, { status: 400 });
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "documentId is required for AIQuery endpoint",
+                    },
+                    { status: 400 }
+                );
             }
 
             const [targetDocument] = await db
                 .select({
                     id: document.id,
-                    companyId: document.companyId
+                    companyId: document.companyId,
                 })
                 .from(document)
                 .where(eq(document.id, documentId))
@@ -138,34 +138,39 @@ export async function POST(request: Request) {
 
             if (!targetDocument) {
                 recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "Document not found."
-                }, { status: 404 });
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "Document not found.",
+                    },
+                    { status: 404 }
+                );
             }
 
             if (targetDocument.companyId !== ctx.data.companyId) {
                 recordResult("error");
-                return NextResponse.json({
-                    success: false,
-                    message: "You do not have access to this document."
-                }, { status: 403 });
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "You do not have access to this document.",
+                    },
+                    { status: 403 }
+                );
             }
 
-            const companyConfig =
-                await getCompanyEmbeddingConfig(ctx.data.companyId);
+            const companyConfig = await getCompanyEmbeddingConfig(ctx.data.companyId);
 
             // Perform document search
             const resolvedEmbeddingIndex = resolveEmbeddingIndex(
                 embeddingIndexKey,
-                companyConfig ?? undefined,
+                companyConfig ?? undefined
             );
             const embeddings = getEmbeddings(
                 resolvedEmbeddingIndex.indexKey,
-                companyConfig ?? undefined,
+                companyConfig ?? undefined
             );
             let documents: SearchResult[] = [];
-            retrievalMethod = 'document_ensemble_rrf';
+            retrievalMethod = "document_ensemble_rrf";
 
             try {
                 const documentOptions: DocumentSearchOptions = {
@@ -174,22 +179,17 @@ export async function POST(request: Request) {
                     companyId: Number(ctx.data.companyId),
                     embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                 };
-                
-                documents = await documentEnsembleSearch(
-                    question,
-                    documentOptions,
-                    embeddings
-                );
-                
+
+                documents = await documentEnsembleSearch(question, documentOptions, embeddings);
+
                 if (documents.length === 0) {
                     throw new Error("No ensemble results");
                 }
-
             } catch (ensembleError) {
                 console.warn(`⚠️ [AIQuery] Ensemble search failed, falling back:`, ensembleError);
                 if (isLegacyEmbeddingIndex(resolvedEmbeddingIndex)) {
-                    retrievalMethod = 'ann_hybrid';
-                    
+                    retrievalMethod = "ann_hybrid";
+
                     try {
                         const questionEmbedding = await embeddings.embedQuery(question);
                         const annResults = await qaAnnOptimizer.searchSimilarChunks(
@@ -206,19 +206,21 @@ export async function POST(request: Request) {
                                 page: result.page,
                                 documentId: result.documentId,
                                 distance: 1 - result.confidence,
-                                source: 'ann_hybrid',
-                                searchScope: 'document' as const,
-                                retrievalMethod: 'ann_hybrid' as const,
-                                timestamp: new Date().toISOString()
-                            }
+                                source: "ann_hybrid",
+                                searchScope: "document" as const,
+                                retrievalMethod: "ann_hybrid" as const,
+                                timestamp: new Date().toISOString(),
+                            },
                         }));
-
                     } catch (annError) {
-                        console.warn(`⚠️ [AIQuery] ANN search failed, using vector search:`, annError);
-                        retrievalMethod = 'vector_fallback';
+                        console.warn(
+                            `⚠️ [AIQuery] ANN search failed, using vector search:`,
+                            annError
+                        );
+                        retrievalMethod = "vector_fallback";
                     }
                 } else {
-                    retrievalMethod = 'vector_fallback';
+                    retrievalMethod = "vector_fallback";
                 }
 
                 if (documents.length === 0) {
@@ -226,17 +228,17 @@ export async function POST(request: Request) {
                         documentId,
                         embeddings,
                         resolvedEmbeddingIndex,
-                        3,
+                        3
                     );
                     const vectorDocs = await retriever.getRelevantDocuments(question);
-                    documents = vectorDocs.map((doc) => ({
+                    documents = vectorDocs.map(doc => ({
                         pageContent: doc.pageContent,
                         metadata: {
                             ...doc.metadata,
-                            searchScope: 'document' as const,
-                            retrievalMethod: 'vector_fallback' as RetrievalMethod,
+                            searchScope: "document" as const,
+                            retrievalMethod: "vector_fallback" as RetrievalMethod,
                             timestamp: new Date().toISOString(),
-                        }
+                        },
                     }));
                 }
             }
@@ -252,24 +254,19 @@ export async function POST(request: Request) {
             // Build context from retrieved documents
             const combinedContent = documents
                 .map((doc, idx) => {
-                    const page = doc.metadata?.page ?? 'Unknown';
+                    const page = doc.metadata?.page ?? "Unknown";
                     return `=== Chunk #${idx + 1}, Page ${page} ===\n${doc.pageContent}`;
                 })
                 .join("\n\n");
 
             // Perform web search if enabled
-            const documentContext = documents.map(doc => doc.pageContent).join('\n\n');
-            const webSearch = await performWebSearch(
-                question,
-                documentContext,
-                enableWebSearch,
-                5
-            );
+            const documentContext = documents.map(doc => doc.pageContent).join("\n\n");
+            const webSearch = await performWebSearch(question, documentContext, enableWebSearch, 5);
 
-            const selectedStyle = (style ?? 'concise') satisfies keyof typeof SYSTEM_PROMPTS;
-            
+            const selectedStyle = (style ?? "concise") satisfies keyof typeof SYSTEM_PROMPTS;
+
             // Build conversation context
-            let conversationContext = '';
+            let conversationContext = "";
             if (conversationHistory) {
                 conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
             }
@@ -284,14 +281,14 @@ export async function POST(request: Request) {
             );
 
             const userPrompt = `User's question: "${question}"${conversationContext}\n\nRelevant document content:\n${combinedContent}${webSearch.content}${webSearchInstruction}\n\nProvide a natural, conversational answer based primarily on the provided content. When using information from web sources, cite them using [Source X] format. Address the user directly and maintain continuity with any previous conversation.`;
-            
+
             let response;
             try {
                 response = await chat.invoke(
                     resolved.prepareMessages([
                         new SystemMessage(systemPrompt),
                         new HumanMessage(userPrompt),
-                    ]),
+                    ])
                 );
             } catch (modelError) {
                 const friendly = describeChatError(modelError, resolvedModel);
@@ -302,7 +299,7 @@ export async function POST(request: Request) {
                             success: false,
                             message: friendly.message,
                         },
-                        { status: friendly.status },
+                        { status: friendly.status }
                     );
                 }
                 throw modelError;
@@ -330,20 +327,23 @@ export async function POST(request: Request) {
                 processingTimeMs: totalTime,
                 chunksAnalyzed: documents.length,
                 fusionWeights: [0.4, 0.6],
-                searchScope: 'document',
+                searchScope: "document",
                 aiModel: resolvedModel,
                 webSources: enableWebSearch ? webSearch.results : undefined,
-                webSearch: enableWebSearch ? {
-                    refinedQuery: webSearch.refinedQuery || question,
-                    reasoning: webSearch.reasoning,
-                    resultsCount: webSearch.results.length
-                } : undefined,
+                webSearch: enableWebSearch
+                    ? {
+                          refinedQuery: webSearch.refinedQuery || question,
+                          reasoning: webSearch.reasoning,
+                          resultsCount: webSearch.results.length,
+                      }
+                    : undefined,
                 disclaimer: supervision.disclaimer,
-                guardrails: !supervision.approved ? {
-                    warnings: supervision.issues,
-                } : undefined,
+                guardrails: !supervision.approved
+                    ? {
+                          warnings: supervision.issues,
+                      }
+                    : undefined,
             });
-
         } catch (error) {
             console.error("❌ [AIQuery] Error in query processing:", error);
             recordResult("error");

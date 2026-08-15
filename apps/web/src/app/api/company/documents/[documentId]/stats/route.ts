@@ -4,10 +4,7 @@ import { db } from "~/server/db/index";
 import { document } from "@launchstack/core/db/schema";
 import { users, documentViews } from "~/server/db/schema";
 import { eq, and, sql, gte, desc, count } from "drizzle-orm";
-import {
-  isManagementRole,
-  requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface Viewer {
     name: string;
@@ -47,10 +44,7 @@ export async function GET(
         const documentId = (await params).documentId;
 
         if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json(
-                { success: false, error: "Unauthorized" },
-                { status: 403 }
-            );
+            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 });
         }
 
         const docId = parseInt(documentId);
@@ -65,10 +59,7 @@ export async function GET(
         const [doc] = await db
             .select()
             .from(document)
-            .where(and(
-                eq(document.id, docId),
-                eq(document.companyId, ctx.data.companyId)
-            ));
+            .where(and(eq(document.id, docId), eq(document.companyId, ctx.data.companyId)));
 
         if (!doc) {
             return NextResponse.json(
@@ -84,7 +75,7 @@ export async function GET(
             .where(
                 and(
                     eq(documentViews.documentId, BigInt(docId)),
-                    eq(documentViews.companyId, ctx.data.companyId),
+                    eq(documentViews.companyId, ctx.data.companyId)
                 )
             );
 
@@ -95,7 +86,7 @@ export async function GET(
             .where(
                 and(
                     eq(documentViews.documentId, BigInt(docId)),
-                    eq(documentViews.companyId, ctx.data.companyId),
+                    eq(documentViews.companyId, ctx.data.companyId)
                 )
             );
 
@@ -112,7 +103,7 @@ export async function GET(
             .where(
                 and(
                     eq(documentViews.documentId, BigInt(docId)),
-                    eq(documentViews.companyId, ctx.data.companyId),
+                    eq(documentViews.companyId, ctx.data.companyId)
                 )
             )
             .orderBy(desc(documentViews.viewedAt))
@@ -142,11 +133,11 @@ export async function GET(
         const fillTrendDates = (data: { date: string; count: number }[]): TrendDataPoint[] => {
             const result: TrendDataPoint[] = [];
             const dataMap = new Map(data.map(d => [d.date, Number(d.count)]));
-            
+
             for (let i = 29; i >= 0; i--) {
                 const date = new Date();
                 date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0]!;
+                const dateStr = date.toISOString().split("T")[0]!;
                 result.push({
                     date: dateStr,
                     count: dataMap.get(dateStr) ?? 0,
@@ -170,15 +161,16 @@ export async function GET(
                     viewedAt: v.viewedAt.toISOString(),
                     role: v.role ?? "unknown",
                 })),
-                viewsTrend: fillTrendDates(trendData.map(d => ({
-                    date: d.date,
-                    count: Number(d.count)
-                }))),
+                viewsTrend: fillTrendDates(
+                    trendData.map(d => ({
+                        date: d.date,
+                        count: Number(d.count),
+                    }))
+                ),
             },
         };
 
         return NextResponse.json(response);
-
     } catch (error) {
         console.error("Error fetching document details:", error);
         return NextResponse.json(

@@ -68,7 +68,12 @@ async function resolveCaller(): Promise<CallerResult> {
     }
 
     const [userInfo] = await db
-        .select({ id: users.id, role: users.role, companyId: users.companyId, status: users.status })
+        .select({
+            id: users.id,
+            role: users.role,
+            companyId: users.companyId,
+            status: users.status,
+        })
         .from(users)
         .where(eq(users.userId, userId));
 
@@ -84,7 +89,7 @@ async function resolveCaller(): Promise<CallerResult> {
     const companyId = await resolveActiveCompanyForUser(
         userInfo.id,
         userInfo.companyId,
-        userInfo.status,
+        userInfo.status
     );
     // Null means the user holds no membership in the resolved workspace. There
     // is no tenant to import into, so this is a refusal rather than a fallback —

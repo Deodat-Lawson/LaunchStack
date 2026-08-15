@@ -19,10 +19,7 @@ export default async function WorkspacesPage({
     const { userId } = await auth();
     if (!userId) redirect("/signin");
 
-    const [user] = await db
-        .select({ id: users.id })
-        .from(users)
-        .where(eq(users.userId, userId));
+    const [user] = await db.select({ id: users.id }).from(users).where(eq(users.userId, userId));
     if (!user) redirect("/signup");
 
     const memberCountSubquery = db
@@ -59,7 +56,7 @@ export default async function WorkspacesPage({
     const params = await searchParams;
     const fromSignup = params.from === "signup";
 
-    const workspaces = rows.map((r) => ({
+    const workspaces = rows.map(r => ({
         id: r.id.toString(),
         name: r.name,
         slug: r.slug ?? "",
@@ -80,8 +77,7 @@ export default async function WorkspacesPage({
         [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ") ||
         (clerkUser?.username ?? "") ||
         "You";
-    const accountEmail =
-        clerkUser?.primaryEmailAddress?.emailAddress ?? "";
+    const accountEmail = clerkUser?.primaryEmailAddress?.emailAddress ?? "";
 
     return (
         <WorkspaceSelectClient

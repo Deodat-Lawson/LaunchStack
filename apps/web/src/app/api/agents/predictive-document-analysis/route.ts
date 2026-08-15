@@ -110,7 +110,7 @@ async function storeAnalysisResult(
 
 async function getDocumentDetails(
     documentId: number,
-    companyId: bigint,
+    companyId: bigint
 ): Promise<DocumentDetails | null> {
     const results = await db
         .select({
@@ -294,10 +294,7 @@ export async function POST(request: Request) {
                     .selectDistinct({ title: document.title, url: document.url })
                     .from(document)
                     .where(
-                        and(
-                            eq(document.companyId, ctx.data.companyId),
-                            ne(document.id, documentId)
-                        )
+                        and(eq(document.companyId, ctx.data.companyId), ne(document.id, documentId))
                     );
 
                 existingDocuments = existingDocs.map(row => `${row.title || row.url}`);

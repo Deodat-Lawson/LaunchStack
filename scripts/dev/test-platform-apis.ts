@@ -1,12 +1,12 @@
 /**
  * Test script for Marketing Pipeline Platform API integrations
- * 
+ *
  * Usage:
  *   npx tsx scripts/test-platform-apis.ts
- * 
+ *
  * Required env vars:
  *   REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT
- *   TWITTER_BEARER_TOKEN  
+ *   TWITTER_BEARER_TOKEN
  *   LINKEDIN_ACCESS_TOKEN
  *   BLUESKY_HANDLE, BLUESKY_APP_PASSWORD
  */
@@ -86,10 +86,10 @@ async function testBlueskyAPI() {
 
 async function testIntegratedPipeline() {
     console.log("\n🔄 Testing Integrated Marketing Pipeline...");
-    
+
     const platforms: MarketingPlatform[] = ["reddit", "x", "linkedin", "bluesky"];
     let successCount = 0;
-    
+
     for (const platform of platforms) {
         try {
             console.log(`\n   Testing ${platform} integration...`);
@@ -100,40 +100,44 @@ async function testIntegratedPipeline() {
                 companyContext: "Company Name: TechCorp. Knowledge Base Signals: None.",
                 maxResults: 3,
             });
-            
-            console.log(`   ✅ ${platform}: ${results.length} results (${results.length > 0 ? 'API' : 'fallback'} mode)`);
+
+            console.log(
+                `   ✅ ${platform}: ${results.length} results (${results.length > 0 ? "API" : "fallback"} mode)`
+            );
             successCount++;
         } catch (error) {
             console.log(`   ❌ ${platform}: ${error instanceof Error ? error.message : error}`);
         }
     }
-    
+
     console.log(`\n📊 Integration Results: ${successCount}/${platforms.length} platforms working`);
 }
 
 async function main() {
     console.log("🚀 Testing Marketing Pipeline Platform APIs\n");
-    console.log("=" .repeat(50));
-    
+    console.log("=".repeat(50));
+
     // Test individual platform APIs
     const redditOk = await testRedditAPI();
     const twitterOk = await testTwitterAPI();
     const linkedinOk = await testLinkedInAPI();
     const blueskyOk = await testBlueskyAPI();
-    
+
     // Test integrated pipeline
-    await testIntegratedPipeline();  
-    
+    await testIntegratedPipeline();
+
     console.log("\n" + "=".repeat(50));
     console.log("📋 Summary:");
-    console.log(`   Reddit API: ${redditOk ? '✅' : '❌'}`);
-    console.log(`   Twitter API: ${twitterOk ? '✅' : '❌'}`);
-    console.log(`   LinkedIn API: ${linkedinOk ? '✅' : '⚠️ '} ${linkedinOk ? '' : '(Limited access)'}`);
-    console.log(`   Bluesky API: ${blueskyOk ? '✅' : '❌'}`);
-    
+    console.log(`   Reddit API: ${redditOk ? "✅" : "❌"}`);
+    console.log(`   Twitter API: ${twitterOk ? "✅" : "❌"}`);
+    console.log(
+        `   LinkedIn API: ${linkedinOk ? "✅" : "⚠️ "} ${linkedinOk ? "" : "(Limited access)"}`
+    );
+    console.log(`   Bluesky API: ${blueskyOk ? "✅" : "❌"}`);
+
     const workingAPIs = [redditOk, twitterOk, linkedinOk, blueskyOk].filter(Boolean).length;
     console.log(`\n🎯 ${workingAPIs}/4 platform APIs are working!`);
-    
+
     if (workingAPIs === 0) {
         console.log("\n❗ No APIs are working. Check your API credentials in .env");
         process.exit(1);
@@ -144,7 +148,7 @@ async function main() {
     }
 }
 
-main().catch((err) => {
+main().catch(err => {
     console.error("💥 Test failed:", err);
     process.exit(1);
 });

@@ -3,10 +3,7 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { users } from "~/server/db/schema";
-import {
-    createSuccessResponse,
-    handleApiError,
-} from "~/lib/api-utils";
+import { createSuccessResponse, handleApiError } from "~/lib/api-utils";
 import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
 /**

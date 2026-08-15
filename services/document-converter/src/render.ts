@@ -8,43 +8,40 @@
 import { log } from "./logger.js";
 import { errorMessage } from "./errors.js";
 
-export type PageRenderer = (
-  pdf: Buffer,
-  pageNumbers: number[],
-) => Promise<Uint8Array[]>;
+export type PageRenderer = (pdf: Buffer, pageNumbers: number[]) => Promise<Uint8Array[]>;
 
 export const renderPdfPages: PageRenderer = async (pdf, pageNumbers) => {
-  try {
-    const { fromBuffer } = await import("pdf2pic");
+    try {
+        const { fromBuffer } = await import("pdf2pic");
 
-    const converter = fromBuffer(pdf, {
-      density: 200,
-      format: "png",
-      width: 1024,
-      height: 1448,
-    });
+        const converter = fromBuffer(pdf, {
+            density: 200,
+            format: "png",
+            width: 1024,
+            height: 1448,
+        });
 
-    const images: Uint8Array[] = [];
+        const images: Uint8Array[] = [];
 
-    for (const pageNumber of pageNumbers) {
-      try {
-        const result = await converter(pageNumber, { responseType: "buffer" });
-        if (result?.buffer) {
-          images.push(result.buffer);
+        for (const pageNumber of pageNumbers) {
+            try {
+                const result = await converter(pageNumber, { responseType: "buffer" });
+                if (result?.buffer) {
+                    images.push(result.buffer);
+                }
+            } catch (pageError) {
+                const message = errorMessage(pageError);
+                if (!message.includes("page number")) {
+                    log("warn", "render: page failed", { pageNumber, message });
+                }
+            }
         }
-      } catch (pageError) {
-        const message = errorMessage(pageError);
-        if (!message.includes("page number")) {
-          log("warn", "render: page failed", { pageNumber, message });
-        }
-      }
+
+        return images;
+    } catch (err) {
+        log("warn", "render: pdf rendering unavailable", {
+            message: errorMessage(err),
+        });
+        return [];
     }
-
-    return images;
-  } catch (err) {
-    log("warn", "render: pdf rendering unavailable", {
-      message: errorMessage(err),
-    });
-    return [];
-  }
 };

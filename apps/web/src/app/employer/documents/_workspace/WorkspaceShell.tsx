@@ -9,12 +9,7 @@ import LoadingPage from "~/app/_components/loading";
 import { LANDING_URL } from "~/config/landing";
 import { useAIChat } from "../hooks/useAIChat";
 import { AddSourceModal } from "./AddSourceModal";
-import {
-  AskPanel,
-  AvatarMenu,
-  JumpToPaletteButton,
-  workspaceMainHeaderBarStyle,
-} from "./AskPanel";
+import { AskPanel, AvatarMenu, JumpToPaletteButton, workspaceMainHeaderBarStyle } from "./AskPanel";
 import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
@@ -28,12 +23,7 @@ import { StudioMenu } from "./StudioMenu";
 import { renderStudioPane, type StudioPaneContext } from "./StudioPanes";
 import { STUDIO_FEATURES_BY_ID } from "./types";
 import { useWorkspaceData } from "./useWorkspaceData";
-import type {
-  ComposerSend,
-  ThreadMessage,
-  WorkspaceFolder,
-  WorkspaceSource,
-} from "./types";
+import type { ComposerSend, ThreadMessage, WorkspaceFolder, WorkspaceSource } from "./types";
 
 /**
  * Legacy `?view=X` URL params that used to drive the deleted DocumentViewerShell.
@@ -44,24 +34,24 @@ import type {
  * the DocumentViewer modal can pick it up.
  */
 const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
-  "document-only": "/employer/documents/viewer",
-  "with-ai-qa": "/employer/documents",
-  "with-ai-qa-history": "/employer/documents",
-  "predictive-analysis": "/employer/documents?feature=audit",
-  generator: "/employer/documents?feature=draft",
-  rewrite: "/employer/documents?feature=rewrite",
-  upload: "/employer/documents?add=1",
-  dashboard: "/employer/home",
-  analytics: "/employer/documents?feature=analytics",
-  employees: "/employer/employees",
-  settings: "/employer/settings",
-  metadata: "/employer/documents?feature=metadata",
-  "marketing-pipeline": "/employer/tools/marketing-pipeline",
-  "repo-explainer": "/employer/tools/repo-explainer",
-  notes: "/employer/documents?feature=notes",
-  workflows: "/employer/documents?feature=workflows",
-  knowledge: "/employer/documents?feature=knowledge",
-  meetings: "/employer/documents?feature=meetings",
+    "document-only": "/employer/documents/viewer",
+    "with-ai-qa": "/employer/documents",
+    "with-ai-qa-history": "/employer/documents",
+    "predictive-analysis": "/employer/documents?feature=audit",
+    generator: "/employer/documents?feature=draft",
+    rewrite: "/employer/documents?feature=rewrite",
+    upload: "/employer/documents?add=1",
+    dashboard: "/employer/home",
+    analytics: "/employer/documents?feature=analytics",
+    employees: "/employer/employees",
+    settings: "/employer/settings",
+    metadata: "/employer/documents?feature=metadata",
+    "marketing-pipeline": "/employer/tools/marketing-pipeline",
+    "repo-explainer": "/employer/tools/repo-explainer",
+    notes: "/employer/documents?feature=notes",
+    workflows: "/employer/documents?feature=workflows",
+    knowledge: "/employer/documents?feature=knowledge",
+    meetings: "/employer/documents?feature=meetings",
 };
 
 /** Extra horizontal inset for AskPanel / expanded feature headers when rail is hidden (clears overlay “show sidebar” at 12+28px + ~8px gap minus default 20px padding). */
@@ -73,754 +63,747 @@ const RAIL_HIDDEN_HEADER_INSET_PX = 28;
  * reachable via the AskPanel QuickPen view.
  */
 const FEATURE_IDS = new Set([
-  "draft",
-  "rewrite",
-  "notes",
-  "workflows",
-  "video-gen",
-  "image-gen",
-  "audio-gen",
-  "marketing",
-  "knowledge",
-  "meetings",
-  "metadata",
-  "settings",
-  "analytics",
+    "draft",
+    "rewrite",
+    "notes",
+    "workflows",
+    "video-gen",
+    "image-gen",
+    "audio-gen",
+    "marketing",
+    "knowledge",
+    "meetings",
+    "metadata",
+    "settings",
+    "analytics",
 ]);
 
 function initialsOf(first?: string | null, last?: string | null, email?: string | null) {
-  const parts = [first, last].filter(Boolean) as string[];
-  if (parts.length > 0) {
-    return parts.map((p) => p[0]?.toUpperCase()).join("").slice(0, 2);
-  }
-  if (email) return email[0]?.toUpperCase() ?? "U";
-  return "U";
+    const parts = [first, last].filter(Boolean) as string[];
+    if (parts.length > 0) {
+        return parts
+            .map(p => p[0]?.toUpperCase())
+            .join("")
+            .slice(0, 2);
+    }
+    if (email) return email[0]?.toUpperCase() ?? "U";
+    return "U";
 }
 
 export function WorkspaceShell() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { isLoaded, isSignedIn, userId, signOut } = useAuth();
-  const { user } = useUser();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const { isLoaded, isSignedIn, userId, signOut } = useAuth();
+    const { user } = useUser();
 
-  // Legacy `?view=X` URLs redirect to their new destinations. Any other params
-  // (docId, versionId, prompt, etc.) are carried across so deep links survive.
-  const legacyView = searchParams.get("view");
-  const legacyRedirect = legacyView ? LEGACY_VIEW_REDIRECTS[legacyView] : null;
+    // Legacy `?view=X` URLs redirect to their new destinations. Any other params
+    // (docId, versionId, prompt, etc.) are carried across so deep links survive.
+    const legacyView = searchParams.get("view");
+    const legacyRedirect = legacyView ? LEGACY_VIEW_REDIRECTS[legacyView] : null;
 
-  useEffect(() => {
-    if (!legacyRedirect) return;
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("view");
-    // Some redirects already include a query (e.g. `?feature=X`). Merge, not
-    // clobber, so carry-over params land alongside.
-    const [basePath, baseQuery] = legacyRedirect.split("?");
-    if (baseQuery) {
-      for (const [k, v] of new URLSearchParams(baseQuery)) params.set(k, v);
-    }
-    const query = params.toString();
-    router.replace(query ? `${basePath}?${query}` : basePath!);
-  }, [legacyRedirect, searchParams, router]);
+    useEffect(() => {
+        if (!legacyRedirect) return;
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("view");
+        // Some redirects already include a query (e.g. `?feature=X`). Merge, not
+        // clobber, so carry-over params land alongside.
+        const [basePath, baseQuery] = legacyRedirect.split("?");
+        if (baseQuery) {
+            for (const [k, v] of new URLSearchParams(baseQuery)) params.set(k, v);
+        }
+        const query = params.toString();
+        router.replace(query ? `${basePath}?${query}` : basePath!);
+    }, [legacyRedirect, searchParams, router]);
 
-  // Bounce unauthenticated users out of the workspace. `/` is no longer the
-  // landing page on this origin — it redirects to /signin — so this lands them
-  // on the sign-in screen rather than a marketing page.
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) router.push("/");
-  }, [isLoaded, isSignedIn, router]);
+    // Bounce unauthenticated users out of the workspace. `/` is no longer the
+    // landing page on this origin — it redirects to /signin — so this lands them
+    // on the sign-in screen rather than a marketing page.
+    useEffect(() => {
+        if (isLoaded && !isSignedIn) router.push("/");
+    }, [isLoaded, isSignedIn, router]);
 
-  const { sources, folders, companyId, role, refresh } = useWorkspaceData(userId ?? null);
+    const { sources, folders, companyId, role, refresh } = useWorkspaceData(userId ?? null);
 
-  const [selected, setSelected] = useState<string[]>([]);
-  const [thread, setThread] = useState<ThreadMessage[]>([]);
-  const [activeFolder, setActiveFolder] = useState<string | null>(null);
-  const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [addOpen, setAddOpen] = useState(false);
-  /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
-  const [addTab, setAddTab] = useState<string | undefined>(undefined);
-  const [palOpen, setPalOpen] = useState(false);
-  const [newFolderOpen, setNewFolderOpen] = useState(false);
-  const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
-  const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
-  const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
-  const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
-  const [deleteBusy, setDeleteBusy] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-  const [studioOpen, setStudioOpen] = useState(false);
-  const [studioFeatureId, setStudioFeatureId] = useState<string | null>(null);
-  /**
-   * Which feature is "expanded" into the main workspace area. Defaults to
-   * `chat`, which renders the AskPanel; any other id renders the corresponding
-   * pane inline. Set via the drawer's Expand button or `?feature=X` deep links.
-   */
-  const [activeFeatureId, setActiveFeatureId] = useState<string>("chat");
-  const [railHidden, setRailHidden] = useState(false);
-  const railHiddenReady = useRef(false);
+    const [selected, setSelected] = useState<string[]>([]);
+    const [thread, setThread] = useState<ThreadMessage[]>([]);
+    const [activeFolder, setActiveFolder] = useState<string | null>(null);
+    const [activeTag, setActiveTag] = useState<string | null>(null);
+    const [addOpen, setAddOpen] = useState(false);
+    /** Which AddSourceModal tab to open on — set by the Knowledge connector strip. */
+    const [addTab, setAddTab] = useState<string | undefined>(undefined);
+    const [palOpen, setPalOpen] = useState(false);
+    const [newFolderOpen, setNewFolderOpen] = useState(false);
+    const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
+    const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
+    const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
+    const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
+    const [deleteBusy, setDeleteBusy] = useState(false);
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+    const [studioOpen, setStudioOpen] = useState(false);
+    const [studioFeatureId, setStudioFeatureId] = useState<string | null>(null);
+    /**
+     * Which feature is "expanded" into the main workspace area. Defaults to
+     * `chat`, which renders the AskPanel; any other id renders the corresponding
+     * pane inline. Set via the drawer's Expand button or `?feature=X` deep links.
+     */
+    const [activeFeatureId, setActiveFeatureId] = useState<string>("chat");
+    const [railHidden, setRailHidden] = useState(false);
+    const railHiddenReady = useRef(false);
 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("workspace.railHidden.v1");
-      if (raw === "1") setRailHidden(true);
-    } catch {
-      // Private mode / corrupt storage — fall back to visible.
-    }
-    railHiddenReady.current = true;
-  }, []);
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem("workspace.railHidden.v1");
+            if (raw === "1") setRailHidden(true);
+        } catch {
+            // Private mode / corrupt storage — fall back to visible.
+        }
+        railHiddenReady.current = true;
+    }, []);
 
-  useEffect(() => {
-    if (!railHiddenReady.current) return;
-    try {
-      localStorage.setItem("workspace.railHidden.v1", railHidden ? "1" : "0");
-    } catch {
-      // Quota / private mode — drop silently.
-    }
-  }, [railHidden]);
+    useEffect(() => {
+        if (!railHiddenReady.current) return;
+        try {
+            localStorage.setItem("workspace.railHidden.v1", railHidden ? "1" : "0");
+        } catch {
+            // Quota / private mode — drop silently.
+        }
+    }, [railHidden]);
 
-  // Composer preferences persisted across reloads so toggling Web/Think
-  // doesn't reset on every refresh. Ephemeral attachments are NOT persisted —
-  // those are turn-scoped, owned by the Composer.
-  const [composerWebSearch, setComposerWebSearch] = useState(false);
-  const [composerThinking, setComposerThinking] = useState(false);
-  const composerPrefsReady = useRef(false);
+    // Composer preferences persisted across reloads so toggling Web/Think
+    // doesn't reset on every refresh. Ephemeral attachments are NOT persisted —
+    // those are turn-scoped, owned by the Composer.
+    const [composerWebSearch, setComposerWebSearch] = useState(false);
+    const [composerThinking, setComposerThinking] = useState(false);
+    const composerPrefsReady = useRef(false);
 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("askPanel.composer.v1");
-      if (raw) {
-        const parsed = JSON.parse(raw) as {
-          webSearch?: boolean;
-          thinking?: boolean;
-        };
-        if (typeof parsed.webSearch === "boolean")
-          setComposerWebSearch(parsed.webSearch);
-        if (typeof parsed.thinking === "boolean")
-          setComposerThinking(parsed.thinking);
-      }
-    } catch {
-      // Corrupt storage — fall back to defaults.
-    }
-    composerPrefsReady.current = true;
-  }, []);
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem("askPanel.composer.v1");
+            if (raw) {
+                const parsed = JSON.parse(raw) as {
+                    webSearch?: boolean;
+                    thinking?: boolean;
+                };
+                if (typeof parsed.webSearch === "boolean") setComposerWebSearch(parsed.webSearch);
+                if (typeof parsed.thinking === "boolean") setComposerThinking(parsed.thinking);
+            }
+        } catch {
+            // Corrupt storage — fall back to defaults.
+        }
+        composerPrefsReady.current = true;
+    }, []);
 
-  useEffect(() => {
-    if (!composerPrefsReady.current) return;
-    try {
-      localStorage.setItem(
-        "askPanel.composer.v1",
-        JSON.stringify({
-          webSearch: composerWebSearch,
-          thinking: composerThinking,
-        }),
-      );
-    } catch {
-      // Quota / private mode — drop silently.
-    }
-  }, [composerWebSearch, composerThinking]);
+    useEffect(() => {
+        if (!composerPrefsReady.current) return;
+        try {
+            localStorage.setItem(
+                "askPanel.composer.v1",
+                JSON.stringify({
+                    webSearch: composerWebSearch,
+                    thinking: composerThinking,
+                })
+            );
+        } catch {
+            // Quota / private mode — drop silently.
+        }
+    }, [composerWebSearch, composerThinking]);
 
-  const { sendQuery, loading: isSending } = useAIChat();
+    const { sendQuery, loading: isSending } = useAIChat();
 
-  const sendMessage = useCallback(
-    async (send: ComposerSend) => {
-      setThread((prev) => [
-        ...prev,
-        {
-          role: "user",
-          text: send.text,
-          refs: send.refs,
-          attachments: send.attachments.length > 0 ? send.attachments : undefined,
+    const sendMessage = useCallback(
+        async (send: ComposerSend) => {
+            setThread(prev => [
+                ...prev,
+                {
+                    role: "user",
+                    text: send.text,
+                    refs: send.refs,
+                    attachments: send.attachments.length > 0 ? send.attachments : undefined,
+                },
+            ]);
+
+            const numericIds = send.refs
+                .map(r => sources.find(s => s.id === r)?.documentId)
+                .filter((n): n is number => typeof n === "number");
+
+            const scope =
+                numericIds.length >= 2
+                    ? "selected"
+                    : numericIds.length === 1
+                      ? "document"
+                      : companyId
+                        ? "company"
+                        : "document";
+
+            const data = await sendQuery({
+                question: send.text,
+                searchScope: scope,
+                documentId: scope === "document" ? numericIds[0] : undefined,
+                selectedDocumentIds: scope === "selected" ? numericIds : undefined,
+                companyId: scope === "company" ? (companyId ?? undefined) : undefined,
+                enableWebSearch: send.webSearch,
+                thinkingMode: send.thinking,
+                attachments: send.attachments.map(a => ({
+                    url: a.url,
+                    name: a.name,
+                    mimeType: a.mimeType,
+                    kind: a.kind,
+                })),
+            });
+
+            if (data.success) {
+                const citations = (data.references ?? [])
+                    .map(r => {
+                        const src = sources.find(s => s.documentId === Number(r.documentId));
+                        return src
+                            ? {
+                                  sourceId: src.id,
+                                  snippet: r.snippet ?? "",
+                              }
+                            : null;
+                    })
+                    .filter((c): c is { sourceId: string; snippet: string } => Boolean(c))
+                    .slice(0, 4);
+
+                setThread(prev => [
+                    ...prev,
+                    {
+                        role: "assistant",
+                        text: data.summarizedAnswer ?? "No answer.",
+                        citations,
+                        model: data.aiModel,
+                        tokens: data.chunksAnalyzed,
+                    },
+                ]);
+            } else {
+                setThread(prev => [
+                    ...prev,
+                    {
+                        role: "assistant",
+                        text:
+                            data.message ??
+                            data.error ??
+                            "Couldn't reach the model. Try again in a moment.",
+                    },
+                ]);
+            }
         },
-      ]);
+        [sources, sendQuery, companyId]
+    );
 
-      const numericIds = send.refs
-        .map((r) => sources.find((s) => s.id === r)?.documentId)
-        .filter((n): n is number => typeof n === "number");
+    const handleOpenSource = useCallback((source: WorkspaceSource) => {
+        setViewerSource(source);
+    }, []);
 
-      const scope =
-        numericIds.length >= 2
-          ? "selected"
-          : numericIds.length === 1
-          ? "document"
-          : companyId
-          ? "company"
-          : "document";
+    const handleRenameDoc = useCallback(
+        async (docId: number, nextTitle: string): Promise<boolean> => {
+            try {
+                const res = await fetch(`/api/documents/${docId}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ title: nextTitle }),
+                });
+                if (!res.ok) return false;
+                await refresh();
+                // Keep the viewer in sync with the new title.
+                setViewerSource(v =>
+                    v && v.documentId === docId ? { ...v, title: nextTitle } : v
+                );
+                return true;
+            } catch {
+                return false;
+            }
+        },
+        [refresh]
+    );
 
-      const data = await sendQuery({
-        question: send.text,
-        searchScope: scope,
-        documentId: scope === "document" ? numericIds[0] : undefined,
-        selectedDocumentIds: scope === "selected" ? numericIds : undefined,
-        companyId: scope === "company" ? companyId ?? undefined : undefined,
-        enableWebSearch: send.webSearch,
-        thinkingMode: send.thinking,
-        attachments: send.attachments.map((a) => ({
-          url: a.url,
-          name: a.name,
-          mimeType: a.mimeType,
-          kind: a.kind,
-        })),
-      });
+    const deleteDocumentById = useCallback(
+        async (docId: number) => {
+            const res = await fetch("/api/deleteDocument", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ docId: String(docId) }),
+            });
+            if (!res.ok) {
+                const body = (await res.json().catch(() => ({}))) as { error?: string };
+                throw new Error(body.error ?? "Failed to delete document");
+            }
+            setViewerSource(null);
+            setSelected(prev => prev.filter(id => !id.endsWith(String(docId))));
+            await refresh();
+        },
+        [refresh]
+    );
 
-      if (data.success) {
-        const citations = (data.references ?? [])
-          .map((r) => {
-            const src = sources.find((s) => s.documentId === Number(r.documentId));
-            return src
-              ? {
-                  sourceId: src.id,
-                  snippet: r.snippet ?? "",
-                }
-              : null;
-          })
-          .filter((c): c is { sourceId: string; snippet: string } => Boolean(c))
-          .slice(0, 4);
+    const handleDeleteDoc = useCallback(
+        async (docId: number) => {
+            try {
+                await deleteDocumentById(docId);
+            } catch (err) {
+                alert(err instanceof Error ? err.message : "Failed to delete document");
+            }
+        },
+        [deleteDocumentById]
+    );
 
-        setThread((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            text: data.summarizedAnswer ?? "No answer.",
-            citations,
-            model: data.aiModel,
-            tokens: data.chunksAnalyzed,
-          },
-        ]);
-      } else {
-        setThread((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            text:
-              data.message ??
-              data.error ??
-              "Couldn't reach the model. Try again in a moment.",
-          },
-        ]);
-      }
-    },
-    [sources, sendQuery, companyId],
-  );
-
-  const handleOpenSource = useCallback((source: WorkspaceSource) => {
-    setViewerSource(source);
-  }, []);
-
-  const handleRenameDoc = useCallback(
-    async (docId: number, nextTitle: string): Promise<boolean> => {
-      try {
-        const res = await fetch(`/api/documents/${docId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: nextTitle }),
-        });
-        if (!res.ok) return false;
-        await refresh();
-        // Keep the viewer in sync with the new title.
-        setViewerSource((v) =>
-          v && v.documentId === docId ? { ...v, title: nextTitle } : v,
-        );
-        return true;
-      } catch {
-        return false;
-      }
-    },
-    [refresh],
-  );
-
-  const deleteDocumentById = useCallback(
-    async (docId: number) => {
-      const res = await fetch("/api/deleteDocument", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ docId: String(docId) }),
-      });
-      if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? "Failed to delete document");
-      }
-      setViewerSource(null);
-      setSelected((prev) => prev.filter((id) => !id.endsWith(String(docId))));
-      await refresh();
-    },
-    [refresh],
-  );
-
-  const handleDeleteDoc = useCallback(
-    async (docId: number) => {
-      try {
-        await deleteDocumentById(docId);
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "Failed to delete document");
-      }
-    },
-    [deleteDocumentById],
-  );
-
-  const confirmDeleteSource = useCallback(async () => {
-    if (!deleteSource?.documentId) return;
-    setDeleteBusy(true);
-    setDeleteError(null);
-    try {
-      await deleteDocumentById(deleteSource.documentId);
-      setDeleteSource(null);
-    } catch (err) {
-      setDeleteError(err instanceof Error ? err.message : "Failed to delete document");
-    } finally {
-      setDeleteBusy(false);
-    }
-  }, [deleteSource, deleteDocumentById]);
-
-  const handleAskAbout = useCallback((source: WorkspaceSource) => {
-    setSelected((prev) => (prev.includes(source.id) ? prev : [source.id, ...prev]));
-    setViewerSource(null);
-  }, []);
-
-  const openAdd = useCallback((tabId?: string) => {
-    setAddTab(tabId);
-    setAddOpen(true);
-  }, []);
-
-  const handleMoveToFolder = useCallback(
-    async (sourceId: string, folderName: string) => {
-      const src = sources.find((s) => s.id === sourceId);
-      if (!src?.documentId) return;
-      if ((src.folder ?? "Unfiled") === folderName) return;
-      try {
-        const res = await fetch(`/api/documents/${src.documentId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ category: folderName }),
-        });
-        if (!res.ok) {
-          const body = (await res.json().catch(() => ({}))) as { error?: string };
-          alert(body.error ?? "Failed to move document");
-          return;
+    const confirmDeleteSource = useCallback(async () => {
+        if (!deleteSource?.documentId) return;
+        setDeleteBusy(true);
+        setDeleteError(null);
+        try {
+            await deleteDocumentById(deleteSource.documentId);
+            setDeleteSource(null);
+        } catch (err) {
+            setDeleteError(err instanceof Error ? err.message : "Failed to delete document");
+        } finally {
+            setDeleteBusy(false);
         }
-        await refresh();
-      } catch (err) {
-        alert(err instanceof Error ? err.message : "Failed to move document");
-      }
-    },
-    [sources, refresh],
-  );
+    }, [deleteSource, deleteDocumentById]);
 
-  /** Opens the Studio drawer / sidebar only — used by the header “Studio” control and ⌘J toggle. */
-  const openFeature = useCallback(
-    (featureId?: string) => {
-      setStudioFeatureId(featureId ?? activeFeatureId);
-      setStudioOpen(true);
-    },
-    [activeFeatureId],
-  );
+    const handleAskAbout = useCallback((source: WorkspaceSource) => {
+        setSelected(prev => (prev.includes(source.id) ? prev : [source.id, ...prev]));
+        setViewerSource(null);
+    }, []);
 
-  /** Fills the main workspace with a feature and closes the drawer — used by mega-menu picks, palette, FAB pins. */
-  const expandFeature = useCallback((featureId: string) => {
-    setActiveFeatureId(featureId);
-    setStudioOpen(false);
-  }, []);
-
-  // `?feature=X` expands that Studio feature full-width on the workspace (or opens
-  // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal.
-  const featureParam = searchParams.get("feature");
-  const addParam = searchParams.get("add");
-  useEffect(() => {
-    if (!featureParam && !addParam) return;
-    if (legacyRedirect) return;
-    if (featureParam && FEATURE_IDS.has(featureParam)) {
-      expandFeature(featureParam);
-    }
-    if (addParam) {
-      setAddOpen(true);
-    }
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("feature");
-    params.delete("add");
-    const query = params.toString();
-    router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
-  }, [featureParam, addParam, legacyRedirect, expandFeature, router, searchParams]);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement | null)?.tagName;
-      const inInput = tag === "INPUT" || tag === "TEXTAREA";
-      const mod = e.metaKey || e.ctrlKey;
-      if (mod && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setPalOpen((v) => !v);
-      } else if (mod && e.key.toLowerCase() === "u") {
-        e.preventDefault();
+    const openAdd = useCallback((tabId?: string) => {
+        setAddTab(tabId);
         setAddOpen(true);
-      } else if (mod && e.key.toLowerCase() === "j") {
-        e.preventDefault();
-        setStudioOpen((v) => !v);
-      } else if (mod && e.key === "\\") {
-        e.preventDefault();
-        setRailHidden((v) => !v);
-      } else if (e.key === "/" && !inInput) {
-        e.preventDefault();
-        const el = document.querySelector<HTMLInputElement>(
-          'input[placeholder="Search your sources"]',
-        );
-        el?.focus();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+    }, []);
 
-  if (!isLoaded) return <LoadingPage />;
-  if (!isSignedIn) return <LoadingPage />;
+    const handleMoveToFolder = useCallback(
+        async (sourceId: string, folderName: string) => {
+            const src = sources.find(s => s.id === sourceId);
+            if (!src?.documentId) return;
+            if ((src.folder ?? "Unfiled") === folderName) return;
+            try {
+                const res = await fetch(`/api/documents/${src.documentId}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ category: folderName }),
+                });
+                if (!res.ok) {
+                    const body = (await res.json().catch(() => ({}))) as { error?: string };
+                    alert(body.error ?? "Failed to move document");
+                    return;
+                }
+                await refresh();
+            } catch (err) {
+                alert(err instanceof Error ? err.message : "Failed to move document");
+            }
+        },
+        [sources, refresh]
+    );
 
-  // While a legacy `?view=X` redirect is in flight, avoid flashing the workspace.
-  if (legacyRedirect) return <LoadingPage />;
+    /** Opens the Studio drawer / sidebar only — used by the header “Studio” control and ⌘J toggle. */
+    const openFeature = useCallback(
+        (featureId?: string) => {
+            setStudioFeatureId(featureId ?? activeFeatureId);
+            setStudioOpen(true);
+        },
+        [activeFeatureId]
+    );
 
-  const userName =
-    user?.fullName ??
-    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ??
-    undefined;
-  const userEmail = user?.primaryEmailAddress?.emailAddress;
-  const initials = initialsOf(user?.firstName, user?.lastName, userEmail);
+    /** Fills the main workspace with a feature and closes the drawer — used by mega-menu picks, palette, FAB pins. */
+    const expandFeature = useCallback((featureId: string) => {
+        setActiveFeatureId(featureId);
+        setStudioOpen(false);
+    }, []);
 
-  return (
-    <div
-      data-drift-immersive="true"
-      style={{
-        display: "flex",
-        height: "100vh",
-        width: "100%",
-        overflow: "hidden",
-        position: "relative",
-      }}
-    >
-      {!railHidden && (
-        <SourceRail
-          sources={sources}
-          folders={folders}
-          selected={selected}
-          setSelected={setSelected}
-          onOpenAdd={() => openAdd()}
-          onOpenKnowledge={() => expandFeature("knowledge")}
-          onOpenSource={handleOpenSource}
-          onNewFolder={() => setNewFolderOpen(true)}
-          onRenameFolder={(folder) => setRenameFolder(folder)}
-          onRenameSource={(source) => setRenameSource(source)}
-          onDeleteSource={(source) => {
-            setDeleteError(null);
-            setDeleteSource(source);
-          }}
-          onMoveToFolder={(id, name) => void handleMoveToFolder(id, name)}
-          activeFolder={activeFolder}
-          setActiveFolder={setActiveFolder}
-          activeTag={activeTag}
-          setActiveTag={setActiveTag}
-          onClose={() => setRailHidden(true)}
-        />
-      )}
-
-      {railHidden && (
-        <button
-          onClick={() => setRailHidden(false)}
-          title="Show sidebar  ⌘\"
-          aria-label="Show sidebar"
-          style={{
-            position: "absolute",
-            top: 14,
-            left: 12,
-            zIndex: 5,
-            width: 28,
-            height: 28,
-            borderRadius: 7,
-            border: "1px solid var(--line)",
-            background: "var(--panel)",
-            color: "var(--ink-2)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-            transition: "background 120ms, color 120ms, border-color 120ms",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "var(--accent)";
-            e.currentTarget.style.color = "var(--accent)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "var(--line)";
-            e.currentTarget.style.color = "var(--ink-2)";
-          }}
-        >
-          <IconChevronRight size={14} />
-        </button>
-      )}
-
-      {activeFeatureId === "chat" ? (
-        <AskPanel
-          leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
-          sources={sources}
-          selected={selected}
-          setSelected={setSelected}
-          thread={thread}
-          sendMessage={sendMessage}
-          isSending={isSending}
-          onOpenAdd={() => setAddOpen(true)}
-          onNewChat={() => setThread([])}
-          openPalette={() => setPalOpen(true)}
-          onStudioNavigate={(href) => router.push(href)}
-          userInitials={initials}
-          userName={userName}
-          userEmail={userEmail}
-          onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
-          webSearch={composerWebSearch}
-          onToggleWebSearch={() => setComposerWebSearch((v) => !v)}
-          thinking={composerThinking}
-          onToggleThinking={() => setComposerThinking((v) => !v)}
-          studioSlot={
-            <StudioMenu
-              role={role}
-              onOpenStudio={() => openFeature()}
-              onPickFeature={(id) => expandFeature(id)}
-            />
-          }
-        />
-      ) : (
-        <ExpandedFeatureView
-          featureId={activeFeatureId}
-          role={role}
-          leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
-          onPaneExit={() => setActiveFeatureId("chat")}
-          onOpenStudio={() => openFeature()}
-          onPickFeature={(id) => expandFeature(id)}
-          openPalette={() => setPalOpen(true)}
-          userInitials={initials}
-          userName={userName}
-          userEmail={userEmail}
-          // Settings is a workspace surface now, not a separate destination.
-          onOpenSettings={() => expandFeature("settings")}
-          onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
-          paneContext={{
-            knowledge: {
-              sources,
-              folders,
-              selected,
-              setSelected,
-              onOpenSource: handleOpenSource,
-              onOpenAdd: openAdd,
-              onAskAbout: (ids) => {
-                setSelected(ids);
-                setActiveFeatureId("chat");
-              },
-              onRenameSource: (source) => setRenameSource(source),
-              onDeleteSource: (source) => {
-                setDeleteError(null);
-                setDeleteSource(source);
-              },
-              onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
-            },
-          }}
-        />
-      )}
-
-      {studioOpen && (
-        <StudioDrawer
-          open
-          role={role}
-          initialFeatureId={studioFeatureId}
-          activeFeatureId={activeFeatureId}
-          onClose={() => setStudioOpen(false)}
-          onExpand={expandFeature}
-          onOpenWorkspaceChat={() => {
-            setActiveFeatureId("chat");
-            setStudioOpen(false);
-          }}
-        />
-      )}
-
-      <AddSourceModal
-        open={addOpen}
-        initialTab={addTab}
-        onClose={() => {
-          setAddOpen(false);
-          setAddTab(undefined);
-        }}
-        userId={userId ?? null}
-        defaultCategory={activeFolder ?? folders[0]?.name ?? "Unfiled"}
-        folders={folders.map((f) => f.name)}
-        onUploaded={() => {
-          void refresh();
-        }}
-      />
-
-      <CommandPalette
-        open={palOpen}
-        onClose={() => setPalOpen(false)}
-        sources={sources}
-        onOpenAdd={() => {
-          setPalOpen(false);
-          setTimeout(() => setAddOpen(true), 100);
-        }}
-        onPickSource={(id) => {
-          setSelected((prev) => (prev.includes(id) ? prev : [id, ...prev]));
-        }}
-        onPickFeature={(id) => {
-          setPalOpen(false);
-          setTimeout(() => expandFeature(id), 100);
-        }}
-      />
-
-      <NewFolderDialog
-        open={newFolderOpen}
-        onClose={() => setNewFolderOpen(false)}
-        existingFolders={folders.map((f) => f.name)}
-        onCreated={() => {
-          void refresh();
-        }}
-      />
-
-      <RenameFolderDialog
-        open={!!renameFolder}
-        folder={renameFolder}
-        onClose={() => setRenameFolder(null)}
-        existingFolders={folders.map((f) => f.name)}
-        onRenamed={(newName) => {
-          if (activeFolder === renameFolder?.name) setActiveFolder(newName);
-          void refresh();
-        }}
-        onDeleted={() => {
-          if (activeFolder === renameFolder?.name) setActiveFolder(null);
-          void refresh();
-        }}
-      />
-
-      <RenameSourceDialog
-        open={!!renameSource}
-        source={renameSource}
-        onClose={() => setRenameSource(null)}
-        onRename={handleRenameDoc}
-      />
-
-      <ConfirmActionDialog
-        open={!!deleteSource}
-        title="Delete this source?"
-        body={
-          deleteSource
-            ? `“${deleteSource.title}” will be removed from this workspace. This cannot be undone.`
-            : ""
+    // `?feature=X` expands that Studio feature full-width on the workspace (or opens
+    // Assist inline for draft flow via same ids); `?add=1` opens the AddSourceModal.
+    const featureParam = searchParams.get("feature");
+    const addParam = searchParams.get("add");
+    useEffect(() => {
+        if (!featureParam && !addParam) return;
+        if (legacyRedirect) return;
+        if (featureParam && FEATURE_IDS.has(featureParam)) {
+            expandFeature(featureParam);
         }
-        confirmLabel="Delete"
-        busy={deleteBusy}
-        error={deleteError}
-        onConfirm={() => void confirmDeleteSource()}
-        onClose={() => {
-          if (deleteBusy) return;
-          setDeleteSource(null);
-          setDeleteError(null);
-        }}
-      />
+        if (addParam) {
+            setAddOpen(true);
+        }
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("feature");
+        params.delete("add");
+        const query = params.toString();
+        router.replace(query ? `/employer/documents?${query}` : "/employer/documents");
+    }, [featureParam, addParam, legacyRedirect, expandFeature, router, searchParams]);
 
-      {viewerSource && (
-        <DocumentViewer
-          source={viewerSource}
-          onClose={() => setViewerSource(null)}
-          onRename={handleRenameDoc}
-          onDelete={(id) => void handleDeleteDoc(id)}
-          onAskAbout={handleAskAbout}
-          onVersionChanged={() => void refresh()}
-        />
-      )}
-    </div>
-  );
+    // Keyboard shortcuts
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            const tag = (e.target as HTMLElement | null)?.tagName;
+            const inInput = tag === "INPUT" || tag === "TEXTAREA";
+            const mod = e.metaKey || e.ctrlKey;
+            if (mod && e.key.toLowerCase() === "k") {
+                e.preventDefault();
+                setPalOpen(v => !v);
+            } else if (mod && e.key.toLowerCase() === "u") {
+                e.preventDefault();
+                setAddOpen(true);
+            } else if (mod && e.key.toLowerCase() === "j") {
+                e.preventDefault();
+                setStudioOpen(v => !v);
+            } else if (mod && e.key === "\\") {
+                e.preventDefault();
+                setRailHidden(v => !v);
+            } else if (e.key === "/" && !inInput) {
+                e.preventDefault();
+                const el = document.querySelector<HTMLInputElement>(
+                    'input[placeholder="Search your sources"]'
+                );
+                el?.focus();
+            }
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, []);
+
+    if (!isLoaded) return <LoadingPage />;
+    if (!isSignedIn) return <LoadingPage />;
+
+    // While a legacy `?view=X` redirect is in flight, avoid flashing the workspace.
+    if (legacyRedirect) return <LoadingPage />;
+
+    const userName =
+        user?.fullName ?? [user?.firstName, user?.lastName].filter(Boolean).join(" ") ?? undefined;
+    const userEmail = user?.primaryEmailAddress?.emailAddress;
+    const initials = initialsOf(user?.firstName, user?.lastName, userEmail);
+
+    return (
+        <div
+            data-drift-immersive="true"
+            style={{
+                display: "flex",
+                height: "100vh",
+                width: "100%",
+                overflow: "hidden",
+                position: "relative",
+            }}
+        >
+            {!railHidden && (
+                <SourceRail
+                    sources={sources}
+                    folders={folders}
+                    selected={selected}
+                    setSelected={setSelected}
+                    onOpenAdd={() => openAdd()}
+                    onOpenKnowledge={() => expandFeature("knowledge")}
+                    onOpenSource={handleOpenSource}
+                    onNewFolder={() => setNewFolderOpen(true)}
+                    onRenameFolder={folder => setRenameFolder(folder)}
+                    onRenameSource={source => setRenameSource(source)}
+                    onDeleteSource={source => {
+                        setDeleteError(null);
+                        setDeleteSource(source);
+                    }}
+                    onMoveToFolder={(id, name) => void handleMoveToFolder(id, name)}
+                    activeFolder={activeFolder}
+                    setActiveFolder={setActiveFolder}
+                    activeTag={activeTag}
+                    setActiveTag={setActiveTag}
+                    onClose={() => setRailHidden(true)}
+                />
+            )}
+
+            {railHidden && (
+                <button
+                    onClick={() => setRailHidden(false)}
+                    title="Show sidebar  ⌘\"
+                    aria-label="Show sidebar"
+                    style={{
+                        position: "absolute",
+                        top: 14,
+                        left: 12,
+                        zIndex: 5,
+                        width: 28,
+                        height: 28,
+                        borderRadius: 7,
+                        border: "1px solid var(--line)",
+                        background: "var(--panel)",
+                        color: "var(--ink-2)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+                        transition: "background 120ms, color 120ms, border-color 120ms",
+                    }}
+                    onMouseEnter={e => {
+                        e.currentTarget.style.borderColor = "var(--accent)";
+                        e.currentTarget.style.color = "var(--accent)";
+                    }}
+                    onMouseLeave={e => {
+                        e.currentTarget.style.borderColor = "var(--line)";
+                        e.currentTarget.style.color = "var(--ink-2)";
+                    }}
+                >
+                    <IconChevronRight size={14} />
+                </button>
+            )}
+
+            {activeFeatureId === "chat" ? (
+                <AskPanel
+                    leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
+                    sources={sources}
+                    selected={selected}
+                    setSelected={setSelected}
+                    thread={thread}
+                    sendMessage={sendMessage}
+                    isSending={isSending}
+                    onOpenAdd={() => setAddOpen(true)}
+                    onNewChat={() => setThread([])}
+                    openPalette={() => setPalOpen(true)}
+                    onStudioNavigate={href => router.push(href)}
+                    userInitials={initials}
+                    userName={userName}
+                    userEmail={userEmail}
+                    onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
+                    webSearch={composerWebSearch}
+                    onToggleWebSearch={() => setComposerWebSearch(v => !v)}
+                    thinking={composerThinking}
+                    onToggleThinking={() => setComposerThinking(v => !v)}
+                    studioSlot={
+                        <StudioMenu
+                            role={role}
+                            onOpenStudio={() => openFeature()}
+                            onPickFeature={id => expandFeature(id)}
+                        />
+                    }
+                />
+            ) : (
+                <ExpandedFeatureView
+                    featureId={activeFeatureId}
+                    role={role}
+                    leadingChromeInsetPx={railHidden ? RAIL_HIDDEN_HEADER_INSET_PX : 0}
+                    onPaneExit={() => setActiveFeatureId("chat")}
+                    onOpenStudio={() => openFeature()}
+                    onPickFeature={id => expandFeature(id)}
+                    openPalette={() => setPalOpen(true)}
+                    userInitials={initials}
+                    userName={userName}
+                    userEmail={userEmail}
+                    // Settings is a workspace surface now, not a separate destination.
+                    onOpenSettings={() => expandFeature("settings")}
+                    onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
+                    paneContext={{
+                        knowledge: {
+                            sources,
+                            folders,
+                            selected,
+                            setSelected,
+                            onOpenSource: handleOpenSource,
+                            onOpenAdd: openAdd,
+                            onAskAbout: ids => {
+                                setSelected(ids);
+                                setActiveFeatureId("chat");
+                            },
+                            onRenameSource: source => setRenameSource(source),
+                            onDeleteSource: source => {
+                                setDeleteError(null);
+                                setDeleteSource(source);
+                            },
+                            onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
+                        },
+                    }}
+                />
+            )}
+
+            {studioOpen && (
+                <StudioDrawer
+                    open
+                    role={role}
+                    initialFeatureId={studioFeatureId}
+                    activeFeatureId={activeFeatureId}
+                    onClose={() => setStudioOpen(false)}
+                    onExpand={expandFeature}
+                    onOpenWorkspaceChat={() => {
+                        setActiveFeatureId("chat");
+                        setStudioOpen(false);
+                    }}
+                />
+            )}
+
+            <AddSourceModal
+                open={addOpen}
+                initialTab={addTab}
+                onClose={() => {
+                    setAddOpen(false);
+                    setAddTab(undefined);
+                }}
+                userId={userId ?? null}
+                defaultCategory={activeFolder ?? folders[0]?.name ?? "Unfiled"}
+                folders={folders.map(f => f.name)}
+                onUploaded={() => {
+                    void refresh();
+                }}
+            />
+
+            <CommandPalette
+                open={palOpen}
+                onClose={() => setPalOpen(false)}
+                sources={sources}
+                onOpenAdd={() => {
+                    setPalOpen(false);
+                    setTimeout(() => setAddOpen(true), 100);
+                }}
+                onPickSource={id => {
+                    setSelected(prev => (prev.includes(id) ? prev : [id, ...prev]));
+                }}
+                onPickFeature={id => {
+                    setPalOpen(false);
+                    setTimeout(() => expandFeature(id), 100);
+                }}
+            />
+
+            <NewFolderDialog
+                open={newFolderOpen}
+                onClose={() => setNewFolderOpen(false)}
+                existingFolders={folders.map(f => f.name)}
+                onCreated={() => {
+                    void refresh();
+                }}
+            />
+
+            <RenameFolderDialog
+                open={!!renameFolder}
+                folder={renameFolder}
+                onClose={() => setRenameFolder(null)}
+                existingFolders={folders.map(f => f.name)}
+                onRenamed={newName => {
+                    if (activeFolder === renameFolder?.name) setActiveFolder(newName);
+                    void refresh();
+                }}
+                onDeleted={() => {
+                    if (activeFolder === renameFolder?.name) setActiveFolder(null);
+                    void refresh();
+                }}
+            />
+
+            <RenameSourceDialog
+                open={!!renameSource}
+                source={renameSource}
+                onClose={() => setRenameSource(null)}
+                onRename={handleRenameDoc}
+            />
+
+            <ConfirmActionDialog
+                open={!!deleteSource}
+                title="Delete this source?"
+                body={
+                    deleteSource
+                        ? `“${deleteSource.title}” will be removed from this workspace. This cannot be undone.`
+                        : ""
+                }
+                confirmLabel="Delete"
+                busy={deleteBusy}
+                error={deleteError}
+                onConfirm={() => void confirmDeleteSource()}
+                onClose={() => {
+                    if (deleteBusy) return;
+                    setDeleteSource(null);
+                    setDeleteError(null);
+                }}
+            />
+
+            {viewerSource && (
+                <DocumentViewer
+                    source={viewerSource}
+                    onClose={() => setViewerSource(null)}
+                    onRename={handleRenameDoc}
+                    onDelete={id => void handleDeleteDoc(id)}
+                    onAskAbout={handleAskAbout}
+                    onVersionChanged={() => void refresh()}
+                />
+            )}
+        </div>
+    );
 }
 
 interface ExpandedFeatureViewProps {
-  featureId: string;
-  role: string | null;
-  /** Extra left inset for top bar when an overlay chrome control (show sidebar) is visible — see WorkspaceShell.RAIL_HIDDEN_HEADER_INSET_PX. */
-  leadingChromeInsetPx?: number;
-  /** Return to workspace chat when panes invoke their exit / close callbacks. */
-  onPaneExit: () => void;
-  onOpenStudio: () => void;
-  onPickFeature: (featureId: string) => void;
-  openPalette: () => void;
-  userInitials: string;
-  userName?: string;
-  userEmail?: string;
-  onOpenSettings: () => void;
-  onSignOut?: () => void;
-  /** Workspace-owned data some panes need (Knowledge in particular). */
-  paneContext?: StudioPaneContext;
+    featureId: string;
+    role: string | null;
+    /** Extra left inset for top bar when an overlay chrome control (show sidebar) is visible — see WorkspaceShell.RAIL_HIDDEN_HEADER_INSET_PX. */
+    leadingChromeInsetPx?: number;
+    /** Return to workspace chat when panes invoke their exit / close callbacks. */
+    onPaneExit: () => void;
+    onOpenStudio: () => void;
+    onPickFeature: (featureId: string) => void;
+    openPalette: () => void;
+    userInitials: string;
+    userName?: string;
+    userEmail?: string;
+    onOpenSettings: () => void;
+    onSignOut?: () => void;
+    /** Workspace-owned data some panes need (Knowledge in particular). */
+    paneContext?: StudioPaneContext;
 }
 
 /**
  * Main-area container for a Studio feature expanded from the drawer; top bar aligns with AskPanel (jump, Studio, avatar).
  */
 function ExpandedFeatureView({
-  featureId,
-  role,
-  leadingChromeInsetPx = 0,
-  onPaneExit,
-  onOpenStudio,
-  onPickFeature,
-  openPalette,
-  userInitials,
-  userName,
-  userEmail,
-  onOpenSettings,
-  onSignOut,
-  paneContext,
+    featureId,
+    role,
+    leadingChromeInsetPx = 0,
+    onPaneExit,
+    onOpenStudio,
+    onPickFeature,
+    openPalette,
+    userInitials,
+    userName,
+    userEmail,
+    onOpenSettings,
+    onSignOut,
+    paneContext,
 }: ExpandedFeatureViewProps) {
-  const feature = STUDIO_FEATURES_BY_ID[featureId];
+    const feature = STUDIO_FEATURES_BY_ID[featureId];
 
-  return (
-    <main
-      style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        overflow: "hidden",
-        background: "var(--bg)",
-      }}
-    >
-      <div style={workspaceMainHeaderBarStyle(leadingChromeInsetPx)}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 13, fontWeight: 600 }}>
-            {feature?.label ?? "Studio"}
-          </div>
-          <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
-            {feature?.desc ?? ""}
-          </div>
-        </div>
-        <JumpToPaletteButton onClick={openPalette} />
-        <StudioMenu
-          role={role}
-          onOpenStudio={onOpenStudio}
-          onPickFeature={onPickFeature}
-        />
-        <AvatarMenu
-          userInitials={userInitials}
-          userName={userName}
-          userEmail={userEmail}
-          onOpenSettings={onOpenSettings}
-          onSignOut={onSignOut}
-        />
-      </div>
-      <div style={{ flex: 1, overflow: "hidden" }}>
-        {feature ? (
-          renderStudioPane(feature, onPaneExit, paneContext)
-        ) : (
-          <div
+    return (
+        <main
             style={{
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "var(--ink-3)",
-              fontSize: 13,
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                overflow: "hidden",
+                background: "var(--bg)",
             }}
-          >
-            Unknown feature — returning to Chat…
-          </div>
-        )}
-      </div>
-    </main>
-  );
+        >
+            <div style={workspaceMainHeaderBarStyle(leadingChromeInsetPx)}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600 }}>
+                        {feature?.label ?? "Studio"}
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--ink-3)" }}>{feature?.desc ?? ""}</div>
+                </div>
+                <JumpToPaletteButton onClick={openPalette} />
+                <StudioMenu role={role} onOpenStudio={onOpenStudio} onPickFeature={onPickFeature} />
+                <AvatarMenu
+                    userInitials={userInitials}
+                    userName={userName}
+                    userEmail={userEmail}
+                    onOpenSettings={onOpenSettings}
+                    onSignOut={onSignOut}
+                />
+            </div>
+            <div style={{ flex: 1, overflow: "hidden" }}>
+                {feature ? (
+                    renderStudioPane(feature, onPaneExit, paneContext)
+                ) : (
+                    <div
+                        style={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "var(--ink-3)",
+                            fontSize: 13,
+                        }}
+                    >
+                        Unknown feature — returning to Chat…
+                    </div>
+                )}
+            </div>
+        </main>
+    );
 }

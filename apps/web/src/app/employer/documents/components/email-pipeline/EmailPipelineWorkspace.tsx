@@ -176,14 +176,9 @@ export function EmailPipelineWorkspace() {
     // A staged campaign froze its audience at creation; if the recipient list
     // changes before the user confirms, drop the staged send so they re-stage
     // with the current list instead of silently mailing the old one.
-    const recipientsKey = useMemo(
-        () => recipients.map(r => r.email).join("\n"),
-        [recipients]
-    );
+    const recipientsKey = useMemo(() => recipients.map(r => r.email).join("\n"), [recipients]);
     useEffect(() => {
-        setPendingSend(prev =>
-            prev && prev.recipientsKey !== recipientsKey ? null : prev
-        );
+        setPendingSend(prev => (prev && prev.recipientsKey !== recipientsKey ? null : prev));
     }, [recipientsKey]);
 
     /* ── server calls ── */
@@ -293,20 +288,17 @@ export function EmailPipelineWorkspace() {
         setError(null);
         try {
             try {
-                await postJson(
-                    `/api/email-campaigns/${pendingSend.campaignId}/approve`,
-                    {
-                        templateVersionId: pendingSend.templateVersionId,
-                        // A non-passing review may still be sent, but only on the
-                        // record — the verdict is shown in the confirm panel.
-                        ...(pendingSend.review && pendingSend.review.verdict !== "pass"
-                            ? {
-                                  overrideReason:
-                                      "Confirmed from the outreach workspace despite the review verdict.",
-                              }
-                            : {}),
-                    }
-                );
+                await postJson(`/api/email-campaigns/${pendingSend.campaignId}/approve`, {
+                    templateVersionId: pendingSend.templateVersionId,
+                    // A non-passing review may still be sent, but only on the
+                    // record — the verdict is shown in the confirm panel.
+                    ...(pendingSend.review && pendingSend.review.verdict !== "pass"
+                        ? {
+                              overrideReason:
+                                  "Confirmed from the outreach workspace despite the review verdict.",
+                          }
+                        : {}),
+                });
             } catch (e) {
                 throw new Error(
                     `Approving the template failed: ${e instanceof Error ? e.message : "unknown error"}`
@@ -429,7 +421,7 @@ export function EmailPipelineWorkspace() {
                         onChange={e => setCampaignName(e.target.value)}
                         placeholder="Campaign name"
                         aria-label="Campaign name"
-                        className="w-full rounded-md border border-neutral-300 p-2 text-sm dark:border-neutral-700 dark:bg-neutral-950 sm:w-48"
+                        className="w-full rounded-md border border-neutral-300 p-2 text-sm sm:w-48 dark:border-neutral-700 dark:bg-neutral-950"
                     />
                     <input
                         value={goal}
@@ -591,9 +583,7 @@ export function EmailPipelineWorkspace() {
                         disabled={busy || blocked || !confirmSend || pendingSend !== null}
                         className="rounded-md bg-red-700 px-3 py-2 text-sm font-medium text-white disabled:opacity-40"
                     >
-                        {stage === "preparing"
-                            ? "Preparing…"
-                            : `Send to ${recipients.length}`}
+                        {stage === "preparing" ? "Preparing…" : `Send to ${recipients.length}`}
                     </button>
                 </div>
 

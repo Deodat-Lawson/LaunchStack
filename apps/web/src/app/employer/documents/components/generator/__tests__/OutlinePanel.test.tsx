@@ -37,9 +37,7 @@ function makeOutline(): OutlineItem[] {
                     id: "1.2",
                     title: "Motivation",
                     level: 2,
-                    children: [
-                        { id: "1.2.1", title: "Problem Statement", level: 3 },
-                    ],
+                    children: [{ id: "1.2.1", title: "Problem Statement", level: 3 }],
                 },
             ],
         },
@@ -53,7 +51,7 @@ const noop = () => {
 
 function renderPanel(
     outline: OutlineItem[] = [],
-    overrides: Partial<React.ComponentProps<typeof OutlinePanel>> = {},
+    overrides: Partial<React.ComponentProps<typeof OutlinePanel>> = {}
 ) {
     const defaultProps = {
         outline,
@@ -79,9 +77,7 @@ describe("OutlinePanel", () => {
     it("renders the empty state when outline is empty", () => {
         renderPanel([]);
         expect(screen.getByText("No outline yet")).toBeInTheDocument();
-        expect(
-            screen.getByText("Generate one or add sections manually"),
-        ).toBeInTheDocument();
+        expect(screen.getByText("Generate one or add sections manually")).toBeInTheDocument();
     });
 
     it("renders all visible items when outline has data and items are expanded", async () => {
@@ -98,7 +94,9 @@ describe("OutlinePanel", () => {
         renderPanel(makeOutline());
 
         // Find the expand button for "Introduction" (the first treeitem with children)
-        const introItem = screen.getByText("Introduction").closest<HTMLElement>('[role="treeitem"]')!;
+        const introItem = screen
+            .getByText("Introduction")
+            .closest<HTMLElement>('[role="treeitem"]')!;
         const expandBtn = within(introItem).getAllByRole("button")[0]!;
 
         await user.click(expandBtn);
@@ -132,7 +130,9 @@ describe("OutlinePanel", () => {
         const { props } = renderPanel(outline);
 
         // Expand "Introduction" first so we can see children
-        const introItem = screen.getByText("Introduction").closest<HTMLElement>('[role="treeitem"]')!;
+        const introItem = screen
+            .getByText("Introduction")
+            .closest<HTMLElement>('[role="treeitem"]')!;
         const expandBtn = within(introItem).getAllByRole("button")[0]!;
         await user.click(expandBtn);
 
@@ -171,18 +171,14 @@ describe("OutlinePanel", () => {
 
     it("shows the generate controls with topic textarea", () => {
         renderPanel();
-        expect(
-            screen.getByPlaceholderText("Document topic or description..."),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("button", { name: /Generate Outline/i }),
-        ).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Document topic or description...")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /Generate Outline/i })).toBeInTheDocument();
     });
 
     it("has the topic textarea pre-filled with the document title", () => {
         renderPanel([], { documentTitle: "My Document" });
         const textarea = screen.getByPlaceholderText<HTMLTextAreaElement>(
-            "Document topic or description...",
+            "Document topic or description..."
         );
         expect(textarea.value).toBe("My Document");
     });

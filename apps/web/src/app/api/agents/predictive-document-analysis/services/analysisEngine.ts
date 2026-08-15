@@ -2,18 +2,21 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import { invokeStructured } from "@launchstack/core/llm";
 import { DuckDuckGoSearch } from "@langchain/community/tools/duckduckgo_search";
-import type { 
-    PdfChunk, 
-    AnalysisSpecification, 
-    PredictiveAnalysisResult, 
+import type {
+    PdfChunk,
+    AnalysisSpecification,
+    PredictiveAnalysisResult,
     MissingDocumentPrediction,
     DocumentInsight,
-    SearchResult
+    SearchResult,
 } from "~/app/api/agents/predictive-document-analysis/types";
 import { ANALYSIS_TYPES } from "~/app/api/agents/predictive-document-analysis/types";
 import { groupContentFromChunks } from "~/app/api/agents/predictive-document-analysis/utils/content";
 import { createChunkBatches } from "~/app/api/agents/predictive-document-analysis/utils/batching";
-import { extractReferences, deduplicateReferences } from "~/app/api/agents/predictive-document-analysis/services/referenceExtractor";
+import {
+    extractReferences,
+    deduplicateReferences,
+} from "~/app/api/agents/predictive-document-analysis/services/referenceExtractor";
 import { findSuggestedCompanyDocuments } from "~/app/api/agents/predictive-document-analysis/services/documentMatcher";
 import { extractDeterministicInsights } from "~/app/api/agents/predictive-document-analysis/utils/insightExtractors";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
@@ -22,7 +25,7 @@ import pLimit from "p-limit";
 import { db } from "~/server/db/index";
 import { document } from "@launchstack/core/db/schema";
 import { and, eq, ne } from "drizzle-orm";
-import stringSimilarity from 'string-similarity-js';
+import stringSimilarity from "string-similarity-js";
 import { ANALYSIS_BATCH_CONFIG } from "~/lib/constants";
 import { resolveConfiguredChatModel } from "~/lib/models";
 
@@ -32,15 +35,18 @@ async function withRetry<T>(
     delayMs = 1000
 ): Promise<T> {
     let lastError: Error;
-    
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
             return await operation();
         } catch (error) {
             lastError = error instanceof Error ? error : new Error(String(error));
-            
+
             if (attempt < maxRetries) {
-                console.warn(`Attempt ${attempt} failed, retrying in ${delayMs}ms...`, sanitizeErrorMessage(lastError));
+                console.warn(
+                    `Attempt ${attempt} failed, retrying in ${delayMs}ms...`,
+                    sanitizeErrorMessage(lastError)
+                );
                 await new Promise(resolve => setTimeout(resolve, delayMs));
                 delayMs *= 2;
             }
@@ -50,39 +56,52 @@ async function withRetry<T>(
 }
 
 const MissingDocumentSchema = z.object({
-    documentName: z.string().describe('The name of the missing document'),
-    documentType: z.string().describe('The type of the missing document'),
-    reason: z.string().describe('The reason the document is missing'),
-    page: z.number().describe('The page number where the document is referenced'),
-    priority: z.enum(['high', 'medium', 'low']).describe('The priority of the missing document')
+    documentName: z.string().describe("The name of the missing document"),
+    documentType: z.string().describe("The type of the missing document"),
+    reason: z.string().describe("The reason the document is missing"),
+    page: z.number().describe("The page number where the document is referenced"),
+    priority: z.enum(["high", "medium", "low"]).describe("The priority of the missing document"),
 });
 
 const InsightSchema = z.object({
-    category: z.enum(['deadline', 'resource', 'action-item', 'caveat']).describe(
-        'deadline = due dates/exams/submissions; resource = suggested videos/readings/tools; action-item = tasks/follow-ups; caveat = policies/restrictions/conditions'
-    ),
-    severity: z.enum(['note', 'warning']).describe('warning for time-sensitive or critical items, note for informational'),
-    title: z.string().describe('Short scannable label, e.g. "Homework 3 due Feb 20" or "Watch: Design Sprint video"'),
-    detail: z.string().describe('Full context sentence from the document'),
-    page: z.number().describe('Page number where this insight appears'),
-    sourceQuote: z.string().optional().describe('Exact quote from the document'),
-    url: z.string().optional().describe('URL if this insight references an external resource'),
-    date: z.string().optional().describe('Raw date text for deadline-type insights'),
+    category: z
+        .enum(["deadline", "resource", "action-item", "caveat"])
+        .describe(
+            "deadline = due dates/exams/submissions; resource = suggested videos/readings/tools; action-item = tasks/follow-ups; caveat = policies/restrictions/conditions"
+        ),
+    severity: z
+        .enum(["note", "warning"])
+        .describe("warning for time-sensitive or critical items, note for informational"),
+    title: z
+        .string()
+        .describe(
+            'Short scannable label, e.g. "Homework 3 due Feb 20" or "Watch: Design Sprint video"'
+        ),
+    detail: z.string().describe("Full context sentence from the document"),
+    page: z.number().describe("Page number where this insight appears"),
+    sourceQuote: z.string().optional().describe("Exact quote from the document"),
+    url: z.string().optional().describe("URL if this insight references an external resource"),
+    date: z.string().optional().describe("Raw date text for deadline-type insights"),
 });
 
 const AnalysisResultSchema = z.object({
-    missingDocuments: z.array(MissingDocumentSchema).describe('The missing documents found in the document'),
-    recommendations: z.array(z.string()).describe('The recommendations for handling the missing documents'),
-    insights: z.array(InsightSchema).describe('Notable items found IN the document that deserve attention: deadlines, suggested resources, action items, or important caveats. Max 5 per batch.'),
+    missingDocuments: z
+        .array(MissingDocumentSchema)
+        .describe("The missing documents found in the document"),
+    recommendations: z
+        .array(z.string())
+        .describe("The recommendations for handling the missing documents"),
+    insights: z
+        .array(InsightSchema)
+        .describe(
+            "Notable items found IN the document that deserve attention: deadlines, suggested resources, action items, or important caveats. Max 5 per batch."
+        ),
 });
 
-function createAnalysisPrompt(
-    content: string,
-    specification: AnalysisSpecification
-): string {
-    let existingDocsStr = '';
+function createAnalysisPrompt(content: string, specification: AnalysisSpecification): string {
+    let existingDocsStr = "";
     if (specification.existingDocuments && specification.existingDocuments.length > 0) {
-        existingDocsStr = `\nExisting documents (do not suggest these as missing): ${specification.existingDocuments.join(', ')}.`;
+        existingDocsStr = `\nExisting documents (do not suggest these as missing): ${specification.existingDocuments.join(", ")}.`;
     }
 
     const guidanceByType: Record<string, string> = {
@@ -93,9 +112,9 @@ function createAnalysisPrompt(
         educational: `Focus on referenced course materials, syllabi, handouts, assignment templates, readings, and linked resources (URLs, videos) that are mentioned but not included.`,
         hr: `Focus on referenced policies, forms, benefits documents, org charts, employee handbooks, and compliance materials that are mentioned but not included.`,
         research: `Focus on cited papers, datasets, supplementary materials, methodology documents, and referenced figures or tables that are mentioned but not included.`,
-        general: `Focus on any document references, attachments, or supporting materials that are mentioned but not present in the current document.`
+        general: `Focus on any document references, attachments, or supporting materials that are mentioned but not present in the current document.`,
     };
- 
+
     const analysisInstructions = `
         IMPORTANT: Base your analysis ONLY on what is explicitly mentioned in the document content. 
         Do not assume or infer missing documents that aren't clearly referenced.
@@ -121,7 +140,7 @@ function createAnalysisPrompt(
     return `
         ${ANALYSIS_TYPES[specification.type]}
 
-        Analyze the document content step-by-step to find missing referenced documents${specification.includeRelatedDocs ? ' considering broader related document context and potential online searches for templates' : ''}.
+        Analyze the document content step-by-step to find missing referenced documents${specification.includeRelatedDocs ? " considering broader related document context and potential online searches for templates" : ""}.
 
         Chain of Thought:
         1. Scan the content for explicit references to other documents (e.g., "see Exhibit A", "please see syllabus", "refer to the handbook", "as per Schedule 3", "posted on Canvas").
@@ -178,10 +197,10 @@ function createAnalysisPrompt(
 async function performWebSearch(query: string, maxResults = 5): Promise<SearchResult[]> {
     try {
         const searchTool = new DuckDuckGoSearch({ maxResults });
-        const result = await searchTool.invoke(query) as SearchResult[];
-        
+        const result = (await searchTool.invoke(query)) as SearchResult[];
+
         let parsed: SearchResult[];
-        if (typeof result === 'string') {
+        if (typeof result === "string") {
             parsed = JSON.parse(result) as SearchResult[];
         } else if (Array.isArray(result)) {
             parsed = result;
@@ -189,7 +208,7 @@ async function performWebSearch(query: string, maxResults = 5): Promise<SearchRe
             console.warn("Unexpected search result format:", typeof result);
             return [];
         }
-        
+
         return parsed;
     } catch (error) {
         console.error("Web search error:", sanitizeErrorMessage(error));
@@ -214,10 +233,12 @@ export async function callAIAnalysis(
         }, timeoutMs);
     });
 
-    const aiCallPromise = invokeStructured(resolved, AnalysisResultSchema, [
-        new SystemMessage(ANALYSIS_TYPES[specification.type]),
-        new HumanMessage(prompt)
-    ], { name: "analysis_result" });
+    const aiCallPromise = invokeStructured(
+        resolved,
+        AnalysisResultSchema,
+        [new SystemMessage(ANALYSIS_TYPES[specification.type]), new HumanMessage(prompt)],
+        { name: "analysis_result" }
+    );
 
     try {
         const response = await Promise.race([aiCallPromise, timeoutPromise]);
@@ -238,24 +259,33 @@ export async function callAIAnalysis(
     }
 }
 
-
 // ---------------------------------------------------------------------------
 // Chain-of-Verification: verify high-priority predictions against source text
 // ---------------------------------------------------------------------------
 
 const VerificationResultSchema = z.object({
-    verified: z.boolean().describe('Whether the reference truly exists in the source text'),
-    exactQuote: z.string().describe('The exact sentence or phrase from the source that references this document, or empty if not found'),
-    correctedName: z.string().optional().describe('Corrected document name if the original was slightly wrong'),
-    adjustedPriority: z.enum(['high', 'medium', 'low']).optional().describe('Adjusted priority if the original was wrong'),
+    verified: z.boolean().describe("Whether the reference truly exists in the source text"),
+    exactQuote: z
+        .string()
+        .describe(
+            "The exact sentence or phrase from the source that references this document, or empty if not found"
+        ),
+    correctedName: z
+        .string()
+        .optional()
+        .describe("Corrected document name if the original was slightly wrong"),
+    adjustedPriority: z
+        .enum(["high", "medium", "low"])
+        .optional()
+        .describe("Adjusted priority if the original was wrong"),
 });
 
 async function verifyPredictions(
     predictions: MissingDocumentPrediction[],
     allChunks: PdfChunk[],
-    timeoutMs: number,
+    timeoutMs: number
 ): Promise<MissingDocumentPrediction[]> {
-    const highPriority = predictions.filter(p => p.priority === 'high');
+    const highPriority = predictions.filter(p => p.priority === "high");
     if (highPriority.length === 0) return predictions;
 
     const fullContent = groupContentFromChunks(allChunks);
@@ -286,14 +316,24 @@ SOURCE TEXT:
 ${contentWindow}`;
 
                     const timeoutPromise = new Promise<never>((_, reject) => {
-                        setTimeout(() => reject(new Error('Verification timed out')), Math.min(timeoutMs, 15000));
+                        setTimeout(
+                            () => reject(new Error("Verification timed out")),
+                            Math.min(timeoutMs, 15000)
+                        );
                     });
 
                     const result = await Promise.race([
-                        invokeStructured(resolved, VerificationResultSchema, [
-                            new SystemMessage("Verify document references with exact quotes. Be strict: only mark verified if you find a clear reference."),
-                            new HumanMessage(verificationPrompt)
-                        ], { name: "verification_result" }),
+                        invokeStructured(
+                            resolved,
+                            VerificationResultSchema,
+                            [
+                                new SystemMessage(
+                                    "Verify document references with exact quotes. Be strict: only mark verified if you find a clear reference."
+                                ),
+                                new HumanMessage(verificationPrompt),
+                            ],
+                            { name: "verification_result" }
+                        ),
                         timeoutPromise,
                     ]);
 
@@ -317,7 +357,9 @@ ${contentWindow}`;
     );
 
     if (removedSet.size > 0) {
-        console.log(`[PDA Verification] Removed ${removedSet.size} unverified high-priority predictions`);
+        console.log(
+            `[PDA Verification] Removed ${removedSet.size} unverified high-priority predictions`
+        );
     }
 
     return predictions.filter(p => {
@@ -341,18 +383,18 @@ function extractURLReferences(allChunks: PdfChunk[]): MissingDocumentPrediction[
         if (!urls) continue;
 
         for (const rawUrl of urls) {
-            const url = rawUrl.replace(/[.,;:!?)]+$/, '');
+            const url = rawUrl.replace(/[.,;:!?)]+$/, "");
             if (seen.has(url)) continue;
             seen.add(url);
 
             let domain: string;
-            let displayPath = '';
+            let displayPath = "";
             try {
                 const parsed = new URL(url);
-                domain = parsed.hostname.replace(/^www\./, '');
-                const path = parsed.pathname.replace(/\/+$/, '');
-                if (path && path !== '/') {
-                    displayPath = path.length > 40 ? path.slice(0, 37) + '…' : path;
+                domain = parsed.hostname.replace(/^www\./, "");
+                const path = parsed.pathname.replace(/\/+$/, "");
+                if (path && path !== "/") {
+                    displayPath = path.length > 40 ? path.slice(0, 37) + "…" : path;
                 }
             } catch {
                 domain = url.slice(0, 40);
@@ -362,10 +404,10 @@ function extractURLReferences(allChunks: PdfChunk[]): MissingDocumentPrediction[
 
             results.push({
                 documentName: `External: ${displayName}`,
-                documentType: 'external-resource',
+                documentType: "external-resource",
                 reason: `External resource linked on page ${chunk.page}`,
                 page: chunk.page,
-                priority: 'low',
+                priority: "low",
                 suggestedLinks: [{ title: displayName, url, snippet: url }],
             });
         }
@@ -400,7 +442,7 @@ export async function analyzeDocumentChunks(
 ): Promise<AnalyzeDocumentChunksResponse> {
     const batches = createChunkBatches(allChunks, {
         maxChunksPerCall: ANALYSIS_BATCH_CONFIG.MAX_CHUNKS_PER_CALL,
-        maxCharactersPerCall: ANALYSIS_BATCH_CONFIG.MAX_CHARACTERS_PER_CALL
+        maxCharactersPerCall: ANALYSIS_BATCH_CONFIG.MAX_CHARACTERS_PER_CALL,
     });
 
     const safeConcurrency = Math.max(
@@ -420,7 +462,7 @@ export async function analyzeDocumentChunks(
         ]);
 
         const llmInsights: DocumentInsight[] = chunkResults.flatMap(
-            result => result.insights ?? [],
+            result => result.insights ?? []
         );
 
         const combinedResult: PredictiveAnalysisResult = {
@@ -428,10 +470,16 @@ export async function analyzeDocumentChunks(
             recommendations: chunkResults.flatMap(result => result.recommendations ?? []),
         };
 
-        combinedResult.missingDocuments = filterNonFindingDocuments(combinedResult.missingDocuments);
-        combinedResult.missingDocuments = deduplicateMissingDocuments(combinedResult.missingDocuments);
+        combinedResult.missingDocuments = filterNonFindingDocuments(
+            combinedResult.missingDocuments
+        );
+        combinedResult.missingDocuments = deduplicateMissingDocuments(
+            combinedResult.missingDocuments
+        );
 
-        combinedResult.recommendations = filterBoilerplateRecommendations(combinedResult.recommendations);
+        combinedResult.recommendations = filterBoilerplateRecommendations(
+            combinedResult.recommendations
+        );
         combinedResult.recommendations = deduplicateRecommendations(combinedResult.recommendations);
 
         const urlRefs = extractURLReferences(allChunks);
@@ -439,19 +487,22 @@ export async function analyzeDocumentChunks(
 
         combinedResult.missingDocuments = promoteStrongRecommendations(
             combinedResult.missingDocuments,
-            combinedResult.recommendations,
+            combinedResult.recommendations
         );
 
         const MAX_RECOMMENDATIONS = 5;
         if (combinedResult.recommendations.length > MAX_RECOMMENDATIONS) {
-            combinedResult.recommendations = combinedResult.recommendations.slice(0, MAX_RECOMMENDATIONS);
+            combinedResult.recommendations = combinedResult.recommendations.slice(
+                0,
+                MAX_RECOMMENDATIONS
+            );
         }
 
-        if (combinedResult.missingDocuments.some(d => d.priority === 'high')) {
+        if (combinedResult.missingDocuments.some(d => d.priority === "high")) {
             combinedResult.missingDocuments = await verifyPredictions(
                 combinedResult.missingDocuments,
                 allChunks,
-                timeoutMs,
+                timeoutMs
             );
         }
 
@@ -460,29 +511,30 @@ export async function analyzeDocumentChunks(
             await enhanceWithWebSearch(combinedResult, specification);
         }
 
-        combinedResult.insights = mergeAndDeduplicateInsights(
-            deterministicInsights,
-            llmInsights,
-        );
+        combinedResult.insights = mergeAndDeduplicateInsights(deterministicInsights, llmInsights);
 
         combinedResult.missingDocuments = fuseInsightsWithExternalLinks(
             combinedResult.insights,
-            combinedResult.missingDocuments,
+            combinedResult.missingDocuments
         );
 
-        const sourceTexts = allChunks.map(c => c.content ?? '');
+        const sourceTexts = allChunks.map(c => c.content ?? "");
         const supervision = validatePredictiveAnalysis(combinedResult, sourceTexts);
         if (!supervision.approved) {
-            console.warn(`[PDA Supervisor] Issues found: ${supervision.issues.join('; ')}`);
+            console.warn(`[PDA Supervisor] Issues found: ${supervision.issues.join("; ")}`);
         }
 
-        const totalCharacters = allChunks.reduce((sum, chunk) => sum + (chunk.content?.length ?? 0), 0);
+        const totalCharacters = allChunks.reduce(
+            (sum, chunk) => sum + (chunk.content?.length ?? 0),
+            0
+        );
         const stats: AnalysisRunStats = {
             aiCalls: batches.length,
             batches: batches.length,
-            averageBatchSize: batches.length > 0 ? allChunks.length / batches.length : allChunks.length,
+            averageBatchSize:
+                batches.length > 0 ? allChunks.length / batches.length : allChunks.length,
             averageChunkLength: allChunks.length > 0 ? totalCharacters / allChunks.length : 0,
-            totalChunks: allChunks.length
+            totalChunks: allChunks.length,
         };
 
         return {
@@ -506,18 +558,24 @@ async function enhanceWithCompanyDocuments(
     specification: AnalysisSpecification,
     timeoutMs: number
 ): Promise<void> {
-
     const references = await extractReferences(allChunks, timeoutMs);
     deduplicateReferences(references);
 
-    const otherDocsQuery = await withRetry(() => db.select({ 
-        id: document.id, 
-        title: document.title 
-    }).from(document).where(and(
-        eq(document.companyId, BigInt(specification.companyId)),
-        ne(document.id, specification.documentId)
-    )));
-    
+    const otherDocsQuery = await withRetry(() =>
+        db
+            .select({
+                id: document.id,
+                title: document.title,
+            })
+            .from(document)
+            .where(
+                and(
+                    eq(document.companyId, BigInt(specification.companyId)),
+                    ne(document.id, specification.documentId)
+                )
+            )
+    );
+
     const docTitleMap = new Map(otherDocsQuery.map(doc => [doc.id, doc.title]));
 
     for (const missing of result.missingDocuments) {
@@ -528,12 +586,15 @@ async function enhanceWithCompanyDocuments(
                 specification.documentId,
                 docTitleMap
             );
-            
+
             if (suggestions.length > 0) {
                 missing.suggestedCompanyDocuments = suggestions;
             }
         } catch (error) {
-            console.error(`Error finding suggestions for ${missing.documentName}:`, sanitizeErrorMessage(error));
+            console.error(
+                `Error finding suggestions for ${missing.documentName}:`,
+                sanitizeErrorMessage(error)
+            );
         }
     }
 }
@@ -545,18 +606,17 @@ async function enhanceWithWebSearch(
     const relatedQuery = `standard related documents for ${specification.type} ${specification.category} titled ${specification.title}`;
     result.suggestedRelatedDocuments = await withRetry(() => performWebSearch(relatedQuery, 5));
 
-    const highPriorityMissing = result.missingDocuments.filter(doc => doc.priority === 'high');
-    
+    const highPriorityMissing = result.missingDocuments.filter(doc => doc.priority === "high");
+
     const limit = pLimit(3);
     await Promise.all(
         highPriorityMissing.map(missing =>
-        limit(async () => {
-            const missingQuery = `"${missing.documentName}" "${missing.documentType}" (template OR sample OR example) filetype:pdf "free download" site:gov OR site:edu OR site:org`;
-            missing.suggestedLinks = await performWebSearch(missingQuery, 3);
-        })
+            limit(async () => {
+                const missingQuery = `"${missing.documentName}" "${missing.documentType}" (template OR sample OR example) filetype:pdf "free download" site:gov OR site:edu OR site:org`;
+                missing.suggestedLinks = await performWebSearch(missingQuery, 3);
+            })
         )
     );
-    
 }
 
 const PRIORITY_RANK: Record<string, number> = { high: 3, medium: 2, low: 1 };
@@ -582,8 +642,19 @@ const BOILERPLATE_PATTERNS = [
 ];
 
 const GARBAGE_DOC_NAMES = new Set([
-    'content', 'document', 'text', 'page', 'file', 'section', 'material',
-    'information', 'data', 'n/a', 'none', 'unknown', 'the document',
+    "content",
+    "document",
+    "text",
+    "page",
+    "file",
+    "section",
+    "material",
+    "information",
+    "data",
+    "n/a",
+    "none",
+    "unknown",
+    "the document",
 ]);
 
 function filterNonFindingDocuments(docs: MissingDocumentPrediction[]): MissingDocumentPrediction[] {
@@ -607,7 +678,10 @@ function filterBoilerplateRecommendations(recs: string[]): string[] {
     });
 }
 
-function deduplicateMissingDocuments(docs: MissingDocumentPrediction[], threshold = 0.75): MissingDocumentPrediction[] {
+function deduplicateMissingDocuments(
+    docs: MissingDocumentPrediction[],
+    threshold = 0.75
+): MissingDocumentPrediction[] {
     const unique: MissingDocumentPrediction[] = [];
 
     for (const doc of docs) {
@@ -638,22 +712,22 @@ function deduplicateMissingDocuments(docs: MissingDocumentPrediction[], threshol
     }
 
     return unique;
-} 
+}
 
 function deduplicateRecommendations(recommendations: string[], threshold = 0.6): string[] {
     const unique = [];
-  
+
     for (const rec of recommendations) {
-      let isDuplicate = false;
-      for (const existing of unique) {
-        if (stringSimilarity(rec.toLowerCase(), existing.toLowerCase()) > threshold) {
-          isDuplicate = true;
-          break;
+        let isDuplicate = false;
+        for (const existing of unique) {
+            if (stringSimilarity(rec.toLowerCase(), existing.toLowerCase()) > threshold) {
+                isDuplicate = true;
+                break;
+            }
         }
-      }
-      if (!isDuplicate) {
-        unique.push(rec);
-      }
+        if (!isDuplicate) {
+            unique.push(rec);
+        }
     }
     return unique;
 }
@@ -668,7 +742,7 @@ const MAX_INSIGHTS = 10;
 function mergeAndDeduplicateInsights(
     deterministic: DocumentInsight[],
     llmGenerated: DocumentInsight[],
-    threshold = 0.6,
+    threshold = 0.6
 ): DocumentInsight[] {
     const all = [...deterministic, ...llmGenerated];
     const unique: DocumentInsight[] = [];
@@ -679,7 +753,9 @@ function mergeAndDeduplicateInsights(
         for (const existing of unique) {
             if (stringSimilarity(titleLower, existing.title.toLowerCase()) > threshold) {
                 isDuplicate = true;
-                if ((SEVERITY_RANK[insight.severity] ?? 0) > (SEVERITY_RANK[existing.severity] ?? 0)) {
+                if (
+                    (SEVERITY_RANK[insight.severity] ?? 0) > (SEVERITY_RANK[existing.severity] ?? 0)
+                ) {
                     existing.severity = insight.severity;
                 }
                 break;
@@ -706,13 +782,13 @@ function mergeAndDeduplicateInsights(
 
 function fuseInsightsWithExternalLinks(
     insights: DocumentInsight[],
-    missingDocs: MissingDocumentPrediction[],
+    missingDocs: MissingDocumentPrediction[]
 ): MissingDocumentPrediction[] {
     const insightUrls = new Set<string>();
     for (const insight of insights) {
         if (insight.url) {
             try {
-                insightUrls.add(new URL(insight.url).href.replace(/\/+$/, ''));
+                insightUrls.add(new URL(insight.url).href.replace(/\/+$/, ""));
             } catch {
                 insightUrls.add(insight.url);
             }
@@ -722,13 +798,13 @@ function fuseInsightsWithExternalLinks(
     if (insightUrls.size === 0) return missingDocs;
 
     return missingDocs.filter(doc => {
-        if (doc.documentType !== 'external-resource') return true;
+        if (doc.documentType !== "external-resource") return true;
         const docUrl = doc.suggestedLinks?.[0]?.url;
         if (!docUrl) return true;
 
         let normalized: string;
         try {
-            normalized = new URL(docUrl).href.replace(/\/+$/, '');
+            normalized = new URL(docUrl).href.replace(/\/+$/, "");
         } catch {
             normalized = docUrl;
         }
@@ -744,17 +820,17 @@ function fuseInsightsWithExternalLinks(
 // ---------------------------------------------------------------------------
 
 const PROMOTION_PHRASES = [
-    'referenced but not included',
-    'referenced but not attached',
-    'referenced but not provided',
-    'not included in this document',
-    'not attached',
-    'not provided',
-    'is missing',
-    'should be attached',
-    'should be included',
-    'was not found',
-    'does not appear',
+    "referenced but not included",
+    "referenced but not attached",
+    "referenced but not provided",
+    "not included in this document",
+    "not attached",
+    "not provided",
+    "is missing",
+    "should be attached",
+    "should be included",
+    "was not found",
+    "does not appear",
 ];
 
 const NAMED_DOC_PATTERN = /["']([^"']+)["']|(?:the|a)\s+([\w\s]+?)\s+(?:is|was|should|does)/i;
@@ -762,12 +838,10 @@ const PAGE_PATTERN = /page\s+(\d+)/i;
 
 function promoteStrongRecommendations(
     existingDocs: MissingDocumentPrediction[],
-    recommendations: string[],
+    recommendations: string[]
 ): MissingDocumentPrediction[] {
     const promoted = [...existingDocs];
-    const existingNames = new Set(
-        existingDocs.map(d => d.documentName.toLowerCase().trim()),
-    );
+    const existingNames = new Set(existingDocs.map(d => d.documentName.toLowerCase().trim()));
 
     for (const rec of recommendations) {
         const lower = rec.toLowerCase();
@@ -775,7 +849,7 @@ function promoteStrongRecommendations(
         if (!matchesPhrase) continue;
 
         const nameMatch = NAMED_DOC_PATTERN.exec(rec);
-        const docName = (nameMatch?.[1] ?? nameMatch?.[2] ?? '').trim();
+        const docName = (nameMatch?.[1] ?? nameMatch?.[2] ?? "").trim();
         if (!docName || docName.length < 3) continue;
 
         if (existingNames.has(docName.toLowerCase())) continue;
@@ -785,10 +859,10 @@ function promoteStrongRecommendations(
 
         promoted.push({
             documentName: docName,
-            documentType: 'other',
+            documentType: "other",
             reason: rec,
             page,
-            priority: 'medium',
+            priority: "medium",
         });
         existingNames.add(docName.toLowerCase());
     }

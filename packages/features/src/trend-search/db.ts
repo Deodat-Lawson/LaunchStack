@@ -37,7 +37,11 @@ type TrendSearchJobPatch = Partial<
 
 export interface TrendSearchJobStore {
     insert(values: TrendSearchJobInsert): Promise<TrendSearchJobRow>;
-    update(jobId: string, companyId: bigint, patch: TrendSearchJobPatch): Promise<TrendSearchJobRow | null>;
+    update(
+        jobId: string,
+        companyId: bigint,
+        patch: TrendSearchJobPatch
+    ): Promise<TrendSearchJobRow | null>;
     findById(jobId: string, companyId: bigint): Promise<TrendSearchJobRow | null>;
     findByCompanyId(
         companyId: bigint,
@@ -94,12 +98,7 @@ export function createDrizzleTrendSearchJobStore(): TrendSearchJobStore {
                     ...patch,
                     updatedAt: new Date(),
                 })
-                .where(
-                    and(
-                        eq(trendSearchJobs.id, jobId),
-                        eq(trendSearchJobs.companyId, companyId)
-                    )
-                )
+                .where(and(eq(trendSearchJobs.id, jobId), eq(trendSearchJobs.companyId, companyId)))
                 .returning();
 
             return row ?? null;
@@ -109,12 +108,7 @@ export function createDrizzleTrendSearchJobStore(): TrendSearchJobStore {
             const [row] = await db
                 .select()
                 .from(trendSearchJobs)
-                .where(
-                    and(
-                        eq(trendSearchJobs.id, jobId),
-                        eq(trendSearchJobs.companyId, companyId)
-                    )
-                )
+                .where(and(eq(trendSearchJobs.id, jobId), eq(trendSearchJobs.companyId, companyId)))
                 .limit(1);
 
             return row ?? null;
@@ -218,9 +212,8 @@ export const updateJobResults = (...args: Parameters<typeof defaultHelpers.updat
 export const getJobById = (...args: Parameters<typeof defaultHelpers.getJobById>) =>
     defaultHelpers.getJobById(...args);
 
-export const getJobsByCompanyId = (
-    ...args: Parameters<typeof defaultHelpers.getJobsByCompanyId>
-) => defaultHelpers.getJobsByCompanyId(...args);
+export const getJobsByCompanyId = (...args: Parameters<typeof defaultHelpers.getJobsByCompanyId>) =>
+    defaultHelpers.getJobsByCompanyId(...args);
 
 export const __testOnly = {
     mapRowToJobRecord,

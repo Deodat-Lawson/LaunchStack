@@ -26,10 +26,7 @@ export async function POST(request: Request) {
             })
             .from(inviteCodes)
             .where(
-                and(
-                    eq(inviteCodes.code, inviteCode.toUpperCase()),
-                    eq(inviteCodes.isActive, true)
-                )
+                and(eq(inviteCodes.code, inviteCode.toUpperCase()), eq(inviteCodes.isActive, true))
             );
 
         if (!codeRecord) {
@@ -73,9 +70,7 @@ export async function POST(request: Request) {
 
         if (insertedUser) {
             const membershipRole =
-                codeRecord.role === "employer" || codeRecord.role === "owner"
-                    ? "owner"
-                    : "editor";
+                codeRecord.role === "employer" || codeRecord.role === "owner" ? "owner" : "editor";
             await db.insert(userCompanyMemberships).values({
                 userId: BigInt(insertedUser.id),
                 companyId: codeRecord.companyId,
@@ -83,9 +78,10 @@ export async function POST(request: Request) {
             });
         }
 
-        const redirectPath = codeRecord.role === "employee"
-            ? "/employee/pending-approval"
-            : "/employer/pending-approval";
+        const redirectPath =
+            codeRecord.role === "employee"
+                ? "/employee/pending-approval"
+                : "/employer/pending-approval";
 
         return createSuccessResponse(
             { userId, role: codeRecord.role, companyName: companyRecord.name, redirectPath },

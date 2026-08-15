@@ -16,9 +16,20 @@ import {
     type FounderWeeklyReviewCollectionInput,
 } from "@launchstack/features/founder-weekly-review";
 
-export type FounderWeeklyReviewDispatch = Pick<FounderWeeklyReviewDispatchRow,
-    "id" | "companyId" | "runId" | "operationType" | "operationKey" | "eventId" |
-    "generationJobId" | "generationClaimId" | "status" | "attemptCount" | "availableAt">;
+export type FounderWeeklyReviewDispatch = Pick<
+    FounderWeeklyReviewDispatchRow,
+    | "id"
+    | "companyId"
+    | "runId"
+    | "operationType"
+    | "operationKey"
+    | "eventId"
+    | "generationJobId"
+    | "generationClaimId"
+    | "status"
+    | "attemptCount"
+    | "availableAt"
+>;
 
 function toDispatch(row: FounderWeeklyReviewDispatchRow): FounderWeeklyReviewDispatch {
     return row;
@@ -57,33 +68,46 @@ export interface CreateFounderWeeklyReviewDispatchInput {
     operationKey: string;
 }
 export interface FounderWeeklyReviewDispatchServiceDependencies {
-    createDispatch?: (transaction: FounderWeeklyReviewTransactionClient, input: CreateFounderWeeklyReviewDispatchInput) => Promise<FounderWeeklyReviewDispatch>;
+    createDispatch?: (
+        transaction: FounderWeeklyReviewTransactionClient,
+        input: CreateFounderWeeklyReviewDispatchInput
+    ) => Promise<FounderWeeklyReviewDispatch>;
 }
 
 async function createDispatch(
     tx: Pick<DbClient, "insert" | "select">,
     run: FounderWeeklyReviewRunRecord,
     operationType: "create" | "retry",
-    operationKey: string,
+    operationKey: string
 ): Promise<FounderWeeklyReviewDispatch> {
     const ids = identifiers(run.id, operationType, operationKey);
-    const [inserted] = await tx.insert(founderWeeklyReviewDispatches).values({
-        id: ids.id,
-        companyId: run.companyId,
-        runId: run.id,
-        operationType,
-        operationKey,
-        eventId: ids.eventId,
-        generationJobId: ids.generationJobId,
-        generationClaimId: ids.generationClaimId,
-        status: "pending",
-    }).onConflictDoNothing().returning();
+    const [inserted] = await tx
+        .insert(founderWeeklyReviewDispatches)
+        .values({
+            id: ids.id,
+            companyId: run.companyId,
+            runId: run.id,
+            operationType,
+            operationKey,
+            eventId: ids.eventId,
+            generationJobId: ids.generationJobId,
+            generationClaimId: ids.generationClaimId,
+            status: "pending",
+        })
+        .onConflictDoNothing()
+        .returning();
     if (inserted) return toDispatch(inserted);
-    const [existing] = await tx.select().from(founderWeeklyReviewDispatches).where(and(
-        eq(founderWeeklyReviewDispatches.runId, run.id),
-        eq(founderWeeklyReviewDispatches.operationType, operationType),
-        eq(founderWeeklyReviewDispatches.operationKey, operationKey),
-    )).limit(1);
+    const [existing] = await tx
+        .select()
+        .from(founderWeeklyReviewDispatches)
+        .where(
+            and(
+                eq(founderWeeklyReviewDispatches.runId, run.id),
+                eq(founderWeeklyReviewDispatches.operationType, operationType),
+                eq(founderWeeklyReviewDispatches.operationKey, operationKey)
+            )
+        )
+        .limit(1);
     if (!existing) throw new Error("Founder weekly review dispatch was not created");
     return toDispatch(existing);
 }
@@ -95,24 +119,64 @@ export type CreateRunWithDispatchInput = {
     evidenceSnapshot?: FounderWeeklyReviewEvidenceSnapshot;
     collectionInput?: FounderWeeklyReviewCollectionInput;
 };
-export type RetryRunWithDispatchInput = { actor: FounderWeeklyReviewUserActor; runId: string; requestKey: string };
-export type CreateRunWithDispatchResult = { run: FounderWeeklyReviewRunRecord; dispatch: FounderWeeklyReviewDispatch; created: boolean };
-export type RetryRunWithDispatchResult = { run: FounderWeeklyReviewRunRecord; dispatch: FounderWeeklyReviewDispatch; transitionApplied: boolean };
+export type RetryRunWithDispatchInput = {
+    actor: FounderWeeklyReviewUserActor;
+    runId: string;
+    requestKey: string;
+};
+export type CreateRunWithDispatchResult = {
+    run: FounderWeeklyReviewRunRecord;
+    dispatch: FounderWeeklyReviewDispatch;
+    created: boolean;
+};
+export type RetryRunWithDispatchResult = {
+    run: FounderWeeklyReviewRunRecord;
+    dispatch: FounderWeeklyReviewDispatch;
+    transitionApplied: boolean;
+};
 
-export function createFounderWeeklyReviewDispatchService(database: Pick<DbClient, "transaction">, dependencies: FounderWeeklyReviewDispatchServiceDependencies = {}) {
-    const writeDispatch = dependencies.createDispatch ?? ((transaction, input) => createDispatch(transaction, input.run, input.operationType, input.operationKey));
-    const createRunWithDispatch = async (input: CreateRunWithDispatchInput): Promise<CreateRunWithDispatchResult> => database.transaction(async (tx) => {
-        const service = new FounderWeeklyReviewUserService(new FounderWeeklyReviewRepository(tx as unknown as DbClient));
-        const { run, created } = await service.createOrGetRunWithMetadata(input.actor, input);
-        const dispatch = await writeDispatch(tx, { run, operationType: "create", operationKey: input.requestKey });
-        return { run, dispatch, created };
-    });
-    const retryRunWithDispatch = async (input: RetryRunWithDispatchInput): Promise<RetryRunWithDispatchResult> => database.transaction(async (tx) => {
-        const service = new FounderWeeklyReviewUserService(new FounderWeeklyReviewRepository(tx as unknown as DbClient));
-        const { run, transitionApplied } = await service.retryFailedRunWithMetadata(input.actor, input.runId, input.requestKey);
-        const dispatch = await writeDispatch(tx, { run, operationType: "retry", operationKey: input.requestKey });
-        return { run, dispatch, transitionApplied };
-    });
+export function createFounderWeeklyReviewDispatchService(
+    database: Pick<DbClient, "transaction">,
+    dependencies: FounderWeeklyReviewDispatchServiceDependencies = {}
+) {
+    const writeDispatch =
+        dependencies.createDispatch ??
+        ((transaction, input) =>
+            createDispatch(transaction, input.run, input.operationType, input.operationKey));
+    const createRunWithDispatch = async (
+        input: CreateRunWithDispatchInput
+    ): Promise<CreateRunWithDispatchResult> =>
+        database.transaction(async tx => {
+            const service = new FounderWeeklyReviewUserService(
+                new FounderWeeklyReviewRepository(tx as unknown as DbClient)
+            );
+            const { run, created } = await service.createOrGetRunWithMetadata(input.actor, input);
+            const dispatch = await writeDispatch(tx, {
+                run,
+                operationType: "create",
+                operationKey: input.requestKey,
+            });
+            return { run, dispatch, created };
+        });
+    const retryRunWithDispatch = async (
+        input: RetryRunWithDispatchInput
+    ): Promise<RetryRunWithDispatchResult> =>
+        database.transaction(async tx => {
+            const service = new FounderWeeklyReviewUserService(
+                new FounderWeeklyReviewRepository(tx as unknown as DbClient)
+            );
+            const { run, transitionApplied } = await service.retryFailedRunWithMetadata(
+                input.actor,
+                input.runId,
+                input.requestKey
+            );
+            const dispatch = await writeDispatch(tx, {
+                run,
+                operationType: "retry",
+                operationKey: input.requestKey,
+            });
+            return { run, dispatch, transitionApplied };
+        });
     return { createRunWithDispatch, retryRunWithDispatch };
 }
 
@@ -152,9 +216,7 @@ function mapDispatchRow(row: RawDispatchRow): FounderWeeklyReviewDispatch {
         status: row.status,
         attemptCount: Number(row.attempt_count),
         availableAt:
-            row.available_at instanceof Date
-                ? row.available_at
-                : new Date(row.available_at),
+            row.available_at instanceof Date ? row.available_at : new Date(row.available_at),
     };
 }
 
@@ -202,15 +264,13 @@ export function dispatchBackoffMs(attemptCount: number): number {
  * starved by newer work, and so the order is deterministic under contention.
  */
 export async function claimPendingDispatches(
-    limit = DISPATCH_CLAIM_BATCH_SIZE,
+    limit = DISPATCH_CLAIM_BATCH_SIZE
 ): Promise<FounderWeeklyReviewDispatch[]> {
     // Bound as ISO strings with an explicit cast: on the raw-SQL path there is
     // no column definition to tell the driver how to encode a Date, and it
     // rejects one outright.
     const now = new Date().toISOString();
-    const staleDispatchingBefore = new Date(
-        Date.now() - STALE_DISPATCHING_MS,
-    ).toISOString();
+    const staleDispatchingBefore = new Date(Date.now() - STALE_DISPATCHING_MS).toISOString();
 
     const rows = await db.execute<RawDispatchRow>(sql`
         WITH claimed AS (
@@ -237,9 +297,14 @@ export async function claimPendingDispatches(
 }
 
 export async function markDispatchDispatched(dispatchId: string): Promise<void> {
-    await db.update(founderWeeklyReviewDispatches).set({
-        status: "dispatched", dispatchedAt: new Date(), updatedAt: new Date(),
-    }).where(eq(founderWeeklyReviewDispatches.id, dispatchId));
+    await db
+        .update(founderWeeklyReviewDispatches)
+        .set({
+            status: "dispatched",
+            dispatchedAt: new Date(),
+            updatedAt: new Date(),
+        })
+        .where(eq(founderWeeklyReviewDispatches.id, dispatchId));
 }
 
 export interface DispatchFailureOutcome {
@@ -258,7 +323,7 @@ export interface DispatchFailureOutcome {
  */
 export async function recordDispatchFailure(
     dispatchId: string,
-    errorCode: string,
+    errorCode: string
 ): Promise<DispatchFailureOutcome | null> {
     const now = new Date().toISOString();
     const rows = await db.execute<{
@@ -289,8 +354,6 @@ export async function recordDispatchFailure(
         status: row.status,
         attemptCount: Number(row.attempt_count),
         availableAt:
-            row.available_at instanceof Date
-                ? row.available_at
-                : new Date(row.available_at),
+            row.available_at instanceof Date ? row.available_at : new Date(row.available_at),
     };
 }

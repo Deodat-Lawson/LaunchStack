@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Loader2, AlertTriangle, RotateCw, Download } from "lucide-react";
 
 interface DocxViewerProps {
-  url: string;
-  title: string;
+    url: string;
+    title: string;
 }
 
 /**
@@ -14,98 +14,102 @@ interface DocxViewerProps {
  * styled HTML — same pattern as XlsxViewer with SheetJS.
  */
 export function DocxViewer({ url, title }: DocxViewerProps) {
-  const [html, setHtml] = useState<string>("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+    const [html, setHtml] = useState<string>("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-  const loadDocument = async () => {
-    setLoading(true);
-    setError(null);
-    setHtml("");
+    const loadDocument = async () => {
+        setLoading(true);
+        setError(null);
+        setHtml("");
 
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`Failed to fetch document (${response.status})`);
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Failed to fetch document (${response.status})`);
 
-      const arrayBuffer = await response.arrayBuffer();
+            const arrayBuffer = await response.arrayBuffer();
 
-      const mammoth = await import("mammoth");
-      const result = await mammoth.convertToHtml({ arrayBuffer });
+            const mammoth = await import("mammoth");
+            const result = await mammoth.convertToHtml({ arrayBuffer });
 
-      if (!result.value || result.value.trim().length === 0) {
-        throw new Error("Document appears to be empty");
-      }
+            if (!result.value || result.value.trim().length === 0) {
+                throw new Error("Document appears to be empty");
+            }
 
-      setHtml(result.value);
-    } catch (err) {
-      console.error("[DocxViewer] Error converting document:", err);
-      setError(err instanceof Error ? err.message : "Failed to render document");
-    } finally {
-      setLoading(false);
+            setHtml(result.value);
+        } catch (err) {
+            console.error("[DocxViewer] Error converting document:", err);
+            setError(err instanceof Error ? err.message : "Failed to render document");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        void loadDocument();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [url]);
+
+    if (loading) {
+        return (
+            <div className="bg-muted/30 flex h-full flex-col items-center justify-center gap-3">
+                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+                <p className="text-muted-foreground text-sm font-medium">Loading document...</p>
+            </div>
+        );
     }
-  };
 
-  useEffect(() => {
-    void loadDocument();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+    if (error) {
+        return (
+            <div className="bg-muted/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
+                    <AlertTriangle className="h-7 w-7 text-red-500" />
+                </div>
+                <div>
+                    <p className="text-foreground mb-1 text-sm font-medium">
+                        Failed to render document
+                    </p>
+                    <p className="text-muted-foreground mb-4 text-xs">{error}</p>
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => void loadDocument()}
+                            className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+                        >
+                            <RotateCw className="h-4 w-4" />
+                            Retry
+                        </button>
+                        <a
+                            href={url}
+                            download
+                            className="border-border text-muted-foreground hover:text-foreground inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
+                        >
+                            <Download className="h-4 w-4" />
+                            Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-  if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-3 bg-muted/30">
-        <Loader2 className="w-8 h-8 text-purple-500 animate-spin" />
-        <p className="text-sm text-muted-foreground font-medium">Loading document...</p>
-      </div>
-    );
-  }
+        <div className="flex h-full w-full flex-col overflow-hidden bg-white dark:bg-zinc-900">
+            <div className="border-border bg-muted/30 flex flex-shrink-0 items-center justify-between border-b px-4 py-2">
+                <span className="text-muted-foreground text-xs font-medium">
+                    Word Document Preview
+                </span>
+                <a
+                    href={url}
+                    download
+                    className="text-muted-foreground hover:text-foreground hover:bg-muted/50 inline-flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-colors"
+                >
+                    <Download className="h-3.5 w-3.5" />
+                    Download
+                </a>
+            </div>
 
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 p-8 text-center bg-muted/30">
-        <div className="w-14 h-14 rounded-2xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-          <AlertTriangle className="w-7 h-7 text-red-500" />
-        </div>
-        <div>
-          <p className="text-sm font-medium text-foreground mb-1">Failed to render document</p>
-          <p className="text-xs text-muted-foreground mb-4">{error}</p>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => void loadDocument()}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium transition-colors"
-            >
-              <RotateCw className="w-4 h-4" />
-              Retry
-            </button>
-            <a
-              href={url}
-              download
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Download className="w-4 h-4" />
-              Download
-            </a>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col w-full h-full bg-white dark:bg-zinc-900 overflow-hidden">
-      <div className="flex-shrink-0 border-b border-border bg-muted/30 px-4 py-2 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground font-medium">Word Document Preview</span>
-        <a
-          href={url}
-          download
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-        >
-          <Download className="w-3.5 h-3.5" />
-          Download
-        </a>
-      </div>
-
-      <div className="flex-1 overflow-auto p-8 docx-viewer-content">
-        <style>{`
+            <div className="docx-viewer-content flex-1 overflow-auto p-8">
+                <style>{`
           .docx-viewer-content {
             max-width: 800px;
             margin: 0 auto;
@@ -192,8 +196,8 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
             color: #9ca3af;
           }
         `}</style>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-      </div>
-    </div>
-  );
+                <div dangerouslySetInnerHTML={{ __html: html }} />
+            </div>
+        </div>
+    );
 }

@@ -20,9 +20,8 @@ import { createDb, type Db } from "@launchstack/core/db";
 
 jest.mock("~/server/engine", () => {
     const databaseUrl = process.env.DATABASE_URL;
-    const actualDbModule = jest.requireActual<typeof import("@launchstack/core/db")>(
-        "@launchstack/core/db"
-    );
+    const actualDbModule =
+        jest.requireActual<typeof import("@launchstack/core/db")>("@launchstack/core/db");
     const engineDb = databaseUrl ? actualDbModule.createDb({ url: databaseUrl }).db : undefined;
     // The lifecycle now reaches the database through the engine's getDb()
     // slot (ADR-003) rather than the ~/server/db proxy, so the slot must be
@@ -42,11 +41,7 @@ import {
     eventOutbox,
     ocrJobs,
 } from "@launchstack/core/db/schema";
-import {
-    eventIds,
-    PROTOCOL_VERSION,
-    type SourceVersionCreatedEvent,
-} from "@launchstack/protocol";
+import { eventIds, PROTOCOL_VERSION, type SourceVersionCreatedEvent } from "@launchstack/protocol";
 import { db } from "~/server/db";
 import { getDocumentChunks, RLMRetriever } from "~/lib/tools/rag/retrievers";
 import {

@@ -16,9 +16,9 @@ import neo4j, { type Driver, type Session } from "neo4j-driver";
 import { createSlot } from "../internal/slot";
 
 export interface Neo4jClientConfig {
-  uri: string;
-  user: string;
-  password: string;
+    uri: string;
+    user: string;
+    password: string;
 }
 
 const driverSlot = createSlot<Driver>("graph/neo4jDriver");
@@ -32,71 +32,73 @@ const configSlot = createSlot<Neo4jClientConfig | null>("graph/neo4jConfig");
  * `null` to mark Neo4j as unconfigured (disables graph-dependent features).
  */
 export function configureNeo4j(config: Neo4jClientConfig | null): void {
-  const current = configSlot.get();
-  if (current && config && current.uri === config.uri && current.user === config.user && current.password === config.password) {
-    return;
-  }
-  const existingDriver = driverSlot.get();
-  if (existingDriver) {
-    void existingDriver.close();
-    driverSlot.clear();
-  }
-  configSlot.set(config);
+    const current = configSlot.get();
+    if (
+        current &&
+        config &&
+        current.uri === config.uri &&
+        current.user === config.user &&
+        current.password === config.password
+    ) {
+        return;
+    }
+    const existingDriver = driverSlot.get();
+    if (existingDriver) {
+        void existingDriver.close();
+        driverSlot.clear();
+    }
+    configSlot.set(config);
 }
 
 export function isNeo4jConfigured(): boolean {
-  return !!configSlot.get();
+    return !!configSlot.get();
 }
 
 export function getNeo4jDriver(): Driver {
-  const existing = driverSlot.get();
-  if (existing) return existing;
+    const existing = driverSlot.get();
+    if (existing) return existing;
 
-  const config = configSlot.get();
-  if (!config) {
-    throw new Error(
-      "[Neo4j] Not configured. The host must call configureNeo4j({ uri, user, password }) during startup.",
-    );
-  }
+    const config = configSlot.get();
+    if (!config) {
+        throw new Error(
+            "[Neo4j] Not configured. The host must call configureNeo4j({ uri, user, password }) during startup."
+        );
+    }
 
-  const driver = neo4j.driver(
-    config.uri,
-    neo4j.auth.basic(config.user, config.password),
-  );
-  driverSlot.set(driver);
-  return driver;
+    const driver = neo4j.driver(config.uri, neo4j.auth.basic(config.user, config.password));
+    driverSlot.set(driver);
+    return driver;
 }
 
 export function getNeo4jSession(): Session {
-  return getNeo4jDriver().session();
+    return getNeo4jDriver().session();
 }
 
 export async function checkNeo4jHealth(): Promise<boolean> {
-  if (!isNeo4jConfigured()) return false;
+    if (!isNeo4jConfigured()) return false;
 
-  let session: Session | null = null;
-  try {
-    session = getNeo4jSession();
-    await session.run("RETURN 1");
-    return true;
-  } catch (error) {
-     
-    console.warn(
-      "[Neo4j] Health check failed:",
-      error instanceof Error ? error.message : error,
-    );
-    return false;
-  } finally {
-    await session?.close();
-  }
+    let session: Session | null = null;
+    try {
+        session = getNeo4jSession();
+        await session.run("RETURN 1");
+        return true;
+    } catch (error) {
+        console.warn(
+            "[Neo4j] Health check failed:",
+            error instanceof Error ? error.message : error
+        );
+        return false;
+    } finally {
+        await session?.close();
+    }
 }
 
 export async function closeNeo4jDriver(): Promise<void> {
-  const existing = driverSlot.get();
-  if (existing) {
-    await existing.close();
-    driverSlot.clear();
-  }
+    const existing = driverSlot.get();
+    if (existing) {
+        await existing.close();
+        driverSlot.clear();
+    }
 }
 
 /** Re-export Driver / Session types so callers do not need to depend directly on neo4j-driver. */

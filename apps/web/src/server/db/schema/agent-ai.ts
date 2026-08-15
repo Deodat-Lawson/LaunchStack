@@ -47,9 +47,7 @@ export const agentAiChatbotChat = pgTable("agent_ai_chatbot_chat", {
         length: 50,
         enum: ["general", "learning-coach", "financial-expert", "legal-expert", "math-reasoning"],
     }).default("general"),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-        () => new Date()
-    ),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
 });
 
 export const agentAiChatbotMessage = pgTable("agent_ai_chatbot_message", {
@@ -91,9 +89,7 @@ export const agentAiChatbotTask = pgTable("agent_ai_chatbot_task", {
         .default(sql`CURRENT_TIMESTAMP`)
         .notNull(),
     completedAt: timestamp("completed_at", { withTimezone: true }),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-        () => new Date()
-    ),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
 });
 
 export const agentAiChatbotToolCall = pgTable("agent_ai_chatbot_tool_call", {
@@ -145,11 +141,8 @@ export const agentAiChatbotExecutionStep = pgTable(
             .notNull(),
         completedAt: timestamp("completed_at", { withTimezone: true }),
     },
-    (table) => ({
-        taskStepIdx: index("agent_execution_step_task_step_idx").on(
-            table.taskId,
-            table.stepNumber
-        ),
+    table => ({
+        taskStepIdx: index("agent_execution_step_task_step_idx").on(table.taskId, table.stepNumber),
     })
 );
 
@@ -176,12 +169,9 @@ export const agentAiChatbotMemory = pgTable(
             .notNull(),
         expiresAt: timestamp("expires_at", { withTimezone: true }),
     },
-    (table) => ({
+    table => ({
         chatMemoryIdx: index("agent_memory_chat_idx").on(table.chatId),
-        chatMemoryTypeIdx: index("agent_memory_chat_type_idx").on(
-            table.chatId,
-            table.memoryType
-        ),
+        chatMemoryTypeIdx: index("agent_memory_chat_type_idx").on(table.chatId, table.memoryType),
     })
 );
 
@@ -200,7 +190,7 @@ export const agentAiChatbotVote = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         pk: primaryKey({ columns: [table.chatId, table.messageId] }),
     })
 );
@@ -228,7 +218,7 @@ export const agentAiChatbotDocument = pgTable(
             onDelete: "set null",
         }),
     },
-    (table) => ({
+    table => ({
         pk: primaryKey({ columns: [table.id, table.createdAt] }),
     })
 );
@@ -248,7 +238,7 @@ export const agentAiChatbotSuggestion = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         documentRef: foreignKey({
             columns: [table.documentId, table.documentCreatedAt],
             foreignColumns: [agentAiChatbotDocument.id, agentAiChatbotDocument.createdAt],
@@ -270,11 +260,9 @@ export const agentAiChatbotToolRegistry = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         nameUnique: unique().on(table.name),
     })
 );
@@ -331,12 +319,15 @@ export const agentAiChatbotToolCallRelations = relations(agentAiChatbotToolCall,
     }),
 }));
 
-export const agentAiChatbotExecutionStepRelations = relations(agentAiChatbotExecutionStep, ({ one }) => ({
-    task: one(agentAiChatbotTask, {
-        fields: [agentAiChatbotExecutionStep.taskId],
-        references: [agentAiChatbotTask.id],
-    }),
-}));
+export const agentAiChatbotExecutionStepRelations = relations(
+    agentAiChatbotExecutionStep,
+    ({ one }) => ({
+        task: one(agentAiChatbotTask, {
+            fields: [agentAiChatbotExecutionStep.taskId],
+            references: [agentAiChatbotTask.id],
+        }),
+    })
+);
 
 export const agentAiChatbotMemoryRelations = relations(agentAiChatbotMemory, ({ one }) => ({
     chat: one(agentAiChatbotChat, {
@@ -356,21 +347,24 @@ export const agentAiChatbotVoteRelations = relations(agentAiChatbotVote, ({ one 
     }),
 }));
 
-export const agentAiChatbotDocumentRelations = relations(agentAiChatbotDocument, ({ one, many }) => ({
-    user: one(users, {
-        fields: [agentAiChatbotDocument.userId],
-        references: [users.userId],
-    }),
-    chat: one(agentAiChatbotChat, {
-        fields: [agentAiChatbotDocument.chatId],
-        references: [agentAiChatbotChat.id],
-    }),
-    task: one(agentAiChatbotTask, {
-        fields: [agentAiChatbotDocument.taskId],
-        references: [agentAiChatbotTask.id],
-    }),
-    suggestions: many(agentAiChatbotSuggestion),
-}));
+export const agentAiChatbotDocumentRelations = relations(
+    agentAiChatbotDocument,
+    ({ one, many }) => ({
+        user: one(users, {
+            fields: [agentAiChatbotDocument.userId],
+            references: [users.userId],
+        }),
+        chat: one(agentAiChatbotChat, {
+            fields: [agentAiChatbotDocument.chatId],
+            references: [agentAiChatbotChat.id],
+        }),
+        task: one(agentAiChatbotTask, {
+            fields: [agentAiChatbotDocument.taskId],
+            references: [agentAiChatbotTask.id],
+        }),
+        suggestions: many(agentAiChatbotSuggestion),
+    })
+);
 
 export const agentAiChatbotSuggestionRelations = relations(agentAiChatbotSuggestion, ({ one }) => ({
     user: one(users, {

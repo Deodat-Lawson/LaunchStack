@@ -90,9 +90,7 @@ function getConfig(): ProvidersRegistryConfig {
  * same values through configureProviders() (see apps/web/src/server/
  * engine.ts, which builds them from CoreConfig.providers).
  */
-export function getCapabilityConfig(
-    capability: "rerank" | "ner",
-): CapabilityEndpointConfig {
+export function getCapabilityConfig(capability: "rerank" | "ner"): CapabilityEndpointConfig {
     const config = getConfig();
     return (capability === "rerank" ? config.rerank : config.ner) ?? {};
 }
@@ -125,7 +123,7 @@ export interface ResolvedEndpoint {
  */
 export function resolveEndpoint(
     capabilityBaseUrl: string | undefined,
-    capabilityApiKey: string | undefined,
+    capabilityApiKey: string | undefined
 ): ResolvedEndpoint {
     const c = getConfig();
     const strip = (url: string) => url.replace(/\/$/, "");
@@ -158,19 +156,16 @@ export function resolveEndpoint(
     if (!c.googleApiKey && (capabilityApiKey ?? c.aiApiKey)) {
         console.warn(
             "[providers] A credential is configured but no endpoint names where " +
-            "it belongs. Falling back to Gemini, which that key is not for — so " +
-            "it will not be sent. Set the capability's *_API_BASE_URL (or " +
-            "AI_BASE_URL) to pair it, or GOOGLE_AI_API_KEY to use Gemini.",
+                "it belongs. Falling back to Gemini, which that key is not for — so " +
+                "it will not be sent. Set the capability's *_API_BASE_URL (or " +
+                "AI_BASE_URL) to pair it, or GOOGLE_AI_API_KEY to use Gemini."
         );
     }
 
     return { baseUrl: GEMINI_BASE_URL, apiKey: c.googleApiKey ?? "" };
 }
 
-export function resolveModel(
-    capabilityEnv: string | undefined,
-    defaultModel: string,
-): string {
+export function resolveModel(capabilityEnv: string | undefined, defaultModel: string): string {
     return capabilityEnv ?? defaultModel;
 }
 

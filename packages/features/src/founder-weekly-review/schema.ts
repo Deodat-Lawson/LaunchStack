@@ -34,10 +34,7 @@ export const founderWeeklyReviewRunStatusEnum = [
 
 export const founderWeeklyReviewOperationTypeEnum = ["retry"] as const;
 
-export const founderWeeklyReviewDispatchOperationTypeEnum = [
-    "create",
-    "retry",
-] as const;
+export const founderWeeklyReviewDispatchOperationTypeEnum = ["create", "retry"] as const;
 
 export const founderWeeklyReviewDispatchStatusEnum = [
     "pending",
@@ -88,9 +85,7 @@ export const founderWeeklyReviewRuns = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
 
         // ── Added after the table shipped ───────────────────────────────────
         // Declared last on purpose. `ALTER TABLE ADD COLUMN` appends
@@ -104,17 +99,16 @@ export const founderWeeklyReviewRuns = pgTable(
         // default — every read parses this through a strict contract, so a
         // placeholder `{}` would satisfy the column and then fail on the way
         // out. The migration backfills existing rows instead.
-        collectionInput: jsonb("collection_input")
-            .$type<Record<string, unknown>>()
-            .notNull(),
+        collectionInput: jsonb("collection_input").$type<Record<string, unknown>>().notNull(),
         collectionClaimId: varchar("collection_claim_id", { length: 128 }),
         collectionStartedAt: timestamp("collection_started_at", { withTimezone: true }),
         evidenceCollectedAt: timestamp("evidence_collected_at", { withTimezone: true }),
     },
-    (table) => ({
-        requestKeyUnique: uniqueIndex(
-            "founder_weekly_review_runs_company_request_key_unique"
-        ).on(table.companyId, table.requestKey),
+    table => ({
+        requestKeyUnique: uniqueIndex("founder_weekly_review_runs_company_request_key_unique").on(
+            table.companyId,
+            table.requestKey
+        ),
         companyCreatedIdx: index("founder_weekly_review_runs_company_created_at_idx").on(
             table.companyId,
             table.createdAt
@@ -163,7 +157,7 @@ export const founderWeeklyReviewOperations = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         runOperationRequestKeyUnique: uniqueIndex(
             "founder_weekly_review_operations_run_type_request_key_unique"
         ).on(table.runId, table.operationType, table.requestKey),
@@ -219,19 +213,17 @@ export const founderWeeklyReviewDispatches = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .notNull()
             .default(sql`CURRENT_TIMESTAMP`),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         operationUnique: uniqueIndex(
             "founder_weekly_review_dispatches_run_operation_key_unique"
         ).on(table.runId, table.operationType, table.operationKey),
         // The event id is the Inngest idempotency key, so it must be unique
         // across the whole table, not just within a run.
-        eventUnique: uniqueIndex(
-            "founder_weekly_review_dispatches_event_id_unique"
-        ).on(table.eventId),
+        eventUnique: uniqueIndex("founder_weekly_review_dispatches_event_id_unique").on(
+            table.eventId
+        ),
         pendingIdx: index("founder_weekly_review_dispatches_pending_idx").on(
             table.status,
             table.availableAt,
@@ -248,6 +240,4 @@ export type FounderWeeklyReviewRunRow = InferSelectModel<typeof founderWeeklyRev
 export type FounderWeeklyReviewOperationRow = InferSelectModel<
     typeof founderWeeklyReviewOperations
 >;
-export type FounderWeeklyReviewDispatchRow = InferSelectModel<
-    typeof founderWeeklyReviewDispatches
->;
+export type FounderWeeklyReviewDispatchRow = InferSelectModel<typeof founderWeeklyReviewDispatches>;

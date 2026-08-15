@@ -34,7 +34,7 @@ function warnDeprecatedNamesOnce(): void {
     console.warn(
         "[adeu/client] ADEU_SERVICE_URL / SIDECAR_API_KEY are deprecated (ADR-004): the " +
             "Adeu routes moved to services/document-editor. Set DOCUMENT_EDITOR_URL and " +
-            "DOCUMENT_EDITOR_API_KEY instead.",
+            "DOCUMENT_EDITOR_API_KEY instead."
     );
 }
 
@@ -51,9 +51,7 @@ export function getBaseUrl(): string {
         warnDeprecatedNamesOnce();
         return legacy;
     }
-    throw new AdeuConfigError(
-        "DOCUMENT_EDITOR_URL environment variable is not set"
-    );
+    throw new AdeuConfigError("DOCUMENT_EDITOR_URL environment variable is not set");
 }
 
 const ADEU_TIMEOUT_MS = Number(process.env.ADEU_TIMEOUT_MS) || 30_000;
@@ -116,7 +114,11 @@ export async function readDocx(
 
     let res: Response;
     try {
-        res = await fetchWithTimeout(`${baseUrl}/adeu/read`, { method: "POST", body: form, headers: getAuthHeaders() });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/read`, {
+            method: "POST",
+            body: form,
+            headers: getAuthHeaders(),
+        });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }
@@ -136,7 +138,11 @@ export async function processDocumentBatch(
 
     let res: Response;
     try {
-        res = await fetchWithTimeout(`${baseUrl}/adeu/process-batch`, { method: "POST", body: form, headers: getAuthHeaders() });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/process-batch`, {
+            method: "POST",
+            body: form,
+            headers: getAuthHeaders(),
+        });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }
@@ -145,7 +151,12 @@ export async function processDocumentBatch(
 
     // The service returns the modified DOCX binary with a X-Batch-Summary JSON header
     const summaryHeader = res.headers.get("x-batch-summary");
-    let summary: BatchSummary = { applied_edits: 0, skipped_edits: 0, applied_actions: 0, skipped_actions: 0 };
+    let summary: BatchSummary = {
+        applied_edits: 0,
+        skipped_edits: 0,
+        applied_actions: 0,
+        skipped_actions: 0,
+    };
     if (summaryHeader) {
         try {
             // The service emits this header as a JSON-encoded BatchSummary.
@@ -166,7 +177,11 @@ export async function acceptAllChanges(file: Buffer | Blob): Promise<Blob> {
 
     let res: Response;
     try {
-        res = await fetchWithTimeout(`${baseUrl}/adeu/accept-all`, { method: "POST", body: form, headers: getAuthHeaders() });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/accept-all`, {
+            method: "POST",
+            body: form,
+            headers: getAuthHeaders(),
+        });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }
@@ -186,7 +201,11 @@ export async function applyEditsAsMarkdown(
 
     let res: Response;
     try {
-        res = await fetchWithTimeout(`${baseUrl}/adeu/apply-edits-markdown`, { method: "POST", body: form, headers: getAuthHeaders() });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/apply-edits-markdown`, {
+            method: "POST",
+            body: form,
+            headers: getAuthHeaders(),
+        });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }
@@ -210,7 +229,11 @@ export async function diffDocxFiles(
 
     let res: Response;
     try {
-        res = await fetchWithTimeout(`${baseUrl}/adeu/diff`, { method: "POST", body: form, headers: getAuthHeaders() });
+        res = await fetchWithTimeout(`${baseUrl}/adeu/diff`, {
+            method: "POST",
+            body: form,
+            headers: getAuthHeaders(),
+        });
     } catch (err) {
         throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
     }

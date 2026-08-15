@@ -11,11 +11,8 @@ jest.mock("~/lib/require-workspace-context", () => ({
 }));
 
 jest.mock("~/lib/rate-limit-middleware", () => ({
-    withRateLimit: (
-        _request: Request,
-        _config: unknown,
-        handler: () => Promise<Response>
-    ) => handler(),
+    withRateLimit: (_request: Request, _config: unknown, handler: () => Promise<Response>) =>
+        handler(),
 }));
 
 jest.mock("~/lib/rate-limiter", () => ({
@@ -30,10 +27,7 @@ jest.mock("~/server/services/upload-batches", () => ({
 
 import { POST as createBatch } from "~/app/api/upload/batches/route";
 import { GET as getBatch } from "~/app/api/upload/batches/[batchId]/route";
-import {
-    createUploadBatch,
-    findBatchOwnedByUser,
-} from "~/server/services/upload-batches";
+import { createUploadBatch, findBatchOwnedByUser } from "~/server/services/upload-batches";
 
 const createUploadBatchMock = createUploadBatch as jest.MockedFunction<typeof createUploadBatch>;
 const findBatchOwnedByUserMock = findBatchOwnedByUser as jest.MockedFunction<

@@ -8,31 +8,26 @@ import { z } from "zod";
  */
 
 /** Company-knowledge state a fixture simulates (ticket scope). */
-export const KnowledgeStateEnum = z.enum([
-  "strong",
-  "sparse",
-  "missing",
-  "contradictory",
-]);
+export const KnowledgeStateEnum = z.enum(["strong", "sparse", "missing", "contradictory"]);
 export type KnowledgeState = z.infer<typeof KnowledgeStateEnum>;
 
 /** Content category the campaign targets (ticket scope). */
 export const ContentCategoryEnum = z.enum([
-  "product_launch",
-  "thought_leadership",
-  "educational",
-  "customer_proof",
-  "community_discussion",
+    "product_launch",
+    "thought_leadership",
+    "educational",
+    "customer_proof",
+    "community_discussion",
 ]);
 export type ContentCategory = z.infer<typeof ContentCategoryEnum>;
 
 /** Campaign goal the post is optimized for. */
 export const CampaignGoalEnum = z.enum([
-  "awareness",
-  "engagement",
-  "conversion",
-  "signups",
-  "community",
+    "awareness",
+    "engagement",
+    "conversion",
+    "signups",
+    "community",
 ]);
 export type CampaignGoal = z.infer<typeof CampaignGoalEnum>;
 
@@ -41,19 +36,19 @@ export type CampaignGoal = z.infer<typeof CampaignGoalEnum>;
  * Each maps to exactly one scorer (deterministic OR judge — see ScoringMethod).
  */
 export const CriterionIdEnum = z.enum([
-  "groundedness",        // claims trace to source facts
-  "unsupported_claims",  // no fabricated claims
-  "specificity",         // company/product-specific, not generic
-  "brand_voice",         // matches declared voice
-  "audience_relevance",  // speaks to the target audience
-  "goal_alignment",      // serves the campaign goal
-  "platform_structure",  // platform-native format + length
-  "hook_strength",       // first line stops the scroll
-  "cta_quality",         // clear, appropriate call to action
-  "cliche_generic",      // low cliché / generic-language density
-  "citation_coverage",   // required citations/evidence present
-  "variant_quality",     // quality across generated variants
-  "variant_diversity",   // variants are meaningfully distinct
+    "groundedness", // claims trace to source facts
+    "unsupported_claims", // no fabricated claims
+    "specificity", // company/product-specific, not generic
+    "brand_voice", // matches declared voice
+    "audience_relevance", // speaks to the target audience
+    "goal_alignment", // serves the campaign goal
+    "platform_structure", // platform-native format + length
+    "hook_strength", // first line stops the scroll
+    "cta_quality", // clear, appropriate call to action
+    "cliche_generic", // low cliché / generic-language density
+    "citation_coverage", // required citations/evidence present
+    "variant_quality", // quality across generated variants
+    "variant_diversity", // variants are meaningfully distinct
 ]);
 export type CriterionId = z.infer<typeof CriterionIdEnum>;
 
@@ -66,8 +61,8 @@ export type ScoringMethod = z.infer<typeof ScoringMethodEnum>;
 
 /** A fixture's expected terminal state (drives failure/fallback cases). */
 export const ExpectedFailureModeEnum = z.enum([
-  "none",             // should succeed normally
-  "graceful_degrade", // should succeed via fallback (e.g. research unavailable)
-  "hard_fail",        // should error cleanly, not silently produce garbage
+    "none", // should succeed normally
+    "graceful_degrade", // should succeed via fallback (e.g. research unavailable)
+    "hard_fail", // should error cleanly, not silently produce garbage
 ]);
 export type ExpectedFailureMode = z.infer<typeof ExpectedFailureModeEnum>;

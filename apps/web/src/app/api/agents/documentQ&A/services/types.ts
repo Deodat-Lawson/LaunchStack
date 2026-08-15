@@ -1,6 +1,6 @@
 /**
  * Type definitions for Document Q&A services
- * 
+ *
  * This file centralizes all type definitions used across the document Q&A services.
  * Following TypeScript best practices:
  * - Use `type` for unions, intersections, and aliases
@@ -18,10 +18,10 @@
 // ============================================================================
 
 export {
-  ChatRoutes,
-  isChatRoute,
-  type ChatRoute,
-  type ChatCapability,
+    ChatRoutes,
+    isChatRoute,
+    type ChatRoute,
+    type ChatCapability,
 } from "@launchstack/core/llm/types";
 
 // ============================================================================
@@ -51,7 +51,7 @@ export function isResponseStyle(value: string): value is ResponseStyle {
 
 /**
  * Web search result from Exa API or web search agent
- * 
+ *
  * @property title - Title of the search result
  * @property url - URL of the source
  * @property snippet - Content snippet from the source
@@ -70,7 +70,7 @@ export interface WebSearchResult {
 
 /**
  * Input parameters for web search agent
- * 
+ *
  * @property userQuestion - The user's question to search for
  * @property documentContext - Optional document context to refine search
  * @property maxResults - Maximum number of results to return (default: 5)
@@ -89,7 +89,7 @@ export interface WebSearchAgentInput {
 
 /**
  * Result from web search agent execution
- * 
+ *
  * @property results - Array of web search results
  * @property refinedQuery - The refined search query used
  * @property reasoning - Optional reasoning for the search refinement
@@ -103,7 +103,6 @@ export interface WebSearchAgentResult {
     reasoning?: string;
 }
 
-
 // ============================================================================
 // Prompt Types
 // ============================================================================
@@ -111,12 +110,23 @@ export interface WebSearchAgentResult {
 /**
  * AI persona types for specialized responses
  */
-export type AIPersona = "general" | "learning-coach" | "financial-expert" | "legal-expert" | "math-reasoning";
+export type AIPersona =
+    | "general"
+    | "learning-coach"
+    | "financial-expert"
+    | "legal-expert"
+    | "math-reasoning";
 
 /**
  * Const assertion for AI persona types
  */
-export const AIPersonas = ["general", "learning-coach", "financial-expert", "legal-expert", "math-reasoning"] as const;
+export const AIPersonas = [
+    "general",
+    "learning-coach",
+    "financial-expert",
+    "legal-expert",
+    "math-reasoning",
+] as const;
 
 /**
  * Type guard for AI persona validation
@@ -147,42 +157,42 @@ export interface WebSearchInstructionParams {
  * A reference to a source excerpt (e.g. from RAG search) for citations and highlighting
  */
 export interface SourceReference {
-  /** Page number (1-based) if applicable */
-  page?: number;
-  /** Snippet of text from the source */
-  snippet: string;
-  /** Matched keyword/phrase for highlighting */
-  matchText?: string;
-  /** Start index of match in snippet */
-  matchStart?: number;
-  /** End index of match in snippet */
-  matchEnd?: number;
-  /**
-   * Retrieval relevance in [0,1], present only when the retriever actually
-   * scored this chunk (rerank score). It is deliberately named relevance, not
-   * confidence: it is a property of the query, not of the evidence (ADR-005 §3).
-   */
-  relevance?: number;
-  /**
-   * @deprecated Kept for API backward compatibility. Historically this field
-   * carried hardcoded 0.25/0.8 constants that no model ever produced
-   * (ADR-005 §3). It now mirrors {@link relevance} — a real retrieval score —
-   * and is absent when no score exists. Read `relevance` instead.
-   */
-  confidence?: number;
-  /**
-   * Stable citation anchor key ("src:<id>/ver:<id>/page:<n>", ADR-005 §1),
-   * present when the retrieval row carried enough identity to anchor.
-   */
-  anchorKey?: string;
-  /** Document ID if from a stored document */
-  documentId?: number;
-  /** Document title for display */
-  documentTitle?: string;
-  /** Chunk ID within document */
-  chunkId?: number;
-  /** Source identifier (e.g. URL) */
-  source?: string;
+    /** Page number (1-based) if applicable */
+    page?: number;
+    /** Snippet of text from the source */
+    snippet: string;
+    /** Matched keyword/phrase for highlighting */
+    matchText?: string;
+    /** Start index of match in snippet */
+    matchStart?: number;
+    /** End index of match in snippet */
+    matchEnd?: number;
+    /**
+     * Retrieval relevance in [0,1], present only when the retriever actually
+     * scored this chunk (rerank score). It is deliberately named relevance, not
+     * confidence: it is a property of the query, not of the evidence (ADR-005 §3).
+     */
+    relevance?: number;
+    /**
+     * @deprecated Kept for API backward compatibility. Historically this field
+     * carried hardcoded 0.25/0.8 constants that no model ever produced
+     * (ADR-005 §3). It now mirrors {@link relevance} — a real retrieval score —
+     * and is absent when no score exists. Read `relevance` instead.
+     */
+    confidence?: number;
+    /**
+     * Stable citation anchor key ("src:<id>/ver:<id>/page:<n>", ADR-005 §1),
+     * present when the retrieval row carried enough identity to anchor.
+     */
+    anchorKey?: string;
+    /** Document ID if from a stored document */
+    documentId?: number;
+    /** Document title for display */
+    documentTitle?: string;
+    /** Chunk ID within document */
+    chunkId?: number;
+    /** Source identifier (e.g. URL) */
+    source?: string;
 }
 
 // ============================================================================
@@ -233,4 +243,3 @@ export type PartialDeep<T> = {
 export type RequiredDeep<T> = {
     [P in keyof T]-?: T[P] extends object ? RequiredDeep<T[P]> : T[P];
 };
-

@@ -10,11 +10,11 @@ import type { CitationAnchor } from "./anchors";
 
 /** One observed fact value, cited to an immutable source version. */
 export interface EvidenceAssertion {
-  factKey: string;
-  value: string;
-  anchor: CitationAnchor;
-  /** ISO-8601 timestamp of when the value was observed. */
-  observedAt: string;
+    factKey: string;
+    value: string;
+    anchor: CitationAnchor;
+    /** ISO-8601 timestamp of when the value was observed. */
+    observedAt: string;
 }
 
 /**
@@ -24,5 +24,5 @@ export interface EvidenceAssertion {
  * preserved everywhere for display.
  */
 export function normalizeFactValue(value: string): string {
-  return value.trim().replace(/\s+/g, " ").toLowerCase();
+    return value.trim().replace(/\s+/g, " ").toLowerCase();
 }

@@ -1,6 +1,6 @@
 /**
  * Document Generator - Citation Formatting API
- * 
+ *
  * Formats citations in various academic styles:
  * - APA 7th Edition
  * - MLA 9th Edition
@@ -49,28 +49,30 @@ interface FormattedCitation {
 // Validation schema
 const CitationSchema = z.object({
     action: z.enum(["format", "format_all", "generate_bibliography"]),
-    citations: z.array(z.object({
-        id: z.string(),
-        sourceType: z.enum(["website", "book", "journal", "article", "document"]),
-        title: z.string(),
-        authors: z.array(z.string()).optional(),
-        url: z.string().optional(),
-        publishedDate: z.string().optional(),
-        accessDate: z.string().optional(),
-        publisher: z.string().optional(),
-        journal: z.string().optional(),
-        volume: z.string().optional(),
-        issue: z.string().optional(),
-        pages: z.string().optional(),
-        doi: z.string().optional(),
-    })),
+    citations: z.array(
+        z.object({
+            id: z.string(),
+            sourceType: z.enum(["website", "book", "journal", "article", "document"]),
+            title: z.string(),
+            authors: z.array(z.string()).optional(),
+            url: z.string().optional(),
+            publishedDate: z.string().optional(),
+            accessDate: z.string().optional(),
+            publisher: z.string().optional(),
+            journal: z.string().optional(),
+            volume: z.string().optional(),
+            issue: z.string().optional(),
+            pages: z.string().optional(),
+            doi: z.string().optional(),
+        })
+    ),
     format: z.enum(["apa", "mla", "chicago", "ieee", "harvard"]).default("apa"),
 });
 
 // Format helper functions
 function formatAuthorsAPA(authors: string[] | undefined): string {
     if (!authors || authors.length === 0) return "";
-    
+
     if (authors.length === 1) {
         return authors[0] ?? "";
     } else if (authors.length === 2) {
@@ -87,7 +89,7 @@ function formatAuthorsAPA(authors: string[] | undefined): string {
 
 function formatAuthorsMLA(authors: string[] | undefined): string {
     if (!authors || authors.length === 0) return "";
-    
+
     if (authors.length === 1) {
         return authors[0] ?? "";
     } else if (authors.length === 2) {
@@ -99,7 +101,7 @@ function formatAuthorsMLA(authors: string[] | undefined): string {
 
 function formatAuthorsChicago(authors: string[] | undefined): string {
     if (!authors || authors.length === 0) return "";
-    
+
     if (authors.length === 1) {
         return authors[0] ?? "";
     } else if (authors.length <= 3) {
@@ -112,19 +114,22 @@ function formatAuthorsChicago(authors: string[] | undefined): string {
 
 function formatAuthorsIEEE(authors: string[] | undefined): string {
     if (!authors || authors.length === 0) return "";
-    
+
     // IEEE uses initials. First Last format
     const formatted = authors.map(author => {
         const parts = author.split(", ");
         if (parts.length === 2) {
             const lastName = parts[0];
             const firstName = parts[1];
-            const initials = firstName?.split(" ").map(n => n[0]).join(". ");
+            const initials = firstName
+                ?.split(" ")
+                .map(n => n[0])
+                .join(". ");
             return `${initials}. ${lastName}`;
         }
         return author;
     });
-    
+
     if (formatted.length === 1) {
         return formatted[0] ?? "";
     } else if (formatted.length <= 6) {
@@ -137,13 +142,13 @@ function formatAuthorsIEEE(authors: string[] | undefined): string {
 
 function formatDate(dateStr: string | undefined, format: CitationFormat): string {
     if (!dateStr) return "n.d.";
-    
+
     try {
         const date = new Date(dateStr);
         const year = date.getFullYear();
         const month = date.toLocaleString("en-US", { month: "long" });
         const day = date.getDate();
-        
+
         switch (format) {
             case "apa":
                 return `(${year}, ${month} ${day})`;
@@ -173,14 +178,27 @@ function getYear(dateStr: string | undefined): string {
 }
 
 function formatCitationAPA(citation: CitationInput): FormattedCitation {
-    const { id, sourceType, title, authors, url, publishedDate, publisher, journal, volume, issue, pages, doi } = citation;
+    const {
+        id,
+        sourceType,
+        title,
+        authors,
+        url,
+        publishedDate,
+        publisher,
+        journal,
+        volume,
+        issue,
+        pages,
+        doi,
+    } = citation;
     const year = getYear(publishedDate);
     const authorStr = formatAuthorsAPA(authors);
     const firstAuthor = authors?.[0]?.split(",")?.[0] ?? "Unknown";
-    
+
     let inText = "";
     let bibliography = "";
-    
+
     switch (sourceType) {
         case "website":
             inText = `(${firstAuthor}, ${year})`;
@@ -203,18 +221,31 @@ function formatCitationAPA(citation: CitationInput): FormattedCitation {
             bibliography = `${authorStr} (${year}). ${title}. ${publisher ? `${publisher}.` : ""}`;
             break;
     }
-    
+
     return { id, inText, bibliography, format: "apa" };
 }
 
 function formatCitationMLA(citation: CitationInput): FormattedCitation {
-    const { id, sourceType, title, authors, url, publishedDate, accessDate, publisher, journal, volume, issue, pages } = citation;
+    const {
+        id,
+        sourceType,
+        title,
+        authors,
+        url,
+        publishedDate,
+        accessDate,
+        publisher,
+        journal,
+        volume,
+        issue,
+        pages,
+    } = citation;
     const authorStr = formatAuthorsMLA(authors);
     const firstAuthor = authors?.[0]?.split(",")?.[0] ?? "Unknown";
-    
+
     const inText = `(${firstAuthor}${pages ? ` ${pages}` : ""})`;
     let bibliography = "";
-    
+
     switch (sourceType) {
         case "website":
             bibliography = `${authorStr}. "${title}." *${publisher ?? "Web"}*, ${formatDate(publishedDate, "mla")}, ${url ?? ""}.${accessDate ? ` Accessed ${formatDate(accessDate, "mla")}.` : ""}`;
@@ -232,18 +263,30 @@ function formatCitationMLA(citation: CitationInput): FormattedCitation {
             bibliography = `${authorStr}. "${title}." ${publisher ?? ""}, ${getYear(publishedDate)}.`;
             break;
     }
-    
+
     return { id, inText, bibliography, format: "mla" };
 }
 
 function formatCitationChicago(citation: CitationInput): FormattedCitation {
-    const { id, sourceType, title, authors, url, publishedDate, accessDate, publisher, journal, volume, pages } = citation;
+    const {
+        id,
+        sourceType,
+        title,
+        authors,
+        url,
+        publishedDate,
+        accessDate,
+        publisher,
+        journal,
+        volume,
+        pages,
+    } = citation;
     const authorStr = formatAuthorsChicago(authors);
     const firstAuthor = authors?.[0]?.split(",")?.[0] ?? "Unknown";
-    
+
     const inText = `(${firstAuthor} ${getYear(publishedDate)})`;
     let bibliography = "";
-    
+
     switch (sourceType) {
         case "website":
             bibliography = `${authorStr}. "${title}." ${publisher ?? ""}. ${accessDate ? `Accessed ${formatDate(accessDate, "chicago")}.` : ""} ${url ?? ""}.`;
@@ -259,17 +302,29 @@ function formatCitationChicago(citation: CitationInput): FormattedCitation {
             bibliography = `${authorStr}. "${title}." ${publisher ?? ""}, ${getYear(publishedDate)}.`;
             break;
     }
-    
+
     return { id, inText, bibliography, format: "chicago" };
 }
 
 function formatCitationIEEE(citation: CitationInput, index: number): FormattedCitation {
-    const { id, sourceType, title, authors, url, publishedDate, publisher, journal, volume, issue, pages } = citation;
+    const {
+        id,
+        sourceType,
+        title,
+        authors,
+        url,
+        publishedDate,
+        publisher,
+        journal,
+        volume,
+        issue,
+        pages,
+    } = citation;
     const authorStr = formatAuthorsIEEE(authors);
-    
+
     const inText = `[${index + 1}]`;
     let bibliography = `[${index + 1}] `;
-    
+
     switch (sourceType) {
         case "website":
             bibliography += `${authorStr}, "${title}," ${publisher ?? ""}, ${getYear(publishedDate)}. [Online]. Available: ${url ?? ""}`;
@@ -285,19 +340,31 @@ function formatCitationIEEE(citation: CitationInput, index: number): FormattedCi
             bibliography += `${authorStr}, "${title}," ${publisher ?? ""}, ${getYear(publishedDate)}.`;
             break;
     }
-    
+
     return { id, inText, bibliography, format: "ieee" };
 }
 
 function formatCitationHarvard(citation: CitationInput): FormattedCitation {
-    const { id, sourceType, title, authors, url, publishedDate, publisher, journal, volume, issue, pages } = citation;
+    const {
+        id,
+        sourceType,
+        title,
+        authors,
+        url,
+        publishedDate,
+        publisher,
+        journal,
+        volume,
+        issue,
+        pages,
+    } = citation;
     const authorStr = formatAuthorsAPA(authors); // Harvard similar to APA
     const firstAuthor = authors?.[0]?.split(",")?.[0] ?? "Unknown";
     const year = getYear(publishedDate);
-    
+
     const inText = `(${firstAuthor}, ${year})`;
     let bibliography = "";
-    
+
     switch (sourceType) {
         case "website":
             bibliography = `${authorStr} (${year}) *${title}* [Online]. Available at: ${url ?? ""} (Accessed: ${publishedDate ?? "n.d."}).`;
@@ -313,11 +380,15 @@ function formatCitationHarvard(citation: CitationInput): FormattedCitation {
             bibliography = `${authorStr} (${year}) '${title}', ${publisher ?? ""}.`;
             break;
     }
-    
+
     return { id, inText, bibliography, format: "harvard" };
 }
 
-function formatCitation(citation: CitationInput, format: CitationFormat, index: number): FormattedCitation {
+function formatCitation(
+    citation: CitationInput,
+    format: CitationFormat,
+    index: number
+): FormattedCitation {
     switch (format) {
         case "apa":
             return formatCitationAPA(citation);
@@ -339,7 +410,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = CitationSchema.safeParse(body);
 
         if (!validation.success) {
@@ -353,7 +424,7 @@ export async function POST(request: Request) {
         const startTime = Date.now();
 
         // Format all citations
-        const formattedCitations = citations.map((citation, index) => 
+        const formattedCitations = citations.map((citation, index) =>
             formatCitation(citation as CitationInput, format, index)
         );
 
@@ -361,18 +432,21 @@ export async function POST(request: Request) {
         let bibliography: string | undefined;
         if (action === "generate_bibliography" || action === "format_all") {
             // Sort bibliography entries alphabetically (except IEEE which is by order)
-            const sortedBib = format === "ieee" 
-                ? formattedCitations 
-                : [...formattedCitations].sort((a, b) => 
-                    a.bibliography.localeCompare(b.bibliography)
-                );
-            
+            const sortedBib =
+                format === "ieee"
+                    ? formattedCitations
+                    : [...formattedCitations].sort((a, b) =>
+                          a.bibliography.localeCompare(b.bibliography)
+                      );
+
             bibliography = sortedBib.map(c => c.bibliography).join("\n\n");
         }
 
         const processingTimeMs = Date.now() - startTime;
 
-        console.log(`✅ [Citation] Formatted ${formattedCitations.length} citations in ${format} style`);
+        console.log(
+            `✅ [Citation] Formatted ${formattedCitations.length} citations in ${format} style`
+        );
 
         return NextResponse.json({
             success: true,
@@ -383,14 +457,13 @@ export async function POST(request: Request) {
             count: formattedCitations.length,
             processingTimeMs,
         });
-
     } catch (error) {
         console.error("❌ [Citation] Error:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to format citations",
-                error: "Failed to format citations"
+                error: "Failed to format citations",
             },
             { status: 500 }
         );

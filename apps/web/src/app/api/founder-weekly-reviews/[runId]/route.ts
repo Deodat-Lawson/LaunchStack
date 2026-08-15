@@ -3,6 +3,6 @@ import { productionFounderWeeklyReviewActorResolver } from "~/server/founder-wee
 import { createFounderWeeklyReviewGetHandler } from "./get-handler";
 
 export const GET = createFounderWeeklyReviewGetHandler({
-  actorResolver: productionFounderWeeklyReviewActorResolver,
-  getRun: (actor, runId) => new FounderWeeklyReviewUserService().getRun(actor, runId),
+    actorResolver: productionFounderWeeklyReviewActorResolver,
+    getRun: (actor, runId) => new FounderWeeklyReviewUserService().getRun(actor, runId),
 });

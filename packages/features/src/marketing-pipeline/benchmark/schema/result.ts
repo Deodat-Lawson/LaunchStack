@@ -15,30 +15,30 @@ import { CriterionIdEnum, ScoringMethodEnum } from "./enums";
 /* ────────────────────────── Reproducibility manifest ────────────────────────── */
 
 export const RunManifestSchema = z.object({
-  runId: z.string(),
-  createdAt: z.string(), // ISO 8601
-  gitSha: z.string().nullable().default(null),
-  mode: z.enum(["A", "B"]), // A = offline generation, B = true end-to-end
-  /** Snapshot of MARKETING_MODELS at run time (stage → model id). */
-  pipelineModels: z.record(z.string(), z.string()),
-  promptVersion: z.string(),
-  judge: z.object({
-    model: z.string(),
-    version: z.string(), // rubric/prompt version — pinned for comparability
-    temperature: z.number(),
-    samples: z.number().int().positive(), // N samples per judge call (stability)
-  }),
-  configHash: z.string(), // hash of the fully-resolved config
-  fixtureSetVersion: z.string(),
+    runId: z.string(),
+    createdAt: z.string(), // ISO 8601
+    gitSha: z.string().nullable().default(null),
+    mode: z.enum(["A", "B"]), // A = offline generation, B = true end-to-end
+    /** Snapshot of MARKETING_MODELS at run time (stage → model id). */
+    pipelineModels: z.record(z.string(), z.string()),
+    promptVersion: z.string(),
+    judge: z.object({
+        model: z.string(),
+        version: z.string(), // rubric/prompt version — pinned for comparability
+        temperature: z.number(),
+        samples: z.number().int().positive(), // N samples per judge call (stability)
+    }),
+    configHash: z.string(), // hash of the fully-resolved config
+    fixtureSetVersion: z.string(),
 });
 export type RunManifest = z.infer<typeof RunManifestSchema>;
 
 /* ────────────────────────── Per-criterion score ────────────────────────── */
 
 export const TokenUsageSchema = z.object({
-  prompt: z.number().int().min(0).default(0),
-  completion: z.number().int().min(0).default(0),
-  total: z.number().int().min(0).default(0),
+    prompt: z.number().int().min(0).default(0),
+    completion: z.number().int().min(0).default(0),
+    total: z.number().int().min(0).default(0),
 });
 export type TokenUsage = z.infer<typeof TokenUsageSchema>;
 
@@ -47,70 +47,70 @@ export type TokenUsage = z.infer<typeof TokenUsageSchema>;
  * `score` is always normalized to [0..1] so criteria aggregate uniformly.
  */
 export const CriterionScoreSchema = z.object({
-  criterionId: CriterionIdEnum,
-  method: ScoringMethodEnum,
-  score: z.number().min(0).max(1),
-  passed: z.boolean(),
-  weight: z.number().min(0),
-  /** Deterministic detail ("chars=412 > max 280") or judge rationale. */
-  detail: z.string().nullable().default(null),
-  /** Judge stability: score spread across samples (null for deterministic). */
-  stdDev: z.number().min(0).nullable().default(null),
-  /** Raw judge JSON / assertion evidence, kept for audit. */
-  raw: z.unknown().nullable().default(null),
+    criterionId: CriterionIdEnum,
+    method: ScoringMethodEnum,
+    score: z.number().min(0).max(1),
+    passed: z.boolean(),
+    weight: z.number().min(0),
+    /** Deterministic detail ("chars=412 > max 280") or judge rationale. */
+    detail: z.string().nullable().default(null),
+    /** Judge stability: score spread across samples (null for deterministic). */
+    stdDev: z.number().min(0).nullable().default(null),
+    /** Raw judge JSON / assertion evidence, kept for audit. */
+    raw: z.unknown().nullable().default(null),
 });
 export type CriterionScore = z.infer<typeof CriterionScoreSchema>;
 
 /* ────────────────────────── Raw output + case result ────────────────────────── */
 
 export const VariantOutputSchema = z.object({
-  variantId: z.string(),
-  message: z.string(),
-  mediaType: z.enum(["image", "video"]).nullable().default(null),
+    variantId: z.string(),
+    message: z.string(),
+    mediaType: z.enum(["image", "video"]).nullable().default(null),
 });
 export type VariantOutput = z.infer<typeof VariantOutputSchema>;
 
 export const CaseFailureSchema = z.object({
-  failed: z.boolean().default(false),
-  stage: z.string().nullable().default(null),
-  message: z.string().nullable().default(null),
+    failed: z.boolean().default(false),
+    stage: z.string().nullable().default(null),
+    message: z.string().nullable().default(null),
 });
 export type CaseFailure = z.infer<typeof CaseFailureSchema>;
 
 export const CaseResultSchema = z.object({
-  fixtureId: z.string(),
-  fixtureVersion: z.string(),
-  platform: MarketingPlatformEnum,
-  variants: z.array(VariantOutputSchema).default([]), // raw pipeline output
-  scores: z.array(CriterionScoreSchema).default([]),
-  aggregate: z.object({
-    weighted: z.number().min(0).max(1), // weighted mean of enabled criteria
-    passed: z.boolean(), // required criteria met AND thresholds satisfied
-  }),
-  latencyMs: z.number().min(0),
-  tokenUsage: TokenUsageSchema,
-  costUsd: z.number().min(0).default(0),
-  failure: CaseFailureSchema,
-  /** Echoed from the fixture so failure-mode expectations can be diffed. */
-  expectedFailureMode: z.string(),
+    fixtureId: z.string(),
+    fixtureVersion: z.string(),
+    platform: MarketingPlatformEnum,
+    variants: z.array(VariantOutputSchema).default([]), // raw pipeline output
+    scores: z.array(CriterionScoreSchema).default([]),
+    aggregate: z.object({
+        weighted: z.number().min(0).max(1), // weighted mean of enabled criteria
+        passed: z.boolean(), // required criteria met AND thresholds satisfied
+    }),
+    latencyMs: z.number().min(0),
+    tokenUsage: TokenUsageSchema,
+    costUsd: z.number().min(0).default(0),
+    failure: CaseFailureSchema,
+    /** Echoed from the fixture so failure-mode expectations can be diffed. */
+    expectedFailureMode: z.string(),
 });
 export type CaseResult = z.infer<typeof CaseResultSchema>;
 
 /* ────────────────────────── Run + summary ────────────────────────── */
 
 export const BenchmarkRunSchema = z.object({
-  manifest: RunManifestSchema,
-  results: z.array(CaseResultSchema),
-  summary: z.object({
-    caseCount: z.number().int().min(0),
-    passCount: z.number().int().min(0),
-    meanScore: z.number().min(0).max(1),
-    meanCostUsd: z.number().min(0),
-    meanLatencyMs: z.number().min(0),
-    /** platform → mean score, criterionId → mean score (for the summary + chart). */
-    byPlatform: z.record(z.string(), z.number()).default({}),
-    byCriterion: z.record(z.string(), z.number()).default({}),
-  }),
+    manifest: RunManifestSchema,
+    results: z.array(CaseResultSchema),
+    summary: z.object({
+        caseCount: z.number().int().min(0),
+        passCount: z.number().int().min(0),
+        meanScore: z.number().min(0).max(1),
+        meanCostUsd: z.number().min(0),
+        meanLatencyMs: z.number().min(0),
+        /** platform → mean score, criterionId → mean score (for the summary + chart). */
+        byPlatform: z.record(z.string(), z.number()).default({}),
+        byCriterion: z.record(z.string(), z.number()).default({}),
+    }),
 });
 export type BenchmarkRun = z.infer<typeof BenchmarkRunSchema>;
 
@@ -118,28 +118,28 @@ export type BenchmarkRun = z.infer<typeof BenchmarkRunSchema>;
 
 /** Thresholds a candidate run must not exceed vs. the approved baseline. */
 export const RegressionThresholdsSchema = z.object({
-  maxMeanScoreDrop: z.number().min(0).max(1).default(0.03),
-  maxPerCriterionDrop: z.number().min(0).max(1).default(0.05),
-  maxNewFailures: z.number().int().min(0).default(0),
+    maxMeanScoreDrop: z.number().min(0).max(1).default(0.03),
+    maxPerCriterionDrop: z.number().min(0).max(1).default(0.05),
+    maxNewFailures: z.number().int().min(0).default(0),
 });
 export type RegressionThresholds = z.infer<typeof RegressionThresholdsSchema>;
 
 export const BaselineComparisonSchema = z.object({
-  baselineRunId: z.string(),
-  candidateRunId: z.string(),
-  thresholds: RegressionThresholdsSchema,
-  meanScoreDelta: z.number(), // candidate - baseline (negative = worse)
-  regressions: z
-    .array(
-      z.object({
-        fixtureId: z.string(),
-        criterionId: CriterionIdEnum.nullable(), // null = aggregate regression
-        delta: z.number(),
-      }),
-    )
-    .default([]),
-  newFailures: z.array(z.string()).default([]), // fixtureIds newly failing
-  /** CI fails iff true — set only when a defined threshold is breached. */
-  regressed: z.boolean(),
+    baselineRunId: z.string(),
+    candidateRunId: z.string(),
+    thresholds: RegressionThresholdsSchema,
+    meanScoreDelta: z.number(), // candidate - baseline (negative = worse)
+    regressions: z
+        .array(
+            z.object({
+                fixtureId: z.string(),
+                criterionId: CriterionIdEnum.nullable(), // null = aggregate regression
+                delta: z.number(),
+            })
+        )
+        .default([]),
+    newFailures: z.array(z.string()).default([]), // fixtureIds newly failing
+    /** CI fails iff true — set only when a defined threshold is breached. */
+    regressed: z.boolean(),
 });
 export type BaselineComparison = z.infer<typeof BaselineComparisonSchema>;

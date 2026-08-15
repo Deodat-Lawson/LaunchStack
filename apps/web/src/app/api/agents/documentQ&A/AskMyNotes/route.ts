@@ -14,9 +14,9 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { createUserNotesRetriever } from "~/lib/tools/rag/retrievers/notes-retriever";
 import {
-  EMBEDDING_DIM,
-  EMBEDDING_MODEL,
-  resolveEmbeddingConfig,
+    EMBEDDING_DIM,
+    EMBEDDING_MODEL,
+    resolveEmbeddingConfig,
 } from "~/server/notes/embedding-config";
 import { normalizeModelContent } from "../services";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -25,8 +25,8 @@ export const runtime = "nodejs";
 export const maxDuration = 120;
 
 interface Body {
-  question?: string;
-  topK?: number;
+    question?: string;
+    topK?: number;
 }
 
 const SYSTEM_PROMPT = `You are answering a user's question using ONLY the notes
@@ -40,96 +40,90 @@ Rules:
 `;
 
 export async function POST(request: Request) {
-  return withRateLimit(request, RateLimitPresets.strict, async () => {
-    try {
-      const ctx = await requireWorkspaceContext();
-      if (!ctx.success) return ctx.response;
+    return withRateLimit(request, RateLimitPresets.strict, async () => {
+        try {
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) return ctx.response;
 
-      const body = (await request.json().catch(() => ({}))) as Body;
-      const question = (body.question ?? "").trim();
-      if (!question) {
-        return NextResponse.json(
-          { success: false, message: "Question is required" },
-          { status: 400 },
-        );
-      }
-      const topK = Math.min(Math.max(body.topK ?? 8, 1), 25);
+            const body = (await request.json().catch(() => ({}))) as Body;
+            const question = (body.question ?? "").trim();
+            if (!question) {
+                return NextResponse.json(
+                    { success: false, message: "Question is required" },
+                    { status: 400 }
+                );
+            }
+            const topK = Math.min(Math.max(body.topK ?? 8, 1), 25);
 
-      const { apiKey, baseURL } = resolveEmbeddingConfig();
-      if (!apiKey) {
-        return NextResponse.json(
-          {
-            success: false,
-            message:
-              "Notes search isn't configured — add an embedding API key to enable Ask My Notes.",
-          },
-          { status: 503 },
-        );
-      }
+            const { apiKey, baseURL } = resolveEmbeddingConfig();
+            if (!apiKey) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message:
+                            "Notes search isn't configured — add an embedding API key to enable Ask My Notes.",
+                    },
+                    { status: 503 }
+                );
+            }
 
-      const embeddings = new OpenAIEmbeddings({
-        openAIApiKey: apiKey,
-        modelName: EMBEDDING_MODEL,
-        dimensions: EMBEDDING_DIM,
-        ...(baseURL ? { configuration: { baseURL } } : {}),
-      });
+            const embeddings = new OpenAIEmbeddings({
+                openAIApiKey: apiKey,
+                modelName: EMBEDDING_MODEL,
+                dimensions: EMBEDDING_DIM,
+                ...(baseURL ? { configuration: { baseURL } } : {}),
+            });
 
-      const retriever = createUserNotesRetriever(
-        ctx.data.clerkUserId,
-        String(ctx.data.companyId),
-        embeddings,
-        topK,
-      );
-      const docs = await retriever.invoke(question);
+            const retriever = createUserNotesRetriever(
+                ctx.data.clerkUserId,
+                String(ctx.data.companyId),
+                embeddings,
+                topK
+            );
+            const docs = await retriever.invoke(question);
 
-      if (docs.length === 0) {
-        return NextResponse.json(
-          {
-            success: true,
-            answer:
-              "I couldn't find any relevant notes. Try a different phrasing, or capture some notes first.",
-            citations: [],
-          },
-          { status: 200 },
-        );
-      }
+            if (docs.length === 0) {
+                return NextResponse.json(
+                    {
+                        success: true,
+                        answer: "I couldn't find any relevant notes. Try a different phrasing, or capture some notes first.",
+                        citations: [],
+                    },
+                    { status: 200 }
+                );
+            }
 
-      const numbered = docs
-        .map((d, i) => {
-          const title = (d.metadata?.title as string | null) ?? "Untitled";
-          return `[${i + 1}] ${title}\n${d.pageContent}`;
-        })
-        .join("\n\n---\n\n");
+            const numbered = docs
+                .map((d, i) => {
+                    const title = (d.metadata?.title as string | null) ?? "Untitled";
+                    return `[${i + 1}] ${title}\n${d.pageContent}`;
+                })
+                .join("\n\n---\n\n");
 
-      const resolved = resolveConfiguredChatModel();
-      const reply = await resolved.chat.invoke(
-        resolved.prepareMessages([
-          new SystemMessage(SYSTEM_PROMPT),
-          new HumanMessage(
-            `Notes:\n\n${numbered}\n\n---\n\nQuestion: ${question}`,
-          ),
-        ]),
-      );
+            const resolved = resolveConfiguredChatModel();
+            const reply = await resolved.chat.invoke(
+                resolved.prepareMessages([
+                    new SystemMessage(SYSTEM_PROMPT),
+                    new HumanMessage(`Notes:\n\n${numbered}\n\n---\n\nQuestion: ${question}`),
+                ])
+            );
 
-      const answer = normalizeModelContent(reply.content);
+            const answer = normalizeModelContent(reply.content);
 
-      const citations = docs.map((d, i) => ({
-        index: i + 1,
-        noteId: d.metadata?.noteId as number | undefined,
-        title: (d.metadata?.title as string | null) ?? null,
-        documentId: (d.metadata?.documentId as string | null) ?? null,
-      }));
+            const citations = docs.map((d, i) => ({
+                index: i + 1,
+                noteId: d.metadata?.noteId as number | undefined,
+                title: (d.metadata?.title as string | null) ?? null,
+                documentId: (d.metadata?.documentId as string | null) ?? null,
+            }));
 
-      return NextResponse.json(
-        { success: true, answer, citations },
-        { status: 200 },
-      );
-    } catch (err) {
-      console.error("[AskMyNotes] failed:", err);
-      return NextResponse.json(
-        { success: false, message: "Ask My Notes failed" },
-        { status: 500 },
-      );
-    }
-  });
+            return NextResponse.json({ success: true, answer, citations }, { status: 200 });
+        } catch (err) {
+            console.error("[AskMyNotes] failed:", err);
+            return NextResponse.json(
+                { success: false, message: "Ask My Notes failed" },
+                { status: 500 }
+            );
+        }
+    });
 }

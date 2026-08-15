@@ -29,7 +29,7 @@ const MAX_DOCUMENT_CHARS = 1_200;
 
 const SYSTEM_PROMPT =
     "You score how well each document answers a query. Respond with JSON " +
-    "only: {\"scores\":[n, ...]} where each n is between 0 and 1, 1 meaning " +
+    'only: {"scores":[n, ...]} where each n is between 0 and 1, 1 meaning ' +
     "the document fully answers the query and 0 meaning it is irrelevant. " +
     "Return exactly one score per document, in the order the documents were " +
     "given. Do not explain.";
@@ -62,15 +62,12 @@ export class GeminiRerankProvider implements RerankProvider {
         if (!this.apiKey) {
             console.warn(
                 "[Rerank] No API key found. Set GOOGLE_AI_API_KEY, or " +
-                "RERANK_API_KEY alongside RERANK_API_BASE_URL.",
+                    "RERANK_API_KEY alongside RERANK_API_BASE_URL."
             );
         }
     }
 
-    async rerank(
-        query: string,
-        documents: string[],
-    ): Promise<ProviderResult<RerankResult>> {
+    async rerank(query: string, documents: string[]): Promise<ProviderResult<RerankResult>> {
         if (documents.length === 0) {
             return { data: { scores: [] }, usage: { tokensUsed: 0, details: { documents: 0 } } };
         }
@@ -78,7 +75,7 @@ export class GeminiRerankProvider implements RerankProvider {
         const numbered = documents
             .map(
                 (doc, i) =>
-                    `[${i + 1}] ${doc.slice(0, MAX_DOCUMENT_CHARS).replace(/\s+/g, " ").trim()}`,
+                    `[${i + 1}] ${doc.slice(0, MAX_DOCUMENT_CHARS).replace(/\s+/g, " ").trim()}`
             )
             .join("\n\n");
 
@@ -114,10 +111,7 @@ export class GeminiRerankProvider implements RerankProvider {
             usage?: { total_tokens?: number };
         };
 
-        const scores = parseScores(
-            payload.choices?.[0]?.message?.content,
-            documents.length,
-        );
+        const scores = parseScores(payload.choices?.[0]?.message?.content, documents.length);
 
         return {
             data: { scores },
@@ -152,12 +146,12 @@ function parseScores(content: string | undefined, expected: number): number[] {
         console.warn(
             `[Rerank] Expected ${expected} scores, got ${
                 Array.isArray(raw) ? raw.length : "none"
-            }; keeping input order.`,
+            }; keeping input order.`
         );
         return neutral();
     }
 
-    return raw.map((value) => {
+    return raw.map(value => {
         const n = typeof value === "number" ? value : Number(value);
         return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : 0.5;
     });

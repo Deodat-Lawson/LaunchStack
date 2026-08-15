@@ -16,7 +16,7 @@ const portSlot = createSlot<CreditsPort>("credits/port");
 const meteringSlot = createSlot<MeteringMode>("credits/metering");
 
 export function configureCredits(port: CreditsPort): void {
-  portSlot.set(port);
+    portSlot.set(port);
 }
 
 /**
@@ -24,7 +24,7 @@ export function configureCredits(port: CreditsPort): void {
  * the slot is never empty for a host that built an engine.
  */
 export function configureMetering(mode: MeteringMode): void {
-  meteringSlot.set(mode);
+    meteringSlot.set(mode);
 }
 
 /**
@@ -34,12 +34,12 @@ export function configureMetering(mode: MeteringMode): void {
  * worse failure of the two.
  */
 export function getMeteringMode(): MeteringMode {
-  return meteringSlot.get() ?? "off";
+    return meteringSlot.get() ?? "off";
 }
 
 /** True when debits should be recorded at all. */
 export function isMeteringEnabled(): boolean {
-  return getMeteringMode() !== "off";
+    return getMeteringMode() !== "off";
 }
 
 /**
@@ -48,22 +48,22 @@ export function isMeteringEnabled(): boolean {
  * self-hosted deployments that record usage but must never be told no.
  */
 export function isMeteringEnforced(): boolean {
-  return getMeteringMode() === "enforce";
+    return getMeteringMode() === "enforce";
 }
 
 /** Throws when no port has been registered — use only when a debit is required. */
 export function getCredits(): CreditsPort {
-  const port = portSlot.get();
-  if (!port) {
-    throw new Error(
-      "[@launchstack/adapters/credits] No CreditsPort registered. The host must pass `credits.port` to createEngine (or call configureCredits directly).",
-    );
-  }
-  return port;
+    const port = portSlot.get();
+    if (!port) {
+        throw new Error(
+            "[@launchstack/adapters/credits] No CreditsPort registered. The host must pass `credits.port` to createEngine (or call configureCredits directly)."
+        );
+    }
+    return port;
 }
 
 export function getCreditsOrNull(): CreditsPort | null {
-  return portSlot.get() ?? null;
+    return portSlot.get() ?? null;
 }
 
 /**
@@ -72,12 +72,12 @@ export function getCreditsOrNull(): CreditsPort | null {
  * ingestion / NER / OCR paths.
  */
 export async function creditsDebitSafe(input: DebitInput): Promise<void> {
-  if (getMeteringMode() === "off") return;
-  const port = portSlot.get();
-  if (!port) return;
-  try {
-    await port.debit(input);
-  } catch (err) {
-    console.warn("[@launchstack/adapters/credits] Debit failed (non-blocking):", err);
-  }
+    if (getMeteringMode() === "off") return;
+    const port = portSlot.get();
+    if (!port) return;
+    try {
+        await port.debit(input);
+    } catch (err) {
+        console.warn("[@launchstack/adapters/credits] Debit failed (non-blocking):", err);
+    }
 }

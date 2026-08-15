@@ -19,9 +19,9 @@ type Status = "queued" | "collecting" | "generating" | "draft" | "published" | "
 
 function workerStub(status: Status | null) {
     return {
-        getRun: jest.fn().mockResolvedValue(
-            status === null ? null : { status, evidenceSnapshot: null }
-        ),
+        getRun: jest
+            .fn()
+            .mockResolvedValue(status === null ? null : { status, evidenceSnapshot: null }),
         markCollectionFailed: jest.fn().mockResolvedValue(undefined),
         markGenerationFailed: jest.fn().mockResolvedValue(undefined),
         markQueuedRunFailed: jest.fn().mockResolvedValue(undefined),
@@ -89,7 +89,7 @@ describe("founder weekly review generation failure routing", () => {
 
     it.each(["draft", "published", "failed"] as const)(
         "leaves a %s run untouched",
-        async (status) => {
+        async status => {
             const worker = await run(status);
             expect(worker.markCollectionFailed).not.toHaveBeenCalled();
             expect(worker.markGenerationFailed).not.toHaveBeenCalled();

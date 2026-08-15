@@ -32,7 +32,7 @@ class TwitterClient {
     private async makeRequest<T>(url: string): Promise<T> {
         const response = await fetch(url, {
             headers: {
-                "Authorization": `Bearer ${this.bearerToken}`,
+                Authorization: `Bearer ${this.bearerToken}`,
                 "Content-Type": "application/json",
             },
         });
@@ -44,7 +44,10 @@ class TwitterClient {
         return response.json() as Promise<T>;
     }
 
-    async searchTrendingTweets(query: string, maxResults: number): Promise<MarketingResearchResult[]> {
+    async searchTrendingTweets(
+        query: string,
+        maxResults: number
+    ): Promise<MarketingResearchResult[]> {
         try {
             // Search recent tweets with engagement metrics
             const searchQuery = encodeURIComponent(`${query} -is:retweet lang:en`);
@@ -62,14 +65,15 @@ class TwitterClient {
                     const metrics = tweet.public_metrics;
                     return metrics && (metrics.like_count >= 5 || metrics.retweet_count >= 2);
                 })
-                .map((tweet): MarketingResearchResult => ({
-                    title: tweet.text.slice(0, 100) + (tweet.text.length > 100 ? "..." : ""),
-                    url: `https://twitter.com/i/status/${tweet.id}`,
-                    snippet: this.formatTweetSnippet(tweet),
-                    source: "x" as const,
-                }))
+                .map(
+                    (tweet): MarketingResearchResult => ({
+                        title: tweet.text.slice(0, 100) + (tweet.text.length > 100 ? "..." : ""),
+                        url: `https://twitter.com/i/status/${tweet.id}`,
+                        snippet: this.formatTweetSnippet(tweet),
+                        source: "x" as const,
+                    })
+                )
                 .slice(0, maxResults);
-
         } catch (error) {
             console.warn("Twitter search error:", error);
             return [];

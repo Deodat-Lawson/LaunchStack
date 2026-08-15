@@ -72,10 +72,15 @@ export async function generateFounderWeeklyReview(
         return {
             reviewPayload: buildEmptyReview(),
             modelMetadata: buildMetadata(
-                { provider: "skipped", model: "none", capability: "founderWeeklyReview", temperature: 0 },
+                {
+                    provider: "skipped",
+                    model: "none",
+                    capability: "founderWeeklyReview",
+                    temperature: 0,
+                },
                 promptHash,
                 true,
-                evidenceEnvelope.diagnostics,
+                evidenceEnvelope.diagnostics
             ),
         };
     }
@@ -118,7 +123,15 @@ export async function generateFounderWeeklyReview(
         }
     }
 
-    return { reviewPayload, modelMetadata: buildMetadata(result.metadata, promptHash, false, evidenceEnvelope.diagnostics) };
+    return {
+        reviewPayload,
+        modelMetadata: buildMetadata(
+            result.metadata,
+            promptHash,
+            false,
+            evidenceEnvelope.diagnostics
+        ),
+    };
 }
 
 function buildSemanticRepairPrompt(
@@ -126,9 +139,8 @@ function buildSemanticRepairPrompt(
     evidenceItems: readonly FounderWeeklyReviewPromptEvidenceItem[],
     error: FounderWeeklyReviewGenerationValidationError
 ): string {
-    const errors = error.details.length > 0
-        ? error.details
-        : [{ code: "report_validation_failed" }];
+    const errors =
+        error.details.length > 0 ? error.details : [{ code: "report_validation_failed" }];
     const sources = evidenceItems.map(({ sourceId, sourceType }) => ({ sourceId, sourceType }));
     return [
         "Correct the complete canonical Founder Weekly Review JSON candidate below.",
@@ -148,14 +160,16 @@ function logGenerationValidation(
     metadata: FounderWeeklyReviewResolvedGenerationMetadata,
     result: "passed" | "failed"
 ): void {
-    console.info(`[fwr] generation phase=${phase} provider=${metadata.provider} model=${metadata.model} validation=${result}`);
+    console.info(
+        `[fwr] generation phase=${phase} provider=${metadata.provider} model=${metadata.model} validation=${result}`
+    );
 }
 
 function buildMetadata(
     metadata: FounderWeeklyReviewResolvedGenerationMetadata,
     promptHash: string,
     skipped: boolean,
-    diagnostics: GenerationEvidenceEnvelopeDiagnostics,
+    diagnostics: GenerationEvidenceEnvelopeDiagnostics
 ): FounderWeeklyReviewModelMetadata {
     return {
         provider: metadata.provider,
@@ -191,11 +205,26 @@ function buildEmptyReview(): FounderWeeklyReviewV2Payload {
     return {
         schemaVersion: FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION,
         sections: {
-            whatChanged: noEvidence("No change evidence was supplied for this period.", "Add document changes or founder notes for this reporting period."),
-            whatShipped: noEvidence("No shipment evidence was supplied for this period.", "Add release notes, deployment records, or GitHub activity."),
-            whatCustomersSaid: noEvidence("No customer feedback was supplied for this period.", "Add customer calls, support feedback, or survey evidence."),
-            currentBlockers: noEvidence("No blocker evidence was supplied for this period.", "Add founder context, project notes, or issue evidence describing blockers."),
-            nextPriorities: noEvidence("No evidence is available to ground priorities.", "Add evidence for this period before requesting recommended priorities."),
+            whatChanged: noEvidence(
+                "No change evidence was supplied for this period.",
+                "Add document changes or founder notes for this reporting period."
+            ),
+            whatShipped: noEvidence(
+                "No shipment evidence was supplied for this period.",
+                "Add release notes, deployment records, or GitHub activity."
+            ),
+            whatCustomersSaid: noEvidence(
+                "No customer feedback was supplied for this period.",
+                "Add customer calls, support feedback, or survey evidence."
+            ),
+            currentBlockers: noEvidence(
+                "No blocker evidence was supplied for this period.",
+                "Add founder context, project notes, or issue evidence describing blockers."
+            ),
+            nextPriorities: noEvidence(
+                "No evidence is available to ground priorities.",
+                "Add evidence for this period before requesting recommended priorities."
+            ),
         },
     };
 }

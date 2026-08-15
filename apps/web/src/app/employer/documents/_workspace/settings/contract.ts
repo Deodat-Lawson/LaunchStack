@@ -14,26 +14,26 @@ import { useEffect } from "react";
 import type { ReactNode } from "react";
 
 export interface SettingsSectionActions {
-  /** Primary button label. Omit for a read-only section. */
-  primaryLabel?: string;
-  /** Label while the primary action is running. Defaults to `${primaryLabel}…`. */
-  primaryBusyLabel?: string;
-  onPrimary?: () => void | Promise<void>;
-  busy?: boolean;
-  /** Disables the primary button — typically "nothing has changed". */
-  disabled?: boolean;
-  /** Secondary controls rendered to the left of the primary button. */
-  secondary?: ReactNode;
+    /** Primary button label. Omit for a read-only section. */
+    primaryLabel?: string;
+    /** Label while the primary action is running. Defaults to `${primaryLabel}…`. */
+    primaryBusyLabel?: string;
+    onPrimary?: () => void | Promise<void>;
+    busy?: boolean;
+    /** Disables the primary button — typically "nothing has changed". */
+    disabled?: boolean;
+    /** Secondary controls rendered to the left of the primary button. */
+    secondary?: ReactNode;
 }
 
 export type RegisterSectionActions = (actions: SettingsSectionActions | null) => void;
 
 export interface SettingsSectionProps {
-  /**
-   * Publishes this section's actions into the chrome. Sections call it from an
-   * effect and the chrome clears them on unmount.
-   */
-  onActions?: RegisterSectionActions;
+    /**
+     * Publishes this section's actions into the chrome. Sections call it from an
+     * effect and the chrome clears them on unmount.
+     */
+    onActions?: RegisterSectionActions;
 }
 
 /**
@@ -43,15 +43,15 @@ export interface SettingsSectionProps {
  * change, because only the section knows whether it is dirty or busy.
  */
 export function usePublishedActions(
-  onActions: RegisterSectionActions | undefined,
-  actions: SettingsSectionActions,
-  deps: React.DependencyList,
+    onActions: RegisterSectionActions | undefined,
+    actions: SettingsSectionActions,
+    deps: React.DependencyList
 ): void {
-  useEffect(() => {
-    onActions?.(actions);
-    return () => onActions?.(null);
-    // The section owns the dependency list; `actions` is rebuilt each render
-    // and would otherwise loop.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onActions, ...deps]);
+    useEffect(() => {
+        onActions?.(actions);
+        return () => onActions?.(null);
+        // The section owns the dependency list; `actions` is rebuilt each render
+        // and would otherwise loop.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onActions, ...deps]);
 }

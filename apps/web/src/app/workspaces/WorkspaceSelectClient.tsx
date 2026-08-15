@@ -74,8 +74,7 @@ function relativeTime(iso: string): string {
     if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
     if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
     if (diffSec < 86400 * 30) return `${Math.floor(diffSec / 86400)} days ago`;
-    if (diffSec < 86400 * 365)
-        return `${Math.floor(diffSec / (86400 * 30))} months ago`;
+    if (diffSec < 86400 * 365) return `${Math.floor(diffSec / (86400 * 30))} months ago`;
     return `${Math.floor(diffSec / (86400 * 365))} years ago`;
 }
 
@@ -115,7 +114,7 @@ function syntheticMemberInitials(seed: string, index: number): string {
 function memberPileParts(
     memberCount: number,
     accountName: string,
-    seed: string,
+    seed: string
 ): { label: string; extraClass?: string }[] {
     const n = Math.max(1, memberCount);
     const showPlus = n > 4;
@@ -167,9 +166,7 @@ export function WorkspaceSelectClient({
     const [error, setError] = useState<string | null>(null);
     const [switchingId, setSwitchingId] = useState<string | null>(null);
     const [slugAvailable, setSlugAvailable] = useState<null | boolean>(null);
-    const [dismissedPendingIds, setDismissedPendingIds] = useState(
-        () => new Set<string>(),
-    );
+    const [dismissedPendingIds, setDismissedPendingIds] = useState(() => new Set<string>());
 
     const searchRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
@@ -178,10 +175,8 @@ export function WorkspaceSelectClient({
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase();
         if (!q) return workspaces;
-        return workspaces.filter((w) => {
-            const haystack = [w.name, w.slug, w.role, w.description ?? ""]
-                .join(" ")
-                .toLowerCase();
+        return workspaces.filter(w => {
+            const haystack = [w.name, w.slug, w.role, w.description ?? ""].join(" ").toLowerCase();
             return haystack.includes(q);
         });
     }, [workspaces, query]);
@@ -299,9 +294,7 @@ export function WorkspaceSelectClient({
             return;
         }
         if (trimmedSlug.length < 2 || !SLUG_RE.test(trimmedSlug)) {
-            setError(
-                "URL must be 2+ characters: lowercase letters, numbers, or dashes."
-            );
+            setError("URL must be 2+ characters: lowercase letters, numbers, or dashes.");
             return;
         }
         setSubmitting(true);
@@ -452,15 +445,12 @@ export function WorkspaceSelectClient({
                         </div>
                     ) : null}
                     <h1 className={styles.hTitle}>
-                        Pick a{" "}
-                        <span className={`${styles.serif} ${styles.accent}`}>
-                            workspace
-                        </span>
+                        Pick a <span className={`${styles.serif} ${styles.accent}`}>workspace</span>
                     </h1>
                     <p className={styles.hSub}>
-                        A workspace is where your knowledge graph, sources, and
-                        workflows live. Open one you&apos;re already in, accept
-                        an invite, or start a new one for a different company.
+                        A workspace is where your knowledge graph, sources, and workflows live. Open
+                        one you&apos;re already in, accept an invite, or start a new one for a
+                        different company.
                     </p>
                 </header>
 
@@ -484,7 +474,7 @@ export function WorkspaceSelectClient({
                             ref={searchRef}
                             type="text"
                             value={query}
-                            onChange={(e) => setQuery(e.target.value)}
+                            onChange={e => setQuery(e.target.value)}
                             placeholder="Search workspaces by name, URL, or teammate…"
                             autoComplete="off"
                             aria-label="Search workspaces"
@@ -505,27 +495,28 @@ export function WorkspaceSelectClient({
                         <div className={styles.emptyRow}>
                             {query ? (
                                 <>
-                                    No workspace matches <b>“{query}”</b>. Try
-                                    creating a new one below.
+                                    No workspace matches <b>“{query}”</b>. Try creating a new one
+                                    below.
                                 </>
                             ) : (
-                                <>You aren&apos;t in any workspaces yet. Create your first one below.</>
+                                <>
+                                    You aren&apos;t in any workspaces yet. Create your first one
+                                    below.
+                                </>
                             )}
                         </div>
                     ) : (
-                        filtered.map((ws) => {
+                        filtered.map(ws => {
                             const initials = initialsOf(ws.name);
                             const memberLabel =
-                                ws.memberCount === 1
-                                    ? "Just you"
-                                    : `${ws.memberCount} members`;
+                                ws.memberCount === 1 ? "Just you" : `${ws.memberCount} members`;
                             const isSwitching = switchingId === ws.id;
                             const showPile = ws.memberCount > 1;
                             const pile = showPile
                                 ? memberPileParts(
                                       ws.memberCount,
                                       account.name,
-                                      `${ws.id}:${ws.slug}`,
+                                      `${ws.id}:${ws.slug}`
                                   )
                                 : [];
                             return (
@@ -545,20 +536,14 @@ export function WorkspaceSelectClient({
                                     }
                                     aria-current={ws.isActive ? "true" : undefined}
                                 >
-                                    <div
-                                        className={`${styles.wsMark} ${gradientClass(ws.swatch)}`}
-                                    >
+                                    <div className={`${styles.wsMark} ${gradientClass(ws.swatch)}`}>
                                         {initials}
                                     </div>
                                     <div className={styles.wsBody}>
                                         <div className={styles.wsName}>
-                                            <span className={styles.wsNameText}>
-                                                {ws.name}
-                                            </span>
+                                            <span className={styles.wsNameText}>{ws.name}</span>
                                             {ws.isActive ? (
-                                                <span className={styles.activeChip}>
-                                                    Active
-                                                </span>
+                                                <span className={styles.activeChip}>Active</span>
                                             ) : null}
                                         </div>
                                         <div className={styles.wsMeta}>
@@ -572,9 +557,7 @@ export function WorkspaceSelectClient({
                                             ) : null}
                                             <span>{memberLabel}</span>
                                             <span className={styles.sep}>·</span>
-                                            <span>
-                                                Opened {relativeTime(ws.lastOpenedAt)}
-                                            </span>
+                                            <span>Opened {relativeTime(ws.lastOpenedAt)}</span>
                                         </div>
                                     </div>
                                     {showPile ? (
@@ -592,9 +575,7 @@ export function WorkspaceSelectClient({
                                                 </span>
                                             ))}
                                             {ws.memberCount > 4 ? (
-                                                <span
-                                                    className={`${styles.av} ${styles.avMore}`}
-                                                >
+                                                <span className={`${styles.av} ${styles.avMore}`}>
                                                     +{ws.memberCount - 4}
                                                 </span>
                                             ) : null}
@@ -609,17 +590,15 @@ export function WorkspaceSelectClient({
                     )}
                 </div>
 
-                {pendingInvites.filter((p) => !dismissedPendingIds.has(p.id)).length >
-                0 ? (
+                {pendingInvites.filter(p => !dismissedPendingIds.has(p.id)).length > 0 ? (
                     <>
                         <div className={styles.sectionHead}>
                             <div className={styles.sectionTitle}>
                                 Pending invites{" "}
                                 <span className={styles.ct}>
                                     {
-                                        pendingInvites.filter(
-                                            (p) => !dismissedPendingIds.has(p.id),
-                                        ).length
+                                        pendingInvites.filter(p => !dismissedPendingIds.has(p.id))
+                                            .length
                                     }
                                 </span>
                             </div>
@@ -629,14 +608,11 @@ export function WorkspaceSelectClient({
                         </div>
                         <div className={styles.wsList}>
                             {pendingInvites
-                                .filter((p) => !dismissedPendingIds.has(p.id))
-                                .map((inv) => {
+                                .filter(p => !dismissedPendingIds.has(p.id))
+                                .map(inv => {
                                     const mark = initialsOf(inv.companyName);
                                     return (
-                                        <div
-                                            key={inv.id}
-                                            className={styles.wsPending}
-                                        >
+                                        <div key={inv.id} className={styles.wsPending}>
                                             <div
                                                 className={`${styles.wsMark} ${gradientClass(inv.swatch)}`}
                                             >
@@ -676,7 +652,7 @@ export function WorkspaceSelectClient({
                                                     type="button"
                                                     className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
                                                     onClick={() =>
-                                                        setDismissedPendingIds((s) => {
+                                                        setDismissedPendingIds(s => {
                                                             const n = new Set(s);
                                                             n.add(inv.id);
                                                             return n;
@@ -690,7 +666,7 @@ export function WorkspaceSelectClient({
                                                     className={`${styles.btn} ${styles.btnAccent} ${styles.btnSm}`}
                                                     onClick={() =>
                                                         setError(
-                                                            "Accepting invites from this screen is not available yet.",
+                                                            "Accepting invites from this screen is not available yet."
                                                         )
                                                     }
                                                 >
@@ -735,8 +711,7 @@ export function WorkspaceSelectClient({
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div className={styles.ctTitle}>Create a new workspace</div>
                             <div className={styles.ctHelp}>
-                                For a new company or product. Empty knowledge graph,
-                                ready to fill.
+                                For a new company or product. Empty knowledge graph, ready to fill.
                             </div>
                         </div>
                         <svg
@@ -757,11 +732,7 @@ export function WorkspaceSelectClient({
                     <button
                         type="button"
                         className={`${styles.createCard} ${styles.createCardAlt}`}
-                        onClick={() =>
-                            setError(
-                                "Importing from another tool is coming soon."
-                            )
-                        }
+                        onClick={() => setError("Importing from another tool is coming soon.")}
                     >
                         <div className={`${styles.createIcon} ${styles.createIconAlt}`}>
                             <svg
@@ -780,12 +751,10 @@ export function WorkspaceSelectClient({
                             </svg>
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                            <div className={styles.ctTitle}>
-                                Import from another tool
-                            </div>
+                            <div className={styles.ctTitle}>Import from another tool</div>
                             <div className={styles.ctHelp}>
-                                Bring in a Notion workspace, a Linear team, or a
-                                Google Drive folder as a starting point.
+                                Bring in a Notion workspace, a Linear team, or a Google Drive folder
+                                as a starting point.
                             </div>
                         </div>
                         <svg
@@ -816,8 +785,8 @@ export function WorkspaceSelectClient({
                             <div>
                                 <h3 className={styles.ceTitle}>New workspace</h3>
                                 <p className={styles.ceHelp}>
-                                    You&apos;ll start with an empty knowledge graph.
-                                    Upload sources next.
+                                    You&apos;ll start with an empty knowledge graph. Upload sources
+                                    next.
                                 </p>
                             </div>
                             <button
@@ -855,7 +824,7 @@ export function WorkspaceSelectClient({
                                     placeholder="e.g. Northwind Labs"
                                     autoComplete="off"
                                     value={name}
-                                    onChange={(e) => onNameChange(e.target.value)}
+                                    onChange={e => onNameChange(e.target.value)}
                                 />
                             </div>
                             <div className={styles.ceField}>
@@ -870,7 +839,7 @@ export function WorkspaceSelectClient({
                                         placeholder="northwind"
                                         autoComplete="off"
                                         value={slugValue}
-                                        onChange={(e) => onSlugChange(e.target.value)}
+                                        onChange={e => onSlugChange(e.target.value)}
                                     />
                                 </div>
                                 {slugValue.length >= 2 && slugAvailable !== null ? (
@@ -904,7 +873,7 @@ export function WorkspaceSelectClient({
                                 <label className={styles.ceLabel}>Workspace icon</label>
                                 <div className={styles.swatches} role="radiogroup">
                                     {Array.from({ length: SWATCH_COUNT }, (_, i) => i + 1).map(
-                                        (n) => (
+                                        n => (
                                             <button
                                                 key={n}
                                                 type="button"
@@ -926,7 +895,7 @@ export function WorkspaceSelectClient({
                                     id="ce-team"
                                     className={styles.select}
                                     value={teamSize}
-                                    onChange={(e) => setTeamSize(e.target.value)}
+                                    onChange={e => setTeamSize(e.target.value)}
                                 >
                                     <option>Just me — I&apos;m a solo founder</option>
                                     <option>2–5 people</option>
@@ -956,7 +925,7 @@ export function WorkspaceSelectClient({
                                     rows={2}
                                     placeholder="One sentence on what this company does. e.g. ‘We turn scattered context into a knowledge graph for AI workflows.’"
                                     value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
+                                    onChange={e => setDescription(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -1021,8 +990,7 @@ export function WorkspaceSelectClient({
                 ) : null}
 
                 <p className={styles.foot}>
-                    Looking for a workspace that&apos;s not here? Ask its owner to
-                    invite{" "}
+                    Looking for a workspace that&apos;s not here? Ask its owner to invite{" "}
                     <b style={{ color: "var(--ink-2)", fontWeight: 500 }}>
                         {account.email || "you"}
                     </b>
@@ -1031,7 +999,9 @@ export function WorkspaceSelectClient({
                     <a href="/signin">Use a different account</a>
                     <span className={styles.sepDot}>·</span>
                     {/* Cross-origin — support lives on the public site. */}
-                    <a href={LANDING_CONTACT_URL} rel="noopener">Help</a>
+                    <a href={LANDING_CONTACT_URL} rel="noopener">
+                        Help
+                    </a>
                     {/*
                       A "Privacy" link pointing at /privacy used to sit here.
                       That route has never existed in any app, so it 404'd;

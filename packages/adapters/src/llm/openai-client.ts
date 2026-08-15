@@ -18,36 +18,34 @@ import { createSlot } from "../internal/slot";
 import { GEMINI_BASE_URL } from "./types";
 
 export interface AuxiliaryOpenAIConfig {
-  /**
-   * Credential for {@link baseUrl}. Belongs to whatever service that URL names,
-   * and is only ever sent there.
-   */
-  apiKey?: string;
-  /** OpenAI-compatible base URL the operator named, if any. */
-  baseUrl?: string;
-  /**
-   * Credential for the Gemini fallback, kept separate on purpose.
-   *
-   * {@link apiKey} may hold an OpenAI or other vendor's key. Defaulting the URL
-   * to Gemini while reusing that key would post it to Google — the precise
-   * failure this split exists to prevent. The fallback only fires when a Google
-   * credential is present to pair with it.
-   */
-  googleApiKey?: string;
+    /**
+     * Credential for {@link baseUrl}. Belongs to whatever service that URL names,
+     * and is only ever sent there.
+     */
+    apiKey?: string;
+    /** OpenAI-compatible base URL the operator named, if any. */
+    baseUrl?: string;
+    /**
+     * Credential for the Gemini fallback, kept separate on purpose.
+     *
+     * {@link apiKey} may hold an OpenAI or other vendor's key. Defaulting the URL
+     * to Gemini while reusing that key would post it to Google — the precise
+     * failure this split exists to prevent. The fallback only fires when a Google
+     * credential is present to pair with it.
+     */
+    googleApiKey?: string;
 }
 
 const configSlot = createSlot<AuxiliaryOpenAIConfig>("llm/auxiliaryOpenAI");
-const clientSlot = createSlot<{ client: OpenAI; key: string }>(
-  "llm/auxiliaryOpenAIClient",
-);
+const clientSlot = createSlot<{ client: OpenAI; key: string }>("llm/auxiliaryOpenAIClient");
 
 /** Install credentials for the non-chat OpenAI-compatible subsystems. */
 export function configureAuxiliaryOpenAI(config: AuxiliaryOpenAIConfig): void {
-  configSlot.set(config);
+    configSlot.set(config);
 }
 
 export function getAuxiliaryOpenAIConfig(): AuxiliaryOpenAIConfig {
-  return configSlot.get() ?? {};
+    return configSlot.get() ?? {};
 }
 
 /**
@@ -66,36 +64,36 @@ export function getAuxiliaryOpenAIConfig(): AuxiliaryOpenAIConfig {
  * different companies.
  */
 export function getOpenAIClient(): OpenAI | null {
-  const { apiKey, baseUrl, googleApiKey } = getAuxiliaryOpenAIConfig();
+    const { apiKey, baseUrl, googleApiKey } = getAuxiliaryOpenAIConfig();
 
-  const resolved = baseUrl
-    ? apiKey
-      ? { apiKey, baseUrl }
-      : null
-    : googleApiKey
-      ? { apiKey: googleApiKey, baseUrl: GEMINI_BASE_URL }
-      : null;
+    const resolved = baseUrl
+        ? apiKey
+            ? { apiKey, baseUrl }
+            : null
+        : googleApiKey
+          ? { apiKey: googleApiKey, baseUrl: GEMINI_BASE_URL }
+          : null;
 
-  if (!resolved) {
-    if (apiKey && !baseUrl) {
-      console.warn(
-        "[llm] An auxiliary credential is set but no endpoint names where it " +
-          "belongs, and no GOOGLE_AI_API_KEY is available for the Gemini " +
-          "default. Set AI_BASE_URL to pair it, or GOOGLE_AI_API_KEY to use " +
-          "Gemini. The key will not be sent anywhere.",
-      );
+    if (!resolved) {
+        if (apiKey && !baseUrl) {
+            console.warn(
+                "[llm] An auxiliary credential is set but no endpoint names where it " +
+                    "belongs, and no GOOGLE_AI_API_KEY is available for the Gemini " +
+                    "default. Set AI_BASE_URL to pair it, or GOOGLE_AI_API_KEY to use " +
+                    "Gemini. The key will not be sent anywhere."
+            );
+        }
+        return null;
     }
-    return null;
-  }
 
-  const cacheKey = `${resolved.apiKey}:${resolved.baseUrl}`;
-  const cached = clientSlot.get();
-  if (cached && cached.key === cacheKey) return cached.client;
+    const cacheKey = `${resolved.apiKey}:${resolved.baseUrl}`;
+    const cached = clientSlot.get();
+    if (cached && cached.key === cacheKey) return cached.client;
 
-  const client = new OpenAI({
-    apiKey: resolved.apiKey,
-    baseURL: resolved.baseUrl,
-  });
-  clientSlot.set({ client, key: cacheKey });
-  return client;
+    const client = new OpenAI({
+        apiKey: resolved.apiKey,
+        baseURL: resolved.baseUrl,
+    });
+    clientSlot.set({ client, key: cacheKey });
+    return client;
 }

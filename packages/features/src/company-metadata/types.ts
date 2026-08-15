@@ -28,31 +28,13 @@ export type Priority = "manual_override" | "high" | "normal" | "low";
 /** Lifecycle status of a fact. */
 export type FactStatus = "active" | "deprecated" | "superseded";
 
-export const VISIBILITY_VALUES = [
-    "public",
-    "partner",
-    "private",
-    "internal",
-] as const;
+export const VISIBILITY_VALUES = ["public", "partner", "private", "internal"] as const;
 
-export const USAGE_VALUES = [
-    "outreach_ok",
-    "outreach_ok_with_approval",
-    "no_outreach",
-] as const;
+export const USAGE_VALUES = ["outreach_ok", "outreach_ok_with_approval", "no_outreach"] as const;
 
-export const PRIORITY_VALUES = [
-    "manual_override",
-    "high",
-    "normal",
-    "low",
-] as const;
+export const PRIORITY_VALUES = ["manual_override", "high", "normal", "low"] as const;
 
-export const FACT_STATUS_VALUES = [
-    "active",
-    "deprecated",
-    "superseded",
-] as const;
+export const FACT_STATUS_VALUES = ["active", "deprecated", "superseded"] as const;
 
 export const CHANGE_TYPE_VALUES = [
     "extraction",
@@ -200,11 +182,7 @@ export interface ExtractedCompanyFacts {
     facts: Partial<
         Omit<
             CompanyMetadataJSON,
-            | "schema_version"
-            | "company_id"
-            | "updated_at"
-            | "provenance"
-            | "derived_views"
+            "schema_version" | "company_id" | "updated_at" | "provenance" | "derived_views"
         >
     >;
 }

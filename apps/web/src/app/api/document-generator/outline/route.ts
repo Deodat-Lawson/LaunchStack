@@ -1,6 +1,6 @@
 /**
  * Document Generator - Outline Generation API
- * 
+ *
  * Actions:
  * - generate: Generate an outline from topic/description
  * - restructure: Suggest improvements to existing structure
@@ -27,13 +27,15 @@ interface OutlineItem {
     children?: OutlineItem[];
 }
 
-const OutlineItemSchema: z.ZodType<OutlineItem> = z.lazy(() => z.object({
-    id: z.string(),
-    title: z.string(),
-    level: z.number(),
-    description: z.string().optional(),
-    children: z.array(OutlineItemSchema).optional(),
-}));
+const OutlineItemSchema: z.ZodType<OutlineItem> = z.lazy(() =>
+    z.object({
+        id: z.string(),
+        title: z.string(),
+        level: z.number(),
+        description: z.string().optional(),
+        children: z.array(OutlineItemSchema).optional(),
+    })
+);
 
 const OutlineResponseSchema = z.object({
     outline: z.array(OutlineItemSchema).optional(),
@@ -53,13 +55,15 @@ const OutlineSchema = z.object({
     description: z.string().optional(),
     content: z.string().optional(), // Existing content for restructure/extract
     templateId: z.string().optional(),
-    options: z.object({
-        depth: z.number().min(1).max(4).optional(), // Max heading depth
-        sections: z.number().min(2).max(20).optional(), // Target number of sections
-        audience: z.string().optional(),
-        tone: z.string().optional(),
-        model: z.string().min(1).optional(),
-    }).optional(),
+    options: z
+        .object({
+            depth: z.number().min(1).max(4).optional(), // Max heading depth
+            sections: z.number().min(2).max(20).optional(), // Target number of sections
+            audience: z.string().optional(),
+            tone: z.string().optional(),
+            model: z.string().min(1).optional(),
+        })
+        .optional(),
 });
 
 const OUTLINE_SYSTEM_PROMPT = `You are an expert document structure architect. Your task is to create well-organized, logical document outlines.
@@ -135,16 +139,22 @@ IMPORTANT: Respond ONLY with valid JSON in this exact format:
 
 // Template-specific outline hints
 const TEMPLATE_HINTS: Record<string, string> = {
-    research: "Include: Abstract, Introduction, Literature Review, Methodology, Results, Discussion, Conclusion, References",
+    research:
+        "Include: Abstract, Introduction, Literature Review, Methodology, Results, Discussion, Conclusion, References",
     report: "Include: Executive Summary, Background, Analysis, Findings, Recommendations, Conclusion",
-    proposal: "Include: Overview, Objectives, Scope, Timeline, Budget, Expected Outcomes, Conclusion",
-    technical: "Include: Overview, Architecture, Components, API Reference, Configuration, Troubleshooting",
+    proposal:
+        "Include: Overview, Objectives, Scope, Timeline, Budget, Expected Outcomes, Conclusion",
+    technical:
+        "Include: Overview, Architecture, Components, API Reference, Configuration, Troubleshooting",
     meeting: "Include: Agenda, Discussion Points, Decisions, Action Items, Next Steps",
-    whitepaper: "Include: Executive Summary, Challenge, Solution, Benefits, Implementation, Case Studies, Conclusion",
-    "case-study": "Include: Client Overview, Challenge, Solution, Implementation, Results, Testimonial, Lessons Learned",
+    whitepaper:
+        "Include: Executive Summary, Challenge, Solution, Benefits, Implementation, Case Studies, Conclusion",
+    "case-study":
+        "Include: Client Overview, Challenge, Solution, Implementation, Results, Testimonial, Lessons Learned",
     guide: "Include: Introduction, Prerequisites, Step-by-Step Instructions, Tips, Troubleshooting, Conclusion",
     policy: "Include: Purpose, Scope, Policy Statement, Responsibilities, Procedures, Compliance, Review",
-    newsletter: "Include: Editor's Note, Highlights, Featured Story, Updates, Upcoming Events, Resources",
+    newsletter:
+        "Include: Editor's Note, Highlights, Featured Story, Updates, Upcoming Events, Resources",
     sop: "Include: Purpose, Scope, Responsibilities, Procedure Steps, Safety, Quality Standards, Documentation",
 };
 
@@ -153,7 +163,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = OutlineSchema.safeParse(body);
 
         if (!validation.success) {
@@ -168,14 +178,11 @@ export async function POST(request: Request) {
 
         const resolved = resolveConfiguredChatModel({ route: "fast" });
         const modelId = resolved.modelId;
-        const compatibility = validateDeprecatedChatSelection(
-            { model: options?.model },
-            resolved,
-        );
+        const compatibility = validateDeprecatedChatSelection({ model: options?.model }, resolved);
         if (!compatibility.ok) {
             return NextResponse.json(
                 { success: false, message: compatibility.message },
-                { status: compatibility.status },
+                { status: compatibility.status }
             );
         }
 
@@ -186,23 +193,23 @@ export async function POST(request: Request) {
             case "generate":
                 systemPrompt = OUTLINE_SYSTEM_PROMPT;
                 userPrompt = `Create a document outline for: ${topic ?? "the document"}`;
-                
+
                 if (description) {
                     userPrompt += `\n\nDocument description: ${description}`;
                 }
-                
+
                 if (templateId && templateId in TEMPLATE_HINTS) {
                     userPrompt += `\n\nTemplate type: ${templateId}\nSuggested sections to ${TEMPLATE_HINTS[templateId]}`;
                 }
-                
+
                 if (options?.depth) {
                     userPrompt += `\n\nMaximum heading depth: ${options.depth} levels`;
                 }
-                
+
                 if (options?.sections) {
                     userPrompt += `\n\nTarget approximately ${options.sections} main sections`;
                 }
-                
+
                 if (options?.audience) {
                     userPrompt += `\n\nTarget audience: ${options.audience}`;
                 }
@@ -211,7 +218,7 @@ export async function POST(request: Request) {
             case "restructure":
                 systemPrompt = RESTRUCTURE_SYSTEM_PROMPT;
                 userPrompt = `Analyze and suggest improvements for this document structure:\n\n${content}`;
-                
+
                 if (topic) {
                     userPrompt += `\n\nDocument topic: ${topic}`;
                 }
@@ -229,10 +236,12 @@ export async function POST(request: Request) {
                 );
         }
 
-        const extras = await invokeStructured(resolved, OutlineResponseSchema, [
-            new SystemMessage(systemPrompt),
-            new HumanMessage(userPrompt),
-        ], { name: "outline_response" });
+        const extras = await invokeStructured(
+            resolved,
+            OutlineResponseSchema,
+            [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
+            { name: "outline_response" }
+        );
         const outline = extras.outline ?? extras.suggestedStructure ?? [];
         const processingTimeMs = Date.now() - startTime;
 
@@ -242,27 +251,30 @@ export async function POST(request: Request) {
             success: true,
             action,
             outline,
-            ...(action === "restructure" ? {
-                currentStructure: extras.currentStructure,
-                improvements: extras.improvements,
-                gaps: extras.gaps,
-            } : {}),
-            ...(action === "extract" ? {
-                wordCount: extras.wordCount,
-                sectionCount: extras.sectionCount,
-            } : {}),
+            ...(action === "restructure"
+                ? {
+                      currentStructure: extras.currentStructure,
+                      improvements: extras.improvements,
+                      gaps: extras.gaps,
+                  }
+                : {}),
+            ...(action === "extract"
+                ? {
+                      wordCount: extras.wordCount,
+                      sectionCount: extras.sectionCount,
+                  }
+                : {}),
             summary: extras.summary,
             processingTimeMs,
             model: modelId,
         });
-
     } catch (error) {
         console.error("❌ [Document Generator] Error generating outline:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to generate outline",
-                error: "Failed to generate outline"
+                error: "Failed to generate outline",
             },
             { status: 500 }
         );

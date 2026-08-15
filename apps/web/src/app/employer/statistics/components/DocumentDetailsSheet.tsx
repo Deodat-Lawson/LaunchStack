@@ -25,7 +25,16 @@ import {
     TableHeader,
     TableRow,
 } from "~/app/employer/documents/components/ui/table";
-import { FileText, Users, Eye, Clock, Calendar, TrendingUp, Loader2, ExternalLink } from "lucide-react";
+import {
+    FileText,
+    Users,
+    Eye,
+    Clock,
+    Calendar,
+    TrendingUp,
+    Loader2,
+    ExternalLink,
+} from "lucide-react";
 import { Card } from "~/app/employer/documents/components/ui/card";
 import { cn } from "~/lib/utils";
 import { Button } from "~/app/employer/documents/components/ui/button";
@@ -51,11 +60,11 @@ function formatDate(dateString: string): string {
 
 function formatDateTime(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleString("en-US", { 
-        month: "short", 
-        day: "numeric", 
-        hour: "numeric", 
-        minute: "numeric" 
+    return date.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
     });
 }
 
@@ -101,11 +110,11 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
         try {
             const response = await fetch(`/api/company/documents/${id}/stats`);
             const result = (await response.json()) as DocumentDetailsResponse;
-            
+
             if (!result.success || !result.data) {
                 throw new Error(result.error ?? "Failed to fetch document details");
             }
-            
+
             setDetails(result.data);
         } catch (err) {
             setError(err instanceof Error ? err.message : "An error occurred");
@@ -125,36 +134,37 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
     const totalViewsIn30Days = details?.viewsTrend.reduce((sum, d) => sum + d.count, 0) ?? 0;
 
     return (
-        <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <SheetContent className="w-[420px] sm:w-[560px] p-0 flex flex-col gap-0 overflow-hidden">
+        <Sheet open={isOpen} onOpenChange={open => !open && onClose()}>
+            <SheetContent className="flex w-[420px] flex-col gap-0 overflow-hidden p-0 sm:w-[560px]">
                 {/* Fixed Header */}
                 <div className="bg-gradient-to-br from-blue-600 to-purple-600 p-6 text-white">
                     <SheetHeader className="space-y-3">
                         <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-start gap-4 flex-1 min-w-0">
-                                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl shrink-0">
-                                    <FileText className="w-6 h-6" />
+                            <div className="flex min-w-0 flex-1 items-start gap-4">
+                                <div className="shrink-0 rounded-xl bg-white/20 p-3 backdrop-blur-sm">
+                                    <FileText className="h-6 w-6" />
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                    <SheetTitle className="text-white text-lg font-bold leading-tight line-clamp-2 text-left">
+                                <div className="min-w-0 flex-1">
+                                    <SheetTitle className="line-clamp-2 text-left text-lg font-bold leading-tight text-white">
                                         {document.title}
                                     </SheetTitle>
-                                    <div className="flex items-center gap-2 mt-2">
-                                        <Badge className="bg-white/20 hover:bg-white/30 text-white border-0 text-xs">
+                                    <div className="mt-2 flex items-center gap-2">
+                                        <Badge className="border-0 bg-white/20 text-xs text-white hover:bg-white/30">
                                             {document.category}
                                         </Badge>
-                                        <SheetDescription className="text-white/70 text-xs">
-                                            Created {new Date(document.createdAt).toLocaleDateString()}
+                                        <SheetDescription className="text-xs text-white/70">
+                                            Created{" "}
+                                            {new Date(document.createdAt).toLocaleDateString()}
                                         </SheetDescription>
                                     </div>
                                 </div>
                             </div>
-                            <Button 
+                            <Button
                                 onClick={handleViewDocument}
-                                size="sm" 
-                                className="bg-white/20 hover:bg-white/30 text-white border-0 backdrop-blur-sm shrink-0 gap-2 h-9"
+                                size="sm"
+                                className="h-9 shrink-0 gap-2 border-0 bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
                             >
-                                <ExternalLink className="w-4 h-4" />
+                                <ExternalLink className="h-4 w-4" />
                                 <span className="hidden sm:inline">View Doc</span>
                             </Button>
                         </div>
@@ -162,74 +172,115 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                 </div>
 
                 {/* Scrollable Content */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                <div className="flex-1 space-y-6 overflow-y-auto p-6">
                     {error ? (
-                        <Card className="p-4 border-destructive/20 bg-destructive/5">
+                        <Card className="border-destructive/20 bg-destructive/5 p-4">
                             <p className="text-destructive text-sm font-medium">
                                 Failed to load details: {error}
                             </p>
                         </Card>
                     ) : loading ? (
-                        <div className="flex flex-col items-center justify-center py-12 gap-4">
+                        <div className="flex flex-col items-center justify-center gap-4 py-12">
                             <div className="relative">
-                                <div className="w-12 h-12 border-3 border-blue-100 dark:border-blue-900/30 rounded-full border-t-blue-600 animate-spin" />
-                                <Loader2 className="w-5 h-5 text-blue-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+                                <div className="border-3 h-12 w-12 animate-spin rounded-full border-blue-100 border-t-blue-600 dark:border-blue-900/30" />
+                                <Loader2 className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 animate-pulse text-blue-600" />
                             </div>
-                            <p className="text-sm text-muted-foreground font-medium">Loading statistics...</p>
+                            <p className="text-muted-foreground text-sm font-medium">
+                                Loading statistics...
+                            </p>
                         </div>
                     ) : details ? (
                         <>
                             {/* Stats Grid */}
                             <div className="grid grid-cols-3 gap-3">
-                                <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200/50 dark:border-blue-800/30">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <Eye className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                                        <span className="text-[10px] font-bold text-blue-600/70 dark:text-blue-400/70 uppercase tracking-wider">Views</span>
+                                <Card className="border-blue-200/50 bg-gradient-to-br from-blue-50 to-blue-100/50 p-4 dark:border-blue-800/30 dark:from-blue-950/30 dark:to-blue-900/20">
+                                    <div className="mb-2 flex items-center gap-2">
+                                        <Eye className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600/70 dark:text-blue-400/70">
+                                            Views
+                                        </span>
                                     </div>
-                                    <div className="text-2xl font-black text-blue-700 dark:text-blue-300">{details.totalViews}</div>
-                                    <p className="text-[10px] text-blue-600/60 dark:text-blue-400/60 mt-1">All time</p>
+                                    <div className="text-2xl font-black text-blue-700 dark:text-blue-300">
+                                        {details.totalViews}
+                                    </div>
+                                    <p className="mt-1 text-[10px] text-blue-600/60 dark:text-blue-400/60">
+                                        All time
+                                    </p>
                                 </Card>
-                                
-                                <Card className="p-4 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20 border-purple-200/50 dark:border-purple-800/30">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <Users className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                                        <span className="text-[10px] font-bold text-purple-600/70 dark:text-purple-400/70 uppercase tracking-wider">Unique</span>
+
+                                <Card className="border-purple-200/50 bg-gradient-to-br from-purple-50 to-purple-100/50 p-4 dark:border-purple-800/30 dark:from-purple-950/30 dark:to-purple-900/20">
+                                    <div className="mb-2 flex items-center gap-2">
+                                        <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600/70 dark:text-purple-400/70">
+                                            Unique
+                                        </span>
                                     </div>
-                                    <div className="text-2xl font-black text-purple-700 dark:text-purple-300">{details.uniqueViewers}</div>
-                                    <p className="text-[10px] text-purple-600/60 dark:text-purple-400/60 mt-1">Viewers</p>
+                                    <div className="text-2xl font-black text-purple-700 dark:text-purple-300">
+                                        {details.uniqueViewers}
+                                    </div>
+                                    <p className="mt-1 text-[10px] text-purple-600/60 dark:text-purple-400/60">
+                                        Viewers
+                                    </p>
                                 </Card>
-                                
-                                <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950/30 dark:to-green-900/20 border-green-200/50 dark:border-green-800/30">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
-                                        <span className="text-[10px] font-bold text-green-600/70 dark:text-green-400/70 uppercase tracking-wider">30 Days</span>
+
+                                <Card className="border-green-200/50 bg-gradient-to-br from-green-50 to-green-100/50 p-4 dark:border-green-800/30 dark:from-green-950/30 dark:to-green-900/20">
+                                    <div className="mb-2 flex items-center gap-2">
+                                        <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-green-600/70 dark:text-green-400/70">
+                                            30 Days
+                                        </span>
                                     </div>
-                                    <div className="text-2xl font-black text-green-700 dark:text-green-300">{totalViewsIn30Days}</div>
-                                    <p className="text-[10px] text-green-600/60 dark:text-green-400/60 mt-1">Recent</p>
+                                    <div className="text-2xl font-black text-green-700 dark:text-green-300">
+                                        {totalViewsIn30Days}
+                                    </div>
+                                    <p className="mt-1 text-[10px] text-green-600/60 dark:text-green-400/60">
+                                        Recent
+                                    </p>
                                 </Card>
                             </div>
 
                             {/* Activity Chart */}
                             <div className="space-y-3">
                                 <div className="flex items-center gap-2">
-                                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                                    <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                                    <Calendar className="text-muted-foreground h-4 w-4" />
+                                    <h3 className="text-muted-foreground text-xs font-bold uppercase tracking-widest">
                                         30 Day Activity
                                     </h3>
                                 </div>
-                                <Card className="p-4 border-none shadow-sm bg-muted/30">
-                                    <ChartContainer config={viewsChartConfig} className="h-[160px] w-full">
+                                <Card className="bg-muted/30 border-none p-4 shadow-sm">
+                                    <ChartContainer
+                                        config={viewsChartConfig}
+                                        className="h-[160px] w-full"
+                                    >
                                         <AreaChart
                                             data={details.viewsTrend}
                                             margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
                                         >
                                             <defs>
-                                                <linearGradient id="detailViewsGradient" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="5%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.4} />
-                                                    <stop offset="95%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0} />
+                                                <linearGradient
+                                                    id="detailViewsGradient"
+                                                    x1="0"
+                                                    y1="0"
+                                                    x2="0"
+                                                    y2="1"
+                                                >
+                                                    <stop
+                                                        offset="5%"
+                                                        stopColor="hsl(221, 83%, 53%)"
+                                                        stopOpacity={0.4}
+                                                    />
+                                                    <stop
+                                                        offset="95%"
+                                                        stopColor="hsl(221, 83%, 53%)"
+                                                        stopOpacity={0}
+                                                    />
                                                 </linearGradient>
                                             </defs>
-                                            <CartesianGrid strokeDasharray="3 3" className="stroke-muted/50" vertical={false} />
+                                            <CartesianGrid
+                                                strokeDasharray="3 3"
+                                                className="stroke-muted/50"
+                                                vertical={false}
+                                            />
                                             <XAxis
                                                 dataKey="date"
                                                 tickLine={false}
@@ -247,7 +298,9 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                             <ChartTooltip
                                                 content={
                                                     <ChartTooltipContent
-                                                        labelFormatter={(value) => formatDate(value as string)}
+                                                        labelFormatter={value =>
+                                                            formatDate(value as string)
+                                                        }
                                                     />
                                                 }
                                             />
@@ -267,8 +320,8 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <Clock className="w-4 h-4 text-muted-foreground" />
-                                        <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                                        <Clock className="text-muted-foreground h-4 w-4" />
+                                        <h3 className="text-muted-foreground text-xs font-bold uppercase tracking-widest">
                                             Recent Viewers
                                         </h3>
                                     </div>
@@ -276,14 +329,18 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                         {details.recentViewers.length} shown
                                     </Badge>
                                 </div>
-                                
+
                                 <Card className="overflow-hidden border shadow-sm">
                                     <div className="max-h-[200px] overflow-y-auto">
                                         <Table>
-                                            <TableHeader className="sticky top-0 bg-muted/80 backdrop-blur-sm z-10">
+                                            <TableHeader className="bg-muted/80 sticky top-0 z-10 backdrop-blur-sm">
                                                 <TableRow>
-                                                    <TableHead className="text-[10px] uppercase font-bold tracking-wider py-2">User</TableHead>
-                                                    <TableHead className="text-[10px] uppercase font-bold tracking-wider text-right py-2">When</TableHead>
+                                                    <TableHead className="py-2 text-[10px] font-bold uppercase tracking-wider">
+                                                        User
+                                                    </TableHead>
+                                                    <TableHead className="py-2 text-right text-[10px] font-bold uppercase tracking-wider">
+                                                        When
+                                                    </TableHead>
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
@@ -292,32 +349,51 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                         <TableRow key={i} className="group">
                                                             <TableCell className="py-2.5">
                                                                 <div className="flex items-center gap-3">
-                                                                    <div className={cn(
-                                                                        "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0",
-                                                                        viewer.role === "owner" ? "bg-purple-500" :
-                                                                        viewer.role === "employer" ? "bg-blue-500" : "bg-gray-400"
-                                                                    )}>
-                                                                        {viewer.name.charAt(0).toUpperCase()}
+                                                                    <div
+                                                                        className={cn(
+                                                                            "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white",
+                                                                            viewer.role === "owner"
+                                                                                ? "bg-purple-500"
+                                                                                : viewer.role ===
+                                                                                    "employer"
+                                                                                  ? "bg-blue-500"
+                                                                                  : "bg-gray-400"
+                                                                        )}
+                                                                    >
+                                                                        {viewer.name
+                                                                            .charAt(0)
+                                                                            .toUpperCase()}
                                                                     </div>
                                                                     <div className="min-w-0">
-                                                                        <p className="font-medium text-sm truncate">{viewer.name}</p>
-                                                                        <p className="text-[11px] text-muted-foreground truncate">{viewer.email}</p>
+                                                                        <p className="truncate text-sm font-medium">
+                                                                            {viewer.name}
+                                                                        </p>
+                                                                        <p className="text-muted-foreground truncate text-[11px]">
+                                                                            {viewer.email}
+                                                                        </p>
                                                                     </div>
                                                                 </div>
                                                             </TableCell>
-                                                            <TableCell className="text-right py-2.5">
-                                                                <span className="text-xs text-muted-foreground font-medium">
-                                                                    {formatRelativeTime(viewer.viewedAt)}
+                                                            <TableCell className="py-2.5 text-right">
+                                                                <span className="text-muted-foreground text-xs font-medium">
+                                                                    {formatRelativeTime(
+                                                                        viewer.viewedAt
+                                                                    )}
                                                                 </span>
                                                             </TableCell>
                                                         </TableRow>
                                                     ))
                                                 ) : (
                                                     <TableRow>
-                                                        <TableCell colSpan={2} className="text-center text-muted-foreground py-8">
+                                                        <TableCell
+                                                            colSpan={2}
+                                                            className="text-muted-foreground py-8 text-center"
+                                                        >
                                                             <div className="flex flex-col items-center gap-2">
-                                                                <Eye className="w-8 h-8 text-muted-foreground/30" />
-                                                                <p className="text-sm">No views yet</p>
+                                                                <Eye className="text-muted-foreground/30 h-8 w-8" />
+                                                                <p className="text-sm">
+                                                                    No views yet
+                                                                </p>
                                                             </div>
                                                         </TableCell>
                                                     </TableRow>

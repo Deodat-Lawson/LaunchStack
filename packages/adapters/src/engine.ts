@@ -7,7 +7,12 @@
  */
 
 import { createDb, configureDatabase, type Db, type DbClient } from "./db";
-import { configureNeo4j, getNeo4jDriver, closeNeo4jDriver, type Driver } from "./graph/neo4j-client";
+import {
+    configureNeo4j,
+    getNeo4jDriver,
+    closeNeo4jDriver,
+    type Driver,
+} from "./graph/neo4j-client";
 import { configureStorage } from "./storage/slot";
 import { configureJobDispatcher } from "./jobs/slot";
 import { configureCredits, configureMetering } from "./credits/slot";
@@ -28,24 +33,24 @@ export { createDb, toRows } from "./db";
  * more subsystems migrate into core — today it's db + storage + graph.
  */
 export interface Engine {
-  config: CoreConfig;
-  /** Drizzle client + raw postgres.js client + close(). */
-  db: DbClient;
-  dbHandle: Db;
-  /** StoragePort handed in via config — re-exposed for convenience. */
-  storage: CoreConfig["storage"];
-  /**
-   * Accessor for the Neo4j driver. Returns null when config.neo4j is absent
-   * so graph-dependent code paths can skip gracefully. The driver itself is
-   * instantiated lazily inside the graph client module.
-   */
-  neo4j: () => Driver | null;
-  /**
-   * Closes the DB pool and the Neo4j driver (if configured). Hosts should
-   * call this on graceful shutdown (SIGTERM handler, Inngest worker exit,
-   * etc.). Idempotent — safe to call multiple times.
-   */
-  close: () => Promise<void>;
+    config: CoreConfig;
+    /** Drizzle client + raw postgres.js client + close(). */
+    db: DbClient;
+    dbHandle: Db;
+    /** StoragePort handed in via config — re-exposed for convenience. */
+    storage: CoreConfig["storage"];
+    /**
+     * Accessor for the Neo4j driver. Returns null when config.neo4j is absent
+     * so graph-dependent code paths can skip gracefully. The driver itself is
+     * instantiated lazily inside the graph client module.
+     */
+    neo4j: () => Driver | null;
+    /**
+     * Closes the DB pool and the Neo4j driver (if configured). Hosts should
+     * call this on graceful shutdown (SIGTERM handler, Inngest worker exit,
+     * etc.). Idempotent — safe to call multiple times.
+     */
+    close: () => Promise<void>;
 }
 
 /**
@@ -56,51 +61,55 @@ export interface Engine {
  * pattern that caches on globalThis to survive HMR).
  */
 export function createEngine(config: CoreConfig): Engine {
-  if (config.llm.chat) {
-    configureChatModels(config.llm.chat);
-  }
-  if (config.llm.auxiliaryOpenAI) {
-    configureAuxiliaryOpenAI(config.llm.auxiliaryOpenAI);
-  }
-  configureVlmEnrichment({ ollamaBaseUrl: config.llm.ollama?.baseUrl });
-  const dbHandle = createDb(config.db);
-  configureDatabase(dbHandle.db);
-  configureStorage(config.storage);
-  if (config.jobs?.dispatcher) {
-    configureJobDispatcher(config.jobs.dispatcher);
-  }
-  if (config.credits?.port) {
-    configureCredits(config.credits.port);
-  }
-  // Unconditional, unlike the port above: a host that builds an engine has
-  // decided about metering even when it says nothing, and leaving the slot
-  // empty would make "never configured" and "explicitly off" indistinguishable
-  // to anything reading it later.
-  configureMetering(config.credits?.metering ?? "off");
-  if (config.rag?.port) {
-    configureRag(config.rag.port);
-  }
-  configureNeo4j(config.neo4j ? {
-    uri: config.neo4j.uri,
-    user: config.neo4j.user,
-    password: config.neo4j.password,
-  } : null);
+    if (config.llm.chat) {
+        configureChatModels(config.llm.chat);
+    }
+    if (config.llm.auxiliaryOpenAI) {
+        configureAuxiliaryOpenAI(config.llm.auxiliaryOpenAI);
+    }
+    configureVlmEnrichment({ ollamaBaseUrl: config.llm.ollama?.baseUrl });
+    const dbHandle = createDb(config.db);
+    configureDatabase(dbHandle.db);
+    configureStorage(config.storage);
+    if (config.jobs?.dispatcher) {
+        configureJobDispatcher(config.jobs.dispatcher);
+    }
+    if (config.credits?.port) {
+        configureCredits(config.credits.port);
+    }
+    // Unconditional, unlike the port above: a host that builds an engine has
+    // decided about metering even when it says nothing, and leaving the slot
+    // empty would make "never configured" and "explicitly off" indistinguishable
+    // to anything reading it later.
+    configureMetering(config.credits?.metering ?? "off");
+    if (config.rag?.port) {
+        configureRag(config.rag.port);
+    }
+    configureNeo4j(
+        config.neo4j
+            ? {
+                  uri: config.neo4j.uri,
+                  user: config.neo4j.user,
+                  password: config.neo4j.password,
+              }
+            : null
+    );
 
-  let closed = false;
+    let closed = false;
 
-  return {
-    config,
-    db: dbHandle.db,
-    dbHandle,
-    storage: config.storage,
-    neo4j: () => (config.neo4j ? getNeo4jDriver() : null),
-    async close() {
-      if (closed) return;
-      closed = true;
-      await Promise.allSettled([
-        dbHandle.close(),
-        config.neo4j ? closeNeo4jDriver() : Promise.resolve(),
-      ]);
-    },
-  };
+    return {
+        config,
+        db: dbHandle.db,
+        dbHandle,
+        storage: config.storage,
+        neo4j: () => (config.neo4j ? getNeo4jDriver() : null),
+        async close() {
+            if (closed) return;
+            closed = true;
+            await Promise.allSettled([
+                dbHandle.close(),
+                config.neo4j ? closeNeo4jDriver() : Promise.resolve(),
+            ]);
+        },
+    };
 }

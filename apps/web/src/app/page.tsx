@@ -18,5 +18,5 @@ import { redirect } from "next/navigation";
  * an explicit already-signed-in state rather than handing back to Clerk.
  */
 export default function RootPage() {
-  redirect("/signin");
+    redirect("/signin");
 }

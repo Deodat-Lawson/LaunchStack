@@ -19,7 +19,7 @@ import {
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeIfDatabase =
-    process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL
+    (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
 
@@ -59,7 +59,8 @@ function createEvidenceSnapshot(): FounderWeeklyReviewEvidenceSnapshot {
                 sourceType: "founder_context",
                 sourceId: "founder-context-1",
                 title: "Founder weekly context",
-                excerpt: "Manual founder input: enterprise onboarding remains blocked on SSO setup.",
+                excerpt:
+                    "Manual founder input: enterprise onboarding remains blocked on SSO setup.",
             },
         ],
         sourceWarnings: [
@@ -104,49 +105,59 @@ function createV2Payload(): FounderWeeklyReviewV2Payload {
         sections: {
             whatChanged: {
                 state: "evidence",
-                items: [{
-                    kind: "observed_fact",
-                    text: "Billing exports changed.",
-                    sourceIds: ["doc-1"],
-                    confidence: 0.9,
-                }],
+                items: [
+                    {
+                        kind: "observed_fact",
+                        text: "Billing exports changed.",
+                        sourceIds: ["doc-1"],
+                        confidence: 0.9,
+                    },
+                ],
             },
             whatShipped: {
                 state: "evidence",
-                items: [{
-                    kind: "observed_fact",
-                    text: "Billing exports shipped.",
-                    sourceIds: ["doc-1"],
-                    confidence: 0.9,
-                }],
+                items: [
+                    {
+                        kind: "observed_fact",
+                        text: "Billing exports shipped.",
+                        sourceIds: ["doc-1"],
+                        confidence: 0.9,
+                    },
+                ],
             },
             whatCustomersSaid: {
                 state: "evidence",
-                items: [{
-                    kind: "observed_fact",
-                    text: "Prospects requested audit logging.",
-                    sourceIds: ["feedback-1"],
-                    confidence: 0.8,
-                }],
+                items: [
+                    {
+                        kind: "observed_fact",
+                        text: "Prospects requested audit logging.",
+                        sourceIds: ["feedback-1"],
+                        confidence: 0.8,
+                    },
+                ],
             },
             currentBlockers: {
                 state: "evidence",
-                items: [{
-                    kind: "observed_fact",
-                    text: "SSO setup remains blocked.",
-                    sourceIds: ["founder-context-1"],
-                    confidence: 0.8,
-                }],
+                items: [
+                    {
+                        kind: "observed_fact",
+                        text: "SSO setup remains blocked.",
+                        sourceIds: ["founder-context-1"],
+                        confidence: 0.8,
+                    },
+                ],
             },
             nextPriorities: {
                 state: "evidence",
-                items: [{
-                    kind: "recommendation",
-                    label: "Recommendation",
-                    text: "Prioritize SSO setup.",
-                    sourceIds: ["founder-context-1"],
-                    confidence: 0.8,
-                }],
+                items: [
+                    {
+                        kind: "recommendation",
+                        label: "Recommendation",
+                        text: "Prioritize SSO setup.",
+                        sourceIds: ["founder-context-1"],
+                        confidence: 0.8,
+                    },
+                ],
             },
         },
     };
@@ -170,11 +181,7 @@ async function insertCompany(
 
     const id = result.id;
 
-    if (
-        typeof id !== "number" &&
-        typeof id !== "string" &&
-        typeof id !== "bigint"
-    ) {
+    if (typeof id !== "number" && typeof id !== "string" && typeof id !== "bigint") {
         throw new Error(`Invalid company ID returned for ${name}`);
     }
 
@@ -315,9 +322,7 @@ describeIfDatabase("Founder Weekly Review lifecycle integration", () => {
                 createPayload("draft-2")
             );
             expect(editedDraft.status).toBe("draft");
-            expect(editedDraft.reviewPayload?.schemaVersion).toBe(
-                "founder-weekly-review/v1"
-            );
+            expect(editedDraft.reviewPayload?.schemaVersion).toBe("founder-weekly-review/v1");
             if (
                 !editedDraft.reviewPayload ||
                 editedDraft.reviewPayload.schemaVersion !== "founder-weekly-review/v1"
@@ -499,13 +504,9 @@ describeIfDatabase("Founder Weekly Review lifecycle integration", () => {
             expect(listed.length).toBeGreaterThanOrEqual(5);
 
             await expect(
-                userServiceA.updateDraft(
-                    actorA,
-                    claimRaceRun.id,
-                    {
-                        schemaVersion: "founder-weekly-review/v1",
-                    } as FounderWeeklyReviewPayload
-                )
+                userServiceA.updateDraft(actorA, claimRaceRun.id, {
+                    schemaVersion: "founder-weekly-review/v1",
+                } as FounderWeeklyReviewPayload)
             ).rejects.toBeInstanceOf(FounderWeeklyReviewInvalidPayloadError);
         } finally {
             await thirdSession.close();

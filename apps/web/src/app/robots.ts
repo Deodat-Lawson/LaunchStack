@@ -7,7 +7,7 @@ import type { MetadataRoute } from "next";
 // No `sitemap` key: this origin serves no sitemap.xml, and pointing at one
 // that 404s is worse than omitting the directive.
 export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: [{ userAgent: "*", disallow: "/" }],
-  };
+    return {
+        rules: [{ userAgent: "*", disallow: "/" }],
+    };
 }

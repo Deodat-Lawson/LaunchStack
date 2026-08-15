@@ -107,11 +107,7 @@ function projectKeyFor(target: ProjectTarget): string {
  * Deliberately free of absolute paths: this string is the identity the host
  * keys its documents on, and it has to survive the home directory moving.
  */
-export function buildSourceId(
-    toolId: AgentToolId,
-    scopeKey: string,
-    relativePath: string
-): string {
+export function buildSourceId(toolId: AgentToolId, scopeKey: string, relativePath: string): string {
     const normalized = relativePath.split(path.sep).join("/");
     return `${AGENT_KNOWLEDGE_CONNECTOR_ID}://${toolId}/${scopeKey}/${normalized}`;
 }
@@ -234,11 +230,7 @@ async function walkDirectory(
     } catch (error) {
         if (isMissing(error)) return;
         ctx.skipped.push({
-            sourceId: buildSourceId(
-                ctx.layout.toolId,
-                ctx.scopeKey,
-                path.relative(ctx.root, dir)
-            ),
+            sourceId: buildSourceId(ctx.layout.toolId, ctx.scopeKey, path.relative(ctx.root, dir)),
             reason: "unreadable",
             detail: describeError(error),
         });
@@ -369,7 +361,12 @@ export async function scanAgentKnowledge(
     for (const toolId of tools) {
         const layout = layoutFor(toolId);
 
-        const targets: { scope: KnowledgeScope; key: string; dir: string; entries: readonly LayoutEntry[] }[] = [];
+        const targets: {
+            scope: KnowledgeScope;
+            key: string;
+            dir: string;
+            entries: readonly LayoutEntry[];
+        }[] = [];
         if (scopes.includes("global")) {
             targets.push({
                 scope: "global",

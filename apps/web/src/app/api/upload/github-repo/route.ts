@@ -41,8 +41,7 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
-            const { repoUrl, branch, accessToken, category } =
-                validation.data;
+            const { repoUrl, branch, accessToken, category } = validation.data;
 
             // Parse and validate the GitHub URL. SSRF note: parseGitHubUrl
             // rejects any hostname other than (www.)github.com, and the
@@ -65,7 +64,7 @@ export async function POST(request: Request) {
 
             console.log(
                 `[GitHubRepoUpload] Request: ${owner}/${repo}` +
-                    `${branch ? `@${branch}` : ""}, user=${ctx.data.clerkUserId}`,
+                    `${branch ? `@${branch}` : ""}, user=${ctx.data.clerkUserId}`
             );
 
             // Download the repository as a ZIP
@@ -137,10 +136,7 @@ export async function POST(request: Request) {
             // throws with its own status (404 foreign file / 503 unconfigured);
             // a generic 500 would hide an operator-fixable condition.
             if (error instanceof UploadAuthorizationError) {
-                return NextResponse.json(
-                    { error: error.message },
-                    { status: error.status },
-                );
+                return NextResponse.json({ error: error.message }, { status: error.status });
             }
 
             console.error("[GitHubRepoUpload] Error:", error);

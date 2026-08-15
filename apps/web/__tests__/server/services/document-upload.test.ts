@@ -135,7 +135,12 @@ describe("processDocumentUpload credit gate", () => {
     beforeEach(() => {
         (shouldTranscribeFile as jest.Mock).mockReturnValue(false);
         mockCreateDocumentLifecycle.mockResolvedValue({
-            document: { id: 1, title: "notes.txt", url: "https://blob.test/notes.txt", category: "Docs" },
+            document: {
+                id: 1,
+                title: "notes.txt",
+                url: "https://blob.test/notes.txt",
+                category: "Docs",
+            },
             jobId: "job-1",
             eventIds: ["event-1"],
         });

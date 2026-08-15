@@ -63,18 +63,14 @@ export const documentNotes = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         notesUserIdx: index("document_notes_user_idx").on(table.userId),
         notesDocIdx: index("document_notes_document_idx").on(table.documentId),
         notesCompanyIdx: index("document_notes_company_idx").on(table.companyId),
         notesVersionIdx: index("document_notes_version_idx").on(table.versionId),
-        notesAnchorStatusIdx: index("document_notes_anchor_status_idx").on(
-            table.anchorStatus
-        ),
+        notesAnchorStatusIdx: index("document_notes_anchor_status_idx").on(table.anchorStatus),
     })
 );
 
@@ -111,7 +107,7 @@ export const documentNoteEmbeddings = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         noteIdIdx: index("doc_note_emb_note_id_idx").on(table.noteId),
         userIdIdx: index("doc_note_emb_user_id_idx").on(table.userId),
         documentIdIdx: index("doc_note_emb_document_id_idx").on(table.documentId),
@@ -146,12 +142,10 @@ export const noteLinks = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         sourceIdx: index("note_links_source_idx").on(table.sourceNoteId),
         targetNoteIdx: index("note_links_target_note_idx").on(table.targetNoteId),
-        targetDocumentIdx: index("note_links_target_document_idx").on(
-            table.targetDocumentId
-        ),
+        targetDocumentIdx: index("note_links_target_document_idx").on(table.targetDocumentId),
         companyTitleIdx: index("note_links_company_title_idx").on(
             table.companyId,
             table.targetTitle
@@ -169,14 +163,7 @@ export type DocumentNoteEmbedding = InferSelectModel<typeof documentNoteEmbeddin
 // Anchor payload shape — stored in `documentNotes.anchor` as JSONB.
 // ---------------------------------------------------------------------------
 
-export type AnchorKind =
-    | "pdf"
-    | "docx"
-    | "media"
-    | "image"
-    | "code"
-    | "markdown"
-    | "text";
+export type AnchorKind = "pdf" | "docx" | "media" | "image" | "code" | "markdown" | "text";
 
 export interface PdfQuadAnchor {
     kind: "pdf";

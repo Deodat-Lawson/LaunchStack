@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 import { inter, instrumentSerif, jetbrainsMono } from "~/app/employer/fonts";
 
 export const metadata: Metadata = {
-    title: 'Sign In',
-    description: 'Sign in to Launchstack — your second brain for docs, notes, and conversations.',
+    title: "Sign In",
+    description: "Sign in to Launchstack — your second brain for docs, notes, and conversations.",
     alternates: {
-        canonical: '/signin',
+        canonical: "/signin",
     },
 };
 

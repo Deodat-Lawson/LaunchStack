@@ -100,8 +100,7 @@ export async function processDocumentUpload({
     // populated by createEngine, and an unbuilt engine reads as "off".
     getEngine();
 
-    const effectiveProvider =
-        parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
+    const effectiveProvider = parseProvider(preferredProvider) ?? getOcrConfig().defaultProvider;
 
     // Throws before anything is created when the URL names a file this
     // workspace does not own. An internal reference is always database-backed

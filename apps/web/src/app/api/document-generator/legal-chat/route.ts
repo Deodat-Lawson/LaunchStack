@@ -3,10 +3,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { describeChatError } from "@launchstack/core/llm";
-import {
-  describeChatResolutionFailure,
-  resolveConfiguredChatModel,
-} from "~/lib/models";
+import { describeChatResolutionFailure, resolveConfiguredChatModel } from "~/lib/models";
 import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
 import { TEMPLATE_REGISTRY } from "@launchstack/features/legal-templates";
@@ -19,66 +16,64 @@ export const maxDuration = 60;
 // ─── Request schema ────────────────────────────────────────────────────────────
 
 const MessageSchema = z.object({
-  role: z.enum(["user", "assistant"]),
-  content: z.string(),
+    role: z.enum(["user", "assistant"]),
+    content: z.string(),
 });
 
 const LegalChatSchema = z.object({
-  messages: z.array(MessageSchema).min(1),
-  accumulatedFields: z.record(z.coerce.string()).optional(),
+    messages: z.array(MessageSchema).min(1),
+    accumulatedFields: z.record(z.coerce.string()).optional(),
 });
 
 // ─── Template summary for the LLM ─────────────────────────────────────────────
 
 function buildTemplateSummary(): string {
-  return Object.values(TEMPLATE_REGISTRY)
-    .map(
-      (t) =>
-        `- id: "${t.id}" | name: "${t.name}" | description: "${t.description}" | fields: ${t.fields.length} (required: ${t.fields.filter((f) => f.required).length})`
-    )
-    .join("\n");
+    return Object.values(TEMPLATE_REGISTRY)
+        .map(
+            t =>
+                `- id: "${t.id}" | name: "${t.name}" | description: "${t.description}" | fields: ${t.fields.length} (required: ${t.fields.filter(f => f.required).length})`
+        )
+        .join("\n");
 }
 
 function buildFieldList(templateId: string): string {
-  const template = TEMPLATE_REGISTRY[templateId];
-  if (!template) return "";
-  return template.fields
-    .map((f) => {
-      let desc = `- key: "${f.key}" | label: "${f.label}" | type: ${f.type} | required: ${f.required}`;
-      if (f.options) desc += ` | options: [${f.options.join(", ")}]`;
-      return desc;
-    })
-    .join("\n");
+    const template = TEMPLATE_REGISTRY[templateId];
+    if (!template) return "";
+    return template.fields
+        .map(f => {
+            let desc = `- key: "${f.key}" | label: "${f.label}" | type: ${f.type} | required: ${f.required}`;
+            if (f.options) desc += ` | options: [${f.options.join(", ")}]`;
+            return desc;
+        })
+        .join("\n");
 }
 
 // ─── Company metadata helper ───────────────────────────────────────────────────
 
-function extractCompanyDefaults(
-  meta: CompanyMetadataJSON | null
-): Record<string, string> {
-  if (!meta) return {};
-  const defaults: Record<string, string> = {};
-  const c = meta.company;
-  if (c?.name?.value) defaults.company_name = c.name.value;
-  if (c?.headquarters?.value) {
-    defaults.company_address = c.headquarters.value;
-    defaults.governing_law_jurisdiction = c.headquarters.value;
-  }
-  return defaults;
+function extractCompanyDefaults(meta: CompanyMetadataJSON | null): Record<string, string> {
+    if (!meta) return {};
+    const defaults: Record<string, string> = {};
+    const c = meta.company;
+    if (c?.name?.value) defaults.company_name = c.name.value;
+    if (c?.headquarters?.value) {
+        defaults.company_address = c.headquarters.value;
+        defaults.governing_law_jurisdiction = c.headquarters.value;
+    }
+    return defaults;
 }
 
 // ─── System prompt ─────────────────────────────────────────────────────────────
 
 function buildSystemPrompt(
-  templateSummary: string,
-  companyDefaults: Record<string, string>
+    templateSummary: string,
+    companyDefaults: Record<string, string>
 ): string {
-  const defaultsNote =
-    Object.keys(companyDefaults).length > 0
-      ? `\nCompany defaults (pre-filled, mention these are pre-filled when relevant):\n${JSON.stringify(companyDefaults, null, 2)}`
-      : "";
+    const defaultsNote =
+        Object.keys(companyDefaults).length > 0
+            ? `\nCompany defaults (pre-filled, mention these are pre-filled when relevant):\n${JSON.stringify(companyDefaults, null, 2)}`
+            : "";
 
-  return `You are a legal document assistant that helps users select the right legal template and collect the information needed to generate it.
+    return `You are a legal document assistant that helps users select the right legal template and collect the information needed to generate it.
 
 AVAILABLE TEMPLATES:
 ${templateSummary}
@@ -134,195 +129,187 @@ RULES:
 // ─── POST handler ──────────────────────────────────────────────────────────────
 
 export async function POST(request: Request) {
-  // Recorded as soon as the model resolves, so the catch below can describe a
-  // transport failure without resolving a second time. Resolving there would
-  // re-read the configuration, and on a configuration fault that throws out of
-  // the very handler whose job is to turn the fault into a response — the
-  // caller gets an opaque 500 instead of the message explaining what is wrong.
-  let selectedModelId: string | undefined;
+    // Recorded as soon as the model resolves, so the catch below can describe a
+    // transport failure without resolving a second time. Resolving there would
+    // re-read the configuration, and on a configuration fault that throws out of
+    // the very handler whose job is to turn the fault into a response — the
+    // caller gets an opaque 500 instead of the message explaining what is wrong.
+    let selectedModelId: string | undefined;
 
-  try {
-    const ctx = await requireWorkspaceContext();
-    if (!ctx.success) return ctx.response;
-
-    let body: unknown;
     try {
-      body = (await request.json()) as unknown;
-    } catch {
-      return NextResponse.json(
-        { success: false, message: "Invalid JSON body" },
-        { status: 400 }
-      );
-    }
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-    const parsed = LegalChatSchema.safeParse(body);
-    if (!parsed.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid input",
-          errors: parsed.error.flatten(),
-        },
-        { status: 400 }
-      );
-    }
-
-    const companyId = Number(ctx.data.companyId);
-
-    // Fetch company metadata for pre-filling
-    let companyDefaults: Record<string, string> = {};
-    if (!Number.isNaN(companyId)) {
-      const [metaRow] = await db
-        .select({ metadata: companyMetadata.metadata })
-        .from(companyMetadata)
-        .where(eq(companyMetadata.companyId, ctx.data.companyId))
-        .limit(1);
-
-      if (metaRow?.metadata) {
-        companyDefaults = extractCompanyDefaults(
-          metaRow.metadata as CompanyMetadataJSON
-        );
-      }
-    }
-
-    // Build conversation for the LLM
-    const templateSummary = buildTemplateSummary();
-    const systemPrompt = buildSystemPrompt(templateSummary, companyDefaults);
-
-    // Include field details when a template has been selected in prior messages
-    const lastAssistantMsg = [...parsed.data.messages]
-      .reverse()
-      .find((m) => m.role === "assistant");
-
-    let fieldContext = "";
-    if (lastAssistantMsg) {
-      try {
-        const lastResponse = JSON.parse(lastAssistantMsg.content) as {
-          selectedTemplateId?: string | null;
-        };
-        if (lastResponse.selectedTemplateId) {
-          fieldContext = `\n\nFIELD DETAILS FOR SELECTED TEMPLATE "${lastResponse.selectedTemplateId}" (use these EXACT labels and keys):\n${buildFieldList(lastResponse.selectedTemplateId)}`;
+        let body: unknown;
+        try {
+            body = (await request.json()) as unknown;
+        } catch {
+            return NextResponse.json(
+                { success: false, message: "Invalid JSON body" },
+                { status: 400 }
+            );
         }
-      } catch {
-        // Not JSON - ignore
-      }
-    }
 
-    // Build LangChain messages with proper role mapping
-    const langchainMessages = [
-      new SystemMessage(systemPrompt + fieldContext),
-      ...parsed.data.messages.map((m) =>
-        m.role === "user"
-          ? new HumanMessage(m.content)
-          : new AIMessage(m.content)
-      ),
-    ];
-
-    // Inject accumulated fields as a separate system-context message after conversation
-    // (kept out of the main system prompt to limit prompt-injection surface from client data)
-    const clientFields = parsed.data.accumulatedFields;
-    if (clientFields && Object.keys(clientFields).length > 0) {
-      // Sanitize: only keep string key/value pairs, strip control characters
-      const sanitized: Record<string, string> = {};
-      for (const [key, value] of Object.entries(clientFields)) {
-        if (typeof key === "string" && typeof value === "string") {
-          sanitized[key.slice(0, 100)] = value.slice(0, 1000);
+        const parsed = LegalChatSchema.safeParse(body);
+        if (!parsed.success) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Invalid input",
+                    errors: parsed.error.flatten(),
+                },
+                { status: 400 }
+            );
         }
-      }
-      if (Object.keys(sanitized).length > 0) {
-        langchainMessages.push(
-          new HumanMessage(
-            `[SYSTEM CONTEXT] Already collected field values (include these in extractedFields, do NOT ask for them again):\n${JSON.stringify(sanitized)}`
-          )
+
+        const companyId = Number(ctx.data.companyId);
+
+        // Fetch company metadata for pre-filling
+        let companyDefaults: Record<string, string> = {};
+        if (!Number.isNaN(companyId)) {
+            const [metaRow] = await db
+                .select({ metadata: companyMetadata.metadata })
+                .from(companyMetadata)
+                .where(eq(companyMetadata.companyId, ctx.data.companyId))
+                .limit(1);
+
+            if (metaRow?.metadata) {
+                companyDefaults = extractCompanyDefaults(metaRow.metadata as CompanyMetadataJSON);
+            }
+        }
+
+        // Build conversation for the LLM
+        const templateSummary = buildTemplateSummary();
+        const systemPrompt = buildSystemPrompt(templateSummary, companyDefaults);
+
+        // Include field details when a template has been selected in prior messages
+        const lastAssistantMsg = [...parsed.data.messages]
+            .reverse()
+            .find(m => m.role === "assistant");
+
+        let fieldContext = "";
+        if (lastAssistantMsg) {
+            try {
+                const lastResponse = JSON.parse(lastAssistantMsg.content) as {
+                    selectedTemplateId?: string | null;
+                };
+                if (lastResponse.selectedTemplateId) {
+                    fieldContext = `\n\nFIELD DETAILS FOR SELECTED TEMPLATE "${lastResponse.selectedTemplateId}" (use these EXACT labels and keys):\n${buildFieldList(lastResponse.selectedTemplateId)}`;
+                }
+            } catch {
+                // Not JSON - ignore
+            }
+        }
+
+        // Build LangChain messages with proper role mapping
+        const langchainMessages = [
+            new SystemMessage(systemPrompt + fieldContext),
+            ...parsed.data.messages.map(m =>
+                m.role === "user" ? new HumanMessage(m.content) : new AIMessage(m.content)
+            ),
+        ];
+
+        // Inject accumulated fields as a separate system-context message after conversation
+        // (kept out of the main system prompt to limit prompt-injection surface from client data)
+        const clientFields = parsed.data.accumulatedFields;
+        if (clientFields && Object.keys(clientFields).length > 0) {
+            // Sanitize: only keep string key/value pairs, strip control characters
+            const sanitized: Record<string, string> = {};
+            for (const [key, value] of Object.entries(clientFields)) {
+                if (typeof key === "string" && typeof value === "string") {
+                    sanitized[key.slice(0, 100)] = value.slice(0, 1000);
+                }
+            }
+            if (Object.keys(sanitized).length > 0) {
+                langchainMessages.push(
+                    new HumanMessage(
+                        `[SYSTEM CONTEXT] Already collected field values (include these in extractedFields, do NOT ask for them again):\n${JSON.stringify(sanitized)}`
+                    )
+                );
+            }
+        }
+
+        let resolved;
+        try {
+            resolved = resolveConfiguredChatModel();
+        } catch (modelError) {
+            console.error("[legal-chat] chat resolution failed:", modelError);
+            const failure = describeChatResolutionFailure(modelError);
+            return NextResponse.json(
+                { success: false, message: failure.message },
+                { status: failure.status }
+            );
+        }
+        selectedModelId = resolved.modelId;
+
+        const response = await resolved.chat.invoke(resolved.prepareMessages(langchainMessages));
+        const content =
+            typeof response.content === "string"
+                ? response.content
+                : JSON.stringify(response.content);
+
+        // Try to parse as JSON, fall back to wrapping in a message
+        let responseData: Record<string, unknown>;
+        try {
+            // Strip markdown code fences if present
+            const cleaned = content
+                .replace(/^```(?:json)?\s*\n?/i, "")
+                .replace(/\n?```\s*$/i, "")
+                .trim();
+            responseData = JSON.parse(cleaned) as Record<string, unknown>;
+        } catch {
+            responseData = {
+                message: content,
+                phase: "recommending",
+                recommendedTemplates: [],
+                selectedTemplateId: null,
+                extractedFields: {},
+                missingRequiredFields: [],
+            };
+        }
+
+        // Enrich recommended templates with registry metadata
+        const recommendedTemplates =
+            (
+                responseData.recommendedTemplates as Array<{
+                    templateId: string;
+                    confidence: number;
+                    reason: string;
+                }>
+            )?.map(rec => {
+                const template = TEMPLATE_REGISTRY[rec.templateId];
+                return {
+                    ...rec,
+                    name: template?.name ?? rec.templateId,
+                    description: template?.description ?? "",
+                    fieldCount: template?.fields.length ?? 0,
+                    requiredFieldCount: template?.fields.filter(f => f.required).length ?? 0,
+                    requiredFieldLabels: template
+                        ? template.fields.filter(f => f.required).map(f => f.label)
+                        : [],
+                };
+            }) ?? [];
+
+        return NextResponse.json({
+            success: true,
+            data: {
+                ...responseData,
+                recommendedTemplates,
+                companyDefaults,
+            },
+        });
+    } catch (error) {
+        console.error("[legal-chat] POST error:", error);
+        // No model id means the failure happened before or during resolution, so
+        // there is nothing to describe a transport error against.
+        const friendly = selectedModelId ? describeChatError(error, selectedModelId) : null;
+
+        return NextResponse.json(
+            {
+                success: false,
+                message: friendly?.message ?? "Failed to process legal chat",
+            },
+            { status: friendly?.status ?? 500 }
         );
-      }
     }
-
-    let resolved;
-    try {
-      resolved = resolveConfiguredChatModel();
-    } catch (modelError) {
-      console.error("[legal-chat] chat resolution failed:", modelError);
-      const failure = describeChatResolutionFailure(modelError);
-      return NextResponse.json(
-        { success: false, message: failure.message },
-        { status: failure.status }
-      );
-    }
-    selectedModelId = resolved.modelId;
-
-    const response = await resolved.chat.invoke(
-      resolved.prepareMessages(langchainMessages),
-    );
-    const content =
-      typeof response.content === "string"
-        ? response.content
-        : JSON.stringify(response.content);
-
-    // Try to parse as JSON, fall back to wrapping in a message
-    let responseData: Record<string, unknown>;
-    try {
-      // Strip markdown code fences if present
-      const cleaned = content
-        .replace(/^```(?:json)?\s*\n?/i, "")
-        .replace(/\n?```\s*$/i, "")
-        .trim();
-      responseData = JSON.parse(cleaned) as Record<string, unknown>;
-    } catch {
-      responseData = {
-        message: content,
-        phase: "recommending",
-        recommendedTemplates: [],
-        selectedTemplateId: null,
-        extractedFields: {},
-        missingRequiredFields: [],
-      };
-    }
-
-    // Enrich recommended templates with registry metadata
-    const recommendedTemplates = (
-      responseData.recommendedTemplates as Array<{
-        templateId: string;
-        confidence: number;
-        reason: string;
-      }>
-    )?.map((rec) => {
-      const template = TEMPLATE_REGISTRY[rec.templateId];
-      return {
-        ...rec,
-        name: template?.name ?? rec.templateId,
-        description: template?.description ?? "",
-        fieldCount: template?.fields.length ?? 0,
-        requiredFieldCount:
-          template?.fields.filter((f) => f.required).length ?? 0,
-        requiredFieldLabels: template
-          ? template.fields.filter((f) => f.required).map((f) => f.label)
-          : [],
-      };
-    }) ?? [];
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        ...responseData,
-        recommendedTemplates,
-        companyDefaults,
-      },
-    });
-  } catch (error) {
-    console.error("[legal-chat] POST error:", error);
-    // No model id means the failure happened before or during resolution, so
-    // there is nothing to describe a transport error against.
-    const friendly = selectedModelId
-      ? describeChatError(error, selectedModelId)
-      : null;
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: friendly?.message ?? "Failed to process legal chat",
-      },
-      { status: friendly?.status ?? 500 }
-    );
-  }
 }

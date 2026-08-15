@@ -56,7 +56,7 @@ function cloneRow(row: StoredRow): StoredRow {
     return {
         ...row,
         categories: row.categories ? [...row.categories] : null,
-        results: row.results ? row.results.map((result) => ({ ...result })) : null,
+        results: row.results ? row.results.map(result => ({ ...result })) : null,
         createdAt: new Date(row.createdAt),
         completedAt: row.completedAt ? new Date(row.completedAt) : null,
         updatedAt: row.updatedAt ? new Date(row.updatedAt) : null,
@@ -74,13 +74,13 @@ function createInMemoryTrendSearchStore() {
                 id: values.id!,
                 companyId: values.companyId!,
                 userId: values.userId!,
-                status: (values.status) ?? "queued",
+                status: values.status ?? "queued",
                 query: values.query!,
                 companyContext: values.companyContext!,
                 categories: (values.categories as SearchCategory[] | undefined) ?? null,
                 results: (values.results as SearchResult[] | undefined) ?? null,
                 errorMessage: (values.errorMessage as string | undefined) ?? null,
-                createdAt: (values.createdAt) ?? now,
+                createdAt: values.createdAt ?? now,
                 completedAt: (values.completedAt as Date | undefined) ?? null,
                 updatedAt: (values.updatedAt as Date | undefined) ?? null,
             };
@@ -100,12 +100,9 @@ function createInMemoryTrendSearchStore() {
                 ...patch,
                 categories:
                     patch.categories !== undefined
-                        ? ((patch.categories) ?? null)
+                        ? (patch.categories ?? null)
                         : current.categories,
-                results:
-                    patch.results !== undefined
-                        ? ((patch.results) ?? null)
-                        : current.results,
+                results: patch.results !== undefined ? (patch.results ?? null) : current.results,
                 updatedAt: patch.updatedAt ?? new Date(),
             };
 
@@ -127,7 +124,7 @@ function createInMemoryTrendSearchStore() {
             const offset = options?.offset ?? 0;
 
             return [...rows.values()]
-                .filter((row) => row.companyId === companyId)
+                .filter(row => row.companyId === companyId)
                 .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
                 .slice(offset, offset + limit)
                 .map(cloneRow);
@@ -168,18 +165,16 @@ const categoriesArb = fc.uniqueArray(categoryArb, { minLength: 1, maxLength: 4 }
 
 const nonEmptyTextArb = fc
     .string({ minLength: 1, maxLength: 300 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
-const validQueryArb = fc
-    .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+const validQueryArb = fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
 const searchResultArb = fc.record({
-    sourceUrl: fc.uuid().map((id) => `https://example.com/${id}`),
+    sourceUrl: fc.uuid().map(id => `https://example.com/${id}`),
     summary: nonEmptyTextArb,
     description: nonEmptyTextArb,
 });
@@ -269,7 +264,9 @@ describe("Property 11: Successful pipeline sets completed status", () => {
                         },
                     };
 
-                    const runTrendSearchMock = runTrendSearch as jest.MockedFunction<typeof runTrendSearch>;
+                    const runTrendSearchMock = runTrendSearch as jest.MockedFunction<
+                        typeof runTrendSearch
+                    >;
                     runTrendSearchMock.mockImplementationOnce(async (_input, options) => {
                         await options?.onStageChange?.("synthesizing");
                         return output;

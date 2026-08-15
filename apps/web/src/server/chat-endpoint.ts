@@ -10,10 +10,7 @@
  * `./chat-models`, which nothing on the env path touches.
  */
 
-import {
-  GEMINI_BASE_URL,
-  type ChatEndpointConfig,
-} from "@launchstack/core/llm/types";
+import { GEMINI_BASE_URL, type ChatEndpointConfig } from "@launchstack/core/llm/types";
 
 /**
  * Environment the chat layer reads.
@@ -24,49 +21,49 @@ import {
  * {@link translateLegacyEndpoint}.
  */
 export interface AppChatModelEnvironment {
-  CHAT_BASE_URL?: string;
-  CHAT_API_KEY?: string;
-  CHAT_MODELS_CONFIG?: string;
-  /** @deprecated Pre-PR name for CHAT_BASE_URL. */
-  AI_BASE_URL?: string;
-  /** @deprecated Pre-PR name for CHAT_API_KEY. */
-  AI_API_KEY?: string;
-  /**
-   * The credential for the default Gemini endpoint. Paired with
-   * {@link GEMINI_BASE_URL} — never with an operator-supplied CHAT_BASE_URL,
-   * which takes its key from CHAT_API_KEY.
-   *
-   * Deliberately the only spelling. Google AI Studio calls it a "Gemini API
-   * key", but adding a GEMINI_API_KEY alias would mean declaring it in
-   * `env.ts` too, and a second name for one credential is a second thing to
-   * get wrong.
-   */
-  GOOGLE_AI_API_KEY?: string;
-  /**
-   * Read only to explain where a key did *not* go. These name a vendor other
-   * than the default one, so they select nothing: a key on its own says
-   * nothing about where to send the request, and pairing it with the Gemini
-   * URL would post an OpenAI or OpenRouter credential to Google. See
-   * {@link MISPAIRED_CREDENTIALS}.
-   */
-  OPENROUTER_API_KEY?: string;
-  OPENAI_API_KEY?: string;
-  /**
-   * Declared because the environment still carries it — it configures the
-   * Ollama *embeddings* provider — but deliberately ignored for chat. Ollama
-   * speaks the OpenAI chat-completions protocol, so it is reached through
-   * CHAT_BASE_URL like every other endpoint.
-   */
-  OLLAMA_BASE_URL?: string;
-  /** @deprecated Model selection moved to the configuration file. */
-  CHAT_MODEL?: string;
+    CHAT_BASE_URL?: string;
+    CHAT_API_KEY?: string;
+    CHAT_MODELS_CONFIG?: string;
+    /** @deprecated Pre-PR name for CHAT_BASE_URL. */
+    AI_BASE_URL?: string;
+    /** @deprecated Pre-PR name for CHAT_API_KEY. */
+    AI_API_KEY?: string;
+    /**
+     * The credential for the default Gemini endpoint. Paired with
+     * {@link GEMINI_BASE_URL} — never with an operator-supplied CHAT_BASE_URL,
+     * which takes its key from CHAT_API_KEY.
+     *
+     * Deliberately the only spelling. Google AI Studio calls it a "Gemini API
+     * key", but adding a GEMINI_API_KEY alias would mean declaring it in
+     * `env.ts` too, and a second name for one credential is a second thing to
+     * get wrong.
+     */
+    GOOGLE_AI_API_KEY?: string;
+    /**
+     * Read only to explain where a key did *not* go. These name a vendor other
+     * than the default one, so they select nothing: a key on its own says
+     * nothing about where to send the request, and pairing it with the Gemini
+     * URL would post an OpenAI or OpenRouter credential to Google. See
+     * {@link MISPAIRED_CREDENTIALS}.
+     */
+    OPENROUTER_API_KEY?: string;
+    OPENAI_API_KEY?: string;
+    /**
+     * Declared because the environment still carries it — it configures the
+     * Ollama *embeddings* provider — but deliberately ignored for chat. Ollama
+     * speaks the OpenAI chat-completions protocol, so it is reached through
+     * CHAT_BASE_URL like every other endpoint.
+     */
+    OLLAMA_BASE_URL?: string;
+    /** @deprecated Model selection moved to the configuration file. */
+    CHAT_MODEL?: string;
 }
 
 export const DEFAULT_CHAT_CONFIG_PATH = "config/chat-models.yaml";
 
 export function trimmed(value: string | undefined): string | undefined {
-  const text = value?.trim();
-  return text && text.length > 0 ? text : undefined;
+    const text = value?.trim();
+    return text && text.length > 0 ? text : undefined;
 }
 
 /**
@@ -90,14 +87,14 @@ const MISPAIRED_CREDENTIALS = ["OPENROUTER_API_KEY", "OPENAI_API_KEY"] as const;
 const warnedMessages = new Set<string>();
 
 function warnOnce(message: string): void {
-  if (warnedMessages.has(message)) return;
-  warnedMessages.add(message);
-  console.warn(message);
+    if (warnedMessages.has(message)) return;
+    warnedMessages.add(message);
+    console.warn(message);
 }
 
 /** Test seam: forget which warnings have been emitted. */
 export function resetChatEndpointWarnings(): void {
-  warnedMessages.clear();
+    warnedMessages.clear();
 }
 
 /**
@@ -114,22 +111,22 @@ export function resetChatEndpointWarnings(): void {
  * chosen on the operator's behalf.
  */
 export function translateLegacyEndpoint(
-  server: AppChatModelEnvironment,
+    server: AppChatModelEnvironment
 ): { endpoint: ChatEndpointConfig; deprecation?: string } | undefined {
-  const baseUrl = trimmed(server.AI_BASE_URL);
-  if (!baseUrl) return undefined;
+    const baseUrl = trimmed(server.AI_BASE_URL);
+    if (!baseUrl) return undefined;
 
-  const endpoint: ChatEndpointConfig = {
-    baseUrl,
-    apiKey: trimmed(server.AI_API_KEY),
-  };
-  return {
-    endpoint,
-    deprecation:
-      "[chat] AI_BASE_URL/AI_API_KEY are deprecated and will be removed next " +
-      `release. Set CHAT_BASE_URL=${baseUrl}` +
-      `${endpoint.apiKey ? " and CHAT_API_KEY" : ""} instead.`,
-  };
+    const endpoint: ChatEndpointConfig = {
+        baseUrl,
+        apiKey: trimmed(server.AI_API_KEY),
+    };
+    return {
+        endpoint,
+        deprecation:
+            "[chat] AI_BASE_URL/AI_API_KEY are deprecated and will be removed next " +
+            `release. Set CHAT_BASE_URL=${baseUrl}` +
+            `${endpoint.apiKey ? " and CHAT_API_KEY" : ""} instead.`,
+    };
 }
 
 /**
@@ -143,40 +140,38 @@ export function translateLegacyEndpoint(
  * is what made a missing CHAT_BASE_URL a build-time error — and with a default
  * in place there is no longer a state it can fail in.
  */
-export function resolveChatEndpoint(
-  server: AppChatModelEnvironment,
-): ChatEndpointConfig {
-  const baseUrl = trimmed(server.CHAT_BASE_URL);
-  if (baseUrl) {
-    return { baseUrl, apiKey: trimmed(server.CHAT_API_KEY) };
-  }
+export function resolveChatEndpoint(server: AppChatModelEnvironment): ChatEndpointConfig {
+    const baseUrl = trimmed(server.CHAT_BASE_URL);
+    if (baseUrl) {
+        return { baseUrl, apiKey: trimmed(server.CHAT_API_KEY) };
+    }
 
-  const legacy = translateLegacyEndpoint(server);
-  if (legacy) {
-    if (legacy.deprecation) warnOnce(legacy.deprecation);
-    return legacy.endpoint;
-  }
+    const legacy = translateLegacyEndpoint(server);
+    if (legacy) {
+        if (legacy.deprecation) warnOnce(legacy.deprecation);
+        return legacy.endpoint;
+    }
 
-  // Nothing named an endpoint. Fall back to Gemini, paired only with a Google
-  // credential — a key for another vendor is reported, never forwarded.
-  const geminiKey = trimmed(server.GOOGLE_AI_API_KEY);
-  const mispaired = MISPAIRED_CREDENTIALS.filter((name) => trimmed(server[name]));
+    // Nothing named an endpoint. Fall back to Gemini, paired only with a Google
+    // credential — a key for another vendor is reported, never forwarded.
+    const geminiKey = trimmed(server.GOOGLE_AI_API_KEY);
+    const mispaired = MISPAIRED_CREDENTIALS.filter(name => trimmed(server[name]));
 
-  if (!geminiKey) {
-    warnOnce(
-      "[chat] No CHAT_BASE_URL set, so chat defaults to Gemini " +
-        `(${GEMINI_BASE_URL}) — but GOOGLE_AI_API_KEY is not set either, so ` +
-        "requests will be rejected as unauthenticated." +
-        (mispaired.length
-          ? ` ${mispaired.join(" and ")} ${mispaired.length > 1 ? "are" : "is"} set, ` +
-            `but ${mispaired.length > 1 ? "they belong" : "it belongs"} to another ` +
-            "service and will not be sent to Google. Set CHAT_BASE_URL and " +
-            "CHAT_API_KEY to use that service instead."
-          : " Set GOOGLE_AI_API_KEY, or point CHAT_BASE_URL elsewhere."),
-    );
-  }
+    if (!geminiKey) {
+        warnOnce(
+            "[chat] No CHAT_BASE_URL set, so chat defaults to Gemini " +
+                `(${GEMINI_BASE_URL}) — but GOOGLE_AI_API_KEY is not set either, so ` +
+                "requests will be rejected as unauthenticated." +
+                (mispaired.length
+                    ? ` ${mispaired.join(" and ")} ${mispaired.length > 1 ? "are" : "is"} set, ` +
+                      `but ${mispaired.length > 1 ? "they belong" : "it belongs"} to another ` +
+                      "service and will not be sent to Google. Set CHAT_BASE_URL and " +
+                      "CHAT_API_KEY to use that service instead."
+                    : " Set GOOGLE_AI_API_KEY, or point CHAT_BASE_URL elsewhere.")
+        );
+    }
 
-  return { baseUrl: GEMINI_BASE_URL, apiKey: geminiKey };
+    return { baseUrl: GEMINI_BASE_URL, apiKey: geminiKey };
 }
 
 /**
@@ -187,18 +182,18 @@ export function resolveChatEndpoint(
  * deserves to be told why rather than left to guess.
  */
 const IGNORED_MODEL_VARIABLES = [
-  "CHAT_MODEL",
-  "CHAT_CAPABILITIES",
-  "CHAT_PROVIDER",
-  "CHAT_FAST_MODEL",
-  "CHAT_REASONING_MODEL",
-  "CHAT_VISION_MODEL",
-  "CHAT_STRUCTURED_MODEL",
-  "GOOGLE_MODEL",
+    "CHAT_MODEL",
+    "CHAT_CAPABILITIES",
+    "CHAT_PROVIDER",
+    "CHAT_FAST_MODEL",
+    "CHAT_REASONING_MODEL",
+    "CHAT_VISION_MODEL",
+    "CHAT_STRUCTURED_MODEL",
+    "GOOGLE_MODEL",
 ] as const;
 
 export function findIgnoredModelVariables(
-  environment: Record<string, string | undefined>,
+    environment: Record<string, string | undefined>
 ): string[] {
-  return IGNORED_MODEL_VARIABLES.filter((name) => trimmed(environment[name]));
+    return IGNORED_MODEL_VARIABLES.filter(name => trimmed(environment[name]));
 }

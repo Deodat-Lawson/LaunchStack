@@ -626,9 +626,7 @@ export async function storeBatch(
  * percents. Store an integer percent either way; absent stays NULL — never
  * fabricated.
  */
-function toStoredConfidencePercent(
-    confidence: number | undefined
-): number | undefined {
+function toStoredConfidencePercent(confidence: number | undefined): number | undefined {
     if (confidence === undefined) return undefined;
     return Math.round(confidence <= 1 ? confidence * 100 : confidence);
 }
@@ -911,9 +909,7 @@ export async function storeDocument(
             ocrProcessed: true,
             ocrJobId: jobId,
             ocrProvider: normalizationResult.provider,
-            ocrConfidenceScore: toStoredConfidencePercent(
-                normalizationResult.confidenceScore
-            ),
+            ocrConfidenceScore: toStoredConfidencePercent(normalizationResult.confidenceScore),
             ocrMetadata: {
                 totalPages: normalizationResult.pages.length,
                 totalChunks: vectorizedChunks.length,
@@ -938,9 +934,7 @@ export async function storeDocument(
             processingDurationMs: Date.now() - pipelineStartTime,
             pageCount: normalizationResult.pages.length,
             actualProvider: normalizationResult.provider,
-            confidenceScore: toStoredConfidencePercent(
-                normalizationResult.confidenceScore
-            ),
+            confidenceScore: toStoredConfidencePercent(normalizationResult.confidenceScore),
         })
         .where(eq(ocrJobs.id, jobId));
 

@@ -9,13 +9,20 @@ import { join } from "node:path";
 
 import { loadScenario, parseScenario } from "../../scripts/founder-weekly-review-scenario-loader";
 
-const SCENARIO_DIR = join(__dirname, "..", "..", "test-fixtures", "founder-weekly-review", "scenarios");
+const SCENARIO_DIR = join(
+    __dirname,
+    "..",
+    "..",
+    "test-fixtures",
+    "founder-weekly-review",
+    "scenarios"
+);
 
 async function scenarioNames(): Promise<string[]> {
     const entries = await readdir(SCENARIO_DIR, { withFileTypes: true });
     return entries
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name)
+        .filter(entry => entry.isDirectory())
+        .map(entry => entry.name)
         .sort();
 }
 
@@ -29,7 +36,7 @@ describe("founder weekly review scenario loader", () => {
             const scenario = await loadScenario(join(SCENARIO_DIR, name, "scenario.json"));
             expect(scenario.name).not.toHaveLength(0);
             expect(Object.keys(scenario.expect).length).toBeGreaterThan(0);
-            expect(scenario.companies.filter((company) => company.underReview)).toHaveLength(1);
+            expect(scenario.companies.filter(company => company.underReview)).toHaveLength(1);
         }
     });
 

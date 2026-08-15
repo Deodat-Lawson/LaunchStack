@@ -34,12 +34,7 @@ import { company } from "./base";
  * `dead`       — attempts exhausted; visible for operator replay
  *                (docs/runbooks/outbox.md).
  */
-export const eventOutboxStatusEnum = [
-    "pending",
-    "processing",
-    "processed",
-    "dead",
-] as const;
+export const eventOutboxStatusEnum = ["pending", "processing", "processed", "dead"] as const;
 export type EventOutboxStatus = (typeof eventOutboxStatusEnum)[number];
 
 export const eventOutbox = pgTable(
@@ -75,14 +70,10 @@ export const eventOutbox = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .notNull()
             .default(sql`CURRENT_TIMESTAMP`),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
-        eventIdUnique: uniqueIndex("event_outbox_event_id_unique").on(
-            table.eventId
-        ),
+    table => ({
+        eventIdUnique: uniqueIndex("event_outbox_event_id_unique").on(table.eventId),
         /** Scan path for the worker's claim query. */
         pendingIdx: index("event_outbox_pending_idx").on(
             table.status,
@@ -90,10 +81,7 @@ export const eventOutbox = pgTable(
             table.createdAt
         ),
         /** Reclaim path for stale `processing` rows after a worker crash. */
-        claimedIdx: index("event_outbox_claimed_idx").on(
-            table.status,
-            table.claimedAt
-        ),
+        claimedIdx: index("event_outbox_claimed_idx").on(table.status, table.claimedAt),
         companyIdx: index("event_outbox_company_id_idx").on(table.companyId),
     })
 );

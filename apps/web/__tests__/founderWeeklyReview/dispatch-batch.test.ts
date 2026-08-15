@@ -31,11 +31,7 @@ function dispatch(index: number) {
     };
 }
 
-function deps(overrides: {
-    count?: number;
-    send?: jest.Mock;
-    recordFailure?: jest.Mock;
-}) {
+function deps(overrides: { count?: number; send?: jest.Mock; recordFailure?: jest.Mock }) {
     const batch = Array.from({ length: overrides.count ?? 0 }, (_, i) => dispatch(i));
     return {
         claim: jest.fn().mockResolvedValue(batch),
@@ -43,7 +39,9 @@ function deps(overrides: {
         markDispatched: jest.fn().mockResolvedValue(undefined),
         recordFailure:
             overrides.recordFailure ??
-            jest.fn().mockResolvedValue({ status: "pending", attemptCount: 1, availableAt: new Date() }),
+            jest
+                .fn()
+                .mockResolvedValue({ status: "pending", attemptCount: 1, availableAt: new Date() }),
     } as unknown as Parameters<typeof runFounderWeeklyReviewDispatchBatch>[0];
 }
 
@@ -105,7 +103,11 @@ describe("founder weekly review dispatch batch", () => {
                 send: jest.fn().mockRejectedValue(new Error("inngest is down")),
                 recordFailure: jest
                     .fn()
-                    .mockResolvedValue({ status: "failed", attemptCount: 8, availableAt: new Date() }),
+                    .mockResolvedValue({
+                        status: "failed",
+                        attemptCount: 8,
+                        availableAt: new Date(),
+                    }),
             })
         );
         expect(result).toMatchObject({ claimed: 2, succeeded: 0, retired: 2 });

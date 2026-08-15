@@ -19,6 +19,12 @@ html, body {
   width: 100%;
 }
 
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
 * {
   margin: 0;
   padding: 0;

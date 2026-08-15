@@ -1,3 +1,4 @@
+import "@launchstack/design-tokens/tokens.css";
 import "~/styles/tailwind.css";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "next-themes";

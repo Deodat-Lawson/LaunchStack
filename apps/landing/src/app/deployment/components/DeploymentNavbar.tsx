@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import type { DeploymentSection, SectionConfig } from "../types";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import styles from "~/styles/deployment.module.css";
 
 interface DeploymentNavbarProps {
@@ -58,7 +59,7 @@ export const DeploymentNavbar: React.FC<DeploymentNavbarProps> = ({
     return (
         <nav className={styles.nav}>
             <Link href="/" className={styles.navBrand}>
-                <span className={styles.brandMark} aria-hidden />
+                <LaunchstackMark size={30} title="Launchstack" />
                 <span className={styles.navBrandText}>
                     <span className={styles.navBrandTitle}>Launchstack</span>
                     <span className={styles.navBrandEyebrow}>Deploy</span>

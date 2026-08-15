@@ -17,7 +17,7 @@ export function SignupNavbar() {
                 <div className={styles.navWrapper}>
                     {/* Cross-origin: the public site is a separate deployment. */}
                     <a href={LANDING_URL} rel="noopener" className={styles.logoContainer}>
-                        <LaunchstackMark size={28} />
+                        <LaunchstackMark size={28} title="Launchstack" />
                         <span className={styles.logoText}>Launchstack</span>
                     </a>
                     <div className={styles.navLinks}>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { SignOutButton } from "@clerk/nextjs";
 import { LANDING_CONTACT_URL } from "~/config/landing";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { useInstanceHost } from "~/lib/instance-host";
 
 import styles from "./workspace-select.module.css";
@@ -341,8 +342,8 @@ export function WorkspaceSelectClient({
 
             <div className={styles.topbar}>
                 <div className={styles.brand}>
-                    <div className={styles.brandMark} />
-                    LaunchStack
+                    <LaunchstackMark size={24} title="Launchstack" />
+                    Launchstack
                 </div>
                 <div className={styles.spacer} />
                 <div className={styles.me} title="Switch account">
@@ -603,7 +604,7 @@ export function WorkspaceSelectClient({
                                 </span>
                             </div>
                             <span className={styles.sectionAside}>
-                                From teammates who already use LaunchStack
+                                From teammates who already use Launchstack
                             </span>
                         </div>
                         <div className={styles.wsList}>

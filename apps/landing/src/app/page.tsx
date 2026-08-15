@@ -43,7 +43,10 @@ const organizationLd = {
     "@type": "Organization",
     name: "Launchstack",
     url: SITE_URL,
-    logo: `${SITE_URL}/favicon.ico`,
+    // Not favicon.ico: Google's Organization.logo wants a raster image it can
+    // crop, and .ico is not among the formats it reads. logo-512.png is the
+    // same mark, rendered from public/icon.svg.
+    logo: `${SITE_URL}/logo-512.png`,
     description:
         "Launchstack builds free, open-source tools that help tech founders grow their products.",
     sameAs: [GITHUB_REPO],

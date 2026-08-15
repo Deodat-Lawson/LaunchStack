@@ -126,23 +126,9 @@
     letter-spacing: -0.01em;
     color: var(--ink);
 }
-.brandMark {
-    width: 24px;
-    height: 24px;
-    border-radius: 7px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-    position: relative;
-    box-shadow: 0 4px 12px var(--accent-glow);
-}
-.brandMark::after {
-    content: "";
-    position: absolute;
-    inset: 6px;
-    border-radius: 2px;
-    background: white;
-    opacity: 0.95;
-    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-}
+/* The brand mark is <LaunchstackMark>, not CSS: this file used to draw its own
+   purple-diamond tile here, which is how the topbar drifted from the logo the
+   rest of the app renders. */
 .spacer {
     flex: 1;
 }

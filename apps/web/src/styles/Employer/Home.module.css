@@ -17,10 +17,6 @@
     @apply flex items-center space-x-3 cursor-pointer;
 }
 
-.logoIcon {
-    @apply w-8 h-8 text-purple-600 transition-colors duration-300;
-}
-
 .logoText {
     @apply text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 
     bg-clip-text text-transparent transition-all duration-300;
@@ -169,10 +165,6 @@
 }
 
 /* Enhanced Hover Effects */
-.logoContainer:hover .logoIcon {
-    @apply text-purple-700 scale-110;
-}
-
 .menuCard:hover .iconContainer {
     @apply bg-gradient-to-br from-purple-200 to-indigo-200 scale-110;
 }

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Github, Moon, Sun } from "lucide-react";
 import styles from "../../styles/marketing.module.css";
+import { LaunchstackMark } from "./LaunchstackLogo";
 import { GITHUB_REPO, SIGN_IN_URL, SIGN_UP_URL } from "~/config/site";
 
 interface MarketingShellProps {
@@ -56,7 +57,7 @@ export function MarketingShell({
 
             <nav className={`${styles.nav} ${scrolled ? styles.navScrolled : ""}`}>
                 <Link href="/" className={styles.brand}>
-                    <span className={styles.brandMark} />
+                    <LaunchstackMark size={26} title="Launchstack" />
                     Launchstack
                 </Link>
                 <div className={styles.navLinks}>
@@ -128,7 +129,7 @@ function MarketingFooter() {
         <footer className={styles.footer}>
             <div>
                 <div className={styles.brand} style={{ marginBottom: 12 }}>
-                    <span className={styles.brandMark} />
+                    <LaunchstackMark size={26} title="Launchstack" />
                     Launchstack
                 </div>
                 <p className={styles.footTag}>

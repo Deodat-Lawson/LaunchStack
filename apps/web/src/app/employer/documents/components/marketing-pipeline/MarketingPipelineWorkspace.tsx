@@ -574,7 +574,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                             {c.weaknesses.length > 0 && (
                                                 <div
                                                     style={{
-                                                        color: "var(--text-muted, #6b7280)",
+                                                        color: "var(--ink-3)",
                                                         marginLeft: "0.5rem",
                                                     }}
                                                 >
@@ -627,7 +627,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                                 marginBottom: "0.75rem",
                                                 padding: "0.5rem",
                                                 borderRadius: "0.375rem",
-                                                background: "var(--bg-secondary, #f9fafb)",
+                                                background: "var(--panel-2)",
                                             }}
                                         >
                                             <div
@@ -637,7 +637,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                             </div>
                                             <p
                                                 style={{
-                                                    color: "var(--text-muted, #6b7280)",
+                                                    color: "var(--ink-3)",
                                                     marginBottom: "0.25rem",
                                                 }}
                                             >
@@ -707,15 +707,15 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
                                 borderRadius: "0.375rem",
                                 background:
                                     claim.confidence > 0.5
-                                        ? "var(--bg-success, #f0fdf4)"
-                                        : "var(--bg-warning, #fffbeb)",
+                                        ? "var(--success-soft)"
+                                        : "var(--warn-soft)",
                                 fontSize: "0.8125rem",
                             }}
                         >
                             <div style={{ fontWeight: 600, marginBottom: "0.125rem" }}>
                                 {claim.confidence > 0.5 ? "✓" : "?"} {claim.claim}
                             </div>
-                            <div style={{ color: "var(--text-muted, #6b7280)" }}>
+                            <div style={{ color: "var(--ink-3)" }}>
                                 Source: {claim.sourceDoc}
                                 {claim.confidence > 0 && (
                                     <span style={{ marginLeft: "0.5rem" }}>
@@ -728,7 +728,7 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
                                     style={{
                                         marginTop: "0.25rem",
                                         fontStyle: "italic",
-                                        color: "var(--text-muted, #6b7280)",
+                                        color: "var(--ink-3)",
                                         fontSize: "0.75rem",
                                     }}
                                 >
@@ -791,7 +791,7 @@ function CustomizationControls({
                     padding: 0,
                     fontSize: "0.8125rem",
                     fontWeight: 600,
-                    color: "var(--text-muted, #6b7280)",
+                    color: "var(--ink-3)",
                 }}
             >
                 <Target size={14} />
@@ -814,7 +814,7 @@ function CustomizationControls({
                                 fontSize: "0.75rem",
                                 fontWeight: 600,
                                 marginBottom: "0.25rem",
-                                color: "var(--text-muted, #6b7280)",
+                                color: "var(--ink-3)",
                             }}
                         >
                             Tone
@@ -834,16 +834,16 @@ function CustomizationControls({
                                         fontWeight: 500,
                                         border:
                                             toneOverride === t.id
-                                                ? "1.5px solid var(--accent-color, #6366f1)"
-                                                : "1px solid var(--border-color, #e5e7eb)",
+                                                ? "1.5px solid var(--accent)"
+                                                : "1px solid var(--line)",
                                         background:
                                             toneOverride === t.id
-                                                ? "var(--accent-bg, #eef2ff)"
+                                                ? "var(--accent-soft)"
                                                 : "transparent",
                                         color:
                                             toneOverride === t.id
-                                                ? "var(--accent-color, #6366f1)"
-                                                : "var(--text-secondary, #4b5563)",
+                                                ? "var(--accent)"
+                                                : "var(--ink-2)",
                                         cursor: "pointer",
                                     }}
                                 >
@@ -860,7 +860,7 @@ function CustomizationControls({
                                 fontSize: "0.75rem",
                                 fontWeight: 600,
                                 marginBottom: "0.25rem",
-                                color: "var(--text-muted, #6b7280)",
+                                color: "var(--ink-3)",
                             }}
                         >
                             Target audience (optional)
@@ -874,9 +874,9 @@ function CustomizationControls({
                                 width: "100%",
                                 padding: "0.375rem 0.5rem",
                                 borderRadius: "0.375rem",
-                                border: "1px solid var(--border-color, #e5e7eb)",
+                                border: "1px solid var(--line)",
                                 fontSize: "0.8125rem",
-                                background: "var(--bg-primary, #fff)",
+                                background: "var(--panel)",
                             }}
                         />
                     </div>
@@ -888,7 +888,7 @@ function CustomizationControls({
                                 fontSize: "0.75rem",
                                 fontWeight: 600,
                                 marginBottom: "0.25rem",
-                                color: "var(--text-muted, #6b7280)",
+                                color: "var(--ink-3)",
                             }}
                         >
                             Content type
@@ -911,16 +911,16 @@ function CustomizationControls({
                                         fontWeight: 500,
                                         border:
                                             contentType === ct.id
-                                                ? "1.5px solid var(--accent-color, #6366f1)"
-                                                : "1px solid var(--border-color, #e5e7eb)",
+                                                ? "1.5px solid var(--accent)"
+                                                : "1px solid var(--line)",
                                         background:
                                             contentType === ct.id
-                                                ? "var(--accent-bg, #eef2ff)"
+                                                ? "var(--accent-soft)"
                                                 : "transparent",
                                         color:
                                             contentType === ct.id
-                                                ? "var(--accent-color, #6366f1)"
-                                                : "var(--text-secondary, #4b5563)",
+                                                ? "var(--accent)"
+                                                : "var(--ink-2)",
                                         cursor: "pointer",
                                     }}
                                 >
@@ -1739,7 +1739,7 @@ export function MarketingPipelineWorkspace({
                                                             alignItems: "center",
                                                             gap: 8,
                                                             fontSize: 13,
-                                                            color: "var(--text-error, #b91c1c)",
+                                                            color: "var(--danger)",
                                                         }}
                                                     >
                                                         <AlertCircle size={15} />
@@ -1753,9 +1753,9 @@ export function MarketingPipelineWorkspace({
                                                             marginTop: 12,
                                                             padding: 14,
                                                             borderRadius: 10,
-                                                            border: "1px solid var(--border-color, #e5e7eb)",
+                                                            border: "1px solid var(--line)",
                                                             background:
-                                                                "var(--bg-secondary, #f9fafb)",
+                                                                "var(--panel-2)",
                                                         }}
                                                     >
                                                         <div
@@ -1782,7 +1782,7 @@ export function MarketingPipelineWorkspace({
                                                                 style={{
                                                                     fontSize: 22,
                                                                     fontWeight: 800,
-                                                                    color: "var(--text-primary, #111)",
+                                                                    color: "var(--ink)",
                                                                 }}
                                                             >
                                                                 {Math.round(evalResult.overall)}
@@ -1790,7 +1790,7 @@ export function MarketingPipelineWorkspace({
                                                                     style={{
                                                                         fontSize: 13,
                                                                         fontWeight: 600,
-                                                                        color: "var(--text-muted, #6b7280)",
+                                                                        color: "var(--ink-3)",
                                                                     }}
                                                                 >
                                                                     /100
@@ -1819,7 +1819,7 @@ export function MarketingPipelineWorkspace({
                                                                 >
                                                                     <span
                                                                         style={{
-                                                                            color: "var(--text-muted, #6b7280)",
+                                                                            color: "var(--ink-3)",
                                                                         }}
                                                                     >
                                                                         {s.criterion.replace(
@@ -1832,7 +1832,7 @@ export function MarketingPipelineWorkspace({
                                                                             height: 6,
                                                                             borderRadius: 3,
                                                                             background:
-                                                                                "var(--border-color, #e5e7eb)",
+                                                                                "var(--line)",
                                                                             position: "relative",
                                                                             overflow: "hidden",
                                                                         }}
@@ -1844,7 +1844,7 @@ export function MarketingPipelineWorkspace({
                                                                                 inset: 0,
                                                                                 width: `${Math.max(0, Math.min(100, s.score))}%`,
                                                                                 background:
-                                                                                    "var(--accent-color, #6366f1)",
+                                                                                    "var(--accent)",
                                                                                 borderRadius: 3,
                                                                             }}
                                                                         />
@@ -1854,7 +1854,7 @@ export function MarketingPipelineWorkspace({
                                                                         style={{
                                                                             textAlign: "right",
                                                                             fontSize: 11,
-                                                                            color: "var(--text-primary, #111)",
+                                                                            color: "var(--ink)",
                                                                         }}
                                                                     >
                                                                         {Math.round(s.score)}
@@ -1866,7 +1866,7 @@ export function MarketingPipelineWorkspace({
                                                             <div
                                                                 style={{
                                                                     fontSize: 12.5,
-                                                                    color: "var(--text-muted, #6b7280)",
+                                                                    color: "var(--ink-3)",
                                                                     lineHeight: 1.5,
                                                                     marginBottom: 6,
                                                                 }}
@@ -1877,7 +1877,7 @@ export function MarketingPipelineWorkspace({
                                                         <div
                                                             style={{
                                                                 fontSize: 11,
-                                                                color: "var(--text-muted, #6b7280)",
+                                                                color: "var(--ink-3)",
                                                             }}
                                                         >
                                                             judge {evalResult.judgeModel} · rubric{" "}
@@ -1896,8 +1896,8 @@ export function MarketingPipelineWorkspace({
                                                             gap: 8,
                                                             fontSize: 13,
                                                             color: publishResult.success
-                                                                ? "var(--text-success, #15803d)"
-                                                                : "var(--text-error, #b91c1c)",
+                                                                ? "var(--success)"
+                                                                : "var(--danger)",
                                                         }}
                                                     >
                                                         {publishResult.success ? (
@@ -2006,7 +2006,7 @@ export function MarketingPipelineWorkspace({
                                                         style={{
                                                             marginTop: "1rem",
                                                             borderTop:
-                                                                "1px solid var(--border-color, #e5e7eb)",
+                                                                "1px solid var(--line)",
                                                             paddingTop: "0.75rem",
                                                         }}
                                                     >
@@ -2025,7 +2025,7 @@ export function MarketingPipelineWorkspace({
                                                                 padding: 0,
                                                                 fontSize: "0.75rem",
                                                                 fontWeight: 600,
-                                                                color: "var(--text-muted, #6b7280)",
+                                                                color: "var(--ink-3)",
                                                             }}
                                                         >
                                                             {debugOpen ? (
@@ -2070,7 +2070,7 @@ export function MarketingPipelineWorkspace({
                                                                     style={{
                                                                         fontWeight: 600,
                                                                         marginBottom: "0.25rem",
-                                                                        color: "var(--text-muted, #6b7280)",
+                                                                        color: "var(--ink-3)",
                                                                     }}
                                                                 >
                                                                     CompanyDNA
@@ -2078,7 +2078,7 @@ export function MarketingPipelineWorkspace({
                                                                 <pre
                                                                     style={{
                                                                         background:
-                                                                            "var(--bg-secondary, #f9fafb)",
+                                                                            "var(--panel-2)",
                                                                         padding: "0.5rem",
                                                                         borderRadius: "0.375rem",
                                                                         overflow: "auto",
@@ -2099,7 +2099,7 @@ export function MarketingPipelineWorkspace({
                                                                         fontWeight: 600,
                                                                         marginTop: "0.5rem",
                                                                         marginBottom: "0.25rem",
-                                                                        color: "var(--text-muted, #6b7280)",
+                                                                        color: "var(--ink-3)",
                                                                     }}
                                                                 >
                                                                     Raw context sent to LLM
@@ -2107,7 +2107,7 @@ export function MarketingPipelineWorkspace({
                                                                 <pre
                                                                     style={{
                                                                         background:
-                                                                            "var(--bg-secondary, #f9fafb)",
+                                                                            "var(--panel-2)",
                                                                         padding: "0.5rem",
                                                                         borderRadius: "0.375rem",
                                                                         overflow: "auto",

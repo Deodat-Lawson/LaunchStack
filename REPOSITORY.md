@@ -22,6 +22,7 @@ single owners.
 | Path | Runtime | What it is |
 | --- | --- | --- |
 | `apps/web` | Next.js 15 | UI, auth (Clerk), API/BFF. **Command acceptance and synchronous reads only** — it hosts no durable work and no Inngest endpoint. |
+| `apps/landing` | Next.js 15 | The public site (launchstack.app): landing, pricing, contact, the deployment guide. No database, no auth, no engine packages. Deployed on its own; excluded from every image (`.dockerignore`), so it is **not** part of a self-hosted deployment. |
 | `apps/worker` | Node (tsx) | **The sole durable workflow coordinator** (ADR-003): consumes the transactional outbox for ingestion and hosts the Inngest serve endpoint (`:8020/api/inngest`) for the background verticals (trend search, prospector, founder review, predictive analysis, website crawl, document modify, reindex). |
 | `packages/protocol` | TS library (published) | Cross-language contracts only: zod event/EvidenceDocument/service schemas + generated JSON Schemas (`schemas/v1/`) consumed by the Python services' contract tests. |
 | `packages/evidence` | TS library (published) | Pure company-state logic: citation anchors, supersession, diffing, conflicts, reconciliation, freshness. No IO, no env. |
@@ -111,12 +112,28 @@ no `ignoreBuildErrors`.
 1. **`api/adeu` retirement** still needs an explicit call by its authors
    (ADR-004 §4). Until then it stays, tested, deprecated.
 2. **Compose files at the root** — deferred by owner decision (unchanged).
-3. **`apps/web` is two products** (marketing site + application in one route
-   tree) — unchanged.
+3. ~~**`apps/web` is two products** (marketing site + application in one route
+   tree).~~ **Closed.** The public site is now `apps/landing`, deployed
+   separately and excluded from every image; `apps/web` serves the application
+   only, and `/` redirects to `/signin`.
 4. **Worker composition reuse** — the worker boots through
    `apps/web/src/server/engine.ts` (one config authority). That keeps the
    worker's env surface identical to the app's (including Clerk keys it
    never uses); splitting a framework-free composition root out of web is
-   the natural next refactor (ADR-002 consequences).
+   the natural next refactor (ADR-002 consequences). Note this shared root is
+   also what makes `DEPLOYMENT_MODE` reach the worker for free — the app and
+   the worker cannot disagree about metering.
 5. **`employerPasskey`/`employeePasskey`** remain plaintext columns on
    `company` — pre-existing; needs a hashing migration + backfill.
+6. **Clerk is a hard dependency.** `CLERK_SECRET_KEY` and
+   `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` are `requiredString()`, so a self-hoster
+   needs a Clerk account and an air-gapped deployment is impossible. The
+   coupling is small — `clerkMiddleware` in `middleware.ts`, `auth()` behind
+   `lib/require-workspace-context.ts` (the single chokepoint for 227 call
+   sites), `<ClerkProvider>`, four UI components and ~12 `useAuth`/`useUser`
+   hooks — with no `clerkClient`, no `@clerk/backend`, and no webhook route.
+   Tenancy is already entirely our own Postgres (`users`,
+   `userCompanyMemberships`, `company`, plus the `pdr_active_company` cookie),
+   so an `AuthPort` in `apps/web` with a Clerk adapter proven to be a no-op is
+   a tractable first step. Deliberately not bundled with the self-hosting work:
+   it moves a security boundary and deserves its own review.

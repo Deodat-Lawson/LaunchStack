@@ -49,6 +49,11 @@ const PUBLIC_API_PATHS = [
   "/api/files/123",
   "/api/collab/hub/v1/nodes",
   "/api/collab/slack/events",
+  // Clicked from a mail client with no session. Its route docblock has always
+  // said "Public (no auth)", but the allowlist entry was missing, so the
+  // default-deny below answered every unsubscribe click with a 401 — including
+  // the RFC 8058 one-click POST.
+  "/api/email-pipeline/unsubscribe/some-hmac-token",
 ];
 
 const PROTECTED_API_PATHS = [

@@ -29,6 +29,11 @@ x-app-build-args: &app-build-args
 # about providers, storage, or service endpoints.
 x-shared-env: &shared-env
   DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/pdr_ai_v2
+  # Anyone running this Compose stack is self-hosting. Declared on the shared
+  # anchor so the app and the worker cannot disagree about metering — they
+  # boot through the same composition root and would misbehave in different
+  # ways if they did.
+  DEPLOYMENT_MODE: ${DEPLOYMENT_MODE:-self-hosted}
   # Chat: one OpenAI-compatible endpoint. Model ids and route assignments
   # live in the mounted chat-models.yaml, not in environment variables.
   CHAT_BASE_URL: ${CHAT_BASE_URL:-}

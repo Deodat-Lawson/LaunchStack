@@ -62,6 +62,12 @@ const isPublicApiRoute = createRouteMatcher([
     '/api/collab/hub(.*)',
     // Slack Events API verifies the signing secret on the raw body.
     '/api/collab/slack/events',
+    // Clicked from a mail client, which has no Clerk session — the route's own
+    // docblock says so. Without this entry the /api/* default-deny below
+    // answered every unsubscribe click with a JSON 401, which is also an
+    // RFC 8058 one-click compliance problem. The token is an HMAC we issued
+    // over (companyId, email), so the route authenticates the request itself.
+    '/api/email-pipeline/unsubscribe(.*)',
 ]);
 
 // Routes where authenticated users should be redirected to their dashboard

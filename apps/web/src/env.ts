@@ -188,6 +188,20 @@ const serverSchema = z.object({
   // Bearer token required by GET /api/metrics (Prometheus scrapers).
   // In production the endpoint returns 503 if this is unset.
   METRICS_SCRAPE_TOKEN: optionalString(),
+  // HMAC key for the unsubscribe links in outgoing campaign mail. Read
+  // directly from process.env by packages/features (which cannot import this
+  // module), and throws there if unset or under 16 chars — so a campaign send
+  // fails at the point of use rather than here. Declared for documentation and
+  // so it appears in the same place as every other secret.
+  // Generate with:
+  //   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+  EMAIL_UNSUBSCRIBE_SECRET: optionalString(),
+  // When false/unset, campaign sends run as a dry run and no mail leaves the
+  // machine. Read directly by the send routes.
+  EMAIL_SENDING_ENABLED: optionalString(),
+  // Signing key Inngest uses to verify requests to the serve endpoint. Read by
+  // the Inngest SDK itself, not by this app; declared so it is documented.
+  INNGEST_SIGNING_KEY: optionalString(),
   // Enable Graph RAG retrieval
   ENABLE_GRAPH_RETRIEVER: z.preprocess(
     (val) => val === "true" || val === "1",
@@ -396,6 +410,9 @@ function parseServerEnv() {
     APP_PUBLIC_URL: process.env.APP_PUBLIC_URL,
     FILE_ACCESS_TOKEN_SECRET: process.env.FILE_ACCESS_TOKEN_SECRET,
     METRICS_SCRAPE_TOKEN: process.env.METRICS_SCRAPE_TOKEN,
+    EMAIL_UNSUBSCRIBE_SECRET: process.env.EMAIL_UNSUBSCRIBE_SECRET,
+    EMAIL_SENDING_ENABLED: process.env.EMAIL_SENDING_ENABLED,
+    INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
     ENABLE_GRAPH_RETRIEVER: process.env.ENABLE_GRAPH_RETRIEVER,
     ENABLE_NOTES_RETRIEVER: process.env.ENABLE_NOTES_RETRIEVER,
     NEO4J_URI: process.env.NEO4J_URI,

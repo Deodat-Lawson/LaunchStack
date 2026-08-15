@@ -21,6 +21,8 @@ import {
   IconSearch,
   IconX,
 } from "./icons";
+import { ContextMenu } from "./ContextMenu";
+import { buildSourceMenuItems } from "./sourceContextMenu";
 import { ADD_TABS, DOC_DOMAINS, SOURCE_META } from "./types";
 import type { SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
@@ -38,6 +40,9 @@ export interface KnowledgePaneProps {
   onOpenSource: (source: WorkspaceSource) => void;
   onOpenAdd: (tabId?: string) => void;
   onAskAbout: (sourceIds: string[]) => void;
+  onRenameSource?: (source: WorkspaceSource) => void;
+  onDeleteSource?: (source: WorkspaceSource) => void;
+  onMoveToFolder?: (sourceId: string, folderName: string) => void;
 }
 
 type Layout = "grid" | "list";
@@ -51,11 +56,56 @@ export function KnowledgePane({
   onOpenSource,
   onOpenAdd,
   onAskAbout,
+  onRenameSource,
+  onDeleteSource,
+  onMoveToFolder,
 }: KnowledgePaneProps) {
   const [query, setQuery] = useState("");
   const [folder, setFolder] = useState<string | null>(null);
   const [type, setType] = useState<SourceTypeId | null>(null);
   const [layout, setLayout] = useState<Layout>("grid");
+  const [menu, setMenu] = useState<{
+    x: number;
+    y: number;
+    source: WorkspaceSource;
+  } | null>(null);
+
+  const openSourceMenu = (source: WorkspaceSource, point: { clientX: number; clientY: number }) => {
+    setMenu({ source, x: point.clientX, y: point.clientY });
+  };
+
+  const menuItems = useMemo(
+    () =>
+      menu
+        ? buildSourceMenuItems(menu.source, folders, selected, {
+            onOpen: onOpenSource,
+            onToggleContext: (source) => {
+              if (selected.includes(source.id)) {
+                setSelected((prev) => prev.filter((id) => id !== source.id));
+                return;
+              }
+              onAskAbout([source.id]);
+            },
+            onRename: onRenameSource,
+            onMoveToFolder,
+            onCopyTitle: (source) => {
+              void navigator.clipboard?.writeText(source.title).catch(() => undefined);
+            },
+            onDelete: onDeleteSource,
+          })
+        : [],
+    [
+      menu,
+      folders,
+      selected,
+      onOpenSource,
+      onAskAbout,
+      onRenameSource,
+      onMoveToFolder,
+      onDeleteSource,
+      setSelected,
+    ],
+  );
 
   const counts = useMemo(() => {
     const byType = new Map<SourceTypeId, number>();
@@ -277,6 +327,7 @@ export function KnowledgePane({
                 selected={selected.includes(source.id)}
                 onToggle={() => toggle(source.id)}
                 onOpen={() => onOpenSource(source)}
+                onOpenMenu={openSourceMenu}
               />
             ))}
           </div>
@@ -286,11 +337,22 @@ export function KnowledgePane({
             selected={selected}
             onToggle={toggle}
             onOpen={onOpenSource}
+            onOpenMenu={openSourceMenu}
           />
         )}
 
         <ConnectorStrip onOpenAdd={onOpenAdd} />
       </div>
+      {menu && (
+        <ContextMenu
+          open
+          x={menu.x}
+          y={menu.y}
+          items={menuItems}
+          ariaLabel={`Actions for ${menu.source.title}`}
+          onClose={() => setMenu(null)}
+        />
+      )}
     </div>
   );
 }
@@ -483,11 +545,13 @@ function SourceCard({
   selected,
   onToggle,
   onOpen,
+  onOpenMenu,
 }: {
   source: WorkspaceSource;
   selected: boolean;
   onToggle: () => void;
   onOpen: () => void;
+  onOpenMenu?: (source: WorkspaceSource, point: { clientX: number; clientY: number }) => void;
 }) {
   const meta = SOURCE_META[source.type];
   const domain = DOC_DOMAINS[source.domain] ?? DOC_DOMAINS.General;
@@ -495,13 +559,26 @@ function SourceCard({
   return (
     <div
       onClick={onOpen}
+      onContextMenu={(e) => {
+        if (!onOpenMenu) return;
+        e.preventDefault();
+        e.stopPropagation();
+        onOpenMenu(source, { clientX: e.clientX, clientY: e.clientY });
+      }}
       role="button"
       tabIndex={0}
+      data-testid={`knowledge-card-${source.id}`}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onOpen();
+          return;
         }
+        if (!onOpenMenu) return;
+        if (e.key !== "ContextMenu" && !(e.shiftKey && e.key === "F10")) return;
+        e.preventDefault();
+        const rect = e.currentTarget.getBoundingClientRect();
+        onOpenMenu(source, { clientX: rect.left + 16, clientY: rect.bottom });
       }}
       style={{
         position: "relative",
@@ -633,11 +710,13 @@ function SourceTable({
   selected,
   onToggle,
   onOpen,
+  onOpenMenu,
 }: {
   sources: WorkspaceSource[];
   selected: string[];
   onToggle: (id: string) => void;
   onOpen: (source: WorkspaceSource) => void;
+  onOpenMenu?: (source: WorkspaceSource, point: { clientX: number; clientY: number }) => void;
 }) {
   return (
     <div
@@ -668,7 +747,14 @@ function SourceTable({
               return (
                 <tr
                   key={source.id}
+                  data-testid={`knowledge-row-${source.id}`}
                   onClick={() => onOpen(source)}
+                  onContextMenu={(e) => {
+                    if (!onOpenMenu) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onOpenMenu(source, { clientX: e.clientX, clientY: e.clientY });
+                  }}
                   style={{
                     borderTop: "1px solid var(--line)",
                     cursor: "pointer",

@@ -13,10 +13,12 @@ import {
   workspaceMainHeaderBarStyle,
 } from "./AskPanel";
 import { CommandPalette } from "./CommandPalette";
+import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
 import { IconChevronRight } from "./icons";
 import { NewFolderDialog } from "./NewFolderDialog";
 import { RenameFolderDialog } from "./RenameFolderDialog";
+import { RenameSourceDialog } from "./RenameSourceDialog";
 import { SourceRail } from "./SourceRail";
 import { StudioDrawer } from "./StudioDrawer";
 import { StudioMenu } from "./StudioMenu";
@@ -135,6 +137,10 @@ export function WorkspaceShell() {
   const [newFolderOpen, setNewFolderOpen] = useState(false);
   const [renameFolder, setRenameFolder] = useState<WorkspaceFolder | null>(null);
   const [viewerSource, setViewerSource] = useState<WorkspaceSource | null>(null);
+  const [renameSource, setRenameSource] = useState<WorkspaceSource | null>(null);
+  const [deleteSource, setDeleteSource] = useState<WorkspaceSource | null>(null);
+  const [deleteBusy, setDeleteBusy] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [studioOpen, setStudioOpen] = useState(false);
   const [studioFeatureId, setStudioFeatureId] = useState<string | null>(null);
   /**
@@ -315,28 +321,48 @@ export function WorkspaceShell() {
     [refresh],
   );
 
+  const deleteDocumentById = useCallback(
+    async (docId: number) => {
+      const res = await fetch("/api/deleteDocument", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ docId: String(docId) }),
+      });
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(body.error ?? "Failed to delete document");
+      }
+      setViewerSource(null);
+      setSelected((prev) => prev.filter((id) => !id.endsWith(String(docId))));
+      await refresh();
+    },
+    [refresh],
+  );
+
   const handleDeleteDoc = useCallback(
     async (docId: number) => {
       try {
-        const res = await fetch("/api/deleteDocument", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ docId: String(docId) }),
-        });
-        if (!res.ok) {
-          const body = (await res.json().catch(() => ({}))) as { error?: string };
-          alert(body.error ?? "Failed to delete document");
-          return;
-        }
-        setViewerSource(null);
-        setSelected((prev) => prev.filter((id) => !id.endsWith(String(docId))));
-        await refresh();
+        await deleteDocumentById(docId);
       } catch (err) {
         alert(err instanceof Error ? err.message : "Failed to delete document");
       }
     },
-    [refresh],
+    [deleteDocumentById],
   );
+
+  const confirmDeleteSource = useCallback(async () => {
+    if (!deleteSource?.documentId) return;
+    setDeleteBusy(true);
+    setDeleteError(null);
+    try {
+      await deleteDocumentById(deleteSource.documentId);
+      setDeleteSource(null);
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : "Failed to delete document");
+    } finally {
+      setDeleteBusy(false);
+    }
+  }, [deleteSource, deleteDocumentById]);
 
   const handleAskAbout = useCallback((source: WorkspaceSource) => {
     setSelected((prev) => (prev.includes(source.id) ? prev : [source.id, ...prev]));
@@ -472,6 +498,11 @@ export function WorkspaceShell() {
           onOpenSource={handleOpenSource}
           onNewFolder={() => setNewFolderOpen(true)}
           onRenameFolder={(folder) => setRenameFolder(folder)}
+          onRenameSource={(source) => setRenameSource(source)}
+          onDeleteSource={(source) => {
+            setDeleteError(null);
+            setDeleteSource(source);
+          }}
           onMoveToFolder={(id, name) => void handleMoveToFolder(id, name)}
           activeFolder={activeFolder}
           setActiveFolder={setActiveFolder}
@@ -572,6 +603,12 @@ export function WorkspaceShell() {
                 setSelected(ids);
                 setActiveFeatureId("chat");
               },
+              onRenameSource: (source) => setRenameSource(source),
+              onDeleteSource: (source) => {
+                setDeleteError(null);
+                setDeleteSource(source);
+              },
+              onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
             },
           }}
         />
@@ -645,6 +682,32 @@ export function WorkspaceShell() {
         onDeleted={() => {
           if (activeFolder === renameFolder?.name) setActiveFolder(null);
           void refresh();
+        }}
+      />
+
+      <RenameSourceDialog
+        open={!!renameSource}
+        source={renameSource}
+        onClose={() => setRenameSource(null)}
+        onRename={handleRenameDoc}
+      />
+
+      <ConfirmActionDialog
+        open={!!deleteSource}
+        title="Delete this source?"
+        body={
+          deleteSource
+            ? `“${deleteSource.title}” will be removed from this workspace. This cannot be undone.`
+            : ""
+        }
+        confirmLabel="Delete"
+        busy={deleteBusy}
+        error={deleteError}
+        onConfirm={() => void confirmDeleteSource()}
+        onClose={() => {
+          if (deleteBusy) return;
+          setDeleteSource(null);
+          setDeleteError(null);
         }}
       />
 

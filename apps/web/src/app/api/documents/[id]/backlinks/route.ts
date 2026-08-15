@@ -9,59 +9,50 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
  * Notes that reference this document via `[[Document Title]]`. Filtered by
  * the requester's `userId` on the source note so we only show what they own.
  */
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  try {
-    const ctx = await requireWorkspaceContext();
-    if (!ctx.success) return ctx.response;
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+    try {
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-    const { id: documentId } = await params;
-    if (!documentId) {
-      return NextResponse.json(
-        { error: "Invalid document id" },
-        { status: 400 },
-      );
+        const { id: documentId } = await params;
+        if (!documentId) {
+            return NextResponse.json({ error: "Invalid document id" }, { status: 400 });
+        }
+
+        const rows = await db
+            .select({
+                sourceNoteId: noteLinks.sourceNoteId,
+                sourceTitle: documentNotes.title,
+                sourceMarkdown: documentNotes.contentMarkdown,
+                targetTitle: noteLinks.targetTitle,
+                createdAt: noteLinks.createdAt,
+            })
+            .from(noteLinks)
+            .innerJoin(documentNotes, eq(documentNotes.id, noteLinks.sourceNoteId))
+            .where(
+                and(
+                    eq(noteLinks.targetDocumentId, documentId),
+                    eq(documentNotes.userId, ctx.data.clerkUserId)
+                )
+            )
+            .orderBy(desc(noteLinks.createdAt));
+
+        const incoming = rows.map(r => ({
+            sourceNoteId: r.sourceNoteId,
+            title: r.sourceTitle,
+            snippet: snippetOf(r.sourceMarkdown),
+            linkedAs: r.targetTitle,
+        }));
+
+        return NextResponse.json({ incoming }, { status: 200 });
+    } catch (err) {
+        console.error("[/api/documents/:id/backlinks] failed:", err);
+        return NextResponse.json({ error: "Backlinks failed" }, { status: 500 });
     }
-
-    const rows = await db
-      .select({
-        sourceNoteId: noteLinks.sourceNoteId,
-        sourceTitle: documentNotes.title,
-        sourceMarkdown: documentNotes.contentMarkdown,
-        targetTitle: noteLinks.targetTitle,
-        createdAt: noteLinks.createdAt,
-      })
-      .from(noteLinks)
-      .innerJoin(
-        documentNotes,
-        eq(documentNotes.id, noteLinks.sourceNoteId),
-      )
-      .where(
-        and(
-          eq(noteLinks.targetDocumentId, documentId),
-          eq(documentNotes.userId, ctx.data.clerkUserId),
-        ),
-      )
-      .orderBy(desc(noteLinks.createdAt));
-
-    const incoming = rows.map((r) => ({
-      sourceNoteId: r.sourceNoteId,
-      title: r.sourceTitle,
-      snippet: snippetOf(r.sourceMarkdown),
-      linkedAs: r.targetTitle,
-    }));
-
-    return NextResponse.json({ incoming }, { status: 200 });
-  } catch (err) {
-    console.error("[/api/documents/:id/backlinks] failed:", err);
-    return NextResponse.json({ error: "Backlinks failed" }, { status: 500 });
-  }
 }
 
 function snippetOf(md: string | null): string {
-  if (!md) return "";
-  const t = md.trim();
-  return t.length > 200 ? t.slice(0, 200) + "…" : t;
+    if (!md) return "";
+    const t = md.trim();
+    return t.length > 200 ? t.slice(0, 200) + "…" : t;
 }

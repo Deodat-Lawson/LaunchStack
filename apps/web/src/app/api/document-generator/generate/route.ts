@@ -1,6 +1,6 @@
 /**
  * Document Generator - AI Content Generation API
- * 
+ *
  * Actions:
  * - generate_section: Generate a new section based on topic
  * - expand: Expand selected text with more detail
@@ -22,9 +22,20 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 /** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
 function stripRewriteQuotes(text: string): string {
     let s = text.trim();
-    const quotePairs: [string, string][] = [['"', '"'], ['"', '"'], ["'", "'"], ["'", "'"]];
+    const quotePairs: [string, string][] = [
+        ['"', '"'],
+        ['"', '"'],
+        ["'", "'"],
+        ["'", "'"],
+    ];
     for (const [open, close] of quotePairs) {
-        if (open && close && s.length >= open.length + close.length && s.startsWith(open) && s.endsWith(close)) {
+        if (
+            open &&
+            close &&
+            s.length >= open.length + close.length &&
+            s.startsWith(open) &&
+            s.endsWith(close)
+        ) {
             s = s.slice(open.length, -close.length).trim();
             break;
         }
@@ -35,7 +46,7 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 // Action types
-type GenerateAction = 
+type GenerateAction =
     | "generate_section"
     | "expand"
     | "rewrite"
@@ -46,21 +57,37 @@ type GenerateAction =
 
 // Validation schema
 const GenerateSchema = z.object({
-    action: z.enum(["generate_section", "expand", "rewrite", "summarize", "change_tone", "field_update", "continue"]),
+    action: z.enum([
+        "generate_section",
+        "expand",
+        "rewrite",
+        "summarize",
+        "change_tone",
+        "field_update",
+        "continue",
+    ]),
     content: z.string().optional(), // Selected text or current content
     prompt: z.string().optional(), // User's instruction
-    context: z.object({
-        documentTitle: z.string().optional(),
-        documentDescription: z.string().optional(),
-        fullContent: z.string().optional(), // Full document for context
-        cursorPosition: z.number().optional(),
-    }).optional(),
-    options: z.object({
-        tone: z.enum(["professional", "casual", "formal", "technical", "creative", "persuasive"]).optional(),
-        length: z.enum(["brief", "medium", "detailed", "comprehensive"]).optional(),
-        audience: z.enum(["general", "technical", "executives", "students", "customers", "team"]).optional(),
-        model: z.string().min(1).optional(),
-    }).optional(),
+    context: z
+        .object({
+            documentTitle: z.string().optional(),
+            documentDescription: z.string().optional(),
+            fullContent: z.string().optional(), // Full document for context
+            cursorPosition: z.number().optional(),
+        })
+        .optional(),
+    options: z
+        .object({
+            tone: z
+                .enum(["professional", "casual", "formal", "technical", "creative", "persuasive"])
+                .optional(),
+            length: z.enum(["brief", "medium", "detailed", "comprehensive"]).optional(),
+            audience: z
+                .enum(["general", "technical", "executives", "students", "customers", "team"])
+                .optional(),
+            model: z.string().min(1).optional(),
+        })
+        .optional(),
 });
 
 // System prompts for different actions
@@ -135,11 +162,13 @@ Guidelines:
 
 // Tone descriptions for change_tone action
 const TONE_DESCRIPTIONS: Record<string, string> = {
-    professional: "Business-appropriate, clear, and respectful. Uses formal language without being stiff.",
+    professional:
+        "Business-appropriate, clear, and respectful. Uses formal language without being stiff.",
     casual: "Friendly, approachable, and conversational. Uses everyday language and a relaxed style.",
     formal: "Academic or official in nature. Uses precise language, proper grammar, and avoids colloquialisms.",
     technical: "Precise, detailed, and terminology-rich. Appropriate for expert audiences.",
-    creative: "Engaging, imaginative, and expressive. Uses vivid language and varied sentence structures.",
+    creative:
+        "Engaging, imaginative, and expressive. Uses vivid language and varied sentence structures.",
     persuasive: "Compelling and convincing. Uses rhetorical techniques to influence the reader.",
 };
 
@@ -155,8 +184,12 @@ export async function POST(request: Request) {
             body = (await request.json()) as unknown;
         } catch {
             return NextResponse.json(
-                { success: false, message: "Invalid JSON body", error: "Request body must be valid JSON" },
-                { status: 400 },
+                {
+                    success: false,
+                    message: "Invalid JSON body",
+                    error: "Request body must be valid JSON",
+                },
+                { status: 400 }
             );
         }
         const validation = GenerateSchema.safeParse(body);
@@ -170,7 +203,8 @@ export async function POST(request: Request) {
 
         const { action, content, prompt, context, options } = validation.data;
         const startTime = Date.now();
-        const containsEditableHtml = (content?.includes("<mark") ?? false) || (prompt?.includes("<mark") ?? false);
+        const containsEditableHtml =
+            (content?.includes("<mark") ?? false) || (prompt?.includes("<mark") ?? false);
 
         // Field updates are short structured extractions — cheap enough for
         // the operator's fast route; prose generation uses the default.
@@ -178,14 +212,11 @@ export async function POST(request: Request) {
             route: action === "field_update" ? "fast" : "default",
         });
         const { modelId, chat } = resolved;
-        const compatibility = validateDeprecatedChatSelection(
-            { model: options?.model },
-            resolved,
-        );
+        const compatibility = validateDeprecatedChatSelection({ model: options?.model }, resolved);
         if (!compatibility.ok) {
             return NextResponse.json(
                 { success: false, message: compatibility.message },
-                { status: compatibility.status },
+                { status: compatibility.status }
             );
         }
 
@@ -258,9 +289,9 @@ export async function POST(request: Request) {
                     resolved.prepareMessages([
                         new SystemMessage(systemPrompt),
                         new HumanMessage(userPrompt),
-                    ]),
+                    ])
                 );
-                
+
                 // Normalizing
                 const firstDraft = normalizeModelContent(firstPass.content);
 
@@ -274,7 +305,8 @@ export async function POST(request: Request) {
                         ? "IMPORTANT: Preserve the HTML structure and every <mark data-field-key> tag exactly. If the user requested a field change, update only the text inside the correct mark tag."
                         : "Keep the output as plain text unless the original formatting requires otherwise",
                     prompt
-                        ? "IMPORTANT: The user requested specific additions or changes. Make sure these are fully incorporated and prioritized: " + prompt
+                        ? "IMPORTANT: The user requested specific additions or changes. Make sure these are fully incorporated and prioritized: " +
+                          prompt
                         : "Do not change the meaning or add new information beyond what was requested",
                     containsEditableHtml
                         ? "Output ONLY the refined HTML fragment: no quotation marks, no wrapper phrases"
@@ -283,18 +315,20 @@ export async function POST(request: Request) {
 
                 const secondPass = await chat.invoke(
                     resolved.prepareMessages([
-                    new SystemMessage(systemPrompt),
-                    new HumanMessage(`Here is a rewritten version of the original text:
+                        new SystemMessage(systemPrompt),
+                        new HumanMessage(`Here is a rewritten version of the original text:
 
 "${firstDraft}"
 
 Now refine it further:
 - ${refinementInstructions}`),
-                    ]),
+                    ])
                 );
 
                 // Use the refined second pass for rewrite (skip the generic call below)
-                const rewriteContent = stripRewriteQuotes(normalizeModelContent(secondPass.content));
+                const rewriteContent = stripRewriteQuotes(
+                    normalizeModelContent(secondPass.content)
+                );
                 const rewriteProcessingTimeMs = Date.now() - startTime;
                 return NextResponse.json({
                     success: true,
@@ -334,10 +368,12 @@ Now refine it further:
         }
 
         if (action === "field_update") {
-            const fieldUpdates = await invokeStructured(resolved, FieldUpdateSchema, [
-                new SystemMessage(systemPrompt),
-                new HumanMessage(userPrompt),
-            ], { name: "field_updates" });
+            const fieldUpdates = await invokeStructured(
+                resolved,
+                FieldUpdateSchema,
+                [new SystemMessage(systemPrompt), new HumanMessage(userPrompt)],
+                { name: "field_updates" }
+            );
             return NextResponse.json({
                 success: true,
                 action,
@@ -352,7 +388,7 @@ Now refine it further:
             resolved.prepareMessages([
                 new SystemMessage(systemPrompt),
                 new HumanMessage(userPrompt),
-            ]),
+            ])
         );
 
         const generatedContent = normalizeModelContent(response.content);
@@ -365,7 +401,6 @@ Now refine it further:
             processingTimeMs,
             model: modelId,
         });
-
     } catch (error) {
         console.error("[document-generator/generate] error:", error);
         return NextResponse.json(
@@ -373,7 +408,7 @@ Now refine it further:
                 success: false,
                 message: "Failed to generate content",
             },
-            { status: 500, headers: { "Content-Type": "application/json" } },
+            { status: 500, headers: { "Content-Type": "application/json" } }
         );
     }
 }

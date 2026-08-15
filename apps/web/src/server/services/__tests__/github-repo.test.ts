@@ -27,16 +27,12 @@ describe("parseGitHubUrl", () => {
     });
 
     it("handles extra path segments (/tree/main)", () => {
-        const result = parseGitHubUrl(
-            "https://github.com/vercel/next.js/tree/canary",
-        );
+        const result = parseGitHubUrl("https://github.com/vercel/next.js/tree/canary");
         expect(result).toEqual({ owner: "vercel", repo: "next.js" });
     });
 
     it("handles /blob/main/README.md path", () => {
-        const result = parseGitHubUrl(
-            "https://github.com/vercel/next.js/blob/main/README.md",
-        );
+        const result = parseGitHubUrl("https://github.com/vercel/next.js/blob/main/README.md");
         expect(result).toEqual({ owner: "vercel", repo: "next.js" });
     });
 
@@ -51,14 +47,12 @@ describe("parseGitHubUrl", () => {
     });
 
     it("throws for non-GitHub URL", () => {
-        expect(() => parseGitHubUrl("https://gitlab.com/owner/repo")).toThrow(
-            "Not a GitHub URL",
-        );
+        expect(() => parseGitHubUrl("https://gitlab.com/owner/repo")).toThrow("Not a GitHub URL");
     });
 
     it("throws for URL with missing repo component", () => {
         expect(() => parseGitHubUrl("https://github.com/owner")).toThrow(
-            "Invalid GitHub repository URL",
+            "Invalid GitHub repository URL"
         );
     });
 
@@ -112,7 +106,7 @@ describe("downloadGitHubRepoZip", () => {
                     Accept: "application/vnd.github+json",
                     "User-Agent": "Launchstack/1.0",
                 }),
-            }),
+            })
         );
     });
 
@@ -123,19 +117,14 @@ describe("downloadGitHubRepoZip", () => {
 
         expect(global.fetch).toHaveBeenCalledWith(
             "https://api.github.com/repos/owner/repo/zipball/develop",
-            expect.anything(),
+            expect.anything()
         );
     });
 
     it("includes Authorization header when token is provided", async () => {
         mockFetch(200, Buffer.alloc(200));
 
-        await downloadGitHubRepoZip(
-            "owner",
-            "repo",
-            undefined,
-            "github-token-placeholder",
-        );
+        await downloadGitHubRepoZip("owner", "repo", undefined, "github-token-placeholder");
 
         expect(global.fetch).toHaveBeenCalledWith(
             expect.any(String),
@@ -143,24 +132,24 @@ describe("downloadGitHubRepoZip", () => {
                 headers: expect.objectContaining({
                     Authorization: "Bearer github-token-placeholder",
                 }),
-            }),
+            })
         );
     });
 
     it("throws GitHubRepoNotFoundError on 404", async () => {
         mockFetch(404);
 
-        await expect(
-            downloadGitHubRepoZip("owner", "nonexistent"),
-        ).rejects.toThrow(GitHubRepoNotFoundError);
+        await expect(downloadGitHubRepoZip("owner", "nonexistent")).rejects.toThrow(
+            GitHubRepoNotFoundError
+        );
     });
 
     it("throws GitHubAuthError on 401 without token", async () => {
         mockFetch(401);
 
-        await expect(
-            downloadGitHubRepoZip("owner", "private-repo"),
-        ).rejects.toThrow(GitHubAuthError);
+        await expect(downloadGitHubRepoZip("owner", "private-repo")).rejects.toThrow(
+            GitHubAuthError
+        );
 
         try {
             await downloadGitHubRepoZip("owner", "private-repo");
@@ -173,12 +162,7 @@ describe("downloadGitHubRepoZip", () => {
         mockFetch(403);
 
         await expect(
-            downloadGitHubRepoZip(
-                "owner",
-                "repo",
-                undefined,
-                "github-expired-token-placeholder",
-            ),
+            downloadGitHubRepoZip("owner", "repo", undefined, "github-expired-token-placeholder")
         ).rejects.toThrow(GitHubAuthError);
 
         try {
@@ -186,7 +170,7 @@ describe("downloadGitHubRepoZip", () => {
                 "owner",
                 "repo",
                 undefined,
-                "github-expired-token-placeholder",
+                "github-expired-token-placeholder"
             );
         } catch (e) {
             expect((e as Error).message).toContain("lack permissions");
@@ -196,17 +180,13 @@ describe("downloadGitHubRepoZip", () => {
     it("throws GitHubRateLimitError on 429", async () => {
         mockFetch(429, undefined, { "retry-after": "60" });
 
-        await expect(
-            downloadGitHubRepoZip("owner", "repo"),
-        ).rejects.toThrow(GitHubRateLimitError);
+        await expect(downloadGitHubRepoZip("owner", "repo")).rejects.toThrow(GitHubRateLimitError);
     });
 
     it("throws on empty buffer (< 100 bytes)", async () => {
         mockFetch(200, Buffer.alloc(50));
 
-        await expect(
-            downloadGitHubRepoZip("owner", "repo"),
-        ).rejects.toThrow("appears empty");
+        await expect(downloadGitHubRepoZip("owner", "repo")).rejects.toThrow("appears empty");
     });
 
     it("throws on oversized Content-Length header", async () => {
@@ -214,8 +194,6 @@ describe("downloadGitHubRepoZip", () => {
             "content-length": String(600 * 1024 * 1024),
         });
 
-        await expect(
-            downloadGitHubRepoZip("owner", "repo"),
-        ).rejects.toThrow("too large");
+        await expect(downloadGitHubRepoZip("owner", "repo")).rejects.toThrow("too large");
     });
 });

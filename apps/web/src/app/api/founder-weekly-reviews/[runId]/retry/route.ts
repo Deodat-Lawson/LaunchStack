@@ -5,9 +5,9 @@ import { founderWeeklyReviewRetries } from "~/server/founder-weekly-review/obser
 import { createFounderWeeklyReviewRetryPostHandler } from "./retry-handler";
 
 export const POST = createFounderWeeklyReviewRetryPostHandler({
-  actorResolver: productionFounderWeeklyReviewActorResolver,
-  retryRunWithDispatch,
-  sendDispatchRequested: () =>
-    inngest.send({ name: "founder-weekly-review/dispatch.requested", data: {} }),
-  incrementRetry: () => founderWeeklyReviewRetries.inc(),
+    actorResolver: productionFounderWeeklyReviewActorResolver,
+    retryRunWithDispatch,
+    sendDispatchRequested: () =>
+        inngest.send({ name: "founder-weekly-review/dispatch.requested", data: {} }),
+    incrementRetry: () => founderWeeklyReviewRetries.inc(),
 });

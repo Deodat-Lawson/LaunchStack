@@ -3,7 +3,7 @@ import { sql } from "drizzle-orm";
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeIfDatabase =
-    process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL
+    (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
 
@@ -29,7 +29,7 @@ describeIfDatabase("Founder Weekly Review migrations", () => {
 
             expect(runsTable[0]?.name).toBe("pdr_ai_v2_founder_weekly_review_runs");
             expect(opsTable[0]?.name).toBe("pdr_ai_v2_founder_weekly_review_operations");
-            expect(indexes.map((row) => row.indexname)).toEqual(
+            expect(indexes.map(row => row.indexname)).toEqual(
                 expect.arrayContaining([
                     "founder_weekly_review_runs_company_request_key_unique",
                     "founder_weekly_review_operations_run_type_request_key_unique",

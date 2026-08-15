@@ -1,13 +1,8 @@
 export type {
-  RagPort,
-  CompanySearchOptions,
-  RagSearchFilters,
-  RagSearchResult,
-  RagSearchMetadata,
+    RagPort,
+    CompanySearchOptions,
+    RagSearchFilters,
+    RagSearchResult,
+    RagSearchMetadata,
 } from "./types";
-export {
-  configureRag,
-  getRag,
-  getRagOrNull,
-  ragCompanySearchSafe,
-} from "./slot";
+export { configureRag, getRag, getRagOrNull, ragCompanySearchSafe } from "./slot";

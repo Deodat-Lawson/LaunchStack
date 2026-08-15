@@ -42,9 +42,7 @@ describe("mapDocumentVersionToEvidenceItem", () => {
 
     it("produces an item that satisfies the evidence-item contract", () => {
         const item = mapDocumentVersionToEvidenceItem(completeRow());
-        expect(() =>
-            FounderWeeklyReviewEvidenceItemSchema.parse(item)
-        ).not.toThrow();
+        expect(() => FounderWeeklyReviewEvidenceItemSchema.parse(item)).not.toThrow();
     });
 
     it("falls back to a factual excerpt when changelog is absent", () => {

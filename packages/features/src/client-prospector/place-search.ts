@@ -10,7 +10,6 @@
 // IMPORTANT: Do NOT pass the `fields` parameter — it triggers Premium pricing.
 // The default Pro response includes all the fields we need.
 
-
 import type { LatLng, PlannedSearch, RawPlaceResult } from "./types";
 
 // Foursquare new Places API endpoint (post June 17 2025 accounts)
@@ -76,7 +75,7 @@ async function executeSearchWithRetries(
     location: LatLng,
     radius: number,
     apiKey: string,
-    options: { excludeChains: boolean },
+    options: { excludeChains: boolean }
 ): Promise<RawPlaceResult[]> {
     let lastError: Error | null = null;
 
@@ -88,7 +87,7 @@ async function executeSearchWithRetries(
             if (attempt < MAX_RETRIES) {
                 console.warn(
                     `[place-search] Search failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}): "${search.searchQuery.slice(0, 50)}..."`,
-                    lastError.message,
+                    lastError.message
                 );
             }
         }
@@ -96,7 +95,7 @@ async function executeSearchWithRetries(
 
     console.error(
         `[place-search] Search failed after ${MAX_RETRIES + 1} attempts: "${search.searchQuery.slice(0, 50)}..."`,
-        lastError,
+        lastError
     );
     return [];
 }
@@ -109,11 +108,15 @@ function mapFoursquarePlace(place: FoursquarePlace): RawPlaceResult | null {
 
     // Filter out closed businesses
     if (place.date_closed) {
-        console.log(`[place-search] Skipping closed place: "${place.name}" (closed ${place.date_closed})`);
+        console.log(
+            `[place-search] Skipping closed place: "${place.name}" (closed ${place.date_closed})`
+        );
         return null;
     }
     if (place.closed_bucket && CLOSED_BUCKETS.has(place.closed_bucket)) {
-        console.log(`[place-search] Skipping likely-closed place: "${place.name}" (${place.closed_bucket})`);
+        console.log(
+            `[place-search] Skipping likely-closed place: "${place.name}" (${place.closed_bucket})`
+        );
         return null;
     }
 
@@ -127,7 +130,7 @@ function mapFoursquarePlace(place: FoursquarePlace): RawPlaceResult | null {
         address: place.location?.address ?? "",
         formattedAddress: place.location?.formatted_address ?? "",
         location: { lat, lng },
-        categories: (place.categories ?? []).map((c) => ({
+        categories: (place.categories ?? []).map(c => ({
             id: c.fsq_category_id,
             name: c.name,
         })),
@@ -152,7 +155,7 @@ async function callFoursquare(
     location: LatLng,
     radius: number,
     apiKey: string,
-    options: { excludeChains: boolean },
+    options: { excludeChains: boolean }
 ): Promise<RawPlaceResult[]> {
     const params = new URLSearchParams({
         query: search.searchQuery,
@@ -183,7 +186,9 @@ async function callFoursquare(
 
     if (!response.ok) {
         const text = await response.text();
-        throw new Error(`Foursquare API error: ${response.status} ${response.statusText} - ${text}`);
+        throw new Error(
+            `Foursquare API error: ${response.status} ${response.statusText} - ${text}`
+        );
     }
 
     const data = (await response.json()) as FoursquareSearchResponse;
@@ -191,9 +196,7 @@ async function callFoursquare(
         return [];
     }
 
-    return data.results
-        .map(mapFoursquarePlace)
-        .filter((p): p is RawPlaceResult => p !== null);
+    return data.results.map(mapFoursquarePlace).filter((p): p is RawPlaceResult => p !== null);
 }
 
 // ─── Public API ──────────────────────────────────────────────────────────────
@@ -210,7 +213,7 @@ export async function executePlaceSearch(
     searches: PlannedSearch[],
     location: LatLng,
     radius: number,
-    options: { excludeChains?: boolean } = {},
+    options: { excludeChains?: boolean } = {}
 ): Promise<RawPlaceResult[]> {
     const apiKey = getApiKey();
     const seenIds = new Set<string>();
@@ -218,9 +221,9 @@ export async function executePlaceSearch(
     const excludeChains = options.excludeChains ?? true; // default: exclude chains
 
     const settledSearches = await Promise.allSettled(
-        searches.map((search) =>
-            executeSearchWithRetries(search, location, radius, apiKey, { excludeChains }),
-        ),
+        searches.map(search =>
+            executeSearchWithRetries(search, location, radius, apiKey, { excludeChains })
+        )
     );
 
     for (const [index, settled] of settledSearches.entries()) {
@@ -232,7 +235,7 @@ export async function executePlaceSearch(
         if (settled.status === "rejected") {
             console.error(
                 `[place-search] Search promise rejected unexpectedly: "${search.searchQuery.slice(0, 50)}..."`,
-                settled.reason,
+                settled.reason
             );
             continue;
         }
@@ -240,7 +243,9 @@ export async function executePlaceSearch(
         const results = settled.value;
 
         if (results.length === 0) {
-            console.warn(`[place-search] Zero results for search: "${search.searchQuery.slice(0, 80)}..."`);
+            console.warn(
+                `[place-search] Zero results for search: "${search.searchQuery.slice(0, 80)}..."`
+            );
             continue;
         }
 

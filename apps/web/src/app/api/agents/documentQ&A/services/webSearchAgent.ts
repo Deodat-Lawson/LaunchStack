@@ -7,18 +7,17 @@ import type { WebSearchResult, WebSearchAgentInput, WebSearchAgentResult } from 
 
 /**
  * Web Search Agent using LangChain and LangSmith
- * 
+ *
  * This agent performs intelligent web searches by:
  * 1. Refining search queries based on context
  * 2. Executing optimized searches
  * 3. Synthesizing and filtering results for relevance
  * 4. Providing high-quality, contextualized information
- * 
+ *
  * LangSmith tracing is automatically enabled if LANGCHAIN_TRACING_V2=true
  */
 
-const QUERY_REFINEMENT_PROMPT = 
-    `You are an expert search query optimizer. Your task is to refine user questions into highly effective web search queries.
+const QUERY_REFINEMENT_PROMPT = `You are an expert search query optimizer. Your task is to refine user questions into highly effective web search queries.
 
     Guidelines:
     1. Extract the core intent and key concepts from the user's question
@@ -36,8 +35,7 @@ const QUERY_REFINEMENT_PROMPT =
 
     Return ONLY the refined search query, nothing else.`;
 
-const RESULT_SYNTHESIS_PROMPT = 
-    `You are an expert information analyst specializing in evaluating and synthesizing web search results.
+const RESULT_SYNTHESIS_PROMPT = `You are an expert information analyst specializing in evaluating and synthesizing web search results.
 
     Your task is to:
     1. Analyze search results for relevance to the user's question
@@ -80,12 +78,14 @@ const RESULT_SYNTHESIS_PROMPT =
     }`;
 
 const SearchSynthesisSchema = z.object({
-    selectedResults: z.array(z.object({
-        title: z.string(),
-        url: z.string(),
-        snippet: z.string(),
-        relevanceScore: z.number().optional(),
-    })),
+    selectedResults: z.array(
+        z.object({
+            title: z.string(),
+            url: z.string(),
+            snippet: z.string(),
+            relevanceScore: z.number().optional(),
+        })
+    ),
     reasoning: z.string().optional(),
 });
 
@@ -110,22 +110,18 @@ async function refineSearchQuery(
     ];
 
     try {
-        const response = await resolved.chat.invoke(
-            resolved.prepareMessages(messages),
-        );
+        const response = await resolved.chat.invoke(resolved.prepareMessages(messages));
         let content: string;
         if (typeof response.content === "string") {
             content = response.content;
         } else if (Array.isArray(response.content)) {
             content = response.content
-                .map((item) => typeof item === "string" ? item : JSON.stringify(item))
+                .map(item => (typeof item === "string" ? item : JSON.stringify(item)))
                 .join("");
         } else {
             content = JSON.stringify(response.content);
         }
-        const refinedQuery = content
-            .trim()
-            .replace(/^["']|["']$/g, "");
+        const refinedQuery = content.trim().replace(/^["']|["']$/g, "");
 
         console.log(`🔍 [WebSearchAgent] Query refined: "${userQuestion}" → "${refinedQuery}"`);
 
@@ -146,10 +142,7 @@ async function refineSearchQuery(
 /**
  * Performs the actual web search using Exa
  */
-async function executeSearch(
-    query: string,
-    maxResults: number
-): Promise<WebSearchResult[]> {
+async function executeSearch(query: string, maxResults: number): Promise<WebSearchResult[]> {
     try {
         console.log(`🌐 [WebSearchAgent] Executing search: "${query}"`);
 
@@ -192,29 +185,36 @@ async function synthesizeResults(
         )
         .join("\n---\n\n");
 
-    const prompt = RESULT_SYNTHESIS_PROMPT
-        .replace("{documentContext}", documentContext ?? "None provided")
+    const prompt = RESULT_SYNTHESIS_PROMPT.replace(
+        "{documentContext}",
+        documentContext ?? "None provided"
+    )
         .replace("{userQuestion}", userQuestion)
         .replace("{searchResults}", searchResultsText)
         .replace("{maxResults}", maxResults.toString());
 
     try {
-        const parsed = await invokeStructured(resolved, SearchSynthesisSchema, [
-            new SystemMessage("You are a helpful assistant that returns only valid JSON."),
-            new HumanMessage(prompt),
-        ], { name: "web_search_synthesis" });
-        
-        // Map back to WebSearchResult format
-        const synthesizedResults: WebSearchResult[] = parsed.selectedResults.map(
-            (result) => ({
-                title: result.title,
-                url: result.url,
-                snippet: result.snippet,
-                relevanceScore: result.relevanceScore,
-            })
+        const parsed = await invokeStructured(
+            resolved,
+            SearchSynthesisSchema,
+            [
+                new SystemMessage("You are a helpful assistant that returns only valid JSON."),
+                new HumanMessage(prompt),
+            ],
+            { name: "web_search_synthesis" }
         );
 
-        console.log(`✨ [WebSearchAgent] Synthesized ${synthesizedResults.length} high-quality results`);
+        // Map back to WebSearchResult format
+        const synthesizedResults: WebSearchResult[] = parsed.selectedResults.map(result => ({
+            title: result.title,
+            url: result.url,
+            snippet: result.snippet,
+            relevanceScore: result.relevanceScore,
+        }));
+
+        console.log(
+            `✨ [WebSearchAgent] Synthesized ${synthesizedResults.length} high-quality results`
+        );
         console.log(`📊 [WebSearchAgent] Reasoning: ${parsed.reasoning ?? "N/A"}`);
 
         return {
@@ -233,12 +233,12 @@ async function synthesizeResults(
 
 /**
  * Main function to execute web search using the intelligent agent
- * 
+ *
  * This function orchestrates the three-step process:
  * 1. Query refinement
  * 2. Search execution
  * 3. Result synthesis
- * 
+ *
  * LangSmith tracing is automatically enabled if configured in environment variables
  */
 export async function executeWebSearchAgent(
@@ -280,10 +280,7 @@ export async function executeWebSearchAgent(
     } catch (error) {
         console.error("Web search agent error:", error);
         // Fallback to direct search
-        const fallbackResults = await performExaSearch(
-            input.userQuestion,
-            maxResults
-        );
+        const fallbackResults = await performExaSearch(input.userQuestion, maxResults);
         return {
             results: fallbackResults,
             refinedQuery: input.userQuestion,

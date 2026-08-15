@@ -90,15 +90,12 @@ export async function POST(_request: Request) {
 
         const companyId = ctx.data.companyId;
 
-        const docs = await db
-            .select()
-            .from(document)
-            .where(eq(document.companyId, companyId));
+        const docs = await db.select().from(document).where(eq(document.companyId, companyId));
 
         // Enrich with mimeType from file_uploads when document URL is /api/files/{id}
         // (so preview works for PDFs and other types when stored in DB and url has no extension)
         const fileIds = docs
-            .map((d) => {
+            .map(d => {
                 const m = FILE_API_ID_REGEX.exec(d.url);
                 return m ? parseInt(m[1]!, 10) : null;
             })
@@ -111,22 +108,21 @@ export async function POST(_request: Request) {
                 .select({ id: fileUploads.id, mimeType: fileUploads.mimeType })
                 .from(fileUploads)
                 .where(inArray(fileUploads.id, uniqueFileIds));
-            mimeByFileId = Object.fromEntries(rows.map((r) => [r.id, r.mimeType]));
+            mimeByFileId = Object.fromEntries(rows.map(r => [r.id, r.mimeType]));
         }
 
         // Convert BigInt fields to numbers for JSON serialization; attach mimeType for viewer
-        const serializedDocs = docs.map((doc) => {
+        const serializedDocs = docs.map(doc => {
             const fileId = FILE_API_ID_REGEX.exec(doc.url)?.[1];
             const mimeFromFile = fileId ? mimeByFileId[parseInt(fileId, 10)] : undefined;
-            const mimeType = doc.mimeType
-                ?? mimeFromFile
-                ?? inferMimeFromName(doc.title)
-                ?? inferMimeFromName(doc.url);
-            const needsProxy = isPrivateBlobUrl(doc.url)
-                || (isS3Storage() && doc.url.startsWith("http"));
-            const url = needsProxy
-                ? `/api/documents/${Number(doc.id)}/content`
-                : doc.url;
+            const mimeType =
+                doc.mimeType ??
+                mimeFromFile ??
+                inferMimeFromName(doc.title) ??
+                inferMimeFromName(doc.url);
+            const needsProxy =
+                isPrivateBlobUrl(doc.url) || (isS3Storage() && doc.url.startsWith("http"));
+            const url = needsProxy ? `/api/documents/${Number(doc.id)}/content` : doc.url;
 
             return {
                 ...doc,
@@ -137,9 +133,7 @@ export async function POST(_request: Request) {
                 // schema — convert to number|null so JSON.stringify doesn't
                 // choke on the raw BigInt.
                 currentVersionId:
-                    doc.currentVersionId !== null
-                        ? Number(doc.currentVersionId)
-                        : null,
+                    doc.currentVersionId !== null ? Number(doc.currentVersionId) : null,
                 ...(mimeType && { mimeType }),
             };
         });
@@ -147,9 +141,6 @@ export async function POST(_request: Request) {
         return NextResponse.json(serializedDocs, { status: 200 });
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
-        return NextResponse.json(
-            { error: "Unable to fetch documents" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Unable to fetch documents" }, { status: 500 });
     }
 }

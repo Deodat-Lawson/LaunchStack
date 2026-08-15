@@ -18,41 +18,45 @@ const MIN_SEPARATION = 0.2;
 const MIN_POSITIVE_MEAN = 0.8;
 
 async function main(): Promise<void> {
-  const run = await runMeetingEvals();
+    const run = await runMeetingEvals();
 
-  if (process.argv.includes("--json")) {
-    console.log(JSON.stringify(run, null, 2));
-  } else {
-    console.log(formatMeetingEvalRun(run));
-  }
+    if (process.argv.includes("--json")) {
+        console.log(JSON.stringify(run, null, 2));
+    } else {
+        console.log(formatMeetingEvalRun(run));
+    }
 
-  const separation = run.positiveMeanScore - run.negativeMeanScore;
-  const problems: string[] = [];
+    const separation = run.positiveMeanScore - run.negativeMeanScore;
+    const problems: string[] = [];
 
-  if (run.violations.length > 0) {
-    problems.push(
-      `${run.violations.length} scenario(s) no longer behave as documented: ` +
-        run.violations.map((v) => v.scenarioId).join(", "),
-    );
-  }
-  if (run.positiveMeanScore < MIN_POSITIVE_MEAN) {
-    problems.push(`good meetings averaged ${run.positiveMeanScore} (floor ${MIN_POSITIVE_MEAN})`);
-  }
-  if (separation < MIN_SEPARATION) {
-    problems.push(
-      `only ${Math.round(separation * 1000) / 1000} separates good from bad meetings (floor ${MIN_SEPARATION})`,
-    );
-  }
+    if (run.violations.length > 0) {
+        problems.push(
+            `${run.violations.length} scenario(s) no longer behave as documented: ` +
+                run.violations.map(v => v.scenarioId).join(", ")
+        );
+    }
+    if (run.positiveMeanScore < MIN_POSITIVE_MEAN) {
+        problems.push(
+            `good meetings averaged ${run.positiveMeanScore} (floor ${MIN_POSITIVE_MEAN})`
+        );
+    }
+    if (separation < MIN_SEPARATION) {
+        problems.push(
+            `only ${Math.round(separation * 1000) / 1000} separates good from bad meetings (floor ${MIN_SEPARATION})`
+        );
+    }
 
-  if (problems.length > 0) {
-    console.error(`\nEvaluation failed:\n${problems.map((p) => `  - ${p}`).join("\n")}`);
-    process.exit(1);
-  }
+    if (problems.length > 0) {
+        console.error(`\nEvaluation failed:\n${problems.map(p => `  - ${p}`).join("\n")}`);
+        process.exit(1);
+    }
 
-  console.log("\nEvaluation passed.");
+    console.log("\nEvaluation passed.");
 }
 
 main().catch((err: unknown) => {
-  console.error(`[evals] fatal: ${err instanceof Error ? err.stack ?? err.message : String(err)}`);
-  process.exit(1);
+    console.error(
+        `[evals] fatal: ${err instanceof Error ? (err.stack ?? err.message) : String(err)}`
+    );
+    process.exit(1);
 });

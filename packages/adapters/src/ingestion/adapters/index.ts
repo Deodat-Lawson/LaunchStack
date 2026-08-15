@@ -35,28 +35,28 @@ import { DoclingIngestionAdapter } from "./docling-adapter";
 // Its canHandle() returns false when the converter is not configured, so the
 // legacy adapters take over.
 const ADAPTERS: SourceAdapter[] = [
-  new DoclingIngestionAdapter(),
-  new PdfAdapter(),
-  new DocxAdapter(),
-  new PptxAdapter(),
-  new SpreadsheetAdapter(),
-  new ReadabilityAdapter(),
-  new HtmlAdapter(),
-  new ImageAdapter(),
-  new TextAdapter(),
-  new JsonExportAdapter(),
-  new ZipAdapter(),
-  new FallbackAdapter(), // last: handles any unknown MIME/extension
+    new DoclingIngestionAdapter(),
+    new PdfAdapter(),
+    new DocxAdapter(),
+    new PptxAdapter(),
+    new SpreadsheetAdapter(),
+    new ReadabilityAdapter(),
+    new HtmlAdapter(),
+    new ImageAdapter(),
+    new TextAdapter(),
+    new JsonExportAdapter(),
+    new ZipAdapter(),
+    new FallbackAdapter(), // last: handles any unknown MIME/extension
 ];
 
 export function findAdapter(
-  mimeType: string,
-  extension: string,
-  filename?: string,
+    mimeType: string,
+    extension: string,
+    filename?: string
 ): SourceAdapter | undefined {
-  return ADAPTERS.find((a) => a.canHandle(mimeType, extension, filename));
+    return ADAPTERS.find(a => a.canHandle(mimeType, extension, filename));
 }
 
 export function getAllAdapters(): readonly SourceAdapter[] {
-  return ADAPTERS;
+    return ADAPTERS;
 }

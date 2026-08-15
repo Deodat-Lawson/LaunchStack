@@ -1,9 +1,6 @@
 import type { ProviderResult } from "@launchstack/core/providers";
 import type { TranscriptionProvider, TranscriptionResult } from "./index";
-import {
-    getTranscriptionServiceApiKey,
-    getTranscriptionServiceUrl,
-} from "../service-config";
+import { getTranscriptionServiceApiKey, getTranscriptionServiceUrl } from "../service-config";
 
 /**
  * Self-hosted Whisper transcription via services/transcription (ADR-004).

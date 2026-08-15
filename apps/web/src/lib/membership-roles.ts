@@ -22,5 +22,5 @@ export const MANAGEMENT_ROLES = new Set<string>(["owner", "admin"]);
  * where a management role is required.
  */
 export function isManagementRole(role: string): role is ManagementRole {
-  return MANAGEMENT_ROLES.has(role);
+    return MANAGEMENT_ROLES.has(role);
 }

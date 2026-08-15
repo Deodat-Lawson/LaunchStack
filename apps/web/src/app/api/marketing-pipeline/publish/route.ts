@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
-import { MarketingPlatformEnum } from '@launchstack/features/marketing-pipeline';
-import { publishContent } from '@launchstack/features/marketing-pipeline';
-import { requireWorkspaceContext } from '~/lib/require-workspace-context';
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { MarketingPlatformEnum } from "@launchstack/features/marketing-pipeline";
+import { publishContent } from "@launchstack/features/marketing-pipeline";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 export const maxDuration = 30;
 
 const PublishSchema = z.object({
@@ -22,8 +22,8 @@ export async function POST(request: Request) {
         const validation = PublishSchema.safeParse(body);
         if (!validation.success) {
             return NextResponse.json(
-                { success: false, message: 'Invalid input', errors: validation.error.flatten() },
-                { status: 400 },
+                { success: false, message: "Invalid input", errors: validation.error.flatten() },
+                { status: 400 }
             );
         }
 
@@ -32,8 +32,8 @@ export async function POST(request: Request) {
 
         if (!result.success) {
             return NextResponse.json(
-                { success: false, message: result.error ?? 'Publish failed', platform },
-                { status: 502 },
+                { success: false, message: result.error ?? "Publish failed", platform },
+                { status: 502 }
             );
         }
 
@@ -43,14 +43,14 @@ export async function POST(request: Request) {
             postUrl: result.postUrl,
         });
     } catch (error) {
-        console.error('[marketing-pipeline/publish] POST error:', error);
+        console.error("[marketing-pipeline/publish] POST error:", error);
         return NextResponse.json(
             {
                 success: false,
-                message: 'Failed to publish content',
-                error: 'Failed to publish content',
+                message: "Failed to publish content",
+                error: "Failed to publish content",
             },
-            { status: 500 },
+            { status: 500 }
         );
     }
 }

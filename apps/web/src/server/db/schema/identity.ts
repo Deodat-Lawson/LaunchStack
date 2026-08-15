@@ -7,7 +7,15 @@
  */
 import { relations, sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
-import { bigint, bigserial, boolean, index, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
+import {
+    bigint,
+    bigserial,
+    boolean,
+    index,
+    timestamp,
+    uniqueIndex,
+    varchar,
+} from "drizzle-orm/pg-core";
 
 import { pgTable } from "@launchstack/core/db/schema/helpers";
 import { company } from "@launchstack/core/db/schema";
@@ -28,11 +36,9 @@ export const users = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("users_company_id_idx").on(table.companyId),
         userIdIdx: index("users_user_id_idx").on(table.userId),
     })
@@ -57,7 +63,7 @@ export const inviteCodes = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         codeIdx: index("invite_codes_code_idx").on(table.code),
         companyIdIdx: index("invite_codes_company_id_idx").on(table.companyId),
     })
@@ -88,7 +94,7 @@ export const userCompanyMemberships = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         uniqUserCompany: uniqueIndex("user_company_memberships_user_company_unique").on(
             table.userId,
             table.companyId
@@ -102,19 +108,16 @@ export const userCompanyMemberships = pgTable(
 // Document
 // ============================================================================
 
-export const userCompanyMembershipsRelations = relations(
-    userCompanyMemberships,
-    ({ one }) => ({
-        user: one(users, {
-            fields: [userCompanyMemberships.userId],
-            references: [users.id],
-        }),
-        company: one(company, {
-            fields: [userCompanyMemberships.companyId],
-            references: [company.id],
-        }),
-    })
-);
+export const userCompanyMembershipsRelations = relations(userCompanyMemberships, ({ one }) => ({
+    user: one(users, {
+        fields: [userCompanyMemberships.userId],
+        references: [users.id],
+    }),
+    company: one(company, {
+        fields: [userCompanyMemberships.companyId],
+        references: [company.id],
+    }),
+}));
 
 export const inviteCodesRelations = relations(inviteCodes, ({ one }) => ({
     company: one(company, {

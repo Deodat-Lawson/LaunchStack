@@ -6,21 +6,21 @@ import { getWorkspaceSwitcherPayload } from "./_chrome/getWorkspaceSwitcherPaylo
 import { Toaster } from "./documents/components/ui/sonner";
 
 export default async function EmployerLayout({ children }: { children: ReactNode }) {
-  const workspaceSwitcher = await getWorkspaceSwitcherPayload();
+    const workspaceSwitcher = await getWorkspaceSwitcherPayload();
 
-  return (
-    <div
-      className={`lsw-root ${inter.variable} ${interTight.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
-      style={{
-        fontFamily: `var(--font-inter-tight), var(--font-inter), system-ui, sans-serif`,
-        minHeight: "100vh",
-        width: "100%",
-      }}
-    >
-      <EmployerWorkspaceSwitcherProvider value={workspaceSwitcher}>
-        <DriftShell>{children}</DriftShell>
-      </EmployerWorkspaceSwitcherProvider>
-      <Toaster richColors position="top-right" />
-    </div>
-  );
+    return (
+        <div
+            className={`lsw-root ${inter.variable} ${interTight.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
+            style={{
+                fontFamily: `var(--font-inter-tight), var(--font-inter), system-ui, sans-serif`,
+                minHeight: "100vh",
+                width: "100%",
+            }}
+        >
+            <EmployerWorkspaceSwitcherProvider value={workspaceSwitcher}>
+                <DriftShell>{children}</DriftShell>
+            </EmployerWorkspaceSwitcherProvider>
+            <Toaster richColors position="top-right" />
+        </div>
+    );
 }

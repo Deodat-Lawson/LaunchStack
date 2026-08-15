@@ -53,7 +53,7 @@ const PRIORITY_RANK: Record<string, number> = {
  */
 export function mergeCompanyMetadata(
     existing: CompanyMetadataJSON,
-    extracted: ExtractedCompanyFacts,
+    extracted: ExtractedCompanyFacts
 ): MergeResult {
     const now = new Date().toISOString();
     const diff: MetadataDiff = { added: [], updated: [], deprecated: [] };
@@ -63,21 +63,12 @@ export function mergeCompanyMetadata(
 
     // ---- Company fields ----
     if (extracted.facts.company) {
-        merged.company = mergeCompanyInfo(
-            merged.company,
-            extracted.facts.company,
-            diff,
-        );
+        merged.company = mergeCompanyInfo(merged.company, extracted.facts.company, diff);
     }
 
     // ---- People ----
     if (extracted.facts.people) {
-        merged.people = mergeNamedArray(
-            merged.people,
-            extracted.facts.people,
-            "people",
-            diff,
-        );
+        merged.people = mergeNamedArray(merged.people, extracted.facts.people, "people", diff);
     }
 
     // ---- Services ----
@@ -86,7 +77,7 @@ export function mergeCompanyMetadata(
             merged.services,
             extracted.facts.services,
             "services",
-            diff,
+            diff
         );
     }
 
@@ -96,18 +87,13 @@ export function mergeCompanyMetadata(
             merged.projects,
             extracted.facts.projects,
             "projects",
-            diff,
+            diff
         );
     }
 
     // ---- Legal ----
     if (extracted.facts.legal) {
-        merged.legal = mergeNamedArray(
-            merged.legal ?? [],
-            extracted.facts.legal,
-            "legal",
-            diff,
-        );
+        merged.legal = mergeNamedArray(merged.legal ?? [], extracted.facts.legal, "legal", diff);
     }
 
     // ---- Markets ----
@@ -117,11 +103,7 @@ export function mergeCompanyMetadata(
 
     // ---- Policies ----
     if (extracted.facts.policies) {
-        merged.policies = mergePolicies(
-            merged.policies,
-            extracted.facts.policies,
-            diff,
-        );
+        merged.policies = mergePolicies(merged.policies, extracted.facts.policies, diff);
     }
 
     // ---- Provenance ----
@@ -149,10 +131,7 @@ export function mergeCompanyMetadata(
  *
  * Returns `true` if the incoming fact wins.
  */
-function shouldReplace(
-    existing: MetadataFact<unknown>,
-    incoming: MetadataFact<unknown>,
-): boolean {
+function shouldReplace(existing: MetadataFact<unknown>, incoming: MetadataFact<unknown>): boolean {
     // Rule 1: manual_override is never overwritten by automated extraction
     if (existing.priority === "manual_override" && incoming.priority !== "manual_override") {
         return false;
@@ -191,7 +170,7 @@ function deprecate(fact: MetadataFact<unknown>): MetadataFact<unknown> {
 function mergeCompanyInfo(
     existing: CompanyInfo,
     incoming: Partial<CompanyInfo>,
-    diff: MetadataDiff,
+    diff: MetadataDiff
 ): CompanyInfo {
     const result = { ...existing };
 
@@ -242,7 +221,7 @@ function mergeNamedArray<T extends NamedEntry>(
     existing: T[],
     incoming: T[],
     section: string,
-    diff: MetadataDiff,
+    diff: MetadataDiff
 ): T[] {
     // Index existing by normalised name
     const existingMap = new Map<string, { entry: T; index: number }>();
@@ -251,7 +230,7 @@ function mergeNamedArray<T extends NamedEntry>(
         existingMap.set(normaliseName(entry.name), { entry, index: i });
     }
 
-    const result = existing.map((e) => ({ ...e }));
+    const result = existing.map(e => ({ ...e }));
 
     for (const incomingEntry of incoming) {
         const key = normaliseName(incomingEntry.name);
@@ -272,9 +251,12 @@ function mergeNamedArray<T extends NamedEntry>(
 
             for (const [field, incomingFact] of Object.entries(incomingEntry)) {
                 if (field === "subprojects") continue; // handled separately below
-                if (!incomingFact || typeof incomingFact !== "object" || !("value" in incomingFact)) continue;
+                if (!incomingFact || typeof incomingFact !== "object" || !("value" in incomingFact))
+                    continue;
 
-                const existingFact = match.entry[field as keyof T] as MetadataFact<unknown> | undefined;
+                const existingFact = match.entry[field as keyof T] as
+                    | MetadataFact<unknown>
+                    | undefined;
                 const typed = incomingFact as MetadataFact<unknown>;
 
                 if (!existingFact) {
@@ -304,7 +286,7 @@ function mergeNamedArray<T extends NamedEntry>(
                     existingSubs,
                     incomingEntry.subprojects as NamedEntry[],
                     `${section}[${idx}].subprojects`,
-                    diff,
+                    diff
                 );
             }
 
@@ -322,7 +304,7 @@ function mergeNamedArray<T extends NamedEntry>(
 function mergeMarkets(
     existing: MarketsInfo,
     incoming: Partial<MarketsInfo>,
-    diff: MetadataDiff,
+    diff: MetadataDiff
 ): MarketsInfo {
     const result = { ...existing };
     const categories = ["primary", "verticals", "geographies"] as const;
@@ -336,10 +318,7 @@ function mergeMarkets(
         // Index existing by normalised value
         const existingValues = new Map<string, MetadataFact>();
         for (const fact of existingFacts) {
-            existingValues.set(
-                String(fact.value).toLowerCase().trim(),
-                fact,
-            );
+            existingValues.set(String(fact.value).toLowerCase().trim(), fact);
         }
 
         const merged = [...existingFacts];
@@ -378,7 +357,7 @@ function mergeMarkets(
 function mergePolicies(
     existing: Record<string, MetadataFact>,
     incoming: Record<string, MetadataFact>,
-    diff: MetadataDiff,
+    diff: MetadataDiff
 ): Record<string, MetadataFact> {
     const result = { ...existing };
 

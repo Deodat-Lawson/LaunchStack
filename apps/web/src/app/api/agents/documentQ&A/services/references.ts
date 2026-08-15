@@ -3,10 +3,41 @@ import type { SearchResult } from "~/lib/tools/rag";
 import type { SourceReference } from "./types";
 
 const STOPWORDS = new Set([
-    "a", "an", "and", "are", "as", "at", "be", "but", "by", "for",
-    "from", "how", "i", "in", "is", "it", "of", "on", "or", "that",
-    "the", "their", "this", "to", "was", "we", "what", "when", "where",
-    "which", "who", "why", "with", "you", "your",
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "but",
+    "by",
+    "for",
+    "from",
+    "how",
+    "i",
+    "in",
+    "is",
+    "it",
+    "of",
+    "on",
+    "or",
+    "that",
+    "the",
+    "their",
+    "this",
+    "to",
+    "was",
+    "we",
+    "what",
+    "when",
+    "where",
+    "which",
+    "who",
+    "why",
+    "with",
+    "you",
+    "your",
 ]);
 
 function normalizeWhitespace(text: string): string {
@@ -17,15 +48,13 @@ function getQuestionKeywords(question: string): string[] {
     const words = question
         .toLowerCase()
         .split(/[^a-z0-9]+/)
-        .filter((word) => word.length > 2 && !STOPWORDS.has(word));
+        .filter(word => word.length > 2 && !STOPWORDS.has(word));
 
     return Array.from(new Set(words)).slice(0, 12);
 }
 
 function getPageValue(value: unknown): number | undefined {
-    return typeof value === "number" && Number.isInteger(value) && value > 0
-        ? value
-        : undefined;
+    return typeof value === "number" && Number.isInteger(value) && value > 0 ? value : undefined;
 }
 
 /**
@@ -34,7 +63,10 @@ function getPageValue(value: unknown): number | undefined {
  * used to fabricate were removed by ADR-005 §3 (no model ever produced
  * them). Relevance now comes only from real retrieval scores.
  */
-function extractSnippet(text: string, question: string): {
+function extractSnippet(
+    text: string,
+    question: string
+): {
     snippet: string;
     matchText?: string;
     matchStart?: number;
@@ -69,7 +101,7 @@ function extractSnippet(text: string, question: string): {
 
     const prefix = left > 0 ? "... " : "";
     const suffix = right < normalizedText.length ? " ..." : "";
-    const bestKeyword = keywords.find((keyword) => haystack.indexOf(keyword) === bestIndex);
+    const bestKeyword = keywords.find(keyword => haystack.indexOf(keyword) === bestIndex);
     return {
         snippet: `${prefix}${rawSnippet}${suffix}`,
         matchText: bestKeyword,
@@ -80,10 +112,10 @@ function extractSnippet(text: string, question: string): {
 
 export function extractRecommendedPages(documents: SearchResult[]): number[] {
     const pages = documents
-        .map((doc) => getPageValue(doc.metadata?.page))
+        .map(doc => getPageValue(doc.metadata?.page))
         .filter((page): page is number => page !== undefined);
 
-    if (pages.length > 1 && pages.every((page) => page === 1)) {
+    if (pages.length > 1 && pages.every(page => page === 1)) {
         // Legacy fallback data often pins everything to page 1; hide misleading values.
         return [];
     }
@@ -107,10 +139,7 @@ export function extractRecommendedPages(documents: SearchResult[]): number[] {
  * - Every cited page falls outside the candidate set (e.g. the model
  *   hallucinated a page number — avoid returning an empty list).
  */
-export function filterPagesByAICitation(
-    aiResponse: string,
-    candidatePages: number[]
-): number[] {
+export function filterPagesByAICitation(aiResponse: string, candidatePages: number[]): number[] {
     if (candidatePages.length === 0) return [];
 
     const cited = new Set<number>();
@@ -132,7 +161,7 @@ export function filterPagesByAICitation(
         return candidatePages;
     }
 
-    const filtered = candidatePages.filter((p) => cited.has(p));
+    const filtered = candidatePages.filter(p => cited.has(p));
     return filtered.length > 0 ? filtered : candidatePages;
 }
 
@@ -189,7 +218,8 @@ export function buildReferences(
 
         const page = getPageValue(metadata.page);
         const relevance = getRelevance(metadata);
-        const documentId = typeof metadata.documentId === "number" ? metadata.documentId : undefined;
+        const documentId =
+            typeof metadata.documentId === "number" ? metadata.documentId : undefined;
         const chunkId = typeof metadata.chunkId === "number" ? metadata.chunkId : undefined;
 
         // Anchor through the shared citation builder when the row carries a
@@ -226,7 +256,8 @@ export function buildReferences(
             confidence: relevance,
             anchorKey,
             documentId,
-            documentTitle: typeof metadata.documentTitle === "string" ? metadata.documentTitle : undefined,
+            documentTitle:
+                typeof metadata.documentTitle === "string" ? metadata.documentTitle : undefined,
             chunkId,
             source: typeof metadata.source === "string" ? metadata.source : undefined,
         };

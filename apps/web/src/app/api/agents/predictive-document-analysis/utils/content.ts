@@ -2,7 +2,7 @@ import type { PdfChunk } from "~/app/api/agents/predictive-document-analysis/typ
 
 export function groupContentFromChunks(chunks: PdfChunk[]): string {
     return chunks
-        .map((chunk) => {
+        .map(chunk => {
             const header = chunk.sectionHeading
                 ? `=== Page ${chunk.page} | Section: ${chunk.sectionHeading} ===`
                 : `=== Page ${chunk.page} ===`;
@@ -12,23 +12,42 @@ export function groupContentFromChunks(chunks: PdfChunk[]): string {
 }
 
 export function cleanText(text: string): string {
-    return text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+    return text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .trim();
 }
 
 export function extractKeywords(text: string, minLength = 2): string[] {
-    const commonWords = new Set(['the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'a', 'an']);
-    
-    return text.toLowerCase()
+    const commonWords = new Set([
+        "the",
+        "and",
+        "or",
+        "but",
+        "in",
+        "on",
+        "at",
+        "to",
+        "for",
+        "of",
+        "with",
+        "by",
+        "a",
+        "an",
+    ]);
+
+    return text
+        .toLowerCase()
         .split(/\s+/)
         .filter(word => word.length > minLength && !commonWords.has(word))
-        .map(word => word.replace(/[^a-z0-9]/g, ''))
+        .map(word => word.replace(/[^a-z0-9]/g, ""))
         .filter(word => word.length > 0);
 }
 
 export function hasReferencePattern(content: string, documentName: string): boolean {
     const docName = documentName.toLowerCase();
     const text = content.toLowerCase();
-    
+
     const patterns = [
         `see ${docName}`,
         `refer to ${docName}`,
@@ -37,31 +56,31 @@ export function hasReferencePattern(content: string, documentName: string): bool
         `${docName} attached`,
         `${docName} shows`,
         `in ${docName}`,
-        `per ${docName}`
+        `per ${docName}`,
     ];
-    
+
     return patterns.some(pattern => text.includes(pattern));
 }
 
 export function calculateTextSimilarity(text1: string, text2: string): number {
     const clean1 = cleanText(text1);
     const clean2 = cleanText(text2);
-    
+
     if (clean1 === clean2) return 1.0;
     if (clean1.includes(clean2) || clean2.includes(clean1)) return 0.8;
-    
+
     const words1 = new Set(clean1.split(/\s+/));
     const words2 = new Set(clean2.split(/\s+/));
-    
+
     const intersection = new Set([...words1].filter(x => words2.has(x)));
     const union = new Set([...words1, ...words2]);
-    
+
     return intersection.size / union.size;
 }
 
 export function truncateText(text: string, maxLength = 200): string {
     if (text.length <= maxLength) return text;
-    return text.slice(0, maxLength - 3) + '...';
+    return text.slice(0, maxLength - 3) + "...";
 }
 
 /**
@@ -72,10 +91,18 @@ export function hasSpecificIdentifier(documentName: string): boolean {
 }
 
 const GENERIC_REJECT_PHRASES = new Set([
-    'other documents', 'additional forms', 'related materials',
-    'various materials', 'related items', 'supporting documents',
-    'other files', 'additional documents', 'various documents',
-    'relevant documents', 'necessary documents', 'required documents',
+    "other documents",
+    "additional forms",
+    "related materials",
+    "various materials",
+    "related items",
+    "supporting documents",
+    "other files",
+    "additional documents",
+    "various documents",
+    "relevant documents",
+    "necessary documents",
+    "required documents",
 ]);
 
 export function isValidReference(documentName: string): boolean {
@@ -104,4 +131,4 @@ export function isValidReference(documentName: string): boolean {
     ];
 
     return validPatterns.some(pattern => pattern.test(name));
-} 
+}

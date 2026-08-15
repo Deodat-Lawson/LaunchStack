@@ -19,8 +19,7 @@ export class EmbeddingConfigurationError extends Error {
  * same source or the call fails.
  */
 function resolveEmbeddingEndpoint(): { apiKey: string; baseURL: string } {
-    const baseURL =
-        process.env.EMBEDDING_API_BASE_URL ?? process.env.AI_BASE_URL;
+    const baseURL = process.env.EMBEDDING_API_BASE_URL ?? process.env.AI_BASE_URL;
     const apiKey = process.env.EMBEDDING_API_BASE_URL
         ? process.env.EMBEDDING_API_KEY
         : (process.env.AI_API_KEY ?? process.env.OPENAI_API_KEY);
@@ -30,7 +29,7 @@ function resolveEmbeddingEndpoint(): { apiKey: string; baseURL: string } {
             "Embeddings are not configured. Set EMBEDDING_API_BASE_URL and " +
                 "EMBEDDING_API_KEY (or AI_BASE_URL and AI_API_KEY). There is no " +
                 "default endpoint: embeddings are persisted, so the provider " +
-                "must be named explicitly.",
+                "must be named explicitly."
         );
     }
     return { apiKey, baseURL };
@@ -50,7 +49,7 @@ export async function getEmbeddings(text: string): Promise<number[]> {
     if (cached) {
         return cached;
     }
-    
+
     try {
         const { apiKey, baseURL } = resolveEmbeddingEndpoint();
         const embeddings = new OpenAIEmbeddings({
@@ -62,7 +61,7 @@ export async function getEmbeddings(text: string): Promise<number[]> {
 
         const [embedding] = await embeddings.embedDocuments([text]);
         const result = embedding ?? [];
-        
+
         embeddingCache.set(text, result);
         return result;
     } catch (error) {
@@ -77,7 +76,7 @@ export async function getEmbeddings(text: string): Promise<number[]> {
 
 export async function batchGetEmbeddings(texts: string[]): Promise<number[][]> {
     const uniqueTexts = [...new Set(texts)];
-    
+
     try {
         const { apiKey, baseURL } = resolveEmbeddingEndpoint();
         const embeddings = new OpenAIEmbeddings({
@@ -89,11 +88,11 @@ export async function batchGetEmbeddings(texts: string[]): Promise<number[][]> {
 
         const results = await embeddings.embedDocuments(uniqueTexts);
         const embeddingMap = new Map(uniqueTexts.map((text, i) => [text, results[i]]));
-        
+
         embeddingMap.forEach((embedding, text) => {
             embeddingCache.set(text, embedding ?? []);
         });
-        
+
         return texts.map(text => embeddingMap.get(text) ?? []);
     } catch (error) {
         // See getEmbeddings: a misconfiguration must not degrade into a batch

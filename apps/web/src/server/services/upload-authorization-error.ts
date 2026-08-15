@@ -8,11 +8,11 @@
  * db client and the whole engine composition root just to name an error type.
  */
 export class UploadAuthorizationError extends Error {
-  readonly status: number;
+    readonly status: number;
 
-  constructor(message: string, status = 403) {
-    super(message);
-    this.name = "UploadAuthorizationError";
-    this.status = status;
-  }
+    constructor(message: string, status = 403) {
+        super(message);
+        this.name = "UploadAuthorizationError";
+        this.status = status;
+    }
 }

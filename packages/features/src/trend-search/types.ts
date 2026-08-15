@@ -2,12 +2,7 @@ import { z } from "zod";
 
 // ─── Category ────────────────────────────────────────────────────────────────
 
-export const SearchCategoryEnum = z.enum([
-    "fashion",
-    "finance",
-    "business",
-    "tech",
-]);
+export const SearchCategoryEnum = z.enum(["fashion", "finance", "business", "tech"]);
 export type SearchCategory = z.infer<typeof SearchCategoryEnum>;
 
 // ─── Input ───────────────────────────────────────────────────────────────────

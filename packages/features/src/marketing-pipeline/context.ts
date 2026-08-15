@@ -32,11 +32,15 @@ export async function buildCompanyKnowledgeContext(args: {
 
     const [companyRow, categoryRows] = await Promise.all([
         db.select().from(company).where(eq(company.id, companyId)).limit(1),
-        db.select().from(category).where(eq(category.companyId, BigInt(companyId))).limit(8),
+        db
+            .select()
+            .from(category)
+            .where(eq(category.companyId, BigInt(companyId)))
+            .limit(8),
     ]);
 
     const companyInfo = companyRow[0];
-    const categoryNames = categoryRows.map((row) => row.name).filter(Boolean);
+    const categoryNames = categoryRows.map(row => row.name).filter(Boolean);
 
     let kbSnippets: string[] = [];
     try {
@@ -49,7 +53,7 @@ export async function buildCompanyKnowledgeContext(args: {
 
         kbSnippets = kbResults
             .slice(0, 6)
-            .map((row) => row.pageContent.trim().replace(/\s+/g, " ").slice(0, 400))
+            .map(row => row.pageContent.trim().replace(/\s+/g, " ").slice(0, 400))
             .filter(Boolean);
     } catch (error) {
         console.warn("[marketing-pipeline] company KB context retrieval failed:", error);
@@ -62,7 +66,9 @@ export async function buildCompanyKnowledgeContext(args: {
         `Employee Count Range: ${companyInfo?.numberOfEmployees ?? "Unknown"}`,
         `Company Categories: ${categoryNames.length > 0 ? categoryNames.join(", ") : "None"}`,
         `Knowledge Base Signals: ${
-            kbSnippets.length > 0 ? kbSnippets.map((s, i) => `${i + 1}. ${s}`).join(" | ") : "No matching KB snippets found"
+            kbSnippets.length > 0
+                ? kbSnippets.map((s, i) => `${i + 1}. ${s}`).join(" | ")
+                : "No matching KB snippets found"
         }`,
     ];
 
@@ -88,13 +94,19 @@ export async function extractCompanyDNA(args: {
     // Try metadata-first approach
     const metadataContext = await buildMetadataContext(companyId);
     if (metadataContext) {
-        console.log("[marketing-pipeline] extractCompanyDNA: using METADATA for company %d", companyId);
+        console.log(
+            "[marketing-pipeline] extractCompanyDNA: using METADATA for company %d",
+            companyId
+        );
         const dna = await synthesizeDNA(metadataContext, prompt);
         return { dna, debug: { source: "metadata", contextUsed: metadataContext, dna } };
     }
 
     // Fallback: dual RAG extraction for companies without metadata
-    console.log("[marketing-pipeline] extractCompanyDNA: using RAG FALLBACK for company %d (no metadata found)", companyId);
+    console.log(
+        "[marketing-pipeline] extractCompanyDNA: using RAG FALLBACK for company %d (no metadata found)",
+        companyId
+    );
     const ragContext = await buildRAGContext(companyId, prompt);
     const dna = await synthesizeDNA(ragContext, prompt);
     return { dna, debug: { source: "rag", contextUsed: ragContext, dna } };
@@ -198,15 +210,19 @@ async function buildMetadataContext(companyId: number): Promise<string | null> {
     // Markets → differentiators
     const marketParts: string[] = [];
     if (md.markets.primary?.length) {
-        const vals = md.markets.primary.map((f) => readFact(f)).filter((v): v is string => v != null);
+        const vals = md.markets.primary.map(f => readFact(f)).filter((v): v is string => v != null);
         if (vals.length) marketParts.push(`Primary markets: ${vals.join(", ")}`);
     }
     if (md.markets.verticals?.length) {
-        const vals = md.markets.verticals.map((f) => readFact(f)).filter((v): v is string => v != null);
+        const vals = md.markets.verticals
+            .map(f => readFact(f))
+            .filter((v): v is string => v != null);
         if (vals.length) marketParts.push(`Verticals: ${vals.join(", ")}`);
     }
     if (md.markets.geographies?.length) {
-        const vals = md.markets.geographies.map((f) => readFact(f)).filter((v): v is string => v != null);
+        const vals = md.markets.geographies
+            .map(f => readFact(f))
+            .filter((v): v is string => v != null);
         if (vals.length) marketParts.push(`Geographies: ${vals.join(", ")}`);
     }
     if (marketParts.length > 0) {
@@ -238,11 +254,15 @@ async function buildRAGContext(companyId: number, prompt: string): Promise<strin
     const db = getDb();
     const [companyRow, categoryRows] = await Promise.all([
         db.select().from(company).where(eq(company.id, companyId)).limit(1),
-        db.select().from(category).where(eq(category.companyId, BigInt(companyId))).limit(8),
+        db
+            .select()
+            .from(category)
+            .where(eq(category.companyId, BigInt(companyId)))
+            .limit(8),
     ]);
 
     const companyInfo = companyRow[0];
-    const categoryNames = categoryRows.map((r) => r.name).filter(Boolean);
+    const categoryNames = categoryRows.map(r => r.name).filter(Boolean);
     const baseMeta = `Company: ${companyInfo?.name ?? "Unknown"}. Categories: ${categoryNames.join(", ") || "None"}.`;
 
     const rag = getRag();
@@ -254,19 +274,19 @@ async function buildRAGContext(companyId: number, prompt: string): Promise<strin
     try {
         const [generalResults, diffResults] = await Promise.all([
             rag.companyEnsembleSearch(prompt, options),
-            rag.companyEnsembleSearch(
-                `${baseMeta} ${DIFFERENTIATOR_QUERY_PARTS.join(" ")}`,
-                { ...options, topK: 4 },
-            ),
+            rag.companyEnsembleSearch(`${baseMeta} ${DIFFERENTIATOR_QUERY_PARTS.join(" ")}`, {
+                ...options,
+                topK: 4,
+            }),
         ]);
 
         generalSnippets = generalResults
             .slice(0, 4)
-            .map((r) => r.pageContent.trim().replace(/\s+/g, " ").slice(0, 320))
+            .map(r => r.pageContent.trim().replace(/\s+/g, " ").slice(0, 320))
             .filter(Boolean);
         differentiatorSnippets = diffResults
             .slice(0, 4)
-            .map((r) => r.pageContent.trim().replace(/\s+/g, " ").slice(0, 320))
+            .map(r => r.pageContent.trim().replace(/\s+/g, " ").slice(0, 320))
             .filter(Boolean);
     } catch (error) {
         console.warn("[marketing-pipeline] extractCompanyDNA RAG failed:", error);
@@ -300,7 +320,7 @@ async function synthesizeDNA(context: string, userPrompt: string): Promise<Compa
             new SystemMessage(DNA_SYSTEM_PROMPT),
             new HumanMessage(`Company information:\n\n${context}\n\nUser focus: ${userPrompt}`),
         ],
-        "company_dna",
+        "company_dna"
     );
     return CompanyDNASchema.parse(response);
 }

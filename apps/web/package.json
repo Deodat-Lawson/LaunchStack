@@ -33,7 +33,6 @@
     "@aws-sdk/client-s3": "^3.1004.0",
     "@aws-sdk/s3-request-presigner": "^3.1004.0",
     "@clerk/nextjs": "^6.31.9",
-    "@clerk/themes": "^2.4.29",
     "@esbuild-kit/core-utils": "^3.3.2",
     "@esbuild-kit/esm-loader": "^2.6.5",
     "@huggingface/inference": "^4.13.15",

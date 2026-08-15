@@ -1,5 +1,8 @@
-import type { PdfChunk, DocumentInsight } from "~/app/api/agents/predictive-document-analysis/types";
-import stringSimilarity from 'string-similarity-js';
+import type {
+    PdfChunk,
+    DocumentInsight,
+} from "~/app/api/agents/predictive-document-analysis/types";
+import stringSimilarity from "string-similarity-js";
 
 // ---------------------------------------------------------------------------
 // Layer 1 — Deterministic insight extraction (zero LLM cost)
@@ -7,22 +10,22 @@ import stringSimilarity from 'string-similarity-js';
 
 // ── Document format detection ─────────────────────────────────
 
-export type DocumentFormat = 'slides' | 'prose' | 'mixed';
+export type DocumentFormat = "slides" | "prose" | "mixed";
 
 export function detectDocumentFormat(chunks: PdfChunk[]): DocumentFormat {
-    if (chunks.length === 0) return 'mixed';
+    if (chunks.length === 0) return "mixed";
 
     const totalChars = chunks.reduce((s, c) => s + (c.content?.length ?? 0), 0);
     const avgChunkLen = totalChars / chunks.length;
     const totalPages = new Set(chunks.map(c => c.page)).size;
 
     const bulletPattern = /[●•○◦▪▸▹►–—]\s|^\s*[-*]\s/m;
-    const bulletChunks = chunks.filter(c => bulletPattern.test(c.content ?? ''));
+    const bulletChunks = chunks.filter(c => bulletPattern.test(c.content ?? ""));
     const bulletRatio = bulletChunks.length / chunks.length;
 
-    if (avgChunkLen < 500 && totalPages > 15 && bulletRatio > 0.25) return 'slides';
-    if (avgChunkLen > 1200 && bulletRatio < 0.15) return 'prose';
-    return 'mixed';
+    if (avgChunkLen < 500 && totalPages > 15 && bulletRatio > 0.25) return "slides";
+    if (avgChunkLen > 1200 && bulletRatio < 0.15) return "prose";
+    return "mixed";
 }
 
 // ── Sentence boundary helper ──────────────────────────────────
@@ -69,7 +72,7 @@ export function extractDeadlines(chunks: PdfChunk[]): DocumentInsight[] {
     const results: DocumentInsight[] = [];
 
     for (const chunk of chunks) {
-        const text = chunk.content ?? '';
+        const text = chunk.content ?? "";
         if (!text) continue;
 
         for (const pattern of DEADLINE_PATTERNS) {
@@ -77,18 +80,17 @@ export function extractDeadlines(chunks: PdfChunk[]): DocumentInsight[] {
             let match: RegExpExecArray | null;
             while ((match = pattern.exec(text)) !== null) {
                 const matchedText = match[0].trim();
-                const normalizedKey = matchedText.toLowerCase().replace(/\s+/g, ' ').slice(0, 60);
+                const normalizedKey = matchedText.toLowerCase().replace(/\s+/g, " ").slice(0, 60);
                 if (seen.has(normalizedKey)) continue;
                 seen.add(normalizedKey);
 
                 const sentence = extractSurroundingSentence(text, match.index, match[0].length);
-                const title = matchedText.length > 60
-                    ? matchedText.slice(0, 57) + '...'
-                    : matchedText;
+                const title =
+                    matchedText.length > 60 ? matchedText.slice(0, 57) + "..." : matchedText;
 
                 results.push({
-                    category: 'deadline',
-                    severity: 'warning',
+                    category: "deadline",
+                    severity: "warning",
                     title,
                     detail: sentence,
                     page: chunk.page,
@@ -108,29 +110,89 @@ const CAPITALIZED_PHRASE = /(?:[A-Z][a-zA-Z]+(?:'s)?(?:[\s,&]+|[-])){1,4}[A-Z][a
 const QUOTED_TITLE = /"([^"]{5,80})"/g;
 
 const STOPLIST = new Set([
-    'the', 'this', 'that', 'these', 'those', 'page', 'slide',
-    'please', 'note', 'see', 'also', 'section', 'chapter',
-    'figure', 'table', 'part', 'item', 'class', 'lecture',
-    'monday', 'tuesday', 'wednesday', 'thursday', 'friday',
-    'saturday', 'sunday', 'january', 'february', 'march', 'april',
-    'may', 'june', 'july', 'august', 'september', 'october',
-    'november', 'december', 'spring', 'fall', 'summer', 'winter',
-    'common', 'design', 'overview', 'introduction', 'review',
-    'summary', 'conclusion', 'questions', 'discussion', 'agenda',
-    'outline', 'objectives', 'learning', 'today', 'next',
-    'evaluation', 'prototype', 'prototyping', 'testing',
-    'analysis', 'methodology', 'framework', 'approach',
-    'project', 'assignment', 'activity', 'exercise',
-    'high', 'low', 'mid', 'fidelity',
+    "the",
+    "this",
+    "that",
+    "these",
+    "those",
+    "page",
+    "slide",
+    "please",
+    "note",
+    "see",
+    "also",
+    "section",
+    "chapter",
+    "figure",
+    "table",
+    "part",
+    "item",
+    "class",
+    "lecture",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+    "spring",
+    "fall",
+    "summer",
+    "winter",
+    "common",
+    "design",
+    "overview",
+    "introduction",
+    "review",
+    "summary",
+    "conclusion",
+    "questions",
+    "discussion",
+    "agenda",
+    "outline",
+    "objectives",
+    "learning",
+    "today",
+    "next",
+    "evaluation",
+    "prototype",
+    "prototyping",
+    "testing",
+    "analysis",
+    "methodology",
+    "framework",
+    "approach",
+    "project",
+    "assignment",
+    "activity",
+    "exercise",
+    "high",
+    "low",
+    "mid",
+    "fidelity",
 ]);
 
 function isStopPhrase(phrase: string): boolean {
     const words = phrase.toLowerCase().split(/\s+/);
     if (words.length < 2) return true;
     if (words.every(w => STOPLIST.has(w))) return true;
-    if (words.length === 2 && words.some(w => STOPLIST.has(w ?? ''))) return true;
+    if (words.length === 2 && words.some(w => STOPLIST.has(w ?? ""))) return true;
     if (words[0] && STOPLIST.has(words[0]) && words.length <= 3) return true;
-    if (/^(In|On|At|By|For|To|The|This|That|If|As|Or|An?|What|Why|How|When|Where)\s/i.test(phrase)) return true;
+    if (/^(In|On|At|By|For|To|The|This|That|If|As|Or|An?|What|Why|How|When|Where)\s/i.test(phrase))
+        return true;
     return false;
 }
 
@@ -154,8 +216,8 @@ function contextsAreDiverse(contexts: string[], threshold = 0.8): boolean {
     if (contexts.length <= 1) return false;
     for (let i = 1; i < contexts.length; i++) {
         const sim = stringSimilarity(
-            (contexts[0] ?? '').toLowerCase().slice(0, 200),
-            (contexts[i] ?? '').toLowerCase().slice(0, 200),
+            (contexts[0] ?? "").toLowerCase().slice(0, 200),
+            (contexts[i] ?? "").toLowerCase().slice(0, 200)
         );
         if (sim < threshold) return true;
     }
@@ -164,19 +226,19 @@ function contextsAreDiverse(contexts: string[], threshold = 0.8): boolean {
 
 export function extractRecurringReferences(
     chunks: PdfChunk[],
-    format: DocumentFormat = 'mixed',
+    format: DocumentFormat = "mixed"
 ): DocumentInsight[] {
     const sectionHeaders = new Set<string>();
     for (const chunk of chunks) {
         if (chunk.sectionHeading) {
-            sectionHeaders.add(chunk.sectionHeading.toLowerCase().replace(/\s+/g, ' ').trim());
+            sectionHeaders.add(chunk.sectionHeading.toLowerCase().replace(/\s+/g, " ").trim());
         }
     }
 
     const frequencyMap = new Map<string, PhraseInfo>();
 
     for (const chunk of chunks) {
-        const text = chunk.content ?? '';
+        const text = chunk.content ?? "";
         if (!text) continue;
 
         const phrases: string[] = [];
@@ -195,11 +257,15 @@ export function extractRecurringReferences(
         for (const raw of phrases) {
             if (isStopPhrase(raw)) continue;
 
-            const key = raw.toLowerCase().replace(/\s+/g, ' ');
+            const key = raw.toLowerCase().replace(/\s+/g, " ");
 
             let matchesHeader = false;
             for (const header of sectionHeaders) {
-                if (stringSimilarity(key, header) > 0.7 || header.includes(key) || key.includes(header)) {
+                if (
+                    stringSimilarity(key, header) > 0.7 ||
+                    header.includes(key) ||
+                    key.includes(header)
+                ) {
                     matchesHeader = true;
                     break;
                 }
@@ -217,9 +283,7 @@ export function extractRecurringReferences(
                 }
             } else {
                 const idx = text.indexOf(raw);
-                const context = idx >= 0
-                    ? extractSurroundingSentence(text, idx, raw.length)
-                    : raw;
+                const context = idx >= 0 ? extractSurroundingSentence(text, idx, raw.length) : raw;
 
                 frequencyMap.set(key, {
                     phrase: raw,
@@ -231,15 +295,15 @@ export function extractRecurringReferences(
         }
     }
 
-    const minPages = format === 'slides' ? 5 : 3;
-    const minGap = format === 'slides' ? 10 : 3;
+    const minPages = format === "slides" ? 5 : 3;
+    const minGap = format === "slides" ? 10 : 3;
 
     const allPages = new Set(chunks.map(c => c.page));
     const totalPageCount = allPages.size;
     const firstPageContent = chunks
         .filter(c => c.page === Math.min(...allPages))
-        .map(c => (c.content ?? '').toLowerCase())
-        .join(' ');
+        .map(c => (c.content ?? "").toLowerCase())
+        .join(" ");
 
     const recurring = [...frequencyMap.values()]
         .filter(info => {
@@ -247,7 +311,7 @@ export function extractRecurringReferences(
             if (computeMaxGap(info.pages) < minGap) return false;
             if (!contextsAreDiverse(info.contexts)) return false;
 
-            const key = info.phrase.toLowerCase().replace(/\s+/g, ' ');
+            const key = info.phrase.toLowerCase().replace(/\s+/g, " ");
             if (firstPageContent.includes(key) && info.pages.size / totalPageCount > 0.08) {
                 return false;
             }
@@ -257,13 +321,15 @@ export function extractRecurringReferences(
         .slice(0, 5);
 
     return recurring.map(info => ({
-        category: 'key-reference' as const,
-        severity: 'note' as const,
+        category: "key-reference" as const,
+        severity: "note" as const,
         title: info.phrase,
-        detail: `Referenced on ${info.pages.size} pages (${[...info.pages].sort((a, b) => a - b).join(', ')})`,
+        detail: `Referenced on ${info.pages.size} pages (${[...info.pages].sort((a, b) => a - b).join(", ")})`,
         page: info.firstPage,
         sourceQuote: info.contexts[0]
-            ? (info.contexts[0].length > 200 ? info.contexts[0].slice(0, 197) + '...' : info.contexts[0])
+            ? info.contexts[0].length > 200
+                ? info.contexts[0].slice(0, 197) + "..."
+                : info.contexts[0]
             : undefined,
     }));
 }
@@ -273,59 +339,75 @@ export function extractRecurringReferences(
 const URL_REGEX = /https?:\/\/[^\s<>"')\]},]+/gi;
 
 const VIDEO_DOMAINS = new Set([
-    'youtube.com', 'youtu.be', 'vimeo.com', 'dailymotion.com',
-    'twitch.tv', 'wistia.com', 'loom.com',
+    "youtube.com",
+    "youtu.be",
+    "vimeo.com",
+    "dailymotion.com",
+    "twitch.tv",
+    "wistia.com",
+    "loom.com",
 ]);
 
-const RESOURCE_ACTION_RE = /\b(?:watch|view|see|check\s*out|review|read|visit|explore|look\s*at|refer\s*to|go\s*to)\b/i;
-const RESOURCE_FRAMING_RE = /\b(?:recommended|suggested|required|optional|useful|helpful|important|reference|supplementary|additional)\s+(?:reading|viewing|video|resource|material|link)/i;
+const RESOURCE_ACTION_RE =
+    /\b(?:watch|view|see|check\s*out|review|read|visit|explore|look\s*at|refer\s*to|go\s*to)\b/i;
+const RESOURCE_FRAMING_RE =
+    /\b(?:recommended|suggested|required|optional|useful|helpful|important|reference|supplementary|additional)\s+(?:reading|viewing|video|resource|material|link)/i;
 
 function isVideoDomain(hostname: string): boolean {
-    const cleaned = hostname.replace(/^www\./, '');
+    const cleaned = hostname.replace(/^www\./, "");
     return VIDEO_DOMAINS.has(cleaned);
 }
 
-const TRAILING_JUNK_RE = /\s+(?:et|and|or|the|a|an|in|on|of|for|by|to|at|is|are|was|with|from)\s*$/i;
+const TRAILING_JUNK_RE =
+    /\s+(?:et|and|or|the|a|an|in|on|of|for|by|to|at|is|are|was|with|from)\s*$/i;
 
 function cleanSnippet(words: string[], maxWords: number): string {
-    let snippet = words.slice(0, maxWords).join(' ');
-    snippet = snippet.replace(TRAILING_JUNK_RE, '');
+    let snippet = words.slice(0, maxWords).join(" ");
+    snippet = snippet.replace(TRAILING_JUNK_RE, "");
     if (snippet.length < 4 && words.length > maxWords) {
-        snippet = words.slice(0, maxWords + 2).join(' ').replace(TRAILING_JUNK_RE, '');
+        snippet = words
+            .slice(0, maxWords + 2)
+            .join(" ")
+            .replace(TRAILING_JUNK_RE, "");
     }
     return snippet;
 }
 
 function buildResourceTitle(url: string, context: string, hostname: string): string {
     if (isVideoDomain(hostname)) {
-        const contextClean = context.replace(/https?:\/\/[^\s]+/g, '').trim();
-        const words = contextClean.split(/\s+/).filter(w => w.length > 1 && !/^[●•○▪►–—*]$/.test(w));
+        const contextClean = context.replace(/https?:\/\/[^\s]+/g, "").trim();
+        const words = contextClean
+            .split(/\s+/)
+            .filter(w => w.length > 1 && !/^[●•○▪►–—*]$/.test(w));
         const snippet = cleanSnippet(words, 6);
         if (snippet.length > 5) return `Watch: ${snippet}`;
-        return `Watch: Video on ${hostname.replace(/^www\./, '')}`;
+        return `Watch: Video on ${hostname.replace(/^www\./, "")}`;
     }
 
     const actionMatch = RESOURCE_ACTION_RE.exec(context);
     if (actionMatch) {
         const afterAction = context.slice((actionMatch.index ?? 0) + actionMatch[0].length).trim();
-        const clean = afterAction.replace(/https?:\/\/[^\s]+/g, '').trim();
+        const clean = afterAction.replace(/https?:\/\/[^\s]+/g, "").trim();
         const words = clean.split(/\s+/).filter(w => w.length > 1);
         const snippet = cleanSnippet(words, 6);
         if (snippet.length > 5) {
-            const verb = actionMatch[0].charAt(0).toUpperCase() + actionMatch[0].slice(1).toLowerCase();
+            const verb =
+                actionMatch[0].charAt(0).toUpperCase() + actionMatch[0].slice(1).toLowerCase();
             return `${verb}: ${snippet}`;
         }
     }
 
-    const domain = hostname.replace(/^www\./, '');
+    const domain = hostname.replace(/^www\./, "");
     try {
         const parsed = new URL(url);
-        const path = parsed.pathname.replace(/\/+$/, '');
-        if (path && path !== '/') {
-            const pathSnippet = path.length > 30 ? path.slice(0, 27) + '...' : path;
+        const path = parsed.pathname.replace(/\/+$/, "");
+        if (path && path !== "/") {
+            const pathSnippet = path.length > 30 ? path.slice(0, 27) + "..." : path;
             return `Resource: ${domain}${pathSnippet}`;
         }
-    } catch { /* skip */ }
+    } catch {
+        /* skip */
+    }
 
     return `Resource: ${domain}`;
 }
@@ -335,13 +417,13 @@ export function extractResourceSuggestions(chunks: PdfChunk[]): DocumentInsight[
     const results: DocumentInsight[] = [];
 
     for (const chunk of chunks) {
-        const text = chunk.content ?? '';
+        const text = chunk.content ?? "";
         if (!text) continue;
 
         URL_REGEX.lastIndex = 0;
         let urlMatch: RegExpExecArray | null;
         while ((urlMatch = URL_REGEX.exec(text)) !== null) {
-            const rawUrl = urlMatch[0].replace(/[.,;:!?)]+$/, '');
+            const rawUrl = urlMatch[0].replace(/[.,;:!?)]+$/, "");
             if (seen.has(rawUrl)) continue;
             seen.add(rawUrl);
 
@@ -366,13 +448,15 @@ export function extractResourceSuggestions(chunks: PdfChunk[]): DocumentInsight[
             const title = buildResourceTitle(rawUrl, contextWindow, hostname);
 
             results.push({
-                category: 'resource',
-                severity: 'note',
+                category: "resource",
+                severity: "note",
                 title,
-                detail: sentence.replace(/https?:\/\/[^\s]+/g, '').trim() || `Resource linked on page ${chunk.page}`,
+                detail:
+                    sentence.replace(/https?:\/\/[^\s]+/g, "").trim() ||
+                    `Resource linked on page ${chunk.page}`,
                 page: chunk.page,
                 url: rawUrl,
-                sourceQuote: sentence.length > 200 ? sentence.slice(0, 197) + '...' : sentence,
+                sourceQuote: sentence.length > 200 ? sentence.slice(0, 197) + "..." : sentence,
             });
         }
     }
@@ -392,31 +476,38 @@ const ASSIGNMENT_PATTERNS = [
     /\b(project\s+\d+)[^.!?\n]{0,80}/gi,
 ];
 
-const PLATFORM_TASK_RE = /\b(?:post|submit|upload|share|register|sign\s*up|enroll|respond|reply|introduce\s+yourself|self[- ]?intro(?:duction)?)\s+(?:on|to|via|at|in|through)\s+(canvas|courselore|piazza|blackboard|moodle|teams|slack|gradescope|sakai|brightspace|discord|github|google\s*(?:classroom|drive|docs|forms))[^.!?\n]{0,60}/gi;
+const PLATFORM_TASK_RE =
+    /\b(?:post|submit|upload|share|register|sign\s*up|enroll|respond|reply|introduce\s+yourself|self[- ]?intro(?:duction)?)\s+(?:on|to|via|at|in|through)\s+(canvas|courselore|piazza|blackboard|moodle|teams|slack|gradescope|sakai|brightspace|discord|github|google\s*(?:classroom|drive|docs|forms))[^.!?\n]{0,60}/gi;
 
-const IMPERATIVE_RE = /^(?:complete|prepare|bring|create|write|read|review|finish|attend|watch|sign\s*up\s+for|set\s*up|make\s*sure|don'?t\s+forget|remember\s+to)\s+[^.!?\n]{5,80}/gim;
+const IMPERATIVE_RE =
+    /^(?:complete|prepare|bring|create|write|read|review|finish|attend|watch|sign\s*up\s+for|set\s*up|make\s*sure|don'?t\s+forget|remember\s+to)\s+[^.!?\n]{5,80}/gim;
 
-const URGENCY_RE = /\b(?:before\s+(?:next|class|lecture|lab|section)|by\s+(?:end\s+of|next|tomorrow|monday|tuesday|wednesday|thursday|friday)|asap|immediately|today|tonight)\b/i;
+const URGENCY_RE =
+    /\b(?:before\s+(?:next|class|lecture|lab|section)|by\s+(?:end\s+of|next|tomorrow|monday|tuesday|wednesday|thursday|friday)|asap|immediately|today|tonight)\b/i;
 
 export function extractActionItems(chunks: PdfChunk[]): DocumentInsight[] {
     const seen = new Set<string>();
     const results: DocumentInsight[] = [];
 
-    function addResult(matchedText: string, text: string, matchIndex: number, matchLength: number, page: number) {
-        const normalizedKey = matchedText.toLowerCase().replace(/\s+/g, ' ').slice(0, 60);
+    function addResult(
+        matchedText: string,
+        text: string,
+        matchIndex: number,
+        matchLength: number,
+        page: number
+    ) {
+        const normalizedKey = matchedText.toLowerCase().replace(/\s+/g, " ").slice(0, 60);
         if (seen.has(normalizedKey)) return;
         seen.add(normalizedKey);
 
         const sentence = extractSurroundingSentence(text, matchIndex, matchLength);
-        const title = matchedText.length > 60
-            ? matchedText.slice(0, 57) + '...'
-            : matchedText;
+        const title = matchedText.length > 60 ? matchedText.slice(0, 57) + "..." : matchedText;
 
         const isUrgent = URGENCY_RE.test(sentence);
 
         results.push({
-            category: 'action-item',
-            severity: isUrgent ? 'warning' : 'note',
+            category: "action-item",
+            severity: isUrgent ? "warning" : "note",
             title,
             detail: sentence,
             page,
@@ -425,7 +516,7 @@ export function extractActionItems(chunks: PdfChunk[]): DocumentInsight[] {
     }
 
     for (const chunk of chunks) {
-        const text = chunk.content ?? '';
+        const text = chunk.content ?? "";
         if (!text) continue;
 
         for (const pattern of ASSIGNMENT_PATTERNS) {
@@ -453,17 +544,46 @@ export function extractActionItems(chunks: PdfChunk[]): DocumentInsight[] {
 
 // ── extractCaveats ────────────────────────────────────────────
 
-const CAVEAT_PATTERNS: Array<{ pattern: RegExp; severity: 'warning' | 'note' }> = [
-    { pattern: /\b(academic\s+integrity\s*(?:code|policy|violation)?)[^.!?\n]{0,100}/gi, severity: 'warning' },
-    { pattern: /\b(plagiarism\s+(?:policy|will|is|results?)[^.!?\n]{0,80})/gi, severity: 'warning' },
-    { pattern: /\b(honor\s+code)[^.!?\n]{0,80}/gi, severity: 'warning' },
-    { pattern: /\b(zero\s+tolerance)[^.!?\n]{0,80}/gi, severity: 'warning' },
-    { pattern: /\b(will\s+result\s+in\s+(?:a\s+)?(?:failing|zero|grade\s+of|expulsion|suspension|penalty))[^.!?\n]{0,60}/gi, severity: 'warning' },
-    { pattern: /\b(generative\s+AI|ChatGPT|AI[- ]?(?:generated|policy|use|tools?))\b[^.!?\n]{0,100}/gi, severity: 'note' },
-    { pattern: /\b((?:is|are)\s+(?:prohibited|not\s+allowed|strictly\s+forbidden|not\s+permitted))[^.!?\n]{0,80}/gi, severity: 'warning' },
-    { pattern: /\b((?:required|mandatory|prerequisite|must\s+(?:complete|attend|submit|bring|have)))[^.!?\n]{0,80}/gi, severity: 'note' },
-    { pattern: /\b(late\s+(?:penalty|submission|work|assignments?)\s*(?:policy|will|:)?)[^.!?\n]{0,80}/gi, severity: 'warning' },
-    { pattern: /\b(attendance\s+(?:policy|is\s+(?:required|mandatory)))[^.!?\n]{0,80}/gi, severity: 'note' },
+const CAVEAT_PATTERNS: Array<{ pattern: RegExp; severity: "warning" | "note" }> = [
+    {
+        pattern: /\b(academic\s+integrity\s*(?:code|policy|violation)?)[^.!?\n]{0,100}/gi,
+        severity: "warning",
+    },
+    {
+        pattern: /\b(plagiarism\s+(?:policy|will|is|results?)[^.!?\n]{0,80})/gi,
+        severity: "warning",
+    },
+    { pattern: /\b(honor\s+code)[^.!?\n]{0,80}/gi, severity: "warning" },
+    { pattern: /\b(zero\s+tolerance)[^.!?\n]{0,80}/gi, severity: "warning" },
+    {
+        pattern:
+            /\b(will\s+result\s+in\s+(?:a\s+)?(?:failing|zero|grade\s+of|expulsion|suspension|penalty))[^.!?\n]{0,60}/gi,
+        severity: "warning",
+    },
+    {
+        pattern:
+            /\b(generative\s+AI|ChatGPT|AI[- ]?(?:generated|policy|use|tools?))\b[^.!?\n]{0,100}/gi,
+        severity: "note",
+    },
+    {
+        pattern:
+            /\b((?:is|are)\s+(?:prohibited|not\s+allowed|strictly\s+forbidden|not\s+permitted))[^.!?\n]{0,80}/gi,
+        severity: "warning",
+    },
+    {
+        pattern:
+            /\b((?:required|mandatory|prerequisite|must\s+(?:complete|attend|submit|bring|have)))[^.!?\n]{0,80}/gi,
+        severity: "note",
+    },
+    {
+        pattern:
+            /\b(late\s+(?:penalty|submission|work|assignments?)\s*(?:policy|will|:)?)[^.!?\n]{0,80}/gi,
+        severity: "warning",
+    },
+    {
+        pattern: /\b(attendance\s+(?:policy|is\s+(?:required|mandatory)))[^.!?\n]{0,80}/gi,
+        severity: "note",
+    },
 ];
 
 export function extractCaveats(chunks: PdfChunk[]): DocumentInsight[] {
@@ -472,7 +592,7 @@ export function extractCaveats(chunks: PdfChunk[]): DocumentInsight[] {
     const results: DocumentInsight[] = [];
 
     for (const chunk of chunks) {
-        const text = chunk.content ?? '';
+        const text = chunk.content ?? "";
         if (!text) continue;
 
         for (let pi = 0; pi < CAVEAT_PATTERNS.length; pi++) {
@@ -487,13 +607,16 @@ export function extractCaveats(chunks: PdfChunk[]): DocumentInsight[] {
                 if ((pagePatternCount.get(pagePatternKey) ?? 0) >= 1) break;
 
                 const matchedText = match[0].trim();
-                const normalizedKey = matchedText.toLowerCase().replace(/\s+/g, ' ').slice(0, 60);
+                const normalizedKey = matchedText.toLowerCase().replace(/\s+/g, " ").slice(0, 60);
                 if (seen.has(normalizedKey)) continue;
 
                 let tooSimilar = false;
                 for (const existing of results) {
-                    if (existing.page === chunk.page &&
-                        stringSimilarity(normalizedKey, existing.title.toLowerCase().slice(0, 60)) > 0.4) {
+                    if (
+                        existing.page === chunk.page &&
+                        stringSimilarity(normalizedKey, existing.title.toLowerCase().slice(0, 60)) >
+                            0.4
+                    ) {
                         tooSimilar = true;
                         break;
                     }
@@ -501,15 +624,17 @@ export function extractCaveats(chunks: PdfChunk[]): DocumentInsight[] {
                 if (tooSimilar) continue;
 
                 seen.add(normalizedKey);
-                pagePatternCount.set(pagePatternKey, (pagePatternCount.get(pagePatternKey) ?? 0) + 1);
+                pagePatternCount.set(
+                    pagePatternKey,
+                    (pagePatternCount.get(pagePatternKey) ?? 0) + 1
+                );
 
                 const sentence = extractSurroundingSentence(text, match.index, match[0].length);
-                const title = matchedText.length > 60
-                    ? matchedText.slice(0, 57) + '...'
-                    : matchedText;
+                const title =
+                    matchedText.length > 60 ? matchedText.slice(0, 57) + "..." : matchedText;
 
                 results.push({
-                    category: 'caveat',
+                    category: "caveat",
                     severity,
                     title,
                     detail: sentence,

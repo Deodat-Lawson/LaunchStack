@@ -1,4 +1,4 @@
-import { customType } from 'drizzle-orm/pg-core';
+import { customType } from "drizzle-orm/pg-core";
 
 interface PgVectorConfig {
     dimension: number;
@@ -19,7 +19,7 @@ function fromPgVectorLiteral(value: string) {
         return [];
     }
 
-    return body.split(",").map((part) => Number(part.trim()));
+    return body.split(",").map(part => Number(part.trim()));
 }
 
 /**

@@ -35,11 +35,7 @@ function makeDocxBuffer(): Buffer {
     return Buffer.from("PK\x03\x04fake-docx-content");
 }
 
-function blobResponse(
-    content: string,
-    status = 200,
-    headers?: Record<string, string>,
-): Response {
+function blobResponse(content: string, status = 200, headers?: Record<string, string>): Response {
     return new Response(content, {
         status,
         headers: {
@@ -50,11 +46,7 @@ function blobResponse(
     });
 }
 
-function jsonResponse(
-    body: object,
-    status = 200,
-    headers?: Record<string, string>,
-): Response {
+function jsonResponse(body: object, status = 200, headers?: Record<string, string>): Response {
     return new Response(JSON.stringify(body), {
         status,
         headers: { "content-type": "application/json", ...headers },
@@ -66,9 +58,7 @@ function jsonResponse(
 // ===========================================================================
 describe("Fix 1.9: Authentication — client sends X-API-Key header to sidecar", () => {
     it("readDocx sends X-API-Key header to sidecar", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ text: "hello", filename: "doc.docx" }),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ text: "hello", filename: "doc.docx" }));
 
         await readDocx(makeDocxBuffer());
 
@@ -77,8 +67,7 @@ describe("Fix 1.9: Authentication — client sends X-API-Key header to sidecar",
         // FIX: X-API-Key header is sent for authentication.
         const headers = opts.headers as Record<string, string> | undefined;
         const hasApiKey =
-            headers?.["X-API-Key"] !== undefined ||
-            headers?.["x-api-key"] !== undefined;
+            headers?.["X-API-Key"] !== undefined || headers?.["x-api-key"] !== undefined;
         expect(hasApiKey).toBe(true);
     });
 
@@ -93,8 +82,7 @@ describe("Fix 1.9: Authentication — client sends X-API-Key header to sidecar",
         const [, opts] = mockFetch.mock.calls[0] as [string, RequestInit];
         const headers = opts.headers as Record<string, string> | undefined;
         const hasApiKey =
-            headers?.["X-API-Key"] !== undefined ||
-            headers?.["x-api-key"] !== undefined;
+            headers?.["X-API-Key"] !== undefined || headers?.["x-api-key"] !== undefined;
         expect(hasApiKey).toBe(true);
     });
 
@@ -106,8 +94,7 @@ describe("Fix 1.9: Authentication — client sends X-API-Key header to sidecar",
         const [, opts] = mockFetch.mock.calls[0] as [string, RequestInit];
         const headers = opts.headers as Record<string, string> | undefined;
         const hasApiKey =
-            headers?.["X-API-Key"] !== undefined ||
-            headers?.["x-api-key"] !== undefined;
+            headers?.["X-API-Key"] !== undefined || headers?.["x-api-key"] !== undefined;
         expect(hasApiKey).toBe(true);
     });
 
@@ -121,23 +108,19 @@ describe("Fix 1.9: Authentication — client sends X-API-Key header to sidecar",
         const [, opts] = mockFetch.mock.calls[0] as [string, RequestInit];
         const headers = opts.headers as Record<string, string> | undefined;
         const hasApiKey =
-            headers?.["X-API-Key"] !== undefined ||
-            headers?.["x-api-key"] !== undefined;
+            headers?.["X-API-Key"] !== undefined || headers?.["x-api-key"] !== undefined;
         expect(hasApiKey).toBe(true);
     });
 
     it("diffDocxFiles sends X-API-Key header", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ diff: "", has_differences: false }),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ diff: "", has_differences: false }));
 
         await diffDocxFiles(makeDocxBuffer(), makeDocxBuffer());
 
         const [, opts] = mockFetch.mock.calls[0] as [string, RequestInit];
         const headers = opts.headers as Record<string, string> | undefined;
         const hasApiKey =
-            headers?.["X-API-Key"] !== undefined ||
-            headers?.["x-api-key"] !== undefined;
+            headers?.["X-API-Key"] !== undefined || headers?.["x-api-key"] !== undefined;
         expect(hasApiKey).toBe(true);
     });
 });
@@ -151,7 +134,7 @@ describe("Fix 1.13: Graceful JSON.parse — malformed x-batch-summary handled wi
         mockFetch.mockResolvedValueOnce(
             blobResponse("modified-docx-bytes", 200, {
                 "x-batch-summary": "{broken json",
-            }),
+            })
         );
 
         // FIX: JSON.parse error is caught gracefully; no crash.
@@ -159,7 +142,7 @@ describe("Fix 1.13: Graceful JSON.parse — malformed x-batch-summary handled wi
             processDocumentBatch(makeDocxBuffer(), {
                 author_name: "Author",
                 edits: [{ target_text: "a", new_text: "b" }],
-            }),
+            })
         ).resolves.toBeDefined();
     });
 
@@ -167,7 +150,7 @@ describe("Fix 1.13: Graceful JSON.parse — malformed x-batch-summary handled wi
         mockFetch.mockResolvedValueOnce(
             blobResponse("modified-docx-bytes", 200, {
                 "x-batch-summary": "not-json-at-all",
-            }),
+            })
         );
 
         // FIX: Falls back to default summary instead of crashing
@@ -185,9 +168,7 @@ describe("Fix 1.13: Graceful JSON.parse — malformed x-batch-summary handled wi
 // ===========================================================================
 describe("Fix 1.14: Fetch timeout — client uses AbortController signal", () => {
     it("readDocx fetch call has a signal (AbortController)", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ text: "hello", filename: "doc.docx" }),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ text: "hello", filename: "doc.docx" }));
 
         await readDocx(makeDocxBuffer());
 
@@ -229,9 +210,7 @@ describe("Fix 1.14: Fetch timeout — client uses AbortController signal", () =>
     });
 
     it("diffDocxFiles fetch call has a signal (AbortController)", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ diff: "", has_differences: false }),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ diff: "", has_differences: false }));
 
         await diffDocxFiles(makeDocxBuffer(), makeDocxBuffer());
 

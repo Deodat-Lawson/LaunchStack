@@ -60,7 +60,7 @@ async function updateStatusOrThrow(
     jobId: string,
     companyId: bigint,
     status: ClientProspectorPipelineStage | "completed" | "failed",
-    errorMessage?: string,
+    errorMessage?: string
 ) {
     const updated = await updateJobStatus(jobId, companyId, status, errorMessage);
     if (!updated) {
@@ -69,11 +69,7 @@ async function updateStatusOrThrow(
 }
 
 // Persist the pipeline results to the DB, or throw if the job was not found.
-async function persistResultsOrThrow(
-    jobId: string,
-    companyId: bigint,
-    output: ProspectorOutput,
-) {
+async function persistResultsOrThrow(jobId: string, companyId: bigint, output: ProspectorOutput) {
     const updated = await updateJobResults(jobId, companyId, output);
     if (!updated) {
         throw new Error(`Client prospector job not found for result persistence: ${jobId}`);
@@ -89,7 +85,9 @@ function toPipelineInput(eventData: ProspectorEventData) {
         location: eventData.location,
         radius: eventData.radius,
         ...(eventData.categories ? { categories: eventData.categories } : {}),
-        ...(eventData.excludeChains !== undefined ? { excludeChains: eventData.excludeChains } : {}),
+        ...(eventData.excludeChains !== undefined
+            ? { excludeChains: eventData.excludeChains }
+            : {}),
     };
 }
 
@@ -104,7 +102,10 @@ export const clientProspectorJob = inngest.createFunction(
         onFailure: async ({ error, event }) => {
             const parsed = ProspectorEventDataSchema.safeParse(event.data);
             if (!parsed.success) {
-                console.error("[ClientProspector] Failed job with invalid event payload:", parsed.error);
+                console.error(
+                    "[ClientProspector] Failed job with invalid event payload:",
+                    parsed.error
+                );
                 return;
             }
 
@@ -113,7 +114,7 @@ export const clientProspectorJob = inngest.createFunction(
                     parsed.data.jobId,
                     parseCompanyId(parsed.data.companyId),
                     "failed",
-                    toErrorMessage(error),
+                    toErrorMessage(error)
                 );
             } catch (failureError) {
                 console.error("[ClientProspector] Failed to mark job as failed:", failureError);
@@ -158,5 +159,5 @@ export const clientProspectorJob = inngest.createFunction(
             await updateStatusOrThrow(jobId, companyId, "completed");
             return output;
         })) as ProspectorOutput;
-    },
+    }
 );

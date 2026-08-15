@@ -1,12 +1,5 @@
 import { sql } from "drizzle-orm";
-import {
-  integer,
-  smallint,
-  text,
-  timestamp,
-  varchar,
-    bigint,
-} from "drizzle-orm/pg-core";
+import { integer, smallint, text, timestamp, varchar, bigint } from "drizzle-orm/pg-core";
 
 import { company } from "./base";
 import { pgTable } from "./helpers";
@@ -24,12 +17,10 @@ import { pgTable } from "./helpers";
  * `company.embedding*` columns remain until backfill runs, then get dropped
  * in a follow-up migration.
  */
-export const companyEmbeddingCredentials = pgTable(
-  "company_embedding_credentials",
-  {
+export const companyEmbeddingCredentials = pgTable("company_embedding_credentials", {
     companyId: bigint("company_id", { mode: "number" })
-      .primaryKey()
-      .references(() => company.id, { onDelete: "cascade" }),
+        .primaryKey()
+        .references(() => company.id, { onDelete: "cascade" }),
     openAIApiKeyCiphertext: text("openai_api_key_ciphertext"),
     openAIApiKeyLast4: varchar("openai_api_key_last4", { length: 8 }),
     huggingFaceApiKeyCiphertext: text("huggingface_api_key_ciphertext"),
@@ -38,7 +29,6 @@ export const companyEmbeddingCredentials = pgTable(
     ollamaModel: varchar("ollama_model", { length: 256 }),
     encryptionKeyVersion: smallint("encryption_key_version").notNull().default(1),
     updatedAt: timestamp("updated_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-  },
-);
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull(),
+});

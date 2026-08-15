@@ -18,71 +18,68 @@
  */
 
 export class LaunchstackError extends Error {
-  readonly code: string;
-  readonly cause?: unknown;
+    readonly code: string;
+    readonly cause?: unknown;
 
-  constructor(code: string, message: string, options?: { cause?: unknown }) {
-    super(message);
-    this.name = "LaunchstackError";
-    this.code = code;
-    this.cause = options?.cause;
-  }
+    constructor(code: string, message: string, options?: { cause?: unknown }) {
+        super(message);
+        this.name = "LaunchstackError";
+        this.code = code;
+        this.cause = options?.cause;
+    }
 }
 
 export class ConfigError extends LaunchstackError {
-  constructor(message: string, options?: { cause?: unknown }) {
-    super("LAUNCHSTACK_CONFIG", message, options);
-    this.name = "ConfigError";
-  }
+    constructor(message: string, options?: { cause?: unknown }) {
+        super("LAUNCHSTACK_CONFIG", message, options);
+        this.name = "ConfigError";
+    }
 }
 
 export class ProviderError extends LaunchstackError {
-  readonly provider: string;
-  readonly retryable: boolean;
+    readonly provider: string;
+    readonly retryable: boolean;
 
-  constructor(
-    provider: string,
-    message: string,
-    options?: { cause?: unknown; retryable?: boolean }
-  ) {
-    super("LAUNCHSTACK_PROVIDER", `${provider}: ${message}`, options);
-    this.name = "ProviderError";
-    this.provider = provider;
-    this.retryable = options?.retryable ?? true;
-  }
+    constructor(
+        provider: string,
+        message: string,
+        options?: { cause?: unknown; retryable?: boolean }
+    ) {
+        super("LAUNCHSTACK_PROVIDER", `${provider}: ${message}`, options);
+        this.name = "ProviderError";
+        this.provider = provider;
+        this.retryable = options?.retryable ?? true;
+    }
 }
 
 export class StorageError extends LaunchstackError {
-  constructor(message: string, options?: { cause?: unknown }) {
-    super("LAUNCHSTACK_STORAGE", message, options);
-    this.name = "StorageError";
-  }
+    constructor(message: string, options?: { cause?: unknown }) {
+        super("LAUNCHSTACK_STORAGE", message, options);
+        this.name = "StorageError";
+    }
 }
 
 export class CreditsError extends LaunchstackError {
-  readonly companyId?: string;
+    readonly companyId?: string;
 
-  constructor(
-    message: string,
-    options?: { cause?: unknown; companyId?: string }
-  ) {
-    super("LAUNCHSTACK_CREDITS", message, options);
-    this.name = "CreditsError";
-    this.companyId = options?.companyId;
-  }
+    constructor(message: string, options?: { cause?: unknown; companyId?: string }) {
+        super("LAUNCHSTACK_CREDITS", message, options);
+        this.name = "CreditsError";
+        this.companyId = options?.companyId;
+    }
 }
 
 export class ValidationError extends LaunchstackError {
-  readonly field?: string;
+    readonly field?: string;
 
-  constructor(message: string, options?: { cause?: unknown; field?: string }) {
-    super("LAUNCHSTACK_VALIDATION", message, options);
-    this.name = "ValidationError";
-    this.field = options?.field;
-  }
+    constructor(message: string, options?: { cause?: unknown; field?: string }) {
+        super("LAUNCHSTACK_VALIDATION", message, options);
+        this.name = "ValidationError";
+        this.field = options?.field;
+    }
 }
 
 /** Type-guard helper — useful in host error middleware that maps codes to statuses. */
 export function isLaunchstackError(value: unknown): value is LaunchstackError {
-  return value instanceof LaunchstackError;
+    return value instanceof LaunchstackError;
 }

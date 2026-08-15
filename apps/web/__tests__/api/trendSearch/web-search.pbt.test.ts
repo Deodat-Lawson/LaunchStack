@@ -32,7 +32,12 @@ afterAll(() => {
 
 // ─── Arbitraries ─────────────────────────────────────────────────────────────
 
-const validCategories = ["fashion", "finance", "business", "tech"] as const satisfies readonly SearchCategory[];
+const validCategories = [
+    "fashion",
+    "finance",
+    "business",
+    "tech",
+] as const satisfies readonly SearchCategory[];
 
 const categoryArb = fc.constantFrom(...validCategories);
 
@@ -52,7 +57,9 @@ const plannedQueriesArb = fc.array(plannedQueryArb(categoryArb), {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function makeExaOkResponse(results: { url: string; title?: string; text?: string; score?: number }[]) {
+function makeExaOkResponse(
+    results: { url: string; title?: string; text?: string; score?: number }[]
+) {
     return {
         ok: true,
         text: async () => "",
@@ -66,9 +73,13 @@ describe("Property 6: Every sub-query triggers a search call", () => {
     let fetchSpy: jest.SpyInstance;
 
     beforeEach(() => {
-        fetchSpy = jest.spyOn(globalThis, "fetch").mockResolvedValue(
-            makeExaOkResponse([{ url: "https://example.com/1", title: "T", text: "C", score: 0.9 }])
-        );
+        fetchSpy = jest
+            .spyOn(globalThis, "fetch")
+            .mockResolvedValue(
+                makeExaOkResponse([
+                    { url: "https://example.com/1", title: "T", text: "C", score: 0.9 },
+                ])
+            );
     });
 
     afterEach(() => {
@@ -77,10 +88,12 @@ describe("Property 6: Every sub-query triggers a search call", () => {
 
     it("mock Exa called once per sub-query for any random PlannedQuery array", async () => {
         await fc.assert(
-            fc.asyncProperty(plannedQueriesArb, async (subQueries) => {
+            fc.asyncProperty(plannedQueriesArb, async subQueries => {
                 fetchSpy.mockClear();
                 fetchSpy.mockResolvedValue(
-                    makeExaOkResponse([{ url: "https://example.com/1", title: "T", text: "C", score: 0.9 }])
+                    makeExaOkResponse([
+                        { url: "https://example.com/1", title: "T", text: "C", score: 0.9 },
+                    ])
                 );
 
                 await executeSearch(subQueries);
@@ -117,7 +130,9 @@ describe("Unit: one sub-query returns 0 results, pipeline continues", () => {
             }
             if (callCount === 2) {
                 return Promise.resolve(
-                    makeExaOkResponse([{ url: "https://b.com", title: "B", text: "C2", score: 0.8 }])
+                    makeExaOkResponse([
+                        { url: "https://b.com", title: "B", text: "C2", score: 0.8 },
+                    ])
                 );
             }
             return Promise.resolve(
@@ -129,7 +144,7 @@ describe("Unit: one sub-query returns 0 results, pipeline continues", () => {
 
         expect(fetchSpy).toHaveBeenCalledTimes(3);
         expect(results).toHaveLength(2);
-        expect(results.map((r) => r.url)).toEqual(["https://b.com", "https://c.com"]);
+        expect(results.map(r => r.url)).toEqual(["https://b.com", "https://c.com"]);
     });
 });
 
@@ -151,14 +166,16 @@ describe("Unit: Exa fails, retries 2 times then marks sub-query failed", () => {
         fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((_input, init) => {
             // The code under test always sends a JSON string body.
             const rawBody = init?.body;
-            const body = JSON.parse(
-                typeof rawBody === "string" ? rawBody : "{}",
-            ) as { query?: string };
+            const body = JSON.parse(typeof rawBody === "string" ? rawBody : "{}") as {
+                query?: string;
+            };
             if (body.query === "failing-query") {
                 return Promise.reject(new Error("Exa API error: 500"));
             }
             return Promise.resolve(
-                makeExaOkResponse([{ url: "https://ok.com", title: "OK", text: "Content", score: 0.9 }])
+                makeExaOkResponse([
+                    { url: "https://ok.com", title: "OK", text: "Content", score: 0.9 },
+                ])
             );
         });
 

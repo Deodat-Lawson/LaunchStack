@@ -11,58 +11,53 @@
  * Its only permitted dependency is `@launchstack/protocol`.
  */
 export {
-  anchorKey,
-  isValidAnchorSpan,
-  isValidCitationAnchor,
-  parseAnchorKey,
-  type AnchorSpan,
-  type CharSpan,
-  type CitationAnchor,
-  type PageSpan,
-  type ParsedAnchorKey,
-  type TimeSpan,
+    anchorKey,
+    isValidAnchorSpan,
+    isValidCitationAnchor,
+    parseAnchorKey,
+    type AnchorSpan,
+    type CharSpan,
+    type CitationAnchor,
+    type PageSpan,
+    type ParsedAnchorKey,
+    type TimeSpan,
 } from "./anchors";
 
 export {
-  isSuperseded,
-  resolveCurrentVersion,
-  supersessionChain,
-  type SourceVersionMeta,
+    isSuperseded,
+    resolveCurrentVersion,
+    supersessionChain,
+    type SourceVersionMeta,
 } from "./versioning";
 
-export {
-  diffVersions,
-  type ChunkFingerprint,
-  type ChunkMove,
-  type VersionDiff,
-} from "./diffing";
+export { diffVersions, type ChunkFingerprint, type ChunkMove, type VersionDiff } from "./diffing";
 
 export {
-  computeFreshness,
-  DEFAULT_FRESHNESS_POLICY,
-  isValidFreshnessPolicy,
-  type FreshnessPolicy,
-  type FreshnessTier,
+    computeFreshness,
+    DEFAULT_FRESHNESS_POLICY,
+    isValidFreshnessPolicy,
+    type FreshnessPolicy,
+    type FreshnessTier,
 } from "./freshness";
 
 export { normalizeFactValue, type EvidenceAssertion } from "./assertions";
 
 export {
-  compareAssertionRecency,
-  detectConflicts,
-  resolveByRecency,
-  type ConflictResolution,
-  type ConflictValueGroup,
-  type DetectConflictsOptions,
-  type FactConflict,
-  type RecencyRanked,
+    compareAssertionRecency,
+    detectConflicts,
+    resolveByRecency,
+    type ConflictResolution,
+    type ConflictValueGroup,
+    type DetectConflictsOptions,
+    type FactConflict,
+    type RecencyRanked,
 } from "./conflicts";
 
 export {
-  reconcile,
-  type FactChange,
-  type FactRecord,
-  type ReconcileOptions,
-  type ReconcileResult,
-  type SupersededValue,
+    reconcile,
+    type FactChange,
+    type FactRecord,
+    type ReconcileOptions,
+    type ReconcileResult,
+    type SupersededValue,
 } from "./reconciliation";

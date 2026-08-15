@@ -6,7 +6,6 @@ import { eq } from "drizzle-orm";
 import { getRedactedCredentials } from "@launchstack/core/embeddings";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
-
 export async function GET() {
     try {
         const ctx = await requireWorkspaceContext();
@@ -32,10 +31,7 @@ export async function GET() {
             .where(eq(company.id, Number(companyId)));
 
         if (!companyRecord) {
-            return NextResponse.json(
-                { error: "Company not found." },
-                { status: 404 }
-            );
+            return NextResponse.json({ error: "Company not found." }, { status: 404 });
         }
 
         // Embedding provider credentials come from the encrypted table; the
@@ -50,13 +46,10 @@ export async function GET() {
                 embeddingOllamaBaseUrl: creds.ollamaBaseUrl,
                 embeddingOllamaModel: creds.ollamaModel,
             },
-            { status: 200 },
+            { status: 200 }
         );
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
-        return NextResponse.json(
-            { error: "Unable to fetch documents" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Unable to fetch documents" }, { status: 500 });
     }
 }

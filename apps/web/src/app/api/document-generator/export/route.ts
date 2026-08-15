@@ -1,12 +1,12 @@
 /**
  * Document Generator - Export API
- * 
+ *
  * Export documents to various formats:
  * - PDF (using pdf-lib)
  * - Markdown (raw markdown)
  * - HTML (rendered from markdown or raw HTML)
  * - Plain Text
- * 
+ *
  * Supports both Markdown and HTML input (WYSIWYG editor saves HTML to preserve formatting).
  */
 
@@ -78,36 +78,40 @@ const ExportSchema = z.object({
     format: z.enum(["pdf", "markdown", "html", "text"]),
     title: z.string().min(1).max(512),
     content: z.string(),
-    options: z.object({
-        includeCitations: z.boolean().optional(),
-        includeMetadata: z.boolean().optional(),
-        pageSize: z.enum(["letter", "a4"]).optional(),
-        fontSize: z.number().min(8).max(24).optional(),
-        bibliography: z.string().optional(),
-    }).optional(),
+    options: z
+        .object({
+            includeCitations: z.boolean().optional(),
+            includeMetadata: z.boolean().optional(),
+            pageSize: z.enum(["letter", "a4"]).optional(),
+            fontSize: z.number().min(8).max(24).optional(),
+            bibliography: z.string().optional(),
+        })
+        .optional(),
 });
 
 // Simple markdown to text converter for PDF
 function markdownToText(markdown: string): string {
-    return markdown
-        // Remove headers but keep text
-        .replace(/^#{1,6}\s+/gm, "")
-        // Convert bold
-        .replace(/\*\*(.+?)\*\*/g, "$1")
-        // Convert italic
-        .replace(/\*(.+?)\*/g, "$1")
-        // Convert links
-        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-        // Convert code blocks
-        .replace(/```[\s\S]*?```/g, (match) => match.replace(/```\w*\n?/g, "").trim())
-        // Convert inline code
-        .replace(/`([^`]+)`/g, "$1")
-        // Convert bullet points
-        .replace(/^[-*]\s+/gm, "• ")
-        // Convert numbered lists
-        .replace(/^\d+\.\s+/gm, "")
-        // Clean up extra newlines
-        .replace(/\n{3,}/g, "\n\n");
+    return (
+        markdown
+            // Remove headers but keep text
+            .replace(/^#{1,6}\s+/gm, "")
+            // Convert bold
+            .replace(/\*\*(.+?)\*\*/g, "$1")
+            // Convert italic
+            .replace(/\*(.+?)\*/g, "$1")
+            // Convert links
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+            // Convert code blocks
+            .replace(/```[\s\S]*?```/g, match => match.replace(/```\w*\n?/g, "").trim())
+            // Convert inline code
+            .replace(/`([^`]+)`/g, "$1")
+            // Convert bullet points
+            .replace(/^[-*]\s+/gm, "• ")
+            // Convert numbered lists
+            .replace(/^\d+\.\s+/gm, "")
+            // Clean up extra newlines
+            .replace(/\n{3,}/g, "\n\n")
+    );
 }
 
 // Simple markdown to HTML converter
@@ -191,8 +195,8 @@ ${html}
 // Generate PDF from markdown content
 // Note: pdf-lib types are incomplete, causing false positive ESLint errors
 async function generatePDF(
-    title: string, 
-    content: string, 
+    title: string,
+    content: string,
     options: { pageSize?: "letter" | "a4"; fontSize?: number; bibliography?: string }
 ): Promise<Uint8Array> {
     const pdfDoc = await PDFDocument.create();
@@ -200,24 +204,24 @@ async function generatePDF(
     const font: any = await pdfDoc.embedFont(StandardFonts.TimesRoman);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const boldFont: any = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
-    
+
     const fontSize = options.fontSize ?? 12;
     const lineHeight = fontSize * 1.4;
-    
+
     // Page dimensions
     const pageWidth = options.pageSize === "a4" ? 595 : 612; // A4 or Letter
     const pageHeight = options.pageSize === "a4" ? 842 : 792;
     const margin = 72; // 1 inch margins
     const maxWidth = pageWidth - margin * 2;
-    
+
     // Convert markdown to plain text for PDF
     const plainText = markdownToText(content);
     const lines = plainText.split("\n");
-    
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let page: any = pdfDoc.addPage([pageWidth, pageHeight]);
     let y = pageHeight - margin;
-    
+
     // Add title
     page.drawText(title, {
         x: margin,
@@ -227,7 +231,7 @@ async function generatePDF(
         color: rgb(0, 0, 0),
     });
     y -= lineHeight * 2;
-    
+
     // Add content
     for (const line of lines) {
         if (y < margin + lineHeight) {
@@ -235,15 +239,15 @@ async function generatePDF(
             page = pdfDoc.addPage([pageWidth, pageHeight]);
             y = pageHeight - margin;
         }
-        
+
         // Word wrap
         const words = line.split(" ");
         let currentLine = "";
-        
+
         for (const word of words) {
             const testLine = currentLine ? `${currentLine} ${word}` : word;
             const width = font.widthOfTextAtSize(testLine, fontSize);
-            
+
             if (width > maxWidth && currentLine) {
                 page.drawText(currentLine, {
                     x: margin,
@@ -254,7 +258,7 @@ async function generatePDF(
                 });
                 y -= lineHeight;
                 currentLine = word;
-                
+
                 if (y < margin + lineHeight) {
                     page = pdfDoc.addPage([pageWidth, pageHeight]);
                     y = pageHeight - margin;
@@ -263,7 +267,7 @@ async function generatePDF(
                 currentLine = testLine;
             }
         }
-        
+
         if (currentLine) {
             page.drawText(currentLine, {
                 x: margin,
@@ -274,22 +278,22 @@ async function generatePDF(
             });
             y -= lineHeight;
         }
-        
+
         // Extra spacing for paragraphs
         if (!line.trim()) {
             y -= lineHeight * 0.5;
         }
     }
-    
+
     // Add bibliography if provided
     if (options.bibliography) {
         y -= lineHeight * 2;
-        
+
         if (y < margin + lineHeight * 4) {
             page = pdfDoc.addPage([pageWidth, pageHeight]);
             y = pageHeight - margin;
         }
-        
+
         page.drawText("References", {
             x: margin,
             y: y,
@@ -298,16 +302,16 @@ async function generatePDF(
             color: rgb(0, 0, 0),
         });
         y -= lineHeight * 1.5;
-        
+
         const bibLines = options.bibliography.split("\n");
         for (const bibLine of bibLines) {
             if (!bibLine.trim()) continue;
-            
+
             if (y < margin + lineHeight) {
                 page = pdfDoc.addPage([pageWidth, pageHeight]);
                 y = pageHeight - margin;
             }
-            
+
             // Simple text drawing for bibliography (would need word wrap for long entries)
             const truncatedLine = bibLine.length > 100 ? bibLine.slice(0, 97) + "..." : bibLine;
             page.drawText(truncatedLine, {
@@ -320,7 +324,7 @@ async function generatePDF(
             y -= lineHeight;
         }
     }
-    
+
     return pdfDoc.save();
 }
 /* eslint-enable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
@@ -330,7 +334,7 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = ExportSchema.safeParse(body);
 
         if (!validation.success) {
@@ -370,9 +374,10 @@ export async function POST(request: Request) {
 
             case "html":
                 if (isHtml(content)) {
-                    const refs = options?.includeCitations && options.bibliography
-                        ? `\n<hr>\n<h2>References</h2>\n<p>${options.bibliography.replace(/\n/g, "</p><p>")}</p>\n`
-                        : "";
+                    const refs =
+                        options?.includeCitations && options.bibliography
+                            ? `\n<hr>\n<h2>References</h2>\n<p>${options.bibliography.replace(/\n/g, "</p><p>")}</p>\n`
+                            : "";
                     const bodyContent = content.trim() + refs;
                     exportedContent = `<!DOCTYPE html>
 <html lang="en">
@@ -443,14 +448,13 @@ export async function POST(request: Request) {
             contentType,
             processingTimeMs,
         });
-
     } catch (error) {
         console.error("❌ [Export] Error:", error);
         return NextResponse.json(
-            { 
-                success: false, 
+            {
+                success: false,
                 message: "Failed to export document",
-                error: "Failed to export document"
+                error: "Failed to export document",
             },
             { status: 500 }
         );

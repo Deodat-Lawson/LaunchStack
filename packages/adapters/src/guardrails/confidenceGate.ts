@@ -52,12 +52,15 @@ export function checkConfidence(response: string): ConfidenceGateResult {
     for (const [patternA, patternB] of CONTRADICTION_PAIRS) {
         if (patternA.test(response) && patternB.test(response)) {
             contradictionDetected = true;
-            flags.push(`Potential contradiction detected (${patternA.source} vs ${patternB.source})`);
+            flags.push(
+                `Potential contradiction detected (${patternA.source} vs ${patternB.source})`
+            );
             break;
         }
     }
 
-    const excessiveHedging = (lower.match(/\b(?:maybe|perhaps|possibly|might|could)\b/g) ?? []).length;
+    const excessiveHedging = (lower.match(/\b(?:maybe|perhaps|possibly|might|could)\b/g) ?? [])
+        .length;
     if (excessiveHedging > 5) {
         flags.push(`Excessive hedging (${excessiveHedging} instances)`);
     }

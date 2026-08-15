@@ -2,10 +2,8 @@ import { z } from "zod";
 
 export const FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION =
     "founder-weekly-review-evidence/v1" as const;
-export const FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION =
-    "founder-weekly-review/v1" as const;
-export const FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION =
-    "founder-weekly-review/v2" as const;
+export const FOUNDER_WEEKLY_REVIEW_SCHEMA_VERSION = "founder-weekly-review/v1" as const;
+export const FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION = "founder-weekly-review/v2" as const;
 
 export const FounderWeeklyReviewStatusSchema = z.enum([
     "queued",
@@ -58,12 +56,16 @@ export const WorkspaceTimezoneSchema = z
     .refine(isValidTimeZone, "Not a recognized IANA time zone");
 
 /** Durable, request-derived inputs needed to collect evidence after the HTTP response. */
-export const FounderWeeklyReviewCollectionInputSchema = z.object({
-    workspaceTimezone: WorkspaceTimezoneSchema,
-    founderContext: z.string().min(1).max(4000).optional(),
-    actorExternalUserId: z.string().min(1).max(256),
-}).strict();
-export type FounderWeeklyReviewCollectionInput = z.infer<typeof FounderWeeklyReviewCollectionInputSchema>;
+export const FounderWeeklyReviewCollectionInputSchema = z
+    .object({
+        workspaceTimezone: WorkspaceTimezoneSchema,
+        founderContext: z.string().min(1).max(4000).optional(),
+        actorExternalUserId: z.string().min(1).max(256),
+    })
+    .strict();
+export type FounderWeeklyReviewCollectionInput = z.infer<
+    typeof FounderWeeklyReviewCollectionInputSchema
+>;
 
 export const FounderWeeklyReviewOperationTypeSchema = z.enum(["retry"]);
 export type FounderWeeklyReviewOperationType = z.infer<
@@ -75,7 +77,7 @@ export const ReportingPeriodSchema = z
         start: CalendarDateSchema,
         end: CalendarDateSchema,
     })
-    .refine((value) => value.start <= value.end, {
+    .refine(value => value.start <= value.end, {
         message: "Reporting period start must be on or before end",
         path: ["end"],
     });
@@ -113,9 +115,7 @@ export const FounderWeeklyReviewEvidenceItemSchema = z.object({
     workspaceDeepLink: z.string().max(2048).optional(),
     metadata: z.record(z.string().max(64), SerializableMetadataValueSchema).default({}),
 });
-export type FounderWeeklyReviewEvidenceItem = z.infer<
-    typeof FounderWeeklyReviewEvidenceItemSchema
->;
+export type FounderWeeklyReviewEvidenceItem = z.infer<typeof FounderWeeklyReviewEvidenceItemSchema>;
 
 export const FounderWeeklyReviewEvidenceWarningSchema = z.object({
     code: z.string().min(1).max(64),
@@ -139,9 +139,7 @@ export type FounderWeeklyReviewEvidenceSnapshot = z.infer<
 >;
 
 export const FounderWeeklyReviewConfidenceSchema = z.enum(["high", "medium", "low"]);
-export type FounderWeeklyReviewConfidence = z.infer<
-    typeof FounderWeeklyReviewConfidenceSchema
->;
+export type FounderWeeklyReviewConfidence = z.infer<typeof FounderWeeklyReviewConfidenceSchema>;
 
 export const FounderWeeklyReviewSectionItemSchema = z.discriminatedUnion("kind", [
     z.object({
@@ -167,9 +165,7 @@ export const FounderWeeklyReviewSectionItemSchema = z.discriminatedUnion("kind",
         markdown: z.string().min(1).max(12000),
     }),
 ]);
-export type FounderWeeklyReviewSectionItem = z.infer<
-    typeof FounderWeeklyReviewSectionItemSchema
->;
+export type FounderWeeklyReviewSectionItem = z.infer<typeof FounderWeeklyReviewSectionItemSchema>;
 
 const FounderWeeklyReviewSectionSchema = z.object({
     heading: z.string().min(1).max(128),
@@ -194,78 +190,101 @@ export type FounderWeeklyReviewV1Payload = z.infer<typeof FounderWeeklyReviewV1P
 
 const V2ConfidenceSchema = z.number().min(0).max(1);
 function v2SourceIdsSchema(minimum: number) {
-    return z.array(z.string().min(1).max(256)).min(minimum).max(20).superRefine(
-        (sourceIds, context) => {
-        if (new Set(sourceIds).size !== sourceIds.length) {
-            context.addIssue({ code: z.ZodIssueCode.custom, message: "sourceIds must be unique" });
-        }
-        }
-    );
+    return z
+        .array(z.string().min(1).max(256))
+        .min(minimum)
+        .max(20)
+        .superRefine((sourceIds, context) => {
+            if (new Set(sourceIds).size !== sourceIds.length) {
+                context.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "sourceIds must be unique",
+                });
+            }
+        });
 }
 
-export const FounderWeeklyReviewV2ObservedFactSchema = z.object({
-    kind: z.literal("observed_fact"),
-    text: z.string().min(1).max(2000),
-    sourceIds: v2SourceIdsSchema(1),
-    confidence: V2ConfidenceSchema,
-}).strict();
+export const FounderWeeklyReviewV2ObservedFactSchema = z
+    .object({
+        kind: z.literal("observed_fact"),
+        text: z.string().min(1).max(2000),
+        sourceIds: v2SourceIdsSchema(1),
+        confidence: V2ConfidenceSchema,
+    })
+    .strict();
 
-export const FounderWeeklyReviewV2ContradictoryEvidenceSchema = z.object({
-    kind: z.literal("contradictory_evidence"),
-    text: z.string().min(1).max(2000),
-    sourceIds: v2SourceIdsSchema(2),
-    confidence: V2ConfidenceSchema,
-}).strict();
+export const FounderWeeklyReviewV2ContradictoryEvidenceSchema = z
+    .object({
+        kind: z.literal("contradictory_evidence"),
+        text: z.string().min(1).max(2000),
+        sourceIds: v2SourceIdsSchema(2),
+        confidence: V2ConfidenceSchema,
+    })
+    .strict();
 
-export const FounderWeeklyReviewV2RecommendationSchema = z.object({
-    kind: z.literal("recommendation"),
-    label: z.literal("Recommendation"),
-    text: z.string().min(1).max(2000),
-    rationale: z.string().min(1).max(2000).optional(),
-    sourceIds: v2SourceIdsSchema(1),
-    confidence: V2ConfidenceSchema,
-}).strict();
+export const FounderWeeklyReviewV2RecommendationSchema = z
+    .object({
+        kind: z.literal("recommendation"),
+        label: z.literal("Recommendation"),
+        text: z.string().min(1).max(2000),
+        rationale: z.string().min(1).max(2000).optional(),
+        sourceIds: v2SourceIdsSchema(1),
+        confidence: V2ConfidenceSchema,
+    })
+    .strict();
 
-export const FounderWeeklyReviewV2NoEvidenceSchema = z.object({
-    code: z.string().min(1).max(64),
-    message: z.string().min(1).max(512),
-    cta: z.string().min(1).max(512),
-}).strict();
+export const FounderWeeklyReviewV2NoEvidenceSchema = z
+    .object({
+        code: z.string().min(1).max(64),
+        message: z.string().min(1).max(512),
+        cta: z.string().min(1).max(512),
+    })
+    .strict();
 
-const FounderWeeklyReviewV2NoEvidenceSectionSchema = z.object({
-    state: z.literal("no_evidence"),
-    noEvidence: FounderWeeklyReviewV2NoEvidenceSchema,
-}).strict();
+const FounderWeeklyReviewV2NoEvidenceSectionSchema = z
+    .object({
+        state: z.literal("no_evidence"),
+        noEvidence: FounderWeeklyReviewV2NoEvidenceSchema,
+    })
+    .strict();
 
 const FounderWeeklyReviewV2FactualItemSchema = z.union([
     FounderWeeklyReviewV2ObservedFactSchema,
     FounderWeeklyReviewV2ContradictoryEvidenceSchema,
 ]);
 const FounderWeeklyReviewV2FactualSectionSchema = z.union([
-    z.object({
-        state: z.literal("evidence"),
-        items: z.array(FounderWeeklyReviewV2FactualItemSchema).min(1).max(100),
-    }).strict(),
+    z
+        .object({
+            state: z.literal("evidence"),
+            items: z.array(FounderWeeklyReviewV2FactualItemSchema).min(1).max(100),
+        })
+        .strict(),
     FounderWeeklyReviewV2NoEvidenceSectionSchema,
 ]);
 const FounderWeeklyReviewV2PrioritySectionSchema = z.union([
-    z.object({
-        state: z.literal("evidence"),
-        items: z.array(FounderWeeklyReviewV2RecommendationSchema).min(1).max(100),
-    }).strict(),
+    z
+        .object({
+            state: z.literal("evidence"),
+            items: z.array(FounderWeeklyReviewV2RecommendationSchema).min(1).max(100),
+        })
+        .strict(),
     FounderWeeklyReviewV2NoEvidenceSectionSchema,
 ]);
 
-export const FounderWeeklyReviewV2PayloadSchema = z.object({
-    schemaVersion: z.literal(FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION),
-    sections: z.object({
-        whatChanged: FounderWeeklyReviewV2FactualSectionSchema,
-        whatShipped: FounderWeeklyReviewV2FactualSectionSchema,
-        whatCustomersSaid: FounderWeeklyReviewV2FactualSectionSchema,
-        currentBlockers: FounderWeeklyReviewV2FactualSectionSchema,
-        nextPriorities: FounderWeeklyReviewV2PrioritySectionSchema,
-    }).strict(),
-}).strict();
+export const FounderWeeklyReviewV2PayloadSchema = z
+    .object({
+        schemaVersion: z.literal(FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION),
+        sections: z
+            .object({
+                whatChanged: FounderWeeklyReviewV2FactualSectionSchema,
+                whatShipped: FounderWeeklyReviewV2FactualSectionSchema,
+                whatCustomersSaid: FounderWeeklyReviewV2FactualSectionSchema,
+                currentBlockers: FounderWeeklyReviewV2FactualSectionSchema,
+                nextPriorities: FounderWeeklyReviewV2PrioritySectionSchema,
+            })
+            .strict(),
+    })
+    .strict();
 export type FounderWeeklyReviewV2Payload = z.infer<typeof FounderWeeklyReviewV2PayloadSchema>;
 
 export const FounderWeeklyReviewPayloadSchema = z.union([
@@ -283,7 +302,10 @@ export const FounderWeeklyReviewModelMetadataSchema = z.object({
     promptVersion: z.string().min(1).max(128).optional(),
     temperature: z.number().finite().optional(),
     capability: z.string().min(1).max(128).optional(),
-    promptHash: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+    promptHash: z
+        .string()
+        .regex(/^[a-f0-9]{64}$/)
+        .optional(),
     evidenceSchemaVersion: z.string().min(1).max(128).optional(),
     reviewPayloadSchemaVersion: z.string().min(1).max(128).optional(),
     completionId: z.string().min(1).max(256).optional(),
@@ -387,9 +409,7 @@ export function buildFounderWeeklyReviewActorId(
     return `user:${actor.externalUserId}`;
 }
 
-export function parseFounderWeeklyReviewPayload(
-    value: unknown
-): FounderWeeklyReviewPayload {
+export function parseFounderWeeklyReviewPayload(value: unknown): FounderWeeklyReviewPayload {
     return FounderWeeklyReviewPayloadSchema.parse(value);
 }
 
@@ -399,7 +419,9 @@ export function parseFounderWeeklyReviewEvidenceSnapshot(
     return FounderWeeklyReviewEvidenceSnapshotSchema.parse(value);
 }
 
-export function parseFounderWeeklyReviewCollectionInput(value: unknown): FounderWeeklyReviewCollectionInput {
+export function parseFounderWeeklyReviewCollectionInput(
+    value: unknown
+): FounderWeeklyReviewCollectionInput {
     return FounderWeeklyReviewCollectionInputSchema.parse(value);
 }
 

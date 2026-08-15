@@ -64,11 +64,8 @@ export async function resolveLocation(location: SearchLocation): Promise<LatLng>
     const response = await invokeStructured(
         resolved,
         GeocodingOutputSchema,
-        [
-            new SystemMessage(SYSTEM_PROMPT),
-            new HumanMessage(`Geocode this location: "${trimmed}"`),
-        ],
-        { name: "geocode_location" },
+        [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(`Geocode this location: "${trimmed}"`)],
+        { name: "geocode_location" }
     );
 
     // Check for the "UNKNOWN" sentinel

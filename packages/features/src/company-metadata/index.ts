@@ -68,7 +68,7 @@ export interface CompanyMetadataToolResult {
  * metadata and a diff of what changed. Does not persist anything.
  */
 export async function runCompanyMetadataTool(
-    input: CompanyMetadataToolInput,
+    input: CompanyMetadataToolInput
 ): Promise<CompanyMetadataToolResult> {
     const { documentId, companyId, existingMetadata, generate } = input;
 
@@ -89,12 +89,8 @@ export async function runCompanyMetadataTool(
 
         return { success: true, result: mergeResult };
     } catch (error) {
-        const message =
-            error instanceof Error ? error.message : String(error);
-        console.error(
-            `[CompanyMetadataTool] Failed for document ${documentId}:`,
-            error,
-        );
+        const message = error instanceof Error ? error.message : String(error);
+        console.error(`[CompanyMetadataTool] Failed for document ${documentId}:`, error);
         return { success: false, error: message };
     }
 }

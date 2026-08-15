@@ -77,8 +77,8 @@ describe("Fix 1.1: Step output uses blob storage — large DOCX stored as blob U
                 Promise.resolve(
                     largeFakeDocx.buffer.slice(
                         largeFakeDocx.byteOffset,
-                        largeFakeDocx.byteOffset + largeFakeDocx.byteLength,
-                    ),
+                        largeFakeDocx.byteOffset + largeFakeDocx.byteLength
+                    )
                 ),
         });
 
@@ -215,7 +215,7 @@ describe("Fix 1.4: Failure status — onFailure sets error metadata on document"
         // Read the source file and verify the 422 path sets error metadata
         const sourceFile = fs.readFileSync(
             path.resolve(__dirname, "../../../src/server/inngest/functions/modifyDocument.ts"),
-            "utf-8",
+            "utf-8"
         );
 
         // FIX: The 422 path should result in a step that writes error metadata.
@@ -233,7 +233,7 @@ describe("Fix 1.15: Idempotent replay — db.update is in a separate step.run", 
     it("db.update() is in its own dedicated step.run, not inside the modify-document step", () => {
         const sourceFile = fs.readFileSync(
             path.resolve(__dirname, "../../../src/server/inngest/functions/modifyDocument.ts"),
-            "utf-8",
+            "utf-8"
         );
 
         // FIX: There should be a dedicated step for the DB update.
@@ -249,10 +249,11 @@ describe("Fix 1.15: Idempotent replay — db.update is in a separate step.run", 
 
         // Find the closing of the modify-document step by looking for the next step.run
         const afterModifyStep = sourceFile.slice(modifyStepStart);
-        const nextStepStart = afterModifyStep.indexOf('step.run(', 10); // skip the current one
-        const modifyStepChunk = nextStepStart > -1
-            ? afterModifyStep.slice(0, nextStepStart)
-            : afterModifyStep.slice(0, 1200);
+        const nextStepStart = afterModifyStep.indexOf("step.run(", 10); // skip the current one
+        const modifyStepChunk =
+            nextStepStart > -1
+                ? afterModifyStep.slice(0, nextStepStart)
+                : afterModifyStep.slice(0, 1200);
 
         // The modify-document step should NOT have db.update (it's in its own step)
         expect(modifyStepChunk).not.toMatch(/db\s*\.\s*update\s*\(/);
@@ -261,7 +262,7 @@ describe("Fix 1.15: Idempotent replay — db.update is in a separate step.run", 
     it("update-document-record step contains the db.update call", () => {
         const sourceFile = fs.readFileSync(
             path.resolve(__dirname, "../../../src/server/inngest/functions/modifyDocument.ts"),
-            "utf-8",
+            "utf-8"
         );
 
         // FIX: The dedicated update step should contain db.update
@@ -280,7 +281,7 @@ describe("Fix 1.19: Explicit handler assertion — no silent skip on handler loo
     it("test file uses expect(handler).toBeDefined() instead of if(handler) guard", () => {
         const testFile = fs.readFileSync(
             path.resolve(__dirname, "modifyDocument.test.ts"),
-            "utf-8",
+            "utf-8"
         );
 
         // FIX: The test should use expect(handler).toBeDefined() so it fails
@@ -300,7 +301,7 @@ describe("Fix 1.20: Meaningful route registration test — no tautological asser
     it("route registration test does NOT use expect(true).toBe(true)", () => {
         const testFile = fs.readFileSync(
             path.resolve(__dirname, "modifyDocument.test.ts"),
-            "utf-8",
+            "utf-8"
         );
 
         // FIX: The tautological assertion should be replaced with a real check.
@@ -310,10 +311,12 @@ describe("Fix 1.20: Meaningful route registration test — no tautological asser
     it("route registration test makes a meaningful assertion about modifyDocument", () => {
         const testFile = fs.readFileSync(
             path.resolve(__dirname, "modifyDocument.test.ts"),
-            "utf-8",
+            "utf-8"
         );
 
         // FIX: The test should assert something meaningful about the actual import.
-        expect(testFile).toMatch(/expect\(.*modifyDocument.*\)\.toBeDefined\(\)|expect\(.*opts.*id.*\)\.toBe\("modify-document"\)/);
+        expect(testFile).toMatch(
+            /expect\(.*modifyDocument.*\)\.toBeDefined\(\)|expect\(.*opts.*id.*\)\.toBe\("modify-document"\)/
+        );
     });
 });

@@ -11,11 +11,8 @@ jest.mock("~/lib/require-workspace-context", () => ({
 }));
 
 jest.mock("~/lib/rate-limit-middleware", () => ({
-    withRateLimit: (
-        _request: Request,
-        _config: unknown,
-        handler: () => Promise<Response>
-    ) => handler(),
+    withRateLimit: (_request: Request, _config: unknown, handler: () => Promise<Response>) =>
+        handler(),
 }));
 
 jest.mock("~/lib/rate-limiter", () => ({
@@ -88,7 +85,12 @@ describe("POST /api/upload/github-repo", () => {
             jobId: "job-gh",
             eventIds: ["evt"],
             storageType: "s3",
-            document: { id: 5, url: "https://blob.example/repo.zip", title: "o/r", category: "code" },
+            document: {
+                id: 5,
+                url: "https://blob.example/repo.zip",
+                title: "o/r",
+                category: "code",
+            },
             resolvedDocumentUrl: "https://blob.example/repo.zip",
         } as never);
     });

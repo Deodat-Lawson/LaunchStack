@@ -26,21 +26,21 @@ dotenv.config({ path: resolve(HERE, "../../.env") });
  */
 const productTables: string[] = [];
 for (const value of Object.values(productSchema)) {
-  // drizzle's `is` narrows, so no hand-written type predicate is needed.
-  if (is(value, PgTable)) productTables.push(getTableName(value));
+    // drizzle's `is` narrows, so no hand-written type predicate is needed.
+    if (is(value, PgTable)) productTables.push(getTableName(value));
 }
 
 export default {
-  schema: [
-    "./src/server/db/schema/*.ts",
-    "../../packages/features/src/*/schema.ts",
-    "../../packages/features/src/*/cache-schema.ts",
-  ],
-  out: "./drizzle",
-  dialect: "postgresql",
-  migrations: { prefix: "timestamp" },
-  dbCredentials: {
-    url: process.env.MIGRATE_DATABASE_URL ?? process.env.DATABASE_URL!,
-  },
-  tablesFilter: productTables,
+    schema: [
+        "./src/server/db/schema/*.ts",
+        "../../packages/features/src/*/schema.ts",
+        "../../packages/features/src/*/cache-schema.ts",
+    ],
+    out: "./drizzle",
+    dialect: "postgresql",
+    migrations: { prefix: "timestamp" },
+    dbCredentials: {
+        url: process.env.MIGRATE_DATABASE_URL ?? process.env.DATABASE_URL!,
+    },
+    tablesFilter: productTables,
 } satisfies Config;

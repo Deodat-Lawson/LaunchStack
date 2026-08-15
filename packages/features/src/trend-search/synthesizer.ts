@@ -6,7 +6,9 @@ import type { RawSearchResult, SearchCategory, SearchResult } from "./types";
 // ─── Output schema for LLM (validate SearchResult[]) ──────────────────────────
 
 const SearchResultSchema = z.object({
-    sourceUrl: z.string().describe("URL of the source (must be one of the provided raw result URLs)"),
+    sourceUrl: z
+        .string()
+        .describe("URL of the source (must be one of the provided raw result URLs)"),
     summary: z.string().describe("Short summary of the result"),
     description: z.string().describe("Longer description of relevance to the query and company"),
 });
@@ -43,7 +45,7 @@ function buildHumanPrompt(
     rawResults: RawSearchResult[],
     query: string,
     companyContext: string,
-    categories: SearchCategory[],
+    categories: SearchCategory[]
 ): string {
     const resultsBlock = rawResults
         .map(
@@ -52,7 +54,10 @@ function buildHumanPrompt(
         )
         .join("\n\n");
 
-    const categoryBlock = categories.length > 0 ? `Categories of interest: ${categories.join(", ")}.` : "No category filter.";
+    const categoryBlock =
+        categories.length > 0
+            ? `Categories of interest: ${categories.join(", ")}.`
+            : "No category filter.";
 
     return `QUERY: ${query}
 
@@ -76,7 +81,7 @@ export async function synthesizeResults(
     rawResults: RawSearchResult[],
     query: string,
     companyContext: string,
-    categories: SearchCategory[] = [],
+    categories: SearchCategory[] = []
 ): Promise<SearchResult[]> {
     const TARGET_COUNT = 5;
 
@@ -92,7 +97,7 @@ export async function synthesizeResults(
         resolved,
         SynthesizerOutputSchema,
         [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
-        { name: "synthesized_results" },
+        { name: "synthesized_results" }
     );
 
     const parsed = SynthesizerOutputSchema.safeParse(response);

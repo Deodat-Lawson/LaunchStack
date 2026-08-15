@@ -55,12 +55,12 @@ import { pgTable } from "@launchstack/core/db/schema/helpers";
 //   queued → planning → searching → scoring → completed
 // If anything fails after retries, it goes to "failed".
 export const clientProspectorJobStatusEnum = [
-    "queued",      // Job created, waiting for Inngest to pick it up
-    "planning",    // LLM is generating Foursquare search parameters
-    "searching",   // Calling Foursquare API for each planned search
-    "scoring",     // LLM is ranking/scoring the found businesses
-    "completed",   // Pipeline finished successfully, results are available
-    "failed",      // Pipeline failed after all retries, errorMessage has details
+    "queued", // Job created, waiting for Inngest to pick it up
+    "planning", // LLM is generating Foursquare search parameters
+    "searching", // Calling Foursquare API for each planned search
+    "scoring", // LLM is ranking/scoring the found businesses
+    "completed", // Pipeline finished successfully, results are available
+    "failed", // Pipeline failed after all retries, errorMessage has details
 ] as const;
 
 // ─── Table Definition ────────────────────────────────────────────────────────
@@ -151,15 +151,13 @@ export const clientProspectorJobs = pgTable(
 
         // Auto-updated whenever any column in the row changes.
         // Drizzle's $onUpdate hook handles this in the application layer.
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
 
     // ── Indexes ──────────────────────────────────────────────────────────────
     // These speed up common queries. Without indexes, PostgreSQL would have
     // to scan every row in the table to find matches.
-    (table) => ({
+    table => ({
         // Look up all jobs for a specific company (used by GET /api/client-prospector)
         companyIdIdx: index("client_prospector_jobs_company_id_idx").on(table.companyId),
 

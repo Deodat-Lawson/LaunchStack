@@ -31,7 +31,7 @@ export async function GET() {
             .orderBy(desc(companyMetadataHistory.createdAt))
             .limit(100);
 
-        const serializable = history.map((h) => ({
+        const serializable = history.map(h => ({
             ...h,
             documentId: h.documentId != null ? String(h.documentId) : null,
         }));

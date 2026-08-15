@@ -24,7 +24,11 @@ const ORIGINAL_ENV = {
     SEARCH_PROVIDER: process.env.SEARCH_PROVIDER,
 };
 
-function setEnv(overrides: Partial<Record<"EXA_API_KEY" | "SERPER_API_KEY" | "SEARCH_PROVIDER", string | undefined>>) {
+function setEnv(
+    overrides: Partial<
+        Record<"EXA_API_KEY" | "SERPER_API_KEY" | "SEARCH_PROVIDER", string | undefined>
+    >
+) {
     for (const [key, value] of Object.entries(overrides)) {
         if (value === undefined) delete process.env[key];
         else process.env[key] = value;
@@ -94,7 +98,9 @@ function conformsToRawSearchResult(r: unknown): r is RawSearchResult {
         typeof o.title === "string" &&
         typeof o.content === "string" &&
         typeof o.score === "number" &&
-        (!("publishedDate" in o) || typeof o.publishedDate === "string" || o.publishedDate === undefined)
+        (!("publishedDate" in o) ||
+            typeof o.publishedDate === "string" ||
+            o.publishedDate === undefined)
     );
 }
 
@@ -103,7 +109,7 @@ function conformsToRawSearchResult(r: unknown): r is RawSearchResult {
 describe("Property 13: Serper-shaped responses normalize to RawSearchResult", () => {
     it("for any random Serper news array, every output item conforms to RawSearchResult", async () => {
         await fc.assert(
-            fc.asyncProperty(serperNewsArrayArb, async (news) => {
+            fc.asyncProperty(serperNewsArrayArb, async news => {
                 const fetchSpy = jest.spyOn(globalThis, "fetch").mockResolvedValue({
                     ok: true,
                     text: async () => "",
@@ -132,31 +138,45 @@ describe("Property 13: Serper-shaped responses normalize to RawSearchResult", ()
 describe("Property 14: Fallback strategy invokes secondary when primary returns empty", () => {
     it("for random sub-query lists, when primary (Serper) returns empty, Exa is invoked once per sub-query", async () => {
         await fc.assert(
-            fc.asyncProperty(subQueriesArb, async (subQueries) => {
+            fc.asyncProperty(subQueriesArb, async subQueries => {
                 let serperCalls = 0;
                 let exaCalls = 0;
-                const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-                    const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
-                    if (url === SERPER_URL) {
-                        serperCalls++;
-                        return Promise.resolve({
-                            ok: true,
-                            text: async () => "",
-                            json: async () => ({ news: [] }),
-                        } as Response);
-                    }
-                    if (url === EXA_URL) {
-                        exaCalls++;
-                        return Promise.resolve({
-                            ok: true,
-                            text: async () => "",
-                            json: async () => ({
-                                results: [{ url: "https://exa.ai/1", title: "T", text: "C", score: 0.9 }],
-                            }),
-                        } as Response);
-                    }
-                    return Promise.reject(new Error(`Unexpected URL: ${url}`));
-                });
+                const fetchSpy = jest
+                    .spyOn(globalThis, "fetch")
+                    .mockImplementation((input: RequestInfo | URL) => {
+                        const url =
+                            typeof input === "string"
+                                ? input
+                                : input instanceof URL
+                                  ? input.href
+                                  : input.url;
+                        if (url === SERPER_URL) {
+                            serperCalls++;
+                            return Promise.resolve({
+                                ok: true,
+                                text: async () => "",
+                                json: async () => ({ news: [] }),
+                            } as Response);
+                        }
+                        if (url === EXA_URL) {
+                            exaCalls++;
+                            return Promise.resolve({
+                                ok: true,
+                                text: async () => "",
+                                json: async () => ({
+                                    results: [
+                                        {
+                                            url: "https://exa.ai/1",
+                                            title: "T",
+                                            text: "C",
+                                            score: 0.9,
+                                        },
+                                    ],
+                                }),
+                            } as Response);
+                        }
+                        return Promise.reject(new Error(`Unexpected URL: ${url}`));
+                    });
 
                 setEnv({ SEARCH_PROVIDER: "fallback", SERPER_API_KEY: "test-serper-key" });
 
@@ -183,10 +203,12 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
                 fc.string({ minLength: 1, maxLength: 100 }),
                 async (setA, setB, _query) => {
                     // Exa returns setA with original scores; Serper adapter recomputes score as 1 - position/totalResults
-                    const serperScores = setB.length > 0
-                        ? setB.map((_, i) => 1 - (i + 1) / setB.length)
-                        : [];
-                    const setBWithSerperScores = setB.map((r, i) => ({ ...r, score: serperScores[i] ?? 0 }));
+                    const serperScores =
+                        setB.length > 0 ? setB.map((_, i) => 1 - (i + 1) / setB.length) : [];
+                    const setBWithSerperScores = setB.map((r, i) => ({
+                        ...r,
+                        score: serperScores[i] ?? 0,
+                    }));
                     // Replicate executeSearch parallel merge: Serper first, then Exa; first URL wins
                     const byUrl = new Map<string, RawSearchResult>();
                     for (const r of setBWithSerperScores) {
@@ -199,41 +221,49 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
                         if (!key) continue;
                         if (!byUrl.has(key)) byUrl.set(key, r);
                     }
-                    const pairKey = (r: RawSearchResult) => `${normalizeUrl(r.url)}::${Number(r.score).toFixed(10)}`;
+                    const pairKey = (r: RawSearchResult) =>
+                        `${normalizeUrl(r.url)}::${Number(r.score).toFixed(10)}`;
                     const expectedPairs = new Set([...byUrl.values()].map(pairKey));
 
-                    const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-                        const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
-                        if (url === EXA_URL) {
-                            return Promise.resolve({
-                                ok: true,
-                                text: async () => "",
-                                json: async () => ({
-                                    results: setA.map((r) => ({
-                                        url: r.url,
-                                        title: r.title,
-                                        text: r.content,
-                                        score: r.score,
-                                        publishedDate: r.publishedDate,
-                                    })),
-                                }),
-                            } as Response);
-                        }
-                        if (url === SERPER_URL) {
-                            const serperNews = setB.map((r, i) => ({
-                                link: r.url,
-                                title: r.title,
-                                snippet: r.content,
-                                position: i + 1,
-                            }));
-                            return Promise.resolve({
-                                ok: true,
-                                text: async () => "",
-                                json: async () => ({ news: serperNews }),
-                            } as Response);
-                        }
-                        return Promise.reject(new Error(`Unexpected URL: ${url}`));
-                    });
+                    const fetchSpy = jest
+                        .spyOn(globalThis, "fetch")
+                        .mockImplementation((input: RequestInfo | URL) => {
+                            const url =
+                                typeof input === "string"
+                                    ? input
+                                    : input instanceof URL
+                                      ? input.href
+                                      : input.url;
+                            if (url === EXA_URL) {
+                                return Promise.resolve({
+                                    ok: true,
+                                    text: async () => "",
+                                    json: async () => ({
+                                        results: setA.map(r => ({
+                                            url: r.url,
+                                            title: r.title,
+                                            text: r.content,
+                                            score: r.score,
+                                            publishedDate: r.publishedDate,
+                                        })),
+                                    }),
+                                } as Response);
+                            }
+                            if (url === SERPER_URL) {
+                                const serperNews = setB.map((r, i) => ({
+                                    link: r.url,
+                                    title: r.title,
+                                    snippet: r.content,
+                                    position: i + 1,
+                                }));
+                                return Promise.resolve({
+                                    ok: true,
+                                    text: async () => "",
+                                    json: async () => ({ news: serperNews }),
+                                } as Response);
+                            }
+                            return Promise.reject(new Error(`Unexpected URL: ${url}`));
+                        });
 
                     setEnv({ SEARCH_PROVIDER: "parallel", SERPER_API_KEY: "test-serper-key" });
 
@@ -244,7 +274,7 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
 
                     fetchSpy.mockRestore();
 
-                    const resultUrls = results.map((r) => r.url);
+                    const resultUrls = results.map(r => r.url);
                     const uniqueUrls = new Set(resultUrls);
                     expect(resultUrls.length).toBe(uniqueUrls.size);
 
@@ -265,31 +295,45 @@ describe("Property 15: Parallel merge deduplicates by URL (Serper first)", () =>
 describe("Property 16: Default strategy matches Exa-only behavior", () => {
     it("when SEARCH_PROVIDER is unset, providerUsed is exa and only Exa is called", async () => {
         await fc.assert(
-            fc.asyncProperty(subQueriesArb, async (subQueries) => {
+            fc.asyncProperty(subQueriesArb, async subQueries => {
                 let exaCalls = 0;
                 let serperCalls = 0;
-                const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-                    const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
-                    if (url === EXA_URL) {
-                        exaCalls++;
-                        return Promise.resolve({
-                            ok: true,
-                            text: async () => "",
-                            json: async () => ({
-                                results: [{ url: "https://exa.ai/1", title: "T", text: "C", score: 0.9 }],
-                            }),
-                        } as Response);
-                    }
-                    if (url === SERPER_URL) {
-                        serperCalls++;
-                        return Promise.resolve({
-                            ok: true,
-                            text: async () => "",
-                            json: async () => ({ news: [] }),
-                        } as Response);
-                    }
-                    return Promise.reject(new Error(`Unexpected URL: ${url}`));
-                });
+                const fetchSpy = jest
+                    .spyOn(globalThis, "fetch")
+                    .mockImplementation((input: RequestInfo | URL) => {
+                        const url =
+                            typeof input === "string"
+                                ? input
+                                : input instanceof URL
+                                  ? input.href
+                                  : input.url;
+                        if (url === EXA_URL) {
+                            exaCalls++;
+                            return Promise.resolve({
+                                ok: true,
+                                text: async () => "",
+                                json: async () => ({
+                                    results: [
+                                        {
+                                            url: "https://exa.ai/1",
+                                            title: "T",
+                                            text: "C",
+                                            score: 0.9,
+                                        },
+                                    ],
+                                }),
+                            } as Response);
+                        }
+                        if (url === SERPER_URL) {
+                            serperCalls++;
+                            return Promise.resolve({
+                                ok: true,
+                                text: async () => "",
+                                json: async () => ({ news: [] }),
+                            } as Response);
+                        }
+                        return Promise.reject(new Error(`Unexpected URL: ${url}`));
+                    });
 
                 setEnv({ SEARCH_PROVIDER: undefined, SERPER_API_KEY: "test-serper-key" });
 
@@ -317,26 +361,40 @@ describe("Property 17: Missing Serper key downgrades Serper-dependent strategies
                 fc.constantFrom(...serperDependentStrategies),
                 subQueriesArb,
                 async (strategy, subQueries) => {
-                    const fetchSpy = jest.spyOn(globalThis, "fetch").mockImplementation((input: RequestInfo | URL) => {
-                        const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input).url;
-                        if (url === EXA_URL) {
-                            return Promise.resolve({
-                                ok: true,
-                                text: async () => "",
-                                json: async () => ({
-                                    results: [{ url: "https://exa.ai/1", title: "T", text: "C", score: 0.9 }],
-                                }),
-                            } as Response);
-                        }
-                        if (url === SERPER_URL) {
-                            return Promise.resolve({
-                                ok: true,
-                                text: async () => "",
-                                json: async () => ({ news: [] }),
-                            } as Response);
-                        }
-                        return Promise.reject(new Error(`Unexpected URL: ${url}`));
-                    });
+                    const fetchSpy = jest
+                        .spyOn(globalThis, "fetch")
+                        .mockImplementation((input: RequestInfo | URL) => {
+                            const url =
+                                typeof input === "string"
+                                    ? input
+                                    : input instanceof URL
+                                      ? input.href
+                                      : input.url;
+                            if (url === EXA_URL) {
+                                return Promise.resolve({
+                                    ok: true,
+                                    text: async () => "",
+                                    json: async () => ({
+                                        results: [
+                                            {
+                                                url: "https://exa.ai/1",
+                                                title: "T",
+                                                text: "C",
+                                                score: 0.9,
+                                            },
+                                        ],
+                                    }),
+                                } as Response);
+                            }
+                            if (url === SERPER_URL) {
+                                return Promise.resolve({
+                                    ok: true,
+                                    text: async () => "",
+                                    json: async () => ({ news: [] }),
+                                } as Response);
+                            }
+                            return Promise.reject(new Error(`Unexpected URL: ${url}`));
+                        });
 
                     setEnv({ SERPER_API_KEY: undefined });
                     const warnSpy = jest.spyOn(console, "warn").mockImplementation();

@@ -19,7 +19,12 @@ import {
 } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Input } from "~/app/employer/documents/components/ui/input";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "~/app/employer/documents/components/ui/tabs";
+import {
+    Tabs,
+    TabsList,
+    TabsTrigger,
+    TabsContent,
+} from "~/app/employer/documents/components/ui/tabs";
 import { ScrollArea } from "~/app/employer/documents/components/ui/scroll-area";
 import { Badge } from "~/app/employer/documents/components/ui/badge";
 // import { cn } from "~/lib/utils";
@@ -62,7 +67,10 @@ interface ArxivResult {
 type ResearchResult = DocumentResult | WebResult | ArxivResult;
 
 interface ResearchPanelProps {
-    onInsertContent: (content: string, citation?: { title: string; url?: string; authors?: string[]; date?: string }) => void;
+    onInsertContent: (
+        content: string,
+        citation?: { title: string; url?: string; authors?: string[]; date?: string }
+    ) => void;
     onClose: () => void;
     initialMode?: "documents" | "web" | "arxiv";
 }
@@ -81,7 +89,11 @@ const arxivCategories = [
     { value: "econ", label: "Economics" },
 ];
 
-export function ResearchPanel({ onInsertContent, onClose, initialMode = "documents" }: ResearchPanelProps) {
+export function ResearchPanel({
+    onInsertContent,
+    onClose,
+    initialMode = "documents",
+}: ResearchPanelProps) {
     const [query, setQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [results, setResults] = useState<ResearchResult[]>([]);
@@ -99,11 +111,12 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
         setError(null);
 
         try {
-            const sources = activeTab === "all" 
-                ? ["documents", "web", "arxiv"] 
-                : activeTab === "documents" 
-                    ? ["documents"] 
-                    : activeTab === "arxiv"
+            const sources =
+                activeTab === "all"
+                    ? ["documents", "web", "arxiv"]
+                    : activeTab === "documents"
+                      ? ["documents"]
+                      : activeTab === "arxiv"
                         ? ["arxiv"]
                         : ["web"];
 
@@ -121,7 +134,11 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
                 }),
             });
 
-            const data = await response.json() as { success: boolean; results?: ResearchResult[]; message?: string };
+            const data = (await response.json()) as {
+                success: boolean;
+                results?: ResearchResult[];
+                message?: string;
+            };
 
             if (data.success) {
                 setResults(data.results ?? []);
@@ -160,16 +177,16 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
         }
     };
 
-    const filteredResults = results.filter((r) => {
+    const filteredResults = results.filter(r => {
         if (activeTab === "all") return true;
         if (activeTab === "documents") return r.source === "document";
         if (activeTab === "arxiv") return r.source === "arxiv";
         return r.source === "web";
     });
 
-    const documentResults = results.filter((r) => r.source === "document");
-    const webResults = results.filter((r) => r.source === "web");
-    const arxivResults = results.filter((r) => r.source === "arxiv");
+    const documentResults = results.filter(r => r.source === "document");
+    const webResults = results.filter(r => r.source === "web");
+    const arxivResults = results.filter(r => r.source === "arxiv");
 
     const formatDate = (dateStr: string) => {
         try {
@@ -189,26 +206,30 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
     };
 
     return (
-        <div className="flex flex-col h-full bg-background">
+        <div className="bg-background flex h-full flex-col">
             {/* Header */}
-            <div className="p-4 border-b border-border">
-                <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-foreground flex items-center gap-2">
-                        <Search className="w-4 h-4" />
+            <div className="border-border border-b p-4">
+                <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-foreground flex items-center gap-2 font-semibold">
+                        <Search className="h-4 w-4" />
                         Research
                     </h3>
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
-                        <X className="w-4 h-4" />
+                        <X className="h-4 w-4" />
                     </Button>
                 </div>
 
                 {/* Search Input */}
                 <div className="flex gap-2">
                     <Input
-                        placeholder={activeTab === "arxiv" ? "Search arXiv papers..." : "Search documents and web..."}
+                        placeholder={
+                            activeTab === "arxiv"
+                                ? "Search arXiv papers..."
+                                : "Search documents and web..."
+                        }
                         value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                        onChange={e => setQuery(e.target.value)}
+                        onKeyDown={e => e.key === "Enter" && handleSearch()}
                         className="flex-1"
                     />
                     <Button
@@ -217,53 +238,53 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
                         className="bg-purple-600 hover:bg-purple-700"
                     >
                         {isLoading ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
-                            <Search className="w-4 h-4" />
+                            <Search className="h-4 w-4" />
                         )}
                     </Button>
                 </div>
 
                 {/* Search Type / arXiv Category */}
-                <div className="flex gap-1 mt-3 flex-wrap">
+                <div className="mt-3 flex flex-wrap gap-1">
                     {activeTab !== "arxiv" ? (
                         <>
                             <Button
                                 variant={searchType === "general" ? "secondary" : "ghost"}
                                 size="sm"
-                                className="text-xs h-7"
+                                className="h-7 text-xs"
                                 onClick={() => setSearchType("general")}
                             >
-                                <Globe className="w-3 h-3 mr-1" />
+                                <Globe className="mr-1 h-3 w-3" />
                                 General
                             </Button>
                             <Button
                                 variant={searchType === "academic" ? "secondary" : "ghost"}
                                 size="sm"
-                                className="text-xs h-7"
+                                className="h-7 text-xs"
                                 onClick={() => setSearchType("academic")}
                             >
-                                <BookOpen className="w-3 h-3 mr-1" />
+                                <BookOpen className="mr-1 h-3 w-3" />
                                 Academic
                             </Button>
                             <Button
                                 variant={searchType === "news" ? "secondary" : "ghost"}
                                 size="sm"
-                                className="text-xs h-7"
+                                className="h-7 text-xs"
                                 onClick={() => setSearchType("news")}
                             >
-                                <Newspaper className="w-3 h-3 mr-1" />
+                                <Newspaper className="mr-1 h-3 w-3" />
                                 News
                             </Button>
                         </>
                     ) : (
                         <div className="flex flex-wrap gap-1">
-                            {arxivCategories.map((cat) => (
+                            {arxivCategories.map(cat => (
                                 <Button
                                     key={cat.value}
                                     variant={arxivCategory === cat.value ? "secondary" : "ghost"}
                                     size="sm"
-                                    className="text-xs h-7"
+                                    className="h-7 text-xs"
                                     onClick={() => setArxivCategory(cat.value)}
                                 >
                                     {cat.label}
@@ -275,22 +296,22 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
             </div>
 
             {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
-                <div className="px-4 py-2 border-b border-border">
-                    <TabsList className="w-full grid grid-cols-4 h-9">
-                        <TabsTrigger value="all" className="text-xs px-2">
+            <Tabs value={activeTab} onValueChange={v => setActiveTab(v as typeof activeTab)}>
+                <div className="border-border border-b px-4 py-2">
+                    <TabsList className="grid h-9 w-full grid-cols-4">
+                        <TabsTrigger value="all" className="px-2 text-xs">
                             All ({results.length})
                         </TabsTrigger>
-                        <TabsTrigger value="documents" className="text-xs px-2">
-                            <FileText className="w-3 h-3 mr-1 hidden sm:inline" />
+                        <TabsTrigger value="documents" className="px-2 text-xs">
+                            <FileText className="mr-1 hidden h-3 w-3 sm:inline" />
                             Docs ({documentResults.length})
                         </TabsTrigger>
-                        <TabsTrigger value="web" className="text-xs px-2">
-                            <Globe className="w-3 h-3 mr-1 hidden sm:inline" />
+                        <TabsTrigger value="web" className="px-2 text-xs">
+                            <Globe className="mr-1 hidden h-3 w-3 sm:inline" />
                             Web ({webResults.length})
                         </TabsTrigger>
-                        <TabsTrigger value="arxiv" className="text-xs px-2">
-                            <GraduationCap className="w-3 h-3 mr-1 hidden sm:inline" />
+                        <TabsTrigger value="arxiv" className="px-2 text-xs">
+                            <GraduationCap className="mr-1 hidden h-3 w-3 sm:inline" />
                             arXiv ({arxivResults.length})
                         </TabsTrigger>
                     </TabsList>
@@ -300,21 +321,21 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
                 <ScrollArea className="flex-1">
                     <TabsContent value={activeTab} className="m-0 p-4">
                         {error && (
-                            <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg text-sm">
+                            <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
                                 {error}
                             </div>
                         )}
 
                         {!isLoading && results.length === 0 && !error && (
-                            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+                            <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
                                 {activeTab === "arxiv" ? (
                                     <>
-                                        <GraduationCap className="w-12 h-12 mb-4 opacity-20" />
-                                        <p className="text-sm text-center">
+                                        <GraduationCap className="mb-4 h-12 w-12 opacity-20" />
+                                        <p className="text-center text-sm">
                                             Search for academic papers from <br />
-                                            <a 
-                                                href="https://arxiv.org" 
-                                                target="_blank" 
+                                            <a
+                                                href="https://arxiv.org"
+                                                target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-purple-500 hover:underline"
                                             >
@@ -324,8 +345,10 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
                                     </>
                                 ) : (
                                     <>
-                                        <Search className="w-12 h-12 mb-4 opacity-20" />
-                                        <p className="text-sm">Search for information to include in your document</p>
+                                        <Search className="mb-4 h-12 w-12 opacity-20" />
+                                        <p className="text-sm">
+                                            Search for information to include in your document
+                                        </p>
                                     </>
                                 )}
                             </div>
@@ -333,13 +356,13 @@ export function ResearchPanel({ onInsertContent, onClose, initialMode = "documen
 
                         {isLoading && (
                             <div className="flex flex-col items-center justify-center py-12">
-                                <Loader2 className="w-8 h-8 animate-spin text-purple-500 mb-4" />
-                                <p className="text-sm text-muted-foreground">Searching...</p>
+                                <Loader2 className="mb-4 h-8 w-8 animate-spin text-purple-500" />
+                                <p className="text-muted-foreground text-sm">Searching...</p>
                             </div>
                         )}
 
                         <div className="space-y-3">
-                            {filteredResults.map((result) => (
+                            {filteredResults.map(result => (
                                 <ResultCard
                                     key={result.id}
                                     result={result}
@@ -367,55 +390,58 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
     if (result.source === "arxiv") {
         const arxivResult = result;
         return (
-            <div className="p-4 border border-border rounded-lg hover:border-rose-300 dark:hover:border-rose-700 transition-colors group bg-gradient-to-br from-rose-50/50 to-transparent dark:from-rose-950/20">
+            <div className="border-border group rounded-lg border bg-gradient-to-br from-rose-50/50 to-transparent p-4 transition-colors hover:border-rose-300 dark:from-rose-950/20 dark:hover:border-rose-700">
                 {/* Header */}
-                <div className="flex items-start justify-between gap-2 mb-2">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <div className="p-1.5 bg-rose-100 dark:bg-rose-900/30 rounded-md shrink-0">
-                            <GraduationCap className="w-4 h-4 text-rose-500" />
+                <div className="mb-2 flex items-start justify-between gap-2">
+                    <div className="flex min-w-0 flex-1 items-center gap-2">
+                        <div className="shrink-0 rounded-md bg-rose-100 p-1.5 dark:bg-rose-900/30">
+                            <GraduationCap className="h-4 w-4 text-rose-500" />
                         </div>
-                        <span className="font-medium text-sm line-clamp-2 leading-tight">
+                        <span className="line-clamp-2 text-sm font-medium leading-tight">
                             {arxivResult.title}
                         </span>
                     </div>
-                    <Badge variant="outline" className="text-[10px] shrink-0 bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800">
+                    <Badge
+                        variant="outline"
+                        className="shrink-0 border-rose-200 bg-rose-50 text-[10px] dark:border-rose-800 dark:bg-rose-900/20"
+                    >
                         {arxivResult.arxivId}
                     </Badge>
                 </div>
 
                 {/* Authors */}
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
-                    <Users className="w-3 h-3" />
+                <div className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs">
+                    <Users className="h-3 w-3" />
                     <span className="line-clamp-1">{formatAuthors(arxivResult.authors, 4)}</span>
                 </div>
 
                 {/* Summary */}
-                <p className="text-xs text-muted-foreground line-clamp-3 mb-3 leading-relaxed">
+                <p className="text-muted-foreground mb-3 line-clamp-3 text-xs leading-relaxed">
                     {arxivResult.summary}
                 </p>
 
                 {/* Metadata */}
-                <div className="flex items-center gap-3 text-[10px] text-muted-foreground mb-3">
+                <div className="text-muted-foreground mb-3 flex items-center gap-3 text-[10px]">
                     <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
+                        <Calendar className="h-3 w-3" />
                         {formatDate(arxivResult.published)}
                     </span>
-                    {arxivResult.categories.slice(0, 3).map((cat) => (
+                    {arxivResult.categories.slice(0, 3).map(cat => (
                         <span key={cat} className="flex items-center gap-1">
-                            <Tag className="w-3 h-3" />
+                            <Tag className="h-3 w-3" />
                             {cat}
                         </span>
                     ))}
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                     <Button
                         size="sm"
-                        className="h-7 text-xs bg-rose-500 hover:bg-rose-600"
+                        className="h-7 bg-rose-500 text-xs hover:bg-rose-600"
                         onClick={onInsert}
                     >
-                        <Plus className="w-3 h-3 mr-1" />
+                        <Plus className="mr-1 h-3 w-3" />
                         Insert & Cite
                     </Button>
                     <Button
@@ -424,7 +450,7 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
                         className="h-7 text-xs"
                         onClick={() => window.open(arxivResult.pdfUrl, "_blank")}
                     >
-                        <Download className="w-3 h-3 mr-1" />
+                        <Download className="mr-1 h-3 w-3" />
                         PDF
                     </Button>
                     <Button
@@ -433,7 +459,7 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
                         className="h-7 text-xs"
                         onClick={() => window.open(arxivResult.url, "_blank")}
                     >
-                        <ExternalLink className="w-3 h-3 mr-1" />
+                        <ExternalLink className="mr-1 h-3 w-3" />
                         arXiv
                     </Button>
                 </div>
@@ -444,11 +470,11 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
     if (result.source === "document") {
         const docResult = result;
         return (
-            <div className="p-3 border border-border rounded-lg hover:border-blue-300 dark:hover:border-blue-700 transition-colors group">
-                <div className="flex items-start justify-between gap-2 mb-2">
+            <div className="border-border group rounded-lg border p-3 transition-colors hover:border-blue-300 dark:hover:border-blue-700">
+                <div className="mb-2 flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-blue-500" />
-                        <span className="font-medium text-sm line-clamp-1">
+                        <FileText className="h-4 w-4 text-blue-500" />
+                        <span className="line-clamp-1 text-sm font-medium">
                             {docResult.documentTitle ?? "Document"}
                         </span>
                     </div>
@@ -457,24 +483,17 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
                     </Badge>
                 </div>
 
-                <p className="text-xs text-muted-foreground line-clamp-3 mb-2">
+                <p className="text-muted-foreground mb-2 line-clamp-3 text-xs">
                     {docResult.content}
                 </p>
 
                 {docResult.page && (
-                    <p className="text-[10px] text-muted-foreground mb-2">
-                        Page {docResult.page}
-                    </p>
+                    <p className="text-muted-foreground mb-2 text-[10px]">Page {docResult.page}</p>
                 )}
 
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-7 text-xs"
-                        onClick={onInsert}
-                    >
-                        <Plus className="w-3 h-3 mr-1" />
+                <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={onInsert}>
+                        <Plus className="mr-1 h-3 w-3" />
                         Insert
                     </Button>
                 </div>
@@ -485,31 +504,22 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
     // Web result
     const webResult = result;
     return (
-        <div className="p-3 border border-border rounded-lg hover:border-green-300 dark:hover:border-green-700 transition-colors group">
-            <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="border-border group rounded-lg border p-3 transition-colors hover:border-green-300 dark:hover:border-green-700">
+            <div className="mb-2 flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-green-500" />
-                    <span className="font-medium text-sm line-clamp-1">
-                        {webResult.title}
-                    </span>
+                    <Globe className="h-4 w-4 text-green-500" />
+                    <span className="line-clamp-1 text-sm font-medium">{webResult.title}</span>
                 </div>
                 <Badge variant="secondary" className="text-[10px]">
                     {Math.round(webResult.relevanceScore * 100)}%
                 </Badge>
             </div>
 
-            <p className="text-xs text-muted-foreground line-clamp-3 mb-2">
-                {webResult.snippet}
-            </p>
+            <p className="text-muted-foreground mb-2 line-clamp-3 text-xs">{webResult.snippet}</p>
 
-            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-7 text-xs"
-                    onClick={onInsert}
-                >
-                    <Plus className="w-3 h-3 mr-1" />
+            <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                <Button size="sm" variant="outline" className="h-7 text-xs" onClick={onInsert}>
+                    <Plus className="mr-1 h-3 w-3" />
                     Insert
                 </Button>
                 <Button
@@ -518,7 +528,7 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
                     className="h-7 text-xs"
                     onClick={() => window.open(webResult.url, "_blank")}
                 >
-                    <ExternalLink className="w-3 h-3 mr-1" />
+                    <ExternalLink className="mr-1 h-3 w-3" />
                     Open
                 </Button>
             </div>

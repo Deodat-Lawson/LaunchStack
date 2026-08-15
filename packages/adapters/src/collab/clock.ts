@@ -6,15 +6,15 @@
 import { randomUUID } from "node:crypto";
 
 export interface Clock {
-  /** Milliseconds since epoch. */
-  now(): number;
-  /** ISO-8601 timestamp for `now()`. */
-  iso(): string;
+    /** Milliseconds since epoch. */
+    now(): number;
+    /** ISO-8601 timestamp for `now()`. */
+    iso(): string;
 }
 
 export const systemClock: Clock = {
-  now: () => Date.now(),
-  iso: () => new Date().toISOString(),
+    now: () => Date.now(),
+    iso: () => new Date().toISOString(),
 };
 
 /**
@@ -22,26 +22,26 @@ export const systemClock: Clock = {
  * by tests that assert on ordering without sleeping.
  */
 export function fixedClock(startMs = 0, stepMs = 1000): Clock & { advance(ms?: number): void } {
-  let current = startMs;
-  return {
-    now: () => current,
-    iso: () => new Date(current).toISOString(),
-    advance(ms = stepMs) {
-      current += ms;
-    },
-  };
+    let current = startMs;
+    return {
+        now: () => current,
+        iso: () => new Date(current).toISOString(),
+        advance(ms = stepMs) {
+            current += ms;
+        },
+    };
 }
 
 export type IdFactory = (prefix: string) => string;
 
-export const randomIdFactory: IdFactory = (prefix) => `${prefix}_${randomUUID().replace(/-/g, "")}`;
+export const randomIdFactory: IdFactory = prefix => `${prefix}_${randomUUID().replace(/-/g, "")}`;
 
 /** Monotonic ids — `msg_1`, `msg_2`, … — for deterministic assertions. */
 export function sequentialIdFactory(): IdFactory {
-  const counters = new Map<string, number>();
-  return (prefix) => {
-    const next = (counters.get(prefix) ?? 0) + 1;
-    counters.set(prefix, next);
-    return `${prefix}_${next}`;
-  };
+    const counters = new Map<string, number>();
+    return prefix => {
+        const next = (counters.get(prefix) ?? 0) + 1;
+        counters.set(prefix, next);
+        return `${prefix}_${next}`;
+    };
 }

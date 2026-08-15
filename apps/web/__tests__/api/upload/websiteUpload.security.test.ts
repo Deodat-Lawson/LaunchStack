@@ -12,11 +12,8 @@ jest.mock("~/lib/require-workspace-context", () => ({
 // in-memory store's cleanup setInterval from holding the Jest process open
 // after the run.
 jest.mock("~/lib/rate-limit-middleware", () => ({
-    withRateLimit: (
-        _request: Request,
-        _config: unknown,
-        handler: () => Promise<Response>
-    ) => handler(),
+    withRateLimit: (_request: Request, _config: unknown, handler: () => Promise<Response>) =>
+        handler(),
 }));
 
 jest.mock("~/lib/rate-limiter", () => ({
@@ -82,14 +79,8 @@ function requestFor(body: Record<string, unknown>) {
 }
 
 /** Minimal Response stand-in for the manual-redirect fetch loop. */
-function fetchResponse(
-    status: number,
-    headers: Record<string, string> = {},
-    html = ""
-): Response {
-    const lower = Object.fromEntries(
-        Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v])
-    );
+function fetchResponse(status: number, headers: Record<string, string> = {}, html = ""): Response {
+    const lower = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));
     return {
         status,
         ok: status >= 200 && status < 300,
@@ -138,7 +129,11 @@ describe("POST /api/upload/website", () => {
     it("rejects a hostname that resolves to a private address (SSRF), even in crawl mode", async () => {
         lookupMock.mockResolvedValue([{ address: "10.1.2.3", family: 4 }] as never);
         const response = await POST(
-            requestFor({ userId: "user_session", url: "https://internal.corp.example/", crawl: true })
+            requestFor({
+                userId: "user_session",
+                url: "https://internal.corp.example/",
+                crawl: true,
+            })
         );
         expect(response.status).toBe(400);
         expect(mockInngestSend).not.toHaveBeenCalled();
@@ -147,9 +142,7 @@ describe("POST /api/upload/website", () => {
     it("rejects a redirect chain that lands on a private address (single-page mode)", async () => {
         lookupMock.mockResolvedValue([{ address: "93.184.216.34", family: 4 }] as never);
         // Public seed URL answers with a redirect into the internal network.
-        fetchMock.mockResolvedValue(
-            fetchResponse(302, { Location: "http://192.168.0.10/admin" })
-        );
+        fetchMock.mockResolvedValue(fetchResponse(302, { Location: "http://192.168.0.10/admin" }));
 
         const response = await POST(
             requestFor({ userId: "user_session", url: "https://example.com/docs" })
@@ -166,9 +159,7 @@ describe("POST /api/upload/website", () => {
 
     it("rejects a redirect to a hex-mapped IPv6 loopback (single-page mode)", async () => {
         lookupMock.mockResolvedValue([{ address: "93.184.216.34", family: 4 }] as never);
-        fetchMock.mockResolvedValue(
-            fetchResponse(301, { Location: "http://[::ffff:7f00:1]/" })
-        );
+        fetchMock.mockResolvedValue(fetchResponse(301, { Location: "http://[::ffff:7f00:1]/" }));
 
         const response = await POST(
             requestFor({ userId: "user_session", url: "https://example.com/docs" })
@@ -182,9 +173,7 @@ describe("POST /api/upload/website", () => {
     it("indexes a page that follows a public redirect chain", async () => {
         lookupMock.mockResolvedValue([{ address: "93.184.216.34", family: 4 }] as never);
         fetchMock
-            .mockResolvedValueOnce(
-                fetchResponse(301, { Location: "https://example.com/docs" })
-            )
+            .mockResolvedValueOnce(fetchResponse(301, { Location: "https://example.com/docs" }))
             .mockResolvedValueOnce(
                 fetchResponse(
                     200,

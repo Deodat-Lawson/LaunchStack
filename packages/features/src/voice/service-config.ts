@@ -16,7 +16,7 @@ function warnOnce(): void {
     console.warn(
         "[voice] SIDECAR_URL / SIDECAR_API_KEY are deprecated (ADR-004): the sidecar was " +
             "replaced by services/transcription. Set TRANSCRIPTION_SERVICE_URL and " +
-            "TRANSCRIPTION_SERVICE_API_KEY instead.",
+            "TRANSCRIPTION_SERVICE_API_KEY instead."
     );
 }
 

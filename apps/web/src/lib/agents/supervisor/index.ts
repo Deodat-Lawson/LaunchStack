@@ -4,9 +4,9 @@
  * checks and optionally an LLM call for deeper validation.
  */
 
-import { runGuardrails, type GuardrailResult } from '@launchstack/core/guardrails';
+import { runGuardrails, type GuardrailResult } from "@launchstack/core/guardrails";
 
-export type AgentType = 'predictive-analysis' | 'document-qa';
+export type AgentType = "predictive-analysis" | "document-qa";
 
 export type SupervisorInput = {
     agentType: AgentType;
@@ -24,22 +24,26 @@ export type SupervisorResult = {
 };
 
 const AGENT_DISCLAIMERS: Partial<Record<AgentType, string>> = {
-    'predictive-analysis': 'This analysis is AI-generated and may not capture all document references. Always verify critical findings manually.',
+    "predictive-analysis":
+        "This analysis is AI-generated and may not capture all document references. Always verify critical findings manually.",
 };
 
-const AGENT_GUARDRAIL_CONFIG: Record<AgentType, {
-    enableContentFilter: boolean;
-    enableGroundingCheck: boolean;
-    enableConfidenceGate: boolean;
-    groundingThreshold: number;
-}> = {
-    'predictive-analysis': {
+const AGENT_GUARDRAIL_CONFIG: Record<
+    AgentType,
+    {
+        enableContentFilter: boolean;
+        enableGroundingCheck: boolean;
+        enableConfidenceGate: boolean;
+        groundingThreshold: number;
+    }
+> = {
+    "predictive-analysis": {
         enableContentFilter: true,
         enableGroundingCheck: true,
         enableConfidenceGate: false,
         groundingThreshold: 0.25,
     },
-    'document-qa': {
+    "document-qa": {
         enableContentFilter: true,
         enableGroundingCheck: true,
         enableConfidenceGate: true,
@@ -88,22 +92,27 @@ export function validatePredictiveAnalysis(
         recommendations: string[];
         insights?: Array<{ title: string; category: string }>;
     },
-    sourceChunks: string[],
+    sourceChunks: string[]
 ): SupervisorResult {
     const issues: string[] = [];
-    const sourceText = sourceChunks.join(' ').toLowerCase();
+    const sourceText = sourceChunks.join(" ").toLowerCase();
 
     for (const doc of result.missingDocuments) {
-        if (doc.priority === 'high') {
-            const nameWords = doc.documentName.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+        if (doc.priority === "high") {
+            const nameWords = doc.documentName
+                .toLowerCase()
+                .split(/\s+/)
+                .filter(w => w.length > 3);
             const foundInSource = nameWords.some(w => sourceText.includes(w));
             if (!foundInSource) {
-                issues.push(`High-priority "${doc.documentName}" may not be grounded in source text`);
+                issues.push(
+                    `High-priority "${doc.documentName}" may not be grounded in source text`
+                );
             }
         }
     }
 
-    const vaguePhrases = ['consider', 'you may want', 'it might be helpful', 'think about'];
+    const vaguePhrases = ["consider", "you may want", "it might be helpful", "think about"];
     for (const rec of result.recommendations) {
         const lower = rec.toLowerCase();
         if (vaguePhrases.some(p => lower.startsWith(p))) {
@@ -126,7 +135,7 @@ export function validatePredictiveAnalysis(
         approved: issues.length === 0 && guardrails.passed,
         guardrails,
         issues,
-        disclaimer: AGENT_DISCLAIMERS['predictive-analysis'],
+        disclaimer: AGENT_DISCLAIMERS["predictive-analysis"],
     };
 }
 
@@ -136,16 +145,18 @@ export function validatePredictiveAnalysis(
 export function validateQAResponse(
     response: string,
     sourceChunks: string[],
-    persona?: string,
+    persona?: string
 ): SupervisorResult {
-    const guardrails = runGuardrails(response, sourceChunks, AGENT_GUARDRAIL_CONFIG['document-qa']);
+    const guardrails = runGuardrails(response, sourceChunks, AGENT_GUARDRAIL_CONFIG["document-qa"]);
     const issues = [...guardrails.warnings];
 
     let disclaimer: string | undefined;
-    if (persona === 'legal-expert') {
-        disclaimer = 'This is AI-generated analysis, not legal advice. Consult a qualified attorney for legal matters.';
-    } else if (persona === 'financial-expert') {
-        disclaimer = 'This is AI-generated analysis, not financial advice. Consult a qualified financial advisor.';
+    if (persona === "legal-expert") {
+        disclaimer =
+            "This is AI-generated analysis, not legal advice. Consult a qualified attorney for legal matters.";
+    } else if (persona === "financial-expert") {
+        disclaimer =
+            "This is AI-generated analysis, not financial advice. Consult a qualified financial advisor.";
     }
 
     let adjustedOutput: string | undefined;

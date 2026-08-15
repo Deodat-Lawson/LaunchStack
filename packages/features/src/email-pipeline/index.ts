@@ -18,22 +18,22 @@ export * from "./automation";
 export * from "./run";
 
 export {
-  addSuppression,
-  appendTemplateVersion,
-  claimAutomationCampaign,
-  createCampaign,
-  freezeRecipients,
-  reclaimAbandonedAttempts,
-  isSuppressed,
-  getCampaign,
-  listCampaigns,
-  listTemplateVersions,
-  getTemplateVersion,
-  getLatestTemplateVersion,
-  listApprovals,
-  listRecipients,
-  upsertRecipients,
-  listSendAttempts,
+    addSuppression,
+    appendTemplateVersion,
+    claimAutomationCampaign,
+    createCampaign,
+    freezeRecipients,
+    reclaimAbandonedAttempts,
+    isSuppressed,
+    getCampaign,
+    listCampaigns,
+    listTemplateVersions,
+    getTemplateVersion,
+    getLatestTemplateVersion,
+    listApprovals,
+    listRecipients,
+    upsertRecipients,
+    listSendAttempts,
 } from "./db";
 
 /* member.md — recipients, validation, company field mapping, seed templates. */

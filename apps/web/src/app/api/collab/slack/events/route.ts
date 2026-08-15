@@ -29,62 +29,62 @@ import { getSlackSigningSecret } from "~/server/collab/slack";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  const signingSecret = getSlackSigningSecret();
-  if (!signingSecret) {
-    return NextResponse.json(
-      { error: "Slack events are not enabled. Set SLACK_SIGNING_SECRET." },
-      { status: 503 },
-    );
-  }
+    const signingSecret = getSlackSigningSecret();
+    if (!signingSecret) {
+        return NextResponse.json(
+            { error: "Slack events are not enabled. Set SLACK_SIGNING_SECRET." },
+            { status: 503 }
+        );
+    }
 
-  const rawBody = await request.text();
-  const headers: Record<string, string> = {};
-  request.headers.forEach((value, key) => {
-    headers[key.toLowerCase()] = value;
-  });
+    const rawBody = await request.text();
+    const headers: Record<string, string> = {};
+    request.headers.forEach((value, key) => {
+        headers[key.toLowerCase()] = value;
+    });
 
-  const verified = verifySlackRequest({ signingSecret, rawBody, headers });
-  if (!verified.ok) {
-    return NextResponse.json({ error: `Rejected: ${verified.reason}` }, { status: 401 });
-  }
+    const verified = verifySlackRequest({ signingSecret, rawBody, headers });
+    if (!verified.ok) {
+        return NextResponse.json({ error: `Rejected: ${verified.reason}` }, { status: 401 });
+    }
 
-  let envelope: SlackEventEnvelope;
-  try {
-    envelope = JSON.parse(rawBody) as SlackEventEnvelope;
-  } catch {
-    return NextResponse.json({ error: "Malformed JSON" }, { status: 400 });
-  }
+    let envelope: SlackEventEnvelope;
+    try {
+        envelope = JSON.parse(rawBody) as SlackEventEnvelope;
+    } catch {
+        return NextResponse.json({ error: "Malformed JSON" }, { status: 400 });
+    }
 
-  if (envelope.type === "url_verification") {
-    return NextResponse.json({ challenge: envelope.challenge });
-  }
+    if (envelope.type === "url_verification") {
+        return NextResponse.json({ challenge: envelope.challenge });
+    }
 
-  const slackChannelId = envelope.event?.channel;
-  if (!slackChannelId) return NextResponse.json({ ok: true });
+    const slackChannelId = envelope.event?.channel;
+    if (!slackChannelId) return NextResponse.json({ ok: true });
 
-  // Route to the most recent meeting mirroring this Slack channel. A finished
-  // meeting still accepts messages into its channel — the transcript stays
-  // open even when the agents have stopped.
-  const [row] = await db
-    .select()
-    .from(collabMeeting)
-    .where(eq(collabMeeting.slackChannelId, slackChannelId))
-    .orderBy(collabMeeting.createdAt)
-    .limit(1);
+    // Route to the most recent meeting mirroring this Slack channel. A finished
+    // meeting still accepts messages into its channel — the transcript stays
+    // open even when the agents have stopped.
+    const [row] = await db
+        .select()
+        .from(collabMeeting)
+        .where(eq(collabMeeting.slackChannelId, slackChannelId))
+        .orderBy(collabMeeting.createdAt)
+        .limit(1);
 
-  if (!row) return NextResponse.json({ ok: true, ignored: "no_meeting_for_channel" });
+    if (!row) return NextResponse.json({ ok: true, ignored: "no_meeting_for_channel" });
 
-  // Loading the runtime is what attaches the bridge in this process.
-  await getMeetingRuntime(row.id, row.companyId);
-  const bridge = getMeetingBridge(row.id);
-  if (!bridge) return NextResponse.json({ ok: true, ignored: "mirror_disabled" });
+    // Loading the runtime is what attaches the bridge in this process.
+    await getMeetingRuntime(row.id, row.companyId);
+    const bridge = getMeetingBridge(row.id);
+    if (!bridge) return NextResponse.json({ ok: true, ignored: "mirror_disabled" });
 
-  try {
-    const result = await bridge.handleEvent(envelope);
-    return NextResponse.json(result.responseBody ?? { ok: true });
-  } catch (err) {
-    console.error("[collab:slack] event handling failed:", err);
-    // Answering 200 stops Slack retrying an event we will fail again anyway.
-    return NextResponse.json({ ok: true, error: "handler_failed" });
-  }
+    try {
+        const result = await bridge.handleEvent(envelope);
+        return NextResponse.json(result.responseBody ?? { ok: true });
+    } catch (err) {
+        console.error("[collab:slack] event handling failed:", err);
+        // Answering 200 stops Slack retrying an event we will fail again anyway.
+        return NextResponse.json({ ok: true, error: "handler_failed" });
+    }
 }

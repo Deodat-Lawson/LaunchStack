@@ -5,13 +5,10 @@ import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
 
 import { embedNote } from "../notes/embed-note";
 import { countUnrepairedDocuments, repairDocumentVersions } from "./document-version-repair";
+import { countUnstampedFileUploads, stampFileUploadsCompanyId } from "./file-uploads-company-id";
 import {
-  countUnstampedFileUploads,
-  stampFileUploadsCompanyId,
-} from "./file-uploads-company-id";
-import {
-  countUsersMissingMembership,
-  provisionMissingMemberships,
+    countUsersMissingMembership,
+    provisionMissingMemberships,
 } from "./user-company-memberships";
 
 /**
@@ -37,7 +34,7 @@ const pendingNotesSql = (after: number, limit?: number) => sql`
 `;
 
 function rowsOf<T>(result: unknown): T[] {
-  return Array.isArray(result) ? (result as T[]) : ((result as { rows?: T[] }).rows ?? []);
+    return Array.isArray(result) ? (result as T[]) : ((result as { rows?: T[] }).rows ?? []);
 }
 
 /**
@@ -48,47 +45,47 @@ function rowsOf<T>(result: unknown): T[] {
  * repopulate them.
  */
 const noteEmbeddings: Backfill = {
-  id: "2026-08-note-embeddings",
-  description: "Embed notes that have no row in document_note_embeddings",
+    id: "2026-08-note-embeddings",
+    description: "Embed notes that have no row in document_note_embeddings",
 
-  async estimate({ db, cursor }) {
-    const after = typeof cursor === "number" ? cursor : 0;
-    const rows = rowsOf<{ n: number }>(
-      await db.execute(sql`SELECT count(*)::int AS n FROM (${pendingNotesSql(after)}) t`),
-    );
-    return rows[0]?.n ?? 0;
-  },
-
-  async step({ db, cursor, batchSize }) {
-    // Keyset pagination on note id. The cursor is the last id handled, so an
-    // interrupted run resumes instead of rescanning from zero.
-    const after = typeof cursor === "number" ? cursor : 0;
-    const rows = rowsOf<{ id: number }>(await db.execute(pendingNotesSql(after, batchSize)));
-
-    if (rows.length === 0) return { cursor: null, processed: 0 };
-
-    let processed = 0;
-    let lastGood = after;
-    for (const row of rows) {
-      try {
-        await embedNote(row.id);
-      } catch (err) {
-        // Stop at the last SUCCESSFUL id and fail loudly. Advancing past a
-        // failed note would let the run finish and mark itself done while that
-        // note stays unembedded forever — a re-run would never revisit it.
-        throw new Error(
-          `note ${row.id} failed to embed after ${processed} row(s) in this batch; ` +
-            `cursor stays at ${lastGood} so a re-run retries from there. ` +
-            `Cause: ${err instanceof Error ? err.message : String(err)}`,
-          { cause: err },
+    async estimate({ db, cursor }) {
+        const after = typeof cursor === "number" ? cursor : 0;
+        const rows = rowsOf<{ n: number }>(
+            await db.execute(sql`SELECT count(*)::int AS n FROM (${pendingNotesSql(after)}) t`)
         );
-      }
-      processed += 1;
-      lastGood = row.id;
-    }
+        return rows[0]?.n ?? 0;
+    },
 
-    return { cursor: lastGood, processed };
-  },
+    async step({ db, cursor, batchSize }) {
+        // Keyset pagination on note id. The cursor is the last id handled, so an
+        // interrupted run resumes instead of rescanning from zero.
+        const after = typeof cursor === "number" ? cursor : 0;
+        const rows = rowsOf<{ id: number }>(await db.execute(pendingNotesSql(after, batchSize)));
+
+        if (rows.length === 0) return { cursor: null, processed: 0 };
+
+        let processed = 0;
+        let lastGood = after;
+        for (const row of rows) {
+            try {
+                await embedNote(row.id);
+            } catch (err) {
+                // Stop at the last SUCCESSFUL id and fail loudly. Advancing past a
+                // failed note would let the run finish and mark itself done while that
+                // note stays unembedded forever — a re-run would never revisit it.
+                throw new Error(
+                    `note ${row.id} failed to embed after ${processed} row(s) in this batch; ` +
+                        `cursor stays at ${lastGood} so a re-run retries from there. ` +
+                        `Cause: ${err instanceof Error ? err.message : String(err)}`,
+                    { cause: err }
+                );
+            }
+            processed += 1;
+            lastGood = row.id;
+        }
+
+        return { cursor: lastGood, processed };
+    },
 };
 
 /**
@@ -107,19 +104,19 @@ const noteEmbeddings: Backfill = {
  * src/server/backfills/sql/document-version-repair.sql.
  */
 const documentVersionsBackfill: Backfill = {
-  id: "2026-08-document-versions",
-  description: "Repair v1 rows, current-version pointers and RLM version links",
-  // Pure SQL — no embeddings, no LLM. Runnable with only DATABASE_URL.
-  requiresEngine: false,
+    id: "2026-08-document-versions",
+    description: "Repair v1 rows, current-version pointers and RLM version links",
+    // Pure SQL — no embeddings, no LLM. Runnable with only DATABASE_URL.
+    requiresEngine: false,
 
-  estimate: ({ db }) => countUnrepairedDocuments(db),
+    estimate: ({ db }) => countUnrepairedDocuments(db),
 
-  async step({ db }) {
-    const remaining = await countUnrepairedDocuments(db);
-    await repairDocumentVersions(db);
-    // One pass handles every row, so there is never a resume point.
-    return { cursor: null, processed: remaining };
-  },
+    async step({ db }) {
+        const remaining = await countUnrepairedDocuments(db);
+        await repairDocumentVersions(db);
+        // One pass handles every row, so there is never a resume point.
+        return { cursor: null, processed: remaining };
+    },
 };
 
 /**
@@ -130,19 +127,18 @@ const documentVersionsBackfill: Backfill = {
  * here so clean-database migrates stay DML-free.
  */
 const fileUploadsCompanyId: Backfill = {
-  id: "2026-08-file-uploads-company-id",
-  description:
-    "Stamp and reconcile file_uploads.company_id from canonical document URLs",
-  requiresEngine: false,
-  requiresMigration: "20260809142627_file_uploads_company_id",
+    id: "2026-08-file-uploads-company-id",
+    description: "Stamp and reconcile file_uploads.company_id from canonical document URLs",
+    requiresEngine: false,
+    requiresMigration: "20260809142627_file_uploads_company_id",
 
-  estimate: ({ db }) => countUnstampedFileUploads(db),
+    estimate: ({ db }) => countUnstampedFileUploads(db),
 
-  async step({ db }) {
-    const remaining = await countUnstampedFileUploads(db);
-    await stampFileUploadsCompanyId(db);
-    return { cursor: null, processed: remaining };
-  },
+    async step({ db }) {
+        const remaining = await countUnstampedFileUploads(db);
+        await stampFileUploadsCompanyId(db);
+        return { cursor: null, processed: remaining };
+    },
 };
 
 /**
@@ -156,24 +152,23 @@ const fileUploadsCompanyId: Backfill = {
  * from the legacy default-workspace pointer.
  */
 const userCompanyMembershipsBackfill: Backfill = {
-  id: "2026-08-user-company-memberships",
-  description:
-    "Provision user_company_memberships for verified users that predate the table",
-  requiresEngine: false,
+    id: "2026-08-user-company-memberships",
+    description: "Provision user_company_memberships for verified users that predate the table",
+    requiresEngine: false,
 
-  estimate: ({ db }) => countUsersMissingMembership(db),
+    estimate: ({ db }) => countUsersMissingMembership(db),
 
-  async step({ db }) {
-    const remaining = await countUsersMissingMembership(db);
-    await provisionMissingMemberships(db);
-    // One statement covers every row, so there is never a resume point.
-    return { cursor: null, processed: remaining };
-  },
+    async step({ db }) {
+        const remaining = await countUsersMissingMembership(db);
+        await provisionMissingMemberships(db);
+        // One statement covers every row, so there is never a resume point.
+        return { cursor: null, processed: remaining };
+    },
 };
 
 export const BACKFILLS: Backfill[] = [
-  noteEmbeddings,
-  documentVersionsBackfill,
-  fileUploadsCompanyId,
-  userCompanyMembershipsBackfill,
+    noteEmbeddings,
+    documentVersionsBackfill,
+    fileUploadsCompanyId,
+    userCompanyMembershipsBackfill,
 ];

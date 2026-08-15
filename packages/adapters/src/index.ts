@@ -5,27 +5,27 @@
  * composition roots; nothing here reads process.env.
  */
 export {
-  DrizzleOutboxStore,
-  enqueueOutboxEventsWithRevive,
-  type DrizzleOutboxStoreOptions,
+    DrizzleOutboxStore,
+    enqueueOutboxEventsWithRevive,
+    type DrizzleOutboxStoreOptions,
 } from "./outbox/drizzle-outbox-store";
 
 export {
-  createDocumentLifecycle,
-  createDocumentVersionLifecycle,
-  findDocumentByCreationKey,
-  type CreateDocumentLifecycleParams,
-  type CreateDocumentVersionLifecycleParams,
-  type CreatedDocumentLifecycle,
-  type CreatedDocumentVersionLifecycle,
-  type DocumentCreationProcessing,
-  type DocumentLifecycleJob,
+    createDocumentLifecycle,
+    createDocumentVersionLifecycle,
+    findDocumentByCreationKey,
+    type CreateDocumentLifecycleParams,
+    type CreateDocumentVersionLifecycleParams,
+    type CreatedDocumentLifecycle,
+    type CreatedDocumentVersionLifecycle,
+    type DocumentCreationProcessing,
+    type DocumentLifecycleJob,
 } from "./ingestion/source-lifecycle";
 
 export {
-  buildSourceVersionCreatedEvent,
-  normalizeStoredProvider,
-  type SourceEventInput,
+    buildSourceVersionCreatedEvent,
+    normalizeStoredProvider,
+    type SourceEventInput,
 } from "./ingestion/source-events";
 
 export { DrizzleSourceLifecycle } from "./ingestion/source-lifecycle-port";
@@ -33,36 +33,29 @@ export { DrizzleSourceLifecycle } from "./ingestion/source-lifecycle-port";
 export { DocIngestionPipeline } from "./ingestion/pipeline-port";
 
 export {
-  expandArchive,
-  isTextFastPathFile,
-  isZipFile,
-  type ExpandArchiveInput,
-  type ExpandArchiveResult,
+    expandArchive,
+    isTextFastPathFile,
+    isZipFile,
+    type ExpandArchiveInput,
+    type ExpandArchiveResult,
 } from "./ingestion/archive-expansion";
 
 export {
-  runDocIngestionTool,
-  runExtractionStage,
-  runIndexingStage,
-  type DocIngestionToolInput,
-  type DocIngestionToolResult,
-  type DocIngestionToolRuntimeOptions,
-  type ExtractionStageSummary,
-  type IndexingStageCounts,
+    runDocIngestionTool,
+    runExtractionStage,
+    runIndexingStage,
+    type DocIngestionToolInput,
+    type DocIngestionToolResult,
+    type DocIngestionToolRuntimeOptions,
+    type ExtractionStageSummary,
+    type IndexingStageCounts,
 } from "./ingestion/doc-ingestion/index";
 
-export {
-  ComputeServiceError,
-  postJson,
-  type ServiceClientConfig,
-} from "./http/service-client";
+export { ComputeServiceError, postJson, type ServiceClientConfig } from "./http/service-client";
+
+export { HttpDocumentConverterClient, type ConverterClientConfig } from "./http/converter-client";
 
 export {
-  HttpDocumentConverterClient,
-  type ConverterClientConfig,
-} from "./http/converter-client";
-
-export {
-  HttpTranscriptionClient,
-  type TranscriptionClientConfig,
+    HttpTranscriptionClient,
+    type TranscriptionClientConfig,
 } from "./http/transcription-client";

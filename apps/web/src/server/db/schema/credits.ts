@@ -33,11 +33,9 @@ export const tokenAccounts = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: uniqueIndex("token_accounts_company_id_idx").on(table.companyId),
     })
 );
@@ -64,7 +62,7 @@ export const tokenTransactions = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         companyCreatedIdx: index("token_tx_company_created_idx").on(
             table.companyId,
             table.createdAt
@@ -92,11 +90,9 @@ export const tokenUsageDaily = pgTable(
         service: varchar("service", { length: 50 }).notNull(),
         operationCount: integer("operation_count").default(0).notNull(),
         tokensUsed: integer("tokens_used").default(0).notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyDateServiceIdx: uniqueIndex("token_usage_daily_company_date_service_idx").on(
             table.companyId,
             table.date,
@@ -124,7 +120,7 @@ export const tokenGrants = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         companyIdIdx: index("token_grants_company_id_idx").on(table.companyId),
     })
 );

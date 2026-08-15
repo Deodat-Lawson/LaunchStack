@@ -16,122 +16,100 @@ import { document } from "@launchstack/core/db/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import {
-  isManagementRole,
-  requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
-
-
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 // `title` and `category` columns are both varchar(256) — match schema.
 const PatchDocumentSchema = z.object({
-  title: z
-    .string()
-    .trim()
-    .min(1, "Title cannot be empty")
-    .max(256, "Title is too long (max 256 characters)")
-    .optional(),
-  category: z
-    .string()
-    .trim()
-    .min(1, "Category cannot be empty")
-    .max(256, "Category is too long (max 256 characters)")
-    .optional(),
+    title: z
+        .string()
+        .trim()
+        .min(1, "Title cannot be empty")
+        .max(256, "Title is too long (max 256 characters)")
+        .optional(),
+    category: z
+        .string()
+        .trim()
+        .min(1, "Category cannot be empty")
+        .max(256, "Category is too long (max 256 characters)")
+        .optional(),
 });
 
-function parseDocumentId(rawId: string):
-  | { ok: true; documentId: number }
-  | { ok: false; response: NextResponse } {
-  const documentId = Number(rawId);
-  if (!Number.isInteger(documentId) || documentId <= 0) {
-    return {
-      ok: false,
-      response: NextResponse.json(
-        { error: "Invalid document id" },
-        { status: 400 }
-      ),
-    };
-  }
-  return { ok: true, documentId };
+function parseDocumentId(
+    rawId: string
+): { ok: true; documentId: number } | { ok: false; response: NextResponse } {
+    const documentId = Number(rawId);
+    if (!Number.isInteger(documentId) || documentId <= 0) {
+        return {
+            ok: false,
+            response: NextResponse.json({ error: "Invalid document id" }, { status: 400 }),
+        };
+    }
+    return { ok: true, documentId };
 }
 
-export async function PATCH(
-  request: Request,
-  context: { params: Promise<{ id: string }> }
-) {
-  return withRateLimit(request, RateLimitPresets.strict, async () => {
-    try {
-      const { id: rawId } = await context.params;
-      const parsed = parseDocumentId(rawId);
-      if (!parsed.ok) return parsed.response;
+export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
+    return withRateLimit(request, RateLimitPresets.strict, async () => {
+        try {
+            const { id: rawId } = await context.params;
+            const parsed = parseDocumentId(rawId);
+            if (!parsed.ok) return parsed.response;
 
-      const ctx = await requireWorkspaceContext();
-      if (!ctx.success) return ctx.response;
+            const ctx = await requireWorkspaceContext();
+            if (!ctx.success) return ctx.response;
 
-      if (!isManagementRole(ctx.data.role)) {
-        return NextResponse.json(
-          { error: "Forbidden: owner or admin role required" },
-          { status: 403 }
-        );
-      }
+            if (!isManagementRole(ctx.data.role)) {
+                return NextResponse.json(
+                    { error: "Forbidden: owner or admin role required" },
+                    { status: 403 }
+                );
+            }
 
-      const [doc] = await db
-        .select()
-        .from(document)
-        .where(eq(document.id, parsed.documentId));
+            const [doc] = await db
+                .select()
+                .from(document)
+                .where(eq(document.id, parsed.documentId));
 
-      if (!doc || doc.companyId !== ctx.data.companyId) {
-        // Don't leak existence to cross-company requests.
-        return NextResponse.json(
-          { error: "Document not found" },
-          { status: 404 }
-        );
-      }
+            if (!doc || doc.companyId !== ctx.data.companyId) {
+                // Don't leak existence to cross-company requests.
+                return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            }
 
-      const validation = await validateRequestBody(request, PatchDocumentSchema);
-      if (!validation.success) return validation.response;
+            const validation = await validateRequestBody(request, PatchDocumentSchema);
+            if (!validation.success) return validation.response;
 
-      const { title, category } = validation.data;
+            const { title, category } = validation.data;
 
-      const patch: Record<string, string> = {};
-      if (title !== undefined) patch.title = title;
-      if (category !== undefined) patch.category = category;
+            const patch: Record<string, string> = {};
+            if (title !== undefined) patch.title = title;
+            if (category !== undefined) patch.category = category;
 
-      if (Object.keys(patch).length === 0) {
-        return NextResponse.json(
-          { error: "No mutable fields provided" },
-          { status: 400 }
-        );
-      }
+            if (Object.keys(patch).length === 0) {
+                return NextResponse.json({ error: "No mutable fields provided" }, { status: 400 });
+            }
 
-      const [updated] = await db
-        .update(document)
-        .set(patch)
-        .where(eq(document.id, parsed.documentId))
-        .returning();
+            const [updated] = await db
+                .update(document)
+                .set(patch)
+                .where(eq(document.id, parsed.documentId))
+                .returning();
 
-      // `companyId` and `currentVersionId` are bigint columns; JSON.stringify
-      // can't serialize bigints, so coerce them to JSON-safe shapes before
-      // sending. Matches the convention used by /api/documents/[id]/versions.
-      const serialized = updated && {
-        ...updated,
-        companyId: updated.companyId.toString(),
-        currentVersionId:
-          updated.currentVersionId !== null
-            ? Number(updated.currentVersionId)
-            : null,
-      };
+            // `companyId` and `currentVersionId` are bigint columns; JSON.stringify
+            // can't serialize bigints, so coerce them to JSON-safe shapes before
+            // sending. Matches the convention used by /api/documents/[id]/versions.
+            const serialized = updated && {
+                ...updated,
+                companyId: updated.companyId.toString(),
+                currentVersionId:
+                    updated.currentVersionId !== null ? Number(updated.currentVersionId) : null,
+            };
 
-      return NextResponse.json({
-        success: true,
-        document: serialized,
-      });
-    } catch (error) {
-      console.error("[PATCH /api/documents/[id]] error:", error);
-      return NextResponse.json(
-        { error: "Failed to update document" },
-        { status: 500 }
-      );
-    }
-  });
+            return NextResponse.json({
+                success: true,
+                document: serialized,
+            });
+        } catch (error) {
+            console.error("[PATCH /api/documents/[id]] error:", error);
+            return NextResponse.json({ error: "Failed to update document" }, { status: 500 });
+        }
+    });
 }

@@ -687,9 +687,7 @@ export class RLMRetriever {
     /**
      * Probe multiple sections (get metadata without full content).
      */
-    async probeSections(
-        sectionIds: number[]
-    ): Promise<
+    async probeSections(sectionIds: number[]): Promise<
         Array<{
             id: number;
             tokenCount: number;

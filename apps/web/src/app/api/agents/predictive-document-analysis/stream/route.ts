@@ -40,12 +40,7 @@ export async function POST(request: Request) {
     const docCheck = await db
         .select({ id: document.id, currentVersionId: document.currentVersionId })
         .from(document)
-        .where(
-            and(
-                eq(document.id, documentId),
-                eq(document.companyId, ctx.data.companyId),
-            ),
-        )
+        .where(and(eq(document.id, documentId), eq(document.companyId, ctx.data.companyId)))
         .limit(1);
 
     if (docCheck.length === 0) {

@@ -36,7 +36,10 @@ describe("configuredProjectRoots", () => {
 
     it("splits on the platform delimiter, resolves and de-duplicates", () => {
         const raw = ["/srv/a", "/srv/b", "/srv/a", " "].join(path.delimiter);
-        expect(configuredProjectRoots(raw)).toEqual([path.resolve("/srv/a"), path.resolve("/srv/b")]);
+        expect(configuredProjectRoots(raw)).toEqual([
+            path.resolve("/srv/a"),
+            path.resolve("/srv/b"),
+        ]);
     });
 });
 

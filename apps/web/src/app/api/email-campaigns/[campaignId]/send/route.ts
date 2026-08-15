@@ -1,31 +1,28 @@
 import { z } from "zod";
 
-import {
-  dispatchEmailCampaign,
-  RecipientSchema,
-} from "@launchstack/features/email-pipeline";
+import { dispatchEmailCampaign, RecipientSchema } from "@launchstack/features/email-pipeline";
 
 import {
-  fail,
-  handleRouteError,
-  idempotencyKeyFrom,
-  ok,
-  parseCampaignId,
-  readJson,
-  resolveActor,
-  resolveManagementActor,
-  unsubscribeBaseUrl,
+    fail,
+    handleRouteError,
+    idempotencyKeyFrom,
+    ok,
+    parseCampaignId,
+    readJson,
+    resolveActor,
+    resolveManagementActor,
+    unsubscribeBaseUrl,
 } from "../../_lib/context";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
 const SendSchema = z.object({
-  mode: z.enum(["dry_run", "send"]).optional(),
-  /** Audience for the first dispatch only; ignored once the list is frozen. */
-  recipients: z.array(RecipientSchema).max(500).optional(),
-  /** Fallback when the `Idempotency-Key` header is absent. */
-  idempotencyKey: z.string().min(1).max(200).optional(),
+    mode: z.enum(["dry_run", "send"]).optional(),
+    /** Audience for the first dispatch only; ignored once the list is frozen. */
+    recipients: z.array(RecipientSchema).max(500).optional(),
+    /** Fallback when the `Idempotency-Key` header is absent. */
+    idempotencyKey: z.string().min(1).max(200).optional(),
 });
 
 /**
@@ -44,72 +41,62 @@ const SendSchema = z.object({
  * EMAIL_SENDING_ENABLED; otherwise it degrades to a dry run.
  */
 export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ campaignId: string }> },
+    request: Request,
+    { params }: { params: Promise<{ campaignId: string }> }
 ) {
-  try {
-    const campaignId = parseCampaignId((await params).campaignId);
-    if (campaignId === null) return fail("Invalid campaign ID", 400);
+    try {
+        const campaignId = parseCampaignId((await params).campaignId);
+        if (campaignId === null) return fail("Invalid campaign ID", 400);
 
-    const parsed = SendSchema.safeParse((await readJson(request)) ?? {});
-    if (!parsed.success) {
-      return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+        const parsed = SendSchema.safeParse((await readJson(request)) ?? {});
+        if (!parsed.success) {
+            return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+        }
+
+        // Real delivery is a workspace-management action; a dry-run preview
+        // stays open to any member so editors can iterate on drafts.
+        const actor =
+            parsed.data.mode === "send" ? await resolveManagementActor() : await resolveActor();
+        if (!actor.ok) return actor.response;
+
+        const idempotencyKey = idempotencyKeyFrom(request, parsed.data.idempotencyKey);
+        if (!idempotencyKey) {
+            return fail("An Idempotency-Key header is required to send a campaign.", 400, {
+                code: "idempotency_key_required",
+            });
+        }
+
+        // Real sends require an explicit mode AND a server-side kill-switch.
+        const mode =
+            parsed.data.mode === "send" && process.env.EMAIL_SENDING_ENABLED === "true"
+                ? "send"
+                : "dry_run";
+
+        const dispatched = await dispatchEmailCampaign({
+            companyId: actor.actor.companyId,
+            campaignId,
+            idempotencyKey,
+            mode,
+            ...(parsed.data.recipients ? { recipients: parsed.data.recipients } : {}),
+            senderIdentity: actor.actor.senderIdentity,
+            unsubscribeBaseUrl: unsubscribeBaseUrl(request),
+            requestedBy: actor.actor.userId,
+        });
+
+        return ok({
+            campaignId: dispatched.campaign.id,
+            status: dispatched.campaign.status,
+            // The attempt's stored mode, not this request's: a replayed dry-run
+            // attempt must not be reported as a real send.
+            mode: dispatched.attempt.mode,
+            templateVersionId: dispatched.version.id,
+            version: dispatched.version.version,
+            attempt: dispatched.attempt,
+            results: dispatched.results,
+            replayed: dispatched.replayed,
+            recipientsFrozen: dispatched.recipientsFrozen,
+        });
+    } catch (error) {
+        return handleRouteError("email-campaigns/send", error);
     }
-
-    // Real delivery is a workspace-management action; a dry-run preview
-    // stays open to any member so editors can iterate on drafts.
-    const actor =
-      parsed.data.mode === "send"
-        ? await resolveManagementActor()
-        : await resolveActor();
-    if (!actor.ok) return actor.response;
-
-    const idempotencyKey = idempotencyKeyFrom(
-      request,
-      parsed.data.idempotencyKey,
-    );
-    if (!idempotencyKey) {
-      return fail(
-        "An Idempotency-Key header is required to send a campaign.",
-        400,
-        { code: "idempotency_key_required" },
-      );
-    }
-
-    // Real sends require an explicit mode AND a server-side kill-switch.
-    const mode =
-      parsed.data.mode === "send" &&
-      process.env.EMAIL_SENDING_ENABLED === "true"
-        ? "send"
-        : "dry_run";
-
-    const dispatched = await dispatchEmailCampaign({
-      companyId: actor.actor.companyId,
-      campaignId,
-      idempotencyKey,
-      mode,
-      ...(parsed.data.recipients
-        ? { recipients: parsed.data.recipients }
-        : {}),
-      senderIdentity: actor.actor.senderIdentity,
-      unsubscribeBaseUrl: unsubscribeBaseUrl(request),
-      requestedBy: actor.actor.userId,
-    });
-
-    return ok({
-      campaignId: dispatched.campaign.id,
-      status: dispatched.campaign.status,
-      // The attempt's stored mode, not this request's: a replayed dry-run
-      // attempt must not be reported as a real send.
-      mode: dispatched.attempt.mode,
-      templateVersionId: dispatched.version.id,
-      version: dispatched.version.version,
-      attempt: dispatched.attempt,
-      results: dispatched.results,
-      replayed: dispatched.replayed,
-      recipientsFrozen: dispatched.recipientsFrozen,
-    });
-  } catch (error) {
-    return handleRouteError("email-campaigns/send", error);
-  }
 }

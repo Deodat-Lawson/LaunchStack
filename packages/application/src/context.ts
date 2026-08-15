@@ -7,13 +7,13 @@
  * workspace scope and an opaque actor id kept for provenance.
  */
 export interface ActorContext {
-  /** Opaque product-side actor id, recorded for provenance only. */
-  actorId: string;
-  /** The workspace (company) the actor is operating in — already authorized. */
-  companyId: number;
+    /** Opaque product-side actor id, recorded for provenance only. */
+    actorId: string;
+    /** The workspace (company) the actor is operating in — already authorized. */
+    companyId: number;
 }
 
 /** Log fields every use case forwards to the logger. */
 export interface TraceContext {
-  traceId: string;
+    traceId: string;
 }

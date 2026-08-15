@@ -22,55 +22,54 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 function headersToRecord(headers: Headers): Record<string, string> {
-  const out: Record<string, string> = {};
-  headers.forEach((value, key) => {
-    out[key.toLowerCase()] = value;
-  });
-  return out;
+    const out: Record<string, string> = {};
+    headers.forEach((value, key) => {
+        out[key.toLowerCase()] = value;
+    });
+    return out;
 }
 
 async function handle(request: Request, path: string[]): Promise<Response> {
-  const hub = getHub();
-  if (!hub) {
-    return NextResponse.json(
-      {
-        ok: false,
-        code: "unauthorized",
-        error:
-          "Distributed agents are not enabled on this deployment. Set COLLAB_HUB_SECRET to accept remote agent nodes.",
-      },
-      { status: 503 },
-    );
-  }
+    const hub = getHub();
+    if (!hub) {
+        return NextResponse.json(
+            {
+                ok: false,
+                code: "unauthorized",
+                error: "Distributed agents are not enabled on this deployment. Set COLLAB_HUB_SECRET to accept remote agent nodes.",
+            },
+            { status: 503 }
+        );
+    }
 
-  const url = new URL(request.url);
-  // A worker configured with `COLLAB_HUB_URL=https://app/api/collab/hub`
-  // requests `/api/collab/hub/collab/v1/nodes/poll`, so the captured segments
-  // already carry the canonical prefix. Accept both shapes rather than making
-  // the mount point load-bearing — and rebuild the query string too, because
-  // it is covered by the worker's signature.
-  const carriesPrefix = path[0] === "collab" && path[1] === "v1";
-  const canonical = carriesPrefix
-    ? `/${path.join("/")}${url.search}`
-    : `${COLLAB_API_PREFIX}/${path.join("/")}${url.search}`;
+    const url = new URL(request.url);
+    // A worker configured with `COLLAB_HUB_URL=https://app/api/collab/hub`
+    // requests `/api/collab/hub/collab/v1/nodes/poll`, so the captured segments
+    // already carry the canonical prefix. Accept both shapes rather than making
+    // the mount point load-bearing — and rebuild the query string too, because
+    // it is covered by the worker's signature.
+    const carriesPrefix = path[0] === "collab" && path[1] === "v1";
+    const canonical = carriesPrefix
+        ? `/${path.join("/")}${url.search}`
+        : `${COLLAB_API_PREFIX}/${path.join("/")}${url.search}`;
 
-  const body = request.method === "GET" || request.method === "HEAD" ? "" : await request.text();
+    const body = request.method === "GET" || request.method === "HEAD" ? "" : await request.text();
 
-  const hubRequest: HubHttpRequest = {
-    method: request.method,
-    path: canonical,
-    headers: headersToRecord(request.headers),
-    body,
-  };
+    const hubRequest: HubHttpRequest = {
+        method: request.method,
+        path: canonical,
+        headers: headersToRecord(request.headers),
+        body,
+    };
 
-  const response = await hub.handle(hubRequest);
-  return new Response(response.body, { status: response.status, headers: response.headers });
+    const response = await hub.handle(hubRequest);
+    return new Response(response.body, { status: response.status, headers: response.headers });
 }
 
 export async function GET(request: Request, { params }: { params: Promise<{ path: string[] }> }) {
-  return handle(request, (await params).path);
+    return handle(request, (await params).path);
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ path: string[] }> }) {
-  return handle(request, (await params).path);
+    return handle(request, (await params).path);
 }

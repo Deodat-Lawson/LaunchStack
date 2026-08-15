@@ -17,23 +17,23 @@ import { useEffect, useState } from "react";
  * so there is no hydration mismatch.
  */
 const CONFIGURED_HOST = (() => {
-  const raw = process.env.NEXT_PUBLIC_APP_URL;
-  if (!raw) return null;
-  try {
-    return new URL(raw).host;
-  } catch {
-    return null;
-  }
+    const raw = process.env.NEXT_PUBLIC_APP_URL;
+    if (!raw) return null;
+    try {
+        return new URL(raw).host;
+    } catch {
+        return null;
+    }
 })();
 
 export function useInstanceHost(): string {
-  const [host, setHost] = useState<string>(CONFIGURED_HOST ?? "");
+    const [host, setHost] = useState<string>(CONFIGURED_HOST ?? "");
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setHost(window.location.host);
-    }
-  }, []);
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setHost(window.location.host);
+        }
+    }, []);
 
-  return host;
+    return host;
 }

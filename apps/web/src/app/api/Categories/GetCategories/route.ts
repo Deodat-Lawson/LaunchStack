@@ -3,10 +3,7 @@ import { db } from "~/server/db";
 import { category } from "@launchstack/core/db/schema";
 import { eq } from "drizzle-orm";
 import * as console from "console";
-import {
-    isManagementRole,
-    requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export async function GET(_request: Request) {
     try {
@@ -14,19 +11,16 @@ export async function GET(_request: Request) {
         if (!ctx.success) return ctx.response;
 
         if (!isManagementRole(ctx.data.role)) {
-            return NextResponse.json(
-                { error: "Invalid user role." },
-                { status: 403 }
-            );
+            return NextResponse.json({ error: "Invalid user role." }, { status: 403 });
         }
 
         const categories = await db
             .select()
             .from(category)
             .where(eq(category.companyId, ctx.data.companyId));
-            
+
         // Convert BigInt fields to numbers for JSON serialization
-        const serializedCategories = categories.map((category) => ({
+        const serializedCategories = categories.map(category => ({
             ...category,
             id: Number(category.id),
             companyId: Number(category.companyId),
@@ -35,9 +29,6 @@ export async function GET(_request: Request) {
         return NextResponse.json(serializedCategories, { status: 200 });
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
-        return NextResponse.json(
-            { error: "Unable to fetch documents" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Unable to fetch documents" }, { status: 500 });
     }
 }

@@ -1,11 +1,12 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 import { inter, instrumentSerif, jetbrainsMono } from "~/app/employer/fonts";
 
 export const metadata: Metadata = {
-    title: 'Get Started with Launchstack — Free',
-    description: 'Your second brain for docs, notes, and code. Set up your personal Launchstack workspace in under a minute — built for solo founders, developers, and students.',
+    title: "Get Started with Launchstack — Free",
+    description:
+        "Your second brain for docs, notes, and code. Set up your personal Launchstack workspace in under a minute — built for solo founders, developers, and students.",
     alternates: {
-        canonical: '/signup',
+        canonical: "/signup",
     },
 };
 

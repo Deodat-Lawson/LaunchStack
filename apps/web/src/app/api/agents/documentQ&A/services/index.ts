@@ -61,11 +61,7 @@ export type {
 } from "./types";
 
 // Type guards
-export {
-    isResponseStyle,
-    isAIPersona,
-    isSearchScope,
-} from "./types";
+export { isResponseStyle, isAIPersona, isSearchScope } from "./types";
 
 // Additional types from specific modules
 export type { PerformWebSearchResult } from "./webSearch";

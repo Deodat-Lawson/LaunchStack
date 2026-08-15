@@ -28,15 +28,17 @@ describe("dedupeEvidenceItems", () => {
             makeItem("b"),
         ]);
 
-        expect(result.map((i) => i.sourceId)).toEqual(["a", "b"]);
+        expect(result.map(i => i.sourceId)).toEqual(["a", "b"]);
         expect(result[0]?.sourceTimestamp).toBe("2026-01-01T00:00:00.000Z");
     });
 
     it("rejects sourceId conflicts even across source types", () => {
-        expect(() => dedupeEvidenceItems([
-            makeItem("x", undefined, "document_change"),
-            makeItem("x", undefined, "customer_feedback"),
-        ])).toThrow(FounderWeeklyReviewEvidenceConflictError);
+        expect(() =>
+            dedupeEvidenceItems([
+                makeItem("x", undefined, "document_change"),
+                makeItem("x", undefined, "customer_feedback"),
+            ])
+        ).toThrow(FounderWeeklyReviewEvidenceConflictError);
     });
 
     it("returns an empty array unchanged", () => {
@@ -52,14 +54,14 @@ describe("orderEvidenceItems", () => {
             makeItem("c", "2026-02-01T00:00:00.000Z"),
         ]);
 
-        expect(result.map((i) => i.sourceId)).toEqual(["a", "c", "b"]);
+        expect(result.map(i => i.sourceId)).toEqual(["a", "c", "b"]);
     });
 
     it("breaks ties on identity when timestamps are equal", () => {
         const ts = "2026-01-01T00:00:00.000Z";
         const result = orderEvidenceItems([makeItem("z", ts), makeItem("a", ts)]);
 
-        expect(result.map((i) => i.sourceId)).toEqual(["a", "z"]);
+        expect(result.map(i => i.sourceId)).toEqual(["a", "z"]);
     });
 
     it("orders source-type ties with ordinal comparison, not locale collation", () => {
@@ -68,8 +70,9 @@ describe("orderEvidenceItems", () => {
             makeItem("same", ts, "github_activity"),
             makeItem("same", ts, "customer_feedback"),
         ]);
-        expect(result.map((item) => item.sourceType)).toEqual([
-            "customer_feedback", "github_activity",
+        expect(result.map(item => item.sourceType)).toEqual([
+            "customer_feedback",
+            "github_activity",
         ]);
     });
 
@@ -79,7 +82,7 @@ describe("orderEvidenceItems", () => {
             makeItem("noTs"),
         ]);
 
-        expect(result.map((i) => i.sourceId)).toEqual(["noTs", "withTs"]);
+        expect(result.map(i => i.sourceId)).toEqual(["noTs", "withTs"]);
     });
 
     it("does not mutate the input array", () => {
@@ -87,10 +90,10 @@ describe("orderEvidenceItems", () => {
             makeItem("b", "2026-02-01T00:00:00.000Z"),
             makeItem("a", "2026-01-01T00:00:00.000Z"),
         ];
-        const originalOrder = input.map((i) => i.sourceId);
+        const originalOrder = input.map(i => i.sourceId);
 
         orderEvidenceItems(input);
 
-        expect(input.map((i) => i.sourceId)).toEqual(originalOrder);
+        expect(input.map(i => i.sourceId)).toEqual(originalOrder);
     });
 });

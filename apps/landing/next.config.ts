@@ -11,22 +11,22 @@ import type { NextConfig } from "next";
 loadDotenv({ path: path.resolve(__dirname, "../../.env") });
 
 const config: NextConfig = {
-  // Deliberately NOT `output: "standalone"`. This app is never containerized —
-  // docker-compose and the GHCR images build apps/web only (see .dockerignore).
-  // outputFileTracingRoot still pins the workspace root so Next doesn't walk up
-  // looking for a lockfile and emit noisy warnings.
-  outputFileTracingRoot: path.join(__dirname, "../../"),
+    // Deliberately NOT `output: "standalone"`. This app is never containerized —
+    // docker-compose and the GHCR images build apps/web only (see .dockerignore).
+    // outputFileTracingRoot still pins the workspace root so Next doesn't walk up
+    // looking for a lockfile and emit noisy warnings.
+    outputFileTracingRoot: path.join(__dirname, "../../"),
 
-  // Same reason as apps/web: pin the Turbopack root to the monorepo root so
-  // `next dev --turbo` can't land on a stray lockfile above the repo.
-  turbopack: {
-    root: path.join(__dirname, "../../"),
-  },
+    // Same reason as apps/web: pin the Turbopack root to the monorepo root so
+    // `next dev --turbo` can't land on a stray lockfile above the repo.
+    turbopack: {
+        root: path.join(__dirname, "../../"),
+    },
 
-  // `pnpm lint` at the root is the lint authority (same rationale as apps/web).
-  eslint: { ignoreDuringBuilds: true },
+    // `pnpm lint` at the root is the lint authority (same rationale as apps/web).
+    eslint: { ignoreDuringBuilds: true },
 
-  productionBrowserSourceMaps: false,
+    productionBrowserSourceMaps: false,
 };
 
 export default config;

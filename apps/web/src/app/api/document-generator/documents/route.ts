@@ -1,6 +1,6 @@
 /**
  * Document Generator - Documents CRUD API
- * 
+ *
  * Endpoints:
  * - GET: List all generated documents for the user
  * - POST: Create a new generated document
@@ -18,23 +18,25 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 export const runtime = "nodejs";
 
 // Citation schema - flexible to support multiple formats
-const CitationSchema = z.object({
-    id: z.string(),
-    // Support both old and new formats
-    sourceType: z.enum(["arxiv", "website", "document", "book", "journal"]).optional(),
-    title: z.string().optional(),
-    authors: z.array(z.string()).optional(),
-    url: z.string().optional(),
-    year: z.string().optional(),
-    arxivId: z.string().optional(),
-    accessDate: z.string().optional(),
-    // Legacy fields
-    text: z.string().optional(),
-    sourceUrl: z.string().optional(),
-    sourceTitle: z.string().optional(),
-    format: z.string().optional(),
-    createdAt: z.string().optional(),
-}).passthrough(); // Allow additional fields
+const CitationSchema = z
+    .object({
+        id: z.string(),
+        // Support both old and new formats
+        sourceType: z.enum(["arxiv", "website", "document", "book", "journal"]).optional(),
+        title: z.string().optional(),
+        authors: z.array(z.string()).optional(),
+        url: z.string().optional(),
+        year: z.string().optional(),
+        arxivId: z.string().optional(),
+        accessDate: z.string().optional(),
+        // Legacy fields
+        text: z.string().optional(),
+        sourceUrl: z.string().optional(),
+        sourceTitle: z.string().optional(),
+        format: z.string().optional(),
+        createdAt: z.string().optional(),
+    })
+    .passthrough(); // Allow additional fields
 
 // Validation schemas
 const CreateDocumentSchema = z.object({
@@ -68,10 +70,12 @@ interface DbCitation {
 }
 
 // Transform input citations to database format
-function transformCitations(citations: z.infer<typeof CitationSchema>[] | undefined): DbCitation[] | undefined {
+function transformCitations(
+    citations: z.infer<typeof CitationSchema>[] | undefined
+): DbCitation[] | undefined {
     if (!citations) return undefined;
-    
-    return citations.map((c) => ({
+
+    return citations.map(c => ({
         id: c.id,
         text: c.text ?? c.title ?? "",
         sourceUrl: c.sourceUrl ?? c.url,
@@ -137,12 +141,16 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = CreateDocumentSchema.safeParse(body);
-        
+
         if (!validation.success) {
             return NextResponse.json(
-                { success: false, message: "Invalid request body", errors: validation.error.errors },
+                {
+                    success: false,
+                    message: "Invalid request body",
+                    errors: validation.error.errors,
+                },
                 { status: 400 }
             );
         }
@@ -193,12 +201,16 @@ export async function PUT(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = UpdateDocumentSchema.safeParse(body);
-        
+
         if (!validation.success) {
             return NextResponse.json(
-                { success: false, message: "Invalid request body", errors: validation.error.errors },
+                {
+                    success: false,
+                    message: "Invalid request body",
+                    errors: validation.error.errors,
+                },
                 { status: 400 }
             );
         }
@@ -213,7 +225,7 @@ export async function PUT(request: Request) {
                 and(
                     eq(generatedDocuments.id, id),
                     eq(generatedDocuments.userId, ctx.data.clerkUserId),
-                    eq(generatedDocuments.companyId, ctx.data.companyId),
+                    eq(generatedDocuments.companyId, ctx.data.companyId)
                 )
             )
             .limit(1);
@@ -269,12 +281,16 @@ export async function DELETE(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        const body = await request.json() as unknown;
+        const body = (await request.json()) as unknown;
         const validation = DeleteDocumentSchema.safeParse(body);
-        
+
         if (!validation.success) {
             return NextResponse.json(
-                { success: false, message: "Invalid request body", errors: validation.error.errors },
+                {
+                    success: false,
+                    message: "Invalid request body",
+                    errors: validation.error.errors,
+                },
                 { status: 400 }
             );
         }
@@ -289,7 +305,7 @@ export async function DELETE(request: Request) {
                 and(
                     eq(generatedDocuments.id, id),
                     eq(generatedDocuments.userId, ctx.data.clerkUserId),
-                    eq(generatedDocuments.companyId, ctx.data.companyId),
+                    eq(generatedDocuments.companyId, ctx.data.companyId)
                 )
             )
             .limit(1);
@@ -302,9 +318,7 @@ export async function DELETE(request: Request) {
         }
 
         // Delete the document
-        await db
-            .delete(generatedDocuments)
-            .where(eq(generatedDocuments.id, id));
+        await db.delete(generatedDocuments).where(eq(generatedDocuments.id, id));
 
         return NextResponse.json({
             success: true,

@@ -4,10 +4,7 @@ import crypto from "crypto";
 import { db } from "~/server/db";
 import { inviteCodes } from "~/server/db/schema";
 import { validateRequestBody, GenerateInviteCodeSchema } from "~/lib/validation";
-import {
-  isManagementRole,
-  requireWorkspaceContext,
-} from "~/lib/require-workspace-context";
+import { isManagementRole, requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 function generateCode(): string {
     return crypto.randomBytes(4).toString("hex").toUpperCase(); // 8-char hex code

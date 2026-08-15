@@ -1,10 +1,7 @@
 "use client";
 import React, { useRef, useEffect } from "react";
 import styles from "~/styles/Employer/ProfileDropdown.module.css";
-import {
-    UserButton
-} from '@clerk/nextjs'
-
+import { UserButton } from "@clerk/nextjs";
 
 const ProfileDropdown: React.FC = () => {
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -16,10 +13,7 @@ const ProfileDropdown: React.FC = () => {
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target as Node)
-            ) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 return;
             }
         }

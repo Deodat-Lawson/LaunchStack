@@ -7,102 +7,92 @@ import { validateRequestBody, UpdateTaskSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertTaskOwnedByUser } from "~/lib/ai-chat-ownership";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 export const maxDuration = 300;
 
 // GET /api/agent-ai-chatbot/tasks/[taskId] - Get a specific task with execution steps
 export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ taskId: string }> }
+    request: NextRequest,
+    { params }: { params: Promise<{ taskId: string }> }
 ) {
-  const ctx = await requireWorkspaceContext();
-  if (!ctx.success) return ctx.response;
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
-  try {
-    const { taskId } = await params;
+    try {
+        const { taskId } = await params;
 
-    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
-    if (!owned.success) return owned.response;
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+        if (!owned.success) return owned.response;
 
-    const [task] = await db
-      .select()
-      .from(agentAiChatbotTask)
-      .where(eq(agentAiChatbotTask.id, taskId));
+        const [task] = await db
+            .select()
+            .from(agentAiChatbotTask)
+            .where(eq(agentAiChatbotTask.id, taskId));
 
-    if (!task) {
-      return NextResponse.json(
-        { error: "Task not found" },
-        { status: 404 }
-      );
+        if (!task) {
+            return NextResponse.json({ error: "Task not found" }, { status: 404 });
+        }
+
+        // Get execution steps for this task
+        const steps = await db
+            .select()
+            .from(agentAiChatbotExecutionStep)
+            .where(eq(agentAiChatbotExecutionStep.taskId, taskId))
+            .orderBy(agentAiChatbotExecutionStep.stepNumber);
+
+        return NextResponse.json({
+            success: true,
+            task,
+            steps,
+        });
+    } catch (error) {
+        console.error("Error fetching task:", error);
+        return NextResponse.json({ error: "Failed to fetch task" }, { status: 500 });
     }
-
-    // Get execution steps for this task
-    const steps = await db
-      .select()
-      .from(agentAiChatbotExecutionStep)
-      .where(eq(agentAiChatbotExecutionStep.taskId, taskId))
-      .orderBy(agentAiChatbotExecutionStep.stepNumber);
-
-    return NextResponse.json({
-      success: true,
-      task,
-      steps,
-    });
-  } catch (error) {
-    console.error("Error fetching task:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch task" },
-      { status: 500 }
-    );
-  }
 }
 
 // PATCH /api/agent-ai-chatbot/tasks/[taskId] - Update task
 export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ taskId: string }> }
+    request: NextRequest,
+    { params }: { params: Promise<{ taskId: string }> }
 ) {
-  const ctx = await requireWorkspaceContext();
-  if (!ctx.success) return ctx.response;
+    const ctx = await requireWorkspaceContext();
+    if (!ctx.success) return ctx.response;
 
-  try {
-    const { taskId } = await params;
+    try {
+        const { taskId } = await params;
 
-    const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
-    if (!owned.success) return owned.response;
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.clerkUserId);
+        if (!owned.success) return owned.response;
 
-    const validation = await validateRequestBody(request, UpdateTaskSchema);
-    if (!validation.success) return validation.response;
-    const { status, result, metadata, completedAt } = validation.data;
+        const validation = await validateRequestBody(request, UpdateTaskSchema);
+        if (!validation.success) return validation.response;
+        const { status, result, metadata, completedAt } = validation.data;
 
-    const updateData: Record<string, unknown> = {};
-    if (status) updateData.status = status;
-    if (result) updateData.result = result;
-    if (metadata) updateData.metadata = metadata;
-    if (completedAt) updateData.completedAt = completedAt instanceof Date ? completedAt : new Date(completedAt);
+        const updateData: Record<string, unknown> = {};
+        if (status) updateData.status = status;
+        if (result) updateData.result = result;
+        if (metadata) updateData.metadata = metadata;
+        if (completedAt)
+            updateData.completedAt =
+                completedAt instanceof Date ? completedAt : new Date(completedAt);
 
-    const [updatedTask] = await db
-      .update(agentAiChatbotTask)
-      .set(updateData)
-      .where(eq(agentAiChatbotTask.id, taskId))
-      .returning();
+        const [updatedTask] = await db
+            .update(agentAiChatbotTask)
+            .set(updateData)
+            .where(eq(agentAiChatbotTask.id, taskId))
+            .returning();
 
-    if (!updatedTask) {
-      return NextResponse.json(
-        { error: "Task not found" },
-        { status: 404 }
-      );
+        if (!updatedTask) {
+            return NextResponse.json({ error: "Task not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({
+            success: true,
+            task: updatedTask,
+        });
+    } catch (error) {
+        console.error("Error updating task:", error);
+        return NextResponse.json({ error: "Failed to update task" }, { status: 500 });
     }
-
-    return NextResponse.json({
-      success: true,
-      task: updatedTask,
-    });
-  } catch (error) {
-    console.error("Error updating task:", error);
-    return NextResponse.json(
-      { error: "Failed to update task" },
-      { status: 500 }
-    );
-  }
 }

@@ -21,8 +21,12 @@ import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekl
 import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";
 
 const require = createRequire(import.meta.url);
-const { createFounderWeeklyReviewTestDatabase } = require("../__tests__/founderWeeklyReview/testDb") as typeof import("../__tests__/founderWeeklyReview/testDb");
-const fixturePath = resolve(process.cwd(), "test-fixtures/founder-weekly-review/realistic-company/seed.json");
+const { createFounderWeeklyReviewTestDatabase } =
+    require("../__tests__/founderWeeklyReview/testDb") as typeof import("../__tests__/founderWeeklyReview/testDb");
+const fixturePath = resolve(
+    process.cwd(),
+    "test-fixtures/founder-weekly-review/realistic-company/seed.json"
+);
 const STARTUP_TIMEOUT_MS = 45_000;
 const SOCKET_RELEASE_WAIT_MS = 1_500;
 const STARTUP_SMOKE_ONLY = process.env.FWR_TRANSPORT_STARTUP_SMOKE_ONLY === "1";
@@ -65,7 +69,7 @@ function digest(value: unknown) {
 }
 
 function sleep(ms: number) {
-    return new Promise((resolveSleep) => setTimeout(resolveSleep, ms));
+    return new Promise(resolveSleep => setTimeout(resolveSleep, ms));
 }
 
 function lifecycleTimeoutMs(): number {
@@ -95,12 +99,14 @@ async function allocateLoopbackPort(): Promise<number> {
         server.close();
         throw new Error("Unable to allocate a loopback TCP port.");
     }
-    await new Promise<void>((resolveClose, rejectClose) => server.close((error) => error ? rejectClose(error) : resolveClose()));
+    await new Promise<void>((resolveClose, rejectClose) =>
+        server.close(error => (error ? rejectClose(error) : resolveClose()))
+    );
     return address.port;
 }
 
 async function canConnect(port: number, host: string): Promise<boolean> {
-    return new Promise((resolveConnect) => {
+    return new Promise(resolveConnect => {
         const socket = net.createConnection({ host, port });
         const settle = (listening: boolean) => {
             socket.removeAllListeners();
@@ -116,12 +122,14 @@ async function canConnect(port: number, host: string): Promise<boolean> {
 async function isPortListening(port: number): Promise<boolean> {
     // `next dev -H localhost` may choose IPv6 loopback on Windows. Check both
     // loopback families so stale listeners are never mistaken for a free port.
-    return (await canConnect(port, "127.0.0.1")) || await canConnect(port, "::1");
+    return (await canConnect(port, "127.0.0.1")) || (await canConnect(port, "::1"));
 }
 
 async function assertPortClosed(port: number, label: string): Promise<void> {
     if (await isPortListening(port)) {
-        throw new Error(`${label} port ${port} is already listening; refusing to attach to an existing process.`);
+        throw new Error(
+            `${label} port ${port} is already listening; refusing to attach to an existing process.`
+        );
     }
 }
 
@@ -135,28 +143,37 @@ function boundedLogs(logs: string[]): string {
 
 function appendRecentDiagnostic(logs: string[], line: string): void {
     logs.push(line);
-    if (logs.length > RECENT_DIAGNOSTIC_LIMIT) logs.splice(0, logs.length - RECENT_DIAGNOSTIC_LIMIT);
+    if (logs.length > RECENT_DIAGNOSTIC_LIMIT)
+        logs.splice(0, logs.length - RECENT_DIAGNOSTIC_LIMIT);
 }
 
 function isInngestDevUiNoise(line: string): boolean {
     try {
-        const parsed = JSON.parse(line) as { level?: unknown; event?: unknown; event_name?: unknown };
-        return parsed.level === "INFO" && (parsed.event === "cli/dev_ui.loaded" || parsed.event_name === "cli/dev_ui.loaded");
+        const parsed = JSON.parse(line) as {
+            level?: unknown;
+            event?: unknown;
+            event_name?: unknown;
+        };
+        return (
+            parsed.level === "INFO" &&
+            (parsed.event === "cli/dev_ui.loaded" || parsed.event_name === "cli/dev_ui.loaded")
+        );
     } catch {
         return false;
     }
 }
 
 function isUsefulDiagnostic(name: string, line: string): boolean {
-    return /warn|error|fail|exception|stack|retry|founder-weekly-review|claim-evidence|collect-evidence|persist-evidence|\bclaim\b|\bgenerate\b|\bpersist\b|database|relation|column|non-2\d\d|PUT \/api\/inngest 200/i.test(line);
+    return /warn|error|fail|exception|stack|retry|founder-weekly-review|claim-evidence|collect-evidence|persist-evidence|\bclaim\b|\bgenerate\b|\bpersist\b|database|relation|column|non-2\d\d|PUT \/api\/inngest 200/i.test(
+        line
+    );
 }
 
 function isTerminalNoise(name: string, line: string): boolean {
     if (name === "inngest") return isInngestDevUiNoise(line);
     // Keep registration failures and non-2xx callbacks visible, but omit the
     // steady-state successful callback poll noise from the terminal.
-    return /^(GET|PUT) \/api\/inngest.*\s2\d\d\s/i.test(line)
-        || /^responseBody:/i.test(line);
+    return /^(GET|PUT) \/api\/inngest.*\s2\d\d\s/i.test(line) || /^responseBody:/i.test(line);
 }
 
 function isKnownShutdownMissingBody(
@@ -164,12 +181,16 @@ function isKnownShutdownMissingBody(
     line: string,
     state: ShutdownDrainState
 ): boolean {
-    return name === "next"
-        && line.includes("[Inngest] error - Missing body when executing, possibly due to missing request body middleware")
-        && state.terminalStatus !== null
-        && state.finalDiagnosticsCaptured
-        && state.cleanupStarted
-        && state.callbackDrained;
+    return (
+        name === "next" &&
+        line.includes(
+            "[Inngest] error - Missing body when executing, possibly due to missing request body middleware"
+        ) &&
+        state.terminalStatus !== null &&
+        state.finalDiagnosticsCaptured &&
+        state.cleanupStarted &&
+        state.callbackDrained
+    );
 }
 
 function printRecentDiagnostics(name: "next" | "inngest", logs: string[]): void {
@@ -179,7 +200,7 @@ function printRecentDiagnostics(name: "next" | "inngest", logs: string[]): void 
 }
 
 async function closeLogStream(stream: WriteStream): Promise<void> {
-    await new Promise<void>((resolveClose) => stream.end(resolveClose));
+    await new Promise<void>(resolveClose => stream.end(resolveClose));
 }
 
 function startManagedChild(
@@ -208,15 +229,24 @@ function startManagedChild(
         rawLog.write(output);
         for (const line of output.split(/\r?\n/)) {
             if (!line.trim()) continue;
-            if (name === "next" && /\/api\/inngest/i.test(line)) shutdownDrain.lastCallbackActivityAt = Date.now();
-            if (name === "inngest" && shutdownDrain.terminalStatus && line.includes("inngest/function.finished")) shutdownDrain.functionFinishedAfterTerminal = true;
+            if (name === "next" && /\/api\/inngest/i.test(line))
+                shutdownDrain.lastCallbackActivityAt = Date.now();
+            if (
+                name === "inngest" &&
+                shutdownDrain.terminalStatus &&
+                line.includes("inngest/function.finished")
+            )
+                shutdownDrain.functionFinishedAfterTerminal = true;
             const formatted = `[${name}:${stream}] ${line}`;
             const expectedShutdownNoise = isKnownShutdownMissingBody(name, line, shutdownDrain);
             const suppressedNoise = isTerminalNoise(name, line) || expectedShutdownNoise;
-            if (isUsefulDiagnostic(name, line) && !suppressedNoise) appendRecentDiagnostic(logs, formatted);
+            if (isUsefulDiagnostic(name, line) && !suppressedNoise)
+                appendRecentDiagnostic(logs, formatted);
             if (expectedShutdownNoise) {
                 shutdownDrain.knownMissingBodyDuringShutdown = true;
-                console.log("[next] known shutdown-only Inngest callback race observed; retained in raw log");
+                console.log(
+                    "[next] known shutdown-only Inngest callback race observed; retained in raw log"
+                );
             }
             if (VERBOSE_CHILD_LOGS || !suppressedNoise) console.log(formatted);
         }
@@ -243,7 +273,9 @@ async function drainTerminalCallbackActivity(state: ShutdownDrainState): Promise
         }
         await sleep(100);
     }
-    console.warn(`[cleanup] terminal callback drain cap reached functionFinished=${state.functionFinishedAfterTerminal}`);
+    console.warn(
+        `[cleanup] terminal callback drain cap reached functionFinished=${state.functionFinishedAfterTerminal}`
+    );
 }
 
 function terminateProcessTree(child: ManagedChild): void {
@@ -255,7 +287,9 @@ function terminateProcessTree(child: ManagedChild): void {
             windowsHide: true,
         });
         if (result.error || (result.status !== 0 && childIsAlive(child))) {
-            console.warn(`[cleanup] ${child.name} pid=${pid} taskkill did not confirm termination (already exited is non-fatal)`);
+            console.warn(
+                `[cleanup] ${child.name} pid=${pid} taskkill did not confirm termination (already exited is non-fatal)`
+            );
         }
         return;
     }
@@ -265,15 +299,20 @@ function terminateProcessTree(child: ManagedChild): void {
 async function waitForChildExit(child: ManagedChild): Promise<void> {
     if (!childIsAlive(child)) return;
     await Promise.race([
-        new Promise<void>((resolveExit) => child.process.once("exit", () => resolveExit())),
+        new Promise<void>(resolveExit => child.process.once("exit", () => resolveExit())),
         sleep(5_000),
     ]);
 }
 
 function owningPid(port: number): string | undefined {
     if (process.platform !== "win32") return undefined;
-    const result = spawnSync("netstat", ["-ano", "-p", "tcp"], { encoding: "utf8", windowsHide: true });
-    const match = result.stdout?.split(/\r?\n/).find((line) => new RegExp(`127\\.0\\.0\\.1:${port}\\s+.*LISTENING`, "i").test(line));
+    const result = spawnSync("netstat", ["-ano", "-p", "tcp"], {
+        encoding: "utf8",
+        windowsHide: true,
+    });
+    const match = result.stdout
+        ?.split(/\r?\n/)
+        .find(line => new RegExp(`127\\.0\\.0\\.1:${port}\\s+.*LISTENING`, "i").test(line));
     return match?.trim().split(/\s+/).at(-1);
 }
 
@@ -286,18 +325,25 @@ async function waitForCallback(
     const deadline = Date.now() + STARTUP_TIMEOUT_MS;
     while (Date.now() < deadline) {
         if (shouldAbort()) throw new Error("Startup interrupted before callback readiness.");
-        const next = managedChildren.find((child) => child.name === "next");
-        if (!childIsAlive(next)) throw new Error(`Next exited before callback readiness: ${boundedLogs(logs)}`);
+        const next = managedChildren.find(child => child.name === "next");
+        if (!childIsAlive(next))
+            throw new Error(`Next exited before callback readiness: ${boundedLogs(logs)}`);
         try {
             const response = await fetch(callbackUrl);
             const registration = await response.text();
-            const functionsInGetResponse = registration.includes("founder-weekly-review-dispatcher") && registration.includes("founder-weekly-review-generation");
+            const functionsInGetResponse =
+                registration.includes("founder-weekly-review-dispatcher") &&
+                registration.includes("founder-weekly-review-generation");
             // The dev CLI performs the authoritative registration with PUT. A
             // bare GET is still required to respond successfully, but its body
             // is protocol-dependent and does not always echo function IDs.
-            const functionsRegisteredByCli = logs.some((line) => line.includes("PUT /api/inngest 200"));
+            const functionsRegisteredByCli = logs.some(line =>
+                line.includes("PUT /api/inngest 200")
+            );
             if (response.ok && (functionsInGetResponse || functionsRegisteredByCli)) {
-                console.log(`[harness] callback ready url=${callbackUrl}; Founder Weekly Review functions registered=${functionsInGetResponse ? "GET" : "CLI PUT"}`);
+                console.log(
+                    `[harness] callback ready url=${callbackUrl}; Founder Weekly Review functions registered=${functionsInGetResponse ? "GET" : "CLI PUT"}`
+                );
                 return;
             }
         } catch {
@@ -305,14 +351,22 @@ async function waitForCallback(
         }
         await sleep(500);
     }
-    throw new Error(`Timed out waiting for registered callback ${callbackUrl}: ${boundedLogs(logs)}`);
+    throw new Error(
+        `Timed out waiting for registered callback ${callbackUrl}: ${boundedLogs(logs)}`
+    );
 }
 
-async function waitForHttp(url: string, child: ManagedChild, logs: string[], shouldAbort: () => boolean): Promise<void> {
+async function waitForHttp(
+    url: string,
+    child: ManagedChild,
+    logs: string[],
+    shouldAbort: () => boolean
+): Promise<void> {
     const deadline = Date.now() + STARTUP_TIMEOUT_MS;
     while (Date.now() < deadline) {
         if (shouldAbort()) throw new Error("Startup interrupted before Inngest readiness.");
-        if (!childIsAlive(child)) throw new Error(`Inngest exited before readiness: ${boundedLogs(logs)}`);
+        if (!childIsAlive(child))
+            throw new Error(`Inngest exited before readiness: ${boundedLogs(logs)}`);
         try {
             if ((await fetch(url)).ok) return;
         } catch {
@@ -323,11 +377,17 @@ async function waitForHttp(url: string, child: ManagedChild, logs: string[], sho
     throw new Error(`Timed out waiting for ${url}: ${boundedLogs(logs)}`);
 }
 
-async function waitForPort(port: number, child: ManagedChild, logs: string[], shouldAbort: () => boolean): Promise<void> {
+async function waitForPort(
+    port: number,
+    child: ManagedChild,
+    logs: string[],
+    shouldAbort: () => boolean
+): Promise<void> {
     const deadline = Date.now() + STARTUP_TIMEOUT_MS;
     while (Date.now() < deadline) {
         if (shouldAbort()) throw new Error("Startup interrupted before Next was listening.");
-        if (!childIsAlive(child)) throw new Error(`Next exited before listening: ${boundedLogs(logs)}`);
+        if (!childIsAlive(child))
+            throw new Error(`Next exited before listening: ${boundedLogs(logs)}`);
         if (await isPortListening(port)) return;
         await sleep(250);
     }
@@ -341,29 +401,39 @@ function createCleanupController(
     shutdownDrain: ShutdownDrainState
 ): () => Promise<void> {
     let cleanupPromise: Promise<void> | undefined;
-    return () => cleanupPromise ??= (async () => {
-        shutdownDrain.cleanupStarted = true;
-        console.log("[cleanup] stopping managed child process trees");
-        for (const child of [...managedChildren].reverse()) {
-            console.log(`[cleanup] stopping ${child.name} pid=${child.process.pid ?? "unknown"}`);
-            terminateProcessTree(child);
-            await waitForChildExit(child);
-        }
-        await sleep(SOCKET_RELEASE_WAIT_MS);
-        let portsClosed = true;
-        for (const [name, port] of [["next", nextPort], ["inngest", inngestPort]] as const) {
-            if (await isPortListening(port)) {
-                portsClosed = false;
-                const child = managedChildren.find((candidate) => candidate.name === name);
-                console.warn(`[cleanup] ${name}Port=${port} still listening pid=${owningPid(port) ?? "unknown"} childAlive=${childIsAlive(child)}`);
-            } else {
-                console.log(`[cleanup] ${name}Port=closed`);
+    return () =>
+        (cleanupPromise ??= (async () => {
+            shutdownDrain.cleanupStarted = true;
+            console.log("[cleanup] stopping managed child process trees");
+            for (const child of [...managedChildren].reverse()) {
+                console.log(
+                    `[cleanup] stopping ${child.name} pid=${child.process.pid ?? "unknown"}`
+                );
+                terminateProcessTree(child);
+                await waitForChildExit(child);
             }
-        }
-        if (shutdownDrain.knownMissingBodyDuringShutdown && portsClosed) {
-            console.log("[cleanup] known Missing body message classified as shutdown-only after terminal callback drain and port closure");
-        }
-    })();
+            await sleep(SOCKET_RELEASE_WAIT_MS);
+            let portsClosed = true;
+            for (const [name, port] of [
+                ["next", nextPort],
+                ["inngest", inngestPort],
+            ] as const) {
+                if (await isPortListening(port)) {
+                    portsClosed = false;
+                    const child = managedChildren.find(candidate => candidate.name === name);
+                    console.warn(
+                        `[cleanup] ${name}Port=${port} still listening pid=${owningPid(port) ?? "unknown"} childAlive=${childIsAlive(child)}`
+                    );
+                } else {
+                    console.log(`[cleanup] ${name}Port=closed`);
+                }
+            }
+            if (shutdownDrain.knownMissingBodyDuringShutdown && portsClosed) {
+                console.log(
+                    "[cleanup] known Missing body message classified as shutdown-only after terminal callback drain and port closure"
+                );
+            }
+        })());
 }
 
 async function main(): Promise<void> {
@@ -446,58 +516,167 @@ async function main(): Promise<void> {
             INNGEST_DEV: inngestUrl,
             INNGEST_EVENT_KEY: "local-transport",
         };
-        console.log(`[harness] database host=${schemaUrl.hostname} port=${schemaUrl.port || "5432"} database=${testDb.databaseName}`);
+        console.log(
+            `[harness] database host=${schemaUrl.hostname} port=${schemaUrl.port || "5432"} database=${testDb.databaseName}`
+        );
         console.log(`[harness] selected nextPort=${nextPort} inngestPort=${inngestPort}`);
         console.log(`[harness] verbose child logs: ${VERBOSE_CHILD_LOGS ? "enabled" : "disabled"}`);
         console.log(`[harness] Next log: ${relative(process.cwd(), nextLogPath)}`);
         console.log(`[harness] Inngest log: ${relative(process.cwd(), inngestLogPath)}`);
         await assertPortClosed(nextPort, "Next");
         await assertPortClosed(inngestPort, "Inngest");
-        const next = startManagedChild(managedChildren, "pnpm.cmd", ["exec", "next", "dev", "--turbo", "-H", "localhost", "-p", String(nextPort)], process.cwd(), runtimeEnv, nextLogs, nextRawLog, "next", shutdownDrain);
+        const next = startManagedChild(
+            managedChildren,
+            "pnpm.cmd",
+            ["exec", "next", "dev", "--turbo", "-H", "localhost", "-p", String(nextPort)],
+            process.cwd(),
+            runtimeEnv,
+            nextLogs,
+            nextRawLog,
+            "next",
+            shutdownDrain
+        );
         console.log(`[next] expected database=${testDb.databaseName}`);
         // Inngest's serve handler proxies its registration response through the
         // dev server. Before that server exists, a GET can reset even though the
         // current child owns and is listening on the allocated callback port.
         await waitForPort(nextPort, next, nextLogs, () => shutdownRequested);
         await assertPortClosed(inngestPort, "Inngest");
-        const inngest = startManagedChild(managedChildren, "pnpm.cmd", ["dlx", "inngest-cli@latest", "dev", "--no-discovery", "-u", callbackUrl, "--port", String(inngestPort)], process.cwd(), runtimeEnv, inngestLogs, inngestRawLog, "inngest", shutdownDrain);
+        const inngest = startManagedChild(
+            managedChildren,
+            "pnpm.cmd",
+            [
+                "dlx",
+                "inngest-cli@latest",
+                "dev",
+                "--no-discovery",
+                "-u",
+                callbackUrl,
+                "--port",
+                String(inngestPort),
+            ],
+            process.cwd(),
+            runtimeEnv,
+            inngestLogs,
+            inngestRawLog,
+            "inngest",
+            shutdownDrain
+        );
         await waitForHttp(inngestUrl, inngest, inngestLogs, () => shutdownRequested);
         await waitForCallback(callbackUrl, managedChildren, nextLogs, () => shutdownRequested);
         console.log(`[harness] Inngest ready url=${inngestUrl} callback=${callbackUrl}`);
         if (STARTUP_SMOKE_ONLY) {
-            console.log("[harness] startup/cleanup smoke completed; no data seeded, event dispatched, or provider called");
+            console.log(
+                "[harness] startup/cleanup smoke completed; no data seeded, event dispatched, or provider called"
+            );
             return;
         }
 
         const fixture = JSON.parse(await readFile(fixturePath, "utf8")) as Fixture;
-        const [target] = await testDb.db.insert(company).values({ name: "Northstar Analytics", numberOfEmployees: "24" }).returning();
-        const [other] = await testDb.db.insert(company).values({ name: "Other Company", numberOfEmployees: "4" }).returning();
+        const [target] = await testDb.db
+            .insert(company)
+            .values({ name: "Northstar Analytics", numberOfEmployees: "24" })
+            .returning();
+        const [other] = await testDb.db
+            .insert(company)
+            .values({ name: "Other Company", numberOfEmployees: "4" })
+            .returning();
         for (const entry of fixture.documents) {
-            const [doc] = await testDb.db.insert(document).values({ companyId: BigInt(target!.id), url: `local://${entry.title}`, category: entry.category, title: entry.title }).returning();
-            const [version] = await testDb.db.insert(documentVersions).values({ documentId: BigInt(doc!.id), versionNumber: 1, url: `local://${entry.title}/v1`, mimeType: "text/plain", uploadedBy: "seed", changelog: entry.changelog, createdAt: new Date(entry.timestamp) }).returning();
+            const [doc] = await testDb.db
+                .insert(document)
+                .values({
+                    companyId: BigInt(target!.id),
+                    url: `local://${entry.title}`,
+                    category: entry.category,
+                    title: entry.title,
+                })
+                .returning();
+            const [version] = await testDb.db
+                .insert(documentVersions)
+                .values({
+                    documentId: BigInt(doc!.id),
+                    versionNumber: 1,
+                    url: `local://${entry.title}/v1`,
+                    mimeType: "text/plain",
+                    uploadedBy: "seed",
+                    changelog: entry.changelog,
+                    createdAt: new Date(entry.timestamp),
+                })
+                .returning();
             for (const [index, content] of (entry.chunks ?? []).entries()) {
-                await testDb.db.insert(documentContextChunks).values({ documentId: BigInt(doc!.id), versionId: BigInt(version!.id), content, tokenCount: content.split(/\s+/).length, charCount: content.length, pageNumber: index + 1 });
+                await testDb.db
+                    .insert(documentContextChunks)
+                    .values({
+                        documentId: BigInt(doc!.id),
+                        versionId: BigInt(version!.id),
+                        content,
+                        tokenCount: content.split(/\s+/).length,
+                        charCount: content.length,
+                        pageNumber: index + 1,
+                    });
             }
         }
-        for (const [companyId, title, timestamp] of [[BigInt(target!.id), "Outside period", "2026-03-01T00:00:00.000Z"], [BigInt(other!.id), "Other company control", "2026-02-21T00:00:00.000Z"]] as const) {
-            const [doc] = await testDb.db.insert(document).values({ companyId, url: `local://${title}`, category: "Product", title }).returning();
-            await testDb.db.insert(documentVersions).values({ documentId: BigInt(doc!.id), versionNumber: 1, url: `local://${title}/v1`, mimeType: "text/plain", uploadedBy: "seed", changelog: title, createdAt: new Date(timestamp) });
+        for (const [companyId, title, timestamp] of [
+            [BigInt(target!.id), "Outside period", "2026-03-01T00:00:00.000Z"],
+            [BigInt(other!.id), "Other company control", "2026-02-21T00:00:00.000Z"],
+        ] as const) {
+            const [doc] = await testDb.db
+                .insert(document)
+                .values({ companyId, url: `local://${title}`, category: "Product", title })
+                .returning();
+            await testDb.db
+                .insert(documentVersions)
+                .values({
+                    documentId: BigInt(doc!.id),
+                    versionNumber: 1,
+                    url: `local://${title}/v1`,
+                    mimeType: "text/plain",
+                    uploadedBy: "seed",
+                    changelog: title,
+                    createdAt: new Date(timestamp),
+                });
         }
         const [seededDocuments, seededVersions, seededChunks] = await Promise.all([
             testDb.db.select().from(document),
             testDb.db.select().from(documentVersions),
             testDb.db.select().from(documentContextChunks),
         ]);
-        console.log(`[harness] fixture counts companies=2 documents=${seededDocuments.length} versions=${seededVersions.length} contextChunks=${seededChunks.length}`);
-        const actor = { externalUserId: "realistic-owner", internalUserId: 1n, companyId: BigInt(target!.id), role: "owner" as const };
-        const created = await createFounderWeeklyReviewDispatchService(testDb.db).createRunWithDispatch({ actor, requestKey: `transport-${randomUUID()}`, reportingPeriod: fixture.reportingPeriod, collectionInput: { workspaceTimezone: fixture.workspaceTimezone, founderContext: fixture.founderContext, actorExternalUserId: actor.externalUserId } });
-        if (created.run.status !== "queued" || created.run.evidenceSnapshot) throw new Error("Initial queued-without-snapshot invariant failed.");
-        const initialDispatches = await testDb.db.select().from(founderWeeklyReviewDispatches).where(eq(founderWeeklyReviewDispatches.runId, created.run.id));
-        if (initialDispatches.length !== 1) throw new Error("Expected exactly one initial outbox dispatch.");
+        console.log(
+            `[harness] fixture counts companies=2 documents=${seededDocuments.length} versions=${seededVersions.length} contextChunks=${seededChunks.length}`
+        );
+        const actor = {
+            externalUserId: "realistic-owner",
+            internalUserId: 1n,
+            companyId: BigInt(target!.id),
+            role: "owner" as const,
+        };
+        const created = await createFounderWeeklyReviewDispatchService(
+            testDb.db
+        ).createRunWithDispatch({
+            actor,
+            requestKey: `transport-${randomUUID()}`,
+            reportingPeriod: fixture.reportingPeriod,
+            collectionInput: {
+                workspaceTimezone: fixture.workspaceTimezone,
+                founderContext: fixture.founderContext,
+                actorExternalUserId: actor.externalUserId,
+            },
+        });
+        if (created.run.status !== "queued" || created.run.evidenceSnapshot)
+            throw new Error("Initial queued-without-snapshot invariant failed.");
+        const initialDispatches = await testDb.db
+            .select()
+            .from(founderWeeklyReviewDispatches)
+            .where(eq(founderWeeklyReviewDispatches.runId, created.run.id));
+        if (initialDispatches.length !== 1)
+            throw new Error("Expected exactly one initial outbox dispatch.");
         process.env.INNGEST_DEV = inngestUrl;
         process.env.INNGEST_EVENT_KEY = "local-transport";
         const { inngest: client } = await import("~/server/inngest/client");
-        const requested = await client.send({ name: "founder-weekly-review/dispatch.requested", data: {} });
+        const requested = await client.send({
+            name: "founder-weekly-review/dispatch.requested",
+            data: {},
+        });
         console.log(`[harness] dispatch event sent at=${new Date().toISOString()}`);
         const repository = new FounderWeeklyReviewRepository(testDb.db);
         const deadline = Date.now() + lifecycleTimeoutMs();
@@ -505,14 +684,24 @@ async function main(): Promise<void> {
         let heartbeatAt = 0;
         const seen: string[] = ["queued without snapshot"];
         let previousState = seen[0]!;
-        let final: Awaited<ReturnType<FounderWeeklyReviewRepository["getByCompanyAndRunId"]>> | null = null;
+        let final: Awaited<
+            ReturnType<FounderWeeklyReviewRepository["getByCompanyAndRunId"]>
+        > | null = null;
         while (Date.now() < deadline) {
-            if (shutdownRequested) throw new Error("Transport run interrupted during lifecycle polling.");
+            if (shutdownRequested)
+                throw new Error("Transport run interrupted during lifecycle polling.");
             if (!childIsAlive(next) || !childIsAlive(inngest)) {
-                throw new Error("A managed child exited before the Founder Weekly Review reached a terminal state.");
+                throw new Error(
+                    "A managed child exited before the Founder Weekly Review reached a terminal state."
+                );
             }
             const current = await repository.getByCompanyAndRunId(actor.companyId, created.run.id);
-            const currentDispatch = (await testDb.db.select().from(founderWeeklyReviewDispatches).where(eq(founderWeeklyReviewDispatches.id, created.dispatch.id)))[0];
+            const currentDispatch = (
+                await testDb.db
+                    .select()
+                    .from(founderWeeklyReviewDispatches)
+                    .where(eq(founderWeeklyReviewDispatches.id, created.dispatch.id))
+            )[0];
             if (current) {
                 const state = `${current.status}${current.evidenceSnapshot ? " with snapshot" : " without snapshot"}`;
                 if (state !== previousState) {
@@ -522,40 +711,57 @@ async function main(): Promise<void> {
                 }
                 if (Date.now() - heartbeatAt >= 10_000) {
                     heartbeatAt = Date.now();
-                    console.log(`[harness +${Math.floor((Date.now() - startedAt) / 1000)}s] nextAlive=${childIsAlive(next)} inngestAlive=${childIsAlive(inngest)} callbackReady=true runStatus=${current.status} snapshot=${current.evidenceSnapshot ? "present" : "absent"} dispatchStatus=${currentDispatch?.status ?? "unknown"} collectionClaim=${current.collectionClaimId ? "present" : "absent"} generationClaim=${current.generationClaimId ? "present" : "absent"}`);
+                    console.log(
+                        `[harness +${Math.floor((Date.now() - startedAt) / 1000)}s] nextAlive=${childIsAlive(next)} inngestAlive=${childIsAlive(inngest)} callbackReady=true runStatus=${current.status} snapshot=${current.evidenceSnapshot ? "present" : "absent"} dispatchStatus=${currentDispatch?.status ?? "unknown"} collectionClaim=${current.collectionClaimId ? "present" : "absent"} generationClaim=${current.generationClaimId ? "present" : "absent"}`
+                    );
                 }
                 if (current.status === "draft") {
                     final = current;
                     shutdownDrain.terminalStatus = "draft";
-                    console.log("[harness] terminal status=draft observed; stopping lifecycle polling and starting cleanup");
+                    console.log(
+                        "[harness] terminal status=draft observed; stopping lifecycle polling and starting cleanup"
+                    );
                     break;
                 }
                 if (current.status === "failed") {
-                    console.error(JSON.stringify({
-                        runId: current.id,
-                        status: current.status,
-                        failureCode: current.errorCode,
-                        failureMessage: current.errorMessage?.slice(0, 1_024) ?? null,
-                        snapshot: current.evidenceSnapshot ? "present" : "absent",
-                        collectionClaim: current.collectionClaimId ? "present" : "absent",
-                        collectionStartedAt: current.collectionStartedAt?.toISOString() ?? null,
-                        evidenceCollectedAt: current.evidenceCollectedAt?.toISOString() ?? null,
-                        generationClaim: current.generationClaimId ? "present" : "absent",
-                        retryCount: current.retryCount,
-                        dispatchStatus: currentDispatch?.status ?? null,
-                        dispatchAttempts: currentDispatch?.attemptCount ?? null,
-                        lastLifecycleTransition: current.updatedAt?.toISOString() ?? current.createdAt.toISOString(),
-                    }));
+                    console.error(
+                        JSON.stringify({
+                            runId: current.id,
+                            status: current.status,
+                            failureCode: current.errorCode,
+                            failureMessage: current.errorMessage?.slice(0, 1_024) ?? null,
+                            snapshot: current.evidenceSnapshot ? "present" : "absent",
+                            collectionClaim: current.collectionClaimId ? "present" : "absent",
+                            collectionStartedAt: current.collectionStartedAt?.toISOString() ?? null,
+                            evidenceCollectedAt: current.evidenceCollectedAt?.toISOString() ?? null,
+                            generationClaim: current.generationClaimId ? "present" : "absent",
+                            retryCount: current.retryCount,
+                            dispatchStatus: currentDispatch?.status ?? null,
+                            dispatchAttempts: currentDispatch?.attemptCount ?? null,
+                            lastLifecycleTransition:
+                                current.updatedAt?.toISOString() ?? current.createdAt.toISOString(),
+                        })
+                    );
                     shutdownDrain.terminalStatus = "failed";
                     shutdownDrain.finalDiagnosticsCaptured = true;
-                    console.log("[harness] terminal status=failed observed; stopping lifecycle polling and starting cleanup");
-                    throw new Error(`Founder Weekly Review run ${current.id} failed before draft persistence.`);
+                    console.log(
+                        "[harness] terminal status=failed observed; stopping lifecycle polling and starting cleanup"
+                    );
+                    throw new Error(
+                        `Founder Weekly Review run ${current.id} failed before draft persistence.`
+                    );
                 }
             }
             await sleep(500);
         }
-        if (!final?.reviewPayload || !final.evidenceSnapshot) throw new Error("Timed out before persisted draft read-back.");
-        const dispatch = (await testDb.db.select().from(founderWeeklyReviewDispatches).where(eq(founderWeeklyReviewDispatches.id, created.dispatch.id)))[0];
+        if (!final?.reviewPayload || !final.evidenceSnapshot)
+            throw new Error("Timed out before persisted draft read-back.");
+        const dispatch = (
+            await testDb.db
+                .select()
+                .from(founderWeeklyReviewDispatches)
+                .where(eq(founderWeeklyReviewDispatches.id, created.dispatch.id))
+        )[0];
         const rendered = renderFounderWeeklyReviewMarkdown(final);
         const directory = resolve(process.cwd(), ".artifacts/founder-weekly-review");
         await mkdir(directory, { recursive: true });
@@ -567,8 +773,66 @@ async function main(): Promise<void> {
             console.log("===== END FOUNDER WEEKLY REVIEW =====");
         }
         const generationEventKeys = ["runId", "companyId", "generationJobId", "generationClaimId"];
-        const forbiddenEventKeys = ["evidenceSnapshot", "founderContext", "documentContent", "customerFeedback", "prompt", "reviewPayload", "providerResponse", "databaseUrl", "credentials", "token"];
-        console.log(JSON.stringify({ runId: final.id, lifecycle: seen, dispatch: { initialStatus: initialDispatches[0]!.status, finalStatus: dispatch?.status, attempts: dispatch?.attemptCount }, ingressEventIds: requested.ids, callbackUrl, functionId: "founder-weekly-review-generation", transportEvent: { name: "founder-weekly-review/generation.requested", keys: generationEventKeys, companyIdSerializedAsString: true, forbiddenKeysAbsent: forbiddenEventKeys.every((key) => !generationEventKeys.includes(key)) }, steps: ["claim-evidence", "collect-evidence", "persist-evidence", "claim", "generate", "persist"], evidenceCounts: Object.fromEntries(["document_change", "customer_feedback", "founder_context"].map((type) => [type, final.evidenceSnapshot!.items.filter((item) => item.sourceType === type).length])), snapshotDigest: digest(final.evidenceSnapshot), retryCount: final.retryCount, generationAttempt: final.generationAttempt, provider: final.modelMetadata?.provider, model: final.modelMetadata?.model, validation: { canonicalSchema: true, citations: true, sourceSemantics: true }, markdownPath, terminalEqualsExport: (await readFile(markdownPath, "utf8")) === rendered, devLogsMentionFunction: inngestLogs.join("").includes("founder-weekly-review-generation") }));
+        const forbiddenEventKeys = [
+            "evidenceSnapshot",
+            "founderContext",
+            "documentContent",
+            "customerFeedback",
+            "prompt",
+            "reviewPayload",
+            "providerResponse",
+            "databaseUrl",
+            "credentials",
+            "token",
+        ];
+        console.log(
+            JSON.stringify({
+                runId: final.id,
+                lifecycle: seen,
+                dispatch: {
+                    initialStatus: initialDispatches[0]!.status,
+                    finalStatus: dispatch?.status,
+                    attempts: dispatch?.attemptCount,
+                },
+                ingressEventIds: requested.ids,
+                callbackUrl,
+                functionId: "founder-weekly-review-generation",
+                transportEvent: {
+                    name: "founder-weekly-review/generation.requested",
+                    keys: generationEventKeys,
+                    companyIdSerializedAsString: true,
+                    forbiddenKeysAbsent: forbiddenEventKeys.every(
+                        key => !generationEventKeys.includes(key)
+                    ),
+                },
+                steps: [
+                    "claim-evidence",
+                    "collect-evidence",
+                    "persist-evidence",
+                    "claim",
+                    "generate",
+                    "persist",
+                ],
+                evidenceCounts: Object.fromEntries(
+                    ["document_change", "customer_feedback", "founder_context"].map(type => [
+                        type,
+                        final.evidenceSnapshot!.items.filter(item => item.sourceType === type)
+                            .length,
+                    ])
+                ),
+                snapshotDigest: digest(final.evidenceSnapshot),
+                retryCount: final.retryCount,
+                generationAttempt: final.generationAttempt,
+                provider: final.modelMetadata?.provider,
+                model: final.modelMetadata?.model,
+                validation: { canonicalSchema: true, citations: true, sourceSemantics: true },
+                markdownPath,
+                terminalEqualsExport: (await readFile(markdownPath, "utf8")) === rendered,
+                devLogsMentionFunction: inngestLogs
+                    .join("")
+                    .includes("founder-weekly-review-generation"),
+            })
+        );
         shutdownDrain.finalDiagnosticsCaptured = true;
     } catch (error) {
         printRecentDiagnostics("next", nextLogs);

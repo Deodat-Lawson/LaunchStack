@@ -40,10 +40,7 @@ import type {
     LoggerPort,
 } from "@launchstack/application";
 
-import {
-    runExtractionStage,
-    runIndexingStage,
-} from "./doc-ingestion/index";
+import { runExtractionStage, runIndexingStage } from "./doc-ingestion/index";
 import { expandArchive, isTextFastPathFile, isZipFile } from "./archive-expansion";
 
 interface StoredDispatchOptions {
@@ -59,11 +56,7 @@ interface StoredDispatchOptions {
 
 async function loadJobRow(ocrJobId: string) {
     const db = getDb();
-    const [job] = await db
-        .select()
-        .from(ocrJobs)
-        .where(eq(ocrJobs.id, ocrJobId))
-        .limit(1);
+    const [job] = await db.select().from(ocrJobs).where(eq(ocrJobs.id, ocrJobId)).limit(1);
     return job;
 }
 
@@ -95,7 +88,7 @@ export class DocIngestionPipeline implements ExtractionPipelinePort {
                     extracted: result.extracted,
                     ...result.stats,
                 },
-                "archive expanded into per-entry sources",
+                "archive expanded into per-entry sources"
             );
             return {
                 provider: "INGESTION",
@@ -148,7 +141,7 @@ export class DocIngestionPipeline implements ExtractionPipelinePort {
         const row = await loadJobRow(job.ocrJobId);
         if (!row) {
             throw new Error(
-                `OCR job ${job.ocrJobId} not found — cannot index source version ${job.sourceVersionId}`,
+                `OCR job ${job.ocrJobId} not found — cannot index source version ${job.sourceVersionId}`
             );
         }
         const options = (row.dispatchOptions as StoredDispatchOptions | null) ?? {};

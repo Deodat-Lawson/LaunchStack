@@ -46,22 +46,14 @@ function makeDocxBuffer(): Buffer {
     return Buffer.from("PK\x03\x04fake-docx-content");
 }
 
-function jsonResponse(
-    body: object,
-    status = 200,
-    headers?: Record<string, string>,
-): Response {
+function jsonResponse(body: object, status = 200, headers?: Record<string, string>): Response {
     return new Response(JSON.stringify(body), {
         status,
         headers: { "content-type": "application/json", ...headers },
     });
 }
 
-function blobResponse(
-    content: string,
-    status = 200,
-    headers?: Record<string, string>,
-): Response {
+function blobResponse(content: string, status = 200, headers?: Record<string, string>): Response {
     return new Response(content, {
         status,
         headers: {
@@ -88,9 +80,7 @@ describe("Preservation: readDocx returns expected ReadDocxResponse for valid inp
     });
 
     it("sends file as FormData with correct field name", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ text: "content", filename: "doc.docx" }),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ text: "content", filename: "doc.docx" }));
 
         await readDocx(makeDocxBuffer());
 
@@ -102,9 +92,7 @@ describe("Preservation: readDocx returns expected ReadDocxResponse for valid inp
     });
 
     it("preserves clean_view option in FormData", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ text: "clean", filename: "doc.docx" }),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ text: "clean", filename: "doc.docx" }));
 
         await readDocx(makeDocxBuffer(), { cleanView: true });
 
@@ -132,7 +120,7 @@ describe("Preservation: processDocumentBatch returns { summary, file } for valid
         mockFetch.mockResolvedValueOnce(
             blobResponse("modified-docx-bytes", 200, {
                 "x-batch-summary": JSON.stringify(summary),
-            }),
+            })
         );
 
         const result = await processDocumentBatch(makeDocxBuffer(), params);
@@ -186,7 +174,7 @@ describe("Preservation: Well-formed x-batch-summary JSON parses into correct Bat
         mockFetch.mockResolvedValueOnce(
             blobResponse("docx", 200, {
                 "x-batch-summary": JSON.stringify(summary),
-            }),
+            })
         );
 
         const result = await processDocumentBatch(makeDocxBuffer(), params);
@@ -207,7 +195,7 @@ describe("Preservation: Well-formed x-batch-summary JSON parses into correct Bat
         mockFetch.mockResolvedValueOnce(
             blobResponse("docx", 200, {
                 "x-batch-summary": JSON.stringify(summary),
-            }),
+            })
         );
 
         const result = await processDocumentBatch(makeDocxBuffer(), params);
@@ -225,7 +213,7 @@ describe("Preservation: Well-formed x-batch-summary JSON parses into correct Bat
         mockFetch.mockResolvedValueOnce(
             blobResponse("docx", 200, {
                 "x-batch-summary": JSON.stringify(summary),
-            }),
+            })
         );
 
         const result = await processDocumentBatch(makeDocxBuffer(), params);
@@ -305,9 +293,7 @@ describe("Preservation: diffDocxFiles returns DiffResponse for valid inputs", ()
     });
 
     it("returns has_differences: false for identical documents", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ diff: "", has_differences: false }),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ diff: "", has_differences: false }));
 
         const result = await diffDocxFiles(makeDocxBuffer(), makeDocxBuffer());
 
@@ -316,9 +302,7 @@ describe("Preservation: diffDocxFiles returns DiffResponse for valid inputs", ()
     });
 
     it("sends both files as separate FormData fields", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ diff: "", has_differences: false }),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ diff: "", has_differences: false }));
 
         await diffDocxFiles(makeDocxBuffer(), makeDocxBuffer());
 
@@ -333,9 +317,7 @@ describe("Preservation: diffDocxFiles returns DiffResponse for valid inputs", ()
 // ===========================================================================
 describe("Preservation: Error responses throw AdeuServiceError with correct fields", () => {
     it("throws AdeuServiceError with statusCode and detail on 422", async () => {
-        mockFetch.mockResolvedValueOnce(
-            jsonResponse({ detail: "Invalid DOCX file" }, 422),
-        );
+        mockFetch.mockResolvedValueOnce(jsonResponse({ detail: "Invalid DOCX file" }, 422));
 
         try {
             await readDocx(makeDocxBuffer());

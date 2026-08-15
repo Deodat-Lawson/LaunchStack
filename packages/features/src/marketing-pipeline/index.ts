@@ -1,8 +1,5 @@
 export { runMarketingPipeline } from "./run";
-export {
-    publishContent,
-    type PublishResult,
-} from "./publish";
+export { publishContent, type PublishResult } from "./publish";
 export { generateVariants, refineContent } from "./generator";
 export { extractBrandVoice } from "./voice";
 export { extractTargetPersona } from "./persona";

@@ -20,25 +20,20 @@ const validLatLngArb = fc.record({
     lng: validLngArb,
 });
 
-const validQueryArb = fc
-    .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+const validQueryArb = fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
-const validRadiusArb = fc.option(
-    fc.integer({ min: 100, max: 50000 }),
-    { nil: undefined },
-);
+const validRadiusArb = fc.option(fc.integer({ min: 100, max: 50000 }), { nil: undefined });
 
 const validCategoriesArb = fc.option(
     fc.array(fc.string({ minLength: 1, maxLength: 50 }), {
         minLength: 1,
         maxLength: 5,
     }),
-    { nil: undefined },
+    { nil: undefined }
 );
 
 // ─── Property 12: Input serialization round-trip ──────────────────────────────
@@ -56,16 +51,7 @@ describe("Feature: client-prospector, Property 12: Input serialization round-tri
                 fc.uuid(), // jobId
                 fc.uuid(), // companyId (serialized as string)
                 fc.uuid(), // userId
-                (
-                    query,
-                    companyContext,
-                    location,
-                    radius,
-                    categories,
-                    jobId,
-                    companyId,
-                    userId,
-                ) => {
+                (query, companyContext, location, radius, categories, jobId, companyId, userId) => {
                     const resolvedRadius = radius ?? 5000;
 
                     const eventPayload = {
@@ -84,8 +70,7 @@ describe("Feature: client-prospector, Property 12: Input serialization round-tri
                     const deserialized = JSON.parse(serialized) as unknown;
 
                     // Validate with ProspectorEventDataSchema
-                    const result =
-                        ProspectorEventDataSchema.safeParse(deserialized);
+                    const result = ProspectorEventDataSchema.safeParse(deserialized);
 
                     expect(result.success).toBe(true);
                     if (!result.success) return;
@@ -97,13 +82,16 @@ describe("Feature: client-prospector, Property 12: Input serialization round-tri
                     expect(result.data.query).toBe(query);
                     expect(result.data.companyContext).toBe(companyContext);
                     // JSON.stringify(-0) produces "0", so compare against the JSON round-tripped location
-                    const expectedLocation = JSON.parse(JSON.stringify(location)) as { lat: number; lng: number };
+                    const expectedLocation = JSON.parse(JSON.stringify(location)) as {
+                        lat: number;
+                        lng: number;
+                    };
                     expect(result.data.location).toEqual(expectedLocation);
                     expect(result.data.radius).toBe(resolvedRadius);
                     expect(result.data.categories).toEqual(categories);
-                },
+                }
             ),
-            { numRuns: 100 },
+            { numRuns: 100 }
         );
     });
 
@@ -142,11 +130,8 @@ describe("Feature: client-prospector, Property 12: Input serialization round-tri
                     };
 
                     // Round-trip through JSON
-                    const roundTripped = JSON.parse(
-                        JSON.stringify(eventPayload),
-                    ) as unknown;
-                    const eventResult =
-                        ProspectorEventDataSchema.safeParse(roundTripped);
+                    const roundTripped = JSON.parse(JSON.stringify(eventPayload)) as unknown;
+                    const eventResult = ProspectorEventDataSchema.safeParse(roundTripped);
 
                     expect(eventResult.success).toBe(true);
                     if (!eventResult.success) return;
@@ -154,12 +139,15 @@ describe("Feature: client-prospector, Property 12: Input serialization round-tri
                     // Core input fields must be identical after round-trip
                     expect(eventResult.data.query).toBe(query);
                     expect(eventResult.data.companyContext).toBe(companyContext);
-                    const expectedLoc = JSON.parse(JSON.stringify(location)) as { lat: number; lng: number };
+                    const expectedLoc = JSON.parse(JSON.stringify(location)) as {
+                        lat: number;
+                        lng: number;
+                    };
                     expect(eventResult.data.location).toEqual(expectedLoc);
                     expect(eventResult.data.categories).toEqual(categories);
-                },
+                }
             ),
-            { numRuns: 100 },
+            { numRuns: 100 }
         );
     });
 });
@@ -185,9 +173,9 @@ describe("Feature: client-prospector, Property 1: Valid input is accepted by Pro
                         categories,
                     });
                     expect(result.success).toBe(true);
-                },
+                }
             ),
-            { numRuns: 100 },
+            { numRuns: 100 }
         );
     });
 
@@ -204,9 +192,9 @@ describe("Feature: client-prospector, Property 1: Valid input is accepted by Pro
                         location: locationStr,
                     });
                     expect(result.success).toBe(true);
-                },
+                }
             ),
-            { numRuns: 100 },
+            { numRuns: 100 }
         );
     });
 });
@@ -237,9 +225,9 @@ describe("Feature: client-prospector, Property 2: Invalid input is rejected by P
                         location,
                     });
                     expect(result.success).toBe(false);
-                },
+                }
             ),
-            { numRuns: 100 },
+            { numRuns: 100 }
         );
     });
 
@@ -252,7 +240,7 @@ describe("Feature: client-prospector, Property 2: Invalid input is rejected by P
                 });
                 expect(result.success).toBe(false);
             }),
-            { numRuns: 100 },
+            { numRuns: 100 }
         );
     });
 
@@ -269,9 +257,9 @@ describe("Feature: client-prospector, Property 2: Invalid input is rejected by P
                         location,
                     });
                     expect(result.success).toBe(false);
-                },
+                }
             ),
-            { numRuns: 100 },
+            { numRuns: 100 }
         );
     });
 });

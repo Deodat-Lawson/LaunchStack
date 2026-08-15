@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         if (!parsed.success) {
             return NextResponse.json(
                 { error: "Validation failed", details: parsed.error.flatten() },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
@@ -52,16 +52,10 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        return NextResponse.json(
-            { jobId, status: "queued" },
-            { status: 202 },
-        );
+        return NextResponse.json({ jobId, status: "queued" }, { status: 202 });
     } catch (error) {
         console.error("[trend-search] POST error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
 
@@ -73,7 +67,7 @@ export async function GET() {
 
         const jobs = await getJobsByCompanyId(ctx.data.companyId);
 
-        const results = jobs.map((job) => ({
+        const results = jobs.map(job => ({
             id: job.id,
             status: job.status,
             query: job.input.query,
@@ -84,9 +78,6 @@ export async function GET() {
         return NextResponse.json({ searches: results }, { status: 200 });
     } catch (error) {
         console.error("[trend-search] GET error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

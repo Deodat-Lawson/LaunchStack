@@ -24,128 +24,120 @@ import { NextResponse } from "next/server";
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import {
-  kgEntities,
-  kgEntityMentions,
-  kgRelationships,
-} from "@launchstack/core/db/schema";
-import {
-  getNeo4jSession,
-  isNeo4jConfigured,
-} from "@launchstack/core/graph";
+import { kgEntities, kgEntityMentions, kgRelationships } from "@launchstack/core/db/schema";
+import { getNeo4jSession, isNeo4jConfigured } from "@launchstack/core/graph";
 import { getEngine } from "~/server/engine";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 interface GraphNode {
-  id: number;
-  name: string;
-  label: string;
-  mentionCount: number;
-  confidence: number;
+    id: number;
+    name: string;
+    label: string;
+    mentionCount: number;
+    confidence: number;
 }
 
 interface GraphEdge {
-  source: number;
-  target: number;
-  type: string;
-  weight: number;
-  evidenceCount: number;
+    source: number;
+    target: number;
+    type: string;
+    weight: number;
+    evidenceCount: number;
 }
 
 const MAX_LIMIT = 500;
 const DEFAULT_LIMIT = 120;
 
 export async function GET(request: Request) {
-  try {
-    const ctx = await requireWorkspaceContext();
-    if (!ctx.success) return ctx.response;
+    try {
+        const ctx = await requireWorkspaceContext();
+        if (!ctx.success) return ctx.response;
 
-    const url = new URL(request.url);
-    const limitParam = Number(url.searchParams.get("limit"));
-    const minCountParam = Number(url.searchParams.get("minCount"));
-    const documentIdParam = url.searchParams.get("documentId");
+        const url = new URL(request.url);
+        const limitParam = Number(url.searchParams.get("limit"));
+        const minCountParam = Number(url.searchParams.get("minCount"));
+        const documentIdParam = url.searchParams.get("documentId");
 
-    const limit = Number.isFinite(limitParam) && limitParam > 0
-      ? Math.min(limitParam, MAX_LIMIT)
-      : DEFAULT_LIMIT;
-    const minCount = Number.isFinite(minCountParam) && minCountParam > 0
-      ? minCountParam
-      : 1;
-    const documentId = documentIdParam ? Number(documentIdParam) : null;
+        const limit =
+            Number.isFinite(limitParam) && limitParam > 0
+                ? Math.min(limitParam, MAX_LIMIT)
+                : DEFAULT_LIMIT;
+        const minCount = Number.isFinite(minCountParam) && minCountParam > 0 ? minCountParam : 1;
+        const documentId = documentIdParam ? Number(documentIdParam) : null;
 
-    // Make sure the engine has booted so Neo4j is configured before we try it.
-    getEngine();
+        // Make sure the engine has booted so Neo4j is configured before we try it.
+        getEngine();
 
-    if (isNeo4jConfigured()) {
-      try {
-        const result = await queryNeo4j({
-          companyId: ctx.data.companyId,
-          limit,
-          minCount,
-          documentId,
-        });
-        if (result.nodes.length > 0) {
-          return NextResponse.json({
-            source: "neo4j",
-            ...result,
-          });
+        if (isNeo4jConfigured()) {
+            try {
+                const result = await queryNeo4j({
+                    companyId: ctx.data.companyId,
+                    limit,
+                    minCount,
+                    documentId,
+                });
+                if (result.nodes.length > 0) {
+                    return NextResponse.json({
+                        source: "neo4j",
+                        ...result,
+                    });
+                }
+                // Neo4j returned no rows for this company — fall through to Postgres
+                // in case sync hasn't run yet.
+            } catch (err) {
+                console.warn("[GraphEntities] Neo4j query failed, falling back to Postgres:", err);
+            }
         }
-        // Neo4j returned no rows for this company — fall through to Postgres
-        // in case sync hasn't run yet.
-      } catch (err) {
-        console.warn("[GraphEntities] Neo4j query failed, falling back to Postgres:", err);
-      }
-    }
 
-    const pg = await queryPostgres({
-      companyId: ctx.data.companyId,
-      limit,
-      minCount,
-      documentId,
-    });
-    return NextResponse.json({
-      source: pg.nodes.length > 0 ? "postgres" : "empty",
-      ...pg,
-    });
-  } catch (error) {
-    console.error("[GraphEntities] failed:", error);
-    return NextResponse.json(
-      {
-        error: "Failed to load graph",
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 },
-    );
-  }
+        const pg = await queryPostgres({
+            companyId: ctx.data.companyId,
+            limit,
+            minCount,
+            documentId,
+        });
+        return NextResponse.json({
+            source: pg.nodes.length > 0 ? "postgres" : "empty",
+            ...pg,
+        });
+    } catch (error) {
+        console.error("[GraphEntities] failed:", error);
+        return NextResponse.json(
+            {
+                error: "Failed to load graph",
+                details: error instanceof Error ? error.message : String(error),
+            },
+            { status: 500 }
+        );
+    }
 }
 
 interface QueryArgs {
-  companyId: bigint;
-  limit: number;
-  minCount: number;
-  documentId: number | null;
+    companyId: bigint;
+    limit: number;
+    minCount: number;
+    documentId: number | null;
 }
 
 interface QueryResult {
-  nodes: GraphNode[];
-  edges: GraphEdge[];
-  stats: { entities: number; relationships: number; truncated: boolean };
+    nodes: GraphNode[];
+    edges: GraphEdge[];
+    stats: { entities: number; relationships: number; truncated: boolean };
 }
 
 async function queryNeo4j({
-  companyId,
-  limit,
-  minCount,
-  documentId,
+    companyId,
+    limit,
+    minCount,
+    documentId,
 }: QueryArgs): Promise<QueryResult> {
-  const session = getNeo4jSession();
-  try {
-    const companyIdStr = companyId.toString();
-    // Pull top entities by mentionCount, optionally scoped to a document.
-    const entityFilter = documentId
-      ? `MATCH (e:Entity {companyId: $companyId})-[:MENTIONED_IN]->(:Section {documentId: $documentId})`
-      : `MATCH (e:Entity {companyId: $companyId})`;
-    const entityQuery = `
+    const session = getNeo4jSession();
+    try {
+        const companyIdStr = companyId.toString();
+        // Pull top entities by mentionCount, optionally scoped to a document.
+        const entityFilter = documentId
+            ? `MATCH (e:Entity {companyId: $companyId})-[:MENTIONED_IN]->(:Section {documentId: $documentId})`
+            : `MATCH (e:Entity {companyId: $companyId})`;
+        const entityQuery = `
       ${entityFilter}
       WHERE e.mentionCount >= $minCount
       WITH DISTINCT e
@@ -158,28 +150,28 @@ async function queryNeo4j({
       ORDER BY mentionCount DESC
       LIMIT $limit
     `;
-    const entityResult = await session.run(entityQuery, {
-      companyId: companyIdStr,
-      minCount,
-      limit,
-      documentId: documentId ? documentId.toString() : null,
-    });
-    const nodes: GraphNode[] = entityResult.records.map((r) => ({
-      id: Number(r.get("id")),
-      name: String(r.get("name")),
-      label: String(r.get("label")),
-      mentionCount: Number(r.get("mentionCount")),
-      confidence: Number(r.get("confidence")),
-    }));
-    if (nodes.length === 0) {
-      return {
-        nodes: [],
-        edges: [],
-        stats: { entities: 0, relationships: 0, truncated: false },
-      };
-    }
-    const nodeIds = nodes.map((n) => n.id);
-    const edgeQuery = `
+        const entityResult = await session.run(entityQuery, {
+            companyId: companyIdStr,
+            minCount,
+            limit,
+            documentId: documentId ? documentId.toString() : null,
+        });
+        const nodes: GraphNode[] = entityResult.records.map(r => ({
+            id: Number(r.get("id")),
+            name: String(r.get("name")),
+            label: String(r.get("label")),
+            mentionCount: Number(r.get("mentionCount")),
+            confidence: Number(r.get("confidence")),
+        }));
+        if (nodes.length === 0) {
+            return {
+                nodes: [],
+                edges: [],
+                stats: { entities: 0, relationships: 0, truncated: false },
+            };
+        }
+        const nodeIds = nodes.map(n => n.id);
+        const edgeQuery = `
       MATCH (a:Entity {companyId: $companyId})-[r]->(b:Entity {companyId: $companyId})
       WHERE a.id IN $nodeIds AND b.id IN $nodeIds AND type(r) <> 'MENTIONED_IN'
       RETURN
@@ -189,140 +181,137 @@ async function queryNeo4j({
         coalesce(r.weight, 0.5) AS weight,
         coalesce(r.evidenceCount, 1) AS evidenceCount
     `;
-    const edgeResult = await session.run(edgeQuery, {
-      companyId: companyIdStr,
-      nodeIds,
-    });
-    const edges: GraphEdge[] = edgeResult.records.map((r) => ({
-      source: Number(r.get("source")),
-      target: Number(r.get("target")),
-      type: String(r.get("type")),
-      weight: Number(r.get("weight")),
-      evidenceCount: Number(r.get("evidenceCount")),
-    }));
-    return {
-      nodes,
-      edges,
-      stats: {
-        entities: nodes.length,
-        relationships: edges.length,
-        truncated: nodes.length === limit,
-      },
-    };
-  } finally {
-    await session.close();
-  }
+        const edgeResult = await session.run(edgeQuery, {
+            companyId: companyIdStr,
+            nodeIds,
+        });
+        const edges: GraphEdge[] = edgeResult.records.map(r => ({
+            source: Number(r.get("source")),
+            target: Number(r.get("target")),
+            type: String(r.get("type")),
+            weight: Number(r.get("weight")),
+            evidenceCount: Number(r.get("evidenceCount")),
+        }));
+        return {
+            nodes,
+            edges,
+            stats: {
+                entities: nodes.length,
+                relationships: edges.length,
+                truncated: nodes.length === limit,
+            },
+        };
+    } finally {
+        await session.close();
+    }
 }
 
 async function queryPostgres({
-  companyId,
-  limit,
-  minCount,
-  documentId,
+    companyId,
+    limit,
+    minCount,
+    documentId,
 }: QueryArgs): Promise<QueryResult> {
-  let entityRows: {
-    id: number;
-    name: string;
-    displayName: string;
-    label: string;
-    mentionCount: number;
-    confidence: number;
-  }[];
+    let entityRows: {
+        id: number;
+        name: string;
+        displayName: string;
+        label: string;
+        mentionCount: number;
+        confidence: number;
+    }[];
 
-  if (documentId != null) {
-    entityRows = await db
-      .selectDistinct({
-        id: kgEntities.id,
-        name: kgEntities.name,
-        displayName: kgEntities.displayName,
-        label: kgEntities.label,
-        mentionCount: kgEntities.mentionCount,
-        confidence: kgEntities.confidence,
-      })
-      .from(kgEntities)
-      .innerJoin(
-        kgEntityMentions,
-        eq(kgEntities.id, kgEntityMentions.entityId),
-      )
-      .where(
-        and(
-          eq(kgEntities.companyId, companyId),
-          eq(kgEntityMentions.documentId, BigInt(documentId)),
-          sql`${kgEntities.mentionCount} >= ${minCount}`,
-        ),
-      )
-      .orderBy(desc(kgEntities.mentionCount))
-      .limit(limit);
-  } else {
-    entityRows = await db
-      .select({
-        id: kgEntities.id,
-        name: kgEntities.name,
-        displayName: kgEntities.displayName,
-        label: kgEntities.label,
-        mentionCount: kgEntities.mentionCount,
-        confidence: kgEntities.confidence,
-      })
-      .from(kgEntities)
-      .where(
-        and(
-          eq(kgEntities.companyId, companyId),
-          sql`${kgEntities.mentionCount} >= ${minCount}`,
-        ),
-      )
-      .orderBy(desc(kgEntities.mentionCount))
-      .limit(limit);
-  }
+    if (documentId != null) {
+        entityRows = await db
+            .selectDistinct({
+                id: kgEntities.id,
+                name: kgEntities.name,
+                displayName: kgEntities.displayName,
+                label: kgEntities.label,
+                mentionCount: kgEntities.mentionCount,
+                confidence: kgEntities.confidence,
+            })
+            .from(kgEntities)
+            .innerJoin(kgEntityMentions, eq(kgEntities.id, kgEntityMentions.entityId))
+            .where(
+                and(
+                    eq(kgEntities.companyId, companyId),
+                    eq(kgEntityMentions.documentId, BigInt(documentId)),
+                    sql`${kgEntities.mentionCount} >= ${minCount}`
+                )
+            )
+            .orderBy(desc(kgEntities.mentionCount))
+            .limit(limit);
+    } else {
+        entityRows = await db
+            .select({
+                id: kgEntities.id,
+                name: kgEntities.name,
+                displayName: kgEntities.displayName,
+                label: kgEntities.label,
+                mentionCount: kgEntities.mentionCount,
+                confidence: kgEntities.confidence,
+            })
+            .from(kgEntities)
+            .where(
+                and(
+                    eq(kgEntities.companyId, companyId),
+                    sql`${kgEntities.mentionCount} >= ${minCount}`
+                )
+            )
+            .orderBy(desc(kgEntities.mentionCount))
+            .limit(limit);
+    }
 
-  if (entityRows.length === 0) {
+    if (entityRows.length === 0) {
+        return {
+            nodes: [],
+            edges: [],
+            stats: { entities: 0, relationships: 0, truncated: false },
+        };
+    }
+
+    const nodeIds = entityRows.map(r => r.id);
+    const edgeRows = await db
+        .select({
+            source: kgRelationships.sourceEntityId,
+            target: kgRelationships.targetEntityId,
+            type: kgRelationships.relationshipType,
+            weight: kgRelationships.weight,
+            evidenceCount: kgRelationships.evidenceCount,
+        })
+        .from(kgRelationships)
+        .where(
+            and(
+                eq(kgRelationships.companyId, companyId),
+                inArray(kgRelationships.sourceEntityId, nodeIds),
+                inArray(kgRelationships.targetEntityId, nodeIds)
+            )
+        );
+
+    const nodes: GraphNode[] = entityRows.map(r => ({
+        id: r.id,
+        name: r.displayName,
+        label: r.label,
+        mentionCount: r.mentionCount,
+        confidence: r.confidence,
+    }));
+
+    const edges: GraphEdge[] = edgeRows.map(r => ({
+        source: r.source,
+        target: r.target,
+        type: r.type,
+        weight: r.weight,
+        evidenceCount: r.evidenceCount,
+    }));
+
     return {
-      nodes: [],
-      edges: [],
-      stats: { entities: 0, relationships: 0, truncated: false },
+        nodes,
+        edges,
+        stats: {
+            entities: nodes.length,
+            relationships: edges.length,
+            truncated: nodes.length === limit,
+        },
     };
-  }
-
-  const nodeIds = entityRows.map((r) => r.id);
-  const edgeRows = await db
-    .select({
-      source: kgRelationships.sourceEntityId,
-      target: kgRelationships.targetEntityId,
-      type: kgRelationships.relationshipType,
-      weight: kgRelationships.weight,
-      evidenceCount: kgRelationships.evidenceCount,
-    })
-    .from(kgRelationships)
-    .where(
-      and(
-        eq(kgRelationships.companyId, companyId),
-        inArray(kgRelationships.sourceEntityId, nodeIds),
-        inArray(kgRelationships.targetEntityId, nodeIds),
-      ),
-    );
-
-  const nodes: GraphNode[] = entityRows.map((r) => ({
-    id: r.id,
-    name: r.displayName,
-    label: r.label,
-    mentionCount: r.mentionCount,
-    confidence: r.confidence,
-  }));
-
-  const edges: GraphEdge[] = edgeRows.map((r) => ({
-    source: r.source,
-    target: r.target,
-    type: r.type,
-    weight: r.weight,
-    evidenceCount: r.evidenceCount,
-  }));
-
-  return {
-    nodes,
-    edges,
-    stats: {
-      entities: nodes.length,
-      relationships: edges.length,
-      truncated: nodes.length === limit,
-    },
-  };
 }

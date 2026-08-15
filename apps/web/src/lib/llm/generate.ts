@@ -31,44 +31,44 @@ import type { GenerateStructuredInput } from "./types";
  * is logged and the overall pipeline continues with the successful batches.
  */
 export async function generateStructured<TOutput>(
-  input: GenerateStructuredInput<TOutput>,
+    input: GenerateStructuredInput<TOutput>
 ): Promise<TOutput> {
-  const resolved = resolveConfiguredChatModel({ route: "fast" });
+    const resolved = resolveConfiguredChatModel({ route: "fast" });
 
-  // Diagnostic logging: capture the chosen model, prompt size, and
-  // wall-clock duration for every call. This is intentionally verbose in
-  // dev so slowness in any specific capability surfaces in the console.
-  // If this becomes noisy in production, gate it behind an env flag.
-  const promptChars = (input.system?.length ?? 0) + input.prompt.length;
-  const startedAt = Date.now();
-  console.log(
-    `[llm] generateStructured start capability=${input.capability} ` +
-      `route=${resolved.route} model=${resolved.modelId} ` +
-      `prompt=${promptChars} chars`,
-  );
-
-  try {
-    const messages = [
-      ...(input.system ? [new SystemMessage(input.system)] : []),
-      new HumanMessage(input.prompt),
-    ];
-    const result = await invokeStructured(resolved, input.schema, messages, {
-      name: input.schemaName ?? "structured_response",
-    });
-
+    // Diagnostic logging: capture the chosen model, prompt size, and
+    // wall-clock duration for every call. This is intentionally verbose in
+    // dev so slowness in any specific capability surfaces in the console.
+    // If this becomes noisy in production, gate it behind an env flag.
+    const promptChars = (input.system?.length ?? 0) + input.prompt.length;
+    const startedAt = Date.now();
     console.log(
-      `[llm] generateStructured ok  capability=${input.capability} ` +
-        `route=${resolved.route} model=${resolved.modelId} ` +
-        `${Date.now() - startedAt}ms`,
+        `[llm] generateStructured start capability=${input.capability} ` +
+            `route=${resolved.route} model=${resolved.modelId} ` +
+            `prompt=${promptChars} chars`
     );
 
-    return result;
-  } catch (err) {
-    console.error(
-      `[llm] generateStructured FAIL capability=${input.capability} ` +
-        `route=${resolved.route} model=${resolved.modelId} ` +
-        `${Date.now() - startedAt}ms err=${err instanceof Error ? err.message : String(err)}`,
-    );
-    throw err;
-  }
+    try {
+        const messages = [
+            ...(input.system ? [new SystemMessage(input.system)] : []),
+            new HumanMessage(input.prompt),
+        ];
+        const result = await invokeStructured(resolved, input.schema, messages, {
+            name: input.schemaName ?? "structured_response",
+        });
+
+        console.log(
+            `[llm] generateStructured ok  capability=${input.capability} ` +
+                `route=${resolved.route} model=${resolved.modelId} ` +
+                `${Date.now() - startedAt}ms`
+        );
+
+        return result;
+    } catch (err) {
+        console.error(
+            `[llm] generateStructured FAIL capability=${input.capability} ` +
+                `route=${resolved.route} model=${resolved.modelId} ` +
+                `${Date.now() - startedAt}ms err=${err instanceof Error ? err.message : String(err)}`
+        );
+        throw err;
+    }
 }

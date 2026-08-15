@@ -5,13 +5,11 @@ import { FounderWeeklyReviewEvidenceService } from "@launchstack/features/founde
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeIfDatabase =
-    process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL
+    (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
 
-type TestDatabase = Awaited<
-    ReturnType<typeof createFounderWeeklyReviewTestDatabase>
->;
+type TestDatabase = Awaited<ReturnType<typeof createFounderWeeklyReviewTestDatabase>>;
 type TestDb = TestDatabase["db"];
 
 function firstInsertedId(rows: unknown): bigint {
@@ -121,7 +119,13 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
 
         // Company A: two versions inside the window, two outside it.
         docAVersion1 = await insertVersion(testDb.db, docA, 1, "2026-02-17T10:00:00.000Z");
-        docAVersion2 = await insertVersion(testDb.db, docA, 2, "2026-02-20T10:00:00.000Z", "Updated pricing");
+        docAVersion2 = await insertVersion(
+            testDb.db,
+            docA,
+            2,
+            "2026-02-20T10:00:00.000Z",
+            "Updated pricing"
+        );
         await insertVersion(testDb.db, docA, 3, "2026-02-25T10:00:00.000Z"); // after end
         await insertVersion(testDb.db, docA, 4, "2026-02-10T10:00:00.000Z"); // before start
 
@@ -139,7 +143,12 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
             "Customer Feedback",
             "Gamma Feedback"
         );
-        docCProductVersion = await insertVersion(testDb.db, docCProduct, 1, "2026-02-17T12:00:00.000Z");
+        docCProductVersion = await insertVersion(
+            testDb.db,
+            docCProduct,
+            1,
+            "2026-02-17T12:00:00.000Z"
+        );
         docCFeedbackVersion = await insertVersion(
             testDb.db,
             docCFeedback,
@@ -159,13 +168,9 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
     });
 
     it("collects only in-window versions for the company, ordered by time", async () => {
-        const items = await service.collectDocumentChangeEvidence(
-            companyA,
-            START_BOUND,
-            END_BOUND
-        );
+        const items = await service.collectDocumentChangeEvidence(companyA, START_BOUND, END_BOUND);
 
-        expect(items.map((i) => i.sourceId)).toEqual([
+        expect(items.map(i => i.sourceId)).toEqual([
             `document_change:doc:${docA}:version:${docAVersion1}`,
             `document_change:doc:${docA}:version:${docAVersion2}`,
         ]);
@@ -180,7 +185,7 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
 
         expect(snapshot.schemaVersion).toBe("founder-weekly-review-evidence/v1");
         expect(snapshot.workspaceTimezone).toBe("UTC");
-        expect(snapshot.items.map((i) => i.sourceId)).toEqual([
+        expect(snapshot.items.map(i => i.sourceId)).toEqual([
             `document_change:doc:${docA}:version:${docAVersion1}`,
             `document_change:doc:${docA}:version:${docAVersion2}`,
         ]);
@@ -214,23 +219,19 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
     });
 
     it("reports every changed document as document_change, feedback documents included", async () => {
-        const items = await service.collectDocumentChangeEvidence(
-            companyC,
-            START_BOUND,
-            END_BOUND
-        );
+        const items = await service.collectDocumentChangeEvidence(companyC, START_BOUND, END_BOUND);
 
         // A Customer Feedback document still *changes*, and that change is a
         // document change. Classification into customer_feedback happens in the
         // dedicated collector, at section granularity — the two are not
         // mutually exclusive views of the same version.
-        expect(items.map((i) => i.sourceId).sort()).toEqual(
+        expect(items.map(i => i.sourceId).sort()).toEqual(
             [
                 `document_change:doc:${docCProduct}:version:${docCProductVersion}`,
                 `document_change:doc:${docCFeedback}:version:${docCFeedbackVersion}`,
             ].sort()
         );
-        expect(items.every((i) => i.sourceType === "document_change")).toBe(true);
+        expect(items.every(i => i.sourceType === "document_change")).toBe(true);
     });
 
     it("classifies a customer-feedback document as customer_feedback and excludes normal docs", async () => {
@@ -250,9 +251,7 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
         );
         expect(items[0]?.sourceType).toBe("customer_feedback");
         // the normal doc must not show up here
-        expect(
-            items.some((i) => i.sourceId.includes(`doc:${docCProduct}:`))
-        ).toBe(false);
+        expect(items.some(i => i.sourceId.includes(`doc:${docCProduct}:`))).toBe(false);
     });
 
     it("includes both source types in the snapshot without double-counting", async () => {
@@ -265,7 +264,7 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
         // Both changed documents plus the one cited feedback section. Deduping
         // is by source id, and a version-level change and a section-level quote
         // are genuinely different citations, so nothing collapses here.
-        expect(snapshot.items.map((i) => i.sourceId).sort()).toEqual(
+        expect(snapshot.items.map(i => i.sourceId).sort()).toEqual(
             [
                 `document_change:doc:${docCProduct}:version:${docCProductVersion}`,
                 `document_change:doc:${docCFeedback}:version:${docCFeedbackVersion}`,
@@ -273,8 +272,6 @@ describeIfDatabase("FounderWeeklyReviewEvidenceService (integration)", () => {
             ].sort()
         );
         // No source id appears twice.
-        expect(new Set(snapshot.items.map((i) => i.sourceId)).size).toBe(
-            snapshot.items.length
-        );
+        expect(new Set(snapshot.items.map(i => i.sourceId)).size).toBe(snapshot.items.length);
     });
 });

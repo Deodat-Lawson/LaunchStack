@@ -1,4 +1,13 @@
-import { bigint, bigserial, index, integer, jsonb, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+    bigint,
+    bigserial,
+    index,
+    integer,
+    jsonb,
+    text,
+    timestamp,
+    varchar,
+} from "drizzle-orm/pg-core";
 import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 export const marketingContentHistory = pgTable(
@@ -17,8 +26,8 @@ export const marketingContentHistory = pgTable(
         createdAt: timestamp("created_at").defaultNow().notNull(),
         updatedAt: timestamp("updated_at").defaultNow().notNull(),
     },
-    (table) => [
+    table => [
         index("mch_company_id_idx").on(table.companyId),
         index("mch_platform_idx").on(table.platform),
-    ],
+    ]
 );

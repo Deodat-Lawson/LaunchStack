@@ -8,22 +8,22 @@
  */
 
 export interface JobDispatcherPort {
-  /** Queue an event for asynchronous processing. */
-  dispatch(event: DispatchEvent): Promise<DispatchResult>;
-  /** Human-readable backend name (e.g. "inngest", "trigger.dev"). */
-  readonly name: string;
+    /** Queue an event for asynchronous processing. */
+    dispatch(event: DispatchEvent): Promise<DispatchResult>;
+    /** Human-readable backend name (e.g. "inngest", "trigger.dev"). */
+    readonly name: string;
 }
 
 export interface DispatchEvent {
-  /** Event name understood by the runner (e.g. "document/process.requested"). */
-  name: string;
-  /** Arbitrary JSON-serializable payload. */
-  data: Record<string, unknown>;
+    /** Event name understood by the runner (e.g. "document/process.requested"). */
+    name: string;
+    /** Arbitrary JSON-serializable payload. */
+    data: Record<string, unknown>;
 }
 
 export interface DispatchResult {
-  /** Optional identifier the caller can use for tracking. */
-  jobId?: string;
-  /** Runner-returned event/run IDs. Empty array when the runner returns none. */
-  eventIds: string[];
+    /** Optional identifier the caller can use for tracking. */
+    jobId?: string;
+    /** Runner-returned event/run IDs. Empty array when the runner returns none. */
+    eventIds: string[];
 }

@@ -8,12 +8,12 @@ export * from "./usage";
 export { applyMessageBehavior, systemMessageFor } from "./messages";
 export { normalizeModelContent } from "./normalize-content";
 export {
-  KEYLESS_PLACEHOLDER_API_KEY,
-  describeChatEndpointError,
+    KEYLESS_PLACEHOLDER_API_KEY,
+    describeChatEndpointError,
 } from "./openai-compatible-transport";
 export {
-  configureAuxiliaryOpenAI,
-  getAuxiliaryOpenAIConfig,
-  getOpenAIClient,
-  type AuxiliaryOpenAIConfig,
+    configureAuxiliaryOpenAI,
+    getAuxiliaryOpenAIConfig,
+    getOpenAIClient,
+    type AuxiliaryOpenAIConfig,
 } from "./openai-client";

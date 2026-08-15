@@ -45,10 +45,7 @@ describe("resolveReportingPeriodBounds", () => {
 
     it("throws on an invalid timezone", () => {
         expect(() =>
-            resolveReportingPeriodBounds(
-                { start: "2026-02-16", end: "2026-02-22" },
-                "Not/AZone"
-            )
+            resolveReportingPeriodBounds({ start: "2026-02-16", end: "2026-02-22" }, "Not/AZone")
         ).toThrow(/invalid workspace timezone/i);
     });
 });

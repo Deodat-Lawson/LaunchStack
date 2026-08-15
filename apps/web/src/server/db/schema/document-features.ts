@@ -7,7 +7,17 @@
  */
 import { relations, sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
-import { bigint, bigserial, boolean, index, integer, jsonb, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+    bigint,
+    bigserial,
+    boolean,
+    index,
+    integer,
+    jsonb,
+    text,
+    timestamp,
+    varchar,
+} from "drizzle-orm/pg-core";
 
 import { pgTable } from "@launchstack/core/db/schema/helpers";
 import { company, document, documentVersions } from "@launchstack/core/db/schema";
@@ -32,11 +42,9 @@ export const ChatHistory = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         userIdIdx: index("chat_history_user_id_idx").on(table.UserId),
         userIdCreatedAtIdx: index("chat_history_user_id_created_at_idx").on(
             table.UserId,
@@ -71,7 +79,7 @@ export const predictiveDocumentAnalysisResults = pgTable(
             onDelete: "cascade",
         }),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("predictive_analysis_document_id_idx").on(table.documentId),
         documentVersionIdx: index("predictive_analysis_document_version_idx").on(
             table.documentId,
@@ -96,10 +104,8 @@ export const documentReferenceResolution = pgTable(
         resolutionDetails: jsonb("resolution_details"),
         createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     },
-    (table) => ({
-        companyRefIdx: index("document_reference_resolutions_company_ref_idx").on(
-            table.companyId
-        ),
+    table => ({
+        companyRefIdx: index("document_reference_resolutions_company_ref_idx").on(table.companyId),
     })
 );
 
@@ -122,7 +128,7 @@ export const documentViews = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         documentIdIdx: index("document_views_document_id_idx").on(table.documentId),
         companyIdIdx: index("document_views_company_id_idx").on(table.companyId),
         userIdIdx: index("document_views_user_id_idx").on(table.userId),
@@ -144,12 +150,15 @@ export const chatHistoryRelations = relations(ChatHistory, ({ one }) => ({
     }),
 }));
 
-export const predictiveAnalysisRelations = relations(predictiveDocumentAnalysisResults, ({ one }) => ({
-    document: one(document, {
-        fields: [predictiveDocumentAnalysisResults.documentId],
-        references: [document.id],
-    }),
-}));
+export const predictiveAnalysisRelations = relations(
+    predictiveDocumentAnalysisResults,
+    ({ one }) => ({
+        document: one(document, {
+            fields: [predictiveDocumentAnalysisResults.documentId],
+            references: [document.id],
+        }),
+    })
+);
 
 export const documentViewsRelations = relations(documentViews, ({ one }) => ({
     document: one(document, {
@@ -193,22 +202,22 @@ export const generatedDocuments = pgTable(
                 editable?: boolean;
             }>;
         }>(),
-        citations: jsonb("citations").$type<Array<{
-            id: string;
-            text: string;
-            sourceUrl?: string;
-            sourceTitle?: string;
-            format: string;
-            createdAt: string;
-        }>>(),
+        citations: jsonb("citations").$type<
+            Array<{
+                id: string;
+                text: string;
+                sourceUrl?: string;
+                sourceTitle?: string;
+                format: string;
+                createdAt: string;
+            }>
+        >(),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date()
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         userIdIdx: index("generated_documents_user_id_idx").on(table.userId),
         companyIdIdx: index("generated_documents_company_id_idx").on(table.companyId),
         companyUserIdx: index("generated_documents_company_user_idx").on(
@@ -231,7 +240,9 @@ export const generatedDocumentsRelations = relations(generatedDocuments, ({ one 
 
 export type ChatHistoryEntry = InferSelectModel<typeof ChatHistory>;
 
-export type PredictiveDocumentAnalysisResult = InferSelectModel<typeof predictiveDocumentAnalysisResults>;
+export type PredictiveDocumentAnalysisResult = InferSelectModel<
+    typeof predictiveDocumentAnalysisResults
+>;
 
 export type DocumentReferenceResolution = InferSelectModel<typeof documentReferenceResolution>;
 

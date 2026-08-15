@@ -9,12 +9,12 @@ import { jsonb, timestamp, varchar } from "drizzle-orm/pg-core";
 import { pgTable } from "@launchstack/core/db/schema/helpers";
 
 export const trendSearchCache = pgTable("trend_search_cache", {
-  cacheKey: varchar("cache_key", { length: 64 }).primaryKey(),
-  output: jsonb("output").notNull(),
-  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
+    cacheKey: varchar("cache_key", { length: 64 }).primaryKey(),
+    output: jsonb("output").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull(),
 });
 
 export type TrendSearchCacheEntry = InferSelectModel<typeof trendSearchCache>;

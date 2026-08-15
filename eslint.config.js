@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+    allConfig: js.configs.all,
 });
 
 const eslintConfig = [
@@ -70,30 +70,45 @@ const eslintConfig = [
             "@typescript-eslint/array-type": "off",
             "@typescript-eslint/consistent-type-definitions": "off",
 
-            "@typescript-eslint/consistent-type-imports": ["warn", {
-                prefer: "type-imports",
-                fixStyle: "inline-type-imports",
-            }],
+            "@typescript-eslint/consistent-type-imports": [
+                "warn",
+                {
+                    prefer: "type-imports",
+                    fixStyle: "inline-type-imports",
+                },
+            ],
 
-            "@typescript-eslint/no-unused-vars": ["warn", {
-                argsIgnorePattern: "^_",
-            }],
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    argsIgnorePattern: "^_",
+                },
+            ],
 
             "@typescript-eslint/require-await": "off",
 
-            "@typescript-eslint/no-misused-promises": ["error", {
-                checksVoidReturn: {
-                    attributes: false,
+            "@typescript-eslint/no-misused-promises": [
+                "error",
+                {
+                    checksVoidReturn: {
+                        attributes: false,
+                    },
                 },
-            }],
+            ],
 
-            "drizzle/enforce-delete-with-where": ["error", {
-                drizzleObjectName: ["db", "ctx.db"],
-            }],
+            "drizzle/enforce-delete-with-where": [
+                "error",
+                {
+                    drizzleObjectName: ["db", "ctx.db"],
+                },
+            ],
 
-            "drizzle/enforce-update-with-where": ["error", {
-                drizzleObjectName: ["db", "ctx.db"],
-            }],
+            "drizzle/enforce-update-with-where": [
+                "error",
+                {
+                    drizzleObjectName: ["db", "ctx.db"],
+                },
+            ],
         },
     },
     // `services/*` is deliberately outside the pnpm workspace (see
@@ -125,29 +140,35 @@ const eslintConfig = [
     {
         files: ["packages/core/src/**/*.{ts,tsx}"],
         rules: {
-            "no-restricted-imports": ["error", {
-                patterns: [
-                    {
-                        group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
-                        message:
-                            "@launchstack/core must stay framework-agnostic. " +
-                            "No Next, Clerk, React, or UI libraries in core.",
-                    },
-                    {
-                        group: ["~/*", "@launchstack/features", "@launchstack/features/*"],
-                        message:
-                            "@launchstack/core cannot depend on apps/web (~/*) " +
-                            "or @launchstack/features. Features depend on core, " +
-                            "not the other way around.",
-                    },
-                ],
-            }],
-            "no-restricted-globals": ["error", {
-                name: "process",
-                message:
-                    "@launchstack/core must not read process.env. " +
-                    "Accept runtime config through CoreConfig / configure* hooks.",
-            }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
+                            message:
+                                "@launchstack/core must stay framework-agnostic. " +
+                                "No Next, Clerk, React, or UI libraries in core.",
+                        },
+                        {
+                            group: ["~/*", "@launchstack/features", "@launchstack/features/*"],
+                            message:
+                                "@launchstack/core cannot depend on apps/web (~/*) " +
+                                "or @launchstack/features. Features depend on core, " +
+                                "not the other way around.",
+                        },
+                    ],
+                },
+            ],
+            "no-restricted-globals": [
+                "error",
+                {
+                    name: "process",
+                    message:
+                        "@launchstack/core must not read process.env. " +
+                        "Accept runtime config through CoreConfig / configure* hooks.",
+                },
+            ],
         },
     },
     // Tests and dev-harness scripts interact with jest/vitest mocks and
@@ -183,99 +204,155 @@ const eslintConfig = [
     {
         files: ["packages/protocol/src/**/*.ts"],
         rules: {
-            "no-restricted-imports": ["error", {
-                patterns: [
-                    {
-                        group: ["@launchstack/*", "~/*", "next", "next/*", "@clerk/*", "react", "node:*"],
-                        message:
-                            "@launchstack/protocol is contracts only: zod and " +
-                            "nothing else — no other workspace package, no " +
-                            "Node built-ins, no frameworks.",
-                    },
-                ],
-            }],
-            "no-restricted-globals": ["error", {
-                name: "process",
-                message: "@launchstack/protocol must not read the environment.",
-            }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: [
+                                "@launchstack/*",
+                                "~/*",
+                                "next",
+                                "next/*",
+                                "@clerk/*",
+                                "react",
+                                "node:*",
+                            ],
+                            message:
+                                "@launchstack/protocol is contracts only: zod and " +
+                                "nothing else — no other workspace package, no " +
+                                "Node built-ins, no frameworks.",
+                        },
+                    ],
+                },
+            ],
+            "no-restricted-globals": [
+                "error",
+                {
+                    name: "process",
+                    message: "@launchstack/protocol must not read the environment.",
+                },
+            ],
         },
     },
     {
         files: ["packages/evidence/src/**/*.ts"],
         rules: {
-            "no-restricted-imports": ["error", {
-                patterns: [
-                    {
-                        group: [
-                            "@launchstack/core", "@launchstack/core/*",
-                            "@launchstack/application", "@launchstack/application/*",
-                            "@launchstack/adapters", "@launchstack/adapters/*",
-                            "@launchstack/features", "@launchstack/features/*",
-                            "~/*", "next", "next/*", "@clerk/*", "react", "node:*",
-                        ],
-                        message:
-                            "@launchstack/evidence is pure domain logic: it may " +
-                            "import @launchstack/protocol and nothing else.",
-                    },
-                ],
-            }],
-            "no-restricted-globals": ["error", {
-                name: "process",
-                message: "@launchstack/evidence must not read the environment.",
-            }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: [
+                                "@launchstack/core",
+                                "@launchstack/core/*",
+                                "@launchstack/application",
+                                "@launchstack/application/*",
+                                "@launchstack/adapters",
+                                "@launchstack/adapters/*",
+                                "@launchstack/features",
+                                "@launchstack/features/*",
+                                "~/*",
+                                "next",
+                                "next/*",
+                                "@clerk/*",
+                                "react",
+                                "node:*",
+                            ],
+                            message:
+                                "@launchstack/evidence is pure domain logic: it may " +
+                                "import @launchstack/protocol and nothing else.",
+                        },
+                    ],
+                },
+            ],
+            "no-restricted-globals": [
+                "error",
+                {
+                    name: "process",
+                    message: "@launchstack/evidence must not read the environment.",
+                },
+            ],
         },
     },
     {
         files: ["packages/application/src/**/*.ts"],
         rules: {
-            "no-restricted-imports": ["error", {
-                patterns: [
-                    {
-                        group: [
-                            "@launchstack/core", "@launchstack/core/*",
-                            "@launchstack/adapters", "@launchstack/adapters/*",
-                            "@launchstack/features", "@launchstack/features/*",
-                            "~/*", "next", "next/*", "@clerk/*", "react",
-                            "drizzle-orm", "drizzle-orm/*", "postgres",
-                        ],
-                        message:
-                            "@launchstack/application holds use cases and ports " +
-                            "only. It may import protocol + evidence; database " +
-                            "and framework code belongs in adapters/apps.",
-                    },
-                ],
-            }],
-            "no-restricted-globals": ["error", {
-                name: "process",
-                message:
-                    "@launchstack/application must not read the environment — " +
-                    "configuration arrives through injected ports.",
-            }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: [
+                                "@launchstack/core",
+                                "@launchstack/core/*",
+                                "@launchstack/adapters",
+                                "@launchstack/adapters/*",
+                                "@launchstack/features",
+                                "@launchstack/features/*",
+                                "~/*",
+                                "next",
+                                "next/*",
+                                "@clerk/*",
+                                "react",
+                                "drizzle-orm",
+                                "drizzle-orm/*",
+                                "postgres",
+                            ],
+                            message:
+                                "@launchstack/application holds use cases and ports " +
+                                "only. It may import protocol + evidence; database " +
+                                "and framework code belongs in adapters/apps.",
+                        },
+                    ],
+                },
+            ],
+            "no-restricted-globals": [
+                "error",
+                {
+                    name: "process",
+                    message:
+                        "@launchstack/application must not read the environment — " +
+                        "configuration arrives through injected ports.",
+                },
+            ],
         },
     },
     {
         files: ["packages/adapters/src/**/*.ts"],
         rules: {
-            "no-restricted-imports": ["error", {
-                patterns: [
-                    {
-                        group: [
-                            "@launchstack/features", "@launchstack/features/*",
-                            "~/*", "next", "next/*", "@clerk/*", "react", "react-dom",
-                        ],
-                        message:
-                            "@launchstack/adapters implements ports over " +
-                            "infrastructure. It must stay host-agnostic: no " +
-                            "Next/Clerk/React, no apps/web, no features.",
-                    },
-                ],
-            }],
-            "no-restricted-globals": ["error", {
-                name: "process",
-                message:
-                    "@launchstack/adapters must not read process.env — " +
-                    "configuration is injected by the composition roots.",
-            }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: [
+                                "@launchstack/features",
+                                "@launchstack/features/*",
+                                "~/*",
+                                "next",
+                                "next/*",
+                                "@clerk/*",
+                                "react",
+                                "react-dom",
+                            ],
+                            message:
+                                "@launchstack/adapters implements ports over " +
+                                "infrastructure. It must stay host-agnostic: no " +
+                                "Next/Clerk/React, no apps/web, no features.",
+                        },
+                    ],
+                },
+            ],
+            "no-restricted-globals": [
+                "error",
+                {
+                    name: "process",
+                    message:
+                        "@launchstack/adapters must not read process.env — " +
+                        "configuration is injected by the composition roots.",
+                },
+            ],
         },
     },
     // @launchstack/features builds vertical features on top of core. It can
@@ -284,24 +361,27 @@ const eslintConfig = [
     {
         files: ["packages/features/src/**/*.{ts,tsx}"],
         rules: {
-            "no-restricted-imports": ["error", {
-                patterns: [
-                    {
-                        group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
-                        message:
-                            "@launchstack/features must not import Next, Clerk, " +
-                            "or React. Those belong in apps/web. Feature code " +
-                            "has to work in any Node host.",
-                    },
-                    {
-                        group: ["~/*"],
-                        message:
-                            "@launchstack/features cannot import from apps/web " +
-                            "(~/*). Rewrite as a relative import inside the " +
-                            "feature or as an @launchstack/core subpath.",
-                    },
-                ],
-            }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: ["next/*", "next", "@clerk/*", "react", "react-dom"],
+                            message:
+                                "@launchstack/features must not import Next, Clerk, " +
+                                "or React. Those belong in apps/web. Feature code " +
+                                "has to work in any Node host.",
+                        },
+                        {
+                            group: ["~/*"],
+                            message:
+                                "@launchstack/features cannot import from apps/web " +
+                                "(~/*). Rewrite as a relative import inside the " +
+                                "feature or as an @launchstack/core subpath.",
+                        },
+                    ],
+                },
+            ],
         },
     },
     // Every chat request goes through one OpenAI-compatible transport, which
@@ -312,39 +392,42 @@ const eslintConfig = [
         files: ["packages/**/src/**/*.{ts,tsx}", "apps/web/src/**/*.{ts,tsx}"],
         ignores: ["packages/adapters/src/llm/openai-compatible-transport.ts"],
         rules: {
-            "no-restricted-imports": ["error", {
-                paths: [
-                    {
-                        name: "@langchain/openai",
-                        importNames: ["ChatOpenAI"],
-                        message:
-                            "Resolve a route with @launchstack/core/llm instead. " +
-                            "ChatOpenAI belongs to openai-compatible-transport.ts alone. " +
-                            "(OpenAIEmbeddings is fine — embeddings are configured separately.)",
-                    },
-                    {
-                        name: "@langchain/anthropic",
-                        importNames: ["ChatAnthropic"],
-                        message:
-                            "Chat reaches one OpenAI-compatible endpoint; native provider " +
-                            "transports are tracked in the multi-endpoint follow-up issue.",
-                    },
-                    {
-                        name: "@langchain/google-genai",
-                        importNames: ["ChatGoogleGenerativeAI"],
-                        message:
-                            "Chat reaches one OpenAI-compatible endpoint; native provider " +
-                            "transports are tracked in the multi-endpoint follow-up issue.",
-                    },
-                    {
-                        name: "@langchain/ollama",
-                        importNames: ["ChatOllama"],
-                        message:
-                            "Point CHAT_BASE_URL at Ollama's OpenAI-compatible /v1 surface " +
-                            "instead. (OllamaEmbeddings is fine — embeddings are separate.)",
-                    },
-                ],
-            }],
+            "no-restricted-imports": [
+                "error",
+                {
+                    paths: [
+                        {
+                            name: "@langchain/openai",
+                            importNames: ["ChatOpenAI"],
+                            message:
+                                "Resolve a route with @launchstack/core/llm instead. " +
+                                "ChatOpenAI belongs to openai-compatible-transport.ts alone. " +
+                                "(OpenAIEmbeddings is fine — embeddings are configured separately.)",
+                        },
+                        {
+                            name: "@langchain/anthropic",
+                            importNames: ["ChatAnthropic"],
+                            message:
+                                "Chat reaches one OpenAI-compatible endpoint; native provider " +
+                                "transports are tracked in the multi-endpoint follow-up issue.",
+                        },
+                        {
+                            name: "@langchain/google-genai",
+                            importNames: ["ChatGoogleGenerativeAI"],
+                            message:
+                                "Chat reaches one OpenAI-compatible endpoint; native provider " +
+                                "transports are tracked in the multi-endpoint follow-up issue.",
+                        },
+                        {
+                            name: "@langchain/ollama",
+                            importNames: ["ChatOllama"],
+                            message:
+                                "Point CHAT_BASE_URL at Ollama's OpenAI-compatible /v1 surface " +
+                                "instead. (OllamaEmbeddings is fine — embeddings are separate.)",
+                        },
+                    ],
+                },
+            ],
         },
     },
 ];

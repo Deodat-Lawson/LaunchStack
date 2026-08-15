@@ -18,20 +18,20 @@
 const STORE: Record<symbol, unknown> = globalThis as unknown as Record<symbol, unknown>;
 
 export interface Slot<T> {
-  get(): T | undefined;
-  set(value: T): void;
-  clear(): void;
+    get(): T | undefined;
+    set(value: T): void;
+    clear(): void;
 }
 
 export function createSlot<T>(name: string): Slot<T> {
-  const key = Symbol.for(`@launchstack/adapters:${name}`);
-  return {
-    get: () => STORE[key] as T | undefined,
-    set: (value: T) => {
-      STORE[key] = value;
-    },
-    clear: () => {
-      delete STORE[key];
-    },
-  };
+    const key = Symbol.for(`@launchstack/adapters:${name}`);
+    return {
+        get: () => STORE[key] as T | undefined,
+        set: (value: T) => {
+            STORE[key] = value;
+        },
+        clear: () => {
+            delete STORE[key];
+        },
+    };
 }

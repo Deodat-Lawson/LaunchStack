@@ -23,31 +23,29 @@ import { sql } from "drizzle-orm";
 import type { DbClient } from "@launchstack/core/db";
 
 type QueryResult = {
-  count?: number;
-  rowCount?: number;
-  rows?: Array<Record<string, unknown>>;
+    count?: number;
+    rowCount?: number;
+    rows?: Array<Record<string, unknown>>;
 };
 
 function resultCount(result: unknown): number {
-  const queryResult = result as QueryResult;
-  const rows = Array.isArray(result)
-    ? (result as Array<Record<string, unknown>>)
-    : queryResult.rows;
-  const count = rows?.[0]?.count;
-  return count === undefined
-    ? Number(queryResult.count ?? queryResult.rowCount ?? 0)
-    : Number(count);
+    const queryResult = result as QueryResult;
+    const rows = Array.isArray(result)
+        ? (result as Array<Record<string, unknown>>)
+        : queryResult.rows;
+    const count = rows?.[0]?.count;
+    return count === undefined
+        ? Number(queryResult.count ?? queryResult.rowCount ?? 0)
+        : Number(count);
 }
 
 /**
  * Verified users holding a default company but no membership for it — exactly
  * the population that resolves to a null workspace today.
  */
-export async function countUsersMissingMembership(
-  db: DbClient,
-): Promise<number> {
-  return resultCount(
-    await db.execute(sql`
+export async function countUsersMissingMembership(db: DbClient): Promise<number> {
+    return resultCount(
+        await db.execute(sql`
       SELECT COUNT(*)::int AS count
       FROM pdr_ai_v2_users u
       LEFT JOIN pdr_ai_v2_user_company_memberships m
@@ -56,8 +54,8 @@ export async function countUsersMissingMembership(
       WHERE u.status = 'verified'
         AND u.company_id IS NOT NULL
         AND m.id IS NULL
-    `),
-  );
+    `)
+    );
 }
 
 /**
@@ -68,12 +66,10 @@ export async function countUsersMissingMembership(
  * membership role is owner/admin/editor (see ~/lib/membership-roles) — so the
  * mapping mirrors what the signup routes already write.
  */
-export async function provisionMissingMemberships(
-  db: DbClient,
-): Promise<void> {
-  console.log("[backfill-user-company-memberships] Starting...");
+export async function provisionMissingMemberships(db: DbClient): Promise<void> {
+    console.log("[backfill-user-company-memberships] Starting...");
 
-  await db.execute(sql`
+    await db.execute(sql`
     INSERT INTO pdr_ai_v2_user_company_memberships (user_id, company_id, role)
     SELECT
         u.id,
@@ -90,5 +86,5 @@ export async function provisionMissingMemberships(
     ON CONFLICT (user_id, company_id) DO NOTHING
   `);
 
-  console.log("[backfill-user-company-memberships] Done.");
+    console.log("[backfill-user-company-memberships] Done.");
 }

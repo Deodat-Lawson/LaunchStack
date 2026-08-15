@@ -12,8 +12,8 @@ export type FreshnessTier = "fresh" | "aging" | "stale";
  * strictly less than `staleAfterDays`.
  */
 export interface FreshnessPolicy {
-  freshWithinDays: number;
-  staleAfterDays: number;
+    freshWithinDays: number;
+    staleAfterDays: number;
 }
 
 /**
@@ -22,28 +22,28 @@ export interface FreshnessPolicy {
  * should) pass their own policy instead.
  */
 export const DEFAULT_FRESHNESS_POLICY: FreshnessPolicy = {
-  freshWithinDays: 30,
-  staleAfterDays: 180,
+    freshWithinDays: 30,
+    staleAfterDays: 180,
 };
 
 /** True when both thresholds are finite, non-negative, and correctly ordered. */
 export function isValidFreshnessPolicy(policy: FreshnessPolicy): boolean {
-  return (
-    Number.isFinite(policy.freshWithinDays) &&
-    policy.freshWithinDays >= 0 &&
-    Number.isFinite(policy.staleAfterDays) &&
-    policy.freshWithinDays < policy.staleAfterDays
-  );
+    return (
+        Number.isFinite(policy.freshWithinDays) &&
+        policy.freshWithinDays >= 0 &&
+        Number.isFinite(policy.staleAfterDays) &&
+        policy.freshWithinDays < policy.staleAfterDays
+    );
 }
 
 const MS_PER_DAY = 86_400_000;
 
 function parseIsoTimestamp(value: string, label: string): number {
-  const ms = Date.parse(value);
-  if (Number.isNaN(ms)) {
-    throw new RangeError(`${label} is not a parseable ISO timestamp: ${value}`);
-  }
-  return ms;
+    const ms = Date.parse(value);
+    if (Number.isNaN(ms)) {
+        throw new RangeError(`${label} is not a parseable ISO timestamp: ${value}`);
+    }
+    return ms;
 }
 
 /**
@@ -55,20 +55,19 @@ function parseIsoTimestamp(value: string, label: string): number {
  * on an invalid policy or unparseable timestamps.
  */
 export function computeFreshness(
-  lastUpdatedAt: string,
-  now: string,
-  policy: FreshnessPolicy,
+    lastUpdatedAt: string,
+    now: string,
+    policy: FreshnessPolicy
 ): FreshnessTier {
-  if (!isValidFreshnessPolicy(policy)) {
-    throw new RangeError(
-      "Invalid freshness policy: freshWithinDays must be >= 0 and < staleAfterDays",
-    );
-  }
-  const ageDays =
-    (parseIsoTimestamp(now, "now") -
-      parseIsoTimestamp(lastUpdatedAt, "lastUpdatedAt")) /
-    MS_PER_DAY;
-  if (ageDays <= policy.freshWithinDays) return "fresh";
-  if (ageDays <= policy.staleAfterDays) return "aging";
-  return "stale";
+    if (!isValidFreshnessPolicy(policy)) {
+        throw new RangeError(
+            "Invalid freshness policy: freshWithinDays must be >= 0 and < staleAfterDays"
+        );
+    }
+    const ageDays =
+        (parseIsoTimestamp(now, "now") - parseIsoTimestamp(lastUpdatedAt, "lastUpdatedAt")) /
+        MS_PER_DAY;
+    if (ageDays <= policy.freshWithinDays) return "fresh";
+    if (ageDays <= policy.staleAfterDays) return "aging";
+    return "stale";
 }

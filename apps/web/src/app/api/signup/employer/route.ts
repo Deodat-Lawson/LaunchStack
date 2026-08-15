@@ -21,10 +21,7 @@ export async function POST(request: Request) {
             .select()
             .from(company)
             .where(
-                and(
-                    eq(company.name, companyName),
-                    eq(company.employerpasskey, employerPasskey)
-                )
+                and(eq(company.name, companyName), eq(company.employerpasskey, employerPasskey))
             );
 
         if (!existingCompany) {

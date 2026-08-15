@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
                 if (!parsed.success) {
                     return NextResponse.json(
                         { error: "Validation failed", details: parsed.error.flatten() },
-                        { status: 400 },
+                        { status: 400 }
                     );
                 }
 
@@ -54,9 +54,7 @@ export async function POST(request: NextRequest) {
                 const jobId = uuidv4();
                 const radius = input.radius ?? DEFAULT_SEARCH_RADIUS;
                 const queuedLocation =
-                    typeof input.location === "string"
-                        ? { lat: 0, lng: 0 }
-                        : input.location;
+                    typeof input.location === "string" ? { lat: 0, lng: 0 } : input.location;
 
                 // Step 5: Create the job row in the DB with status "queued".
                 // The frontend can immediately start polling GET /api/client-prospector/[jobId]
@@ -86,23 +84,19 @@ export async function POST(request: NextRequest) {
                         location: input.location,
                         radius,
                         ...(input.categories ? { categories: input.categories } : {}),
-                        ...(input.excludeChains !== undefined ? { excludeChains: input.excludeChains } : {}),
+                        ...(input.excludeChains !== undefined
+                            ? { excludeChains: input.excludeChains }
+                            : {}),
                     },
                 });
 
                 // Step 7: Return 202 Accepted — the job is queued, not finished yet.
-                return NextResponse.json(
-                    { jobId, status: "queued" },
-                    { status: 202 },
-                );
+                return NextResponse.json({ jobId, status: "queued" }, { status: 202 });
             } catch (error) {
                 console.error("[client-prospector] POST error:", error);
-                return NextResponse.json(
-                    { error: "Internal server error" },
-                    { status: 500 },
-                );
+                return NextResponse.json({ error: "Internal server error" }, { status: 500 });
             }
-        },
+        }
     );
 }
 
@@ -122,20 +116,20 @@ export async function GET(request: NextRequest) {
         if (!Number.isInteger(limit) || limit < 1 || limit > 500) {
             return NextResponse.json(
                 { error: "Invalid limit: expected an integer between 1 and 500" },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
         if (!Number.isInteger(offset) || offset < 0) {
             return NextResponse.json(
                 { error: "Invalid offset: expected a non-negative integer" },
-                { status: 400 },
+                { status: 400 }
             );
         }
 
         const jobs = await getJobsByCompanyId(ctx.data.companyId, { limit, offset });
 
-        const results = jobs.map((job) => ({
+        const results = jobs.map(job => ({
             id: job.id,
             status: job.status,
             query: job.input.query,
@@ -147,9 +141,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ jobs: results, pagination: { limit, offset } }, { status: 200 });
     } catch (error) {
         console.error("[client-prospector] GET error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

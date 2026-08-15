@@ -1,15 +1,15 @@
 import type { ResolvedChatModel } from "@launchstack/core/llm";
 
 export interface DeprecatedChatSelection {
-  /** Pre-PR per-request provider selector. No longer meaningful. */
-  provider?: string;
-  /** Pre-PR per-request model selector. */
-  model?: string;
+    /** Pre-PR per-request provider selector. No longer meaningful. */
+    provider?: string;
+    /** Pre-PR per-request model selector. */
+    model?: string;
 }
 
 export type DeprecatedChatSelectionResult =
-  | { ok: true }
-  | { ok: false; status: 400; message: string };
+    | { ok: true }
+    | { ok: false; status: 400; message: string };
 
 /**
  * Compatibility-window handling for legacy request selectors.
@@ -21,24 +21,24 @@ export type DeprecatedChatSelectionResult =
  * a selector would let a client believe it picked a model it did not get.
  */
 export function validateDeprecatedChatSelection(
-  requested: DeprecatedChatSelection,
-  resolved: Pick<ResolvedChatModel, "modelId">,
+    requested: DeprecatedChatSelection,
+    resolved: Pick<ResolvedChatModel, "modelId">
 ): DeprecatedChatSelectionResult {
-  if (requested.provider) {
-    return {
-      ok: false,
-      status: 400,
-      message:
-        "Per-request provider selection is no longer supported; the deployment serves one chat endpoint configured by the operator",
-    };
-  }
-  if (requested.model && requested.model !== resolved.modelId) {
-    return {
-      ok: false,
-      status: 400,
-      message:
-        "Per-request model overrides are disabled; the model serving each route is operator-configured",
-    };
-  }
-  return { ok: true };
+    if (requested.provider) {
+        return {
+            ok: false,
+            status: 400,
+            message:
+                "Per-request provider selection is no longer supported; the deployment serves one chat endpoint configured by the operator",
+        };
+    }
+    if (requested.model && requested.model !== resolved.modelId) {
+        return {
+            ok: false,
+            status: 400,
+            message:
+                "Per-request model overrides are disabled; the model serving each route is operator-configured",
+        };
+    }
+    return { ok: true };
 }

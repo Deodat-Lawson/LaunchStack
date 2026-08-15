@@ -3,13 +3,13 @@
  * before they reach the user. Each guardrail can run independently.
  */
 
-export { filterContent, type ContentFilterResult, type PIIDetection } from './contentFilter';
-export { checkGrounding, type GroundingCheckResult } from './groundingCheck';
-export { checkConfidence, type ConfidenceGateResult } from './confidenceGate';
+export { filterContent, type ContentFilterResult, type PIIDetection } from "./contentFilter";
+export { checkGrounding, type GroundingCheckResult } from "./groundingCheck";
+export { checkConfidence, type ConfidenceGateResult } from "./confidenceGate";
 
-import { filterContent, type ContentFilterResult } from './contentFilter';
-import { checkGrounding, type GroundingCheckResult } from './groundingCheck';
-import { checkConfidence, type ConfidenceGateResult } from './confidenceGate';
+import { filterContent, type ContentFilterResult } from "./contentFilter";
+import { checkGrounding, type GroundingCheckResult } from "./groundingCheck";
+import { checkConfidence, type ConfidenceGateResult } from "./confidenceGate";
 
 export type GuardrailResult = {
     passed: boolean;
@@ -40,7 +40,7 @@ const DEFAULT_OPTIONS: Required<GuardrailOptions> = {
 export function runGuardrails(
     response: string,
     sourceChunks: string[] = [],
-    options: GuardrailOptions = {},
+    options: GuardrailOptions = {}
 ): GuardrailResult {
     const opts = { ...DEFAULT_OPTIONS, ...options };
     const warnings: string[] = [];
@@ -59,10 +59,10 @@ export function runGuardrails(
 
     if (!contentResult.passed) {
         if (contentResult.piiDetected.length > 0) {
-            warnings.push(`PII detected: ${contentResult.piiDetected.map(p => p.type).join(', ')}`);
+            warnings.push(`PII detected: ${contentResult.piiDetected.map(p => p.type).join(", ")}`);
         }
         if (contentResult.toxicContentDetected) {
-            warnings.push('Potentially harmful content detected');
+            warnings.push("Potentially harmful content detected");
         }
     }
 

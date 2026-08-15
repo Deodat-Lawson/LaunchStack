@@ -115,9 +115,7 @@ describe("regression: the exemplar good post passes the full default run", () =>
     it("GOOD_MERIDIAN_LINKEDIN passes every default assertion", () => {
         const result = runFixture(fixture, out("linkedin", GOOD_MERIDIAN_LINKEDIN), context);
         expect(result.errors).toEqual([]);
-        expect(
-            result.blocking.map(b => `${b.criterionId}: ${b.explanation}`)
-        ).toEqual([]);
+        expect(result.blocking.map(b => `${b.criterionId}: ${b.explanation}`)).toEqual([]);
         expect(result.passed).toBe(true);
     });
 

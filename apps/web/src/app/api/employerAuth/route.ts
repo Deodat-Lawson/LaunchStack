@@ -1,4 +1,3 @@
-
 import { db } from "../../../server/db/index";
 import { users } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
@@ -6,7 +5,7 @@ import {
     handleApiError,
     createSuccessResponse,
     createForbiddenError,
-    createNotFoundError
+    createNotFoundError,
 } from "~/lib/api-utils";
 import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
@@ -27,10 +26,7 @@ export async function GET() {
         const clerkUserId = identity.data.clerkUserId;
 
         const dbStart = Date.now();
-        const [userInfo] = await db
-            .select()
-            .from(users)
-            .where(eq(users.userId, clerkUserId));
+        const [userInfo] = await db.select().from(users).where(eq(users.userId, clerkUserId));
         dbQueryMs = Date.now() - dbStart;
 
         if (!userInfo) {
@@ -40,12 +36,16 @@ export async function GET() {
 
         if (userInfo.role === "employee") {
             outcome = "forbidden_role";
-            return createForbiddenError("Employer access required. Your account does not have the necessary permissions.");
+            return createForbiddenError(
+                "Employer access required. Your account does not have the necessary permissions."
+            );
         }
 
         if (userInfo.status !== "verified") {
             outcome = "forbidden_status";
-            return createForbiddenError("Account not verified. Please wait for administrator approval.");
+            return createForbiddenError(
+                "Account not verified. Please wait for administrator approval."
+            );
         }
 
         return createSuccessResponse({ role: userInfo.role }, "Authorization successful");
@@ -57,7 +57,9 @@ export async function GET() {
         if (shouldLogPerf) {
             const totalMs = Date.now() - requestStart;
             const dbSegment = dbQueryMs == null ? "n/a" : `${dbQueryMs}ms`;
-            console.info(`[perf] employerAuth total=${totalMs}ms db=${dbSegment} outcome=${outcome}`);
+            console.info(
+                `[perf] employerAuth total=${totalMs}ms db=${dbSegment} outcome=${outcome}`
+            );
         }
     }
 }

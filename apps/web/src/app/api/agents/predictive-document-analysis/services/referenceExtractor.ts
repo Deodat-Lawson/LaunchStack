@@ -1,18 +1,28 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import { invokeStructured } from "@launchstack/core/llm";
-import type { PdfChunk, DocumentReference } from "~/app/api/agents/predictive-document-analysis/types";
-import { groupContentFromChunks, isValidReference } from "~/app/api/agents/predictive-document-analysis/utils/content";
+import type {
+    PdfChunk,
+    DocumentReference,
+} from "~/app/api/agents/predictive-document-analysis/types";
+import {
+    groupContentFromChunks,
+    isValidReference,
+} from "~/app/api/agents/predictive-document-analysis/utils/content";
 import { sanitizeErrorMessage } from "~/app/api/agents/predictive-document-analysis/utils/logging";
 import { resolveConfiguredChatModel } from "~/lib/models";
 
 const ReferenceExtractionSchema = z.object({
-    references: z.array(z.object({
-        documentName: z.string(),
-        documentType: z.string(),
-        page: z.number(),
-        contextSnippet: z.string()
-    })).describe('Extracted references')
+    references: z
+        .array(
+            z.object({
+                documentName: z.string(),
+                documentType: z.string(),
+                page: z.number(),
+                contextSnippet: z.string(),
+            })
+        )
+        .describe("Extracted references"),
 });
 
 function createReferenceExtractionPrompt(content: string): string {
@@ -44,12 +54,12 @@ function createReferenceExtractionPrompt(content: string): string {
 }
 
 export async function extractReferences(
-    chunks: PdfChunk[], 
+    chunks: PdfChunk[],
     timeoutMs = 30000
 ): Promise<DocumentReference[]> {
     const content = groupContentFromChunks(chunks);
     const prompt = createReferenceExtractionPrompt(content);
-    
+
     const resolved = resolveConfiguredChatModel({ route: "fast" });
 
     const timeoutPromise = new Promise<never>((_, reject) => {
@@ -58,19 +68,19 @@ export async function extractReferences(
         }, timeoutMs);
     });
 
-    const aiCallPromise = invokeStructured(resolved, ReferenceExtractionSchema, [
-        new SystemMessage("Extract references step-by-step"),
-        new HumanMessage(prompt)
-    ], { name: "reference_extraction" });
+    const aiCallPromise = invokeStructured(
+        resolved,
+        ReferenceExtractionSchema,
+        [new SystemMessage("Extract references step-by-step"), new HumanMessage(prompt)],
+        { name: "reference_extraction" }
+    );
 
     try {
         const response = await Promise.race([aiCallPromise, timeoutPromise]);
         const references = response.references;
-        
-        const filteredReferences = references.filter(ref => 
-            isValidReference(ref.documentName)
-        );
-        
+
+        const filteredReferences = references.filter(ref => isValidReference(ref.documentName));
+
         return filteredReferences;
     } catch (error) {
         console.error("Reference extraction error:", sanitizeErrorMessage(error));

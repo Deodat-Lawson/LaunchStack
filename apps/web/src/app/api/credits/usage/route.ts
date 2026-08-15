@@ -31,9 +31,6 @@ export async function GET(request: Request) {
         return NextResponse.json({ balanceTokens, usage });
     } catch (error) {
         console.error("[Tokens] Error fetching usage:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

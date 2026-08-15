@@ -16,18 +16,15 @@ const validCategories = SearchCategoryEnum.options; // ["fashion","finance","bus
 
 const categoryArb = fc.constantFrom(...validCategories);
 
-const validQueryArb = fc
-    .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+const validQueryArb = fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
-const validCategoriesArb = fc.option(
-    fc.array(categoryArb, { minLength: 1, maxLength: 4 }),
-    { nil: undefined }
-);
+const validCategoriesArb = fc.option(fc.array(categoryArb, { minLength: 1, maxLength: 4 }), {
+    nil: undefined,
+});
 
 // ─── Property 12: Input serialization round-trip ──────────────────────────────
 // Validates: Requirements 8.1, 8.2
@@ -149,7 +146,9 @@ describe("Property 2: Invalid input is rejected by TrendSearchInputSchema", () =
         fc.assert(
             fc.property(
                 // Generate strings composed only of whitespace characters
-                fc.array(fc.constantFrom(" ", "\t", "\n", "\r"), { minLength: 1, maxLength: 100 }).map((chars) => chars.join("")),
+                fc
+                    .array(fc.constantFrom(" ", "\t", "\n", "\r"), { minLength: 1, maxLength: 100 })
+                    .map(chars => chars.join("")),
                 validCompanyContextArb,
                 (whitespaceQuery, companyContext) => {
                     const result = TrendSearchInputSchema.safeParse({

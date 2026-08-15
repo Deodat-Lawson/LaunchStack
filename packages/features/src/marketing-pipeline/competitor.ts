@@ -13,39 +13,39 @@ import { CompetitorAnalysisSchema } from "./types";
 const COMPETITOR_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 interface CompetitorCacheEntry {
-  result: CompetitorAnalysis;
-  expiresAt: number;
+    result: CompetitorAnalysis;
+    expiresAt: number;
 }
 
 const cache = new Map<string, CompetitorCacheEntry>();
 
 function buildCacheKey(companyName: string, categories: string[]): string {
-  const normalized = `${companyName.trim().toLowerCase()}::${[...categories].sort().join(",").toLowerCase()}`;
-  return createHash("sha256").update(normalized).digest("hex");
+    const normalized = `${companyName.trim().toLowerCase()}::${[...categories].sort().join(",").toLowerCase()}`;
+    return createHash("sha256").update(normalized).digest("hex");
 }
 
 function pruneCache(): void {
-  const now = Date.now();
-  for (const [key, entry] of cache.entries()) {
-    if (entry.expiresAt <= now) cache.delete(key);
-  }
+    const now = Date.now();
+    for (const [key, entry] of cache.entries()) {
+        if (entry.expiresAt <= now) cache.delete(key);
+    }
 }
 
 function getCached(companyName: string, categories: string[]): CompetitorAnalysis | null {
-  const key = buildCacheKey(companyName, categories);
-  const entry = cache.get(key);
-  if (!entry) return null;
-  if (entry.expiresAt <= Date.now()) {
-    cache.delete(key);
-    return null;
-  }
-  return entry.result;
+    const key = buildCacheKey(companyName, categories);
+    const entry = cache.get(key);
+    if (!entry) return null;
+    if (entry.expiresAt <= Date.now()) {
+        cache.delete(key);
+        return null;
+    }
+    return entry.result;
 }
 
 function setCache(companyName: string, categories: string[], result: CompetitorAnalysis): void {
-  if (cache.size > 50) pruneCache();
-  const key = buildCacheKey(companyName, categories);
-  cache.set(key, { result, expiresAt: Date.now() + COMPETITOR_CACHE_TTL_MS });
+    if (cache.size > 50) pruneCache();
+    const key = buildCacheKey(companyName, categories);
+    cache.set(key, { result, expiresAt: Date.now() + COMPETITOR_CACHE_TTL_MS });
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -53,29 +53,29 @@ function setCache(companyName: string, categories: string[], result: CompetitorA
  * ────────────────────────────────────────────────────────────── */
 
 function buildCompetitorQueries(
-  companyName: string,
-  categories: string[],
-  companyDescription?: string,
+    companyName: string,
+    categories: string[],
+    companyDescription?: string
 ): PlannedQuery[] {
-  const categoryStr = categories.length > 0 ? categories.join(" ") : "industry";
-  const currentYear = new Date().getFullYear();
+    const categoryStr = categories.length > 0 ? categories.join(" ") : "industry";
+    const currentYear = new Date().getFullYear();
 
-  const descHint = companyDescription
-    ? ` ${companyDescription.split(/\s+/).slice(0, 12).join(" ")}`
-    : "";
+    const descHint = companyDescription
+        ? ` ${companyDescription.split(/\s+/).slice(0, 12).join(" ")}`
+        : "";
 
-  return [
-    {
-      searchQuery: `"${companyName}"${descHint} competitors ${categoryStr} ${currentYear}`,
-      category: "business",
-      rationale: "Find direct competitors using company description to disambiguate",
-    },
-    {
-      searchQuery: `${categoryStr} market leaders alternative solutions ${currentYear}`,
-      category: "business",
-      rationale: "Find alternatives and market leaders in the same category",
-    },
-  ];
+    return [
+        {
+            searchQuery: `"${companyName}"${descHint} competitors ${categoryStr} ${currentYear}`,
+            category: "business",
+            rationale: "Find direct competitors using company description to disambiguate",
+        },
+        {
+            searchQuery: `${categoryStr} market leaders alternative solutions ${currentYear}`,
+            category: "business",
+            rationale: "Find alternatives and market leaders in the same category",
+        },
+    ];
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -83,43 +83,42 @@ function buildCompetitorQueries(
  * ────────────────────────────────────────────────────────────── */
 
 export async function analyzeCompetitors(args: {
-  companyName: string;
-  categories: string[];
-  companyContext?: string;
+    companyName: string;
+    categories: string[];
+    companyContext?: string;
 }): Promise<CompetitorAnalysis> {
-  const { companyName, categories, companyContext = "" } = args;
+    const { companyName, categories, companyContext = "" } = args;
 
-  const cached = getCached(companyName, categories);
-  if (cached) {
-    console.log("[marketing-pipeline] competitor analysis cache HIT for %s", companyName);
-    return cached;
-  }
-
-  const plannedQueries = buildCompetitorQueries(companyName, categories, companyContext);
-
-  let rawContext = companyContext;
-  try {
-    const { results } = await executeSearch(plannedQueries);
-    if (results.length > 0) {
-      rawContext +=
-        "\n\nWeb search results (competitors / market):\n" +
-        results
-          .slice(0, 12)
-          .map(
-            (r, i) =>
-              `${i + 1}. [${r.title}] ${r.content.slice(0, 200)}... (${r.url})`,
-          )
-          .join("\n\n");
+    const cached = getCached(companyName, categories);
+    if (cached) {
+        console.log("[marketing-pipeline] competitor analysis cache HIT for %s", companyName);
+        return cached;
     }
-  } catch (error) {
-    console.warn("[marketing-pipeline] competitor web search failed:", error);
-  }
 
-  if (!rawContext.trim()) {
-    rawContext = `Company: ${companyName}. Categories: ${categories.join(", ") || "Unknown"}. No search results.`;
-  }
+    const plannedQueries = buildCompetitorQueries(companyName, categories, companyContext);
 
-  const systemPrompt = `You are a competitive intelligence analyst. Given a company's description, categories, and web search results about competitors and the market, produce a structured CompetitorAnalysis.
+    let rawContext = companyContext;
+    try {
+        const { results } = await executeSearch(plannedQueries);
+        if (results.length > 0) {
+            rawContext +=
+                "\n\nWeb search results (competitors / market):\n" +
+                results
+                    .slice(0, 12)
+                    .map(
+                        (r, i) => `${i + 1}. [${r.title}] ${r.content.slice(0, 200)}... (${r.url})`
+                    )
+                    .join("\n\n");
+        }
+    } catch (error) {
+        console.warn("[marketing-pipeline] competitor web search failed:", error);
+    }
+
+    if (!rawContext.trim()) {
+        rawContext = `Company: ${companyName}. Categories: ${categories.join(", ") || "Unknown"}. No search results.`;
+    }
+
+    const systemPrompt = `You are a competitive intelligence analyst. Given a company's description, categories, and web search results about competitors and the market, produce a structured CompetitorAnalysis.
 
 CRITICAL: The company description tells you EXACTLY what industry and market this company operates in. Use it to identify the RIGHT competitors. Do NOT be confused by the company name — analyze competitors based on what the company DOES, not what its name sounds like. For example, a software company named "Launchstack" competes with other software companies, NOT with rocket companies.
 
@@ -135,13 +134,13 @@ Rules:
 
 Return valid JSON matching the schema.`;
 
-  const response = await invokeMarketingStructured(
-    CompetitorAnalysisSchema,
-    [new SystemMessage(systemPrompt), new HumanMessage(rawContext)],
-    "competitor_analysis",
-  );
+    const response = await invokeMarketingStructured(
+        CompetitorAnalysisSchema,
+        [new SystemMessage(systemPrompt), new HumanMessage(rawContext)],
+        "competitor_analysis"
+    );
 
-  const result = CompetitorAnalysisSchema.parse(response);
-  setCache(companyName, categories, result);
-  return result;
+    const result = CompetitorAnalysisSchema.parse(response);
+    setCache(companyName, categories, result);
+    return result;
 }

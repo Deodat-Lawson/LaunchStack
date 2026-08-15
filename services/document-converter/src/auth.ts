@@ -21,26 +21,20 @@ import { errorEnvelope } from "./errors.js";
  * buffers for `timingSafeEqual` without leaking the expected key's length.
  */
 export function timingSafeKeyMatch(provided: string, expected: string): boolean {
-  if (!provided || !expected) return false;
-  const a = createHash("sha256").update(provided).digest();
-  const b = createHash("sha256").update(expected).digest();
-  return timingSafeEqual(a, b);
+    if (!provided || !expected) return false;
+    const a = createHash("sha256").update(provided).digest();
+    const b = createHash("sha256").update(expected).digest();
+    return timingSafeEqual(a, b);
 }
 
 export function apiKeyMiddleware(config: Config): RequestHandler {
-  return (req, res, next) => {
-    const provided = req.header("x-api-key") ?? "";
-    if (
-      !config.apiKey ||
-      !provided ||
-      !timingSafeKeyMatch(provided, config.apiKey)
-    ) {
-      const traceId = res.locals.traceId as string | undefined;
-      res
-        .status(401)
-        .json(errorEnvelope("unauthorized", "Unauthorized", traceId));
-      return;
-    }
-    next();
-  };
+    return (req, res, next) => {
+        const provided = req.header("x-api-key") ?? "";
+        if (!config.apiKey || !provided || !timingSafeKeyMatch(provided, config.apiKey)) {
+            const traceId = res.locals.traceId as string | undefined;
+            res.status(401).json(errorEnvelope("unauthorized", "Unauthorized", traceId));
+            return;
+        }
+        next();
+    };
 }

@@ -26,7 +26,7 @@ export type MissingDocumentPrediction = {
     documentType: string;
     reason: string;
     page: number;
-    priority: 'high' | 'medium' | 'low';
+    priority: "high" | "medium" | "low";
     suggestedLinks?: SearchResult[];
     suggestedCompanyDocuments?: {
         documentId: number;
@@ -50,17 +50,12 @@ export type ResolvedReference = {
     resolvedDocumentId: number;
     resolvedPage: number;
     resolvedDocumentTitle?: string;
-    priority: 'high' | 'medium' | 'low';
+    priority: "high" | "medium" | "low";
 };
 
-export type InsightCategory =
-    | 'deadline'
-    | 'resource'
-    | 'key-reference'
-    | 'action-item'
-    | 'caveat';
+export type InsightCategory = "deadline" | "resource" | "key-reference" | "action-item" | "caveat";
 
-export type InsightSeverity = 'note' | 'warning';
+export type InsightSeverity = "note" | "warning";
 
 export type DocumentInsight = {
     category: InsightCategory;
@@ -115,5 +110,5 @@ export const ANALYSIS_TYPES = {
     educational: `You are an expert in analyzing educational materials to identify missing referenced course documents, syllabi, handouts, readings, and linked resources.`,
     hr: `You are an expert in analyzing HR and employee documents to identify missing referenced policies, forms, benefits materials, and compliance documents.`,
     research: `You are an expert in analyzing research documents to identify missing cited papers, datasets, supplementary materials, and methodology references.`,
-    general: `You are an expert in analyzing documents to identify any missing referenced or implied documents.`
-} as const; 
+    general: `You are an expert in analyzing documents to identify any missing referenced or implied documents.`,
+} as const;

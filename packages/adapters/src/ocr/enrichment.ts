@@ -22,22 +22,20 @@ import { GEMINI_DEFAULT_MODEL } from "../llm/types";
 import { createSlot } from "../internal/slot";
 
 export interface VlmEnrichmentConfig {
-  /** Ollama base URL for local VLM enrichment. */
-  ollamaBaseUrl?: string;
+    /** Ollama base URL for local VLM enrichment. */
+    ollamaBaseUrl?: string;
 }
 
 const vlmConfigSlot = createSlot<VlmEnrichmentConfig>("ocr/vlmEnrichment");
 
 /** Install the OCR-side VLM settings. Separate from the chat endpoint. */
 export function configureVlmEnrichment(config: VlmEnrichmentConfig): void {
-  vlmConfigSlot.set(config);
+    vlmConfigSlot.set(config);
 }
 
 /** Whether any VLM provider is reachable, without rendering a page first. */
 export function isVlmEnrichmentConfigured(): boolean {
-  return Boolean(
-    vlmConfigSlot.get()?.ollamaBaseUrl ?? getAuxiliaryOpenAIConfig().apiKey,
-  );
+    return Boolean(vlmConfigSlot.get()?.ollamaBaseUrl ?? getAuxiliaryOpenAIConfig().apiKey);
 }
 
 const SYSTEM_PROMPT = `You are a document analysis assistant. Your job is to analyze the visual layout of a document page and describe its key components, especially those that OCR might miss.
@@ -53,108 +51,110 @@ Do NOT repeat plain text that is clearly legible. Focus on the VISUAL and STRUCT
 Keep the description concise and factual.`;
 
 const USER_PROMPT =
-  "Analyze this document page and provide a visual description of charts, diagrams, or complex layout elements.";
+    "Analyze this document page and provide a visual description of charts, diagrams, or complex layout elements.";
 
 export interface VlmEnrichmentOptions {
-  model?: string;
-  detail?: "low" | "high" | "auto";
-  maxTokens?: number;
+    model?: string;
+    detail?: "low" | "high" | "auto";
+    maxTokens?: number;
 }
 
 export async function enrichPageWithVlm(
-  imageBuffer: Buffer,
-  options?: VlmEnrichmentOptions
+    imageBuffer: Buffer,
+    options?: VlmEnrichmentOptions
 ): Promise<string> {
-  const ollamaBaseUrl = vlmConfigSlot.get()?.ollamaBaseUrl;
-  if (ollamaBaseUrl) {
-    return enrichWithOllama(imageBuffer, ollamaBaseUrl, options);
-  }
-  if (getAuxiliaryOpenAIConfig().apiKey) {
-    return enrichWithOpenAI(imageBuffer, options);
-  }
-  console.warn(
-    "[VLM] No VLM provider configured (call configureVlmEnrichment or configureAuxiliaryOpenAI), skipping enrichment",
-  );
-  return "";
+    const ollamaBaseUrl = vlmConfigSlot.get()?.ollamaBaseUrl;
+    if (ollamaBaseUrl) {
+        return enrichWithOllama(imageBuffer, ollamaBaseUrl, options);
+    }
+    if (getAuxiliaryOpenAIConfig().apiKey) {
+        return enrichWithOpenAI(imageBuffer, options);
+    }
+    console.warn(
+        "[VLM] No VLM provider configured (call configureVlmEnrichment or configureAuxiliaryOpenAI), skipping enrichment"
+    );
+    return "";
 }
 
 async function enrichWithOllama(
-  imageBuffer: Buffer,
-  ollamaBaseUrl: string,
-  options?: VlmEnrichmentOptions,
+    imageBuffer: Buffer,
+    ollamaBaseUrl: string,
+    options?: VlmEnrichmentOptions
 ): Promise<string> {
-  const baseUrl = ollamaBaseUrl.replace(/\/$/, "");
-  const model = options?.model ?? "llava:13b";
-  const maxTokens = options?.maxTokens ?? 500;
+    const baseUrl = ollamaBaseUrl.replace(/\/$/, "");
+    const model = options?.model ?? "llava:13b";
+    const maxTokens = options?.maxTokens ?? 500;
 
-  try {
-    const response = await fetch(`${baseUrl}/api/chat`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        model,
-        stream: false,
-        options: { num_predict: maxTokens },
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          {
-            role: "user",
-            content: USER_PROMPT,
-            images: [imageBuffer.toString("base64")],
-          },
-        ],
-      }),
-    });
+    try {
+        const response = await fetch(`${baseUrl}/api/chat`, {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                model,
+                stream: false,
+                options: { num_predict: maxTokens },
+                messages: [
+                    { role: "system", content: SYSTEM_PROMPT },
+                    {
+                        role: "user",
+                        content: USER_PROMPT,
+                        images: [imageBuffer.toString("base64")],
+                    },
+                ],
+            }),
+        });
 
-    if (!response.ok) {
-      const body = await response.text().catch(() => "");
-      console.error(`[VLM] Ollama enrichment failed: ${response.status} ${body.slice(0, 300)}`);
-      return "";
+        if (!response.ok) {
+            const body = await response.text().catch(() => "");
+            console.error(
+                `[VLM] Ollama enrichment failed: ${response.status} ${body.slice(0, 300)}`
+            );
+            return "";
+        }
+
+        const data = (await response.json()) as { message?: { content?: string } };
+        return (data.message?.content ?? "").trim();
+    } catch (error) {
+        console.error("[VLM] Ollama enrichment error:", error);
+        return "";
     }
-
-    const data = (await response.json()) as { message?: { content?: string } };
-    return (data.message?.content ?? "").trim();
-  } catch (error) {
-    console.error("[VLM] Ollama enrichment error:", error);
-    return "";
-  }
 }
 
 async function enrichWithOpenAI(
-  imageBuffer: Buffer,
-  options?: VlmEnrichmentOptions
+    imageBuffer: Buffer,
+    options?: VlmEnrichmentOptions
 ): Promise<string> {
-  const openai = getOpenAIClient();
-  if (!openai) {
-    console.warn("[VLM] getOpenAIClient() returned null — skipping OpenAI enrichment");
-    return "";
-  }
-  const model = options?.model ?? GEMINI_DEFAULT_MODEL;
-  const detail = options?.detail ?? "auto";
-  const maxTokens = options?.maxTokens ?? 500;
+    const openai = getOpenAIClient();
+    if (!openai) {
+        console.warn("[VLM] getOpenAIClient() returned null — skipping OpenAI enrichment");
+        return "";
+    }
+    const model = options?.model ?? GEMINI_DEFAULT_MODEL;
+    const detail = options?.detail ?? "auto";
+    const maxTokens = options?.maxTokens ?? 500;
 
-  try {
-    const base64Image = imageBuffer.toString("base64");
-    const dataUrl = `data:image/png;base64,${base64Image}`;
+    try {
+        const base64Image = imageBuffer.toString("base64");
+        const dataUrl = `data:image/png;base64,${base64Image}`;
 
-    const response = await openai.chat.completions.create({
-      model,
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        {
-          role: "user",
-          content: [
-            { type: "text", text: USER_PROMPT },
-            { type: "image_url", image_url: { url: dataUrl, detail } },
-          ],
-        },
-      ],
-      max_tokens: maxTokens,
-    });
+        const response = await openai.chat.completions.create({
+            model,
+            messages: [
+                { role: "system", content: SYSTEM_PROMPT },
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: USER_PROMPT },
+                        { type: "image_url", image_url: { url: dataUrl, detail } },
+                    ],
+                },
+            ],
+            max_tokens: maxTokens,
+        });
 
-    return (response.choices[0]?.message?.content ?? "").trim();
-  } catch (error) {
-    console.error("[VLM] OpenAI enrichment failed:", error);
-    return "";
-  }
+        return (response.choices[0]?.message?.content ?? "").trim();
+    } catch (error) {
+        console.error("[VLM] OpenAI enrichment failed:", error);
+        return "";
+    }
 }

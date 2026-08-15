@@ -23,14 +23,13 @@ import { seedScenario } from "../../scripts/founder-weekly-review-scenario-seede
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeIfDatabase =
-    process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL
+    (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
 
 const SCENARIO = parseScenario({
     name: "seeder-smoke",
-    description:
-        "Every source type at once, plus an out-of-window version and a control company.",
+    description: "Every source type at once, plus an out-of-window version and a control company.",
     reportingPeriod: { start: "2026-07-20", end: "2026-07-26" },
     workspaceTimezone: "America/New_York",
     founderContext: "Focus on onboarding reliability.",
@@ -53,9 +52,7 @@ const SCENARIO = parseScenario({
                             versionNumber: 2,
                             timestamp: "2026-07-22T10:00:00.000Z",
                             changelog: "Reworked pricing tiers.",
-                            chunks: [
-                                { section: "Tiers", content: "Monthly and annual billing." },
-                            ],
+                            chunks: [{ section: "Tiers", content: "Monthly and annual billing." }],
                         },
                         {
                             versionNumber: 3,
@@ -76,7 +73,10 @@ const SCENARIO = parseScenario({
                             timestamp: "2026-07-23T10:00:00.000Z",
                             changelog: "Processed customer feedback.",
                             chunks: [
-                                { section: "Billing", content: "Customers asked for annual billing." },
+                                {
+                                    section: "Billing",
+                                    content: "Customers asked for annual billing.",
+                                },
                                 { section: "SSO", content: "Multiple requests for SSO / SAML." },
                             ],
                         },
@@ -135,29 +135,31 @@ describeIfDatabase("seedScenario -> collector", () => {
             });
 
             const itemsOfType = (sourceType: string) =>
-                snapshot.items.filter((item) => item.sourceType === sourceType);
+                snapshot.items.filter(item => item.sourceType === sourceType);
 
             // The in-window v1 -> v2 pair is comparable, so it yields change evidence.
-            expect(itemsOfType("document_change").map((item) => item.title)).toEqual(["Pricing Page"]);
+            expect(itemsOfType("document_change").map(item => item.title)).toEqual([
+                "Pricing Page",
+            ]);
 
             // One customer_feedback item per processed section.
             const feedback = itemsOfType("customer_feedback");
             expect(feedback).toHaveLength(2);
-            expect(feedback.every((item) => item.title === "Customer Feedback - July")).toBe(true);
+            expect(feedback.every(item => item.title === "Customer Feedback - July")).toBe(true);
 
             expect(itemsOfType("founder_context")).toHaveLength(1);
 
             // The post-window version is seeded but out of scope. Asserted on the
             // excerpt, because the document itself legitimately appears via the
             // in-window pair — only v3's content must be absent.
-            const excerpts = snapshot.items.map((item) => item.excerpt).join("\n");
+            const excerpts = snapshot.items.map(item => item.excerpt).join("\n");
             expect(excerpts).not.toContain("usage-based");
             expect(excerpts).not.toContain("Post-window tweak");
 
             // Cross-company isolation, with a positive control: the rows exist,
             // so their absence from the snapshot is filtering rather than a
             // seeder that never wrote them.
-            expect(snapshot.items.some((item) => item.title === "Acme roadmap")).toBe(false);
+            expect(snapshot.items.some(item => item.title === "Acme roadmap")).toBe(false);
             const controlId = companyNamesToId.get("Acme (control)")!;
             const controlDocs = await testDb.db
                 .select()
@@ -165,7 +167,7 @@ describeIfDatabase("seedScenario -> collector", () => {
                 .where(eq(document.companyId, controlId));
             expect(controlDocs.length).toBeGreaterThan(0);
 
-            const sourceIds = snapshot.items.map((item) => item.sourceId);
+            const sourceIds = snapshot.items.map(item => item.sourceId);
             expect(new Set(sourceIds).size).toBe(sourceIds.length);
         } finally {
             await testDb.close();

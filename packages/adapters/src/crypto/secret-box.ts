@@ -1,9 +1,4 @@
-import {
-  createCipheriv,
-  createDecipheriv,
-  randomBytes,
-  timingSafeEqual,
-} from "node:crypto";
+import { createCipheriv, createDecipheriv, randomBytes, timingSafeEqual } from "node:crypto";
 
 import { createSlot } from "../internal/slot";
 
@@ -21,12 +16,12 @@ import { createSlot } from "../internal/slot";
 const keySlot = createSlot<string | null>("crypto/keyBase64");
 
 export interface SecretBoxConfig {
-  /** EMBEDDING_SECRETS_KEY — base64-encoded 32-byte random value. */
-  key: string | undefined;
+    /** EMBEDDING_SECRETS_KEY — base64-encoded 32-byte random value. */
+    key: string | undefined;
 }
 
 export function configureSecretBox(config: SecretBoxConfig): void {
-  keySlot.set(config.key ?? null);
+    keySlot.set(config.key ?? null);
 }
 
 /**
@@ -51,38 +46,38 @@ const TAG_LENGTH = 16;
 const KEY_LENGTH = 32;
 
 export class MissingSecretsKeyError extends Error {
-  constructor() {
-    super(
-      "EMBEDDING_SECRETS_KEY is not configured. Required to encrypt per-company provider API keys. Generate with: node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\"",
-    );
-    this.name = "MissingSecretsKeyError";
-  }
+    constructor() {
+        super(
+            "EMBEDDING_SECRETS_KEY is not configured. Required to encrypt per-company provider API keys. Generate with: node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\""
+        );
+        this.name = "MissingSecretsKeyError";
+    }
 }
 
 export class CiphertextDecodeError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "CiphertextDecodeError";
-  }
+    constructor(message: string) {
+        super(message);
+        this.name = "CiphertextDecodeError";
+    }
 }
 
 function resolveKey(version: number): Buffer {
-  if (version !== CURRENT_KEY_VERSION) {
-    throw new CiphertextDecodeError(
-      `Unknown encryption key version ${version}; expected ${CURRENT_KEY_VERSION}`,
-    );
-  }
-  const raw = keySlot.get();
-  if (!raw) {
-    throw new MissingSecretsKeyError();
-  }
-  const key = Buffer.from(raw, "base64");
-  if (key.length !== KEY_LENGTH) {
-    throw new CiphertextDecodeError(
-      `EMBEDDING_SECRETS_KEY must decode to ${KEY_LENGTH} bytes (got ${key.length}). Ensure it is a base64-encoded 32-byte random value.`,
-    );
-  }
-  return key;
+    if (version !== CURRENT_KEY_VERSION) {
+        throw new CiphertextDecodeError(
+            `Unknown encryption key version ${version}; expected ${CURRENT_KEY_VERSION}`
+        );
+    }
+    const raw = keySlot.get();
+    if (!raw) {
+        throw new MissingSecretsKeyError();
+    }
+    const key = Buffer.from(raw, "base64");
+    if (key.length !== KEY_LENGTH) {
+        throw new CiphertextDecodeError(
+            `EMBEDDING_SECRETS_KEY must decode to ${KEY_LENGTH} bytes (got ${key.length}). Ensure it is a base64-encoded 32-byte random value.`
+        );
+    }
+    return key;
 }
 
 /**
@@ -91,30 +86,22 @@ function resolveKey(version: number): Buffer {
  * find the right key to decrypt each row.
  */
 export function encryptSecret(plaintext: string): {
-  ciphertext: string;
-  keyVersion: number;
+    ciphertext: string;
+    keyVersion: number;
 } {
-  if (plaintext.length === 0) {
-    throw new Error("Refusing to encrypt empty plaintext");
-  }
-  const key = resolveKey(CURRENT_KEY_VERSION);
-  const iv = randomBytes(IV_LENGTH);
-  const cipher = createCipheriv("aes-256-gcm", key, iv);
-  const encrypted = Buffer.concat([
-    cipher.update(plaintext, "utf8"),
-    cipher.final(),
-  ]);
-  const tag = cipher.getAuthTag();
-  const payload = Buffer.concat([
-    Buffer.from([CURRENT_KEY_VERSION]),
-    iv,
-    tag,
-    encrypted,
-  ]);
-  return {
-    ciphertext: payload.toString("base64"),
-    keyVersion: CURRENT_KEY_VERSION,
-  };
+    if (plaintext.length === 0) {
+        throw new Error("Refusing to encrypt empty plaintext");
+    }
+    const key = resolveKey(CURRENT_KEY_VERSION);
+    const iv = randomBytes(IV_LENGTH);
+    const cipher = createCipheriv("aes-256-gcm", key, iv);
+    const encrypted = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
+    const tag = cipher.getAuthTag();
+    const payload = Buffer.concat([Buffer.from([CURRENT_KEY_VERSION]), iv, tag, encrypted]);
+    return {
+        ciphertext: payload.toString("base64"),
+        keyVersion: CURRENT_KEY_VERSION,
+    };
 }
 
 /**
@@ -122,27 +109,27 @@ export function encryptSecret(plaintext: string): {
  * malformed, the auth tag doesn't verify, or the key version is unknown.
  */
 export function decryptSecret(ciphertext: string): string {
-  const payload = Buffer.from(ciphertext, "base64");
-  if (payload.length < 1 + IV_LENGTH + TAG_LENGTH + 1) {
-    throw new CiphertextDecodeError("Ciphertext payload is too short");
-  }
-  const version = payload[0]!;
-  const iv = payload.subarray(1, 1 + IV_LENGTH);
-  const tag = payload.subarray(1 + IV_LENGTH, 1 + IV_LENGTH + TAG_LENGTH);
-  const body = payload.subarray(1 + IV_LENGTH + TAG_LENGTH);
-  const key = resolveKey(version);
-  const decipher = createDecipheriv("aes-256-gcm", key, iv);
-  decipher.setAuthTag(tag);
-  try {
-    const decrypted = Buffer.concat([decipher.update(body), decipher.final()]);
-    return decrypted.toString("utf8");
-  } catch (err) {
-    throw new CiphertextDecodeError(
-      err instanceof Error
-        ? `Failed to decrypt secret: ${err.message}`
-        : "Failed to decrypt secret",
-    );
-  }
+    const payload = Buffer.from(ciphertext, "base64");
+    if (payload.length < 1 + IV_LENGTH + TAG_LENGTH + 1) {
+        throw new CiphertextDecodeError("Ciphertext payload is too short");
+    }
+    const version = payload[0]!;
+    const iv = payload.subarray(1, 1 + IV_LENGTH);
+    const tag = payload.subarray(1 + IV_LENGTH, 1 + IV_LENGTH + TAG_LENGTH);
+    const body = payload.subarray(1 + IV_LENGTH + TAG_LENGTH);
+    const key = resolveKey(version);
+    const decipher = createDecipheriv("aes-256-gcm", key, iv);
+    decipher.setAuthTag(tag);
+    try {
+        const decrypted = Buffer.concat([decipher.update(body), decipher.final()]);
+        return decrypted.toString("utf8");
+    } catch (err) {
+        throw new CiphertextDecodeError(
+            err instanceof Error
+                ? `Failed to decrypt secret: ${err.message}`
+                : "Failed to decrypt secret"
+        );
+    }
 }
 
 /**
@@ -151,8 +138,8 @@ export function decryptSecret(ciphertext: string): string {
  * signature checks etc. Included here so all crypto lives in one module.
  */
 export function timingSafeStringEqual(a: string, b: string): boolean {
-  const aBuf = Buffer.from(a);
-  const bBuf = Buffer.from(b);
-  if (aBuf.length !== bBuf.length) return false;
-  return timingSafeEqual(aBuf, bBuf);
+    const aBuf = Buffer.from(a);
+    const bBuf = Buffer.from(b);
+    if (aBuf.length !== bBuf.length) return false;
+    return timingSafeEqual(aBuf, bBuf);
 }

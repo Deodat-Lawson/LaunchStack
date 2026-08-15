@@ -9,7 +9,9 @@ import { SearchCategoryEnum } from "./types";
 const PlannedQuerySchema = z.object({
     searchQuery: z.string().describe("The search query string to send to the search engine"),
     category: SearchCategoryEnum.describe("One of: fashion, finance, business, tech"),
-    rationale: z.string().describe("Brief reason why this query is useful for finding relevant news"),
+    rationale: z
+        .string()
+        .describe("Brief reason why this query is useful for finding relevant news"),
 });
 
 // Output schema for the query planner (3-5 sub-queries)
@@ -41,7 +43,7 @@ RULES:
 function buildHumanPrompt(
     query: string,
     companyContext: string,
-    categories?: SearchCategory[],
+    categories?: SearchCategory[]
 ): string {
     const categoryBlock =
         categories && categories.length > 0
@@ -68,9 +70,8 @@ Generate 3-5 search sub-queries for recent news/events that are relevant to the 
 export async function planQueries(
     query: string,
     companyContext: string,
-    categories?: SearchCategory[],
+    categories?: SearchCategory[]
 ): Promise<PlannedQuery[]> {
-
     const resolved = resolveChatModel({ route: "fast" });
 
     // Build the human prompt
@@ -81,7 +82,7 @@ export async function planQueries(
         resolved,
         QueryPlannerOutputSchema,
         [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
-        { name: "query_plan" },
+        { name: "query_plan" }
     );
 
     return response.plannedQueries as PlannedQuery[];

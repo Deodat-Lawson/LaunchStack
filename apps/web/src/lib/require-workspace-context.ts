@@ -27,11 +27,11 @@ import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 // ---------------------------------------------------------------------------
 
 export type WorkspaceContext = {
-  clerkUserId: string;
-  userPk: bigint;
-  companyId: bigint;
-  role: string;
-  status: string;
+    clerkUserId: string;
+    userPk: bigint;
+    companyId: bigint;
+    role: string;
+    status: string;
 };
 
 type WorkspaceSuccess = { success: true; data: WorkspaceContext };
@@ -48,33 +48,24 @@ export type ClerkIdentityResult = IdentitySuccess | IdentityFailure;
 // ---------------------------------------------------------------------------
 
 function unauthorized(): WorkspaceFailure {
-  return {
-    success: false,
-    response: NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 },
-    ),
-  };
+    return {
+        success: false,
+        response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    };
 }
 
 function forbidden(): WorkspaceFailure {
-  return {
-    success: false,
-    response: NextResponse.json(
-      { error: "Forbidden" },
-      { status: 403 },
-    ),
-  };
+    return {
+        success: false,
+        response: NextResponse.json({ error: "Forbidden" }, { status: 403 }),
+    };
 }
 
 function internalError(): WorkspaceFailure {
-  return {
-    success: false,
-    response: NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    ),
-  };
+    return {
+        success: false,
+        response: NextResponse.json({ error: "Internal server error" }, { status: 500 }),
+    };
 }
 
 // ---------------------------------------------------------------------------
@@ -90,100 +81,88 @@ function internalError(): WorkspaceFailure {
  * resolved company. The role always comes from that membership.
  */
 export async function requireWorkspaceContext(): Promise<WorkspaceContextResult> {
-  const { userId: clerkUserId } = await auth();
-  if (!clerkUserId) {
-    return unauthorized();
-  }
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) {
+        return unauthorized();
+    }
 
-  const [user] = await db
-    .select({
-      id: users.id,
-      companyId: users.companyId,
-      role: users.role,
-      status: users.status,
-    })
-    .from(users)
-    .where(eq(users.userId, clerkUserId));
+    const [user] = await db
+        .select({
+            id: users.id,
+            companyId: users.companyId,
+            role: users.role,
+            status: users.status,
+        })
+        .from(users)
+        .where(eq(users.userId, clerkUserId));
 
-  if (!user) {
-    return unauthorized();
-  }
+    if (!user) {
+        return unauthorized();
+    }
 
-  if (user.status !== "verified") {
-    return forbidden();
-  }
+    if (user.status !== "verified") {
+        return forbidden();
+    }
 
-  let companyId: bigint | null;
-  try {
-    companyId = await resolveActiveCompanyForUser(
-      user.id,
-      user.companyId,
-      user.status,
-    );
-  } catch {
-    console.error(
-      `[requireWorkspaceContext] Failed to resolve company for user ${clerkUserId}`,
-    );
-    return internalError();
-  }
+    let companyId: bigint | null;
+    try {
+        companyId = await resolveActiveCompanyForUser(user.id, user.companyId, user.status);
+    } catch {
+        console.error(
+            `[requireWorkspaceContext] Failed to resolve company for user ${clerkUserId}`
+        );
+        return internalError();
+    }
 
-  if (companyId == null) {
-    console.error(
-      `[requireWorkspaceContext] Null company for user ${clerkUserId}`,
-    );
-    return forbidden();
-  }
+    if (companyId == null) {
+        console.error(`[requireWorkspaceContext] Null company for user ${clerkUserId}`);
+        return forbidden();
+    }
 
-  const userPk = BigInt(user.id);
+    const userPk = BigInt(user.id);
 
-  const [membership] = await db
-    .select({ role: userCompanyMemberships.role })
-    .from(userCompanyMemberships)
-    .where(
-      and(
-        eq(userCompanyMemberships.userId, userPk),
-        eq(userCompanyMemberships.companyId, companyId),
-      ),
-    );
+    const [membership] = await db
+        .select({ role: userCompanyMemberships.role })
+        .from(userCompanyMemberships)
+        .where(
+            and(
+                eq(userCompanyMemberships.userId, userPk),
+                eq(userCompanyMemberships.companyId, companyId)
+            )
+        );
 
-  // No membership means no workspace, even when the company came from
-  // `users.companyId`. Falling back to the legacy global `users.role` here
-  // would turn a membership miss into a working context with a role nobody
-  // granted for this tenant.
-  if (!membership) {
-    return forbidden();
-  }
+    // No membership means no workspace, even when the company came from
+    // `users.companyId`. Falling back to the legacy global `users.role` here
+    // would turn a membership miss into a working context with a role nobody
+    // granted for this tenant.
+    if (!membership) {
+        return forbidden();
+    }
 
-  return {
-    success: true,
-    data: {
-      clerkUserId,
-      userPk,
-      companyId,
-      role: membership.role,
-      status: user.status,
-    },
-  };
+    return {
+        success: true,
+        data: {
+            clerkUserId,
+            userPk,
+            companyId,
+            role: membership.role,
+            status: user.status,
+        },
+    };
 }
 
 // ---------------------------------------------------------------------------
 // Role gates
 // ---------------------------------------------------------------------------
 
-export {
-  MANAGEMENT_ROLES,
-  isManagementRole,
-} from "~/lib/membership-roles";
+export { MANAGEMENT_ROLES, isManagementRole } from "~/lib/membership-roles";
 
 /**
  * 403 response for a caller whose membership role is too low. Returned by
  * handlers that mutate workspace-wide state.
  */
 export function forbiddenForRole(): NextResponse {
-  return NextResponse.json(
-    { error: "Forbidden" },
-    { status: 403 },
-  );
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 }
 
 // ---------------------------------------------------------------------------
@@ -196,19 +175,16 @@ export function forbiddenForRole(): NextResponse {
  * before a user row exists.
  */
 export async function requireClerkIdentity(): Promise<ClerkIdentityResult> {
-  const { userId: clerkUserId } = await auth();
-  if (!clerkUserId) {
-    return {
-      success: false,
-      response: NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 },
-      ),
-    };
-  }
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) {
+        return {
+            success: false,
+            response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+        };
+    }
 
-  return {
-    success: true,
-    data: { clerkUserId },
-  };
+    return {
+        success: true,
+        data: { clerkUserId },
+    };
 }

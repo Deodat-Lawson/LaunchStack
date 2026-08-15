@@ -9,7 +9,7 @@ import { sql } from "drizzle-orm";
 import { createFounderWeeklyReviewTestDatabase } from "./testDb";
 
 const describeIfDatabase =
-    process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL
+    (process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL)
         ? describe
         : describe.skip;
 
@@ -76,7 +76,7 @@ describeIfDatabase("founder weekly review dispatch claiming", () => {
 
         const claimed = await claimPendingDispatches(10);
 
-        expect(claimed.map((d) => d.id)).toEqual(["d_first", "d_second"]);
+        expect(claimed.map(d => d.id)).toEqual(["d_first", "d_second"]);
         // Raw SQL returns database column names and untyped numerics; the
         // mapper is what turns them back into the domain shape.
         expect(claimed[0]).toMatchObject({
@@ -108,7 +108,7 @@ describeIfDatabase("founder weekly review dispatch claiming", () => {
         `);
 
         const claimed = await claimPendingDispatches(10);
-        expect(claimed.map((d) => d.id)).toEqual(["d_first"]);
+        expect(claimed.map(d => d.id)).toEqual(["d_first"]);
         // Reclaiming counts as another attempt.
         expect(claimed[0]?.attemptCount).toBe(2);
     });
@@ -208,7 +208,7 @@ describeIfDatabase("founder weekly review dispatch claiming", () => {
                     WHERE "id" = 'd_growing'
                 `);
                 const claimed = await claimPendingDispatches(10);
-                expect(claimed.map((d) => d.id)).toEqual(["d_growing"]);
+                expect(claimed.map(d => d.id)).toEqual(["d_growing"]);
                 const at = Date.now();
                 await recordDispatchFailure("d_growing", "dispatch_failed");
                 delays.push((await statusOf("d_growing")).availableAt.getTime() - at);
@@ -233,7 +233,7 @@ describeIfDatabase("founder weekly review dispatch claiming", () => {
                 WHERE "id" = 'd_exhausted'
             `);
             const claimed = await claimPendingDispatches(10);
-            expect(claimed.map((d) => d.id)).not.toContain("d_exhausted");
+            expect(claimed.map(d => d.id)).not.toContain("d_exhausted");
         });
     });
 });

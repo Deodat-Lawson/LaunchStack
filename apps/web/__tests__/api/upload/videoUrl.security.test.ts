@@ -9,11 +9,8 @@ jest.mock("~/lib/require-workspace-context", () => ({
 }));
 
 jest.mock("~/lib/rate-limit-middleware", () => ({
-    withRateLimit: (
-        _request: Request,
-        _config: unknown,
-        handler: () => Promise<Response>
-    ) => handler(),
+    withRateLimit: (_request: Request, _config: unknown, handler: () => Promise<Response>) =>
+        handler(),
 }));
 
 jest.mock("~/lib/rate-limiter", () => ({

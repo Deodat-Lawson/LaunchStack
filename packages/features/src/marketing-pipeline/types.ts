@@ -8,122 +8,124 @@ import { z } from "zod";
 
 /** OpenAI structured outputs require .nullable() instead of .optional() - all fields must be present. */
 export const EvidenceCitationSchema = z.object({
-  documentId: z.union([z.string(), z.number()]).nullable(),
-  title: z.string().nullable(),
-  page: z.number().int().nullable(),
-  sectionPath: z.string().nullable(),
-  snippet: z.string().min(1),
-  sourceType: z.string().nullable(),
+    documentId: z.union([z.string(), z.number()]).nullable(),
+    title: z.string().nullable(),
+    page: z.number().int().nullable(),
+    sectionPath: z.string().nullable(),
+    snippet: z.string().min(1),
+    sourceType: z.string().nullable(),
 });
 
 export type EvidenceCitation = z.infer<typeof EvidenceCitationSchema>;
 
 export const NormalizedClaimSchema = z.object({
-  claim: z.string(),
-  category: z.string(),
-  confidence: z.enum(["high", "medium", "low"]),
-  citations: z.array(EvidenceCitationSchema).default([]),
+    claim: z.string(),
+    category: z.string(),
+    confidence: z.enum(["high", "medium", "low"]),
+    citations: z.array(EvidenceCitationSchema).default([]),
 });
 
 export type NormalizedClaim = z.infer<typeof NormalizedClaimSchema>;
 
 export const NormalizedCompanyKnowledgeSchema = z.object({
-  companyName: z.string(),
-  whatItDoes: z.string(),
-  targetAudience: z.array(z.string()).default([]),
-  categories: z.array(z.string()).default([]),
-  keyDifferentiators: z.array(z.string()).default([]),
-  proofPoints: z.array(z.string()).default([]),
-  capabilities: z.array(z.string()).default([]),
-  customerPainPoints: z.array(z.string()).default([]),
-  outcomes: z.array(z.string()).default([]),
-  brandValues: z.array(z.string()).default([]),
-  founderStory: z.string(),
-  technicalEdge: z.string(),
-  risksOrUnknowns: z.array(z.string()).default([]),
-  claims: z.array(NormalizedClaimSchema).default([]),
-  summary: z.string(),
-  missingInformation: z.array(z.string()).default([]),
+    companyName: z.string(),
+    whatItDoes: z.string(),
+    targetAudience: z.array(z.string()).default([]),
+    categories: z.array(z.string()).default([]),
+    keyDifferentiators: z.array(z.string()).default([]),
+    proofPoints: z.array(z.string()).default([]),
+    capabilities: z.array(z.string()).default([]),
+    customerPainPoints: z.array(z.string()).default([]),
+    outcomes: z.array(z.string()).default([]),
+    brandValues: z.array(z.string()).default([]),
+    founderStory: z.string(),
+    technicalEdge: z.string(),
+    risksOrUnknowns: z.array(z.string()).default([]),
+    claims: z.array(NormalizedClaimSchema).default([]),
+    summary: z.string(),
+    missingInformation: z.array(z.string()).default([]),
 });
 
 export type NormalizedCompanyKnowledge = z.infer<typeof NormalizedCompanyKnowledgeSchema>;
 
 export const KnowledgeValidationReportSchema = z.object({
-  groundednessScore: z.number().min(0).max(10),
-  completenessScore: z.number().min(0).max(10),
-  consistencyScore: z.number().min(0).max(10),
-  needsRevision: z.boolean(),
-  unsupportedClaims: z.array(z.string()).default([]),
-  missingCriticalFields: z.array(z.string()).default([]),
-  revisionNotes: z.array(z.string()).default([]),
+    groundednessScore: z.number().min(0).max(10),
+    completenessScore: z.number().min(0).max(10),
+    consistencyScore: z.number().min(0).max(10),
+    needsRevision: z.boolean(),
+    unsupportedClaims: z.array(z.string()).default([]),
+    missingCriticalFields: z.array(z.string()).default([]),
+    revisionNotes: z.array(z.string()).default([]),
 });
 
 export type KnowledgeValidationReport = z.infer<typeof KnowledgeValidationReportSchema>;
 
 /** Structured company profile distilled from KB for marketing (issue #232). */
 export interface CompanyDNA {
-  coreMission: string;
-  keyDifferentiators: string[];
-  provenResults: string[];
-  humanStory: string;
-  technicalEdge: string;
+    coreMission: string;
+    keyDifferentiators: string[];
+    provenResults: string[];
+    humanStory: string;
+    technicalEdge: string;
 }
 
 export const CompanyDNASchema = z.object({
-  coreMission: z.string(),
-  keyDifferentiators: z.array(z.string()),
-  provenResults: z.array(z.string()),
-  humanStory: z.string(),
-  technicalEdge: z.string(),
+    coreMission: z.string(),
+    keyDifferentiators: z.array(z.string()),
+    provenResults: z.array(z.string()),
+    humanStory: z.string(),
+    technicalEdge: z.string(),
 });
 
 /** Competitor landscape for marketing (issue #232). */
 export interface CompetitorAnalysis {
-  competitors: Array<{
-    name: string;
-    positioning: string;
-    weaknesses: string[];
-  }>;
-  ourAdvantages: string[];
-  marketGaps: string[];
-  messagingAntiPatterns: string[];
+    competitors: Array<{
+        name: string;
+        positioning: string;
+        weaknesses: string[];
+    }>;
+    ourAdvantages: string[];
+    marketGaps: string[];
+    messagingAntiPatterns: string[];
 }
 
 export const CompetitorAnalysisSchema = z.object({
-  competitors: z.array(
-    z.object({
-      name: z.string(),
-      positioning: z.string(),
-      weaknesses: z.array(z.string()),
-    }),
-  ),
-  ourAdvantages: z.array(z.string()),
-  marketGaps: z.array(z.string()),
-  messagingAntiPatterns: z.array(z.string()),
+    competitors: z.array(
+        z.object({
+            name: z.string(),
+            positioning: z.string(),
+            weaknesses: z.array(z.string()),
+        })
+    ),
+    ourAdvantages: z.array(z.string()),
+    marketGaps: z.array(z.string()),
+    messagingAntiPatterns: z.array(z.string()),
 });
 
 /** Messaging strategy derived from DNA + competitors + trends (issue #232). */
 export interface MessagingStrategy {
-  angle: string;
-  keyProof: string[];
-  humanHook: string;
-  avoidList: string[];
+    angle: string;
+    keyProof: string[];
+    humanHook: string;
+    avoidList: string[];
 }
 
 export const MessagingStrategySchema = z.object({
-  angle: z.string(),
-  keyProof: z.array(z.string()),
-  humanHook: z.string(),
-  avoidList: z.array(z.string()),
+    angle: z.string(),
+    keyProof: z.array(z.string()),
+    humanHook: z.string(),
+    avoidList: z.array(z.string()),
 });
 
 export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
 export type MarketingPlatform = z.infer<typeof MarketingPlatformEnum>;
 
-export const PlatformMetaSchema = z.object({
-    subreddit: z.string().max(100).optional(),
-    hashtags: z.array(z.string().max(50)).max(5).optional(),
-}).optional();
+export const PlatformMetaSchema = z
+    .object({
+        subreddit: z.string().max(100).optional(),
+        hashtags: z.array(z.string().max(50)).max(5).optional(),
+    })
+    .optional();
 
 export const FormalityLevelEnum = z.enum(["formal", "conversational", "technical", "bold"]);
 export type FormalityLevel = z.infer<typeof FormalityLevelEnum>;
@@ -285,16 +287,28 @@ export const PIPELINE_STEPS: ReadonlyArray<{ id: PipelineStepId; label: string }
 
 export type PipelineSSEEvent =
     | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
-    | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string; status?: "completed" | "skipped" | "failed" }
+    | {
+          type: "step_complete";
+          step: PipelineStepId;
+          durationMs: number;
+          detail?: string;
+          status?: "completed" | "skipped" | "failed";
+      }
     | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
     | { type: "step_thinking"; step: PipelineStepId; text: string }
     | { type: "result"; success: true; data: MarketingPipelineResult }
     | { type: "error"; success: false; message: string; error?: string };
 
-export type OnPipelineProgress = (event:
-    | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
-    | { type: "step_complete"; step: PipelineStepId; durationMs: number; detail?: string; status?: "completed" | "skipped" | "failed" }
-    | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
-    | { type: "step_thinking"; step: PipelineStepId; text: string }
+export type OnPipelineProgress = (
+    event:
+        | { type: "step_start"; step: PipelineStepId; label: string; parallelGroup?: number }
+        | {
+              type: "step_complete";
+              step: PipelineStepId;
+              durationMs: number;
+              detail?: string;
+              status?: "completed" | "skipped" | "failed";
+          }
+        | { type: "step_data"; step: PipelineStepId; data: Record<string, unknown> }
+        | { type: "step_thinking"; step: PipelineStepId; text: string }
 ) => void;
-

@@ -1,14 +1,6 @@
 "use client";
 
-import {
-    ChevronRight,
-    ChevronDown,
-    FileText,
-    ListTree,
-    Edit2,
-    Plus,
-    Trash2,
-} from "lucide-react";
+import { ChevronRight, ChevronDown, FileText, ListTree, Edit2, Plus, Trash2 } from "lucide-react";
 import { Button } from "~/app/employer/documents/components/ui/button";
 import { Input } from "~/app/employer/documents/components/ui/input";
 import { cn } from "~/lib/utils";
@@ -59,10 +51,8 @@ export function OutlineTreeItem({
             aria-selected={isFocused}
             data-item-id={item.id}
             className={cn(
-                "flex items-center gap-1.5 py-1.5 rounded-md group transition-colors",
-                isFocused
-                    ? "bg-accent/60 ring-1 ring-ring/30"
-                    : "hover:bg-muted/50",
+                "group flex items-center gap-1.5 rounded-md py-1.5 transition-colors",
+                isFocused ? "bg-accent/60 ring-ring/30 ring-1" : "hover:bg-muted/50"
             )}
             style={{ paddingLeft: `${depth * 20 + 12}px`, paddingRight: "8px" }}
         >
@@ -70,31 +60,25 @@ export function OutlineTreeItem({
             <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 w-7 p-0 flex-shrink-0"
+                className="h-7 w-7 flex-shrink-0 p-0"
                 onClick={() => onToggleExpand(item.id)}
                 tabIndex={-1}
-                aria-label={
-                    hasChildren
-                        ? isExpanded
-                            ? "Collapse"
-                            : "Expand"
-                        : undefined
-                }
+                aria-label={hasChildren ? (isExpanded ? "Collapse" : "Expand") : undefined}
             >
                 {hasChildren ? (
                     isExpanded ? (
-                        <ChevronDown className="w-4 h-4" />
+                        <ChevronDown className="h-4 w-4" />
                     ) : (
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="h-4 w-4" />
                     )
                 ) : (
-                    <div className="w-4 h-4" />
+                    <div className="h-4 w-4" />
                 )}
             </Button>
 
             {/* Level icon */}
             {styles.showIcon && (
-                <span className="flex-shrink-0 text-muted-foreground">
+                <span className="text-muted-foreground flex-shrink-0">
                     {item.level === 1 ? (
                         <FileText className={styles.iconSize} />
                     ) : (
@@ -107,21 +91,18 @@ export function OutlineTreeItem({
             {isEditing ? (
                 <Input
                     value={editValue}
-                    onChange={(e) => onEditValueChange(e.target.value)}
+                    onChange={e => onEditValueChange(e.target.value)}
                     onBlur={onSaveEdit}
-                    onKeyDown={(e) => {
+                    onKeyDown={e => {
                         if (e.key === "Enter") onSaveEdit();
                         if (e.key === "Escape") onSaveEdit();
                     }}
-                    className="h-7 text-sm flex-1"
+                    className="h-7 flex-1 text-sm"
                     autoFocus
                 />
             ) : (
                 <span
-                    className={cn(
-                        "flex-1 cursor-pointer truncate",
-                        styles.textClass,
-                    )}
+                    className={cn("flex-1 cursor-pointer truncate", styles.textClass)}
                     onClick={() => onInsertSection(item.title, item.level)}
                 >
                     {item.title}
@@ -130,7 +111,7 @@ export function OutlineTreeItem({
 
             {/* Children count badge */}
             {hasChildren && !isEditing && (
-                <span className="flex-shrink-0 bg-muted rounded-full px-1.5 text-[10px] text-muted-foreground tabular-nums">
+                <span className="bg-muted text-muted-foreground flex-shrink-0 rounded-full px-1.5 text-[10px] tabular-nums">
                     {childCount}
                 </span>
             )}
@@ -138,8 +119,8 @@ export function OutlineTreeItem({
             {/* Actions (visible on hover or focus) */}
             <div
                 className={cn(
-                    "flex gap-0.5 flex-shrink-0 transition-opacity",
-                    isFocused ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+                    "flex flex-shrink-0 gap-0.5 transition-opacity",
+                    isFocused ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 )}
             >
                 <Button
@@ -150,7 +131,7 @@ export function OutlineTreeItem({
                     tabIndex={-1}
                     aria-label="Edit"
                 >
-                    <Edit2 className="w-3.5 h-3.5" />
+                    <Edit2 className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                     variant="ghost"
@@ -160,7 +141,7 @@ export function OutlineTreeItem({
                     tabIndex={-1}
                     aria-label="Add child"
                 >
-                    <Plus className="w-3.5 h-3.5" />
+                    <Plus className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                     variant="ghost"
@@ -170,7 +151,7 @@ export function OutlineTreeItem({
                     tabIndex={-1}
                     aria-label="Delete"
                 >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="h-3.5 w-3.5" />
                 </Button>
             </div>
         </div>

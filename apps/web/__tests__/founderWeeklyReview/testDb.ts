@@ -17,10 +17,7 @@ const repoRoot = join(webDir, "..", "..");
  * then product. The product set has foreign keys into engine tables, so
  * applying apps/web/drizzle alone fails on the first one.
  */
-const MIGRATION_SETS = [
-    join(repoRoot, "packages", "core", "drizzle"),
-    join(webDir, "drizzle"),
-];
+const MIGRATION_SETS = [join(repoRoot, "packages", "core", "drizzle"), join(webDir, "drizzle")];
 
 interface JournalEntry {
     idx: number;
@@ -33,12 +30,12 @@ interface JournalEntry {
  * apply exactly the SQL, in exactly the order, that a deploy applies.
  */
 async function listMigrationFiles(dir: string): Promise<string[]> {
-    const journal = JSON.parse(
-        await readFile(join(dir, "meta", "_journal.json"), "utf8")
-    ) as { entries?: JournalEntry[] };
+    const journal = JSON.parse(await readFile(join(dir, "meta", "_journal.json"), "utf8")) as {
+        entries?: JournalEntry[];
+    };
     return [...(journal.entries ?? [])]
         .sort((a, b) => a.idx - b.idx)
-        .map((entry) => join(dir, `${entry.tag}.sql`));
+        .map(entry => join(dir, `${entry.tag}.sql`));
 }
 
 function withDatabase(connectionString: string, databaseName: string): string {
@@ -59,9 +56,7 @@ export interface FounderWeeklyReviewTestDatabase {
     close(): Promise<void>;
 }
 
-async function createSession(
-    connectionString: string
-): Promise<FounderWeeklyReviewTestSession> {
+async function createSession(connectionString: string): Promise<FounderWeeklyReviewTestSession> {
     const client = postgres(connectionString, { max: 1 });
     return {
         db: drizzle(client, { schema: { ...coreSchema, ...featuresSchema } }),
@@ -69,7 +64,15 @@ async function createSession(
     };
 }
 
-const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]", "0.0.0.0", "postgres", "db"]);
+const LOCAL_HOSTS = new Set([
+    "localhost",
+    "127.0.0.1",
+    "::1",
+    "[::1]",
+    "0.0.0.0",
+    "postgres",
+    "db",
+]);
 
 /** Escape hatch for a sandboxed non-local runner. Opt-in, never inferred. */
 const ALLOW_NON_LOCAL = "LAUNCHSTACK_ALLOW_NON_LOCAL_TEST_DATABASE";
@@ -117,8 +120,7 @@ export function assertLocalTestServer(connectionString: string): void {
  * is what lets these suites run the real migration SQL unmodified.
  */
 export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWeeklyReviewTestDatabase> {
-    const connectionString =
-        process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL;
+    const connectionString = process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL;
 
     if (!connectionString) {
         throw new Error(
@@ -152,7 +154,7 @@ export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWe
         for (const dir of MIGRATION_SETS) {
             for (const file of await listMigrationFiles(dir)) {
                 const body = await readFile(file, "utf8");
-                await admin.begin(async (tx) => {
+                await admin.begin(async tx => {
                     await tx.unsafe(body);
                 });
             }
@@ -175,9 +177,7 @@ export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWe
             await admin.end({ timeout: 5 });
             // WITH (FORCE) so a session a test forgot to close cannot wedge the
             // drop and leak a database into the next run.
-            await maintenance.unsafe(
-                `DROP DATABASE IF EXISTS "${databaseName}" WITH (FORCE)`
-            );
+            await maintenance.unsafe(`DROP DATABASE IF EXISTS "${databaseName}" WITH (FORCE)`);
             await maintenance.end({ timeout: 5 });
         },
     };

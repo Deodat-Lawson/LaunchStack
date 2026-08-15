@@ -151,9 +151,7 @@ export async function createAgentKnowledgeSink(
     getEngine();
 
     const embeddingIndexKey =
-        context.embeddingIndexKey ??
-        (await resolveIngestIndexKey(context.companyId)) ??
-        undefined;
+        context.embeddingIndexKey ?? (await resolveIngestIndexKey(context.companyId)) ?? undefined;
     const category = context.category ?? AGENT_KNOWLEDGE_CATEGORY;
 
     return {

@@ -5,11 +5,11 @@ import { prepareEmailCampaign } from "./prepare";
 import { isSuppressed } from "./db";
 import { createUnsubscribeToken } from "./unsubscribe-token";
 import {
-  CampaignLifecycleError,
-  type EmailTemplate,
-  type Recipient,
-  type SendResult,
-  type TemplateReview,
+    CampaignLifecycleError,
+    type EmailTemplate,
+    type Recipient,
+    type SendResult,
+    type TemplateReview,
 } from "./types";
 
 /**
@@ -30,68 +30,68 @@ import {
  * or `runAutomatedEmailCampaign` for unattended runs.
  */
 export async function runEmailCampaign(args: {
-  companyId: number;
-  name: string;
-  goal?: string;
-  recipients: Recipient[];
-  /** Only "dry_run" is accepted; "send" raises a 410. */
-  mode?: "dry_run";
-  senderIdentity: string;
-  unsubscribeBaseUrl: string;
-  /** Persist a campaign + template version (audit). Default true. */
-  persist?: boolean;
-  actorUserId?: number | null;
+    companyId: number;
+    name: string;
+    goal?: string;
+    recipients: Recipient[];
+    /** Only "dry_run" is accepted; "send" raises a 410. */
+    mode?: "dry_run";
+    senderIdentity: string;
+    unsubscribeBaseUrl: string;
+    /** Persist a campaign + template version (audit). Default true. */
+    persist?: boolean;
+    actorUserId?: number | null;
 }): Promise<{
-  campaignId: number | null;
-  template: EmailTemplate;
-  review: TemplateReview;
-  results: SendResult[];
+    campaignId: number | null;
+    template: EmailTemplate;
+    review: TemplateReview;
+    results: SendResult[];
 }> {
-  if ((args.mode as string) === "send") {
-    throw new CampaignLifecycleError(
-      "Real sending has moved to the staged campaign API. Create a campaign, " +
-        "approve a template version, then POST /api/email-campaigns/{id}/send " +
-        "with an Idempotency-Key.",
-      "one_shot_send_removed",
-      410,
-    );
-  }
+    if ((args.mode as string) === "send") {
+        throw new CampaignLifecycleError(
+            "Real sending has moved to the staged campaign API. Create a campaign, " +
+                "approve a template version, then POST /api/email-campaigns/{id}/send " +
+                "with an Idempotency-Key.",
+            "one_shot_send_removed",
+            410
+        );
+    }
 
-  const persist = args.persist ?? true;
+    const persist = args.persist ?? true;
 
-  // A persisted preview still produces a real, reviewable template version —
-  // the campaign simply stays unapproved, so nothing can be dispatched from it
-  // until someone goes through the staged flow.
-  if (persist) {
-    const prepared = await prepareEmailCampaign({
-      companyId: args.companyId,
-      name: args.name,
-      ...(args.goal !== undefined ? { goal: args.goal } : {}),
-      recipients: args.recipients,
-      actorUserId: args.actorUserId ?? null,
+    // A persisted preview still produces a real, reviewable template version —
+    // the campaign simply stays unapproved, so nothing can be dispatched from it
+    // until someone goes through the staged flow.
+    if (persist) {
+        const prepared = await prepareEmailCampaign({
+            companyId: args.companyId,
+            name: args.name,
+            ...(args.goal !== undefined ? { goal: args.goal } : {}),
+            recipients: args.recipients,
+            actorUserId: args.actorUserId ?? null,
+        });
+        if (!prepared.review) throw new Error("Template review did not run");
+
+        return {
+            campaignId: prepared.campaign.id,
+            template: prepared.template,
+            review: prepared.review,
+            results: await previewResults(args, prepared.template),
+        };
+    }
+
+    const { template, companyContext } = await generateTemplate({
+        companyId: args.companyId,
+        ...(args.goal !== undefined ? { goal: args.goal } : {}),
     });
-    if (!prepared.review) throw new Error("Template review did not run");
+    const review = await reviewTemplate({ template, companyContext });
 
     return {
-      campaignId: prepared.campaign.id,
-      template: prepared.template,
-      review: prepared.review,
-      results: await previewResults(args, prepared.template),
+        campaignId: null,
+        template,
+        review,
+        results: await previewResults(args, template),
     };
-  }
-
-  const { template, companyContext } = await generateTemplate({
-    companyId: args.companyId,
-    ...(args.goal !== undefined ? { goal: args.goal } : {}),
-  });
-  const review = await reviewTemplate({ template, companyContext });
-
-  return {
-    campaignId: null,
-    template,
-    review,
-    results: await previewResults(args, template),
-  };
 }
 
 /**
@@ -99,21 +99,21 @@ export async function runEmailCampaign(args: {
  * still honoured; that check is never optional, even in a preview.
  */
 function previewResults(
-  args: {
-    companyId: number;
-    recipients: Recipient[];
-    senderIdentity: string;
-    unsubscribeBaseUrl: string;
-  },
-  template: EmailTemplate,
+    args: {
+        companyId: number;
+        recipients: Recipient[];
+        senderIdentity: string;
+        unsubscribeBaseUrl: string;
+    },
+    template: EmailTemplate
 ): Promise<SendResult[]> {
-  return sendCampaign({
-    template,
-    recipients: args.recipients,
-    mode: "dry_run",
-    senderIdentity: args.senderIdentity,
-    unsubscribeUrl: (email) =>
-      `${args.unsubscribeBaseUrl.replace(/\/+$/, "")}/${createUnsubscribeToken({ companyId: args.companyId, email })}`,
-    isSuppressed: (email) => isSuppressed(args.companyId, email),
-  });
+    return sendCampaign({
+        template,
+        recipients: args.recipients,
+        mode: "dry_run",
+        senderIdentity: args.senderIdentity,
+        unsubscribeUrl: email =>
+            `${args.unsubscribeBaseUrl.replace(/\/+$/, "")}/${createUnsubscribeToken({ companyId: args.companyId, email })}`,
+        isSuppressed: email => isSuppressed(args.companyId, email),
+    });
 }

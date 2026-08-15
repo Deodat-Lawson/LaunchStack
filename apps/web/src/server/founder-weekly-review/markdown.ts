@@ -21,12 +21,15 @@ type RenderableRun = {
 type V2Sections = FounderWeeklyReviewV2Payload["sections"];
 type SectionKey = keyof V2Sections;
 /** Every section is either a list of items or a no-evidence placeholder. */
-type SectionItem = Extract<
-    V2Sections[SectionKey],
-    { state: "evidence" }
->["items"][number];
+type SectionItem = Extract<V2Sections[SectionKey], { state: "evidence" }>["items"][number];
 
-const SECTION_ORDER = ["whatShipped", "whatChanged", "whatCustomersSaid", "currentBlockers", "nextPriorities"] as const;
+const SECTION_ORDER = [
+    "whatShipped",
+    "whatChanged",
+    "whatCustomersSaid",
+    "currentBlockers",
+    "nextPriorities",
+] as const;
 const SECTION_LABELS: Record<(typeof SECTION_ORDER)[number], string> = {
     whatShipped: "Shipped This Period",
     whatChanged: "Other Meaningful Changes",
@@ -41,7 +44,9 @@ function metadataNumber(item: FounderWeeklyReviewEvidenceItem, key: string): str
     return typeof value === "number" || typeof value === "string" ? String(value) : null;
 }
 
-export function formatFounderWeeklyReviewEvidenceReference(item: FounderWeeklyReviewEvidenceItem): string {
+export function formatFounderWeeklyReviewEvidenceReference(
+    item: FounderWeeklyReviewEvidenceItem
+): string {
     if (item.sourceType === "founder_context") return "Founder-provided context";
     const details: string[] = [];
     const page = metadataNumber(item, "pageNumber");
@@ -49,47 +54,66 @@ export function formatFounderWeeklyReviewEvidenceReference(item: FounderWeeklyRe
     if (page) details.push(`page ${page}`);
     if (section) details.push(`section ${section}`);
     const title = item.title.trim() || "Untitled evidence";
-    const prefix = item.sourceType === "document_change" ? `Document change ${REFERENCE_SEPARATOR} ` : "";
+    const prefix =
+        item.sourceType === "document_change" ? `Document change ${REFERENCE_SEPARATOR} ` : "";
     return [prefix + title, ...details].join(` ${REFERENCE_SEPARATOR} `);
 }
 
 /** Renders only a persisted, validated draft and intentionally excludes operational internals. */
 export function renderFounderWeeklyReviewMarkdown(run: RenderableRun): string {
     if (!run.reviewPayload || !run.evidenceSnapshot) {
-        throw new Error("A persisted review payload and evidence snapshot are required for Markdown rendering.");
+        throw new Error(
+            "A persisted review payload and evidence snapshot are required for Markdown rendering."
+        );
     }
-    const sources = new Map(run.evidenceSnapshot.items.map((item) => [item.sourceId, item]));
+    const sources = new Map(run.evidenceSnapshot.items.map(item => [item.sourceId, item]));
     const referenceNumbers = new Map<string, number>();
     const references: string[] = [];
-    const cite = (sourceIds: readonly string[]) => sourceIds.map((sourceId) => {
-        let number = referenceNumbers.get(sourceId);
-        if (!number) {
-            number = referenceNumbers.size + 1;
-            referenceNumbers.set(sourceId, number);
-            const source = sources.get(sourceId);
-            if (source) references.push(`[${number}] ${formatFounderWeeklyReviewEvidenceReference(source)}`);
-        }
-        return `[${number}]`;
-    }).join("");
+    const cite = (sourceIds: readonly string[]) =>
+        sourceIds
+            .map(sourceId => {
+                let number = referenceNumbers.get(sourceId);
+                if (!number) {
+                    number = referenceNumbers.size + 1;
+                    referenceNumbers.set(sourceId, number);
+                    const source = sources.get(sourceId);
+                    if (source)
+                        references.push(
+                            `[${number}] ${formatFounderWeeklyReviewEvidenceReference(source)}`
+                        );
+                }
+                return `[${number}]`;
+            })
+            .join("");
     if (run.reviewPayload.schemaVersion !== FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION) {
         // Previously this field was `any`, so a legacy row reached the section
         // loop and failed on an undefined `state` deep inside rendering.
         throw new Error(
             `Markdown rendering supports ${FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION} payloads; ` +
-                `this run holds ${run.reviewPayload.schemaVersion}. Regenerate the review.`,
+                `this run holds ${run.reviewPayload.schemaVersion}. Regenerate the review.`
         );
     }
     const normalize = (text: string) => text.trim().replace(/\s+/g, " ");
     const payload: FounderWeeklyReviewV2Payload = run.reviewPayload;
-    const shipped = new Set(payload.sections.whatShipped.state === "evidence"
-        ? payload.sections.whatShipped.items.map((item) => normalize(item.text))
-        : []);
-    const lines = ["# Founder Weekly Review", "", `**Reporting period:** ${run.reportingPeriod.start} to ${run.reportingPeriod.end}`, ""];
+    const shipped = new Set(
+        payload.sections.whatShipped.state === "evidence"
+            ? payload.sections.whatShipped.items.map(item => normalize(item.text))
+            : []
+    );
+    const lines = [
+        "# Founder Weekly Review",
+        "",
+        `**Reporting period:** ${run.reportingPeriod.start} to ${run.reportingPeriod.end}`,
+        "",
+    ];
     for (const key of SECTION_ORDER) {
         const section: V2Sections[SectionKey] = payload.sections[key];
-        const items: SectionItem[] = section.state === "evidence"
-            ? section.items.filter((item) => key !== "whatChanged" || !shipped.has(normalize(item.text)))
-            : [];
+        const items: SectionItem[] =
+            section.state === "evidence"
+                ? section.items.filter(
+                      item => key !== "whatChanged" || !shipped.has(normalize(item.text))
+                  )
+                : [];
         const noEvidence = section.state === "no_evidence" ? section.noEvidence : null;
         if (!items.length && !noEvidence) continue;
         lines.push(`## ${SECTION_LABELS[key]}`, "");

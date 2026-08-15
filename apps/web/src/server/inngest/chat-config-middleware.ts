@@ -32,48 +32,48 @@ let warnedAboutFailure = false;
  * and `yaml` into all of them for a client they never construct.
  */
 async function installAiConfiguration(): Promise<void> {
-  const [{ env }, { configureAppChatModels }, { getEngine }] = await Promise.all([
-    import("~/env"),
-    import("~/server/chat-models"),
-    import("~/server/engine"),
-  ]);
-  configureAppChatModels(env.server);
-  // Registers the provider registry, embedding defaults and secret box. Cached
-  // on globalThis, so this is a lookup after the first step.
-  getEngine();
+    const [{ env }, { configureAppChatModels }, { getEngine }] = await Promise.all([
+        import("~/env"),
+        import("~/server/chat-models"),
+        import("~/server/engine"),
+    ]);
+    configureAppChatModels(env.server);
+    // Registers the provider registry, embedding defaults and secret box. Cached
+    // on globalThis, so this is a lookup after the first step.
+    getEngine();
 }
 
 export const chatConfigMiddleware = new InngestMiddleware({
-  name: "chat-configuration",
-  init() {
-    return {
-      onFunctionRun() {
+    name: "chat-configuration",
+    init() {
         return {
-          async transformInput() {
-            try {
-              await installAiConfiguration();
-            } catch (error) {
-              // Deliberately not fatal. Most background functions never touch
-              // chat or a provider, and failing them all because the model file
-              // is wrong would turn a misconfiguration into a
-              // document-processing outage. The steps that do need one still
-              // fail — with their own typed error — and this log explains why.
-              if (!warnedAboutFailure) {
-                warnedAboutFailure = true;
-                console.warn(
-                  "[inngest] AI configuration unavailable; steps that need a chat model or a provider will fail:",
-                  error instanceof Error ? error.message : error,
-                );
-              }
-            }
-          },
+            onFunctionRun() {
+                return {
+                    async transformInput() {
+                        try {
+                            await installAiConfiguration();
+                        } catch (error) {
+                            // Deliberately not fatal. Most background functions never touch
+                            // chat or a provider, and failing them all because the model file
+                            // is wrong would turn a misconfiguration into a
+                            // document-processing outage. The steps that do need one still
+                            // fail — with their own typed error — and this log explains why.
+                            if (!warnedAboutFailure) {
+                                warnedAboutFailure = true;
+                                console.warn(
+                                    "[inngest] AI configuration unavailable; steps that need a chat model or a provider will fail:",
+                                    error instanceof Error ? error.message : error
+                                );
+                            }
+                        }
+                    },
+                };
+            },
         };
-      },
-    };
-  },
+    },
 });
 
 /** Test helper — re-arms the one-shot warning. */
 export function resetChatConfigMiddlewareWarning(): void {
-  warnedAboutFailure = false;
+    warnedAboutFailure = false;
 }

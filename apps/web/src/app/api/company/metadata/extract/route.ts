@@ -71,7 +71,7 @@ export async function POST(request: Request) {
                   .select({ id: documentTable.id, title: documentTable.title })
                   .from(documentTable)
                   .where(
-                      sql`${documentTable.companyId} = ${companyIdBigint} AND ${documentTable.id} > ${lastDocId}`,
+                      sql`${documentTable.companyId} = ${companyIdBigint} AND ${documentTable.id} > ${lastDocId}`
                   )
             : await db
                   .select({ id: documentTable.id, title: documentTable.title })
@@ -83,22 +83,27 @@ export async function POST(request: Request) {
                 message: isIncremental
                     ? "No new documents since last extraction"
                     : "No documents found for this company",
-                metadata: isIncremental ? existingRow?.metadata ?? null : null,
+                metadata: isIncremental ? (existingRow?.metadata ?? null) : null,
                 documentsProcessed: 0,
                 incremental: isIncremental,
             });
         }
 
         // For incremental: merge into existing. For full: start fresh (force) or merge into existing.
-        const baseMetadata = force ? null : existingRow?.metadata ?? null;
+        const baseMetadata = force ? null : (existingRow?.metadata ?? null);
 
-        return processDocuments(docs, companyId, companyIdBigint, baseMetadata, debug, isIncremental, ctx.data.clerkUserId);
+        return processDocuments(
+            docs,
+            companyId,
+            companyIdBigint,
+            baseMetadata,
+            debug,
+            isIncremental,
+            ctx.data.clerkUserId
+        );
     } catch (error) {
         console.error("[company-metadata] POST /extract error:", error);
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
 
@@ -109,7 +114,7 @@ async function processDocuments(
     existingMetadata: CompanyMetadataJSON | null,
     debug: boolean,
     incremental: boolean,
-    userId: string,
+    userId: string
 ) {
     // Debug mode: return per-document chunk counts without running extraction
     if (debug) {
@@ -130,7 +135,7 @@ async function processDocuments(
             incremental,
             totalDocuments: docs.length,
             documents: diagnostics,
-            documentsWithChunks: diagnostics.filter((d) => d.chunkCount > 0).length,
+            documentsWithChunks: diagnostics.filter(d => d.chunkCount > 0).length,
         });
     }
 
@@ -144,7 +149,7 @@ async function processDocuments(
         const extracted = await extractCompanyFacts({
             documentId: doc.id,
             companyId,
-            generate: (input) =>
+            generate: input =>
                 generateStructured({
                     ...input,
                     capability: "smallExtraction",
@@ -153,10 +158,7 @@ async function processDocuments(
 
         if (!extracted) continue;
 
-        const { updatedMetadata, diff } = mergeCompanyMetadata(
-            metadata,
-            extracted,
-        );
+        const { updatedMetadata, diff } = mergeCompanyMetadata(metadata, extracted);
 
         metadata = updatedMetadata;
         allDiffs.added.push(...diff.added);
@@ -197,7 +199,8 @@ async function processDocuments(
         });
 
     // Write audit history entry for this extraction
-    const hasChanges = allDiffs.added.length > 0 || allDiffs.updated.length > 0 || allDiffs.deprecated.length > 0;
+    const hasChanges =
+        allDiffs.added.length > 0 || allDiffs.updated.length > 0 || allDiffs.deprecated.length > 0;
     if (hasChanges) {
         await db.insert(companyMetadataHistory).values({
             companyId: companyIdBigint,

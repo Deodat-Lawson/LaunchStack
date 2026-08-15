@@ -122,9 +122,7 @@ describe("POST /api/connectors/agent-knowledge", () => {
         const response = await POST(postRequest({}));
 
         expect(response.status).toBe(403);
-        expect((await readBody(response)).message).toContain(
-            "AGENT_KNOWLEDGE_CONNECTOR_ENABLED"
-        );
+        expect((await readBody(response)).message).toContain("AGENT_KNOWLEDGE_CONNECTOR_ENABLED");
         expect(mockSync).not.toHaveBeenCalled();
     });
 
@@ -181,7 +179,16 @@ describe("POST /api/connectors/agent-knowledge", () => {
 describe("GET /api/connectors/agent-knowledge", () => {
     it("previews without reading file contents", async () => {
         mockPreview.mockResolvedValue({
-            roots: [{ toolId: "claude-code", scope: "global", key: "global", dir: "/h/.claude", exists: true, itemCount: 1 }],
+            roots: [
+                {
+                    toolId: "claude-code",
+                    scope: "global",
+                    key: "global",
+                    dir: "/h/.claude",
+                    exists: true,
+                    itemCount: 1,
+                },
+            ],
             items: [
                 {
                     sourceId: "agent-knowledge://claude-code/global/CLAUDE.md",

@@ -13,11 +13,7 @@ import {
     type RouterDecisionResult,
     type StoredSection,
 } from "../../ocr/processor";
-import {
-    prepareForEmbedding,
-    mergeWithEmbeddings,
-    getTotalChunkSize,
-} from "../../ocr/chunker";
+import { prepareForEmbedding, mergeWithEmbeddings, getTotalChunkSize } from "../../ocr/chunker";
 import { createEmbeddingModel } from "../../embeddings";
 import type { CompanyEmbeddingConfig } from "../../embeddings";
 import {
@@ -28,12 +24,7 @@ import {
 import type { DocumentChunk, PageContent, PipelineResult } from "../../ocr/types";
 import { getDb } from "../../db";
 import { ocrJobs, documentContextChunks } from "../../db/schema";
-import {
-    creditsDebitSafe,
-    embeddingTokens,
-    ocrTokens,
-    ocrProviderToTokenKey,
-} from "../../credits";
+import { creditsDebitSafe, embeddingTokens, ocrTokens, ocrProviderToTokenKey } from "../../credits";
 
 import type {
     DocIngestionToolInput,
@@ -256,11 +247,13 @@ async function maybeExtractEntities(
     // rows for this version.
     try {
         await runStep("step-f-graph-rag", async () => {
-            const { extractAndStoreEntities } = await import(
-                "../entity-extraction"
-            );
+            const { extractAndStoreEntities } = await import("../entity-extraction");
 
-            const result = await extractAndStoreEntities(storedSections, documentId, BigInt(companyId));
+            const result = await extractAndStoreEntities(
+                storedSections,
+                documentId,
+                BigInt(companyId)
+            );
 
             console.log(
                 `[DocIngestionTool] Graph RAG: ${result.totalEntities} entities, ` +
@@ -389,20 +382,17 @@ export async function runExtractionStage(
         );
 
         if (isInngest) {
-            normSummary = await runStep(
-                "step-b-normalize",
-                async (): Promise<NormalizeSummary> => {
-                    const result = await normalizeDocument(documentUrl, routerDecision);
-                    await savePipelineState(jobId, "pages", result.pages);
-                    return {
-                        jobId,
-                        pageCount: result.pages.length,
-                        provider: result.provider,
-                        processingTimeMs: result.processingTimeMs,
-                        confidenceScore: result.confidenceScore,
-                    };
-                }
-            );
+            normSummary = await runStep("step-b-normalize", async (): Promise<NormalizeSummary> => {
+                const result = await normalizeDocument(documentUrl, routerDecision);
+                await savePipelineState(jobId, "pages", result.pages);
+                return {
+                    jobId,
+                    pageCount: result.pages.length,
+                    provider: result.provider,
+                    processingTimeMs: result.processingTimeMs,
+                    confidenceScore: result.confidenceScore,
+                };
+            });
         } else {
             const result = await runStep(
                 "step-b-normalize",
@@ -420,26 +410,23 @@ export async function runExtractionStage(
         }
     } else {
         if (isInngest) {
-            normSummary = await runStep(
-                "step-ab-ingest",
-                async (): Promise<NormalizeSummary> => {
-                    const { ingestToNormalized } = await import("../index");
-                    const normalizedDoc = await ingestToNormalized(documentUrl, {
-                        mimeType,
-                        filename: routingFilename,
-                        forceOCR: options?.forceOCR,
-                        isWebsite,
-                    });
-                    await savePipelineState(jobId, "pages", normalizedDoc.pages);
-                    return {
-                        jobId,
-                        pageCount: normalizedDoc.pages.length,
-                        provider: normalizedDoc.metadata.provider,
-                        processingTimeMs: normalizedDoc.metadata.processingTimeMs,
-                        confidenceScore: normalizedDoc.metadata.confidenceScore,
-                    };
-                }
-            );
+            normSummary = await runStep("step-ab-ingest", async (): Promise<NormalizeSummary> => {
+                const { ingestToNormalized } = await import("../index");
+                const normalizedDoc = await ingestToNormalized(documentUrl, {
+                    mimeType,
+                    filename: routingFilename,
+                    forceOCR: options?.forceOCR,
+                    isWebsite,
+                });
+                await savePipelineState(jobId, "pages", normalizedDoc.pages);
+                return {
+                    jobId,
+                    pageCount: normalizedDoc.pages.length,
+                    provider: normalizedDoc.metadata.provider,
+                    processingTimeMs: normalizedDoc.metadata.processingTimeMs,
+                    confidenceScore: normalizedDoc.metadata.confidenceScore,
+                };
+            });
         } else {
             const result = await runStep(
                 "step-ab-ingest",
@@ -498,9 +485,7 @@ export interface IndexingStageCounts {
  * Requires `runExtractionStage` to have persisted pipeline state for the
  * job. Idempotent via content-hash dedup and per-version upserts.
  */
-export async function runIndexingStage(
-    input: DocIngestionToolInput
-): Promise<IndexingStageCounts> {
+export async function runIndexingStage(input: DocIngestionToolInput): Promise<IndexingStageCounts> {
     const {
         jobId,
         documentId,
@@ -531,25 +516,19 @@ export async function runIndexingStage(
     let chunks: DocumentChunk[];
 
     if (isInngest) {
-        const chunkSummary = await runStep(
-            "step-c-chunking",
-            async (): Promise<ChunkSummary> => {
-                const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
-                const chunked = await chunkPages(pages, routingFilename);
-                await savePipelineState(jobId, "chunks", chunked);
-                const stats = getTotalChunkSize(chunked);
-                return {
-                    jobId,
-                    parentChunkCount: chunked.length,
-                    childChunkCount: chunked.reduce(
-                        (sum, c) => sum + (c.children?.length ?? 1),
-                        0
-                    ),
-                    textChunks: stats.textChunks,
-                    tableChunks: stats.tableChunks,
-                };
-            }
-        );
+        const chunkSummary = await runStep("step-c-chunking", async (): Promise<ChunkSummary> => {
+            const pages = await loadPipelineState<PageContent[]>(jobId, "pages");
+            const chunked = await chunkPages(pages, routingFilename);
+            await savePipelineState(jobId, "chunks", chunked);
+            const stats = getTotalChunkSize(chunked);
+            return {
+                jobId,
+                parentChunkCount: chunked.length,
+                childChunkCount: chunked.reduce((sum, c) => sum + (c.children?.length ?? 1), 0),
+                textChunks: stats.textChunks,
+                tableChunks: stats.tableChunks,
+            };
+        });
         chunks = await loadPipelineState<DocumentChunk[]>(jobId, "chunks");
         console.log(
             `[Pipeline] Chunks loaded: ${chunkSummary.parentChunkCount} parents, ${chunkSummary.childChunkCount} children`

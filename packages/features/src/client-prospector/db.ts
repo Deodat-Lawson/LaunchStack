@@ -18,12 +18,7 @@ import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 import { getDb } from "@launchstack/core/db";
 import { clientProspectorJobs } from "../schema";
-import type {
-    LatLng,
-    ProspectorJobRecord,
-    ProspectorJobStatus,
-    ProspectorOutput,
-} from "./types";
+import type { LatLng, ProspectorJobRecord, ProspectorJobStatus, ProspectorOutput } from "./types";
 
 // ─── Row types derived from the Drizzle schema ──────────────────────────────
 // These represent the raw shape of data as it sits in PostgreSQL.
@@ -243,10 +238,7 @@ export function createClientProspectorJobHelpers(store: ClientProspectorJobStore
         // Retrieve a single job by ID, scoped to a company.
         // Returns null if the job doesn't exist OR belongs to a different company.
         // This is how we enforce company data isolation.
-        async getJobById(
-            jobId: string,
-            companyId: bigint
-        ): Promise<ProspectorJobRecord | null> {
+        async getJobById(jobId: string, companyId: bigint): Promise<ProspectorJobRecord | null> {
             const row = await store.findById(jobId, companyId);
             return row ? mapRowToJobRecord(row) : null;
         },
@@ -282,9 +274,8 @@ export const updateJobResults = (...args: Parameters<typeof defaultHelpers.updat
 export const getJobById = (...args: Parameters<typeof defaultHelpers.getJobById>) =>
     defaultHelpers.getJobById(...args);
 
-export const getJobsByCompanyId = (
-    ...args: Parameters<typeof defaultHelpers.getJobsByCompanyId>
-) => defaultHelpers.getJobsByCompanyId(...args);
+export const getJobsByCompanyId = (...args: Parameters<typeof defaultHelpers.getJobsByCompanyId>) =>
+    defaultHelpers.getJobsByCompanyId(...args);
 
 export const __testOnly = {
     mapRowToJobRecord,

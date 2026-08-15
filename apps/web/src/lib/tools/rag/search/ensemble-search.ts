@@ -6,36 +6,36 @@ import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
 import { getRerankProvider, isRerankConfigured } from "@launchstack/core/providers/reranking";
 import { env } from "~/env";
 import {
-  createDocumentVectorRetriever,
-  createCompanyVectorRetriever,
-  createMultiDocVectorRetriever,
+    createDocumentVectorRetriever,
+    createCompanyVectorRetriever,
+    createMultiDocVectorRetriever,
 } from "../retrievers/vector-retriever";
 import {
-  createDocumentBM25Retriever,
-  createCompanyBM25Retriever,
-  createMultiDocBM25Retriever,
-  getDocumentChunks,
-  getCompanyChunks,
-  getMultiDocChunks,
-  chunksToDocuments,
+    createDocumentBM25Retriever,
+    createCompanyBM25Retriever,
+    createMultiDocBM25Retriever,
+    getDocumentChunks,
+    getCompanyChunks,
+    getMultiDocChunks,
+    chunksToDocuments,
 } from "../retrievers/bm25-retriever";
 import {
-  createNeo4jGraphRetriever,
-  shouldUseNeo4jRetriever,
+    createNeo4jGraphRetriever,
+    shouldUseNeo4jRetriever,
 } from "../retrievers/neo4j-graph-retriever";
 import { createGraphRetriever } from "../retrievers/graph-retriever";
 import {
-  createDocumentNotesRetriever,
-  createCompanyNotesRetriever,
-  createMultiDocNotesRetriever,
+    createDocumentNotesRetriever,
+    createCompanyNotesRetriever,
+    createMultiDocNotesRetriever,
 } from "../retrievers/notes-retriever";
 import type {
-  SearchResult,
-  DocumentSearchOptions,
-  CompanySearchOptions,
-  MultiDocSearchOptions,
-  EmbeddingsProvider,
-  SearchScope,
+    SearchResult,
+    DocumentSearchOptions,
+    CompanySearchOptions,
+    MultiDocSearchOptions,
+    EmbeddingsProvider,
+    SearchScope,
 } from "../types";
 
 const DEFAULT_WEIGHTS_2: number[] = [0.4, 0.6];
@@ -51,7 +51,7 @@ const NOTES_DEFAULT_WEIGHT = 0.15;
 const NOTES_MAX_CANDIDATES = 8;
 
 function isGraphRetrievalEnabled(): boolean {
-  return env.server.ENABLE_GRAPH_RETRIEVER === true;
+    return env.server.ENABLE_GRAPH_RETRIEVER === true;
 }
 
 /**
@@ -60,146 +60,146 @@ function isGraphRetrievalEnabled(): boolean {
  * empty-notes paths run the SQL query anyway and just add noise.
  */
 function isNotesRetrievalEnabled(): boolean {
-  return env.server.ENABLE_NOTES_RETRIEVER === true;
+    return env.server.ENABLE_NOTES_RETRIEVER === true;
 }
 
 export function createOpenAIEmbeddings(): EmbeddingsProvider {
-  return createEmbeddingModel(resolveEmbeddingIndex());
+    return createEmbeddingModel(resolveEmbeddingIndex());
 }
 
 export function createEmbeddingsForIndex(indexKey?: string): EmbeddingsProvider {
-  return createEmbeddingModel(resolveEmbeddingIndex(indexKey));
+    return createEmbeddingModel(resolveEmbeddingIndex(indexKey));
 }
 
 export async function createDocumentEnsembleRetriever(
-  options: DocumentSearchOptions,
-  embeddings?: EmbeddingsProvider
+    options: DocumentSearchOptions,
+    embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
-  const { documentId, companyId, topK = DEFAULT_TOP_K, filters } = options;
-  const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
-  const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
+    const { documentId, companyId, topK = DEFAULT_TOP_K, filters } = options;
+    const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
+    const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
-  const bm25Retriever = await createDocumentBM25Retriever(documentId, candidateK);
-  const vectorRetriever = createDocumentVectorRetriever(
-    documentId,
-    emb,
-    resolveEmbeddingIndex(options.embeddingIndexKey),
-    candidateK,
-    filters,
-  );
-
-  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
-  let weights = options.weights ?? DEFAULT_WEIGHTS_2;
-
-  if (isGraphRetrievalEnabled() && companyId != null) {
-    const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
-      documentIds: [documentId],
-      topK: candidateK,
-    });
-    if (graphRetriever) {
-      retrievers.push(graphRetriever);
-      weights = options.weights ?? DEFAULT_WEIGHTS_3;
-    }
-  }
-
-  if (isNotesRetrievalEnabled()) {
-    const notesRetriever = createDocumentNotesRetriever(
-      documentId,
-      emb,
-      Math.min(candidateK, NOTES_MAX_CANDIDATES),
+    const bm25Retriever = await createDocumentBM25Retriever(documentId, candidateK);
+    const vectorRetriever = createDocumentVectorRetriever(
+        documentId,
+        emb,
+        resolveEmbeddingIndex(options.embeddingIndexKey),
+        candidateK,
+        filters
     );
-    retrievers.push(notesRetriever);
-    weights = [...weights, NOTES_DEFAULT_WEIGHT];
-  }
 
-  return new EnsembleRetriever({ retrievers, weights });
+    const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
+    let weights = options.weights ?? DEFAULT_WEIGHTS_2;
+
+    if (isGraphRetrievalEnabled() && companyId != null) {
+        const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
+            documentIds: [documentId],
+            topK: candidateK,
+        });
+        if (graphRetriever) {
+            retrievers.push(graphRetriever);
+            weights = options.weights ?? DEFAULT_WEIGHTS_3;
+        }
+    }
+
+    if (isNotesRetrievalEnabled()) {
+        const notesRetriever = createDocumentNotesRetriever(
+            documentId,
+            emb,
+            Math.min(candidateK, NOTES_MAX_CANDIDATES)
+        );
+        retrievers.push(notesRetriever);
+        weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    }
+
+    return new EnsembleRetriever({ retrievers, weights });
 }
 
 export async function createCompanyEnsembleRetriever(
-  options: CompanySearchOptions,
-  embeddings?: EmbeddingsProvider
+    options: CompanySearchOptions,
+    embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
-  const { companyId, topK = 10, filters } = options;
-  const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
-  const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
+    const { companyId, topK = 10, filters } = options;
+    const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
+    const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
-  const bm25Retriever = await createCompanyBM25Retriever(companyId, candidateK);
-  const vectorRetriever = createCompanyVectorRetriever(
-    companyId,
-    emb,
-    resolveEmbeddingIndex(options.embeddingIndexKey),
-    candidateK,
-    filters,
-  );
-
-  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
-  let weights = options.weights ?? DEFAULT_WEIGHTS_2;
-
-  if (isGraphRetrievalEnabled()) {
-    const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
-      topK: candidateK,
-    });
-    if (graphRetriever) {
-      retrievers.push(graphRetriever);
-      weights = options.weights ?? DEFAULT_WEIGHTS_3;
-    }
-  }
-
-  if (isNotesRetrievalEnabled()) {
-    const notesRetriever = createCompanyNotesRetriever(
-      companyId,
-      emb,
-      Math.min(candidateK, NOTES_MAX_CANDIDATES),
+    const bm25Retriever = await createCompanyBM25Retriever(companyId, candidateK);
+    const vectorRetriever = createCompanyVectorRetriever(
+        companyId,
+        emb,
+        resolveEmbeddingIndex(options.embeddingIndexKey),
+        candidateK,
+        filters
     );
-    retrievers.push(notesRetriever);
-    weights = [...weights, NOTES_DEFAULT_WEIGHT];
-  }
 
-  return new EnsembleRetriever({ retrievers, weights });
+    const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
+    let weights = options.weights ?? DEFAULT_WEIGHTS_2;
+
+    if (isGraphRetrievalEnabled()) {
+        const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
+            topK: candidateK,
+        });
+        if (graphRetriever) {
+            retrievers.push(graphRetriever);
+            weights = options.weights ?? DEFAULT_WEIGHTS_3;
+        }
+    }
+
+    if (isNotesRetrievalEnabled()) {
+        const notesRetriever = createCompanyNotesRetriever(
+            companyId,
+            emb,
+            Math.min(candidateK, NOTES_MAX_CANDIDATES)
+        );
+        retrievers.push(notesRetriever);
+        weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    }
+
+    return new EnsembleRetriever({ retrievers, weights });
 }
 
 export async function createMultiDocEnsembleRetriever(
-  options: MultiDocSearchOptions,
-  embeddings?: EmbeddingsProvider
+    options: MultiDocSearchOptions,
+    embeddings?: EmbeddingsProvider
 ): Promise<EnsembleRetriever> {
-  const { documentIds, companyId, topK = DEFAULT_TOP_K, filters } = options;
-  const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
-  const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
+    const { documentIds, companyId, topK = DEFAULT_TOP_K, filters } = options;
+    const emb = embeddings ?? createEmbeddingsForIndex(options.embeddingIndexKey);
+    const candidateK = topK * RERANK_CANDIDATE_MULTIPLIER;
 
-  const bm25Retriever = await createMultiDocBM25Retriever(documentIds, candidateK);
-  const vectorRetriever = createMultiDocVectorRetriever(
-    documentIds,
-    emb,
-    resolveEmbeddingIndex(options.embeddingIndexKey),
-    candidateK,
-    filters,
-  );
-
-  const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
-  let weights = options.weights ?? DEFAULT_WEIGHTS_2;
-
-  if (isGraphRetrievalEnabled() && companyId != null) {
-    const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
-      documentIds,
-      topK: candidateK,
-    });
-    if (graphRetriever) {
-      retrievers.push(graphRetriever);
-      weights = options.weights ?? DEFAULT_WEIGHTS_3;
-    }
-  }
-
-  if (isNotesRetrievalEnabled()) {
-    const notesRetriever = createMultiDocNotesRetriever(
-      documentIds,
-      emb,
-      Math.min(candidateK, NOTES_MAX_CANDIDATES),
+    const bm25Retriever = await createMultiDocBM25Retriever(documentIds, candidateK);
+    const vectorRetriever = createMultiDocVectorRetriever(
+        documentIds,
+        emb,
+        resolveEmbeddingIndex(options.embeddingIndexKey),
+        candidateK,
+        filters
     );
-    retrievers.push(notesRetriever);
-    weights = [...weights, NOTES_DEFAULT_WEIGHT];
-  }
 
-  return new EnsembleRetriever({ retrievers, weights });
+    const retrievers: BaseRetriever[] = [bm25Retriever, vectorRetriever];
+    let weights = options.weights ?? DEFAULT_WEIGHTS_2;
+
+    if (isGraphRetrievalEnabled() && companyId != null) {
+        const graphRetriever = createGraphRetrieverForEnsemble(companyId, {
+            documentIds,
+            topK: candidateK,
+        });
+        if (graphRetriever) {
+            retrievers.push(graphRetriever);
+            weights = options.weights ?? DEFAULT_WEIGHTS_3;
+        }
+    }
+
+    if (isNotesRetrievalEnabled()) {
+        const notesRetriever = createMultiDocNotesRetriever(
+            documentIds,
+            emb,
+            Math.min(candidateK, NOTES_MAX_CANDIDATES)
+        );
+        retrievers.push(notesRetriever);
+        weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    }
+
+    return new EnsembleRetriever({ retrievers, weights });
 }
 
 /**
@@ -207,144 +207,148 @@ export async function createMultiDocEnsembleRetriever(
  * Returns null if graph retrieval is not available.
  */
 function createGraphRetrieverForEnsemble(
-  companyId: number,
-  options?: { documentIds?: number[]; topK?: number },
+    companyId: number,
+    options?: { documentIds?: number[]; topK?: number }
 ): BaseRetriever | null {
-  if (shouldUseNeo4jRetriever()) {
-    console.log(
-      `[EnsembleSearch] Graph retriever: using NEO4J (companyId=${companyId}, docs=${options?.documentIds?.length ?? "all"})`,
-    );
-    return createNeo4jGraphRetriever(companyId, options);
-  }
+    if (shouldUseNeo4jRetriever()) {
+        console.log(
+            `[EnsembleSearch] Graph retriever: using NEO4J (companyId=${companyId}, docs=${options?.documentIds?.length ?? "all"})`
+        );
+        return createNeo4jGraphRetriever(companyId, options);
+    }
 
-  console.log(
-    `[EnsembleSearch] Graph retriever: using POSTGRESQL fallback (companyId=${companyId})`,
-  );
-  return createGraphRetriever(companyId, options);
+    console.log(
+        `[EnsembleSearch] Graph retriever: using POSTGRESQL fallback (companyId=${companyId})`
+    );
+    return createGraphRetriever(companyId, options);
 }
 
 export async function documentEnsembleSearch(
-  query: string,
-  options: DocumentSearchOptions,
-  embeddings?: EmbeddingsProvider
+    query: string,
+    options: DocumentSearchOptions,
+    embeddings?: EmbeddingsProvider
 ): Promise<SearchResult[]> {
-  const { documentId, topK = DEFAULT_TOP_K } = options;
+    const { documentId, topK = DEFAULT_TOP_K } = options;
 
-  const graphEnabled = isGraphRetrievalEnabled() && options.companyId != null;
-  console.log(
-    `[EnsembleSearch] Searching document ${documentId} for: "${query.substring(0, 50)}..." ` +
-    `(graph=${graphEnabled ? "ON" : "OFF"})`,
-  );
+    const graphEnabled = isGraphRetrievalEnabled() && options.companyId != null;
+    console.log(
+        `[EnsembleSearch] Searching document ${documentId} for: "${query.substring(0, 50)}..." ` +
+            `(graph=${graphEnabled ? "ON" : "OFF"})`
+    );
 
-  try {
-    const retriever = await createDocumentEnsembleRetriever(options, embeddings);
-    const results = await retriever.getRelevantDocuments(query);
+    try {
+        const retriever = await createDocumentEnsembleRetriever(options, embeddings);
+        const results = await retriever.getRelevantDocuments(query);
 
-    console.log(`[EnsembleSearch] Found ${results.length} candidates for document ${documentId} (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`);
+        console.log(
+            `[EnsembleSearch] Found ${results.length} candidates for document ${documentId} (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`
+        );
 
-    const mapped: SearchResult[] = results.map((doc) => ({
-      pageContent: doc.pageContent,
-      metadata: {
-        ...doc.metadata,
-        retrievalMethod: "ensemble_rrf",
-        timestamp: new Date().toISOString(),
-        searchScope: "document" as const,
-      },
-    }));
+        const mapped: SearchResult[] = results.map(doc => ({
+            pageContent: doc.pageContent,
+            metadata: {
+                ...doc.metadata,
+                retrievalMethod: "ensemble_rrf",
+                timestamp: new Date().toISOString(),
+                searchScope: "document" as const,
+            },
+        }));
 
-    const reranked = await rerankResults(query, mapped);
-    return reranked.slice(0, topK);
-  } catch (error) {
-    console.error("[EnsembleSearch] Document search error:", error);
-    return fallbackBM25Search(query, "document", { documentId }, topK);
-  }
+        const reranked = await rerankResults(query, mapped);
+        return reranked.slice(0, topK);
+    } catch (error) {
+        console.error("[EnsembleSearch] Document search error:", error);
+        return fallbackBM25Search(query, "document", { documentId }, topK);
+    }
 }
 
 export async function companyEnsembleSearch(
-  query: string,
-  options: CompanySearchOptions,
-  embeddings?: EmbeddingsProvider
+    query: string,
+    options: CompanySearchOptions,
+    embeddings?: EmbeddingsProvider
 ): Promise<SearchResult[]> {
-  const { companyId, topK = 10 } = options;
+    const { companyId, topK = 10 } = options;
 
-  const chunks = await getCompanyChunks(companyId);
-  if (chunks.length === 0) {
-    console.log(`[EnsembleSearch] No chunks for company ${companyId}, skipping search`);
-    return [];
-  }
+    const chunks = await getCompanyChunks(companyId);
+    if (chunks.length === 0) {
+        console.log(`[EnsembleSearch] No chunks for company ${companyId}, skipping search`);
+        return [];
+    }
 
-  const graphEnabled = isGraphRetrievalEnabled();
-  console.log(
-    `[EnsembleSearch] Searching company ${companyId} for: "${query.substring(0, 50)}..." ` +
-    `(graph=${graphEnabled ? "ON" : "OFF"})`,
-  );
+    const graphEnabled = isGraphRetrievalEnabled();
+    console.log(
+        `[EnsembleSearch] Searching company ${companyId} for: "${query.substring(0, 50)}..." ` +
+            `(graph=${graphEnabled ? "ON" : "OFF"})`
+    );
 
-  try {
-    const retriever = await createCompanyEnsembleRetriever(options, embeddings);
-    const results = await retriever.getRelevantDocuments(query);
+    try {
+        const retriever = await createCompanyEnsembleRetriever(options, embeddings);
+        const results = await retriever.getRelevantDocuments(query);
 
-    console.log(`[EnsembleSearch] Found ${results.length} candidates for company ${companyId} (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`);
+        console.log(
+            `[EnsembleSearch] Found ${results.length} candidates for company ${companyId} (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`
+        );
 
-    const mapped: SearchResult[] = results.map((doc) => ({
-      pageContent: doc.pageContent,
-      metadata: {
-        ...doc.metadata,
-        retrievalMethod: "ensemble_rrf",
-        timestamp: new Date().toISOString(),
-        searchScope: "company" as const,
-      },
-    }));
+        const mapped: SearchResult[] = results.map(doc => ({
+            pageContent: doc.pageContent,
+            metadata: {
+                ...doc.metadata,
+                retrievalMethod: "ensemble_rrf",
+                timestamp: new Date().toISOString(),
+                searchScope: "company" as const,
+            },
+        }));
 
-    const reranked = await rerankResults(query, mapped);
-    return reranked.slice(0, topK);
-  } catch (error) {
-    console.error("[EnsembleSearch] Company search error:", error);
-    return fallbackBM25Search(query, "company", { companyId }, topK);
-  }
+        const reranked = await rerankResults(query, mapped);
+        return reranked.slice(0, topK);
+    } catch (error) {
+        console.error("[EnsembleSearch] Company search error:", error);
+        return fallbackBM25Search(query, "company", { companyId }, topK);
+    }
 }
 
 export async function multiDocEnsembleSearch(
-  query: string,
-  options: MultiDocSearchOptions,
-  embeddings?: EmbeddingsProvider
+    query: string,
+    options: MultiDocSearchOptions,
+    embeddings?: EmbeddingsProvider
 ): Promise<SearchResult[]> {
-  const { documentIds, topK = DEFAULT_TOP_K } = options;
+    const { documentIds, topK = DEFAULT_TOP_K } = options;
 
-  if (documentIds.length === 0) {
-    console.log("[EnsembleSearch] No documents provided, returning empty");
-    return [];
-  }
+    if (documentIds.length === 0) {
+        console.log("[EnsembleSearch] No documents provided, returning empty");
+        return [];
+    }
 
-  const graphEnabled = isGraphRetrievalEnabled() && options.companyId != null;
-  console.log(
-    `[EnsembleSearch] Searching ${documentIds.length} documents for: "${query.substring(0, 50)}..." ` +
-    `(graph=${graphEnabled ? "ON" : "OFF"})`,
-  );
-
-  try {
-    const retriever = await createMultiDocEnsembleRetriever(options, embeddings);
-    const results = await retriever.getRelevantDocuments(query);
-
+    const graphEnabled = isGraphRetrievalEnabled() && options.companyId != null;
     console.log(
-      `[EnsembleSearch] Found ${results.length} candidates from ${documentIds.length} documents (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`,
+        `[EnsembleSearch] Searching ${documentIds.length} documents for: "${query.substring(0, 50)}..." ` +
+            `(graph=${graphEnabled ? "ON" : "OFF"})`
     );
 
-    const mapped: SearchResult[] = results.map((doc) => ({
-      pageContent: doc.pageContent,
-      metadata: {
-        ...doc.metadata,
-        retrievalMethod: "ensemble_rrf",
-        timestamp: new Date().toISOString(),
-        searchScope: "multi-document" as const,
-      },
-    }));
+    try {
+        const retriever = await createMultiDocEnsembleRetriever(options, embeddings);
+        const results = await retriever.getRelevantDocuments(query);
 
-    const reranked = await rerankResults(query, mapped);
-    return reranked.slice(0, topK);
-  } catch (error) {
-    console.error("[EnsembleSearch] Multi-doc search error:", error);
-    return fallbackBM25Search(query, "multi-document", { documentIds }, topK);
-  }
+        console.log(
+            `[EnsembleSearch] Found ${results.length} candidates from ${documentIds.length} documents (topK=${topK}, graph=${graphEnabled ? "ON" : "OFF"})`
+        );
+
+        const mapped: SearchResult[] = results.map(doc => ({
+            pageContent: doc.pageContent,
+            metadata: {
+                ...doc.metadata,
+                retrievalMethod: "ensemble_rrf",
+                timestamp: new Date().toISOString(),
+                searchScope: "multi-document" as const,
+            },
+        }));
+
+        const reranked = await rerankResults(query, mapped);
+        return reranked.slice(0, topK);
+    } catch (error) {
+        console.error("[EnsembleSearch] Multi-doc search error:", error);
+        return fallbackBM25Search(query, "multi-document", { documentIds }, topK);
+    }
 }
 
 // ============================================================================
@@ -361,108 +365,105 @@ export async function multiDocEnsembleSearch(
  * Unconfigured or failing reranking is not fatal: the candidates pass through
  * in their existing RRF order.
  */
-async function rerankResults(
-  query: string,
-  results: SearchResult[],
-): Promise<SearchResult[]> {
-  if (results.length === 0) {
-    return results;
-  }
+async function rerankResults(query: string, results: SearchResult[]): Promise<SearchResult[]> {
+    if (results.length === 0) {
+        return results;
+    }
 
-  // Reranking is opt-in (RERANK_API_BASE_URL). Unconfigured deployments keep
-  // the RRF order without spending a chat-model call per search — the
-  // pre-refactor production behavior (the sidecar rerank never existed).
-  if (!isRerankConfigured()) {
-    return results;
-  }
+    // Reranking is opt-in (RERANK_API_BASE_URL). Unconfigured deployments keep
+    // the RRF order without spending a chat-model call per search — the
+    // pre-refactor production behavior (the sidecar rerank never existed).
+    if (!isRerankConfigured()) {
+        return results;
+    }
 
-  const rerankStart = Date.now();
+    const rerankStart = Date.now();
 
-  try {
-    const provider = await getRerankProvider();
-    console.log(
-      `[Rerank] Scoring ${results.length} results via ${provider.name}, ` +
-      `query="${query.substring(0, 60)}..."`,
-    );
+    try {
+        const provider = await getRerankProvider();
+        console.log(
+            `[Rerank] Scoring ${results.length} results via ${provider.name}, ` +
+                `query="${query.substring(0, 60)}..."`
+        );
 
-    const { data } = await provider.rerank(
-      query,
-      results.map((r) => r.pageContent),
-    );
+        const { data } = await provider.rerank(
+            query,
+            results.map(r => r.pageContent)
+        );
 
-    const reranked: SearchResult[] = results
-      .map((result, idx) => ({
-        result,
-        score: data.scores[idx] ?? 0,
-      }))
-      .sort((a, b) => b.score - a.score)
-      .map(({ result, score }) => ({
-        ...result,
-        metadata: {
-          ...result.metadata,
-          rerankScore: score,
-          retrievalMethod: "ensemble_rrf_reranked" as const,
-        },
-      }));
+        const reranked: SearchResult[] = results
+            .map((result, idx) => ({
+                result,
+                score: data.scores[idx] ?? 0,
+            }))
+            .sort((a, b) => b.score - a.score)
+            .map(({ result, score }) => ({
+                ...result,
+                metadata: {
+                    ...result.metadata,
+                    rerankScore: score,
+                    retrievalMethod: "ensemble_rrf_reranked" as const,
+                },
+            }));
 
-    const scores = [...data.scores].sort((a, b) => b - a);
-    const elapsed = Date.now() - rerankStart;
-    console.log(
-      `[Rerank] Reranked ${reranked.length} results (${elapsed}ms): ` +
-      `top=${scores[0]?.toFixed(3) ?? "N/A"}, median=${scores[Math.floor(scores.length / 2)]?.toFixed(3) ?? "N/A"}, ` +
-      `bottom=${scores[scores.length - 1]?.toFixed(3) ?? "N/A"}`,
-    );
+        const scores = [...data.scores].sort((a, b) => b - a);
+        const elapsed = Date.now() - rerankStart;
+        console.log(
+            `[Rerank] Reranked ${reranked.length} results (${elapsed}ms): ` +
+                `top=${scores[0]?.toFixed(3) ?? "N/A"}, median=${scores[Math.floor(scores.length / 2)]?.toFixed(3) ?? "N/A"}, ` +
+                `bottom=${scores[scores.length - 1]?.toFixed(3) ?? "N/A"}`
+        );
 
-    return reranked;
-  } catch (error) {
-    const elapsed = Date.now() - rerankStart;
-    console.warn(
-      `[Rerank] Reranking failed or is unconfigured (${elapsed}ms), returning original order:`,
-      error instanceof Error ? error.message : error,
-    );
-    return results;
-  }
+        return reranked;
+    } catch (error) {
+        const elapsed = Date.now() - rerankStart;
+        console.warn(
+            `[Rerank] Reranking failed or is unconfigured (${elapsed}ms), returning original order:`,
+            error instanceof Error ? error.message : error
+        );
+        return results;
+    }
 }
 
 async function fallbackBM25Search(
-  query: string,
-  scope: SearchScope,
-  ids: { documentId?: number; companyId?: number; documentIds?: number[] },
-  topK: number
+    query: string,
+    scope: SearchScope,
+    ids: { documentId?: number; companyId?: number; documentIds?: number[] },
+    topK: number
 ): Promise<SearchResult[]> {
-  console.warn(`[EnsembleSearch] Falling back to BM25-only search for ${scope}`);
+    console.warn(`[EnsembleSearch] Falling back to BM25-only search for ${scope}`);
 
-  try {
-    let chunks;
-    if (scope === "document" && ids.documentId !== undefined) {
-      chunks = await getDocumentChunks(ids.documentId);
-    } else if (scope === "company" && ids.companyId !== undefined) {
-      chunks = await getCompanyChunks(ids.companyId);
-    } else if (scope === "multi-document" && ids.documentIds?.length) {
-      chunks = await getMultiDocChunks(ids.documentIds);
-    } else {
-      return [];
+    try {
+        let chunks;
+        if (scope === "document" && ids.documentId !== undefined) {
+            chunks = await getDocumentChunks(ids.documentId);
+        } else if (scope === "company" && ids.companyId !== undefined) {
+            chunks = await getCompanyChunks(ids.companyId);
+        } else if (scope === "multi-document" && ids.documentIds?.length) {
+            chunks = await getMultiDocChunks(ids.documentIds);
+        } else {
+            return [];
+        }
+
+        if (chunks.length === 0) {
+            return [];
+        }
+
+        const docs = chunksToDocuments(chunks, scope);
+        const retriever = BM25Retriever.fromDocuments(docs, { k: topK });
+        const results = await retriever.getRelevantDocuments(query);
+
+        return results.map(doc => ({
+            pageContent: doc.pageContent,
+            metadata: {
+                ...doc.metadata,
+                retrievalMethod: "bm25_fallback",
+                timestamp: new Date().toISOString(),
+                searchScope: scope,
+            },
+        }));
+    } catch (fallbackError) {
+        console.error("[EnsembleSearch] Fallback search error:", fallbackError);
+        return [];
     }
-
-    if (chunks.length === 0) {
-      return [];
-    }
-
-    const docs = chunksToDocuments(chunks, scope);
-    const retriever = BM25Retriever.fromDocuments(docs, { k: topK });
-    const results = await retriever.getRelevantDocuments(query);
-
-    return results.map((doc) => ({
-      pageContent: doc.pageContent,
-      metadata: {
-        ...doc.metadata,
-        retrievalMethod: "bm25_fallback",
-        timestamp: new Date().toISOString(),
-        searchScope: scope,
-      },
-    }));
-  } catch (fallbackError) {
-    console.error("[EnsembleSearch] Fallback search error:", fallbackError);
-    return [];
-  }
 }

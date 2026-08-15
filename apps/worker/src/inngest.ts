@@ -16,24 +16,24 @@ import { reindexCompanyEmbeddingsJob } from "~/server/inngest/functions/reindexC
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { crawlWebsite } from "~/server/inngest/functions/crawlWebsite";
 import {
-  founderWeeklyReviewDispatcher,
-  founderWeeklyReviewDispatchReconciler,
-  founderWeeklyReviewGenerationJob,
+    founderWeeklyReviewDispatcher,
+    founderWeeklyReviewDispatchReconciler,
+    founderWeeklyReviewGenerationJob,
 } from "~/server/inngest/functions/founderWeeklyReview";
 
 export function createInngestHandler() {
-  return serve({
-    client: inngest,
-    functions: [
-      trendSearchJob,
-      clientProspectorJob,
-      predictiveAnalysisJob,
-      reindexCompanyEmbeddingsJob,
-      modifyDocument,
-      crawlWebsite,
-      founderWeeklyReviewDispatcher,
-      founderWeeklyReviewDispatchReconciler,
-      founderWeeklyReviewGenerationJob,
-    ],
-  });
+    return serve({
+        client: inngest,
+        functions: [
+            trendSearchJob,
+            clientProspectorJob,
+            predictiveAnalysisJob,
+            reindexCompanyEmbeddingsJob,
+            modifyDocument,
+            crawlWebsite,
+            founderWeeklyReviewDispatcher,
+            founderWeeklyReviewDispatchReconciler,
+            founderWeeklyReviewGenerationJob,
+        ],
+    });
 }

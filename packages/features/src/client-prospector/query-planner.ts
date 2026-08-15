@@ -17,7 +17,10 @@ import type { PlannedSearch } from "./types";
 // ─── Structured output schema for LLM ───────────────────────────────────────
 
 const PlannedSearchSchema = z.object({
-    searchQuery: z.string().min(1).describe("The search query string to send to Foursquare Places API"),
+    searchQuery: z
+        .string()
+        .min(1)
+        .describe("The search query string to send to Foursquare Places API"),
     categoryIds: z.array(z.string()).describe("Foursquare category IDs to filter results"),
     rationale: z.string().describe("Brief reason why this search is useful for finding prospects"),
 });
@@ -71,16 +74,12 @@ Common Foursquare category IDs:
 - 17057: Real Estate Office
 - 12009: Bookstore`;
 
-function buildHumanPrompt(
-    query: string,
-    companyContext: string,
-    categories?: string[],
-): string {
-    const validCategoryIds = (categories ?? []).filter((category) =>
-        FoursquareCategoryIdSchema.safeParse(category).success,
+function buildHumanPrompt(query: string, companyContext: string, categories?: string[]): string {
+    const validCategoryIds = (categories ?? []).filter(
+        category => FoursquareCategoryIdSchema.safeParse(category).success
     );
     const categoryLabels = (categories ?? []).filter(
-        (category) => !FoursquareCategoryIdSchema.safeParse(category).success,
+        category => !FoursquareCategoryIdSchema.safeParse(category).success
     );
     const categoryBlock =
         categories && categories.length > 0
@@ -117,7 +116,7 @@ Generate 2-4 Foursquare search parameter sets to find potential client businesse
 export async function planSearches(
     query: string,
     companyContext: string,
-    categories?: string[],
+    categories?: string[]
 ): Promise<PlannedSearch[]> {
     const resolved = resolveChatModel({
         route: "fast",
@@ -130,7 +129,7 @@ export async function planSearches(
         resolved,
         QueryPlannerOutputSchema,
         [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
-        { name: "search_plan" },
+        { name: "search_plan" }
     );
 
     return response.plannedSearches as PlannedSearch[];

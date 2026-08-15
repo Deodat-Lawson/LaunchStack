@@ -13,10 +13,16 @@ import type { ProspectResult, RawPlaceResult } from "./types";
 // ─── Structured output schema for LLM ───────────────────────────────────────
 
 const ScoredProspectSchema = z.object({
-    fsqId: z.string().min(1).describe("The Foursquare ID of the business (must match one from the input)"),
+    fsqId: z
+        .string()
+        .min(1)
+        .describe("The Foursquare ID of the business (must match one from the input)"),
     name: z.string().min(1).describe("The exact business name as shown in the input list"),
     relevanceScore: z.number().int().min(0).max(100).describe("Relevance score from 0-100"),
-    rationale: z.string().min(1).describe("Why this business is a good prospect for the user's company"),
+    rationale: z
+        .string()
+        .min(1)
+        .describe("Why this business is a good prospect for the user's company"),
 });
 
 const ScorerOutputSchema = z.object({
@@ -58,12 +64,12 @@ function buildHumanPrompt(
     rawPlaces: RawPlaceResult[],
     query: string,
     companyContext: string,
-    categories: string[],
+    categories: string[]
 ): string {
     const placesBlock = rawPlaces
         .map(
-            (p) =>
-                `- fsqId: "${p.fsqId}"\n  Name: ${p.name}\n  Address: ${p.formattedAddress || p.address}\n  Categories: ${p.categories.map((c) => c.name).join(", ")}\n  Description: ${p.description ?? "N/A"}\n  Website: ${p.website ?? "N/A"}`,
+            p =>
+                `- fsqId: "${p.fsqId}"\n  Name: ${p.name}\n  Address: ${p.formattedAddress || p.address}\n  Categories: ${p.categories.map(c => c.name).join(", ")}\n  Description: ${p.description ?? "N/A"}\n  Website: ${p.website ?? "N/A"}`
         )
         .join("\n\n");
 
@@ -99,7 +105,7 @@ export async function scoreLeads(
     rawPlaces: RawPlaceResult[],
     query: string,
     companyContext: string,
-    categories: string[],
+    categories: string[]
 ): Promise<ProspectResult[]> {
     if (rawPlaces.length === 0) {
         return [];
@@ -116,11 +122,11 @@ export async function scoreLeads(
         resolved,
         ScorerOutputSchema,
         [new SystemMessage(SYSTEM_PROMPT), new HumanMessage(humanPrompt)],
-        { name: "scored_prospects" },
+        { name: "scored_prospects" }
     );
 
     // Build a lookup map for raw places by fsqId
-    const placeMap = new Map(rawPlaces.map((p) => [p.fsqId, p]));
+    const placeMap = new Map(rawPlaces.map(p => [p.fsqId, p]));
 
     // Map scored results back to full ProspectResult objects,
     // deduplicating by fsqId (keep first = highest-scored since LLM returns descending)
@@ -129,7 +135,9 @@ export async function scoreLeads(
     for (const scored of response.prospects) {
         // Skip duplicate fsqIds — LLM sometimes reuses the same ID with different rationales
         if (seenIds.has(scored.fsqId)) {
-            console.warn(`[scorer] Duplicate fsqId in LLM output: ${scored.fsqId}, keeping first occurrence.`);
+            console.warn(
+                `[scorer] Duplicate fsqId in LLM output: ${scored.fsqId}, keeping first occurrence.`
+            );
             continue;
         }
 
@@ -143,7 +151,7 @@ export async function scoreLeads(
         // Validate that the LLM's name matches the actual place — catches cross-contamination
         if (scored.name !== raw.name) {
             console.warn(
-                `[scorer] Name mismatch for fsqId ${scored.fsqId}: LLM said "${scored.name}", actual is "${raw.name}". Using actual data; rationale may be inaccurate.`,
+                `[scorer] Name mismatch for fsqId ${scored.fsqId}: LLM said "${scored.name}", actual is "${raw.name}". Using actual data; rationale may be inaccurate.`
             );
         }
 
@@ -153,7 +161,7 @@ export async function scoreLeads(
             name: raw.name,
             address: raw.formattedAddress || raw.address,
             location: raw.location,
-            categories: raw.categories.map((c) => c.name),
+            categories: raw.categories.map(c => c.name),
             phone: raw.phone,
             website: raw.website,
             rating: raw.rating,

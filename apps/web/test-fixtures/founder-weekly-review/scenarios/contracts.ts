@@ -220,7 +220,7 @@ export const FounderWeeklyReviewScenarioSchema = z
     })
     .strict()
     .superRefine((scenario, ctx) => {
-        const underReview = scenario.companies.filter((company) => company.underReview);
+        const underReview = scenario.companies.filter(company => company.underReview);
         if (underReview.length !== 1) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
@@ -230,7 +230,10 @@ export const FounderWeeklyReviewScenarioSchema = z
         }
         // A leakage claim with nothing to leak from passes vacuously, which is
         // worse than not claiming it: it reads as coverage in the fixture.
-        if (scenario.expect.sourceSemantics?.noCrossCompanyLeakage && scenario.companies.length < 2) {
+        if (
+            scenario.expect.sourceSemantics?.noCrossCompanyLeakage &&
+            scenario.companies.length < 2
+        ) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
                 path: ["expect", "sourceSemantics", "noCrossCompanyLeakage"],
@@ -240,7 +243,7 @@ export const FounderWeeklyReviewScenarioSchema = z
         }
         for (const [companyIndex, company] of scenario.companies.entries()) {
             for (const [documentIndex, doc] of company.documents.entries()) {
-                const versionNumbers = doc.versions.map((version) => version.versionNumber);
+                const versionNumbers = doc.versions.map(version => version.versionNumber);
                 if (new Set(versionNumbers).size !== versionNumbers.length) {
                     ctx.addIssue({
                         code: z.ZodIssueCode.custom,

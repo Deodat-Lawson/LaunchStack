@@ -12,8 +12,7 @@
  * it into far more bundles than it belongs in. A wrong value here yields a
  * link to the wrong host, not a boot failure, so there is nothing to validate.
  */
-export const LANDING_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://launchstack.app";
+export const LANDING_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://launchstack.app";
 
 export const LANDING_CONTACT_URL = `${LANDING_URL}/contact`;
 export const LANDING_DEPLOYMENT_URL = `${LANDING_URL}/deployment`;

@@ -89,7 +89,7 @@ function cloneRow(row: StoredRow): StoredRow {
     return {
         ...row,
         categories: row.categories ? [...row.categories] : null,
-        results: row.results ? row.results.map((r) => ({ ...r })) : null,
+        results: row.results ? row.results.map(r => ({ ...r })) : null,
         createdAt: new Date(row.createdAt),
         completedAt: row.completedAt ? new Date(row.completedAt) : null,
         updatedAt: row.updatedAt ? new Date(row.updatedAt) : null,
@@ -107,16 +107,16 @@ function createInMemoryClientProspectorStore() {
                 id: values.id!,
                 companyId: values.companyId!,
                 userId: values.userId!,
-                status: (values.status) ?? "queued",
+                status: values.status ?? "queued",
                 query: values.query!,
                 companyContext: values.companyContext!,
                 locationLat: values.locationLat!,
                 locationLng: values.locationLng!,
-                radius: (values.radius) ?? 5000,
+                radius: values.radius ?? 5000,
                 categories: (values.categories as string[] | undefined) ?? null,
                 results: (values.results as ProspectResult[] | undefined) ?? null,
                 errorMessage: (values.errorMessage as string | undefined) ?? null,
-                createdAt: (values.createdAt) ?? now,
+                createdAt: values.createdAt ?? now,
                 completedAt: (values.completedAt as Date | undefined) ?? null,
                 updatedAt: (values.updatedAt as Date | undefined) ?? null,
             };
@@ -136,12 +136,9 @@ function createInMemoryClientProspectorStore() {
                 ...patch,
                 categories:
                     patch.categories !== undefined
-                        ? ((patch.categories) ?? null)
+                        ? (patch.categories ?? null)
                         : current.categories,
-                results:
-                    patch.results !== undefined
-                        ? ((patch.results) ?? null)
-                        : current.results,
+                results: patch.results !== undefined ? (patch.results ?? null) : current.results,
                 updatedAt: patch.updatedAt ?? new Date(),
             };
 
@@ -162,7 +159,7 @@ function createInMemoryClientProspectorStore() {
             const offset = options?.offset ?? 0;
 
             return [...rows.values()]
-                .filter((row) => row.companyId === companyId)
+                .filter(row => row.companyId === companyId)
                 .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
                 .slice(offset, offset + limit)
                 .map(cloneRow);
@@ -206,15 +203,13 @@ async function invokeClientProspectorJob(eventData: Record<string, unknown>, ste
 
 const nonEmptyTextArb = fc
     .string({ minLength: 1, maxLength: 300 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
-const validQueryArb = fc
-    .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+const validQueryArb = fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
 const latLngArb: fc.Arbitrary<LatLng> = fc.record({
     lat: fc.double({ min: -90, max: 90, noNaN: true }),
@@ -233,7 +228,7 @@ const prospectResultArb: fc.Arbitrary<ProspectResult> = fc.record({
     categories: fc.array(nonEmptyTextArb, { minLength: 1, maxLength: 3 }),
     phone: fc.option(nonEmptyTextArb, { nil: undefined }),
     website: fc.option(
-        fc.uuid().map((id) => `https://example.com/${id}`),
+        fc.uuid().map(id => `https://example.com/${id}`),
         { nil: undefined }
     ),
     rating: fc.option(fc.double({ min: 0, max: 10, noNaN: true }), { nil: undefined }),
@@ -261,7 +256,9 @@ describe("Property 11: Successful pipeline sets completed status", () => {
         const updateJobResultsMock = clientProspectorDb.updateJobResults as jest.MockedFunction<
             typeof clientProspectorDb.updateJobResults
         >;
-        const runClientProspectorMock = runClientProspector as jest.MockedFunction<typeof runClientProspector>;
+        const runClientProspectorMock = runClientProspector as jest.MockedFunction<
+            typeof runClientProspector
+        >;
 
         updateJobStatusMock.mockReset();
         updateJobResultsMock.mockReset();
@@ -316,7 +313,9 @@ describe("Property 11: Successful pipeline sets completed status", () => {
                     outputCategories
                 ) => {
                     // Create a fresh in-memory store for this iteration.
-                    const helpers = createClientProspectorJobHelpers(createInMemoryClientProspectorStore());
+                    const helpers = createClientProspectorJobHelpers(
+                        createInMemoryClientProspectorStore()
+                    );
                     activeHelpers = helpers;
 
                     // Seed the store with a job in "queued" status,
@@ -348,7 +347,9 @@ describe("Property 11: Successful pipeline sets completed status", () => {
                     // Mock runClientProspector to return our fake output.
                     // It also fires the onStageChange callback to simulate
                     // the pipeline progressing through stages.
-                    const runMock = runClientProspector as jest.MockedFunction<typeof runClientProspector>;
+                    const runMock = runClientProspector as jest.MockedFunction<
+                        typeof runClientProspector
+                    >;
                     runMock.mockImplementationOnce(async (_input, options) => {
                         await options?.onStageChange?.("searching");
                         await options?.onStageChange?.("scoring");

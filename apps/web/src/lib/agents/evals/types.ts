@@ -2,7 +2,7 @@
  * Types for the agent evaluation framework.
  */
 
-export type EvalDomain = 'predictive-analysis' | 'document-qa';
+export type EvalDomain = "predictive-analysis" | "document-qa";
 
 export type EvalScenario = {
     id: string;
@@ -22,7 +22,7 @@ export type EvalInput = {
 export type EvalExpected = {
     missingDocuments?: Array<{
         documentName: string;
-        priority: 'high' | 'medium' | 'low';
+        priority: "high" | "medium" | "low";
     }>;
     shouldContain?: string[];
     shouldNotContain?: string[];
@@ -55,10 +55,13 @@ export type EvalReport = {
     passed: number;
     failed: number;
     overallScore: number;
-    byDomain: Record<EvalDomain, {
-        total: number;
-        passed: number;
-        score: number;
-    }>;
+    byDomain: Record<
+        EvalDomain,
+        {
+            total: number;
+            passed: number;
+            score: number;
+        }
+    >;
     results: EvalResult[];
 };

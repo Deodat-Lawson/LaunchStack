@@ -1,9 +1,6 @@
 import type { ProviderResult } from "@launchstack/core/providers";
 import type { TranscriptionProvider, TranscriptionResult } from "./index";
-import {
-    resolveEndpoint,
-    resolveModel,
-} from "@launchstack/core/providers/registry";
+import { resolveEndpoint, resolveModel } from "@launchstack/core/providers/registry";
 import { GEMINI_DEFAULT_MODEL } from "@launchstack/core/llm/types";
 
 /** Transcription is billed per minute. 5000 tokens/minute matches the
@@ -71,20 +68,17 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
     constructor() {
         const endpoint = resolveEndpoint(
             process.env.TRANSCRIPTION_API_BASE_URL,
-            process.env.TRANSCRIPTION_API_KEY,
+            process.env.TRANSCRIPTION_API_KEY
         );
         this.baseUrl = endpoint.baseUrl;
         this.apiKey = endpoint.apiKey;
-        this.model = resolveModel(
-            process.env.TRANSCRIPTION_MODEL,
-            GEMINI_DEFAULT_MODEL,
-        );
+        this.model = resolveModel(process.env.TRANSCRIPTION_MODEL, GEMINI_DEFAULT_MODEL);
         this.name = `transcription:${this.model}`;
 
         if (!this.apiKey) {
             console.warn(
                 "[Transcription] No API key found. Set GOOGLE_AI_API_KEY, or " +
-                "TRANSCRIPTION_API_KEY alongside TRANSCRIPTION_API_BASE_URL.",
+                    "TRANSCRIPTION_API_KEY alongside TRANSCRIPTION_API_BASE_URL."
             );
         }
     }
@@ -92,7 +86,7 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
     async transcribe(
         audioBuffer: Buffer,
         filename: string,
-        durationSeconds = 0,
+        durationSeconds = 0
     ): Promise<ProviderResult<TranscriptionResult>> {
         const extension = filename.split(".").pop()?.toLowerCase() ?? "";
         const format = SUPPORTED_EXTENSIONS[extension];
@@ -104,7 +98,7 @@ export class GeminiTranscriptionProvider implements TranscriptionProvider {
                       "service (TRANSCRIPTION_SERVICE_URL, TRANSCRIPTION_PROVIDER=sidecar), " +
                       "which decodes any container, or convert the file to wav or mp3 first."
                     : `Unsupported audio format ".${extension}" for transcription. ` +
-                      `Accepted: ${Object.keys(SUPPORTED_EXTENSIONS).join(", ")}.`,
+                      `Accepted: ${Object.keys(SUPPORTED_EXTENSIONS).join(", ")}.`
             );
         }
 

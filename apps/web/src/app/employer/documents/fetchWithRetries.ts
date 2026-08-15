@@ -1,9 +1,5 @@
 // 1) A helper function that retries fetch up to `maxRetries` times
-export async function fetchWithRetries(
-    url: string,
-    options: RequestInit = {},
-    maxRetries = 5
-) {
+export async function fetchWithRetries(url: string, options: RequestInit = {}, maxRetries = 5) {
     let lastError: unknown = null;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -12,9 +8,9 @@ export async function fetchWithRetries(
 
             if (!res.ok) {
                 // For a non-200 response, you can parse the error body or just throw.
-                const rawErrorData : unknown = await res.json().catch(() => ({}));
+                const rawErrorData: unknown = await res.json().catch(() => ({}));
 
-                if(typeof rawErrorData !== "object") {
+                if (typeof rawErrorData !== "object") {
                     throw new Error(`Request failed with status ${res.status}`);
                 }
 
@@ -31,8 +27,7 @@ export async function fetchWithRetries(
 
             // Check if it's specifically a "timeout" or "network" error
             if (err instanceof Error) {
-                const isTimeoutError =
-                    /timed out/i.test(err.message) || err.name === "AbortError";
+                const isTimeoutError = /timed out/i.test(err.message) || err.name === "AbortError";
 
                 if (isTimeoutError && attempt < maxRetries) {
                     console.warn(`Attempt ${attempt} failed due to timeout, retrying...`);

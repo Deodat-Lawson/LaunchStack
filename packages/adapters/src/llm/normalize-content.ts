@@ -12,78 +12,75 @@
  */
 
 function convertLatexDelimitersToDollarSigns(text: string): string {
-  text = text.replace(/\\\[/g, "$$");
-  text = text.replace(/\\\]/g, "$$");
-  text = text.replace(/\\\(/g, "$");
-  text = text.replace(/\\\)/g, "$");
-  return text;
+    text = text.replace(/\\\[/g, "$$");
+    text = text.replace(/\\\]/g, "$$");
+    text = text.replace(/\\\(/g, "$");
+    text = text.replace(/\\\)/g, "$");
+    return text;
 }
 
 function convertParenthesesNotationToLatex(text: string): string {
-  text = text.replace(/\(\(([^()]+)\)\)/g, (_match, equation: string) => {
-    return `$(${equation.trim()})$`;
-  });
+    text = text.replace(/\(\(([^()]+)\)\)/g, (_match, equation: string) => {
+        return `$(${equation.trim()})$`;
+    });
 
-  text = text.replace(
-    /\(([^(),]*(?:\\[a-zA-Z]+|[_^=])[^(),]*)\)/g,
-    (_match, equation: string) => {
-      return `$${equation.trim()}$`;
-    },
-  );
+    text = text.replace(
+        /\(([^(),]*(?:\\[a-zA-Z]+|[_^=])[^(),]*)\)/g,
+        (_match, equation: string) => {
+            return `$${equation.trim()}$`;
+        }
+    );
 
-  text = text.replace(
-    /(?<![a-zA-Z])\(([a-zA-Z])\)(?!\w)/g,
-    (_match, letter: string) => {
-      return `$${letter}$`;
-    },
-  );
+    text = text.replace(/(?<![a-zA-Z])\(([a-zA-Z])\)(?!\w)/g, (_match, letter: string) => {
+        return `$${letter}$`;
+    });
 
-  return text;
+    return text;
 }
 
 function convertBracketNotationToLatex(text: string): string {
-  text = text.replace(
-    /(\n|^)\s*\[\s*(\\[a-zA-Z]+|[^\[\]]*(?:\\[a-zA-Z]+|[_^{}])[^\[\]]*)\s*\]\s*(?=\n|$)/g,
-    (_match, _prefix, equation: string) => {
-      return `$$${equation.trim()}$$`;
-    },
-  );
+    text = text.replace(
+        /(\n|^)\s*\[\s*(\\[a-zA-Z]+|[^\[\]]*(?:\\[a-zA-Z]+|[_^{}])[^\[\]]*)\s*\]\s*(?=\n|$)/g,
+        (_match, _prefix, equation: string) => {
+            return `$$${equation.trim()}$$`;
+        }
+    );
 
-  text = text.replace(
-    /\[\s+((?:\\[a-zA-Z]+|[^\[\]]*(?:\\[a-zA-Z]+|[_^{}])[^\[\]]*)+)\s+\]/g,
-    (_match, equation: string) => {
-      return `$${equation.trim()}$`;
-    },
-  );
+    text = text.replace(
+        /\[\s+((?:\\[a-zA-Z]+|[^\[\]]*(?:\\[a-zA-Z]+|[_^{}])[^\[\]]*)+)\s+\]/g,
+        (_match, equation: string) => {
+            return `$${equation.trim()}$`;
+        }
+    );
 
-  return text;
+    return text;
 }
 
 export function normalizeModelContent(content: unknown): string {
-  if (typeof content === "string") {
-    let result = convertLatexDelimitersToDollarSigns(content);
-    result = convertBracketNotationToLatex(result);
-    result = convertParenthesesNotationToLatex(result);
-    return result;
-  }
+    if (typeof content === "string") {
+        let result = convertLatexDelimitersToDollarSigns(content);
+        result = convertBracketNotationToLatex(result);
+        result = convertParenthesesNotationToLatex(result);
+        return result;
+    }
 
-  if (Array.isArray(content)) {
-    const joined = content
-      .map((part) => (typeof part === "string" ? part : JSON.stringify(part)))
-      .join("");
-    let result = convertLatexDelimitersToDollarSigns(joined);
-    result = convertBracketNotationToLatex(result);
-    result = convertParenthesesNotationToLatex(result);
-    return result;
-  }
+    if (Array.isArray(content)) {
+        const joined = content
+            .map(part => (typeof part === "string" ? part : JSON.stringify(part)))
+            .join("");
+        let result = convertLatexDelimitersToDollarSigns(joined);
+        result = convertBracketNotationToLatex(result);
+        result = convertParenthesesNotationToLatex(result);
+        return result;
+    }
 
-  if (content == null) {
-    return "";
-  }
+    if (content == null) {
+        return "";
+    }
 
-  try {
-    return JSON.stringify(content);
-  } catch {
-    return Object.prototype.toString.call(content);
-  }
+    try {
+        return JSON.stringify(content);
+    } catch {
+        return Object.prototype.toString.call(content);
+    }
 }

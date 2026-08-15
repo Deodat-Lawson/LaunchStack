@@ -2,11 +2,7 @@ import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { inviteCodes } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import {
-    createSuccessResponse,
-    createValidationError,
-    handleApiError,
-} from "~/lib/api-utils";
+import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
 import { validateRequestBody, ValidateInviteCodeSchema } from "~/lib/validation";
 
 /**
@@ -29,12 +25,7 @@ export async function POST(request: Request) {
                 isActive: inviteCodes.isActive,
             })
             .from(inviteCodes)
-            .where(
-                and(
-                    eq(inviteCodes.code, code),
-                    eq(inviteCodes.isActive, true)
-                )
-            );
+            .where(and(eq(inviteCodes.code, code), eq(inviteCodes.isActive, true)));
 
         if (!codeRecord) {
             return createValidationError(
@@ -49,9 +40,7 @@ export async function POST(request: Request) {
             .where(eq(company.id, Number(codeRecord.companyId)));
 
         if (!companyRecord) {
-            return createValidationError(
-                "The company associated with this code no longer exists."
-            );
+            return createValidationError("The company associated with this code no longer exists.");
         }
 
         return createSuccessResponse(

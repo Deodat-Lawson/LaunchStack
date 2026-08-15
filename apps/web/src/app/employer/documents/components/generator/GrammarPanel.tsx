@@ -28,7 +28,14 @@ import { cn } from "~/lib/utils";
 // Suggestion types
 interface GrammarSuggestion {
     id: string;
-    type: "grammar" | "spelling" | "punctuation" | "style" | "clarity" | "formality" | "consistency";
+    type:
+        | "grammar"
+        | "spelling"
+        | "punctuation"
+        | "style"
+        | "clarity"
+        | "formality"
+        | "consistency";
     severity: "error" | "warning" | "suggestion";
     original: string;
     suggestion: string;
@@ -105,7 +112,13 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                 }),
             });
 
-            const data = await response.json() as { success: boolean; suggestions?: GrammarSuggestion[]; overallScore?: number; readabilityScore?: number; summary?: string };
+            const data = (await response.json()) as {
+                success: boolean;
+                suggestions?: GrammarSuggestion[];
+                overallScore?: number;
+                readabilityScore?: number;
+                summary?: string;
+            };
             if (data.success) {
                 setSuggestions(data.suggestions ?? []);
                 setOverallScore(data.overallScore ?? data.readabilityScore ?? null);
@@ -129,35 +142,31 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
     const handleApplyAll = () => {
         const toApply = visibleSuggestions.filter(
-            (s) => !appliedIds.has(s.id) && !dismissedIds.has(s.id)
+            s => !appliedIds.has(s.id) && !dismissedIds.has(s.id)
         );
-        toApply.forEach((s) => {
+        toApply.forEach(s => {
             onApplySuggestion(s.original, s.suggestion);
         });
-        setAppliedIds(new Set([...appliedIds, ...toApply.map((s) => s.id)]));
+        setAppliedIds(new Set([...appliedIds, ...toApply.map(s => s.id)]));
     };
 
-    const visibleSuggestions = suggestions.filter(
-        (s) => !dismissedIds.has(s.id)
-    );
+    const visibleSuggestions = suggestions.filter(s => !dismissedIds.has(s.id));
 
     const stats = {
-        errors: suggestions.filter((s) => s.severity === "error").length,
-        warnings: suggestions.filter((s) => s.severity === "warning").length,
-        suggestions: suggestions.filter((s) => s.severity === "suggestion").length,
+        errors: suggestions.filter(s => s.severity === "error").length,
+        warnings: suggestions.filter(s => s.severity === "warning").length,
+        suggestions: suggestions.filter(s => s.severity === "suggestion").length,
     };
 
-    const pendingSuggestions = visibleSuggestions.filter(
-        (s) => !appliedIds.has(s.id)
-    );
+    const pendingSuggestions = visibleSuggestions.filter(s => !appliedIds.has(s.id));
 
     return (
-        <div className="flex flex-col h-full bg-background">
+        <div className="bg-background flex h-full flex-col">
             {/* Header */}
-            <div className="p-4 border-b border-border">
-                <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-foreground flex items-center gap-2">
-                        <SpellCheck className="w-4 h-4" />
+            <div className="border-border border-b p-4">
+                <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-foreground flex items-center gap-2 font-semibold">
+                        <SpellCheck className="h-4 w-4" />
                         Grammar & Style
                     </h3>
                     <Button variant="ghost" size="sm" onClick={onClose}>
@@ -168,7 +177,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                 {/* Check Controls */}
                 <div className="space-y-2">
                     <div className="flex gap-2">
-                        <Select value={action} onValueChange={(v) => setAction(v as CheckAction)}>
+                        <Select value={action} onValueChange={v => setAction(v as CheckAction)}>
                             <SelectTrigger className="flex-1">
                                 <SelectValue />
                             </SelectTrigger>
@@ -186,9 +195,9 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                             className="bg-purple-600 hover:bg-purple-700"
                         >
                             {isChecking ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <Loader2 className="h-4 w-4 animate-spin" />
                             ) : (
-                                <Wand2 className="w-4 h-4" />
+                                <Wand2 className="h-4 w-4" />
                             )}
                         </Button>
                     </div>
@@ -196,7 +205,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                     {action === "adjust_formality" && (
                         <Select
                             value={formalityLevel}
-                            onValueChange={(v) => setFormalityLevel(v as FormalityLevel)}
+                            onValueChange={v => setFormalityLevel(v as FormalityLevel)}
                         >
                             <SelectTrigger>
                                 <SelectValue />
@@ -215,8 +224,8 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
             {/* Score & Stats */}
             {overallScore !== null && (
-                <div className="p-4 border-b border-border">
-                    <div className="flex items-center justify-between mb-2">
+                <div className="border-border border-b p-4">
+                    <div className="mb-2 flex items-center justify-between">
                         <span className="text-sm font-medium">Quality Score</span>
                         <span
                             className={cn(
@@ -224,27 +233,28 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                                 overallScore >= 80
                                     ? "text-green-500"
                                     : overallScore >= 60
-                                    ? "text-amber-500"
-                                    : "text-red-500"
+                                      ? "text-amber-500"
+                                      : "text-red-500"
                             )}
                         >
                             {overallScore}%
                         </span>
                     </div>
                     <Progress value={overallScore} className="h-2" />
-                    {summary && (
-                        <p className="text-xs text-muted-foreground mt-2">{summary}</p>
-                    )}
+                    {summary && <p className="text-muted-foreground mt-2 text-xs">{summary}</p>}
 
                     {/* Stats Badges */}
-                    <div className="flex gap-2 mt-3">
+                    <div className="mt-3 flex gap-2">
                         {stats.errors > 0 && (
                             <Badge variant="destructive" className="text-xs">
                                 {stats.errors} errors
                             </Badge>
                         )}
                         {stats.warnings > 0 && (
-                            <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-700">
+                            <Badge
+                                variant="secondary"
+                                className="bg-amber-100 text-xs text-amber-700"
+                            >
                                 {stats.warnings} warnings
                             </Badge>
                         )}
@@ -259,14 +269,9 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
             {/* Apply All Button */}
             {pendingSuggestions.length > 0 && (
-                <div className="p-4 border-b border-border">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                        onClick={handleApplyAll}
-                    >
-                        <Check className="w-4 h-4 mr-2" />
+                <div className="border-border border-b p-4">
+                    <Button variant="outline" size="sm" className="w-full" onClick={handleApplyAll}>
+                        <Check className="mr-2 h-4 w-4" />
                         Apply All ({pendingSuggestions.length})
                     </Button>
                 </div>
@@ -274,23 +279,25 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
             {/* Suggestions List */}
             <ScrollArea className="flex-1">
-                <div className="p-4 space-y-3">
+                <div className="space-y-3 p-4">
                     {!isChecking && suggestions.length === 0 && (
-                        <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-                            <SpellCheck className="w-12 h-12 mb-4 opacity-20" />
+                        <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
+                            <SpellCheck className="mb-4 h-12 w-12 opacity-20" />
                             <p className="text-sm">No issues found</p>
-                            <p className="text-xs mt-1">Run a check to analyze your content</p>
+                            <p className="mt-1 text-xs">Run a check to analyze your content</p>
                         </div>
                     )}
 
                     {isChecking && (
                         <div className="flex flex-col items-center justify-center py-12">
-                            <Loader2 className="w-8 h-8 animate-spin text-purple-500 mb-4" />
-                            <p className="text-sm text-muted-foreground">Analyzing your content...</p>
+                            <Loader2 className="mb-4 h-8 w-8 animate-spin text-purple-500" />
+                            <p className="text-muted-foreground text-sm">
+                                Analyzing your content...
+                            </p>
                         </div>
                     )}
 
-                    {visibleSuggestions.map((suggestion) => {
+                    {visibleSuggestions.map(suggestion => {
                         const config = severityConfig[suggestion.severity];
                         const Icon = config.icon;
                         const isApplied = appliedIds.has(suggestion.id);
@@ -299,25 +306,28 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                             <div
                                 key={suggestion.id}
                                 className={cn(
-                                    "p-3 border rounded-lg transition-all",
+                                    "rounded-lg border p-3 transition-all",
                                     config.border,
                                     config.bg,
                                     isApplied && "opacity-50"
                                 )}
                             >
-                                <div className="flex items-start gap-2 mb-2">
-                                    <Icon className={cn("w-4 h-4 mt-0.5", config.color)} />
+                                <div className="mb-2 flex items-start gap-2">
+                                    <Icon className={cn("mt-0.5 h-4 w-4", config.color)} />
                                     <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <Badge variant="outline" className="text-[10px] capitalize">
+                                        <div className="mb-1 flex items-center gap-2">
+                                            <Badge
+                                                variant="outline"
+                                                className="text-[10px] capitalize"
+                                            >
                                                 {suggestion.type}
                                             </Badge>
-                                            <span className="text-[10px] text-muted-foreground">
+                                            <span className="text-muted-foreground text-[10px]">
                                                 {config.label}
                                             </span>
                                         </div>
                                         <p className="text-sm">
-                                            <span className="line-through text-muted-foreground">
+                                            <span className="text-muted-foreground line-through">
                                                 {suggestion.original}
                                             </span>
                                             {" → "}
@@ -325,21 +335,21 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                                                 {suggestion.suggestion}
                                             </span>
                                         </p>
-                                        <p className="text-xs text-muted-foreground mt-1">
+                                        <p className="text-muted-foreground mt-1 text-xs">
                                             {suggestion.explanation}
                                         </p>
                                     </div>
                                 </div>
 
                                 {!isApplied && (
-                                    <div className="flex gap-2 mt-2">
+                                    <div className="mt-2 flex gap-2">
                                         <Button
                                             size="sm"
                                             variant="outline"
                                             className="h-7 text-xs"
                                             onClick={() => handleApply(suggestion)}
                                         >
-                                            <Check className="w-3 h-3 mr-1" />
+                                            <Check className="mr-1 h-3 w-3" />
                                             Apply
                                         </Button>
                                         <Button
@@ -348,15 +358,15 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                                             className="h-7 text-xs"
                                             onClick={() => handleDismiss(suggestion.id)}
                                         >
-                                            <X className="w-3 h-3 mr-1" />
+                                            <X className="mr-1 h-3 w-3" />
                                             Dismiss
                                         </Button>
                                     </div>
                                 )}
 
                                 {isApplied && (
-                                    <div className="flex items-center gap-1 mt-2 text-green-600 dark:text-green-400">
-                                        <Check className="w-3 h-3" />
+                                    <div className="mt-2 flex items-center gap-1 text-green-600 dark:text-green-400">
+                                        <Check className="h-3 w-3" />
                                         <span className="text-xs">Applied</span>
                                     </div>
                                 )}
@@ -368,7 +378,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
             {/* Footer */}
             {suggestions.length > 0 && (
-                <div className="p-4 border-t border-border">
+                <div className="border-border border-t p-4">
                     <Button
                         variant="outline"
                         size="sm"
@@ -376,7 +386,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                         onClick={runCheck}
                         disabled={isChecking}
                     >
-                        <RefreshCw className={cn("w-4 h-4 mr-2", isChecking && "animate-spin")} />
+                        <RefreshCw className={cn("mr-2 h-4 w-4", isChecking && "animate-spin")} />
                         Re-check
                     </Button>
                 </div>

@@ -5,5 +5,5 @@ import { ContactClient } from "./ContactClient";
 // NEXT_PUBLIC_ values baked into the image at build time. A self-hoster sets
 // SUPPORT_CONTACT_EMAIL and friends in .env and this page reflects them.
 export default function EmployerContactPage() {
-  return <ContactClient support={getSupportChannels()} />;
+    return <ContactClient support={getSupportChannels()} />;
 }

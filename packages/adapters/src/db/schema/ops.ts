@@ -1,11 +1,5 @@
 import { sql } from "drizzle-orm";
-import {
-    bigint,
-    jsonb,
-    text,
-    timestamp,
-    varchar,
-} from "drizzle-orm/pg-core";
+import { bigint, jsonb, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 import { pgTable } from "./helpers";
 

@@ -17,13 +17,13 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 const VERSION = "v1";
 
 export class UnsubscribeSecretMissingError extends Error {
-  constructor() {
-    super(
-      "EMAIL_UNSUBSCRIBE_SECRET is not set. Unsubscribe links cannot be issued " +
-        "or verified without it; set it to a long random string.",
-    );
-    this.name = "UnsubscribeSecretMissingError";
-  }
+    constructor() {
+        super(
+            "EMAIL_UNSUBSCRIBE_SECRET is not set. Unsubscribe links cannot be issued " +
+                "or verified without it; set it to a long random string."
+        );
+        this.name = "UnsubscribeSecretMissingError";
+    }
 }
 
 /**
@@ -35,28 +35,28 @@ export class UnsubscribeSecretMissingError extends Error {
 const MIN_SECRET_LENGTH = 16;
 
 function secret(env: Record<string, string | undefined> = process.env): string {
-  const value = env.EMAIL_UNSUBSCRIBE_SECRET?.trim();
-  if (!value) throw new UnsubscribeSecretMissingError();
-  if (value.length < MIN_SECRET_LENGTH) {
-    throw new Error(
-      `EMAIL_UNSUBSCRIBE_SECRET must be at least ${MIN_SECRET_LENGTH} characters; ` +
-        "set it to a long random string.",
-    );
-  }
-  return value;
+    const value = env.EMAIL_UNSUBSCRIBE_SECRET?.trim();
+    if (!value) throw new UnsubscribeSecretMissingError();
+    if (value.length < MIN_SECRET_LENGTH) {
+        throw new Error(
+            `EMAIL_UNSUBSCRIBE_SECRET must be at least ${MIN_SECRET_LENGTH} characters; ` +
+                "set it to a long random string."
+        );
+    }
+    return value;
 }
 
 function b64url(input: string): string {
-  return Buffer.from(input, "utf8").toString("base64url");
+    return Buffer.from(input, "utf8").toString("base64url");
 }
 
 function sign(payload: string, key: string): string {
-  return createHmac("sha256", key).update(payload).digest("base64url");
+    return createHmac("sha256", key).update(payload).digest("base64url");
 }
 
 export interface UnsubscribeClaims {
-  companyId: number;
-  email: string;
+    companyId: number;
+    email: string;
 }
 
 /**
@@ -64,11 +64,11 @@ export interface UnsubscribeClaims {
  * first so the token matches the form the suppression list stores.
  */
 export function createUnsubscribeToken(
-  claims: UnsubscribeClaims,
-  env?: Record<string, string | undefined>,
+    claims: UnsubscribeClaims,
+    env?: Record<string, string | undefined>
 ): string {
-  const payload = `${VERSION}.${claims.companyId}.${b64url(claims.email.toLowerCase())}`;
-  return `${payload}.${sign(payload, secret(env))}`;
+    const payload = `${VERSION}.${claims.companyId}.${b64url(claims.email.toLowerCase())}`;
+    return `${payload}.${sign(payload, secret(env))}`;
 }
 
 /**
@@ -77,36 +77,31 @@ export function createUnsubscribeToken(
  * signature a byte at a time.
  */
 export function verifyUnsubscribeToken(
-  token: string,
-  env?: Record<string, string | undefined>,
+    token: string,
+    env?: Record<string, string | undefined>
 ): UnsubscribeClaims | null {
-  const parts = token.split(".");
-  if (parts.length !== 4) return null;
-  const [version, rawCompanyId, rawEmail, signature] = parts as [
-    string,
-    string,
-    string,
-    string,
-  ];
-  if (version !== VERSION) return null;
+    const parts = token.split(".");
+    if (parts.length !== 4) return null;
+    const [version, rawCompanyId, rawEmail, signature] = parts as [string, string, string, string];
+    if (version !== VERSION) return null;
 
-  const payload = `${version}.${rawCompanyId}.${rawEmail}`;
-  const expected = sign(payload, secret(env));
+    const payload = `${version}.${rawCompanyId}.${rawEmail}`;
+    const expected = sign(payload, secret(env));
 
-  const given = Buffer.from(signature);
-  const want = Buffer.from(expected);
-  if (given.length !== want.length || !timingSafeEqual(given, want)) return null;
+    const given = Buffer.from(signature);
+    const want = Buffer.from(expected);
+    if (given.length !== want.length || !timingSafeEqual(given, want)) return null;
 
-  const companyId = Number(rawCompanyId);
-  if (!Number.isInteger(companyId) || companyId <= 0) return null;
+    const companyId = Number(rawCompanyId);
+    if (!Number.isInteger(companyId) || companyId <= 0) return null;
 
-  let email: string;
-  try {
-    email = Buffer.from(rawEmail, "base64url").toString("utf8");
-  } catch {
-    return null;
-  }
-  if (!email.includes("@")) return null;
+    let email: string;
+    try {
+        email = Buffer.from(rawEmail, "base64url").toString("utf8");
+    } catch {
+        return null;
+    }
+    if (!email.includes("@")) return null;
 
-  return { companyId, email };
+    return { companyId, email };
 }

@@ -11,42 +11,37 @@
 
 import type { StoragePort, UploadInput, UploadResult } from "@launchstack/core/storage";
 
-import {
-  uploadFile,
-  fetchFile,
-  deleteFileByUrl,
-  resolveStorageBackend,
-} from "~/lib/storage";
+import { uploadFile, fetchFile, deleteFileByUrl, resolveStorageBackend } from "~/lib/storage";
 
 export function createAppStoragePort(): StoragePort {
-  const provider = resolveStorageBackend();
+    const provider = resolveStorageBackend();
 
-  return {
-    provider,
+    return {
+        provider,
 
-    async upload(input: UploadInput): Promise<UploadResult> {
-      // The app's uploadFile requires a userId; default to "system" for
-      // engine-initiated writes that do not carry an end-user context.
-      const result = await uploadFile({
-        filename: input.filename,
-        data: input.data,
-        contentType: input.contentType,
-        userId: input.userId ?? "system",
-      });
-      return {
-        url: result.url,
-        pathname: result.pathname,
-        contentType: result.contentType,
-        provider: result.provider,
-      };
-    },
+        async upload(input: UploadInput): Promise<UploadResult> {
+            // The app's uploadFile requires a userId; default to "system" for
+            // engine-initiated writes that do not carry an end-user context.
+            const result = await uploadFile({
+                filename: input.filename,
+                data: input.data,
+                contentType: input.contentType,
+                userId: input.userId ?? "system",
+            });
+            return {
+                url: result.url,
+                pathname: result.pathname,
+                contentType: result.contentType,
+                provider: result.provider,
+            };
+        },
 
-    download(urlOrKey, init) {
-      return fetchFile(urlOrKey, init);
-    },
+        download(urlOrKey, init) {
+            return fetchFile(urlOrKey, init);
+        },
 
-    delete(urlOrKey) {
-      return deleteFileByUrl(urlOrKey);
-    },
-  };
+        delete(urlOrKey) {
+            return deleteFileByUrl(urlOrKey);
+        },
+    };
 }

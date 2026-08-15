@@ -11,14 +11,14 @@
  * pays for work it is about to throw away.
  */
 import {
-  getPublicChatConfig,
-  isChatRequestError,
-  resolveChatModel,
-  resolveChatRoute,
-  selectChatRoute,
-  type PublicChatConfig,
-  type ResolveChatModelOptions,
-  type ResolvedChatModel,
+    getPublicChatConfig,
+    isChatRequestError,
+    resolveChatModel,
+    resolveChatRoute,
+    selectChatRoute,
+    type PublicChatConfig,
+    type ResolveChatModelOptions,
+    type ResolvedChatModel,
 } from "@launchstack/core/llm";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
@@ -31,10 +31,10 @@ export { selectChatRoute };
 
 /** Resolve a route to a ready-to-invoke model for this deployment. */
 export function resolveConfiguredChatModel(
-  options: ResolveChatModelOptions = {},
+    options: ResolveChatModelOptions = {}
 ): ResolvedChatModel {
-  configureAppChatModels(env.server);
-  return resolveChatModel(options);
+    configureAppChatModels(env.server);
+    return resolveChatModel(options);
 }
 
 /**
@@ -49,16 +49,16 @@ export function resolveConfiguredChatModel(
  * fault, which sends whoever is debugging it to the wrong place entirely.
  */
 export function describeChatResolutionFailure(error: unknown): {
-  status: number;
-  message: string;
+    status: number;
+    message: string;
 } {
-  return {
-    status: isChatRequestError(error) ? error.status : 500,
-    message:
-      error instanceof Error
-        ? error.message
-        : "The configured chat models cannot serve this request",
-  };
+    return {
+        status: isChatRequestError(error) ? error.status : 500,
+        message:
+            error instanceof Error
+                ? error.message
+                : "The configured chat models cannot serve this request",
+    };
 }
 
 /**
@@ -67,21 +67,21 @@ export function describeChatResolutionFailure(error: unknown): {
  * for instance.
  */
 export function resolveConfiguredChatRoute(
-  route: Parameters<typeof resolveChatRoute>[0] = "default",
+    route: Parameters<typeof resolveChatRoute>[0] = "default"
 ) {
-  configureAppChatModels(env.server);
-  return resolveChatRoute(route);
+    configureAppChatModels(env.server);
+    return resolveChatRoute(route);
 }
 
 /** Sanitized route information for the browser. Never includes secrets. */
 export function getConfiguredPublicChatConfig(): PublicChatConfig {
-  configureAppChatModels(env.server);
-  return getPublicChatConfig();
+    configureAppChatModels(env.server);
+    return getPublicChatConfig();
 }
 
 export function getEmbeddings(
-  indexKey?: string,
-  config?: CompanyEmbeddingConfig,
+    indexKey?: string,
+    config?: CompanyEmbeddingConfig
 ): EmbeddingsProvider {
-  return createEmbeddingModel(resolveEmbeddingIndex(indexKey, config), config);
+    return createEmbeddingModel(resolveEmbeddingIndex(indexKey, config), config);
 }

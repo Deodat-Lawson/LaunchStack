@@ -6,10 +6,7 @@ import { users, userCompanyMemberships } from "~/server/db/schema";
 import { setActiveWorkspaceCookie } from "~/lib/active-workspace";
 import { requireClerkIdentity } from "~/lib/require-workspace-context";
 
-export async function POST(
-    _request: Request,
-    { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const identity = await requireClerkIdentity();
         if (!identity.success) return identity.response;

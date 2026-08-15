@@ -101,7 +101,10 @@ function mockUnauthenticated() {
     });
 }
 
-function requestFor(body: Record<string, unknown>, path = "/api/agents/predictive-document-analysis") {
+function requestFor(
+    body: Record<string, unknown>,
+    path = "/api/agents/predictive-document-analysis"
+) {
     return new Request(`http://localhost${path}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

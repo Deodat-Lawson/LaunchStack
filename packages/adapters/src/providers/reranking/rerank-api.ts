@@ -40,8 +40,8 @@ export class DedicatedRerankProvider implements RerankProvider {
         if (!model) {
             throw new Error(
                 "RERANK_MODEL is required when RERANK_API_BASE_URL is set: a " +
-                "dedicated rerank endpoint names its own model, and there is no " +
-                "default to fall back on.",
+                    "dedicated rerank endpoint names its own model, and there is no " +
+                    "default to fall back on."
             );
         }
         this.model = model;
@@ -52,10 +52,7 @@ export class DedicatedRerankProvider implements RerankProvider {
         }
     }
 
-    async rerank(
-        query: string,
-        documents: string[]
-    ): Promise<ProviderResult<RerankResult>> {
+    async rerank(query: string, documents: string[]): Promise<ProviderResult<RerankResult>> {
         const resp = await fetch(`${this.baseUrl}/rerank`, {
             method: "POST",
             headers: {

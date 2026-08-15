@@ -16,12 +16,12 @@ export { toRows } from "@launchstack/core/db";
 // (not at import time). Keeps env validation lazy for tooling that imports
 // this file without a full server env present.
 export const db = new Proxy({} as ReturnType<typeof getEngine>["db"], {
-  get(_target, prop, receiver) {
-    const engineDb = getEngine().db;
-    const value = Reflect.get(engineDb, prop, receiver) as unknown;
-    if (typeof value === "function") {
-      return (value as (...args: unknown[]) => unknown).bind(engineDb);
-    }
-    return value;
-  },
+    get(_target, prop, receiver) {
+        const engineDb = getEngine().db;
+        const value = Reflect.get(engineDb, prop, receiver) as unknown;
+        if (typeof value === "function") {
+            return (value as (...args: unknown[]) => unknown).bind(engineDb);
+        }
+        return value;
+    },
 });

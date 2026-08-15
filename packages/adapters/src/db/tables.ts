@@ -18,34 +18,33 @@
 import { getTableName, sql } from "drizzle-orm";
 
 import {
-  document,
-  documentContextChunks,
-  documentEmbeddings768,
-  documentEmbeddings1024,
-  documentMetadata,
-  documentRetrievalChunks,
-  documentStructure,
+    document,
+    documentContextChunks,
+    documentEmbeddings768,
+    documentEmbeddings1024,
+    documentMetadata,
+    documentRetrievalChunks,
+    documentStructure,
 } from "./schema";
 
-const ident = <T extends { _: unknown }>(table: T) =>
-  sql.identifier(getTableName(table as never));
+const ident = <T extends { _: unknown }>(table: T) => sql.identifier(getTableName(table as never));
 
 export const NAME = {
-  document: getTableName(document),
-  contextChunks: getTableName(documentContextChunks),
-  retrievalChunks: getTableName(documentRetrievalChunks),
-  structure: getTableName(documentStructure),
-  metadata: getTableName(documentMetadata),
-  embeddings768: getTableName(documentEmbeddings768),
-  embeddings1024: getTableName(documentEmbeddings1024),
+    document: getTableName(document),
+    contextChunks: getTableName(documentContextChunks),
+    retrievalChunks: getTableName(documentRetrievalChunks),
+    structure: getTableName(documentStructure),
+    metadata: getTableName(documentMetadata),
+    embeddings768: getTableName(documentEmbeddings768),
+    embeddings1024: getTableName(documentEmbeddings1024),
 } as const;
 
 export const T = {
-  document: ident(document),
-  contextChunks: ident(documentContextChunks),
-  retrievalChunks: ident(documentRetrievalChunks),
-  structure: ident(documentStructure),
-  metadata: ident(documentMetadata),
-  embeddings768: ident(documentEmbeddings768),
-  embeddings1024: ident(documentEmbeddings1024),
+    document: ident(document),
+    contextChunks: ident(documentContextChunks),
+    retrievalChunks: ident(documentRetrievalChunks),
+    structure: ident(documentStructure),
+    metadata: ident(documentMetadata),
+    embeddings768: ident(documentEmbeddings768),
+    embeddings1024: ident(documentEmbeddings1024),
 } as const;

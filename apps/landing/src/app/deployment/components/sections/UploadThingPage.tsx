@@ -1,175 +1,212 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'motion/react';
-import { Upload, Check, ExternalLink } from 'lucide-react';
-import type { DeploymentProps } from '../../types';
-import { Section, CodeBlock, WarningBox } from '../ui';
+import React from "react";
+import { motion } from "motion/react";
+import { Upload, Check, ExternalLink } from "lucide-react";
+import type { DeploymentProps } from "../../types";
+import { Section, CodeBlock, WarningBox } from "../ui";
 
-export const UploadThingPage: React.FC<DeploymentProps> = ({ 
- 
-  copyToClipboard, 
-  copiedCode 
-}) => {
-  const darkMode = false;
-  return (
-    <>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-12"
-      >
-        <div className={`inline-flex items-center gap-2 px-4 py-2 ${darkMode ? 'bg-green-900/50 text-green-300' : 'bg-green-100 text-green-700'} rounded-full font-medium mb-6 text-sm`}>
-          <Upload className="w-4 h-4" />
-          Optional Feature
-        </div>
+export const UploadThingPage: React.FC<DeploymentProps> = ({ copyToClipboard, copiedCode }) => {
+    const darkMode = false;
+    return (
+        <>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="mb-12"
+            >
+                <div
+                    className={`inline-flex items-center gap-2 px-4 py-2 ${darkMode ? "bg-green-900/50 text-green-300" : "bg-green-100 text-green-700"} mb-6 rounded-full text-sm font-medium`}
+                >
+                    <Upload className="h-4 w-4" />
+                    Optional Feature
+                </div>
 
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-          UploadThing Cloud Storage
-        </h1>
-        <p className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-          Fast, reliable cloud file storage for document uploads.
-        </p>
-      </motion.div>
+                <h1 className="mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-4xl font-bold text-transparent">
+                    UploadThing Cloud Storage
+                </h1>
+                <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"} mb-6`}>
+                    Fast, reliable cloud file storage for document uploads.
+                </p>
+            </motion.div>
 
-      <Section title="What is UploadThing?">
-        <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-          UploadThing provides a simple, type-safe file upload solution that enables:
-        </p>
-        <ul className={`space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          <li className="flex items-start gap-2">
-            <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span>Fast, reliable cloud file storage</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span>Automatic file type validation</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span>Drag-and-drop upload interface</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span>CDN-backed file delivery</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span>Type-safe file routing with Next.js</span>
-          </li>
-        </ul>
-      </Section>
+            <Section title="What is UploadThing?">
+                <p className={`${darkMode ? "text-gray-300" : "text-gray-600"} mb-4`}>
+                    UploadThing provides a simple, type-safe file upload solution that enables:
+                </p>
+                <ul className={`space-y-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                    <li className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
+                        <span>Fast, reliable cloud file storage</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
+                        <span>Automatic file type validation</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
+                        <span>Drag-and-drop upload interface</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
+                        <span>CDN-backed file delivery</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
+                        <span>Type-safe file routing with Next.js</span>
+                    </li>
+                </ul>
+            </Section>
 
-      <Section title="UploadThing vs Vercel Blob">
-        <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-          Launchstack supports two cloud storage backends for uploaded documents. Vercel Blob is the default and required; UploadThing is an optional alternative.
-        </p>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className={`p-4 rounded-xl ${darkMode ? 'bg-slate-800/50 border border-slate-600/30' : 'bg-slate-50 border border-slate-200'}`}>
-            <h4 className={`font-semibold mb-2 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Vercel Blob (Default)
-            </h4>
-            <ul className={`text-sm space-y-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>• Required — used by default for all uploads</li>
-              <li>• Native Vercel integration</li>
-              <li>• Edge-optimized delivery</li>
-              <li>• Public &amp; private store support</li>
-            </ul>
-          </div>
-          <div className={`p-4 rounded-xl ${darkMode ? 'bg-purple-900/30 border border-purple-500/30' : 'bg-purple-50 border border-purple-200'}`}>
-            <h4 className={`font-semibold mb-2 ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}>
-              UploadThing (Optional)
-            </h4>
-            <ul className={`text-sm space-y-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>• Optional alternative upload path</li>
-              <li>• CDN-backed delivery</li>
-              <li>• Type-safe file routing</li>
-              <li>• Requires UploadThing account</li>
-            </ul>
-          </div>
-        </div>
-      </Section>
+            <Section title="UploadThing vs Vercel Blob">
+                <p className={`${darkMode ? "text-gray-300" : "text-gray-600"} mb-4`}>
+                    Launchstack supports two cloud storage backends for uploaded documents. Vercel
+                    Blob is the default and required; UploadThing is an optional alternative.
+                </p>
+                <div className="grid gap-4 md:grid-cols-2">
+                    <div
+                        className={`rounded-xl p-4 ${darkMode ? "border border-slate-600/30 bg-slate-800/50" : "border border-slate-200 bg-slate-50"}`}
+                    >
+                        <h4
+                            className={`mb-2 font-semibold ${darkMode ? "text-slate-300" : "text-slate-700"}`}
+                        >
+                            Vercel Blob (Default)
+                        </h4>
+                        <ul
+                            className={`space-y-1 text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}
+                        >
+                            <li>• Required — used by default for all uploads</li>
+                            <li>• Native Vercel integration</li>
+                            <li>• Edge-optimized delivery</li>
+                            <li>• Public &amp; private store support</li>
+                        </ul>
+                    </div>
+                    <div
+                        className={`rounded-xl p-4 ${darkMode ? "border border-purple-500/30 bg-purple-900/30" : "border border-purple-200 bg-purple-50"}`}
+                    >
+                        <h4
+                            className={`mb-2 font-semibold ${darkMode ? "text-purple-300" : "text-purple-700"}`}
+                        >
+                            UploadThing (Optional)
+                        </h4>
+                        <ul
+                            className={`space-y-1 text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}
+                        >
+                            <li>• Optional alternative upload path</li>
+                            <li>• CDN-backed delivery</li>
+                            <li>• Type-safe file routing</li>
+                            <li>• Requires UploadThing account</li>
+                        </ul>
+                    </div>
+                </div>
+            </Section>
 
-      <Section title="Setup Instructions">
-        <div className="space-y-6">
-          <div>
-            <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Step 1: Create UploadThing Account
-            </h3>
-            <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-              Visit <a href="https://uploadthing.com" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline inline-flex items-center gap-1">
-                uploadthing.com <ExternalLink className="w-4 h-4" />
-              </a> and sign up for a free account.
-            </p>
-          </div>
+            <Section title="Setup Instructions">
+                <div className="space-y-6">
+                    <div>
+                        <h3
+                            className={`mb-3 text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}
+                        >
+                            Step 1: Create UploadThing Account
+                        </h3>
+                        <p className={`${darkMode ? "text-gray-300" : "text-gray-600"} mb-3`}>
+                            Visit{" "}
+                            <a
+                                href="https://uploadthing.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-purple-600 hover:underline"
+                            >
+                                uploadthing.com <ExternalLink className="h-4 w-4" />
+                            </a>{" "}
+                            and sign up for a free account.
+                        </p>
+                    </div>
 
-          <div>
-            <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Step 2: Create a New App
-            </h3>
-            <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-              In your UploadThing dashboard, create a new app and copy your API token.
-            </p>
-          </div>
+                    <div>
+                        <h3
+                            className={`mb-3 text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}
+                        >
+                            Step 2: Create a New App
+                        </h3>
+                        <p className={`${darkMode ? "text-gray-300" : "text-gray-600"} mb-3`}>
+                            In your UploadThing dashboard, create a new app and copy your API token.
+                        </p>
+                    </div>
 
-          <div>
-            <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Step 3: Add to Environment Variables
-            </h3>
-            <CodeBlock
-              code={`UPLOADTHING_TOKEN=your_token_here`}
-              onCopy={() => copyToClipboard('UPLOADTHING_TOKEN=your_token_here', 'uploadthing-env')}
-              copied={copiedCode === 'uploadthing-env'}
+                    <div>
+                        <h3
+                            className={`mb-3 text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}
+                        >
+                            Step 3: Add to Environment Variables
+                        </h3>
+                        <CodeBlock
+                            code={`UPLOADTHING_TOKEN=your_token_here`}
+                            onCopy={() =>
+                                copyToClipboard(
+                                    "UPLOADTHING_TOKEN=your_token_here",
+                                    "uploadthing-env"
+                                )
+                            }
+                            copied={copiedCode === "uploadthing-env"}
+                        />
+                    </div>
 
-            />
-          </div>
+                    <div>
+                        <h3
+                            className={`mb-3 text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}
+                        >
+                            Step 4: Select UploadThing in the Upload Page
+                        </h3>
+                        <p className={`${darkMode ? "text-gray-300" : "text-gray-600"} mb-3`}>
+                            Once configured, you can toggle between Vercel Blob and UploadThing in
+                            the storage method selector on the upload page. The preference is saved
+                            per-company and persists across sessions.
+                        </p>
+                    </div>
 
-          <div>
-            <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Step 4: Select UploadThing in the Upload Page
-            </h3>
-            <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
-              Once configured, you can toggle between Vercel Blob and UploadThing in the storage method selector on the upload page. 
-              The preference is saved per-company and persists across sessions.
-            </p>
-          </div>
+                    <WarningBox
+                        title="Note"
+                        description="Without UploadThing configured, Launchstack uses Vercel Blob for all uploads. UploadThing is fully optional — Vercel Blob is the required default storage backend."
+                    />
+                </div>
+            </Section>
 
-          <WarningBox
-            title="Note"
-            description="Without UploadThing configured, Launchstack uses Vercel Blob for all uploads. UploadThing is fully optional — Vercel Blob is the required default storage backend."
-
-          />
-        </div>
-      </Section>
-
-      <Section title="File Limits">
-        <div className={`p-4 rounded-xl ${darkMode ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
-          <table className={`w-full text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            <thead>
-              <tr className={`border-b ${darkMode ? 'border-slate-600' : 'border-slate-200'}`}>
-                <th className="text-left py-2 font-semibold">Limit</th>
-                <th className="text-left py-2 font-semibold">Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className={`border-b ${darkMode ? 'border-slate-700' : 'border-slate-100'}`}>
-                <td className="py-2">Max file size</td>
-                <td className="py-2">128 MB</td>
-              </tr>
-              <tr className={`border-b ${darkMode ? 'border-slate-700' : 'border-slate-100'}`}>
-                <td className="py-2">Allowed file types</td>
-                <td className="py-2">PDF only</td>
-              </tr>
-              <tr>
-                <td className="py-2">Files per upload</td>
-                <td className="py-2">1</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Section>
-    </>
-  );
+            <Section title="File Limits">
+                <div className={`rounded-xl p-4 ${darkMode ? "bg-slate-800/50" : "bg-slate-50"}`}>
+                    <table
+                        className={`w-full text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}
+                    >
+                        <thead>
+                            <tr
+                                className={`border-b ${darkMode ? "border-slate-600" : "border-slate-200"}`}
+                            >
+                                <th className="py-2 text-left font-semibold">Limit</th>
+                                <th className="py-2 text-left font-semibold">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                className={`border-b ${darkMode ? "border-slate-700" : "border-slate-100"}`}
+                            >
+                                <td className="py-2">Max file size</td>
+                                <td className="py-2">128 MB</td>
+                            </tr>
+                            <tr
+                                className={`border-b ${darkMode ? "border-slate-700" : "border-slate-100"}`}
+                            >
+                                <td className="py-2">Allowed file types</td>
+                                <td className="py-2">PDF only</td>
+                            </tr>
+                            <tr>
+                                <td className="py-2">Files per upload</td>
+                                <td className="py-2">1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </Section>
+        </>
+    );
 };
-

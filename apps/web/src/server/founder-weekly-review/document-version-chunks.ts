@@ -1,7 +1,15 @@
 import { and, asc, desc, eq, gte, inArray, lt } from "drizzle-orm";
 import { getDb, type DbClient } from "@launchstack/core/db";
-import { document, documentContextChunks, documentStructure, documentVersions } from "@launchstack/core/db/schema";
-import type { DocumentVersionForComparison, VersionChunk } from "@launchstack/features/founder-weekly-review";
+import {
+    document,
+    documentContextChunks,
+    documentStructure,
+    documentVersions,
+} from "@launchstack/core/db/schema";
+import type {
+    DocumentVersionForComparison,
+    VersionChunk,
+} from "@launchstack/features/founder-weekly-review";
 
 export type VersionChunkLoad =
     | { state: "complete"; chunks: VersionChunk[]; warnings: string[] }
@@ -38,7 +46,7 @@ export class FounderWeeklyReviewDocumentVersionStore {
     async listVersionsForReportingPeriod(
         companyId: bigint,
         startInclusive: Date,
-        endExclusive: Date,
+        endExclusive: Date
     ): Promise<DocumentVersionForComparison[]> {
         const inPeriod = await this.db
             .select(VERSION_COLUMNS)
@@ -48,16 +56,16 @@ export class FounderWeeklyReviewDocumentVersionStore {
                 and(
                     eq(document.companyId, companyId),
                     gte(documentVersions.createdAt, startInclusive),
-                    lt(documentVersions.createdAt, endExclusive),
-                ),
+                    lt(documentVersions.createdAt, endExclusive)
+                )
             )
             .orderBy(
                 asc(documentVersions.createdAt),
                 asc(documentVersions.versionNumber),
-                asc(documentVersions.id),
+                asc(documentVersions.id)
             );
 
-        const touchedDocumentIds = [...new Set(inPeriod.map((row) => row.documentId))];
+        const touchedDocumentIds = [...new Set(inPeriod.map(row => row.documentId))];
         if (touchedDocumentIds.length === 0) return [];
 
         // One predecessor per document — the baseline each earliest in-period
@@ -71,14 +79,14 @@ export class FounderWeeklyReviewDocumentVersionStore {
                 and(
                     eq(document.companyId, companyId),
                     inArray(documentVersions.documentId, touchedDocumentIds),
-                    lt(documentVersions.createdAt, startInclusive),
-                ),
+                    lt(documentVersions.createdAt, startInclusive)
+                )
             )
             .orderBy(
                 asc(documentVersions.documentId),
                 desc(documentVersions.createdAt),
                 desc(documentVersions.versionNumber),
-                desc(documentVersions.id),
+                desc(documentVersions.id)
             );
 
         // Pairing re-sorts per document, so append order does not matter.
@@ -99,10 +107,10 @@ export class FounderWeeklyReviewDocumentVersionStore {
         const results = new Map<string, VersionChunkLoad>();
         const requested = [
             ...new Map(
-                input.versions.map((version) => [
+                input.versions.map(version => [
                     versionChunkKey(version.documentId, version.versionId),
                     version,
-                ]),
+                ])
             ).values(),
         ];
         if (requested.length === 0) return results;
@@ -119,14 +127,12 @@ export class FounderWeeklyReviewDocumentVersionStore {
                     eq(document.companyId, input.companyId),
                     inArray(
                         documentVersions.id,
-                        requested.map((version) => version.versionId),
-                    ),
-                ),
+                        requested.map(version => version.versionId)
+                    )
+                )
             );
 
-        const ownedKeys = new Set(
-            owned.map((row) => versionChunkKey(row.documentId, row.versionId)),
-        );
+        const ownedKeys = new Set(owned.map(row => versionChunkKey(row.documentId, row.versionId)));
         for (const version of requested) {
             if (!ownedKeys.has(versionChunkKey(version.documentId, version.versionId))) {
                 results.set(versionChunkKey(version.documentId, version.versionId), {
@@ -137,7 +143,7 @@ export class FounderWeeklyReviewDocumentVersionStore {
             }
         }
 
-        const ownedVersionIds = owned.map((row) => row.versionId);
+        const ownedVersionIds = owned.map(row => row.versionId);
         if (ownedVersionIds.length === 0) return results;
 
         const rows = await this.db
@@ -156,19 +162,22 @@ export class FounderWeeklyReviewDocumentVersionStore {
                 versionId: documentContextChunks.versionId,
             })
             .from(documentContextChunks)
-            .leftJoin(documentStructure, eq(documentContextChunks.structureId, documentStructure.id))
+            .leftJoin(
+                documentStructure,
+                eq(documentContextChunks.structureId, documentStructure.id)
+            )
             .where(
                 inArray(
                     documentContextChunks.versionId,
-                    ownedVersionIds.map((versionId) => BigInt(versionId)),
-                ),
+                    ownedVersionIds.map(versionId => BigInt(versionId))
+                )
             )
             .orderBy(
                 asc(documentStructure.path),
                 asc(documentContextChunks.pageNumber),
                 asc(documentContextChunks.lineStart),
                 asc(documentStructure.ordering),
-                asc(documentContextChunks.id),
+                asc(documentContextChunks.id)
             );
 
         const byVersion = new Map<string, VersionChunk[]>();
@@ -184,15 +193,19 @@ export class FounderWeeklyReviewDocumentVersionStore {
             const key = versionChunkKey(row.documentId, row.versionId);
             const chunks = byVersion.get(key);
             if (!chunks || chunks.length === 0) {
-                results.set(key, { state: "missing", chunks: [], warnings: ["version_chunks_missing"] });
+                results.set(key, {
+                    state: "missing",
+                    chunks: [],
+                    warnings: ["version_chunks_missing"],
+                });
                 continue;
             }
-            const partial = chunks.some((chunk) => !chunk.contentHash || !chunk.structurePath);
+            const partial = chunks.some(chunk => !chunk.contentHash || !chunk.structurePath);
             results.set(
                 key,
                 partial
                     ? { state: "partial", chunks, warnings: ["version_chunks_partial_provenance"] }
-                    : { state: "complete", chunks, warnings: [] },
+                    : { state: "complete", chunks, warnings: [] }
             );
         }
 

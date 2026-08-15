@@ -42,11 +42,11 @@ export interface RunClientProspectorInput {
  */
 export async function runClientProspector(
     input: RunClientProspectorInput,
-    options: RunClientProspectorOptions = {},
+    options: RunClientProspectorOptions = {}
 ): Promise<ProspectorOutput> {
     const radius = input.radius ?? DEFAULT_SEARCH_RADIUS;
-    const providedCategoryIds = (input.categories ?? []).filter((category) =>
-        FoursquareCategoryIdSchema.safeParse(category).success,
+    const providedCategoryIds = (input.categories ?? []).filter(
+        category => FoursquareCategoryIdSchema.safeParse(category).success
     );
 
     // Step 1: Resolve location
@@ -54,15 +54,11 @@ export async function runClientProspector(
 
     // Step 2: Plan searches — LLM decides what Foursquare queries to run
     await options.onStageChange?.("planning");
-    const plannedSearches = await planSearches(
-        input.query,
-        input.companyContext,
-        input.categories,
-    );
+    const plannedSearches = await planSearches(input.query, input.companyContext, input.categories);
 
     console.log(
         `[prospector] Planned ${plannedSearches.length} searches:`,
-        plannedSearches.map((s) => ({ query: s.searchQuery, categories: s.categoryIds })),
+        plannedSearches.map(s => ({ query: s.searchQuery, categories: s.categoryIds }))
     );
 
     // Step 3: Search — call Foursquare Places API for each planned search
@@ -73,14 +69,15 @@ export async function runClientProspector(
 
     // Step 4: Score — LLM ranks and scores the results by relevance
     await options.onStageChange?.("scoring");
-    const resolvedCategories = providedCategoryIds.length > 0 ? providedCategoryIds : [
-        ...new Set(plannedSearches.flatMap((s) => s.categoryIds)),
-    ];
+    const resolvedCategories =
+        providedCategoryIds.length > 0
+            ? providedCategoryIds
+            : [...new Set(plannedSearches.flatMap(s => s.categoryIds))];
     const results = await scoreLeads(
         rawPlaces,
         input.query,
         input.companyContext,
-        resolvedCategories,
+        resolvedCategories
     );
 
     return {

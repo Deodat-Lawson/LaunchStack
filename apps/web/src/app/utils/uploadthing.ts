@@ -1,7 +1,4 @@
-import {
-    generateUploadButton,
-    generateUploadDropzone,
-} from "@uploadthing/react";
+import { generateUploadButton, generateUploadDropzone } from "@uploadthing/react";
 
 import type { FileRouter } from "uploadthing/next";
 

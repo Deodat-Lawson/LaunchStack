@@ -13,24 +13,24 @@ import type { CreditsPort, DebitInput } from "@launchstack/core/credits";
 import { debitTokens } from "~/lib/credits";
 
 export function createAppCreditsPort(): CreditsPort {
-  return {
-    async debit(input: DebitInput): Promise<void> {
-      try {
-        await debitTokens({
-          companyId: input.companyId,
-          amount: input.tokens,
-          service: input.service,
-          description: input.description ?? `${input.service} usage`,
-          referenceId: input.referenceId,
-          metadata: input.metadata,
-          // allowNegative is deliberately not passed: debitTokens defaults it
-          // from the deployment's own policy, so this port and the routes that
-          // debit directly cannot drift apart on whether recording may
-          // overdraw.
-        });
-      } catch (err) {
-        console.warn("[CreditsPort] debitTokens failed (non-blocking):", err);
-      }
-    },
-  };
+    return {
+        async debit(input: DebitInput): Promise<void> {
+            try {
+                await debitTokens({
+                    companyId: input.companyId,
+                    amount: input.tokens,
+                    service: input.service,
+                    description: input.description ?? `${input.service} usage`,
+                    referenceId: input.referenceId,
+                    metadata: input.metadata,
+                    // allowNegative is deliberately not passed: debitTokens defaults it
+                    // from the deployment's own policy, so this port and the routes that
+                    // debit directly cannot drift apart on whether recording may
+                    // overdraw.
+                });
+            } catch (err) {
+                console.warn("[CreditsPort] debitTokens failed (non-blocking):", err);
+            }
+        },
+    };
 }

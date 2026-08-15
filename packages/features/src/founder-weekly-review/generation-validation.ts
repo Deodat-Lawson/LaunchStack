@@ -28,7 +28,7 @@ const isTemporalEvidenceSource = (source: { sourceType?: string } | undefined) =
 export function assertUniqueSnapshotSourceIds(
     evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot
 ): void {
-    const sourceIds = evidenceSnapshot.items.map((item) => item.sourceId);
+    const sourceIds = evidenceSnapshot.items.map(item => item.sourceId);
     if (new Set(sourceIds).size !== sourceIds.length) {
         throw new FounderWeeklyReviewGenerationValidationError(
             "Evidence snapshot contains duplicate source IDs."
@@ -40,9 +40,7 @@ export function validateFounderWeeklyReviewV2Citations(
     payload: FounderWeeklyReviewV2Payload,
     evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot
 ): FounderWeeklyReviewV2Payload {
-    const evidenceBySourceId = new Map(
-        evidenceSnapshot.items.map((item) => [item.sourceId, item])
-    );
+    const evidenceBySourceId = new Map(evidenceSnapshot.items.map(item => [item.sourceId, item]));
     const factualSections = [
         "whatChanged",
         "whatShipped",
@@ -66,27 +64,52 @@ export function validateFounderWeeklyReviewV2Citations(
                     if (source?.sourceType === "founder_context") {
                         throw new FounderWeeklyReviewGenerationValidationError(
                             "founder_context must never be presented as customer feedback.",
-                            [{ code: "founder_context_used_as_customer_feedback", section: sectionName, itemIndex, sourceId }]
+                            [
+                                {
+                                    code: "founder_context_used_as_customer_feedback",
+                                    section: sectionName,
+                                    itemIndex,
+                                    sourceId,
+                                },
+                            ]
                         );
                     }
                     if (source?.sourceType !== "customer_feedback") {
                         throw new FounderWeeklyReviewGenerationValidationError(
                             `whatCustomersSaid may cite only customer_feedback evidence; received "${sourceId}".`,
-                            [{ code: "customer_signals_requires_customer_feedback", section: sectionName, itemIndex, sourceId }]
+                            [
+                                {
+                                    code: "customer_signals_requires_customer_feedback",
+                                    section: sectionName,
+                                    itemIndex,
+                                    sourceId,
+                                },
+                            ]
                         );
                     }
                 }
             }
             if (sectionName === "whatChanged" || sectionName === "whatShipped") {
-                const sources = item.sourceIds.map((sourceId) => evidenceBySourceId.get(sourceId) as { sourceType?: string } | undefined);
-                const workspaceOnly = sources.length > 0 && sources.every((source) => source?.sourceType === "workspace_document");
-                const workspaceWithoutTemporalEvidence = sources.some((source) => source?.sourceType === "workspace_document")
-                    && !sources.some(isTemporalEvidenceSource);
+                const sources = item.sourceIds.map(
+                    sourceId =>
+                        evidenceBySourceId.get(sourceId) as { sourceType?: string } | undefined
+                );
+                const workspaceOnly =
+                    sources.length > 0 &&
+                    sources.every(source => source?.sourceType === "workspace_document");
+                const workspaceWithoutTemporalEvidence =
+                    sources.some(source => source?.sourceType === "workspace_document") &&
+                    !sources.some(isTemporalEvidenceSource);
                 if (workspaceOnly || workspaceWithoutTemporalEvidence) {
                     throw new FounderWeeklyReviewGenerationValidationError(
                         `${sectionName} requires temporal evidence in addition to workspace_document context.`,
-                        item.sourceIds.map((sourceId) => ({
-                            code: workspaceOnly ? "workspace_document_only_temporal_claim" : `${sectionName === "whatChanged" ? "what_changed" : "what_shipped"}_requires_temporal_evidence`, section: sectionName, itemIndex, sourceId,
+                        item.sourceIds.map(sourceId => ({
+                            code: workspaceOnly
+                                ? "workspace_document_only_temporal_claim"
+                                : `${sectionName === "whatChanged" ? "what_changed" : "what_shipped"}_requires_temporal_evidence`,
+                            section: sectionName,
+                            itemIndex,
+                            sourceId,
                         }))
                     );
                 }

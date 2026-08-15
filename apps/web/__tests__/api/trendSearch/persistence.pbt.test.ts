@@ -37,7 +37,7 @@ function cloneRow(row: StoredRow): StoredRow {
     return {
         ...row,
         categories: row.categories ? [...row.categories] : null,
-        results: row.results ? row.results.map((result) => ({ ...result })) : null,
+        results: row.results ? row.results.map(result => ({ ...result })) : null,
         createdAt: new Date(row.createdAt),
         completedAt: row.completedAt ? new Date(row.completedAt) : null,
         updatedAt: row.updatedAt ? new Date(row.updatedAt) : null,
@@ -55,13 +55,13 @@ function createInMemoryTrendSearchStore() {
                 id: values.id!,
                 companyId: values.companyId!,
                 userId: values.userId!,
-                status: (values.status) ?? "queued",
+                status: values.status ?? "queued",
                 query: values.query!,
                 companyContext: values.companyContext!,
                 categories: (values.categories as SearchCategory[] | undefined) ?? null,
                 results: (values.results as SearchResult[] | undefined) ?? null,
                 errorMessage: (values.errorMessage as string | undefined) ?? null,
-                createdAt: (values.createdAt) ?? now,
+                createdAt: values.createdAt ?? now,
                 completedAt: (values.completedAt as Date | undefined) ?? null,
                 updatedAt: (values.updatedAt as Date | undefined) ?? null,
             };
@@ -81,12 +81,9 @@ function createInMemoryTrendSearchStore() {
                 ...patch,
                 categories:
                     patch.categories !== undefined
-                        ? ((patch.categories) ?? null)
+                        ? (patch.categories ?? null)
                         : current.categories,
-                results:
-                    patch.results !== undefined
-                        ? ((patch.results) ?? null)
-                        : current.results,
+                results: patch.results !== undefined ? (patch.results ?? null) : current.results,
                 updatedAt: patch.updatedAt ?? new Date(),
             };
 
@@ -108,7 +105,7 @@ function createInMemoryTrendSearchStore() {
             const offset = options?.offset ?? 0;
 
             return [...rows.values()]
-                .filter((row) => row.companyId === companyId)
+                .filter(row => row.companyId === companyId)
                 .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
                 .slice(offset, offset + limit)
                 .map(cloneRow);
@@ -124,27 +121,26 @@ const categoriesArb = fc.uniqueArray(categoryArb, { minLength: 1, maxLength: 4 }
 
 const nonEmptyTextArb = fc
     .string({ minLength: 1, maxLength: 300 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
-const validQueryArb = fc
-    .string({ minLength: 1, maxLength: 1000 })
-    .filter((s) => s.trim().length > 0);
+const validQueryArb = fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0);
 
 const validCompanyContextArb = fc
     .string({ minLength: 1, maxLength: 2000 })
-    .filter((s) => s.trim().length > 0);
+    .filter(s => s.trim().length > 0);
 
 const searchResultArb = fc.record({
-    sourceUrl: fc.uuid().map((id) => `https://example.com/${id}`),
+    sourceUrl: fc.uuid().map(id => `https://example.com/${id}`),
     summary: nonEmptyTextArb,
     description: nonEmptyTextArb,
 });
 
 const searchResultsArb = fc.array(searchResultArb, { minLength: 0, maxLength: 12 });
 
-const isoDateArb = fc.date({ min: new Date("2000-01-01T00:00:00Z"), max: new Date("2100-01-01T00:00:00Z") })
-    .filter((d) => !isNaN(d.getTime()))
-    .map((d) => d.toISOString());
+const isoDateArb = fc
+    .date({ min: new Date("2000-01-01T00:00:00Z"), max: new Date("2100-01-01T00:00:00Z") })
+    .filter(d => !isNaN(d.getTime()))
+    .map(d => d.toISOString());
 
 const trendSearchOutputArb = fc.record({
     results: searchResultsArb,
@@ -170,7 +166,15 @@ describe("Property 9: Persistence round-trip", () => {
                 validCompanyContextArb,
                 fc.option(categoriesArb, { nil: undefined }),
                 trendSearchOutputArb,
-                async (jobId, companyId, userId, query, companyContext, initialCategories, output) => {
+                async (
+                    jobId,
+                    companyId,
+                    userId,
+                    query,
+                    companyContext,
+                    initialCategories,
+                    output
+                ) => {
                     const helpers = createTrendSearchJobHelpers(createInMemoryTrendSearchStore());
 
                     await helpers.createJob({
@@ -205,7 +209,9 @@ describe("Property 9: Persistence round-trip", () => {
                     expect(persisted.output?.results).toEqual(output.results);
                     expect(persisted.output?.metadata.query).toBe(query);
                     expect(persisted.output?.metadata.companyContext).toBe(companyContext);
-                    expect(persisted.output?.metadata.categories).toEqual(output.metadata.categories);
+                    expect(persisted.output?.metadata.categories).toEqual(
+                        output.metadata.categories
+                    );
                     expect(typeof persisted.output?.metadata.createdAt).toBe("string");
                 }
             ),
@@ -258,8 +264,8 @@ describe("Property 10: Company data isolation", () => {
                     });
 
                     expect(jobsForA).toHaveLength(idsA.length);
-                    expect(jobsForA.every((job) => job.companyId === companyA)).toBe(true);
-                    expect(jobsForA.some((job) => idsB.includes(job.id.replace(/^b-/, "")))).toBe(
+                    expect(jobsForA.every(job => job.companyId === companyA)).toBe(true);
+                    expect(jobsForA.some(job => idsB.includes(job.id.replace(/^b-/, "")))).toBe(
                         false
                     );
                 }

@@ -48,7 +48,7 @@ export const collabChannel = pgTable(
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companySlugUnique: uniqueIndex("collab_channel_company_slug_idx").on(
             table.companyId,
             table.slug
@@ -93,7 +93,7 @@ export const collabMessage = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         channelSeqUnique: uniqueIndex("collab_message_channel_seq_idx").on(
             table.channelId,
             table.seq
@@ -133,7 +133,7 @@ export const collabAgentPersona = pgTable(
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyKeyUnique: uniqueIndex("collab_persona_company_key_idx").on(
             table.companyId,
             table.key
@@ -157,7 +157,10 @@ export const collabMeeting = pgTable(
             .references(() => collabChannel.id, { onDelete: "cascade" }),
         title: varchar("title", { length: 256 }).notNull(),
         objective: text("objective").notNull(),
-        agenda: jsonb("agenda").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+        agenda: jsonb("agenda")
+            .$type<string[]>()
+            .notNull()
+            .default(sql`'[]'::jsonb`),
         /** Frozen copy of the personas — a meeting must replay after edits. */
         participants: jsonb("participants").notNull(),
         turnPolicy: varchar("turn_policy", {
@@ -192,7 +195,7 @@ export const collabMeeting = pgTable(
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
+    table => ({
         companyIdx: index("collab_meeting_company_idx").on(table.companyId),
         channelIdx: index("collab_meeting_channel_idx").on(table.channelId),
     })
@@ -211,7 +214,10 @@ export const collabNode = pgTable(
             .references(() => company.id, { onDelete: "cascade" }),
         label: varchar("label", { length: 256 }),
         /** Personas the node advertised at registration. */
-        personaIds: jsonb("persona_ids").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+        personaIds: jsonb("persona_ids")
+            .$type<string[]>()
+            .notNull()
+            .default(sql`'[]'::jsonb`),
         lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
         /** Remote address the node last connected from — operator diagnostics. */
         lastRemoteAddress: varchar("last_remote_address", { length: 64 }),
@@ -219,7 +225,7 @@ export const collabNode = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
+    table => ({
         companyIdx: index("collab_node_company_idx").on(table.companyId),
     })
 );

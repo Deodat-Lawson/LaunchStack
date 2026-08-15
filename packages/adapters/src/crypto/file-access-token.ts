@@ -22,9 +22,7 @@ export const FILE_ACCESS_TOKEN_PARAM = "t";
 const DEFAULT_TTL_MS = 15 * 60 * 1000;
 
 function computeMac(fileId: string, expiresAt: number, secret: string): string {
-  return createHmac("sha256", secret)
-    .update(`${fileId}:${expiresAt}`)
-    .digest("hex");
+    return createHmac("sha256", secret).update(`${fileId}:${expiresAt}`).digest("hex");
 }
 
 /**
@@ -34,39 +32,39 @@ function computeMac(fileId: string, expiresAt: number, secret: string): string {
  * run the OCR worker against database-backed storage.
  */
 export function signFileAccessToken(
-  fileId: string,
-  secret: string | undefined,
-  options?: { ttlMs?: number; now?: number },
+    fileId: string,
+    secret: string | undefined,
+    options?: { ttlMs?: number; now?: number }
 ): string | null {
-  if (!secret) return null;
+    if (!secret) return null;
 
-  const now = options?.now ?? Date.now();
-  const expiresAt = now + (options?.ttlMs ?? DEFAULT_TTL_MS);
+    const now = options?.now ?? Date.now();
+    const expiresAt = now + (options?.ttlMs ?? DEFAULT_TTL_MS);
 
-  return `${expiresAt}.${computeMac(fileId, expiresAt, secret)}`;
+    return `${expiresAt}.${computeMac(fileId, expiresAt, secret)}`;
 }
 
 /** Verify a token against the file id it is supposed to grant access to. */
 export function verifyFileAccessToken(
-  token: string | null | undefined,
-  fileId: string,
-  secret: string | undefined,
-  options?: { now?: number },
+    token: string | null | undefined,
+    fileId: string,
+    secret: string | undefined,
+    options?: { now?: number }
 ): boolean {
-  if (!token || !secret) return false;
+    if (!token || !secret) return false;
 
-  const separator = token.indexOf(".");
-  if (separator === -1) return false;
+    const separator = token.indexOf(".");
+    if (separator === -1) return false;
 
-  const expiresAt = Number(token.slice(0, separator));
-  const providedMac = token.slice(separator + 1);
-  if (!Number.isFinite(expiresAt) || providedMac.length === 0) return false;
+    const expiresAt = Number(token.slice(0, separator));
+    const providedMac = token.slice(separator + 1);
+    if (!Number.isFinite(expiresAt) || providedMac.length === 0) return false;
 
-  if (expiresAt <= (options?.now ?? Date.now())) return false;
+    if (expiresAt <= (options?.now ?? Date.now())) return false;
 
-  const expectedMac = Buffer.from(computeMac(fileId, expiresAt, secret), "hex");
-  const provided = Buffer.from(providedMac, "hex");
-  if (provided.length !== expectedMac.length) return false;
+    const expectedMac = Buffer.from(computeMac(fileId, expiresAt, secret), "hex");
+    const provided = Buffer.from(providedMac, "hex");
+    if (provided.length !== expectedMac.length) return false;
 
-  return timingSafeEqual(provided, expectedMac);
+    return timingSafeEqual(provided, expectedMac);
 }

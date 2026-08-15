@@ -18,7 +18,7 @@ function row(content: string | null): CustomerFeedbackChunkRow {
 }
 
 describe("Customer Feedback chunk mapping", () => {
-    it.each([null, "", "   "])("does not create cited evidence for missing content", (content) => {
+    it.each([null, "", "   "])("does not create cited evidence for missing content", content => {
         expect(mapCustomerFeedbackChunkToEvidenceItem(row(content))).toBeNull();
     });
 

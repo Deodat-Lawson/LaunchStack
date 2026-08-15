@@ -1,7 +1,7 @@
-import React from 'react';
-import { Loader } from 'lucide-react';
-import styles from '../../styles/authenticating.module.css';
-import { LaunchstackMark } from './LaunchstackLogo';
+import React from "react";
+import { Loader } from "lucide-react";
+import styles from "../../styles/authenticating.module.css";
+import { LaunchstackMark } from "./LaunchstackLogo";
 
 interface LoadingPageProps {
     message?: string;
@@ -10,17 +10,13 @@ interface LoadingPageProps {
 
 const LoadingPage: React.FC<LoadingPageProps> = ({
     message = "Please wait while we set up your workspace",
-    title = "Loading"
+    title = "Loading",
 }) => {
     return (
         <div className={styles.container} role="status" aria-live="polite">
             <div className={styles.content}>
                 <div className={styles.logoWrapper}>
-                    <LaunchstackMark
-                        size={48}
-                        title="Launchstack"
-                        style={{ marginRight: 10 }}
-                    />
+                    <LaunchstackMark size={48} title="Launchstack" style={{ marginRight: 10 }} />
                     <span className={styles.logoText}>Launchstack</span>
                 </div>
 
@@ -49,9 +45,7 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
                     <h1 className={styles.loadingText}>{title}</h1>
                 </div>
 
-                <p className={styles.message}>
-                    {message}
-                </p>
+                <p className={styles.message}>{message}</p>
             </div>
         </div>
     );

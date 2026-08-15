@@ -109,8 +109,7 @@ export function countEmojis(text: string): number {
  * `.example` is included because all fixture companies use reserved
  * `.example` domains.
  */
-const BARE_DOMAIN_TLDS =
-    "com|org|net|io|co|dev|app|ai|me|us|uk|ca|au|de|fr|es|it|nl|se|example";
+const BARE_DOMAIN_TLDS = "com|org|net|io|co|dev|app|ai|me|us|uk|ca|au|de|fr|es|it|nl|se|example";
 
 const EXPLICIT_URL_RE = /https?:\/\/\S+/gi;
 const BARE_URL_WITH_PATH_RE = /(?<=^|\s)(?!https?:\/\/)[a-z0-9-]+(\.[a-z0-9-]+)+\/\S*/gi;

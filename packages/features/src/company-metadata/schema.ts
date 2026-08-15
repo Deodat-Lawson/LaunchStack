@@ -173,27 +173,19 @@ export const companyMetadata = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        schemaVersion: varchar("schema_version", { length: 20 })
-            .notNull()
-            .default("1.0.0"),
-        metadata: jsonb("metadata")
-            .notNull()
-            .$type<CompanyMetadataJSON>(),
+        schemaVersion: varchar("schema_version", { length: 20 }).notNull().default("1.0.0"),
+        metadata: jsonb("metadata").notNull().$type<CompanyMetadataJSON>(),
         lastExtractionDocumentId: bigint("last_extraction_document_id", {
             mode: "bigint",
         }).references(() => document.id, { onDelete: "set null" }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-            () => new Date(),
-        ),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
     },
-    (table) => ({
-        companyIdUnique: uniqueIndex("company_metadata_company_id_unique").on(
-            table.companyId,
-        ),
-    }),
+    table => ({
+        companyIdUnique: uniqueIndex("company_metadata_company_id_unique").on(table.companyId),
+    })
 );
 
 // ============================================================================
@@ -207,10 +199,9 @@ export const companyMetadataHistory = pgTable(
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),
-        documentId: bigint("document_id", { mode: "bigint" }).references(
-            () => document.id,
-            { onDelete: "set null" },
-        ),
+        documentId: bigint("document_id", { mode: "bigint" }).references(() => document.id, {
+            onDelete: "set null",
+        }),
         changeType: varchar("change_type", {
             length: 32,
             enum: CHANGE_TYPE_VALUES,
@@ -221,20 +212,12 @@ export const companyMetadataHistory = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    (table) => ({
-        companyIdIdx: index("company_metadata_history_company_id_idx").on(
-            table.companyId,
-        ),
-        documentIdIdx: index("company_metadata_history_document_id_idx").on(
-            table.documentId,
-        ),
-        createdAtIdx: index("company_metadata_history_created_at_idx").on(
-            table.createdAt,
-        ),
-        changeTypeIdx: index("company_metadata_history_change_type_idx").on(
-            table.changeType,
-        ),
-    }),
+    table => ({
+        companyIdIdx: index("company_metadata_history_company_id_idx").on(table.companyId),
+        documentIdIdx: index("company_metadata_history_document_id_idx").on(table.documentId),
+        createdAtIdx: index("company_metadata_history_created_at_idx").on(table.createdAt),
+        changeTypeIdx: index("company_metadata_history_change_type_idx").on(table.changeType),
+    })
 );
 
 // ============================================================================
@@ -252,19 +235,16 @@ export const companyMetadataRelations = relations(companyMetadata, ({ one }) => 
     }),
 }));
 
-export const companyMetadataHistoryRelations = relations(
-    companyMetadataHistory,
-    ({ one }) => ({
-        company: one(company, {
-            fields: [companyMetadataHistory.companyId],
-            references: [company.id],
-        }),
-        document: one(document, {
-            fields: [companyMetadataHistory.documentId],
-            references: [document.id],
-        }),
+export const companyMetadataHistoryRelations = relations(companyMetadataHistory, ({ one }) => ({
+    company: one(company, {
+        fields: [companyMetadataHistory.companyId],
+        references: [company.id],
     }),
-);
+    document: one(document, {
+        fields: [companyMetadataHistory.documentId],
+        references: [document.id],
+    }),
+}));
 
 // ============================================================================
 // Type Exports

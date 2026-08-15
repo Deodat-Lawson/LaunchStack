@@ -91,6 +91,27 @@ const eslintConfig = [
             }],
         },
     },
+    // `services/*` is deliberately outside the pnpm workspace (see
+    // pnpm-workspace.yaml), so its dependencies are never installed here and no
+    // tsconfig project covers it. Type-aware linting consequently resolves
+    // every import in the tree to `error` and buries it under ~440 phantom
+    // no-unsafe-* violations — the reason lint has been red on main.
+    //
+    // Drop the type information, not the files. Each service's own CI job runs
+    // `tsc --noEmit` and its test suite against its own lockfile, but none of
+    // them run ESLint, so ignoring `services/**` here would leave this code
+    // with no lint coverage anywhere. The syntactic rules need no type
+    // information and keep working.
+    {
+        files: ["services/**/*.{ts,tsx,js,mjs,cjs}"],
+        languageOptions: {
+            parserOptions: {
+                project: false,
+                projectService: false,
+            },
+        },
+        rules: typescriptEslint.configs["disable-type-checked"].rules,
+    },
     // @launchstack/core is the published compatibility facade (ADR-002):
     // every file under its src is a re-export stub over @launchstack/adapters
     // and friends (scripts/ci/check-core-facade.mjs enforces the stub shape).

@@ -86,6 +86,10 @@ async function resolveCaller(): Promise<CallerResult> {
         userInfo.companyId,
         userInfo.status,
     );
+    // Null means the user holds no membership in the resolved workspace. There
+    // is no tenant to import into, so this is a refusal rather than a fallback —
+    // importing into a company the caller has left would leak the contents of
+    // their local agent folders into someone else's knowledge base.
     if (companyId === null) {
         return { ok: false, response: createForbiddenError("No active workspace membership.") };
     }

@@ -95,9 +95,22 @@ const serverSchema = z.object({
   ),
   LANGCHAIN_API_KEY: optionalString(),
   LANGCHAIN_PROJECT: optionalString(), // Optional project name for LangSmith
-  // Job runner backend
-  JOB_RUNNER: z.enum(["inngest"]).default("inngest"),
-  // Inngest event key — required in production; optional in development
+  // Which kind of deployment this is. Unset means self-hosted: the hosted
+  // service opts IN to cloud behaviour rather than every self-hoster opting
+  // out of it.
+  //
+  // The asymmetry is deliberate. If the hosted deploy forgets this var, one
+  // operator who owns the environment loses usage metering and fixes it in
+  // seconds. If a self-hoster forgets it, their instance refuses uploads the
+  // moment a workspace exhausts its signup grant — and there is no way to add
+  // credits from anywhere in the product. The failure that lands on the party
+  // who cannot fix it must not be the default.
+  //
+  // Read via ~/server/deployment, never directly: a `.default()` here does NOT
+  // apply under SKIP_ENV_VALIDATION (see parseServerEnv), so the fallback has
+  // to exist in code as well.
+  DEPLOYMENT_MODE: z.enum(["self-hosted", "cloud"]).optional(),
+  // Inngest event key — required for cloud deploys; warned about otherwise
   INNGEST_EVENT_KEY: optionalString(),
   // Agent-knowledge connector. Reads Claude Code / Codex knowledge from the
   // filesystem of the machine running this server, so it stays off unless a
@@ -360,7 +373,10 @@ function parseServerEnv() {
     LANGCHAIN_TRACING_V2: process.env.LANGCHAIN_TRACING_V2,
     LANGCHAIN_API_KEY: process.env.LANGCHAIN_API_KEY,
     LANGCHAIN_PROJECT: process.env.LANGCHAIN_PROJECT,
-    JOB_RUNNER: process.env.JOB_RUNNER as "inngest" | undefined,
+    DEPLOYMENT_MODE: process.env.DEPLOYMENT_MODE as
+      | "self-hosted"
+      | "cloud"
+      | undefined,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     TRANSCRIPTION_SERVICE_URL: process.env.TRANSCRIPTION_SERVICE_URL,
     TRANSCRIPTION_SERVICE_API_KEY: process.env.TRANSCRIPTION_SERVICE_API_KEY,
@@ -428,11 +444,36 @@ function parseServerEnv() {
     server = serverSchemaRefined.parse(rawValues);
   }
 
-  if (
-    !skipValidation &&
-    (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0)
-  ) {
-    throw new Error("INNGEST_EVENT_KEY is required in production");
+  // Inngest backs the background verticals (trend search, prospector, founder
+  // review, …). Ingestion does NOT need it — that runs through the Postgres
+  // transactional outbox in apps/worker (ADR-003).
+  //
+  // So this is fatal only for a cloud deploy, where a missing key is a real
+  // misconfiguration. A self-hoster who does not want those verticals should
+  // get a warning and a working instance, not a crash-looping container. The
+  // old message claimed "required in production" while actually throwing
+  // whenever validation ran at all, regardless of NODE_ENV.
+  //
+  // INNGEST_DEV satisfies it too: the SDK ignores the event key in dev mode,
+  // which is exactly what docker-compose's bundled inngest-dev container runs.
+  const inngestKeyMissing =
+    (server.INNGEST_EVENT_KEY == null || server.INNGEST_EVENT_KEY.length === 0) &&
+    !process.env.INNGEST_DEV;
+
+  if (!skipValidation && inngestKeyMissing) {
+    if (server.DEPLOYMENT_MODE === "cloud") {
+      throw new Error(
+        "INNGEST_EVENT_KEY is required when DEPLOYMENT_MODE=cloud.",
+      );
+    }
+    console.warn(
+      "[env] INNGEST_EVENT_KEY is not set. Document ingestion is unaffected " +
+        "(it runs through the transactional outbox), but the background " +
+        "verticals — trend search, client prospector, founder weekly review, " +
+        "predictive analysis, website crawl, document modify, reindex — will " +
+        "not run. Set INNGEST_EVENT_KEY, or INNGEST_DEV=1 with the bundled " +
+        "dev server, to enable them.",
+    );
   }
   return server;
 }

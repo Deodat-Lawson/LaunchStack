@@ -58,6 +58,8 @@ packages/*/dist/
 /.localFiles
 .windsurf/rules/markdowncreation.md
 /public/vad
+# Copied from node_modules at build time by apps/web/scripts/copy-pdf-worker.mjs
+apps/web/public/pdf.worker.min.mjs
 *.pyc
 
 # kiro

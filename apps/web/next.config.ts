@@ -45,20 +45,48 @@ const config: NextConfig = {
   // config surface, so it stays off — `pnpm lint` is the authority.
   eslint: { ignoreDuringBuilds: true },
 
+  // Remote image hosts. This list used to name two specific *.ufs.sh
+  // subdomains — Launchstack's own UploadThing app IDs — which no other
+  // deployment can serve images from.
+  //
+  // Note this is intrinsically build-time: next/image validates against the
+  // compiled list, so a prebuilt GHCR image cannot pick up a new host without
+  // a rebuild. That is the argument for the wildcard below rather than an
+  // enumeration — a self-hoster's own UploadThing app gets a different
+  // subdomain, and it should just work.
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "iiazjw8b8a.ufs.sh",
-        port: "",
-        pathname: "/f/**",
-      },
-      {
-        protocol: "https",
-        hostname: "h0xotvuawi.ufs.sh",
-        port: "",
-        pathname: "/f/**",
-      },
+      // Any UploadThing app, not just ours. Only relevant when UploadThing is
+      // actually configured; harmless otherwise.
+      { protocol: "https", hostname: "**.ufs.sh", pathname: "/f/**" },
+      // The instance's own S3-compatible endpoint, when one is set.
+      ...(() => {
+        const raw =
+          process.env.S3_PUBLIC_ENDPOINT ?? process.env.NEXT_PUBLIC_S3_ENDPOINT;
+        if (!raw) return [];
+        try {
+          const { protocol, hostname, port } = new URL(raw);
+          return [
+            {
+              protocol: protocol.replace(":", "") as "http" | "https",
+              hostname,
+              port,
+              pathname: "/**",
+            },
+          ];
+        } catch {
+          return [];
+        }
+      })(),
+      // Escape hatch: comma-separated hostnames, e.g. "cdn.example.com,img.example.com".
+      ...(process.env.IMAGE_REMOTE_PATTERNS?.split(",") ?? [])
+        .map((h) => h.trim())
+        .filter(Boolean)
+        .map((hostname) => ({
+          protocol: "https" as const,
+          hostname,
+          pathname: "/**",
+        })),
     ],
   },
 

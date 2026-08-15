@@ -34,7 +34,6 @@ import {
     ocrTokens,
     ocrProviderToTokenKey,
 } from "../../credits";
-import { isCloudMode } from "../../providers/registry";
 
 import type {
     DocIngestionToolInput,
@@ -597,9 +596,10 @@ export async function runIndexingStage(
     }
 
     // -----------------------------------------------------------------------
-    // Credit debits (cloud mode only)
+    // Credit debits. No mode check needed: creditsDebitSafe already no-ops
+    // when metering is off or no port is registered, and never throws.
     // -----------------------------------------------------------------------
-    if (isCloudMode() && companyId) {
+    if (companyId) {
         const bigCompanyId = BigInt(companyId);
 
         if (totalStored > 0) {

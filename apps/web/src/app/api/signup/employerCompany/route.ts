@@ -4,6 +4,7 @@ import { users, userCompanyMemberships } from "~/server/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
 import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
+import { isMeteringEnforced } from "~/server/deployment";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
 import { generateUniqueSlug } from "~/lib/workspace-slug";
@@ -116,8 +117,14 @@ export async function POST(request: Request) {
             });
         }
 
-        // Initialize credit account with signup bonus
-        await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
+        // The account is always created so usage is recorded from the first
+        // document. The signup grant is cloud-only: on a self-hosted instance
+        // nothing enforces the balance and nothing can top it up, so seeding a
+        // notional 10M would just be a number nobody reads.
+        await initTokenAccount(
+            companyId,
+            isMeteringEnforced() ? TOKEN_SIGNUP_BONUS : 0,
+        );
 
         return createSuccessResponse(
             { userId, role: "owner" },

@@ -16,6 +16,23 @@ export interface CreditsPort {
   debit(input: DebitInput): Promise<void>;
 }
 
+/**
+ * How much authority the credit ledger has over a deployment.
+ *
+ * The distinction between `record` and `enforce` is the whole point: a
+ * self-hosted instance runs on its operator's own API keys, so gating uploads
+ * on a balance nobody can top up just bricks it. Recording still earns its
+ * keep — "which document burned 400k embedding tokens" is a question the
+ * operator genuinely has, and token_usage_daily already answers it.
+ *
+ * - `off`     — no ledger at all. The default for a library consumer that
+ *               never registered a port.
+ * - `record`  — debits are written; balances may go negative and nothing is
+ *               ever refused. The default for a self-hosted deployment.
+ * - `enforce` — debits are written and balance checks can refuse work.
+ */
+export type MeteringMode = "off" | "record" | "enforce";
+
 export interface DebitInput {
   companyId: bigint;
   service: TokenService;

@@ -12,6 +12,9 @@ import {
     tokenGrants,
 } from "~/server/db/schema";
 import type { TokenService } from "./costs";
+// The env-backed helper, not the engine-slot one in @launchstack/core/credits:
+// ensureTokenAccount can run before createEngine has populated that slot.
+import { isMeteringEnforced } from "~/server/deployment";
 
 // ── Balance ─────────────────────────────────────────────────────────
 
@@ -26,6 +29,11 @@ export async function getBalance(companyId: bigint): Promise<number> {
 /**
  * Ensure a company has a token account, auto-provisioning with the
  * signup bonus if one doesn't exist yet (handles pre-existing companies).
+ *
+ * The signup bonus is cloud-only policy. On a self-hosted deployment the
+ * account still gets created — usage is recorded — but seeding it with a
+ * notional grant would be theatre: nothing enforces the balance and nothing
+ * can top it up.
  */
 export async function ensureTokenAccount(companyId: bigint): Promise<number> {
     const balance = await getBalance(companyId);
@@ -39,10 +47,13 @@ export async function ensureTokenAccount(companyId: bigint): Promise<number> {
 
     if (account) return 0; // Account exists, genuinely zero balance
 
-    // Auto-provision for pre-existing companies
-    const { TOKEN_SIGNUP_BONUS } = await import("./costs");
-    const { balance: newBalance } = await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
-    console.log(`[Tokens] Auto-provisioned ${TOKEN_SIGNUP_BONUS.toLocaleString()} tokens for company ${companyId}`);
+    const grant = isMeteringEnforced()
+        ? (await import("./costs")).TOKEN_SIGNUP_BONUS
+        : 0;
+    const { balance: newBalance } = await initTokenAccount(companyId, grant);
+    if (grant > 0) {
+        console.log(`[Tokens] Auto-provisioned ${grant.toLocaleString()} tokens for company ${companyId}`);
+    }
     return newBalance;
 }
 
@@ -63,6 +74,17 @@ export interface DebitOptions {
     description: string;
     referenceId?: string;
     metadata?: Record<string, unknown>;
+    /**
+     * Let the balance go negative instead of refusing the debit.
+     *
+     * Set by the credits port for self-hosted deployments, where the ledger
+     * records usage but has no authority to refuse anything. Without this the
+     * guarded UPDATE below stops matching the moment the notional balance runs
+     * out, and the instance silently stops recording — which is the opposite of
+     * what "record" mode is for. With it, balanceTokens simply reads as net
+     * usage and lifetimeTokensUsed keeps climbing.
+     */
+    allowNegative?: boolean;
 }
 
 /**
@@ -74,23 +96,34 @@ export async function debitTokens(
 ): Promise<{ newBalance: number } | null> {
     if (opts.amount <= 0) return { newBalance: await getBalance(opts.companyId) };
 
-    // Atomic: only succeeds if balance >= amount
-    const result = await db
-        .update(tokenAccounts)
-        .set({
-            balanceTokens: sql`${tokenAccounts.balanceTokens} - ${opts.amount}`,
-            lifetimeTokensUsed: sql`${tokenAccounts.lifetimeTokensUsed} + ${opts.amount}`,
-        })
-        .where(
-            and(
-                eq(tokenAccounts.companyId, opts.companyId),
-                gte(tokenAccounts.balanceTokens, opts.amount)
+    const set = {
+        balanceTokens: sql`${tokenAccounts.balanceTokens} - ${opts.amount}`,
+        lifetimeTokensUsed: sql`${tokenAccounts.lifetimeTokensUsed} + ${opts.amount}`,
+    };
+
+    // The enforcing branch is kept byte-for-byte as it was: the `gte` conjunct
+    // is what makes the debit atomic against a concurrent one, and it is the
+    // only thing protecting a billed balance from being overdrawn. The two
+    // modes deliberately do not share a code path through `.where()`.
+    const result = opts.allowNegative
+        ? await db
+            .update(tokenAccounts)
+            .set(set)
+            .where(eq(tokenAccounts.companyId, opts.companyId))
+            .returning({ newBalance: tokenAccounts.balanceTokens })
+        : await db
+            .update(tokenAccounts)
+            .set(set)
+            .where(
+                and(
+                    eq(tokenAccounts.companyId, opts.companyId),
+                    gte(tokenAccounts.balanceTokens, opts.amount)
+                )
             )
-        )
-        .returning({ newBalance: tokenAccounts.balanceTokens });
+            .returning({ newBalance: tokenAccounts.balanceTokens });
 
     if (result.length === 0) {
-        return null; // Insufficient tokens
+        return null; // Insufficient tokens, or no account row at all
     }
 
     const newBalance = result[0]!.newBalance;

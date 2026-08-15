@@ -11,6 +11,7 @@
 
 import type { CreditsPort, DebitInput } from "@launchstack/core/credits";
 import { debitTokens } from "~/lib/credits";
+import { getMeteringMode } from "~/server/deployment";
 
 export function createAppCreditsPort(): CreditsPort {
   return {
@@ -23,6 +24,9 @@ export function createAppCreditsPort(): CreditsPort {
           description: input.description ?? `${input.service} usage`,
           referenceId: input.referenceId,
           metadata: input.metadata,
+          // In "record" mode the ledger observes rather than governs, so a
+          // debit must never be dropped for want of balance.
+          allowNegative: getMeteringMode() !== "enforce",
         });
       } catch (err) {
         console.warn("[CreditsPort] debitTokens failed (non-blocking):", err);

@@ -31,6 +31,11 @@ const eslintConfig = [
             "**/jest.config.mjs",
             "**/jest.config.js",
             "apps/web/public/vad/**",
+            // Minified pdf.js worker, copied from node_modules at build time
+            // by apps/web/scripts/copy-pdf-worker.mjs. Vendored output, not
+            // source — and it is outside every tsconfig, so typed linting
+            // cannot parse it anyway.
+            "apps/web/public/pdf.worker.min.mjs",
             // Untyped operational scripts (repo-root scripts/, package .mjs
             // scripts): plain files run directly by node, outside every
             // tsconfig project — the type-aware parser cannot load them.

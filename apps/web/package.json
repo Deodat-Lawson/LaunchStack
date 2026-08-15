@@ -6,6 +6,7 @@
   "description": "Launchstack Next.js application \u2014 hosts the engine (via @launchstack/core) and all vertical features behind Clerk auth.",
   "license": "Apache-2.0",
   "scripts": {
+    "prebuild": "node ./scripts/copy-pdf-worker.mjs",
     "build": "next build",
     "check": "eslint . && tsc --noEmit",
     "db:migrate": "pnpm --filter @launchstack/core db:migrate && node ../../packages/core/scripts/migrate.mjs --set=product",

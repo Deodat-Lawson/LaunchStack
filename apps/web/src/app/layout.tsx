@@ -1,7 +1,7 @@
 import "~/styles/globals.css";
 import "@uploadthing/react/styles.css";
-import { Analytics } from '@vercel/analytics/next';
 import { ThemeProvider } from "next-themes";
+import { CloudAnalytics } from "./_components/CloudAnalytics";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
@@ -50,7 +50,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
       <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="dark" enableSystem>
         {children}
-        <Analytics />
+        <CloudAnalytics />
       </ThemeProvider>
       </body>
       </html>

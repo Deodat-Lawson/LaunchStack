@@ -1,0 +1,192 @@
+{
+  "id": "tilde-labs",
+  "name": "Tilde Labs",
+  "archetype": "Deliberately sparse company. Positioning is unresolved, the audience is ambiguous and documentation is a single unfinished note. Tests whether the generator degrades honestly instead of inventing specifics to fill the gap.",
+  "knowledgeDepth": "sparse",
+  "summary": null,
+  "industry": null,
+  "foundedYear": null,
+  "headquarters": null,
+  "size": null,
+  "website": null,
+
+  "products": [
+    {
+      "name": "Tilde CLI",
+      "description": "A command-line tool that synchronises something. The notes do not say what.",
+      "capabilities": [],
+      "limitations": ["No stated differentiator", "Unclear whether it is a product or a feature"],
+      "integrations": []
+    }
+  ],
+
+  "audiences": [],
+  "differentiators": [],
+  "proofPoints": [],
+
+  "markets": { "primary": [], "verticals": [], "geographies": [] },
+  "people": [],
+  "certifications": [],
+  "brandVoice": null,
+
+  "prohibitedCompetitors": [],
+  "allowedProductNames": ["Tilde CLI"],
+
+  "documents": [
+    {
+      "path": "docs/notes.md",
+      "title": "Tilde Labs — internal notes",
+      "kind": "notes",
+      "summary": "Unfinished positioning-session notes. Records open questions rather than answers."
+    }
+  ],
+
+  "sourceFacts": [
+    {
+      "id": "tld-f-001",
+      "kind": "supported",
+      "category": "capability",
+      "statement": "Tilde Labs builds developer tooling, described in the notes as a CLI that synchronises something.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Rough notes",
+          "quote": "We build developer tooling. Some kind of CLI. It syncs things."
+        }
+      ],
+      "relevantTo": ["tilde-bluesky-sparse-degradation"],
+      "contradicts": null,
+      "notes": "The single substantive supported fact available. Deliberately vague."
+    },
+    {
+      "id": "tld-f-002",
+      "kind": "supported",
+      "category": "audience",
+      "statement": "The target audience is unresolved; the notes record an unsettled argument between platform teams and individual developers.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Rough notes",
+          "quote": "Someone said \"both\" and we moved on."
+        }
+      ],
+      "relevantTo": ["tilde-bluesky-sparse-degradation"],
+      "contradicts": null,
+      "notes": "Absence of an audience is itself the fact under test."
+    },
+    {
+      "id": "tld-f-003",
+      "kind": "supported",
+      "category": "positioning",
+      "statement": "No differentiator has been articulated; nobody could state one in a sentence.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Rough notes",
+          "quote": "Nobody could state the differentiator in one sentence."
+        }
+      ],
+      "relevantTo": ["tilde-bluesky-sparse-degradation"],
+      "contradicts": null,
+      "notes": null
+    },
+    {
+      "id": "tld-f-004",
+      "kind": "supported",
+      "category": "pricing",
+      "statement": "Pricing is undecided, possibly free for now.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Rough notes",
+          "quote": "Pricing: undecided. Possibly free for now."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": null
+    },
+    {
+      "id": "tld-f-005",
+      "kind": "supported",
+      "category": "audience",
+      "statement": "Tilde Labs has two customers, neither of whom has agreed to be named.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Rough notes",
+          "quote": "We have two customers. Neither has agreed to be named."
+        }
+      ],
+      "relevantTo": ["tilde-bluesky-sparse-degradation"],
+      "contradicts": null,
+      "notes": "Naming a customer is therefore a consent violation as well as a fabrication."
+    },
+
+    {
+      "id": "tld-f-101",
+      "kind": "contradictory",
+      "category": "numeric",
+      "statement": "Tilde CLI is used by over 4,000 engineering teams.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Rough notes",
+          "quote": "We have two customers. Neither has agreed to be named."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "tld-f-005",
+      "notes": "The characteristic sparse-context failure: inventing scale where none exists."
+    },
+    {
+      "id": "tld-f-102",
+      "kind": "contradictory",
+      "category": "pricing",
+      "statement": "Tilde CLI starts at $29 per seat per month.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Rough notes",
+          "quote": "Pricing: undecided. Possibly free for now."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "tld-f-004",
+      "notes": null
+    },
+    {
+      "id": "tld-f-103",
+      "kind": "contradictory",
+      "category": "comparative",
+      "statement": "Tilde CLI is the fastest sync tool available for platform teams.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Open questions",
+          "quote": "What does the product actually do that alternatives do not?"
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "tld-f-003",
+      "notes": "Unsupported comparative superlative on a company with no articulated differentiator."
+    },
+
+    {
+      "id": "tld-f-201",
+      "kind": "distractor",
+      "category": "positioning",
+      "statement": "A follow-up positioning session was listed as a TODO and never scheduled.",
+      "provenance": [
+        {
+          "document": "docs/notes.md",
+          "section": "Open questions",
+          "quote": "TODO: schedule follow-up. (Never scheduled.)"
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True within the fixture universe and entirely irrelevant to any external campaign."
+    }
+  ]
+}

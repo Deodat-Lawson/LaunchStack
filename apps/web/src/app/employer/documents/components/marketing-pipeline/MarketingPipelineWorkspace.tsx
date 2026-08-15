@@ -10,14 +10,18 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  AlertCircle,
   Copy,
+  ExternalLink,
   FileText,
+  Gauge,
   Hash,
   Loader2,
   Megaphone,
   MessageSquareText,
   Pencil,
   Plus,
+  Send,
   SkipForward,
   Sparkles,
   Target,
@@ -27,7 +31,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/app/employer/doc
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 import {
-  PIPELINE_STEP_ORDER,
   PLATFORM_OPTIONS,
   REDDIT_SNOO_URL,
   type ClaimSourceUI,
@@ -585,7 +588,6 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
   if (claims.length === 0) return null;
 
   const verified = claims.filter((c) => c.confidence > 0.5);
-  const unverified = claims.filter((c) => c.confidence <= 0.5);
 
   return (
     <div className={styles.strategyCard}>
@@ -1054,6 +1056,13 @@ export function MarketingPipelineWorkspace({
     handleCopy,
     runPipeline,
     cancelPipeline,
+    publishing,
+    publishResult,
+    publishPost,
+    evaluating,
+    evalResult,
+    evalError,
+    evaluatePost,
     pipelineSteps,
     thinkingLog,
     generationStartTime,
@@ -1427,7 +1436,7 @@ export function MarketingPipelineWorkspace({
                           </button>
                           <button
                             type="button"
-                            className={styles.actionPrimary}
+                            className={styles.actionSecondary}
                             onClick={handleCopy}
                             disabled={!editableMessage.trim()}
                           >
@@ -1436,7 +1445,214 @@ export function MarketingPipelineWorkspace({
                               ? "Copied!"
                               : `Copy to ${PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? "platform"}`}
                           </button>
+                          <button
+                            type="button"
+                            className={styles.actionSecondary}
+                            onClick={() => void evaluatePost()}
+                            disabled={!editableMessage.trim() || evaluating}
+                            title="Score this post's quality with the evaluation pipeline"
+                          >
+                            {evaluating ? (
+                              <Loader2 size={14} className={styles.spinIcon} />
+                            ) : (
+                              <Gauge size={14} />
+                            )}
+                            {evaluating ? "Scoring…" : "Evaluate quality"}
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.actionPrimary}
+                            onClick={() => void publishPost()}
+                            disabled={!editableMessage.trim() || publishing}
+                            title={`Publish this post directly to ${PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? "the platform"}`}
+                          >
+                            {publishing ? (
+                              <Loader2 size={14} className={styles.spinIcon} />
+                            ) : (
+                              <Send size={14} />
+                            )}
+                            {publishing
+                              ? "Publishing…"
+                              : `Publish to ${PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ?? "platform"}`}
+                          </button>
                         </div>
+
+                        {evalError && (
+                          <div
+                            role="status"
+                            style={{
+                              marginTop: 10,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              fontSize: 13,
+                              color: "var(--text-error, #b91c1c)",
+                            }}
+                          >
+                            <AlertCircle size={15} />
+                            <span>{evalError}</span>
+                          </div>
+                        )}
+
+                        {evalResult && (
+                          <div
+                            style={{
+                              marginTop: 12,
+                              padding: 14,
+                              borderRadius: 10,
+                              border: "1px solid var(--border-color, #e5e7eb)",
+                              background: "var(--bg-secondary, #f9fafb)",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "baseline",
+                                justifyContent: "space-between",
+                                marginBottom: 10,
+                              }}
+                            >
+                              <span
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 8,
+                                  fontSize: 14,
+                                  fontWeight: 700,
+                                }}
+                              >
+                                <Gauge size={16} />
+                                Quality score
+                              </span>
+                              <span style={{ fontSize: 22, fontWeight: 800, color: "var(--text-primary, #111)" }}>
+                                {Math.round(evalResult.overall)}
+                                <span
+                                  style={{
+                                    fontSize: 13,
+                                    fontWeight: 600,
+                                    color: "var(--text-muted, #6b7280)",
+                                  }}
+                                >
+                                  /100
+                                </span>
+                              </span>
+                            </div>
+                            <div style={{ display: "grid", gap: 6, marginBottom: 10 }}>
+                              {evalResult.scores.map((s) => (
+                                <div
+                                  key={s.criterion}
+                                  title={s.rationale}
+                                  style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "150px 1fr 34px",
+                                    alignItems: "center",
+                                    gap: 8,
+                                    fontSize: 12,
+                                  }}
+                                >
+                                  <span style={{ color: "var(--text-muted, #6b7280)" }}>
+                                    {s.criterion.replace(/_/g, " ")}
+                                  </span>
+                                  <span
+                                    style={{
+                                      height: 6,
+                                      borderRadius: 3,
+                                      background: "var(--border-color, #e5e7eb)",
+                                      position: "relative",
+                                      overflow: "hidden",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        position: "absolute",
+                                        inset: 0,
+                                        width: `${Math.max(0, Math.min(100, s.score))}%`,
+                                        background: "var(--accent-color, #6366f1)",
+                                        borderRadius: 3,
+                                      }}
+                                    />
+                                  </span>
+                                  <span
+                                    className="mono"
+                                    style={{ textAlign: "right", fontSize: 11, color: "var(--text-primary, #111)" }}
+                                  >
+                                    {Math.round(s.score)}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                            {evalResult.summary && (
+                              <div
+                                style={{
+                                  fontSize: 12.5,
+                                  color: "var(--text-muted, #6b7280)",
+                                  lineHeight: 1.5,
+                                  marginBottom: 6,
+                                }}
+                              >
+                                {evalResult.summary}
+                              </div>
+                            )}
+                            <div
+                              style={{
+                                fontSize: 11,
+                                color: "var(--text-muted, #6b7280)",
+                              }}
+                            >
+                              judge {evalResult.judgeModel} · rubric{" "}
+                              {evalResult.rubricVersion}
+                            </div>
+                          </div>
+                        )}
+
+                        {publishResult && (
+                          <div
+                            role="status"
+                            style={{
+                              marginTop: 10,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              fontSize: 13,
+                              color: publishResult.success
+                                ? "var(--text-success, #15803d)"
+                                : "var(--text-error, #b91c1c)",
+                            }}
+                          >
+                            {publishResult.success ? (
+                              <>
+                                <Check size={15} />
+                                <span>
+                                  Published to{" "}
+                                  {PLATFORM_OPTIONS.find((p) => p.id === result.platform)?.label ??
+                                    "the platform"}
+                                  .
+                                </span>
+                                {publishResult.postUrl && (
+                                  <a
+                                    href={publishResult.postUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                      gap: 4,
+                                      color: "inherit",
+                                      textDecoration: "underline",
+                                    }}
+                                  >
+                                    View post <ExternalLink size={12} />
+                                  </a>
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                <AlertCircle size={15} />
+                                <span>{publishResult.error}</span>
+                              </>
+                            )}
+                          </div>
+                        )}
 
                         <Sheet open={showRewriteSheet} onOpenChange={setShowRewriteSheet}>
                           <SheetContent

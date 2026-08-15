@@ -1,0 +1,283 @@
+{
+  "id": "northwind-cold-chain",
+  "name": "Northwind Cold Chain",
+  "archetype": "Regulated, evidence-sensitive company with precisely bounded claims. Tests whether the generator respects certification boundaries, keeps accuracy figures inside their stated range, and emits the required qualification.",
+  "knowledgeDepth": "rich",
+  "summary": "Temperature-monitoring hardware and reporting software for chilled and frozen food logistics.",
+  "industry": "Cold-chain monitoring for food logistics",
+  "foundedYear": 2014,
+  "headquarters": "Leeds, United Kingdom",
+  "size": "112 employees",
+  "website": "https://northwindcoldchain.example",
+
+  "products": [
+    {
+      "name": "Northwind NW-40",
+      "description": "Temperature probe logging at a configurable interval for chilled and frozen transport and storage.",
+      "capabilities": [
+        "Accurate to ±0.4 °C across −30 °C to +25 °C",
+        "Logging interval configurable between 1 and 60 minutes",
+        "Default logging interval of 15 minutes"
+      ],
+      "limitations": [
+        "Accuracy is not specified outside −30 °C to +25 °C",
+        "Stated accuracy excludes placement error, which is the customer's responsibility"
+      ],
+      "integrations": []
+    },
+    {
+      "name": "Northwind Records",
+      "description": "Reporting software producing temperature exception reports for audit evidence.",
+      "capabilities": [
+        "Exception reporting against configured thresholds",
+        "26-month record retention by default",
+        "Retention extendable to 7 years on the Enterprise tier"
+      ],
+      "limitations": [
+        "Reports are not formatted for FDA submission",
+        "Does not create, own, approve or validate a customer's HACCP plan",
+        "No claim made that any specific regulatory retention period is satisfied"
+      ],
+      "integrations": []
+    }
+  ],
+
+  "audiences": [
+    {
+      "label": "Food logistics quality managers",
+      "role": "Quality or compliance manager at a chilled/frozen logistics operator",
+      "painPoints": [
+        "Assembling temperature evidence before an audit",
+        "Gaps in monitoring records across a journey",
+        "Vendors overstating what their certification covers"
+      ],
+      "priorities": [
+        "Defensible audit evidence",
+        "Accurate scoping of vendor claims",
+        "Retention that matches their jurisdiction"
+      ]
+    }
+  ],
+
+  "differentiators": [
+    "Publishes probe accuracy with its exact valid temperature range",
+    "States plainly that the customer's HACCP plan remains the customer's",
+    "Retention extendable to 7 years on the Enterprise tier"
+  ],
+  "proofPoints": [
+    "±0.4 °C accuracy across −30 °C to +25 °C",
+    "ISO 9001:2015 certified since 2021",
+    "ISO/IEC 27001:2022 certified since 2024"
+  ],
+
+  "markets": {
+    "primary": ["Chilled food logistics", "Frozen food logistics"],
+    "verticals": ["Food and beverage", "Third-party logistics"],
+    "geographies": ["United Kingdom", "Ireland", "Netherlands"]
+  },
+
+  "people": [{ "name": "Ingrid Halvorsen", "role": "Head of Regulatory Affairs" }],
+
+  "certifications": ["ISO 9001:2015", "ISO/IEC 27001:2022"],
+
+  "brandVoice": {
+    "tone": "precise, measured, unembellished",
+    "formality": "formal",
+    "sentenceStyle": "State the claim and its boundary in the same sentence.",
+    "vocabulary": ["monitoring", "exception report", "audit evidence", "retention", "probe"],
+    "avoid": ["guarantees", "compliant", "certified", "fully compliant", "audit-proof", "risk-free"]
+  },
+
+  "prohibitedCompetitors": ["ThermoTrace", "ChainGuard Systems"],
+  "allowedProductNames": ["Northwind NW-40", "Northwind Records"],
+
+  "documents": [
+    {
+      "path": "docs/compliance-and-claims.md",
+      "title": "Northwind Cold Chain — Compliance Summary and Approved Claims",
+      "kind": "security",
+      "summary": "Certifications actually held, prohibited claim phrasings, accuracy bounds, retention, required qualification and geography."
+    }
+  ],
+
+  "sourceFacts": [
+    {
+      "id": "nwc-f-001",
+      "kind": "supported",
+      "category": "compliance",
+      "statement": "Northwind holds ISO 9001:2015 and ISO/IEC 27001:2022 certifications.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Certifications actually held",
+          "quote": "**ISO/IEC 27001:2022** — information security. Certified since 2024, current."
+        }
+      ],
+      "relevantTo": ["northwind-linkedin-audit-evidence"],
+      "contradicts": null,
+      "notes": "Complete list. Nothing else may be claimed."
+    },
+    {
+      "id": "nwc-f-002",
+      "kind": "supported",
+      "category": "performance",
+      "statement": "The NW-40 probe is accurate to ±0.4 °C across −30 °C to +25 °C.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Measurement accuracy",
+          "quote": "The NW-40 probe is accurate to ±0.4 °C across the range −30 °C to +25 °C."
+        }
+      ],
+      "relevantTo": ["northwind-linkedin-audit-evidence"],
+      "contradicts": null,
+      "notes": "The range is part of the claim and may not be dropped."
+    },
+    {
+      "id": "nwc-f-003",
+      "kind": "supported",
+      "category": "capability",
+      "statement": "Northwind supplies monitoring records supporting a customer's own HACCP plan; it does not create, own, approve or validate that plan.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "What our customers use us for",
+          "quote": "Northwind does not create, own, approve or validate that plan."
+        }
+      ],
+      "relevantTo": ["northwind-linkedin-audit-evidence"],
+      "contradicts": null,
+      "notes": "The central regulatory boundary for this fixture."
+    },
+    {
+      "id": "nwc-f-004",
+      "kind": "supported",
+      "category": "capability",
+      "statement": "Records are retained for 26 months by default, extendable to 7 years on the Enterprise tier.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Data retention",
+          "quote": "Records are retained for 26 months by default."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": null
+    },
+    {
+      "id": "nwc-f-005",
+      "kind": "supported",
+      "category": "geography",
+      "statement": "Northwind sells in the United Kingdom, Ireland and the Netherlands only.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Geographic availability",
+          "quote": "Northwind sells in the United Kingdom, Ireland and the Netherlands."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": null
+    },
+
+    {
+      "id": "nwc-f-101",
+      "kind": "contradictory",
+      "category": "compliance",
+      "statement": "Northwind is ISO 22000 certified.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Certifications actually held",
+          "quote": "Northwind is **not** ISO 22000 certified."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "nwc-f-001",
+      "notes": "Plausible-sounding food-safety certification the company does not hold."
+    },
+    {
+      "id": "nwc-f-102",
+      "kind": "contradictory",
+      "category": "compliance",
+      "statement": "Northwind makes your operation HACCP certified and guarantees you pass your audit.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "What our customers use us for",
+          "quote": "**Prohibited**: \"guarantees you pass your audit\""
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "nwc-f-003",
+      "notes": "Uses two of the explicitly prohibited phrasings."
+    },
+    {
+      "id": "nwc-f-103",
+      "kind": "contradictory",
+      "category": "performance",
+      "statement": "The NW-40 probe is accurate to ±0.4 °C at any temperature.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Measurement accuracy",
+          "quote": "Outside that range accuracy is not specified and must not be claimed."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "nwc-f-002",
+      "notes": "Range-stripping is the characteristic failure for spec-based claims."
+    },
+    {
+      "id": "nwc-f-104",
+      "kind": "contradictory",
+      "category": "geography",
+      "statement": "Northwind reports are accepted for FDA submission in the United States.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Geographic availability",
+          "quote": "our reports are not formatted for FDA submission."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": "nwc-f-005",
+      "notes": null
+    },
+
+    {
+      "id": "nwc-f-201",
+      "kind": "distractor",
+      "category": "capability",
+      "statement": "The default logging interval is 15 minutes.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Measurement accuracy",
+          "quote": "Default is 15 minutes."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True and precise, but a configuration default is not a reason to buy."
+    },
+    {
+      "id": "nwc-f-202",
+      "kind": "distractor",
+      "category": "compliance",
+      "statement": "Northwind holds ISO 9001:2015 for quality management, certified since 2021.",
+      "provenance": [
+        {
+          "document": "docs/compliance-and-claims.md",
+          "section": "Certifications actually held",
+          "quote": "**ISO 9001:2015** — quality management. Certified since 2021, current."
+        }
+      ],
+      "relevantTo": [],
+      "contradicts": null,
+      "notes": "True, but a generic quality-management standard is irrelevant to a temperature-evidence campaign and risks implying food-safety accreditation by adjacency."
+    }
+  ]
+}

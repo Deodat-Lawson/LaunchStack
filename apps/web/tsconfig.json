@@ -8,7 +8,8 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@schema": ["./src/lib/agents/evals/campaign/contract.ts"]
     }
   },
   "include": [

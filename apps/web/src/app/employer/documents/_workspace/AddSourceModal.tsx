@@ -2,7 +2,6 @@
 
 import React, {
   type ComponentType,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -12,7 +11,6 @@ import {
   IconBolt,
   IconCheck,
   IconChevronDown,
-  IconFile,
   IconFolder,
   IconPlus,
   IconX,
@@ -56,37 +54,44 @@ export interface AddSourceModalProps {
 }
 
 interface UploadResult {
-  objectKey: string;
-  bucket: string;
   url: string;
+  provider: "s3" | "database";
 }
 
+// Uses the provider-agnostic /api/upload-local route so uploads work whether the
+// app is configured for S3 or database storage (NEXT_PUBLIC_STORAGE_PROVIDER).
+// The old /api/storage/upload path 400s whenever storage isn't S3.
 async function uploadFileToStorage(file: File): Promise<UploadResult> {
   const form = new FormData();
   form.append("file", file);
-  const res = await fetch("/api/storage/upload", { method: "POST", body: form });
+  const res = await fetch("/api/upload-local", { method: "POST", body: form });
   if (!res.ok) {
     const body = (await res.json().catch(() => ({}))) as { error?: string };
     throw new Error(body.error ?? `Upload failed (HTTP ${res.status})`);
   }
-  return (await res.json()) as UploadResult;
+  const data = (await res.json()) as {
+    url: string;
+    provider?: "s3" | "database";
+  };
+  return {
+    url: data.url,
+    provider: data.provider === "s3" ? "s3" : "database",
+  };
 }
 
 async function registerDocument(params: {
   file: File;
   url: string;
-  objectKey: string;
+  provider: "s3" | "database";
   category: string;
 }): Promise<void> {
-  const body = {
+  const body: Record<string, unknown> = {
     documentName: params.file.name,
     category: params.category,
     documentUrl: params.url,
-    storageType: "s3" as const,
+    storageType: params.provider,
     mimeType: params.file.type || "application/octet-stream",
     originalFilename: params.file.name,
-    storageProvider: "s3",
-    storagePathname: params.objectKey,
   };
   const res = await fetch("/api/uploadDocument", {
     method: "POST",
@@ -113,7 +118,7 @@ async function uploadAndRegisterAll(params: {
       await registerDocument({
         file,
         url: up.url,
-        objectKey: up.objectKey,
+        provider: up.provider,
         category: params.category,
       });
       successes++;
@@ -569,7 +574,8 @@ interface FilesPanelProps {
 const FILE_ACCEPT: Record<FilesPanelProps["kind"], string> = {
   files: "",
   audio: "audio/*",
-  video: "video/*",
+  // Ingestion only accepts MP4 — don't let the picker offer formats that fail.
+  video: "video/mp4,.mp4",
 };
 
 const KIND_COPY: Record<
@@ -590,7 +596,7 @@ const KIND_COPY: Record<
   },
   video: {
     title: "Drop video files",
-    hint: "MP4, MOV, WEBM — transcribed automatically",
+    hint: "MP4 only — transcribed automatically",
     browse: "Browse video",
     IconEl: SOURCE_META.video.Icon,
   },
@@ -627,18 +633,21 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
         category,
         onProgress: (done, total) => setProgress({ done, total }),
       });
-      if (result.successes > 0) {
-        toast.success(
-          `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${category}"`,
-        );
-      }
       if (result.errors.length > 0) {
         toast.error(`${result.errors.length} file${result.errors.length !== 1 ? "s" : ""} failed`, {
           description: result.errors.slice(0, 2).join(" · "),
         });
       }
-      setStaged([]);
-      onUploaded();
+      // Only clear the staged list (and close via onUploaded) when something
+      // actually made it up — if every file failed, keep the list so the user
+      // can retry without re-picking.
+      if (result.successes > 0) {
+        toast.success(
+          `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${category}"`,
+        );
+        setStaged([]);
+        onUploaded();
+      }
     } finally {
       setProgress(null);
     }
@@ -917,19 +926,21 @@ function FolderPanel({ userId, category, onFolderRename, onUploaded }: FolderPan
         category: destName.trim(),
         onProgress: (done, total) => setProgress({ done, total }),
       });
-      if (result.successes > 0) {
-        toast.success(
-          `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${destName.trim()}"`,
-        );
-      }
       if (result.errors.length > 0) {
         toast.error(
           `${result.errors.length} file${result.errors.length !== 1 ? "s" : ""} failed`,
           { description: result.errors.slice(0, 2).join(" · ") },
         );
       }
-      setPicked(null);
-      onUploaded();
+      // Same retry affordance as FilesPanel: keep the picked folder staged
+      // when nothing uploaded so the user can retry.
+      if (result.successes > 0) {
+        toast.success(
+          `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""} to "${destName.trim()}"`,
+        );
+        setPicked(null);
+        onUploaded();
+      }
     } finally {
       setBusy(false);
       setProgress(null);
@@ -1219,7 +1230,7 @@ function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
       await registerDocument({
         file,
         url: up.url,
-        objectKey: up.objectKey,
+        provider: up.provider,
         category,
       });
       toast.success(`"${safeTitle}" added to "${category}"`);

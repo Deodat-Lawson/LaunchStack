@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack Next.js application — hosts the engine (via @launchstack/core) and all vertical features behind Clerk auth.",
+  "description": "Launchstack Next.js application \u2014 hosts the engine (via @launchstack/core) and all vertical features behind Clerk auth.",
   "license": "Apache-2.0",
   "scripts": {
     "build": "next build",
@@ -24,6 +24,7 @@
     "preview": "next build && next start",
     "start": "next start",
     "test": "jest --passWithNoTests",
+    "test:evals": "jest __tests__/lib/evals",
     "typecheck": "tsc --noEmit",
     "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest"
   },

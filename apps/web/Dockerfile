@@ -31,7 +31,11 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 FROM deps AS builder
 COPY tsconfig.base.json ./
 COPY packages ./packages
-COPY apps ./apps
+# apps/web only — apps/worker has its own image and apps/landing is not
+# containerized at all. `.dockerignore` already excludes landing; naming the
+# directory explicitly makes it structural rather than a matter of ignore-file
+# hygiene. Matches apps/worker/Dockerfile, which copies its two apps by name.
+COPY apps/web ./apps/web
 
 ENV SKIP_ENV_VALIDATION=1
 ENV NEXT_TELEMETRY_DISABLED=1

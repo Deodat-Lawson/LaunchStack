@@ -2,9 +2,10 @@
 
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { useAuth, SignIn } from "@clerk/nextjs";
+import { useAuth, SignIn, SignOutButton } from "@clerk/nextjs";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
+import { LANDING_URL } from "~/config/landing";
 
 /**
  * Sign-in page.
@@ -15,7 +16,7 @@ import { AuthChrome } from "~/app/_components/AuthChrome";
  * signing into. No enterprise "50+ companies" pitch.
  */
 const SigninPage: React.FC = () => {
-    const { isLoaded: isAuthLoaded } = useAuth();
+    const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
 
     return (
         <div
@@ -86,6 +87,8 @@ const SigninPage: React.FC = () => {
 
                         {!isAuthLoaded ? (
                             <LoadingState />
+                        ) : isSignedIn ? (
+                            <AlreadySignedIn />
                         ) : (
                             <SignIn
                                 routing="hash"
@@ -132,6 +135,79 @@ const SigninPage: React.FC = () => {
         </div>
     );
 };
+
+/**
+ * Rendered when Clerk reports an active session on the sign-in page.
+ *
+ * This is the cycle breaker, not a cosmetic nicety. `/` redirects here for
+ * anonymous visitors, and <SignIn> honours forceRedirectUrl="/" when a session
+ * already exists — so handing an already-signed-in user back to <SignIn> closes
+ * a loop that the browser will spin on forever. It fires in two real cases:
+ *
+ *   1. The middleware's role lookup threw (database down) and it failed open,
+ *      so it never fanned the user out to their dashboard.
+ *   2. Server and client disagree about the session — a Clerk key mismatch
+ *      between deployments, a handshake in flight, or clock skew.
+ *
+ * Both are degraded states, so this offers manual versions of the two things
+ * the app would otherwise have done automatically.
+ */
+function AlreadySignedIn() {
+    return (
+        <div
+            style={{
+                padding: "28px 24px",
+                border: "1px solid var(--line)",
+                borderRadius: 12,
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+                alignItems: "flex-start",
+            }}
+        >
+            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
+                You&rsquo;re already signed in.
+            </div>
+            <p style={{ fontSize: 13, color: "var(--ink-3)", lineHeight: 1.55, margin: 0 }}>
+                We couldn&rsquo;t work out which workspace to open for you. Continue
+                to pick one, or sign out and start again.
+            </p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <Link
+                    href="/workspaces"
+                    style={{
+                        background: "var(--accent)",
+                        color: "#fff",
+                        fontWeight: 600,
+                        fontSize: 13,
+                        padding: "9px 16px",
+                        borderRadius: 8,
+                        textDecoration: "none",
+                    }}
+                >
+                    Continue
+                </Link>
+                <SignOutButton redirectUrl={LANDING_URL}>
+                    <button
+                        type="button"
+                        style={{
+                            background: "transparent",
+                            color: "var(--ink-3)",
+                            fontWeight: 600,
+                            fontSize: 13,
+                            padding: "9px 16px",
+                            borderRadius: 8,
+                            border: "1px solid var(--line)",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Sign out
+                    </button>
+                </SignOutButton>
+            </div>
+        </div>
+    );
+}
 
 function LoadingState() {
     return (

@@ -6,6 +6,7 @@ import styles from "~/styles/Employer/Home.module.css";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
 import { useAuth } from "@clerk/nextjs";
+import { LANDING_CONTACT_URL } from "~/config/landing";
 import LoadingPage from "~/app/_components/loading";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
 
@@ -68,12 +69,19 @@ const EmployeeHomeScreen = () => {
       icon: <HelpCircle className={styles.menuIcon} />,
       title: "Contact Support",
       description: "Get help with technical difficulties and questions",
-      path: "/contact",
+      path: LANDING_CONTACT_URL,
       isBeta: false,
     },
   ];
 
   const handleNavigation = (path: string) => {
+    // "Contact Support" points at the public site, which is a different
+    // origin. next/navigation's router only handles in-app routes, so absolute
+    // URLs need a real document navigation.
+    if (/^https?:\/\//.test(path)) {
+      window.location.href = path;
+      return;
+    }
     router.push(path);
   };
 

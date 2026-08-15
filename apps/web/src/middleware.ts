@@ -20,12 +20,17 @@ const isProtectedRoute = createRouteMatcher([
 
 // Page routes that are always public. API routes are governed by
 // isPublicApiRoute below, not by this list.
+//
+// Note this matcher is currently inert: its only use is the
+// `isProtectedRoute(req) && !isPublicRoute(req)` guard below, and
+// isProtectedRoute (/employer, /employee, /workspaces) has no overlap with
+// either entry — so the condition is `X && true` for every request. It is kept
+// because it documents intent and would start doing real work the moment a
+// public path is nested under a protected prefix.
+//
+// /pricing, /deployment, /contact and /about were removed here when the public
+// site moved to apps/landing; / was removed because it now redirects.
 const isPublicRoute = createRouteMatcher([
-    '/',
-    '/pricing',
-    '/deployment',
-    '/contact',
-    '/about',
     '/signup',
     '/signin',
 ]);
@@ -142,6 +147,18 @@ export default clerkMiddleware(async (auth, req) => {
         // Static assets: no redirect logic.
         if (pathname.startsWith('/_next/')) {
             return;
+        }
+
+        // Anonymous visitor at the root. This origin is the product — the
+        // public site lives in apps/landing — so the front door is sign-in.
+        //
+        // Handled here rather than only in app/page.tsx so the redirect happens
+        // BEFORE the database lookup below. A signed-in session plus an
+        // unreachable database falls through that lookup's catch, and if the
+        // page component were the only redirect, / -> /signin -> (Clerk honours
+        // forceRedirectUrl on an active session) -> / would loop forever.
+        if (!userId && pathname === '/') {
+            return NextResponse.redirect(new URL('/signin', req.url));
         }
 
         // Protect routes that require authentication

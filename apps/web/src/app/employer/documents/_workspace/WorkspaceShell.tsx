@@ -4,6 +4,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth, useUser } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
+// A just-signed-out user is a public-site audience, and the public site is a
+// separate origin now (apps/landing).
+import { LANDING_URL } from "~/config/landing";
 import { useAIChat } from "../hooks/useAIChat";
 import { AddSourceModal } from "./AddSourceModal";
 import {
@@ -532,7 +535,7 @@ export function WorkspaceShell() {
           userInitials={initials}
           userName={userName}
           userEmail={userEmail}
-          onSignOut={() => signOut({ redirectUrl: "/" })}
+          onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
           webSearch={composerWebSearch}
           onToggleWebSearch={() => setComposerWebSearch((v) => !v)}
           thinking={composerThinking}
@@ -559,7 +562,7 @@ export function WorkspaceShell() {
           userEmail={userEmail}
           // Settings is a workspace surface now, not a separate destination.
           onOpenSettings={() => expandFeature("settings")}
-          onSignOut={() => signOut({ redirectUrl: "/" })}
+          onSignOut={() => signOut({ redirectUrl: LANDING_URL })}
           paneContext={{
             knowledge: {
               sources,

@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import React from "react";
 import { useAuth, useUser, UserButton } from "@clerk/nextjs";
 import { ThemeToggle } from "./ThemeToggle";
 import { LaunchstackMark } from "./LaunchstackLogo";
+import { LANDING_URL } from "~/config/landing";
 
 /**
  * Top bar used on /signin and /signup.
@@ -31,8 +31,14 @@ export function AuthChrome() {
                 zIndex: 40,
             }}
         >
-            <Link
-                href="/"
+            {/*
+              Cross-origin, and deliberately so. A logged-out visitor clicking
+              the brand from a sign-in screen wants the public site, not a
+              redirect straight back to where they already are.
+            */}
+            <a
+                href={LANDING_URL}
+                rel="noopener"
                 style={{
                     display: "flex",
                     alignItems: "center",
@@ -51,7 +57,7 @@ export function AuthChrome() {
                 >
                     Launchstack
                 </span>
-            </Link>
+            </a>
             <div style={{ flex: 1 }} />
             <ThemeToggle />
             {isLoaded && isSignedIn && user && (
@@ -66,7 +72,8 @@ export function AuthChrome() {
                         {user.primaryEmailAddress?.emailAddress ?? user.fullName ?? "Signed in"}
                     </span>
                     <UserButton
-                        afterSignOutUrl="/"
+                        // A just-signed-out user is a public-site audience.
+                        afterSignOutUrl={LANDING_URL}
                         appearance={{ elements: { avatarBox: "w-8 h-8" } }}
                     />
                 </>

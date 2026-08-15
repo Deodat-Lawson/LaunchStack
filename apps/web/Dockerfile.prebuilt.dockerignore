@@ -14,7 +14,9 @@
 
 # Generated and heavy static assets
 apps/web/public/vad
-apps/web/public/deployment-demos
+
+# The public site is not containerized (see .dockerignore).
+apps/landing
 
 # Git and local configuration
 .git

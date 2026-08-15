@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { SignOutButton } from "@clerk/nextjs";
+import { LANDING_CONTACT_URL } from "~/config/landing";
 
 import styles from "./workspace-select.module.css";
 
@@ -1025,9 +1026,13 @@ export function WorkspaceSelectClient({
                     <br />
                     <a href="/signin">Use a different account</a>
                     <span className={styles.sepDot}>·</span>
-                    <a href="/contact">Help</a>
-                    <span className={styles.sepDot}>·</span>
-                    <a href="/privacy">Privacy</a>
+                    {/* Cross-origin — support lives on the public site. */}
+                    <a href={LANDING_CONTACT_URL} rel="noopener">Help</a>
+                    {/*
+                      A "Privacy" link pointing at /privacy used to sit here.
+                      That route has never existed in any app, so it 404'd;
+                      removed rather than carried across the split.
+                    */}
                 </p>
             </div>
         </div>

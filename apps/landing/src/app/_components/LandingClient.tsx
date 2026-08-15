@@ -18,8 +18,7 @@ import { MarketingShell } from './MarketingShell';
 import { createHeroGraph, type HeroGraphApi } from './heroGraph';
 import { runHeroDemo } from './heroDemo';
 import styles from '../../styles/marketing.module.css';
-
-const GITHUB_REPO = 'https://github.com/Deodat-Lawson/LaunchStack';
+import { GITHUB_REPO, SIGN_UP_URL } from '~/config/site';
 
 // App connectors are not implemented yet — every entry below is roadmap.
 // What IS live today: manual upload and import (files, ZIP archives,
@@ -120,13 +119,15 @@ function Hero() {
         </p>
 
         <div className={styles.heroCtas}>
-          <Link
-            href="/signup"
+          {/* Cross-origin — the app is a separate deployment (apps/web). */}
+          <a
+            href={SIGN_UP_URL}
+            rel="noopener"
             className={`${styles.btn} ${styles.btnAccent} ${styles.btnLg}`}
           >
             Start free — no card needed
             <ArrowRight size={16} />
-          </Link>
+          </a>
           <Link
             href="/deployment"
             className={`${styles.btn} ${styles.btnOutline} ${styles.btnLg}`}
@@ -1633,9 +1634,9 @@ function FinalCta() {
         citations. Self-hosted, everything stays on your own infrastructure.
       </p>
       <div className={styles.heroCtas}>
-        <Link href="/signup" className={`${styles.btn} ${styles.btnAccent} ${styles.btnLg}`}>
+        <a href={SIGN_UP_URL} rel="noopener" className={`${styles.btn} ${styles.btnAccent} ${styles.btnLg}`}>
           Start free — no card needed
-        </Link>
+        </a>
         <Link href="/deployment" className={`${styles.btn} ${styles.btnOutline} ${styles.btnLg}`}>
           Read the docs
         </Link>

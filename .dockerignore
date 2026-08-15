@@ -12,8 +12,10 @@
 # Generated assets (created by postinstall from node_modules)
 apps/web/public/vad
 
-# Heavy static assets not needed in Docker image
-apps/web/public/deployment-demos
+# The public site (launchstack.app) is not containerized — docker-compose and
+# the GHCR images build apps/web only. This also keeps its 26MB deployment
+# demo video out of every build context.
+apps/landing
 
 # Git
 .git

@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import { ArrowLeft, Home, BookOpen, Github } from 'lucide-react';
+import { LogIn, BookOpen, Github } from 'lucide-react';
 import type { Metadata } from 'next';
 import { LaunchstackMark } from './_components/LaunchstackLogo';
+import { LANDING_DEPLOYMENT_URL } from '~/config/landing';
 
 export const metadata: Metadata = {
     title: 'Page Not Found',
-    description: 'The page you are looking for does not exist. Head back to Launchstack to explore document analysis, deployment guides, and more.',
+    description: 'The page you are looking for does not exist.',
 };
 
 const GITHUB_REPO = "https://github.com/Deodat-Lawson/LaunchStack";
@@ -27,25 +28,25 @@ export default function NotFound() {
                     The page you are looking for does not exist or may have been moved. Here are some places you might want to go instead.
                 </p>
 
+                {/*
+                  /pricing, /about, /contact and /deployment used to be siblings
+                  of this page. They live on the public site now (apps/landing),
+                  so the only in-app destination left is sign-in — everything
+                  else on this origin is behind it anyway.
+                */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
-                    <Link href="/">
+                    <Link href="/signin">
                         <button className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-full transition-colors text-sm cursor-pointer w-full sm:w-auto">
-                            <Home className="w-4 h-4" />
-                            Go Home
-                        </button>
-                    </Link>
-                    <Link href="/deployment">
-                        <button className="flex items-center justify-center gap-2 border border-gray-200 dark:border-purple-700/50 text-gray-600 dark:text-gray-300 font-semibold px-6 py-3 rounded-full hover:border-purple-400 dark:hover:border-purple-500 transition-colors text-sm cursor-pointer w-full sm:w-auto">
-                            <BookOpen className="w-4 h-4" />
-                            Deployment Guide
+                            <LogIn className="w-4 h-4" />
+                            Go to sign in
                         </button>
                     </Link>
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
-                    <Link href="/pricing" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Pricing</Link>
-                    <Link href="/about" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">About</Link>
-                    <Link href="/contact" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Contact</Link>
+                    <a href={LANDING_DEPLOYMENT_URL} rel="noopener" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5" /> Deployment guide
+                    </a>
                     <a href={GITHUB_REPO} target="_blank" rel="noopener noreferrer" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1.5">
                         <Github className="w-3.5 h-3.5" /> GitHub
                     </a>

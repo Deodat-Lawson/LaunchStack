@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { inter, instrumentSerif, jetbrainsMono } from "~/app/employer/fonts";
 
 export const metadata: Metadata = {
     title: "Get Started with Launchstack — Free",
@@ -13,9 +12,8 @@ export const metadata: Metadata = {
 export default function SignupLayout({ children }: { children: React.ReactNode }) {
     return (
         <div
-            className={`lsw-root ${inter.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
+            className="lsw-root"
             style={{
-                fontFamily: `var(--font-inter), system-ui, sans-serif`,
                 minHeight: "100vh",
                 width: "100%",
             }}

@@ -52,7 +52,7 @@ export function OutlineTreeItem({
             data-item-id={item.id}
             className={cn(
                 "group flex items-center gap-1.5 rounded-md py-1.5 transition-colors",
-                isFocused ? "bg-accent/60 ring-ring/30 ring-1" : "hover:bg-muted/50"
+                isFocused ? "bg-accent ring-ring/30 ring-1" : "hover:bg-muted/50"
             )}
             style={{ paddingLeft: `${depth * 20 + 12}px`, paddingRight: "8px" }}
         >

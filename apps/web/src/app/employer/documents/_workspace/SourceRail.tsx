@@ -21,7 +21,27 @@ import {
   IconX,
 } from "./icons";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
+import { ContextMenu } from "./ContextMenu";
+import {
+  buildBlankRailMenuItems,
+  buildFolderMenuItems,
+  buildSourceMenuItems,
+  type SourceContextMenuItem,
+} from "./sourceContextMenu";
 import { SOURCE_META, type WorkspaceFolder, type WorkspaceSource } from "./types";
+
+type RailMenu =
+  | { kind: "source"; x: number; y: number; source: WorkspaceSource }
+  | { kind: "folder"; x: number; y: number; folderName: string; itemIds: string[] }
+  | { kind: "blank"; x: number; y: number };
+
+async function copyText(value: string): Promise<void> {
+  try {
+    await navigator.clipboard.writeText(value);
+  } catch {
+    // Private mode / missing permission — the action still closes the menu.
+  }
+}
 
 interface TagChipProps {
   tag: string;
@@ -123,20 +143,43 @@ interface SourceRowProps {
   selected: boolean;
   toggleSelected: (id: string) => void;
   onOpen?: (source: WorkspaceSource) => void;
+  onOpenMenu?: (point: { clientX: number; clientY: number }, source: WorkspaceSource) => void;
 }
 
-function SourceRow({ source, selected, toggleSelected, onOpen }: SourceRowProps) {
+function SourceRow({
+  source,
+  selected,
+  toggleSelected,
+  onOpen,
+  onOpenMenu,
+}: SourceRowProps) {
   const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
   const Icon = meta.Icon;
   const [hover, setHover] = useState(false);
+  const [menuFocus, setMenuFocus] = useState(false);
   const tags = source.tags ?? [];
   const visibleTags = tags.slice(0, 2);
   const extra = tags.length - visibleTags.length;
+  const showActions = hover || menuFocus;
 
   return (
     <div
+      data-testid={`source-row-${source.id}`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      onContextMenu={(e) => {
+        if (!onOpenMenu) return;
+        e.preventDefault();
+        e.stopPropagation();
+        onOpenMenu({ clientX: e.clientX, clientY: e.clientY }, source);
+      }}
+      onKeyDown={(e) => {
+        if (!onOpenMenu) return;
+        if (e.key !== "ContextMenu" && !(e.shiftKey && e.key === "F10")) return;
+        e.preventDefault();
+        const rect = e.currentTarget.getBoundingClientRect();
+        onOpenMenu({ clientX: rect.left + 16, clientY: rect.bottom }, source);
+      }}
       style={{
         display: "flex",
         alignItems: "center",
@@ -234,6 +277,44 @@ function SourceRow({ source, selected, toggleSelected, onOpen }: SourceRowProps)
           )}
         </div>
       </div>
+      {onOpenMenu && (
+        <button
+          type="button"
+          data-testid={`source-row-menu-${source.id}`}
+          aria-label={`Actions for ${source.title}`}
+          aria-haspopup="menu"
+          title="Actions"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const rect = e.currentTarget.getBoundingClientRect();
+            onOpenMenu({ clientX: rect.right, clientY: rect.bottom }, source);
+          }}
+          onFocus={() => setMenuFocus(true)}
+          onBlur={() => setMenuFocus(false)}
+          style={{
+            width: 18,
+            height: 18,
+            borderRadius: 4,
+            color: "var(--ink-3)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+            opacity: showActions ? 1 : 0,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "var(--ink)";
+            e.currentTarget.style.background = "var(--panel)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "var(--ink-3)";
+            e.currentTarget.style.background = "transparent";
+          }}
+        >
+          <IconMore size={12} />
+        </button>
+      )}
     </div>
   );
 }
@@ -246,6 +327,7 @@ interface FolderHeaderProps {
   onToggle: () => void;
   onSelectAll: (ids: string[], add: boolean) => void;
   onRename?: () => void;
+  onOpenMenu?: (point: { clientX: number; clientY: number }) => void;
   selected: string[];
   dragOver: boolean;
 }
@@ -258,6 +340,7 @@ function FolderHeader({
   onToggle,
   onSelectAll,
   onRename,
+  onOpenMenu,
   selected,
   dragOver,
 }: FolderHeaderProps) {
@@ -269,6 +352,12 @@ function FolderHeader({
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      onContextMenu={(e) => {
+        if (!onOpenMenu) return;
+        e.preventDefault();
+        e.stopPropagation();
+        onOpenMenu({ clientX: e.clientX, clientY: e.clientY });
+      }}
       style={{
         display: "flex",
         alignItems: "center",
@@ -369,6 +458,8 @@ export interface SourceRailProps {
   onNewFolder?: () => void;
   onRenameFolder?: (folder: WorkspaceFolder) => void;
   onMoveToFolder?: (sourceId: string, folderName: string) => void;
+  onRenameSource?: (source: WorkspaceSource) => void;
+  onDeleteSource?: (source: WorkspaceSource) => void;
   activeFolder: string | null;
   setActiveFolder: Dispatch<SetStateAction<string | null>>;
   activeTag: string | null;
@@ -401,6 +492,8 @@ export function SourceRail({
   onNewFolder,
   onRenameFolder,
   onMoveToFolder,
+  onRenameSource,
+  onDeleteSource,
   activeFolder,
   setActiveFolder,
   activeTag,
@@ -414,6 +507,70 @@ export function SourceRail({
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [dragOverFolder, setDragOverFolder] = useState<string | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [menu, setMenu] = useState<RailMenu | null>(null);
+
+  const closeMenu = () => setMenu(null);
+
+  const menuItems = useMemo<SourceContextMenuItem[]>(() => {
+    if (!menu) return [];
+    if (menu.kind === "source") {
+      return buildSourceMenuItems(menu.source, folders, selected, {
+        onOpen: onOpenSource,
+        onToggleContext: (source) => {
+          setSelected((prev) =>
+            prev.includes(source.id)
+              ? prev.filter((id) => id !== source.id)
+              : [...prev, source.id],
+          );
+        },
+        onRename: onRenameSource,
+        onMoveToFolder,
+        onCopyTitle: (source) => {
+          void copyText(source.title);
+        },
+        onDelete: onDeleteSource,
+      });
+    }
+    if (menu.kind === "folder") {
+      const selCount = menu.itemIds.filter((id) => selected.includes(id)).length;
+      const selectState: "none" | "some" | "all" =
+        selCount === 0 ? "none" : selCount === menu.itemIds.length ? "all" : "some";
+      const match = folders.find((f) => f.name === menu.folderName);
+      return buildFolderMenuItems(menu.folderName, {
+        onRename:
+          onRenameFolder && match
+            ? () => onRenameFolder(match)
+            : undefined,
+        onSelectAll: (add) => {
+          setSelected((prev) => {
+            if (add) {
+              const set = new Set(prev);
+              menu.itemIds.forEach((id) => set.add(id));
+              return [...set];
+            }
+            return prev.filter((id) => !menu.itemIds.includes(id));
+          });
+        },
+        selectState,
+      });
+    }
+    return buildBlankRailMenuItems({
+      onAddKnowledge: onOpenAdd,
+      onNewFolder,
+    });
+  }, [
+    menu,
+    folders,
+    selected,
+    onOpenSource,
+    onRenameSource,
+    onMoveToFolder,
+    onDeleteSource,
+    onRenameFolder,
+    onOpenAdd,
+    onNewFolder,
+    setSelected,
+  ]);
 
   const toggleCollapsed = (name: string) =>
     setCollapsed((p) => ({ ...p, [name]: !p[name] }));
@@ -631,7 +788,14 @@ export function SourceRail({
         </div>
       )}
 
-      <div style={{ flex: 1, overflowY: "auto", padding: "2px 8px 8px" }}>
+      <div
+        data-testid="source-rail-list"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setMenu({ kind: "blank", x: e.clientX, y: e.clientY });
+        }}
+        style={{ flex: 1, overflowY: "auto", padding: "2px 8px 8px" }}
+      >
         {groups.map((group) => {
           const isCollapsed = group.name ? !!collapsed[group.name] : false;
           const hasHeader = !!group.name;
@@ -688,6 +852,15 @@ export function SourceRail({
                       return prev.filter((id) => !ids.includes(id));
                     });
                   }}
+                  onOpenMenu={(point) => {
+                    setMenu({
+                      kind: "folder",
+                      x: point.clientX,
+                      y: point.clientY,
+                      folderName: group.name!,
+                      itemIds: group.items.map((item) => item.id),
+                    });
+                  }}
                   dragOver={isDragOver}
                 />
               )}
@@ -708,6 +881,14 @@ export function SourceRail({
                         selected={selected.includes(s.id)}
                         toggleSelected={toggle}
                         onOpen={onOpenSource}
+                        onOpenMenu={(point, source) => {
+                          setMenu({
+                            kind: "source",
+                            x: point.clientX,
+                            y: point.clientY,
+                            source,
+                          });
+                        }}
                       />
                     </div>
                   ))}
@@ -799,6 +980,22 @@ export function SourceRail({
             clear
           </button>
         </div>
+      )}
+      {menu && (
+        <ContextMenu
+          open
+          x={menu.x}
+          y={menu.y}
+          items={menuItems}
+          ariaLabel={
+            menu.kind === "source"
+              ? `Actions for ${menu.source.title}`
+              : menu.kind === "folder"
+                ? `Actions for folder ${menu.folderName}`
+                : "Sidebar actions"
+          }
+          onClose={closeMenu}
+        />
       )}
     </aside>
   );

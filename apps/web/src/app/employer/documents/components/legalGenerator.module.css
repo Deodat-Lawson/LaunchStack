@@ -4,68 +4,17 @@
    Scoped under `.root` (see <LegalGeneratorTheme>).
    ===================================================================== */
 
+/* Tokens inherit from :root (@launchstack/design-tokens); this block
+   holds layout/typography only. */
 .root {
-  --accent-h: 285;
-  --accent: oklch(0.54 0.24 var(--accent-h));
-  --accent-2: oklch(0.46 0.25 var(--accent-h));
-  --accent-deep: oklch(0.38 0.22 var(--accent-h));
-  --accent-soft: oklch(0.96 0.03 var(--accent-h));
-  --accent-glow: oklch(0.60 0.24 var(--accent-h) / 0.35);
-  --accent-ink: oklch(0.42 0.20 var(--accent-h));
-
-  --bg: oklch(0.992 0.003 80);
-  --bg-2: oklch(0.985 0.004 280);
-  --panel: #ffffff;
-  --panel-2: oklch(0.98 0.005 280);
-  --ink: oklch(0.22 0.015 280);
-  --ink-2: oklch(0.42 0.01 280);
-  --ink-3: oklch(0.60 0.008 280);
-  --ink-4: oklch(0.78 0.006 280);
-  --line: oklch(0.90 0.006 280);
-  --line-2: oklch(0.955 0.004 280);
-
-  --success: oklch(0.58 0.16 150);
-  --success-soft: oklch(0.95 0.06 150);
-  --warn: oklch(0.70 0.16 75);
-  --warn-soft: oklch(0.96 0.05 80);
-  --danger: oklch(0.55 0.22 30);
-  --danger-soft: oklch(0.96 0.04 30);
-
   position: relative;
   color: var(--ink);
   background: var(--bg);
-  font-family: 'Inter', var(--font-inter, system-ui), sans-serif;
+  font-family: var(--font-sans);
   font-feature-settings: "cv11", "ss01", "ss03";
   -webkit-font-smoothing: antialiased;
   height: 100%;
   overflow: hidden;
-}
-
-:global(.dark) .root,
-:global([data-theme="dark"]) .root {
-  --accent: oklch(0.72 0.19 285);
-  --accent-2: oklch(0.62 0.22 285);
-  --accent-deep: oklch(0.46 0.25 285);
-  --accent-soft: oklch(0.30 0.08 285);
-  --accent-glow: oklch(0.72 0.19 285 / 0.35);
-  --accent-ink: oklch(0.86 0.16 285);
-  --bg: oklch(0.14 0.02 290);
-  --bg-2: oklch(0.18 0.025 290);
-  --panel: oklch(0.20 0.025 290);
-  --panel-2: oklch(0.235 0.03 290);
-  --ink: oklch(0.97 0.005 280);
-  --ink-2: oklch(0.80 0.008 280);
-  --ink-3: oklch(0.62 0.008 280);
-  --ink-4: oklch(0.45 0.008 280);
-  --line: oklch(0.32 0.04 290);
-  --line-2: oklch(0.26 0.035 290);
-
-  --success: oklch(0.78 0.17 150);
-  --success-soft: oklch(0.28 0.08 150);
-  --warn: oklch(0.80 0.17 75);
-  --warn-soft: oklch(0.28 0.08 80);
-  --danger: oklch(0.75 0.20 30);
-  --danger-soft: oklch(0.28 0.10 30);
 }
 
 .root ::selection { background: var(--accent-glow); color: var(--ink); }

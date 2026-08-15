@@ -1,12 +1,15 @@
+import "@launchstack/design-tokens/tokens.css";
 import "~/styles/globals.css";
+// compat.css must stay after globals.css: its purple/slate remap beats
+// Tailwind's utilities by source order.
+import "~/styles/compat.css";
 import "@uploadthing/react/styles.css";
 import { ThemeProvider } from "next-themes";
 import { CloudAnalytics } from "./_components/CloudAnalytics";
 
-import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { inter, instrumentSerif, jetbrainsMono } from "./employer/fonts";
+import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
 
 // The marketing metadata that used to live here — keywords, OG card, Twitter
 // card, canonical, index:true — moved to apps/landing with the public site.
@@ -39,7 +42,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ClerkProvider>
             <html
                 lang="en"
-                className={`${GeistSans.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+                className={`${inter.variable} ${interTight.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
                 suppressHydrationWarning
             >
                 <body suppressHydrationWarning>

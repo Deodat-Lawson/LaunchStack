@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { inter, interTight, instrumentSerif, jetbrainsMono } from "./fonts";
 import { DriftShell } from "./_chrome/DriftShell";
 import { EmployerWorkspaceSwitcherProvider } from "./_chrome/EmployerWorkspaceSwitcherContext";
 import { getWorkspaceSwitcherPayload } from "./_chrome/getWorkspaceSwitcherPayload";
@@ -10,9 +9,8 @@ export default async function EmployerLayout({ children }: { children: ReactNode
 
     return (
         <div
-            className={`lsw-root ${inter.variable} ${interTight.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
+            className="lsw-root"
             style={{
-                fontFamily: `var(--font-inter-tight), var(--font-inter), system-ui, sans-serif`,
                 minHeight: "100vh",
                 width: "100%",
             }}

@@ -2,76 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark,
-  [data-theme="dark"] {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
+/* Design tokens come from @launchstack/design-tokens/tokens.css and the
+   deprecated shadcn compat set from ./compat.css — both imported by the
+   root layout around this file. This file holds base styles only. */
 
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
   }
 }
 
@@ -88,8 +32,6 @@ html, body {
   box-sizing: border-box;
 }
 
-
-
 /* Theme Toggle Button */
 
 .theme-toggle-btn {
@@ -102,21 +44,11 @@ html, body {
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #7c3aed;
-}
-
-.dark .theme-toggle-btn,
-[data-theme="dark"] .theme-toggle-btn {
-  color: #c084fc;
-}
-
-:not(.dark) .theme-toggle-btn,
-[data-theme="light"] .theme-toggle-btn {
-  color: #7c3aed;
+  color: var(--accent-ink);
 }
 
 .theme-toggle-btn:hover {
-  background: rgba(124, 58, 237, 0.1);
+  background: var(--accent-soft);
   transform: scale(1.1);
 }
 
@@ -125,147 +57,13 @@ html, body {
 }
 
 /* ==========================================================================
-   Launchstack Workspace (LSW) — scoped OKLCH token system.
-   Only takes effect inside a `.lsw-root` subtree, so existing pages keep
-   their HSL tokens untouched. Values mirror the design prototype exactly.
+   Launchstack Workspace (LSW) helpers. The `.lsw-root` marker class no
+   longer carries tokens (they moved to :root via the design-tokens
+   package); it remains as the scope for these application-shell defaults
+   until the base kit re-theme retires it.
    ========================================================================== */
-.lsw-root {
-  --accent-h: 285;
-  --accent: oklch(0.54 0.24 var(--accent-h));
-  --accent-2: oklch(0.46 0.25 var(--accent-h));
-  --accent-deep: oklch(0.38 0.22 var(--accent-h));
-  --accent-glow: oklch(0.60 0.24 var(--accent-h) / 0.35);
-  --accent-soft: oklch(0.96 0.03 var(--accent-h));
-  --accent-ink: oklch(0.42 0.20 var(--accent-h));
-  --scrim: oklch(0.22 0.04 280 / 0.55);
-  --scrim-shadow: oklch(0.22 0.04 280 / 0.22);
-  --bg: oklch(0.992 0.003 80);
-  --panel: #ffffff;
-  --panel-2: oklch(0.985 0.004 280);
-  --ink: oklch(0.22 0.015 280);
-  --ink-2: oklch(0.42 0.01 280);
-  --ink-3: oklch(0.60 0.008 280);
-  --ink-4: oklch(0.78 0.006 280);
-  --line: oklch(0.90 0.006 280);
-  --line-2: oklch(0.955 0.004 280);
-  --danger: oklch(0.55 0.22 25);
-  --ok: oklch(0.58 0.16 150);
-  --radius: 10px;
-  --radius-lg: 14px;
-
-  /* Drift design system aliases — additive, no rename. New components use these
-     names; existing CSS modules keep working through the original names above. */
-  --bg-elev: var(--panel);
-  --bg-sunk: oklch(0.972 0.005 80);
-  --fg-1: var(--ink);
-  --fg-2: var(--ink-2);
-  --fg-3: var(--ink-3);
-  --fg-4: var(--ink-4);
-  --line-1: var(--line);
-  --line-dot: oklch(0.78 0.012 285);
-  --accent-hi: var(--accent-2);
-  --accent-fg: oklch(0.99 0.002 285);
-
-  --hue-magenta: oklch(0.70 0.22 340);
-  --hue-magenta-glow: oklch(0.70 0.22 340 / 0.35);
-  --hue-teal: oklch(0.72 0.18 200);
-  --hue-teal-glow: oklch(0.72 0.18 200 / 0.28);
-
-  --success: var(--ok);
-  --warn: oklch(0.78 0.17 80);
-  --info: oklch(0.64 0.14 235);
-
-  --shadow-1: 0 1px 2px oklch(0.2 0.02 285 / 0.04);
-  --shadow-2: 0 4px 12px oklch(0.2 0.02 285 / 0.06),
-              0 1px 2px oklch(0.2 0.02 285 / 0.04);
-  --shadow-3: 0 12px 32px oklch(0.2 0.02 285 / 0.08),
-              0 2px 6px oklch(0.2 0.02 285 / 0.05);
-
-  --r-xs: 4px;
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 16px;
-  --r-xl: 24px;
-  --r-full: 9999px;
-
-  --s-1: 4px;
-  --s-2: 8px;
-  --s-3: 12px;
-  --s-4: 16px;
-  --s-5: 24px;
-  --s-6: 32px;
-  --s-7: 48px;
-  --s-8: 64px;
-  --s-9: 96px;
-
-  --fs-display: clamp(40px, 5.2vw, 72px);
-  --fs-h1: clamp(32px, 3.6vw, 48px);
-  --fs-h2: 28px;
-  --fs-h3: 22px;
-  --fs-h4: 18px;
-  --fs-body: 15px;
-  --fs-small: 13px;
-  --fs-micro: 11px;
-  --lh-display: 1.02;
-  --lh-heading: 1.15;
-  --lh-body: 1.55;
-  --ls-tight: -0.02em;
-  --ls-tighter: -0.035em;
-  --ls-wide: 0.04em;
-
-  --font-sans: var(--font-inter-tight), var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
-
-  color: var(--ink);
-  background: var(--bg);
-  font-feature-settings: "cv11", "ss01", "ss03";
-  -webkit-font-smoothing: antialiased;
-}
-
-.dark .lsw-root,
-[data-theme="dark"] .lsw-root,
-.lsw-root[data-theme="dark"] {
-  --bg: oklch(0.14 0.02 290);
-  --panel: oklch(0.20 0.025 290);
-  --panel-2: oklch(0.235 0.03 290);
-  --ink: oklch(0.97 0.005 280);
-  --ink-2: oklch(0.80 0.008 280);
-  --ink-3: oklch(0.62 0.008 280);
-  --ink-4: oklch(0.45 0.008 280);
-  --line: oklch(0.32 0.04 290);
-  --line-2: oklch(0.26 0.035 290);
-  --accent: oklch(0.72 0.19 var(--accent-h));
-  --accent-2: oklch(0.62 0.22 var(--accent-h));
-  --accent-deep: oklch(0.46 0.25 var(--accent-h));
-  --accent-glow: oklch(0.72 0.19 var(--accent-h) / 0.35);
-  --accent-soft: oklch(0.30 0.08 var(--accent-h));
-  --accent-ink: oklch(0.86 0.16 var(--accent-h));
-  --scrim: oklch(0.05 0.02 290 / 0.72);
-  --scrim-shadow: oklch(0.05 0.02 290 / 0.55);
-
-  --success: oklch(0.72 0.16 150);
-  --danger: oklch(0.70 0.20 25);
-
-  /* Drift dark-mode aliases */
-  --bg-sunk: oklch(0.12 0.02 290);
-  --line-dot: oklch(0.55 0.02 285);
-  --accent-fg: oklch(0.14 0.02 290);
-  --hue-magenta: oklch(0.65 0.22 330);
-  --hue-magenta-glow: oklch(0.65 0.22 330 / 0.40);
-  --hue-teal: oklch(0.70 0.18 200);
-  --hue-teal-glow: oklch(0.70 0.18 200 / 0.32);
-  --warn: oklch(0.78 0.16 75);
-  --info: oklch(0.72 0.14 235);
-  --shadow-1: 0 1px 2px oklch(0 0 0 / 0.4);
-  --shadow-2: 0 4px 12px oklch(0 0 0 / 0.5),
-              0 1px 2px oklch(0 0 0 / 0.4);
-  --shadow-3: 0 12px 32px oklch(0 0 0 / 0.55),
-              0 2px 6px oklch(0 0 0 / 0.4);
-}
-
-.lsw-root .mono { font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, monospace; }
-.lsw-root .serif { font-family: var(--font-instrument-serif, 'Instrument Serif'), Georgia, serif; font-feature-settings: normal; }
+.lsw-root .mono { font-family: var(--font-mono); }
+.lsw-root .serif { font-family: var(--font-serif); font-feature-settings: normal; }
 /* Specificity (0,0,1) only — any single class on a button (e.g. CSS modules)
    overrides padding, border, and background. */
 :where(.lsw-root) button {
@@ -286,86 +84,3 @@ html, body {
 @keyframes lsw-drawerIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes lsw-shimmer { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
 @keyframes lsw-spin { to { transform: rotate(360deg); } }
-
-/* ==========================================================================
-   Legacy shim: when legacy shadcn/Tailwind components render inside `.lsw-root`
-   (e.g. full-screen Studio feature pages that embed DocumentGenerator,
-   RewriteDiffView, legacy DocumentViewer),
-   override the shadcn HSL tokens with HSL approximations of Launchstack tokens
-   so the legacy Tailwind classes (bg-background, text-foreground, border-border
-   …) automatically match the new design. Purple utilities are re-mapped to the
-   accent token so the brand color is unified end-to-end.
-
-   Light theme only needs one definition; the existing `.dark .lsw-root` block
-   above already switches the Launchstack tokens, so the shadcn shim below
-   re-reads them via var() and follows automatically.
-   ========================================================================== */
-.lsw-root {
-  --background: 60 30% 99%;
-  --foreground: 264 6% 17%;
-  --card: 0 0% 100%;
-  --card-foreground: 264 6% 17%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 264 6% 17%;
-  --primary: 268 83% 55%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 264 3% 96%;
-  --secondary-foreground: 264 6% 20%;
-  --muted: 264 3% 96%;
-  --muted-foreground: 264 3% 48%;
-  --accent-foreground: 270 60% 38%;
-  --border: 264 3% 89%;
-  --input: 264 3% 89%;
-  --ring: 268 83% 55%;
-}
-.dark .lsw-root,
-[data-theme="dark"] .lsw-root,
-.lsw-root[data-theme="dark"] {
-  --background: 264 20% 11%;
-  --foreground: 270 10% 97%;
-  --card: 264 20% 15%;
-  --card-foreground: 270 10% 97%;
-  --popover: 264 20% 15%;
-  --popover-foreground: 270 10% 97%;
-  --primary: 270 70% 68%;
-  --primary-foreground: 270 20% 12%;
-  --secondary: 264 15% 22%;
-  --secondary-foreground: 270 10% 92%;
-  --muted: 264 15% 19%;
-  --muted-foreground: 264 5% 62%;
-  --accent-foreground: 270 70% 82%;
-  --border: 264 15% 25%;
-  --input: 264 15% 25%;
-  --ring: 270 70% 68%;
-}
-
-/* Bridge the most common Tailwind purple utilities onto the accent token so the
-   brand color in legacy components matches Launchstack. */
-.lsw-root .bg-purple-50,
-.lsw-root .bg-purple-100,
-.lsw-root [class*="dark:bg-purple-900"] { background-color: var(--accent-soft); }
-.lsw-root .bg-purple-500,
-.lsw-root .bg-purple-600,
-.lsw-root .bg-purple-700,
-.lsw-root .hover\:bg-purple-600:hover,
-.lsw-root .hover\:bg-purple-700:hover { background-color: var(--accent); }
-.lsw-root .text-purple-500,
-.lsw-root .text-purple-600,
-.lsw-root .text-purple-700,
-.lsw-root [class*="dark:text-purple-"] { color: var(--accent-ink); }
-.lsw-root .border-purple-200,
-.lsw-root .border-purple-300,
-.lsw-root .border-purple-400,
-.lsw-root .border-purple-500,
-.lsw-root [class*="dark:border-purple-"],
-.lsw-root .hover\:border-purple-400:hover { border-color: var(--accent); }
-.lsw-root .focus\:ring-purple-500:focus,
-.lsw-root .focus\:border-purple-500:focus { --tw-ring-color: var(--accent); border-color: var(--accent); }
-.lsw-root .shadow-purple-500\/20,
-.lsw-root .shadow-purple-500\/10 { --tw-shadow-color: var(--accent-glow); }
-
-/* Slate dark-mode chrome used throughout legacy components. Map onto panel/line
-   tokens so dark Launchstack surface stays consistent. */
-.lsw-root [class*="dark:bg-slate-800"],
-.lsw-root [class*="dark:bg-slate-900"] { background-color: var(--panel-2); }
-.lsw-root [class*="dark:border-slate-"] { border-color: var(--line); }

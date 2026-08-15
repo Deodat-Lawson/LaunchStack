@@ -9,7 +9,6 @@ import {
   Globe,
   ShieldAlert,
   ExternalLink,
-  Play,
 } from 'lucide-react';
 import type { DeploymentProps } from '../../types';
 import { Section, Step } from '../ui';
@@ -269,43 +268,6 @@ BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>`}
               ))}
             </tbody>
           </table>
-        </div>
-      </Section>
-
-      <Divider />
-
-      {/* ── Video walkthrough ── */}
-      <Section
-        title="Video walkthrough"
-        subtitle="Drop a recording to show the full Vercel setup flow on a loop."
-
-      >
-        <div
-          className={`rounded-xl border overflow-hidden ${
-            darkMode ? 'border-gray-700/60 bg-gray-800/40' : 'border-gray-200 bg-white'
-          }`}
-        >
-          <video
-            src="/deployment-demos/vercel-setup.mov"
-            controls
-            loop
-            muted
-            playsInline
-            className="w-full aspect-video bg-black"
-          />
-          <div className="p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Play className="w-4 h-4 text-purple-500" />
-              <h4 className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                Vercel Setup Demo
-              </h4>
-            </div>
-            <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-              <code className={`${darkMode ? 'bg-gray-900' : 'bg-gray-100'} px-1.5 py-0.5 rounded`}>
-                public/deployment-demos/vercel-setup.mov
-              </code>
-            </p>
-          </div>
         </div>
       </Section>
 

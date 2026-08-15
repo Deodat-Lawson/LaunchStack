@@ -47,13 +47,22 @@ export async function ensureTokenAccount(companyId: bigint): Promise<number> {
 
     if (account) return 0; // Account exists, genuinely zero balance
 
-    const grant = isMeteringEnforced()
-        ? (await import("./costs")).TOKEN_SIGNUP_BONUS
-        : 0;
-    const { balance: newBalance } = await initTokenAccount(companyId, grant);
-    if (grant > 0) {
-        console.log(`[Tokens] Auto-provisioned ${grant.toLocaleString()} tokens for company ${companyId}`);
+    if (!isMeteringEnforced()) {
+        // Recording only: open the account at zero. Deliberately not routed
+        // through initTokenAccount — that logs a grant row and a
+        // "signup_bonus: +0 tokens" transaction, which is ledger noise for a
+        // grant that did not happen. onConflictDoNothing covers the race with
+        // a concurrent debit doing the same thing.
+        await db
+            .insert(tokenAccounts)
+            .values({ companyId, balanceTokens: 0 })
+            .onConflictDoNothing({ target: tokenAccounts.companyId });
+        return 0;
     }
+
+    const { TOKEN_SIGNUP_BONUS } = await import("./costs");
+    const { balance: newBalance } = await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
+    console.log(`[Tokens] Auto-provisioned ${TOKEN_SIGNUP_BONUS.toLocaleString()} tokens for company ${companyId}`);
     return newBalance;
 }
 
@@ -77,12 +86,15 @@ export interface DebitOptions {
     /**
      * Let the balance go negative instead of refusing the debit.
      *
-     * Set by the credits port for self-hosted deployments, where the ledger
-     * records usage but has no authority to refuse anything. Without this the
-     * guarded UPDATE below stops matching the moment the notional balance runs
-     * out, and the instance silently stops recording — which is the opposite of
-     * what "record" mode is for. With it, balanceTokens simply reads as net
-     * usage and lifetimeTokensUsed keeps climbing.
+     * Defaults to the deployment's own policy — negative allowed unless this
+     * deployment enforces balances — so callers do not have to know about
+     * metering modes to record usage correctly. Pass it explicitly only to
+     * override that.
+     *
+     * Without it the guarded UPDATE below stops matching the moment the
+     * notional balance runs out, and the instance silently stops recording,
+     * which is the opposite of what "record" mode is for. With it,
+     * balanceTokens simply reads as net usage and lifetimeTokensUsed climbs.
      */
     allowNegative?: boolean;
 }
@@ -96,6 +108,11 @@ export async function debitTokens(
 ): Promise<{ newBalance: number } | null> {
     if (opts.amount <= 0) return { newBalance: await getBalance(opts.companyId) };
 
+    // Default to this deployment's policy. Every caller that merely wants to
+    // record usage — the credits port, and the chat route, which debits
+    // directly — then behaves correctly without repeating the mode check.
+    const allowNegative = opts.allowNegative ?? !isMeteringEnforced();
+
     const set = {
         balanceTokens: sql`${tokenAccounts.balanceTokens} - ${opts.amount}`,
         lifetimeTokensUsed: sql`${tokenAccounts.lifetimeTokensUsed} + ${opts.amount}`,
@@ -105,22 +122,35 @@ export async function debitTokens(
     // is what makes the debit atomic against a concurrent one, and it is the
     // only thing protecting a billed balance from being overdrawn. The two
     // modes deliberately do not share a code path through `.where()`.
-    const result = opts.allowNegative
-        ? await db
-            .update(tokenAccounts)
-            .set(set)
-            .where(eq(tokenAccounts.companyId, opts.companyId))
-            .returning({ newBalance: tokenAccounts.balanceTokens })
-        : await db
-            .update(tokenAccounts)
-            .set(set)
-            .where(
-                and(
-                    eq(tokenAccounts.companyId, opts.companyId),
-                    gte(tokenAccounts.balanceTokens, opts.amount)
+    const runUpdate = () =>
+        allowNegative
+            ? db
+                .update(tokenAccounts)
+                .set(set)
+                .where(eq(tokenAccounts.companyId, opts.companyId))
+                .returning({ newBalance: tokenAccounts.balanceTokens })
+            : db
+                .update(tokenAccounts)
+                .set(set)
+                .where(
+                    and(
+                        eq(tokenAccounts.companyId, opts.companyId),
+                        gte(tokenAccounts.balanceTokens, opts.amount)
+                    )
                 )
-            )
-            .returning({ newBalance: tokenAccounts.balanceTokens });
+                .returning({ newBalance: tokenAccounts.balanceTokens });
+
+    let result = await runUpdate();
+
+    if (result.length === 0 && allowNegative) {
+        // Recording, and the UPDATE matched nothing. With no balance guard in
+        // this branch, the only way that happens is a missing account row —
+        // a workspace that predates the ledger, whose row `hasTokens` used to
+        // create as a side effect of the balance check we no longer run.
+        // Create it and retry once, or this workspace records nothing, ever.
+        await ensureTokenAccount(opts.companyId);
+        result = await runUpdate();
+    }
 
     if (result.length === 0) {
         return null; // Insufficient tokens, or no account row at all

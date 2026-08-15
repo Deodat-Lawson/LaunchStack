@@ -9,7 +9,6 @@
 import { getStoragePort } from "@launchstack/core/storage";
 import { getTranscriptionProvider } from "./providers";
 import { creditsDebitSafe } from "@launchstack/core/credits";
-import { isCloudMode } from "@launchstack/core/providers/registry";
 import {
   getTranscriptionServiceApiKey,
   getTranscriptionServiceUrl,
@@ -108,9 +107,9 @@ export async function transcribeAudioFromUrl(
 
     const { data, usage } = await provider.transcribe(audioBuffer, filename);
 
-    // Debit credits if cloud mode and companyId available. creditsDebitSafe
-    // no-ops when no CreditsPort is registered and swallows bookkeeping errors.
-    if (isCloudMode() && companyId != null && usage.tokensUsed > 0) {
+    // creditsDebitSafe no-ops when metering is off or no CreditsPort is
+    // registered, and swallows bookkeeping errors.
+    if (companyId != null && usage.tokensUsed > 0) {
       await creditsDebitSafe({
         companyId,
         tokens: usage.tokensUsed,

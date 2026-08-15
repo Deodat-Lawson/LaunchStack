@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, AlertCircle, Loader2, ExternalLink } from "lucide-react";
-import Link from "next/link";
+import { LANDING_DEPLOYMENT_URL } from "~/config/landing";
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -682,8 +682,16 @@ const UploadForm: React.FC<UploadFormProps> = ({
               <span style={{ fontSize: 13, fontWeight: 600 }}>
                 UploadThing is not configured. Uploads will use Vercel Blob.
               </span>
-              <Link
-                href="/deployment?section=uploadthing"
+              {/*
+                The deployment guide lives on the public site now. Opened in a
+                new tab deliberately: this is config help shown mid-upload, and
+                navigating the user out of the flow to read it would lose the
+                files they have already queued.
+              */}
+              <a
+                href={`${LANDING_DEPLOYMENT_URL}?section=uploadthing`}
+                target="_blank"
+                rel="noopener"
                 style={{
                   fontSize: 12.5,
                   color: "var(--accent-ink)",
@@ -695,7 +703,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 }}
               >
                 Set up UploadThing <ExternalLink size={12} />
-              </Link>
+              </a>
             </div>
           </div>
         )}

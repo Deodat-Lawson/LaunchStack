@@ -1,7 +1,7 @@
 import "~/styles/globals.css";
 import "@uploadthing/react/styles.css";
-import { Analytics } from '@vercel/analytics/next';
 import { ThemeProvider } from "next-themes";
+import { CloudAnalytics } from "./_components/CloudAnalytics";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
@@ -11,42 +11,28 @@ import {
 import { inter, instrumentSerif, jetbrainsMono } from "./employer/fonts";
 
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://launchstack.app';
+// The marketing metadata that used to live here — keywords, OG card, Twitter
+// card, canonical, index:true — moved to apps/landing with the public site.
+// What is left is what a private application needs.
+//
+// APP_PUBLIC_URL is the existing variable for "the origin this instance is
+// served from" (see env.ts; it also feeds CoreConfig.ocr.appPublicUrl). When
+// nothing is set, metadataBase is omitted rather than defaulted: asserting
+// launchstack.app as a self-hosted instance's canonical origin is a lie, and
+// Next resolves relative URLs fine without it.
+const APP_URL = process.env.APP_PUBLIC_URL ?? process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata: Metadata = {
   title: {
-    default: 'Launchstack — The Open-Source Launch Stack for Tech Founders',
+    default: 'Launchstack',
     template: '%s | Launchstack',
   },
-  description: 'Launchstack is a free, open-source AI platform that helps tech founders analyze documents, detect compliance gaps, manage teams, and grow their product. Self-host with your own API keys.',
-  keywords: [
-    'open source startup tools', 'free tools for tech founders', 'startup launch stack',
-    'document analysis AI', 'RAG', 'predictive analysis', 'document Q&A',
-    'contract analysis', 'compliance', 'open source', 'self-hosted AI platform',
-    'founder tools', 'startup growth', 'free AI tools',
-  ],
-  metadataBase: new URL(SITE_URL),
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: SITE_URL,
-    siteName: 'Launchstack',
-    title: 'Launchstack — The Open-Source Launch Stack for Tech Founders',
-    description: 'Launchstack is a free, open-source AI platform that helps tech founders analyze documents, detect compliance gaps, manage teams, and grow their product. Self-host with your own API keys.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Launchstack — Open-Source AI Platform for Tech Founders' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Launchstack — The Open-Source Launch Stack for Tech Founders',
-    description: 'Free, open-source AI platform for document analysis, compliance gap detection, team management, and startup growth. Self-host with your own API keys.',
-    images: ['/og-image.png'],
-  },
+  description: 'Cited answers from your company documents.',
+  ...(APP_URL ? { metadataBase: new URL(APP_URL) } : {}),
+  // Every route on this origin is behind auth, and / redirects to /signin.
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
   },
   icons: [{ rel: "icon", url: "favicon.ico" }],
 };
@@ -64,7 +50,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
       <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="dark" enableSystem>
         {children}
-        <Analytics />
+        <CloudAnalytics />
       </ThemeProvider>
       </body>
       </html>

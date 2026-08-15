@@ -1,6 +1,6 @@
 import type { StoragePort } from "../storage/types";
 import type { JobDispatcherPort } from "../jobs/types";
-import type { CreditsPort } from "../credits/types";
+import type { CreditsPort, MeteringMode } from "../credits/types";
 import type { RagPort } from "../rag/types";
 import type { ChatModelsConfig } from "../llm/chat-config";
 import type { AuxiliaryOpenAIConfig } from "../llm/openai-client";
@@ -40,6 +40,13 @@ export interface JobsConfig {
 export interface CreditsConfig {
   /** Port that debits per-company token balances when absent is a no-op. */
   port: CreditsPort;
+  /**
+   * How much authority the ledger has. Defaults to "off" when omitted, which
+   * keeps a host that registers a port but says nothing about metering from
+   * accidentally gating work. Hosts that bill set "enforce"; self-hosted
+   * deployments set "record". See MeteringMode.
+   */
+  metering?: MeteringMode;
 }
 
 export interface DbConfig {

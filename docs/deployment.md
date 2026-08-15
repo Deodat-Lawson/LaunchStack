@@ -2,6 +2,34 @@
 
 This document covers deployment options for Launchstack.
 
+## Self-hosting defaults
+
+A deployment is **self-hosted unless it says otherwise** (`DEPLOYMENT_MODE`
+unset). In that mode:
+
+- **No usage metering gate.** Token usage is still recorded — `/api/credits/usage`
+  and `token_usage_daily` answer "which document burned 400k embedding tokens" —
+  but nothing is ever refused for want of balance. Only `DEPLOYMENT_MODE=cloud`
+  enforces a balance, because only a billing deployment has a way to add credits.
+- **No telemetry and no phone-home.** Vercel Analytics is mounted only on cloud
+  deployments, `NEXT_TELEMETRY_DISABLED=1` is set in the images, and there is no
+  usage reporting of any kind.
+- **No third-party asset fetches.** The pdf.js worker is served from the instance
+  (copied into `public/` at build time), so PDFs render on an air-gapped host.
+- **No contact form that goes nowhere.** The in-app support page is driven by
+  `SUPPORT_CONTACT_EMAIL` / `SUPPORT_COMMUNITY_URL`; with none set it points at
+  the project's issue tracker rather than showing a form that discards messages.
+- **The instance names itself.** Workspace URLs use the host you serve from, not
+  `launchstack.app`.
+
+The public marketing site is **not** part of a self-hosted deployment. It is a
+separate app (`apps/landing`, deployed independently); Docker and Compose build
+`apps/web` only. On a self-hosted instance `/` redirects to `/signin`.
+
+**The first person to sign up becomes the owner** of the workspace they create,
+already verified — there is no separate admin bootstrap step and no approval
+queue to clear for that first account.
+
 ## Prerequisites
 
 - Required environment variables configured
@@ -130,7 +158,7 @@ modes, and migration from the pre-PR variables.
 | `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
 | `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
 | `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
-| `INNGEST_EVENT_KEY` | Yes (prod) | Inngest event key for background jobs |
+| `INNGEST_EVENT_KEY` | Cloud only | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox |
 | `BLOB_READ_WRITE_TOKEN` | Yes (Vercel) | Required for Vercel Blob uploads |
 | `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
 | `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Optional | Whisper transcription service (`services/transcription`) — the names the Compose stack uses |
@@ -148,7 +176,11 @@ being picked up.
 | `AZURE_DOC_INTELLIGENCE_*` | Optional | OCR for scanned PDFs |
 | `DATALAB_API_KEY` | Optional | Alternative OCR |
 | `LANDING_AI_API_KEY` | Optional | Fallback OCR |
-| `JOB_RUNNER` | Optional | `inngest` (default) or `trigger-dev` |
+| `DEPLOYMENT_MODE` | Optional | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults) |
+| `NEXT_PUBLIC_SITE_URL` | Optional | Origin the public site (`apps/landing`) is served from |
+| `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
+| `EMAIL_UNSUBSCRIBE_SECRET` | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars |
+| `SUPPORT_CONTACT_EMAIL` | Optional | Address the in-app contact form composes to. Unset hides the form |
 
 ## Post-deployment Checklist
 

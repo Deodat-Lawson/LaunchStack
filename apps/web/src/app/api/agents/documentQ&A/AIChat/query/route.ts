@@ -44,7 +44,7 @@ import { normalizeTokenUsage } from "@launchstack/core/llm";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import type { AttachmentPayload } from "~/lib/validation";
 import { debitTokens, llmChatTokens } from "~/lib/credits";
-import { isCloudMode } from "@launchstack/core/providers/registry";
+import { isMeteringEnabled } from "@launchstack/core/credits";
 import type { SYSTEM_PROMPTS } from "../../services/prompts";
 import { validateQAResponse } from "~/lib/agents/supervisor";
 
@@ -689,7 +689,11 @@ export async function POST(request: Request) {
             console.log(
                 `[AIChat] Token usage: ${promptTokens} prompt + ${completionTokens} completion = ${usage.totalTokens ?? promptTokens + completionTokens} tokens (model=${selectedAiModel}, ${totalTime}ms)`
             );
-            if (isCloudMode() && userCompanyId && promptTokens + completionTokens > 0) {
+            // isMeteringEnabled, not isMeteringEnforced: recording chat usage
+            // is useful on a self-hosted instance too. This calls debitTokens
+            // directly rather than going through creditsDebitSafe (which would
+            // change the recorded metadata shape), so it needs its own guard.
+            if (isMeteringEnabled() && userCompanyId && promptTokens + completionTokens > 0) {
                 const tokenCost = llmChatTokens(promptTokens, completionTokens);
                 debitTokens({
                     companyId: userCompanyId,

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { db } from "~/server/db";
 import { company } from "@launchstack/core/db/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
-import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
+import { ensureTokenAccount } from "~/lib/credits";
 import {
     setActiveWorkspaceCookie,
     getActiveCompanyId,
@@ -166,9 +166,11 @@ export async function POST(request: Request) {
         });
 
         try {
-            await initTokenAccount(newCompanyId, TOKEN_SIGNUP_BONUS);
+            // Grant is cloud-only; see the signup route for why a self-hosted
+            // instance opens the account at zero instead.
+            await ensureTokenAccount(newCompanyId);
         } catch (creditErr) {
-            console.error("[workspaces] initTokenAccount failed:", creditErr);
+            console.error("[workspaces] ensureTokenAccount failed:", creditErr);
             // Non-fatal: workspace exists, credits can be initialized later.
         }
 

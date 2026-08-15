@@ -10,7 +10,7 @@ import { createDb, configureDatabase, type Db, type DbClient } from "./db";
 import { configureNeo4j, getNeo4jDriver, closeNeo4jDriver, type Driver } from "./graph/neo4j-client";
 import { configureStorage } from "./storage/slot";
 import { configureJobDispatcher } from "./jobs/slot";
-import { configureCredits } from "./credits/slot";
+import { configureCredits, configureMetering } from "./credits/slot";
 import { configureRag } from "./rag/slot";
 import { configureChatModels } from "./llm/chat-model-factory";
 import { configureAuxiliaryOpenAI } from "./llm/openai-client";
@@ -72,6 +72,11 @@ export function createEngine(config: CoreConfig): Engine {
   if (config.credits?.port) {
     configureCredits(config.credits.port);
   }
+  // Unconditional, unlike the port above: a host that builds an engine has
+  // decided about metering even when it says nothing, and leaving the slot
+  // empty would make "never configured" and "explicitly off" indistinguishable
+  // to anything reading it later.
+  configureMetering(config.credits?.metering ?? "off");
   if (config.rag?.port) {
     configureRag(config.rag.port);
   }

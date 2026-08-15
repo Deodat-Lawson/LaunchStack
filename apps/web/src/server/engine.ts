@@ -18,6 +18,7 @@ import { configureEmbeddingIndexRegistry } from "@launchstack/core/embeddings";
 import { configureCompanyEmbeddingDefaults } from "@launchstack/core/embeddings";
 import { createAppStoragePort } from "./storage/port";
 import { createAppCreditsPort } from "./credits/port";
+import { getMeteringMode, logDeploymentModeOnce } from "./deployment";
 import { createAppRagPort } from "./rag/port";
 import { configureAppChatModels, getAppChatModelsConfig } from "./chat-models";
 
@@ -184,6 +185,12 @@ function buildConfig(): CoreConfig {
 
     credits: {
       port: createAppCreditsPort(),
+      // "enforce" for the hosted service, "record" for a self-hosted instance.
+      // This is the single place the deployment's billing posture reaches the
+      // engine; packages/* must not read process.env, so it travels as config.
+      // apps/worker boots through this same composition root, so it cannot
+      // disagree.
+      metering: getMeteringMode(),
     },
 
     rag: {
@@ -196,6 +203,11 @@ export function getEngine(): Engine {
   if (globalHolder.__launchstackEngine) {
     return globalHolder.__launchstackEngine.engine;
   }
+
+  // Say out loud which posture this process resolved to. A hosted deploy that
+  // loses DEPLOYMENT_MODE would otherwise stop metering with no other symptom.
+  logDeploymentModeOnce();
+
   const config = buildConfig();
 
   // Register chat-model config so chat-model-factory sees the same

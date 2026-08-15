@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { SignOutButton } from "@clerk/nextjs";
+import { LANDING_CONTACT_URL } from "~/config/landing";
+import { useInstanceHost } from "~/lib/instance-host";
 
 import styles from "./workspace-select.module.css";
 
@@ -149,6 +151,9 @@ export function WorkspaceSelectClient({
     const router = useRouter();
     const { theme, setTheme, resolvedTheme } = useTheme();
     const isDark = (resolvedTheme ?? theme) === "dark";
+    // Workspace URLs are shown as "<this instance's host>/<slug>". Hardcoding
+    // launchstack.app here showed self-hosters someone else's domain as theirs.
+    const instanceHost = useInstanceHost();
 
     const [query, setQuery] = useState("");
     const [editorOpen, setEditorOpen] = useState(false);
@@ -247,7 +252,7 @@ export function WorkspaceSelectClient({
     }, [slugValue]);
 
     const previewName = name || "New workspace";
-    const previewUrl = `launchstack.app/${slugValue || "—"}`;
+    const previewUrl = `${instanceHost}/${slugValue || "—"}`;
     const previewInitials = initialsOf(name);
 
     function onNameChange(v: string) {
@@ -560,7 +565,7 @@ export function WorkspaceSelectClient({
                                             {ws.slug ? (
                                                 <>
                                                     <span className={styles.url}>
-                                                        launchstack.app/{ws.slug}
+                                                        {instanceHost}/{ws.slug}
                                                     </span>
                                                     <span className={styles.sep}>·</span>
                                                 </>
@@ -643,7 +648,7 @@ export function WorkspaceSelectClient({
                                                 </div>
                                                 <div className={styles.wsMeta}>
                                                     <span className={styles.url}>
-                                                        launchstack.app/{inv.slug}
+                                                        {instanceHost}/{inv.slug}
                                                     </span>
                                                     <span className={styles.sep}>·</span>
                                                     <span>
@@ -858,7 +863,7 @@ export function WorkspaceSelectClient({
                                     URL <span className={styles.req}>*</span>
                                 </label>
                                 <div className={styles.urlInput}>
-                                    <span className={styles.urlPrefix}>launchstack.app/</span>
+                                    <span className={styles.urlPrefix}>{instanceHost}/</span>
                                     <input
                                         id="ce-url"
                                         type="text"
@@ -1025,9 +1030,13 @@ export function WorkspaceSelectClient({
                     <br />
                     <a href="/signin">Use a different account</a>
                     <span className={styles.sepDot}>·</span>
-                    <a href="/contact">Help</a>
-                    <span className={styles.sepDot}>·</span>
-                    <a href="/privacy">Privacy</a>
+                    {/* Cross-origin — support lives on the public site. */}
+                    <a href={LANDING_CONTACT_URL} rel="noopener">Help</a>
+                    {/*
+                      A "Privacy" link pointing at /privacy used to sit here.
+                      That route has never existed in any app, so it 404'd;
+                      removed rather than carried across the split.
+                    */}
                 </p>
             </div>
         </div>

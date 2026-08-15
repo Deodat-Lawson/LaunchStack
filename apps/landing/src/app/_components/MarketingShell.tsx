@@ -5,8 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { Github, Moon, Sun } from 'lucide-react';
 import styles from '../../styles/marketing.module.css';
-
-const GITHUB_REPO = 'https://github.com/Deodat-Lawson/LaunchStack';
+import { GITHUB_REPO, SIGN_IN_URL, SIGN_UP_URL } from '~/config/site';
 
 interface MarketingShellProps {
   children: React.ReactNode;
@@ -14,11 +13,13 @@ interface MarketingShellProps {
   hideFooter?: boolean;
 }
 
+// `/about` used to sit between Deployment and Contact. The route has never
+// existed in any app, so it 404'd here and in the sitemap; dropped rather than
+// carried onto a dedicated marketing domain.
 const DEFAULT_LINKS: Array<{ href: string; label: string }> = [
   { href: '/#features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/deployment', label: 'Deployment' },
-  { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -84,12 +85,18 @@ export function MarketingShell({
           >
             {mounted ? (isDark ? <Sun size={16} /> : <Moon size={16} />) : <Sun size={16} style={{ opacity: 0 }} />}
           </button>
-          <Link href="/signin" className={`${styles.btn} ${styles.btnGhost}`}>
+          {/*
+            Cross-origin: the app lives on app.launchstack.app (apps/web).
+            Plain <a>, not next/link — Link does a full document navigation for
+            absolute URLs anyway, while attempting a same-origin prefetch that
+            no-ops with a console warning.
+          */}
+          <a href={SIGN_IN_URL} rel="noopener" className={`${styles.btn} ${styles.btnGhost}`}>
             Sign in
-          </Link>
-          <Link href="/signup" className={`${styles.btn} ${styles.btnAccent}`}>
+          </a>
+          <a href={SIGN_UP_URL} rel="noopener" className={`${styles.btn} ${styles.btnAccent}`}>
             Start free →
-          </Link>
+          </a>
         </div>
       </nav>
 
@@ -119,7 +126,7 @@ function MarketingFooter() {
           <li><Link href="/#features">Features</Link></li>
           <li><Link href="/pricing">Pricing</Link></li>
           <li><Link href="/deployment">Deployment</Link></li>
-          <li><Link href="/signup">Try it free</Link></li>
+          <li><a href={SIGN_UP_URL} rel="noopener">Try it free</a></li>
         </ul>
       </div>
       <div>
@@ -134,7 +141,6 @@ function MarketingFooter() {
       <div>
         <h5>Company</h5>
         <ul>
-          <li><Link href="/about">About</Link></li>
           <li><Link href="/contact">Contact</Link></li>
         </ul>
       </div>

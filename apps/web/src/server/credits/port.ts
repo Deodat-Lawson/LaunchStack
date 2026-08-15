@@ -23,6 +23,10 @@ export function createAppCreditsPort(): CreditsPort {
           description: input.description ?? `${input.service} usage`,
           referenceId: input.referenceId,
           metadata: input.metadata,
+          // allowNegative is deliberately not passed: debitTokens defaults it
+          // from the deployment's own policy, so this port and the routes that
+          // debit directly cannot drift apart on whether recording may
+          // overdraw.
         });
       } catch (err) {
         console.warn("[CreditsPort] debitTokens failed (non-blocking):", err);

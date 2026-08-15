@@ -25,6 +25,7 @@ const DEPLOY_SURFACES = [
   "apps/web/Dockerfile",
   "apps/web/Dockerfile.prebuilt",
   "apps/web/vercel.json",
+  "apps/landing/vercel.json",
   "docker-compose.yml",
   "docker-compose.prebuilt.yml",
 ];

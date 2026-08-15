@@ -66,7 +66,7 @@ Running it from `@launchstack/core` applies only the engine set — that is what
 consumer embedding the engine uses, not what a full app needs.
 Nothing else creates schema — see [Changing the database](CONTRIBUTING.md#changing-the-database).
 
-> **If you ran `make up` first**, note that Compose publishes Postgres on host port **5433** with database `pdr_ai_v2`, while `.env.example` ships `localhost:5432/pdr_ai`. Point `DATABASE_URL` at `localhost:5433/pdr_ai_v2` to reuse the container's database.
+> `.env.example` points `DATABASE_URL` at `localhost:5433/pdr_ai_v2`, which is what Compose publishes — so the Docker and non-Docker paths share one database by default. Running your own Postgres instead? Use the commented `localhost:5432/pdr_ai` line in its place.
 
 <details>
 <summary>Windows (no <code>make</code>)</summary>
@@ -87,6 +87,22 @@ Or install `make` via [Chocolatey](https://chocolatey.org/) (`choco install make
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full dev guide.
 
+### Self-hosting
+
+A deployment is self-hosted unless you set `DEPLOYMENT_MODE=cloud`, and the
+defaults are chosen for that case: usage is recorded but never gated, no
+telemetry is loaded, no assets are fetched from a CDN, and the instance
+identifies itself by the host you serve it from. **The first person to sign up
+becomes the owner** of the workspace they create, already verified — there is no
+separate admin bootstrap.
+
+This repository builds the application. The marketing site at launchstack.app is
+a separate app ([`apps/landing`](apps/landing)) that Docker and Compose do not
+build — on your own instance, `/` is the sign-in page, not a pitch.
+
+Full details, including what degrades without which optional service, are in
+[Self-hosting defaults](docs/deployment.md#self-hosting-defaults).
+
 ---
 
 ## Repository layout
@@ -96,6 +112,7 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full dev guide.
 | Path | What it is |
 |---|---|
 | [`apps/web`](apps/web) | The Next.js app: UI, auth, command acceptance, synchronous reads. |
+| [`apps/landing`](apps/landing) | The public site (launchstack.app): landing, pricing, contact, deployment guide. No database, no auth; **not** part of any self-hosted deployment. |
 | [`apps/worker`](apps/worker) | The durable workflow coordinator — consumes the ingestion outbox and hosts the background jobs (ADR-003). |
 | [`packages/protocol`](packages/protocol), [`packages/evidence`](packages/evidence), [`packages/application`](packages/application), [`packages/adapters`](packages/adapters) | The layered engine (ADR-002): contracts → pure company-state logic → use cases/ports → implementations. |
 | [`packages/core`](packages/core) | The published compatibility facade over the engine packages. |

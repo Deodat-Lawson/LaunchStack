@@ -1,0 +1,36 @@
+{
+  "name": "@launchstack/landing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "launchstack.app — the public site (landing, pricing, contact, deployment guide). No database, no auth, no engine packages. Every CTA that needs an account crosses to NEXT_PUBLIC_APP_URL (apps/web).",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --turbo --port 3001",
+    "lint": "eslint .",
+    "preview": "next build && next start --port 3001",
+    "start": "next start --port 3001",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "@vercel/analytics": "^1.6.1",
+    "dotenv": "^17.3.1",
+    "lucide-react": "^0.487.0",
+    "motion": "^12.29.2",
+    "next": "^15.5.7",
+    "next-themes": "^0.4.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.9.2"
+  }
+}

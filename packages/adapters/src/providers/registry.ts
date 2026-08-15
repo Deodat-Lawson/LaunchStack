@@ -191,12 +191,12 @@ export function resolveTranscriptionProvider(): ProviderMode {
     return getConfig().transcriptionProviderMode === "sidecar" ? "sidecar" : "cloud";
 }
 
-/**
- * Whether cloud token metering applies. Always true since ADR-004 §5: the
- * "sidecar deployment = free" global switch keyed off SIDECAR_URL, which no
- * longer selects anything. Self-hosted providers (transcription service)
- * report `tokensUsed: 0`, so per-usage debits already no-op for them.
- */
-export function isCloudMode(): boolean {
-    return true;
-}
+// `isCloudMode()` used to live here, hardcoded to `true` since ADR-004 §5
+// removed the SIDECAR_URL switch it was keyed off. Metering is not a provider
+// concern — it only sat in this registry because of that historical
+// derivation — and hardcoding it made every deployment behave as if it were
+// billing, which permanently bricked uploads on self-hosted instances once a
+// workspace exhausted its signup grant.
+//
+// It is replaced by the metering slot in ../credits/slot.ts, fed from
+// CoreConfig.credits.metering. Use isMeteringEnforced() for blocking checks.

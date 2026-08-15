@@ -13,7 +13,7 @@ import { detectStorageType, toAbsoluteUrl, type StorageType } from "./detect-sto
 import { authorizeInternalFileRef } from "./internal-file-ref";
 import { createDocumentLifecycle, type CreatedDocumentLifecycle } from "./document-creation";
 import { hasTokens } from "~/lib/credits";
-import { isCloudMode } from "@launchstack/core/providers/registry";
+import { isMeteringEnforced } from "@launchstack/core/credits";
 import { buildInternalFileUrl } from "@launchstack/core/crypto";
 import { getOcrConfig } from "@launchstack/core/ocr/config";
 
@@ -96,7 +96,8 @@ export async function processDocumentUpload({
     // authorizing internal file refs. On a cold process, an empty slot makes
     // effectiveProvider / workerUrl / FILE_ACCESS_TOKEN_SECRET look unset and
     // skips the ingress rejection for unsigned OSS fetches. Idempotent/cached.
-    // Also required before isCloudMode() below (empty registry → false "cloud").
+    // Also required before isMeteringEnforced() below: the metering slot is
+    // populated by createEngine, and an unbuilt engine reads as "off".
     getEngine();
 
     const effectiveProvider =
@@ -128,15 +129,18 @@ export async function processDocumentUpload({
     const documentCategory = category ?? "Uncategorized";
 
     // ------------------------------------------------------------------
-    // Credit pre-check (cloud mode only)
+    // Credit pre-check. Only a deployment that actually bills gates on the
+    // balance: a self-hosted instance records usage but must never refuse
+    // work, because nothing in the product can add credits and the refusal
+    // would be permanent.
     // ------------------------------------------------------------------
-    if (isCloudMode()) {
+    if (isMeteringEnforced()) {
         // Rough estimate: 20 credits covers a typical document (OCR + embeddings)
         const estimatedCredits = shouldTranscribeFile(mimeType, originalFilename) ? 30 : 20;
         const sufficient = await hasTokens(user.companyId, estimatedCredits);
         if (!sufficient) {
             throw new Error(
-                "Insufficient credits to process this document. Please add more credits to continue."
+                "This workspace has run out of processing credits, so the upload was not started. Contact your workspace owner to top up."
             );
         }
     }

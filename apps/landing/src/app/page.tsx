@@ -1,0 +1,101 @@
+import type { Metadata } from 'next';
+import React from 'react';
+import { LandingClient } from './_components/LandingClient';
+import { GITHUB_REPO, SITE_URL } from '~/config/site';
+
+export const metadata: Metadata = {
+  title: 'Launchstack — The Open-Source Launch Stack for Tech Founders',
+  description:
+    'Launchstack is the open-source second brain for founders. Turn uploaded docs, recordings, and repository imports into a living knowledge graph — ask anything, get cited answers.',
+  alternates: { canonical: '/' },
+};
+
+// Truthful SoftwareApplication facts only — no ratings, review counts, or
+// aggregate metrics (ADR-006 §4).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Launchstack',
+  applicationCategory: 'BusinessApplication',
+  applicationSubCategory: 'DeveloperApplication',
+  operatingSystem: 'Web',
+  description:
+    'Launchstack is a free, open-source AI platform that turns uploaded documents, recordings, and repository imports into a cited knowledge graph. Self-host with your own API keys.',
+  url: SITE_URL,
+  downloadUrl: GITHUB_REPO,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+  },
+  creator: { '@type': 'Organization', name: 'Launchstack', url: SITE_URL },
+  featureList:
+    'Document RAG with cited answers, Audio/video transcription, OCR document conversion, Predictive document analysis, DOCX redlining, Marketing pipeline, Self-hosting',
+  // Served by the file-convention app/opengraph-image.tsx. The previous value
+  // here was `${SITE_URL}/og-image.png`, which has never existed in public/.
+  screenshot: `${SITE_URL}/opengraph-image`,
+  license: 'https://www.apache.org/licenses/LICENSE-2.0',
+};
+
+const organizationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Launchstack',
+  url: SITE_URL,
+  logo: `${SITE_URL}/favicon.ico`,
+  description:
+    'Launchstack builds free, open-source tools that help tech founders grow their products.',
+  sameAs: [GITHUB_REPO],
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is Launchstack?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Launchstack is a free, open-source AI platform for tech founders. It turns uploaded documents, recordings, and repository imports into a cited knowledge graph you can query in plain English.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is Launchstack really free?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Launchstack is 100% free and open source under the Apache 2.0 license. Self-host on your own infrastructure with your own API keys — no usage limits, no hidden costs.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I self-host Launchstack?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely. Run the full stack with Docker Compose on any server you control, or deploy the web app to Vercel with a separately hosted worker for ingestion. Bring your own API keys and maintain full control over your data.',
+      },
+    },
+  ],
+};
+
+export default function HomePage() {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+      />
+      <LandingClient />
+    </>
+  );
+}

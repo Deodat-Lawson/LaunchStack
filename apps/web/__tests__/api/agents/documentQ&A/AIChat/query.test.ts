@@ -156,8 +156,8 @@ jest.mock("~/lib/credits", () => ({
   llmChatTokens: () => 0,
 }));
 
-jest.mock("@launchstack/core/providers/registry", () => ({
-  isCloudMode: () => false,
+jest.mock("@launchstack/core/credits", () => ({
+  isMeteringEnabled: () => false,
 }));
 
 jest.mock("~/lib/agents/supervisor", () => ({

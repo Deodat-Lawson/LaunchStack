@@ -12,15 +12,21 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
 /**
- * react-pdf ships with `pdfjs-dist` as a transitive dep but expects the host
- * app to configure the worker. We pin the worker to the exact pdfjs-dist
- * version bundled with react-pdf via `pdfjs.version`, so bumping react-pdf
- * in the future automatically moves the worker in lockstep. CDN is fine for
- * the hosted demo; self-hosters can override `NEXT_PUBLIC_PDF_WORKER_URL`.
+ * react-pdf ships `pdfjs-dist` as a transitive dep but expects the host app to
+ * configure the worker.
+ *
+ * Served from public/, copied there at build time by
+ * scripts/copy-pdf-worker.mjs from the exact pdfjs-dist that react-pdf
+ * resolves — so bumping react-pdf moves the worker in lockstep, same guarantee
+ * the old `pdfjs.version` interpolation gave.
+ *
+ * Local rather than a CDN because the default has to work on an air-gapped
+ * instance. NEXT_PUBLIC_PDF_WORKER_URL still overrides it, but note that being
+ * a NEXT_PUBLIC_ value it is baked in at build time — it is an option when you
+ * build your own image, not something a prebuilt image can be pointed at.
  */
 const WORKER_URL =
-    process.env.NEXT_PUBLIC_PDF_WORKER_URL ??
-    `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+    process.env.NEXT_PUBLIC_PDF_WORKER_URL ?? "/pdf.worker.min.mjs";
 
 if (typeof window !== "undefined") {
     pdfjs.GlobalWorkerOptions.workerSrc = WORKER_URL;

@@ -18,7 +18,6 @@ import {
 import { eq, and, sql } from "drizzle-orm";
 import { getNERProvider } from "../providers/ner";
 import { creditsDebitSafe } from "../credits/slot";
-import { isCloudMode } from "../providers/registry";
 
 function isEntityLabel(s: string): s is EntityLabel {
   return (entityLabelEnum as readonly string[]).includes(s);
@@ -51,9 +50,9 @@ export async function extractAndStoreEntities(
 
   const { data, usage } = await provider.extract(chunks.map((c) => c.content));
 
-  // Debit credits if cloud mode. creditsDebitSafe no-ops when no port is
-  // registered and swallows bookkeeping errors.
-  if (isCloudMode() && usage.tokensUsed > 0) {
+  // creditsDebitSafe no-ops when metering is off or no port is registered,
+  // and swallows bookkeeping errors.
+  if (usage.tokensUsed > 0) {
     await creditsDebitSafe({
       companyId,
       tokens: usage.tokensUsed,

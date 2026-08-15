@@ -3,7 +3,7 @@ import { company } from "@launchstack/core/db/schema";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import {eq} from "drizzle-orm";
 import {handleApiError, createSuccessResponse, createValidationError} from "~/lib/api-utils";
-import { initTokenAccount, TOKEN_SIGNUP_BONUS } from "~/lib/credits";
+import { ensureTokenAccount } from "~/lib/credits";
 import { validateRequestBody, EmployerCompanySignupSchema } from "~/lib/validation";
 import { upsertCompanyCredentials } from "@launchstack/core/embeddings";
 import { generateUniqueSlug } from "~/lib/workspace-slug";
@@ -116,8 +116,12 @@ export async function POST(request: Request) {
             });
         }
 
-        // Initialize credit account with signup bonus
-        await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
+        // Always create the account so usage is recorded from the first
+        // document. ensureTokenAccount applies the signup grant only where a
+        // balance is enforced — on a self-hosted instance nothing enforces it
+        // and nothing can top it up, so a notional 10M would be a number
+        // nobody reads.
+        await ensureTokenAccount(companyId);
 
         return createSuccessResponse(
             { userId, role: "owner" },

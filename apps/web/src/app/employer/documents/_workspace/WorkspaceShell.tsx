@@ -122,7 +122,9 @@ export function WorkspaceShell() {
     router.replace(query ? `${basePath}?${query}` : basePath!);
   }, [legacyRedirect, searchParams, router]);
 
-  // Redirect unauthenticated users back to the landing page.
+  // Bounce unauthenticated users out of the workspace. `/` is no longer the
+  // landing page on this origin — it redirects to /signin — so this lands them
+  // on the sign-in screen rather than a marketing page.
   useEffect(() => {
     if (isLoaded && !isSignedIn) router.push("/");
   }, [isLoaded, isSignedIn, router]);

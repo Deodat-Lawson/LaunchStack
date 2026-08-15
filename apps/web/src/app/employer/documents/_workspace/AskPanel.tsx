@@ -1023,7 +1023,8 @@ function EmptyState({ onOpenAdd, sourceCount }: EmptyStateProps) {
   );
 }
 
-/** Public README — same destination as MarketingShell footer "Documentation". */
+/** Public README — same destination as the public site's footer "Documentation"
+ *  link (apps/landing, MarketingShell). */
 const EMPLOYER_DOCS_URL = "https://github.com/Deodat-Lawson/LaunchStack#readme";
 
 export interface AvatarMenuProps {

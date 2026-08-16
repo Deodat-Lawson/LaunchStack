@@ -9,7 +9,12 @@
 import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import {
+    CALL_NOTES_ENRICHMENT_PROPOSAL,
+    EnrichedNoteProposalSchema,
+} from "@launchstack/features/call-notes";
 import { z } from "zod";
+import { FounderWeeklyReviewV2RecommendationSchema } from "@launchstack/features/founder-weekly-review";
 import {
     createChatModelsConfig,
     describeChatEndpointError,
@@ -367,6 +372,219 @@ describe("structured output", () => {
         expect(captured[0]!.body.response_format).toMatchObject({
             type: "json_schema",
         });
+    });
+
+    it("uses the validated JSON fallback for an optional field", async () => {
+        respondWith = () => ({
+            status: 200,
+            payload: completion(JSON.stringify({ required: "yes" })),
+        });
+
+        const OptionalSchema = z.object({
+            required: z.string(),
+            optional: z.string().optional(),
+        });
+        const resolved = resolveChatModel({
+            config: deployment(`      input: [text]
+      reasoning: { mode: none }
+      nativeStructuredOutput: [json-schema]
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported`),
+        });
+        await expect(
+            invokeStructured(resolved, OptionalSchema, [new HumanMessage("q")], {
+                name: "optional_example",
+            })
+        ).resolves.toEqual({ required: "yes" });
+
+        expect(captured).toHaveLength(1);
+        expect(captured[0]!.body).not.toHaveProperty("response_format");
+        expect(JSON.stringify(captured[0]!.body.messages)).toContain("optional");
+    });
+
+    it("accepts a present optional value and rejects an invalid one through the original schema", async () => {
+        respondWith = () => ({
+            status: 200,
+            payload: completion(JSON.stringify({ required: "yes", optional: "present" })),
+        });
+        const OptionalSchema = z.object({
+            required: z.string(),
+            optional: z.string().optional(),
+        });
+        const resolved = resolveChatModel({
+            config: deployment(`      input: [text]
+      reasoning: { mode: none }
+      nativeStructuredOutput: [json-schema]
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported`),
+        });
+        await expect(
+            invokeStructured(resolved, OptionalSchema, [new HumanMessage("q")], {
+                name: "optional_present",
+            })
+        ).resolves.toEqual({ required: "yes", optional: "present" });
+
+        respondWith = () => ({
+            status: 200,
+            payload: completion(JSON.stringify({ required: "yes", optional: 42 })),
+        });
+        await expect(
+            invokeStructured(resolved, OptionalSchema, [new HumanMessage("q")], {
+                name: "optional_invalid",
+            })
+        ).rejects.toBeInstanceOf(StructuredOutputError);
+        expect(captured).toHaveLength(3);
+    });
+
+    it("uses the fallback for a defaulted object field and preserves Zod defaults", async () => {
+        respondWith = () => ({
+            status: 200,
+            payload: completion(JSON.stringify({ required: "yes" })),
+        });
+        const DefaultedSchema = z.object({
+            required: z.string(),
+            defaulted: z.string().default("from-zod"),
+        });
+        const resolved = resolveChatModel({
+            config: deployment(`      input: [text]
+      reasoning: { mode: none }
+      nativeStructuredOutput: [json-schema]
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported`),
+        });
+
+        await expect(
+            invokeStructured(resolved, DefaultedSchema, [new HumanMessage("q")], {
+                name: "defaulted_example",
+            })
+        ).resolves.toEqual({ required: "yes", defaulted: "from-zod" });
+        expect(captured).toHaveLength(1);
+        expect(captured[0]!.body).not.toHaveProperty("response_format");
+    });
+
+    it("detects optional and defaulted fields nested inside an object", async () => {
+        respondWith = () => ({
+            status: 200,
+            payload: completion(JSON.stringify({ nested: { required: "yes" } })),
+        });
+        const NestedSchema = z.object({
+            nested: z.object({
+                required: z.string(),
+                optional: z.string().optional(),
+                defaulted: z.string().default("nested-default"),
+            }),
+        });
+        const resolved = resolveChatModel({
+            config: deployment(`      input: [text]
+      reasoning: { mode: none }
+      nativeStructuredOutput: [json-schema]
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported`),
+        });
+
+        await expect(
+            invokeStructured(resolved, NestedSchema, [new HumanMessage("q")], {
+                name: "nested_optional_example",
+            })
+        ).resolves.toEqual({
+            nested: { required: "yes", defaulted: "nested-default" },
+        });
+        expect(captured).toHaveLength(1);
+        expect(captured[0]!.body).not.toHaveProperty("response_format");
+    });
+
+    it("uses the fallback for the current Founder Weekly Review recommendation schema", async () => {
+        respondWith = () => ({
+            status: 200,
+            payload: completion(
+                JSON.stringify({
+                    kind: "recommendation",
+                    label: "Recommendation",
+                    text: "Review the evidence.",
+                    sourceIds: ["document_change:example"],
+                    confidence: 0.5,
+                })
+            ),
+        });
+        const resolved = resolveChatModel({
+            config: deployment(`      input: [text]
+      reasoning: { mode: none }
+      nativeStructuredOutput: [json-schema]
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported`),
+        });
+        await expect(
+            invokeStructured(
+                resolved,
+                FounderWeeklyReviewV2RecommendationSchema,
+                [new HumanMessage("q")],
+                { name: "founder_weekly_review_v2" }
+            )
+        ).resolves.toMatchObject({ kind: "recommendation", text: "Review the evidence." });
+        expect(captured).toHaveLength(1);
+        expect(captured[0]!.body).not.toHaveProperty("response_format");
+    });
+
+    it("uses the fallback for the frozen Call Notes enrichment proposal schema", async () => {
+        respondWith = () => ({
+            status: 200,
+            payload: completion(JSON.stringify(CALL_NOTES_ENRICHMENT_PROPOSAL)),
+        });
+        const resolved = resolveChatModel({
+            config: deployment(`      input: [text]
+      reasoning: { mode: none }
+      nativeStructuredOutput: [json-schema]
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported`),
+        });
+
+        await expect(
+            invokeStructured(resolved, EnrichedNoteProposalSchema, [new HumanMessage("q")], {
+                name: "call_notes_enrichment_v1",
+            })
+        ).resolves.toEqual(CALL_NOTES_ENRICHMENT_PROPOSAL);
+        expect(captured).toHaveLength(1);
+        expect(captured[0]!.body).not.toHaveProperty("response_format");
+    });
+
+    it("does not reroute a normal native provider failure", async () => {
+        respondWith = () => ({
+            status: 401,
+            payload: { error: { message: "provider failed" } },
+        });
+        const resolved = resolveChatModel({
+            config: deployment(`      input: [text]
+      reasoning: { mode: none }
+      nativeStructuredOutput: [json-schema]
+      parameters:
+        temperature: supported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported`),
+        });
+        await expect(
+            invokeStructured(resolved, Schema, [new HumanMessage("q")], { name: "native_error" })
+        ).rejects.toThrow();
+        expect(captured).toHaveLength(1);
+        expect(captured[0]!.body.response_format).toMatchObject({ type: "json_schema" });
     });
 
     it("falls back to a strict JSON prompt carrying the schema", async () => {

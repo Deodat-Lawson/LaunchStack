@@ -21,6 +21,8 @@ import { eq } from "drizzle-orm";
 import { inngest } from "../client";
 import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
+import { findObjectByRef, registerArtifactEdge, registerObject } from "~/server/services/storage-manifest";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 import { putFile, fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
 
@@ -94,6 +96,7 @@ export const modifyDocument = inngest.createFunction(
         return {
           summary,
           blobUrl: stored.url,
+          storageRef: stored.ref,
         };
       } catch (err) {
         // 422 = validation error — don't retry
@@ -128,19 +131,53 @@ export const modifyDocument = inngest.createFunction(
       return { success: false, error: result.validationError };
     }
 
+    if (!("storageRef" in result) || !result.storageRef || !result.blobUrl) {
+      throw new Error(`Modification output for document ${documentId} did not include a storage ref`);
+    }
+    const nextStorageRef = result.storageRef;
+    const nextBlobUrl = result.blobUrl;
+
     // Step 3: Store the final URL on the document record
     // Fix 1.15: DB update is in its own step.run so Inngest memoizes it
     // separately — replays won't re-execute the write
     const storedUrl = await step.run("update-document-record", async () => {
-      await db
-        .update(document)
-        .set({
-          url: result.blobUrl!,
-          updatedAt: new Date(),
-        })
-        .where(eq(document.id, documentId));
+      await db.transaction(async (tx) => {
+        const [target] = await tx
+          .select({ companyId: document.companyId })
+          .from(document)
+          .where(eq(document.id, documentId));
+        if (!target) throw new Error(`Document ${documentId} not found while registering edit output`);
 
-      return result.blobUrl!;
+        const nextManifest = await registerObject(tx, {
+          ref: nextStorageRef,
+          companyId: target.companyId,
+          documentId,
+          contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          sourceOperation: "document-modification",
+        });
+
+        const oldRef = promoteLegacyUrlToRef({ value: documentUrl });
+        if (oldRef.ok) {
+          const previousManifest = await findObjectByRef(tx, oldRef.ref);
+          if (previousManifest && previousManifest.id !== nextManifest.id) {
+            await registerArtifactEdge(tx, {
+              parentObjectId: previousManifest.id,
+              childObjectId: nextManifest.id,
+              edgeType: "supersedes",
+            });
+          }
+        }
+
+        await tx
+          .update(document)
+          .set({
+            url: nextBlobUrl,
+            updatedAt: new Date(),
+          })
+          .where(eq(document.id, documentId));
+      });
+
+      return nextBlobUrl;
     });
 
     return {

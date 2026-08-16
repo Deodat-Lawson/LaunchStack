@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth, useUser } from "@clerk/nextjs";
 import LoadingPage from "~/app/_components/loading";
+import { pollDocumentDeletion } from "~/lib/deletion-status-client";
 import { useAIChat } from "../hooks/useAIChat";
 import { AddSourceModal } from "./AddSourceModal";
 import {
@@ -323,9 +324,18 @@ export function WorkspaceShell() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ docId: String(docId) }),
         });
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
         if (!res.ok) {
-          const body = (await res.json().catch(() => ({}))) as { error?: string };
           alert(body.error ?? "Failed to delete document");
+          return;
+        }
+        const deletion = await pollDocumentDeletion(docId);
+        if (deletion.kind !== "completed") {
+          const label =
+            deletion.kind === "timed_out"
+              ? "still in progress"
+              : deletion.status.replace("_", " ");
+          alert(`Document deletion is ${label}. Check the document status before retrying.`);
           return;
         }
         setViewerSource(null);
@@ -653,7 +663,7 @@ export function WorkspaceShell() {
           source={viewerSource}
           onClose={() => setViewerSource(null)}
           onRename={handleRenameDoc}
-          onDelete={(id) => void handleDeleteDoc(id)}
+          onDelete={handleDeleteDoc}
           onAskAbout={handleAskAbout}
           onVersionChanged={() => void refresh()}
         />

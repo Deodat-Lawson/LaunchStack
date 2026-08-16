@@ -41,7 +41,13 @@ import type {
 import { db } from "~/server/db";
 import { inngest } from "~/server/inngest/client";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
-import { hasManifest, listOwnedRefs, type StorageAdapter } from "./storage-manifest";
+import {
+  hasDocumentManifest,
+  hasManifest,
+  listDocumentOwnedRefs,
+  listOwnedRefs,
+  type StorageAdapter,
+} from "./storage-manifest";
 import { deleteDocumentCore } from "./document-delete";
 
 type Tx = Parameters<Parameters<(typeof db)["transaction"]>[0]>[0];
@@ -241,8 +247,8 @@ export async function buildDocumentDeletionItems(
     );
   }
 
-  if (await hasManifest(tx, { documentId: params.docId })) {
-    const refs = await listOwnedRefs(tx, { documentId: params.docId });
+  if (await hasDocumentManifest(tx, params.docId)) {
+    const refs = await listDocumentOwnedRefs(tx, params.docId);
     return refs.map((ref) => ({
       objectId: ref.id,
       adapter: ref.adapter as StorageAdapter,

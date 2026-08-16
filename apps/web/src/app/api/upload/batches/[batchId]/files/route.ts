@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { ObjectRef } from "@launchstack/core/storage";
 import { and, eq, inArray, isNull } from "drizzle-orm";
 import { z } from "zod";
 
@@ -25,6 +26,13 @@ const RegisterFilesSchema = z.object({
         relativePath: z.string().optional(),
         storageUrl: z.string().min(1, "storageUrl is required"),
         storageType: z.enum(["s3", "database"]).optional(),
+        storageRef: z
+          .object({
+            adapter: z.enum(["s3", "vercel-blob", "database", "uploadthing"]),
+            storageLocationId: z.string().min(1),
+            key: z.string().min(1),
+          })
+          .optional(),
         mimeType: z.string().optional(),
         size: z.number().int().nonnegative().optional(),
         metadata: z.record(z.any()).optional(),
@@ -81,8 +89,11 @@ export async function POST(
       if (file.size !== undefined) {
         updateData.fileSizeBytes = toFileSizeBigint(file.size);
       }
-      if (file.metadata !== undefined) {
-        updateData.metadata = file.metadata;
+      if (file.metadata !== undefined || file.storageRef !== undefined) {
+        updateData.metadata = {
+          ...(file.metadata ?? {}),
+          ...(file.storageRef ? { storageRef: file.storageRef satisfies ObjectRef } : {}),
+        };
       }
 
       const [updated] = await db

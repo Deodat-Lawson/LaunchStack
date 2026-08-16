@@ -111,7 +111,54 @@ NEXT_PUBLIC_STORAGE_PROVIDER="database"
 
 Restart the dev server and do a test upload. The file should be stored as base64 in the `file_uploads.file_data` column, and the document URL should be `/api/files/<id>`. Verify `storage_provider = 'database'` in the database.
 
-## 8. Infrastructure Smoke Test (Optional)
+## 8. Storage Deletion Lifecycle Smoke Test
+
+Enable both lifecycle flags in the app environment:
+
+```bash
+STORAGE_DELETION_LIFECYCLE_ENABLED="true"
+STORAGE_DELETION_WORKER_ENABLED="true"
+```
+
+Upload a document through the UI, record its document ID, and confirm its
+`storage_objects` row contains the S3 `storage_location_id` and opaque key.
+Request deletion through the UI or API:
+
+```bash
+curl -X DELETE http://localhost:3000/api/deleteDocument \
+  -H 'Content-Type: application/json' \
+  -H 'Cookie: <authenticated-cookie>' \
+  --data '{"docId":"<document-id>"}'
+```
+
+The response should be `202` with a `requestId`. Poll until the status is
+`completed`:
+
+```bash
+curl http://localhost:3000/api/documents/<document-id>/deletion-status \
+  -H 'Cookie: <authenticated-cookie>'
+```
+
+Finally, verify the exact key is gone from SeaweedFS. `head-object` should
+return a not-found error and the key should not appear in `list-objects`:
+
+```bash
+AWS_ACCESS_KEY_ID=pdr_local_key \
+AWS_SECRET_ACCESS_KEY=pdr_local_secret \
+aws s3api head-object --bucket pdr-documents --key '<full-key>' \
+  --endpoint-url http://localhost:8333
+
+AWS_ACCESS_KEY_ID=pdr_local_key \
+AWS_SECRET_ACCESS_KEY=pdr_local_secret \
+aws s3api list-objects-v2 --bucket pdr-documents --prefix '<full-key>' \
+  --endpoint-url http://localhost:8333
+```
+
+If the status is `partial`, `manual_review`, or `quarantined`, treat the smoke
+test as failed and inspect the per-item status instead of treating the SQL
+row removal as success.
+
+## 9. Infrastructure Smoke Test (Optional)
 
 Run the automated 17-check infrastructure test:
 

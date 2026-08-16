@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 
 import { getPresignedUploadUrl, getS3BucketName, ensureBucketExists } from "~/server/storage/s3-client";
 import { isS3Storage } from "~/lib/storage";
+import { resolveStorageLocationId } from "~/lib/storage-location-id";
 import { validateRequestBody, PresignUploadSchema } from "~/lib/validation";
 
 export async function POST(request: Request) {
@@ -42,7 +43,16 @@ export async function POST(request: Request) {
             300,
         );
 
-        return NextResponse.json({ presignedUrl, objectKey, bucket });
+        return NextResponse.json({
+            presignedUrl,
+            objectKey,
+            bucket,
+            ref: {
+                adapter: "s3",
+                storageLocationId: resolveStorageLocationId("s3"),
+                key: objectKey,
+            },
+        });
     } catch (error) {
         console.error("[Presign] Failed to generate presigned URL:", error);
         return NextResponse.json(

@@ -35,3 +35,7 @@ Deletion uses per-ref outcome reporting (`DeleteResult.outcome`):
 - `rejected`
 
 `deleteRef` / `deleteMany` return outcomes instead of a bare throw.
+
+## Deferred port scope
+
+The frozen lifecycle contract covers provider-owned identity and deletion. Full naming parity for `put`, `get`, and `getSignedUrl` is intentionally deferred; the current `StoragePort` continues to expose `upload` and `download` until existing ingestion callers can migrate without a compatibility break. New deletion and manifest code must use `ObjectRef`, `deleteRef`, and `deleteMany`; the legacy URL `delete` method remains only as a promotion shim for historical rows.

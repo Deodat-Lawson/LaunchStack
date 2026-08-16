@@ -67,6 +67,7 @@ import { deleteObjects } from "~/server/storage/s3-client";
 import { deleteFile as deleteBlobFile } from "~/server/storage/vercel-blob";
 import { deleteUploadThingFileByKey } from "~/server/storage/uploadthing";
 import { purgeDocumentRelational } from "~/server/services/storage-deletion-coordinator";
+import { isStorageDeletionWorkerEnabled } from "~/server/services/storage-deletion-flags";
 import { deleteFileByRef } from "~/lib/storage";
 import type { ObjectRef } from "@launchstack/core/storage";
 
@@ -96,18 +97,6 @@ function normalizeDeleteResult(result: {
     errorCode: result.errorCode,
     message: result.message,
   };
-}
-
-/**
- * Is the worker allowed to run right now? Matches the raw-env-var pattern
- * the existing A6a test already expects (STORAGE_DELETION_LIFECYCLE_ENABLED)
- * — no formal env.ts entry yet, that's Dev C's flag to own/wire up
- * properly. Default is OFF per the design doc (Decision 7): unset or
- * anything other than "true"/"1" means paused.
- */
-function isWorkerEnabled(): boolean {
-  const raw = process.env.STORAGE_DELETION_WORKER_ENABLED;
-  return raw === "true" || raw === "1";
 }
 
 /** Calls the right adapter's delete function and normalizes the result. */
@@ -168,7 +157,7 @@ export interface ProcessPendingItemsResult {
  * worker's kill switch is off.
  */
 export async function processPendingItems(requestId: number): Promise<ProcessPendingItemsResult> {
-  if (!isWorkerEnabled()) {
+  if (!isStorageDeletionWorkerEnabled()) {
     return { skipped: true, reason: "STORAGE_DELETION_WORKER_ENABLED is not on" };
   }
 

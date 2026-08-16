@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 
 import { putObject, getS3BucketName, ensureBucketExists, getObjectUrl } from "~/server/storage/s3-client";
 import { isS3Storage } from "~/lib/storage";
+import { resolveStorageLocationId } from "~/lib/storage-location-id";
 
 function sanitizeFilename(filename: string): string {
     return filename.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
@@ -47,7 +48,16 @@ export async function POST(request: Request) {
 
         const url = getObjectUrl(objectKey);
 
-        return NextResponse.json({ objectKey, bucket, url });
+        return NextResponse.json({
+            objectKey,
+            bucket,
+            url,
+            ref: {
+                adapter: "s3",
+                storageLocationId: resolveStorageLocationId("s3"),
+                key: objectKey,
+            },
+        });
     } catch (error) {
         console.error("[StorageUpload] Failed to upload file:", error);
         return NextResponse.json(

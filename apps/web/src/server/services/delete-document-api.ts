@@ -9,6 +9,7 @@ import {
   DocumentNotFoundError,
   TenantMismatchError,
 } from "./storage-deletion-coordinator";
+import { isStorageDeletionLifecycleEnabled } from "./storage-deletion-flags";
 
 export interface DeleteDocumentApiResult {
   status: number;
@@ -20,10 +21,7 @@ export interface DeleteDocumentApiResult {
  * (STORAGE_DELETION_LIFECYCLE_ENABLED) — no formal env.ts entry yet,
  * that's Dev C's flag to own/wire up properly.
  */
-export function isLifecycleEnabled(): boolean {
-  const raw = process.env.STORAGE_DELETION_LIFECYCLE_ENABLED;
-  return raw === "true" || raw === "1";
-}
+export const isLifecycleEnabled = isStorageDeletionLifecycleEnabled;
 
 /**
  * Everything the route does after authentication/role checks: flag gate,

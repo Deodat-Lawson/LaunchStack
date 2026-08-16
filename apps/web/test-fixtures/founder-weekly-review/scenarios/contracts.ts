@@ -9,17 +9,9 @@
  * required, and every field in it is asserted by
  * `__tests__/founderWeeklyReview/scenario-collection.integration.test.ts`.
  *
- * The vocabulary here is deliberately limited to what the shipped evidence
- * snapshot (`founder-weekly-review-evidence/v1`) actually exposes: source-type
- * counts, warning codes, and the semantic invariants derivable from item
- * metadata. Two things a reader might expect are absent on purpose:
- *
- *   - Document-change *grouping* assertions (group counts, per-group
- *     categories, "no invented baseline" as a group-level claim) need the
- *     `documentChangeAudit` block from evidence snapshot v2, which this
- *     codebase does not emit. The baseline case is still covered here through
- *     `warningCodes` + a `document_change` count of zero.
- *   - Review *content* assertions (required/forbidden themes) need a model
+ * Snapshot v2 exposes structural document-change audit provenance, so fixtures
+ * can assert group counts, materiality categories, and no-invented-baseline
+ * behavior without a provider call. Review *content* assertions still need a model
  *     call. `review.sectionStates` is supported because the empty-evidence
  *     path builds its review without one; anything richer would be asserting
  *     a stub.
@@ -30,6 +22,7 @@
 import { z } from "zod";
 
 import {
+    DOCUMENT_CHANGE_CATEGORIES,
     ReportingPeriodSchema,
     type FounderWeeklyReviewEvidenceItem,
 } from "@launchstack/features/founder-weekly-review";
@@ -109,6 +102,47 @@ export const ScenarioExpectSchema = z
                 forbiddenWarningCodes: z.array(z.string().min(1).max(64)).max(32).optional(),
             })
             .strict()
+            .optional(),
+        documentChanges: z
+            .object({
+                min: z.number().int().nonnegative().optional(),
+                max: z.number().int().nonnegative().optional(),
+                requiredCategories: z
+                    .array(z.enum(DOCUMENT_CHANGE_CATEGORIES))
+                    .min(1)
+                    .max(16)
+                    .optional(),
+                requireNoInventedBaseline: z.literal(true).optional(),
+            })
+            .strict()
+            .superRefine((value, ctx) => {
+                if (
+                    value.min === undefined &&
+                    value.max === undefined &&
+                    value.requiredCategories === undefined &&
+                    value.requireNoInventedBaseline === undefined
+                ) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: "documentChanges must assert something",
+                    });
+                }
+                if (value.min !== undefined && value.max !== undefined && value.min > value.max) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: "min must not exceed max",
+                    });
+                }
+                if (
+                    value.requireNoInventedBaseline &&
+                    ((value.min ?? 0) > 0 || (value.requiredCategories?.length ?? 0) > 0)
+                ) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: "requireNoInventedBaseline cannot require document-change groups",
+                    });
+                }
+            })
             .optional(),
         sourceSemantics: z
             .object({

@@ -5,6 +5,7 @@ import {
     type ReportingPeriod,
 } from "@launchstack/features/founder-weekly-review";
 import { FounderWeeklyReviewDocumentVersionStore } from "./document-version-chunks";
+import { createConfiguredDocumentChangeMaterialityAnalyzer } from "./document-change-materiality-analyzer";
 import { StrictCurrentWorkspaceDocumentStore } from "./workspace-document-store";
 
 export interface FounderWeeklyReviewEvidenceCollector {
@@ -59,7 +60,8 @@ export class CanonicalFounderWeeklyReviewEvidenceCollector
             undefined,
             undefined,
             { kind: "computed", store: new FounderWeeklyReviewDocumentVersionStore() },
-            new StrictCurrentWorkspaceDocumentStore()
+            new StrictCurrentWorkspaceDocumentStore(),
+            createConfiguredDocumentChangeMaterialityAnalyzer()
         )).collectFounderWeeklyReviewEvidence({
             companyId: input.companyId,
             reportingPeriod: input.reportingPeriod,

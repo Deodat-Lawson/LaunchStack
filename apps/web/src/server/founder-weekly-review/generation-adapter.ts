@@ -24,6 +24,7 @@ import { resolveConfiguredChatModel } from "~/lib/models";
 const FOUNDER_WEEKLY_REVIEW_ROUTE = "reasoning" as const;
 
 const CAPABILITY = "founderWeeklyReview";
+export const FOUNDER_WEEKLY_REVIEW_MAX_OUTPUT_TOKENS = 2_400;
 
 export async function generateFounderWeeklyReviewStructured<TSchema extends ZodType>(input: {
     system?: string;
@@ -37,6 +38,7 @@ export async function generateFounderWeeklyReviewStructured<TSchema extends ZodT
 }> {
     const resolved = resolveConfiguredChatModel({
         route: FOUNDER_WEEKLY_REVIEW_ROUTE,
+        maxOutputTokens: FOUNDER_WEEKLY_REVIEW_MAX_OUTPUT_TOKENS,
     });
 
     const messages = [

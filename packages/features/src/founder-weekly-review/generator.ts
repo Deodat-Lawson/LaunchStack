@@ -23,6 +23,7 @@ import {
     type FounderWeeklyReviewPromptEvidenceItem,
     type GenerationEvidenceEnvelopeDiagnostics,
 } from "./generation-evidence-envelope";
+import { buildFounderWeeklyReviewEvidenceDigest } from "./evidence-digest";
 
 export interface FounderWeeklyReviewResolvedGenerationMetadata {
     provider: string;
@@ -80,7 +81,8 @@ export async function generateFounderWeeklyReview(
                 },
                 promptHash,
                 true,
-                evidenceEnvelope.diagnostics
+                evidenceEnvelope.diagnostics,
+                evidenceSnapshot
             ),
         };
     }
@@ -129,7 +131,8 @@ export async function generateFounderWeeklyReview(
             result.metadata,
             promptHash,
             false,
-            evidenceEnvelope.diagnostics
+            evidenceEnvelope.diagnostics,
+            evidenceSnapshot
         ),
     };
 }
@@ -169,7 +172,8 @@ function buildMetadata(
     metadata: FounderWeeklyReviewResolvedGenerationMetadata,
     promptHash: string,
     skipped: boolean,
-    diagnostics: GenerationEvidenceEnvelopeDiagnostics
+    diagnostics: GenerationEvidenceEnvelopeDiagnostics,
+    evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot
 ): FounderWeeklyReviewModelMetadata {
     return {
         provider: metadata.provider,
@@ -178,7 +182,7 @@ function buildMetadata(
         ...(metadata.temperature === undefined ? {} : { temperature: metadata.temperature }),
         promptVersion: FOUNDER_WEEKLY_REVIEW_PROMPT_VERSION,
         promptHash,
-        evidenceSchemaVersion: "founder-weekly-review-evidence/v1",
+        evidenceSchemaVersion: evidenceSnapshot.schemaVersion,
         reviewPayloadSchemaVersion: FOUNDER_WEEKLY_REVIEW_V2_SCHEMA_VERSION,
         ...(metadata.providerRequestId ? { completionId: metadata.providerRequestId } : {}),
         attributes: {
@@ -193,6 +197,7 @@ function buildMetadata(
             evidenceEnvelopeTruncated: diagnostics.truncated,
             evidenceEnvelopeSelectedByType: JSON.stringify(diagnostics.selectedBySourceType),
             evidenceEnvelopeExcludedByType: JSON.stringify(diagnostics.excludedBySourceType),
+            evidenceDigest: buildFounderWeeklyReviewEvidenceDigest(evidenceSnapshot),
         },
     };
 }

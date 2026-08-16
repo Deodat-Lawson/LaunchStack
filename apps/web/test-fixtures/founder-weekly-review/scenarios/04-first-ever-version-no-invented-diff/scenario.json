@@ -34,6 +34,7 @@
       "sourceTypeCounts": { "document_change": { "exact": 0 } },
       "warningCodes": ["document_change_baseline_missing"]
     },
+    "documentChanges": { "requireNoInventedBaseline": true },
     "sourceSemantics": { "temporalEvidenceRequired": true }
   }
 }

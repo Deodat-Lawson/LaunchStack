@@ -1,6 +1,7 @@
 import {
     FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
     FounderWeeklyReviewEvidenceSnapshotSchema,
+    type DocumentChangeAuditSnapshot,
     type FounderWeeklyReviewEvidenceItem,
     type FounderWeeklyReviewEvidenceSnapshot,
     type FounderWeeklyReviewEvidenceWarning,
@@ -12,11 +13,16 @@ import { getDb, type DbClient } from "@launchstack/core/db";
 import { document, documentContextChunks, documentVersions } from "@launchstack/core/db/schema";
 import {
     alignVersionChunks,
-    buildDocumentChangeEvidence,
     selectVersionPairsForReportingPeriod,
+    type DocumentChangePairInput,
     type DocumentVersionForComparison,
     type VersionChunk,
 } from "./document-change";
+import {
+    materializeDocumentChangesWithAnalyzer,
+    type DocumentChangeMaterialityAnalyzer,
+} from "./document-change-materiality-analyzer";
+import type { DeterministicMaterialChangeDiagnostics } from "./document-change-materiality";
 import {
     buildWorkspaceDocumentEvidence,
     normalizeFounderContextRetrievalQuery,
@@ -149,6 +155,7 @@ export interface BuildFounderWeeklyReviewEvidenceSnapshotInput {
 export interface FounderWeeklyReviewEvidenceSourceResult {
     items: FounderWeeklyReviewEvidenceItem[];
     warnings: FounderWeeklyReviewEvidenceWarning[];
+    documentChangeAudit?: DocumentChangeAuditSnapshot;
 }
 
 export interface VersionChunkLoadResult {
@@ -198,7 +205,11 @@ export class FounderWeeklyReviewEvidenceService {
         private readonly documentChangeSource: FounderWeeklyReviewDocumentChangeSource = {
             kind: "unconfigured",
         },
-        private readonly workspaceDocumentStore?: FounderWeeklyReviewWorkspaceDocumentStore
+        private readonly workspaceDocumentStore?: FounderWeeklyReviewWorkspaceDocumentStore,
+        private readonly documentChangeMaterialityAnalyzer?: DocumentChangeMaterialityAnalyzer,
+        private readonly onDocumentChangeDiagnostics?: (
+            diagnostics: DeterministicMaterialChangeDiagnostics
+        ) => void
     ) {}
 
     async collectDocumentChangeEvidence(
@@ -228,7 +239,7 @@ export class FounderWeeklyReviewEvidenceService {
                 startInclusive,
                 endExclusive
             );
-            const items: FounderWeeklyReviewEvidenceItem[] = [];
+            const pairInputs: DocumentChangePairInput[] = [];
             const warnings: FounderWeeklyReviewEvidenceWarning[] = [];
             // Cap the pairs BEFORE loading chunks and aligning them. Capping
             // only the finished items meant a workspace with thousands of
@@ -283,13 +294,21 @@ export class FounderWeeklyReviewEvidenceService {
                         )
                     );
                 }
-                items.push(
-                    ...buildDocumentChangeEvidence(
-                        pair,
-                        alignVersionChunks(previous.chunks, current.chunks)
-                    )
-                );
+                pairInputs.push({
+                    pair,
+                    alignments: alignVersionChunks(previous.chunks, current.chunks),
+                });
             }
+            const materialized = await materializeDocumentChangesWithAnalyzer(
+                pairInputs,
+                this.documentChangeMaterialityAnalyzer
+            );
+            this.onDocumentChangeDiagnostics?.(materialized.diagnostics);
+            warnings.push(
+                ...materialized.warnings.map(item =>
+                    warning(item.code, item.message, "document_change")
+                )
+            );
             // Against every pair the period produced, not the capped subset —
             // a version dropped by the cap was truncated, not un-paired, and
             // reporting it as a missing baseline would be a false alarm.
@@ -308,7 +327,7 @@ export class FounderWeeklyReviewEvidenceService {
                         "document_change"
                     )
                 );
-            const ordered = orderEvidenceItems(dedupeEvidenceItems(items));
+            const ordered = orderEvidenceItems(dedupeEvidenceItems([...materialized.items]));
             // The pair cap may already have reported truncation; one warning is
             // enough to tell the reader the pack is not exhaustive.
             if (ordered.length > MAX_ITEMS_PER_SOURCE && allPairs.length === pairs.length) {
@@ -320,7 +339,11 @@ export class FounderWeeklyReviewEvidenceService {
                     )
                 );
             }
-            return { items: ordered.slice(0, MAX_ITEMS_PER_SOURCE), warnings };
+            return {
+                items: ordered.slice(0, MAX_ITEMS_PER_SOURCE),
+                warnings,
+                documentChangeAudit: materialized.audit,
+            };
         }
         if (this.documentChangeSource.kind !== "legacy") {
             return {
@@ -560,13 +583,31 @@ export class FounderWeeklyReviewEvidenceService {
                     "Evidence snapshot was truncated to its configured maximum."
                 )
             );
+        const selectedItems = items.slice(0, maxItems);
+        const selectedSourceIds = new Set(selectedItems.map(item => item.sourceId));
+        const collectedAudit = documentChanges.documentChangeAudit ?? {
+            schemaVersion: "document-change-audit/v1" as const,
+            rawChanges: [],
+            groups: [],
+        };
+        const documentChangeAudit: DocumentChangeAuditSnapshot = {
+            ...collectedAudit,
+            groups: collectedAudit.groups.map(group => ({
+                ...group,
+                evidenceSourceId:
+                    group.evidenceSourceId && selectedSourceIds.has(group.evidenceSourceId)
+                        ? group.evidenceSourceId
+                        : null,
+            })),
+        };
         return FounderWeeklyReviewEvidenceSnapshotSchema.parse({
             schemaVersion: FOUNDER_WEEKLY_REVIEW_EVIDENCE_SCHEMA_VERSION,
             capturedAt: (input.capturedAt ?? this.now()).toISOString(),
             reportingPeriod: input.reportingPeriod,
             workspaceTimezone: input.workspaceTimezone,
-            items: items.slice(0, maxItems),
+            items: selectedItems,
             sourceWarnings: dedupeWarnings(warnings).slice(0, MAX_WARNINGS),
+            documentChangeAudit,
         });
     }
 }
@@ -593,6 +634,47 @@ export function dedupeEvidenceItems(
 function compareOrdinal(a: string, b: string): number {
     return a < b ? -1 : a > b ? 1 : 0;
 }
+
+function evidenceMetadataText(item: FounderWeeklyReviewEvidenceItem, key: string): string {
+    const value = item.metadata[key];
+    return typeof value === "string" || typeof value === "number" ? String(value) : "";
+}
+
+function compareDocumentChangeEvidence(
+    a: FounderWeeklyReviewEvidenceItem,
+    b: FounderWeeklyReviewEvidenceItem
+): number {
+    if (a.sourceType !== "document_change" || b.sourceType !== "document_change") return 0;
+    const aDocument = evidenceMetadataText(a, "documentId");
+    const bDocument = evidenceMetadataText(b, "documentId");
+    const document =
+        /^\d+$/.test(aDocument) && /^\d+$/.test(bDocument)
+            ? BigInt(aDocument) < BigInt(bDocument)
+                ? -1
+                : BigInt(aDocument) > BigInt(bDocument)
+                  ? 1
+                  : 0
+            : compareOrdinal(aDocument, bDocument);
+    if (document !== 0) return document;
+    for (const key of [
+        "previousVersionId",
+        "currentVersionId",
+        "structureOrdering",
+        "pageNumber",
+        "lineStart",
+    ] as const) {
+        const left = Number(evidenceMetadataText(a, key));
+        const right = Number(evidenceMetadataText(b, key));
+        if (Number.isFinite(left) && Number.isFinite(right) && left !== right) {
+            return left - right;
+        }
+    }
+    return compareOrdinal(
+        evidenceMetadataText(a, "structurePath"),
+        evidenceMetadataText(b, "structurePath")
+    );
+}
+
 export function orderEvidenceItems(
     items: FounderWeeklyReviewEvidenceItem[]
 ): FounderWeeklyReviewEvidenceItem[] {
@@ -600,6 +682,7 @@ export function orderEvidenceItems(
         (a, b) =>
             compareOrdinal(a.sourceTimestamp ?? "", b.sourceTimestamp ?? "") ||
             compareOrdinal(a.sourceType, b.sourceType) ||
+            compareDocumentChangeEvidence(a, b) ||
             compareOrdinal(a.sourceId, b.sourceId)
     );
 }

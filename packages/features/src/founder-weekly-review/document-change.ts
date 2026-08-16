@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { FounderWeeklyReviewEvidenceItem } from "./contracts";
 
 export type DocumentVersionForComparison = {
@@ -52,6 +53,77 @@ export type ChunkAlignment = {
     similarityScore?: number;
 };
 
+export const RAW_DOCUMENT_CHANGE_VERSION = "raw-document-change/v1" as const;
+export const DOCUMENT_CHANGE_GROUPING_VERSION = "document-change-grouping/v1" as const;
+export const DOCUMENT_CHANGE_GROUP_BUDGET = Object.freeze({
+    rawChangesPerGroup: 16,
+    groupsPerVersionPair: 8,
+    groupsPerDocument: 8,
+    groupsPerReview: 24,
+});
+
+export type RawDocumentChange = {
+    rawChangeId: string;
+    changeType: Exclude<ChunkAlignment["changeType"], "unchanged">;
+    alignmentMethod: ChunkAlignment["alignmentMethod"];
+    similarityScore?: number;
+    previousChunk?: VersionChunk;
+    currentChunk?: VersionChunk;
+    previousNormalizedContent?: string;
+    currentNormalizedContent?: string;
+};
+
+/** A deterministic bounded structural edit context, not a semantic business topic. */
+export type DocumentChangeGroup = {
+    groupId: string;
+    documentId: bigint;
+    previousVersionId: number;
+    currentVersionId: number;
+    structurePath?: string | null;
+    structureTitle?: string | null;
+    splitOrdinal: number;
+    rawChanges: readonly RawDocumentChange[];
+};
+
+export type DocumentChangeProcessingWarning = {
+    code:
+        | "materiality_group_too_large"
+        | "document_change_budget_truncated"
+        | "materiality_analyzer_unavailable"
+        | "materiality_analysis_partial"
+        | "materiality_result_invalid"
+        | "materiality_analysis_timeout"
+        | "materiality_analysis_budget_truncated";
+    message: string;
+};
+
+export type DocumentChangeCondensationDiagnostics = {
+    versionPairCount: number;
+    alignedChunkCount: number;
+    rawModifiedCount: number;
+    rawAddedCount: number;
+    rawRemovedCount: number;
+    deterministicNoOpCount: number;
+    groupCount: number;
+    oversizedGroupSplitCount: number;
+    selectedGroupCount: number;
+    truncatedGroupCount: number;
+    approximateChangedCharacters: number;
+};
+
+export type DocumentChangePairInput = {
+    pair: VersionPair;
+    alignments: readonly ChunkAlignment[];
+};
+
+export type DocumentChangeCondensationResult = {
+    rawChanges: readonly RawDocumentChange[];
+    groups: readonly DocumentChangeGroup[];
+    selectedGroups: readonly DocumentChangeGroup[];
+    warnings: readonly DocumentChangeProcessingWarning[];
+    diagnostics: DocumentChangeCondensationDiagnostics;
+};
+
 const MAX_EXCERPT = 4000;
 const MAX_METADATA_TEXT = 512;
 const MIN_TEXT_SIMILARITY_CHARACTERS = 20;
@@ -74,6 +146,18 @@ const compareChunks = (a: VersionChunk, b: VersionChunk) =>
     (a.lineStart ?? -1) - (b.lineStart ?? -1) ||
     (a.structureOrdering ?? -1) - (b.structureOrdering ?? -1) ||
     a.chunkId - b.chunkId;
+
+function digest(parts: readonly (string | number | null)[]): string {
+    return createHash("sha256").update(JSON.stringify(parts), "utf8").digest("hex");
+}
+
+function compareOrdinal(a: string, b: string): number {
+    return a < b ? -1 : a > b ? 1 : 0;
+}
+
+function compareBigInt(a: bigint, b: bigint): number {
+    return a < b ? -1 : a > b ? 1 : 0;
+}
 
 /** Select only adjacent pairs whose current version is in the reporting period. */
 export function selectVersionPairsForReportingPeriod(
@@ -261,6 +345,430 @@ export function alignVersionChunks(
     );
 }
 
+/** Conservative normalization used only to remove deterministic formatting no-ops. */
+export function normalizeDocumentChangeContent(value: string): string {
+    return value
+        .normalize("NFC")
+        .replace(/\r\n?/g, "\n")
+        .replace(/\u00a0/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function rawChangeContentIdentity(chunk: VersionChunk | undefined): string | null {
+    return chunk ? digest([chunk.contentHash, chunk.content]) : null;
+}
+
+function compareRawChanges(a: RawDocumentChange, b: RawDocumentChange): number {
+    const aChunk = a.currentChunk ?? a.previousChunk!;
+    const bChunk = b.currentChunk ?? b.previousChunk!;
+    return (
+        (aChunk.structureOrdering ?? Number.MAX_SAFE_INTEGER) -
+            (bChunk.structureOrdering ?? Number.MAX_SAFE_INTEGER) ||
+        (aChunk.pageNumber ?? Number.MAX_SAFE_INTEGER) -
+            (bChunk.pageNumber ?? Number.MAX_SAFE_INTEGER) ||
+        (aChunk.lineStart ?? Number.MAX_SAFE_INTEGER) -
+            (bChunk.lineStart ?? Number.MAX_SAFE_INTEGER) ||
+        compareOrdinal(aChunk.structurePath ?? "", bChunk.structurePath ?? "") ||
+        (a.previousChunk?.chunkId ?? -1) - (b.previousChunk?.chunkId ?? -1) ||
+        (a.currentChunk?.chunkId ?? -1) - (b.currentChunk?.chunkId ?? -1) ||
+        compareOrdinal(a.rawChangeId, b.rawChangeId)
+    );
+}
+
+/** Converts alignments into stable raw records and drops normalized-equal modifications. */
+export function buildRawDocumentChanges(
+    pair: VersionPair,
+    alignments: readonly ChunkAlignment[]
+): { rawChanges: RawDocumentChange[]; deterministicNoOpCount: number } {
+    const rawChanges: RawDocumentChange[] = [];
+    let deterministicNoOpCount = 0;
+    for (const alignment of alignments) {
+        if (alignment.changeType === "unchanged") continue;
+        const previousNormalizedContent = alignment.previousChunk
+            ? normalizeDocumentChangeContent(alignment.previousChunk.content)
+            : undefined;
+        const currentNormalizedContent = alignment.currentChunk
+            ? normalizeDocumentChangeContent(alignment.currentChunk.content)
+            : undefined;
+        if (
+            alignment.changeType === "modified" &&
+            previousNormalizedContent === currentNormalizedContent
+        ) {
+            deterministicNoOpCount++;
+            continue;
+        }
+        const rawChangeId = `raw_document_change:${digest([
+            RAW_DOCUMENT_CHANGE_VERSION,
+            pair.documentId.toString(),
+            pair.previousVersionId,
+            pair.currentVersionId,
+            alignment.changeType,
+            alignment.previousChunk?.chunkId ?? null,
+            alignment.currentChunk?.chunkId ?? null,
+            alignment.alignmentMethod,
+            rawChangeContentIdentity(alignment.previousChunk),
+            rawChangeContentIdentity(alignment.currentChunk),
+        ])}`;
+        rawChanges.push({
+            rawChangeId,
+            changeType: alignment.changeType,
+            alignmentMethod: alignment.alignmentMethod,
+            ...(alignment.similarityScore === undefined
+                ? {}
+                : { similarityScore: alignment.similarityScore }),
+            ...(alignment.previousChunk
+                ? { previousChunk: alignment.previousChunk, previousNormalizedContent }
+                : {}),
+            ...(alignment.currentChunk
+                ? { currentChunk: alignment.currentChunk, currentNormalizedContent }
+                : {}),
+        });
+    }
+    return { rawChanges: rawChanges.sort(compareRawChanges), deterministicNoOpCount };
+}
+
+function normalizedSectionValues(
+    change: RawDocumentChange,
+    field: "structurePath" | "structureTitle"
+): string[] {
+    return [
+        ...new Set(
+            [change.previousChunk?.[field], change.currentChunk?.[field]]
+                .map(normalize)
+                .filter((value): value is string => value !== null)
+        ),
+    ].sort(compareOrdinal);
+}
+
+function intersects(left: readonly string[], right: readonly string[]): boolean {
+    return left.some(value => right.includes(value));
+}
+
+function hasKnownSection(change: RawDocumentChange): boolean {
+    return (
+        normalizedSectionValues(change, "structurePath").length > 0 ||
+        normalizedSectionValues(change, "structureTitle").length > 0
+    );
+}
+
+function structurallyProximate(left: RawDocumentChange, right: RawDocumentChange): boolean {
+    const a = left.currentChunk ?? left.previousChunk!;
+    const b = right.currentChunk ?? right.previousChunk!;
+    if (
+        a.structureOrdering !== null &&
+        b.structureOrdering !== null &&
+        Math.abs(a.structureOrdering - b.structureOrdering) <= 1
+    ) {
+        return true;
+    }
+    if (
+        a.pageNumber !== null &&
+        b.pageNumber !== null &&
+        Math.abs(a.pageNumber - b.pageNumber) <= 1
+    ) {
+        if (a.pageNumber !== b.pageNumber) return true;
+        if (a.lineEnd !== null && b.lineStart !== null && b.lineStart - a.lineEnd <= 2) return true;
+        if (b.lineEnd !== null && a.lineStart !== null && a.lineStart - b.lineEnd <= 2) return true;
+    }
+    return false;
+}
+
+function shouldGroup(left: RawDocumentChange, right: RawDocumentChange): boolean {
+    const leftPaths = normalizedSectionValues(left, "structurePath");
+    const rightPaths = normalizedSectionValues(right, "structurePath");
+    if (intersects(leftPaths, rightPaths)) return true;
+    if (leftPaths.length > 0 && rightPaths.length > 0) return false;
+    const leftTitles = normalizedSectionValues(left, "structureTitle");
+    const rightTitles = normalizedSectionValues(right, "structureTitle");
+    if (intersects(leftTitles, rightTitles)) return true;
+    // Proximity is only a fallback when neither record has a known section. This
+    // prevents an unlabelled record from transitively bridging two named sections.
+    if (hasKnownSection(left) || hasKnownSection(right)) return false;
+    return structurallyProximate(left, right);
+}
+
+function canonicalSectionKey(changes: readonly RawDocumentChange[]): string {
+    const paths = [
+        ...new Set(changes.flatMap(change => normalizedSectionValues(change, "structurePath"))),
+    ].sort(compareOrdinal);
+    const titles = [
+        ...new Set(changes.flatMap(change => normalizedSectionValues(change, "structureTitle"))),
+    ].sort(compareOrdinal);
+    if (paths.length > 0) return `path:${paths.join("|")}`;
+    if (titles.length > 0) return `title:${titles.join("|")}`;
+    const first = changes[0]!.currentChunk ?? changes[0]!.previousChunk!;
+    return `position:${first.structureOrdering ?? ""}:${first.pageNumber ?? ""}:${first.lineStart ?? ""}`;
+}
+
+function preferredStructureValue(
+    changes: readonly RawDocumentChange[],
+    field: "structurePath" | "structureTitle"
+): string | null {
+    const values = changes
+        .flatMap(change => [change.currentChunk?.[field], change.previousChunk?.[field]])
+        .filter((value): value is string => Boolean(value?.trim()));
+    return values.sort(compareOrdinal)[0] ?? null;
+}
+
+function makeGroup(
+    pair: VersionPair,
+    naturalGroup: readonly RawDocumentChange[],
+    rawChanges: readonly RawDocumentChange[],
+    splitOrdinal: number
+): DocumentChangeGroup {
+    const sectionKey = canonicalSectionKey(naturalGroup);
+    return {
+        groupId: `document_change_group:${digest([
+            DOCUMENT_CHANGE_GROUPING_VERSION,
+            pair.documentId.toString(),
+            pair.previousVersionId,
+            pair.currentVersionId,
+            sectionKey,
+            ...rawChanges.map(change => change.rawChangeId),
+            splitOrdinal,
+        ])}`,
+        documentId: pair.documentId,
+        previousVersionId: pair.previousVersionId,
+        currentVersionId: pair.currentVersionId,
+        structurePath: preferredStructureValue(naturalGroup, "structurePath"),
+        structureTitle: preferredStructureValue(naturalGroup, "structureTitle"),
+        splitOrdinal,
+        rawChanges,
+    };
+}
+
+function compareGroups(a: DocumentChangeGroup, b: DocumentChangeGroup): number {
+    const aFirst = a.rawChanges[0]!;
+    const bFirst = b.rawChanges[0]!;
+    return (
+        compareBigInt(a.documentId, b.documentId) ||
+        a.currentVersionId - b.currentVersionId ||
+        a.previousVersionId - b.previousVersionId ||
+        compareRawChanges(aFirst, bFirst) ||
+        a.splitOrdinal - b.splitOrdinal ||
+        compareOrdinal(a.groupId, b.groupId)
+    );
+}
+
+/** Groups changed records within one immutable document version pair. */
+export function groupRawDocumentChanges(
+    pair: VersionPair,
+    input: readonly RawDocumentChange[]
+): {
+    groups: DocumentChangeGroup[];
+    oversizedGroupSplitCount: number;
+    warnings: DocumentChangeProcessingWarning[];
+} {
+    const rawChanges = [...input].sort(compareRawChanges);
+    const parents = rawChanges.map((_, index) => index);
+    const find = (index: number): number => {
+        while (parents[index] !== index) {
+            parents[index] = parents[parents[index]!]!;
+            index = parents[index]!;
+        }
+        return index;
+    };
+    const union = (left: number, right: number) => {
+        const a = find(left);
+        const b = find(right);
+        if (a !== b) parents[Math.max(a, b)] = Math.min(a, b);
+    };
+    for (let left = 0; left < rawChanges.length; left++) {
+        for (let right = left + 1; right < rawChanges.length; right++) {
+            if (shouldGroup(rawChanges[left]!, rawChanges[right]!)) union(left, right);
+        }
+    }
+    const components = new Map<number, RawDocumentChange[]>();
+    rawChanges.forEach((change, index) => {
+        const root = find(index);
+        const component = components.get(root) ?? [];
+        component.push(change);
+        components.set(root, component);
+    });
+    const naturalGroups = [...components.values()]
+        .map(group => group.sort(compareRawChanges))
+        .sort((a, b) => compareRawChanges(a[0]!, b[0]!));
+    const groups: DocumentChangeGroup[] = [];
+    let oversizedGroupSplitCount = 0;
+    for (const naturalGroup of naturalGroups) {
+        const windowCount = Math.ceil(
+            naturalGroup.length / DOCUMENT_CHANGE_GROUP_BUDGET.rawChangesPerGroup
+        );
+        if (windowCount > 1) oversizedGroupSplitCount += windowCount - 1;
+        for (let splitOrdinal = 0; splitOrdinal < windowCount; splitOrdinal++) {
+            const start = splitOrdinal * DOCUMENT_CHANGE_GROUP_BUDGET.rawChangesPerGroup;
+            const window = naturalGroup.slice(
+                start,
+                start + DOCUMENT_CHANGE_GROUP_BUDGET.rawChangesPerGroup
+            );
+            groups.push(makeGroup(pair, naturalGroup, window, splitOrdinal));
+        }
+    }
+    return {
+        groups: groups.sort(compareGroups),
+        oversizedGroupSplitCount,
+        warnings:
+            oversizedGroupSplitCount > 0
+                ? [
+                      {
+                          code: "materiality_group_too_large",
+                          message:
+                              "One or more document-change groups exceeded the raw-change limit and were split into deterministic windows.",
+                      },
+                  ]
+                : [],
+    };
+}
+
+function pairKey(
+    group: Pick<DocumentChangeGroup, "previousVersionId" | "currentVersionId">
+): string {
+    return `${group.previousVersionId}:${group.currentVersionId}`;
+}
+
+function sectionSelectionKey(group: DocumentChangeGroup): string {
+    return `${group.structurePath ?? ""}|${group.structureTitle ?? ""}`;
+}
+
+/** Neutral structural budget: documents, then version pairs, then distinct sections. */
+export function selectDocumentChangeGroups(input: readonly DocumentChangeGroup[]): {
+    selectedGroups: DocumentChangeGroup[];
+    truncatedGroupCount: number;
+    warnings: DocumentChangeProcessingWarning[];
+} {
+    const ordered = [...input].sort(compareGroups);
+    const byDocument = new Map<string, Map<string, DocumentChangeGroup[]>>();
+    for (const group of ordered) {
+        const documentKey = group.documentId.toString();
+        const pairs = byDocument.get(documentKey) ?? new Map<string, DocumentChangeGroup[]>();
+        const key = pairKey(group);
+        const pairGroups = pairs.get(key) ?? [];
+        pairGroups.push(group);
+        pairs.set(key, pairGroups);
+        byDocument.set(documentKey, pairs);
+    }
+    for (const pairs of byDocument.values()) {
+        for (const [key, groups] of pairs) {
+            pairs.set(
+                key,
+                groups.sort(
+                    (a, b) =>
+                        a.splitOrdinal - b.splitOrdinal ||
+                        compareOrdinal(sectionSelectionKey(a), sectionSelectionKey(b)) ||
+                        compareGroups(a, b)
+                )
+            );
+        }
+    }
+    const documents = [...byDocument.entries()].sort(([a], [b]) =>
+        compareBigInt(BigInt(a), BigInt(b))
+    );
+    const documentCounts = new Map<string, number>();
+    const pairCounts = new Map<string, number>();
+    const pairCursors = new Map<string, number>();
+    const selectedGroups: DocumentChangeGroup[] = [];
+    let madeProgress = true;
+    while (selectedGroups.length < DOCUMENT_CHANGE_GROUP_BUDGET.groupsPerReview && madeProgress) {
+        madeProgress = false;
+        for (const [documentId, pairs] of documents) {
+            if (
+                (documentCounts.get(documentId) ?? 0) >=
+                DOCUMENT_CHANGE_GROUP_BUDGET.groupsPerDocument
+            )
+                continue;
+            const pairEntries = [...pairs.entries()].sort(([, a], [, b]) =>
+                compareGroups(a[0]!, b[0]!)
+            );
+            const start = pairCursors.get(documentId) ?? 0;
+            for (let offset = 0; offset < pairEntries.length; offset++) {
+                const pairIndex = (start + offset) % pairEntries.length;
+                const [key, groups] = pairEntries[pairIndex]!;
+                const countKey = `${documentId}:${key}`;
+                const count = pairCounts.get(countKey) ?? 0;
+                if (count >= DOCUMENT_CHANGE_GROUP_BUDGET.groupsPerVersionPair || !groups[count])
+                    continue;
+                selectedGroups.push(groups[count]);
+                documentCounts.set(documentId, (documentCounts.get(documentId) ?? 0) + 1);
+                pairCounts.set(countKey, count + 1);
+                pairCursors.set(documentId, (pairIndex + 1) % pairEntries.length);
+                madeProgress = true;
+                break;
+            }
+            if (selectedGroups.length >= DOCUMENT_CHANGE_GROUP_BUDGET.groupsPerReview) break;
+        }
+    }
+    const truncatedGroupCount = ordered.length - selectedGroups.length;
+    return {
+        selectedGroups: selectedGroups.sort(compareGroups),
+        truncatedGroupCount,
+        warnings:
+            truncatedGroupCount > 0
+                ? [
+                      {
+                          code: "document_change_budget_truncated",
+                          message:
+                              "Document-change groups were truncated to deterministic structural limits.",
+                      },
+                  ]
+                : [],
+    };
+}
+
+/** Complete pure condensation boundary used before current evidence compatibility projection. */
+export function condenseDocumentChanges(
+    inputs: readonly DocumentChangePairInput[]
+): DocumentChangeCondensationResult {
+    const rawChanges: RawDocumentChange[] = [];
+    const groups: DocumentChangeGroup[] = [];
+    const warnings: DocumentChangeProcessingWarning[] = [];
+    let deterministicNoOpCount = 0;
+    let oversizedGroupSplitCount = 0;
+    for (const { pair, alignments } of [...inputs].sort(
+        (a, b) =>
+            compareBigInt(a.pair.documentId, b.pair.documentId) ||
+            a.pair.currentCreatedAt.getTime() - b.pair.currentCreatedAt.getTime() ||
+            a.pair.currentVersionId - b.pair.currentVersionId
+    )) {
+        const raw = buildRawDocumentChanges(pair, alignments);
+        const grouped = groupRawDocumentChanges(pair, raw.rawChanges);
+        rawChanges.push(...raw.rawChanges);
+        groups.push(...grouped.groups);
+        deterministicNoOpCount += raw.deterministicNoOpCount;
+        oversizedGroupSplitCount += grouped.oversizedGroupSplitCount;
+        warnings.push(...grouped.warnings);
+    }
+    const selected = selectDocumentChangeGroups(groups);
+    warnings.push(...selected.warnings);
+    const counts = (type: RawDocumentChange["changeType"]) =>
+        rawChanges.filter(change => change.changeType === type).length;
+    return {
+        rawChanges: rawChanges.sort(compareRawChanges),
+        groups: groups.sort(compareGroups),
+        selectedGroups: selected.selectedGroups,
+        warnings: [...new Map(warnings.map(item => [item.code, item])).values()],
+        diagnostics: {
+            versionPairCount: inputs.length,
+            alignedChunkCount: inputs.reduce((total, input) => total + input.alignments.length, 0),
+            rawModifiedCount: counts("modified"),
+            rawAddedCount: counts("added"),
+            rawRemovedCount: counts("removed"),
+            deterministicNoOpCount,
+            groupCount: groups.length,
+            oversizedGroupSplitCount,
+            selectedGroupCount: selected.selectedGroups.length,
+            truncatedGroupCount: selected.truncatedGroupCount,
+            approximateChangedCharacters: rawChanges.reduce(
+                (total, change) =>
+                    total +
+                    (change.previousChunk?.content.length ?? 0) +
+                    (change.currentChunk?.content.length ?? 0),
+                0
+            ),
+        },
+    };
+}
+
 function bound(value: string, max = MAX_EXCERPT) {
     return value.length <= max ? value : `${value.slice(0, max - 1)}…`;
 }
@@ -315,4 +823,12 @@ export function buildDocumentChangeEvidence(
                 },
             };
         });
+}
+
+/** Compatibility projection: one existing-format evidence item per selected structural group. */
+export function buildDocumentChangeGroupEvidence(
+    pair: VersionPair,
+    group: DocumentChangeGroup
+): FounderWeeklyReviewEvidenceItem {
+    return buildDocumentChangeEvidence(pair, group.rawChanges)[0]!;
 }

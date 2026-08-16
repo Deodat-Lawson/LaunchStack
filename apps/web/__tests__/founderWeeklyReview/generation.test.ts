@@ -531,6 +531,20 @@ describe("Founder Weekly Review generation", () => {
         expect(FounderWeeklyReviewV2PayloadSchema.safeParse(payload).success).toBe(false);
     });
 
+    it("enforces the concise contract of at most three items per section", () => {
+        const payload = validPayload();
+        const item =
+            payload.sections.whatChanged.state === "evidence"
+                ? payload.sections.whatChanged.items[0]!
+                : undefined;
+        expect(item).toBeDefined();
+        payload.sections.whatChanged = {
+            state: "evidence",
+            items: [item!, item!, item!, item!],
+        };
+        expect(FounderWeeklyReviewV2PayloadSchema.safeParse(payload).success).toBe(false);
+    });
+
     it("rejects mixed v2 section states instead of normalizing them", () => {
         const payload = validPayload();
         payload.sections.whatChanged = {
@@ -628,6 +642,20 @@ describe("Founder Weekly Review generation", () => {
             generate: fake(validPayload()),
         });
         expect(first.modelMetadata.promptHash).toBe(second.modelMetadata.promptHash);
+    });
+
+    it("uses the concise founder-review generation contract", async () => {
+        const generate = fake(validPayload());
+        await generateFounderWeeklyReview({ evidenceSnapshot: completeSnapshot(), generate });
+        const system = generate.mock.calls[0][0].system as string;
+        expect(system).toContain("decision-oriented founder review, not an evidence transcript");
+        expect(system).toContain("at most 3 items in each section");
+        expect(system).toContain("one concise sentence whenever possible");
+        expect(system).toContain("Synthesize related evidence into one focused claim");
+        expect(system).toContain("do not create one output item per evidence source");
+        expect(system).toContain("optional rationale should be brief");
+        expect(system).not.toContain("2–4 sentences per substantive item");
+        expect(system).not.toContain("600–1,000 words overall");
     });
 
     it("changes the prompt hash when selected evidence changes", async () => {
@@ -761,6 +789,7 @@ describe("Founder Weekly Review generation", () => {
         // default route when the operator has pointed reasoning elsewhere.
         expect(mockResolveConfiguredChatModel).toHaveBeenCalledWith({
             route: "reasoning",
+            maxOutputTokens: 2_400,
         });
     });
 

@@ -3,6 +3,8 @@ import { createHash, randomUUID } from "node:crypto";
 import { createRequire } from "node:module";
 import { readFile, mkdir, rename, writeFile, access } from "node:fs/promises";
 import { resolve } from "node:path";
+
+import type * as FounderWeeklyReviewTestDb from "../__tests__/founderWeeklyReview/testDb";
 import { eq, sql } from "drizzle-orm";
 import {
     company,
@@ -16,14 +18,21 @@ import {
     FounderWeeklyReviewEvidenceService,
     FounderWeeklyReviewEvidenceSnapshotSchema,
     FounderWeeklyReviewRepository,
+    FounderWeeklyReviewV2PayloadSchema,
     FounderWeeklyReviewWorkerService,
+    buildGenerationEvidenceEnvelope,
+    evaluateFounderWeeklyReview,
     generateFounderWeeklyReview,
     validateFounderWeeklyReviewV2Citations,
+    type DeterministicMaterialChangeDiagnostics,
+    type DocumentChangeMaterialityAnalyzer,
 } from "@launchstack/features/founder-weekly-review";
 import { FounderWeeklyReviewDocumentVersionStore } from "~/server/founder-weekly-review/document-version-chunks";
 import { StrictCurrentWorkspaceDocumentStore } from "~/server/founder-weekly-review/workspace-document-store";
 import { createFounderWeeklyReviewDispatchService } from "~/server/founder-weekly-review/dispatch-service";
 import { generateFounderWeeklyReviewStructured } from "~/server/founder-weekly-review/generation-adapter";
+import { createConfiguredDocumentChangeMaterialityAnalyzer } from "~/server/founder-weekly-review/document-change-materiality-analyzer";
+import { gradePersistedFounderWeeklyReview } from "~/server/founder-weekly-review/evaluation-adapter";
 import { renderFounderWeeklyReviewMarkdown } from "~/server/founder-weekly-review/markdown";
 import {
     founderWeeklyReviewRealisticExportRoot,
@@ -32,7 +41,7 @@ import {
 
 const require = createRequire(import.meta.url);
 const { createFounderWeeklyReviewTestDatabase } =
-    require("../__tests__/founderWeeklyReview/testDb") as typeof import("../__tests__/founderWeeklyReview/testDb");
+    require("../__tests__/founderWeeklyReview/testDb") as typeof FounderWeeklyReviewTestDb;
 const fixturePath = resolve(
     process.cwd(),
     "test-fixtures/founder-weekly-review/realistic-company/seed.json"
@@ -49,7 +58,6 @@ type Fixture = {
         chunks?: string[];
     }>;
 };
-type EvidenceMode = ReturnType<typeof parseFounderWeeklyReviewRealisticEvidenceMode>;
 type ComputedTexts = {
     before: string;
     after: string;
@@ -59,7 +67,14 @@ type ComputedTexts = {
     foreign: string;
     unrelated: string;
 };
-type ArtifactPaths = { evidence: string; report: string; markdown: string; summary: string };
+type ArtifactPaths = {
+    evidence: string;
+    envelope: string;
+    report: string;
+    markdown: string;
+    evaluation: string;
+    summary: string;
+};
 
 function canonicalize(value: unknown): unknown {
     if (value === null || ["string", "boolean"].includes(typeof value)) return value;
@@ -103,6 +118,8 @@ function assertComputedSnapshot(
     const workspace = items.filter(item => item.sourceType === "workspace_document");
     const feedback = items.filter(item => item.sourceType === "customer_feedback");
     const founder = items.filter(item => item.sourceType === "founder_context");
+    if (parsed.schemaVersion !== "founder-weekly-review-evidence/v2")
+        throw new Error("Computed collection did not produce evidence snapshot v2.");
     const change = changes.find(
         item =>
             item.metadata.previousVersionId === ids.a1 && item.metadata.currentVersionId === ids.a2
@@ -110,9 +127,23 @@ function assertComputedSnapshot(
     const workspaceItem = workspace.find(item => item.metadata.documentId === String(ids.b));
     if (!change || !workspaceItem || !feedback.length || founder.length !== 1)
         throw new Error("Computed snapshot is missing required evidence types.");
+    const auditGroup = parsed.documentChangeAudit.groups.find(
+        group => group.evidenceSourceId === change.sourceId
+    );
+    const auditedRaw = auditGroup?.rawChangeIds.map(rawChangeId =>
+        parsed.documentChangeAudit.rawChanges.find(raw => raw.rawChangeId === rawChangeId)
+    );
     if (
-        change.metadata.previousChunkId === null ||
-        change.metadata.currentChunkId === null ||
+        !auditGroup ||
+        auditedRaw?.some(raw => !raw) ||
+        !auditedRaw?.some(
+            raw =>
+                raw!.previousChunkId !== null &&
+                raw!.currentChunkId !== null &&
+                raw!.previousExcerpt?.includes(texts.before) &&
+                raw!.currentExcerpt?.includes(texts.after)
+        ) ||
+        change.metadata.category !== "ownership_change" ||
         !change.excerpt.includes(texts.before) ||
         !change.excerpt.includes(texts.after) ||
         change.sourceTimestamp !== "2026-02-20T10:00:00.000Z" ||
@@ -209,6 +240,18 @@ try {
         role: "owner",
     };
     let collector: FounderWeeklyReviewEvidenceService;
+    const configuredAnalyzer =
+        mode === "computed" ? createConfiguredDocumentChangeMaterialityAnalyzer() : undefined;
+    let materialityAnalyzerCalls = 0;
+    let changeDiagnostics: DeterministicMaterialChangeDiagnostics | undefined;
+    const analyzer: DocumentChangeMaterialityAnalyzer | undefined = configuredAnalyzer
+        ? {
+              async analyze(input) {
+                  materialityAnalyzerCalls++;
+                  return configuredAnalyzer.analyze(input);
+              },
+          }
+        : undefined;
     let computedIds: Record<string, bigint | number> | undefined;
     const texts: ComputedTexts = {
         before: "Product owns retry telemetry.",
@@ -244,16 +287,14 @@ try {
                 })
                 .returning();
             for (const [index, content] of (entry.chunks ?? []).entries())
-                await testDb.db
-                    .insert(documentContextChunks)
-                    .values({
-                        documentId: BigInt(doc!.id),
-                        versionId: BigInt(version!.id),
-                        content,
-                        tokenCount: content.split(/\s+/).length,
-                        charCount: content.length,
-                        pageNumber: index + 1,
-                    });
+                await testDb.db.insert(documentContextChunks).values({
+                    documentId: BigInt(doc!.id),
+                    versionId: BigInt(version!.id),
+                    content,
+                    tokenCount: content.split(/\s+/).length,
+                    charCount: content.length,
+                    pageNumber: index + 1,
+                });
         }
         const [outsideDoc] = await testDb.db
             .insert(document)
@@ -264,17 +305,15 @@ try {
                 title: "Outside period",
             })
             .returning();
-        await testDb.db
-            .insert(documentVersions)
-            .values({
-                documentId: BigInt(outsideDoc!.id),
-                versionNumber: 1,
-                url: "local://outside/v1",
-                mimeType: "text/plain",
-                uploadedBy: "seed",
-                changelog: "Outside-period control.",
-                createdAt: new Date("2026-03-01T00:00:00.000Z"),
-            });
+        await testDb.db.insert(documentVersions).values({
+            documentId: BigInt(outsideDoc!.id),
+            versionNumber: 1,
+            url: "local://outside/v1",
+            mimeType: "text/plain",
+            uploadedBy: "seed",
+            changelog: "Outside-period control.",
+            createdAt: new Date("2026-03-01T00:00:00.000Z"),
+        });
         collector = new FounderWeeklyReviewEvidenceService(
             testDb.db,
             () => new Date("2026-03-01T00:00:00.000Z"),
@@ -553,7 +592,11 @@ try {
             { kind: "computed", store: new FounderWeeklyReviewDocumentVersionStore(testDb.db) },
             new StrictCurrentWorkspaceDocumentStore(testDb.db, {
                 embedQuery: async () => vector(0),
-            })
+            }),
+            analyzer,
+            diagnostics => {
+                changeDiagnostics = diagnostics;
+            }
         );
     }
 
@@ -594,12 +637,15 @@ try {
         requestKey: created.run.requestKey,
     };
     const snapshot = await collector.collectFounderWeeklyReviewEvidence(input);
-    const repeated = await collector.collectFounderWeeklyReviewEvidence(input);
-    if (
-        JSON.stringify(snapshot.items) !== JSON.stringify(repeated.items) ||
-        JSON.stringify(snapshot.sourceWarnings) !== JSON.stringify(repeated.sourceWarnings)
-    )
-        throw new Error("Evidence collection was not deterministic.");
+    if (!analyzer) {
+        const repeated = await collector.collectFounderWeeklyReviewEvidence(input);
+        if (
+            JSON.stringify(snapshot.items) !== JSON.stringify(repeated.items) ||
+            JSON.stringify(snapshot.sourceWarnings) !== JSON.stringify(repeated.sourceWarnings) ||
+            JSON.stringify(snapshot) !== JSON.stringify(repeated)
+        )
+            throw new Error("Evidence collection was not deterministic.");
+    }
     const beforeDigest = digest(snapshot);
     const attached = await worker.attachEvidenceSnapshotIfAbsent(collectionContext, snapshot);
     const afterDigest = digest(attached.evidenceSnapshot);
@@ -662,6 +708,36 @@ try {
         throw new Error("Validated draft read-back or snapshot immutability failed.");
     if (mode === "computed")
         assertComputedReport(readBack.reviewPayload, readBack.evidenceSnapshot);
+    const persistedReview = FounderWeeklyReviewV2PayloadSchema.parse(readBack.reviewPayload);
+    const deterministicEvaluation = evaluateFounderWeeklyReview(
+        readBack.evidenceSnapshot,
+        persistedReview
+    );
+    if (!deterministicEvaluation.passed) {
+        throw new Error(
+            `Persisted review failed deterministic evaluation: ${deterministicEvaluation.failures
+                .filter(failure => failure.category !== "unsupported_claim")
+                .map(failure => failure.category)
+                .join(", ")}`
+        );
+    }
+    let semanticGraderCalls = 0;
+    let semanticEvaluation = null;
+    if (process.env.FWR_FOUNDER_REVIEW_EVALUATION_ENABLED === "true") {
+        semanticGraderCalls++;
+        try {
+            semanticEvaluation = await gradePersistedFounderWeeklyReview(
+                readBack.evidenceSnapshot,
+                persistedReview
+            );
+        } catch (error) {
+            console.error(
+                `[fwr-evaluation] semantic grader unavailable: ${
+                    error instanceof Error ? error.name : "unknown"
+                }`
+            );
+        }
+    }
     const rendered = renderFounderWeeklyReviewMarkdown(readBack);
     const dispatchRows = await testDb.db
         .select()
@@ -681,13 +757,19 @@ try {
         await mkdir(directory, { recursive: true });
         artifactPaths = {
             evidence: resolve(directory, "evidence.json"),
+            envelope: resolve(directory, "generation-envelope.json"),
             report: resolve(directory, "report.json"),
             markdown: resolve(directory, "report.md"),
+            evaluation: resolve(directory, "evaluation.json"),
             summary: resolve(directory, "run-summary.json"),
         };
         await writeAtomic(
             artifactPaths.evidence,
             JSON.stringify(readBack.evidenceSnapshot, null, 2)
+        );
+        await writeAtomic(
+            artifactPaths.envelope,
+            JSON.stringify(buildGenerationEvidenceEnvelope(readBack.evidenceSnapshot), null, 2)
         );
         await writeAtomic(
             artifactPaths.report,
@@ -705,6 +787,14 @@ try {
             )
         );
         await writeAtomic(artifactPaths.markdown, rendered);
+        await writeAtomic(
+            artifactPaths.evaluation,
+            JSON.stringify(
+                { deterministic: deterministicEvaluation, semantic: semanticEvaluation },
+                null,
+                2
+            )
+        );
         await writeAtomic(
             artifactPaths.summary,
             JSON.stringify(
@@ -726,8 +816,16 @@ try {
                         warning => warning.code
                     ),
                     repairCount: generationCalls - 1,
+                    materialityAnalyzerCalls,
+                    generationCalls,
+                    semanticGraderCalls,
                     retryCount: saved.retryCount,
                     validation: { canonicalSchema: true, citations: true, sourceSemantics: true },
+                    materialityDiagnostics: changeDiagnostics,
+                    evaluation: {
+                        deterministic: deterministicEvaluation,
+                        semantic: semanticEvaluation,
+                    },
                     snapshotDigestBefore: beforeDigest,
                     snapshotDigestAfter: digest(readBack.evidenceSnapshot),
                     artifactPaths,
@@ -760,6 +858,11 @@ try {
             provider: generated.modelMetadata.provider,
             model: generated.modelMetadata.model,
             repairCount: generationCalls - 1,
+            materialityAnalyzerCalls,
+            generationCalls,
+            semanticGraderCalls,
+            deterministicEvaluation,
+            semanticEvaluation,
             dispatchCount: dispatchRows.length,
             runRowCount: runRows.length,
             artifactPaths,

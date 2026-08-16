@@ -58,6 +58,11 @@
       },
       "forbiddenWarningCodes": ["document_change_baseline_missing"]
     },
+    "documentChanges": {
+      "min": 4,
+      "max": 4,
+      "requiredCategories": ["ownership_change"]
+    },
     "sourceSemantics": { "temporalEvidenceRequired": true }
   }
 }

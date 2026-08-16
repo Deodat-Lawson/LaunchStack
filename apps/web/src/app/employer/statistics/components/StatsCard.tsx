@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "~/app/employer/documents/components/ui/card";
+import { Card } from "~/components/ui/card";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 

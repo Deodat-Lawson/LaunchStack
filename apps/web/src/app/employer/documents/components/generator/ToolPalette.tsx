@@ -19,19 +19,10 @@ import {
     PanelLeft,
     GraduationCap,
 } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
+import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "~/app/employer/documents/components/ui/collapsible";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "~/app/employer/documents/components/ui/tooltip";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 
 // Tool types
 export type ToolType =

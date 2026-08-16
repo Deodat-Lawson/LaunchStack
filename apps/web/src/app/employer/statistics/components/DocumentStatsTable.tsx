@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card } from "~/app/employer/documents/components/ui/card";
-import { Badge } from "~/app/employer/documents/components/ui/badge";
-import { Input } from "~/app/employer/documents/components/ui/input";
+import { Card } from "~/components/ui/card";
+import { Badge } from "~/components/ui/badge";
+import { Input } from "~/components/ui/input";
 import {
     Table,
     TableBody,
@@ -11,7 +11,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "~/app/employer/documents/components/ui/table";
+} from "~/components/ui/table";
 import { FileText, Search, Eye, ChevronRight } from "lucide-react";
 import type { DocumentStat } from "../types";
 import { DocumentDetailsSheet } from "./DocumentDetailsSheet";

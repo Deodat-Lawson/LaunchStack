@@ -12,17 +12,17 @@ import {
     RefreshCw,
     Wand2,
 } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { ScrollArea } from "~/app/employer/documents/components/ui/scroll-area";
-import { Badge } from "~/app/employer/documents/components/ui/badge";
-import { Progress } from "~/app/employer/documents/components/ui/progress";
+import { Button } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Badge } from "~/components/ui/badge";
+import { Progress } from "~/components/ui/progress";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "~/app/employer/documents/components/ui/select";
+} from "~/components/ui/select";
 import { cn } from "~/lib/utils";
 
 // Suggestion types

@@ -7,16 +7,16 @@ import {
     SheetHeader,
     SheetTitle,
     SheetDescription,
-} from "~/app/employer/documents/components/ui/sheet";
+} from "~/components/ui/sheet";
 import type { DocumentStat, DocumentDetails } from "../types";
 import {
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
     type ChartConfig,
-} from "~/app/employer/documents/components/ui/chart";
+} from "~/components/ui/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
-import { Badge } from "~/app/employer/documents/components/ui/badge";
+import { Badge } from "~/components/ui/badge";
 import {
     Table,
     TableBody,
@@ -24,7 +24,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "~/app/employer/documents/components/ui/table";
+} from "~/components/ui/table";
 import {
     FileText,
     Users,
@@ -35,9 +35,9 @@ import {
     Loader2,
     ExternalLink,
 } from "lucide-react";
-import { Card } from "~/app/employer/documents/components/ui/card";
+import { Card } from "~/components/ui/card";
 import { cn } from "~/lib/utils";
-import { Button } from "~/app/employer/documents/components/ui/button";
+import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
 
 interface DocumentDetailsSheetProps {

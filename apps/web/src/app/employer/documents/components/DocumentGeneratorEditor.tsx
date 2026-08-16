@@ -18,14 +18,10 @@ import {
     CheckCircle,
     Download,
 } from "lucide-react";
-import {
-    ResizablePanelGroup,
-    ResizablePanel,
-    ResizableHandle,
-} from "~/app/employer/documents/components/ui/resizable";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Input } from "~/app/employer/documents/components/ui/input";
-import { Textarea } from "~/app/employer/documents/components/ui/textarea";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "~/components/ui/resizable";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
 
 // Import tool components

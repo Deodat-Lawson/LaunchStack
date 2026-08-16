@@ -17,16 +17,11 @@ import {
     Tag,
     X,
 } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Input } from "~/app/employer/documents/components/ui/input";
-import {
-    Tabs,
-    TabsList,
-    TabsTrigger,
-    TabsContent,
-} from "~/app/employer/documents/components/ui/tabs";
-import { ScrollArea } from "~/app/employer/documents/components/ui/scroll-area";
-import { Badge } from "~/app/employer/documents/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "~/components/ui/tabs";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Badge } from "~/components/ui/badge";
 // import { cn } from "~/lib/utils";
 
 // Research result types

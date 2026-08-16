@@ -2,23 +2,23 @@
 
 import { useState } from "react";
 import { Download, FileText, File, Code, Loader2, Check } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Label } from "~/app/employer/documents/components/ui/label";
-import { Switch } from "~/app/employer/documents/components/ui/switch";
+import { Button } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogDescription,
-} from "~/app/employer/documents/components/ui/dialog";
+} from "~/components/ui/dialog";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "~/app/employer/documents/components/ui/select";
+} from "~/components/ui/select";
 import { cn } from "~/lib/utils";
 
 type ExportFormat = "pdf" | "markdown" | "html" | "text";

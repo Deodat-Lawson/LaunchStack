@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Card } from "~/app/employer/documents/components/ui/card";
-import { Badge } from "~/app/employer/documents/components/ui/badge";
+import { Card } from "~/components/ui/card";
+import { Badge } from "~/components/ui/badge";
 import {
     Table,
     TableBody,
@@ -10,7 +10,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "~/app/employer/documents/components/ui/table";
+} from "~/components/ui/table";
 import { Users, Clock, MessageSquare } from "lucide-react";
 import { cn } from "~/lib/utils";
 import type { EmployeeInfo } from "../types";

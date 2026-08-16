@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { Card } from "~/app/employer/documents/components/ui/card";
+import { Card } from "~/components/ui/card";
 import {
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
     type ChartConfig,
-} from "~/app/employer/documents/components/ui/chart";
+} from "~/components/ui/chart";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
 import { Users, MousePointerClick } from "lucide-react";
 import type { DashboardData } from "../types";

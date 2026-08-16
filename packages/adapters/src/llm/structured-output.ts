@@ -55,6 +55,59 @@ const LANGCHAIN_METHOD = {
     "json-object": "jsonMode",
 } as const;
 
+type JsonSchemaNode = Record<string, unknown>;
+
+function isJsonSchemaNode(value: unknown): value is JsonSchemaNode {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Native OpenAI-compatible strict JSON Schema requires every object property to
+ * be present. Zod's optional object properties are valid JSON Schema, but they
+ * cannot be passed through that native LangChain method. Detect that shape
+ * before invoking the model so the existing provider-neutral JSON fallback can
+ * preserve the original Zod contract without spending a failed request.
+ */
+function hasOptionalObjectFields(schema: z.ZodType<unknown>, name: string): boolean {
+    const root = zodToJsonSchema(schema, name) as JsonSchemaNode;
+    const definitions = isJsonSchemaNode(root.definitions) ? root.definitions : {};
+    const visited = new Set<JsonSchemaNode>();
+
+    function visit(value: unknown): boolean {
+        if (!isJsonSchemaNode(value) || visited.has(value)) return false;
+
+        const reference = value.$ref;
+        if (typeof reference === "string" && reference.startsWith("#/definitions/")) {
+            const definition = definitions[reference.slice("#/definitions/".length)];
+            return visit(definition);
+        }
+
+        visited.add(value);
+        const properties = value.properties;
+        if (isJsonSchemaNode(properties)) {
+            const required = new Set(
+                Array.isArray(value.required)
+                    ? value.required.filter((entry): entry is string => typeof entry === "string")
+                    : []
+            );
+            for (const [property, child] of Object.entries(properties)) {
+                if (!required.has(property) || visit(child)) return true;
+            }
+        }
+
+        for (const key of ["items", "additionalProperties"] as const) {
+            if (visit(value[key])) return true;
+        }
+        for (const key of ["anyOf", "oneOf", "allOf"] as const) {
+            const branches = value[key];
+            if (Array.isArray(branches) && branches.some(visit)) return true;
+        }
+        return false;
+    }
+
+    return visit(root);
+}
+
 function jsonInstruction(schema: z.ZodType<unknown>, name: string): string {
     const jsonSchema = JSON.stringify(zodToJsonSchema(schema, name), null, 2);
     return [
@@ -152,6 +205,10 @@ export async function invokeStructured<T>(
 ): Promise<T> {
     const native = pickNativeStructuredMode(resolved.behavior.nativeStructuredOutput);
     if (!native) {
+        return invokeJsonFallback(resolved, schema, messages, options);
+    }
+
+    if (native === "json-schema" && hasOptionalObjectFields(schema, options.name)) {
         return invokeJsonFallback(resolved, schema, messages, options);
     }
 

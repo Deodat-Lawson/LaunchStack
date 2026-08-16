@@ -15,6 +15,74 @@ const compat = new FlatCompat({
     allConfig: js.configs.all,
 });
 
+// Flat config REPLACES a rule's options when a later block matches the same
+// file — it never merges them. Every block below that re-declares
+// no-restricted-imports for an apps/web scope must therefore carry the full
+// set of error-level restrictions itself; these shared pieces keep that
+// composition in one place.
+const chatClientImportBans = [
+    {
+        name: "@langchain/openai",
+        importNames: ["ChatOpenAI"],
+        message:
+            "Resolve a route with @launchstack/core/llm instead. " +
+            "ChatOpenAI belongs to openai-compatible-transport.ts alone. " +
+            "(OpenAIEmbeddings is fine — embeddings are configured separately.)",
+    },
+    {
+        name: "@langchain/anthropic",
+        importNames: ["ChatAnthropic"],
+        message:
+            "Chat reaches one OpenAI-compatible endpoint; native provider " +
+            "transports are tracked in the multi-endpoint follow-up issue.",
+    },
+    {
+        name: "@langchain/google-genai",
+        importNames: ["ChatGoogleGenerativeAI"],
+        message:
+            "Chat reaches one OpenAI-compatible endpoint; native provider " +
+            "transports are tracked in the multi-endpoint follow-up issue.",
+    },
+    {
+        name: "@langchain/ollama",
+        importNames: ["ChatOllama"],
+        message:
+            "Point CHAT_BASE_URL at Ollama's OpenAI-compatible /v1 surface " +
+            "instead. (OllamaEmbeddings is fine — embeddings are separate.)",
+    },
+];
+
+const oldKitTombstone = {
+    group: ["~/app/employer/documents/components/ui/*", "**/documents/components/ui/*"],
+    message: "The base kit moved: import from ~/components/ui/<name>.",
+};
+
+// no-restricted-imports matches the raw specifier, so relative escapes from
+// a route area must be banned explicitly alongside the alias forms.
+const relativeReaches = area => [
+    `../${area}/*`,
+    `../../${area}/*`,
+    `../../../${area}/*`,
+    `../../../../${area}/*`,
+    `../../../../../${area}/*`,
+    `../../../../../../${area}/*`,
+];
+
+const deprecatedModuleWarns = [
+    {
+        group: ["**/_workspace/icons"],
+        message:
+            "Legacy icon set. Use lucide-react for general icons " +
+            "and ~/components/icons/brand for brand marks.",
+    },
+    {
+        group: ["~/app/employer/_components/primitives", "**/_components/primitives"],
+        message:
+            "Deprecated inline-style primitives. Use ~/components/ui " +
+            "(shadcn base kit on the design tokens) instead.",
+    },
+];
+
 const eslintConfig = [
     {
         // Flat-config patterns are anchored: without a `**/` prefix they only
@@ -392,88 +460,23 @@ const eslintConfig = [
         files: ["packages/**/src/**/*.{ts,tsx}", "apps/web/src/**/*.{ts,tsx}"],
         ignores: ["packages/adapters/src/llm/openai-compatible-transport.ts"],
         rules: {
-            "no-restricted-imports": [
-                "error",
-                {
-                    paths: [
-                        {
-                            name: "@langchain/openai",
-                            importNames: ["ChatOpenAI"],
-                            message:
-                                "Resolve a route with @launchstack/core/llm instead. " +
-                                "ChatOpenAI belongs to openai-compatible-transport.ts alone. " +
-                                "(OpenAIEmbeddings is fine — embeddings are configured separately.)",
-                        },
-                        {
-                            name: "@langchain/anthropic",
-                            importNames: ["ChatAnthropic"],
-                            message:
-                                "Chat reaches one OpenAI-compatible endpoint; native provider " +
-                                "transports are tracked in the multi-endpoint follow-up issue.",
-                        },
-                        {
-                            name: "@langchain/google-genai",
-                            importNames: ["ChatGoogleGenerativeAI"],
-                            message:
-                                "Chat reaches one OpenAI-compatible endpoint; native provider " +
-                                "transports are tracked in the multi-endpoint follow-up issue.",
-                        },
-                        {
-                            name: "@langchain/ollama",
-                            importNames: ["ChatOllama"],
-                            message:
-                                "Point CHAT_BASE_URL at Ollama's OpenAI-compatible /v1 surface " +
-                                "instead. (OllamaEmbeddings is fine — embeddings are separate.)",
-                        },
-                    ],
-                },
-            ],
+            "no-restricted-imports": ["error", { paths: chatClientImportBans }],
         },
     },
-    // Design-system guardrails (see apps/web/README.md). Errors are
-    // tombstones with zero legitimate uses; warns are ratchets over the
-    // pre-existing baseline — the count may only go down.
+    // Design-system guardrails (see apps/web/README.md). Two tiers so that
+    // error- and warn-level restrictions can coexist on the same files
+    // (one rule id holds one severity): hard boundaries live in the base
+    // no-restricted-imports — every block that redefines it for a narrower
+    // web scope repeats the wider scope's restrictions, because flat
+    // config replaces rather than merges — and warn-level deprecation
+    // ratchets live in the @typescript-eslint twin rule. Warn counts may
+    // only go down.
     {
         files: ["apps/web/src/**/*.{ts,tsx}"],
         rules: {
             "no-restricted-imports": [
                 "error",
-                {
-                    patterns: [
-                        {
-                            group: [
-                                "~/app/employer/documents/components/ui/*",
-                                "**/documents/components/ui/*",
-                            ],
-                            message: "The base kit moved: import from ~/components/ui/<name>.",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        files: ["apps/web/src/**/*.{ts,tsx}"],
-        ignores: ["apps/web/src/app/employer/documents/_workspace/**"],
-        rules: {
-            "no-restricted-imports": [
-                "warn",
-                {
-                    patterns: [
-                        {
-                            group: ["**/_workspace/icons"],
-                            message:
-                                "Legacy icon set. Use lucide-react for general icons " +
-                                "and ~/components/icons/brand for brand marks.",
-                        },
-                        {
-                            group: ["~/app/employer/_components/primitives"],
-                            message:
-                                "Deprecated inline-style primitives. Use ~/components/ui " +
-                                "(shadcn base kit on the design tokens) instead.",
-                        },
-                    ],
-                },
+                { paths: chatClientImportBans, patterns: [oldKitTombstone] },
             ],
         },
     },
@@ -481,17 +484,23 @@ const eslintConfig = [
     // each other. Shared pieces belong in ~/components, ~/lib, or
     // ~/app/_components. The employee → employer leg has 5 pre-existing
     // violations (ProfileDropdown, WorkspaceShell, NavBar, Employer
-    // styles), so it warns until they migrate; the reverse leg is clean
-    // and stays an error.
+    // styles), so it warns below until they migrate; this reverse leg is
+    // clean and stays an error.
     {
         files: ["apps/web/src/app/employer/**/*.{ts,tsx}"],
         rules: {
             "no-restricted-imports": [
                 "error",
                 {
+                    paths: chatClientImportBans,
                     patterns: [
+                        oldKitTombstone,
                         {
-                            group: ["~/app/employee/*", "**/app/employee/*"],
+                            group: [
+                                "~/app/employee/*",
+                                "**/app/employee/*",
+                                ...relativeReaches("employee"),
+                            ],
                             message:
                                 "employer must not import from the employee area; " +
                                 "promote shared code to ~/components or ~/lib.",
@@ -502,14 +511,29 @@ const eslintConfig = [
         },
     },
     {
+        files: ["apps/web/src/**/*.{ts,tsx}"],
+        ignores: ["apps/web/src/app/employer/documents/_workspace/**"],
+        rules: {
+            "@typescript-eslint/no-restricted-imports": [
+                "warn",
+                { patterns: deprecatedModuleWarns },
+            ],
+        },
+    },
+    {
         files: ["apps/web/src/app/employee/**/*.{ts,tsx}"],
         rules: {
-            "no-restricted-imports": [
+            "@typescript-eslint/no-restricted-imports": [
                 "warn",
                 {
                     patterns: [
+                        ...deprecatedModuleWarns,
                         {
-                            group: ["~/app/employer/*", "~/styles/Employer/*"],
+                            group: [
+                                "~/app/employer/*",
+                                "~/styles/Employer/*",
+                                ...relativeReaches("employer"),
+                            ],
                             message:
                                 "employee reaching into employer — promote the shared " +
                                 "piece to ~/components (or duplicate the style) when " +
@@ -521,7 +545,8 @@ const eslintConfig = [
         },
     },
     // Colors come from tokens (var(--…) / semantic Tailwind classes), not
-    // hex literals. Warn-level ratchet; baseline ~74 occurrences.
+    // hex literals in any CSS form (#rgb, #rgba, #rrggbb, #rrggbbaa).
+    // Warn-level ratchet; baseline ~74 occurrences.
     {
         files: ["apps/web/src/**/*.tsx"],
         rules: {
@@ -529,13 +554,14 @@ const eslintConfig = [
                 "warn",
                 {
                     selector:
-                        "Literal[value=/#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?\\b/], Literal[value=/#[0-9a-fA-F]{3}\\b/]",
+                        "Literal[value=/#([0-9a-fA-F]{6}([0-9a-fA-F]{2})?|[0-9a-fA-F]{3,4})\\b/]",
                     message:
                         "Use design tokens (var(--…) or semantic Tailwind classes " +
                         "like bg-panel/text-ink/border-line) instead of hex colors.",
                 },
                 {
-                    selector: "TemplateElement[value.raw=/#[0-9a-fA-F]{6}\\b/]",
+                    selector:
+                        "TemplateElement[value.raw=/#([0-9a-fA-F]{6}([0-9a-fA-F]{2})?|[0-9a-fA-F]{3,4})\\b/]",
                     message:
                         "Use design tokens (var(--…) or semantic Tailwind classes) " +
                         "instead of hex colors.",

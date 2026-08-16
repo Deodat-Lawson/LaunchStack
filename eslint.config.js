@@ -430,6 +430,119 @@ const eslintConfig = [
             ],
         },
     },
+    // Design-system guardrails (see apps/web/README.md). Errors are
+    // tombstones with zero legitimate uses; warns are ratchets over the
+    // pre-existing baseline — the count may only go down.
+    {
+        files: ["apps/web/src/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: [
+                                "~/app/employer/documents/components/ui/*",
+                                "**/documents/components/ui/*",
+                            ],
+                            message: "The base kit moved: import from ~/components/ui/<name>.",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        files: ["apps/web/src/**/*.{ts,tsx}"],
+        ignores: ["apps/web/src/app/employer/documents/_workspace/**"],
+        rules: {
+            "no-restricted-imports": [
+                "warn",
+                {
+                    patterns: [
+                        {
+                            group: ["**/_workspace/icons"],
+                            message:
+                                "Legacy icon set. Use lucide-react for general icons " +
+                                "and ~/components/icons/brand for brand marks.",
+                        },
+                        {
+                            group: ["~/app/employer/_components/primitives"],
+                            message:
+                                "Deprecated inline-style primitives. Use ~/components/ui " +
+                                "(shadcn base kit on the design tokens) instead.",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    // Route areas are products: employer and employee must not reach into
+    // each other. Shared pieces belong in ~/components, ~/lib, or
+    // ~/app/_components. The employee → employer leg has 5 pre-existing
+    // violations (ProfileDropdown, WorkspaceShell, NavBar, Employer
+    // styles), so it warns until they migrate; the reverse leg is clean
+    // and stays an error.
+    {
+        files: ["apps/web/src/app/employer/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: ["~/app/employee/*", "**/app/employee/*"],
+                            message:
+                                "employer must not import from the employee area; " +
+                                "promote shared code to ~/components or ~/lib.",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        files: ["apps/web/src/app/employee/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "warn",
+                {
+                    patterns: [
+                        {
+                            group: ["~/app/employer/*", "~/styles/Employer/*"],
+                            message:
+                                "employee reaching into employer — promote the shared " +
+                                "piece to ~/components (or duplicate the style) when " +
+                                "you touch this code.",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    // Colors come from tokens (var(--…) / semantic Tailwind classes), not
+    // hex literals. Warn-level ratchet; baseline ~74 occurrences.
+    {
+        files: ["apps/web/src/**/*.tsx"],
+        rules: {
+            "no-restricted-syntax": [
+                "warn",
+                {
+                    selector:
+                        "Literal[value=/#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?\\b/], Literal[value=/#[0-9a-fA-F]{3}\\b/]",
+                    message:
+                        "Use design tokens (var(--…) or semantic Tailwind classes " +
+                        "like bg-panel/text-ink/border-line) instead of hex colors.",
+                },
+                {
+                    selector: "TemplateElement[value.raw=/#[0-9a-fA-F]{6}\\b/]",
+                    message:
+                        "Use design tokens (var(--…) or semantic Tailwind classes) " +
+                        "instead of hex colors.",
+                },
+            ],
+        },
+    },
 ];
 
 export default eslintConfig;

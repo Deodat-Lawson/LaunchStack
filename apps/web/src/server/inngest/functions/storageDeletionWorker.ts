@@ -343,6 +343,22 @@ export async function finalizeRequestIfDone(
         .update(storageDeletionRequests)
         .set({ status: "manual_review" })
         .where(eq(storageDeletionRequests.id, requestId));
+    } else if (
+      allItems.some(
+        (item) => stateOf(item) === "DELETED" || stateOf(item) === "NOT_FOUND",
+      )
+    ) {
+      // Some items are done and some aren't, with nothing blocked or
+      // quarantined outranking that: Decision 6a's "partial", applied at the
+      // request level rather than the batch level. Nothing wrote this status
+      // before B7 — without it the maintained summary column can never
+      // represent the one state the status API most needs to explain, and
+      // the read API would be silently correcting the stored value on every
+      // poll.
+      await db
+        .update(storageDeletionRequests)
+        .set({ status: "partial" })
+        .where(eq(storageDeletionRequests.id, requestId));
     }
     return {
       requestId,

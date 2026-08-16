@@ -16,12 +16,10 @@
  *     attempts, the item is marked BLOCKED and the request is left
  *     incomplete for a human to look at (future B7 status API).
  *
- * "database"-adapter items: NOT handled by this worker. Per the design doc
- * (task A3, "Database-backed delete"), the real fix for deleting
- * file_uploads rows belongs to Dev A, alongside the S3/Blob/UploadThing
- * adapters. Until that lands, database-adapter items are deliberately
- * marked BLOCKED (not silently skipped, not faked as deleted) so nothing
- * in this system quietly reinvents that piece.
+ * Database-backed items use the same ref-based storage helper as the other
+ * adapters. The item's storageLocationId and key are passed through unchanged
+ * so the active-location guard can block stale refs rather than deleting from
+ * a newly configured store.
  *
  * storage_objects.lifecycleState: this worker only touches the two states
  * it needs to make cancellation (coordinator's cancelDeletionRequest) and
@@ -55,6 +53,7 @@
 
 import { eq, inArray } from "drizzle-orm";
 import {
+  documentVersions,
   storageDeletionItems,
   storageDeletionRequests,
   storageDeletionTombstones,
@@ -68,6 +67,8 @@ import { deleteObjects } from "~/server/storage/s3-client";
 import { deleteFile as deleteBlobFile } from "~/server/storage/vercel-blob";
 import { deleteUploadThingFileByKey } from "~/server/storage/uploadthing";
 import { purgeDocumentRelational } from "~/server/services/storage-deletion-coordinator";
+import { deleteFileByRef } from "~/lib/storage";
+import type { ObjectRef } from "@launchstack/core/storage";
 
 export const BLOCK_AFTER_ATTEMPTS = 5;
 
@@ -75,6 +76,26 @@ export interface DeleteOutcome {
   outcome: "deleted" | "not_found" | "retryable" | "blocked";
   errorCode?: string;
   message?: string;
+}
+
+function normalizeDeleteResult(result: {
+  outcome: DeleteOutcome["outcome"] | "rejected";
+  errorCode?: string;
+  message?: string;
+}): DeleteOutcome {
+  if (result.outcome === "rejected") {
+    return {
+      outcome: "blocked",
+      errorCode: result.errorCode ?? "delete_rejected",
+      message: result.message ?? "Storage adapter rejected the delete request",
+    };
+  }
+
+  return {
+    outcome: result.outcome,
+    errorCode: result.errorCode,
+    message: result.message,
+  };
 }
 
 /**
@@ -90,7 +111,11 @@ function isWorkerEnabled(): boolean {
 }
 
 /** Calls the right adapter's delete function and normalizes the result. */
-async function deleteByAdapter(adapter: string, key: string): Promise<DeleteOutcome> {
+async function deleteByAdapter(
+  adapter: string,
+  storageLocationId: string,
+  key: string,
+): Promise<DeleteOutcome> {
   switch (adapter) {
     case "s3": {
       const [result] = await deleteObjects([key]);
@@ -110,14 +135,15 @@ async function deleteByAdapter(adapter: string, key: string): Promise<DeleteOutc
     }
     case "uploadthing":
       return deleteUploadThingFileByKey(key);
-    case "database":
-      // Dev A owns this (design doc task A3). Not implemented here on
-      // purpose — see file header comment.
-      return {
-        outcome: "blocked",
-        errorCode: "database_adapter_not_yet_implemented",
-        message: "database-adapter delete is Dev A's A3 task and isn't wired up yet",
+    case "database": {
+      const ref: ObjectRef = {
+        adapter: "database",
+        storageLocationId,
+        key,
       };
+      const result = await deleteFileByRef(ref);
+      return normalizeDeleteResult(result);
+    }
     default:
       // Unknown adapter — not transient, a human needs to look at this.
       return {
@@ -176,7 +202,7 @@ export async function processPendingItems(requestId: number): Promise<ProcessPen
         .where(eq(storageObjects.id, Number(item.objectId)));
     }
 
-    const result = await deleteByAdapter(item.adapter, item.key);
+    const result = await deleteByAdapter(item.adapter, item.storageLocationId, item.key);
 
     if (result.outcome === "deleted" || result.outcome === "not_found") {
       await db
@@ -473,15 +499,30 @@ export async function finalizeRequestIfDone(
     };
   }
 
-  // documentVersionId-scoped requests (single-version delete) don't purge
-  // the parent document — there's no equivalent "purge just this version"
-  // relational step defined yet. Leaving that as a known gap for now.
-  // (No cascade risk here yet either, since nothing deletes the document
-  // in this branch — the request row survives on its own.)
-  await db
-    .update(storageDeletionRequests)
-    .set({ status: "completed", completedAt: new Date() })
-    .where(eq(storageDeletionRequests.id, requestId));
+  // Version-scoped requests do not purge the parent document, but the
+  // version row must still be removed only after every storage item is
+  // terminal. Insert the tombstone before the delete because the request and
+  // its items are cascaded by document_versions.
+  if (request.documentVersionId !== null) {
+    await db.transaction(async (tx) => {
+      await tx.insert(storageDeletionTombstones).values({
+        requestId: BigInt(request.id),
+        companyId: request.companyId,
+        documentVersionId: request.documentVersionId,
+        finalStatus: "completed",
+        objectCount: allItems.length,
+      });
+      await tx
+        .delete(documentVersions)
+        .where(eq(documentVersions.id, Number(request.documentVersionId)));
+    });
+    purged = true;
+  } else {
+    await db
+      .update(storageDeletionRequests)
+      .set({ status: "completed", completedAt: new Date() })
+      .where(eq(storageDeletionRequests.id, requestId));
+  }
 
   return {
     requestId,

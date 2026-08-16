@@ -17,7 +17,18 @@ export interface StoragePort {
    */
   download(urlOrKey: string, init?: RequestInit): Promise<Response>;
 
-  /** Delete an object, identified by URL or key. No-op if the object is gone. */
+  /** Delete an object by its provider-owned opaque identity. */
+  deleteRef(ref: ObjectRef): Promise<DeleteResult>;
+
+  /** Delete multiple objects by provider-owned opaque identity. */
+  deleteMany(refs: readonly ObjectRef[]): Promise<DeleteResult[]>;
+
+  /**
+   * Deprecated URL/key compatibility shim.
+   *
+   * New callers must use {@link deleteRef}. URL promotion belongs in the
+   * hosting adapter, not in core.
+   */
   delete(urlOrKey: string): Promise<void>;
 
   /** Identifier for the active backend (e.g. "s3", "database"). */
@@ -32,11 +43,27 @@ export interface UploadInput {
   userId?: string;
 }
 
+/** Provider-owned, immutable storage identity. Callers must not parse URLs into refs. */
+export interface ObjectRef {
+  adapter: "s3" | "vercel-blob" | "database" | "uploadthing";
+  storageLocationId: string;
+  key: string;
+}
+
+export interface DeleteResult {
+  ref: ObjectRef;
+  outcome: "deleted" | "not_found" | "retryable" | "blocked" | "rejected";
+  errorCode?: string;
+  message?: string;
+}
+
 export interface UploadResult {
   /** Canonical URL the app should store to fetch the object later. */
   url: string;
   /** Provider-specific object path/key. */
   pathname: string;
+  /** Provider-owned identity minted by the adapter at upload time. */
+  ref: ObjectRef;
   contentType?: string;
   provider: string;
 }

@@ -1,9 +1,8 @@
 /**
  * DELETE /api/documents/[id]/versions/[versionId]
  *
- * Permanently remove a specific version of a document: the blob file, all
- * embeddings/structure/metadata/previews tagged with this versionId, and the
- * `document_versions` row itself.
+ * Request removal of a specific document version. Storage cleanup is
+ * ref-based and happens before the relational row is removed.
  *
  * Safety rules:
  *   - Cannot delete the current version. Callers must revert to a different
@@ -17,9 +16,7 @@
  *     `document_metadata`, and `document_previews` all have `version_id` FKs
  *     with `ON DELETE CASCADE`, so deleting the `document_versions` row
  *     automatically removes all embeddings tied to it — no manual cleanup.
- *   - The blob file is deleted from storage (Vercel Blob or SeaweedFS)
- *     _before_ the DB row is removed, so a blob deletion failure aborts the
- *     operation and leaves the DB consistent with the retained blob.
+ *   - The lifecycle gate refuses intake while the coordinator is disabled.
  */
 
 import { NextResponse } from "next/server";
@@ -28,10 +25,15 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions, users } from "@launchstack/core/db/schema";
-import { deleteFileByUrl } from "~/lib/storage";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { isLifecycleEnabled } from "~/server/services/delete-document-api";
+import {
+  requestVersionDeletionAndDispatch,
+  TenantMismatchError,
+  VersionNotFoundError,
+} from "~/server/services/storage-deletion-coordinator";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -147,49 +149,64 @@ export async function DELETE(
         );
       }
 
-      // Delete the blob first. If storage is unreachable we bail out before
-      // touching the DB, leaving the system in a consistent state that can
-      // be retried. A missing blob (404 from storage) is logged but does not
-      // block DB cleanup — we still want the row and embeddings gone.
-      try {
-        await deleteFileByUrl(targetVersion.url);
-      } catch (blobError) {
-        console.warn(
-          `[Versions] Blob delete failed for doc=${documentId} version=${versionId} url=${targetVersion.url}:`,
-          blobError
-        );
+      if (!isLifecycleEnabled()) {
         return NextResponse.json(
           {
-            error: "Failed to delete version blob from storage",
-            details:
-              blobError instanceof Error ? blobError.message : String(blobError),
+            success: false,
+            status: "unavailable",
+            error: "Storage deletion lifecycle is disabled",
           },
-          { status: 502 }
+          { status: 503 },
         );
       }
 
-      // Deleting the document_versions row cascades to all RLM tables that
-      // FK against it (structure, context_chunks, retrieval_chunks, metadata,
-      // previews), so no manual cleanup is needed.
-      await db
-        .delete(documentVersions)
-        .where(eq(documentVersions.id, versionId));
+      try {
+        const result = await requestVersionDeletionAndDispatch({
+          versionId,
+          companyId: Number(doc.companyId),
+          actorId: userId,
+        });
 
-      console.log(
-        `[Versions] Deleted doc=${documentId} v${targetVersion.versionNumber} ` +
-          `(versionId=${targetVersion.id}) by user=${userId}`
-      );
+        if (result.kind === "already-completed") {
+          return NextResponse.json(
+            {
+              success: true,
+              status: result.tombstone.finalStatus,
+              requestId: result.tombstone.requestId
+                ? Number(result.tombstone.requestId)
+                : undefined,
+              documentId,
+              versionId,
+              message: "This version was already deleted.",
+            },
+            { status: 200 },
+          );
+        }
 
-      return NextResponse.json(
-        {
-          success: true,
-          documentId,
-          versionId: targetVersion.id,
-          versionNumber: targetVersion.versionNumber,
-          message: "Version deleted successfully",
-        },
-        { status: 200 }
-      );
+        return NextResponse.json(
+          {
+            success: true,
+            status: result.request.status,
+            requestId: result.request.id,
+            documentId,
+            versionId,
+            versionNumber: targetVersion.versionNumber,
+            message: "Version deletion request accepted and is now in progress.",
+          },
+          { status: 202 },
+        );
+      } catch (error) {
+        if (error instanceof VersionNotFoundError) {
+          return NextResponse.json(
+            { error: "Version not found for this document" },
+            { status: 404 },
+          );
+        }
+        if (error instanceof TenantMismatchError) {
+          return NextResponse.json({ error: "Document not found" }, { status: 404 });
+        }
+        throw error;
+      }
     } catch (error) {
       console.error("[Versions] delete failed:", error);
       return NextResponse.json(

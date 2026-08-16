@@ -1,5 +1,6 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { auth } from "@clerk/nextjs/server";
+import { mintUploadThingObjectRef } from "~/server/storage/uploadthing";
 
 const f = createUploadthing();
 
@@ -17,10 +18,16 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+            const ref = mintUploadThingObjectRef(file);
             return {
                 uploadedBy: metadata.userId,
                 fileUrl: file.url,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 
@@ -37,10 +44,16 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+            const ref = mintUploadThingObjectRef(file);
             return {
                 uploadedBy: metadata.userId,
                 fileUrl: file.url,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 
@@ -57,10 +70,16 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+            const ref = mintUploadThingObjectRef(file);
             return {
                 uploadedBy: metadata.userId,
                 fileUrl: file.url,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 
@@ -77,10 +96,16 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+            const ref = mintUploadThingObjectRef(file);
             return {
                 uploadedBy: metadata.userId,
                 fileUrl: file.url,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 
@@ -114,10 +139,16 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+            const ref = mintUploadThingObjectRef(file);
             return {
                 uploadedBy: metadata.userId,
                 fileUrl: file.url,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 } satisfies FileRouter;

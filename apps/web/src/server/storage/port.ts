@@ -14,9 +14,11 @@ import type { StoragePort, UploadInput, UploadResult } from "@launchstack/core/s
 import {
   uploadFile,
   fetchFile,
-  deleteFileByUrl,
+  deleteFileByRef,
+  deleteManyByRef,
   resolveStorageBackend,
 } from "~/lib/storage";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 export function createAppStoragePort(): StoragePort {
   const provider = resolveStorageBackend();
@@ -36,6 +38,7 @@ export function createAppStoragePort(): StoragePort {
       return {
         url: result.url,
         pathname: result.pathname,
+        ref: result.ref,
         contentType: result.contentType,
         provider: result.provider,
       };
@@ -45,8 +48,26 @@ export function createAppStoragePort(): StoragePort {
       return fetchFile(urlOrKey, init);
     },
 
-    delete(urlOrKey) {
-      return deleteFileByUrl(urlOrKey);
+    deleteRef(ref) {
+      return deleteFileByRef(ref);
+    },
+
+    deleteMany(refs) {
+      return deleteManyByRef(refs);
+    },
+
+    async delete(urlOrKey) {
+      const promoted = promoteLegacyUrlToRef({ value: urlOrKey });
+      if (!promoted.ok) {
+        throw new Error(
+          `StoragePort.delete could not promote the legacy reference: ${promoted.reason}`,
+        );
+      }
+      const result = await deleteFileByRef(promoted.ref);
+      if (result.outcome === "deleted" || result.outcome === "not_found") {
+        return;
+      }
+      throw new Error(result.message ?? result.errorCode ?? "Storage delete failed");
     },
   };
 }

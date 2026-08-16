@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { ListTree, Sparkles, Plus, Loader2, FileText, RefreshCw } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Textarea } from "~/app/employer/documents/components/ui/textarea";
-import { ScrollArea } from "~/app/employer/documents/components/ui/scroll-area";
+import { Button } from "~/components/ui/button";
+import { Textarea } from "~/components/ui/textarea";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { OutlineTree } from "./OutlineTree";
 import { findItem, deleteItem, saveEdit, addChild as addChildUtil } from "./outline-utils";
 

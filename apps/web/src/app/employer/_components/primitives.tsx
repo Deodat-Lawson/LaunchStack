@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * @deprecated Inline-style primitive set predating the shared kit. New
+ * code uses `~/components/ui/*` (shadcn base kit on the design tokens);
+ * page-shell/header/section ideas from this file are being reimplemented
+ * in `~/components/layout/`. Existing consumers migrate opportunistically
+ * when their UI is touched — do not add new imports of this module.
+ */
+
 import {
     type ButtonHTMLAttributes,
     type CSSProperties,

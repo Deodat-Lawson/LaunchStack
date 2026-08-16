@@ -1,8 +1,8 @@
 "use client";
 
 import { ChevronRight, ChevronDown, FileText, ListTree, Edit2, Plus, Trash2 } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Input } from "~/app/employer/documents/components/ui/input";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 import { getItemStyles } from "./outline-utils";
 import type { OutlineItem } from "./OutlinePanel";

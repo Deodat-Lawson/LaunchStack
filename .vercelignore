@@ -5,6 +5,11 @@ __tests__
 .github
 .vscode
 
+# Eval-runner scripts that require __tests__ helpers (excluded above).
+# They never run at deploy time, but next build's type-check compiles
+# scripts/, so uploading them without __tests__ fails every deployment.
+apps/web/scripts/run-founder-weekly-review-*.ts
+
 # Sidecar (ML deps too large for Vercel — Adeu runs via api/adeu/ instead)
 sidecar/
 

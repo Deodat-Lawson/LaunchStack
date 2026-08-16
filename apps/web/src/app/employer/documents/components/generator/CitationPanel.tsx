@@ -14,24 +14,24 @@ import {
     FileText,
     Newspaper,
 } from "lucide-react";
-import { Button } from "~/app/employer/documents/components/ui/button";
-import { Input } from "~/app/employer/documents/components/ui/input";
-import { Label } from "~/app/employer/documents/components/ui/label";
-import { ScrollArea } from "~/app/employer/documents/components/ui/scroll-area";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "~/app/employer/documents/components/ui/select";
+} from "~/components/ui/select";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "~/app/employer/documents/components/ui/dialog";
+} from "~/components/ui/dialog";
 // import { cn } from "~/lib/utils";
 
 // Citation types

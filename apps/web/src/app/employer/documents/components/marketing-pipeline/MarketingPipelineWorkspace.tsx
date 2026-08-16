@@ -27,12 +27,7 @@ import {
     Target,
     X,
 } from "lucide-react";
-import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-} from "~/app/employer/documents/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/components/ui/sheet";
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 import {
@@ -1754,8 +1749,7 @@ export function MarketingPipelineWorkspace({
                                                             padding: 14,
                                                             borderRadius: 10,
                                                             border: "1px solid var(--line)",
-                                                            background:
-                                                                "var(--panel-2)",
+                                                            background: "var(--panel-2)",
                                                         }}
                                                     >
                                                         <div
@@ -2005,8 +1999,7 @@ export function MarketingPipelineWorkspace({
                                                     <div
                                                         style={{
                                                             marginTop: "1rem",
-                                                            borderTop:
-                                                                "1px solid var(--line)",
+                                                            borderTop: "1px solid var(--line)",
                                                             paddingTop: "0.75rem",
                                                         }}
                                                     >

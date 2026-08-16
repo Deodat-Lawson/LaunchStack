@@ -13,7 +13,7 @@ import { OutlinePanel, type OutlineItem } from "../OutlinePanel";
 global.fetch = jest.fn();
 
 // Mock ScrollArea to just render children (avoids Radix internals)
-jest.mock("~/app/employer/documents/components/ui/scroll-area", () => ({
+jest.mock("~/components/ui/scroll-area", () => ({
     ScrollArea: ({ children, ...props }: React.PropsWithChildren) => (
         <div data-testid="scroll-area" {...props}>
             {children}

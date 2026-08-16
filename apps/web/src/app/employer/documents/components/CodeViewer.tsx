@@ -3,8 +3,8 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import "highlight.js/styles/github-dark-dimmed.min.css";
 import { Loader2, AlertTriangle, RotateCw, Copy, Check, WrapText, Hash } from "lucide-react";
-import { Button } from "./ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { Button } from "~/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 
 interface CodeViewerProps {
     url: string;

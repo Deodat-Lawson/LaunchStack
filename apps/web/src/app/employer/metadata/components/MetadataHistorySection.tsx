@@ -2,12 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { History, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardContent,
-} from "~/app/employer/documents/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { cn } from "~/lib/utils";
 import type { MetadataDiff, ChangeType } from "@launchstack/features/company-metadata";
 

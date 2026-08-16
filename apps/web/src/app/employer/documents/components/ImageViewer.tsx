@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { Loader2, AlertTriangle, RotateCw, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "~/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+} from "~/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
 export type ImageFitMode = "fit-view" | "fit-width" | "fit-height" | "actual";

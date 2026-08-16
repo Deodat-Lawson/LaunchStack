@@ -5,6 +5,7 @@ import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isS3Storage } from "~/lib/storage";
+import { checkDocumentServable } from "~/server/services/document-servable";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -54,6 +55,13 @@ export async function GET(_request: Request, { params }: RouteParams) {
 
     if (!doc) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
+    }
+
+    // B6 serve-gating: the row still exists while a delete is in flight, so
+    // existence is not permission to serve.
+    const gate = await checkDocumentServable(docId);
+    if (!gate.servable) {
+      return NextResponse.json({ error: gate.message }, { status: gate.status });
     }
 
     if (!isS3Storage() && !isPrivateBlobUrl(doc.url)) {

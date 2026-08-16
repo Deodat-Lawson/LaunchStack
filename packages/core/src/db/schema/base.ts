@@ -13,6 +13,10 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { uniqueIndex, check } from "drizzle-orm/pg-core";
+// Needed to type a self-referential foreign key (storage_deletion_items'
+// linked_to_item_id points back at storage_deletion_items.id) — without the
+// explicit return type TypeScript hits a circular inference error.
+import type { AnyPgColumn } from "drizzle-orm/pg-core";
 
 import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
@@ -1137,6 +1141,20 @@ export const storageDeletionItems = pgTable(
         }).notNull(),
         storageLocationId: varchar("storage_location_id", { length: 256 }).notNull(),
         key: text("key").notNull(),
+        // Cross-document dedup (B5): when two documents in one batch delete
+        // reference the same physical file, exactly one item ("the leader")
+        // performs the real provider call and every other item ("a follower")
+        // points at it here and inherits its outcome. Only ever set on
+        // legacy-promoted items — manifest-backed objects are exclusively
+        // owned by one target, so they can't collide across documents.
+        // ON DELETE SET NULL so a follower survives the leader's document
+        // being purged; the worker copies the leader's final state onto its
+        // followers before that cascade, so a null pointer never means a
+        // lost outcome.
+        linkedToItemId: bigint("linked_to_item_id", { mode: "bigint" }).references(
+            (): AnyPgColumn => storageDeletionItems.id,
+            { onDelete: "set null" }
+        ),
         itemState: varchar("item_state", {
             length: 32,
             enum: [
@@ -1148,6 +1166,11 @@ export const storageDeletionItems = pgTable(
                 "RETRYABLE_FAILED",
                 "BLOCKED",
                 "QUARANTINED",
+                // Not independently processed: this item's real outcome lives
+                // on the item named by linkedToItemId. The worker's
+                // itemsToProcess filter is a PENDING/WAITING_RETRY allowlist,
+                // so LINKED is skipped without any filter change.
+                "LINKED",
             ],
         })
             .notNull()
@@ -1168,6 +1191,11 @@ export const storageDeletionItems = pgTable(
         objectIdIdx: index("storage_deletion_items_object_id_idx").on(table.objectId),
         itemStateIdx: index("storage_deletion_items_item_state_idx").on(
             table.itemState
+        ),
+        // Supports the purge-time materialization lookup: "does anything
+        // point at the leader items I'm about to cascade away?"
+        linkedToItemIdIdx: index("storage_deletion_items_linked_to_item_id_idx").on(
+            table.linkedToItemId
         ),
     })
 );

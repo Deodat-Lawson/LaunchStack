@@ -20,6 +20,7 @@ import { document, documentVersions, users } from "@launchstack/core/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isLocalStorage } from "~/lib/storage";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { checkVersionServable } from "~/server/services/document-servable";
 
 const EXTENSION_TO_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
@@ -118,6 +119,13 @@ export async function GET(
         { error: "Version not found for this document" },
         { status: 404 }
       );
+    }
+
+    // B6 serve-gating: gated by a whole-document delete (which takes every
+    // version with it) and by a version-scoped delete of this version alone.
+    const gate = await checkVersionServable({ documentId, versionId });
+    if (!gate.servable) {
+      return NextResponse.json({ error: gate.message }, { status: gate.status });
     }
 
     // Public cloud URL — redirect the browser directly and let the CDN serve.

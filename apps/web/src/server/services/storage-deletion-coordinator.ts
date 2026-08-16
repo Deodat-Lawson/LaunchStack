@@ -33,7 +33,11 @@ import {
   storageDeletionTombstones,
   storageObjects,
 } from "@launchstack/core/db/schema";
-import type { StorageDeletionRequest, StorageDeletionTombstone } from "@launchstack/core/db/schema";
+import type {
+  StorageDeletionItem,
+  StorageDeletionRequest,
+  StorageDeletionTombstone,
+} from "@launchstack/core/db/schema";
 import { db } from "~/server/db";
 import { inngest } from "~/server/inngest/client";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
@@ -60,6 +64,29 @@ interface PendingItem {
   key: string;
   /** Set when legacy promotion couldn't resolve this URL. */
   quarantineReason?: string;
+  /**
+   * Cross-document dedup (B5): storage_deletion_items.id of the "leader"
+   * item that will actually perform this file's delete. Set only by the
+   * batch coordinator, and only on legacy-promoted items. An item carrying
+   * this is inserted as LINKED and is never independently processed — its
+   * real outcome is read from (and eventually materialized off of) the
+   * leader.
+   */
+  linkedToItemId?: number;
+}
+
+/**
+ * Identity of a physical file, for cross-document dedup. Joins the ref
+ * triple with a NUL separator, which can't appear in a URL, an S3 key or a
+ * bucket name — so two different triples can never collide into one string
+ * (a plain ":" join could, e.g. key "a:b" vs location "a" + key "b").
+ */
+export function refIdentity(item: {
+  adapter: string;
+  storageLocationId: string;
+  key: string;
+}): string {
+  return `${item.adapter}\u0000${item.storageLocationId}\u0000${item.key}`;
 }
 
 /**
@@ -99,6 +126,12 @@ function initialStatus(items: PendingItem[]): "queued" | "quarantined" {
   return items.some((i) => i.quarantineReason) ? "quarantined" : "queued";
 }
 
+/** What insertRequestAndItems actually wrote — the request plus its rows. */
+export interface InsertedRequest {
+  request: StorageDeletionRequest;
+  items: StorageDeletionItem[];
+}
+
 async function insertRequestAndItems(
   tx: Tx,
   params: {
@@ -108,7 +141,7 @@ async function insertRequestAndItems(
     documentVersionId?: number;
   },
   items: PendingItem[],
-): Promise<StorageDeletionRequest> {
+): Promise<InsertedRequest> {
   if (items.length === 0) {
     // Should be unreachable — document.url is NOT NULL, so there's always
     // at least one candidate URL. Fail loud rather than silently proceeding
@@ -136,17 +169,29 @@ async function insertRequestAndItems(
     throw new Error("insertRequestAndItems: request insert returned no row");
   }
 
-  await tx.insert(storageDeletionItems).values(
-    items.map((item) => ({
-      requestId: BigInt(request.id),
-      objectId: item.objectId !== undefined ? BigInt(item.objectId) : undefined,
-      adapter: item.adapter,
-      storageLocationId: item.storageLocationId,
-      key: item.key,
-      itemState: item.quarantineReason ? ("QUARANTINED" as const) : ("PENDING" as const),
-      lastError: item.quarantineReason,
-    })),
-  );
+  const insertedItems = await tx
+    .insert(storageDeletionItems)
+    .values(
+      items.map((item) => ({
+        requestId: BigInt(request.id),
+        objectId: item.objectId !== undefined ? BigInt(item.objectId) : undefined,
+        adapter: item.adapter,
+        storageLocationId: item.storageLocationId,
+        key: item.key,
+        linkedToItemId:
+          item.linkedToItemId !== undefined ? BigInt(item.linkedToItemId) : undefined,
+        // Order matters: a quarantined item is quarantined regardless (it was
+        // never a resolvable ref, so it can't be following anything), and a
+        // follower is LINKED. Everything else starts PENDING.
+        itemState: item.quarantineReason
+          ? ("QUARANTINED" as const)
+          : item.linkedToItemId !== undefined
+            ? ("LINKED" as const)
+            : ("PENDING" as const),
+        lastError: item.quarantineReason,
+      })),
+    )
+    .returning();
 
   // Flip every manifest-backed object to DELETE_REQUESTED, in the same
   // transaction. Legacy-promoted items (no objectId) have no storage_objects
@@ -162,19 +207,23 @@ async function insertRequestAndItems(
       .where(inArray(storageObjects.id, manifestObjectIds));
   }
 
-  return request;
+  return { request, items: insertedItems };
 }
 
 /**
- * Request deletion of an entire document — all versions, all owned
- * objects. Commits the durable plan; does not touch storage or purge
- * relational rows itself (that's the worker's job, later, once every item
- * is confirmed clean).
+ * Authorize + lock a document, then resolve the full list of objects that
+ * deleting it must clean up — WITHOUT writing anything.
+ *
+ * Split out of requestDocumentDeletion for B5: the batch coordinator has to
+ * see every document's item list *before* inserting any of them, so it can
+ * spot the same physical file appearing under two documents and elect one
+ * leader for it. Single-document behavior is unchanged — requestDocumentDeletion
+ * is now just this function followed by the same insert as before.
  */
-export async function requestDocumentDeletion(
+export async function buildDocumentDeletionItems(
   tx: Tx,
-  params: { docId: number; companyId: number; actorId: string },
-): Promise<StorageDeletionRequest> {
+  params: { docId: number; companyId: number },
+): Promise<PendingItem[]> {
   // Authorize + lock. Row lock prevents a second concurrent delete request
   // for the same document from racing this one.
   const [doc] = await tx
@@ -192,40 +241,54 @@ export async function requestDocumentDeletion(
     );
   }
 
-  let items: PendingItem[];
-
   if (await hasManifest(tx, { documentId: params.docId })) {
     const refs = await listOwnedRefs(tx, { documentId: params.docId });
-    items = refs.map((ref) => ({
+    return refs.map((ref) => ({
       objectId: ref.id,
       adapter: ref.adapter as StorageAdapter,
       storageLocationId: ref.storageLocationId,
       key: ref.key,
     }));
-  } else {
-    // No manifest — scavenge every URL field that might reference a file.
-    const versions = await tx
-      .select({ url: documentVersions.url })
-      .from(documentVersions)
-      .where(eq(documentVersions.documentId, BigInt(params.docId)));
-    const jobs = await tx
-      .select({ url: ocrJobs.documentUrl })
-      .from(ocrJobs)
-      .where(eq(ocrJobs.documentId, BigInt(params.docId)));
-    const batchFiles = await tx
-      .select({ url: uploadBatchFiles.storageUrl })
-      .from(uploadBatchFiles)
-      .where(eq(uploadBatchFiles.documentId, BigInt(params.docId)));
-
-    items = promoteUrlsToItems([
-      doc.url,
-      ...versions.map((v) => v.url),
-      ...jobs.map((j) => j.url),
-      ...batchFiles.map((b) => b.url),
-    ]);
   }
 
-  return insertRequestAndItems(
+  // No manifest — scavenge every URL field that might reference a file.
+  const versions = await tx
+    .select({ url: documentVersions.url })
+    .from(documentVersions)
+    .where(eq(documentVersions.documentId, BigInt(params.docId)));
+  const jobs = await tx
+    .select({ url: ocrJobs.documentUrl })
+    .from(ocrJobs)
+    .where(eq(ocrJobs.documentId, BigInt(params.docId)));
+  const batchFiles = await tx
+    .select({ url: uploadBatchFiles.storageUrl })
+    .from(uploadBatchFiles)
+    .where(eq(uploadBatchFiles.documentId, BigInt(params.docId)));
+
+  return promoteUrlsToItems([
+    doc.url,
+    ...versions.map((v) => v.url),
+    ...jobs.map((j) => j.url),
+    ...batchFiles.map((b) => b.url),
+  ]);
+}
+
+/**
+ * Request deletion of an entire document — all versions, all owned
+ * objects. Commits the durable plan; does not touch storage or purge
+ * relational rows itself (that's the worker's job, later, once every item
+ * is confirmed clean).
+ */
+export async function requestDocumentDeletion(
+  tx: Tx,
+  params: { docId: number; companyId: number; actorId: string },
+): Promise<StorageDeletionRequest> {
+  const items = await buildDocumentDeletionItems(tx, {
+    docId: params.docId,
+    companyId: params.companyId,
+  });
+
+  const { request } = await insertRequestAndItems(
     tx,
     {
       companyId: params.companyId,
@@ -234,6 +297,8 @@ export async function requestDocumentDeletion(
     },
     items,
   );
+
+  return request;
 }
 
 /**
@@ -287,7 +352,7 @@ export async function requestVersionDeletion(
     items = promoteUrlsToItems([version.url]);
   }
 
-  return insertRequestAndItems(
+  const { request } = await insertRequestAndItems(
     tx,
     {
       companyId: params.companyId,
@@ -296,6 +361,8 @@ export async function requestVersionDeletion(
     },
     items,
   );
+
+  return request;
 }
 
 /**
@@ -484,6 +551,217 @@ export async function requestDocumentDeletionAndDispatch(params: {
  * place so this starts working automatically once that gap is closed,
  * rather than needing a second change later.
  */
+// ---------------------------------------------------------------------------
+// B5 — batch delete
+// ---------------------------------------------------------------------------
+
+/** One document's slot in a batch delete plan. */
+export interface BatchDeletionEntry {
+  docId: number;
+  request: StorageDeletionRequest;
+  itemCount: number;
+  /**
+   * How many of this document's items are followers — i.e. reference a file
+   * that an earlier document in the same batch already claimed. 0 for the
+   * overwhelming majority of batches.
+   */
+  linkedItemCount: number;
+}
+
+/**
+ * Write deletion plans for N documents in ONE transaction, deduping any
+ * physical file that more than one of them references.
+ *
+ * Why dedup is needed at all: manifest-backed objects are exclusively owned
+ * by exactly one document (storage_objects' exactly-one-owner CHECK), so two
+ * documents can never both own the same manifest row. But a pre-manifest
+ * document's refs are scavenged from raw URL columns, and two documents can
+ * genuinely carry the same URL — which without dedup would mean two
+ * independent delete calls for one file.
+ *
+ * How it's resolved: the first document to reference a file becomes its
+ * "leader" and gets an ordinary PENDING item. Every later document
+ * referencing the same file gets a follower — a real item row carrying the
+ * same adapter/location/key (so its audit trail is complete), but in state
+ * LINKED with linkedToItemId pointing at the leader's item. The worker's
+ * itemsToProcess filter is a PENDING/WAITING_RETRY allowlist, so a follower
+ * is never independently processed: exactly one provider call per file.
+ *
+ * Not deduped, deliberately:
+ *   - manifest-backed items — can't collide (see above), and making one a
+ *     follower would strand its storage_objects row at DELETE_REQUESTED with
+ *     nothing to advance it.
+ *   - quarantined items — an unresolvable URL isn't a resolved ref at all,
+ *     and each document needs its own QUARANTINED item so its own request
+ *     status is independently correct.
+ *   - duplicates *within* a single document — unchanged from the
+ *     single-document path, which already relies on delete idempotency there.
+ *
+ * Any failure (missing doc, wrong tenant) throws and rolls back the whole
+ * batch — "one txn accepts durable intent for all IDs" means all or nothing.
+ */
+export async function requestBatchDocumentDeletion(
+  tx: Tx,
+  params: { docIds: number[]; companyId: number; actorId: string },
+): Promise<BatchDeletionEntry[]> {
+  // Sorted ascending for two reasons: leader election becomes deterministic
+  // (the lowest doc id in the batch owns any file it shares, so a retry of
+  // the same batch produces the same plan), and every batch takes its
+  // document row locks in the same order, which is what stops two
+  // overlapping batches from deadlocking against each other.
+  const uniqueDocIds = Array.from(new Set(params.docIds)).sort((a, b) => a - b);
+
+  /** refIdentity -> storage_deletion_items.id of the item that owns that file. */
+  const claimed = new Map<string, number>();
+  const entries: BatchDeletionEntry[] = [];
+
+  for (const docId of uniqueDocIds) {
+    const built = await buildDocumentDeletionItems(tx, {
+      docId,
+      companyId: params.companyId,
+    });
+
+    let linkedItemCount = 0;
+    const items = built.map((item) => {
+      if (item.objectId !== undefined || item.quarantineReason) return item;
+
+      const leaderItemId = claimed.get(refIdentity(item));
+      if (leaderItemId === undefined) return item;
+
+      linkedItemCount += 1;
+      return { ...item, linkedToItemId: leaderItemId };
+    });
+
+    // Inserted per document, in order, because a follower needs its leader's
+    // real DB-assigned id to already exist.
+    const { request, items: inserted } = await insertRequestAndItems(
+      tx,
+      {
+        companyId: params.companyId,
+        requestedBy: params.actorId,
+        documentId: docId,
+      },
+      items,
+    );
+
+    // Claim this document's newly-inserted leaders for the documents that
+    // come after it. Only PENDING legacy items are claimable: a follower
+    // can't be a leader, and a QUARANTINED item never resolved to a real ref.
+    for (const row of inserted) {
+      if (row.objectId !== null) continue;
+      if (row.itemState !== "PENDING") continue;
+      const identity = refIdentity(row);
+      if (!claimed.has(identity)) claimed.set(identity, row.id);
+    }
+
+    entries.push({ docId, request, itemCount: inserted.length, linkedItemCount });
+  }
+
+  return entries;
+}
+
+/** Per-document outcome of a dispatched batch delete. */
+export type BatchDeletionDispatchEntry =
+  | {
+      docId: number;
+      kind: "created";
+      request: StorageDeletionRequest;
+      itemCount: number;
+      linkedItemCount: number;
+    }
+  | { docId: number; kind: "already-completed"; tombstone: StorageDeletionTombstone };
+
+/**
+ * Public entry point for the B5 route. Same shape as
+ * requestDocumentDeletionAndDispatch, extended across N documents:
+ *
+ *   - Documents that already have a tombstone are answered from it and never
+ *     re-planned (idempotent re-delete, per-document).
+ *   - Everything else is planned in a single transaction.
+ *   - The worker is notified with ONE inngest.send carrying every request, so
+ *     dispatch is all-or-nothing. Anything else risks a batch where some
+ *     documents got picked up and others silently never will — and since a
+ *     follower depends on a leader in a *different* request, a half-dispatched
+ *     batch could strand followers permanently.
+ *   - If that send fails, every request written by this batch is rolled back
+ *     (same hard-failure rule as the single-document path) and
+ *     DispatchFailedError is thrown.
+ */
+export async function requestBatchDocumentDeletionAndDispatch(params: {
+  docIds: number[];
+  companyId: number;
+  actorId: string;
+}): Promise<BatchDeletionDispatchEntry[]> {
+  const uniqueDocIds = Array.from(new Set(params.docIds)).sort((a, b) => a - b);
+  if (uniqueDocIds.length === 0) return [];
+
+  const tombstones = await db
+    .select()
+    .from(storageDeletionTombstones)
+    .where(
+      inArray(
+        storageDeletionTombstones.documentId,
+        uniqueDocIds.map((id) => BigInt(id)),
+      ),
+    );
+
+  const tombstoneByDocId = new Map<number, StorageDeletionTombstone>();
+  for (const tombstone of tombstones) {
+    if (tombstone.documentId !== null) {
+      tombstoneByDocId.set(Number(tombstone.documentId), tombstone);
+    }
+  }
+
+  const toPlan = uniqueDocIds.filter((id) => !tombstoneByDocId.has(id));
+
+  const results: BatchDeletionDispatchEntry[] = uniqueDocIds
+    .filter((id) => tombstoneByDocId.has(id))
+    .map((id) => ({
+      docId: id,
+      kind: "already-completed" as const,
+      tombstone: tombstoneByDocId.get(id)!,
+    }));
+
+  if (toPlan.length === 0) return results;
+
+  const planned = await db.transaction(async (tx) =>
+    requestBatchDocumentDeletion(tx, {
+      docIds: toPlan,
+      companyId: params.companyId,
+      actorId: params.actorId,
+    }),
+  );
+
+  try {
+    await inngest.send(
+      planned.map((entry) => ({
+        name: "storage-deletion/request.created",
+        data: { requestId: entry.request.id },
+      })),
+    );
+  } catch (err) {
+    for (const entry of planned) {
+      await rollbackFailedDispatch(entry.request.id);
+    }
+    throw new DispatchFailedError(
+      `requestBatchDocumentDeletionAndDispatch: ${planned.length} request(s) were written but the worker could not be notified — all rolled back. Underlying error: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+
+  for (const entry of planned) {
+    results.push({
+      docId: entry.docId,
+      kind: "created",
+      request: entry.request,
+      itemCount: entry.itemCount,
+      linkedItemCount: entry.linkedItemCount,
+    });
+  }
+
+  results.sort((a, b) => a.docId - b.docId);
+  return results;
+}
+
 export async function requestVersionDeletionAndDispatch(params: {
   versionId: number;
   companyId: number;

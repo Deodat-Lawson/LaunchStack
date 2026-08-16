@@ -9,6 +9,8 @@ import { db } from "~/server/db";
 import { fileUploads } from "@launchstack/core/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
+import { checkRefServable } from "~/server/services/document-servable";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 const MIME_BY_EXTENSION: Record<string, string> = {
   pdf: "application/pdf",
@@ -71,6 +73,26 @@ export async function GET(
         { error: "File not found" },
         { status: 404 }
       );
+    }
+
+    // B6 serve-gating: refuse a file that an open deletion request already
+    // covers, even though its row still exists. This route is keyed on
+    // file_uploads.id and never sees a documentId, so it gates by ref —
+    // deletion items carry the same (adapter, key) pair for manifest-backed
+    // and legacy-promoted files alike. Both names for the file are checked,
+    // since being gated under either one is disqualifying.
+    const candidateRefs: Array<{ adapter: string; key: string }> = [
+      { adapter: "database", key: String(fileId) },
+    ];
+    if (file.storageUrl) {
+      const promoted = promoteLegacyUrlToRef({ value: file.storageUrl });
+      if (promoted.ok) {
+        candidateRefs.push({ adapter: promoted.ref.adapter, key: promoted.ref.key });
+      }
+    }
+    const gate = await checkRefServable(candidateRefs);
+    if (!gate.servable) {
+      return NextResponse.json({ error: gate.message }, { status: gate.status });
     }
 
     // External storage (S3 or legacy Vercel Blob): proxy or redirect.

@@ -3,6 +3,7 @@ import { eq, asc } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { document, documentContextChunks } from "@launchstack/core/db/schema";
+import { checkDocumentServable } from "~/server/services/document-servable";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -28,6 +29,13 @@ export async function GET(_request: Request, { params }: RouteParams) {
 
     if (!doc) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
+    }
+
+    // B6 serve-gating: extracted text is document content too — chunks
+    // outlive the file itself, so this path leaks just as readily.
+    const gate = await checkDocumentServable(docId);
+    if (!gate.servable) {
+      return NextResponse.json({ error: gate.message }, { status: gate.status });
     }
 
     const chunks = await db

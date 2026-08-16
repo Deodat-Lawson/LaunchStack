@@ -1,0 +1,23 @@
+<!--
+  Launchstack mark, standalone. Mirrors LaunchstackMark in
+  src/app/_components/LaunchstackLogo.tsx for surfaces that can't render React:
+  the SVG favicon, the OG cards, and the raster favicon.ico generated from this
+  file. The gradient stops are the sRGB equivalents of the component's OKLCH
+  stops — resvg (favicon rasterization) and satori (OG cards) don't parse oklch().
+    oklch(0.55 0.2 295) = #7e4ed7
+    oklch(0.4  0.2 290) = #4e1ca8
+    oklch(0.24 0.13 285) = #1f0658
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Launchstack">
+  <defs>
+    <linearGradient id="ls-mark-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7e4ed7"/>
+      <stop offset="55%" stop-color="#4e1ca8"/>
+      <stop offset="100%" stop-color="#1f0658"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="10" transform="rotate(-6 32 32)" fill="url(#ls-mark-fill)"/>
+  <path d="M18 17 L18 47 L32 47" stroke="#ffffff" stroke-width="5" stroke-linecap="square" fill="none"/>
+  <path d="M46 18 L30 18 L30 32 L46 32 L46 46 L30 46" stroke="#ffffff" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <circle cx="18" cy="54" r="2.4" fill="#ffffff" opacity="0.85"/>
+</svg>

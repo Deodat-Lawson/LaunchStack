@@ -34,7 +34,13 @@ export const metadata: Metadata = {
         index: false,
         follow: false,
     },
-    icons: [{ rel: "icon", url: "favicon.ico" }],
+    // Both files are the Launchstack mark. The SVG is listed first so browsers
+    // that support it render the logo crisply at any density; favicon.ico is the
+    // multi-resolution raster fallback (see public/icon.svg for how it's built).
+    icons: [
+        { rel: "icon", url: "/icon.svg", type: "image/svg+xml" },
+        { rel: "icon", url: "/favicon.ico", sizes: "any" },
+    ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FileText, Brain, HelpCircle, BookOpen } from "lucide-react";
+import { FileText, HelpCircle, BookOpen } from "lucide-react";
 import styles from "~/styles/Employer/Home.module.css";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
 import { useAuth } from "@clerk/nextjs";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import LoadingPage from "~/app/_components/loading";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { ThemeToggle } from "~/app/_components/ThemeToggle";
 
 const EmployeeHomeScreen = () => {
@@ -101,7 +102,7 @@ const EmployeeHomeScreen = () => {
             <nav className={styles.navbar}>
                 <div className={styles.navContent}>
                     <div className={styles.logoContainer}>
-                        <Brain className={styles.logoIcon} />
+                        <LaunchstackMark size={26} title="Launchstack" />
                         <span className={styles.logoText}>Launchstack</span>
                     </div>
                     <div className={styles.navActions}>

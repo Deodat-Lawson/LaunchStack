@@ -160,17 +160,9 @@
   font-weight: 700; font-size: 16px; letter-spacing: -0.01em;
   color: var(--ink); text-decoration: none;
 }
-.brandMark {
-  width: 26px; height: 26px; border-radius: 7px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
-  position: relative; overflow: hidden;
-  box-shadow: 0 4px 14px var(--accent-glow);
-}
-.brandMark::after {
-  content: ''; position: absolute; inset: 7px; border-radius: 2px;
-  background: white; opacity: 0.95;
-  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-}
+/* The brand mark is <LaunchstackMark>, not CSS: this file used to draw its own
+   purple-diamond tile here, which is how the marketing nav and footer drifted
+   from the logo apps/web renders. */
 .navLinks { display: flex; gap: 28px; font-size: 14px; color: var(--ink-2); }
 .navLinks a { color: inherit; text-decoration: none; transition: color .2s; }
 .navLinks a:hover { color: var(--ink); }

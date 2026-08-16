@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+import { OgMark } from "../_components/og-mark";
+
 export const runtime = "edge";
 export const alt = "Launchstack Pricing — Free & Open Source for Every Founder";
 export const size = { width: 1200, height: 630 };
@@ -41,22 +43,7 @@ export default function OGImage() {
                         marginBottom: "24px",
                     }}
                 >
-                    <div
-                        style={{
-                            width: "56px",
-                            height: "56px",
-                            borderRadius: "14px",
-                            background: "linear-gradient(135deg, #9333ea, #7c3aed)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "28px",
-                            color: "white",
-                            fontWeight: 700,
-                        }}
-                    >
-                        L
-                    </div>
+                    <OgMark size={56} />
                     <span
                         style={{
                             fontSize: "40px",

@@ -404,19 +404,9 @@
 
 .okIcon { color: var(--ok); flex-shrink: 0; }
 
-/* Brand mark (mini) used in navbar */
-.brandMark {
-  width: 30px; height: 30px; border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
-  position: relative; overflow: hidden;
-  box-shadow: 0 4px 14px var(--accent-glow);
-  flex-shrink: 0;
-}
-.brandMark::after {
-  content: ''; position: absolute; inset: 8px; border-radius: 2px;
-  background: white; opacity: 0.95;
-  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-}
+/* The navbar's brand mark is <LaunchstackMark>, not CSS: this file used to draw
+   its own purple-diamond tile here, which is how the deployment guide drifted
+   from the logo apps/web renders. */
 
 /* ---------------- TAILWIND UTILITY REMAPS ------------------
    Redirect legacy gradient / gray / indigo / status-color utilities

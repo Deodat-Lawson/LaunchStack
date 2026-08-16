@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Launchstack">
+  <!-- Static export of the Launchstack mark (see src/app/_components/LaunchstackLogo.tsx,
+       the canonical in-app component). Keep the two in sync. -->
+  <defs>
+    <linearGradient id="ls-mark-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="oklch(0.55 0.2 295)"/>
+      <stop offset="55%" stop-color="oklch(0.4 0.2 290)"/>
+      <stop offset="100%" stop-color="oklch(0.24 0.13 285)"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="10" transform="rotate(-6 32 32)" fill="url(#ls-mark-fill)"/>
+  <path d="M18 17 L18 47 L32 47" stroke="white" stroke-width="5" stroke-linecap="square" fill="none"/>
+  <path d="M46 18 L30 18 L30 32 L46 32 L46 46 L30 46" stroke="white" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <circle cx="18" cy="54" r="2.4" fill="white" opacity="0.85"/>
+</svg>

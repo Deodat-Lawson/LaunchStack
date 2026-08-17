@@ -89,21 +89,30 @@ event → compute services → evidence persistence → indexing → company-sta
 projection. Operations (replaying dead events, monitoring) are documented in
 [`docs/runbooks/outbox.md`](./runbooks/outbox.md).
 
-## Option 2: Vercel + managed PostgreSQL
+## Option 2: Container images (any container host)
 
-**See the full guide: [`deployment/vercel.md`](./deployment/vercel.md).**
+`.github/workflows/docker.yml` builds and publishes two images to GHCR on every
+push to `main` and on version tags:
 
-Short version:
+- `ghcr.io/<owner>/<repo>-web` — the Next.js app (`apps/web/Dockerfile`)
+- `ghcr.io/<owner>/<repo>-web-worker` — the durable worker (`apps/worker/Dockerfile`)
 
-1. Import the repository into Vercel and set the project root directory to `apps/web`.
-2. Provision Postgres with pgvector (Vercel Postgres, Neon, Supabase, etc.).
-3. Set env vars per the [Vercel deployment guide](./deployment/vercel.md#3-configure-environment-variables).
-4. Deploy. Migrations run automatically on production builds via [`apps/web/vercel.json`](../apps/web/vercel.json).
-5. **Deploy `apps/worker` separately** (Fly.io / Railway / Cloud Run / any
-   container host). The web app only accepts commands; without a worker,
-   uploads are stored but never processed (ADR-003).
-6. Register the **worker's** public `/api/inngest` URL in Inngest Cloud — the
+Deploy both to any container host (Fly.io / Railway / Cloud Run / ECS / your own
+Kubernetes) alongside managed PostgreSQL with pgvector:
+
+1. Provision Postgres with pgvector (Neon, Supabase, RDS, Cloud SQL, …) and set
+   `DATABASE_URL`.
+2. Apply schema before rolling the app — run `db:migrate` as a one-shot job on
+   the same image (`docker compose run --rm migrate`, a Kubernetes Job, or a
+   release command). Nothing applies schema on container boot.
+3. Set the environment variables in the [summary table](#environment-variables-summary).
+4. **Deploy the worker image too.** The web app only accepts commands; without a
+   worker, uploads are stored but never processed (ADR-003).
+5. Register the **worker's** public `/api/inngest` URL in Inngest Cloud — the
    Next.js app no longer serves an Inngest endpoint.
+
+`apps/landing` is a separate app and has no deploy pipeline in this repo; it is
+not part of a self-hosted deployment.
 
 Optional integrations:
 
@@ -117,11 +126,14 @@ Optional integrations:
 
 Trend search calls external search APIs. Configure `EXA_API_KEY` and/or `SERPER_API_KEY` and set `SEARCH_PROVIDER` as documented in [`.env.example`](../.env.example) (`exa`, `serper`, `fallback`, or `parallel`). If no API key backs the chosen path, the pipeline returns empty results and `providerUsed` may be `none`—this is expected when keys are omitted for local or OSS setups.
 
-### Verifying Blob uploads on Vercel
+### Verifying object-storage uploads
 
 1. After deploy, sign in to the Employer portal and open `/employer/upload`.
-2. Upload any small PDF or DOCX. The `/api/upload-local` response should return a `vercel-storage.com` URL.
-3. Paste that URL into a new tab. The file should download directly, confirming Blob access end to end.
+2. Upload any small PDF or DOCX. The `/api/upload-local` response should return
+   a URL on the storage backend you configured (SeaweedFS/S3 host, or
+   `vercel-storage.com` if you set `BLOB_READ_WRITE_TOKEN`).
+3. Paste that URL into a new tab. The file should download directly, confirming
+   storage access end to end.
 
 ## Option 3: VPS self-hosted (Node + reverse proxy)
 
@@ -159,7 +171,7 @@ modes, and migration from the pre-PR variables.
 | `CHAT_MODELS_CONFIG` | Optional | Path to the chat model configuration file. Defaults to `config/chat-models.yaml` |
 | `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
 | `INNGEST_EVENT_KEY` | Cloud only | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox |
-| `BLOB_READ_WRITE_TOKEN` | Yes (Vercel) | Required for Vercel Blob uploads |
+| `BLOB_READ_WRITE_TOKEN` | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately |
 | `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
 | `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Optional | Whisper transcription service (`services/transcription`) — the names the Compose stack uses |
 | `DOCUMENT_EDITOR_URL` + `DOCUMENT_EDITOR_API_KEY` | Optional | DOCX redlining service (`services/document-editor`) — the names the Compose stack uses |
@@ -187,7 +199,7 @@ being picked up.
 - [ ] Environment variables set for all enabled features
 - [ ] `DATABASE_URL` points to production DB
 - [ ] `vector` extension enabled on PostgreSQL
-- [ ] Schema applied (`pnpm --filter @launchstack/web db:migrate` locally, or automatic on Vercel production builds)
+- [ ] Schema applied (`pnpm --filter @launchstack/web db:migrate`, or the Compose `migrate` service / a one-shot job on the image)
 - [ ] Clerk and the selected chat provider/model validated
 - [ ] OpenAI/global/per-capability integrations validated when enabled
 - [ ] OCR providers validated if OCR is enabled

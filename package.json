@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack monorepo root. This is a workspace, not an application — it holds no app code and runs no server. Target a package explicitly: pnpm --filter @launchstack/web dev. See REPOSITORY.md. `build` and `db:migrate` are delegating aliases kept only so a deploy platform configured with the repository root still works; everything else lives in the package that owns it.",
+  "description": "Launchstack monorepo root. This is a workspace, not an application — it holds no app code and runs no server. Target a package explicitly: pnpm --filter @launchstack/web dev. See REPOSITORY.md. `build`, `build:landing` and `db:migrate` are convenience aliases that delegate to @launchstack/web or @launchstack/landing; everything else lives in the package that owns it.",
   "license": "Apache-2.0",
   "scripts": {
     "build": "pnpm --filter @launchstack/web build",

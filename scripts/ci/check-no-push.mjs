@@ -4,12 +4,12 @@
  *
  * push rewrites a live schema to match the current TypeScript, unreviewed and
  * unrecorded, and will DROP columns to do it. This repo previously ran push in
- * local dev, CI and Docker while Vercel production ran SQL migrations — two
+ * local dev, CI and Docker while production ran SQL migrations — two
  * strategies that produced provably different databases. This check keeps them
  * from diverging again.
  *
  * Rules:
- *   - Deploy surfaces (Dockerfiles, vercel.json, compose) may not mention it.
+ *   - Deploy surfaces (Dockerfiles, compose) may not mention it.
  *   - Workflows may use it only with LAUNCHSTACK_ALLOW_PUSH=1 nearby — the
  *     schema-parity job pushes into a throwaway empty database on purpose.
  *
@@ -24,8 +24,7 @@ import { join } from "node:path";
 const DEPLOY_SURFACES = [
   "apps/web/Dockerfile",
   "apps/web/Dockerfile.prebuilt",
-  "apps/web/vercel.json",
-  "apps/landing/vercel.json",
+  "apps/worker/Dockerfile",
   "docker-compose.yml",
   "docker-compose.prebuilt.yml",
 ];

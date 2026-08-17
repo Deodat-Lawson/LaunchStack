@@ -61,7 +61,7 @@ Run the worker alongside it or documents will sit queued forever; the
 Inngest dev server is only needed for the Inngest-hosted background
 verticals (trend search, prospector, …), not for ingestion.
 
-`db:migrate` is the same command CI, Docker and the Vercel production build run.
+`db:migrate` is the same command CI, Docker and the production image build run.
 Running it from `@launchstack/core` applies only the engine set — that is what a
 consumer embedding the engine uses, not what a full app needs.
 Nothing else creates schema — see [Changing the database](CONTRIBUTING.md#changing-the-database).

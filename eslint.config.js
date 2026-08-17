@@ -482,10 +482,10 @@ const eslintConfig = [
     },
     // Route areas are products: employer and employee must not reach into
     // each other. Shared pieces belong in ~/components, ~/lib, or
-    // ~/app/_components. The employee → employer leg has 5 pre-existing
-    // violations (ProfileDropdown, WorkspaceShell, NavBar, Employer
-    // styles), so it warns below until they migrate; this reverse leg is
-    // clean and stays an error.
+    // ~/app/_components. Both legs are hard errors; the one sanctioned
+    // exception (the shared document workspace, rendered by both products)
+    // carries an inline eslint-disable at its import site until the
+    // feature gets a neutral home.
     {
         files: ["apps/web/src/app/employer/**/*.{ts,tsx}"],
         rules: {
@@ -511,36 +511,37 @@ const eslintConfig = [
         },
     },
     {
+        files: ["apps/web/src/app/employee/**/*.{ts,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "error",
+                {
+                    paths: chatClientImportBans,
+                    patterns: [
+                        oldKitTombstone,
+                        {
+                            group: [
+                                "~/app/employer/*",
+                                "**/app/employer/*",
+                                "~/styles/Employer/*",
+                                ...relativeReaches("employer"),
+                            ],
+                            message:
+                                "employee must not import from the employer area; " +
+                                "promote shared code to ~/components or ~/lib.",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
         files: ["apps/web/src/**/*.{ts,tsx}"],
         ignores: ["apps/web/src/app/employer/documents/_workspace/**"],
         rules: {
             "@typescript-eslint/no-restricted-imports": [
                 "warn",
                 { patterns: deprecatedModuleWarns },
-            ],
-        },
-    },
-    {
-        files: ["apps/web/src/app/employee/**/*.{ts,tsx}"],
-        rules: {
-            "@typescript-eslint/no-restricted-imports": [
-                "warn",
-                {
-                    patterns: [
-                        ...deprecatedModuleWarns,
-                        {
-                            group: [
-                                "~/app/employer/*",
-                                "~/styles/Employer/*",
-                                ...relativeReaches("employer"),
-                            ],
-                            message:
-                                "employee reaching into employer — promote the shared " +
-                                "piece to ~/components (or duplicate the style) when " +
-                                "you touch this code.",
-                        },
-                    ],
-                },
             ],
         },
     },

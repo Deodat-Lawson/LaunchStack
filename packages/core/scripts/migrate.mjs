@@ -7,7 +7,7 @@
  * exactly once per database.
  *
  * This is the ONLY way schema reaches a database in any environment — local,
- * CI, Docker and Vercel all run this same command. `drizzle-kit push` is
+ * CI and Docker all run this same command. `drizzle-kit push` is
  * banned outside a scratch database (see guard-push.mjs).
  *
  * Depends only on `postgres` and `dotenv`: drizzle-kit never loads on a
@@ -258,7 +258,7 @@ async function ensureVector(cx) {
 }
 
 async function applyOne(cx, m) {
-  const by = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.HOSTNAME ?? "local";
+  const by = process.env.GITHUB_SHA ?? process.env.HOSTNAME ?? "local";
   const t0 = Date.now();
   const n = m.statements.length;
 
@@ -364,7 +364,7 @@ async function main() {
     }
 
     // Everything below mutates. Take the lock BEFORE reading the ledger:
-    // reading first is why the old runner let two concurrent Vercel builds
+    // reading first is why the old runner let two concurrent deploy builds
     // both decide the same migration was pending.
     await acquireLock(cx);
     await ensureLedger(cx);

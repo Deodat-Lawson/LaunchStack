@@ -65,8 +65,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # The same forward migration command local dev, Docker and the Vercel
-      # production build run. CI used to `drizzle-kit push` here, which meant
+      # The same forward migration command local dev, Docker and the production
+      # image build run. CI used to `drizzle-kit push` here, which meant
       # the test suite exercised a schema no deploy ever produced.
       - name: Apply migrations to test database
         run: pnpm --filter @launchstack/web db:migrate

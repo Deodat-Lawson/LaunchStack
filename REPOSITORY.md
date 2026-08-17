@@ -39,7 +39,7 @@ single owners.
 | `docs/` | Markdown | ADRs (`docs/architecture/ADR-00*.md`), `target-architecture.md`, deployment, runbooks (`docs/runbooks/outbox.md`). |
 
 > **`services/*` stays outside the pnpm workspace** (deliberate — their deps
-> must not enter every Vercel install). They are covered by their own CI
+> must not enter every app install). They are covered by their own CI
 > jobs (`python-services`, `document-converter` in CI.yml), not by
 > `pnpm -r typecheck`.
 
@@ -91,8 +91,8 @@ banned on deploy surfaces. The one engine table the refactor added:
 
 | Target | Built from | Notes |
 | --- | --- | --- |
-| Vercel — web app | `apps/web` | Runs `db:migrate` on production builds. **Accepts uploads but cannot process them without a worker deployment.** |
-| GHCR images | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). |
+| GHCR images | `apps/web/Dockerfile`, `apps/worker/Dockerfile` | `.github/workflows/docker.yml` (`…-web`, `…-web-worker`). The web image **accepts uploads but cannot process them without the worker deployed.** |
+| `apps/landing` | — | The public marketing site has no deploy pipeline in this repo. |
 | npm packages | `packages/{protocol,evidence,application,adapters,core}` | One Changesets flow (`release.yml`); `check-package-exports.mjs` gates every core subpath. |
 | Local | `docker-compose.yml` via `Makefile` | `make up` starts the required stack: db, migrate, seaweedfs, transcription, document-editor, document-converter, worker, app, inngest-dev. `--profile ocr` adds docling-serve; `--profile backfill` for data backfills. |
 

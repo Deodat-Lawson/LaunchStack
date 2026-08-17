@@ -86,8 +86,6 @@ const config: NextConfig = {
         ],
     },
 
-    // Exclude unnecessary files from Vercel output (moved from experimental in Next.js 15)
-    // Apply to all routes using "/*" wildcard
     // Disable server-side source maps to reduce build I/O and output size
     productionBrowserSourceMaps: false,
 

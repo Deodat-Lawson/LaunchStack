@@ -62,8 +62,6 @@ hand-drawn set at `documents/_workspace/icons.tsx` is deprecated.
   by `packages/features/src/legal-templates/template-service.ts` via
   `process.cwd()`. Do not move or rename without fixing that coupling.
 - Anything a component imports goes through the bundler, not `public/`.
-- `.vercelignore` (repo root) excludes `__tests__` from deploys — a script
-  that imports test helpers will pass CI and then break every Vercel deploy.
 
 ## The migration boundary rule
 

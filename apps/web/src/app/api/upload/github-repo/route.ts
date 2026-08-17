@@ -112,6 +112,7 @@ export async function POST(request: Request) {
                 requestUrl: request.url,
                 category,
                 explicitStorageType: "s3",
+                storageRef: blob.ref,
                 mimeType: "application/zip",
                 originalFilename: filename,
             });

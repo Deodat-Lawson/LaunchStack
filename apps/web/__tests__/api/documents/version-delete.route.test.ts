@@ -4,6 +4,7 @@ const mockResolveActiveCompanyForUser = jest.fn();
 const mockDeleteFileByRef = jest.fn();
 const mockDeleteFileByUrl = jest.fn();
 const mockPromoteLegacyUrlToRef = jest.fn();
+const mockRequestVersionDeletionAndDispatch = jest.fn();
 
 const selectQueue: unknown[] = [];
 const mockDbSelect = jest.fn((_arg?: unknown) => ({
@@ -46,6 +47,14 @@ jest.mock("~/lib/storage", () => ({
 jest.mock("~/server/storage/legacy-promote", () => ({
   promoteLegacyUrlToRef: (...args: unknown[]) =>
     mockPromoteLegacyUrlToRef(...args),
+}));
+
+jest.mock("~/server/services/storage-deletion-coordinator", () => ({
+  requestVersionDeletionAndDispatch: (...args: unknown[]) =>
+    mockRequestVersionDeletionAndDispatch(...args),
+  requestDocumentDeletionAndDispatch: jest.fn(),
+  VersionNotFoundError: class extends Error {},
+  TenantMismatchError: class extends Error {},
 }));
 
 jest.mock("~/server/db", () => ({
@@ -91,6 +100,7 @@ describe("DELETE /api/documents/[id]/versions/[versionId]", () => {
     mockAuth.mockResolvedValue({ userId: "user-1" });
     mockResolveActiveCompanyForUser.mockResolvedValue(7n);
     mockDbDeleteWhere.mockResolvedValue(undefined);
+    mockRequestVersionDeletionAndDispatch.mockReset();
   });
 
   afterAll(() => {
@@ -116,22 +126,14 @@ describe("DELETE /api/documents/[id]/versions/[versionId]", () => {
     expect(mockDbDelete).not.toHaveBeenCalled();
   });
 
-  it("uses promoted ObjectRef + deleteFileByRef when lifecycle flag is on", async () => {
+  it("queues version deletion through the coordinator when lifecycle flag is on", async () => {
     process.env.STORAGE_DELETION_LIFECYCLE_ENABLED = "1";
     queueHappyPathRows();
 
-    const promotedRef = {
-      adapter: "uploadthing" as const,
-      storageLocationId: "uploadthing:app_test@us-east-1",
-      key: "ut_key_20",
-    };
-
-    mockPromoteLegacyUrlToRef.mockReturnValue({
-      ok: true,
-      ref: promotedRef,
-      confidence: "medium",
+    mockRequestVersionDeletionAndDispatch.mockResolvedValue({
+      kind: "created",
+      request: { id: 300, status: "queued" },
     });
-    mockDeleteFileByRef.mockResolvedValue({ ref: promotedRef, outcome: "deleted" });
 
     const response = await DELETE(new Request("http://localhost/test", { method: "DELETE" }), {
       params: Promise.resolve({ id: "10", versionId: "20" }),
@@ -139,14 +141,19 @@ describe("DELETE /api/documents/[id]/versions/[versionId]", () => {
 
     const body = await response.json();
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(202);
     expect(body.success).toBe(true);
+    expect(body.status).toBe("queued");
+    expect(body.requestId).toBe(300);
 
-    expect(mockPromoteLegacyUrlToRef).toHaveBeenCalledWith({
-      value: "https://utfs.io/f/ut_key_20",
+    expect(mockRequestVersionDeletionAndDispatch).toHaveBeenCalledWith({
+      versionId: 20,
+      companyId: 7,
+      actorId: "user-1",
     });
-    expect(mockDeleteFileByRef).toHaveBeenCalledWith(promotedRef);
+    expect(mockPromoteLegacyUrlToRef).not.toHaveBeenCalled();
+    expect(mockDeleteFileByRef).not.toHaveBeenCalled();
     expect(mockDeleteFileByUrl).not.toHaveBeenCalled();
-    expect(mockDbDelete).toHaveBeenCalledTimes(1);
+    expect(mockDbDelete).not.toHaveBeenCalled();
   });
 });

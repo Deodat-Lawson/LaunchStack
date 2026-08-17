@@ -1,7 +1,8 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
+import type { ObjectRef } from "@launchstack/core/storage";
 import { db } from "~/server/db";
-import { document, documentVersions } from "@launchstack/core/db/schema";
+import { document, documentVersions, storageObjects } from "@launchstack/core/db/schema";
 import { resolveIngestIndexKey } from "@launchstack/core/embeddings";
 import {
   shouldTranscribeFile,
@@ -21,6 +22,7 @@ import { createDocumentRecord } from "./create-document";
 import { triggerJob } from "./trigger-job";
 import { hasTokens } from "~/lib/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 export type { StorageType } from "./detect-storage-type";
 export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
@@ -44,6 +46,8 @@ export interface DocumentUploadParams {
   /** Links crawled pages together for UI grouping */
   crawlGroupId?: string;
   embeddingIndexKey?: string;
+  /** ObjectRef minted by the adapter that wrote rawDocumentUrl. */
+  storageRef?: ObjectRef;
 }
 
 export interface DocumentUploadResult {
@@ -57,6 +61,18 @@ export interface DocumentUploadResult {
     category: string;
   };
   resolvedDocumentUrl: string;
+}
+
+function resolveStorageRef(rawDocumentUrl: string, supplied?: ObjectRef): ObjectRef {
+  if (supplied) return supplied;
+
+  const promoted = promoteLegacyUrlToRef({ value: rawDocumentUrl });
+  if (!promoted.ok) {
+    throw new Error(
+      `Document upload requires an adapter ObjectRef; legacy reference promotion failed (${promoted.reason}).`,
+    );
+  }
+  return promoted.ref;
 }
 
 /**
@@ -77,8 +93,17 @@ async function createInitialVersion(params: {
   uploadedBy: string;
   ocrProcessed?: boolean;
   ocrMetadata?: Record<string, unknown>;
+  storageObjectId?: number;
 }): Promise<number> {
-  const { documentId, url, mimeType, uploadedBy, ocrProcessed, ocrMetadata } = params;
+  const {
+    documentId,
+    url,
+    mimeType,
+    uploadedBy,
+    ocrProcessed,
+    ocrMetadata,
+    storageObjectId,
+  } = params;
 
   // Fall back to application/octet-stream only if the caller genuinely has no
   // MIME info. This matches the backfill script's behavior so old and new rows
@@ -113,6 +138,21 @@ async function createInitialVersion(params: {
       })
       .where(eq(document.id, documentId));
 
+    if (storageObjectId !== undefined) {
+      await tx
+        .update(storageObjects)
+        .set({
+          documentId: null,
+          documentVersionId: BigInt(version.id),
+        })
+        .where(
+          and(
+            eq(storageObjects.id, storageObjectId),
+            eq(storageObjects.documentId, BigInt(documentId)),
+          ),
+        );
+    }
+
     return Number(version.id);
   });
 }
@@ -132,7 +172,9 @@ export async function processDocumentUpload({
   originalFilename,
   isWebsite,
   embeddingIndexKey,
+  storageRef,
 }: DocumentUploadParams): Promise<DocumentUploadResult> {
+  const resolvedStorageRef = resolveStorageRef(rawDocumentUrl, storageRef);
   const storageType = explicitStorageType ?? detectStorageType(rawDocumentUrl);
   const resolvedDocumentUrl =
     storageType === "database" ? toAbsoluteUrl(rawDocumentUrl, requestUrl) : rawDocumentUrl;
@@ -178,6 +220,8 @@ export async function processDocumentUpload({
       companyId: user.companyId,
       ocrEnabled: false,
       ocrProcessed: true,
+      storageRef: resolvedStorageRef,
+      sourceOperation: "audio-upload",
     });
 
     // The original audio file is its own v1. Embeddings are generated from the
@@ -189,6 +233,7 @@ export async function processDocumentUpload({
       mimeType: mimeType ?? null,
       uploadedBy: user.userId,
       ocrProcessed: true,
+      storageObjectId: audioDocument.storageObjectId,
     });
 
     try {
@@ -228,6 +273,10 @@ export async function processDocumentUpload({
         ocrEnabled: true,
         ocrProcessed: false,
         ocrMetadata: transcriptionMetadata,
+        storageRef: textBlob.ref,
+        sourceOperation: "audio-transcription",
+        parentObjectId: audioDocument.storageObjectId,
+        parentEdgeType: "audio-transcript",
       });
 
       // The transcript document is what goes through the OCR-to-Vector pipeline,
@@ -241,6 +290,7 @@ export async function processDocumentUpload({
         uploadedBy: user.userId,
         ocrProcessed: false,
         ocrMetadata: transcriptionMetadata,
+        storageObjectId: transcriptDocument.storageObjectId,
       });
 
       const { jobId, eventIds } = await triggerJob({
@@ -256,6 +306,8 @@ export async function processDocumentUpload({
         transcriptionMetadata,
         versionId: transcriptVersionId,
         embeddingIndexKey: resolvedEmbeddingIndexKey,
+        storageRef: textBlob.ref,
+        artifactGroupId: `document:${transcriptDocument.id}`,
       });
 
       console.log(`[DocumentUpload] Audio + transcript saved: audio docId=${audioDocument.id}, transcript docId=${transcriptDocument.id}`);
@@ -290,6 +342,8 @@ export async function processDocumentUpload({
     companyId: user.companyId,
     ocrEnabled: true,
     ocrProcessed: false,
+    storageRef: resolvedStorageRef,
+    sourceOperation: "document-upload",
   });
 
   // Create the v1 row for this document and lock in its file type. The
@@ -300,6 +354,7 @@ export async function processDocumentUpload({
     url: rawDocumentUrl,
     mimeType,
     uploadedBy: user.userId,
+    storageObjectId: newDocument.storageObjectId,
   });
 
   const { jobId, eventIds } = await triggerJob({
@@ -315,6 +370,8 @@ export async function processDocumentUpload({
     isWebsite,
     versionId,
     embeddingIndexKey: resolvedEmbeddingIndexKey,
+    storageRef: resolvedStorageRef,
+    artifactGroupId: `document:${newDocument.id}`,
   });
 
   return {
@@ -338,6 +395,8 @@ export interface VideoUrlUploadParams {
   title?: string;
   preferredProvider?: string;
   embeddingIndexKey?: string;
+  /** ObjectRef minted by the adapter that wrote rawDocumentUrl. */
+  storageRef?: ObjectRef;
 }
 
 export async function processVideoUrlUpload({
@@ -395,6 +454,8 @@ export async function processVideoUrlUpload({
     ocrEnabled: true,
     ocrProcessed: false,
     ocrMetadata: transcriptionMetadata,
+    storageRef: textBlob.ref,
+    sourceOperation: "video-transcription",
   });
 
   const transcriptVersionId = await createInitialVersion({
@@ -404,6 +465,7 @@ export async function processVideoUrlUpload({
     uploadedBy: user.userId,
     ocrProcessed: false,
     ocrMetadata: transcriptionMetadata,
+    storageObjectId: transcriptDocument.storageObjectId,
   });
 
   // 4. Trigger embedding pipeline
@@ -420,6 +482,8 @@ export async function processVideoUrlUpload({
     transcriptionMetadata,
     versionId: transcriptVersionId,
     embeddingIndexKey: resolvedEmbeddingIndexKey,
+    storageRef: textBlob.ref,
+    artifactGroupId: `document:${transcriptDocument.id}`,
   });
 
   console.log(`[DocumentUpload] Video transcript saved: docId=${transcriptDocument.id}, title="${documentName}"`);

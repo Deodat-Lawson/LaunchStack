@@ -1,5 +1,6 @@
 "use client";
 
+import type { ObjectRef } from "@launchstack/core/storage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -64,7 +65,7 @@ export interface DocumentViewerProps {
   source: WorkspaceSource;
   onClose: () => void;
   onRename: (id: number, title: string) => Promise<boolean>;
-  onDelete: (id: number) => void;
+  onDelete: (id: number) => Promise<void>;
   onAskAbout: (source: WorkspaceSource) => void;
   onVersionChanged?: () => void;
 }
@@ -176,6 +177,7 @@ export function DocumentViewer({
   const [fullDoc, setFullDoc] = useState<DocumentType | null>(null);
   const [fullDocError, setFullDocError] = useState<string | null>(null);
   const [uploadState, setUploadState] = useState<UploadState>({ phase: "idle" });
+  const [deleting, setDeleting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [sidebarTab, setSidebarTab] = useState<"versions" | "notes">("versions");
   const [pdfNotes, setPdfNotes] = useState<DocumentNote[]>([]);
@@ -373,7 +375,7 @@ export function DocumentViewer({
           return;
         }
 
-        let storage: { url: string } | null = null;
+        let storage: { url: string; ref?: ObjectRef } | null = null;
         try {
           storage = JSON.parse(xhr.responseText) as { url: string };
         } catch {
@@ -394,6 +396,7 @@ export function DocumentViewer({
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 documentUrl: storage!.url,
+                storageRef: storage!.ref,
                 mimeType: file.type || expectedMime || "application/octet-stream",
                 originalFilename: file.name,
                 fileSize: file.size,
@@ -451,10 +454,16 @@ export function DocumentViewer({
     }
   };
 
-  const deleteDocument = () => {
+  const deleteDocument = async () => {
     if (!source.documentId) return;
+    if (deleting) return;
     if (!confirm(`Delete "${source.title}"? This cannot be undone.`)) return;
-    onDelete(source.documentId);
+    setDeleting(true);
+    try {
+      await onDelete(source.documentId);
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const openOriginal = () => {
@@ -599,7 +608,8 @@ export function DocumentViewer({
           <IconSparkle size={12} /> Ask about this
         </button>
         <button
-          onClick={deleteDocument}
+          onClick={() => void deleteDocument()}
+          disabled={deleting}
           style={{
             width: 30,
             height: 30,
@@ -609,8 +619,10 @@ export function DocumentViewer({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            opacity: deleting ? 0.55 : 1,
+            cursor: deleting ? "wait" : "pointer",
           }}
-          title="Delete document"
+          title={deleting ? "Waiting for deletion status" : "Delete document"}
         >
           <IconTrash size={13} />
         </button>

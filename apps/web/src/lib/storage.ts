@@ -528,10 +528,10 @@ export async function deleteObjects(keys: string[]): Promise<DeleteResult[]> {
 }
 
 /**
- * Delete a stored file by its URL, regardless of provider.
+ * Delete a historical stored file by its URL, regardless of provider.
  *
- * Legacy URL parsing is delegated exclusively to the promotion helper
- * (`promoteLegacyUrlToRef`). Callers should migrate to `deleteFileByRef`.
+ * @deprecated New lifecycle code must call `deleteFileByRef`; this shim is
+ * retained only for unmanifested historical rows.
  */
 export async function deleteFileByUrl(url: string): Promise<void> {
   if (!url) return;

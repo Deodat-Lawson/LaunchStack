@@ -43,6 +43,7 @@ export interface StoragePort {
    */
   download(urlOrKey: string, init?: RequestInit): Promise<Response>;
 
+<<<<<<< HEAD
   /** Delete an object by canonical reference with a stable per-item outcome. */
   deleteRef(ref: ObjectRef): Promise<DeleteResult>;
 
@@ -52,6 +53,19 @@ export interface StoragePort {
   /**
    * @deprecated URL/key delete shim kept only for migration. New code must use
    * `deleteRef` / `deleteMany` and avoid URL parsing outside legacy promotion.
+=======
+  /** Delete an object by its provider-owned opaque identity. */
+  deleteRef(ref: ObjectRef): Promise<DeleteResult>;
+
+  /** Delete multiple objects by provider-owned opaque identity. */
+  deleteMany(refs: readonly ObjectRef[]): Promise<DeleteResult[]>;
+
+  /**
+   * Deprecated URL/key compatibility shim.
+   *
+   * New callers must use {@link deleteRef}. URL promotion belongs in the
+   * hosting adapter, not in core.
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
    */
   delete(urlOrKey: string): Promise<void>;
 
@@ -67,12 +81,30 @@ export interface UploadInput {
   userId?: string;
 }
 
+/** Provider-owned, immutable storage identity. Callers must not parse URLs into refs. */
+export interface ObjectRef {
+  adapter: "s3" | "vercel-blob" | "database" | "uploadthing";
+  storageLocationId: string;
+  key: string;
+}
+
+export interface DeleteResult {
+  ref: ObjectRef;
+  outcome: "deleted" | "not_found" | "retryable" | "blocked" | "rejected";
+  errorCode?: string;
+  message?: string;
+}
+
 export interface UploadResult {
   /** Canonical URL the app should store to fetch the object later. */
   url: string;
   /** Provider-specific object path/key. */
   pathname: string;
+<<<<<<< HEAD
   /** Canonical object reference. Required for every successful upload. */
+=======
+  /** Provider-owned identity minted by the adapter at upload time. */
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
   ref: ObjectRef;
   contentType?: string;
   provider: string;

@@ -297,6 +297,7 @@ export const crawlWebsite = inngest.createFunction(
             requestUrl,
             category,
             explicitStorageType: uploaded.provider,
+            storageRef: uploaded.ref,
             mimeType: "text/html",
             originalFilename: filename,
             isWebsite: true,

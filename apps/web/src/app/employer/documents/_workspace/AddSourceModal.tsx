@@ -1,5 +1,6 @@
 "use client";
 
+import type { ObjectRef } from "@launchstack/core/storage";
 import React, {
   type ComponentType,
   useCallback,
@@ -80,6 +81,7 @@ async function registerDocument(params: {
   url: string;
   ref: ObjectRef;
   category: string;
+  storageRef: ObjectRef;
 }): Promise<void> {
   const body = {
     userId: params.userId,
@@ -90,9 +92,14 @@ async function registerDocument(params: {
     mimeType: params.file.type || "application/octet-stream",
     originalFilename: params.file.name,
     storageProvider: "s3",
+<<<<<<< HEAD
     storagePathname: params.ref.key,
     storageAdapter: params.ref.adapter,
     documentRef: params.ref,
+=======
+    storagePathname: params.objectKey,
+    storageRef: params.storageRef,
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
   };
   const res = await fetch("/api/uploadDocument", {
     method: "POST",
@@ -123,6 +130,7 @@ async function uploadAndRegisterAll(params: {
         url: up.url,
         ref: up.ref,
         category: params.category,
+        storageRef: up.ref,
       });
       successes++;
     } catch (err) {
@@ -1232,6 +1240,7 @@ function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
         url: up.url,
         objectKey: up.objectKey,
         category,
+        storageRef: up.ref,
       });
       toast.success(`"${safeTitle}" added to "${category}"`);
       setTitle("");

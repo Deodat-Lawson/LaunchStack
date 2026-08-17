@@ -18,16 +18,25 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+<<<<<<< HEAD
             const ref = mintUploadThingObjectRef({
                 key: file.key,
                 url: file.url,
                 ufsUrl: file.ufsUrl,
             });
+=======
+            const ref = mintUploadThingObjectRef(file);
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
                 ref,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 
@@ -44,16 +53,25 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+<<<<<<< HEAD
             const ref = mintUploadThingObjectRef({
                 key: file.key,
                 url: file.url,
                 ufsUrl: file.ufsUrl,
             });
+=======
+            const ref = mintUploadThingObjectRef(file);
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
                 ref,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 
@@ -70,16 +88,25 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+<<<<<<< HEAD
             const ref = mintUploadThingObjectRef({
                 key: file.key,
                 url: file.url,
                 ufsUrl: file.ufsUrl,
             });
+=======
+            const ref = mintUploadThingObjectRef(file);
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
                 ref,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 
@@ -96,16 +123,25 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+<<<<<<< HEAD
             const ref = mintUploadThingObjectRef({
                 key: file.key,
                 url: file.url,
                 ufsUrl: file.ufsUrl,
             });
+=======
+            const ref = mintUploadThingObjectRef(file);
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
                 ref,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 
@@ -139,16 +175,25 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
+<<<<<<< HEAD
             const ref = mintUploadThingObjectRef({
                 key: file.key,
                 url: file.url,
                 ufsUrl: file.ufsUrl,
             });
+=======
+            const ref = mintUploadThingObjectRef(file);
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
                 ref,
                 filename: file.name,
+                ref: {
+                    adapter: ref.adapter,
+                    storageLocationId: ref.storageLocationId,
+                    key: ref.key,
+                },
             };
         }),
 } satisfies FileRouter;

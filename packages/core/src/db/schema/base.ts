@@ -12,7 +12,11 @@ import {
     bigint,
 } from "drizzle-orm/pg-core";
 
-import { uniqueIndex } from "drizzle-orm/pg-core";
+import { uniqueIndex, check } from "drizzle-orm/pg-core";
+// Needed to type a self-referential foreign key (storage_deletion_items'
+// linked_to_item_id points back at storage_deletion_items.id) — without the
+// explicit return type TypeScript hits a circular inference error.
+import type { AnyPgColumn } from "drizzle-orm/pg-core";
 
 import { pgVector } from "../pgVector";
 import { pgTable } from "./helpers";
@@ -887,6 +891,420 @@ export const generatedDocumentsRelations = relations(generatedDocuments, ({ one 
 }));
 
 // ============================================================================
+// Storage Objects (manifest — one row per real object in storage)
+// ============================================================================
+// Tracks provider-owned object identity independent of URLs, so a document's
+// deletion can enumerate and clean up every file it owns. See
+// docs/storage-deletion-runbook.md for the full lifecycle design.
+
+export const storageObjects = pgTable(
+    "storage_objects",
+    {
+        id: serial("id").primaryKey(),
+
+        // Immutable ObjectRef — opaque outside the adapter that minted it.
+        adapter: varchar("adapter", {
+            length: 32,
+            enum: ["s3", "vercel-blob", "database", "uploadthing"],
+        }).notNull(),
+        storageLocationId: varchar("storage_location_id", { length: 256 }).notNull(),
+        key: text("key").notNull(),
+
+        // Tenant + owner. Exactly one of documentId / documentVersionId /
+        // artifactId must be set — enforced by a CHECK constraint below.
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        documentId: bigint("document_id", { mode: "bigint" }).references(
+            () => document.id,
+            { onDelete: "cascade" }
+        ),
+        documentVersionId: bigint("document_version_id", { mode: "bigint" }).references(
+            () => documentVersions.id,
+            { onDelete: "cascade" }
+        ),
+        artifactId: bigint("artifact_id", { mode: "bigint" }),
+
+        // Metadata — best-effort, not all providers supply all fields.
+        contentType: varchar("content_type", { length: 128 }),
+        sizeBytes: bigint("size_bytes", { mode: "bigint" }),
+        checksum: varchar("checksum", { length: 256 }),
+        sourceOperation: varchar("source_operation", { length: 64 }),
+
+        // Lifecycle
+        lifecycleState: varchar("lifecycle_state", {
+            length: 32,
+            enum: [
+                "ACTIVE",
+                "DELETE_REQUESTED",
+                "STORAGE_DELETING",
+                "STORAGE_CLEAN",
+                "RELATIONAL_PURGE",
+                "PURGED",
+                "WAITING_RETRY",
+                "BLOCKED",
+                "QUARANTINED",
+                "CANCELLED",
+            ],
+        })
+            .notNull()
+            .default("ACTIVE"),
+        deletionAttempts: integer("deletion_attempts").default(0).notNull(),
+        lastError: text("last_error"),
+
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+            () => new Date()
+        ),
+    },
+    (table) => ({
+        // Never two manifest rows claiming the same physical object.
+        adapterLocationKeyUnique: uniqueIndex(
+            "storage_objects_adapter_location_key_unique"
+        ).on(table.adapter, table.storageLocationId, table.key),
+        companyIdIdx: index("storage_objects_company_id_idx").on(table.companyId),
+        documentIdIdx: index("storage_objects_document_id_idx").on(table.documentId),
+        documentVersionIdIdx: index("storage_objects_document_version_id_idx").on(
+            table.documentVersionId
+        ),
+        lifecycleStateIdx: index("storage_objects_lifecycle_state_idx").on(
+            table.lifecycleState
+        ),
+        // Exactly one owner column populated per row.
+        exactlyOneOwnerCheck: check(
+            "storage_objects_exactly_one_owner_check",
+            sql`(
+                (CASE WHEN ${table.documentId} IS NOT NULL THEN 1 ELSE 0 END) +
+                (CASE WHEN ${table.documentVersionId} IS NOT NULL THEN 1 ELSE 0 END) +
+                (CASE WHEN ${table.artifactId} IS NOT NULL THEN 1 ELSE 0 END)
+            ) = 1`
+        ),
+    })
+);
+
+export const storageObjectsRelations = relations(storageObjects, ({ one }) => ({
+    company: one(company, {
+        fields: [storageObjects.companyId],
+        references: [company.id],
+    }),
+    document: one(document, {
+        fields: [storageObjects.documentId],
+        references: [document.id],
+    }),
+    documentVersion: one(documentVersions, {
+        fields: [storageObjects.documentVersionId],
+        references: [documentVersions.id],
+    }),
+}));
+
+// ============================================================================
+// Storage Artifact Edges (parent/child relationships between storage objects)
+// ============================================================================
+// Records derivation relationships — e.g. a ZIP object and its extracted
+// children, or a document and a generated summary/transcript — so the
+// deletion coordinator can cascade a delete across a whole artifact group.
+// One parent per child (unique constraint below); confirmed with the team
+// that no current or planned flow needs a child to trace back to more than
+// one parent. `edgeType` is intentionally a free varchar, not a locked enum:
+// the full taxonomy of edge types is owned by the artifact-lineage policy
+// work (C2), not finalized yet.
+
+export const storageArtifactEdges = pgTable(
+    "storage_artifact_edges",
+    {
+        id: serial("id").primaryKey(),
+        parentObjectId: bigint("parent_object_id", { mode: "bigint" })
+            .notNull()
+            .references(() => storageObjects.id, { onDelete: "cascade" }),
+        childObjectId: bigint("child_object_id", { mode: "bigint" })
+            .notNull()
+            .references(() => storageObjects.id, { onDelete: "cascade" }),
+        edgeType: varchar("edge_type", { length: 64 }).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    (table) => ({
+        // One parent per child.
+        parentChildUnique: uniqueIndex(
+            "storage_artifact_edges_parent_child_unique"
+        ).on(table.parentObjectId, table.childObjectId),
+        parentObjectIdIdx: index("storage_artifact_edges_parent_object_id_idx").on(
+            table.parentObjectId
+        ),
+        childObjectIdIdx: index("storage_artifact_edges_child_object_id_idx").on(
+            table.childObjectId
+        ),
+    })
+);
+
+export const storageArtifactEdgesRelations = relations(
+    storageArtifactEdges,
+    ({ one }) => ({
+        parent: one(storageObjects, {
+            fields: [storageArtifactEdges.parentObjectId],
+            references: [storageObjects.id],
+            relationName: "artifact_edge_parent",
+        }),
+        child: one(storageObjects, {
+            fields: [storageArtifactEdges.childObjectId],
+            references: [storageObjects.id],
+            relationName: "artifact_edge_child",
+        }),
+    })
+);
+
+// ============================================================================
+// Storage Deletion Requests + Items (durable deletion intent)
+// ============================================================================
+// A deletion request is the outer record ("delete document #42"); each item
+// is one physical object that must be deleted to fulfill it. Recorded
+// *before* any storage or relational deletion happens, so a crash mid-delete
+// never loses track of what still needs cleaning up. `status` on the request
+// is a maintained summary (updated by the worker as items change), not
+// recomputed on read — chosen for fast status-polling reads, at the cost of
+// the worker needing to keep it in sync correctly.
+
+export const storageDeletionRequests = pgTable(
+    "storage_deletion_requests",
+    {
+        id: serial("id").primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        // Exactly one of these two must be set — enforced by the CHECK below.
+        documentId: bigint("document_id", { mode: "bigint" }).references(
+            () => document.id,
+            { onDelete: "cascade" }
+        ),
+        documentVersionId: bigint("document_version_id", { mode: "bigint" }).references(
+            () => documentVersions.id,
+            { onDelete: "cascade" }
+        ),
+        requestedBy: varchar("requested_by", { length: 256 }).notNull(),
+        // Maintained summary status — see Decision 6 in the design doc.
+        status: varchar("status", {
+            length: 32,
+            enum: ["queued", "completed", "partial", "manual_review", "quarantined"],
+        })
+            .notNull()
+            .default("queued"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+            () => new Date()
+        ),
+        completedAt: timestamp("completed_at", { withTimezone: true }),
+    },
+    (table) => ({
+        companyIdIdx: index("storage_deletion_requests_company_id_idx").on(
+            table.companyId
+        ),
+        documentIdIdx: index("storage_deletion_requests_document_id_idx").on(
+            table.documentId
+        ),
+        documentVersionIdIdx: index(
+            "storage_deletion_requests_document_version_id_idx"
+        ).on(table.documentVersionId),
+        statusIdx: index("storage_deletion_requests_status_idx").on(table.status),
+        exactlyOneTargetCheck: check(
+            "storage_deletion_requests_exactly_one_target_check",
+            sql`(
+                (CASE WHEN ${table.documentId} IS NOT NULL THEN 1 ELSE 0 END) +
+                (CASE WHEN ${table.documentVersionId} IS NOT NULL THEN 1 ELSE 0 END)
+            ) = 1`
+        ),
+    })
+);
+
+export const storageDeletionItems = pgTable(
+    "storage_deletion_items",
+    {
+        id: serial("id").primaryKey(),
+        requestId: bigint("request_id", { mode: "bigint" })
+            .notNull()
+            .references(() => storageDeletionRequests.id, { onDelete: "cascade" }),
+        // Nullable: legacy-promoted refs (no manifest row yet) carry the ref
+        // fields directly instead of pointing at a storage_objects row. Set
+        // null (not cascaded) if the linked manifest row is later purged, so
+        // this item's history survives as an audit record.
+        objectId: bigint("object_id", { mode: "bigint" }).references(
+            () => storageObjects.id,
+            { onDelete: "set null" }
+        ),
+        adapter: varchar("adapter", {
+            length: 32,
+            enum: ["s3", "vercel-blob", "database", "uploadthing"],
+        }).notNull(),
+        storageLocationId: varchar("storage_location_id", { length: 256 }).notNull(),
+        key: text("key").notNull(),
+        // Cross-document dedup (B5): when two documents in one batch delete
+        // reference the same physical file, exactly one item ("the leader")
+        // performs the real provider call and every other item ("a follower")
+        // points at it here and inherits its outcome. Only ever set on
+        // legacy-promoted items — manifest-backed objects are exclusively
+        // owned by one target, so they can't collide across documents.
+        // ON DELETE SET NULL so a follower survives the leader's document
+        // being purged; the worker copies the leader's final state onto its
+        // followers before that cascade, so a null pointer never means a
+        // lost outcome.
+        linkedToItemId: bigint("linked_to_item_id", { mode: "bigint" }).references(
+            (): AnyPgColumn => storageDeletionItems.id,
+            { onDelete: "set null" }
+        ),
+        itemState: varchar("item_state", {
+            length: 32,
+            enum: [
+                "PENDING",
+                "IN_FLIGHT",
+                "WAITING_RETRY",
+                "DELETED",
+                "NOT_FOUND",
+                "RETRYABLE_FAILED",
+                "BLOCKED",
+                "QUARANTINED",
+                // Not independently processed: this item's real outcome lives
+                // on the item named by linkedToItemId. The worker's
+                // itemsToProcess filter is a PENDING/WAITING_RETRY allowlist,
+                // so LINKED is skipped without any filter change.
+                "LINKED",
+            ],
+        })
+            .notNull()
+            .default("PENDING"),
+        attempts: integer("attempts").default(0).notNull(),
+        lastError: text("last_error"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+            () => new Date()
+        ),
+    },
+    (table) => ({
+        requestIdIdx: index("storage_deletion_items_request_id_idx").on(
+            table.requestId
+        ),
+        objectIdIdx: index("storage_deletion_items_object_id_idx").on(table.objectId),
+        itemStateIdx: index("storage_deletion_items_item_state_idx").on(
+            table.itemState
+        ),
+        // Supports the purge-time materialization lookup: "does anything
+        // point at the leader items I'm about to cascade away?"
+        linkedToItemIdIdx: index("storage_deletion_items_linked_to_item_id_idx").on(
+            table.linkedToItemId
+        ),
+    })
+);
+
+export const storageDeletionRequestsRelations = relations(
+    storageDeletionRequests,
+    ({ one, many }) => ({
+        company: one(company, {
+            fields: [storageDeletionRequests.companyId],
+            references: [company.id],
+        }),
+        document: one(document, {
+            fields: [storageDeletionRequests.documentId],
+            references: [document.id],
+        }),
+        documentVersion: one(documentVersions, {
+            fields: [storageDeletionRequests.documentVersionId],
+            references: [documentVersions.id],
+        }),
+        items: many(storageDeletionItems),
+    })
+);
+
+export const storageDeletionItemsRelations = relations(
+    storageDeletionItems,
+    ({ one }) => ({
+        request: one(storageDeletionRequests, {
+            fields: [storageDeletionItems.requestId],
+            references: [storageDeletionRequests.id],
+        }),
+        object: one(storageObjects, {
+            fields: [storageDeletionItems.objectId],
+            references: [storageObjects.id],
+        }),
+    })
+);
+
+// ============================================================================
+// Storage Deletion Tombstones (permanent, post-purge audit + idempotency)
+// ============================================================================
+// A tombstone is the one thing that survives after a document/version is
+// hard-deleted in RELATIONAL_PURGE — it's what lets a duplicate/repeat
+// delete request on an already-purged document return the existing outcome
+// instead of erroring or redoing work. Kept intentionally minimal: detailed
+// per-object outcomes already live in storage_deletion_items; duplicating
+// that here would create two audit trails with no clear source of truth.
+//
+// documentId / documentVersionId are plain, unconstrained bigints — NOT
+// real foreign keys. A real FK would either block the document from ever
+// being purged, or cascade-delete the tombstone along with it, defeating
+// the whole point of a tombstone surviving the purge it's recording.
+
+export const storageDeletionTombstones = pgTable(
+    "storage_deletion_tombstones",
+    {
+        id: serial("id").primaryKey(),
+        requestId: bigint("request_id", { mode: "bigint" }).references(
+            () => storageDeletionRequests.id,
+            { onDelete: "set null" }
+        ),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        // Intentionally not a real FK — see comment above.
+        documentId: bigint("document_id", { mode: "bigint" }),
+        documentVersionId: bigint("document_version_id", { mode: "bigint" }),
+        // Only the two real terminal outcomes a tombstone can represent.
+        finalStatus: varchar("final_status", {
+            length: 32,
+            enum: ["completed", "quarantined"],
+        }).notNull(),
+        objectCount: integer("object_count").notNull().default(0),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    (table) => ({
+        // One tombstone per document / per version — supports the
+        // idempotency lookup ("has this already been handled").
+        documentIdUnique: uniqueIndex(
+            "storage_deletion_tombstones_document_id_unique"
+        ).on(table.documentId),
+        documentVersionIdUnique: uniqueIndex(
+            "storage_deletion_tombstones_document_version_id_unique"
+        ).on(table.documentVersionId),
+        requestIdIdx: index("storage_deletion_tombstones_request_id_idx").on(
+            table.requestId
+        ),
+        companyIdIdx: index("storage_deletion_tombstones_company_id_idx").on(
+            table.companyId
+        ),
+    })
+);
+
+export const storageDeletionTombstonesRelations = relations(
+    storageDeletionTombstones,
+    ({ one }) => ({
+        request: one(storageDeletionRequests, {
+            fields: [storageDeletionTombstones.requestId],
+            references: [storageDeletionRequests.id],
+        }),
+        company: one(company, {
+            fields: [storageDeletionTombstones.companyId],
+            references: [company.id],
+        }),
+    })
+);
+
+// ============================================================================
 // Type exports
 // ============================================================================
 
@@ -907,3 +1325,8 @@ export type DocumentView = InferSelectModel<typeof documentViews>;
 export type GeneratedDocument = InferSelectModel<typeof generatedDocuments>;
 export type InviteCode = InferSelectModel<typeof inviteCodes>;
 export type UserCompanyMembership = InferSelectModel<typeof userCompanyMemberships>;
+export type StorageObject = InferSelectModel<typeof storageObjects>;
+export type StorageArtifactEdge = InferSelectModel<typeof storageArtifactEdges>;
+export type StorageDeletionRequest = InferSelectModel<typeof storageDeletionRequests>;
+export type StorageDeletionItem = InferSelectModel<typeof storageDeletionItems>;
+export type StorageDeletionTombstone = InferSelectModel<typeof storageDeletionTombstones>;

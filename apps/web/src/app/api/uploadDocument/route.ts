@@ -6,6 +6,7 @@
  */
 
 import { NextResponse } from "next/server";
+import type { ObjectRef } from "@launchstack/core/storage";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import type { ObjectRef } from "@launchstack/core/storage";
@@ -17,11 +18,19 @@ import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { resolveStorageLocationId } from "~/lib/storage-location-id";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 /**
  * Request validation schema
  * Accepts either a full URL (cloud) or a relative path (database)
  */
+const ObjectRefSchema = z.object({
+  adapter: z.enum(["s3", "vercel-blob", "database", "uploadthing"]),
+  storageLocationId: z.string().min(1),
+  key: z.string().min(1),
+});
+
 const UploadDocumentSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   documentUrl: z.string().min(1, "Document URL or path is required"),
@@ -37,6 +46,7 @@ const UploadDocumentSchema = z.object({
   storageProvider: z.string().optional(),
   /** S3 object key for local uploads */
   storagePathname: z.string().optional(),
+<<<<<<< HEAD
   /** Canonical adapter id for this upload path (e.g. "uploadthing") */
   storageAdapter: z.enum(["s3", "vercel-blob", "database", "uploadthing"]).optional(),
   /** Canonical object reference minted at upload time */
@@ -58,6 +68,33 @@ function isObjectRef(value: unknown): value is ObjectRef {
       typeof (value as { storageLocationId?: unknown }).storageLocationId === "string" &&
       typeof (value as { key?: unknown }).key === "string",
   );
+=======
+  storageRef: ObjectRefSchema.optional(),
+  embeddingIndexKey: z.string().min(1).optional(),
+});
+
+function resolveUploadRef(input: {
+  documentUrl: string;
+  storageProvider?: string;
+  storagePathname?: string;
+  storageRef?: ObjectRef;
+}): ObjectRef | undefined {
+  if (input.storageRef) return input.storageRef;
+
+  if (
+    (input.storageProvider === "s3" || input.storageProvider === "database") &&
+    input.storagePathname
+  ) {
+    return {
+      adapter: input.storageProvider,
+      storageLocationId: resolveStorageLocationId(input.storageProvider),
+      key: input.storagePathname,
+    };
+  }
+
+  const promoted = promoteLegacyUrlToRef({ value: input.documentUrl });
+  return promoted.ok ? promoted.ref : undefined;
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
 }
 
 export async function POST(request: Request) {
@@ -77,9 +114,15 @@ export async function POST(request: Request) {
         storageType: explicitStorageType,
         mimeType,
         originalFilename,
+<<<<<<< HEAD
         storageAdapter,
         storagePathname,
         documentRef,
+=======
+        storageProvider,
+        storagePathname,
+        storageRef,
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
         embeddingIndexKey,
       } = validation.data;
 
@@ -143,6 +186,12 @@ export async function POST(request: Request) {
         mimeType,
         originalFilename,
         embeddingIndexKey,
+        storageRef: resolveUploadRef({
+          documentUrl: rawDocumentUrl,
+          storageProvider,
+          storagePathname,
+          storageRef,
+        }),
         requestUrl: request.url,
       });
 

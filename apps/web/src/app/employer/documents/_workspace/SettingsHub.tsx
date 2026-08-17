@@ -20,7 +20,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 
 import { Button } from "~/app/employer/_components/primitives";
-import { IconBuilding, IconChart, IconRobot, IconSettings, IconSlack } from "./icons";
+import { IconBuilding, IconChart, IconRobot, IconSettings, IconShield, IconSlack } from "./icons";
 import { StatusNote } from "./settings/ui";
 import type { SettingsSectionActions } from "./settings/contract";
 
@@ -48,12 +48,18 @@ const StatisticsView = dynamic(
   { loading: () => <SectionLoading /> },
 );
 
+const StorageDeletionPanel = dynamic(
+  () => import("./settings/StorageDeletionPanel").then((m) => m.StorageDeletionPanel),
+  { loading: () => <SectionLoading /> },
+);
+
 export type SettingsSectionId =
   | "processing"
   | "agents"
   | "integrations"
   | "company"
-  | "analytics";
+  | "analytics"
+  | "storage";
 
 interface SectionDef {
   id: SettingsSectionId;
@@ -131,6 +137,17 @@ const SECTIONS: SectionDef[] = [
     Icon: IconChart,
     wide: true,
     aliases: ["analytics", "statistics", "stats"],
+  },
+  {
+    id: "storage",
+    label: "Storage operations",
+    blurb: "Deletion lifecycle health",
+    eyebrow: "Storage",
+    title: "How deletion is progressing",
+    description:
+      "Monitor queued cleanup, provider outcomes, relational purge, and the two rollout flags without changing operational state.",
+    Icon: IconShield,
+    aliases: ["storage", "deletion", "cleanup"],
   },
 ];
 
@@ -391,6 +408,8 @@ function SectionBody({
       return <MetadataView bare onActions={onActions} />;
     case "analytics":
       return <StatisticsView bare onActions={onActions} />;
+    case "storage":
+      return <StorageDeletionPanel />;
   }
 }
 

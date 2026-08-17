@@ -7,6 +7,7 @@
  */
 
 import { getJobDispatcher } from "../jobs/slot";
+import type { ObjectRef } from "../storage";
 import type { ProcessDocumentEventData, OCRProvider } from "./types";
 
 /**
@@ -36,6 +37,10 @@ export interface TriggerOptions {
    * filter to the current version of each document.
    */
   versionId?: number;
+  /** Canonical source object identity for manifest-aware downstream writers. */
+  storageRef?: ObjectRef;
+  /** Stable group identifier for derived storage artifacts. */
+  artifactGroupId?: string;
   /**
    * Opaque transcription provenance metadata, set only for documents that
    * were produced by audio transcription. Carried through so the pipeline
@@ -74,6 +79,8 @@ export async function triggerDocumentProcessing(
     originalFilename: options?.originalFilename,
     isWebsite: options?.isWebsite,
     versionId: options?.versionId,
+    storageRef: options?.storageRef,
+    artifactGroupId: options?.artifactGroupId,
     transcriptionMetadata: options?.transcriptionMetadata,
     options: {
       forceOCR: options?.forceOCR,

@@ -7,11 +7,13 @@
  * receives a separate ingestion event. The original ZIP document is deleted.
  */
 
-import { eq } from "drizzle-orm";
 import { inngest } from "../client";
 import { runDocIngestionTool } from "~/lib/tools";
 import { db } from "~/server/db";
 import { document, ocrJobs } from "@launchstack/core/db/schema";
+import { findObjectByRef, registerArtifactEdge, registerObject } from "~/server/services/storage-manifest";
+import { requestDocumentDeletionAndDispatch } from "~/server/services/storage-deletion-coordinator";
+import { isStorageDeletionLifecycleEnabled } from "~/server/services/storage-deletion-flags";
 import { putFile } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
 
@@ -255,6 +257,7 @@ interface ExtractedFileInfo {
   originalFilename: string;
   mimeType: string | undefined;
   jobId: string;
+  storageRef: import("@launchstack/core/storage").ObjectRef;
 }
 
 interface ZipExtractionResult {
@@ -436,28 +439,49 @@ export const uploadDocument = inngest.createFunction(
                 data: fileBuffer,
                 contentType: fileMime,
               });
-              const [newDoc] = await db
-                .insert(document)
-                .values({
-                  url: blob.url,
-                  title: titleName,
-                  mimeType: fileMime ?? null,
-                  category: eventData.category,
+              const child = await db.transaction(async (tx) => {
+                const [newDoc] = await tx
+                  .insert(document)
+                  .values({
+                    url: blob.url,
+                    title: titleName,
+                    mimeType: fileMime ?? null,
+                    category: eventData.category,
+                    companyId: BigInt(eventData.companyId),
+                    ocrEnabled: true,
+                    ocrProcessed: false,
+                    sourceArchiveName: archiveName,
+                  })
+                  .returning({
+                    id: document.id,
+                    url: document.url,
+                    title: document.title,
+                  });
+
+                if (!newDoc) return null;
+
+                const childManifest = await registerObject(tx, {
+                  ref: blob.ref,
                   companyId: BigInt(eventData.companyId),
-                  ocrEnabled: true,
-                  ocrProcessed: false,
-                  sourceArchiveName: archiveName,
-                })
-                .returning({
-                  id: document.id,
-                  url: document.url,
-                  title: document.title,
+                  documentId: newDoc.id,
+                  contentType: fileMime,
+                  sizeBytes: fileBuffer.length,
+                  sourceOperation: "zip-extracted-child",
                 });
 
-              if (newDoc) {
-                const childJobId = `ocr-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 10)}`;
+                if (eventData.storageRef) {
+                  const parentManifest = await findObjectByRef(tx, eventData.storageRef);
+                  if (parentManifest && parentManifest.id !== childManifest.id) {
+                    await registerArtifactEdge(tx, {
+                      parentObjectId: parentManifest.id,
+                      childObjectId: childManifest.id,
+                      edgeType: "zip-child",
+                    });
+                  }
+                }
 
-                await db.insert(ocrJobs).values({
+                const childJobId = `ocr-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 10)}`;
+                await tx.insert(ocrJobs).values({
                   id: childJobId,
                   companyId: BigInt(eventData.companyId),
                   userId: eventData.userId,
@@ -466,13 +490,18 @@ export const uploadDocument = inngest.createFunction(
                   documentName: titleName,
                 });
 
+                return { newDoc, childJobId };
+              });
+
+              if (child) {
                 results.push({
-                  documentId: newDoc.id,
+                  documentId: child.newDoc.id,
                   documentUrl: blob.url,
                   documentName: titleName,
                   originalFilename: baseName,
                   mimeType: fileMime,
-                  jobId: childJobId,
+                  jobId: child.childJobId,
+                  storageRef: blob.ref,
                 });
               }
             } catch (err) {
@@ -530,23 +559,44 @@ export const uploadDocument = inngest.createFunction(
           });
 
           const summaryJobId = `ocr-${Date.now().toString(36)}-summary`;
+          const summary = await db.transaction(async (tx) => {
+            const [summaryDoc] = await tx
+              .insert(document)
+              .values({
+                url: summaryBlob.url,
+                title: `_project_summary.md`,
+                mimeType: "text/markdown",
+                category: eventData.category,
+                companyId: BigInt(eventData.companyId),
+                ocrEnabled: true,
+                ocrProcessed: false,
+                sourceArchiveName: archiveName,
+              })
+              .returning({ id: document.id });
 
-          const [summaryDoc] = await db
-            .insert(document)
-            .values({
-              url: summaryBlob.url,
-              title: `_project_summary.md`,
-              mimeType: "text/markdown",
-              category: eventData.category,
+            if (!summaryDoc) return null;
+
+            const summaryManifest = await registerObject(tx, {
+              ref: summaryBlob.ref,
               companyId: BigInt(eventData.companyId),
-              ocrEnabled: true,
-              ocrProcessed: false,
-              sourceArchiveName: archiveName,
-            })
-            .returning({ id: document.id });
+              documentId: summaryDoc.id,
+              contentType: "text/markdown",
+              sizeBytes: Buffer.byteLength(summaryText, "utf8"),
+              sourceOperation: "zip-project-summary",
+            });
 
-          if (summaryDoc) {
-            await db.insert(ocrJobs).values({
+            if (eventData.storageRef) {
+              const parentManifest = await findObjectByRef(tx, eventData.storageRef);
+              if (parentManifest && parentManifest.id !== summaryManifest.id) {
+                await registerArtifactEdge(tx, {
+                  parentObjectId: parentManifest.id,
+                  childObjectId: summaryManifest.id,
+                  edgeType: "zip-summary",
+                });
+              }
+            }
+
+            await tx.insert(ocrJobs).values({
               id: summaryJobId,
               companyId: BigInt(eventData.companyId),
               userId: eventData.userId,
@@ -555,13 +605,18 @@ export const uploadDocument = inngest.createFunction(
               documentName: `_project_summary.md`,
             });
 
+            return { summaryDoc };
+          });
+
+          if (summary) {
             extractedFiles.push({
-              documentId: summaryDoc.id,
+              documentId: summary.summaryDoc.id,
               documentUrl: summaryBlob.url,
               documentName: `_project_summary.md`,
               originalFilename: `_project_summary.md`,
               mimeType: "text/markdown",
               jobId: summaryJobId,
+              storageRef: summaryBlob.ref,
             });
 
             console.log(
@@ -589,6 +644,9 @@ export const uploadDocument = inngest.createFunction(
                 documentId: f.documentId,
                 category: eventData.category,
                 mimeType: f.mimeType,
+                storageRef: f.storageRef,
+                artifactGroupId:
+                  eventData.artifactGroupId ?? `document:${eventData.documentId}`,
                 options: {
                   embeddingIndexKey: eventData.options?.embeddingIndexKey,
                 },
@@ -601,17 +659,22 @@ export const uploadDocument = inngest.createFunction(
         }
       }
 
-      await step.run("delete-zip-document", async () => {
-        await db
-          .delete(ocrJobs)
-          .where(eq(ocrJobs.id, eventData.jobId));
-        await db
-          .delete(document)
-          .where(eq(document.id, eventData.documentId));
-        console.log(
-          `[ProcessDocument] Deleted original ZIP document id=${eventData.documentId}`,
+      if (isStorageDeletionLifecycleEnabled()) {
+        await step.run("request-zip-document-deletion", async () => {
+          await requestDocumentDeletionAndDispatch({
+            docId: eventData.documentId,
+            companyId: Number(eventData.companyId),
+            actorId: eventData.userId,
+          });
+          console.log(
+            `[ProcessDocument] Requested lifecycle deletion for original ZIP document id=${eventData.documentId}`,
+          );
+        });
+      } else {
+        console.warn(
+          "[ProcessDocument] Skipping ZIP source deletion because the lifecycle flag is disabled",
         );
-      });
+      }
 
       return {
         success: true,

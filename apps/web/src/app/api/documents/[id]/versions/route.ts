@@ -25,6 +25,7 @@
  */
 
 import { NextResponse } from "next/server";
+import type { ObjectRef } from "@launchstack/core/storage";
 import { auth } from "@clerk/nextjs/server";
 import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
@@ -36,6 +37,8 @@ import {
   ocrJobs,
   users,
 } from "@launchstack/core/db/schema";
+import { registerObject } from "~/server/services/storage-manifest";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 import { getEngine } from "~/server/engine";
 import { validateRequestBody } from "~/lib/validation";
@@ -44,6 +47,12 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
+
+const ObjectRefSchema = z.object({
+  adapter: z.enum(["s3", "vercel-blob", "database", "uploadthing"]),
+  storageLocationId: z.string().min(1),
+  key: z.string().min(1),
+});
 
 const CreateVersionSchema = z.object({
   /** URL of the already-uploaded replacement file in blob storage */
@@ -58,7 +67,17 @@ const CreateVersionSchema = z.object({
   preferredProvider: z.string().optional(),
   /** File size in bytes, for display in version history UI */
   fileSize: z.number().int().nonnegative().optional(),
+  storageRef: ObjectRefSchema.optional(),
 });
+
+function resolveVersionRef(documentUrl: string, supplied?: ObjectRef): ObjectRef {
+  if (supplied) return supplied;
+  const promoted = promoteLegacyUrlToRef({ value: documentUrl });
+  if (!promoted.ok) {
+    throw new Error(`Version upload requires an adapter ObjectRef (${promoted.reason})`);
+  }
+  return promoted.ref;
+}
 
 /**
  * Parse and validate the `[id]` route parameter.
@@ -180,6 +199,7 @@ export async function POST(
         changelog,
         preferredProvider,
         fileSize,
+        storageRef,
       } = validation.data;
 
       // File type enforcement: exact MIME match against the canonical file_type
@@ -249,6 +269,15 @@ export async function POST(
           throw new Error("Failed to insert document_versions row");
         }
 
+        await registerObject(tx, {
+          ref: resolveVersionRef(documentUrl, storageRef),
+          companyId: doc.companyId,
+          documentVersionId: inserted.id,
+          contentType: mimeType,
+          sizeBytes: fileSize,
+          sourceOperation: "document-version-upload",
+        });
+
         // Flip currentVersionId to the new row so RAG starts returning the
         // new version's chunks as soon as embeddings land. The brief window
         // between flip and embedding completion is acceptable — search will
@@ -293,6 +322,8 @@ export async function POST(
           mimeType,
           originalFilename,
           versionId: createdVersion.id,
+          storageRef: resolveVersionRef(documentUrl, storageRef),
+          artifactGroupId: `version:${createdVersion.id}`,
         }
       );
 

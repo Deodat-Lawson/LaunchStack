@@ -200,6 +200,28 @@ flowchart LR
   AdeuFn["api/adeu serverless handler"] -. deployment wiring unresolved .-> Web
 ```
 
+## Storage deletion lifecycle
+
+Storage writes return an opaque `ObjectRef` and register it in
+`storage_objects`. Document and version deletion writes a durable request,
+`storageDeletionWorker` removes provider objects, and relational purge follows
+only after every provider item is `DELETED` or `NOT_FOUND`. The read-only
+status surfaces are `/api/documents/[id]/deletion-status` and
+`/api/storage/deletion-requests/[id]`; the employer/owner metrics surface is
+`/api/storage/deletion-metrics`.
+
+The two rollout controls are intentionally independent:
+
+- `STORAGE_DELETION_LIFECYCLE_ENABLED` gates new deletion requests.
+- `STORAGE_DELETION_WORKER_ENABLED` gates asynchronous provider cleanup.
+
+The metrics response separates provider cleanup backlog/retries from SQL purge
+completion and exposes both flag states. `storage_artifact_edges` records
+derived-object lineage; it is not a URL-based ownership substitute. See
+[`storage-artifact-lineage.md`](../storage-artifact-lineage.md) and
+[`storage-orphan-audit.md`](../storage-orphan-audit.md) for the group policy
+and read-only inventory workflow.
+
 ## Background jobs
 
 `apps/web/src/app/api/inngest/route.ts` registers nine functions:

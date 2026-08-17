@@ -1,3 +1,4 @@
+import type { ObjectRef } from "@launchstack/core/storage";
 import { db } from "~/server/db";
 import { ocrJobs } from "@launchstack/core/db/schema";
 import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
@@ -17,6 +18,8 @@ export interface TriggerJobParams {
   transcriptionMetadata?: Record<string, unknown>;
   versionId?: number;
   embeddingIndexKey?: string;
+  storageRef?: ObjectRef;
+  artifactGroupId?: string;
 }
 
 export interface TriggerJobResult {
@@ -44,6 +47,8 @@ export async function triggerJob(params: TriggerJobParams): Promise<TriggerJobRe
       transcriptionMetadata: params.transcriptionMetadata,
       versionId: params.versionId,
       embeddingIndexKey: params.embeddingIndexKey,
+      storageRef: params.storageRef,
+      artifactGroupId: params.artifactGroupId,
     },
   );
 

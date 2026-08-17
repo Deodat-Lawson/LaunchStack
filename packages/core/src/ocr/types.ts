@@ -1,3 +1,5 @@
+import type { ObjectRef } from "../storage";
+
 /**
  * OCR-to-Vector Pipeline Types
  * Strictly typed structures for normalized OCR output and chunking
@@ -222,6 +224,10 @@ export interface ProcessDocumentEventData {
    * Optional for backwards compatibility with pre-versioning callers.
    */
   versionId?: number;
+  /** Canonical ref for the source object, forwarded to manifest writers. */
+  storageRef?: ObjectRef;
+  /** Stable lineage group identifier for derived artifacts. */
+  artifactGroupId?: string;
   /**
    * Opaque metadata passed through when the source document was produced by
    * audio transcription. Used by the ingestion tool to record provenance.

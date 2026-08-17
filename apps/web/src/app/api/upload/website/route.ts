@@ -261,6 +261,7 @@ export async function POST(request: Request) {
         requestUrl: request.url,
         category,
         explicitStorageType: uploaded.provider,
+        storageRef: uploaded.ref,
         mimeType: "text/html",
         originalFilename: filename,
         isWebsite: true,

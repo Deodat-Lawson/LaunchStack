@@ -37,6 +37,7 @@ Deletion uses per-ref outcome reporting (`DeleteResult.outcome`):
 
 `deleteRef` / `deleteMany` return outcomes instead of a bare throw.
 
+<<<<<<< HEAD
 Worker/state mapping (frozen):
 
 - `deleted` → `DELETED`
@@ -69,3 +70,8 @@ Dominance rules:
 - `quarantined` dominates when required items are quarantined without approved bypass
 - `manual_review` dominates when any item is blocked
 - `completed` only when all required items are `DELETED`/`NOT_FOUND` and relational purge is done
+=======
+## Deferred port scope
+
+The frozen lifecycle contract covers provider-owned identity and deletion. Full naming parity for `put`, `get`, and `getSignedUrl` is intentionally deferred; the current `StoragePort` continues to expose `upload` and `download` until existing ingestion callers can migrate without a compatibility break. New deletion and manifest code must use `ObjectRef`, `deleteRef`, and `deleteMany`; the legacy URL `delete` method remains only as a promotion shim for historical rows.
+>>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4

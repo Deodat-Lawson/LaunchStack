@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { ObjectRef } from "@launchstack/core/storage";
 import { and, eq } from "drizzle-orm";
 import pLimit from "p-limit";
 import { z } from "zod";
@@ -176,6 +177,24 @@ async function markFileFailed(batchId: string, fileId: number, message: string) 
     .update(uploadBatchFiles)
     .set({ status: "failed", errorMessage: message, processedAt: new Date() })
     .where(and(eq(uploadBatchFiles.id, fileId), eq(uploadBatchFiles.batchId, batchId)));
+}
+
+function extractStorageRef(value: unknown): ObjectRef | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const candidate = (value as { storageRef?: unknown }).storageRef;
+  if (!candidate || typeof candidate !== "object") return undefined;
+  const ref = candidate as Partial<ObjectRef>;
+  if (
+    (ref.adapter === "s3" ||
+      ref.adapter === "vercel-blob" ||
+      ref.adapter === "database" ||
+      ref.adapter === "uploadthing") &&
+    typeof ref.storageLocationId === "string" &&
+    typeof ref.key === "string"
+  ) {
+    return ref as ObjectRef;
+  }
+  return undefined;
 }
 
 function inferStorageType(value: string | null): "s3" | "database" | undefined {

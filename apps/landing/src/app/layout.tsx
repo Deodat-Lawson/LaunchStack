@@ -74,12 +74,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         >
             <body suppressHydrationWarning>
                 {/*
-          attribute={["class", "data-theme"]} is load-bearing: marketing.module.css
-          and deployment.module.css each key their dark variants off BOTH
-          `:global(.dark) .root` and `:global([data-theme="dark"]) .root`.
-          A single-attribute provider half-breaks dark mode on this origin.
+          data-theme on <html> is the one dark-mode mechanism: the CSS
+          modules key off `:global([data-theme="dark"])` and Tailwind's
+          darkMode selector matches the same attribute.
         */}
-                <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="dark" enableSystem>
+                <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
                     {children}
                     <Analytics />
                 </ThemeProvider>

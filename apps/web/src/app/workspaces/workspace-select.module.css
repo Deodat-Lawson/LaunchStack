@@ -85,7 +85,6 @@
     opacity: 0.04;
     mix-blend-mode: multiply;
 }
-:global(.dark) .ambientGrain,
 :global([data-theme="dark"]) .ambientGrain {
     opacity: 0.06;
     mix-blend-mode: screen;

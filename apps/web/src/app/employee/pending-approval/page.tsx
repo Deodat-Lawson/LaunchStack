@@ -5,7 +5,7 @@ import { Clock, Building, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import styles from "~/styles/Employee/PendingApproval.module.css";
-import NavBar from "~/app/employer/employees/NavBar";
+import { EmployeeNavbar } from "~/app/employee/_components/employee-navbar";
 
 interface EmployeeData {
     name?: string;
@@ -52,7 +52,7 @@ const PendingApproval: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <NavBar />
+            <EmployeeNavbar showHome />
 
             <main className={styles.main}>
                 <div className={styles.statusCard}>

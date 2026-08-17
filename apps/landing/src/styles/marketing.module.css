@@ -45,7 +45,6 @@
   opacity: 0.7;
   will-change: transform;
 }
-:global(.dark) .orb,
 :global([data-theme="dark"]) .orb {
   opacity: 0.55;
   filter: blur(90px);
@@ -81,15 +80,12 @@
   background: radial-gradient(circle, oklch(0.72 0.2 285 / 0.3) 0%, transparent 65%);
   animation: drift2 50s ease-in-out infinite alternate;
 }
-:global(.dark) .orb1,
 :global([data-theme="dark"]) .orb1 {
   background: radial-gradient(circle, oklch(0.7 0.22 285 / 0.5) 0%, transparent 65%);
 }
-:global(.dark) .orb2,
 :global([data-theme="dark"]) .orb2 {
   background: radial-gradient(circle, oklch(0.65 0.22 330 / 0.4) 0%, transparent 65%);
 }
-:global(.dark) .orb3,
 :global([data-theme="dark"]) .orb3 {
   background: radial-gradient(circle, oklch(0.7 0.18 200 / 0.32) 0%, transparent 65%);
 }
@@ -116,7 +112,6 @@
   opacity: 0.04;
   mix-blend-mode: multiply;
 }
-:global(.dark) .ambientGrain,
 :global([data-theme="dark"]) .ambientGrain {
   opacity: 0.06;
   mix-blend-mode: screen;
@@ -252,7 +247,6 @@
   opacity: 0.5;
   pointer-events: none; z-index: 0;
 }
-:global(.dark) .heroBg,
 :global([data-theme="dark"]) .heroBg {
   background: radial-gradient(ellipse 60% 35% at 25% 40%, oklch(0.72 0.19 285 / 0.25) 0%, transparent 60%);
 }
@@ -334,7 +328,6 @@
   box-shadow: 0 40px 80px oklch(0 0 0 / 0.08), 0 8px 24px oklch(0 0 0 / 0.04);
   overflow: hidden;
 }
-:global(.dark) .stage,
 :global([data-theme="dark"]) .stage {
   background:
     radial-gradient(ellipse at 50% 40%, oklch(0.72 0.19 285 / 0.08) 0%, transparent 70%),

@@ -44,7 +44,6 @@
     radial-gradient(ellipse 90% 50% at 50% -10%, var(--accent-soft) 0%, transparent 60%),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
 }
-:global(.dark) .root::before,
 :global([data-theme="dark"]) .root::before {
   background:
     radial-gradient(ellipse 90% 50% at 50% -10%, oklch(0.28 0.08 285 / 0.4) 0%, transparent 60%),

@@ -117,8 +117,12 @@
 
   /* ── Semantic: code surface (dark in both themes) ───────────── */
   --code-bg: oklch(0.22 0.025 280);
+  --code-bg-2: oklch(0.26 0.03 280);
   --code-ink: oklch(0.94 0.005 280);
+  --code-ink-muted: oklch(0.60 0.02 280);
   --code-line: oklch(0.32 0.03 280);
+  --code-accent: oklch(0.75 0.16 285);
+  --code-accent-soft: oklch(0.75 0.16 285 / 0.12);
 
   /* ── Shadows ────────────────────────────────────────────────── */
   --shadow-1: 0 1px 2px oklch(0.2 0.02 285 / 0.04);
@@ -173,8 +177,12 @@
   --info-soft: oklch(0.28 0.06 240);
 
   --code-bg: oklch(0.12 0.02 290);
+  --code-bg-2: oklch(0.16 0.025 290);
   --code-ink: oklch(0.94 0.005 280);
+  --code-ink-muted: oklch(0.55 0.02 285);
   --code-line: oklch(0.28 0.035 290);
+  --code-accent: oklch(0.75 0.16 285);
+  --code-accent-soft: oklch(0.75 0.16 285 / 0.14);
 
   --hue-magenta: oklch(0.65 0.22 330);
   --hue-magenta-glow: oklch(0.65 0.22 330 / 0.40);

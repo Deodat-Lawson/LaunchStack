@@ -1,7 +1,7 @@
 /* Modern Loading Screen - Glassmorphism Theme */
 
 .container {
-    @apply dark:via-background relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-purple-50 dark:from-slate-950 dark:to-purple-950/20;
+    @apply relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-surface-2 via-panel to-brand-soft;
 }
 
 /* Animated background gradient */

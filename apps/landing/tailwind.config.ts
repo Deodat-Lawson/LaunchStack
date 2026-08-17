@@ -8,7 +8,7 @@ import { type Config } from "tailwindcss";
 // app, so apps/web's theme extension and globals.css are not needed.
 export default {
     content: ["./src/**/*.{ts,tsx}"],
-    darkMode: ["class"],
+    darkMode: ["selector", '[data-theme="dark"]'],
     theme: { extend: {} },
     plugins: [],
 } satisfies Config;

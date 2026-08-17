@@ -77,6 +77,49 @@ quality shortfall — the eval suite scores it as an outright failure.
 
 ---
 
+## Rooms
+
+A **meeting** is a conversation: one speaker at a time, elected from the
+transcript, working toward a close. A **room** is a question: one question,
+every member, concurrently, no floor to hold.
+
+```
+POST /api/collab/rooms/{id}/ask   { "text": "What breaks if the token becomes a JWT?" }
+
+  @legal    Clause 11.2 caps liability at 12 months of fees.   ← reads contracts/
+  @ops      Nothing in my sources covers that.                 ← reads runbooks/
+  @finance  The Growth tier is 58% of self-serve revenue.      ← reads finance/
+```
+
+Members are bound to **different document sets**, which is the entire point.
+Measured across 39 live runs, a room whose members all read the same corpus
+performs no better than asking one agent and costs 3–5× the wall-clock — so the
+value of a room is exactly the information its members do *not* share.
+
+| | |
+| --- | --- |
+| Concurrent | Members run in parallel; wall time is the slowest member, not the sum. |
+| Isolated | Each member sees the question only, never the other answers. Otherwise the first to finish anchors the rest and it stops being a fan-out. |
+| Independently settled | A member that fails, declines, times out, or has no runtime becomes one message. There is no round-level failure. |
+| Derived | A round has no row: the question carries its id and expected roster, each answer carries the round id. `summarizeRounds()` reconstructs it from the log. |
+
+Retrieval runs as the **asking human**, never the room's creator — otherwise a
+room becomes a way to read documents you could not open yourself. The room's
+document set narrows the corpus; the asker authorizes it.
+
+A member that retrieves nothing declines rather than answering, and the model is
+never consulted in that case. "My sources don't cover this" is the most useful
+thing a specialist can say in a room; a fluent guess is the least.
+
+### Not in a room
+
+No turn policy, no moderator, no minutes, no completion marker, no `control`
+route. A room has no state machine to drive. External sessions — a Claude Code
+or Codex session joining from another machine — are tracked separately; today's
+members are all in-process.
+
+---
+
 ## Preset teams
 
 `Settings → Agents & nodes → Preset teams` adds a whole room at once. The pack

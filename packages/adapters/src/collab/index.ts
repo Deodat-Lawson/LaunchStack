@@ -14,6 +14,7 @@ export * from "./agent";
 export * from "./grounding";
 export * from "./turn-policy";
 export * from "./meeting";
+export * from "./room";
 export * from "./minutes";
 export * from "./evals";
 export {

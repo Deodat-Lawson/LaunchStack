@@ -43,6 +43,13 @@
       "when": 1786827949439,
       "tag": "20260815210549_meeting_grounding",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786929774532,
+      "tag": "20260817012254_collab_rooms",
+      "breakpoints": true
     }
   ]
 }

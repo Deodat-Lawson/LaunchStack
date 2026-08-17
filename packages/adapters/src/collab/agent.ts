@@ -24,6 +24,15 @@ export interface TurnContext {
   turnIndex: number;
   maxTurns: number;
   completionMarker: string;
+  /**
+   * What kind of exchange this turn belongs to. Absent means `meeting`, so a
+   * worker built before rooms existed keeps its current behaviour.
+   *
+   * A room member answers a question once, alone, and does not hold a floor —
+   * so the standing instructions about turn budgets and handing off are not
+   * merely unnecessary there, they describe a room that does not exist.
+   */
+  mode?: "meeting" | "room";
 }
 
 export interface AgentTurnRequest {
@@ -107,15 +116,27 @@ export function buildSystemPrompt(persona: AgentPersona, ctx: TurnContext): stri
     );
   }
 
-  lines.push(
-    "",
-    "## How to speak here",
-    "- Write one chat message. No preamble, no sign-off, no role label — the channel already shows who you are.",
-    "- Address a specific participant with @their-id when you need something from them.",
-    "- Be concrete: name numbers, tradeoffs, and owners. Do not restate what was already said.",
-    `- This meeting ends after at most ${ctx.maxTurns} turns; you are on turn ${ctx.turnIndex + 1}.`,
-    `- When the objective is genuinely met, end your message with ${ctx.completionMarker} on its own line.`,
-  );
+  if (ctx.mode === "room") {
+    lines.push(
+      "",
+      "## How to answer here",
+      "- You are answering one question, once. Nobody is waiting for you to hand off, and you will not be asked a follow-up.",
+      "- Answer only from what you can actually see: your own sources and the grounding passages above. Other members are answering the same question from theirs.",
+      "- Be specific and short. Name files, figures, clauses, versions. Skip preamble and skip restating the question.",
+      "- Say what you are *not* able to see, when that changes how much your answer is worth.",
+      `- If nothing you have access to bears on the question, reply with ${ctx.completionMarker} on its own line rather than guessing. Being the member with nothing to add is a useful answer.`,
+    );
+  } else {
+    lines.push(
+      "",
+      "## How to speak here",
+      "- Write one chat message. No preamble, no sign-off, no role label — the channel already shows who you are.",
+      "- Address a specific participant with @their-id when you need something from them.",
+      "- Be concrete: name numbers, tradeoffs, and owners. Do not restate what was already said.",
+      `- This meeting ends after at most ${ctx.maxTurns} turns; you are on turn ${ctx.turnIndex + 1}.`,
+      `- When the objective is genuinely met, end your message with ${ctx.completionMarker} on its own line.`,
+    );
+  }
 
   if (persona.maxTurnChars) {
     lines.push(`- Keep the message under ${persona.maxTurnChars} characters.`);

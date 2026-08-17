@@ -211,6 +211,55 @@ export const collabMeeting = pgTable(
 );
 
 // ============================================================================
+// Rooms
+// ============================================================================
+
+/**
+ * A room is a question surface, not a conversation.
+ *
+ * Deliberately its own table rather than a flavour of `collab_meeting`. A
+ * meeting row carries a turn policy, a turn cap, a completion marker, a status
+ * machine, a turn cursor and a controller — every one of which is meaningless
+ * for a fan-out. Reusing it would also make rooms load through
+ * `getMeetingRuntime()` and surface in the meetings list as permanently
+ * scheduled meetings.
+ *
+ * There is no round table: a round is derived from the channel log, where the
+ * question carries its id and expected roster and each answer carries the round
+ * id. Same rule the rest of this subsystem follows — the log is the truth.
+ */
+export const collabRoom = pgTable(
+    "collab_room",
+    {
+        id: varchar("id", { length: 64 }).primaryKey().notNull(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        channelId: varchar("channel_id", { length: 64 })
+            .notNull()
+            .references(() => collabChannel.id, { onDelete: "cascade" }),
+        name: varchar("name", { length: 256 }).notNull(),
+        purpose: text("purpose"),
+        /**
+         * Frozen copy of the members, each with the documents it answers from.
+         * Frozen for the same reason a meeting's participants are: editing a
+         * persona must not rewrite what was said in a past round.
+         */
+        members: jsonb("members").notNull(),
+        archived: boolean("archived").notNull().default(false),
+        createdByUserId: varchar("created_by_user_id", { length: 256 }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+    },
+    (table) => ({
+        companyIdx: index("collab_room_company_idx").on(table.companyId),
+        channelIdx: index("collab_room_channel_idx").on(table.channelId),
+    })
+);
+
+// ============================================================================
 // Worker nodes
 // ============================================================================
 
@@ -274,7 +323,19 @@ export const collabAgentPersonaRelations = relations(collabAgentPersona, ({ one 
     }),
 }));
 
+export const collabRoomRelations = relations(collabRoom, ({ one }) => ({
+    channel: one(collabChannel, {
+        fields: [collabRoom.channelId],
+        references: [collabChannel.id],
+    }),
+    company: one(company, {
+        fields: [collabRoom.companyId],
+        references: [company.id],
+    }),
+}));
+
 export type CollabChannel = InferSelectModel<typeof collabChannel>;
+export type CollabRoom = InferSelectModel<typeof collabRoom>;
 export type CollabMessage = InferSelectModel<typeof collabMessage>;
 export type CollabAgentPersona = InferSelectModel<typeof collabAgentPersona>;
 export type CollabMeeting = InferSelectModel<typeof collabMeeting>;

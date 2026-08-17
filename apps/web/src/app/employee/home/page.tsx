@@ -2,14 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { FileText, HelpCircle, BookOpen } from "lucide-react";
-import styles from "~/styles/Employer/Home.module.css";
 import { useRouter } from "next/navigation";
-import ProfileDropdown from "~/app/employer/_components/ProfileDropdown";
 import { useAuth } from "@clerk/nextjs";
 import { LANDING_CONTACT_URL } from "~/config/landing";
 import LoadingPage from "~/app/_components/loading";
-import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
-import { ThemeToggle } from "~/app/_components/ThemeToggle";
+import { EmployeeNavbar } from "~/app/employee/_components/employee-navbar";
 
 const EmployeeHomeScreen = () => {
     const router = useRouter();
@@ -60,25 +57,22 @@ const EmployeeHomeScreen = () => {
 
     const menuOptions = [
         {
-            icon: <FileText className={styles.menuIcon} />,
+            icon: FileText,
             title: "View Documents",
             description: "Browse your company documents with AI-powered Q&A and analysis",
             path: "/employee/documents",
-            isBeta: false,
         },
         {
-            icon: <BookOpen className={styles.menuIcon} />,
+            icon: BookOpen,
             title: "Training Materials",
             description: "Access onboarding guides and training resources",
             path: "/employee/documents",
-            isBeta: false,
         },
         {
-            icon: <HelpCircle className={styles.menuIcon} />,
+            icon: HelpCircle,
             title: "Contact Support",
             description: "Get help with technical difficulties and questions",
             path: LANDING_CONTACT_URL,
-            isBeta: false,
         },
     ];
 
@@ -98,33 +92,22 @@ const EmployeeHomeScreen = () => {
     }
 
     return (
-        <div className={styles.container}>
-            <nav className={styles.navbar}>
-                <div className={styles.navContent}>
-                    <div className={styles.logoContainer}>
-                        <LaunchstackMark size={26} title="Launchstack" />
-                        <span className={styles.logoText}>Launchstack</span>
-                    </div>
-                    <div className={styles.navActions}>
-                        <ThemeToggle />
-                        <ProfileDropdown />
-                    </div>
-                </div>
-            </nav>
-            <main className={styles.main}>
-                <div className={styles.welcomeSection}>
-                    <h1 className={styles.welcomeTitle}>Welcome to Launchstack</h1>
-                    <p className={styles.welcomeText}>
+        <div className="bg-surface text-ink min-h-screen">
+            <EmployeeNavbar />
+            <main className="mx-auto max-w-5xl px-6 py-12">
+                <div className="mb-10">
+                    <h1 className="text-3xl font-bold tracking-tight">Welcome to Launchstack</h1>
+                    <p className="text-ink-2 mt-2 max-w-2xl">
                         Your AI integrated document management assistant and interpreter. Choose an
                         option below to get started.
                     </p>
                 </div>
 
-                <div className={styles.menuGrid}>
-                    {menuOptions.map((option, index) => (
+                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    {menuOptions.map(option => (
                         <div
-                            key={index}
-                            className={styles.menuCard}
+                            key={option.title}
+                            className="border-line bg-panel shadow-1 hover:border-brand hover:shadow-2 cursor-pointer rounded-lg border p-6 transition-all"
                             onClick={() => handleNavigation(option.path)}
                             onKeyDown={e => {
                                 if (e.key === "Enter" || e.key === " ") {
@@ -135,14 +118,15 @@ const EmployeeHomeScreen = () => {
                             role="button"
                             tabIndex={0}
                         >
-                            <div className={styles.cardHeader}>
-                                <div className={styles.iconContainer}>{option.icon}</div>
-                                {option.isBeta && <span className={styles.betaBadge}>Beta</span>}
+                            <div className="bg-brand-soft mb-4 flex h-11 w-11 items-center justify-center rounded-md">
+                                <option.icon className="text-brand-ink h-5 w-5" />
                             </div>
-                            <h2 className={styles.menuTitle}>{option.title}</h2>
-                            <p className={styles.menuDescription}>{option.description}</p>
-                            <div className={styles.cardFooter}>
-                                <span className={styles.getStarted}>Get Started</span>
+                            <h2 className="text-base font-semibold">{option.title}</h2>
+                            <p className="text-ink-2 mt-1 text-sm leading-relaxed">
+                                {option.description}
+                            </p>
+                            <div className="text-brand-ink mt-4 text-sm font-medium">
+                                Get Started
                             </div>
                         </div>
                     ))}

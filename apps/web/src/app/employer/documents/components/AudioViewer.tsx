@@ -125,15 +125,15 @@ export function AudioViewer({ document }: AudioViewerProps) {
                 <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-violet-100 dark:bg-violet-900/30">
                     <Music className="h-10 w-10 text-violet-600 dark:text-violet-400" />
                 </div>
-                <h3 className="text-foreground text-lg font-semibold">{document.title}</h3>
+                <h3 className="text-ink text-lg font-semibold">{document.title}</h3>
                 {audioBlobUrl ? (
                     <audio ref={audioRef} controls className="w-full max-w-lg" src={audioBlobUrl} />
                 ) : (
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                    <div className="text-ink-3 flex items-center gap-2 text-sm">
                         <Loader2 className="h-4 w-4 animate-spin" /> Loading audio...
                     </div>
                 )}
-                <p className="text-muted-foreground text-sm">
+                <p className="text-ink-3 text-sm">
                     Check the matching transcript document to view the transcribed text.
                 </p>
             </div>
@@ -155,7 +155,7 @@ export function AudioViewer({ document }: AudioViewerProps) {
                     {audioBlobUrl ? (
                         <audio ref={audioRef} controls className="w-full" src={audioBlobUrl} />
                     ) : (
-                        <div className="text-muted-foreground flex items-center gap-2 py-2 text-sm">
+                        <div className="text-ink-3 flex items-center gap-2 py-2 text-sm">
                             <Loader2 className="h-4 w-4 animate-spin" /> Loading audio...
                         </div>
                     )}
@@ -166,7 +166,7 @@ export function AudioViewer({ document }: AudioViewerProps) {
             <div className="flex-1 overflow-y-auto p-6">
                 <div className="mb-4 flex items-center gap-2">
                     <FileText className="h-4 w-4 text-violet-600 dark:text-violet-400" />
-                    <h3 className="text-foreground text-sm font-semibold">Transcript</h3>
+                    <h3 className="text-ink text-sm font-semibold">Transcript</h3>
                     {metadata?.language && (
                         <span className="rounded bg-violet-100 px-2 py-0.5 text-[10px] font-medium uppercase text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
                             {metadata.language}
@@ -200,7 +200,7 @@ export function AudioViewer({ document }: AudioViewerProps) {
                                         <Clock className="h-3 w-3" />
                                         {formatTime(segment.start)}
                                     </span>
-                                    <span className="text-foreground text-sm leading-relaxed">
+                                    <span className="text-ink text-sm leading-relaxed">
                                         {segment.text}
                                     </span>
                                 </div>
@@ -209,12 +209,12 @@ export function AudioViewer({ document }: AudioViewerProps) {
                     </div>
                 ) : transcript ? (
                     <div className="prose dark:prose-invert prose-sm max-w-none">
-                        <p className="text-foreground/90 whitespace-pre-wrap leading-relaxed">
+                        <p className="text-ink/90 whitespace-pre-wrap leading-relaxed">
                             {transcript}
                         </p>
                     </div>
                 ) : (
-                    <p className="text-muted-foreground text-sm">No transcript available.</p>
+                    <p className="text-ink-3 text-sm">No transcript available.</p>
                 )}
             </div>
         </div>

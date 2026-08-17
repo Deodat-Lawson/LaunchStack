@@ -76,7 +76,9 @@ function actionableItems(items: SourceContextMenuItem[]): SourceContextMenuItem[
 }
 
 function portalRoot(): HTMLElement {
-    return document.querySelector(".lsw-root") ?? document.body;
+    // Tokens are global now (the .lsw-root scope is retired), so the body
+    // is a fully-themed portal target.
+    return document.body;
 }
 
 export function ContextMenu({

@@ -13,8 +13,8 @@ interface StatsCardProps {
 
 const colorMap = {
     purple: {
-        border: "border-l-purple-500",
-        text: "text-purple-500",
+        border: "border-l-brand",
+        text: "text-brand-ink",
     },
     blue: {
         border: "border-l-blue-500",
@@ -36,18 +36,18 @@ export function StatsCard({ title, value, icon: Icon, color, className }: StatsC
     return (
         <Card
             className={cn(
-                "bg-card group flex flex-col justify-between border-l-4 border-none p-5 shadow-sm transition-all hover:shadow-md",
+                "bg-panel group flex flex-col justify-between border-l-4 border-none p-5 shadow-sm transition-all hover:shadow-md",
                 colors.border,
                 className
             )}
         >
             <div className="mb-2 flex items-start justify-between">
-                <span className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest">
+                <span className="text-ink-3 text-[10px] font-bold uppercase tracking-widest">
                     {title}
                 </span>
                 <Icon className={cn("h-4 w-4", colors.text)} />
             </div>
-            <div className="text-foreground text-3xl font-black">{value}</div>
+            <div className="text-ink text-3xl font-black">{value}</div>
         </Card>
     );
 }

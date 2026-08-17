@@ -36,10 +36,11 @@ already wired to `cn` from `~/lib/utils`. Modals/popovers come from the kit
 
 - **Colors are tokens.** `var(--…)` from `@launchstack/design-tokens`, or the
   semantic Tailwind namespace: `surface/panel/ink/line/brand-*/success/
-danger/warn/info`. New hex literals trigger a lint warning; don't add any.
-- The shadcn names (`bg-background`, `text-muted-foreground`, …) live in
-  `src/styles/compat.css` — a **deprecated** quarantine that dies when the
-  kit is re-themed. Don't add to it; prefer the semantic namespace.
+danger/warn/info`. Opacity modifiers compose (`bg-panel-2/30`). New hex
+  literals trigger a lint warning; don't add any.
+- The shadcn color names (`bg-background`, `text-muted-foreground`, …) and
+  the raw purple/slate palette are **gone** — the compat quarantine was
+  deleted once the kit was re-themed. Don't reintroduce either.
 - Dark mode keys off `data-theme="dark"` on `<html>` (next-themes sets it).
   `dark:` variants and `[data-theme="dark"]` CSS both work; never branch on
   `resolvedTheme` in JS just to pick colors — use a token that flips.
@@ -78,7 +79,5 @@ migration. Nobody rewrites the ~100 inline-style files as a project.
 | --------------------------------------------- | ----------------------------------------- |
 | `app/employer/_components/primitives.tsx`     | `~/components/ui` + tokens                |
 | `app/employer/documents/_workspace/icons.tsx` | lucide-react + `~/components/icons/brand` |
-| `src/styles/compat.css` + shadcn color names  | semantic Tailwind namespace / tokens      |
-| `.lsw-root` wrapper class                     | inert; tokens are global now              |
 
 Lint warnings on these are a ratchet: the count only goes down.

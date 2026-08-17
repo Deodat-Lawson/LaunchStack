@@ -22,13 +22,13 @@ export default function EmployeeError({
             <div className="flex gap-3">
                 <button
                     onClick={reset}
-                    className="cursor-pointer rounded-full bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-purple-700"
+                    className="bg-brand hover:bg-brand-hi cursor-pointer rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-colors"
                 >
                     Try again
                 </button>
                 <Link
                     href="/employee/documents"
-                    className="rounded-full border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:border-purple-400 dark:border-purple-700/50 dark:text-gray-300"
+                    className="hover:border-brand dark:border-brand-soft rounded-full border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition-colors dark:text-gray-300"
                 >
                     Back to Dashboard
                 </Link>

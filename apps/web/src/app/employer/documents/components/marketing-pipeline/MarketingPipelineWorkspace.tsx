@@ -1946,7 +1946,7 @@ export function MarketingPipelineWorkspace({
                                                             <SheetTitle className="text-lg font-semibold">
                                                                 Refine your campaign
                                                             </SheetTitle>
-                                                            <p className="text-muted-foreground text-sm">
+                                                            <p className="text-ink-3 text-sm">
                                                                 Use tone, length, and audience
                                                                 options to refine the message.
                                                                 Preview and accept when you&apos;re

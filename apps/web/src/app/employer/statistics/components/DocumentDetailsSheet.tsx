@@ -137,7 +137,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
         <Sheet open={isOpen} onOpenChange={open => !open && onClose()}>
             <SheetContent className="flex w-[420px] flex-col gap-0 overflow-hidden p-0 sm:w-[560px]">
                 {/* Fixed Header */}
-                <div className="bg-gradient-to-br from-blue-600 to-purple-600 p-6 text-white">
+                <div className="from-info to-brand bg-gradient-to-br p-6 text-white">
                     <SheetHeader className="space-y-3">
                         <div className="flex items-start justify-between gap-4">
                             <div className="flex min-w-0 flex-1 items-start gap-4">
@@ -174,8 +174,8 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                 {/* Scrollable Content */}
                 <div className="flex-1 space-y-6 overflow-y-auto p-6">
                     {error ? (
-                        <Card className="border-destructive/20 bg-destructive/5 p-4">
-                            <p className="text-destructive text-sm font-medium">
+                        <Card className="border-danger/20 bg-danger/5 p-4">
+                            <p className="text-danger text-sm font-medium">
                                 Failed to load details: {error}
                             </p>
                         </Card>
@@ -185,9 +185,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                 <div className="border-3 h-12 w-12 animate-spin rounded-full border-blue-100 border-t-blue-600 dark:border-blue-900/30" />
                                 <Loader2 className="absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 animate-pulse text-blue-600" />
                             </div>
-                            <p className="text-muted-foreground text-sm font-medium">
-                                Loading statistics...
-                            </p>
+                            <p className="text-ink-3 text-sm font-medium">Loading statistics...</p>
                         </div>
                     ) : details ? (
                         <>
@@ -208,19 +206,17 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                     </p>
                                 </Card>
 
-                                <Card className="border-purple-200/50 bg-gradient-to-br from-purple-50 to-purple-100/50 p-4 dark:border-purple-800/30 dark:from-purple-950/30 dark:to-purple-900/20">
+                                <Card className="border-brand-soft from-brand-soft to-brand-soft/50 bg-gradient-to-br p-4">
                                     <div className="mb-2 flex items-center gap-2">
-                                        <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600/70 dark:text-purple-400/70">
+                                        <Users className="text-brand-ink h-4 w-4" />
+                                        <span className="text-brand-ink/70 text-[10px] font-bold uppercase tracking-wider">
                                             Unique
                                         </span>
                                     </div>
-                                    <div className="text-2xl font-black text-purple-700 dark:text-purple-300">
+                                    <div className="text-brand-ink text-2xl font-black">
                                         {details.uniqueViewers}
                                     </div>
-                                    <p className="mt-1 text-[10px] text-purple-600/60 dark:text-purple-400/60">
-                                        Viewers
-                                    </p>
+                                    <p className="text-brand-ink/60 mt-1 text-[10px]">Viewers</p>
                                 </Card>
 
                                 <Card className="border-green-200/50 bg-gradient-to-br from-green-50 to-green-100/50 p-4 dark:border-green-800/30 dark:from-green-950/30 dark:to-green-900/20">
@@ -242,12 +238,12 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                             {/* Activity Chart */}
                             <div className="space-y-3">
                                 <div className="flex items-center gap-2">
-                                    <Calendar className="text-muted-foreground h-4 w-4" />
-                                    <h3 className="text-muted-foreground text-xs font-bold uppercase tracking-widest">
+                                    <Calendar className="text-ink-3 h-4 w-4" />
+                                    <h3 className="text-ink-3 text-xs font-bold uppercase tracking-widest">
                                         30 Day Activity
                                     </h3>
                                 </div>
-                                <Card className="bg-muted/30 border-none p-4 shadow-sm">
+                                <Card className="bg-panel-2/30 border-none p-4 shadow-sm">
                                     <ChartContainer
                                         config={viewsChartConfig}
                                         className="h-[160px] w-full"
@@ -278,7 +274,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                             </defs>
                                             <CartesianGrid
                                                 strokeDasharray="3 3"
-                                                className="stroke-muted/50"
+                                                className="stroke-panel-2/50"
                                                 vertical={false}
                                             />
                                             <XAxis
@@ -320,8 +316,8 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <Clock className="text-muted-foreground h-4 w-4" />
-                                        <h3 className="text-muted-foreground text-xs font-bold uppercase tracking-widest">
+                                        <Clock className="text-ink-3 h-4 w-4" />
+                                        <h3 className="text-ink-3 text-xs font-bold uppercase tracking-widest">
                                             Recent Viewers
                                         </h3>
                                     </div>
@@ -333,7 +329,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                 <Card className="overflow-hidden border shadow-sm">
                                     <div className="max-h-[200px] overflow-y-auto">
                                         <Table>
-                                            <TableHeader className="bg-muted/80 sticky top-0 z-10 backdrop-blur-sm">
+                                            <TableHeader className="bg-panel-2/80 sticky top-0 z-10 backdrop-blur-sm">
                                                 <TableRow>
                                                     <TableHead className="py-2 text-[10px] font-bold uppercase tracking-wider">
                                                         User
@@ -353,7 +349,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                                         className={cn(
                                                                             "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white",
                                                                             viewer.role === "owner"
-                                                                                ? "bg-purple-500"
+                                                                                ? "bg-brand"
                                                                                 : viewer.role ===
                                                                                     "employer"
                                                                                   ? "bg-blue-500"
@@ -368,14 +364,14 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                                         <p className="truncate text-sm font-medium">
                                                                             {viewer.name}
                                                                         </p>
-                                                                        <p className="text-muted-foreground truncate text-[11px]">
+                                                                        <p className="text-ink-3 truncate text-[11px]">
                                                                             {viewer.email}
                                                                         </p>
                                                                     </div>
                                                                 </div>
                                                             </TableCell>
                                                             <TableCell className="py-2.5 text-right">
-                                                                <span className="text-muted-foreground text-xs font-medium">
+                                                                <span className="text-ink-3 text-xs font-medium">
                                                                     {formatRelativeTime(
                                                                         viewer.viewedAt
                                                                     )}
@@ -387,10 +383,10 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
                                                     <TableRow>
                                                         <TableCell
                                                             colSpan={2}
-                                                            className="text-muted-foreground py-8 text-center"
+                                                            className="text-ink-3 py-8 text-center"
                                                         >
                                                             <div className="flex flex-col items-center gap-2">
-                                                                <Eye className="text-muted-foreground/30 h-8 w-8" />
+                                                                <Eye className="text-ink-3/30 h-8 w-8" />
                                                                 <p className="text-sm">
                                                                     No views yet
                                                                 </p>

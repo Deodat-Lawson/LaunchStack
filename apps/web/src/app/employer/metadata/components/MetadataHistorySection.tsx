@@ -56,7 +56,7 @@ const changeTypeConfig: Record<ChangeType, { label: string; className: string }>
 function DiffSummary({ diff, expanded }: { diff: MetadataDiff; expanded: boolean }) {
     const totalChanges = diff.added.length + diff.updated.length + diff.deprecated.length;
     if (totalChanges === 0) {
-        return <p className="text-muted-foreground text-xs">No field changes recorded.</p>;
+        return <p className="text-ink-3 text-xs">No field changes recorded.</p>;
     }
 
     return (
@@ -82,7 +82,7 @@ function DiffSummary({ diff, expanded }: { diff: MetadataDiff; expanded: boolean
 
             {/* Expanded field paths */}
             {expanded && (
-                <div className="border-border mt-2 space-y-1 border-l-2 pl-3">
+                <div className="border-line mt-2 space-y-1 border-l-2 pl-3">
                     {diff.added.map((entry, i) => (
                         <div
                             key={i}
@@ -90,7 +90,7 @@ function DiffSummary({ diff, expanded }: { diff: MetadataDiff; expanded: boolean
                         >
                             + {entry.path}
                             {entry.new && (
-                                <span className="text-muted-foreground ml-2">
+                                <span className="text-ink-3 ml-2">
                                     → {formatEntryValue(entry.new).slice(0, 60)}
                                 </span>
                             )}
@@ -100,7 +100,7 @@ function DiffSummary({ diff, expanded }: { diff: MetadataDiff; expanded: boolean
                         <div key={i} className="font-mono text-xs text-blue-700 dark:text-blue-400">
                             ~ {entry.path}
                             {entry.old && entry.new && (
-                                <span className="text-muted-foreground ml-2">
+                                <span className="text-ink-3 ml-2">
                                     {formatEntryValue(entry.old).slice(0, 30)}
                                     {" → "}
                                     {formatEntryValue(entry.new).slice(0, 30)}
@@ -138,7 +138,7 @@ function HistoryEntryRow({ entry }: { entry: HistoryEntry }) {
     return (
         <div className="relative pl-6">
             {/* Timeline dot */}
-            <div className="border-border bg-background absolute left-0 top-1.5 h-3 w-3 rounded-full border-2" />
+            <div className="border-line bg-surface absolute left-0 top-1.5 h-3 w-3 rounded-full border-2" />
 
             <div className="pb-4">
                 <div className="flex items-start justify-between gap-2">
@@ -151,14 +151,14 @@ function HistoryEntryRow({ entry }: { entry: HistoryEntry }) {
                         >
                             {config.label}
                         </span>
-                        <span className="text-muted-foreground text-xs">
+                        <span className="text-ink-3 text-xs">
                             {dateStr} at {timeStr}
                         </span>
                     </div>
                     {totalChanges > 0 && (
                         <button
                             onClick={() => setExpanded(v => !v)}
-                            className="text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-1 text-xs transition-colors"
+                            className="text-ink-3 hover:text-ink flex shrink-0 items-center gap-1 text-xs transition-colors"
                         >
                             {expanded ? (
                                 <ChevronUp className="h-3 w-3" />
@@ -209,7 +209,7 @@ export function MetadataHistorySection() {
 
     return (
         <Card className="border-none shadow-sm">
-            <CardHeader className="border-border border-b pb-4">
+            <CardHeader className="border-line border-b pb-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="rounded-lg bg-slate-600 p-2">
@@ -217,15 +217,13 @@ export function MetadataHistorySection() {
                         </div>
                         <div>
                             <CardTitle className="text-lg font-bold">Change History</CardTitle>
-                            <p className="text-muted-foreground text-sm">
-                                Audit log of all metadata updates
-                            </p>
+                            <p className="text-ink-3 text-sm">Audit log of all metadata updates</p>
                         </div>
                     </div>
                     <button
                         onClick={() => void fetchHistory()}
                         disabled={loading}
-                        className="hover:bg-muted text-muted-foreground hover:text-foreground rounded p-1.5 transition-colors"
+                        className="hover:bg-panel-2 text-ink-3 hover:text-ink rounded p-1.5 transition-colors"
                         title="Refresh history"
                     >
                         <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
@@ -234,20 +232,20 @@ export function MetadataHistorySection() {
             </CardHeader>
             <CardContent className="pt-6">
                 {loading ? (
-                    <div className="text-muted-foreground flex items-center gap-2 py-4 text-sm">
+                    <div className="text-ink-3 flex items-center gap-2 py-4 text-sm">
                         <RefreshCw className="h-4 w-4 animate-spin" />
                         Loading history...
                     </div>
                 ) : error ? (
-                    <p className="text-destructive py-4 text-sm">{error}</p>
+                    <p className="text-danger py-4 text-sm">{error}</p>
                 ) : history.length === 0 ? (
-                    <p className="text-muted-foreground py-4 text-sm">
+                    <p className="text-ink-3 py-4 text-sm">
                         No history yet. Changes will appear here after extractions or manual edits.
                     </p>
                 ) : (
                     <>
                         {/* Timeline */}
-                        <div className="border-border relative ml-1.5 border-l-2">
+                        <div className="border-line relative ml-1.5 border-l-2">
                             {displayed.map(entry => (
                                 <HistoryEntryRow key={entry.id} entry={entry} />
                             ))}
@@ -256,7 +254,7 @@ export function MetadataHistorySection() {
                         {history.length > INITIAL_SHOW && (
                             <button
                                 onClick={() => setShowAll(v => !v)}
-                                className="text-muted-foreground hover:text-foreground mt-3 flex items-center gap-1 text-xs font-semibold transition-colors"
+                                className="text-ink-3 hover:text-ink mt-3 flex items-center gap-1 text-xs font-semibold transition-colors"
                             >
                                 {showAll ? (
                                     <>

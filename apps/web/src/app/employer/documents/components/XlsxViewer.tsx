@@ -71,27 +71,27 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
 
     if (loading) {
         return (
-            <div className="bg-muted/30 flex h-full flex-col items-center justify-center gap-3">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
-                <p className="text-muted-foreground text-sm font-medium">Loading spreadsheet...</p>
+            <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-3">
+                <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
+                <p className="text-ink-3 text-sm font-medium">Loading spreadsheet...</p>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="bg-muted/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
+            <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
                     <AlertTriangle className="h-7 w-7 text-red-500" />
                 </div>
                 <div>
-                    <p className="text-foreground mb-1 text-sm font-medium">
+                    <p className="text-ink mb-1 text-sm font-medium">
                         Failed to render spreadsheet
                     </p>
-                    <p className="text-muted-foreground mb-4 text-xs">{error}</p>
+                    <p className="text-ink-3 mb-4 text-xs">{error}</p>
                     <button
                         onClick={() => void loadSpreadsheet()}
-                        className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+                        className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                     >
                         <RotateCw className="h-4 w-4" />
                         Retry
@@ -107,7 +107,7 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
         <div className="flex h-full w-full flex-col overflow-hidden bg-white dark:bg-zinc-900">
             {/* Sheet Tabs */}
             {sheets.length > 1 && (
-                <div className="border-border bg-muted/30 flex-shrink-0 overflow-x-auto border-b px-2 pt-2">
+                <div className="border-line bg-panel-2/30 flex-shrink-0 overflow-x-auto border-b px-2 pt-2">
                     <div className="flex gap-1">
                         {sheets.map((sheet, idx) => (
                             <button
@@ -116,8 +116,8 @@ export function XlsxViewer({ url, title: _title }: XlsxViewerProps) {
                                 className={cn(
                                     "whitespace-nowrap rounded-t-lg px-4 py-2 text-xs font-medium transition-all",
                                     idx === activeSheet
-                                        ? "border-border border border-b-0 bg-white text-purple-600 shadow-sm dark:bg-zinc-900 dark:text-purple-400"
-                                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                                        ? "border-line text-brand-ink border border-b-0 bg-white shadow-sm dark:bg-zinc-900"
+                                        : "text-ink-3 hover:text-ink hover:bg-panel-2/50"
                                 )}
                             >
                                 {sheet.name}

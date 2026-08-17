@@ -4,7 +4,7 @@
  * The few settings-specific pieces the shared primitives do not cover.
  *
  * Everything else — `Section`, `Card`, `Field`, `TextInput`, `Button`,
- * `Badge` — comes from `~/app/employer/_components/primitives`, deliberately,
+ * `Badge` — comes from `~/components/ui/badge`, deliberately,
  * so a settings section cannot drift into its own look by accident.
  */
 

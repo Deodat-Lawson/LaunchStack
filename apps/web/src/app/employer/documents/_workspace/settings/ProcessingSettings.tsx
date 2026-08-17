@@ -13,14 +13,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
-import {
-    Badge,
-    Card,
-    Field,
-    Section,
-    SelectInput,
-    TextInput,
-} from "~/app/employer/_components/primitives";
+import { Badge } from "~/components/ui/badge";
+import { Card, Section } from "~/components/layout/page-shell";
+import { Field, SelectInput, TextInput } from "~/components/field";
 import { StatusNote, type StatusTone } from "./ui";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 

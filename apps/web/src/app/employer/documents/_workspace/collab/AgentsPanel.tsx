@@ -4,23 +4,17 @@
  * Agents & nodes — the roster that meets, and the machines that run it.
  *
  * Body only. The header and the "New agent" button live in the settings
- * chrome, and everything here is built from the shared `_components/primitives`
+ * chrome, and everything here is built from the shared kit and layout components
  * so it reads as the same screen as Processing and Integrations rather than as
  * a bolted-on panel.
  */
 
 import React, { useCallback, useState } from "react";
 
-import {
-    Badge,
-    Button,
-    Card,
-    Field,
-    Section,
-    SelectInput,
-    TextArea,
-    TextInput,
-} from "~/app/employer/_components/primitives";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Card, Section } from "~/components/layout/page-shell";
+import { Field, SelectInput, TextArea, TextInput } from "~/components/field";
 import { usePublishedActions, type SettingsSectionProps } from "../settings/contract";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
 import { IconTrash, IconX } from "../icons";
@@ -69,8 +63,8 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
 
     return (
         <>
-            {notice && <StatusNote tone="ok">{notice}</StatusNote>}
-            {error && <StatusNote tone="danger">{error}</StatusNote>}
+            {notice && <StatusNote variant="success">{notice}</StatusNote>}
+            {error && <StatusNote variant="destructive">{error}</StatusNote>}
 
             <Section
                 title="Roster"
@@ -185,7 +179,7 @@ function AgentCard({
             </p>
 
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                {persona.route && <Badge tone="neutral">{persona.route}</Badge>}
+                {persona.route && <Badge variant="secondary">{persona.route}</Badge>}
                 {persona.nodeId ? (
                     <span
                         title={
@@ -199,7 +193,7 @@ function AgentCard({
                         </Badge>
                     </span>
                 ) : (
-                    <Badge tone="neutral">runs here</Badge>
+                    <Badge variant="secondary">runs here</Badge>
                 )}
                 <div style={{ flex: 1 }} />
                 <Button
@@ -257,12 +251,12 @@ function NodesSection({
             description="An agent can run on a different machine from this app. The worker dials in and answers turn requests — all outbound, so it needs no public address of its own."
         >
             {!network.enabled ? (
-                <StatusNote tone="warn">
+                <StatusNote variant="warn">
                     Remote agents are off. Set <Code>COLLAB_HUB_SECRET</Code> on this deployment to
                     accept worker machines — until then every agent runs in this process.
                 </StatusNote>
             ) : (
-                <StatusNote tone="ok">
+                <StatusNote variant="success">
                     Hub <Code>{network.hubId}</Code> is accepting nodes at{" "}
                     <Code>{network.hubPath}</Code>.
                 </StatusNote>
@@ -524,7 +518,7 @@ function AgentEditor({
                         </Field>
                     </div>
 
-                    {error && <StatusNote tone="danger">{error}</StatusNote>}
+                    {error && <StatusNote variant="destructive">{error}</StatusNote>}
                 </div>
 
                 <div

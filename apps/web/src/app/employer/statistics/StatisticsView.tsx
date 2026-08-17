@@ -3,13 +3,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { AlertCircle, Clock, FileText, MousePointerClick, RefreshCw, Users } from "lucide-react";
 
-import {
-    Button,
-    Card,
-    PageHeader,
-    PageShell,
-    Section,
-} from "~/app/employer/_components/primitives";
+import { Button } from "~/components/ui/button";
+import { Card, PageHeader, PageShell, Section } from "~/components/layout/page-shell";
 import {
     usePublishedActions,
     type RegisterSectionActions,
@@ -179,7 +174,7 @@ export function StatisticsView({ embedded = false, bare = false, onActions }: St
                                 {error}
                             </div>
                             <Button
-                                variant="secondary"
+                                variant="outline"
                                 onClick={() => void fetchDashboardData()}
                                 style={{ marginTop: 10, padding: "5px 10px" }}
                             >

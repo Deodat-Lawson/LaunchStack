@@ -75,12 +75,6 @@ const deprecatedModuleWarns = [
             "Legacy icon set. Use lucide-react for general icons " +
             "and ~/components/icons/brand for brand marks.",
     },
-    {
-        group: ["~/app/employer/_components/primitives", "**/_components/primitives"],
-        message:
-            "Deprecated inline-style primitives. Use ~/components/ui " +
-            "(shadcn base kit on the design tokens) instead.",
-    },
 ];
 
 const eslintConfig = [

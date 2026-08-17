@@ -77,7 +77,6 @@ migration. Nobody rewrites the ~100 inline-style files as a project.
 
 | Module                                        | Replacement                               |
 | --------------------------------------------- | ----------------------------------------- |
-| `app/employer/_components/primitives.tsx`     | `~/components/ui` + tokens                |
 | `app/employer/documents/_workspace/icons.tsx` | lucide-react + `~/components/icons/brand` |
 
 Lint warnings on these are a ratchet: the count only goes down.

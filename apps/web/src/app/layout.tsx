@@ -49,11 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 suppressHydrationWarning
             >
                 <body suppressHydrationWarning>
-                    <ThemeProvider
-                        attribute={["class", "data-theme"]}
-                        defaultTheme="dark"
-                        enableSystem
-                    >
+                    <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
                         {children}
                         <CloudAnalytics />
                     </ThemeProvider>

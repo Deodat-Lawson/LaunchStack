@@ -12,13 +12,14 @@ function useDarkMode(): boolean {
     const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
+        // next-themes stamps data-theme on <html>; mermaid renders to canvas
+        // so it needs the theme name in JS rather than CSS tokens.
         const html = document.documentElement;
-        setIsDark(html.classList.contains("dark"));
+        const read = () => setIsDark(html.getAttribute("data-theme") === "dark");
+        read();
 
-        const observer = new MutationObserver(() => {
-            setIsDark(html.classList.contains("dark"));
-        });
-        observer.observe(html, { attributes: true, attributeFilter: ["class"] });
+        const observer = new MutationObserver(read);
+        observer.observe(html, { attributes: true, attributeFilter: ["data-theme"] });
         return () => observer.disconnect();
     }, []);
 

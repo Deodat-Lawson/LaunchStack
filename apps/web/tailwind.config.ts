@@ -67,14 +67,23 @@ export default {
                     ink: token("accent-ink"),
                     fg: token("accent-fg"),
                 },
-                success: token("success"),
+                success: {
+                    DEFAULT: token("success"),
+                    soft: token("success-soft"),
+                },
                 danger: {
                     DEFAULT: token("danger"),
                     fg: token("danger-fg"),
                     soft: token("danger-soft"),
                 },
-                warn: token("warn"),
-                info: token("info"),
+                warn: {
+                    DEFAULT: token("warn"),
+                    soft: token("warn-soft"),
+                },
+                info: {
+                    DEFAULT: token("info"),
+                    soft: token("info-soft"),
+                },
             },
             keyframes: {
                 "accordion-down": {

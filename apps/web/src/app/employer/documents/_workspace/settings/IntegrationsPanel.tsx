@@ -11,7 +11,7 @@
 
 import React from "react";
 
-import { Card, Section } from "~/app/employer/_components/primitives";
+import { Card, Section } from "~/components/layout/page-shell";
 import { useAgents } from "../collab/useMeetings";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 import { Code, StatusNote, StatusRow } from "./ui";

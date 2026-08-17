@@ -9,16 +9,9 @@ import type { SupportChannels } from "~/server/support";
 
 import LoadingPage from "~/app/_components/loading";
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
-import {
-    Button,
-    Card,
-    Field,
-    PageHeader,
-    PageShell,
-    Section,
-    TextArea,
-    TextInput,
-} from "~/app/employer/_components/primitives";
+import { Button } from "~/components/ui/button";
+import { Card, PageHeader, PageShell, Section } from "~/components/layout/page-shell";
+import { Field, TextArea, TextInput } from "~/components/field";
 
 export function ContactClient({ support }: { support: SupportChannels }) {
     const router = useRouter();

@@ -2428,7 +2428,6 @@
 
 /* ---------------- Dark mode polish on platform-specific brand chips ---------------- */
 
-:global(.dark) .platformLogoX,
 :global([data-theme="dark"]) .platformLogoX {
     background: #0a0a14;
     box-shadow: 0 0 0 1px var(--line);
@@ -2503,7 +2502,6 @@
     overflow: hidden;
 }
 
-:global(.dark) .aiCard,
 :global([data-theme="dark"]) .aiCard {
     background: linear-gradient(135deg, oklch(0.26 0.05 285) 0%, oklch(0.26 0.06 340) 100%);
     border-color: oklch(0.4 0.08 285);

@@ -51,7 +51,6 @@
     opacity: 0.55;
     will-change: transform;
 }
-:global(.dark) .orb,
 :global([data-theme="dark"]) .orb {
     opacity: 0.45;
     filter: blur(90px);
@@ -80,7 +79,6 @@
     background: radial-gradient(circle, oklch(0.72 0.18 200 / 0.22) 0%, transparent 65%);
     animation: driftC 38s ease-in-out infinite alternate;
 }
-:global(.dark) .orb2,
 :global([data-theme="dark"]) .orb2 {
     background: radial-gradient(circle, oklch(0.65 0.22 330 / 0.35) 0%, transparent 65%);
 }
@@ -710,7 +708,6 @@
         0 24px 50px oklch(0 0 0 / 0.08),
         0 4px 14px var(--accent-glow);
 }
-:global(.dark) .card:hover,
 :global([data-theme="dark"]) .card:hover {
     box-shadow:
         0 30px 60px oklch(0 0 0 / 0.4),
@@ -1299,13 +1296,11 @@
     border-color: oklch(0.65 0.18 80);
     box-shadow: 0 0 0 3px oklch(0.78 0.1 80 / 0.3);
 }
-:global(.dark) .mark,
 :global([data-theme="dark"]) .mark {
     background: oklch(0.4 0.1 80 / 0.35);
     border-color: oklch(0.55 0.12 80 / 0.55);
     color: oklch(0.85 0.12 80);
 }
-:global(.dark) .markFilled,
 :global([data-theme="dark"]) .markFilled {
     background: oklch(0.4 0.08 285 / 0.4);
     border-color: oklch(0.6 0.18 285 / 0.55);
@@ -1322,7 +1317,6 @@
     position: relative;
     overflow: hidden;
 }
-:global(.dark) .aiCard,
 :global([data-theme="dark"]) .aiCard {
     background: linear-gradient(135deg, oklch(0.26 0.05 285) 0%, oklch(0.26 0.06 340) 100%);
     border-color: oklch(0.4 0.08 285);
@@ -2140,16 +2134,13 @@
 }
 
 /* Dark mode tweaks for rewrite workspace */
-:global(.dark) .rwsPaneProposed,
 :global([data-theme="dark"]) .rwsPaneProposed {
     background: color-mix(in oklch, oklch(0.55 0.18 145) 8%, transparent);
 }
-:global(.dark) .rwsHlAdd,
 :global([data-theme="dark"]) .rwsHlAdd {
     background: oklch(0.55 0.18 145 / 0.32);
     color: oklch(0.92 0.12 145);
 }
-:global(.dark) .rwsHlDel,
 :global([data-theme="dark"]) .rwsHlDel {
     background: oklch(0.45 0.18 25 / 0.32);
     text-decoration-color: oklch(0.78 0.18 25 / 0.7);
@@ -2647,7 +2638,6 @@
     color: oklch(0.18 0.018 285);
     line-height: 1.65;
 }
-:global(.dark) .rdDocPage,
 :global([data-theme="dark"]) .rdDocPage {
     background: var(--panel);
     color: var(--ink);
@@ -2826,7 +2816,6 @@ textarea.rdFieldInput {
     position: relative;
     overflow: hidden;
 }
-:global(.dark) .rdAiCard,
 :global([data-theme="dark"]) .rdAiCard {
     background: linear-gradient(135deg, oklch(0.26 0.05 285) 0%, oklch(0.26 0.06 340) 100%);
     border-color: oklch(0.4 0.08 285);
@@ -3086,7 +3075,6 @@ textarea.rdFieldInput {
     font-family: var(--font-instrument-serif, "Instrument Serif"), Georgia, serif;
     font-style: italic;
 }
-:global(.dark) .rdDocPage h1,
 :global([data-theme="dark"]) .rdDocPage h1 {
     color: var(--ink);
 }
@@ -3099,7 +3087,6 @@ textarea.rdFieldInput {
     color: oklch(0.2 0.02 285);
     font-family: inherit;
 }
-:global(.dark) .rdDocPage h2,
 :global([data-theme="dark"]) .rdDocPage h2 {
     color: var(--ink);
 }
@@ -3125,7 +3112,6 @@ textarea.rdFieldInput {
     text-transform: uppercase;
     margin: 0 0 32px;
 }
-:global(.dark) .rdDocSubtitle,
 :global([data-theme="dark"]) .rdDocSubtitle {
     color: var(--ink-3);
 }
@@ -3177,13 +3163,11 @@ textarea.rdFieldInput {
     color: inherit;
     border-bottom: 1px dashed var(--line);
 }
-:global(.dark) .rdDocPage mark[data-field-key],
 :global([data-theme="dark"]) .rdDocPage mark[data-field-key] {
     background: oklch(0.4 0.1 80 / 0.35);
     border-color: oklch(0.55 0.12 80 / 0.55);
     color: oklch(0.85 0.12 80);
 }
-:global(.dark) .rdDocPage mark[data-field-key]:not(.legal-mark-empty),
 :global([data-theme="dark"]) .rdDocPage mark[data-field-key]:not(.legal-mark-empty) {
     background: oklch(0.4 0.08 285 / 0.4);
     border-color: oklch(0.6 0.18 285 / 0.55);

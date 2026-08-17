@@ -63,8 +63,8 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
 
     return (
         <>
-            {notice && <StatusNote variant="success">{notice}</StatusNote>}
-            {error && <StatusNote variant="destructive">{error}</StatusNote>}
+            {notice && <StatusNote tone="ok">{notice}</StatusNote>}
+            {error && <StatusNote tone="danger">{error}</StatusNote>}
 
             <Section
                 title="Roster"
@@ -188,7 +188,7 @@ function AgentCard({
                                 : `Node "${persona.nodeId}" is not connected — turns for this agent will fail until it registers`
                         }
                     >
-                        <Badge tone={node?.connected ? "ok" : "warn"}>
+                        <Badge variant={node?.connected ? "success" : "warn"}>
                             {persona.nodeId} · {node?.connected ? "online" : "offline"}
                         </Badge>
                     </span>
@@ -251,12 +251,12 @@ function NodesSection({
             description="An agent can run on a different machine from this app. The worker dials in and answers turn requests — all outbound, so it needs no public address of its own."
         >
             {!network.enabled ? (
-                <StatusNote variant="warn">
+                <StatusNote tone="warn">
                     Remote agents are off. Set <Code>COLLAB_HUB_SECRET</Code> on this deployment to
                     accept worker machines — until then every agent runs in this process.
                 </StatusNote>
             ) : (
-                <StatusNote variant="success">
+                <StatusNote tone="ok">
                     Hub <Code>{network.hubId}</Code> is accepting nodes at{" "}
                     <Code>{network.hubPath}</Code>.
                 </StatusNote>
@@ -518,7 +518,7 @@ function AgentEditor({
                         </Field>
                     </div>
 
-                    {error && <StatusNote variant="destructive">{error}</StatusNote>}
+                    {error && <StatusNote tone="danger">{error}</StatusNote>}
                 </div>
 
                 <div

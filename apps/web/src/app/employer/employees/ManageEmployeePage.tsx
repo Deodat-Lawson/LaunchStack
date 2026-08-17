@@ -283,10 +283,10 @@ export default function ManageEmployeesPage() {
                                                 </td>
                                                 <td style={{ padding: "10px 14px" }}>
                                                     <Badge
-                                                        tone={
+                                                        variant={
                                                             ic.role === "employer"
-                                                                ? "accent"
-                                                                : "neutral"
+                                                                ? "default"
+                                                                : "secondary"
                                                         }
                                                     >
                                                         {ic.role === "employer"

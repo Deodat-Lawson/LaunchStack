@@ -195,11 +195,11 @@ export function CitationPanel({
     };
 
     return (
-        <div className="bg-background flex h-full flex-col">
+        <div className="bg-surface flex h-full flex-col">
             {/* Header */}
-            <div className="border-border border-b p-4">
+            <div className="border-line border-b p-4">
                 <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-foreground flex items-center gap-2 font-semibold">
+                    <h3 className="text-ink flex items-center gap-2 font-semibold">
                         <Quote className="h-4 w-4" />
                         Citations
                     </h3>
@@ -233,7 +233,7 @@ export function CitationPanel({
             </div>
 
             {/* Add Citation Button */}
-            <div className="border-border border-b p-4">
+            <div className="border-line border-b p-4">
                 <Dialog
                     open={isAddDialogOpen}
                     onOpenChange={open => {
@@ -242,7 +242,7 @@ export function CitationPanel({
                     }}
                 >
                     <DialogTrigger asChild>
-                        <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                        <Button className="bg-brand hover:bg-brand-hi w-full">
                             <Plus className="mr-2 h-4 w-4" />
                             Add Citation
                         </Button>
@@ -415,7 +415,7 @@ export function CitationPanel({
                             <Button
                                 onClick={handleAddCitation}
                                 disabled={!newCitation.title?.trim()}
-                                className="bg-purple-600 hover:bg-purple-700"
+                                className="bg-brand hover:bg-brand-hi"
                             >
                                 {editingCitation ? "Update" : "Add"}
                             </Button>
@@ -428,7 +428,7 @@ export function CitationPanel({
             <ScrollArea className="flex-1">
                 <div className="space-y-3 p-4">
                     {citations.length === 0 ? (
-                        <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
+                        <div className="text-ink-3 flex flex-col items-center justify-center py-12">
                             <Quote className="mb-4 h-12 w-12 opacity-20" />
                             <p className="text-sm">No citations added yet</p>
                             <p className="mt-1 text-xs">Add sources from research or manually</p>
@@ -441,13 +441,11 @@ export function CitationPanel({
                             return (
                                 <div
                                     key={citation.id}
-                                    className="border-border rounded-lg border p-3 transition-colors hover:border-purple-300 dark:hover:border-purple-700"
+                                    className="border-line hover:border-brand dark:hover:border-brand rounded-lg border p-3 transition-colors"
                                 >
                                     <div className="mb-2 flex items-start justify-between gap-2">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-muted-foreground">
-                                                {sourceInfo.icon}
-                                            </span>
+                                            <span className="text-ink-3">{sourceInfo.icon}</span>
                                             <span className="line-clamp-1 text-sm font-medium">
                                                 {citation.title}
                                             </span>
@@ -455,17 +453,17 @@ export function CitationPanel({
                                     </div>
 
                                     {citation.authors && citation.authors.length > 0 && (
-                                        <p className="text-muted-foreground mb-2 text-xs">
+                                        <p className="text-ink-3 mb-2 text-xs">
                                             {citation.authors.join("; ")}
                                         </p>
                                     )}
 
                                     {formatted && (
-                                        <div className="bg-muted/50 mt-2 rounded p-2 text-xs">
+                                        <div className="bg-panel-2/50 mt-2 rounded p-2 text-xs">
                                             <p className="mb-1 font-medium">
                                                 In-text: {formatted.inText}
                                             </p>
-                                            <p className="text-muted-foreground line-clamp-2">
+                                            <p className="text-ink-3 line-clamp-2">
                                                 {formatted.bibliography}
                                             </p>
                                         </div>
@@ -529,11 +527,11 @@ export function CitationPanel({
 
             {/* Bibliography Preview */}
             {formattedCitations.length > 0 && (
-                <div className="border-border border-t p-4">
+                <div className="border-line border-t p-4">
                     <p className="mb-2 text-xs font-medium">Bibliography Preview</p>
-                    <div className="bg-muted/50 max-h-32 overflow-y-auto rounded p-2 text-xs">
+                    <div className="bg-panel-2/50 max-h-32 overflow-y-auto rounded p-2 text-xs">
                         {formattedCitations.map(fc => (
-                            <p key={fc.id} className="text-muted-foreground mb-1">
+                            <p key={fc.id} className="text-ink-3 mb-1">
                                 {fc.bibliography}
                             </p>
                         ))}

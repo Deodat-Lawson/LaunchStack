@@ -171,16 +171,14 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                                     className={cn(
                                         "flex items-center gap-3 rounded-lg border-2 p-3 text-left transition-all",
                                         selectedFormat === format.id
-                                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                                            : "border-border hover:border-purple-300"
+                                            ? "border-brand bg-brand-soft"
+                                            : "border-line hover:border-brand"
                                     )}
                                 >
                                     {format.icon}
                                     <div>
                                         <div className="text-sm font-medium">{format.name}</div>
-                                        <div className="text-muted-foreground text-xs">
-                                            {format.extension}
-                                        </div>
+                                        <div className="text-ink-3 text-xs">{format.extension}</div>
                                     </div>
                                 </button>
                             ))}
@@ -189,7 +187,7 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
 
                     {/* PDF-specific options */}
                     {selectedFormat === "pdf" && (
-                        <div className="bg-muted/50 space-y-4 rounded-lg p-4">
+                        <div className="bg-panel-2/50 space-y-4 rounded-lg p-4">
                             <div className="flex items-center justify-between">
                                 <Label htmlFor="pageSize">Page Size</Label>
                                 <Select
@@ -228,10 +226,10 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
 
                     {/* Citations option */}
                     {bibliography && (
-                        <div className="bg-muted/50 flex items-center justify-between rounded-lg p-4">
+                        <div className="bg-panel-2/50 flex items-center justify-between rounded-lg p-4">
                             <div>
                                 <Label htmlFor="citations">Include Bibliography</Label>
-                                <p className="text-muted-foreground mt-0.5 text-xs">
+                                <p className="text-ink-3 mt-0.5 text-xs">
                                     Add references section at the end
                                 </p>
                             </div>
@@ -244,7 +242,7 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                     )}
 
                     {/* Preview info */}
-                    <div className="border-border rounded-lg border p-4">
+                    <div className="border-line rounded-lg border p-4">
                         <div className="flex items-center gap-3">
                             {selectedFormatOption?.icon}
                             <div>
@@ -253,7 +251,7 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                                     {title.length > 40 ? "..." : ""}
                                     {selectedFormatOption?.extension}
                                 </p>
-                                <p className="text-muted-foreground text-xs">
+                                <p className="text-ink-3 text-xs">
                                     ~{Math.ceil(content.length / 300)} page(s) •{" "}
                                     {selectedFormatOption?.description}
                                 </p>
@@ -274,7 +272,7 @@ export function ExportDialog({ isOpen, onClose, title, content, bibliography }: 
                             "min-w-[100px]",
                             exportSuccess
                                 ? "bg-green-600 hover:bg-green-700"
-                                : "bg-purple-600 hover:bg-purple-700"
+                                : "bg-brand hover:bg-brand-hi"
                         )}
                     >
                         {isExporting ? (

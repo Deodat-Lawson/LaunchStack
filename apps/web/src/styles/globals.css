@@ -2,85 +2,137 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design tokens come from @launchstack/design-tokens/tokens.css and the
-   deprecated shadcn compat set from ./compat.css — both imported by the
-   root layout around this file. This file holds base styles only. */
+/* Design tokens come from @launchstack/design-tokens/tokens.css, imported
+   by the root layout ahead of this file. This file holds base styles only. */
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01", "ss03";
-    -webkit-font-smoothing: antialiased;
-  }
+    * {
+        border-color: var(--line);
+    }
+    body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font-sans);
+        font-feature-settings: "cv11", "ss01", "ss03";
+        -webkit-font-smoothing: antialiased;
+    }
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  width: 100%;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 /* Theme Toggle Button */
 
 .theme-toggle-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: var(--accent-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--accent-ink);
 }
 
 .theme-toggle-btn:hover {
-  background: var(--accent-soft);
-  transform: scale(1.1);
+    background: var(--accent-soft);
+    transform: scale(1.1);
 }
 
 .theme-toggle-btn:active {
-  transform: scale(0.95);
+    transform: scale(0.95);
 }
 
-/* ==========================================================================
-   Launchstack Workspace (LSW) helpers. The `.lsw-root` marker class no
-   longer carries tokens (they moved to :root via the design-tokens
-   package); it remains as the scope for these application-shell defaults
-   until the base kit re-theme retires it.
-   ========================================================================== */
-.lsw-root .mono { font-family: var(--font-mono); }
-.lsw-root .serif { font-family: var(--font-serif); font-feature-settings: normal; }
-/* Specificity (0,0,1) only — any single class on a button (e.g. CSS modules)
-   overrides padding, border, and background. */
-:where(.lsw-root) button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: inherit;
-  padding: 0;
+/* Application-shell defaults, formerly scoped under the (now retired)
+   .lsw-root marker class. */
+.mono {
+    font-family: var(--font-mono);
 }
-.lsw-root input, .lsw-root textarea { font-family: inherit; }
-.lsw-root ::-webkit-scrollbar { width: 8px; height: 8px; }
-.lsw-root ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
-.lsw-root ::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+.serif {
+    font-family: var(--font-serif);
+    font-feature-settings: normal;
+}
+/* Specificity (0,0,1) via :where() — any single class on a button (e.g.
+   CSS modules or Tailwind utilities) overrides padding, border, and
+   background. */
+:where(button) {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+input,
+textarea {
+    font-family: inherit;
+}
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--ink-4);
+}
 
-@keyframes lsw-fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes lsw-modalIn { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@keyframes lsw-drawerIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes lsw-shimmer { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
-@keyframes lsw-spin { to { transform: rotate(360deg); } }
+@keyframes lsw-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes lsw-modalIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+@keyframes lsw-drawerIn {
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+@keyframes lsw-shimmer {
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+@keyframes lsw-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

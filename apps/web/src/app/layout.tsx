@@ -1,8 +1,5 @@
 import "@launchstack/design-tokens/tokens.css";
 import "~/styles/globals.css";
-// compat.css must stay after globals.css: its purple/slate remap beats
-// Tailwind's utilities by source order.
-import "~/styles/compat.css";
 import "@uploadthing/react/styles.css";
 import { ThemeProvider } from "next-themes";
 import { CloudAnalytics } from "./_components/CloudAnalytics";

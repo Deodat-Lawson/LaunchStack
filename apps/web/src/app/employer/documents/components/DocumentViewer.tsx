@@ -88,21 +88,19 @@ function IframeWithState({
     return (
         <div className="relative h-full w-full">
             {loading && !error && (
-                <div className="bg-muted/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
-                    <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
-                    <p className="text-muted-foreground text-sm font-medium">Loading...</p>
+                <div className="bg-panel-2/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
+                    <Loader2 className="text-brand-ink h-8 w-8 animate-spin" />
+                    <p className="text-ink-3 text-sm font-medium">Loading...</p>
                 </div>
             )}
             {error && (
-                <div className="bg-muted/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 p-8 text-center">
+                <div className="bg-panel-2/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 p-8 text-center">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
                         <AlertTriangle className="h-7 w-7 text-red-500" />
                     </div>
                     <div>
-                        <p className="text-foreground mb-1 text-sm font-medium">
-                            Failed to load document
-                        </p>
-                        <p className="text-muted-foreground mb-4 text-xs">
+                        <p className="text-ink mb-1 text-sm font-medium">Failed to load document</p>
+                        <p className="text-ink-3 mb-4 text-xs">
                             The document could not be displayed.
                         </p>
                         <button
@@ -110,7 +108,7 @@ function IframeWithState({
                                 setLoading(true);
                                 setError(false);
                             }}
-                            className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+                            className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                         >
                             <RotateCw className="h-4 w-4" />
                             Retry
@@ -163,11 +161,11 @@ export function DocumentViewer({
 
     if (isCollapsed) {
         return (
-            <div className="bg-muted/20 border-border animate-in fade-in flex h-full flex-col items-center border-l py-4 duration-300">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 shadow-sm dark:bg-purple-900/30">
-                    <FileText className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <div className="bg-panel-2/20 border-line animate-in fade-in flex h-full flex-col items-center border-l py-4 duration-300">
+                <div className="bg-brand-soft mb-4 flex h-10 w-10 items-center justify-center rounded-xl shadow-sm">
+                    <FileText className="text-brand-ink h-5 w-5" />
                 </div>
-                <div className="text-muted-foreground flex flex-1 items-center justify-center text-[10px] font-bold uppercase tracking-widest opacity-50 [writing-mode:vertical-rl]">
+                <div className="text-ink-3 flex flex-1 items-center justify-center text-[10px] font-bold uppercase tracking-widest opacity-50 [writing-mode:vertical-rl]">
                     Document Preview
                 </div>
             </div>
@@ -176,12 +174,12 @@ export function DocumentViewer({
 
     if (!document) {
         return (
-            <div className="bg-muted/30 animate-in fade-in flex h-full flex-1 flex-col items-center justify-center p-8 text-center duration-500">
-                <div className="bg-muted mb-6 flex h-20 w-20 items-center justify-center rounded-3xl shadow-sm">
-                    <FileText className="text-muted-foreground/30 h-10 w-10" />
+            <div className="bg-panel-2/30 animate-in fade-in flex h-full flex-1 flex-col items-center justify-center p-8 text-center duration-500">
+                <div className="bg-panel-2 mb-6 flex h-20 w-20 items-center justify-center rounded-3xl shadow-sm">
+                    <FileText className="text-ink-3/30 h-10 w-10" />
                 </div>
-                <h3 className="text-foreground mb-2 text-xl font-semibold">No Document Selected</h3>
-                <p className="text-muted-foreground max-w-xs text-sm font-medium">
+                <h3 className="text-ink mb-2 text-xl font-semibold">No Document Selected</h3>
+                <p className="text-ink-3 max-w-xs text-sm font-medium">
                     Select a document from the sidebar to view its content and start your analysis.
                 </p>
             </div>
@@ -243,34 +241,34 @@ export function DocumentViewer({
     };
 
     return (
-        <div className="bg-background flex h-full flex-col overflow-hidden transition-all duration-300">
+        <div className="bg-surface flex h-full flex-col overflow-hidden transition-all duration-300">
             {/* Document Header - Clean and minimal */}
             {!minimal && (
-                <div className="bg-background border-border z-10 flex-shrink-0 border-b px-6 py-3">
+                <div className="bg-surface border-line z-10 flex-shrink-0 border-b px-6 py-3">
                     <div className="flex items-center justify-between gap-4">
                         <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
-                                <div className="rounded bg-purple-100 p-1 dark:bg-purple-900/30">
-                                    <DisplayIcon className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                                <div className="bg-brand-soft rounded p-1">
+                                    <DisplayIcon className="text-brand-ink h-4 w-4" />
                                 </div>
-                                <h1 className="text-foreground truncate text-sm font-semibold leading-none">
+                                <h1 className="text-ink truncate text-sm font-semibold leading-none">
                                     {document.title}
                                 </h1>
-                                <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-medium capitalize">
+                                <span className="bg-panel-2 text-ink-3 rounded px-1.5 py-0.5 text-[10px] font-medium capitalize">
                                     {document.category}
                                 </span>
-                                <span className="rounded bg-purple-50 px-1.5 py-0.5 text-[10px] font-medium text-purple-600 dark:bg-purple-900/20 dark:text-purple-400">
+                                <span className="bg-brand-soft text-brand-ink rounded px-1.5 py-0.5 text-[10px] font-medium">
                                     {DISPLAY_TYPE_LABELS[displayType]}
                                 </span>
                             </div>
                         </div>
 
-                        <div className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+                        <div className="text-ink-3 flex items-center gap-2 text-xs font-medium">
                             {onOpenVersionHistory && (
                                 <button
                                     type="button"
                                     onClick={onOpenVersionHistory}
-                                    className="border-border inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] font-semibold text-purple-600 transition-colors hover:border-purple-300 hover:bg-purple-50 dark:text-purple-400 dark:hover:border-purple-700 dark:hover:bg-purple-900/20"
+                                    className="border-line text-brand-ink hover:border-brand hover:bg-brand-soft dark:hover:border-brand dark:hover:bg-brand-soft inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] font-semibold transition-colors"
                                     title="View and manage document versions"
                                 >
                                     <History className="h-3.5 w-3.5" />
@@ -284,7 +282,7 @@ export function DocumentViewer({
             )}
 
             {/* Document Content */}
-            <div className="bg-muted/30 relative flex-1 overflow-hidden">{renderContent()}</div>
+            <div className="bg-panel-2/30 relative flex-1 overflow-hidden">{renderContent()}</div>
         </div>
     );
 }

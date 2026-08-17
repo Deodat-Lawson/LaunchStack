@@ -124,11 +124,11 @@ export function OutlinePanel({
     };
 
     return (
-        <div className="bg-background flex h-full flex-col">
+        <div className="bg-surface flex h-full flex-col">
             {/* Header */}
-            <div className="border-border border-b p-4">
+            <div className="border-line border-b p-4">
                 <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-foreground flex items-center gap-2 font-semibold">
+                    <h3 className="text-ink flex items-center gap-2 font-semibold">
                         <ListTree className="h-4 w-4" />
                         Outline
                     </h3>
@@ -149,7 +149,7 @@ export function OutlinePanel({
                         <Button
                             onClick={generateOutline}
                             disabled={isGenerating || !topic.trim()}
-                            className="flex-1 bg-purple-600 hover:bg-purple-700"
+                            className="bg-brand hover:bg-brand-hi flex-1"
                         >
                             {isGenerating ? (
                                 <>
@@ -180,7 +180,7 @@ export function OutlinePanel({
             <ScrollArea className="flex-1">
                 <div className="p-4">
                     {outline.length === 0 ? (
-                        <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
+                        <div className="text-ink-3 flex flex-col items-center justify-center py-12">
                             <FileText className="mb-4 h-12 w-12 opacity-20" />
                             <p className="text-sm">No outline yet</p>
                             <p className="mt-1 text-xs">Generate one or add sections manually</p>
@@ -204,12 +204,12 @@ export function OutlinePanel({
             </ScrollArea>
 
             {/* Footer */}
-            <div className="border-border border-t p-4">
+            <div className="border-line border-t p-4">
                 <Button variant="outline" size="sm" className="w-full" onClick={addTopLevel}>
                     <Plus className="mr-2 h-4 w-4" />
                     Add Section
                 </Button>
-                <p className="text-muted-foreground mt-2 text-center text-[10px]">
+                <p className="text-ink-3 mt-2 text-center text-[10px]">
                     Click a section title to insert it into your document
                 </p>
             </div>

@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 export default function SignupLayout({ children }: { children: React.ReactNode }) {
     return (
         <div
-            className="lsw-root"
             style={{
                 minHeight: "100vh",
                 width: "100%",

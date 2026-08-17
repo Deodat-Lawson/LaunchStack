@@ -44,7 +44,7 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                     <div className="rounded-lg bg-green-100 p-1.5 text-green-600 dark:bg-green-900/30 dark:text-green-400">
                         <Users className="h-4 w-4" />
                     </div>
-                    <h2 className="text-foreground text-sm font-bold uppercase tracking-widest">
+                    <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
                         Employee Activity
                     </h2>
                 </div>
@@ -56,10 +56,10 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                 </Badge>
             </div>
 
-            <div className="border-border overflow-hidden rounded-lg border">
+            <div className="border-line overflow-hidden rounded-lg border">
                 <Table>
                     <TableHeader>
-                        <TableRow className="bg-muted/50">
+                        <TableRow className="bg-panel-2/50">
                             <TableHead className="text-[10px] font-bold uppercase tracking-widest">
                                 Name
                             </TableHead>
@@ -79,13 +79,11 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                     </TableHeader>
                     <TableBody>
                         {employees.map(employee => (
-                            <TableRow key={employee.id} className="hover:bg-muted/30">
+                            <TableRow key={employee.id} className="hover:bg-panel-2/30">
                                 <TableCell className="font-medium">
                                     <div className="flex flex-col">
                                         <span>{employee.name}</span>
-                                        <span className="text-muted-foreground text-xs">
-                                            {employee.email}
-                                        </span>
+                                        <span className="text-ink-3 text-xs">{employee.email}</span>
                                     </div>
                                 </TableCell>
                                 <TableCell>
@@ -94,7 +92,7 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                                         className={cn(
                                             "text-[10px] font-bold uppercase",
                                             employee.role === "owner"
-                                                ? "border-purple-200 text-purple-600 dark:border-purple-900/30 dark:text-purple-400"
+                                                ? "border-brand text-brand-ink dark:border-brand-soft"
                                                 : employee.role === "employer"
                                                   ? "border-blue-200 text-blue-600 dark:border-blue-900/30 dark:text-blue-400"
                                                   : "border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400"
@@ -118,11 +116,11 @@ export function EmployeeActivityTable({ employees }: EmployeeActivityTableProps)
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex items-center gap-2">
-                                        <MessageSquare className="text-muted-foreground h-3 w-3" />
+                                        <MessageSquare className="text-ink-3 h-3 w-3" />
                                         <span className="font-mono">{employee.queryCount}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-muted-foreground text-right text-sm">
+                                <TableCell className="text-ink-3 text-right text-sm">
                                     <div className="flex items-center justify-end gap-2">
                                         <Clock className="h-3 w-3" />
                                         {formatRelativeTime(employee.lastActiveAt)}

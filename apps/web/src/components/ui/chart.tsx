@@ -54,7 +54,7 @@ function ChartContainer({
                 data-slot="chart"
                 data-chart={chartId}
                 className={cn(
-                    "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-sector[stroke='#fff']]:stroke-transparent",
+                    "[&_.recharts-cartesian-axis-tick_text]:fill-panel-2-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-panel-2 [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-panel-2 [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-sector[stroke='#fff']]:stroke-transparent",
                     className
                 )}
                 {...props}
@@ -161,7 +161,7 @@ function ChartTooltipContent({
     return (
         <div
             className={cn(
-                "border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
+                "border-line/50 bg-surface grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
                 className
             )}
         >
@@ -177,7 +177,7 @@ function ChartTooltipContent({
                         <div
                             key={item.dataKey}
                             className={cn(
-                                "[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
+                                "[&>svg]:text-ink-3 flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
                                 indicator === "dot" && "items-center"
                             )}
                         >
@@ -218,12 +218,12 @@ function ChartTooltipContent({
                                     >
                                         <div className="grid gap-1.5">
                                             {nestLabel ? tooltipLabel : null}
-                                            <span className="text-muted-foreground">
+                                            <span className="text-ink-3">
                                                 {itemConfig?.label ?? item.name}
                                             </span>
                                         </div>
                                         {item.value && (
-                                            <span className="text-foreground font-mono font-medium tabular-nums">
+                                            <span className="text-ink font-mono font-medium tabular-nums">
                                                 {item.value.toLocaleString()}
                                             </span>
                                         )}
@@ -273,7 +273,7 @@ function ChartLegendContent({
                     <div
                         key={item.value as string}
                         className={cn(
-                            "[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3"
+                            "[&>svg]:text-ink-3 flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3"
                         )}
                     >
                         {itemConfig?.icon && !hideIcon ? (

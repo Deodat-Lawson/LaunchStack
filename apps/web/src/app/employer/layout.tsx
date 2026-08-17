@@ -9,7 +9,6 @@ export default async function EmployerLayout({ children }: { children: ReactNode
 
     return (
         <div
-            className="lsw-root"
             style={{
                 minHeight: "100vh",
                 width: "100%",

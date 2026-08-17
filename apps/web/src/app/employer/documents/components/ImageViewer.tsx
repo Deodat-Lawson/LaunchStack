@@ -187,10 +187,10 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                     <AlertTriangle className="h-7 w-7 text-red-500" />
                 </div>
                 <div>
-                    <p className="text-foreground mb-1 text-sm font-medium">Failed to load image</p>
+                    <p className="text-ink mb-1 text-sm font-medium">Failed to load image</p>
                     <Button
                         onClick={handleRetry}
-                        className="mt-3 inline-flex gap-2 bg-purple-600 text-white hover:bg-purple-700"
+                        className="bg-brand hover:bg-brand-hi mt-3 inline-flex gap-2 text-white"
                     >
                         <RotateCw className="h-4 w-4" />
                         Retry
@@ -202,13 +202,13 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
 
     return (
         <div
-            className="bg-muted/30 flex h-full flex-col"
+            className="bg-panel-2/30 flex h-full flex-col"
             role="img"
             aria-label={alt ? `Image: ${alt}` : "Image viewer"}
         >
             {/* Toolbar - hidden in minimal mode */}
             {!minimal && (
-                <div className="border-border bg-background/80 flex flex-shrink-0 items-center justify-between gap-2 border-b px-3 py-2">
+                <div className="border-line bg-surface/80 flex flex-shrink-0 items-center justify-between gap-2 border-b px-3 py-2">
                     <div className="flex items-center gap-1">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -241,7 +241,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                             </DropdownMenuContent>
                         </DropdownMenu>
 
-                        <div className="bg-border mx-1 h-4 w-px" />
+                        <div className="bg-line mx-1 h-4 w-px" />
 
                         <Button
                             variant="ghost"
@@ -253,7 +253,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                         >
                             <ZoomOut className="h-3.5 w-3.5" />
                         </Button>
-                        <span className="text-muted-foreground min-w-[3rem] text-center text-xs tabular-nums">
+                        <span className="text-ink-3 min-w-[3rem] text-center text-xs tabular-nums">
                             {Math.round(zoomLevel * 100)}%
                         </span>
                         <Button
@@ -282,14 +282,14 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                         (isSmallerThanViewport ? (
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <span className="text-muted-foreground cursor-help text-xs tabular-nums underline decoration-dotted underline-offset-1">
+                                    <span className="text-ink-3 cursor-help text-xs tabular-nums underline decoration-dotted underline-offset-1">
                                         {dimensions.width} × {dimensions.height}
                                     </span>
                                 </TooltipTrigger>
                                 <TooltipContent>Image is smaller than viewport</TooltipContent>
                             </Tooltip>
                         ) : (
-                            <span className="text-muted-foreground text-xs tabular-nums">
+                            <span className="text-ink-3 text-xs tabular-nums">
                                 {dimensions.width} × {dimensions.height}
                             </span>
                         ))}
@@ -317,7 +317,7 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                             className={cn(
                                 "inline-flex items-center justify-center",
                                 isSmallerThanViewport &&
-                                    "border-border bg-background/50 rounded-lg border p-2 shadow-sm"
+                                    "border-line bg-surface/50 rounded-lg border p-2 shadow-sm"
                             )}
                         >
                             {/* eslint-disable-next-line @next/next/no-img-element -- Dynamic sizing, fit modes, zoom require native img */}
@@ -350,11 +350,11 @@ export function ImageViewer({ src, alt, minimal = false }: ImageViewerProps) {
                         </div>
                         {loading && (
                             <div
-                                className="bg-muted/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg"
+                                className="bg-panel-2/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg"
                                 aria-label="Loading image"
                             >
-                                <div className="bg-muted-foreground/10 h-32 w-48 animate-pulse rounded-xl" />
-                                <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
+                                <div className="bg-panel-2-foreground/10 h-32 w-48 animate-pulse rounded-xl" />
+                                <Loader2 className="text-brand-ink h-6 w-6 animate-spin" />
                             </div>
                         )}
                     </div>

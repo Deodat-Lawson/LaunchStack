@@ -161,7 +161,7 @@ export const WysiwygEditor = forwardRef<WysiwygEditorHandle, WysiwygEditorProps>
                 editorProps: {
                     attributes: {
                         class: [
-                            "focus:outline-none min-h-[900px] text-base leading-relaxed text-foreground",
+                            "focus:outline-none min-h-[900px] text-base leading-relaxed text-ink",
                             "[&_p]:my-3 [&_p]:leading-relaxed",
                             "[&_strong]:font-bold",
                             "[&_em]:italic [&_u]:underline",
@@ -171,8 +171,8 @@ export const WysiwygEditor = forwardRef<WysiwygEditorHandle, WysiwygEditorProps>
                             "[&_ul]:list-disc [&_ul]:ml-6 [&_ul]:my-3 [&_ul]:space-y-1",
                             "[&_ol]:list-decimal [&_ol]:pl-8 [&_ol]:my-3 [&_ol]:space-y-1",
                             "[&_li]:leading-relaxed",
-                            "[&_blockquote]:border-l-4 [&_blockquote]:border-muted-foreground/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-3",
-                            "[&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:bg-muted [&_code]:text-sm",
+                            "[&_blockquote]:border-l-4 [&_blockquote]:border-panel-2-foreground/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-3",
+                            "[&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:bg-panel-2 [&_code]:text-sm",
                         ].join(" "),
                     },
                     handleDOMEvents: {

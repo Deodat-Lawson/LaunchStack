@@ -42,10 +42,7 @@ const MarkdownMessage: React.FC<MarkdownMessageProps> = ({ content, className })
                         className?: string;
                     }) => {
                         const combinedClassName = inline
-                            ? clsx(
-                                  "px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[0.85em]",
-                                  codeClassName
-                              )
+                            ? clsx("px-1 py-0.5 rounded bg-panel-2 text-[0.85em]", codeClassName)
                             : clsx(
                                   "block w-full rounded bg-slate-950/90 text-slate-50 p-3 overflow-x-auto text-xs",
                                   codeClassName
@@ -61,7 +58,7 @@ const MarkdownMessage: React.FC<MarkdownMessageProps> = ({ content, className })
                         <a
                             {...props}
                             className={clsx(
-                                "text-purple-700 underline underline-offset-2 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-200",
+                                "text-brand-ink hover:text-brand-ink dark:hover:text-brand-ink underline underline-offset-2",
                                 props.className
                             )}
                             target="_blank"

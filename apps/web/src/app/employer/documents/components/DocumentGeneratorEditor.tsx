@@ -751,7 +751,7 @@ export function DocumentGeneratorEditor({
     ];
 
     return (
-        <div className="bg-background flex h-full flex-col">
+        <div className="bg-surface flex h-full flex-col">
             <ResizablePanelGroup direction="horizontal" className="flex-1">
                 {!isRewriteMode && (
                     <>
@@ -771,7 +771,7 @@ export function DocumentGeneratorEditor({
                                 }
                             />
                         </ResizablePanel>
-                        <ResizableHandle className="bg-border w-px" />
+                        <ResizableHandle className="bg-line w-px" />
                     </>
                 )}
 
@@ -780,26 +780,26 @@ export function DocumentGeneratorEditor({
                     defaultSize={activeTool && !isRewriteMode ? 50 : isRewriteMode ? 65 : 55}
                     minSize={40}
                 >
-                    <div className="bg-background flex h-full flex-col">
+                    <div className="bg-surface flex h-full flex-col">
                         {/* Toolbar */}
-                        <div className="border-border flex-shrink-0 border-b">
+                        <div className="border-line flex-shrink-0 border-b">
                             {/* Top Bar */}
-                            <div className="border-border bg-background flex items-center justify-between border-b px-4 py-3">
+                            <div className="border-line bg-surface flex items-center justify-between border-b px-4 py-3">
                                 <div className="flex items-center gap-3">
                                     <Button
                                         variant="ghost"
                                         size="sm"
                                         onClick={onBack}
-                                        className="text-muted-foreground hover:text-foreground"
+                                        className="text-ink-3 hover:text-ink"
                                     >
                                         <ArrowLeft className="mr-2 h-4 w-4" />
                                         Back
                                     </Button>
-                                    <div className="bg-border h-6 w-px" />
+                                    <div className="bg-line h-6 w-px" />
                                     <Input
                                         value={title}
                                         onChange={e => setTitle(e.target.value)}
-                                        className="text-foreground max-w-[300px] border-0 bg-transparent px-2 text-lg font-medium focus-visible:ring-0"
+                                        className="text-ink max-w-[300px] border-0 bg-transparent px-2 text-lg font-medium focus-visible:ring-0"
                                         placeholder={
                                             isRewriteMode
                                                 ? "Add a title (optional)"
@@ -809,7 +809,7 @@ export function DocumentGeneratorEditor({
                                 </div>
                                 <div className="flex items-center gap-2">
                                     {lastSaved && (
-                                        <span className="text-muted-foreground flex items-center gap-1 text-xs">
+                                        <span className="text-ink-3 flex items-center gap-1 text-xs">
                                             <CheckCircle className="h-3 w-3 text-green-500" />
                                             Saved {lastSaved.toLocaleTimeString()}
                                         </span>
@@ -839,7 +839,7 @@ export function DocumentGeneratorEditor({
                                                 document.body.removeChild(a);
                                                 URL.revokeObjectURL(url);
                                             }}
-                                            className="text-muted-foreground hover:text-foreground"
+                                            className="text-ink-3 hover:text-ink"
                                         >
                                             <Download className="mr-2 h-4 w-4" />
                                             Download DOCX
@@ -850,7 +850,7 @@ export function DocumentGeneratorEditor({
                                         size="sm"
                                         onClick={() => void handleSave()}
                                         disabled={isSaving}
-                                        className="text-muted-foreground hover:text-foreground"
+                                        className="text-ink-3 hover:text-ink"
                                     >
                                         {isSaving ? (
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -863,11 +863,11 @@ export function DocumentGeneratorEditor({
                             </div>
 
                             {/* Formatting Bar */}
-                            <div className="bg-background/50 flex items-center gap-1 px-4 py-2 backdrop-blur-sm">
+                            <div className="bg-surface/50 flex items-center gap-1 px-4 py-2 backdrop-blur-sm">
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
+                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
                                     title="Bold (Ctrl+B)"
                                     onMouseDown={e => {
                                         e.preventDefault();
@@ -883,7 +883,7 @@ export function DocumentGeneratorEditor({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
+                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
                                     title="Italic (Ctrl+I)"
                                     onMouseDown={e => {
                                         e.preventDefault();
@@ -899,7 +899,7 @@ export function DocumentGeneratorEditor({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
+                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
                                     title="Underline"
                                     onMouseDown={e => {
                                         e.preventDefault();
@@ -912,11 +912,11 @@ export function DocumentGeneratorEditor({
                                 >
                                     <Underline className="h-4 w-4" />
                                 </Button>
-                                <div className="bg-border mx-2 h-6 w-px" />
+                                <div className="bg-line mx-2 h-6 w-px" />
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
+                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
                                     title="Bullet List"
                                     onMouseDown={e => {
                                         e.preventDefault();
@@ -932,7 +932,7 @@ export function DocumentGeneratorEditor({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
+                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
                                     title="Numbered List"
                                     onMouseDown={e => {
                                         e.preventDefault();
@@ -945,11 +945,11 @@ export function DocumentGeneratorEditor({
                                 >
                                     <ListOrdered className="h-4 w-4" />
                                 </Button>
-                                <div className="bg-border mx-2 h-6 w-px" />
+                                <div className="bg-line mx-2 h-6 w-px" />
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
+                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
                                     title="Align Left"
                                     onMouseDown={e => {
                                         e.preventDefault();
@@ -961,7 +961,7 @@ export function DocumentGeneratorEditor({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
+                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
                                     title="Align Center"
                                     onMouseDown={e => {
                                         e.preventDefault();
@@ -973,7 +973,7 @@ export function DocumentGeneratorEditor({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
+                                    className="text-ink-3 hover:text-ink h-8 w-8 p-0"
                                     title="Align Right"
                                     onMouseDown={e => {
                                         e.preventDefault();
@@ -984,17 +984,17 @@ export function DocumentGeneratorEditor({
                                 </Button>
 
                                 {/* Word count */}
-                                <div className="text-muted-foreground ml-auto text-xs">
+                                <div className="text-ink-3 ml-auto text-xs">
                                     {content.split(/\s+/).filter(Boolean).length} words
                                 </div>
                             </div>
                         </div>
 
                         {/* Editor Content - Edit or Preview (single pane) */}
-                        <div className="bg-muted/30 custom-scrollbar relative flex-1 overflow-y-auto">
+                        <div className="bg-panel-2/30 custom-scrollbar relative flex-1 overflow-y-auto">
                             <div className="px-4 py-8">
                                 <div
-                                    className="bg-card border-border/50 text-foreground mx-auto min-h-[1056px] max-w-[816px] border px-24 py-20 text-base leading-relaxed shadow-xl"
+                                    className="bg-panel border-line/50 text-ink mx-auto min-h-[1056px] max-w-[816px] border px-24 py-20 text-base leading-relaxed shadow-xl"
                                     style={{ fontFamily: "Georgia, serif" }}
                                 >
                                     {/* Editor stays mounted when rewrite preview shows so Accept can replace content */}
@@ -1041,7 +1041,7 @@ export function DocumentGeneratorEditor({
                     </div>
                 </ResizablePanel>
 
-                <ResizableHandle className="bg-border w-px" />
+                <ResizableHandle className="bg-line w-px" />
 
                 {/* Tool Panel or AI Assistant - in rewrite mode always show AI Assistant */}
                 <ResizablePanel
@@ -1058,14 +1058,14 @@ export function DocumentGeneratorEditor({
                     {activeTool && activeTool !== "ai-generate" && !isRewriteMode ? (
                         renderToolPanel()
                     ) : (
-                        <div className="bg-background border-border flex h-full flex-col border-l">
+                        <div className="bg-surface border-line flex h-full flex-col border-l">
                             {/* Header */}
-                            <div className="border-border bg-background/50 flex-shrink-0 border-b p-4 backdrop-blur-md">
+                            <div className="border-line bg-surface/50 flex-shrink-0 border-b p-4 backdrop-blur-md">
                                 <div className="mb-1 flex items-center gap-2">
-                                    <Sparkles className="h-5 w-5 text-purple-600" />
-                                    <h3 className="text-foreground font-semibold">AI Assistant</h3>
+                                    <Sparkles className="text-brand-ink h-5 w-5" />
+                                    <h3 className="text-ink font-semibold">AI Assistant</h3>
                                 </div>
-                                <p className="text-muted-foreground text-xs">
+                                <p className="text-ink-3 text-xs">
                                     {isRewriteMode
                                         ? selectedText
                                             ? "Selected text - Ask AI to rewrite it"
@@ -1081,12 +1081,12 @@ export function DocumentGeneratorEditor({
                                 <div className="space-y-4">
                                     {chatMessages.length === 0 && !rewritePreview && (
                                         <div className="space-y-3">
-                                            <div className="rounded-lg border border-purple-200 bg-purple-50 p-3 dark:border-purple-800 dark:bg-purple-900/20">
-                                                <p className="text-foreground mb-2 flex items-center gap-2 text-sm font-medium">
-                                                    <Sparkles className="h-4 w-4 text-purple-600" />
+                                            <div className="border-brand bg-brand-soft rounded-lg border p-3">
+                                                <p className="text-ink mb-2 flex items-center gap-2 text-sm font-medium">
+                                                    <Sparkles className="text-brand-ink h-4 w-4" />
                                                     How to use AI
                                                 </p>
-                                                <ul className="text-muted-foreground space-y-1 text-xs">
+                                                <ul className="text-ink-3 space-y-1 text-xs">
                                                     <li>• Select text to ask AI to edit it</li>
                                                     <li>• Type requests to add new content</li>
                                                     <li>• Use quick actions below</li>
@@ -1096,7 +1096,7 @@ export function DocumentGeneratorEditor({
 
                                             {selectedText ? (
                                                 <div>
-                                                    <p className="text-muted-foreground mb-2 text-xs font-bold uppercase tracking-widest">
+                                                    <p className="text-ink-3 mb-2 text-xs font-bold uppercase tracking-widest">
                                                         EDIT SELECTED TEXT
                                                     </p>
                                                     <div className="space-y-2">
@@ -1105,7 +1105,7 @@ export function DocumentGeneratorEditor({
                                                                 key={action.label}
                                                                 variant="outline"
                                                                 size="sm"
-                                                                className="border-border text-muted-foreground hover:text-foreground w-full justify-start text-sm"
+                                                                className="border-line text-ink-3 hover:text-ink w-full justify-start text-sm"
                                                                 onClick={() =>
                                                                     void handleAIAction(
                                                                         action.action
@@ -1120,7 +1120,7 @@ export function DocumentGeneratorEditor({
                                                 </div>
                                             ) : (
                                                 <div>
-                                                    <p className="text-muted-foreground mb-2 text-xs font-bold uppercase tracking-widest">
+                                                    <p className="text-ink-3 mb-2 text-xs font-bold uppercase tracking-widest">
                                                         QUICK ACTIONS
                                                     </p>
                                                     <div className="space-y-2">
@@ -1129,7 +1129,7 @@ export function DocumentGeneratorEditor({
                                                                 key={action.label}
                                                                 variant="outline"
                                                                 size="sm"
-                                                                className="border-border text-muted-foreground hover:text-foreground w-full justify-start text-sm"
+                                                                className="border-line text-ink-3 hover:text-ink w-full justify-start text-sm"
                                                                 onClick={() =>
                                                                     void handleAIAction(
                                                                         action.action
@@ -1137,7 +1137,7 @@ export function DocumentGeneratorEditor({
                                                                 }
                                                                 disabled={isProcessing}
                                                             >
-                                                                <Sparkles className="mr-2 h-3 w-3 text-purple-600" />
+                                                                <Sparkles className="text-brand-ink mr-2 h-3 w-3" />
                                                                 {action.label}
                                                             </Button>
                                                         ))}
@@ -1151,23 +1151,23 @@ export function DocumentGeneratorEditor({
                                         <div
                                             key={index}
                                             className={cn(
-                                                "border-border/50 rounded-2xl border p-3 shadow-sm",
+                                                "border-line/50 rounded-2xl border p-3 shadow-sm",
                                                 message.role === "user"
-                                                    ? "ml-4 border-purple-200/50 bg-purple-100 dark:bg-purple-900/30"
-                                                    : "bg-muted/50 mr-4"
+                                                    ? "border-brand-soft bg-brand-soft ml-4"
+                                                    : "bg-panel-2/50 mr-4"
                                             )}
                                         >
-                                            <p className="text-muted-foreground mb-1 text-[10px] font-black uppercase tracking-widest">
+                                            <p className="text-ink-3 mb-1 text-[10px] font-black uppercase tracking-widest">
                                                 {message.role === "user" ? "You" : "AI Assistant"}
                                             </p>
-                                            <p className="text-foreground text-sm leading-relaxed">
+                                            <p className="text-ink text-sm leading-relaxed">
                                                 {message.content}
                                             </p>
                                         </div>
                                     ))}
 
                                     {isProcessing && (
-                                        <div className="text-muted-foreground flex animate-pulse items-center gap-2 text-sm">
+                                        <div className="text-ink-3 flex animate-pulse items-center gap-2 text-sm">
                                             <Loader2 className="h-4 w-4 animate-spin" />
                                             AI is processing...
                                         </div>
@@ -1176,14 +1176,14 @@ export function DocumentGeneratorEditor({
                             </div>
 
                             {/* Input */}
-                            <div className="border-border bg-background flex-shrink-0 border-t p-4">
+                            <div className="border-line bg-surface flex-shrink-0 border-t p-4">
                                 <div className="space-y-2">
                                     {selectedText && (
-                                        <div className="rounded-xl border border-purple-100/50 bg-purple-50 p-2 text-[10px] dark:border-purple-900/50 dark:bg-purple-900/20">
-                                            <p className="mb-1 font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">
+                                        <div className="border-brand-soft bg-brand-soft dark:border-brand-soft rounded-xl border p-2 text-[10px]">
+                                            <p className="text-brand-ink mb-1 font-black uppercase tracking-widest">
                                                 Selected Text
                                             </p>
-                                            <p className="text-muted-foreground line-clamp-2 italic">
+                                            <p className="text-ink-3 line-clamp-2 italic">
                                                 &quot;{selectedText}&quot;
                                             </p>
                                         </div>
@@ -1196,7 +1196,7 @@ export function DocumentGeneratorEditor({
                                         }
                                         value={aiPrompt}
                                         onChange={e => setAiPrompt(e.target.value)}
-                                        className="bg-muted/30 border-border resize-none rounded-xl focus-visible:ring-purple-500"
+                                        className="bg-panel-2/30 border-line focus-visible:ring-brand resize-none rounded-xl"
                                         rows={3}
                                         onKeyDown={e => {
                                             if (e.key === "Enter" && !e.shiftKey) {
@@ -1208,7 +1208,7 @@ export function DocumentGeneratorEditor({
                                     <Button
                                         onClick={() => void handleAIRequest()}
                                         disabled={!aiPrompt.trim() || isProcessing}
-                                        className="w-full rounded-xl bg-purple-600 text-white shadow-lg shadow-purple-500/20 hover:bg-purple-700"
+                                        className="bg-brand shadow-brand-glow hover:bg-brand-hi w-full rounded-xl text-white shadow-lg"
                                         size="sm"
                                     >
                                         {isProcessing ? (

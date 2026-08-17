@@ -52,7 +52,7 @@ export function OutlineTreeItem({
             data-item-id={item.id}
             className={cn(
                 "group flex items-center gap-1.5 rounded-md py-1.5 transition-colors",
-                isFocused ? "bg-accent ring-ring/30 ring-1" : "hover:bg-muted/50"
+                isFocused ? "bg-brand-soft ring-brand/30 ring-1" : "hover:bg-panel-2/50"
             )}
             style={{ paddingLeft: `${depth * 20 + 12}px`, paddingRight: "8px" }}
         >
@@ -78,7 +78,7 @@ export function OutlineTreeItem({
 
             {/* Level icon */}
             {styles.showIcon && (
-                <span className="text-muted-foreground flex-shrink-0">
+                <span className="text-ink-3 flex-shrink-0">
                     {item.level === 1 ? (
                         <FileText className={styles.iconSize} />
                     ) : (
@@ -111,7 +111,7 @@ export function OutlineTreeItem({
 
             {/* Children count badge */}
             {hasChildren && !isEditing && (
-                <span className="bg-muted text-muted-foreground flex-shrink-0 rounded-full px-1.5 text-[10px] tabular-nums">
+                <span className="bg-panel-2 text-ink-3 flex-shrink-0 rounded-full px-1.5 text-[10px] tabular-nums">
                     {childCount}
                 </span>
             )}

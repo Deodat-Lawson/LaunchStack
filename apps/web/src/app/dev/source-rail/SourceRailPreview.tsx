@@ -70,7 +70,6 @@ export function SourceRailPreview() {
 
     return (
         <div
-            className="lsw-root"
             style={{
                 height: "100vh",
                 background: "var(--bg)",

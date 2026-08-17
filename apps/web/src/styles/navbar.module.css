@@ -1,14 +1,14 @@
 /* Navigation */
 .navContainer {
-    @apply bg-slate-950/80 backdrop-blur-md border-b border-purple-500/20 sticky top-0 z-50;
+    @apply sticky top-0 z-50 border-b border-purple-500/20 bg-slate-950/80 backdrop-blur-md;
 }
 
 .navContent {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 
 .navWrapper {
-    @apply flex justify-between h-16 items-center;
+    @apply flex h-16 items-center justify-between;
 }
 
 .logoContainer {
@@ -16,11 +16,11 @@
 }
 
 .iconPurple {
-    @apply w-8 h-8 text-purple-400;
+    @apply h-8 w-8 text-purple-400;
 }
 
 .logoText {
-    @apply text-2xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-2xl font-bold text-transparent;
 }
 
 .navLinks {
@@ -32,7 +32,7 @@
 }
 
 .userName {
-    @apply text-sm text-gray-300 truncate max-w-[140px] sm:max-w-[180px];
+    @apply max-w-[140px] truncate text-sm text-gray-300 sm:max-w-[180px];
 }
 
 :global([data-theme="light"]) .userName {
@@ -41,7 +41,7 @@
 
 /* Buttons */
 .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer border-0 text-sm flex items-center gap-2;
+    @apply flex cursor-pointer items-center gap-2 rounded-lg border-0 px-4 py-2 text-sm font-medium transition-all duration-200;
 }
 
 .btnGhost {
@@ -49,17 +49,16 @@
 }
 
 .btnSecondary {
-    @apply bg-transparent text-purple-400 border border-purple-500/40
-    hover:bg-purple-500/10 hover:border-purple-400 hover:-translate-y-0.5;
+    @apply border border-purple-500/40 bg-transparent text-purple-400 hover:-translate-y-0.5 hover:border-purple-400 hover:bg-purple-500/10;
 }
 
 .btnPrimary {
-    @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:opacity-90 hover:-translate-y-0.5;
+    @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:-translate-y-0.5 hover:opacity-90;
 }
 
 /* Light Theme Overrides */
 :global([data-theme="light"]) .navContainer {
-    @apply bg-white/80 border-b border-purple-200;
+    @apply border-b border-purple-200 bg-white/80;
 }
 
 :global([data-theme="light"]) .btnGhost {
@@ -67,7 +66,7 @@
 }
 
 :global([data-theme="light"]) .btnSecondary {
-    @apply text-purple-600 border-purple-300 hover:bg-purple-50 hover:border-purple-500;
+    @apply border-purple-300 text-purple-600 hover:border-purple-500 hover:bg-purple-50;
 }
 
 :global([data-theme="light"]) .iconPurple {
@@ -93,23 +92,23 @@
     .navLinks {
         @apply space-x-1;
     }
-    
+
     .btn {
         @apply px-2 py-1.5 text-xs;
     }
-    
+
     /* Hide text on smaller buttons, keep icons */
     .btn:not(.btnPrimary) {
         @apply hidden;
     }
-    
+
     /* Hide user name on mobile, keep avatar */
     .userName {
         @apply hidden;
     }
-    
+
     /* Keep theme toggle, Sign In, and Get Started visible */
-    .navLinks > :nth-last-child(-n+3) {
+    .navLinks > :nth-last-child(-n + 3) {
         @apply flex;
     }
 }
@@ -119,4 +118,3 @@
         @apply text-lg;
     }
 }
-

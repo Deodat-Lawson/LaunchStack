@@ -17,7 +17,7 @@ export default function LoadingDoc() {
                 </div>
 
                 <div className="space-y-4 p-6">
-                    <div className="h-4 animate-pulse rounded-lg bg-purple-200/50"></div>
+                    <div className="bg-brand-soft h-4 animate-pulse rounded-lg"></div>
                     <div className="space-y-2">
                         <div className="h-3 animate-pulse rounded bg-gray-200/50"></div>
                         <div className="h-3 w-3/4 animate-pulse rounded bg-gray-200/50"></div>
@@ -33,15 +33,15 @@ export default function LoadingDoc() {
             <main className={styles.mainLoadingContent}>
                 <div className={styles.loadingContent}>
                     <div className="relative mb-8">
-                        <div className="relative h-24 w-24 animate-spin rounded-full border-4 border-purple-200">
-                            <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-purple-600"></div>
+                        <div className="border-brand relative h-24 w-24 animate-spin rounded-full border-4">
+                            <div className="border-t-brand absolute inset-0 animate-spin rounded-full border-4 border-transparent"></div>
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <Building2 className="h-10 w-10 animate-pulse text-purple-600" />
+                            <Building2 className="text-brand-ink h-10 w-10 animate-pulse" />
                         </div>
                     </div>
 
-                    <h2 className="mb-4 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-3xl font-bold text-transparent">
+                    <h2 className="from-brand to-brand-deep mb-4 bg-gradient-to-r bg-clip-text text-3xl font-bold text-transparent">
                         Loading Management Dashboard
                     </h2>
 
@@ -50,7 +50,7 @@ export default function LoadingDoc() {
                     </p>
 
                     <div className="h-2 w-64 overflow-hidden rounded-full bg-gray-200">
-                        <div className="h-full animate-pulse rounded-full bg-gradient-to-r from-purple-600 to-indigo-600"></div>
+                        <div className="from-brand to-brand-deep h-full animate-pulse rounded-full bg-gradient-to-r"></div>
                     </div>
                 </div>
             </main>

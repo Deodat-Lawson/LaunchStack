@@ -179,7 +179,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                     <summary className="cursor-pointer text-slate-600 dark:text-slate-400">
                         Raw Mermaid code
                     </summary>
-                    <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-lg bg-slate-100 p-3 text-[10px] dark:bg-slate-900">
+                    <pre className="bg-panel-2 mt-2 overflow-x-auto whitespace-pre-wrap rounded-lg p-3 text-[10px]">
                         {code}
                     </pre>
                 </details>
@@ -188,13 +188,13 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
     }
 
     return (
-        <div className="border-border from-background to-muted/20 overflow-hidden rounded-xl border bg-gradient-to-b shadow-sm">
+        <div className="border-line from-background to-muted/20 overflow-hidden rounded-xl border bg-gradient-to-b shadow-sm">
             {/* Download toolbar */}
             {!loading && (
-                <div className="border-border bg-muted/30 flex items-center justify-end gap-1.5 border-b px-4 py-2">
+                <div className="border-line bg-panel-2/30 flex items-center justify-end gap-1.5 border-b px-4 py-2">
                     <button
                         onClick={handleDownloadSvg}
-                        className="border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] font-medium shadow-sm transition"
+                        className="border-line bg-surface text-ink-3 hover:bg-panel-2 hover:text-ink inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] font-medium shadow-sm transition"
                         title="Download as SVG"
                     >
                         <Download className="h-3 w-3" />
@@ -202,7 +202,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
                     </button>
                     <button
                         onClick={handleDownloadPng}
-                        className="border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] font-medium shadow-sm transition"
+                        className="border-line bg-surface text-ink-3 hover:bg-panel-2 hover:text-ink inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] font-medium shadow-sm transition"
                         title="Download as PNG"
                     >
                         <ImageIcon className="h-3 w-3" />
@@ -214,9 +214,7 @@ export function MermaidDiagram({ code, repoName }: MermaidDiagramProps) {
             {/* Diagram container */}
             <div className="overflow-x-auto p-6">
                 {loading && (
-                    <p className="text-muted-foreground py-12 text-center text-sm">
-                        Rendering diagram...
-                    </p>
+                    <p className="text-ink-3 py-12 text-center text-sm">Rendering diagram...</p>
                 )}
                 <div ref={containerRef} />
             </div>

@@ -64,17 +64,15 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                             <FileText className="h-5 w-5" />
                         </div>
                         <div>
-                            <h2 className="text-foreground text-sm font-bold uppercase tracking-widest">
+                            <h2 className="text-ink text-sm font-bold uppercase tracking-widest">
                                 Document Statistics
                             </h2>
-                            <p className="text-muted-foreground mt-0.5 text-xs">
-                                Click a row to view details
-                            </p>
+                            <p className="text-ink-3 mt-0.5 text-xs">Click a row to view details</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="relative">
-                            <Search className="text-muted-foreground absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
+                            <Search className="text-ink-3 absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
                             <Input
                                 placeholder="Search documents..."
                                 value={searchTerm}
@@ -92,11 +90,11 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                 </div>
 
                 {/* Scrollable Table Container */}
-                <div className="border-border bg-card relative overflow-hidden rounded-xl border">
+                <div className="border-line bg-panel relative overflow-hidden rounded-xl border">
                     <div className="scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent max-h-[450px] overflow-auto">
                         <Table>
                             <TableHeader className="sticky top-0 z-20">
-                                <TableRow className="bg-muted/80 border-b backdrop-blur-sm">
+                                <TableRow className="bg-panel-2/80 border-b backdrop-blur-sm">
                                     <TableHead className="w-[45%] py-3 text-[11px] font-bold uppercase tracking-wider">
                                         Document
                                     </TableHead>
@@ -120,14 +118,14 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                                             className={cn(
                                                 "group cursor-pointer transition-all duration-150",
                                                 "hover:bg-blue-50/50 dark:hover:bg-blue-950/20",
-                                                index % 2 === 0 ? "bg-background" : "bg-muted/20"
+                                                index % 2 === 0 ? "bg-surface" : "bg-panel-2/20"
                                             )}
                                             onClick={() => handleRowClick(doc)}
                                         >
                                             <TableCell className="py-3">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="bg-muted rounded-lg p-1.5 transition-colors group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30">
-                                                        <FileText className="text-muted-foreground h-4 w-4 transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+                                                    <div className="bg-panel-2 rounded-lg p-1.5 transition-colors group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30">
+                                                        <FileText className="text-ink-3 h-4 w-4 transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400" />
                                                     </div>
                                                     <span
                                                         className="max-w-[280px] truncate text-sm font-medium transition-colors group-hover:text-blue-700 dark:group-hover:text-blue-300"
@@ -147,25 +145,25 @@ export function DocumentStatsTable({ documents }: DocumentStatsTableProps) {
                                             </TableCell>
                                             <TableCell className="py-3 text-right">
                                                 <div className="flex items-center justify-end gap-1.5">
-                                                    <Eye className="text-muted-foreground h-3.5 w-3.5" />
+                                                    <Eye className="text-ink-3 h-3.5 w-3.5" />
                                                     <span className="font-mono text-sm font-medium">
                                                         {doc.views}
                                                     </span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground py-3 text-right text-sm">
+                                            <TableCell className="text-ink-3 py-3 text-right text-sm">
                                                 {formatRelativeTime(doc.lastViewedAt)}
                                             </TableCell>
                                             <TableCell className="py-3">
-                                                <ChevronRight className="text-muted-foreground/50 h-4 w-4 transition-all group-hover:translate-x-0.5 group-hover:text-blue-500" />
+                                                <ChevronRight className="text-ink-3/50 h-4 w-4 transition-all group-hover:translate-x-0.5 group-hover:text-blue-500" />
                                             </TableCell>
                                         </TableRow>
                                     ))
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan={5} className="h-32">
-                                            <div className="text-muted-foreground flex flex-col items-center justify-center gap-2">
-                                                <FileText className="text-muted-foreground/30 h-10 w-10" />
+                                            <div className="text-ink-3 flex flex-col items-center justify-center gap-2">
+                                                <FileText className="text-ink-3/30 h-10 w-10" />
                                                 <p className="text-sm font-medium">
                                                     No documents found
                                                 </p>

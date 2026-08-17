@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 export default function SigninLayout({ children }: { children: React.ReactNode }) {
     return (
         <div
-            className="lsw-root"
             style={{
                 minHeight: "100vh",
                 width: "100%",

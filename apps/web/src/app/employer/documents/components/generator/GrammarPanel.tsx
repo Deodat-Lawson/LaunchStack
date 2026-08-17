@@ -161,11 +161,11 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
     const pendingSuggestions = visibleSuggestions.filter(s => !appliedIds.has(s.id));
 
     return (
-        <div className="bg-background flex h-full flex-col">
+        <div className="bg-surface flex h-full flex-col">
             {/* Header */}
-            <div className="border-border border-b p-4">
+            <div className="border-line border-b p-4">
                 <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-foreground flex items-center gap-2 font-semibold">
+                    <h3 className="text-ink flex items-center gap-2 font-semibold">
                         <SpellCheck className="h-4 w-4" />
                         Grammar & Style
                     </h3>
@@ -192,7 +192,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                         <Button
                             onClick={runCheck}
                             disabled={isChecking || !content.trim()}
-                            className="bg-purple-600 hover:bg-purple-700"
+                            className="bg-brand hover:bg-brand-hi"
                         >
                             {isChecking ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -224,7 +224,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
             {/* Score & Stats */}
             {overallScore !== null && (
-                <div className="border-border border-b p-4">
+                <div className="border-line border-b p-4">
                     <div className="mb-2 flex items-center justify-between">
                         <span className="text-sm font-medium">Quality Score</span>
                         <span
@@ -241,7 +241,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                         </span>
                     </div>
                     <Progress value={overallScore} className="h-2" />
-                    {summary && <p className="text-muted-foreground mt-2 text-xs">{summary}</p>}
+                    {summary && <p className="text-ink-3 mt-2 text-xs">{summary}</p>}
 
                     {/* Stats Badges */}
                     <div className="mt-3 flex gap-2">
@@ -269,7 +269,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
             {/* Apply All Button */}
             {pendingSuggestions.length > 0 && (
-                <div className="border-border border-b p-4">
+                <div className="border-line border-b p-4">
                     <Button variant="outline" size="sm" className="w-full" onClick={handleApplyAll}>
                         <Check className="mr-2 h-4 w-4" />
                         Apply All ({pendingSuggestions.length})
@@ -281,7 +281,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
             <ScrollArea className="flex-1">
                 <div className="space-y-3 p-4">
                     {!isChecking && suggestions.length === 0 && (
-                        <div className="text-muted-foreground flex flex-col items-center justify-center py-12">
+                        <div className="text-ink-3 flex flex-col items-center justify-center py-12">
                             <SpellCheck className="mb-4 h-12 w-12 opacity-20" />
                             <p className="text-sm">No issues found</p>
                             <p className="mt-1 text-xs">Run a check to analyze your content</p>
@@ -290,10 +290,8 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
                     {isChecking && (
                         <div className="flex flex-col items-center justify-center py-12">
-                            <Loader2 className="mb-4 h-8 w-8 animate-spin text-purple-500" />
-                            <p className="text-muted-foreground text-sm">
-                                Analyzing your content...
-                            </p>
+                            <Loader2 className="text-brand-ink mb-4 h-8 w-8 animate-spin" />
+                            <p className="text-ink-3 text-sm">Analyzing your content...</p>
                         </div>
                     )}
 
@@ -322,12 +320,12 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                                             >
                                                 {suggestion.type}
                                             </Badge>
-                                            <span className="text-muted-foreground text-[10px]">
+                                            <span className="text-ink-3 text-[10px]">
                                                 {config.label}
                                             </span>
                                         </div>
                                         <p className="text-sm">
-                                            <span className="text-muted-foreground line-through">
+                                            <span className="text-ink-3 line-through">
                                                 {suggestion.original}
                                             </span>
                                             {" → "}
@@ -335,7 +333,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
                                                 {suggestion.suggestion}
                                             </span>
                                         </p>
-                                        <p className="text-muted-foreground mt-1 text-xs">
+                                        <p className="text-ink-3 mt-1 text-xs">
                                             {suggestion.explanation}
                                         </p>
                                     </div>
@@ -378,7 +376,7 @@ export function GrammarPanel({ content, onApplySuggestion, onClose }: GrammarPan
 
             {/* Footer */}
             {suggestions.length > 0 && (
-                <div className="border-border border-t p-4">
+                <div className="border-line border-t p-4">
                     <Button
                         variant="outline"
                         size="sm"

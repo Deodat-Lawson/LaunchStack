@@ -4,8 +4,7 @@
 }
 
 .profileButton {
-    @apply flex items-center justify-center rounded-full bg-gray-200 p-2 cursor-pointer
-    hover:bg-gray-300 transition-colors;
+    @apply flex cursor-pointer items-center justify-center rounded-full bg-gray-200 p-2 transition-colors hover:bg-gray-300;
     width: 40px;
     height: 40px;
     border: none;
@@ -13,15 +12,15 @@
 }
 
 .profileImage {
-    @apply w-full h-full object-cover rounded-full;
+    @apply h-full w-full rounded-full object-cover;
 }
 
 .defaultAvatar {
-    @apply w-6 h-6 text-gray-600;
+    @apply h-6 w-6 text-gray-600;
 }
 
 .dropdownMenu {
-    @apply absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg p-2;
+    @apply absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white p-2 shadow-lg;
     z-index: 50;
 }
 
@@ -30,11 +29,11 @@
 }
 
 .userName {
-    @apply block text-gray-900 font-semibold;
+    @apply block font-semibold text-gray-900;
 }
 
 .userEmail {
-    @apply block text-gray-500 text-sm;
+    @apply block text-sm text-gray-500;
 }
 
 .divider {
@@ -42,6 +41,5 @@
 }
 
 .dropdownItem {
-    @apply block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-100
-    rounded-md transition-colors;
+    @apply block w-full rounded-md px-3 py-2 text-left text-gray-700 transition-colors hover:bg-gray-100;
 }

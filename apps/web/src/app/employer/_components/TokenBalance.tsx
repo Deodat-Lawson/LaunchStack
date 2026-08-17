@@ -35,7 +35,7 @@ export function TokenBalance() {
             className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                 isLow
                     ? "border-red-200 bg-red-50 text-red-600 dark:border-red-800/50 dark:bg-red-950/40 dark:text-red-400"
-                    : "border-purple-200 bg-purple-50 text-purple-600 dark:border-purple-800/50 dark:bg-purple-950/40 dark:text-purple-400"
+                    : "border-brand bg-brand-soft text-brand-ink dark:border-brand-soft"
             }`}
             title={`${balance.toLocaleString()} tokens remaining`}
         >

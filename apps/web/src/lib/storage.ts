@@ -506,54 +506,6 @@ export async function deleteManyByRef(refs: readonly ObjectRef[]): Promise<Delet
   return results;
 }
 
-function recoverS3KeyFromUrl(url: string): string | null {
-  const endpoint =
-    env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
-  const bucket = env.server.S3_BUCKET_NAME;
-  if (!endpoint || !bucket) return null;
-
-  try {
-    const target = new URL(url);
-    const endpointUrl = new URL(endpoint);
-    if (target.origin !== endpointUrl.origin) return null;
-
-    const endpointPath = endpointUrl.pathname.replace(/\/+$/, "");
-    let objectPath = target.pathname;
-
-    if (endpointPath) {
-      if (!objectPath.startsWith(endpointPath)) {
-        return null;
-      }
-      objectPath = objectPath.slice(endpointPath.length);
-    }
-
-    objectPath = objectPath.replace(/^\/+/, "");
-    const bucketPrefix = `${bucket}/`;
-    if (!objectPath.startsWith(bucketPrefix)) {
-      return null;
-    }
-
-    const key = objectPath.slice(bucketPrefix.length);
-    return key || null;
-  } catch {
-    return null;
-  }
-}
-
-function recoverBlobPathnameFromUrl(url: string): string | null {
-  try {
-    const target = new URL(url);
-    if (!target.hostname.includes(".blob.vercel-storage.com")) {
-      return null;
-    }
-
-    const pathname = target.pathname.replace(/^\/+/, "");
-    return pathname.length > 0 ? pathname : null;
-  } catch {
-    return null;
-  }
-}
-
 export async function deleteObjects(keys: string[]): Promise<DeleteResult[]> {
   if (keys.length === 0) return [];
 
@@ -583,39 +535,6 @@ export async function deleteObjects(keys: string[]): Promise<DeleteResult[]> {
  */
 export async function deleteFileByUrl(url: string): Promise<void> {
   if (!url) return;
-
-  // Canonical database URL path — route through database delete branch.
-  if (/^\/api\/files\/\d+$/.test(url)) {
-    await deleteFile(url, "database");
-    return;
-  }
-
-  const blobPathname = recoverBlobPathnameFromUrl(url);
-  if (blobPathname) {
-    const result = await deleteFileByRef({
-      adapter: "vercel-blob",
-      storageLocationId: resolveStorageLocationId("vercel-blob"),
-      key: blobPathname,
-    });
-
-    if (result.outcome === "retryable" || result.outcome === "blocked" || result.outcome === "rejected") {
-      throw new StorageError(result.message ?? `Delete failed with outcome=${result.outcome}`, "vercel-blob");
-    }
-    return;
-  }
-
-  const s3Key = recoverS3KeyFromUrl(url);
-  if (s3Key) {
-    const result = await deleteFileByRef({
-      adapter: "s3",
-      storageLocationId: resolveStorageLocationId("s3"),
-      key: s3Key,
-    });
-    if (result.outcome === "retryable" || result.outcome === "blocked" || result.outcome === "rejected") {
-      throw new StorageError(result.message ?? `Delete failed with outcome=${result.outcome}`, "s3");
-    }
-    return;
-  }
 
   const { promoteLegacyUrlToRef } = await import("~/server/storage/legacy-promote");
   const promoted = promoteLegacyUrlToRef({ value: url });

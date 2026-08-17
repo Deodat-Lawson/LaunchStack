@@ -8,6 +8,7 @@ This document captures the frozen storage contract used by server-side upload/de
 - The only allowed URL-to-ref conversion path is [apps/web/src/server/storage/legacy-promote.ts](../apps/web/src/server/storage/legacy-promote.ts).
 - `storageLocationId` is server-resolved from configured adapter environment.
 - Clients do not guess, derive, or mint `storageLocationId`.
+- `ObjectRef` is opaque and immutable once minted.
 
 ## ObjectRef
 
@@ -35,3 +36,36 @@ Deletion uses per-ref outcome reporting (`DeleteResult.outcome`):
 - `rejected`
 
 `deleteRef` / `deleteMany` return outcomes instead of a bare throw.
+
+Worker/state mapping (frozen):
+
+- `deleted` → `DELETED`
+- `not_found` → `NOT_FOUND` (clean)
+- `retryable` → `WAITING_RETRY`
+- `blocked` → `BLOCKED` / manual review
+- `rejected` → `QUARANTINED` / quarantined
+
+Blocked/rejected outcomes are terminal for that adapter attempt and must not fall
+through to another adapter.
+
+## Lifecycle feature flags (exactly two)
+
+- `STORAGE_DELETION_LIFECYCLE_ENABLED` (intake gate, default off)
+- `STORAGE_DELETION_WORKER_ENABLED` (worker gate, default off)
+
+When intake is disabled, APIs return HTTP `503`/`409` and do not bypass into
+legacy direct-delete behavior.
+
+## Deletion API status enum (frozen)
+
+- `queued`
+- `completed`
+- `partial`
+- `manual_review`
+- `quarantined`
+
+Dominance rules:
+
+- `quarantined` dominates when required items are quarantined without approved bypass
+- `manual_review` dominates when any item is blocked
+- `completed` only when all required items are `DELETED`/`NOT_FOUND` and relational purge is done

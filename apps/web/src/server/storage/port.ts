@@ -9,14 +9,22 @@
  * interface exported by @launchstack/core.
  */
 
-import type { StoragePort, UploadInput, UploadResult } from "@launchstack/core/storage";
+import type {
+  DeleteResult,
+  ObjectRef,
+  StoragePort,
+  UploadInput,
+  UploadResult,
+} from "@launchstack/core/storage";
 
 import {
+  deleteFileByRef,
+  deleteManyByRef,
   uploadFile,
   fetchFile,
-  deleteFileByUrl,
   resolveStorageBackend,
 } from "~/lib/storage";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 export function createAppStoragePort(): StoragePort {
   const provider = resolveStorageBackend();
@@ -36,17 +44,37 @@ export function createAppStoragePort(): StoragePort {
       return {
         url: result.url,
         pathname: result.pathname,
+        ref: result.ref,
         contentType: result.contentType,
         provider: result.provider,
       };
+    },
+
+    deleteRef(ref: ObjectRef): Promise<DeleteResult> {
+      return deleteFileByRef(ref);
+    },
+
+    deleteMany(refs: readonly ObjectRef[]): Promise<DeleteResult[]> {
+      return deleteManyByRef(refs);
     },
 
     download(urlOrKey, init) {
       return fetchFile(urlOrKey, init);
     },
 
-    delete(urlOrKey) {
-      return deleteFileByUrl(urlOrKey);
+    /** @deprecated Use deleteRef/deleteMany. Kept as URL-based migration shim. */
+    async delete(urlOrKey) {
+      if (!urlOrKey) return;
+
+      const promoted = promoteLegacyUrlToRef({ value: urlOrKey });
+      if (!promoted.ok) {
+        throw new Error(`Ref promotion failed (${promoted.reason})`);
+      }
+
+      const result = await deleteFileByRef(promoted.ref);
+      if (result.outcome === "retryable" || result.outcome === "blocked" || result.outcome === "rejected") {
+        throw new Error(result.message ?? `Delete failed with outcome=${result.outcome}`);
+      }
     },
   };
 }

@@ -50,10 +50,30 @@ function toAbsoluteUrl(raw: string): URL | null {
 }
 
 function promoteDatabaseUrl(raw: string): ObjectRef | null {
-  const dbPathMatch = raw.match(/^(?:https?:\/\/[^/]+)?\/api\/files\/(\d+)$/);
-  if (!dbPathMatch?.[1]) return null;
+  let key: string | null = null;
 
-  const key = dbPathMatch[1];
+  if (raw.startsWith("/")) {
+    const relativeMatch = raw.match(/^\/api\/files\/(\d+)$/);
+    key = relativeMatch?.[1] ?? null;
+  } else if (raw.startsWith("http://") || raw.startsWith("https://")) {
+    const target = toAbsoluteUrl(raw);
+    if (!target) return null;
+
+    const absoluteMatch = target.pathname.match(/^\/api\/files\/(\d+)$/);
+    if (!absoluteMatch?.[1]) return null;
+
+    // Only allow absolute DB URLs from our own public app origin.
+    // This avoids ambiguities like Blob URLs that can also contain /api/files/*.
+    const appBase = env.server.APP_PUBLIC_URL;
+    if (!appBase) return null;
+
+    const appUrl = toAbsoluteUrl(appBase);
+    if (!appUrl || target.origin !== appUrl.origin) return null;
+
+    key = absoluteMatch[1];
+  }
+
+  if (!key) return null;
 
   return {
     adapter: "database",

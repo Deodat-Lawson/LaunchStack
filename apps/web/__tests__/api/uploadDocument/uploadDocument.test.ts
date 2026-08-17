@@ -2,6 +2,7 @@ import { POST } from "~/app/api/uploadDocument/route";
 import { validateRequestBody } from "~/lib/validation";
 import { db } from "~/server/db";
 import { triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
+import { clearRateLimitStore, destroyRateLimitStore } from "~/lib/rate-limiter";
 
 jest.mock("~/lib/validation", () => {
   const actual = jest.requireActual("~/lib/validation");
@@ -67,6 +68,10 @@ jest.mock("~/server/engine", () => ({
   getEngine: jest.fn().mockReturnValue({}),
 }));
 
+jest.mock("~/lib/active-workspace", () => ({
+  resolveActiveCompanyForUser: jest.fn(async (_userDbId: number, fallbackCompanyId: bigint) => fallbackCompanyId),
+}));
+
 // The upload path calls getCompanyReindexState() which uses getDb() from
 // @launchstack/core/db. Register a stub so getDb() doesn't throw. Returning
 // an empty array is fine — resolveIngestIndexKey() will resolve to null and
@@ -85,6 +90,45 @@ configureDatabase({
 describe("POST /api/uploadDocument", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    clearRateLimitStore();
+  });
+
+  afterAll(() => {
+    destroyRateLimitStore();
+  });
+
+  it("rejects UploadThing registration without canonical ref", async () => {
+    (validateRequestBody as jest.Mock).mockResolvedValue({
+      success: true,
+      data: {
+        userId: "user-1",
+        documentName: "Example Document",
+        documentUrl: "https://utfs.io/f/example-key",
+        category: "contracts",
+        storageAdapter: "uploadthing",
+      },
+    });
+
+    const request = new Request("http://localhost/api/uploadDocument", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: "user-1",
+        documentName: "Example Document",
+        documentUrl: "https://utfs.io/f/example-key",
+        category: "contracts",
+        storageAdapter: "uploadthing",
+      }),
+    });
+
+    const response = await POST(request);
+    const json = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(json.error).toContain("canonical object ref");
+    expect(db.select).not.toHaveBeenCalled();
+    expect(db.insert).not.toHaveBeenCalled();
+    expect(triggerDocumentProcessing).not.toHaveBeenCalled();
   });
 
   it("uploads and processes a document successfully", async () => {
@@ -99,7 +143,7 @@ describe("POST /api/uploadDocument", () => {
     });
 
     const mockWhere = jest.fn().mockResolvedValue([
-      { userId: "user-1", companyId: 5 },
+      { id: 101, userId: "user-1", companyId: 5 },
     ]);
 
     const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
@@ -187,7 +231,7 @@ describe("POST /api/uploadDocument", () => {
     });
 
     const mockWhere = jest.fn().mockResolvedValue([
-      { userId: "user-1", companyId: 9 },
+      { id: 102, userId: "user-1", companyId: 9 },
     ]);
 
     const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });
@@ -269,7 +313,7 @@ describe("POST /api/uploadDocument", () => {
       });
 
       const mockWhere = jest.fn().mockResolvedValue([
-        { userId: "user-2", companyId: 7 },
+        { id: 103, userId: "user-2", companyId: 7 },
       ]);
 
       const mockFrom = jest.fn().mockReturnValue({ where: mockWhere });

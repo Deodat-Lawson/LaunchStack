@@ -75,6 +75,30 @@ export function createInMemoryStoragePort(
     return stored;
   };
 
+  const deleteRefImpl = async (ref: ObjectRef): Promise<DeleteResult> => {
+    const refKey = makeRefKey(ref);
+    if (!objects.has(refKey)) {
+      return { ref, outcome: "not_found" };
+    }
+
+    objects.delete(refKey);
+    for (const [url, key] of urlToRefKey.entries()) {
+      if (key === refKey) {
+        urlToRefKey.delete(url);
+      }
+    }
+
+    return { ref, outcome: "deleted" };
+  };
+
+  const deleteManyImpl = async (refs: readonly ObjectRef[]): Promise<DeleteResult[]> => {
+    const results: DeleteResult[] = [];
+    for (const ref of refs) {
+      results.push(await deleteRefImpl(ref));
+    }
+    return results;
+  };
+
   return {
     provider,
 
@@ -126,36 +150,16 @@ export function createInMemoryStoragePort(
       });
     },
 
-    async deleteRef(ref: ObjectRef): Promise<DeleteResult> {
-      const refKey = makeRefKey(ref);
-      if (!objects.has(refKey)) {
-        return { ref, outcome: "not_found" };
-      }
+    deleteRef: deleteRefImpl,
 
-      objects.delete(refKey);
-      for (const [url, key] of urlToRefKey.entries()) {
-        if (key === refKey) {
-          urlToRefKey.delete(url);
-        }
-      }
-
-      return { ref, outcome: "deleted" };
-    },
-
-    async deleteMany(refs: readonly ObjectRef[]): Promise<DeleteResult[]> {
-      const results: DeleteResult[] = [];
-      for (const ref of refs) {
-        results.push(await this.deleteRef(ref));
-      }
-      return results;
-    },
+    deleteMany: deleteManyImpl,
 
     async delete(urlOrKey: string): Promise<void> {
       const refKeyByUrl = urlToRefKey.get(urlOrKey);
       if (refKeyByUrl) {
         const stored = objects.get(refKeyByUrl);
         if (!stored) return;
-        await this.deleteRef(stored.ref);
+        await deleteRefImpl(stored.ref);
         return;
       }
 
@@ -164,7 +168,7 @@ export function createInMemoryStoragePort(
         storageLocationId,
         key: urlOrKey,
       };
-      await this.deleteRef(ref);
+      await deleteRefImpl(ref);
     },
 
     seedObject,

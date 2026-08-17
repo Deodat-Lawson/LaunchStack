@@ -117,6 +117,8 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       url: fileUrl,
+      ref: uploaded.ref,
+      storageAdapter: uploaded.ref.adapter,
       name: file.name,
       id: fileId,
       provider: uploaded.provider,

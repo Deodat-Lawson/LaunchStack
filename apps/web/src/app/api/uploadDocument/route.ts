@@ -8,6 +8,7 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import type { ObjectRef } from "@launchstack/core/storage";
 
 import { db } from "~/server/db";
 import { users, ocrJobs } from "@launchstack/core/db/schema";
@@ -36,8 +37,28 @@ const UploadDocumentSchema = z.object({
   storageProvider: z.string().optional(),
   /** S3 object key for local uploads */
   storagePathname: z.string().optional(),
+  /** Canonical adapter id for this upload path (e.g. "uploadthing") */
+  storageAdapter: z.enum(["s3", "vercel-blob", "database", "uploadthing"]).optional(),
+  /** Canonical object reference minted at upload time */
+  documentRef: z
+    .object({
+      adapter: z.enum(["s3", "vercel-blob", "database", "uploadthing"]),
+      storageLocationId: z.string().min(1),
+      key: z.string().min(1),
+    })
+    .optional(),
   embeddingIndexKey: z.string().min(1).optional(),
 });
+
+function isObjectRef(value: unknown): value is ObjectRef {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      typeof (value as { adapter?: unknown }).adapter === "string" &&
+      typeof (value as { storageLocationId?: unknown }).storageLocationId === "string" &&
+      typeof (value as { key?: unknown }).key === "string",
+  );
+}
 
 export async function POST(request: Request) {
   return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -56,8 +77,45 @@ export async function POST(request: Request) {
         storageType: explicitStorageType,
         mimeType,
         originalFilename,
+        storageAdapter,
+        storagePathname,
+        documentRef,
         embeddingIndexKey,
       } = validation.data;
+
+      const requiresCanonicalRef = Boolean(storageAdapter || storagePathname);
+
+      if (requiresCanonicalRef) {
+        if (!documentRef || !isObjectRef(documentRef)) {
+          return NextResponse.json(
+            {
+              error:
+                "Uploads with storage adapter/path metadata must include a canonical object ref minted at upload time.",
+            },
+            { status: 400 },
+          );
+        }
+
+        if (storageAdapter && documentRef.adapter !== storageAdapter) {
+          return NextResponse.json(
+            {
+              error:
+                "documentRef.adapter must match storageAdapter for adapter-based uploads.",
+            },
+            { status: 400 },
+          );
+        }
+
+        if (storagePathname && documentRef.key !== storagePathname) {
+          return NextResponse.json(
+            {
+              error:
+                "documentRef.key must match storagePathname for key-based uploads.",
+            },
+            { status: 400 },
+          );
+        }
+      }
 
       const [userInfo] = await db
         .select()

@@ -7,7 +7,9 @@ import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { genUploader } from "uploadthing/client";
+import type { ObjectRef } from "@launchstack/core/storage";
 import type { OurFileRouter } from "~/app/api/uploadthing/core";
+import { readUploadThingResult } from "~/app/utils/uploadthing";
 import { isUploadAccepted, UPLOAD_ACCEPT_STRING } from "~/lib/upload-accepted";
 
 import { SourceGrid, type SourceType } from "./SourceGrid";
@@ -61,7 +63,7 @@ export interface AvailableProviders {
 function uploadToS3WithProgress(
   file: File,
   onProgress: (percent: number) => void,
-): Promise<{ objectKey: string; bucket: string; url: string }> {
+): Promise<{ objectKey: string; bucket: string; url: string; ref: ObjectRef }> {
   return new Promise((resolve, reject) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -83,6 +85,7 @@ function uploadToS3WithProgress(
             objectKey: string;
             bucket: string;
             url: string;
+            ref: ObjectRef;
           };
           resolve(data);
         } catch {
@@ -447,12 +450,14 @@ const UploadForm: React.FC<UploadFormProps> = ({
     let resolvedStorageType: "s3" | "database" = "s3";
     let fileUrl: string;
     let uploadedObjectKey: string | undefined;
+    let uploadedRef: ObjectRef | undefined;
+    let storageAdapter: ObjectRef["adapter"] | undefined;
     const mimeType: string | undefined = doc.file.type || undefined;
 
     if (storageProvider === "s3") {
       updateDocument(doc.id, { progress: 15 });
 
-      const { objectKey, url } = await uploadToS3WithProgress(doc.file, (pct) => {
+      const { objectKey, url, ref } = await uploadToS3WithProgress(doc.file, (pct) => {
         updateDocument(doc.id, {
           progress: 15 + Math.round(pct * 0.75),
         });
@@ -460,6 +465,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
       fileUrl = url;
       uploadedObjectKey = objectKey;
+      uploadedRef = ref;
+      storageAdapter = ref.adapter;
       resolvedStorageType = "s3";
     } else {
       const useUploadThingForDoc =
@@ -470,9 +477,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
         const res = await uploadFiles("documentUploaderRestricted", {
           files: [doc.file],
         });
-        if (!res?.[0]?.url)
-          throw new Error("UploadThing: Cloud upload failed — no URL returned");
-        fileUrl = res[0].url;
+        const parsed = readUploadThingResult(res?.[0]);
+        fileUrl = parsed.url;
+        uploadedRef = parsed.ref;
+        storageAdapter = parsed.ref.adapter;
         resolvedStorageType = "s3";
       } else {
         updateDocument(doc.id, { progress: 30 });
@@ -489,8 +497,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
         const data = (await res.json()) as {
           url: string;
           provider?: "s3" | "database";
+          ref?: ObjectRef;
         };
         fileUrl = data.url;
+        if (data.ref) {
+          uploadedRef = data.ref;
+          storageAdapter = data.ref.adapter;
+        }
         resolvedStorageType = data.provider === "s3" ? "s3" : "database";
       }
     }
@@ -510,6 +523,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
       category: doc.category,
       documentUrl: fileUrl,
       storageType: resolvedStorageType,
+      storageAdapter,
+      documentRef: uploadedRef,
       mimeType,
       originalFilename: doc.file.name,
       preferredProvider:

@@ -133,6 +133,14 @@ const serverSchema = z.object({
   S3_ACCESS_KEY: optionalString(),
   S3_SECRET_KEY: optionalString(),
   S3_BUCKET_NAME: optionalString(),
+  STORAGE_DELETION_LIFECYCLE_ENABLED: z.preprocess(
+    (val) => val === "true" || val === "1",
+    z.boolean().optional()
+  ),
+  STORAGE_DELETION_WORKER_ENABLED: z.preprocess(
+    (val) => val === "true" || val === "1",
+    z.boolean().optional()
+  ),
   // Repo Explainer
   GITHUB_TOKEN: optionalString(),
   // Global AI provider fallback — set once to route ALL capabilities to one provider
@@ -346,6 +354,8 @@ function parseServerEnv() {
     S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
     S3_SECRET_KEY: process.env.S3_SECRET_KEY,
     S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+    STORAGE_DELETION_LIFECYCLE_ENABLED: process.env.STORAGE_DELETION_LIFECYCLE_ENABLED,
+    STORAGE_DELETION_WORKER_ENABLED: process.env.STORAGE_DELETION_WORKER_ENABLED,
   };
 
   let server: z.infer<typeof serverSchemaRefined>;

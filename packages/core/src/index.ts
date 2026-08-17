@@ -20,7 +20,15 @@ import type { CoreConfig } from "./config/types";
 
 export * from "./config";
 export * from "./errors";
-export type { StoragePort, UploadInput, UploadResult } from "./storage/types";
+export type {
+  DeleteOutcome,
+  DeleteResult,
+  ObjectRef,
+  StorageAdapter,
+  StoragePort,
+  UploadInput,
+  UploadResult,
+} from "./storage/types";
 export type { Db, DbClient, SqlClient } from "./db";
 export { createDb, toRows } from "./db";
 

@@ -28,10 +28,12 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions, users } from "@launchstack/core/db/schema";
-import { deleteFileByUrl } from "~/lib/storage";
+import { deleteFileByRef } from "~/lib/storage";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
+import { isStorageDeletionLifecycleEnabled } from "~/server/storage/deletion-flags";
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -147,24 +149,64 @@ export async function DELETE(
         );
       }
 
-      // Delete the blob first. If storage is unreachable we bail out before
-      // touching the DB, leaving the system in a consistent state that can
-      // be retried. A missing blob (404 from storage) is logged but does not
-      // block DB cleanup — we still want the row and embeddings gone.
-      try {
-        await deleteFileByUrl(targetVersion.url);
-      } catch (blobError) {
-        console.warn(
-          `[Versions] Blob delete failed for doc=${documentId} version=${versionId} url=${targetVersion.url}:`,
-          blobError
+      if (!isStorageDeletionLifecycleEnabled()) {
+        return NextResponse.json(
+          {
+            error: "Storage deletion lifecycle is disabled",
+            details:
+              "Enable STORAGE_DELETION_LIFECYCLE_ENABLED=1 to process storage deletions.",
+          },
+          { status: 503 }
         );
+      }
+
+      const promoted = promoteLegacyUrlToRef({ value: targetVersion.url });
+      if (!promoted.ok) {
+        return NextResponse.json(
+          {
+            error: "Legacy storage reference promotion failed",
+            reason: promoted.reason,
+            quarantine: true,
+          },
+          { status: 409 }
+        );
+      }
+
+      const deleteOutcome = await deleteFileByRef(promoted.ref);
+      if (deleteOutcome.outcome === "retryable") {
         return NextResponse.json(
           {
             error: "Failed to delete version blob from storage",
-            details:
-              blobError instanceof Error ? blobError.message : String(blobError),
+            details: deleteOutcome.message ?? "Storage delete returned retryable outcome.",
+            outcome: deleteOutcome.outcome,
+            errorCode: deleteOutcome.errorCode,
           },
           { status: 502 }
+        );
+      }
+
+      if (deleteOutcome.outcome === "blocked") {
+        return NextResponse.json(
+          {
+            error: "Storage deletion requires manual review",
+            details: deleteOutcome.message ?? "Storage delete returned blocked outcome.",
+            outcome: deleteOutcome.outcome,
+            errorCode: deleteOutcome.errorCode,
+          },
+          { status: 409 }
+        );
+      }
+
+      if (deleteOutcome.outcome === "rejected") {
+        return NextResponse.json(
+          {
+            error: "Storage deletion was rejected and quarantined",
+            details: deleteOutcome.message ?? "Storage delete returned rejected outcome.",
+            outcome: deleteOutcome.outcome,
+            errorCode: deleteOutcome.errorCode,
+            quarantine: true,
+          },
+          { status: 409 }
         );
       }
 

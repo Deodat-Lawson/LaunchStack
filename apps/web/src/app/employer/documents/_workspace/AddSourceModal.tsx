@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import type { ObjectRef } from "@launchstack/core/storage";
 import { toast } from "sonner";
 import {
   IconBolt,
@@ -59,6 +60,7 @@ interface UploadResult {
   objectKey: string;
   bucket: string;
   url: string;
+  ref: ObjectRef;
 }
 
 async function uploadFileToStorage(file: File): Promise<UploadResult> {
@@ -76,7 +78,7 @@ async function registerDocument(params: {
   userId: string;
   file: File;
   url: string;
-  objectKey: string;
+  ref: ObjectRef;
   category: string;
 }): Promise<void> {
   const body = {
@@ -88,7 +90,9 @@ async function registerDocument(params: {
     mimeType: params.file.type || "application/octet-stream",
     originalFilename: params.file.name,
     storageProvider: "s3",
-    storagePathname: params.objectKey,
+    storagePathname: params.ref.key,
+    storageAdapter: params.ref.adapter,
+    documentRef: params.ref,
   };
   const res = await fetch("/api/uploadDocument", {
     method: "POST",
@@ -117,7 +121,7 @@ async function uploadAndRegisterAll(params: {
         userId: params.userId,
         file,
         url: up.url,
-        objectKey: up.objectKey,
+        ref: up.ref,
         category: params.category,
       });
       successes++;

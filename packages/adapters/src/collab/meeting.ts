@@ -12,6 +12,8 @@ import type { AgentRuntime, AgentTurnResult, TurnContext } from "./agent";
 import { DEFAULT_COMPLETION_MARKER } from "./agent";
 import type { Clock } from "./clock";
 import { systemClock } from "./clock";
+import type { TurnGrounding, TurnGroundingProvider } from "./grounding";
+import { EMPTY_GROUNDING } from "./grounding";
 import type { ChannelStore } from "./store";
 import { selectNextSpeaker } from "./turn-policy";
 import type {
@@ -54,6 +56,17 @@ export interface MeetingOrchestratorOptions {
    * marked failed. A remote worker restarting mid-meeting should not kill it.
    */
   maxConsecutiveFailures?: number;
+  /**
+   * Retrieves passages for the persona about to speak. Optional: without one
+   * a meeting is grounded only in `config.context`.
+   */
+  groundingProvider?: TurnGroundingProvider;
+  /**
+   * Notified when grounding fails. The turn still happens — retrieval being
+   * down degrades answer quality, and dropping the turn instead would convert
+   * that into a dead meeting.
+   */
+  onGroundingError?: (error: Error, personaId: string) => void;
 }
 
 export class MeetingOrchestrator {
@@ -63,6 +76,8 @@ export class MeetingOrchestrator {
   private readonly clock: Clock;
   private readonly listeners = new Set<MeetingEventListener>();
   private readonly maxConsecutiveFailures: number;
+  private readonly groundingProvider: TurnGroundingProvider | null;
+  private readonly onGroundingError?: (error: Error, personaId: string) => void;
   private consecutiveFailures = 0;
   private state: MeetingState;
   /**
@@ -78,6 +93,8 @@ export class MeetingOrchestrator {
     this.runtimes = options.runtimes;
     this.clock = options.clock ?? systemClock;
     this.maxConsecutiveFailures = options.maxConsecutiveFailures ?? 2;
+    this.groundingProvider = options.groundingProvider ?? null;
+    this.onGroundingError = options.onGroundingError;
     this.state = options.initialState ?? {
       meetingId: options.config.id,
       status: "scheduled",
@@ -202,11 +219,15 @@ export class MeetingOrchestrator {
       return { state: this.getState(), done: true };
     }
 
+    // Grounding is fetched before the turn and never inside it, so a runtime
+    // that lives on another machine gets the same passages a local one would.
+    const grounding = await this.groundFor(speaker, transcript);
+
     let result: AgentTurnResult;
     try {
       result = await runtime.takeTurn({
         persona: speaker,
-        context: this.turnContext(),
+        context: this.turnContext(grounding.passages),
         transcript,
       });
       this.consecutiveFailures = 0;
@@ -251,6 +272,10 @@ export class MeetingOrchestrator {
         meetingId: this.config.id,
         turnIndex: this.state.turnIndex,
         addressedTo: result.addressedTo,
+        // What this turn was allowed to read. Recorded even when empty, so a
+        // grounded meeting that retrieved nothing is distinguishable from one
+        // that never asked.
+        ...(grounding.sources ? { grounding: grounding.sources } : {}),
         ...result.meta,
       },
     });
@@ -474,13 +499,40 @@ export class MeetingOrchestrator {
     return this.runtimes.find((r) => r.serves(persona)) ?? null;
   }
 
-  private turnContext(): TurnContext {
+  /**
+   * Passages for the persona about to speak. Retrieval failure is downgraded
+   * to "no extra grounding" rather than a failed turn: a meeting that stops
+   * because the search index is briefly unavailable is a worse outcome than a
+   * meeting that carries on with only its pinned context.
+   */
+  private async groundFor(
+    persona: AgentPersona,
+    transcript: ChannelMessage[],
+  ): Promise<TurnGrounding> {
+    if (!this.groundingProvider) return EMPTY_GROUNDING;
+    try {
+      return await this.groundingProvider.retrieve({
+        meetingId: this.config.id,
+        persona,
+        objective: this.config.objective,
+        agenda: this.config.agenda,
+        transcript,
+        turnIndex: this.state.turnIndex,
+      });
+    } catch (err) {
+      this.onGroundingError?.(err instanceof Error ? err : new Error(String(err)), persona.id);
+      return EMPTY_GROUNDING;
+    }
+  }
+
+  /** `retrieved` is appended after the pinned context, never in place of it. */
+  private turnContext(retrieved: string[] = []): TurnContext {
     return {
       meetingId: this.config.id,
       title: this.config.title,
       objective: this.config.objective,
       agenda: this.config.agenda,
-      context: this.config.context ?? [],
+      context: [...(this.config.context ?? []), ...retrieved],
       roster: this.config.participants.map((p) => ({
         id: p.id,
         displayName: p.displayName,

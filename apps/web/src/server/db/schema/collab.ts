@@ -171,6 +171,18 @@ export const collabMeeting = pgTable(
         completionMarker: varchar("completion_marker", { length: 64 }),
         /** Grounding passages pinned to the meeting (retrieved knowledge). */
         context: jsonb("context").$type<string[]>(),
+        /**
+         * When true, each turn additionally retrieves passages for the persona
+         * about to speak. Off by default: retrieval costs a search per turn,
+         * and a meeting with no documents attached has nothing to retrieve.
+         */
+        groundingEnabled: boolean("grounding_enabled").notNull().default(false),
+        /**
+         * Documents this meeting may read. Access is re-checked against the
+         * creator on every retrieval — this list narrows the corpus, it does
+         * not grant anything.
+         */
+        documentIds: jsonb("document_ids").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
         status: varchar("status", {
             length: 24,
             enum: ["scheduled", "running", "paused", "human_control", "completed", "failed"],

@@ -11,6 +11,7 @@
 import type { AgentRuntime } from "./agent";
 import type { Clock, IdFactory } from "./clock";
 import { randomIdFactory, systemClock } from "./clock";
+import type { TurnGroundingProvider } from "./grounding";
 import { MeetingOrchestrator } from "./meeting";
 import type { MeetingHub } from "./net/hub";
 import { SlackChannelBridge } from "./slack/bridge";
@@ -35,6 +36,8 @@ export interface CreateMeetingInput {
   /** Slug for the new channel. Defaults to a slugified title. */
   slug?: string;
   slack?: { client: SlackClient; config: SlackMirrorConfig };
+  /** When given, every turn is grounded in passages retrieved for its speaker. */
+  groundingProvider?: TurnGroundingProvider;
   /** When given, the meeting is registered so remote workers can serve turns. */
   hub?: MeetingHub;
   clock?: Clock;
@@ -93,6 +96,7 @@ export async function createMeeting(input: CreateMeetingInput): Promise<CreatedM
     config,
     runtimes,
     clock,
+    groundingProvider: input.groundingProvider,
   });
 
   // Subscribe the bridge *before* anything can append, so the kickoff system

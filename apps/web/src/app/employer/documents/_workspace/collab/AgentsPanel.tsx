@@ -27,6 +27,7 @@ import {
 } from "../settings/contract";
 import { Code, CommandBlock, StatusNote } from "../settings/ui";
 import { IconTrash, IconX } from "../icons";
+import { PresetTeams } from "./PresetTeams";
 import { useAgents } from "./useMeetings";
 import { initialsOf, personaColor, type AgentPersonaRecord, type WorkerNode } from "./types";
 
@@ -68,6 +69,8 @@ export function AgentsPanel({ onActions }: SettingsSectionProps = {}) {
     <>
       {notice && <StatusNote tone="ok">{notice}</StatusNote>}
       {error && <StatusNote tone="danger">{error}</StatusNote>}
+
+      <PresetTeams onApplied={refresh} />
 
       <Section
         title="Roster"

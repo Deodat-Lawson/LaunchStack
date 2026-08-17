@@ -12,7 +12,12 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { IconHash, IconServer, IconSlack, IconX } from "../icons";
 import { useAgents } from "./useMeetings";
-import { initialsOf, personaColor, type AgentPersonaRecord } from "./types";
+import {
+  initialsOf,
+  personaColor,
+  type AgentPersonaRecord,
+  type WorkspaceDocument,
+} from "./types";
 
 export interface NewMeetingDialogProps {
   open: boolean;
@@ -49,10 +54,32 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
   const [maxTurns, setMaxTurns] = useState(10);
   const [slackChannelId, setSlackChannelId] = useState("");
   const [mirror, setMirror] = useState(false);
+  const [groundingDocIds, setGroundingDocIds] = useState<string[]>([]);
+  const [documents, setDocuments] = useState<WorkspaceDocument[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const personas = useMemo(() => data?.personas.filter((p) => !p.archived) ?? [], [data]);
+
+  // Loaded when the dialog opens rather than on mount: the corpus can be large
+  // and most sessions never open this dialog.
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const response = await fetch("/api/collab/documents");
+        const body = (await response.json()) as { documents?: WorkspaceDocument[] };
+        if (!cancelled) setDocuments(body.documents ?? []);
+      } catch {
+        // A meeting without grounding is still a meeting — leave the picker
+        // empty rather than blocking the dialog on it.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open]);
 
   // Pre-select the first three so the picker starts from a working room.
   useEffect(() => {
@@ -87,6 +114,8 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
           turnPolicy: policy,
           moderatorKey: policy === "moderated" ? moderator || undefined : undefined,
           maxTurns,
+          groundingEnabled: groundingDocIds.length > 0,
+          documentIds: groundingDocIds.length > 0 ? groundingDocIds : undefined,
           slackChannelId: slackChannelId.trim() || undefined,
           slackMirrorEnabled: mirror && slackChannelId.trim().length > 0,
           slackUseAgentIdentity: true,
@@ -117,6 +146,7 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
     setMaxTurns(10);
     setSlackChannelId("");
     setMirror(false);
+    setGroundingDocIds([]);
   };
 
   return (
@@ -316,6 +346,25 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
           </FormField>
 
           <FormField
+            label="Ground in documents"
+            hint={
+              documents.length === 0
+                ? "Upload a document to let the agents cite your own material instead of reasoning from the objective alone."
+                : "Each turn retrieves passages for whoever is speaking, and the transcript records what they read. Without this the agents only know what you type here."
+            }
+          >
+            <DocumentPicker
+              documents={documents}
+              selected={groundingDocIds}
+              onToggle={(id) =>
+                setGroundingDocIds((prev) =>
+                  prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id],
+                )
+              }
+            />
+          </FormField>
+
+          <FormField
             label="Slack mirror"
             hint={
               data?.slack.canPost
@@ -416,6 +465,84 @@ export function NewMeetingDialog({ open, onClose, onCreated }: NewMeetingDialogP
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Multi-select over the workspace's documents.
+ *
+ * A plain scrolling checklist rather than a search box: the cost of picking
+ * the wrong corpus is paid once per turn, so seeing the whole selection at a
+ * glance matters more than fast filtering of a long list.
+ */
+function DocumentPicker({
+  documents,
+  selected,
+  onToggle,
+}: {
+  documents: WorkspaceDocument[];
+  selected: string[];
+  onToggle: (id: string) => void;
+}) {
+  if (documents.length === 0) {
+    return (
+      <p style={{ margin: 0, fontSize: 12.5, color: "var(--ink-3)" }}>
+        No documents in this workspace yet.
+      </p>
+    );
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <div
+        style={{
+          maxHeight: 148,
+          overflowY: "auto",
+          border: "1px solid var(--line)",
+          borderRadius: 8,
+          padding: 6,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+        }}
+      >
+        {documents.map((doc) => {
+          const checked = selected.includes(doc.id);
+          return (
+            <label
+              key={doc.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "5px 7px",
+                borderRadius: 6,
+                fontSize: 12.5,
+                color: checked ? "var(--ink)" : "var(--ink-2)",
+                background: checked ? "var(--panel-2)" : "transparent",
+                cursor: "pointer",
+              }}
+            >
+              <input type="checkbox" checked={checked} onChange={() => onToggle(doc.id)} />
+              <span
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {doc.title}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+      <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
+        {selected.length === 0
+          ? "Nothing selected — agents will run ungrounded."
+          : `${selected.length} document${selected.length === 1 ? "" : "s"} · searched once per turn`}
+      </span>
     </div>
   );
 }

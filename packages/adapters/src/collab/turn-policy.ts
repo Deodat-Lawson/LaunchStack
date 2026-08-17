@@ -101,16 +101,31 @@ export function selectNextSpeaker(input: SelectSpeakerInput): AgentPersona | nul
   }
 }
 
+/**
+ * Who a message hands the floor to.
+ *
+ * The **last** mention wins, not the first. A turn in a working channel
+ * characteristically opens by answering whoever spoke last and closes by
+ * asking someone else — "@product, agreed on the cut. @eng, what does that
+ * cost?" Taking the first mention routes the floor back to the person who
+ * just spoke and starves the person actually being asked; over a whole
+ * meeting it silences the specialists entirely, because they are addressed at
+ * the end of a message and never at the start.
+ *
+ * Every scripted test line carries exactly one mention, so this was invisible
+ * until a live meeting produced multi-mention turns.
+ */
 function findMention(
   text: string,
   participants: AgentPersona[],
   excludeId?: string,
 ): AgentPersona | null {
+  let found: AgentPersona | null = null;
   for (const match of text.matchAll(/@([a-zA-Z0-9_-]+)/g)) {
     const id = match[1]!;
     if (id === excludeId) continue;
     const hit = participants.find((p) => p.id === id);
-    if (hit) return hit;
+    if (hit) found = hit;
   }
-  return null;
+  return found;
 }

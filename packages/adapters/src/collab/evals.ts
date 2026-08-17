@@ -205,12 +205,16 @@ function scoreDecisions(
 }
 
 /**
- * Specific claims — numbers and proper nouns — that appear in the supplied
- * context. Only meaningful when the meeting was given context; without it
- * there is nothing to be grounded in and the dimension abstains.
+ * Specific claims — numbers and proper nouns — that appear in the material the
+ * meeting was actually given. That material has two sources: passages pinned
+ * to the whole meeting, and passages retrieved for one turn and recorded on
+ * the message that turn produced. Both count; a meeting grounded purely by
+ * retrieval is exactly the case this dimension has to be able to score.
+ *
+ * Without either, there is nothing to be grounded in and the dimension abstains.
  */
 function scoreGrounding(config: MeetingConfig, chat: ChannelMessage[]): MeetingEvalDimension {
-  const context = config.context ?? [];
+  const context = [...(config.context ?? []), ...retrievedExcerpts(chat)];
   if (context.length === 0) {
     return {
       id: "grounding",
@@ -245,6 +249,25 @@ function scoreGrounding(config: MeetingConfig, chat: ChannelMessage[]): MeetingE
     weight: 1.5,
     detail: `${supported.length}/${claims.size} figures traceable to the supplied context`,
   };
+}
+
+/**
+ * Excerpts of everything retrieval put in front of an agent, read back off the
+ * transcript. Shaped defensively because `meta` is `jsonb` — a message written
+ * by an older build, or by a host that records grounding differently, must not
+ * throw the scorer.
+ */
+function retrievedExcerpts(chat: ChannelMessage[]): string[] {
+  const excerpts: string[] = [];
+  for (const message of chat) {
+    const sources = (message.meta as { grounding?: unknown } | undefined)?.grounding;
+    if (!Array.isArray(sources)) continue;
+    for (const source of sources) {
+      const excerpt = (source as { excerpt?: unknown })?.excerpt;
+      if (typeof excerpt === "string" && excerpt.trim().length > 0) excerpts.push(excerpt);
+    }
+  }
+  return excerpts;
 }
 
 /** Penalizes turns that mostly restate an earlier turn. */

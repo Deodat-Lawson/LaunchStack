@@ -98,6 +98,7 @@ export interface MeetingDetail {
     channelId: string;
     channelSlug: string | null;
     slack: { channelId: string; enabled: boolean; useAgentIdentity?: boolean } | null;
+    grounding: { enabled: boolean; documentCount: number };
     createdAt: string;
   };
   state: MeetingState;
@@ -128,6 +129,30 @@ export interface AgentsResponse {
   nodes: WorkerNode[];
   network: { enabled: boolean; hubId: string | null; hubPath: string };
   slack: { canPost: boolean; canReceive: boolean; missing: string[] };
+}
+
+export interface PersonaPackMember {
+  key: string;
+  displayName: string;
+  role: string;
+  accent: string | null;
+  promptPreview: string;
+}
+
+export interface PersonaPack {
+  id: string;
+  name: string;
+  description: string;
+  bestFor: string;
+  suggested: { turnPolicy: string; moderatorKey?: string; maxTurns: number };
+  personas: PersonaPackMember[];
+  /** Handles this workspace already uses — applying leaves them untouched. */
+  conflicts: string[];
+}
+
+export interface WorkspaceDocument {
+  id: string;
+  title: string;
 }
 
 export const MEETING_STATUS_META: Record<

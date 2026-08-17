@@ -929,7 +929,63 @@ function MessageRow({
         >
           {renderMentions(message.text)}
         </div>
+        <GroundingCitations meta={message.meta} />
       </div>
+    </div>
+  );
+}
+
+interface GroundingSourceMeta {
+  label?: unknown;
+  page?: unknown;
+  excerpt?: unknown;
+}
+
+/**
+ * What this turn was allowed to read.
+ *
+ * Shown even when retrieval came back empty, because "searched and found
+ * nothing" and "never searched" mean different things when you are deciding
+ * whether to trust a figure.
+ */
+function GroundingCitations({ meta }: { meta?: Record<string, unknown> }) {
+  const raw = meta?.grounding;
+  if (!Array.isArray(raw)) return null;
+
+  const sources = raw
+    .map((entry) => entry as GroundingSourceMeta)
+    .filter((entry) => typeof entry?.label === "string" && entry.label.length > 0);
+
+  if (sources.length === 0) {
+    return (
+      <div style={{ marginTop: 4, fontSize: 10.5, color: "var(--ink-3)", opacity: 0.75 }}>
+        Searched the attached documents — nothing relevant found.
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ marginTop: 5, display: "flex", flexWrap: "wrap", gap: 5, alignItems: "center" }}>
+      <span style={{ fontSize: 10, color: "var(--ink-3)", opacity: 0.8 }}>read</span>
+      {sources.map((source, index) => (
+        <span
+          key={`${String(source.label)}-${index}`}
+          title={typeof source.excerpt === "string" ? source.excerpt : undefined}
+          style={{
+            fontSize: 10,
+            color: "var(--ink-3)",
+            border: "1px solid var(--line)",
+            borderRadius: 999,
+            padding: "1px 7px",
+            maxWidth: 260,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {String(source.label)}
+        </span>
+      ))}
     </div>
   );
 }

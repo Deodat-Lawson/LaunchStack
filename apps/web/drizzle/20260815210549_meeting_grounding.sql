@@ -1,0 +1,2 @@
+ALTER TABLE "pdr_ai_v2_collab_meeting" ADD COLUMN "grounding_enabled" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE "pdr_ai_v2_collab_meeting" ADD COLUMN "document_ids" jsonb DEFAULT '[]'::jsonb NOT NULL;

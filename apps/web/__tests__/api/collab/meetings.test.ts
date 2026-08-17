@@ -42,6 +42,10 @@ function mockBuildRow(config: {
     status: "scheduled" as const,
     slackChannelId: null as string | null,
     slackMirrorEnabled: false,
+    // Both columns are NOT NULL with defaults, so a real row always carries
+    // them — the fixture has to as well or it stops representing the row.
+    groundingEnabled: false,
+    documentIds: [] as string[],
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     startedAt: null as Date | null,
     endedAt: null as Date | null,

@@ -109,6 +109,76 @@ describe("meeting orchestration", () => {
     expect(chatOf(await h.store.read(config.channelId))).toHaveLength(4);
   });
 
+  /**
+   * Regression, found by `pnpm meeting:live` rather than by this suite. Every
+   * other scripted line here carries a single mention, which makes
+   * first-mention and last-mention indistinguishable — a real meeting was the
+   * only thing that could surface it.
+   */
+  it("hands the floor to the closing ask, not the opening reply-to", () => {
+    const speaker = selectNextSpeaker({
+      participants: [PM, ENG, FIN],
+      transcript: [
+        {
+          id: "m1",
+          channelId: "c1",
+          seq: 1,
+          ts: "2026-01-01T00:00:00.000Z",
+          author: { kind: "agent", id: "fin", displayName: "Dana" },
+          text: "@pm agreed on the cut. @eng, what does the billing migration cost?",
+          kind: "chat",
+        },
+      ],
+      turnIndex: 1,
+      policy: { kind: "reactive" },
+    });
+
+    expect(speaker?.id).toBe("eng");
+  });
+
+  it("skips a self-mention when picking the closing ask", () => {
+    const speaker = selectNextSpeaker({
+      participants: [PM, ENG, FIN],
+      transcript: [
+        {
+          id: "m1",
+          channelId: "c1",
+          seq: 1,
+          ts: "2026-01-01T00:00:00.000Z",
+          author: { kind: "agent", id: "pm", displayName: "Priya" },
+          text: "@fin can you confirm? To be clear, @pm owns the rollout.",
+          kind: "chat",
+        },
+      ],
+      turnIndex: 1,
+      policy: { kind: "reactive" },
+    });
+
+    // @pm is last but is the speaker; the floor goes to the real ask.
+    expect(speaker?.id).toBe("fin");
+  });
+
+  it("routes a moderated nomination to the closing ask too", () => {
+    const speaker = selectNextSpeaker({
+      participants: [PM, ENG, FIN],
+      transcript: [
+        {
+          id: "m1",
+          channelId: "c1",
+          seq: 1,
+          ts: "2026-01-01T00:00:00.000Z",
+          author: { kind: "agent", id: "pm", displayName: "Priya" },
+          text: "Thanks @fin. @eng, you have the floor.",
+          kind: "chat",
+        },
+      ],
+      turnIndex: 1,
+      policy: { kind: "moderated", moderatorId: "pm" },
+    });
+
+    expect(speaker?.id).toBe("eng");
+  });
+
   it("follows @mentions under the reactive policy", async () => {
     const h = harness({
       turnPolicy: { kind: "reactive" },

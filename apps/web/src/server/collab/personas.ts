@@ -171,3 +171,65 @@ export async function ensureStarterPersonas(companyId: bigint) {
   }
   return listPersonas(companyId);
 }
+
+export interface ApplyPersonasResult {
+  created: string[];
+  /** Handles already in use — left exactly as they were. */
+  skipped: string[];
+}
+
+/**
+ * Splits a candidate roster into what would be created and what already
+ * exists. Pure, and separate from the writes, because this is the rule worth
+ * testing: which handles are considered taken.
+ */
+export function partitionByHandle(
+  existingKeys: Iterable<string>,
+  candidates: PersonaInput[],
+): { toCreate: PersonaInput[]; skipped: string[] } {
+  const taken = new Set(existingKeys);
+  const toCreate: PersonaInput[] = [];
+  const skipped: string[] = [];
+
+  for (const candidate of candidates) {
+    if (taken.has(candidate.key)) {
+      skipped.push(candidate.key);
+      continue;
+    }
+    // Added as we go, so a pack that lists the same handle twice creates it
+    // once rather than tripping the unique index on the second insert.
+    taken.add(candidate.key);
+    toCreate.push(candidate);
+  }
+  return { toCreate, skipped };
+}
+
+/**
+ * Adds a set of personas to a workspace, additively.
+ *
+ * An existing handle is never overwritten. A persona key is referenced by past
+ * transcripts and by the frozen participant list on every meeting that used
+ * it, so silently replacing `@eng` because a preset also defines `@eng` would
+ * rewrite the meaning of history. The caller is told what was skipped and can
+ * offer to rename.
+ *
+ * Archived personas count as taken: their handle is still live in old
+ * transcripts, and the unique index is on `(company_id, key)` regardless.
+ */
+export async function applyPersonas(
+  companyId: bigint,
+  personas: PersonaInput[],
+): Promise<ApplyPersonasResult> {
+  const existing = await listPersonas(companyId, true);
+  const { toCreate, skipped } = partitionByHandle(
+    existing.map((p) => p.id),
+    personas,
+  );
+
+  const created: string[] = [];
+  for (const persona of toCreate) {
+    await createPersona(companyId, persona);
+    created.push(persona.key);
+  }
+  return { created, skipped };
+}

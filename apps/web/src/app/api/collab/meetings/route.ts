@@ -23,6 +23,14 @@ const CreateMeetingSchema = z.object({
   moderatorKey: z.string().optional(),
   maxTurns: z.number().int().min(1).max(60).optional(),
   context: z.array(z.string().max(4000)).max(20).optional(),
+  /** Retrieve fresh passages for the speaking persona on every turn. */
+  groundingEnabled: z.boolean().optional(),
+  /**
+   * Documents the meeting may read. Capped because every turn searches this
+   * set — a meeting pointed at the entire corpus retrieves noise and pays for
+   * it once per turn.
+   */
+  documentIds: z.array(z.string().min(1).max(64)).max(25).optional(),
   channelId: z.string().optional(),
   slackChannelId: z.string().optional(),
   slackMirrorEnabled: z.boolean().optional(),
@@ -124,6 +132,8 @@ export async function POST(request: Request) {
     },
     maxTurns: input.maxTurns,
     context: input.context,
+    groundingEnabled: input.groundingEnabled,
+    documentIds: input.documentIds,
     channelId: input.channelId,
     slackChannelId: input.slackChannelId,
     slackMirrorEnabled: input.slackMirrorEnabled,

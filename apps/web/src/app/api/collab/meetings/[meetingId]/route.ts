@@ -49,6 +49,10 @@ export async function GET(
       channelId: runtime.config.channelId,
       channelSlug: channel?.slug ?? null,
       slack: runtime.config.slack ?? null,
+      grounding: {
+        enabled: runtime.row.groundingEnabled,
+        documentCount: runtime.row.documentIds.length,
+      },
       createdAt: runtime.row.createdAt.toISOString(),
     },
     state: runtime.orchestrator.getState(),

@@ -34,6 +34,7 @@ import { collabChannel, collabMeeting, collabNode } from "~/server/db/schema";
 import { db } from "~/server/db";
 import { env } from "~/env";
 import { createCollabChatFn } from "./chat";
+import { buildMeetingGrounding } from "./grounding";
 import { getChannelStore, type PostgresChannelStore } from "./store";
 import { getSlackClient } from "./slack";
 
@@ -207,6 +208,15 @@ export async function getMeetingRuntime(
     config,
     runtimes: buildRuntimes(),
     initialState: rowToState(row),
+    groundingProvider: buildMeetingGrounding({
+      groundingEnabled: row.groundingEnabled,
+      documentIds: row.documentIds,
+      createdByUserId: row.createdByUserId,
+    }) ?? undefined,
+    // Retrieval being down degrades the turn; it must not end the meeting.
+    onGroundingError: (error, personaId) => {
+      console.error(`[collab:grounding] ${meetingId} @${personaId}: ${error.message}`);
+    },
   });
 
   // Coalescing persist: only the LATEST state matters (each write is the
@@ -268,6 +278,10 @@ export interface NewMeetingInput {
   turnPolicy?: TurnPolicy;
   maxTurns?: number;
   context?: string[];
+  /** Retrieve fresh passages for the speaking persona on every turn. */
+  groundingEnabled?: boolean;
+  /** Documents the meeting may read. Required for grounding to do anything. */
+  documentIds?: string[];
   /** Reuse an existing channel instead of opening a new one. */
   channelId?: string;
   slackChannelId?: string;
@@ -307,6 +321,8 @@ export async function createMeetingForCompany(input: NewMeetingInput) {
       moderatorPersonaId: input.turnPolicy?.moderatorId,
       maxTurns: input.maxTurns ?? 12,
       context: input.context,
+      groundingEnabled: input.groundingEnabled ?? false,
+      documentIds: input.documentIds ?? [],
       slackChannelId: input.slackChannelId,
       slackMirrorEnabled: input.slackMirrorEnabled ?? false,
       slackUseAgentIdentity: input.slackUseAgentIdentity ?? false,

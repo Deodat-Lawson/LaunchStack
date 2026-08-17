@@ -17,16 +17,21 @@ and writers of the same log, with nothing to keep in sync.
 
 | Path | What it is |
 | --- | --- |
-| `packages/core/src/collab/` | The engine. No Next, no Clerk, no database, no `process.env`. |
-| `packages/core/src/collab/net/` | The signed HTTP protocol, the hub, the worker, the `node:http` adapter. |
-| `packages/core/src/collab/slack/` | Slack Web API port, signature verification, the two-way bridge. |
-| `packages/core/src/collab/evals.ts` | Deterministic meeting scoring. |
-| `packages/core/src/db/schema/collab.ts` | Channels, messages, personas, meetings, nodes. |
-| `apps/web/src/server/collab/` | Postgres-backed store, the process-wide hub, the model adapter. |
+| `packages/adapters/src/collab/` | The engine. No Next, no Clerk, no database, no `process.env`. |
+| `packages/adapters/src/collab/net/` | The signed HTTP protocol, the hub, the worker, the `node:http` adapter. |
+| `packages/adapters/src/collab/slack/` | Slack Web API port, signature verification, the two-way bridge. |
+| `packages/adapters/src/collab/grounding.ts` | The turn-level retrieval port and its query builder. |
+| `packages/adapters/src/collab/evals.ts` | Deterministic meeting scoring. |
+| `packages/core/src/collab/` | Re-export facade only (ADR-002). No logic may be added here. |
+| `apps/web/src/server/db/schema/collab.ts` | Channels, messages, personas, meetings, nodes. |
+| `apps/web/src/server/collab/` | Postgres store, the process-wide hub, the model adapter, presets, retrieval. |
 | `apps/web/src/app/api/collab/` | Meeting routes, the hub mount, the Slack events receiver. |
 | `apps/web/src/app/employer/documents/_workspace/collab/` | The Meetings surface and the agent roster. |
 | `apps/web/scripts/collab-hub.ts` | Standalone hub, for running the meeting plane on its own host. |
 | `apps/web/scripts/collab-worker.ts` | Agent worker. Run this on any machine that should host agents. |
+
+Import from `@launchstack/core/collab` regardless — the facade is the public
+entry point, and `scripts/ci/check-core-facade.mjs` keeps it a pure re-export.
 
 ---
 
@@ -34,9 +39,11 @@ and writers of the same log, with nothing to keep in sync.
 
 1. **Settings → Agents & nodes** defines the roster. A workspace that has never
    opened it gets four starter agents seeded on first read, so nothing
-   dead-ends on an empty picker.
-2. **Meetings → New** picks the participants, states the objective, and chooses
-   how the floor moves.
+   dead-ends on an empty picker. **Preset teams** at the top of that pane add a
+   whole room in one click — see [Preset teams](#preset-teams).
+2. **Meetings → New** picks the participants, states the objective, chooses how
+   the floor moves, and optionally attaches documents to ground the agents in —
+   see [Grounding](#grounding).
 3. The channel view shows the transcript. `Run` advances a few turns at a time;
    `Take over` stops the agents and gives you the floor; `End` closes the
    meeting and produces minutes.
@@ -67,6 +74,69 @@ Three distinct things a person can do, deliberately kept separate:
 
 An agent speaking while a human holds the floor is a correctness bug, not a
 quality shortfall — the eval suite scores it as an outright failure.
+
+---
+
+## Preset teams
+
+`Settings → Agents & nodes → Preset teams` adds a whole room at once. The pack
+that ships is **Tech startup — core team**: `@founder` (chair), `@product`,
+`@eng`, `@design`, `@growth`, `@data`.
+
+Applying is additive and idempotent. A handle already in use is reported as a
+conflict *before* the click and left exactly as it is — a persona key appears
+in past transcripts and in the frozen participant list of every meeting that
+used it, so overwriting one rewrites the meaning of history.
+
+Packs live in `apps/web/src/server/collab/presets.ts`. The prompts follow four
+rules, each of them a lesson from a meeting that went badly:
+
+1. **Give the agent a reason to disagree.** Every prompt has a *What you refuse
+   to let pass* section. A persona told to be helpful converges on whatever was
+   said last, and six of those produce six paraphrases.
+2. **Force a shape on the output.** "Be concrete" is not actionable; "give the
+   estimate in sprints and name the long pole" is.
+3. **Make ignorance sayable.** Every prompt says what to do when the material
+   does not support an answer, because the alternative is a confident number
+   nobody can trace.
+4. **Say who to hand to.** Meetings stall when nobody is addressed.
+
+`__tests__/api/collab/presets.test.ts` enforces the structural half of that:
+prompts carry each section, handles are mention-safe, a pack fits under the
+ten-participant cap, and — the one that has already caught a real bug — a
+prompt only ever hands off to a handle that exists in the same pack.
+
+---
+
+## Grounding
+
+A meeting can read the workspace's documents. Attach them in **Meetings → New**
+and every turn retrieves passages for the persona *about to speak*, using its
+role, the objective, and the last thing said.
+
+Retrieval is a port, not a field. `TurnGroundingProvider` lives in the engine,
+which never learns what a document or an index is; the implementation over the
+existing ensemble retriever is `apps/web/src/server/collab/grounding.ts`.
+
+| | |
+| --- | --- |
+| Per-persona, not per-meeting | The analyst and the engineer ask the corpus different questions. Retrieving once at creation gives everyone the union of nobody's actual need. |
+| Four passages per turn | Each turn already carries the full transcript. A generous top-k inflates the turn at exactly the point where cost already grows with the square of the turn count. |
+| Never fatal | A retrieval failure yields no passages and the turn proceeds. A meeting that dies because the index blinked is worse than an ungrounded one. |
+| Recorded on the message | What a turn read is stored on the message it produced — label, page, score, and a truncated excerpt. |
+
+`MeetingConfig.context` still pins passages for the whole meeting; retrieved
+ones are appended after it, never in place of it.
+
+Storing the excerpt is what keeps a grounded meeting auditable *and*
+scoreable. A reader can check a figure without the index still being around,
+and the `grounding` eval dimension can tell a cited number from an invented
+one — before this, a meeting grounded purely by retrieval scored as "no context
+supplied, dimension not applicable".
+
+The transcript shows what each turn read, and distinguishes *searched and found
+nothing* from *never searched* — they mean different things when you are
+deciding whether to trust a figure.
 
 ---
 
@@ -195,6 +265,43 @@ pnpm --filter @launchstack/web evals:meetings          # readable report
 pnpm --filter @launchstack/web evals:meetings -- --json
 ```
 
+### Against a real model
+
+The suite above is deterministic because its agents are scripted — which means
+it cannot tell you whether a *prompt* steers a model well. A preset that reads
+beautifully and produces six agreeable paraphrases passes every scripted test.
+
+```bash
+pnpm --filter @launchstack/web meeting:live -- --env-file=/path/to/.env --ground
+pnpm --filter @launchstack/web meeting:live -- --route=fast --turns=8    # cheap smoke run
+```
+
+Runs the preset roster as a real meeting against the deployment's configured
+models, prints each turn and what it read, then scores it and exits non-zero on
+a threshold miss — so a prompt change can be gated rather than merely admired.
+No Postgres, no Clerk, no HTTP: the channel is in-memory and `--ground` uses an
+in-process fixture corpus, so the retrieval *port* is exercised without the
+retriever needing a database.
+
+Expect run-to-run variance; two runs of the shipped roster scored 0.93 and 0.87.
+Treat a single number as a smoke test and a repeated regression as a finding.
+
+Three defects were found by the first live run and none of them could have been
+found by the scripted suite:
+
+- **`findMention` took the first mention.** A real turn opens by answering the
+  last speaker and closes by asking someone else, so the floor kept going back
+  to whoever had just spoken and the specialists were never reached. Every
+  scripted line carries exactly one mention, which made first and last
+  identical. Now the last mention wins.
+- **Broadcast turns.** An agent asking five people at once gets one answer and
+  silently drops four, because the floor can only move to one of them. The
+  house rules now mandate exactly one handoff, in the final sentence.
+- **Minutes were always empty.** Extraction matches literal cue phrases, and
+  models write "we should build it", which is not a recordable decision. The
+  chair is now told the exact opening words (`Decision:`, `Next step:`) that
+  make the outcome and its owner extractable.
+
 Scenarios run as real meetings — same orchestrator, same turn policies, same
 takeover path — with scripted utterances standing in for model output. That
 makes the *orchestration* the thing under test and keeps the suite
@@ -236,7 +343,9 @@ pnpm exec jest __tests__/collab __tests__/api/collab
 | `__tests__/collab/hub-network.test.ts` | Hub ↔ worker over real sockets, timeouts, worker restart |
 | `__tests__/collab/two-machine.test.ts` | Three OS processes, one meeting, over the host's routable address |
 | `__tests__/collab/slack-bridge.test.ts` | Mirroring, echo loops, duplicate delivery, commands, signatures |
+| `__tests__/collab/meeting-grounding.test.ts` | Retrieval per turn, provenance, degradation when the index is down |
 | `__tests__/collab/meeting-evals.test.ts` | The scoring function and the scenario suite |
+| `__tests__/api/collab/presets.test.ts` | Preset prompt structure, additive application, handle conflicts |
 | `__tests__/api/collab/*.test.ts` | Route auth, validation, the hub mount, the Slack receiver |
 
 `two-machine.test.ts` is the one to read if you want to know whether the

@@ -1,14 +1,6 @@
 import { put, type PutBlobResult } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
-
-import { env } from "~/env";
-import { parseVercelBlobStoreIdFromToken, storageLocationIdForVercelBlob } from "~/lib/storage-location-id";
-
-type ObjectRef = {
-  adapter: "s3" | "vercel-blob" | "database" | "uploadthing";
-  storageLocationId: string;
-  key: string;
-};
+import type { ObjectRef } from "@launchstack/core/storage";
 
 export interface PutFileInput {
   filename: string;
@@ -40,7 +32,7 @@ class UnparseableBlobTokenError extends Error {
 }
 
 function getBlobToken(): string {
-  const token = env.server.BLOB_READ_WRITE_TOKEN ?? process.env.BLOB_READ_WRITE_TOKEN;
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
   if (!token) {
     throw new MissingBlobTokenError();
   }
@@ -48,11 +40,16 @@ function getBlobToken(): string {
 }
 
 function getBlobStoreId(token: string): string {
-  const storeId = parseVercelBlobStoreIdFromToken(token);
+  const parts = token.split("_");
+  const storeId = parts[3];
   if (!storeId) {
     throw new UnparseableBlobTokenError();
   }
   return storeId;
+}
+
+function storageLocationIdForVercelBlob(storeId: string): string {
+  return `vercel-blob:${storeId}`;
 }
 
 let detectedAccess: "public" | "private" | null = null;

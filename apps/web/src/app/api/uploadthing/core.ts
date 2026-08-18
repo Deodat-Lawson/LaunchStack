@@ -1,8 +1,73 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { auth } from "@clerk/nextjs/server";
+import { eq } from "drizzle-orm";
+
 import { mintUploadThingObjectRef } from "~/server/storage/uploadthing";
+import { db } from "~/server/db";
+import { fileUploads, users } from "@launchstack/core/db/schema";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { findObjectByRef, registerUploadArtifact } from "~/server/services/storage-manifest";
 
 const f = createUploadthing();
+
+async function registerUploadThingArtifact(params: {
+    userId: string;
+    file: { name?: string | null; type?: string | null; size?: number | null; url?: string | null };
+    ref: ReturnType<typeof mintUploadThingObjectRef>;
+}): Promise<number | null> {
+    const [userInfo] = await db
+        .select({ id: users.id, companyId: users.companyId })
+        .from(users)
+        .where(eq(users.userId, params.userId));
+
+    if (!userInfo) {
+        throw new Error("UploadThing callback user was not found");
+    }
+
+    const companyId = await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId);
+
+    return db.transaction(async (tx) => {
+        const existing = await findObjectByRef(tx, params.ref);
+
+        // Idempotency: callback retries should not mint a second artifact row.
+        if (existing) {
+            // Existing row already transferred to a document/version owner.
+            if (existing.artifactId === null) {
+                return null;
+            }
+            return Number(existing.artifactId);
+        }
+
+        const [row] = await tx
+            .insert(fileUploads)
+            .values({
+                userId: params.userId,
+                filename: params.file.name ?? params.ref.key,
+                mimeType: params.file.type ?? "application/octet-stream",
+                fileData: null,
+                fileSize: params.file.size ?? 0,
+                storageProvider: "uploadthing",
+                storageUrl: params.file.url ?? null,
+                storagePathname: params.ref.key,
+            })
+            .returning({ id: fileUploads.id });
+
+        if (!row) {
+            throw new Error("UploadThing callback failed to create fileUploads row");
+        }
+
+        await registerUploadArtifact(tx, {
+            ref: params.ref,
+            companyId,
+            fileUploadId: row.id,
+            contentType: params.file.type ?? undefined,
+            sizeBytes: typeof params.file.size === "number" ? params.file.size : undefined,
+            sourceOperation: "uploadthing-callback",
+        });
+
+        return row.id;
+    });
+}
 
 export const ourFileRouter = {
     pdfUploader: f({
@@ -19,6 +84,11 @@ export const ourFileRouter = {
         })
         .onUploadComplete(async ({ metadata, file }) => {
             const ref = mintUploadThingObjectRef(file);
+            const artifactId = await registerUploadThingArtifact({
+                userId: metadata.userId,
+                file,
+                ref,
+            });
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
@@ -31,6 +101,7 @@ export const ourFileRouter = {
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                artifactId,
                 filename: file.name,
             };
         }),
@@ -49,6 +120,11 @@ export const ourFileRouter = {
         })
         .onUploadComplete(async ({ metadata, file }) => {
             const ref = mintUploadThingObjectRef(file);
+            const artifactId = await registerUploadThingArtifact({
+                userId: metadata.userId,
+                file,
+                ref,
+            });
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
@@ -61,6 +137,7 @@ export const ourFileRouter = {
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                artifactId,
                 filename: file.name,
             };
         }),
@@ -79,6 +156,11 @@ export const ourFileRouter = {
         })
         .onUploadComplete(async ({ metadata, file }) => {
             const ref = mintUploadThingObjectRef(file);
+            const artifactId = await registerUploadThingArtifact({
+                userId: metadata.userId,
+                file,
+                ref,
+            });
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
@@ -91,6 +173,7 @@ export const ourFileRouter = {
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                artifactId,
                 filename: file.name,
             };
         }),
@@ -109,6 +192,11 @@ export const ourFileRouter = {
         })
         .onUploadComplete(async ({ metadata, file }) => {
             const ref = mintUploadThingObjectRef(file);
+            const artifactId = await registerUploadThingArtifact({
+                userId: metadata.userId,
+                file,
+                ref,
+            });
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
@@ -121,6 +209,7 @@ export const ourFileRouter = {
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                artifactId,
                 filename: file.name,
             };
         }),
@@ -156,6 +245,11 @@ export const ourFileRouter = {
         })
         .onUploadComplete(async ({ metadata, file }) => {
             const ref = mintUploadThingObjectRef(file);
+            const artifactId = await registerUploadThingArtifact({
+                userId: metadata.userId,
+                file,
+                ref,
+            });
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
@@ -168,6 +262,7 @@ export const ourFileRouter = {
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                artifactId,
                 filename: file.name,
             };
         }),

@@ -111,6 +111,8 @@ modes, and migration from the pre-PR variables.
 | `BLOB_READ_WRITE_TOKEN` | Yes (Vercel) | Required for Vercel Blob uploads |
 | `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
 | `SIDECAR_URL` | Optional | Sidecar URL for reranking and Graph RAG |
+| `STORAGE_DELETION_LIFECYCLE_ENABLED` | Optional | **Default off.** Intake gate for document/version deletion requests. |
+| `STORAGE_DELETION_WORKER_ENABLED` | Optional | **Default off.** Async provider-cleanup worker gate. |
 | `EXA_API_KEY` | Optional | Exa (trend search); required for `exa` / `fallback` / `parallel` when using Exa |
 | `SERPER_API_KEY` | Optional | Serper Google News (trend search); required for `serper` / `fallback` / `parallel` when using Serper |
 | `SEARCH_PROVIDER` | Optional | `exa` (default), `serper`, `fallback`, or `parallel` — see `.env.example` |
@@ -118,6 +120,10 @@ modes, and migration from the pre-PR variables.
 | `DATALAB_API_KEY` | Optional | Alternative OCR |
 | `LANDING_AI_API_KEY` | Optional | Fallback OCR |
 | `JOB_RUNNER` | Optional | `inngest` (default) or `trigger-dev` |
+
+For staged activation/rollback of storage deletion, see
+[storage-deletion-rollout.md](./storage-deletion-rollout.md). For the frozen
+contract and status semantics, see [storage-ref-contract.md](./storage-ref-contract.md).
 
 ## Post-deployment Checklist
 

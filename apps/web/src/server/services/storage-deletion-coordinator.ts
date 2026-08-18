@@ -547,12 +547,9 @@ export async function requestDocumentDeletionAndDispatch(params: {
 
 /**
  * Same idea as requestDocumentDeletionAndDispatch, for a single version.
- * NOTE: the tombstone check below currently can't ever find a match — the
- * worker's finalizeRequestIfDone only writes a tombstone in the
- * document-scoped branch (version-scoped purge is a known, already-flagged
- * gap: there's no "purge just this version" relational step yet). Left in
- * place so this starts working automatically once that gap is closed,
- * rather than needing a second change later.
+ * Idempotent re-delete is supported the same way as documents: when a
+ * prior request has already completed and purged the version row, the
+ * persisted tombstone is returned instead of creating a new request.
  */
 // ---------------------------------------------------------------------------
 // B5 — batch delete

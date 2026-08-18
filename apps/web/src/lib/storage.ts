@@ -1,9 +1,11 @@
 import { randomUUID } from "node:crypto";
 import type { DeleteResult, ObjectRef } from "@launchstack/core/storage";
 
-import { env } from "~/env";
 import { internalServiceHeaders } from "~/server/storage/internal-service-auth";
-import { resolveStorageLocationId } from "~/lib/storage-location-id";
+
+declare const require:
+  | ((id: string) => { env?: unknown })
+  | undefined;
 
 // ---------------------------------------------------------------------------
 // StorageError — wraps provider errors with provider name context
@@ -26,13 +28,108 @@ export class StorageError extends Error {
 
 export type StorageBackend = "s3" | "database";
 
+type LegacyEnvShape = {
+  server?: Record<string, string | undefined>;
+  client?: Record<string, string | undefined>;
+};
+
+let cachedEnvModule: LegacyEnvShape | null | undefined;
+
+function readLegacyEnv(name: string): string | undefined {
+  if (cachedEnvModule === undefined) {
+    try {
+      if (typeof require === "function") {
+        cachedEnvModule = require("~/env")?.env ?? null;
+      } else {
+        cachedEnvModule = null;
+      }
+    } catch {
+      cachedEnvModule = null;
+    }
+  }
+
+  const fromServer = cachedEnvModule?.server?.[name];
+  if (fromServer && fromServer.length > 0) return fromServer;
+
+  const fromClient = cachedEnvModule?.client?.[name];
+  if (fromClient && fromClient.length > 0) return fromClient;
+
+  return undefined;
+}
+
+function readEnv(name: string): string | undefined {
+  const legacy = readLegacyEnv(name);
+  if (legacy) return legacy;
+
+  const value = process.env[name];
+  return value && value.length > 0 ? value : undefined;
+}
+
+function resolveStorageLocationId(adapter: ObjectRef["adapter"]): string {
+  if (adapter === "database") {
+    return "database:pdr_file_uploads_v1";
+  }
+
+  if (adapter === "s3") {
+    const endpoint = readEnv("NEXT_PUBLIC_S3_ENDPOINT");
+    const bucket = readEnv("S3_BUCKET_NAME");
+    if (!endpoint || !bucket) {
+      throw new Error("S3 location id requires NEXT_PUBLIC_S3_ENDPOINT and S3_BUCKET_NAME");
+    }
+    return `s3:${endpoint}@${bucket}`;
+  }
+
+  if (adapter === "vercel-blob") {
+    const token = readEnv("BLOB_READ_WRITE_TOKEN");
+    const storeId = token?.split("_")[3];
+    if (!storeId) {
+      throw new Error("Vercel Blob location id requires parseable BLOB_READ_WRITE_TOKEN");
+    }
+    return `vercel-blob:${storeId}`;
+  }
+
+  if (adapter === "uploadthing") {
+    const explicit = readEnv("UPLOADTHING_LOCATION_ID");
+    if (explicit) return explicit;
+
+    const token = readEnv("UPLOADTHING_TOKEN");
+    let appId: string | undefined;
+    let region: string | undefined;
+
+    if (token && token.includes(".")) {
+      try {
+        const payloadB64 = token.split(".")[1];
+        if (payloadB64) {
+          const payloadJson = Buffer.from(payloadB64, "base64url").toString("utf8");
+          const payload = JSON.parse(payloadJson) as { appId?: string; region?: string };
+          appId = payload.appId;
+          region = payload.region;
+        }
+      } catch {
+        // Fall back to underscore format parsing below.
+      }
+    }
+
+    if (!appId && token) {
+      appId = token.split("_")[3];
+    }
+
+    if (!appId) {
+      throw new Error("UploadThing location id requires UPLOADTHING_LOCATION_ID or parseable UPLOADTHING_TOKEN");
+    }
+    return region ? `uploadthing:${appId}@${region}` : `uploadthing:${appId}`;
+  }
+
+  throw new Error(`Unsupported adapter for location id resolution: ${adapter}`);
+}
+
 function s3VarsConfigured(): boolean {
   return Boolean(
-    env.server.NEXT_PUBLIC_S3_ENDPOINT &&
-      env.server.S3_REGION &&
-      env.server.S3_ACCESS_KEY &&
-      env.server.S3_SECRET_KEY &&
-      env.server.S3_BUCKET_NAME,
+    readEnv("NEXT_PUBLIC_S3_ENDPOINT") &&
+      readEnv("S3_REGION") &&
+      readEnv("S3_ACCESS_KEY") &&
+      readEnv("S3_SECRET_KEY") &&
+      readEnv("S3_BUCKET_NAME"),
   );
 }
 
@@ -42,7 +139,7 @@ function s3VarsConfigured(): boolean {
  * set of S3 env vars is present (auto-fallback to Postgres).
  */
 export function resolveStorageBackend(): StorageBackend {
-  const explicit = env.server.NEXT_PUBLIC_STORAGE_PROVIDER;
+  const explicit = readEnv("NEXT_PUBLIC_STORAGE_PROVIDER");
   if (explicit === "s3" || explicit === "database") {
     return explicit;
   }
@@ -192,15 +289,14 @@ export function getFileUrl(key: string, provider?: StorageBackend): string {
   const resolvedProvider = provider ?? resolveStorageBackend();
 
   if (resolvedProvider === "s3") {
-    const endpoint =
-      env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
+    const endpoint = readEnv("NEXT_PUBLIC_S3_ENDPOINT");
     if (!endpoint) {
       throw new StorageError(
         "NEXT_PUBLIC_S3_ENDPOINT is not configured",
         "s3",
       );
     }
-    const bucket = env.server.S3_BUCKET_NAME;
+    const bucket = readEnv("S3_BUCKET_NAME");
     const base = endpoint.replace(/\/+$/, "");
     return bucket ? `${base}/${bucket}/${key}` : `${base}/${key}`;
   }
@@ -565,7 +661,7 @@ export async function deleteFileByUrl(url: string): Promise<void> {
 function isSelfOriginUrl(url: string): boolean {
   if (url.startsWith("/")) return true;
 
-  const appBase = env.server.APP_PUBLIC_URL;
+  const appBase = readEnv("APP_PUBLIC_URL");
   if (!appBase) return false;
 
   try {
@@ -579,8 +675,7 @@ export async function fetchFile(
   url: string,
   init?: RequestInit,
 ): Promise<Response> {
-  const s3Endpoint =
-    env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
+  const s3Endpoint = readEnv("NEXT_PUBLIC_S3_ENDPOINT");
 
   // Identify ourselves when calling our own endpoints, so the tenant check on
   // /api/files/[id] can tell "the ingestion pipeline" apart from "an anonymous

@@ -46,3 +46,35 @@ scrape_configs:
   - Fallback ratio: `rate(pdr_qa_requests_total{retrieval="ann_fallback"}[5m]) / rate(pdr_qa_requests_total[5m])`
 
 These dashboards help spot cache regressions, GPT usage spikes, or ensemble search issues before users are affected.
+
+## Storage Deletion Lifecycle Observability
+
+Storage deletion lifecycle health is intentionally exposed as a read-only JSON
+surface (separate from Prometheus counters):
+
+- `GET /api/storage/deletion-metrics`
+- UI surface: Documents → Settings → **Storage operations**
+
+Key fields:
+
+- `flags.lifecycleEnabled` / `flags.workerEnabled`
+- backlog: request count, oldest age, retries, blocked/quarantined counts
+- provider cleanup: pending/completed/blocked item counts
+- SQL purge: completed vs pending request totals
+
+This endpoint is the primary rollout guardrail while enabling
+`STORAGE_DELETION_LIFECYCLE_ENABLED` and then
+`STORAGE_DELETION_WORKER_ENABLED` in stages.
+
+### Orphan Audit (read-only by default)
+
+Use the orphan inventory tool to audit provider objects against manifest/legacy
+references without deleting anything:
+
+```bash
+pnpm --dir apps/web exec tsx scripts/audit-storage-orphans.ts --adapter s3
+```
+
+Only explicit `--backfill` writes high-confidence manifest rows; default mode is
+read-only. See [storage-orphan-audit.md](./storage-orphan-audit.md) and
+[storage-deletion-rollout.md](./storage-deletion-rollout.md).

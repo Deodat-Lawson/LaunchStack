@@ -13,8 +13,11 @@ export interface CreateDocumentParams {
   ocrEnabled: boolean;
   ocrProcessed: boolean;
   ocrMetadata?: Record<string, unknown>;
-  /** ObjectRef minted by the adapter that wrote the document bytes. */
-  storageRef: ObjectRef;
+  /**
+   * ObjectRef minted by the adapter that wrote the document bytes.
+   * Optional only for legacy rows/tests that still pass URL-only uploads.
+   */
+  storageRef?: ObjectRef;
   sizeBytes?: number;
   checksum?: string;
   sourceOperation?: string;
@@ -28,8 +31,8 @@ export interface CreatedDocument {
   url: string;
   title: string;
   category: string;
-  /** Manifest row for the uploaded source object. */
-  storageObjectId: number;
+  /** Manifest row for the uploaded source object, when present. */
+  storageObjectId: number | null;
 }
 
 /**
@@ -64,24 +67,28 @@ export async function createDocumentRecord(
       throw new Error("Failed to create document record");
     }
 
-    const manifest = await claimObjectForDocument(tx, {
-      ref: params.storageRef,
-      companyId: params.companyId,
-      documentId: row.id,
-      contentType: params.mimeType ?? undefined,
-      sizeBytes: params.sizeBytes,
-      checksum: params.checksum,
-      sourceOperation: params.sourceOperation ?? "document-create",
-    });
-
-    if (params.parentObjectId !== undefined) {
-      await registerArtifactEdge(tx, {
-        parentObjectId: params.parentObjectId,
-        childObjectId: manifest.id,
-        edgeType: params.parentEdgeType ?? "derived-document",
+    let manifestId: number | null = null;
+    if (params.storageRef) {
+      const manifest = await claimObjectForDocument(tx, {
+        ref: params.storageRef,
+        companyId: params.companyId,
+        documentId: row.id,
+        contentType: params.mimeType ?? undefined,
+        sizeBytes: params.sizeBytes,
+        checksum: params.checksum,
+        sourceOperation: params.sourceOperation ?? "document-create",
       });
+      manifestId = manifest.id;
+
+      if (params.parentObjectId !== undefined) {
+        await registerArtifactEdge(tx, {
+          parentObjectId: params.parentObjectId,
+          childObjectId: manifest.id,
+          edgeType: params.parentEdgeType ?? "derived-document",
+        });
+      }
     }
 
-    return { ...row, storageObjectId: manifest.id };
+    return { ...row, storageObjectId: manifestId };
   });
 }

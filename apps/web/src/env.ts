@@ -137,6 +137,11 @@ const serverSchema = z.object({
   S3_ACCESS_KEY: optionalString(),
   S3_SECRET_KEY: optionalString(),
   S3_BUCKET_NAME: optionalString(),
+  // Storage deletion rollout flags (both default OFF when unset):
+  // - STORAGE_DELETION_LIFECYCLE_ENABLED gates new delete requests.
+  // - STORAGE_DELETION_WORKER_ENABLED gates async provider cleanup.
+  // Status surfaces: /api/documents/[id]/deletion-status,
+  // /api/storage/deletion-requests/[id], /api/storage/deletion-metrics.
   STORAGE_DELETION_LIFECYCLE_ENABLED: z.preprocess(
     (val) => val === "true" || val === "1",
     z.boolean().optional()

@@ -18,7 +18,6 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { resolveStorageLocationId } from "~/lib/storage-location-id";
-import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 /**
  * Request validation schema
@@ -61,16 +60,20 @@ function resolveUploadRef(input: {
     (input.storageProvider === "s3" || input.storageProvider === "database") &&
     input.storagePathname
   ) {
+    const storageLocationId = resolveStorageLocationId(input.storageProvider);
+
     return {
       adapter: input.storageProvider,
-      storageLocationId: resolveStorageLocationId(input.storageProvider),
+      storageLocationId,
       key: input.storagePathname,
     };
   }
 
-  const promoted = promoteLegacyUrlToRef({ value: input.documentUrl });
-  return promoted.ok ? promoted.ref : undefined;
+  return undefined;
 }
+
+const isUploadThingUrl = (value: string): boolean =>
+  /\/f\//.test(value) && /uploadthing\.com|ufs\.sh|utfs\.io/i.test(value);
 
 export async function POST(request: Request) {
   return withRateLimit(request, RateLimitPresets.strict, async () => {
@@ -103,6 +106,16 @@ export async function POST(request: Request) {
         storagePathname,
         storageRef,
       });
+
+      if (isUploadThingUrl(rawDocumentUrl) && !resolvedStorageRef) {
+        return NextResponse.json(
+          {
+            error:
+              "Uploads from UploadThing must include a canonical object ref minted at upload time.",
+          },
+          { status: 400 },
+        );
+      }
 
       if ((storageProvider ?? storagePathname) && !resolvedStorageRef) {
         return NextResponse.json(

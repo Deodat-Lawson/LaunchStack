@@ -22,9 +22,7 @@ import { inngest } from "../client";
 import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
 import { findObjectByRef, registerArtifactEdge, registerObject } from "~/server/services/storage-manifest";
-import { requestObjectCleanupAndDispatch } from "~/server/services/storage-deletion-coordinator";
 import { isStorageDeletionLifecycleEnabled } from "~/server/storage/deletion-flags";
-import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 import { putFile, fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
 
@@ -162,17 +160,22 @@ export const modifyDocument = inngest.createFunction(
           sourceOperation: "document-modification",
         });
 
-        const oldRef = promoteLegacyUrlToRef({ value: documentUrl });
-        if (oldRef.ok) {
-          const previousManifest = await findObjectByRef(tx, oldRef.ref);
-          if (previousManifest && previousManifest.id !== nextManifest.id) {
-            previousObjectId = previousManifest.id;
-            await registerArtifactEdge(tx, {
-              parentObjectId: previousManifest.id,
-              childObjectId: nextManifest.id,
-              edgeType: "supersedes",
-            });
+        try {
+          const { promoteLegacyUrlToRef } = await import("~/server/storage/legacy-promote");
+          const oldRef = promoteLegacyUrlToRef({ value: documentUrl });
+          if (oldRef.ok) {
+            const previousManifest = await findObjectByRef(tx, oldRef.ref);
+            if (previousManifest && previousManifest.id !== nextManifest.id) {
+              previousObjectId = previousManifest.id;
+              await registerArtifactEdge(tx, {
+                parentObjectId: previousManifest.id,
+                childObjectId: nextManifest.id,
+                edgeType: "supersedes",
+              });
+            }
           }
+        } catch {
+          // Legacy URL promotion is best-effort for lineage only.
         }
 
         await tx
@@ -190,6 +193,9 @@ export const modifyDocument = inngest.createFunction(
         isStorageDeletionLifecycleEnabled()
       ) {
         const actorId = typeof userId === "string" && userId.length > 0 ? userId : "system";
+        const { requestObjectCleanupAndDispatch } = await import(
+          "~/server/services/storage-deletion-coordinator"
+        );
         await requestObjectCleanupAndDispatch({
           documentId,
           companyId: Number(companyIdForCleanup),

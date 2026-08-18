@@ -37,7 +37,11 @@ import {
   ocrJobs,
   users,
 } from "@launchstack/core/db/schema";
-import { registerObject } from "~/server/services/storage-manifest";
+import {
+  findObjectByRef,
+  registerArtifactEdge,
+  registerObject,
+} from "~/server/services/storage-manifest";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 import { parseProvider, triggerDocumentProcessing } from "@launchstack/core/ocr/trigger";
 import { getEngine } from "~/server/engine";
@@ -269,7 +273,7 @@ export async function POST(
           throw new Error("Failed to insert document_versions row");
         }
 
-        await registerObject(tx, {
+        const nextManifest = await registerObject(tx, {
           ref: resolveVersionRef(documentUrl, storageRef),
           companyId: doc.companyId,
           documentVersionId: inserted.id,
@@ -277,6 +281,18 @@ export async function POST(
           sizeBytes: fileSize,
           sourceOperation: "document-version-upload",
         });
+
+        const previousRef = promoteLegacyUrlToRef({ value: doc.url });
+        if (previousRef.ok) {
+          const previousManifest = await findObjectByRef(tx, previousRef.ref);
+          if (previousManifest && previousManifest.id !== nextManifest.id) {
+            await registerArtifactEdge(tx, {
+              parentObjectId: previousManifest.id,
+              childObjectId: nextManifest.id,
+              edgeType: "supersedes",
+            });
+          }
+        }
 
         // Flip currentVersionId to the new row so RAG starts returning the
         // new version's chunks as soon as embeddings land. The brief window

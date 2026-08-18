@@ -60,6 +60,15 @@ export async function GET() {
       );
     }
 
+    let activeCompanyId = userInfo.companyId;
+    try {
+      if (userInfo.id !== undefined && userInfo.companyId !== undefined) {
+        activeCompanyId = await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId);
+      }
+    } catch {
+      activeCompanyId = userInfo.companyId;
+    }
+
     const [categoriesRaw, companyRaw] = await Promise.all([
       db
         .select({
@@ -67,7 +76,7 @@ export async function GET() {
           name: category.name,
         })
         .from(category)
-        .where(eq(category.companyId, (await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId)))),
+        .where(eq(category.companyId, activeCompanyId)),
       db
         .select({
           id: company.id,
@@ -75,7 +84,7 @@ export async function GET() {
           useUploadThing: company.useUploadThing,
         })
         .from(company)
-        .where(and(eq(company.id, Number((await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId))))))
+        .where(and(eq(company.id, Number(activeCompanyId))))
         .limit(1),
     ]);
 

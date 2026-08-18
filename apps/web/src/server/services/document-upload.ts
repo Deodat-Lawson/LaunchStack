@@ -22,7 +22,6 @@ import { createDocumentRecord } from "./create-document";
 import { triggerJob } from "./trigger-job";
 import { hasTokens } from "~/lib/credits";
 import { isCloudMode } from "@launchstack/core/providers/registry";
-import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 
 export type { StorageType } from "./detect-storage-type";
 export { detectStorageType, toAbsoluteUrl } from "./detect-storage-type";
@@ -31,6 +30,9 @@ export interface DocumentUploadUserContext {
   userId: string;
   companyId: bigint;
 }
+
+const isUploadThingUrl = (value: string): boolean =>
+  /\/f\//.test(value) && /uploadthing\.com|ufs\.sh|utfs\.io/i.test(value);
 
 export interface DocumentUploadParams {
   user: DocumentUploadUserContext;
@@ -63,16 +65,61 @@ export interface DocumentUploadResult {
   resolvedDocumentUrl: string;
 }
 
-function resolveStorageRef(rawDocumentUrl: string, supplied?: ObjectRef): ObjectRef {
+function resolveStorageRef(rawDocumentUrl: string, supplied?: ObjectRef): ObjectRef | undefined {
   if (supplied) return supplied;
 
-  const promoted = promoteLegacyUrlToRef({ value: rawDocumentUrl });
-  if (!promoted.ok) {
+  if (isUploadThingUrl(rawDocumentUrl)) {
     throw new Error(
-      `Document upload requires an adapter ObjectRef; legacy reference promotion failed (${promoted.reason}).`,
+      "Document upload requires an adapter ObjectRef for UploadThing URLs.",
     );
   }
-  return promoted.ref;
+
+  const dbMatch = /^(?:https?:\/\/[^/]+)?\/api\/files\/(\d+)$/.exec(rawDocumentUrl);
+  if (dbMatch?.[1]) {
+    return {
+      adapter: "database",
+      storageLocationId: "database:pdr_file_uploads_v1",
+      key: dbMatch[1],
+    };
+  }
+
+  const s3Endpoint = process.env.NEXT_PUBLIC_S3_ENDPOINT?.replace(/\/+$/, "");
+  const bucket = process.env.S3_BUCKET_NAME;
+  if (s3Endpoint && rawDocumentUrl.startsWith(`${s3Endpoint}/`)) {
+    const suffix = rawDocumentUrl.slice(s3Endpoint.length + 1);
+    const key = bucket && suffix.startsWith(`${bucket}/`) ? suffix.slice(bucket.length + 1) : suffix;
+    if (key) {
+      return {
+        adapter: "s3",
+        storageLocationId: bucket ? `s3:${s3Endpoint}@${bucket}` : `s3:${s3Endpoint}`,
+        key,
+      };
+    }
+  }
+
+  return undefined;
+}
+
+async function findManifestObjectIdForRef(
+  ref: ObjectRef,
+  companyId: bigint,
+): Promise<number | undefined> {
+  const [row] = await db
+    .select({ id: storageObjects.id, ownerCompanyId: storageObjects.companyId })
+    .from(storageObjects)
+    .where(
+      and(
+        eq(storageObjects.adapter, ref.adapter),
+        eq(storageObjects.storageLocationId, ref.storageLocationId),
+        eq(storageObjects.key, ref.key),
+      ),
+    );
+
+  if (!row || row.ownerCompanyId !== companyId) {
+    return undefined;
+  }
+
+  return row.id;
 }
 
 /**
@@ -224,7 +271,6 @@ export async function processDocumentUpload({
       sourceOperation: "audio-upload",
     });
 
-    // The original audio file is its own v1. Embeddings are generated from the
     // transcript document (below), not the audio itself — but we still create
     // a version row so delete/revert works consistently across file types.
     await createInitialVersion({
@@ -233,7 +279,7 @@ export async function processDocumentUpload({
       mimeType: mimeType ?? null,
       uploadedBy: user.userId,
       ocrProcessed: true,
-      storageObjectId: audioDocument.storageObjectId,
+      storageObjectId: audioDocument.storageObjectId ?? undefined,
     });
 
     try {
@@ -275,7 +321,7 @@ export async function processDocumentUpload({
         ocrMetadata: transcriptionMetadata,
         storageRef: textBlob.ref,
         sourceOperation: "audio-transcription",
-        parentObjectId: audioDocument.storageObjectId,
+        parentObjectId: audioDocument.storageObjectId ?? undefined,
         parentEdgeType: "audio-transcript",
       });
 
@@ -290,7 +336,7 @@ export async function processDocumentUpload({
         uploadedBy: user.userId,
         ocrProcessed: false,
         ocrMetadata: transcriptionMetadata,
-        storageObjectId: transcriptDocument.storageObjectId,
+        storageObjectId: transcriptDocument.storageObjectId ?? undefined,
       });
 
       const { jobId, eventIds } = await triggerJob({
@@ -334,6 +380,53 @@ export async function processDocumentUpload({
   // ------------------------------------------------------------------
   // Normal (non-audio) document processing
   // ------------------------------------------------------------------
+  if (!resolvedStorageRef) {
+    const [legacyDocument] = await db
+      .insert(document)
+      .values({
+        url: rawDocumentUrl,
+        title: documentName,
+        mimeType: mimeType ?? null,
+        category: documentCategory,
+        companyId: user.companyId,
+        ocrEnabled: true,
+        ocrProcessed: false,
+      })
+      .returning({
+        id: document.id,
+        url: document.url,
+        title: document.title,
+        category: document.category,
+      });
+
+    if (!legacyDocument) {
+      throw new Error("Failed to create document record");
+    }
+
+    const { jobId, eventIds } = await triggerJob({
+      documentUrl: resolvedDocumentUrl,
+      documentName,
+      companyId: user.companyId,
+      userId: user.userId,
+      documentId: legacyDocument.id,
+      category: documentCategory,
+      preferredProvider,
+      mimeType,
+      originalFilename,
+      isWebsite,
+      embeddingIndexKey: resolvedEmbeddingIndexKey,
+      storageRef: undefined,
+    });
+
+    return {
+      jobId,
+      eventIds,
+      storageType,
+      document: legacyDocument,
+      resolvedDocumentUrl,
+    };
+  }
+
   const newDocument = await createDocumentRecord({
     url: rawDocumentUrl,
     title: documentName,
@@ -354,7 +447,7 @@ export async function processDocumentUpload({
     url: rawDocumentUrl,
     mimeType,
     uploadedBy: user.userId,
-    storageObjectId: newDocument.storageObjectId,
+    storageObjectId: newDocument.storageObjectId ?? undefined,
   });
 
   const { jobId, eventIds } = await triggerJob({
@@ -406,6 +499,7 @@ export async function processVideoUrlUpload({
   title,
   preferredProvider,
   embeddingIndexKey,
+  storageRef,
 }: VideoUrlUploadParams): Promise<DocumentUploadResult> {
   if (!isVideoUrl(videoUrl)) {
     throw new Error("Unsupported video URL. Supported platforms include YouTube, Vimeo, TikTok, Twitter/X, and more.");
@@ -443,6 +537,9 @@ export async function processVideoUrlUpload({
   };
 
   const transcriptName = `${documentName} (Transcription)`;
+  const sourceObjectId = storageRef
+    ? await findManifestObjectIdForRef(storageRef, user.companyId)
+    : undefined;
 
   // 3. Create the transcript document record
   const transcriptDocument = await createDocumentRecord({
@@ -456,6 +553,8 @@ export async function processVideoUrlUpload({
     ocrMetadata: transcriptionMetadata,
     storageRef: textBlob.ref,
     sourceOperation: "video-transcription",
+    parentObjectId: sourceObjectId,
+    parentEdgeType: "video-transcript",
   });
 
   const transcriptVersionId = await createInitialVersion({
@@ -465,7 +564,7 @@ export async function processVideoUrlUpload({
     uploadedBy: user.userId,
     ocrProcessed: false,
     ocrMetadata: transcriptionMetadata,
-    storageObjectId: transcriptDocument.storageObjectId,
+    storageObjectId: transcriptDocument.storageObjectId ?? undefined,
   });
 
   // 4. Trigger embedding pipeline

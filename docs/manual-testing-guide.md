@@ -138,6 +138,18 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 | 3.3.6 | Document generator (if present) | Outline/citation/grammar/research/export panels open and behave; export works or shows clear state. |
 | 3.3.7 | Simple query / Agent chat | Query panel or agent chat returns answers; no infinite loading. |
 
+### 3.2.1 Storage deletion lifecycle checks
+
+Run these after at least one successful upload.
+
+| # | Check | Expected |
+|---|--------|----------|
+| 3.2.1.1 | Delete document from workspace UI | UI waits for status polling and only treats `completed` as success. Any `queued` timeout, `partial`, `manual_review`, or `quarantined` is shown as non-success. |
+| 3.2.1.2 | Document status API | `GET /api/documents/<id>/deletion-status` returns: in-progress status, terminal tombstone status, or `deletionRequested: false` when no request exists. |
+| 3.2.1.3 | Request status API | `GET /api/storage/deletion-requests/<id>` returns the same lifecycle status by request id, including after relational purge via tombstone fallback. |
+| 3.2.1.4 | Metrics dashboard | In Documents → Settings → **Storage operations**, confirm lifecycle/worker flags, backlog counts, and SQL purge counters load and refresh. |
+| 3.2.1.5 | Worker flag off behavior | With `STORAGE_DELETION_WORKER_ENABLED` unset/false, requests remain queued (durable outbox preserved), not silently deleted. |
+
 ### 3.3 Statistics (`/employer/statistics`)
 
 | # | Check | Expected |

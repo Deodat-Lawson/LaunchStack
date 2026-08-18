@@ -26,6 +26,7 @@ import { eq } from "drizzle-orm";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { handleDeleteDocumentRequest } from "~/server/services/delete-document-api";
+import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 
 export async function DELETE(request: Request) {
   try {
@@ -68,7 +69,9 @@ export async function DELETE(request: Request) {
 
     const { status, body } = await handleDeleteDocumentRequest({
       documentId,
-      companyId: Number(userInfo.companyId),
+      companyId: Number(
+        await resolveActiveCompanyForUser(userInfo.id, userInfo.companyId),
+      ),
       actorId: userId,
     });
 

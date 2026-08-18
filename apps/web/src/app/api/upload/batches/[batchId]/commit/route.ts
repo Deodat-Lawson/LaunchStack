@@ -103,6 +103,7 @@ export async function POST(
               preferredProvider,
               explicitStorageType: inferStorageType(file.storageType),
               mimeType: file.mimeType ?? undefined,
+              storageRef: extractStorageRef(file.metadata),
               embeddingIndexKey,
             });
 

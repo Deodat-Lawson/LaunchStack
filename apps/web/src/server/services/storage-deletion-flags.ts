@@ -1,21 +1,10 @@
-export function isStorageDeletionLifecycleEnabled(): boolean {
-    return isEnabled(process.env.STORAGE_DELETION_LIFECYCLE_ENABLED);
-}
-
-export function isStorageDeletionWorkerEnabled(): boolean {
-    return isEnabled(process.env.STORAGE_DELETION_WORKER_ENABLED);
-}
-
-export function getStorageDeletionFlagState(): {
-    lifecycleEnabled: boolean;
-    workerEnabled: boolean;
-} {
-    return {
-        lifecycleEnabled: isStorageDeletionLifecycleEnabled(),
-        workerEnabled: isStorageDeletionWorkerEnabled(),
-    };
-}
-
-function isEnabled(value: string | undefined): boolean {
-    return value === "true" || value === "1";
-}
+/**
+ * Re-export only. The flags have exactly one implementation, in
+ * ~/server/storage/deletion-flags — this module exists because several
+ * callers already import them from the services path.
+ */
+export {
+  getStorageDeletionFlagState,
+  isStorageDeletionLifecycleEnabled,
+  isStorageDeletionWorkerEnabled,
+} from "~/server/storage/deletion-flags";

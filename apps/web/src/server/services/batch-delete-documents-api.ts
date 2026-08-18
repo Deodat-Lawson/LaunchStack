@@ -14,6 +14,10 @@ import {
   TenantMismatchError,
 } from "./storage-deletion-coordinator";
 import { isLifecycleEnabled } from "./delete-document-api";
+import {
+  BatchDeleteDocumentsResponseSchema,
+  validateApiResponse,
+} from "~/lib/api-response-schemas";
 
 /** Per-document status, drawn from the frozen deletion status enum. */
 export type DeletionStatus =
@@ -81,6 +85,17 @@ export function rollUpBatchStatus(statuses: DeletionStatus[]): DeletionStatus {
  * provider deletes happen per item in the worker, and a file already removed
  * from S3 is not un-removable if a later one fails.
  */
+/** B8: check the declared response shape on the way out (dev/test only). */
+function checked(
+  status: number,
+  body: Record<string, unknown>,
+): BatchDeleteDocumentsApiResult {
+  return {
+    status,
+    body: validateApiResponse(BatchDeleteDocumentsResponseSchema, body, "batch delete response"),
+  };
+}
+
 export async function handleBatchDeleteDocumentsRequest(params: {
   documentIds: number[];
   companyId: number;
@@ -89,10 +104,10 @@ export async function handleBatchDeleteDocumentsRequest(params: {
   if (!isLifecycleEnabled()) {
     // Flag off never falls back to the old direct-delete path — that path
     // is removed, not bypassed (Decision 7).
-    return {
-      status: 503,
-      body: { success: false, error: "Document deletion is not currently enabled." },
-    };
+    return checked(503, {
+      success: false,
+      error: "Document deletion is not currently enabled.",
+    });
   }
 
   let results;
@@ -105,16 +120,10 @@ export async function handleBatchDeleteDocumentsRequest(params: {
   } catch (err) {
     // Typed errors, checked by type — never by substring-matching a message.
     if (err instanceof DocumentNotFoundError) {
-      return {
-        status: 404,
-        body: { success: false, error: "One or more documents not found" },
-      };
+      return checked(404, { success: false, error: "One or more documents not found" });
     }
     if (err instanceof TenantMismatchError) {
-      return {
-        status: 404,
-        body: { success: false, error: "One or more documents not found" },
-      };
+      return checked(404, { success: false, error: "One or more documents not found" });
     }
     // Anything else — including DispatchFailedError, where the whole batch
     // was written and then rolled back — is a genuine hard failure. Let it
@@ -143,24 +152,21 @@ export async function handleBatchDeleteDocumentsRequest(params: {
     0,
   );
 
-  return {
-    // 202 whenever real work was accepted but isn't done yet; 200 only when
-    // every document in the batch was already fully deleted beforehand, so
-    // nothing new was queued.
-    status: createdCount > 0 ? 202 : 200,
-    body: {
-      success: true,
-      status: batchStatus,
-      accepted: createdCount,
-      alreadyCompleted: documents.length - createdCount,
-      // Files that more than one document in this batch pointed at, and so
-      // will be deleted exactly once rather than once per document.
-      dedupedFileCount,
-      documents,
-      message:
-        createdCount > 0
-          ? `Deletion accepted for ${createdCount} document${createdCount === 1 ? "" : "s"} and is now in progress.`
-          : "All requested documents were already deleted.",
-    },
-  };
+  // 202 whenever real work was accepted but isn't done yet; 200 only when
+  // every document in the batch was already fully deleted beforehand, so
+  // nothing new was queued.
+  return checked(createdCount > 0 ? 202 : 200, {
+    success: true,
+    status: batchStatus,
+    accepted: createdCount,
+    alreadyCompleted: documents.length - createdCount,
+    // Files that more than one document in this batch pointed at, and so
+    // will be deleted exactly once rather than once per document.
+    dedupedFileCount,
+    documents,
+    message:
+      createdCount > 0
+        ? `Deletion accepted for ${createdCount} document${createdCount === 1 ? "" : "s"} and is now in progress.`
+        : "All requested documents were already deleted.",
+  });
 }

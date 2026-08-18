@@ -42,6 +42,10 @@ import {
 import type { StorageDeletionItem } from "@launchstack/core/db/schema";
 
 import { db } from "~/server/db";
+import {
+  DeletionStatusResponseSchema,
+  validateApiResponse,
+} from "~/lib/api-response-schemas";
 
 /** The frozen deletion status enum. B7 reports these, it never invents one. */
 export type DeletionStatus =
@@ -348,29 +352,37 @@ export async function getDeletionStatusByDocumentId(params: {
   return { kind: "no-deletion", documentId: params.documentId };
 }
 
-/** Maps a service result to the HTTP shape both routes return. */
+/**
+ * Maps a service result to the HTTP shape both routes return.
+ *
+ * B8: the body is checked against its declared response schema on the way
+ * out. Outside production only, and it can never alter or reject the
+ * response — see validateApiResponse.
+ */
 export function toHttpResponse(result: DeletionStatusResult): {
   status: number;
   body: Record<string, unknown>;
 } {
+  const checked = (status: number, body: Record<string, unknown>) => ({
+    status,
+    body: validateApiResponse(DeletionStatusResponseSchema, body, "deletion status response"),
+  });
+
   switch (result.kind) {
     case "ok":
-      return { status: 200, body: { success: true, ...result.payload } };
+      return checked(200, { success: true, ...result.payload });
     case "no-deletion":
-      return {
-        status: 200,
-        body: {
-          success: true,
-          documentId: result.documentId,
-          deletionRequested: false,
-          message: "No deletion has been requested for this document.",
-        },
-      };
+      return checked(200, {
+        success: true,
+        documentId: result.documentId,
+        deletionRequested: false,
+        message: "No deletion has been requested for this document.",
+      });
     case "forbidden":
       // Same non-disclosure choice the batch delete route makes: don't let
       // this be used to probe which ids exist in other companies.
-      return { status: 404, body: { success: false, error: "Not found" } };
+      return checked(404, { success: false, error: "Not found" });
     case "not-found":
-      return { status: 404, body: { success: false, error: "Not found" } };
+      return checked(404, { success: false, error: "Not found" });
   }
 }

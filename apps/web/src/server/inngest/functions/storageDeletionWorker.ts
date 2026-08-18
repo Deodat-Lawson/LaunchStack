@@ -63,84 +63,21 @@ import type { StorageDeletionItem } from "@launchstack/core/db/schema";
 
 import { inngest } from "../client";
 import { db } from "~/server/db";
-import { deleteObjects } from "~/server/storage/s3-client";
-import { deleteFile as deleteBlobFile } from "~/server/storage/vercel-blob";
-import { deleteUploadThingFileByKey } from "~/server/storage/uploadthing";
-import { purgeDocumentRelational } from "~/server/services/storage-deletion-coordinator";
-import { isStorageDeletionWorkerEnabled } from "~/server/services/storage-deletion-flags";
-import { deleteFileByRef } from "~/lib/storage";
-import type { ObjectRef } from "@launchstack/core/storage";
+import {
+  purgeDocumentRelational,
+  refIdentity,
+} from "~/server/services/storage-deletion-coordinator";
+import { isStorageDeletionWorkerEnabled } from "~/server/storage/deletion-flags";
+import { deleteManyByRef } from "~/lib/storage";
+import { mapDeleteOutcomeToItemState } from "~/server/storage/deletion-lifecycle";
+import type { DeleteResult, ObjectRef } from "@launchstack/core/storage";
 
 export const BLOCK_AFTER_ATTEMPTS = 5;
 
-export interface DeleteOutcome {
-  outcome: "deleted" | "not_found" | "retryable" | "blocked";
-  errorCode?: string;
-  message?: string;
-}
+const SUPPORTED_ADAPTERS = new Set(["s3", "vercel-blob", "database", "uploadthing"]);
 
-function normalizeDeleteResult(result: {
-  outcome: DeleteOutcome["outcome"] | "rejected";
-  errorCode?: string;
-  message?: string;
-}): DeleteOutcome {
-  if (result.outcome === "rejected") {
-    return {
-      outcome: "blocked",
-      errorCode: result.errorCode ?? "delete_rejected",
-      message: result.message ?? "Storage adapter rejected the delete request",
-    };
-  }
-
-  return {
-    outcome: result.outcome,
-    errorCode: result.errorCode,
-    message: result.message,
-  };
-}
-
-/** Calls the right adapter's delete function and normalizes the result. */
-async function deleteByAdapter(
-  adapter: string,
-  storageLocationId: string,
-  key: string,
-): Promise<DeleteOutcome> {
-  switch (adapter) {
-    case "s3": {
-      const [result] = await deleteObjects([key]);
-      return result ?? { outcome: "retryable", message: "deleteObjects returned no result" };
-    }
-    case "vercel-blob": {
-      try {
-        await deleteBlobFile(key);
-        return { outcome: "deleted" };
-      } catch (err) {
-        return {
-          outcome: "retryable",
-          errorCode: "vercel_blob_delete_failed",
-          message: err instanceof Error ? err.message : String(err),
-        };
-      }
-    }
-    case "uploadthing":
-      return deleteUploadThingFileByKey(key);
-    case "database": {
-      const ref: ObjectRef = {
-        adapter: "database",
-        storageLocationId,
-        key,
-      };
-      const result = await deleteFileByRef(ref);
-      return normalizeDeleteResult(result);
-    }
-    default:
-      // Unknown adapter — not transient, a human needs to look at this.
-      return {
-        outcome: "blocked",
-        errorCode: "unknown_adapter",
-        message: `deleteByAdapter: no delete handler for adapter "${adapter}"`,
-      };
-  }
+function isSupportedAdapter(adapter: string): adapter is ObjectRef["adapter"] {
+  return SUPPORTED_ADAPTERS.has(adapter);
 }
 
 export interface ProcessPendingItemsResult {
@@ -155,6 +92,32 @@ export interface ProcessPendingItemsResult {
  *
  * No-ops entirely (leaves every item untouched — "outbox intact") if the
  * worker's kill switch is off.
+ *
+ * DELETE PATH (design doc B3 item 2)
+ * ----------------------------------
+ * Refs go out through Dev A's deleteManyByRef, which groups by
+ * (adapter, storageLocationId) and batches where the provider supports it —
+ * one S3 DeleteObjects call for the whole group instead of one call per key.
+ * Two consequences beyond fewer round trips:
+ *
+ *  - the Decision 4 stale-location guard actually runs. The previous
+ *    per-adapter switch passed only the raw key for s3 / vercel-blob /
+ *    uploadthing, so a ref minted against an old bucket or Blob store would
+ *    have been deleted out of whatever store is configured *now*. It is now
+ *    reported blocked instead, which is the documented behavior.
+ *  - outcomes come back per ref, so a partial batch failure retries only the
+ *    refs that actually failed (design doc A7).
+ *
+ * Items are grouped by refIdentity first, so two items naming the same
+ * physical file within one request cost one provider call, not two.
+ *
+ * OUTCOME MAPPING (design doc B3 item 3 / Decision 2)
+ * --------------------------------------------------
+ * mapDeleteOutcomeToItemState is the single frozen mapping, shared with the
+ * adapter side rather than restated here. Note "rejected" maps to
+ * QUARANTINED, not BLOCKED — the two are different things: BLOCKED is
+ * "retryable by a human after a fix" (admin requeue), QUARANTINED is
+ * "refused, needs an approved exception" and dominates request status.
  */
 export async function processPendingItems(requestId: number): Promise<ProcessPendingItemsResult> {
   if (!isStorageDeletionWorkerEnabled()) {
@@ -166,62 +129,139 @@ export async function processPendingItems(requestId: number): Promise<ProcessPen
     .from(storageDeletionItems)
     .where(eq(storageDeletionItems.requestId, BigInt(requestId)));
 
-  const itemsToProcess = items.filter(
+  const candidates = items.filter(
     (item) => item.itemState === "PENDING" || item.itemState === "WAITING_RETRY",
   );
+  if (candidates.length === 0) return { skipped: false };
 
-  for (const item of itemsToProcess) {
-    // Manifest-backed items carry a real storage_objects row — check/flip
-    // its lifecycle state before touching the actual file.
-    if (item.objectId !== null) {
-      const [obj] = await db
-        .select()
-        .from(storageObjects)
-        .where(eq(storageObjects.id, Number(item.objectId)));
+  // Manifest-backed items carry a real storage_objects row. An object that
+  // was cancelled after the request was created is left completely alone —
+  // both it and its item stay exactly as they are.
+  const objectIds = Array.from(
+    new Set(
+      candidates
+        .filter((item) => item.objectId !== null)
+        .map((item) => Number(item.objectId)),
+    ),
+  );
 
-      if (obj?.lifecycleState === "CANCELLED") {
-        // Cancelled after the request was created, before we got to it —
-        // leave both the object and this item alone entirely.
-        continue;
-      }
+  const lifecycleById = new Map<number, string>();
+  if (objectIds.length > 0) {
+    const objects = await db
+      .select({ id: storageObjects.id, lifecycleState: storageObjects.lifecycleState })
+      .from(storageObjects)
+      .where(inArray(storageObjects.id, objectIds));
+    for (const obj of objects) lifecycleById.set(obj.id, obj.lifecycleState);
+  }
 
-      await db
-        .update(storageObjects)
-        .set({ lifecycleState: "STORAGE_DELETING" })
-        .where(eq(storageObjects.id, Number(item.objectId)));
+  const processable = candidates.filter((item) => {
+    if (item.objectId === null) return true;
+    return lifecycleById.get(Number(item.objectId)) !== "CANCELLED";
+  });
+  if (processable.length === 0) return { skipped: false };
+
+  // "Deletion has actually started" becomes a real, checkable fact before any
+  // provider is touched — this is what cancelDeletionRequest refuses against.
+  const startingObjectIds = processable
+    .filter((item) => item.objectId !== null)
+    .map((item) => Number(item.objectId));
+  if (startingObjectIds.length > 0) {
+    await db
+      .update(storageObjects)
+      .set({ lifecycleState: "STORAGE_DELETING" })
+      .where(inArray(storageObjects.id, startingObjectIds));
+  }
+
+  // One provider call per distinct physical file, not per item.
+  const refsByIdentity = new Map<string, ObjectRef>();
+  const unsupported = new Map<string, string>();
+  for (const item of processable) {
+    const identity = refIdentity(item);
+    if (refsByIdentity.has(identity) || unsupported.has(identity)) continue;
+
+    if (!isSupportedAdapter(item.adapter)) {
+      // Not transient and not the provider's fault — a human needs to look.
+      unsupported.set(identity, item.adapter);
+      continue;
     }
+    refsByIdentity.set(identity, {
+      adapter: item.adapter,
+      storageLocationId: item.storageLocationId,
+      key: item.key,
+    });
+  }
 
-    const result = await deleteByAdapter(item.adapter, item.storageLocationId, item.key);
+  const results =
+    refsByIdentity.size > 0 ? await deleteManyByRef(Array.from(refsByIdentity.values())) : [];
 
-    if (result.outcome === "deleted" || result.outcome === "not_found") {
+  // deleteManyByRef returns results grouped by (adapter, storageLocationId),
+  // NOT in input order — match them back by identity rather than by index.
+  const resultByIdentity = new Map<string, DeleteResult>();
+  for (const result of results) resultByIdentity.set(refIdentity(result.ref), result);
+
+  for (const item of processable) {
+    const identity = refIdentity(item);
+
+    const unsupportedAdapter = unsupported.get(identity);
+    const result: DeleteResult | undefined = unsupportedAdapter
+      ? {
+          ref: {
+            adapter: "database",
+            storageLocationId: item.storageLocationId,
+            key: item.key,
+          },
+          outcome: "blocked",
+          errorCode: "unknown_adapter",
+          message: `No delete handler for adapter "${unsupportedAdapter}"`,
+        }
+      : resultByIdentity.get(identity);
+
+    const outcome: DeleteResult = result ?? {
+      ref: {
+        adapter: "database",
+        storageLocationId: item.storageLocationId,
+        key: item.key,
+      },
+      outcome: "retryable",
+      errorCode: "missing_delete_outcome",
+      message: `No delete outcome returned for key "${item.key}".`,
+    };
+
+    let itemState = mapDeleteOutcomeToItemState(outcome);
+
+    if (itemState === "DELETED" || itemState === "NOT_FOUND") {
       await db
         .update(storageDeletionItems)
-        .set({
-          itemState: result.outcome === "deleted" ? "DELETED" : "NOT_FOUND",
-          lastError: null,
-        })
+        .set({ itemState, lastError: null })
         .where(eq(storageDeletionItems.id, item.id));
       continue;
     }
 
-    // retryable or blocked (from the adapter's own judgment, e.g. an
-    // auth error) — either way, this counts as one real attempt.
+    // Everything else counts as one real attempt against our own budget.
+    // (Inngest's step-level retries happen above this and are free.)
     const nextAttempts = item.attempts + 1;
-    const forceBlocked = result.outcome === "blocked" || nextAttempts >= BLOCK_AFTER_ATTEMPTS;
+
+    // A retryable failure that has burned the budget stops being retryable.
+    if (itemState === "WAITING_RETRY" && nextAttempts >= BLOCK_AFTER_ATTEMPTS) {
+      itemState = "BLOCKED";
+    }
 
     await db
       .update(storageDeletionItems)
       .set({
-        itemState: forceBlocked ? "BLOCKED" : "WAITING_RETRY",
+        itemState,
         attempts: nextAttempts,
-        lastError: result.message ?? result.errorCode ?? "delete failed",
+        lastError: outcome.message ?? outcome.errorCode ?? "delete failed",
       })
       .where(eq(storageDeletionItems.id, item.id));
 
-    if (forceBlocked && item.objectId !== null) {
+    // Mirror the terminal-ish states onto the manifest row so the admin
+    // repair path (BLOCKED -> requeue / quarantine) has something real to act
+    // on, and so B6's serve gate keeps refusing the document.
+    if (item.objectId !== null && (itemState === "BLOCKED" || itemState === "QUARANTINED")) {
       await db
         .update(storageObjects)
-        .set({ lifecycleState: "BLOCKED" })
+        .set({ lifecycleState: itemState })
         .where(eq(storageObjects.id, Number(item.objectId)));
     }
   }

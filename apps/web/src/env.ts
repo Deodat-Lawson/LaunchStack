@@ -141,6 +141,8 @@ const serverSchema = z.object({
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
+  // B8: "off" | "log" | "enforce". Default "log" — observe before blocking.
+  STORAGE_FILE_TENANT_AUTH_MODE: z.enum(["off", "log", "enforce"]).optional(),
   // Repo Explainer
   GITHUB_TOKEN: optionalString(),
   // Global AI provider fallback — set once to route ALL capabilities to one provider
@@ -356,6 +358,11 @@ function parseServerEnv() {
     S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
     STORAGE_DELETION_LIFECYCLE_ENABLED: process.env.STORAGE_DELETION_LIFECYCLE_ENABLED,
     STORAGE_DELETION_WORKER_ENABLED: process.env.STORAGE_DELETION_WORKER_ENABLED,
+    STORAGE_FILE_TENANT_AUTH_MODE: process.env.STORAGE_FILE_TENANT_AUTH_MODE as
+      | "off"
+      | "log"
+      | "enforce"
+      | undefined,
   };
 
   let server: z.infer<typeof serverSchemaRefined>;

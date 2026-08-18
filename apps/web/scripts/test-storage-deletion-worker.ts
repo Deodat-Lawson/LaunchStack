@@ -4,14 +4,18 @@
  * CANCELLED object-state slice, cancellation, idempotent re-delete via
  * tombstone, and the admin requeue/quarantine repair path.
  *
- * The "database" adapter is still deliberately unimplemented (Dev A's A3),
- * so every item in these tests reliably ends up BLOCKED rather than
- * DELETED when processed — which is actually convenient here, since most
- * of what we're testing (cancellation-before-start, cancellation-refused-
- * after-start, admin repair) specifically needs a BLOCKED item to work
- * with. Part D reuses the earlier "simulate success" trick (delete
- * file_uploads directly, mark the item DELETED by hand) to reach the
- * purge+tombstone path, standing in for Dev A's not-yet-built adapter call.
+ * UPDATED now that Dev A's A3 (database-backed delete) has shipped. The
+ * database adapter really deletes the file_uploads row, so an item no longer
+ * lands on BLOCKED by accident.
+ *
+ * The parts that specifically need a BLOCKED item (cancellation-refused-
+ * after-start, admin repair) now get one deliberately, by registering the
+ * object against a stale storageLocationId — which is a real, documented
+ * outcome (Decision 4: a ref whose location doesn't match what current env
+ * would mint is blocked, never silently deleted from the new location).
+ *
+ * Part D no longer fakes the delete: it runs the real worker end to end,
+ * so DELETED -> purge -> tombstone is actually exercised.
  *
  * Run with:
  *   pnpm tsx scripts/test-storage-deletion-worker.ts
@@ -43,6 +47,17 @@ import {
   AdminActionRefusedError,
 } from "../src/server/services/storage-deletion-admin";
 import { processPendingItems, finalizeRequestIfDone } from "../src/server/inngest/functions/storageDeletionWorker";
+import { resolveStorageLocationId } from "../src/lib/storage-location-id";
+
+/** What the active config would mint for a database-backed object. */
+const LIVE_DATABASE_LOCATION = resolveStorageLocationId("database");
+
+/**
+ * A location id the active config would never mint. Stands in for a ref
+ * created before a storage reconfiguration — Decision 4 says those must be
+ * reported blocked, not deleted out of whatever store is configured now.
+ */
+const STALE_DATABASE_LOCATION = "database:retired_store_v0";
 
 const failures: string[] = [];
 const companyIdsToCleanUp: number[] = [];
@@ -51,7 +66,7 @@ function check(condition: boolean, label: string) {
   if (!condition) failures.push(label);
 }
 
-async function setUpFakeDocument(label: string) {
+async function setUpFakeDocument(label: string, storageLocationId = LIVE_DATABASE_LOCATION) {
   const [testCompany] = await db
     .insert(company)
     .values({ name: `B3 test company (${label})`, numberOfEmployees: "1" })
@@ -86,7 +101,7 @@ async function setUpFakeDocument(label: string) {
   const { obj, request } = await db.transaction(async (tx) => {
     const registeredObj = await registerObject(tx, {
       adapter: "database",
-      storageLocationId: "database:default",
+      storageLocationId,
       key: String(upload.id),
       companyId: testCompany.id,
       documentId: testDoc.id,
@@ -158,9 +173,11 @@ async function run() {
 
     // ---- Part C: cancel refused once deletion has actually started ----
     console.log("\n[test-b3] Part C: cancel refused once item has already been touched");
-    const c = await setUpFakeDocument("cancel-after");
+    // Stale location -> the delete is refused as blocked, which is what this
+    // part needs: an item that has demonstrably *started* and can't be cancelled.
+    const c = await setUpFakeDocument("cancel-after", STALE_DATABASE_LOCATION);
 
-    await processPendingItems(c.request.id); // database adapter -> BLOCKED, object -> BLOCKED
+    await processPendingItems(c.request.id); // stale location -> BLOCKED, object -> BLOCKED
     const [objCBeforeCancel] = await db.select().from(storageObjects).where(eq(storageObjects.id, c.obj.id));
     console.log("[test-b3][C] object state after processing (expected BLOCKED):", objCBeforeCancel?.lifecycleState);
 
@@ -181,12 +198,24 @@ async function run() {
     console.log("\n[test-b3] Part D: purge + tombstone, then a second delete request is idempotent");
     const d = await setUpFakeDocument("idempotent");
 
-    // Stand in for Dev A's not-yet-built adapter call.
-    await db.delete(fileUploads).where(eq(fileUploads.id, d.upload.id));
-    await db
-      .update(storageDeletionItems)
-      .set({ itemState: "DELETED", lastError: null })
+    // Real end-to-end run now that A3 exists: the worker itself deletes the
+    // file_uploads row through the database adapter. No faked outcome.
+    await processPendingItems(d.request.id);
+
+    const [itemD] = await db
+      .select()
+      .from(storageDeletionItems)
       .where(eq(storageDeletionItems.requestId, BigInt(d.request.id)));
+    check(
+      itemD?.itemState === "DELETED",
+      `[D] expected the real database-adapter delete to mark the item DELETED, got "${itemD?.itemState}" (${itemD?.lastError ?? "no error"})`,
+    );
+
+    const [uploadDAfter] = await db
+      .select()
+      .from(fileUploads)
+      .where(eq(fileUploads.id, d.upload.id));
+    check(!uploadDAfter, "[D] expected the file_uploads row to actually be gone");
 
     const finalizeD = await finalizeRequestIfDone(d.request.id);
     check(finalizeD.purged === true, "[D] expected the document to be purged");
@@ -210,9 +239,10 @@ async function run() {
 
     // ---- Part E: admin repair path (requeue, then quarantine) ----
     console.log("\n[test-b3] Part E: admin requeue, then approved-exception quarantine");
-    const e = await setUpFakeDocument("admin-repair");
+    // Stale location again — the admin repair path only acts on BLOCKED items.
+    const e = await setUpFakeDocument("admin-repair", STALE_DATABASE_LOCATION);
 
-    await processPendingItems(e.request.id); // -> BLOCKED
+    await processPendingItems(e.request.id); // stale location -> BLOCKED
     const [itemEBlocked] = await db
       .select()
       .from(storageDeletionItems)
@@ -246,7 +276,7 @@ async function run() {
       "[E] expected quarantineBlockedDeletionItem to refuse a non-BLOCKED item",
     );
 
-    // Process again — adapter still unimplemented, so it goes BLOCKED again.
+    // Process again — the location is still stale, so it goes BLOCKED again.
     await processPendingItems(e.request.id);
     await quarantineBlockedDeletionItem(itemEBlocked.id, "test-admin", "manual override, approved");
     const [itemEQuarantined] = await db

@@ -4,13 +4,46 @@
  */
 
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { fileUploads } from "@launchstack/core/db/schema";
+import { fileUploads, users } from "@launchstack/core/db/schema";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile } from "~/lib/storage";
 import { checkRefServable } from "~/server/services/document-servable";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
+import {
+  checkFileUploadTenantAccess,
+  logFileTenantDecision,
+} from "~/server/services/file-ownership";
+
+/**
+ * Who is asking, if anyone. Deliberately failure-tolerant: this route is
+ * reachable server-to-server (the ingestion path fetches uploaded files
+ * itself, with no session), and auth() throwing there must not turn into a
+ * 500 on a request that used to work. No session simply means no actor.
+ */
+async function resolveActor(): Promise<{
+  actorUserId: string | null;
+  actorCompanyId: number | null;
+}> {
+  try {
+    const { userId } = await auth();
+    if (!userId) return { actorUserId: null, actorCompanyId: null };
+
+    const [actor] = await db
+      .select({ companyId: users.companyId })
+      .from(users)
+      .where(eq(users.userId, userId));
+
+    return {
+      actorUserId: userId,
+      actorCompanyId: actor ? Number(actor.companyId) : null,
+    };
+  } catch {
+    return { actorUserId: null, actorCompanyId: null };
+  }
+}
 
 const MIME_BY_EXTENSION: Record<string, string> = {
   pdf: "application/pdf",
@@ -73,6 +106,30 @@ export async function GET(
         { error: "File not found" },
         { status: 404 }
       );
+    }
+
+    // B8 tenant auth: this route takes a raw file_uploads id and had no
+    // authentication at all, so /api/files/1, /api/files/2, ... was a real
+    // enumeration path. file_uploads records no company, so ownership is
+    // derived — see file-ownership.ts for the four sources and their
+    // relative strength.
+    //
+    // Rolled out in observe-first mode by default: the check runs and logs
+    // what it WOULD refuse, but refuses nothing until
+    // STORAGE_FILE_TENANT_AUTH_MODE=enforce. The ingestion path fetches these
+    // files server-to-server with no session, and turning this on blind would
+    // surface as failed document processing rather than as an auth error.
+    const { actorUserId, actorCompanyId } = await resolveActor();
+    const tenant = await checkFileUploadTenantAccess({
+      fileId,
+      actorUserId,
+      actorCompanyId,
+    });
+    logFileTenantDecision(fileId, tenant);
+    if (!tenant.allowed) {
+      // 404 rather than 403, same non-disclosure choice the delete APIs make:
+      // a refusal must not confirm that this id exists.
+      return NextResponse.json({ error: "File not found" }, { status: 404 });
     }
 
     // B6 serve-gating: refuse a file that an open deletion request already

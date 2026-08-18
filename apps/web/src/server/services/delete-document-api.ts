@@ -10,6 +10,10 @@ import {
   TenantMismatchError,
 } from "./storage-deletion-coordinator";
 import { isStorageDeletionLifecycleEnabled } from "./storage-deletion-flags";
+import {
+  DeleteDocumentResponseSchema,
+  validateApiResponse,
+} from "~/lib/api-response-schemas";
 
 export interface DeleteDocumentApiResult {
   status: number;
@@ -29,6 +33,11 @@ export const isLifecycleEnabled = isStorageDeletionLifecycleEnabled;
  * status + body. Never reports "deleted successfully" on SQL alone — see
  * Decision 6/6a in the design doc.
  */
+/** B8: check the declared response shape on the way out (dev/test only). */
+function checked(status: number, body: Record<string, unknown>): DeleteDocumentApiResult {
+  return { status, body: validateApiResponse(DeleteDocumentResponseSchema, body, "single delete response") };
+}
+
 export async function handleDeleteDocumentRequest(params: {
   documentId: number;
   companyId: number;
@@ -37,10 +46,10 @@ export async function handleDeleteDocumentRequest(params: {
   if (!isLifecycleEnabled()) {
     // Flag off never falls back to the old direct-delete path — that path
     // is removed, not bypassed (Decision 7).
-    return {
-      status: 503,
-      body: { success: false, error: "Document deletion is not currently enabled." },
-    };
+    return checked(503, {
+      success: false,
+      error: "Document deletion is not currently enabled.",
+    });
   }
 
   let result;
@@ -56,10 +65,10 @@ export async function handleDeleteDocumentRequest(params: {
     // an Inngest "event key not found" failure, must never be confused
     // with a real document-not-found case.)
     if (err instanceof DocumentNotFoundError) {
-      return { status: 404, body: { success: false, error: "Document not found." } };
+      return checked(404, { success: false, error: "Document not found." });
     }
     if (err instanceof TenantMismatchError) {
-      return { status: 403, body: { success: false, error: "Unauthorized" } };
+      return checked(403, { success: false, error: "Unauthorized" });
     }
     // Anything else — including DispatchFailedError (the worker couldn't
     // be notified) — is a genuine hard failure. Let it bubble up to the
@@ -70,32 +79,26 @@ export async function handleDeleteDocumentRequest(params: {
   if (result.kind === "already-completed") {
     // Idempotent re-delete (design doc B3 item 8): nothing new happened,
     // this document was already fully processed before.
-    return {
-      status: 200,
-      body: {
-        success: true,
-        status: result.tombstone.finalStatus,
-        documentId: params.documentId,
-        message:
-          result.tombstone.finalStatus === "completed"
-            ? "This document was already deleted."
-            : "This document's deletion was already quarantined and needs manual review.",
-      },
-    };
+    return checked(200, {
+      success: true,
+      status: result.tombstone.finalStatus,
+      documentId: params.documentId,
+      message:
+        result.tombstone.finalStatus === "completed"
+          ? "This document was already deleted."
+          : "This document's deletion was already quarantined and needs manual review.",
+    });
   }
 
   // A new request was created — accepted, but not yet complete.
-  return {
-    status: 202,
-    body: {
-      success: true,
-      status: result.request.status,
-      requestId: result.request.id,
-      documentId: params.documentId,
-      message:
-        result.request.status === "quarantined"
-          ? "Deletion accepted, but some files could not be confidently identified and require manual review."
-          : "Deletion request accepted and is now in progress.",
-    },
-  };
+  return checked(202, {
+    success: true,
+    status: result.request.status,
+    requestId: result.request.id,
+    documentId: params.documentId,
+    message:
+      result.request.status === "quarantined"
+        ? "Deletion accepted, but some files could not be confidently identified and require manual review."
+        : "Deletion request accepted and is now in progress.",
+  });
 }

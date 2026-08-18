@@ -7,6 +7,7 @@ import { auth } from '@clerk/nextjs/server';
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { isS3Storage } from "~/lib/storage";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
+import { checkDocumentServable } from "~/server/services/document-servable";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -117,9 +118,17 @@ export async function POST(request: Request) {
             .from(document)
             .where(eq(document.companyId, companyId));
 
+        const servableDocs = [];
+        for (const doc of docs) {
+            const gate = await checkDocumentServable(Number(doc.id));
+            if (gate.servable) {
+                servableDocs.push(doc);
+            }
+        }
+
         // Enrich with mimeType from file_uploads when document URL is /api/files/{id}
         // (so preview works for PDFs and other types when stored in DB and url has no extension)
-        const fileIds = docs
+        const fileIds = servableDocs
             .map((d) => {
                 const m = FILE_API_ID_REGEX.exec(d.url);
                 return m ? parseInt(m[1]!, 10) : null;
@@ -137,7 +146,7 @@ export async function POST(request: Request) {
         }
 
         // Convert BigInt fields to numbers for JSON serialization; attach mimeType for viewer
-        const serializedDocs = docs.map((doc) => {
+        const serializedDocs = servableDocs.map((doc) => {
             const fileId = FILE_API_ID_REGEX.exec(doc.url)?.[1];
             const mimeFromFile = fileId ? mimeByFileId[parseInt(fileId, 10)] : undefined;
             const mimeType = doc.mimeType

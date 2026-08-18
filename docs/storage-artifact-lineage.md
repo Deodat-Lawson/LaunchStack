@@ -18,6 +18,7 @@ Writers use the following stable edge types:
 - `zip-child`: extracted file derived from an uploaded ZIP
 - `zip-summary`: generated project summary derived from an uploaded ZIP
 - `audio-transcript`: transcript derived from uploaded audio
+- `video-transcript`: transcript derived from an external video URL (no stored source ObjectRef)
 - `supersedes`: edited DOCX replacing an earlier document object
 - `derived-document`: generic derived document when a more specific type is unavailable
 

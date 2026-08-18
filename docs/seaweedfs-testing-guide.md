@@ -56,6 +56,7 @@ No manual bucket creation needed — the app auto-creates the S3 bucket on the f
 4. Watch the progress bar:
    - ~15% → presign request fired to `/api/storage/presign`
    - ~20–90% → file uploading directly to SeaweedFS via XHR
+   - After the PUT succeeds, confirm the manifest with `POST /api/storage/presign/complete` (body: `{ ref, filename, contentType, sizeBytes }` from the presign response)
    - 100% → OCR pipeline triggered via `/api/uploadDocument`
 
 ## 5. Verify the File Landed in SeaweedFS

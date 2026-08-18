@@ -488,7 +488,28 @@ export async function finalizeRequestIfDone(
   let purged = false;
   let materializedFollowerRequestIds: number[] = [];
 
-  if (request.documentId !== null) {
+  if (request.intent === "object_cleanup") {
+    await db.transaction(async (tx) => {
+      if (manifestObjectIds.length > 0) {
+        await tx.delete(storageObjects).where(inArray(storageObjects.id, manifestObjectIds));
+      }
+      await tx
+        .update(storageDeletionRequests)
+        .set({ status: "completed", completedAt: new Date() })
+        .where(eq(storageDeletionRequests.id, requestId));
+    });
+
+    return {
+      requestId,
+      allTerminal: true,
+      anyBlocked: false,
+      anyQuarantined: false,
+      purged: false,
+      materializedFollowerRequestIds: [],
+    };
+  }
+
+  if (request.documentId !== null && request.intent === "document_purge") {
     // storage_deletion_requests.documentId is ON DELETE CASCADE against
     // document.id — purging the document row cascades away this very
     // request row (and its items) automatically. So the tombstone —
@@ -603,7 +624,7 @@ export async function finalizeRequestIfDone(
   // version row must still be removed only after every storage item is
   // terminal. Insert the tombstone before the delete because the request and
   // its items are cascaded by document_versions.
-  if (request.documentVersionId !== null) {
+  if (request.documentVersionId !== null && request.intent === "version_purge") {
     await db.transaction(async (tx) => {
       if (manifestObjectIds.length > 0) {
         await tx

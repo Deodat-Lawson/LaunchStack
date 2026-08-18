@@ -157,10 +157,25 @@ async function setUpManifestDocument(label: string) {
  */
 async function setUpLegacyDocument(label: string) {
   const testCompany = await makeCompany(label);
+  const [upload] = await db
+    .insert(fileUploads)
+    .values({
+      userId: "test-user",
+      filename: "legacy.pdf",
+      mimeType: "application/pdf",
+      fileData: Buffer.from("legacy").toString("base64"),
+      fileSize: 6,
+      storageProvider: "database",
+      storageUrl: null,
+      storagePathname: `legacy/${label}.pdf`,
+    })
+    .returning();
+  if (!upload) throw new Error("failed to insert legacy file upload");
+
   const [testDoc] = await db
     .insert(document)
     .values({
-      url: "https://legacy.example.test/api/files/970001",
+      url: `/api/files/${upload.id}`,
       category: "test",
       title: `B6 legacy document (${label})`,
       companyId: BigInt(testCompany.id),
@@ -300,12 +315,13 @@ async function run() {
     console.log("[test-b6][I] verdict:", verdictI);
 
     // ---- Part J: every gated route actually calls the shared check ----
-    console.log("\n[test-b6] Part J: static — all four content routes call the shared gate");
+    console.log("\n[test-b6] Part J: static — all gated read routes call the shared gate");
     const gatedRoutes = [
       "src/app/api/files/[id]/route.ts",
       "src/app/api/documents/[id]/content/route.ts",
       "src/app/api/documents/[id]/text/route.ts",
       "src/app/api/documents/[id]/versions/[versionId]/content/route.ts",
+      "src/app/api/fetchDocument/route.ts",
     ];
     for (const route of gatedRoutes) {
       let source: string;

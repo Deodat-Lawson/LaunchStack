@@ -149,13 +149,6 @@ export async function DELETE(
         );
       }
 
-      // PROVISIONAL RESOLUTION (Dev B, local only — not pushed).
-      // Merge e84b7fa9 left this route conflicted between A6a (interim direct
-      // deleteFileByRef) and A6b (cutover to the deletion coordinator). Taken
-      // as A6b because the design doc's A6b says to swap this route onto
-      // requestVersionDeletion once B1 shipped and delete the A6a path
-      // entirely — and because the code below this block already assumes the
-      // A6b result shape. Confirm with Dev A (Sofia) before this is pushed.
       if (!isLifecycleEnabled()) {
         return NextResponse.json(
           {

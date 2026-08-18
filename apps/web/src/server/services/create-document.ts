@@ -2,7 +2,7 @@ import type { ObjectRef } from "@launchstack/core/storage";
 import { document } from "@launchstack/core/db/schema";
 
 import { db } from "~/server/db";
-import { registerArtifactEdge, registerObject } from "./storage-manifest";
+import { registerArtifactEdge, claimObjectForDocument } from "./storage-manifest";
 
 export interface CreateDocumentParams {
   url: string;
@@ -64,7 +64,7 @@ export async function createDocumentRecord(
       throw new Error("Failed to create document record");
     }
 
-    const manifest = await registerObject(tx, {
+    const manifest = await claimObjectForDocument(tx, {
       ref: params.storageRef,
       companyId: params.companyId,
       documentId: row.id,

@@ -124,6 +124,93 @@ export async function registerObject(
   return existing;
 }
 
+/**
+ * Register a manifest row for a file uploaded before it becomes a document.
+ * Uses fileUploads.id as the artifact owner until claimObjectForDocument runs.
+ */
+export async function registerUploadArtifact(
+  tx: Tx,
+  input: {
+    ref: ObjectRef;
+    companyId: number | bigint;
+    fileUploadId: number;
+    contentType?: string;
+    sizeBytes?: number;
+    sourceOperation?: string;
+  },
+): Promise<StorageObject> {
+  return registerObject(tx, {
+    ref: input.ref,
+    companyId: input.companyId,
+    artifactId: input.fileUploadId,
+    contentType: input.contentType,
+    sizeBytes: input.sizeBytes,
+    sourceOperation: input.sourceOperation ?? "upload-artifact",
+  });
+}
+
+/**
+ * Register or transfer manifest ownership when a document is created for an
+ * object that may already have been registered as an upload artifact.
+ */
+export async function claimObjectForDocument(
+  tx: Tx,
+  input: {
+    ref: ObjectRef;
+    companyId: number | bigint;
+    documentId: number;
+    contentType?: string;
+    sizeBytes?: number;
+    checksum?: string;
+    sourceOperation?: string;
+  },
+): Promise<StorageObject> {
+  const existing = await findObjectByRef(tx, input.ref);
+  if (existing) {
+    if (existing.companyId !== BigInt(input.companyId)) {
+      throw new Error("claimObjectForDocument: ObjectRef is already owned by another company");
+    }
+    if (
+      existing.documentId !== null &&
+      existing.documentId !== BigInt(input.documentId)
+    ) {
+      throw new Error("claimObjectForDocument: ObjectRef is already owned by another document");
+    }
+    if (existing.documentId === BigInt(input.documentId)) {
+      return existing;
+    }
+
+    const [updated] = await tx
+      .update(storageObjects)
+      .set({
+        documentId: BigInt(input.documentId),
+        artifactId: null,
+        contentType: input.contentType ?? existing.contentType,
+        sizeBytes:
+          input.sizeBytes !== undefined ? BigInt(input.sizeBytes) : existing.sizeBytes,
+        checksum: input.checksum ?? existing.checksum,
+        sourceOperation: input.sourceOperation ?? existing.sourceOperation,
+      })
+      .where(eq(storageObjects.id, existing.id))
+      .returning();
+
+    if (!updated) {
+      throw new Error("claimObjectForDocument: failed to transfer artifact ownership");
+    }
+    return updated;
+  }
+
+  return registerObject(tx, {
+    ref: input.ref,
+    companyId: input.companyId,
+    documentId: input.documentId,
+    contentType: input.contentType,
+    sizeBytes: input.sizeBytes,
+    checksum: input.checksum,
+    sourceOperation: input.sourceOperation,
+  });
+}
+
 /** Find a manifest row by its immutable ObjectRef identity. */
 export async function findObjectByRef(
   tx: Tx,

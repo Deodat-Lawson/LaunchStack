@@ -1,4 +1,4 @@
-const mockRegisterObject = jest.fn();
+const mockClaimObjectForDocument = jest.fn();
 const mockRegisterArtifactEdge = jest.fn();
 const mockDbTransaction = jest.fn();
 const mockTx = {
@@ -21,7 +21,7 @@ jest.mock("@launchstack/core/db/schema", () => ({
 }));
 
 jest.mock("~/server/services/storage-manifest", () => ({
-  registerObject: (...args: unknown[]) => mockRegisterObject(...args),
+  claimObjectForDocument: (...args: unknown[]) => mockClaimObjectForDocument(...args),
   registerArtifactEdge: (...args: unknown[]) => mockRegisterArtifactEdge(...args),
 }));
 
@@ -30,7 +30,7 @@ import { createDocumentRecord } from "~/server/services/create-document";
 
 describe("createDocumentRecord manifest guard", () => {
   beforeEach(() => {
-    mockRegisterObject.mockReset();
+    mockClaimObjectForDocument.mockReset();
     mockRegisterArtifactEdge.mockReset();
     mockDbTransaction.mockReset();
     mockTx.insert.mockReset();
@@ -50,7 +50,7 @@ describe("createDocumentRecord manifest guard", () => {
         returning: jest.fn().mockResolvedValue([row]),
       })),
     });
-    mockRegisterObject.mockResolvedValue(insertedObject);
+    mockClaimObjectForDocument.mockResolvedValue(insertedObject);
     mockDbTransaction.mockImplementation(async (callback: (tx: typeof mockTx) => Promise<unknown>) => callback(mockTx));
 
     const result = await createDocumentRecord({
@@ -64,7 +64,7 @@ describe("createDocumentRecord manifest guard", () => {
       sourceOperation: "document-upload",
     });
 
-    expect(mockRegisterObject).toHaveBeenCalledWith(
+    expect(mockClaimObjectForDocument).toHaveBeenCalledWith(
       mockTx,
       expect.objectContaining({
         ref,
@@ -89,7 +89,7 @@ describe("createDocumentRecord manifest guard", () => {
         returning: jest.fn().mockResolvedValue([row]),
       })),
     });
-    mockRegisterObject.mockResolvedValue({ id: 11 });
+    mockClaimObjectForDocument.mockResolvedValue({ id: 11 });
     mockRegisterArtifactEdge.mockResolvedValue({ id: 12 });
     mockDbTransaction.mockImplementation(async (callback: (tx: typeof mockTx) => Promise<unknown>) => callback(mockTx));
 

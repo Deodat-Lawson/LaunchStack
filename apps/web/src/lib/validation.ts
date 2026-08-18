@@ -429,6 +429,20 @@ export const PresignUploadSchema = z.object({
   },
 );
 
+const ObjectRefSchema = z.object({
+  adapter: z.enum(["s3", "vercel-blob", "database", "uploadthing"]),
+  storageLocationId: z.string().min(1),
+  key: z.string().min(1),
+});
+
+export const PresignCompleteSchema = z.object({
+  ref: ObjectRefSchema,
+  filename: z.string().min(1),
+  contentType: z.string().min(1),
+  sizeBytes: z.number().int().nonnegative().optional(),
+  fileUploadId: z.number().int().positive().optional(),
+});
+
 // ============================================================================
 // Voice Schemas
 // ============================================================================

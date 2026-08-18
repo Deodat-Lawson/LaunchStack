@@ -44,7 +44,7 @@
  * already tenant-authorized, so 410 discloses nothing they couldn't see.
  */
 
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, ne } from "drizzle-orm";
 import {
   storageDeletionItems,
   storageDeletionRequests,
@@ -168,7 +168,12 @@ export async function checkDocumentServable(docId: number): Promise<ServableVerd
   const requests = await db
     .select({ id: storageDeletionRequests.id })
     .from(storageDeletionRequests)
-    .where(eq(storageDeletionRequests.documentId, BigInt(docId)));
+    .where(
+      and(
+        eq(storageDeletionRequests.documentId, BigInt(docId)),
+        ne(storageDeletionRequests.intent, "object_cleanup"),
+      ),
+    );
 
   if (requests.length === 0) return SERVABLE;
 
@@ -214,7 +219,12 @@ export async function checkVersionServable(params: {
   const requests = await db
     .select({ id: storageDeletionRequests.id })
     .from(storageDeletionRequests)
-    .where(eq(storageDeletionRequests.documentVersionId, BigInt(params.versionId)));
+    .where(
+      and(
+        eq(storageDeletionRequests.documentVersionId, BigInt(params.versionId)),
+        ne(storageDeletionRequests.intent, "object_cleanup"),
+      ),
+    );
 
   if (requests.length === 0) return SERVABLE;
 

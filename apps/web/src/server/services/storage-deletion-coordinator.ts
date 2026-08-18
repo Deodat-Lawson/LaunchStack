@@ -1,25 +1,15 @@
 /**
  * Storage deletion coordinator — B2.
  *
- * Replaces the old DB-only delete path. A delete is only "complete" once
- * every object a document/version owns has been captured in a durable
- * plan — this module writes that plan (storage_deletion_requests +
- * storage_deletion_items) *before* any relational row is touched. The
- * actual provider (S3/Blob/etc.) deletion happens later, asynchronously,
- * in the deletion worker (B3, not yet built) — this module never calls a
- * storage adapter directly.
+ * Writes durable deletion plans (storage_deletion_requests +
+ * storage_deletion_items) before any relational row is touched or any
+ * storage adapter is called. Provider deletion is handled asynchronously
+ * by the deletion worker (B3).
  *
  * Two paths per document/version, per Decision 10:
- *   - Manifest exists (B1's hasManifest) → snapshot real storage_objects refs.
- *   - No manifest (pre-B1 document) → scavenge every URL field that might
- *     reference a file, and try to reconstruct a ref from each one via
- *     Dev A's promoteLegacyUrlToRef. A URL that can't be confidently
- *     resolved becomes a QUARANTINED item, not a silently-dropped one.
- *
- * Note on ObjectRef: @launchstack/core/storage doesn't export a finished
- * ObjectRef/DeleteResult contract yet (Dev A's A0 work in progress), so
- * this file uses the same locally-defined shape as storage-manifest.ts.
- * Swap to the real import once it lands.
+ *   - Manifest exists → snapshot real storage_objects refs.
+ *   - No manifest → promote legacy URLs via promoteLegacyUrlToRef; unresolvable
+ *     URLs become QUARANTINED items.
  */
 
 import { and, eq, inArray } from "drizzle-orm";
@@ -32,6 +22,7 @@ import {
   storageDeletionItems,
   storageDeletionTombstones,
   storageObjects,
+  storageArtifactEdges,
 } from "@launchstack/core/db/schema";
 import type {
   StorageDeletionItem,
@@ -62,6 +53,9 @@ export class TenantMismatchError extends Error {}
 /** Thrown when the plan was written but the worker couldn't be notified. */
 export class DispatchFailedError extends Error {}
 
+export class ObjectCleanupRefusedError extends Error {}
+
+export type DeletionRequestIntent = "document_purge" | "version_purge" | "object_cleanup";
 interface PendingItem {
   /** storage_objects.id — plain number (serial), not bigint. */
   objectId?: number;
@@ -145,6 +139,7 @@ async function insertRequestAndItems(
     requestedBy: string;
     documentId?: number;
     documentVersionId?: number;
+    intent?: DeletionRequestIntent;
   },
   items: PendingItem[],
 ): Promise<InsertedRequest> {
@@ -168,6 +163,7 @@ async function insertRequestAndItems(
           : undefined,
       requestedBy: params.requestedBy,
       status: initialStatus(items),
+      intent: params.intent ?? "document_purge",
     })
     .returning();
 
@@ -364,6 +360,7 @@ export async function requestVersionDeletion(
       companyId: params.companyId,
       requestedBy: params.actorId,
       documentVersionId: params.versionId,
+      intent: "version_purge",
     },
     items,
   );
@@ -795,6 +792,140 @@ export async function requestVersionDeletionAndDispatch(params: {
     await rollbackFailedDispatch(request.id);
     throw new DispatchFailedError(
       `requestVersionDeletionAndDispatch: request ${request.id} was written but the worker could not be notified — rolled back. Underlying error: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+
+  return { kind: "created", request };
+}
+
+/**
+ * Request deletion of specific manifest object(s) without purging the
+ * document or triggering serve-gating. Used when a document replaces its
+ * bytes (e.g. DOCX edit) and the superseded blob should be cleaned up.
+ */
+export async function requestObjectCleanup(
+  tx: Tx,
+  params: {
+    companyId: number;
+    actorId: string;
+    documentId: number;
+    objectIds: number[];
+  },
+): Promise<StorageDeletionRequest> {
+  const uniqueObjectIds = Array.from(new Set(params.objectIds));
+  if (uniqueObjectIds.length === 0) {
+    throw new Error("requestObjectCleanup: objectIds must not be empty");
+  }
+
+  const [doc] = await tx
+    .select({ companyId: document.companyId })
+    .from(document)
+    .where(eq(document.id, params.documentId));
+
+  if (!doc) {
+    throw new DocumentNotFoundError(
+      `requestObjectCleanup: document ${params.documentId} not found`,
+    );
+  }
+  if (doc.companyId !== BigInt(params.companyId)) {
+    throw new TenantMismatchError(
+      `requestObjectCleanup: document ${params.documentId} does not belong to company ${params.companyId}`,
+    );
+  }
+
+  const objects = await tx
+    .select()
+    .from(storageObjects)
+    .where(inArray(storageObjects.id, uniqueObjectIds));
+
+  if (objects.length !== uniqueObjectIds.length) {
+    throw new ObjectCleanupRefusedError(
+      "requestObjectCleanup: one or more object ids were not found",
+    );
+  }
+
+  for (const obj of objects) {
+    if (obj.companyId !== BigInt(params.companyId)) {
+      throw new TenantMismatchError(
+        `requestObjectCleanup: object ${obj.id} does not belong to company ${params.companyId}`,
+      );
+    }
+
+    const ownedByDocument =
+      obj.documentId !== null && obj.documentId === BigInt(params.documentId);
+
+    if (ownedByDocument) continue;
+
+    const [supersedesEdge] = await tx
+      .select({ parentObjectId: storageArtifactEdges.parentObjectId })
+      .from(storageArtifactEdges)
+      .where(
+        and(
+          eq(storageArtifactEdges.childObjectId, BigInt(obj.id)),
+          eq(storageArtifactEdges.edgeType, "supersedes"),
+        ),
+      );
+
+    if (!supersedesEdge) {
+      throw new ObjectCleanupRefusedError(
+        `requestObjectCleanup: object ${obj.id} is not owned by document ${params.documentId} and has no supersedes edge`,
+      );
+    }
+
+    const [parent] = await tx
+      .select({ documentId: storageObjects.documentId })
+      .from(storageObjects)
+      .where(eq(storageObjects.id, Number(supersedesEdge.parentObjectId)));
+
+    if (
+      !parent ||
+      parent.documentId === null ||
+      parent.documentId !== BigInt(params.documentId)
+    ) {
+      throw new ObjectCleanupRefusedError(
+        `requestObjectCleanup: object ${obj.id} supersedes edge does not trace to document ${params.documentId}`,
+      );
+    }
+  }
+
+  const items: PendingItem[] = objects.map((obj) => ({
+    objectId: obj.id,
+    adapter: obj.adapter as StorageAdapter,
+    storageLocationId: obj.storageLocationId,
+    key: obj.key,
+  }));
+
+  const { request } = await insertRequestAndItems(
+    tx,
+    {
+      companyId: params.companyId,
+      requestedBy: params.actorId,
+      documentId: params.documentId,
+      intent: "object_cleanup",
+    },
+    items,
+  );
+
+  return request;
+}
+
+export async function requestObjectCleanupAndDispatch(params: {
+  companyId: number;
+  actorId: string;
+  documentId: number;
+  objectIds: number[];
+}): Promise<DeletionDispatchResult> {
+  const request = await db.transaction(async (tx) => requestObjectCleanup(tx, params));
+
+  try {
+    await inngest.send({
+      name: "storage-deletion/request.created",
+      data: { requestId: request.id },
+    });
+  } catch (err) {
+    await rollbackFailedDispatch(request.id);
+    throw new DispatchFailedError(
+      `requestObjectCleanupAndDispatch: request ${request.id} was written but the worker could not be notified — rolled back. Underlying error: ${err instanceof Error ? err.message : String(err)}`,
     );
   }
 

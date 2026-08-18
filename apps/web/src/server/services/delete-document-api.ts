@@ -20,11 +20,6 @@ export interface DeleteDocumentApiResult {
   body: Record<string, unknown>;
 }
 
-/**
- * Matches the raw-env-var pattern the existing A6a test already expects
- * (STORAGE_DELETION_LIFECYCLE_ENABLED) — no formal env.ts entry yet,
- * that's Dev C's flag to own/wire up properly.
- */
 export const isLifecycleEnabled = isStorageDeletionLifecycleEnabled;
 
 /**

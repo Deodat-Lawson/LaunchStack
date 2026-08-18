@@ -126,7 +126,11 @@ const serverSchema = z.object({
   // "s3" → any S3-compatible endpoint (AWS, MinIO, SeaweedFS, etc.)
   // "database" → base64 fallback stored in Postgres fileUploads.fileData
   // Unset → auto-detect: "s3" if S3 env vars are present, else "database"
-  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["s3", "database"]).optional(),
+  // "local" is a legacy alias for "database" (Postgres file_uploads fallback).
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.preprocess(
+    (val) => (val === "local" ? "database" : val),
+    z.enum(["s3", "database"]).optional(),
+  ),
   NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
   S3_PUBLIC_ENDPOINT: optionalString(), // Browser-facing S3 URL (defaults to NEXT_PUBLIC_S3_ENDPOINT)
   S3_REGION: optionalString(),
@@ -238,7 +242,11 @@ const clientSchema = z.object({
     (val) => val === "true" || val === "1",
     z.boolean().optional()
   ),
-  NEXT_PUBLIC_STORAGE_PROVIDER: z.enum(["s3", "database"]).optional(),
+  // "local" is a legacy alias for "database" (Postgres file_uploads fallback).
+  NEXT_PUBLIC_STORAGE_PROVIDER: z.preprocess(
+    (val) => (val === "local" ? "database" : val),
+    z.enum(["s3", "database"]).optional(),
+  ),
   NEXT_PUBLIC_S3_ENDPOINT: optionalString(),
 });
 

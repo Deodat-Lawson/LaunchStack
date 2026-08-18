@@ -50,6 +50,7 @@ export type DocumentModifyEvent = {
     documentId: number;
     documentUrl: string;
     authorName: string;
+    userId?: string;
     edits?: DocumentEdit[];
     actions?: ReviewAction[];
   };

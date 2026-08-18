@@ -22,6 +22,8 @@ import { inngest } from "../client";
 import { db } from "~/server/db";
 import { document } from "@launchstack/core/db/schema";
 import { findObjectByRef, registerArtifactEdge, registerObject } from "~/server/services/storage-manifest";
+import { requestObjectCleanupAndDispatch } from "~/server/services/storage-deletion-coordinator";
+import { isStorageDeletionLifecycleEnabled } from "~/server/storage/deletion-flags";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
 import { putFile, fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/features/adeu";
@@ -59,7 +61,7 @@ export const modifyDocument = inngest.createFunction(
   },
   { event: "document/modify.requested" },
   async ({ event, step }) => {
-    const { documentId, documentUrl, authorName, edits, actions } = event.data;
+    const { documentId, documentUrl, authorName, edits, actions, userId } = event.data;
 
     // Step 1: Fetch the DOCX from Vercel Blob
     const docBuffer = await step.run("fetch-document", async () => {
@@ -141,12 +143,16 @@ export const modifyDocument = inngest.createFunction(
     // Fix 1.15: DB update is in its own step.run so Inngest memoizes it
     // separately — replays won't re-execute the write
     const storedUrl = await step.run("update-document-record", async () => {
+      let previousObjectId: number | undefined;
+      let companyIdForCleanup: bigint | undefined;
+
       await db.transaction(async (tx) => {
         const [target] = await tx
           .select({ companyId: document.companyId })
           .from(document)
           .where(eq(document.id, documentId));
         if (!target) throw new Error(`Document ${documentId} not found while registering edit output`);
+        companyIdForCleanup = target.companyId;
 
         const nextManifest = await registerObject(tx, {
           ref: nextStorageRef,
@@ -160,6 +166,7 @@ export const modifyDocument = inngest.createFunction(
         if (oldRef.ok) {
           const previousManifest = await findObjectByRef(tx, oldRef.ref);
           if (previousManifest && previousManifest.id !== nextManifest.id) {
+            previousObjectId = previousManifest.id;
             await registerArtifactEdge(tx, {
               parentObjectId: previousManifest.id,
               childObjectId: nextManifest.id,
@@ -176,6 +183,20 @@ export const modifyDocument = inngest.createFunction(
           })
           .where(eq(document.id, documentId));
       });
+
+      if (
+        previousObjectId !== undefined &&
+        companyIdForCleanup !== undefined &&
+        isStorageDeletionLifecycleEnabled()
+      ) {
+        const actorId = typeof userId === "string" && userId.length > 0 ? userId : "system";
+        await requestObjectCleanupAndDispatch({
+          documentId,
+          companyId: Number(companyIdForCleanup),
+          actorId,
+          objectIds: [previousObjectId],
+        });
+      }
 
       return nextBlobUrl;
     });

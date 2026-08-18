@@ -1084,6 +1084,13 @@ export const storageDeletionRequests = pgTable(
             { onDelete: "cascade" }
         ),
         requestedBy: varchar("requested_by", { length: 256 }).notNull(),
+        // What this request is allowed to do when it completes.
+        intent: varchar("intent", {
+            length: 32,
+            enum: ["document_purge", "version_purge", "object_cleanup"],
+        })
+            .notNull()
+            .default("document_purge"),
         // Maintained summary status — see Decision 6 in the design doc.
         status: varchar("status", {
             length: 32,

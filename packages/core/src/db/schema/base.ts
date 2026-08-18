@@ -1243,19 +1243,27 @@ export const storageDeletionItemsRelations = relations(
 // per-object outcomes already live in storage_deletion_items; duplicating
 // that here would create two audit trails with no clear source of truth.
 //
-// documentId / documentVersionId are plain, unconstrained bigints — NOT
-// real foreign keys. A real FK would either block the document from ever
-// being purged, or cascade-delete the tombstone along with it, defeating
-// the whole point of a tombstone surviving the purge it's recording.
+// documentId / documentVersionId / requestId are plain, unconstrained
+// bigints — NOT real foreign keys. A real FK would either block the document
+// from ever being purged, or cascade-delete the tombstone along with it,
+// defeating the whole point of a tombstone surviving the purge it's recording.
+//
+// requestId gets the same treatment for the same reason, and this is easy to
+// get wrong: storage_deletion_requests.document_id is ON DELETE CASCADE, so
+// completing a deletion destroys the request row. An FK with ON DELETE SET
+// NULL here would then wipe the tombstone's only pointer back to it — at
+// exactly the moment someone holding a request id from a log line wants to
+// ask what happened. Migration 0022 dropped that FK; this declaration has to
+// stay in agreement with it, because `db:push` regenerates the schema from
+// THIS file and would otherwise silently re-create the constraint.
 
 export const storageDeletionTombstones = pgTable(
     "storage_deletion_tombstones",
     {
         id: serial("id").primaryKey(),
-        requestId: bigint("request_id", { mode: "bigint" }).references(
-            () => storageDeletionRequests.id,
-            { onDelete: "set null" }
-        ),
+        // Intentionally not a real FK — see comment above (and migration
+        // 0022_storage_deletion_tombstones_request_id_plain.sql).
+        requestId: bigint("request_id", { mode: "bigint" }),
         companyId: bigint("company_id", { mode: "bigint" })
             .notNull()
             .references(() => company.id, { onDelete: "cascade" }),

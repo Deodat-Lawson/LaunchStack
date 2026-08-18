@@ -19,6 +19,7 @@ import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { crawlWebsite } from "~/server/inngest/functions/crawlWebsite";
 import { rehydrateNoteAnchorsJob } from "~/server/inngest/functions/rehydrateNoteAnchors";
 import { storageDeletionWorker } from "~/server/inngest/functions/storageDeletionWorker";
+import { storageDeletionSweep } from "~/server/inngest/functions/storageDeletionSweep";
 
 // Register all Inngest functions
 const handler = serve({
@@ -34,6 +35,7 @@ const handler = serve({
     crawlWebsite,
     rehydrateNoteAnchorsJob,
     storageDeletionWorker,
+    storageDeletionSweep,
   ],
 });
 

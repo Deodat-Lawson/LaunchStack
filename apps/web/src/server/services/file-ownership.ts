@@ -42,6 +42,7 @@ import {
 } from "@launchstack/core/db/schema";
 
 import { db } from "~/server/db";
+import { isInternalServiceAuthConfigured } from "~/server/storage/internal-service-auth";
 
 export type FileOwnerSource = "manifest" | "document" | "document_version" | "uploader";
 
@@ -131,24 +132,52 @@ export async function resolveFileUploadOwner(
 }
 
 /**
- * Rollout switch (B8 judgment call). Default "log": the check runs and
- * reports what it *would* have refused, but refuses nothing.
+ * Rollout switch (B8).
  *
  *   off      — skip entirely, no lookup, no log
- *   log      — evaluate and log would-be blocks; always allow  (default)
+ *   log      — evaluate and log would-be blocks; refuse nothing
  *   enforce  — actually refuse
  *
- * Why not enforce by default: the OCR/ingestion path fetches uploaded files
- * server-to-server, with no session cookie to authenticate. Flipping this on
- * blind risks silently breaking document processing, and that breakage would
- * surface as a failed upload rather than an auth error. Run in "log" first,
- * read the logs, then flip.
+ * An explicit STORAGE_FILE_TENANT_AUTH_MODE always wins. With nothing set,
+ * the default depends on whether internal service auth is configured, and
+ * that condition is the whole point:
+ *
+ * The OCR/ingestion path fetches uploaded files server-to-server with no
+ * session cookie. Enforcing without a way for those calls to identify
+ * themselves would refuse them — surfacing as failed document processing
+ * rather than as an auth error. INTERNAL_SERVICE_TOKEN is that way (see
+ * internal-service-auth.ts). So:
+ *
+ *   token configured    -> enforce. Internal callers can prove who they are,
+ *                          so refusing everyone else is safe.
+ *   token not configured -> log, plus a warning. Refusing here would break
+ *                          ingestion on any deployment that upgraded without
+ *                          setting the secret.
+ *
+ * This is deliberately not fail-closed-regardless: an unset secret is a
+ * deployment that hasn't finished rolling out, and taking its uploads down is
+ * a worse failure than the enumeration risk it already had. The warning is
+ * there so it doesn't sit unnoticed.
  */
 export type FileTenantAuthMode = "off" | "log" | "enforce";
 
+let warnedAboutMissingToken = false;
+
 export function getFileTenantAuthMode(): FileTenantAuthMode {
   const value = process.env.STORAGE_FILE_TENANT_AUTH_MODE?.trim().toLowerCase();
-  if (value === "off" || value === "enforce") return value;
+  if (value === "off" || value === "log" || value === "enforce") return value;
+
+  if (isInternalServiceAuthConfigured()) return "enforce";
+
+  if (!warnedAboutMissingToken) {
+    warnedAboutMissingToken = true;
+    console.warn(
+      "[FileTenantAuth] INTERNAL_SERVICE_TOKEN is not set, so /api/files/[id] " +
+        "tenant auth is running in log-only mode and refusing nothing. Set that " +
+        "token (and restart) to enforce, or set STORAGE_FILE_TENANT_AUTH_MODE " +
+        "explicitly to silence this.",
+    );
+  }
   return "log";
 }
 

@@ -30,10 +30,13 @@
  *   - skips (never touches) an object that's been flipped to CANCELLED
  *   - flips an object to BLOCKED when its item becomes BLOCKED, so the
  *     admin repair path has something real to flip back
- * The rest of the state machine (STORAGE_CLEAN, RELATIONAL_PURGE, PURGED)
- * is still deliberately deferred to B6 — this worker's own item-state
- * tracking (storage_deletion_items) remains the real source of truth for
- * "is this item actually done," same as before.
+ * finalizeRequestIfDone then completes the state machine: STORAGE_CLEAN once
+ * every item is terminal, and RELATIONAL_PURGE in the same transaction as the
+ * purge. There is no PURGED write — storage_objects.document_id is ON DELETE
+ * CASCADE, so a purged document's manifest rows no longer exist; PURGED is
+ * the row's absence plus the tombstone. storage_deletion_items remains the
+ * source of truth for "is this item actually done"; the object lifecycle is
+ * what serve-gating and the admin paths read.
  *
  * LINKED items (B5 cross-document dedup): when a batch delete finds two
  * documents referencing the same physical file, only one item ("the leader")
@@ -86,6 +89,26 @@ export interface ProcessPendingItemsResult {
 }
 
 /**
+ * Seams for tests. Both default to the real thing; nothing in production
+ * passes them.
+ *
+ * These exist because three rows of the design doc's failure matrix cannot
+ * be produced from outside otherwise. A provider timeout, a provider that
+ * rejects, and a SQL purge that fails after storage is already clean are all
+ * states you have to inject — waiting for a real S3 timeout is not a test.
+ * The alternative was asserting nothing and calling the row covered.
+ */
+export interface WorkerDeps {
+  /** Defaults to Dev A's deleteManyByRef. */
+  deleteMany?: (refs: readonly ObjectRef[]) => Promise<DeleteResult[]>;
+}
+
+export interface FinalizeDeps {
+  /** Defaults to B2's purgeDocumentRelational. */
+  purge?: typeof purgeDocumentRelational;
+}
+
+/**
  * Attempts every PENDING/WAITING_RETRY item for a request once. Updates
  * each item's state directly. Safe to call repeatedly (idempotent w.r.t.
  * items already in a terminal state — it only looks at non-terminal ones).
@@ -119,7 +142,12 @@ export interface ProcessPendingItemsResult {
  * "retryable by a human after a fix" (admin requeue), QUARANTINED is
  * "refused, needs an approved exception" and dominates request status.
  */
-export async function processPendingItems(requestId: number): Promise<ProcessPendingItemsResult> {
+export async function processPendingItems(
+  requestId: number,
+  deps: WorkerDeps = {},
+): Promise<ProcessPendingItemsResult> {
+  const deleteMany = deps.deleteMany ?? deleteManyByRef;
+
   if (!isStorageDeletionWorkerEnabled()) {
     return { skipped: true, reason: "STORAGE_DELETION_WORKER_ENABLED is not on" };
   }
@@ -192,7 +220,7 @@ export async function processPendingItems(requestId: number): Promise<ProcessPen
   }
 
   const results =
-    refsByIdentity.size > 0 ? await deleteManyByRef(Array.from(refsByIdentity.values())) : [];
+    refsByIdentity.size > 0 ? await deleteMany(Array.from(refsByIdentity.values())) : [];
 
   // deleteManyByRef returns results grouped by (adapter, storageLocationId),
   // NOT in input order — match them back by identity rather than by index.
@@ -364,7 +392,9 @@ export async function finalizeRequestIfDone(
    * in practice — this is cheap insurance, not a load-bearing assumption.
    */
   visited: Set<number> = new Set(),
+  deps: FinalizeDeps = {},
 ): Promise<FinalizeResult> {
+  const purge = deps.purge ?? purgeDocumentRelational;
   visited.add(requestId);
 
   const allItems = await db
@@ -434,6 +464,27 @@ export async function finalizeRequestIfDone(
     throw new Error(`finalizeRequestIfDone: request ${requestId} not found`);
   }
 
+  // ---- Lifecycle: STORAGE_CLEAN (design doc B3 item 4) ----------------
+  // Every item is terminal, so every byte this request owned is confirmed
+  // gone from its provider. Record that on the manifest rows before touching
+  // any relational data — if the purge below fails, these objects are left
+  // truthfully marked "storage is clean, database is not", which is exactly
+  // the state a human debugging a stuck purge needs to see.
+  const manifestObjectIds = Array.from(
+    new Set(
+      allItems
+        .filter((item) => item.objectId !== null)
+        .map((item) => Number(item.objectId)),
+    ),
+  );
+
+  if (manifestObjectIds.length > 0) {
+    await db
+      .update(storageObjects)
+      .set({ lifecycleState: "STORAGE_CLEAN" })
+      .where(inArray(storageObjects.id, manifestObjectIds));
+  }
+
   let purged = false;
   let materializedFollowerRequestIds: number[] = [];
 
@@ -495,6 +546,26 @@ export async function finalizeRequestIfDone(
       }
       // -----------------------------------------------------------------
 
+      // ---- Lifecycle: RELATIONAL_PURGE -------------------------------
+      // Set in the same transaction as the purge itself. On the happy path
+      // no one ever observes it, because the cascade below deletes these
+      // rows moments later — but if the purge throws, the transaction rolls
+      // back and the objects stay at STORAGE_CLEAN, so the pair is never
+      // inconsistent. The state earns its keep in the crash case, not the
+      // success case.
+      //
+      // There is deliberately no PURGED write. storage_objects.document_id
+      // is ON DELETE CASCADE, so a purged document's manifest rows cease to
+      // exist — there is nothing left to label. PURGED is represented by the
+      // row's absence plus the tombstone, which is the permanent record and
+      // the thing that survives on purpose.
+      if (manifestObjectIds.length > 0) {
+        await tx
+          .update(storageObjects)
+          .set({ lifecycleState: "RELATIONAL_PURGE" })
+          .where(inArray(storageObjects.id, manifestObjectIds));
+      }
+
       await tx.insert(storageDeletionTombstones).values({
         requestId: BigInt(request.id),
         companyId: request.companyId,
@@ -502,7 +573,7 @@ export async function finalizeRequestIfDone(
         finalStatus: "completed",
         objectCount: allItems.length,
       });
-      await purgeDocumentRelational(tx, Number(request.documentId));
+      await purge(tx, Number(request.documentId));
     });
     purged = true;
 
@@ -512,7 +583,7 @@ export async function finalizeRequestIfDone(
     // Inngest event is emitted for it — so finalize it directly here.
     for (const followerRequestId of materializedFollowerRequestIds) {
       if (visited.has(followerRequestId)) continue;
-      await finalizeRequestIfDone(followerRequestId, visited);
+      await finalizeRequestIfDone(followerRequestId, visited, deps);
     }
 
     // The request/items rows were just cascade-deleted along with the
@@ -534,6 +605,13 @@ export async function finalizeRequestIfDone(
   // its items are cascaded by document_versions.
   if (request.documentVersionId !== null) {
     await db.transaction(async (tx) => {
+      if (manifestObjectIds.length > 0) {
+        await tx
+          .update(storageObjects)
+          .set({ lifecycleState: "RELATIONAL_PURGE" })
+          .where(inArray(storageObjects.id, manifestObjectIds));
+      }
+
       await tx.insert(storageDeletionTombstones).values({
         requestId: BigInt(request.id),
         companyId: request.companyId,

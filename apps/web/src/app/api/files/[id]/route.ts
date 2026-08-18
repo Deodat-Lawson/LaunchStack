@@ -16,6 +16,7 @@ import {
   checkFileUploadTenantAccess,
   logFileTenantDecision,
 } from "~/server/services/file-ownership";
+import { isInternalServiceRequest } from "~/server/storage/internal-service-auth";
 
 /**
  * Who is asking, if anyone. Deliberately failure-tolerant: this route is
@@ -119,17 +120,24 @@ export async function GET(
     // STORAGE_FILE_TENANT_AUTH_MODE=enforce. The ingestion path fetches these
     // files server-to-server with no session, and turning this on blind would
     // surface as failed document processing rather than as an auth error.
-    const { actorUserId, actorCompanyId } = await resolveActor();
-    const tenant = await checkFileUploadTenantAccess({
-      fileId,
-      actorUserId,
-      actorCompanyId,
-    });
-    logFileTenantDecision(fileId, tenant);
-    if (!tenant.allowed) {
-      // 404 rather than 403, same non-disclosure choice the delete APIs make:
-      // a refusal must not confirm that this id exists.
-      return NextResponse.json({ error: "File not found" }, { status: 404 });
+    //
+    // The app fetching its own files (ingestion/OCR) presents a service token
+    // instead of a session — see internal-service-auth.ts. That identifies the
+    // caller as *us*, not as any company, so it bypasses the tenant check
+    // rather than satisfying it.
+    if (!isInternalServiceRequest(request)) {
+      const { actorUserId, actorCompanyId } = await resolveActor();
+      const tenant = await checkFileUploadTenantAccess({
+        fileId,
+        actorUserId,
+        actorCompanyId,
+      });
+      logFileTenantDecision(fileId, tenant);
+      if (!tenant.allowed) {
+        // 404 rather than 403, same non-disclosure choice the delete APIs
+        // make: a refusal must not confirm that this id exists.
+        return NextResponse.json({ error: "File not found" }, { status: 404 });
+      }
     }
 
     // B6 serve-gating: refuse a file that an open deletion request already

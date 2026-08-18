@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { DeleteResult, ObjectRef } from "@launchstack/core/storage";
 
 import { env } from "~/env";
+import { internalServiceHeaders } from "~/server/storage/internal-service-auth";
 import { resolveStorageLocationId } from "~/lib/storage-location-id";
 
 // ---------------------------------------------------------------------------
@@ -555,12 +556,42 @@ export async function deleteFileByUrl(url: string): Promise<void> {
 // fetchFile — unified retrieval for any storage URL
 // ---------------------------------------------------------------------------
 
+/**
+ * True when this URL points back at our own app — a relative path, or an
+ * absolute one on APP_PUBLIC_URL's origin. Those are the fetches that hit our
+ * own routes with no session cookie (the ingestion/OCR download path), and so
+ * the ones that need internal service credentials attached (B8).
+ */
+function isSelfOriginUrl(url: string): boolean {
+  if (url.startsWith("/")) return true;
+
+  const appBase = env.server.APP_PUBLIC_URL;
+  if (!appBase) return false;
+
+  try {
+    return new URL(url).origin === new URL(appBase).origin;
+  } catch {
+    return false;
+  }
+}
+
 export async function fetchFile(
   url: string,
   init?: RequestInit,
 ): Promise<Response> {
   const s3Endpoint =
     env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
+
+  // Identify ourselves when calling our own endpoints, so the tenant check on
+  // /api/files/[id] can tell "the ingestion pipeline" apart from "an anonymous
+  // caller walking file ids". Never attached to third-party URLs — a provider
+  // has no business seeing this secret.
+  if (isSelfOriginUrl(url)) {
+    const internalHeaders = internalServiceHeaders();
+    if (Object.keys(internalHeaders).length > 0) {
+      init = { ...init, headers: { ...(init?.headers ?? {}), ...internalHeaders } };
+    }
+  }
 
   // S3 URLs — plain fetch
   if (s3Endpoint && url.startsWith(s3Endpoint)) {

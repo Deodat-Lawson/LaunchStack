@@ -18,6 +18,11 @@
  *   I  B8 tenant gate                 -> log observes, enforce refuses
  *   J  B8 response shapes             -> a real B7 payload matches its schema
  *   K  status-by-request-id after purge -> the tombstone keeps its request id
+ *   L  provider timeout               -> WAITING_RETRY, not a false success
+ *   M  worker crash after success     -> converges, never double-reports
+ *   N  SQL purge fails after clean    -> retry SQL only; storage not re-deleted
+ *   O  retry sweep                    -> a stalled request is actually re-run
+ *   P  version-scoped deletion        -> version purged, tombstone written
  *
  * Run with:
  *   pnpm tsx scripts/test-storage-failure-matrix.ts
@@ -28,6 +33,7 @@ import { eq, sql } from "drizzle-orm";
 import {
   company,
   document,
+  documentVersions,
   fileUploads,
   storageDeletionItems,
   storageDeletionRequests,
@@ -38,7 +44,14 @@ import {
 
 import { db } from "../src/server/db";
 import { registerObject } from "../src/server/services/storage-manifest";
-import { requestDocumentDeletion } from "../src/server/services/storage-deletion-coordinator";
+import {
+  requestDocumentDeletion,
+  requestVersionDeletion,
+} from "../src/server/services/storage-deletion-coordinator";
+import {
+  backoffMinutes,
+  sweepStalledDeletionRequests,
+} from "../src/server/inngest/functions/storageDeletionSweep";
 import {
   BLOCK_AFTER_ATTEMPTS,
   finalizeRequestIfDone,
@@ -480,6 +493,222 @@ async function run() {
       byRequestId.kind === "ok" && byRequestId.payload.purged === true,
       `[K] status-by-request-id must still answer after the purge, got "${byRequestId.kind}"`,
     );
+
+    // ---- L: provider timeout -> WAITING_RETRY, never a false success ----
+    console.log("[L] provider timeout -> WAITING_RETRY");
+    const l = await scenario("timeout");
+    await processPendingItems(l.request.id, {
+      deleteMany: async (refs) =>
+        refs.map((ref) => ({
+          ref,
+          outcome: "retryable" as const,
+          errorCode: "ETIMEDOUT",
+          message: "operation timed out after 30000ms",
+        })),
+    });
+    const [itemL] = await itemsFor(l.request.id);
+    check(
+      itemL?.itemState === "WAITING_RETRY",
+      `[L] expected WAITING_RETRY on timeout, got "${itemL?.itemState}"`,
+    );
+    const [uploadL] = await db
+      .select()
+      .from(fileUploads)
+      .where(eq(fileUploads.id, l.upload.id));
+    check(Boolean(uploadL), "[L] a timed-out delete must not be treated as done");
+
+    // ---- M: worker crashed after the provider already succeeded ----------
+    // The provider deleted the object, then we died before persisting that.
+    // On the retry the same ref is deleted again; an idempotent adapter
+    // reports not_found and the item converges. Nothing is double-counted
+    // and nothing is stuck.
+    console.log("[M] worker crash after provider success -> converges");
+    const m = await scenario("crash-after-success");
+    await processPendingItems(m.request.id, {
+      deleteMany: async (refs) => refs.map((ref) => ({ ref, outcome: "deleted" as const })),
+    });
+    // Simulate the lost write: the provider succeeded, our persistence didn't.
+    const [itemMBefore] = await itemsFor(m.request.id);
+    await db
+      .update(storageDeletionItems)
+      .set({ itemState: "WAITING_RETRY" })
+      .where(eq(storageDeletionItems.id, itemMBefore!.id));
+
+    await processPendingItems(m.request.id, {
+      deleteMany: async (refs) => refs.map((ref) => ({ ref, outcome: "not_found" as const })),
+    });
+    const [itemM] = await itemsFor(m.request.id);
+    check(
+      itemM?.itemState === "NOT_FOUND",
+      `[M] expected NOT_FOUND after retrying an already-deleted ref, got "${itemM?.itemState}"`,
+    );
+
+    // ---- N: SQL purge fails after storage is already clean ---------------
+    // The failure matrix says: retry SQL only, do not restore or re-delete a
+    // different object. Also the one place RELATIONAL_PURGE is observable —
+    // the injected purge reads it inside the transaction that sets it.
+    console.log("[N] SQL purge failure after storage clean -> rolls back, retries cleanly");
+    const n = await scenario("purge-failure");
+    await processPendingItems(n.request.id);
+
+    let lifecycleSeenInsideTxn: string | undefined;
+    let purgeFailed = false;
+    try {
+      await finalizeRequestIfDone(n.request.id, new Set(), {
+        purge: async (tx) => {
+          const [obj] = await tx
+            .select({ lifecycleState: storageObjects.lifecycleState })
+            .from(storageObjects)
+            .where(eq(storageObjects.id, n.obj.id));
+          lifecycleSeenInsideTxn = obj?.lifecycleState;
+          throw new Error("simulated SQL purge failure");
+        },
+      });
+    } catch {
+      purgeFailed = true;
+    }
+    check(purgeFailed, "[N] expected the injected purge failure to propagate");
+    check(
+      lifecycleSeenInsideTxn === "RELATIONAL_PURGE",
+      `[N] expected RELATIONAL_PURGE inside the purge transaction, saw "${lifecycleSeenInsideTxn}"`,
+    );
+
+    const [objNAfterFailure] = await db
+      .select()
+      .from(storageObjects)
+      .where(eq(storageObjects.id, n.obj.id));
+    check(
+      objNAfterFailure?.lifecycleState === "STORAGE_CLEAN",
+      `[N] after rollback the object must sit at STORAGE_CLEAN, got "${objNAfterFailure?.lifecycleState}"`,
+    );
+    const [docNStillThere] = await db
+      .select()
+      .from(document)
+      .where(eq(document.id, n.testDoc.id));
+    check(Boolean(docNStillThere), "[N] the document must survive a failed purge");
+    const [tombstoneNone] = await db
+      .select()
+      .from(storageDeletionTombstones)
+      .where(eq(storageDeletionTombstones.documentId, BigInt(n.testDoc.id)));
+    check(!tombstoneNone, "[N] no tombstone may be written when the purge rolled back");
+
+    // The item states must be untouched by the failed finalize — the retry is
+    // a SQL-only retry, so it must find exactly the terminal outcomes the
+    // provider already produced rather than re-deriving them. (finalize never
+    // calls a provider at all, by construction: only processPendingItems
+    // does. That is what makes "retry SQL only" structural here rather than
+    // something this test has to police.)
+    const itemsNAfterFailure = await itemsFor(n.request.id);
+    check(
+      itemsNAfterFailure.every(
+        (item) => item.itemState === "DELETED" || item.itemState === "NOT_FOUND",
+      ),
+      `[N] item states must survive the rolled-back purge, got ${JSON.stringify(itemsNAfterFailure.map((i) => i.itemState))}`,
+    );
+
+    const finalizeNRetry = await finalizeRequestIfDone(n.request.id);
+    check(finalizeNRetry.purged === true, "[N] the retry must complete the purge");
+    const [docNGone] = await db
+      .select()
+      .from(document)
+      .where(eq(document.id, n.testDoc.id));
+    check(!docNGone, "[N] the document must be purged on the successful retry");
+
+    // ---- O: the retry sweep actually re-runs a stalled request -----------
+    console.log("[O] retry sweep re-dispatches a stalled request");
+    const o = await scenario("sweep");
+    await processPendingItems(o.request.id, {
+      deleteMany: async (refs) =>
+        refs.map((ref) => ({ ref, outcome: "retryable" as const, message: "transient" })),
+    });
+    const [itemO] = await itemsFor(o.request.id);
+    check(itemO?.itemState === "WAITING_RETRY", "[O] setup: expected a WAITING_RETRY item");
+
+    // Fresh failure: still inside its backoff, must not be woken yet.
+    const dispatchedEarly: number[] = [];
+    await sweepStalledDeletionRequests(new Date(), {
+      dispatch: async (ids) => {
+        dispatchedEarly.push(...ids);
+      },
+    });
+    check(
+      !dispatchedEarly.includes(o.request.id),
+      "[O] an item still inside its backoff window must not be re-dispatched",
+    );
+
+    // Now look at the world from far enough in the future that it is due.
+    const dueAt = new Date(Date.now() + (backoffMinutes(itemO!.attempts) + 1) * 60_000);
+    const dispatchedLater: number[] = [];
+    await sweepStalledDeletionRequests(dueAt, {
+      dispatch: async (ids) => {
+        dispatchedLater.push(...ids);
+      },
+    });
+    check(
+      dispatchedLater.includes(o.request.id),
+      "[O] a stalled request past its backoff must be re-dispatched — without this, " +
+        "WAITING_RETRY is a dead end and the document never finishes deleting",
+    );
+
+    // ---- P: version-scoped deletion ------------------------------------
+    console.log("[P] version-scoped deletion purges the version, not the document");
+    const pCompany = await makeCompany("version-scope");
+    const pUpload = await makeUpload();
+    const [pDoc] = await db
+      .insert(document)
+      .values({
+        url: "https://example.com/failure-matrix-version-parent.pdf",
+        category: "test",
+        title: "failure matrix (version parent)",
+        companyId: BigInt(pCompany.id),
+      })
+      .returning();
+    const [pVersion] = await db
+      .insert(documentVersions)
+      .values({
+        documentId: BigInt(pDoc!.id),
+        versionNumber: 1,
+        url: `/api/files/${pUpload.id}`,
+        mimeType: "application/pdf",
+      })
+      .returning();
+
+    const pRequest = await db.transaction(async (tx) => {
+      await registerObject(tx, {
+        adapter: "database",
+        storageLocationId: LIVE_DATABASE_LOCATION,
+        key: String(pUpload.id),
+        companyId: pCompany.id,
+        documentVersionId: pVersion!.id,
+        contentType: "application/pdf",
+        sizeBytes: pUpload.fileSize,
+      });
+      return requestVersionDeletion(tx, {
+        versionId: pVersion!.id,
+        companyId: pCompany.id,
+        actorId: "test-script",
+      });
+    });
+
+    await processPendingItems(pRequest.id);
+    const finalizeP = await finalizeRequestIfDone(pRequest.id);
+    check(finalizeP.purged === true, "[P] expected the version to be purged");
+
+    const [versionGone] = await db
+      .select()
+      .from(documentVersions)
+      .where(eq(documentVersions.id, pVersion!.id));
+    check(!versionGone, "[P] the version row must be gone");
+    const [parentAlive] = await db
+      .select()
+      .from(document)
+      .where(eq(document.id, pDoc!.id));
+    check(Boolean(parentAlive), "[P] the parent document must NOT be deleted by a version delete");
+    const [tombstoneP] = await db
+      .select()
+      .from(storageDeletionTombstones)
+      .where(eq(storageDeletionTombstones.documentVersionId, BigInt(pVersion!.id)));
+    check(Boolean(tombstoneP), "[P] expected a version-scoped tombstone");
 
     // ---- Report ----
     if (failures.length > 0) {

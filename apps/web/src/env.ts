@@ -143,6 +143,9 @@ const serverSchema = z.object({
   ),
   // B8: "off" | "log" | "enforce". Default "log" — observe before blocking.
   STORAGE_FILE_TENANT_AUTH_MODE: z.enum(["off", "log", "enforce"]).optional(),
+  // Shared secret the app presents to its own endpoints (B8). When set,
+  // /api/files/[id] tenant auth defaults to enforce.
+  INTERNAL_SERVICE_TOKEN: optionalString(),
   // Repo Explainer
   GITHUB_TOKEN: optionalString(),
   // Global AI provider fallback — set once to route ALL capabilities to one provider
@@ -363,6 +366,7 @@ function parseServerEnv() {
       | "log"
       | "enforce"
       | undefined,
+    INTERNAL_SERVICE_TOKEN: process.env.INTERNAL_SERVICE_TOKEN,
   };
 
   let server: z.infer<typeof serverSchemaRefined>;

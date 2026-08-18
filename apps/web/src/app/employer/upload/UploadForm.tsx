@@ -450,12 +450,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
     let resolvedStorageType: "s3" | "database" = "s3";
     let fileUrl: string;
     let uploadedObjectKey: string | undefined;
-<<<<<<< HEAD
-    let uploadedRef: ObjectRef | undefined;
-    let storageAdapter: ObjectRef["adapter"] | undefined;
-=======
     let storageRef: ObjectRef | undefined;
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
     const mimeType: string | undefined = doc.file.type || undefined;
 
     if (storageProvider === "s3") {
@@ -469,12 +464,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
       fileUrl = url;
       uploadedObjectKey = objectKey;
-<<<<<<< HEAD
-      uploadedRef = ref;
-      storageAdapter = ref.adapter;
-=======
       storageRef = ref;
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
       resolvedStorageType = "s3";
     } else {
       const useUploadThingForDoc =
@@ -485,23 +475,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
         const res = await uploadFiles("documentUploaderRestricted", {
           files: [doc.file],
         });
-<<<<<<< HEAD
         const parsed = readUploadThingResult(res?.[0]);
         fileUrl = parsed.url;
-        uploadedRef = parsed.ref;
-        storageAdapter = parsed.ref.adapter;
-=======
-        const upload = res?.[0] as
-          | { url?: string; serverData?: { ref?: ObjectRef } }
-          | undefined;
-        if (!upload?.url)
-          throw new Error("UploadThing: Cloud upload failed — no URL returned");
-        fileUrl = upload.url;
-        storageRef = upload.serverData?.ref;
-        if (!storageRef) {
-          throw new Error("UploadThing: Cloud upload completed without an ObjectRef");
-        }
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
+        storageRef = parsed.ref;
         resolvedStorageType = "s3";
       } else {
         updateDocument(doc.id, { progress: 30 });
@@ -521,15 +497,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
           ref?: ObjectRef;
         };
         fileUrl = data.url;
-<<<<<<< HEAD
-        if (data.ref) {
-          uploadedRef = data.ref;
-          storageAdapter = data.ref.adapter;
-=======
         storageRef = data.ref;
         if (!storageRef) {
           throw new Error("Local upload completed without an ObjectRef");
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
         }
         resolvedStorageType = data.provider === "s3" ? "s3" : "database";
       }
@@ -550,8 +520,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
       category: doc.category,
       documentUrl: fileUrl,
       storageType: resolvedStorageType,
-      storageAdapter,
-      documentRef: uploadedRef,
       mimeType,
       originalFilename: doc.file.name,
       preferredProvider:

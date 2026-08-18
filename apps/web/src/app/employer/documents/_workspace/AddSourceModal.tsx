@@ -8,7 +8,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import type { ObjectRef } from "@launchstack/core/storage";
 import { toast } from "sonner";
 import {
   IconBolt,
@@ -79,7 +78,6 @@ async function registerDocument(params: {
   userId: string;
   file: File;
   url: string;
-  ref: ObjectRef;
   category: string;
   storageRef: ObjectRef;
 }): Promise<void> {
@@ -92,14 +90,8 @@ async function registerDocument(params: {
     mimeType: params.file.type || "application/octet-stream",
     originalFilename: params.file.name,
     storageProvider: "s3",
-<<<<<<< HEAD
-    storagePathname: params.ref.key,
-    storageAdapter: params.ref.adapter,
-    documentRef: params.ref,
-=======
-    storagePathname: params.objectKey,
+    storagePathname: params.storageRef.key,
     storageRef: params.storageRef,
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
   };
   const res = await fetch("/api/uploadDocument", {
     method: "POST",
@@ -128,7 +120,6 @@ async function uploadAndRegisterAll(params: {
         userId: params.userId,
         file,
         url: up.url,
-        ref: up.ref,
         category: params.category,
         storageRef: up.ref,
       });
@@ -1238,7 +1229,6 @@ function PastePanel({ userId, category, onUploaded }: TextPanelProps) {
         userId,
         file,
         url: up.url,
-        objectKey: up.objectKey,
         category,
         storageRef: up.ref,
       });

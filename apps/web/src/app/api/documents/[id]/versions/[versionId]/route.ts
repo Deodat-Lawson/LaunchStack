@@ -25,14 +25,6 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions, users } from "@launchstack/core/db/schema";
-<<<<<<< HEAD
-import { deleteFileByRef } from "~/lib/storage";
-import { withRateLimit } from "~/lib/rate-limit-middleware";
-import { RateLimitPresets } from "~/lib/rate-limiter";
-import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
-import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
-import { isStorageDeletionLifecycleEnabled } from "~/server/storage/deletion-flags";
-=======
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
@@ -42,7 +34,6 @@ import {
   TenantMismatchError,
   VersionNotFoundError,
 } from "~/server/services/storage-deletion-coordinator";
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
 
 const AUTHORIZED_ROLES = new Set(["employer", "owner"]);
 
@@ -158,91 +149,30 @@ export async function DELETE(
         );
       }
 
-<<<<<<< HEAD
-      if (!isStorageDeletionLifecycleEnabled()) {
-        return NextResponse.json(
-          {
-            error: "Storage deletion lifecycle is disabled",
-            details:
-              "Enable STORAGE_DELETION_LIFECYCLE_ENABLED=1 to process storage deletions.",
-          },
-          { status: 503 }
-        );
-      }
-
-      const promoted = promoteLegacyUrlToRef({ value: targetVersion.url });
-      if (!promoted.ok) {
-        return NextResponse.json(
-          {
-            error: "Legacy storage reference promotion failed",
-            reason: promoted.reason,
-            quarantine: true,
-          },
-          { status: 409 }
-        );
-      }
-
-      const deleteOutcome = await deleteFileByRef(promoted.ref);
-      if (deleteOutcome.outcome === "retryable") {
-        return NextResponse.json(
-          {
-            error: "Failed to delete version blob from storage",
-            details: deleteOutcome.message ?? "Storage delete returned retryable outcome.",
-            outcome: deleteOutcome.outcome,
-            errorCode: deleteOutcome.errorCode,
-=======
+      // PROVISIONAL RESOLUTION (Dev B, local only — not pushed).
+      // Merge e84b7fa9 left this route conflicted between A6a (interim direct
+      // deleteFileByRef) and A6b (cutover to the deletion coordinator). Taken
+      // as A6b because the design doc's A6b says to swap this route onto
+      // requestVersionDeletion once B1 shipped and delete the A6a path
+      // entirely — and because the code below this block already assumes the
+      // A6b result shape. Confirm with Dev A (Sofia) before this is pushed.
       if (!isLifecycleEnabled()) {
         return NextResponse.json(
           {
             success: false,
             status: "unavailable",
             error: "Storage deletion lifecycle is disabled",
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
           },
           { status: 503 },
         );
       }
 
-<<<<<<< HEAD
-      if (deleteOutcome.outcome === "blocked") {
-        return NextResponse.json(
-          {
-            error: "Storage deletion requires manual review",
-            details: deleteOutcome.message ?? "Storage delete returned blocked outcome.",
-            outcome: deleteOutcome.outcome,
-            errorCode: deleteOutcome.errorCode,
-          },
-          { status: 409 }
-        );
-      }
-
-      if (deleteOutcome.outcome === "rejected") {
-        return NextResponse.json(
-          {
-            error: "Storage deletion was rejected and quarantined",
-            details: deleteOutcome.message ?? "Storage delete returned rejected outcome.",
-            outcome: deleteOutcome.outcome,
-            errorCode: deleteOutcome.errorCode,
-            quarantine: true,
-          },
-          { status: 409 }
-        );
-      }
-
-      // Deleting the document_versions row cascades to all RLM tables that
-      // FK against it (structure, context_chunks, retrieval_chunks, metadata,
-      // previews), so no manual cleanup is needed.
-      await db
-        .delete(documentVersions)
-        .where(eq(documentVersions.id, versionId));
-=======
       try {
         const result = await requestVersionDeletionAndDispatch({
           versionId,
           companyId: Number(doc.companyId),
           actorId: userId,
         });
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
 
         if (result.kind === "already-completed") {
           return NextResponse.json(

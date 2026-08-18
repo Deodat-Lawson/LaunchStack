@@ -18,25 +18,20 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-<<<<<<< HEAD
-            const ref = mintUploadThingObjectRef({
-                key: file.key,
-                url: file.url,
-                ufsUrl: file.ufsUrl,
-            });
-=======
             const ref = mintUploadThingObjectRef(file);
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
-                ref,
-                filename: file.name,
+                // Spread into a plain literal rather than passing `ref`
+                // directly: UploadThing types serverData as JsonObject, and
+                // ObjectRef (a readonly interface, no index signature) is not
+                // assignable to it. Same values, structurally serializable.
                 ref: {
                     adapter: ref.adapter,
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                filename: file.name,
             };
         }),
 
@@ -53,25 +48,20 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-<<<<<<< HEAD
-            const ref = mintUploadThingObjectRef({
-                key: file.key,
-                url: file.url,
-                ufsUrl: file.ufsUrl,
-            });
-=======
             const ref = mintUploadThingObjectRef(file);
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
-                ref,
-                filename: file.name,
+                // Spread into a plain literal rather than passing `ref`
+                // directly: UploadThing types serverData as JsonObject, and
+                // ObjectRef (a readonly interface, no index signature) is not
+                // assignable to it. Same values, structurally serializable.
                 ref: {
                     adapter: ref.adapter,
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                filename: file.name,
             };
         }),
 
@@ -88,25 +78,20 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-<<<<<<< HEAD
-            const ref = mintUploadThingObjectRef({
-                key: file.key,
-                url: file.url,
-                ufsUrl: file.ufsUrl,
-            });
-=======
             const ref = mintUploadThingObjectRef(file);
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
-                ref,
-                filename: file.name,
+                // Spread into a plain literal rather than passing `ref`
+                // directly: UploadThing types serverData as JsonObject, and
+                // ObjectRef (a readonly interface, no index signature) is not
+                // assignable to it. Same values, structurally serializable.
                 ref: {
                     adapter: ref.adapter,
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                filename: file.name,
             };
         }),
 
@@ -123,25 +108,20 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-<<<<<<< HEAD
-            const ref = mintUploadThingObjectRef({
-                key: file.key,
-                url: file.url,
-                ufsUrl: file.ufsUrl,
-            });
-=======
             const ref = mintUploadThingObjectRef(file);
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
-                ref,
-                filename: file.name,
+                // Spread into a plain literal rather than passing `ref`
+                // directly: UploadThing types serverData as JsonObject, and
+                // ObjectRef (a readonly interface, no index signature) is not
+                // assignable to it. Same values, structurally serializable.
                 ref: {
                     adapter: ref.adapter,
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                filename: file.name,
             };
         }),
 
@@ -175,25 +155,20 @@ export const ourFileRouter = {
             return { userId };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-<<<<<<< HEAD
-            const ref = mintUploadThingObjectRef({
-                key: file.key,
-                url: file.url,
-                ufsUrl: file.ufsUrl,
-            });
-=======
             const ref = mintUploadThingObjectRef(file);
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
             return {
                 uploadedBy: metadata.userId,
                 url: file.url,
-                ref,
-                filename: file.name,
+                // Spread into a plain literal rather than passing `ref`
+                // directly: UploadThing types serverData as JsonObject, and
+                // ObjectRef (a readonly interface, no index signature) is not
+                // assignable to it. Same values, structurally serializable.
                 ref: {
                     adapter: ref.adapter,
                     storageLocationId: ref.storageLocationId,
                     key: ref.key,
                 },
+                filename: file.name,
             };
         }),
 } satisfies FileRouter;

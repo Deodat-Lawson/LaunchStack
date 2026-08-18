@@ -54,20 +54,7 @@ export async function POST(request: Request) {
             key: objectKey,
         };
 
-<<<<<<< HEAD
         return NextResponse.json({ objectKey, bucket, url, ref, storageAdapter: ref.adapter });
-=======
-        return NextResponse.json({
-            objectKey,
-            bucket,
-            url,
-            ref: {
-                adapter: "s3",
-                storageLocationId: resolveStorageLocationId("s3"),
-                key: objectKey,
-            },
-        });
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
     } catch (error) {
         console.error("[StorageUpload] Failed to upload file:", error);
         return NextResponse.json(

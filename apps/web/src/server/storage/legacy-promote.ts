@@ -52,7 +52,6 @@ function toAbsoluteUrl(raw: string): URL | null {
 function promoteDatabaseUrl(raw: string): ObjectRef | null {
   let key: string | null = null;
 
-<<<<<<< HEAD
   if (raw.startsWith("/")) {
     const relativeMatch = raw.match(/^\/api\/files\/(\d+)$/);
     key = relativeMatch?.[1] ?? null;
@@ -75,19 +74,6 @@ function promoteDatabaseUrl(raw: string): ObjectRef | null {
   }
 
   if (!key) return null;
-=======
-  if (raw.startsWith("http://") || raw.startsWith("https://")) {
-    const appPublicUrl = env.server.APP_PUBLIC_URL;
-    if (!appPublicUrl) return null;
-    try {
-      if (new URL(raw).origin !== new URL(appPublicUrl).origin) return null;
-    } catch {
-      return null;
-    }
-  }
-
-  const key = dbPathMatch[1];
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
 
   return {
     adapter: "database",

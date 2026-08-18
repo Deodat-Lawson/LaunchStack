@@ -22,11 +22,6 @@ import {
   deleteManyByRef,
   uploadFile,
   fetchFile,
-<<<<<<< HEAD
-=======
-  deleteFileByRef,
-  deleteManyByRef,
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
   resolveStorageBackend,
 } from "~/lib/storage";
 import { promoteLegacyUrlToRef } from "~/server/storage/legacy-promote";
@@ -67,7 +62,6 @@ export function createAppStoragePort(): StoragePort {
       return fetchFile(urlOrKey, init);
     },
 
-<<<<<<< HEAD
     /** @deprecated Use deleteRef/deleteMany. Kept as URL-based migration shim. */
     async delete(urlOrKey) {
       if (!urlOrKey) return;
@@ -81,28 +75,6 @@ export function createAppStoragePort(): StoragePort {
       if (result.outcome === "retryable" || result.outcome === "blocked" || result.outcome === "rejected") {
         throw new Error(result.message ?? `Delete failed with outcome=${result.outcome}`);
       }
-=======
-    deleteRef(ref) {
-      return deleteFileByRef(ref);
-    },
-
-    deleteMany(refs) {
-      return deleteManyByRef(refs);
-    },
-
-    async delete(urlOrKey) {
-      const promoted = promoteLegacyUrlToRef({ value: urlOrKey });
-      if (!promoted.ok) {
-        throw new Error(
-          `StoragePort.delete could not promote the legacy reference: ${promoted.reason}`,
-        );
-      }
-      const result = await deleteFileByRef(promoted.ref);
-      if (result.outcome === "deleted" || result.outcome === "not_found") {
-        return;
-      }
-      throw new Error(result.message ?? result.errorCode ?? "Storage delete failed");
->>>>>>> 4e365dff2f6519db028a2c29e80a4de5c898f4f4
     },
   };
 }

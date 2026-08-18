@@ -123,7 +123,6 @@ export async function POST(request: Request) {
       id: fileId,
       provider: uploaded.provider,
       pathname: uploaded.pathname,
-      ref: uploaded.ref,
     });
   } catch (error) {
     const elapsed = Date.now() - uploadStart;

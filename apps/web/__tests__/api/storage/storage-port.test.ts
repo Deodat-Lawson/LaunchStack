@@ -45,6 +45,36 @@ describe("createAppStoragePort", () => {
     expect(result).toEqual({ ref, outcome: "deleted" });
   });
 
+  it("put delegates to uploadFile using the canonical method name", async () => {
+    const ref: ObjectRef = {
+      adapter: "s3",
+      storageLocationId: "s3:http://localhost:8333@bucket",
+      key: "documents/a.pdf",
+    };
+    mockUploadFile.mockResolvedValue({
+      url: "http://localhost:8333/bucket/documents/a.pdf",
+      pathname: "documents/a.pdf",
+      ref,
+      contentType: "application/pdf",
+      provider: "s3",
+    });
+
+    const port = createAppStoragePort();
+    const result = await port.put({
+      filename: "a.pdf",
+      data: Buffer.from("hello"),
+      contentType: "application/pdf",
+    });
+
+    expect(mockUploadFile).toHaveBeenCalledWith({
+      filename: "a.pdf",
+      data: Buffer.from("hello"),
+      contentType: "application/pdf",
+      userId: "system",
+    });
+    expect(result.ref).toEqual(ref);
+  });
+
   it("deleteMany delegates to grouped batch helper", async () => {
     const refs: ObjectRef[] = [
       {
@@ -88,5 +118,13 @@ describe("createAppStoragePort", () => {
 
     expect(mockPromoteLegacyUrlToRef).toHaveBeenCalledWith({ value: "https://utfs.io/f/ut_abc" });
     expect(mockDeleteFileByRef).toHaveBeenCalledWith(ref);
+  });
+
+  it("forAdapter exposes the targeted adapter surface before concrete adapters land", () => {
+    const port = createAppStoragePort();
+    const target = port.forAdapter("vercel-blob");
+
+    expect(target.adapter).toBe("vercel-blob");
+    expect(target.provider).toBe("s3");
   });
 });

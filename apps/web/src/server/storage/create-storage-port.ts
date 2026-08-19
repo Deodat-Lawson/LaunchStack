@@ -1,0 +1,55 @@
+import type {
+  DeleteResult,
+  GetSignedUrlOptions,
+  ObjectRef,
+  StorageAdapter,
+  TargetedStoragePort,
+  UploadInput,
+  UploadResult,
+} from "@launchstack/core/storage";
+
+function createUnwiredAdapterTarget(
+  adapter: StorageAdapter,
+  provider: string,
+): TargetedStoragePort {
+  const error = (method: string): Error =>
+    new Error(
+      `[storage] Adapter target "${adapter}" is not wired for ${method} yet. ` +
+        "A2 only locks the contract surface; concrete adapter extraction lands later.",
+    );
+
+  return {
+    adapter,
+    provider,
+    async put(_input: UploadInput): Promise<UploadResult> {
+      throw error("put()");
+    },
+    async get(_ref: ObjectRef, _init?: RequestInit): Promise<Response> {
+      throw error("get()");
+    },
+    async delete(_ref: ObjectRef): Promise<DeleteResult> {
+      throw error("delete()");
+    },
+    async deleteMany(_refs: readonly ObjectRef[]): Promise<DeleteResult[]> {
+      throw error("deleteMany()");
+    },
+    async getSignedUrl(_ref: ObjectRef, _opts?: GetSignedUrlOptions): Promise<string> {
+      throw error("getSignedUrl()");
+    },
+  };
+}
+
+/**
+ * A2 factory skeleton: this locks the targeted-adapter surface before real
+ * adapter extraction lands. The default app port can keep using existing
+ * helpers for now, while future migrations call through concrete targets.
+ */
+export function createStoragePortTargetFactory(provider: string): {
+  forAdapter(adapter: StorageAdapter): TargetedStoragePort;
+} {
+  return {
+    forAdapter(adapter: StorageAdapter): TargetedStoragePort {
+      return createUnwiredAdapterTarget(adapter, provider);
+    },
+  };
+}

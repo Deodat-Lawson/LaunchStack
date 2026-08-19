@@ -23,9 +23,11 @@ export * from "./errors";
 export type {
   DeleteOutcome,
   DeleteResult,
+  GetSignedUrlOptions,
   ObjectRef,
   StorageAdapter,
   StoragePort,
+  TargetedStoragePort,
   UploadInput,
   UploadResult,
 } from "./storage/types";

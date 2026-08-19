@@ -9,6 +9,7 @@ This document captures the frozen storage contract used by server-side upload/de
 - `storageLocationId` is server-resolved from configured adapter environment.
 - Clients do not guess, derive, or mint `storageLocationId`.
 - `ObjectRef` is opaque and immutable once minted.
+- New `STORAGE_S3_*` env vars take precedence over legacy S3 env names; legacy names remain supported for compatibility.
 
 ## ObjectRef
 
@@ -48,6 +49,28 @@ Worker/state mapping (frozen):
 Blocked/rejected outcomes are terminal for that adapter attempt and must not fall
 through to another adapter.
 
+## Port surface
+
+The storage contract now distinguishes canonical methods from compatibility
+aliases:
+
+- Canonical methods:
+  - `put`
+  - `get`
+  - `delete`
+  - `deleteMany`
+  - `getSignedUrl`
+- Explicit adapter targeting:
+  - `getStoragePort().forAdapter(adapter)`
+- Deprecated compatibility aliases:
+  - `upload`
+  - `download`
+  - `deleteRef`
+
+Canonical write/read/delete flows should move toward `ObjectRef`-based calls.
+Deprecated aliases remain so existing callers can migrate incrementally without
+changing lifecycle behavior.
+
 ## Lifecycle feature flags (exactly two)
 
 - `STORAGE_DELETION_LIFECYCLE_ENABLED` (intake gate, default off)
@@ -72,4 +95,9 @@ Dominance rules:
 
 ## Deferred port scope
 
-The frozen lifecycle contract covers provider-owned identity and deletion. Full naming parity for `put`, `get`, and `getSignedUrl` is intentionally deferred; the current `StoragePort` continues to expose `upload` and `download` until existing ingestion callers can migrate without a compatibility break. New deletion and manifest code must use `ObjectRef`, `deleteRef`, and `deleteMany`; the legacy URL `delete` method remains only as a promotion shim for historical rows.
+The frozen lifecycle contract still covers provider-owned identity and deletion.
+This contract update only locks the canonical method names and adapter-targeting
+shape; it does not by itself rewire existing app call sites. New deletion and
+manifest code must continue to use `ObjectRef` and `deleteMany`, while the
+legacy URL `delete` overload remains a promotion shim for historical rows until
+downstream migration work lands.

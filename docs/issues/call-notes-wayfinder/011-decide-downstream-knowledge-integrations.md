@@ -3,7 +3,7 @@ id: MN-WF-011
 title: Decide Post-Call Outputs and Downstream Integrations
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by:

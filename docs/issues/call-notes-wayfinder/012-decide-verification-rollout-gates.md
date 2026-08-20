@@ -3,7 +3,7 @@ id: MN-WF-012
 title: Decide Architecture Verification and Rollout Gates
 parent: MN-WF-000
 status: open
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by:

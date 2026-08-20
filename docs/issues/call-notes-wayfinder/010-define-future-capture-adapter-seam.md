@@ -3,7 +3,7 @@ id: MN-WF-010
 title: Define the Future Capture Adapter Seam
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by:

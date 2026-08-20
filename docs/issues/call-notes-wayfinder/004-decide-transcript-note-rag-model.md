@@ -3,7 +3,7 @@ id: MN-WF-004
 title: Decide the Transcript, Note, and RAG Knowledge Model
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by:

@@ -3,7 +3,7 @@ id: MN-WF-003
 title: Prototype the Call Notes Interaction Shape
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:prototype
 blocked_by: []
@@ -35,7 +35,7 @@ What minimal interaction shape makes live attributed transcript, a contemporaneo
 - The Call Note is shared read-only with the company by default. Only its initiating owner can edit or accept AI revisions, and a **Shared with company** toggle can make it private during or after the Call; other users then see Transcript only.
 - Transcript segments are immutable and visible to all authorized company users. Only the Call Note owner can add a company-visible Bookmark with an optional freeform comment; AI infers whether that comment requests verbatim reuse or thematic focus.
 - The live editor is a blank rich Call Note using existing formatting and autosave, without templates or live-AI prompts.
-- After transcript finalization, AI automatically prepares an owner-only enrichment proposal. A **My notes / AI enhanced** toggle exposes the ready proposal without replacing the canonical Call Note. **Review suggestion** opens the side-by-side decision view: the current note remains read-only beside an editable proposal; Accept creates the next canonical revision with the Call Note's current visibility and Reject preserves the current note.
+- After transcript finalization, the owner may explicitly request an AI enrichment proposal. A **My notes / AI enhanced** toggle exposes the ready proposal without replacing the canonical Call Note. **Review suggestion** opens the side-by-side decision view: the current note remains read-only beside an editable proposal; Accept creates the next canonical revision with the Call Note's current visibility and Reject preserves the current note.
 - Failed Calls remain in Recent even when empty. Empty failed attempts expose an explicit Delete action so the user can clean them up.
 - Calls uses a list/detail split: a compact Live/Recent rail remains beside the selected Call and collapses on narrow screens.
 - Enrichment review gives the current note and editable proposal two columns; citations open the relevant immutable Transcript segment in a collapsible evidence drawer.

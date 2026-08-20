@@ -27,6 +27,8 @@ Consumes `StartCaptureInput`, `CaptureControlInput`, durable commands/webhook ev
 
 `apps/call-worker/**`, provider-adapter tests, and the Zoom-specific integration module consumed by the web edge. Per MN-WF-006, `apps/web` hosts OAuth initiation/callbacks and the public signed-webhook endpoint; the worker publishes no endpoint. Root environment/Compose wiring and shared package changes remain Kien's integration work.
 
+Kien retains this lane because the target Zoom account required for OAuth, RTMS, and pilot evidence is available only to him.
+
 ## Acceptance
 
 - OAuth tokens are encrypted at rest and scoped to the LaunchStack user/company connection that owns them.

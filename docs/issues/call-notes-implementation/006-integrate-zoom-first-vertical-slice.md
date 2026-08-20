@@ -28,7 +28,7 @@ Consumes every lane's handback and the frozen conformance pack. Provides the onl
 
 ## Owned surface
 
-Root/package exports, dependency injection, environment parsing, Docker Compose and deployment wiring, worker registration/health, cross-lane conflict resolution, shared conformance execution, release documentation, and pilot gate configuration. Lane internals change only when a failing shared contract demonstrates a necessary integration fix.
+Root/package exports, dependency injection, environment parsing, Docker Compose and deployment wiring, worker registration/health, cross-lane conflict resolution, release documentation, and pilot gate configuration. Peace hands back the shared fixture/E2E harness and integration write-up; Kien owns the final merge and release evidence. Lane internals change only when a failing shared contract demonstrates a necessary integration fix.
 
 ## Acceptance
 

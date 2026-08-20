@@ -3,7 +3,7 @@ id: MN-IMP-003
 title: Implement Call Notes Domain and Persistence
 parent: MN-IMP-000
 status: open
-assignee: Teammate-1
+assignee: Peace
 labels:
   - call-notes
   - domain
@@ -26,6 +26,8 @@ Consumes `CallNotesCommand`, `CaptureEvent`, the canonical Drizzle tables, deter
 ## Owned surface
 
 Call/Capture domain services, repositories, authorization rules, state transitions, finalization, durable work claiming, application-service implementation, and Call Notes product API handlers. Canonical contracts/schema/migration, Zoom runtime, production UI, enrichment internals, and root wiring are exclusive to other lanes.
+
+Peace also owns transcript finalization, shared fixture alignment, and the deterministic integration harness. Root environment/Compose wiring and the final cross-lane merge remain Kien's responsibility.
 
 ## Acceptance
 

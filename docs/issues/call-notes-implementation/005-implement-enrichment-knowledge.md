@@ -3,7 +3,7 @@ id: MN-IMP-005
 title: Implement Enrichment and Knowledge Integration
 parent: MN-IMP-000
 status: open
-assignee: Teammate-3
+assignee: Junkun
 labels:
   - call-notes
   - ai

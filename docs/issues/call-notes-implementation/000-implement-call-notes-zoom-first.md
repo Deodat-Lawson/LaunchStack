@@ -35,6 +35,12 @@ flowchart LR
 
 MN-IMP-003, MN-IMP-004, and MN-IMP-005 may proceed against the deterministic contract fixtures while target-account Zoom verification remains open. MN-IMP-002 may implement everything supported by the settled official contract, but pilot acceptance remains blocked on MN-WF-013 evidence.
 
+## Week Five team alignment
+
+The [Week Five implementation plan](https://docs.google.com/document/d/1ny0H3b_c4RsnJtZ3ed565pE61hya-naT7Rf8pZRh70Y/edit?tab=t.0) agrees with the Zoom-first vertical slice, normalized provider boundary, transcript finalization, synthetic-fixture parallelism, reviewable AI proposal, and deliberate knowledge acceptance. Its provisional-schema premise is obsolete: `call-notes/v1` is frozen, so every lane consumes the shared contract directly and adds no local contract or adapter.
+
+Kien retains Zoom integration because he owns the target Zoom account, as well as canonical contract approval and final release integration. Junkun leads day-to-day implementation and owns enrichment/knowledge. Hank owns the Calls product surface. Peace owns domain/persistence, transcript finalization, shared fixture integration, and the E2E harness. The delivery milestones are fixture E2E, real Zoom E2E, then knowledge integration.
+
 ## Shared baseline
 
 The canonical contract pack is `@launchstack/features/call-notes`:
@@ -49,15 +55,15 @@ Architecture decisions remain in `docs/issues/call-notes-wayfinder/001` through 
 
 ## Ownership and collision rules
 
-| Lane                     | Owner      | Exclusive surface                                                                                                         |
-| ------------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Contract and integration | Kien       | Canonical contracts, schema/migration, fixtures, package exports, root environment/Compose wiring, final cross-lane fixes |
-| Zoom integration         | Kien       | `apps/call-worker/**`; web OAuth/callback/signed-webhook edge; provider adapter                                           |
-| Domain and persistence   | Teammate-1 | Call/Capture services, repositories, authorization, commands, state transitions, product API handlers                     |
-| Product surface          | Teammate-2 | Production Calls pages/components/client behavior and their UI tests                                                      |
-| Enrichment and knowledge | Teammate-3 | Enrichment generation, provenance/revisions, knowledge sink and retrieval integration                                     |
+| Lane                       | Owner  | Exclusive surface                                                                                                         |
+| -------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Contract and final release | Kien   | Canonical contracts, schema/migration, fixtures, package exports, root environment/Compose wiring, final cross-lane fixes |
+| Zoom integration           | Kien   | `apps/call-worker/**`; web OAuth/callback/signed-webhook edge; provider adapter                                           |
+| Domain and persistence     | Peace  | Call/Capture services, repositories, transcript finalization, fixtures/E2E harness, product API handlers                  |
+| Product surface            | Hank   | Production Calls pages/components/client behavior and their UI tests                                                      |
+| Enrichment and knowledge   | Junkun | Enrichment generation, provenance/revisions, knowledge sink and retrieval integration                                     |
 
-A lane may consume another lane's public interface but must not edit its exclusive surface. Teammates do not edit canonical contracts, schema/migration, root exports, environment parsing, Docker/worker wiring, or another lane's files. Kien resolves shared wiring and integration conflicts.
+A lane may consume another lane's public interface but must not edit its exclusive surface. Teammates do not edit canonical contracts, schema/migration, root exports, environment parsing, Docker/worker wiring, or another lane's files. Junkun coordinates implementation handbacks and reports seam requests; Kien approves contract changes and resolves final wiring and integration conflicts.
 
 ## Contract-change protocol
 

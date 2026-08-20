@@ -15,6 +15,27 @@
       "when": 1786146482828,
       "tag": "20260807234802_founder_weekly_review",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1787188199398,
+      "tag": "20260820010959_simple_khan",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1787205296532,
+      "tag": "20260820055456_deep_veda",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1787205446269,
+      "tag": "20260820055726_famous_titanium_man",
+      "breakpoints": true
     }
   ]
 }

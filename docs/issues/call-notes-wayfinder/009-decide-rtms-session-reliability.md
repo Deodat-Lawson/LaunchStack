@@ -3,7 +3,7 @@ id: MN-WF-009
 title: Decide the RTMS Session Reliability Model
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by:

@@ -3,7 +3,7 @@ id: MN-WF-007
 title: Decide the Self-Hosted Docker Topology
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by:

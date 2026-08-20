@@ -3,7 +3,7 @@ id: MN-WF-005
 title: Decide the AI Enrichment and Provenance Contract
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by:

@@ -3,7 +3,7 @@ id: MN-WF-006
 title: Decide the LaunchStack Module and Runtime Boundaries
 parent: MN-WF-000
 status: closed
-assignee: Main
+assignee: Kien
 labels:
   - wayfinder:grilling
 blocked_by:

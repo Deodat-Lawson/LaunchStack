@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub \u2014 real sources land in later migration steps.)",
+  "description": "Launchstack vertical features on top of @launchstack/core. (Scaffolding stub — real sources land in later migration steps.)",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=20"
@@ -88,6 +88,10 @@
     "./client-prospector/db": {
       "types": "./src/client-prospector/db.ts",
       "default": "./src/client-prospector/db.ts"
+    },
+    "./call-notes": {
+      "types": "./src/call-notes/index.ts",
+      "default": "./src/call-notes/index.ts"
     },
     "./founder-weekly-review": {
       "types": "./src/founder-weekly-review/index.ts",

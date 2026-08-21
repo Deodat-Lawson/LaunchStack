@@ -3,6 +3,7 @@ import { BM25Retriever } from "@langchain/community/retrievers/bm25";
 import type { BaseRetriever } from "@langchain/core/retrievers";
 import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
+
 import {
   createDocumentVectorRetriever,
   createCompanyVectorRetriever,
@@ -109,13 +110,16 @@ export async function createDocumentEnsembleRetriever(
   }
 
   if (isNotesRetrievalEnabled()) {
-    const notesRetriever = createDocumentNotesRetriever(
-      documentId,
-      emb,
-      Math.min(candidateK, NOTES_MAX_CANDIDATES),
-    );
-    retrievers.push(notesRetriever);
-    weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    const noteEmbeddings = resolveNoteEmbeddingRuntime()?.embeddings;
+    if (noteEmbeddings) {
+      const notesRetriever = createDocumentNotesRetriever(
+        documentId,
+        noteEmbeddings,
+        Math.min(candidateK, NOTES_MAX_CANDIDATES),
+      );
+      retrievers.push(notesRetriever);
+      weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    }
   }
 
   return new EnsembleRetriever({ retrievers, weights });
@@ -152,13 +156,16 @@ export async function createCompanyEnsembleRetriever(
   }
 
   if (isNotesRetrievalEnabled()) {
-    const notesRetriever = createCompanyNotesRetriever(
-      companyId,
-      emb,
-      Math.min(candidateK, NOTES_MAX_CANDIDATES),
-    );
-    retrievers.push(notesRetriever);
-    weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    const noteEmbeddings = resolveNoteEmbeddingRuntime()?.embeddings;
+    if (noteEmbeddings) {
+      const notesRetriever = createCompanyNotesRetriever(
+        companyId,
+        noteEmbeddings,
+        Math.min(candidateK, NOTES_MAX_CANDIDATES),
+      );
+      retrievers.push(notesRetriever);
+      weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    }
   }
 
   return new EnsembleRetriever({ retrievers, weights });
@@ -196,13 +203,16 @@ export async function createMultiDocEnsembleRetriever(
   }
 
   if (isNotesRetrievalEnabled()) {
-    const notesRetriever = createMultiDocNotesRetriever(
-      documentIds,
-      emb,
-      Math.min(candidateK, NOTES_MAX_CANDIDATES),
-    );
-    retrievers.push(notesRetriever);
-    weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    const noteEmbeddings = resolveNoteEmbeddingRuntime()?.embeddings;
+    if (noteEmbeddings) {
+      const notesRetriever = createMultiDocNotesRetriever(
+        documentIds,
+        noteEmbeddings,
+        Math.min(candidateK, NOTES_MAX_CANDIDATES),
+      );
+      retrievers.push(notesRetriever);
+      weights = [...weights, NOTES_DEFAULT_WEIGHT];
+    }
   }
 
   return new EnsembleRetriever({ retrievers, weights });

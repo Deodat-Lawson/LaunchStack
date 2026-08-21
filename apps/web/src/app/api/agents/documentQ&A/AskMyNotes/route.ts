@@ -7,18 +7,13 @@
  */
 
 import { NextResponse } from "next/server";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { auth } from "@clerk/nextjs/server";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { createUserNotesRetriever } from "~/lib/tools/rag/retrievers/notes-retriever";
-import {
-  EMBEDDING_DIM,
-  EMBEDDING_MODEL,
-  resolveEmbeddingConfig,
-} from "~/server/notes/embedding-config";
+import { resolveNoteEmbeddingRuntime } from "~/server/notes/embedding-config";
 import { normalizeModelContent } from "../services";
 
 export const runtime = "nodejs";
@@ -60,8 +55,8 @@ export async function POST(request: Request) {
       }
       const topK = Math.min(Math.max(body.topK ?? 8, 1), 25);
 
-      const { apiKey, baseURL } = resolveEmbeddingConfig();
-      if (!apiKey) {
+      const noteEmbeddingRuntime = resolveNoteEmbeddingRuntime();
+      if (!noteEmbeddingRuntime) {
         return NextResponse.json(
           {
             success: false,
@@ -72,14 +67,11 @@ export async function POST(request: Request) {
         );
       }
 
-      const embeddings = new OpenAIEmbeddings({
-        openAIApiKey: apiKey,
-        modelName: EMBEDDING_MODEL,
-        dimensions: EMBEDDING_DIM,
-        ...(baseURL ? { configuration: { baseURL } } : {}),
-      });
-
-      const retriever = createUserNotesRetriever(userId, embeddings, topK);
+      const retriever = createUserNotesRetriever(
+        userId,
+        noteEmbeddingRuntime.embeddings,
+        topK,
+      );
       const docs = await retriever.invoke(question);
 
       if (docs.length === 0) {

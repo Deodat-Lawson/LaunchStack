@@ -67,7 +67,11 @@ export interface NoteEmbeddingRuntime {
   index: NoteEmbeddingIndex;
 }
 
-/** One fixed runtime for both note writes and note queries. */
+/**
+ * One explicit boundary for the fixed-width note vector table. Both note
+ * writes and every note query must resolve through this function until a
+ * schema migration and reindex can move notes to another embedding index.
+ */
 export function resolveNoteEmbeddingRuntime(): NoteEmbeddingRuntime | null {
   const { apiKey, baseURL } = resolveEmbeddingConfig();
   if (!apiKey || !baseURL) return null;

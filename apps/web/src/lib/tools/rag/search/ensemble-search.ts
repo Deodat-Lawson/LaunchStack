@@ -5,6 +5,7 @@ import { createEmbeddingModel } from "@launchstack/core/embeddings";
 import { resolveEmbeddingIndex } from "@launchstack/core/embeddings";
 import { getRerankProvider, isRerankConfigured } from "@launchstack/core/providers/reranking";
 import { env } from "~/env";
+import { resolveNoteEmbeddingRuntime } from "~/server/notes/embedding-config";
 import {
     createDocumentVectorRetriever,
     createCompanyVectorRetriever,
@@ -103,9 +104,11 @@ export async function createDocumentEnsembleRetriever(
     }
 
     if (isNotesRetrievalEnabled()) {
+        const noteEmbeddings = resolveNoteEmbeddingRuntime()?.embeddings;
+        if (!noteEmbeddings) return new EnsembleRetriever({ retrievers, weights });
         const notesRetriever = createDocumentNotesRetriever(
             documentId,
-            emb,
+            noteEmbeddings,
             Math.min(candidateK, NOTES_MAX_CANDIDATES)
         );
         retrievers.push(notesRetriever);
@@ -146,9 +149,11 @@ export async function createCompanyEnsembleRetriever(
     }
 
     if (isNotesRetrievalEnabled()) {
+        const noteEmbeddings = resolveNoteEmbeddingRuntime()?.embeddings;
+        if (!noteEmbeddings) return new EnsembleRetriever({ retrievers, weights });
         const notesRetriever = createCompanyNotesRetriever(
             companyId,
-            emb,
+            noteEmbeddings,
             Math.min(candidateK, NOTES_MAX_CANDIDATES)
         );
         retrievers.push(notesRetriever);
@@ -190,9 +195,11 @@ export async function createMultiDocEnsembleRetriever(
     }
 
     if (isNotesRetrievalEnabled()) {
+        const noteEmbeddings = resolveNoteEmbeddingRuntime()?.embeddings;
+        if (!noteEmbeddings) return new EnsembleRetriever({ retrievers, weights });
         const notesRetriever = createMultiDocNotesRetriever(
             documentIds,
-            emb,
+            noteEmbeddings,
             Math.min(candidateK, NOTES_MAX_CANDIDATES)
         );
         retrievers.push(notesRetriever);

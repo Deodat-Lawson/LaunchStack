@@ -276,10 +276,48 @@ export async function companyEnsembleSearch(
 ): Promise<SearchResult[]> {
     const { companyId, topK = 10 } = options;
 
-    const chunks = await getCompanyChunks(companyId);
-    if (chunks.length === 0) {
-        console.log(`[EnsembleSearch] No chunks for company ${companyId}, skipping search`);
+    let chunks;
+    try {
+        chunks = await getCompanyChunks(companyId);
+    } catch (error) {
+        console.error("[EnsembleSearch] Failed to load company chunks:", error);
         return [];
+    }
+    if (chunks.length === 0) {
+        if (!isNotesRetrievalEnabled()) {
+            console.log(`[EnsembleSearch] No chunks or enabled notes for company ${companyId}`);
+            return [];
+        }
+
+        try {
+            const noteEmbeddings = resolveNoteEmbeddingRuntime()?.embeddings;
+            if (!noteEmbeddings) {
+                console.log(
+                    `[EnsembleSearch] No chunks or configured note embeddings for company ${companyId}`
+                );
+                return [];
+            }
+            const notesRetriever = createCompanyNotesRetriever(
+                companyId,
+                noteEmbeddings,
+                Math.min(topK * RERANK_CANDIDATE_MULTIPLIER, NOTES_MAX_CANDIDATES)
+            );
+            const notes = await notesRetriever.getRelevantDocuments(query);
+            const mapped: SearchResult[] = notes.map(doc => ({
+                pageContent: doc.pageContent,
+                metadata: {
+                    ...doc.metadata,
+                    retrievalMethod: "vector_ann",
+                    timestamp: new Date().toISOString(),
+                    searchScope: "company" as const,
+                },
+            }));
+            const reranked = await rerankResults(query, mapped);
+            return reranked.slice(0, topK);
+        } catch (error) {
+            console.error("[EnsembleSearch] Notes-only company search error:", error);
+            return [];
+        }
     }
 
     const graphEnabled = isGraphRetrievalEnabled();

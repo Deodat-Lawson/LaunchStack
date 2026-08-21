@@ -634,3 +634,52 @@ export const RLMQuestionSchema = z
             pageRange: data.pageRange,
         };
     });
+
+// ============================================================================
+// Mindmap (the diagramming app)
+// ============================================================================
+
+/**
+ * The document body is validated on the client by `parseDoc`, which already
+ * has to tolerate documents written by older builds. A second, stricter copy
+ * of the shape here would reject files the editor can happily open, so the API
+ * only asserts "a JSON object" and lets the parser normalise it.
+ */
+const MindmapDocSchema = z.record(z.unknown());
+
+export const CreateMindmapSchema = z.object({
+    title: z.string().min(1).max(300).optional(),
+    description: z.string().max(2000).optional(),
+    templateId: z.string().min(1).max(64).optional(),
+    folder: z.string().min(1).max(256).optional(),
+    doc: MindmapDocSchema.optional(),
+});
+
+export const UpdateMindmapSchema = z
+    .object({
+        title: z.string().min(1).max(300).optional(),
+        description: z.string().max(2000).nullable().optional(),
+        folder: z.string().min(1).max(256).optional(),
+        starred: z.boolean().optional(),
+        doc: MindmapDocSchema.optional(),
+        thumbnail: z.string().max(2_000_000).nullable().optional(),
+        /**
+         * Revision the client last saw. A mismatch means another tab saved in
+         * the meantime, so the write is rejected with 409 instead of silently
+         * overwriting the newer document.
+         */
+        baseRevision: z.number().int().min(0).optional(),
+        /** Also write a version-history snapshot for this save. */
+        snapshot: z.boolean().optional(),
+        snapshotLabel: z.string().max(200).optional(),
+        /** Bring the map back out of the trash. */
+        restore: z.boolean().optional(),
+    })
+    .refine(data => Object.keys(data).length > 0, { message: "No fields to update" });
+
+export const PublishMindmapSchema = z.object({
+    /** Folder in the Sources library to file the exported document under. */
+    category: z.string().min(1).max(256).optional(),
+    /** Markdown rendering of the map, produced by the editor. */
+    markdown: z.string().min(1).max(5_000_000),
+});

@@ -64,6 +64,21 @@ hand-drawn set at `documents/_workspace/icons.tsx` is deprecated.
 - `.vercelignore` (repo root) excludes `__tests__` from deploys — a script
   that imports test helpers will pass CI and then break every Vercel deploy.
 
+## Route areas with their own README
+
+Most features are a page and a few components. Two are large enough to document
+themselves — read the local README before changing them:
+
+| Area                          | README                               |
+| ----------------------------- | ------------------------------------ |
+| Mindmap (the diagramming app) | `src/app/employer/mindmap/README.md` |
+
+Mindmap is the one place in `apps/web` where **colours are deliberately not
+design tokens**: shape fills live inside the saved document, so they are literal
+OKLCH values rather than `var(--…)`. A token would repaint when the _viewer_
+changes theme and silently alter someone else's diagram. Its editor chrome uses
+the tokens like everything else.
+
 ## The migration boundary rule
 
 New files must use the kit + tokens — no inline color styles, no raw

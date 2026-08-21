@@ -2,15 +2,13 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
-import type { ObjectRef } from "@launchstack/core/storage";
 
-import { putObject, getS3BucketName, ensureBucketExists, getObjectUrl } from "~/server/storage/s3-client";
 import { isS3Storage } from "~/lib/storage";
-import { resolveStorageLocationId } from "~/lib/storage-location-id";
 import { db } from "~/server/db";
 import { fileUploads, users } from "@launchstack/core/db/schema";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { registerUploadArtifact } from "~/server/services/storage-manifest";
+import { createStorageWritePort } from "~/server/storage/write-port";
 
 function sanitizeFilename(filename: string): string {
     return filename.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
@@ -56,19 +54,18 @@ export async function POST(request: Request) {
 
         const safeName = sanitizeFilename(file.name);
         const objectKey = `documents/${randomUUID()}-${safeName || "upload"}`;
-        const bucket = getS3BucketName();
-
-        await ensureBucketExists();
+        const storage = createStorageWritePort();
+        const bucket = storage.getBucketName();
 
         const buffer = Buffer.from(await file.arrayBuffer());
-        await putObject(objectKey, buffer, file.type || "application/octet-stream");
-
-        const url = getObjectUrl(objectKey);
-        const ref: ObjectRef = {
-            adapter: "s3",
-            storageLocationId: resolveStorageLocationId("s3"),
+        const stored = await storage.put({
             key: objectKey,
-        };
+            body: buffer,
+            contentType: file.type || "application/octet-stream",
+        });
+
+        const url = stored.url;
+        const ref = stored.ref;
 
         const fileId = await db.transaction(async (tx) => {
             const [row] = await tx

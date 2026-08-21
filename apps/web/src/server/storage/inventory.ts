@@ -1,6 +1,5 @@
 import "server-only";
 
-import { ListObjectsV2Command } from "@aws-sdk/client-s3";
 import type { ObjectRef } from "@launchstack/core/storage";
 import { and, asc, eq, gt, like } from "drizzle-orm";
 
@@ -8,7 +7,7 @@ import { fileUploads } from "@launchstack/core/db/schema";
 import { env } from "~/env";
 import { resolveStorageLocationId, parseVercelBlobStoreIdFromToken } from "~/lib/storage-location-id";
 import { db } from "~/server/db";
-import { getS3BucketName, getS3Client } from "~/server/storage/s3-client";
+import { getS3StorageAdapter } from "~/server/storage/adapters/s3-adapter";
 
 export interface PrivilegedListObjectsInput {
   adapter: ObjectRef["adapter"];
@@ -83,31 +82,28 @@ async function listS3Objects(input: Required<Pick<PrivilegedListObjectsInput, "s
   const limit = clampLimit(input.limit);
 
   try {
-    const response = await getS3Client().send(
-      new ListObjectsV2Command({
-        Bucket: getS3BucketName(),
-        Prefix: input.prefix,
-        ContinuationToken: input.cursor,
-        MaxKeys: limit,
-      }),
-    );
+    const response = await getS3StorageAdapter().listObjectsPrivileged({
+      prefix: input.prefix,
+      cursor: input.cursor,
+      limit,
+    });
 
     const objects: PrivilegedInventoryObject[] = [];
-    for (const entry of response.Contents ?? []) {
-      if (!entry.Key) continue;
+    for (const entry of response.objects) {
+      if (!entry.key) continue;
       objects.push({
-        key: entry.Key,
-        ref: makeRef("s3", input.storageLocationId, entry.Key),
-        size: typeof entry.Size === "number" ? entry.Size : undefined,
-        lastModified: entry.LastModified?.toISOString(),
-        etag: entry.ETag,
+        key: entry.key,
+        ref: makeRef("s3", input.storageLocationId, entry.key),
+        size: entry.size,
+        lastModified: entry.lastModified,
+        etag: entry.etag,
       });
     }
 
     return {
       ok: true,
       objects,
-      nextCursor: response.IsTruncated ? response.NextContinuationToken : undefined,
+      nextCursor: response.nextCursor,
     };
   } catch (err) {
     return {

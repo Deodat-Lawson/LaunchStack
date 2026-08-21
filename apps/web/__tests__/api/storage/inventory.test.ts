@@ -1,7 +1,7 @@
 const TEST_ENDPOINT = "http://localhost:8333";
 const TEST_BUCKET = "pdr-documents";
 
-const mockS3Send = jest.fn();
+const mockListObjectsPrivileged = jest.fn();
 
 jest.mock("server-only", () => ({}));
 
@@ -19,9 +19,10 @@ jest.mock("~/env", () => ({
   },
 }));
 
-jest.mock("~/server/storage/s3-client", () => ({
-  getS3Client: () => ({ send: mockS3Send }),
-  getS3BucketName: () => TEST_BUCKET,
+jest.mock("~/server/storage/adapters/s3-adapter", () => ({
+  getS3StorageAdapter: () => ({
+    listObjectsPrivileged: mockListObjectsPrivileged,
+  }),
 }));
 
 jest.mock("~/server/db", () => ({
@@ -34,7 +35,7 @@ import { listObjectsPrivileged } from "~/server/storage/inventory";
 
 describe("listObjectsPrivileged", () => {
   beforeEach(() => {
-    mockS3Send.mockReset();
+    mockListObjectsPrivileged.mockReset();
   });
 
   it("returns explicit unavailable for adapters without listing support", async () => {
@@ -65,21 +66,20 @@ describe("listObjectsPrivileged", () => {
 
     expect(result.error.kind).toBe("blocked");
     expect(result.error.code).toBe("storage_location_mismatch");
-    expect(mockS3Send).not.toHaveBeenCalled();
+    expect(mockListObjectsPrivileged).not.toHaveBeenCalled();
   });
 
   it("lists S3 objects with canonical refs and pagination cursor", async () => {
-    mockS3Send.mockResolvedValue({
-      Contents: [
+    mockListObjectsPrivileged.mockResolvedValue({
+      objects: [
         {
-          Key: "documents/a.pdf",
-          Size: 123,
-          LastModified: new Date("2026-01-01T00:00:00.000Z"),
-          ETag: '"etag-a"',
+          key: "documents/a.pdf",
+          size: 123,
+          lastModified: "2026-01-01T00:00:00.000Z",
+          etag: '"etag-a"',
         },
       ],
-      IsTruncated: true,
-      NextContinuationToken: "next-1",
+      nextCursor: "next-1",
     });
 
     const result = await listObjectsPrivileged({

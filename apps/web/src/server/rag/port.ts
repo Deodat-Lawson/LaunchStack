@@ -39,24 +39,33 @@ export function createAppRagPort(): RagPort {
 }
 
 function mapResult(r: AppSearchResult): RagSearchResult {
+    const metadata = r.metadata as AppSearchResult["metadata"] & {
+        noteId?: number;
+        callId?: string;
+        revision?: number;
+    };
+    const source = r.source ?? metadata.source;
     return {
         pageContent: r.pageContent,
         pageNumber: r.pageNumber,
         title: r.title,
         documentId: r.documentId,
-        source: r.source,
+        source,
         retrievalMethod: r.retrievalMethod,
         metadata: {
-            chunkId: r.metadata.chunkId,
-            page: r.metadata.page,
-            documentId: r.metadata.documentId,
-            documentTitle: r.metadata.documentTitle,
-            distance: r.metadata.distance,
-            confidence: r.metadata.confidence,
-            source: r.metadata.source,
-            embeddingIndexKey: r.metadata.embeddingIndexKey,
-            rerankScore: r.metadata.rerankScore,
-            timestamp: r.metadata.timestamp,
+            chunkId: metadata.chunkId,
+            page: metadata.page,
+            documentId: metadata.documentId,
+            documentTitle: metadata.documentTitle,
+            distance: metadata.distance,
+            confidence: metadata.confidence,
+            source,
+            embeddingIndexKey: metadata.embeddingIndexKey,
+            rerankScore: metadata.rerankScore,
+            timestamp: metadata.timestamp,
+            ...(metadata.noteId === undefined ? {} : { noteId: metadata.noteId }),
+            ...(metadata.callId === undefined ? {} : { callId: metadata.callId }),
+            ...(metadata.revision === undefined ? {} : { revision: metadata.revision }),
         },
     };
 }

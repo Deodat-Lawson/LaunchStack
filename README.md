@@ -117,7 +117,7 @@ Full details, including what degrades without which optional service, are in
 | [`packages/protocol`](packages/protocol), [`packages/evidence`](packages/evidence), [`packages/application`](packages/application), [`packages/adapters`](packages/adapters) | The layered engine (ADR-002): contracts → pure company-state logic → use cases/ports → implementations. |
 | [`packages/core`](packages/core) | The published compatibility facade over the engine packages. |
 | [`packages/features`](packages/features) | Vertical features built on the engine. |
-| [`services/`](services) | Compute services — document-converter (Node), transcription and document-editor (Python). Not part of the pnpm workspace; each manages its own dependencies. |
+| [`services/`](services) | Compute services — document-converter (Node), transcription and adeu-ai-docs-editing (Python). Not part of the pnpm workspace; each manages its own dependencies. |
 | [`scripts/`](scripts) | `ci/` for gates, `ops/` for operational tasks, `dev/` for manual developer probes. |
 
 ---

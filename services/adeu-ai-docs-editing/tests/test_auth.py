@@ -3,7 +3,7 @@ Auth coverage for the X-API-Key dependency (ported from the sidecar suite).
 
 Pins the contract for all five adeu routes, the fail-closed behaviour when no
 key env var is set — the property that makes a missing key safe rather than
-silently open — and the DOCUMENT_EDITOR_API_KEY-first / SIDECAR_API_KEY-
+silently open — and the ADEU_SERVICE_API_KEY-first / SIDECAR_API_KEY-
 fallback resolution introduced by the sidecar split.
 
 verify_api_key is a coroutine, but driven with asyncio.run rather than a
@@ -60,7 +60,7 @@ def test_health_is_open(client_no_auth):
 
 @pytest.mark.parametrize("unset_value", ["", None])
 def test_unset_key_rejects_every_request(monkeypatch, client_no_auth, unset_value):
-    for var in ("DOCUMENT_EDITOR_API_KEY", "SIDECAR_API_KEY"):
+    for var in ("ADEU_SERVICE_API_KEY", "SIDECAR_API_KEY"):
         if unset_value is None:
             monkeypatch.delenv(var, raising=False)
         else:
@@ -75,15 +75,15 @@ def test_unset_key_rejects_every_request(monkeypatch, client_no_auth, unset_valu
 
 def test_sidecar_api_key_fallback_accepted(monkeypatch, client_no_auth):
     """With only the legacy SIDECAR_API_KEY set, that key still works."""
-    monkeypatch.delenv("DOCUMENT_EDITOR_API_KEY", raising=False)
+    monkeypatch.delenv("ADEU_SERVICE_API_KEY", raising=False)
     monkeypatch.setenv("SIDECAR_API_KEY", "legacy-key")
     resp = client_no_auth.post("/adeu/read", headers={"X-API-Key": "legacy-key"})
     assert resp.status_code == 422  # past auth, failed body validation
 
 
 def test_document_editor_key_takes_precedence(monkeypatch, client_no_auth):
-    """When both are set, only DOCUMENT_EDITOR_API_KEY is accepted."""
-    monkeypatch.setenv("DOCUMENT_EDITOR_API_KEY", "primary-key")
+    """When both are set, only ADEU_SERVICE_API_KEY is accepted."""
+    monkeypatch.setenv("ADEU_SERVICE_API_KEY", "primary-key")
     monkeypatch.setenv("SIDECAR_API_KEY", "legacy-key")
 
     resp = client_no_auth.post("/adeu/read", headers={"X-API-Key": "legacy-key"})

@@ -101,13 +101,11 @@ describe("founder weekly review dispatch batch", () => {
             deps({
                 count: 2,
                 send: jest.fn().mockRejectedValue(new Error("inngest is down")),
-                recordFailure: jest
-                    .fn()
-                    .mockResolvedValue({
-                        status: "failed",
-                        attemptCount: 8,
-                        availableAt: new Date(),
-                    }),
+                recordFailure: jest.fn().mockResolvedValue({
+                    status: "failed",
+                    attemptCount: 8,
+                    availableAt: new Date(),
+                }),
             })
         );
         expect(result).toMatchObject({ claimed: 2, succeeded: 0, retired: 2 });

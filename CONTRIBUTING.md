@@ -19,7 +19,7 @@ packages/core        @launchstack/core â€” compatibility facade over the above â
 packages/features    vertical features on top of the engine (private, not published)
 apps/web             Next.js app: UI, auth, command acceptance, synchronous reads
 apps/worker          the durable workflow coordinator (outbox consumer + Inngest host)
-services/            Compute services (document-converter, transcription, document-editor)
+services/            Compute services (document-converter, transcription, adeu-ai-docs-editing)
 ```
 
 The **layer boundaries are enforced by ESLint** (see [`eslint.config.js`](eslint.config.js))
@@ -69,7 +69,7 @@ make down          # tear down
 make down-clean    # tear down + wipe volumes
 ```
 
-Once the stack is up: app at `localhost:3000`, worker health at `localhost:8020/healthz`, Inngest dashboard at `localhost:8288`, transcription API at `localhost:8000/docs`, document-editor at `localhost:8003/docs`, document-converter at `localhost:8002/health`.
+Once the stack is up: app at `localhost:3000`, worker health at `localhost:8020/healthz`, Inngest dashboard at `localhost:8288`, transcription API at `localhost:8000/docs`, adeu-docs-editing at `localhost:8003/docs`, document-converter at `localhost:8002/health`.
 
 ## Changing the database
 

@@ -5,6 +5,8 @@ import type {
     ApplyEditsMarkdownParams,
     ApplyEditsMarkdownResponse,
     DiffResponse,
+    ReviewItemsResponse,
+    ProcessBatchJsonResponse,
 } from "./types";
 
 export class AdeuConfigError extends Error {
@@ -32,36 +34,37 @@ function warnDeprecatedNamesOnce(): void {
     if (warnedDeprecatedNames) return;
     warnedDeprecatedNames = true;
     console.warn(
-        "[adeu/client] ADEU_SERVICE_URL / SIDECAR_API_KEY are deprecated (ADR-004): the " +
-            "Adeu routes moved to services/document-editor. Set DOCUMENT_EDITOR_URL and " +
-            "DOCUMENT_EDITOR_API_KEY instead."
+        "[adeu/client] DOCUMENT_EDITOR_URL / DOCUMENT_EDITOR_API_KEY / ADEU_SERVICE_URL / " +
+            "SIDECAR_API_KEY are deprecated: the service is now " +
+            "services/adeu-ai-docs-editing. Set ADEU_SERVICE_URL and ADEU_SERVICE_API_KEY."
     );
 }
 
 /**
- * Base URL of the document-editor service (ADR-004). DOCUMENT_EDITOR_URL is
- * canonical; the pre-split ADEU_SERVICE_URL is honored as a deprecated
- * fallback with a single warning.
+ * Base URL of the adeu-ai-docs-editing service. ADEU_SERVICE_URL is canonical;
+ * DOCUMENT_EDITOR_URL (pre-rename) is honored as a deprecated fallback with a
+ * single warning.
  */
 export function getBaseUrl(): string {
-    const url = process.env.DOCUMENT_EDITOR_URL;
+    const url = process.env.ADEU_SERVICE_URL;
     if (url) return url;
-    const legacy = process.env.ADEU_SERVICE_URL;
+    const legacy = process.env.DOCUMENT_EDITOR_URL;
     if (legacy) {
         warnDeprecatedNamesOnce();
         return legacy;
     }
-    throw new AdeuConfigError("DOCUMENT_EDITOR_URL environment variable is not set");
+    throw new AdeuConfigError("ADEU_SERVICE_URL environment variable is not set");
 }
 
 const ADEU_TIMEOUT_MS = Number(process.env.ADEU_TIMEOUT_MS) || 30_000;
 
 function getAuthHeaders(): Record<string, string> {
-    const key = process.env.DOCUMENT_EDITOR_API_KEY;
+    const key = process.env.ADEU_SERVICE_API_KEY;
     if (key) return { "X-API-Key": key };
-    if (process.env.SIDECAR_API_KEY) {
+    const legacy = process.env.DOCUMENT_EDITOR_API_KEY ?? process.env.SIDECAR_API_KEY;
+    if (legacy) {
         warnDeprecatedNamesOnce();
-        return { "X-API-Key": process.env.SIDECAR_API_KEY };
+        return { "X-API-Key": legacy };
     }
     // The service fails closed — an empty key yields 401s, never
     // unauthenticated access.
@@ -240,4 +243,87 @@ export async function diffDocxFiles(
 
     if (!res.ok) return handleErrorResponse(res);
     return res.json() as Promise<DiffResponse>;
+}
+
+/**
+ * List every tracked change and comment in a document, with its adeu id.
+ *
+ * Review actions address changes by ids like `Chg:12`; this is where a caller
+ * learns what those ids are. Without it, ACCEPT / REJECT / REPLY cannot be
+ * called correctly from a UI at all.
+ */
+export async function listReviewItems(
+    file: Buffer | Blob,
+    options?: { filename?: string }
+): Promise<ReviewItemsResponse> {
+    const baseUrl = getBaseUrl();
+    const form = new FormData();
+    form.append("file", toBlob(file), options?.filename ?? "document.docx");
+
+    let res: Response;
+    try {
+        res = await fetchWithTimeout(`${baseUrl}/adeu/review-items`, {
+            method: "POST",
+            body: form,
+            headers: getAuthHeaders(),
+        });
+    } catch (err) {
+        throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
+    }
+
+    if (!res.ok) return handleErrorResponse(res);
+    return res.json() as Promise<ReviewItemsResponse>;
+}
+
+/**
+ * Apply a batch and get the document back *with* a per-edit report.
+ *
+ * The binary form returns counts in a header, which cannot carry per-edit
+ * detail — so a caller could never tell which edit failed, only how many did.
+ * This asks for JSON instead.
+ */
+export async function processDocumentBatchDetailed(
+    file: Buffer | Blob,
+    params: ProcessBatchParams,
+    options?: { filename?: string }
+): Promise<ProcessBatchJsonResponse> {
+    const baseUrl = getBaseUrl();
+    const form = new FormData();
+    form.append("file", toBlob(file), options?.filename ?? "document.docx");
+    form.append("body", JSON.stringify(params));
+
+    let res: Response;
+    try {
+        res = await fetchWithTimeout(`${baseUrl}/adeu/process-batch`, {
+            method: "POST",
+            body: form,
+            headers: { ...getAuthHeaders(), Accept: "application/json" },
+        });
+    } catch (err) {
+        throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
+    }
+
+    if (!res.ok) return handleErrorResponse(res);
+    return res.json() as Promise<ProcessBatchJsonResponse>;
+}
+
+/** Reject every tracked change, restoring the document's original text. */
+export async function rejectAllChanges(file: Buffer | Blob): Promise<Blob> {
+    const baseUrl = getBaseUrl();
+    const form = new FormData();
+    form.append("file", toBlob(file), "document.docx");
+
+    let res: Response;
+    try {
+        res = await fetchWithTimeout(`${baseUrl}/adeu/reject-all`, {
+            method: "POST",
+            body: form,
+            headers: getAuthHeaders(),
+        });
+    } catch (err) {
+        throw new AdeuServiceError(0, err instanceof Error ? err.message : String(err));
+    }
+
+    if (!res.ok) return handleErrorResponse(res);
+    return res.blob();
 }

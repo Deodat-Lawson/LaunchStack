@@ -62,14 +62,12 @@ function setup(
         .mockResolvedValue({ run: run(), dispatch: {}, created: true });
     const deps = {
         actorResolver: {
-            resolve: jest
-                .fn()
-                .mockResolvedValue({
-                    externalUserId: "u",
-                    internalUserId: 1n,
-                    companyId: 1n,
-                    role: "owner",
-                }),
+            resolve: jest.fn().mockResolvedValue({
+                externalUserId: "u",
+                internalUserId: 1n,
+                companyId: 1n,
+                role: "owner",
+            }),
         },
         evidenceCollector: collector,
         repository: { getByCompanyAndRequestKey: jest.fn().mockResolvedValue(null) },

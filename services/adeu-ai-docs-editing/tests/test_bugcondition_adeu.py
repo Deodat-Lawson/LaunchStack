@@ -26,20 +26,54 @@ class TestFix1_5_AsyncioToThread:
 
     def test_sync_adeu_calls_wrapped_in_to_thread(self):
         """Inspect the route source to confirm sync calls ARE wrapped
-        in asyncio.to_thread()."""
+        in asyncio.to_thread().
+
+        A route may delegate the blocking work to a helper (accept-all and
+        reject-all share one), so the helper it calls counts as well — what
+        matters is that no synchronous adeu call sits on the event loop, not
+        which function body the wrapper appears in.
+        """
         import inspect
-        from app.routes.adeu import read_docx, process_batch, accept_all, diff_docx
+        from app.routes import adeu as routes
+        from app.routes.adeu import (
+            accept_all,
+            diff_docx,
+            process_batch,
+            read_docx,
+            reject_all,
+            review_items,
+        )
+
+        def wraps_blocking_work(fn) -> bool:
+            source = inspect.getsource(fn)
+            if "asyncio.to_thread" in source:
+                return True
+            # Follow one level of delegation into module-level helpers.
+            for name, helper in vars(routes).items():
+                if (
+                    name.startswith("_")
+                    and callable(helper)
+                    and f"{name}(" in source
+                    and getattr(helper, "__module__", None) == routes.__name__
+                ):
+                    try:
+                        if "asyncio.to_thread" in inspect.getsource(helper):
+                            return True
+                    except (OSError, TypeError):
+                        continue
+            return False
 
         for fn_name, fn in [
             ("read_docx", read_docx),
+            ("review_items", review_items),
             ("process_batch", process_batch),
             ("accept_all", accept_all),
+            ("reject_all", reject_all),
             ("diff_docx", diff_docx),
         ]:
-            source = inspect.getsource(fn)
-            # FIX: The async route wraps sync adeu calls in asyncio.to_thread().
-            assert "asyncio.to_thread" in source, (
-                f"{fn_name} does not use asyncio.to_thread — bug 1.5 not fixed"
+            assert wraps_blocking_work(fn), (
+                f"{fn_name} does not reach asyncio.to_thread — a synchronous "
+                "adeu call would block the event loop (bug 1.5)"
             )
 
     def test_routes_are_async(self):

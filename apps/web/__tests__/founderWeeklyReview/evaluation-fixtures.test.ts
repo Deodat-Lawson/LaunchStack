@@ -120,17 +120,15 @@ function assertGrounded(
 
 describe("LAU-9 grounding evaluation fixtures", () => {
     it("grounds the complete fixture, including customer attribution", async () => {
-        const generate = jest
-            .fn()
-            .mockResolvedValue({
-                object: payload(true),
-                metadata: {
-                    provider: "test",
-                    model: "fixed",
-                    capability: "founderWeeklyReview",
-                    temperature: 0,
-                },
-            });
+        const generate = jest.fn().mockResolvedValue({
+            object: payload(true),
+            metadata: {
+                provider: "test",
+                model: "fixed",
+                capability: "founderWeeklyReview",
+                temperature: 0,
+            },
+        });
         const result = await generateFounderWeeklyReview({
             evidenceSnapshot: completeWorkspaceFixture,
             generate,
@@ -141,17 +139,15 @@ describe("LAU-9 grounding evaluation fixtures", () => {
         });
     });
     it("keeps the partial fixture customer section at explicit no-evidence", async () => {
-        const generate = jest
-            .fn()
-            .mockResolvedValue({
-                object: payload(false),
-                metadata: {
-                    provider: "test",
-                    model: "fixed",
-                    capability: "founderWeeklyReview",
-                    temperature: 0,
-                },
-            });
+        const generate = jest.fn().mockResolvedValue({
+            object: payload(false),
+            metadata: {
+                provider: "test",
+                model: "fixed",
+                capability: "founderWeeklyReview",
+                temperature: 0,
+            },
+        });
         const result = await generateFounderWeeklyReview({
             evidenceSnapshot: partialWorkspaceFixture,
             generate,

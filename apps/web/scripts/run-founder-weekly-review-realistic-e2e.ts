@@ -244,16 +244,14 @@ try {
                 })
                 .returning();
             for (const [index, content] of (entry.chunks ?? []).entries())
-                await testDb.db
-                    .insert(documentContextChunks)
-                    .values({
-                        documentId: BigInt(doc!.id),
-                        versionId: BigInt(version!.id),
-                        content,
-                        tokenCount: content.split(/\s+/).length,
-                        charCount: content.length,
-                        pageNumber: index + 1,
-                    });
+                await testDb.db.insert(documentContextChunks).values({
+                    documentId: BigInt(doc!.id),
+                    versionId: BigInt(version!.id),
+                    content,
+                    tokenCount: content.split(/\s+/).length,
+                    charCount: content.length,
+                    pageNumber: index + 1,
+                });
         }
         const [outsideDoc] = await testDb.db
             .insert(document)
@@ -264,17 +262,15 @@ try {
                 title: "Outside period",
             })
             .returning();
-        await testDb.db
-            .insert(documentVersions)
-            .values({
-                documentId: BigInt(outsideDoc!.id),
-                versionNumber: 1,
-                url: "local://outside/v1",
-                mimeType: "text/plain",
-                uploadedBy: "seed",
-                changelog: "Outside-period control.",
-                createdAt: new Date("2026-03-01T00:00:00.000Z"),
-            });
+        await testDb.db.insert(documentVersions).values({
+            documentId: BigInt(outsideDoc!.id),
+            versionNumber: 1,
+            url: "local://outside/v1",
+            mimeType: "text/plain",
+            uploadedBy: "seed",
+            changelog: "Outside-period control.",
+            createdAt: new Date("2026-03-01T00:00:00.000Z"),
+        });
         collector = new FounderWeeklyReviewEvidenceService(
             testDb.db,
             () => new Date("2026-03-01T00:00:00.000Z"),

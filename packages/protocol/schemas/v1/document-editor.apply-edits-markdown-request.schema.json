@@ -20,6 +20,21 @@
                   "string",
                   "null"
                 ]
+              },
+              "match_mode": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "strict",
+                      "first",
+                      "all"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -36,6 +51,32 @@
         "include_index": {
           "type": "boolean",
           "default": false
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "filename": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "url"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [

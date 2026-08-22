@@ -136,12 +136,12 @@ describe("Single-endpoint chat runtime configuration", () => {
 
 // ===========================================================================
 // Fix 1.11 — service Dockerfiles have USER directives
-// The sidecar split into services/transcription + services/document-editor
+// The sidecar split into services/transcription + services/adeu-ai-docs-editing
 // (ADR-004); the non-root contract carries over to both successors.
 // ===========================================================================
 describe.each([
     ["services/transcription", path.join("services", "transcription")],
-    ["services/document-editor", path.join("services", "document-editor")],
+    ["services/adeu-ai-docs-editing", path.join("services", "adeu-ai-docs-editing")],
 ])("Fix 1.11: Non-root container — %s Dockerfile has USER directive", (_label, serviceDir) => {
     it("Dockerfile has a USER directive", () => {
         const dockerfilePath = path.join(ROOT, serviceDir, "Dockerfile");
@@ -181,11 +181,11 @@ describe("Fix 1.12: Log files excluded — *.log in .gitignore", () => {
 
 // ===========================================================================
 // Fix 1.18 — adeu installed only once (via requirements.txt, not duplicated)
-// The adeu authority is now services/document-editor (ADR-004).
+// The adeu authority is now services/adeu-ai-docs-editing (ADR-004).
 // ===========================================================================
 describe("Fix 1.18: Single adeu install — adeu not duplicated in Dockerfile", () => {
-    it("document-editor Dockerfile does NOT have explicit standalone pip install adeu", () => {
-        const dockerfilePath = path.join(ROOT, "services", "document-editor", "Dockerfile");
+    it("adeu-ai-docs-editing Dockerfile does NOT have explicit standalone pip install adeu", () => {
+        const dockerfilePath = path.join(ROOT, "services", "adeu-ai-docs-editing", "Dockerfile");
         const content = fs.readFileSync(dockerfilePath, "utf-8");
 
         // FIX: adeu should NOT be installed via a standalone pip install line.
@@ -200,16 +200,16 @@ describe("Fix 1.18: Single adeu install — adeu not duplicated in Dockerfile", 
         expect(hasStandalonePipInstallAdeu).toBe(false);
     });
 
-    it("document-editor requirements.txt contains adeu as single source of truth", () => {
-        const reqPath = path.join(ROOT, "services", "document-editor", "requirements.txt");
+    it("adeu-ai-docs-editing requirements.txt contains adeu as single source of truth", () => {
+        const reqPath = path.join(ROOT, "services", "adeu-ai-docs-editing", "requirements.txt");
         const content = fs.readFileSync(reqPath, "utf-8");
 
         // FIX: adeu is in requirements.txt as the single source of truth
         expect(content).toMatch(/adeu/);
     });
 
-    it("document-editor Dockerfile installs dependencies via requirements.txt", () => {
-        const dockerfilePath = path.join(ROOT, "services", "document-editor", "Dockerfile");
+    it("adeu-ai-docs-editing Dockerfile installs dependencies via requirements.txt", () => {
+        const dockerfilePath = path.join(ROOT, "services", "adeu-ai-docs-editing", "Dockerfile");
         const content = fs.readFileSync(dockerfilePath, "utf-8");
 
         // FIX: Dockerfile uses pip install -r requirements.txt (which includes adeu)

@@ -126,18 +126,21 @@ const serverSchema = z.object({
     // The service fails closed: unset means every call returns 401 rather than
     // running unauthenticated.
     TRANSCRIPTION_SERVICE_API_KEY: optionalString(),
-    // services/document-editor (ADR-004) — the authoritative Adeu DOCX
-    // redlining service, plus its fail-closed X-API-Key secret.
+    // services/adeu-ai-docs-editing (ADR-004, renamed in ADR-007) — the
+    // authoritative Adeu DOCX redlining service, plus its fail-closed
+    // X-API-Key secret.
+    ADEU_SERVICE_API_KEY: optionalString(),
+    // Deprecated by ADR-007: read as fallbacks for ADEU_SERVICE_* so existing
+    // deployments keep working across the rename.
     DOCUMENT_EDITOR_URL: optionalString(),
     DOCUMENT_EDITOR_API_KEY: optionalString(),
     // Legacy (deprecated by ADR-004): the sidecar was split into
-    // services/transcription and services/document-editor. SIDECAR_URL and
+    // services/transcription and services/adeu-ai-docs-editing. SIDECAR_URL and
     // SIDECAR_API_KEY are still read as fallbacks for TRANSCRIPTION_SERVICE_*
     // (with a warning); the sidecar embed/rerank/NER inference surface they
     // used to enable was removed entirely — no service ever implemented it.
     SIDECAR_URL: optionalString(),
     SIDECAR_API_KEY: optionalString(),
-    // Legacy (deprecated by ADR-004): fallback for DOCUMENT_EDITOR_URL.
     ADEU_SERVICE_URL: optionalString(),
     // services/document-converter (ADR-004) — the consolidated OCR routing,
     // vision classification, PDF page rendering, and Docling parsing service.
@@ -387,6 +390,7 @@ function parseServerEnv() {
         INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
         TRANSCRIPTION_SERVICE_URL: process.env.TRANSCRIPTION_SERVICE_URL,
         TRANSCRIPTION_SERVICE_API_KEY: process.env.TRANSCRIPTION_SERVICE_API_KEY,
+        ADEU_SERVICE_API_KEY: process.env.ADEU_SERVICE_API_KEY,
         DOCUMENT_EDITOR_URL: process.env.DOCUMENT_EDITOR_URL,
         DOCUMENT_EDITOR_API_KEY: process.env.DOCUMENT_EDITOR_API_KEY,
         AGENT_KNOWLEDGE_CONNECTOR_ENABLED: process.env.AGENT_KNOWLEDGE_CONNECTOR_ENABLED,

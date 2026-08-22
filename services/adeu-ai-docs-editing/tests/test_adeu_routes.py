@@ -1,5 +1,5 @@
 """
-Pytest tests for the document-editor service's Adeu endpoints
+Pytest tests for the adeu-ai-docs-editing service's Adeu endpoints
 (ported from the former sidecar suite).
 
 Covers: /adeu/read, /adeu/process-batch, /adeu/accept-all,

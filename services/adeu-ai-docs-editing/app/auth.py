@@ -1,5 +1,5 @@
 """
-Shared API-key authentication for the document-editor service's routes.
+Shared API-key authentication for the adeu-ai-docs-editing service's routes.
 
 Fails closed: an unset or empty key env var rejects every request rather than
 serving an open endpoint. `/health` is deliberately left unauthenticated,
@@ -7,11 +7,12 @@ because container healthchecks call it with no headers.
 
 Key resolution and compatibility
 --------------------------------
-The key is read from ``DOCUMENT_EDITOR_API_KEY``. When that variable is unset
-(or empty), ``SIDECAR_API_KEY`` is honoured as a deprecated fallback so
-deployments that predate the sidecar split (ADR-004) keep working without a
-config change. New deployments should set ``DOCUMENT_EDITOR_API_KEY``; the
-fallback will be removed once the migration completes.
+The key is read from ``ADEU_SERVICE_API_KEY``. When that variable is unset (or
+empty), ``DOCUMENT_EDITOR_API_KEY`` and then ``SIDECAR_API_KEY`` are honoured
+as deprecated fallbacks, so deployments that predate the service rename — and
+those that predate the sidecar split (ADR-004) — keep working without a config
+change. New deployments should set ``ADEU_SERVICE_API_KEY``; the fallbacks will
+be removed once the migration completes.
 
 The env var is read per request (a read, not a mutation). This keeps tests
 with ``monkeypatch.setenv`` working and means key rotation applies without a
@@ -28,10 +29,13 @@ _api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 
 
 def expected_api_key() -> str:
-    """Resolve the configured API key: DOCUMENT_EDITOR_API_KEY, then the
-    deprecated SIDECAR_API_KEY fallback (see module docstring)."""
-    return os.environ.get("DOCUMENT_EDITOR_API_KEY") or os.environ.get(
-        "SIDECAR_API_KEY", ""
+    """Resolve the configured API key: ADEU_SERVICE_API_KEY, then the
+    deprecated DOCUMENT_EDITOR_API_KEY and SIDECAR_API_KEY fallbacks (see
+    module docstring)."""
+    return (
+        os.environ.get("ADEU_SERVICE_API_KEY")
+        or os.environ.get("DOCUMENT_EDITOR_API_KEY")
+        or os.environ.get("SIDECAR_API_KEY", "")
     )
 
 

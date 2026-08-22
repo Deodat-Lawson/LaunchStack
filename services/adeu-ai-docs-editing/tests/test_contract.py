@@ -1,5 +1,5 @@
 """
-Contract tests: the document-editor service's pydantic wire models must
+Contract tests: the adeu-ai-docs-editing service's pydantic wire models must
 satisfy the frozen JSON Schemas in packages/protocol/schemas/v1. A field
 added, removed, or retyped on either side fails here instead of drifting
 silently.

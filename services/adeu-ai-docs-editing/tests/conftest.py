@@ -1,4 +1,4 @@
-"""Shared fixtures for the document-editor service tests.
+"""Shared fixtures for the adeu-ai-docs-editing service tests.
 
 The suite uses the REAL app from ``app.main`` (routes, trace-id middleware,
 and the actual /health handler — the sidecar suite duplicated /health in its
@@ -21,10 +21,10 @@ TEST_API_KEY = "test-document-editor-api-key"
 
 @pytest.fixture(autouse=True)
 def set_api_key_env(monkeypatch):
-    """Set DOCUMENT_EDITOR_API_KEY for all tests so the auth dependency passes.
+    """Set ADEU_SERVICE_API_KEY for all tests so the auth dependency passes.
     SIDECAR_API_KEY is cleared so tests exercise the primary variable."""
     monkeypatch.delenv("SIDECAR_API_KEY", raising=False)
-    monkeypatch.setenv("DOCUMENT_EDITOR_API_KEY", TEST_API_KEY)
+    monkeypatch.setenv("ADEU_SERVICE_API_KEY", TEST_API_KEY)
 
 
 @pytest.fixture
@@ -61,3 +61,22 @@ def multi_paragraph_docx() -> bytes:
     buf = io.BytesIO()
     doc.save(buf)
     return buf.getvalue()
+
+
+@pytest.fixture
+def auth_headers() -> dict[str, str]:
+    """Explicit auth header, for tests that also need to send other headers
+    (the `client` fixture's defaults are replaced, not merged, when a request
+    passes its own `headers`)."""
+    return {"X-API-Key": TEST_API_KEY}
+
+
+@pytest.fixture
+def service_app(client):
+    """The FastAPI app behind the test client, for tests that need to vary
+    startup config (e.g. the object-reference allow-list).
+
+    Not named `app`: this module imports the real application object under
+    that name, and a fixture would shadow it inside `client`.
+    """
+    return client.app

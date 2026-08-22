@@ -91,7 +91,7 @@ The Python/Node compute services ([ADR-004](./architecture/ADR-004-compute-servi
 | Service | Purpose | URL variable |
 |---------|---------|--------------|
 | `services/transcription` | Whisper transcription + yt-dlp download | `TRANSCRIPTION_SERVICE_URL` |
-| `services/document-editor` | Adeu DOCX redlining | `DOCUMENT_EDITOR_URL` |
+| `services/adeu-ai-docs-editing` | Adeu DOCX redlining | `ADEU_SERVICE_URL` |
 | `services/document-converter` | OCR routing, vision classification, PDF rendering, docling-backed parsing | `DOCUMENT_CONVERTER_URL` |
 
 All three authenticate with per-service API keys (fail-closed), expose

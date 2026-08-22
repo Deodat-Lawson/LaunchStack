@@ -1,12 +1,15 @@
 """
-LaunchStack Document Editor Service
-The single authoritative DOCX-editing (Adeu redlining) service: reading,
-tracked-change edits, review actions, accept-all, CriticMarkup preview, and
-diffing, behind the five /adeu/* routes.
+LaunchStack adeu-ai-docs-editing Service
+
+The authoritative DOCX-editing service: reading, review-item enumeration,
+tracked-change edits, review actions, accept-all / reject-all, CriticMarkup
+preview, and diffing, behind the /adeu/* routes.
 
 Split out of the former `sidecar/` per ADR-004 (compute service
-consolidation): transcription and DOCX redlining have unrelated lifecycles,
-so the Whisper half now lives in `services/transcription`.
+consolidation) as `services/document-editor`, then renamed once it grew from a
+one-call-per-route wrapper into the service that owns document editing for the
+product. `DOCUMENT_EDITOR_URL` / `DOCUMENT_EDITOR_API_KEY` are still honoured
+as deprecated fallbacks.
 """
 
 import logging
@@ -17,7 +20,7 @@ from fastapi import FastAPI
 from app.config import load_config
 from app.tracing import TraceIdMiddleware, configure_logging
 
-configure_logging("document-editor")
+configure_logging("adeu-ai-docs-editing")
 logger = logging.getLogger(__name__)
 
 
@@ -30,10 +33,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="LaunchStack Document Editor Service",
-    description="DOCX redlining (Adeu): tracked changes, review actions, "
-    "CriticMarkup preview, and diffing.",
-    version="1.0.0",
+    title="LaunchStack Adeu AI Docs Editing Service",
+    description=(
+        "DOCX redlining (Adeu): tracked changes, review-item enumeration, "
+        "review actions, CriticMarkup preview, and diffing."
+    ),
+    version="2.0.0",
     lifespan=lifespan,
 )
 

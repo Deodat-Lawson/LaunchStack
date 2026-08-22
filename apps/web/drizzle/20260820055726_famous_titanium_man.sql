@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_call_notes_calls" ALTER COLUMN "status" SET DEFAULT 'active';

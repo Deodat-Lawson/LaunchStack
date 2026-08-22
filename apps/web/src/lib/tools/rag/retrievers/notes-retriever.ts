@@ -58,6 +58,8 @@ type NotesRetrieverFields = SingleDocConfig | CompanyConfig | MultiDocConfig | U
 
 type NoteRow = {
     note_id: number;
+    note_user_id: string;
+    note_company_id: string | null;
     document_id: string | null;
     company_id: string | null;
     version_id: string | null;
@@ -67,7 +69,35 @@ type NoteRow = {
     anchor: unknown;
     anchor_status: string | null;
     distance: number;
+    call_id: string | null;
+    call_company_id: string | null;
+    call_status: string | null;
+    call_document_note_id: number | null;
+    call_owner_user_id: string | null;
+    call_visibility: string | null;
+    call_knowledge_included: boolean | null;
+    call_revision: number | null;
 };
+
+export function isEligibleCompanyCallNoteRow(
+    row: NoteRow,
+    requestedCompanyId: number | string
+): boolean {
+    if (row.call_id === null) return true;
+    const companyId = String(requestedCompanyId);
+    return (
+        row.call_company_id === companyId &&
+        row.company_id === companyId &&
+        row.note_company_id === companyId &&
+        row.call_status === "completed" &&
+        row.call_document_note_id === row.note_id &&
+        row.call_owner_user_id === row.note_user_id &&
+        row.call_visibility === "company" &&
+        row.call_knowledge_included === true &&
+        row.call_revision !== null &&
+        row.call_revision > 0
+    );
+}
 
 export class NotesRetriever extends BaseRetriever {
     lc_namespace = ["rag", "retrievers", "notes"];
@@ -115,6 +145,8 @@ export class NotesRetriever extends BaseRetriever {
                 await db.execute<NoteRow>(sql`
           SELECT
             ne.note_id,
+            n.user_id AS note_user_id,
+            n.company_id AS note_company_id,
             ne.document_id,
             ne.company_id,
             ne.version_id,
@@ -123,36 +155,74 @@ export class NotesRetriever extends BaseRetriever {
             n.content_markdown,
             n.anchor,
             n.anchor_status,
+            c.id AS call_id,
+            c.company_id::text AS call_company_id,
+            c.status AS call_status,
+            c.document_note_id AS call_document_note_id,
+            c.note_owner_user_id AS call_owner_user_id,
+            c.note_visibility AS call_visibility,
+            c.knowledge_included AS call_knowledge_included,
+            c.current_note_revision AS call_revision,
             (ne.embedding <-> ${fullLiteral}) as distance
           FROM ${T.noteEmbeddings} ne
           JOIN ${T.notes} n ON n.id = ne.note_id
+          LEFT JOIN ${T.callNotesCalls} c ON c.document_note_id = n.id
           WHERE ${where}
             AND ne.embedding IS NOT NULL
             AND ne.embedding_short IS NOT NULL
             AND COALESCE(n.anchor_status, 'resolved') <> 'orphaned'
+            AND (
+              ${this.searchScope !== "company"}
+              OR c.id IS NULL
+              OR (
+                c.company_id::text = ${String(this.companyId ?? "")}
+                AND ne.company_id = c.company_id::text
+                AND n.company_id = c.company_id::text
+                AND c.status = 'completed'
+                AND c.document_note_id = n.id
+                AND c.note_owner_user_id = n.user_id
+                AND c.note_visibility = 'company'
+                AND c.knowledge_included = TRUE
+                AND c.current_note_revision > 0
+              )
+            )
           ORDER BY ne.embedding_short <-> ${shortLiteral}
           LIMIT ${this.topK}
         `)
             );
 
-            return rows.map(r => {
-                const snippet = (r.title ? `${r.title}\n\n` : "") + (r.content ?? "");
-                return new Document({
-                    pageContent: snippet,
-                    metadata: {
-                        source: "note",
-                        noteId: r.note_id,
-                        documentId: r.document_id,
-                        companyId: r.company_id,
-                        versionId: r.version_id,
-                        title: r.title,
-                        anchor: r.anchor,
-                        anchorStatus: r.anchor_status,
-                        distance: r.distance,
-                        searchScope: this.searchScope,
-                    },
+            return rows
+                .filter(
+                    r =>
+                        this.searchScope !== "company" ||
+                        (this.companyId !== undefined &&
+                            isEligibleCompanyCallNoteRow(r, this.companyId))
+                )
+                .map(r => {
+                    const snippet = (r.title ? `${r.title}\n\n` : "") + (r.content ?? "");
+                    const source = r.call_id === null ? "note" : "call_note";
+                    return new Document({
+                        pageContent: snippet,
+                        metadata: {
+                            source,
+                            noteId: r.note_id,
+                            documentId: r.document_id,
+                            companyId: r.company_id,
+                            versionId: r.version_id,
+                            title: r.title,
+                            anchor: r.anchor,
+                            anchorStatus: r.anchor_status,
+                            distance: r.distance,
+                            searchScope: this.searchScope,
+                            ...(r.call_id === null
+                                ? {}
+                                : {
+                                      callId: r.call_id,
+                                      revision: r.call_revision,
+                                  }),
+                        },
+                    });
                 });
-            });
         } catch (err) {
             console.error("[NotesRetriever] error:", err);
             return [];

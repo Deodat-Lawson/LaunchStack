@@ -33,9 +33,9 @@ A company-visible marker that the Call Note owner attaches to an immutable Trans
 _Avoid_: Private highlight, transcript edit
 
 **Call Note**:
-The one canonical editable note for a Call, owned by the first LaunchStack user whose capture start succeeds. It is company-visible by default but the owner can make it private; other users then see the Transcript without a note and cannot create another. Ownership does not transfer in the initial product.
-_Avoid_: User Note, collaborative note, multiple notes per Call
+The one canonical editable note for a Call, owned by the first LaunchStack user whose capture start succeeds. It is company-visible by default but the owner can make it private; other users then see the Transcript without a note and cannot create another. Ownership does not transfer in the initial product. After the Call, the owner can explicitly and reversibly include a company-visible canonical revision in company knowledge; Capture completion alone never indexes it, and private Call Notes are excluded.
+_Avoid_: User Note, collaborative note, multiple notes per Call, automatically indexed note
 
 **Enriched Note**:
-An AI-proposed revision grounded in the Call's Transcript. It preserves existing owner steering and emphasis, may propose a complete Call Note when blank, and becomes the next canonical revision only after the owner accepts it.
-_Avoid_: Call summary, transcript summary
+An explicit post-call AI-proposed revision grounded in the finalized Transcript. Transcript chronology and substantive-topic coverage shape the proposal; the owner's existing note controls emphasis and intent, including visibly labelled owner context that the Transcript cannot support. The proposal remains separate and editable until the owner accepts it, at which point it becomes the next canonical Call Note revision.
+_Avoid_: Call summary, transcript summary, automatic overwrite, unaccepted knowledge

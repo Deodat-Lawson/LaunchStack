@@ -1,35 +1,29 @@
 /**
  * Embed a note's content into `documentNoteEmbeddings` so the hybrid
- * retriever can union notes with regular document chunks. One row per note;
- * re-running replaces the existing row in place so updates don't accumulate
- * stale vectors.
- *
- * Called fire-and-forget from the notes API after create/update. Swallows
- * errors internally — the note itself is already persisted when we reach
- * here, so an embedding failure must not break the user-facing save.
+ * retriever can union notes with regular document chunks. Embedding is
+ * computed outside the final transaction, then the canonical note and any
+ * associated Call are locked and revalidated before atomic replacement.
  */
 
 import { eq } from "drizzle-orm";
-import { OpenAIEmbeddings } from "@langchain/openai";
+
 import { document } from "@launchstack/core/db/schema";
+import type { EmbeddingsProvider } from "@launchstack/core/embeddings";
 
 import { db } from "~/server/db";
-import { type NoteAnchor } from "~/server/db/schema";
-import { documentNotes, documentNoteEmbeddings } from "~/server/db/schema";
 import {
-  EMBEDDING_DIM,
-  EMBEDDING_MODEL,
-  EMBEDDING_SHORT_DIM,
-  resolveEmbeddingConfig,
+  callNotesCalls,
+  documentNoteEmbeddings,
+  documentNotes,
+  type NoteAnchor,
+} from "~/server/db/schema";
+import {
+  resolveNoteEmbeddingRuntime,
+  type NoteEmbeddingRuntime,
 } from "./embedding-config";
 
-/**
- * Build the exact text that gets embedded. Including the anchored quote in
- * addition to the note body is the single biggest quality lever — user
- * queries usually match the document's language, not the annotator's
- * paraphrase. Plays well with BM25 + vector ensemble.
- */
-function buildEmbeddingText(args: {
+/** Build the exact text that gets embedded for both snapshots and writes. */
+export function buildEmbeddingText(args: {
   title: string | null;
   markdown: string | null;
   anchor: NoteAnchor | null;
@@ -42,81 +36,332 @@ function buildEmbeddingText(args: {
   return parts.join("\n\n");
 }
 
-/** Approximate GPT-tokens from char count — fine for bookkeeping. */
 function approxTokens(text: string): number {
   return Math.ceil(text.length / 4);
 }
 
-export async function embedNote(noteId: number): Promise<void> {
-  try {
-    const [note] = await db
-      .select()
-      .from(documentNotes)
-      .where(eq(documentNotes.id, noteId));
-    if (!note) return;
+export interface NoteEmbeddingSource {
+  id: number;
+  userId: string;
+  companyId: string | null;
+  documentId: string | null;
+  versionId: bigint | null;
+  title: string | null;
+  content: string | null;
+  contentMarkdown: string | null;
+  anchor: unknown;
+  createdAt: Date;
+  updatedAt: Date | null;
+}
 
-    const anchor = (note.anchor as NoteAnchor | null) ?? null;
-    const embeddingText = buildEmbeddingText({
+export interface CallNoteEmbeddingState {
+  id: string;
+  companyId: bigint;
+  status: "active" | "finalizing" | "completed" | "failed";
+  documentNoteId: number | null;
+  noteOwnerUserId: string | null;
+  noteVisibility: "company" | "private";
+  knowledgeIncluded: boolean;
+  currentNoteRevision: number;
+}
+
+export interface NoteEmbeddingSnapshot {
+  note: NoteEmbeddingSource;
+  call: CallNoteEmbeddingState | null;
+}
+
+export interface NoteEmbeddingProjection {
+  content: string;
+  tokenCount: number;
+  embedding: number[];
+  embeddingShort: number[];
+  modelVersion: string;
+}
+
+export type NoteEmbeddingWriteResult = "written" | "missing" | "stale" | "ineligible";
+export type NoteEmbeddingCleanupResult = "removed" | "missing" | "stale";
+
+export interface NoteEmbeddingStore {
+  loadSnapshot(noteId: number): Promise<NoteEmbeddingSnapshot | null>;
+  removeProjection(noteId: number): Promise<void>;
+  removeIfCurrent(snapshot: NoteEmbeddingSnapshot): Promise<NoteEmbeddingCleanupResult>;
+  replaceIfCurrent(
+    snapshot: NoteEmbeddingSnapshot,
+    projection: NoteEmbeddingProjection,
+  ): Promise<NoteEmbeddingWriteResult>;
+}
+
+function noteSelection() {
+  return {
+    id: documentNotes.id,
+    userId: documentNotes.userId,
+    companyId: documentNotes.companyId,
+    documentId: documentNotes.documentId,
+    versionId: documentNotes.versionId,
+    title: documentNotes.title,
+    content: documentNotes.content,
+    contentMarkdown: documentNotes.contentMarkdown,
+    anchor: documentNotes.anchor,
+    createdAt: documentNotes.createdAt,
+    updatedAt: documentNotes.updatedAt,
+  };
+}
+
+function callSelection() {
+  return {
+    id: callNotesCalls.id,
+    companyId: callNotesCalls.companyId,
+    status: callNotesCalls.status,
+    documentNoteId: callNotesCalls.documentNoteId,
+    noteOwnerUserId: callNotesCalls.noteOwnerUserId,
+    noteVisibility: callNotesCalls.noteVisibility,
+    knowledgeIncluded: callNotesCalls.knowledgeIncluded,
+    currentNoteRevision: callNotesCalls.currentNoteRevision,
+  };
+}
+
+function sourceIdentity(note: NoteEmbeddingSource): string {
+  return JSON.stringify({
+    userId: note.userId,
+    companyId: note.companyId,
+    documentId: note.documentId,
+    versionId: note.versionId?.toString() ?? null,
+    updatedAt: note.updatedAt?.toISOString() ?? null,
+    embeddingText: buildEmbeddingText({
       title: note.title,
       markdown: note.contentMarkdown ?? note.content ?? "",
-      anchor,
-    });
+      anchor: (note.anchor as NoteAnchor | null) ?? null,
+    }),
+  });
+}
 
-    if (!embeddingText.trim()) {
-      // Nothing to embed — clear any prior vector so stale content can't
-      // resurface in retrieval.
-      await db
+function callIdentity(call: CallNoteEmbeddingState | null): string | null {
+  if (!call) return null;
+  return JSON.stringify({
+    id: call.id,
+    companyId: call.companyId.toString(),
+    status: call.status,
+    documentNoteId: call.documentNoteId,
+    noteOwnerUserId: call.noteOwnerUserId,
+    noteVisibility: call.noteVisibility,
+    knowledgeIncluded: call.knowledgeIncluded,
+    currentNoteRevision: call.currentNoteRevision,
+  });
+}
+
+export function isEligibleCallNote(snapshot: NoteEmbeddingSnapshot): boolean {
+  const { note, call } = snapshot;
+  if (!call) return true;
+  return (
+    call.status === "completed" &&
+    call.knowledgeIncluded &&
+    call.noteVisibility === "company" &&
+    call.documentNoteId === note.id &&
+    call.noteOwnerUserId === note.userId &&
+    call.companyId.toString() === note.companyId &&
+    call.currentNoteRevision > 0
+  );
+}
+
+export function evaluateEmbeddingFreshness(
+  expected: NoteEmbeddingSnapshot,
+  current: NoteEmbeddingSnapshot | null,
+): NoteEmbeddingWriteResult {
+  if (!current) return "missing";
+  if (current.call && !isEligibleCallNote(current)) return "ineligible";
+  if (
+    sourceIdentity(expected.note) !== sourceIdentity(current.note) ||
+    callIdentity(expected.call) !== callIdentity(current.call)
+  ) {
+    return "stale";
+  }
+  return "written";
+}
+
+class DrizzleNoteEmbeddingStore implements NoteEmbeddingStore {
+  async loadSnapshot(noteId: number): Promise<NoteEmbeddingSnapshot | null> {
+    const [note] = await db
+      .select(noteSelection())
+      .from(documentNotes)
+      .where(eq(documentNotes.id, noteId))
+      .limit(1);
+    if (!note) return null;
+
+    const [call] = await db
+      .select(callSelection())
+      .from(callNotesCalls)
+      .where(eq(callNotesCalls.documentNoteId, noteId))
+      .limit(1);
+    return { note, call: call ?? null };
+  }
+
+  async removeProjection(noteId: number): Promise<void> {
+    await db.delete(documentNoteEmbeddings).where(eq(documentNoteEmbeddings.noteId, noteId));
+  }
+
+  async removeIfCurrent(snapshot: NoteEmbeddingSnapshot): Promise<NoteEmbeddingCleanupResult> {
+    return db.transaction(async tx => {
+      const [note] = await tx
+        .select(noteSelection())
+        .from(documentNotes)
+        .where(eq(documentNotes.id, snapshot.note.id))
+        .limit(1)
+        .for("update");
+
+      if (!note) {
+        await tx
+          .delete(documentNoteEmbeddings)
+          .where(eq(documentNoteEmbeddings.noteId, snapshot.note.id));
+        return "missing";
+      }
+
+      const [call] = await tx
+        .select(callSelection())
+        .from(callNotesCalls)
+        .where(eq(callNotesCalls.documentNoteId, snapshot.note.id))
+        .limit(1)
+        .for("update");
+      const current: NoteEmbeddingSnapshot = { note, call: call ?? null };
+
+      // A newer source or eligibility transition owns the projection now.
+      // The stale cleanup must not erase what that newer event wrote.
+      if (evaluateEmbeddingFreshness(snapshot, current) === "stale") return "stale";
+
+      await tx
         .delete(documentNoteEmbeddings)
-        .where(eq(documentNoteEmbeddings.noteId, noteId));
-      return;
-    }
-
-    // Both halves or neither — see resolveEmbeddingConfig.
-    const { apiKey, baseURL } = resolveEmbeddingConfig();
-    if (!apiKey || !baseURL) {
-      console.warn(
-        "[embedNote] no embedding endpoint configured (EMBEDDING_API_BASE_URL " +
-          "+ EMBEDDING_API_KEY, or AI_BASE_URL + AI_API_KEY) — skipping",
-      );
-      return;
-    }
-
-    const client = new OpenAIEmbeddings({
-      openAIApiKey: apiKey,
-      modelName: EMBEDDING_MODEL,
-      dimensions: EMBEDDING_DIM,
-      configuration: { baseURL },
+        .where(eq(documentNoteEmbeddings.noteId, snapshot.note.id));
+      return "removed";
     });
+  }
 
-    const [embedding] = await client.embedDocuments([embeddingText]);
-    if (!embedding || embedding.length !== EMBEDDING_DIM) {
-      console.warn(
-        `[embedNote] unexpected embedding length ${embedding?.length ?? "null"}`,
-      );
-      return;
-    }
-    const embeddingShort = embedding.slice(0, EMBEDDING_SHORT_DIM);
+  async replaceIfCurrent(
+    snapshot: NoteEmbeddingSnapshot,
+    projection: NoteEmbeddingProjection,
+  ): Promise<NoteEmbeddingWriteResult> {
+    return db.transaction(async tx => {
+      // All compliant workers lock the canonical note first and its Call
+      // second. The note row is the serialization mutex for per-note replace.
+      const [note] = await tx
+        .select(noteSelection())
+        .from(documentNotes)
+        .where(eq(documentNotes.id, snapshot.note.id))
+        .limit(1)
+        .for("update");
 
-    await db
-      .delete(documentNoteEmbeddings)
-      .where(eq(documentNoteEmbeddings.noteId, noteId));
+      if (!note) {
+        await tx
+          .delete(documentNoteEmbeddings)
+          .where(eq(documentNoteEmbeddings.noteId, snapshot.note.id));
+        return "missing";
+      }
 
-    await db.insert(documentNoteEmbeddings).values({
-      noteId,
-      userId: note.userId,
-      documentId: note.documentId,
-      companyId: note.companyId,
-      versionId: note.versionId,
-      content: embeddingText,
-      tokenCount: approxTokens(embeddingText),
-      embedding,
-      embeddingShort,
-      modelVersion: EMBEDDING_MODEL,
+      const [call] = await tx
+        .select(callSelection())
+        .from(callNotesCalls)
+        .where(eq(callNotesCalls.documentNoteId, snapshot.note.id))
+        .limit(1)
+        .for("update");
+      const current: NoteEmbeddingSnapshot = { note, call: call ?? null };
+      const freshness = evaluateEmbeddingFreshness(snapshot, current);
+
+      if (freshness !== "written") {
+        // Call Note projections fail closed. Ordinary notes retain their last
+        // good vector while the newer canonical update/event converges.
+        if (freshness !== "stale" || snapshot.call !== null || current.call !== null) {
+          await tx
+            .delete(documentNoteEmbeddings)
+            .where(eq(documentNoteEmbeddings.noteId, snapshot.note.id));
+        }
+        return freshness;
+      }
+
+      await tx
+        .delete(documentNoteEmbeddings)
+        .where(eq(documentNoteEmbeddings.noteId, snapshot.note.id));
+      await tx.insert(documentNoteEmbeddings).values({
+        noteId: note.id,
+        userId: note.userId,
+        documentId: note.documentId,
+        companyId: note.companyId,
+        versionId: note.versionId,
+        content: projection.content,
+        tokenCount: projection.tokenCount,
+        embedding: projection.embedding,
+        embeddingShort: projection.embeddingShort,
+        modelVersion: projection.modelVersion,
+      });
+      return "written";
     });
+  }
+}
+
+async function embedOne(embeddings: EmbeddingsProvider, text: string): Promise<number[] | undefined> {
+  if (embeddings.embedDocuments) {
+    const [embedding] = await embeddings.embedDocuments([text]);
+    return embedding;
+  }
+  return embeddings.embedQuery(text);
+}
+
+export interface EmbedNoteDependencies {
+  store?: NoteEmbeddingStore;
+  runtime?: NoteEmbeddingRuntime | null;
+}
+
+export async function embedNoteWithDependencies(
+  noteId: number,
+  dependencies: EmbedNoteDependencies = {},
+): Promise<NoteEmbeddingWriteResult | "skipped"> {
+  const store = dependencies.store ?? new DrizzleNoteEmbeddingStore();
+  const snapshot = await store.loadSnapshot(noteId);
+  if (!snapshot) {
+    await store.removeProjection(noteId);
+    return "missing";
+  }
+  if (snapshot.call && !isEligibleCallNote(snapshot)) {
+    const cleanup = await store.removeIfCurrent(snapshot);
+    return cleanup === "stale" ? "stale" : "ineligible";
+  }
+
+  const embeddingText = buildEmbeddingText({
+    title: snapshot.note.title,
+    markdown: snapshot.note.contentMarkdown ?? snapshot.note.content ?? "",
+    anchor: (snapshot.note.anchor as NoteAnchor | null) ?? null,
+  });
+  if (!embeddingText.trim()) {
+    const cleanup = await store.removeIfCurrent(snapshot);
+    return cleanup === "stale" ? "stale" : "skipped";
+  }
+
+  const runtime =
+    dependencies.runtime === undefined ? resolveNoteEmbeddingRuntime() : dependencies.runtime;
+  if (!runtime) {
+    console.warn(
+      "[embedNote] no legacy note embedding endpoint configured (EMBEDDING_API_BASE_URL + " +
+      "EMBEDDING_API_KEY, or AI_BASE_URL + AI_API_KEY) — skipping",
+    );
+    return "skipped";
+  }
+
+  const embedding = await embedOne(runtime.embeddings, embeddingText);
+  if (!embedding || embedding.length !== runtime.index.dimension) {
+    console.warn(`[embedNote] unexpected embedding length ${embedding?.length ?? "null"}`);
+    return "skipped";
+  }
+
+  return store.replaceIfCurrent(snapshot, {
+    content: embeddingText,
+    tokenCount: approxTokens(embeddingText),
+    embedding,
+    embeddingShort: embedding.slice(0, runtime.index.shortDimension),
+    modelVersion: runtime.index.model,
+  });
+}
+
+export async function embedNote(noteId: number): Promise<void> {
+  try {
+    await embedNoteWithDependencies(noteId);
   } catch (err) {
-    // Rethrow so the outbox handler records the failure and retries with
-    // backoff (ADR-003). The old fire-and-forget path swallowed this, which
-    // silently left notes unsearchable.
     console.error("[embedNote] failed:", err);
     throw err;
   }
@@ -128,28 +373,13 @@ function parsePositiveInt(
 ): number | null {
   if (value === null || value === undefined) return null;
   const n = Number(value);
-  return Number.isInteger(n) && n > 0 ? n : null;
+  return Number.isSafeInteger(n) && n > 0 ? n : null;
 }
 
-/**
- * Durable replacement for the old fire-and-forget `embedNoteAsync`:
- * enqueues a `note.embedding.requested` outbox event that apps/worker
- * consumes with retries. The event id carries a per-edit fingerprint (the
- * note's `updatedAt` epoch-ms, falling back to `createdAt` for a fresh
- * note), so an edit that lands while a previous request is mid-handler
- * (`processing`) gets its OWN event instead of being absorbed — and lost —
- * by the in-flight row. The handler embeds the CURRENT note content, so
- * redelivery of any fingerprint converges; re-enqueueing an already
- * processed/dead fingerprint revives it via the store's upsert.
- */
+/** Enqueue the existing durable note embedding event. */
 export async function requestNoteEmbedding(
   noteId: number,
   reason: "created" | "updated",
-  /**
-   * Company to attribute the event to when neither the note row nor its
-   * document yields one. The UI note-create paths write null `companyId`,
-   * so routes pass the acting user's active company as this hint.
-   */
   companyIdHint?: string | number | bigint | null,
 ): Promise<void> {
   const [note] = await db
@@ -164,15 +394,8 @@ export async function requestNoteEmbedding(
     .limit(1);
   if (!note) return;
 
-  // Per-edit fingerprint: `updatedAt` is stamped on every update
-  // ($onUpdate); a freshly created note only has `createdAt`. Epoch-ms
-  // keeps the event id deterministic for a given edit, so producer retries
-  // of the SAME edit converge while each new edit gets a new event.
   const fingerprint = String((note.updatedAt ?? note.createdAt).getTime());
 
-  // Resolve the owning company: the note row first, then the anchored
-  // document's row, then the caller-supplied hint. Without the fallbacks,
-  // every UI-created note (null companyId) would silently never be embedded.
   let companyId = parsePositiveInt(note.companyId);
   if (companyId === null) {
     const documentId = parsePositiveInt(note.documentId);
@@ -187,8 +410,6 @@ export async function requestNoteEmbedding(
   }
   companyId ??= parsePositiveInt(companyIdHint);
   if (companyId === null) {
-    // Never drop the event silently — this note will not be searchable until
-    // a later edit manages to resolve a company.
     console.error(
       `[requestNoteEmbedding] could not resolve a company for note ${noteId} ` +
         `(row companyId "${note.companyId}", documentId "${note.documentId}", ` +

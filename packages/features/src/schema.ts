@@ -16,3 +16,4 @@ export * from "./company-metadata/schema";
 export * from "./marketing-pipeline/schema";
 export * from "./founder-weekly-review/schema";
 export * from "./email-pipeline/schema";
+export * from "./call-notes/schema";

@@ -8,7 +8,12 @@ import {
     documentRetrievalChunks,
     documentStructure,
 } from "@launchstack/core/db/schema";
-import { documentNoteEmbeddings, documentNotes, trendSearchCache } from "~/server/db/schema";
+import {
+    callNotesCalls,
+    documentNoteEmbeddings,
+    documentNotes,
+    trendSearchCache,
+} from "~/server/db/schema";
 
 /**
  * Physical table identifiers for hand-written SQL.
@@ -37,6 +42,7 @@ export const NAME = {
     metadata: getTableName(documentMetadata),
     notes: getTableName(documentNotes),
     noteEmbeddings: getTableName(documentNoteEmbeddings),
+    callNotesCalls: getTableName(callNotesCalls),
     embeddings768: getTableName(documentEmbeddings768),
     embeddings1024: getTableName(documentEmbeddings1024),
     trendSearchCache: getTableName(trendSearchCache),
@@ -50,6 +56,7 @@ export const T = {
     metadata: ident(documentMetadata),
     notes: ident(documentNotes),
     noteEmbeddings: ident(documentNoteEmbeddings),
+    callNotesCalls: ident(callNotesCalls),
     embeddings768: ident(documentEmbeddings768),
     embeddings1024: ident(documentEmbeddings1024),
     trendSearchCache: ident(trendSearchCache),

@@ -2,10 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { randomUUID } from "node:crypto";
 
-import { getPresignedUploadUrl, getS3BucketName, ensureBucketExists } from "~/server/storage/s3-client";
 import { isS3Storage } from "~/lib/storage";
-import { resolveStorageLocationId } from "~/lib/storage-location-id";
 import { validateRequestBody, PresignUploadSchema } from "~/lib/validation";
+import { createStorageWritePort } from "~/server/storage/write-port";
 
 export async function POST(request: Request) {
     try {
@@ -34,24 +33,22 @@ export async function POST(request: Request) {
 
         const safeName = resolvedFilename.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "");
         const objectKey = `documents/${randomUUID()}-${safeName || "upload"}`;
-        const bucket = getS3BucketName();
+        const storage = createStorageWritePort();
+        const bucket = storage.getBucketName();
+        const ref = storage.mintRef(objectKey);
 
-        await ensureBucketExists();
-        const presignedUrl = await getPresignedUploadUrl(
-            objectKey,
-            body.contentType,
-            300,
-        );
+        const presignedUrl = await storage.getSignedUrl({
+            ref,
+            operation: "put",
+            contentType: body.contentType,
+            expiresIn: 300,
+        });
 
         return NextResponse.json({
             presignedUrl,
             objectKey,
             bucket,
-            ref: {
-                adapter: "s3",
-                storageLocationId: resolveStorageLocationId("s3"),
-                key: objectKey,
-            },
+            ref,
         });
     } catch (error) {
         console.error("[Presign] Failed to generate presigned URL:", error);

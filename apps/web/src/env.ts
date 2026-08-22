@@ -366,12 +366,23 @@ function parseServerEnv() {
       | "s3"
       | "database"
       | undefined,
-    NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
-    S3_PUBLIC_ENDPOINT: process.env.S3_PUBLIC_ENDPOINT,
-    S3_REGION: process.env.S3_REGION,
-    S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
-    S3_SECRET_KEY: process.env.S3_SECRET_KEY,
-    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+    NEXT_PUBLIC_S3_ENDPOINT:
+      process.env.STORAGE_S3_ENDPOINT ?? process.env.NEXT_PUBLIC_S3_ENDPOINT,
+    S3_PUBLIC_ENDPOINT:
+      process.env.STORAGE_S3_PUBLIC_ENDPOINT ?? process.env.S3_PUBLIC_ENDPOINT,
+    S3_REGION: process.env.STORAGE_S3_REGION ?? process.env.S3_REGION,
+    S3_ACCESS_KEY:
+      process.env.STORAGE_S3_ACCESS_KEY ??
+      process.env.STORAGE_S3_ACCESS_KEY_ID ??
+      process.env.S3_ACCESS_KEY,
+    S3_SECRET_KEY:
+      process.env.STORAGE_S3_SECRET_KEY ??
+      process.env.STORAGE_S3_SECRET_ACCESS_KEY ??
+      process.env.S3_SECRET_KEY,
+    S3_BUCKET_NAME:
+      process.env.STORAGE_S3_BUCKET_NAME ??
+      process.env.STORAGE_S3_BUCKET ??
+      process.env.S3_BUCKET_NAME,
     STORAGE_DELETION_LIFECYCLE_ENABLED: process.env.STORAGE_DELETION_LIFECYCLE_ENABLED,
     STORAGE_DELETION_WORKER_ENABLED: process.env.STORAGE_DELETION_WORKER_ENABLED,
     STORAGE_FILE_TENANT_AUTH_MODE: process.env.STORAGE_FILE_TENANT_AUTH_MODE as
@@ -410,6 +421,7 @@ export const env = {
       | "s3"
       | "database"
       | undefined,
-    NEXT_PUBLIC_S3_ENDPOINT: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+    NEXT_PUBLIC_S3_ENDPOINT:
+      process.env.NEXT_PUBLIC_S3_ENDPOINT ?? process.env.STORAGE_S3_ENDPOINT,
   }),
 };

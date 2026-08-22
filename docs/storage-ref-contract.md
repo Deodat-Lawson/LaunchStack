@@ -26,6 +26,26 @@ This document captures the frozen storage contract used by server-side upload/de
 - Database: `database:pdr_file_uploads_v1`
 - UploadThing: `uploadthing:{appId}[@region]`
 
+## S3-compatible env var reference (B5)
+
+S3 adapter configuration accepts the `STORAGE_S3_*` names below (legacy names remain supported; precedence rules are defined in A1):
+
+- `STORAGE_S3_ENDPOINT` — provider/API endpoint used for SDK calls.
+- `STORAGE_S3_PUBLIC_ENDPOINT` — optional public/base URL for minted object URLs.
+- `STORAGE_S3_REGION` — region value for request signing.
+- `STORAGE_S3_ACCESS_KEY` — access key id credential.
+- `STORAGE_S3_SECRET_KEY` — secret access key credential.
+- `STORAGE_S3_BUCKET_NAME` — bucket/container name.
+- `STORAGE_S3_FORCE_PATH_STYLE` — optional boolean, defaults to path-style (`true`).
+- `STORAGE_S3_ENSURE_BUCKET_EXISTS` — optional boolean, default `false` (opt-in bucket bootstrap).
+
+Legacy aliases still recognized by runtime and env parsing:
+
+- `NEXT_PUBLIC_S3_ENDPOINT`, `S3_PUBLIC_ENDPOINT`
+- `S3_REGION`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET_NAME`
+
+Current limitation note: URL minting is path-style today. With `STORAGE_S3_FORCE_PATH_STYLE=false`, signed requests can be virtual-hosted-style, but minted object URLs remain path-style until `getObjectUrl` gains virtual-host formatting.
+
 ## Delete outcomes
 
 Deletion uses per-ref outcome reporting (`DeleteResult.outcome`):
